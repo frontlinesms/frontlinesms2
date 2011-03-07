@@ -11,3 +11,6 @@ target/
 
 # vi temporary files
 *.swp
+
+# Grails-generated files
+stacktrace.log
