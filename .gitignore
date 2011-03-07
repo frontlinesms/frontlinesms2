@@ -1,0 +1,13 @@
+# Maven output directory
+target/
+
+# Eclipse Project files
+.classpath
+.project
+.settings/
+
+# OS X generated files
+.DS_Store
+
+# vi temporary files
+*.swp
