@@ -7,15 +7,35 @@ import org.apache.camel.*
 import org.apache.camel.builder.*
 import org.apache.camel.impl.DefaultProducerTemplate
 
-class EmailToDispatcherRouteSpec extends UnitSpec {
+class EmailToDispatcherRouteSpec extends IntegrationSpec {
 	def camelContext
 
 	def resultEndpoint
 	def template
 
+	def setup() {
+		camelContext.addRoutes(createRouteBuilder())
+		resultEndpoint = camelContext.getEndpoint('mock:result')
+		template = new DefaultProducerTemplate(
+			camelContext,
+			camelContext.getEndpoint('direct:start'))
+		template.start()
+	}
+
+	def cleanup() {
+		template?.stop()
+		println "Current routes:"
+		for(r in camelContext.getRoutes()) {
+			println "\t${r?.id} :: ${r}"
+		}
+		def testRoutes = [camelContext.getRouteDefinition('test-1'),
+						camelContext.getRouteDefinition('test-2')]
+		println "Removing routes: ${testRoutes}"
+		camelContext.removeRouteDefinitions(testRoutes)
+	}
+
 	def "complete route test"() {
 		given:
-			setupContext()
 			resultEndpoint.expectedBodiesReceived(
 					new Fmessage(src: 'alice', dst: 'bob', content: 'subject'))
 		when:
@@ -27,20 +47,11 @@ class EmailToDispatcherRouteSpec extends UnitSpec {
 		        assert Fmessage.count() == 1
 	}
 
-	private void setupContext() {
-			camelContext.addRoutes(createRouteBuilder())
-			resultEndpoint = camelContext.getEndpoint('mock:result')
-			template = new DefaultProducerTemplate(
-				camelContext,
-				camelContext.getEndpoint('direct:start'))
-			template.start()
-	}
-
 	private RouteBuilder createRouteBuilder() {
 		return new RouteBuilder() {
 			public void configure() {
-				from('direct:start').to('seda:raw-email')
-				from('seda:fmessages-to-process').to('mock:result')
+				from('direct:start').to('seda:raw-email').routeId('test-1')
+				from('seda:fmessages-to-process').to('mock:result').routeId('test-2')
 			}
 		}
 	}

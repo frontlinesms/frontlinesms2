@@ -15,8 +15,9 @@ eventDefaultStart = {
 			case "TagLibUnitTestCase":
 				superClass = "TagLibSpec"
 				break
+			// TODO add a case for Camel Route integration test case
 			default:
-				superClass = "UnitSpec"
+				superClass = "${type.capitalize()}Spec"
 		}
 		createArtifact name: args["name"], suffix: "${args['suffix']}Spec", type: "Spec", path: "test/${type}", superClass: superClass
 	}
