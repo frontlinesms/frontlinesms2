@@ -13,17 +13,20 @@ class FmessageSaverSpec extends UnitSpec {
 
 	def "it's a processor"() {
 		expect:
-			t instanceof org.apache.camel.Processor
+			s instanceof org.apache.camel.Processor
 	}
 
 	def "it saves the incoming Fmessage"() {
 		given:
-			mockDomain([])
+			mockDomain(Fmessage.class)
 			def m = new Fmessage()
 		when:
-			s.process(createExchange(m))
+			s.process(createTestExchange(m))
 		then:
 			Fmessage.findAll() == [m]
+	}
+
+	def createTestExchange(Fmessage fmessage) {
 	}
 }
 

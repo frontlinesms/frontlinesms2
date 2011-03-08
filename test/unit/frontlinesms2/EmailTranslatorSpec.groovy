@@ -49,12 +49,19 @@ class EmailTranslatorSpec extends UnitSpec {
 	def "original email is available from the Fmessage"() {
 		given:
 			def testEmail = createTestEmail()
-			def createTestExchange = createTestExchange(testEmail)
+			def testExchange = createTestExchange(testEmail)
 		when:
 			t.process(testExchange)
 		then:
 			Fmessage out = testExchange.getOut()
 			assert out.original == testEmail
+	}
+
+	private def createTestExchange(def email = null) {
+		email = email ?: createTestEmail()
+	}
+
+	private def createTestEmail() {
 	}
 }
 
