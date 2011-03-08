@@ -10,7 +10,7 @@ class EmailTranslatorSpec extends UnitSpec {
 		t = new EmailTranslator()
 	}
 
-	def "it's a processor"() {
+	def "it's a TransformProcessor"() {
 		then:
 			t instanceof org.apache.camel.processor.TransformProcessor
 	}
