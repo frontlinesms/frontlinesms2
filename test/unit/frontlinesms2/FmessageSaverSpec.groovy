@@ -4,6 +4,7 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class FmessageSaverSpec extends UnitSpec {
+	@Shared
 	def s
 
 	def setupSpec() {
@@ -11,7 +12,7 @@ class FmessageSaverSpec extends UnitSpec {
 	}
 
 	def "it's a processor"() {
-		then:
+		expect:
 			t instanceof org.apache.camel.Processor
 	}
 

@@ -4,6 +4,7 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class EmailTranslatorSpec extends UnitSpec {
+	@Shared
 	def t
 
 	def setupSpec() {
@@ -11,7 +12,7 @@ class EmailTranslatorSpec extends UnitSpec {
 	}
 
 	def "it's a TransformProcessor"() {
-		then:
+		expect:
 			t instanceof org.apache.camel.processor.TransformProcessor
 	}
 
