@@ -6,7 +6,7 @@ import grails.plugin.spock.*
 class FmessageSaverSpec extends UnitSpec {
 	def s
 
-	setupSpec() {
+	def setupSpec() {
 		s = new FmessageSaver()
 	}
 
@@ -18,7 +18,7 @@ class FmessageSaverSpec extends UnitSpec {
 	def "it saves the incoming Fmessage"() {
 		given:
 			mockDomain([])
-			def m = new Fmessage
+			def m = new Fmessage()
 		when:
 			s.process(createExchange(m))
 		then:
