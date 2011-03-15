@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import routing.CamelIntegrationSpec
+import org.apache.camel.component.mail.MailMessage
 
 class EmailTranslationRouteSpec extends CamelIntegrationSpec {
 	String getFrom() {
@@ -14,10 +15,9 @@ class EmailTranslationRouteSpec extends CamelIntegrationSpec {
 		given:
 			resultEndpoint.expectedBodiesReceived(
 					new Fmessage(src: 'alice', dst: 'bob', content: 'subject'))
+			def mailMessage = mock(MailMessage) // FIXME add methods to mock return of required message properties
 		when:
-			// FIXME body here should be a message as provided by camel email component
-			template.sendBodyAndHeaders('email body',
-        		        [From: 'alice', To: 'bob', Subject: 'subject'])
+			template.sendBodyAndHeaders(mailMessage)
 		then:
        			resultEndpoint.assertIsSatisfied()
 			assert Fmessage.count() == 0		
