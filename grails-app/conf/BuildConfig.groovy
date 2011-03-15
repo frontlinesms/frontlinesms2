@@ -22,11 +22,14 @@ grails.project.dependency.resolution = {
 		//mavenRepo "http://repository.codehaus.org"
 		//mavenRepo "http://download.java.net/maven/2/"
 		//mavenRepo "http://repository.jboss.com/maven2/"
+		mavenRepo "http://dev.frontlinesms.com/m2repo/"
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// runtime 'mysql:mysql-connector-java:5.1.13'
+		compile 'net.frontlinesms.core:camel-smslib:0.0.1'
+		compile 'org.apache.camel:camel-mail:2.5.0'
 	}
 	coverage {
 		// FIXME these Cobertura settings currently appear to be ignored
