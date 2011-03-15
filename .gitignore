@@ -6,6 +6,9 @@ target/
 .project
 .settings/
 
+# IntelliJ IDEA Project files
+*.iml
+
 # OS X generated files
 .DS_Store
 

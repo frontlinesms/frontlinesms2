@@ -14,12 +14,15 @@ class EmailTranslationRouteSpec extends CamelIntegrationSpec {
 	def "test translation route"() {
 		given:
 			resultEndpoint.expectedBodiesReceived(
-					new Fmessage(src: 'alice', dst: 'bob', content: 'subject'))
-			def mailMessage = mock(MailMessage) // FIXME add methods to mock return of required message properties
+					new Fmessage(src: 'alice', dst: 'bob', content: 'email subject'))
+			def mailMessage = mock(MailMessage)
+			mailMessage.getHeader('From').return('alice@example.com')
+			mailMessage.getHeader('To').return('bob@example.de')
+			mailMessage.getHeader('Suibject').return('email subject')
 		when:
 			template.sendBodyAndHeaders(mailMessage)
 		then:
-       			resultEndpoint.assertIsSatisfied()
+       		resultEndpoint.assertIsSatisfied()
 			assert Fmessage.count() == 0		
 	}
 }
