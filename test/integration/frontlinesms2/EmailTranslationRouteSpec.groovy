@@ -18,11 +18,15 @@ class EmailTranslationRouteSpec extends EmailRouteSpec {
 	def "test translation route"() {
 		given:
 			resultEndpoint.expectedBodiesReceived(
-					new Fmessage(src: 'alice', dst: 'bob', content: 'email subject'))
+					new Fmessage(src: 'alice', dst: 'bob', content: '''email subject
+#############
+
+email body'''))
 			def message = mock(Message)
 			message.getFrom().returns(emailAddress('alice@example.com'))
 			message.getTo().returns(emailAddress('bob@example.de'))
 			message.getSubject().returns('email subject')
+			message.getBody().returns('email body')
 		when:
 			template.sendBodyAndHeaders(new MailMessage(message), [:])
 		then:

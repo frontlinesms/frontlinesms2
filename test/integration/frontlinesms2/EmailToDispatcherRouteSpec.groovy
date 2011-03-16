@@ -18,13 +18,16 @@ class EmailToDispatcherRouteSpec extends EmailRouteSpec {
 	def "complete route test"() {
 		given:
 			resultEndpoint.expectedBodiesReceived(
-					new Fmessage(src: 'alice', dst: 'bob', content: 'subject'))
+					new Fmessage(src: 'alice', dst: 'bob', content: '''email subject
+#############
+
+email body'''))
 			def message = mock(Message)
 			message.getFrom().returns(emailAddress('alice@example.com'))
 			message.getTo().returns(emailAddress('bob@example.de'))
 			message.getSubject().returns('email subject')
+			message.getBody().returns('email body')
 		when:
-			// FIXME body here should be a message as provided by camel email component
 			template.sendBodyAndHeaders(new MailMessage(message), [:])
 		then:
 			resultEndpoint.assertIsSatisfied()
