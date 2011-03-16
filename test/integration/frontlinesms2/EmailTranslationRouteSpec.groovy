@@ -1,9 +1,13 @@
 package frontlinesms2
 
-import routing.CamelIntegrationSpec
 import org.apache.camel.component.mail.MailMessage
 
-class EmailTranslationRouteSpec extends CamelIntegrationSpec {
+import javax.mail.Message;
+
+import org.gmock.WithGMock
+
+@WithGMock
+class EmailTranslationRouteSpec extends EmailRouteSpec {
 	String getFrom() {
 		'seda:raw-email'
 	}
@@ -15,12 +19,12 @@ class EmailTranslationRouteSpec extends CamelIntegrationSpec {
 		given:
 			resultEndpoint.expectedBodiesReceived(
 					new Fmessage(src: 'alice', dst: 'bob', content: 'email subject'))
-			def mailMessage = mock(MailMessage)
-			mailMessage.getHeader('From').return('alice@example.com')
-			mailMessage.getHeader('To').return('bob@example.de')
-			mailMessage.getHeader('Suibject').return('email subject')
+			def message = mock(Message)
+			message.getFrom().returns(emailAddress('alice@example.com'))
+			message.getTo().returns(emailAddress('bob@example.de'))
+			message.getSubject().returns('email subject')
 		when:
-			template.sendBodyAndHeaders(mailMessage)
+			template.sendBodyAndHeaders(new MailMessage(message), [:])
 		then:
        		resultEndpoint.assertIsSatisfied()
 			assert Fmessage.count() == 0		
