@@ -60,16 +60,6 @@ class EmailTranslationServiceSpec extends UnitSpec {
 Here's the test email body converted into a textual message."""
 	}
 
-	def "original email is available from the Fmessage"() {
-		given:
-			def testEmail = createTestEmail()
-			def testExchange = createTestExchange(testEmail)
-		when:
-			t.process(testExchange)
-		then:
-			assert testExchange.out.originalMailMessage == testEmail
-	}
-
 	private Exchange createTestExchange(def email = null) {
 		email = email ?: createTestEmail()
 		def camelMessage = new org.apache.camel.component.mail.MailMessage(email)
