@@ -56,6 +56,7 @@ class EmailTranslationServiceSpec extends UnitSpec {
 			t.process(testExchange)
 		then:
 			assert testExchange.out.body.text == """Hello
+
 Here's the test email body converted into a textual message."""
 	}
 
@@ -66,7 +67,7 @@ Here's the test email body converted into a textual message."""
 		when:
 			t.process(testExchange)
 		then:
-			assert testExchange.out.original == testEmail
+			assert testExchange.out.originalMailMessage == testEmail
 	}
 
 	private Exchange createTestExchange(def email = null) {
@@ -78,9 +79,11 @@ Here's the test email body converted into a textual message."""
 	private javax.mail.Message createTestEmail() {
 		def e = Mock(javax.mail.Message)
 
-		def headers = [From: 'test@example.com', To: 'frontlinesms@example.com', Subject: 'Hello']
+		def headers = [From: 'test@example.com', To: 'frontlinesms1@example.com', Subject: 'Hello']
 		headers.each { k,v -> e.getHeader(k) >> v }
 		e.getAllHeaders() >> asEnumeration(headers.collect { k,v -> new javax.mail.Header(k, v) })
+
+		e.getContent() >> "Here's the test email body converted into a textual message."
 
 		return e
 	}
