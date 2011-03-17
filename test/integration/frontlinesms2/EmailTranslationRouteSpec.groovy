@@ -19,7 +19,7 @@ class EmailTranslationRouteSpec extends EmailRouteSpec {
 		given:
 			resultEndpoint.expectedBodiesReceived(
 					new Fmessage(src: 'alice', dst: 'bob', content: '''email subject
-#############
+=============
 
 email body'''))
 			def message = mock(Message)

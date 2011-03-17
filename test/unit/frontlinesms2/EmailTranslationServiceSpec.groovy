@@ -17,7 +17,7 @@ class EmailTranslationServiceSpec extends UnitSpec {
 		t = new EmailTranslationService()
 	}
 
-	def "it's a TransformProcessor"() {
+	def "it's a Processor"() {
 		expect:
 			t instanceof org.apache.camel.Processor
 	}
@@ -51,29 +51,48 @@ class EmailTranslationServiceSpec extends UnitSpec {
 
 	def "email body is converted to a suitable Fmessage body"() {
 		given:
-			def testExchange = createTestExchange()
+			def testExchange = createTestExchange([body:"Here's the test email body converted into a textual message."])
+		when:
+			t.process(testExchange)
+		then:
+			assert testExchange.out.body.text == "Here's the test email body converted into a textual message."
+	}
+
+	def "email subject is converted to a suitable Fmessage body"() {
+		given:
+			def testExchange = createTestExchange([subject:'Hello'])
+		when:
+			t.process(testExchange)
+		then:
+			assert testExchange.out.body.text == 'Hello'
+	}
+
+	def "email body and subject is converted to a suitable Fmessage body"() {
+		given:
+			def testExchange = createTestExchange([subject:'Hello', body:"Here's the test email body converted into a textual message."])
 		when:
 			t.process(testExchange)
 		then:
 			assert testExchange.out.body.text == """Hello
+=====
 
 Here's the test email body converted into a textual message."""
 	}
 
-	private Exchange createTestExchange(def email = null) {
-		email = email ?: createTestEmail()
+	private Exchange createTestExchange(def params = []) {
+		def email = createTestEmail(params)
 		def camelMessage = new org.apache.camel.component.mail.MailMessage(email)
 		new MailEndpoint('asdf').createExchange(email)
 	}
 
-	private javax.mail.Message createTestEmail() {
+	private javax.mail.Message createTestEmail(def params) {
 		def e = Mock(javax.mail.Message)
 
-		def headers = [From: 'test@example.com', To: 'frontlinesms1@example.com', Subject: 'Hello']
+		def headers = [From: 'test@example.com', To: 'frontlinesms1@example.com', Subject: params.subject?:'']
 		headers.each { k,v -> e.getHeader(k) >> v }
 		e.getAllHeaders() >> asEnumeration(headers.collect { k,v -> new javax.mail.Header(k, v) })
 
-		e.getContent() >> "Here's the test email body converted into a textual message."
+		e.getContent() >> params.body
 
 		return e
 	}
