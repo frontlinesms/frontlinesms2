@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class Fmessage {
-	static constraints = {
-	}
+	String src
+	String dst
+	String text
 }
