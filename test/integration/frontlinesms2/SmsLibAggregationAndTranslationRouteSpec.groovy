@@ -1,13 +1,11 @@
 package frontlinesms2
 
 import routing.CamelIntegrationSpec
-import org.gmock.WithGMock
 
 import net.frontlinesms.camel.smslib.IncomingSmslibCamelMessage
 
 import org.smslib.CIncomingMessage
 
-@WithGMock
 class SmsLibAggregationAndTranslationRouteSpec extends CamelIntegrationSpec {
 	String getFrom() {
 		'seda:raw-smslib'
@@ -45,17 +43,17 @@ class SmsLibAggregationAndTranslationRouteSpec extends CamelIntegrationSpec {
 
 	private CIncomingMessage mockMultipartMessage(String sender, int multipartReference, int partNumber, int partCount, String text) {
 		def mockMessage = mockMessage(sender, text)
-		mockMessage.getMpRefNo().returns(multipartReference)
-		mockMessage.getMpSeqNo().returns(partNumber)
-		mockMessage.getMpMaxNo().returns(partCount)
-		mockMessage.isMultipart().returns(true)
+		mockMessage.getMpRefNo() >> multipartReference
+		mockMessage.getMpSeqNo() >> partNumber
+		mockMessage.getMpMaxNo() >> partCount
+		mockMessage.isMultipart() >> true
 		mockMessage
 	}
 
 	private CIncomingMessage mockMessage(String sender, String text) {
-		def mockMessage = mock(CIncomingMessage)
-		mockMessage.getOriginator().returns(sender)
-		mockMessage.getText().returns(text)
+		def mockMessage = Mock(CIncomingMessage)
+		mockMessage.getOriginator() >> sender
+		mockMessage.getText() >> text
 		mockMessage
 	}
 }

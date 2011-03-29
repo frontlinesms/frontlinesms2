@@ -4,9 +4,6 @@ import org.apache.camel.component.mail.MailMessage
 
 import javax.mail.Message;
 
-import org.gmock.WithGMock
-
-@WithGMock
 class EmailToDispatcherRouteSpec extends EmailRouteSpec {
 	String getFrom() {
 		'seda:raw-email'
@@ -22,11 +19,11 @@ class EmailToDispatcherRouteSpec extends EmailRouteSpec {
 #############
 
 email body'''))
-			def message = mock(Message)
-			message.getFrom().returns(emailAddress('alice@example.com'))
-			message.getTo().returns(emailAddress('bob@example.de'))
-			message.getSubject().returns('email subject')
-			message.getBody().returns('email body')
+			def message = Mock(Message)
+			message.getFrom() >> emailAddress('alice@example.com')
+			message.getTo() >> emailAddress('bob@example.de')
+			message.getSubject() >> 'email subject'
+			message.getBody() >> 'email body'
 		when:
 			template.sendBodyAndHeaders(new MailMessage(message), [:])
 		then:

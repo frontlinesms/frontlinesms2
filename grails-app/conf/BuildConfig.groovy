@@ -27,10 +27,9 @@ grails.project.dependency.resolution = {
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-		/* TEST dependencies */
-		test 'org.gmock:gmock:0.8.1'
+		// TEST dependencies
 
-		// runtime 'mysql:mysql-connector-java:5.1.13'
+		// COMPILE dependencies
 		compile 'net.frontlinesms.core:camel-smslib:0.0.1'
 		compile 'org.apache.camel:camel-mail:2.5.0'
 	}
