@@ -27,9 +27,11 @@ grails.project.dependency.resolution = {
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-		// TEST dependencies
+		// TEST
+		test 'org.apache.camel:camel-test:2.5.0'
+		test 'org.mockito:mockito-all:1.8.5'
 
-		// COMPILE dependencies
+		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.1'
 		compile 'org.apache.camel:camel-mail:2.5.0'
 	}

@@ -2,10 +2,13 @@ package frontlinesms2
 
 import spock.lang.*
 import grails.plugin.spock.*
+import org.apache.camel.impl.DefaultExchange
+import org.apache.camel.Exchange
+import org.apache.camel.CamelContext
 
 class FmessageSaverSpec extends UnitSpec {
 	@Shared
-	def s
+	FmessageSaver s
 
 	def setupSpec() {
 		s = new FmessageSaver()
@@ -26,7 +29,12 @@ class FmessageSaverSpec extends UnitSpec {
 			Fmessage.findAll() == [m]
 	}
 
-	def createTestExchange(Fmessage fmessage) {
+	def createTestExchange(def fmessage) {
+		CamelContext context = null
+		Exchange exchange = new DefaultExchange(context)
+		org.apache.camel.Message message = exchange.in
+        message.setBody(fmessage);
+        return exchange;
 	}
 }
 
