@@ -6,12 +6,12 @@ import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.Exchange
 import org.apache.camel.CamelContext
 
-class FmessageSaverSpec extends UnitSpec {
+class MessageStorageServiceSpec extends UnitSpec {
 	@Shared
-	FmessageSaver s
+	MessageStorageService s
 
 	def setupSpec() {
-		s = new FmessageSaver()
+		s = new MessageStorageService()
 	}
 
 	def "it's a processor"() {

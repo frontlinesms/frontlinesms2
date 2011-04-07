@@ -2,7 +2,8 @@
 
 class EmailTranslationRoute {
     def configure = {
-        // example:
-        // from('seda:input').to('stream:out')
-    }
+		from('seda:raw-email')
+				.beanRef('emailTranslationService', 'process')
+				.to('seda:fmessages-to-store')
+	}
 }

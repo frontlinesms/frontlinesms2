@@ -2,7 +2,8 @@
 
 class MessageStorageRoute {
     def configure = {
-        // example:
-        // from('seda:input').to('stream:out')
+        from('seda:fmessages-to-store').
+				beanRef('messageStorageService', 'process').
+				to('seda:fmessages-to-process')
     }
 }

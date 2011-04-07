@@ -22,6 +22,7 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 		template = new DefaultProducerTemplate(
 			camelContext,
 			camelContext.getEndpoint('direct:start'))
+//		template = createProducerTemplate()
 		template.start()
 	}
 
@@ -34,6 +35,12 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 
 	abstract String getFrom();
 	abstract String getTo();
+
+	ProducerTemplate createProducerTemplate() {
+		new DefaultProducerTemplate(
+				camelContext,
+				camelContext.getEndpoint('direct:start'))
+	}
 
 	private RouteBuilder createRouteBuilder() {
 		return new RouteBuilder() {
