@@ -14,11 +14,7 @@ class EmailTranslationRouteSpec extends EmailRouteSpec {
 
 	def "test translation route"() {
 		given:
-			resultEndpoint.expectedBodiesReceived(
-					new Fmessage(src: 'alice', dst: 'bob', content: '''email subject
-=============
-
-email body'''))
+//			assert Fmessage.count() == 0
 			def message = Mock(Message)
 			message.getFrom() >> emailAddress('alice@example.com')
 			message.getTo() >> emailAddress('bob@example.de')
@@ -27,8 +23,23 @@ email body'''))
 		when:
 			template.sendBodyAndHeaders(new MailMessage(message), [:])
 		then:
-       		resultEndpoint.assertIsSatisfied()
-			assert Fmessage.count() == 0		
+//			assert Fmessage.count() == 0
+			def exchanges = resultEndpoint.getReceivedExchanges()
+//			println "Exchanges: ${exchanges.class} : ${exchanges}"
+//			println "Exchanges size: ${exchanges.size()}"
+//			println exchanges
+//			assert exchanges == []
+//			assert exchanges instanceof java.util.concurrent.CopyOnWriteArrayList
+			exchanges.each() { println "Exchange entry: ${it}" }
+			assert exchanges.size() == 1
+			def receivedBody = exchanges[0].in.body
+			assert receivedBody instanceof Fmessage
+			assert receivedBody.src == 'email:alice@example.com'
+			assert receivedBody.dst == 'email:bob@example.de'
+			assert receivedBody.content == '''email subject
+=============
+
+email body'''
 	}
 }
 

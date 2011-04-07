@@ -81,7 +81,6 @@ Here's the test email body converted into a textual message."""
 
 	private Exchange createTestExchange(def params = []) {
 		def email = createTestEmail(params)
-		def camelMessage = new org.apache.camel.component.mail.MailMessage(email)
 		new MailEndpoint('asdf').createExchange(email)
 	}
 

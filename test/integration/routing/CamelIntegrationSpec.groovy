@@ -6,6 +6,8 @@ import grails.plugin.spock.*
 import org.apache.camel.*
 import org.apache.camel.builder.*
 import org.apache.camel.impl.DefaultProducerTemplate
+import org.apache.camel.component.mock.MockEndpoint
+import frontlinesms2.Fmessage
 
 abstract class CamelIntegrationSpec extends IntegrationSpec {
 	// This is the CamelContext used by Grails.  It will be injected for you.
@@ -28,9 +30,15 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 
 	def cleanup() {
 		template?.stop()
+		MockEndpoint.resetMocks(camelContext)
 		def testRoutes = [camelContext.getRouteDefinition('test-1'),
 						camelContext.getRouteDefinition('test-2')]
 		camelContext.removeRouteDefinitions(testRoutes)
+
+		// TODO Work around for apparent non-transactional nature of Spock integration specs
+		Fmessage.findAll().each() {
+			it.delete()
+		}
 	}
 
 	abstract String getFrom();

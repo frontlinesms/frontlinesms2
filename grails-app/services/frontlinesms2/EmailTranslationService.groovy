@@ -10,12 +10,18 @@ class EmailTranslationService implements Processor {
 	static transactional = false
 
 	void process(Exchange exchange) {
-		Fmessage message = new Fmessage()
+		println("exchange ${exchange}")
 		def i = exchange.in
+		println("in: ${i}")
+		Fmessage message = new Fmessage()
 		message.src = EMAIL_PROTOCOL_PREFIX + i.getHeader('From')
+		println("src: ${message.src}")
 		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')
+		println("dst: ${message.dst}")
 		def emailBody = i.body
 		def emailSubject = i.getHeader('Subject')
+		println("emailBody: ${emailBody}")
+		println("emailSubject: ${emailSubject}")
 		message.text = emailSubject
 		if(emailBody != null) {
 			message.text = message.text ? "${message.text}\n${underline(emailSubject)}\n\n${emailBody}" : emailBody

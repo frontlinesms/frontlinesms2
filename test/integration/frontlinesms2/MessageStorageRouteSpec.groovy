@@ -5,14 +5,20 @@ import routing.CamelIntegrationSpec
 class MessageStorageRouteSpec extends CamelIntegrationSpec {
 	def "test storage"() {
 		given:
+
+		// TODO Work around for apparent non-transactional nature of Spock integration specs
+			Fmessage.findAll().each() {
+				it.delete()
+			}
+			assert Fmessage.count() == 0
+
 			def fmessage = new Fmessage(src: 'alice', dst: 'bob', content: 'subject')
-		        assert Fmessage.count() == 0
 			resultEndpoint.expectedBodiesReceived(fmessage)
 		when:
 			template.sendBodyAndHeaders(fmessage, [:])
 		then:
-       			resultEndpoint.assertIsSatisfied()
-		        assert Fmessage.count() == 1
+       		resultEndpoint.assertIsSatisfied()
+		    assert Fmessage.count() == 1
 	}
 
 	@Override
