@@ -19,3 +19,4 @@ target/
 stacktrace.log
 CodeNarcReport.html
 cobertura.ser
+.idea/
