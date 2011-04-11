@@ -11,7 +11,7 @@
 		<g:if test="${contactInstanceTotal > 0}">
 			<ol id="contacts">
 				<g:each in="${contactInstanceList}" status="i" var="contactInstance">
-					<li>${contactInstance.name}</li>
+					<li><g:link action="show" id="${contactInstance.id}">${contactInstance.name}</g:link></li>
 				</g:each>
 			</ol>
 		</g:if>
