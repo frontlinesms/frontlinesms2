@@ -13,15 +13,15 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 		ContactSpecUtils.deleteTestContacts()
 	}
 
-	
-
 	def 'contacts link to their details'() {
+		given:
+			def alice = Contact.findByName('Alice')
 		when:
 			go 'contact'
 			println $('body').text()
 		then:
 			def contactDetails = $('#contacts')
-			def alice = Contact.findByName('Alice')
+
 			def firstContactListItem = $('#contacts').children().first()
 			println " firstContactListItem: ${firstContactListItem}"
 			println " firstContactListItem.children(): ${firstContactListItem.children().collect() { it.tag() }}"
@@ -32,14 +32,15 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 
 
 	def 'contacts details are displayed'() {
-		when:
+		given:
 			def alice = Contact.findByName('Alice')
+			def bob = Contact.findByName('Bob')
+		when:
 			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
 		then:
 			assertContactSelected('Alice')
 		    
 		when:
-			def bob = Contact.findByName('Bob')
 			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
 		then:
 			assertContactSelected('Bob')
