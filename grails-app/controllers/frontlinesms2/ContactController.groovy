@@ -38,7 +38,7 @@ class ContactController {
             redirect(action: "list")
         }
         else {
-            [contactInstance: contactInstance]
+            return [contactInstance: contactInstance] << list()
         }
     }
 
