@@ -10,16 +10,32 @@ class ContactViewSpec extends grails.plugin.geb.GebSpec {
 			go 'contact'
 			println $('body').text()
 		then:
-			def contactsList = $('.list')
-			println contactsList
-			assert contactsList != null
-
-			def odds = contactsList.find('.odd')
-			assert odds[0].children()[2].text() == 'Alice'
-		
-			def contactNames = $('tbody').children().collect() {
-				it.children()[2].text()
+			def contactList = $('#contacts')
+			assert contactList.tag() == 'ol'
+			
+			def contactNames = contactList.children().collect() {
+				it.text()
 			}
 			assert contactNames == ['Alice', 'Bob']
+	}
+    
+	def 'contacts list not shown when no contacts exist'() {
+		when:
+			println 'Deleting contacts...'
+			// TODO should not need to delete all contacts manually
+			def allContacts = frontlinesms2.Contact.findAll()
+			println "All contacts: ${allContacts}"
+			allContacts.each() { 
+				println "Deleting ${it.name}"
+				it.delete(failOnError: true, flush: true)
+				
+			}
+			println 'deleted.'
+			go 'http://localhost:8080/frontlinesms2/contact'
+		then:
+			def c = $('#contacts')
+			println "contacts content after deletion: ${c.text()}"
+			assert c.tag() == "div"
+			assert c.text() == 'You have no contacts saved'
 	}
 }
