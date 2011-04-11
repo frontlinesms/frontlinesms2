@@ -6,17 +6,30 @@ import grails.plugin.geb.GebSpec
 
 class ContactListSpec extends grails.plugin.geb.GebSpec {
 	def 'contacts list is displayed'() {
+		given:
+			ContactSpecUtils.createTestContacts()
 		when:
 			go 'contact'
 			println $('body').text()
 		then:
-			def contactDetails = $('#contacts')
+			def contactList = $('#contacts')
+			assert contactList.tag() == 'ol'
 			
-			def firstContactListItem = $('#contacts').children().first()
-			println " firstContactListItem: ${firstContactListItem}"
-			println " firstContactListItem.children(): ${firstContactListItem.children().collect() { it.tag() }}"
-			def anchor = firstContactListItem.children('a').first()
-			assert anchor.text() == 'Alice'
-			assert anchor.getAttribute('href') == '/frontlinesms2/contact/show/1'
+			def contactNames = contactList.children().collect() {
+				it.text()
+			}
+			assert contactNames == ['Alice', 'Bob']
+		cleanup:
+			ContactSpecUtils.deleteTestContacts()
+	}
+
+	def 'contacts list not shown when no contacts exist'() {
+		when:
+			go 'http://localhost:8080/frontlinesms2/contact'
+		then:
+			def c = $('#contacts')
+			println "contacts content after deletion: ${c.text()}"
+			assert c.tag() == "div"
+			assert c.text() == 'You have no contacts saved'
 	}
 }
