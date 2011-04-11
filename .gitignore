@@ -20,3 +20,8 @@ stacktrace.log
 CodeNarcReport.html
 cobertura.ser
 .idea/
+
+# Temp files and directories
+temp/
+*~
+test/functional/frontlinesms2/InProgressSpec.groovy
