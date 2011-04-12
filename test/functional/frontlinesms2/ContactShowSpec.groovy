@@ -20,8 +20,6 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 			go 'contact'
 			println $('body').text()
 		then:
-			def contactDetails = $('#contacts')
-
 			def firstContactListItem = $('#contacts').children().first()
 			println " firstContactListItem: ${firstContactListItem}"
 			println " firstContactListItem.children(): ${firstContactListItem.children().collect() { it.tag() }}"
@@ -31,7 +29,7 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 	}
 
 
-	def 'contacts details are displayed'() {
+	def 'selected contact is highlighted'() {
 		given:
 			def alice = Contact.findByName('Alice')
 			def bob = Contact.findByName('Bob')
@@ -44,6 +42,34 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
 		then:
 			assertContactSelected('Bob')
+	}
+
+	def 'selected contact details are displayed'() {
+		given:
+			def alice = Contact.findByName('Alice')
+			def bob = Contact.findByName('Bob')
+		when:
+			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
+		then:
+			def contactDetails = $('#contactinfo')
+
+			def contactName = contactDetails.children('div#name')
+			assert contactName.getAttribute("id") == 'name'
+			assert contactName.children('label').text() == 'Name'
+			assert contactName.children('label').getAttribute('for') == 'name'
+			assert contactName.children('input').getAttribute('name') == 'name'
+			assert contactName.children('input').getAttribute('id') == 'name'
+			assert contactName.children('input').getAttribute('type')  == 'text'
+			assert contactName.children('input').getAttribute('value')  == 'Alice'
+
+			def contactAddress = contactDetails.children('div#address')
+			assert contactAddress.getAttribute("id") == 'address'
+			assert contactAddress.children('label').text() == 'Address'
+			assert contactAddress.children('label').getAttribute('for') == 'address'
+			assert contactAddress.children('input').getAttribute('name') == 'address'
+			assert contactAddress.children('input').getAttribute('id') == 'address'
+			assert contactAddress.children('input').getAttribute('type')  == 'text'
+			assert contactAddress.children('input').getAttribute('value')  == '+2541234567'
 	}
 
 	def assertContactSelected(String name) {
