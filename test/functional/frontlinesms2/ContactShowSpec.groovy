@@ -4,13 +4,13 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactShowSpec extends grails.plugin.geb.GebSpec {
+class ContactShowSpec extends ContactGebSpec {
 	def setup() {
-		ContactSpecUtils.createTestContacts()
+		createTestContacts()
 	}
 
 	def cleanup() {
-		ContactSpecUtils.deleteTestContacts()
+		deleteTestContacts()
 	}
 
 	def 'contacts link to their details'() {
@@ -20,8 +20,6 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 			go 'contact'
 			println $('body').text()
 		then:
-			def contactDetails = $('#contacts')
-
 			def firstContactListItem = $('#contacts').children().first()
 			println " firstContactListItem: ${firstContactListItem}"
 			println " firstContactListItem.children(): ${firstContactListItem.children().collect() { it.tag() }}"
@@ -30,8 +28,7 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
 	}
 
-
-	def 'contacts details are displayed'() {
+	def 'selected contact is highlighted'() {
 		given:
 			def alice = Contact.findByName('Alice')
 			def bob = Contact.findByName('Bob')
@@ -44,6 +41,16 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
 		then:
 			assertContactSelected('Bob')
+	}
+
+	def 'selected contact details are displayed'() {
+		given:
+			def alice = Contact.findByName('Alice')
+		when:
+			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
+		then:
+			assertFieldDetailsCorrect('name', 'Name', 'Alice')
+			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
 	}
 
 	def assertContactSelected(String name) {
