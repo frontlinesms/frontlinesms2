@@ -8,18 +8,7 @@
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
-		<g:if test="${contactInstanceTotal > 0}">
-			<ol id="contacts">
-				<g:each in="${contactInstanceList}" status="i" var="contactInstance">
-					<li><g:link action="show" id="${contactInstance.id}">${contactInstance.name}</g:link></li>
-				</g:each>
-			</ol>
-		</g:if>
-		<g:else>
-			<div id="contacts">
-				You have no contacts saved
-			</div>
-		</g:else>
+		<g:render template="contact_list"/>
 
 
 
