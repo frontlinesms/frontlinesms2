@@ -20,19 +20,11 @@
             <span class="menuButton"><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></span>
             <span class="menuButton"><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></span>
         </div>
+
+
+
         <div class="body">
-			<g:if test="${contactInstanceTotal > 0}">
-				<ol id="contacts">
-					<g:each in="${contactInstanceList}" status="i" var="c">
-						<li class="${c == contactInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">${c.name}</g:link></li>
-					</g:each>
-				</ol>
-			</g:if>
-			<g:else>
-				<div id="contacts">
-					You have no contacts saved
-				</div>
-			</g:else>
+			<g:render template="contact_list"/>
 			 <g:form name="contactDetails">
 				<g:hiddenField name="id" value="${contactInstance?.id}" />
                 <g:hiddenField name="version" value="${contactInstance?.version}" />
