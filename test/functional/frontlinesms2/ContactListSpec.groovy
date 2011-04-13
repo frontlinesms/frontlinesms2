@@ -4,10 +4,10 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactListSpec extends grails.plugin.geb.GebSpec {
+class ContactListSpec extends ContactGebSpec {
 	def 'contacts list is displayed'() {
 		given:
-			ContactSpecUtils.createTestContacts()
+			createTestContacts()
 		when:
 			go 'contact'
 			println $('body').text()
@@ -20,7 +20,7 @@ class ContactListSpec extends grails.plugin.geb.GebSpec {
 			}
 			assert contactNames == ['Alice', 'Bob']
 		cleanup:
-			ContactSpecUtils.deleteTestContacts()
+			deleteTestContacts()
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
