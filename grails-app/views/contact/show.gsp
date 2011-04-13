@@ -31,15 +31,15 @@
 				 <div id="contactinfo">
 						<div id="name">
 							<label for="name"><g:message code="contact.name.label" default="Name" /></label>
-								<g:textField name="name" id="name" value="${contactInstance?.name}" />
+							<g:textField name="name" id="name" value="${contactInstance?.name}" />
 						</div>
 						<div id="address">
 							<label for="address"><g:message code="contact.address.label" default="Address" /></label>
-								<g:textField name="address" id="address" value="${contactInstance?.address}" />
+							<g:textField name="address" id="address" value="${contactInstance?.address}" />
 						</div>
 				 </div>
 				 <div class="buttons">
-                 	<span class="button"><g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" /></span>
+              	 	<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
 				 </div>
 			 </g:form>
 
