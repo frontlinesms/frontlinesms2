@@ -8,6 +8,7 @@
         <title><g:message code="default.list.label" args="[entityName]" /></title>
     </head>
     <body>
+		<g:render template="menu"/>
 		<g:render template="contact_list"/>
 
 
