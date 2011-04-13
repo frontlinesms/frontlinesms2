@@ -4,13 +4,13 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactShowSpec extends grails.plugin.geb.GebSpec {
+class ContactShowSpec extends ContactGebSpec {
 	def setup() {
-		ContactSpecUtils.createTestContacts()
+		createTestContacts()
 	}
 
 	def cleanup() {
-		ContactSpecUtils.deleteTestContacts()
+		deleteTestContacts()
 	}
 
 	def 'contacts link to their details'() {
@@ -46,26 +46,11 @@ class ContactShowSpec extends grails.plugin.geb.GebSpec {
 	def 'selected contact details are displayed'() {
 		given:
 			def alice = Contact.findByName('Alice')
-			def bob = Contact.findByName('Bob')
 		when:
 			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
 		then:
-			def contactDetails = 
-
 			assertFieldDetailsCorrect('name', 'Name', 'Alice')
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
-	}
-
-	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
-			def contactName = $('#contactinfo').children("div#${fieldName}")
-			assert contactName.getAttribute("id") == "${fieldName}"
-			assert contactName.children('label').text() == "${labelText}"
-			assert contactName.children('label').getAttribute('for') == "${fieldName}"
-			assert contactName.children('input').getAttribute('name') == "${fieldName}"
-			assert contactName.children('input').getAttribute('id') == "${fieldName}"
-			assert contactName.children('input').getAttribute('type')  == 'text'
-			assert contactName.children('input').getAttribute('value')  == "${expectedValue}"
-			true
 	}
 
 	def assertContactSelected(String name) {
