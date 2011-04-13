@@ -24,7 +24,7 @@ class ContactController {
         def contactInstance = new Contact(params)
 		if (contactInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-            redirect(action: "show", id: contactInstance.id)
+            redirect(action: "list", id: contactInstance.id)
         }
         else {
             render(view: "create", model: [contactInstance: contactInstance])
