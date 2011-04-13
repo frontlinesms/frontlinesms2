@@ -49,9 +49,14 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="buttons">
-                    <span class="button"><g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
+
+
+				<div id="buttons">
+                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+					<g:link class="cancel" action="list">Cancel</g:link>
                 </div>
+
+
             </g:form>
         </div>
     </body>
