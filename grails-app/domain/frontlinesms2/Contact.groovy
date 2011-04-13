@@ -5,6 +5,7 @@ class Contact {
 	String address
 
     static constraints = {
-		address(unique: true)
+		name(blank: false)
+		address(unique: true, blank: false)
     }
 }

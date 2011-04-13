@@ -23,7 +23,11 @@
                 <g:renderErrors bean="${contactInstance}" as="list" />
             </div>
             </g:hasErrors>
-            <g:form action="save" >
+
+
+            <g:form name="contactDetails" action="save" >
+
+
                 <div class="dialog">
                     <table>
                         <tbody>
