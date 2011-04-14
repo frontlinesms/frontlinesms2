@@ -6,6 +6,6 @@ class Contact {
 
     static constraints = {
 		name(blank: false)
-		address(unique: true, blank: false)
+		address(unique: true, nullable: true)
     }
 }
