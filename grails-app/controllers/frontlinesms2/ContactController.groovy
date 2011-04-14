@@ -9,15 +9,29 @@ class ContactController {
     }
 
     def list = {
+		def groupInstance = params.id? Group.findById(params.id): null
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        return [contactInstanceList: Contact.list(params),
-					contactInstanceTotal: Contact.count()]
+
+		def contactInstanceList, contactInstanceTotal
+		println "Contacts: ${Contact.list(params)}"
+		if(groupInstance) {
+			contactInstanceList = groupInstance.members
+			contactInstanceTotal = groupInstance.members.size()
+		} else {
+			contactInstanceList = Contact.list(params)
+			contactInstanceTotal = Contact.count()
+		}
+
+         return [contactInstanceList: contactInstanceList,
+					contactInstanceTotal: contactInstanceTotal,
+					groupInstanceList: Group.findAll(),
+					contactsSection: groupInstance]
     }
 
     def create = {
         def contactInstance = new Contact()
         contactInstance.properties = params
-        return [contactInstance: contactInstance]
+        return [contactInstance: contactInstance] << list()
     }
 
     def save = {

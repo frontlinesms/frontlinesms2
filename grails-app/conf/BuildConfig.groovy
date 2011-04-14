@@ -30,7 +30,7 @@ grails.project.dependency.resolution = {
 		// TEST
 		test 'org.apache.camel:camel-test:2.5.0'
 		test 'org.mockito:mockito-all:1.8.5'
-		test 'org.seleniumhq.selenium:selenium-firefox-driver:latest.release'
+		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
 
 		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.1'
