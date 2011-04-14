@@ -21,8 +21,6 @@ class ContactShowSpec extends ContactGebSpec {
 			println $('body').text()
 		then:
 			def firstContactListItem = $('#contacts').children().first()
-			println " firstContactListItem: ${firstContactListItem}"
-			println " firstContactListItem.children(): ${firstContactListItem.children().collect() { it.tag() }}"
 			def anchor = firstContactListItem.children('a').first()
 			assert anchor.text() == 'Alice'
 			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"

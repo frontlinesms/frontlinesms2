@@ -1,0 +1,38 @@
+Welcome to Grails 1.3.7 - http://grails.org/
+Licensed under Apache Standard License 2.0
+Grails home is set to: /home/david/.grails/grails-1.3.7
+
+Base Directory: /media/Storage/Active/FrontlineSMS/Project/frontlinesms2
+Resolving dependencies...
+Dependencies resolved in 2531ms.
+Running script /home/david/.grails/grails-1.3.7/scripts/TestApp.groovy
+Environment set to test
+    [mkdir] Created dir: /media/Storage/Active/FrontlineSMS/Project/frontlinesms2/target/test-reports/html
+    [mkdir] Created dir: /media/Storage/Active/FrontlineSMS/Project/frontlinesms2/target/test-reports/plain
+
+Starting functional test phase ...
+     [copy] Copying 1 file to /home/david/.grails/1.3.7/projects/frontlinesms2
+   [delete] Deleting directory /home/david/.grails/1.3.7/projects/frontlinesms2/tomcat
+Running Grails application..
+Server running. Browse to http://localhost:8080/frontlinesms2
+
+-------------------------------------------------------
+Running 3 spock tests...
+Running test frontlinesms2.GroupViewSpec...
+                    Group menu is displayed...FAILED
+                    Group menu item is highli ghted when viewing corresponding group...FAILED
+                    Group members list is displayed when viewing corresponding group...FAILED
+Tests Completed in 7915ms ...
+-------------------------------------------------------
+Tests passed: 0
+Tests failed: 3
+-------------------------------------------------------
+Server stopped
+[junitreport] Processing /media/Storage/Active/FrontlineSMS/Project/frontlinesms2/target/test-reports/TESTS-TestSuites.xml to /tmp/null1247424187
+[junitreport] Loading stylesheet /home/david/.grails/grails-1.3.7/lib/junit-frames.xsl
+[junitreport] Transform time: 3527ms
+[junitreport] Deleting: /tmp/null1247424187
+
+Tests FAILED - view reports in target/test-reports
+Application context shutting down...
+Application context shutdown.
