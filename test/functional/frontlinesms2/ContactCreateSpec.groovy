@@ -53,7 +53,3 @@ class CreateContactPage extends geb.Page {
 		errorMessages { $('.errors') }
 	}
 }
-
-class ContactListPage extends geb.Page {
-	static url = 'contact/list'
-}
