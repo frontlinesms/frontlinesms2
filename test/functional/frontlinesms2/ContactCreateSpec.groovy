@@ -14,7 +14,6 @@ class ContactCreateSpec extends ContactGebSpec {
 		when:
 			to CreateContactPage
 			$("#contactDetails").name = 'Kate'
-			$("#contactDetails").address = '+2541234567'
 			saveButton.click()
 		then:
 			at ContactListPage
