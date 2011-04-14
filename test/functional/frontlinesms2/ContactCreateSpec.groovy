@@ -41,6 +41,13 @@ class ContactCreateSpec extends ContactGebSpec {
 			assert cancelContact.getAttribute('href') == "/frontlinesms2/contact/list"
 
 	}
+
+	def '"All contacts" menu item is selected when creating a contact'() {
+		when:
+			to ContactListPage
+		then:
+			selectedMenuItem.text() == 'All contacts'
+	}
 }
 
 class CreateContactPage extends geb.Page {
