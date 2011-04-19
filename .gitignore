@@ -25,3 +25,4 @@ cobertura.ser
 temp/
 *~
 test/functional/frontlinesms2/InProgressSpec.groovy
+test.log
