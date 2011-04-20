@@ -1,28 +1,23 @@
 package frontlinesms2
 
+import geb.Browser
+import org.openqa.selenium.firefox.FirefoxDriver
+import grails.plugin.geb.GebSpec
+
 class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
-	def '"phone settings & connections" menu item is available settings menu'() {
-		when:
-			to SettingsPage
-		then:
-			phonesMenuItem.text() == "Phones & connections"
-			phonesMenuItem.children('a').getAttribute('href') == "/frontlinesms2/settings/connections"
-	}
 	
-	def 'add new connection option is available in phone settings panel'() {
+	def 'add new connection option is available in connection settings panel'() {
 		when:
 			to ConnectionsListPage	
 		then:
 			btnNewConnection.text() == "Add new connection"
-		when:
-			btnNewConnection.click()
-		then:
-			at NewConnectionPage
+			assert btnNewConnection.children().getAttribute("href") == "/frontlinesms2/connection/create"
 	}
 	
+
 	def 'connections are listed in "phone & connections" panel'() {
 		given:
-			mockConnections()
+			createTestConnections()
 		when:
 			at ConnectionsListPage
 		then:
@@ -30,27 +25,27 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 			lstConnections.children().collect() {
 				it.text()
 			} == ["'MTN Dongle' (Phone/Modem)", "'David's Clickatell account' (Clickatell SMS Gateway)", "'Miriam's Clickatell account' (Clickatell SMS Gateway)"]
+		cleanup:	
+			deleteTestConnections()
 	}
 
-	def mockConnections() {
-		def mocks = [new Fconnection(name:'MTN Dongle', type:'Phone/Modem'),
+	def createTestConnections() {
+		[new Fconnection(name:'MTN Dongle', type:'Phone/Modem'),
 				new Fconnection(name:'David\'s Clickatell account', type:'Clickatell SMS Gateway'),
-				new Fconnection(name:'Miriam\'s Clickatell account', type:'Clickatell SMS Gateway')]
-		mockDomain(Connection, mocks)
+				new Fconnection(name:'Miriam\'s Clickatell account', type:'Clickatell SMS Gateway')].each() { it.save(failOnError: true)  }
+	}
+
+	def deleteTestConnections() {
+		Fconnection.findAll().each() { it.delete(flush: true) }
 	}
 }
 
 class ConnectionsListPage extends geb.Page {
-	static url = 'settings/connections'
+	static url = 'connection/index'
 	static content = {
 		btnNewConnection { $('#btnNewConnection') }
 		lstConnections { $('#connections') }
 	}
 }
 
-class NewConnectionPage extends geb.Page {
-	static at = {
-		title.endsWith('Add new connection')
-	}
-}
 
