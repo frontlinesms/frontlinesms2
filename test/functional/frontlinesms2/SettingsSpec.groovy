@@ -1,15 +1,26 @@
 package frontlinesms2
 
+import geb.Browser
+import org.openqa.selenium.firefox.FirefoxDriver
+
 class SettingsSpec extends grails.plugin.geb.GebSpec {
 	def 'settings menu item is available in eyebrow'() {
 		when:
-			to ContactsListPage
-			def btnGotoSettings = $('#eyebrow #btnGotoSettings a')
+			to ContactListPage
+			def btnGotoSettings = $('#eyebrow #btnGotoSettings')
 		then:
 			btnGotoSettings.text() == 'Settings & Plugins'
 		when:
 			btnGotoSettings.click()
 		then:
 			at SettingsPage
+	}
+
+	def '"phones & connections" menu item is available settings menu'() {
+		when:
+			to SettingsPage
+		then:
+			phonesMenuItem.text() == "Phones & connections"
+			phonesMenuItem.children('a').getAttribute('href') == "/frontlinesms2/connection/index"
 	}
 }

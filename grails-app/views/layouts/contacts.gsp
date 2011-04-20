@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
 	</head>
 	<body>
+		<g:render template="/eyebrow"/>
 		<g:if test="${flash.message}">
 			<div class="message">${flash.message}</div>
 		</g:if>
