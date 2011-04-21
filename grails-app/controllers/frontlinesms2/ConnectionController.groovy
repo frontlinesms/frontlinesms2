@@ -3,11 +3,9 @@ package frontlinesms2
 class ConnectionController {
 
     def index = {
+		def fconnectionInstanceList = Fconnection.findAll()
 
-	}
-
-	def connectionsOverview = {
-
+		return [connectionInstanceList: fconnectionInstanceList]
 	}
 	def create = {
 

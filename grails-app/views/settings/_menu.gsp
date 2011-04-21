@@ -7,9 +7,7 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-	<ol id="settings-menu">
-		<li><g:link action="general">General settings</g:link></li>
-		<li><g:link url="${[controller:'connection', action:'index']}">Phones & connections</g:link></li>
-	</ol>
-</html>
+		<ol id="settings-menu">
+			<li><g:link action="general">General settings</g:link></li>
+			<li><g:link url="${[controller:'connection', action:'index']}">Phones & connections</g:link></li>
+		</ol>
