@@ -19,20 +19,26 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestConnections()
 		when:
-			at ConnectionsListPage
+			to ConnectionsListPage
 		then:
+			println "Connections: ${Fconnection.findAll()}"
 			lstConnections != null
+			println "----"
+			println lstConnections
+			println lstConnections.children()
 			lstConnections.children().collect() {
 				it.text()
-			} == ["'MTN Dongle' (Phone/Modem)", "'David's Clickatell account' (Clickatell SMS Gateway)", "'Miriam's Clickatell account' (Clickatell SMS Gateway)"]
+			} == ["MTN Dongle", "David's Clickatell account", "Miriam's Clickatell account"]
 		cleanup:	
 			deleteTestConnections()
 	}
 
 	def createTestConnections() {
-		[new Fconnection(name:'MTN Dongle', type:'Phone/Modem'),
-				new Fconnection(name:'David\'s Clickatell account', type:'Clickatell SMS Gateway'),
-				new Fconnection(name:'Miriam\'s Clickatell account', type:'Clickatell SMS Gateway')].each() { it.save(failOnError: true)  }
+		[new Fconnection(name:'MTN Dongle', type:'Phone/Modem', camelAddress:'1'),
+				new Fconnection(name:'David\'s Clickatell account', type:'Clickatell SMS Gateway', camelAddress:'2'),
+				new Fconnection(name:'Miriam\'s Clickatell account', type:'Clickatell SMS Gateway', camelAddress:'3')].each() {
+			it.save(flush:true, failOnError: true)
+		}
 	}
 
 	def deleteTestConnections() {

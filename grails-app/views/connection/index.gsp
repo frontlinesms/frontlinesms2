@@ -11,9 +11,9 @@
   <head><meta name="layout" content="connection" /></head>
 	<body>
 		<ol id='connections'>
-			<li>'MTN Dongle' (Phone/Modem)</li>
-			<li>'David's Clickatell account' (Clickatell SMS Gateway)</li>
-			<li>'Miriam's Clickatell account' (Clickatell SMS Gateway)</li>
+			<g:each in="${connectionInstanceList}" status="i" var="c">
+				<li class="${c == connectionInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">${c.name}</g:link></li>
+			</g:each>
 		</ol>
 		<div id='btnNewConnection'>
 			<g:link action='create'>Add new connection</g:link>

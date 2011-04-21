@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class Fconnection {
-
-    static constraints = {
-    }
+	String name
+	String type
+	String camelAddress
 }
