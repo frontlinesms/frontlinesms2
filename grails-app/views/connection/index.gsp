@@ -8,11 +8,15 @@
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-  <head><meta name="layout" content="connection" /></head>
+  <head>
+	  <meta name="layout" content="connection" />
+	  <title>Settings > Connections</title>
+
+  </head>
 	<body>
 		<ol id='connections'>
 			<g:each in="${connectionInstanceList}" status="i" var="c">
-				<li class="${c == connectionInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">${c.name}</g:link></li>
+				<li class="${c == connectionInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">'${c.name}' (${c.type})</g:link></li>
 			</g:each>
 		</ol>
 		<div id='btnNewConnection'>

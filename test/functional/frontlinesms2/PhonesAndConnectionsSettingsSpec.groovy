@@ -28,7 +28,7 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 			println lstConnections.children()
 			lstConnections.children().collect() {
 				it.text()
-			} == ["MTN Dongle", "David's Clickatell account", "Miriam's Clickatell account"]
+			} == ["'MTN Dongle' (Phone/Modem)", "'David's Clickatell account' (Clickatell SMS Gateway)", "'Miriam's Clickatell account' (Clickatell SMS Gateway)"]
 		cleanup:	
 			deleteTestConnections()
 	}
@@ -43,14 +43,6 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 
 	def deleteTestConnections() {
 		Fconnection.findAll().each() { it.delete(flush: true) }
-	}
-}
-
-class ConnectionsListPage extends geb.Page {
-	static url = 'connection/index'
-	static content = {
-		btnNewConnection { $('#btnNewConnection') }
-		lstConnections { $('#connections') }
 	}
 }
 
