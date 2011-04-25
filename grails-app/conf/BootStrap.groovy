@@ -20,13 +20,12 @@ class BootStrap {
 	}
 
 	def createContact(String n, String a) {
-		println "Creating contact: ${n}"
 		def c = new Contact(name: n, address: a)
 		c.save(failOnError: true)
 	}
 	
 	def createFconnection(String n, String t, String address) {
-		new Fconnection(name: n, type: t,camelAddress: address).save(failOnError: true)
+		new Fconnection(name: n, type: t, camelAddress: address).save(failOnError: true)
 	}
 
 	def destroy = {

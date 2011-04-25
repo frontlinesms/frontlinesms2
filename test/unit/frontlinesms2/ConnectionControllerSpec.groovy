@@ -3,7 +3,7 @@ package frontlinesms2
 import spock.lang.*
 import grails.plugin.spock.*
 
-class ConnectionsControllerSpec extends ControllerSpec {
+class ConnectionControllerSpec extends ControllerSpec {
 	def "feature method"() {
 		
 	}
