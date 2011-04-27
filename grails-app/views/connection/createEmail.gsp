@@ -21,7 +21,7 @@
 				<g:textField name="camelAddress" value="${fconnectionInstance?.camelAddress}" />
 			</div>
 
-			<g:submitButton class='create' name="create" value="${message(code: 'default.button.create.label', default: 'Create')}" /></span>
+			<g:submitButton class='create' name="create" value="${message(code: 'default.button.create.label', default: 'Save')}" /></span>
 		</g:form>
 	</body>
 </html>

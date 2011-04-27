@@ -7,6 +7,9 @@
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>
+		<g:if test="${flash.message}">
+			<div class="message">${flash.message}</div>
+		</g:if>
 		<g:render template="/settings/menu"/>
 		<g:layoutBody />
 	</body>

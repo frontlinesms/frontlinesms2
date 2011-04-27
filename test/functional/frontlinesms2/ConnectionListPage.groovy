@@ -1,7 +1,7 @@
 package frontlinesms2
 
-class ConnectionsListPage extends geb.Page {
-	static url = 'connection/index'
+class ConnectionListPage extends geb.Page {
+	static url = 'connection/list'
 	static at = {
 		assert title == "Settings > Connections"
 		true
@@ -9,6 +9,7 @@ class ConnectionsListPage extends geb.Page {
 	static content = {
 		btnNewConnection { $('#btnNewConnection') }
 		lstConnections { $('#connections') }
+		lstCreateRouteButtons { $('#createRouteButtons')}
 		selectedConnection { lstConnections.find(".selected") }
 	}
 }
