@@ -1,14 +1,10 @@
 package frontlinesms2
 
-import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
-import grails.plugin.geb.GebSpec
-
 class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'add new connection option is available in connection settings panel'() {
 		when:
-			to ConnectionsListPage	
+			to ConnectionListPage
 		then:
 			btnNewConnection.text() == "Add new connection"
 			assert btnNewConnection.children().getAttribute("href") == "/frontlinesms2/connection/create"
@@ -19,13 +15,10 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestConnections()
 		when:
-			to ConnectionsListPage
+			to ConnectionListPage
 		then:
 			println "Connections: ${Fconnection.findAll()}"
 			lstConnections != null
-			println "----"
-			println lstConnections
-			println lstConnections.children()
 			lstConnections.children().collect() {
 				it.text()
 			} == ["'MTN Dongle' (Phone/Modem)", "'David's Clickatell account' (Clickatell SMS Gateway)", "'Miriam's Clickatell account' (Clickatell SMS Gateway)"]
