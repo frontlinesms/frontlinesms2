@@ -51,6 +51,7 @@ class ConnectionController {
 	}
 
 	def createRoute = {
+		println "Executiung creatRoute closure with params: ${params}"
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
 			flash.message = "Created route from ${settings.camelAddress}"
@@ -58,6 +59,7 @@ class ConnectionController {
 		}
 	}
 	def withFconnection(id=params.id, Closure c) {
+		println "withFconnection id=${id}"
 		def connection = Fconnection.get(id)
 		if(connection) c.call connection
 		else {
