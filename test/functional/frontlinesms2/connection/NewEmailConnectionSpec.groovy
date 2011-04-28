@@ -2,7 +2,7 @@ package frontlinesms2.connection
 
 import frontlinesms2.*
 
-class NewConnectionSpec extends ConnectionGebSpec {
+class NewEmailConnectionSpec extends ConnectionGebSpec {
 	def 'email connection type is available from new connections page' () {
 		when:
 			to ConnectionsTypePage
@@ -19,14 +19,15 @@ class NewConnectionSpec extends ConnectionGebSpec {
 		when:
 			frmNewConnection.type = 'Email'
 			frmNewConnection.name = 'test email connection'
-			frmNewConnection.camelAddress = "smtp:example.com"
+			frmNewConnection.camelAddress = "smtp:example.com?debugMode=true"
 			btnNewConnectionSave.click()
 		then:
 			at ConnectionListPage
 			Fconnection.count() == 1
-			selectedConnection.text().startsWith('\'test email connection\' (Email)')
+			selectedConnection.find('h2').text() == 'test email connection'
+			selectedConnection.find('h3').text() == 'Email'
 		cleanup:
-			Fconnection.findAll().each() { it.delete(flush: true) }
+			deleteTestConnections()
 	}
 	
 	def '"Create route" button exists and can be clicked' () {
@@ -34,23 +35,14 @@ class NewConnectionSpec extends ConnectionGebSpec {
 			createTestConnection()
 		    to ConnectionListPage
 		then:
-			def btnCreateRoute = lstCreateRouteButtons
-			assert btnCreateRoute.text() == 'Create route'
+			def btnCreateRoute = lstConnections.find('.buttons a').first()
+			btnCreateRoute.text() == 'Create route'
 		when:
 			btnCreateRoute.click()
 		then:
-			sleep(15000)
 			at ConnectionListPage
 		cleanup:
-			deleteTestConnection()
-	}
-}
-
-class ConnectionsTypePage extends geb.Page {
-	static url = 'connection/create'
-	static content = {
-		lstConnectionTypes { $('#connectionTypes') }
-		btnNewEmailConnection { lstConnectionTypes.find('.email') }
+			deleteTestConnections()
 	}
 }
 
@@ -65,4 +57,3 @@ class NewEmailConnectionPage extends geb.Page {
 		btnNewConnectionSave {frmNewConnection.find('.create')}
 	}
 }
-

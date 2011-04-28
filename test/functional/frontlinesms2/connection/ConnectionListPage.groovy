@@ -11,7 +11,7 @@ class ConnectionListPage extends geb.Page {
 	static content = {
 		btnNewConnection { $('#btnNewConnection') }
 		lstConnections { $('#connections') }
-		lstCreateRouteButtons { $('#createRouteButtons')}
 		selectedConnection { lstConnections.find(".selected") }
+		btnCreateRoute { selectedConnection.find('.buttons').first() }
 	}
 }
