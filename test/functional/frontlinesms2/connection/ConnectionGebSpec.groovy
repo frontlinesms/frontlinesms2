@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.connection
+
+import frontlinesms2.*
 
 class ConnectionGebSpec extends grails.plugin.geb.GebSpec{
 

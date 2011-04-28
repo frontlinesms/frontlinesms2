@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.connection
+
+import frontlinesms2.*
 
 class NewConnectionSpec extends ConnectionGebSpec {
 	def 'email connection type is available from new connections page' () {
