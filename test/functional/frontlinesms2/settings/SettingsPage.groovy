@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.settings
+
+import frontlinesms2.*
 
 class SettingsPage extends geb.Page {
 	static url = 'settings'

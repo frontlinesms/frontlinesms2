@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.connection
+
+import frontlinesms2.*
 
 class ConnectionListPage extends geb.Page {
 	static url = 'connection/list'
