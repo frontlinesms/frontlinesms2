@@ -1,8 +1,9 @@
 package frontlinesms2
 
 import org.apache.camel.Exchange
+import org.apache.camel.Processor
 
-class MessageStorageService implements org.apache.camel.Processor {
+class MessageStorageService implements Processor {
     static transactional = true
 
 	public void process(Exchange ex) {

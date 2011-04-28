@@ -8,13 +8,6 @@ import org.apache.camel.Exchange
 import org.apache.camel.component.mail.MailEndpoint
 import org.apache.camel.component.mail.MailMessage;
 
-/**
- * Created by IntelliJ IDEA.
- * User: user
- * Date: 16/03/11
- * Time: 15:14
- * To change this template use File | Settings | File Templates.
- */
 abstract class EmailRouteSpec extends CamelIntegrationSpec {
 	protected Address[] emailAddress(String... strings) {
 		def addresses = []
