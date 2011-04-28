@@ -22,9 +22,7 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		then:
 			println "Connections: ${Fconnection.findAll()}"
 			lstConnections != null
-			lstConnections.children().collect() {
-				it.text()
-			} == ["'MTN Dongle' (Phone/Modem)", "'David's Clickatell account' (Clickatell SMS Gateway)", "'Miriam's Clickatell account' (Clickatell SMS Gateway)"]
+			lstConnections.find('h2')*.text() == ['MTN Dongle', 'David\'s Clickatell account', 'Miriam\'s Clickatell account']
 		cleanup:	
 			deleteTestConnections()
 	}

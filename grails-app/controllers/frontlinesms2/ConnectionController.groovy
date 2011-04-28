@@ -20,6 +20,20 @@ class ConnectionController {
 
 	def create = {}
 
+	def createX = {
+		def fconnectionInstance = new Fconnection()
+		fconnectionInstance.properties = params
+		return [fconnectionInstance: fconnectionInstance]
+	}
+
+	def createEmail = {
+		createX
+	}
+
+	def createSmslib = {
+		createX
+	}
+
 	def show = {
 		def connectionInstance = Fconnection.get(params.id)
         if (!connectionInstance) {
@@ -31,16 +45,23 @@ class ConnectionController {
         }
 	}
 
-	def createEmail = {
-		def fconnectionInstance = new Fconnection()
-		fconnectionInstance.properties = params
-		return [fconnectionInstance: fconnectionInstance]
-	}
-
 	def saveEmail = {
 		def fconnectionInstance = new Fconnection()
 		fconnectionInstance.properties = params
 		fconnectionInstance.type = 'Email'
+
+		if (fconnectionInstance.save(flush: true)) {
+			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
+			redirect(action: "list", id: fconnectionInstance.id)
+		} else {
+			render "fail!  ${fconnectionInstance.errors}"
+		}
+	}
+
+	def saveSmslib = {
+		def fconnectionInstance = new Fconnection()
+		fconnectionInstance.properties = params
+		fconnectionInstance.type = 'Phone/Modem'
 
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
