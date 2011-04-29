@@ -17,9 +17,12 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 		then:
 			at NewEmailConnectionPage
 		when:
-			frmNewConnection.type = 'Email'
 			frmNewConnection.name = 'test email connection'
-			frmNewConnection.camelAddress = "smtp:example.com?debugMode=true"
+			frmNewConnection.protocol = 'imap'
+			frmNewConnection.serverName = 'mail.example.com'
+			frmNewConnection.serverPort = '1234'
+			frmNewConnection.username = 'greg'
+			frmNewConnection.password = 'pastie'
 			btnNewConnectionSave.click()
 		then:
 			at ConnectionListPage
@@ -33,7 +36,7 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 	def '"Create route" button exists and can be clicked' () {
 		when:
 			createTestConnection()
-		    to ConnectionListPage
+			to ConnectionListPage
 		then:
 			def btnCreateRoute = lstConnections.find('.buttons a').first()
 			btnCreateRoute.text() == 'Create route'

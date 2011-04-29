@@ -15,7 +15,7 @@
 						<li id='item' class="${c == connectionInstance ? 'selected' : ''}">
 							<g:link action="show" class="show" id="${c.id}">
 								<h2>${c.name}</h2>
-								<h3>${c.type}</h3>
+								<h3>${c.type()}</h3>
 							</g:link>
 							<div class="buttons">
 								<g:link action="createRoute" class='route' id="${c.id}">Create route</g:link>
