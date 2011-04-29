@@ -17,9 +17,9 @@ class NewSmslibConnectionSpec extends ConnectionGebSpec {
 		then:
 			at NewSmslibConnectionPage
 		when:
-			frmNewConnection.type = 'Phone/Modem'
 			frmNewConnection.name = 'test smslib connection'
-			frmNewConnection.camelAddress = "smslib:COM1?baud=9600&debugMode=true"
+			frmNewConnection.port = 'COM1'
+			frmNewConnection.baud = '9600'
 			btnNewConnectionSave.click()
 		then:
 			at ConnectionListPage
