@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.contact
+
+import frontlinesms2.*
 
 abstract class GroupGebSpec extends grails.plugin.geb.GebSpec {
 	def createTestGroups() {
