@@ -12,13 +12,13 @@
 			</div>
 
 			<div class="input">
-				<label for="type"><g:message code="fconnection.type.label" default="Type" /></label>
-				<g:textField name="type" value="${fconnectionInstance?.type}" />
+				<label for="port"><g:message code="fconnection.port.label" default="Port" /></label>
+				<g:textField name="port" value="${fconnectionInstance?.port}" />
 			</div>
 
-			<div class="input">
-				<label for="camelAddress"><g:message code="fconnection.camelAddress.label" default="Camel Address" /></label>
-				<g:textField name="camelAddress" value="${fconnectionInstance?.camelAddress}" />
+			<div class="baud">
+				<label for="baud"><g:message code="fconnection.camelAddress.label" default="Baud rate" /></label>
+				<g:textField name="baud" value="${fconnectionInstance?.baud}" />
 			</div>
 
 			<g:submitButton class='create' name="create" value="${message(code: 'default.button.create.label', default: 'Save')}" /></span>

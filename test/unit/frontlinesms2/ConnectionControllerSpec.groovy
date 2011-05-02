@@ -19,4 +19,3 @@ class ConnectionControllerSpec extends ControllerSpec {
 			1 * service.createRoute(fconnection1) // Verify that createRoute was called on the correct Fconnection instance
 	}
 }
-

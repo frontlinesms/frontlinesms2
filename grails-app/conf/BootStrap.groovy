@@ -17,10 +17,11 @@ class BootStrap {
 			['Friends', 'Listeners'].each() { createGroup(it) }
 			Contact.findAll().each() { Group.findByName('Friends').addToMembers(it) }
 			
-			createFconnection("mr testy's email", "Email", "imaps://imap.zoho.com:993?username=mr.testy@zoho.com&password=mister&debugMode=true&consumer.delay=15000")
+			new EmailFconnection(name:"mr testy's email", protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
+					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
 			initialiseMockSerialDevice()
-			createFconnection("COM99 mock smslib device", "Phone/Modem", "smslib:COM99?debugMode=true&baud=9600")
+			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 		}
 	}
 
@@ -31,10 +32,6 @@ class BootStrap {
 	def createContact(String n, String a) {
 		def c = new Contact(name: n, address: a)
 		c.save(failOnError: true)
-	}
-	
-	def createFconnection(String n, String t, String address) {
-		new Fconnection(name: n, type: t, camelAddress: address).save(failOnError: true)
 	}
 
 	def destroy = {

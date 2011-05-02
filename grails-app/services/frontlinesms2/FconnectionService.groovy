@@ -7,7 +7,7 @@ class FconnectionService {
 	def camelRouteBuilder = new RouteBuilder() {
 		void configure() {}
 		List getRouteDefinitions(Fconnection c) {
-			[ from(c.camelAddress).to('seda:raw-email') ]
+			[ from(c.camelAddress()).to('seda:raw-email') ]
 		}
 	}
 	
