@@ -50,7 +50,7 @@ class ContactCreateSpec extends ContactGebSpec {
 }
 
 class CreateContactPage extends geb.Page {
-	static url = 'contact/create'
+	static url = 'contact/createContact'
 	static at = {
 		title.endsWith('Create Contact')
 	}
