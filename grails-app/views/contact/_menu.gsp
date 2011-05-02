@@ -3,8 +3,11 @@
 		<li>
 			<h2>Create new...</h2>
 			<ol id="create-submenu">
-				<li>
-					<g:link class="create contact" action="create">Contact</g:link>
+				<li id="create-contact">
+					<g:link class="create contact" action="createContact">Contact</g:link>
+				</li>
+				<li id="create-group">
+					<g:link class="create group" action="createGroup">Group</g:link>
 				</li>
 			</ol>
 		</li>

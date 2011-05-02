@@ -10,6 +10,7 @@ class ContactController {
 
     def list = {
 		def groupInstance = params.id? Group.findById(params.id): null
+		def groupInstanceTotal
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 
 		def contactInstanceList, contactInstanceTotal
@@ -25,13 +26,20 @@ class ContactController {
          return [contactInstanceList: contactInstanceList,
 					contactInstanceTotal: contactInstanceTotal,
 					groupInstanceList: Group.findAll(),
+				 	groupInstanceTotal: Group.count(),
 					contactsSection: groupInstance]
     }
 
-    def create = {
+    def createContact = {
         def contactInstance = new Contact()
         contactInstance.properties = params
         return [contactInstance: contactInstance] << list()
+    }
+
+	def createGroup = {
+        def groupInstance = new Group()
+        groupInstance.properties = params
+        return [groupInstance: groupInstance] << list()
     }
 
     def save = {
@@ -41,7 +49,7 @@ class ContactController {
             redirect(action: "list", id: contactInstance.id)
         }
         else {
-            render(view: "create", model: [contactInstance: contactInstance])
+            render(view: "createContact", model: [contactInstance: contactInstance])
         }
     }
 
