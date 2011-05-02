@@ -1,4 +1,6 @@
-package frontlinesms2
+package frontlinesms2.contact
+
+import frontlinesms2.*
 
 class GroupViewSpec extends GroupGebSpec {
 	def cleanup() {

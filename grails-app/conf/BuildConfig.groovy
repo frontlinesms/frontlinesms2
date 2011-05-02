@@ -33,7 +33,10 @@ grails.project.dependency.resolution = {
 		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.1'
+		compile 'net.frontlinesms.core:camel-smslib:0.0.2-SNAPSHOT'
 		compile 'org.apache.camel:camel-mail:2.5.0'
+
+		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
+		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT'
 	}
 }
