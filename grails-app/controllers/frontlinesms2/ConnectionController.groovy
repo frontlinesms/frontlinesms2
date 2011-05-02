@@ -20,18 +20,16 @@ class ConnectionController {
 
 	def create = {}
 
-	def createX = {
-		def fconnectionInstance = new Fconnection()
+	def createEmail = {
+		def fconnectionInstance = new EmailFconnection()
 		fconnectionInstance.properties = params
 		return [fconnectionInstance: fconnectionInstance]
 	}
 
-	def createEmail = {
-		createX
-	}
-
 	def createSmslib = {
-		createX
+		def fconnectionInstance = new SmslibFconnection()
+		fconnectionInstance.properties = params
+		return [fconnectionInstance: fconnectionInstance]
 	}
 
 	def show = {
@@ -46,9 +44,9 @@ class ConnectionController {
 	}
 
 	def saveEmail = {
-		def fconnectionInstance = new Fconnection()
+		def fconnectionInstance = new EmailFconnection()
+		if(params.protocol) params.protocol = EmailProtocol.valueOf(params.protocol.toUpperCase())
 		fconnectionInstance.properties = params
-		fconnectionInstance.type = 'Email'
 
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
@@ -59,9 +57,8 @@ class ConnectionController {
 	}
 
 	def saveSmslib = {
-		def fconnectionInstance = new Fconnection()
+		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
-		fconnectionInstance.type = 'Phone/Modem'
 
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
@@ -75,7 +72,7 @@ class ConnectionController {
 		println "Executiung creatRoute closure with params: ${params}"
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
-			flash.message = "Created route from ${settings.camelAddress}"
+			flash.message = "Created route from ${settings.camelAddress()}"
 			redirect action:'list'
 		}
 	}
