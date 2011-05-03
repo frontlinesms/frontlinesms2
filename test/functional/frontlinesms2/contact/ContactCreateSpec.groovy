@@ -34,7 +34,7 @@ class ContactCreateSpec extends ContactGebSpec {
 	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
 		given:
 		when:
-			go 'contact/create'
+			go 'contact/createContact'
 			def cancelContact = $('#buttons').find('a').first()
 			def btn = $("#buttons .list")
 		then:

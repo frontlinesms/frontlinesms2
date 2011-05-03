@@ -6,5 +6,5 @@ class Group {
 
 	static mapping = { table 'grup' }
 
-	static constraints = { name(unique: true) }
+	static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
 }
