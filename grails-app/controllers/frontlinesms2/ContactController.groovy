@@ -42,7 +42,7 @@ class ContactController {
         return [groupInstance: groupInstance] << list()
     }
 
-    def save = {
+    def saveContact = {
         def contactInstance = new Contact(params)
 		if (contactInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
@@ -50,6 +50,17 @@ class ContactController {
         }
         else {
             render(view: "createContact", model: [contactInstance: contactInstance])
+        }
+    }
+
+	def saveGroup = {
+        def groupInstance = new Group(params)
+		if (groupInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
+            redirect(action: "list", id: groupInstance.id)
+        }
+        else {
+            render(view: "createGroup", model: [groupInstance: groupInstance])
         }
     }
 

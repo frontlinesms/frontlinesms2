@@ -25,7 +25,7 @@
             </g:hasErrors>
 
 
-            <g:form name="contactDetails" action="save" >
+            <g:form name="contactDetails" action="saveContact" >
 
 
                 <div class="dialog">
@@ -56,7 +56,7 @@
 
 
 				<div id="buttons">
-                    <g:submitButton name="create" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
+                    <g:submitButton name="createContact" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
 					<g:link class="cancel" action="list">Cancel</g:link>
                 </div>
 
