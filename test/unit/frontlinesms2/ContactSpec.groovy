@@ -4,6 +4,10 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class ContactSpec extends UnitSpec {
+	def setup() {
+		mockForConstraintsTests(Contact)
+	}
+	
 	def "contact may have a name"() {
 		when:
 			Contact c = new Contact()
@@ -13,14 +17,55 @@ class ContactSpec extends UnitSpec {
 			c.name == 'Alice'
 	}
 
-	def "contact must have a name"() {
+	def "blank names are allowed"() {
 		when:
-			def noNameContact = new Contact()
+			def noNameContact = new Contact(name:'')
 			def namedContact = new Contact(name:'Alice')
-			mockForConstraintsTests(Contact, [noNameContact, namedContact])
 		then:
-			!noNameContact.validate()
+			noNameContact.validate()
 			namedContact.validate()
+	}
+	
+	def "duplicate names are allowed"(){
+		when:
+			def Contact contact1=new Contact(name:'John')
+			def Contact contact2=new Contact(name:'John')
+		then:
+			contact1.validate()
+			contact2.validate()
+	}
+	
+	def "max name length 255"(){
+		when:
+			def Contact contact=new Contact(name:'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'0123456789'+
+												'012345')
+	then:
+		!contact.validate()
 	}
 }
 
