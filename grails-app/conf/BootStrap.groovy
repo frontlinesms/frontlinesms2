@@ -12,11 +12,19 @@ class BootStrap {
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
           	// do custom init for dev here
-			createContact("Alice", "+123456789")
+			['Friends', 'Listeners', 'Not Cats'].each() { createGroup(it) }
+			def alice = createContact("Alice", "+123456789")
+			def friends = Group.findByName('Friends')
+			def notCats = Group.findByName('Not Cats')
+//			Contact.findAll().each() { Group.findByName('Friends').addToMembers(it) }
 			createContact("Bob", "+198765432")
-			['Friends', 'Listeners'].each() { createGroup(it) }
-			Contact.findAll().each() { Group.findByName('Friends').addToMembers(it) }
-			
+			Contact.findAll().each() {
+				GroupMembership.create(it, friends)
+				GroupMembership.create(it, notCats)
+			}
+//			Contact.findAll().each() { Group.findByName('Not Cats').addToMembers(it) }
+			createContact("Kate", "+198730948")
+
 			new EmailFconnection(name:"mr testy's email", protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 

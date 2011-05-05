@@ -16,19 +16,26 @@ class ContactEditSpec extends ContactGebSpec {
 	}
 
 	def 'selected contact details can be edited and saved'() {
-		given:
-			def alice = Contact.findByName('Alice')
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
-			$("#contactDetails").name = 'Kate'
-			$("#contactDetails").address = '+2541234567'
-			def btn = $("#contactDetails .save")
-			println btn
-			btn.click()
+			to AliceDetailsPage
+			frmDetails.name = 'Kate'
+			frmDetails.address = '+2541234567'
+			btnSave.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assert Contact.findByName('Kate') != null
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			Contact.findByName('Kate') != null
+	}
+}
+
+class AliceDetailsPage extends geb.Page {
+	static url = getUrl()
+	static def getUrl() {
+		"contact/show/${Contact.findByName('Alice').id}"
 	}
 
+	static content = {
+		frmDetails { $("#contact-details") }
+		btnSave { frmDetails.find('.save') }
+	}
 }
