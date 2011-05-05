@@ -4,6 +4,7 @@
 		<title><g:layoutTitle default="Contacts"/></title>
         <g:layoutHead />
         <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
+		<g:javascript library="jquery" plugin="jquery"/>
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>

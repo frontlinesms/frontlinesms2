@@ -33,14 +33,18 @@ class ConnectionController {
 	}
 
 	def show = {
-		def connectionInstance = Fconnection.get(params.id)
-        if (!connectionInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Connection'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [connectionInstance: connectionInstance] << list()
-        }
+//		def connectionInstance = Fconnection.get(params.id)
+//        if (!connectionInstance) {
+//            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'connection.label', default: 'Connection'), params.id])}"
+//            redirect(action: "list")
+//        }
+//        else {
+//            return [connectionInstance: connectionInstance] << list()
+//        }
+
+		withFconnection {
+			return [connectionInstance: it] << list()
+		}
 	}
 
 	def saveEmail = {

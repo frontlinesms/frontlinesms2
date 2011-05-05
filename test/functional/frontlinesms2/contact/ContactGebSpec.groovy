@@ -9,6 +9,17 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 			new Contact(name: 'Bob', address: '+254987654')].each() { it.save(failOnError:true) }
 	}
 
+	static createTestGroups() {
+		def bob = Contact.findByName('Bob')
+		def groupThree = new Group(name: 'three')
+		def groupTest = new Group(name: 'Test')
+		groupTest.addToMembers(bob)
+		groupThree.addToMembers(bob)
+		[groupTest, new Group(name: 'Others'), groupThree, new Group(name: 'four')].each() {
+			it.save(failOnError:true, flush:true)
+		}
+	}
+
 	static deleteTestContacts() {
 		Contact.findAll().each() {
 			it.refresh()
@@ -16,15 +27,24 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 
+	static deleteTestGroups() {
+		Group.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+
+
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
-			def contactName = $('#contactinfo').children("div#${fieldName}")
-			assert contactName.getAttribute("id") == "${fieldName}"
-			assert contactName.children('label').text() == "${labelText}"
-			assert contactName.children('label').getAttribute('for') == "${fieldName}"
-			assert contactName.children('input').getAttribute('name') == "${fieldName}"
-			assert contactName.children('input').getAttribute('id') == "${fieldName}"
-			assert contactName.children('input').getAttribute('type')  == 'text'
-			assert contactName.children('input').getAttribute('value')  == "${expectedValue}"
-			true
+		def label = $('label', for:fieldName)
+		assert label.text() == labelText
+		assert label.getAttribute('for') == fieldName
+
+		def input = $('input', id:fieldName)
+		assert input.getAttribute('name') == fieldName
+		assert input.getAttribute('id') == fieldName
+		assert input.getAttribute('type')  == 'text'
+		assert input.getAttribute('value')  == expectedValue
+		true
 	}
 }

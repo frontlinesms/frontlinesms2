@@ -1,10 +1,23 @@
 package frontlinesms2
 
 class Group {
-	static hasMany = [members: Contact]
-	String name
+    String name
 
-	static mapping = { table 'grup' }
+    static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
+    static mapping = {
+            members cascade:'save-update'
+            table 'grup'
+    }
 
-	static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
+	def beforeDelete = {
+		GroupMembership.deleteFor(this)
+	}
+
+    Set<Contact> getMembers() {
+  		GroupMembership.findAllByGroup(this).collect { it.contact } as Set
+    }
+
+	def addToMembers(Contact c) {
+		GroupMembership.create(c, this)
+	}
 }

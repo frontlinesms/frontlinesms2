@@ -9,25 +9,45 @@ class ContactController {
     }
 
     def list = {
-		def groupInstance = params.id? Group.findById(params.id): null
-		def groupInstanceTotal
+        def groupInstance = params.id? Group.findById(params.id): null
+        def groupInstanceTotal
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 
-		def contactInstanceList, contactInstanceTotal
-		println "Contacts: ${Contact.list(params)}"
-		if(groupInstance) {
-			contactInstanceList = groupInstance.members
-			contactInstanceTotal = groupInstance.members.size()
-		} else {
-			contactInstanceList = Contact.list(params)
-			contactInstanceTotal = Contact.count()
-		}
+        def contactInstanceList, contactInstanceTotal
+        println "Contacts: ${Contact.list(params)}"
+        if(groupInstance) {
+                contactInstanceList = groupInstance.members
+                contactInstanceTotal = groupInstance.members.size()
+        } else {
+                contactInstanceList = Contact.list(params)
+                contactInstanceTotal = Contact.count()
+        }
 
-         return [contactInstanceList: contactInstanceList,
-					contactInstanceTotal: contactInstanceTotal,
-					groupInstanceList: Group.findAll(),
-				 	groupInstanceTotal: Group.count(),
-					contactsSection: groupInstance]
+        return [contactInstanceList: contactInstanceList,
+                contactInstanceTotal: contactInstanceTotal,
+                groupInstanceList: Group.findAll(),
+                groupInstanceTotal: Group.count(),
+                contactsSection: groupInstance]
+    }
+
+    def show = {
+        def contactInstance = Contact.get(params.id)
+        if (!contactInstance) {
+            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+            redirect(action: "list")
+        } else {
+			def contactGroupInstanceList = contactInstance.groups;
+			def nonContactGroupInstanceList = Group.findAll() - contactGroupInstanceList // FIXME add a named query to Group to fetch this info
+            def csvContactGroupsIds = ','
+			contactGroupInstanceList.each() {
+				csvContactGroupsIds += it.id + ','
+			}
+
+			return [contactInstance:contactInstance,
+                                contactGroupInstanceList: contactGroupInstanceList,
+                                nonContactGroupInstanceList: nonContactGroupInstanceList,
+                                contactGroupInstanceListString: csvContactGroupsIds] << list()
+        }
     }
 
     def createContact = {
@@ -53,7 +73,7 @@ class ContactController {
         }
     }
 
-	def saveGroup = {
+    def saveGroup = {
         def groupInstance = new Group(params)
 		if (groupInstance.save(flush: true)) {
             flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
@@ -64,16 +84,11 @@ class ContactController {
         }
     }
 
-    def show = {
-        def contactInstance = Contact.get(params.id)
-        if (!contactInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [contactInstance: contactInstance] << list()
-        }
-    }
+//	def removeGroup = {
+//		def groupInstance = Group.get(params.id)
+//		groupInstance.removeFromMembers()
+//
+//	}
 
     def edit = {
         def contactInstance = Contact.get(params.id)
@@ -87,7 +102,7 @@ class ContactController {
     }
 
     def update = {
-        def contactInstance = Contact.get(params.id)
+        def contactInstance = Contact.get(params.id) // TODO replace with withContact closure
         if (contactInstance) {
             if (params.version) {
                 def version = params.version.toLong()
@@ -98,8 +113,12 @@ class ContactController {
                     return
                 }
             }
+			params.groups = params.groups.tokenize(',').collect() { Long.parseLong(it) }
+
             contactInstance.properties = params
-            if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
+			println contactInstance.groups
+//			    !contactInstance.hasErrors() &&
+            if (contactInstance.save(flush: true)) {
                 flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
                 redirect(action: "show", id: contactInstance.id)
             }
@@ -111,6 +130,7 @@ class ContactController {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
             redirect(action: "list")
         }
+		return [contactInstance:contactInstance]
     }
 
     def delete = {
