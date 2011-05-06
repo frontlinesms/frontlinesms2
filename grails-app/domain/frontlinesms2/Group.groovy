@@ -20,4 +20,23 @@ class Group {
 	def addToMembers(Contact c) {
 		GroupMembership.create(c, this)
 	}
+
+	static Set<Contact> findAllWithoutMember(Contact c) {
+		// FIXME do this with a single select/join??
+		def allGroups = Group.findAll();
+		def cGroups = c.groups
+		def without = allGroups
+		cGroups.each() { cg ->
+			def remove
+			allGroups.each() { ag ->
+				if(ag.id == cg.id) remove = ag
+			}
+			if(remove) {
+				allGroups.remove(remove)
+//				println """allGroups: ${allGroups}
+//-----"""
+			}
+		}
+		without as Set
+	}
 }
