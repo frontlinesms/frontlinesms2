@@ -2,7 +2,7 @@
 <html>
 	<head>
 	  	<meta name="layout" content="connection" />
-		<title>Settings > Connections</title>
+		<title>Settings > Connections > ${connectionInstance?.name}</title>
 	</head>
 	<body>
 		<g:hiddenField name="id" value="${connectionInstance?.id}"/>
@@ -14,7 +14,7 @@
 			</div>
 			<div id="connectionaddress">
 				<label for="address"><g:message code="connection.camelAddress.label" default="camelAddress"/></label>
-				<g:textField name="address" id="address" value="${connectionInstance?.camelAddress}"/>
+				<g:textField name="address" id="address" value="${connectionInstance?.camelAddress()}"/>
 			</div>
 		</div>
 	</body>
