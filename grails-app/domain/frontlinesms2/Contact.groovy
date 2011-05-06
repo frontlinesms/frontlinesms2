@@ -13,12 +13,21 @@ class Contact {
 		GroupMembership.deleteFor(this)
 	}
 
-	Set<Group> getGroups() {
-  		GroupMembership.findAllByContact(this).collect { it.group } as Set
+	def getGroups() {
+  		GroupMembership.findAllByContact(this).collect { it.group }
 	}
 
-	def addToGroups(Group g) {
-		GroupMembership.create(this, g)
+	def setGroups(groups) {
+		this.groups.each() { GroupMembership.remove(this, it) }
+		groups.each() { GroupMembership.create(this, it) }
+	}
+
+	def addToGroups(Group g, flush=false) {
+		GroupMembership.create(this, g, flush)
+	}
+
+	def removeFromGroups(Group g, flush=false) {
+		GroupMembership.remove(this, g, flush)
 	}
 
 	boolean isMemberOf(Group group) {

@@ -13,17 +13,17 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		def bob = Contact.findByName('Bob')
 		def groupThree = new Group(name: 'three')
 		def groupTest = new Group(name: 'Test')
-		groupTest.addToMembers(bob)
-		groupThree.addToMembers(bob)
 		[groupTest, new Group(name: 'Others'), groupThree, new Group(name: 'four')].each() {
 			it.save(failOnError:true, flush:true)
 		}
+		groupTest.addToMembers(bob)
+		groupThree.addToMembers(bob)
 	}
 
 	static deleteTestContacts() {
 		Contact.findAll().each() {
 			it.refresh()
-			it.delete(failOnError:true, flush:true)		
+			it.delete(failOnError:true, flush:true)
 		}
 	}
 

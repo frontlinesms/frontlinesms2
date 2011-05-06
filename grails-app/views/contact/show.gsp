@@ -22,8 +22,9 @@
 				$('#group-list').append(groupListItem);
 
 				me.remove();
-
-				addIdToGroupHiddenField(groupId);
+				$("#no-groups").hide();
+				addGroupId(groupId);
+				// addIdToGroupHiddenField(groupId);
 			}
 
 			function removeGroupClickAction() {
@@ -35,25 +36,40 @@
 				option.click(addGroupClickAction);
 
 				$('#group-dropdown').append(option);
-				me.parent().remove();
+				var groupList = me.parent();
+				groupList.remove();
+				if($('#group-list').children().children('h2').length < 1) {
+				    $('#no-groups').show();
+				}
 
-				removeIdFromGroupHiddenField(groupId);
+				removeGroupId(groupId);
+				// removeIdFromGroupHiddenField(groupId);
 			}
-
-			function removeIdFromGroupHiddenField(groupId) {
-				var f = getGroupHiddenField();
+			
+			function removeGroupId(id) {
+			  // remove from the ADD list
+			  removeIdFromList(id, 'groupsToAdd');	
+			  // add to the REMOVE list
+			  addIdToList(id, 'groupsToRemove');
+			}
+			
+			function addGroupId(id) {
+			  // remove from the REMOVE list
+			  removeIdFromList(id, 'groupsToRemove');
+			  // add to the ADD list
+		  	  addIdToList(id, 'groupsToAdd');
+			}
+			function removeIdFromList(id, fieldName) {
+				var f = $('input:hidden[name=' + fieldName + ']');
 				var oldList = f.val();
-				var newList = oldList.replace(','+ groupId +',', ',');
+				var newList = oldList.replace(','+ id +',', ',');
 				f.val(newList);
 			}
-			function addIdToGroupHiddenField(groupId) {
-				var f = getGroupHiddenField();
+			function addIdToList(id, fieldName) {
+				var f = $('input:hidden[name=' + fieldName + ']');
 				var oldList = f.val();
-				var newList = oldList + groupId + ',';
+				var newList = oldList + id + ',';
 				f.val(newList);
-			}
-			function getGroupHiddenField() {
-				return $('input:hidden[name=groups]');
 			}
 		</script>
     </head>
@@ -61,7 +77,8 @@
 		<g:form name="contact-details">
 			<g:hiddenField name="id" value="${contactInstance?.id}"/>
 			<g:hiddenField name="version" value="${contactInstance?.version}"/>
-			<g:hiddenField name="groups" value="${contactGroupInstanceListString}"/>
+			<g:hiddenField name="groupsToAdd" value=","/>
+			<g:hiddenField name="groupsToRemove" value=","/>
 
 			<div id="contact-info">
 				<div>
@@ -80,17 +97,20 @@
 						<a class="remove-group" id="remove-group-${g.id}">Delete</a>
 					</li>
 				</g:each>
+			  <li id="no-groups" style="display: none">
+					<p>Not part of any Groups</p>
+				</li>
 			</ol>
 			<div>
 				<select id="group-dropdown" name="group-dropdown">
-					<option disabled="disabled" class="not-group">Add to group...</option>
+					<option class="not-group">Add to group...</option>
 					<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 						<option value="${g.id}">${g.name}</option>
 					</g:each>
 				</select>
 			</div>
 			<div class="buttons">
-				<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+				<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
 			</div>
 		</g:form>
     </body>
