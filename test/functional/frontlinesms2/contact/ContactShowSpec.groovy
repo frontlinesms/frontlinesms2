@@ -28,6 +28,17 @@ class ContactShowSpec extends ContactGebSpec {
 			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
 	}
 
+	def 'contact with no name can be clicked and edited'() {
+		when:
+			def empty = new Contact(name:'', address:"987654321")
+			empty.save(failOnError:true)
+			go "http://localhost:8080/frontlinesms2/contact/list"
+			def noName = Contact.findByName('')
+		then:
+			noName != null
+			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim().length() > 0
+	}
+
 	def 'selected contact is highlighted'() {
 		given:
 			def alice = Contact.findByName('Alice')
@@ -58,5 +69,22 @@ class ContactShowSpec extends ContactGebSpec {
 		assert selectedChildren.size() == 1
 		assert selectedChildren.text() == name
 		true
+	}
+}
+
+class EmptyContactPage extends geb.Page {
+	static url = getUrl()
+	static def getUrl() {
+		"contact/show/${Contact.findByName('').id}"
+	}
+
+	static at = {
+		assert url == "http://localhost:8080/frontlinesms2/contact/show/${Contact.findByName('').id}"
+		true
+	}
+
+	static content = {
+		frmDetails { $("#contact-details") }
+		btnSave { frmDetails.find('.update') }
 	}
 }

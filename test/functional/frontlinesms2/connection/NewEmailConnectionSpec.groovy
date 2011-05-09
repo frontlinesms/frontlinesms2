@@ -40,6 +40,7 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 		then:
 			def btnCreateRoute = lstConnections.find('.buttons a').first()
 			btnCreateRoute.text() == 'Create route'
+			// FIXME email route should be mocked as this create
 		when:
 			btnCreateRoute.click()
 		then:

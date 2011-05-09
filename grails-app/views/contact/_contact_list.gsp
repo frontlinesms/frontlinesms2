@@ -4,7 +4,7 @@
 	<ol id="contacts">
 		<g:each in="${contactInstanceList}" status="i" var="c">
 		  <g:if test="${c.name == ''}">
-			<li> class="${c == contactInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">[No Name]</g:link></li>
+			<li class="${c == contactInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">[No Name]</g:link></li>
 		  </g:if>
 		  <g:else>
 			<li class="${c == contactInstance ? 'selected' : ''}"><g:link action="show" id="${c.id}">${c.name}</g:link></li>

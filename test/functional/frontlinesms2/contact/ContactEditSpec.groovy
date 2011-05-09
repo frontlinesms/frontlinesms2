@@ -36,6 +36,6 @@ class AliceDetailsPage extends geb.Page {
 
 	static content = {
 		frmDetails { $("#contact-details") }
-		btnSave { frmDetails.find('.save') }
+		btnSave { frmDetails.find('.update') }
 	}
 }
