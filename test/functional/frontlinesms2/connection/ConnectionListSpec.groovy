@@ -7,6 +7,13 @@ class ConnectionListSpec extends ConnectionGebSpec {
 		then:
 			lstConnections.tag() == 'div'
 			lstConnections.text() == 'You have no connections configured.'
+	}
+	
+	def 'There is a New Connection button available when there are no connections'() {
+		when:
+			to ConnectionListPage
+		then:
 			btnNewConnection != null
+			btnNewConnection.text() == "Add new connection"
 	}
 }

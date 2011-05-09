@@ -12,7 +12,6 @@ class ContactCreateSpec extends ContactGebSpec {
 	}
 
 	def 'button to save new contact is displayed and works'() {
-		given:
 		when:
 			to CreateContactPage
 			$("#contactDetails").name = 'Kate'
@@ -21,18 +20,15 @@ class ContactCreateSpec extends ContactGebSpec {
 			at ContactListPage
 	}
 
-	def 'trying to save with no name is invalid'() {
-		given:
+	def 'trying to save with no name is valid'() {
 		when:
 			to CreateContactPage
 			saveButton.click()
 		then:
-			at CreateContactPage
-			errorMessages.text().contains("cannot be blank")
+			at ContactListPage			
 	}
 	
 	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
-		given:
 		when:
 			go 'contact/createContact'
 			def cancelContact = $('#buttons').find('a').first()
@@ -40,7 +36,6 @@ class ContactCreateSpec extends ContactGebSpec {
 		then:
 			assert cancelContact.text() == "Cancel"
 			assert cancelContact.getAttribute('href') == "/frontlinesms2/contact/list"
-
 	}
 
 	def '"All contacts" menu item is selected when creating a contact'() {
