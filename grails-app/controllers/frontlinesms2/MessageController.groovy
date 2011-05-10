@@ -9,16 +9,18 @@ class MessageController {
 
     def inbox = {
 		def messageInstance = Fmessage.get(params.id)
+		params.inbound = true
 		return [messageSection:'inbox',
 				messageInstance: messageInstance] << list()
     }
 
     def sent = {
+		params.inbound = false
 		[messageSection:'sent'] << list()
     }
 
     def list = {
-		[messageInstanceList:Fmessage.list(params),
-				messageInstanceTotal:Fmessage.count()]
+		[messageInstanceList:Fmessage.findAllByInbound(params.inbound, params),
+				messageInstanceTotal:Fmessage.countByInbound(params.inbound)]
     }
 }
