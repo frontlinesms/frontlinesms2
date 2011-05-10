@@ -10,7 +10,7 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 	def 'settings menu item is available in eyebrow'() {
 		when:
 			to ContactListPage
-			def btnGotoSettings = $('#eyebrow #btnGotoSettings')
+			def btnGotoSettings = $('#eyebrow #goto-settings')
 		then:
 			btnGotoSettings.text() == 'Settings & Plugins'
 		when:

@@ -3,7 +3,7 @@ package frontlinesms2
 class ContactController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+    
     def index = {
         redirect(action: "list", params: params)
     }
