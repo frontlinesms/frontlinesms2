@@ -20,7 +20,7 @@ class MessageController {
     }
 
     def list = {
-		[messageInstanceList:Fmessage.findAllByInbound(params.inbound, params),
+		[messageInstanceList:Fmessage.findAllByInbound(params.inbound, params).sort{it.dateCreated},
 				messageInstanceTotal:Fmessage.countByInbound(params.inbound)]
     }
 }
