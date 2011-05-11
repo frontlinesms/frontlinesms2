@@ -15,7 +15,9 @@ class ConnectionController {
 		def connectionInstance = Fconnection.get(params.id)
 		def fconnectionInstanceTotal = Fconnection.count()
 
-		return [connectionInstanceList: fconnectionInstanceList, connectionInstance: connectionInstance, fconnectionInstanceTotal: fconnectionInstanceTotal]
+		[connectionInstanceList: fconnectionInstanceList,
+				connectionInstance: connectionInstance,
+				fconnectionInstanceTotal: fconnectionInstanceTotal]
 	}
 
 	def create = {}
@@ -23,27 +25,18 @@ class ConnectionController {
 	def createEmail = {
 		def fconnectionInstance = new EmailFconnection()
 		fconnectionInstance.properties = params
-		return [fconnectionInstance: fconnectionInstance]
+		[fconnectionInstance: fconnectionInstance]
 	}
 
 	def createSmslib = {
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
-		return [fconnectionInstance: fconnectionInstance]
+		[fconnectionInstance: fconnectionInstance]
 	}
 
 	def show = {
-//		def connectionInstance = Fconnection.get(params.id)
-//        if (!connectionInstance) {
-//            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'connection.label', default: 'Connection'), params.id])}"
-//            redirect(action: "list")
-//        }
-//        else {
-//            return [connectionInstance: connectionInstance] << list()
-//        }
-
 		withFconnection {
-			return [connectionInstance: it] << list()
+			[connectionInstance: it] << list()
 		}
 	}
 
@@ -73,17 +66,16 @@ class ConnectionController {
 	}
 
 	def createRoute = {
-		println "Executiung creatRoute closure with params: ${params}"
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
 			flash.message = "Created route from ${settings.camelAddress()}"
 			redirect action:'list'
 		}
 	}
-	def withFconnection(id=params.id, Closure c) {
-		println "withFconnection id=${id}"
-		def connection = Fconnection.get(id)
-		if(connection) c.call connection
+	
+	def withFconnection(Closure c) {
+		def connection = Fconnection.get(params.id)
+		if(connection) c connection
 		else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), id])}"
 			redirect action:'list'
