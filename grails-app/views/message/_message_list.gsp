@@ -10,16 +10,22 @@
 		</thead>
 		<tbody>
 			<g:each in="${messageInstanceList}" status="i" var="m">
-			    
 				<tr class="${m == messageInstance?'selected':''}">
-					<td>${m.src}</td>
 					<td>
-					  <g:link action="inbox" id="${m.id}">
-					    ${m.text}
-					  </g:link>
+						<g:link action="inbox" id="${m.id}">
+							${m.src}
+						</g:link>
 					</td>
-					<td><g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" /></td>
-				  
+					<td>
+						<g:link action="inbox" id="${m.id}">
+						  ${m.text}
+						</g:link>
+					</td>
+					<td>
+						<g:link action="inbox" id="${m.id}">
+							<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+						</g:link>
+					</td>
 				</tr>
 			</g:each>
 		</tbody>
