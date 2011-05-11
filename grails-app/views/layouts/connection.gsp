@@ -3,7 +3,9 @@
 	<head>
 		<title><g:layoutTitle default="Connection"/></title>
         <g:layoutHead />
-        <link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
+		<link rel="stylesheet" href="${resource(dir:'css',file:'main.css')}" />
+        <link rel="stylesheet" href="${resource(dir:'css',file:'grails-default.css')}" />
+		<meta name="layout" content="main" />
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>
