@@ -21,98 +21,67 @@ class ContactController {
                 contactInstanceTotal = Contact.count()
         }
 
-        return [contactInstanceList: contactInstanceList,
+        [contactInstanceList: contactInstanceList,
                 contactInstanceTotal: contactInstanceTotal,
                 groupInstanceList: Group.findAll(),
                 groupInstanceTotal: Group.count(),
                 contactsSection: groupInstance]
     }
 
-    def show = {
-        def contactInstance = Contact.get(params.id) // TODO withContact {}
-        if (!contactInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-            redirect(action: "list")
-        } else {
-			def contactGroupInstanceList = contactInstance.groups;
-			
-//			def csvContactGroupsIds = ','
-//			contactGroupInstanceList.each() {
-//				csvContactGroupsIds += it.id + ','
-//			}
-
+	def show = {
+		withContact { contactInstance ->
+			def contactGroupInstanceList = contactInstance.groups
 			def nonContactGroupInstanceList = Group.findAllWithoutMember(contactInstance)
-//			println "contactGroupInstanceList: ${contactGroupInstanceList}"
-//			println "nonContactGroupInstanceList: ${nonContactGroupInstanceList}"
-//			println "intersection: ${contactGroupInstanceList.intersect(nonContactGroupInstanceList)}"
-//			println "intersection: ${nonContactGroupInstanceList.intersect(contactGroupInstanceList)}"
 
-			return [contactInstance:contactInstance,
-                                contactGroupInstanceList: contactGroupInstanceList,
-								contactGroupInstanceTotal: contactGroupInstanceList.size(),
-                                nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance) //,
-//                                contactGroupInstanceListString: csvContactGroupsIds
-							] << list()
-        }
-    }
+			[contactInstance:contactInstance,
+					contactGroupInstanceList: contactGroupInstanceList,
+					contactGroupInstanceTotal: contactGroupInstanceList.size(),
+					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance)] << list()
+		}
+	}
 
 	def update = {
-        def contactInstance = Contact.get(params.id) // TODO replace with withContact closure
-        if (contactInstance) {
-            if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
-                def version = params.version.toLong()
-                if (contactInstance.version > version) {
+		withContact { contactInstance ->
+			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
+				def version = params.version.toLong()
+				if (contactInstance.version > version) {
+					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
+					render(view: "edit", model: [contactInstance: contactInstance])
+					return
+				}
+			}
 
-                    contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-                    render(view: "edit", model: [contactInstance: contactInstance])
-                    return
-                }
-            }
-//			params.groups = params.groups.tokenize(',').collect() { Group.get(Long.parseLong(it)) }
-//			println params.groups
+			contactInstance.properties = params
 
-            contactInstance.properties = params
-			println "groups after properties set: ${contactInstance.groups}"
-
-            if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-				println "groups before add: ${contactInstance.groups}"
+			if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
 				params.groupsToAdd.tokenize(',').each() {
 					def g = Group.get(Long.parseLong(it))
-					println "Adding to group: ${g}"
 					contactInstance.addToGroups(g, true)
 				}
-				println "groups before remove: ${contactInstance.groups}"
 				params.groupsToRemove.tokenize(',').each() {
 					def g = Group.get(Long.parseLong(it))
-					println "Removing from group: ${g}"
 					contactInstance.removeFromGroups(g, true)
 				}
-				println "groups after changes: ${contactInstance.groups}"
 
-                flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-                redirect(action: "show", id: contactInstance.id)
-            }
-            else {
-                render(view: "edit", model: [contactInstance: contactInstance])
-            }
-        }
-        else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-            redirect(action: "list")
-        }
-		return [contactInstance:contactInstance]
-    }
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+				redirect(action: "show", id: contactInstance.id)
+			} else {
+				render(view: "edit", model: [contactInstance: contactInstance])
+			}
+			[contactInstance:contactInstance]
+		}
+	}
 
     def createContact = {
         def contactInstance = new Contact()
         contactInstance.properties = params
-        return [contactInstance: contactInstance] << list()
+        [contactInstance: contactInstance] << list()
     }
 
 	def createGroup = {
         def groupInstance = new Group()
         groupInstance.properties = params
-        return [groupInstance: groupInstance] << list()
+        [groupInstance: groupInstance] << list()
     }
 
     def saveContact = {
@@ -137,39 +106,27 @@ class ContactController {
         }
     }
 
-//	def removeGroup = {
-//		def groupInstance = Group.get(params.id)
-//		groupInstance.removeFromMembers()
-//
-//	}
-
-    def edit = {
-        def contactInstance = Contact.get(params.id)
-        if (!contactInstance) {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-            redirect(action: "list")
-        }
-        else {
-            return [contactInstance: contactInstance]
-        }
-    }
-
     def delete = {
-        def contactInstance = Contact.get(params.id)
-        if (contactInstance) {
+		withContact {
             try {
                 contactInstance.delete(flush: true)
                 flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
                 redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
+            } catch (org.springframework.dao.DataIntegrityViolationException e) {
                 flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
                 redirect(action: "show", id: params.id)
             }
         }
-        else {
+    }
+
+	def withContact(Closure c) {
+		println "params: ${params}"
+	    def contactInstance = Contact.get(params.id)
+	    if (contactInstance) {
+			c contactInstance
+        } else {
             flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
             redirect(action: "list")
         }
-    }
+	}
 }
