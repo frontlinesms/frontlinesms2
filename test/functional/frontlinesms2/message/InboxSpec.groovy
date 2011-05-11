@@ -4,7 +4,7 @@ import java.util.regex.*
 
 import frontlinesms2.*
 
-class InboxSpec extends InboxGebSpec {
+class InboxSpec extends grails.plugin.geb.GebSpec {
 	def 'inbox message list is displayed'() {
 		given:
 			createTestMessages()
@@ -13,11 +13,11 @@ class InboxSpec extends InboxGebSpec {
 			def messageSources = $('#messages tbody tr td:first-child')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
-        cleanup:
-            deleteTestMessages()
+		cleanup:
+			deleteTestMessages()
 	}
     
-    def 'message details are shown in list'() {
+	def 'message details are shown in list'() {
 		given:
 			createTestMessages()
 		when:
@@ -27,11 +27,11 @@ class InboxSpec extends InboxGebSpec {
 			rowContents[0] == 'Alice'
 			rowContents[1] == 'hi Alice'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
-        cleanup:
-            deleteTestMessages()
-    }
+		cleanup:
+			deleteTestMessages()
+	}
     
-    def 'message to alice is first in the list, and links to the show page'() {
+	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createTestMessages()
 			def message = Fmessage.findBySrc('Alice')
@@ -42,9 +42,9 @@ class InboxSpec extends InboxGebSpec {
 			firstMessageLink.text() == 'hi Alice'
 		cleanup:
 			deleteTestMessages()
-    }
+	}
         
-    def 'selected message is displayed'() {
+	def 'selected message is displayed'() {
 		given:
 			createTestMessages()
 			def message = Fmessage.findBySrc('Alice')
@@ -54,9 +54,9 @@ class InboxSpec extends InboxGebSpec {
 			$('#message-text p').text() == message.text
 		cleanup:
 			deleteTestMessages()
-    }
+	}
     
-    def 'selected message is highlighted'() {
+	def 'selected message is highlighted'() {
 		given:
 			createTestMessages()
 			def aliceMessage = Fmessage.findBySrc('Alice')
@@ -71,5 +71,20 @@ class InboxSpec extends InboxGebSpec {
 			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/${bobMessage.id}"
 		cleanup:
 			deleteTestMessages()
-    }
+	}
+
+	static createTestMessages() {
+		[new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
+				new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob')].each() {
+			it.inbound = true
+			it.save(failOnError:true)
+		}
+	}
+
+	static deleteTestMessages() {
+		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
 }
