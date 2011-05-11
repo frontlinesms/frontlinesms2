@@ -55,22 +55,24 @@ class MessageControllerSpec extends ControllerSpec {
 
 	def 'Messages are sorted by date' () {
 		setup:
-			Date date1 = createDate("2011/01/20")
-			Date date2 = createDate("2011/01/24")
-			Date date3 = createDate("2011/01/23")
-			Date date4 = createDate("2011/01/21")
-
-			def message1 = new Fmessage(inbound:true, dateCreated:date1)
-			def message2 = new Fmessage(inbound:true, dateCreated:date2)
-			def message3 = new Fmessage(inbound:true, dateCreated:date3)
-			def message4 = new Fmessage(inbound:true, dateCreated:date4)
+			def message1 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/20"))
+			def message2 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/24"))
+			def message3 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/23"))
+			def message4 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/21"))
 			mockDomain(Fmessage, [message1, message2, message3, message4])
 		when:
 			def model = controller.inbox()
 		then:
 			model.messageInstanceTotal == 4
-			model.messageInstanceList == [message1, message4, message3, message2]
+			model.messageInstanceList == [message2, message3, message4, message1]
 			model.messageInstanceList != [message1, message2, message3, message4]
+		when:
+			mockParams.max = 2
+			mockParams.offset = 2
+			model = controller.inbox()
+		then:
+			model.messageInstanceTotal == 4
+			model.messageInstanceList == [message4, message1]
 	}
 
 	Date createDate(String dateAsString) {
