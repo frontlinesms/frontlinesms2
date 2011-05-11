@@ -11,7 +11,7 @@
 		<tbody>
 			<g:each in="${messageInstanceList}" status="i" var="m">
 			    
-				<tr class="${m == messageInstance?'selected':''}">
+				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
 					<td>${m.src}</td>
 					<td>
 					  <g:link action="inbox" id="${m.id}">
