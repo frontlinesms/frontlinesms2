@@ -1,6 +1,9 @@
 package frontlinesms2.message
 
-import java.util.regex.* 
+import java.util.regex.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
 
 import frontlinesms2.*
 
@@ -39,19 +42,22 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			def firstMessageLink = $('#messages tbody tr:first-child a', href:"/frontlinesms2/message/inbox/${message.id}")
 		then:
-			firstMessageLink.text() == 'hi Alice'
+			firstMessageLink.text() == 'Alice'
 		cleanup:
 			deleteTestMessages()
 	}
         
-	def 'selected message is displayed'() {
+	def 'selected message and its details are displayed'() {
 		given:
 			createTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			go "message/inbox/${message.id}"
+			def formatedDate = dateToString(message.dateCreated)
 		then:
-			$('#message-text p').text() == message.text
+			$('#message-details p:nth-child(1)').text() == message.src
+			$('#message-details p:nth-child(2)').text() == formatedDate
+			$('#message-details p:nth-child(3)').text() == message.text
 		cleanup:
 			deleteTestMessages()
 	}
@@ -102,5 +108,14 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
 			it.refresh()
 			it.delete(failOnError:true, flush:true)
 		}
+	}
+
+	String dateToString(Date date) {
+		DateFormat formatedDate = createDateFormat();
+		return formatedDate.format(date)
+	}
+
+	DateFormat createDateFormat() {
+		return new SimpleDateFormat("dd-MMM-yyyy hh:mm")
 	}
 }
