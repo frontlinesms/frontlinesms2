@@ -19,9 +19,11 @@
 		<g:render template="menu"/>
 		<g:render template="message_list"/>
 		<g:if test="${messageInstance != null}">
-		  <div id="message-text">
-		    <p>${messageInstance.text}</p>
-		  </div>
+			<div id="message-details">
+				<p>${messageInstance.src}</p>
+				<p><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
+				<p>${messageInstance.text}</p>
+			</div>
 		</g:if>
 		<g:layoutBody />
 	</body>
