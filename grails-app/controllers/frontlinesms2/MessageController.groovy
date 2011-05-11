@@ -9,6 +9,11 @@ class MessageController {
 
     def inbox = {
 		def messageInstance = Fmessage.get(params.id)
+		if(messageInstance && !messageInstance.read) {
+			messageInstance.read = true
+			messageInstance.save()
+		}
+		
 		params.inbound = true
 		return [messageSection:'inbox',
 				messageInstance: messageInstance] << list()
