@@ -42,7 +42,7 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			def firstMessageLink = $('#messages tbody tr:first-child a', href:"/frontlinesms2/message/inbox/${message.id}")
 		then:
-			firstMessageLink.text() == 'hi Alice'
+			firstMessageLink.text() == 'Alice'
 		cleanup:
 			deleteTestMessages()
 	}
