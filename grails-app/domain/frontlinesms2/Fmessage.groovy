@@ -10,7 +10,7 @@ class Fmessage {
 
 	static constraints = {
 		src(nullable:true)
-		dst(nullable: true)
-		text(nullable: true)
+		dst(nullable:true)
+		text(nullable:true)
 	}
 }
