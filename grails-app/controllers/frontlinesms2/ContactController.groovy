@@ -10,7 +10,6 @@ class ContactController {
 
     def list = {
         def groupInstance = params.id? Group.findById(params.id): null
-        def groupInstanceTotal
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 
         def contactInstanceList, contactInstanceTotal
