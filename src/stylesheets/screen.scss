@@ -9,14 +9,38 @@ $blueprint_grid_width: 30px;
 @import "compass/reset";
 @import "blueprint";
 
+
+/* DEBUG */
 div {
 	border: solid #ddd 1px;
 }
 
+/* RESET LINKS */
+a,a:hover,a:visited,a:link {
+	font-weight: normal;
+	color: blue;
+	text-decoration: underline;
+}
+
+/* FONTS */
+body {
+	font-family: Georgia,Helvetica,Arial,sans-serif;
+	font-size: 1.2em;
+}
+
+/* SPECIFIC */
 #main {
 	@include container;
-	#page-menu {
+	.content-menu {
 		@include column(6);
+		h2 { font-weight: bold; }
+		>li {
+			margin-bottom: 1em;
+			li {
+				text-indent: 1em;
+				margin: 0.3em;
+			}
+		}
 	}
 	
 	#contacts {
@@ -25,4 +49,32 @@ div {
 	#contact-details-container {
 		@include column(11, true);
 	}
+	
+	#messages {
+		@include column(11);
+		tr a {
+			display:block;
+			padding:1em;
+		}
+		.unread a { font-weight:bold; }
+	}
+	#message-details {
+		@include column(6, true);
+		border: solid #ddd 3px;
+		.contact-name {
+			font-weight: bold;
+			background-color: #ddd;
+		}
+		.message-date {
+			background-color: #ddd;
+		}
+		.message-body {
+			font-size: 1.1em;
+		}
+	}
+}
+
+/* GENERAL */
+.selected {
+	background-color:cyan;
 }
