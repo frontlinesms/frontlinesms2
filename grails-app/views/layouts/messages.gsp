@@ -13,23 +13,18 @@
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>
-		<g:if test="${flash.message}">
-			<div class="message">${flash.message}</div>
-		</g:if>
-		<g:hasErrors bean="${messageInstance}">
-			<div class="errors">
-				<g:renderErrors bean="${messageInstance}" as="list"/>
-			</div>
-		</g:hasErrors>
-		<g:render template="menu"/>
-		<g:render template="message_list"/>
-		<g:if test="${messageInstance != null}">
-			<div id="message-details">
-				<p>${messageInstance.src}</p>
-				<p><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
-				<p>${messageInstance.text}</p>
-			</div>
-		</g:if>
-		<g:layoutBody />
+		<g:render template="/flash"/>
+		<div id="main">
+			<g:render template="menu"/>
+			<g:render template="message_list"/>
+			<g:if test="${messageInstance != null}">
+				<div id="message-details">
+					<p class="contact-name">${messageInstance.src}</p>
+					<p class="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
+					<p class="message-body">${messageInstance.text}</p>
+				</div>
+			</g:if>
+			<g:layoutBody/>
+		</div>
 	</body>
 </html>

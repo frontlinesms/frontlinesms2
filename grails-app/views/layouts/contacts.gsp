@@ -13,18 +13,9 @@
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>
-		<g:if test="${flash.message}">
-			<div class="flash message">${flash.message}</div>
-		</g:if>
-		<g:hasErrors bean="${contactInstance}">
-			<div class="flash errors">
-				<g:renderErrors bean="${contactInstance}" as="list"/>
-			</div>
-		</g:hasErrors>
+		<g:render template="/flash"/>
 		<div id="main">
-			<div id="page-menu">
-				<g:render template="menu"/>
-			</div>
+			<g:render template="menu"/>
 			<g:render template="contact_list"/>
 			<g:layoutBody />
 		</div>

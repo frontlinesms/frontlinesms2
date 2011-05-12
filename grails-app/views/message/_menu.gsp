@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<ul id="messages-menu">
+<ul class="content-menu">
 	<li>
 		<h2>Messages</h2>
 		<ol>
