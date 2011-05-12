@@ -19,8 +19,8 @@
 				var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '">Delete</a>');
 				deleteButton.click(removeGroupClickAction);
 				groupListItem.append(deleteButton);
-				$('#group-list').append(groupListItem);
 
+				$('#group-list').append(groupListItem).sort('name');
 				me.remove();
 				$("#no-groups").hide();
 				addGroupId(groupId);
@@ -111,6 +111,7 @@
 			</div>
 			<div class="buttons">
 				<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+				<g:link class="cancel" action="show" id="${contactInstance.id}" default="Cancel">Cancel</g:link>
 			</div>
 		</g:form>
     </body>

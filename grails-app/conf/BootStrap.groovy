@@ -12,7 +12,7 @@ class BootStrap {
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
           	// do custom init for dev here
-			['Friends', 'Listeners', 'Not Cats'].each() { createGroup(it) }
+			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 			def alice = createContact("Alice", "+123456789")
 			def friends = Group.findByName('Friends')
 			def notCats = Group.findByName('Not Cats')
