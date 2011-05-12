@@ -1,7 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<title><g:layoutTitle default="Settings"/></title>
+		<title>
+			<g:layoutTitle default="Settings"/>
+		</title>
         <g:layoutHead />
         <link rel="stylesheet" href="${resource(dir:'css',file:'screen.css')}" type="text/css" media="screen, projection"/>
         <link rel="stylesheet" href="${resource(dir:'css',file:'ie.css')}" type="text/css" media="screen, projection"/>
@@ -13,7 +15,11 @@
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>
-		<g:render template="/settings/menu"/>
-		<g:layoutBody />
+		<div id="main">
+			<g:render template="/settings/menu"/>
+			<div id="settings-content">
+				<g:layoutBody />
+			</div>		
+		</div>
 	</body>
 </html>

@@ -43,24 +43,18 @@ body {
 		}
 	}
 	
+	#settings-content {
+		@include column(17);
+		.button {
+			border: solid #ddd 1px;
+		}
+	}
+	
 	#contacts {
 		@include column(6);
 	}
 	#contact-details {
 		@include column(11, true);
-
-		.field {
-			clear: both;
-			padding: 0.5em;
-			label {
-				float: left;
-				width: 120px;
-				text-align: right;
-			}
-			input {
-				float: left;
-			}
-		}
 		.buttons,#group-dropdown {
 			margin-left: 140px;
 		}
@@ -96,4 +90,17 @@ body {
 /* GENERAL */
 .selected {
 	background-color:cyan;
+}
+
+.field {
+	clear: both;
+	padding: 0.5em;
+	label {
+		float: left;
+		width: 120px;
+		text-align: right;
+	}
+	input {
+		float: left;
+	}
 }

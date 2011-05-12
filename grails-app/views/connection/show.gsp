@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<meta name="layout" content="connection"/>
+		<meta name="layout" content="settings" />
 		<title>Settings > Connections > ${connectionInstance?.name}</title>
 	</head>
 	<body>
