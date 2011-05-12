@@ -6,11 +6,11 @@ class Fmessage {
 	String text
 	Date dateCreated
 	boolean inbound
+	boolean read
 
 	static constraints = {
 		src(nullable:true)
-		dst(nullable: true)
-		text(nullable: true)
-		inbound(nullable: false)
+		dst(nullable:true)
+		text(nullable:true)
 	}
 }

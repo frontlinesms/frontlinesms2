@@ -78,6 +78,22 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
+	
+	def 'CSS classes "read" and "unread" are set on corresponding messages'() {
+		given:
+			def m1 = new Fmessage(inbound: true, read: false).save(failOnError:true)
+			def m2 = new Fmessage(inbound: true, read: true).save(failOnError:true)
+			assert !m1.read
+			assert m2.read
+		when:
+			go "message/inbox/"
+		then:
+			$("tr#message-${m1.id}").hasClass('unread')
+			!$("tr#message-${m1.id}").hasClass('read')
+			
+			!$("tr#message-${m2.id}").hasClass('unread')
+			$("tr#message-${m2.id}").hasClass('read')
+	}
 
 	static createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
