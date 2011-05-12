@@ -13,8 +13,8 @@ class Group {
 		GroupMembership.deleteFor(this)
 	}
 
-    Set<Contact> getMembers() {
-  		GroupMembership.findAllByGroup(this).collect { it.contact } as Set
+    def getMembers() {
+  		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
     }
 
 	def addToMembers(Contact c) {
