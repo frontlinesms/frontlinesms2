@@ -74,6 +74,30 @@ class MessageControllerSpec extends ControllerSpec {
 			model.messageInstanceTotal == 4
 			model.messageInstanceList == [message4, message1]
 	}
+	
+	def 'calling "show" action in inbox leads to unread message becoming read'() {
+		setup:
+			mockDomain(Fmessage)
+			def id = new Fmessage().save(failOnError: true).id
+			assert Fmessage.get(id).read == false
+		when:
+			mockParams.id = id
+			controller.inbox()
+		then:
+			Fmessage.get(id).read
+	}
+	
+	def 'calling "show" action leads to read message staying read'() {
+		setup:
+			mockDomain(Fmessage)
+			def id = new Fmessage(read:true).save(failOnError: true).id
+			assert Fmessage.get(id).read
+		when:
+			mockParams.id = id
+			controller.inbox()
+		then:
+			Fmessage.get(id).read
+	}
 
 	Date createDate(String dateAsString) {
 		DateFormat format = createDateFormat();
