@@ -20,7 +20,7 @@
 				deleteButton.click(removeGroupClickAction);
 				groupListItem.append(deleteButton);
 
-				$('#group-list').append(groupListItem).sort('name');
+				$('#group-list').append(groupListItem);
 				me.remove();
 				$("#no-groups").hide();
 				addGroupId(groupId);
