@@ -28,15 +28,26 @@ class ContactShowSpec extends ContactGebSpec {
 			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
 	}
 
-	def 'contact with no name can be clicked and edited'() {
+	def 'contact with no name can be clicked and edited because his address is displayed'() {
 		when:
-			def empty = new Contact(name:'', address:"987654321")
+			def empty = new Contact(name:'', address:"+987654321")
 			empty.save(failOnError:true)
 			go "http://localhost:8080/frontlinesms2/contact/list"
 			def noName = Contact.findByName('')
 		then:
 			noName != null
-			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim().length() > 0
+			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.address
+	}
+
+	def 'contact with no name or address can be clicked and edited'() {
+		when:
+			def empty = new Contact(name:'', address:"")
+			empty.save(failOnError:true)
+			go "http://localhost:8080/frontlinesms2/contact/list"
+			def noNameOrAddress = Contact.get(empty.id)
+		then:
+			noNameOrAddress != null
+			$('a', href:"/frontlinesms2/contact/show/${noNameOrAddress.id}").text().trim().length() > 0
 	}
 
 	def 'selected contact is highlighted'() {
