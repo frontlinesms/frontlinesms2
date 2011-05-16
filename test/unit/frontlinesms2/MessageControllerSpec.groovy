@@ -77,6 +77,7 @@ class MessageControllerSpec extends ControllerSpec {
 	
 	def 'calling "show" action in inbox leads to unread message becoming read'() {
 		setup:
+			mockDomain(Contact)
 			mockDomain(Fmessage)
 			def id = new Fmessage().save(failOnError: true).id
 			assert Fmessage.get(id).read == false
@@ -89,6 +90,7 @@ class MessageControllerSpec extends ControllerSpec {
 	
 	def 'calling "show" action leads to read message staying read'() {
 		setup:
+			mockDomain(Contact)
 			mockDomain(Fmessage)
 			def id = new Fmessage(read:true).save(failOnError: true).id
 			assert Fmessage.get(id).read

@@ -20,7 +20,6 @@ class ContactShowSpec extends ContactGebSpec {
 			def alice = Contact.findByName('Alice')
 		when:
 			go 'contact'
-			println $('body').text()
 		then:
 			def firstContactListItem = $('#contacts').children().first()
 			def anchor = firstContactListItem.children('a').first()

@@ -7,10 +7,10 @@ import java.util.Date
 
 import frontlinesms2.*
 
-class InboxSpec extends grails.plugin.geb.GebSpec {
+class InboxSpec extends MessageGebSpec {
 	def 'inbox message list is displayed'() {
 		given:
-			createTestMessages()
+			createInboxTestMessages()
 		when:
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:first-child')*.text()
@@ -22,13 +22,13 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
     
 	def 'message details are shown in list'() {
 		given:
-			createTestMessages()
+			createInboxTestMessages()
 		when:
 			to MessagesPage
-			def rowContents = $('#messages tbody tr:first-child td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
-			rowContents[0] == 'Alice'
-			rowContents[1] == 'hi Alice'
+			rowContents[0] == 'Bob'
+			rowContents[1] == 'hi Bob'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
@@ -36,11 +36,11 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
     
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
-			createTestMessages()
+			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to MessagesPage
-			def firstMessageLink = $('#messages tbody tr:first-child a', href:"/frontlinesms2/message/inbox/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
@@ -49,22 +49,22 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
         
 	def 'selected message and its details are displayed'() {
 		given:
-			createTestMessages()
+			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			go "message/inbox/${message.id}"
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(2)').text() == formatedDate
-			$('#message-details p:nth-child(3)').text() == message.text
+			$('#message-details p:nth-child(3)').text() == formatedDate
+			$('#message-details p:nth-child(4)').text() == message.text
 		cleanup:
 			deleteTestMessages()
 	}
     
 	def 'selected message is highlighted'() {
 		given:
-			createTestMessages()
+			createInboxTestMessages()
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
@@ -93,21 +93,6 @@ class InboxSpec extends grails.plugin.geb.GebSpec {
 			
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
-	}
-
-	static createTestMessages() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice')].each() {
-			it.inbound = true
-			it.save(failOnError:true)
-		}
-	}
-
-	static deleteTestMessages() {
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
 	}
 
 	String dateToString(Date date) {

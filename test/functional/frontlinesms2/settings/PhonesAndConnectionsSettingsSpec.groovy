@@ -20,7 +20,6 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to ConnectionListPage
 		then:
-			println "Connections: ${Fconnection.findAll()}"
 			lstConnections != null
 			lstConnections.find('h2')*.text() == ['MTN Dongle', 'David\'s Clickatell account', 'Miriam\'s Clickatell account']
 		cleanup:	
