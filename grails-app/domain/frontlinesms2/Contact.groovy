@@ -14,7 +14,7 @@ class Contact {
 	}
 
 	def getGroups() {
-  		GroupMembership.findAllByContact(this).collect { it.group }
+		GroupMembership.findAllByContact(this)*.group.sort{it.name}
 	}
 
 	def setGroups(groups) {
