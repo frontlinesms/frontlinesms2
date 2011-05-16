@@ -11,6 +11,7 @@ class ContactController {
     def list = {
         def groupInstance = params.id? Group.findById(params.id): null
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		params.sort = "name"
 
         def contactInstanceList, contactInstanceTotal
         if(groupInstance) {
@@ -29,9 +30,9 @@ class ContactController {
     }
 
 	def show = {
+		params.sort = "name"
 		withContact { contactInstance ->
 			def contactGroupInstanceList = contactInstance.groups
-			def nonContactGroupInstanceList = Group.findAllWithoutMember(contactInstance)
 
 			[contactInstance:contactInstance,
 					contactGroupInstanceList: contactGroupInstanceList,
