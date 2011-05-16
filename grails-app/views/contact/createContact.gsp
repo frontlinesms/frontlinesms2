@@ -15,7 +15,7 @@
         </div>
         <div class="body">
             <h1><g:message code="default.create.label" args="[entityName]" /></h1>
-            <g:form name="contactDetails" action="saveContact" >
+            <g:form name="contact-details" action="saveContact" >
                 <div class="dialog">
                     <table>
                         <tbody>

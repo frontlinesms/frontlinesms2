@@ -12,7 +12,6 @@ class ContactListSpec extends ContactGebSpec {
 			createTestContacts()
 		when:
 			go 'contact'
-			println $('body').text()
 		then:
 			def contactList = $('#contacts')
 			assert contactList.tag() == 'ol'
@@ -30,7 +29,6 @@ class ContactListSpec extends ContactGebSpec {
 			go 'http://localhost:8080/frontlinesms2/contact'
 		then:
 			def c = $('#contacts')
-			println "contacts content after deletion: ${c.text()}"
 			assert c.tag() == "div"
 			assert c.text() == 'You have no contacts saved'
 	}

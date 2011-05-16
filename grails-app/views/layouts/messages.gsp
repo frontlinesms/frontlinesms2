@@ -24,12 +24,9 @@
 			<g:render template="message_list"/>
 			<g:if test="${messageInstance != null}">
 				<div id="message-details">
-					<g:if test="${contactInstance != null}">
-						<p class="message-name">${contactInstance.name}</p>
-					</g:if>
-					<g:else>
-						<p class="message-name">${messageInstance.src}</p>
-					</g:else>
+					<p class="message-name">${contactInstance?.name?:messageInstance?.src}</p>
+					<g:def var="thisAddress" value="${messageInstance.src}"/>
+					<g:link class="button" controller="contact" action="createContact" params="[address: thisAddress]">+</g:link>
 					<p class="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
 					<p class="message-body">${messageInstance.text}</p>
 				</div>

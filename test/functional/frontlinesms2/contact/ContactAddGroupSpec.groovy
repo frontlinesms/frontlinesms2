@@ -34,21 +34,9 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def nonMemberOf = groupSelecter.children().collect() { it.text() }.sort()
 		then:
 			nonMemberOf == ['Add to group...', 'Others', 'four']
+			
 		when:
-//			$("#contact-details").find('select', name:'group-dropdown').value('Others')
-//			$("#contact-details").getSelectByName('group-dropdown')
-			println 'hello?'
-			println groupSelecter.text() //.findById(Group.findByName('Others'))
-//			println groupSelecter.setOption('Others')
-//			groupSelecter = Group.findByName('Others').id
-//			input.findElements(By.tagName("option")).find { it.value == Others }.setSelected()
-
-//			$("option[value=${Group.findByName('Others').id}]").setSelected()
-//			$("option", value:"${Group.findByName('Others').id}").setSelected()
 			$('#group-dropdown').value("${Group.findByName('Others').id}")
-
-			//.setSelected()
-//			groupSelecter = 'Others'
 			def updatedMemberOf = $("#group-list").children().children('h2').collect() { it.text() }.sort()
 		then:
 			updatedMemberOf == ['Others', 'Test', 'three']

@@ -8,16 +8,19 @@ class MessageController {
     }
 
     def inbox = {
+		println 'Welcome to inbox'
 		def messageInstance = Fmessage.get(params.id)
+		def contactInstance
 		if(messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
+			contactInstance = Contact.findByAddress(messageInstance.src)
 		}
 		
 		params.inbound = true
-		return [messageSection:'inbox',
+		[messageSection:'inbox',
 				messageInstance: messageInstance,
-				contactInstance: Contact.findContactByAddress(messageInstance.src)] << list()
+				contactInstance: contactInstance] << list()
     }
 
     def sent = {
@@ -26,10 +29,14 @@ class MessageController {
     }
 
     def list = {
+		println "List{}"
 		params.sort = 'dateCreated'
 		params.order = 'desc'
 		def messageInstanceList = Fmessage.findAllByInbound(params.inbound, params)
-		[messageInstanceList:messageInstanceList,
+		println "list building model..."
+		def model = [messageInstanceList:messageInstanceList,
 				messageInstanceTotal:Fmessage.countByInbound(params.inbound)]
+		println "List model: ${model}"
+		model
     }
 }

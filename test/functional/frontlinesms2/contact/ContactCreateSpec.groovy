@@ -14,7 +14,7 @@ class ContactCreateSpec extends ContactGebSpec {
 	def 'button to save new contact is displayed and works'() {
 		when:
 			to CreateContactPage
-			$("#contactDetails").name = 'Kate'
+			$("#contact-details").name = 'Kate'
 			saveButton.click()
 		then:
 			at ContactListPage
@@ -52,7 +52,7 @@ class CreateContactPage extends geb.Page {
 		title.endsWith('Create Contact')
 	}
 	static content = {
-		saveButton { $("#contactDetails .save") }
+		saveButton { $("#contact-details .save") }
 		errorMessages { $('.errors') }
 	}
 }
