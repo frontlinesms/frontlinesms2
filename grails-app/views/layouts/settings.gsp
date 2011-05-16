@@ -4,9 +4,9 @@
 		<title>
 			<g:layoutTitle default="Settings"/>
 		</title>
-        <g:layoutHead />
+		<g:layoutHead />
 		<g:render template="/css"/>
-        <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 	</head>
 	<body>
