@@ -6,14 +6,6 @@
 	</head>
 	<body>
 		<h1><g:message code="default.create.label" args="[entityName]" /></h1>
-		<g:if test="${flash.message}">
-		<div class="message">${flash.message}</div>
-		</g:if>
-		<g:hasErrors bean="${groupInstance}">
-		<div class="errors">
-			<g:renderErrors bean="${groupInstance}" as="list" />
-		</div>
-        </g:hasErrors>
 		<g:form name="groupDetails" action="saveGroup" >
 			<div class="dialog">
 				<table>

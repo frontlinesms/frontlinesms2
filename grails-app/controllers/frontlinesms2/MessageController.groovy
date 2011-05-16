@@ -16,7 +16,8 @@ class MessageController {
 		
 		params.inbound = true
 		return [messageSection:'inbox',
-				messageInstance: messageInstance] << list()
+				messageInstance: messageInstance,
+				contactInstance: Contact.findContactByAddress(messageInstance.src)] << list()
     }
 
     def sent = {

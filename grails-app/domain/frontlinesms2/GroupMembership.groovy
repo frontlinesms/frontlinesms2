@@ -44,7 +44,5 @@ class GroupMembership implements Serializable {
       id composite: ['group', 'contact']
       version false
       table 'group_member'
-//	  contact sort:"name", order:"asc"
-//	  group sort:"name", order:"asc"
    }
 }

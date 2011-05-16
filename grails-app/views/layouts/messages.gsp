@@ -24,7 +24,12 @@
 			<g:render template="message_list"/>
 			<g:if test="${messageInstance != null}">
 				<div id="message-details">
-					<p class="contact-name">${messageInstance.src}</p>
+					<g:if test="${contactInstance != null}">
+						<p class="message-name">${contactInstance.name}</p>
+					</g:if>
+					<g:else>
+						<p class="message-name">${messageInstance.src}</p>
+					</g:else>
 					<p class="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
 					<p class="message-body">${messageInstance.text}</p>
 				</div>
