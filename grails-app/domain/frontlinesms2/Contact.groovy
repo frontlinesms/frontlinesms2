@@ -22,6 +22,10 @@ class Contact {
 		groups.each() { GroupMembership.create(this, it) }
 	}
 
+	def findContactByAddress(address) {
+		Contact.findByAddress(address)
+	}
+
 	def addToGroups(Group g, flush=false) {
 		GroupMembership.create(this, g, flush)
 	}

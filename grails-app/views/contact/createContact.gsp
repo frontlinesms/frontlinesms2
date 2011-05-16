@@ -15,19 +15,7 @@
         </div>
         <div class="body">
             <h1><g:message code="default.create.label" args="[entityName]" /></h1>
-            <g:if test="${flash.message}">
-            <div class="message">${flash.message}</div>
-            </g:if>
-            <g:hasErrors bean="${contactInstance}">
-            <div class="errors">
-                <g:renderErrors bean="${contactInstance}" as="list" />
-            </div>
-            </g:hasErrors>
-
-
             <g:form name="contactDetails" action="saveContact" >
-
-
                 <div class="dialog">
                     <table>
                         <tbody>
