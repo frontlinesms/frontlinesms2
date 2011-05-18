@@ -1,5 +1,3 @@
-
-
 <%@ page import="frontlinesms2.Contact" %>
 <html>
     <head>

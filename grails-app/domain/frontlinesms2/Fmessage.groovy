@@ -1,6 +1,8 @@
 package frontlinesms2
 
 class Fmessage {
+//	static belongsTo = [activity : Poll]
+
 	String src
 	String dst
 	String text
