@@ -6,8 +6,9 @@ import grails.plugin.spock.*
 class ContactControllerSpec extends ControllerSpec {
 	def "adding and removing a contact from the same group triggers error"() {
 		given:
-			mockDomain(Contact, [new Contact(name:'Ada')])
-			mockParams.id = 1
+			def c = new Contact(name:'Ada')
+			mockDomain(Contact, [c])
+			mockParams.id = c.id
 			mockParams.groupsToAdd = ",2,"
 			mockParams.groupsToRemove = ",2,"
 		when:
