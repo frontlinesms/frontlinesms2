@@ -53,15 +53,19 @@ class ContactController {
 			}
 
 			contactInstance.properties = params
-
-			if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-				params.groupsToAdd.tokenize(',').each() {
-					def g = Group.get(Long.parseLong(it))
-					contactInstance.addToGroups(g, true)
+			
+			// Check for errors in groupsToAdd and groupsToRemove
+			def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
+			def groupsToRemove = params.groupsToRemove.tokenize(',')
+			if(!groupsToAdd.disjoint(groupsToRemove)) {
+				contactInstance.errors.reject('Cannot add and remove from the same group!')
+				render(view: "edit", model: [contactInstance: contactInstance])
+			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
+				groupsToAdd.each() {
+					contactInstance.addToGroups(Group.get(it), true)
 				}
-				params.groupsToRemove.tokenize(',').each() {
-					def g = Group.get(Long.parseLong(it))
-					contactInstance.removeFromGroups(g, true)
+				groupsToRemove.each() {
+					contactInstance.removeFromGroups(Group.get(it), true)
 				}
 
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
@@ -69,7 +73,6 @@ class ContactController {
 			} else {
 				render(view: "edit", model: [contactInstance: contactInstance])
 			}
-			[contactInstance:contactInstance]
 		}
 	}
 
