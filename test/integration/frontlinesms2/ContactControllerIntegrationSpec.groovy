@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
-	def "adding a contact to a group multiple times only leads to a single add request"() {
+	def "adding a contact to a group multiple times leads to a successful add request"() {
 		given:
 			def controller = new ContactController()
 			def c = new Contact(name:'Ada').save(failOnError:true)
@@ -12,6 +12,23 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		when:
 			controller.update()
 		then:
-			1 * c.addToGroups(g)
+			Contact.get(c.id).isMemberOf(g)
+	}	
+	
+	def "removing a contact from a group multiple times leads to a successful remove"() {
+		given:
+			def controller = new ContactController()
+			def c = new Contact(name:'Ada').save(failOnError:true)
+			def g = new Group(name:'test group').save(failOnError:true)
+			c.addToGroups(g, true)
+			assert(Contact.get(c.id).isMemberOf(Group.get(g.id)))
+			
+			controller.params.id = c.id
+			controller.params.groupsToAdd = ","
+			controller.params.groupsToRemove = ",${g.id},${g.id},"
+		when:
+			controller.update()
+		then:
+			!Contact.get(c.id).isMemberOf(Group.get(g.id))
 	}
 }
