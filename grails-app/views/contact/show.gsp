@@ -97,7 +97,7 @@
 						<a class="remove-group" id="remove-group-${g.id}">Delete</a>
 					</li>
 				</g:each>
-				<li id="no-groups" style="display: none">
+				<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
 					<p>Not part of any Groups</p>
 				</li>
 			</ol>

@@ -74,6 +74,27 @@ class ContactShowSpec extends ContactGebSpec {
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
 	}
 
+	def 'contact with no groups has "no groups" message visible'() {
+		given:
+			def alice = Contact.findByName('Alice')
+		when:
+			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
+		then:
+			$('#no-groups').displayed
+	}
+
+	def 'contact with groups has "no groups" message hidden'() {
+		given:
+			createTestGroups()
+			def bob = Contact.findByName('Bob')
+		when:
+			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+		then:
+			!$('#no-groups').displayed
+		cleanup:
+			deleteTestGroups()
+	}
+
 	def assertContactSelected(String name) {
 		def selectedChildren = $('#contacts').children('li.selected')
 		assert selectedChildren.size() == 1
