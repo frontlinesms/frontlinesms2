@@ -20,11 +20,11 @@
                             </tr>
 
                             <tr class="prop">
-                                <td valign="top" class="keywords">
-                                    <label for="responses"><g:message code="poll.responses.label" default="Responses" /></label>
+                                <td valign="top" class="responses">
+                                    <label for="responses"><g:message code="responses.value.label" default="Responses" /></label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean: pollInstance, field: 'responses', 'errors')}">
-                                    <g:textField name="responses" value="${pollInstance?.responses}" />
+                                    <g:textField name="responses" value="${responses}" />
                                 </td>
                             </tr>
                         </tbody>

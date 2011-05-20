@@ -32,12 +32,25 @@ class BootStrap {
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
 			[new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
-					new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob')].each() {
-				it.inbound = true
-				it.save(failOnError:true)
-			}
+					new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
+					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best')].each() {
+						it.inbound = true
+						it.save(failOnError:true)
+					}
+
+			[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
+					new PollResponse(value:'barcelona')]),
+					new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
+					new PollResponse(value:'oriele')])].each() {
+						it.save(failOnError:true, flush:true)
+					}
+
+			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob'))
+			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))
+			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
 		}
 	}
+
 
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)

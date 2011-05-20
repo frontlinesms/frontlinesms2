@@ -23,9 +23,9 @@
 		<h2>Activities</h2>
 		<ol id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
-					<li>
-						<g:link action="poll" id="${p.id}" class="${pollSection == p ? 'selected' : ''}">${p.title}</g:link>
-					</li>
+				<li>
+					<g:link action="poll" id="${p.id}" class="${pollSection == p ? 'selected' : ''}">${p.title}</g:link>
+				</li>
 			</g:each>
 		</ol>
 	</li>
