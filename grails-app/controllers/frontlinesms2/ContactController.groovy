@@ -9,7 +9,7 @@ class ContactController {
     }
 
     def list = {
-        def groupInstance = params.id? Group.findById(params.id): null
+        def groupInstance = params.groupId? Group.findById(params.groupId): null
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		params.sort = "name"
 
@@ -125,12 +125,12 @@ class ContactController {
 
 	def withContact(Closure c) {
 		println "params: ${params}"
-	    def contactInstance = Contact.get(params.id)
-	    if (contactInstance) {
+		def contactInstance = Contact.get(params.contactId)
+		if (contactInstance) {
 			c contactInstance
-        } else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-            redirect(action: "list")
-        }
+		} else {
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+			redirect(action: "list")
+		}
 	}
 }
