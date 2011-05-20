@@ -9,7 +9,7 @@ class ContactController {
     }
 
     def list = {
-        def groupInstance = params.id? Group.findById(params.id): null
+        def groupInstance = params.groupId? Group.findById(params.groupId): null
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		params.sort = "name"
 
@@ -53,15 +53,19 @@ class ContactController {
 			}
 
 			contactInstance.properties = params
-
-			if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-				params.groupsToAdd.tokenize(',').each() {
-					def g = Group.get(Long.parseLong(it))
-					contactInstance.addToGroups(g, true)
+			
+			// Check for errors in groupsToAdd and groupsToRemove
+			def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
+			def groupsToRemove = params.groupsToRemove.tokenize(',')
+			if(!groupsToAdd.disjoint(groupsToRemove)) {
+				contactInstance.errors.reject('Cannot add and remove from the same group!')
+				render(view: "edit", model: [contactInstance: contactInstance])
+			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
+				groupsToAdd.each() {
+					contactInstance.addToGroups(Group.get(it), true)
 				}
-				params.groupsToRemove.tokenize(',').each() {
-					def g = Group.get(Long.parseLong(it))
-					contactInstance.removeFromGroups(g, true)
+				groupsToRemove.each() {
+					contactInstance.removeFromGroups(Group.get(it), true)
 				}
 
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
@@ -69,7 +73,6 @@ class ContactController {
 			} else {
 				render(view: "edit", model: [contactInstance: contactInstance])
 			}
-			[contactInstance:contactInstance]
 		}
 	}
 
@@ -122,12 +125,12 @@ class ContactController {
 
 	def withContact(Closure c) {
 		println "params: ${params}"
-	    def contactInstance = Contact.get(params.id)
-	    if (contactInstance) {
+		def contactInstance = Contact.get(params.contactId)
+		if (contactInstance) {
 			c contactInstance
-        } else {
-            flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-            redirect(action: "list")
-        }
+		} else {
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+			redirect(action: "list")
+		}
 	}
 }

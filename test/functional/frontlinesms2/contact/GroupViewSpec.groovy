@@ -43,8 +43,7 @@ class GroupViewSpec extends GroupGebSpec {
 }
 
 class FriendsGroupPage extends geb.Page {
-	static url = getUrl()
-	static getUrl() { "contact/list/${Group.findByName('Friends').id}" }
+	static getUrl() { "group/show/${Group.findByName('Friends').id}" }
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
 		contactsList { $('#contacts') }

@@ -29,7 +29,6 @@ class ContactEditSpec extends ContactGebSpec {
 }
 
 class AliceDetailsPage extends geb.Page {
-	static url = getUrl()
 	static def getUrl() {
 		"contact/show/${Contact.findByName('Alice').id}"
 	}

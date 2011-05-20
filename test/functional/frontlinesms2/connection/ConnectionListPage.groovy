@@ -13,5 +13,6 @@ class ConnectionListPage extends geb.Page {
 		lstConnections { $('#connections') }
 		selectedConnection { lstConnections.find(".selected") }
 		btnCreateRoute { selectedConnection.find('.buttons').first() }
+		btnCreateFirstRoute { $('.buttons') }
 	}
 }
