@@ -75,7 +75,7 @@
     </head>
     <body>
 		<g:form name="contact-details">
-			<g:hiddenField name="id" value="${contactInstance?.id}"/>
+			<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 			<g:hiddenField name="version" value="${contactInstance?.version}"/>
 			<g:hiddenField name="groupsToAdd" value=","/>
 			<g:hiddenField name="groupsToRemove" value=","/>

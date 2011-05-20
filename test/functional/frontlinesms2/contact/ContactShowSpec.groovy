@@ -104,7 +104,6 @@ class ContactShowSpec extends ContactGebSpec {
 }
 
 class EmptyContactPage extends geb.Page {
-	static url = getUrl()
 	static def getUrl() {
 		"contact/show/${Contact.findByName('').id}"
 	}

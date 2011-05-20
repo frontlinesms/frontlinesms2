@@ -6,7 +6,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			def controller = new ContactController()
 			def c = new Contact(name:'Ada').save(failOnError:true)
 			def g = new Group(name:'test group').save(failOnError:true)
-			controller.params.id = c.id
+			controller.params.contactId = c.id
 			controller.params.groupsToAdd = ",${g.id},${g.id},"
 			controller.params.groupsToRemove = ","
 		when:
@@ -23,7 +23,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			c.addToGroups(g, true)
 			assert(Contact.get(c.id).isMemberOf(Group.get(g.id)))
 			
-			controller.params.id = c.id
+			controller.params.contactId = c.id
 			controller.params.groupsToAdd = ","
 			controller.params.groupsToRemove = ",${g.id},${g.id},"
 		when:
