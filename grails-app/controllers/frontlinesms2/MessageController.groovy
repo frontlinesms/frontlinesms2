@@ -27,12 +27,22 @@ class MessageController {
 		[messageSection:'sent'] << list()
     }
 
+	def poll = {
+		def pollInstance = Poll.get(params.id)
+		
+		[messageInstanceList: pollInstance.messages,
+				messageInstanceTotal: pollInstance.messages.size(),
+				pollInstanceList: Poll.findAll(),
+				pollInstance: pollInstance,
+				pollResponseList: pollInstance.responses]
+	}
+
     def list = {
 		params.sort = 'dateCreated'
 		params.order = 'desc'
 		def messageInstanceList = Fmessage.findAllByInbound(params.inbound, params)
-		def model = [messageInstanceList:messageInstanceList,
-				messageInstanceTotal:Fmessage.countByInbound(params.inbound)]
-		model
+		[messageInstanceList:messageInstanceList,
+				messageInstanceTotal:Fmessage.countByInbound(params.inbound),
+				pollInstanceList: Poll.findAll()]
     }
 }

@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<h1><g:message code="default.create.label" args="[entityName]" /></h1>
-		<g:form name="groupDetails" action="saveGroup" >
+		<g:form name="group-details" action="saveGroup" >
 			<div class="dialog">
 				<table>
 					<tbody>
@@ -22,7 +22,6 @@
 					</tbody>
 				</table>
 			</div>
-
 
 			<div id="buttons">
 				<g:submitButton name="createGroup" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />

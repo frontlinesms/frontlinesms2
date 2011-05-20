@@ -14,8 +14,8 @@ class GroupCreateSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to CreateGroupPage
 			def initNumGroups = Group.count()
-			$("#groupDetails").name = 'People'
-			saveButton.click()
+			$("#group-details").name = 'People'
+			btnSave.click()
 		then:
 			at ContactListPage
 			assert Group.count() == (initNumGroups + 1)
@@ -39,7 +39,7 @@ class CreateGroupPage extends geb.Page {
 	}
 
 	static content = {
-		saveButton { $("#groupDetails .save") }
+		btnSave { $("#group-details .save") }
 		errorMessages { $('.errors') }
 	}
 }

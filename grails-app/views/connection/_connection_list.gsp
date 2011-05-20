@@ -8,6 +8,7 @@
 					<g:link action="show" class="show" id="${c.id}">
 						<h2>${c.name}</h2>
 						<h3>${c.type()}</h3>
+						<div class="status">${c.status}</div>
 					</g:link>
 					<div class="buttons">
 						<g:link action="createRoute" class='route' id="${c.id}">Create route</g:link>

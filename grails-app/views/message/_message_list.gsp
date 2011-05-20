@@ -9,7 +9,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${messageInstanceList}" status="i" var="m">
+			<g:each in="${messageInstanceList.sort { it.dateCreated } }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
 					<td>
 						<g:link action="inbox" id="${m.id}">
@@ -18,7 +18,7 @@
 					</td>
 					<td>
 						<g:link action="inbox" id="${m.id}">
-						  ${m.text}
+						  ${m.displayText}
 						</g:link>
 					</td>
 					<td>
