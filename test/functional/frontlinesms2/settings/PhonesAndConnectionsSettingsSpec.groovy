@@ -37,6 +37,8 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def deleteTestConnections() {
+		SmslibFconnection.findAll().each() { it.delete(flush: true) }
+		EmailFconnection.findAll().each() { it.delete(flush: true) }
 		Fconnection.findAll().each() { it.delete(flush: true) }
 	}
 }

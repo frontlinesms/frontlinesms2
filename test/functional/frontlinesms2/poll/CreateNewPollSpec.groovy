@@ -18,9 +18,10 @@ class CreateNewPollSpec extends PollGebSpec {
 		when:
 			to CreatePollPage
 			frmDetails.title = 'UFOs?'
-			frmDetails.responses = 'yes'
+			frmDetails.responses = 'yes no'
 			btnSave.click()
 		then:
+			println Poll.findAll()*.title
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
 		cleanup:
@@ -34,6 +35,19 @@ class CreateNewPollSpec extends PollGebSpec {
 			go 'message'
 		then:
 			$('#activities-submenu li')*.text() == ['Football Teams', 'Shampoo Brands']
+		cleanup:
+			deleteTestPolls()
+	}
+
+	def 'each word in response field is its own possible response'() {
+		when:
+			to CreatePollPage
+			frmDetails.title = 'UFOs?'
+			frmDetails.responses = 'yes no kidnapped'
+			btnSave.click()
+			def ufoPoll = Poll.findByTitle("UFOs?")
+		then:
+			ufoPoll.responses*.value.sort() == ['kidnapped', 'no', 'yes']
 		cleanup:
 			deleteTestPolls()
 	}

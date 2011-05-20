@@ -13,10 +13,14 @@ class PollController {
 	}
 
 	def save = {
-        def pollInstance = new Poll(params)
-		if (pollInstance.save(flush: true)
-			) {
-            flash.message = "${message(code: 'default.created.message', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
+        def pollInstance = new Poll(title: params.title)
+		def responseList = params.responses.tokenize().collect() {
+			new PollResponse(value:it)
+		}
+		pollInstance.responses = responseList
+		
+		if (pollInstance.save(flush: true)) {
+            flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
 			redirect(controller: "message")
 		} else {
 			println "Something went wrong while saving the poll instance."

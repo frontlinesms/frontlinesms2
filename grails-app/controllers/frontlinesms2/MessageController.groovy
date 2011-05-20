@@ -28,8 +28,13 @@ class MessageController {
     }
 
 	def poll = {
-		params.inbound = true
-		[messageSection:'sent'] << list()
+		def pollInstance = Poll.get(params.id)
+		
+		[messageInstanceList: pollInstance.messages,
+				messageInstanceTotal: pollInstance.messages.size(),
+				pollInstanceList: Poll.findAll(),
+				pollInstance: pollInstance,
+				pollResponseList: pollInstance.responses]
 	}
 
     def list = {
