@@ -9,9 +9,9 @@ class GroupsAndContactsUrlMappingTests extends grails.test.GrailsUrlMappingsTest
 	}
 
 	void testGroupMapping() {
-		assertForwardUrlMapping('/group/show/1', controller:'contact', action:'show') {
+		assertForwardUrlMapping('/group/show/123', controller:'contact', action:'list') {
+			groupId = 123
 			contactId = null
-			groupId = 1
 		}
 	}
 

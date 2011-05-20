@@ -24,9 +24,11 @@ class ContactControllerSpec extends ControllerSpec {
 			def contact3 = new Contact(name:'Charlie')
 			mockDomain(Contact, [contact1, contact2, contact3])
 			mockDomain(Group)
-			assert controller.list() != null
+			mockDomain(GroupMembership)
+			mockParams.contactId = contact1.id
+			assert controller.show() != null
 		when:
-			def model = controller.list()
+			def model = controller.show()
 		then:
 			model.contactInstanceList == [contact2, contact1, contact3]
 			model.contactInstanceList != [contact1, contact2, contact3]

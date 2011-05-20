@@ -22,7 +22,7 @@
 			<ol id="groups-submenu">
 				<g:each in="${groupInstanceList}" status="i" var="g">
 					<li>
-						<g:link action="list" id="${g.id}" class="${contactsSection==g ? 'selected' : ''}">${g.name}</g:link>
+						<g:link controller="group" action="show" id="${g.id}" class="${contactsSection==g ? 'selected' : ''}">${g.name}</g:link>
 					</li>
 				</g:each>
 			</ol>
