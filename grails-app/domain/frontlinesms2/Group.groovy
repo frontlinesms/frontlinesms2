@@ -5,7 +5,6 @@ class Group {
 
 	static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
 	static mapping = {
-	    members cascade:'save-update'
 	    table 'grup'
 	}
 
