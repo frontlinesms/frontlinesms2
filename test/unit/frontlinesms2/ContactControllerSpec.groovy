@@ -9,7 +9,7 @@ class ContactControllerSpec extends ControllerSpec {
 			def c = new Contact(name:'Ada')
 			mockDomain(Contact, [c])
 			mockDomain(Group)
-			mockDomain(GroupMembershippr)
+			mockDomain(GroupMembership)
 			mockParams.contactId = c.id
 			mockParams.groupsToAdd = ",2,"
 			mockParams.groupsToRemove = ",2,"
