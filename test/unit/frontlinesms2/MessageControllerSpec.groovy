@@ -82,8 +82,9 @@ class MessageControllerSpec extends ControllerSpec {
 			def id = new Fmessage().save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
+			mockParams.messageSection = 'inbox'
 			mockParams.id = id
-			controller.inbox()
+			controller.show()
 		then:
 			Fmessage.get(id).read
 	}
