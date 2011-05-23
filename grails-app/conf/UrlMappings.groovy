@@ -2,7 +2,11 @@ class UrlMappings {
 	static mappings = {
 		"/contact/show/$contactId"(controller:'contact', action:'show') {}
 
-		"/group/show/$groupId/contact?/$action?/$contactId?"(controller:'contact') {}
+		showGroupContact:"/group/show/$groupId/contact/show/$contactId" {
+			controller = 'contact'
+			action = 'show'
+		}
+		showGroup:"/group/show/$groupId"(controller:'contact') {}
 
 		"/$controller/$action?/$id?"{
 			constraints {

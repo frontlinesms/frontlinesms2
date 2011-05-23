@@ -46,12 +46,11 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def 'when showing all contacts, the first contact in the list is selected if none is specified'() {
 		given:
-			controller.params.groupId = null
 			controller.params.contactId = null
 		when:
 			controller.list()
 		then:
-			controller.response.redirectedUrl == "/contact/show/${c.id}?groupId=&max=10&sort=name"
+			controller.response.redirectedUrl == "/contact/show/${c.id}?max=10&sort=name"
 	}
 
 	def 'when showing a group, the first contact in the group is selected if none is specified'() {
@@ -62,7 +61,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		when:
 			controller.list()
 		then:
-			controller.response.redirectedUrl == "/contact/show/${c.id}?groupId=${g.id}&max=10&sort=name"
+			controller.response.redirectedUrl == "/group/show/${g.id}/contact/show/${c.id}?max=10&sort=name"
 	}
 
 	def "when a new group is saved, user is redirected to the group's show page"() {
