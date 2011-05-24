@@ -9,14 +9,17 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def folders = $('#message-actions li a')*.text() 
-			
+			def actions = $('#message-actions li a')*.text()
 		then:
-			folders[0] == 'Football Teams'
-			folders[1] == 'Shampoo Brands'			
+			actions[0] == 'Shampoo Brands'
+
+		when:
+			go "/messages/inbox/show/${Fmessage.findBySrc("Bob").id}"
+			def actions = $('#message-actions li a')*.text()
+		then:
+			actions[0] == 'Football Teams'
 		cleanup:
 			deleteTestPolls()
-			//deleteTestMessages()
 
 	}
 	
@@ -26,13 +29,16 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def folder = $('#message-actions li:first-child')
+			def btnAction = $('#message-actions li').children('a').first()
 			def bob = Fmessage.findBySrc('Bob')
-			folder.click() 
+			def shampooPoll = Poll.findByTitle('Shampoo Brands')
+			def footballPoll = Poll.findByTitle('Football Teams')
+			btnAction.click()
+			shampooPoll.responses.each{ it.refresh() }
+			footballPoll.responses.each{ it.refresh() }
 		then:
-			Poll.findByTitle("Shampoo Brands").getMessages().find { bob }
-			!Poll.findByTitle("Football Teams").getMessages().find { bob }
-				
+			bob == Poll.findByTitle("Shampoo Brands").getMessages().find { it == bob }
+			bob != Poll.findByTitle("Football Teams").getMessages().find { it == bob }
 		cleanup:
 			deleteTestPolls()
 	}

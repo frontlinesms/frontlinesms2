@@ -19,5 +19,14 @@ class Poll {
 	def getMessages() {
 		return this.responses*.messages.flatten()
 	}
+
+	def removeMessage(Fmessage message) {
+		def responseList = this.responses
+		for (r in responseList) {
+			if (r.messages.find { message }) {
+				r.removeFromMessages(message)
+			}
+		}
+	}
 }
 

@@ -25,4 +25,23 @@ class Fmessage {
 
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
 	}
+
+	static def getInboxMessages() {
+		def list = Fmessage.findAll()
+		def inboundList = []
+		for (m in list) {
+			if(m.inbound == true)
+				inboundList.add(m)
+		}
+		inboundList
+	}
+	static def getSentMessages() {
+		def list = Fmessage.findAll()
+		def outBoundList = []
+		for (m in list) {
+			if(m.inbound == false)
+				outBoundList.add(m)
+		}
+		outBoundList
+	}
 }

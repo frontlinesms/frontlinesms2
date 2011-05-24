@@ -56,18 +56,11 @@ class MessageController {
 	
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
+		def oldPollInstance = Poll.get(params.oldPollId)
 		def messageInstance = Fmessage.get(params.id)
 		def pollInstanceList = Poll.findAll()
-		
-		pollInstanceList.each{ poll ->
-			messageToBeDeleted = poll.getMessages().find{ messageInstance }
-			if(messageToBeDeleted) {
-				poll.responses.removeAll(messageToBeDeleted)
-				println "Message Deleted"
-			}
-		}
-		println "Message Deleted"
-		pollInstance.responses.toArray()[0].addToMessages(messageInstance)
+		pollInstance.responses.toArray()[0].addToMessages(messageInstance).save(failOnError: true, flush: true)
+		oldPollInstance.removeMessage(messageInstance)//.save(failOnError: true, flush: true)
 		redirect(action: "poll", params: params)
 	}
 }
