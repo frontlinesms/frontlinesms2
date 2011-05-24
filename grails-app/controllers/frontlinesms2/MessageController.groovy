@@ -9,6 +9,7 @@ class MessageController {
 
 	def show = {
 		def messageInstance = Fmessage.get(params.id)
+		def pollInstance = Poll.get(params.pollId)
 		def contactInstance
 		if(params.messageSection=='inbox' && messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -18,7 +19,9 @@ class MessageController {
 
 		render view:params.messageSection,
 				model:[messageInstance: messageInstance,
-						contactInstance: contactInstance] << "${params.messageSection}"()
+						contactInstance: contactInstance,
+						pollInstanceList: Poll.findAll(),
+						pollInstance: pollInstance] << "${params.messageSection}"()
 	}
 
     def inbox = {		
@@ -34,11 +37,12 @@ class MessageController {
 	def poll = {
 		def pollInstance = Poll.get(params.pollId)
 		
-		[messageInstanceList: pollInstance.messages,
+		[messageSection:'poll',
+				messageInstanceList: pollInstance.messages,
 				messageInstanceTotal: pollInstance.messages.size(),
 				pollInstanceList: Poll.findAll(),
 				pollInstance: pollInstance,
-				pollResponseList: pollInstance.responses] // FIXME should add messageSection:'poll'
+				pollResponseList: pollInstance.responses]
 	}
 
     def list = {
