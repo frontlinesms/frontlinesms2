@@ -49,5 +49,7 @@ class PollResponseSpec extends UnitSpec {
 //		then:
 //			m.activity == r
 //	}
+
+	
 }
 
