@@ -9,8 +9,7 @@ class ConnectionController {
 		redirect(action:'list')
 	}
 
-    def list = {
-		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+	def list = {
 		def fconnectionInstanceList = Fconnection.list(params)
 		def connectionInstance = Fconnection.get(params.id)
 		def fconnectionInstanceTotal = Fconnection.count()
