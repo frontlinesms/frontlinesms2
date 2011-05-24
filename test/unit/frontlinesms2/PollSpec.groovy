@@ -4,7 +4,6 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 	def 'Poll must have at least two responses'() {
 		given:
 			mockDomain(Poll)
-//			mockForConstraintsTests(Poll)
 		when:
 			def p = new Poll(title:'test poll')
 		then:

@@ -1,7 +1,7 @@
 package frontlinesms2
 
 import grails.util.Environment
-import frontlinesms2.FconnectionService
+
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {

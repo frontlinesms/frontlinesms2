@@ -4,7 +4,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 
 class MessageControllerSpec extends ControllerSpec {
 	def setup() {

@@ -119,7 +119,7 @@ class ContactController {
 		}
 	}
 
-	def withContact(Closure c) {
+	private def withContact(Closure c) {
 		def contactInstance = Contact.get(params.contactId)
 		if (contactInstance) {
 			c contactInstance

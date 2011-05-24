@@ -39,11 +39,11 @@ class ContactSpec extends UnitSpec {
 	
 	def "max name length 255"(){
 		when:
-			def Contact contact = new Contact(name:
-					'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+
-					'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+
-					'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+
-					'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef'+'0123456789abcdef')
+			def Contact contact = new Contact(name:'''\
+0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\
+0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\
+0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\
+0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef''')
 	then:
 		!contact.validate()
 	}
