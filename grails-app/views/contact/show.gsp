@@ -77,6 +77,9 @@
 		<g:form name="contact-details">
 			<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 			<g:hiddenField name="version" value="${contactInstance?.version}"/>
+			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+				<g:hiddenField name="groupId" value="${contactsSection.id}"/>
+			</g:if>
 			<g:hiddenField name="groupsToAdd" value=","/>
 			<g:hiddenField name="groupsToRemove" value=","/>
 

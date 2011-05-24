@@ -69,7 +69,6 @@ class ContactController {
 			def groupsToRemove = params.groupsToRemove.tokenize(',')
 			if(!groupsToAdd.disjoint(groupsToRemove)) {
 				contactInstance.errors.reject('Cannot add and remove from the same group!')
-				render(view: "edit", model: [contactInstance: contactInstance])
 			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
 				groupsToAdd.each() {
 					contactInstance.addToGroups(Group.get(it), true)
@@ -79,10 +78,12 @@ class ContactController {
 				}
 
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-				redirect(action: "show", id: contactInstance.id)
-			} else {
-				render(view: "edit", model: [contactInstance: contactInstance])
+				def redirectParams = [contactId:contactInstance.id]
+				if(params.groupId) redirectParams << [groupId: params.groupId]
+				redirect(action: "show", params:redirectParams)
+				return
 			}
+			render(view:'show', model:show()<<[contactInstance:contactInstance])
 		}
 	}
 

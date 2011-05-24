@@ -26,6 +26,23 @@ class ContactEditSpec extends ContactGebSpec {
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
 			Contact.findByName('Kate') != null
 	}
+
+	def "Updating a contact within a group keeps the view inside the group"() {
+		given:
+			def alice = Contact.findByName('Alice')
+			Group g = new Group(name: 'Excellent').save(failOnError:true, flush:true)
+			GroupMembership.create(alice, g, true)
+		when:
+			go "/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
+			frmDetails.name = 'Kate'
+			frmDetails.address = '+2541234567'
+			btnSave.click()
+		then:
+			assertFieldDetailsCorrect('name', 'Name', 'Kate')
+			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			Contact.findByName('Kate') != null
+			$('#groups-submenu .selected').text() == 'Excellent'
+	}
 }
 
 class AliceDetailsPage extends geb.Page {
