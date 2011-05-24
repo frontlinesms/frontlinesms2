@@ -32,8 +32,8 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 
 	static deleteTestPolls() {
 		Poll.findAll().each() {
-			it?.refresh()
-			it?.delete(failOnError:true, flush:true)
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
 		}
 	}
 
