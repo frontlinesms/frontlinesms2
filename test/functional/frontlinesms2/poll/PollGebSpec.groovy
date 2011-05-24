@@ -15,7 +15,7 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester'),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:' go manchester'),
+				new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester'),
 				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best')].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
