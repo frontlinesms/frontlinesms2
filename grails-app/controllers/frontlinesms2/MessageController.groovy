@@ -1,25 +1,32 @@
 package frontlinesms2
 
 class MessageController {
-    static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def index = {
-        redirect(action: "inbox", params: params)
-    }
+	def index = {
+		redirect(action: "inbox", params: params)
+	}
 
-    def inbox = {
+	def show = {
 		def messageInstance = Fmessage.get(params.id)
+		def pollInstance = Poll.get(params.pollId)
 		def contactInstance
-		if(messageInstance && !messageInstance.read) {
+		if(params.messageSection=='inbox' && messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
 			contactInstance = Contact.findByAddress(messageInstance.src)
 		}
-		
+
+		render view:params.messageSection,
+				model:[messageInstance: messageInstance,
+						contactInstance: contactInstance,
+						pollInstanceList: Poll.findAll(),
+						pollInstance: pollInstance] << "${params.messageSection}"()
+	}
+
+    def inbox = {		
 		params.inbound = true
-		[messageSection:'inbox',
-				messageInstance: messageInstance,
-				contactInstance: contactInstance] << list()
+		[messageSection:'inbox'] << list()
     }
 
     def sent = {
@@ -28,9 +35,10 @@ class MessageController {
     }
 
 	def poll = {
-		def pollInstance = Poll.get(params.id)
+		def pollInstance = Poll.get(params.pollId)
 		
-		[messageInstanceList: pollInstance.messages,
+		[messageSection:'poll',
+				messageInstanceList: pollInstance.messages,
 				messageInstanceTotal: pollInstance.messages.size(),
 				pollInstanceList: Poll.findAll(),
 				pollInstance: pollInstance,
