@@ -65,6 +65,9 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollListPage
 		then:
 			selectedMenuItem.text() == 'Football Teams'
+		cleanup:
+			deleteTestMessages()
+			deleteTestPolls()
 	}
 }
 
