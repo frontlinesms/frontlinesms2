@@ -8,7 +8,9 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 		[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
 						new PollResponse(value:'barcelona')]),
 				new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
-						new PollResponse(value:'oriele')])].each() {
+						new PollResponse(value:'oriele')]),
+				new Poll(title:'Rugby Brands', responses:[new PollResponse(value:'newzealand'),
+						new PollResponse(value:'britain')])].each() {
 			it.save(failOnError:true, flush:true)
 		}
 	}
@@ -36,10 +38,12 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	static deleteTestMessages() {
-		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Bob'))
-		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Alice'))
-		PollResponse.findByValue('pantene').removeFromMessages(Fmessage.findBySrc('Joe'))
-
+//		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Bob'))
+//		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Alice'))
+//		PollResponse.findByValue('pantene').removeFromMessages(Fmessage.findBySrc('Joe'))
+//		PollResponse.findAll().each() {
+//			it?.removeAllFromMessages()
+//		}
 		Fmessage.findAll().each() {
 			it?.refresh()
 			it?.delete(failOnError:true, flush:true)
