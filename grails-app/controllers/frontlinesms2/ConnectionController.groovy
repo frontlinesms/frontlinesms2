@@ -72,7 +72,7 @@ class ConnectionController {
 		}
 	}
 	
-	def withFconnection(Closure c) {
+	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
 		if(connection) c connection
 		else {
