@@ -56,6 +56,19 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 			deleteTestPolls()
 	}
+
+	def 'selected poll is highlighted'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollListPage
+		then:
+			selectedMenuItem.text() == 'Football Teams'
+		cleanup:
+			deleteTestMessages()
+			deleteTestPolls()
+	}
 }
 
 class PollListPage extends geb.Page {
