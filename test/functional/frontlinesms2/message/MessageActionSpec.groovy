@@ -9,10 +9,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def folders = $('#message-actions')*.text() 
+			def folders = $('#message-actions li a')*.text() 
 			
 		then:
-			println $('li')*.text
 			folders[0] == 'Football Teams'
 			folders[1] == 'Shampoo Brands'			
 		cleanup:
@@ -27,7 +26,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def folder = $('#message-actions li a')
+			def folder = $('#message-actions li:first-child')
 			def bob = Fmessage.findBySrc('Bob')
 			folder.click() 
 		then:
@@ -37,14 +36,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		cleanup:
 			deleteTestPolls()
 	}
+	
 }
 class PollMessageViewPage extends geb.Page {
  	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
-	static at = {
-		title.endsWith('Poll')
-	}
-	static content = {
-		selectedMenuItem { $('#messages-menu .selected') }
-		messagesList { $('#messages-submenu') }
-	}
 }
