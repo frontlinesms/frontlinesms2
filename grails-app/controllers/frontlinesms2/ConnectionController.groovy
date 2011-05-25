@@ -69,7 +69,7 @@ class ConnectionController {
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
 			flash.message = "Created route from ${settings.camelAddress()}"
-			redirect action:'list'
+			redirect action:'list', id:settings.id
 		}
 	}
 	
@@ -77,7 +77,7 @@ class ConnectionController {
 		def connection = Fconnection.get(params.id)
 		if(connection) c connection
 		else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), id])}"
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}"
 			redirect action:'list'
 		}
 	}
