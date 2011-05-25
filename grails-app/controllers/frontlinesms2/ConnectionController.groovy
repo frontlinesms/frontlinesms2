@@ -9,8 +9,7 @@ class ConnectionController {
 		redirect(action:'list')
 	}
 
-    def list = {
-		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+	def list = {
 		def fconnectionInstanceList = Fconnection.list(params)
 		def connectionInstance = Fconnection.get(params.id)
 		def fconnectionInstanceTotal = Fconnection.count()
@@ -69,15 +68,15 @@ class ConnectionController {
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
 			flash.message = "Created route from ${settings.camelAddress()}"
-			redirect action:'list'
+			redirect action:'list', id:settings.id
 		}
 	}
 	
-	def withFconnection(Closure c) {
+	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
 		if(connection) c connection
 		else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), id])}"
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}"
 			redirect action:'list'
 		}
 	}

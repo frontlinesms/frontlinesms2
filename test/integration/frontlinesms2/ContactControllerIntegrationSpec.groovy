@@ -69,7 +69,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.params.name = 'new group'
 			assert Group.count() == 1
 		when:
-			def model = controller.saveGroup()
+			controller.saveGroup()
 		then:
 			controller.response.redirectedUrl =~ /\/group\/show\/\d/
 			Group.count() == 2
