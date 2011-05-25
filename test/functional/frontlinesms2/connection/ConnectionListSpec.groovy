@@ -34,8 +34,8 @@ class ConnectionListSpec extends ConnectionGebSpec {
 			to ConnectionListPage
 		then:
 			$('div.status').text() == "Not connected"
-		when:	
-			$(".buttons a", href:"/frontlinesms2/connection/createRoute/2").click()
+		when:
+			$(".buttons a").click()
 		then:
 			$('div.status').text() == "Connected"
 		cleanup:

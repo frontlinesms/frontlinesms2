@@ -7,7 +7,7 @@ class AddContactSpec extends MessageGebSpec {
 		when:
 			createTestMessages()
 			def contactlessMessage = Fmessage.findBySrc('+254778899')
-			go "message/inbox/${contactlessMessage.id}"
+			go "message/inbox/show/${contactlessMessage.id}"
 		then:
 			!Contact.findByAddress(contactlessMessage.src)
 			$('#message-details p:nth-child(1)').text() == '+254778899'
@@ -20,7 +20,7 @@ class AddContactSpec extends MessageGebSpec {
 			createTestContacts()
 			createTestMessages()
 			def message = Fmessage.findBySrc('+254778899')
-			go "message/inbox/${message.id}"
+			go "message/inbox/show/${message.id}"
 
 		then:
 			Contact.findByAddress(message.src)
@@ -34,7 +34,7 @@ class AddContactSpec extends MessageGebSpec {
 		when:
 			createTestMessages()
 			def message = Fmessage.findBySrc('+254778899')
-			go "message/inbox/${message.id}"
+			go "message/inbox/show/${message.id}"
 			def btnAddContact = $('a.button')
 			assert btnAddContact instanceof geb.navigator.NonEmptyNavigator
 			btnAddContact.click()

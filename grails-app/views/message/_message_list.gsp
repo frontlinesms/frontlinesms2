@@ -9,22 +9,43 @@
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${messageInstanceList}" status="i" var="m">
+			<g:each in="${messageInstanceList.sort { it.dateCreated } }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
 					<td>
-						<g:link action="inbox" id="${m.id}">
-							${m.src}
-						</g:link>
+						<g:if test="${pollInstance}">
+							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
+								${m.src}
+							</g:link>
+						</g:if>
+						<g:else>
+							<g:link action="show" id="${m.id}">
+								${m.src}
+							</g:link>
+						</g:else>
 					</td>
 					<td>
-						<g:link action="inbox" id="${m.id}">
-						  ${m.text}
-						</g:link>
+						<g:if test="${pollInstance}">
+							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
+								${m.displayText}
+							</g:link>
+						</g:if>
+						<g:else>
+							<g:link action="show" id="${m.id}">
+							  ${m.displayText}
+							</g:link>
+						</g:else>
 					</td>
 					<td>
-						<g:link action="inbox" id="${m.id}">
-							<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-						</g:link>
+						<g:if test="${pollInstance}">
+							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
+								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+							</g:link>
+						</g:if>
+						<g:else>
+							<g:link action="show" id="${m.id}">
+								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+							</g:link>
+						</g:else>
 					</td>
 				</tr>
 			</g:each>

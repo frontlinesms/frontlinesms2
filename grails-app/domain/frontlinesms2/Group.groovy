@@ -1,21 +1,20 @@
 package frontlinesms2
 
 class Group {
-    String name
+	String name
 
-    static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
-    static mapping = {
-            members cascade:'save-update'
-            table 'grup'
-    }
+	static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
+	static mapping = {
+	    table 'grup'
+	}
 
 	def beforeDelete = {
 		GroupMembership.deleteFor(this)
 	}
 
-    def getMembers() {
-  		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
-    }
+	def getMembers() {
+		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
+	}
 
 	def addToMembers(Contact c) {
 		GroupMembership.create(c, this)
@@ -33,8 +32,6 @@ class Group {
 			}
 			if(remove) {
 				allGroups.remove(remove)
-//				println """allGroups: ${allGroups}
-//-----"""
 			}
 		}
 		without as Set

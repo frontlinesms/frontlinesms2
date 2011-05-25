@@ -4,12 +4,14 @@ import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 
 class MessageControllerSpec extends ControllerSpec {
+	def setup() {
+		mockDomain(Fmessage)
+		mockDomain(Poll)
+	}
+
 	def 'inbox closure requests correct messages'() {
-		setup:
-			mockDomain(Fmessage)
 		when:
 			controller.inbox()
 		then:
@@ -17,8 +19,6 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 	def "sent closure requests correct messages"() {
-		setup:
-			mockDomain(Fmessage)
 		when:
 			controller.sent()
 		then:
@@ -78,12 +78,12 @@ class MessageControllerSpec extends ControllerSpec {
 	def 'calling "show" action in inbox leads to unread message becoming read'() {
 		setup:
 			mockDomain(Contact)
-			mockDomain(Fmessage)
 			def id = new Fmessage().save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
+			mockParams.messageSection = 'inbox'
 			mockParams.id = id
-			controller.inbox()
+			controller.show()
 		then:
 			Fmessage.get(id).read
 	}
@@ -91,7 +91,6 @@ class MessageControllerSpec extends ControllerSpec {
 	def 'calling "show" action leads to read message staying read'() {
 		setup:
 			mockDomain(Contact)
-			mockDomain(Fmessage)
 			def id = new Fmessage(read:true).save(failOnError: true).id
 			assert Fmessage.get(id).read
 		when:
