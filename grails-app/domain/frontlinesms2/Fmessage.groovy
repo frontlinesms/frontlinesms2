@@ -5,15 +5,22 @@ class Fmessage {
 	String dst
 	String text
 	Date dateCreated
+	Date dateRecieved
 	boolean inbound
 	boolean read
+	static belongsTo = [activity:PollResponse]
 //	PollResponse activity
+	static mapping = {
+		sort dateCreated:'desc'
+		sort dateRecieved:'desc'
+	}
 
 	static constraints = {
 		src(nullable:true)
 		dst(nullable:true)
 		text(nullable:true)
-//		activity(nullable:true)
+		activity(nullable:true)
+		dateRecieved(nullable:true)
 	}
 
 	def getDisplayText() {
@@ -27,21 +34,25 @@ class Fmessage {
 	}
 
 	static def getInboxMessages() {
-		def list = Fmessage.findAll()
-		def inboundList = []
-		for (m in list) {
-			if(m.inbound == true)
-				inboundList.add(m)
+		def messages = Fmessage.createCriteria().list {
+			and {
+				eq("inbound", true)
+				isNull("activity")
+			}
+			order('dateRecieved', 'desc')
+			order('dateCreated', 'desc')
 		}
-		inboundList
+		messages
 	}
+
 	static def getSentMessages() {
-		def list = Fmessage.findAll()
-		def outBoundList = []
-		for (m in list) {
-			if(m.inbound == false)
-				outBoundList.add(m)
+		def messages = Fmessage.createCriteria().list {
+			and {
+				eq("inbound", false)
+				isNull("activity")
+			}
+			order("dateCreated", "desc")
 		}
-		outBoundList
+		messages
 	}
 }

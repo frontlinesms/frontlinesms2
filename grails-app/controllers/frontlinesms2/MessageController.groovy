@@ -11,9 +11,12 @@ class MessageController {
 		def messageInstance = Fmessage.get(params.id)
 		def pollInstance = Poll.get(params.pollId)
 		def contactInstance
-		if(params.messageSection=='inbox' && messageInstance && !messageInstance.read) {
+		if(params.messageSection=='inbox' && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
+		}
+
+		if(messageInstance) {
 			contactInstance = Contact.findByAddress(messageInstance.src)
 		}
 
@@ -24,9 +27,13 @@ class MessageController {
 						pollInstance: pollInstance] << "${params.messageSection}"()
 	}
 
-    def inbox = {		
+    def inbox = {
+		params.sort = 'dateCreated'
+		params.order = 'desc'
 		params.inbound = true
-		[messageSection:'inbox'] << list()
+		[messageSection:'inbox',
+			messageInstanceList: Fmessage.getInboxMessages(),
+			messageInstanceTotal: Fmessage.getInboxMessages().size()] << list()
     }
 
     def sent = {
@@ -48,19 +55,19 @@ class MessageController {
     def list = {
 		params.sort = 'dateCreated'
 		params.order = 'desc'
-		def messageInstanceList = Fmessage.findAllByInbound(params.inbound, params)
-		[messageInstanceList:messageInstanceList,
-				messageInstanceTotal:Fmessage.countByInbound(params.inbound),
-				pollInstanceList: Poll.findAll()]
+//		def messageInstanceList = Fmessage.findAllByInbound(params.inbound, params)
+//		[messageInstanceList:messageInstanceList,
+//				messageInstanceTotal:Fmessage.countByInbound(params.inbound),
+				[pollInstanceList: Poll.findAll()]
     }
 	
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
-		def oldPollInstance = Poll.get(params.oldPollId)
+//		def oldPollInstance = Poll.get(params.oldPollId)
 		def messageInstance = Fmessage.get(params.id)
 		def pollInstanceList = Poll.findAll()
 		pollInstance.responses.toArray()[0].addToMessages(messageInstance).save(failOnError: true, flush: true)
-		oldPollInstance.removeMessage(messageInstance)//.save(failOnError: true, flush: true)
-		redirect(action: "poll", params: params)
+		//oldPollInstance?.removeMessage(messageInstance)//.save(failOnError: true, flush: true)
+		redirect(action: "show", params: params)
 	}
 }

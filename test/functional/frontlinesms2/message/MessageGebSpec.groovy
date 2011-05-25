@@ -19,6 +19,14 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 					it.inbound = true
 					it.save(failOnError:true)
 				}
+
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:false)
+		def chickenResponse = new PollResponse(value:'chicken')
+		def liverResponse = new PollResponse(value:'liver')
+		liverResponse.addToMessages(liverMessage)
+		chickenResponse.addToMessages(chickenMessage)
+		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 	}
 	
 	static createTestContacts() {	
@@ -27,6 +35,11 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static deleteTestMessages() {
+		Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+
 		Fmessage.findAll().each() {
 			it.refresh()
 			it.delete(failOnError:true, flush:true)

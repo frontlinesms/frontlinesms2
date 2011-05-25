@@ -9,21 +9,21 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def actions = $('#message-actions li a')*.text()
+			def actions = $('#message-actions li').children('a')*.text()
 		then:
 			actions[0] == 'Shampoo Brands'
 
 		when:
-			go "/messages/inbox/show/${Fmessage.findBySrc("Bob").id}"
-			def actions = $('#message-actions li a')*.text()
+			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
+			def inboxActions = $('#message-actions li a')*.text()
 		then:
-			actions[0] == 'Football Teams'
+			inboxActions[0] == 'Football Teams'
 		cleanup:
 			deleteTestPolls()
 
 	}
 	
-	def 'clicking on activity moves the message to that activity and removes it from the previous activity'() {
+	def 'clicking on activity moves the message to that activity and removes it from the previous activity or inbox'() {
 		given:
 			createTestPolls()
 			createTestMessages()
@@ -31,14 +31,25 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollMessageViewPage
 			def btnAction = $('#message-actions li').children('a').first()
 			def bob = Fmessage.findBySrc('Bob')
+			def jill = Fmessage.findBySrc('Jill')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			btnAction.click()
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 		then:
-			bob == Poll.findByTitle("Shampoo Brands").getMessages().find { it == bob }
 			bob != Poll.findByTitle("Football Teams").getMessages().find { it == bob }
+			bob == Poll.findByTitle("Shampoo Brands").getMessages().find { it == bob }
+
+		when:
+			go "message/inbox/show/${jill.id}"
+			btnAction = $('#message-actions li').children('a').first()
+			btnAction.click()
+			footballPoll.responses.each { it.refresh() }
+			Fmessage.findAll().each { it.refresh() }
+		then:
+			jill != Fmessage.getInboxMessages().find { it == jill }
+			jill == Poll.findByTitle("Football Teams").getMessages().find { it == jill }
 		cleanup:
 			deleteTestPolls()
 	}
