@@ -15,7 +15,7 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:first-child')*.text()
 		then:
-			messageSources == ['Alice', 'Bob']
+			messageSources == ['Bob', 'Alice']
 		cleanup:
 			deleteTestMessages()
 	}
@@ -25,8 +25,9 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
+			println $('#messages').text()
 			rowContents[0] == 'Bob'
 			rowContents[1] == 'hi Bob'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
@@ -40,7 +41,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to MessagesPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
@@ -52,7 +53,7 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
-			go "message/inbox/${message.id}"
+			go "message/inbox/show/${message.id}"
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
@@ -68,13 +69,13 @@ class InboxSpec extends MessageGebSpec {
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			go "message/inbox/${aliceMessage.id}"
+			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/${aliceMessage.id}"
+			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
-			go "message/inbox/${bobMessage.id}"
+			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/${bobMessage.id}"
+			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 		cleanup:
 			deleteTestMessages()
 	}

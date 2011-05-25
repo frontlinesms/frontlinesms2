@@ -22,10 +22,16 @@ class GroupViewSpec extends GroupGebSpec {
 			} == groupNames
 	}
 
-	def 'Group menu item is highli ghted when viewing corresponding group'() {
+	def 'Group menu item is highlighted when viewing corresponding group'() {
 		given:
 			createTestGroups()
 		when:
+			to FriendsGroupPage
+		then:
+			selectedMenuItem.text() == 'Friends'
+		when:
+			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
+			GroupMembership.create(c, Group.findByName('Friends'), true)
 			to FriendsGroupPage
 		then:
 			selectedMenuItem.text() == 'Friends'
@@ -40,11 +46,23 @@ class GroupViewSpec extends GroupGebSpec {
 		then:
 			contactsList.children().collect() { it.text() }.sort() == friendsContactNames
 	}
+
+	def 'Group members list has correct href when viewing corresponding group'() {
+		given:
+			createTestGroupsAndContacts()
+		when:
+			to FriendsGroupPage
+			def links = contactsList.find('a')
+		then:
+			links.size() == 2
+			links.each() {
+				assert it.@href ==~ '/frontlinesms2/group/show/\\d+/contact/show/\\d+'
+			}
+	}
 }
 
 class FriendsGroupPage extends geb.Page {
-	static url = getUrl()
-	static getUrl() { "contact/list/${Group.findByName('Friends').id}" }
+	static getUrl() { "group/show/${Group.findByName('Friends').id}" }
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
 		contactsList { $('#contacts') }

@@ -75,8 +75,11 @@
     </head>
     <body>
 		<g:form name="contact-details">
-			<g:hiddenField name="id" value="${contactInstance?.id}"/>
+			<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 			<g:hiddenField name="version" value="${contactInstance?.version}"/>
+			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+				<g:hiddenField name="groupId" value="${contactsSection.id}"/>
+			</g:if>
 			<g:hiddenField name="groupsToAdd" value=","/>
 			<g:hiddenField name="groupsToRemove" value=","/>
 
@@ -97,7 +100,7 @@
 						<a class="remove-group" id="remove-group-${g.id}">Delete</a>
 					</li>
 				</g:each>
-				<li id="no-groups" style="display: none">
+				<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
 					<p>Not part of any Groups</p>
 				</li>
 			</ol>

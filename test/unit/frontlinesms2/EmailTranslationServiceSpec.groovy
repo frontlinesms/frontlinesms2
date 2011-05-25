@@ -4,9 +4,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.Exchange
 
-import org.apache.camel.impl.DefaultExchange
-import org.apache.camel.component.mail.MailBinding
-import org.apache.camel.impl.DefaultHeaderFilterStrategy
 import org.apache.camel.component.mail.MailEndpoint
 
 class EmailTranslationServiceSpec extends UnitSpec {
