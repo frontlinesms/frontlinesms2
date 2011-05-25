@@ -4,9 +4,12 @@
   <ol id ="message-actions">
 	  <g:each in="${pollInstanceList}" status="i" var="p">
 		  <li>
-			  <g:if test="${p != pollInstance}">
-				  <g:link action="move" params="[pollId: p.id, oldPollId: pollInstance.id]" id ="${messageInstance.id}">${p.title}</g:link>
+			  <g:if test="${messageSection == 'inbox'}">
+				  <g:link action="move" params="[pollId: p.id]" id ="${messageInstance.id}">${p.title}</g:link>
 			  </g:if>
+			  <g:elseif test="${p != pollInstance}">
+				  <g:link action="move" params="[pollId: p.id]" id ="${messageInstance.id}">${p.title}</g:link>
+			  </g:elseif>
 		  </li>
 	  </g:each>
   </ol>
