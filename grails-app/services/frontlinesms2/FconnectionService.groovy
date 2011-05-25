@@ -2,11 +2,11 @@ package frontlinesms2
 
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
-import org.apache.camel.ServiceStatus
 
 class FconnectionService {
 	def camelContext
 	def camelRouteBuilder = new RouteBuilder() {
+		@Override
 		void configure() {}
 		List getRouteDefinitions(Fconnection c) {
 			[ from(c.camelAddress()).to('seda:raw-email').routeId("${c.id}") ]
