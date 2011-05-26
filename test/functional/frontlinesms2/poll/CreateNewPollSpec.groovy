@@ -34,7 +34,7 @@ class CreateNewPollSpec extends PollGebSpec {
 		when:
 			go 'message'
 		then:
-			$('#activities-submenu li')*.text() == ['Football Teams', 'Shampoo Brands']
+			$('#activities-submenu li')*.text() == ['Football Teams', 'Shampoo Brands', 'Rugby Brands']
 		cleanup:
 			deleteTestPolls()
 	}

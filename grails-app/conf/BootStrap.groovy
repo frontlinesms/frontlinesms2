@@ -6,6 +6,10 @@ import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
 import net.frontlinesms.test.serial.HayesPortHandler
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 class BootStrap {
 
@@ -31,9 +35,12 @@ class BootStrap {
 			initialiseMockSerialDevice()
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
-			[new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
-					new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best')].each() {
+			[new Fmessage(src:'Alice', dst:'+2541234567', text:'manchester rules!'),
+					new Fmessage(src:'Bob', dst:'+254987654', text:'go manchester'),
+					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
+					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateRecieved:createDate("2011/01/21")),
+					new Fmessage(src:'Jack', dst:'+254112233', text:"where's the pale?", dateRecieved:createDate("2011/01/20")),
+					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateRecieved:createDate("2011/01/23"))].each() {
 						it.inbound = true
 						it.save(failOnError:true)
 					}
@@ -97,5 +104,14 @@ OK''');
 		CommPortIdentifier cpi = new CommPortIdentifier("COM99", portHandler);
 		MockSerial.setIdentifier("COM99", cpi);
 		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));
+	}
+
+	Date createDate(String dateAsString) {
+		DateFormat format = createDateFormat();
+		return format.parse(dateAsString)
+	}
+
+	DateFormat createDateFormat() {
+		return new SimpleDateFormat("yyyy/MM/dd")
 	}
 }
