@@ -4,7 +4,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 
 class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -13,26 +12,12 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new MessageController()
 	}
 
-//	def 'inbox closure requests correct messages'() {
-//		when:
-//			controller.inbox()
-//		then:
-//			controller.inbound
-//	}
-//
-//	def "sent closure requests correct messages"() {
-//		when:
-//			controller.sent()
-//		then:
-//			controller.inbound
-//	}
-
 	def "Inbound messages show up in inbox view"() {
 		setup:
 			def messageIn1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
 			def messageIn2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/20")).save(failOnError: true)
-			def messageOut1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
-			def messageOut2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 		when:
 			def model = controller.inbox()
 		then:
@@ -48,10 +33,6 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			def model = controller.inbox()
-			println message1.dateCreated
-			println message2.dateCreated
-			println message3.dateCreated
-			println message4.dateCreated
 		then:
 			model.messageInstanceTotal == 4
 			model.messageInstanceList == [message2, message3, message4, message1]
@@ -65,7 +46,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.id = id
 			controller.params.messageSection = 'inbox'
-			def model = controller.show()
+			controller.show()
 		then:
 			Fmessage.get(id).read == true
 	}

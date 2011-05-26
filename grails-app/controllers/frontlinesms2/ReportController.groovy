@@ -3,7 +3,6 @@ package frontlinesms2
 import org.grails.plugins.csv.CSVWriter
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 
 class ReportController {
 
@@ -28,12 +27,12 @@ class ReportController {
 		render(contentType:"text/csv", text: csv.writer.toString(), encoding:"UTF-8")
 	}
 
-	String dateToString(Date date) {
+	private String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat()
 		return formatedDate.format(date)
 	}
 
-	DateFormat createDateFormat() {
+	private DateFormat createDateFormat() {
 		return new SimpleDateFormat("dd-MMM-yyyy")
 	}
 	

@@ -52,22 +52,14 @@ class MessageController {
 				pollResponseList: pollInstance.responses]
 	}
 
-    def list = {
-		params.sort = 'dateCreated'
-		params.order = 'desc'
-//		def messageInstanceList = Fmessage.findAllByInbound(params.inbound, params)
-//		[messageInstanceList:messageInstanceList,
-//				messageInstanceTotal:Fmessage.countByInbound(params.inbound),
-				[pollInstanceList: Poll.findAll()]
-    }
+	def list = {
+		[pollInstanceList: Poll.findAll()]
+	}
 	
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
-//		def oldPollInstance = Poll.get(params.oldPollId)
 		def messageInstance = Fmessage.get(params.id)
-		def pollInstanceList = Poll.findAll()
 		pollInstance.responses.toArray()[0].addToMessages(messageInstance).save(failOnError: true, flush: true)
-		//oldPollInstance?.removeMessage(messageInstance)//.save(failOnError: true, flush: true)
 		redirect(action: "show", params: params)
 	}
 }
