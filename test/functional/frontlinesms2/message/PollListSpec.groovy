@@ -14,7 +14,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			at PollListPage
 			pollMessageSources == ['Bob', 'Alice']
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 
@@ -22,7 +21,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			assert Poll.count() == 2
 		when:
 			to PollListPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
@@ -32,7 +30,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			rowContents[1] == 'manchester ("I like manchester")'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 
@@ -53,7 +50,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			statsNums == ['0', '2']
 			statsPercents == ['(0%)', '(100%)']
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 
@@ -66,7 +62,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			selectedMenuItem.text() == 'Football Teams'
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 }

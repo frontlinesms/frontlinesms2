@@ -4,8 +4,5 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class ContactGroupSpec extends UnitSpec {
-	def "feature method"() {
-		
-	}
 }
 

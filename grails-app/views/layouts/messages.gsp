@@ -21,6 +21,7 @@
 					<p class="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
 					<p class="message-body">${messageInstance.text}</p>
 				</div>
+				<g:render template="action_list"/>
 			</g:if>
 			<g:layoutBody/>
 		</div>

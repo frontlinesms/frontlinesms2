@@ -16,6 +16,8 @@ class PollResponse {
 	}
 
 	static mapping = {
-            messages cascade:'save-update'
+            messages cascade:'all'
+			messages sort:'dateCreated'
+			messages sort:'dateRecieved'
     }
 }

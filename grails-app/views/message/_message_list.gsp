@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+  <%@ page contentType="text/html;charset=UTF-8" %>
 <g:if test="${messageInstanceTotal > 0}">
 	<table id="messages">
 		<thead>

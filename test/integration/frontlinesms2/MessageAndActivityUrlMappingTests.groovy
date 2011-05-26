@@ -29,7 +29,6 @@ class MessageAndActivityUrlMappingTests extends grails.test.GrailsUrlMappingsTes
 	
 	def testPollView() {
 		assertForwardUrlMapping('/message/poll/123', controller:'message', action:'poll') {
-			String id = null
 			pollId = 123
 		}
 	}

@@ -119,20 +119,7 @@ class ContactController {
 		}
 	}
 
-	def delete = {
-		withContact {
-			try {
-				contactInstance.delete(flush: true)
-				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-				redirect(action: "list")
-			} catch (org.springframework.dao.DataIntegrityViolationException e) {
-				flash.message = "${message(code: 'default.not.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-				redirect(action: "show", id: params.id)
-			}
-		}
-	}
-
-	def withContact(Closure c) {
+	private def withContact(Closure c) {
 		def contactInstance = Contact.get(params.contactId)
 		if (contactInstance) {
 			c contactInstance

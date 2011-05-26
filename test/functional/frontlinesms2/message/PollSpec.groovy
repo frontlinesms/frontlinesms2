@@ -19,7 +19,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 
@@ -37,7 +36,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-details p:nth-child(3)').text() == formatedDate
 			$('#message-details p:nth-child(4)').text() == message.text
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 
@@ -57,7 +55,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
 	}
 

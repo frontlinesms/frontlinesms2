@@ -17,7 +17,12 @@
 						${r.messages.size()}
 					</td>
 					<td>
-						(${r.messages.size()/messageInstanceTotal*100}%)
+						<g:if test="${r.messages.size() > 0}">
+							(${r.messages.size()/messageInstanceTotal*100}%)
+						</g:if>
+						<g:else>
+							(0%)
+						</g:else>
 					</td>
 				</tr>
 			</g:each>

@@ -8,7 +8,9 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 		[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
 						new PollResponse(value:'barcelona')]),
 				new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
-						new PollResponse(value:'oriele')])].each() {
+						new PollResponse(value:'oriele')]),
+				new Poll(title:'Rugby Brands', responses:[new PollResponse(value:'newzealand'),
+						new PollResponse(value:'britain')])].each() {
 			it.save(failOnError:true, flush:true)
 		}
 	}
@@ -16,7 +18,8 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 	static createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester'),
-				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best')].each() {
+				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
+				new Fmessage(src:'Jill', dst:'+234234', text:'I fell down the hill')].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
@@ -30,16 +33,18 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 
 	static deleteTestPolls() {
 		Poll.findAll().each() {
-			it?.refresh()
-			it?.delete(failOnError:true, flush:true)
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
 		}
 	}
 
 	static deleteTestMessages() {
-		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Bob'))
-		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Alice'))
-		PollResponse.findByValue('pantene').removeFromMessages(Fmessage.findBySrc('Joe'))
-
+//		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Bob'))
+//		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Alice'))
+//		PollResponse.findByValue('pantene').removeFromMessages(Fmessage.findBySrc('Joe'))
+//		PollResponse.findAll().each() {
+//			it?.removeAllFromMessages()
+//		}
 		Fmessage.findAll().each() {
 			it?.refresh()
 			it?.delete(failOnError:true, flush:true)
