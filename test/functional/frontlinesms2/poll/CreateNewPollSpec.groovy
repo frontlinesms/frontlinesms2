@@ -51,6 +51,15 @@ class CreateNewPollSpec extends PollGebSpec {
 		cleanup:
 			deleteTestPolls()
 	}
+	
+	def 'Errors are displayed when poll fails to save'() {
+		when:
+			to CreatePollPage
+			btnSave.click()
+		then:
+			errorMessages.present
+			println errorMessages.text()
+	}
 }
 
 class CreatePollPage extends geb.Page {
@@ -62,5 +71,6 @@ class CreatePollPage extends geb.Page {
 	static content = {
 		frmDetails { $("#poll-details") }
 		btnSave { $('input', name:'save') }
+		errorMessages { $('.errors') }
 	}
 }
