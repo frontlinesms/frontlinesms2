@@ -39,12 +39,6 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	static deleteTestMessages() {
-//		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Bob'))
-//		PollResponse.findByValue('manchester').removeFromMessages(Fmessage.findBySrc('Alice'))
-//		PollResponse.findByValue('pantene').removeFromMessages(Fmessage.findBySrc('Joe'))
-//		PollResponse.findAll().each() {
-//			it?.removeAllFromMessages()
-//		}
 		Fmessage.findAll().each() {
 			it?.refresh()
 			it?.delete(failOnError:true, flush:true)
