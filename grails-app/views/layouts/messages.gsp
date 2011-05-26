@@ -12,6 +12,7 @@
 		<g:render template="/flash"/>
 		<div id="main">
 			<g:render template="menu"/>
+			<g:layoutBody/>
 			<g:render template="message_list"/>
 			<g:if test="${messageInstance != null}">
 				<div id="message-details">
@@ -23,7 +24,6 @@
 				</div>
 				<g:render template="action_list"/>
 			</g:if>
-			<g:layoutBody/>
 		</div>
 	</body>
 </html>
