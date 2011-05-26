@@ -11,7 +11,7 @@ class MessageController {
 		def messageInstance = Fmessage.get(params.id)
 		def pollInstance = Poll.get(params.pollId)
 		def contactInstance
-		if(params.messageSection=='inbox' && !messageInstance.read) {
+		if(!messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
 		}

@@ -1,6 +1,6 @@
 <%@ page import="frontlinesms2.Contact" %>
 <div>
-  <h2>Move messages to</h2>
+  <h2>Move message to</h2>
   <ol id ="message-actions">
 	  <g:each in="${pollInstanceList}" status="i" var="p">
 		  <li>
