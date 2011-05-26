@@ -21,7 +21,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.responses = 'yes no'
 			btnSave.click()
 		then:
-			println Poll.findAll()*.title
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
 		cleanup:

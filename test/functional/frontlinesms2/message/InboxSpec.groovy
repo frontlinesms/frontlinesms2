@@ -27,7 +27,6 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			println $('#messages').text()
 			rowContents[0] == 'Bob'
 			rowContents[1] == 'hi Bob'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/

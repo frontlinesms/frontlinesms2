@@ -10,8 +10,6 @@ class ReportControllerSpec extends ControllerSpec {
 			mockDomain(Fmessage, [gMessage])
 		when:
 			controller.create()
-			println "renderArgs: ${controller.renderArgs}"
-			println "response: ${controller.response}"
 			def csv = '''"DatabaseID","Source","Destination","Text","Date"
 "''' + gMessage.id + '''","geraldine","null","hi david u r a hunk","null"'''
 		then:
