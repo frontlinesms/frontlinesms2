@@ -1,0 +1,49 @@
+package frontlinesms2.reports
+
+import frontlinesms2.*
+import org.grails.plugins.csv.*
+
+class GenerateCSVSpec extends grails.plugin.geb.GebSpec {
+	def 'export all messages as CSV file exists' () {
+		when:
+			to ReportsPage
+			def btnCreateReport = $('#create-CSVreport a')
+		then:
+			btnCreateReport.getAttribute('href') == "/frontlinesms2/report/create"
+	}
+
+	def 'check the csv writer output to make sure it matches the input'() {
+		setup:
+			createTestMessages()
+		when:
+			to ReportsPage
+			def btnCreateReport = $('#create-CSVreport a')
+			btnCreateReport.click()
+		then:
+			Fmessage.findAll().each {
+				CSVWriter.find(csv).writer.toString() == '"Source","Destination","Text","Date"\n"it.id","it.src","it.dst","it.text","it.dateCreated"'
+			}
+		cleanup:
+			deleteTestMessages()
+	}
+
+	static createTestMessages() {
+		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
+				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
+				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
+					it.inbound = true
+					it.save(failOnError:true)
+				}
+	}
+
+	static deleteTestMessages() {
+		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+}
+
+class ReportsPage extends geb.Page {
+	static url = 'report'
+}
