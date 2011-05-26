@@ -20,6 +20,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			inboxActions[0] == 'Football Teams'
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 
 	}
 	
@@ -52,6 +53,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			jill == Poll.findByTitle("Football Teams").getMessages().find { it == jill }
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 	
 }
