@@ -2,10 +2,10 @@
 <html>
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
+		<g:javascript library="jquery" plugin="jquery"/>
 		<g:layoutHead />
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
-		<g:javascript library="jquery" plugin="jquery"/>
 	</head>
 	<body>
 		<g:render template="/eyebrow"/>
