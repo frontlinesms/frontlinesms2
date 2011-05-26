@@ -71,6 +71,7 @@
 				var newList = oldList + id + ',';
 				f.val(newList);
 			}
+			
 		</script>
     </head>
     <body>
