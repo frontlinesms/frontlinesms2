@@ -30,6 +30,14 @@ class GroupCreateSpec extends grails.plugin.geb.GebSpec {
 			assert cancelGroup.text() == "Cancel"
 			assert cancelGroup.getAttribute('href') == "/frontlinesms2/contact/list"
 	}
+	
+	def 'Errors are displayed when group fails to save'() {
+		when:
+			to CreateGroupPage
+			btnSave.click()
+		then:
+			errorMessages.present
+	}
 }
 
 class CreateGroupPage extends geb.Page {
