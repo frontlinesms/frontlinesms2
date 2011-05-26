@@ -9,7 +9,6 @@
 			$(function() {
 			    $('input[name="name"]').focus();
 			});
-			
 		</script>
     </head>
     <body>
