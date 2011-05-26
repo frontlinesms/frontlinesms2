@@ -58,7 +58,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnSave.click()
 		then:
 			errorMessages.present
-			println errorMessages.text()
 	}
 }
 
