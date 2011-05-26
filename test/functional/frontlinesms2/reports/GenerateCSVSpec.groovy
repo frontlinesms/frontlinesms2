@@ -12,21 +12,6 @@ class GenerateCSVSpec extends grails.plugin.geb.GebSpec {
 			btnCreateReport.getAttribute('href') == "/frontlinesms2/report/create"
 	}
 
-	def 'check the csv writer output to make sure it matches the input'() {
-		setup:
-			createTestMessages()
-		when:
-			to ReportsPage
-			def btnCreateReport = $('#create-CSVreport a')
-			btnCreateReport.click()
-		then:
-			Fmessage.findAll().each {
-				CSVWriter.find(csv).writer.toString() == '"Source","Destination","Text","Date"\n"it.id","it.src","it.dst","it.text","it.dateCreated"'
-			}
-		cleanup:
-			deleteTestMessages()
-	}
-
 	static createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
