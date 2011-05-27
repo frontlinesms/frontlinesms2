@@ -1,7 +1,6 @@
 package frontlinesms2
 
 class PollResponse {
-//	static belongsTo = [poll:Poll]
 	static hasMany = [messages:Fmessage]
 
 	String value
