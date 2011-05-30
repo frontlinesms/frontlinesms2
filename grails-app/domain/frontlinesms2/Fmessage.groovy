@@ -4,12 +4,13 @@ class Fmessage {
 	String src
 	String dst
 	String text
+	String displaySrc
 	Date dateCreated
 	Date dateRecieved
 	boolean inbound
 	boolean read
 	static belongsTo = [activity:PollResponse]
-//	PollResponse activity
+	static transients = ['displaySrc']
 	static mapping = {
 		sort dateCreated:'desc'
 		sort dateRecieved:'desc'
@@ -31,6 +32,13 @@ class Fmessage {
 		}
 
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
+	}
+	
+	def updateDisplaySrc() {
+		if(src) {
+			def c = Contact.findByAddress(src)
+			displaySrc = c? c.name: src
+		}
 	}
 
 	static def getInboxMessages() {
