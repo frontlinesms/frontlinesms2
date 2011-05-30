@@ -31,8 +31,12 @@ class MessageController {
 		params.sort = 'dateCreated'
 		params.order = 'desc'
 		params.inbound = true
+		def messageInstanceList = Fmessage.getInboxMessages()
+		messageInstanceList.each {
+			it.updateDisplaySrc()
+		}
 		[messageSection:'inbox',
-			messageInstanceList: Fmessage.getInboxMessages(),
+			messageInstanceList: messageInstanceList,
 			messageInstanceTotal: Fmessage.getInboxMessages().size()] << list()
     }
 
@@ -43,9 +47,12 @@ class MessageController {
 
 	def poll = {
 		def pollInstance = Poll.get(params.pollId)
-		
+		def messageInstanceList = pollInstance.messages
+		messageInstanceList.each {
+			it.updateDisplaySrc()
+		}
 		[messageSection:'poll',
-				messageInstanceList: pollInstance.messages,
+				messageInstanceList: messageInstanceList,
 				messageInstanceTotal: pollInstance.messages.size(),
 				pollInstanceList: Poll.findAll(),
 				pollInstance: pollInstance,

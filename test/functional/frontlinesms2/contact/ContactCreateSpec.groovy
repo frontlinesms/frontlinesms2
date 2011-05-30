@@ -52,6 +52,6 @@ class CreateContactPage extends geb.Page {
 	}
 	static content = {
 		saveButton { $("#contact-details .save") }
-		errorMessages { $('.errors') }
+		errorMessages { $('.flash.errors') }
 	}
 }

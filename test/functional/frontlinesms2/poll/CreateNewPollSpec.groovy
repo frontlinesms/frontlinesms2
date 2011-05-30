@@ -69,6 +69,6 @@ class CreatePollPage extends geb.Page {
 	static content = {
 		frmDetails { $("#poll-details") }
 		btnSave { $('input', name:'save') }
-		errorMessages { $('.errors') }
+		errorMessages { $('.flash.errors') }
 	}
 }
