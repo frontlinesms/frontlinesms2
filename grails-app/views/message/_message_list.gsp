@@ -14,12 +14,12 @@
 					<td>
 						<g:if test="${pollInstance}">
 							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
-								${m.src}
+								${m.displaySrc}
 							</g:link>
 						</g:if>
 						<g:else>
 							<g:link action="show" id="${m.id}">
-								${m.src}
+								${m.displaySrc}
 							</g:link>
 						</g:else>
 					</td>

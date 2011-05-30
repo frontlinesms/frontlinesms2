@@ -93,8 +93,24 @@ class InboxSpec extends MessageGebSpec {
 			
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
+		cleanup:
+			deleteTestMessages()
 	}
-
+	
+	def 'contact name is displayed if message src is an existing contact'() {
+		given:
+			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound: true).save(failOnError:true)
+			def contact = new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+		when:
+			to MessagesPage
+			def rowContents = $('#messages tbody tr td:nth-child(1)')*.text()
+		then:
+			rowContents == ['June']
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
+	}
+	
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)
