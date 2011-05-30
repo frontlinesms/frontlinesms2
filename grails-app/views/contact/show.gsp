@@ -123,7 +123,7 @@
 			  <g:else>
 				<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
 			  </g:else>
-				<g:link class="cancel" action="show" id="${contactInstance.id}" default="Cancel">Cancel</g:link>
+				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 			</div>
 		</g:form>
     </body>
