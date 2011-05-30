@@ -19,7 +19,7 @@ class PollController {
 		pollInstance.responses = responseList
 		
 		if (pollInstance.save(flush: true)) {
-		flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
+			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
 			redirect(controller: "message")
 		} else {
 			println "Something went wrong while saving the poll instance."
