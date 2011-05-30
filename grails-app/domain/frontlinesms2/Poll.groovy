@@ -7,8 +7,9 @@ class Poll {
 
 	static constraints = {
 		title(unique: true, blank: false, nullable: false, maxSize: 255)
-		responses(unique: true, validator: { val, obj ->
-				val?.size() >= 2
+		responses(validator: { val, obj ->
+				val?.size() >= 2 &&
+					(val*.value as Set)?.size() == val?.size()
 		})
 	}
 
