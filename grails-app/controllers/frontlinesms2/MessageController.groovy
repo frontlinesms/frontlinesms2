@@ -11,33 +11,37 @@ class MessageController {
 		def messageInstance = Fmessage.get(params.id)
 		def pollInstance = Poll.get(params.pollId)
 		def contactInstance
+		messageInstance.updateDisplaySrc()
 		if(!messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-
-		if(messageInstance) {
-			contactInstance = Contact.findByAddress(messageInstance.src)
-		}
-
 		render view:params.messageSection,
 				model:[messageInstance: messageInstance,
 						contactInstance: contactInstance,
 						pollInstanceList: Poll.findAll(),
-						pollInstance: pollInstance] << "${params.messageSection}"()
+						pollInstance: pollInstance] << list()
 	}
 
     def inbox = {
-		params.sort = 'dateCreated'
-		params.order = 'desc'
-		params.inbound = true
 		def messageInstanceList = Fmessage.getInboxMessages()
+		def latestMessage
 		messageInstanceList.each {
-			it.updateDisplaySrc()
+			if(!latestMessage) {
+				latestMessage = it
+			} else{
+				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
+					latestMessage = it
+				}
+			}
 		}
-		[messageSection:'inbox',
-			messageInstanceList: messageInstanceList,
-			messageInstanceTotal: Fmessage.getInboxMessages().size()] << list()
+		params.id = latestMessage?.id
+		if(params.id) {
+			redirect(action:'show', params:params)
+		} else {
+			[messageSection: 'inbox',
+				pollInstanceList: Poll.findAll()]
+		}
     }
 
     def sent = {
@@ -48,21 +52,45 @@ class MessageController {
 	def poll = {
 		def pollInstance = Poll.get(params.pollId)
 		def messageInstanceList = pollInstance.messages
+		def latestMessage
 		messageInstanceList.each {
-			it.updateDisplaySrc()
+			if(!latestMessage) {
+				latestMessage = it
+			} else{
+				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
+					latestMessage = it
+				}
+			}
 		}
-		[messageSection:'poll',
-				messageInstanceList: messageInstanceList,
-				messageInstanceTotal: pollInstance.messages.size(),
-				pollInstanceList: Poll.findAll(),
-				pollInstance: pollInstance,
-				pollResponseList: pollInstance.responses]
-	}
-
-	def list = {
-		[pollInstanceList: Poll.findAll()]
+		params.id = latestMessage?.id
+		if(params.id) {
+			redirect(action:'show', params:params)
+		} else {
+			[pollInstance: pollInstance,
+				pollInstanceList: Poll.findAll()]
+		}
 	}
 	
+	def list = {
+		def messageInstanceList
+		if(params.messageSection == 'inbox') {
+			messageInstanceList = Fmessage.getInboxMessages().each { it.updateDisplaySrc()}
+			[messageInstanceList: messageInstanceList,
+				messageSection: 'inbox',
+				messageInstanceTotal: Fmessage.getInboxMessages().size()]
+		} else if(params.messageSection == 'poll') {
+			def pollInstance = Poll.get(params.pollId)
+		 	messageInstanceList = pollInstance.messages
+			messageInstanceList.each{ it.updateDisplaySrc() }
+			[messageInstanceList: messageInstanceList,
+				messageSection: 'poll',
+				messageInstanceTotal: pollInstance.messages.size(),
+				pollResponseList: pollInstance.responses]
+		} else {
+			[pollInstanceList: Poll.findAll()]
+		}
+		
+	}
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
 		def messageInstance = Fmessage.get(params.id)
