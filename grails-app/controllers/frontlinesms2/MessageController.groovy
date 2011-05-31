@@ -20,11 +20,12 @@ class MessageController {
 			contactInstance = Contact.findByAddress(messageInstance.src)
 		}
 
-		render view:params.messageSection,
-				model:[messageInstance: messageInstance,
+		def model = [messageInstance: messageInstance,
 						contactInstance: contactInstance,
 						pollInstanceList: Poll.findAll(),
 						pollInstance: pollInstance] << "${params.messageSection}"()
+
+		render view:params.messageSection, model:model
 	}
 
     def inbox = {
@@ -56,7 +57,7 @@ class MessageController {
 				messageInstanceTotal: pollInstance.messages.size(),
 				pollInstanceList: Poll.findAll(),
 				pollInstance: pollInstance,
-				pollResponseList: pollInstance.responses]
+				responseList: pollInstance.getResponses()]
 	}
 
 	def list = {
@@ -66,7 +67,16 @@ class MessageController {
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
 		def messageInstance = Fmessage.get(params.id)
-		pollInstance.responses.toArray()[0].addToMessages(messageInstance).save(failOnError: true, flush: true)
+		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
+		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+		redirect(action: "show", params: params)
+	}
+
+	def changeResponse = {
+		def pollInstance = Poll.get(params.pollId)
+		def responseInstance = PollResponse.get(params.responseId)
+		def messageInstance = Fmessage.get(params.id)
+		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 		redirect(action: "show", params: params)
 	}
 }
