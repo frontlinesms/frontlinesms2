@@ -5,10 +5,10 @@
         <title>Poll</title>
     </head>
     <body>
-	  <h2 id="poll-title">${pollInstance.title}</h2>
+	  <h2 id="poll-title">${pollInstance?.title}</h2>
 	  <table id="poll-stats">
 		<tbody>
-			<g:each in="${pollResponseList.sort { it.value } }" status="i" var="r">
+			<g:each in="${pollResponseList?.sort { it.value } }" status="i" var="r">
 				<tr>
 					<td>
 						${r.value}

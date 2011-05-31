@@ -86,7 +86,7 @@ class InboxSpec extends MessageGebSpec {
 			assert !m1.read
 			assert m2.read
 		when:
-			go "message/inbox/"
+			go "message/inbox/show/$m2.id"
 		then:
 			$("tr#message-${m1.id}").hasClass('unread')
 			!$("tr#message-${m1.id}").hasClass('read')
