@@ -20,5 +20,22 @@ class Poll {
 	def getMessages() {
 		return this.responses*.messages.flatten()
 	}
+
+	static Poll createPoll(question, responseList) {
+		def r
+		boolean unknown = false
+		def p = new Poll(title:	question, responses: responseList)
+		p.responses.each {
+			if(it.value == 'Unknown') {
+				unknown = true
+			}
+		}
+		if(unknown == false) {
+			r = new PollResponse(value:'Unknown')
+			p.addToResponses(r)
+		}
+
+		return p
+	}
 }
 
