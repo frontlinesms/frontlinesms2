@@ -33,7 +33,7 @@ class ContactListSpec extends ContactGebSpec {
 			assert c.text() == 'You have no contacts saved'
 	}
 
-	def '"All contacts" menu item is selected in default view'() {
+	def 'aLL CONTACTS menu item is selected in default view'() {
 		when:
 			to ContactListPage
 		then:

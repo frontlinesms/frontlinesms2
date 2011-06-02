@@ -74,7 +74,7 @@ class ContactShowSpec extends ContactGebSpec {
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
 	}
 
-	def 'contact with no groups has "no groups" message visible'() {
+	def 'contact with no groups has NO GROUPS message visible'() {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
@@ -83,7 +83,7 @@ class ContactShowSpec extends ContactGebSpec {
 			$('#no-groups').displayed
 	}
 
-	def 'contact with groups has "no groups" message hidden'() {
+	def 'contact with groups has NO GROUPS message hidden'() {
 		given:
 			createTestGroups()
 			def bob = Contact.findByName('Bob')

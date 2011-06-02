@@ -19,7 +19,7 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 			at SettingsPage
 	}
 
-	def '"phones & connections" menu item is available settings menu'() {
+	def 'PHONES & CONNECTIONS menu item is available settings menu'() {
 		when:
 			to SettingsPage
 		then:
