@@ -8,6 +8,6 @@ class SettingsPage extends geb.Page {
 		title.endsWith('Settings')
 	}
 	static content = {
-		phonesMenuItem { $("#settings-menu").children()[1] }
+		phonesMenuItem(required: false) { $("#settings-menu").children()[0] }
 	}
 }
