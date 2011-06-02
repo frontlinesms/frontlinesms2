@@ -41,7 +41,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceList != [message1, message2, message3, message4]
 	}
 
-	def 'calling "show" action in inbox leads to unread message becoming read'() {
+	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
 			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
@@ -53,7 +53,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.get(id).read == true
 	}
 
-	def 'calling "show" action leads to read message staying read'() {
+	def 'calling SHOW action leads to read message staying read'() {
 		setup:
 			def id = new Fmessage(read:true).save(failOnError: true).id
 			assert Fmessage.get(id).read
