@@ -11,12 +11,22 @@ class ConnectionController {
 
 	def list = {
 		def fconnectionInstanceList = Fconnection.list(params)
+		if(!params.id) {
+			params.id = Fconnection.list(params)[0]?.id
+		}		
 		def connectionInstance = Fconnection.get(params.id)
 		def fconnectionInstanceTotal = Fconnection.count()
-
-		[connectionInstanceList: fconnectionInstanceList,
+		if(params.id){
+			render(view:'show', model:show() << [connectionInstanceList: fconnectionInstanceList,
+				connectionInstance: connectionInstance,
+				fconnectionInstanceTotal: fconnectionInstanceTotal])
+		} else {
+			[connectionInstanceList: fconnectionInstanceList,
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal]
+		}
+		
+		
 	}
 
 	def create = {}
@@ -35,7 +45,7 @@ class ConnectionController {
 
 	def show = {
 		withFconnection {
-			[connectionInstance: it] << list()
+			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params), fconnectionInstanceTotal: Fconnection.list(params)]
 		}
 	}
 

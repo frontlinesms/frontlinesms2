@@ -26,4 +26,11 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 			phonesMenuItem.text() == "Phones & connections"
 			phonesMenuItem.children('a').getAttribute('href') == "/frontlinesms2/connection/index"
 	}
+	
+	def 'The first item in the settings page is selected'() {
+		when:
+			to SettingsPage
+		then:
+			$("li:nth-child(1) .selected")
+	}
 }

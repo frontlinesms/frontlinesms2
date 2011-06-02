@@ -19,4 +19,9 @@ class ConnectionShowPage extends geb.Page {
 		assert title == "Settings > Connections > test email connection"
 		true
 	}
+	
+	static content = {
+		lstConnections { $('#connections') }
+		selectedConnection(required:false) { lstConnections.find(".selected") }
+	}
 }
