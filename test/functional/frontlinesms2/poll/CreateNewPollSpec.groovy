@@ -46,7 +46,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnSave.click()
 			def ufoPoll = Poll.findByTitle("UFOs?")
 		then:
-			ufoPoll.responses*.value.sort() == ['kidnapped', 'no', 'yes']
+			ufoPoll.responses*.value.sort() == ['Unknown', 'kidnapped', 'no', 'yes']
 		cleanup:
 			deleteTestPolls()
 	}
@@ -69,6 +69,6 @@ class CreatePollPage extends geb.Page {
 	static content = {
 		frmDetails { $("#poll-details") }
 		btnSave { $('input', name:'save') }
-		errorMessages { $('.flash.errors') }
+		errorMessages(required:false) { $('.flash.errors') }
 	}
 }

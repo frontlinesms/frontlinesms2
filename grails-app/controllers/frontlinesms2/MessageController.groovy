@@ -83,9 +83,11 @@ class MessageController {
 		 	messageInstanceList = pollInstance.messages
 			messageInstanceList.each{ it.updateDisplaySrc() }
 			[messageInstanceList: messageInstanceList,
-				messageSection: 'poll',
-				messageInstanceTotal: pollInstance.messages.size(),
-				pollResponseList: pollInstance.responses]
+					messageSection: 'poll',
+					messageInstanceTotal: pollInstance.messages.size(),
+					pollInstance: pollInstance,
+					pollInstanceList: Poll.findAll(),
+					responseList: pollInstance.responses]
 		} else {
 			[pollInstanceList: Poll.findAll()]
 		}
@@ -94,7 +96,16 @@ class MessageController {
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
 		def messageInstance = Fmessage.get(params.id)
-		pollInstance.responses.toArray()[0].addToMessages(messageInstance).save(failOnError: true, flush: true)
+		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
+		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+		redirect(action: "show", params: params)
+	}
+
+	def changeResponse = {
+		def pollInstance = Poll.get(params.pollId)
+		def responseInstance = PollResponse.get(params.responseId)
+		def messageInstance = Fmessage.get(params.id)
+		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 		redirect(action: "show", params: params)
 	}
 }

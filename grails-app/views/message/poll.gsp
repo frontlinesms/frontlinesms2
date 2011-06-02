@@ -8,7 +8,7 @@
 	  <h2 id="poll-title">${pollInstance?.title}</h2>
 	  <table id="poll-stats">
 		<tbody>
-			<g:each in="${pollResponseList?.sort { it.value } }" status="i" var="r">
+			<g:each in="${responseList.sort { it.value } }" status="i" var="r">
 				<tr>
 					<td>
 						${r.value}
@@ -27,5 +27,9 @@
 				</tr>
 			</g:each>
 		</tbody>
+	  </table>
+	<g:if test="${messageInstance != null}">
+		<g:render  template="categorize_response"/>
+	</g:if>
     </body>
 </html>

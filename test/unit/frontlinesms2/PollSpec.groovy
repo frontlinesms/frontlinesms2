@@ -9,15 +9,15 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			!p.validate()
 		when:
-			p.addToResponses(new PollResponse())
+			p.addToResponses(new PollResponse(value:'one'))
 		then:
 			!p.validate()
 		when:
-			p.addToResponses(new PollResponse())
+			p.addToResponses(new PollResponse(value:'two'))
 		then:
 			p.validate()
 		when:
-			p.addToResponses(new PollResponse())
+			p.addToResponses(new PollResponse(value:'three'))
 		then:
 			p.validate()
 	}
