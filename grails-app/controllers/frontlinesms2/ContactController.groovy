@@ -88,9 +88,12 @@ class ContactController {
 	}
 
 	def createContact = {
-		def contactInstance = new Contact()
-		contactInstance.properties = params
-		[contactInstance: contactInstance] << buildList()
+		def model = [contactInstance:new Contact(params),
+					contactGroupInstanceList: [],
+					contactGroupInstanceTotal: 0,
+					nonContactGroupInstanceList: Group.findAll()] << buildList()
+
+		render(view:'show', model:model)
 	}
 
 	def createGroup = {
@@ -101,12 +104,28 @@ class ContactController {
 
 	def saveContact = {
 		def contactInstance = new Contact(params)
-		if (contactInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-			redirect(action:'show', id:contactInstance.id)
-		} else {
-			render(view: "createContact", model: [contactInstance: contactInstance])
-		}
+		contactInstance.properties = params
+
+		// Check for errors in groupsToAdd and groupsToRemove
+			def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
+			def groupsToRemove = params.groupsToRemove.tokenize(',')
+			if(!groupsToAdd.disjoint(groupsToRemove)) {
+				contactInstance.errors.reject('Cannot add and remove from the same group!')
+			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
+				groupsToAdd.each() {
+					contactInstance.addToGroups(Group.get(it), true)
+				}
+				groupsToRemove.each() {
+					contactInstance.removeFromGroups(Group.get(it), true)
+				}
+
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+				def redirectParams = [contactId:contactInstance.id]
+				if(params.groupId) redirectParams << [groupId: params.groupId]
+				redirect(action: "show", params:redirectParams)
+				return
+			}
+			render(view:'show', model:show()<<[contactInstance:contactInstance])
 	}
 
 	def saveGroup = {

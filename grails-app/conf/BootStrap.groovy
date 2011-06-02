@@ -45,9 +45,9 @@ class BootStrap {
 						it.save(failOnError:true)
 					}
 
-			[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
+			[Poll.createPoll('Football Teams', [new PollResponse(value:'manchester'),
 					new PollResponse(value:'barcelona')]),
-					new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
+					Poll.createPoll('Shampoo Brands', [new PollResponse(value:'pantene'),
 					new PollResponse(value:'oriele')])].each() {
 						it.save(failOnError:true, flush:true)
 					}

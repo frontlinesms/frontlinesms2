@@ -79,6 +79,8 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		given:
 			controller.params.name = 'new contact'
 			controller.params.address = '1234565'
+			controller.params.groupsToAdd = ","
+			controller.params.groupsToRemove = ","
 			assert Contact.count() == 1
 		when:
 			controller.saveContact()

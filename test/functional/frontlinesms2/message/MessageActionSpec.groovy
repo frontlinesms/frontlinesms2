@@ -55,6 +55,47 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()
 			deleteTestMessages()
 	}
+
+	def 'messages are always added to the "unknown" response of a poll'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollMessageViewPage
+			def btnAction = $('#message-actions li').children('a').first()
+			def bob = Fmessage.findBySrc('Bob')
+			def jill = Fmessage.findBySrc('Jill')
+			def shampooPoll = Poll.findByTitle('Shampoo Brands')
+			def footballPoll = Poll.findByTitle('Football Teams')
+			btnAction.click()
+			shampooPoll.responses.each{ it.refresh() }
+			footballPoll.responses.each{ it.refresh() }
+			def response =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
+		then:
+			bob.activity == response
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
+
+	def 'possible poll responses are shown in action list and are clickable'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollMessageViewPage
+			def footballPoll = Poll.findByTitle('Football Teams')
+			def bob = Fmessage.findBySrc('Bob')
+			def btnBarce = $('#poll-actions li:nth-child(2) a')
+			btnBarce.click()
+			footballPoll.responses.each{ it.refresh() }
+			def barceResponse =  footballPoll.getResponses().find { it.value == 'barcelona'}
+		then:
+			bob.activity == barceResponse
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
 	
 }
 class PollMessageViewPage extends geb.Page {
