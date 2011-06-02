@@ -31,6 +31,6 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to SettingsPage
 		then:
-			$("li:nth-child(1) .selected")
+			$("#settings-menu li:nth-child(1) a").hasClass('selected')
 	}
 }
