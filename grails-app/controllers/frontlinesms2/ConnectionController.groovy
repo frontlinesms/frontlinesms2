@@ -21,7 +21,8 @@ class ConnectionController {
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal])
 		} else {
-			[connectionInstanceList: fconnectionInstanceList,
+			[settingsSection:'connections',
+				connectionInstanceList: fconnectionInstanceList,
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal]
 		}
@@ -34,18 +35,18 @@ class ConnectionController {
 	def createEmail = {
 		def fconnectionInstance = new EmailFconnection()
 		fconnectionInstance.properties = params
-		[fconnectionInstance: fconnectionInstance]
+		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
 	}
 
 	def createSmslib = {
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
-		[fconnectionInstance: fconnectionInstance]
+		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
 	}
 
 	def show = {
 		withFconnection {
-			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params), fconnectionInstanceTotal: Fconnection.list(params)]
+			[connectionInstance: it] << [settingsSection:'connections', connectionInstanceList: Fconnection.list(params), fconnectionInstanceTotal: Fconnection.list(params)]
 		}
 	}
 
