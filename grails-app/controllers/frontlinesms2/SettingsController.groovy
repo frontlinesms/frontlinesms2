@@ -2,11 +2,10 @@ package frontlinesms2
 
 class SettingsController {
 	def index = {
-		redirect: "list"
+		redirect(controller:'connection')
 	}
 
 	def list = {
-		
 	}
 
 	def general = {
