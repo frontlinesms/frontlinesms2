@@ -62,6 +62,7 @@ class MessageController {
 				}
 			}
 		}
+		println "pollInstance.messages.size: ${pollInstance.messages.size()}"
 		params.id = latestMessage?.id
 		if(params.id) {
 			redirect(action:'show', params:params)
@@ -107,5 +108,13 @@ class MessageController {
 		def messageInstance = Fmessage.get(params.id)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 		redirect(action: "show", params: params)
+	}
+	
+	def deleteMessage = {
+		def messageInstance = Fmessage.get(params.id)
+		messageInstance.toDelete()
+		messageInstance.save(failOnError: true, flush: true)
+		Fmessage.get(params.id).activity?.refresh()
+		redirect(action: params.messageSection, params:params)
 	}
 }

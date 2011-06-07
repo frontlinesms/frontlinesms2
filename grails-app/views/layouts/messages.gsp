@@ -21,6 +21,14 @@
 					<g:link class="button" controller="contact" action="createContact" params="[address: thisAddress]">+</g:link>
 					<p class="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
 					<p class="message-body">${messageInstance.text}</p>
+					<div class="buttons">
+						<g:if test="${messageSection == 'poll'}">
+							<g:link action="deleteMessage" params="[messageSection: messageSection, pollId: pollInstance.id]" id="${messageInstance.id}">Delete</g:link>
+						</g:if>
+						<g:else>
+							<g:link action="deleteMessage" params="[messageSection: messageSection]" id="${messageInstance.id}">Delete</g:link>
+						</g:else>
+					</div>
 				</div>
 				<g:render template="action_list"/>
 			</g:if>
