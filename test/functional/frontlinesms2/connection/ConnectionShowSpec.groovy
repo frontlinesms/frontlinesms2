@@ -3,12 +3,12 @@ package frontlinesms2.connection
 class ConnectionShowSpec extends ConnectionGebSpec {
 	def 'clicking on a connection shows us more details'() {
 		given:
-			createTestConnection()
+			createTestSMSConnection()
 			to ConnectionListPage
 		when:
 			lstConnections.find('h2').click()
 		then:
-			at ConnectionShowPage
+			$('title').text() == "Settings > Connections > MTN Dongle"
 		cleanup:
 			deleteTestConnections()
 	}
