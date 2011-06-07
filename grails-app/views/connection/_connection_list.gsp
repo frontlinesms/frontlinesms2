@@ -15,6 +15,9 @@
 							<g:link action="createRoute" class='route' id="${c.id}" >Create route</g:link>
 						</div>
 					</g:if>
+					<g:if test="${c == connectionInstance ? 'selected' : ''}" class="${c == connectionInstance ? 'selected' : ''}">
+						<g:link action="createTest" class='test' id="${c.id}" >Send test message</g:link>
+					</g:if>
 				</li>
 		</g:each>
 	</ol>

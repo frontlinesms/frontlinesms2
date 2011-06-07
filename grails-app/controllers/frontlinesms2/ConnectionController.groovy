@@ -71,6 +71,16 @@ class ConnectionController {
 			redirect action:'list', id:settings.id
 		}
 	}
+
+	def createTest = {
+		def connectionInstance  = Fconnection.get(params.id)
+		[connectionInstance:connectionInstance]
+	}
+
+	def sendTest = {
+		flash.message = "Test message successfully sent to" //${settings.camelAddress()}"
+		redirect (action:'show', params:params)
+	}
 	
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
