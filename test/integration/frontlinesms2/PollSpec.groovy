@@ -17,6 +17,8 @@ class PollSpec extends grails.plugin.spock.IntegrationSpec {
 			message1.toDelete().save(flush:true, failOnError:true)
 		then:
 			p.messages.size() == 1
+		cleanup:
+			deleteTestData()
 	}
 	
 	def "creating a new poll also creates a poll response with value 'Unknown'"() {
@@ -26,5 +28,17 @@ class PollSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			p.responses.size() == 3
 
+	}
+	
+	static deleteTestData() {
+		Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+
+		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
 	}
 }

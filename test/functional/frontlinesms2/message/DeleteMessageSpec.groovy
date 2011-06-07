@@ -8,7 +8,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		setup:
 			createTestData()
 		when:
-			println "activity start: ${Fmessage.findBySrc('Barnabus').activity.messages.size()}"
 			go "message/deleteMessage/${Fmessage.findBySrc('Bob').id}"
 			go "message/deleteMessage/${Fmessage.findBySrc('Mary').id}"
 			go "message/deleteMessage/${Fmessage.findBySrc('Barnabus').id}"
