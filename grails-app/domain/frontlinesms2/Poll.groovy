@@ -18,7 +18,14 @@ class Poll {
 	}
 
 	def getMessages() {
-		return this.responses*.messages.flatten()
+		Fmessage.createCriteria().list {
+			and {
+				eq("deleted", false)
+				'in'("activity", this.responses)
+			}
+			order('dateRecieved', 'desc')
+			order('dateCreated', 'desc')
+		}
 	}
 
 	static Poll createPoll(question, responseList) {
@@ -38,4 +45,3 @@ class Poll {
 		return p
 	}
 }
-

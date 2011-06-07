@@ -9,6 +9,7 @@ class Fmessage {
 	Date dateRecieved
 	boolean inbound
 	boolean read
+	boolean deleted
 	static belongsTo = [activity:PollResponse]
 	static transients = ['displaySrc']
 	static mapping = {
@@ -27,6 +28,7 @@ class Fmessage {
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
+				eq('deleted', false)
 				eq('id', this.id)
 			}
 		}
@@ -40,10 +42,16 @@ class Fmessage {
 			displaySrc = c? c.name: src
 		}
 	}
+	
+	def toDelete() {
+		this.deleted = true
+		this
+	}
 
 	static def getInboxMessages() {
 		def messages = Fmessage.createCriteria().list {
 			and {
+				eq("deleted", false)
 				eq("inbound", true)
 				isNull("activity")
 			}
@@ -56,6 +64,7 @@ class Fmessage {
 	static def getSentMessages() {
 		def messages = Fmessage.createCriteria().list {
 			and {
+				eq("deleted", false)
 				eq("inbound", false)
 				isNull("activity")
 			}
