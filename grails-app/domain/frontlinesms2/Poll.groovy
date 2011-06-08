@@ -7,8 +7,9 @@ class Poll {
 
 	static constraints = {
 		title(unique: true, blank: false, nullable: false, maxSize: 255)
-		responses(unique: true, validator: { val, obj ->
-				val?.size() >= 2
+		responses(validator: { val, obj ->
+				val?.size() >= 2 &&
+					(val*.value as Set)?.size() == val?.size()
 		})
 	}
 
@@ -17,7 +18,30 @@ class Poll {
 	}
 
 	def getMessages() {
-		return this.responses*.messages.flatten()
+		Fmessage.createCriteria().list {
+			and {
+				eq("deleted", false)
+				'in'("activity", this.responses)
+			}
+			order('dateRecieved', 'desc')
+			order('dateCreated', 'desc')
+		}
+	}
+
+	static Poll createPoll(question, responseList) {
+		def r
+		boolean unknown = false
+		def p = new Poll(title:	question, responses: responseList)
+		p.responses.each {
+			if(it.value == 'Unknown') {
+				unknown = true
+			}
+		}
+		if(unknown == false) {
+			r = new PollResponse(value:'Unknown')
+			p.addToResponses(r)
+		}
+
+		return p
 	}
 }
-
