@@ -19,6 +19,7 @@ class MessageController {
 		render view:params.messageSection,
 				model:[messageInstance: messageInstance,
 						contactInstance: contactInstance,
+						folderInstanceList: Folder.findAll(),
 						pollInstanceList: Poll.findAll(),
 						pollInstance: pollInstance] << list()
 	}
@@ -40,6 +41,7 @@ class MessageController {
 			redirect(action:'show', params:params)
 		} else {
 			[messageSection: 'inbox',
+				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll()]
 		}
     }
@@ -68,6 +70,7 @@ class MessageController {
 			redirect(action:'show', params:params)
 		} else {
 			[pollInstance: pollInstance,
+				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll()]
 		}
 	}
@@ -87,6 +90,7 @@ class MessageController {
 					messageSection: 'poll',
 					messageInstanceTotal: pollInstance.messages.size(),
 					pollInstance: pollInstance,
+					folderInstanceList: Folder.findAll(),
 					pollInstanceList: Poll.findAll(),
 					responseList: pollInstance.responses]
 		} else {
@@ -114,7 +118,7 @@ class MessageController {
 		def messageInstance = Fmessage.get(params.id)
 		messageInstance.toDelete()
 		messageInstance.save(failOnError: true, flush: true)
-		Fmessage.get(params.id).activity?.refresh()
+		Fmessage.get(params.id).messageOwner?.refresh()
 		redirect(action: params.messageSection, params:params)
 	}
 }
