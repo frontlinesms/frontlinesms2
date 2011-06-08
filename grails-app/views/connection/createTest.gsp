@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		<g:form name="test-details" action="sendTest" >
+		  <g:hiddenField name="id" value="${connectionInstance?.id}"/>
 			<div id="message-info">
 				<div class="field">
 					<label for="number"><g:message code="message.number.label" default="Number"/></label>

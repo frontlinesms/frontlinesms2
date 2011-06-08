@@ -4,6 +4,7 @@ class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def fconnectionService
+	def messageSendService
 
 	def index = {
 		redirect(action:'list')
@@ -73,13 +74,16 @@ class ConnectionController {
 	}
 
 	def createTest = {
-		def connectionInstance  = Fconnection.get(params.id)
+		def connectionInstance = Fconnection.get(params.id)
 		[connectionInstance:connectionInstance]
 	}
 
 	def sendTest = {
-		flash.message = "Test message successfully sent to" //${settings.camelAddress()}"
-		redirect (action:'show', params:params)
+		withFconnection {
+			flash.message = "Test message successfully sent to ${it.name}"
+			messageSendService.dispatch(new Fmessage(src:'Bob', dst:'567890', text:'test routing message'), it)
+			redirect (action:'show', id:params.id)
+		}
 	}
 	
 	private def withFconnection(Closure c) {
