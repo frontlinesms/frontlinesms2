@@ -12,5 +12,15 @@
 			  </g:elseif>
 		  </li>
 	  </g:each>
+	  <g:each in="${folderInstanceList}" status="i" var="f">
+		  <li>
+			  <g:if test="${messageSection == 'inbox'}">
+				  <g:link action="move" params="[folderId: f.id]" id ="${messageInstance.id}">${f.value}</g:link>
+			  </g:if>
+			  <g:elseif test="${f != folderInstance}">
+				  <g:link action="move" params="[folderId: f.id]" id ="${messageInstance.id}">${f.value}</g:link>
+			  </g:elseif>
+		  </li>
+	  </g:each>
   </ol>
 </div>

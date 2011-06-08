@@ -40,5 +40,19 @@ class MessageAndActivityUrlMappingTests extends grails.test.GrailsUrlMappingsTes
 			messageSection = 'poll'
 		}
 	}
+	
+	def testFolderView() {
+		assertForwardUrlMapping('/message/folder/123', controller:'message', action:'folder') {
+			folderId = 123
+		}
+	}
+	
+	def testFolderMessageView() {
+		assertForwardUrlMapping('/message/folder/123/show/456', controller:'message', action:'show') {
+			id = 456
+			folderId = 123
+			messageSection = 'folder'
+		}
+	}
 }
 

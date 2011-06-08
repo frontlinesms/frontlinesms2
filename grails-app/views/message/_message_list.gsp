@@ -17,6 +17,11 @@
 								${m.displaySrc}
 							</g:link>
 						</g:if>
+						<g:elseif test="${folderInstance}">
+							<g:link action="show" id="${m.id}" params="[folderId:folderInstance.id]">
+								${m.displaySrc}
+							</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link action="show" id="${m.id}">
 								${m.displaySrc}
@@ -29,6 +34,11 @@
 								${m.displayText}
 							</g:link>
 						</g:if>
+						<g:elseif test="${folderInstance}">
+							<g:link action="show" id="${m.id}" params="[folderId:folderInstance.id]">
+								${m.displayText}
+							</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link action="show" id="${m.id}">
 							  ${m.displayText}
@@ -41,6 +51,11 @@
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
 						</g:if>
+						<g:elseif test="${folderInstance}">
+							<g:link action="show" id="${m.id}" params="[folderId:folderInstance.id]">
+								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+							</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link action="show" id="${m.id}">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
