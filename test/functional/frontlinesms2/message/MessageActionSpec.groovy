@@ -117,37 +117,39 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 	
-//		def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
-//		given:
-//			createTestFolders()
-//			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
-//		when:
-//			to PollMessageViewPage
-//			def btnAction = $('#message-actions li').children('a').first()
-//			def bob = Fmessage.findBySrc('Bob')
-//			def jill = Fmessage.findBySrc('Jill')
-//			def shampooPoll = Poll.findByTitle('Shampoo Brands')
-//			def footballPoll = Poll.findByTitle('Football Teams')
-//			btnAction.click()
-//			shampooPoll.responses.each{ it.refresh() }
-//			footballPoll.responses.each{ it.refresh() }
-//		then:
-//			bob != Poll.findByTitle("Football Teams").getMessages().find { it == bob }
-//			bob == Poll.findByTitle("Shampoo Brands").getMessages().find { it == bob }
-//
-//		when:
-//			go "message/inbox/show/${jill.id}"
-//			btnAction = $('#message-actions li').children('a').first()
-//			btnAction.click()
-//			footballPoll.responses.each { it.refresh() }
-//			Fmessage.findAll().each { it.refresh() }
-//		then:
-//			jill != Fmessage.getInboxMessages().find { it == jill }
-//			jill == Poll.findByTitle("Football Teams").getMessages().find { it == jill }
-//		cleanup:
-//			deleteTestPolls()
-//			deleteTestMessages()
-//	}
+		def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
+		given:
+			createTestFolders()
+			createTestPolls()
+			createTestMessages()
+			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
+		when:
+			go "message/folder/${Folder.findByValue('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+			def btnAction = $('#message-actions li').children('a').first()
+			def max = Fmessage.findBySrc('Max')
+			def jill = Fmessage.findBySrc('Jill')
+			def shampooPoll = Poll.findByTitle('Shampoo Brands')
+			def footballPoll = Poll.findByTitle('Football Teams')
+			btnAction.click()
+			shampooPoll.responses.each{ it.refresh() }
+			footballPoll.responses.each{ it.refresh() }
+		then:
+			max != Folder.findByValue("Work").getMessages().find { it == max }
+			max == Poll.findByTitle("Shampoo Brands").getMessages().find { it == max }
+
+		when:
+			go "message/inbox/show/${jill.id}"
+			btnAction = $('#message-actions li').children('a').first()
+			btnAction.click()
+			footballPoll.responses.each { it.refresh() }
+			Fmessage.findAll().each { it.refresh() }
+		then:
+			jill != Fmessage.getInboxMessages().find { it == jill }
+			jill == Poll.findByTitle("Football Teams").getMessages().find { it == jill }
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
 	
 }
 class PollMessageViewPage extends geb.Page {
