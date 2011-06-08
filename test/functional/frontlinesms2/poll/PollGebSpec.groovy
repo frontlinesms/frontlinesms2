@@ -4,15 +4,14 @@ import frontlinesms2.*
 
 class PollGebSpec extends grails.plugin.geb.GebSpec {
 	static createTestPolls() {
-
-		[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
+		[Poll.createPoll('Football Teams', [new PollResponse(value:'manchester'),
 						new PollResponse(value:'barcelona')]),
-				new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
+				Poll.createPoll('Shampoo Brands', [new PollResponse(value:'pantene'),
 						new PollResponse(value:'oriele')]),
-				new Poll(title:'Rugby Brands', responses:[new PollResponse(value:'newzealand'),
+				Poll.createPoll('Rugby Brands', [new PollResponse(value:'newzealand'),
 						new PollResponse(value:'britain')])].each() {
 			it.save(failOnError:true, flush:true)
-		}
+						}
 	}
 
 	static createTestMessages() {

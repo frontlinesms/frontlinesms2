@@ -39,15 +39,15 @@ class BootStrap {
 					new Fmessage(src:'Bob', dst:'+254987654', text:'go manchester'),
 					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
 					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateRecieved:createDate("2011/01/21")),
-					new Fmessage(src:'Jack', dst:'+254112233', text:"where's the pale?", dateRecieved:createDate("2011/01/20")),
+					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateRecieved:createDate("2011/01/20")),
 					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateRecieved:createDate("2011/01/23"))].each() {
 						it.inbound = true
 						it.save(failOnError:true)
 					}
 
-			[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
+			[Poll.createPoll('Football Teams', [new PollResponse(value:'manchester'),
 					new PollResponse(value:'barcelona')]),
-					new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
+					Poll.createPoll('Shampoo Brands', [new PollResponse(value:'pantene'),
 					new PollResponse(value:'oriele')])].each() {
 						it.save(failOnError:true, flush:true)
 					}

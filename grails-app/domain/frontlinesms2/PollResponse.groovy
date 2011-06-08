@@ -5,8 +5,8 @@ class PollResponse {
 
 	String value
 	static constraints = {
-		value(unique: true, blank: false, nullable: false, maxSize: 255)
-	}
+		value(blank: false, nullable: false, maxSize: 255)
+	} // having a unique value here makes all reponses across all polls unique - not what we want right now
 
 	static mapping = {
 		messages cascade:'all'

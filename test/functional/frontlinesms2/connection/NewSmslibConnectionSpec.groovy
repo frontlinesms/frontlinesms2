@@ -22,11 +22,23 @@ class NewSmslibConnectionSpec extends ConnectionGebSpec {
 			frmNewConnection.baud = '9600'
 			btnNewConnectionSave.click()
 		then:
-			at ConnectionListPage
+			at SmsConnectionShowPage
 			Fconnection.count() == 1
 			selectedConnection.find('h2').text() == 'test smslib connection'
 			selectedConnection.find('h3').text() == 'Phone/Modem'
 		cleanup:
 			deleteTestConnections()
+	}
+}
+	
+class SmsConnectionShowPage extends geb.Page {
+	static at = {
+		assert title == "Settings > Connections > test smslib connection"
+		true
+	}
+	
+	static content = {
+		lstConnections { $('#connections') }
+		selectedConnection(required:false) { lstConnections.find(".selected") }
 	}
 }
