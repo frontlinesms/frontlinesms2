@@ -21,7 +21,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
-
 	}
 	
 	def 'clicking on activity moves the message to that activity and removes it from the previous activity or inbox'() {
@@ -78,26 +77,25 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
-	def 'possible poll responses are shown in action list and are clickable'() {
+	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
 		given:
 			createTestPolls()
 			createTestMessages()
+			assert Fmessage.findBySrc('Bob').activity.value == 'manchester'
 		when:
 			to PollMessageViewPage
+			$('#poll-actions li:nth-child(2) a').click()
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')
-			def btnBarce = $('#poll-actions li:nth-child(2) a')
-			btnBarce.click()
-			footballPoll.responses.each{ it.refresh() }
-			def barceResponse =  footballPoll.getResponses().find { it.value == 'barcelona'}
+			bob.refresh()
 		then:
-			bob.activity == barceResponse
+			bob.activity.value == 'barcelona'
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
 	}
-	
 }
+
 class PollMessageViewPage extends geb.Page {
  	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
 }
