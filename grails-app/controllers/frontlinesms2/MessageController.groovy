@@ -10,17 +10,22 @@ class MessageController {
 	def show = {
 		def messageInstance = Fmessage.get(params.id)
 		def pollInstance = Poll.get(params.pollId)
+		def folderInstance = Poll.get(params.folderId)
 		def contactInstance
 		messageInstance.updateDisplaySrc()
 		if(!messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
 		}
+		params.each{
+			println it
+		}
 		render view:params.messageSection,
 				model:[messageInstance: messageInstance,
 						contactInstance: contactInstance,
 						folderInstanceList: Folder.findAll(),
 						pollInstanceList: Poll.findAll(),
+						folderInstance: folderInstance,
 						pollInstance: pollInstance] << list()
 	}
 
@@ -52,6 +57,7 @@ class MessageController {
     }
 
 	def poll = {
+		
 		def pollInstance = Poll.get(params.pollId)
 		def messageInstanceList = pollInstance.messages
 		def latestMessage
@@ -75,6 +81,29 @@ class MessageController {
 		}
 	}
 	
+	def folder = {
+		def folderInstance = Folder.get(params.folderId)
+		def messageInstanceList = folderInstance.messages
+		def latestMessage
+		messageInstanceList.each {
+			if(!latestMessage) {
+				latestMessage = it
+			} else{
+				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
+					latestMessage = it
+				}
+			}
+		}
+		params.id = latestMessage?.id
+		if(params.id) {
+			redirect(action:'show', params:params)
+		} else {
+			[folderInstance: folderInstance,
+				folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
+		}
+	}
+	
 	def list = {
 		def messageInstanceList
 		if(params.messageSection == 'inbox') {
@@ -90,10 +119,19 @@ class MessageController {
 					messageSection: 'poll',
 					messageInstanceTotal: pollInstance.messages.size(),
 					pollInstance: pollInstance,
-					folderInstanceList: Folder.findAll(),
 					pollInstanceList: Poll.findAll(),
 					responseList: pollInstance.responses]
-		} else {
+		}else if(params.messageSection == 'folder') {
+			def folderInstance = Folder.get(params.folderId)
+		 	messageInstanceList = folderInstance.messages
+			messageInstanceList.each{ it.updateDisplaySrc() }
+			[messageInstanceList: messageInstanceList,
+					messageSection: 'folder',
+					messageInstanceTotal: folderInstance.messages.size(),
+					folderInstance: folderInstance,
+					folderInstanceList: Folder.findAll(),
+					pollInstanceList: Poll.findAll()]
+		}else {
 			[pollInstanceList: Poll.findAll()]
 		}
 		

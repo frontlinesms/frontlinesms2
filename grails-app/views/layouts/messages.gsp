@@ -25,6 +25,9 @@
 						<g:if test="${messageSection == 'poll'}">
 							<g:link action="deleteMessage" params="[messageSection: messageSection, pollId: pollInstance.id]" id="${messageInstance.id}">Delete</g:link>
 						</g:if>
+					    <g:elseif test="${messageSection == 'folder'}">
+							<g:link action="deleteMessage" params="[messageSection: messageSection, folderId: folderInstance.id]" id="${messageInstance.id}">Delete</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link action="deleteMessage" params="[messageSection: messageSection]" id="${messageInstance.id}">Delete</g:link>
 						</g:else>
