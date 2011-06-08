@@ -21,7 +21,7 @@ class Poll {
 		Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
-				'in'("activity", this.responses)
+				'in'("messageOwner", this.responses)
 			}
 			order('dateRecieved', 'desc')
 			order('dateCreated', 'desc')

@@ -72,7 +72,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			footballPoll.responses.each{ it.refresh() }
 			def response =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
 		then:
-			bob.activity == response
+			bob.messageOwner == response
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -91,7 +91,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			footballPoll.responses.each{ it.refresh() }
 			def barceResponse =  footballPoll.getResponses().find { it.value == 'barcelona'}
 		then:
-			bob.activity == barceResponse
+			bob.messageOwner == barceResponse
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()

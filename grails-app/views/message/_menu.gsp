@@ -6,6 +6,9 @@
 				<li id="create-poll">
 					<g:link class="create" controller="poll" action="create">Poll</g:link>
 				</li>
+				<li id="create-folder">
+					<g:link class="create" controller="folder" action="create">Folder</g:link>
+				</li>
 		</ol>
 	</li>
 	<li>
@@ -25,6 +28,12 @@
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li>
 					<g:link action="poll" id="${p.id}" class="${p == pollInstance ? 'selected' : ''}">${p.title}</g:link>
+				</li>
+			</g:each>
+		  <h2>Folders</h2>
+			<g:each in="${folderInstanceList}" status="i" var="f">
+				<li>
+					<g:link action="folder" id="${f.id}" class="${f == folderInstance ? 'selected' : ''}">${f.value}</g:link>
 				</li>
 			</g:each>
 		</ol>
