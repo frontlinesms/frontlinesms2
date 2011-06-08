@@ -137,10 +137,20 @@ class MessageController {
 		
 	}
 	def move = {
-		def pollInstance = Poll.get(params.pollId)
+		def messageOwner
+		if(params.pollId){
+			messageOwner = Poll.get(params.pollId)
+		}else{
+			messageOwner = Folder.get(params.folderId)
+		}
 		def messageInstance = Fmessage.get(params.id)
-		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
-		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+		if(messageOwner instanceof Poll){
+			def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
+			unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+		}else{
+			messageOwner.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+		}
+		
 		redirect(action: "show", params: params)
 	}
 
