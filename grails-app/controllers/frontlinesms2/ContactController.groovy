@@ -134,7 +134,8 @@ class ContactController {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
 			redirect(controller:'group', action:'show', id:groupInstance.id)
 		} else {
-			render(view: "createGroup", model: [groupInstance: groupInstance])
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Group'), params.id])}"
+			redirect(action: "createGroup", model: [groupInstance: groupInstance])
 		}
 	}
 
