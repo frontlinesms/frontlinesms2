@@ -122,32 +122,25 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestFolders()
 			createTestPolls()
 			createTestMessages()
-			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
+			def max = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
+			Folder.findByValue('Work').addToMessages(max).save(failOnError:true, flush:true)
 		when:
 			go "message/folder/${Folder.findByValue('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 			def btnAction = $('#message-actions li').children('a').first()
-			def max = Fmessage.findBySrc('Max')
 			def jill = Fmessage.findBySrc('Jill')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
+			println btnAction.text()
 			btnAction.click()
+			Folder.findByValue('Work').each{ it.refresh() }
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 		then:
-			max != Folder.findByValue("Work").getMessages().find { it == max }
-			max == Poll.findByTitle("Shampoo Brands").getMessages().find { it == max }
-
-		when:
-			go "message/inbox/show/${jill.id}"
-			btnAction = $('#message-actions li').children('a').first()
-			btnAction.click()
-			footballPoll.responses.each { it.refresh() }
-			Fmessage.findAll().each { it.refresh() }
-		then:
-			jill != Fmessage.getInboxMessages().find { it == jill }
-			jill == Poll.findByTitle("Football Teams").getMessages().find { it == jill }
+			max == Poll.findByTitle("Football Teams").getMessages().find { it == max }
+			max != Folder.findByValue("Work").getMessages().find { it == max }			
 		cleanup:
-			deleteTestPolls()
+			deleteTestFolders()
+			deleteTestPolls()			
 			deleteTestMessages()
 	}
 	
