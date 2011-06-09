@@ -73,9 +73,5 @@ class PollShowPage extends geb.Page {
 	static at = {
 		title.endsWith('Poll')
 	}
-//		static content = {
-//			selectedMenuItem { $('#messages-menu .selected') }
-//			messagesList { $('#messages-submenu') }
-//		}
 }
 
