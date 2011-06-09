@@ -30,9 +30,7 @@ class Poll {
 
 	def getResponseStats() {
 		def totalMessageCount = messages.size()
-		println "Getting response stats for ${responses*.value}"
 		responses.sort{it.id}.collect {
-			println "Response: ${it.value}"
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
