@@ -27,12 +27,8 @@ class MessageController {
 		def messageInstanceList = Fmessage.getInboxMessages()
 		def latestMessage
 		messageInstanceList.each {
-			if(!latestMessage) {
+			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
 				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
 			}
 		}
 		params.id = latestMessage?.id
@@ -54,12 +50,8 @@ class MessageController {
 		def messageInstanceList = pollInstance.messages
 		def latestMessage
 		messageInstanceList.each {
-			if(!latestMessage) {
+			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
 				latestMessage = it
-			} else {
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
 			}
 		}
 		params.id = latestMessage?.id
@@ -95,14 +87,12 @@ class MessageController {
 	}
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
-		def messageInstance = Fmessage.get(params.id)
 		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
 		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
 		redirect(action: "show", params: params)
 	}
 
 	def changeResponse = {
-		def pollInstance = Poll.get(params.pollId)
 		def responseInstance = PollResponse.get(params.responseId)
 		def messageInstance = Fmessage.get(params.id)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
