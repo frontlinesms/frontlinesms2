@@ -5,7 +5,7 @@
 		<title>Create Group</title>
 	</head>
 	<body>
-		<h1><g:message code="default.create.label" args="[entityName]" /></h1>
+		<h1>Create Group</h1>
 		<g:form name="group-details" action="saveGroup" >
 			<div class="dialog">
 				<table>
