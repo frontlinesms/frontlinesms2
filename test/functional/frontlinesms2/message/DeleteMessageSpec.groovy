@@ -5,8 +5,11 @@ import frontlinesms2.*
 class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		
 	def 'deleted messages do not show up in any view'() {
-		setup:
+		given:
 			createTestData()
+			assert Fmessage.getSentMessages().size() == 2
+			assert Fmessage.getInboxMessages().size() == 3
+			assert Poll.findByTitle('Miauow Mix').messages.size() == 2
 		when:
 			go "message/deleteMessage/${Fmessage.findBySrc('Bob').id}"
 			go "message/deleteMessage/${Fmessage.findBySrc('Mary').id}"
@@ -20,16 +23,21 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def 'delete button appears in message show view and works'() {
-		setup:
+		given:
 			createTestData()
-		when:
 			def bob = Fmessage.findBySrc("Bob")
+		when:
 			go "message/inbox/show/${bob.id}"
 			def btnDelete = $('#message-details .buttons a')
+		then:
+			btnDelete
+		when:
 			btnDelete.click()
 		then:
 			at MessagesPage
+		when:
 			bob.refresh()
+		then:
 			bob.deleted
 		cleanup:
 			deleteTestData()
