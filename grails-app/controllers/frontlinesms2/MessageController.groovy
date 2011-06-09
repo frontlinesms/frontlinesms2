@@ -27,12 +27,8 @@ class MessageController {
 		def messageInstanceList = Fmessage.getInboxMessages()
 		def latestMessage
 		messageInstanceList.each {
-			if(!latestMessage) {
+			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
 				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
 			}
 		}
 		params.id = latestMessage?.id
@@ -54,18 +50,13 @@ class MessageController {
 		def messageInstanceList = pollInstance.messages
 		def latestMessage
 		messageInstanceList.each {
-			if(!latestMessage) {
+			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
 				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
 			}
 		}
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
-		println "pollInstance.messages.size: ${pollInstance.messages.size()}"
 		params.id = latestMessage?.id
 		if(params.id) {
 			redirect(action:'show', params:params)
@@ -91,7 +82,7 @@ class MessageController {
 					messageInstanceTotal: pollInstance.messages.size(),
 					pollInstance: pollInstance,
 					pollInstanceList: Poll.findAll(),
-					responseList: pollInstance.responses]
+					responseList: pollInstance.responseStats]
 		} else {
 			[pollInstanceList: Poll.findAll()]
 		}
@@ -99,7 +90,6 @@ class MessageController {
 	}
 	def move = {
 		def pollInstance = Poll.get(params.pollId)
-		def messageInstance = Fmessage.get(params.id)
 		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
 		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
@@ -107,7 +97,6 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def pollInstance = Poll.get(params.pollId)
 		def responseInstance = PollResponse.get(params.responseId)
 		def messageInstance = Fmessage.get(params.id)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
