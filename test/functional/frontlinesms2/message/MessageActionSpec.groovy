@@ -84,7 +84,11 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			assert Fmessage.findBySrc('Bob').activity.value == 'manchester'
 		when:
 			to PollMessageViewPage
-			$('#poll-actions li:nth-child(2) a').click()
+			def btnAssignToBarcelona = $('#poll-actions li:nth-child(2) a')
+		then:
+			btnAssignToBarcelona.text() == 'barcelona'
+		when:
+			btnAssignToBarcelona.click()
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')
 			bob.refresh()

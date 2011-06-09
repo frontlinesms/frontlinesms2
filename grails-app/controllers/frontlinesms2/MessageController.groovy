@@ -56,13 +56,12 @@ class MessageController {
 		messageInstanceList.each {
 			if(!latestMessage) {
 				latestMessage = it
-			} else{
+			} else {
 				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
 					latestMessage = it
 				}
 			}
 		}
-		println "pollInstance.messages.size: ${pollInstance.messages.size()}"
 		params.id = latestMessage?.id
 		if(params.id) {
 			redirect(action:'show', params:params)
@@ -88,7 +87,7 @@ class MessageController {
 					messageInstanceTotal: pollInstance.messages.size(),
 					pollInstance: pollInstance,
 					pollInstanceList: Poll.findAll(),
-					responseList: pollInstance.responses]
+					responseList: pollInstance.responseStats]
 		} else {
 			[pollInstanceList: Poll.findAll()]
 		}

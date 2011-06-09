@@ -28,20 +28,21 @@ class Poll {
 		}
 	}
 
-	static Poll createPoll(question, responseList) {
-		def r
-		boolean unknown = false
-		def p = new Poll(title:	question, responses: responseList)
-		p.responses.each {
-			if(it.value == 'Unknown') {
-				unknown = true
-			}
+	def getResponseStats() {
+		def totalMessageCount = messages.size()
+		println "Getting response stats for ${responses*.value}"
+		responses.sort{it.id}.collect {
+			println "Response: ${it.value}"
+			def messageCount = it.liveMessageCount
+			[id: it.id,
+					value: it.value,
+					count: messageCount,
+					percent: totalMessageCount? messageCount * 100 / totalMessageCount as Integer: 0]
 		}
-		if(unknown == false) {
-			r = new PollResponse(value:'Unknown')
-			p.addToResponses(r)
-		}
+	}
 
-		return p
+	static Poll createPoll(question, responseList) {
+		if(!responseList.contains('Unknown')) responseList = ['Unknown'] << responseList
+		new Poll(title:	question, responses: responseList.flatten().collect{new PollResponse(value:it)})
 	}
 }

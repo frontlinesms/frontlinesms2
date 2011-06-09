@@ -12,9 +12,7 @@ class PollController {
 	}
 
 	def save = {
-		def responseList = params.responses.tokenize().collect() {
-			new PollResponse(value:it)
-		}
+		def responseList = params.responses.tokenize()
 		def pollInstance = Poll.createPoll(params.title, responseList)
 		
 		if (pollInstance.save(flush: true)) {
