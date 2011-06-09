@@ -9,7 +9,8 @@ class FconnectionService {
 		@Override
 		void configure() {}
 		List getRouteDefinitions(Fconnection c) {
-			[ from(c.camelAddress()).to('seda:raw-email').routeId("${c.id}") ]
+			[ from(c.camelAddress()).to('seda:raw-email').routeId("${c.id}")]
+			[ from('seda:smslib-messages-to-send').to(c.camelAddress()).routeId("${c.id}")]
 		}
 	}
 	

@@ -11,8 +11,7 @@ class SmslibOutgoingTranslationService implements Processor {
 		def message = i.body
 		ex.out.body = message
 
-//		def endpoint = i.header
-//		ex.out.setHeader(endpoint, Endpoint)
+//		def endpoint = i.getHeader('endpoint')
 	}
 }
 
