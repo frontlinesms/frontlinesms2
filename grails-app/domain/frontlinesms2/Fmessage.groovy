@@ -7,6 +7,7 @@ class Fmessage {
 	String displaySrc
 	Date dateCreated
 	Date dateRecieved
+	boolean contactExists
 	boolean inbound
 	boolean read
 	boolean deleted
@@ -40,6 +41,7 @@ class Fmessage {
 		if(src) {
 			def c = Contact.findByAddress(src)
 			displaySrc = c? c.name: src
+			contactExists = c? true: false
 		}
 	}
 	
