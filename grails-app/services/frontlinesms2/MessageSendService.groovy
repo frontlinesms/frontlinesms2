@@ -7,9 +7,6 @@ class MessageSendService {
 
     def dispatch(Fmessage m, SmslibFconnection c) {
 		m.save(failOnError:true, flush:true)
-
-//		sendMessage(c.camelAddress(), m)
-		sendMessage('seda:smslib-messages-to-send', [body:m, endpoint:c.camelAddress()])
-
+		sendMessage('seda:smslib-outgoing-fmessages', [body:m, endpoint:c.camelAddress()])
     }
 }

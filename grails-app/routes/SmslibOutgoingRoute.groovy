@@ -2,8 +2,8 @@
 
 class SmslibOutgoingRoute {
     def configure = {
-        from('seda:smslib-messages-to-send').
+        from('seda:smslib-outgoing-fmessages').
 			beanRef('smslibOutgoingTranslationService', 'process').
-			to('seda:smslib-send')
+			to('seda:smslib-messages-to-send')
     }
 }
