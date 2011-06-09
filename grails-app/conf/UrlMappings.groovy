@@ -23,10 +23,11 @@ class UrlMappings {
 			messageSection = 'poll'
 		}
 		
-		"/message/folder/$folderId"(controller:'message', action:'folder') {}
+		
 		"/message/folder/$folderId/show/$id"(controller:'message', action:'show') {
 			messageSection = 'folder'
 		}
+		"/message/folder/$folderId"(controller:'message', action:'folder') {}
 
 		"/$controller/$action?/$id?"{
 			constraints {

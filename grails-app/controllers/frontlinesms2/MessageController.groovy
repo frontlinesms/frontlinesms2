@@ -17,8 +17,9 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		params.each{
-			println it
+		
+		if(params.pollId){
+			params.messageSection = 'poll'
 		}
 		render view:params.messageSection,
 				model:[messageInstance: messageInstance,
@@ -132,7 +133,8 @@ class MessageController {
 					folderInstanceList: Folder.findAll(),
 					pollInstanceList: Poll.findAll()]
 		}else {
-			[pollInstanceList: Poll.findAll()]
+			[folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
 		}
 		
 	}
@@ -145,7 +147,7 @@ class MessageController {
 		}
 		def messageInstance = Fmessage.get(params.id)
 		if(messageOwner instanceof Poll){
-			def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
+			def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
 			unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
 		}else{
 			messageOwner.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
