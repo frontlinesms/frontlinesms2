@@ -59,7 +59,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
-			def model = controller.list()
+			controller.list()
 		then:
 			Fmessage.get(id).read
 	}
