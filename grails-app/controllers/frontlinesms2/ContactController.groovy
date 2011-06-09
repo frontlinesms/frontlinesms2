@@ -31,7 +31,9 @@ class ContactController {
 			contactInstanceList = Contact.list(params)
 			contactInstanceTotal = Contact.count()
 		}
-
+		if(params.flashMessage) {
+			flash.message = params.flashMessage
+		}
 		[contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
 				groupInstanceList: Group.findAll(),
@@ -125,18 +127,18 @@ class ContactController {
 				redirect(action: "show", params:redirectParams)
 				return
 			}
-			render(view:'show', model:show()<<[contactInstance:contactInstance])
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+			redirect(action:'createContact')
 	}
 
 	def saveGroup = {
 		def groupInstance = new Group(params)
-		if (groupInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.created.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
-			redirect(controller:'group', action:'show', id:groupInstance.id)
-		} else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Group'), params.id])}"
-			redirect(action: "createGroup", model: [groupInstance: groupInstance])
+		if (!groupInstance.hasErrors() && groupInstance.save(flush: true)) {
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
+			redirect(controller:'group', action:'show', id: groupInstance.id, params: [flashMessage: flash.message])
 		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), params.id])}"
+		redirect(action: "createGroup", model: [groupInstance: groupInstance])
 	}
 
 	private def withContact(Closure c) {

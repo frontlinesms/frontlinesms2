@@ -62,6 +62,9 @@ class MessageController {
 				}
 			}
 		}
+		if(params.flashMessage) {
+			flash.message = params.flashMessage
+		}
 		println "pollInstance.messages.size: ${pollInstance.messages.size()}"
 		params.id = latestMessage?.id
 		if(params.id) {
@@ -99,6 +102,7 @@ class MessageController {
 		def messageInstance = Fmessage.get(params.id)
 		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
 		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 		redirect(action: "show", params: params)
 	}
 
@@ -107,6 +111,7 @@ class MessageController {
 		def responseInstance = PollResponse.get(params.responseId)
 		def messageInstance = Fmessage.get(params.id)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 		redirect(action: "show", params: params)
 	}
 	
@@ -115,6 +120,7 @@ class MessageController {
 		messageInstance.toDelete()
 		messageInstance.save(failOnError: true, flush: true)
 		Fmessage.get(params.id).activity?.refresh()
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 		redirect(action: params.messageSection, params:params)
 	}
 }

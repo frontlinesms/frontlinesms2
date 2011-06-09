@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<div>
+<div  id ="poll-actions">
   <h2>Categorize Response</h2>
-  <ol id ="poll-actions">
+  <ol>
 	  <g:each in="${responseList.sort { it.value }}" status="i" var="r">
 		  <li>
 			  <g:link action="changeResponse" params="[messageSection: 'poll', pollId: pollInstance.id, responseId: r.id]" id ="${messageInstance.id}">${r.value}</g:link>
