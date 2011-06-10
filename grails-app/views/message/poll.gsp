@@ -5,7 +5,7 @@
 		<title>Poll</title>
 	</head>
 	<body>
-		<h2 id="poll-title">${pollInstance?.title}</h2>
+		<h2 id="poll-title">${ownerInstance?.title}</h2>
 		<g:if test="$responseList">
 			<table id="poll-stats">
 				<tbody>

@@ -7,26 +7,32 @@ class UrlMappings {
 			action = 'show'
 		}
 		"/group/show/$groupId"(controller:'contact') {}
-
-		"/message/inbox"(controller:'message', action:'inbox') {}
-		"/message/inbox/show/$id"(controller:'message', action:'show') {
-			messageSection = 'inbox'
-		}
-
-		"/message/sent"(controller:'message', action:'sent') {}
-		"/message/sent/show/$id"(controller:'message', action:'show') {
-			messageSection = 'sent'
-		}
-
-		"/message/folder/$ownerId"(controller:'message') {}
-		"/message/folder/$ownerId/show/$id"(controller:'message', action:'show') {
-			messageSection = 'folder'
-		}
 		
-		"/message/poll/$ownerId"(controller:'message') {}
-		"/message/poll/$ownerId/show/$id"(controller:'message', action:'show') {
-			messageSection = 'poll'
+		
+		"/message/$messageSection/$ownerId"(controller:'message') { messageSection = { params.messageSection } }
+		"/message/$messageSection/$ownerId/show/$id"(controller:'message', action:'show') {
+			messageSection = { params.messageSection }
 		}
+
+		"/message/$messageSection"(controller:'message', action:'inbox') { messageSection = { params.messageSection } }
+		"/message/$messageSection/show/$id"(controller:'message', action:'show') {
+			messageSection = { params.messageSection }
+		}
+
+//		"/message/sent"(controller:'message', action:'sent') {}
+//		"/message/sent/show/$id"(controller:'message', action:'show') {
+//			messageSection = 'sent'
+//		}
+		
+//		"/message/folder/$ownerId"(controller:'message') {}
+//		"/message/folder/$ownerId/show/$id"(controller:'message', action:'show') {
+//			messageSection = 'folder'
+//		}
+//		
+//		"/message/poll/$ownerId"(controller:'message') {}
+//		"/message/poll/$ownerId/show/$id"(controller:'message', action:'show') {
+//			messageSection = 'poll'
+//		}
 		
 		"/$controller/$action?/$id?"{
 			constraints {
