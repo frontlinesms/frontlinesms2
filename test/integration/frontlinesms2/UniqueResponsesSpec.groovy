@@ -13,8 +13,6 @@ class UniqueResponsesSpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			createTestData()
 		when:
-			def p = Poll.findByTitle('Test')
-			def p2 = Poll.findByTitle('Second')
 			def r = PollResponse.findAllByValue('one')
 		then:
 			r.size() == 2

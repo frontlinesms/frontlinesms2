@@ -19,7 +19,8 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 		when:
-			def model = controller.inbox()
+			controller.params.messageSection = 'inbox'
+			def model = controller.list()
 		then:
 			model.messageInstanceTotal == 2
 			model.messageInstanceList == [messageIn1, messageIn2]
@@ -32,7 +33,8 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/23")).save(failOnError: true)
 			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
 		when:
-			def model = controller.inbox()
+			controller.params.messageSection = 'inbox'
+			def model = controller.list()
 		then:
 			model.messageInstanceTotal == 4
 			model.messageInstanceList == [message2, message3, message4, message1]
@@ -56,10 +58,22 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			def id = new Fmessage(read:true).save(failOnError: true).id
 			assert Fmessage.get(id).read
 		when:
-			controller.inbox()
+			controller.params.messageSection = 'inbox'
+			controller.list()
 		then:
 			Fmessage.get(id).read
 	}
+
+	def "first message in the inbox view is selected by default"() {
+          setup:
+             def message1 = new Fmessage(inbound:true).save(failOnError: true)
+          when:
+             controller.inbox()
+          then:
+             controller.response.redirectedUrl == "/message/inbox/show/${message1.id}"
+             controller.params.id == message1.id
+        }
+
 
 	Date createDate(String dateAsString) {
 		DateFormat format = createDateFormat();
