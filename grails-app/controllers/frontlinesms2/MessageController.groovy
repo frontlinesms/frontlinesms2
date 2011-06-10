@@ -92,7 +92,7 @@ class MessageController {
 		def pollInstance = Poll.get(params.pollId)
 		def unknownResponse = pollInstance.getResponses().find { it.value == 'Unknown'}
 		unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), Fmessage.get(params.id).id])}"
 		redirect(action: "show", params: params)
 	}
 
