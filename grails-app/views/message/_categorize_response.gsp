@@ -2,7 +2,7 @@
 <div  id ="poll-actions">
   <h2>Categorize Response</h2>
   <ol>
-	  <g:each in="${responseList.sort { it.value }}" status="i" var="r">
+	  <g:each in="${responseList}" status="i" var="r">
 		  <li>
 			  <g:link action="changeResponse" params="[messageSection: 'poll', pollId: pollInstance.id, responseId: r.id]" id ="${messageInstance.id}">${r.value}</g:link>
 		  </li>
