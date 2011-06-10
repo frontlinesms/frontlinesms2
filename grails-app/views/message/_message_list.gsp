@@ -12,7 +12,7 @@
 			<g:each in="${messageInstanceList.sort { it.dateCreated } }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
 					<td>
-						<g:if test="${pollInstance}">
+						<g:if test="${ownerInstance}">
 							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
 								${m.displaySrc}
 							</g:link>

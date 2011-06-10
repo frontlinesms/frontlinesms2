@@ -27,13 +27,13 @@
 		<ol id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li>
-					<g:link action="poll" id="${p.id}" class="${p == ownerInstance ? 'selected' : ''}">${p.title}</g:link>
+					<g:link action="poll" params="[ownerId: p.id]" class="${p == ownerInstance ? 'selected' : ''}">${p.title}</g:link>
 				</li>
 			</g:each>
 		  <h2>Folders</h2>
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>
-					<g:link action="folder" id="${f.id}" class="${f == ownerInstance ? 'selected' : ''}">${f.value}</g:link>
+					<g:link action="folder" params="[ownerId: f.id]" class="${f == ownerInstance ? 'selected' : ''}">${f.value}</g:link>
 				</li>
 			</g:each>
 		</ol>

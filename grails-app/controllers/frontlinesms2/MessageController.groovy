@@ -12,10 +12,12 @@ class MessageController {
 		def ownerInstance
 		if(params.messageSection == 'poll') {
 			ownerInstance = Poll.get(params.ownerId)
-		} else {
+		} else if(params.messageSection == 'poll'){
 			ownerInstance = Folder.get(params.ownerId)
+		} else {
+			params.messageSection = 'inbox'
 		}
-		
+		println params
 		messageInstance.updateDisplaySrc()
 		if(!messageInstance.read) {
 			messageInstance.read = true
@@ -37,6 +39,7 @@ class MessageController {
 			}
 		}
 		params.id = latestMessage?.id
+		params.messageSection = 'inbox'
 		if(params.id) {
 			redirect(action:'show', params:params)
 		} else {
@@ -52,7 +55,7 @@ class MessageController {
     }
 
 	def poll = {
-		
+		println "at poll"
 		def ownerInstance = Poll.get(params.ownerId)
 		def messageInstanceList = ownerInstance.messages
 		def latestMessage
