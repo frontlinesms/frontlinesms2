@@ -11,7 +11,7 @@
 	<li>
 		<h2>Messages</h2>
 		<ol>
-			<li class="${(messageSection=='inbox')?'selected':''}">
+			<li class="${(messageSection=='inbox')? 'selected':''}">
 				<g:link action="inbox">Inbox</g:link>
 			</li>
 			<li class="${(messageSection=='sent')? 'selected':''}">

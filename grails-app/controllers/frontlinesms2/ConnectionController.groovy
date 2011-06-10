@@ -12,12 +12,23 @@ class ConnectionController {
 
 	def list = {
 		def fconnectionInstanceList = Fconnection.list(params)
+		if(!params.id) {
+			params.id = Fconnection.list(params)[0]?.id
+		}		
 		def connectionInstance = Fconnection.get(params.id)
 		def fconnectionInstanceTotal = Fconnection.count()
-
-		[connectionInstanceList: fconnectionInstanceList,
+		if(params.id){
+			render(view:'show', model:show() << [connectionInstanceList: fconnectionInstanceList,
+				connectionInstance: connectionInstance,
+				fconnectionInstanceTotal: fconnectionInstanceTotal])
+		} else {
+			[settingsSection:'connections',
+				connectionInstanceList: fconnectionInstanceList,
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal]
+		}
+		
+		
 	}
 
 	def create = {}
@@ -25,18 +36,18 @@ class ConnectionController {
 	def createEmail = {
 		def fconnectionInstance = new EmailFconnection()
 		fconnectionInstance.properties = params
-		[fconnectionInstance: fconnectionInstance]
+		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
 	}
 
 	def createSmslib = {
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
-		[fconnectionInstance: fconnectionInstance]
+		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
 	}
 
 	def show = {
 		withFconnection {
-			[connectionInstance: it] << list()
+			[connectionInstance: it] << [settingsSection:'connections', connectionInstanceList: Fconnection.list(params), fconnectionInstanceTotal: Fconnection.list(params)]
 		}
 	}
 

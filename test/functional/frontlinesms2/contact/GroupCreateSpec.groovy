@@ -48,6 +48,6 @@ class CreateGroupPage extends geb.Page {
 
 	static content = {
 		btnSave { $("#group-details .save") }
-		errorMessages { $('.flash.errors') }
+		errorMessages { $('.flash.message') }
 	}
 }
