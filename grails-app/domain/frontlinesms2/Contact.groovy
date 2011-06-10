@@ -5,8 +5,18 @@ class Contact {
 	String address
 
     static constraints = {
-		name(blank: true, maxSize: 255)
-		address(unique: true, nullable: true)
+		name(blank: true, maxSize: 255, validator: { val, obj ->
+				if(val == '') {
+					obj.address != ''
+					obj.address != null
+				}
+		})
+		address(unique: true, nullable: true, validator: { val, obj ->
+				if(val == '') {
+					obj.name != ''
+					obj.name != null
+				}
+		})
 	}
 
 	def beforeDelete = {

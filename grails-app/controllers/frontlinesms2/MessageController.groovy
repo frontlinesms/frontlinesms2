@@ -32,12 +32,8 @@ class MessageController {
 		def messageInstanceList = Fmessage.getInboxMessages()
 		def latestMessage
 		messageInstanceList.each {
-			if(!latestMessage) {
+			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
 				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
 			}
 		}
 		params.id = latestMessage?.id
@@ -84,14 +80,15 @@ class MessageController {
 		def messageInstanceList = ownerInstance.messages
 		def latestMessage
 		messageInstanceList.each {
-			if(!latestMessage) {
+			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
 				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
 			}
 		}
+
+		if(params.flashMessage) {
+			flash.message = params.flashMessage
+		}
+
 		params.id = latestMessage?.id
 		if(params.id) {
 			redirect(action:'show', params:params)
@@ -118,7 +115,7 @@ class MessageController {
 					messageInstanceTotal: ownerInstance.messages.size(),
 					ownerInstance: ownerInstance,
 					pollInstanceList: Poll.findAll(),
-					responseList: ownerInstance.responses]
+					responseList: ownerInstance.responseStats]
 		}else if(params.messageSection == 'folder') {
 			def ownerInstance = Folder.get(params.ownerId)
 		 	messageInstanceList = ownerInstance.messages
@@ -135,6 +132,7 @@ class MessageController {
 		}
 		
 	}
+
 	def move = {
 		def messageOwner
 		if(params.messageSection == 'poll') {
@@ -146,18 +144,19 @@ class MessageController {
 		if(messageOwner instanceof Poll){
 			def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
 			unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
-		}else{
+		} else {
 			messageOwner.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
 		}
 		
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), Fmessage.get(params.id).id])}"
 		redirect(action: "show", params: params)
 	}
 
 	def changeResponse = {
-		def pollInstance = Poll.get(params.ownerId)
 		def responseInstance = PollResponse.get(params.responseId)
 		def messageInstance = Fmessage.get(params.id)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 		redirect(action: "show", params: params)
 	}
 	
@@ -166,6 +165,7 @@ class MessageController {
 		messageInstance.toDelete()
 		messageInstance.save(failOnError: true, flush: true)
 		Fmessage.get(params.id).messageOwner?.refresh()
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 		redirect(action: params.messageSection, params:params)
 	}
 }
