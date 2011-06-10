@@ -9,25 +9,23 @@ class MessageController {
 
 	def show = {
 		def messageInstance = Fmessage.get(params.id)
-		def pollInstance = Poll.get(params.pollId)
-		def folderInstance = Poll.get(params.folderId)
-		def contactInstance
+		def ownerInstance
+		if(params.messageSection == 'poll') {
+			ownerInstance = Poll.get(params.ownerId)
+		} else {
+			ownerInstance = Folder.get(params.ownerId)
+		}
+		
 		messageInstance.updateDisplaySrc()
 		if(!messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		
-		if(params.pollId){
-			params.messageSection = 'poll'
-		}
 		render view:params.messageSection,
 				model:[messageInstance: messageInstance,
-						contactInstance: contactInstance,
 						folderInstanceList: Folder.findAll(),
 						pollInstanceList: Poll.findAll(),
-						folderInstance: folderInstance,
-						pollInstance: pollInstance] << list()
+					ownerInstance: ownerInstance] << list()
 	}
 
     def inbox = {
@@ -59,8 +57,8 @@ class MessageController {
 
 	def poll = {
 		
-		def pollInstance = Poll.get(params.pollId)
-		def messageInstanceList = pollInstance.messages
+		def ownerInstance = Poll.get(params.ownerId)
+		def messageInstanceList = ownerInstance.messages
 		def latestMessage
 		messageInstanceList.each {
 			if(!latestMessage) {
@@ -71,20 +69,19 @@ class MessageController {
 				}
 			}
 		}
-		println "pollInstance.messages.size: ${pollInstance.messages.size()}"
 		params.id = latestMessage?.id
 		if(params.id) {
 			redirect(action:'show', params:params)
 		} else {
-			[pollInstance: pollInstance,
+			[ownerInstance: ownerInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll()]
 		}
 	}
 	
 	def folder = {
-		def folderInstance = Folder.get(params.folderId)
-		def messageInstanceList = folderInstance.messages
+		def ownerInstance = Folder.get(params.ownerId)
+		def messageInstanceList = ownerInstance.messages
 		def latestMessage
 		messageInstanceList.each {
 			if(!latestMessage) {
@@ -99,7 +96,7 @@ class MessageController {
 		if(params.id) {
 			redirect(action:'show', params:params)
 		} else {
-			[folderInstance: folderInstance,
+			[ownerInstance: ownerInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll()]
 		}
@@ -113,23 +110,23 @@ class MessageController {
 				messageSection: 'inbox',
 				messageInstanceTotal: Fmessage.getInboxMessages().size()]
 		} else if(params.messageSection == 'poll') {
-			def pollInstance = Poll.get(params.pollId)
-		 	messageInstanceList = pollInstance.messages
+			def ownerInstance = Poll.get(params.ownerId)
+		 	messageInstanceList = ownerInstance.messages
 			messageInstanceList.each{ it.updateDisplaySrc() }
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'poll',
-					messageInstanceTotal: pollInstance.messages.size(),
-					pollInstance: pollInstance,
+					messageInstanceTotal: ownerInstance.messages.size(),
+					ownerInstance: ownerInstance,
 					pollInstanceList: Poll.findAll(),
-					responseList: pollInstance.responses]
+					responseList: ownerInstance.responses]
 		}else if(params.messageSection == 'folder') {
-			def folderInstance = Folder.get(params.folderId)
-		 	messageInstanceList = folderInstance.messages
+			def ownerInstance = Folder.get(params.ownerId)
+		 	messageInstanceList = ownerInstance.messages
 			messageInstanceList.each{ it.updateDisplaySrc() }
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'folder',
-					messageInstanceTotal: folderInstance.messages.size(),
-					folderInstance: folderInstance,
+					messageInstanceTotal: ownerInstance.messages.size(),
+					ownerInstance: ownerInstance,
 					folderInstanceList: Folder.findAll(),
 					pollInstanceList: Poll.findAll()]
 		}else {
@@ -140,10 +137,10 @@ class MessageController {
 	}
 	def move = {
 		def messageOwner
-		if(params.pollId){
-			messageOwner = Poll.get(params.pollId)
-		}else{
-			messageOwner = Folder.get(params.folderId)
+		if(params.messageSection == 'poll') {
+			messageOwner = Poll.get(params.ownerId)
+		} else {
+			messageOwner = Folder.get(params.ownerId)
 		}
 		def messageInstance = Fmessage.get(params.id)
 		if(messageOwner instanceof Poll){
@@ -157,7 +154,7 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def pollInstance = Poll.get(params.pollId)
+		def pollInstance = Poll.get(params.ownerId)
 		def responseInstance = PollResponse.get(params.responseId)
 		def messageInstance = Fmessage.get(params.id)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)

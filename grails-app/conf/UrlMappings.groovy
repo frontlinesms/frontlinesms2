@@ -18,17 +18,16 @@ class UrlMappings {
 			messageSection = 'sent'
 		}
 
-		"/message/poll/$pollId"(controller:'message', action:'poll') {}
-		"/message/poll/$pollId/show/$id"(controller:'message', action:'show') {
+		"/message/folder/$ownerId"(controller:'message') {}
+		"/message/folder/$ownerId/show/$id"(controller:'message', action:'show') {
+			messageSection = 'folder'
+		}
+		
+		"/message/poll/$ownerId"(controller:'message') {}
+		"/message/poll/$ownerId/show/$id"(controller:'message', action:'show') {
 			messageSection = 'poll'
 		}
 		
-		
-		"/message/folder/$folderId/show/$id"(controller:'message', action:'show') {
-			messageSection = 'folder'
-		}
-		"/message/folder/$folderId"(controller:'message', action:'folder') {}
-
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here
