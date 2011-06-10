@@ -5,20 +5,20 @@
 	  <g:each in="${pollInstanceList}" status="i" var="p">
 		  <li>
 			  <g:if test="${messageSection == 'inbox'}">
-				  <g:link action="move" params="[pollId: p.id]" id ="${messageInstance.id}">${p.title}</g:link>
+				  <g:link action="move" params="[ownerId: p.id]" id ="${messageInstance.id}">${p.title}</g:link>
 			  </g:if>
-			  <g:elseif test="${p != pollInstance}">
-				  <g:link action="move" params="[pollId: p.id]" id ="${messageInstance.id}">${p.title}</g:link>
+			  <g:elseif test="${p != ownerInstance}">
+				  <g:link action="move" params="[ownerId: p.id]" id ="${messageInstance.id}">${p.title}</g:link>
 			  </g:elseif>
 		  </li>
 	  </g:each>
 	  <g:each in="${folderInstanceList}" status="i" var="f">
 		  <li>
 			  <g:if test="${messageSection == 'inbox'}">
-				  <g:link action="move" params="[folderId: f.id]" id ="${messageInstance.id}">${f.value}</g:link>
+				  <g:link action="move" params="[ownerId: f.id]" id ="${messageInstance.id}">${f.value}</g:link>
 			  </g:if>
-			  <g:elseif test="${f != folderInstance}">
-				  <g:link action="move" params="[folderId: f.id]" id ="${messageInstance.id}">${f.value}</g:link>
+			  <g:elseif test="${f != ownerInstance}">
+				  <g:link action="move" params="[ownerId: f.id]" id ="${messageInstance.id}">${f.value}</g:link>
 			  </g:elseif>
 		  </li>
 	  </g:each>

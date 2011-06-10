@@ -13,15 +13,10 @@
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
 					<td>
 						<g:if test="${pollInstance}">
-							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
+							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
 								${m.displaySrc}
 							</g:link>
 						</g:if>
-						<g:elseif test="${folderInstance}">
-							<g:link action="show" id="${m.id}" params="[folderId:folderInstance.id]">
-								${m.displaySrc}
-							</g:link>
-						</g:elseif>
 						<g:else>
 							<g:link action="show" id="${m.id}">
 								${m.displaySrc}
@@ -29,16 +24,11 @@
 						</g:else>
 					</td>
 					<td>
-						<g:if test="${pollInstance}">
-							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
+						<g:if test="${ownerInstance}">
+							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
 								${m.displayText}
 							</g:link>
 						</g:if>
-						<g:elseif test="${folderInstance}">
-							<g:link action="show" id="${m.id}" params="[folderId:folderInstance.id]">
-								${m.displayText}
-							</g:link>
-						</g:elseif>
 						<g:else>
 							<g:link action="show" id="${m.id}">
 							  ${m.displayText}
@@ -46,16 +36,11 @@
 						</g:else>
 					</td>
 					<td>
-						<g:if test="${pollInstance}">
-							<g:link action="show" id="${m.id}" params="[pollId:pollInstance.id]">
+						<g:if test="${ownerInstance}">
+							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
 						</g:if>
-						<g:elseif test="${folderInstance}">
-							<g:link action="show" id="${m.id}" params="[folderId:folderInstance.id]">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-							</g:link>
-						</g:elseif>
 						<g:else>
 							<g:link action="show" id="${m.id}">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
