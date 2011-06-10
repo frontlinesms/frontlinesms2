@@ -39,15 +39,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			to PollListPage
 			def pollTitle = $('#poll-title').text()
-//			def pollQuestion = $('#poll-question p').text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
 		then:
 			pollTitle == 'Football Teams'
-			statsLabels == ['Unknown', 'barcelona', 'manchester']
-			statsNums == ['0', '0', '2']
-			statsPercents == ['(0%)', '(0%)', '(100%)']
+			statsLabels == ['Unknown', 'manchester', 'barcelona']
+			statsNums == ['0', '2', '0']
+			statsPercents == ['(0%)', '(100%)', '(0%)']
 		cleanup:
 			deleteTestPolls()
 	}

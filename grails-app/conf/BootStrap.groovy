@@ -12,21 +12,18 @@ import java.util.Date
 
 
 class BootStrap {
-
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
-          	// do custom init for dev here
+			// do custom init for dev here
 			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 			def alice = createContact("Alice", "+123456789")
 			def friends = Group.findByName('Friends')
 			def notCats = Group.findByName('Not Cats')
-//			Contact.findAll().each() { Group.findByName('Friends').addToMembers(it) }
 			createContact("Bob", "+198765432")
 			Contact.findAll().each() {
 				GroupMembership.create(it, friends)
 				GroupMembership.create(it, notCats)
 			}
-//			Contact.findAll().each() { Group.findByName('Not Cats').addToMembers(it) }
 			createContact("Kate", "+198730948")
 
 			new EmailFconnection(name:"mr testy's email", protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
@@ -45,10 +42,8 @@ class BootStrap {
 						it.save(failOnError:true)
 					}
 
-			[Poll.createPoll('Football Teams', [new PollResponse(value:'manchester'),
-					new PollResponse(value:'barcelona')]),
-					Poll.createPoll('Shampoo Brands', [new PollResponse(value:'pantene'),
-					new PollResponse(value:'oriele')])].each() {
+			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
+					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
 						it.save(failOnError:true, flush:true)
 					}
 

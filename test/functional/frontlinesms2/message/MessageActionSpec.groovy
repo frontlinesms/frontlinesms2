@@ -21,7 +21,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
-
 	}
 	
 	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {
@@ -78,25 +77,28 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
-	def 'possible poll responses are shown in action list and are clickable'() {
+	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
 		given:
 			createTestPolls()
 			createTestMessages()
+			assert Fmessage.findBySrc('Bob').activity.value == 'manchester'
 		when:
 			to PollMessageViewPage
+			def btnAssignToBarcelona = $('#poll-actions li:nth-child(3) a')
+		then:
+			btnAssignToBarcelona.text() == 'barcelona'
+		when:
+			btnAssignToBarcelona.click()
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')
-			def btnBarce = $('#poll-actions li:nth-child(2) a')
-			btnBarce.click()
-			footballPoll.responses.each{ it.refresh() }
-			def barceResponse =  footballPoll.getResponses().find { it.value == 'barcelona'}
+			bob.refresh()
 		then:
 			bob.messageOwner == barceResponse
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
 	}
-	
+
 	def 'existing folders appear in message actions menu'() {
 		given:
 			createTestFolders()
@@ -143,8 +145,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()			
 			deleteTestMessages()
 	}
-	
 }
+
 class PollMessageViewPage extends geb.Page {
  	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
 }
