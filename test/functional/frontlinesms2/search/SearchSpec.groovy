@@ -2,22 +2,36 @@ package frontlinesms2.search
 
 class SearchSpec extends SearchGebSpec{
 	
-	def "the 'search form' is visible within the search page view"(){
+	def "clicking on the search button links to the result show page"(){
+		when:
+			to SearchPage
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			at SearchPage
+	}
+	
+	def "group list and activity lists are displayed when they exist"() {
+		given:
+			createTestGroups()
+			createTestMessages()
 		when:
 			to SearchPage
 		then:
-			$('#search-details').present
-			$('#btnSearch').present
+			//$('#group-dropdown').value("${Group.findByName('Listeners').id}")
+			$("#search-details").find('select', name:'group-dropdown').children().collect() { it.text() } == ['Listeners', 'Friends']
+			$("#search-details").find('select', name:'poll-dropdown').children().collect() { it.text() } == ["Miauow Mix"]
+		cleanup:
+			deleteTestGroups()
+			deleteTestMessages()
 	}
 	
 	def 'keywords found within message content return a list of related messages'() {
 		given:
-			createSearchTestMessages()
+			createTestMessages()
 		when:
 			to SearchPage
-			def searchFrm = $('#search-details')
-			def searchBtn = $('#btnSearch')
-			searchFrm.keyword = "meet"
+			searchFrm.keywords = "meet"
 			searchBtn.click()
 		then:
 			at SearchPage
@@ -54,9 +68,12 @@ class SearchSpec extends SearchGebSpec{
 }
 
 class SearchPage extends geb.Page {
-	static url = 'search'
+	static url = 'search/show'
+	static at = {
+		title.startsWith('Search')
+	}
 	static content = {
-//		selectedMenuItem { $('#messages-menu .selected') }
-		messagesList { $('#messages') }
+		searchFrm(required: false) { $('#search-details') }
+		searchBtn(required: false) { $('.buttons .search') }
 	}
 }
