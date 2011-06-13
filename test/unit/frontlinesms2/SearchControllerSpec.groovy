@@ -8,12 +8,10 @@ class SearchControllerSpec extends ControllerSpec{
 		when:
 			controller.index()
 		then:
-			controller.redirectArgs.controller == 'connection' || !controller.redirectArgs.controller
-			controller.redirectArgs.action == 'list'
+			controller.redirectArgs.controller == 'search' || !controller.redirectArgs.controller
+			controller.redirectArgs.action == 'show'
 	}
 	
-	def "messageContent search operation returns a valid response for any given keyword"() {
-		
-	}
+	
 }
 

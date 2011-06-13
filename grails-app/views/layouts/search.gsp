@@ -12,6 +12,8 @@
 		<g:render template="/flash"/>
 		<div id="main">
 			<g:layoutBody/>
+			<g:render template="search_menu"/>
+			<g:render template="result_list"/>
 		</div>
 	</body>
 </html>

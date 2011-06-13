@@ -4,7 +4,12 @@ import frontlinesms2.*
 
 class SearchGebSpec extends grails.plugin.geb.GebSpec{
 	
-	static createSearchTestMessages() {
+	def createTestGroups() {
+		new Group(name: 'Listeners').save(flush: true)
+		new Group(name: 'Friends').save(flush: true)
+	}
+	
+	static createTestMessages() {
 		[new Fmessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00'),
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
@@ -28,6 +33,13 @@ class SearchGebSpec extends grails.plugin.geb.GebSpec{
 		}
 
 		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+	
+	static deleteTestGroups() {
+		Group.findAll().each() {
 			it.refresh()
 			it.delete(failOnError:true, flush:true)
 		}
