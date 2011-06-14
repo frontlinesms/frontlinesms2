@@ -136,9 +136,10 @@ class ContactController {
 		if (!groupInstance.hasErrors() && groupInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
 			redirect(controller:'group', action:'show', id: groupInstance.id, params: [flashMessage: flash.message])
+		} else {
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Group'), params.id])}"
+			redirect(action: "createGroup", model: [groupInstance: groupInstance])
 		}
-		flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Group'), params.id])}"
-		redirect(action: "createGroup", model: [groupInstance: groupInstance])
 	}
 
 	private def withContact(Closure c) {
