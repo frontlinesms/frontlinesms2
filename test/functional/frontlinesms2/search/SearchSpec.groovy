@@ -1,6 +1,8 @@
 package frontlinesms2.search
 
-class SearchSpec extends SearchGebSpec{
+import frontlinesms2.*
+
+class SearchSpec extends grails.plugin.geb.GebSpec{
 	
 	def "clicking on the search button links to the result show page"(){
 		when:
@@ -14,61 +16,111 @@ class SearchSpec extends SearchGebSpec{
 	def "group list and activity lists are displayed when they exist"() {
 		given:
 			createTestGroups()
-			createTestMessages()
+			createTestPolls()
 		when:
 			to SearchPage
 		then:
-			//$('#group-dropdown').value("${Group.findByName('Listeners').id}")
-			$("#search-details").find('select', name:'group-dropdown').children().collect() { it.text() } == ['Listeners', 'Friends']
-			$("#search-details").find('select', name:'poll-dropdown').children().collect() { it.text() } == ["Miauow Mix"]
+			$("#search-details").find('select', name:'groupList').children().collect() { it.text() } == ['','Listeners', 'Friends']
+			$("#search-details").find('select', name:'pollList').children().collect() { it.text() } == ['',"Miauow Mix"]
 		cleanup:
 			deleteTestGroups()
-			deleteTestMessages()
+			deleteTestPolls()
 	}
 	
-	def 'keywords found within message content return a list of related messages'() {
+	def "search description is shown in header"() {
+		given:
+			createTestGroups()
+			createTestPolls()
+		when:
+			to SearchPage
+		then:
+			$('#search-description').text() == 'Start new search on the left'
+		when:
+			searchFrm.keywords = "test"
+			searchBtn.click()
+		then:
+			$('#search-description').text() == 'Searching in all messages'
+		when:
+			searchFrm.keywords = "test"
+			$("#search-details").find('select', name:'groupList').value("${Group.findByName("Listeners").id}")
+			$("#search-details").find('select', name:'pollList').value("${Poll.findByTitle("Miauow Mix").id}")
+			searchBtn.click()
+		then:
+			$('#search-description').text() == "Searching in 'Listeners' and 'Miauow Mix'"
+		cleanup:
+			deleteTestGroups()
+			deleteTestPolls()
+	}
+	
+	def "message list returned from a search operation is displayed"() {
 		given:
 			createTestMessages()
 		when:
-			to SearchPage
-			searchFrm.keywords = "meet"
+			searchFrm.keywords = "alex"
 			searchBtn.click()
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			at SearchPage
-			def messageSources = $('#messages tbody tr td:first-child')*.text()
-		then:
-			messageSources == ['Alex', 'Michael']
+			rowContents[0] == 'Alex'
+			rowContents[1] == 'hi alex'
+			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
 	}
 	
-	def "a notification message is shown when no messages are found containing the given keywords"() {
-		
+//	def 'message actions menu is displayed for all individual messages'() {
+//		given:
+//			createTestMessages()
+//		when:
+//			searchFrm.keywords = "Bob"
+//			searchBtn.click()
+//			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+//			def actions = $('#message-actions li').children('a')*.text()
+//		then:
+//			actions[0] == 'Miauow Mix'
+//		cleanup:
+//			deleteTestMessages()
+//	}
+//	
+	
+	def createTestGroups() {
+		new Group(name: 'Listeners').save(flush: true)
+		new Group(name: 'Friends').save(flush: true)
 	}
 	
-	def "messageContent search operation returns a valid response for any given keyword"() {
-		
+	static createTestMessages() {
+		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00'),
+			new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex')].each() {
+					it.inbound = true
+					it.save(failOnError:true)
+				}
+
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:false)
 	}
 	
-	def "message searches can be restricted to a contact group"() {
-		
+	static createTestPolls() {
+		def chickenResponse = new PollResponse(value:'chicken')
+		def liverResponse = new PollResponse(value:'liver')
+		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+	}
+	static deleteTestPolls() {
+		Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
 	}
 	
-	def "a list of existing activities and contact groups is displayed"() {
-		
+	static deleteTestMessages() {
+		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 	
-	def "message searches can be restricted to an activity"() {
-		
-	}
-	
-	def "message searches can be restricted to both contact groups and activities"() {
-		
+	static deleteTestGroups() {
+		Group.findAll()*.delete(flush:true, failOnError:true)
 	}
 }
 
 class SearchPage extends geb.Page {
-	static url = 'search/show'
+	static url = 'search/list'
 	static at = {
 		title.startsWith('Search')
 	}

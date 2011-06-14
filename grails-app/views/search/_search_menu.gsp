@@ -9,14 +9,16 @@
 				  <g:if test="${groupInstanceList || pollInstanceList}">
 					  <label>Limit Search to:</label>
 					  <div class="field">
-						  <select id="group-dropdown" name="group-dropdown">
+						  <select id="group-list" name="groupList">
+								  <option value=""></option>
 								  <g:each in="${groupInstanceList}" status="i" var="g">
 									  <option value="${g.id}">${g.name}</option>
 								  </g:each>
 						  </select>
 					  </div>
 					  <div class="field">
-						  <select id="poll-dropdown" name="poll-dropdown">
+						  <select id="poll-list" name="pollList">
+								  <option value=""></option>
 								  <g:each in="${pollInstanceList}" status="i" var="p">
 									  <option value="${p.id}">${p.title}</option>
 								  </g:each>
