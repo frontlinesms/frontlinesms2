@@ -7,7 +7,7 @@ class ContactSpec extends UnitSpec {
 	def setup() {
 		mockForConstraintsTests(Contact)
 	}
-	
+
 	def "contact may have a name"() {
 		when:
 			Contact c = new Contact()
@@ -25,7 +25,7 @@ class ContactSpec extends UnitSpec {
 			noNameContact.validate()
 			namedContact.validate()
 	}
-	
+
 	def "duplicate names are allowed"(){
 		setup:
 			mockDomain(Contact)
@@ -36,7 +36,7 @@ class ContactSpec extends UnitSpec {
 			contact1.save()
 			contact2.save()
 	}
-	
+
 	def "max name length 255"(){
 		when:
 			def Contact contact = new Contact(name:'''\
@@ -47,5 +47,19 @@ class ContactSpec extends UnitSpec {
 	then:
 		!contact.validate()
 	}
+
+  def "should return the count of all messages sent to a given contact"() {
+	setup:
+		String destinationAddress = "9876543210"
+		Contact contact = new Contact(name: "John", address: destinationAddress)
+		mockDomain Fmessage,[new Fmessage(dst: destinationAddress, deleted : false),
+		new Fmessage(dst: destinationAddress, deleted : true),
+		new Fmessage(dst: destinationAddress, deleted : true)]
+	    when:
+	        def count = contact.inboundMessagesCount()
+	    then:
+	        assert 3 == count
+  }
+
 }
 
