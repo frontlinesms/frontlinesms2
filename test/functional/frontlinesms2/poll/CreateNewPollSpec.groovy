@@ -22,7 +22,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnSave.click()
 		then:
 			Poll.count() == initialPollCount + 1
-			title.contains("Inbox")
+			title.contains("Poll")
 		cleanup:
 			deleteTestPolls()
 	}

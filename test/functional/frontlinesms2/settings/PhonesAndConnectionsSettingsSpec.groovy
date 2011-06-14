@@ -21,15 +21,13 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionListPage
 		then:
 			lstConnections != null
-			lstConnections.find('h2')*.text() == ['MTN Dongle', 'David\'s Clickatell account', 'Miriam\'s Clickatell account']
+			lstConnections.find('h2')*.text() == ['MTN Dongle','Miriam\'s Clickatell account']
 		cleanup:	
 			deleteTestConnections()
 	}
 
 	def createTestConnections() {
 		[new SmslibFconnection(name:'MTN Dongle', port:'stormyPort'),
-				new EmailFconnection(name:'David\'s Clickatell account', protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
-						serverPort:993, username:'mr.testy@zoho.com', password:'mister'),
 				new EmailFconnection(name:'Miriam\'s Clickatell account', protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
 						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
 			it.save(flush:true, failOnError: true)

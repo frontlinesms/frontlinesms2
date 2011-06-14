@@ -88,6 +88,9 @@ body {
 			font-size: 1.1em;
 		}
 	}
+	#poll-actions {
+		@include column(6, true);
+	}
 }
 
 /* GENERAL */

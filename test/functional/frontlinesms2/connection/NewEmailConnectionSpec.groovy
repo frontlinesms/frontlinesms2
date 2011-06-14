@@ -25,7 +25,7 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 			frmNewConnection.password = 'pastie'
 			btnNewConnectionSave.click()
 		then:
-			at ConnectionListPage
+			at ConnectionShowPage
 			Fconnection.count() == 1
 			selectedConnection.find('h2').text() == 'test email connection'
 			selectedConnection.find('h3').text() == 'Email'
