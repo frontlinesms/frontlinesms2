@@ -1,5 +1,4 @@
 package frontlinesms2
 
-class Folder extends MessageOwner{
-	
+class Folder extends MessageOwner {
 }

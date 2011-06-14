@@ -4,171 +4,134 @@ class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def index = {
-		redirect(action: "inbox", params: params)
+		def latestMessage
+		def messageInstanceList = Fmessage.getInboxMessages().each {
+			if(!latestMessage || it.dateCreated < latestMessage.dateCreated) {
+				latestMessage = it
+			}
+		}
+		params.messageId = latestMessage?.id
+		if(messageInstanceList.size() > 0) {
+			redirect(action: "inbox", params: params)
+		} else {
+			redirect(action:'inbox')
+		}
 	}
 
 	def show = {
-		def messageInstance = Fmessage.get(params.id)
-		def ownerInstance
-		if(params.messageSection == 'poll') {
-			ownerInstance = Poll.get(params.ownerId)
-		} else if(params.messageSection == 'poll'){
-			ownerInstance = Folder.get(params.ownerId)
-		} else {
-			params.messageSection = 'inbox'
+		if (params.deletedMessage) { params.messageId = null }
+		def messageInstanceList
+		if (params.messageId == null) {
+			def latestMessage
+
+			// Not quite happy with this bit, is there a way to get messageInstanceList from the action show is being injected into?
+			if(params.messageSection == 'inbox') {
+				messageInstanceList = Fmessage.getInboxMessages().each { it.updateDisplaySrc() }
+			} else if (params.messageSection == 'poll') {
+				messageInstanceList = Poll.get(params.ownerId).messages.each { it.updateDisplaySrc() }
+			} else if (params.messageSection == 'folder') {
+				messageInstanceList = Fmessage.getFolderMessages(params.ownerId).each { it.updateDisplaySrc() }
+			}
+
+			messageInstanceList.each {
+				if(!latestMessage || it.dateCreated < latestMessage.dateCreated) {
+					latestMessage = it
+				}
+			}
+			params.messageId = latestMessage?.id
 		}
-		println params
-		messageInstance.updateDisplaySrc()
-		if(!messageInstance.read) {
+		
+		def messageInstance = Fmessage.get(params.messageId)
+		messageInstance?.updateDisplaySrc()
+		if(messageInstanceList?.size() > 0 && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		render view:params.messageSection,
-				model:[messageInstance: messageInstance,
-						folderInstanceList: Folder.findAll(),
-						pollInstanceList: Poll.findAll(),
-					ownerInstance: ownerInstance] << list()
+
+		[messageInstance: messageInstance,
+				folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
 	}
 
     def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages()
-		def latestMessage
-		messageInstanceList.each {
-			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
-				latestMessage = it
-			}
+		if (Fmessage.getInboxMessages().size() > 0) {
+			messageInstanceList.each { it.updateDisplaySrc()}
 		}
-		params.id = latestMessage?.id
 		params.messageSection = 'inbox'
-		if(params.id) {
-			redirect(action:'show', params:params)
-		} else {
-			[messageSection: 'inbox',
-				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
-		}
-    }
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'inbox',
+				messageInstanceTotal: messageInstanceList.size()] << show()
+	}
 
     def sent = {
 		params.inbound = false
-		[messageSection:'sent'] << list()
+		[messageSection: 'sent']
     }
 
 	def poll = {
-		println "at poll"
 		def ownerInstance = Poll.get(params.ownerId)
 		def messageInstanceList = ownerInstance.messages
-		def latestMessage
-		messageInstanceList.each {
-			if(!latestMessage) {
-				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
-			}
-		}
-		params.id = latestMessage?.id
-		if(params.id) {
-			redirect(action:'show', params:params)
-		} else {
-			[ownerInstance: ownerInstance,
-				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
-		}
+		messageInstanceList.each { it.updateDisplaySrc() }
+
+		params.messageSection = 'poll'
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'poll',
+				messageInstanceTotal: messageInstanceList.size(),
+				ownerInstance: ownerInstance,
+				responseList: ownerInstance.responseStats] << show()
 	}
 	
 	def folder = {
 		def ownerInstance = Folder.get(params.ownerId)
-		def messageInstanceList = ownerInstance.messages
-		def latestMessage
-		messageInstanceList.each {
-			if(!latestMessage || it.dateCreated > latestMessage.dateCreated) {
-				latestMessage = it
-			}
-		}
+		def messageInstanceList = Fmessage.getFolderMessages(params.ownerId)
+		messageInstanceList.each{ it.updateDisplaySrc() }
 
-		if(params.flashMessage) {
-			flash.message = params.flashMessage
-		}
+		if(params.flashMessage) { flash.message = params.flashMessage }
 
-		params.id = latestMessage?.id
-		if(params.id) {
-			redirect(action:'show', params:params)
-		} else {
-			[ownerInstance: ownerInstance,
-				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
-		}
-	}
-	
-	def list = {
-		def messageInstanceList
-		if(params.messageSection == 'inbox') {
-			messageInstanceList = Fmessage.getInboxMessages().each { it.updateDisplaySrc()}
-			[messageInstanceList: messageInstanceList,
-				messageSection: 'inbox',
-				messageInstanceTotal: Fmessage.getInboxMessages().size()]
-		} else if(params.messageSection == 'poll') {
-			def ownerInstance = Poll.get(params.ownerId)
-		 	messageInstanceList = ownerInstance.messages
-			messageInstanceList.each{ it.updateDisplaySrc() }
-			[messageInstanceList: messageInstanceList,
-					messageSection: 'poll',
-					messageInstanceTotal: ownerInstance.messages.size(),
-					ownerInstance: ownerInstance,
-					pollInstanceList: Poll.findAll(),
-					responseList: ownerInstance.responseStats]
-		}else if(params.messageSection == 'folder') {
-			def ownerInstance = Folder.get(params.ownerId)
-		 	messageInstanceList = ownerInstance.messages
-			messageInstanceList.each{ it.updateDisplaySrc() }
-			[messageInstanceList: messageInstanceList,
-					messageSection: 'folder',
-					messageInstanceTotal: ownerInstance.messages.size(),
-					ownerInstance: ownerInstance,
-					folderInstanceList: Folder.findAll(),
-					pollInstanceList: Poll.findAll()]
-		}else {
-			[folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
-		}
-		
+		params.messageSection = 'folder'
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'folder',
+				messageInstanceTotal: messageInstanceList.size(),
+				ownerInstance: ownerInstance] << show()
 	}
 
 	def move = {
 		def messageOwner
 		if(params.messageSection == 'poll') {
 			messageOwner = Poll.get(params.ownerId)
-		} else {
+		} else if (params.messageSection == 'folder') {
 			messageOwner = Folder.get(params.ownerId)
 		}
-		def messageInstance = Fmessage.get(params.id)
-		if(messageOwner instanceof Poll){
+		def messageInstance = Fmessage.get(params.messageId)
+		if(messageOwner instanceof Poll) {
 			def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-			unknownResponse.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
-		} else {
-			messageOwner.addToMessages(Fmessage.get(params.id)).save(failOnError: true, flush: true)
+			unknownResponse.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+		} else if (messageOwner instanceof Folder) {
+			messageOwner.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
 		}
-		
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), Fmessage.get(params.id).id])}"
-		redirect(action: "show", params: params)
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+		redirect(action: params.messageSection, params: params)
 	}
 
 	def changeResponse = {
 		def responseInstance = PollResponse.get(params.responseId)
-		def messageInstance = Fmessage.get(params.id)
+		def messageInstance = Fmessage.get(params.messageId)
 		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+//		params.messageSection = 'poll'
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-		redirect(action: "show", params: params)
+		redirect(action: "poll", params: params)
 	}
 	
 	def deleteMessage = {
-		def messageInstance = Fmessage.get(params.id)
+		def messageInstance = Fmessage.get(params.messageId)
 		messageInstance.toDelete()
 		messageInstance.save(failOnError: true, flush: true)
-		Fmessage.get(params.id).messageOwner?.refresh()
+		Fmessage.get(params.messageId).messageOwner?.refresh()
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+		params.deletedMessage = true
+		println "owner ${Fmessage.get(params.messageId).messageOwner}"
+		println "delete ${params}"
 		redirect(action: params.messageSection, params:params)
 	}
 }

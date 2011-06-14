@@ -25,7 +25,7 @@
 				</tbody>
 			</table>
 		</g:if>
-		<g:if test="$messageInstance">
+		<g:if test="${messageInstance}">
 			<g:render  template="categorize_response"/>
 		</g:if>
 	</body>
