@@ -9,7 +9,7 @@ class SearchControllerSpec extends ControllerSpec{
 			controller.index()
 		then:
 			controller.redirectArgs.controller == 'search' || !controller.redirectArgs.controller
-			controller.redirectArgs.action == 'show'
+			controller.redirectArgs.action == 'list'
 	}
 	
 	
