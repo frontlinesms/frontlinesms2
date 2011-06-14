@@ -4,7 +4,7 @@
   <ol>
 	  <g:each in="${responseList}" status="i" var="r">
 		  <li>
-			  <g:link action="changeResponse" params="[messageSection: 'poll', ownerId: ownerInstance.id, responseId: r.id]" id ="${messageInstance.id}">${r.value}</g:link>
+			  <g:link action="changeResponse" params="[ownerId: ownerInstance.id, responseId: r.id, messageId: messageInstance.id]">${r.value}</g:link>
 		  </li>
 	  </g:each>
   </ol>

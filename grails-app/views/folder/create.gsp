@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="layout" content="folders" />
-    <title>Sample title</title>
+    <title>Folder</title>
   </head>
   <body>
    <g:form name="folder-details" action="save" >

@@ -13,36 +13,36 @@
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
 					<td>
 						<g:if test="${ownerInstance}">
-							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
+							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
 								${m.displaySrc}
 							</g:link>
 						</g:if>
 						<g:else>
-							<g:link action="show" id="${m.id}">
+							<g:link action="${messageSection}" params="[messageId: m.id]">
 								${m.displaySrc}
 							</g:link>
 						</g:else>
 					</td>
 					<td>
 						<g:if test="${ownerInstance}">
-							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
+							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
 								${m.displayText}
 							</g:link>
 						</g:if>
 						<g:else>
-							<g:link action="show" id="${m.id}">
+							<g:link action="${messageSection}" params="[messageId: m.id]">
 							  ${m.displayText}
 							</g:link>
 						</g:else>
 					</td>
 					<td>
 						<g:if test="${ownerInstance}">
-							<g:link action="show" id="${m.id}" params="[ownerId:ownerInstance.id]">
+							<g:link action="${messageSection}" params="[messageId: m.id, ownerId:ownerInstance.id]">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
 						</g:if>
 						<g:else>
-							<g:link action="show" id="${m.id}">
+							<g:link  action="${messageSection}" params="[messageId: m.id]">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
 						</g:else>

@@ -7,33 +7,22 @@ class UrlMappings {
 			action = 'show'
 		}
 		"/group/show/$groupId"(controller:'contact') {}
-		
-		
-		"/message/$messageSection/$ownerId"(controller:'message') { messageSection = { params.messageSection } }
-		"/message/$messageSection/$ownerId/show/$id"(controller:'message', action:'show') {
-			messageSection = { params.messageSection }
-		}
 
-		"/message/$messageSection"(controller:'message', action:'inbox') { messageSection = { params.messageSection } }
-		"/message/$messageSection/show/$id"(controller:'message', action:'show') {
-			messageSection = { params.messageSection }
-		}
+		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
 
-//		"/message/sent"(controller:'message', action:'sent') {}
-//		"/message/sent/show/$id"(controller:'message', action:'show') {
-//			messageSection = 'sent'
-//		}
-		
-//		"/message/folder/$ownerId"(controller:'message') {}
-//		"/message/folder/$ownerId/show/$id"(controller:'message', action:'show') {
-//			messageSection = 'folder'
-//		}
-//		
-//		"/message/poll/$ownerId"(controller:'message') {}
-//		"/message/poll/$ownerId/show/$id"(controller:'message', action:'show') {
-//			messageSection = 'poll'
-//		}
-		
+		"/poll/$ownerId"(controller:'message', action:'poll') {}
+		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
+
+		"/folder/$ownerId"(controller:'message', action:'folder') {}
+		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
+
+		// Don't know why this is neccessary, but it is
+		"/poll/create"(controller:'poll', action:'create')
+		"/poll/save"(controller:'poll', action:'save')
+		"/folder/create"(controller:'folder', action:'create')
+		"/folder/save"(controller:'folder', action:'save')
+
+
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here

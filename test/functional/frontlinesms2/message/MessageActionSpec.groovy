@@ -6,20 +6,24 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 	def 'message actions menu is displayed for all individual messages'() {
 		given:
 			createTestPolls()
+			createTestFolders()
 			createTestMessages()
 		when:
 			to PollMessageViewPage
 			def actions = $('#message-actions li').children('a')*.text()
 		then:
 			actions[0] == 'Shampoo Brands'
+			actions[2] == 'Work'
 
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
 			def inboxActions = $('#message-actions li a')*.text()
 		then:
 			inboxActions[0] == 'Football Teams'
+
 		cleanup:
 			deleteTestPolls()
+			deleteTestFolders()
 			deleteTestMessages()
 	}
 	
@@ -81,7 +85,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			assert Fmessage.findBySrc('Bob').activity.value == 'manchester'
+			assert Fmessage.findBySrc('Bob').messageOwner.value == 'manchester'
 		when:
 			to PollMessageViewPage
 			def btnAssignToBarcelona = $('#poll-actions li:nth-child(3) a')
@@ -89,6 +93,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			btnAssignToBarcelona.text() == 'barcelona'
 		when:
 			btnAssignToBarcelona.click()
+			def barceResponse = PollResponse.findByValue('barcelona')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')
 			bob.refresh()
@@ -98,48 +103,27 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()
 			deleteTestMessages()
 	}
-
-	def 'existing folders appear in message actions menu'() {
-		given:
-			createTestFolders()
-			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
-		when:
-			go 'message'
-			def actions = $('#message-actions li').children('a')*.text()
-		then:
-			actions[0] == 'Work'
-
-		when:
-			go "message/inbox/show/${Fmessage.findBySrc("Max").id}"
-			def inboxActions = $('#message-actions li a')*.text()
-		then:
-			inboxActions[0] == 'Work'
-		cleanup:
-			deleteTestFolders()
-			deleteTestMessages()
-	}
 	
-		def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
+	def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
 		given:
 			createTestFolders()
 			createTestPolls()
 			createTestMessages()
-			def max = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
-			Folder.findByValue('Work').addToMessages(max).save(failOnError:true, flush:true)
 		when:
-			go "message/folder/${Folder.findByValue('Work').id}/show/${Fmessage.findBySrc('Max').id}"
-			def btnAction = $('#message-actions li').children('a').first()
-			def jill = Fmessage.findBySrc('Jill')
-			def shampooPoll = Poll.findByTitle('Shampoo Brands')
+			def max = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
 			def footballPoll = Poll.findByTitle('Football Teams')
+			def unknownResponse = footballPoll.getResponses().find { it.value == 'Unknown'}
+			unknownResponse.addToMessages(max).save(failOnError:true, flush:true)
+			def workFolder = Folder.findByValue('Work')
+			go "message/poll/${footballPoll.id}/show/${Fmessage.findBySrc('Max').id}"
+			def btnAction = $('#message-actions li:nth-child(4) a')
 			println btnAction.text()
 			btnAction.click()
-			Folder.findByValue('Work').each{ it.refresh() }
-			shampooPoll.responses.each{ it.refresh() }
-			footballPoll.responses.each{ it.refresh() }
+			footballPoll.responses.each { it.refresh() }
+			workFolder.refresh()
 		then:
-			max == Poll.findByTitle("Football Teams").getMessages().find { it == max }
-			max != Folder.findByValue("Work").getMessages().find { it == max }			
+			max != footballPoll.getMessages().find { it == max }
+			max == workFolder.getMessages().find { it == max }
 		cleanup:
 			deleteTestFolders()
 			deleteTestPolls()			
