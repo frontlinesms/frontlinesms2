@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="layout" content="polls" />
-    <title>Sample title</title>
+    <title>Poll</title>
   </head>
   <body>
    <g:form name="poll-details" action="save" >
@@ -18,7 +17,6 @@
                                     <g:textField name="title" value="${pollInstance?.title}" />
                                 </td>
                             </tr>
-
                             <tr class="prop">
                                 <td valign="top" class="responses">
                                     <label for="responses"><g:message code="responses.value.label" default="Responses" /></label>

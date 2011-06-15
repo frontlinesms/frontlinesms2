@@ -15,6 +15,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
+			println $('#messages tbody tr:nth-child(2) a').text()
 			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
@@ -76,9 +77,5 @@ class PollShowPage extends geb.Page {
 	static at = {
 		title.endsWith('Poll')
 	}
-//		static content = {
-//			selectedMenuItem { $('#messages-menu .selected') }
-//			messagesList { $('#messages-submenu') }
-//		}
 }
 

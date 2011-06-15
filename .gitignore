@@ -9,6 +9,8 @@ web-app/WEB-INF/classes/
 
 # IntelliJ IDEA Project files
 *.iml
+*.ipr
+*.iws
 
 # OS X generated files
 .DS_Store

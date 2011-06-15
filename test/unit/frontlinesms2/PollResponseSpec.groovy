@@ -9,7 +9,7 @@ class PollResponseSpec extends UnitSpec {
 		given:
 			mockForConstraintsTests(PollResponse)
 		when:
-			def noResponse = new PollResponse(poll:new Poll())
+			def noResponse = new PollResponse()
 		then:
 			!noResponse.validate()
 		when:
@@ -22,7 +22,7 @@ class PollResponseSpec extends UnitSpec {
 		given:
 			mockDomain(PollResponse)
 		when:
-			def r = new PollResponse(value:'yes', poll:new Poll())
+			def r = new PollResponse(value:'yes')
 		then:
 			r.validate()
 		when:
@@ -40,14 +40,14 @@ class PollResponseSpec extends UnitSpec {
 		given:
 			mockDomain(Poll)
 			mockDomain(Fmessage)
-			mockDomain(PollResponse)
-			def r = new PollResponse(value:'yes', poll:new Poll()).save()
+			mockDomain(MessageOwner)
+			def r = new PollResponse(value:'yes').save()
 			def m = new Fmessage()
 		when:
 			r.addToMessages(m)
 			r.save()
 		then:
-			m.activity == r
+			m.messageOwner == r
 	}
 }
 

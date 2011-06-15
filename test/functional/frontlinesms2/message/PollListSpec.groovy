@@ -23,7 +23,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[0] == 'Bob'
@@ -39,17 +39,16 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def pollTitle = $('#poll-title').text()
-//			def pollQuestion = $('#poll-question p').text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
 		then:
 			pollTitle == 'Football Teams'
-			statsLabels == ['Unknown', 'barcelona', 'manchester']
-			statsNums == ['0', '0', '2']
-			statsPercents == ['(0%)', '(0%)', '(100%)']
+			statsLabels == ['Unknown', 'manchester', 'barcelona']
+			statsNums == ['0', '2', '0']
+			statsPercents == ['(0%)', '(100%)', '(0%)']
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -60,7 +59,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
 			selectedMenuItem.text() == 'Football Teams'
 		cleanup:
@@ -70,7 +69,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 }
 
 class PollListPage extends geb.Page {
- 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}" }
+ 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 	static at = {
 		title.endsWith('Poll')
 	}
