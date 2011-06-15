@@ -6,36 +6,36 @@ class SearchController {
 	}
 	
 	def list = {
-		def messageInstance = Fmessage.get(params.id)
-		[messageInstance: messageInstance,
-			groupInstanceList : Group.findAll(),
+		[groupInstanceList : Group.findAll(),
+			folderInstanceList: Folder.findAll(),
 			pollInstanceList: Poll.findAll()]
 	}
 	
 	def search = {
 		def groupInstance = Group.get(params.groupList)
-		def pollInstance = Poll.get(params?.pollList)
-		def results = search(params.keywords, groupInstance, pollInstance)
-		def latestMessage
-		if(results){
-			results.each {
-			if(!latestMessage) {
-				latestMessage = it
-			} else{
-				if(it.dateCreated.compareTo(latestMessage.dateCreated) < 0) {
-					latestMessage = it
-				}
+		def messageOwner
+		def activityInstance
+		if(params.activityList){
+			if(Poll.findById(params.activityList) && Poll.findByTitle(params.selectedActivity)){
+				activityInstance = Poll.findById(params.activityList)
+				messageOwner = activityInstance.responses
+			}
+			else if(Folder.findById(params.activityList) && Folder.findByValue(params.selectedActivity)){
+				activityInstance = Folder.findById(params.activityList)
+				messageOwner = Folder.findById(params.activityList)
 			}
 		}
-		
-		params.id = latestMessage?.id
-			render(view:'list', model:list()<<[keywords: params.keywords, groupInstance: groupInstance, pollInstance: pollInstance, messageInstanceList: results, messageInstanceTotal: results.size()])
+		 
+		def results = search(params.keywords, groupInstance, messageOwner)
+		def latestMessage
+		if(results){
+			render(view:'list', model:list()<<[keywords: params.keywords, groupInstance: groupInstance, activityInstance: activityInstance, messageInstanceList: results, messageInstanceTotal: results.size()])
 		} else {
-			render(view:'list', model:list()<<[keywords: params.keywords, groupInstance: groupInstance, pollInstance: pollInstance])
+			render(view:'list', model:list()<<[keywords: params.keywords, groupInstance: groupInstance, activityInstance: activityInstance])
 		}	
 	}
 	
-	def search(keywords, groupInstance, pollInstance) {
+	def search(keywords, groupInstance, messageOwner) {
 		def results
 		def groupContactAddresses = groupInstance?.getMembers()*.address
 		if(!groupContactAddresses){
@@ -48,8 +48,8 @@ class SearchController {
 					if(groupInstance){
 						'in'("src",  groupContactAddresses)
 					}
-					if(pollInstance){
-						'in'("activity", pollInstance.responses)
+					if(messageOwner){
+						'in'("messageOwner", messageOwner)
 					}
 					eq('deleted', false)
 				}
