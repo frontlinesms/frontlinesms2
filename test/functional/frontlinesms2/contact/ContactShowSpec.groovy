@@ -23,29 +23,19 @@ class ContactShowSpec extends ContactGebSpec {
 		then:
 			def firstContactListItem = $('#contacts').children().first()
 			def anchor = firstContactListItem.children('a').first()
-			assert anchor.text() == 'Alice'
-			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+			anchor.text() == 'Alice'
+			anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
 	}
 
-	def 'selected contacts show message statistics if address present' () {
+	def 'selected contacts show message statistics' () {
 		given:
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
 		then:
-	        assert $("#message-count p").first().text() == '0 messages sent'
-	        assert $("#message-count p").last().text() == '0 messages received'	  
+	        $("#message-count p").first().text() == '0 messages sent'
+	        $("#message-count p").last().text() == '0 messages received'
 	}
-
-	  def 'selected contacts does not show message statistics if address not present' () {
-		given:
-			new Contact(name : 'Carl').save()
-	  		def carl = Contact.findByName('Carl')
-		when:
-	  		go "contact/show/${carl.id}"
-		then:
-	        assert $("#message-count").isDisplayed() == false
-	  }
 
 	def 'contact with no name can be clicked and edited because his address is displayed'() {
 		when:

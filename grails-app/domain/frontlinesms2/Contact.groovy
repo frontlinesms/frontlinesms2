@@ -45,10 +45,10 @@ class Contact {
 	}
 
 	def getInboundMessagesCount() {
-	  Fmessage.countByDst(address)
+		address? Fmessage.countByDst(address): 0
 	}
 
 	def getOutboundMessagesCount() {
-	  Fmessage.countBySrc(address)
+		address? Fmessage.countBySrc(address): 0
 	}
 }

@@ -115,7 +115,7 @@
 					</g:each>
 				</select>
 			</div>
-			<g:if test="${contactInstance.address}">
+			<g:if test="${contactInstance.id}">
 				<div id="message-count">
 					<h3>Messages</h3>
 					<p>${contactInstance.inboundMessagesCount} messages sent</p>
