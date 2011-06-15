@@ -71,6 +71,7 @@ class ContactShowSpec extends ContactGebSpec {
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Alice')
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
 	}
 
 	def 'contact with no groups has NO GROUPS message visible'() {

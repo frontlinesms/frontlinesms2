@@ -95,6 +95,10 @@
 					<label for="address"><g:message code="contact.address.label" default="Address"/></label>
 					<g:textField name="address" id="address" value="${contactInstance?.address}"/>
 				</div>
+				<div class="field">
+					<label for="notes"><g:message code="contact.notes.label" default="Notes"/></label>
+					<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				</div>
 			</div>
 			<ol id="group-list">
 				<g:each in="${contactGroupInstanceList}" status="i" var="g">
