@@ -19,7 +19,7 @@ class ContactSpec extends UnitSpec {
 
 	def "blank names are allowed, there is no minimum length for name"() {
 		when:
-			def noNameContact = new Contact(name:'')
+			def noNameContact = new Contact(name:'', address:'9876543')
 			def namedContact = new Contact(name:'a')
 		then:
 			noNameContact.validate()
