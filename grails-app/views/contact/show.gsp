@@ -2,7 +2,6 @@
 <html>
     <head>
         <meta name="layout" content="contacts" />
-		<g:javascript library="jquery" plugin="jquery"/>
 		<script type="text/javascript">
 			$(function() {
 			    $('input[name="name"]').focus();
@@ -116,6 +115,13 @@
 					</g:each>
 				</select>
 			</div>
+			<g:if test="${contactInstance.address}">
+				<div id="message-count">
+					<h3>Messages</h3>
+					<p>${contactInstance.inboundMessagesCount} messages sent</p>
+					<p>${contactInstance.outboundMessagesCount} messages received</p>
+				</div>
+			</g:if>
 			<div class="buttons">
 				<g:if test="${contactInstance.id}">
 					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>

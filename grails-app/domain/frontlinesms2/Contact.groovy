@@ -44,7 +44,11 @@ class Contact {
 	   GroupMembership.countByContactAndGroup(this, group) > 0
 	}
 
-	def inboundMessagesCount() {
-		Fmessage.countByDst(address)
+	def getInboundMessagesCount() {
+	  Fmessage.countByDst(address)
+	}
+
+	def getOutboundMessagesCount() {
+	  Fmessage.countBySrc(address)
 	}
 }
