@@ -59,7 +59,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
-	def 'messages are always added to the "unknown" response of a poll'() {
+	def 'messages are always added to the UNKNOWN response of a poll'() {
 		given:
 			createTestPolls()
 			createTestMessages()
