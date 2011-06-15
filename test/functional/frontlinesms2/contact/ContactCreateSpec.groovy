@@ -37,7 +37,7 @@ class ContactCreateSpec extends ContactGebSpec {
 			at ContactListPage
 	}
 
-	def '"All contacts" menu item is selected when creating a contact'() {
+	def 'ALL CONTACTS menu item is selected when creating a contact'() {
 		when:
 			to ContactListPage
 		then:

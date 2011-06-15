@@ -23,8 +23,18 @@ class ContactShowSpec extends ContactGebSpec {
 		then:
 			def firstContactListItem = $('#contacts').children().first()
 			def anchor = firstContactListItem.children('a').first()
-			assert anchor.text() == 'Alice'
-			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+			anchor.text() == 'Alice'
+			anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+	}
+
+	def 'selected contacts show message statistics' () {
+		given:
+	  		def alice = Contact.findByName('Alice')
+		when:
+	  		go "contact/show/${alice.id}"
+		then:
+	        $("#message-count p").first().text() == '0 messages sent'
+	        $("#message-count p").last().text() == '0 messages received'
 	}
 
 	def 'contact with no name can be clicked and edited because his address is displayed'() {
@@ -61,9 +71,10 @@ class ContactShowSpec extends ContactGebSpec {
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Alice')
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
 	}
 
-	def 'contact with no groups has "no groups" message visible'() {
+	def 'contact with no groups has NO GROUPS message visible'() {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
@@ -72,7 +83,7 @@ class ContactShowSpec extends ContactGebSpec {
 			$('#no-groups').displayed
 	}
 
-	def 'contact with groups has "no groups" message hidden'() {
+	def 'contact with groups has NO GROUPS message hidden'() {
 		given:
 			createTestGroups()
 			def bob = Contact.findByName('Bob')
