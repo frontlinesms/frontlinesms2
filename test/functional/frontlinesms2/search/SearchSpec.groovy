@@ -16,21 +16,21 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 	def "group list and activity lists are displayed when they exist"() {
 		given:
 			createTestGroups()
-			createTestPolls()
+			createTestPollsAndFolders()
 		when:
 			to SearchPage
 		then:
-			$("#search-details").find('select', name:'groupList').children().collect() { it.text() } == ['','Listeners', 'Friends']
-			$("#search-details").find('select', name:'pollList').children().collect() { it.text() } == ['',"Miauow Mix"]
+			$("#search-details").find('select', name:'groupList').children().collect() { it.text() } == ['Select group','Listeners', 'Friends']
+			$("#search-details").find('select', name:'activityList').children().collect() { it.text() } == ['Select activity / folder', "Miauow Mix", 'Work']
 		cleanup:
 			deleteTestGroups()
-			deleteTestPolls()
+			deleteTestPollsAndFolders()
 	}
 	
 	def "search description is shown in header"() {
 		given:
 			createTestGroups()
-			createTestPolls()
+			createTestPollsAndFolders()
 		when:
 			to SearchPage
 		then:
@@ -43,13 +43,13 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 		when:
 			searchFrm.keywords = "test"
 			$("#search-details").find('select', name:'groupList').value("${Group.findByName("Listeners").id}")
-			$("#search-details").find('select', name:'pollList').value("${Poll.findByTitle("Miauow Mix").id}")
+			$("#search-details").find('select', name:'activityList').value("${Poll.findByTitle("Miauow Mix").id}")
 			searchBtn.click()
 		then:
 			$('#search-description').text() == "Searching in 'Listeners' and 'Miauow Mix'"
 		cleanup:
 			deleteTestGroups()
-			deleteTestPolls()
+			deleteTestPollsAndFolders()
 	}
 	
 	def "message list returned from a search operation is displayed"() {
@@ -95,16 +95,15 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 				}
 	}
 	
-	static createTestPolls() {
+	static createTestPollsAndFolders() {
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		Folder f = new Folder(value: "Work").save(failOnError:true, flush:true)
 	}
-	static deleteTestPolls() {
-		Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
+	static deleteTestPollsAndFolders() {
+		Poll.findAll()*.delete(flush:true, failOnError:true)
+		Folder.findAll()*.delete(flush:true, failOnError:true)
 	}
 	
 	static deleteTestMessages() {

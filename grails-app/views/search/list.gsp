@@ -6,9 +6,11 @@
   <body>
 	  <h2 id="search-description">
 		  <g:if test="${keywords}">Searching in
-				<g:if test="${groupInstance != null && pollInstance != null}">'${groupInstance.name}' and '${pollInstance.title}'</g:if>
+				<g:if test="${groupInstance != null && activityInstance instanceof frontlinesms2.Poll}">'${groupInstance.name}' and '${activityInstance.title}'</g:if>
+				<g:elseif test="${groupInstance != null && activityInstance instanceof frontlinesms2.Folder}">'${groupInstance.name}' and '${activityInstance.value}'</g:elseif>
 				<g:elseif test="${groupInstance != null}">'${groupInstance.name}'</g:elseif>
-				<g:elseif test="${pollInstance != null}">'${pollInstance.title}'</g:elseif>
+				<g:elseif test="${activityInstance instanceof frontlinesms2.Poll}">'${activityInstance.title}</g:elseif>
+				<g:elseif test="${activityInstance instanceof frontlinesms2.Folder}">'${activityInstance.value}</g:elseif>
 				<g:else>all messages</g:else>
 		  </g:if>
 		  <g:else>

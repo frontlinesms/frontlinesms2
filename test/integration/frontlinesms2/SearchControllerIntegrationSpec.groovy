@@ -4,13 +4,16 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	def controller
 	def c1, c2
 	def g
+	def f
 
 	def setup() {
 		controller = new SearchController()
 		c1 = new Contact(name:'Alex', address:'+254987654').save(failOnError:true)
 		c2 = new Contact(name:'Mark', address:'+254333222').save(failOnError:true)
 		g = new Group(name:'test').save(failOnError:true)
-		[new Fmessage(src:'+254987654', dst:'+254987654', text:'meeting at 11.00'),
+		f = new Folder(value: 'work')
+		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00'),
+			new Fmessage(src:'+254111222', dst:'+254937634', text:'work is awesome'),
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
 					it.inbound = true
@@ -22,6 +25,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', inbound:false)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		f.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true)
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
@@ -31,6 +35,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	def cleanup() {
 		Contact.findAll()*.delete(flush:true, failOnError:true)
 		Group.findAll()*.delete(flush:true, failOnError:true)
+		Folder.findAll()*.delete(flush:true, failOnError:true)
 		Poll.findAll()*.delete(flush:true, failOnError:true)
 		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
@@ -45,7 +50,6 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	def "blank search does not return a list of messages"() {
 		when:
 			controller.params.keywords = ""
-			controller.params.pollList = -1
 			controller.params.groupList = -1
 			controller.search()
 			def model = controller.modelAndView.model.messageInstanceList
@@ -53,15 +57,25 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			!model
 	}
 	
-	def "message searches can be restricted to an activity"() {
+	def "message searches can be restricted to a poll or folders"() {
 		when:
 			controller.params.keywords = "chicken"
-			controller.params.pollList = Poll.findByTitle('Miauow Mix').id
+			controller.params.activityList = Poll.findByTitle('Miauow Mix').id
+			controller.params.selectedActivity = 'Miauow Mix'
 			controller.params.groupList = -1
 			controller.search()
 			def model = controller.modelAndView.model.messageInstanceList
 		then:
 			model == [Fmessage.findBySrc('Barnabus')]
+		when:
+			controller.params.keywords = "work"
+			controller.params.activityList = Folder.findByValue('work').id
+			controller.params.selectedActivity = 'work'
+			controller.params.groupList = -1
+			controller.search()
+			def model2 = controller.modelAndView.model.messageInstanceList
+		then:
+			model2 == [Fmessage.findBySrc('+254111222')]
 	}
 	
 	def "message searches can be restricted to a contact group"() {
@@ -69,7 +83,6 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			makeGroupMember()
 		when:
 			controller.params.keywords = "liver"
-			controller.params.pollList = -1
 			controller.params.groupList = Group.findByName('test').id
 			controller.search()
 			def model = controller.modelAndView.model.messageInstanceList
@@ -80,7 +93,6 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	def "groups without contacts do not return messages"() {
 		when:
 			controller.params.keywords = "test"
-			controller.params.pollList = -1
 			controller.params.groupList = Group.findByName('test').id
 			controller.search()
 			def model = controller.modelAndView.model.messageInstanceList
@@ -88,12 +100,13 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			!model
 	}
 	
-	def "message searches can be restricted to both contact groups and activities"() {
+	def "message searches can be restricted to both contact groups and polls"() {
 		given:
 			makeGroupMember()
 		when:
 			controller.params.keywords = "liver"
-			controller.params.pollList = Poll.findByTitle('Miauow Mix').id
+			controller.params.activityList = Poll.findByTitle('Miauow Mix').id
+			controller.params.selectedActivity = 'Miauow Mix'
 			controller.params.groupList = Group.findByName('test').id
 			controller.search()
 			def model = controller.modelAndView.model.messageInstanceList
@@ -104,8 +117,8 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	def "deleted messages do not appear in search results"() {
 		when:
 			controller.params.keywords = "liver"
-			controller.params.groupList = -1
-			controller.params.pollList = Poll.findByTitle('Miauow Mix').id
+			controller.params.activityList = Poll.findByTitle('Miauow Mix').id
+			controller.params.selectedActivity = 'Miauow Mix'
 			Fmessage.findBySrc("+254333222").toDelete().save(flush: true)
 			controller.search()
 			def model = controller.modelAndView.model.messageInstanceList
