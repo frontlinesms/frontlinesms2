@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import spock.lang.*
 import grails.plugin.spock.*
 
 class ContactSpec extends UnitSpec {
@@ -48,18 +47,31 @@ class ContactSpec extends UnitSpec {
 		!contact.validate()
 	}
 
-  def "should return the count of all messages sent to a given contact"() {
-	setup:
-		String destinationAddress = "9876543210"
-		Contact contact = new Contact(name: "John", address: destinationAddress)
-		mockDomain Fmessage,[new Fmessage(dst: destinationAddress, deleted : false),
-		new Fmessage(dst: destinationAddress, deleted : true),
-		new Fmessage(dst: destinationAddress, deleted : true)]
+	def "should return the count of all messages sent to a given contact"() {
+		setup:
+			String johnsAddress = "9876543210"
+			Contact contact = new Contact(name: "John", address: johnsAddress)
+			mockDomain Fmessage,[new Fmessage(dst: johnsAddress, deleted : false),
+			new Fmessage(dst: johnsAddress, deleted : true),
+			new Fmessage(dst: johnsAddress, deleted : true)]
 	    when:
-	        def count = contact.inboundMessagesCount()
+	        def count = contact.inboundMessagesCount
 	    then:
 	        assert 3 == count
-  }
+  	}
 
+	def "should return the count of all messages received from a given contact"() {
+		setup:
+			String georgesAddress = "1234567890"
+			Contact contact = new Contact(name: "George", address: georgesAddress)
+			mockDomain Fmessage,[new Fmessage(dst: georgesAddress, deleted : false),
+			new Fmessage(src: georgesAddress, deleted : true),
+			new Fmessage(src: georgesAddress, deleted : false),
+			new Fmessage(dst: georgesAddress, deleted : true)]
+	    when:
+	        def count = contact.outboundMessagesCount
+	    then:                                     
+	        assert 2 == count
+  	}
 }
 
