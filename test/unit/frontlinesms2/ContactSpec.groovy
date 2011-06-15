@@ -51,27 +51,36 @@ class ContactSpec extends UnitSpec {
 		setup:
 			String johnsAddress = "9876543210"
 			Contact contact = new Contact(name: "John", address: johnsAddress)
-			mockDomain Fmessage,[new Fmessage(dst: johnsAddress, deleted : false),
-			new Fmessage(dst: johnsAddress, deleted : true),
-			new Fmessage(dst: johnsAddress, deleted : true)]
+			mockDomain Fmessage, [new Fmessage(dst: johnsAddress, deleted: false),
+					new Fmessage(dst: johnsAddress, deleted: true),
+					new Fmessage(dst: johnsAddress, deleted: true)]
 	    when:
 	        def count = contact.inboundMessagesCount
 	    then:
-	        assert 3 == count
+	        count == 3
   	}
 
 	def "should return the count of all messages received from a given contact"() {
 		setup:
 			String georgesAddress = "1234567890"
 			Contact contact = new Contact(name: "George", address: georgesAddress)
-			mockDomain Fmessage,[new Fmessage(dst: georgesAddress, deleted : false),
-			new Fmessage(src: georgesAddress, deleted : true),
-			new Fmessage(src: georgesAddress, deleted : false),
-			new Fmessage(dst: georgesAddress, deleted : true)]
+			mockDomain Fmessage, [new Fmessage(dst: georgesAddress, deleted: false),
+					new Fmessage(src: georgesAddress, deleted: true),
+					new Fmessage(src: georgesAddress, deleted: false),
+					new Fmessage(dst: georgesAddress, deleted: true)]
 	    when:
 	        def count = contact.outboundMessagesCount
 	    then:                                     
-	        assert 2 == count
+	        count == 2
   	}
+
+  	def "should return the count as zero is there is no address present for a given contact"() {
+		when:
+			def inboundMessagesCount = new Contact(name:"Person without an address").inboundMessagesCount
+			def outboundMessagesCount = new Contact(name:"Person without an address").outboundMessagesCount
+		then:
+			inboundMessagesCount == 0
+			outboundMessagesCount == 0
+	}
 }
 
