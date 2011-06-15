@@ -15,7 +15,7 @@
 			<g:render template="message_list"/>
 			<g:if test="${messageInstance != null}">
 				<div id="message-details">
-					<p class="message-name">${messageInstance?.displaySrc}</p>
+					<p class="message-name">${messageInstance.displaySrc}</p>
 					<g:def var="thisAddress" value="${messageInstance.src}"/>
 					<g:if test="${!messageInstance.contactExists}">
 						<g:link class="button" controller="contact" action="createContact" params="[address: thisAddress]">+</g:link>
@@ -24,10 +24,13 @@
 					<p class="message-body">${messageInstance.text}</p>
 					<div class="buttons">
 						<g:if test="${messageSection == 'poll'}">
-							<g:link action="deleteMessage" params="[messageSection: messageSection, pollId: pollInstance.id]" id="${messageInstance.id}">Delete</g:link>
+							<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance.id, messageId: messageInstance.id]">Delete</g:link>
 						</g:if>
+						<g:elseif test="${messageSection == 'folder'}">
+							<g:link disabled="true" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance.id, messageId: messageInstance.id]">Delete</g:link>
+						</g:elseif>
 						<g:else>
-							<g:link action="deleteMessage" params="[messageSection: messageSection]" id="${messageInstance.id}">Delete</g:link>
+							<g:link action="deleteMessage" params="[messageSection: messageSection, messageId: messageInstance.id]">Delete</g:link>
 						</g:else>
 					</div>
 				</div>

@@ -46,12 +46,12 @@ class FmessageSpec extends UnitSpec {
 			mockDomain(Poll)
 			mockDomain(PollResponse)
 			Poll p = new Poll(title:'Test poll').save()
-			PollResponse response = new PollResponse(poll:p, value:'yes').save()
+			PollResponse response = new PollResponse(value:'yes').save()
 		when:
-			def m = new Fmessage(activity:response).save()
+			def m = new Fmessage(messageOwner:response).save()
 		then:
 			Fmessage.count() == 1
-			Fmessage.get(m.id).activity == response
+			Fmessage.get(m.id).messageOwner == response
 	}
 }
 

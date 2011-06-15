@@ -17,7 +17,7 @@ class PollController {
 		
 		if (pollInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
-			redirect(controller: "message", action:'poll', params:[flashMessage: flash.message, pollId: pollInstance.id])
+			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {
 			render(view: "create", model: [pollInstance: pollInstance])
 		}
