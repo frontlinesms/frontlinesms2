@@ -11,7 +11,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		c1 = new Contact(name:'Alex', address:'+254987654').save(failOnError:true)
 		c2 = new Contact(name:'Mark', address:'+254333222').save(failOnError:true)
 		g = new Group(name:'test').save(failOnError:true)
-		f = new Folder(value: 'work')
+		
 		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00'),
 			new Fmessage(src:'+254111222', dst:'+254937634', text:'work is awesome'),
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
@@ -25,7 +25,6 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', inbound:false)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
-		f.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true)
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
@@ -33,10 +32,10 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	}
 
 	def cleanup() {
-		Contact.findAll()*.delete(flush:true, failOnError:true)
 		Group.findAll()*.delete(flush:true, failOnError:true)
-		Folder.findAll()*.delete(flush:true, failOnError:true)
+		Contact.findAll()*.delete(flush:true, failOnError:true)
 		Poll.findAll()*.delete(flush:true, failOnError:true)
+		MessageOwner.findAll()*.delete(flush:true, failOnError:true)
 		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 	
@@ -68,8 +67,11 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		then:
 			model == [Fmessage.findBySrc('Barnabus')]
 		when:
+			new MessageOwner(value: 'work').save(failOnError: true, flush:true)
+			f = new Folder(value: 'work')
+			f.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true, flush:true)
 			controller.params.keywords = "work"
-			controller.params.activityList = Folder.findByValue('work').id
+			controller.params.activityList = f.id
 			controller.params.selectedActivity = 'work'
 			controller.params.groupList = -1
 			controller.search()
@@ -126,4 +128,3 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model == [Fmessage.findBySrc('Minime')]
 	}
 }
-

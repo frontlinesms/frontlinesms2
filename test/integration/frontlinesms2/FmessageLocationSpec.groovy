@@ -46,8 +46,8 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:false)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
+		liverResponse.addToMessages(liverMessage).save(failOnError: true)
+		chickenResponse.addToMessages(chickenMessage).save(failOnError: true)
 		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 	}
 	
