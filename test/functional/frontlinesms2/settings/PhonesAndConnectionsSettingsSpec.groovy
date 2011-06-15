@@ -14,7 +14,7 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 
-	def 'connections are listed in "phone & connections" panel'() {
+	def 'connections are listed in PHONE & CONNECTIONS panel'() {
 		given:
 			createTestConnections()
 		when:
