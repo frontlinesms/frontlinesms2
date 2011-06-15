@@ -3,6 +3,7 @@ package frontlinesms2
 class Contact {
 	String name
 	String address
+    String notes
 
     static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
@@ -17,6 +18,7 @@ class Contact {
 					obj.name != null
 				}
 		})
+        notes(nullable: true, maxSize: 1024)
 	}
 
 	def beforeDelete = {

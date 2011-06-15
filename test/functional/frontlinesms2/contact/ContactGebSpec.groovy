@@ -5,7 +5,7 @@ import frontlinesms2.*
 class ContactGebSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestContacts() {	
-		[new Contact(name: 'Alice', address: '+2541234567'),
+		[new Contact(name: 'Alice', address: '+2541234567', notes: 'notes'),
 			new Contact(name: 'Bob', address: '+254987654')].each() { it.save(failOnError:true) }
 	}
 
@@ -40,10 +40,9 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		assert label.text() == labelText
 		assert label.getAttribute('for') == fieldName
 
-		def input = $('input', id:fieldName)
+		def input = $("#$fieldName")
 		assert input.getAttribute('name') == fieldName
 		assert input.getAttribute('id') == fieldName
-		assert input.getAttribute('type')  == 'text'
 		assert input.getAttribute('value')  == expectedValue
 		true
 	}
