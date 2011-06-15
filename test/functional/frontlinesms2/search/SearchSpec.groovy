@@ -93,9 +93,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 					it.inbound = true
 					it.save(failOnError:true)
 				}
-
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:false)
 	}
 	
 	static createTestPolls() {
