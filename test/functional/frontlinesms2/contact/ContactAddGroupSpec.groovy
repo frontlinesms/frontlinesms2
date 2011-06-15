@@ -43,7 +43,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			assert groupSelecter.children().collect() { it.text() } == ['Add to group...', 'four']
 	}
 
-	def 'clicking "x" next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
+	def 'clicking X next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
 		given:
 			def bob = Contact.findByName("Bob")
 			def bobsDatabaseGroups = bob.getGroups()

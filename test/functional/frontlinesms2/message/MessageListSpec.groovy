@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 class MessageListSpec extends grails.plugin.geb.GebSpec {
     
-    def 'button to view inbox messages exists and goes to "inbox" page'() {
+    def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
             to MessagesPage
 			def btnInbox = $('#messages-menu li a', href:"/frontlinesms2/message/inbox")
@@ -12,7 +12,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			btnInbox.text() == 'Inbox'
     }
 
-    def 'button to view sent messages exists and goes to "sent" page'() {
+    def 'button to view sent messages exists and goes to SENT page'() {
         when:
 	        to MessagesPage
 			def btnSentItems = $('#messages-menu li a', href:'/frontlinesms2/message/sent')
