@@ -4,18 +4,7 @@ class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def index = {
-		def latestMessage
-		def messageInstanceList = Fmessage.getInboxMessages().each {
-			if(!latestMessage || it.dateCreated < latestMessage.dateCreated) {
-				latestMessage = it
-			}
-		}
-		params.messageId = latestMessage?.id
-		if(messageInstanceList.size() > 0) {
-			redirect(action: "inbox", params: params)
-		} else {
-			redirect(action:'inbox')
-		}
+		redirect(action:'inbox')
 	}
 
 	def show = {
@@ -97,41 +86,50 @@ class MessageController {
 	}
 
 	def move = {
-		def messageOwner
-		if(params.messageSection == 'poll') {
-			messageOwner = Poll.get(params.ownerId)
-		} else if (params.messageSection == 'folder') {
-			messageOwner = Folder.get(params.ownerId)
+		withFmessage { messageInstance ->
+			def messageOwner
+			if(params.messageSection == 'poll') {
+				messageOwner = Poll.get(params.ownerId)
+			} else if (params.messageSection == 'folder') {
+				messageOwner = Folder.get(params.ownerId)
+			}
+			if(messageOwner instanceof Poll) {
+				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
+				unknownResponse.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+			} else if (messageOwner instanceof Folder) {
+				messageOwner.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+			}
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			redirect(action: params.messageSection, params: params)
 		}
-		def messageInstance = Fmessage.get(params.messageId)
-		if(messageOwner instanceof Poll) {
-			def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-			unknownResponse.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
-		} else if (messageOwner instanceof Folder) {
-			messageOwner.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-		redirect(action: params.messageSection, params: params)
 	}
 
 	def changeResponse = {
-		def responseInstance = PollResponse.get(params.responseId)
-		def messageInstance = Fmessage.get(params.messageId)
-		responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
-//		params.messageSection = 'poll'
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-		redirect(action: "poll", params: params)
+		withFmessage { messageInstance ->
+			def responseInstance = PollResponse.get(params.responseId)
+			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+	//		params.messageSection = 'poll'
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			redirect(action: "poll", params: params)
+		}
 	}
 	
 	def deleteMessage = {
-		def messageInstance = Fmessage.get(params.messageId)
-		messageInstance.toDelete()
-		messageInstance.save(failOnError: true, flush: true)
-		Fmessage.get(params.messageId).messageOwner?.refresh()
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-		params.deletedMessage = true
-		println "owner ${Fmessage.get(params.messageId).messageOwner}"
-		println "delete ${params}"
-		redirect(action: params.messageSection, params:params)
+		withFmessage { messageInstance ->
+			messageInstance.toDelete()
+			messageInstance.save(failOnError: true, flush: true)
+			Fmessage.get(params.messageId).messageOwner?.refresh()
+			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			params.deletedMessage = true
+			println "owner ${Fmessage.get(params.messageId).messageOwner}"
+			println "delete ${params}"
+			redirect(action: params.messageSection, params:params)
+		}
+	}
+
+	private def withFmessage(Closure c) {
+		def m = Fmessage.get(params.messageId)
+		if(m) c.call(m)
+		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
 	}
 }

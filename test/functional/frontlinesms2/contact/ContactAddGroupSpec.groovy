@@ -19,7 +19,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 		then:
 			def memberOf = $("#group-list").children().children('h2').collect() { it.text() }.sort()
 			memberOf == ['Test', 'three']
@@ -29,7 +29,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			def nonMemberOf = groupSelecter.children().collect() { it.text() }.sort()
 		then:
@@ -50,7 +50,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def bobsGroups = bobsDatabaseGroups
 
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 			def lstGroups = $("#group-list")
 		then:
 			lstGroups.children().children('h2').size() == 2
@@ -79,7 +79,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 //			to BobsContactPage
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			groupSelecter.find(name: 'group-dropdown').value('Others')

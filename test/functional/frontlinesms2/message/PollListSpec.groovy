@@ -31,6 +31,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def "poll details are shown in header"() {
@@ -50,6 +51,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			statsPercents == ['(0%)', '(100%)', '(0%)']
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected poll is highlighted'() {
@@ -62,6 +64,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			selectedMenuItem.text() == 'Football Teams'
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 }
 

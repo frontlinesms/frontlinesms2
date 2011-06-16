@@ -22,14 +22,14 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     
     def 'when in inbox, Inbox menu item is highlighted'() {
         when:
-            go "http://localhost:8080/frontlinesms2/message"
+            go "message"
         then:
             assertMenuItemSelected("Inbox")
 	}
 	
 	def 'when viewing Sent Items, Sent Items menu item is hilighted'() {
         when:
-            go "http://localhost:8080/frontlinesms2/message/sent"
+            go "message/sent"
         then:
             assertMenuItemSelected("Sent")
     }

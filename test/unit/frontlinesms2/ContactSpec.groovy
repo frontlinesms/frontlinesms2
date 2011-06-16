@@ -1,13 +1,12 @@
 package frontlinesms2
 
-import spock.lang.*
 import grails.plugin.spock.*
 
 class ContactSpec extends UnitSpec {
 	def setup() {
 		mockForConstraintsTests(Contact)
 	}
-	
+
 	def "contact may have a name"() {
 		when:
 			Contact c = new Contact()
@@ -25,7 +24,7 @@ class ContactSpec extends UnitSpec {
 			noNameContact.validate()
 			namedContact.validate()
 	}
-	
+
 	def "duplicate names are allowed"(){
 		setup:
 			mockDomain(Contact)
@@ -36,7 +35,7 @@ class ContactSpec extends UnitSpec {
 			contact1.save()
 			contact2.save()
 	}
-	
+
 	def "max name length 255"(){
 		when:
 			def Contact contact = new Contact(name:'''\
@@ -47,5 +46,66 @@ class ContactSpec extends UnitSpec {
 	then:
 		!contact.validate()
 	}
+
+	def "should return the count of all messages sent to a given contact"() {
+		setup:
+			String johnsAddress = "9876543210"
+			Contact contact = new Contact(name: "John", address: johnsAddress)
+			mockDomain Fmessage, [new Fmessage(dst: johnsAddress, deleted: false),
+					new Fmessage(dst: johnsAddress, deleted: true),
+					new Fmessage(dst: johnsAddress, deleted: true)]
+	    when:
+	        def count = contact.inboundMessagesCount
+	    then:
+	        count == 3
+  	}
+
+	def "should return the count of all messages received from a given contact"() {
+		setup:
+			String georgesAddress = "1234567890"
+			Contact contact = new Contact(name: "George", address: georgesAddress)
+			mockDomain Fmessage, [new Fmessage(dst: georgesAddress, deleted: false),
+					new Fmessage(src: georgesAddress, deleted: true),
+					new Fmessage(src: georgesAddress, deleted: false),
+					new Fmessage(dst: georgesAddress, deleted: true)]
+	    when:
+	        def count = contact.outboundMessagesCount
+	    then:                                     
+	        count == 2
+  	}
+
+  	def "should return the count as zero is there is no address present for a given contact"() {
+		when:
+			def inboundMessagesCount = new Contact(name:"Person without an address").inboundMessagesCount
+			def outboundMessagesCount = new Contact(name:"Person without an address").outboundMessagesCount
+		then:
+			inboundMessagesCount == 0
+			outboundMessagesCount == 0
+	}
+
+    def "should not complain if a contact does not have a note"() {
+        when:
+			def c = new Contact(notes: null, name: "Tim")
+        then:
+        	c.validate()
+    }
+
+   def 'should be able to add notes with length equal to 1024 chars'() {
+	 	setup:
+        	def notes = "a" * 1024
+        when:
+			def c = new Contact(name: "Tim", notes: notes)
+        then:
+        	c.validate()
+    }
+
+   def 'should not be able to add notes with length more than 1024 chars'() {
+		setup:
+			def notes = "a" * 1025
+        when:
+			def c = new Contact(name: "Tim", notes: notes)
+        then:
+			!c.validate()
+   }
 }
 

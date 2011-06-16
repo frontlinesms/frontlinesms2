@@ -21,6 +21,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			firstMessageLink.text() == 'Alice'
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -38,6 +39,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-details p:nth-child(4)').text() == message.text
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected message is highlighted'() {
@@ -57,6 +59,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	String dateToString(Date date) {
