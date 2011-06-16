@@ -4,7 +4,7 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class FmessageSpec extends UnitSpec {
-	def 'check that "read" flag cannot be null'() {
+	def 'check that READ flag cannot be null'() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
