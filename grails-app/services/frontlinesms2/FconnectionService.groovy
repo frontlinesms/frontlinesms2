@@ -9,18 +9,36 @@ class FconnectionService {
 		@Override
 		void configure() {}
 		List getRouteDefinitions(Fconnection c) {
-			[ from(c.camelAddress()).to('seda:raw-email').routeId("${c.id}")]
-			[ from('seda:smslib-messages-to-send').to(c.camelAddress()).routeId("${c.id}")]
+			def inGoesTo, outComesFrom
+			if(c instanceof SmslibFconnection) {
+				inGoesTo = 'seda:raw-smslib'
+				outComesFrom = 'seda:smslib-messages-to-send'
+			} else if(c instanceof EmailFconnection) {
+				inGoesTo = 'seda:email-messages-to-send'
+				outComesFrom = 'seda:raw-email'
+			} else if(grails.util.Environment.current == grails.util.Environment.TEST && c instanceof Fconnection) {
+				inGoesTo = 'stream:out'
+				outComesFrom = 'seda:nowhere'
+			} else {
+				throw new IllegalStateException("Do not know how to create routes for Fconnection of class: ${c?.class}")
+			}
+			def routes = []
+			getLog().info "Creating routes: $routes..."
+			println "In goes to: $inGoesTo"
+			if(inGoesTo) routes << from(c.camelConsumerAddress).to(inGoesTo).routeId("in-${c.id}")
+			println "out comes from: $outComesFrom"
+			if(outComesFrom) routes << from(outComesFrom).to(c.camelProducerAddress).routeId("out-${c.id}")
+			println 'Routes created.'
+			routes
 		}
 	}
 	
 	def createRoute(Fconnection c) {
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
-		println "routes: ${routes*.id}"
 		camelContext.addRouteDefinitions(routes)
 	}
 	
 	def getRouteStatus(Fconnection c) {
-		camelContext.getRoute(c.id?.toString()) ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED 
+		(camelContext.getRoute("in-${c.id}") || camelContext.getRoute("out-${c.id}")) ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED 
 	}
 }

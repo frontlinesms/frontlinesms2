@@ -53,7 +53,7 @@ class ConnectionController {
 
 	def saveEmail = {
 		def fconnectionInstance = new EmailFconnection()
-		if(params.protocol) params.protocol = EmailProtocol.valueOf(params.protocol.toUpperCase())
+		if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 		fconnectionInstance.properties = params
 
 		if (fconnectionInstance.save(flush: true)) {
@@ -79,7 +79,7 @@ class ConnectionController {
 	def createRoute = {
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
-			flash.message = "Created route from ${settings.camelAddress()}"
+			flash.message = "Created route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
 			redirect action:'list', id:settings.id
 		}
 	}

@@ -28,7 +28,7 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 
 	def createTestConnections() {
 		[new SmslibFconnection(name:'MTN Dongle', port:'stormyPort'),
-				new EmailFconnection(name:'Miriam\'s Clickatell account', protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
+				new EmailFconnection(name:'Miriam\'s Clickatell account', receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
 			it.save(flush:true, failOnError: true)
 		}

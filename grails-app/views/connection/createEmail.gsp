@@ -12,10 +12,10 @@
 			</div>
 			
 			<div class="field">
-				<label for="protocol"><g:message code="fconnection.protocol.label" default="Protocol" /></label>
-				<g:select from="${frontlinesms2.EmailProtocol.values()}"
-					    value="${fconnectionInstance?.protocol}"
-					    name="protocol"
+				<label for="receiveProtocol"><g:message code="fconnection.receiveProtocol.label" default="Protocol" /></label>
+				<g:select from="${frontlinesms2.EmailReceiveProtocol.values()}"
+					    value="${fconnectionInstance?.receiveProtocol}"
+					    name="receiveProtocol"
 					    noSelection="${['null': '- Select -']}"/>
 			</div>
 			
