@@ -15,11 +15,13 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
+			println $('#messages tbody tr:nth-child(2) a').text()
 			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -37,6 +39,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-details p:nth-child(4)').text() == message.text
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected message is highlighted'() {
@@ -56,6 +59,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	String dateToString(Date date) {

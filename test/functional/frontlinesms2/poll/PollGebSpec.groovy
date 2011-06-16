@@ -11,7 +11,7 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester'),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester'),
+			new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester'),
 				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
 				new Fmessage(src:'Jill', dst:'+234234', text:'I fell down the hill')].each() {
 					it.inbound = true
@@ -23,6 +23,13 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 				PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
 	}
 
+	static createTestFolders() {
+		[new Folder(value: 'Work'),
+			new Folder(value: 'Projects')].each() {
+					it.save(failOnError:true, flush:true)
+				}
+	}
+	
 	static deleteTestPolls() {
 		Poll.findAll().each() {
 			it.refresh()
@@ -32,8 +39,15 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 
 	static deleteTestMessages() {
 		Fmessage.findAll().each() {
-			it?.refresh()
-			it?.delete(failOnError:true, flush:true)
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+	
+	static deleteTestFolders() {
+		Folder.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
 		}
 	}
 }

@@ -11,7 +11,7 @@ class Fmessage {
 	boolean inbound
 	boolean read
 	boolean deleted
-	static belongsTo = [activity:PollResponse]
+	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['displaySrc']
 	static mapping = {
 		sort dateCreated:'desc'
@@ -22,7 +22,7 @@ class Fmessage {
 		src(nullable:true)
 		dst(nullable:true)
 		text(nullable:true)
-		activity(nullable:true)
+		messageOwner(nullable:true)
 		dateRecieved(nullable:true)
 	}
 
@@ -50,12 +50,25 @@ class Fmessage {
 		this
 	}
 
+	static def getFolderMessages(folderId) {
+		def folder = Folder.get(folderId)
+		def messages = Fmessage.createCriteria().list {
+			and {
+				eq("deleted", false)
+				eq("messageOwner", folder)
+			}
+			order('dateRecieved', 'desc')
+			order('dateCreated', 'desc')
+		}
+		messages
+	}
+
 	static def getInboxMessages() {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
 				eq("inbound", true)
-				isNull("activity")
+				isNull("messageOwner")
 			}
 			order('dateRecieved', 'desc')
 			order('dateCreated', 'desc')
@@ -68,7 +81,7 @@ class Fmessage {
 			and {
 				eq("deleted", false)
 				eq("inbound", false)
-				isNull("activity")
+				isNull("messageOwner")
 			}
 			order("dateCreated", "desc")
 		}

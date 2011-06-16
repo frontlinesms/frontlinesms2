@@ -15,6 +15,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			pollMessageSources == ['Bob', 'Alice']
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def "message's poll details are shown in list"() {
@@ -22,7 +23,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[0] == 'Bob'
@@ -30,6 +31,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def "poll details are shown in header"() {
@@ -37,7 +39,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def pollTitle = $('#poll-title').text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
@@ -49,6 +51,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			statsPercents == ['(0%)', '(100%)', '(0%)']
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected poll is highlighted'() {
@@ -56,16 +59,17 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
 			selectedMenuItem.text() == 'Football Teams'
 		cleanup:
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 }
 
 class PollListPage extends geb.Page {
- 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}" }
+ 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 	static at = {
 		title.endsWith('Poll')
 	}

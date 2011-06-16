@@ -5,11 +5,15 @@ import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
+class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 
 	def setup() {
 		controller = new MessageController()
+	}
+	
+	def cleanup() {
+		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 
 	def "Inbound messages show up in inbox view"() {
@@ -20,7 +24,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 		when:
 			controller.params.messageSection = 'inbox'
-			def model = controller.list()
+			def model = controller.inbox()
 		then:
 			model.messageInstanceTotal == 2
 			model.messageInstanceList == [messageIn1, messageIn2]
@@ -34,7 +38,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			controller.params.messageSection = 'inbox'
-			def model = controller.list()
+			def model = controller.inbox()
 		then:
 			model.messageInstanceTotal == 4
 			model.messageInstanceList == [message2, message3, message4, message1]
@@ -48,7 +52,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.id = id
 			controller.params.messageSection = 'inbox'
-			controller.show()
+			controller.inbox()
 		then:
 			Fmessage.get(id).read == true
 	}
@@ -59,7 +63,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
-			controller.list()
+			controller.inbox()
 		then:
 			Fmessage.get(id).read
 	}
@@ -70,8 +74,7 @@ class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
           when:
              controller.inbox()
           then:
-             controller.response.redirectedUrl == "/message/inbox/show/${message1.id}"
-             controller.params.id == message1.id
+             controller.params.messageId == message1.id
         }
 
 
