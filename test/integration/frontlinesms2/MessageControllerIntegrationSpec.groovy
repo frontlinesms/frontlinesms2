@@ -11,6 +11,10 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	def setup() {
 		controller = new MessageController()
 	}
+	
+	def cleanup() {
+		Fmessage.findAll()*.delete(flush:true, failOnError:true)
+	}
 
 	def "Inbound messages show up in inbox view"() {
 		setup:
