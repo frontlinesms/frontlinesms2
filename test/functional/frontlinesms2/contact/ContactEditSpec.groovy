@@ -42,6 +42,8 @@ class ContactEditSpec extends ContactGebSpec {
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
 			Contact.findByName('Kate') != null
 			$('#groups-submenu .selected').text() == 'Excellent'
+	  	cleanup:
+	  		g.delete()
 	}
 }
 
