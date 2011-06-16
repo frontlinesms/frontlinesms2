@@ -4,18 +4,7 @@ class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def index = {
-		def latestMessage
-		def messageInstanceList = Fmessage.getInboxMessages().each {
-			if(!latestMessage || it.dateCreated < latestMessage.dateCreated) {
-				latestMessage = it
-			}
-		}
-		params.messageId = latestMessage?.id
-		if(messageInstanceList.size() > 0) {
-			redirect(action: "inbox", params: params)
-		} else {
-			redirect(action:'inbox')
-		}
+		redirect(action:'inbox')
 	}
 
 	def show = {
