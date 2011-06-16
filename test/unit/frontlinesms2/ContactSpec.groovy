@@ -85,29 +85,27 @@ class ContactSpec extends UnitSpec {
 
     def "should not complain if a contact does not have a note"() {
         when:
-          def c = new Contact(notes: null, name: "Tim")
+			def c = new Contact(notes: null, name: "Tim")
         then:
-          c.validate()
-	    when:
-    		c.notes = ""
-    	then:
-    		c.validate()
+        	c.validate()
     }
 
    def 'should be able to add notes with length equal to 1024 chars'() {
-        def notes = "a" * 1024
+	 	setup:
+        	def notes = "a" * 1024
         when:
-          def c = new Contact(name: "Tim", notes: notes)
+			def c = new Contact(name: "Tim", notes: notes)
         then:
-          c.validate()
+        	c.validate()
     }
 
-    def 'should not be able to add notes with length more than 1024 chars'() {
-        def notes = "a" * 1025
+   def 'should not be able to add notes with length more than 1024 chars'() {
+		setup:
+			def notes = "a" * 1025
         when:
-          def c = new Contact(name: "Tim", notes: notes)
+			def c = new Contact(name: "Tim", notes: notes)
         then:
-          !c.validate()
-    }
+			!c.validate()
+   }
 }
 
