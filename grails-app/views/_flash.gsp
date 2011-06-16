@@ -19,3 +19,8 @@
 		<g:renderErrors bean="${pollInstance}" as="list"/>
 	</div>
 </g:hasErrors>
+<g:hasErrors bean="${folderInstance}">
+	<div class="flash errors">
+		<g:renderErrors bean="${folderInstance}" as="list"/>
+	</div>
+</g:hasErrors>

@@ -33,7 +33,7 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 			deleteTestConnections()
 	}
 	
-	def '"Create route" button exists and can be clicked only once' () {
+	def 'CREATE ROUTE button exists and can be clicked only once' () {
 		when:
 			createTestConnection()
 			to ConnectionListPage

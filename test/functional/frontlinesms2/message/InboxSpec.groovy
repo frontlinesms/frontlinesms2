@@ -79,7 +79,7 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestMessages()
 	}
 	
-	def 'CSS classes "read" and "unread" are set on corresponding messages'() {
+	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
 			def m1 = new Fmessage(inbound: true, read: false).save(failOnError:true)
 			def m2 = new Fmessage(inbound: true, read: true).save(failOnError:true)
