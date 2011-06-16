@@ -25,8 +25,10 @@ class FconnectionService {
 			def routes = []
 			getLog().info "Creating routes: $routes..."
 			println "In goes to: $inGoesTo"
+			println "from(${c.camelConsumerAddress}).to($inGoesTo).routeId(in-${c.id})"
 			if(inGoesTo) routes << from(c.camelConsumerAddress).to(inGoesTo).routeId("in-${c.id}")
 			println "out comes from: $outComesFrom"
+			println "from($outComesFrom).to(${c.camelProducerAddress}).routeId(out-${c.id})"
 			if(outComesFrom) routes << from(outComesFrom).to(c.camelProducerAddress).routeId("out-${c.id}")
 			println 'Routes created.'
 			routes

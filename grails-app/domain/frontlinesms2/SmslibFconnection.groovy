@@ -9,10 +9,10 @@ class SmslibFconnection extends Fconnection {
 	String type() { 'Phone/Modem' }
 	
 	String getCamelConsumerAddress() {
-		camelAddress
+		camelAddress()
 	}
 	
 	String getCamelProducerAddress() {
-		camelAddress
+		camelAddress()
 	}
 }
