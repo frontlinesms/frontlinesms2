@@ -26,7 +26,7 @@ class ContactListSpec extends ContactGebSpec {
 
 	def 'contacts list not shown when no contacts exist'() {
 		when:
-			go 'http://localhost:8080/frontlinesms2/contact'
+			go 'contact'
 		then:
 			def c = $('#contacts')
 			assert c.tag() == "div"
