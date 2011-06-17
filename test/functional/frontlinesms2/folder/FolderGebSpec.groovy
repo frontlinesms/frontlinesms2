@@ -11,10 +11,10 @@ class FolderGebSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	static createTestMessages() {
-		[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
-				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
-				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
-				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+		[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateRecieved: new Date() - 4),
+				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateRecieved: new Date() - 3),
+				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started', dateRecieved: new Date() - 2),
+				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked', dateRecieved: new Date() - 1)].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}

@@ -14,6 +14,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			def btnDelete = $('#message-details .buttons a')
 			btnDelete.click()
+            waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			Fmessage.getInboxMessages().size() == 2
 
@@ -21,6 +22,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			def btnDeleteFromPoll = $('#message-details .buttons a')
 			btnDeleteFromPoll.click()
+            waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			Poll.findByTitle('Miauow Mix').messages.size() == 1
 
@@ -28,6 +30,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/folder/${Folder.findByValue('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
 			def btnDeleteFromFolder = $('#message-details .buttons a')
 			btnDeleteFromFolder.click()
+            waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			Fmessage.getFolderMessages(Folder.findByValue('Fools').id).size() == 1
 		cleanup:

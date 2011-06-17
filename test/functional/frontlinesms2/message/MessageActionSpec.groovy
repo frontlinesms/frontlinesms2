@@ -93,6 +93,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			btnAssignToBarcelona.text() == 'barcelona'
 		when:
 			btnAssignToBarcelona.click()
+            waitFor { $("div.flash.message").text().contains("Fmessage") }
 			def barceResponse = PollResponse.findByValue('barcelona')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')

@@ -21,6 +21,7 @@ class CreateFolderSpec extends FolderGebSpec {
 				def btnSave = $('input', name:'save')
 				frmDetails.value = 'Fun'
 				btnSave.click()
+                waitFor { !($("div.flash.message").text().isEmpty()) }
 			then:
 				Folder.count() == initialFolderCount + 1
 				title.contains("Inbox")
