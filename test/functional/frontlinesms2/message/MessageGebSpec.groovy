@@ -14,8 +14,8 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createInboxTestMessages() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateRecieved: new Date() - 2),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateRecieved: new Date() - 1)].each() {
+		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 2),
+				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 1)].each() {
 					it.inbound = true
 					it.save(failOnError:true)
 				}
