@@ -36,8 +36,8 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
       
             new Folder(value: 'home').save(flush: true)
             def folder = Folder.findByValue('home')
-            folder.addToMessages(new Fmessage(src: "Bob", dateRecieved: new Date() - 14))
-            folder.addToMessages(new Fmessage(src: "Jim", dateRecieved: new Date() - 10))
+            folder.addToMessages(new Fmessage(src: "Bob", dateReceived: new Date() - 14))
+            folder.addToMessages(new Fmessage(src: "Jim", dateReceived: new Date() - 10))
             folder.save(flush: true)
         when:
             def results = Fmessage.getFolderMessages(Folder.findByValue("home").id)
@@ -48,14 +48,14 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
     }
 
 	static createTestData() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateRecieved: new Date() - 4),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateRecieved: new Date() - 5),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', dateRecieved: new Date() - 3)].each() {
+		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4),
+				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 5),
+				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', dateReceived: new Date() - 3)].each() {
 					it.inbound = true
 					it.save(failOnError:true)
 				}
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateRecieved: new Date() - 2),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateRecieved: new Date() - 1)].each() {
+		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived: new Date() - 2),
+				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived: new Date() - 1)].each() {
 					it.inbound = false
 					it.save(failOnError:true)
 				}

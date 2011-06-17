@@ -6,7 +6,7 @@ class Fmessage {
 	String text
 	String displaySrc
 	Date dateCreated
-	Date dateRecieved
+	Date dateReceived
 	boolean contactExists
 	boolean inbound
 	boolean read
@@ -15,7 +15,7 @@ class Fmessage {
 	static transients = ['displaySrc']
 	static mapping = {
 		sort dateCreated:'desc'
-		sort dateRecieved:'desc'
+		sort dateReceived:'desc'
 	}
 
 	static constraints = {
@@ -23,7 +23,7 @@ class Fmessage {
 		dst(nullable:true)
 		text(nullable:true)
 		messageOwner(nullable:true)
-		dateRecieved(nullable:true)
+		dateReceived(nullable:true)
 	}
 
 	def getDisplayText() {
@@ -57,7 +57,7 @@ class Fmessage {
 				eq("deleted", false)
 				eq("messageOwner", folder)
 			}
-			order('dateRecieved', 'desc')
+			order('dateReceived', 'desc')
 		}
 		messages
 	}
@@ -69,7 +69,7 @@ class Fmessage {
 				eq("inbound", true)
 				isNull("messageOwner")
 			}
-			order('dateRecieved', 'desc')
+			order('dateReceived', 'desc')
 		}
 		messages
 	}

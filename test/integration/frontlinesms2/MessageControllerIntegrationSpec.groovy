@@ -18,8 +18,8 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def "Inbound messages show up in inbox view"() {
 		setup:
-			def messageIn1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
-			def messageIn2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/20")).save(failOnError: true)
+			def messageIn1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/21")).save(failOnError: true)
+			def messageIn2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/20")).save(failOnError: true)
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 		when:
@@ -32,10 +32,10 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/20")).save(failOnError: true)
-			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/24")).save(failOnError: true)
-			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/23")).save(failOnError: true)
-			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/20")).save(failOnError: true)
+			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/24")).save(failOnError: true)
+			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/23")).save(failOnError: true)
+			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			controller.params.messageSection = 'inbox'
 			def model = controller.inbox()

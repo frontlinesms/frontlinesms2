@@ -69,9 +69,9 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
           poll.addToResponses(new PollResponse(value: "response 3"))
           poll.save(flush: true, failOnError:true)
 
-          PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateRecieved: new Date() - 10)).save(flush: true, failOnError:true)
-          PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateRecieved: new Date() - 2)).save(flush: true, failOnError:true)
-          PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateRecieved: new Date() - 5)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateReceived: new Date() - 10)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateReceived: new Date() - 2)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5)).save(flush: true, failOnError:true)
 
           def result = Poll.findByTitle('question').messages
       then:
