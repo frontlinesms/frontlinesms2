@@ -20,6 +20,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no'
 			btnSave.click()
+            waitFor { !($("div.flash.message").text().isEmpty()) }
 		then:
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
@@ -44,6 +45,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no kidnapped'
 			btnSave.click()
+            waitFor { !($("div.flash.message").text().isEmpty()) }
 			def ufoPoll = Poll.findByTitle("UFOs?")
 		then:
 			ufoPoll.responses*.value.sort() == ['Unknown', 'kidnapped', 'no', 'yes']

@@ -58,7 +58,6 @@ class Fmessage {
 				eq("messageOwner", folder)
 			}
 			order('dateRecieved', 'desc')
-			order('dateCreated', 'desc')
 		}
 		messages
 	}
@@ -71,7 +70,6 @@ class Fmessage {
 				isNull("messageOwner")
 			}
 			order('dateRecieved', 'desc')
-			order('dateCreated', 'desc')
 		}
 		messages
 	}

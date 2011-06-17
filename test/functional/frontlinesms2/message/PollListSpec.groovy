@@ -12,7 +12,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			def pollMessageSources = $('#messages tbody tr td:first-child')*.text()
 		then:
 			at PollListPage
-			pollMessageSources == ['Bob', 'Alice']
+			pollMessageSources == ['Alice', 'Bob']
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -24,7 +24,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[0] == 'Bob'
 			rowContents[1] == 'manchester ("I like manchester")'

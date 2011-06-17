@@ -7,50 +7,26 @@ class MessageController {
 		redirect(action:'inbox')
 	}
 
-	def show = {
-		if (params.deletedMessage) { params.messageId = null }
-		def messageInstanceList
-		if (params.messageId == null) {
-			def latestMessage
+   def show = { messageInstanceList ->
+        def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
+        messageInstance?.updateDisplaySrc()
+        if (messageInstance && !messageInstance.read) {
+          messageInstance.read = true
+          messageInstance.save()
+        }
+         [messageInstance: messageInstance,
+                folderInstanceList: Folder.findAll(),
+                pollInstanceList: Poll.findAll()]
+   }
 
-			// Not quite happy with this bit, is there a way to get messageInstanceList from the action show is being injected into?
-			if(params.messageSection == 'inbox') {
-				messageInstanceList = Fmessage.getInboxMessages().each { it.updateDisplaySrc() }
-			} else if (params.messageSection == 'poll') {
-				messageInstanceList = Poll.get(params.ownerId).messages.each { it.updateDisplaySrc() }
-			} else if (params.messageSection == 'folder') {
-				messageInstanceList = Fmessage.getFolderMessages(params.ownerId).each { it.updateDisplaySrc() }
-			}
 
-			messageInstanceList.each {
-				if(!latestMessage || it.dateCreated < latestMessage.dateCreated) {
-					latestMessage = it
-				}
-			}
-			params.messageId = latestMessage?.id
-		}
-		
-		def messageInstance = Fmessage.get(params.messageId)
-		messageInstance?.updateDisplaySrc()
-		if(messageInstanceList?.size() > 0 && !messageInstance.read) {
-			messageInstance.read = true
-			messageInstance.save()
-		}
-
-		[messageInstance: messageInstance,
-				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
-	}
-
-    def inbox = {
+  def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages()
-		if (Fmessage.getInboxMessages().size() > 0) {
-			messageInstanceList.each { it.updateDisplaySrc()}
-		}
+    	messageInstanceList.each { it.updateDisplaySrc()}
 		params.messageSection = 'inbox'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'inbox',
-				messageInstanceTotal: messageInstanceList.size()] << show()
+				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
 	}
 
     def sent = {
@@ -68,7 +44,7 @@ class MessageController {
 				messageSection: 'poll',
 				messageInstanceTotal: messageInstanceList.size(),
 				ownerInstance: ownerInstance,
-				responseList: ownerInstance.responseStats] << show()
+				responseList: ownerInstance.responseStats] << show(messageInstanceList)
 	}
 	
 	def folder = {
@@ -82,7 +58,7 @@ class MessageController {
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
 				messageInstanceTotal: messageInstanceList.size(),
-				ownerInstance: ownerInstance] << show()
+				ownerInstance: ownerInstance] << show(messageInstanceList)
 	}
 
 	def move = {
@@ -108,7 +84,6 @@ class MessageController {
 		withFmessage { messageInstance ->
 			def responseInstance = PollResponse.get(params.responseId)
 			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
-	//		params.messageSection = 'poll'
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			redirect(action: "poll", params: params)
 		}
@@ -120,9 +95,7 @@ class MessageController {
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			params.deletedMessage = true
-			println "owner ${Fmessage.get(params.messageId).messageOwner}"
-			println "delete ${params}"
+            params.remove('messageId')
 			redirect(action: params.messageSection, params:params)
 		}
 	}

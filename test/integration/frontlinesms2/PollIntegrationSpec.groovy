@@ -60,6 +60,23 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			p.responses.size() == 3
 
 	}
+
+    def "should sort messages based on date received"() {
+      when:
+          def poll = new Poll(title: 'question')
+          poll.addToResponses(new PollResponse(value: "response 1"))
+          poll.addToResponses(new PollResponse(value: "response 2"))
+          poll.addToResponses(new PollResponse(value: "response 3"))
+          poll.save(flush: true, failOnError:true)
+
+          PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateRecieved: new Date() - 10)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateRecieved: new Date() - 2)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateRecieved: new Date() - 5)).save(flush: true, failOnError:true)
+
+          def result = Poll.findByTitle('question').messages
+      then:
+         result*.src == ["src2", "src3", "src1"]
+    }
 	
 	static deleteTestData() {
 		Poll.findAll().each() {

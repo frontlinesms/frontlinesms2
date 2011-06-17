@@ -69,13 +69,13 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	}
 
 	def "first message in the inbox view is selected by default"() {
-          setup:
+        setup:
              def message1 = new Fmessage(inbound:true).save(failOnError: true)
-          when:
-             controller.inbox()
-          then:
-             controller.params.messageId == message1.id
-        }
+        when:
+            def resultMap =  controller.inbox()
+        then:
+            resultMap['messageInstance'].id == message1.id
+    }
 
 
 	Date createDate(String dateAsString) {

@@ -15,7 +15,7 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:first-child')*.text()
 		then:
-			messageSources == ['Bob', 'Alice']
+			messageSources == ['Alice', 'Bob']
 		cleanup:
 			deleteTestMessages()
 	}
@@ -27,8 +27,8 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[0] == 'Bob'
-			rowContents[1] == 'hi Bob'
+			rowContents[0] == 'Alice'
+			rowContents[1] == 'hi Alice'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
@@ -40,7 +40,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to MessagesPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:

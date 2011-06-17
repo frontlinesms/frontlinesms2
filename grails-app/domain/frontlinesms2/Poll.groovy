@@ -24,7 +24,6 @@ class Poll {
 				'in'("messageOwner", this.responses)
 			}
 			order('dateRecieved', 'desc')
-			order('dateCreated', 'desc')
 		}
 	}
 
