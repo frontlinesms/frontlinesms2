@@ -13,33 +13,24 @@
 </script>
 <g:form name="searchDetails" action="search" class="content-menu">
 	<div id="search-details" >
-		<div id="field">
+		<div class="field">
 			<label for="keywords" class="keywords">Keyword or phrase:</label>
 			<g:textField name="keywords" id="keywords" value=""/>
 		</div>
-		<div id="filter">
-		  <g:if test="${groupInstanceList || pollInstanceList}">
-			  <label>Limit Search to:</label>
-			  <div class="field">
-				  <select id="grouplist" name="groupList">
-						  <option value="">Select group</option>
-						  <g:each in="${groupInstanceList}" status="i" var="g">
-							  <option value="${g.id}">${g.name}</option>
-						  </g:each>
-				  </select>
-			  </div>
-			  <div class="field">
-				  <select id="activitylist" name="activityList">
-						  <option value="">Select activity / folder</option>
-						  <g:each in="${pollInstanceList}" status="i" var="p">
-							  <option value="${p.id}">${p.title}</option>
-						  </g:each>
-						  <g:each in="${folderInstanceList}" status="i" var="f">
-							  <option value="${f.id}">${f.value}</option>
-						  </g:each>
-				  </select>
-				<g:hiddenField name="selectedActivity" value=""/>
-			  </div></g:if>
+		<div id="search-filters">
+			<g:if test="${groupInstanceList || pollInstanceList}">
+				<label>Limit Search to:</label>
+				<div class="field">
+					<g:select name="groupId" from="${groupInstanceList}" value="groupId"
+							  optionKey="id"
+							  optionValue="name"/>
+				</div>
+				<div class="field">
+					<g:select name="activityId" from="${pollInstanceList + folderInstanceList}" value="activityId"
+							  optionKey="${{(it instanceof frontlinesms2.Poll?'poll':'folder') + '-' + it.id}}"
+							  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.value}}"/>
+				</div>
+			</g:if>
 
 		</div>
 	</div>

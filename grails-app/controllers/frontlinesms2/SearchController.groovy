@@ -12,19 +12,10 @@ class SearchController {
 	}
 	
 	def search = {
-		def groupInstance = Group.get(params.groupList)
-		def messageOwner
-		def activityInstance
-		if(params.activityList){
-			if(Poll.findById(params.activityList) && Poll.findByTitle(params.selectedActivity)){
-				activityInstance = Poll.findById(params.activityList)
-				messageOwner = activityInstance.responses
-			}
-			else if(Folder.findById(params.activityList) && Folder.findByValue(params.selectedActivity)){
-				activityInstance = Folder.findById(params.activityList)
-				messageOwner = Folder.findById(params.activityList)
-			}
-		}
+		println "Action:search; params:$params"
+		def groupInstance = Group.get(params.groupId)
+		def activityInstance = getActivityInstance()
+		def messageOwner = getMessageOwner(activityInstance)
 		 
 		def results = search(params.keywords, groupInstance, messageOwner)
 		def latestMessage
@@ -60,5 +51,22 @@ class SearchController {
 		results*.updateDisplaySrc()
 		results
 	}
+
+	private def getActivityInstance() {
+		if(!params.activityId) return null
+		else {
+			def stringParts = params.activityId.tokenize('-')
+			def activityType = stringParts[0] == 'poll'? Poll : Folder
+			println "Activity type: $activityType"
+			def activityId = stringParts[1]
+			println "activityId: $activityId"
+			def activity = activityType.findById(activityId)
+			println "Fetched activity: $activity"
+			activity
+		}
+	}
 	
+	private def getMessageOwner(activity) {
+		activity instanceof Poll ? activity.responses : activity
+	}
 }
