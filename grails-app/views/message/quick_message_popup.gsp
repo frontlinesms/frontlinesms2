@@ -1,21 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<div id="main">
-	<div class="content-menu">
-		<li>Enter Message</li>
-		<li>Select Recipients</li>
-		<li>Confirm</li>
-	</div>
-
-	<div class="content-menu">
-	<div id="message-text">
+<div>
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Enter Message</a></li>
+		<li><a href="#tabs-2">Select Recipients</a></li>
+		<li><a href="#tabs-3">Confirm</a></li>
+	</ul>
+	<div id="tabs-1">
 		<label for="message">Enter message</label>
 		<g:textArea name="message" rows="5" cols="40"/>
 	</div>
-	<div id="message-recipient">
-			<label for="address">Add phone number</label>
-			<g:textField name="address"/>
+	<div id="tabs-2">
+		<label for="address">Add phone number</label>
+		<g:textField name="address"/>
 	</div>
-	<div id="confirm-send">
+	<div id="tabs-3">
+		<label>Do you want to send?</label>
 	</div>
 </div>
 </div>
