@@ -31,7 +31,19 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor {$('div#tabs-3').displayed}
 		then:
 			$('div#tabs-3').displayed
+	}
 
+	def "should add the manually entered contacts to the list "() {
+		when:
+			to MessagesPage
+			$("a.quick_message").click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+			waitFor {$('div#tabs-2').displayed}
+			$("#address").value("+919544426000")
+			$('.add-address').click()
+		then:
+			$('div#contacts div')[0].find('input').value() == "+919544426000"
 	}
 }
 
