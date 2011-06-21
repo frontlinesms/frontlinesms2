@@ -75,7 +75,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 //			Group.count() == 2
 //	}
 
-	def "when a new contact is saved, user is redirected to the group's show page"() {
+	def "when a new contact is saved, user is redirected to the contact's show page"() {
 		given:
 			controller.params.name = 'new contact'
 			controller.params.address = '1234565'

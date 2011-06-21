@@ -80,7 +80,6 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 		when:
 			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
-//			to BobsContactPage
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			groupSelecter.find(name: 'group-dropdown').value('Others')
 			$("#contactDetails .save").click()
