@@ -103,7 +103,10 @@ class MessageController {
 	}
 
 	def send = {
-		[params.addresses].flatten().each { address ->
+		def addresses = [params.addresses].flatten() - null
+		def groups = [params.groups].flatten() - null
+		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses.unique().each { address ->
 			//TODO: Need to add source from app settings
 			def message = new Fmessage(dst: address, text: params.messageText)
 			messageSendService.process(message)
