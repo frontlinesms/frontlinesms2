@@ -14,6 +14,8 @@ import java.util.Date
 class BootStrap {
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
+			//DB Viewer
+			//org.hsqldb.util.DatabaseManager.main()
 			// do custom init for dev here
 			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 			def alice = createContact("Alice", "+123456789")
