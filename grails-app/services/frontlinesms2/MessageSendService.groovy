@@ -4,7 +4,7 @@ class MessageSendService {
     static transactional = true
 
  public void process(Fmessage message) {
-  println("MessageStorageService.process()")
+  println("MessageSendService.process()")
   println("Sending message: ${message}")
   assert message instanceof Fmessage
  }
