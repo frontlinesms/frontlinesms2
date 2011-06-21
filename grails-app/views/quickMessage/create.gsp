@@ -33,9 +33,11 @@
 			</g:each>
 		</div>
 		<g:link url="#" class="next">Next</g:link>
+		<g:link url="#" class="back">Back</g:link>
 	</div>
 		<div id="tabs-3">
 		<label>Do you want to send?</label>
+		<g:link url="#" class="back">Back</g:link>
 		<g:submitButton name="send-msg">Send</g:submitButton>
 	</div>
 	</g:form>
