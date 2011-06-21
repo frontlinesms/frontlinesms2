@@ -26,7 +26,6 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 			btnGotoSettings.click()
 		then:
 			at SettingsPage
-			println $('#main-tabs #goto-settings').classes()
 			$('#main-tabs #goto-settings').hasClass('selected')
 	}
 
