@@ -11,6 +11,13 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnNewPoll.getAttribute('href') == "/frontlinesms2/poll/create"
 	}
 
+	def "'messages' menu item is selected when creating a new poll"() {
+		when:
+			go 'poll/create'
+		then:
+			$('#goto-messages').hasClass('selected')
+	}
+	
 	def 'button to save new poll with keyword choices and title works'() {
 		given:
 			createTestPolls()
