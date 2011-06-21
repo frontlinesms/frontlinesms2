@@ -19,12 +19,18 @@ class BootStrap {
 			def alice = createContact("Alice", "+123456789")
 			def friends = Group.findByName('Friends')
 			def notCats = Group.findByName('Not Cats')
-			createContact("Bob", "+198765432")
+			def bob = createContact("Bob", "+198765432")
 			Contact.findAll().each() {
 				GroupMembership.create(it, friends)
 				GroupMembership.create(it, notCats)
 			}
 			createContact("Kate", "+198730948")
+
+			[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
+				new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
+					it.save(failOnError:true, flush:true)
+				}
+//			alice.addToCustomFields(CustomField.findByName('lake')).save(failOnError:true, flush:true)
 
 			new EmailFconnection(name:"mr testy's email", protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
