@@ -33,6 +33,23 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$('div#tabs-3').displayed
 	}
 
+    def "should select the previous tab on click of back"() {
+		when:
+			to MessagesPage
+			$("a.quick_message").click()
+			waitFor {$('div#tabs-1').displayed}
+			$(".next").click()
+			waitFor {$('div#tabs-3').displayed}
+		then:
+			$('div#tabs-3').displayed
+        when:
+			$("div#tabs-3 .back").click()
+			waitFor {$('div#tabs-2').displayed}
+		then:
+			$('div#tabs-2').displayed
+
+	}
+
 	def "should add the manually entered contacts to the list "() {
 		when:
 			to MessagesPage
