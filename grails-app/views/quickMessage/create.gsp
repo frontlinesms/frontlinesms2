@@ -13,12 +13,33 @@
 	</div>
 	<div id="tabs-2">
 		<label for="address">Add phone number</label>
-		<g:textField name="address"/>
+		<g:textField id="address" name="address"/>
+		<g:link url="#" class="add-address">Add</g:link>
+		<div id="groups">
+		<g:each in="${groupList}" var="group">
+			<div>
+				<input type="checkbox" name="contact" value="${group.name}">${group.name}</input>
+			</div>
+		</g:each>
+		</div>
+
+		<div id="contacts">
+			<g:each in="${contactList}" var="contact">
+				<div>
+					<input type="checkbox" name="contact" value="${contact.address}">${contact.name ?: contact.address}</input>
+				</div>
+			</g:each>
+		</div>
 		<g:link url="#" class="next">Next</g:link>
 	</div>
 	<div id="tabs-3">
 		<label>Do you want to send?</label>
+		<g:link url="#">Send</g:link>
 	</div>
 </div>
 </div>
+
+
+
+
 
