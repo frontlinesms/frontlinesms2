@@ -9,13 +9,16 @@
 	<div id="tabs-1">
 		<label for="message">Enter message</label>
 		<g:textArea name="message" rows="5" cols="40"/>
+		<g:link url="#" class="next">Next</g:link>
 	</div>
 	<div id="tabs-2">
 		<label for="address">Add phone number</label>
 		<g:textField name="address"/>
+		<g:link url="#" class="next">Next</g:link>
 	</div>
 	<div id="tabs-3">
 		<label>Do you want to send?</label>
 	</div>
 </div>
 </div>
+
