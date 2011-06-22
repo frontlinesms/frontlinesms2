@@ -50,18 +50,6 @@ class Fmessage {
 		this
 	}
 
-	static def getFolderMessages(folderId) {
-		def folder = Folder.get(folderId)
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				eq("messageOwner", folder)
-			}
-			order('dateReceived', 'desc')
-		}
-		messages
-	}
-
 	static def getInboxMessages() {
 		def messages = Fmessage.createCriteria().list {
 			and {

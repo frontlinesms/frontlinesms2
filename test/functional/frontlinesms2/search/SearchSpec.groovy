@@ -102,7 +102,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
 			to SearchPage
-			def a = Folder.findByValue("Work")
+			def a = Folder.findByName("Work")
 			searchFrm.activityId = "folder-${a.id}"
 		when:
 			searchBtn.click()
@@ -132,17 +132,17 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	private createTestMessages() {
 		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00'),
-			new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex')].each() {
-					it.inbound = true
-					it.save(failOnError:true)
-				}
+				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex')].each() {
+			it.inbound = true
+			it.save(failOnError:true)
+		}
 	}
 	
 	private createTestPollsAndFolders() {
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
-		Folder f = new Folder(value: "Work").save(failOnError:true, flush:true)
+		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
 	}
 	private deleteTestPollsAndFolders() {
 		Poll.findAll()*.delete(flush:true, failOnError:true)

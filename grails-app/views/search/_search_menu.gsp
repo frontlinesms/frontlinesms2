@@ -29,7 +29,7 @@
 					<g:select name="activityId" from="${pollInstanceList + folderInstanceList}"
 							  value="${activityId}"
 							  optionKey="${{(it instanceof frontlinesms2.Poll?'poll':'folder') + '-' + it.id}}"
-							  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.value}}"
+							  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.name}}"
 							  noSelection="${['':'Select activity / folder']}"/>
 				</div>
 			</g:if>

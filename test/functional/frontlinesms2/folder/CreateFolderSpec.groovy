@@ -27,7 +27,7 @@ class CreateFolderSpec extends FolderGebSpec {
 				go "folder/create"
 				def frmDetails = $("#folder-details")
 				def btnSave = $('input', name:'save')
-				frmDetails.value = 'Fun'
+				frmDetails.name = 'Fun'
 				btnSave.click()
                 waitFor { !($("div.flash.message").text().isEmpty()) }
 			then:

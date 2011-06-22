@@ -65,8 +65,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "message searches can be restricted to a folder"() {
 		when:
-			new MessageOwner(value: 'work').save(failOnError: true, flush:true)
-			folder = new Folder(value: 'work')
+			folder = new Folder(name: 'work').save(failOnError:true, flush:true)
 			folder.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true, flush:true)
 			controller.params.searchString = "work"
 			controller.params.activityId = "folder-${folder.id}"

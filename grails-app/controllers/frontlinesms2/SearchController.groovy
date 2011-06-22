@@ -27,7 +27,7 @@ class SearchController {
 				} else if(!activity) {
 					"'${group.name}'"
 				} else {
-					String activityDescription = activity instanceof Poll? activity.title: activity.value
+					String activityDescription = activity instanceof Poll? activity.title: activity.name
 					if(group) {
 						"'${group.name}' and '$activityDescription'"
 					} else "'$activityDescription'"
