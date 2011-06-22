@@ -7,19 +7,29 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import frontlinesms2.contact.ContactListPage
 
 class SettingsSpec extends grails.plugin.geb.GebSpec {
-	def 'settings menu item is available in eyebrow'() {
+	
+	def 'eyebrow list is present in the global navigation header'() {
 		when:
 			to ContactListPage
-			def btnGotoSettings = $('#eyebrow #goto-settings')
+			def list = $("ul",id:"main-tabs").children('li')
+		then:
+			assert list*.text() == ['Messages','Contacts','Reports','Search', 'Settings & Plugins']
+	}
+	
+	def 'settings menu item is available in global navigation and is selected'() {
+		when:
+			to ContactListPage
+			def btnGotoSettings = $('#main-tabs #goto-settings')
 		then:
 			btnGotoSettings.text() == 'Settings & Plugins'
 		when:
 			btnGotoSettings.click()
 		then:
 			at SettingsPage
+			$('#main-tabs #goto-settings').hasClass('selected')
 	}
 
-	def '"phones & connections" menu item is available settings menu'() {
+	def 'PHONES & CONNECTIONS menu item is available settings menu'() {
 		when:
 			to SettingsPage
 		then:

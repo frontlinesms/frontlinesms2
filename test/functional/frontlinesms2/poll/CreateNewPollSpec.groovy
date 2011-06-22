@@ -11,6 +11,13 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnNewPoll.getAttribute('href') == "/frontlinesms2/poll/create"
 	}
 
+	def "'messages' menu item is selected when creating a new poll"() {
+		when:
+			go 'poll/create'
+		then:
+			$('#goto-messages').hasClass('selected')
+	}
+	
 	def 'button to save new poll with keyword choices and title works'() {
 		given:
 			createTestPolls()
@@ -20,6 +27,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no'
 			btnSave.click()
+            waitFor { !($("div.flash.message").text().isEmpty()) }
 		then:
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
@@ -44,6 +52,7 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no kidnapped'
 			btnSave.click()
+            waitFor { !($("div.flash.message").text().isEmpty()) }
 			def ufoPoll = Poll.findByTitle("UFOs?")
 		then:
 			ufoPoll.responses*.value.sort() == ['Unknown', 'kidnapped', 'no', 'yes']

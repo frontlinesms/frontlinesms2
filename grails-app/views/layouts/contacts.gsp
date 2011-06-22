@@ -8,7 +8,7 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
 	<body>
-		<g:render template="/eyebrow"/>
+		<g:render template="/tabs"/>
 		<g:render template="/flash"/>
 		<div id="main">
 			<g:render template="menu"/>

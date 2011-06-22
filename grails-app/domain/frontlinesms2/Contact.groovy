@@ -4,6 +4,7 @@ class Contact {
 	String name
 	String address
 	static hasMany = [customFields: CustomField]
+    String notes
 
     static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
@@ -18,6 +19,8 @@ class Contact {
 					obj.name != null
 				}
 		})
+
+        	notes(nullable: true, maxSize: 1024)
 		customFields(unique: false)
 	}
 
@@ -49,5 +52,13 @@ class Contact {
 
 	boolean isMemberOf(Group group) {
 	   GroupMembership.countByContactAndGroup(this, group) > 0
+	}
+
+	def getInboundMessagesCount() {
+		address? Fmessage.countByDst(address): 0
+	}
+
+	def getOutboundMessagesCount() {
+		address? Fmessage.countBySrc(address): 0
 	}
 }

@@ -91,3 +91,8 @@ log4j = {
 
     warn   'org.mortbay.log'
 }
+
+codenarc {
+	reportName = 'target/test-reports/CodeNarcReport.xml'
+	reportType = 'xml'
+}

@@ -6,8 +6,8 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound: true).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound: true).save()
 			def p = Poll.createPoll('This is a poll', ['Manchester', 'Barcelona']).save(failOnError:true, flush:true)
-			PollResponse.findByValue('Manchester').addToMessages(message1)
-			PollResponse.findByValue('Barcelona').addToMessages(message2)
+			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
+			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
 		then:
 			p.messages.size() == 2
@@ -60,6 +60,23 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			p.responses.size() == 3
 
 	}
+
+    def "should sort messages based on date received"() {
+      when:
+          def poll = new Poll(title: 'question')
+          poll.addToResponses(new PollResponse(value: "response 1"))
+          poll.addToResponses(new PollResponse(value: "response 2"))
+          poll.addToResponses(new PollResponse(value: "response 3"))
+          poll.save(flush: true, failOnError:true)
+
+          PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateReceived: new Date() - 10)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateReceived: new Date() - 2)).save(flush: true, failOnError:true)
+          PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5)).save(flush: true, failOnError:true)
+
+          def result = Poll.findByTitle('question').messages
+      then:
+         result*.src == ["src2", "src3", "src1"]
+    }
 	
 	static deleteTestData() {
 		Poll.findAll().each() {

@@ -14,6 +14,8 @@ import java.util.Date
 class BootStrap {
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
+			//DB Viewer
+			//org.hsqldb.util.DatabaseManager.main()
 			// do custom init for dev here
 			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 			def alice = createContact("Alice", "+123456789")
@@ -41,9 +43,9 @@ class BootStrap {
 			[new Fmessage(src:'Alice', dst:'+2541234567', text:'manchester rules!'),
 					new Fmessage(src:'Bob', dst:'+254987654', text:'go manchester'),
 					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
-					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateRecieved:createDate("2011/01/21")),
-					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateRecieved:createDate("2011/01/20")),
-					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateRecieved:createDate("2011/01/23"))].each() {
+					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
+					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
+					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateReceived:createDate("2011/01/23"))].each() {
 						it.inbound = true
 						it.save(failOnError:true)
 					}
