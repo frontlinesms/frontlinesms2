@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.hibernate.criterion.Projections
 
 class GroupMembership implements Serializable {
     Contact contact
@@ -45,4 +46,8 @@ class GroupMembership implements Serializable {
       version false
       table 'group_member'
    }
+
+	static def getGroupDetails() {
+		GroupMembership.list().groupBy { it.group.name}
+	}
 }

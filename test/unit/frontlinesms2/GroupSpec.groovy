@@ -66,5 +66,18 @@ class GroupSpec extends UnitSpec {
 			assert longNameGroup.name.length() > 255
 			!longNameGroup.validate()
 	}
+
+	def "should get all the member addresses for a group"() {
+		setup:
+			def group = new Group(name: "Sahara")
+			mockDomain Group, [group]
+			mockDomain GroupMembership, [new GroupMembership(group: group, contact: new Contact(address: "12345")),
+				new GroupMembership(group: group, contact: new Contact(address: "56484"))]
+		when:
+			def result = group.getAddresses()
+		then:
+			result == ["12345", "56484"]
+
+	}
 }
 
