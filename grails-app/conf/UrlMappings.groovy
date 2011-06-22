@@ -8,20 +8,20 @@ class UrlMappings {
 		}
 		"/group/show/$groupId"(controller:'contact') {}
 
-		"/message/inbox"(controller:'message', action:'inbox') {}
-		"/message/inbox/show/$id"(controller:'message', action:'show') {
-			messageSection = 'inbox'
-		}
+		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
 
-		"/message/sent"(controller:'message', action:'sent') {}
-		"/message/sent/show/$id"(controller:'message', action:'show') {
-			messageSection = 'sent'
-		}
+		"/message/poll/$ownerId"(controller:'message', action:'poll') {}
+		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
 
-		"/message/poll/$pollId"(controller:'message', action:'poll') {}
-		"/message/poll/$pollId/show/$id"(controller:'message', action:'show') {
-			messageSection = 'poll'
-		}
+		"/folder/$ownerId"(controller:'message', action:'folder') {}
+		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
+
+		// Don't know why this is neccessary, but it is
+		"/poll/create"(controller:'poll', action:'create')
+		"/poll/save"(controller:'poll', action:'save')
+		"/folder/create"(controller:'folder', action:'create')
+		"/folder/save"(controller:'folder', action:'save')
+
 
 		"/$controller/$action?/$id?"{
 			constraints {

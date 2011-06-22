@@ -45,4 +45,8 @@ class GroupMembership implements Serializable {
       version false
       table 'group_member'
    }
+
+	static def getGroupDetails() {
+		GroupMembership.list().groupBy { it.group.name}
+	}
 }

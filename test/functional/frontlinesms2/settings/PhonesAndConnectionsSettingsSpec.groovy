@@ -14,22 +14,20 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 
-	def 'connections are listed in "phone & connections" panel'() {
+	def 'connections are listed in PHONE & CONNECTIONS panel'() {
 		given:
 			createTestConnections()
 		when:
 			to ConnectionListPage
 		then:
 			lstConnections != null
-			lstConnections.find('h2')*.text() == ['MTN Dongle', 'David\'s Clickatell account', 'Miriam\'s Clickatell account']
+			lstConnections.find('h2')*.text() == ['MTN Dongle','Miriam\'s Clickatell account']
 		cleanup:	
 			deleteTestConnections()
 	}
 
 	def createTestConnections() {
 		[new SmslibFconnection(name:'MTN Dongle', port:'stormyPort'),
-				new EmailFconnection(name:'David\'s Clickatell account', protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
-						serverPort:993, username:'mr.testy@zoho.com', password:'mister'),
 				new EmailFconnection(name:'Miriam\'s Clickatell account', protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
 						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
 			it.save(flush:true, failOnError: true)
@@ -37,9 +35,9 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def deleteTestConnections() {
-		SmslibFconnection.findAll().each() { it.delete(flush: true) }
-		EmailFconnection.findAll().each() { it.delete(flush: true) }
-		Fconnection.findAll().each() { it.delete(flush: true) }
+		SmslibFconnection.findAll().each() { it?.delete(flush: true) }
+		EmailFconnection.findAll().each() { it?.delete(flush: true) }
+		Fconnection.findAll().each() { it?.delete(flush: true) }
 	}
 }
 

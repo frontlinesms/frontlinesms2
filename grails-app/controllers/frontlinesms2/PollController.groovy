@@ -1,30 +1,25 @@
 package frontlinesms2
 
 class PollController {
-
-    def index = {
+	def index = {
 		 redirect(action: "create", params: params)
 	}
 
 	def create = {
 		def pollInstance = new Poll()
-        pollInstance.properties = params
-        [pollInstance: pollInstance]
+		pollInstance.properties = params
+		[pollInstance: pollInstance]
 	}
 
 	def save = {
-        def pollInstance = new Poll(title: params.title)
-		def responseList = params.responses.tokenize().collect() {
-			new PollResponse(value:it)
-		}
-		pollInstance.responses = responseList
+		def responseList = params.responses.tokenize()
+		def pollInstance = Poll.createPoll(params.title, responseList)
 		
 		if (pollInstance.save(flush: true)) {
-            flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
-			redirect(controller: "message")
+			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
+			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {
-			println "Something went wrong while saving the poll instance."
-            render(view: "create", model: [pollInstance: pollInstance])
-        }
-    }
+			render(view: "create", model: [pollInstance: pollInstance])
+		}
+	}
 }

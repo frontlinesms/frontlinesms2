@@ -30,11 +30,11 @@ class MessageStorageServiceSpec extends UnitSpec {
 	}
 
 	def createTestExchange(def fmessage) {
-		CamelContext context = null
+		CamelContext context = Mock(CamelContext)
 		Exchange exchange = new DefaultExchange(context)
 		org.apache.camel.Message message = exchange.in
-        message.setBody(fmessage);
-        return exchange;
+		message.setBody(fmessage);
+		return exchange;
 	}
 }
 

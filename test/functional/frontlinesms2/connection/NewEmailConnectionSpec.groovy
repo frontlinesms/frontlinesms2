@@ -25,7 +25,7 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 			frmNewConnection.password = 'pastie'
 			btnNewConnectionSave.click()
 		then:
-			at ConnectionListPage
+			at ConnectionShowPage
 			Fconnection.count() == 1
 			selectedConnection.find('h2').text() == 'test email connection'
 			selectedConnection.find('h3').text() == 'Email'
@@ -33,18 +33,16 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 			deleteTestConnections()
 	}
 	
-	def '"Create route" button exists and can be clicked' () {
+	def 'CREATE ROUTE button exists and can be clicked only once' () {
 		when:
 			createTestConnection()
 			to ConnectionListPage
 		then:
-			def btnCreateRoute = lstConnections.find('.buttons a').first()
 			btnCreateRoute.text() == 'Create route'
-			// FIXME email route should be mocked as this create
 		when:
 			btnCreateRoute.click()
 		then:
-			at ConnectionListPage
+			!btnCreateRoute.present
 		cleanup:
 			deleteTestConnections()
 	}

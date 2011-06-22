@@ -8,7 +8,7 @@ $blueprint_grid_width: 30px;
 
 @import "compass/reset";
 @import "blueprint";
-
+@import "compass/typography/lists/horizontal-list";
 
 /* DEBUG */
 div {
@@ -88,6 +88,13 @@ body {
 			font-size: 1.1em;
 		}
 	}
+	#poll-actions {
+		@include column(6, true);
+	}
+}
+
+#main-tabs {
+  @include horizontal-list
 }
 
 /* GENERAL */

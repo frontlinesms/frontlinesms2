@@ -15,7 +15,7 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:first-child')*.text()
 		then:
-			messageSources == ['Bob', 'Alice']
+			messageSources == ['Alice', 'Bob']
 		cleanup:
 			deleteTestMessages()
 	}
@@ -27,9 +27,8 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			println $('#messages').text()
-			rowContents[0] == 'Bob'
-			rowContents[1] == 'hi Bob'
+			rowContents[0] == 'Alice'
+			rowContents[1] == 'hi Alice'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
@@ -41,7 +40,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to MessagesPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
@@ -80,22 +79,38 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestMessages()
 	}
 	
-	def 'CSS classes "read" and "unread" are set on corresponding messages'() {
+	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
 			def m1 = new Fmessage(inbound: true, read: false).save(failOnError:true)
 			def m2 = new Fmessage(inbound: true, read: true).save(failOnError:true)
 			assert !m1.read
 			assert m2.read
 		when:
-			go "message/inbox/"
+			go "message/inbox/show/$m2.id"
 		then:
 			$("tr#message-${m1.id}").hasClass('unread')
 			!$("tr#message-${m1.id}").hasClass('read')
 			
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
+		cleanup:
+			deleteTestMessages()
 	}
-
+	
+	def 'contact name is displayed if message src is an existing contact'() {
+		given:
+			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound: true).save(failOnError:true)
+			def contact = new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+		when:
+			to MessagesPage
+			def rowContents = $('#messages tbody tr td:nth-child(1)')*.text()
+		then:
+			rowContents == ['June']
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
+	}
+	
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)

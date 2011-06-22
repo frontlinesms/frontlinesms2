@@ -40,3 +40,8 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT'
 	}
 }
+
+coverage {
+	xml = true
+	enabledByDefault = true
+}

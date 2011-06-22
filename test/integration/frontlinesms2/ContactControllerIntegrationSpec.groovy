@@ -63,22 +63,24 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			controller.response.redirectedUrl == "/group/show/${g.id}/contact/show/${c.id}?max=10&sort=name"
 	}
-
-	def "when a new group is saved, user is redirected to the group's show page"() {
-		given:
-			controller.params.name = 'new group'
-			assert Group.count() == 1
-		when:
-			controller.saveGroup()
-		then:
-			controller.response.redirectedUrl =~ /\/group\/show\/\d/
-			Group.count() == 2
-	}
+//
+//	def "when a new group is saved, user is redirected to the group's show page"() {
+//		given:
+//			controller.params.name = 'new group'
+//			assert Group.count() == 1
+//		when:
+//			controller.saveGroup()
+//		then:
+//			controller.response.redirectedUrl =~ /\/group\/show\/\d/
+//			Group.count() == 2
+//	}
 
 	def "when a new contact is saved, user is redirected to the group's show page"() {
 		given:
 			controller.params.name = 'new contact'
 			controller.params.address = '1234565'
+			controller.params.groupsToAdd = ","
+			controller.params.groupsToRemove = ","
 			assert Contact.count() == 1
 		when:
 			controller.saveContact()

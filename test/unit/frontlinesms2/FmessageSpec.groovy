@@ -4,7 +4,7 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class FmessageSpec extends UnitSpec {
-	def 'check that "read" flag cannot be null'() {
+	def 'check that READ flag cannot be null'() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
@@ -19,28 +19,39 @@ class FmessageSpec extends UnitSpec {
 		then:
 			message.read == false
 	}
-//
-//	def "message doesn't have to have an activity"() {
-//		given:
-//			mockDomain(Fmessage)
-//		when:
-//			new Fmessage().save()
-//		then:
-//			Fmessage.count() == 1
-//	}
-//
-//	def 'message can have an activity'() {
-//		given:
-//			mockDomain(Fmessage)
-//			mockDomain(Poll)
-//			mockDomain(PollResponse)
-//			Poll p = new Poll(title:'Test poll').save()
-//			PollResponse response = new PollResponse(poll:p, value:'yes').save()
-//		when:
-//			def m = new Fmessage(activity:response).save()
-//		then:
-//			Fmessage.count() == 1
-//			Fmessage.get(m.id).activity == response
-//	}
+	
+	def 'deleting message sets deleted flag to true'() {
+		when:
+			Fmessage message = new Fmessage()
+		then:
+			message.deleted == false
+		when:
+			message.toDelete()
+		then:
+			message.deleted == true
+	}
+
+	def "message doesn't have to have an activity"() {
+		given:
+			mockDomain(Fmessage)
+		when:
+			new Fmessage().save()
+		then:
+			Fmessage.count() == 1
+	}
+
+	def 'message can have an activity'() {
+		given:
+			mockDomain(Fmessage)
+			mockDomain(Poll)
+			mockDomain(PollResponse)
+			Poll p = new Poll(title:'Test poll').save()
+			PollResponse response = new PollResponse(value:'yes').save()
+		when:
+			def m = new Fmessage(messageOwner:response).save()
+		then:
+			Fmessage.count() == 1
+			Fmessage.get(m.id).messageOwner == response
+	}
 }
 

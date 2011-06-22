@@ -2,8 +2,11 @@
 <html>
     <head>
         <meta name="layout" content="contacts" />
-		<g:javascript library="jquery" plugin="jquery"/>
 		<script type="text/javascript">
+			$(function() {
+			    $('input[name="name"]').focus();
+			});
+			
 			$(document).ready(function() {
   				$("#group-list li a.remove-group").click(removeGroupClickAction);
 				$("#group-dropdown").change(addGroupClickAction);
@@ -92,6 +95,10 @@
 					<label for="address"><g:message code="contact.address.label" default="Address"/></label>
 					<g:textField name="address" id="address" value="${contactInstance?.address}"/>
 				</div>
+				<div class="field">
+					<label for="notes"><g:message code="contact.notes.label" default="Notes"/></label>
+					<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				</div>
 			</div>
 			<ol id="group-list">
 				<g:each in="${contactGroupInstanceList}" status="i" var="g">
@@ -112,9 +119,21 @@
 					</g:each>
 				</select>
 			</div>
+			<g:if test="${contactInstance.id}">
+				<div id="message-count">
+					<h3>Messages</h3>
+					<p>${contactInstance.inboundMessagesCount} messages sent</p>
+					<p>${contactInstance.outboundMessagesCount} messages received</p>
+				</div>
+			</g:if>
 			<div class="buttons">
-				<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-				<g:link class="cancel" action="show" id="${contactInstance.id}" default="Cancel">Cancel</g:link>
+				<g:if test="${contactInstance.id}">
+					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
+				</g:if>
+			  <g:else>
+				<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+			  </g:else>
+				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 			</div>
 		</g:form>
     </body>

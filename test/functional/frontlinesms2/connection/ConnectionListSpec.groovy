@@ -41,4 +41,14 @@ class ConnectionListSpec extends ConnectionGebSpec {
 		cleanup:
 			deleteTestConnections()
 	}
+	
+	def 'The first connection in the connection list page is selected'() {
+		when: 
+			createTestConnection()
+			to ConnectionListPage
+		then:
+			$('#connections .selected').size() == 1
+		cleanup:
+			deleteTestConnections()
+	}
 }

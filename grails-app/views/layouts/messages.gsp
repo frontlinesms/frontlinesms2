@@ -6,21 +6,37 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
-	</head>
+		<jqui:resources />
+    </head>
 	<body>
-		<g:render template="/eyebrow"/>
-		<g:render template="/flash"/>
+		<g:render template="/tabs"/>
+		<g:render template="quick_message"/>	
+        <g:render template="/flash"/>
 		<div id="main">
 			<g:render template="menu"/>
 			<g:render template="message_list"/>
 			<g:if test="${messageInstance != null}">
 				<div id="message-details">
-					<p class="message-name">${contactInstance?.name?:messageInstance?.src}</p>
+					<p class="message-name">${messageInstance.displaySrc}</p>
 					<g:def var="thisAddress" value="${messageInstance.src}"/>
-					<g:link class="button" controller="contact" action="createContact" params="[address: thisAddress]">+</g:link>
+					<g:if test="${!messageInstance.contactExists}">
+						<g:link class="button" controller="contact" action="createContact" params="[address: thisAddress]">+</g:link>
+					</g:if>
 					<p class="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
 					<p class="message-body">${messageInstance.text}</p>
+					<div class="buttons">
+						<g:if test="${messageSection == 'poll'}">
+							<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance.id, messageId: messageInstance.id]">Delete</g:link>
+						</g:if>
+						<g:elseif test="${messageSection == 'folder'}">
+							<g:link disabled="true" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance.id, messageId: messageInstance.id]">Delete</g:link>
+						</g:elseif>
+						<g:else>
+							<g:link action="deleteMessage" params="[messageSection: messageSection, messageId: messageInstance.id]">Delete</g:link>
+						</g:else>
+					</div>
 				</div>
+				<g:render template="action_list"/>
 			</g:if>
 			<g:layoutBody/>
 		</div>

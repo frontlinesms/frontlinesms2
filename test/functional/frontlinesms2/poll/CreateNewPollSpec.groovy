@@ -11,6 +11,13 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnNewPoll.getAttribute('href') == "/frontlinesms2/poll/create"
 	}
 
+	def "'messages' menu item is selected when creating a new poll"() {
+		when:
+			go 'poll/create'
+		then:
+			$('#goto-messages').hasClass('selected')
+	}
+	
 	def 'button to save new poll with keyword choices and title works'() {
 		given:
 			createTestPolls()
@@ -20,8 +27,8 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no'
 			btnSave.click()
+            waitFor { !($("div.flash.message").text().isEmpty()) }
 		then:
-			println Poll.findAll()*.title
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
 		cleanup:
@@ -34,7 +41,7 @@ class CreateNewPollSpec extends PollGebSpec {
 		when:
 			go 'message'
 		then:
-			$('#activities-submenu li')*.text() == ['Football Teams', 'Shampoo Brands']
+			$('#activities-submenu li')*.text() == ['Football Teams', 'Shampoo Brands', 'Rugby Brands']
 		cleanup:
 			deleteTestPolls()
 	}
@@ -45,11 +52,20 @@ class CreateNewPollSpec extends PollGebSpec {
 			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no kidnapped'
 			btnSave.click()
+            waitFor { !($("div.flash.message").text().isEmpty()) }
 			def ufoPoll = Poll.findByTitle("UFOs?")
 		then:
-			ufoPoll.responses*.value.sort() == ['kidnapped', 'no', 'yes']
+			ufoPoll.responses*.value.sort() == ['Unknown', 'kidnapped', 'no', 'yes']
 		cleanup:
 			deleteTestPolls()
+	}
+	
+	def 'Errors are displayed when poll fails to save'() {
+		when:
+			to CreatePollPage
+			btnSave.click()
+		then:
+			errorMessages.present
 	}
 }
 
@@ -62,5 +78,6 @@ class CreatePollPage extends geb.Page {
 	static content = {
 		frmDetails { $("#poll-details") }
 		btnSave { $('input', name:'save') }
+		errorMessages(required:false) { $('.flash.errors') }
 	}
 }

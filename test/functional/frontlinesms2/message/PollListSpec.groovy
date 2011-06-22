@@ -12,28 +12,26 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			def pollMessageSources = $('#messages tbody tr td:first-child')*.text()
 		then:
 			at PollListPage
-			pollMessageSources == ['Bob', 'Alice']
+			pollMessageSources == ['Alice', 'Bob']
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def "message's poll details are shown in list"() {
 		given:
 			createTestPolls()
 			createTestMessages()
-			assert Poll.count() == 2
 		when:
-			to PollListPage
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
-			println $('#messages').text()
 			rowContents[0] == 'Bob'
 			rowContents[1] == 'manchester ("I like manchester")'
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def "poll details are shown in header"() {
@@ -41,20 +39,19 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def pollTitle = $('#poll-title').text()
-//			def pollQuestion = $('#poll-question p').text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
 		then:
 			pollTitle == 'Football Teams'
-			statsLabels == ['barcelona', 'manchester']
-			statsNums == ['0', '2']
-			statsPercents == ['(0%)', '(100%)']
+			statsLabels == ['Unknown', 'manchester', 'barcelona']
+			statsNums == ['0', '2', '0']
+			statsPercents == ['(0%)', '(100%)', '(0%)']
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected poll is highlighted'() {
@@ -62,17 +59,17 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
 			selectedMenuItem.text() == 'Football Teams'
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 }
 
 class PollListPage extends geb.Page {
- 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}" }
+ 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 	static at = {
 		title.endsWith('Poll')
 	}
