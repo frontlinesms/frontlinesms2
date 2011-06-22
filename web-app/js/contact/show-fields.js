@@ -3,29 +3,27 @@ $(document).ready(function() {
 	$("#new-field-dropdown").change(addFieldClickAction);
 });
 
+function customFieldPopup(data) {
+		$(data).dialog({title: "Create Custom Field", width: 600});
+}
+
 function addFieldClickAction() {
 	var me = $(this).find('option:selected');
 	if(me.hasClass('not-field')) return;
 	if(me.hasClass('create-custom-field')) {
-		window.location = "/frontlinesms2/contact/newCustomField";
-		return;
+		$.ajax({
+			type:'POST',
+			url: '/frontlinesms2/contact/newCustomField',
+			success: function(data, textStatus){ customFieldPopup(data); }
+		});
+		$("#new-field-dropdown").val("na");
+		return false;
 	}
 	$("#new-field-dropdown").val("na");
 
-	var fieldId = me.attr('id');
 	var fieldName = me.text();
-
-	var fieldListItem = $('<li><label for="custom-field">' + fieldName + '</label>');
-	var textFieldItem = $('<input type="text" name="' + fieldName + '" value="" />');
-	var deleteButton = $('<a class="delete-field" id="delete-field-' + fieldId + '">Delete</a></li>');
-
-	deleteButton.click(removeFieldClickAction);
-	fieldListItem.append(textFieldItem);
-	fieldListItem.append(deleteButton);
-
-	$('#custom-field-list').append(fieldListItem);
-	$('input[name="' + fieldName + '"]').focus();
-	addField(fieldName);
+	var fieldValue = "";
+	addCustomField(fieldName, fieldValue);
 }
 
 function removeFieldClickAction() {
@@ -60,4 +58,19 @@ function addFieldIdToList(id, fieldName) {
 	var oldList = f.val();
 	var newList = oldList + id + ',';
 	f.val(newList);
+}
+
+function addCustomField(name, value) {
+	var fieldId = name; // FIXME convert name to safe string
+	var fieldListItem = $('<li><label for="' + fieldId + '">' + name + '</label>');
+	var textFieldItem = $('<input type="text" name="' + fieldId + '" value="' + value + '" />');
+	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '">Delete</a></li>');
+
+	deleteButton.click(removeFieldClickAction);
+	fieldListItem.append(textFieldItem);
+	fieldListItem.append(deleteButton);
+
+	$('#custom-field-list').append(fieldListItem);
+	$('input[name="' + name + '"]').focus();
+	addField(name);
 }

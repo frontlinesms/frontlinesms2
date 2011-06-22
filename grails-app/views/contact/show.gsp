@@ -3,6 +3,7 @@
     <head>
         <meta name="layout" content="contacts" />
 		<g:javascript library="jquery" plugin="jquery"/>
+		<jqui:resources />
 		<g:javascript src="contact/show-groups.js"></g:javascript>
 		<g:javascript src="contact/show-fields.js"></g:javascript>
 		<script type="text/javascript">
@@ -35,8 +36,8 @@
 				<ol id="custom-field-list">
 				  <g:each in="${contactFieldInstanceList}" status="i" var="f">
 					  <li class="${f == fieldInstance ? 'selected' : ''}">
-						  <label for="custom-field">${f.name}</label>
-						  <input type="text" name="${f.name}" id="field-item-${f.id}" value="${f.value}"/>
+						  <label for="custom-field-${f.name}">${f.name}</label>
+						  <input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
 						  <a class="remove-field" id="remove-field-${f.id}">Delete</a>
 					  </li>
 				  </g:each>

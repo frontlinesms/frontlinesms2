@@ -117,17 +117,17 @@ class ContactController {
 		[customFieldInstance: customFieldInstance,
 				contactInstance: contactInstance]
 	}
-
-	def saveCustomField = {
-		def customFieldInstance = new CustomField(params)
-		if (!customFieldInstance.hasErrors() && customFieldInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'CustomField'), customFieldInstance.id])}"
-			redirect(controller:'contact', action:'show', id: contactInstance.id, params: [flashMessage: flash.message])
-		} else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'CustomField'), params.id])}"
-			redirect(action: "newCustomField", model: [customFieldInstance: customFieldInstance])
-		}
-	}
+//
+//	def saveCustomField = {
+//		def customFieldInstance = new CustomField(params)
+//		if (!customFieldInstance.hasErrors() && customFieldInstance.save(flush: true)) {
+//			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'CustomField'), customFieldInstance.id])}"
+//			redirect(controller:'contact', action:'show', id: contactInstance.id, params: [flashMessage: flash.message])
+//		} else {
+//			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'CustomField'), params.id])}"
+//			redirect(action: "newCustomField", model: [customFieldInstance: customFieldInstance])
+//		}
+//	}
 
 	private def withContact(Closure c) {
 		def contactInstance = Contact.get(params.contactId)
