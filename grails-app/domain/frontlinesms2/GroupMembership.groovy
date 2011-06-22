@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import org.apache.commons.lang.builder.HashCodeBuilder
-import org.hibernate.criterion.Projections
 
 class GroupMembership implements Serializable {
     Contact contact
