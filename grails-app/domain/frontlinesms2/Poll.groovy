@@ -23,8 +23,7 @@ class Poll {
 				eq("deleted", false)
 				'in'("messageOwner", this.responses)
 			}
-			order('dateRecieved', 'desc')
-			order('dateCreated', 'desc')
+			order('dateReceived', 'desc')
 		}
 	}
 

@@ -11,11 +11,15 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	def setup() {
 		controller = new MessageController()
 	}
+	
+	def cleanup() {
+		Fmessage.findAll()*.delete(flush:true, failOnError:true)
+	}
 
 	def "Inbound messages show up in inbox view"() {
 		setup:
-			def messageIn1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
-			def messageIn2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/20")).save(failOnError: true)
+			def messageIn1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/21")).save(failOnError: true)
+			def messageIn2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/20")).save(failOnError: true)
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:false).save(failOnError: true)
 		when:
@@ -28,10 +32,10 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/20")).save(failOnError: true)
-			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/24")).save(failOnError: true)
-			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/23")).save(failOnError: true)
-			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateRecieved:createDate("2011/01/21")).save(failOnError: true)
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/20")).save(failOnError: true)
+			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/24")).save(failOnError: true)
+			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/23")).save(failOnError: true)
+			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			controller.params.messageSection = 'inbox'
 			def model = controller.inbox()
@@ -41,7 +45,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			model.messageInstanceList != [message1, message2, message3, message4]
 	}
 
-	def 'calling "show" action in inbox leads to unread message becoming read'() {
+	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
 			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
@@ -53,7 +57,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			Fmessage.get(id).read == true
 	}
 
-	def 'calling "show" action leads to read message staying read'() {
+	def 'calling SHOW action leads to read message staying read'() {
 		setup:
 			def id = new Fmessage(read:true).save(failOnError: true).id
 			assert Fmessage.get(id).read
@@ -65,13 +69,13 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	}
 
 	def "first message in the inbox view is selected by default"() {
-          setup:
+        setup:
              def message1 = new Fmessage(inbound:true).save(failOnError: true)
-          when:
-             controller.inbox()
-          then:
-             controller.params.messageId == message1.id
-        }
+        when:
+            def resultMap =  controller.inbox()
+        then:
+            resultMap['messageInstance'].id == message1.id
+    }
 
 
 	Date createDate(String dateAsString) {

@@ -19,7 +19,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 		then:
 			def memberOf = $("#group-list").children().children('h2').collect() { it.text() }.sort()
 			memberOf == ['Test', 'three']
@@ -29,7 +29,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			def nonMemberOf = groupSelecter.children().collect() { it.text() }.sort()
 		then:
@@ -43,14 +43,14 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			assert groupSelecter.children().collect() { it.text() } == ['Add to group...', 'four']
 	}
 
-	def 'clicking "x" next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
+	def 'clicking X next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
 		given:
 			def bob = Contact.findByName("Bob")
 			def bobsDatabaseGroups = bob.getGroups()
 			def bobsGroups = bobsDatabaseGroups
 
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 			def lstGroups = $("#group-list")
 		then:
 			lstGroups.children().children('h2').size() == 2
@@ -79,7 +79,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			groupSelecter.find(name: 'group-dropdown').value('Others')
 			$("#contactDetails .save").click()

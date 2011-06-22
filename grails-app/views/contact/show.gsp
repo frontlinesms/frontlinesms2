@@ -50,6 +50,10 @@
 						<option value="${f}">${f}</option>
 					</g:each>
 				</select>
+				<div class="field">
+					<label for="notes"><g:message code="contact.notes.label" default="Notes"/></label>
+					<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				</div>
 			</div>
 			<ol id="group-list">
 				<g:each in="${contactGroupInstanceList}" status="i" var="g">
@@ -70,6 +74,13 @@
 					</g:each>
 				</select>
 			</div>
+			<g:if test="${contactInstance.id}">
+				<div id="message-count">
+					<h3>Messages</h3>
+					<p>${contactInstance.inboundMessagesCount} messages sent</p>
+					<p>${contactInstance.outboundMessagesCount} messages received</p>
+				</div>
+			</g:if>
 			<div class="buttons">
 				<g:if test="${contactInstance.id}">
 					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
