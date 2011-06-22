@@ -101,9 +101,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
 			fieldSelecter.value('lake')
 			def inputField =  $("#contact-details ").find('input', name:'lake')
-			println "inputField: $inputField"
 			inputField.value('erie')
-			println "The fields are now: ${$('#custom-field-list input')*.@name} and their values are ${$('#custom-field-list input')*.@value}"
 			$("#contact-details .update").click()
 		then:
 			bob.refresh()
