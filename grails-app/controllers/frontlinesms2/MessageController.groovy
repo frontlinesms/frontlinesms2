@@ -9,17 +9,17 @@ class MessageController {
 		redirect(action:'inbox')
 	}
 
-   def show = { messageInstanceList ->
-        def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
-        messageInstance?.updateDisplaySrc()
-        if (messageInstance && !messageInstance.read) {
-          messageInstance.read = true
-          messageInstance.save()
-        }
-         [messageInstance: messageInstance,
-                folderInstanceList: Folder.findAll(),
-                pollInstanceList: Poll.findAll()]
-   }
+	def show = { messageInstanceList ->
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
+		messageInstance?.updateDisplaySrc()
+		if (messageInstance && !messageInstance.read) {
+			messageInstance.read = true
+			messageInstance.save()
+		}
+		[messageInstance: messageInstance,
+				folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
+	}
 
 
 	def inbox = {
@@ -31,10 +31,10 @@ class MessageController {
 					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
 	}
 
-    def sent = {
-		params.inbound = false
+	def sent = {
+		params.inbound = false // FIXME does setting params here actually achieve anything?
 		[messageSection: 'sent']
-    }
+	}
 
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
@@ -97,7 +97,7 @@ class MessageController {
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-            params.remove('messageId')
+			params.remove('messageId')
 			redirect(action: params.messageSection, params:params)
 		}
 	}
