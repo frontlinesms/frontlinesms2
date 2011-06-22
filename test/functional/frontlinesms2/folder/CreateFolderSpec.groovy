@@ -16,7 +16,7 @@ class CreateFolderSpec extends FolderGebSpec {
 		when:
 			go 'folder/create'
 		then:
-			$('#goto-messages').hasClass('selected')
+			$('#tab-messages').hasClass('selected')
 	}
 	
 	def 'button to save new folder works'() {
