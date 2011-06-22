@@ -13,6 +13,7 @@ class SearchController {
 				searchString: params.searchString,
 				groupInstance: groupInstance,
 				activityInstance: activityInstance,
+				activityId: params.activityId,
 				messageInstanceList: results,
 				messageInstanceTotal: results?.size()]
 	}
