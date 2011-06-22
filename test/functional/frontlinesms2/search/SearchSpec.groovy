@@ -2,7 +2,7 @@ package frontlinesms2.search
 
 import frontlinesms2.*
 
-class SearchSpec extends grails.plugin.geb.GebSpec{
+class SearchSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestGroups()
 		createTestPollsAndFolders()
@@ -15,7 +15,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 		deleteTestMessages()
 	}
 	
-	def "clicking on the search button links to the result show page"(){
+	def "clicking on the search button links to the result show page"() {
 		when:
 			to SearchPage
 			searchBtn.present()
@@ -35,7 +35,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 	def "search description is shown in header when searching by group"() {
 		when:
 			to SearchPage
-			searchFrm.keywords = "test"
+			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
 			searchDescription.text() == 'Searching in all messages'
@@ -44,8 +44,8 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 	def "search description is shown in header when searching by group and poll"() {
 		when:
 			to SearchPage
-			searchFrm.keywords = "test"
-			searchFrm.groupId = Group.findByName("Listeners").id
+			searchFrm.searchString = "test"
+			searchFrm.groupId = "${Group.findByName("Listeners").id}"
 			searchFrm.activityId = "poll-${Poll.findByTitle("Miauow Mix").id}"
 			searchBtn.click()
 		then:
@@ -54,7 +54,18 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 	
 	def "message list returned from a search operation is displayed"() {
 		when:
-			searchFrm.keywords = "alex"
+			searchFrm.searchString = "alex"
+			searchBtn.click()
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+		then:
+			rowContents[0] == 'Alex'
+			rowContents[1] == 'hi alex'
+			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+	}
+	
+	def "message list returned from a search operation is displayed, regardless of search case"() {
+		when:
+			searchFrm.searchString = "AlEx"
 			searchBtn.click()
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
@@ -67,7 +78,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec{
 //		given:
 //			createTestMessages()
 //		when:
-//			searchFrm.keywords = "Bob"
+//			searchFrm.searchString = "Bob"
 //			searchBtn.click()
 //			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 //			def actions = $('#message-actions li').children('a')*.text()
