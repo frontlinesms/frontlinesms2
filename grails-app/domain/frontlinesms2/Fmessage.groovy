@@ -11,6 +11,7 @@ class Fmessage {
 	boolean inbound
 	boolean read
 	boolean deleted
+	boolean starred
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['displaySrc']
 	static mapping = {
@@ -50,6 +51,15 @@ class Fmessage {
 		this
 	}
 
+	def addStar() {
+		this.starred = true
+		this
+	}
+	
+	def removeStar() {
+		this.starred = false
+		this
+	}
 	static def getFolderMessages(folderId) {
 		def folder = Folder.get(folderId)
 		def messages = Fmessage.createCriteria().list {

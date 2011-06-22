@@ -13,7 +13,7 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			def messageSources = $('#messages tbody tr td:first-child')*.text()
+			def messageSources = $('#messages tbody tr td:nth-child(2)')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
 		cleanup:
@@ -27,9 +27,9 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[0] == 'Alice'
-			rowContents[1] == 'hi Alice'
-			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[1] == 'Alice'
+			rowContents[2] == 'hi Alice'
+			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
 	}
@@ -103,7 +103,7 @@ class InboxSpec extends MessageGebSpec {
 			def contact = new Contact(name: 'June', address: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
-			def rowContents = $('#messages tbody tr td:nth-child(1)')*.text()
+			def rowContents = $('#messages tbody tr td:nth-child(2)')*.text()
 		then:
 			rowContents == ['June']
 		cleanup:

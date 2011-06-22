@@ -1,8 +1,23 @@
   <%@ page contentType="text/html;charset=UTF-8" %>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("tr #star").click(function(){
+			if($(this).hasClass('')) {
+				$(this).addClass('starred')
+				$(this).empty().append("Remove Star")
+			} else if($(this).hasClass('starred')) {
+				$(this).removeClass('starred')
+				$(this).empty().append("Add Star")
+			} 
+		});
+	});
+
+</script>
 <g:if test="${messageInstanceTotal > 0}">
 	<table id="messages">
 		<thead>
 			<tr>
+				<td></td>
 			    <td><g:message code="fmessage.src.label" default="Name"/></td>
 			    <td><g:message code="fmessage.text.label" default="Snippet"/></td>
 			    <td><g:message code="fmessage.date.label" default="Date"/></td>
@@ -11,6 +26,9 @@
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
+					<td id="star">
+					 ${m.starred?'Remove Star':'Add Star'}
+					</td>
 					<td>
 						<g:if test="${ownerInstance}">
 							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">

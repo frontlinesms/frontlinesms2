@@ -67,7 +67,7 @@ body {
 	}
 	
 	#messages {
-		@include column(11);
+		@include column(12);
 		tr a {
 			display:block;
 			padding:1em;
@@ -100,6 +100,10 @@ body {
 /* GENERAL */
 .selected {
 	background-color:cyan;
+}
+
+.starred {
+	background-color:green;
 }
 
 .field {
