@@ -103,7 +103,7 @@ class Fmessage {
 					}
 					eq('deleted', false)
 				}
-				order('dateRecieved', 'desc')
+				order('dateReceived', 'desc')
 				order('dateCreated', 'desc')
 			}
 			results*.updateDisplaySrc()
