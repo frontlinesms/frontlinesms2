@@ -18,9 +18,9 @@
 		<g:textField id="address" name="address"/>
 		<g:link url="#" class="add-address">Add</g:link>
 		<div id="groups">
-		<g:each in="${groupList}" var="group">
+		<g:each in="${groupList}" var="entry">
 			<div>
-				<input type="checkbox" name="groups" value="${group.name}">${group.name}</input>
+				<input type="checkbox" name="groups" value="${entry.key}">${entry.key}(${entry.value.size})</input>
 			</div>
 		</g:each>
 		</div>
@@ -38,7 +38,7 @@
 		<div id="tabs-3">
 		<label>Do you want to send?</label>
 		<g:link url="#" class="back">Back</g:link>
-		<g:submitButton name="send-msg">Send</g:submitButton>
+		<g:submitButton name="send-msg" id="sendMsg">Send</g:submitButton>
 	</div>
 	</g:form>
 </div>

@@ -1,19 +1,19 @@
 package frontlinesms2
 
-import grails.plugin.spock.UnitSpec
 import grails.plugin.spock.ControllerSpec
 
 class QuickMessageControllerSpec extends ControllerSpec {
 	def 'create returns the contact and group list'() {
 		setup:
-			def contacts = [new Contact(name: "jim", address: "12345")]
-			def groups = [new Group(name: "group")]
-			mockDomain Contact, contacts
-			mockDomain Group, groups
+			def jim = new Contact(name:"jim", address:"12345")
+			def mohave = new Group(name:"Mojave")
+			def membership = new GroupMembership(group: mohave, contact: jim)
+			mockDomain Contact, [jim]
+			mockDomain GroupMembership, [membership]
 		when:
 			def result = controller.create()
 		then:
-			result['contactList'] == contacts
-			result['groupList'] == groups
+			result['contactList'] == [jim]
+			result['groupList'] == ["Mojave":[membership]]
 	}
 }
