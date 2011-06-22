@@ -3,6 +3,8 @@ package frontlinesms2
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+	def messageSendService
+	
 	def index = {
 		redirect(action:'inbox')
 	}
@@ -20,13 +22,13 @@ class MessageController {
    }
 
 
-  def inbox = {
+	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages()
-    	messageInstanceList.each { it.updateDisplaySrc()}
-		params.messageSection = 'inbox'
-		[messageInstanceList: messageInstanceList,
-				messageSection: 'inbox',
-				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+		messageInstanceList.each { it.updateDisplaySrc()}
+			params.messageSection = 'inbox'
+			[messageInstanceList: messageInstanceList,
+					messageSection: 'inbox',
+					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
 	}
 
     def sent = {
@@ -98,6 +100,19 @@ class MessageController {
             params.remove('messageId')
 			redirect(action: params.messageSection, params:params)
 		}
+	}
+
+	def send = {
+		def addresses = [params.addresses].flatten() - null
+		def groups = [params.groups].flatten() - null
+		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses.unique().each { address ->
+			//TODO: Need to add source from app settings
+			def message = new Fmessage(dst: address, text: params.messageText)
+			messageSendService.process(message)
+			message.save(failOnError: true, flush: true)
+		}
+		redirect (action: 'sent')
 	}
 
 	private def withFmessage(Closure c) {
