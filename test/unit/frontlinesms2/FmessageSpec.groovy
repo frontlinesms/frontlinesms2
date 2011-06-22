@@ -53,5 +53,34 @@ class FmessageSpec extends UnitSpec {
 			Fmessage.count() == 1
 			Fmessage.get(m.id).messageOwner == response
 	}
+	
+	def 'messages are unstarred by default'() {
+		when:
+			Fmessage message = new Fmessage()
+		then:
+			message.starred == false
+	}
+
+	def 'starring messages sets the star flag to true'() {
+		when:
+			Fmessage message = new Fmessage()
+		then:
+			message.starred == false
+		when:
+			message.addStar()
+		then:
+			message.starred == true
+	}
+	
+	def 'unstarring messages sets the star flag to false'() {
+		when:
+			Fmessage message = new Fmessage()
+		then:
+			message.addStar()
+		when:
+			message.removeStar()
+		then:
+			message.starred == false
+	}
 }
 

@@ -99,6 +99,17 @@ class MessageController {
 			redirect(action: params.messageSection, params:params)
 		}
 	}
+	
+	def starMessage = {
+		withFmessage { messageInstance ->
+			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
+			messageInstance.save(failOnError: true, flush: true)
+			Fmessage.get(params.messageId).messageOwner?.refresh()
+//			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+            params.remove('messageId')
+			redirect(action: params.messageSection, params:params)
+		}
+	}
 
 	private def withFmessage(Closure c) {
 		def m = Fmessage.get(params.messageId)

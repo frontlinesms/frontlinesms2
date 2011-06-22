@@ -76,6 +76,30 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
         then:
             resultMap['messageInstance'].id == message1.id
     }
+	
+	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
+		setup:
+			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save(failOnError: true).id
+			assert Fmessage.get(id).read == false
+		when:
+			controller.params.messageId = id
+			controller.params.messageSection = 'inbox'
+			controller.starMessage()
+		then:
+			Fmessage.get(id).starred == true
+	}
+
+	def 'calling "starMessage" action leads to starred message becoming unstarred'() {
+		setup:
+			def id = new Fmessage(read:true, starred:true).save(failOnError: true).id
+			assert Fmessage.get(id).read
+		when:
+			controller.params.messageId = id
+			controller.params.messageSection = 'inbox'
+			controller.starMessage()
+		then:
+			Fmessage.get(id).starred == false
+	}
 
 
 	Date createDate(String dateAsString) {
