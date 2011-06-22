@@ -34,8 +34,8 @@ class ContactCreateSpec extends ContactGebSpec {
 			def cancelContact = $('#buttons').find('a').first()
 			def btn = $("#buttons .list")
 		then:
-			assert cancelContact.text() == "Cancel"
-			assert cancelContact.getAttribute('href') == "/frontlinesms2/contact/list"
+			cancelContact.text() == "Cancel"
+			cancelContact.@href == "/frontlinesms2/contact/list"
 	}
 
 	def '"All contacts" menu item is selected when creating a contact'() {
