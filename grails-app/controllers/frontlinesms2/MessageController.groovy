@@ -50,8 +50,8 @@ class MessageController {
 	}
 	
 	def folder = {
-		def ownerInstance = Folder.get(params.ownerId)
-		def messageInstanceList = Fmessage.getFolderMessages(params.ownerId)
+		def folderInstance = Folder.get(params.ownerId)
+		def messageInstanceList = folderInstance.folderMessages
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
@@ -60,7 +60,7 @@ class MessageController {
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
 				messageInstanceTotal: messageInstanceList.size(),
-				ownerInstance: ownerInstance] << show(messageInstanceList)
+				ownerInstance: folderInstance] << show(messageInstanceList)
 	}
 
 	def move = {
