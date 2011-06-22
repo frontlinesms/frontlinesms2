@@ -74,6 +74,42 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
 	
+	def "search string is still shown on form submit and consequent page reload"() {
+		given:
+			to SearchPage
+			searchFrm.searchString = 'bacon'
+		when:
+			searchBtn.click()
+		then:
+			searchFrm.searchString == 'bacon'
+	}
+	
+	def "selected group is still selected on form submit and consequent page reload"() {
+		given:
+			to SearchPage
+			def g = Group.findByName("Friends")
+			println "Grou: ${g.id}"
+			println "Trying to set it for: ${searchFrm.groupId}"
+			searchFrm.groupId = "${g.id}"
+			println "Value set successfully"
+		when:
+			searchBtn.click()
+			println "the class is ${searchFrm.groupId.value.class}"
+		then:
+			searchFrm.groupId == ["${g.id}"]
+	}
+	
+	def "selected activity is still selected on form submit and consequent page reload"() {
+		given:
+			to SearchPage
+			def a = Folder.findByValue("Work")
+			searchFrm.activityId = "folder-${a.id}"
+		when:
+			searchBtn.click()
+		then:
+			searchFrm.activityId == ["folder-${a.id}"]
+	}
+	
 //	def 'message actions menu is displayed for all individual messages'() {
 //		given:
 //			createTestMessages()
