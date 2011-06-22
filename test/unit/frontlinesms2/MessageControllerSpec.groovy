@@ -1,112 +1,72 @@
 package frontlinesms2
 
-import spock.lang.*
 import grails.plugin.spock.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 
 class MessageControllerSpec extends ControllerSpec {
+
 	def setup() {
-		mockDomain(Fmessage)
-		mockDomain(Poll)
+		mockDomain Fmessage
+		mockParams.messageText = "text"
+		controller.messageSendService = new MessageSendService()
+		def sahara = new Group(name: "Sahara")
+		def thar = new Group(name: "Thar")
+		mockDomain Group, [sahara, thar]
+		mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(address: "12345")),
+			new GroupMembership(group: sahara, contact: new Contact(address: "56484")),
+			new GroupMembership(group: thar, contact: new Contact(address: "12121")),
+			new GroupMembership(group: thar, contact: new Contact(address: "22222"))]
 	}
 
-	def 'inbox closure requests correct messages'() {
-		when:
-			controller.inbox()
-		then:
-			mockParams.inbound
-	}
-
-	def "sent closure requests correct messages"() {
-		when:
-			controller.sent()
-		then:
-			!mockParams.inbound
-	}
-
-	def "Inbound messages show up in inbox view"() {
+	def "should send message to all the members in a group"() {
 		setup:
-			def messageIn1 = new Fmessage(inbound:true)
-			def messageIn2 = new Fmessage(inbound:true)
-			def messageOut1 = new Fmessage(inbound:false)
-			def messageOut2 = new Fmessage(inbound:false)
-			mockDomain(Fmessage, [messageIn1, messageIn2, messageOut1, messageOut2])
+			mockParams.groups = "Sahara"
 		when:
-			def model = controller.inbox()
+			assert Fmessage.count() == 0
+			controller.send()
 		then:
-			model.messageInstanceTotal == 2
-			model.messageInstanceList == [messageIn1, messageIn2]
+			Fmessage.list()*.dst == ["12345","56484"]
 	}
 
-	def "Outbound messages show up in sent view"() {
+	def "should send message to all the members in multiple groups"() {
 		setup:
-			def messageIn1 = new Fmessage(inbound:true)
-			def messageIn2 = new Fmessage(inbound:true)
-			def messageOut1 = new Fmessage(inbound:false)
-			def messageOut2 = new Fmessage(inbound:false)
-			mockDomain(Fmessage, [messageIn1, messageIn2, messageOut1, messageOut2])
+			mockParams.groups = ["Sahara", "Thar"]
 		when:
-			def model = controller.sent()
+			assert Fmessage.count() == 0
+			controller.send()
 		then:
-			model.messageInstanceTotal == 2
-			model.messageInstanceList == [messageOut1, messageOut2]
-	}
-
-	def 'Messages are sorted by date' () {
-		setup:
-			def message1 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/20"))
-			def message2 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/24"))
-			def message3 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/23"))
-			def message4 = new Fmessage(inbound:true, dateCreated:createDate("2011/01/21"))
-			mockDomain(Fmessage, [message1, message2, message3, message4])
-		when:
-			def model = controller.inbox()
-		then:
-			model.messageInstanceTotal == 4
-			model.messageInstanceList == [message2, message3, message4, message1]
-			model.messageInstanceList != [message1, message2, message3, message4]
-		when:
-			mockParams.max = 2
-			mockParams.offset = 2
-			model = controller.inbox()
-		then:
-			model.messageInstanceTotal == 4
-			model.messageInstanceList == [message4, message1]
+			Fmessage.list()*.dst == ["12345","56484","12121","22222"]
 	}
 	
-	def 'calling "show" action in inbox leads to unread message becoming read'() {
+	def "should send a message to the given address"() {
 		setup:
-			mockDomain(Contact)
-			def id = new Fmessage().save(failOnError: true).id
-			assert Fmessage.get(id).read == false
+			mockParams.addresses = "+919544426000"
 		when:
-			mockParams.messageSection = 'inbox'
-			mockParams.id = id
-			controller.show()
+			assert Fmessage.count() == 0
+			controller.send()
 		then:
-			Fmessage.get(id).read
-	}
-	
-	def 'calling "show" action leads to read message staying read'() {
-		setup:
-			mockDomain(Contact)
-			def id = new Fmessage(read:true).save(failOnError: true).id
-			assert Fmessage.get(id).read
-		when:
-			mockParams.id = id
-			controller.inbox()
-		then:
-			Fmessage.get(id).read
+			Fmessage.count() == 1
 	}
 
-	Date createDate(String dateAsString) {
-		DateFormat format = createDateFormat();
-		return format.parse(dateAsString)
+	def "should eliminate duplicate address if present"() {
+		setup:
+			mockParams.addresses = "12345"
+			mockParams.groups = "Sahara"
+		when:
+			assert Fmessage.count() == 0
+			controller.send()
+		then:
+			Fmessage.count() == 2
 	}
 
-	DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy/MM/dd")
+	def "should send message to each recipient in the list of address"() {
+		setup:
+			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
+			mockParams.addresses = addresses
+		when:
+			assert Fmessage.count() == 0
+			controller.send()
+		then:
+			Fmessage.list()*.dst == addresses
+			Fmessage.count() == 3
 	}
 }
-

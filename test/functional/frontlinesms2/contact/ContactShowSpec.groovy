@@ -23,30 +23,29 @@ class ContactShowSpec extends ContactGebSpec {
 		then:
 			def firstContactListItem = $('#contacts').children().first()
 			def anchor = firstContactListItem.children('a').first()
-			assert anchor.text() == 'Alice'
-			assert anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+			anchor.text() == 'Alice'
+			anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+	}
+
+	def 'selected contacts show message statistics' () {
+		given:
+	  		def alice = Contact.findByName('Alice')
+		when:
+	  		go "contact/show/${alice.id}"
+		then:
+	        $("#message-count p").first().text() == '0 messages sent'
+	        $("#message-count p").last().text() == '0 messages received'
 	}
 
 	def 'contact with no name can be clicked and edited because his address is displayed'() {
 		when:
 			def empty = new Contact(name:'', address:"+987654321")
 			empty.save(failOnError:true)
-			go "http://localhost:8080/frontlinesms2/contact/list"
+			go "contact/list"
 			def noName = Contact.findByName('')
 		then:
 			noName != null
 			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.address
-	}
-
-	def 'contact with no name or address can be clicked and edited'() {
-		when:
-			def empty = new Contact(name:'', address:"")
-			empty.save(failOnError:true)
-			go "http://localhost:8080/frontlinesms2/contact/list"
-			def noNameOrAddress = Contact.get(empty.id)
-		then:
-			noNameOrAddress != null
-			$('a', href:"/frontlinesms2/contact/show/${noNameOrAddress.id}").text().trim().length() > 0
 	}
 
 	def 'selected contact is highlighted'() {
@@ -54,12 +53,12 @@ class ContactShowSpec extends ContactGebSpec {
 			def alice = Contact.findByName('Alice')
 			def bob = Contact.findByName('Bob')
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
+			go "contact/show/${alice.id}"
 		then:
 			assertContactSelected('Alice')
 		    
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 		then:
 			assertContactSelected('Bob')
 	}
@@ -68,27 +67,28 @@ class ContactShowSpec extends ContactGebSpec {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
+			go "contact/show/${alice.id}"
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Alice')
 			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
 	}
 
-	def 'contact with no groups has "no groups" message visible'() {
+	def 'contact with no groups has NO GROUPS message visible'() {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${alice.id}"
+			go "contact/show/${alice.id}"
 		then:
 			$('#no-groups').displayed
 	}
 
-	def 'contact with groups has "no groups" message hidden'() {
+	def 'contact with groups has NO GROUPS message hidden'() {
 		given:
 			createTestGroups()
 			def bob = Contact.findByName('Bob')
 		when:
-			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
+			go "contact/show/${bob.id}"
 		then:
 			!$('#no-groups').displayed
 		cleanup:
@@ -109,7 +109,7 @@ class EmptyContactPage extends geb.Page {
 	}
 
 	static at = {
-		assert url == "http://localhost:8080/frontlinesms2/contact/show/${Contact.findByName('').id}"
+		assert url == "contact/show/${Contact.findByName('').id}"
 		true
 	}
 

@@ -3,10 +3,22 @@ package frontlinesms2
 class Contact {
 	String name
 	String address
+    String notes
 
     static constraints = {
-		name(blank: true, maxSize: 255)
-		address(unique: true, nullable: true)
+		name(blank: true, maxSize: 255, validator: { val, obj ->
+				if(val == '') {
+					obj.address != ''
+					obj.address != null
+				}
+		})
+		address(unique: true, nullable: true, validator: { val, obj ->
+				if(val == '') {
+					obj.name != ''
+					obj.name != null
+				}
+		})
+        notes(nullable: true, maxSize: 1024)
 	}
 
 	def beforeDelete = {
@@ -32,5 +44,13 @@ class Contact {
 
 	boolean isMemberOf(Group group) {
 	   GroupMembership.countByContactAndGroup(this, group) > 0
+	}
+
+	def getInboundMessagesCount() {
+		address? Fmessage.countByDst(address): 0
+	}
+
+	def getOutboundMessagesCount() {
+		address? Fmessage.countBySrc(address): 0
 	}
 }

@@ -9,7 +9,7 @@ class PollResponseSpec extends UnitSpec {
 		given:
 			mockForConstraintsTests(PollResponse)
 		when:
-			def noResponse = new PollResponse(poll:new Poll())
+			def noResponse = new PollResponse()
 		then:
 			!noResponse.validate()
 		when:
@@ -22,7 +22,7 @@ class PollResponseSpec extends UnitSpec {
 		given:
 			mockDomain(PollResponse)
 		when:
-			def r = new PollResponse(value:'yes', poll:new Poll())
+			def r = new PollResponse(value:'yes')
 		then:
 			r.validate()
 		when:
@@ -35,19 +35,19 @@ class PollResponseSpec extends UnitSpec {
 			r.validate()
 	}
 
-//	def "Adding a message to a PollResponse will cascade to the message's activity value"() {
-//		// FIXME this almost certainly needs to be an integration test due to reliance on cascades (cascades are probably enforced by Hibernate rather than GORM)
-//		given:
-//			mockDomain(Poll)
-//			mockDomain(Fmessage)
-//			mockDomain(PollResponse)
-//			def r = new PollResponse(value:'yes', poll:new Poll()).save()
-//			def m = new Fmessage()
-//		when:
-//			r.addToMessages(m)
-//			r.save()
-//		then:
-//			m.activity == r
-//	}
+	def "Adding a message to a PollResponse will cascade to the message's activity value"() {
+		// FIXME this almost certainly needs to be an integration test due to reliance on cascades (cascades are probably enforced by Hibernate rather than GORM)
+		given:
+			mockDomain(Poll)
+			mockDomain(Fmessage)
+			mockDomain(MessageOwner)
+			def r = new PollResponse(value:'yes').save()
+			def m = new Fmessage()
+		when:
+			r.addToMessages(m)
+			r.save()
+		then:
+			m.messageOwner == r
+	}
 }
 

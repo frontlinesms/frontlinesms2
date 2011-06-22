@@ -6,23 +6,26 @@ import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
 import net.frontlinesms.test.serial.HayesPortHandler
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+
 
 class BootStrap {
-
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
-          	// do custom init for dev here
+			//DB Viewer
+			//org.hsqldb.util.DatabaseManager.main()
+			// do custom init for dev here
 			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 			def alice = createContact("Alice", "+123456789")
 			def friends = Group.findByName('Friends')
 			def notCats = Group.findByName('Not Cats')
-//			Contact.findAll().each() { Group.findByName('Friends').addToMembers(it) }
 			createContact("Bob", "+198765432")
 			Contact.findAll().each() {
 				GroupMembership.create(it, friends)
 				GroupMembership.create(it, notCats)
 			}
-//			Contact.findAll().each() { Group.findByName('Not Cats').addToMembers(it) }
 			createContact("Kate", "+198730948")
 
 			new EmailFconnection(name:"mr testy's email", protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
@@ -31,23 +34,44 @@ class BootStrap {
 			initialiseMockSerialDevice()
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
-			[new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
-					new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best')].each() {
+			[new Fmessage(src:'Alice', dst:'+2541234567', text:'manchester rules!'),
+					new Fmessage(src:'Bob', dst:'+254987654', text:'go manchester'),
+					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
+					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
+					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
+					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateReceived:createDate("2011/01/23"))].each() {
 						it.inbound = true
 						it.save(failOnError:true)
 					}
 
-			[new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
-					new PollResponse(value:'barcelona')]),
-					new Poll(title:'Shampoo Brands', responses:[new PollResponse(value:'pantene'),
-					new PollResponse(value:'oriele')])].each() {
+			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
+					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
 						it.save(failOnError:true, flush:true)
 					}
 
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob'))
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))
 			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
+			
+			[new Folder(value: 'Work'), 
+				new Folder(value: 'Projects')].each() {
+					it.save(failOnError:true, flush:true)
+				}
+				
+			[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
+				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
+				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
+				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+					it.inbound = true
+					it.save(failOnError:true, flush:true)
+				}
+				
+			[Folder.findByValue('Work').addToMessages(Fmessage.findBySrc('Max')),
+				Folder.findByValue('Work').addToMessages(Fmessage.findBySrc('Jane')),
+				Folder.findByValue('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
+				Folder.findByValue('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
+				it.save(failOnError:true, flush:true)
+			}
 		}
 	}
 
@@ -97,5 +121,14 @@ OK''');
 		CommPortIdentifier cpi = new CommPortIdentifier("COM99", portHandler);
 		MockSerial.setIdentifier("COM99", cpi);
 		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));
+	}
+
+	Date createDate(String dateAsString) {
+		DateFormat format = createDateFormat();
+		return format.parse(dateAsString)
+	}
+
+	DateFormat createDateFormat() {
+		return new SimpleDateFormat("yyyy/MM/dd")
 	}
 }

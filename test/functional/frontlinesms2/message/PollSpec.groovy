@@ -15,12 +15,12 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -37,8 +37,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-details p:nth-child(3)').text() == formatedDate
 			$('#message-details p:nth-child(4)').text() == message.text
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	def 'selected message is highlighted'() {
@@ -57,8 +57,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
 		cleanup:
-			deleteTestMessages()
 			deleteTestPolls()
+			deleteTestMessages()
 	}
 
 	String dateToString(Date date) {
@@ -76,9 +76,5 @@ class PollShowPage extends geb.Page {
 	static at = {
 		title.endsWith('Poll')
 	}
-//		static content = {
-//			selectedMenuItem { $('#messages-menu .selected') }
-//			messagesList { $('#messages-submenu') }
-//		}
 }
 

@@ -16,6 +16,10 @@ class Group {
 		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
 	}
 
+	def getAddresses() {
+		GroupMembership.findAllByGroup(this)*.contact.address
+	}
+
 	def addToMembers(Contact c) {
 		GroupMembership.create(c, this)
 	}

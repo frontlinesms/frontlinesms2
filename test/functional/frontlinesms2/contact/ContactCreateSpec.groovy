@@ -30,15 +30,14 @@ class ContactCreateSpec extends ContactGebSpec {
 	
 	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
 		when:
-			go 'contact/createContact'
-			def cancelContact = $('#buttons').find('a').first()
-			def btn = $("#buttons .list")
+			to CreateContactPage
+			def cancelContact = $('.buttons .cancel')
 		then:
 			cancelContact.text() == "Cancel"
-			cancelContact.@href == "/frontlinesms2/contact/list"
+			at ContactListPage
 	}
 
-	def '"All contacts" menu item is selected when creating a contact'() {
+	def 'ALL CONTACTS menu item is selected when creating a contact'() {
 		when:
 			to ContactListPage
 		then:
@@ -53,6 +52,6 @@ class CreateContactPage extends geb.Page {
 	}
 	static content = {
 		saveButton { $("#contact-details .save") }
-		errorMessages { $('.errors') }
+		errorMessages { $('.flash.errors') }
 	}
 }
