@@ -35,32 +35,7 @@ class GroupSpec extends UnitSpec {
 
 	def "group name must be less than 255 characters"() {
 		when:
-			def longNameGroup = new Group(name:'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789')
+			def longNameGroup = new Group(name:'0123456789abcdef'*16)
 			mockForConstraintsTests(Group, [longNameGroup])
 		then:
 			assert longNameGroup.name.length() > 255

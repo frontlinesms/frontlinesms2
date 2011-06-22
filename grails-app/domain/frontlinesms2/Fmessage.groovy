@@ -87,4 +87,31 @@ class Fmessage {
 		}
 		messages
 	}
+	
+	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[]) {
+		if(searchString) {
+			def groupContactAddresses = groupInstance?.getMembers()*.address
+			if(!groupContactAddresses) {
+				groupContactAddresses = "null"
+			}
+			def results = Fmessage.createCriteria().list {
+				ilike("text", "%${searchString}%")
+				and{
+					if(groupInstance) {
+						'in'("src",  groupContactAddresses)
+					}
+					if(messageOwner) {
+						'in'("messageOwner", messageOwner)
+					}
+					eq('deleted', false)
+				}
+				order('dateRecieved', 'desc')
+				order('dateCreated', 'desc')
+			}
+			results*.updateDisplaySrc()
+			results
+		} else {
+			[]
+		}
+	}
 }

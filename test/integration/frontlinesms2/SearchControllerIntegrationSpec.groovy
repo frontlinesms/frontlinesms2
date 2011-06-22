@@ -48,76 +48,72 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "blank search does not return a list of messages"() {
 		when:
-			controller.params.keywords = ""
-			controller.search()
-			def model = controller.modelAndView.model.messageInstanceList
+			controller.params.searchString = ""
+			def model = controller.index()
 		then:
-			!model
+			model.messageInstanceList.isEmpty()
 	}
 	
-	def "message searches can be restricted to a poll or folders"() {
+	def "message searches can be restricted to a poll"() {
 		when:
-			controller.params.keywords = "chicken"
+			controller.params.searchString = "chicken"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
-			controller.search()
-			def model = controller.modelAndView.model.messageInstanceList
+			def model = controller.index()
 		then:
-			model == [Fmessage.findBySrc('Barnabus')]
+			model.messageInstanceList == [Fmessage.findBySrc('Barnabus')]
+	}
+	
+	def "message searches can be restricted to a folder"() {
 		when:
 			new MessageOwner(value: 'work').save(failOnError: true, flush:true)
 			folder = new Folder(value: 'work')
 			folder.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true, flush:true)
-			controller.params.keywords = "work"
+			controller.params.searchString = "work"
 			controller.params.activityId = "folder-${folder.id}"
-			controller.search()
-			def model2 = controller.modelAndView.model.messageInstanceList
+			def model = controller.index()
 		then:
-			model2 == [Fmessage.findBySrc('+254111222')]
+			model.messageInstanceList == [Fmessage.findBySrc('+254111222')]
 	}
 	
 	def "message searches can be restricted to a contact group"() {
 		given:
 			makeGroupMember()
 		when:
-			controller.params.keywords = "liver"
+			controller.params.searchString = "liver"
 			controller.params.groupId = Group.findByName('test').id
-			controller.search()
-			def model = controller.modelAndView.model.messageInstanceList
+			def model = controller.index()
 		then:
-			model == [ Fmessage.findBySrc('+254333222')]
+			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
 	}
 	
 	def "groups without contacts do not return messages"() {
 		when:
-			controller.params.keywords = "test"
+			controller.params.searchString = "test"
 			controller.params.groupId = Group.findByName('test').id
-			controller.search()
-			def model = controller.modelAndView.model.messageInstanceList
+			def model = controller.index()
 		then:
-			!model
+			model.messageInstanceList.isEmpty()
 	}
 	
 	def "message searches can be restricted to both contact groups and polls"() {
 		given:
 			makeGroupMember()
 		when:
-			controller.params.keywords = "liver"
+			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
 			controller.params.groupId = Group.findByName('test').id
-			controller.search()
-			def model = controller.modelAndView.model.messageInstanceList
+			def model = controller.index()
 		then:
-			model == [Fmessage.findBySrc('+254333222')]
+			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
 	}
 	
 	def "deleted messages do not appear in search results"() {
 		when:
-			controller.params.keywords = "liver"
+			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
 			Fmessage.findBySrc("+254333222").toDelete().save(flush: true)
-			controller.search()
-			def model = controller.modelAndView.model.messageInstanceList
+			def model = controller.index()
 		then:
-			model == [Fmessage.findBySrc('Minime')]
+			model.messageInstanceList == [Fmessage.findBySrc('Minime')]
 	}
 }
