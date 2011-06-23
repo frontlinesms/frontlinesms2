@@ -24,11 +24,6 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
 			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
-
-		when:
-			$('#new-field-dropdown').value("Create custom field")
-		then:
-			title.contains('Create Custom Field')
 	}
 
 	def 'custom fields with no value for that contact are shown in dropdown'() {

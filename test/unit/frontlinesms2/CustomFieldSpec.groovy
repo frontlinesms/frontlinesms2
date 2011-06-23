@@ -4,25 +4,23 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class CustomFieldSpec extends UnitSpec {
-	def "Custom Field must have a name"() {
+	def "Custom Field must have a name and a contact"() {
 		when:
-			def CustomField f = new CustomField()
-			assert f.name == null
-			mockForConstraintsTests(CustomField, [f])
+			CustomField namelessField = new CustomField()
+			CustomField namedField = new CustomField(name: 'address')
+			CustomField contactField = newCustomField(name:'town', contact: new Contact(address: "12345"))
+			mockForConstraintsTests(CustomField, [namelessField, nameledField, contactField])
 		then:
-			!f.validate()
-
-		when:
-			f.name = 'address'
-		then:
-			f.validate()
+			namelessField.validate()
+			namedField.validate()
+			contactField.validate()
 	}
 
 	def "Custom Field may have a value"() {
 		setup:
 			mockForConstraintsTests(CustomField)
 		when:
-			def CustomField f = new CustomField(name:'town')
+			CustomField f = new CustomField(name:'town')
 		then:
 			f.validate()
 

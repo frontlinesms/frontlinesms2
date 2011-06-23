@@ -52,9 +52,10 @@ class ContactSpec extends UnitSpec {
 	def 'contact may have a custom field'() {
 		setup:
 			mockDomain(Contact)
+			mockDomain(CustomField)
 		when:
 			Contact c = new Contact(name: 'Eve')
-			c.addToCustomfields(new CustomField())
+			c.addToCustomfields(new CustomField(name: 'height'))
 		then:
 			c.validate()
 	}

@@ -117,17 +117,6 @@ class ContactController {
 		[customFieldInstance: customFieldInstance,
 				contactInstance: contactInstance]
 	}
-//
-//	def saveCustomField = {
-//		def customFieldInstance = new CustomField(params)
-//		if (!customFieldInstance.hasErrors() && customFieldInstance.save(flush: true)) {
-//			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'CustomField'), customFieldInstance.id])}"
-//			redirect(controller:'contact', action:'show', id: contactInstance.id, params: [flashMessage: flash.message])
-//		} else {
-//			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'CustomField'), params.id])}"
-//			redirect(action: "newCustomField", model: [customFieldInstance: customFieldInstance])
-//		}
-//	}
 
 	private def withContact(Closure c) {
 		def contactInstance = Contact.get(params.contactId)
@@ -158,7 +147,8 @@ class ContactController {
 			fieldsToAdd.each() { name ->
 				def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
 				def fieldsByName = params."$name"
-				if(fieldsByName.class != String) {
+				println name
+				if(fieldsByName?.class != String) {
 					fieldsByName.each() { val ->
 						if(val != "" && !existingFields.value.contains(val))
 							contactInstance.addToCustomFields(new CustomField(name: name, value: val)).save(flush:true)
@@ -168,8 +158,10 @@ class ContactController {
 					contactInstance.addToCustomFields(new CustomField(name: name, value: fieldsByName))
 				}
 			}
-			fieldsToRemove.each() {
-				CustomField.get(it).delete(failOnError: true, flush: true)
+			fieldsToRemove.each() { id ->
+				def toRemove = CustomField.get(id)
+				if(toRemove)
+					toRemove.delete(failOnError: true, flush:true)
 			}
 
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
