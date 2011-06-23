@@ -32,8 +32,8 @@
 				</div>
 			</g:each>
 		</div>
-		<g:link url="#" class="next">Next</g:link>
 		<g:link url="#" class="back">Back</g:link>
+		<g:link url="#" class="next">Next</g:link>		
 	</div>
 		<div id="tabs-3">
 		<label>Do you want to send?</label>
