@@ -2,12 +2,28 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$("tr #star").click(function(){
-			if($(this).hasClass('')) {
-				$(this).addClass('starred')
-				$(this).empty().append("Remove Star")
+			if(!$(this).hasClass('starred')) {
+				$.ajax({
+					type: "POST",
+					url: "/frontlinesms2/message/starMessage",
+					data: ({messageId: $(this).attr("messageId")}), 
+					success: function(){
+					 }
+				});
+				$(this).addClass('starred');
+				$(this).empty().append("Remove Star");
+				
 			} else if($(this).hasClass('starred')) {
-				$(this).removeClass('starred')
-				$(this).empty().append("Add Star")
+				 $.ajax({
+					type: "POST",
+					url: "/frontlinesms2/message/starMessage",
+					data: ({messageId: $(this).attr("messageId")}), 
+					success: function(){
+						
+					 }
+				});
+				$(this).removeClass('starred');
+				$(this).empty().append("Add Star");
 			} 
 		});
 	});
@@ -26,7 +42,7 @@
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
-					<td id="star">
+					<td id="star" class=" ${m.starred?'starred':""}" messageId="${m.id}">
 					 ${m.starred?'Remove Star':'Add Star'}
 					</td>
 					<td>
