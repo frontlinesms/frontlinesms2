@@ -26,6 +26,21 @@ function addFieldClickAction() {
 	addCustomField(fieldName, fieldValue);
 }
 
+function addCustomField(name, value) {
+	var fieldId = Math.floor(Math.random()*100001)
+	var fieldListItem = $('<li><label for="' + fieldId + '">' + name + '</label>');
+	var textFieldItem = $('<input type="text" name="' + name + '" value="' + value + '" />');
+	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '">Delete</a></li>');
+
+	fieldListItem.append(textFieldItem);
+	fieldListItem.append(deleteButton);
+	deleteButton.click(removeFieldClickAction);
+
+	$('#custom-field-list').append(fieldListItem);
+	$('input[name="' + name + '"]').focus();
+	addField(name);
+}
+
 function removeFieldClickAction() {
 	var fieldId = $(this).attr('id').substring('remove-field-'.length);
 	var parent = $(this).parent();
@@ -60,17 +75,45 @@ function addFieldIdToList(id, fieldName) {
 	f.val(newList);
 }
 
-function addCustomField(name, value) {
-	var fieldId = name; // FIXME convert name to safe string
-	var fieldListItem = $('<li><label for="' + fieldId + '">' + name + '</label>');
-	var textFieldItem = $('<input type="text" name="' + fieldId + '" value="' + value + '" />');
-	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '">Delete</a></li>');
+function createCustomField_submit() {
+	var name = $('#custom-field-name').val();
+	var value = $('#custom-field-value').val();
+	if(!name.length || !value.length) {
+		if(!$('#invalid').length) {
+			$('#custom-field-popup').prepend("<p id='invalid'>invalid details</p>");
+		}
+	} else {
+		addCustomField(name, value);
+		$("#custom-field-popup").dialog('close');
+	}
+	return false;
+}
 
-	deleteButton.click(removeFieldClickAction);
-	fieldListItem.append(textFieldItem);
-	fieldListItem.append(deleteButton);
+function createCustomField_cancel() {
+	$("#custom-field-popup").dialog('close');
+	return false;
+}
 
-	$('#custom-field-list').append(fieldListItem);
-	$('input[name="' + name + '"]').focus();
-	addField(name);
+var createCustomField = {
+	submit: function() {
+		  var name = $('#custom-field-name').val();
+		  var value = $('#custom-field-value').val();
+		  if(!name.length || !value.length) {
+			  if(!$('#invalid').length) {
+				  $('#custom-field-popup').prepend("<p id='invalid'>invalid details</p>");
+			  }
+			  return false;
+		  }
+		  alert("We think we checked");
+		  addCustomField(name, value);
+
+		  alert("We think we added a new field");
+		  $("#custom-field-popup").dialog('close');
+		  return false;
+	},
+
+	cancel: function() {
+		$("#custom-field-popup").dialog('close');
+		return false;
+	}
 }

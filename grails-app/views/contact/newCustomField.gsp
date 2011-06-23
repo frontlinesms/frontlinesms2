@@ -23,31 +23,8 @@
 		  </table>
 	  </div>
 	  <div class="buttons">
-		  <g:submitButton name="save-custom-field" value="Create" />
-		  <g:link id="cancel-create-field" class="cancel">Cancel</g:link>
+		<a href="#" onClick="createCustomField_submit()">Create</a>
+		<a class="cancel" href="#" onClick="createCustomField_cancel()">Cancel</a>
 	  </div>
 	</g:form>
-  	<script>
-		$('#custom-field-details').submit(function() {
-		  var name = $('#custom-field-name').val();
-		  var value = $('#custom-field-value').val();
-		  if(!name.length || !value.length) {
-			  if(!$('#invalid').length) {
-				  $('#custom-field-popup').prepend("<p id='invalid'>invalid details</p>");
-			  }
-			  return false;
-		  }
-		  alert("We think we checked");
-		  addCustomField(name, value);
-
-		  alert("We think we added a new field");
-		  $("#custom-field-popup").dialog('close');
-		  return false;
-		});
-		
-		$('#cancel-create-field').click(function() {
-		  $("#custom-field-popup").dialog('close');
-		  return false;
-		});
-	</script>
 </div>
