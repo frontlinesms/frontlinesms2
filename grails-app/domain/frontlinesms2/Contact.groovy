@@ -20,7 +20,7 @@ class Contact {
 				}
 		})
 
-        	notes(nullable: true, maxSize: 1024)
+        notes(nullable: true, maxSize: 1024)
 		customFields(unique: false)
 	}
 

@@ -52,10 +52,9 @@ class ContactSpec extends UnitSpec {
 	def 'contact may have a custom field'() {
 		setup:
 			mockDomain(Contact)
-			mockDomain(CustomField)
 		when:
 			Contact c = new Contact(name: 'Eve')
-			c.addToCustomfields(new CustomField(name: 'height'))
+			c.addToCustomFields(new CustomField())
 		then:
 			c.validate()
 	}
@@ -65,8 +64,8 @@ class ContactSpec extends UnitSpec {
 			mockDomain(Contact)
 		when:
 			Contact c = new Contact(name: 'Eve')
-			c.addToCustomfields(new CustomField())
-			c.addToCustomfields(new CustomField())
+			c.addToCustomFields(new CustomField())
+			c.addToCustomFields(new CustomField())
 		then:
 			c.validate()
 	}
@@ -108,7 +107,9 @@ class ContactSpec extends UnitSpec {
 	}
 
     def "should not complain if a contact does not have a note"() {
-        when:
+        setup:
+			mockForConstraintsTests(Contact)
+		when:
 			def c = new Contact(notes: null, name: "Tim")
         then:
         	c.validate()
@@ -116,6 +117,7 @@ class ContactSpec extends UnitSpec {
 
    def 'should be able to add notes with length equal to 1024 chars'() {
 	 	setup:
+			mockForConstraintsTests(Contact)
         	def notes = "a" * 1024
         when:
 			def c = new Contact(name: "Tim", notes: notes)
@@ -125,6 +127,7 @@ class ContactSpec extends UnitSpec {
 
    def 'should not be able to add notes with length more than 1024 chars'() {
 		setup:
+			mockForConstraintsTests(Contact)
 			def notes = "a" * 1025
         when:
 			def c = new Contact(name: "Tim", notes: notes)
