@@ -46,7 +46,7 @@
 			<div class="field">
 				<select id="new-field-dropdown" name="new-field-dropdown">
 					<option class="not-field" value="na">Add more information...</option>
-					<option class="create-custom-field">Create custom field</option>
+					<option class="create-custom-field" value='add-new'>Create custom field</option>
 					<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
 						<option value="${f}">${f}</option>
 					</g:each>
