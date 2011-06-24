@@ -8,11 +8,11 @@ class CustomFieldSpec extends UnitSpec {
 		when:
 			CustomField namelessField = new CustomField()
 			CustomField namedField = new CustomField(name: 'address')
-			CustomField contactField = newCustomField(name:'town', contact: new Contact(address: "12345"))
-			mockForConstraintsTests(CustomField, [namelessField, nameledField, contactField])
+			CustomField contactField = new CustomField(name:'town', contact: new Contact(address: "12345"))
+			mockForConstraintsTests(CustomField, [namelessField, namedField, contactField])
 		then:
-			namelessField.validate()
-			namedField.validate()
+			!namelessField.validate()
+			!namedField.validate()
 			contactField.validate()
 	}
 
@@ -20,7 +20,7 @@ class CustomFieldSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(CustomField)
 		when:
-			CustomField f = new CustomField(name:'town')
+			CustomField f = new CustomField(name:'town', contact: new Contact(address: "12345"))
 		then:
 			f.validate()
 
