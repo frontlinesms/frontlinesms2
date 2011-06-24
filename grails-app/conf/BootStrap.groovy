@@ -46,36 +46,35 @@ class BootStrap {
 					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
 					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
 					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateReceived:createDate("2011/01/23"))].each() {
-						it.inbound = true
-						it.save(failOnError:true)
-					}
+				it.inbound = true
+				it.save(failOnError:true)
+			}	
 
 			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
 					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
-						it.save(failOnError:true, flush:true)
-					}
+				it.save(failOnError:true, flush:true)
+			}
 
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob'))
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))
 			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
+		
+			['Work', 'Projects'].each {
+				new Folder(name:it).save(failOnError:true, flush:true)
+			}
 			
-			[new Folder(value: 'Work'), 
-				new Folder(value: 'Projects')].each() {
-					it.save(failOnError:true, flush:true)
-				}
-				
 			[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
-				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
-				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
-				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
-					it.inbound = true
-					it.save(failOnError:true, flush:true)
-				}
-				
-			[Folder.findByValue('Work').addToMessages(Fmessage.findBySrc('Max')),
-				Folder.findByValue('Work').addToMessages(Fmessage.findBySrc('Jane')),
-				Folder.findByValue('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
-				Folder.findByValue('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
+					new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
+					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
+					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+				it.inbound = true
+				it.save(failOnError:true, flush:true)
+			}
+			
+			[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
+					Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
+					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
+					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 				it.save(failOnError:true, flush:true)
 			}
 		}

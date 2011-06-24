@@ -22,7 +22,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			"message/folder/${Folder.findByValue('Work').id}/show/${Fmessage.findBySrc('Max')}"
+			"message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max')}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[0] == 'Jane'
@@ -37,7 +37,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			"message/folder/${Folder.findByValue('Work').id}/show/${Fmessage.findBySrc('Max')}"
+			"message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max')}"
 			def selectedMenuItem = $('#messages-menu .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
@@ -47,7 +47,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 }
 
 class FolderListPage extends geb.Page {
- 	static url = "message/folder/${Folder.findByValue('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+ 	static url = "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 	static at = {
 		title.endsWith('Folder')
 	}

@@ -19,14 +19,14 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 	def 'settings menu item is available in global navigation and is selected'() {
 		when:
 			to ContactListPage
-			def btnGotoSettings = $('#main-tabs #goto-settings')
+			def btnGotoSettings = $('#main-tabs #tab-settings')
 		then:
 			btnGotoSettings.text() == 'Settings & Plugins'
 		when:
 			btnGotoSettings.click()
 		then:
 			at SettingsPage
-			$('#main-tabs #goto-settings').hasClass('selected')
+			$('#main-tabs #tab-settings').hasClass('selected')
 	}
 
 	def 'PHONES & CONNECTIONS menu item is available settings menu'() {
