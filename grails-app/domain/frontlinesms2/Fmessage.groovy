@@ -50,18 +50,6 @@ class Fmessage {
 		this
 	}
 
-	static def getFolderMessages(folderId) {
-		def folder = Folder.get(folderId)
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				eq("messageOwner", folder)
-			}
-			order('dateReceived', 'desc')
-		}
-		messages
-	}
-
 	static def getInboxMessages() {
 		def messages = Fmessage.createCriteria().list {
 			and {
@@ -84,5 +72,32 @@ class Fmessage {
 			order("dateCreated", "desc")
 		}
 		messages
+	}
+	
+	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[]) {
+		if(searchString) {
+			def groupContactAddresses = groupInstance?.getMembers()*.address
+			if(!groupContactAddresses) {
+				groupContactAddresses = "null"
+			}
+			def results = Fmessage.createCriteria().list {
+				ilike("text", "%${searchString}%")
+				and{
+					if(groupInstance) {
+						'in'("src",  groupContactAddresses)
+					}
+					if(messageOwner) {
+						'in'("messageOwner", messageOwner)
+					}
+					eq('deleted', false)
+				}
+				order('dateReceived', 'desc')
+				order('dateCreated', 'desc')
+			}
+			results*.updateDisplaySrc()
+			results
+		} else {
+			[]
+		}
 	}
 }

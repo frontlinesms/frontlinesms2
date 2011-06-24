@@ -15,7 +15,7 @@ class CreateNewPollSpec extends PollGebSpec {
 		when:
 			go 'poll/create'
 		then:
-			$('#goto-messages').hasClass('selected')
+			$('#tab-messages').hasClass('selected')
 	}
 	
 	def 'button to save new poll with keyword choices and title works'() {

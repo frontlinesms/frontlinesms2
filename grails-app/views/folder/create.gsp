@@ -11,10 +11,10 @@
                         <tbody>
                             <tr class="prop">
                                 <td valign="top" class="title">
-                                    <label for="value"><g:message code="folder.value.label" default="Name" /></label>
+                                    <label for="name"><g:message code="folder.name.label" default="Name" /></label>
                                 </td>
-                                <td valign="top" class="value ${hasErrors(bean: folderInstance, field: 'value', 'errors')}">
-                                    <g:textField name="value" value="${folderInstance?.value}" />
+                                <td valign="top" class="name ${hasErrors(bean: folderInstance, field: 'name', 'errors')}">
+                                    <g:textField name="name" value="${folderInstance?.name}" />
                                 </td>
                             </tr>
                         </tbody>

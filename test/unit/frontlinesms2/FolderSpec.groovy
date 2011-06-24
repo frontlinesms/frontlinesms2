@@ -3,12 +3,12 @@ package frontlinesms2
 import spock.lang.*
 import grails.plugin.spock.*
 
-class FolderSpec extends UnitSpec{
+class FolderSpec extends UnitSpec {
 	def 'A folder may have none, one or many messages stored in it'() {
 		given:
 			mockDomain(MessageOwner)
 		when:
-			def f = new Folder(value:'test')
+			def f = new Folder(name:'test')
 		then:
 			f.validate()
 		when:
@@ -26,7 +26,7 @@ class FolderSpec extends UnitSpec{
 		given:
 			mockDomain(Fmessage)
 			mockDomain(MessageOwner)
-			def f = new Folder(value:'test').save()
+			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage()
 		when:
 			f.addToMessages(m)
