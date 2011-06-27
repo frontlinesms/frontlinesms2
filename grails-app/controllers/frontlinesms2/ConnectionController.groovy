@@ -33,12 +33,14 @@ class ConnectionController {
 	def create = {}
 
 	def createEmail = {
+		if(params.flashMessage) { flash.message = params.flashMessage }
 		def fconnectionInstance = new EmailFconnection()
 		fconnectionInstance.properties = params
 		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
 	}
 
 	def createSmslib = {
+		if(params.flashMessage) { flash.message = params.flashMessage }
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
 		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
@@ -59,7 +61,8 @@ class ConnectionController {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
 			redirect(action: "list", id: fconnectionInstance.id)
 		} else {
-			render "fail!  ${fconnectionInstance.errors}"
+			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
+			redirect(action: "createEmail", params: params)
 		}
 	}
 
@@ -71,7 +74,8 @@ class ConnectionController {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
 			redirect(action: "list", id: fconnectionInstance.id)
 		} else {
-			render "fail!  ${fconnectionInstance.errors}"
+			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
+			redirect(action: "createSmslib", params: params)
 		}
 	}
 
