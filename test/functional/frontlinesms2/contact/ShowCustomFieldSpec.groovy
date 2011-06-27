@@ -60,7 +60,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
 	}
 
-	def 'clicking "x" next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {
+	def 'clicking X next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {
 		when:
 			def bob = Contact.findByName("Bob")
 			bob.addToCustomFields(CustomField.findByName('lake')).save(failOnError: true, flush: true)
@@ -78,7 +78,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			bobsFields == bobsDatabaseFields
 	}
 
-	def 'clicking "x" next to custom field in list then saving removes it from  database'() {
+	def 'clicking X next to custom field in list then saving removes it from  database'() {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
