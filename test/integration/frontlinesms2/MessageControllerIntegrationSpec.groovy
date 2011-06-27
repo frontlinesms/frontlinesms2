@@ -84,7 +84,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
-			controller.starMessage()
+			controller.changeStarStatus()
 		then:
 			Fmessage.get(id).starred == true
 	}
@@ -96,7 +96,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
-			controller.starMessage()
+			controller.changeStarStatus()
 		then:
 			Fmessage.get(id).starred == false
 	}

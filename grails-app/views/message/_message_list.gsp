@@ -1,43 +1,18 @@
   <%@ page contentType="text/html;charset=UTF-8" %>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("tr #star").click(function(){
-			if(!$(this).hasClass('starred')) {
-			  var object= $(this)
-				$.ajax({
-					type: "POST",
-					url: "/frontlinesms2/message/starMessage",
-					data: ({messageId: $(this).attr("messageId")}), 
-					success: function(){ addStar(object); }
-				});
-				
-				
-			} else if($(this).hasClass('starred')) {
-				 var object = $(this)
-				 $.ajax({
-					type: "POST",
-					url: "/frontlinesms2/message/starMessage",
-					data: ({messageId: $(this).attr("messageId")}), 
-					success: function(){ removeStar(object); }
-				});
-				
-			}
-			
-			function addStar(dom){
-				dom.addClass('starred');
-				dom.empty().append("Remove Star");
-			}
-	
-			function removeStar(dom){
-				dom.removeClass('starred');
-				dom.empty().append("Add Star");
-			}
-		});
-	
-	});
-
-	
-	
+	function setStarStatus(object,data){
+		if($("#"+object).hasClass("starred")) {
+			$("#"+object).removeClass("starred");
+		}
+		
+		$("#"+object).addClass(data);
+		if(data != '') {
+			$("#"+object).empty().append("Remove Star");
+		} else {
+			$("#"+object).empty().append("Add Star");
+		}
+		
+	}
 </script>
 <g:if test="${messageInstanceTotal > 0}">
 	<table id="messages">
@@ -52,8 +27,12 @@
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
-					<td id="star" class=" ${m.starred?'starred':""}" messageId="${m.id}">
-					 ${m.starred?'Remove Star':'Add Star'}
+					<td>
+					  <g:remoteLink action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
+							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
+								${m.starred?'Remove Star':'Add Star'}
+							</div>
+					  </g:remoteLink>
 					</td>
 					<td>
 						<g:if test="${ownerInstance}">
