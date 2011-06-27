@@ -12,6 +12,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	}
 
 	def cleanup() {
+		MessageOwner.findAll()*.delete(flush:true, failOnError:true)
 		Contact.findAll()*.delete(flush:true, failOnError:true)
 		Group.findAll()*.delete(flush:true, failOnError:true)
 	}
