@@ -9,6 +9,7 @@ import net.frontlinesms.test.serial.HayesPortHandler
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import frontlinesms2.enums.MessageStatus
 
 
 class BootStrap {
@@ -48,7 +49,12 @@ class BootStrap {
 					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateReceived:createDate("2011/01/23"))].each() {
 				it.inbound = true
 				it.save(failOnError:true)
-			}	
+			}
+
+			[new Fmessage(src: 'Alice', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
+					new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
+				it.save(failOnError: true)
+			}
 
 			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
 					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
