@@ -73,7 +73,16 @@ class Fmessage {
 		}
 		messages
 	}
-	
+
+	static def getDeletedMessages() {
+		def messages = Fmessage.createCriteria().list {
+			and {
+				eq("deleted", true)
+			}
+			order("dateCreated", "desc")
+		}
+		messages
+	}
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[]) {
 		if(searchString) {
 			def groupContactAddresses = groupInstance?.getMembers()*.address
