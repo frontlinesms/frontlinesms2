@@ -15,21 +15,27 @@ class StarMessageSpec extends MessageGebSpec{
 		def 'clicking on an unstarred message changes its CSS to "starred"'() {
 		when:
 			go "message/inbox/show/$message.id"
-			$('#star').click()
+			$('tr #star').click()
 		then:
-			$("tr#message-${message.id} #star").hasClass('starred')	
+			message.refresh()
+			$("tr #star").hasClass('starred')	
 			assert message.starred
 	}
 	
 	def 'clicking on a starred messages removes the "starred" CSS'() {
 		when:
-			message.addStar()
+			message.addStar().save(failOnError: true, flush: true)
 			go "message/inbox/show/$message.id"
-			$('#star').click()
+			$('tr #star').click()
 		then:
+			message.refresh()
 			assert !message.starred
-			!$("tr#message-${message.id} #star").hasClass('starred')
+			!$("tr #star").hasClass('starred')
 			
+	}
+	
+	def 'starring one message does not affect other messages'() {
+		
 	}
 }
 

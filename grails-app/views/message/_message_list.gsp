@@ -3,31 +3,41 @@
 	$(document).ready(function(){
 		$("tr #star").click(function(){
 			if(!$(this).hasClass('starred')) {
+			  var object= $(this)
 				$.ajax({
 					type: "POST",
 					url: "/frontlinesms2/message/starMessage",
 					data: ({messageId: $(this).attr("messageId")}), 
-					success: function(){
-					 }
+					success: function(){ addStar(object); }
 				});
-				$(this).addClass('starred');
-				$(this).empty().append("Remove Star");
+				
 				
 			} else if($(this).hasClass('starred')) {
+				 var object = $(this)
 				 $.ajax({
 					type: "POST",
 					url: "/frontlinesms2/message/starMessage",
 					data: ({messageId: $(this).attr("messageId")}), 
-					success: function(){
-						
-					 }
+					success: function(){ removeStar(object); }
 				});
-				$(this).removeClass('starred');
-				$(this).empty().append("Add Star");
-			} 
+				
+			}
+			
+			function addStar(dom){
+				dom.addClass('starred');
+				dom.empty().append("Remove Star");
+			}
+	
+			function removeStar(dom){
+				dom.removeClass('starred');
+				dom.empty().append("Add Star");
+			}
 		});
+	
 	});
 
+	
+	
 </script>
 <g:if test="${messageInstanceTotal > 0}">
 	<table id="messages">
