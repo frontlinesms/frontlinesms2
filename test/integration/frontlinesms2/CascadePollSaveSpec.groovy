@@ -4,6 +4,11 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class CascadePollSaveSpec extends grails.plugin.spock.IntegrationSpec {
+
+	def cleanup() {
+		MessageOwner.list()*.delete()	
+	}
+
 	def 'saving a poll cascades to saving poll responses'() {
 		when:
 			def p = new Poll(title:'Football Teams', responses:[new PollResponse(value:'manchester'),
