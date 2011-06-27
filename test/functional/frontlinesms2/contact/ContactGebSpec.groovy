@@ -20,6 +20,15 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		groupThree.addToMembers(bob)
 	}
 
+	static createTestCustomFields() {
+		def bob = Contact.findByName('Bob')
+		def alice = Contact.findByName('Alice')
+		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
+				new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
+					it.save(failOnError:true, flush:true)
+				}
+	}
+
 	static deleteTestContacts() {
 		Contact.findAll().each() {
 			it.refresh()
@@ -34,6 +43,12 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 
+	static deleteTestCustomFields() {
+		CustomField.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
 
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
 		def label = $('label', for:fieldName)

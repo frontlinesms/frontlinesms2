@@ -115,7 +115,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def unknownResponse = footballPoll.getResponses().find { it.value == 'Unknown'}
 			unknownResponse.addToMessages(max).save(failOnError:true, flush:true)
-			def workFolder = Folder.findByValue('Work')
+			def workFolder = Folder.findByName('Work')
 			go "message/poll/${footballPoll.id}/show/${Fmessage.findBySrc('Max').id}"
 			def btnAction = $('#message-actions li:nth-child(4) a')
 			println btnAction.text()

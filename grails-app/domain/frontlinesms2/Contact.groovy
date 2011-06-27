@@ -3,6 +3,7 @@ package frontlinesms2
 class Contact {
 	String name
 	String address
+	static hasMany = [customFields: CustomField]
     String notes
 
     static constraints = {
@@ -18,7 +19,14 @@ class Contact {
 					obj.name != null
 				}
 		})
+
         notes(nullable: true, maxSize: 1024)
+		customFields(unique: false)
+	}
+
+	static mapping = {
+		customFields cascade: 'all'
+		customFields sort: 'name','value'
 	}
 
 	def beforeDelete = {

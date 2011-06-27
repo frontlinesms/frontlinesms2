@@ -16,7 +16,7 @@
 				<g:select from="${frontlinesms2.EmailProtocol.values()}"
 					    value="${fconnectionInstance?.protocol}"
 					    name="protocol"
-					    noSelection="${['null': '- Select -']}"/>
+					    noSelection="${['': '- Select -']}"/>
 			</div>
 			
 			<div class="field">
@@ -28,7 +28,7 @@
 				<label for="serverPort"><g:message code="fconnection.serverPort.label" default="Server port" /></label>
 				<g:textField name="serverPort" value="${fconnectionInstance?.serverPort}" />
 			</div>
-			
+
 			<div class="field">
 				<label for="username"><g:message code="fconnection.username.label" default="Username" /></label>
 				<g:textField name="username" value="${fconnectionInstance?.username}" />

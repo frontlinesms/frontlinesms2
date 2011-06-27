@@ -3,43 +3,52 @@ package frontlinesms2.message
 import frontlinesms2.*
 
 class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
+	def setup() {
+		createTestData()
+		assert Fmessage.getInboxMessages().size() == 3
+		assert Poll.findByTitle('Miauow Mix').messages.size() == 2
+		assert Folder.findByName('Fools').messages.size() == 2	
+	}
+	
+	def cleanup() {
+		deleteTestData()
+	}
 		
-	def 'deleted messages do not show up in inbox or poll or folder views'() {
-		given:
-			createTestData()
-			assert Fmessage.getInboxMessages().size() == 3
-			assert Poll.findByTitle('Miauow Mix').messages.size() == 2
-			assert Fmessage.getFolderMessages(Folder.findByValue('Fools').id).size() == 2
+	def 'deleted messages do not show up in inbox view'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			def btnDelete = $('#message-details .buttons a')
 			btnDelete.click()
-            waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			Fmessage.getInboxMessages().size() == 2
-
+	}
+	
+	def 'deleted messages do not show up in poll view'() {
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			def btnDeleteFromPoll = $('#message-details .buttons a')
 			btnDeleteFromPoll.click()
-            waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			Poll.findByTitle('Miauow Mix').messages.size() == 1
-
+	}
+	
+	def 'deleted messages do not show up in folder view'() {
+		given:
+			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
+			assert Folder.findByName('Fools').messages.size() == 2
 		when:
-			go "message/folder/${Folder.findByValue('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
+			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
 			def btnDeleteFromFolder = $('#message-details .buttons a')
 			btnDeleteFromFolder.click()
-            waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
-			Fmessage.getFolderMessages(Folder.findByValue('Fools').id).size() == 1
-		cleanup:
-			deleteTestData()
+			Folder.findByName('Fools').folderMessages.size() == 1
 	}
 	
 	def 'delete button appears in message show view and works'() {
 		given:
-			createTestData()
 			def bob = Fmessage.findBySrc("Bob")
 		when:
 			go "message/inbox/show/${bob.id}"
@@ -54,8 +63,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bob.refresh()
 		then:
 			bob.deleted
-		cleanup:
-			deleteTestData()
 	}
 	
 	static createTestData() {
@@ -81,14 +88,13 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 
 		def message1 = new Fmessage(src:'Cheney', dst:'+12345678', text:'i hate chicken', inbound:false)
 		def message2 = new Fmessage(src:'Bush', dst:'+12345678', text:'i hate liver', inbound:false)
-		def fools = new Folder(value:'Fools').save(failOnError:true, flush:true)
+		def fools = new Folder(name:'Fools').save(failOnError:true, flush:true)
 		fools.addToMessages(message1)
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)
 	}
 	
 	static deleteTestData() {
-
 		Poll.findAll().each() {
 			it.refresh()
 			it.delete(failOnError:true, flush:true)

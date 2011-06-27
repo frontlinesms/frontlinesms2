@@ -14,17 +14,25 @@ import java.util.Date
 class BootStrap {
 	def init = { servletContext ->
 		if (Environment.current == Environment.DEVELOPMENT) {
+			//DB Viewer
+			//org.hsqldb.util.DatabaseManager.main()
 			// do custom init for dev here
 			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 			def alice = createContact("Alice", "+123456789")
 			def friends = Group.findByName('Friends')
 			def notCats = Group.findByName('Not Cats')
-			createContact("Bob", "+198765432")
+			def bob = createContact("Bob", "+198765432")
 			Contact.findAll().each() {
 				GroupMembership.create(it, friends)
 				GroupMembership.create(it, notCats)
 			}
 			createContact("Kate", "+198730948")
+
+			[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
+				new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
+					it.save(failOnError:true, flush:true)
+				}
+//			alice.addToCustomFields(CustomField.findByName('lake')).save(failOnError:true, flush:true)
 
 			new EmailFconnection(name:"mr testy's email", protocol:EmailProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
@@ -37,37 +45,43 @@ class BootStrap {
 					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
 					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
 					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
+<<<<<<< HEAD
 					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
 						it.inbound = true
 						it.save(failOnError:true)
 					}
+=======
+					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", dateReceived:createDate("2011/01/23"))].each() {
+				it.inbound = true
+				it.save(failOnError:true)
+			}	
+>>>>>>> master
 
 			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
 					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
-						it.save(failOnError:true, flush:true)
-					}
+				it.save(failOnError:true, flush:true)
+			}
 
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob'))
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))
 			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
+		
+			['Work', 'Projects'].each {
+				new Folder(name:it).save(failOnError:true, flush:true)
+			}
 			
-			[new Folder(value: 'Work'), 
-				new Folder(value: 'Projects')].each() {
-					it.save(failOnError:true, flush:true)
-				}
-				
 			[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
-				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
-				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
-				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
-					it.inbound = true
-					it.save(failOnError:true, flush:true)
-				}
-				
-			[Folder.findByValue('Work').addToMessages(Fmessage.findBySrc('Max')),
-				Folder.findByValue('Work').addToMessages(Fmessage.findBySrc('Jane')),
-				Folder.findByValue('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
-				Folder.findByValue('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
+					new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
+					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
+					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+				it.inbound = true
+				it.save(failOnError:true, flush:true)
+			}
+			
+			[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
+					Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
+					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
+					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 				it.save(failOnError:true, flush:true)
 			}
 		}

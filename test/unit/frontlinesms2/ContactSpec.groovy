@@ -3,11 +3,9 @@ package frontlinesms2
 import grails.plugin.spock.*
 
 class ContactSpec extends UnitSpec {
-	def setup() {
-		mockForConstraintsTests(Contact)
-	}
-
 	def "contact may have a name"() {
+		setup:
+			mockForConstraintsTests(Contact)
 		when:
 			Contact c = new Contact()
 			assert c.name == null
@@ -17,6 +15,8 @@ class ContactSpec extends UnitSpec {
 	}
 
 	def "blank names are allowed, there is no minimum length for name"() {
+		setup:
+			mockForConstraintsTests(Contact)
 		when:
 			def noNameContact = new Contact(name:'', address:'9876543')
 			def namedContact = new Contact(name:'a')
@@ -37,14 +37,37 @@ class ContactSpec extends UnitSpec {
 	}
 
 	def "max name length 255"(){
+		setup:
+			mockForConstraintsTests(Contact)
 		when:
 			def Contact contact = new Contact(name:'''\
 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\
 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\
 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef\
 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef''')
-	then:
-		!contact.validate()
+		then:
+			!contact.validate()
+	}
+
+	def 'contact may have a custom field'() {
+		setup:
+			mockDomain(Contact)
+		when:
+			Contact c = new Contact(name: 'Eve')
+			c.addToCustomFields(new CustomField())
+		then:
+			c.validate()
+	}
+
+	def 'contact may have multiple custom fields'() {
+		setup:
+			mockDomain(Contact)
+		when:
+			Contact c = new Contact(name: 'Eve')
+			c.addToCustomFields(new CustomField())
+			c.addToCustomFields(new CustomField())
+		then:
+			c.validate()
 	}
 
 	def "should return the count of all messages sent to a given contact"() {
@@ -84,7 +107,9 @@ class ContactSpec extends UnitSpec {
 	}
 
     def "should not complain if a contact does not have a note"() {
-        when:
+        setup:
+			mockForConstraintsTests(Contact)
+		when:
 			def c = new Contact(notes: null, name: "Tim")
         then:
         	c.validate()
@@ -92,6 +117,7 @@ class ContactSpec extends UnitSpec {
 
    def 'should be able to add notes with length equal to 1024 chars'() {
 	 	setup:
+			mockForConstraintsTests(Contact)
         	def notes = "a" * 1024
         when:
 			def c = new Contact(name: "Tim", notes: notes)
@@ -101,6 +127,7 @@ class ContactSpec extends UnitSpec {
 
    def 'should not be able to add notes with length more than 1024 chars'() {
 		setup:
+			mockForConstraintsTests(Contact)
 			def notes = "a" * 1025
         when:
 			def c = new Contact(name: "Tim", notes: notes)

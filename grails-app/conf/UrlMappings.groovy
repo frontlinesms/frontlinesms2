@@ -22,7 +22,6 @@ class UrlMappings {
 		"/folder/create"(controller:'folder', action:'create')
 		"/folder/save"(controller:'folder', action:'save')
 
-
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here

@@ -35,36 +35,24 @@ class GroupSpec extends UnitSpec {
 
 	def "group name must be less than 255 characters"() {
 		when:
-			def longNameGroup = new Group(name:'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789' +
-												'0123456789')
+			def longNameGroup = new Group(name:'0123456789abcdef'*16)
 			mockForConstraintsTests(Group, [longNameGroup])
 		then:
 			assert longNameGroup.name.length() > 255
 			!longNameGroup.validate()
+	}
+
+	def "should get all the member addresses for a group"() {
+		setup:
+			def group = new Group(name: "Sahara")
+			mockDomain Group, [group]
+			mockDomain GroupMembership, [new GroupMembership(group: group, contact: new Contact(address: "12345")),
+				new GroupMembership(group: group, contact: new Contact(address: "56484"))]
+		when:
+			def result = group.getAddresses()
+		then:
+			result == ["12345", "56484"]
+
 	}
 }
 
