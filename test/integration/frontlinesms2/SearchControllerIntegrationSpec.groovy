@@ -35,7 +35,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		Group.findAll()*.delete(flush:true, failOnError:true)
 		Contact.findAll()*.delete(flush:true, failOnError:true)
 		Poll.findAll()*.delete(flush:true, failOnError:true)
-		MessageOwner.findAll()*.delete(flush:true, failOnError:true)
+		MessageOwner.list()*.delete(flush:true, failOnError:true)
 		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 	

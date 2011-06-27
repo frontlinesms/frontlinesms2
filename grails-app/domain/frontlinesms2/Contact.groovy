@@ -21,7 +21,7 @@ class Contact {
 		})
 
         notes(nullable: true, maxSize: 1024)
-		customFields(unique: false)
+		customFields(nullable: true, unique: false)
 	}
 
 	static mapping = {
