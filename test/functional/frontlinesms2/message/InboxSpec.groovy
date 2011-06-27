@@ -70,11 +70,11 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 		cleanup:
 			deleteTestMessages()
 	}
