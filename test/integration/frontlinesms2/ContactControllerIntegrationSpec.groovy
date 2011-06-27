@@ -7,7 +7,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def setup() {
 		controller = new ContactController()
-		c = new Contact(name:'Ada').save(failOnError:true)
+		c = new Contact(name:'Bob').save(failOnError:true)
 		g = new Group(name:'test group').save(failOnError:true)
 	}
 
@@ -26,6 +26,8 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.params.contactId = c.id
 			controller.params.groupsToAdd = ",${g.id},${g.id},"
 			controller.params.groupsToRemove = ","
+			controller.params.fieldsToAdd = ","
+			controller.params.fieldsToRemove = ","
 		when:
 			controller.update()
 		then:
@@ -38,6 +40,8 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.params.contactId = c.id
 			controller.params.groupsToAdd = ","
 			controller.params.groupsToRemove = ",${g.id},${g.id},"
+			controller.params.fieldsToAdd = ","
+			controller.params.fieldsToRemove = ","
 		when:
 			controller.update()
 		then:
@@ -63,29 +67,35 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			controller.response.redirectedUrl == "/group/show/${g.id}/contact/show/${c.id}?max=10&sort=name"
 	}
-//
-//	def "when a new group is saved, user is redirected to the group's show page"() {
-//		given:
-//			controller.params.name = 'new group'
-//			assert Group.count() == 1
-//		when:
-//			controller.saveGroup()
-//		then:
-//			controller.response.redirectedUrl =~ /\/group\/show\/\d/
-//			Group.count() == 2
-//	}
 
-	def "when a new contact is saved, user is redirected to the group's show page"() {
+	def "adding and removing a contact from the same group triggers error"() {
 		given:
-			controller.params.name = 'new contact'
-			controller.params.address = '1234565'
+			controller.params.contactId = c.id
+			controller.params.groupsToAdd = ",g,"
+			controller.params.groupsToRemove = ",g,"
+			controller.params.fieldsToAdd = ","
+			controller.params.fieldsToRemove = ","
+		when:
+			controller.update()
+			def model = controller.show()
+		then:
+			model.contactInstance.errors
+	}
+
+	def "All contacts list appears in alphabetical order"() {
+		setup:
+			def contact2 = new Contact(name:'Charlie').save(failOnError:true)
+			def contact3 = new Contact(name:'Alice').save(failOnError:true)
+			controller.params.contactId = c.id
 			controller.params.groupsToAdd = ","
 			controller.params.groupsToRemove = ","
-			assert Contact.count() == 1
+			controller.params.fieldsToAdd = ","
+			controller.params.fieldsToRemove = ","
+			assert controller.show() != null
 		when:
-			controller.saveContact()
+			def model = controller.show()
 		then:
-			controller.response.redirectedUrl =~ /\/contact\/show\/\d/
-			Contact.count() == 2
+			model.contactInstanceList == [contact3, c, contact2]
+			model.contactInstanceList != [c, contact2, contact3]
 	}
 }

@@ -6,10 +6,12 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
-	</head>
+		<jqui:resources />
+    </head>
 	<body>
 		<g:render template="/tabs"/>
-		<g:render template="/flash"/>
+		<g:render template="quick_message"/>	
+        <g:render template="/flash"/>
 		<div id="main">
 			<g:render template="menu"/>
 			<g:render template="message_list"/>

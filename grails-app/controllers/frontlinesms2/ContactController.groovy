@@ -36,6 +36,7 @@ class ContactController {
 		}
 		[contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
+				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
 				groupInstanceTotal: Group.count(),
 				contactsSection: groupInstance]
@@ -45,11 +46,13 @@ class ContactController {
 		params.sort = "name"
 		withContact { contactInstance ->
 			def contactGroupInstanceList = contactInstance.groups
-
+			def contactFieldInstanceList = contactInstance.customFields
 			[contactInstance:contactInstance,
+					contactFieldInstanceList: contactFieldInstanceList,
 					contactGroupInstanceList: contactGroupInstanceList,
 					contactGroupInstanceTotal: contactGroupInstanceList.size(),
-					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance)] << buildList()
+					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance),
+					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
 		}
 	}
 
@@ -63,37 +66,19 @@ class ContactController {
 					return
 				}
 			}
-
 			contactInstance.properties = params
-			
-			// Check for errors in groupsToAdd and groupsToRemove
-			def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
-			def groupsToRemove = params.groupsToRemove.tokenize(',')
-			if(!groupsToAdd.disjoint(groupsToRemove)) {
-				contactInstance.errors.reject('Cannot add and remove from the same group!')
-			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-				groupsToAdd.each() {
-					contactInstance.addToGroups(Group.get(it), true)
-				}
-				groupsToRemove.each() {
-					contactInstance.removeFromGroups(Group.get(it), true)
-				}
-
-				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-				def redirectParams = [contactId:contactInstance.id]
-				if(params.groupId) redirectParams << [groupId: params.groupId]
-				redirect(action: "show", params:redirectParams)
-				return
-			}
+			updateData(contactInstance)
 			render(view:'show', model:show()<<[contactInstance:contactInstance])
 		}
 	}
 
 	def createContact = {
 		def model = [contactInstance:new Contact(params),
+					contactFieldInstanceList: [],
 					contactGroupInstanceList: [],
 					contactGroupInstanceTotal: 0,
-					nonContactGroupInstanceList: Group.findAll()] << buildList()
+					nonContactGroupInstanceList: Group.findAll(),
+					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
 
 		render(view:'show', model:model)
 	}
@@ -108,27 +93,10 @@ class ContactController {
 		def contactInstance = new Contact(params)
 		contactInstance.properties = params
 
-		// Check for errors in groupsToAdd and groupsToRemove
-			def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
-			def groupsToRemove = params.groupsToRemove.tokenize(',')
-			if(!groupsToAdd.disjoint(groupsToRemove)) {
-				contactInstance.errors.reject('Cannot add and remove from the same group!')
-			} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-				groupsToAdd.each() {
-					contactInstance.addToGroups(Group.get(it), true)
-				}
-				groupsToRemove.each() {
-					contactInstance.removeFromGroups(Group.get(it), true)
-				}
+		updateData(contactInstance)
 
-				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-				def redirectParams = [contactId:contactInstance.id]
-				if(params.groupId) redirectParams << [groupId: params.groupId]
-				redirect(action: "show", params:redirectParams)
-				return
-			}
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-			redirect(action:'createContact')
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+		redirect(action:'createContact')
 	}
 
 	def saveGroup = {
@@ -142,6 +110,14 @@ class ContactController {
 		}
 	}
 
+	def newCustomField = {
+		def contactInstance = params.contactId
+		def customFieldInstance = new CustomField()
+		customFieldInstance.properties = params
+		[customFieldInstance: customFieldInstance,
+				contactInstance: contactInstance]
+	}
+
 	private def withContact(Closure c) {
 		def contactInstance = Contact.get(params.contactId)
 		if (contactInstance) {
@@ -149,6 +125,50 @@ class ContactController {
 		} else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
 			redirect(action: "list")
+		}
+	}
+
+	private def updateData(Contact contactInstance) {
+		// Check for errors in groupsToAdd and groupsToRemove
+		def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
+		def groupsToRemove = params.groupsToRemove.tokenize(',')
+		def fieldsToAdd = params.fieldsToAdd.tokenize(',')
+		def fieldsToRemove = params.fieldsToRemove.tokenize(',')
+		if(!groupsToAdd.disjoint(groupsToRemove)) {
+			contactInstance.errors.reject('Cannot add and remove from the same group!')
+		} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
+			groupsToAdd.each() {
+				contactInstance.addToGroups(Group.get(it), true)
+			}
+			groupsToRemove.each() {
+				contactInstance.removeFromGroups(Group.get(it), true)
+			}
+
+			fieldsToAdd.each() { name ->
+				def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
+				def fieldsByName = params."$name"
+				println name
+				if(fieldsByName?.class != String) {
+					fieldsByName.each() { val ->
+						if(val != "" && !existingFields.value.contains(val))
+							contactInstance.addToCustomFields(new CustomField(name: name, value: val)).save(flush:true)
+							existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
+					}
+				} else if(fieldsByName != "" && !existingFields.value.contains(fieldsByName)) {
+					contactInstance.addToCustomFields(new CustomField(name: name, value: fieldsByName))
+				}
+			}
+			fieldsToRemove.each() { id ->
+				def toRemove = CustomField.get(id)
+				if(toRemove)
+					toRemove.delete(failOnError: true, flush:true)
+			}
+
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+			def redirectParams = [contactId:contactInstance.id]
+			if(params.groupId) redirectParams << [groupId: params.groupId]
+			redirect(action: "show", params:redirectParams)
+			return
 		}
 	}
 }

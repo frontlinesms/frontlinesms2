@@ -3,36 +3,38 @@ package frontlinesms2
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+	def messageSendService
+	
 	def index = {
 		redirect(action:'inbox')
 	}
 
-   def show = { messageInstanceList ->
-        def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
-        messageInstance?.updateDisplaySrc()
-        if (messageInstance && !messageInstance.read) {
-          messageInstance.read = true
-          messageInstance.save()
-        }
-         [messageInstance: messageInstance,
-                folderInstanceList: Folder.findAll(),
-                pollInstanceList: Poll.findAll()]
-   }
-
-
-  def inbox = {
-		def messageInstanceList = Fmessage.getInboxMessages()
-    	messageInstanceList.each { it.updateDisplaySrc()}
-		params.messageSection = 'inbox'
-		[messageInstanceList: messageInstanceList,
-				messageSection: 'inbox',
-				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+	def show = { messageInstanceList ->
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
+		messageInstance?.updateDisplaySrc()
+		if (messageInstance && !messageInstance.read) {
+			messageInstance.read = true
+			messageInstance.save()
+		}
+		[messageInstance: messageInstance,
+				folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
 	}
 
-    def sent = {
-		params.inbound = false
+
+	def inbox = {
+		def messageInstanceList = Fmessage.getInboxMessages()
+		messageInstanceList.each { it.updateDisplaySrc()}
+			params.messageSection = 'inbox'
+			[messageInstanceList: messageInstanceList,
+					messageSection: 'inbox',
+					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+	}
+
+	def sent = {
+		params.inbound = false // FIXME does setting params here actually achieve anything?
 		[messageSection: 'sent']
-    }
+	}
 
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
@@ -48,8 +50,8 @@ class MessageController {
 	}
 	
 	def folder = {
-		def ownerInstance = Folder.get(params.ownerId)
-		def messageInstanceList = Fmessage.getFolderMessages(params.ownerId)
+		def folderInstance = Folder.get(params.ownerId)
+		def messageInstanceList = folderInstance.folderMessages
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
@@ -58,7 +60,7 @@ class MessageController {
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
 				messageInstanceTotal: messageInstanceList.size(),
-				ownerInstance: ownerInstance] << show(messageInstanceList)
+				ownerInstance: folderInstance] << show(messageInstanceList)
 	}
 
 	def move = {
@@ -95,7 +97,7 @@ class MessageController {
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-            params.remove('messageId')
+			params.remove('messageId')
 			redirect(action: params.messageSection, params:params)
 		}
 	}
@@ -109,6 +111,19 @@ class MessageController {
             params.remove('messageId')
 			render(text: messageInstance.starred ? "starred" : "")
 		}
+	}
+
+	def send = {
+		def addresses = [params.addresses].flatten() - null
+		def groups = [params.groups].flatten() - null
+		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses.unique().each { address ->
+			//TODO: Need to add source from app settings
+			def message = new Fmessage(dst: address, text: params.messageText)
+			messageSendService.process(message)
+			message.save(failOnError: true, flush: true)
+		}
+		redirect (action: 'sent')
 	}
 
 	private def withFmessage(Closure c) {

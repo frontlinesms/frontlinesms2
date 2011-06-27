@@ -29,23 +29,23 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			deleteTestData()
 	}
 
-    def "should return all folder messages ordered on date received"() {
-        setup:
-            //FIXME: Need to remove.Test fails without this line.
-            Folder.list()
-      
-            new Folder(value: 'home').save(flush: true)
-            def folder = Folder.findByValue('home')
-            folder.addToMessages(new Fmessage(src: "Bob", dateReceived: new Date() - 14))
-            folder.addToMessages(new Fmessage(src: "Jim", dateReceived: new Date() - 10))
-            folder.save(flush: true)
-        when:
-            def results = Fmessage.getFolderMessages(Folder.findByValue("home").id)
-        then:
-            results*.src == ["Jim", "Bob"]
-        cleanup:
-            Folder.list()*.delete()
-    }
+	def "should return all folder messages ordered on date received"() {
+		setup:
+			//FIXME: Need to remove.Test fails without this line.
+			Folder.list()
+
+			new Folder(name: 'home').save(flush: true)
+			def folder = Folder.findByName('home')
+			folder.addToMessages(new Fmessage(src: "Bob", dateReceived: new Date() - 14))
+			folder.addToMessages(new Fmessage(src: "Jim", dateReceived: new Date() - 10))
+			folder.save(flush: true)
+		when:
+			def results = Folder.findByName("home").folderMessages
+		then:
+			results*.src == ["Jim", "Bob"]
+		cleanup:
+			Folder.list()*.delete()
+	}
 
 	static createTestData() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4),
