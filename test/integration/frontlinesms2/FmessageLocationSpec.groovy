@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import frontlinesms2.enums.MessageStatus
+
 class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 	def "getInboxMessages() returns the list of messages with inbound equal to true that are not part of an activity"() {
 		setup:
@@ -45,6 +47,20 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			results*.src == ["Jim", "Bob"]
 		cleanup:
 			Folder.list()*.delete()
+	}
+
+	def "should fetch all pending messages"() {
+		setup:
+			new Fmessage(src:"src", dst:"dst1", text:"text",  status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src:"src", dst:"dst2", text:"text",  status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src:"src", dst:"dst3", text:"text",  status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src:"src", dst:"dst4", text:"text").save(flush: true)
+		when:
+		    assert Fmessage.count() == 4
+			def results = Fmessage.getPendingMessages()
+		then:
+		    results.size() == 2
+			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
 	}
 
 	static createTestData() {

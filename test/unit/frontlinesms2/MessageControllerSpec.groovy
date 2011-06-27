@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
+import groovy.mock.interceptor.MockFor
 
 class MessageControllerSpec extends ControllerSpec {
 
@@ -68,5 +69,28 @@ class MessageControllerSpec extends ControllerSpec {
 		then:
 			Fmessage.list()*.dst == addresses
 			Fmessage.count() == 3
+	}
+
+	def "should fetch pending messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			def mockFmessage = new MockFor(Fmessage)
+			mockFmessage.demand.asBoolean(2..2) { -> true}
+			mockFmessage.demand.updateDisplaySrc(2..2) {->}
+
+			def pendingMessages = [mockFmessage.proxyInstance(), mockFmessage.proxyInstance()]
+			Fmessage.metaClass.'static'.getPendingMessages = {->
+				pendingMessages
+			}
+			mockDomain(Folder)
+			mockDomain(Poll)
+
+		when:
+			def results = controller.pending()
+		then:
+			results['messageInstanceList'] == pendingMessages
+			results['messageSection'] == 'pending'
+			results['messageInstanceTotal'] == 1
+			results['messageInstance'] == pendingMessages[0]
 	}
 }

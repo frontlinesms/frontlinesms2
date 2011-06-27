@@ -36,6 +36,13 @@ class MessageController {
 		[messageSection: 'sent']
 	}
 
+	def pending = {
+		def messageInstanceList = Fmessage.getPendingMessages()
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'pending',
+				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+	}
+
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
 		def messageInstanceList = ownerInstance.messages

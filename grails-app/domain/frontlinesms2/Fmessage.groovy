@@ -1,5 +1,8 @@
 package frontlinesms2
 
+import frontlinesms2.enums.MessageStatus
+import grails.orm.HibernateCriteriaBuilder
+
 class Fmessage {
 	String src
 	String dst
@@ -8,6 +11,7 @@ class Fmessage {
 	Date dateCreated
 	Date dateReceived
 	boolean contactExists
+	MessageStatus status
 	boolean inbound
 	boolean read
 	boolean deleted
@@ -24,6 +28,8 @@ class Fmessage {
 		text(nullable:true)
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
+		//NEED TO REMOVE
+		status(nullable:true)
 	}
 
 	def getDisplayText() {
@@ -68,6 +74,19 @@ class Fmessage {
 				eq("deleted", false)
 				eq("inbound", false)
 				isNull("messageOwner")
+			}
+			order("dateCreated", "desc")
+		}
+		messages
+	}
+
+	static def getPendingMessages() {
+		def messages = Fmessage.createCriteria().list {
+			and {
+				eq("deleted", false)
+				eq("inbound", false)
+				isNull("messageOwner")
+				'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 			}
 			order("dateCreated", "desc")
 		}
