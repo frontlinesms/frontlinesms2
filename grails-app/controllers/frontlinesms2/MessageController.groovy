@@ -100,13 +100,14 @@ class MessageController {
 		}
 	}
 	
-	def starMessage = {
+	def changeStarStatus = {
+		println params
 		withFmessage { messageInstance ->
 			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
             params.remove('messageId')
-			redirect(action: params.messageSection, params:params)
+			render(text: messageInstance.starred ? "starred" : "")
 		}
 	}
 
