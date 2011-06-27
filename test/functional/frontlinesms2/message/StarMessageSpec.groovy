@@ -2,23 +2,22 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
-class StarMessageSpec extends MessageGebSpec{
+class StarMessageSpec extends grails.plugin.geb.GebSpec{
 		
 	def setup() {
 		new Fmessage(src:'+254287645', dst:'+254112233', text:'css test', inbound: true, read: false).save(failOnError:true)
-		new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', inbound: true, read: false).save(failOnError:true)
 	}
 	
 	def cleanup() {
-		deleteTestMessages()
+		Fmessage.findAll()*.delete(flush:true,failOnError:true)
 	}
 		
 	def 'clicking on an unstarred message changes its CSS to "starred"'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
-		then:
 			Fmessage.findBySrc('+254287645').refresh()
+		then:
 			Fmessage.findBySrc('+254287645').starred
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass('starred')
 	}
@@ -28,8 +27,8 @@ class StarMessageSpec extends MessageGebSpec{
 			Fmessage.findBySrc('+254287645').addStar().save(failOnError: true, flush: true)
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
-		then:
 			Fmessage.findBySrc('+254287645').refresh()
+		then:
 			!Fmessage.findBySrc('+254287645').starred
 			!$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass('starred')
 			
@@ -37,6 +36,7 @@ class StarMessageSpec extends MessageGebSpec{
 	
 	def 'starring one message does not affect other messages'() {
 		when:
+			new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', inbound: true, read: false).save(failOnError:true)
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
 		then:
