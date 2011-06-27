@@ -23,7 +23,7 @@
 		  </table>
 	  </div>
 	  <div class="buttons">
-		<a href="#" onClick="createCustomField_submit()">Create</a>
+		<a class="create" href="#" onClick="createCustomField_submit()">Create</a>
 		<a class="cancel" href="#" onClick="createCustomField_cancel()">Cancel</a>
 	  </div>
 	</g:form>
