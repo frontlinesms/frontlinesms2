@@ -9,6 +9,7 @@ import net.frontlinesms.test.serial.HayesPortHandler
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
+import frontlinesms2.enums.MessageStatus
 
 
 class BootStrap {
@@ -46,9 +47,14 @@ class BootStrap {
 					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
 					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
 					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
-						it.inbound = true
+						it.status = MessageStatus.INBOUND
 						it.save(failOnError:true)
 					}
+					[new Fmessage(src: 'Alice', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
+							new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
+						it.save(failOnError: true)
+					}
+
 
 			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
 					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
@@ -67,7 +73,7 @@ class BootStrap {
 					new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
 					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
 					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
-				it.inbound = true
+				it.status = MessageStatus.INBOUND
 				it.save(failOnError:true, flush:true)
 			}
 			

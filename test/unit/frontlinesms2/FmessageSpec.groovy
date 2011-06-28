@@ -53,7 +53,7 @@ class FmessageSpec extends UnitSpec {
 			Fmessage.count() == 1
 			Fmessage.get(m.id).messageOwner == response
 	}
-	
+
 	def 'messages are unstarred by default'() {
 		when:
 			Fmessage message = new Fmessage()
@@ -81,6 +81,15 @@ class FmessageSpec extends UnitSpec {
 			message.removeStar()
 		then:
 			message.starred == false
+	}
+
+	def "Fmessage can have null status"() {
+		setup:
+			mockDomain(Fmessage)
+		when:
+			def m = new Fmessage(status: null)
+		then:
+			m.validate()
 	}
 }
 

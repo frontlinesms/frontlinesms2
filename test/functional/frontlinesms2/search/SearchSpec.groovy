@@ -1,6 +1,7 @@
 package frontlinesms2.search
 
 import frontlinesms2.*
+import frontlinesms2.enums.MessageStatus
 
 class SearchSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
@@ -133,7 +134,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	private createTestMessages() {
 		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00'),
 				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex')].each() {
-			it.inbound = true
+			it.status = MessageStatus.INBOUND
 			it.save(failOnError:true)
 		}
 	}

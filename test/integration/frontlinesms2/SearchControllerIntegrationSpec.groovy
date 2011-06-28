@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import frontlinesms2.enums.MessageStatus
+
 class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def firstContact, secondContact
@@ -16,13 +18,13 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			new Fmessage(src:'+254111222', dst:'+254937634', text:'work is awesome'),
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
-					it.inbound = true
+					it.status = MessageStatus.INBOUND
 					it.save(failOnError:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:false)
-		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', inbound:false)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', status: MessageStatus.INBOUND)
+		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', status:MessageStatus.INBOUND)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
