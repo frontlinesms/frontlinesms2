@@ -123,6 +123,11 @@ class MessageController {
 		redirect (action: 'sent')
 	}
 
+	def emptyTrash = {
+		Fmessage.findAllByDeleted(true)*.delete()
+		redirect(action: 'inbox')
+	}
+
 	private def withFmessage(Closure c) {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
