@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import frontlinesms2.*
+import frontlinesms2.enums.MessageStatus
 
 class InboxSpec extends MessageGebSpec {
 	def 'inbox message list is displayed'() {
@@ -81,8 +82,8 @@ class InboxSpec extends MessageGebSpec {
 	
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = new Fmessage(inbound: true, read: false).save(failOnError:true)
-			def m2 = new Fmessage(inbound: true, read: true).save(failOnError:true)
+			def m1 = new Fmessage(status:MessageStatus.INBOUND, read: false).save(failOnError:true)
+			def m2 = new Fmessage(status:MessageStatus.INBOUND, read: true).save(failOnError:true)
 			assert !m1.read
 			assert m2.read
 		when:
@@ -99,7 +100,7 @@ class InboxSpec extends MessageGebSpec {
 	
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound: true).save(failOnError:true)
+			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 			def contact = new Contact(name: 'June', address: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
