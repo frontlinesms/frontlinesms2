@@ -38,6 +38,7 @@ class MessageController {
 
 	def pending = {
 		def messageInstanceList = Fmessage.getPendingMessages()
+		messageInstanceList.each { it.updateDisplaySrc() }
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)

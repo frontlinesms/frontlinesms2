@@ -73,24 +73,22 @@ class MessageControllerSpec extends ControllerSpec {
 
 	def "should fetch pending messages"() {
 		setup:
-			registerMetaClass(Fmessage)
-			def mockFmessage = new MockFor(Fmessage)
-			mockFmessage.demand.asBoolean(2..2) { -> true}
-			mockFmessage.demand.updateDisplaySrc(2..2) {->}
-
-			def pendingMessages = [mockFmessage.proxyInstance(), mockFmessage.proxyInstance()]
-			Fmessage.metaClass.'static'.getPendingMessages = {->
-				pendingMessages
-			}
-			mockDomain(Folder)
-			mockDomain(Poll)
-
+		registerMetaClass(Fmessage)
+		def pendingMessages = [new Fmessage(src: "src"), new Fmessage(src: "src")]
+		Fmessage.metaClass.'static'.getPendingMessages = {->
+			pendingMessages
+		}
+		mockDomain(Folder)
+		mockDomain(Poll)
+		mockDomain(Contact)
 		when:
-			def results = controller.pending()
+		def results = controller.pending()
 		then:
-			results['messageInstanceList'] == pendingMessages
-			results['messageSection'] == 'pending'
-			results['messageInstanceTotal'] == 1
-			results['messageInstance'] == pendingMessages[0]
+		results['messageInstanceList'] == pendingMessages
+		results['messageSection'] == 'pending'
+		results['messageInstanceTotal'] == 2
+		results['messageInstance'] == pendingMessages[0]
+		results['messageInstanceList']*.contactExists == [false, false]
+		results['messageInstanceList']*.displaySrc == ["src", "src"]
 	}
 }
