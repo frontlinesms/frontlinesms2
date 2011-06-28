@@ -21,6 +21,14 @@ class MessageController {
 				pollInstanceList: Poll.findAll()]
 	}
 
+	def trash = {
+		def messageInstanceList = Fmessage.deletedMessages
+		messageInstanceList.each { it.updateDisplaySrc()}
+			params.messageSection = 'trash'
+			[messageInstanceList: messageInstanceList,
+					messageSection: 'trash',
+					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+	}
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages()
