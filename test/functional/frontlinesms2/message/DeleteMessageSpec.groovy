@@ -23,6 +23,33 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			Fmessage.getInboxMessages().size() == 2
 	}
+
+	def 'deleted messages do show up in trash view'() {
+		when:
+			def bobMessage = Fmessage.findBySrc('Bob')
+			go "message/inbox/show/${bobMessage.id}"
+			def btnDelete = $('#message-details .buttons a')
+			btnDelete.click()
+			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			go "message/trash"
+			bobMessage.updateDisplaySrc()
+		then:
+			Fmessage.deletedMessages.size() == 1
+			$('#message-details .message-name').text() == bobMessage.displaySrc
+	}
+
+	def 'delete button does not show up for messages in shown in trash view'() {
+		when:
+			def bobMessage = Fmessage.findBySrc('Bob')
+			bobMessage.deleted = true
+			bobMessage.save(flush:true)
+			bobMessage.updateDisplaySrc()
+			go "message/trash"
+		then:
+			Fmessage.deletedMessages.size() == 1
+			$('#message-details .message-name').text() == bobMessage.displaySrc
+			!$('#message-details .buttons a')
+	}
 	
 	def 'deleted messages do not show up in poll view'() {
 		when:
