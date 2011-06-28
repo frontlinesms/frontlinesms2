@@ -5,6 +5,7 @@
 		<title>Poll</title>
 	</head>
 	<body>
+		<g:render template="message_details"/>
 		<h2 id="poll-title">${ownerInstance?.title}</h2>
 		<g:if test="$responseList">
 			<table id="poll-stats">
