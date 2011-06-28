@@ -53,5 +53,14 @@ class FmessageSpec extends UnitSpec {
 			Fmessage.count() == 1
 			Fmessage.get(m.id).messageOwner == response
 	}
+
+	def "Fmessage can have null status"() {
+		setup:
+			mockDomain(Fmessage)
+		when:
+			def m = new Fmessage(status: null)
+		then:
+			m.validate()
+	}
 }
 
