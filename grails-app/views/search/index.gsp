@@ -7,5 +7,8 @@
 	  <h2 id="search-description">
 		  ${searchDescription}
 	  </h2>
+	  <h2>
+		  <g:link class="export" action="export">Export to PDF</g:link>
+	  </h2>
   </body>
 </html>
