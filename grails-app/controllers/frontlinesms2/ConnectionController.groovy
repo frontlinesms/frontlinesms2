@@ -27,8 +27,6 @@ class ConnectionController {
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal]
 		}
-		
-		
 	}
 
 	def create = {}
@@ -99,8 +97,9 @@ class ConnectionController {
 	
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
-		if(connection) c connection
-		else {
+		if(connection) {
+			c connection
+		} else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}"
 			redirect action:'list'
 		}
