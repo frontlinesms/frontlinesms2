@@ -103,7 +103,6 @@ class MessageController {
 	}
 	
 	def changeStarStatus = {
-		println params
 		withFmessage { messageInstance ->
 			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
 			messageInstance.save(failOnError: true, flush: true)
