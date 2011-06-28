@@ -10,7 +10,7 @@
 		</thead>
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
-				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
+				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
 					<td>
 						<g:if test="${ownerInstance}">
 							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
