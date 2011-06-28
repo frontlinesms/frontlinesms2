@@ -9,10 +9,8 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def inbox = Fmessage.getInboxMessages()
 		then:
-			inbox.each {
-				it.inbound == true
-			}
-            inbox*.src == ["+254778899", "Bob", "Alice"]
+	        inbox*.src == ["+254778899", "Bob", "Alice"]
+	        inbox*.status == [MessageStatus.INBOUND, MessageStatus.INBOUND, MessageStatus.INBOUND]
 		cleanup:
 			deleteTestData()
 	}
@@ -23,10 +21,8 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def sent = Fmessage.getSentMessages()
 		then:
-			sent.each {
-				it.inbound == false
-			}
 			assert sent.size() == 2
+			sent*.status == [MessageStatus.SENT, MessageStatus.SENT]
 		cleanup:
 			deleteTestData()
 	}
@@ -67,17 +63,16 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 5),
 				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', dateReceived: new Date() - 3)].each() {
-					it.inbound = true
+					it.status = MessageStatus.INBOUND
 					it.save(failOnError:true)
 				}
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived: new Date() - 2),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived: new Date() - 1)].each() {
-					it.inbound = false
+		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived: new Date() - 2, status:MessageStatus.SENT),
+				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived: new Date() - 1, status:MessageStatus.SENT)].each() {
 					it.save(failOnError:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:false)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
         def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage).save(failOnError: true)

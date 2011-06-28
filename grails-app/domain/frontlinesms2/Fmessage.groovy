@@ -12,7 +12,6 @@ class Fmessage {
 	Date dateReceived
 	boolean contactExists
 	MessageStatus status
-	boolean inbound
 	boolean read
 	boolean deleted
 	static belongsTo = [messageOwner:MessageOwner]
@@ -60,7 +59,7 @@ class Fmessage {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
-				eq("inbound", true)
+				eq("status", MessageStatus.INBOUND)
 				isNull("messageOwner")
 			}
 			order('dateReceived', 'desc')
@@ -72,7 +71,7 @@ class Fmessage {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
-				eq("inbound", false)
+				eq("status", MessageStatus.SENT)
 				isNull("messageOwner")
 			}
 			order("dateCreated", "desc")
@@ -84,7 +83,6 @@ class Fmessage {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
-				eq("inbound", false)
 				isNull("messageOwner")
 				'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 			}
