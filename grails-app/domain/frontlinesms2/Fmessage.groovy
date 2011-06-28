@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import frontlinesms2.enums.MessageStatus
+
 class Fmessage {
 	String src
 	String dst
@@ -8,7 +10,7 @@ class Fmessage {
 	Date dateCreated
 	Date dateReceived
 	boolean contactExists
-	boolean inbound
+	MessageStatus status
 	boolean read
 	boolean deleted
 	boolean starred
@@ -25,6 +27,7 @@ class Fmessage {
 		text(nullable:true)
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
+		status(nullable:true)
 	}
 
 	def getDisplayText() {
@@ -76,7 +79,7 @@ class Fmessage {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
-				eq("inbound", true)
+				eq("status", MessageStatus.INBOUND)
 				isNull("messageOwner")
 			}
 			order('dateReceived', 'desc')
@@ -88,8 +91,20 @@ class Fmessage {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
-				eq("inbound", false)
+				eq("status", MessageStatus.SENT)
 				isNull("messageOwner")
+			}
+			order("dateCreated", "desc")
+		}
+		messages
+	}
+
+	static def getPendingMessages() {
+		def messages = Fmessage.createCriteria().list {
+			and {
+				eq("deleted", false)
+				isNull("messageOwner")
+				'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 			}
 			order("dateCreated", "desc")
 		}

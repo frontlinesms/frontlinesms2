@@ -26,7 +26,7 @@
 		</thead>
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
-				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}" id="message-${m.id}">
+				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
 					<td>
 					  <g:remoteLink action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
