@@ -3,9 +3,27 @@
     <head>
         <meta name="layout" content="messages" />
         <title>Trash</title>
+		<script>
+			function emptyTrash() {
+				$('<div><p>This will empty trash and delete messages permanently.</p>Do you want to continue?</div>').dialog({
+					modal: true,
+					title: "Empty Trash?",
+					width: 600,
+					buttons:{
+						"Yes": function() {
+							window.location = 'emptyTrash';
+						},
+						"No" : function() { 
+							$(this).dialog("close");
+						}
+					}
+				});
+			}
+		</script>
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
+			<a href="#" onClick="emptyTrash()" >Empty trash</a>
 			<div id="message-details">
 				<p class="message-name">${messageInstance.displaySrc}</p>
 				<g:def var="thisAddress" value="${messageInstance.src}"/>
