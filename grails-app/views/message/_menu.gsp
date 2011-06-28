@@ -18,7 +18,7 @@
 				<g:link action="inbox">Inbox</g:link>
 			</li>
 			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending">Pending</g:link>
+				<g:link action="pending" class="pending">Pending</g:link>
 			</li>
 			<li class="${(messageSection=='sent')? 'selected':''}">
 				<g:link action="sent">Sent</g:link>
