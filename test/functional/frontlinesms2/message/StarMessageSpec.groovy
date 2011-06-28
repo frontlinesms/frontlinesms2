@@ -9,7 +9,10 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 	}
 	
 	def cleanup() {
-		Fmessage.findAll()*.delete(flush:true,failOnError:true)
+		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
 	}
 		
 	def 'clicking on an unstarred message changes its CSS to "starred"'() {
@@ -18,6 +21,7 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
 			Fmessage.findBySrc('+254287645').refresh()
 		then:
+			println "Messages: ${Fmessage.findAll()}"
 			Fmessage.findBySrc('+254287645').starred
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass('starred')
 	}
