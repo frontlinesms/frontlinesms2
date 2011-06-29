@@ -47,6 +47,27 @@ class CreateFolderSpec extends FolderGebSpec {
 			cleanup:
 				deleteTestFolders()
 	}
+
+	def "should be able to reply for folder messages"() {
+		setup:
+			createTestFolders()
+			createTestMessages()
+		when:
+			def folder = Folder.findByName("Work")
+			def messages = folder.getMessages() as List
+			def message = messages[0]
+			go "message/folder/${folder.id}/show/${message.id}"
+		then:
+			$('a', text:'Reply').click()
+			waitFor {$('div#tabs-1').displayed}
+		when:
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value: message.src).getAttribute('checked')
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
+	}
 //
 //	def 'Errors are displayed when folder fails to save'() {
 //			when:
