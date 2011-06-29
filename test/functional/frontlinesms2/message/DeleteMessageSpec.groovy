@@ -29,9 +29,9 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
 			go "message/inbox/show/${bobMessage.id}"
-			def btnDelete = $('#message-details .buttons a')
+			def btnDelete = $('#message-details .buttons a')[1]
 			btnDelete.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash").text().contains("Fmessage") }
 			go "message/trash"
 			bobMessage.updateDisplaySrc()
 		then:
@@ -94,11 +94,12 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			def bob = Fmessage.findBySrc("Bob")
 		when:
 			go "message/inbox/show/${bob.id}"
-			def btnDelete = $('#message-details .buttons a')
+			def btnDelete = $('#message-details .buttons a')[1]
 		then:
 			btnDelete
 		when:
 			btnDelete.click()
+			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			at MessagesPage
 		when:
