@@ -15,6 +15,9 @@
 				<g:link disabled="true" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance.id, messageId: messageInstance.id]">Delete</g:link>
 			</g:elseif>
 			<g:else>
+				<g:remoteLink controller="quickMessage" action="create" params="[recipient: messageInstance.src]" onSuccess="loadContents(data);" class="quick_message">
+					Reply
+				</g:remoteLink>
 				<g:link action="deleteMessage" params="[messageSection: messageSection, messageId: messageInstance.id]">Delete</g:link>
 			</g:else>
 		</div>

@@ -1,12 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <script>
 	function loadContents(data) {
-		$("#quick-message-dialog").html(data);
+		$("<div id='quick-message-dialog'><div>").html(data).appendTo(document.body);
 		$("#quick-message-dialog").dialog(
 			{
 				modal: true,
 				title: "Quick Message",
-				width: 600
+				width: 600,
+				close: function(ev, ui) { $(this).remove(); }
 			}
 		);
 		$("#tabs").tabs();
@@ -33,8 +34,7 @@
 	});
 
 </script>
-<div>
 <g:remoteLink controller="quickMessage" action="create" onSuccess="loadContents(data);" class="quick_message">
 	Quick Message
 </g:remoteLink>
-<div id="quick-message-dialog"/>
+

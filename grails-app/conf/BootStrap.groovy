@@ -41,8 +41,8 @@ class BootStrap {
 			initialiseMockSerialDevice()
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
-			[new Fmessage(src:'Alice', dst:'+2541234567', text:'manchester rules!'),
-					new Fmessage(src:'Bob', dst:'+254987654', text:'go manchester'),
+			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
+					new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
 					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
 					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
 					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
@@ -50,7 +50,7 @@ class BootStrap {
 						it.status = MessageStatus.INBOUND
 						it.save(failOnError:true)
 					}
-					[new Fmessage(src: 'Alice', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
+					[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
 							new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
 						it.save(failOnError: true)
 					}
@@ -61,8 +61,8 @@ class BootStrap {
 				it.save(failOnError:true, flush:true)
 			}
 
-			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob'))
-			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))
+			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
+			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
 			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
 		
 			['Work', 'Projects'].each {
