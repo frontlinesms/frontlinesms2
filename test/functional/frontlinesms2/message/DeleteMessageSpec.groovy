@@ -73,6 +73,20 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			Folder.findByName('Fools').folderMessages.size() == 1
 	}
+
+	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
+		given:
+			new Fmessage(deleted:true).save(flush:true)
+			go "message/trash"
+			assert Fmessage.findAllByDeleted(true).size == 1
+		when:
+			$('#empty-trash').click()
+			waitFor {$('.ui-button')}
+			$('.ui-button')[0].click()
+		then:
+			at MessagesPage
+			Fmessage.findAllByDeleted(true).size == 0
+	}
 	
 	def 'delete button appears in message show view and works'() {
 		given:
@@ -138,4 +152,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 }
+
+
 
