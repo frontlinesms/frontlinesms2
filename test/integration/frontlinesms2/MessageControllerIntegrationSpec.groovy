@@ -102,6 +102,28 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			Fmessage.get(id).starred == false
 	}
 
+	def 'deleted messages are returned by trash method and the first message is displayed'() {
+		setup:
+			(1..3).each {new Fmessage(deleted:true).save()}
+			def deletedMessages = Fmessage.list()
+			(1..2).each {new Fmessage(deleted:false).save()}
+		when:
+			def resultMap = controller.trash()
+		then:
+			resultMap['messageInstanceList'] == deletedMessages
+			resultMap['messageInstance'].id == deletedMessages[0].id
+	}
+
+	def 'empty trash permanently deletes messages with deleted flag true'() {
+		setup:
+			(1..3).each {new Fmessage(deleted:false).save()}
+			def inboxMessages = Fmessage.list()
+			(1..3).each {new Fmessage(deleted:true).save()}
+		when:
+			controller.emptyTrash()
+		then:
+			Fmessage.list() == inboxMessages
+	}
 
 	Date createDate(String dateAsString) {
 		DateFormat format = createDateFormat();
