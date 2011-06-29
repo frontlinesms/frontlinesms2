@@ -24,6 +24,33 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			Fmessage.getInboxMessages().size() == 2
 	}
+
+	def 'deleted messages do show up in trash view'() {
+		when:
+			def bobMessage = Fmessage.findBySrc('Bob')
+			go "message/inbox/show/${bobMessage.id}"
+			def btnDelete = $('#message-details .buttons a')
+			btnDelete.click()
+			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			go "message/trash"
+			bobMessage.updateDisplaySrc()
+		then:
+			Fmessage.deletedMessages.size() == 1
+			$('#message-details .message-name').text() == bobMessage.displaySrc
+	}
+
+	def 'delete button does not show up for messages in shown in trash view'() {
+		when:
+			def bobMessage = Fmessage.findBySrc('Bob')
+			bobMessage.deleted = true
+			bobMessage.save(flush:true)
+			bobMessage.updateDisplaySrc()
+			go "message/trash"
+		then:
+			Fmessage.deletedMessages.size() == 1
+			$('#message-details .message-name').text() == bobMessage.displaySrc
+			!$('#message-details .buttons a')
+	}
 	
 	def 'deleted messages do not show up in poll view'() {
 		when:
@@ -46,6 +73,20 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
 			Folder.findByName('Fools').folderMessages.size() == 1
+	}
+
+	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
+		given:
+			new Fmessage(deleted:true).save(flush:true)
+			go "message/trash"
+			assert Fmessage.findAllByDeleted(true).size == 1
+		when:
+			$('#empty-trash').click()
+			waitFor {$('.ui-button')}
+			$('.ui-button')[0].click()
+		then:
+			at MessagesPage
+			Fmessage.findAllByDeleted(true).size == 0
 	}
 	
 	def 'delete button appears in message show view and works'() {
@@ -111,4 +152,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 }
+
+
 

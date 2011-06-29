@@ -21,6 +21,14 @@ class MessageController {
 				pollInstanceList: Poll.findAll()]
 	}
 
+	def trash = {
+		def messageInstanceList = Fmessage.deletedMessages
+		messageInstanceList.each { it.updateDisplaySrc()}
+			params.messageSection = 'trash'
+			[messageInstanceList: messageInstanceList,
+					messageSection: 'trash',
+					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+	}
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages()
@@ -131,6 +139,11 @@ class MessageController {
 			message.save(failOnError: true, flush: true)
 		}
 		redirect (action: 'sent')
+	}
+
+	def emptyTrash = {
+		Fmessage.findAllByDeleted(true)*.delete()
+		redirect(action: 'inbox')
 	}
 
 	private def withFmessage(Closure c) {
