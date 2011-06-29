@@ -5,5 +5,6 @@
         <title>Inbox</title>
     </head>
     <body>
+		<g:render template="message_details"/>
     </body>
 </html>
