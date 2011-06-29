@@ -111,7 +111,41 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestMessages()
 			deleteTestContacts()
 	}
-	
+
+	def "should autopopulate the recipients name on click of reply for a inbox message"() {
+		given:
+			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+		when:
+			to MessagesPage
+			$('a', text:'Reply').click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value:'+254778899').getAttribute('checked')
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
+	}
+
+	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
+		given:
+			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+		when:
+			go "message/inbox/show/${message.id}"	
+			$('a', text:'Reply').click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value:'+254999999').getAttribute('checked')
+			!$('input', value:'+254778899').getAttribute('checked')
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
+	}
+
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)
