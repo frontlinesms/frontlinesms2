@@ -68,7 +68,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			assert Folder.findByName('Fools').messages.size() == 2
 		when:
 			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
-			def btnDeleteFromFolder = $('#message-details .buttons a')
+			def btnDeleteFromFolder = $('#message-details .buttons a')[1]
 			btnDeleteFromFolder.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
