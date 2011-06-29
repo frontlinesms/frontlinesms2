@@ -23,7 +23,7 @@
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
-			<a href="#" onClick="emptyTrash()" >Empty trash</a>
+			<a href="#" onClick="emptyTrash()" id="empty-trash">Empty trash</a>
 			<div id="message-details">
 				<p class="message-name">${messageInstance.displaySrc}</p>
 				<g:def var="thisAddress" value="${messageInstance.src}"/>
