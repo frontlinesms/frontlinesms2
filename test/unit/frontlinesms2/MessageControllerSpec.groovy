@@ -69,4 +69,25 @@ class MessageControllerSpec extends ControllerSpec {
 			Fmessage.list()*.dst == addresses
 			Fmessage.count() == 3
 	}
+
+	def "should fetch pending messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			def pendingMessages = [new Fmessage(src: "src"), new Fmessage(src: "src")]
+			Fmessage.metaClass.'static'.getPendingMessages = {->
+				pendingMessages
+			}
+			mockDomain(Folder)
+			mockDomain(Poll)
+			mockDomain(Contact)
+		when:
+			def results = controller.pending()
+		then:
+			results['messageInstanceList'] == pendingMessages
+			results['messageSection'] == 'pending'
+			results['messageInstanceTotal'] == 2
+			results['messageInstance'] == pendingMessages[0]
+			results['messageInstanceList']*.contactExists == [false, false]
+			results['messageInstanceList']*.displaySrc == ["src", "src"]
+	}
 }

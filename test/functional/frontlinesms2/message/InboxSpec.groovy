@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import frontlinesms2.*
+import frontlinesms2.enums.MessageStatus
 
 class InboxSpec extends MessageGebSpec {
 	def 'inbox message list is displayed'() {
@@ -13,7 +14,7 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			def messageSources = $('#messages tbody tr td:first-child')*.text()
+			def messageSources = $('#messages tbody tr td:nth-child(2)')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
 		cleanup:
@@ -27,9 +28,9 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[0] == 'Alice'
-			rowContents[1] == 'hi Alice'
-			rowContents[2] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[1] == 'Alice'
+			rowContents[2] == 'hi Alice'
+			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
 	}
@@ -70,19 +71,19 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 		cleanup:
 			deleteTestMessages()
 	}
 	
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = new Fmessage(inbound: true, read: false).save(failOnError:true)
-			def m2 = new Fmessage(inbound: true, read: true).save(failOnError:true)
+			def m1 = new Fmessage(status:MessageStatus.INBOUND, read: false).save(failOnError:true)
+			def m2 = new Fmessage(status:MessageStatus.INBOUND, read: true).save(failOnError:true)
 			assert !m1.read
 			assert m2.read
 		when:
@@ -99,11 +100,11 @@ class InboxSpec extends MessageGebSpec {
 	
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound: true).save(failOnError:true)
+			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 			def contact = new Contact(name: 'June', address: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
-			def rowContents = $('#messages tbody tr td:nth-child(1)')*.text()
+			def rowContents = $('#messages tbody tr td:nth-child(2)')*.text()
 		then:
 			rowContents == ['June']
 		cleanup:

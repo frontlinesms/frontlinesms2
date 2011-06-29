@@ -1,6 +1,7 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.enums.MessageStatus
 
 class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 	def 'message actions menu is displayed for all individual messages'() {
@@ -111,7 +112,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			def max = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', inbound: true).save(failOnError:true, flush:true)
+			def max = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', status:MessageStatus.INBOUND).save(failOnError:true, flush:true)
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def unknownResponse = footballPoll.getResponses().find { it.value == 'Unknown'}
 			unknownResponse.addToMessages(max).save(failOnError:true, flush:true)

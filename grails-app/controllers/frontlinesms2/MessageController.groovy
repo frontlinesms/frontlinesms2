@@ -21,6 +21,14 @@ class MessageController {
 				pollInstanceList: Poll.findAll()]
 	}
 
+	def trash = {
+		def messageInstanceList = Fmessage.deletedMessages
+		messageInstanceList.each { it.updateDisplaySrc()}
+			params.messageSection = 'trash'
+			[messageInstanceList: messageInstanceList,
+					messageSection: 'trash',
+					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+	}
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages()
@@ -34,6 +42,14 @@ class MessageController {
 	def sent = {
 		params.inbound = false // FIXME does setting params here actually achieve anything?
 		[messageSection: 'sent']
+	}
+
+	def pending = {
+		def messageInstanceList = Fmessage.getPendingMessages()
+		messageInstanceList.each { it.updateDisplaySrc() }
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'pending',
+				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
 	}
 
 	def poll = {
@@ -101,6 +117,16 @@ class MessageController {
 			redirect(action: params.messageSection, params:params)
 		}
 	}
+	
+	def changeStarStatus = {
+		withFmessage { messageInstance ->
+			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
+			messageInstance.save(failOnError: true, flush: true)
+			Fmessage.get(params.messageId).messageOwner?.refresh()
+            params.remove('messageId')
+			render(text: messageInstance.starred ? "starred" : "")
+		}
+	}
 
 	def send = {
 		def addresses = [params.addresses].flatten() - null
@@ -113,6 +139,11 @@ class MessageController {
 			message.save(failOnError: true, flush: true)
 		}
 		redirect (action: 'sent')
+	}
+
+	def emptyTrash = {
+		Fmessage.findAllByDeleted(true)*.delete()
+		redirect(action: 'inbox')
 	}
 
 	private def withFmessage(Closure c) {
