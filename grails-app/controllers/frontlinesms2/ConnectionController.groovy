@@ -88,9 +88,11 @@ class ConnectionController {
 	}
 
 	def sendTest = {
+		println params
+
 		withFconnection {
 			flash.message = "Test message successfully sent to ${it.name}"
-			messageSendService.dispatch(new Fmessage(src:'Bob', dst:'567890', text:'test routing message'), it)
+			messageSendService.dispatch(new Fmessage(src:"$it", dst: params.number, text: params.message), it)
 			redirect (action:'show', id:params.id)
 		}
 	}
