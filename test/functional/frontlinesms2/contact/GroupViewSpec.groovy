@@ -31,7 +31,8 @@ class GroupViewSpec extends GroupGebSpec {
 			selectedMenuItem.text() == 'Friends'
 		when:
 			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
-			GroupMembership.create(c, Group.findByName('Friends'), true)
+		    c.addToGroups(Group.findByName('Friends'))
+		    c.save(flush: true)
 			to FriendsGroupPage
 		then:
 			selectedMenuItem.text() == 'Friends'

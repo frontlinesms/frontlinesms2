@@ -18,6 +18,8 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		}
 		groupTest.addToMembers(bob)
 		groupThree.addToMembers(bob)
+		groupTest.save(failOnError:true, flush:true)
+		groupThree.save(failOnError:true, flush:true)
 	}
 
 	static createTestCustomFields() {

@@ -25,7 +25,7 @@ class ContactController {
 
 		def contactInstanceList, contactInstanceTotal
 		if(groupInstance) {
-			contactInstanceList = groupInstance.members
+			contactInstanceList = groupInstance.members as List
 			contactInstanceTotal = groupInstance.members.size()
 		} else {
 			contactInstanceList = Contact.list(params)
@@ -45,7 +45,7 @@ class ContactController {
 	def show = {
 		params.sort = "name"
 		withContact { contactInstance ->
-			def contactGroupInstanceList = contactInstance.groups
+			def contactGroupInstanceList = contactInstance.groups?: []
 			def contactFieldInstanceList = contactInstance.customFields
 			[contactInstance:contactInstance,
 					contactFieldInstanceList: contactFieldInstanceList,
@@ -138,10 +138,10 @@ class ContactController {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
 		} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
 			groupsToAdd.each() {
-				contactInstance.addToGroups(Group.get(it), true)
+				contactInstance.addToGroups(Group.get(it))
 			}
 			groupsToRemove.each() {
-				contactInstance.removeFromGroups(Group.get(it), true)
+				contactInstance.removeFromGroups(Group.get(it))
 			}
 
 			fieldsToAdd.each() { name ->

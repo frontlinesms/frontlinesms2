@@ -6,7 +6,7 @@ class QuickMessageController {
 		def contacts = Contact.list()
 
 		[contactList: contacts,
-			groupList:GroupMembership.getGroupDetails(),
+			groupList:Group.getGroupDetails(),
 			recipients:recipients,
 			nonExistingRecipients:recipients - (recipients.intersect(contacts*.getAddress()))]
 

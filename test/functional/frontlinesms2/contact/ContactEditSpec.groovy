@@ -31,7 +31,8 @@ class ContactEditSpec extends ContactGebSpec {
 		given:
 			def alice = Contact.findByName('Alice')
 			Group g = new Group(name: 'Excellent').save(failOnError:true, flush:true)
-			GroupMembership.create(alice, g, true)
+			alice.addToGroups(g)
+		    alice.save(flush: true)
 		when:
 			go "/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
 			frmDetails.name = 'Kate'
