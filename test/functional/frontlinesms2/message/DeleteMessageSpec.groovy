@@ -18,7 +18,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	def 'deleted messages do not show up in inbox view'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			def btnDelete = $('#message-details .buttons a')
+			def btnDelete = $('#message-details .buttons a')[1]
 			btnDelete.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
