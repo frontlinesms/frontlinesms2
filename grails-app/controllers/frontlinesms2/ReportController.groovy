@@ -49,7 +49,7 @@ class ReportController {
 	def generatePDFReport(Collection<Fmessage> model = []) {
 		def currentTime = new Date()
 		def exportService
-		
+		println "At PDF action"
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
 

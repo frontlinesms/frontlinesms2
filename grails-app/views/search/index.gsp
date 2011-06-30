@@ -9,6 +9,7 @@
 	  </h2>
 	  <h2>
 		  <g:link class="export" action="export">Export to PDF</g:link>
+		  <export:formats  formats="['pdf']" params="['searchString':searchString]" controller="report" action="generatePDFReport"/>
 	  </h2>
   </body>
 </html>
