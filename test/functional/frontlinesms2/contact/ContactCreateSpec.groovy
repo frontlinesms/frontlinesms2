@@ -14,7 +14,8 @@ class ContactCreateSpec extends ContactGebSpec {
 	def 'button to save new contact is displayed and works'() {
 		when:
 			to CreateContactPage
-			$("#contact-details").name = 'Kate'
+			$('#name').value('Kate')
+			$('#address').value('987878778')
 			saveButton.click()
 		then:
 			at ContactListPage
@@ -24,10 +25,11 @@ class ContactCreateSpec extends ContactGebSpec {
 		when:
 			to CreateContactPage
 			saveButton.click()
+			$('#address').value('987878778')
 		then:
-			at ContactListPage			
+			at ContactListPage
 	}
-	
+
 	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
 		when:
 			to CreateContactPage

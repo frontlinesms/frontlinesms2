@@ -167,7 +167,6 @@ class ContactController {
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
 			def redirectParams = [contactId:contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
-			redirect(action: "show", params:redirectParams)
 			return
 		}
 	}
