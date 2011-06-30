@@ -8,8 +8,7 @@
 		  ${searchDescription}
 	  </h2>
 	  <h2>
-		  <g:link class="export" action="export">Export to PDF</g:link>
-		  <export:formats  formats="['pdf']" params="['searchString':searchString]" controller="report" action="generatePDFReport"/>
+		  Export to <export:formats  formats="['pdf','csv']" params="['searchString':params.searchString, 'groupId':params.groupId, 'activityId':params.activityId]" action="downloadReport"/>
 	  </h2>
   </body>
 </html>
