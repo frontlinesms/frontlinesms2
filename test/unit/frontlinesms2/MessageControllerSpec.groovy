@@ -70,7 +70,7 @@ class MessageControllerSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def pendingMessages = [new Fmessage(src: "src"), new Fmessage(src: "src")]
-			Fmessage.metaClass.'static'.getPendingMessages = {->
+			Fmessage.metaClass.'static'.getPendingMessages = {isStarred->
 				pendingMessages
 			}
 			mockDomain(Folder)
@@ -85,5 +85,40 @@ class MessageControllerSpec extends ControllerSpec {
 			results['messageInstance'] == pendingMessages[0]
 			results['messageInstanceList']*.contactExists == [false, false]
 			results['messageInstanceList']*.displaySrc == ["src", "src"]
+	}
+
+	def "should fetch starred inbox messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			def starredInboxMessages = [new Fmessage(starred: true)]
+			mockParams.starred = true
+			mockDomain(Folder)
+			mockDomain(Poll)
+			Fmessage.metaClass.'static'.getInboxMessages = {isStarred ->
+				if(isStarred)
+					return starredInboxMessages
+			}
+		when:
+			def results = controller.inbox()
+		then:
+			results['messageInstanceList'] == starredInboxMessages
+	}
+
+
+	def "should fetch starred pending messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			def starredPendingMessages = [new Fmessage(starred: true)]
+			mockParams.starred = true
+			mockDomain(Folder)
+			mockDomain(Poll)
+			Fmessage.metaClass.'static'.getPendingMessages = {isStarred ->
+				if(isStarred)
+					return starredPendingMessages
+			}
+		when:
+			def results = controller.pending()
+		then:
+			results['messageInstanceList'] == starredPendingMessages
 	}
 }
