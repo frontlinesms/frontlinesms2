@@ -30,24 +30,13 @@ class ReportController {
 		render(contentType:"text/csv", text: csv.writer.toString(), encoding:"UTF-8")
 	}
 	
-	def generateReport = {
-		println "Params: $params"
-		if(params.format == 'pdf') {
-			generatePDFReport(params.messageInstanceList)
-		}
-		
-		if(params.format == 'csv'){
-			generateCSVReport(params.messageInstanceList)
-		}
-	}
-	
 	def generateCSVReport(model) {
 		def currentTime = new Date()
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
 
 		def formatedTime = dateToString(currentTime)
-		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.pdf")
+		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.csv")
 		exportService.export(params.format, response.outputStream, model, fields, labels, [:],[:])
 	}
 	
