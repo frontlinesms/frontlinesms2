@@ -4,8 +4,6 @@ class QuickMessageController {
 	def create = {
 		def recipients = [params['recipient']]
 		def contacts = Contact.list()
-		println contacts
-		println recipients
 
 		[contactList: contacts,
 			groupList:GroupMembership.getGroupDetails(),
