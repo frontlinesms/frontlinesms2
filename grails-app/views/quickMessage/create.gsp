@@ -26,9 +26,17 @@
 		</div>
 
 		<div id="contacts">
+			<g:each in="${nonExistingRecipients}" var="address">
+				<div>
+					<input type="checkbox" name="addresses" value="${address}" checked>${address}</input>
+				</div>
+			</g:each>
+
 			<g:each in="${contactList}" var="contact">
 				<div>
-					<input type="checkbox" name="addresses" value="${contact.address}">${contact.name ?: contact.address}</input>
+					<input type="checkbox" name="addresses" value="${contact.address}" <g:if test="${recipients.contains(contact.address)}">checked</g:if>>
+						${contact.name ?: contact.address}
+					</input>
 				</div>
 			</g:each>
 		</div>

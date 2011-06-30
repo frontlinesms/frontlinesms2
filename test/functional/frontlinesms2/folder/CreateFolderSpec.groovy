@@ -47,6 +47,7 @@ class CreateFolderSpec extends FolderGebSpec {
 			cleanup:
 				deleteTestFolders()
 	}
+
 //
 //	def 'Errors are displayed when folder fails to save'() {
 //			when:

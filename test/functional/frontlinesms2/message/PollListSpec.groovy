@@ -66,6 +66,19 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()
 			deleteTestMessages()
 	}
+
+	def "reply option should not be available for messages listed in poll section"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+		then:
+		    !$('a', text:'Reply')
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
 }
 
 class PollListPage extends geb.Page {
