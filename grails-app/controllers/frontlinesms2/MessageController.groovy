@@ -31,7 +31,7 @@ class MessageController {
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.getInboxMessages()
+		def messageInstanceList = Fmessage.getInboxMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'inbox'
 			[messageInstanceList: messageInstanceList,
@@ -45,7 +45,7 @@ class MessageController {
 	}
 
 	def pending = {
-		def messageInstanceList = Fmessage.getPendingMessages()
+		def messageInstanceList = Fmessage.getPendingMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc() }
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
@@ -54,7 +54,7 @@ class MessageController {
 
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.messages
+		def messageInstanceList = ownerInstance.messages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc() }
 
 		params.messageSection = 'poll'
@@ -67,7 +67,7 @@ class MessageController {
 	
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance.folderMessages
+		def messageInstanceList = folderInstance.folderMessages(params['starred'])
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }

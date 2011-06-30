@@ -75,11 +75,13 @@ class Fmessage {
 		messages
 	}
 
-	static def getInboxMessages() {
+	static def getInboxMessages(isStarred) {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
 				eq("status", MessageStatus.INBOUND)
+				if(isStarred)
+					eq("starred", true)
 				isNull("messageOwner")
 			}
 			order('dateReceived', 'desc')
@@ -99,12 +101,14 @@ class Fmessage {
 		messages
 	}
 
-	static def getPendingMessages() {
+	static def getPendingMessages(isStarred) {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
 				isNull("messageOwner")
 				'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
+				if(isStarred)
+					eq('starred', true)
 			}
 			order("dateCreated", "desc")
 		}
