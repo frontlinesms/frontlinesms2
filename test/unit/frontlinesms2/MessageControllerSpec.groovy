@@ -8,13 +8,9 @@ class MessageControllerSpec extends ControllerSpec {
 		mockDomain Fmessage
 		mockParams.messageText = "text"
 		controller.messageSendService = new MessageSendService()
-		def sahara = new Group(name: "Sahara")
-		def thar = new Group(name: "Thar")
+		def sahara = new Group(name: "Sahara", members: [new Contact(address: "12345"),new Contact(address: "56484")])
+		def thar = new Group(name: "Thar", members: [new Contact(address: "12121"), new Contact(address: "22222")])
 		mockDomain Group, [sahara, thar]
-		mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(address: "12345")),
-			new GroupMembership(group: sahara, contact: new Contact(address: "56484")),
-			new GroupMembership(group: thar, contact: new Contact(address: "12121")),
-			new GroupMembership(group: thar, contact: new Contact(address: "22222"))]
 	}
 
 	def "should send message to all the members in a group"() {
@@ -24,7 +20,7 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.list()*.dst == ["12345","56484"]
+			Fmessage.list()*.dst.containsAll(["12345","56484"])
 	}
 
 	def "should send message to all the members in multiple groups"() {
@@ -34,7 +30,7 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.list()*.dst == ["12345","56484","12121","22222"]
+			Fmessage.list()*.dst.containsAll(["12345","56484","12121","22222"])
 	}
 	
 	def "should send a message to the given address"() {
@@ -66,7 +62,7 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.list()*.dst == addresses
+			Fmessage.list()*.dst.containsAll(addresses)
 			Fmessage.count() == 3
 	}
 

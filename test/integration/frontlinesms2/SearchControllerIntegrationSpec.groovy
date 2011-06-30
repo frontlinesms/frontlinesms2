@@ -42,9 +42,11 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	}
 	
 	private def makeGroupMember() {
-		firstContact.addToGroups(group, true)
+		firstContact.addToGroups(group)
+		secondContact.addToGroups(group)
+		firstContact.save(flush: true)
+		secondContact.save(flush: true)
 		assert(Contact.get(firstContact.id).isMemberOf(Group.get(group.id)))
-		secondContact.addToGroups(group, true)
 		assert(Contact.get(secondContact.id).isMemberOf(Group.get(group.id)))
 	}
 	

@@ -2,26 +2,23 @@ package frontlinesms2
 
 class Group {
 	String name
+	
+	static hasMany = [members: Contact]
 
 	static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
 	static mapping = {
 	    table 'grup'
 	}
 
-	def beforeDelete = {
-		GroupMembership.deleteFor(this)
-	}
-
-	def getMembers() {
-		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
-	}
 
 	def getAddresses() {
-		GroupMembership.findAllByGroup(this)*.contact.address
+		members*.address
 	}
 
-	def addToMembers(Contact c) {
-		GroupMembership.create(c, this)
+	static def getGroupDetails() {
+		def resultMap= [:]
+		Group.list().each {resultMap[it.name] = it.members.size()}
+		resultMap
 	}
 
 	static Set<Contact> findAllWithoutMember(Contact c) {

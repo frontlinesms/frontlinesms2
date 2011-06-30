@@ -44,15 +44,27 @@ class GroupSpec extends UnitSpec {
 
 	def "should get all the member addresses for a group"() {
 		setup:
-			def group = new Group(name: "Sahara")
-			mockDomain Group, [group]
-			mockDomain GroupMembership, [new GroupMembership(group: group, contact: new Contact(address: "12345")),
-				new GroupMembership(group: group, contact: new Contact(address: "56484"))]
+			def group = new Group(name: "Sahara",
+							members:[new Contact(address: "12345"), new Contact(address: "56484")])
 		when:
 			def result = group.getAddresses()
 		then:
-			result == ["12345", "56484"]
+			result.containsAll(["12345", "56484"])
 
 	}
+
+	def "should list all the group names with a count of number of people in the group"() {
+		setup:
+			def sahara = new Group(name: "sahara", members: [new Contact(name: "Bob", address: "address1"),
+															new Contact(name: "Jim", address: "address2")])
+			def thar = new Group(name: "thar", members: [new Contact(name: "Kate", address: "address3")])
+			mockDomain(Group, [sahara, thar])
+		when:
+			def result = Group.getGroupDetails()
+		then:
+			result['sahara'] == 2
+			result['thar'] == 1
+	}
+
 }
 

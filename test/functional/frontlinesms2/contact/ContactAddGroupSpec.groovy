@@ -46,30 +46,28 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	def 'clicking X next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
 		given:
 			def bob = Contact.findByName("Bob")
-			def bobsDatabaseGroups = bob.getGroups()
+			def bobsDatabaseGroups = bob.groups
 			def bobsGroups = bobsDatabaseGroups
-
 		when:
 			go "contact/show/${bob.id}"
 			def lstGroups = $("#group-list")
 		then:
 			lstGroups.children().children('h2').size() == 2
-			def groupsText = lstGroups.children().children('h2').collect() { it.text() }.sort()
-			groupsText == ['Test', 'three']
-
+			def groupsText = lstGroups.children().children('h2').collect() { it.text() }
+			groupsText.containsAll(['Test', 'three'])
 		when:
 			lstGroups.find('a').first().click()
-			bobsGroups = bob.getGroups()
+			bobsGroups = bob.groups
 		then:
 			lstGroups.children().children('h2').size() == 1
-			lstGroups.children().children('h2').text() == 'three'
+			lstGroups.children().children('h2').text() == groupsText[1]
 			bobsGroups == bobsDatabaseGroups
 
 		when:
 			lstGroups.find('a').first().click()
 			bobsGroups = bob.getGroups()
 		then:
-			lstGroups.children().children('h2').text() == null
+			lstGroups.children().children('h2').size() == 0
 			bobsGroups == bobsDatabaseGroups
 			$("#group-list").text() == 'Not part of any Groups'
 			bobsGroups == bobsDatabaseGroups
@@ -89,12 +87,10 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	}
 
 	def 'clicking save removes contact from newly removed groups'() {
-		given:
-//			def bob = Contact.findByName("Bob")
 		when:
-//			go "http://localhost:8080/frontlinesms2/contact/show/${bob.id}"
 			to BobsContactPage
 			def btnRemoveFromGroup = $("#group-list").find('a').first()
+		    def groupDeletedFrom = $("#group-list").find('h2').first().text()
 			assert btnRemoveFromGroup != null && !(btnRemoveFromGroup instanceof EmptyNavigator)
 			btnRemoveFromGroup.click()
 			def btnUpdate = $("#contact-details .update")
@@ -102,7 +98,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			btnUpdate.click()
 		then:
 			at ContactListPage
-			Group.findByName('Test').members.size() == 0
+			Group.findByName(groupDeletedFrom).refresh().members.size() == 0
 	}
 
 	// TODO test cancel button - remove from 1 group

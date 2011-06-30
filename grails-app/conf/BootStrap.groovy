@@ -24,8 +24,8 @@ class BootStrap {
 			def notCats = Group.findByName('Not Cats')
 			def bob = createContact("Bob", "+198765432")
 			Contact.findAll().each() {
-				GroupMembership.create(it, friends)
-				GroupMembership.create(it, notCats)
+				it.addToGroups(friends)
+				it.addToGroups(notCats)
 			}
 			createContact("Kate", "+198730948")
 
