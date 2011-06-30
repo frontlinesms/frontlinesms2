@@ -34,4 +34,14 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			messages*.getAttribute('class').each {it.contains("SEND_FAILED") || it.contains("SEND_PENDING")}
 		    messages.collect { it.find("td:nth-child(2) a").text()}.containsAll(["src1", "src2"])
 	}
+
+
+	def "reply option should not be available for messages listed in poll section"() {
+		when:
+			to MessagesPage
+			$('#messages-menu li a', href:'/frontlinesms2/message/pending').click()
+			waitFor { title == "Pending" }
+		then:
+		    !$('a', text:'Reply')
+	}
 }
