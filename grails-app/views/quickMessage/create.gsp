@@ -20,7 +20,7 @@
 		<div id="groups">
 		<g:each in="${groupList}" var="entry">
 			<div>
-				<input type="checkbox" name="groups" value="${entry.key}">${entry.key}(${entry.value.size})</input>
+				<input type="checkbox" name="groups" value="${entry.key}">${entry.key}(${entry.value})</input>
 			</div>
 		</g:each>
 		</div>
