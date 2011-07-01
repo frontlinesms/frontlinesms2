@@ -89,12 +89,14 @@ class Fmessage {
 		messages
 	}
 
-	static def getSentMessages() {
+	static def getSentMessages(isStarred) {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
 				eq("status", MessageStatus.SENT)
 				isNull("messageOwner")
+				if(isStarred)
+					eq("starred", true)
 			}
 			order("dateCreated", "desc")
 		}
