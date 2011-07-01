@@ -98,6 +98,9 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Bob', 'Alice'])
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
 	}
 }
 

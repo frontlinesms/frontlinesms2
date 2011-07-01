@@ -84,6 +84,10 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Jane', 'Max'])
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
+
 	}
 }
 
