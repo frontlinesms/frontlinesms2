@@ -65,6 +65,18 @@ class MessageControllerSpec extends ControllerSpec {
 			Fmessage.list()*.dst.containsAll(addresses)
 			Fmessage.count() == 3
 	}
+	
+	def "should display flash message on successful message sending"() {
+		setup:
+			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
+			mockParams.addresses = addresses
+		when:
+			assert Fmessage.count() == 0
+			controller.send()
+		then:
+			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
+			
+	}
 
 	def "should fetch pending messages"() {
 		setup:

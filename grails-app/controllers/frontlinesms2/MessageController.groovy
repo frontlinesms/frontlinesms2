@@ -138,6 +138,7 @@ class MessageController {
 			messageSendService.process(message)
 			message.save(failOnError: true, flush: true)
 		}
+		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
 		redirect (action: 'sent')
 	}
 
