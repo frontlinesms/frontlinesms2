@@ -40,8 +40,10 @@ class MessageController {
 	}
 
 	def sent = {
-		params.inbound = false // FIXME does setting params here actually achieve anything?
-		[messageSection: 'sent']
+		def messageInstanceList = Fmessage.getSentMessages(params['starred'])
+		[messageSection:'sent',
+				messageInstanceList:messageInstanceList,
+				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
 	}
 
 	def pending = {
