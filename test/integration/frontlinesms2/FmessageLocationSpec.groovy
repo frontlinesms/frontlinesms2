@@ -82,6 +82,35 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		    results.size() == 1
 			results[0].status == MessageStatus.SEND_PENDING
 			results[0].starred
+		cleanup:
+			deleteTestData()
+	}
+
+	def "should fetch starred deleted messages"() {
+		setup:
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+		when:
+			def results = Fmessage.getDeletedMessages(true)
+		then:
+		    results.size() == 1
+			results[0].deleted
+			results[0].starred
+		cleanup:
+			deleteTestData()
+	}
+
+	def "should fetch deleted messages"() {
+		setup:
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+		when:
+			def results = Fmessage.getDeletedMessages(false)
+		then:
+		    results.size() == 2
+			results[0].deleted
+		cleanup:
+			deleteTestData()
 	}
 
 	static createTestData() {
