@@ -115,10 +115,12 @@ class Fmessage {
 		messages
 	}
 
-	static def getDeletedMessages() {
+	static def getDeletedMessages(isStarred) {
 		def messages = Fmessage.createCriteria().list {
 			and {
 				eq("deleted", true)
+				if(isStarred)
+					eq('starred', true)
 			}
 			order("dateCreated", "desc")
 		}

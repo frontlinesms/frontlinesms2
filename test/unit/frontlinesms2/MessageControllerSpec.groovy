@@ -162,4 +162,21 @@ class MessageControllerSpec extends ControllerSpec {
 		then:
 			results['messageInstanceList'] == [starredFmessage]
 	}
+
+	def "should fetch starred trashed messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			def starredFmessage = new Fmessage(deleted: true, starred: true)
+			mockParams.starred = true
+			mockDomain Folder
+			mockDomain Poll
+			Fmessage.metaClass.'static'.getDeletedMessages = {isStarred->
+				if(isStarred)
+					[starredFmessage]
+			}
+		when:
+			def results = controller.trash()
+		then:
+			results['messageInstanceList'] == [starredFmessage]
+	}
 }
