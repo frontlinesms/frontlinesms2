@@ -67,7 +67,7 @@ class MessageController {
 	
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance.folderMessages(params['starred'])
+		def messageInstanceList = folderInstance.getFolderMessages(params['starred'])
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
