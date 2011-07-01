@@ -54,7 +54,7 @@ class MessageController {
 
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.messages(params['starred'])
+		def messageInstanceList = ownerInstance.getMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc() }
 
 		params.messageSection = 'poll'
