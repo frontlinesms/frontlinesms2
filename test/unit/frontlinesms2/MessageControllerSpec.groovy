@@ -141,4 +141,25 @@ class MessageControllerSpec extends ControllerSpec {
 		then:
 			results['messageInstanceList'] == [starredFmessage]
 	}
+
+	def "should fetch starred folder messages"() {
+		setup:
+			registerMetaClass(Poll)
+			def starredFmessage = new Fmessage(starred: true)
+			def unstarredFmessage = new Fmessage(starred: false)
+			def folder = new Folder(id: 2L, messages: [starredFmessage, unstarredFmessage])
+			mockParams.starred = true
+			mockParams.ownerId = 2L
+			mockDomain Folder, [folder]
+			mockDomain Poll
+			mockDomain Fmessage, [starredFmessage, unstarredFmessage]
+			folder.metaClass.getFolderMessages = {isStarred->
+				if(isStarred)
+					[starredFmessage]
+			}
+		when:
+			def results = controller.folder()
+		then:
+			results['messageInstanceList'] == [starredFmessage]
+	}
 }
