@@ -163,7 +163,8 @@ class InboxSpec extends MessageGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Alice', 'Bob'])
-
+		cleanup:
+			deleteTestMessages()
 	}
 
 	String dateToString(Date date) {
