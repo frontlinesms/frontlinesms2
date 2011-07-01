@@ -66,6 +66,25 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			deleteTestMessages()
 	}
 
+	def "should filter folder messages for starred and unstarred messages"() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+		then:
+			$("#messages tbody tr").size() == 2
+		when:
+			$('a', text:'Starred').click()
+			waitFor {$("#messages tbody tr").size() == 1}
+		then:
+			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'Max'
+		when:
+			$('a', text:'All').click()
+			waitFor {$("#messages tbody tr").size() == 2}
+		then:
+			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Jane', 'Max'])
+	}
 }
 
 class FolderListPage extends geb.Page {
