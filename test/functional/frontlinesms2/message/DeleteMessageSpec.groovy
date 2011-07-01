@@ -72,7 +72,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDeleteFromFolder.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
-			Folder.findByName('Fools').folderMessages.size() == 1
+			Folder.findByName('Fools').getFolderMessages(false).size() == 1
 	}
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
