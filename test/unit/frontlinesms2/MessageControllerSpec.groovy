@@ -121,4 +121,24 @@ class MessageControllerSpec extends ControllerSpec {
 		then:
 			results['messageInstanceList'] == starredPendingMessages
 	}
+
+	def "should fetch starred poll messages"() {
+		setup:
+			registerMetaClass(Poll)
+			def starredFmessage = new Fmessage(starred: true)
+			def unstarredFmessage = new Fmessage(starred: false)
+			def poll = new Poll(id: 2L, responses: [new PollResponse()])
+			mockParams.starred = true
+			mockParams.ownerId = 2L
+			mockDomain Folder
+			mockDomain Poll, [poll]
+			mockDomain Fmessage, [starredFmessage, unstarredFmessage]
+			poll.metaClass.getMessages = {isStarred->
+				isStarred ? [starredFmessage] : [starredFmessage, unstarredFmessage] 
+			}
+		when:
+			def results = controller.poll()
+		then:
+			results['messageInstanceList'] == [starredFmessage]
+	}
 }
