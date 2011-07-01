@@ -31,10 +31,23 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages()
+			def sent = Fmessage.getSentMessages(false)
 		then:
 			assert sent.size() == 2
-			sent*.status == [MessageStatus.SENT, MessageStatus.SENT]
+			sent.every { it.status == MessageStatus.SENT}
+		cleanup:
+			deleteTestData()
+	}
+
+	def "should return starred sent messages"() {
+		setup:
+			createTestData()
+		when:
+			def sent = Fmessage.getSentMessages(true)
+		then:
+			assert sent.size() == 1
+			sent[0].status == MessageStatus.SENT
+			sent[0].starred
 		cleanup:
 			deleteTestData()
 	}
@@ -122,7 +135,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 					it.save(failOnError:true)
 				}
 		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived: new Date() - 2, status:MessageStatus.SENT),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived: new Date() - 1, status:MessageStatus.SENT)].each() {
+				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived: new Date() - 1, status:MessageStatus.SENT, starred: true)].each() {
 					it.save(failOnError:true)
 				}
 		[new Fmessage(src:"src", dst:"dst1", text:"text",  status: MessageStatus.SEND_FAILED),

@@ -11,7 +11,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 					new Fmessage(deleted:false).save(flush:true)
 				}
 		when:
-			def deletedMessages = Fmessage.deletedMessages
+			def deletedMessages = Fmessage.getDeletedMessages(false)
 		then:
 			deletedMessages.size == 3
 	}
