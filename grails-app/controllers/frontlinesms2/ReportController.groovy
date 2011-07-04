@@ -1,11 +1,14 @@
 package frontlinesms2
 
 import org.grails.plugins.csv.CSVWriter
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 class ReportController {
 
+	def exportService
+	
     def index = { }
 
 	def create = {
@@ -26,6 +29,40 @@ class ReportController {
 		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-messageDump-${formatedTime}.csv")
 		render(contentType:"text/csv", text: csv.writer.toString(), encoding:"UTF-8")
 	}
+	
+	def generateCSVReport(searchString,model) {
+		def currentTime = new Date()
+		List fields = ["id", "src", "dst", "text", "dateCreated"]
+		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
+		Map parameters = [title: "$searchString"]
+		def formatedTime = dateToString(currentTime)
+		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.csv")
+		
+		try{
+			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report for $searchString")
+		}
+		
+		[messageInstanceList: model]
+	}
+	
+	def generatePDFReport(searchString,model) {
+		def currentTime = new Date()
+		List fields = ["id", "src", "dst", "text", "dateCreated"]
+		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
+		def formatedTime = dateToString(currentTime)
+		Map parameters = [title: "$searchString"]
+		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.pdf")
+		
+		try{
+			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report for $searchString")
+		}
+		
+		[messageInstanceList: model]
+	}
 
 	private String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat()
@@ -33,7 +70,7 @@ class ReportController {
 	}
 
 	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd-MMM-yyyy")
+		return new SimpleDateFormat("yyyy-MMM-dd")
 	}
 	
 }

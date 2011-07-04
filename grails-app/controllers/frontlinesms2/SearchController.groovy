@@ -36,6 +36,19 @@ class SearchController {
 		}
 	}
 
+	def downloadReport = {
+			def groupInstance = params.groupId? Group.get(params.groupId): null
+			def activityInstance = getActivityInstance()
+			def messageOwners = activityInstance? getMessageOwners(activityInstance): null
+			def messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)
+			messageInstanceList.sort { it.dateCreated }
+			if(params.format == 'pdf')
+				new ReportController().generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
+			if(params.format == 'csv')
+				new ReportController().generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
+			
+	}
+	
 	private def getActivityInstance() {
 		if(!params.activityId) return null
 		else {
