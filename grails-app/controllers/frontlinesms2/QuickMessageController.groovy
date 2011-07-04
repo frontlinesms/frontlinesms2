@@ -2,7 +2,7 @@ package frontlinesms2
 
 class QuickMessageController {
 	def create = {
-		def recipients = [params['recipient']]
+		def recipients = params['recipient'] ? [params['recipient']] : []
 		def contacts = Contact.list()
 
 		[contactList: contacts,

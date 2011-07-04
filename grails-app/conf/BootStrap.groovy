@@ -51,10 +51,11 @@ class BootStrap {
 						it.save(failOnError:true)
 					}
 					[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
+							new Fmessage(src: 'Jhonny', dst: '+254114433', text: "I am in a meeting", status: MessageStatus.SENT),
+							new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", status: MessageStatus.SENT),
 							new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
 						it.save(failOnError: true)
 					}
-
 
 			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
 					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
