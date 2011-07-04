@@ -101,6 +101,9 @@ class BootStrap {
 				"AT+CGSN", "123456789099998\rOK",
 				"AT+CIMI", "254123456789012\rOK",
 				//"AT+CBC"
+				"AT+CMGS=108", "OK",
+				"AT+CMGS=109", "OK",
+				"AT+CMGS=110", "OK",
 				"AT+COPS=0", "OK",
 				"AT+CLIP=1", "OK",
 				"ATE0", "OK",
