@@ -84,7 +84,7 @@ function createCustomField_submit() {
 		}
 	} else {
 		addCustomField(name, value);
-		$("#custom-field-popup").dialog('close');
+		$("#custom-field-popup").remove();
 	}
 	return false;
 }
