@@ -10,7 +10,7 @@ import frontlinesms2.enums.MessageStatus
 
 class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src: "src1", status: MessageStatus.SEND_FAILED).save(flush: true)
+		new Fmessage(src: "src1", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true)
 		new Fmessage(src: "src2", status: MessageStatus.SEND_PENDING).save(flush: true)
 		new Fmessage(src: "src", status: MessageStatus.SENT).save(flush: true)
 		new Fmessage(src: "src", status: MessageStatus.INBOUND).save(flush: true)
@@ -43,5 +43,24 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor { title == "Pending" }
 		then:
 		    !$('a', text:'Reply')
+	}
+
+	def "should filter pending messages for starred and unstarred messages"() {
+		when:
+			to MessagesPage
+			$('#messages-menu li a', href:'/frontlinesms2/message/pending').click()
+			waitFor { title == "Pending" }
+		then:
+			$("#messages tbody tr").size() == 2
+		when:
+			$('a', text:'Starred').click()
+			waitFor {$("#messages tbody tr").size() == 1}
+		then:
+			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'src1'
+		when:
+			$('a', text:'All').click()
+			waitFor {$("#messages tbody tr").size() == 2}
+		then:
+			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['src1', 'src2'])
 	}
 }

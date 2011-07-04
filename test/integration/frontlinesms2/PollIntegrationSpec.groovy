@@ -12,11 +12,11 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
 		then:
-			p.messages.size() == 2
+			p.getMessages(false).size() == 2
 		when:
 			message1.toDelete().save(flush:true, failOnError:true)
 		then:
-			p.messages.size() == 1
+			p.getMessages(false).size() == 1
 		cleanup:
 			deleteTestData()
 	}
@@ -60,25 +60,40 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def p = Poll.createPoll('This is a poll', ['one', 'two'])
 		then:
 			p.responses.size() == 3
-
 	}
 
     def "should sort messages based on date received"() {
-      when:
-          def poll = new Poll(title: 'question')
-          poll.addToResponses(new PollResponse(value: "response 1"))
-          poll.addToResponses(new PollResponse(value: "response 2"))
-          poll.addToResponses(new PollResponse(value: "response 3"))
-          poll.save(flush: true, failOnError:true)
-
-          PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateReceived: new Date() - 10)).save(flush: true, failOnError:true)
-          PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateReceived: new Date() - 2)).save(flush: true, failOnError:true)
-          PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5)).save(flush: true, failOnError:true)
-
-          def result = Poll.findByTitle('question').messages
-      then:
-         result*.src == ["src2", "src3", "src1"]
+		setup:
+			setUpPollResponseAndItsMessages()
+		when:
+			def result = Poll.findByTitle('question').getMessages(false)
+		then:
+			result*.src == ["src2", "src3", "src1"]
     }
+
+	def "should fetch starred poll messages"() {
+		setup:
+			setUpPollResponseAndItsMessages()
+		when:
+			def results = Poll.findByTitle("question").getMessages(true)
+		then:
+			results*.src == ["src3"]
+		cleanup:
+			Folder.list()*.delete()
+	}
+
+	private def setUpPollResponseAndItsMessages() {
+		def poll = new Poll(title: 'question')
+		poll.addToResponses(new PollResponse(value: "response 1"))
+		poll.addToResponses(new PollResponse(value: "response 2"))
+		poll.addToResponses(new PollResponse(value: "response 3"))
+		poll.save(flush: true, failOnError:true)
+
+		PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateReceived: new Date() - 10)).save(flush: true, failOnError:true)
+		PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateReceived: new Date() - 2)).save(flush: true, failOnError:true)
+		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
+	}
+
 	
 	static deleteTestData() {
 		Poll.findAll().each() {
