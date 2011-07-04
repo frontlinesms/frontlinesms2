@@ -8,7 +8,6 @@ class ReportControllerSpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new ReportController()
 		[new Fmessage(src:'gerad', text:'i love pie'),
 			new Fmessage(src:'steve', text:'i hate beef')].each() {
-					it.inbound = true
 					it.save(failOnError:true)
 				}
 	}
