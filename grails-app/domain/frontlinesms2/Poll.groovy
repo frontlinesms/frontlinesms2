@@ -17,11 +17,13 @@ class Poll {
             responses cascade:'all'
 	}
 
-	def getMessages() {
+	def getMessages(isStarred = false) {
 		Fmessage.createCriteria().list {
 			and {
 				eq("deleted", false)
 				'in'("messageOwner", this.responses)
+				if(isStarred)
+					eq("starred", true)
 			}
 			order('dateReceived', 'desc')
 		}
