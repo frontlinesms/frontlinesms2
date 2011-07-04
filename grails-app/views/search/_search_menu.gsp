@@ -1,16 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<script type="text/javascript">
-			$(document).ready(function() {
-				$('select[name="activityList"]').change(updateSelectedActivity);
-			});
-			
-			function updateSelectedActivity() {
-				var f = $('input:hidden[name="selectedActivity"]');
-				var selectedActivity = $('select[name="activityList"]').find('option:selected');
-				if(selectedActivity.attr("value") == '') return;
-				f.val(selectedActivity.text());
-			}
-</script>
 <g:form name="searchDetails" class="content-menu">
 	<div id="search-details" >
 		<div class="field">
