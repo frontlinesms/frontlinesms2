@@ -264,5 +264,4 @@ class MessageControllerSpec extends ControllerSpec {
 			results['messageInstanceList']*.contactExists == [false]
 			results['messageInstanceList']*.displaySrc == ["src1"]
     }
-
 }

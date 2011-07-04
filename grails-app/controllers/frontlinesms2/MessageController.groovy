@@ -11,7 +11,6 @@ class MessageController {
 
 	def show = { messageInstanceList ->
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
-		messageInstance?.updateDisplaySrc()
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -23,7 +22,7 @@ class MessageController {
 
 	def trash = {
 		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'])
-//		messageInstanceList.each { it.updateDisplaySrc()}
+		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'trash'
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
@@ -41,6 +40,7 @@ class MessageController {
 
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params['starred'])
+		messageInstanceList.each { it.updateDisplaySrc()}
 		[messageSection:'sent',
 				messageInstanceList:messageInstanceList,
 				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
