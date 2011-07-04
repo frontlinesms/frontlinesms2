@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
-import frontlinesms2.enums.MessageStatus
 
 class MessageControllerSpec extends ControllerSpec {
 
@@ -68,120 +67,84 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 	def "should fetch pending messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			def pendingMessages = [new Fmessage(src: "src"), new Fmessage(src: "src")]
-			Fmessage.metaClass.'static'.getPendingMessages = {isStarred->
-				pendingMessages
-			}
-			mockDomain(Folder)
-			mockDomain(Poll)
-			mockDomain(Contact)
-		when:
-			def results = controller.pending()
-		then:
-			results['messageInstanceList'] == pendingMessages
-			results['messageSection'] == 'pending'
-			results['messageInstanceTotal'] == 2
-			results['messageInstance'] == pendingMessages[0]
-			results['messageInstanceList']*.contactExists == [false, false]
-			results['messageInstanceList']*.displaySrc == ["src", "src"]
+		def isStarred = false
+		expect:
+			withSetup(isStarred, {fmessage ->
+
+				Fmessage.metaClass.'static'.getPendingMessages = {starred->
+					assert starred == isStarred 
+					[fmessage]
+				}
+				controller.pending()
+			})
 	}
 
 	def "should fetch starred inbox messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			def starredInboxMessages = [new Fmessage(starred: true)]
-			mockParams.starred = true
-			mockDomain(Folder)
-			mockDomain(Poll)
-			Fmessage.metaClass.'static'.getInboxMessages = {isStarred ->
-				if(isStarred)
-					return starredInboxMessages
-			}
-		when:
-			def results = controller.inbox()
-		then:
-			results['messageInstanceList'] == starredInboxMessages
+		def isStarred = true
+		expect:
+			withSetup(isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getInboxMessages = {starred ->
+					assert starred == isStarred
+					[fmessage]
+				}
+				controller.inbox()
+			})
 	}
 
 
 	def "should fetch all inbox messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			def isStarred = false
-			def fmessageList = [new Fmessage(starred: isStarred)]
-			mockParams.starred = isStarred
-			mockDomain(Folder)
-			mockDomain(Poll)
-			Fmessage.metaClass.'static'.getInboxMessages = {starred ->
-				assert isStarred == starred
-				return fmessageList
-			}
-		when:
-			def results = controller.inbox()
-		then:
-			results['messageInstanceList'] == fmessageList
+		def isStarred = false
+		expect:
+			withSetup(isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getInboxMessages = {starred ->
+					assert isStarred == starred
+					[fmessage]
+				}
+				controller.inbox()
+		})
 	}
 
 
 	def "should fetch starred pending messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			def isStarred = true
-			def starredPendingMessages = [new Fmessage(starred: isStarred)]
-			mockParams.starred = isStarred
-			mockDomain(Folder)
-			mockDomain(Poll)
-			Fmessage.metaClass.'static'.getPendingMessages = {starred ->
-				assert starred == isStarred
-				return starredPendingMessages
-			}
-		when:
-			def results = controller.pending()
-		then:
-			results['messageInstanceList'] == starredPendingMessages
+		def isStarred = true
+		expect:
+			withSetup(isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getPendingMessages = {starred ->
+					assert starred == isStarred
+					return [fmessage]
+				}
+				controller.pending()
+		})
 	}
 
 	def "should fetch all pending messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			def isStarred = false
-			def fmessages = [new Fmessage(starred: isStarred)]
-			mockParams.starred = isStarred
-			mockDomain(Folder)
-			mockDomain(Poll)
-			Fmessage.metaClass.'static'.getPendingMessages = {starred ->
-				assert isStarred == starred
-				return fmessages
-			}
-		when:
-			def results = controller.pending()
-		then:
-			results['messageInstanceList'] == fmessages
+		def isStarred = false
+		expect:
+			withSetup(isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getPendingMessages = {starred ->
+					assert isStarred == starred
+					return [fmessage]
+				}
+				controller.pending()
+		})
 	}
 
 	def "should fetch all poll messages"() {
-		setup:
-			registerMetaClass(Poll)
-			def isStarred = false
-			def fmessage = new Fmessage(starred: isStarred)
-			def poll = new Poll(id: 2L, responses: [new PollResponse()])
-			mockParams.starred = isStarred
-			mockParams.ownerId = 2L
-			mockDomain Folder
-			mockDomain Poll, [poll]
-			mockDomain Fmessage
-			poll.metaClass.getMessages = {starred->
-				assert starred == isStarred
-				[fmessage]
-			}
-		when:
-			def results = controller.poll()
-		then:
-			results['messageInstanceList'] == [fmessage]
+		def isStarred = false
+		expect:
+			withSetup(isStarred, {fmessage ->
+				def poll = new Poll(id: 2L, responses: [new PollResponse()])
+				mockParams.ownerId = 2L
+				mockDomain Poll, [poll]
+				poll.metaClass.getMessages = {starred->
+					assert starred == isStarred
+					[fmessage]
+				}
+				 controller.poll()
+		})
 	}
 
+	//FIXME: Need to  replace it with 'withSetup' method.
 	def "should fetch starred poll messages"() {
 		setup:
 			registerMetaClass(Poll)
@@ -203,124 +166,103 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 	def "should fetch all folder messages"() {
-		setup:
-			def starredFmessage = new Fmessage(starred: true)
-			def unstarredFmessage = new Fmessage(starred: false)
-			def folder = new Folder(id: 2L, messages: [starredFmessage, unstarredFmessage])
-			def isStarred = false
-
-			mockParams.starred = isStarred
-			mockParams.ownerId = 2L
-			mockDomain Folder, [folder]
-			mockDomain Poll
-			mockDomain Fmessage
-
-			folder.metaClass.getFolderMessages = {starred->
-					assert starred == isStarred
-					[starredFmessage, unstarredFmessage]
-			}
-		when:
-			def results = controller.folder()
-		then:
-			results['messageInstanceList'] == [starredFmessage, unstarredFmessage]
+		def isStarred = false
+		expect:
+			withSetup(isStarred, {fmessage ->
+				def folder = new Folder(id: 2L, messages: [fmessage])
+				mockParams.ownerId = 2L
+				mockDomain Folder, [folder]
+				folder.metaClass.getFolderMessages = {starred->
+						assert starred == isStarred
+						[fmessage]
+				}
+				controller.folder()
+			})
 	}
 
 	def "should fetch starred folder messages"() {
-		setup:
+		expect:
 			def isStarred = true
-			def starredFmessage = new Fmessage(starred: true)
-			def unstarredFmessage = new Fmessage(starred: false)
-			def folder = new Folder(id: 2L, messages: [starredFmessage, unstarredFmessage])
-			mockParams.starred = isStarred
-			mockParams.ownerId = 2L
-			mockDomain Folder, [folder]
-			mockDomain Poll
-			mockDomain Fmessage
-			folder.metaClass.getFolderMessages = {starred->
+			withSetup (isStarred, {fmessage ->
+				def folder = new Folder(id: 2L, messages: [fmessage])
+				mockParams.ownerId = 2L
+				mockDomain Folder, [folder]
+				folder.metaClass.getFolderMessages = {starred->
 					assert starred == isStarred
-					[starredFmessage]
-			}
-		when:
-			def results = controller.folder()
-		then:
-			results['messageInstanceList'] == [starredFmessage]
+					[fmessage]
+				}
+				controller.folder()
+			})
 	}
 
+
+
+
 	def "should fetch starred trash messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			def fmessage = new Fmessage(deleted: true, starred: true)
-			mockParams.starred = true
-			mockDomain Folder
-			mockDomain Poll
-			Fmessage.metaClass.'static'.getDeletedMessages = {isStarred->
-				if(isStarred)
+		expect:
+			def isStarred = true
+			withSetup (isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getDeletedMessages = {starred->
+					assert starred == starred
 					[fmessage]
-			}
-		when:
-			def results = controller.trash()
-		then:
-			results['messageInstanceList'] == [fmessage]
+				}
+				controller.trash()
+			})
 	}
 
 	def "should fetch all trash messages"() {
-		setup:
-			registerMetaClass(Fmessage)
+		expect:
 			def isStarred = false
-			def fmessage = new Fmessage(deleted: true, starred: isStarred)
-			mockParams.starred = isStarred
-			mockDomain Folder
-			mockDomain Poll
-			Fmessage.metaClass.'static'.getDeletedMessages = {starred->
-				assert starred == isStarred
-				[fmessage]
-			}
-		when:
-			def results = controller.trash()
-		then:
-			results['messageInstanceList'] == [fmessage]
+			withSetup (isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getDeletedMessages = {starred->
+					assert starred == isStarred
+					[fmessage]
+				}
+				controller.trash()	
+			})
 	}
 
 	def "should show the starred sent messages"() {
-		setup:
-			registerMetaClass(Fmessage)
+		expect:
 			def isStarred = true
-			def fmessage = new Fmessage(status: MessageStatus.SENT, starred: isStarred)
-			Fmessage.metaClass.'static'.getSentMessages = {starred ->
-				assert starred == isStarred
-				[fmessage]
-			}
-			mockDomain Folder
-			mockDomain Poll
-			mockParams.starred = isStarred
-		when:
-			def results = controller.sent()
-		then:
-			results['messageInstanceList'] == [fmessage]
-			results['messageSection'] == 'sent'
-			results['messageInstanceTotal'] == 1
-			results['messageInstance'] == fmessage
+			withSetup (isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getSentMessages = {starred ->
+					assert starred == isStarred
+					[fmessage]
+				}
+				controller.sent()
+			})
 	}
 
 	def "should show all the  sent messages"() {
+		expect:       
+			def isStarred = false
+			withSetup (isStarred, {fmessage ->
+				Fmessage.metaClass.'static'.getSentMessages = {starred ->
+					assert starred == isStarred
+					[fmessage]
+				}
+
+				controller.sent()
+			})
+	}
+
+    def withSetup = {isStarred, closure  ->
 		setup:
 			registerMetaClass(Fmessage)
-			def isStarred = false
-			def fmessage = new Fmessage(status: MessageStatus.SENT, starred: isStarred)
-			Fmessage.metaClass.'static'.getSentMessages = {starred ->
-				assert starred == isStarred
-				[fmessage]
-			}
+			def fmessage = new Fmessage(src: "src1", starred: isStarred)
 			mockDomain Folder
 			mockDomain Poll
+			mockDomain Contact
 			mockParams.starred = isStarred
 		when:
-			def results = controller.sent()
+			def results = closure.call(fmessage)
 		then:
 			results['messageInstanceList'] == [fmessage]
-			results['messageSection'] == 'sent'
 			results['messageInstanceTotal'] == 1
 			results['messageInstance'] == fmessage
-	}
+			results['messageInstanceList']*.contactExists == [false]
+			results['messageInstanceList']*.displaySrc == ["src1"]
+    }
 
 }

@@ -23,7 +23,7 @@ class MessageController {
 
 	def trash = {
 		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'])
-		messageInstanceList.each { it.updateDisplaySrc()}
+//		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'trash'
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',

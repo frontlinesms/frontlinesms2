@@ -35,7 +35,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 			bobMessage.updateDisplaySrc()
 		then:
-			Fmessage.deletedMessages.size() == 1
+			Fmessage.getDeletedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 	}
 
@@ -47,7 +47,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bobMessage.updateDisplaySrc()
 			go "message/trash"
 		then:
-			Fmessage.deletedMessages.size() == 1
+			Fmessage.getDeletedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 			!$('#message-details .buttons a')
 	}
