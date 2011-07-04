@@ -35,7 +35,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 			bobMessage.updateDisplaySrc()
 		then:
-			Fmessage.deletedMessages.size() == 1
+			Fmessage.getDeletedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 	}
 
@@ -47,7 +47,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bobMessage.updateDisplaySrc()
 			go "message/trash"
 		then:
-			Fmessage.deletedMessages.size() == 1
+			Fmessage.getDeletedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 			!$('#message-details .buttons a')
 	}
@@ -72,7 +72,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDeleteFromFolder.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
-			Folder.findByName('Fools').folderMessages.size() == 1
+			Folder.findByName('Fools').getFolderMessages(false).size() == 1
 	}
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {

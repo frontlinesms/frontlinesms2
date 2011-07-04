@@ -16,6 +16,9 @@
 			<g:render template="menu"/>
 			<g:render template="message_list"/>
 			<g:layoutBody/>
+			Show:
+			<g:link action="${messageSection}" params="${[starred:true] << params}" >Starred</g:link>
+			<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred'})}">All</g:link>
 		</div>
 	</body>
 </html>

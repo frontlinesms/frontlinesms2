@@ -37,4 +37,12 @@ class QuickMessageControllerSpec extends ControllerSpec {
 			result['nonExistingRecipients'] ==  []
 	}
 
+	def "recipient list must be empty if there is no need for pre populating address"() {
+		when:
+			def result = controller.create()
+		then:
+			!result['recipients']
+			!result['nonExistingRecipients']
+	}
+
 }

@@ -11,7 +11,6 @@ class MessageController {
 
 	def show = { messageInstanceList ->
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
-		messageInstance?.updateDisplaySrc()
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -22,7 +21,7 @@ class MessageController {
 	}
 
 	def trash = {
-		def messageInstanceList = Fmessage.deletedMessages
+		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'trash'
 			[messageInstanceList: messageInstanceList,
@@ -31,7 +30,7 @@ class MessageController {
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.getInboxMessages()
+		def messageInstanceList = Fmessage.getInboxMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'inbox'
 			[messageInstanceList: messageInstanceList,
@@ -40,12 +39,15 @@ class MessageController {
 	}
 
 	def sent = {
-		params.inbound = false // FIXME does setting params here actually achieve anything?
-		[messageSection: 'sent']
+		def messageInstanceList = Fmessage.getSentMessages(params['starred'])
+		messageInstanceList.each { it.updateDisplaySrc()}
+		[messageSection:'sent',
+				messageInstanceList:messageInstanceList,
+				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
 	}
 
 	def pending = {
-		def messageInstanceList = Fmessage.getPendingMessages()
+		def messageInstanceList = Fmessage.getPendingMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc() }
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
@@ -54,7 +56,7 @@ class MessageController {
 
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.messages
+		def messageInstanceList = ownerInstance.getMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc() }
 
 		params.messageSection = 'poll'
@@ -67,7 +69,7 @@ class MessageController {
 	
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance.folderMessages
+		def messageInstanceList = folderInstance.getFolderMessages(params['starred'])
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
@@ -138,6 +140,7 @@ class MessageController {
 			messageSendService.process(message)
 			message.save(failOnError: true, flush: true)
 		}
+		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
 		redirect (action: 'sent')
 	}
 

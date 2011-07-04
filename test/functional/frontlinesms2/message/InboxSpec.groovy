@@ -146,6 +146,27 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestContacts()
 	}
 
+	def "should filter inbox messages for starred and unstarred messages"() {
+		setup:
+	    	createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.list()[0].id}"
+		then:    	
+			$("#messages tbody tr").size() == 2
+		when:	
+			$('a', text:'Starred').click()
+			waitFor {$("#messages tbody tr").size() == 1}
+		then:
+			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'Alice'
+		when:
+			$('a', text:'All').click()
+			waitFor {$("#messages tbody tr").size() == 2}
+		then:
+			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Alice', 'Bob'])
+		cleanup:
+			deleteTestMessages()
+	}
+
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)
