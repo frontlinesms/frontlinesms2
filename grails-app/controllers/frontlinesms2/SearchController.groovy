@@ -37,16 +37,15 @@ class SearchController {
 	}
 
 	def downloadReport = {
-			println "params at controller: $params.params"
 			def groupInstance = params.groupId? Group.get(params.groupId): null
 			def activityInstance = getActivityInstance()
 			def messageOwners = activityInstance? getMessageOwners(activityInstance): null
 			def messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)
-			println "List at search: ${messageInstanceList.class}"
+			messageInstanceList.sort { it.dateCreated }
 			if(params.format == 'pdf')
-				new ReportController().generatePDFReport(messageInstanceList)
+				new ReportController().generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
 			if(params.format == 'csv')
-				new ReportController().generateCSVReport(messageInstanceList)
+				new ReportController().generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
 			
 	}
 	

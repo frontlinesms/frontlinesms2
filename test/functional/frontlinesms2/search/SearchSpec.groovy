@@ -54,6 +54,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "message list returned from a search operation is displayed"() {
 		when:
+			to SearchPage
 			searchFrm.searchString = "alex"
 			searchBtn.click()
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
@@ -110,20 +111,24 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.activityId == ["folder-${a.id}"]
 	}
 	
-//	def 'message actions menu is displayed for all individual messages'() {
-//		given:
-//			createTestMessages()
-//		when:
-//			searchFrm.searchString = "Bob"
-//			searchBtn.click()
-//			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
-//			def actions = $('#message-actions li').children('a')*.text()
-//		then:
-//			actions[0] == 'Miauow Mix'
-//		cleanup:
-//			deleteTestMessages()
-//	}
-//	
+	def "'Export Results' link is disabled when search is null "() {
+		when:
+			to SearchPage
+		then:
+			!$('h2:nth-child(2) div#export-results a').present();
+	}
+	
+	
+	def "Presence of search results causes the export link to be active"() {
+		when:
+			to SearchPage
+			searchFrm.searchString = "alex"
+			searchBtn.click()
+		then:
+			println "H2 div"
+			println $('h2:nth-child(2) div#export-results a').text()
+			$('h2:nth-child(2) div#export-results a:nth-child(1)')*.text() == ['PDF', 'CSV']
+	}
 	
 	private createTestGroups() {
 		new Group(name: 'Listeners').save(flush: true)

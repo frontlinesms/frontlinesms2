@@ -30,25 +30,36 @@ class ReportController {
 		render(contentType:"text/csv", text: csv.writer.toString(), encoding:"UTF-8")
 	}
 	
-	def generateCSVReport(model) {
+	def generateCSVReport(searchString,model) {
 		def currentTime = new Date()
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
-
+		Map parameters = [title: "$searchString"]
 		def formatedTime = dateToString(currentTime)
 		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.csv")
-		exportService.export(params.format, response.outputStream, model, fields, labels, [:],[:])
+		
+		try{
+			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report for $searchString")
+		}
+		
+		[messageInstanceList: model]
 	}
 	
-	def generatePDFReport(model) {
+	def generatePDFReport(searchString,model) {
 		def currentTime = new Date()
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
-		println "List: ${model}"
 		def formatedTime = dateToString(currentTime)
-		Map parameters = [title: "frontlineSMS-searchReport", "column.widhts": [0.2, 0.3, 0.5]]
+		Map parameters = [title: "$searchString"]
 		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.pdf")
-		exportService.export(params.format, response.outputStream, model, fields, labels, [:],[:])
+		
+		try{
+			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report for $searchString")
+		}
 		
 		[messageInstanceList: model]
 	}
@@ -59,7 +70,7 @@ class ReportController {
 	}
 
 	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd-MMM-yyyy")
+		return new SimpleDateFormat("yyyy-MMM-dd")
 	}
 	
 }
