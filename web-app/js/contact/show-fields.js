@@ -90,30 +90,6 @@ function createCustomField_submit() {
 }
 
 function createCustomField_cancel() {
-	$("#custom-field-popup").dialog('close');
+	$("#custom-field-popup").remove();
 	return false;
-}
-
-var createCustomField = {
-	submit: function() {
-		  var name = $('#custom-field-name').val();
-		  var value = $('#custom-field-value').val();
-		  if(!name.length || !value.length) {
-			  if(!$('#invalid').length) {
-				  $('#custom-field-popup').prepend("<p id='invalid'>invalid details</p>");
-			  }
-			  return false;
-		  }
-		  alert("We think we checked");
-		  addCustomField(name, value);
-
-		  alert("We think we added a new field");
-		  $("#custom-field-popup").dialog('close');
-		  return false;
-	},
-
-	cancel: function() {
-		$("#custom-field-popup").dialog('close');
-		return false;
-	}
 }
