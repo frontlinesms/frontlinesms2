@@ -2,10 +2,28 @@ package frontlinesms2
 
 class Group {
 	String name
-	
+	String subscriptionKey
+	String unsubscriptionKey
+
 	static hasMany = [members: Contact]
 
-	static constraints = { name(unique: true, nullable: false, blank: false, maxSize: 255) }
+	static constraints = {
+		name(unique: true, nullable: false, blank: false, maxSize: 255)
+		subscriptionKey(nullable: true, blank: false, validator: { val, obj ->
+			return isUniqueAcrossColumns(val, obj.unsubscriptionKey, obj)
+		})
+		unsubscriptionKey(nullable: true, blank: false, validator: { val, obj ->
+			return isUniqueAcrossColumns(val, obj.subscriptionKey, obj)
+		})
+	}
+
+	private static boolean isUniqueAcrossColumns(val, otherVal, obj) {
+		return (val == null && otherVal == null) ? true :
+				(val && otherVal && !otherVal.equals(val) &&
+						Group.findAllBySubscriptionKeyOrUnsubscriptionKey(val, val).every {it.id == obj.id})
+	}
+
+
 	static mapping = {
 	    table 'grup'
 	}
