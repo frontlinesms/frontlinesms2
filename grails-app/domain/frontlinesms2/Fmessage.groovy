@@ -43,7 +43,7 @@ class Fmessage {
 	
 	def updateDisplaySrc() {
 		if(src) {
-			def c = Contact.findByAddress(src)
+			def c = Contact.findByPrimaryMobile(src)
 			displaySrc = c? c.name: src
 			contactExists = c? true: false
 		}
@@ -130,15 +130,16 @@ class Fmessage {
 	}
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[]) {
 		if(searchString) {
-			def groupContactAddresses = groupInstance?.getMembers()*.address
-			if(!groupContactAddresses) {
-				groupContactAddresses = "null"
+			def groupPrimaryMobile = groupInstance?.getMembers()*.primaryMobile
+			if(!groupPrimaryMobile) {
+				groupPrimaryMobile = "null"
 			}
+			
 			def results = Fmessage.createCriteria().list {
 				ilike("text", "%${searchString}%")
 				and{
 					if(groupInstance) {
-						'in'("src",  groupContactAddresses)
+						'in'("src",  groupPrimaryMobile)
 					}
 					if(messageOwner) {
 						'in'("messageOwner", messageOwner)

@@ -34,8 +34,8 @@
 
 			<g:each in="${contactList}" var="contact">
 				<div>
-					<input type="checkbox" name="addresses" value="${contact.address}" <g:if test="${recipients.contains(contact.address)}">checked</g:if>>
-						${contact.name ?: contact.address}
+					<input type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
+						${contact.name ?: contact.primaryMobile}
 					</input>
 				</div>
 			</g:each>

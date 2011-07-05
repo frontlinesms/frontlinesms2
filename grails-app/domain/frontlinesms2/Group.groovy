@@ -12,7 +12,7 @@ class Group {
 
 
 	def getAddresses() {
-		members*.address
+		members*.primaryMobile
 	}
 
 	static def getGroupDetails() {

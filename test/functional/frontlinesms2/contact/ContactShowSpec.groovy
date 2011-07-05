@@ -37,15 +37,15 @@ class ContactShowSpec extends ContactGebSpec {
 	        $("#message-count p").last().text() == '0 messages received'
 	}
 
-	def 'contact with no name can be clicked and edited because his address is displayed'() {
+	def 'contact with no name can be clicked and edited because his primaryMobile is displayed'() {
 		when:
-			def empty = new Contact(name:'', address:"+987654321")
+			def empty = new Contact(name:'', primaryMobile:"+987654321")
 			empty.save(failOnError:true)
 			go "contact/list"
 			def noName = Contact.findByName('')
 		then:
 			noName != null
-			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.address
+			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.primaryMobile
 	}
 
 	def 'selected contact is highlighted'() {
@@ -70,7 +70,7 @@ class ContactShowSpec extends ContactGebSpec {
 			go "contact/show/${alice.id}"
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Alice')
-			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
 			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
 	}
 

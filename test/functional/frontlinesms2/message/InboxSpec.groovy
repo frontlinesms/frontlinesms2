@@ -101,7 +101,7 @@ class InboxSpec extends MessageGebSpec {
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
 			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			def contact = new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
 			def rowContents = $('#messages tbody tr td:nth-child(2)')*.text()
@@ -115,7 +115,7 @@ class InboxSpec extends MessageGebSpec {
 	def "should autopopulate the recipients name on click of reply for a inbox message"() {
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
 			$('a', text:'Reply').click()
@@ -131,7 +131,7 @@ class InboxSpec extends MessageGebSpec {
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			new Contact(name: 'June', address: '+254778899').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"	

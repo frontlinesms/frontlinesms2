@@ -30,8 +30,16 @@
 					<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 				</div>
 				<div class="field">
-					<label for="address"><g:message code="contact.address.label" default="Address"/></label>
-					<g:textField name="address" id="address" value="${contactInstance?.address}"/>
+					<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
+					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
+				</div>
+				<div class="field">
+					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
+					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
+				</div>
+			   <div class="field">
+					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
+					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
 				</div>
 				<ol id="custom-field-list">
 				  <g:each in="${contactFieldInstanceList}" status="i" var="f">

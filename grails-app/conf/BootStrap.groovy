@@ -93,7 +93,7 @@ class BootStrap {
 	}
 
 	def createContact(String n, String a) {
-		def c = new Contact(name: n, address: a)
+		def c = new Contact(name: n, primaryMobile: a)
 		c.save(failOnError: true)
 	}
 

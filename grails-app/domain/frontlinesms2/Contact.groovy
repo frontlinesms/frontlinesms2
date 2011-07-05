@@ -2,7 +2,9 @@ package frontlinesms2
 
 class Contact {
 	String name
-	String address
+	String primaryMobile
+	String secondaryMobile
+	String email
     String notes
 
 	static hasMany = [groups: Group, customFields: CustomField]
@@ -11,11 +13,26 @@ class Contact {
     static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
 				if(val == '') {
-					obj.address != ''
-					obj.address != null
+					obj.primaryMobile != ''
+					obj.primaryMobile != null
 				}
 		})
-		address(unique: true, nullable: true, validator: { val, obj ->
+		primaryMobile(unique: true, nullable: true, validator: { val, obj ->
+				if(val == '') {
+					obj.name != ''
+					obj.name != null
+				}
+		})
+		secondaryMobile(unique: false, nullable: true, validator: { val, obj ->
+				if(val == '') {
+					obj.name != ''
+					obj.name != null
+				}
+				if(val && obj.primaryMobile){
+					val != obj.primaryMobile
+				}
+		})
+		email(unique: false, nullable: true, email: true, validator: { val, obj ->
 				if(val == '') {
 					obj.name != ''
 					obj.name != null
@@ -36,10 +53,16 @@ class Contact {
 	}
 
 	def getInboundMessagesCount() {
-		address? Fmessage.countByDst(address): 0
+		def primary = primaryMobile? Fmessage.countByDst(primaryMobile): 0
+		def secondary = secondaryMobile? Fmessage.countByDst(secondaryMobile): 0
+		def email = email? Fmessage.countByDst(email): 0
+		primary + secondary + email
 	}
 
 	def getOutboundMessagesCount() {
-		address? Fmessage.countBySrc(address): 0
+		def primary = primaryMobile? Fmessage.countBySrc(primaryMobile): 0
+		def secondary = secondaryMobile? Fmessage.countByDst(secondaryMobile): 0
+		def email = email? Fmessage.countByDst(email): 0
+		primary + secondary + email
 	}
 }

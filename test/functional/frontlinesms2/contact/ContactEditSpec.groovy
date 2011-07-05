@@ -19,11 +19,14 @@ class ContactEditSpec extends ContactGebSpec {
 		when:
 			to AliceDetailsPage
 			frmDetails.name = 'Kate'
-			frmDetails.address = '+2541234567'
+			frmDetails.primaryMobile = '+2541234567'
+			frmDetails.secondaryMobile = '+2542334567'
+			frmDetails.email = 'gaga@gmail.com'
 			btnSave.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
+			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
+			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
 			Contact.findByName('Kate') != null
 	}
 
@@ -36,12 +39,16 @@ class ContactEditSpec extends ContactGebSpec {
 		when:
 			go "/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
 			frmDetails.name = 'Kate'
-			frmDetails.address = '+2541234567'
+			frmDetails.primaryMobile = '+2541234567'
+			frmDetails.secondaryMobile = '+2542334567'
+			frmDetails.email = 'gaga@gmail.com'
 			btnSave.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('address', 'Address', '+2541234567')
 			Contact.findByName('Kate') != null
+			assertFieldDetailsCorrect('name', 'Name', 'Kate')
+			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
+			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
 			$('#groups-submenu .selected').text() == 'Excellent'
 	  	cleanup:
 	  		g.delete()

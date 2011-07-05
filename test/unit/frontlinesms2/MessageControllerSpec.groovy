@@ -8,8 +8,8 @@ class MessageControllerSpec extends ControllerSpec {
 		mockDomain Fmessage
 		mockParams.messageText = "text"
 		controller.messageSendService = new MessageSendService()
-		def sahara = new Group(name: "Sahara", members: [new Contact(address: "12345"),new Contact(address: "56484")])
-		def thar = new Group(name: "Thar", members: [new Contact(address: "12121"), new Contact(address: "22222")])
+		def sahara = new Group(name: "Sahara", members: [new Contact(primaryMobile: "12345"),new Contact(primaryMobile: "56484")])
+		def thar = new Group(name: "Thar", members: [new Contact(primaryMobile: "12121"), new Contact(primaryMobile: "22222")])
 		mockDomain Group, [sahara, thar]
 	}
 

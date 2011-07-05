@@ -5,10 +5,10 @@
 		<g:each in="${contactInstanceList}" status="i" var="c">
 			<li class="${c == contactInstance ? 'selected' : ''}">
 				<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-					<g:link controller="contact" action="show" params="[contactId:c.id, groupId:contactsSection.id]">${c.name?:c.address?:'[No Name]'}</g:link>
+					<g:link controller="contact" action="show" params="[contactId:c.id, groupId:contactsSection.id]">${c.name?:c.primaryMobile?:'[No Name]'}</g:link>
 				</g:if>
 				<g:else>
-					<g:link action="show" id="${c.id}">${c.name?:c.address?:'[No Name]'}</g:link>
+					<g:link action="show" id="${c.id}">${c.name?:c.primaryMobile?:'[No Name]'}</g:link>
 				</g:else>
 			</li>
 		</g:each>

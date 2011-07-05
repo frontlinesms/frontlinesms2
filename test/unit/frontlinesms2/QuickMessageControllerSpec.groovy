@@ -5,7 +5,7 @@ import grails.plugin.spock.ControllerSpec
 class QuickMessageControllerSpec extends ControllerSpec {
 
 	def setup() {
-		def jim = new Contact(name:"jim", address:"12345")
+		def jim = new Contact(name:"jim", primaryMobile:"12345")
 		def mohave = new Group(name:"Mojave", members: [jim])
 		mockDomain Contact, [jim]
 		mockDomain Group, [mohave]
