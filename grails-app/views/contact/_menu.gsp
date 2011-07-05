@@ -10,7 +10,9 @@
 					<g:link class="create group" action="createGroup">Group</g:link>
 				</li>
 				<li id="manage-subscription">
-					<g:render template="manage_subscription"/>
+					<g:remoteLink controller="group" action="list" onSuccess="launchWizard('manage_subscription', data);">
+						Manage Subscription
+					</g:remoteLink>
 				</li>
 			</ol>
 		</li>
