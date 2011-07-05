@@ -9,6 +9,9 @@
 				<li id="create-group">
 					<g:link class="create group" action="createGroup">Group</g:link>
 				</li>
+				<li id="manage-subscription">
+					<g:render template="manage_subscription"/>
+				</li>
 			</ol>
 		</li>
 		<li>
