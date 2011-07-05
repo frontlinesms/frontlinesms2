@@ -18,7 +18,7 @@ class ContactSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Contact)
 		when:
-			def noNameContact = new Contact(name:'', address:'9876543')
+			def noNameContact = new Contact(name:'', primaryMobile:'9876543')
 			def namedContact = new Contact(name:'a')
 		then:
 			noNameContact.validate()
@@ -72,11 +72,11 @@ class ContactSpec extends UnitSpec {
 
 	def "should return the count of all messages sent to a given contact"() {
 		setup:
-			String johnsAddress = "9876543210"
-			Contact contact = new Contact(name: "John", address: johnsAddress)
-			mockDomain Fmessage, [new Fmessage(dst: johnsAddress, deleted: false),
-					new Fmessage(dst: johnsAddress, deleted: true),
-					new Fmessage(dst: johnsAddress, deleted: true)]
+			String johnsprimaryMobile = "9876543210"
+			Contact contact = new Contact(name: "John", primaryMobile: johnsprimaryMobile)
+			mockDomain Fmessage, [new Fmessage(dst: johnsprimaryMobile, deleted: false),
+					new Fmessage(dst: johnsprimaryMobile, deleted: true),
+					new Fmessage(dst: johnsprimaryMobile, deleted: true)]
 	    when:
 	        def count = contact.inboundMessagesCount
 	    then:
@@ -86,7 +86,7 @@ class ContactSpec extends UnitSpec {
 	def "should return the count of all messages received from a given contact"() {
 		setup:
 			String georgesAddress = "1234567890"
-			Contact contact = new Contact(name: "George", address: georgesAddress)
+			Contact contact = new Contact(name: "George", primaryMobile: georgesAddress)
 			mockDomain Fmessage, [new Fmessage(dst: georgesAddress, deleted: false),
 					new Fmessage(src: georgesAddress, deleted: true),
 					new Fmessage(src: georgesAddress, deleted: false),
@@ -134,5 +134,40 @@ class ContactSpec extends UnitSpec {
         then:
 			!c.validate()
    }
+   
+	def "the email address field can only contain a valid email address"() {
+        setup:
+			mockForConstraintsTests(Contact)
+		when:
+			def c = new Contact(name: "Tim", email: "yaya")
+        then:
+        	!c.validate()
+		when:
+			 c = new Contact(name: "Tim", email: "yaya@")
+        then:
+        	!c.validate()
+		when:
+			c = new Contact(name: "Tim", email: "yaya@gmail.com")
+        then:
+        	c.validate()
+    }
+	
+	def "a contact can contain both primary and secondary mobile numbers"() {
+		setup:
+			mockForConstraintsTests(Contact)
+        when:
+			def c = new Contact(name: "Tim", primaryMobile: "+0724 356271", secondaryMobile: "+0723 467529")
+        then:
+        	c.validate()
+	}
+	
+	def "a contact cannot contain the same primary and secondary mobile numbers"() {
+		setup:
+			mockForConstraintsTests(Contact)
+        when:
+			def c = new Contact(name: "Tim", primaryMobile: "+0724 356271", secondaryMobile: "+0724 356271")
+        then:
+        	!c.validate()
+	}
 }
 

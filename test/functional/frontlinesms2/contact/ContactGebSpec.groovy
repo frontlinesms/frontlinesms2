@@ -5,8 +5,8 @@ import frontlinesms2.*
 class ContactGebSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestContacts() {	
-		[new Contact(name: 'Alice', address: '+2541234567', notes: 'notes'),
-			new Contact(name: 'Bob', address: '+254987654')].each() { it.save(failOnError:true) }
+		[new Contact(name: 'Alice', primaryMobile: '+2541234567', notes: 'notes'),
+			new Contact(name: 'Bob', primaryMobile: '+254987654', secondaryMobile: "+232345675", email: "bob@bob.com")].each() { it.save(failOnError:true) }
 	}
 
 	static createTestGroups() {

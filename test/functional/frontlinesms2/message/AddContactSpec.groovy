@@ -9,7 +9,7 @@ class AddContactSpec extends MessageGebSpec {
 			def contactlessMessage = Fmessage.findBySrc('+254778899')
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
-			!Contact.findByAddress(contactlessMessage.src)
+			!Contact.findByPrimaryMobile(contactlessMessage.src)
 			$('#message-details p:nth-child(1)').text() == '+254778899'
 		cleanup:
 			deleteTestMessages()
@@ -23,7 +23,7 @@ class AddContactSpec extends MessageGebSpec {
 			go "message/inbox/show/${message.id}"
 
 		then:
-			Contact.findByAddress(message.src)
+			Contact.findByPrimaryMobile(message.src)
 			$('#message-details p:nth-child(1)').text() == 'Alice'
 		cleanup:
 			deleteTestMessages()
@@ -39,9 +39,8 @@ class AddContactSpec extends MessageGebSpec {
 			assert btnAddContact instanceof geb.navigator.NonEmptyNavigator
 			btnAddContact.click()
 		then:
-			$('#contact-details').address == "+254778899"
+			$('#contact-details').primaryMobile == "+254778899"
 		cleanup:
 			deleteTestMessages()
 	}
 }
-

@@ -20,9 +20,9 @@
 					<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 					<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 				</div>
-				<div id="address">
-					<label for="address"><g:message code="contact.address.label" default="Address"/></label>
-					<g:textField name="address" id="address" value="${contactInstance?.address}"/>
+				<div id="primaryMobile">
+					<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile"/></label>
+					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 				</div>
 			</div>
 			<div class="buttons">
