@@ -106,14 +106,35 @@ class ContactShowSpec extends ContactGebSpec {
 	        $('div#tabs-1').displayed
 	}
 	
-	def "'Send Message' link is not displayed if adjacent field is blank"() {
+	def "'send Message' link should not displayed for blank addresses"() {
 		given:
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			println ">>>"+$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=")*.text()
 		then:
 			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=")*.text() == []
+	}
+	
+	def "sending a message to a contact address updates the statistics"() {
+		given:
+	  		def alice = Contact.findByName('Alice')
+		when:
+	  		go "contact/show/${alice.id}"
+			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=2541234567").click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+			waitFor {$('div#tabs-2').displayed}	
+			$("div#tabs-2 .next").click()
+			waitFor {$('div#tabs-3').displayed}
+        	$("#sendMsg").click()
+		then:
+            $("title").text() == "Sent"
+		when:
+	  		go "contact/show/${alice.id}"
+		then:
+	        $("#message-count p").first().text() == '1 messages sent'
+	        $("#message-count p").last().text() == '0 messages received'
+		
 	}
 
 	def assertContactSelected(String name) {
