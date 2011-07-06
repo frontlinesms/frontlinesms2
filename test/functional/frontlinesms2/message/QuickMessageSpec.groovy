@@ -81,6 +81,10 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		$("div#tabs-2 .next").click()
 		waitFor {$('div#tabs-3').displayed}		
 	}
+	def loadQuickMessageDialog() {
+		$("a.quick_message").click()
+		waitFor {$('div#tabs-1').displayed}
+	}
 }
 
 class SentMessagesPage extends geb.Page {
