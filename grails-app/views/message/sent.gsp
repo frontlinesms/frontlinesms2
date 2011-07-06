@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="messages" />
-        <title>Pending</title>
+        <title>Sent</title>
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
