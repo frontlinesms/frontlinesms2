@@ -5,7 +5,7 @@
 		<li><a href="#tabs-1">Select Group</a></li>
 		<li><a href="#tabs-2">Specify Keyword</a></li>
 	</ul>
-	<g:formRemote name="manage-subscription" url="${[action:'update']}" method="post">
+	<g:form name="manage-subscription" url="${[action:'update']}" method="post">
 		<div id="tabs-1">
 		<label>Select Group</label>
 				<div>
@@ -20,11 +20,9 @@
 			<div> <label>Unsubscribe Keyword</label> <g:textField name="unsubscribeKeyword" /> </div>
 			<g:submitButton name="submit">Submit</g:submitButton>
 		</div>
-	</g:formRemote>
+	</g:form>
 </div>
 </div>
-
-
 
 
 
