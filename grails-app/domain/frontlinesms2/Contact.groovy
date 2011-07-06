@@ -61,8 +61,8 @@ class Contact {
 
 	def getOutboundMessagesCount() {
 		def primary = primaryMobile? Fmessage.countBySrc(primaryMobile): 0
-		def secondary = secondaryMobile? Fmessage.countByDst(secondaryMobile): 0
-		def email = email? Fmessage.countByDst(email): 0
+		def secondary = secondaryMobile? Fmessage.countBySrc(secondaryMobile): 0
+		def email = email? Fmessage.countBySrc(email): 0
 		primary + secondary + email
 	}
 }
