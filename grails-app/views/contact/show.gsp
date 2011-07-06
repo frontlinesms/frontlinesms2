@@ -32,14 +32,23 @@
 				<div class="field">
 					<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
+					<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.primaryMobile]" onSuccess="loadContents(data);" class="quick_message">
+					Send Message
+					</g:remoteLink>
 				</div>
 				<div class="field">
 					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
+					<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.secondaryMobile]" onSuccess="loadContents(data);" class="quick_message">
+					Send Message
+					</g:remoteLink>
 				</div>
 			   <div class="field">
 					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
+					<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
+					Send Message
+					</g:remoteLink>
 				</div>
 				<ol id="custom-field-list">
 				  <g:each in="${contactFieldInstanceList}" status="i" var="f">

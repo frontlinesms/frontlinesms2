@@ -10,6 +10,7 @@
 	</head>
 	<body>
 		<g:render template="/tabs"/>
+		<g:render template="/message/quick_message"/>
 		<g:render template="/flash"/>
 		<div id="main">
 			<g:render template="menu"/>

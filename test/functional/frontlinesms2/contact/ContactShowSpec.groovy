@@ -94,6 +94,39 @@ class ContactShowSpec extends ContactGebSpec {
 		cleanup:
 			deleteTestGroups()
 	}
+	
+	def "clicking on 'Send Message' should redirect to quick message dialog"() {
+		given:
+	  		def alice = Contact.findByName('Alice')
+		when:
+	  		go "contact/show/${alice.id}"
+			$("a:nth-child(1) .quickMessage").click()
+			waitFor {$('div#tabs-1').displayed}
+		then:
+	        $('div#tabs-1').displayed
+		when:
+	  		go "contact/show/${alice.id}"
+			$("a:nth-child(2) .quickMessage").click()
+			waitFor {$('div#tabs-1').displayed}
+		then:
+	        $('div#tabs-1').displayed
+		when:
+	  		go "contact/show/${alice.id}"
+			$("a:nth-child(3) .quickMessage").click()
+			waitFor {$('div#tabs-1').displayed}
+		then:
+	        $('div#tabs-1').displayed
+	}
+	
+	def "'Send Message' link is not displayed if adjacent field is blank"() {
+		given:
+	  		def alice = Contact.findByName('Alice')
+		when:
+	  		go "contact/show/${alice.id}"
+		then:
+			//Solve problem by adding g:if tag
+	        false //FIXME
+	}
 
 	def assertContactSelected(String name) {
 		def selectedChildren = $('#contacts').children('li.selected')
