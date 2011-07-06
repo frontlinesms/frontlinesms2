@@ -25,6 +25,6 @@ class GroupControllerSpec extends ControllerSpec {
 			def group = Group.get(2L)
 			group.subscriptionKey == "JOIN"
 			group.unsubscriptionKey == "REMOVE"
-			controller.flash.message == "Group saved successfully"
+			controller.flash.message == "Group updated successfully"
 	}
 }
