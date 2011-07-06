@@ -34,7 +34,5 @@
 	});
 
 </script>
-<g:remoteLink controller="quickMessage" action="create" onSuccess="loadContents(data);" class="quick_message">
-	Quick Message
-</g:remoteLink>
+
 

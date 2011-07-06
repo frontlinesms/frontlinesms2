@@ -70,7 +70,7 @@ class ContactShowSpec extends ContactGebSpec {
 			go "contact/show/${alice.id}"
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Alice')
-			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
+			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '2541234567')
 			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
 	}
 
@@ -100,19 +100,7 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			$("a:nth-child(1) .quickMessage").click()
-			waitFor {$('div#tabs-1').displayed}
-		then:
-	        $('div#tabs-1').displayed
-		when:
-	  		go "contact/show/${alice.id}"
-			$("a:nth-child(2) .quickMessage").click()
-			waitFor {$('div#tabs-1').displayed}
-		then:
-	        $('div#tabs-1').displayed
-		when:
-	  		go "contact/show/${alice.id}"
-			$("a:nth-child(3) .quickMessage").click()
+			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=2541234567").click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 	        $('div#tabs-1').displayed
@@ -123,9 +111,9 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
+			println ">>>"+$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=")*.text()
 		then:
-			//Solve problem by adding g:if tag
-	        false //FIXME
+			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=")*.text() == []
 	}
 
 	def assertContactSelected(String name) {
