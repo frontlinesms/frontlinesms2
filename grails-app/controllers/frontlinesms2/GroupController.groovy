@@ -11,7 +11,9 @@ class GroupController {
 		def group = Group.get(params['id'])
 		group.properties = params
 		if(group.save(failOnError: true, flush: true))
-			flash['message'] = "Group saved successfully"
-		
+			flash['message'] = "Group updated successfully"
+		else
+			render("Group not updated")
+		redirect(action: "list", controller: "contact")
 	}
 }
