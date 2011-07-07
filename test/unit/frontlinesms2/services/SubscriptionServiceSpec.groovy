@@ -58,6 +58,19 @@ class SubscriptionServiceSpec extends UnitSpec {
 			!Group.findByName("MAC").members
 	}
 
+	def "should process subscription messages without case sensitivity"() {
+ 		setup:
+			Exchange mockExchange = Mock()
+			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "add") }
+			mockDomain(Group, [new Group(name:"WINDOWS", subscriptionKey:"ADDME" , unsubscriptionKey:"REMOVEME"),
+									new Group(name:"MAC", subscriptionKey:"ADD" ,unsubscriptionKey:"REMOVE")])
+		when:
+			service.process(mockExchange)
+		then:
+			Group.findByName("MAC").members
+			!Group.findByName("WINDOWS").members
+	}
+
 	def "should process subscription messages with white space"() {
  		setup:
 			Exchange mockExchange = Mock()
