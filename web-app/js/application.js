@@ -25,6 +25,10 @@ function launchWizard(title, html) {
 	$("#tabs").tabs();
 }
 
+function isEmpty(selector) {
+	return !$(selector).val();
+}
+
 function moveToTabBy(index) {
 	var tabWidget = $('#tabs').tabs();
 	var selected = tabWidget.tabs('option', 'selected')
