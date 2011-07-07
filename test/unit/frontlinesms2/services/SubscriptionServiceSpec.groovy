@@ -20,7 +20,7 @@ class SubscriptionServiceSpec extends UnitSpec {
 			service = new SubscriptionService()
 			Exchange mockExchange = Mock()
 			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "ADD") }
-			def contact = new Contact(address: "9533326555")
+			def contact = new Contact(primaryMobile: "9533326555")
 			mockDomain(Contact, [contact])
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" , 
 											unsubscriptionKey:"REMOVE")])
@@ -35,7 +35,7 @@ class SubscriptionServiceSpec extends UnitSpec {
 			service = new SubscriptionService()
 			Exchange mockExchange = Mock()
 			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "REMOVE") }
-			def contact = new Contact(address: "9533326555")
+			def contact = new Contact(primaryMobile: "9533326555")
 			mockDomain(Contact, [contact])
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
 											unsubscriptionKey:"REMOVE", members: [contact])])

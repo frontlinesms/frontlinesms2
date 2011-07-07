@@ -12,12 +12,12 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
-function launchWizard(id, html) {
-	$("<div id=" + id + "><div>").html(html).appendTo(document.body);
-	$("#" + id).dialog(
+function launchWizard(title, html) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#modalBox").dialog(
 		{
 			modal: true,
-			title: "Manage Subscription",
+			title: title,
 			width: 600,
 			close: function() { $(this).remove(); }
 		}

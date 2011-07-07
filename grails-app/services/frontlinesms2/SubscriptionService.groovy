@@ -19,7 +19,7 @@ class SubscriptionService implements Processor {
 	}
 
 	private Contact findOrCreateContact(String src) {
-		return Contact.findByAddress(src) ?: new Contact(address: src)
+		return Contact.findByPrimaryMobileOrSecondaryMobile(src, src) ?: new Contact(primaryMobile: src)
 	}
 	
 	 Fmessage getMessage(Exchange exchange) {
