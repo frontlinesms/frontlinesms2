@@ -2,6 +2,8 @@ package frontlinesms2
 
 import org.apache.camel.Exchange
 import org.apache.camel.Processor
+import java.util.regex.Pattern
+import java.text.Normalizer
 
 class SubscriptionService implements Processor {
 	static transactional = false
@@ -9,7 +11,8 @@ class SubscriptionService implements Processor {
 	void process(Exchange exchange) {
 		Fmessage message = getMessage(exchange)
 		def address = message.src
-		def keyword = getKeyword(message.text.replaceAll(/\s/, ''))
+		def msgText = message.text
+		def keyword = getKeyword(msgText.trim())
 		def groupToAdd = Group.findBySubscriptionKey(keyword)
 		def groupToRemove = Group.findByUnsubscriptionKey(keyword)
 		groupToAdd?.addToMembers(findOrCreateContact(address))

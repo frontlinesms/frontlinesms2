@@ -61,7 +61,7 @@ class SubscriptionServiceSpec extends UnitSpec {
 	def "should process subscription messages with white space"() {
  		setup:
 			Exchange mockExchange = Mock()
-			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "AD${WHITE_SPACE}D" ) }
+			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "${WHITE_SPACE}ADD${WHITE_SPACE}" ) }
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
 											unsubscriptionKey:"REMOVE")])
 		when:
