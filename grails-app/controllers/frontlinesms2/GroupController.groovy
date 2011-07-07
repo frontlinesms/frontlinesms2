@@ -18,4 +18,9 @@ class GroupController {
 			flash['message'] = "Group not saved successfully"
 		redirect(action: "list", controller: "contact")
 	}
+
+	//FIXME: Need to refactor all group related activities from ContactController
+	def show = {
+		redirect(controller: "contact", action: "list", params:[groupId : params.id])
+	}
 }
