@@ -5,7 +5,7 @@
 		<li><a href="#tabs-1">Select Group</a></li>
 		<li><a href="#tabs-2">Specify Keyword</a></li>
 	</ul>
-	<g:form name="manage-subscription" url="${[action:'update']}" method="post">
+	<g:form name="manage-subscription" url="${[action:'update']}" method="post" onsubmit="return !isEmpty('#subscriptionKey') && !isEmpty('#unsubscriptionKey')">
 		<div id="tabs-1">
 		<label>Select Group</label>
 				<div>
