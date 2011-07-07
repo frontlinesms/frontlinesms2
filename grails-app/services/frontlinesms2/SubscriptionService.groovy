@@ -9,9 +9,9 @@ class SubscriptionService implements Processor {
 	void process(Exchange exchange) {
 		Fmessage message = getMessage(exchange)
 		def address = message.src
-		def firstWord = message.text.split(" ")[0]
-		def groupToAdd = Group.findBySubscriptionKey(firstWord)
-		def groupToRemove = Group.findByUnsubscriptionKey(firstWord)
+		def keyword = getKeyword(message.text.replaceAll(/\s/, ''))
+		def groupToAdd = Group.findBySubscriptionKey(keyword)
+		def groupToRemove = Group.findByUnsubscriptionKey(keyword)
 		groupToAdd?.addToMembers(findOrCreateContact(address))
 		groupToRemove?.removeFromMembers(findOrCreateContact(address))
 		groupToAdd?.save()
@@ -21,8 +21,18 @@ class SubscriptionService implements Processor {
 	private Contact findOrCreateContact(String src) {
 		return Contact.findByPrimaryMobileOrSecondaryMobile(src, src) ?: new Contact(primaryMobile: src)
 	}
-	
-	 Fmessage getMessage(Exchange exchange) {
+
+	private def getKeyword(message) {
+		def keyword =""
+		message.find {
+			if (!Character.isLetterOrDigit(it.toCharacter())) return true
+				keyword += it
+				return false
+		}
+		return keyword
+	}
+
+	Fmessage getMessage(Exchange exchange) {
 		return new Fmessage()
 	}
 }
