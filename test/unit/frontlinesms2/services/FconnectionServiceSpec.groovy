@@ -1,8 +1,11 @@
-package frontlinesms2
+package frontlinesms2.services
 
 import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.CamelContext
+import frontlinesms2.FconnectionService
+import frontlinesms2.Fconnection
+import frontlinesms2.RouteStatus
 
 class FconnectionServiceSpec extends UnitSpec  {
 	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {
