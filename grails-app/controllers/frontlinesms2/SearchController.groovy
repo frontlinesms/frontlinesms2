@@ -2,20 +2,36 @@ package frontlinesms2
 
 class SearchController {
 	def index = {
-		def groupInstance = params.groupId? Group.get(params.groupId): null
+		redirect(action:'no_search')
+	}
+	
+	def no_search = {
 		def activityInstance = getActivityInstance()
-		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-		def results = Fmessage.search(params.searchString, groupInstance, messageOwners)
-		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
-				groupInstanceList : Group.findAll(),
-				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
-				searchString: params.searchString,
-				groupInstance: groupInstance,
+		[searchString: params.searchString,
 				activityInstance: activityInstance,
 				activityId: params.activityId,
-				messageInstanceList: results,
-				messageInstanceTotal: results?.size()]
+				groupInstanceList : Group.findAll(),
+				folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
+	}
+	
+	def result = {
+		def groupInstance = params.groupId? Group.get(params.groupId): null
+		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
+		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners)
+		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),,
+				messageSection: 'search',
+				messageInstanceList: searchResults,
+				messageInstanceTotal: searchResults?.size()] << show(searchResults) << no_search()
+	}
+	
+	def show = { searchResults ->
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) :searchResults[0]
+		if (messageInstance && !messageInstance.read) {
+			messageInstance.read = true
+			messageInstance.save()
+		}
+		[messageInstance: messageInstance]
 	}
 	
 	private def getSearchDescription(searchString, group, activity) {

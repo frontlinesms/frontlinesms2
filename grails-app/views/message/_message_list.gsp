@@ -11,7 +11,6 @@
 		} else {
 			$("#"+object).empty().append("Add Star");
 		}
-		
 	}
 </script>
 <g:if test="${messageInstanceTotal > 0}">
@@ -28,7 +27,7 @@
 			<g:each in="${messageInstanceList }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
 					<td>
-					  <g:remoteLink action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
+					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
 								${m.starred?'Remove Star':'Add Star'}
 							</div>
@@ -77,6 +76,6 @@
 </g:if>
 <g:else>
 	<div id="messages">
-		You have no messages saved
+		No messages
 	</div>
 </g:else>
