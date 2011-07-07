@@ -28,7 +28,6 @@ class GroupControllerSpec extends ControllerSpec {
 			controller.flash.message == "Group updated successfully"
 			controller.redirectArgs.controller == 'contact'
 			controller.redirectArgs.action == 'list'
-			
 	}
 
 	def "should error for invalid subscription keywords"() {
