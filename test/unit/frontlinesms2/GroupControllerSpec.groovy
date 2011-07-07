@@ -26,8 +26,7 @@ class GroupControllerSpec extends ControllerSpec {
 			group.subscriptionKey == "JOIN"
 			group.unsubscriptionKey == "REMOVE"
 			controller.flash.message == "Group updated successfully"
-			controller.redirectArgs.controller == 'contact'
-			controller.redirectArgs.action == 'list'
+			assertRedirectArgs()
 	}
 
 	def "should error for invalid subscription keywords"() {
@@ -42,8 +41,7 @@ class GroupControllerSpec extends ControllerSpec {
 			controller.update()
 		then:
 			controller.flash.message == "Group not saved successfully"
-			controller.redirectArgs.controller == 'contact'
-			controller.redirectArgs.action == 'list'
+			assertRedirectArgs()
 	}
 
 	def "should not error when a group which already has subscription keywords is updated"() {
@@ -57,9 +55,27 @@ class GroupControllerSpec extends ControllerSpec {
 			controller.update()
 		then:
 			controller.flash.message == "Group updated successfully"
-			controller.redirectArgs.controller == 'contact'
-			controller.redirectArgs.action == 'list'
-		
+			assertRedirectArgs()
 	}
+
+	def "test group show"() {
+		setup:
+			mockParams.id = 3L
+		when:
+			controller.show()
+		then:
+			assert controller.redirectArgs.controller == 'contact'
+			assert controller.redirectArgs.action == 'list'
+			assert controller.redirectArgs.params.groupId == 3L
+
+	}
+
+	private def assertRedirectArgs() {
+		assert controller.redirectArgs.controller == 'contact'
+		assert controller.redirectArgs.action == 'list'
+		assert controller.redirectArgs.params.flashMessage == controller.flash.message
+		true
+	}
+
 
 }

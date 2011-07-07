@@ -16,7 +16,7 @@ class GroupController {
 		}
 		else
 			flash['message'] = "Group not saved successfully"
-		redirect(action: "list", controller: "contact")
+		redirect(action: "list", controller: "contact", params:[flashMessage:flash.message])
 	}
 
 	//FIXME: Need to refactor all group related activities from ContactController
