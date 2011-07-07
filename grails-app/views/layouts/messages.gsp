@@ -12,7 +12,7 @@
 	<body>
 		<g:render template="/tabs"/>
 		<g:render template="quick_message"/>
-		<g:remoteLink controller="quickMessage" action="create" onSuccess="loadContents(data);" class="quick_message">
+		<g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" class="quick_message">
 			Quick Message
 		</g:remoteLink>
         <g:render template="/flash"/>
