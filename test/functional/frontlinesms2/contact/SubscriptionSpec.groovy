@@ -15,16 +15,20 @@ class SubscriptionSpec extends GroupGebSpec  {
 			$("#manage-subscription a").click()
 			waitFor { $('div#tabs-1').displayed}
 		then:
-			println $("input", name:"id")
 			$("input", name:"id")[0].click()
 		when:
 			$(".next").click()
 	    then:
-			$("input", name:"subscribeKeyword").value("ADD")
-			$("input", name:"unsubscribeKeyword").value("REMOVE")
+			$("input", name:"subscriptionKey").value("ADD")
+			$("input", name:"unsubscriptionKey").value("REMOVE")
 			$("input", type:"submit").click()
-		    waitFor({title = 'Contacts'})
-			$('div.flash').contains('Group updated successfully')
+		    waitFor({title == 'Contacts'})
+			$('div.flash').text().contains('Group updated successfully')
+			def groupUpdated = Group.findByName("Listeners").refresh()
+			groupUpdated.subscriptionKey == "ADD"
+			groupUpdated.unsubscriptionKey == "REMOVE"
+		cleanup:
+			Group.list()*.delete(flush: true)
 	}
 }
 

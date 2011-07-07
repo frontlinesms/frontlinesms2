@@ -16,8 +16,8 @@
 		<g:link url="#" class="next">Next</g:link>
 	</div>
 		<div id="tabs-2">
-			<div> <label>Subscribe Keyword</label> <g:textField name="subscribeKeyword"/> </div>
-			<div> <label>Unsubscribe Keyword</label> <g:textField name="unsubscribeKeyword" /> </div>
+			<div> <label>Subscribe Keyword</label> <g:textField name="subscriptionKey"/> </div>
+			<div> <label>Unsubscribe Keyword</label> <g:textField name="unsubscriptionKey" /> </div>
 			<g:submitButton name="submit">Submit</g:submitButton>
 		</div>
 	</g:form>
