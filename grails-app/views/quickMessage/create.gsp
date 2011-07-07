@@ -35,13 +35,20 @@
 			<g:each in="${contactList}" var="contact">
 				<div>
 					<input type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
-						${contact.name ?: contact.primaryMobile} <g:if test="${recipients.contains(contact.secondaryMobile)}">(Primary)</g:if>
+						${contact.name ?: contact.primaryMobile} <g:if test="${recipients.contains(contact.secondaryMobile) || recipients.contains(contact.email)}">(Primary)</g:if>
 					</input>
 				</div>
 				<div>
 					<g:if test="${recipients.contains(contact.secondaryMobile)}">
 						<input type="checkbox" name="addresses" value="${contact.secondaryMobile}" checked>
 							${contact.name ?: contact.secondaryMobile} (Secondary)
+						</input>
+					</g:if>
+				</div>
+				<div>
+					<g:if test="${recipients.contains(contact.email)}">
+						<input type="checkbox" name="addresses" value="${contact.email}" checked>
+							${contact.name ?: contact.email} (Email)
 						</input>
 					</g:if>
 				</div>
