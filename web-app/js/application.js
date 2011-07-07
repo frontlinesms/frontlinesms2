@@ -11,3 +11,32 @@ if (Ajax && (Ajax != null)) {
 	  }
 	});
 }
+
+function launchWizard(title, html) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#modalBox").dialog(
+		{
+			modal: true,
+			title: title,
+			width: 600,
+			close: function() { $(this).remove(); }
+		}
+	);
+	$("#tabs").tabs();
+}
+
+function moveToTabBy(index) {
+	var tabWidget = $('#tabs').tabs();
+	var selected = tabWidget.tabs('option', 'selected')
+	tabWidget.tabs('select', selected + index);
+	return false;
+}
+
+$('.next').live('click', function() {
+	return moveToTabBy(1);
+});
+
+$('.back').live('click', function() {
+	return moveToTabBy(-1);
+});
+
