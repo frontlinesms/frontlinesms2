@@ -8,7 +8,7 @@ class QuickMessageController {
 		[contactList: contacts,
 			groupList:Group.getGroupDetails(),
 			recipients:recipients,
-			nonExistingRecipients:recipients - (recipients.intersect(contacts*.getPrimaryMobile())) - (recipients.intersect(contacts*.getSecondaryMobile()))]
+			nonExistingRecipients:recipients - (recipients.intersect(contacts*.getPrimaryMobile())) - (recipients.intersect(contacts*.getSecondaryMobile())) - (recipients.intersect(contacts*.getEmail()))]
 
 	}
 }
