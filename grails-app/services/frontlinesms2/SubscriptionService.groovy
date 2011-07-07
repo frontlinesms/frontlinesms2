@@ -13,8 +13,8 @@ class SubscriptionService implements Processor {
 		def address = message.src
 		def msgText = message.text
 		def keyword = getKeyword(msgText.trim())
-		def groupToAdd = Group.findBySubscriptionKey(keyword)
-		def groupToRemove = Group.findByUnsubscriptionKey(keyword)
+		def groupToAdd = Group.findBySubscriptionKeyIlike(keyword)
+		def groupToRemove = Group.findByUnsubscriptionKeyIlike(keyword)
 		groupToAdd?.addToMembers(findOrCreateContact(address))
 		groupToRemove?.removeFromMembers(findOrCreateContact(address))
 		groupToAdd?.save()
