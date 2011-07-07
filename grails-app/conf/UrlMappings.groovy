@@ -6,8 +6,7 @@ class UrlMappings {
 			controller = 'contact'
 			action = 'show'
 		}
-		"/group/show/$groupId"(controller:'contact') {}
-
+		
 		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
 
 		"/message/poll/$ownerId"(controller:'message', action:'poll') {}

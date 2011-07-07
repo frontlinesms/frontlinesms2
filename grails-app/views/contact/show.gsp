@@ -2,8 +2,6 @@
 <html>
     <head>
         <meta name="layout" content="contacts" />
-		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources />
 		<g:javascript src="contact/show-groups.js"></g:javascript>
 		<g:javascript src="contact/show-fields.js"></g:javascript>
 		<script type="text/javascript">

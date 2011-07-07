@@ -1,10 +1,12 @@
-package frontlinesms2
+package frontlinesms2.services
 
 import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.Exchange
 
 import org.apache.camel.component.mail.MailEndpoint
+import frontlinesms2.EmailTranslationService
+import frontlinesms2.Fmessage
 
 class EmailTranslationServiceSpec extends UnitSpec {
 	@Shared

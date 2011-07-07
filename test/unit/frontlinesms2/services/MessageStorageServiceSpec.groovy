@@ -1,10 +1,12 @@
-package frontlinesms2
+package frontlinesms2.services
 
 import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.Exchange
 import org.apache.camel.CamelContext
+import frontlinesms2.MessageStorageService
+import frontlinesms2.Fmessage
 
 class MessageStorageServiceSpec extends UnitSpec {
 	@Shared
