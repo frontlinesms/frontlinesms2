@@ -6,21 +6,21 @@ class SearchController {
 	}
 	
 	def no_search = {
-		def activityInstance = getActivityInstance()
-		[searchString: params.searchString,
-				activityInstance: activityInstance,
-				activityId: params.activityId,
-				groupInstanceList : Group.findAll(),
+		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll()]
 	}
 	
 	def result = {
 		def groupInstance = params.groupId? Group.get(params.groupId): null
+		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
 		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners)
 		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),,
 				messageSection: 'search',
+				searchString: params.searchString,
+				groupInstance: groupInstance,
+				activityId: params.activityId,
 				messageInstanceList: searchResults,
 				messageInstanceTotal: searchResults?.size()] << show(searchResults) << no_search()
 	}
