@@ -25,6 +25,14 @@ function launchWizard(title, html) {
 	$("#tabs").tabs();
 }
 
+function isElementEmpty(selector) {
+	return $(selector).val().trim().length == 0;
+}
+
+function isRadioGroupChecked(radioName) {
+	return $('input[name=' + radioName + ']:checked').length > 0;
+}
+
 function moveToTabBy(index) {
 	var tabWidget = $('#tabs').tabs();
 	var selected = tabWidget.tabs('option', 'selected')
