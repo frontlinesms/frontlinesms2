@@ -25,8 +25,12 @@ function launchWizard(title, html) {
 	$("#tabs").tabs();
 }
 
-function isEmpty(selector) {
-	return !$(selector).val();
+function isElementEmpty(selector) {
+	return $(selector).val().trim().length == 0;
+}
+
+function isRadioGroupChecked(radioName) {
+	return $('input[name=' + radioName + ']:checked').length > 0;
 }
 
 function moveToTabBy(index) {

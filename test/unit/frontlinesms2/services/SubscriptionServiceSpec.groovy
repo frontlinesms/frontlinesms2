@@ -57,11 +57,23 @@ class SubscriptionServiceSpec extends UnitSpec {
 			!Group.findByName("MAC").members
 	}
 
-	def "should process subscription messages when unsubscribed"() {
-		setup:
-			def contact = Contact.list()[0]
+	def "should process subscription messages without case sensitivity"() {
+ 		setup:
 			Exchange mockExchange = Mock()
-			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "REMOVE") }
+			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "add") }
+			mockDomain(Group, [new Group(name:"WINDOWS", subscriptionKey:"ADDME" , unsubscriptionKey:"REMOVEME"),
+									new Group(name:"MAC", subscriptionKey:"ADD" ,unsubscriptionKey:"REMOVE")])
+		when:
+			service.process(mockExchange)
+		then:
+			Group.findByName("MAC").members
+			!Group.findByName("WINDOWS").members
+	}
+
+	def "should process subscription messages with white space"() {
+ 		setup:
+			Exchange mockExchange = Mock()
+			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "${WHITE_SPACE}ADD${WHITE_SPACE}" ) }
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
 											unsubscriptionKey:"REMOVE", members: [contact])])
 		when:
@@ -82,5 +94,15 @@ class SubscriptionServiceSpec extends UnitSpec {
 		then:
 			Group.findByName("MAC").members.contains(contact)
 	}
-
+	
+	def "should process subscription messages when unsubscribed"() {
+		setup:
+			def contact = Contact.list()[0]
+			Exchange mockExchange = Mock()
+			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "REMOVE") }
+		when:
+			service.process(mockExchange)
+		then:
+			!Group.findByName("MAC").members.contains(contact)
+	}
 }

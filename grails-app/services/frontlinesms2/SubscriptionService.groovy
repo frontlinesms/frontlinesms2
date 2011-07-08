@@ -10,9 +10,10 @@ class SubscriptionService implements Processor {
 	void process(Exchange exchange) {
 		Fmessage message = getMessage(exchange)
 		def address = message.src
-		def keyword = getKeyword(StringUtils.unAccent(message.text.trim()))
-		def groupToAdd = Group.findBySubscriptionKey(keyword)
-		def groupToRemove = Group.findByUnsubscriptionKey(keyword)
+		def msgText = message.text
+        def keyword = getKeyword(StringUtils.unAccent(msgText.trim()))
+		def groupToAdd = Group.findBySubscriptionKeyIlike(keyword)
+		def groupToRemove = Group.findByUnsubscriptionKeyIlike(keyword)
 		groupToAdd?.addToMembers(findOrCreateContact(address))
 		groupToRemove?.removeFromMembers(findOrCreateContact(address))
 		groupToAdd?.save()
