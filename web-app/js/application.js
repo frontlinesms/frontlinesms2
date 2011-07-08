@@ -29,8 +29,16 @@ function isElementEmpty(selector) {
 	return $(selector).val().trim().length == 0;
 }
 
-function isRadioGroupChecked(radioName) {
-	return $('input[name=' + radioName + ']:checked').length > 0;
+function isGroupChecked(groupName) {
+	return getSelectedGroupElements(groupName).length > 0;
+}
+
+function getSelectedGroupElements(groupName) {
+	return $('input[name=' + groupName + ']:checked');
+}
+
+function isDropDownSelected(id) {
+	return $("#" + id + " option:selected").length > 0
 }
 
 function moveToTabBy(index) {
