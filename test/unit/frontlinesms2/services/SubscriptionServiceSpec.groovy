@@ -14,6 +14,8 @@ import frontlinesms2.Group
 class SubscriptionServiceSpec extends UnitSpec {
 	@Shared
 	SubscriptionService service
+
+	String WHITE_SPACE = " "
 		
 	def setup() {
 		service = new SubscriptionService()
@@ -72,14 +74,15 @@ class SubscriptionServiceSpec extends UnitSpec {
 
 	def "should process subscription messages with white space"() {
  		setup:
+			def contact = Contact.list()[0]
 			Exchange mockExchange = Mock()
 			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "${WHITE_SPACE}ADD${WHITE_SPACE}" ) }
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
-											unsubscriptionKey:"REMOVE", members: [contact])])
+											unsubscriptionKey:"REMOVE")])
 		when:
 			service.process(mockExchange)
 		then:
-			!Group.findByName("MAC").members.contains(contact)
+			Group.findByName("MAC").members.contains(contact)
 	}
 	
 	def "should process subscription messages conflating accented characters"() {
@@ -100,6 +103,8 @@ class SubscriptionServiceSpec extends UnitSpec {
 			def contact = Contact.list()[0]
 			Exchange mockExchange = Mock()
 			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "REMOVE") }
+			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
+										unsubscriptionKey:"REMOVE", members: [contact])])
 		when:
 			service.process(mockExchange)
 		then:
