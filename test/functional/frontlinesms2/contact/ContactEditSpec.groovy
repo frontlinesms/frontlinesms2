@@ -53,6 +53,16 @@ class ContactEditSpec extends ContactGebSpec {
 	  	cleanup:
 	  		g.delete()
 	}
+	
+	 def "'send Message' link should not displayed for invalid email address"() {
+		when:
+			to AliceDetailsPage
+			frmDetails.primaryMobile = ''
+	  		frmDetails.email = 'gagasaas'
+			btnSave.click()
+		then:
+			$(".quick_message")*.text() == []
+	}
 }
 
 class AliceDetailsPage extends geb.Page {
