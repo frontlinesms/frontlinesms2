@@ -4,6 +4,11 @@ import frontlinesms2.*
 import java.util.regex.*
 
 class AddCustomFieldSpec extends grails.plugin.geb.GebSpec {
+	
+	def cleanup() {
+		Contact.findAll()*.delete(flush:true, failOnError:true)
+	}
+	
 	def "selecting add custom field from dropdown opens the popup"() {
 		when:
 			Contact bob = new Contact(name:'Bob').save(failOnError: true, flush: true)
