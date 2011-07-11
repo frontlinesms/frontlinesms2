@@ -74,6 +74,5 @@ class GroupSpec extends UnitSpec {
 		then:
 			!group.validate()
 	}
-
 }
 

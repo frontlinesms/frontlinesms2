@@ -4,6 +4,7 @@ import frontlinesms2.*
 
 import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.Keys
 
 class SubscriptionSpec extends GroupGebSpec  {
 
@@ -14,76 +15,120 @@ class SubscriptionSpec extends GroupGebSpec  {
 	def cleanup() {
 		Group.list()*.delete(flush: true)
 	}
-	              
+
+	def "should move to the next tab if all the values are provided"() {
+		when:
+			goToManageSubscriptions()
+			inputKeywords("subscriptionKey", "ADD")
+			inputKeywords("unsubscriptionKey", "REMOVE")
+			selectAValueFromDropDown()
+			$('.next-validate').click()
+			waitFor { $("#tabs-2").displayed }
+		then:
+			$("#tabs-2").displayed
+	}
+
 	def "should be able to set subscription keywords for a group"() {
 		when:
 			goToManageSubscriptions()
+			inputKeywords("subscriptionKey", "ADD")
+			inputKeywords("unsubscriptionKey", "REMOVE")
+			selectAValueFromDropDown()
+			$('.next-validate').click()
+			waitFor { $("#tabs-2").displayed }
+			$('.next').click()
+			waitFor { $("#tabs-3").displayed }
 		then:
-			$("input", name:"id")[0].click()
-		when:
-			$(".next").click()
-	    then:
-		    inputKeywords('subscriptionKey', 'ADD')
-		    inputKeywords('unsubscriptionKey', 'REMOVE')
 			$("input", type:"submit").click()
-		    waitFor({title == 'Contacts'})
+			waitFor({title == 'Contacts'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
 			groupUpdated.subscriptionKey == "ADD"
 			groupUpdated.unsubscriptionKey == "REMOVE"
 	}
 
-	def "should validate if all the elements are present"() {
+
+	def "should not go to the next tab if the subscription checkbox is selected and no value given"() {
 		when:
 			goToManageSubscriptions()
-			$(".next").click()
-			$("input", type:"submit").click()
+			inputKeywords("subscriptionKey", "")
+			selectAValueFromDropDown()
+			$('.next-validate').click()
+			waitFor { !($('div.error-panel').text().isEmpty())}
 		then:
-			$('.error').text().contains("please enter all the details")
+			$('.error-panel').text().contains("please enter all the details")
 	}
 
-	def "should not submit the form if the group is not selected"() {
+
+	def "should not go to the next tab if the unsubscription checkbox is selected and no value given"() {
 		when:
 			goToManageSubscriptions()
-			$(".next").click()
-			inputKeywords('subscriptionKey', 'ADD')
-			inputKeywords('unsubscriptionKey', 'REMOVE')
-			$("input", type:"submit").click()
+			inputKeywords("unsubscriptionKey", "")
+			selectAValueFromDropDown()
+			$('.next-validate').click()
+			waitFor { !($('div.error-panel').text().isEmpty())}
 		then:
-			$('.error').text().contains("please enter all the details")
+			$('.error-panel').text().contains("please enter all the details")
 	}
 
-	def "should not submit the form if subscription key is not entered"() {
+
+	def "should check the checkbox on click of subscription key text box"() {
 		when:
 			goToManageSubscriptions()
-			$("input", name:"id")[0].click()
-			$(".next").click()
-			inputKeywords('unsubscriptionKey', 'REMOVE')
-			$("input", type:"submit").click()
+			assert !$("input", value: "subscriptionKey").getAttribute("checked")
+			$("input", name: "subscriptionKey").click()
 		then:
-			$('.error').text().contains("please enter all the details")
+			$("input", value: "subscriptionKey").getAttribute("checked")
+
 	}
 
-	def "should not submit the form if unsubscription key is not entered"() {
+	def "should check the checkbox on click of unsubscription key text box"() {
 		when:
 			goToManageSubscriptions()
-			$("input", name:"id")[0].click()
-			$(".next").click()
-			inputKeywords('subscriptionKey', 'ADD')
-			$("input", type:"submit").click()
+			assert !$("input", value: "unsubscriptionKey").getAttribute("checked")
+			$("input", name: "unsubscriptionKey").click()
 		then:
-			$('.error').text().contains("please enter all the details")
+			$("input", value: "unsubscriptionKey").getAttribute("checked")
 	}
+
+	def "should not go to next tab if no group is selected"() {
+		when:
+			goToManageSubscriptions()
+			inputKeywords("subscriptionKey", "ADD")
+			inputKeywords("unsubscriptionKey", "REMOVE")
+			$('.next-validate').click()
+			waitFor { !($('div.error-panel').text().isEmpty())}
+
+		then:
+			$('.error-panel').text().contains("please enter all the details")
+	}
+
+	def "should not go to the next tab when all the fields are empty"() {
+		when:
+			goToManageSubscriptions()
+			$('.next-validate').click()
+			waitFor { !($('div.error-panel').text().isEmpty())}
+
+		then:
+			$('.error-panel').text().contains("please enter all the details")
+	}
+
 
 	private def goToManageSubscriptions() {
-		go "/frontlinesms2/contact"
+		go "/frontlinesms2/message"
 		$("#manage-subscription a").click()
 		waitFor { $('div#tabs-1').displayed}
 	}
 
 	private def inputKeywords(keyName, keyValue) {
-		$("input", name:keyName).value(keyValue)
+		def element  = $("input", name:keyName)
+		element.click()
+		element.value(keyValue)
 
+	}
+
+	private def selectAValueFromDropDown() {
+		$("#manage-subscription").id() << Keys.ARROW_DOWN
 	}
 
 
