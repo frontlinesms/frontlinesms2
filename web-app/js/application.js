@@ -26,7 +26,11 @@ function launchWizard(title, html) {
 }
 
 function isElementEmpty(selector) {
-	return $(selector).val().trim().length == 0;
+	return isEmpty($(selector).val());
+}
+
+function isEmpty(val) {
+	return val.trim().length == 0
 }
 
 function isGroupChecked(groupName) {
@@ -38,7 +42,8 @@ function getSelectedGroupElements(groupName) {
 }
 
 function isDropDownSelected(id) {
-	return $("#" + id + " option:selected").length > 0
+	var selectedOptions = $("#" + id + " option:selected")
+	return selectedOptions.length > 0  && (!isEmpty(selectedOptions[0].value))
 }
 
 function moveToTabBy(index) {
@@ -48,8 +53,17 @@ function moveToTabBy(index) {
 	return false;
 }
 
+function moveToNextTab(canMoveToNextTab, onValidationFail) {
+	if (canMoveToNextTab) {
+		return moveToTabBy(1);
+	}
+	else {
+		onValidationFail()
+		return false
+	}
+}
 $('.next').live('click', function() {
-	return moveToTabBy(1);
+	return moveToNextTab(true);
 });
 
 $('.back').live('click', function() {
