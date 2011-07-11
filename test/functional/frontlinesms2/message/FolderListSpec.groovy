@@ -89,6 +89,24 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			deleteTestMessages()
 
 	}
+	
+	def "should autopopulate the message body when 'forward' is clicked"() {
+		setup:
+			createTestFolders()
+			createTestMessages()
+		when:
+			def folder = Folder.findByName("Work")
+			def messages = folder.getMessages() as List
+			def message = messages[0]
+			go "message/folder/${folder.id}/show/${message.id}"
+		then:
+			$('a', text:'Forward').click()
+			waitFor {$('div#tabs-1').displayed}
+			$('textArea', name:'messageText').text() == "I will be late"
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
+	}
 }
 
 class FolderListPage extends geb.Page {
