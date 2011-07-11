@@ -15,6 +15,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			folderMessageSources == ['Jane', 'Max']
 		cleanup:
 			deleteTestFolders()
+			deleteTestMessages()
 	}
 
 	def "message's folder details are shown in list"() {
@@ -30,6 +31,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestFolders()
+			deleteTestMessages()
 	}
 
 	def 'selected folder is highlighted'() {
@@ -43,6 +45,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			selectedMenuItem.text() == 'Work'
 		cleanup:
 			deleteTestFolders()
+			deleteTestMessages()
 	}
 
 	def "should be able to reply for messages listed in the folder section"() {
@@ -96,9 +99,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestMessages()
 		when:
 			def folder = Folder.findByName("Work")
-			def messages = folder.getMessages() as List
-			def message = messages[0]
-			go "message/folder/${folder.id}/show/${message.id}"
+			go "message/folder/${folder.id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
 			$('a', text:'Forward').click()
 			waitFor {$('div#tabs-1').displayed}
