@@ -89,8 +89,8 @@ class Fmessage {
 		messages
 	}
 
-	static def getSentMessages(isStarred) {
-		def messages = Fmessage.createCriteria().list {
+	static def getSentMessages(isStarred, max, offset) {
+		def messages = Fmessage.createCriteria().list(max:max, offset: offset) {
 			and {
 				eq("deleted", false)                                
 				eq("status", MessageStatus.SENT)
@@ -117,8 +117,8 @@ class Fmessage {
 		messages
 	}
 
-	static def getDeletedMessages(isStarred) {
-		def messages = Fmessage.createCriteria().list {
+	static def getDeletedMessages(isStarred, max, offset) {
+		def messages = Fmessage.createCriteria().list(max: max, offset: offset) {
 			and {
 				eq("deleted", true)
 				if(isStarred)

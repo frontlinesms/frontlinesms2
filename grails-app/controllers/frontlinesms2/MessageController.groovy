@@ -23,7 +23,9 @@ class MessageController {
 	}
 
 	def trash = {
-		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.config.pagination.max
+		def offset = params.offset ?: 0
+		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'], max, offset)
 		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'trash'
 			[messageInstanceList: messageInstanceList,
@@ -43,7 +45,9 @@ class MessageController {
 	}
 
 	def sent = {
-		def messageInstanceList = Fmessage.getSentMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.config.pagination.max
+		def offset = params.offset ?: 0
+		def messageInstanceList = Fmessage.getSentMessages(params['starred'], max, offset)
 		messageInstanceList.each { it.updateDisplaySrc()}
 		[messageSection:'sent',
 				messageInstanceList:messageInstanceList,
@@ -61,8 +65,10 @@ class MessageController {
 	}
 
 	def poll = {
+		def max = params.max ?: GrailsConfig.config.pagination.max
+		def offset = params.offset ?: 0
 		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.getMessages(params['starred'])
+		def messageInstanceList = ownerInstance.getMessages(params['starred'], max, offset)
 		messageInstanceList.each { it.updateDisplaySrc() }
 
 		params.messageSection = 'poll'
@@ -74,8 +80,10 @@ class MessageController {
 	}
 	
 	def folder = {
+		def max = params.max ?: GrailsConfig.config.pagination.max
+		def offset = params.offset ?: 0
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance.getFolderMessages(params['starred'])
+		def messageInstanceList = folderInstance.getFolderMessages(params['starred'], max, offset)
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
