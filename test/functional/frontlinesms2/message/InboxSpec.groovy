@@ -166,6 +166,20 @@ class InboxSpec extends MessageGebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
+	
+	def "should autopopulate the message body  when 'forward' is clicked"() {
+		given:
+			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+		when:
+			go "message/inbox/show/${message.id}"
+			$('a', text:'Forward').click()
+			waitFor {$('div#tabs-1').displayed}
+		then:
+			$('textArea', name:'messageText').text() == "test"
+		cleanup:
+			deleteTestMessages()
+	}
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();

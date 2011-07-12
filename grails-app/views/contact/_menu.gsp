@@ -9,11 +9,6 @@
 				<li id="create-group">
 					<g:link class="create group" action="createGroup">Group</g:link>
 				</li>
-				<li id="manage-subscription">
-					<g:remoteLink controller="group" action="list" onSuccess="launchWizard('Manage Subscription', data);">
-						Manage Subscription
-					</g:remoteLink>
-				</li>
 			</ol>
 		</li>
 		<li>

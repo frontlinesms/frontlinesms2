@@ -25,6 +25,27 @@ function launchWizard(title, html) {
 	$("#tabs").tabs();
 }
 
+function isElementEmpty(selector) {
+	return isEmpty($(selector).val());
+}
+
+function isEmpty(val) {
+	return val.trim().length == 0
+}
+
+function isGroupChecked(groupName) {
+	return getSelectedGroupElements(groupName).length > 0;
+}
+
+function getSelectedGroupElements(groupName) {
+	return $('input[name=' + groupName + ']:checked');
+}
+
+function isDropDownSelected(id) {
+	var selectedOptions = $("#" + id + " option:selected")
+	return selectedOptions.length > 0  && (!isEmpty(selectedOptions[0].value))
+}
+
 function moveToTabBy(index) {
 	var tabWidget = $('#tabs').tabs();
 	var selected = tabWidget.tabs('option', 'selected')
@@ -32,8 +53,17 @@ function moveToTabBy(index) {
 	return false;
 }
 
+function moveToNextTab(canMoveToNextTab, onValidationFail) {
+	if (canMoveToNextTab) {
+		return moveToTabBy(1);
+	}
+	else {
+		onValidationFail()
+		return false
+	}
+}
 $('.next').live('click', function() {
-	return moveToTabBy(1);
+	return moveToNextTab(true);
 });
 
 $('.back').live('click', function() {
