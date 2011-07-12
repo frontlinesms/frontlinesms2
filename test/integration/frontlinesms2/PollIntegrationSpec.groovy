@@ -12,11 +12,11 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
 		then:
-			p.getMessages(false).size() == 2
+			p.getMessages(false, 10, 0).size() == 2
 		when:
 			message1.toDelete().save(flush:true, failOnError:true)
 		then:
-			p.getMessages(false).size() == 1
+			p.getMessages(false,10, 0).size() == 1
 		cleanup:
 			deleteTestData()
 	}
@@ -66,7 +66,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def result = Poll.findByTitle('question').getMessages(false)
+			def result = Poll.findByTitle('question').getMessages(false,10, 0)
 		then:
 			result*.src == ["src2", "src3", "src1"]
     }
@@ -75,7 +75,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").getMessages(true)
+			def results = Poll.findByTitle("question").getMessages(true,10, 0)
 		then:
 			results*.src == ["src3"]
 		cleanup:
@@ -118,3 +118,4 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		}
 	}
 }
+
