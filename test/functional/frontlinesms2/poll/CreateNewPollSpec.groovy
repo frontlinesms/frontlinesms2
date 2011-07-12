@@ -41,7 +41,9 @@ class CreateNewPollSpec extends PollGebSpec {
 		when:
 			go 'message'
 		then:
-			$('#activities-submenu li')*.text() == ['Football Teams', 'Shampoo Brands', 'Rugby Brands']
+			$('#activities-submenu li')[0].text().contains('Football Teams') // TODO: find/implement array contains
+			$('#activities-submenu li')[1].text().contains('Shampoo Brands')
+			$('#activities-submenu li')[2].text().contains('Rugby Brands')
 		cleanup:
 			deleteTestPolls()
 	}

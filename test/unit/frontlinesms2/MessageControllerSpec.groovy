@@ -6,6 +6,8 @@ class MessageControllerSpec extends ControllerSpec {
 
 	def setup() {
 		mockDomain Fmessage
+		registerMetaClass(Fmessage)
+		Fmessage.metaClass.'static'.countAllMessages = {isStarred -> [inbox:0,pending:0,deleted:0,sent:0]}
 		mockParams.messageText = "text"
 		controller.messageSendService = new MessageSendService()
 		def sahara = new Group(name: "Sahara", members: [new Contact(primaryMobile: "12345"),new Contact(primaryMobile: "56484")])
