@@ -39,6 +39,11 @@
 								${m.displaySrc}
 							</g:link>
 						</g:if>
+						<g:elseif test="${messageSection == 'search'}">
+							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
+								${m.displaySrc}
+							</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link action="${messageSection}" params="[messageId: m.id]">
 								${m.displaySrc}
@@ -51,6 +56,11 @@
 								${m.displayText}
 							</g:link>
 						</g:if>
+						<g:elseif test="${messageSection == 'search'}">
+							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
+								${m.displayText}
+							</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link action="${messageSection}" params="[messageId: m.id]">
 							  ${m.displayText}
@@ -63,6 +73,11 @@
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
 						</g:if>
+						<g:elseif test="${messageSection == 'search'}">
+							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
+								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+							</g:link>
+						</g:elseif>
 						<g:else>
 							<g:link  action="${messageSection}" params="[messageId: m.id]">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
