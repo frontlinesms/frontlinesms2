@@ -118,7 +118,7 @@ class Fmessage {
 		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc")
 		messages
 	}
-
+                         
 	static def getSentMessages(isStarred) {
 		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc")
 		messages
