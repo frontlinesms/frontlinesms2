@@ -7,7 +7,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(false, 4, 1)
+			def inbox = Fmessage.getInboxMessages(false, 10, 0)
 		then:
 	        inbox*.src == ["+254778899", "Bob", "Alice", "9544426444"]
 	        inbox.every {it.status == MessageStatus.INBOUND}
@@ -19,7 +19,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(true, 1, 1)
+			def inbox = Fmessage.getInboxMessages(true, 10, 0)
 		then:
 			inbox.size() == 1
 			inbox.every {it.starred}
@@ -31,23 +31,26 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
+			assert 4 == Fmessage.getInboxMessages(false, 10, 0).size()
 			def inboxPageOne = Fmessage.getInboxMessages(false, 3, 1)
 			def inboxPageTwo = Fmessage.getInboxMessages(false, 3, 2)
-		then
+		then:
+	        println inboxPageOne
+	        println inboxPageTwo
 			inboxPageOne.size() == 3
 			inboxPageTwo.size() == 1
+
 			inboxPageOne*.src == ["+254778899", "Bob", "Alice"]
 			inboxPageTwo*.src == ["9544426444"]
-
-
-
+		cleanup:
+			deleteTestData()
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages(false)
+			def sent = Fmessage.getSentMessages(false, 10, 0)
 		then:
 			assert sent.size() == 2
 			sent.every { it.status == MessageStatus.SENT}
@@ -59,7 +62,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages(true)
+			def sent = Fmessage.getSentMessages(true, 10, 0)
 		then:
 			assert sent.size() == 1
 			sent[0].status == MessageStatus.SENT
@@ -67,6 +70,21 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		cleanup:
 			deleteTestData()
 	}
+
+	def "check for offset and limit while fetching sent messages"() {
+		setup:
+			createTestData()
+		when:
+			def sentPageOne = Fmessage.getSentMessages(false, 1, 0)
+			def sentPageTwo = Fmessage.getSentMessages(false, 1, 1)
+		then:
+			sentPageOne.size() == 1
+			sentPageTwo.size() == 1
+			sentPageOne*.src == ['+254445566']
+			sentPageTwo*.src == ['Mary']
+	}
+
+
 
 	def "should return all folder messages ordered on date received"() {
 		setup:
@@ -89,12 +107,13 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		cleanup:
 			Folder.list()*.delete()
 	}
+	
 
 	def "should fetch all pending messages"() {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(false)
+			def results = Fmessage.getPendingMessages(false, 10, 0)
 		then:
 		    results.size() == 2
 			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
@@ -106,7 +125,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(true)
+			def results = Fmessage.getPendingMessages(true, 10, 0)
 		then:
 		    results.size() == 1
 			results[0].status == MessageStatus.SEND_PENDING
@@ -115,12 +134,25 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			deleteTestData()
 	}
 
+	def "check for offset and limit while fetching pending messages"() {
+		setup:
+			createTestData()
+		when:
+			def pendingPageOne = Fmessage.getPendingMessages(false, 1, 0)
+			def pendingPageTwo = Fmessage.getPendingMessages(false, 1, 1)
+		then:
+			pendingPageOne.size() == 1
+			pendingPageTwo.size() == 1
+			pendingPageOne*.dst == ['dst2']
+			pendingPageTwo*.dst == ['dst1']
+	}
+
 	def "should fetch starred deleted messages"() {
 		setup:
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def results = Fmessage.getDeletedMessages(true)
+			def results = Fmessage.getDeletedMessages(true, 10, 0)
 		then:
 		    results.size() == 1
 			results[0].deleted
@@ -134,12 +166,26 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def results = Fmessage.getDeletedMessages(false)
+			def results = Fmessage.getDeletedMessages(false, 10, 0)
 		then:
 		    results.size() == 2
 			results[0].deleted
 		cleanup:
 			deleteTestData()
+	}
+
+	def "check for offset and limit while fetching deleted messages"() {
+		setup:
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+		when:
+			def pendingPageOne = Fmessage.getDeletedMessages(false, 1, 0)
+			def pendingPageTwo = Fmessage.getDeletedMessages(false, 1, 1)
+		then:
+			pendingPageOne.size() == 1
+			pendingPageTwo.size() == 1
+			pendingPageOne*.src == ['Jim']
+			pendingPageTwo*.src == ['Bob']
 	}
 
 	static createTestData() {
