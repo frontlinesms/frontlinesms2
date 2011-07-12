@@ -48,8 +48,8 @@
 			   <div class="field">
 					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
-					<g:if test="${contactInstance?.email}">
-						<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="launchWizard('Send Message',data);" class="quick_message">
+					<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">
+						<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
 							Send Message
 						</g:remoteLink>
 					</g:if>

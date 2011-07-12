@@ -10,7 +10,7 @@
 	<g:form action="send" controller="message" method="post">
 		<div id="tabs-1">
 		<label for="messageText">Enter message</label>
-		<g:textArea name="messageText" rows="5" cols="40"/>
+		<g:textArea name="messageText" value="${messageText}" rows="5" cols="40"/>
 		<g:link url="#" class="next">Next</g:link>
 	</div>
 		<div id="tabs-2">
