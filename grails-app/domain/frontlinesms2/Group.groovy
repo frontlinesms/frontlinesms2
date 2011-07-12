@@ -18,8 +18,8 @@ class Group {
 	}
 
 	private static boolean isUniqueAcrossColumns(val, otherVal, obj) {
-		return (val == null && otherVal == null) ? true :
-				(val && otherVal && val ==~ /([a-zA-Z0-9]+)/ && !otherVal.equals(val) &&
+		return val == null ?:
+				(val ==~ /([a-zA-Z0-9]+)/ && !(val.equals(otherVal)) &&
 						Group.findAllBySubscriptionKeyOrUnsubscriptionKey(val, val).every {it.id == obj.id})
 	}
 
