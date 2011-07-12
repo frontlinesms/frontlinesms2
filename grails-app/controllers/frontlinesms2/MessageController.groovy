@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.util.GrailsConfig
+
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -30,7 +32,9 @@ class MessageController {
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.getInboxMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.config.pagination.max
+		def offset = params.offset ?: 0
+		def messageInstanceList = Fmessage.getInboxMessages(params['starred'], max, offset)
 		messageInstanceList.each { it.updateDisplaySrc()}
 			params.messageSection = 'inbox'
 			[messageInstanceList: messageInstanceList,
@@ -47,7 +51,9 @@ class MessageController {
 	}
 
 	def pending = {
-		def messageInstanceList = Fmessage.getPendingMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.config.pagination.max
+		def offset = params.offset ?: 0
+		def messageInstanceList = Fmessage.getPendingMessages(params['starred'], max, offset)
 		messageInstanceList.each { it.updateDisplaySrc() }
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',

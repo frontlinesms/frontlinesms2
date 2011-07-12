@@ -7,7 +7,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(false)
+			def inbox = Fmessage.getInboxMessages(false, 4, 1)
 		then:
 	        inbox*.src == ["+254778899", "Bob", "Alice", "9544426444"]
 	        inbox.every {it.status == MessageStatus.INBOUND}
@@ -19,12 +19,28 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(true)
+			def inbox = Fmessage.getInboxMessages(true, 1, 1)
 		then:
 			inbox.size() == 1
 			inbox.every {it.starred}
 		cleanup:
 			deleteTestData()
+	}
+
+	def "check for offset and limit while fetching inbox messages"() {
+		setup:
+			createTestData()
+		when:
+			def inboxPageOne = Fmessage.getInboxMessages(false, 3, 1)
+			def inboxPageTwo = Fmessage.getInboxMessages(false, 3, 2)
+		then
+			inboxPageOne.size() == 3
+			inboxPageTwo.size() == 1
+			inboxPageOne*.src == ["+254778899", "Bob", "Alice"]
+			inboxPageTwo*.src == ["9544426444"]
+
+
+
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
