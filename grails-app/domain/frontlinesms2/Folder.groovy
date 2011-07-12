@@ -8,15 +8,11 @@ class Folder extends MessageOwner {
 	}
 	
 	def getFolderMessages(isStarred) { // FIXME this should be done just using folder.messages and having sort and deleted filter applied automatically
-		Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				eq("messageOwner", this)
-				if(isStarred)
-					eq("starred", true)
-			}
-			order('dateReceived', 'desc')
-		}
+		Fmessage.owned(isStarred, this).list(sort:'dateReceived', order:'desc')
+	}
+	
+	def countMessages(isStarred) {
+		Fmessage.owned(isStarred,this).count()
 	}
 	
 }

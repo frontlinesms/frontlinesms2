@@ -29,6 +29,51 @@ class Fmessage {
 		dateReceived(nullable:true)
 		status(nullable:true)
 	}
+	
+	static namedQueries = {
+			inbox { isStarred ->
+				and {
+					eq("deleted", false)
+					if(isStarred)
+						eq("starred", true)
+					eq("status", MessageStatus.INBOUND)
+					isNull("messageOwner")
+				}
+			}
+			sent { isStarred ->
+				and {
+					eq("deleted", false)
+					eq("status", MessageStatus.SENT)
+					isNull("messageOwner")
+					if(isStarred)
+						eq("starred", true)
+				}
+			}
+			pending { isStarred ->
+				and {
+					eq("deleted", false)
+					isNull("messageOwner")
+					'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
+					if(isStarred)
+						eq('starred', true)
+				}
+			}
+			deleted { isStarred ->
+				and {
+					eq("deleted", true)
+					if(isStarred)
+						eq('starred', true)
+				}
+			}
+			owned { isStarred, responses ->
+				and {
+					eq("deleted", false)
+					'in'("messageOwner", responses)
+					if(isStarred)
+						eq("starred", true)
+				}
+			}
+	}
 
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
@@ -65,69 +110,58 @@ class Fmessage {
 	}
 	static def getFolderMessages(folderId) {
 		def folder = Folder.get(folderId)
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				eq("messageOwner", folder)
-			}
-			order('dateReceived', 'desc')
-		}
+		def messages = Fmessage.owned(folder).list(sort:"dateReceived", order:"desc")
 		messages
 	}
 
 	static def getInboxMessages(isStarred) {
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				eq("status", MessageStatus.INBOUND)
-				if(isStarred)
-					eq("starred", true)
-				isNull("messageOwner")
-			}
-			order('dateReceived', 'desc')
-		}
+		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc")
 		messages
 	}
 
 	static def getSentMessages(isStarred) {
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				eq("status", MessageStatus.SENT)
-				isNull("messageOwner")
-				if(isStarred)
-					eq("starred", true)
-			}
-			order("dateCreated", "desc")
-		}
+		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc")
 		messages
 	}
-
+		
 	static def getPendingMessages(isStarred) {
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				isNull("messageOwner")
-				'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
-				if(isStarred)
-					eq('starred', true)
-			}
-			order("dateCreated", "desc")
-		}
+		def messages = Fmessage.pending(isStarred).list(sort:"dateReceived", order:"desc")
 		messages
 	}
 
 	static def getDeletedMessages(isStarred) {
-		def messages = Fmessage.createCriteria().list {
-			and {
-				eq("deleted", true)
-				if(isStarred)
-					eq('starred', true)
-			}
-			order("dateCreated", "desc")
-		}
+		def messages = Fmessage.deleted(isStarred).list(sort:"dateReceived", order:"desc")
 		messages
 	}
+	
+	static def countInboxMessages(isStarred) {
+		def messageCount = Fmessage.inbox(isStarred).count()
+		messageCount
+	}
+	
+	static def countSentMessages(isStarred) {
+		def messageCount = Fmessage.sent(isStarred).count()
+		messageCount
+	}
+	
+	static def countPendingMessages(isStarred) {
+		def messageCount = Fmessage.pending(isStarred).count()
+		messageCount
+	}
+	
+	static def countDeletedMessages(isStarred) {
+		def messageCount = Fmessage.deleted(isStarred).count()
+		messageCount
+	}
+	
+	static def countAllMessages(isStarred) {
+		def inboxCount = Fmessage.countInboxMessages()
+		def sentCount = Fmessage.countSentMessages()
+		def pendingCount = Fmessage.countPendingMessages()
+		def deletedCount = Fmessage.countDeletedMessages()
+		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
+	}
+	
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[]) {
 		if(searchString) {
 			def groupPrimaryMobile = groupInstance?.getMembers()*.primaryMobile
