@@ -21,7 +21,6 @@
 							  noSelection="${['':'Select activity / folder']}"/>
 				</div>
 			</g:if>
-
 		</div>
 	</div>
 	<div class="buttons">
