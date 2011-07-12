@@ -17,7 +17,8 @@ class MessageController {
 		}
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
+				pollInstanceList: Poll.findAll(),
+				messageCount: Fmessage.countAllMessages()]
 	}
 
 	def trash = {

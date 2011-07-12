@@ -43,7 +43,8 @@ class CreateFolderSpec extends FolderGebSpec {
 			when:
 				go 'message'
 			then:
-				$('#activities-submenu li')*.text() == ['Work', 'Projects']
+				$('#activities-submenu li')[0].text().contains('Work')
+				$('#activities-submenu li')[1].text().contains('Project')
 			cleanup:
 				deleteTestFolders()
 	}
