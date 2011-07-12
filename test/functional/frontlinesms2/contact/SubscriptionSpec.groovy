@@ -40,7 +40,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			waitFor { $("#tabs-3").displayed }
 		then:
 			$("input", type:"submit").click()
-			waitFor({title == 'Contacts'})
+			waitFor({title == 'Inbox'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
 			groupUpdated.subscriptionKey == "ADD"
@@ -59,7 +59,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			waitFor { $("#tabs-3").displayed }
 		then:
 			$("input", type:"submit").click()
-			waitFor({title == 'Contacts'})
+			waitFor({title == 'Inbox'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
 			groupUpdated.subscriptionKey == "ADD"
@@ -78,7 +78,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			waitFor { $("#tabs-3").displayed }
 		then:
 			$("input", type:"submit").click()
-			waitFor({title == 'Contacts'})
+			waitFor({title == 'Inbox'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
 			!groupUpdated.subscriptionKey
