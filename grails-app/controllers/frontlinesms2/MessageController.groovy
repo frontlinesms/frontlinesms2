@@ -23,7 +23,6 @@ class MessageController {
 	def trash = {
 		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc()}
-			params.messageSection = 'trash'
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
 					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
@@ -32,7 +31,6 @@ class MessageController {
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages(params['starred'])
 		messageInstanceList.each { it.updateDisplaySrc()}
-			params.messageSection = 'inbox'
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
 					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)

@@ -1,21 +1,64 @@
 package frontlinesms2
 
+import groovy.lang.Closure;
+
 class SearchController {
 	def index = {
+		redirect(action:'no_search')
+	}
+	
+	def no_search = {
+		[groupInstanceList : Group.findAll(),
+				folderInstanceList: Folder.findAll(),
+				pollInstanceList: Poll.findAll()]
+	}
+	
+	def result = {
+		println params
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-		def results = Fmessage.search(params.searchString, groupInstance, messageOwners)
-		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
-				groupInstanceList : Group.findAll(),
-				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
+		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners)
+		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),,
+				messageSection: 'search',
 				searchString: params.searchString,
 				groupInstance: groupInstance,
-				activityInstance: activityInstance,
 				activityId: params.activityId,
-				messageInstanceList: results,
-				messageInstanceTotal: results?.size()]
+				messageInstanceList: searchResults,
+				messageInstanceTotal: searchResults?.size()] << show(searchResults) << no_search()
+	}
+	
+	def show = { searchResults ->
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) :searchResults[0]
+		if (messageInstance && !messageInstance.read) {
+			messageInstance.read = true
+			messageInstance.save()
+		}
+		[messageInstance: messageInstance]
+	}
+	
+	def deleteMessage = {
+		withFmessage { messageInstance ->
+			messageInstance.toDelete()
+			messageInstance.save(failOnError: true, flush: true)
+			Fmessage.get(params.messageId).messageOwner?.refresh()
+			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			params.remove('messageId')
+			redirect(action: result, params:params)
+		}
+	}
+	
+	def downloadReport = {
+			def groupInstance = params.groupId? Group.get(params.groupId): null
+			def activityInstance = getActivityInstance()
+			def messageOwners = activityInstance? getMessageOwners(activityInstance): null
+			def messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)
+			messageInstanceList.sort { it.dateCreated }
+			if(params.format == 'pdf')
+				new ReportController().generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
+			if(params.format == 'csv')
+				new ReportController().generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
+			
 	}
 	
 	private def getSearchDescription(searchString, group, activity) {
@@ -35,19 +78,6 @@ class SearchController {
 			}()
 		}
 	}
-
-	def downloadReport = {
-			def groupInstance = params.groupId? Group.get(params.groupId): null
-			def activityInstance = getActivityInstance()
-			def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-			def messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)
-			messageInstanceList.sort { it.dateCreated }
-			if(params.format == 'pdf')
-				new ReportController().generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
-			if(params.format == 'csv')
-				new ReportController().generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
-			
-	}
 	
 	private def getActivityInstance() {
 		if(!params.activityId) return null
@@ -61,5 +91,11 @@ class SearchController {
 	
 	private def getMessageOwners(activity) {
 		activity instanceof Poll ? activity.responses : [activity]
+	}
+	
+	private def withFmessage(Closure c) {
+		def m = Fmessage.get(params.messageId)
+		if(m) c.call(m)
+		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
 	}
 }

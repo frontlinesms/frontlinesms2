@@ -10,4 +10,4 @@
 			${buttons}
 		</div>
 	</div>
-	<g:render template="action_list"/>
+	<g:render template="/message/action_list"/>
