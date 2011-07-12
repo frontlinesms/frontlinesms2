@@ -18,13 +18,13 @@
 					<div>
 						<div>Join Keyword</div>
 						<g:checkBox name="keyword" value="subscriptionKey" checked='false'/> Join the group using a keyword
-						<g:textField name="subscriptionKey" onclick="selectCheckbox('subscriptionKey')"/>
+						<g:textField name="subscriptionKey" onfocus="selectCheckbox('subscriptionKey')"/>
 					</div>
 
 					<div>
 						<div>Leave Keyword</div>
 						<g:checkBox name="keyword" value="unsubscriptionKey" checked='false'/> Leave the group using a keyword
-						<g:textField name="unsubscriptionKey" onclick="selectCheckbox('unsubscriptionKey')"/>
+						<g:textField name="unsubscriptionKey" onfocus="selectCheckbox('unsubscriptionKey')"/>
 					</div>
 					<g:link url="#" class="next-validate" onClick="moveToNextTab(validate(), function(){\$('.error-panel').html('please enter all the details'); })">Next</g:link>
 				</div>

@@ -48,6 +48,44 @@ class SubscriptionSpec extends GroupGebSpec  {
 	}
 
 
+	def "should be able to set subscription keyword alone for a group"() {
+		when:
+			goToManageSubscriptions()
+			inputKeywords("subscriptionKey", "ADD")
+			selectAValueFromDropDown()
+			$('.next-validate').click()
+			waitFor { $("#tabs-2").displayed }
+			$('.next').click()
+			waitFor { $("#tabs-3").displayed }
+		then:
+			$("input", type:"submit").click()
+			waitFor({title == 'Contacts'})
+			$('div.flash').text().contains('Group updated successfully')
+			def groupUpdated = Group.findByName("Listeners").refresh()
+			groupUpdated.subscriptionKey == "ADD"
+			!groupUpdated.unsubscriptionKey
+	}
+
+
+	def "should be able to set unsubscription keyword alone for a group"() {
+		when:
+			goToManageSubscriptions()
+			inputKeywords("unsubscriptionKey", "REMOVE")
+			selectAValueFromDropDown()
+			$('.next-validate').click()
+			waitFor { $("#tabs-2").displayed }
+			$('.next').click()
+			waitFor { $("#tabs-3").displayed }
+		then:
+			$("input", type:"submit").click()
+			waitFor({title == 'Contacts'})
+			$('div.flash').text().contains('Group updated successfully')
+			def groupUpdated = Group.findByName("Listeners").refresh()
+			!groupUpdated.subscriptionKey
+			groupUpdated.unsubscriptionKey == "REMOVE"
+	}
+
+
 	def "should not go to the next tab if the subscription checkbox is selected and no value given"() {
 		when:
 			goToManageSubscriptions()
@@ -121,14 +159,12 @@ class SubscriptionSpec extends GroupGebSpec  {
 	}
 
 	private def inputKeywords(keyName, keyValue) {
-		def element  = $("input", name:keyName)
-		element.click()
-		element.value(keyValue)
+		 $("input", name:keyName).value(keyValue)
 
 	}
-
+    //FIXME: Need to find a better way to select dropdowns in GEB
 	private def selectAValueFromDropDown() {
-		$("#manage-subscription").id() << Keys.ARROW_DOWN
+		$("select", id:"id" ).getJquery().val(Group.list()[0].id.toString());
 	}
 
 
