@@ -17,8 +17,8 @@ class Poll {
             responses cascade:'all'
 	}
 
-	def getMessages(isStarred = false) {
-		Fmessage.createCriteria().list {
+	def getMessages(isStarred = false, max, offset) {
+		Fmessage.createCriteria().list(max: max, offset: offset) {
 			and {
 				eq("deleted", false)
 				'in'("messageOwner", this.responses)

@@ -157,21 +157,24 @@ class MessageControllerSpec extends ControllerSpec {
 		})
 	}
 
-//	def "should fetch all poll messages"() {
-//		def isStarred = false
-//		expect:
-//			setupDataAndAssert(isStarred, {fmessage ->
-//				def poll = new Poll(id: 2L, responses: [new PollResponse()])
-//				mockParams.ownerId = 2L
-//				mockDomain Poll, [poll]
-//				poll.metaClass.getMessages = {starred->
-//					assert starred == isStarred
-//					[fmessage]
-//				}
-//				 controller.poll()
-//		})
-//	}
-//
+	def "should fetch all poll messages"() {
+		def isStarred = false
+		expect:
+			setupDataAndAssert(isStarred, null, null, {fmessage ->
+				def poll = new Poll(id: 2L, responses: [new PollResponse()])
+				mockParams.ownerId = 2L
+				mockDomain Poll, [poll]
+				poll.metaClass.getMessages = {starred, max, offset ->
+					assert starred == isStarred
+					assert max == 5
+					assert offset == 0
+					[fmessage]
+				}
+				 controller.poll()
+				
+		})
+	}
+
 //	//FIXME: Need to  replace it with 'setupDataAndAssert' method.
 //	def "should fetch starred poll messages"() {
 //		setup:
@@ -193,87 +196,99 @@ class MessageControllerSpec extends ControllerSpec {
 //			results['messageInstanceList'] == [starredFmessage]
 //	}
 //
-//	def "should fetch all folder messages"() {
-//		def isStarred = false
-//		expect:
-//			setupDataAndAssert(isStarred, {fmessage ->
-//				def folder = new Folder(id: 2L, messages: [fmessage])
-//				mockParams.ownerId = 2L
-//				mockDomain Folder, [folder]
-//				folder.metaClass.getFolderMessages = {starred->
-//						assert starred == isStarred
-//						[fmessage]
-//				}
-//				controller.folder()
-//			})
-//	}
-//
-//	def "should fetch starred folder messages"() {
-//		expect:
-//			def isStarred = true
-//			setupDataAndAssert (isStarred, {fmessage ->
-//				def folder = new Folder(id: 2L, messages: [fmessage])
-//				mockParams.ownerId = 2L
-//				mockDomain Folder, [folder]
-//				folder.metaClass.getFolderMessages = {starred->
-//					assert starred == isStarred
-//					[fmessage]
-//				}
-//				controller.folder()
-//			})
-//	}
-//
-//
-//
-//
-//	def "should fetch starred trash messages"() {
-//		expect:
-//			def isStarred = true
-//			setupDataAndAssert (isStarred, {fmessage ->
-//				Fmessage.metaClass.'static'.getDeletedMessages = {starred->
-//					assert starred == starred
-//					[fmessage]
-//				}
-//				controller.trash()
-//			})
-//	}
-//
-//	def "should fetch all trash messages"() {
-//		expect:
-//			def isStarred = false
-//			setupDataAndAssert (isStarred, {fmessage ->
-//				Fmessage.metaClass.'static'.getDeletedMessages = {starred->
-//					assert starred == isStarred
-//					[fmessage]
-//				}
-//				controller.trash()
-//			})
-//	}
-//
-//	def "should show the starred sent messages"() {
-//		expect:
-//			def isStarred = true
-//			setupDataAndAssert (isStarred, {fmessage ->
-//				Fmessage.metaClass.'static'.getSentMessages = {starred ->
-//					assert starred == isStarred
-//					[fmessage]
-//				}
-//				controller.sent()
-//			})
-//	}
-//
-//	def "should show all the  sent messages"() {
-//		expect:
-//			def isStarred = false
-//			setupDataAndAssert (isStarred, {fmessage ->
-//				Fmessage.metaClass.'static'.getSentMessages = {starred ->
-//					assert starred == isStarred
-//					[fmessage]
-//				}
-//
-//				controller.sent()
-//			})
-//	}
+	def "should fetch all folder messages"() {
+		def isStarred = false
+		expect:
+			setupDataAndAssert(isStarred, null, null, {fmessage ->
+				def folder = new Folder(id: 2L, messages: [fmessage])
+				mockParams.ownerId = 2L
+				mockDomain Folder, [folder]
+				folder.metaClass.getFolderMessages = {starred, max, offset->
+						assert starred == isStarred
+						assert max == 5
+						assert offset == 0
+						[fmessage]
+				}
+				controller.folder()
+			})
+	}
+
+	def "should fetch starred folder messages"() {
+		expect:
+			def isStarred = true
+			setupDataAndAssert (isStarred, 3, 2, {fmessage ->
+				def folder = new Folder(id: 2L, messages: [fmessage])
+				mockParams.ownerId = 2L
+				mockDomain Folder, [folder]
+				folder.metaClass.getFolderMessages = {starred, max, offset->
+					assert starred == isStarred
+					assert max == mockParams.max
+					assert offset == mockParams.offset
+					[fmessage]
+				}
+				controller.folder()
+			})
+	}
+
+
+
+
+	def "should fetch starred trash messages"() {
+		expect:
+			def isStarred = true
+			setupDataAndAssert (isStarred, 3, 4, {fmessage ->
+				Fmessage.metaClass.'static'.getDeletedMessages = {starred, max, offset->
+					assert starred == starred
+					assert max == mockParams.max
+					assert offset == mockParams.offset
+					[fmessage]
+				}
+				controller.trash()
+			})
+	}
+
+	def "should fetch all trash messages"() {
+		expect:
+			def isStarred = false
+			setupDataAndAssert (isStarred, null, null, {fmessage ->
+				Fmessage.metaClass.'static'.getDeletedMessages = {starred, max, offset ->
+					assert starred == isStarred
+					assert max == 5
+					assert offset == 0
+					[fmessage]
+				}
+				controller.trash()
+			})
+	}
+
+	def "should show the starred sent messages"() {
+		expect:
+			def isStarred = true
+			setupDataAndAssert (isStarred, 3, 4, {fmessage ->
+				Fmessage.metaClass.'static'.getSentMessages = {starred, max, offset ->
+					assert starred == isStarred
+					assert max == 3
+					assert offset == 4
+					[fmessage]
+				}
+				controller.sent()
+			})
+	}
+
+	def "should show all the  sent messages"() {
+		expect:
+			def isStarred = false
+			setupDataAndAssert (isStarred,null, null, {fmessage ->
+				Fmessage.metaClass.'static'.getSentMessages = {starred, max, offset ->
+					assert starred == isStarred
+					assert max == 5
+					assert offset == 0
+					[fmessage]
+				}
+
+				controller.sent()
+			})
+	}
 
     def setupDataAndAssert = {isStarred, max, offset, closure  ->
 		setup:
