@@ -24,5 +24,10 @@
 			<g:link action="${messageSection}" params="${[starred:true] << params}" >Starred</g:link>
 			<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred'})}">All</g:link>
 		</div>
+	    <div id="footer">
+			<g:paginate next="Forward" prev="Back"
+					maxsteps="0" max="${grailsApplication.config.pagination.max}" controller="message"
+					action="${messageSection}" total="4"/>
+		</div>
 	</body>
 </html>
