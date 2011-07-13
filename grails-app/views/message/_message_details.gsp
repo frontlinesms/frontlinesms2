@@ -1,5 +1,5 @@
+<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}" />
 <div id="message-details">
-	<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}" />
 	<p class="message-name">${messageInstance.displaySrc}</p>
 	<g:def var="thisAddress" value="${messageInstance.src}" />
 	<g:if test="${!messageInstance.contactExists}">
@@ -14,8 +14,8 @@
 				<option value="reply" params="[recipient: messageInstance.src]">Reply</option>
 				<option value="forward" params="[messageText: messageInstance.text]">Forward</option>
 			</select>
+			<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
 		</g:if>
-		<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
 	</div>
 </div>
 <g:render template="/message/action_list"/>

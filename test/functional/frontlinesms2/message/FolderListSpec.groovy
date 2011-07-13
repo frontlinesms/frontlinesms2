@@ -58,7 +58,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def message = messages[0]
 			go "message/folder/${folder.id}/show/${message.id}"
 		then:
-			$('a', text:'Reply').click()
+			$("#reply-dropdown").value('reply')
 			waitFor {$('div#tabs-1').displayed}
 		when:
 			$("div#tabs-1 .next").click()
@@ -101,7 +101,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def folder = Folder.findByName("Work")
 			go "message/folder/${folder.id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
-			$('a', text:'Forward').click()
+			$("#reply-dropdown").value('forward')
 			waitFor {$('div#tabs-1').displayed}
 			$('textArea', name:'messageText').text() == "I will be late"
 		cleanup:
