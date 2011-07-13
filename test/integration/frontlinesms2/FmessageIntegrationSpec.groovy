@@ -38,4 +38,14 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			messageCounts['pending'] == 2
 			messageCounts['deleted'] == 1
 	}
+	
+	def "should return unread messages count"() {
+		setup:
+			Fmessage readMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true).save(flush:true)
+			Fmessage unreadMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false).save(flush:true)
+		when:
+			def unreadMessageCount = Fmessage.countUnreadMessages()
+		then:
+			unreadMessageCount == 1
+	}
 }
