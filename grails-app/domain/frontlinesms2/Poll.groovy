@@ -18,17 +18,13 @@ class Poll {
 	}
 
 	def getMessages(isStarred = false) {
-		Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				'in'("messageOwner", this.responses)
-				if(isStarred)
-					eq("starred", true)
-			}
-			order('dateReceived', 'desc')
-		}
+		Fmessage.owned(isStarred,this.responses).list(sort:"dateReceived", order:"desc")
 	}
 
+	def countMessages(isStarred = false) {
+		Fmessage.owned(isStarred,this.responses).count()
+	}
+	
 	def getResponseStats() {
 		def totalMessageCount = messages.size()
 		responses.sort{it.id}.collect {
