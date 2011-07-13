@@ -114,7 +114,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 		when:
 			goToManageSubscriptions()
 			assert !$("input", value: "subscriptionKey").getAttribute("checked")
-			$("input", name: "subscriptionKey").click()
+			inputKeywords("subscriptionKey","")
 		then:
 			$("input", value: "subscriptionKey").getAttribute("checked")
 
@@ -124,7 +124,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 		when:
 			goToManageSubscriptions()
 			assert !$("input", value: "unsubscriptionKey").getAttribute("checked")
-			$("input", name: "unsubscriptionKey").click()
+			inputKeywords("unsubscriptionKey","")
 		then:
 			$("input", value: "unsubscriptionKey").getAttribute("checked")
 	}
@@ -159,8 +159,9 @@ class SubscriptionSpec extends GroupGebSpec  {
 	}
 
 	private def inputKeywords(keyName, keyValue) {
-		 $("input", name:keyName).value(keyValue)
-
+		def element = $("input", name:keyName)
+		element.jquery.trigger('focus')
+		element.value(keyValue)
 	}
     //FIXME: Need to find a better way to select dropdowns in GEB
 	private def selectAValueFromDropDown() {
