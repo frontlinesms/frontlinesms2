@@ -6,8 +6,8 @@ import frontlinesms2.enums.MessageStatus
 class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.getInboxMessages().size() == 3
-		assert Poll.findByTitle('Miauow Mix').messages.size() == 2
+		assert Fmessage.getInboxMessages(false, null, null).size() == 3
+		assert Poll.findByTitle('Miauow Mix').getMessages(false, null, null).size() == 2
 		assert Folder.findByName('Fools').messages.size() == 2	
 	}
 	
@@ -22,7 +22,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDelete.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
-			Fmessage.getInboxMessages().size() == 2
+			Fmessage.getInboxMessages(false, null, null).size() == 2
 	}
 
 	def 'deleted messages do show up in trash view'() {
@@ -35,7 +35,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 			bobMessage.updateDisplaySrc()
 		then:
-			Fmessage.getDeletedMessages(false).size() == 1
+			Fmessage.getDeletedMessages(false, null, null).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 	}
 
@@ -47,7 +47,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bobMessage.updateDisplaySrc()
 			go "message/trash"
 		then:
-			Fmessage.getDeletedMessages(false).size() == 1
+			Fmessage.getDeletedMessages(false, null, null).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
 			!$('#message-details .buttons a')
 	}
@@ -59,7 +59,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDeleteFromPoll.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
-			Poll.findByTitle('Miauow Mix').messages.size() == 1
+			Poll.findByTitle('Miauow Mix').getMessages(false, null, null).size() == 1
 	}
 	
 	def 'deleted messages do not show up in folder view'() {
@@ -72,7 +72,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDeleteFromFolder.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
-			Folder.findByName('Fools').getFolderMessages(false).size() == 1
+			Folder.findByName('Fools').getFolderMessages(false, null, null).size() == 1
 	}
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {

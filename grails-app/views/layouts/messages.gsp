@@ -27,7 +27,7 @@
 	    <div id="footer">
 			<g:paginate next="Forward" prev="Back"
 					maxsteps="0" max="${grailsApplication.config.pagination.max}" controller="message"
-					action="${messageSection}" total="4"/>
+					action="${messageSection}" total="${messageInstanceTotal}" params= "${[starred: params.starred]}"/>
 		</div>
 	</body>
 </html>
