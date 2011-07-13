@@ -12,19 +12,6 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
-function launchWizard(title, html) {
-	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#modalBox").dialog(
-		{
-			modal: true,
-			title: title,
-			width: 600,
-			close: function() { $(this).remove(); }
-		}
-	);
-	$("#tabs").tabs();
-}
-
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }
