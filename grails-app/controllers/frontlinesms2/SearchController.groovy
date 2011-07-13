@@ -14,7 +14,6 @@ class SearchController {
 	}
 	
 	def result = {
-		println params
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
