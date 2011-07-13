@@ -23,6 +23,7 @@
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
+		 	<a href="#" onClick="emptyTrash()" id="empty-trash">Empty trash</a>
 			<g:render template="message_details" />
 		</g:if>
     </body>

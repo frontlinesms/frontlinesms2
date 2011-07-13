@@ -8,7 +8,7 @@
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
 		<g:javascript src="application.js"/>
-		<g:javascript src="quickMessage/popup.js"></g:javascript>
+		<g:javascript src="popup.js"></g:javascript>
 	</head>
 	<body>
 		<g:render template="/tabs"/>
