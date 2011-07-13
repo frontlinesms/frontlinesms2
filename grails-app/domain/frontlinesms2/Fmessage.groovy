@@ -73,6 +73,14 @@ class Fmessage {
 						eq("starred", true)
 				}
 			}
+			unread {
+				and {
+					eq("deleted", false)
+					eq("status", MessageStatus.INBOUND)
+					eq("read", false)
+					isNull("messageOwner")
+				}
+			}
 	}
 
 	def getDisplayText() {
@@ -151,6 +159,11 @@ class Fmessage {
 	
 	static def countDeletedMessages(isStarred) {
 		def messageCount = Fmessage.deleted(isStarred).count()
+		messageCount
+	}
+	
+	static def countUnreadMessages(isStarred) {
+		def messageCount = Fmessage.unread().count()
 		messageCount
 	}
 	

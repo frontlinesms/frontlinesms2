@@ -45,7 +45,18 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
-    
+	
+	def 'Messages tab should have unread messages count next to it'() {
+		given:
+			createReadUnreadMessages()
+		when:
+			to MessagesPage
+		then:
+		$('#tab-messages').text() == 'Messages (1)'
+		cleanup:
+			deleteTestMessages()
+	}
+	   
     def assertMenuItemSelected(String itemText) {
         def selectedChildren = $('#messages-menu li.selected')
         assert selectedChildren.size() == 1
@@ -63,6 +74,11 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		
 		Fmessage sentFailedMessage = new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
 		Fmessage sentPendingMessage = new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)		
+	}
+	
+	def createReadUnreadMessages() {
+		Fmessage readMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true).save(flush:true)
+		Fmessage unreadMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false).save(flush:true)
 	}
 	
 	def deleteTestMessages() {
