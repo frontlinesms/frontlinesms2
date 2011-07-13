@@ -5,7 +5,7 @@ class QuickMessageController {
 		def recipients = params['recipient'] ? [params['recipient']] : []
 		def fowardMessage = params['messageText'] ? params['messageText'] : []
 		def contacts = Contact.list()
-
+		println params
 		[contactList: contacts,
 			groupList:Group.getGroupDetails(),
 			recipients:recipients,
