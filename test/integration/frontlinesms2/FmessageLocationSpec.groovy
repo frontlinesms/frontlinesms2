@@ -31,17 +31,11 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			assert 4 == Fmessage.getInboxMessages(false, 10, 0).size()
-			def inboxPageOne = Fmessage.getInboxMessages(false, 3, 1)
-			def inboxPageTwo = Fmessage.getInboxMessages(false, 3, 2)
+			assert 4 == Fmessage.countInboxMessages(false)
+			def firstThreeInboxMsgs = Fmessage.getInboxMessages(false, 3, 0)
 		then:
-	        println inboxPageOne
-	        println inboxPageTwo
-			inboxPageOne.size() == 3
-			inboxPageTwo.size() == 1
-
-			inboxPageOne*.src == ["+254778899", "Bob", "Alice"]
-			inboxPageTwo*.src == ["9544426444"]
+			firstThreeInboxMsgs.size() == 3
+			firstThreeInboxMsgs*.src == ["+254778899", "Bob", "Alice"]
 		cleanup:
 			deleteTestData()
 	}
@@ -75,22 +69,20 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def sentPageOne = Fmessage.getSentMessages(false, 1, 0)
-			def sentPageTwo = Fmessage.getSentMessages(false, 1, 1)
+			assert 2 == Fmessage.countSentMessages(false)
+			def firstSentMsg = Fmessage.getSentMessages(false, 1, 0)
 		then:
-			sentPageOne.size() == 1
-			sentPageTwo.size() == 1
-			sentPageOne*.src == ['+254445566']
-			sentPageTwo*.src == ['Mary']
+			firstSentMsg*.src == ['+254445566']
+		cleanup:
+			deleteTestData()
 	}
-
 
 
 	def "should return all folder messages ordered on date received"() {
 		setup:
 			setUpFolderMessages()
 		when:
-			def results = Folder.findByName("home").getFolderMessages(false)
+			def results = Folder.findByName("home").getFolderMessages(false, 10, 0)
 		then:
 			results*.src == ["Jim", "Bob", "Jack"]
 		cleanup:
@@ -101,13 +93,24 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpFolderMessages()
 		when:
-			def results = Folder.findByName("home").getFolderMessages(true)
+			def results = Folder.findByName("home").getFolderMessages(true, 10, 0)
 		then:
 			results*.src == ["Jack"]
 		cleanup:
 			Folder.list()*.delete()
 	}
-	
+
+	def "check for offset and limit while fetching folder messages"() {
+		setup:
+			setUpFolderMessages()
+		when:
+			assert 3 == Folder.findByName("home").countMessages(false)
+			def firstFolderMsg = Folder.findByName("home").getFolderMessages(false, 1, 0)
+		then:
+			firstFolderMsg*.src == ['Jim']
+		cleanup:
+			Folder.list()*.delete()
+	}
 
 	def "should fetch all pending messages"() {
 		setup:
@@ -138,13 +141,9 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def pendingPageOne = Fmessage.getPendingMessages(false, 1, 0)
-			def pendingPageTwo = Fmessage.getPendingMessages(false, 1, 1)
+			def firstPendingMessage = Fmessage.getPendingMessages(false, 1, 0)
 		then:
-			pendingPageOne.size() == 1
-			pendingPageTwo.size() == 1
-			pendingPageOne*.dst == ['dst2']
-			pendingPageTwo*.dst == ['dst1']
+			firstPendingMessage*.dst == ['dst1']
 	}
 
 	def "should fetch starred deleted messages"() {
@@ -179,13 +178,9 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def pendingPageOne = Fmessage.getDeletedMessages(false, 1, 0)
-			def pendingPageTwo = Fmessage.getDeletedMessages(false, 1, 1)
+			def firstDeletedMsg = Fmessage.getDeletedMessages(false, 1, 0)
 		then:
-			pendingPageOne.size() == 1
-			pendingPageTwo.size() == 1
-			pendingPageOne*.src == ['Jim']
-			pendingPageTwo*.src == ['Bob']
+			firstDeletedMsg*.src == ['Jim']
 	}
 
 	static createTestData() {

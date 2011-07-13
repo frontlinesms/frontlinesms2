@@ -17,8 +17,8 @@ class Poll {
             responses cascade:'all'
 	}
 
-	def getMessages(isStarred = false) {
-		Fmessage.owned(isStarred,this.responses).list(sort:"dateReceived", order:"desc")
+	def getMessages(isStarred = false, max, offset) {
+		Fmessage.owned(isStarred,this.responses).list(sort:"dateReceived", order:"desc", max:max, offset:offset)
 	}
 
 	def countMessages(isStarred = false) {
@@ -26,7 +26,7 @@ class Poll {
 	}
 	
 	def getResponseStats() {
-		def totalMessageCount = messages.size()
+		def totalMessageCount = countMessages(false)
 		responses.sort{it.id}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
