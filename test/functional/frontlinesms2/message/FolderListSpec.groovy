@@ -9,7 +9,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestMessages()
 		when:
 			to FolderListPage
-			def folderMessageSources = $('#messages tbody tr td:nth-child(2)')*.text()
+			def folderMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			at FolderListPage
 			folderMessageSources == ['Jane', 'Max']
@@ -26,9 +26,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			"message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max')}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[1] == 'Jane'
-			rowContents[2] == 'Meeting at 10 am'
-			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[2] == 'Jane'
+			rowContents[3] == 'Meeting at 10 am'
+			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestFolders()
 			deleteTestMessages()
@@ -81,12 +81,12 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'Max'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Max'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Jane', 'Max'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Jane', 'Max'])
 		cleanup:
 			deleteTestFolders()
 			deleteTestMessages()

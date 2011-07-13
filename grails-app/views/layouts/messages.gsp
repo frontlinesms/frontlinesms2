@@ -7,7 +7,8 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
-		<g:javascript src="application.js"/>
+		<g:javascript src="application.js"></g:javascript>
+		<g:javascript src="message/actions.js"></g:javascript>
     </head>
 	<body>
 		<g:render template="/tabs"/>

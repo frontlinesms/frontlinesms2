@@ -51,11 +51,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			to PollShowPage
 		then:
-			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
 		when:
 			go "message//poll/${poll.id}/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()

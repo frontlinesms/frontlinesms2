@@ -1,24 +1,9 @@
   <%@ page contentType="text/html;charset=UTF-8" %>
-<script type="text/javascript">
-	function setStarStatus(object,data){
-		if($("#"+object).hasClass("starred")) {
-			$("#"+object).removeClass("starred");
-		}
-		
-		$("#"+object).addClass(data);
-		if(data != '') {
-			$("#"+object).empty().append("Remove Star");
-		} else {
-			$("#"+object).empty().append("Add Star");
-		}
-		
-	}
-</script>
 <g:if test="${messageInstanceTotal > 0}">
 	<table id="messages">
 		<thead>
 			<tr>
-				<td></td>
+				<td><g:checkBox name="message" value="0" checked="false" onclick="checkAllMessages()"/></td>
 			    <td><g:message code="fmessage.src.label" default="Name"/></td>
 			    <td><g:message code="fmessage.text.label" default="Snippet"/></td>
 			    <td><g:message code="fmessage.date.label" default="Date"/></td>
@@ -27,6 +12,7 @@
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
+					<td><g:checkBox name="message" checked="false" value="${messageInstance.id}" onclick="appendMessageDetails()"/></td>
 					<td>
 					  <g:remoteLink action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 							<div id="star-${m.id}" class="${m.starred? 'starred':''}">

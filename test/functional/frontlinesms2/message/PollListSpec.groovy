@@ -9,7 +9,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollListPage
-			def pollMessageSources = $('#messages tbody tr td:nth-child(2)')*.text()
+			def pollMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			at PollListPage
 			pollMessageSources == ['Alice', 'Bob']
@@ -26,9 +26,9 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
-			rowContents[1] == 'Bob'
-			rowContents[2] == 'manchester ("I like manchester")'
-			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[2] == 'Bob'
+			rowContents[3] == 'manchester ("I like manchester")'
+			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -92,12 +92,12 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'Bob'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Bob'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Bob', 'Alice'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
