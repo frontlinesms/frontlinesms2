@@ -99,6 +99,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		cleanup:
 			Folder.list()*.delete()
 	}
+	
 
 	def "check for offset and limit while fetching folder messages"() {
 		setup:
