@@ -62,11 +62,12 @@ environments {
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
+		pagination.max = 1
     }
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
+		pagination.max = 10
     }
-
 }
 
 // log4j configuration
