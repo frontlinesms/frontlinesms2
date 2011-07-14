@@ -122,26 +122,42 @@ class Fmessage {
 		messages
 	}
 
-	static def getInboxMessages(isStarred) {
-		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc")
+	static def getInboxMessages(isStarred, max, offset) {
+		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 
-	static def getSentMessages(isStarred) {
-		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc")
+	static def getInboxMessages(isStarred) {
+		getInboxMessages(isStarred, null, null)
+	}
+
+	static def getSentMessages(isStarred, max, offset) {
+		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 		
-	static def getPendingMessages(isStarred) {
-		def messages = Fmessage.pending(isStarred).list(sort:"dateReceived", order:"desc")
+	static def getSentMessages(isStarred) {
+		getSentMessages(isStarred, null, null)
+	}
+
+	static def getPendingMessages(isStarred, max, offset) {
+		def messages = Fmessage.pending(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 
-	static def getDeletedMessages(isStarred) {
-		def messages = Fmessage.deleted(isStarred).list(sort:"dateReceived", order:"desc")
+	static def getPendingMessages(isStarred) {
+		getPendingMessages(isStarred, null, null)
+	}
+
+	static def getDeletedMessages(isStarred, max, offset) {
+		def messages = Fmessage.deleted(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 	
+	static def getDeletedMessages(isStarred) {
+		getDeletedMessages(isStarred, null, null)
+	}
+
 	static def countInboxMessages(isStarred) {
 		def messageCount = Fmessage.inbox(isStarred).count()
 		messageCount
