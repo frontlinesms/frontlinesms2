@@ -131,6 +131,6 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	}
 
 	DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy/MM/dd")
+		return new SimpleDateFormat("yyyy/MM/dd", request.locale)
 	}
 }

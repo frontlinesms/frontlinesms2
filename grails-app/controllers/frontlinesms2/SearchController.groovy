@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import java.text.DateFormat
-import java.util.Date
 import java.text.SimpleDateFormat
 
 
@@ -144,6 +143,6 @@ class SearchController {
 	}
 
 	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy-MMM-dd")
+		return new SimpleDateFormat("yyyy-MMM-dd", request.locale)
 	}
 }
