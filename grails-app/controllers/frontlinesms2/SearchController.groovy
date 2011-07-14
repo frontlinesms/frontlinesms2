@@ -1,8 +1,13 @@
 package frontlinesms2
 
-import groovy.lang.Closure;
+import java.text.DateFormat
+import java.util.Date
+import java.text.SimpleDateFormat
+
 
 class SearchController {
+	def exportService
+	
 	def index = {
 		redirect(action:'no_search')
 	}
@@ -51,12 +56,14 @@ class SearchController {
 			def groupInstance = params.groupId? Group.get(params.groupId): null
 			def activityInstance = getActivityInstance()
 			def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-			def messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)
+			def messageInstanceList 
+			if(params.searchString) {messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)}
+			else {messageInstanceList = Fmessage.findAll()}
 			messageInstanceList.sort { it.dateCreated }
 			if(params.format == 'pdf')
-				new ReportController().generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
+				generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
 			if(params.format == 'csv')
-				new ReportController().generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
+				generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
 			
 	}
 	
@@ -79,13 +86,12 @@ class SearchController {
 	}
 	
 	private def getActivityInstance() {
-		if(!params.activityId) return null
-		else {
+		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
 			def activityType = stringParts[0] == 'poll'? Poll: Folder
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
-		}
+		} else return null
 	}
 	
 	private def getMessageOwners(activity) {
@@ -96,5 +102,48 @@ class SearchController {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
 		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+	}
+	
+	private def generateCSVReport(searchString, model) {
+		def currentTime = new Date()
+		List fields = ["id", "src", "dst", "text", "dateCreated"]
+		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
+		Map parameters = [title: "$searchString"]
+		def formatedTime = dateToString(currentTime)
+		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.csv")
+		
+		try{
+			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report")
+		}
+		
+		[messageInstanceList: model]
+	}
+	
+	private def generatePDFReport(searchString, model) {
+		def currentTime = new Date()
+		List fields = ["id", "src", "dst", "text", "dateCreated"]
+		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
+		def formatedTime = dateToString(currentTime)
+		Map parameters = [title: "$searchString"]
+		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.pdf")
+		
+		try{
+			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report")
+		}
+		
+		[messageInstanceList: model]
+	}
+
+	private String dateToString(Date date) {
+		DateFormat formatedDate = createDateFormat()
+		return formatedDate.format(date)
+	}
+
+	private DateFormat createDateFormat() {
+		return new SimpleDateFormat("yyyy-MMM-dd")
 	}
 }
