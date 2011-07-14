@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import org.grails.plugins.csv.CSVWriter
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -30,7 +29,7 @@ class ReportController {
 		render(contentType:"text/csv", text: csv.writer.toString(), encoding:"UTF-8")
 	}
 	
-	def generateCSVReport(searchString,model) {
+	private def generateCSVReport(searchString,model) {
 		def currentTime = new Date()
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
@@ -47,7 +46,7 @@ class ReportController {
 		[messageInstanceList: model]
 	}
 	
-	def generatePDFReport(searchString,model) {
+	private def generatePDFReport(searchString,model) {
 		def currentTime = new Date()
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]

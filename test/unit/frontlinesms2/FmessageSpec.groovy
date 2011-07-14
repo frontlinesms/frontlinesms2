@@ -2,7 +2,6 @@ package frontlinesms2
 
 import spock.lang.*
 import grails.plugin.spock.*
-import frontlinesms2.enums.MessageStatus
 
 class FmessageSpec extends UnitSpec {
 	def 'check that READ flag cannot be null'() {
@@ -46,7 +45,7 @@ class FmessageSpec extends UnitSpec {
 			mockDomain(Fmessage)
 			mockDomain(Poll)
 			mockDomain(PollResponse)
-			Poll p = new Poll(title:'Test poll').save()
+			new Poll(title:'Test poll').save()
 			PollResponse response = new PollResponse(value:'yes').save()
 		when:
 			def m = new Fmessage(messageOwner:response).save()
