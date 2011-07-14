@@ -81,7 +81,9 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 			assert Fmessage.findAllByDeleted(true).size == 1
 		when:
-			$('#empty-trash').click()
+			def trashAction = $("select", id:"empty-trash")
+			trashAction.getJquery().val('Empty trash')
+			trashAction.jquery.trigger('change')
 			waitFor {$('.ui-button')}
 			$('.ui-button')[0].click()
 		then:
