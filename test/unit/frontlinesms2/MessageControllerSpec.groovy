@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
-import spock.lang.Ignore
 
 class MessageControllerSpec extends ControllerSpec {
 
