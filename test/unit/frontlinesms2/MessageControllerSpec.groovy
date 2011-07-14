@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
+import spock.lang.Ignore
 
 class MessageControllerSpec extends ControllerSpec {
 
@@ -13,6 +14,10 @@ class MessageControllerSpec extends ControllerSpec {
 		def sahara = new Group(name: "Sahara", members: [new Contact(primaryMobile: "12345"),new Contact(primaryMobile: "56484")])
 		def thar = new Group(name: "Thar", members: [new Contact(primaryMobile: "12121"), new Contact(primaryMobile: "22222")])
 		mockDomain Group, [sahara, thar]
+		mockConfig('''
+			pagination.max = 10
+		''')
+
 	}
 
 	def "should send message to all the members in a group"() {
@@ -80,39 +85,43 @@ class MessageControllerSpec extends ControllerSpec {
 			
 	}
 
-	def "should fetch pending messages"() {
-		def isStarred = false
-		expect:
-			withSetup(isStarred, {fmessage ->
-
-				Fmessage.metaClass.'static'.getPendingMessages = {starred->
-					assert starred == isStarred 
-					[fmessage]
-				}
-				controller.pending()
-			})
-	}
-
 	def "should fetch starred inbox messages"() {
 		def isStarred = true
+
 		expect:
-			withSetup(isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getInboxMessages = {starred ->
-					assert starred == isStarred
+		setupDataAndAssert(isStarred, 5, 1, {fmessage ->
+			Fmessage.metaClass.'static'.countInboxMessages = {starred ->
+				assert isStarred == starred
+				return 2
+			}
+
+			Fmessage.metaClass.'static'.getInboxMessages = { starred, max, offset ->
+				if(isStarred && max == mockParams.max && offset == mockParams.offset)
 					[fmessage]
-				}
-				controller.inbox()
-			})
+			}
+
+			controller.inbox()
+		})
 	}
+
+
 
 
 	def "should fetch all inbox messages"() {
 		def isStarred = false
 		expect:
-			withSetup(isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getInboxMessages = {starred ->
+			setupDataAndAssert(isStarred, null, null, { fmessage ->
+
+				Fmessage.metaClass.'static'.getInboxMessages = {starred, max, offset ->
 					assert isStarred == starred
+					assert max == 10
+					assert offset == 0
 					[fmessage]
+				}
+
+				Fmessage.metaClass.'static'.countInboxMessages = {starred ->
+					assert isStarred == starred
+					2
 				}
 				controller.inbox()
 		})
@@ -122,11 +131,19 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch starred pending messages"() {
 		def isStarred = true
 		expect:
-			withSetup(isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getPendingMessages = {starred ->
+			setupDataAndAssert(isStarred, 3, 4, {fmessage ->
+				Fmessage.metaClass.'static'.getPendingMessages = {starred, max, offset ->
 					assert starred == isStarred
+					assert max == mockParams.max
+					assert offset == mockParams.offset
 					return [fmessage]
 				}
+
+				Fmessage.metaClass.'static'.countPendingMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+
 				controller.pending()
 		})
 	}
@@ -134,11 +151,19 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch all pending messages"() {
 		def isStarred = false
 		expect:
-			withSetup(isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getPendingMessages = {starred ->
+			setupDataAndAssert(isStarred, null, null, {fmessage ->
+				Fmessage.metaClass.'static'.getPendingMessages = {starred, max, offset ->
 					assert isStarred == starred
+					assert max == 10
+					assert offset == 0
 					return [fmessage]
 				}
+
+				Fmessage.metaClass.'static'.countPendingMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+
 				controller.pending()
 		})
 	}
@@ -146,19 +171,27 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch all poll messages"() {
 		def isStarred = false
 		expect:
-			withSetup(isStarred, {fmessage ->
+			setupDataAndAssert(isStarred, null, null, {fmessage ->
 				def poll = new Poll(id: 2L, responses: [new PollResponse()])
 				mockParams.ownerId = 2L
 				mockDomain Poll, [poll]
-				poll.metaClass.getMessages = {starred->
+				poll.metaClass.getMessages = {starred, max, offset ->
 					assert starred == isStarred
+					assert max == 10
+					assert offset == 0
 					[fmessage]
 				}
-				 controller.poll()
+
+				poll.metaClass.countMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+				controller.poll()
+
 		})
 	}
 
-	//FIXME: Need to  replace it with 'withSetup' method.
+	//FIXME: Need to  replace it with 'setupDataAndAssert' method.
 	def "should fetch starred poll messages"() {
 		setup:
 			registerMetaClass(Poll)
@@ -167,12 +200,21 @@ class MessageControllerSpec extends ControllerSpec {
 			def poll = new Poll(id: 2L, responses: [new PollResponse()])
 			mockParams.starred = true
 			mockParams.ownerId = 2L
+			mockParams.max = 2
+			mockParams.offset =3
 			mockDomain Folder
 			mockDomain Poll, [poll]
 			mockDomain Fmessage, [starredFmessage, unstarredFmessage]
-			poll.metaClass.getMessages = {isStarred->
+			poll.metaClass.getMessages = {isStarred, max, offset ->
+				assert max == 2
+				assert offset == 3
 				isStarred ? [starredFmessage] : [starredFmessage, unstarredFmessage]
 			}
+
+			poll.metaClass.countMessages = {isStarred ->
+				2
+			}
+
 		when:
 			def results = controller.poll()
 		then:
@@ -182,13 +224,20 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch all folder messages"() {
 		def isStarred = false
 		expect:
-			withSetup(isStarred, {fmessage ->
+			setupDataAndAssert(isStarred, null, null, {fmessage ->
 				def folder = new Folder(id: 2L, messages: [fmessage])
 				mockParams.ownerId = 2L
 				mockDomain Folder, [folder]
-				folder.metaClass.getFolderMessages = {starred->
+				folder.metaClass.getFolderMessages = {starred, max, offset->
 						assert starred == isStarred
+						assert max == 10
+						assert offset == 0
 						[fmessage]
+				}
+
+				folder.metaClass.countMessages = {starred ->
+					assert isStarred == starred
+					2
 				}
 				controller.folder()
 			})
@@ -197,29 +246,41 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch starred folder messages"() {
 		expect:
 			def isStarred = true
-			withSetup (isStarred, {fmessage ->
+			setupDataAndAssert (isStarred, 3, 2, {fmessage ->
 				def folder = new Folder(id: 2L, messages: [fmessage])
 				mockParams.ownerId = 2L
 				mockDomain Folder, [folder]
-				folder.metaClass.getFolderMessages = {starred->
+				folder.metaClass.getFolderMessages = {starred, max, offset->
 					assert starred == isStarred
+					assert max == mockParams.max
+					assert offset == mockParams.offset
 					[fmessage]
+				}
+				folder.metaClass.countMessages = {starred ->
+					assert isStarred == starred
+					2
 				}
 				controller.folder()
 			})
 	}
 
 
-
-
 	def "should fetch starred trash messages"() {
 		expect:
 			def isStarred = true
-			withSetup (isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getDeletedMessages = {starred->
-					assert starred == starred
+			setupDataAndAssert (isStarred, 3, 4, {fmessage ->
+				Fmessage.metaClass.'static'.getDeletedMessages = {starred, max, offset->
+					assert starred == starred;
+					assert max == mockParams.max;
+					assert offset == mockParams.offset;
 					[fmessage]
 				}
+
+				Fmessage.metaClass.'static'.countDeletedMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+
 				controller.trash()
 			})
 	}
@@ -227,55 +288,78 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch all trash messages"() {
 		expect:
 			def isStarred = false
-			withSetup (isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getDeletedMessages = {starred->
+			setupDataAndAssert (isStarred, null, null, {fmessage ->
+				Fmessage.metaClass.'static'.getDeletedMessages = {starred, max, offset ->
 					assert starred == isStarred
+					assert max == 10
+					assert offset == 0
 					[fmessage]
 				}
-				controller.trash()	
+
+				Fmessage.metaClass.'static'.countDeletedMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+				
+				controller.trash()
 			})
 	}
 
 	def "should show the starred sent messages"() {
 		expect:
 			def isStarred = true
-			withSetup (isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getSentMessages = {starred ->
+			setupDataAndAssert (isStarred, 3, 4, {fmessage ->
+				Fmessage.metaClass.'static'.getSentMessages = {starred, max, offset ->
 					assert starred == isStarred
+					assert max == 3
+					assert offset == 4
 					[fmessage]
 				}
+
+				Fmessage.metaClass.'static'.countSentMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+
 				controller.sent()
 			})
 	}
 
 	def "should show all the  sent messages"() {
-		expect:       
+		expect:
 			def isStarred = false
-			withSetup (isStarred, {fmessage ->
-				Fmessage.metaClass.'static'.getSentMessages = {starred ->
+			setupDataAndAssert (isStarred,null, null, {fmessage ->
+				Fmessage.metaClass.'static'.getSentMessages = {starred, max, offset ->
 					assert starred == isStarred
+					assert max == 10
+					assert offset == 0
 					[fmessage]
 				}
 
+				Fmessage.metaClass.'static'.countSentMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
 				controller.sent()
 			})
 	}
 
-    def withSetup = {isStarred, closure  ->
-		setup:
+     private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure)  {
 			registerMetaClass(Fmessage)
 			def fmessage = new Fmessage(src: "src1", starred: isStarred)
 			mockDomain Folder
 			mockDomain Poll
 			mockDomain Contact
 			mockParams.starred = isStarred
-		when:
+			mockParams.max = max
+			mockParams.offset = offset
+
 			def results = closure.call(fmessage)
-		then:
-			results['messageInstanceList'] == [fmessage]
-			results['messageInstanceTotal'] == 1
-			results['messageInstance'] == fmessage
-			results['messageInstanceList']*.contactExists == [false]
-			results['messageInstanceList']*.displaySrc == ["src1"]
+
+			assert results['messageInstanceList'] == [fmessage]
+			assert results['messageInstanceTotal'] == 2
+			assert results['messageInstance'] == fmessage
+			assert results['messageInstanceList']*.contactExists == [false]
+			assert results['messageInstanceList']*.displaySrc == ["src1"]
     }
 }
