@@ -9,13 +9,31 @@
 	<p class="message-body" id="message-body">${messageInstance.text}</p>
 	<div class="buttons">
 		<g:if test="${messageSection != 'trash'}">
-			<select id="reply-dropdown" name="reply-dropdown">
-				<option value="na" disabled="disabled" selected='true'>Reply</option>
-				<option value="reply" params="[recipient: messageInstance.src]">Reply</option>
-				<option value="forward" params="[messageText: messageInstance.text]">Forward</option>
-			</select>
+			<button id="reply">Reply</button>
+			<button id="forward">Forward</button>
 			<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
 		</g:if>
 	</div>
 </div>
 <g:render template="/message/action_list"/>
+<script> 
+	$(function() {
+		$( "#reply" )
+			.button()
+			.click(function() {
+				alert( "Reply" );
+			})
+			.next()
+				.button( {
+					text: false,
+					icons: {
+						primary: "ui-icon-triangle-1-s"
+					}
+				})
+				.click(function() {
+					alert( "Could display a menu to select an action" );
+				})
+				.parent()
+					.buttonset();
+	});
+</script> 
