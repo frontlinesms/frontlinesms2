@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import groovy.lang.Closure;
-
 class SearchController {
 	def index = {
 		redirect(action:'no_search')
@@ -79,13 +77,12 @@ class SearchController {
 	}
 	
 	private def getActivityInstance() {
-		if(!params.activityId) return null
-		else {
+		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
 			def activityType = stringParts[0] == 'poll'? Poll: Folder
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
-		}
+		} else return null
 	}
 	
 	private def getMessageOwners(activity) {
