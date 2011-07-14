@@ -15,7 +15,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def deletedMessages = Fmessage.getDeletedMessages(false)
 		then:
-			deletedMessages.size == 3
+			deletedMessages.size() == 3
 	}
 	
 	def "should return all message counts"() {

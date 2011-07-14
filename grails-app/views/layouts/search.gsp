@@ -19,6 +19,8 @@
 	  		</h2>
 	  		<h2>
 			 	<div id="export-results">
+			 		Export all messages as
+					<export:formats  formats="['pdf','csv']" action="downloadReport" />
 					<g:if test="${messageInstanceList}">
 						 Export results as
 						<export:formats  formats="['pdf','csv']" params="['searchString':params.searchString, 'groupId':params.groupId, 'activityId':params.activityId]" action="downloadReport" />

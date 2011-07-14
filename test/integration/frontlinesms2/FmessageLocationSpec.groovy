@@ -27,6 +27,19 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			deleteTestData()
 	}
 
+	def "check for offset and limit while fetching inbox messages"() {
+		setup:
+			createTestData()
+		when:
+			assert 4 == Fmessage.countInboxMessages(false)
+			def firstThreeInboxMsgs = Fmessage.getInboxMessages(false, 3, 0)
+		then:
+			firstThreeInboxMsgs.size() == 3
+			firstThreeInboxMsgs*.src == ["+254778899", "Bob", "Alice"]
+		cleanup:
+			deleteTestData()
+	}
+
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
 		setup:
 			createTestData()
@@ -52,6 +65,19 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			deleteTestData()
 	}
 
+	def "check for offset and limit while fetching sent messages"() {
+		setup:
+			createTestData()
+		when:
+			assert 2 == Fmessage.countSentMessages(false)
+			def firstSentMsg = Fmessage.getSentMessages(false, 1, 0)
+		then:
+			firstSentMsg*.src == ['+254445566']
+		cleanup:
+			deleteTestData()
+	}
+
+
 	def "should return all folder messages ordered on date received"() {
 		setup:
 			setUpFolderMessages()
@@ -70,6 +96,19 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Folder.findByName("home").getFolderMessages(true)
 		then:
 			results*.src == ["Jack"]
+		cleanup:
+			Folder.list()*.delete()
+	}
+	
+
+	def "check for offset and limit while fetching folder messages"() {
+		setup:
+			setUpFolderMessages()
+		when:
+			assert 3 == Folder.findByName("home").countMessages(false)
+			def firstFolderMsg = Folder.findByName("home").getFolderMessages(false, 1, 0)
+		then:
+			firstFolderMsg*.src == ['Jim']
 		cleanup:
 			Folder.list()*.delete()
 	}
@@ -99,6 +138,15 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			deleteTestData()
 	}
 
+	def "check for offset and limit while fetching pending messages"() {
+		setup:
+			createTestData()
+		when:
+			def firstPendingMessage = Fmessage.getPendingMessages(false, 1, 0)
+		then:
+			firstPendingMessage*.dst == ['dst1']
+	}
+
 	def "should fetch starred deleted messages"() {
 		setup:
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
@@ -124,6 +172,16 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			results[0].deleted
 		cleanup:
 			deleteTestData()
+	}
+
+	def "check for offset and limit while fetching deleted messages"() {
+		setup:
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+		when:
+			def firstDeletedMsg = Fmessage.getDeletedMessages(false, 1, 0)
+		then:
+			firstDeletedMsg*.src == ['Jim']
 	}
 
 	static createTestData() {

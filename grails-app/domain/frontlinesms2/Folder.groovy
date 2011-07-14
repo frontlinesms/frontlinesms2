@@ -7,10 +7,14 @@ class Folder extends MessageOwner {
 		name(blank:false, nullable:false, maxSize:255)
 	}
 	
-	def getFolderMessages(isStarred) { // FIXME this should be done just using folder.messages and having sort and deleted filter applied automatically
-		Fmessage.owned(isStarred, this).list(sort:'dateReceived', order:'desc')
+	def getFolderMessages(isStarred, max, offset) {
+		Fmessage.owned(isStarred, this).list(sort:'dateReceived', order:'desc', max:max, offset: offset)
 	}
 	
+	def getFolderMessages(isStarred) {
+		getFolderMessages(isStarred, null, null)
+	}
+
 	def countMessages(isStarred) {
 		Fmessage.owned(isStarred,this).count()
 	}
