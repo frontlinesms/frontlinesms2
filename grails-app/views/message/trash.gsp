@@ -3,28 +3,40 @@
     <head>
         <meta name="layout" content="messages" />
         <title>Trash</title>
-		<script>
-			function emptyTrash() {
-				$('<div><p>This will empty trash and delete messages permanently.</p>Do you want to continue?</div>').dialog({
-					modal: true,
-					title: "Empty Trash?",
-					width: 600,
-					buttons:{
-						"Yes": function() {
-							window.location = 'emptyTrash';
-						},
-						"No" : function() { 
-							$(this).dialog("close");
-						}
-					}
-				});
-			}
-		</script>
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
-		 	<a href="#" onClick="emptyTrash()" id="empty-trash">Empty trash</a>
+		 	<g:select id="empty-trash" from="${['Empty trash','Show Recipients']}" noSelection="${['null':'Trash actions...']}"></g:select>
 			<g:render template="message_details" />
+			<g:javascript>
+				$('#empty-trash').change(function(){
+					switch($('#empty-trash option:selected').text()) {
+						case 'Empty trash' : emptyTrash(); break;
+						case 'Show recipient' : showRecipient(); break;
+						default: ;
+					}
+				});
+
+				function emptyTrash() {
+					$("<div>${message(code:"messages.trash.confirmation")}</div>").dialog({
+						modal: true,
+						title: "Empty Trash?",
+						width: 600,
+						buttons:{
+							"Yes": function() {
+								window.location = 'emptyTrash';
+							},
+							"No" : function() { 
+								$(this).dialog("close");
+							}
+						}
+					});
+				}
+			
+				function showRecipient() {
+					//TODO: Yet to implement
+				}
+			</g:javascript>
 		</g:if>
     </body>
 </html>
