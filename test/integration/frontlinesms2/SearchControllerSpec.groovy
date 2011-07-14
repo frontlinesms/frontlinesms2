@@ -1,11 +1,10 @@
 package frontlinesms2
 
-
-class ReportControllerSpec extends grails.plugin.spock.IntegrationSpec {
-	
+class SearchControllerSpec {
 	def controller
+	
 	def setup() {
-		controller = new ReportController()
+		controller = new SearchController()
 		[new Fmessage(src:'gerad', text:'i love pie'),
 			new Fmessage(src:'steve', text:'i hate beef')].each() {
 					it.save(failOnError:true)
@@ -30,4 +29,3 @@ class ReportControllerSpec extends grails.plugin.spock.IntegrationSpec {
 			model == [Fmessage.findBySrc('gerad'), Fmessage.findBySrc('steve')]
 	}
 }
-
