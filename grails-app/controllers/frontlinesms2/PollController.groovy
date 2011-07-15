@@ -11,9 +11,11 @@ class PollController {
 		[pollInstance: pollInstance]
 	}
 
+	def popupCreate = {
+	}
+
 	def save = {
-		def responseList = params.responses.tokenize()
-		def pollInstance = Poll.createPoll(params.title, responseList)
+		def pollInstance = Poll.createPoll(params)
 		
 		if (pollInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"

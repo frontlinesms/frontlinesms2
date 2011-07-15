@@ -17,18 +17,18 @@
 
 					<div>
 						<div>Join Keyword</div>
-						<g:checkBox name="keyword" value="subscriptionKey" checked='false'/> Join the group using a keyword
-						<g:textField name="subscriptionKey" onfocus="selectCheckbox('subscriptionKey')"/>
-					</div>
+						<g:checkBox name="keyword" value="subscriptionKey" id="join_group_checkbox" checked='false'/> Join the group using a keyword
+						<g:textField name="subscriptionKey" class="check-bound-text-area" checkbox_id="join_group_checkbox"/>
+					</div>                                               
 
 					<div>
 						<div>Leave Keyword</div>
-						<g:checkBox name="keyword" value="unsubscriptionKey" checked='false'/> Leave the group using a keyword
-						<g:textField name="unsubscriptionKey" onfocus="selectCheckbox('unsubscriptionKey')"/>
+						<g:checkBox name="keyword" value="unsubscriptionKey" id="leave_group_checkbox" checked='false'/> Leave the group using a keyword
+						<g:textField name="unsubscriptionKey" class="check-bound-text-area" checkbox_id="leave_group_checkbox"/>
 					</div>
 					<g:link url="#" class="next-validate" onClick="moveToNextTab(validate(), function(){\$('.error-panel').html('please enter all the details'); })">Next</g:link>
 				</div>
-			</div>
+			</div>                                                  
 			<div id="tabs-2">
 				<g:link url="#" class="next">Next</g:link>
 			</div>
@@ -43,14 +43,9 @@
 	function validate() {
 		var selectedElements = getSelectedGroupElements('keyword');
 		for (var i = 0; i < selectedElements.size(); i++) {
-			if (isElementEmpty('#' + selectedElements[i].value))
+			if (isElementEmpty('$input[checkbox_id=' + selectedElements[i].id + ']'))
 				return false;
 		}
 		return isDropDownSelected("id") && isGroupChecked('keyword')
-	}
-
-	function selectCheckbox(value) {
-		$('input[value=' + value + ']').attr('checked', true);
-
 	}
 </script>

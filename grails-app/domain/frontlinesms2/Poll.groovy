@@ -2,6 +2,7 @@ package frontlinesms2
 
 class Poll {
 	String title
+	String autoReplyText
 	static hasMany = [responses:PollResponse]
 	static fetchMode = [responses:"eager"]
 
@@ -11,6 +12,7 @@ class Poll {
 				val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
+		autoReplyText(nullable: true, blank: false)
 	}
 
 	static mapping = {
@@ -40,8 +42,10 @@ class Poll {
 		}
 	}
 
-	static Poll createPoll(question, responseList) {
+	static Poll createPoll(attrs) {
+		def responseList = attrs.responseString.tokenize()
 		if(!responseList.contains('Unknown')) responseList = ['Unknown'] << responseList
-		new Poll(title:	question, responses: responseList.flatten().collect{new PollResponse(value:it)})
+		attrs['responses'] = responseList.flatten().collect{new PollResponse(value:it)}
+		new Poll(attrs)
 	}
 }

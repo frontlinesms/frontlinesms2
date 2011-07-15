@@ -6,6 +6,11 @@
 				<li id="create-poll">
 					<g:link class="create" controller="poll" action="create">Poll</g:link>
 				</li>
+				<li>
+					<g:remoteLink class="create" controller="poll" action="popupCreate" onSuccess="launchWizard('New Poll', data);">
+						Poll popup
+					</g:remoteLink>
+				</li>
 				<li id="create-folder">
 					<g:link class="create" controller="folder" action="create">Folder</g:link>
 				</li>

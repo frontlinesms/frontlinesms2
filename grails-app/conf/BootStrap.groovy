@@ -57,8 +57,8 @@ class BootStrap {
 						it.save(failOnError: true)
 					}
 
-			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
-					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
+			[Poll.createPoll([title: 'Football Teams', responseString: 'manchester barcelona']),
+					Poll.createPoll([title: 'Shampoo Brands', responseString: 'pantene oriele'])].each() {
 				it.save(failOnError:true, flush:true)
 			}
 
