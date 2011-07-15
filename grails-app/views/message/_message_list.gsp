@@ -18,8 +18,13 @@
 		<thead>
 			<tr>
 				<td></td>
-			    <td><g:message code="fmessage.src.label" default="Name"/></td>
-			    <td><g:message code="fmessage.text.label" default="Snippet"/></td>
+				<g:if test="${messageSection == 'sent' || messageSection == 'pending'}">
+			    	<td><g:message code="fmessage.src.label" default="To"/></td>
+			    </g:if>
+			    <g:else>
+			    	<td><g:message code="fmessage.src.label" default="From"/></td>
+			    </g:else>
+			    <td><g:message code="fmessage.text.label" default="Message"/></td>
 			    <td><g:message code="fmessage.date.label" default="Date"/></td>
 			</tr>
 		</thead>

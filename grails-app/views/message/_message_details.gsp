@@ -9,31 +9,13 @@
 	<p class="message-body" id="message-body">${messageInstance.text}</p>
 	<div class="buttons">
 		<g:if test="${messageSection != 'trash'}">
-			<button id="reply">Reply</button>
-			<button id="forward">Forward</button>
+			<button id="btn_reply">Reply</button>
+			<button id='btn_dropdown'></button>
+			<ol id="dropdown_options">
+				<button id="btn_forward">Forward</button>
+			</ol>
 			<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
 		</g:if>
 	</div>
 </div>
 <g:render template="/message/action_list"/>
-<script> 
-	$(function() {
-		$( "#reply" )
-			.button()
-			.click(function() {
-				alert( "Reply" );
-			})
-			.next()
-				.button( {
-					text: false,
-					icons: {
-						primary: "ui-icon-triangle-1-s"
-					}
-				})
-				.click(function() {
-					alert( "Could display a menu to select an action" );
-				})
-				.parent()
-					.buttonset();
-	});
-</script> 

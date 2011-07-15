@@ -23,17 +23,16 @@
 				<g:link action="inbox">Inbox</g:link>
 				(${messageCount['inbox']})
 			</li>
-			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending">Pending</g:link>
-				(${messageCount['pending']})
-			</li>
 			<li class="${(messageSection=='sent')? 'selected':''}">
 				<g:link action="sent">Sent</g:link>
 				(${messageCount['sent']})
 			</li>
+			<li class="${(messageSection=='pending')? 'selected':''}">
+				<g:link action="pending">Pending</g:link>
+				(${messageCount['pending']})
+			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
-				(${messageCount['deleted']})
 			</li>
 		</ol>
 	</li>
