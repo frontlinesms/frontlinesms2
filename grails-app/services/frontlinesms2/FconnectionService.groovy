@@ -9,27 +9,35 @@ class FconnectionService {
 		@Override
 		void configure() {}
 		List getRouteDefinitions(Fconnection c) {
-			def inGoesTo, outComesFrom
+			def incoming, outgoing
+			def routes = []
 			if(c instanceof SmslibFconnection) {
-				inGoesTo = 'seda:raw-smslib'
-				outComesFrom = 'seda:smslib-messages-to-send'
+				incoming = 'seda:raw-smslib'
+				outgoing = 'seda:smslib-messages-to-send'
 			} else if(c instanceof EmailFconnection) {
-				inGoesTo = 'seda:email-messages-to-send'
-				outComesFrom = 'seda:raw-email'
+				incoming = 'seda:raw-email'
+				outgoing = 'seda:email-messages-to-send'
 			} else if(grails.util.Environment.current == grails.util.Environment.TEST && c instanceof Fconnection) {
-				inGoesTo = 'stream:out'
-				outComesFrom = 'seda:nowhere'
+				incoming = 'stream:out'
+				outgoing = 'seda:nowhere'
 			} else {
 				throw new IllegalStateException("Do not know how to create routes for Fconnection of class: ${c?.class}")
 			}
-			def routes = []
 			getLog().info "Creating routes: $routes..."
-			println "In goes to: $inGoesTo"
-			println "from(${c.camelConsumerAddress}).to($inGoesTo).routeId(in-${c.id})"
-			if(inGoesTo && c.camelConsumerAddress) routes << from(c.camelConsumerAddress).to(inGoesTo).routeId("in-${c.id}")
-			println "out comes from: $outComesFrom"
-			println "from($outComesFrom).to(${c.camelProducerAddress}).routeId(out-${c.id})"
-			if(outComesFrom && c.camelProducerAddress) routes << from(outComesFrom).to(c.camelProducerAddress).routeId("out-${c.id}")
+			println "In comes from: $incoming"
+			if(incoming && c.camelConsumerAddress) {
+				println "from(${c.camelConsumerAddress}).to($incoming).routeId(in-${c.id})"
+				routes << from(c.camelConsumerAddress).to(incoming).routeId("in-${c.id}")
+			} else {
+				println "not creating incoming route: from(${c.camelConsumerAddress}).to($incoming).routeId(in-${c.id})"
+			}
+			println "out goes to: $outgoing"
+			if(outgoing && c.camelProducerAddress) {
+				println "from($outgoing).to(${c.camelProducerAddress}).routeId(out-${c.id})"
+				routes << from(outgoing).to(c.camelProducerAddress).routeId("out-${c.id}")
+			} else {
+				println "not creating outgoing route: from($outgoing).to(${c.camelProducerAddress}).routeId(out-${c.id})"
+			}
 			println 'Routes created.'
 			routes
 		}
