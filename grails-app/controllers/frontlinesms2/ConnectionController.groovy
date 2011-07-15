@@ -27,8 +27,6 @@ class ConnectionController {
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal]
 		}
-		
-		
 	}
 
 	def create = {}
@@ -90,17 +88,20 @@ class ConnectionController {
 	}
 
 	def sendTest = {
+		println params
+
 		withFconnection {
 			flash.message = "Test message successfully sent to ${it.name}"
-			messageSendService.dispatch(new Fmessage(src:'Bob', dst:'567890', text:'test routing message'), it)
+			messageSendService.dispatch(new Fmessage(src:"$it", dst: params.number, text: params.message), it)
 			redirect (action:'show', id:params.id)
 		}
 	}
 	
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
-		if(connection) c connection
-		else {
+		if(connection) {
+			c connection
+		} else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}"
 			redirect action:'list'
 		}
