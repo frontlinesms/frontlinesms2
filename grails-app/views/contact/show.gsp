@@ -21,7 +21,15 @@
 			<g:hiddenField name="groupsToRemove" value=","/>
 			<g:hiddenField name="fieldsToAdd" value=","/>
 			<g:hiddenField name="fieldsToRemove" value=","/>
-
+			<div class="buttons">
+				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
+				<g:if test="${contactInstance.id}">
+					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+				</g:if>
+			  <g:else>
+				<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+			  </g:else>
+			</div>
 			<div id="contact-info">
 				<div class="field">
 					<label for="name"><g:message code="contact.name.label" default="Name"/></label>
@@ -103,15 +111,6 @@
 					<p>${contactInstance.outboundMessagesCount} messages received</p>
 				</div>
 			</g:if>
-			<div class="buttons">
-				<g:if test="${contactInstance.id}">
-					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-				</g:if>
-			  <g:else>
-				<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
-			  </g:else>
-				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
-			</div>
 		</g:form>
     </body>
 </html>

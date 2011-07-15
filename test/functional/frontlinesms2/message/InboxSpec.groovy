@@ -118,7 +118,8 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
-			$('#reply-dropdown').value('reply')
+			println $('#btn_reply').text()
+			$('#btn_reply').click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
 		then:
@@ -135,7 +136,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"	
-			$('#reply-dropdown').value('reply')
+			$('#btn_reply').click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
 		then:
@@ -173,7 +174,8 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"
-			$('#reply-dropdown').value('forward')
+			$('#btn_dropdown').click()
+			$('#btn_forward').click()			
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
