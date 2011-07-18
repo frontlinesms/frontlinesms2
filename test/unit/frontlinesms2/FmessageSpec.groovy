@@ -91,5 +91,16 @@ class FmessageSpec extends UnitSpec {
 		then:
 			m.validate()
 	}
+
+    def 'archiving messages sets the archived flag to true'() {
+		when:
+			Fmessage message = new Fmessage()
+		then:
+			message.archived == false
+		when:
+			message.archive()
+		then:
+			message.archived == true
+	}
 }
 
