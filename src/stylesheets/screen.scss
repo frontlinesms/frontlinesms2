@@ -123,3 +123,17 @@ body {
 .currentStep, .step {
 	display : none;
 }
+
+.status {
+	.label {
+		@include column(6)
+	}
+
+	.value {
+		@include column(12)
+	}
+
+	
+	
+
+}
