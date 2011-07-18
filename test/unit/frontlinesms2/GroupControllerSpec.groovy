@@ -71,9 +71,8 @@ class GroupControllerSpec extends ControllerSpec {
 	}
 
 	private def assertRedirectArgs() {
-		assert controller.redirectArgs.controller == 'contact'
-		assert controller.redirectArgs.action == 'list'
-		assert controller.redirectArgs.params.flashMessage == controller.flash.message
+		assert controller.redirectArgs.controller == 'message'
+		assert controller.redirectArgs.action == 'inbox'
 		true
 	}
 

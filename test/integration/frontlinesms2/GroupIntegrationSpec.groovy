@@ -14,11 +14,18 @@ class GroupIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def invalid3 = new Group(name: "group6", subscriptionKey: "ADD1", unsubscriptionKey: "REMOVE")
 			def invalid4 = new Group(name: "group7", subscriptionKey: "REMOVE1", unsubscriptionKey: "ADD1")
 			def invalid5 = new Group(name: "group8", subscriptionKey: "ADDGROUP", unsubscriptionKey: "ADDGROUP")
+
+			def valid1 = new Group(name: "group9", unsubscriptionKey: "unsubkey")
+			def valid2 = new Group(name: "group10", subscriptionKey: "subkey")
+
 		then:
 			!invalid1.validate()
 			!invalid2.validate()
 			!invalid3.validate()
 			!invalid4.validate()
 			!invalid5.validate()
+
+			valid1.validate()
+			valid2.validate()
 	}
 }

@@ -21,10 +21,9 @@
 							  noSelection="${['':'Select activity / folder']}"/>
 				</div>
 			</g:if>
-
 		</div>
 	</div>
 	<div class="buttons">
-		<g:actionSubmit class="search" name="search" value="${message(code: 'default.button.search.label', default: 'Search')}" action="index"/>
+		<g:actionSubmit class="search" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" action="result"/>
 	</div>
 </g:form>

@@ -17,20 +17,20 @@ class Poll {
             responses cascade:'all'
 	}
 
-	def getMessages(isStarred = false) {
-		Fmessage.createCriteria().list {
-			and {
-				eq("deleted", false)
-				'in'("messageOwner", this.responses)
-				if(isStarred)
-					eq("starred", true)
-			}
-			order('dateReceived', 'desc')
-		}
+	def getMessages(isStarred = false, max, offset) {
+		Fmessage.owned(isStarred,this.responses).list(sort:"dateReceived", order:"desc", max:max, offset:offset)
 	}
 
+	def getMessages(isStarred = false) {
+		getMessages(isStarred, null, null)
+	}
+
+	def countMessages(isStarred = false) {
+		Fmessage.owned(isStarred,this.responses).count()
+	}
+	
 	def getResponseStats() {
-		def totalMessageCount = messages.size()
+		def totalMessageCount = countMessages(false)
 		responses.sort{it.id}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,

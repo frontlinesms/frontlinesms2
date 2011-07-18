@@ -1,11 +1,8 @@
 package frontlinesms2.services
 
 import frontlinesms2.Fmessage
-import frontlinesms2.MessageStorageService
 import grails.plugin.spock.UnitSpec
-import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
-import org.apache.camel.impl.DefaultExchange
 import spock.lang.Shared
 import frontlinesms2.SubscriptionService
 import frontlinesms2.Contact

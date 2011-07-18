@@ -20,6 +20,8 @@ class UrlMappings {
 		"/poll/save"(controller:'poll', action:'save')
 		"/folder/create"(controller:'folder', action:'create')
 		"/folder/save"(controller:'folder', action:'save')
+		
+		"/search/result/$messageId"(controller:'search', action:'result') {}
 
 		"/$controller/$action?/$id?"{
 			constraints {
