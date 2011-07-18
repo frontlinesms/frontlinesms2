@@ -138,6 +138,17 @@ class MessageController {
 			redirect(action: params.messageSection, params:params)
 		}
 	}
+
+    def archiveMessage = {
+		withFmessage { messageInstance ->
+			messageInstance.archive()
+			messageInstance.save(failOnError: true, flush: true)
+			Fmessage.get(params.messageId).messageOwner?.refresh()
+			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			params.remove('messageId')
+			redirect(action: params.messageSection, params:params)
+		}
+	}
 	
 	def changeStarStatus = {
 		withFmessage { messageInstance ->
