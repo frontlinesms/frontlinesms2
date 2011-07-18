@@ -113,11 +113,22 @@ class MessageController {
 		withFmessage { messageInstance ->
 			messageInstance.toDelete()
 			messageInstance.save(failOnError: true, flush: true)
-			Fmessage.get(params.messageId).messageOwner?.refresh()
-			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			params.remove('messageId')
-			redirect(action: params.messageSection, params:params)
+			if(params.messageId) {
+				Fmessage.get(params.messageId).messageOwner?.refresh()
+				params.remove('messageId')
+				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			} else {
+				Fmessage.get(messageInstance.id).messageOwner?.refresh()
+				params.remove('checkedMessageIds')
+			}
 		}
+		if(params.count) {
+			def messageCount = params.count
+			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount])}"
+			params.remove('count')
+		}
+		
+		redirect(action: params.messageSection, params:params)
 	}
 	
 	def changeStarStatus = {
@@ -150,8 +161,24 @@ class MessageController {
 	}
 
 	private def withFmessage(Closure c) {
+		if(params.checkedMessageIds) {
+			getCheckedMessageList().each{ m ->
+				if(m) c.call(m)
+				else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+			}
+		}
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
 		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+	}
+	
+	private def getCheckedMessageList() {
+		def messageList = []
+		def checkedMessageIds = params.checkedMessageIds.tokenize(',').unique();
+		checkedMessageIds.each { id ->
+			messageList << Fmessage.get(id)
+		}
+		params.count = messageList.size
+		messageList	
 	}
 }

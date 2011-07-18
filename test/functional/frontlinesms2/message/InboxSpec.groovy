@@ -181,6 +181,27 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestMessages()
 	}
 	
+	def "should only display message details when one message is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		when:
+			$("#message")[1].click()
+			def message = Fmessage.findBySrc('Bob')
+		then:
+			$('#message-details p:nth-child(1)').text() == message.src
+			$('#message-details p:nth-child(3)').text() == formatedDate
+			$('#message-details p:nth-child(4)').text() == message.text
+		
+		cleanup:
+			deleteTestMessages()
+	}
+	
 	def "should check all the messages when the header checkbox is checked"() {
 		given:
 			createInboxTestMessages()
@@ -217,6 +238,48 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details p:nth-child(1)').text() == "2 messages selected"
 		cleanup:
 			deleteTestMessages()
+	}
+	
+	def "should change CSS to CHECKED when message is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.list()[0].id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:    	
+			$("tr#message-${Fmessage.list()[0].id}").hasClass('checked')
+			$("tr#message-${Fmessage.list()[1].id}").hasClass('checked')
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "'Reply All' button appears for multiple selected messages and works"() {
+		given:
+			createInboxTestMessages()
+			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			def aliceMessage = Fmessage.findBySrc('Alice')
+			def message3 = Fmessage.findBySrc('+254778899')
+		when:
+			go "message/inbox"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			println ">>>"+$('#message-details div.buttons').text()
+			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
+			def btnReply = $('#message-details div.buttons a')[0]
+		then:
+			btnReply
+		when:
+			btnReply.click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value:'+254999999').getAttribute('checked')
+			!$('input', value:'+254778899').getAttribute('checked')
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
 	}
 
 	String dateToString(Date date) {
