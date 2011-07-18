@@ -8,7 +8,8 @@
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
 		<g:javascript src="application.js"/>
-		<g:javascript src="popup.js"></g:javascript>
+		<g:javascript src="popup.js" />
+		<g:javascript src="/message/move_dropdown.js" />
     </head>
 	<body>
 		<g:render template="/tabs"/>
