@@ -12,7 +12,6 @@ function setStarStatus(object,data){
 }
 
 var messageDetails;
-var messageIds = "";
 
 function checkAllMessages(){
 	if($(':checkbox')[0].checked){
@@ -42,7 +41,20 @@ function updateMessageDetails(id){
 
 	if(count == 1 && $("#message-"+id).hasClass('checked') == $("#message-"+id).hasClass('selected')) {
 		 //load the checked message
-		 alert("Section:"+window.location.pathname+"/"+$('tr :checkbox[checked="true"]').val());
+		 var location = window.location.pathname
+		 var messageSection = $('input:hidden[name=messageSection]').val();
+		 var messageId = $('tr :checkbox[checked="true"]').val();
+		 if(messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash') {
+		 	window.location = "/frontlinesms2/message/"+messageSection+"?messageId="+messageId;
+		 } else{
+		 	$(document).load("/frontlinesms2/message/"+messageSection+"/show/"+messageId, function(data){
+		 		$(document).append(data);
+		 	});
+		 	
+		 }
+		 $(document).ready(function(){
+		 	$("tr :checkbox[value="+messageId+"]").checked = true;
+		 });
 	}
 	if(count > 1){
 		changeMessageCount(count);
@@ -87,8 +99,40 @@ function changeMessageCount(count){
 }
 
 function setMessageActions() {
+	replyAll = "<a id='btn_reply_all' >Reply All</a>";
+	deleteAll = "<a id='btn_delete_all' >Delete All</a>";
 	$('#message-details').append("<div class='buttons'></div>");
-	$('#message-details div.buttons').load("/frontlinesms2/message/_multiple_message_buttons.gsp", {'checkedMessageIds': $('input:hidden[name=checkedMessageList]').val(), 'messageSection' : $('input:hidden[name=messageSection]').val()});
+	$('#message-details div.buttons').append(replyAll+"&nbsp;"+deleteAll);
+	$('#btn_reply_all').click(quickReplyClickAction);
+	$('#btn_delete_all').click(deleteAllClickAction);
+}
+
+function quickReplyClickAction() {
+	var me = $(this);
+	var messageType = me.text();
+	var checkedMessageIdList = $('input:hidden[name=checkedMessageIdList]').val();
+
+	$.ajax({
+		type:'POST',
+		data: {checkedMessageIdList: checkedMessageIdList},
+		url: '/frontlinesms2/quickMessage/create',
+		success: function(data, textStatus){ launchWizard(messageType, data); }
+	});
+}
+
+function deleteAllClickAction() {
+	var me = $(this);
+	var messageType = me.text();
+	var checkedMessageIdList = $('input:hidden[name=checkedMessageIdList]').val();
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
+	$.ajax({
+		type:'POST',
+		context:document.body,
+		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
+		url: '/frontlinesms2/message/deleteMessage',
+		success: function(data) { $(this).empty().append(data); }
+	});
 }
 
 function showMessageDetails(){
@@ -108,16 +152,16 @@ function highlightRow(id){
 }
 
 function removeMessageIdFromList(id) {
-	var f = $('input:hidden[name=checkedMessageList]');
-	var oldList = f.val().replace(0 +',', ',');
+	var f = $('input:hidden[name=checkedMessageIdList]');
+	var oldList = f.val().replace(0 +',', ",");
 	if(oldList.indexOf(id + ',') != -1) {
-		var newList = oldList.replace(id +',', ',');
+		var newList = oldList.replace(id +',', ",");
 			f.val(newList);
 	}
 }
 
 function addMessageIdToList(id) {
-	var f = $('input:hidden[name=checkedMessageList]');
+	var f = $('input:hidden[name=checkedMessageIdList]');
 	var oldList = f.val();
 	
 	if(oldList.indexOf(id + ',') == -1) {

@@ -8,11 +8,12 @@ class QuickMessageController {
 		def contacts = Contact.list()
 		def checkedMessageSrcList;
 		
-		if(params.checkedMessageIds) {
+		if(params.checkedMessageIdList) {
 			checkedMessageSrcList = getCheckedMessageSrcList()
 			recipients.addAll(checkedMessageSrcList)
 		}
-		
+		params.remove('checkedMessageIdList')
+
 		[contactList: contacts,
 			groupList:Group.getGroupDetails(),
 			recipients:recipients,
@@ -23,8 +24,8 @@ class QuickMessageController {
 	
 	private def getCheckedMessageSrcList() {
 		def messageSrcList = []
-		def checkedMessageIds = params.checkedMessageIds.tokenize(',').unique();
-		checkedMessageIds.each { id ->
+		def checkedMessageIdList = params.checkedMessageIdList.tokenize(',').unique();
+		checkedMessageIdList.each { id ->
 			messageSrcList << Fmessage.get(id).src
 		}
 		messageSrcList	
