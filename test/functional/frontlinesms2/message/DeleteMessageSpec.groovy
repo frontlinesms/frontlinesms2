@@ -124,7 +124,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDelete
 		when:
 			btnDelete.click()
-			waitFor { $("div.flash.message").text().contains("deleted") }
 		then:
 			at MessagesPage
 		when:

@@ -1,7 +1,8 @@
   <%@ page contentType="text/html;charset=UTF-8" %>
 <g:if test="${messageInstanceTotal > 0}">
-	<g:hiddenField name="checkedMessageList" value=""/>
+	<g:hiddenField name="checkedMessageIdList" value=""/>
 	<g:hiddenField name="messageSection" value="${messageSection}"/>
+	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 	<table id="messages">
 		<thead>
 			<tr>

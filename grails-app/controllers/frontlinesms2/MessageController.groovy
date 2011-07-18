@@ -12,7 +12,7 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -80,7 +80,7 @@ class MessageController {
 				messageSection: 'poll',
 				messageInstanceTotal: ownerInstance.countMessages(isStarred),
 				ownerInstance: ownerInstance,
-				responseList: ownerInstance.responseStats] << show(messageInstanceList)
+				responseList: ownerInstance?.responseStats] << show(messageInstanceList)
 	}
 	
 	def folder = {
@@ -88,7 +88,7 @@ class MessageController {
 		def offset = params.offset ?: 0
 		def folderInstance = Folder.get(params.ownerId)
 		def isStarred = params['starred']
-		def messageInstanceList = folderInstance.getFolderMessages(isStarred, max, offset)
+		def messageInstanceList = folderInstance?.getFolderMessages(isStarred, max, offset)
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
@@ -138,7 +138,7 @@ class MessageController {
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			} else {
 				Fmessage.get(messageInstance.id).messageOwner?.refresh()
-				params.remove('checkedMessageIds')
+				params.remove('checkedMessageIdList')
 			}
 		}
 		if(params.count) {
@@ -180,7 +180,7 @@ class MessageController {
 	}
 
 	private def withFmessage(Closure c) {
-		if(params.checkedMessageIds) {
+		if(params.checkedMessageIdList) {
 			getCheckedMessageList().each{ m ->
 				if(m) c.call(m)
 				else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
@@ -193,8 +193,8 @@ class MessageController {
 	
 	private def getCheckedMessageList() {
 		def messageList = []
-		def checkedMessageIds = params.checkedMessageIds.tokenize(',').unique();
-		checkedMessageIds.each { id ->
+		def checkedMessageIdList = params.checkedMessageIdList.tokenize(',').unique();
+		checkedMessageIdList.each { id ->
 			messageList << Fmessage.get(id)
 		}
 		params.count = messageList.size
