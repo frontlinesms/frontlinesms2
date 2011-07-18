@@ -1,5 +1,7 @@
   <%@ page contentType="text/html;charset=UTF-8" %>
 <g:if test="${messageInstanceTotal > 0}">
+	<g:hiddenField name="checkedMessageList" value=""/>
+	<g:hiddenField name="messageSection" value="${messageSection}"/>
 	<table id="messages">
 		<thead>
 			<tr>
@@ -12,7 +14,7 @@
 		<tbody>
 			<g:each in="${messageInstanceList }" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
-					<td><g:checkBox name="message" checked="false" value="${messageInstance.id}" onclick="appendMessageDetails()"/></td>
+					<td><g:checkBox name="message" checked="false" value="${m.id}" onclick="updateMessageDetails(${m.id}); highlightRow(${m.id})"/></td>
 					<td>
 					  <g:remoteLink action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
