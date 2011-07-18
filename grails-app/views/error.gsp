@@ -5,7 +5,7 @@
 
   <body>
     <h1>FrontlineSMS Exception</h1>
-    <g:set var="LINE_BREAK" value="%0D%0A"/>
+    <g:set var="LINE_BREAK" value=""/>
 	<g:set var="content">
 		Error ${request.'javax.servlet.error.status_code'}: ${request.'javax.servlet.error.message'.encodeAsHTML()} ${LINE_BREAK}
 		Servlet: ${request.'javax.servlet.error.servlet_name'} ${LINE_BREAK}
@@ -18,8 +18,9 @@
 		</g:if>
 	</g:set>
 
-
-  <a href="mailto:support@frontlinesms.com?subject=Error report -
-				${exception.message?.encodeAsHTML()}&body=${content}">Send report to admin team</a>
+	<form action="mailto:support@frontlinesms.com?subject=Error%20Report-%20${exception.message?.encodeAsHTML()}" method="post" enctype="text/plain">
+		<textarea name="body">${content}</textarea>
+		<input type="submit" value="Send report to admin team"> 
+	</form>
   </body>
 </html>

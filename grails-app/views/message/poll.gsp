@@ -6,10 +6,7 @@
 	</head>
 	<body>
 		<g:if test="${messageInstance != null}">
-			<g:set var="buttons">
-				<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance.id, messageId: messageInstance.id]">Delete</g:link>
-			</g:set>
-			<g:render template="message_details" model="${[buttons: buttons]}"/>
+			<g:render template="message_details" />
 		</g:if>
 		<h2 id="poll-title">${ownerInstance?.title}</h2>
 		<g:if test="$responseList">

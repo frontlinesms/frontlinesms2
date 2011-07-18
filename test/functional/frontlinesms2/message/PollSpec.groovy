@@ -60,6 +60,19 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()
 			deleteTestMessages()
 	}
+	
+	def 'activities should also list message counts'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollShowPage
+		then:
+			$('#activities-submenu li')*.text() ==  ['Football Teams (2)', 'Shampoo Brands (1)', 'Rugby Brands (0)']
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();

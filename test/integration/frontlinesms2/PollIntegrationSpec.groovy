@@ -81,6 +81,28 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		cleanup:
 			Folder.list()*.delete()
 	}
+	
+	def "should check for offset and limit while fetching poll messages"() {
+		setup:
+			setUpPollResponseAndItsMessages()
+		when:
+			def results = Poll.findByTitle("question").getMessages(false,1, 0)
+		then:
+			results*.src == ["src2"]
+		cleanup:
+			Folder.list()*.delete()
+	}
+
+	def "should return count of poll messages"() {
+		setup:
+			setUpPollResponseAndItsMessages()
+		when:
+			def results = Poll.findByTitle("question").countMessages(false)
+		then:
+			results == 3
+		cleanup:
+			Folder.list()*.delete()
+	}
 
 	private def setUpPollResponseAndItsMessages() {
 		def poll = new Poll(title: 'question')
@@ -107,3 +129,4 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		}
 	}
 }
+

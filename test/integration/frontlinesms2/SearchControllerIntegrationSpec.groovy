@@ -30,7 +30,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 	}
 
 	def cleanup() {
@@ -53,7 +53,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	def "blank search does not return a list of messages"() {
 		when:
 			controller.params.searchString = ""
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList.isEmpty()
 	}
@@ -62,7 +62,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		when:
 			controller.params.searchString = "chicken"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Barnabus')]
 	}
@@ -73,7 +73,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			folder.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true, flush:true)
 			controller.params.searchString = "work"
 			controller.params.activityId = "folder-${folder.id}"
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('+254111222')]
 	}
@@ -84,7 +84,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		when:
 			controller.params.searchString = "liver"
 			controller.params.groupId = Group.findByName('test').id
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
 	}
@@ -93,7 +93,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		when:
 			controller.params.searchString = "test"
 			controller.params.groupId = Group.findByName('test').id
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList.isEmpty()
 	}
@@ -105,7 +105,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
 			controller.params.groupId = Group.findByName('test').id
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
 	}
@@ -115,7 +115,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
 			Fmessage.findBySrc("+254333222").toDelete().save(flush: true)
-			def model = controller.index()
+			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Minime')]
 	}

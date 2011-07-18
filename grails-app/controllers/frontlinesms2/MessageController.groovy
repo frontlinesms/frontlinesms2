@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.util.GrailsConfig
+
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -17,59 +19,76 @@ class MessageController {
 		}
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
+				pollInstanceList: Poll.findAll(),
+				messageCount: Fmessage.countAllMessages()]
 	}
 
 	def trash = {
-		def messageInstanceList = Fmessage.getDeletedMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def isStarred = params['starred']
+		def messageInstanceList = Fmessage.getDeletedMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc()}
-			params.messageSection = 'trash'
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
-					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+					messageInstanceTotal: Fmessage.countDeletedMessages(isStarred)] << show(messageInstanceList)
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.getInboxMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def isStarred = params['starred']
+		def messageInstanceList = Fmessage.getInboxMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc()}
-			params.messageSection = 'inbox'
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+					messageInstanceTotal: Fmessage.countInboxMessages(isStarred)] << show(messageInstanceList)
 	}
 
 	def sent = {
-		def messageInstanceList = Fmessage.getSentMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def isStarred = params['starred']
+		def messageInstanceList = Fmessage.getSentMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc()}
 		[messageSection:'sent',
 				messageInstanceList:messageInstanceList,
-				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+				messageInstanceTotal: Fmessage.countSentMessages(isStarred)] << show(messageInstanceList)
 	}
 
 	def pending = {
-		def messageInstanceList = Fmessage.getPendingMessages(params['starred'])
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def isStarred = params['starred']
+		def messageInstanceList = Fmessage.getPendingMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc() }
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
-				messageInstanceTotal: messageInstanceList.size()] << show(messageInstanceList)
+				messageInstanceTotal: Fmessage.countPendingMessages(isStarred)] << show(messageInstanceList)
 	}
 
 	def poll = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
 		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.getMessages(params['starred'])
+		def isStarred = params['starred']
+		def messageInstanceList = ownerInstance.getMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc() }
 
 		params.messageSection = 'poll'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
-				messageInstanceTotal: messageInstanceList.size(),
+				messageInstanceTotal: ownerInstance.countMessages(isStarred),
 				ownerInstance: ownerInstance,
 				responseList: ownerInstance.responseStats] << show(messageInstanceList)
 	}
 	
 	def folder = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance.getFolderMessages(params['starred'])
+		def isStarred = params['starred']
+		def messageInstanceList = folderInstance.getFolderMessages(isStarred, max, offset)
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
@@ -77,7 +96,7 @@ class MessageController {
 		params.messageSection = 'folder'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
-				messageInstanceTotal: messageInstanceList.size(),
+				messageInstanceTotal: folderInstance.countMessages(isStarred),
 				ownerInstance: folderInstance] << show(messageInstanceList)
 	}
 

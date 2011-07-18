@@ -17,7 +17,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			deleteTestFolders()
 			deleteTestMessages()
 	}
-
+	
 	def "message's folder details are shown in list"() {
 		given:
 			createTestFolders()
@@ -58,7 +58,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def message = messages[0]
 			go "message/folder/${folder.id}/show/${message.id}"
 		then:
-			$('a', text:'Reply').click()
+			$("#btn_reply").click()
 			waitFor {$('div#tabs-1').displayed}
 		when:
 			$("div#tabs-1 .next").click()
@@ -101,9 +101,23 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def folder = Folder.findByName("Work")
 			go "message/folder/${folder.id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
-			$('a', text:'Forward').click()
+			$("#btn_dropdown").click()
+			$("#btn_forward").click()
 			waitFor {$('div#tabs-1').displayed}
 			$('textArea', name:'messageText').text() == "I will be late"
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
+	}
+	
+	def 'folder message list should also display message counts'() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			"message"
+		then:
+			$("#activities-submenu li")*.text() == ['Work (2)', 'Projects (2)']
 		cleanup:
 			deleteTestFolders()
 			deleteTestMessages()

@@ -43,8 +43,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 		then:
-			bob != Poll.findByTitle("Football Teams").getMessages().find { it == bob }
-			bob == Poll.findByTitle("Shampoo Brands").getMessages().find { it == bob }
+			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
+			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 
 		when:
 			go "message/inbox/show/${jill.id}"
@@ -53,8 +53,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			footballPoll.responses.each { it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
 		then:
-			jill != Fmessage.getInboxMessages().find { it == jill }
-			jill == Poll.findByTitle("Football Teams").getMessages().find { it == jill }
+			jill != Fmessage.getInboxMessages(false).find { it == jill }
+			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -124,8 +124,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			footballPoll.responses.each { it.refresh() }
 			workFolder.refresh()
 		then:
-			max != footballPoll.getMessages().find { it == max }
-			max == workFolder.getMessages().find { it == max }
+			max != footballPoll.getMessages(false).find { it == max }
+			max == workFolder.getFolderMessages(false).find { it == max }
 		cleanup:
 			deleteTestFolders()
 			deleteTestPolls()			
