@@ -34,7 +34,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
-	def "poll details are shown in header"() {
+	def "poll details are shown in header and graph is displayed"() {
 		given:
 			createTestPolls()
 			createTestMessages()
@@ -46,9 +46,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
 		then:
 			pollTitle == 'Football Teams'
-			statsLabels == ['Unknown', 'manchester', 'barcelona']
-			statsNums == ['0', '2', '0']
-			statsPercents == ['(0%)', '(100%)', '(0%)']
+			statsLabels == ['manchester', 'barcelona','Unknown']
+			statsNums == ['2', '0', '0']
+			statsPercents == ['(100%)', '(0%)', '(0%)']
+		when:
+			$("#pollSettings").click()
+			waitFor {$('#pollGraph svg').displayed}
+		then:
+			$('#pollGraph svg')
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
