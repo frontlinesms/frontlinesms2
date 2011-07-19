@@ -1,5 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+	<h2>${contactsSection.name}</h2>
+</g:if>
+<g:elseif test="${!contactInstance}">
+	<h2>New Group</h2>
+</g:elseif>
+<g:else>
+	<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
+</g:else>
 <g:if test="${contactInstanceTotal > 0}">
 	<ol id="contacts">
 		<g:each in="${contactInstanceList}" status="i" var="c">
