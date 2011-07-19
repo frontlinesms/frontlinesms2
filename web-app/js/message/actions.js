@@ -103,7 +103,8 @@ function changeMessageCount(count){
 
 function setMessageActions() {
 	var replyAll = '';
-	if($('input:hidden[name=messageSection]').val() != 'pending'){
+	var messageSection = $('input:hidden[name=messageSection]').val()
+	if(messageSection != 'pending'){
 		replyAll = "<a id='btn_reply_all' >Reply All</a>";
 	}
 	deleteAll = "<a id='btn_delete_all' >Delete All</a>";

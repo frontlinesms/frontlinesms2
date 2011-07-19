@@ -127,6 +127,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at MessagesPage
 		when:
+			waitFor { $("div.flash.message").displayed }
 			aliceMessage.refresh()
 			message3.refresh()
 		then:

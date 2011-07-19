@@ -67,19 +67,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
-	def "reply option should not be available for messages listed in poll section"() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-		then:
-		    !$('a', text:'Reply')
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
-	}
-
 	def "should filter poll response messages for starred and unstarred messages"() {
 		given:
 			createTestPolls()
@@ -103,32 +90,19 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 	
-	def "forward option should not be available for messages listed in poll section"() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-				go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-		then:
-		    !$('a', text:'Foward')
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
-	}
-	
 	def "should only display message details when one message is checked"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
 			$('#message-details p:nth-child(1)').text() == "2 messages selected"
 		when:
-			$("#message")[2].click()
-			def message = Fmessage.findBySrc('Alice')
+			$("#message")[1].click()
+			def message = Fmessage.findBySrc('Bob')
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
 			$('#message-details p:nth-child(4)').text() == message.text
