@@ -243,6 +243,23 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestMessages()
 	}
 	
+	def "should remained checked when single message is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		when:
+			$("#message")[1].click()
+		then:
+			$("#message")[2].@checked == "true"
+		cleanup:
+			deleteTestMessages()
+	}
+	
 	def "should change CSS to CHECKED when message is checked"() {
 		given:
 			createInboxTestMessages()
