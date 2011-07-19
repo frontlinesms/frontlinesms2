@@ -19,7 +19,8 @@ class FolderController {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'folder.label', default: 'Folder'), folderInstance.id])}"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {
-			render(view: "create", model: [folderInstance: folderInstance])
+			flash.message = "error"
+			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		}
 	}
 }
