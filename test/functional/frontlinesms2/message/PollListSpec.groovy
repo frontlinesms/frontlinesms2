@@ -115,7 +115,72 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()
 			deleteTestMessages()
 	}
+	
+	def "should only display message details when one message is checked"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		when:
+			$("#message")[2].click()
+			def message = Fmessage.findBySrc('Alice')
+		then:
+			$('#message-details p:nth-child(1)').text() == message.src
+			$('#message-details p:nth-child(4)').text() == message.text
+		
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
 
+	def "should display message count when multiple messages are selected"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
+	
+	def "'Reply All' button appears for multiple selected messages and works"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
+			def btnReply = $('#message-details div.buttons a')[0]
+		then:
+			btnReply
+		when:
+			btnReply.click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value:'Alice').getAttribute('checked')
+			$('input', value:'Bob').getAttribute('checked')
+			!$('input', value:'June').getAttribute('checked')
+			
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+			deleteTestContacts()
+	}
 }
 
 class PollListPage extends geb.Page {

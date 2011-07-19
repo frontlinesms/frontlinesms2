@@ -195,6 +195,7 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')
+			def formatedDate = dateToString(message.dateCreated)
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
 			$('#message-details p:nth-child(3)').text() == formatedDate
@@ -261,13 +262,10 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def message3 = Fmessage.findBySrc('+254778899')
 		when:
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			println ">>>"+$('#message-details div.buttons').text()
 			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
 			def btnReply = $('#message-details div.buttons a')[0]
 		then:
