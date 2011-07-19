@@ -50,7 +50,11 @@ class BootStrap {
 						it.status = MessageStatus.INBOUND
 						it.save(failOnError:true)
 					}
-					[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
+			(1..10).each {
+				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", status:MessageStatus.INBOUND).save(failOnError:true)
+			}
+
+			[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
 							new Fmessage(src: 'Jhonny', dst: '+254114433', text: "I am in a meeting", status: MessageStatus.SENT),
 							new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", status: MessageStatus.SENT),
 							new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
