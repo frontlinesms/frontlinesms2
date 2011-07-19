@@ -11,7 +11,6 @@ function moveAction() {
 	} else if(me.hasClass('folder')) {
 		var section = 'folder';
 	}
-	alert(mesId);
 	$.ajax({
 		type:'POST',
 		data: {messageSection: section, messageId: mesId, ownerId: me.val()},

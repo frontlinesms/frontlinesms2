@@ -4,28 +4,28 @@ import frontlinesms2.*
 import frontlinesms2.enums.MessageStatus
 
 class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
-//	def 'message actions menu is displayed for all individual messages'() {
-//		given:
-//			createTestPolls()
-//			createTestFolders()
-//			createTestMessages()
-//		when:
-//			to PollMessageViewPage
-//			def actions = $('#message-actions').children()*.text()
-//		then:
-//			actions == ["Move message to..." "Shampoo Brands" "Work" "Projects"]
-//
-//		when:
-//			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
-//			def inboxActions = $('#message-actions').children()*.text()
-//		then:
-//			inboxActions == ["Move message to... Football Teams Shampoo Brands Work Projects"]
-//
-//		cleanup:
-//			deleteTestPolls()
-//			deleteTestFolders()
-//			deleteTestMessages()
-//	}
+	def 'message actions menu is displayed for all individual messages'() {
+		given:
+			createTestPolls()
+			createTestFolders()
+			createTestMessages()
+		when:
+			to PollMessageViewPage
+			def actions = $('#message-actions').children()*.text()
+		then:
+			actions[1] == "Shampoo Brands"
+
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
+			def inboxActions = $('#message-actions').children()*.text()
+		then:
+			inboxActions[1] == "Football Teams"
+
+		cleanup:
+			deleteTestPolls()
+			deleteTestFolders()
+			deleteTestMessages()
+	}
 	
 	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {
 		given:
