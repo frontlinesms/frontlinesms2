@@ -115,7 +115,7 @@ class MessageController {
 				messageOwner.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
 			}
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			redirect(action: params.messageSection, params: params)
+			render ""
 		}
 	}
 

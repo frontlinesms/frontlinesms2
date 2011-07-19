@@ -64,7 +64,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'deleted messages do not show up in folder view'() {
 		given:
-			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
 			assert Folder.findByName('Fools').messages.size() == 2
 		when:
 			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"

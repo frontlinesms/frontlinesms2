@@ -16,7 +16,7 @@ function moveAction() {
 		data: {messageSection: section, messageId: mesId, ownerId: me.val()},
 		url: '/frontlinesms2/message/move',
 		success: function(data) {
-			window.location = "/frontlinesms2/message/" + section + "?messageId=" + mesId + "&ownerId=" + me.val();
+			location.reload();
 		}
 	});
 }
