@@ -191,7 +191,7 @@ class InboxSpec extends MessageGebSpec {
 			go "message/inbox"
 		then:
 			$('#message-actions').value("${Folder.findByName('my-folder').id}")
-			waitFor { $("div.flash.message").displayed }
+			waitFor {$("#messages").text().contains("No messages")}
 			$("#messages-submenu .selected").text().contains('Inbox')
 		cleanup:
 			Fmessage.list()*.refresh()
