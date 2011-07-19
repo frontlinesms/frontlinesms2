@@ -75,6 +75,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 			def response =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
+			
 		then:
 			bob.messageOwner == response
 		cleanup:
@@ -89,7 +90,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			assert Fmessage.findBySrc('Bob').messageOwner.value == 'manchester'
 		when:
 			to PollMessageViewPage
-			def btnAssignToBarcelona = $('#poll-actions li:nth-child(3) a')
+			def btnAssignToBarcelona = $('#poll-actions li:nth-child(2) a')
 		then:
 			btnAssignToBarcelona.text() == 'barcelona'
 		when:
