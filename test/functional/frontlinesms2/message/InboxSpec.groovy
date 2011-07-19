@@ -301,6 +301,23 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestContacts()
 	}
 
+//  NOTE: Need to find a better way to make this test work
+//	def "should remain in the same page, after moving the message to the destination folder"() {
+//		setup:
+//			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
+//			new Folder(name: "my-folder").save(flush: true)
+//		when:
+//			go "message/inbox"
+//		then:
+//			$('#message-actions').value("${Folder.findByName('my-folder').id}")
+//			waitFor {$("#messages").text().contains("No messages")}
+//			$("#messages-submenu .selected").text().contains('Inbox')
+//		cleanup:
+//			Fmessage.list()*.refresh()
+//			Folder.findByName('my-folder').refresh().delete(flush: true)
+//	}
+
+
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)

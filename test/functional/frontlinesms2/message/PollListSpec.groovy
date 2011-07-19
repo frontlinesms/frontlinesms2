@@ -166,5 +166,3 @@ class PollListPage extends geb.Page {
 		messagesList { $('#messages-submenu') }
 	}
 }
-
-

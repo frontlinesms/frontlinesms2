@@ -1,19 +1,15 @@
 <div>
-  <h2>Move message to</h2>
-  <ol id ="message-actions">
-	  <g:each in="${pollInstanceList}" status="i" var="p">
-		  <li>
-			  <g:if test="${messageSection=='inbox' || p!=ownerInstance}">
-				  <g:link controller="message" action="move" params="[messageSection: 'poll', messageId: messageInstance.id, ownerId: p.id]">${p.title}</g:link>
-			  </g:if>
-		  </li>
-	  </g:each>
-	  <g:each in="${folderInstanceList}" status="i" var="f">
-		  <li>
-			  <g:if test="${messageSection=='inbox' || f!=ownerInstance}">
-				  <g:link controller="message" action="move" params="[messageSection: 'folder', messageId: messageInstance.id, ownerId: f.id]">${f.name}</g:link>
-			  </g:if>
-		  </li>
-	  </g:each>
-  </ol>
+	<select id="message-actions">
+		<option value="na" class="na">Move message to...</option>
+		<g:each in="${pollInstanceList}" status="i" var="p">
+			<g:if test="${(messageSection == 'inbox') || (p != ownerInstance)}">
+				<option class="poll" value="${p.id}">${p.title}</option>
+			</g:if>
+		</g:each>
+		<g:each in="${folderInstanceList}" status="i" var="f">
+			<g:if test="${(messageSection == 'inbox') || (f != ownerInstance)}">
+				<option class="folder" value="${f.id}">${f.name}</option>
+			</g:if>
+		</g:each>
+	</select>
 </div>

@@ -30,60 +30,31 @@
 					  </g:remoteLink>
 					</td>
 					<td>
-						<g:if test="${ownerInstance}">
-							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
+							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
 								${m.displaySrc}
 							</g:link>
-						</g:if>
-						<g:elseif test="${messageSection == 'search'}">
-							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
-								${m.displaySrc}
-							</g:link>
-						</g:elseif>
-						<g:else>
-							<g:link action="${messageSection}" params="[messageId: m.id]">
-								${m.displaySrc}
-							</g:link>
-						</g:else>
 					</td>
 					<td>
-						<g:if test="${ownerInstance}">
-							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
-								${m.displayText}
-							</g:link>
-						</g:if>
-						<g:elseif test="${messageSection == 'search'}">
-							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
-								${m.displayText}
-							</g:link>
-						</g:elseif>
-						<g:else>
-							<g:link action="${messageSection}" params="[messageId: m.id]">
+							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
 							  ${m.displayText}
 							</g:link>
-						</g:else>
 					</td>
 					<td>
-						<g:if test="${ownerInstance}">
-							<g:link action="${messageSection}" params="[messageId: m.id, ownerId:ownerInstance.id]">
+							<g:link  action="${messageSection}" params="${params + [messageId: m.id]}">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
-						</g:if>
-						<g:elseif test="${messageSection == 'search'}">
-							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-							</g:link>
-						</g:elseif>
-						<g:else>
-							<g:link  action="${messageSection}" params="[messageId: m.id]">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-							</g:link>
-						</g:else>
 					</td>
 				</tr>
 			</g:each>
 		</tbody>
-	</table> 
+		<tfoot>
+			<div id="footer">
+				<g:paginate next="Forward" prev="Back"
+					 max="${grailsApplication.config.pagination.max}"
+					action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+			</div>
+		</tfoot>
+	</table>
 </g:if>
 <g:else>
 	<div id="messages">

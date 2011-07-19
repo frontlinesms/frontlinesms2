@@ -11,16 +11,15 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def actions = $('#message-actions li').children('a')*.text()
+			def actions = $('#message-actions').children()*.text()
 		then:
-			actions[0] == 'Shampoo Brands'
-			actions[2] == 'Work'
+			actions[1] == "Shampoo Brands"
 
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
-			def inboxActions = $('#message-actions li a')*.text()
+			def inboxActions = $('#message-actions').children()*.text()
 		then:
-			inboxActions[0] == 'Football Teams'
+			inboxActions[1] == "Football Teams"
 
 		cleanup:
 			deleteTestPolls()
@@ -34,30 +33,30 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def btnAction = $('#message-actions li').children('a').first()
 			def bob = Fmessage.findBySrc('Bob')
 			def jill = Fmessage.findBySrc('Jill')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
-			btnAction.click()
+			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
+			waitFor {$("div.flash.message").displayed}
 		then:
 			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 
 		when:
 			go "message/inbox/show/${jill.id}"
-			btnAction = $('#message-actions li').children('a').first()
-			btnAction.click()
+			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
 			footballPoll.responses.each { it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
+			waitFor {$("div.flash.message").displayed}
 		then:
 			jill != Fmessage.getInboxMessages(false).find { it == jill }
 			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
 		cleanup:
-			deleteTestPolls()
 			deleteTestMessages()
+			deleteTestPolls()
 	}
 
 	def 'messages are always added to the UNKNOWN response of a poll'() {
@@ -66,20 +65,20 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			def btnAction = $('#message-actions li').children('a').first()
 			def bob = Fmessage.findBySrc('Bob')
-			def jill = Fmessage.findBySrc('Jill')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
-			btnAction.click()
+			def unknownResponse =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
+			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
+			waitFor {$("div.flash.message").displayed}
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
-			def response =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
+			Fmessage.findAll().each { it.refresh() }
 		then:
-			bob.messageOwner == response
+			bob.messageOwner == unknownResponse
 		cleanup:
-			deleteTestPolls()
 			deleteTestMessages()
+			deleteTestPolls()
 	}
 
 	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
@@ -118,9 +117,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			unknownResponse.addToMessages(max).save(failOnError:true, flush:true)
 			def workFolder = Folder.findByName('Work')
 			go "message/poll/${footballPoll.id}/show/${Fmessage.findBySrc('Max').id}"
-			def btnAction = $('#message-actions li:nth-child(4) a')
-			println btnAction.text()
-			btnAction.click()
+			$('#message-actions').value("${Folder.findByName('Work').id}")
+			waitFor {$("div.flash.message").displayed}
 			footballPoll.responses.each { it.refresh() }
 			workFolder.refresh()
 		then:
@@ -128,8 +126,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			max == workFolder.getFolderMessages(false).find { it == max }
 		cleanup:
 			deleteTestFolders()
-			deleteTestPolls()			
-			deleteTestMessages()
+			deleteTestPolls()
+			deleteTestMessages()	
 	}
 }
 

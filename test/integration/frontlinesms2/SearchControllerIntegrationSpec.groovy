@@ -119,4 +119,16 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Minime')]
 	}
+
+	def "messageInstanceTotal should give a total count of all the messages available"() {
+		when:
+			controller.params.searchString = "w"
+			controller.params.max = "1"
+			controller.params.offset = "0"
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 1
+			model.messageInstanceTotal == 3
+
+	}
 }

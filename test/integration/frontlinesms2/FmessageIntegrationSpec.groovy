@@ -20,13 +20,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should return all message counts"() {
 		setup:
-			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message').save(flush:true)
-			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message').save(flush:true)
-			new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
-			new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)
+			setUpMessages()
 			
 		when:
 			def messageCounts = Fmessage.countAllMessages(false)
@@ -45,5 +39,28 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def unreadMessageCount = Fmessage.countUnreadMessages()
 		then:
 			unreadMessageCount == 1
+	}
+
+	def "should return search results with a given max and offset"() {
+		setup:
+			setUpMessages()
+		when:
+			def firstInboxMessage = Fmessage.search("inbox", null, null, 1, 0)
+			def firstTwoInboxMessages = Fmessage.search("inbox", null, null, 2, 0)
+		then:
+			firstInboxMessage.size() == 1
+			firstTwoInboxMessages.size() == 2
+			Fmessage.countAllSearchMessages("inbox", null, null) == 2
+	}
+
+
+	private def setUpMessages() {
+			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message').save(flush:true)
+			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message').save(flush:true)
+			new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message').save(flush:true)
+			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message').save(flush:true)
+			new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message').save(flush:true)
+			new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
+			new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)
 	}
 }
