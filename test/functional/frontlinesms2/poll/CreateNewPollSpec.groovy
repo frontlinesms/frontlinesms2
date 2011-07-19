@@ -11,13 +11,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			btnNewPoll.getAttribute('href') == "/frontlinesms2/poll/create"
 	}
 
-	def "'messages' menu item is selected when creating a new poll"() {
-		when:
-			go 'poll/create'
-		then:
-			$('#tab-messages').hasClass('selected')
-	}
-	
 	def 'button to save new poll with keyword choices and title works'() {
 		given:
 			createTestPolls()
@@ -60,14 +53,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			ufoPoll.responses*.value.sort() == ['Unknown', 'kidnapped', 'no', 'yes']
 		cleanup:
 			deleteTestPolls()
-	}
-	
-	def 'Errors are displayed when poll fails to save'() {
-		when:
-			to CreatePollPage
-			btnSave.click()
-		then:
-			errorMessages.present
 	}
 }
 

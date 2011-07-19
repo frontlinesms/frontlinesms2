@@ -4,14 +4,18 @@
 		<h2>Create new...</h2>
 		<ol id="create-submenu">
 				<li id="create-poll">
-					<g:link class="create" controller="poll" action="create">Poll</g:link>
+					<g:remoteLink controller="poll" action="create" onSuccess="launchWizard('Create Poll', data);">
+						Poll
+					</g:remoteLink>				
 				</li>
 				<li id="create-folder">
-					<g:link class="create" controller="folder" action="create">Folder</g:link>
+					<g:remoteLink controller="folder" action="create" onSuccess="launchWizard('Create Folder', data);">
+						Folder
+					</g:remoteLink>
 				</li>
 				<li id="manage-subscription">
 					<g:remoteLink controller="group" action="list" onSuccess="launchWizard('Manage Subscription', data);">
-					Manage Subscription
+						Manage Subscription
 					</g:remoteLink>
 				</li>
 		</ol>
