@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.util.GrailsConfig
+import grails.converters.JSON
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -74,13 +75,14 @@ class MessageController {
 		def isStarred = params['starred']
 		def messageInstanceList = ownerInstance.getMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc() }
-
+		
 		params.messageSection = 'poll'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
 				messageInstanceTotal: ownerInstance.countMessages(isStarred),
 				ownerInstance: ownerInstance,
-				responseList: ownerInstance.responseStats] << show(messageInstanceList)
+				responseList: ownerInstance.responseStats,
+				pollResponse: ownerInstance.responseStats as JSON] << show(messageInstanceList)
 	}
 	
 	def folder = {
