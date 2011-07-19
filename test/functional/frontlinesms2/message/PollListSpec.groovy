@@ -131,8 +131,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+2544635263').save(failOnError:true)
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[1].click()
