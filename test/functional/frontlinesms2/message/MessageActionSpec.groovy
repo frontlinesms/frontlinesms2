@@ -40,7 +40,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
-			waitFor {$('#messages-menu .selected').text() == 'Shampoo Brands'}
+			waitFor {$("div.flash.message").displayed}
 		then:
 			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
@@ -50,7 +50,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
 			footballPoll.responses.each { it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
-			waitFor {$('#messages-menu .selected').text() == 'Football Teams'}
+			waitFor {$("div.flash.message").displayed}
 		then:
 			jill != Fmessage.getInboxMessages(false).find { it == jill }
 			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
@@ -70,7 +70,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def unknownResponse =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
 			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
-			waitFor {$('#messages-menu .selected').text() == 'Shampoo Brands'}
+			waitFor {$("div.flash.message").displayed}
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
@@ -118,7 +118,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def workFolder = Folder.findByName('Work')
 			go "message/poll/${footballPoll.id}/show/${Fmessage.findBySrc('Max').id}"
 			$('#message-actions').value("${Folder.findByName('Work').id}")
-			waitFor {$('#messages-menu .selected').text() == 'Work'}
+			waitFor {$("div.flash.message").displayed}
 			footballPoll.responses.each { it.refresh() }
 			workFolder.refresh()
 		then:
