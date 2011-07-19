@@ -4,16 +4,22 @@
 	  <g:each in="${pollInstanceList}" status="i" var="p">
 		  <li>
 			  <g:if test="${messageSection=='inbox' || p!=ownerInstance}">
-				  <g:link controller="message" action="move" params="[messageSection: 'poll', messageId: messageInstance.id, ownerId: p.id]">${p.title}</g:link>
+				  <g:remoteLink controller="message" action="move" onSuccess="reload()" params="[messageSection: 'poll', messageId: messageInstance.id, ownerId: p.id]">${p.title}</g:remoteLink>
 			  </g:if>
 		  </li>
 	  </g:each>
 	  <g:each in="${folderInstanceList}" status="i" var="f">
 		  <li>
 			  <g:if test="${messageSection=='inbox' || f!=ownerInstance}">
-				  <g:link controller="message" action="move" params="[messageSection: 'folder', messageId: messageInstance.id, ownerId: f.id]">${f.name}</g:link>
+				  <g:remoteLink controller="message" action="move" onSuccess="reload()" params="[messageSection: 'folder', messageId: messageInstance.id, ownerId: f.id]">${f.name}</g:remoteLink>
 			  </g:if>
 		  </li>
 	  </g:each>
   </ol>
 </div>
+
+<script>
+	function reload() {
+		location.reload();
+	}
+</script>

@@ -183,6 +183,22 @@ class InboxSpec extends MessageGebSpec {
 			deleteTestMessages()
 	}
 
+	def "should remain in the same page, after moving the message to the destination folder"() {
+		setup:
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
+			new Folder(name: "my-folder").save(flush: true)
+		when:
+			go "message/inbox"
+		then:
+			$("#message-actions a", text: "my-folder").click()
+			waitFor { $("div.flash.message").displayed }
+			$("#messages-submenu .selected").text().contains('Inbox')
+		cleanup:
+			Fmessage.list()*.refresh()
+			Folder.findByName('my-folder').refresh().delete(flush: true)
+	}
+
+
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)
