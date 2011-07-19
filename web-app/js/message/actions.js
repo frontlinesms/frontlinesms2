@@ -1,3 +1,7 @@
+$(document).ready(function() {
+	$('tr :checkbox[checked="true"]').parent().parent().addClass('checked');
+});
+
 function setStarStatus(object,data){
 	if($("#"+object).hasClass("starred")) {
 		$("#"+object).removeClass("starred");
@@ -37,40 +41,40 @@ function checkAllMessages(){
 }
 
 function updateMessageDetails(id){
+	highlightRow(id); 
+	
 	var count = countCheckedMessages();
-
-	if(count == 1 && $("#message-"+id).hasClass('checked') == $("#message-"+id).hasClass('selected')) {
-		 //load the checked message
-		 var location = window.location.pathname
-		 var messageSection = $('input:hidden[name=messageSection]').val();
-		 var messageId = $('tr :checkbox[checked="true"]').val();
-		 if(messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash') {
-		 	window.location = "/frontlinesms2/message/"+messageSection+"?messageId="+messageId;
-		 } else{
-		 	$(document).load("/frontlinesms2/message/"+messageSection+"/show/"+messageId, function(data){
-		 		$(document).append(data);
-		 	});
-		 	
-		 }
-		 $(document).ready(function(){
-		 	$("tr :checkbox[value="+messageId+"]").checked = true;
-		 });
+	if(count == 1) {
+		loadCheckedMessage();
 	}
 	if(count > 1){
 		changeMessageCount(count);
-	} else {
-		showMessageDetails();
+	}
+}
+
+function loadCheckedMessage() {
+	var location = window.location.pathname
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
+	var messageId = $('tr :checkbox[checked="true"]').val();
+	
+	if(messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash') {
+		window.location = "/frontlinesms2/message/"+messageSection+"?messageId="+messageId+"&checkedId="+messageId;
+	}else if(messageSection == 'poll' || messageSection == 'folder'){
+		window.location = "/frontlinesms2/message/"+messageSection+"/"+ownerId+"/show/"+messageId+"?checkedId="+messageId;
+	} else{
+		window.location = "/frontlinesms2/message/"+messageSection+"/show/"+messageId+"?checkedId="+messageId;
 	}
 }
 
 function countCheckedMessages(){
 	var count = 0;
-	$(':checkbox').each(function(index){
+	$(':checkbox').each(function(){
 			if(this.checked){
 				count++;
 				addMessageIdToList(this.value);
 			} else{
-				removeMessageIdFromList(index>0 ? this.value: '');
+				removeMessageIdFromList(this.value);
 			}
 		});
 	
@@ -88,7 +92,6 @@ function validateCheckedMessageCount(count) {
 		return count;
 }
 
-
 function changeMessageCount(count){
 	if(messageDetails == null){
 		messageDetails = $('#message-details').html();
@@ -99,7 +102,10 @@ function changeMessageCount(count){
 }
 
 function setMessageActions() {
-	replyAll = "<a id='btn_reply_all' >Reply All</a>";
+	var replyAll = '';
+	if($('input:hidden[name=messageSection]').val() != 'pending'){
+		replyAll = "<a id='btn_reply_all' >Reply All</a>";
+	}
 	deleteAll = "<a id='btn_delete_all' >Delete All</a>";
 	$('#message-details').append("<div class='buttons'></div>");
 	$('#message-details div.buttons').append(replyAll+"&nbsp;"+deleteAll);
@@ -144,10 +150,10 @@ function showMessageDetails(){
 }
 
 function highlightRow(id){
-	if($("#message-"+id).hasClass('checked')){
-		$("#message-"+id).removeClass('checked')
-	} else {
+	if( $('tr :checkbox[value='+id+']').attr('checked') == 'checked'){
 		$("#message-"+id).addClass('checked')
+	} else {
+		$("#message-"+id).removeClass('checked')
 	}
 }
 

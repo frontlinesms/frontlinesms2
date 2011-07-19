@@ -44,6 +44,19 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 		    !$('a', text:'Reply')
 	}
+	
+	def "'Reply All' button appears for multiple selected messages and works"() {
+		when:
+			to MessagesPage
+			$('#messages-menu li a', href:'/frontlinesms2/message/pending').click()
+			waitFor { title == "Pending" }
+			
+			$("#message")[1].click()
+			$("#message")[2].click()
+			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
+		then:
+			!$('a', text:'Reply All')
+	}
 
 	def "should filter pending messages for starred and unstarred messages"() {
 		when:
@@ -63,4 +76,6 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['src1', 'src2'])
 	}
+	
+	
 }
