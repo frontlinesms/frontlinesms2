@@ -56,13 +56,12 @@
 				</tr>
 			</g:each>
 		</tbody>
-	</table>
-
-	<div id="footer">
+		<tfoot id="footer">
 			<g:paginate next="Forward" prev="Back"
 				 max="${grailsApplication.config.pagination.max}"
 				action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
-	</div>
+		</tfoot>
+	</table>
 </g:if>
 <g:else>
 	<div id="messages">

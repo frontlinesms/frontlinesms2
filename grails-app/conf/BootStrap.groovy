@@ -50,7 +50,7 @@ class BootStrap {
 						it.status = MessageStatus.INBOUND
 						it.save(failOnError:true)
 					}
-			(1..10).each {
+			(1..11).each {
 				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", status:MessageStatus.INBOUND).save(failOnError:true)
 			}
 
