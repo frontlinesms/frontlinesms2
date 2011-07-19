@@ -65,7 +65,14 @@ class BootStrap {
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
 			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
-		
+			
+			def barcelonaResponse = PollResponse.findByValue('barcelona');
+			10.times {
+				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}", text: "Yes", status: MessageStatus.INBOUND);
+				msg.save(failOnError: true);
+				barcelonaResponse.addToMessages(msg);
+			}
+			
 			['Work', 'Projects'].each {
 				new Folder(name:it).save(failOnError:true, flush:true)
 			}

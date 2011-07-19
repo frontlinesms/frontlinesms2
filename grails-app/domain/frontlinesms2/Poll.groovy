@@ -41,7 +41,7 @@ class Poll {
 	}
 
 	static Poll createPoll(question, responseList) {
-		if(!responseList.contains('Unknown')) responseList = ['Unknown'] << responseList
+		if(!responseList.contains('Unknown')) responseList = responseList << ['Unknown']
 		new Poll(title:	question, responses: responseList.flatten().collect{new PollResponse(value:it)})
 	}
 }
