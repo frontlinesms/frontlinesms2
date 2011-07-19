@@ -1,4 +1,5 @@
 <g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}" />
+<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}" />
 <div id="message-details">
 	<p class="message-name">${messageInstance.displaySrc}</p>
 	<g:def var="thisAddress" value="${messageInstance.src}" />

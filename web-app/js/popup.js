@@ -2,20 +2,20 @@ $(document).ready(function() {
 	$("#dropdown_options").hide()
 	$("#btn_forward").click(quickMessageClickAction)
 	$("#btn_reply" )
-	.button()
-	.click(quickMessageClickAction)
-	.next()
-		.button( {
-			text: false,
-			icons: {
-				primary: "ui-icon-triangle-1-s"
-			}
-		})
-		.click(function() {
-			$("#dropdown_options").toggle()
-		})
-		.parent()
-			.buttonset();
+		.button()
+		.click(quickMessageClickAction)
+		.next()
+			.button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-s"
+				}
+			})
+			.click(function() {
+				$("#dropdown_options").toggle()
+			})
+			.parent()
+				.buttonset();
 });
 
 function launchWizard(title, html) {

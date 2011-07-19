@@ -26,9 +26,9 @@
 				<g:if test="${contactInstance.id}">
 					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
 				</g:if>
-			  <g:else>
-				<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
-			  </g:else>
+			  	<g:else>
+					<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+			  	</g:else>
 			</div>
 			<div id="contact-info">
 				<div class="field">

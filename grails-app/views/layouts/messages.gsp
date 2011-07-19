@@ -7,9 +7,10 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
-		<g:javascript src="application.js"></g:javascript>
 		<g:javascript src="message/actions.js"></g:javascript>
-		<g:javascript src="popup.js"></g:javascript>
+		<g:javascript src="application.js"/>
+		<g:javascript src="popup.js" />
+		<g:javascript src="/message/move_dropdown.js" />
     </head>
 	<body>
 		<g:render template="/tabs"/>
@@ -25,11 +26,6 @@
 			Show:
 			<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link>
 			<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link>
-		</div>
-	    <div id="footer">
-			<g:paginate next="Forward" prev="Back"
-					 max="${grailsApplication.config.pagination.max}" controller="message"
-					action="${messageSection}" total="${messageInstanceTotal}" params= "${params}"/>
 		</div>
 	</body>
 </html>

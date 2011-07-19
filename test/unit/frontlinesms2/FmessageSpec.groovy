@@ -91,5 +91,12 @@ class FmessageSpec extends UnitSpec {
 		then:
 			m.validate()
 	}
+
+	def "should return count as zero if no search string is given"() {
+		when:
+			def count = Fmessage.countAllSearchMessages()
+		then:
+			count == 0
+	}
 }
 

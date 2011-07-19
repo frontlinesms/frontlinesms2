@@ -2,6 +2,7 @@ package frontlinesms2
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import grails.util.GrailsConfig
 
 
 class SearchController {
@@ -18,17 +19,19 @@ class SearchController {
 	}
 	
 	def result = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners)
-		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),,
-				messageSection: 'search',
+		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners, max, offset)
+		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
+				messageSection: 'result',
 				searchString: params.searchString,
 				groupInstance: groupInstance,
 				activityId: params.activityId,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: searchResults?.size()] << show(searchResults) << no_search()
+				messageInstanceTotal: Fmessage.countAllSearchMessages(params.searchString, groupInstance, messageOwners)] << show(searchResults) << no_search()
 	}
 	
 	def show = { searchResults ->
