@@ -2,9 +2,12 @@ package frontlinesms2
 
 import grails.plugin.spock.ControllerSpec
 
-class SearchControllerSpec extends ControllerSpec {
+class SearchControllerUnitSpec extends ControllerSpec {
 	def "should set max and offset parameters if not sent"() {
 		setup:
+			mockConfig('''
+				pagination.max = 10
+			''')
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
 			Fmessage.metaClass.static.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
@@ -26,7 +29,7 @@ class SearchControllerSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.static.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
+			Fmessage.metaClass.'static'.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
 				assert max == 5
 				assert offset == 7
 				searchResults
