@@ -62,7 +62,7 @@ environments {
     }
     development {
         grails.serverURL = "http://localhost:8080/${appName}"
-		pagination.max = 1
+		pagination.max = 10
     }
     test {
         grails.serverURL = "http://localhost:8080/${appName}"
