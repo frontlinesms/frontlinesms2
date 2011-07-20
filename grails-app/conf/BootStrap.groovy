@@ -5,7 +5,7 @@ import java.lang.reflect.Field
 import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
-import net.frontlinesms.test.serial.HayesPortHandler
+import net.frontlinesms.test.serial.hayes.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -90,7 +90,7 @@ class BootStrap {
 		// Set up modem simulation
 		MockSerial.init();
 		MockSerial.setMultipleOwnershipAllowed(true);
-		SerialPortHandler portHandler = new HayesPortHandler("ERROR: 999",
+		HayesState state_initial = HayesState.createState("ERROR: 1",
 				"AT", "OK",
 				"AT+CMEE=1", "OK",
 				"AT+STSF=1", "OK",
@@ -101,9 +101,6 @@ class BootStrap {
 				"AT+CGSN", "123456789099998\rOK",
 				"AT+CIMI", "254123456789012\rOK",
 				//"AT+CBC"
-				"AT+CMGS=108", "OK",
-				"AT+CMGS=109", "OK",
-				"AT+CMGS=110", "OK",
 				"AT+COPS=0", "OK",
 				"AT+CLIP=1", "OK",
 				"ATE0", "OK",
@@ -118,7 +115,12 @@ class BootStrap {
 +CMGL: 3,1,,62
 07915892000000F0040B915892214365F700007040213252242331493A283D0795C3F33C88FE06C9CB6132885EC6D341EDF27C1E3E97E7207B3A0C0A5241E377BB1D7693E72E
 
-OK''');
+OK''')
+		HayesState state_waitingForPdu = HayesState.createState(new HayesResponse("ERROR: 2", state_initial),
+				~/.+/, new HayesResponse('+CMGS: 0\rOK', state_initial))
+		state_initial.setResponse(~/AT\+CMGS=\d+/, "OK", state_waitingForPdu)
+		
+		SerialPortHandler portHandler = new StatefulHayesPortHandler(state_initial);
 		CommPortIdentifier cpi = new CommPortIdentifier("COM99", portHandler);
 		MockSerial.setIdentifier("COM99", cpi);
 		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));

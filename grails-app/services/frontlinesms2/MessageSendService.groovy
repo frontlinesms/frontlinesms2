@@ -5,6 +5,6 @@ class MessageSendService {
 
 	def dispatch(Fmessage m, SmslibFconnection c) {
 		m.save(failOnError:true, flush:true)
-		sendMessage('seda:smslib-outgoing-fmessages', m, [fconnection:c.id])
+		sendMessageAndHeaders('seda:smslib-outgoing-fmessages', m, [fconnection:c.id])
 	}
 }
