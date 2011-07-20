@@ -1,11 +1,13 @@
 package frontlinesms2
 
 enum ConnectionStatus {
-	NOT_CONNECTED,
-	CONNECTED,
-	ERROR
+	NOT_CONNECTED("red"),
+	CONNECTED("green"),
+	ERROR("orange")
 
-	String toString() {
-		super.toString().toLowerCase().capitalize().replaceAll("_"," ")
+	String indicator;
+
+	public ConnectionStatus(String color) {
+		this.indicator = color;
 	}
 }

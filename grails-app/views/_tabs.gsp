@@ -8,12 +8,10 @@
 	<li><g:link class="tab ${params.controller=='search'?'selected':''}" url="${[controller:'search']}" id="tab-search">Search</g:link></li>
 	<li><g:link class="tab ${params.controller=='connection'?'selected':''}" url="${[controller:'settings']}" id="tab-settings">Settings & Plugins</g:link></li>
 </ul>
-
 <script>
 	$.ajax({
 		type:'GET',
 		url: '/frontlinesms2/status/trafficLightIndicator',
-		success: function(data){ $('#indicator').attr(alert('"/frontlinesms2/images/${data}-status.png")'; src' + "/frontlinesms2/images/${data}-status.png") }
+		success: function(data){$('#indicator').attr("src", "/frontlinesms2/images/" + data + "-status.png") }
 	});
-
 </script>
