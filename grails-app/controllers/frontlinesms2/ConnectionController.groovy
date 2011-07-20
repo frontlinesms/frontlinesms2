@@ -95,7 +95,7 @@ class ConnectionController {
 		println params
 
 		withFconnection {
-			flash.message = "Test message successfully sent to ${it.name}"
+			flash.message = "Test message successfully sent to ${params.number} using ${it.name}"
 			messageSendService.dispatch(new Fmessage(src:"$it", dst: params.number, text: params.message), it)
 			redirect (action:'show', id:params.id)
 		}
