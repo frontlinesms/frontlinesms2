@@ -11,7 +11,7 @@ class ConnectionControllerSpec extends ControllerSpec {
 			controller.redirectArgs.action == 'list'
 	}
 
-	def "test that route actually calls FconnectionService and routes"() {
+	def "test that createRoute actually calls FconnectionService"() {
 		setup:
 //			controller.metaClass.message = { LinkedHashMap m -> "unresolved i18n message '${m}'"}
 			def fconnection1 = new Fconnection() // we need a ref to this to make sure it is passed to our mock service
