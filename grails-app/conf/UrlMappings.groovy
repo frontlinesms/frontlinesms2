@@ -12,7 +12,7 @@ class UrlMappings {
 		"/message/poll/$ownerId"(controller:'message', action:'poll') {}
 		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
 
-		"/folder/$ownerId"(controller:'message', action:'folder') {}
+		"/message/folder/$ownerId"(controller:'message', action:'folder') {}
 		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
 
 		// Don't know why this is neccessary, but it is

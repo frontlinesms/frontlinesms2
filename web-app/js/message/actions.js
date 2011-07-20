@@ -44,7 +44,7 @@ function updateMessageDetails(id){
 	highlightRow(id); 
 	
 	var count = countCheckedMessages();
-	if(count == 1) {
+	if(count == 1 && $(':checkbox').size() != 2) {
 		loadCheckedMessage();
 	}
 	if(count > 1){
@@ -171,7 +171,7 @@ function addMessageIdToList(id) {
 	var f = $('input:hidden[name=checkedMessageIdList]');
 	var oldList = f.val();
 	
-	if(oldList.indexOf(id + ',') == -1) {
+	if(oldList.indexOf(id + ',') == -1 && id != 0) {
 		var newList;
 		newList = oldList + id + ',';
 		f.val(newList);

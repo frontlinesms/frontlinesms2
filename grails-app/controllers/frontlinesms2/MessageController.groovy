@@ -110,13 +110,22 @@ class MessageController {
 			}
 			if(messageOwner instanceof Poll) {
 				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-				unknownResponse.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
 			} else if (messageOwner instanceof Folder) {
-				messageOwner.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
 			}
+
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			render ""
+			
 		}
+		if(params.count) {
+			def messageCount = params.count
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
+			params.remove('count')
+			
+			}
+		params.remove('checkedMessageIdList')
+		render ""
 	}
 
 	def changeResponse = {
@@ -143,7 +152,7 @@ class MessageController {
 		}
 		if(params.count) {
 			def messageCount = params.count
-			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount])}"
+			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
 		}
 		
@@ -181,14 +190,17 @@ class MessageController {
 
 	private def withFmessage(Closure c) {
 		if(params.checkedMessageIdList) {
+			params.remove('messageId')
 			getCheckedMessageList().each{ m ->
 				if(m) c.call(m)
-				else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
 			}
 		}
-		def m = Fmessage.get(params.messageId)
-		if(m) c.call(m)
-		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+		if(params.messageId) {
+			def m = Fmessage.get(params.messageId)
+			if(m) c.call(m)
+			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+		}
+		
 	}
 	
 	private def getCheckedMessageList() {
