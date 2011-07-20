@@ -15,14 +15,18 @@ class ConnectionShowSpec extends ConnectionGebSpec {
 			deleteTestConnections()
 	}
 
-	def '"Send test message" button for particular connection appears when that connection is selected'() {
+	def '"Send test message" button for particular connection appears when that connection is selected and started'() {
 		given:
 			createTestConnection()
 			def testyEmail = EmailFconnection.findByName('test email connection')
 		when:
 			go "connection/show/${testyEmail.id}"
 		then:
-			$('#connections .selected .test').getAttribute('href') == "/frontlinesms2/connection/createTest/${testyEmail.id}"
+			$('#connections .selected .test').isEmpty()
+		when:
+			$("#connections .selected .route").click()
+		then:
+			$('#connections .selected .test').@href == "/frontlinesms2/connection/createTest/${testyEmail.id}"
 		cleanup:
 			deleteTestConnections()
 	}
