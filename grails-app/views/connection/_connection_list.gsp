@@ -2,9 +2,9 @@
 	<div id='connections'>You have no connections configured.</div>
 </g:if>
 <g:else>
-	<ol id='connections'>
+	<ol id="connections">
 		<g:each in="${connectionInstanceList}" status="i" var="c">
-				<li id='item' class="${c == connectionInstance ? 'selected' : ''}">
+				<li class="${c == connectionInstance ? 'selected' : ''}">
 					<g:link action="show" class="show" id="${c.id}">
 						<h2>${c.name}</h2>
 						<h3>${c.type()}</h3>
@@ -13,11 +13,11 @@
 					<g:if test="${c == connectionInstance}">
 						<g:if test="${c.status == 'Not connected'}">
 							<div class="buttons">
-								<g:link action="createRoute" class='route' id="${c.id}" >Create route</g:link>
+								<g:link action="createRoute" class="route" id="${c.id}" >Create route</g:link>
 							</div>
 						</g:if>
 						<g:else>
-							<g:link action="createTest" class='test' id="${c.id}" >Send test message</g:link>
+							<g:link action="createTest" class="test" id="${c.id}" >Send test message</g:link>
 						</g:else>
 					</g:if>
 				</li>
