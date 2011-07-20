@@ -40,6 +40,8 @@ class BootStrap {
 //			initialiseMockSerialDevice()
 			initialiseRealSerialDevice()
 			
+			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
+			
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
 			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),

@@ -10,14 +10,16 @@
 						<h3>${c.type()}</h3>
 						<div class="status">${c.status}</div>
 					</g:link>
-					<g:if test="${c.status == 'Not connected'}">
-						<div class="buttons">
-							<g:link action="createRoute" class='route' id="${c.id}" >Create route</g:link>
-						</div>
+					<g:if test="${c == connectionInstance}">
+						<g:if test="${c.status == 'Not connected'}">
+							<div class="buttons">
+								<g:link action="createRoute" class='route' id="${c.id}" >Create route</g:link>
+							</div>
+						</g:if>
+						<g:else>
+							<g:link action="createTest" class='test' id="${c.id}" >Send test message</g:link>
+						</g:else>
 					</g:if>
-					<g:else>
-						<g:link action="createTest" class='test' id="${c.id}" >Send test message</g:link>
-					</g:else>
 				</li>
 		</g:each>
 	</ol>
