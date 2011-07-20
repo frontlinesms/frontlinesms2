@@ -37,8 +37,8 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-//			initialiseMockSerialDevice()
-			initialiseRealSerialDevice()
+			initialiseMockSerialDevice()
+//			initialiseRealSerialDevice()
 			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
 			
@@ -166,7 +166,7 @@ class BootStrap {
 				"+++", "", // switch 2 command mode
 				"AT+CPMS?", "+CPMS:\r\"ME\",1,15,\"SM\",0,100\rOK", // get storage locations
 				"AT+CPMS=\"ME\"", "OK",
-				"AT+CMGL=0", '''+CMGL: 2,1,,51
+				~/AT\+CMGL=[04]/, '''+CMGL: 2,1,,51
 07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905
 +CMGL: 3,1,,62
 07915892000000F0040B915892214365F700007040213252242331493A283D0795C3F33C88FE06C9CB6132885EC6D341EDF27C1E3E97E7207B3A0C0A5241E377BB1D7693E72E

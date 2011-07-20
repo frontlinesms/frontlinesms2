@@ -93,7 +93,8 @@ log4j = {
 
     warn   'org.mortbay.log'
 
-    trace  'serial'
+    info  'serial',
+           'org.apache.camel'
 }
 
 codenarc {
