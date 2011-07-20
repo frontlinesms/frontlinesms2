@@ -128,3 +128,13 @@ body {
 	clear:both;
 	display:block;
 }
+
+.status {
+	.label {
+		@include column(6)
+	}
+
+	.value {
+		@include column(12)
+	}
+}
