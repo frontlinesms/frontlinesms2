@@ -25,9 +25,4 @@ class Fconnection {
 	String getStatus() {
 		fconnectionService.getRouteStatus(this)
 	}
-
-	static def fetchAllStatus() {
-		['MTNDONGLE' : , "GMAIL": EmailFconnection, "INTERNET": ConnectionStatus.CONNECTED,
-			"MESSAGEQUEUE": ConnectionStatus.NOT_CONNECTED]
-	}
 }
