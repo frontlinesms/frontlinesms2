@@ -37,7 +37,9 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-			initialiseMockSerialDevice()
+//			initialiseMockSerialDevice()
+			initialiseRealSerialDevice()
+			
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
 			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
@@ -108,6 +110,34 @@ class BootStrap {
 	}
 
 	def destroy = {
+	}
+	
+	def initialiseRealSerialDevice() {
+		// adapted from http://techdm.com/grails/?p=255&lang=en
+		def addJavaLibraryPath = { path, boolean prioritise=true ->
+			def dir = new File(path)
+			assert dir.exists()
+			def oldPathList = System.getProperty('java.library.path', '')
+			def newPathList = prioritise?
+					dir.canonicalPath + File.pathSeparator + oldPathList:
+					oldPathList + File.pathSeparator + dir.canonicalPath
+			log.info "Setting java.library.path to $newPathList"
+			System.setProperty('java.library.path', newPathList)
+			ClassLoader.@sys_paths = null
+		}
+		
+		def os = {
+			def osNameString = System.properties['os.name'].toLowerCase()
+			for(name in ['linux', 'windows', 'mac']) {
+				if(osNameString.contains(name)) return name
+			}
+		}.call()
+		
+		def architecture = System.properties['os.arch'].contains('64')? 'x86_64': 'i686'
+		
+		log.info "Adding jni/$os/$architecture to library paths..."
+		addJavaLibraryPath "jni/$os/$architecture"
+		serial.SerialClassFactory.init(serial.SerialClassFactory.PACKAGE_RXTX) // TODO hoepfully this step of specifying the package is unnecessary
 	}
 
 	def initialiseMockSerialDevice() {
