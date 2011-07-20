@@ -27,7 +27,7 @@ class Fmessage {
 		text(nullable:true)
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
-		status(nullable:false)
+		status(nullable:true)
 	}
 	
 	static namedQueries = {
