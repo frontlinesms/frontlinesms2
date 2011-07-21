@@ -103,7 +103,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			setupFolderAndItsMessages()
 			def folderId = Folder.findByName("folder").id
 		when:
-			go "/message/folder/${folderId}"
+			go "/frontlinesms2/message/folder/${folderId}"
 		then:
 			$("#messages tbody tr").size() == 10
 		when:
@@ -112,7 +112,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		then:
 			$("#messages tbody tr").size() == 10
 
-	}
+}
 
 	def "should paginate poll messages"() {
 		setup:

@@ -4,30 +4,10 @@ import frontlinesms2.*
 import frontlinesms2.enums.MessageStatus
 
 class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
-	def setup() {
-		createTestPolls()
-		createTestMessages()
-	}
-	
-	def cleanup() {
-		Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-
-		Folder.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-		
-		Fmessage.list().each {
-			it.refresh()
-			it.delete(failOnError:true, flush: true)
-		}
-	}
-
 	def 'message actions menu is displayed for all individual messages'() {
 		given:
+			createTestPolls()
+			createTestMessages()
 			createTestFolders()
 		when:
 			to PollMessageViewPage
@@ -40,9 +20,27 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def inboxActions = $('#message-actions').children()*.text()
 		then:
 			inboxActions[1] == "Football Teams"
+		cleanup:
+			Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+			}
+
+		Folder.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+			}
+		
+		Fmessage.list().each {
+			it.refresh()
+			it.delete(failOnError:true, flush: true)
+			}
 	}
 	
 	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {	
+		given:
+			createTestPolls()
+			createTestMessages()
 		when:
 			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
@@ -62,13 +60,30 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
 			footballPoll.responses.each { it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
-			waitFor {$("div.flash.message").displayed}
 		then:
 			jill != Fmessage.getInboxMessages(false).find { it == jill }
 			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
+		cleanup:
+			Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+			}
+
+		Folder.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+			}
+		
+		Fmessage.list().each {
+			it.refresh()
+			it.delete(failOnError:true, flush: true)
+			}
 	}
 	
 	def 'messages are always added to the UNKNOWN response of a poll'() {
+		given:
+			createTestPolls()
+			createTestMessages()
 		when:
 			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
@@ -76,16 +91,31 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def unknownResponse =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
 			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
-			waitFor {$("div.flash.message").displayed}
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
 		then:
 			bob.messageOwner == unknownResponse
+		cleanup:
+			Folder.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
+		
+			Fmessage.list().each {
+				it.refresh()
+				it.delete(failOnError:true, flush: true)
+				}
+			Poll.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
 	}
 
 	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
 		given:
+			createTestPolls()
+			createTestMessages()
 			assert Fmessage.findBySrc('Bob').messageOwner.value == 'manchester'
 		when:
 			to PollMessageViewPage
@@ -101,10 +131,25 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			bob.refresh()
 		then:
 			bob.messageOwner == barceResponse
+		cleanup:
+			Folder.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
+			Poll.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
+			Fmessage.list().each {
+				it.refresh()
+				it.delete(failOnError:true, flush: true)
+				}
 	}
 	
 	def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
 		given:
+			createTestPolls()
+			createTestMessages()
 			createTestFolders()
 		when:
 			def max = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', status:MessageStatus.INBOUND).save(failOnError:true, flush:true)
@@ -120,9 +165,26 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			max != footballPoll.getMessages(false).find { it == max }
 			max == workFolder.getFolderMessages(false).find { it == max }
+		cleanup:
+			Folder.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
+		
+			Poll.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
+			Fmessage.list().each {
+				it.refresh()
+				it.delete(failOnError:true, flush: true)
+				}
 	}
 	
-		def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll'() {
+	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll'() {
+		given:
+			createTestPolls()
+			createTestMessages()
 		when:
 			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
@@ -135,12 +197,21 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
-			waitFor {$("div.flash.message").text().displayed}
 		then:
 			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
 			alice != Poll.findByTitle("Football Teams").getMessages(false).find { it == alice }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
+		cleanup:
+			
+			Fmessage.list().each {
+				it.refresh()
+				it.delete(failOnError:true, flush: true)
+				}
+			Poll.findAll().each() {
+				it.refresh()
+				it.delete(failOnError:true, flush:true)
+				}
 	}
 }
 
