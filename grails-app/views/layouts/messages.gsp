@@ -22,9 +22,6 @@
 			<g:render template="menu"/>
 			<g:render template="message_list"/>
 			<g:layoutBody/>
-			Show:
-			<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link>
-			<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link>
 		</div>
 	</body>
 </html>
