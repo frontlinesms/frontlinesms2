@@ -6,7 +6,7 @@ import grails.util.Environment
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
 	def fconnectionService
-	static transients = ['status']
+	static transients = ['status', 'camelConsumerAddress', 'camelProducerAddress']
 	
 	String name
 	
@@ -16,7 +16,13 @@ class Fconnection {
 		} else throw new IllegalStateException()
 	}
 	
-	String camelAddress() {
+	String getCamelConsumerAddress() {
+		if (Environment.current == Environment.TEST) {
+			'bad:fconnection?subclassed=false'
+		} else throw new IllegalStateException()
+	}
+	
+	String getCamelProducerAddress() {
 		if (Environment.current == Environment.TEST) {
 			'bad:fconnection?subclassed=false'
 		} else throw new IllegalStateException()

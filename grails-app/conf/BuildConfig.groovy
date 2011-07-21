@@ -10,10 +10,6 @@ grails.project.dependency.resolution = {
 	}
 	log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 	repositories {
-		grailsPlugins()
-		grailsHome()
-		grailsCentral()
-
 		// uncomment the below to enable remote dependency resolution
 		// from public Maven repositories
 		mavenLocal()
@@ -23,6 +19,10 @@ grails.project.dependency.resolution = {
 		//mavenRepo "http://download.java.net/maven/2/"
 		//mavenRepo "http://repository.jboss.com/maven2/"
 		mavenRepo "http://dev.frontlinesms.com/m2repo/"
+		
+		grailsPlugins()
+		grailsHome()
+		grailsCentral()
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -35,9 +35,10 @@ grails.project.dependency.resolution = {
 		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.2-SNAPSHOT'
 		compile 'org.apache.camel:camel-mail:2.5.0'
+		compile 'org.rxtx:rxtx:2.1.7'
 
 		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT'
+		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT' // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 	}
 }
 

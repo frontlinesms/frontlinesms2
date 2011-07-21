@@ -3,6 +3,8 @@ package frontlinesms2
 import org.apache.camel.Processor
 import org.apache.camel.Exchange
 
+import frontlinesms2.enums.MessageStatus // FIXME remove "enums" package
+
 class EmailTranslationService implements Processor {
 	static final String EMAIL_PROTOCOL_PREFIX = 'email:'
 	static final char UNDERLINE_CHAR = '='
@@ -13,7 +15,7 @@ class EmailTranslationService implements Processor {
 		println("exchange ${exchange}")
 		def i = exchange.in
 		println("in: ${i}")
-		Fmessage message = new Fmessage()
+		Fmessage message = new Fmessage(status:MessageStatus.INBOUND)
 		message.src = EMAIL_PROTOCOL_PREFIX + i.getHeader('From')
 		println("src: ${message.src}")
 		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')

@@ -4,6 +4,7 @@ class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def fconnectionService
+	def messageSendService
 
 	def index = {
 		redirect(action:'list')
@@ -26,8 +27,6 @@ class ConnectionController {
 				connectionInstance: connectionInstance,
 				fconnectionInstanceTotal: fconnectionInstanceTotal]
 		}
-		
-		
 	}
 
 	def create = {}
@@ -54,7 +53,7 @@ class ConnectionController {
 
 	def saveEmail = {
 		def fconnectionInstance = new EmailFconnection()
-		if(params.protocol) params.protocol = EmailProtocol.valueOf(params.protocol.toUpperCase())
+		if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 		fconnectionInstance.properties = params
 
 		if (fconnectionInstance.save(flush: true)) {
@@ -82,15 +81,31 @@ class ConnectionController {
 	def createRoute = {
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
-			flash.message = "Created route from ${settings.camelAddress()}"
+			flash.message = "Created route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
 			redirect action:'list', id:settings.id
+		}
+	}
+
+	def createTest = {
+		def connectionInstance = Fconnection.get(params.id)
+		[connectionInstance:connectionInstance]
+	}
+
+	def sendTest = {
+		println params
+
+		withFconnection {
+			flash.message = "Test message successfully sent to ${params.number} using ${it.name}"
+			messageSendService.dispatch(new Fmessage(src:"$it", dst: params.number, text: params.message), it)
+			redirect (action:'show', id:params.id)
 		}
 	}
 	
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
-		if(connection) c connection
-		else {
+		if(connection) {
+			c connection
+		} else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}"
 			redirect action:'list'
 		}
