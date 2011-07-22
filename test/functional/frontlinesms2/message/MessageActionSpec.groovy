@@ -134,12 +134,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def sam = new Fmessage(src:'Sam', dst:'+80808088', text:'go manchester', dateReceived: new Date() - 3, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
-			def jack = new Fmessage(src:'Jack', dst:'+2575758899', text:'pantene is the best',  dateReceived: new Date() - 2, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
 		when:
 			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
-			def jill = Fmessage.findBySrc('Jill')
 			def alice = Fmessage.findBySrc('Alice')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
@@ -154,16 +151,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			alice != Poll.findByTitle("Football Teams").getMessages(false).find { it == alice }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
-		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Sam').id}"
-			$("#message")[0].click()
-			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
-			footballPoll.responses.each{ it.refresh() }
-		then:
-			sam == Poll.findByTitle("Football Teams").getMessages(false).find { it == sam }
-			jack == Poll.findByTitle("Football Teams").getMessages(false).find { it == jack }
-			sam != Fmessage.getInboxMessages(false).find { it == sam }
-			jack != Fmessage.getInboxMessages(false).find { it == jack }
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
