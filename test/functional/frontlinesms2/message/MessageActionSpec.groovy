@@ -27,37 +27,37 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 	
-	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			to PollMessageViewPage
-			def bob = Fmessage.findBySrc('Bob')
-			def jill = Fmessage.findBySrc('Jill')
-			def shampooPoll = Poll.findByTitle('Shampoo Brands')
-			def footballPoll = Poll.findByTitle('Football Teams')
-			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
-			shampooPoll.responses.each{ it.refresh() }
-			footballPoll.responses.each{ it.refresh() }
-			waitFor {$("div.flash.message").displayed}
-		then:
-			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
-			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
-
-		when:
-			go "message/inbox/show/${jill.id}"
-			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
-			footballPoll.responses.each { it.refresh() }
-			Fmessage.findAll().each { it.refresh() }
-			waitFor {$("div.flash.message").displayed}
-		then:
-			jill != Fmessage.getInboxMessages(false).find { it == jill }
-			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
-		cleanup:
-			deleteTestMessages()
-			deleteTestPolls()
-	}
+//	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {
+//		given:
+//			createTestPolls()
+//			createTestMessages()
+//		when:
+//			to PollMessageViewPage
+//			def bob = Fmessage.findBySrc('Bob')
+//			def jill = Fmessage.findBySrc('Jill')
+//			def shampooPoll = Poll.findByTitle('Shampoo Brands')
+//			def footballPoll = Poll.findByTitle('Football Teams')
+//			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
+//			shampooPoll.responses.each{ it.refresh() }
+//			footballPoll.responses.each{ it.refresh() }
+//			waitFor {$("div.flash.message").displayed}
+//		then:
+//			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
+//			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
+//
+//		when:
+//			go "message/inbox/show/${jill.id}"
+//			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
+//			footballPoll.responses.each { it.refresh() }
+//			Fmessage.findAll().each { it.refresh() }
+//			waitFor {$("div.flash.message").displayed}
+//		then:
+//			jill != Fmessage.getInboxMessages(false).find { it == jill }
+//			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
+//		cleanup:
+//			deleteTestMessages()
+//			deleteTestPolls()
+//	}
 
 	def 'messages are always added to the UNKNOWN response of a poll'() {
 		given:
