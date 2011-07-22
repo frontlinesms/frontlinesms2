@@ -211,9 +211,9 @@ class Fmessage {
 	
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
 		if(!searchString) return []
-		def results = Fmessage.searchMessages(searchString, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
-		results*.updateDisplaySrc()
-		results
+		def searchResults = Fmessage.searchMessages(searchString, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
+		searchResults*.updateDisplaySrc()
+		searchResults
 	}
 
 	static def countAllSearchMessages(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
