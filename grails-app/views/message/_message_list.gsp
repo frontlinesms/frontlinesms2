@@ -13,6 +13,11 @@
 		}
 	}
 </script>
+<div id="export_button">
+	<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchWizard('Export', data);">
+		Export
+	</g:remoteLink>		
+</div>
 <g:if test="${messageInstanceTotal > 0}">
 	<table id="messages">
 		<thead>
@@ -29,7 +34,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${messageInstanceList }" status="i" var="m">
+			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
 					<td>
 					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
