@@ -3,7 +3,7 @@ package frontlinesms2.connection
 import frontlinesms2.*
 
 class TestMessageSpec extends ConnectionGebSpec {
-	def 'clicking "Send test message" takes us to a page with default message and empty recieving number field'() {
+	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
 		given:
 			createTestConnection()
 		when:
