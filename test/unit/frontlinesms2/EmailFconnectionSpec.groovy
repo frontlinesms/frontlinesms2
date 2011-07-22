@@ -18,7 +18,7 @@ class EmailFconnectionSpec extends UnitSpec {
 	}
 	
 	def createEmailFconnectionWithServerPort(serverPort) {
-		new EmailFconnection(name: 'test', protocol:EmailProtocol.IMAP,
+		new EmailFconnection(name: 'test', receiveProtocol:EmailReceiveProtocol.IMAP,
 				serverName:'example.com', serverPort:serverPort, username:'user',
 				password:'secret')
 	}

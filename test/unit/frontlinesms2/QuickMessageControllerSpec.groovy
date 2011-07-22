@@ -35,6 +35,16 @@ class QuickMessageControllerSpec extends ControllerSpec {
 		then:
 			result['recipients'] ==  [address]
 			result['nonExistingRecipients'] ==  []
+			result['configureTabs'] ==  ['tabs-1', 'tabs-2', 'tabs-3']
+	}
+
+	def "should set configure tabs when set in the incoming request"() {
+		setup:
+			mockParams.configureTabs = ['tabs-1', 'tabs-3']
+		when:
+			def result = controller.create()
+		then:
+			result['configureTabs'] ==  ['tabs-1', 'tabs-3']
 	}
 
 	def "recipient list must be empty if there is no need for pre populating address"() {

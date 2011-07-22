@@ -6,7 +6,8 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
-	</head>
+		<jqui:resources />
+			</head>
 	<body>
 		<g:render template="/tabs"/>
 		<g:render template="/flash"/>
