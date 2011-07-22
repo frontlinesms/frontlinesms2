@@ -29,4 +29,10 @@ environments {
             url = "jdbc:hsqldb:file:prodDb;shutdown=true"
         }
     }
+    standalone {
+        dataSource {
+            dbCreate = "update"
+            url = "jdbc:hsqldb:file:standalone;shutdown=true"
+        }
+    }
 }
