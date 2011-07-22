@@ -14,7 +14,9 @@ class QuickMessageController {
 		}
 		params.remove('checkedMessageIdList')
 
+		def configureTabs = params['configureTabs'] ?: ['tabs-1', 'tabs-2', 'tabs-3']
 		[contactList: contacts,
+			configureTabs: configureTabs,
 			groupList:Group.getGroupDetails(),
 			recipients:recipients,
 			messageText: fowardMessage,
