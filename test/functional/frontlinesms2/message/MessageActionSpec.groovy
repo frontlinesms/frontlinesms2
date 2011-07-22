@@ -130,33 +130,12 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 	
-	def 'clicking on poll moves multiple messages to that poll and removes it from inbox'() {
-		given:
-			createTestPolls()	
-			def alice = new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester', dateReceived: new Date() - 3, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
-			def joe = new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best',  dateReceived: new Date() - 2, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
-		when:
-			go '/message/inbox'
-			$("#message")[0].click()
-			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
-			def shampooPoll = Poll.findByTitle('Shampoo Brands')
-			def footballPoll = Poll.findByTitle('Football Teams')
-			shampooPoll.responses.each{ it.refresh() }
-			footballPoll.responses.each{ it.refresh() }
-		then:
-			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
-			joe == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == joe }
-			alice != Fmessage.getInboxMessages(false).find { it == alice }
-			joe != Fmessage.getInboxMessages(false).find { it == joe }
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
-	}
-	
-	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll'() {
+	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
 		given:
 			createTestPolls()
 			createTestMessages()
+			def sam = new Fmessage(src:'Sam', dst:'+80808088', text:'go manchester', dateReceived: new Date() - 3, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			def jack = new Fmessage(src:'Jack', dst:'+2575758899', text:'pantene is the best',  dateReceived: new Date() - 2, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
 		when:
 			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
@@ -175,6 +154,16 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			alice != Poll.findByTitle("Football Teams").getMessages(false).find { it == alice }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Sam').id}"
+			$("#message")[0].click()
+			$('#message-actions').value("${Poll.findByTitle('Football Teams').id}")
+			footballPoll.responses.each{ it.refresh() }
+		then:
+			sam == Poll.findByTitle("Football Teams").getMessages(false).find { it == sam }
+			jack == Poll.findByTitle("Football Teams").getMessages(false).find { it == jack }
+			sam != Fmessage.getInboxMessages(false).find { it == sam }
+			jack != Fmessage.getInboxMessages(false).find { it == jack }
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
