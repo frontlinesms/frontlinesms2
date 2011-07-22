@@ -21,20 +21,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			inboxActions[1] == "Football Teams"
 		cleanup:
-			Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-			}
-
-		Folder.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-			}
-		
-		Fmessage.list().each {
-			it.refresh()
-			it.delete(failOnError:true, flush: true)
-			}
+			deleteTestFolders()
+			deleteTestPolls()
+			deleteTestMessages()
 	}
 	
 	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {	
@@ -64,20 +53,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			jill != Fmessage.getInboxMessages(false).find { it == jill }
 			jill == Poll.findByTitle("Football Teams").getMessages(false).find { it == jill }
 		cleanup:
-			Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-			}
-
-		Folder.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-			}
-		
-		Fmessage.list().each {
-			it.refresh()
-			it.delete(failOnError:true, flush: true)
-			}
+			deleteTestFolders()
+			deleteTestPolls()
+			deleteTestMessages()
 	}
 	
 	def 'messages are always added to the UNKNOWN response of a poll'() {
@@ -97,19 +75,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			bob.messageOwner == unknownResponse
 		cleanup:
-			Folder.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
-		
-			Fmessage.list().each {
-				it.refresh()
-				it.delete(failOnError:true, flush: true)
-				}
-			Poll.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
+			deleteTestFolders()
+			deleteTestMessages()
+			deleteTestPolls()
 	}
 
 	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
@@ -132,18 +100,9 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			bob.messageOwner == barceResponse
 		cleanup:
-			Folder.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
-			Poll.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
-			Fmessage.list().each {
-				it.refresh()
-				it.delete(failOnError:true, flush: true)
-				}
+			deleteTestFolders()
+			deleteTestPolls()
+			deleteTestMessages()
 	}
 	
 	def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
@@ -166,19 +125,32 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			max != footballPoll.getMessages(false).find { it == max }
 			max == workFolder.getFolderMessages(false).find { it == max }
 		cleanup:
-			Folder.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
-		
-			Poll.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
-			Fmessage.list().each {
-				it.refresh()
-				it.delete(failOnError:true, flush: true)
-				}
+			deleteTestFolders()
+			deleteTestPolls()
+			deleteTestMessages()
+	}
+	
+	def 'clicking on poll moves multiple messages to that poll and removes it from inbox'() {
+		given:
+			createTestPolls()	
+			def alice = new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester', dateReceived: new Date() - 3, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			def joe = new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best',  dateReceived: new Date() - 2, status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+		when:
+			go '/message/inbox'
+			$("#message")[0].click()
+			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
+			def shampooPoll = Poll.findByTitle('Shampoo Brands')
+			def footballPoll = Poll.findByTitle('Football Teams')
+			shampooPoll.responses.each{ it.refresh() }
+			footballPoll.responses.each{ it.refresh() }
+		then:
+			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
+			joe == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == joe }
+			alice != Fmessage.getInboxMessages(false).find { it == alice }
+			joe != Fmessage.getInboxMessages(false).find { it == joe }
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
 	}
 	
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll'() {
@@ -197,21 +169,15 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
+			waitFor {$("div.flash.message").displayed}
 		then:
 			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
 			alice != Poll.findByTitle("Football Teams").getMessages(false).find { it == alice }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
 		cleanup:
-			
-			Fmessage.list().each {
-				it.refresh()
-				it.delete(failOnError:true, flush: true)
-				}
-			Poll.findAll().each() {
-				it.refresh()
-				it.delete(failOnError:true, flush:true)
-				}
+			deleteTestPolls()
+			deleteTestMessages()
 	}
 }
 
