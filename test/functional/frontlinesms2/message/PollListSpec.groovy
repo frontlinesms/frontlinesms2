@@ -9,7 +9,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollListPage
-			def pollMessageSources = $('#messages tbody tr td:nth-child(2)')*.text()
+			def pollMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			at PollListPage
 			pollMessageSources == ['Alice', 'Bob']
@@ -26,9 +26,9 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
-			rowContents[1] == 'Bob'
-			rowContents[2] == 'manchester ("I like manchester")'
-			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[2] == 'Bob'
+			rowContents[3] == 'manchester ("I like manchester")'
+			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -72,19 +72,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
-	def "reply option should not be available for messages listed in poll section"() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-		then:
-		    !$('a', text:'Reply')
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
-	}
-
 	def "should filter poll response messages for starred and unstarred messages"() {
 		given:
 			createTestPolls()
@@ -97,30 +84,81 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'Bob'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Bob'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Bob', 'Alice'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
 	}
 	
-	def "forward option should not be available for messages listed in poll section"() {
+	def "should only display message details when one message is checked"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
 		then:
-		    !$('a', text:'Foward')
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		when:
+			$("#message")[1].click()
+			def message = Fmessage.findBySrc('Bob')
+		then:
+			$('#message-details p:nth-child(1)').text() == message.src
+			$('#message-details p:nth-child(4)').text() == message.text
+		
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
 	}
 
+	def "should display message count when multiple messages are selected"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+	}
+	
+	def "'Reply All' button appears for multiple selected messages and works"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+			new Contact(name: 'June', primaryMobile: '+2544635263').save(failOnError:true)
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
+			def btnReply = $('#message-details div.buttons a')[0]
+		then:
+			btnReply
+		when:
+			btnReply.click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value:'Alice').getAttribute('checked')
+			$('input', value:'Bob').getAttribute('checked')
+			!$('input', value:'June').getAttribute('checked')
+			
+		cleanup:
+			deleteTestPolls()
+			deleteTestMessages()
+			deleteTestContacts()
+	}
 }
 
 class PollListPage extends geb.Page {
@@ -133,5 +171,3 @@ class PollListPage extends geb.Page {
 		messagesList { $('#messages-submenu') }
 	}
 }
-
-

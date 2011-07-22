@@ -3,7 +3,21 @@ $(document).ready(function() {
 });
 
 function moveAction() {
+	var count = countCheckedMessages();
+	var checkedMessageList = '';
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
+	if(messageSection == 'poll' || messageSection == 'folder'){
+		var location = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
+	} else{
+		var location = "/frontlinesms2/message/"+messageSection;
+	}
 	var me = $(this).find('option:selected');
+	if(count > 1) {
+		moveMultipleMessages(me, location);
+		return;
+	}
+
 	var mesId = $("#message-id").val()
 	if(me.hasClass('na')) return;
 	if(me.hasClass('poll')) {
@@ -11,12 +25,30 @@ function moveAction() {
 	} else if(me.hasClass('folder')) {
 		var section = 'folder';
 	}
+	
 	$.ajax({
 		type:'POST',
 		data: {messageSection: section, messageId: mesId, ownerId: me.val()},
 		url: '/frontlinesms2/message/move',
 		success: function(data) {
-			location.reload();
+			window.location = location;
+		}
+	});
+}
+
+function moveMultipleMessages(object, location) {
+	var	checkedMessageIdList = $('input:hidden[name=checkedMessageIdList]').val();
+	if(object.hasClass('poll')) {
+		var section = 'poll';
+	} else if(object.hasClass('folder')) {
+		var section = 'folder';
+	}
+	$.ajax({
+		type:'POST',
+		data: {messageSection: section, ownerId: object.val(), checkedMessageIdList: checkedMessageIdList},
+		url: '/frontlinesms2/message/move',
+		success: function(data) {
+			window.location = location;
 		}
 	});
 }
