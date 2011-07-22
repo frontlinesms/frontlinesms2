@@ -100,7 +100,7 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=2541234567").click()
+			$("#contact-info .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 	        $('div#tabs-1').displayed
@@ -112,7 +112,9 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 	  		go "contact/show/${alice.id}"
 		then:
-			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=")*.text() == []
+			$("#contact-info .send-message").each {
+	        	assert it.getAttribute('href') ==~ /.*recipient=\d+/
+			}
 	}
 	
 	def "sending a message to a contact address updates the statistics"() {
@@ -120,11 +122,9 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			$("#contact-info .quick_message", href: "/frontlinesms2/quickMessage/create?recipient=2541234567").click()
+			$("#contact-info .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
-			waitFor {$('div#tabs-2').displayed}	
-			$("div#tabs-2 .next").click()
 			waitFor {$('div#tabs-3').displayed}
         	$("#sendMsg").click()
 		then:

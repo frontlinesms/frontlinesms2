@@ -123,3 +123,22 @@ body {
 .currentStep, .step {
 	display : none;
 }
+
+#pollGraph {
+	clear:both;
+	display:block;
+}
+
+.status {
+	.label {
+		@include column(6)
+	}
+
+	.value {
+		@include column(12)
+	}
+}
+
+.hide {
+  display: none
+}

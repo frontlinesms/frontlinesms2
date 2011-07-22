@@ -167,7 +167,15 @@ class InboxSpec extends MessageGebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
-	
+
+	def "starred message filter should not be visible when there are no search results"() {
+		when:
+			go "message/inbox"
+		then:
+			$("#messages").text() == "No messages"
+		    !$("a", text:"starred").displayed
+	}
+
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)

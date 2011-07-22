@@ -88,7 +88,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			assert Fmessage.findBySrc('Bob').messageOwner.value == 'manchester'
 		when:
 			to PollMessageViewPage
-			def btnAssignToBarcelona = $('#poll-actions li:nth-child(3) a')
+			def btnAssignToBarcelona = $('#poll-actions li:nth-child(2) a')
 		then:
 			btnAssignToBarcelona.text() == 'barcelona'
 		when:
