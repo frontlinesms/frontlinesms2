@@ -82,7 +82,7 @@ class Fmessage {
 				}
 			}
 
-			searchMessages {searchString, groupInstance, groupPrimaryMobile, messageOwner -> 
+			searchMessages {searchString, groupInstance, groupPrimaryMobile, messageOwner ->
 				ilike("text", "%${searchString}%")
 				and{
 					if(groupInstance) {
@@ -135,40 +135,24 @@ class Fmessage {
 		messages
 	}
 
-	static def getInboxMessages(isStarred, max, offset) {
+	static def getInboxMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 
-	static def getInboxMessages(isStarred) {
-		getInboxMessages(isStarred, null, null)
-	}
-
-	static def getSentMessages(isStarred, max, offset) {
+	static def getSentMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
-		
-	static def getSentMessages(isStarred) {
-		getSentMessages(isStarred, null, null)
-	}
 
-	static def getPendingMessages(isStarred, max, offset) {
+	static def getPendingMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.pending(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 
-	static def getPendingMessages(isStarred) {
-		getPendingMessages(isStarred, null, null)
-	}
-
-	static def getDeletedMessages(isStarred, max, offset) {
+	static def getDeletedMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.deleted(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
-	}
-	
-	static def getDeletedMessages(isStarred) {
-		getDeletedMessages(isStarred, null, null)
 	}
 
 	static def countInboxMessages(isStarred) {
