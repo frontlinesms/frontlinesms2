@@ -18,8 +18,8 @@ $(document).ready(function() {
 				.buttonset();
 });
 
-function launchWizard(title, html) {
-	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+function launchWizard(title, data) {
+	$("<div id='modalBox'><div>").html(data).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
 			modal: true,

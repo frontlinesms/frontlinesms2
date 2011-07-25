@@ -73,6 +73,8 @@ body {
 			padding:1em;
 		}
 		.unread a { font-weight:bold; }
+		.checked { background-color:cyan; }
+}
 	}
 	#message-details {
 		@include column(6, true);
@@ -91,7 +93,6 @@ body {
 	#poll-actions {
 		@include column(6, true);
 	}
-}
 
 #main-tabs {
   @include horizontal-list
@@ -137,4 +138,8 @@ body {
 	.value {
 		@include column(12)
 	}
+}
+
+.hide {
+  display: none
 }

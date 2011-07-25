@@ -7,6 +7,24 @@ class MessageAndActivityUrlMappingTests extends grails.test.GrailsUrlMappingsTes
 		}
 	}
 	
+	def testSentView() {
+		assertForwardUrlMapping('/message/sent/show/123', controller:'message', action:'sent') {
+			messageId = 123
+		}
+	}
+
+	def testPendingView() {
+		assertForwardUrlMapping('/message/pending/show/123', controller:'message', action:'pending') {
+			messageId = 123
+		}
+	}
+
+	def testTrashView() {
+		assertForwardUrlMapping('/message/trash/show/123', controller:'message', action:'trash') {
+			messageId = 123
+		}
+	}
+
 	def testPollMessageView() {
 		assertForwardUrlMapping('/message/poll/123/show/456', controller:'message', action:'poll') {
 			messageId = 456
