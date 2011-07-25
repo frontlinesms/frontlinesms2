@@ -11,13 +11,19 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
 	<body>
-		<g:render template="/tabs"/>
-		<g:render template="/message/quick_message"/>
-		<g:render template="/flash"/>
-		<div id="main">
-			<g:render template="menu"/>
-			<g:render template="contact_list"/>
-			<g:layoutBody />
+		<div id="container">
+			<g:render template="/system_menu"/>
+			<g:render template="/tabs"/>
+			<g:render template="/flash"/>
+			<div class="main">
+				<g:render template="menu"/>
+				<div class="content">
+					<div class="content-body">
+						<g:render template="contact_list"/>
+						<g:layoutBody />
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
