@@ -1,5 +1,7 @@
 class UrlMappings {
 	static mappings = {
+		"/"(controller:'message')
+		
 		"/contact/show/$contactId"(controller:'contact', action:'show') {}
 
 		"/group/show/$groupId/contact/show/$contactId" {
@@ -28,8 +30,6 @@ class UrlMappings {
 				// apply constraints here
 			}
 		}
-
-		"/"(view:"/index")
 		"500"(view:'/error')
 	}
 }
