@@ -3,12 +3,13 @@
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
-$blueprint_grid_columns: 24;
-$blueprint_grid_width: 30px;
+$blueprint-liquid-grid-columns: 24;
 
 @import "compass/reset";
 @import "blueprint";
+@import "blueprint/liquid";
 @import "compass/typography/lists/horizontal-list";
+@import "compass/layout/grid-background";
 
 /* DEBUG */
 div {
@@ -29,112 +30,127 @@ body {
 }
 
 /* SPECIFIC */
-#main {
-	@include container;
-	.content-menu {
-		@include column(6);
-		h2 { font-weight: bold; }
-		>li {
-			margin-bottom: 1em;
-			li {
-				text-indent: 1em;
-				margin: 0.3em;
+#container {
+	width: 80%;
+	
+	#system-menu {
+	  	@include horizontal-list;
+	}
+	
+	#global-nav {
+	  	@include horizontal-list;
+	}
+	
+	.main {
+		.context-menu {
+			@include column(5, true);
+			h2 { font-weight: bold; }
+			>li {
+				margin-bottom: 1em;
+				li {
+					text-indent: 1em;
+					margin: 0.3em;
+				}
 			}
 		}
-	}
-	
-	#settings-content {
-		@include column(17);
-		.button {
-			border: solid #ddd 1px;
+		
+		.content {
+			@include column(19, true);
+		
+			.content-header {
+				width: 100%;
+			}
+			
+			.content-body {
+				width: 100%;
+				
+				#contact-list {
+					@include column(5, true);
+				}
+				
+				#contact_details {
+					@include column(14, true);
+					.buttons, #group-dropdown {
+						margin-left: 140px;
+					}
+					#group-list {
+						clear: both;
+					}
+					.remove-group {
+						cursor: pointer;
+					}
+				}
+				
+				#message-list {
+					@include column(14, true);
+					tr a {
+						display:block;
+						padding:1em;
+					}
+					.unread a { font-weight:bold; }
+				}
+				
+				#message-details {
+					@include column(5, true);
+					border: solid #ddd 3px;
+					.contact-name {
+						font-weight: bold;
+						background-color: #ddd;
+					}
+					.message-date {
+						background-color: #ddd;
+					}
+					.message-body {
+						font-size: 1.1em;
+					}
+				}
+			}
+			
+			.content-footer {
+				width: 100%;
+			}
 		}
-	}
 	
-	#contacts {
-		@include column(6);
-	}
-	#contact-details {
-		@include column(11, true);
-		.buttons,#group-dropdown {
-			margin-left: 140px;
+	/* GENERAL */
+		.selected {
+			background-color:cyan;
 		}
-		#group-list {
+		
+		.starred {
+			color:green;
+		}
+		
+		.field {
 			clear: both;
+			padding: 0.5em;
+			label {
+				float: left;
+				width: 120px;
+				text-align: right;
+			}
+			input {
+				float: left;
+			}
 		}
-		.remove-group {
-			cursor: pointer;
+		
+		/* PAGINATION */
+		.currentStep, .step {
+			display : none;
 		}
-	}
-	
-	#messages {
-		@include column(12);
-		tr a {
+		
+		#pollGraph {
+			clear:both;
 			display:block;
-			padding:1em;
 		}
-		.unread a { font-weight:bold; }
-	}
-	#message-details {
-		@include column(6, true);
-		border: solid #ddd 3px;
-		.contact-name {
-			font-weight: bold;
-			background-color: #ddd;
+		
+		.status {
+			.label {
+				@include column(6);
+			}
+		
+			.value {
+				@include column(12);
+			}
 		}
-		.message-date {
-			background-color: #ddd;
-		}
-		.message-body {
-			font-size: 1.1em;
-		}
-	}
-	#poll-actions {
-		@include column(6, true);
-	}
-}
-
-#main-tabs {
-  @include horizontal-list
-}
-
-/* GENERAL */
-.selected {
-	background-color:cyan;
-}
-
-.starred {
-	color:green;
-}
-
-.field {
-	clear: both;
-	padding: 0.5em;
-	label {
-		float: left;
-		width: 120px;
-		text-align: right;
-	}
-	input {
-		float: left;
-	}
-}
-
-/* PAGINATION */
-.currentStep, .step {
-	display : none;
-}
-
-#pollGraph {
-	clear:both;
-	display:block;
-}
-
-.status {
-	.label {
-		@include column(6)
-	}
-
-	.value {
-		@include column(12)
 	}
 }

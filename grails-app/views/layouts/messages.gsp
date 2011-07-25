@@ -12,16 +12,24 @@
 		<g:javascript src="/message/move_dropdown.js" />
     </head>
 	<body>
-		<g:render template="/tabs"/>
-		<g:render template="quick_message"/>
-		<g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" class="quick_message">
-			Quick Message
-		</g:remoteLink>
-        <g:render template="/flash"/>
-		<div id="main">
-			<g:render template="menu"/>
-			<g:render template="message_list"/>
-			<g:layoutBody/>
+		<div id="container">
+			<g:render template="/system_menu"/>
+			<g:render template="/tabs"/>
+	        <g:render template="/flash"/>
+	        <div class="main">
+		        <div class="content-header">
+			        <g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" class="quick_message">
+						Quick Message
+					</g:remoteLink>
+				</div>
+				<g:render template="menu"/>
+				<div class="content">
+					<div class="content-body">
+						<g:render template="message_list"/>
+						<g:layoutBody />
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
