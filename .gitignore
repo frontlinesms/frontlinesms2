@@ -34,3 +34,6 @@ out/
 # SASS temp and generated files
 .sass-cache/
 web-app/css/
+
+# jetty-standalone plugin run files
+standalone.*
