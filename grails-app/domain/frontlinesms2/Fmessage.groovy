@@ -82,11 +82,12 @@ class Fmessage {
 				}
 			}
 
-			searchMessages {searchString, groupInstance, groupPrimaryMobile, messageOwner -> 
+			searchMessages {searchString, groupInstance, messageOwner -> 
+				def groupMembers = groupInstance?.getAddresses()
 				ilike("text", "%${searchString}%")
 				and{
 					if(groupInstance) {
-						'in'("src",  groupPrimaryMobile)
+						'in'("src",  groupMembers)
 					}
 					if(messageOwner) {
 						'in'("messageOwner", messageOwner)
@@ -135,40 +136,24 @@ class Fmessage {
 		messages
 	}
 
-	static def getInboxMessages(isStarred, max, offset) {
+	static def getInboxMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 
-	static def getInboxMessages(isStarred) {
-		getInboxMessages(isStarred, null, null)
-	}
-
-	static def getSentMessages(isStarred, max, offset) {
+	static def getSentMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
-		
-	static def getSentMessages(isStarred) {
-		getSentMessages(isStarred, null, null)
-	}
 
-	static def getPendingMessages(isStarred, max, offset) {
+	static def getPendingMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.pending(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
 	}
 
-	static def getPendingMessages(isStarred) {
-		getPendingMessages(isStarred, null, null)
-	}
-
-	static def getDeletedMessages(isStarred, max, offset) {
+	static def getDeletedMessages(isStarred, max=null, offset=null) {
 		def messages = Fmessage.deleted(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 		messages
-	}
-	
-	static def getDeletedMessages(isStarred) {
-		getDeletedMessages(isStarred, null, null)
 	}
 
 	static def countInboxMessages(isStarred) {
@@ -204,23 +189,19 @@ class Fmessage {
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
 	
+	static def getMessageOwners(activity) {
+		activity instanceof Poll ? activity.responses : [activity]
+	}
+	
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
 		if(!searchString) return []
-			def groupPrimaryMobile = groupInstance?.getMembers()*.primaryMobile
-			if(!groupPrimaryMobile) {
-				groupPrimaryMobile = "null"
-			}
-			def results = Fmessage.searchMessages(searchString, groupInstance, groupPrimaryMobile, messageOwner).list(sort:"dateReceived", order:"desc",max: max, offset: offset)
-			results*.updateDisplaySrc()
-			results
+		def searchResults = Fmessage.searchMessages(searchString, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
+		searchResults*.updateDisplaySrc()
+		searchResults
 	}
 
 	static def countAllSearchMessages(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
 		if(!searchString) return 0
-		def groupPrimaryMobile = groupInstance?.getMembers()*.primaryMobile
-		if(!groupPrimaryMobile) {
-			groupPrimaryMobile = "null"
-		}
-		return Fmessage.searchMessages(searchString, groupInstance, groupPrimaryMobile, messageOwners).count()
+		return Fmessage.searchMessages(searchString, groupInstance, messageOwners).count()
 	}
 }

@@ -14,7 +14,7 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			def messageSources = $('#messages tbody tr td:nth-child(2)')*.text()
+			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
 		cleanup:
@@ -28,9 +28,9 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[1] == 'Alice'
-			rowContents[2] == 'hi Alice'
-			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[2] == 'Alice'
+			rowContents[3] == 'hi Alice'
+			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
 		cleanup:
 			deleteTestMessages()
 	}
@@ -71,11 +71,11 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(2) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 		cleanup:
 			deleteTestMessages()
 	}
@@ -104,7 +104,7 @@ class InboxSpec extends MessageGebSpec {
 			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
-			def rowContents = $('#messages tbody tr td:nth-child(2)')*.text()
+			def rowContents = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			rowContents == ['June']
 		cleanup:
@@ -158,12 +158,12 @@ class InboxSpec extends MessageGebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(2)").text() == 'Alice'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Alice'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(2)").text()}.containsAll(['Alice', 'Bob'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Alice', 'Bob'])
 		cleanup:
 			deleteTestMessages()
 	}
@@ -189,6 +189,124 @@ class InboxSpec extends MessageGebSpec {
 			$('textArea', name:'messageText').text() == "test"
 		cleanup:
 			deleteTestMessages()
+	}
+	
+	def "should only display message details when one message is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		when:
+			$("#message")[1].click()
+			def message = Fmessage.findBySrc('Bob')
+			def formatedDate = dateToString(message.dateCreated)
+		then:
+			$('#message-details p:nth-child(1)').text() == message.src
+			$('#message-details p:nth-child(3)').text() == formatedDate
+			$('#message-details p:nth-child(4)').text() == message.text
+		
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "should check all the messages when the header checkbox is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[0].click()
+		then:
+			$("#message")*.@checked == ["true", "true", "true"]
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "should check the header checkbox when all the messages are checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then: 
+			$("#message")[0].@checked == "true"
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "should display message count when multiple messages are selected"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "should remained checked when single message is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to MessagesPage
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:
+			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+		when:
+			$("#message")[1].click()
+		then:
+			$("#message")[2].@checked == "true"
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "should change CSS to CHECKED when message is checked"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.list()[0].id}"
+			$("#message")[1].click()
+			$("#message")[2].click()
+		then:    	
+			$("tr#message-${Fmessage.list()[0].id}").hasClass('checked')
+			$("tr#message-${Fmessage.list()[1].id}").hasClass('checked')
+		cleanup:
+			deleteTestMessages()
+	}
+	
+	def "'Reply All' button appears for multiple selected messages and works"() {
+		given:
+			createInboxTestMessages()
+			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+		when:
+			go "message/inbox"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
+			def btnReply = $('#message-details div.buttons a')[0]
+		then:
+			btnReply
+		when:
+			btnReply.click()
+			waitFor {$('div#tabs-1').displayed}
+			$("div#tabs-1 .next").click()
+		then:
+			$('input', value:'Alice').getAttribute('checked')
+			$('input', value:'Bob').getAttribute('checked')
+			!$('input', value:'June').getAttribute('checked')
+			
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
 	}
 
 //  NOTE: Need to find a better way to make this test work

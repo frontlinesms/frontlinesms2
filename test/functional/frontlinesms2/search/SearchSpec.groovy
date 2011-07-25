@@ -42,17 +42,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchDescription.text() == 'Searching in all messages'
 	}
 	
-	def "search description is shown in header when searching by group and poll"() {
-		when:
-			to SearchPage
-			searchFrm.searchString = "test"
-			searchFrm.groupId = "${Group.findByName("Listeners").id}"
-			searchFrm.activityId = "poll-${Poll.findByTitle("Miauow Mix").id}"
-			searchBtn.click()
-		then:
-			searchDescription.text() == "Searching in 'Listeners' and 'Miauow Mix'"
-	}
-	
 	def "search string is still shown on form submit and consequent page reload"() {
 		given:
 			to SearchPage

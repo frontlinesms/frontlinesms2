@@ -2,18 +2,20 @@
 <div>
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Enter Message</a></li>
-		<li><a href="#tabs-2">Select Recipients</a></li>
-		<li><a href="#tabs-3">Confirm</a></li>
+		<g:each in="['tabs-1' : 'Enter Message', 'tabs-2' : 'Select Recipients', 'tabs-3' : 'Confirm']" var='entry' >
+			<g:if test="${configureTabs.contains(entry.key)}">
+				<li><a href="#${entry.key}" >${entry.value}</a></li>
+			</g:if>
+		</g:each>
 	</ul>
 
 	<g:form action="send" controller="message" method="post">
-		<div id="tabs-1">
+		<div id="tabs-1" class="${configureTabs.contains('tabs-1') ? '' : 'hide'}">
 		<label for="messageText">Enter message</label>
 		<g:textArea name="messageText" value="${messageText}" rows="5" cols="40"/>
 		<g:link url="#" class="next">Next</g:link>
 	</div>
-		<div id="tabs-2">
+		<div id="tabs-2"  class="${configureTabs.contains('tabs-2') ? '' : 'hide'}">
 		<label for="address">Add phone number</label>
 		<g:textField id="address" name="address"/>
 		<g:link url="#" class="add-address">Add</g:link>
@@ -57,7 +59,7 @@
 		<g:link url="#" class="back">Back</g:link>
 		<g:link url="#" class="next">Next</g:link>		
 	</div>
-		<div id="tabs-3">
+		<div id="tabs-3"  class="${configureTabs.contains('tabs-3') ? '' : 'hide'}">
 		<label>Do you want to send?</label>
 		<g:link url="#" class="back">Back</g:link>
 		<g:submitButton name="send-msg" id="sendMsg">Send</g:submitButton>
