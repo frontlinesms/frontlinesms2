@@ -57,7 +57,7 @@
 					(${s.countMessages()})
 				</li>
 			</g:each>
-			<g:remoteLink controller="show" action="create" onSuccess="launchWizard('Create Show', data)">Create new shows</g:remoteLink>
+			<g:remoteLink controller="radioShow" action="create" onSuccess="launchWizard('Create Show', data)">Create new shows</g:remoteLink>
 		 <h2>Folders</h2>
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>
