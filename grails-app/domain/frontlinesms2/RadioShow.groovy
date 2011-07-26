@@ -11,7 +11,7 @@ class RadioShow extends MessageOwner {
 		Fmessage.owned(isStarred, this).list(sort:'dateReceived', order:'desc', max:max, offset: offset)
 	}
 
-	def countMessages(isStarred = false) {
+	def countMessages(isStarred = false) {                                                                                       
 		Fmessage.owned(isStarred,this).count()
 	}
 }

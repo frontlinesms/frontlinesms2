@@ -11,7 +11,7 @@ class RadioShowController {
 		def showInstance = new RadioShow()
 		showInstance.properties = params
 		showInstance.save()
-		redirect(controller: 'message', action: "show", showId: showInstance.id)
+		redirect(controller: 'message', action: "radioShow", ownerId: showInstance.id)
 	}
 
 }
