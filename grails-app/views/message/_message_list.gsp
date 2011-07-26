@@ -57,18 +57,6 @@
 					</tr>
 				</g:each>
 			</tbody>
-			<tfoot>
-				<div id="footer">
-					Show:
-					<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link>
-					<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link>
-	
-					
-					<g:paginate next="Forward" prev="Back"
-						 max="${grailsApplication.config.pagination.max}"
-						action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
-				</div>
-			</tfoot>
 		</table>
 	</g:if>
 	<g:else>

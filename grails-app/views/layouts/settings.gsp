@@ -9,13 +9,18 @@
 		<jqui:resources />
 	</head>
 	<body>
-		<g:render template="/tabs"/>
-		<g:render template="/flash"/>
-		<div id="main">
-			<g:render template="/settings/menu"/>
-			<div id="settings-content">
-				<g:layoutBody />
-			</div>		
+		<div id="container">
+			<g:render template="/system_menu"/>
+			<g:render template="/tabs"/>
+			<g:render template="/flash"/>
+			<div class="main">
+				<g:render template="/settings/menu"/>
+				<div class="content">
+					<div class="content-body">
+						<g:layoutBody />
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>

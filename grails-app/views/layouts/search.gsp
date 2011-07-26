@@ -11,26 +11,40 @@
 		<g:javascript src="popup.js"></g:javascript>
 	</head>
 	<body>
-		<g:render template="/tabs"/>
-		<g:render template="/flash"/>
-		<div id="main">
-			<h2 id="search-description">
-				${searchDescription}
-	  		</h2>
-	  		<h2>
-			 	<div id="export-results">
-			 		Export all messages as
-					<export:formats  formats="['pdf','csv']" action="downloadReport" />
-					<g:if test="${messageInstanceList}">
-						 Export results as
-						<export:formats  formats="['pdf','csv']" params="['searchString':params.searchString, 'groupId':params.groupId, 'activityId':params.activityId]" action="downloadReport" />
-					</g:if>
-					<g:else> Export results as PDF | CSV</g:else>
-			  	</div>
-	  		</h2>
-			<g:layoutBody/>
-			<g:render template="search_menu"/>
-			<g:render template="/message/message_list"/>
+		<div id="container">
+			<g:render template="/system_menu"/>
+			<g:render template="/tabs"/>
+	        <g:render template="/flash"/>
+	        <div class="main">
+				<g:render template="menu"/>
+				<div class="content">
+					<div class="content-header">
+						<h2>Search</h2>
+						<p id="search-description">
+							${searchDescription}
+			  			</p>
+					</div>
+					<div class="content-body">
+						<g:render template="/message/message_list"/>
+						<g:layoutBody />
+					</div>
+					<div class="content-footer">
+							<ul id="filter">
+								<li>Show:</li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
+								<li>|</li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
+							</ul>
+							<g:if test="${params.action == 'results'}">
+								<div id="page-arrows">
+									<g:paginate next="Forward" prev="Back"
+										 max="${grailsApplication.config.pagination.max}"
+										action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+								</div>
+							</g:if>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
