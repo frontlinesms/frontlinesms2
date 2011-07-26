@@ -242,6 +242,28 @@ class MessageControllerSpec extends ControllerSpec {
 			})
 	}
 
+	def "should fetch all starred radio show messages"() {
+		def isStarred = false
+		expect:
+			setupDataAndAssert(isStarred, null, null, {fmessage ->
+				def radioShow = new RadioShow(id: 2L, messages: [fmessage])
+				mockParams.ownerId = 2L
+				mockDomain RadioShow, [radioShow]
+				radioShow.metaClass.getShowMessages = {starred, max, offset->
+						assert starred == isStarred
+						assert max == 10
+						assert offset == 0
+						[fmessage]
+				}
+
+				radioShow.metaClass.countMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+				controller.radioShow()
+			})
+	}
+
 	def "should fetch starred folder messages"() {
 		expect:
 			def isStarred = true
@@ -315,7 +337,7 @@ class MessageControllerSpec extends ControllerSpec {
 					[fmessage]
 				}
 
-				Fmessage.metaClass.'static'.countSentMessages = {starred ->
+	 			Fmessage.metaClass.'static'.countSentMessages = {starred ->
 					assert isStarred == starred
 					2
 				}
@@ -349,6 +371,7 @@ class MessageControllerSpec extends ControllerSpec {
 			mockDomain Folder
 			mockDomain Poll
 			mockDomain Contact
+			mockDomain RadioShow 
 			mockParams.starred = isStarred
 			mockParams.max = max
 			mockParams.offset = offset
@@ -360,5 +383,6 @@ class MessageControllerSpec extends ControllerSpec {
 			assert results['messageInstance'] == fmessage
 			assert results['messageInstanceList']*.contactExists == [false]
 			assert results['messageInstanceList']*.displaySrc == ["src1"]
+
     }
 }

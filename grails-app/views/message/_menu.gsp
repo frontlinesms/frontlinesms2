@@ -49,6 +49,15 @@
 					(${p.countMessages()})
 				</li>
 			</g:each>
+		<h2>Shows</h2>
+		<ol id="shows-submenu">
+			<g:each in="${showInstanceList}" status="i" var="s">
+				<li>
+					<g:link action="show" params="[ownerId: s.id]" class="${p == ownerInstance ? 'selected' : ''}">${s.title}</g:link>
+					(${s.countMessages()})
+				</li>
+			</g:each>
+			<g:remoteLink controller="show" action="create" onSuccess="launchWizard('Create Show', data)">Create new shows</g:remoteLink>
 		 <h2>Folders</h2>
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>
