@@ -18,10 +18,10 @@ class RadioShowControllerIntegrationSpec extends ControllerSpec {
 			def showInstance = RadioShow.findByName("show name")
 		then:
 			showInstance
-			controller.redirectArgs.showId
+			controller.redirectArgs.ownerId
 			controller.redirectArgs.controller == "message"
-			controller.redirectArgs.action == "show"
-			controller.redirectArgs.showId == showInstance.id
+			controller.redirectArgs.action == "radioShow"
+			controller.redirectArgs.ownerId == showInstance.id
 	}
 
 
