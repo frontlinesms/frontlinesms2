@@ -33,9 +33,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollShowPage
 			def formatedDate = dateToString(message.dateCreated)
 		then:
-			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(3)').text() == formatedDate
-			$('#message-details p:nth-child(4)').text() == message.text
+			$('.message-name').text() == message.src
+			$('.message-date').text() == formatedDate
+			$('.message-body').text() == message.text
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
