@@ -9,7 +9,7 @@ $blueprint-liquid-grid-columns: 24;
 @import "blueprint";
 @import "blueprint/liquid";
 @import "compass/typography/lists/horizontal-list";
-@import "compass/layout/grid-background";
+
 
 /* DEBUG */
 div {
@@ -31,10 +31,10 @@ body {
 
 /* SPECIFIC */
 #container {
-	width: 80%;
+	@include container;
 	
 	#system-menu {
-	  	@include horizontal-list;
+	  	@include horizontal-list(4px, right);
 	}
 	
 	#global-nav {
@@ -42,8 +42,10 @@ body {
 	}
 	
 	.main {
+		@include clearfix;
 		.context-menu {
-			@include column(5, true);
+			height: 100%;
+			@include column(5);
 			h2 { font-weight: bold; }
 			>li {
 				margin-bottom: 1em;
@@ -55,27 +57,24 @@ body {
 		}
 		
 		.content {
-			@include column(19, true);
-		
 			.content-header {
-				width: 100%;
+				@include clearfix;
+				h2 { text-transform:capitalize; }
+				#message-title { @include column(15); }
+				
+				a {
+					@include column(9, true);
+					text-align: right;
+				}
 			}
 			
 			.content-body {
-				width: 100%;
-				
 				#contact-list {
-					@include column(5, true);
+					@include column(5);
 				}
 				
 				#contact_details {
 					@include column(14, true);
-					.buttons, #group-dropdown {
-						margin-left: 140px;
-					}
-					#group-list {
-						clear: both;
-					}
 					.remove-group {
 						cursor: pointer;
 					}
@@ -83,16 +82,11 @@ body {
 				
 				#message-list {
 					@include column(14, true);
-					tr a {
-						display:block;
-						padding:1em;
-					}
 					.unread a { font-weight:bold; }
 				}
-				
+					
 				#message-details {
 					@include column(5, true);
-					border: solid #ddd 3px;
 					.contact-name {
 						font-weight: bold;
 						background-color: #ddd;
@@ -107,50 +101,60 @@ body {
 			}
 			
 			.content-footer {
-				width: 100%;
+				@include column(14);
+				margin-left: 0;
+				
+				#filter {
+					@include column(10);
+					@include horizontal-list;
+				}
+					
+				#page-arrows {
+					@include column(13.9, true);
+					text-align: right;
+				}
 			}
+		}
+	}
+	/* GENERAL */
+	.selected {
+		background-color:cyan;
+	}
+	
+	.starred {
+		color:green;
+	}
+	
+	.field {
+		clear: both;
+		padding: 0.5em;
+		label {
+			float: left;
+			width: 120px;
+			text-align: right;
+		}
+		input {
+			float: left;
+		}
+	}
+	
+	/* PAGINATION */
+	.currentStep, .step {
+		display : none;
+	}
+	
+	#pollGraph {
+		clear:both;
+		display:block;
+	}
+	
+	.status {
+		.label {
+			@include column(6);
 		}
 	
-	/* GENERAL */
-		.selected {
-			background-color:cyan;
-		}
-		
-		.starred {
-			color:green;
-		}
-		
-		.field {
-			clear: both;
-			padding: 0.5em;
-			label {
-				float: left;
-				width: 120px;
-				text-align: right;
-			}
-			input {
-				float: left;
-			}
-		}
-		
-		/* PAGINATION */
-		.currentStep, .step {
-			display : none;
-		}
-		
-		#pollGraph {
-			clear:both;
-			display:block;
-		}
-		
-		.status {
-			.label {
-				@include column(6);
-			}
-		
-			.value {
-				@include column(12);
-			}
+		.value {
+			@include column(12);
 		}
 	}
 }

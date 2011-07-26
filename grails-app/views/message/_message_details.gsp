@@ -19,4 +19,9 @@
 		</g:if>
 	</div>
 	<g:render template="/message/action_list"/>
+	<div id="poll-actions">
+		<g:if test="${messageInstance && messageSection == 'poll'}">
+			<g:render  template="categorize_response"/>
+		</g:if>
+	</div>
 </div>

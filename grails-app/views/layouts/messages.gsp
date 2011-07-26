@@ -17,16 +17,38 @@
 			<g:render template="/tabs"/>
 	        <g:render template="/flash"/>
 	        <div class="main">
-		        <div class="content-header">
-			        <g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" class="quick_message">
-						Quick Message
-					</g:remoteLink>
-				</div>
 				<g:render template="menu"/>
 				<div class="content">
+					<div class="content-header">
+						<g:if test="${messageSection == 'poll'}">
+							<g:render template="poll_header"/>
+						</g:if>
+						<g:elseif test="${messageSection == 'folder'}">
+							<h2 id="message-title">${ownerInstance?.name}</h2>
+						</g:elseif>
+						<g:else>
+							<h2 id="message-title">${messageSection}</h2>
+						</g:else>
+				        <g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" id="quick_message">
+							Quick Message
+						</g:remoteLink>
+					</div>
 					<div class="content-body">
 						<g:render template="message_list"/>
 						<g:layoutBody />
+					</div>
+					<div class="content-footer">
+							<ul id="filter">
+								<li>Show:</li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
+								<li>|</li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
+							</ul>
+							<div id="page-arrows">
+								<g:paginate next="Forward" prev="Back"
+									 max="${grailsApplication.config.pagination.max}"
+									action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+							</div>
 					</div>
 				</div>
 			</div>
