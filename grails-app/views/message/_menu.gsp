@@ -51,9 +51,9 @@
 			</g:each>
 		<h2>Shows</h2>
 		<ol id="shows-submenu">
-			<g:each in="${showInstanceList}" status="i" var="s">
+			<g:each in="${radioShows}" status="i" var="s">
 				<li>
-					<g:link action="show" params="[ownerId: s.id]" class="${p == ownerInstance ? 'selected' : ''}">${s.title}</g:link>
+					<g:link action="radioShow" params="[ownerId: s.id]" class="${s == ownerInstance ? 'selected' : ''}">${s.name}</g:link>
 					(${s.countMessages()})
 				</li>
 			</g:each>

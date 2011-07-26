@@ -10,8 +10,11 @@ class RadioShowController {
 	def save = {
 		def showInstance = new RadioShow()
 		showInstance.properties = params
-		showInstance.save()
-		redirect(controller: 'message', action: "radioShow", ownerId: showInstance.id)
+		if (showInstance.validate())
+			showInstance.save()
+		else
+			flash.message = "Name cannot be blank"
+			redirect(controller: 'message', action: "inbox")
 	}
 
 }
