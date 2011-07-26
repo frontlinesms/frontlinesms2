@@ -10,6 +10,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import frontlinesms2.enums.MessageStatus
 import net.frontlinesms.test.serial.hayes.*
+import net.frontlinesms.test.serial.HayesState
+import net.frontlinesms.test.serial.HayesResponse
+import net.frontlinesms.test.serial.StatefulHayesPortHandler
 
 class BootStrap {
 	def init = { servletContext ->
