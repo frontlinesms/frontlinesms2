@@ -7,7 +7,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
-			def p = Poll.createPoll('This is a poll', ['Manchester', 'Barcelona']).save(failOnError:true, flush:true)
+			def p = Poll.createPoll(title: 'This is a poll', responses: ['Manchester', 'Barcelona']).save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
@@ -23,7 +23,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
 		given:
-			def p = Poll.createPoll('Who is badder?', ['Michael Jackson', 'Chuck Norris']).save(failOnError:true, flush:true)
+			def p = Poll.createPoll(title: 'Who is badder?', responses: ['Michael Jackson', 'Chuck Norris']).save(failOnError:true, flush:true)
 		when:
 			def ukId = PollResponse.findByValue('Unknown').id
 			def mjId = PollResponse.findByValue('Michael Jackson').id
@@ -57,7 +57,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "creating a new poll also creates a poll response with value 'Unknown'"() {
 		when:
-			def p = Poll.createPoll('This is a poll', ['one', 'two'])
+			def p = Poll.createPoll(title: 'This is a poll', responses: ['one', 'two'])
 		then:
 			p.responses.size() == 3
 	}

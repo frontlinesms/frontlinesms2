@@ -3,24 +3,24 @@ package frontlinesms2
 class Poll {
 	String title
 	String autoReplyText
-	static hasMany = [responses:PollResponse]
-	static fetchMode = [responses:"eager"]
+	static hasMany = [responses: PollResponse]
+	static fetchMode = [responses: "eager"]
 
 	static constraints = {
 		title(unique: true, blank: false, nullable: false, maxSize: 255)
 		responses(validator: { val, obj ->
-				val?.size() >= 2 &&
+			val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoReplyText(nullable: true, blank: false)
 	}
 
 	static mapping = {
-            responses cascade:'all'
+		responses cascade: 'all'
 	}
 
 	def getMessages(isStarred = false, max, offset) {
-		Fmessage.owned(isStarred,this.responses).list(sort:"dateReceived", order:"desc", max:max, offset:offset)
+		Fmessage.owned(isStarred, this.responses).list(sort: "dateReceived", order: "desc", max: max, offset: offset)
 	}
 
 	def getMessages(isStarred = false) {
@@ -28,24 +28,32 @@ class Poll {
 	}
 
 	def countMessages(isStarred = false) {
-		Fmessage.owned(isStarred,this.responses).count()
+		Fmessage.owned(isStarred, this.responses).count()
 	}
-	
+
 	def getResponseStats() {
 		def totalMessageCount = countMessages(false)
-		responses.sort{it.id}.collect {
+		responses.sort {it.id}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
 					count: messageCount,
-					percent: totalMessageCount? messageCount * 100 / totalMessageCount as Integer: 0]
+					percent: totalMessageCount ? messageCount * 100 / totalMessageCount as Integer : 0]
 		}
 	}
 
 	static Poll createPoll(attrs) {
-		def responseList = attrs.responseString.tokenize()
-		if(!responseList.contains('Unknown')) responseList = ['Unknown'] << responseList
-		attrs['responses'] = responseList.flatten().collect{new PollResponse(value:it)}
+		def responseList = buildResponses(attrs.responses)
+		if (!responseList.contains('Unknown')) responseList = ['Unknown'] << responseList
+		attrs['responses'] = responseList.flatten().collect {new PollResponse(value: it)}
 		new Poll(attrs)
+	}
+
+	static private buildResponses(String responses) {
+		responses.tokenize()
+	}
+
+	static private buildResponses(List<String> responses) {
+		responses
 	}
 }
