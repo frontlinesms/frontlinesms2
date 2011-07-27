@@ -11,9 +11,6 @@ class PollController {
 		[pollInstance: pollInstance]
 	}
 
-	def popupCreate = {
-	}
-
 	def save = {
 		def pollInstance = Poll.createPoll(params)
 		
