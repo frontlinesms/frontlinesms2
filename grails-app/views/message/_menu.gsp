@@ -49,6 +49,15 @@
 					(${p.countMessages()})
 				</li>
 			</g:each>
+		<h2>Shows</h2>
+		<ol id="shows-submenu">
+			<g:each in="${radioShows}" status="i" var="s">
+				<li>
+					<g:link action="radioShow" params="[ownerId: s.id]" class="${s == ownerInstance ? 'selected' : ''}">${s.name}</g:link>
+					(${s.countMessages()})
+				</li>
+			</g:each>
+			<g:remoteLink controller="radioShow" action="create" onSuccess="launchWizard('Create Show', data)">Create new shows</g:remoteLink>
 		 <h2>Folders</h2>
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>
