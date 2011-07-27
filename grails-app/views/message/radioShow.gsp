@@ -1,8 +1,7 @@
-<%@ page import="frontlinesms2.Contact" %>
 <html>
     <head>
         <meta name="layout" content="messages" />
-        <title>Inbox</title>
+        <title>Folder</title>
     </head>
     <body>
 		<g:if test="${messageInstance != null}">

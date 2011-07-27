@@ -26,44 +26,44 @@
 					<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 					<g:if test="${contactInstance.id}">
 						<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
-					</g:if>
 				  	<g:else>
 						<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
 				  	</g:else>
 				</div>
-				<div id="contact-info">
-					<div class="field">
-						<label for="name"><g:message code="contact.name.label" default="Name"/></label>
-						<g:textField name="name" id="name" value="${contactInstance?.name}"/>
-					</div>
-					<div class="field">
-						<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
-						<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
-						<g:if test="${contactInstance?.primaryMobile}">
-							  <g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.primaryMobile]" onSuccess="launchWizard('Send Message', data);" class="quick_message">
-								  Send Message
-							  </g:remoteLink>
-						</g:if>
-					</div>
-					<div class="field">
-						<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
-						<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
-						<g:if test="${contactInstance?.secondaryMobile}">
-							<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.secondaryMobile]" onSuccess="launchWizard('Send Message',data);" class="quick_message">
-								  Send Message
-							</g:remoteLink>
-						</g:if>
-					</div>
-				   <div class="field">
-						<label for="email"><g:message code="contact.email.label" default="Email"/></label>
-						<g:textField name="email" id="email" value="${contactInstance?.email}"/>
-						<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">
-							<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
-								Send Message
-							</g:remoteLink>
-						</g:if>
-					</div>
-					<ol id="custom-field-list">
+			<div id="contact-info">
+				<div class="field">
+					<label for="name"><g:message code="contact.name.label" default="Name"/></label>
+					<g:textField name="name" id="name" value="${contactInstance?.name}"/>
+				</div>
+				<div class="field">
+					<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
+					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
+					<g:if test="${contactInstance?.primaryMobile}">
+						  <g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'],
+						  recipient: contactInstance?.primaryMobile]" onSuccess="launchWizard('Send Message', data);" class="send-message">
+							  Send Message
+						  </g:remoteLink>
+					</g:if>
+				</div>
+				<div class="field">
+					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
+					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
+					<g:if test="${contactInstance?.secondaryMobile}">
+						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipient: contactInstance?.secondaryMobile]" onSuccess="launchWizard('Send Message',data);" class="send-message">
+							  Send Message
+						</g:remoteLink>
+					</g:if>
+				</div>
+			   <div class="field">
+					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
+					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
+					<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">
+						<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
+							Send Message
+						</g:remoteLink>
+					</g:if>
+				</div>
+				<ol id="custom-field-list">
 					  <g:each in="${contactFieldInstanceList}" status="i" var="f">
 						  <li class="${f == fieldInstance ? 'selected' : ''}">
 							  <label for="custom-field-${f.name}">${f.name}</label>
@@ -71,8 +71,7 @@
 							  <a class="remove-field" id="remove-field-${f.id}">Delete</a>
 						  </li>
 					  </g:each>
-					</ol>
-				</div>
+				</ol>
 				<div class="field">
 					<select id="new-field-dropdown" name="new-field-dropdown">
 						<option class="not-field" value="na">Add more information...</option>

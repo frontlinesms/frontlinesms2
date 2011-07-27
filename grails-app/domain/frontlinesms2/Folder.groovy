@@ -7,11 +7,11 @@ class Folder extends MessageOwner {
 		name(blank:false, nullable:false, maxSize:255)
 	}
 	
-	def getFolderMessages(isStarred, max, offset) {
+	def getFolderMessages(isStarred = false, max, offset) {
 		Fmessage.owned(isStarred, this).list(sort:'dateReceived', order:'desc', max:max, offset: offset)
 	}
 	
-	def getFolderMessages(isStarred) {
+	def getFolderMessages(isStarred = false) {
 		getFolderMessages(isStarred, null, null)
 	}
 
