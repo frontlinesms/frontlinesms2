@@ -86,6 +86,11 @@ class ConnectionController {
 		}
 	}
 
+	def listComPorts = {
+		// This is a secret debug method for now to help devs see what ports are available
+		render(text: "${serial.CommPortIdentifier.portIdentifiers*.name}")
+	}
+
 	def createTest = {
 		def connectionInstance = Fconnection.get(params.id)
 		[connectionInstance:connectionInstance]
