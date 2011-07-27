@@ -9,7 +9,6 @@
 	<g:form action="save" name="poll-details" controller="poll" method="post">
 		<div id="tabs-1">
 			<div class="section">
-				<h3>Select the kind of poll to create</h3>
 				<div>
 					Responses:
 					<g:textField name="responses"/>
