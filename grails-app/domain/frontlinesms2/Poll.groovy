@@ -43,17 +43,9 @@ class Poll {
 	}
 
 	static Poll createPoll(attrs) {
-		def responseList = buildResponses(attrs.responses)
+		def responseList = attrs.responses.tokenize()
 		if (!responseList.contains('Unknown')) responseList =  (responseList << ['Unknown'])
 		attrs['responses'] = responseList.flatten().collect {new PollResponse(value: it)}
 		new Poll(attrs)
-	}
-
-	static private buildResponses(String responses) {
-		responses.tokenize()
-	}
-
-	static private buildResponses(List<String> responses) {
-		responses
 	}
 }
