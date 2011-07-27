@@ -39,8 +39,8 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-//			initialiseMockSerialDevice()
-			initialiseRealSerialDevice()
+			initialiseMockSerialDevice()
+//			initialiseRealSerialDevice()
 			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
 			

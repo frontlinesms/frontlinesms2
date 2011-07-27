@@ -1,11 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<div  id ="poll-actions">
-  <h2>Categorize Response</h2>
-  <ol>
-	  <g:each in="${responseList}" status="i" var="r">
-		  <li>
-			  <g:link action="changeResponse" params="[ownerId: ownerInstance.id, responseId: r.id, messageId: messageInstance.id]">${r.value}</g:link>
-		  </li>
-	  </g:each>
-  </ol>
+<div class="dropdown">
+	<g:hiddenField id="owner-id" name="owner-id" value="${ownerInstance.id}" />
+	<g:hiddenField id="response-id" name="response-id" value="${responseInstance.id}" />
+	<h2>Categorise Response</h2>
+	<select id="categorise_dropdown">
+		<option value="na" class="na">${responseInstance.value}</option>
+		<g:each in="${responseList}" status="i" var="r">
+			<g:if test="${r.id != responseInstance.id}">
+				<option value="btn-${r.id}">${r.value}</option>
+			</g:if>
+		</g:each>
+	</select>
 </div>

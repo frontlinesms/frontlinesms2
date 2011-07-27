@@ -10,6 +10,7 @@
 		<g:javascript src="application.js"/>
 		<g:javascript src="popup.js" />
 		<g:javascript src="/message/move_dropdown.js" />
+		<g:javascript src="/message/categorize-dropdown.js" />
     </head>
 	<body>
 		<div id="container">
