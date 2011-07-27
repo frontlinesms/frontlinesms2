@@ -117,8 +117,15 @@ body {
 		background-color:cyan;
 	}
 	
-	.starred {
-		color:green;
+	#messages {
+		@include column(12);
+		tr a {
+			display:block;
+			padding:1em;
+		}
+		.unread a { font-weight:bold; }
+		.checked { background-color:cyan; }
+}
 	}
 	
 	.field {
@@ -138,10 +145,27 @@ body {
 	.currentStep, .step {
 		display : none;
 	}
-	
-	#pollGraph {
-		clear:both;
-		display:block;
+
+#main-tabs {
+  @include horizontal-list
+}
+
+/* GENERAL */
+.selected {
+	background-color:cyan;
+}
+
+.starred {
+	color:green;
+}
+
+.field {
+	clear: both;
+	padding: 0.5em;
+	label {
+		float: left;
+		width: 120px;
+		text-align: right;
 	}
 	
 	.status {
@@ -153,4 +177,28 @@ body {
 			@include column(12);
 		}
 	}
+}
+
+/* PAGINATION */
+.currentStep, .step {
+	display : none;
+}
+
+#pollGraph {
+	clear:both;
+	display:block;
+}
+
+.status {
+	.label {
+		@include column(6)
+	}
+
+	.value {
+		@include column(12)
+	}
+}
+
+.hide {
+  display: none
 }

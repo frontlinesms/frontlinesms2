@@ -9,10 +9,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import frontlinesms2.enums.MessageStatus
-import net.frontlinesms.test.serial.HayesState
-import net.frontlinesms.test.serial.HayesResponse
-import net.frontlinesms.test.serial.StatefulHayesPortHandler
-
+import net.frontlinesms.test.serial.hayes.*
 
 class BootStrap {
 	def init = { servletContext ->
@@ -100,6 +97,11 @@ class BootStrap {
 					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 				it.save(failOnError:true, flush:true)
 			}
+
+			def radioShow = new RadioShow(name: "Health")
+			radioShow.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
+			radioShow.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
+			radioShow.save(flush: true)
 		}
 	}
 
