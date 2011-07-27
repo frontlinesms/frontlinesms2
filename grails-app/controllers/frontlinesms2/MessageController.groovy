@@ -18,10 +18,12 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
+		
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
-				messageCount: Fmessage.countAllMessages()]
+				messageCount: Fmessage.countAllMessages(),
+				responseInstance: messageInstance.messageOwner]
 	}
 
 	def trash = {

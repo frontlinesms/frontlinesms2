@@ -47,12 +47,8 @@ body {
 			height: 100%;
 			@include column(5);
 			h2 { font-weight: bold; }
-			>li {
+			li {
 				margin-bottom: 1em;
-				li {
-					text-indent: 1em;
-					margin: 0.3em;
-				}
 			}
 		}
 		

@@ -49,6 +49,8 @@
 					(${p.countMessages()})
 				</li>
 			</g:each>
+	</li>
+	<li>
 		 <h2>Folders</h2>
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>
