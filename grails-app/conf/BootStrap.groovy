@@ -36,6 +36,7 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
+			serial.SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
 //			initialiseMockSerialDevice()
 			initialiseRealSerialDevice()
 			
