@@ -38,7 +38,14 @@ class MessageAndActivityUrlMappingTests extends grails.test.GrailsUrlMappingsTes
 			ownerId = 123
 		}
 	}
-	
+
+	def testRadioMessageView() {
+		assertForwardUrlMapping('/message/radioShow/123/show/3', controller:'message', action:'radioShow') {
+			ownerId = 123
+			messageId = 3
+		}
+	}
+
 	def testFolderMessageView() {
 		assertForwardUrlMapping('/message/folder/123/show/456', controller:'message', action:'folder') {
 			messageId = 456
