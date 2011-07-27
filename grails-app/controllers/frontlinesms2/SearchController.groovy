@@ -2,14 +2,12 @@ package frontlinesms2
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import grails.util.GrailsConfig
 
 
 class SearchController {
-	def exportService
 	
-	def index = {
-		redirect(action:'no_search')
-	}
+	def index = { redirect(action:'no_search') }
 	
 	def no_search = {
 		[groupInstanceList : Group.findAll(),
@@ -18,17 +16,19 @@ class SearchController {
 	}
 	
 	def result = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
-		def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners)
-		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),,
-				messageSection: 'search',
+		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
+		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners, max, offset)
+		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
+				messageSection: 'result',
 				searchString: params.searchString,
 				groupInstance: groupInstance,
 				activityId: params.activityId,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: searchResults?.size()] << show(searchResults) << no_search()
+				messageInstanceTotal: Fmessage.countAllSearchMessages(params.searchString, groupInstance, messageOwners)] << show(searchResults) << no_search()
 	}
 	
 	def show = { searchResults ->
@@ -49,21 +49,6 @@ class SearchController {
 			params.remove('messageId')
 			redirect(action: result, params:params)
 		}
-	}
-	
-	def downloadReport = {
-			def groupInstance = params.groupId? Group.get(params.groupId): null
-			def activityInstance = getActivityInstance()
-			def messageOwners = activityInstance? getMessageOwners(activityInstance): null
-			def messageInstanceList 
-			if(params.searchString) {messageInstanceList = Fmessage.search(params.searchString, groupInstance, messageOwners)}
-			else {messageInstanceList = Fmessage.findAll()}
-			messageInstanceList.sort { it.dateCreated }
-			if(params.format == 'pdf')
-				generatePDFReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
-			if(params.format == 'csv')
-				generateCSVReport(getSearchDescription(params.searchString, groupInstance, activityInstance), messageInstanceList)
-			
 	}
 	
 	private def getSearchDescription(searchString, group, activity) {
@@ -93,56 +78,9 @@ class SearchController {
 		} else return null
 	}
 	
-	private def getMessageOwners(activity) {
-		activity instanceof Poll ? activity.responses : [activity]
-	}
-	
 	private def withFmessage(Closure c) {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
 		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
-	}
-	
-	private def generateCSVReport(searchString, model) {
-		def currentTime = new Date()
-		List fields = ["id", "src", "dst", "text", "dateCreated"]
-		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
-		Map parameters = [title: "$searchString"]
-		def formatedTime = dateToString(currentTime)
-		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.csv")
-		
-		try{
-			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
-		} catch(Exception e){
-			render(text: "Error creating report")
-		}
-		
-		[messageInstanceList: model]
-	}
-	
-	private def generatePDFReport(searchString, model) {
-		def currentTime = new Date()
-		List fields = ["id", "src", "dst", "text", "dateCreated"]
-		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
-		def formatedTime = dateToString(currentTime)
-		Map parameters = [title: "$searchString"]
-		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.pdf")
-		
-		try{
-			exportService.export(params.format, response.outputStream, model, fields, labels, [:],parameters)
-		} catch(Exception e){
-			render(text: "Error creating report")
-		}
-		
-		[messageInstanceList: model]
-	}
-
-	private String dateToString(Date date) {
-		DateFormat formatedDate = createDateFormat()
-		return formatedDate.format(date)
-	}
-
-	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy-MMM-dd", request.locale)
 	}
 }

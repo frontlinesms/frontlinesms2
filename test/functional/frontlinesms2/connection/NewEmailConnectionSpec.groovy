@@ -18,7 +18,7 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 			at NewEmailConnectionPage
 		when:
 			frmNewConnection.name = 'test email connection'
-			frmNewConnection.protocol = 'imap'
+			frmNewConnection.receiveProtocol = 'imap'
 			frmNewConnection.serverName = 'mail.example.com'
 			frmNewConnection.serverPort = '1234'
 			frmNewConnection.username = 'greg'

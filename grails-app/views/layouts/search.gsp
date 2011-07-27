@@ -17,20 +17,9 @@
 			<h2 id="search-description">
 				${searchDescription}
 	  		</h2>
-	  		<h2>
-			 	<div id="export-results">
-			 		Export all messages as
-					<export:formats  formats="['pdf','csv']" action="downloadReport" />
-					<g:if test="${messageInstanceList}">
-						 Export results as
-						<export:formats  formats="['pdf','csv']" params="['searchString':params.searchString, 'groupId':params.groupId, 'activityId':params.activityId]" action="downloadReport" />
-					</g:if>
-					<g:else> Export results as PDF | CSV</g:else>
-			  	</div>
-	  		</h2>
-			<g:layoutBody/>
 			<g:render template="search_menu"/>
 			<g:render template="/message/message_list"/>
+			<g:layoutBody/>
 		</div>
 	</body>
 </html>

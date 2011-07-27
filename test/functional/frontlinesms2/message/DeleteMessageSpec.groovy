@@ -64,7 +64,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'deleted messages do not show up in folder view'() {
 		given:
-			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
 			assert Folder.findByName('Fools').messages.size() == 2
 		when:
 			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
@@ -108,6 +107,31 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bob.refresh()
 		then:
 			bob.deleted
+	}
+	
+	def "'Delete All' button appears for multiple selected messages and works"() {
+		given:
+			def aliceMessage = Fmessage.findBySrc('Alice')
+			def message3 = Fmessage.findBySrc('+254778899')
+		when:
+			go "message/inbox"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
+			def btnDelete = $('#message-details div.buttons a')[1]
+		then:
+			btnDelete
+		when:
+			btnDelete.click()
+		then:
+			at MessagesPage
+		when:
+			waitFor { $("div.flash.message").displayed }
+			aliceMessage.refresh()
+			message3.refresh()
+		then:
+			aliceMessage.deleted
+			message3.deleted
 	}
 	
 	static createTestData() {

@@ -23,33 +23,33 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
 		given:
-			def p = Poll.createPoll(title: 'Who is badder?', responses: ['Michael Jackson', 'Chuck Norris']).save(failOnError:true, flush:true)
+			def p = Poll.createPoll(title: 'Who is badder?', responses:['Michael Jackson', 'Chuck Norris']).save(failOnError:true, flush:true)
 		when:
 			def ukId = PollResponse.findByValue('Unknown').id
 			def mjId = PollResponse.findByValue('Michael Jackson').id
 			def cnId = PollResponse.findByValue('Chuck Norris').id
 		then:
 			p.responseStats == [
-				[id:ukId, value:"Unknown", count:0, percent:0],
 				[id:mjId, value:"Michael Jackson", count:0, percent:0],
-				[id:cnId, value:"Chuck Norris", count:0, percent:0]
+				[id:cnId, value:"Chuck Norris", count:0, percent:0],
+				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
 			PollResponse.findByValue('Michael Jackson').addToMessages(new Fmessage(text:'MJ').save(failOnError:true, flush:true))
 			PollResponse.findByValue('Chuck Norris').addToMessages(new Fmessage(text:'big charlie').save(failOnError:true, flush:true))
 		then:
 			p.responseStats == [
-				[id:ukId, value:'Unknown', count:0, percent:0],
 				[id:mjId, value:'Michael Jackson', count:1, percent:50],
-				[id:cnId, value:"Chuck Norris", count:1, percent:50]
+				[id:cnId, value:"Chuck Norris", count:1, percent:50],
+				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		when:
 			Fmessage.findByText('MJ').toDelete()
 		then:
 			p.responseStats == [
-				[id:ukId, value:'Unknown', count:0, percent:0],
 				[id:mjId, value:'Michael Jackson', count:0, percent:0],
-				[id:cnId, value:'Chuck Norris', count:1, percent:100]
+				[id:cnId, value:'Chuck Norris', count:1, percent:100],
+				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		cleanup:
 			deleteTestData()

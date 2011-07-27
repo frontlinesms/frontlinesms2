@@ -37,6 +37,22 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	}
 
+	def "should display the message details for the message selected by default"() {
+		setup:
+			setupInboxMessages()
+		when:
+			go "message/inbox"
+			 def element = $("#messages tr:nth-child(2) td:nth-child(3) a")
+			 def expectedText = element.text()
+             element.click()
+             waitFor { $('#message-details p:nth-child(1)').text() == expectedText }
+		then:
+			$("#footer a", text: "Forward").click()
+			waitFor {$("a", text:"Back").displayed}
+		then:
+			$('#message-details p:nth-child(1)').text() == $(".selected td:nth-child(3) a").text()
+	}
+
 	def "should paginate pending messages"() {
 		setup:
 			setupPendingMessages()
@@ -87,7 +103,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			setupFolderAndItsMessages()
 			def folderId = Folder.findByName("folder").id
 		when:
-			go "folder/${folderId}"
+			go "/frontlinesms2/message/folder/${folderId}"
 		then:
 			$("#messages tbody tr").size() == 10
 		when:
@@ -96,7 +112,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		then:
 			$("#messages tbody tr").size() == 10
 
-	}
+}
 
 	def "should paginate poll messages"() {
 		setup:

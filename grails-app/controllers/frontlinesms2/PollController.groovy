@@ -22,7 +22,8 @@ class PollController {
 			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {
-			render(view: "create", model: [pollInstance: pollInstance])
+			flash.message = "error"
+			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		}
 	}
 }

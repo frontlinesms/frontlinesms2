@@ -4,7 +4,9 @@
 		<h2>Create new...</h2>
 		<ol id="create-submenu">
 				<li id="create-poll">
-					<g:link class="create" controller="poll" action="create">Poll</g:link>
+					<g:remoteLink controller="poll" action="create" onSuccess="launchWizard('Create Poll', data);">
+						Poll
+					</g:remoteLink>				
 				</li>
 				<li>
 					<g:remoteLink class="create" controller="poll" action="popupCreate" onSuccess="launchWizard('New Poll', data, 1000);">
@@ -12,11 +14,13 @@
 					</g:remoteLink>
 				</li>
 				<li id="create-folder">
-					<g:link class="create" controller="folder" action="create">Folder</g:link>
+					<g:remoteLink controller="folder" action="create" onSuccess="launchWizard('Create Folder', data);">
+						Folder
+					</g:remoteLink>
 				</li>
 				<li id="manage-subscription">
 					<g:remoteLink controller="group" action="list" onSuccess="launchWizard('Manage Subscription', data);">
-					Manage Subscription
+						Manage Subscription
 					</g:remoteLink>
 				</li>
 		</ol>
@@ -28,17 +32,16 @@
 				<g:link action="inbox">Inbox</g:link>
 				(${messageCount['inbox']})
 			</li>
-			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending">Pending</g:link>
-				(${messageCount['pending']})
-			</li>
 			<li class="${(messageSection=='sent')? 'selected':''}">
 				<g:link action="sent">Sent</g:link>
 				(${messageCount['sent']})
 			</li>
+			<li class="${(messageSection=='pending')? 'selected':''}">
+				<g:link action="pending">Pending</g:link>
+				(${messageCount['pending']})
+			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
-				(${messageCount['deleted']})
 			</li>
 		</ol>
 	</li>
@@ -51,6 +54,15 @@
 					(${p.countMessages()})
 				</li>
 			</g:each>
+		<h2>Shows</h2>
+		<ol id="shows-submenu">
+			<g:each in="${radioShows}" status="i" var="s">
+				<li>
+					<g:link action="radioShow" params="[ownerId: s.id]" class="${s == ownerInstance ? 'selected' : ''}">${s.name}</g:link>
+					(${s.countMessages()})
+				</li>
+			</g:each>
+			<g:remoteLink controller="radioShow" action="create" onSuccess="launchWizard('Create Show', data)">Create new shows</g:remoteLink>
 		 <h2>Folders</h2>
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>

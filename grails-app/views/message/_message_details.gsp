@@ -1,4 +1,5 @@
 <g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}" />
+<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}" />
 <div id="message-details">
 	<p class="message-name">${messageInstance.displaySrc}</p>
 	<g:def var="thisAddress" value="${messageInstance.src}" />
@@ -9,11 +10,11 @@
 	<p class="message-body" id="message-body">${messageInstance.text}</p>
 	<div class="buttons">
 		<g:if test="${messageSection != 'trash'}">
-			<select id="reply-dropdown" name="reply-dropdown">
-				<option value="na" disabled="disabled" selected='true'>Reply</option>
-				<option value="reply" params="[recipient: messageInstance.src]">Reply</option>
-				<option value="forward" params="[messageText: messageInstance.text]">Forward</option>
-			</select>
+			<button id="btn_reply">Reply</button>
+			<button id='btn_dropdown'></button>
+			<ol id="dropdown_options">
+				<button id="btn_forward">Forward</button>
+			</ol>
 			<g:link action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">Delete</g:link>
 		</g:if>
 	</div>

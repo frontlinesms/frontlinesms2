@@ -1,31 +1,32 @@
   <%@ page contentType="text/html;charset=UTF-8" %>
-<script type="text/javascript">
-	function setStarStatus(object,data){
-		if($("#"+object).hasClass("starred")) {
-			$("#"+object).removeClass("starred");
-		}
-		
-		$("#"+object).addClass(data);
-		if(data != '') {
-			$("#"+object).empty().append("Remove Star");
-		} else {
-			$("#"+object).empty().append("Add Star");
-		}
-	}
-</script>
+<div id="export_button">
+	<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchWizard('Export', data);">
+		Export
+	</g:remoteLink>		
+</div>
 <g:if test="${messageInstanceTotal > 0}">
+	<g:hiddenField name="checkedMessageIdList" value=""/>
+	<g:hiddenField name="messageSection" value="${messageSection}"/>
+	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 	<table id="messages">
 		<thead>
 			<tr>
+				<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAllMessages()"/></td>
 				<td></td>
-			    <td><g:message code="fmessage.src.label" default="Name"/></td>
-			    <td><g:message code="fmessage.text.label" default="Snippet"/></td>
+				<g:if test="${messageSection == 'sent' || messageSection == 'pending'}">
+			    	<td><g:message code="fmessage.src.label" default="To"/></td>
+			    </g:if>
+			    <g:else>
+			    	<td><g:message code="fmessage.src.label" default="From"/></td>
+			    </g:else>
+			    <td><g:message code="fmessage.text.label" default="Message"/></td>
 			    <td><g:message code="fmessage.date.label" default="Date"/></td>
 			</tr>
 		</thead>
 		<tbody>
-			<g:each in="${messageInstanceList }" status="i" var="m">
+			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
+					<td><g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/></td>
 					<td>
 					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
@@ -34,60 +35,36 @@
 					  </g:remoteLink>
 					</td>
 					<td>
-						<g:if test="${ownerInstance}">
-							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
+							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
 								${m.displaySrc}
 							</g:link>
-						</g:if>
-						<g:elseif test="${messageSection == 'search'}">
-							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
-								${m.displaySrc}
-							</g:link>
-						</g:elseif>
-						<g:else>
-							<g:link action="${messageSection}" params="[messageId: m.id]">
-								${m.displaySrc}
-							</g:link>
-						</g:else>
 					</td>
 					<td>
-						<g:if test="${ownerInstance}">
-							<g:link action="${messageSection}" params="[messageId: m.id, ownerId: ownerInstance.id]">
-								${m.displayText}
-							</g:link>
-						</g:if>
-						<g:elseif test="${messageSection == 'search'}">
-							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
-								${m.displayText}
-							</g:link>
-						</g:elseif>
-						<g:else>
-							<g:link action="${messageSection}" params="[messageId: m.id]">
+							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
 							  ${m.displayText}
 							</g:link>
-						</g:else>
 					</td>
 					<td>
-						<g:if test="${ownerInstance}">
-							<g:link action="${messageSection}" params="[messageId: m.id, ownerId:ownerInstance.id]">
+							<g:link  action="${messageSection}" params="${params + [messageId: m.id]}">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
-						</g:if>
-						<g:elseif test="${messageSection == 'search'}">
-							<g:link controller="search" action="result" params="[activityId: activityId, groupId: groupInstance?.id, searchString: searchString, messageId: m.id]">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-							</g:link>
-						</g:elseif>
-						<g:else>
-							<g:link  action="${messageSection}" params="[messageId: m.id]">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-							</g:link>
-						</g:else>
 					</td>
 				</tr>
 			</g:each>
 		</tbody>
-	</table> 
+		<tfoot>
+			<div id="footer">
+				Show:
+				<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link>
+				<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link>
+
+				
+				<g:paginate next="Forward" prev="Back"
+					 max="${grailsApplication.config.pagination.max}"
+					action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+			</div>
+		</tfoot>
+	</table>
 </g:if>
 <g:else>
 	<div id="messages">

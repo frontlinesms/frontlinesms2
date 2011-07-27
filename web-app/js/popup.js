@@ -1,5 +1,21 @@
 $(document).ready(function() {
-	$("#reply-dropdown").change(quickMessageClickAction);
+	$("#dropdown_options").hide()
+	$("#btn_forward").click(quickMessageClickAction)
+	$("#btn_reply" )
+		.button()
+		.click(quickMessageClickAction)
+		.next()
+			.button( {
+				text: false,
+				icons: {
+					primary: "ui-icon-triangle-1-s"
+				}
+			})
+			.click(function() {
+				$("#dropdown_options").toggle()
+			})
+			.parent()
+				.buttonset();
 });
 
 function launchWizard(title, html,width) {
@@ -17,7 +33,8 @@ function launchWizard(title, html,width) {
 }
 
 function quickMessageClickAction() {
-	var me = $(this).find('option:selected');
+	$("#dropdown_options").hide()
+	var me = $(this)
 	var messageType = me.text();
 	if (messageType == 'Reply') {
 		var src = $("#message-src").val()

@@ -12,13 +12,6 @@ class CreateFolderSpec extends FolderGebSpec {
 			btnNewPoll.getAttribute('href') == "/frontlinesms2/folder/create"
 	}
 
-	def "'messages' menu item is selected when creating a new folder"() {
-		when:
-			go 'folder/create'
-		then:
-			$('#tab-messages').hasClass('selected')
-	}
-	
 	def 'button to save new folder works'() {
 			given:
 				createTestFolders()

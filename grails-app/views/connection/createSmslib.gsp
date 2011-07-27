@@ -17,7 +17,7 @@
 			</div>
 
 			<div class="baud field">
-				<label for="baud"><g:message code="fconnection.camelAddress.label" default="Baud rate" /></label>
+				<label for="baud"><g:message code="fconnection.baud.label" default="Baud rate" /></label>
 				<g:textField name="baud" value="${fconnectionInstance?.baud}" />
 			</div>
 

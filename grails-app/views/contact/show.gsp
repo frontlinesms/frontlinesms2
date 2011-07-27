@@ -21,7 +21,15 @@
 			<g:hiddenField name="groupsToRemove" value=","/>
 			<g:hiddenField name="fieldsToAdd" value=","/>
 			<g:hiddenField name="fieldsToRemove" value=","/>
-
+			<div class="buttons">
+				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
+				<g:if test="${contactInstance.id}">
+					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+				</g:if>
+			  	<g:else>
+					<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+			  	</g:else>
+			</div>
 			<div id="contact-info">
 				<div class="field">
 					<label for="name"><g:message code="contact.name.label" default="Name"/></label>
@@ -31,7 +39,8 @@
 					<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 					<g:if test="${contactInstance?.primaryMobile}">
-						  <g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.primaryMobile]" onSuccess="launchWizard('Send Message', data);" class="quick_message">
+						  <g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'],
+						  recipient: contactInstance?.primaryMobile]" onSuccess="launchWizard('Send Message', data);" class="send-message">
 							  Send Message
 						  </g:remoteLink>
 					</g:if>
@@ -40,7 +49,7 @@
 					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
 					<g:if test="${contactInstance?.secondaryMobile}">
-						<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.secondaryMobile]" onSuccess="launchWizard('Send Message',data);" class="quick_message">
+						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipient: contactInstance?.secondaryMobile]" onSuccess="launchWizard('Send Message',data);" class="send-message">
 							  Send Message
 						</g:remoteLink>
 					</g:if>
@@ -103,15 +112,6 @@
 					<p>${contactInstance.outboundMessagesCount} messages received</p>
 				</div>
 			</g:if>
-			<div class="buttons">
-				<g:if test="${contactInstance.id}">
-					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-				</g:if>
-			  <g:else>
-				<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
-			  </g:else>
-				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
-			</div>
 		</g:form>
     </body>
 </html>
