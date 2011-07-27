@@ -21,6 +21,7 @@ class MessageController {
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
+				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages()]
 	}
 
@@ -100,6 +101,21 @@ class MessageController {
 				messageSection: 'folder',
 				messageInstanceTotal: folderInstance.countMessages(isStarred),
 				ownerInstance: folderInstance] << show(messageInstanceList)
+	}
+
+	def radioShow = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def showInstance = RadioShow.get(params.ownerId)
+		def isStarred = params['starred']
+		def messageInstanceList = showInstance?.getShowMessages(isStarred, max, offset)
+		messageInstanceList.each{ it.updateDisplaySrc() }
+
+		params.messageSection = 'radioShow'
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'radioShow',
+				messageInstanceTotal: showInstance.countMessages(isStarred),
+				ownerInstance: showInstance] << show(messageInstanceList)
 	}
 
 	def move = {

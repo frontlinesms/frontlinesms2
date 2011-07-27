@@ -17,6 +17,10 @@ class UrlMappings {
 		"/message/poll/$ownerId"(controller:'message', action:'poll') {}
 		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
 
+
+		"/message/radioShow/$ownerId"(controller:'message', action:'radioShow') {}
+		"/message/radioShow/$ownerId/show/$messageId"(controller:'message', action:'radioShow') {}
+
 		"/message/folder/$ownerId"(controller:'message', action:'folder') {}
 		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
 

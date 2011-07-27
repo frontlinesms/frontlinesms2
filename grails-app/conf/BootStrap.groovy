@@ -106,6 +106,11 @@ class BootStrap {
 					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 				it.save(failOnError:true, flush:true)
 			}
+
+			def radioShow = new RadioShow(name: "Health")
+			radioShow.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
+			radioShow.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
+			radioShow.save(flush: true)
 		}
 	}
 
