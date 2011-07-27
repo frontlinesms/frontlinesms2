@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.util.GrailsConfig
+import grails.converters.JSON
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -12,7 +13,7 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList[0]
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -20,6 +21,7 @@ class MessageController {
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
+				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages()]
 	}
 
@@ -74,13 +76,14 @@ class MessageController {
 		def isStarred = params['starred']
 		def messageInstanceList = ownerInstance.getMessages(isStarred, max, offset)
 		messageInstanceList.each { it.updateDisplaySrc() }
-
+		
 		params.messageSection = 'poll'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
 				messageInstanceTotal: ownerInstance.countMessages(isStarred),
 				ownerInstance: ownerInstance,
-				responseList: ownerInstance.responseStats] << show(messageInstanceList)
+				responseList: ownerInstance.responseStats,
+				pollResponse: ownerInstance.responseStats as JSON] << show(messageInstanceList)
 	}
 	
 	def folder = {
@@ -88,7 +91,7 @@ class MessageController {
 		def offset = params.offset ?: 0
 		def folderInstance = Folder.get(params.ownerId)
 		def isStarred = params['starred']
-		def messageInstanceList = folderInstance.getFolderMessages(isStarred, max, offset)
+		def messageInstanceList = folderInstance?.getFolderMessages(isStarred, max, offset)
 		messageInstanceList.each{ it.updateDisplaySrc() }
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
@@ -98,6 +101,21 @@ class MessageController {
 				messageSection: 'folder',
 				messageInstanceTotal: folderInstance.countMessages(isStarred),
 				ownerInstance: folderInstance] << show(messageInstanceList)
+	}
+
+	def radioShow = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def showInstance = RadioShow.get(params.ownerId)
+		def isStarred = params['starred']
+		def messageInstanceList = showInstance?.getShowMessages(isStarred, max, offset)
+		messageInstanceList.each{ it.updateDisplaySrc() }
+
+		params.messageSection = 'radioShow'
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'radioShow',
+				messageInstanceTotal: showInstance.countMessages(isStarred),
+				ownerInstance: showInstance] << show(messageInstanceList)
 	}
 
 	def move = {
@@ -110,13 +128,22 @@ class MessageController {
 			}
 			if(messageOwner instanceof Poll) {
 				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-				unknownResponse.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
 			} else if (messageOwner instanceof Folder) {
-				messageOwner.addToMessages(Fmessage.get(params.messageId)).save(failOnError: true, flush: true)
+				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
 			}
+
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			redirect(action: params.messageSection, params: params)
+			
 		}
+		if(params.count) {
+			def messageCount = params.count
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
+			params.remove('count')
+			
+			}
+		params.remove('checkedMessageIdList')
+		render ""
 	}
 
 	def changeResponse = {
@@ -132,11 +159,22 @@ class MessageController {
 		withFmessage { messageInstance ->
 			messageInstance.toDelete()
 			messageInstance.save(failOnError: true, flush: true)
-			Fmessage.get(params.messageId).messageOwner?.refresh()
-			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			params.remove('messageId')
-			redirect(action: params.messageSection, params:params)
+			if(params.messageId) {
+				Fmessage.get(params.messageId).messageOwner?.refresh()
+				params.remove('messageId')
+				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			} else {
+				Fmessage.get(messageInstance.id).messageOwner?.refresh()
+				params.remove('checkedMessageIdList')
+			}
 		}
+		if(params.count) {
+			def messageCount = params.count
+			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
+			params.remove('count')
+		}
+		
+		redirect(action: params.messageSection, params:params)
 	}
 	
 	def changeStarStatus = {
@@ -169,8 +207,27 @@ class MessageController {
 	}
 
 	private def withFmessage(Closure c) {
-		def m = Fmessage.get(params.messageId)
-		if(m) c.call(m)
-		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+		if(params.checkedMessageIdList) {
+			params.remove('messageId')
+			getCheckedMessageList().each{ m ->
+				if(m) c.call(m)
+			}
+		}
+		if(params.messageId) {
+			def m = Fmessage.get(params.messageId)
+			if(m) c.call(m)
+			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+		}
+		
+	}
+	
+	private def getCheckedMessageList() {
+		def messageList = []
+		def checkedMessageIdList = params.checkedMessageIdList.tokenize(',').unique();
+		checkedMessageIdList.each { id ->
+			messageList << Fmessage.get(id)
+		}
+		params.count = messageList.size
+		messageList	
 	}
 }

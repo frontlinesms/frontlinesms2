@@ -44,7 +44,7 @@ class Poll {
 
 	static Poll createPoll(attrs) {
 		def responseList = buildResponses(attrs.responses)
-		if (!responseList.contains('Unknown')) responseList = ['Unknown'] << responseList
+		if (!responseList.contains('Unknown')) responseList =  (responseList << ['Unknown'])
 		attrs['responses'] = responseList.flatten().collect {new PollResponse(value: it)}
 		new Poll(attrs)
 	}

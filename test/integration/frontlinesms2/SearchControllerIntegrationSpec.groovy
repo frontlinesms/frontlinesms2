@@ -89,15 +89,6 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
 	}
 	
-	def "groups without contacts do not return messages"() {
-		when:
-			controller.params.searchString = "test"
-			controller.params.groupId = Group.findByName('test').id
-			def model = controller.result()
-		then:
-			model.messageInstanceList.isEmpty()
-	}
-	
 	def "message searches can be restricted to both contact groups and polls"() {
 		given:
 			makeGroupMember()
@@ -118,5 +109,17 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Minime')]
+	}
+
+	def "messageInstanceTotal should give a total count of all the messages available"() {
+		when:
+			controller.params.searchString = "w"
+			controller.params.max = "1"
+			controller.params.offset = "0"
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 1
+			model.messageInstanceTotal == 3
+
 	}
 }

@@ -41,7 +41,10 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to MessagesPage
 		then:
-		$('#messages-submenu li')*.text() == ['Inbox (2)', 'Pending (2)', 'Sent (2)', 'Trash (1)']
+		$('#messages-submenu li')*.text()[0] == 'Inbox (2)'
+		$('#messages-submenu li')*.text()[1] == 'Sent (2)'
+		$('#messages-submenu li')*.text()[2] == 'Pending (2)'
+		$('#messages-submenu li')*.text()[3] == 'Trash'
 		cleanup:
 			deleteTestMessages()
 	}

@@ -7,7 +7,9 @@
 					<g:link class="create contact" action="createContact">Contact</g:link>
 				</li>
 				<li id="create-group">
-					<g:link class="create group" action="createGroup">Group</g:link>
+					<g:remoteLink action="createGroup" onSuccess="launchWizard('Create Group', data);">
+						Group
+					</g:remoteLink>
 				</li>
 			</ol>
 		</li>

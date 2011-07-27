@@ -1,6 +1,8 @@
 package frontlinesms2
 
 class SmslibFconnection extends Fconnection {
+	private def camelAddress = { "smslib:${port}?debugMode=true&baud=${baud}" }
+
 	String port
 	int baud
 
@@ -9,7 +11,12 @@ class SmslibFconnection extends Fconnection {
 	}
 
 	String type() { 'Phone/Modem' }
-	String camelAddress() {
-		"smslib:${port}?debugMode=true&baud=${baud}"
+	
+	String getCamelConsumerAddress() {
+		camelAddress()
+	}
+	
+	String getCamelProducerAddress() {
+		camelAddress()
 	}
 }
