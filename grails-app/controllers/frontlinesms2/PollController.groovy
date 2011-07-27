@@ -17,7 +17,8 @@ class PollController {
 	def save = {
 		def pollInstance = Poll.createPoll(params)
 		
-		if (pollInstance.save(flush: true)) {
+		if (pollInstance.validate()) {
+			pollInstance.save()
 			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {

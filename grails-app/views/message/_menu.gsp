@@ -7,7 +7,7 @@
 					<g:link class="create" controller="poll" action="create">Poll</g:link>
 				</li>
 				<li>
-					<g:remoteLink class="create" controller="poll" action="popupCreate" onSuccess="launchWizard('New Poll', data);">
+					<g:remoteLink class="create" controller="poll" action="popupCreate" onSuccess="launchWizard('New Poll', data, 1000);">
 						Poll popup
 					</g:remoteLink>
 				</li>

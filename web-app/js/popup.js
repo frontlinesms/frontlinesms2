@@ -2,13 +2,14 @@ $(document).ready(function() {
 	$("#reply-dropdown").change(quickMessageClickAction);
 });
 
-function launchWizard(title, html) {
+function launchWizard(title, html,width) {
+	var popupWidth = width ? width : 600
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
 			modal: true,
 			title: title,
-			width: 600,
+			width: popupWidth,
 			close: function() { $(this).remove(); }
 		}
 	);
