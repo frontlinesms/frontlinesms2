@@ -1,23 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">AnswerList</a></li>
-		<li><a href="#tabs-2">Automatic reply</a></li>
-		<li><a href="#tabs-3">Confirm</a></li>
+		<li><a href="#tabs-1">New Poll: Enter Question</a></li>
+		<li><a href="#tabs-2">New Poll: AnswerList</a></li>
+		<li><a href="#tabs-3">Automatic reply</a></li>
+		<li><a href="#tabs-4">Confirm</a></li>
 	</ul>
 
 	<g:form action="save" name="poll-details" controller="poll" method="post">
 		<div id="tabs-1">
 			<div class="section">
 				<div>
-					Responses:
-					<g:textField name="responses"/>
+					<h3>Select the kind of poll to create</h3>
+					<g:radio name="poll-type" value="standard" onclick="populateResponses()"/>Question with a 'Yes' or 'No' answer
+					<g:radio name="poll-type" value="multiple"  onclick="populateResponses()"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
 				</div>
 			</div>
-			<g:link url="#" class="back">Back</g:link>
-			<g:link url="#" class="next">Next</g:link>
+			<g:link url="#" onclick="moveForward()">Next</g:link>
 		</div>
+
 		<div id="tabs-2">
+			Responses:
+			<g:textField name="responses" id="responses"/>
+			<g:link url="#" class="next">Next</g:link>
+			<g:link url="#" class="back">Back</g:link>
+
+		</div>
+		<div id="tabs-3">
 			<div class="error-panel"></div>
 			<h3>
 				Reply automatically to poll responses (optional)
@@ -35,7 +44,7 @@
 				Next
 			</g:link>
 		</div>
-		<div id="tabs-3">
+		<div id="tabs-4">
 			Name this poll:
 			<g:textField name="title"></g:textField>
 			<div>
@@ -51,6 +60,25 @@
 <script>
 	function validate() {
 		return isGroupChecked('auto-reply') ? !isElementEmpty('.check-bound-text-area') : true;
+	}
+
+	function populateResponses() {
+		if (getSelectedGroupElements('poll-type')[0].value == 'standard') {
+			$("#responses").val("yes no");
+		}
+		else {
+			$("#responses").val("")
+		}
+	}
+
+	function moveForward() {
+		var selectedElements = getSelectedGroupElements('poll-type');
+		if (selectedElements.size() > 0 && selectedElements[0].value == 'standard') {
+			moveToTabBy(2)
+		}
+		else {
+			moveToTabBy(1)
+		}
 	}
 </script>
 

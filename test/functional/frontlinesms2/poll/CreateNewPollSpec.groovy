@@ -37,13 +37,13 @@ class CreateNewPollSpec extends PollGebSpec {
 			$("a", text:"Poll").click()
 			waitFor { $("div", id:"tabs-1").displayed}
 			$("a", text:'Automatic reply').click()
-			waitFor { $("div", id:"tabs-2").displayed}
+			waitFor { $("div", id:"tabs-3").displayed}
             $('textArea', name: "autoReplyText").jquery.trigger('focus')
         then:
 			$('#send_auto_reply_check').getAttribute("checked")
 		when:
 			frmDetails.autoReplyText = ''
-			$("#tabs-2 a", text:"Next").click()
+			$("#tabs-3 a", text:"Next").click()
 			waitFor { !$('.error-panel').text().isEmpty()}
         then:
 			!$('.error-panel').text().isEmpty()
