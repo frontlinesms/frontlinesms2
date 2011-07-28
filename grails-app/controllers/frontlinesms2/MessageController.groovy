@@ -169,8 +169,6 @@ class MessageController {
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			} else {
 				Fmessage.get(messageInstance.id).messageOwner?.refresh()
-				params.remove('checkedMessageIdList')
-				params.remove('checkedId')
 			}
 		}
 		if(params.count) {
@@ -178,7 +176,12 @@ class MessageController {
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
 		}
-		render ""		
+		if(params.checkedMessageIdList){
+			params.remove('checkedMessageIdList')			
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: params)
+		}		
 	}
 
     def archiveMessage = {
@@ -196,8 +199,14 @@ class MessageController {
 				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 				params.remove('count')
 		}
-		params.remove('checkedMessageIdList')
-		render ""
+
+		if(params.checkedMessageIdList){
+			params.remove('checkedMessageIdList')			
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: params)
+		}
+		
 	}
 	
 	def changeStarStatus = {
