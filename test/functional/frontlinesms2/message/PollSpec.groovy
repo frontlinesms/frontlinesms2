@@ -74,6 +74,43 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestMessages()
 	}
 
+	def "should auto populate poll response when a poll with yes or no answer is created"() {
+		when:
+			go "message"
+		then:
+			$("a", text: "Poll").click()
+			waitFor {$('#tabs-1').displayed}
+			$("input", name:'poll-type').value("standard")
+			$("input", value:'standard').jquery.trigger('click')
+		when:
+			$("a", text:'Next')[0].jquery.trigger('click')
+			waitFor { $('#tabs-3').displayed }
+            $("a", text:"Confirm").click()
+			waitFor { $('#tabs-4').displayed }
+			$("input", name:'title').value("POLL NAME")
+			$("input", id:'create-poll').click()
+			waitFor {!$("div.flash.message").text().isEmpty()}
+		then:
+			Poll.findByTitle("POLL NAME").responses*.value.containsAll("yes", "no")
+	}
+
+
+	def "should move to the next tab when multiple choice poll is selected"() {
+		when:
+			go "message"
+		then:
+			$("a", text: "Poll").click()
+			waitFor {$('#tabs-1').displayed}
+			$("input", name:'poll-type').value("multiple")
+			$("input", value:'multiple').jquery.trigger('click')
+		when:
+			$("a", text:'Next')[0].jquery.trigger('click')
+			waitFor { $('#tabs-2').displayed }
+		then:
+			$('#tabs-2').displayed 
+	}
+
+
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
 		return formatedDate.format(date)
