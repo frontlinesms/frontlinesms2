@@ -74,10 +74,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			Fmessage.findAll().each { it.refresh() }
 		then:
 			bob.messageOwner == unknownResponse
-		cleanup:
-			deleteTestFolders()
-			deleteTestMessages()
-			deleteTestPolls()
 	}
 
 	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
@@ -99,10 +95,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			bob.refresh()
 		then:
 			bob.messageOwner == barceResponse
-		cleanup:
-			deleteTestFolders()
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 	
 	def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
@@ -151,9 +143,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			alice != Poll.findByTitle("Football Teams").getMessages(false).find { it == alice }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 }
 

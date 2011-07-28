@@ -188,8 +188,9 @@ class MessageController {
 			messageInstance.save(failOnError: true, flush: true)
 			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			params.remove('messageId')
-			redirect(action: params.messageSection, params:params)
+			
 		}
+		redirect(action: params.messageSection, params:params)
 	}
 	
 	def changeStarStatus = {
