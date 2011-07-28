@@ -66,9 +66,10 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def result = Poll.findByTitle('question').getMessages(false)
+			def results = Poll.findByTitle('question').getMessages(false)
 		then:
-			result*.src == ["src2", "src3", "src1"]
+			results*.src == ["src2", "src3", "src1"]
+			results.every {it.archived == false}
     }
 
 	def "should fetch starred poll messages"() {
@@ -78,6 +79,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Poll.findByTitle("question").getMessages(true)
 		then:
 			results*.src == ["src3"]
+			results.every {it.archived == false}
 		cleanup:
 			Folder.list()*.delete()
 	}
