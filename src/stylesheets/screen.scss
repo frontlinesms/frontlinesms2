@@ -12,9 +12,9 @@ $blueprint-liquid-grid-columns: 24;
 
 
 /* DEBUG */
-div {
-	border: solid #ddd 1px;
-}
+// div {
+	//border: solid #ddd 1px;
+//}
 
 /* RESET LINKS */
 a,a:hover,a:visited,a:link {
@@ -131,9 +131,14 @@ body {
 		}
 		
 		.content {
+			@include clearfix;
+			border-bottom: 1px solid #9E9E9E;
+			padding: 17px;
+			
 			.content-header {
 				@include clearfix; // required
-				height: 43px;
+				padding: 17px;
+				background-color: #DFDFDF;
 				
 				h2 { text-transform:capitalize; }
 				#message-title { @include column(10); }
@@ -165,6 +170,7 @@ body {
 				#contact-list {
 					@include column(4, false); // FIXME hack, but its the only thing that seems to help
 					margin-right: 0px;
+					display: block;
 				}
 				
 				#contact_details {
@@ -174,12 +180,9 @@ body {
 					margin-right: 0;
 					padding: 17px;
 					
-					h2 {
-						text-transform:uppercase;
-					}
-					
 					#contact-list {
 						margin-right: 0;
+						display: block;
 						
 						li { height: 10px; }
 						
@@ -195,6 +198,7 @@ body {
 				
 				#message-title {
 					text-transform:uppercase;
+					border-bottom: 1px solid #9E9E9E;
 				}
 				
 				#message-list {
@@ -238,17 +242,20 @@ body {
 			.content-footer {
 				@include clearfix; // required
 				@include column(19);
-				height: 43px;
 				margin-left: 0;
+				margin-right: 0px;
+				display: block;
+				padding: 17px;
 				
 				#filter {
-					@include column(10);
+					@include column(10, false);
 					@include horizontal-list;
+					text-align: bottom;
 				}
 					
 				#page-arrows {
-					@include column(9, true);
-					text-align: right;
+					@include column(14, true);
+					text-align: bottom right;
 				}
 			}
 		}
