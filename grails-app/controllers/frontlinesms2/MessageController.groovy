@@ -178,8 +178,7 @@ class MessageController {
 		addresses.unique().each { address ->
 			//TODO: Need to add source from app settings
 			def message = new Fmessage(dst: address, text: params.messageText)
-			messageSendService.process(message)
-			message.save(failOnError: true, flush: true)
+			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
 		redirect (action: 'sent')
@@ -191,12 +190,12 @@ class MessageController {
 	}
 
 	private def withFmessage(Closure c) {
-		if(params.checkedMessageIdList) {
+		if(params.checkedMessageIdList) { // FIXME surely this should be explicitly handled in a different closure - this is potentially very misleading given the name of the method
 			params.remove('messageId')
 			getCheckedMessageList().each{ m ->
 				if(m) c.call(m)
 			}
-		}
+		} // FIXME should there be an 'else' before this next clause, or do we really want this to happen twice in some cases?
 		if(params.messageId) {
 			def m = Fmessage.get(params.messageId)
 			if(m) c.call(m)

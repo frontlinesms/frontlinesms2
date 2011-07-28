@@ -37,10 +37,11 @@ class BootStrap {
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
 			initialiseMockSerialDevice()
-//			initialiseRealSerialDevice()
+			// initialiseRealSerialDevice()
 			
-			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
+			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			
+			new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
 			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
@@ -177,6 +178,7 @@ OK''')
 		
 		SerialPortHandler portHandler = new StatefulHayesPortHandler(state_initial);
 		CommPortIdentifier cpi = new CommPortIdentifier("COM99", portHandler);
+		MockSerial.setIdentifier("COM98", cpi);
 		MockSerial.setIdentifier("COM99", cpi);
 		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));
 	}
