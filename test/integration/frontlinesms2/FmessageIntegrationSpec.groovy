@@ -35,6 +35,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true).save(flush:true)
 			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false).save(flush:true)
+			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false, archived: true).save(flush:true)
 		when:
 			def unreadMessageCount = Fmessage.countUnreadMessages()
 		then:

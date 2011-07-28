@@ -36,10 +36,20 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
+			serial.SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
 //			initialiseMockSerialDevice()
 			initialiseRealSerialDevice()
 			
+			println "PORTS:"
+			serial.CommPortIdentifier.portIdentifiers.each {
+				println "> Port identifier: ${it.name}"
+			}
+			println "END OF PORTS LIST"
+>>>>>>> 236d8e797b9cd2e03b203bd73a54c595f569886a
+			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
+			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
 			
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
@@ -63,8 +73,8 @@ class BootStrap {
 						it.save(failOnError: true)
 					}
 
-			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
-					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
+			[Poll.createPoll(title: 'Football Teams', responses: "manchester barcelona"),
+					Poll.createPoll(title: 'Shampoo Brands', responses: 'pantene oriele')].each() {
 				it.save(failOnError:true, flush:true)
 			}
 
@@ -97,6 +107,11 @@ class BootStrap {
 					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 				it.save(failOnError:true, flush:true)
 			}
+
+			def radioShow = new RadioShow(name: "Health")
+			radioShow.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
+			radioShow.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
+			radioShow.save(flush: true)
 		}
 	}
 
