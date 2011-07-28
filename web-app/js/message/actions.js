@@ -141,7 +141,7 @@ function deleteAllClickAction() {
 		context:document.body,
 		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
 		url: '/frontlinesms2/message/deleteMessage',
-		success: function(data) { $(this).empty().append(data); }
+		success: function(data) { reloadPage(messageSection, ownerId)}
 	});
 }
 
@@ -151,16 +151,23 @@ function archiveClickAction() {
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var checkedMessageIdList = $('input:hidden[name=checkedMessageIdList]').val();
-
+	
 	$.ajax({
 		type:'POST',
-		context:document.body,
 		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
 		url: '/frontlinesms2/message/archiveMessage',
-		success: function(data, textStatus){ $(this).empty().append(data);}
+		success: function(data, textStatus){ reloadPage(messageSection, ownerId)}
 	});
 }
 
+function reloadPage(messageSection, ownerId) {
+	if(messageSection == 'poll' || messageSection == 'folder'){
+		var location = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
+	} else{
+		var location = "/frontlinesms2/message/"+messageSection;
+	}
+	window.location = location
+}
 function setSelectedMessage() {
 	if(selectedMessageId == null){
 		selectedMessageId = $('tr.selected').attr('id').substring('message-'.length);

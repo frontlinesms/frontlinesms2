@@ -145,8 +145,7 @@ class MessageController {
 			def messageCount = params.count
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
-			
-			}
+		}
 		params.remove('checkedMessageIdList')
 		render ""
 	}
@@ -171,6 +170,7 @@ class MessageController {
 			} else {
 				Fmessage.get(messageInstance.id).messageOwner?.refresh()
 				params.remove('checkedMessageIdList')
+				params.remove('checkedId')
 			}
 		}
 		if(params.count) {
@@ -178,27 +178,26 @@ class MessageController {
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
 		}
-		
-		redirect(action: params.messageSection, params:params)
+		render ""		
 	}
 
     def archiveMessage = {
 		withFmessage { messageInstance ->
 			messageInstance.archive()
 			messageInstance.save(failOnError: true, flush: true)
-			
-			if(params.count) {
+			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			params.remove('messageId')
+			params.remove('checkedId')
+			Fmessage.get(messageInstance.id).refresh()
+		}
+		
+		if(params.count) {
 				def messageCount = params.count
 				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 				params.remove('count')
-			} else {
-				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			}
-			params.remove('messageId')
-			params.remove('checkedMessageIdList')
-			
 		}
-		redirect(action: params.messageSection, params:params)
+		params.remove('checkedMessageIdList')
+		render ""
 	}
 	
 	def changeStarStatus = {
