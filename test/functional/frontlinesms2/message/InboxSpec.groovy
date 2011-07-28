@@ -57,8 +57,8 @@ class InboxSpec extends MessageGebSpec {
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(3)').text() == formatedDate
-			$('#message-details p:nth-child(4)').text() == message.text
+			$('#message-details p:nth-child(2)').text() == formatedDate
+			$('#message-details p:nth-child(3)').text() == message.text
 		cleanup:
 			deleteTestMessages()
 	}
@@ -101,7 +101,7 @@ class InboxSpec extends MessageGebSpec {
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
 			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			def contact = new Contact(name: 'June', primaryMobile: '+254778800').save(failOnError:true)
 		when:
 			to MessagesPage
 			def rowContents = $('#messages tbody tr td:nth-child(3)')*.text()

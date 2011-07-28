@@ -3,7 +3,7 @@ class UrlMappings {
 		"/"(controller:'message')
 		
 		"/contact/show/$contactId"(controller:'contact', action:'show') {}
-
+		
 		"/group/show/$groupId/contact/show/$contactId" {
 			controller = 'contact'
 			action = 'show'
@@ -27,7 +27,7 @@ class UrlMappings {
 		"/folder/save"(controller:'folder', action:'save')
 		
 		"/search/result/$messageId"(controller:'search', action:'result') {}
-
+		
 		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here

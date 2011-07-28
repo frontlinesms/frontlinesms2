@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import frontlinesms2.enums.MessageStatus
+import groovy.time.*
 
 class Fmessage {
 	String src
@@ -19,8 +20,13 @@ class Fmessage {
 	static mapping = {
 		sort dateCreated:'desc'
 		sort dateReceived:'desc'
+		autoTimestamp false
 	}
 
+ 	def beforeInsert = {
+       dateCreated = dateCreated ? dateCreated : new Date()
+	}
+	
 	static constraints = {
 		src(nullable:true)
 		dst(nullable:true)
@@ -84,7 +90,8 @@ class Fmessage {
 
 			searchMessages {searchString, groupInstance, messageOwner -> 
 				def groupMembers = groupInstance?.getAddresses()
-				ilike("text", "%${searchString}%")
+				if(searchString)
+					ilike("text", "%${searchString}%")
 				and{
 					if(groupInstance) {
 						'in'("src",  groupMembers)
@@ -93,6 +100,29 @@ class Fmessage {
 						'in'("messageOwner", messageOwner)
 					}
 					eq('deleted', false)
+				}
+			}
+			
+			filterMessages { groupInstance, messageOwner, startDate, endDate -> 
+				def groupMembers = groupInstance?.getAddresses()
+				and {
+					if(groupInstance) {
+						'in'("src",  groupMembers)
+					}
+					if(messageOwner) {
+						'in'("messageOwner", messageOwner)
+					}
+					eq('deleted', false)
+					or {
+						and {
+							between("dateReceived", startDate, endDate)
+							eq("status", MessageStatus.INBOUND)
+						}
+						and {
+							between("dateCreated", startDate, endDate)
+							eq("status", MessageStatus.SENT)
+						}
+					}
 				}
 			}
 	}
@@ -203,5 +233,39 @@ class Fmessage {
 	static def countAllSearchMessages(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
 		if(!searchString) return 0
 		return Fmessage.searchMessages(searchString, groupInstance, messageOwners).count()
+	}
+	
+	static def getFilteredMessages( Group groupInstance=null, Collection<MessageOwner> messageOwner=[], Date startDate = new Date(Long.MIN_VALUE), Date endDate = new Date(Long.MAX_VALUE)) {
+		def messages = Fmessage.filterMessages(groupInstance, messageOwner, startDate, endDate).list(sort:"dateReceived", order:"desc")
+	
+		def dates = [:]
+		(startDate..endDate).each {
+			dates[it.format('dd/MM')] = ["Sent" :0, "Received" : 0]
+		}
+		
+		def stats = messages.collect {
+			it.status == MessageStatus.INBOUND ? [date: it.dateReceived, type: "Received"] : [date: it.dateCreated, type: "Sent"]
+		}
+		def messageGroups = countBy(stats.iterator(), {[it.date.format('dd/MM'), it.type]})
+		messageGroups.each { key, value -> dates[key[0]][key[1]] += value }
+		dates
+	}
+	
+	//TODO: Remove in Groovy 1.8 (Needed for 1.7)
+	private static def countAnswer(final Map<Object, Integer> answer, Object mappedKey) {
+		if (!answer.containsKey(mappedKey)) {
+			answer.put(mappedKey, 0)
+		}
+		int current = answer.get(mappedKey)
+		answer.put(mappedKey, current + 1)
+	}
+
+	private static def Map<Object, Integer> countBy(Iterator self, Closure closure) {
+		Map<Object, Integer> answer = new LinkedHashMap<Object, Integer>()
+		while (self.hasNext()) {
+			Object value = closure.call(self.next())
+			countAnswer(answer, value)
+		}
+		answer
 	}
 }
