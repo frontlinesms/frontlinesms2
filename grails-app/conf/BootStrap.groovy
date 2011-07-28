@@ -38,8 +38,8 @@ class BootStrap {
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
 			SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
-			initialiseMockSerialDevice()
-//			initialiseRealSerialDevice()
+//			initialiseMockSerialDevice()
+			initialiseRealSerialDevice()
 			
 			println "PORTS:"
 			serial.CommPortIdentifier.portIdentifiers.each {
