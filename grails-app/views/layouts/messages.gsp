@@ -31,9 +31,18 @@
 						<g:else>
 							<h2 id="message-title">${messageSection}</h2>
 						</g:else>
-				        <g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" id="quick_message">
-							Quick Message
-						</g:remoteLink>
+						<ol>
+							<li>
+								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchWizard('Export', data);">
+									Export
+								</g:remoteLink>
+							</li>
+							<li>
+					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" id="quick_message">
+									Quick Message
+								</g:remoteLink>
+							</li>
+						</ol>
 					</div>
 					<div class="content-body">
 						<g:render template="message_list"/>

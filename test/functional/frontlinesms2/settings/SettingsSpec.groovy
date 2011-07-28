@@ -11,22 +11,17 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 	def 'eyebrow list is present in the global navigation header'() {
 		when:
 			to ContactListPage
-			def list = $("ul",id:"main-tabs").children('li')
+			def list = $("ul", id:"global-nav").children('li')
 		then:
-			assert list*.text() == ['Messages (0)','Contacts','Status', 'Search', 'Settings & Plugins']
+			assert list*.text() == ['Messages (0)','Contacts','Status', 'Search']
 	}
 	
-	def 'settings menu item is available in global navigation and is selected'() {
+	def 'settings menu item is available in system menu'() {
 		when:
 			to ContactListPage
-			def btnGotoSettings = $('#main-tabs #tab-settings')
+			def btnGotoSettings = $('#system-menu #settings-nav')
 		then:
 			btnGotoSettings.text() == 'Settings & Plugins'
-		when:
-			btnGotoSettings.click()
-		then:
-			at SettingsPage
-			$('#main-tabs #tab-settings').hasClass('selected')
 	}
 
 	def 'PHONES & CONNECTIONS menu item is available settings menu'() {
