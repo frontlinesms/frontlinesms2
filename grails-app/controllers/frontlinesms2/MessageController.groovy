@@ -13,6 +13,11 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
+		if(params.checkedId && params.checkedId != params.messageId) {
+			params.remove('checkedId')
+			redirect(action:params.action)
+		}
+		
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -140,8 +145,7 @@ class MessageController {
 			def messageCount = params.count
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
-			
-			}
+		}
 		params.remove('checkedMessageIdList')
 		render ""
 	}
@@ -165,7 +169,6 @@ class MessageController {
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			} else {
 				Fmessage.get(messageInstance.id).messageOwner?.refresh()
-				params.remove('checkedMessageIdList')
 			}
 		}
 		if(params.count) {
@@ -173,8 +176,12 @@ class MessageController {
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
 		}
-		
-		redirect(action: params.messageSection, params:params)
+		if(params.checkedMessageIdList){
+			params.remove('checkedMessageIdList')			
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: params)
+		}		
 	}
 
     def archiveMessage = {
@@ -183,8 +190,23 @@ class MessageController {
 			messageInstance.save(failOnError: true, flush: true)
 			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			params.remove('messageId')
-			redirect(action: params.messageSection, params:params)
+			params.remove('checkedId')
+			Fmessage.get(messageInstance.id).refresh()
 		}
+		
+		if(params.count) {
+				def messageCount = params.count
+				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
+				params.remove('count')
+		}
+
+		if(params.checkedMessageIdList){
+			params.remove('checkedMessageIdList')			
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: params)
+		}
+		
 	}
 	
 	def changeStarStatus = {

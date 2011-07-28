@@ -166,28 +166,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			deleteTestMessages()
 			deleteTestContacts()
 	}
-	
-	def "should only display message details when one message is checked"() {
-		given:
-			createTestFolders()
-			createTestMessages()
-		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
-			$("#message")[1].click()
-			$("#message")[2].click()
-		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
-		when:
-			$("#message")[2].click()
-			def message = Fmessage.findBySrc('Jane')
-		then:
-			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(4)').text() == message.text
-		
-		cleanup:
-			deleteTestFolders()
-			deleteTestMessages()
-	}
+
 }
 
 class FolderListPage extends geb.Page {
