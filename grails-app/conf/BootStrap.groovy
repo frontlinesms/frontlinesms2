@@ -2,6 +2,7 @@ import grails.util.Environment
 import frontlinesms2.*
 import org.mockito.Mockito
 import java.lang.reflect.Field
+import serial.SerialClassFactory
 import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
@@ -36,7 +37,7 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-			serial.SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
+			SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
 //			initialiseMockSerialDevice()
 			initialiseRealSerialDevice()
 			
