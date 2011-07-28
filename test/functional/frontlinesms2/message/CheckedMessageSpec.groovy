@@ -111,6 +111,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:
+			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Bob')
 		when: 
 			to MessagesPage

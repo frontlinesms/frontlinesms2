@@ -58,14 +58,12 @@ function loadMessage(id, checked) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var messageId = id;
-	if(checked){
-		messageId = "?messageId="+messageId+"&checkedId="+messageId;
+	if(checked == true){
+		messageId = messageId+"?checkedId="+messageId;
 	}
 	
 	
-	if(messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash') {
-		window.location = "/frontlinesms2/message/"+messageSection+messageId;
-	}else if(messageSection == 'poll' || messageSection == 'folder'){
+	if(ownerId != null && messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
 		window.location = "/frontlinesms2/message/"+messageSection+"/"+ownerId+"/show/"+messageId;
 	} else{
 		window.location = "/frontlinesms2/message/"+messageSection+"/show/"+messageId;
@@ -110,9 +108,10 @@ function setMessageActions() {
 	if(messageSection != 'pending'){
 		replyAll = "<a id='btn_reply_all' >Reply All</a>";
 	}
+	archiveAll = "<a id='btn_archive_all' >Archive All</a>";
 	deleteAll = "<a id='btn_delete_all' >Delete All</a>";
 	$('#message-details').append("<div class='buttons'></div>");
-	$('#message-details div.buttons').append(replyAll+"&nbsp;"+deleteAll);
+	$('#message-details div.buttons').append(replyAll+"&nbsp;"+archiveAll+"&nbsp;"+deleteAll);
 	$('#btn_reply_all').click(quickReplyClickAction);
 	$('#btn_delete_all').click(deleteAllClickAction);
 }

@@ -2,6 +2,7 @@ import grails.util.Environment
 import frontlinesms2.*
 import org.mockito.Mockito
 import java.lang.reflect.Field
+import serial.SerialClassFactory
 import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
@@ -36,17 +37,15 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-			serial.SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
-//			initialiseMockSerialDevice()
-			initialiseRealSerialDevice()
+			SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
+			initialiseMockSerialDevice()
+//			initialiseRealSerialDevice()
 			
 			println "PORTS:"
 			serial.CommPortIdentifier.portIdentifiers.each {
 				println "> Port identifier: ${it.name}"
 			}
 			println "END OF PORTS LIST"
->>>>>>> 236d8e797b9cd2e03b203bd73a54c595f569886a
-			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
