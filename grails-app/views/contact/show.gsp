@@ -63,7 +63,7 @@
 						</g:remoteLink>
 					</g:if>
 				</div>
-				<ol id="custom-field-list">
+				<ol class="field" id="custom-field-list">
 					  <g:each in="${contactFieldInstanceList}" status="i" var="f">
 						  <li class="${f == fieldInstance ? 'selected' : ''}">
 							  <label for="custom-field-${f.name}">${f.name}</label>
