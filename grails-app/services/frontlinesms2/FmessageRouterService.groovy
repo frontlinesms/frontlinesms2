@@ -26,10 +26,16 @@ class FmessageRouterService {
 		} else {
 			println "Routes available: ${camelContext.routes*.id}"
 			def filteredRouteList = filter(camelContext.routes, { it.id.startsWith('out-') })
-			println "Routes available: ${filteredRouteList*.id}"
-			println "We don't know what we're doing, so don't route anywhere"
-			println "Counter has counted up to $counter"
-			return "seda:${filteredRouteList[++counter % filteredRouteList.size].id}"
+			if(filteredRouteList.size > 0) {
+				println "Routes available: ${filteredRouteList*.id}"
+				println "We don't know what we're doing, so don't route anywhere"
+				println "Counter has counted up to $counter"
+				return "seda:${filteredRouteList[++counter % filteredRouteList.size].id}"
+			} else {
+				println "Haven't found any routes.  Discarding message."
+				// TODO do something like increment retry header for message, and then re-add to queue
+				return null
+			}
 		}
 	}
 	
