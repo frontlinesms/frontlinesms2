@@ -36,10 +36,19 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-			initialiseMockSerialDevice()
-			// initialiseRealSerialDevice()
+			serial.SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
+//			initialiseMockSerialDevice()
+			initialiseRealSerialDevice()
+			
+			println "PORTS:"
+			serial.CommPortIdentifier.portIdentifiers.each {
+				println "> Port identifier: ${it.name}"
+			}
+			println "END OF PORTS LIST"
 			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
 			
 			new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
@@ -54,7 +63,7 @@ class BootStrap {
 						it.save(failOnError:true)
 					}
 			(1..11).each {
-				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", status:MessageStatus.INBOUND).save(failOnError:true)
+				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
 			}
 
 			[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
@@ -64,8 +73,8 @@ class BootStrap {
 						it.save(failOnError: true)
 					}
 
-			[Poll.createPoll('Football Teams', ['manchester', 'barcelona']),
-					Poll.createPoll('Shampoo Brands', ['pantene', 'oriele'])].each() {
+			[Poll.createPoll(title: 'Football Teams', responses: "manchester barcelona"),
+					Poll.createPoll(title: 'Shampoo Brands', responses: 'pantene oriele')].each() {
 				it.save(failOnError:true, flush:true)
 			}
 
@@ -75,7 +84,7 @@ class BootStrap {
 			
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
-				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}", text: "Yes", status: MessageStatus.INBOUND);
+				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", status: MessageStatus.INBOUND);
 				msg.save(failOnError: true);
 				barcelonaResponse.addToMessages(msg);
 			}
@@ -89,6 +98,7 @@ class BootStrap {
 					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
 					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
 				it.status = MessageStatus.INBOUND
+				it.dateReceived = new Date()
 				it.save(failOnError:true, flush:true)
 			}
 			
@@ -98,6 +108,11 @@ class BootStrap {
 					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
 				it.save(failOnError:true, flush:true)
 			}
+
+			def radioShow = new RadioShow(name: "Health")
+			radioShow.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
+			radioShow.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
+			radioShow.save(flush: true)
 		}
 	}
 

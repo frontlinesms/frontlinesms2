@@ -1,8 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<html>
+    <head>
+        <meta name="layout" content="status" />
+    </head>
+    <body>
+<div style="clear:both;display:block">
+<g:render template="traffic" />
 <div class="status">
-	<button>Connection Tester</button>
-
 	<div>
 		<div class="label"><img src="/frontlinesms2/images/${MTNDONGLE.getIndicator()}-status.png" />MTN Dongle</div>
 		<div class="value">             
@@ -35,12 +39,8 @@
 			<div>0 pending results</div>
 		</div>
 	</div>
-
-	<div>
-		Updates
-		<div>FrontlineSms update available(v2.0.3) <button>Update FrontlineSMS</button></div>
-		<div>Update available for plugin 3 <button>Update Plugin</button></div>
-	</div>
-
 </div>
+</div>
+    </body>
+</html>
 

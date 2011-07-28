@@ -7,7 +7,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
-			def p = Poll.createPoll('This is a poll', ['Manchester', 'Barcelona']).save(failOnError:true, flush:true)
+			def p = Poll.createPoll(title: 'This is a poll', responses: 'Manchester Barcelona').save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
@@ -23,41 +23,41 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
 		given:
-			def p = Poll.createPoll('Who is badder?', ['Michael Jackson', 'Chuck Norris']).save(failOnError:true, flush:true)
+			def p = Poll.createPoll(title: 'Who is badder?', responses:'Michael-Jackson Chuck-Norris').save(failOnError:true, flush:true)
 		when:
 			def ukId = PollResponse.findByValue('Unknown').id
-			def mjId = PollResponse.findByValue('Michael Jackson').id
-			def cnId = PollResponse.findByValue('Chuck Norris').id
+			def mjId = PollResponse.findByValue('Michael-Jackson').id
+			def cnId = PollResponse.findByValue('Chuck-Norris').id
 		then:
 			p.responseStats == [
-				[id:mjId, value:"Michael Jackson", count:0, percent:0],
-				[id:cnId, value:"Chuck Norris", count:0, percent:0],
+				[id:mjId, value:"Michael-Jackson", count:0, percent:0],
+				[id:cnId, value:"Chuck-Norris", count:0, percent:0],
 				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
-			PollResponse.findByValue('Michael Jackson').addToMessages(new Fmessage(text:'MJ').save(failOnError:true, flush:true))
-			PollResponse.findByValue('Chuck Norris').addToMessages(new Fmessage(text:'big charlie').save(failOnError:true, flush:true))
+			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ').save(failOnError:true, flush:true))
+			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie').save(failOnError:true, flush:true))
 		then:
 			p.responseStats == [
-				[id:mjId, value:'Michael Jackson', count:1, percent:50],
-				[id:cnId, value:"Chuck Norris", count:1, percent:50],
+				[id:mjId, value:'Michael-Jackson', count:1, percent:50],
+				[id:cnId, value:"Chuck-Norris", count:1, percent:50],
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		when:
 			Fmessage.findByText('MJ').toDelete()
 		then:
 			p.responseStats == [
-				[id:mjId, value:'Michael Jackson', count:0, percent:0],
-				[id:cnId, value:'Chuck Norris', count:1, percent:100],
+				[id:mjId, value:'Michael-Jackson', count:0, percent:0],
+				[id:cnId, value:'Chuck-Norris', count:1, percent:100],
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		cleanup:
 			deleteTestData()
 	}
-	
+
 	def "creating a new poll also creates a poll response with value 'Unknown'"() {
 		when:
-			def p = Poll.createPoll('This is a poll', ['one', 'two'])
+			def p = Poll.createPoll(title: 'This is a poll', responses: 'one two')
 		then:
 			p.responses.size() == 3
 	}
@@ -66,9 +66,10 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def result = Poll.findByTitle('question').getMessages(false)
+			def results = Poll.findByTitle('question').getMessages(false)
 		then:
-			result*.src == ["src2", "src3", "src1"]
+			results*.src == ["src2", "src3", "src1"]
+			results.every {it.archived == false}
     }
 
 	def "should fetch starred poll messages"() {
@@ -78,10 +79,11 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Poll.findByTitle("question").getMessages(true)
 		then:
 			results*.src == ["src3"]
+			results.every {it.archived == false}
 		cleanup:
 			Folder.list()*.delete()
 	}
-	
+
 	def "should check for offset and limit while fetching poll messages"() {
 		setup:
 			setUpPollResponseAndItsMessages()
@@ -116,7 +118,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
 	}
 
-	
+
 	static deleteTestData() {
 		Poll.findAll().each() {
 			it.refresh()

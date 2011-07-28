@@ -21,6 +21,7 @@ class MessageController {
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
+				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages()]
 	}
 
@@ -102,6 +103,21 @@ class MessageController {
 				ownerInstance: folderInstance] << show(messageInstanceList)
 	}
 
+	def radioShow = {
+		def max = params.max ?: GrailsConfig.getConfig().pagination.max
+		def offset = params.offset ?: 0
+		def showInstance = RadioShow.get(params.ownerId)
+		def isStarred = params['starred']
+		def messageInstanceList = showInstance?.getShowMessages(isStarred, max, offset)
+		messageInstanceList.each{ it.updateDisplaySrc() }
+
+		params.messageSection = 'radioShow'
+		[messageInstanceList: messageInstanceList,
+				messageSection: 'radioShow',
+				messageInstanceTotal: showInstance.countMessages(isStarred),
+				ownerInstance: showInstance] << show(messageInstanceList)
+	}
+
 	def move = {
 		withFmessage { messageInstance ->
 			def messageOwner
@@ -159,6 +175,16 @@ class MessageController {
 		}
 		
 		redirect(action: params.messageSection, params:params)
+	}
+
+    def archiveMessage = {
+		withFmessage { messageInstance ->
+			messageInstance.archive()
+			messageInstance.save(failOnError: true, flush: true)
+			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			params.remove('messageId')
+			redirect(action: params.messageSection, params:params)
+		}
 	}
 	
 	def changeStarStatus = {

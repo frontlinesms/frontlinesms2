@@ -17,15 +17,36 @@ class CreateNewPollSpec extends PollGebSpec {
 			def initialPollCount = Poll.count()
 		when:
 			to CreatePollPage
-			frmDetails.title = 'UFOs?'
 			frmDetails.responses = 'yes no'
+			$("a", text:"confirm").click()
+			frmDetails.title = 'UFOs?'
 			btnSave.click()
+	
             waitFor { !($("div.flash.message").text().isEmpty()) }
 		then:
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
 		cleanup:
 			deleteTestPolls()
+	}
+
+	def "should not allow to proceed to the next tab if blank auto response is given" () {
+		when:
+			go 'message'
+		
+			$("a", text:"Poll").click()
+			waitFor { $("div", id:"tabs-1").displayed}
+			$("a", text:'Automatic reply').click()
+			waitFor { $("div", id:"tabs-3").displayed}
+            $('textArea', name: "autoReplyText").jquery.trigger('focus')
+        then:
+			$('#send_auto_reply_check').getAttribute("checked")
+		when:
+			frmDetails.autoReplyText = ''
+			$("#tabs-3 a", text:"Next").click()
+			waitFor { !$('.error-panel').text().isEmpty()}
+        then:
+			!$('.error-panel').text().isEmpty()
 	}
 
 	def 'existing polls appear in activities section of messages'() {

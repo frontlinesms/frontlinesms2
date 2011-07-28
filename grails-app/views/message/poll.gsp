@@ -44,7 +44,7 @@
 			<g:render template="message_details" />
 		</g:if>
 		<h2 id="poll-title">${ownerInstance?.title}</h2>
-		<g:if test="$responseList">
+			<g:if test="$responseList">
 			<table id="poll-stats">
 				<tbody>
 					<g:each in="${responseList}" var="r">
