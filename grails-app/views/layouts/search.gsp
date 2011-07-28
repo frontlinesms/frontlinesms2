@@ -19,10 +19,19 @@
 				<g:render template="menu"/>
 				<div class="content">
 					<div class="content-header">
-						<h2>Search</h2>
-						<p id="search-description">
-							${searchDescription}
-			  			</p>
+						<div id="message-title">
+							<h2>Search</h2>
+							<p id="search-description">
+								${searchDescription}
+				  			</p>
+			  			</div>
+			  			<ol>
+				  			<li>
+					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchWizard('Export', data);">
+									Export
+								</g:remoteLink>
+							</li>
+						</ol>
 					</div>
 					<div class="content-body">
 						<g:render template="/message/message_list"/>

@@ -18,11 +18,13 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
+		def responseInstance
+		if (messageInstance.messageOwner) { responseInstance = messageInstance.messageOwner }
 		
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
-				responseInstance: messageInstance.messageOwner]
+				responseInstance: responseInstance,
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages()]
 	}

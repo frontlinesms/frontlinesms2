@@ -26,11 +26,11 @@
 					<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 					<g:if test="${contactInstance.id}">
 						<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+					</g:if>
 				  	<g:else>
 						<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
 				  	</g:else>
 				</div>
-			<div id="contact-info">
 				<div class="field">
 					<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 					<g:textField name="name" id="name" value="${contactInstance?.name}"/>
@@ -54,7 +54,7 @@
 						</g:remoteLink>
 					</g:if>
 				</div>
-			   <div class="field">
+			   	<div class="field">
 					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
 					<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">

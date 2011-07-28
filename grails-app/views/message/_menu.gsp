@@ -13,6 +13,11 @@
 						Folder
 					</g:remoteLink>
 				</li>
+				<li>
+					<g:remoteLink controller="radioShow" action="create" onSuccess="launchWizard('Create Show', data)">
+						Show
+					</g:remoteLink>
+				</li>
 				<li id="manage-subscription">
 					<g:remoteLink controller="group" action="list" onSuccess="launchWizard('Manage Subscription', data);">
 						Manage Subscription
@@ -59,7 +64,6 @@
 					(${s.countMessages()})
 				</li>
 			</g:each>
-			<g:remoteLink controller="radioShow" action="create" onSuccess="launchWizard('Create Show', data)">Create new shows</g:remoteLink>
 	</li>
 	<li>
 		 <h2>Folders</h2>
