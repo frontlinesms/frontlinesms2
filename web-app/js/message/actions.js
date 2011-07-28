@@ -114,6 +114,7 @@ function setMessageActions() {
 	$('#message-details div.buttons').append(replyAll+"&nbsp;"+archiveAll+"&nbsp;"+deleteAll);
 	$('#btn_reply_all').click(quickReplyClickAction);
 	$('#btn_delete_all').click(deleteAllClickAction);
+	$('#btn_archive_all').click(archiveClickAction);
 }
 
 function quickReplyClickAction() {
@@ -141,6 +142,22 @@ function deleteAllClickAction() {
 		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
 		url: '/frontlinesms2/message/deleteMessage',
 		success: function(data) { $(this).empty().append(data); }
+	});
+}
+
+function archiveClickAction() {
+	var me = $(this);
+	var messageType = me.text();
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
+	var checkedMessageIdList = $('input:hidden[name=checkedMessageIdList]').val();
+
+	$.ajax({
+		type:'POST',
+		context:document.body,
+		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
+		url: '/frontlinesms2/message/archiveMessage',
+		success: function(data, textStatus){ $(this).empty().append(data);}
 	});
 }
 

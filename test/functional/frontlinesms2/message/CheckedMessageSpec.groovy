@@ -123,4 +123,24 @@ class CheckedMessageSpec extends MessageGebSpec {
 		then: 
 			$("#message")[1].@checked == ""
 	}
+	
+	def 'should archived multiple messages'() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[0].click()
+			def btnArchive = $('#message-details .buttons #btn_archive_all')
+			btnArchive.click()
+			waitFor { $("div.flash.message").displayed }
+		then:
+			at MessagesPage
+		when:
+			waitFor { $("div.flash.message").displayed }
+			Fmessage.findBySrc('Bob').refresh()
+			Fmessage.findBySrc('Alice').refresh()
+		then:
+			Fmessage.findBySrc('Bob').archived
+			Fmessage.findBySrc('Alice').archived
+	}
 }

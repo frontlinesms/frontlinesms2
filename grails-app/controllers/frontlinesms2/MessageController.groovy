@@ -186,8 +186,16 @@ class MessageController {
 		withFmessage { messageInstance ->
 			messageInstance.archive()
 			messageInstance.save(failOnError: true, flush: true)
-			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			
+			if(params.count) {
+				def messageCount = params.count
+				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
+				params.remove('count')
+			} else {
+				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			}
 			params.remove('messageId')
+			params.remove('checkedMessageIdList')
 			
 		}
 		redirect(action: params.messageSection, params:params)
