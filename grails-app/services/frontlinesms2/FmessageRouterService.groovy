@@ -7,6 +7,8 @@ import org.apache.camel.Header
 class FmessageRouterService {
 	def camelContext
 
+	int counter = 0
+
 	/**
 	 * Slip should return the list of ______ to forward to, or <code>null</code> if
 	 * we've done with it.
@@ -22,8 +24,20 @@ class FmessageRouterService {
 			println "Target is set, so forwarding to specific fconnection"
 			return "seda:out-$target"
 		} else {
+			println "Routes available: ${camelContext.routes*.id}"
+			def filteredRouteList = filter(camelContext.routes, { it.id.startsWith('out-') })
+			println "Routes available: ${filteredRouteList*.id}"
 			println "We don't know what we're doing, so don't route anywhere"
-			return null
+			println "Counter has counted up to $counter"
+			return "seda:${filteredRouteList[++counter % filteredRouteList.size].id}"
 		}
+	}
+	
+	def filter(List l, Closure c) {
+		def r = []
+		l.each {
+			if(c(it)) r << it
+		}
+		r
 	}
 }
