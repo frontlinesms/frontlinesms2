@@ -1,5 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
+<html>
+    <head>
+        <meta name="layout" content="status" />
+    </head>
+    <body>
+<div style="clear:both;display:block">
+<g:render template="traffic" />
 <div class="status">
 	<div>
 		<div class="label"><img src="/frontlinesms2/images/${MTNDONGLE.getIndicator()}-status.png" />MTN Dongle</div>
@@ -34,4 +40,7 @@
 		</div>
 	</div>
 </div>
+</div>
+    </body>
+</html>
 

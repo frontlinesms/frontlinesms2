@@ -53,7 +53,7 @@ class BootStrap {
 						it.save(failOnError:true)
 					}
 			(1..11).each {
-				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", status:MessageStatus.INBOUND).save(failOnError:true)
+				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
 			}
 
 			[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
@@ -74,7 +74,7 @@ class BootStrap {
 			
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
-				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}", text: "Yes", status: MessageStatus.INBOUND);
+				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", status: MessageStatus.INBOUND);
 				msg.save(failOnError: true);
 				barcelonaResponse.addToMessages(msg);
 			}
@@ -88,6 +88,7 @@ class BootStrap {
 					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
 					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
 				it.status = MessageStatus.INBOUND
+				it.dateReceived = new Date()
 				it.save(failOnError:true, flush:true)
 			}
 			
