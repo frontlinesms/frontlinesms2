@@ -11,6 +11,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 	        inbox*.src == ["+254778899", "Bob", "Alice", "9544426444"]
 	        inbox.every {it.status == MessageStatus.INBOUND}
+	        inbox.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -23,6 +24,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			inbox.size() == 1
 			inbox.every {it.starred}
+			inbox.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -48,6 +50,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			assert sent.size() == 2
 			sent.every { it.status == MessageStatus.SENT}
+			sent.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -61,6 +64,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			assert sent.size() == 1
 			sent[0].status == MessageStatus.SENT
 			sent[0].starred
+			sent.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -85,6 +89,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Folder.findByName("home").getFolderMessages(false)
 		then:
 			results*.src == ["Jim", "Bob", "Jack"]
+			results.every {it.archived == false}
 		cleanup:
 			Folder.list()*.delete()
 	}
@@ -96,6 +101,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Folder.findByName("home").getFolderMessages(true)
 		then:
 			results*.src == ["Jack"]
+			results.every {it.archived == false}
 		cleanup:
 			Folder.list()*.delete()
 	}
@@ -121,6 +127,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 		    results.size() == 2
 			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
+			results.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -134,6 +141,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		    results.size() == 1
 			results[0].status == MessageStatus.SEND_PENDING
 			results[0].starred
+			results.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -157,6 +165,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		    results.size() == 1
 			results[0].deleted
 			results[0].starred
+			results.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}
@@ -170,6 +179,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 		    results.size() == 2
 			results[0].deleted
+			results.every {it.archived == false}
 		cleanup:
 			deleteTestData()
 	}

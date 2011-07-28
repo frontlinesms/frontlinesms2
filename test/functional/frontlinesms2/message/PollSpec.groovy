@@ -33,9 +33,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollShowPage
 			def formatedDate = dateToString(message.dateCreated)
 		then:
-			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(3)').text() == formatedDate
-			$('#message-details p:nth-child(4)').text() == message.text
+			$('.message-name').text() == message.src
+			$('.message-date').text() == formatedDate
+			$('.message-body').text() == message.text
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -73,6 +73,43 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestPolls()
 			deleteTestMessages()
 	}
+
+	def "should auto populate poll response when a poll with yes or no answer is created"() {
+		when:
+			go "message"
+		then:
+			$("a", text: "Poll").click()
+			waitFor {$('#tabs-1').displayed}
+			$("input", name:'poll-type').value("standard")
+			$("input", value:'standard').jquery.trigger('click')
+		when:
+			$("a", text:'Next')[0].jquery.trigger('click')
+			waitFor { $('#tabs-3').displayed }
+            $("a", text:"Confirm").click()
+			waitFor { $('#tabs-4').displayed }
+			$("input", name:'title').value("POLL NAME")
+			$("input", id:'create-poll').click()
+			waitFor {!$("div.flash.message").text().isEmpty()}
+		then:
+			Poll.findByTitle("POLL NAME").responses*.value.containsAll("yes", "no")
+	}
+
+
+	def "should move to the next tab when multiple choice poll is selected"() {
+		when:
+			go "message"
+		then:
+			$("a", text: "Poll").click()
+			waitFor {$('#tabs-1').displayed}
+			$("input", name:'poll-type').value("multiple")
+			$("input", value:'multiple').jquery.trigger('click')
+		when:
+			$("a", text:'Next')[0].jquery.trigger('click')
+			waitFor { $('#tabs-2').displayed }
+		then:
+			$('#tabs-2').displayed 
+	}
+
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
