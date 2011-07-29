@@ -36,7 +36,7 @@ body {
 #container {
 	@include container;
 	height: 800px;
-	border-top: 3px solid #D8AEC6;
+	border-top: 3px solid #C79CDD;
 	background-image:url(/frontlinesms2/images/background.png);
 	background-repeat:no-repeat;
 	background-position:left top;
@@ -103,7 +103,7 @@ body {
 		width: 100%;
 		
 		.selected {
-			background-color: #D8E8EF;
+			background-color: #E0F0DE;
 		}
 		
 		.context-menu {
@@ -176,7 +176,7 @@ body {
 				#contact_details {
 					@include column(19, false);
 					display: block;
-					background-color: #D8E8EF;
+					background-color: #E0F0DE;
 					margin-right: 0;
 					padding: 17px;
 					
@@ -215,7 +215,7 @@ body {
 				#message-details {
 					@include column(5, true);
 					display: block;
-					background-color: #D8E8EF;
+					background-color: #E0F0DE;
 					padding: 17px;
 					
 					#contact-name {
