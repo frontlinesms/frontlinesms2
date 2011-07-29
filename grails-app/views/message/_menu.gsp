@@ -4,7 +4,7 @@
 		<h2>Create new...</h2>
 		<ol id="create-submenu">
 				<li id="create-poll">
-					<g:remoteLink controller="poll" action="create" onSuccess="launchWizard('Create Poll', data);">
+					<g:remoteLink controller="poll" action="create" onSuccess="launchWizard('Create Poll', data, 1000);">
 						Poll
 					</g:remoteLink>				
 				</li>

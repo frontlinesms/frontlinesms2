@@ -9,7 +9,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		createTestContacts()
 		createTestGroups()
 	}
-
+	
 	def cleanup() {
 		deleteTestGroups()
 		deleteTestContacts()

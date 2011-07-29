@@ -21,4 +21,13 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			p.validate()
 	}
+
+	def "poll auto-reply cannot be blank"() {
+		setup:
+			mockDomain(Poll)
+		when:
+			def poll = new Poll(title: "title", autoReplyText: " ", responses : [new PollResponse(value: "one"), new PollResponse(value: "two")])
+		then:
+			!poll.validate()
+	}
 }
