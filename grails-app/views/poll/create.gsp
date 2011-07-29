@@ -4,7 +4,8 @@
 		<li><a href="#tabs-1">New Poll: Enter Question</a></li>
 		<li><a href="#tabs-2">New Poll: AnswerList</a></li>
 		<li><a href="#tabs-3">Automatic reply</a></li>
-		<li><a href="#tabs-4">Confirm</a></li>
+		<li><a href="#tabs-4">Select recipients</a></li>
+		<li><a href="#tabs-5">Confirm</a></li>
 	</ul>
 
 	<g:form action="save" name="poll-details" controller="poll" method="post">
@@ -12,11 +13,16 @@
 			<div class="section">
 				<div>
 					<h3>Select the kind of poll to create</h3>
-					<g:radio name="poll-type" value="standard" onclick="populateResponses()"/>Question with a 'Yes' or 'No' answer
-					<g:radio name="poll-type" value="multiple"  onclick="populateResponses()"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
+					<div>
+						<g:radio name="poll-type" value="standard" onclick="populateResponses()"/>Question with a 'Yes' or 'No' answer
+					</div>
+					<div>
+						<g:radio name="poll-type" value="multiple" onclick="populateResponses()"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
+					</div>
+					<g:checkBox name="collect-responses" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
 				</div>
 			</div>
-			<g:link url="#" onclick="moveForward()">Next</g:link>
+			<g:link url="#" onclick="nextTabToMove()">Next</g:link>
 		</div>
 
 		<div id="tabs-2">
@@ -40,11 +46,18 @@
 			<g:link url="#" class="back">Back</g:link>
 			<g:link url="#" class="next-validate" onClick="moveToNextTab(validate(),
 															function(){\$('.error-panel').html('please enter all the details'); },
-															function(){\$('#auto-reply-read-only-text').html(\$('.check-bound-text-area').val()); })">
+															function(){
+																skipTabBy(2, isGroupChecked('collect-responses'));
+																\$('#auto-reply-read-only-text').html(\$('.check-bound-text-area').val());
+															})">
 				Next
 			</g:link>
 		</div>
 		<div id="tabs-4">
+			<g:link url="#" class="back">Back</g:link>
+			<g:link url="#" class="next">Next</g:link>
+		</div>
+		<div id="tabs-5">
 			Name this poll:
 			<g:textField name="title"></g:textField>
 			<div>
@@ -71,14 +84,16 @@
 		}
 	}
 
-	function moveForward() {
-		var selectedElements = getSelectedGroupElements('poll-type');
-		if (selectedElements.size() > 0 && selectedElements[0].value == 'standard') {
+	function skipTabBy(numberOfTabs, condition) {
+		if (condition)
 			moveToTabBy(2)
-		}
-		else {
+		else
 			moveToTabBy(1)
-		}
+	}
+
+	function nextTabToMove() {
+		var selectedElements = getSelectedGroupElements('poll-type');
+		skipTabBy(2, selectedElements.size() > 0 && selectedElements[0].value == 'standard')
 	}
 </script>
 
