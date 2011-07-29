@@ -13,6 +13,11 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
+		if(params.checkedId && params.checkedId != params.messageId) {
+			params.remove('checkedId')
+			redirect(action:params.action)
+		}
+		
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -144,8 +149,7 @@ class MessageController {
 			def messageCount = params.count
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
-			
-			}
+		}
 		params.remove('checkedMessageIdList')
 		render ""
 	}
@@ -169,7 +173,6 @@ class MessageController {
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
 			} else {
 				Fmessage.get(messageInstance.id).messageOwner?.refresh()
-				params.remove('checkedMessageIdList')
 			}
 		}
 		if(params.count) {
@@ -177,8 +180,37 @@ class MessageController {
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
 			params.remove('count')
 		}
+		if(params.checkedMessageIdList){
+			params.remove('checkedMessageIdList')			
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: params)
+		}		
+	}
+
+    def archiveMessage = {
+		withFmessage { messageInstance ->
+			messageInstance.archive()
+			messageInstance.save(failOnError: true, flush: true)
+			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
+			params.remove('messageId')
+			params.remove('checkedId')
+			Fmessage.get(messageInstance.id).refresh()
+		}
 		
-		redirect(action: params.messageSection, params:params)
+		if(params.count) {
+				def messageCount = params.count
+				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
+				params.remove('count')
+		}
+
+		if(params.checkedMessageIdList){
+			params.remove('checkedMessageIdList')			
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: params)
+		}
+		
 	}
 	
 	def changeStarStatus = {
@@ -198,8 +230,7 @@ class MessageController {
 		addresses.unique().each { address ->
 			//TODO: Need to add source from app settings
 			def message = new Fmessage(dst: address, text: params.messageText)
-			messageSendService.process(message)
-			message.save(failOnError: true, flush: true)
+			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
 		redirect (action: 'sent')
@@ -211,12 +242,12 @@ class MessageController {
 	}
 
 	private def withFmessage(Closure c) {
-		if(params.checkedMessageIdList) {
+		if(params.checkedMessageIdList) { // FIXME surely this should be explicitly handled in a different closure - this is potentially very misleading given the name of the method
 			params.remove('messageId')
 			getCheckedMessageList().each{ m ->
 				if(m) c.call(m)
 			}
-		}
+		} // FIXME should there be an 'else' before this next clause, or do we really want this to happen twice in some cases?
 		if(params.messageId) {
 			def m = Fmessage.get(params.messageId)
 			if(m) c.call(m)

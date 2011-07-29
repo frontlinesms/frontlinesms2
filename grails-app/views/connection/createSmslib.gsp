@@ -11,14 +11,19 @@
 				<g:textField name="name" value="${fconnectionInstance?.name}" />
 			</div>
 
-			<div class="input field">
+			<div class="field">
 				<label for="port"><g:message code="fconnection.port.label" default="Port" /></label>
 				<g:textField name="port" value="${fconnectionInstance?.port}" />
 			</div>
 
-			<div class="baud field">
+			<div class="field">
 				<label for="baud"><g:message code="fconnection.baud.label" default="Baud rate" /></label>
 				<g:textField name="baud" value="${fconnectionInstance?.baud}" />
+			</div>
+
+			<div class="field">
+				<label for="pin"><g:message code="fconnection.pin.label" default="PIN" /></label>
+				<g:passwordField name="pin" value="${fconnectionInstance?.pin}" />
 			</div>
 
 			<g:submitButton class='create' name="create" value="${message(code: 'default.button.create.label', default: 'Save')}" /></span>

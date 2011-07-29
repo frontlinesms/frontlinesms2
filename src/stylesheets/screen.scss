@@ -285,6 +285,7 @@ body {
 				@include column(12);
 			}
 		}
+		.buttons { cursor: pointer}
 	}
 	
 	/* PAGINATION */
@@ -296,8 +297,13 @@ body {
 		clear:both;
 		display:block;
 	}
-	
-	.hide {
-	  display: none
-	}
+}
+
+.hide {
+  display: none
+}
+
+#trafficGraph {
+	width:600px;
+	height:400px;
 }

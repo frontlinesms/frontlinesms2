@@ -1,13 +1,13 @@
 package frontlinesms2
 
-import org.apache.camel.Processor
 import org.apache.camel.Exchange
 import org.smslib.CIncomingMessage
+import org.smslib.COutgoingMessage
 
 import frontlinesms2.enums.MessageStatus // FIXME remove "enums" package
 
-class SmslibTranslationService implements Processor {
-	void process(Exchange exchange) {
+class SmslibTranslationService {
+	void toFmessage(Exchange exchange) {
 		println("exchange ${exchange}")
 		def i = exchange.in
 		println("smslib translation service - in: $i")
@@ -18,20 +18,19 @@ class SmslibTranslationService implements Processor {
 		message.dst = bod.recipient
 		message.text = bod.text
 		message.dateReceived = new Date(bod.date)
-		
-//		message.src = EMAIL_PROTOCOL_PREFIX + i.getHeader('From')
-//		println("src: ${message.src}")
-//		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')
-//		println("dst: ${message.dst}")
-//		def emailBody = i.body
-//		def emailSubject = i.getHeader('Subject')
-//		println("emailBody: ${emailBody}")
-//		println("emailSubject: ${emailSubject}")
-//		message.text = emailSubject
-//		if(emailBody != null) {
-//			message.text = message.text ? "${message.text}\n${underline(emailSubject)}\n\n${emailBody}" : emailBody
-//		}
 		assert exchange.out != null
 		exchange.out.body = message
+	}
+	
+	void toCmessage(Exchange exchange) {
+		println "Should be translating to CMessage: $exchange"
+		def f = exchange.in.body
+		def c = new COutgoingMessage(f.dst, f.text)
+		c.originator = f.src
+		c.date = f.dateCreated.time
+		
+		println "Created CMessage $c"
+		
+		exchange.out.body = c
 	}
 }

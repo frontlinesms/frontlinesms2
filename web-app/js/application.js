@@ -40,15 +40,19 @@ function moveToTabBy(index) {
 	return false;
 }
 
-function moveToNextTab(canMoveToNextTab, onValidationFail) {
+function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
+	onSuccess = onSuccess || null
 	if (canMoveToNextTab) {
-		return moveToTabBy(1);
+		moveToTabBy(1);
+		if (onSuccess != null)
+			onSuccess()
 	}
-	else {
-		onValidationFail()
-		return false
-	}
+	else
+		onFailure()
+	return false
+
 }
+
 $('.next').live('click', function() {
 	return moveToNextTab(true);
 });
@@ -57,3 +61,12 @@ $('.back').live('click', function() {
 	return moveToTabBy(-1);
 });
 
+$('.check-bound-text-area').live('focus', function() {
+  	var checkBoxId = $(this).attr('checkbox_id');
+	$('#' + checkBoxId).attr('checked', true);
+});
+
+function selectCheckbox(value) {
+	$('input[value=' + value + ']').attr('checked', true);
+
+}

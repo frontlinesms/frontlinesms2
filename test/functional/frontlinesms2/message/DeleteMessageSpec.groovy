@@ -18,7 +18,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	def 'deleted messages do not show up in inbox view'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			def btnDelete = $('#message-details .buttons a')
+			def btnDelete = $('#message-details .buttons #message-delete')
 			btnDelete.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
@@ -29,7 +29,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
 			go "message/inbox/show/${bobMessage.id}"
-			def btnDelete = $('#message-details .buttons a')
+			def btnDelete = $('#message-details .buttons #message-delete')
 			btnDelete.click()
 			waitFor { $("div.flash").text().contains("Fmessage") }
 			go "message/trash"
@@ -49,13 +49,13 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			Fmessage.getDeletedMessages(false).size() == 1
 			$('#message-details .message-name').text() == bobMessage.displaySrc
-			!$('#message-details .buttons a')
+			!$('#message-details .buttons #message-delete')
 	}
 	
 	def 'deleted messages do not show up in poll view'() {
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
-			def btnDeleteFromPoll = $('#message-details .buttons a')
+			def btnDeleteFromPoll = $('#message-details .buttons #message-delete')
 			btnDeleteFromPoll.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
@@ -67,7 +67,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			assert Folder.findByName('Fools').messages.size() == 2
 		when:
 			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
-			def btnDeleteFromFolder = $('#message-details .buttons a')
+			def btnDeleteFromFolder = $('#message-details .buttons #message-delete')
 			btnDeleteFromFolder.click()
 			waitFor { $("div.flash.message").text().contains("Fmessage") }
 		then:
@@ -95,7 +95,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			def bob = Fmessage.findBySrc("Bob")
 		when:
 			go "message/inbox/show/${bob.id}"
-			def btnDelete = $('#message-details .buttons a')
+			def btnDelete = $('#message-details .buttons #message-delete')
 		then:
 			btnDelete
 		when:
@@ -118,7 +118,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
-			def btnDelete = $('#message-details div.buttons a')[1]
+			def btnDelete = $('#message-details div.buttons a')[2]
 		then:
 			btnDelete
 		when:
