@@ -34,7 +34,7 @@ Raphael.fn.plotStackedBarGraph = function(holder, data, xdata, caption, opts) {
 	var self = this,
 		width = opts.width || $("#" + holder).width(),
 		height = opts.height || $("#" + holder).height(),
-		chartHeight = height - padding.bottom,
+		chartHeight = height - padding.bottom - 20,
 		axisPosition = chartHeight - padding.top,
 		chartWidth = width - padding.left - padding.right,
 		textStyle = opts.textStyle || {
@@ -46,15 +46,18 @@ Raphael.fn.plotStackedBarGraph = function(holder, data, xdata, caption, opts) {
 		colors: opts.colors || ["#D4D5D6", "#949494"]
 	});
 	var packedData = data.pack();
-
-	var yaxis = self.g.axis(padding.left, axisPosition, axisPosition - padding.top, 0, packedData.max(), packedData.length, 1, null, "-", 0);
+	var yaxis = self.g.axis(padding.left, axisPosition, axisPosition - padding.top, 0, packedData.max(), packedData.max(), 1, null, "-", 0);
 	var i = xdata.length;
+	var displayX = parseInt(i/14);
+	var xcordinates = [];
 	chart.eachColumn(function() {
 		var x1 = this.bars[0].x || padding.left,
 			y1 = this.bars[0].y || axisPosition,
 			h1 = this.bars[0].h || 0,
 			val1 = this.bars[0].value || 0;
-		self.text(x1 + 5, y1 + h1 + 15, xdata[--i]).rotate(45).attr(textStyle);
+			xcordinates[x1] = xdata[--i];
+		if(i%displayX == 0)
+		 self.text(x1 + 5, y1 + h1 + 15, xdata[i]).rotate(45).attr(textStyle);
 	});
 
 	chart.hoverColumn(function() {
@@ -65,13 +68,14 @@ Raphael.fn.plotStackedBarGraph = function(holder, data, xdata, caption, opts) {
 			y.push(this.bars[i].y);
 			res.push(caption[i] + " " + this.bars[i].value || "0");
 		}
+		res.push("on " + xcordinates[this.bars[0].x]);
 		this.flag = self.g.popup(this.bars[0].x, Math.min.apply(Math, y), res.join("\r\n"), 3).insertBefore(this);
 	},
 	function() {
 		this.flag.animate({
 			opacity: 0
 		},
-		1000, ">", function() {
+		0, ">", function() {
 			this.remove();
 		});
 	});

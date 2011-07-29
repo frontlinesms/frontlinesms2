@@ -99,9 +99,11 @@ class ConnectionController {
 	def sendTest = {
 		println params
 
-		withFconnection {
-			flash.message = "Test message successfully sent to ${params.number} using ${it.name}"
-			messageSendService.dispatch(new Fmessage(src:"$it", dst: params.number, text: params.message), it)
+		withFconnection { connection ->
+			flash.message = "Test message successfully sent to ${params.number} using ${connection.name}"
+			def fmessage = new Fmessage(src:"$connection", dst: params.number, text: params.message)
+			println "passing arguments ${fmessage.class}, ${connection.class}"
+			messageSendService.send(fmessage, connection)
 			redirect (action:'show', id:params.id)
 		}
 	}
