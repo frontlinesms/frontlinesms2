@@ -118,7 +118,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
-			def btnDelete = $('#message-details div.buttons a')[1]
+			def btnDelete = $('#message-details div.buttons a')[2]
 		then:
 			btnDelete
 		when:

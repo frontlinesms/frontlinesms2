@@ -1,17 +1,15 @@
 package frontlinesms2
 
-class MessageSendService {
-	static transactional = true
+import frontlinesms2.enums.MessageStatus
 
-	def dispatch(Fmessage m, SmslibFconnection c) {
-		m.save(failOnError:true, flush:true)
-		sendMessageAndHeaders('seda:smslib-outgoing-fmessages', m, [fconnection:c.id])
+class MessageSendService {	
+	def send(Fmessage m, Fconnection c=null) {
+		println "MessageSendService.send($m, $c)"
+		assert m instanceof Fmessage
+		m.status = MessageStatus.SEND_PENDING
+		def headers = [:]
+		if(c) headers.fconnection = c.id
+		sendMessageAndHeaders('seda:smslib-outgoing-fmessages', m, headers)
+		println 'should be queued :)'
 	}
-
-	public void process(Fmessage message) {
-		println("MessageSendService.process()")
-		println("Sending message: ${message}")
-		assert message instanceof Fmessage
-		// TODO actually implement sending here
-	}	
 }

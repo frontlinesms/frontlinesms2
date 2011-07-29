@@ -2,6 +2,7 @@ import grails.util.Environment
 import frontlinesms2.*
 import org.mockito.Mockito
 import java.lang.reflect.Field
+import serial.SerialClassFactory
 import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
@@ -36,7 +37,7 @@ class BootStrap {
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 
-			serial.SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
+			SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
 //			initialiseMockSerialDevice()
 			initialiseRealSerialDevice()
 			
@@ -46,10 +47,11 @@ class BootStrap {
 			}
 			println "END OF PORTS LIST"
 			
-			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600).save(failOnError:true)
+			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
 			
+			new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
 			
 			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
@@ -62,7 +64,7 @@ class BootStrap {
 						it.save(failOnError:true)
 					}
 			(1..11).each {
-				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", status:MessageStatus.INBOUND).save(failOnError:true)
+				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
 			}
 
 			[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
@@ -83,7 +85,7 @@ class BootStrap {
 			
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
-				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}", text: "Yes", status: MessageStatus.INBOUND);
+				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", status: MessageStatus.INBOUND);
 				msg.save(failOnError: true);
 				barcelonaResponse.addToMessages(msg);
 			}
@@ -97,6 +99,7 @@ class BootStrap {
 					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
 					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
 				it.status = MessageStatus.INBOUND
+				it.dateReceived = new Date()
 				it.save(failOnError:true, flush:true)
 			}
 			
@@ -191,6 +194,7 @@ OK''')
 		
 		SerialPortHandler portHandler = new StatefulHayesPortHandler(state_initial);
 		CommPortIdentifier cpi = new CommPortIdentifier("COM99", portHandler);
+		MockSerial.setIdentifier("COM98", cpi);
 		MockSerial.setIdentifier("COM99", cpi);
 		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));
 	}

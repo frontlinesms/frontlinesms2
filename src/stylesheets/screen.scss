@@ -89,6 +89,7 @@ body {
 		.message-body {
 			font-size: 1.1em;
 		}
+		.buttons { cursor: pointer}
 	}
 	#poll-actions {
 		@include column(6, true);
@@ -142,4 +143,9 @@ body {
 
 .hide {
   display: none
+}
+
+#trafficGraph {
+	width:600px;
+	height:400px;
 }

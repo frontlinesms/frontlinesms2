@@ -45,7 +45,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		    !$('a', text:'Reply').displayed
 	}
 	
-	def "'Reply All' button appears for multiple selected messages and works"() {
+	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:
 			to MessagesPage
 			$('#messages-menu li a', href:'/frontlinesms2/message/pending').click()

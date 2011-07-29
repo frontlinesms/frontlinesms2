@@ -9,21 +9,27 @@ class FconnectionService {
 		@Override
 		void configure() {}
 		List getRouteDefinitions(Fconnection c) {
-			def incoming, outgoing
+			def incoming
 			def routes = []
 			if(c instanceof SmslibFconnection) {
 				incoming = 'seda:raw-smslib'
-				outgoing = 'seda:smslib-messages-to-send'
+				routes << from("seda:out-${c.id}")
+						.beanRef('smslibTranslationService', 'toCmessage')
+						.to(c.camelProducerAddress)
+						.routeId("out-${c.id}")
 			} else if(c instanceof EmailFconnection) {
 				incoming = 'seda:raw-email'
-				outgoing = 'seda:email-messages-to-send'
+				routes << from('seda:email-messages-to-send')
+						.to(c.camelProducerAddress)
+						.routeId("out-${c.id}")
 			} else if(grails.util.Environment.current == grails.util.Environment.TEST && c instanceof Fconnection) {
 				incoming = 'stream:out'
-				outgoing = 'seda:nowhere'
+				routes << from('seda:nowhere')
+						.to(c.camelProducerAddress)
+						.routeId("out-${c.id}")
 			} else {
 				throw new IllegalStateException("Do not know how to create routes for Fconnection of class: ${c?.class}")
 			}
-			getLog().info "Creating routes: $routes..."
 			println "In comes from: $incoming"
 			if(incoming && c.camelConsumerAddress) {
 				println "from(${c.camelConsumerAddress}).to($incoming).routeId(in-${c.id})"
@@ -31,14 +37,8 @@ class FconnectionService {
 			} else {
 				println "not creating incoming route: from(${c.camelConsumerAddress}).to($incoming).routeId(in-${c.id})"
 			}
-			println "out goes to: $outgoing"
-			if(outgoing && c.camelProducerAddress) {
-				println "from($outgoing).to(${c.camelProducerAddress}).routeId(out-${c.id})"
-				routes << from(outgoing).to(c.camelProducerAddress).routeId("out-${c.id}")
-			} else {
-				println "not creating outgoing route: from($outgoing).to(${c.camelProducerAddress}).routeId(out-${c.id})"
-			}
-			println 'Routes created.'
+			println "Routes created: $routes"
+			getLog().info "Creating routes: $routes..."
 			routes
 		}
 	}
