@@ -4,7 +4,9 @@ class RadioShow extends MessageOwner {
 	String name
 
 	static constraints = {
-		name(blank: false, nullable: false)
+		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
+			RadioShow.findByNameIlike(val) == null
+		})
 	}
 
 	def getShowMessages(isStarred = false, max = null, offset = null) {
