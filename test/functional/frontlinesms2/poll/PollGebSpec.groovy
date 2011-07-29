@@ -29,26 +29,5 @@ class PollGebSpec extends grails.plugin.geb.GebSpec {
 			new Folder(name: it).save(failOnError:true, flush:true)
 		}
 	}
-	
-	static deleteTestPolls() {
-		Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-
-	static deleteTestMessages() {
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-	
-	static deleteTestFolders() {
-		Folder.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
 }
 

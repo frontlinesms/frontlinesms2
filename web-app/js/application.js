@@ -43,9 +43,10 @@ function moveToTabBy(index) {
 function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
 	onSuccess = onSuccess || null
 	if (canMoveToNextTab) {
-		moveToTabBy(1);
 		if (onSuccess != null)
 			onSuccess()
+		else
+			moveToTabBy(1);
 	}
 	else
 		onFailure()
