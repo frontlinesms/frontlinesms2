@@ -26,10 +26,10 @@
 						  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 								<div id="star-${m.id}" class="${m.starred? 'starred':''}">
 									<g:if test="${m.starred}">
-										<img src="/frontlinesms2/images/star_on.png" />
+										<img src="../images/star_on.png" />
 									</g:if>
 									<g:else>
-										<img src="/frontlinesms2/images/star.png" />
+										<img src="../images/star.png" />
 									</g:else>
 								</div>
 						  </g:remoteLink>

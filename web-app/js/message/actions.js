@@ -9,9 +9,9 @@ function setStarStatus(object,data){
 	
 	$("#"+object).addClass(data);
 	if(data != '') {
-		$("#"+object).empty().append("Remove Star");
+		$("#"+object).empty().append('<img src="../images/star_on.png" />');
 	} else {
-		$("#"+object).empty().append("Add Star");
+		$("#"+object).empty().append('<img src="../images/star.png" />');
 	}	
 }
 

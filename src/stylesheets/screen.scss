@@ -37,7 +37,7 @@ body {
 	@include container;
 	height: 800px;
 	border-top: 3px solid #C79CDD;
-	background-image:url(/frontlinesms2/images/background.png);
+	background-image:url('../images/background.png');
 	background-repeat:no-repeat;
 	background-position:left top;
 	background-size: 100% 69px;
@@ -54,7 +54,7 @@ body {
 		height: 60px;
 		position: relative;
 		top: -10px;
-		background-image:url('/frontlinesms2/images/tabbar.png');
+		background-image:url('../images/tabbar.png');
 		background-repeat:no-repeat;
 		background-position:left bottom;
 		background-size: 100%;
@@ -79,7 +79,7 @@ body {
 		  		height: 70px;
 		  		margin-top: 20px;
 		  		vertical-align: bottom;	
-		  		background-image:url('/frontlinesms2/images/buttons/tab.png');
+		  		background-image:url('../images/buttons/tab.png');
 				background-repeat:no-repeat;
 				background-size:114px 27px;
 				background-position: 0 43% 10% 50%;
@@ -91,7 +91,7 @@ body {
 			}
 			
 			li.selected {
-					background-image:url('/frontlinesms2/images/buttons/tab_active.png');
+					background-image:url('../images/buttons/tab_active.png');
 					background-repeat:no-repeat;
 					background-size:114px 27px;
 			}

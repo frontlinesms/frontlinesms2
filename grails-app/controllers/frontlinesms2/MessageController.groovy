@@ -24,7 +24,7 @@ class MessageController {
 			messageInstance.save()
 		}
 		def responseInstance
-		if (messageInstance.messageOwner) { responseInstance = messageInstance.messageOwner }
+		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
 		
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
