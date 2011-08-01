@@ -3,7 +3,8 @@
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
-$blueprint-liquid-grid-columns: 24;
+$blueprint-grid-columns: 24;
+$blueprint-grid-margin: 17px;
 
 @import "compass/reset";
 @import "blueprint";
@@ -75,13 +76,12 @@ body {
 		  	text-align: center;
 		  	
 		  	li {
-		  		width: 114px;
+		  		width: 104px;
 		  		height: 70px;
 		  		margin-top: 20px;
-		  		vertical-align: bottom;	
+		  		vertical-align: middle;	
 		  		background-image:url('/frontlinesms2/images/buttons/tab.png');
 				background-repeat:no-repeat;
-				background-size:114px 27px;
 				background-position: 0 43% 10% 50%;
 			}
 			
@@ -91,15 +91,17 @@ body {
 			}
 			
 			li.selected {
+					width: 108px;
 					background-image:url('/frontlinesms2/images/buttons/tab_active.png');
 					background-repeat:no-repeat;
-					background-size:114px 27px;
 			}
 		}
 	}
 	
 	.main {
 		@include clearfix;
+		position: relative;
+		top: -25px;
 		width: 100%;
 		
 		.selected {
@@ -133,19 +135,33 @@ body {
 		.content {
 			@include clearfix;
 			border-bottom: 1px solid #9E9E9E;
-			padding: 17px;
 			
 			.content-header {
 				@include clearfix; // required
-				padding: 17px;
-				background-color: #DFDFDF;
+				height: 43px;
 				
-				h2 { text-transform:capitalize; }
-				#message-title { @include column(10); }
+				#message-title {
+					@include column(10, false);
+					text-transform: uppercase;
+					padding: 17px 0px 17px 17px;
+				}
 				
-				ol { 
+				ol {
 					@include horizontal-list(4px, right);
-					@include column(14, true);
+					@include column(9, true);
+					
+					li {
+						display: block;
+						text-align: center;
+						padding: 17px 17px 17px 0;
+						
+						a {
+							background-image:url(/frontlinesms2/images/buttons/button_default.png);
+							background-repeat:no-repeat;
+							background-size: 100% 100%;
+							padding: 8px 10px;
+						}
+					}
 				}
 			}
 			
@@ -160,15 +176,20 @@ body {
 					}
 				}
 				
-				td {
-					height: 21px;
-					text-align: left;
-					margin-right: 10px;
-					margin-left: 10px;
+				thead {
+					vertical-align: middle;
+					height: 26px;
+					background-image:url(/frontlinesms2/images/menubar.png);
+					background-repeat:no-repeat;
+					background-size: 100% 100%;
+				}
+				
+				tr {
+					height: 26px;
 				}
 				
 				#contact-list {
-					@include column(4, false); // FIXME hack, but its the only thing that seems to help
+					@include column(4, false);
 					margin-right: 0px;
 					display: block;
 				}
@@ -196,17 +217,13 @@ body {
 					.buttons { text-align: right; }
 				}
 				
-				#message-title {
-					text-transform:uppercase;
-					border-bottom: 1px solid #9E9E9E;
-				}
-				
 				#message-list {
 					@include column(18.41, false); // FIXME hack, but its the only thing that seems to help
 					display: block;
 					.unread a { font-weight:bold; }
 					margin-right: 0px;
 					
+					table { padding: 17px; }
 					li { height: 10px; }
 					
 					a { display: block; }
