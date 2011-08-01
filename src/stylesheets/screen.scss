@@ -236,6 +236,19 @@ body {
 						border: 1px solid #B5C6CD;
 						padding: 17px;
 					}
+					
+					
+				}
+				.starred {
+					background-image:url('../images/star_on.png');
+					width: 16px;
+					height: 16px;
+				}
+	
+				.unstarred {
+					background-image:url('../images/star.png');
+					width: 16px;
+					height: 16px;
 				}
 			}
 			
@@ -263,10 +276,8 @@ body {
 
 	/* GENERAL */
 	
-	.starred {
-		color:green;
-	}
 	
+
 	.field {
 		clear: both;
 		padding: 0.5em;

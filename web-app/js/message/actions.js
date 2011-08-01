@@ -3,15 +3,12 @@ $(document).ready(function() {
 });
 
 function setStarStatus(object,data){
-	if($("#"+object).hasClass("starred")) {
-		$("#"+object).removeClass("starred");
-	}
-	
-	$("#"+object).addClass(data);
-	if(data != '') {
-		$("#"+object).empty().append('<img src="../images/star_on.png" />');
+	if(data == 'starred') {
+		$("#"+object).addClass(data);
+		$("#"+object).removeClass("unstarred");
 	} else {
-		$("#"+object).empty().append('<img src="../images/star.png" />');
+		$("#"+object).addClass(data);
+		$("#"+object).removeClass("starred");
 	}	
 }
 
