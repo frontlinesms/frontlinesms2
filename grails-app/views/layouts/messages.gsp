@@ -6,7 +6,7 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources />
+		<jqui:resources mediumTheme="/web-app/css/medium.css"/>
 		<g:javascript src="message/actions.js"></g:javascript>
 		<g:javascript src="application.js"/>
 		<g:javascript src="popup.js" />
