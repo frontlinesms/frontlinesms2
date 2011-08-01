@@ -1,5 +1,5 @@
 <div id="top">
-	<div id="logo"><img src='../images/logo_radio.png' width="36" height="40"/></div>
+	<div id="logo"><img src='${resource(dir:'images',file:'logo_radio.png')}' width="36" height="40"/></div>
 	<ul id="global-nav">
 		<li class="tab ${['message','folder','poll'].contains(params.controller)?'selected':''}">
 			<g:link url="${[controller:'message']}"	id="tab-messages">Messages ${frontlinesms2.Fmessage.countUnreadMessages()}</g:link>

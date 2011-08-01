@@ -24,14 +24,9 @@
 						<td><g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/></td>
 						<td id="star_column">
 						  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
-								<div id="star-${m.id}" class="${m.starred? 'starred':''}">
-									<g:if test="${m.starred}">
-										<img src="../images/star_on.png" />
-									</g:if>
-									<g:else>
-										<img src="../images/star.png" />
-									</g:else>
-								</div>
+						  <div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
+					
+						  </div>
 						  </g:remoteLink>
 						</td>
 						<td>
