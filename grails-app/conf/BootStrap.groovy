@@ -13,7 +13,11 @@ import frontlinesms2.enums.MessageStatus
 import net.frontlinesms.test.serial.hayes.*
 
 class BootStrap {
+	def grailsApplication
+	
 	def init = { servletContext ->
+		initialiseSerial()
+
 		if (Environment.current == Environment.DEVELOPMENT) {
 			//DB Viewer
 			//org.hsqldb.util.DatabaseManager.main()
@@ -36,16 +40,6 @@ class BootStrap {
 
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
-
-			SerialClassFactory.javaxCommPropertiesPath = "jni/windows/javax.comm.properties"
-//			initialiseMockSerialDevice()
-			initialiseRealSerialDevice()
-			
-			println "PORTS:"
-			serial.CommPortIdentifier.portIdentifiers.each {
-				println "> Port identifier: ${it.name}"
-			}
-			println "END OF PORTS LIST"
 			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
@@ -130,10 +124,28 @@ class BootStrap {
 	def destroy = {
 	}
 	
-	def initialiseRealSerialDevice() {
+	def initialiseSerial() {
+		// initialiseMockSerial()
+		initialiseRealSerial()
+
+		println "PORTS:"
+		serial.CommPortIdentifier.portIdentifiers.each {
+			println "> Port identifier: ${it.name}"
+		}
+		println "END OF PORTS LIST"
+	}
+	
+	def initialiseRealSerial() {
+		def jniPath = grailsApplication.parentContext.getResource("jni").file.absolutePath
+		println "JNI Path: $jniPath"
+		
+		// set javax.comm.properties path (for Windows only)
+		SerialClassFactory.javaxCommPropertiesPath = jniPath + "/windows/javax.comm.properties"
+		
 		// adapted from http://techdm.com/grails/?p=255&lang=en
 		def addJavaLibraryPath = { path, boolean prioritise=true ->
 			def dir = new File(path)
+			println "Absolute location of JNI libraries: ${dir.absolutePath}"
 			assert dir.exists()
 			def oldPathList = System.getProperty('java.library.path', '')
 			def newPathList = prioritise?
@@ -153,12 +165,12 @@ class BootStrap {
 		
 		def architecture = System.properties['os.arch'].contains('64')? 'x86_64': 'i686'
 		
-		log.info "Adding jni/$os/$architecture to library paths..."
-		addJavaLibraryPath "jni/$os/$architecture"
+		log.info "Adding $jniPath/$os/$architecture to library paths..."
+		addJavaLibraryPath "$jniPath/$os/$architecture"
 		serial.SerialClassFactory.init(serial.SerialClassFactory.PACKAGE_RXTX) // TODO hoepfully this step of specifying the package is unnecessary
 	}
 
-	def initialiseMockSerialDevice() {
+	def initialiseMockSerial() {
 		// Set up modem simulation
 		MockSerial.init();
 		MockSerial.setMultipleOwnershipAllowed(true);
