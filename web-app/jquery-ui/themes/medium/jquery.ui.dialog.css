@@ -1,0 +1,54 @@
+/*
+ * jQuery UI Dialog @VERSION
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Dialog#theming
+ */
+.ui-dialog {
+	position: absolute;
+	width: 675px;
+	height: 500px;
+	overflow: hidden;
+	background-clip: padding-box;
+	border: 5px solid rgba(0,0,0,0.4);
+	border-radius: 4px;
+	background-color: white;
+}
+
+.ui-dialog .ui-dialog-titlebar { 
+	position: relative;
+	height: 43px;
+	border-top: 3px solid #C79CDD;
+	border-bottom: 1px solid #9E9E9E;
+}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+	padding: 17px;
+	text-transform: uppercase;
+	vertical-align: middle;
+}
+
+.ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
+
+.ui-dialog .ui-dialog-content {
+	position: relative;
+	overflow: auto;
+	zoom: 1;
+}
+	
+.ui-dialog .ui-dialog-buttonpane {
+	text-align: right;
+	border-top: 1px solid #9E9E9E;
+	height: 43px;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
+.ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
+
+
+.ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }

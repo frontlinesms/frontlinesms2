@@ -140,7 +140,6 @@ body {
 				@include clearfix; // required
 				height: 43px;
 				@include horizontal-list(4px, right);
-				border-bottom: 1px solid #9E9E9E;
 				width: 100%;
 				
 				#message-title {
@@ -159,7 +158,7 @@ body {
 						padding: 17px 17px 17px 0;
 						
 						a {
-							background-image:url(/frontlinesms2/images/buttons/button_default.png);
+							background-image:url('../images/buttons/button_default.png');
 							background-repeat:no-repeat;
 							background-size: 100% 100%;
 							padding: 8px 10px;
@@ -182,16 +181,19 @@ body {
 				thead {
 					vertical-align: middle;
 					height: 26px;
-					background-image:url(/frontlinesms2/images/menubar.png);
+					background-image:url('../images/menubar.png');
 					background-repeat:no-repeat;
 					background-size: 100% 100%;
 				}
 				
 				tr {
 					height: 26px;
+					padding-left: 17px;
 				}
 				
-				td a { display: block; }
+				td a {
+					display: block;
+				}
 				
 				#contact-list {
 					@include column(4, false);
@@ -238,7 +240,11 @@ body {
 					@include column(5, true);
 					display: block;
 					background-color: #E0F0DE;
-					padding: 17px;
+					background-image:url('../images/menubar.png');
+					background-repeat:no-repeat;
+					background-size: 100% 26px;
+					background-position: top;
+					padding: 43px 17px 17px 17px;
 					
 					#contact-name {
 						font-size: 14px;
