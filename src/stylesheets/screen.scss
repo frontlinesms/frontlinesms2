@@ -9,7 +9,8 @@ $blueprint-grid-margin: 17px;
 @import "compass/reset";
 @import "blueprint";
 @import "blueprint/liquid";
-@import "compass/typography/lists/horizontal-list";
+@import "compass/typography";
+@import "compass/layout";
 
 
 /* DEBUG */
@@ -92,12 +93,12 @@ body {
 			
 			li.selected {
 					width: 108px;
-					background-image:url('/frontlinesms2/images/buttons/tab_active.png');
+					background-image:url('/frontlinesms2/images/buttons/tab_active_me.png');
 					background-repeat:no-repeat;
 			}
 		}
 	}
-	
+
 	.main {
 		@include clearfix;
 		position: relative;
@@ -109,7 +110,6 @@ body {
 		}
 		
 		.context-menu {
-			height: 100%;
 			@include column(4, false);
 			text-align: left;
 			padding-left: 40px;
@@ -139,17 +139,20 @@ body {
 			.content-header {
 				@include clearfix; // required
 				height: 43px;
+				@include horizontal-list(4px, right);
+				border-bottom: 1px solid #9E9E9E;
+				width: 100%;
 				
 				#message-title {
+					@include clearfix;
 					@include column(10, false);
 					text-transform: uppercase;
 					padding: 17px 0px 17px 17px;
 				}
 				
-				ol {
-					@include horizontal-list(4px, right);
-					@include column(9, true);
-					
+				ol {		
+					@include clearfix;
+					@include column(13, true);	
 					li {
 						display: block;
 						text-align: center;
@@ -187,6 +190,8 @@ body {
 				tr {
 					height: 26px;
 				}
+				
+				td a { display: block; }
 				
 				#contact-list {
 					@include column(4, false);

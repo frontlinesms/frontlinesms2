@@ -7,9 +7,6 @@
 		<li class="tab ${params.controller=='contact'?'selected':''}">
 			<g:link url="${[controller:'contact']}" id="tab-contacts">Contacts</g:link>
 		</li>
-		<li class="tab ${params.controller=='status'?'selected':''}">
-			<g:link  url="${[controller:'status']}" id="tab-status">Status<img id='indicator'/></g:link>
-		</li>
 		<li class="tab ${params.controller=='search'?'selected':''}">
 			<g:link  url="${[controller:'search']}" id="tab-search">Search</g:link>
 		</li>
