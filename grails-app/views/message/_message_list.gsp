@@ -5,7 +5,6 @@
 	</g:remoteLink>		
 </div>
 <g:if test="${messageInstanceTotal > 0}">
-	<g:hiddenField name="checkedMessageIdList" value=""/>
 	<g:hiddenField name="messageSection" value="${messageSection}"/>
 	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 	<table id="messages">
@@ -26,7 +25,11 @@
 		<tbody>
 			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
-					<td><g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/></td>
+					<td>
+						<g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/>
+						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
+					</td>
+
 					<td>
 					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
 							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
