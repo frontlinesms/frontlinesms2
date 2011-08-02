@@ -124,29 +124,24 @@ class MessageController {
 	}
 
 	def move = {
-		withFmessage { messageInstance ->
-			def messageOwner
-			if(params.messageSection == 'poll') {
-				messageOwner = Poll.get(params.ownerId)
-			} else if (params.messageSection == 'folder') {
-				messageOwner = Folder.get(params.ownerId)
+		def ids = [params.ids].flatten()
+		ids.each {id ->
+			withFmessage id, {messageInstance ->
+				def messageOwner
+				if (params.messageSection == 'poll') {
+					messageOwner = Poll.get(params.ownerId)
+				} else if (params.messageSection == 'folder') {
+					messageOwner = Folder.get(params.ownerId)
+				}
+				if (messageOwner instanceof Poll) {
+					def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
+					unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+				} else if (messageOwner instanceof Folder) {
+					messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+				}
 			}
-			if(messageOwner instanceof Poll) {
-				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-			} else if (messageOwner instanceof Folder) {
-				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-			}
-
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			
 		}
-		if(params.count) {
-			def messageCount = params.count
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
-			params.remove('count')
-		}
-		params.remove('checkedMessageIdList')
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
 		render ""
 	}
 
@@ -158,57 +153,39 @@ class MessageController {
 			redirect(action: "poll", params: params)
 		}
 	}
-	
+
 	def deleteMessage = {
-		withFmessage { messageInstance ->
-			messageInstance.toDelete()
-			messageInstance.save(failOnError: true, flush: true)
-			if(params.messageId) {
-				Fmessage.get(params.messageId).messageOwner?.refresh()
-				params.remove('messageId')
-				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			} else {
-				Fmessage.get(messageInstance.id).messageOwner?.refresh()
+		def ids = [params.ids].flatten()
+		ids.each {id ->
+			withFmessage id, {messageInstance ->
+				messageInstance.toDelete()
+				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
-		if(params.count) {
-			def messageCount = params.count
-			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
-			params.remove('count')
-		}
-		if(params.checkedMessageIdList){
-			params.remove('checkedMessageIdList')			
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
+		if (request.xhr) {
 			render ""
-		}else {
-			redirect(action: params.messageSection, params: params)
-		}		
-	}
-
-    def archiveMessage = {
-		withFmessage { messageInstance ->
-			messageInstance.archive()
-			messageInstance.save(failOnError: true, flush: true)
-			flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			params.remove('messageId')
-			params.remove('checkedId')
-			Fmessage.get(messageInstance.id).refresh()
-		}
-		
-		if(params.count) {
-				def messageCount = params.count
-				flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''),messageCount +' messages'])}"
-				params.remove('count')
-		}
-
-		if(params.checkedMessageIdList){
-			params.remove('checkedMessageIdList')			
-			render ""
-		}else {
+		} else {
 			redirect(action: params.messageSection, params: params)
 		}
-		
 	}
-	
+
+	def archiveMessage = {
+		def ids = [params.ids].flatten()
+		ids.each {id ->
+			withFmessage id, { messageInstance ->
+				messageInstance.archive()
+				messageInstance.save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
+		if (request.xhr) {
+			render ""
+		} else {
+			redirect(action: params.messageSection, params: params)
+		}
+	}
+
 	def changeStarStatus = {
 		withFmessage { messageInstance ->
 			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
@@ -237,28 +214,9 @@ class MessageController {
 		redirect(action: 'inbox')
 	}
 
-	private def withFmessage(Closure c) {
-		if(params.checkedMessageIdList) { // FIXME surely this should be explicitly handled in a different closure - this is potentially very misleading given the name of the method
-			params.remove('messageId')
-			getCheckedMessageList().each{ m ->
-				if(m) c.call(m)
-			}
-		} // FIXME should there be an 'else' before this next clause, or do we really want this to happen twice in some cases?
-		if(params.messageId) {
-			def m = Fmessage.get(params.messageId)
+	private def withFmessage(messageId= params.messageId, Closure c) {
+			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
-		}
-		
-	}
-	
-	private def getCheckedMessageList() {
-		def messageList = []
-		def checkedMessageIdList = params.checkedMessageIdList.tokenize(',').unique();
-		checkedMessageIdList.each { id ->
-			messageList << Fmessage.get(id)
-		}
-		params.count = messageList.size
-		messageList	
 	}
 }

@@ -11,7 +11,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
-		then: 
+		then:
 			$("#message")[0].@checked == "true"
 		cleanup:
 			deleteTestMessages()
@@ -54,7 +54,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
-		then:    	
+		then:
 			$("tr#message-${Fmessage.list()[0].id}").hasClass('checked')
 			$("tr#message-${Fmessage.list()[1].id}").hasClass('checked')
 		cleanup:
@@ -128,19 +128,13 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
+			Fmessage.getInboxMessages(false).size() == 2
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[0].click()
 			def btnArchive = $('#message-details .buttons #btn_archive_all')
 			btnArchive.click()
 			waitFor { $("div.flash.message").displayed }
 		then:
-			at MessagesPage
-		when:
-			waitFor { $("div.flash.message").displayed }
-			Fmessage.findBySrc('Bob').refresh()
-			Fmessage.findBySrc('Alice').refresh()
-		then:
-			Fmessage.findBySrc('Bob').archived
-			Fmessage.findBySrc('Alice').archived
+			Fmessage.getInboxMessages(false).size() == 0
 	}
 }

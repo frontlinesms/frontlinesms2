@@ -40,9 +40,9 @@ class RadioShowSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $("#modalBox").displayed }
 			$("input", name: 'name').value("")
 			$("input", name: 'create').click()
-			waitFor { $("div", text:"Name cannot be blank").displayed }
+			waitFor { $("div", text:"Name is not valid").displayed }
 		then:
-			$("div", text:"Name cannot be blank").displayed
+			$("div", text:"Name is not valid").displayed
 	}
 }
 
