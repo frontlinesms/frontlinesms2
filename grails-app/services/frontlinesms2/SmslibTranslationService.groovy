@@ -2,6 +2,7 @@ package frontlinesms2
 
 import org.apache.camel.Exchange
 import org.smslib.CIncomingMessage
+import org.smslib.CStatusReportMessage
 import org.smslib.COutgoingMessage
 
 import frontlinesms2.enums.MessageStatus // FIXME remove "enums" package
@@ -13,13 +14,19 @@ class SmslibTranslationService {
 		println("smslib translation service - in: $i")
 		println("smslib translation service - inclass: ${i.class}")
 		CIncomingMessage bod = exchange.in.body
-		Fmessage message = new Fmessage(status:MessageStatus.INBOUND)
-		message.src = bod.originator
-		message.dst = bod.recipient
-		message.text = bod.text
-		message.dateReceived = new Date(bod.date)
-		assert exchange.out != null
-		exchange.out.body = message
+		
+		// Ignore CStatusReportMessages
+		if(bod instanceof CStatusReportMessage) {
+			return
+		} else {
+			Fmessage message = new Fmessage(status:MessageStatus.INBOUND)
+			message.src = bod.originator
+			message.dst = bod.recipient
+			message.text = bod.text
+			message.dateReceived = new Date(bod.date)
+			assert exchange.out != null
+			exchange.out.body = message	
+		}
 	}
 	
 	void toCmessage(Exchange exchange) {

@@ -24,7 +24,7 @@ class MessageController {
 			messageInstance.save()
 		}
 		def responseInstance
-		if (messageInstance.messageOwner) { responseInstance = messageInstance.messageOwner }
+		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
 		
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
@@ -219,7 +219,7 @@ class MessageController {
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
             params.remove('messageId')
-			render(text: messageInstance.starred ? "starred" : "")
+			render(text: messageInstance.starred ? "starred" : "unstarred")
 		}
 	}
 
