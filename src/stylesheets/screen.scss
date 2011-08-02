@@ -39,7 +39,7 @@ body {
 	@include container;
 	height: 800px;
 	border-top: 3px solid #C79CDD;
-	background-image:url(/frontlinesms2/images/background.png);
+	background-image:url('../images/background.png');
 	background-repeat:no-repeat;
 	background-position:left top;
 	background-size: 100% 69px;
@@ -56,7 +56,7 @@ body {
 		height: 60px;
 		position: relative;
 		top: -10px;
-		background-image:url('/frontlinesms2/images/tabbar.png');
+		background-image:url('../images/tabbar.png');
 		background-repeat:no-repeat;
 		background-position:left bottom;
 		background-size: 100%;
@@ -81,7 +81,7 @@ body {
 		  		height: 70px;
 		  		margin-top: 20px;
 		  		vertical-align: middle;	
-		  		background-image:url('/frontlinesms2/images/buttons/tab.png');
+		  		background-image:url('../images/buttons/tab.png');
 				background-repeat:no-repeat;
 				background-position: 0 43% 10% 50%;
 			}
@@ -93,7 +93,7 @@ body {
 			
 			li.selected {
 					width: 108px;
-					background-image:url('/frontlinesms2/images/buttons/tab_active_me.png');
+					background-image:url('../images/buttons/tab_active_me.png');
 					background-repeat:no-repeat;
 			}
 		}
@@ -258,6 +258,19 @@ body {
 						border: 1px solid #B5C6CD;
 						padding: 17px;
 					}
+					
+					
+				}
+				.starred {
+					background-image:url('../images/star_on.png');
+					width: 16px;
+					height: 16px;
+				}
+	
+				.unstarred {
+					background-image:url('../images/star.png');
+					width: 16px;
+					height: 16px;
 				}
 			}
 			
@@ -285,10 +298,8 @@ body {
 
 	/* GENERAL */
 	
-	.starred {
-		color:green;
-	}
 	
+
 	.field {
 		clear: both;
 		padding: 0.5em;
