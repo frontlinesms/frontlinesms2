@@ -68,14 +68,18 @@ $('.check-bound-text-area').live('focus', function() {
 });
 
 function setValueForCheckBox(grpName, value, checked) {
-	var checkBox = $('input[value=' + "'" + value + "'" + ']');
+	var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
 	if(checked)
-		checkBox.addClassName(grpName)
+		checkBox.addClass(grpName)
 	else
-		checkBox.removeClassName(grpName)
+		checkBox.removeClass(grpName)
 	checkBox.attr('checked', checked);
 }
 
+function findInputWithValue(value) {
+	return $('input[value=' + "'" + value + "'" + ']');
+}
+
 function isCheckboxSelected(value) {
-	return $('input[value=' + "'" + value + "'" + ']').is(':checked')
+	return findInputWithValue(value).is(':checked')
 }

@@ -54,8 +54,10 @@
 			</g:link>
 		</div>
 		<div id="tabs-4">
-			<g:link url="#" class="back">Back</g:link>
-			<g:link url="#" class="next">Next</g:link>
+			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,
+																			'groupList': groupList,
+																			'nonExistingRecipients': [],
+																			'recipients': []]"></g:render>
 		</div>
 		<div id="tabs-5">
 			Name this poll:
