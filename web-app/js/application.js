@@ -67,7 +67,15 @@ $('.check-bound-text-area').live('focus', function() {
 	$('#' + checkBoxId).attr('checked', true);
 });
 
-function selectCheckbox(value) {
-	$('input[value=' + value + ']').attr('checked', true);
+function setValueForCheckBox(grpName, value, checked) {
+	var checkBox = $('input[value=' + "'" + value + "'" + ']');
+	if(checked)
+		checkBox.addClassName(grpName)
+	else
+		checkBox.removeClassName(grpName)
+	checkBox.attr('checked', checked);
+}
 
+function isCheckboxSelected(value) {
+	return $('input[value=' + "'" + value + "'" + ']').is(':checked')
 }
