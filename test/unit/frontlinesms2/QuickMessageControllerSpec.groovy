@@ -21,7 +21,7 @@ class QuickMessageControllerSpec extends ControllerSpec {
 		then:
 			def jim = Contact.findByName('jim')
 			result['contactList'] == [jim]
-			result['groupList'] == ["Mojave":1]
+			result['groupList'] == ["Mojave":[jim.primaryMobile]]
 			result['recipients'] ==  address
 			result['nonExistingRecipients'] ==  address
 	}
