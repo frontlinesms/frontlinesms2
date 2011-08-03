@@ -137,10 +137,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			at MessagesPage
 		when:
 			waitFor { $("div.flash.message").displayed }
-			Fmessage.findBySrc('Bob').refresh()
-			Fmessage.findBySrc('Alice').refresh()
 		then:
-			Fmessage.findBySrc('Bob').archived
-			Fmessage.findBySrc('Alice').archived
+			$("#messages").text() == 'No messages'
+
 	}
 }
