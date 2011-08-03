@@ -8,6 +8,7 @@
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
 		<g:javascript src="application.js"/>
+		<g:javascript src="message/actions.js"></g:javascript>
 		<g:javascript src="popup.js"></g:javascript>
 	</head>
 	<body>
