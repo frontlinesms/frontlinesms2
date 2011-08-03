@@ -30,24 +30,4 @@
 	</div>
 </div>
 
-<script>
-	function selectMembers(groupName, allContacts) {
-		$.each(allContacts, function(index, value) {
-			setValueForCheckBox(groupName, value, isCheckboxSelected(groupName))
-		});
-	}
-
-	$("input[contacts='true']").live('click', function() {
-		if (!($(this).is(":checked"))) {
-			var groups = $(this).attr('class').split(" ")
-			$.each(groups, function(index, value) {
-				findInputWithValue(value).attr('checked', false);
-			});
-		}
-	});
-
-</script>
-
-
-
 
