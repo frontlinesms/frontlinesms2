@@ -8,8 +8,21 @@ class Contact {
     String notes
 
 	static hasMany = [groups: Group, customFields: CustomField]
-	static belongsTo = Group 
+	static belongsTo = Group
 
+	def beforeUpdate = {
+		updateContactNames("", getOldContactNumber())
+		updateContactNames(name, primaryMobile)
+	}
+	
+	def beforeInsert = {
+		updateContactNames(name, primaryMobile)
+	}
+	
+	def beforeDelete = {
+		updateContactNames(name, "")
+	}
+	
     static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
 				if(val == '') {
@@ -64,5 +77,22 @@ class Contact {
 		def secondary = secondaryMobile? Fmessage.countBySrc(secondaryMobile): 0
 		def email = email? Fmessage.countBySrc(email): 0
 		primary + secondary + email
+	}
+	
+	def updateContactNames(contactName, contactNumber)
+	{
+		if(contactNumber) {
+			 // Prevent stackoverflow exception
+			Contact.withNewSession { session -> 
+				Fmessage.executeUpdate("update Fmessage m set m.contactName = ? where m.src = ?", [contactName, contactNumber])
+			}
+		}
+	}
+	
+	private def getOldContactNumber()
+	{
+		Contact.withNewSession {session ->
+			Contact.get(id).refresh().primaryMobile
+		}
 	}
 }

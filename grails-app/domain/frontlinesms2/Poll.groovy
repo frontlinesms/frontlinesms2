@@ -19,12 +19,8 @@ class Poll {
 		responses cascade: 'all'
 	}
 
-	def getMessages(isStarred = false, max, offset) {
-		Fmessage.owned(isStarred, this.responses).list(sort: "dateReceived", order: "desc", max: max, offset: offset)
-	}
-
-	def getMessages(isStarred = false) {
-		getMessages(isStarred, null, null)
+	def getMessages(params) {
+		Fmessage.owned(params['starred'], this.responses).list(params)
 	}
 
 	def countMessages(isStarred = false) {

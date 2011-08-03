@@ -16,6 +16,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 				searchResults
 			}
 			mockDomain(Fmessage)
+			mockDomain(Contact)
 			mockDomain(Group)
 			mockDomain(Poll)
 			mockDomain(Folder)
@@ -35,6 +36,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 				searchResults
 			}
 			mockDomain(Fmessage)
+			mockDomain(Contact)
 			mockDomain(Group)
 			mockDomain(Poll)
 			mockDomain(Folder)

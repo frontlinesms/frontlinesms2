@@ -22,15 +22,15 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 					it.save(failOnError:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', status: MessageStatus.INBOUND)
-		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', status:MessageStatus.INBOUND)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND).save(failOnError:true)
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', status: MessageStatus.INBOUND).save(failOnError:true)
+		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', status:MessageStatus.INBOUND).save(failOnError:true)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
-		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true)
 	}
 
 	def cleanup() {
@@ -44,8 +44,8 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	private def makeGroupMember() {
 		firstContact.addToGroups(group)
 		secondContact.addToGroups(group)
-		firstContact.save(flush: true)
-		secondContact.save(flush: true)
+		firstContact.save(failOnError:true)
+		secondContact.save(failOnError:true)
 		assert(Contact.get(firstContact.id).isMemberOf(Group.get(group.id)))
 		assert(Contact.get(secondContact.id).isMemberOf(Group.get(group.id)))
 	}

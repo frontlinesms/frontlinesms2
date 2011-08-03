@@ -9,8 +9,8 @@ import frontlinesms2.enums.MessageStatus
 class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.getInboxMessages(false).size() == 3
-		assert Poll.findByTitle('Miauow Mix').messages.size() == 2
+		assert Fmessage.getInboxMessages(['starred':false]).size() == 3
+		assert Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 2
 		assert Folder.findByName('Fools').messages.size() == 2
 	}
 
@@ -25,7 +25,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			btnArchive.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
-			Fmessage.getInboxMessages(false).size() == 2
+			Fmessage.getInboxMessages(['starred':false]).size() == 2
 	}
 
 	def 'archived messages do not show up in poll view'() {
@@ -35,7 +35,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			btnArchiveFromPoll.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
-			Poll.findByTitle('Miauow Mix').messages.size() == 1
+			Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 1
 	}
 
 	def 'archived messages do not show up in folder view'() {
@@ -48,7 +48,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			btnArchiveFromFolder.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
 		then:
-			Folder.findByName('Fools').getFolderMessages(false).size() == 1
+			Folder.findByName('Fools').getFolderMessages(['starred':false]).size() == 1
 	}
 
 	def 'archive button appears in message show view and works'() {

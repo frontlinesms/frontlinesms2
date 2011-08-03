@@ -59,6 +59,17 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
+	
+/*	def 'Should be able to sort messages'() {
+		given:
+			createTestMessages()
+		when:
+			to MessagesPage
+		then:
+			Thread.sleep(100000)
+		cleanup:
+			deleteTestMessages()
+	}*/
 	   
     def assertMenuItemSelected(String itemText) {
         def selectedChildren = $('#messages-menu li.selected')
