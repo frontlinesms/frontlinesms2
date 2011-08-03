@@ -1,7 +1,7 @@
 <g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}" />
 <g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}" />
 <div id="message-details">
-	<p class="message-name">${messageInstance.displaySrc}</p>
+	<p class="message-name">${messageInstance.displayName}</p>
 	<g:def var="thisAddress" value="${messageInstance.src}" />
 	<g:if test="${!messageInstance.contactExists}">
 		<g:link class="button" controller="contact" action="createContact" params="[primaryMobile: thisAddress]">+</g:link>

@@ -114,8 +114,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			footballPoll.responses.each { it.refresh() }
 			workFolder.refresh()
 		then:
-			max != footballPoll.getMessages(false).find { it == max }
-			max == workFolder.getFolderMessages(false).find { it == max }
+			max != footballPoll.getMessages(['starred':false]).find { it == max }
+			max == workFolder.getFolderMessages(['starred':false]).find { it == max }
 		cleanup:
 			deleteTestFolders()
 			deleteTestPolls()
@@ -139,10 +139,10 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			footballPoll.responses.each{ it.refresh() }
 			waitFor {$("div.flash.message").displayed}
 		then:
-			bob != Poll.findByTitle("Football Teams").getMessages(false).find { it == bob }
-			alice != Poll.findByTitle("Football Teams").getMessages(false).find { it == alice }
-			bob == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == bob }
-			alice == Poll.findByTitle("Shampoo Brands").getMessages(false).find { it == alice }
+			bob != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == bob }
+			alice != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == alice }
+			bob == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == bob }
+			alice == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == alice }
 	}
 }
 
