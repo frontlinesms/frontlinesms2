@@ -12,6 +12,11 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
+$('.add-address').live('click', function() {
+		var address = $('#address').val();
+		$("#contacts").prepend("<div><input type='checkbox' checked='true' name='addresses' value=" + address + ">" +  address + "</input></div>")
+});
+
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }
@@ -19,7 +24,7 @@ function isElementEmpty(selector) {
 function isEmpty(val) {
 	return val.trim().length == 0
 }
-
+	
 function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }

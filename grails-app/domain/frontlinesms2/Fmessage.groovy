@@ -148,8 +148,12 @@ class Fmessage {
 	
 	def updateDisplaySrc() {
 		if(src) {
-			def c = Contact.findByPrimaryMobile(src)
+			def c = Contact.findByPrimaryMobile(src) ?: Contact.findBySecondaryMobile(src)
 			displaySrc = c? c.name: src
+			contactExists = c? true: false
+		} else {
+			def c = Contact.findByPrimaryMobile(dst) ?: Contact.findBySecondaryMobile(dst)
+			displaySrc = c? c.name: dst
 			contactExists = c? true: false
 		}
 	}

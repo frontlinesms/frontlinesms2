@@ -57,7 +57,7 @@ grails.exceptionresolver.params.exclude = ['password']
 
 // set per-environment serverURL stem for creating absolute links
 environments {
-    pagination.max = 50
+    pagination.max = 15
     production {
         grails.serverURL = "http://www.changeme.com"
     }
