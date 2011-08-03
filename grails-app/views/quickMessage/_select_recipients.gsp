@@ -49,20 +49,28 @@
 
 
 <script>
+	var groupAndMembers = {}
 	function selectMembers(groupName, allContacts) {
+		groupAndMembers[groupName] = allContacts
 		$.each(allContacts, function(index, value) {
 			setValueForCheckBox(groupName, value, isCheckboxSelected(groupName))
 		});
 	}
 
 	$("input[contacts='true']").live('click', function() {
+		var contactNumber = this.value
 		if (!($(this).is(":checked"))) {
-			var groups = $(this).attr('class').split(" ")
-			$.each(groups, function(index, value) {
-				findInputWithValue(value).attr('checked', false);
+			$.each(groupAndMembers, function(key, value) {
+				if(jQuery.inArray(contactNumber,  groupAndMembers[key] > -1))
+					findInputWithValue(key).attr('checked', false);
 			});
 		}
 	});
+
+	function setValueForCheckBox(grpName, value, checked) {
+		var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
+		checkBox.attr('checked', checked);
+	}
 
 </script>
 
