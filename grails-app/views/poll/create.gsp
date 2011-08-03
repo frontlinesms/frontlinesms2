@@ -1,14 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<div id="create-poll">
-	<g:render template="menu"/>
-	<div id="poll-wizard-content">
-		<g:form action="save" name="poll-details" controller="poll" method="post">
-			<g:render template="question"/>
-			<g:render template="answers"/>
-			<g:render template="replies"/>
-			<g:render template="confirm"/>
-		</g:form>
-	</div>
+<div id="tabs" class="vertical-tabs">
+		<ol>
+			<li><a href="#tabs-1">Enter Question</a></li>
+			<li><a href="#tabs-2">Answer list</a></li>
+			<li><a href="#tabs-3">Automatic reply</a></li>
+			<li><a href="#tabs-4">Confirm</a></li>
+		</ol>
+
+	<g:form action="save" name="poll-details" controller="poll" method="post">
+		<g:render template="question"/>
+		<g:render template="answers"/>
+		<g:render template="replies"/>
+		<g:render template="confirm"/>
+	</g:form>
 </div>
 
 

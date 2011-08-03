@@ -19,13 +19,13 @@ $(document).ready(function() {
 });
 
 function launchWizard(title, html,width) {
-	var popupWidth = width ? width : 600
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
 			modal: true,
 			title: title,
-			width: popupWidth,
+			width: 675,
+			height: 500,
 			close: function() { $(this).remove(); }
 		}
 	);

@@ -18,10 +18,13 @@
 	background-color: white;
 }
 
+.modalBox { padding: 17px; }
+
 .ui-dialog .ui-dialog-titlebar { 
 	position: relative;
-	height: 43px;
+	padding-top: 17px;
 	border-top: 3px solid #C79CDD;
+	padding-bottom: 17px;
 	border-bottom: 1px solid #9E9E9E;
 }
 
@@ -40,7 +43,7 @@
 	overflow: auto;
 	zoom: 1;
 }
-	
+
 .ui-dialog .ui-dialog-buttonpane {
 	text-align: right;
 	border-top: 1px solid #9E9E9E;
