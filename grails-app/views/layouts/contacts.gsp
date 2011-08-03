@@ -3,7 +3,7 @@
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources />
+		<jqui:resources theme="medium" plugin="mumsnet"/>
 		<g:layoutHead />
 		<g:javascript src="application.js"/>
 		<g:javascript src="popup.js"/>

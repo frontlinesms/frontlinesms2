@@ -6,4 +6,4 @@
 	</div>
 	<g:link url="#" class="back">Back</g:link>
 	<g:submitButton name="save" id="create-poll" value="Create"></g:submitButton>
-</div>A
+</div>
