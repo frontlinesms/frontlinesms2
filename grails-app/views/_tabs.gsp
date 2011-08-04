@@ -15,7 +15,7 @@
 <script>
 	$.ajax({
 		type:'GET',
-		url: '/frontlinesms2/status/trafficLightIndicator',
+		url: url_root + 'status/trafficLightIndicator',
 		success: function(data){$('#indicator').attr("src", "../images/status_" + data + ".gif") }
 	});
 </script>

@@ -1,17 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
-		<g:layoutHead />
+		<g:layoutHead/>
 		<g:render template="/css"/>
-		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="mumsnet"/>
-		<g:javascript src="message/actions.js"></g:javascript>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
+		<g:javascript src="message/actions.js"/>
 		<g:javascript src="application.js"/>
-		<g:javascript src="popup.js" />
-		<g:javascript src="/message/move_dropdown.js" />
-		<g:javascript src="/message/categorize-dropdown.js" />
+		<g:javascript src="popup.js"/>
+		<g:javascript src="/message/move_dropdown.js"/>
+		<g:javascript src="/message/categorize-dropdown.js"/>
     </head>
 	<body>
 		<div id="container">
@@ -56,9 +59,9 @@
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
 							<div id="page-arrows">
-								<g:paginate next="Forward" prev="Back"
-									 max="${grailsApplication.config.pagination.max}"
-									action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+								<g:paginate next="Next" prev="Back"
+									max="${grailsApplication.config.pagination.max}"
+									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
 					</div>
 				</div>

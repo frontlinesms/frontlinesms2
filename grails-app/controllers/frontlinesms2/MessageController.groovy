@@ -8,6 +8,13 @@ class MessageController {
 
 	def messageSendService
 	
+	def beforeInterceptor = {
+		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+		params['offset'] = params['offset'] ?: 0
+		params['starred'] = params['starred'] ?: false
+		true
+	}
+	
 	def index = {
 		redirect(action:'inbox')
 	}
@@ -184,7 +191,7 @@ class MessageController {
 			params.remove('checkedMessageIdList')			
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: params)
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}		
 	}
 
@@ -208,7 +215,7 @@ class MessageController {
 			params.remove('checkedMessageIdList')			
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: params)
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 		
 	}

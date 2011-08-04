@@ -28,10 +28,12 @@ function quickMessageClickAction() {
 	} else if(messageType == 'Forward') {
 		var text = $("#message-body").text()
 	}
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	
 	$.ajax({
 		type:'POST',
 		data: {recipient: src, messageText: text},
-		url: '/frontlinesms2/quickMessage/create',
+		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchWizard(messageType, data); }
 	});
 	$("#reply-dropdown").val("na");
