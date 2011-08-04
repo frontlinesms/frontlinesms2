@@ -6,7 +6,7 @@ class SmslibFconnection extends Fconnection {
 	String port
 	int baud
 	String pin
-	boolean allMessages
+	boolean allMessages = true
 
 	static constraints = {
 		port(nullable: false, blank: false)
