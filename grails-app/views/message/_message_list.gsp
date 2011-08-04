@@ -3,6 +3,11 @@
 		<g:hiddenField name="checkedMessageIdList" value=""/>
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
+		<g:if test="${messageSection == 'result'}">
+		  	<g:hiddenField name="activityId" value="${params.activityId}"/>
+		  	<g:hiddenField name="groupId" value="${params.groupId}"/>
+		  	<g:hiddenField name="searchString" value="${params.searchString}"/>
+		</g:if>
 		<table id="messages">
 			<thead>
 				<tr>
