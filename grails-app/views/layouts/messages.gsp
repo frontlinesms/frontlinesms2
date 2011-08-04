@@ -59,9 +59,9 @@
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
 							<div id="page-arrows">
-								<g:paginate next="Next" prev="Back "
-									 max="${grailsApplication.config.pagination.max}"
-									action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+								<g:paginate next="Next" prev="Back"
+									max="${grailsApplication.config.pagination.max}"
+									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
 					</div>
 				</div>
