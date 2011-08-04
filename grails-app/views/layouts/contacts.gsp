@@ -23,13 +23,13 @@
 				<div class="content">
 					<div class="content-header">
 						<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-							<h2>${contactsSection.name}</h2>
+							<h2 id="contact-title">${contactsSection.name}</h2>
 						</g:if>
 						<g:elseif test="${!contactInstance}">
-							<h2>New Group</h2>
+							<h2 id="contact-title">New Group</h2>
 						</g:elseif>
 						<g:else>
-							<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
+							<h2 id="contact-title">${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
 						</g:else>
 					</div>
 					<div class="content-body">

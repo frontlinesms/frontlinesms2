@@ -1,6 +1,5 @@
 $(document).ready(function() {
 	$("#dropdown_options").hide()
-	$('.ui-tabs-nav li a').click(popupButtons)
 	$("#btn_forward").click(quickMessageClickAction)
 	$("#btn_reply" )
 		.button()
@@ -53,7 +52,8 @@ function launchWizard(title, html) {
 			close: function() { $(this).remove(); }
 		}
 	);
-	$(popupButtons);
+	popupButtons();
+	$(".ui-tabs-nav li a ").click(popupButtons);
 }
 
 function prevButton() {

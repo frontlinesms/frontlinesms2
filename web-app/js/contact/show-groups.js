@@ -10,7 +10,7 @@ function addGroupClickAction() {
 	var groupName = me.text();
 	var groupId = me.attr('value');
 
-	var groupListItem = $('<li><h2>' + groupName + '</h2>');
+	var groupListItem = $('<li><input type="text" readonly="readonly" value="' + groupName + '" />');
 	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '">Delete</a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
@@ -25,7 +25,7 @@ function addGroupClickAction() {
 function removeGroupClickAction() {
 	var me = $(this);
 	var groupId = me.attr('id').substring('remove-group-'.length);
-	var groupName = me.parent().children('h2').text();
+	var groupName = me.parent().children('input').val();
 
 	var option = $("<option value='" + groupId + "'>" + groupName + '</option>');
 	option.click(addGroupClickAction);
@@ -33,7 +33,7 @@ function removeGroupClickAction() {
 	$('#group-dropdown').append(option);
 	var groupList = me.parent();
 	groupList.remove();
-	if($('#group-list').children().children('h2').length < 1) {
+	if($('#group-list').children().children('input').length < 1) {
 		$('#no-groups').show();
 	}
 

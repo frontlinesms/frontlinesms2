@@ -63,16 +63,18 @@
 						</g:remoteLink>
 					</g:if>
 				</div>
-				<ol class="field" id="custom-field-list">
-					  <g:each in="${contactFieldInstanceList}" status="i" var="f">
-						  <li class="${f == fieldInstance ? 'selected' : ''}">
-							  <label for="custom-field-${f.name}">${f.name}</label>
-							  <input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
-							  <a class="remove-field" id="remove-field-${f.id}">Delete</a>
-						  </li>
-					  </g:each>
-				</ol>
 				<div class="field">
+					<ol id="custom-field-list">
+						  <g:each in="${contactFieldInstanceList}" status="i" var="f">
+							  <li class="${f == fieldInstance ? 'selected' : ''}">
+								  <label for="custom-field-${f.name}">${f.name}</label>
+								  <input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
+								  <a class="remove-field" id="remove-field-${f.id}">Delete</a>
+							  </li>
+						  </g:each>
+					</ol>
+				</div>
+				<div class="dropdown">
 					<select id="new-field-dropdown" name="new-field-dropdown">
 						<option class="not-field" value="na">Add more information...</option>
 						<option class="create-custom-field" value='add-new'>Create custom field</option>
@@ -80,23 +82,28 @@
 							<option value="${f}">${f}</option>
 						</g:each>
 					</select>
-					<div class="field">
-						<label for="notes"><g:message code="contact.notes.label" default="Notes"/></label>
-						<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				</div>
+				<div class="field">
+					<label for="notes"><g:message code="contact.notes.label" default="Notes"/></label>
+					<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
+				</div>
+				<div class="field">
+					<label for="groups">Groups</label>
+					<div class="list">
+						<ol id="group-list">
+							<g:each in="${contactGroupInstanceList}" status="i" var="g">
+								<li class="${g == groupInstance ? 'selected' : ''}">
+									<input type="text" name="${g.name}" value="${g.name}" readonly="readonly" />
+									<a class="remove-group" id="remove-group-${g.id}">Delete</a>
+								</li>
+							</g:each>
+							<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
+								<p>Not part of any Groups</p>
+							</li>
+						</ol>
 					</div>
 				</div>
-				<ol id="group-list">
-					<g:each in="${contactGroupInstanceList}" status="i" var="g">
-						<li class="${g == groupInstance ? 'selected' : ''}">
-							<h2>${g.name}</h2>
-							<a class="remove-group" id="remove-group-${g.id}">Delete</a>
-						</li>
-					</g:each>
-					<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
-						<p>Not part of any Groups</p>
-					</li>
-				</ol>
-				<div class="field">
+				<div class="dropdown">
 					<select id="group-dropdown" name="group-dropdown">
 						<option class="not-group">Add to group...</option>
 						<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
@@ -104,13 +111,13 @@
 						</g:each>
 					</select>
 				</div>
-				<g:if test="${contactInstance.id}">
+				<div class="field">
+					<label for="messages">Messages</label>
 					<div id="message-count">
-						<h3>Messages</h3>
 						<p>${contactInstance.inboundMessagesCount} messages sent</p>
 						<p>${contactInstance.outboundMessagesCount} messages received</p>
 					</div>
-				</g:if>
+				</div>
 			</g:form>
 		</div>
     </body>

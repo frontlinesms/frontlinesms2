@@ -1,10 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="tabs" class="vertical-tabs">
-		<ol>
-			<li><a href="#tabs-1" onclick="popupButtons()">Enter Question</a></li>
-			<li><a href="#tabs-2" onclick="popupButtons()">Answer list</a></li>
-			<li><a href="#tabs-3" onclick="popupButtons()">Automatic reply</a></li>
-			<li><a href="#tabs-4" onclick="popupButtons()">Confirm</a></li>
+		<ol id="yomama">
+			<li><a href="#tabs-1">Enter Question</a></li>
+			<li><a href="#tabs-2">Answer list</a></li>
+			<li><a href="#tabs-3">Automatic reply</a></li>
+			<li><a href="#tabs-4">Confirm</a></li>
 		</ol>
 
 	<g:form action="save" name="poll-details" controller="poll" method="post">
@@ -25,7 +25,7 @@
 			$("#responses").val("yes no");
 		}
 		else {
-			$("#responses").val("")
+			$("#responses").val("");
 		}
 	}
 </script>
