@@ -27,6 +27,8 @@
 
 .ui-tabs-nav li.ui-tabs-selected {
 	background-color: #E0F0DE;
+	width: 100%;
+	height: 26px;
 }
 
 .ui-tabs-nav li {
@@ -38,4 +40,5 @@
 	text-align: left;	
 	display: block;
 	padding-top: 5px;
+	padding-bottom: 5px;
 }

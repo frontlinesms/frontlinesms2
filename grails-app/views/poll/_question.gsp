@@ -6,5 +6,4 @@
 			<g:radio name="poll-type" value="multiple"  onclick="populateResponses()"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
 		</div>
 	</div>
-	<g:link url="#" onclick="moveForward()">Next</g:link>
 </div>
