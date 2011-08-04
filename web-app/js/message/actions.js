@@ -51,7 +51,6 @@ function updateMessageDetails(id){
 }
 
 function loadMessage(id, checked) {
-	var location = window.location.pathname
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var messageId = id;
@@ -62,6 +61,8 @@ function loadMessage(id, checked) {
 	
 	if(ownerId != null && messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
 		window.location = "/frontlinesms2/message/"+messageSection+"/"+ownerId+"/show/"+messageId;
+	} else if(ownerId != null && messageSection == 'result') {
+		window.location = "/frontlinesms2/search/"+messageSection+"/"+messageId+"&activityId="+$('input:hidden[name=activityId]').val()+"&groupId="+$('input:hidden[name=groupId]').val()+"&searchString="+$('input:hidden[name=searchString]').val();
 	} else{
 		window.location = "/frontlinesms2/message/"+messageSection+"/show/"+messageId;
 	}

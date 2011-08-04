@@ -8,6 +8,13 @@ class MessageController {
 
 	def messageSendService
 	
+	def beforeInterceptor = {
+		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+		params['offset'] = params['offset'] ?: 0
+		params['starred'] = params['starred'] ?: false
+		true
+	}
+	
 	def index = {
 		redirect(action:'inbox')
 	}
@@ -224,6 +231,7 @@ class MessageController {
 	}
 
 	def send = {
+		println "------------------"+params
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
 		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
