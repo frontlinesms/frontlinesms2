@@ -37,7 +37,6 @@ body {
 /* SPECIFIC */
 #container {
 	@include container;
-	height: 800px;
 	border-top: 3px solid #C79CDD;
 	background-image:url('../images/background.png');
 	background-repeat:no-repeat;
@@ -294,7 +293,7 @@ body {
 					
 				#page-arrows {
 					@include column(14, true);
-					text-align: bottom right;
+					text-align: bottom;
 				}
 			}
 		}
@@ -322,8 +321,8 @@ body {
 				@include column(12);
 			}
 		}
-		.buttons { cursor: pointer}
 	}
+	.buttons { cursor: pointer;}
 	
 	/* PAGINATION */
 	.currentStep, .step {

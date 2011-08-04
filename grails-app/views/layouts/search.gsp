@@ -8,7 +8,8 @@
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="mumsnet"/>
 		<g:javascript src="application.js"/>
-		<g:javascript src="popup.js"></g:javascript>
+		<g:javascript src="message/actions.js"/>
+		<g:javascript src="popup.js"/>
 	</head>
 	<body>
 		<div id="container">

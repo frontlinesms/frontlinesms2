@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <script type="text/javascript">
 function closeWizard() {
-	$("#modalBox").dialog().remove();
+	$("#modalBox").dialog('destroy');
 }
 </script>
 <div>
-	<g:form name="export-form" action="downloadReport">
+	<g:form name="export-form" controller="export" action="downloadReport">
 		<g:hiddenField name="messageSection" value="${messageSection}" />
 		<g:hiddenField name="ownerId" value="${ownerId}" />
 		<g:hiddenField name="searchString" value="${searchString}" />
@@ -19,7 +19,7 @@ function closeWizard() {
 			</div>
 			<div class="buttons">
 				<g:link class="cancel" controller="message" action="inbox" >Cancel</g:link>
-				<input type="submit" value="Export" class="submit" onclick="closeWizard()" />
+				<g:submitButton name="Export" class="submit" onClick="closeWizard()">Send</g:submitButton>
 			</div>
 	</g:form>
 </div>

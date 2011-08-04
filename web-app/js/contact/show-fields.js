@@ -13,7 +13,7 @@ function addFieldClickAction() {
 	if(me.hasClass('create-custom-field')) {
 		$.ajax({
 			type:'POST',
-			url: '/frontlinesms2/contact/newCustomField',
+			url: url_root + 'contact/newCustomField',
 			success: function(data, textStatus){ customFieldPopup(data); }
 		});
 		$("#new-field-dropdown").val("na");

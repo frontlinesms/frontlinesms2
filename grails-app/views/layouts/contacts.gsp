@@ -4,6 +4,9 @@
 		<title><g:layoutTitle default="Contacts"/></title>
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="mumsnet"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
 		<g:layoutHead />
 		<g:javascript src="application.js"/>
 		<g:javascript src="popup.js"/>

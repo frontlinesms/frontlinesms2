@@ -7,10 +7,10 @@ function moveAction() {
 	var checkedMessageList = '';
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
-	if(messageSection == 'poll' || messageSection == 'folder'){
-		var location = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
+	if(messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow'){
+		var location = url_root + "message/"+messageSection+"/"+ownerId;
 	} else{
-		var location = "/frontlinesms2/message/"+messageSection;
+		var location = url_root + "message/"+messageSection;
 	}
 	var me = $(this).find('option:selected');
 	if(count > 1) {
@@ -29,7 +29,7 @@ function moveAction() {
 	$.ajax({
 		type:'POST',
 		data: {messageSection: section, messageId: mesId, ownerId: me.val()},
-		url: '/frontlinesms2/message/move',
+		url: url_root + 'message/move',
 		success: function(data) {
 			window.location = location;
 		}
@@ -46,7 +46,7 @@ function moveMultipleMessages(object, location) {
 	$.ajax({
 		type:'POST',
 		data: {messageSection: section, ownerId: object.val(), checkedMessageIdList: checkedMessageIdList},
-		url: '/frontlinesms2/message/move',
+		url: url_root + 'message/move',
 		success: function(data) {
 			window.location = location;
 		}
