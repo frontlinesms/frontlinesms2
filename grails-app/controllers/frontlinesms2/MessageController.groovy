@@ -231,7 +231,6 @@ class MessageController {
 	}
 
 	def send = {
-		println "------------------"+params
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
 		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
