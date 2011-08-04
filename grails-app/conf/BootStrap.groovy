@@ -49,7 +49,7 @@ class BootStrap {
 			
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-			new SmslibFconnection(name:"COM5", port:'COM5', baud:9600).save(failOnError:true)
+			new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 			
 			new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
