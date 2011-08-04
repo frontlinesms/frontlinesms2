@@ -137,7 +137,7 @@ body {
 				@include horizontal-list(4px, right);
 				width: 100%;
 				
-				#message-title {
+				#message-title, #contact-title {
 					@include clearfix;
 					@include column(10, false);
 					text-transform: uppercase;
@@ -191,32 +191,65 @@ body {
 				}
 				
 				#contact-list {
-					@include column(4, false);
+					@include column(5, false);
+					width: 250px;
 					margin-right: 0px;
 					display: block;
+					border-top: 1px solid #9E9E9E;
+					
+					li { height: 26px; }
+					a {
+					padding-top: 5px;
+					padding-bottom: 5px;
+					display: block; }
 				}
 				
 				#contact_details {
-					@include column(19, false);
+					@include column(17, false);
 					display: block;
 					background-color: #E0F0DE;
 					margin-right: 0;
 					padding: 17px;
-					
-					#contact-list {
-						margin-right: 0;
-						display: block;
-						
-						li { height: 10px; }
-						
-						li a { display: block; }
-					}
+					border-top: 1px solid #9E9E9E;
 					
 					.remove-group {
 						cursor: pointer;
 					}
 					
+					.dropdown {
+						position: relative;
+						left: 120px;
+					}
+					
+					.list {
+						position: relative;
+						left: 120px;
+						
+						ol:first-child { left: 0px; }
+					}
+					
 					.buttons { text-align: right; }
+					
+					.field {
+						clear: both;
+						label {
+							float: left;
+							width: 120px;
+							text-align: left;
+							padding-top: 5px;
+							padding-bottom: 5px;
+						}
+						
+						.status {
+							.label {
+								@include column(6);
+							}
+						
+							.value {
+								@include column(12);
+							}
+						}
+					}
 				}
 				
 				#message-list {
@@ -267,7 +300,7 @@ body {
 					width: 16px;
 					height: 16px;
 				}
-	
+
 				.unstarred {
 					background-image:url('../images/star.png');
 					width: 16px;
@@ -301,27 +334,6 @@ body {
 
 	/* GENERAL */
 	
-	
-
-	.field {
-		clear: both;
-		padding: 0.5em;
-		label {
-			float: left;
-			width: 120px;
-			text-align: right;
-		}
-		
-		.status {
-			.label {
-				@include column(6);
-			}
-		
-			.value {
-				@include column(12);
-			}
-		}
-	}
 	.buttons { cursor: pointer;}
 	
 	/* PAGINATION */
