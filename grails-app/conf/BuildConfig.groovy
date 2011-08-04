@@ -32,15 +32,15 @@ grails.project.dependency.resolution = {
 		test 'org.mockito:mockito-all:1.8.5'
 		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
 
+		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
+		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT' // doesn't seem to cause problems if it's here, but should really only be included for dev scope
+
 		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.2-SNAPSHOT'
 		compile 'org.apache.camel:camel-mail:2.5.0'
 		compile 'net.frontlinesms.core:serial:1.0.1-SNAPSHOT'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
-
-		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT' // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 	}
 }
 

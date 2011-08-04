@@ -62,6 +62,8 @@ function loadMessage(id, checked) {
 		window.location = url_root + 'message/'+messageSection+"/"+ownerId+"/show/"+messageId;
 	} else {
 		window.location = url_root + 'message/'+messageSection+"/show/"+messageId;
+	} else if(ownerId != null && messageSection == 'result') {
+		window.location = url_root + "search/"+messageSection+"/"+messageId+"&activityId="+$('input:hidden[name=activityId]').val()+"&groupId="+$('input:hidden[name=groupId]').val()+"&searchString="+$('input:hidden[name=searchString]').val();
 	}
 }
 
