@@ -11,7 +11,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
-		then: 
+		then:
 			$("#message")[0].@checked == "true"
 		cleanup:
 			deleteTestMessages()
@@ -54,7 +54,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
-		then:    	
+		then:
 			$("tr#message-${Fmessage.list()[0].id}").hasClass('checked')
 			$("tr#message-${Fmessage.list()[1].id}").hasClass('checked')
 		cleanup:

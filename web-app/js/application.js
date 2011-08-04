@@ -67,7 +67,10 @@ $('.check-bound-text-area').live('focus', function() {
 	$('#' + checkBoxId).attr('checked', true);
 });
 
-function selectCheckbox(value) {
-	$('input[value=' + value + ']').attr('checked', true);
+function findInputWithValue(value) {
+	return $('input[value=' + "'" + value + "'" + ']');
+}
 
+function isCheckboxSelected(value) {
+	return findInputWithValue(value).is(':checked')
 }
