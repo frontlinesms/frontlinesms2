@@ -43,7 +43,9 @@ function quickMessageClickAction() {
 	}
 	$.ajax({
 		type:'POST',
-		data: {recipient: src, messageText: text},
+		traditional: true,
+		context:'json',
+		data: { recipients: [src], messageText: text},
 		url: '/frontlinesms2/quickMessage/create',
 		success: function(data, textStatus){ launchWizard(messageType, data); }
 	});

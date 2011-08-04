@@ -62,8 +62,8 @@ class GroupSpec extends UnitSpec {
 		when:
 			def result = Group.getGroupDetails()
 		then:
-			result['sahara'] == 2
-			result['thar'] == 1
+			result['sahara'].containsAll(["address1", "address2"])
+			result['thar'] == ["address3"]
 	}
 
 	def "should reject special characters for subscription keys"() {

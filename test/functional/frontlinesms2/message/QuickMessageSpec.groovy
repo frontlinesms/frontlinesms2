@@ -69,6 +69,70 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
             at SentMessagesPage
 	}
 
+
+	def "should send the message to the selected group"() {
+		setup:
+			def group = new Group(name: "group1").save(flush: true)
+			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
+			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
+			group.addToMembers(alice)
+			group.addToMembers(bob)
+			group.save(flush: true)
+		when:
+			to MessagesPage
+			loadFirstTab()
+			loadSecondTab()
+			$("input[name=groups]").value("group1")
+			$("input[value=group1]").jquery.trigger("click")
+		then:
+			$("#count").text() == "2"
+	}
+
+	def "should deselect all member recipients when a group is un checked"() {
+		setup:
+			def group = new Group(name: "group1").save(flush: true)
+			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
+			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
+			group.addToMembers(alice)
+			group.addToMembers(bob)
+			group.save(flush: true)
+		when:
+			to MessagesPage
+			loadFirstTab()
+			loadSecondTab()
+			$("input[name=groups]").value("group1")
+			$("input[value=group1]").jquery.trigger("click")
+		then:
+			$("#count").text() == "2"
+		when:
+			$("input[value=group1]").jquery.trigger("click")
+		then:
+			$("#count").text() == "0"
+	}
+
+	def "selected group should get unchecked when a member drops off"() {
+		setup:
+			def group = new Group(name: "group1").save(flush: true)
+			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
+			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
+			group.addToMembers(alice)
+			group.addToMembers(bob)
+			group.save(flush: true)
+		when:
+			to MessagesPage
+			loadFirstTab()
+			loadSecondTab()
+			$("input[name='groups']").value("group1")
+			$("input[value='group1']").jquery.trigger("click")
+		then:
+			$("#count").text() == "2"
+		when:
+			$("input[value='12345678']").click()
+		then:
+			!$("input[value='group1']").getAttribute("checked")
+			$("#count").text() == "1"
+	}
+
 	def loadFirstTab() {
 		$("a.quick_message").click()
 		waitFor {$('div#tabs-1').displayed}

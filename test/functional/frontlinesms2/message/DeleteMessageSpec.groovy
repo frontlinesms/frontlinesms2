@@ -20,7 +20,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			def btnDelete = $('#message-details .buttons #message-delete')
 			btnDelete.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("deleted") }
 		then:
 			Fmessage.getInboxMessages(['starred':false]).size() == 2
 	}
@@ -31,7 +31,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/inbox/show/${bobMessage.id}"
 			def btnDelete = $('#message-details .buttons #message-delete')
 			btnDelete.click()
-			waitFor { $("div.flash").text().contains("Fmessage") }
+			waitFor { $("div.flash").text().contains("deleted") }
 			go "message/trash"
 		then:
 			Fmessage.getDeletedMessages(['starred':false]).size() == 1
@@ -55,7 +55,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			def btnDeleteFromPoll = $('#message-details .buttons #message-delete')
 			btnDeleteFromPoll.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("deleted") }
 		then:
 			Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 1
 	}
@@ -67,7 +67,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
 			def btnDeleteFromFolder = $('#message-details .buttons #message-delete')
 			btnDeleteFromFolder.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("deleted") }
 		then:
 			Folder.findByName('Fools').getFolderMessages(['starred':false]).size() == 1
 	}
@@ -98,7 +98,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDelete
 		when:
 			btnDelete.click()
-			waitFor { $("div.flash.message").text().contains("Fmessage") }
+			waitFor { $("div.flash.message").text().contains("deleted") }
 		then:
 			at MessagesPage
 		when:

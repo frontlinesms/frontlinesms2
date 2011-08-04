@@ -40,7 +40,7 @@
 					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 					<g:if test="${contactInstance?.primaryMobile}">
 						  <g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'],
-						  recipient: contactInstance?.primaryMobile]" onSuccess="launchWizard('Send Message', data);" class="send-message">
+						  recipients: (!contactInstance) ?: [contactInstance.primaryMobile]]" onSuccess="launchWizard('Send Message', data);" class="send-message">
 							  Send Message
 						  </g:remoteLink>
 					</g:if>
@@ -49,7 +49,7 @@
 					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
 					<g:if test="${contactInstance?.secondaryMobile}">
-						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipient: contactInstance?.secondaryMobile]" onSuccess="launchWizard('Send Message',data);" class="send-message">
+					<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipients: !contactInstance ?: [contactInstance.secondaryMobile]]" onSuccess="launchWizard('Send Message',data);" class="send-message">
 							  Send Message
 						</g:remoteLink>
 					</g:if>
@@ -58,7 +58,7 @@
 					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
 					<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">
-						<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
+						<g:remoteLink controller="quickMessage" action="create" params="[recipients: !contactInstance ?: [contactInstance.email]]" onSuccess="loadContents(data);" class="quick_message">
 							Send Message
 						</g:remoteLink>
 					</g:if>
