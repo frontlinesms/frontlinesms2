@@ -71,28 +71,24 @@ body {
 		
 		#global-nav {
 			@include column(21, true);
-		  	@include horizontal-list;
-		  	height: 60px;
+		  	@include horizontal-list(0px, left);
 		  	text-transform:uppercase;
 		  	text-align: center;
+		  	padding: 20px;
 		  	
 		  	li {
-		  		width: 104px;
-		  		height: 70px;
-		  		margin-top: 20px;
-		  		vertical-align: middle;	
+		  		width: 112px;
+		  		height: 30px;
 		  		background-image:url('../images/buttons/tab.png');
 				background-repeat:no-repeat;
-				background-position: 0 43% 10% 50%;
 			}
 			
 			li a {
 				display: block;
-				padding-top: 10px;
+				padding-top: 7px;
 			}
 			
 			li.selected {
-					width: 108px;
 					background-image:url('../images/buttons/tab_active_me.png');
 					background-repeat:no-repeat;
 			}
@@ -282,11 +278,13 @@ body {
 			
 			.content-footer {
 				@include clearfix; // required
-				@include column(19);
+				@include column(24);
 				margin-left: 0;
 				margin-right: 0px;
 				display: block;
 				padding: 17px;
+				border-top: 1px solid #9E9E9E;
+				background-color: #F0F0F0;
 				
 				#filter {
 					@include column(10, false);

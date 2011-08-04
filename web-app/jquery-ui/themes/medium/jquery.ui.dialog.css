@@ -12,13 +12,11 @@
 	width: 675px;
 	height: 500px;
 	overflow: hidden;
-	background-clip: padding-box;
+	background-clip: border-box;
 	border: 5px solid rgba(0,0,0,0.4);
 	border-radius: 4px;
 	background-color: white;
 }
-
-.modalBox { padding: 17px; }
 
 .ui-dialog .ui-dialog-titlebar { 
 	position: relative;
@@ -39,9 +37,7 @@
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
 
 .ui-dialog .ui-dialog-content {
-	position: relative;
-	overflow: auto;
-	zoom: 1;
+	overflow: hidden;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
@@ -55,3 +51,8 @@
 
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
+
+.ui-widget-overlay {
+	background-color: #000000;
+	opacity: .5;
+}
