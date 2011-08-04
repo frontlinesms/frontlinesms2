@@ -191,7 +191,7 @@ class MessageController {
 			params.remove('checkedMessageIdList')			
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: params)
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}		
 	}
 
@@ -215,7 +215,7 @@ class MessageController {
 			params.remove('checkedMessageIdList')			
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: params)
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 		
 	}

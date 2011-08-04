@@ -51,19 +51,17 @@ function updateMessageDetails(id){
 }
 
 function loadMessage(id, checked) {
-	var location = window.location.pathname
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var messageId = id;
-	if(checked == true){
+	if(checked) {
 		messageId = messageId+"?checkedId="+messageId;
 	}
 	
-	
 	if(ownerId != null && messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
-		window.location = "/frontlinesms2/message/"+messageSection+"/"+ownerId+"/show/"+messageId;
-	} else{
-		window.location = "/frontlinesms2/message/"+messageSection+"/show/"+messageId;
+		window.location = url_root + 'message/'+messageSection+"/"+ownerId+"/show/"+messageId;
+	} else {
+		window.location = url_root + 'message/'+messageSection+"/show/"+messageId;
 	}
 }
 
@@ -94,8 +92,11 @@ function validateCheckedMessageCount(count) {
 
 function changeMessageCount(count){
 	setSelectedMessage();
-	$('#message-details').empty();
-	$('#message-details').append("<p> "+count+" messages selected</p>");
+	$('#message-details p#message-date').remove();
+	$('#message-details p#message-body').remove();
+	$('#message-details .button').remove();
+	$("<p id='message-count'></p>").replaceAll($('#message-details p'));
+	$('#message-details #message-count').empty().append(count+" messages selected");
 	setMessageActions();
 }
 
@@ -107,8 +108,9 @@ function setMessageActions() {
 	}
 	archiveAll = "<a id='btn_archive_all' >Archive All</a>";
 	deleteAll = "<a id='btn_delete_all' >Delete All</a>";
-	$('#message-details').append("<div class='buttons'></div>");
+	$('#message-details .buttons').empty();
 	$('#message-details div.buttons').append(replyAll+"&nbsp;"+archiveAll+"&nbsp;"+deleteAll);
+	
 	$('#btn_reply_all').click(quickReplyClickAction);
 	$('#btn_delete_all').click(deleteAllClickAction);
 	$('#btn_archive_all').click(archiveClickAction);
@@ -122,7 +124,7 @@ function quickReplyClickAction() {
 	$.ajax({
 		type:'POST',
 		data: {checkedMessageIdList: checkedMessageIdList},
-		url: '/frontlinesms2/quickMessage/create',
+		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchWizard(messageType, data); }
 	});
 }
@@ -137,7 +139,7 @@ function deleteAllClickAction() {
 		type:'POST',
 		context:document.body,
 		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
-		url: '/frontlinesms2/message/deleteMessage',
+		url: url_root + 'message/deleteMessage',
 		success: function(data) { reloadPage(messageSection, ownerId)}
 	});
 }
@@ -152,18 +154,18 @@ function archiveClickAction() {
 	$.ajax({
 		type:'POST',
 		data: {messageSection: messageSection, checkedMessageIdList: checkedMessageIdList, ownerId: ownerId},
-		url: '/frontlinesms2/message/archiveMessage',
+		url: url_root + 'message/archiveMessage',
 		success: function(data, textStatus){ reloadPage(messageSection, ownerId)}
 	});
 }
 
 function reloadPage(messageSection, ownerId) {
 	if(messageSection == 'poll' || messageSection == 'folder'){
-		var location = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
+		var location = 'message/'+messageSection+"/"+ownerId;
 	} else{
-		var location = "/frontlinesms2/message/"+messageSection;
+		var location = 'message/'+messageSection;
 	}
-	window.location = location
+	window.location = url_root + location
 }
 function setSelectedMessage() {
 	if(selectedMessageId == null){
@@ -171,11 +173,11 @@ function setSelectedMessage() {
 	}
 }
 
-function showMessageDetails(){
+function showMessageDetails() {
 	if(selectedMessageId == null){
 		return;
 	}
-	loadMessage(selectedMessageId,false);
+	loadMessage(selectedMessageId, false);
 }
 
 function highlightRow(id){

@@ -1,17 +1,20 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
-		<g:layoutHead />
+		<g:layoutHead/>
 		<g:render template="/css"/>
-		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources />
-		<g:javascript src="message/actions.js"></g:javascript>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
+		<jqui:resources/>
+		<g:javascript src="message/actions.js"/>
 		<g:javascript src="application.js"/>
-		<g:javascript src="popup.js" />
-		<g:javascript src="/message/move_dropdown.js" />
-		<g:javascript src="/message/categorize-dropdown.js" />
+		<g:javascript src="popup.js"/>
+		<g:javascript src="/message/move_dropdown.js"/>
+		<g:javascript src="/message/categorize-dropdown.js"/>
     </head>
 	<body>
 		<div id="container">

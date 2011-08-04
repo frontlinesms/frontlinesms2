@@ -3,6 +3,9 @@
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
 		<g:javascript library="jquery" plugin="jquery"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
 		<jqui:resources />
 		<g:layoutHead />
 		<g:javascript src="application.js"/>
