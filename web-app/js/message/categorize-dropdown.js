@@ -10,10 +10,11 @@ function categoriseClickAction() {
 	var responseId = responseValue.split("-");
 	var id = $("#message-id").val();
 	var owner = $("#owner-id").val();
+	
 	$.ajax({
 		type:'POST',
 		data: {responseId: responseId[1], messageId: id, ownerId: owner},
-		url: '/frontlinesms2/message/changeResponse',
+		url: url_root + 'message/changeResponse',
 		success: function(data) { location.reload(); }
 	});
 	$("#categorize-dropdown").val("na");
