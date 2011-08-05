@@ -11,7 +11,9 @@ class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec 
 	def "should save poll"() {
 		setup:
 			controller.params.title = "poll"
-			controller.params.responses = "yes no maybe"
+			controller.params.choiceA = "yes"
+			controller.params.choiceB = "no"
+			controller.params.choiceC = "maybe"
 			controller.params.autoReplyText = "automatic reply text"
 		when:
 			controller.save()
