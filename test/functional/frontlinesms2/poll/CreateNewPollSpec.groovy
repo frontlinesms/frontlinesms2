@@ -17,7 +17,8 @@ class CreateNewPollSpec extends PollGebSpec {
 			def initialPollCount = Poll.count()
 		when:
 			to CreatePollPage
-			frmDetails.responses = 'yes no'
+			frmDetails.choiceA = 'yes'
+			frmDetails.choiceB = 'no'
 			$("a", text:"confirm").click()
 			frmDetails.title = 'UFOs?'
 			btnSave.click()
@@ -66,7 +67,9 @@ class CreateNewPollSpec extends PollGebSpec {
 		when:
 			to CreatePollPage
 			frmDetails.title = 'UFOs?'
-			frmDetails.responses = 'yes no kidnapped'
+			frmDetails.choiceA = 'yes' 
+			frmDetails.choiceB = 'no' 
+			frmDetails.choiceC = 'kidnapped' 
 			btnSave.click()
             waitFor { !($("div.flash.message").text().isEmpty()) }
 			def ufoPoll = Poll.findByTitle("UFOs?")
