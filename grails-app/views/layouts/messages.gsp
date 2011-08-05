@@ -6,13 +6,14 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources theme="medium" plugin="mumsnet"/>
+		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 		</script>
 		<g:javascript src="message/actions.js"/>
 		<g:javascript src="application.js"/>
-		<g:javascript src="popup.js"/>
+		<g:javascript src="mediumPopup.js"/>
+		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="/message/categorize-dropdown.js"/>
     </head>
@@ -36,13 +37,18 @@
 						</g:else>
 						<ol>
 							<li>
-								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchWizard('Export', data);">
+								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
 									Export
 								</g:remoteLink>
 							</li>
+							<li id="manage-subscription">
+								<g:remoteLink controller="group" action="list" onSuccess="launchMediumWizard('Manage Subscription', data, 'Create');">
+									Manage subscription
+								</g:remoteLink>
+							</li>
 							<li>
-					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchWizard('Quick Message', data);" id="quick_message">
-									Quick Message
+					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send');" id="quick_message">
+									Quick message
 								</g:remoteLink>
 							</li>
 						</ol>

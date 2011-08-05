@@ -127,7 +127,7 @@ function quickReplyClickAction() {
 		type:'POST',
 		data: {checkedMessageIdList: checkedMessageIdList},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchWizard(messageType, data); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, 'Send'); }
 	});
 }
 

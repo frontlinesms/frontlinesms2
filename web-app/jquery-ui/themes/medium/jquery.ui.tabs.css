@@ -20,8 +20,8 @@
 .ui-tabs-nav{
 	position: absolute;
 	width: 135px;
+	height: 365px;
 	padding: 17px;
-	height: 100%;
 	border-right: 1px solid #9E9E9E;
 }
 

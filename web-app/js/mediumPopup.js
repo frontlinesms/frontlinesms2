@@ -19,13 +19,13 @@ $(document).ready(function() {
 });
 
 function quickMessageClickAction() {
-	$("#dropdown_options").hide()
-	var me = $(this)
+	$("#dropdown_options").hide();
+	var me = $(this);
 	var messageType = me.text();
 	if (messageType == 'Reply') {
-		var src = $("#message-src").val()
+		var src = $("#message-src").val();
 	} else if(messageType == 'Forward') {
-		var text = $("#message-body").text()
+		var text = $("#message-body").text();
 	}
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	
@@ -33,12 +33,12 @@ function quickMessageClickAction() {
 		type:'POST',
 		data: {recipient: src, messageText: text},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchWizard(messageType, data); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data); }
 	});
 	$("#reply-dropdown").val("na");
 }
 
-function launchWizard(title, html) {
+function launchMediumWizard(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
@@ -48,33 +48,35 @@ function launchWizard(title, html) {
 			height: 500,
 			buttons: [{ text:"Prev", click: prevButton, id:"prevPage" },
 			          		{ text:"Next",  click: nextButton, id:"nextPage" },
-			          		{ text:"Done",  click: done, id:"done" }],
+			          		{ text:btnFinishedText,  click: done, id:"done" }],
 			close: function() { $(this).remove(); }
 		}
 	);
-	popupButtons();
-	$(".ui-tabs-nav li a ").click(popupButtons);
+	changeButtons();
+	$(".ui-tabs-nav li a ").click(changeButtons);
 }
 
 function prevButton() {
 	var $tabs = $('#tabs').tabs();
 	var index = $tabs.tabs('option', 'selected');
 	$tabs.tabs('select', index - 1);
-	$(popupButtons);
+	$(changeButtons);
 }
 
 function nextButton() {
 	var $tabs = $('#tabs').tabs();
 	var index = $tabs.tabs('option', 'selected');
 	$tabs.tabs('select', index + 1);
-	$(popupButtons);
+	$(changeButtons);
 }
 
 function done() {
+	$(this).find("form").submit(); // TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universally
 	$(this).remove();
 }
 
-function popupButtons() {
+
+function changeButtons() {
 	var $tabs = $('#tabs').tabs();
 	var index = $tabs.tabs('option', 'selected');
 	var totalSize = $(".ui-tabs-panel").size() - 1;

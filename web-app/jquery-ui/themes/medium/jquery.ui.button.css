@@ -7,6 +7,7 @@
  *
  * http://docs.jquery.com/UI/Button#theming
  */
+ 
 .ui-button {
 	display: inline-block;
 	position: relative;
@@ -24,11 +25,9 @@
 .ui-button-icon-only {
 	background-image:url('/frontlinesms2/images/arrow.gif');
 	background-repeat:no-repeat;
-	
 	width: 5px;
 } /* to make room for the icon, a width needs to be set here */
 
-button.ui-button-icon-only { width: 15px; } /* button elements seem to need a little more width */
 
 /*button text element */
 .ui-button .ui-button-text { display: block; line-height: 1.4;  }
