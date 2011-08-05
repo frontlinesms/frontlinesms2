@@ -13,7 +13,6 @@ class PollController {
 
 	def save = {
 		def pollInstance = Poll.createPoll(params)
-		
 		if (pollInstance.validate()) {
 			pollInstance.save()
 			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"

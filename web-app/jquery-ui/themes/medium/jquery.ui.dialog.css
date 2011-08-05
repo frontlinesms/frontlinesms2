@@ -56,3 +56,7 @@
 	background-color: #000000;
 	opacity: .5;
 }
+
+.ui-dialog-content form{
+	padding: 17px;
+}

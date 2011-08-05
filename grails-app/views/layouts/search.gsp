@@ -9,7 +9,8 @@
 		<jqui:resources theme="medium" plugin="mumsnet"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="message/actions.js"/>
-		<g:javascript src="popup.js"/>
+		<g:javascript src="mediumPopup.js"/>
+		<g:javascript src="smallPopup.js"/>
 	</head>
 	<body>
 		<div id="container">
@@ -28,7 +29,7 @@
 			  			</div>
 			  			<ol>
 				  			<li>
-					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchWizard('Export', data);">
+					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup(data, 'Export');">
 									Export
 								</g:remoteLink>
 							</li>

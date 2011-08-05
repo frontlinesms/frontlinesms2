@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<h1>Create Group</h1>
 	<g:form name="group-details" action="saveGroup" >
 		<div class="dialog">
 			<table>
@@ -16,11 +15,6 @@
 
 				</tbody>
 			</table>
-		</div>
-
-		<div id="buttons">
-			<g:submitButton name="createGroup" class="save" value="${message(code: 'default.button.create.label', default: 'Create')}" />
-			<g:link class="cancel" action="list">Cancel</g:link>
 		</div>
 	</g:form>
 </div>

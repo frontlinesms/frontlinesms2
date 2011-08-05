@@ -28,7 +28,7 @@
 						<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
 					</g:if>
 				  	<g:else>
-						<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+						<g:actionSubmit class="save" action="saveContact" style="background-image:/frontlinesms2/images/buttons/button_default.png" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
 				  	</g:else>
 				</div>
 				<div class="field">
@@ -40,7 +40,7 @@
 					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 					<g:if test="${contactInstance?.primaryMobile}">
 						  <g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'],
-						  recipient: contactInstance?.primaryMobile]" onSuccess="launchWizard('Send Message', data);" class="send-message">
+						  recipient: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send');" class="send-message">
 							  Send Message
 						  </g:remoteLink>
 					</g:if>
@@ -49,7 +49,7 @@
 					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
 					<g:if test="${contactInstance?.secondaryMobile}">
-						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipient: contactInstance?.secondaryMobile]" onSuccess="launchWizard('Send Message',data);" class="send-message">
+						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipient: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send');" class="send-message">
 							  Send Message
 						</g:remoteLink>
 					</g:if>

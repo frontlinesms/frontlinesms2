@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="tabs" class="vertical-tabs">
-		<ol id="yomama">
+		<ol>
 			<li><a href="#tabs-1">Enter Question</a></li>
 			<li><a href="#tabs-2">Answer list</a></li>
 			<li><a href="#tabs-3">Automatic reply</a></li>
@@ -17,6 +17,7 @@
 
 <script>
 	function validate() {
+		alert('validating');
 		return isGroupChecked('auto-reply') ? !isElementEmpty('.check-bound-text-area') : true;
 	}
 

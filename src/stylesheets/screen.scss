@@ -9,6 +9,7 @@ $blueprint-grid-margin: 17px;
 @import "compass/reset";
 @import "blueprint";
 @import "blueprint/liquid";
+@import "blueprint/reset";
 @import "compass/typography";
 @import "compass/layout";
 
@@ -111,18 +112,39 @@ body {
 			margin-right: 0px;
 			border-right: 1px solid #9E9E9E;
 			
+			
+			
+			.section { padding-top: 20px; }
+			
 			h2 {
 				text-transform:uppercase;
-				margin-bottom: 8px;
-				margin-top: 30px;
-			}
-			li {
-				margin-bottom: 8px;
+				padding-top: 7px;
+				padding-bottom: 7px;
 			}
 			
-			a {
+			ol { display: block; }
+			
+			.sub-menu li {
+				height: 26px;
 				display: block;
-				font: 12px Arial;
+				
+				a {
+					display: block;
+					padding-top: 7px;
+					padding-bottom: 7px;
+				}
+			}
+			
+			.create {
+				padding-top: 7px;
+				a {
+					width: 110px;
+					height: auto;
+					background-image:url('../images/buttons/button_default.png');
+					background-repeat:no-repeat;
+					background-size: 100% 100%;
+					padding: 8px 10px;
+				}
 			}
 				
 		}
@@ -258,7 +280,6 @@ body {
 					.unread a { font-weight:bold; }
 					margin-right: 0px;
 					
-					table { padding: 17px; }
 					li { height: 10px; }
 					
 					a { display: block; }

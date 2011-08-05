@@ -3,13 +3,14 @@
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources theme="medium" plugin="mumsnet"/>
+		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 		</script>
 		<g:layoutHead />
 		<g:javascript src="application.js"/>
-		<g:javascript src="popup.js"/>
+		<g:javascript src="mediumPopup.js"/>
+		<g:javascript src="smallPopup.js"/>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>

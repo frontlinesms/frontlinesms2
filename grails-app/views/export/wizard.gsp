@@ -1,9 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<script type="text/javascript">
-function closeWizard() {
-	$("#modalBox").dialog('destroy');
-}
-</script>
 <div>
 	<g:form name="export-form" controller="export" action="downloadReport">
 		<g:hiddenField name="messageSection" value="${messageSection}" />
@@ -16,10 +11,6 @@ function closeWizard() {
 				<h2>Select an output format:</h2>
 				<input type="radio" name="format" value="csv" checked="checked" /> CSV format for use in spreadsheet<br />
 				<input type="radio" name="format" value="pdf" /> PDF format for printing
-			</div>
-			<div class="buttons">
-				<g:link class="cancel" controller="message" action="inbox" >Cancel</g:link>
-				<g:submitButton name="Export" class="submit" onClick="closeWizard()">Send</g:submitButton>
 			</div>
 	</g:form>
 </div>
