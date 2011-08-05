@@ -9,8 +9,9 @@ class MessageController {
 	def messageSendService
 
 	def beforeInterceptor = {
-      	params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
 		params['offset']  = params['offset'] ?: 0
+		params['archived'] = params['archived'] ? params['archived'].toBoolean()  : false
 		true
 	}
 	
@@ -33,7 +34,7 @@ class MessageController {
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
 				radioShows: RadioShow.findAll(),
-				messageCount: Fmessage.countAllMessages()]
+				messageCount: Fmessage.countAllMessages(params)]
 	}
 
 	def trash = {
@@ -45,16 +46,24 @@ class MessageController {
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages(params)
-			[messageInstanceList: messageInstanceList,
+		def model = [messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
-					messageInstanceTotal: Fmessage.countInboxMessages(params['starred'])] << show(messageInstanceList)
+					messageInstanceTotal: Fmessage.countInboxMessages(params)] << show(messageInstanceList)
+		if(request.xhr) {
+			render(template : "message_list", model: model)
+		}
+		model
 	}
-
+	
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params)
-		[messageSection:'sent',
-				messageInstanceList:messageInstanceList,
-				messageInstanceTotal: Fmessage.countSentMessages(params['starred'])] << show(messageInstanceList)
+		def model = [messageSection: 'sent',
+				messageInstanceList: messageInstanceList,
+				messageInstanceTotal: Fmessage.countSentMessages(params)] << show(messageInstanceList)
+		if(request.xhr) {
+			render(template : "message_list", model: model)
+		}
+		model
 	}
 
 	def pending = {
