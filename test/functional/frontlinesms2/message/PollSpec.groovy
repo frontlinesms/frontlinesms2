@@ -81,7 +81,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("input", id:'create-poll').click()
 			waitFor {!$("div.flash.message").text().isEmpty()}
 		then:
-			Poll.findByTitle("POLL NAME").responses*.value.containsAll("yes", "no")
+			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes","No", "Unknown")
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {

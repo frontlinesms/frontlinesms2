@@ -5,9 +5,9 @@ import frontlinesms2.enums.MessageStatus
 
 class PollGebSpec extends grails.plugin.geb.GebSpec {
 	static createTestPolls() {
-		[Poll.createPoll(title: 'Football Teams', responses: 'manchester barcelona'),
-				Poll.createPoll(title: 'Shampoo Brands', responses: 'pantene oriele'),
-				Poll.createPoll(title: 'Rugby Brands', responses: 'newzealand britain')]*.save(failOnError:true, flush:true)
+		[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona'),
+				Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB: 'oriele'),
+				Poll.createPoll(title: 'Rugby Brands', choiceA: 'newzealand', choiceB: 'britain')]*.save(failOnError:true, flush:true)
 	}
 
 	static createTestMessages() {
