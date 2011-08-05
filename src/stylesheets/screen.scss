@@ -161,3 +161,30 @@ body {
 .desc a{
   background: url('/frontlinesms2/images/down_arrow.png') no-repeat center right;
 }
+
+.poll-responses-tab input, label {
+	display: block
+}
+
+.poll-responses-tab li label {
+	float: left;
+	margin: 5px 10px 0px 30px;
+	color:#949494;
+}
+
+.poll-responses-tab #instruction {
+	margin: 10px 0 10px 30px
+}
+
+.poll-responses-tab input {
+	width: 400px
+}
+
+.poll-responses-tab li {
+	margin: 10px 0 0 0
+}
+
+label.bold {
+	font-weight: bold;
+	color:#000 !important;
+}
