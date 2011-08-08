@@ -117,7 +117,7 @@ function quickReplyClickAction() {
 	var recipients = []
 
 	$.each(getSelectedGroupElements('message'), function(index, value) {
-		recipients.push($("input:hidden[name=src-" + value.value + "]").val())
+			recipients.push($("input:hidden[name=src-" + value.value + "]").val())
 	});
 
 	$.ajax({
@@ -134,7 +134,9 @@ function deleteAllClickAction() {
 	var messageType = me.text();
 	var idsToDelete = []
 	$.each(getSelectedGroupElements('message'), function(index, value) {
+		if(isValid(value.value)) {
 			idsToDelete.push(value.value)
+		}
 	});
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
@@ -155,7 +157,9 @@ function archiveClickAction() {
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var idsToArchive = []
 	$.each(getSelectedGroupElements('message'), function(index, value) {
+		if(isValid(value.value)) {
 			idsToArchive.push(value.value)
+		}
 	});
 
 	$.ajax({
@@ -194,5 +198,9 @@ function highlightRow(id){
 	} else {
 		$("#message-"+id).removeClass('checked')
 	}
+}
+
+function isValid(value) {
+		return value != "0"
 }
 
