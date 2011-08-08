@@ -28,7 +28,7 @@ class Fmessage {
 		dateCreated = dateCreated ? dateCreated : new Date()
 		if(src) {
 			Contact.withNewSession { session ->
-				contactName = Contact.findByPrimaryMobile(src)?.name
+				contactName = Contact.findByPrimaryMobile(src)?.name ?: Contact.findBySecondaryMobile(src)?.name
 			}
 		}
 	}
