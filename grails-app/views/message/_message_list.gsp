@@ -17,8 +17,7 @@
 					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAllMessages()"/></td>
 					<td />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
-									params='[ownerId: "${ownerInstance?.id}"]' id='source-header'>
-					</g:sortableColumn>
+									params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
 		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 									params='[ownerId: "${ownerInstance?.id}"]' id="message-header" />
 					<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
@@ -38,7 +37,7 @@
 						</td>
 						<td>
 								<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
-									${m.displaySrc}
+									${m.displayName}
 								</g:link>
 						</td>
 						<td>
