@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.util.GrailsConfig
 import grails.converters.JSON
+import javax.servlet.http.HttpServletRequest
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -49,18 +50,18 @@ class MessageController {
 		def model = [messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
 					messageInstanceTotal: Fmessage.countInboxMessages(params)] << show(messageInstanceList)
-		if(request.xhr) {
+		if(isAjaxRequest()) {
 			render(template : "message_list", model: model)
 		}
 		model
 	}
-	
+
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params)
 		def model = [messageSection: 'sent',
 				messageInstanceList: messageInstanceList,
 				messageInstanceTotal: Fmessage.countSentMessages(params)] << show(messageInstanceList)
-		if(request.xhr) {
+		if(isAjaxRequest()) {
 			render(template : "message_list", model: model)
 		}
 		model
@@ -151,7 +152,7 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
-		if (request.xhr) {
+		if (isAjaxRequest()) {
 			render ""
 		} else {
 			redirect(action: params.messageSection, params: params)
@@ -206,5 +207,9 @@ class MessageController {
 			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+	}
+
+	private def isAjaxRequest() {
+		return request.xhr
 	}
 }

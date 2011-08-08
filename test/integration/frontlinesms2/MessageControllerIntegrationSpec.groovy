@@ -25,6 +25,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester').save(failOnError: true)
 		when:
 			controller.params.messageSection = 'inbox'
+			controller.params.archived = false
 			def model = controller.inbox()
 		then:
 			model.messageInstanceTotal == 2
@@ -39,6 +40,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			controller.params.messageSection = 'inbox'
+			controller.params.archived = false
 			def model = controller.inbox()
 		then:
 			model.messageInstanceTotal == 4
@@ -53,6 +55,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		when:
 			controller.params.id = id
 			controller.params.messageSection = 'inbox'
+			controller.params.archived = false
 			controller.inbox()
 		then:
 			Fmessage.get(id).read == true
@@ -73,6 +76,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
         setup:
              def message1 = new Fmessage(status:MessageStatus.INBOUND).save(failOnError: true)
         when:
+			controller.params.archived = false
             def resultMap =  controller.inbox()
         then:
             resultMap['messageInstance'].id == message1.id
