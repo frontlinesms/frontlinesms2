@@ -109,50 +109,50 @@ class MessageControllerSpec extends ControllerSpec {
 		})
 	}
 
-	def "should render message list template when the request to inbox is an ajax request"() {
+	def "inbox should render archive layout for archived messages"() {
 		def isStarred = true
-		controller.metaClass.isAjaxRequest = { -> return true}
-		controller.params.archived = false
+		controller.params.archived = true
+		def model
 		expect:
-		setupDataAndAssert(isStarred, 5, 1, {fmessage ->                                                        
-			Fmessage.metaClass.'static'.countInboxMessages = {params ->
-				assert isStarred == params['starred']
-				assert !params['archived']
-				return 2
-			}
+			setupDataAndAssert(isStarred, 5, 1, {fmessage ->
+				Fmessage.metaClass.'static'.countInboxMessages = {params ->
+					assert isStarred == params['starred']
+					assert params['archived']
+					return 2
+				}
 
-			Fmessage.metaClass.'static'.getInboxMessages = { params ->
-				if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (!params['archived']))
-					[fmessage]
-			}
+				Fmessage.metaClass.'static'.getInboxMessages = { params ->
+					if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (params['archived']))
+						[fmessage]
+				}
 
-			controller.inbox()
-		})
+				model = controller.inbox()
+			})
 		and:
-			renderArgs.template == 'message_list'
+			model.actionLayout == "archive"
 	}
 
-	def "should render message list template when the request to sent is an ajax request"() {
+	def "sent should render archive layout for archived messages"() {
 		def isStarred = true
-		controller.metaClass.isAjaxRequest = { -> return true}
-		controller.params.archived = false
+		controller.params.archived = true
+		def model
 		expect:
-		setupDataAndAssert(isStarred, 5, 1, {fmessage ->
-			Fmessage.metaClass.'static'.countSentMessages = {params ->
-				assert isStarred == params['starred']
-				assert !params['archived']
-				return 2
-			}
+			setupDataAndAssert(isStarred, 5, 1, {fmessage ->
+				Fmessage.metaClass.'static'.countSentMessages = {params ->
+					assert isStarred == params['starred']
+					assert params['archived']
+					return 2
+				}
 
-			Fmessage.metaClass.'static'.getSentMessages = { params ->
-				if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (!params['archived']))
-					[fmessage]
-			}
+				Fmessage.metaClass.'static'.getSentMessages = { params ->
+					if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (params['archived']))
+						[fmessage]
+				}
 
-			controller.sent()
-		})
+				model = controller.sent()
+			})
 		and:
-			renderArgs.template == 'message_list'
+			model.actionLayout == "archive"
 	}
 
 	def "should fetch all inbox messages"() {

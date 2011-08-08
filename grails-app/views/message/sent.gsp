@@ -1,7 +1,7 @@
 <!-<%@ page import="frontlinesms2.Contact" %>
 <html>
     <head>
-        <meta name="layout" content="messages" />
+        <meta name="layout" content="${actionLayout}" />
         <title>Sent</title>
     </head>
     <body>
