@@ -55,6 +55,7 @@ function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
 }
 
 $('.next').live('click', function() {
+	if($(this).hasClass('disabled')) return;
 	return moveToNextTab(true);
 });
 
