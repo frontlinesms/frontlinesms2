@@ -28,8 +28,8 @@ function moveAction() {
 	
 	$.ajax({
 		type:'POST',
-		data: {messageSection: section, messageId: mesId, ownerId: me.val()},
 		url: url_root + 'message/move',
+		data: {messageSection: section, ids: mesId, ownerId: me.val()},
 		success: function(data) {
 			window.location = location;
 		}
@@ -37,7 +37,11 @@ function moveAction() {
 }
 
 function moveMultipleMessages(object, location) {
-	var	checkedMessageIdList = $('input:hidden[name=checkedMessageIdList]').val();
+	var msgsToMove = []
+	$.each(getSelectedGroupElements('message'), function(index, value) {
+			msgsToMove.push(value.value)
+	});
+
 	if(object.hasClass('poll')) {
 		var section = 'poll';
 	} else if(object.hasClass('folder')) {
@@ -45,8 +49,9 @@ function moveMultipleMessages(object, location) {
 	}
 	$.ajax({
 		type:'POST',
-		data: {messageSection: section, ownerId: object.val(), checkedMessageIdList: checkedMessageIdList},
 		url: url_root + 'message/move',
+		traditional: true,
+		data: {messageSection: section, ownerId: object.val(), ids: msgsToMove},
 		success: function(data) {
 			window.location = location;
 		}

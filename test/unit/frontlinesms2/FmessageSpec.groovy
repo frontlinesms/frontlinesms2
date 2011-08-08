@@ -31,29 +31,6 @@ class FmessageSpec extends UnitSpec {
 			message.deleted == true
 	}
 
-	def "message doesn't have to have an activity"() {
-		given:
-			mockDomain(Fmessage)
-		when:
-			new Fmessage().save()
-		then:
-			Fmessage.count() == 1
-	}
-
-	def 'message can have an activity'() {
-		given:
-			mockDomain(Fmessage)
-			mockDomain(Poll)
-			mockDomain(PollResponse)
-			new Poll(title:'Test poll').save()
-			PollResponse response = new PollResponse(value:'yes').save()
-		when:
-			def m = new Fmessage(messageOwner:response).save()
-		then:
-			Fmessage.count() == 1
-			Fmessage.get(m.id).messageOwner == response
-	}
-
 	def 'messages are unstarred by default'() {
 		when:
 			Fmessage message = new Fmessage()

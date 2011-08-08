@@ -4,16 +4,41 @@ import frontlinesms2.enums.MessageStatus
 
 class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
+	def "message doesn't have to have an activity"() {
+		given:
+		when:
+			new Fmessage().save(failOnError:true, flush:true)
+		then:
+			Fmessage.count() == 1
+		cleanup:
+			Fmessage.findAll()*.delete()
+	}
+
+	def 'message can have an activity'() {
+		given:
+			new Poll(title:'Test poll').save()
+			PollResponse response = new PollResponse(value:'yes').save()
+		when:
+			def m = new Fmessage(src:"+123456789", messageOwner:response).save()
+		then:
+			Fmessage.count() == 1
+			Fmessage.get(m.id).messageOwner == response
+		cleanup:
+			Fmessage.findAll()*.delete()
+			PollResponse.findAll()*.delete()
+			Poll.findAll()*.delete()
+	}
+	
 	def 'get deleted messages gets all messages with deleted flag'() {
 		setup:
 				(1..3).each {
-				    new Fmessage(deleted:true).save(flush:true)
+				    new Fmessage(deleted:true,src:"+123456789").save(flush:true)
 				}
 				(1..2).each {
-					new Fmessage(deleted:false).save(flush:true)
+					new Fmessage(deleted:false,src:"+987654321").save(flush:true)
 				}
 		when:
-			def deletedMessages = Fmessage.getDeletedMessages(false)
+			def deletedMessages = Fmessage.getDeletedMessages(['starred': false])
 		then:
 			deletedMessages.size() == 3
 	}
@@ -23,7 +48,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			setUpMessages()
 			
 		when:
-			def messageCounts = Fmessage.countAllMessages(false)
+			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
 		then:
 			messageCounts['inbox'] == 2
 			messageCounts['sent'] == 2

@@ -39,8 +39,7 @@
 					<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 					<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 					<g:if test="${contactInstance?.primaryMobile}">
-						  <g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'],
-						  recipient: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send');" class="send-message">
+						  <g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send');" class="send-message">
 							  Send Message
 						  </g:remoteLink>
 					</g:if>
@@ -49,7 +48,7 @@
 					<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 					<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
 					<g:if test="${contactInstance?.secondaryMobile}">
-						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipient: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send');" class="send-message">
+						<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: ['tabs-1', 'tabs-3'], recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send');" class="send-message">
 							  Send Message
 						</g:remoteLink>
 					</g:if>
@@ -58,7 +57,7 @@
 					<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 					<g:textField name="email" id="email" value="${contactInstance?.email}"/>
 					<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">
-						<g:remoteLink controller="quickMessage" action="create" params="[recipient: contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
+						<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance.email]" onSuccess="loadContents(data);" class="quick_message">
 							Send Message
 						</g:remoteLink>
 					</g:if>

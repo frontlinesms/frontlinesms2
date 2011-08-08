@@ -7,7 +7,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(false)
+			def inbox = Fmessage.getInboxMessages(['starred':false, 'archived': false])
 		then:
 	        inbox*.src == ["+254778899", "Bob", "Alice", "9544426444"]
 	        inbox.every {it.status == MessageStatus.INBOUND}
@@ -20,7 +20,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(true)
+			def inbox = Fmessage.getInboxMessages(['starred':true, 'archived': false])
 		then:
 			inbox.size() == 1
 			inbox.every {it.starred}
@@ -33,8 +33,8 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			assert 4 == Fmessage.countInboxMessages(false)
-			def firstThreeInboxMsgs = Fmessage.getInboxMessages(false, 3, 0)
+			assert 4 == Fmessage.countInboxMessages(['archived': false, 'starred': false])
+			def firstThreeInboxMsgs = Fmessage.getInboxMessages(['archived': false,'starred':false, 'max': 3, 'offset': 0])
 		then:
 			firstThreeInboxMsgs.size() == 3
 			firstThreeInboxMsgs*.src == ["+254778899", "Bob", "Alice"]
@@ -46,7 +46,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages(false)
+			def sent = Fmessage.getSentMessages(['archived': false, 'starred':false])
 		then:
 			assert sent.size() == 2
 			sent.every { it.status == MessageStatus.SENT}
@@ -59,7 +59,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages(true)
+			def sent = Fmessage.getSentMessages(['archived': false, 'starred':true])
 		then:
 			assert sent.size() == 1
 			sent[0].status == MessageStatus.SENT
@@ -73,8 +73,8 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			assert 2 == Fmessage.countSentMessages(false)
-			def firstSentMsg = Fmessage.getSentMessages(false, 1, 0)
+			assert 2 == Fmessage.countSentMessages(['archived': false, 'starred': false])
+			def firstSentMsg = Fmessage.getSentMessages(['archived': false, 'starred':false, 'max': 1, 'offset': 0])
 		then:
 			firstSentMsg*.src == ['+254445566']
 		cleanup:
@@ -86,7 +86,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpFolderMessages()
 		when:
-			def results = Folder.findByName("home").getFolderMessages(false)
+			def results = Folder.findByName("home").getFolderMessages(['starred':false])
 		then:
 			results*.src == ["Jim", "Bob", "Jack"]
 			results.every {it.archived == false}
@@ -98,7 +98,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpFolderMessages()
 		when:
-			def results = Folder.findByName("home").getFolderMessages(true)
+			def results = Folder.findByName("home").getFolderMessages(['starred':true])
 		then:
 			results*.src == ["Jack"]
 			results.every {it.archived == false}
@@ -112,7 +112,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			setUpFolderMessages()
 		when:
 			assert 3 == Folder.findByName("home").countMessages(false)
-			def firstFolderMsg = Folder.findByName("home").getFolderMessages(false, 1, 0)
+			def firstFolderMsg = Folder.findByName("home").getFolderMessages(['starred':false, 'max':1, 'offset': 0])
 		then:
 			firstFolderMsg*.src == ['Jim']
 		cleanup:
@@ -123,7 +123,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(false)
+			def results = Fmessage.getPendingMessages(['starred':false])
 		then:
 		    results.size() == 2
 			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
@@ -136,7 +136,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(true)
+			def results = Fmessage.getPendingMessages(['starred':true])
 		then:
 		    results.size() == 1
 			results[0].status == MessageStatus.SEND_PENDING
@@ -150,7 +150,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def firstPendingMessage = Fmessage.getPendingMessages(false, 1, 0)
+			def firstPendingMessage = Fmessage.getPendingMessages(['starred':false, 'max':1, 'offset': 0])
 		then:
 			firstPendingMessage*.dst == ['dst1']
 	}
@@ -160,7 +160,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def results = Fmessage.getDeletedMessages(true)
+			def results = Fmessage.getDeletedMessages(['starred':true])
 		then:
 		    results.size() == 1
 			results[0].deleted
@@ -175,7 +175,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def results = Fmessage.getDeletedMessages(false)
+			def results = Fmessage.getDeletedMessages(['starred':false])
 		then:
 		    results.size() == 2
 			results[0].deleted
@@ -189,7 +189,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def firstDeletedMsg = Fmessage.getDeletedMessages(false, 1, 0)
+			def firstDeletedMsg = Fmessage.getDeletedMessages(['starred':false, 'max':1, 'offset': 0])
 		then:
 			firstDeletedMsg*.src == ['Jim']
 	}

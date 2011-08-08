@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div id="tabs">
 	<ol>
 		<g:each in="['tabs-1' : 'Enter Message', 'tabs-2' : 'Select Recipients', 'tabs-3' : 'Confirm']" var='entry' >
@@ -14,8 +14,5 @@
 		<g:render template="confirm"/>
 	</g:form>
 </div>
-
-
-
 
 

@@ -18,9 +18,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -36,9 +33,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('.message-name').text() == message.src
 			$('.message-date').text() == formatedDate
 			$('.message-body').text() == message.text
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def 'selected message is highlighted'() {
@@ -56,9 +50,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message//poll/${poll.id}/show/${bobMessage.id}"
 		then:
 			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 	
 	def 'activities should also list message counts'() {
@@ -69,9 +60,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollShowPage
 		then:
 			$('#activities-submenu li')*.text() ==  ['Football Teams (2)', 'Shampoo Brands (1)', 'Rugby Brands (0)']
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
@@ -83,15 +71,35 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 		when:
-			$("a", text:'Next')[0].jquery.trigger('click')
-			waitFor { $('#tabs-3').displayed }
-            $("a", text:"Confirm").click()
-			waitFor { $('#tabs-4').displayed }
+			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+            $("#tabs-3 a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-4 ').displayed }
+			$("#tabs-4 a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-5').displayed }
 			$("input", name:'title').value("POLL NAME")
 			$("input", id:'create-poll').click()
 			waitFor {!$("div.flash.message").text().isEmpty()}
 		then:
-			Poll.findByTitle("POLL NAME").responses*.value.containsAll("yes", "no")
+			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes","No", "Unknown")
+	}
+
+	def "should skip recipients tab when do not send message option is chosen"() {
+		when:
+			go "message"
+		then:
+			$("a", text: "Poll").click()
+			waitFor {$('#tabs-1').displayed}
+			$("input", name:'poll-type').value("standard")
+			$("input", value:'standard').jquery.trigger('click')
+			$("input", name:"collect-responses").value('no-message')
+		when:
+			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+			$("#tabs-3 a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-5 ').displayed }
+		then:
+			 $('#tabs-5 ').displayed
 	}
 
 

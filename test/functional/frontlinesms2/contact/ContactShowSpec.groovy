@@ -113,7 +113,7 @@ class ContactShowSpec extends ContactGebSpec {
 	  		go "contact/show/${alice.id}"
 		then:
 			$("#contact-info .send-message").each {
-	        	assert it.getAttribute('href') ==~ /.*recipient=\d+/
+	        	assert it.getAttribute('href') ==~ /.*recipients=\d+/
 			}
 	}
 	

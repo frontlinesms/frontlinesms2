@@ -6,9 +6,8 @@ class PollController {
 	}
 
 	def create = {
-		def pollInstance = new Poll()
-		pollInstance.properties = params
-		[pollInstance: pollInstance]
+		[contactList: Contact.list(),
+			groupList:Group.getGroupDetails()]
 	}
 
 	def save = {

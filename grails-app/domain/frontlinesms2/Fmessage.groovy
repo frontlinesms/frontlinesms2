@@ -7,7 +7,7 @@ class Fmessage {
 	String src
 	String dst
 	String text
-	String displaySrc
+	String contactName
 	Date dateCreated
 	Date dateReceived
 	boolean contactExists
@@ -15,17 +15,22 @@ class Fmessage {
 	boolean read
 	boolean deleted
 	boolean starred
-    boolean archived
+	boolean archived
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['displaySrc']
+
 	static mapping = {
 		sort dateCreated:'desc'
 		sort dateReceived:'desc'
 		autoTimestamp false
 	}
 
- 	def beforeInsert = {
-       dateCreated = dateCreated ? dateCreated : new Date()
+	def beforeInsert = {
+		dateCreated = dateCreated ? dateCreated : new Date()
+		if(src) {
+			Contact.withNewSession { session ->
+				contactName = Contact.findByPrimaryMobile(src)?.name
+			}
+		}
 	}
 	
 	static constraints = {
@@ -35,23 +40,24 @@ class Fmessage {
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
 		status(nullable:true)
+		contactName(nullable:true)
 	}
 	
 	static namedQueries = {
-			inbox { isStarred ->
+			inbox { isStarred, archived ->
 				and {
 					eq("deleted", false)
-					eq("archived", false)
+					eq("archived", archived)
 					if(isStarred)
 						eq("starred", true)
 					eq("status", MessageStatus.INBOUND)
 					isNull("messageOwner")
 				}
 			}
-			sent { isStarred ->
+			sent { isStarred, archived ->
 				and {
 					eq("deleted", false)
-					eq("archived", false)
+					eq("archived", archived)
 					eq("status", MessageStatus.SENT)
 					isNull("messageOwner")
 					if(isStarred)
@@ -101,7 +107,7 @@ class Fmessage {
 					ilike("text", "%${searchString}%")
 				and{
 					if(groupInstance) {
-						'in'("src",  groupMembers)
+						'in'("src",	 groupMembers)
 					}
 					if(messageOwner) {
 						'in'("messageOwner", messageOwner)
@@ -114,7 +120,7 @@ class Fmessage {
 				def groupMembers = groupInstance?.getAddresses()
 				and {
 					if(groupInstance) {
-						'in'("src",  groupMembers)
+						'in'("src",	 groupMembers)
 					}
 					if(messageOwner) {
 						'in'("messageOwner", messageOwner)
@@ -138,7 +144,7 @@ class Fmessage {
 		def p = PollResponse.withCriteria {
 			messages {
 				eq('deleted', false)
-                eq('archived', false)
+				eq('archived', false)
 				eq('id', this.id)
 			}
 		}
@@ -174,43 +180,43 @@ class Fmessage {
 	}
 	
 	def archive() {
-        this.archived = true
-        this
-    }
+		this.archived = true
+		this
+	}
 
 	static def getFolderMessages(folderId) {
 		def folder = Folder.get(folderId)
-		def messages = Fmessage.owned(folder).list(sort:"dateReceived", order:"desc")
+		def messages = Fmessage.owned(folder).list()
 		messages
 	}
 
-	static def getInboxMessages(isStarred, max=null, offset=null) {
-		def messages = Fmessage.inbox(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
+	static def getInboxMessages(params) {
+		def messages = Fmessage.inbox(params['starred'], params["archived"]).list(params)
 		messages
 	}
 
-	static def getSentMessages(isStarred, max=null, offset=null) {
-		def messages = Fmessage.sent(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
+	static def getSentMessages(params) {
+		def messages = Fmessage.sent(params['starred'],  params["archived"]).list(params)
 		messages
 	}
 
-	static def getPendingMessages(isStarred, max=null, offset=null) {
-		def messages = Fmessage.pending(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
+	static def getPendingMessages(params) {
+		def messages = Fmessage.pending(params['starred']).list(params)
 		messages
 	}
 
-	static def getDeletedMessages(isStarred, max=null, offset=null) {
-		def messages = Fmessage.deleted(isStarred).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
+	static def getDeletedMessages(params) {
+		def messages = Fmessage.deleted(params['starred']).list(params)
 		messages
 	}
 
-	static def countInboxMessages(isStarred) {
-		def messageCount = Fmessage.inbox(isStarred).count()
+	static def countInboxMessages(params) {
+		def messageCount = Fmessage.inbox(params['starred'], params['archived']).count()
 		messageCount
 	}
 	
-	static def countSentMessages(isStarred) {
-		def messageCount = Fmessage.sent(isStarred).count()
+	static def countSentMessages(params) {
+		def messageCount = Fmessage.sent(params['starred'], params['archived']).count()
 		messageCount
 	}
 	
@@ -229,9 +235,9 @@ class Fmessage {
 		messageCount
 	}
 	
-	static def countAllMessages(isStarred) {
-		def inboxCount = Fmessage.countInboxMessages()
-		def sentCount = Fmessage.countSentMessages()
+	static def countAllMessages(params) {
+		def inboxCount = Fmessage.countInboxMessages(params)
+		def sentCount = Fmessage.countSentMessages(params)
 		def pendingCount = Fmessage.countPendingMessages()
 		def deletedCount = Fmessage.countDeletedMessages()
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
@@ -244,7 +250,6 @@ class Fmessage {
 	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
 		if(!searchString) return []
 		def searchResults = Fmessage.searchMessages(searchString, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
-		searchResults*.updateDisplaySrc()
 		searchResults
 	}
 

@@ -3,6 +3,9 @@
 		<g:hiddenField name="checkedMessageIdList" value=""/>
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
+		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
+				message(code: 'fmessage.src.label', default: 'To')
+	 			: message(code: 'fmessage.dst.label', default: 'From')}" />
 		<g:if test="${messageSection == 'result'}">
 		  	<g:hiddenField name="activityId" value="${params.activityId}"/>
 		  	<g:hiddenField name="groupId" value="${params.groupId}"/>
@@ -12,15 +15,14 @@
 			<thead>
 				<tr>
 					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAllMessages()"/></td>
-					<td></td>
-					<g:if test="${messageSection == 'sent' || messageSection == 'pending'}">
-				    	<td><g:message code="fmessage.src.label" default="To"/></td>
-				    </g:if>
-				    <g:else>
-				    	<td><g:message code="fmessage.src.label" default="From"/></td>
-				    </g:else>
-				    <td><g:message code="fmessage.text.label" default="Message"/></td>
-				    <td><g:message code="fmessage.date.label" default="Date"/></td>
+					<td />
+				    	<g:sortableColumn property="contactName" title="${messageLabel}"
+									params='[ownerId: "${ownerInstance?.id}"]' id='source-header'>
+					</g:sortableColumn>
+		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+									params='[ownerId: "${ownerInstance?.id}"]' id="message-header" />
+					<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+									params='[ownerId: "${ownerInstance?.id}"]' id="timestamp-header" defaultOrder="desc" />
 				</tr>
 			</thead>
 			<tbody>

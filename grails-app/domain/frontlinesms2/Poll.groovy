@@ -3,6 +3,8 @@ package frontlinesms2
 class Poll {
 	String title
 	String autoReplyText
+	String instruction
+
 	static hasMany = [responses: PollResponse]
 	static fetchMode = [responses: "eager"]
 
@@ -13,18 +15,15 @@ class Poll {
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoReplyText(nullable: true, blank: false)
+		instruction(nullable: true)
 	}
 
 	static mapping = {
 		responses cascade: 'all'
 	}
 
-	def getMessages(isStarred = false, max, offset) {
-		Fmessage.owned(isStarred, this.responses).list(sort: "dateReceived", order: "desc", max: max, offset: offset)
-	}
-
-	def getMessages(isStarred = false) {
-		getMessages(isStarred, null, null)
+	def getMessages(params) {
+		Fmessage.owned(params['starred'], this.responses).list(params)
 	}
 
 	def countMessages(isStarred = false) {
@@ -43,9 +42,22 @@ class Poll {
 	}
 
 	static Poll createPoll(attrs) {
-		def responseList = attrs.responses.tokenize()
-		if (!responseList.contains('Unknown')) responseList =  (responseList << ['Unknown'])
-		attrs['responses'] = responseList.flatten().collect {new PollResponse(value: it)}
+		def responses =[]
+		if(attrs['poll-type'] == 'standard') {
+			['Yes','No'].each { responses << new PollResponse(value:it, key:it)}
+		}
+		else
+		{
+			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
+			choices.each { k,v -> 
+				if(v) 
+					responses << new PollResponse(value: v, key:k)
+			}
+		}
+
+		def unknownResponse = 'Unknown'
+		responses << new PollResponse(value: unknownResponse, key: unknownResponse)
+		attrs['responses'] = responses
 		new Poll(attrs)
 	}
 }

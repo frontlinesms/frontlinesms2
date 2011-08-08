@@ -2,9 +2,11 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 import frontlinesms2.enums.MessageStatus
+import frontlinesms2.utils.*
 
+@Mixin(GebUtil)
 class MessageListSpec extends grails.plugin.geb.GebSpec {
-    
+
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
             to MessagesPage
@@ -59,6 +61,22 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
+	
+	def 'Should be able to sort messages'() {
+		given:
+			createTestMessages()
+		when:
+			to MessagesPage
+			$("#source-header a").click()
+		then:
+			getColumnAsArray($("table tr"), 2) == ['From', 'Contact 1', 'Contact 2']
+		when:
+			$("#message-header a").click()
+		then:
+			getColumnAsArray($("table tr"), 3) == ['Message', 'An inbox message', 'Another inbox message']		
+		cleanup:
+			deleteTestMessages()
+	}
 	   
     def assertMenuItemSelected(String itemText) {
         def selectedChildren = $('#messages-menu li.selected')
@@ -68,20 +86,23 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     }
 	
 	def createTestMessages() {
-		Fmessage inboxMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message').save(flush:true)
-		Fmessage anotherInboxMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message').save(flush:true)
+		9.times {
+			new Contact(name:"Contact ${it}", primaryMobile:"123456789${it}").save(flush:true)
+		}
+		Fmessage inboxMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message', src:'1234567891', dateCreated:new Date()-10).save(flush:true)
+		Fmessage anotherInboxMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message', src:'1234567892', dateCreated:new Date()-20).save(flush:true)
 		
-		Fmessage sentMessage = new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message').save(flush:true)
-		Fmessage anotherSentMessage = new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message').save(flush:true)
-		Fmessage deletedSentMessage = new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message').save(flush:true)
+		Fmessage sentMessage = new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message',src:'1234567893').save(flush:true)
+		Fmessage anotherSentMessage = new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message',src:'1234567894').save(flush:true)
+		Fmessage deletedSentMessage = new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message',src:'1234567895').save(flush:true)
 		
-		Fmessage sentFailedMessage = new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
-		Fmessage sentPendingMessage = new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)		
+		Fmessage sentFailedMessage = new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message',src:'1234567896').save(flush:true)
+		Fmessage sentPendingMessage = new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message',src:'1234567897').save(flush:true)		
 	}
 	
 	def createReadUnreadMessages() {
-		Fmessage readMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true).save(flush:true)
-		Fmessage unreadMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false).save(flush:true)
+		Fmessage readMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true,src:'1234567898').save(flush:true)
+		Fmessage unreadMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false,src:'1234567899').save(flush:true)
 	}
 	
 	def deleteTestMessages() {

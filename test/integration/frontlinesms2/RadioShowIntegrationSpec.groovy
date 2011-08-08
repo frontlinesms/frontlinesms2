@@ -14,21 +14,21 @@ class RadioShowIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should fetch all messages for a radio show"() {
 		when:
-			def results = RadioShow.findByName("Health & fitness").getShowMessages(false)
+			def results = RadioShow.findByName("Health & fitness").getShowMessages(['starred':false])
 		then:
 			results*.text.containsAll(["eat fruits", "eat vegetables", "excerise"])
 	}
 
 	def "should fetch all messages based on offset and max parameters"() {
 		when:
-			def results = RadioShow.findByName("Health & fitness").getShowMessages(false, 2, 0)
+			def results = RadioShow.findByName("Health & fitness").getShowMessages(['starred':false, 'max':2, 'offset': 0])
 		then:
 			results.size() == 2
 	}
 
 	def "should fetch all starred radio show messages"() {
 		when:
-			def results = RadioShow.findByName("Health & fitness").getShowMessages(true)
+			def results = RadioShow.findByName("Health & fitness").getShowMessages(['starred':true])
 		then:
 			results*.text == ["eat fruits"]
 	}

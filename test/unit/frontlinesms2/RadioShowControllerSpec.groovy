@@ -23,7 +23,7 @@ class RadioShowControllerSpec extends ControllerSpec {
 		when:
 			controller.save()
 		then:
-			controller.flash.message == "Name cannot be blank"
+			controller.flash.message == "Name is not valid"
 			controller.redirectArgs.controller == "message"
 			controller.redirectArgs.action == "inbox"
 	}
