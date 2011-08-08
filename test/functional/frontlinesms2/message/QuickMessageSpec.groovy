@@ -70,7 +70,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 
 
-	def "should send the message to the selected group"() {
+	def "should select members belonging to the selected group"() {
 		setup:
 			def group = new Group(name: "group1").save(flush: true)
 			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
