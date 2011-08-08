@@ -58,7 +58,6 @@ class Group {
 	
 	static removeContactFromGroups(Contact contact) {
 		def contactGroups = contact.groups
-		println "Removing $contact from groups"
 		contactGroups.each() { cg ->
 			cg.getMembers().remove(contact)
 		}
