@@ -25,6 +25,7 @@
 				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 				<g:if test="${contactInstance.id}">
 					<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
+					<g:actionSubmit class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/>
 				</g:if>
 			  	<g:else>
 					<g:actionSubmit class="save" action="saveContact" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
