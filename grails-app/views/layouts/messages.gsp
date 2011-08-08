@@ -7,7 +7,8 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
-		<g:javascript src="message/actions.js"></g:javascript>
+		<g:javascript src="message/check_message.js"></g:javascript>
+		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
 		<g:javascript src="popup.js" />
 		<g:javascript src="/message/move_dropdown.js" />
