@@ -51,7 +51,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $("div.flash.message").text().contains("archived") }
 			go "archive"
 			$("#sent").click()
-			waitFor { $("a", text:"hi Mary").displayed}
+			waitFor { $("table", id:'messages').displayed}
 		then:
 	        $("a", text:"hi Mary").displayed
 	}
