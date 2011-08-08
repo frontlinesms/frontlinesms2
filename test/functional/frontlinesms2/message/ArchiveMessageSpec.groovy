@@ -9,7 +9,7 @@ import frontlinesms2.enums.MessageStatus
 class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.getInboxMessages(['starred':false]).size() == 3
+		assert Fmessage.getInboxMessages(['starred':false, 'archived': false]).size() == 3
 		assert Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 2
 		assert Folder.findByName('Fools').messages.size() == 2
 	}
@@ -20,12 +20,40 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def 'archived messages do not show up in inbox view'() {
 		when:
+			go "archive"
+			waitFor { $("#messages").text() == "No messages"}
+		then:
+			$("#messages").text() == 'No messages'
+		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			def btnArchive = $('#message-details .buttons #message-archive')
 			btnArchive.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
+			go "archive"
+			waitFor { $("a", text:"hi Bob").displayed}
 		then:
-			Fmessage.getInboxMessages(['starred':false]).size() == 2
+	        $("a", text:"hi Bob").displayed
+	}
+
+	def 'archived messages do not show up in sent view'() {
+		setup:
+			new Fmessage(src:'src', status: MessageStatus.SENT,dst:'+254112233', text:'hi Mary').save(flush: true)
+		when:
+			go "archive"
+			$("#sent").click()
+			waitFor { $("#messages").text() == "No messages"}
+		then:
+			$("#messages").text() == 'No messages'
+		when:
+			go "message/sent"
+			def btnArchive = $('#message-details .buttons #message-archive')
+			btnArchive.click()
+			waitFor { $("div.flash.message").text().contains("archived") }
+			go "archive"
+			$("#sent").click()
+			waitFor { $("a", text:"hi Mary").displayed}
+		then:
+	        $("a", text:"hi Mary").displayed
 	}
 
 	def 'archived messages do not show up in poll view'() {
@@ -81,7 +109,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 				new Fmessage(src:'+254445566', dst:'+254112233', text:'test')].each() {
 					it.save(failOnError:true)
 				}
-
+		
 		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
 		def chickenResponse = new PollResponse(value:'chicken')

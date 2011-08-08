@@ -6,7 +6,7 @@ import frontlinesms2.enums.MessageStatus
 class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.getInboxMessages(['starred':false]).size() == 3
+		assert Fmessage.getInboxMessages(['starred':false, 'archived': false]).size() == 3
 		assert Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 2
 		assert Folder.findByName('Fools').messages.size() == 2	
 	}
@@ -22,7 +22,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			btnDelete.click()
 			waitFor { $("div.flash.message").text().contains("deleted") }
 		then:
-			Fmessage.getInboxMessages(['starred':false]).size() == 2
+			Fmessage.getInboxMessages(['starred':false, 'archived': false]).size() == 2
 	}
 
 	def 'deleted messages do show up in trash view'() {

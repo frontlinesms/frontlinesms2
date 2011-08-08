@@ -44,20 +44,20 @@ class Fmessage {
 	}
 	
 	static namedQueries = {
-			inbox { isStarred ->
+			inbox { isStarred, archived ->
 				and {
 					eq("deleted", false)
-					eq("archived", false)
+					eq("archived", archived)
 					if(isStarred)
 						eq("starred", true)
 					eq("status", MessageStatus.INBOUND)
 					isNull("messageOwner")
 				}
 			}
-			sent { isStarred ->
+			sent { isStarred, archived ->
 				and {
 					eq("deleted", false)
-					eq("archived", false)
+					eq("archived", archived)
 					eq("status", MessageStatus.SENT)
 					isNull("messageOwner")
 					if(isStarred)
@@ -183,12 +183,12 @@ class Fmessage {
 	}
 
 	static def getInboxMessages(params) {
-		def messages = Fmessage.inbox(params['starred']).list(params)
+		def messages = Fmessage.inbox(params['starred'], params["archived"]).list(params)
 		messages
 	}
 
 	static def getSentMessages(params) {
-		def messages = Fmessage.sent(params['starred']).list(params)
+		def messages = Fmessage.sent(params['starred'],  params["archived"]).list(params)
 		messages
 	}
 
@@ -202,13 +202,13 @@ class Fmessage {
 		messages
 	}
 
-	static def countInboxMessages(isStarred) {
-		def messageCount = Fmessage.inbox(isStarred).count()
+	static def countInboxMessages(params) {
+		def messageCount = Fmessage.inbox(params['starred'], params['archived']).count()
 		messageCount
 	}
 	
-	static def countSentMessages(isStarred) {
-		def messageCount = Fmessage.sent(isStarred).count()
+	static def countSentMessages(params) {
+		def messageCount = Fmessage.sent(params['starred'], params['archived']).count()
 		messageCount
 	}
 	
@@ -227,9 +227,9 @@ class Fmessage {
 		messageCount
 	}
 	
-	static def countAllMessages(isStarred) {
-		def inboxCount = Fmessage.countInboxMessages()
-		def sentCount = Fmessage.countSentMessages()
+	static def countAllMessages(params) {
+		def inboxCount = Fmessage.countInboxMessages(params)
+		def sentCount = Fmessage.countSentMessages(params)
 		def pendingCount = Fmessage.countPendingMessages()
 		def deletedCount = Fmessage.countDeletedMessages()
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
