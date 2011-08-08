@@ -15,14 +15,7 @@ class MessageController {
 		params['archived'] = params['archived'] ? params['archived'].toBoolean()  : false
 		true
 	}
-	
-	def beforeInterceptor = {
-		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
-		params['offset'] = params['offset'] ?: 0
-		params['starred'] = params['starred'] ?: false
-		true
-	}
-	
+
 	def index = {
 		redirect(action:'inbox')
 	}

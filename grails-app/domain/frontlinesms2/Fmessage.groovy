@@ -28,7 +28,7 @@ class Fmessage {
 		dateCreated = dateCreated ? dateCreated : new Date()
 		if(src) {
 			Contact.withNewSession { session ->
-				contactName = Contact.findByPrimaryMobile(src)?.name
+				contactName = Contact.findByPrimaryMobile(src)?.name ?: Contact.findBySecondaryMobile(src)?.name
 			}
 		}
 	}
@@ -152,16 +152,8 @@ class Fmessage {
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
 	}
 	
-	def updateDisplaySrc() {
-		if(src) {
-			def c = Contact.findByPrimaryMobile(src) ?: Contact.findBySecondaryMobile(src)
-			displaySrc = c? c.name: src
-			contactExists = c? true: false
-		} else {
-			def c = Contact.findByPrimaryMobile(dst) ?: Contact.findBySecondaryMobile(dst)
-			displaySrc = c? c.name: dst
-			contactExists = c? true: false
-		}
+	def getDisplayName() {
+		contactName?:src
 	}
 	
 	def toDelete() {
