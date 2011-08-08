@@ -11,6 +11,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def setup() {
 		controller = new MessageController()
+		controller.beforeInterceptor.call()
 	}
 	
 	def cleanup() {
