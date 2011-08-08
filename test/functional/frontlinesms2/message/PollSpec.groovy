@@ -118,6 +118,52 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#tabs-2').displayed 
 	}
 
+	def "should enter instructions for the poll and validate multiple choices user entered"() {
+		when:
+			go "message"
+			$("a", text: "Poll").click()
+		    waitFor {$('#tabs-1').displayed}
+			$("input", name:'poll-type').value("multiple")
+            $("textarea", name:'question').value("How often do you drink coffee?")
+            $("a", text: "Next").click()
+        then:
+			waitFor {$('#tabs-2').displayed}
+			$("label[for='choiceA']").hasClass('bold') == false
+			$("label[for='choiceA']").hasClass('bold') == false
+		when:
+			$("input", name:'instruction').value("Reply A,B etc")
+            keyInData('choiceA', "Never")
+            keyInData('choiceB',"Once a day")
+            keyInData('choiceC', "Twice a day")
+            $("a", text: "Next").click()
+		then:
+			$("label[for='choiceA']").hasClass('bold') == true
+			$("label[for='choiceA']").hasClass('bold') == true
+			waitFor {$('#tabs-3').displayed}
+		when:
+            $("textarea", name:'autoReplyText').value("Thanks for participating...")
+            $("a", text: "Next").click()
+		then:
+			waitFor {$('#tabs-4').displayed}
+		when:
+			$("a", text: "Next").click()
+		then:
+			waitFor { $('#tabs-5 ').displayed }
+            $("input", name:'title').value("Cofee Poll")
+            $("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day Reply A,B etc"
+            $("#confirm-recepients-count").text() == "0 contacts selected"
+            $("#auto-reply-read-only-text").text() == "Thanks for participating..."
+		when:
+			$("#create-poll").click()
+		then:
+			waitFor { $("div.flash.message").text().contains("The poll has been created!") }
+	}
+	
+	def keyInData(String selector, String value) {
+		def element = $("input", name:selector) 
+		element.value(value)
+		element.jquery.trigger('blur')
+	}
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
@@ -135,4 +181,3 @@ class PollShowPage extends geb.Page {
 		title.endsWith('Poll')
 	}
 }
-
