@@ -21,7 +21,9 @@
 	position: absolute;
 	width: 135px;
 	height: 365px;
-	padding: 17px;
+	padding-top: 17px;
+	padding-right: 17px;
+	padding-bottom: 17px;
 	border-right: 1px solid #9E9E9E;
 }
 
@@ -34,6 +36,8 @@
 .ui-tabs-nav li {
 	width: 100%;
 	height: 26px;
+	padding-left: 17px;
+	display: block;
 }
 
 .ui-tabs-nav li a {

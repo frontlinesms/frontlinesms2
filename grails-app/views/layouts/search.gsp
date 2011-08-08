@@ -20,12 +20,9 @@
 	        <div class="main">
 				<g:render template="menu"/>
 				<div class="content">
-					<div class="content-header">
-						<div id="message-title">
+					<div id='search-header' class="content-header">
+						<div id="search-title">
 							<h2>Search</h2>
-							<p id="search-description">
-								${searchDescription}
-				  			</p>
 			  			</div>
 			  			<ol>
 				  			<li>
@@ -34,6 +31,9 @@
 								</g:remoteLink>
 							</li>
 						</ol>
+						<p id="search-description">
+							${searchDescription}
+				  		</p>
 					</div>
 					<div class="content-body">
 						<g:render template="/message/message_list"/>

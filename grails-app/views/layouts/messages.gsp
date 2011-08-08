@@ -25,10 +25,13 @@
 	        <div class="main">
 				<g:render template="menu"/>
 				<div class="content">
-					<div class="content-header">
-						<g:if test="${messageSection == 'poll'}">
+					<g:if test="${messageSection == 'poll'}">
+						<div id='poll-header' class="content-header">
 							<g:render template="poll_header"/>
-						</g:if>
+					</g:if>
+					<g:else>
+						<div id='message-header' class="content-header">
+					</g:else>
 						<g:elseif test="${messageSection == 'folder'}">
 							<h2 id="message-title">${ownerInstance?.name}</h2>
 						</g:elseif>
