@@ -98,6 +98,15 @@ class ContactController {
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
 		redirect(action:'createContact')
 	}
+	
+	def deleteContact = {
+		withContact { contactInstance ->
+			Group.removeContactFromGroups(contactInstance)
+			Contact.get(contactInstance.id).delete()
+		}
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), 'deleted'])}"
+		redirect(action: "list")
+	}
 
 	def saveGroup = {
 		def groupInstance = new Group(params)
