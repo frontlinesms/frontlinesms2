@@ -134,6 +134,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			btnArchive.click()
 			waitFor { $("div.flash.message").displayed }
 		then:
+			$("div.flash.message").text().contains("2 messages")
 			at MessagesPage
 		when:
 			waitFor { $("div.flash.message").displayed }
