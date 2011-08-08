@@ -104,7 +104,7 @@ class ContactController {
 			Group.removeContactFromGroups(contactInstance)
 			Contact.get(contactInstance.id).delete()
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), 'deleted'])}"
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
 		redirect(action: "list")
 	}
 
