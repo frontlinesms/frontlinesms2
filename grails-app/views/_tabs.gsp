@@ -1,15 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ul id="main-tabs">
 	<li><g:link
-			class="tab ${['message','folder','poll'].contains(params.controller)?'selected':''}" url="${[controller:'message']}"
+			class="tab ${!(params['archived']) && ['message','folder','poll'].contains(params.controller)?'selected':''}" url="${[controller:'message']}"
 			id="tab-messages">Messages (${frontlinesms2.Fmessage.countUnreadMessages()})</g:link></li>
-	<li><g:link class="tab ${params.controller=='archive'?'selected':''}" url="${[controller:'archive']}">Archive</g:link></li>
+	<li><g:link class="tab ${params['archived'] ? 'selected':''}" controller='message' action="inbox" params="['archived': true]">Archive</g:link></li>
 	<li><g:link class="tab ${params.controller=='contact'?'selected':''}" url="${[controller:'contact']}" id="tab-contacts">Contacts</g:link></li>
 	<li><g:link class="tab ${params.controller=='status'?'selected':''}" url="${[controller:'status']}" id="tab-status"><img id='indicator'/> Status</g:link></li>
 	<li><g:link class="tab ${params.controller=='search'?'selected':''}" url="${[controller:'search']}" id="tab-search">Search</g:link></li>
 	<li><g:link class="tab ${params.controller=='connection'?'selected':''}" url="${[controller:'settings']}" id="tab-settings">Settings & Plugins</g:link></li>
 </ul>
-<script>
+<script>                       
 	$.ajax({
 		type:'GET',
 		url: '/frontlinesms2/status/trafficLightIndicator',

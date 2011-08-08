@@ -20,7 +20,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def 'archived messages do not show up in inbox view'() {
 		when:
-			go "archive"
+			goToArchivePage()
 			waitFor { $("#messages").text() == "No messages"}
 		then:
 			$("#messages").text() == 'No messages'
@@ -29,7 +29,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			def btnArchive = $('#message-details .buttons #message-archive')
 			btnArchive.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
-			go "archive"
+			goToArchivePage()
 			waitFor { $("a", text:"hi Bob").displayed}
 		then:
 	        $("a", text:"hi Bob").displayed
@@ -39,7 +39,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		setup:
 			new Fmessage(src:'src', status: MessageStatus.SENT,dst:'+254112233', text:'hi Mary').save(flush: true)
 		when:
-			go "archive"
+		    goToArchivePage()
 			$("#sent").click()
 			waitFor { $("#messages").text() == "No messages"}
 		then:
@@ -49,7 +49,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			def btnArchive = $('#message-details .buttons #message-archive')
 			btnArchive.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
-			go "archive"
+			goToArchivePage()
 			$("#sent").click()
 			waitFor { $("a", text:"hi Mary").displayed}
 		then:
@@ -124,6 +124,12 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		fools.addToMessages(message1)
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)
+	}
+
+	private def goToArchivePage() {
+		go ""
+		$("a", class:"tab",text: "Archive").click()
+		waitFor { $("a", text: 'Inbox Archive').displayed}
 	}
 
 	static deleteTestData() {
