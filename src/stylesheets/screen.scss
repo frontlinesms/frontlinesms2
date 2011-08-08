@@ -108,18 +108,16 @@ body {
 		.context-menu {
 			@include column(4, false);
 			text-align: left;
-			padding-left: 40px;
 			margin-right: 0px;
 			border-right: 1px solid #9E9E9E;
 			
-			
-			
-			.section { padding-top: 20px; }
+			.section { padding-top: 17px; }
 			
 			h2 {
 				text-transform:uppercase;
 				padding-top: 7px;
 				padding-bottom: 7px;
+				padding-left: 40px;
 			}
 			
 			ol { display: block; }
@@ -127,6 +125,7 @@ body {
 			.sub-menu li {
 				height: 26px;
 				display: block;
+				padding-left: 40px;
 				
 				a {
 					display: block;
@@ -137,13 +136,15 @@ body {
 			
 			.create {
 				padding-top: 7px;
+				
 				a {
-					width: 110px;
+					width: 120px;
 					height: auto;
 					background-image:url('../images/buttons/button_default.png');
 					background-repeat:no-repeat;
 					background-size: 100% 100%;
 					padding: 8px 10px;
+					text-align: center;
 				}
 			}
 				
@@ -155,21 +156,38 @@ body {
 			
 			.content-header {
 				@include clearfix; // required
-				height: 43px;
 				@include horizontal-list(4px, right);
 				width: 100%;
+				margin-right: 0px;
 				
-				#message-title, #contact-title {
+				#search-header {
+					border-bottom: 1px solid #9E9E9E;
+					background-color: #E0F0DE;
+				}
+				
+				#message-title, #contact-title, #search-title {
 					@include clearfix;
 					@include column(10, false);
 					text-transform: uppercase;
-					padding: 17px 0px 17px 17px;
+					height: 43px;
+				}
+				
+		
+				h2 {
+					padding: 17px;
 				}
 				
 				ol {		
 					@include clearfix;
-					@include column(13, true);	
+					@include column(14, true);
+					height: 43px;
+						
 					li {
+					
+						.first {
+							padding-right: 17px;
+						}
+						
 						display: block;
 						text-align: center;
 						padding: 17px 17px 17px 0;
@@ -183,6 +201,13 @@ body {
 					}
 				}
 			}
+			
+			#search-description, #poll-description {
+					height: 77px;
+					padding: 17px 17px 0 17px;
+					background-color: #E0F0DE;
+					@include column(24, true);
+				}
 			
 			.content-body {
 				@include clearfix; // required
@@ -221,9 +246,11 @@ body {
 					
 					li { height: 26px; }
 					a {
-					padding-top: 5px;
-					padding-bottom: 5px;
-					display: block; }
+						height: 26px;
+						padding-top: 5px;
+						padding-bottom: 5px;
+						display: block;
+					}
 				}
 				
 				#contact_details {
@@ -282,7 +309,10 @@ body {
 					
 					li { height: 10px; }
 					
-					a { display: block; }
+					a {
+						display: block;
+						height: 26px;
+					}
 				}
 					
 				#message-details {
