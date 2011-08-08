@@ -49,9 +49,10 @@ function moveToTabBy(index) {
 function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
 	onSuccess = onSuccess || null
 	if (canMoveToNextTab) {
-		moveToTabBy(1);
 		if (onSuccess != null)
 			onSuccess()
+		else
+			moveToTabBy(1);
 	}
 	else
 		onFailure()
@@ -72,7 +73,10 @@ $('.check-bound-text-area').live('focus', function() {
 	$('#' + checkBoxId).attr('checked', true);
 });
 
-function selectCheckbox(value) {
-	$('input[value=' + value + ']').attr('checked', true);
+function findInputWithValue(value) {
+	return $('input[value=' + "'" + value + "'" + ']');
+}
 
+function isCheckboxSelected(value) {
+	return findInputWithValue(value).is(':checked')
 }

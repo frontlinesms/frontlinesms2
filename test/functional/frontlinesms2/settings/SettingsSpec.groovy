@@ -13,7 +13,7 @@ class SettingsSpec extends grails.plugin.geb.GebSpec {
 			to ContactListPage
 			def list = $("ul", id:"global-nav").children('li')
 		then:
-			assert list*.text() == ['Messages (0)','Contacts','Status', 'Search']
+			assert list*.text() == ['Messages (0)', 'Archives', 'Contacts','Status', 'Search']
 	}
 	
 	def 'settings menu item is available in system menu'() {

@@ -33,9 +33,9 @@ class Group {
 		members*.primaryMobile
 	}
 
-	static def getGroupDetails() {
+	static HashMap<String, List<String>> getGroupDetails() {
 		def resultMap= [:]
-		Group.list().each {resultMap[it.name] = it.members.size()}
+		Group.list().each {resultMap[it.name] = it.getAddresses()}
 		resultMap
 	}
 

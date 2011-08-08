@@ -13,7 +13,7 @@ class RadioShowController {
 		if (showInstance.validate())
 			showInstance.save()
 		else
-			flash.message = "Name cannot be blank"
+			flash.message = "Name is not valid"
 			redirect(controller: 'message', action: "inbox")
 	}
 

@@ -85,6 +85,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def lstFields = $("#custom-field-list")
 			lstFields.find('a').first().click()
 			$("#contact-details .update").click()
+			waitFor {$("div.flash.message").displayed}
 		then:
 			bob.getCustomFields() == null
 	}
@@ -98,6 +99,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def inputField =  $("#contact-details ").find('input', name:'lake')
 			inputField.value('erie')
 			$("#contact-details .update").click()
+			waitFor {$("div.flash.message").displayed}
 		then:
 			bob.refresh()
 			println "Bob has fields: ${bob.customFields}"
@@ -111,6 +113,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
 			fieldSelecter.value('lake')
 			$("#contact-details .update").click()
+			waitFor {$("div.flash.message").displayed}
 		then:
 			bob.refresh()
 			bob.customFields.name == ['town']

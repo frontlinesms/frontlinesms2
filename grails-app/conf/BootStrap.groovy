@@ -69,8 +69,8 @@ class BootStrap {
 						it.save(failOnError: true)
 					}
 
-			[Poll.createPoll(title: 'Football Teams', responses: "manchester barcelona"),
-					Poll.createPoll(title: 'Shampoo Brands', responses: 'pantene oriele')].each() {
+			[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona'),
+					Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele')].each() {
 				it.save(failOnError:true, flush:true)
 			}
 
@@ -163,8 +163,9 @@ class BootStrap {
 				if(osNameString.contains(name)) return name
 			}
 		}.call()
-		
-		def architecture = System.properties['os.arch'].contains('64')? 'x86_64': 'i686'
+
+		def osArch = System.properties['os.arch']
+		def architecture = osArch=='amd64'?'amd64': osArch.contains('64')? 'x86_64': 'i686'
 		
 		log.info "Adding $jniPath/$os/$architecture to library paths..."
 		addJavaLibraryPath "$jniPath/$os/$architecture"

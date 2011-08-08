@@ -141,7 +141,6 @@ class InboxSpec extends MessageGebSpec {
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'+254999999').getAttribute('checked')
-			!$('input', value:'+254778899').getAttribute('checked')
 		cleanup:
 			deleteTestMessages()
 			deleteTestContacts()

@@ -1,4 +1,4 @@
-<div id="tabs-4">
+<div id="tabs-5">
 	Name this poll:
 	<g:textField name="title"></g:textField>
 </div>
