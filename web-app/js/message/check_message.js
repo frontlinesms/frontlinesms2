@@ -83,7 +83,10 @@ $('#btn_reply_all').live('click', function() {
 	var recipients = []
 
 	$.each(getSelectedGroupElements('message'), function(index, value) {
-			recipients.push($("input:hidden[name=src-" + value.value + "]").val())
+			var recipient = $("input:hidden[name=src-" + value.value + "]").val();
+			if(isValid(recipient)) {
+				recipients.push(recipient)
+		}
 	});
 
 	$.ajax({
@@ -170,6 +173,6 @@ function highlightRow(id){
 }
 
 function isValid(value) {
-		return value != "0"
+		return value && value != "0"
 }
 
