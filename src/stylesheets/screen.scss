@@ -89,8 +89,10 @@ body {
 		.message-body {
 			font-size: 1.1em;
 		}
-		.buttons { cursor: pointer}
 	}
+
+	.buttons { cursor: pointer}
+
 	#poll-actions {
 		@include column(6, true);
 	}

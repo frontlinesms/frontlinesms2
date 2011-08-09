@@ -125,7 +125,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		    waitFor {$('#tabs-1').displayed}
 			$("input", name:'poll-type').value("multiple")
             $("textarea", name:'question').value("How often do you drink coffee?")
-            $("a", text: "Next").click()
+            $("#tabs-1 a", text: "Next").click()
         then:
 			waitFor {$('#tabs-2').displayed}
 			$("label[for='choiceA']").hasClass('bold') == false
@@ -135,18 +135,18 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
             keyInData('choiceA', "Never")
             keyInData('choiceB',"Once a day")
             keyInData('choiceC', "Twice a day")
-            $("a", text: "Next").click()
+            $("#tabs-2 a", text: "Next").click()
 		then:
 			$("label[for='choiceA']").hasClass('bold') == true
 			$("label[for='choiceA']").hasClass('bold') == true
 			waitFor {$('#tabs-3').displayed}
 		when:
             $("textarea", name:'autoReplyText').value("Thanks for participating...")
-            $("a", text: "Next").click()
+            $("#tabs-3 a", text: "Next").click()
 		then:
 			waitFor {$('#tabs-4').displayed}
 		when:
-			$("a", text: "Next").click()
+			$("#tabs-4 a", text: "Next").click()
 		then:
 			waitFor { $('#tabs-5 ').displayed }
             $("input", name:'title').value("Cofee Poll")
@@ -158,9 +158,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			waitFor { $("div.flash.message").text().contains("The poll has been created!") }
 	}
-	
+
 	def keyInData(String selector, String value) {
-		def element = $("input", name:selector) 
+		def element = $("input", name:selector)
 		element.value(value)
 		element.jquery.trigger('blur')
 	}

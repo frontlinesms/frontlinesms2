@@ -138,12 +138,13 @@ $('#btn_archive_all').live('click', function() {
 });
 
 function reloadPage(messageSection, ownerId) {
+	var params = location.search
 	if(messageSection == 'poll' || messageSection == 'folder'){
-		var location = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
+		var url = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
 	} else{
-		var location = "/frontlinesms2/message/"+messageSection;
+		var url = "/frontlinesms2/message/"+messageSection + params;
 	}
-	window.location = location
+	window.location = url
 }
 
 function setSelectedMessage() {

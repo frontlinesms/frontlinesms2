@@ -53,9 +53,9 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
+			waitFor {$('.multi-action').displayed}
 		then:
-			!$('a', text:'Reply All').displayed
+			!$('.multi-action a', text:'Reply All').displayed
 	}
 
 	def "should filter pending messages for starred and unstarred messages"() {
