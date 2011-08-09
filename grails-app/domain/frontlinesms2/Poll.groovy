@@ -4,6 +4,7 @@ class Poll {
 	String title
 	String autoReplyText
 	String instruction
+	String question
 
 	static hasMany = [responses: PollResponse]
 	static fetchMode = [responses: "eager"]
@@ -16,6 +17,7 @@ class Poll {
 		})
 		autoReplyText(nullable: true, blank: false)
 		instruction(nullable: true)
+		question(nullable: true)
 	}
 
 	static mapping = {

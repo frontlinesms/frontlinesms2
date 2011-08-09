@@ -152,6 +152,7 @@ body {
 
 .sortable a{	
   text-decoration:none !important;
+  font-weight:bold;
   display:inline !important;
   padding:0px 25px 0 20px !important;
 }
@@ -187,4 +188,57 @@ body {
 label.bold {
 	font-weight: bold;
 	color:#000 !important;
+}
+
+#collect-responses {
+  display:block;
+  float:left;
+}
+#question {
+  width: 400px;
+  display:block;
+}
+
+.confirm-responses-tab div{
+ border:0px;
+ clear:right;
+ margin:0 0 20px 0;
+}
+
+.confirm-responses-tab div.confirm-header {
+  width:200px;
+  margin:0 0 0 30px;
+  float:left;
+  font-weight: bold;
+}
+
+.confirm-responses-tab input[type='text']{
+  display:block;
+  margin:0px 0px 20px 30px;
+  width:400px;
+}
+
+.confirm-responses-tab label{
+  margin:0px 0px 20px 0;
+  font-weight: bold;
+}
+
+#poll-question-text {
+  float:left;
+  width:70%
+}
+
+.clear {
+  clear:both;
+}
+
+pre {
+ white-space: pre-wrap;
+ white-space: -moz-pre-wrap;
+ white-space: -pre-wrap;
+ white-space: -o-pre-wrap;
+}
+
+.disabled {
+ color:gray!important;
 }

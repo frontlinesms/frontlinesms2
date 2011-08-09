@@ -2,19 +2,6 @@ $(document).ready(function() {
 	$('tr :checkbox[checked="true"]').parent().parent().addClass('checked');
 });
 
-function setStarStatus(object,data){
-	if($("#"+object).hasClass("starred")) {
-		$("#"+object).removeClass("starred");
-	}
-
-	$("#"+object).addClass(data);
-	if(data != '') {
-		$("#"+object).empty().append("Remove Star");
-	} else {
-		$("#"+object).empty().append("Add Star");
-	}
-}
-
 var selectedMessageId;
 
 function checkAllMessages(){
@@ -158,6 +145,7 @@ function reloadPage(messageSection, ownerId) {
 	}
 	window.location = location
 }
+
 function setSelectedMessage() {
 	if(selectedMessageId == null){
 		selectedMessageId = $('tr.selected').attr('id').substring('message-'.length);

@@ -18,7 +18,7 @@ $(document).ready(function() {
 				.buttonset();
 });
 
-function launchWizard(title, html,width) {
+function launchWizard(title, html,width, onLoad) {
 	var popupWidth = width ? width : 600
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
@@ -30,6 +30,7 @@ function launchWizard(title, html,width) {
 		}
 	);
 	$("#tabs").tabs();
+	onLoad && onLoad();
 }
 
 function quickMessageClickAction() {
