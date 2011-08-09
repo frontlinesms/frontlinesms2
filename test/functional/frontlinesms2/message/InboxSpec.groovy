@@ -198,12 +198,13 @@ class InboxSpec extends MessageGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$('#count').text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
+			$("#message-details").displayed
 			$('#message-details p:nth-child(1)').text() == message.src
 			$('#message-details p:nth-child(3)').text() == formatedDate
 			$('#message-details p:nth-child(4)').text() == message.text
