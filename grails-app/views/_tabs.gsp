@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ul id="main-tabs">
-	<li><g:link
-			class="tab ${!(params['archived']) && ['message','folder','poll'].contains(params.controller)?'selected':''}" url="${[controller:'message']}"
+	<li><g:link class="tab ${(!params['archived'] || params['archived'] == 'false') && ['message','folder','poll'].contains(params.controller)?'selected':''}" url="${[controller:'message']}"
 			id="tab-messages">Messages (${frontlinesms2.Fmessage.countUnreadMessages()})</g:link></li>
-	<li><g:link class="tab ${params['archived'] ? 'selected':''}" controller='message' action="inbox" params="['archived': true]">Archive</g:link></li>
+	<li><g:link class="tab ${params['archived'] == 'true'? 'selected':''}" controller='message' action="inbox" params="['archived': true]">Archive</g:link></li>
 	<li><g:link class="tab ${params.controller=='contact'?'selected':''}" url="${[controller:'contact']}" id="tab-contacts">Contacts</g:link></li>
 	<li><g:link class="tab ${params.controller=='status'?'selected':''}" url="${[controller:'status']}" id="tab-status"><img id='indicator'/> Status</g:link></li>
 	<li><g:link class="tab ${params.controller=='search'?'selected':''}" url="${[controller:'search']}" id="tab-search">Search</g:link></li>
