@@ -104,7 +104,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$("#count").text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')
@@ -126,7 +126,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$("#count").text() == "2 messages selected"
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -141,8 +141,8 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
-			def btnReply = $('#message-details div.buttons a')[0]
+			waitFor {$('.multi-action').displayed}
+			def btnReply = $('.multi-action a')[0]
 		then:
 			btnReply
 		when:
