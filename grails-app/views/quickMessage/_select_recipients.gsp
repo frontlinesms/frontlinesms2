@@ -40,7 +40,7 @@
 		</div>
 	</g:each>
 
-(<span id="count">0</span> recipients selected)
+(<span id="recipient-count">0</span> recipients selected)
 </div>
 
 
@@ -80,7 +80,7 @@
 
 	function updateCount() {
 		var count = getSelectedGroupElements("addresses").size();
-		$("#count").html(count)
+		$("#recipient-count").html(count)
 		var contactsCount = $("#contacts-count");
 		contactsCount && contactsCount.html(count)
 	}

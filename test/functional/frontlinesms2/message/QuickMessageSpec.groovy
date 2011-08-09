@@ -85,7 +85,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("input[name=groups]").value("group1")
 			$("input[value=group1]").jquery.trigger("click")
 		then:
-			$("#count").text() == "2"
+			$("#recipient-count").text() == "2"
 	}
 
 	def "should deselect all member recipients when a group is un checked"() {
@@ -103,11 +103,11 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("input[name=groups]").value("group1")
 			$("input[value=group1]").jquery.trigger("click")
 		then:
-			$("#count").text() == "2"
+			$("#recipient-count").text() == "2"
 		when:
 			$("input[value=group1]").jquery.trigger("click")
 		then:
-			$("#count").text() == "0"
+			$("#recipient-count").text() == "0"
 	}
 
 	def "selected group should get unchecked when a member drops off"() {
@@ -125,12 +125,12 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("input[name='groups']").value("group1")
 			$("input[value='group1']").jquery.trigger("click")
 		then:
-			$("#count").text() == "2"
+			$("#recipient-count").text() == "2"
 		when:
 			$("input[value='12345678']").click()
 		then:
 			!$("input[value='group1']").getAttribute("checked")
-			$("#count").text() == "1"
+			$("#recipient-count").text() == "1"
 	}
 
 	def loadFirstTab() {
