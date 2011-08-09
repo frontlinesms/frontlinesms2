@@ -22,7 +22,7 @@
         <g:render template="/flash"/>
 		<div id="main">
 			<g:render template="menu"/>
-			<g:render template="message_list"/>
+			<g:render template="list_items"/>
 			<g:layoutBody/>
 		</div>
 	</body>

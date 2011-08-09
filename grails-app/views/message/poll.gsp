@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.Contact" %>
 <html>
 	<head>
-		<meta name="layout" content="messages" />
+		<meta name="layout" content="${actionLayout}" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript src="raphael-min.js"/>
 		<g:javascript src="g.raphael-min.js"/>
@@ -36,7 +36,9 @@
 		<title>Poll</title>
 	</head>
 	<body>
-		<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+		<g:if test="${!params.archive}">
+			<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+		</g:if>
 		<g:if test="${messageInstance != null}">
 			<g:render template="message_details" />
 		</g:if>

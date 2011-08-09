@@ -77,7 +77,8 @@ class MessageController {
 				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
 				ownerInstance: ownerInstance,
 				responseList: ownerInstance.responseStats,
-				pollResponse: ownerInstance.responseStats as JSON] << show(messageInstanceList)
+				pollResponse: ownerInstance.responseStats as JSON,
+				actionLayout : params['archived'] ? 'archive' : 'messages'] << show(messageInstanceList)
 	}
 	
 	def folder = {

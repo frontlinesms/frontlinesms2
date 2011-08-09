@@ -13,9 +13,9 @@
 					</g:link>
 				</li>
 				<li>
-					<g:remoteLink elementId="poll" controller="poll" params="${[archived: true]}"  onSuccess="loadAllData(data)">
+					<g:link elementId="poll" class="${(messageSection=='poll')? 'selected':''}"  controller="poll" params="${[archived: true]}">
 						Activity archive
-					</g:remoteLink>
+					</g:link>
 				</li>
 		</ol>
 	</li>

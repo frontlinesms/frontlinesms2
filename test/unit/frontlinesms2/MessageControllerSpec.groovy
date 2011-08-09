@@ -235,6 +235,32 @@ class MessageControllerSpec extends ControllerSpec {
 		})
 	}
 
+	def "should render list of polls in archive layout"() {
+		def isStarred = false
+		controller.params.archived = true
+		def result
+		expect:
+			setupDataAndAssert(isStarred, 10, 0, {fmessage ->
+				def poll = new Poll(id: 2L, responses: [new PollResponse()])
+				mockParams.ownerId = 2L
+				mockDomain Poll, [poll]
+				poll.metaClass.getMessages = {params->
+					assert params['starred'] == isStarred
+					assert params['max'] == 10
+					assert params['offset'] == 0
+					[fmessage]
+				}
+
+				poll.metaClass.countMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+				result = controller.poll()
+
+		})
+		result['actionLayout'] == 'archived'
+	}
+
 	//FIXME: Need to  replace it with 'setupDataAndAssert' method.
 	def "should fetch starred poll messages"() {
 		setup:
