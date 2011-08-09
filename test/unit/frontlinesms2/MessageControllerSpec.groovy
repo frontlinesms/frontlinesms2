@@ -427,7 +427,7 @@ class MessageControllerSpec extends ControllerSpec {
 			registerMetaClass(Fmessage)
 			def fmessage = new Fmessage(src: "src1", starred: isStarred)
 			mockDomain Folder
-			mockDomain Poll
+			mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
 			mockDomain Contact
 			mockDomain RadioShow 
 			mockParams.starred = isStarred
@@ -440,7 +440,8 @@ class MessageControllerSpec extends ControllerSpec {
 			assert results['messageInstanceTotal'] == 2
 			assert results['messageInstance'] == fmessage
 			assert results['messageInstanceList']*.contactExists == [false]
-			assert results['messageInstanceList']*.displayName == ["src1"]
+			assert results['messageInstanceList']*.contactExists == [false]
+			assert results['pollInstanceList'].every {!it.archived}
 
     }
 }
