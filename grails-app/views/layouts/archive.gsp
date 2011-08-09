@@ -9,6 +9,9 @@
 	<jqui:resources/>
 	<g:javascript src="message/check_message.js"></g:javascript>
 	<g:javascript src="message/star_message.js"></g:javascript>
+	<g:javascript src="application.js"/>
+	<g:javascript src="popup.js" />
+
 </head>
 <body>
 <g:render template="/tabs"/>
