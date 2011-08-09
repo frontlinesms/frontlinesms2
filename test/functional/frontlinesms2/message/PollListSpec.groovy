@@ -40,7 +40,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-			def pollTitle = $('#poll-title').text()
+			def pollTitle = $("#poll-header #message-title h2").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
@@ -104,13 +104,13 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$('#message-details #message-count').text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')
 		then:
-			$('#message-details p:nth-child(1)').text() == message.src
-			$('#message-details p:nth-child(4)').text() == message.text
+			$('#message-details .message-name').text() == message.src
+			$('#message-details #message-body').text() == message.text
 		
 		cleanup:
 			deleteTestPolls()
@@ -126,7 +126,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$('#message-details #message-count').text() == "2 messages selected"
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -150,9 +150,8 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'Alice').getAttribute('checked')
-			$('input', value:'Bob').getAttribute('checked')
-			!$('input', value:'June').getAttribute('checked')
+			$('a', text:'Alice').parent().previous().previous().getAttribute('checked')
+			$('a', text:'Bob').parent().previous().previous().getAttribute('checked')
 			
 		cleanup:
 			deleteTestPolls()
