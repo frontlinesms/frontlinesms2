@@ -33,6 +33,10 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $("a", text:"hi Bob").displayed}
 		then:
 	        $("a", text:"hi Bob").displayed
+		when:
+	        $("a", text:"hi Bob").click()
+		then:
+			$("#main-tabs a", text:"Archive").hasClass("selected")
 	}
 
 	def 'archived messages do not show up in sent view'() {
@@ -54,6 +58,24 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $("table", id:'messages').displayed}
 		then:
 	        $("a", text:"hi Mary").displayed
+		when:
+			$("a", text:"hi Mary").click()
+		then:
+			$("#main-tabs a", text:"Archive").hasClass("selected")
+	}
+
+	def "should not display archive all in archive tab"() {
+		Fmessage.list().each {
+			it.archived = true
+			it.save(flush: true)
+		}
+		when:
+		    goToArchivePage()
+			$("#message")[0].click()
+			waitFor { $("#count").text().contains("3")}
+		then:
+			$(".multi-action a").size() == 2
+			$(".multi-action a").every() {it.text() != "Archive All"}
 	}
 
 	def 'archived messages do not show up in poll view'() {
