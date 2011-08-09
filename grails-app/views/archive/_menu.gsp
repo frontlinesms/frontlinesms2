@@ -12,6 +12,11 @@
 						Sent Archive
 					</g:link>
 				</li>
+				<li>
+					<g:remoteLink elementId="poll" controller="poll" params="${[archived: true]}"  onSuccess="loadAllData(data)">
+						Activity archive
+					</g:remoteLink>
+				</li>
 		</ol>
 	</li>
  </ul>

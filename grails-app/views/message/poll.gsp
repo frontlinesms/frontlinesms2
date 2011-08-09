@@ -32,14 +32,11 @@
 					$("#pollGraph").toggle();
 			});
 		});
-
-			
-			
-		
 		</g:javascript>	
 		<title>Poll</title>
 	</head>
 	<body>
+		<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
 		<g:if test="${messageInstance != null}">
 			<g:render template="message_details" />
 		</g:if>

@@ -33,7 +33,7 @@ class MessageController {
 		}
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
+				pollInstanceList: Poll.getNonArchivedPolls(),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params)]
 	}
