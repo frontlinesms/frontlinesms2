@@ -42,29 +42,19 @@ function updateMessageDetails(id){
 	highlightRow(id);
 
 	var count = countCheckedMessages();
-	if(count == 1 && $(':checkbox').size() != 2) {
-		if(selectedMessageId != $('tr :checkbox[checked="true"]').val())
-			loadMessage($('tr :checkbox[checked="true"]').val(), true);
-	}
-	if(count > 1){
+	if(count == 1)
+		loadMessage($('tr :checkbox[checked="true"]').val(), true);
+	if(count > 1)
 		changeMessageCount(count);
-	}
 }
 
 function loadMessage(id, checked) {
-	var location = window.location.pathname
-	var messageSection = $('input:hidden[name=messageSection]').val();
-	var ownerId = $('input:hidden[name=ownerId]').val();
-	var messageId = id;
+	var url = $(".displayName-" + id).attr("href")
 	if(checked == true){
-		messageId = messageId+"?checkedId="+messageId;
+	   url = url + (url.indexOf("?") > -1 ? "&" : "?")
+		url = url + "checkedId="+id;
 	}
-	
-	if(ownerId != null && messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
-		window.location = "/frontlinesms2/message/"+messageSection+"/"+ownerId+"/show/"+messageId;
-	} else{
-		window.location = "/frontlinesms2/message/"+messageSection+"/show/"+messageId;
-	}
+	window.location = url
 }
 
 function countCheckedMessages(){
@@ -86,31 +76,20 @@ function validateCheckedMessageCount(count) {
 
 function changeMessageCount(count){
 	setSelectedMessage();
-	$('#message-details').empty();
-	$('#message-details').append("<p> "+count+" messages selected</p>");
+	$('#count').html("<p> "+count+" messages selected</p>");
 	setMessageActions();
 }
 
 function setMessageActions() {
-	var replyAll = '';
-	var messageSection = $('input:hidden[name=messageSection]').val()
-	if(messageSection != 'pending'){
-		replyAll = "<a id='btn_reply_all' >Reply All</a>";
-	}
-	archiveAll = "<a id='btn_archive_all' >Archive All</a>";
-	deleteAll = "<a id='btn_delete_all' >Delete All</a>";
-	$('#message-details').append("<div class='buttons'></div>");
-	$('#message-details div.buttons').append(replyAll+"&nbsp;"+archiveAll+"&nbsp;"+deleteAll);
-	$('#btn_reply_all').click(quickReplyClickAction);
-	$('#btn_delete_all').click(deleteAllClickAction);
-	$('#btn_archive_all').click(archiveClickAction);
+	$('.multi-action').show()
+	$('#message-details').hide()
 }
 
 function getSelectedGroupElements(groupName) {
 	return $('input[name=' + groupName + ']:checked');
 }
 
-function quickReplyClickAction() {
+$('#btn_reply_all').live('click', function() {
 	var me = $(this);
 	var messageType = me.text();
 
@@ -127,9 +106,9 @@ function quickReplyClickAction() {
 		url: '/frontlinesms2/quickMessage/create',
 		success: function(data, textStatus){ launchWizard(messageType, data); }
 	});
-}
+});
 
-function deleteAllClickAction() {
+$('#btn_delete_all').live('click', function() {
 	var me = $(this);
 	var messageType = me.text();
 	var idsToDelete = []
@@ -148,9 +127,9 @@ function deleteAllClickAction() {
 		url: '/frontlinesms2/message/deleteMessage',
 		success: function(data) { reloadPage(messageSection, ownerId)}
 	});
-}
+});
 
-function archiveClickAction() {
+$('#btn_archive_all').live('click', function() {
 	var me = $(this);
 	var messageType = me.text();
 	var messageSection = $('input:hidden[name=messageSection]').val();
@@ -169,7 +148,7 @@ function archiveClickAction() {
 		url: '/frontlinesms2/message/archiveMessage',
 		success: function(data, textStatus){ reloadPage(messageSection, ownerId)}
 	});
-}
+});
 
 function reloadPage(messageSection, ownerId) {
 	if(messageSection == 'poll' || messageSection == 'folder'){
@@ -185,11 +164,12 @@ function setSelectedMessage() {
 	}
 }
 
+function enableSingleAction() {
+	$('.multi-action').hide()
+	$('#message-details').show()
+}
 function showMessageDetails(){
-	if(selectedMessageId == null){
-		return;
-	}
-	loadMessage(selectedMessageId,false);
+	enableSingleAction();
 }
 
 function highlightRow(id){
