@@ -54,6 +54,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$('.add-address').click()
 		then:
 			$('div#contacts div')[0].find('input').value() == "+919544426000"
+			$("#recipient-count").text() == "1"
 	}
 
 	def "should send the message to the selected recipients"() {
