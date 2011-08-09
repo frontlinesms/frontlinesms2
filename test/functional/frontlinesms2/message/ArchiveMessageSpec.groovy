@@ -35,6 +35,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	        $("a", text:"hi Bob").displayed
 		when:
 	        $("a", text:"hi Bob").click()
+			!$("#message-archive").displayed()
 		then:
 			$("#main-tabs a", text:"Archive").hasClass("selected")
 	}
@@ -60,6 +61,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	        $("a", text:"hi Mary").displayed
 		when:
 			$("a", text:"hi Mary").click()
+			!$("#message-archive").displayed()
 		then:
 			$("#main-tabs a", text:"Archive").hasClass("selected")
 	}
