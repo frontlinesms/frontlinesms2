@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.Contact" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <g:if test="${contactsSection instanceof frontlinesms2.Group}">
 	<h2>${contactsSection.name}</h2>
@@ -21,6 +22,7 @@
 			</li>
 		</g:each>
 	</ol>
+		<g:paginate next="Forward" prev="Back"	action="list" total="${contactInstanceTotal}"/>
 </g:if>
 <g:else>
 	<div id="contacts">
