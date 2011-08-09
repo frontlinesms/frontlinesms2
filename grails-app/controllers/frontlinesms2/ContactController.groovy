@@ -1,7 +1,13 @@
 package frontlinesms2
 
+import grails.util.GrailsConfig
+
 class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+	def beforeInterceptor = {
+		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+	}
 
 	def index = {
 		redirect action: "list", params:params
