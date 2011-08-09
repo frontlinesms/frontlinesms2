@@ -22,7 +22,7 @@
 		<ol class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li>
-					<g:link action="poll" params="[ownerId: p.id]" class="${p == ownerInstance ? 'selected' : ''}">${p.title} (${p.countMessages()})</g:link>
+					<g:link action="poll" params="[ownerId: p.id]" class="${p == ownerInstance ? 'selected' : ''}">${p.title}</g:link>
 				</li>
 			</g:each>
 			<li class='create' id="create-poll">
@@ -37,7 +37,7 @@
 		<ol class='sub-menu' id="shows-submenu">
 			<g:each in="${radioShows}" status="i" var="s">
 				<li>
-					<g:link action="radioShow" params="[ownerId: s.id]" class="${s == ownerInstance ? 'selected' : ''}">${s.name} (${s.countMessages()})</g:link>
+					<g:link action="radioShow" params="[ownerId: s.id]" class="${s == ownerInstance ? 'selected' : ''}">${s.name}</g:link>
 				</li>
 			</g:each>
 			<li class="create" id='create-show'>
@@ -52,7 +52,7 @@
 	 	<ol class='sub-menu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li>
-					<g:link action="folder" params="[ownerId: f.id]" class="${f == ownerInstance ? 'selected' : ''}">${f.name} (${f.countMessages()})</g:link>
+					<g:link action="folder" params="[ownerId: f.id]" class="${f == ownerInstance ? 'selected' : ''}">${f.name}</g:link>
 				</li>
 			</g:each>
 			<li class='create' id="create-folder">
