@@ -47,24 +47,18 @@ class MessageController {
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages(params)
-		def model = [messageInstanceList: messageInstanceList,
+		[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
-					messageInstanceTotal: Fmessage.countInboxMessages(params)] << show(messageInstanceList)
-		if(isAjaxRequest()) {
-			render(template : "message_list", model: model)
-		}
-		model
+					messageInstanceTotal: Fmessage.countInboxMessages(params),
+					actionLayout : (params['archived'] ? "archive" : "messages")] << show(messageInstanceList)
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params)
-		def model = [messageSection: 'sent',
+		[messageSection: 'sent',
 				messageInstanceList: messageInstanceList,
-				messageInstanceTotal: Fmessage.countSentMessages(params)] << show(messageInstanceList)
-		if(isAjaxRequest()) {
-			render(template : "message_list", model: model)
-		}
-		model
+				messageInstanceTotal: Fmessage.countSentMessages(params),
+				actionLayout : params['archived'] ? "archive" : "messages"] << show(messageInstanceList)
 	}
 
 	def pending = {

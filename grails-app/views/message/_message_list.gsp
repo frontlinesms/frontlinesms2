@@ -41,17 +41,17 @@
 					  </g:remoteLink>
 					</td>
 					<td>
-							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
+							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 								${m.displayName}
 							</g:link>
 					</td>
 					<td>
-							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
+							<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 							  ${m.displayText}
 							</g:link>
 					</td>
 					<td>
-							<g:link  action="${messageSection}" params="${params + [messageId: m.id]}">
+							<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
 								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
 							</g:link>
 					</td>

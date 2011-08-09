@@ -115,8 +115,8 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
-			def btnDelete = $('#message-details div.buttons a')[2]
+			waitFor {$('.multi-action').displayed}
+			def btnDelete = $('.multi-action a')[2]
 		then:
 			btnDelete
 		when:
@@ -124,7 +124,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at MessagesPage
 		when:
-			waitFor { $("div.flash.message").displayed }
 			aliceMessage.refresh()
 			message3.refresh()
 		then:
