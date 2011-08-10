@@ -258,7 +258,7 @@ class MessageControllerSpec extends ControllerSpec {
 				result = controller.poll()
 
 		})
-		result['actionLayout'] == 'archived'
+		result['actionLayout'] == 'archive'
 	}
 
 	//FIXME: Need to  replace it with 'setupDataAndAssert' method.

@@ -36,7 +36,7 @@
 		<title>Poll</title>
 	</head>
 	<body>
-		<g:if test="${!params.archive}">
+		<g:if test="${!params.archived}">
 			<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
 		</g:if>
 		<g:if test="${messageInstance != null}">

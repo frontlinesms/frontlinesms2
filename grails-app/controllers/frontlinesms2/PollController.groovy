@@ -30,6 +30,7 @@ class PollController {
 		def poll = Poll.get(params.id)
 		poll.archived = true
 		poll.save()
-		redirect(controller: "message")
+		flash['message'] = "Activity was archived successfully!"
+		redirect(controller: "message", action: "inbox")
 	}
 }
