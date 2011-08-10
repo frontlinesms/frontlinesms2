@@ -2,7 +2,10 @@ package frontlinesms2
 
 class PollController {
 	def index = {
-		 redirect(action: "create", params: params)
+		def archived = params['archived']
+		[polls: Poll.findAllByArchived(archived),
+		actionLayout : archived ? "archive" : "poll",
+		messageSection: "poll"]
 	}
 
 	def create = {
@@ -21,5 +24,13 @@ class PollController {
 			flash.message = "error"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		}
+	}
+
+	def archive = {
+		def poll = Poll.get(params.id)
+		poll.archived = true
+		poll.save()
+		flash['message'] = "Activity was archived successfully!"
+		redirect(controller: "message", action: "inbox")
 	}
 }

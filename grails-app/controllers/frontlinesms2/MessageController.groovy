@@ -21,11 +21,6 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
-		if(params.checkedId && params.checkedId != params.messageId) {
-			params.remove('checkedId')
-			redirect(action:params.action)
-		}
-		
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -33,7 +28,7 @@ class MessageController {
 		}
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
+				pollInstanceList: Poll.getNonArchivedPolls(),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params)]
 	}
@@ -77,7 +72,8 @@ class MessageController {
 				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
 				ownerInstance: ownerInstance,
 				responseList: ownerInstance.responseStats,
-				pollResponse: ownerInstance.responseStats as JSON] << show(messageInstanceList)
+				pollResponse: ownerInstance.responseStats as JSON,
+				actionLayout : params['archived'] ? 'archive' : 'messages'] << show(messageInstanceList)
 	}
 	
 	def folder = {

@@ -143,7 +143,7 @@ $('#btn_archive_all').live('click', function() {
 function reloadPage(messageSection, ownerId) {
 	var params = location.search
 	if(messageSection == 'poll' || messageSection == 'folder'){
-		var url = "/frontlinesms2/message/"+messageSection+"/"+ownerId;
+		var url = "/frontlinesms2/message/"+messageSection+"/"+ownerId + params;
 	} else{
 		var url = "/frontlinesms2/message/"+messageSection + params;
 	}
