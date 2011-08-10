@@ -17,17 +17,19 @@
 				<g:hiddenField name="version" value="${contactInstance?.version}"/>
 				<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 					<g:hiddenField name="groupId" value="${contactsSection.id}"/>
-			</g:if>
-			<g:hiddenField name="groupsToAdd" value=","/>
-			<g:hiddenField name="groupsToRemove" value=","/>
-			<g:hiddenField name="fieldsToAdd" value=","/>
-			<g:hiddenField name="fieldsToRemove" value=","/>
+				</g:if>
+				<g:hiddenField name="groupsToAdd" value=","/>
+				<g:hiddenField name="groupsToRemove" value=","/>
+				<g:hiddenField name="fieldsToAdd" value=","/>
+				<g:hiddenField name="fieldsToRemove" value=","/>
 			<div class="buttons">
 				<ol>
-					<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 					<g:if test="${contactInstance.id}">
-						<g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/>
-						<g:actionSubmit class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/>
+						<li><g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/></li>
+					</g:if>
+					<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+					<g:if test="${contactInstance.id}">
+						<li><g:actionSubmit class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/></li>
 					</g:if>
 				</ol>
 				</div>

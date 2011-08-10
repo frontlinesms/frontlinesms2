@@ -1,13 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-<<<<<<< HEAD
 	<head>
 		<title><g:layoutTitle default="Archive"/></title>
 		<g:layoutHead />
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources />
+		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<g:javascript src="message/check_message.js"></g:javascript>
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
@@ -28,7 +27,7 @@
 					</div>
 					<div class="content-body">
 						<g:render template="../archive/menu"/>
-						<g:render template="list_items"/>
+						<g:render template="/message/message_list"/>
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">

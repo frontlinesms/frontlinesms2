@@ -10,7 +10,6 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 		</script>
-		<jqui:resources />
 		<g:javascript src="message/check_message.js"></g:javascript>
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
@@ -20,7 +19,6 @@
 		<g:javascript src="/message/categorize-dropdown.js"/>
     </head>
 	<body>
-<<<<<<< HEAD
 		<div id="container">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
@@ -89,7 +87,11 @@
 							</li>
 						</ol>
 						<g:if test="${messageSection == 'poll'}">
-							<a id='show-graph'>Show poll details</a>
+							<g:if test="${!params.archived}">
+								<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+							</g:if>
+							<button id="pollSettings">Show poll details</button>
+							<div id="pollGraph"></div>
 						</g:if>
 					</div>
 					<div class="content-body">

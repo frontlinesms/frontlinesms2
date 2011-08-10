@@ -6,7 +6,7 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources theme="medium" plugin="mumsnet"/>
+		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 	</head>
 	<body>
 		<div id="container">
