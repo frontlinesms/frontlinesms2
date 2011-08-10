@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="search" />
-        <title>Search</title>
+        <title>Results</title>
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
