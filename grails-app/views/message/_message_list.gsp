@@ -6,7 +6,7 @@
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
 				message(code: 'fmessage.src.label', default: 'To')
 	 			: message(code: 'fmessage.dst.label', default: 'From')}" />
-		<g:if test="${messageSection == 'result'}">
+		<g:if test="${messageSection == 'search'}">
 		  	<g:hiddenField name="activityId" value="${params.activityId}"/>
 		  	<g:hiddenField name="groupId" value="${params.groupId}"/>
 		  	<g:hiddenField name="searchString" value="${params.searchString}"/>
@@ -20,7 +20,7 @@
 									params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
 		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 									params='[ownerId: "${ownerInstance?.id}"]' id="message-header" />
-					<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 									params='[ownerId: "${ownerInstance?.id}"]' id="timestamp-header" defaultOrder="desc" />
 				</tr>
 			</thead>
@@ -29,34 +29,38 @@
 					<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
 						<td><g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/></td>
 						<td id="star_column">
-						  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
-						  <div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
-					
-						  </div>
-						  </g:remoteLink>
+							<g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
+								<div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
+								</div>
+							</g:remoteLink>
 						</td>
 						<td>
-								<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
-									${m.displayName}
-								</g:link>
+							<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
+								${m.displayName}
+							</g:link>
 						</td>
 						<td>
-								<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
-								  ${m.displayText}
-								</g:link>
+						<g:link action="${messageSection}" params="${params + [messageId: m.id]}">
+							${m.displayText}
+						</g:link>
 						</td>
 						<td>
-								<g:link  action="${messageSection}" params="${params + [messageId: m.id]}">
-									<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
-								</g:link>
+							<g:link  action="${messageSection}" params="${params + [messageId: m.id]}">
+								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+							</g:link>
 						</td>
 					</tr>
 				</g:each>
 			</tbody>
 		</table>
 	</g:if>
+	<g:elseif test="${(messageSection == 'search') && (searchDescription != 'null')}">
+		<div id="no-search-description">
+			<h1>Start new search on the left</h1>
+		</div>
+	</g:elseif>
 	<g:else>
-		<div id="messages">
+		<div id="no-messages">
 			No messages
 		</div>
 	</g:else>

@@ -22,18 +22,23 @@
 				<div class="content">
 					<div id='search-header' class="content-header">
 						<div id="search-title">
+							<img src='${resource(dir:'images/icons',file:'search.gif')}' />
 							<h2>Search</h2>
 			  			</div>
 			  			<ol>
 				  			<li>
-					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup(data, 'Export');">
+					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
 									Export
 								</g:remoteLink>
 							</li>
 						</ol>
-						<p id="search-description">
-							${searchDescription}
-				  		</p>
+						<g:if test="${searchDescription}">
+							<div id="search-description">
+								<p>
+									${searchDescription}
+						  		</p>
+					  		</div>
+					  	</g:if>
 					</div>
 					<div class="content-body">
 						<g:render template="/message/message_list"/>

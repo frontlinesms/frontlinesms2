@@ -1,4 +1,4 @@
-<div>
+<div class='dropdown'>
 	<select id="message-actions">
 		<option value="na" class="na">Move message to...</option>
 		<g:each in="${pollInstanceList}" status="i" var="p">

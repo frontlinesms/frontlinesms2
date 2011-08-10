@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+	<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
@@ -25,15 +25,47 @@
 	        <div class="main">
 				<g:render template="menu"/>
 				<div class="content">
-					<div id='poll-header' class="content-header">
+					<div class="content-header ${messageSection}">
 						<g:if test="${messageSection == 'poll'}">
-							<g:render template="poll_header"/>
+							<div id="poll-title">
+								<g:render template="poll_header"/>
+							</div>
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
-							<h2 id="message-title">${ownerInstance?.name}</h2>
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
+								<h2>${ownerInstance?.name}</h2>
+							</div>
+						</g:elseif>
+						<g:elseif test="${messageSection == 'sent'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'sent.gif')}' />
+								<h2>${messageSection}</h2>
+							</div>
+						</g:elseif>
+						<g:elseif test="${messageSection == 'pending'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'pending.gif')}' />
+								<h2>${messageSection}</h2>
+							</div>
+						</g:elseif>
+						<g:elseif test="${messageSection == 'trash'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'trash.gif')}' />
+								<h2>${messageSection}</h2>
+							</div>
+						</g:elseif>
+						<g:elseif test="${messageSection == 'radioShow'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'onair.gif')}' />
+								<h2>on air</h2>
+							</div>
 						</g:elseif>
 						<g:else>
-							<h2 id="message-title">${messageSection}</h2>
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'inbox.gif')}' />
+								<h2>${messageSection}</h2>
+							</div>
 						</g:else>
 						<ol>
 							<li>
@@ -48,10 +80,14 @@
 							</li>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send');" id="quick_message">
+					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
 									Quick message
 								</g:remoteLink>
 							</li>
 						</ol>
+						<g:if test="${messageSection == 'poll'}">
+							<a id='show-graph'>Show poll details</a>
+						</g:if>
 					</div>
 					<div class="content-body">
 						<g:render template="message_list"/>

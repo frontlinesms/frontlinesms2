@@ -16,7 +16,7 @@
 	cursor: pointer;
 	text-align: center;
 	overflow: visible; /* the overflow property removes extra width in IE */
-	background-image:url('/frontlinesms2/images/buttons/button_default.png');
+//	background-image:url('/frontlinesms2/images/buttons/button_default.png');
 	background-repeat:no-repeat;
 	background-size: 100% 100%;
 }
@@ -47,8 +47,8 @@ input.ui-button { padding: .4em 1em; }
 .ui-button-text-icons .ui-button-icon-secondary, .ui-button-icons-only .ui-button-icon-secondary { right: .5em; }
 
 /*button sets*/
-.ui-buttonset { margin-right: 7px; }
-.ui-buttonset .ui-button { margin-left: 0; margin-right: -.3em; }
+.ui-buttonset {}
+.ui-buttonset .ui-button { }
 
 /* workarounds */
 button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra padding in Firefox */

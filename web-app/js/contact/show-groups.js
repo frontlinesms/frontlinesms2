@@ -33,7 +33,7 @@ function removeGroupClickAction() {
 	$('#group-dropdown').append(option);
 	var groupList = me.parent();
 	groupList.remove();
-	if($('#group-list').children().children('input').length < 1) {
+	if($('#group-list li').children('input').length < 1) {
 		$('#no-groups').show();
 	}
 

@@ -1,17 +1,18 @@
-<div id="message-title">
+<div>
+	<img src='${resource(dir:'images/icons',file:'activities.gif')}' />
 	<h2>${ownerInstance?.title}</h2>
 	<g:if test="$responseList">
 		<table id="poll-stats">
 			<tbody>
 				<g:each in="${responseList}" var="r">
 					<tr>
-						<td>
+						<td class='answers'>
 							${r.value}
 						</td>
-						<td>
+						<td class='count'>
 							${r.count}
 						</td>
-						<td>
+						<td class='percent'>
 							(${r.percent}%)
 						</td>
 					</tr>
