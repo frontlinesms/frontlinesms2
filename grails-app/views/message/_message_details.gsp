@@ -16,7 +16,7 @@
 			<ol id="dropdown_options">
 				<button id="btn_forward">Forward</button>
 			</ol>
-			<g:link elementId="message-delete" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Delete</g:link>
+			<g:link elementId="message-delete" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id, archived: params.archived]">Delete</g:link>
 			<g:if test="${!params['archived'] && messageSection != 'poll'}">
 				<g:link elementId="message-archive" action="archiveMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Archive</g:link>
 			</g:if>
