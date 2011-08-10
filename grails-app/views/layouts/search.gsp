@@ -18,7 +18,7 @@
 				${searchDescription}
 	  		</h2>
 			<g:render template="search_menu"/>
-			<g:render template="/message/message_list"/>
+			<g:render template="/message/list_items"/>
 			<g:layoutBody/>
 		</div>
 	</body>
