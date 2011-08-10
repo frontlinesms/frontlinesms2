@@ -50,14 +50,14 @@ class ContactListSpec extends ContactGebSpec {
 			def contactNames = contactList.children().collect() {
 				it.text()
 			}
-			def expectedNames = (11..20).collect{"Contact${it}"}
+			def expectedNames = (11..60).collect{"Contact${it}"}
 			assert contactNames == expectedNames
 		cleanup:
 			deleteTestContacts()
 	}
 	
 	static createManyContacts() {	
-		(11..40).each {
+		(11..90).each {
 			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
 		}
 	}
