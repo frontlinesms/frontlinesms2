@@ -47,6 +47,8 @@ class PollControllerSpec extends ControllerSpec {
 		then:
 			Poll.get(2).archived
 			redirectArgs.controller == "message"
+			redirectArgs.action == "inbox"
+			controller.flash.message
 	}
 }
 

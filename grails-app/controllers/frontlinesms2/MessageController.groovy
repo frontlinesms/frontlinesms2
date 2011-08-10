@@ -21,11 +21,6 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
-		if(params.checkedId && params.checkedId != params.messageId) {
-			params.remove('checkedId')
-			redirect(action:params.action)
-		}
-		
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
