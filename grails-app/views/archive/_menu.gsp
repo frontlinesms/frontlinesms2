@@ -12,6 +12,11 @@
 						Sent Archive
 					</g:link>
 				</li>
+				<li>
+					<g:link elementId="poll" class="${(messageSection=='poll')? 'selected':''}"  controller="poll" params="${[archived: true]}">
+						Activity archive
+					</g:link>
+				</li>
 		</ol>
 	</li>
  </ul>

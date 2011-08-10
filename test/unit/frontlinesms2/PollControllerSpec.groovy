@@ -5,12 +5,15 @@ import grails.plugin.spock.*
 
 class PollControllerSpec extends ControllerSpec {
 
-	def "default action is CREATE"() {
+	def "should list all the polls"() {
+		mockDomain(Poll, [new Poll(archived: true), new Poll(archived: false), new Poll(archived : true)])
+		controller.params.archived = true
 		when:
-			controller.index()
+			def results = controller.index()
 		then:
-			controller.redirectArgs.controller == 'poll' || !controller.redirectArgs.controller
-			controller.redirectArgs.action == 'create'
+			results['polls'].every {it.archived}
+			results['actionLayout'] == 'archive'
+			results['messageSection'] == 'poll'
 	}
 
 	def "test create"() {
@@ -25,8 +28,19 @@ class PollControllerSpec extends ControllerSpec {
 			resultMap['contactList']*.name == ["Alice", "Bob"]
 			resultMap['groupList']["group1"].containsAll(["12345", "54321"])
 			resultMap['groupList']["group2"].containsAll(["54321"])
+	}
 
-
+	def "should archive a poll"() {
+		setup:
+			mockDomain(Poll, [new Poll(id: 2L, archived: false)])
+			controller.params.id = 2L
+		when:
+			controller.archive()
+		then:
+			Poll.get(2).archived
+			redirectArgs.controller == "message"
+			redirectArgs.action == "inbox"
+			controller.flash.message
 	}
 }
 

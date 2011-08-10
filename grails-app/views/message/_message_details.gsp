@@ -17,7 +17,7 @@
 				<button id="btn_forward">Forward</button>
 			</ol>
 			<g:link elementId="message-delete" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Delete</g:link>
-			<g:if test="${!params['archived']}">
+			<g:if test="${!params['archived'] && messageSection != 'poll'}">
 				<g:link elementId="message-archive" action="archiveMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Archive</g:link>
 			</g:if>
 		</g:if>
@@ -29,7 +29,7 @@
 	<g:if test="${messageSection != 'pending'}">
 		<a id='btn_reply_all'>Reply All</a>
 	</g:if>
-	<g:if test="${!params['archived']}">
+	<g:if test="${!params['archived'] && messageSection != 'poll'}">
 		<a id='btn_archive_all'>Archive All</a>
 	</g:if>
 	<a id='btn_delete_all'>Delete All</a>
