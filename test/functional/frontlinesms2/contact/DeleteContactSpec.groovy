@@ -7,7 +7,7 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class DeleteContactSpec extends ContactGebSpec {
-	def '"delete" button is displayed and works'() {
+	def 'delete button is displayed and works'() {
 		given:
 			createTestContacts()
 		when:
