@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
+<<<<<<< HEAD
 	<head>
 		<title><g:layoutTitle default="Archive"/></title>
 		<g:layoutHead />
@@ -7,6 +8,10 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources />
+		<g:javascript src="message/check_message.js"></g:javascript>
+		<g:javascript src="message/star_message.js"></g:javascript>
+		<g:javascript src="application.js"/>
+		<g:javascript src="mediumPopup.js"/>
     </head>
 	<body>
 		<div id="container">
@@ -22,7 +27,8 @@
 			  			</div>
 					</div>
 					<div class="content-body">
-						<g:render template="/message/message_list"/>
+						<g:render template="../archive/menu"/>
+						<g:render template="list_items"/>
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">

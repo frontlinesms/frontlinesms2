@@ -637,16 +637,15 @@ body {
 	.currentStep, .step {
 		display: none;
 	}
+	
+	#pollGraph {
+		clear:both;
+		display:block;
+	}
 }
 
 .hide {
   display: none
-}
-
-#pollGraph {
-	clear:both;
-	display:block;
-	width:76.446%
 }
 
 #trafficGraph {
@@ -660,10 +659,10 @@ body {
   padding:0px 25px 0 20px !important;
 }
 .asc a {
-  background: url('../images/up_arrow.png') no-repeat center right;
+  background: url('/frontlinesms2/images/up_arrow.png') no-repeat center right;
 }
 .desc a{
-  background: url('../images/down_arrow.png') no-repeat center right;
+  background: url('/frontlinesms2/images/down_arrow.png') no-repeat center right;
 }
 
 .poll-responses-tab input, label {
@@ -691,18 +690,4 @@ body {
 label.bold {
 	font-weight: bold;
 	color:#000 !important;
-}
-
-#pollSettings {
-  text-decoration: none !important;
-  display: inline !important;
-  padding: 0px 16px 8px 0px;
-}
-
-.show-arrow {
- background: url("../images/move-down.png") no-repeat center right;
-}
-
-.hide-arrow {
- background: url("../images/move-up.png") no-repeat center right;	
 }

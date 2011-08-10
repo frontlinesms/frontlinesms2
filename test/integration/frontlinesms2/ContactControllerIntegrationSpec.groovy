@@ -99,4 +99,25 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			model.contactInstanceList == [contact3, c, contact2]
 			model.contactInstanceList != [c, contact2, contact3]
 	}
+	
+	def "Deleting a contact removes it from the database" () {
+		when:
+			controller.params.contactId = c.id
+			controller.deleteContact()
+		then:
+			!Contact.findAllByName('Bob')
+	}
+	
+	def "Deleting a contact removes it from a contact group" () {
+		given: 
+			c.addToGroups(g)
+			assert g.getMembers()
+		when:
+			controller.params.contactId = c.id
+			controller.deleteContact()
+			g.refresh()
+		then:
+			!Contact.findByName('Bob')
+			!g.getMembers()
+	}
 }

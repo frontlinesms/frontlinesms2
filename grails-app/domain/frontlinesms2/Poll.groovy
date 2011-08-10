@@ -4,6 +4,9 @@ class Poll {
 	String title
 	String autoReplyText
 	String instruction
+	String question
+	boolean archived
+	Date dateCreated
 
 	static hasMany = [responses: PollResponse]
 	static fetchMode = [responses: "eager"]
@@ -16,6 +19,7 @@ class Poll {
 		})
 		autoReplyText(nullable: true, blank: false)
 		instruction(nullable: true)
+		question(nullable: true)
 	}
 
 	static mapping = {
@@ -39,6 +43,10 @@ class Poll {
 					count: messageCount,
 					percent: totalMessageCount ? messageCount * 100 / totalMessageCount as Integer : 0]
 		}
+	}
+
+	static getNonArchivedPolls() {
+		Poll.findAllByArchived(false)
 	}
 
 	static Poll createPoll(attrs) {

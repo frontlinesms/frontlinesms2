@@ -55,7 +55,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			def btnDeleteFromPoll = $('#message-details .buttons #message-delete')
 			btnDeleteFromPoll.click()
-			waitFor { $("div.flash.message").text().contains("deleted") }
+			waitFor { $("div.flash.message").displayed }
 		then:
 			Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 1
 	}
@@ -115,21 +115,15 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#message-details div.buttons').text().contains("Delete All")}
-			def btnDelete = $('#message-details div.buttons a')[2]
+			waitFor {$('.multi-action').displayed}
+			def btnDelete = $('.multi-action a')[2]
 		then:
 			btnDelete
 		when:
 			btnDelete.click()
 		then:
 			at MessagesPage
-		when:
-			waitFor { $("div.flash.message").displayed }
-			aliceMessage.refresh()
-			message3.refresh()
-		then:
-			aliceMessage.deleted
-			message3.deleted
+			waitFor{$("div.flash").text().contains("deleted")}
 	}
 	
 	static createTestData() {

@@ -29,8 +29,11 @@ class StatusController {
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		def startDate = params.startDate ? params.startDate : new Date() - 14; 
-		def endDate = params.endDate ? params.endDate : new Date(); 
+		def startDate, endDate
+		(startDate, endDate) = params.rangeOption == "between-dates" ? 
+			[params.startDate, params.endDate] :
+			[new Date() - 14, new Date()]
+		println "${startDate} ${endDate}"
 		def messageStats = Fmessage.getMessageStats(groupInstance, messageOwners, startDate, endDate)
 		[messageStats: [xdata: messageStats.collect{k,v -> "'${k}'"}, 
 						sent: messageStats.collect{k,v -> "${v["Sent"]}"},

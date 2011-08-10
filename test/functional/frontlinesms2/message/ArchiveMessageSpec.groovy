@@ -20,7 +20,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def 'archived messages do not show up in inbox view'() {
 		when:
-			go "archive"
+			goToArchivePage()
 			waitFor { $("#messages").text() == "No messages"}
 		then:
 			$("#messages").text() == 'No messages'
@@ -29,17 +29,22 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			def btnArchive = $('#message-details .buttons #message-archive')
 			btnArchive.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
-			go "archive"
+			goToArchivePage()
 			waitFor { $("a", text:"hi Bob").displayed}
 		then:
 	        $("a", text:"hi Bob").displayed
+		when:
+	        $("a", text:"hi Bob").click()
+			!$("#message-archive").displayed()
+		then:
+			$("#main-tabs a", text:"Archive").hasClass("selected")
 	}
 
 	def 'archived messages do not show up in sent view'() {
 		setup:
 			new Fmessage(src:'src', status: MessageStatus.SENT,dst:'+254112233', text:'hi Mary').save(flush: true)
 		when:
-			go "archive"
+		    goToArchivePage()
 			$("#sent").click()
 			waitFor { $("#messages").text() == "No messages"}
 		then:
@@ -49,21 +54,30 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			def btnArchive = $('#message-details .buttons #message-archive')
 			btnArchive.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
-			go "archive"
+			goToArchivePage()
 			$("#sent").click()
-			waitFor { $("a", text:"hi Mary").displayed}
+			waitFor { $("table", id:'messages').displayed}
 		then:
 	        $("a", text:"hi Mary").displayed
+		when:
+			$("a", text:"hi Mary").click()
+			!$("#message-archive").displayed()
+		then:
+			$("#main-tabs a", text:"Archive").hasClass("selected")
 	}
 
-	def 'archived messages do not show up in poll view'() {
+	def "should not display archive all in archive tab"() {
+		Fmessage.list().each {
+			it.archived = true
+			it.save(flush: true)
+		}
 		when:
-			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
-			def btnArchiveFromPoll = $('#message-details .buttons #message-archive')
-			btnArchiveFromPoll.click()
-			waitFor { $("div.flash.message").text().contains("archived") }
+		    goToArchivePage()
+			$("#message")[0].click()
+			waitFor { $("#count").text().contains("3")}
 		then:
-			Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 1
+			$(".multi-action a").size() == 2
+			$(".multi-action a").every() {it.text() != "Archive All"}
 	}
 
 	def 'archived messages do not show up in folder view'() {
@@ -98,6 +112,19 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			bob.archived
 	}
 
+	 def 'should not be able to archive activity messages'() {
+		when:
+			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
+		 	def btnArchiveFromPoll = $('#message-details .buttons .activity-archive')
+		then:
+			withAlert {btnArchiveFromPoll.click()}  == "This message is part of activity name Miauow Mix and so cannot be archived. You must archive the activity type"
+		when:
+			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
+			$("#message")[0].click()
+		 then:
+			withAlert {$('a', text: "Archive All").click()}  == "This message is part of activity name Miauow Mix and so cannot be archived. You must archive the activity type"
+	 }
+
 	static createTestData() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
@@ -124,6 +151,12 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		fools.addToMessages(message1)
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)
+	}
+
+	private def goToArchivePage() {
+		go ""
+		$("a", class:"tab",text: "Archive").click()
+		waitFor { $("a", text: 'Inbox Archive').displayed}
 	}
 
 	static deleteTestData() {

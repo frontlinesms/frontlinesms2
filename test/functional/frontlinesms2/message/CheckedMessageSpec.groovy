@@ -25,7 +25,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$("#count").text() == "2 messages selected"
 		cleanup:
 			deleteTestMessages()
 	}
@@ -38,7 +38,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#message-details p:nth-child(1)').text() == "2 messages selected"
+			$("#count").text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
 		then:
@@ -70,8 +70,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#message-details div.buttons').text().contains("Reply All")}
-			def btnReply = $('#message-details div.buttons a')[0]
+			waitFor {$('.multi-action').displayed}
+			def btnReply = $('.multi-action a')[0]
 		then:
 			btnReply
 		when:
@@ -130,15 +130,12 @@ class CheckedMessageSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[0].click()
-			def btnArchive = $('#message-details .buttons #btn_archive_all')
+			waitFor { $(".multi-action").displayed }
+			def btnArchive = $('.multi-action #btn_archive_all')
 			btnArchive.click()
 			waitFor { $("div.flash.message").displayed }
 		then:
-			$("div.flash.message").text().contains("2 messages")
 			at MessagesPage
-		when:
-			waitFor { $("div.flash.message").displayed }
-		then:
 			$("#messages").text() == 'No messages'
 
 	}

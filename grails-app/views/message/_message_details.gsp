@@ -21,8 +21,13 @@
 					</div>
 				</li>
 				<div id='other_btns'>
-					<li class='static_btn'><g:link  elementId="message-delete" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Delete</g:link></li>
-					<li class='static_btn'><g:link elementId="message-archive" action="archiveMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Archive</g:link></li>
+					<li class='static_btn'><g:link elementId="message-delete" action="deleteMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id, archived: params.archived]">Delete</g:link></li>
+					<g:if test="${!params['archived'] && messageSection != 'poll'}">
+i						<li class='static_btn'><g:link elementId="message-archive" action="archiveMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Archive</g:link></li>
+					</g:if>
+					<g:if test="${!params['archived'] && messageSection == 'poll'}">
+						<li class='static_btn'><g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive</g:link></li>
+					</g:if>
 				</div>
 			</g:if>
 		</ol>
@@ -34,3 +39,28 @@
 			</div>
 	</div>
 </div>
+<div class="multi-action buttons hide">
+	<div id="count"></div>
+	<g:if test="${messageSection != 'pending'}">
+		<a id='btn_reply_all'>Reply All</a>
+	</g:if>
+	<g:if test="${!params['archived'] && messageSection != 'poll'}">
+		<a id='btn_archive_all'>Archive All</a>
+	</g:if>
+	<g:if test="${!params['archived'] && messageSection == 'poll'}">
+		<g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link>
+	</g:if>
+	<a id='btn_delete_all'>Delete All</a>
+</div>
+
+
+<g:if test="${!params['archived']}">
+	<g:render template="/message/action_list"/>
+</g:if>
+
+<script>
+	$(".activity-archive").bind("click", function() {
+		var pollName = $(this).attr("name")
+		alert("This message is part of activity name " + pollName + " and so cannot be archived. You must archive the activity type")
+	})
+</script>

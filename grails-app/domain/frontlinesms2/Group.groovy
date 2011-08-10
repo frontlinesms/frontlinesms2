@@ -55,4 +55,11 @@ class Group {
 		}
 		without as Set
 	}
+	
+	static removeContactFromGroups(Contact contact) {
+		def contactGroups = contact.groups
+		contactGroups.each() { cg ->
+			cg.getMembers().remove(contact)
+		}
+	}
 }
