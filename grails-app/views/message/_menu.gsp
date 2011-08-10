@@ -28,7 +28,7 @@
 				</li>
 			</g:each>
 			<li class='create' id="create-poll">
-				<g:remoteLink controller="poll" action="create" onSuccess="launchMediumWizard('Create Poll', data, 'Create');">
+				<g:remoteLink controller="poll" action="create" onSuccess="launchMediumWizard('Create Poll', data, 'Create')">
 					Create new poll
 				</g:remoteLink>				
 			</li>

@@ -109,50 +109,48 @@ class MessageControllerSpec extends ControllerSpec {
 		})
 	}
 
-	def "should render message list template when the request to inbox is an ajax request"() {
+	def "inbox should render archive layout for archived messages"() {
 		def isStarred = true
-		controller.metaClass.isAjaxRequest = { -> return true}
 		controller.params.archived = true
+		def model
 		expect:
-		setupDataAndAssert(isStarred, 5, 1, {fmessage ->                                                        
-			Fmessage.metaClass.'static'.countInboxMessages = {params ->
-				assert isStarred == params['starred']
-				assert params['archived']
-				return 2
-			}
+			setupDataAndAssert(isStarred, 5, 1, {fmessage ->
+				Fmessage.metaClass.'static'.countInboxMessages = {params ->
+					assert isStarred == params['starred']
+					assert params['archived']
+					return 2
+				}
 
-			Fmessage.metaClass.'static'.getInboxMessages = { params ->
-				if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (params['archived']))
-					[fmessage]
-			}
-
-			controller.inbox()
-		})
+				Fmessage.metaClass.'static'.getInboxMessages = { params ->
+					if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (params['archived']))
+						[fmessage]
+				}
+				model = controller.inbox()
+			})
 		and:
-			renderArgs.template == 'message_list'
+			model.actionLayout == "archive"
 	}
 
-	def "should render message list template when the request to sent is an ajax request"() {
+	def "sent should render archive layout for archived messages"() {
 		def isStarred = true
-		controller.metaClass.isAjaxRequest = { -> return true}
 		controller.params.archived = true
+		def model
 		expect:
-		setupDataAndAssert(isStarred, 5, 1, {fmessage ->
-			Fmessage.metaClass.'static'.countSentMessages = {params ->
-				assert isStarred == params['starred']
-				assert params['archived']
-				return 2
-			}
+			setupDataAndAssert(isStarred, 5, 1, {fmessage ->
+				Fmessage.metaClass.'static'.countSentMessages = {params ->
+					assert isStarred == params['starred']
+					assert params['archived']
+					return 2
+				}
 
-			Fmessage.metaClass.'static'.getSentMessages = { params ->
-				if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (params['archived']))
-					[fmessage]
-			}
-
-			controller.sent()
-		})
+				Fmessage.metaClass.'static'.getSentMessages = { params ->
+					if(params['starred'] && params['max'] == mockParams.max && params['offset'] == mockParams.offset && (params['archived']))
+						[fmessage]
+				}
+				model = controller.sent()
+			})
 		and:
-			renderArgs.template == 'message_list'
+			model.actionLayout == "archive"
 	}
 
 	def "should fetch all inbox messages"() {
@@ -235,6 +233,32 @@ class MessageControllerSpec extends ControllerSpec {
 				controller.poll()
 
 		})
+	}
+
+	def "should render list of polls in archive layout"() {
+		def isStarred = false
+		controller.params.archived = true
+		def result
+		expect:
+			setupDataAndAssert(isStarred, 10, 0, {fmessage ->
+				def poll = new Poll(id: 2L, responses: [new PollResponse()])
+				mockParams.ownerId = 2L
+				mockDomain Poll, [poll]
+				poll.metaClass.getMessages = {params->
+					assert params['starred'] == isStarred
+					assert params['max'] == 10
+					assert params['offset'] == 0
+					[fmessage]
+				}
+
+				poll.metaClass.countMessages = {starred ->
+					assert isStarred == starred
+					2
+				}
+				result = controller.poll()
+
+		})
+		result['actionLayout'] == 'archive'
 	}
 
 	//FIXME: Need to  replace it with 'setupDataAndAssert' method.
@@ -429,7 +453,7 @@ class MessageControllerSpec extends ControllerSpec {
 			registerMetaClass(Fmessage)
 			def fmessage = new Fmessage(src: "src1", starred: isStarred)
 			mockDomain Folder
-			mockDomain Poll
+			mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
 			mockDomain Contact
 			mockDomain RadioShow 
 			mockParams.starred = isStarred
@@ -442,7 +466,8 @@ class MessageControllerSpec extends ControllerSpec {
 			assert results['messageInstanceTotal'] == 2
 			assert results['messageInstance'] == fmessage
 			assert results['messageInstanceList']*.contactExists == [false]
-			assert results['messageInstanceList']*.displayName == ["src1"]
+			assert results['messageInstanceList']*.contactExists == [false]
+			assert results['pollInstanceList'].every {!it.archived}
 
     }
 }

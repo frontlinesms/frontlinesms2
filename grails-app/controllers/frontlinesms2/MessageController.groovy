@@ -21,11 +21,6 @@ class MessageController {
 	}
 
 	def show = { messageInstanceList ->
-		if(params.checkedId && params.checkedId != params.messageId) {
-			params.remove('checkedId')
-			redirect(action:params.action)
-		}
-		
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -36,8 +31,8 @@ class MessageController {
 		
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
 				responseInstance: responseInstance,
+				pollInstanceList: Poll.getNonArchivedPolls(),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params)]
 	}
@@ -51,24 +46,18 @@ class MessageController {
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages(params)
-		def model = [messageInstanceList: messageInstanceList,
+		[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
-					messageInstanceTotal: Fmessage.countInboxMessages(params)] << show(messageInstanceList)
-		if(isAjaxRequest()) {
-			render(template : "message_list", model: model)
-		}
-		model
+					messageInstanceTotal: Fmessage.countInboxMessages(params),
+					actionLayout : (params['archived'] ? "archive" : "messages")] << show(messageInstanceList)
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params)
-		def model = [messageSection: 'sent',
+		[messageSection: 'sent',
 				messageInstanceList: messageInstanceList,
-				messageInstanceTotal: Fmessage.countSentMessages(params)] << show(messageInstanceList)
-		if(isAjaxRequest()) {
-			render(template : "message_list", model: model)
-		}
-		model
+				messageInstanceTotal: Fmessage.countSentMessages(params),
+				actionLayout : params['archived'] ? "archive" : "messages"] << show(messageInstanceList)
 	}
 
 	def pending = {
@@ -86,7 +75,8 @@ class MessageController {
 				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
 				ownerInstance: ownerInstance,
 				responseList: ownerInstance.responseStats,
-				pollResponse: ownerInstance.responseStats as JSON] << show(messageInstanceList)
+				pollResponse: ownerInstance.responseStats as JSON,
+				actionLayout : params['archived'] ? 'archive' : 'messages'] << show(messageInstanceList)
 	}
 	
 	def folder = {

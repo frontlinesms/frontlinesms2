@@ -26,13 +26,29 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
-		if(src) {
+		def details = status == MessageStatus.INBOUND ? src : dst
+		if(details) {
 			Contact.withNewSession { session ->
 				contactName = Contact.findByPrimaryMobile(src)?.name ?: Contact.findBySecondaryMobile(src)?.name
 			}
 		}
 	}
+		
+	def updateContactName() {
+		if(status == MessageStatus.INBOUND) {
+			fetchContactName(src)
+		}
+		else {
+			fetchContactName(dst)
+		}
+	}
 	
+	def fetchContactName(String number) {
+		Contact.withNewSession { session ->
+			contactName = Contact.findByPrimaryMobile(number)?.name ?: number
+		}
+	}
+
 	static constraints = {
 		src(nullable:true)
 		dst(nullable:true)

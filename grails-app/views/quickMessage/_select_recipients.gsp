@@ -65,7 +65,10 @@
 	}
 
 	function updateCount() {
-		$("#count").html(getSelectedGroupElements("addresses").size())
+		var count = getSelectedGroupElements("addresses").size();
+		$("#recipient-count").html(count)
+		var contactsCount = $("#contacts-count");
+		contactsCount && contactsCount.html(count)
 	}
 
 </script>

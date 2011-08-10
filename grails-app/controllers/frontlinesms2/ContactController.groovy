@@ -1,7 +1,13 @@
 package frontlinesms2
 
+import grails.util.GrailsConfig
+
 class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+	def beforeInterceptor = {
+		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+	}
 
 	def index = {
 		redirect action: "list", params:params
@@ -97,6 +103,15 @@ class ContactController {
 
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
 		redirect(action:'createContact')
+	}
+	
+	def deleteContact = {
+		withContact { contactInstance ->
+			Group.removeContactFromGroups(contactInstance)
+			Contact.get(contactInstance.id).delete()
+		}
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
+		redirect(action: "list")
 	}
 
 	def saveGroup = {

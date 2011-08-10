@@ -2,16 +2,21 @@
 <ol class="context-menu" id="archives-menu">
 	<li class='section'>
 		<ol class='sub-menu' id="archive-submenu">
-			<li>
-				<g:remoteLink class="" action="inbox" elementId="inbox" controller="message" params="${[archived: true]}"  onSuccess="loadAllData(data)">
-					Inbox Archive
-				</g:remoteLink>
-			</li>
-			<li>
-				<g:remoteLink class="" action="sent" elementId="sent" controller="message" params="${[archived: true]}"  onSuccess="loadAllData(data)">
-					Sent Archive
-				</g:remoteLink>
-			</li>
+				<li>
+					<g:link class="${(messageSection=='inbox')? 'selected':''}" action="inbox" elementId="inbox" controller="message" params="${[archived: true]}"  onSuccess="loadAllData(data)">
+						Inbox Archive
+					</g:link>
+				</li>
+				<li>
+					<g:link class="${(messageSection=='sent')? 'selected':''}" action="sent" elementId="sent" controller="message" params="${[archived: true]}"  onSuccess="loadAllData(data)">
+						Sent Archive
+					</g:link>
+				</li>
+				<li>
+					<g:link elementId="poll" class="${(messageSection=='poll')? 'selected':''}"  controller="poll" params="${[archived: true]}">
+						Activity archive
+					</g:link>
+				</li>
 		</ol>
 	</li>
 </ol>                                                                                                                            
