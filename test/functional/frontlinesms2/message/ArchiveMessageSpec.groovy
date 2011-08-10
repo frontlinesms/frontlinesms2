@@ -80,16 +80,6 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			$(".multi-action a").every() {it.text() != "Archive All"}
 	}
 
-	def 'archived messages do not show up in poll view'() {
-		when:
-			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
-			def btnArchiveFromPoll = $('#message-details .buttons #message-archive')
-			btnArchiveFromPoll.click()
-			waitFor { $("div.flash.message").text().contains("archived") }
-		then:
-			Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 1
-	}
-
 	def 'archived messages do not show up in folder view'() {
 		given:
 			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"

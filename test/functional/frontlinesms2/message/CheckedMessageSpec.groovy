@@ -133,13 +133,9 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $(".multi-action").displayed }
 			def btnArchive = $('.multi-action #btn_archive_all')
 			btnArchive.click()
-			waitFor { $("#messages").text() == 'No messages' }
-		then:
-			$("div.flash.message").text().contains("2 messages")
-			at MessagesPage
-		when:
 			waitFor { $("div.flash.message").displayed }
 		then:
+			at MessagesPage
 			$("#messages").text() == 'No messages'
 
 	}

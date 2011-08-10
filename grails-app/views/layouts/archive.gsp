@@ -10,7 +10,7 @@
 	<g:javascript src="message/check_message.js"></g:javascript>
 	<g:javascript src="message/star_message.js"></g:javascript>
 	<g:javascript src="application.js"/>
-	<g:javascript src="popup.js" />
+	<g:javascript src="popup.js"/>
 
 </head>
 <body>
@@ -19,7 +19,7 @@
 <div id="main">
 	<div id="archive">
 		<g:render template="../archive/menu"/>
-		<g:render template="message_list"/>
+		<g:render template="list_items"/>
 		<g:layoutBody/>
 	</div>
 </div>
