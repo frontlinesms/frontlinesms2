@@ -100,12 +100,20 @@ class ContactController {
 	}
 	
 	def deleteContact = {
-		withContact { contactInstance ->
-			Group.removeContactFromGroups(contactInstance)
-			Contact.get(contactInstance.id).delete()
+		def contactIds = params.ids ? [params.ids].flatten() : [params.contactId]
+		contactIds.each { id ->
+			withContact id, { contactInstance ->
+				Group.removeContactFromGroups(contactInstance)
+				Contact.get(contactInstance.id).delete()
+			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-		redirect(action: "list")
+		
+		if (request.xhr) {
+			render ""
+		} else {
+			redirect(view: "list")		
+		}
 	}
 
 	def saveGroup = {
@@ -127,8 +135,8 @@ class ContactController {
 				contactInstance: contactInstance]
 	}
 
-	private def withContact(Closure c) {
-		def contactInstance = Contact.get(params.contactId)
+	private def withContact(contactId = params.contactId, Closure c) {
+		def contactInstance = Contact.get(contactId)
 		if (contactInstance) {
 			c contactInstance
 		} else {
