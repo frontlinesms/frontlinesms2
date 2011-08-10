@@ -160,23 +160,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			deleteTestContacts()
 	}
 
-	def "should not be able to archive poll messages"() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}"
-			$("#message")[0].click()
-			waitFor {$('.multi-action').displayed}
-    	then:
-			$(".multi-action a").size() == 2
-			$(".multi-action a").every {!it.text().contains("Archive all")}
-		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}"
-		then:
-			$(".single-action a").every {!it.text().contains("Archive")}
-	}
-
 	def "should be able to archive an activity"() {
 		given:
 			createTestPolls()
@@ -223,7 +206,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[0].click()
 			waitFor {$("a", text: "Delete All").displayed}
 			$("a", text:"Delete All").click()
-			waitFor{$("div.flash").displayed}
+			waitFor{$("#messages").text().contains("No messages")}
 		then:
 			$("#main-tabs a", text: "Archive").hasClass("selected")
 	}
