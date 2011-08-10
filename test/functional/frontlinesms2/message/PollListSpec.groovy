@@ -206,7 +206,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[0].click()
 			waitFor {$("a", text: "Delete All").displayed}
 			$("a", text:"Delete All").click()
-			waitFor(5, 0.5) {$("div.flash").text() == "3 messages deleted"}
+			waitFor(5, 0.5) {$("#messages").text() == "No messages"}
 		then:
 			$("#main-tabs a", text: "Archive").hasClass("selected")
 	}
