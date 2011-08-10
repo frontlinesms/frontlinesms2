@@ -1,5 +1,5 @@
 <ol class="context-menu" id='search-menu'>
-	<g:form name="searchDetails">
+	<g:form name="search-details">
 		<li id='search-field' class="section">
 			<h2 id="search-string">Keyword or phrase:</h2>
 			<ol class='sub-menu'>
@@ -27,7 +27,7 @@
 				</ol>
 			</g:if>
 		</li>
-		<li class='section' class="buttons">
+		<li class='section buttons'>
 			<ol class='sub-menu'>
 				<li>
 					<g:actionSubmit class="search" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" action="result"/>

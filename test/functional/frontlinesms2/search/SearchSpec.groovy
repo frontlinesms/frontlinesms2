@@ -134,11 +134,11 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 class SearchPage extends geb.Page {
 	static url = 'search'
 	static at = {
-		title.startsWith('Search')
+		title.startsWith('Results')
 	}
 	static content = {
 		searchFrm { $('#search-details') }
-		searchBtn { $('.buttons .search') }
+		searchBtn { $('#search-details .buttons .search') }
 		searchDescription { $('#search-description') }
 	}
 }
