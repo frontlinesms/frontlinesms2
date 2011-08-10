@@ -204,9 +204,13 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("a", text:'archived poll').click()
 			waitFor {$("#messages").displayed}
 			$("#message")[0].click()
-			waitFor {$("a", text: "Delete All").displayed}
-			$("a", text:"Delete All").click()
-			waitFor(5, 0.5) {$("#messages").text() == "No messages"}
+			waitFor {$('.multi-action').displayed}
+			def btnDelete = $('.multi-action a')[1]
+		then:
+			btnDelete
+		when:
+			btnDelete.click()
+			waitFor() {$("body").find("div.flash").text() ==("3 messages deleted") }
 		then:
 			$("#main-tabs a", text: "Archive").hasClass("selected")
 	}
