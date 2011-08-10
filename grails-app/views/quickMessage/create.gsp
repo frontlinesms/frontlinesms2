@@ -10,7 +10,12 @@
 
 	<g:form action="send" controller="message" method="post">
 		<g:render template="message"/>
-		<g:render template="recipients"/>
+		<div id="tabs-2">
+			<label for="address">Add phone number</label>
+			<g:textField id="address" name="address"/>
+			<g:link url="#" class="add-address">Add</g:link>
+			<g:render template="select_recipients"/>
+		</div>
 		<g:render template="confirm"/>
 	</g:form>
 </div>

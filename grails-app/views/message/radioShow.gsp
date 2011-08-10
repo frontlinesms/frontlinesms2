@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta name="layout" content="messages" />
-        <title>Folder</title>
+        <title>Radio Show</title>
     </head>
     <body>
 		<g:if test="${messageInstance != null}">

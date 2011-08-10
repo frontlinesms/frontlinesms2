@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="messages-menu">
 	<li class="section">
+		<img src='${resource(dir:'images/icons',file:'messages.gif')}' />
 		<h2>Messages</h2>
 		<ol class='sub-menu' id="messages-submenu">
 			<li class="${(messageSection=='inbox')? 'selected':''}">
@@ -18,11 +19,12 @@
 		</ol>
 	</li>
 	<li class="section">
+		<img src='${resource(dir:'images/icons',file:'activities.gif')}' />
 		<h2>Activities</h2>
 		<ol class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
-				<li>
-					<g:link action="poll" params="[ownerId: p.id]" class="${p == ownerInstance ? 'selected' : ''}">${p.title} (${p.countMessages()})</g:link>
+				<li class="${p == ownerInstance ? 'selected' : ''}">
+					<g:link action="poll" params="[ownerId: p.id]">${p.title} (${p.countMessages()})</g:link>
 				</li>
 			</g:each>
 			<li class='create' id="create-poll">
@@ -33,11 +35,12 @@
 		</ol>
 	</li>
 	<li class="section">
+		<img src='${resource(dir:'images/icons',file:'shows.gif')}' />
 		<h2>Shows</h2>
 		<ol class='sub-menu' id="shows-submenu">
 			<g:each in="${radioShows}" status="i" var="s">
-				<li>
-					<g:link action="radioShow" params="[ownerId: s.id]" class="${s == ownerInstance ? 'selected' : ''}">${s.name} (${s.countMessages()})</g:link>
+				<li class="${s == ownerInstance ? 'selected' : ''}">
+					<g:link action="radioShow" params="[ownerId: s.id]">${s.name} (${s.countMessages()})</g:link>
 				</li>
 			</g:each>
 			<li class="create" id='create-show'>
@@ -48,11 +51,12 @@
 		</ol>
 	</li>
 	<li class="section">
+		<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
 		 <h2>Folders</h2>
 	 	<ol class='sub-menu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">
-				<li>
-					<g:link action="folder" params="[ownerId: f.id]" class="${f == ownerInstance ? 'selected' : ''}">${f.name} (${f.countMessages()})</g:link>
+				<li class="${f == ownerInstance ? 'selected' : ''}">
+					<g:link action="folder" params="[ownerId: f.id]">${f.name} (${f.countMessages()})</g:link>
 				</li>
 			</g:each>
 			<li class='create' id="create-folder">

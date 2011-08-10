@@ -7,9 +7,6 @@ $(document).ready(function() {
 		.next()
 			.button( {
 				text: false,
-				icons: {
-					primary: "ui-icon-triangle-1-s"
-				}
 			})
 			.click(function() {
 				$("#dropdown_options").toggle()
@@ -46,7 +43,8 @@ function launchMediumWizard(title, html, btnFinishedText) {
 			title: title,
 			width: 675,
 			height: 500,
-			buttons: [{ text:"Prev", click: prevButton, id:"prevPage" },
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
+			          		{ text:"Prev", click: prevButton, id:"prevPage" },
 			          		{ text:"Next",  click: nextButton, id:"nextPage" },
 			          		{ text:btnFinishedText,  click: done, id:"done" }],
 			close: function() { $(this).remove(); }
@@ -54,6 +52,10 @@ function launchMediumWizard(title, html, btnFinishedText) {
 	);
 	changeButtons();
 	$(".ui-tabs-nav li a ").click(changeButtons);
+}
+
+function cancel() {
+	$(this).remove();
 }
 
 function prevButton() {
@@ -74,7 +76,6 @@ function done() {
 	$(this).find("form").submit(); // TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universally
 	$(this).remove();
 }
-
 
 function changeButtons() {
 	var $tabs = $('#tabs').tabs();

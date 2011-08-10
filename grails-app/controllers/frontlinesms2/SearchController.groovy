@@ -12,7 +12,8 @@ class SearchController {
 	def no_search = {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll()]
+				pollInstanceList: Poll.findAll(),
+				messageSection: 'search']
 	}
 	
 	def result = {
@@ -23,7 +24,6 @@ class SearchController {
 		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
 		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners, max, offset)
 		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
-				messageSection: 'result',
 				searchString: params.searchString,
 				groupInstance: groupInstance,
 				activityId: params.activityId,
@@ -52,7 +52,7 @@ class SearchController {
 	}
 	
 	private def getSearchDescription(searchString, group, activity) {
-		if(!searchString && !group && !activity) 'Start new search on the left'
+		if(!searchString && !group && !activity) null
 		else {
 			"Searching in " + {
 				if(!activity && !group) {

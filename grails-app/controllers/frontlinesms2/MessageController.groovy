@@ -81,7 +81,6 @@ class MessageController {
 	def poll = {
 		def ownerInstance = Poll.get(params.ownerId)
 		def messageInstanceList = ownerInstance.getMessages(params)		
-		params.messageSection = 'poll'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
 				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
@@ -96,7 +95,6 @@ class MessageController {
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
 
-		params.messageSection = 'folder'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
 				messageInstanceTotal: folderInstance.countMessages(params['starred']),
@@ -109,7 +107,6 @@ class MessageController {
 		def showInstance = RadioShow.get(params.ownerId)
 		def messageInstanceList = showInstance?.getShowMessages(params)
 
-		params.messageSection = 'radioShow'
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'radioShow',
 				messageInstanceTotal: showInstance.countMessages(params['starred']),
