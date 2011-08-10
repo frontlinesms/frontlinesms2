@@ -19,7 +19,7 @@
 																			'recipients': []]"></g:render>
 		</div>
 		<g:render template="confirm"/>
-		</g:form>
+	</g:form>
 </div>
 
 <script>

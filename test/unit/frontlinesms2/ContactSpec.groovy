@@ -14,15 +14,17 @@ class ContactSpec extends UnitSpec {
 			c.name == 'Alice'
 	}
 
-	def "blank names are allowed, there is no minimum length for name"() {
+	def "blank names are allowed so long as there is a number, there is no minimum length for name"() {
 		setup:
 			mockForConstraintsTests(Contact)
 		when:
 			def noNameContact = new Contact(name:'', primaryMobile:'9876543')
 			def namedContact = new Contact(name:'a')
+			def noInfoContact = new Contact(name:'', primaryMobile:'')
 		then:
 			noNameContact.validate()
 			namedContact.validate()
+			!noInfoContact.validate()
 	}
 
 	def "duplicate names are allowed"(){

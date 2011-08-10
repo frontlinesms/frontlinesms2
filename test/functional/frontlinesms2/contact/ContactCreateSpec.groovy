@@ -11,25 +11,6 @@ class ContactCreateSpec extends ContactGebSpec {
 		deleteTestContacts()
 	}
 
-	def 'button to save new contact is displayed and works'() {
-		when:
-			to CreateContactPage
-			$('#name').value('Kate')
-			$('#address').value('987878778')
-			saveButton.click()
-		then:
-			at ContactListPage
-	}
-
-	def 'trying to save with no name is valid'() {
-		when:
-			to CreateContactPage
-			saveButton.click()
-			$('#address').value('987878778')
-		then:
-			at ContactListPage
-	}
-
 	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
 		when:
 			to CreateContactPage
@@ -53,7 +34,6 @@ class CreateContactPage extends geb.Page {
 		title.endsWith('Create Contact')
 	}
 	static content = {
-		saveButton { $("#contact-details .save") }
 		errorMessages { $('.flash.errors') }
 	}
 }
