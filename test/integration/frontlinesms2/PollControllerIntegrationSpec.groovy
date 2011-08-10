@@ -8,7 +8,7 @@ class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec 
 		controller = new PollController()
 	}
 
-	def "should save poll"() {
+	def "can save new poll"() {
 		setup:
 			controller.params.title = "poll"
 			controller.params.choiceA = "yes"

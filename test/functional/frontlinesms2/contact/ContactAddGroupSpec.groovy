@@ -21,7 +21,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		when:
 			go "contact/show/${bob.id}"
 		then:
-			def memberOf = $("#group-list").children().children('h2').collect() { it.text() }.sort()
+			def memberOf = $("#group-list li").children('input').collect() { it.value() }.sort()
 			memberOf == ['Test', 'three']
 	}
 
@@ -37,7 +37,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			
 		when:
 			$('#group-dropdown').value("${Group.findByName('Others').id}")
-			def updatedMemberOf = $("#group-list").children().children('h2').collect() { it.text() }.sort()
+			def updatedMemberOf = $("#group-list").children().children('input').collect() { it.value() }.sort()
 		then:
 			updatedMemberOf == ['Others', 'Test', 'three']
 			assert groupSelecter.children().collect() { it.text() } == ['Add to group...', 'four']
@@ -52,22 +52,22 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			go "contact/show/${bob.id}"
 			def lstGroups = $("#group-list")
 		then:
-			lstGroups.children().children('h2').size() == 2
-			def groupsText = lstGroups.children().children('h2').collect() { it.text() }
+			lstGroups.children().children('input').size() == 2
+			def groupsText = lstGroups.children().children('input').collect() { it.value() }
 			groupsText.containsAll(['Test', 'three'])
 		when:
 			lstGroups.find('a').first().click()
 			bobsGroups = bob.groups
 		then:
-			lstGroups.children().children('h2').size() == 1
-			lstGroups.children().children('h2').text() == groupsText[1]
+			lstGroups.children().children('input').size() == 1
+			lstGroups.children().children('input').value() == groupsText[1]
 			bobsGroups == bobsDatabaseGroups
 
 		when:
 			lstGroups.find('a').first().click()
 			bobsGroups = bob.getGroups()
 		then:
-			lstGroups.children().children('h2').size() == 0
+			lstGroups.children().children('input').size() == 0
 			bobsGroups == bobsDatabaseGroups
 			$("#group-list").text() == 'Not part of any Groups'
 			bobsGroups == bobsDatabaseGroups
@@ -80,7 +80,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			go "contact/show/${bob.id}"
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			groupSelecter.find(name: 'group-dropdown').value('Others')
-			$("#contactDetails .save").click()
+			$("#contact-details .save").click()
 		then:
 			at ContactListPage
 			Group.findByName('Test').getMembers().contains(Contact.findByName('Bob'))
@@ -90,7 +90,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		when:
 			to BobsContactPage
 			def btnRemoveFromGroup = $("#group-list").find('a').first()
-		    def groupDeletedFrom = $("#group-list").find('h2').first().text()
+		    def groupDeletedFrom = $("#group-list").find('input').first().value()
 			assert btnRemoveFromGroup != null && !(btnRemoveFromGroup instanceof EmptyNavigator)
 			btnRemoveFromGroup.click()
 			def btnUpdate = $("#contact-details .update")

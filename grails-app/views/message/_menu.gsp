@@ -53,7 +53,7 @@
 	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
 		 <h2>Folders</h2>
-	 	<ol class='sub-menu' >
+	 	<ol class='sub-menu' id='folders-submenu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li class="${f == ownerInstance ? 'selected' : ''}">
 					<g:link action="folder" params="[ownerId: f.id]">${f.name}</g:link>

@@ -12,32 +12,14 @@ class CreateFolderSpec extends FolderGebSpec {
 			btnNewPoll.getAttribute('href') == "/frontlinesms2/folder/create"
 	}
 
-	def 'button to save new folder works'() {
-			given:
-				createTestFolders()
-				def initialFolderCount = Folder.count()
-			when:
-				go "folder/create"
-				def frmDetails = $("#folder-details")
-				def btnSave = $('input', name:'save')
-				frmDetails.name = 'Fun'
-				btnSave.click()
-                waitFor { !($("div.flash.message").text().isEmpty()) }
-			then:
-				Folder.count() == initialFolderCount + 1
-				title.contains("Inbox")
-			cleanup:
-				deleteTestFolders()
-	}
-
 	def 'existing folders appear in activities section of messages'() {
 			given:
 				createTestFolders()
 			when:
 				go 'message'
 			then:
-				$('#activities-submenu li')[0].text().contains('Work')
-				$('#activities-submenu li')[1].text().contains('Project')
+				$('#folders-submenu li')[0].text().contains('Work')
+				$('#folders-submenu li')[1].text().contains('Project')
 			cleanup:
 				deleteTestFolders()
 	}

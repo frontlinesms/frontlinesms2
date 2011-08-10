@@ -22,16 +22,16 @@
 				<g:hiddenField name="groupsToRemove" value=","/>
 				<g:hiddenField name="fieldsToAdd" value=","/>
 				<g:hiddenField name="fieldsToRemove" value=","/>
-			<div class="buttons">
-				<ol>
-					<g:if test="${contactInstance.id}">
-						<li><g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/></li>
-					</g:if>
-					<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
-					<g:if test="${contactInstance.id}">
-						<li><g:actionSubmit class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/></li>
-					</g:if>
-				</ol>
+				<div class="buttons">
+					<ol>
+						<g:if test="${contactInstance.id}">
+							<li><g:actionSubmit class="update" action="update" value="${message(code: 'default.button.save.label', default: 'Save')}"/></li>
+						</g:if>
+						<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+						<g:if test="${contactInstance.id}">
+							<li><g:actionSubmit class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/></li>
+						</g:if>
+					</ol>
 				</div>
 				<div class="basic-info field">
 					<label for="name"><g:message code="contact.name.label" default="Name"/></label>
