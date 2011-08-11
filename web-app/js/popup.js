@@ -34,10 +34,12 @@ function launchWizard(title, html,width, onLoad) {
 }
 
 function quickMessageClickAction() {
+	var configureTabs
 	$("#dropdown_options").hide()
 	var me = $(this)
 	var messageType = me.text();
 	if (messageType == 'Reply') {
+		configureTabs = 'tabs-1, tabs-3'
 		var src = $("#message-src").val()
 	} else if(messageType == 'Forward') {
 		var text = $("#message-body").text()
@@ -46,7 +48,7 @@ function quickMessageClickAction() {
 		type:'POST',
 		traditional: true,
 		context:'json',
-		data: { recipients: [src], messageText: text},
+		data: { recipients: [src],  messageText: text, configureTabs: configureTabs},
 		url: '/frontlinesms2/quickMessage/create',
 		success: function(data, textStatus){ launchWizard(messageType, data); }
 	});
