@@ -5,7 +5,7 @@ import geb.navigator.*
 @Category(grails.plugin.geb.GebSpec)
 class GebUtil {
 	
-	def getTableAsArray(Navigator navigator) {
+	def getTableAsArray(Navigator navigator, boolean stripHeader) {
 		def rows = []
 	    navigator*.each {
 	    	def child = it.children()
@@ -15,10 +15,12 @@ class GebUtil {
 			}
 	    	rows << row
 	    }
-	    rows
+	    if(rows.size() > 0 && stripHeader)
+			rows.remove(0) //Remove header
+		rows
 	}
 	
 	def getColumnAsArray(Navigator navigator, int i) {
-		getTableAsArray(navigator).collect { it -> it[i]}
+		getTableAsArray(navigator, true).collect { it -> it[i]}
 	}
 }
