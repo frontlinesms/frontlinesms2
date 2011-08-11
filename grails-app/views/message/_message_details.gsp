@@ -3,7 +3,8 @@
 	<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}" />
 	<h2 id="contact-name">${messageInstance.displayName}
 		<g:if test="${!messageInstance.contactExists}">
-			<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: '${messageInstance.src ?: messageInstance.dst}']"><img src='${resource(dir:'images/icons',file:'messagehistory.gif')}' /></g:link>
+			<g:def var="thisAddress" value="${messageInstance.src}"/>
+			<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: thisAddress]"><img src='${resource(dir:'images/icons',file:'messagehistory.gif')}' /></g:link>
 		</g:if>
 	</h2>
 	<p id="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
@@ -39,20 +40,20 @@
 				<g:render  template="categorize_response"/>
 			</g:if>
 		</div>
-		<div class="multi-action buttons hide">
-			<div id="count"></div>
-			<g:if test="${messageSection != 'pending'}">
-				<a id='btn_reply_all'>Reply All</a>
-			</g:if>
-			<g:if test="${!params['archived'] && messageSection != 'poll'}">
-				<a id='btn_archive_all'>Archive All</a>
-			</g:if>
-			<g:if test="${!params['archived'] && messageSection == 'poll'}">
-				<g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link>
-			</g:if>
-			<a id='btn_delete_all'>Delete All</a>
-		</div>
 	</div>
+</div>
+<div class="multi-action buttons hide">
+	<div id="count"></div>
+	<g:if test="${messageSection != 'pending'}">
+		<a id='btn_reply_all'>Reply All</a>
+	</g:if>
+	<g:if test="${!params['archived'] && messageSection != 'poll'}">
+		<a id='btn_archive_all'>Archive All</a>
+	</g:if>
+	<g:if test="${!params['archived'] && messageSection == 'poll'}">
+		<g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link>
+	</g:if>
+	<a id='btn_delete_all'>Delete All</a>
 </div>
 
 <script>
