@@ -2,6 +2,7 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
+@Mixin(frontlinesms2.utils.GebUtil)
 class AddContactSpec extends MessageGebSpec {
 	def 'if source of message does not exists in the database then number is displayed'() {
 		when:
@@ -10,27 +11,14 @@ class AddContactSpec extends MessageGebSpec {
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
-			$('#message-details p:nth-child(1)').text() == '+254778899'
-		cleanup:
-			deleteTestMessages()
+			getColumnAsArray($('#messages tr'), 2) == ['+254778899', 'Alice', 'Bob']
 			
-	}
-	def 'if source of message exists in the database then contact name is displayed'() {
-		when:
-			createTestContacts()
-			createTestMessages()
-			def message = Fmessage.findBySrc('+254778899')
-			go "message/inbox/show/${message.id}"
-
-		then:
-			Contact.findByPrimaryMobile(message.src)
-			$('#message-details p:nth-child(1)').text() == 'Alice'
 		cleanup:
 			deleteTestMessages()
 			deleteTestContacts()
 	}
 	
-	def "add contact button is displayed and redirects to create contacts page with number field prepopulated"() {
+	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
 		when:
 			createTestMessages()
 			def message = Fmessage.findBySrc('+254778899')

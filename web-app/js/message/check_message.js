@@ -45,8 +45,7 @@ function loadMessage(id, checked) {
 }
 
 function countCheckedMessages(){
-     return validateCheckedMessageCount(getSelectedGroupElements('message').size())
-
+     return validateCheckedMessageCount(getSelectedGroupElements('message').size());
 }
 
 function validateCheckedMessageCount(count) {
@@ -141,7 +140,7 @@ $('#btn_archive_all').live('click', function() {
 });
 
 function reloadPage(messageSection, ownerId) {
-	var params = location.search
+	var params = location.search;
 	if(messageSection == 'poll' || messageSection == 'folder'){
 		var url = "message/"+messageSection+"/"+ownerId + params;
 	} else {
@@ -176,4 +175,3 @@ function highlightRow(id){
 function isValid(value) {
 		return value && value != "0"
 }
-

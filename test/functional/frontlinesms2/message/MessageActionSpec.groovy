@@ -83,12 +83,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			assert Fmessage.findBySrc('Bob').messageOwner.value == 'manchester'
 		when:
 			to PollMessageViewPage
-			def btnAssignToBarcelona = $('#poll-actions li:nth-child(2) a')
-		then:
-			btnAssignToBarcelona.text() == 'barcelona'
-		when:
-			btnAssignToBarcelona.click()
-            waitFor { $("div.flash.message").text().contains("Fmessage") }
+			def barcelonaOption = $('#categorise_dropdown option', text:'barcelona') 
+			$('#categorise_dropdown').value(barcelonaOption.@value)
 			def barceResponse = PollResponse.findByValue('barcelona')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')
@@ -110,7 +106,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def workFolder = Folder.findByName('Work')
 			go "message/poll/${footballPoll.id}/show/${Fmessage.findBySrc('Max').id}"
 			$('#message-actions').value("${Folder.findByName('Work').id}")
-			waitFor {$("div.flash.message").displayed}
+			waitFor {$("div.flash").displayed}
 			footballPoll.responses.each { it.refresh() }
 			workFolder.refresh()
 		then:
@@ -137,7 +133,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
-			waitFor {$("div.flash.message").displayed}
+			waitFor {$("div.flash").displayed}
 		then:
 			bob != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == bob }
 			alice != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == alice }
