@@ -2,19 +2,6 @@ $(document).ready(function() {
 	$('tr :checkbox[checked="true"]').parent().parent().addClass('checked');
 });
 
-<<<<<<< HEAD
-function setStarStatus(object,data){
-	if(data == 'starred') {
-		$("#"+object).addClass(data);
-		$("#"+object).removeClass("unstarred");
-	} else {
-		$("#"+object).addClass(data);
-		$("#"+object).removeClass("starred");
-	}	
-}
-
-=======
->>>>>>> master
 var selectedMessageId;
 
 function checkAllMessages(){
@@ -49,34 +36,16 @@ function updateMessageDetails(id){
 }
 
 function loadMessage(id, checked) {
-<<<<<<< HEAD
-	var messageSection = $('input:hidden[name=messageSection]').val();
-	var ownerId = $('input:hidden[name=ownerId]').val();
-	var messageId = id;
-	if(checked) {
-		messageId = messageId+"?checkedId="+messageId;
-	}
-	
-	if(ownerId != null && messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
-		window.location = url_root + 'message/'+messageSection+"/"+ownerId+"/show/"+messageId;
-	} else if(ownerId != null && messageSection == 'result') {
-		window.location = url_root + "search/"+messageSection+"/"+messageId+"&activityId="+$('input:hidden[name=activityId]').val()+"&groupId="+$('input:hidden[name=groupId]').val()+"&searchString="+$('input:hidden[name=searchString]').val();
-	} else {
-		window.location = url_root + 'message/'+messageSection+"/show/"+messageId;
-	} 
-=======
 	var url = $(".displayName-" + id).attr("href")
 	if(checked == true){
 	   url = url + (url.indexOf("?") > -1 ? "&" : "?")
 		url = url + "checkedId="+id;
 	}
 	window.location = url
->>>>>>> master
 }
 
 function countCheckedMessages(){
-     return validateCheckedMessageCount(getSelectedGroupElements('message').size())
-
+     return validateCheckedMessageCount(getSelectedGroupElements('message').size());
 }
 
 function validateCheckedMessageCount(count) {
@@ -93,37 +62,13 @@ function validateCheckedMessageCount(count) {
 
 function changeMessageCount(count){
 	setSelectedMessage();
-<<<<<<< HEAD
-	$('#message-details p#message-date').remove();
-	$('#message-details p#message-body').remove();
-	$('#message-details .button').remove();
-	$("<p id='message-count'></p>").replaceAll($('#message-details p'));
-	$('#message-details #message-count').empty().append(count+" messages selected");
-=======
 	$('#count').html("<p> "+count+" messages selected</p>");
->>>>>>> master
 	setMessageActions();
 }
 
 function setMessageActions() {
-<<<<<<< HEAD
-	var replyAll = '';
-	var messageSection = $('input:hidden[name=messageSection]').val()
-	if(messageSection != 'pending'){
-		replyAll = "<a id='btn_reply_all' >Reply All</a>";
-	}
-	archiveAll = "<a id='btn_archive_all' >Archive All</a>";
-	deleteAll = "<a id='btn_delete_all' >Delete All</a>";
-	$('#message-details .buttons').empty();
-	$('#message-details div.buttons').append(replyAll+"&nbsp;"+archiveAll+"&nbsp;"+deleteAll);
-	
-	$('#btn_reply_all').click(quickReplyClickAction);
-	$('#btn_delete_all').click(deleteAllClickAction);
-	$('#btn_archive_all').click(archiveClickAction);
-=======
 	$('.multi-action').show()
 	$('#message-details').hide()
->>>>>>> master
 }
 
 function getSelectedGroupElements(groupName) {
@@ -195,21 +140,13 @@ $('#btn_archive_all').live('click', function() {
 });
 
 function reloadPage(messageSection, ownerId) {
-	var params = location.search
+	var params = location.search;
 	if(messageSection == 'poll' || messageSection == 'folder'){
-<<<<<<< HEAD
-		var location = 'message/'+messageSection+"/"+ownerId;
-	} else{
-		var location = 'message/'+messageSection;
-	}
-	window.location = url_root + location
-=======
 		var url = "/frontlinesms2/message/"+messageSection+"/"+ownerId + params;
 	} else{
 		var url = "/frontlinesms2/message/"+messageSection + params;
 	}
-	window.location = url
->>>>>>> master
+	window.location = url;
 }
 
 function setSelectedMessage() {
@@ -218,20 +155,13 @@ function setSelectedMessage() {
 	}
 }
 
-<<<<<<< HEAD
-function showMessageDetails() {
-	if(selectedMessageId == null){
-		return;
-	}
-	loadMessage(selectedMessageId, false);
-=======
 function enableSingleAction() {
 	$('.multi-action').hide()
 	$('#message-details').show()
 }
+
 function showMessageDetails(){
 	enableSingleAction();
->>>>>>> master
 }
 
 function highlightRow(id){
@@ -245,4 +175,3 @@ function highlightRow(id){
 function isValid(value) {
 		return value && value != "0"
 }
-

@@ -39,10 +39,10 @@
 			if (this.value) choices = choices + ' ' + this.name.substring(6,7) + ') ' + this.value
 		});
 		$("#poll-question-text").html('<pre>' + question + ' ' + choices + ' ' + instruction + '</pre>');
+		$("#auto-reply-read-only-text").html($("#autoReplyText").val())
 	}
 
 	function validate() {
-		alert('validating');
 		return isGroupChecked('auto-reply') ? !isElementEmpty('.check-bound-text-area') : true;
 	}
 

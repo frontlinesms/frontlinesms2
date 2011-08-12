@@ -43,9 +43,9 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to MessagesPage
 		then:
-		$('#messages-submenu li')*.text()[0] == 'Inbox (2)'
-		$('#messages-submenu li')*.text()[1] == 'Sent (2)'
-		$('#messages-submenu li')*.text()[2] == 'Pending (2)'
+		$('#messages-submenu li')*.text()[0] == 'Inbox'
+		$('#messages-submenu li')*.text()[1] == 'Sent'
+		$('#messages-submenu li')*.text()[2] == 'Pending'
 		$('#messages-submenu li')*.text()[3] == 'Trash'
 		cleanup:
 			deleteTestMessages()
@@ -57,7 +57,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to MessagesPage
 		then:
-		$('#tab-messages').text() == 'Messages (1)'
+		$('#tab-messages').text() == 'Messages 1'
 		cleanup:
 			deleteTestMessages()
 	}
@@ -69,11 +69,11 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			$("#source-header a").click()
 		then:
-			getColumnAsArray($("table tr"), 2) == ['From', 'Contact 1', 'Contact 2']
+			getColumnAsArray($("table tr"), 2) == ['Contact 1', 'Contact 2']
 		when:
 			$("#message-header a").click()
 		then:
-			getColumnAsArray($("table tr"), 3) == ['Message', 'An inbox message', 'Another inbox message']		
+			getColumnAsArray($("table tr"), 3) == ['An inbox message', 'Another inbox message']		
 		cleanup:
 			deleteTestMessages()
 	}
