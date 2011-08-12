@@ -27,8 +27,6 @@ class CreateNewPollSpec extends PollGebSpec {
 		then:
 			Poll.count() == initialPollCount + 1
 			title.contains("Inbox")
-		cleanup:
-			deleteTestPolls()
 	}
 
 	def "should not allow to proceed to the next tab if blank auto response is given" () {
@@ -59,8 +57,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			$('#activities-submenu li')[0].text().contains('Football Teams') // TODO: find/implement array contains
 			$('#activities-submenu li')[1].text().contains('Shampoo Brands')
 			$('#activities-submenu li')[2].text().contains('Rugby Brands')
-		cleanup:
-			deleteTestPolls()
 	}
 
 	def 'each word in response field is its own possible response'() {
@@ -75,8 +71,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			def ufoPoll = Poll.findByTitle("UFOs?")
 		then:
 			ufoPoll.responses*.value.sort() == ['Unknown', 'kidnapped', 'no', 'yes']
-		cleanup:
-			deleteTestPolls()
 	}
 }
 

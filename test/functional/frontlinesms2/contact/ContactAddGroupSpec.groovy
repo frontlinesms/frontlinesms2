@@ -10,10 +10,6 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		createTestGroups()
 	}
 	
-	def cleanup() {
-		deleteTestGroups()
-		deleteTestContacts()
-	}
 
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		given:

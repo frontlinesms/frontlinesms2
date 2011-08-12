@@ -3,13 +3,6 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 class GroupViewSpec extends GroupGebSpec {
-	def cleanup() {
-		Group.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)	
-		}
-	}
-
 	def 'Group menu is displayed'() {
 		given:
 			createTestGroups()

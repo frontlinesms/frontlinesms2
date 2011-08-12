@@ -24,8 +24,6 @@ class ConnectionListSpec extends ConnectionGebSpec {
 			to ConnectionListPage
 		then:
 			$('div.status').text() == "Not connected"
-		cleanup:
-			deleteTestConnections()
 	}
 //FIXME: Build Fix	
 /*	def 'There is a Connected label shown for working connection'() {
@@ -48,7 +46,5 @@ class ConnectionListSpec extends ConnectionGebSpec {
 			to ConnectionListPage
 		then:
 			$('#connections .selected').size() == 1
-		cleanup:
-			deleteTestConnections()
 	}
 }

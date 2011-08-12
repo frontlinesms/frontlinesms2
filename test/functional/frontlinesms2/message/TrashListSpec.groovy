@@ -21,8 +21,6 @@ class TrashListSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def "should not be able to check messages"() {
@@ -34,8 +32,6 @@ class TrashListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 		then:
 			$("#message")[1].@checked == ""
-		cleanup:
-			deleteTestMessages()
 	}
 }
 

@@ -13,8 +13,6 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[2].click()
 		then:
 			$("#message")[0].@checked == "true"
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def "should display message count when multiple messages are selected"() {
@@ -26,8 +24,6 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[2].click()
 		then:
 			$("#count").text() == "2 messages selected"
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def "should remained checked when single message is checked"() {
@@ -43,8 +39,6 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].click()
 		then:
 			$("#message")[2].@checked == "true"
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def "should change CSS to CHECKED when message is checked"() {
@@ -57,8 +51,6 @@ class CheckedMessageSpec extends MessageGebSpec {
 		then:
 			$("tr#message-${Fmessage.list()[0].id}").hasClass('checked')
 			$("tr#message-${Fmessage.list()[1].id}").hasClass('checked')
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -82,10 +74,6 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$('input', value:'Alice').getAttribute('checked')
 			$('input', value:'Bob').getAttribute('checked')
 			!$('input', value:'June').getAttribute('checked')
-			
-		cleanup:
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 	
 	def "'Forward' button still work when all messages are unchecked"() {
