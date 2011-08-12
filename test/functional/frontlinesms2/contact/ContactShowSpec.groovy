@@ -100,7 +100,7 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			$("#contact-info .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
+			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 	        $('div#tabs-1').displayed
@@ -112,7 +112,7 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 	  		go "contact/show/${alice.id}"
 		then:
-			$("#contact-info .send-message").each {
+			$("#contact-details .send-message").each {
 	        	assert it.getAttribute('href') ==~ /.*recipients=\d+/
 			}
 	}
@@ -122,11 +122,10 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			$("#contact-info .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
+			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
 			waitFor {$('div#tabs-1').displayed}
-			$("div#tabs-1 .next").click()
-			waitFor {$('div#tabs-3').displayed}
-        	$("#sendMsg").click()
+			$("#nextPage").click()
+        	$("#done").click()
 		then:
             $("title").text() == "Sent"
 		when:
