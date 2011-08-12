@@ -33,7 +33,6 @@ class StatusController {
 		(startDate, endDate) = params.rangeOption == "between-dates" ? 
 			[params.startDate, params.endDate] :
 			[new Date() - 14, new Date()]
-		println "${startDate} ${endDate}"
 		def messageStats = Fmessage.getMessageStats(groupInstance, messageOwners, startDate, endDate)
 		[messageStats: [xdata: messageStats.collect{k,v -> "'${k}'"}, 
 						sent: messageStats.collect{k,v -> "${v["Sent"]}"},

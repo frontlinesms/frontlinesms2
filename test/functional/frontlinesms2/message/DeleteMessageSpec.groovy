@@ -35,7 +35,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 		then:
 			Fmessage.getDeletedMessages(['starred':false]).size() == 1
-			$('#message-details .message-name').text() == bobMessage.displayName
+			$('#message-details #contact-name').text() == bobMessage.displayName
 	}
 
 	def 'delete button does not show up for messages in shown in trash view'() {
@@ -46,7 +46,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 		then:
 			Fmessage.getDeletedMessages(['starred':false]).size() == 1
-			$('#message-details .message-name').text() == bobMessage.displayName
+			$('#message-details #contact-name').text() == bobMessage.displayName
 			!$('#message-details .buttons #message-delete')
 	}
 	
@@ -55,7 +55,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			def btnDeleteFromPoll = $('#message-details .buttons #message-delete')
 			btnDeleteFromPoll.click()
-			waitFor { $("div.flash.message").displayed }
+			waitFor { $("div.flash").displayed }
 		then:
 			Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 1
 	}

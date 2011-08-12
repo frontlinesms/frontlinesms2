@@ -35,7 +35,7 @@ function quickMessageClickAction() {
 	$("#reply-dropdown").val("na");
 }
 
-function launchMediumWizard(title, html, btnFinishedText) {
+function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
@@ -52,6 +52,7 @@ function launchMediumWizard(title, html, btnFinishedText) {
 	);
 	changeButtons();
 	$(".ui-tabs-nav li a ").click(changeButtons);
+	onLoad && onLoad();
 }
 
 function cancel() {
