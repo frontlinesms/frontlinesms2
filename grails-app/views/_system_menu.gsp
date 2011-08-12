@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ul id="system-menu">
-	<li>
-		<g:remoteLink controller="settings" onSuccess="launchMediumWizard('Settings & Plugins', data, 'Done');">
+	<li class="nav ${params.controller=='settings'?'selected':''}">
+		<g:link controller="settings" >
 			Settings & Plugins
-		</g:remoteLink>
+		</g:link>
 	</li>
 </ul>
