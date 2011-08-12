@@ -21,9 +21,9 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def 'archived messages do not show up in inbox view'() {
 		when:
 			goToArchivePage()
-			waitFor { $("#messages").text() == "No messages"}
+			waitFor { $("#no-messages").text() == "No messages"}
 		then:
-			$("#messages").text() == 'No messages'
+			$("#no-messages").text() == 'No messages'
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			def btnArchive = $('#message-details .buttons #message-archive')
@@ -37,7 +37,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	        $("a", text:"hi Bob").click()
 			!$("#message-archive").displayed()
 		then:
-			$("#main-tabs a", text:"Archive").hasClass("selected")
+			$("#global-nav a", text:"Archive").hasClass("selected")
 	}
 
 	def 'archived messages do not show up in sent view'() {
@@ -46,9 +46,9 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 		    goToArchivePage()
 			$("#sent").click()
-			waitFor { $("#messages").text() == "No messages"}
+			waitFor { $("#no-messages").text() == "No messages"}
 		then:
-			$("#messages").text() == 'No messages'
+			$("#no-messages").text() == 'No messages'
 		when:
 			go "message/sent"
 			def btnArchive = $('#message-details .buttons #message-archive')
@@ -63,7 +63,7 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			$("a", text:"hi Mary").click()
 			!$("#message-archive").displayed()
 		then:
-			$("#main-tabs a", text:"Archive").hasClass("selected")
+			$("#global-nav a", text:"Archive").hasClass("selected")
 	}
 
 	def "should not display archive all in archive tab"() {
