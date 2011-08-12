@@ -26,8 +26,6 @@ class NewSmslibConnectionSpec extends ConnectionGebSpec {
 			Fconnection.count() == 1
 			selectedConnection.find('h2').text() == 'test smslib connection'
 			selectedConnection.find('h3').text() == 'Phone/Modem'
-		cleanup:
-			deleteTestConnections()
 	}
 }
 	

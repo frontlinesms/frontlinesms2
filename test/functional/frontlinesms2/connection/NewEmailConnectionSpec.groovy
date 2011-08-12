@@ -29,8 +29,6 @@ class NewEmailConnectionSpec extends ConnectionGebSpec {
 			Fconnection.count() == 1
 			selectedConnection.find('h2').text() == 'test email connection'
 			selectedConnection.find('h3').text() == 'Email'
-		cleanup:
-			deleteTestConnections()
 	}
 	
 /*	def 'CREATE ROUTE button exists and can be clicked only once' () {

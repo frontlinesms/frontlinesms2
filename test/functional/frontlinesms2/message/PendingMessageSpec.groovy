@@ -16,13 +16,6 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		new Fmessage(src: "src", status: MessageStatus.INBOUND).save(flush: true)
 	}
 
-	def cleanup() {
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-
 	def 'should list all the pending messages'() {
 		when:
 			to MessagesPage

@@ -11,9 +11,7 @@ class AddContactSpec extends MessageGebSpec {
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
 			$('#message-details p:nth-child(1)').text() == '+254778899'
-		cleanup:
-			deleteTestMessages()
-			
+
 	}
 	def 'if source of message exists in the database then contact name is displayed'() {
 		when:
@@ -25,9 +23,6 @@ class AddContactSpec extends MessageGebSpec {
 		then:
 			Contact.findByPrimaryMobile(message.src)
 			$('#message-details p:nth-child(1)').text() == 'Alice'
-		cleanup:
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 	
 	def "add contact button is displayed and redirects to create contacts page with number field prepopulated"() {
@@ -40,7 +35,5 @@ class AddContactSpec extends MessageGebSpec {
 			btnAddContact.click()
 		then:
 			$('#contact-details').primaryMobile == "+254778899"
-		cleanup:
-			deleteTestMessages()
 	}
 }

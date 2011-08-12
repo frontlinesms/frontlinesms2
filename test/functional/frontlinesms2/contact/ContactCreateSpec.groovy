@@ -7,10 +7,6 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class ContactCreateSpec extends ContactGebSpec {
-	def cleanup() {
-		deleteTestContacts()
-	}
-
 	def 'button to save new contact is displayed and works'() {
 		when:
 			to CreateContactPage
