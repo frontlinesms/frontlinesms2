@@ -530,6 +530,11 @@ body {
 						margin-right: 17px;
 					}
 					
+					#checked-message-count {
+						font-size: 14px;
+						padding: 5px 17px 5px 17px;
+					}
+					
 					.actions {
 						padding: 5px 17px 5px 17px;
 						
@@ -646,6 +651,10 @@ body {
 
 .hide {
   display: none
+}
+
+.checked {
+	background-color: $highlight;
 }
 
 #trafficGraph {
