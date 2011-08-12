@@ -14,26 +14,18 @@ class GroupCreateSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to CreateGroupPage
 			def initNumGroups = Group.count()
-			$("#group-details").name = 'People'
+			$("li#create-group a").click()
+			$('input', name: "name").value('People')
 			btnSave.click()
 		then:
 			at ContactListPage
 			assert Group.count() == (initNumGroups + 1)
 	}
 
-	def 'link to cancel creating a new group is displayed and goes back to main contact page'() {
-		when:
-			go 'contact/createGroup'
-			def cancelGroup = $('#buttons').find('a').first()
-			def btn = $("#buttons .list")
-		then:
-			assert cancelGroup.text() == "Cancel"
-			assert cancelGroup.getAttribute('href') == "/frontlinesms2/contact/list"
-	}
-	
 	def 'Errors are displayed when group fails to save'() {
 		when:
 			to CreateGroupPage
+			$("li#create-group a").click()
 			btnSave.click()
 		then:
 			errorMessages.present
@@ -41,13 +33,13 @@ class GroupCreateSpec extends grails.plugin.geb.GebSpec {
 }
 
 class CreateGroupPage extends geb.Page {
-	static url = 'contact/createGroup'
+	static url = 'contact'
 	static at = {
 		title.endsWith('Create Group')
 	}
 
 	static content = {
-		btnSave { $("#group-details .save") }
+		btnSave { $("#done") }
 		errorMessages { $('.flash.message') }
 	}
 }
