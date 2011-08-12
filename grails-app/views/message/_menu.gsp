@@ -5,13 +5,13 @@
 		<h2>Messages</h2>
 		<ol class='sub-menu' id="messages-submenu">
 			<li class="${(messageSection=='inbox')? 'selected':''}">
-				<g:link action="inbox">Inbox (${messageCount['inbox']})</g:link>
+				<g:link action="inbox">Inbox</g:link>
 			</li>
 			<li class="${(messageSection=='sent')? 'selected':''}">
-				<g:link action="sent">Sent (${messageCount['sent']})</g:link>
+				<g:link action="sent">Sent</g:link>
 			</li>
 			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending">Pending (${messageCount['pending']})</g:link>
+				<g:link action="pending">Pending</g:link>
 			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
