@@ -7,79 +7,77 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class PollSpec extends frontlinesms2.poll.PollGebSpec {
-	def 'message from alice is first in the list, and links to the show page'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-			def message = Fmessage.findBySrc('Alice')
-			def poll = Poll.findByTitle('Football Teams')
-		when:
-			to PollShowPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
-		then:
-			firstMessageLink.text() == 'Alice'
-	}
+		def 'message from alice is first in the list, and links to the show page'() {
+			given:
+				createTestPolls()
+				createTestMessages()
+				def message = Fmessage.findBySrc('Alice')
+				def poll = Poll.findByTitle('Football Teams')
+			when:
+				to PollShowPage
+				def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
+			then:
+				firstMessageLink.text() == 'Alice'
+		}
 
-	def 'selected message and its details are displayed'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-			def message = Fmessage.findBySrc('Alice')
-			def poll = Poll.findByTitle('Football Teams')
-		when:
-			to PollShowPage
-			def formatedDate = dateToString(message.dateCreated)
-		then:
-			$('.message-name').text() == message.src
-			$('.message-date').text() == formatedDate
-			$('.message-body').text() == message.text
-	}
+		def 'selected message and its details are displayed'() {
+			given:
+				createTestPolls()
+				createTestMessages()
+				def message = Fmessage.findBySrc('Alice')
+				def poll = Poll.findByTitle('Football Teams')
+			when:
+				to PollShowPage
+				def formatedDate = dateToString(message.dateCreated)
+			then:
+				$('#message-details #contact-name').text() == message.src
+				$('#message-details #message-date').text() == formatedDate
+				$('#message-details #message-body').text() == message.text
+		}
 
-	def 'selected message is highlighted'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-			def poll = Poll.findByTitle('Football Teams')
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def bobMessage = Fmessage.findBySrc('Bob')
-		when:
-			to PollShowPage
-		then:
-			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
-		when:
-			go "message//poll/${poll.id}/show/${bobMessage.id}"
-		then:
-			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
-	}
-	
-	def 'activities should also list message counts'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			to PollShowPage
-		then:
-			$('#activities-submenu li')*.text() ==  ['Football Teams (2)', 'Shampoo Brands (1)', 'Rugby Brands (0)']
-	}
+		def 'selected message is highlighted'() {
+			given:
+				createTestPolls()
+				createTestMessages()
+				def poll = Poll.findByTitle('Football Teams')
+				def aliceMessage = Fmessage.findBySrc('Alice')
+				def bobMessage = Fmessage.findBySrc('Bob')
+			when:
+				to PollShowPage
+			then:
+				$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
+			when:
+				go "message//poll/${poll.id}/show/${bobMessage.id}"
+			then:
+				$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
+		}
+		
+		def 'activities should also list message counts'() {
+			given:
+				createTestPolls()
+				createTestMessages()
+			when:
+				to PollShowPage
+			then:
+				$('#activities-submenu li')[0].text() ==  'Football Teams'
+				$('#activities-submenu li')[1].text() ==  'Shampoo Brands'
+				$('#activities-submenu li')[2].text() ==  'Rugby Brands'
+		}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
 			go "message"
 		then:
-			$("a", text: "Poll").click()
+			$("#create-poll a").click()
 			waitFor {$('#tabs-1').displayed}
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 		when:
-			$("#tabs-1  a", text:'Next').jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
-            $("#tabs-3 a", text:'Next').jquery.trigger('click')
-			waitFor { $('#tabs-4 ').displayed }
-			$("#tabs-4 a", text:'Next').jquery.trigger('click')
+			$("a", text:"Confirm").click()
 			waitFor { $('#tabs-5').displayed }
 			$("input", name:'title').value("POLL NAME")
-			$("input", id:'create-poll').click()
-			waitFor {!$("div.flash.message").text().isEmpty()}
+			$("#done").click()
+			waitFor {!$("div.flash").text().isEmpty()}
 		then:
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes","No", "Unknown")
 	}
@@ -88,15 +86,15 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			go "message"
 		then:
-			$("a", text: "Poll").click()
+			$("#create-poll a").click()
 			waitFor {$('#tabs-1').displayed}
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 			$("input", name:"collect-responses").value('no-message')
 		when:
-			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			$("#nextPage").click()
 			waitFor { $('#tabs-3 ').displayed }
-			$("#tabs-3 a", text:'Next').jquery.trigger('click')
+			$("#nextPage").click()
 			waitFor { $('#tabs-5 ').displayed }
 		then:
 			 $('#tabs-5 ').displayed
@@ -107,12 +105,12 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			go "message"
 		then:
-			$("a", text: "Poll").click()
+			$("#create-poll a").click()
 			waitFor {$('#tabs-1').displayed}
 			$("input", name:'poll-type').value("multiple")
 			$("input", value:'multiple').jquery.trigger('click')
 		when:
-			$("a", text:'Next')[0].jquery.trigger('click')
+			$("#nextPage").click()
 			waitFor { $('#tabs-2').displayed }
 		then:
 			$('#tabs-2').displayed 
@@ -121,12 +119,12 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			go "message"
-			$("a", text: "Poll").click()
+			$("#create-poll a").click()
 		    waitFor {$('#tabs-1').displayed}
 			$("input", name:'poll-type').value("multiple")
             $("textarea", name:'question').value("How often do you drink coffee?")
-            $("#tabs-1 a", text: "Next").click()
-        then:
+			$("#nextPage").click()
+		then:
 			waitFor {$('#tabs-2').displayed}
 			$("label[for='choiceA']").hasClass('bold') == false
 			$("label[for='choiceA']").hasClass('bold') == false
@@ -135,18 +133,18 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
             keyInData('choiceA', "Never")
             keyInData('choiceB',"Once a day")
             keyInData('choiceC', "Twice a day")
-            $("#tabs-2 a", text: "Next").click()
+            $("#nextPage").click()
 		then:
 			$("label[for='choiceA']").hasClass('bold') == true
 			$("label[for='choiceA']").hasClass('bold') == true
 			waitFor {$('#tabs-3').displayed}
 		when:
             $("textarea", name:'autoReplyText').value("Thanks for participating...")
-            $("#tabs-3 a", text: "Next").click()
+			$("#nextPage").click()
 		then:
 			waitFor {$('#tabs-4').displayed}
 		when:
-			$("#tabs-4 a", text: "Next").click()
+			$("#nextPage").click()
 		then:
 			waitFor { $('#tabs-5 ').displayed }
             $("input", name:'title').value("Cofee Poll")
@@ -154,9 +152,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
             $("#confirm-recepients-count").text() == "0 contacts selected"
             $("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
-			$("#create-poll").click()
+			$("#done").click()
 		then:
-			waitFor { $("div.flash.message").text().contains("The poll has been created!") }
+			waitFor { $("div.flash").text().contains("The poll has been created!") }
 	}
 
 	def keyInData(String selector, String value) {

@@ -10,12 +10,12 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 		</script>
-		<g:javascript src="message/check_message.js"></g:javascript>
+		<g:javascript src="message/check_message.js"/>
+		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
-		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="/message/categorize-dropdown.js"/>
     </head>
 	<body>

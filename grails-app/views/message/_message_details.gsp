@@ -56,13 +56,15 @@
 					<g:if test="${!params['archived'] && messageSection == 'poll'}">
 						<li class='static_btn'><g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link></li>
 					</g:if>
-					<li class='static_btn'><a id='btn_delete_all'>Delete All</a></li>
+					<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
 				</ol>
+				<g:if test="${!params['archived']}">
+					<g:render template="/message/action_list"/>
+				</g:if>
 			</div>
 		</div>
 	</div>
 </div>
-
 <script>
 	$(".activity-archive").bind("click", function() {
 		var pollName = $(this).attr("name")
