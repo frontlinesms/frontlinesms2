@@ -17,6 +17,8 @@ class InboxSpec extends MessageGebSpec {
 			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
+		cleanup:
+			deleteTestMessages()
 	}
     
 	def 'message details are shown in list'() {
@@ -29,6 +31,8 @@ class InboxSpec extends MessageGebSpec {
 			rowContents[2] == 'Alice'
 			rowContents[3] == 'hi Alice'
 			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+		cleanup:
+			deleteTestMessages()
 	}
     
 	def 'message to alice is first in the list, and links to the show page'() {
@@ -40,6 +44,8 @@ class InboxSpec extends MessageGebSpec {
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
+		cleanup:
+			deleteTestMessages()
 	}
         
 	def 'selected message and its details are displayed'() {
@@ -53,6 +59,8 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details p:nth-child(1)').text() == message.src
 			$('#message-details p:nth-child(3)').text() == formatedDate
 			$('#message-details p:nth-child(4)').text() == message.text
+		cleanup:
+			deleteTestMessages()
 	}
     
 	def 'selected message is highlighted'() {
@@ -68,6 +76,8 @@ class InboxSpec extends MessageGebSpec {
 			go "message/inbox/show/${bobMessage.id}"
 		then:
 			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+		cleanup:
+			deleteTestMessages()
 	}
 	
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -84,6 +94,8 @@ class InboxSpec extends MessageGebSpec {
 			
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
+		cleanup:
+			deleteTestMessages()
 	}
 	
 	def 'contact name is displayed if message src is an existing contact'() {
@@ -95,6 +107,9 @@ class InboxSpec extends MessageGebSpec {
 			def rowContents = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			rowContents == ['June']
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
 	}
 
 	def "should autopopulate the recipients name on click of reply for a inbox message"() {
@@ -109,6 +124,9 @@ class InboxSpec extends MessageGebSpec {
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'+254778899').getAttribute('checked')
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
@@ -123,6 +141,9 @@ class InboxSpec extends MessageGebSpec {
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'+254999999').getAttribute('checked')
+		cleanup:
+			deleteTestMessages()
+			deleteTestContacts()
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
@@ -142,6 +163,8 @@ class InboxSpec extends MessageGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Alice', 'Bob'])
+		cleanup:
+			deleteTestMessages()
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
@@ -163,6 +186,8 @@ class InboxSpec extends MessageGebSpec {
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
+		cleanup:
+			deleteTestMessages()
 	}
 	
 	def "should only display message details when one message is checked"() {
@@ -183,6 +208,9 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details p:nth-child(1)').text() == message.src
 			$('#message-details p:nth-child(3)').text() == formatedDate
 			$('#message-details p:nth-child(4)').text() == message.text
+		
+		cleanup:
+			deleteTestMessages()
 	}
 
 	def "should skip recipients tab if a message is replied"() {

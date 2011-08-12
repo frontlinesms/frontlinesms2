@@ -14,6 +14,10 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		assert Folder.findByName('Fools').messages.size() == 2
 	}
 
+	def cleanup() {
+		deleteTestData()
+	}
+
 	def 'archived messages do not show up in inbox view'() {
 		when:
 			goToArchivePage()
@@ -152,5 +156,22 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		go ""
 		$("a", class:"tab",text: "Archive").click()
 		waitFor { $("a", text: 'Inbox Archive').displayed}
+	}
+
+	static deleteTestData() {
+		Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+
+		Folder.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+
+		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
 	}
 }

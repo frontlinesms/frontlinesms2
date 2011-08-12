@@ -31,6 +31,27 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 				}
 	}
 
+	static deleteTestContacts() {
+		Contact.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+
+	static deleteTestGroups() {
+		Group.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+
+	static deleteTestCustomFields() {
+		CustomField.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
 		def label = $('label', for:fieldName)
 		assert label.text() == labelText

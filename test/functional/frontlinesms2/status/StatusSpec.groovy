@@ -8,6 +8,10 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 		createTestMessages()
 	}
 	
+	def cleanup() {
+		deleteTestMessages()
+	}
+	
 	def "clicking on update chart button renders chart"() {
 		when:
 			to StatusPage
@@ -25,6 +29,9 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 
+	private deleteTestMessages() {
+		Fmessage.findAll()*.delete(flush:true, failOnError:true)
+	}	
 }
 
 class StatusPage extends geb.Page {

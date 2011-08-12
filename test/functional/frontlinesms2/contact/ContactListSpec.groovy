@@ -20,6 +20,8 @@ class ContactListSpec extends ContactGebSpec {
 				it.text()
 			}
 			assert contactNames == ['Alice', 'Bob']
+		cleanup:
+			deleteTestContacts()
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
@@ -50,6 +52,8 @@ class ContactListSpec extends ContactGebSpec {
 			}
 			def expectedNames = (11..20).collect{"Contact${it}"}
 			assert contactNames == expectedNames
+		cleanup:
+			deleteTestContacts()
 	}
 	
 	static createManyContacts() {	

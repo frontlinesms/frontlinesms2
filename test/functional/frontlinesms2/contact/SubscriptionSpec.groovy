@@ -12,6 +12,10 @@ class SubscriptionSpec extends GroupGebSpec  {
 		createTestGroups()
 	}
 
+	def cleanup() {
+		Group.list()*.delete(flush: true)
+	}
+
 	def "should move to the next tab if all the values are provided"() {
 		when:
 			goToManageSubscriptions()

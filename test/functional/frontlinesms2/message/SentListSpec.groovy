@@ -9,6 +9,13 @@ class SentListSpec extends grails.plugin.geb.GebSpec {
 		new Fmessage(src:"src2", dst:"dst2",status:MessageStatus.SENT).save(flush: true)
 	}
 
+	def cleanup() {
+		Fmessage.list().each {
+			it.refresh()
+			it.delete(flush: true)
+		}
+	}
+
 	def "should filter folder messages for starred and unstarred messages"() {
 		when:
 			go "message/sent"

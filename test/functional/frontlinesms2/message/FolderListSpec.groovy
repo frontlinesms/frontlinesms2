@@ -13,6 +13,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 		then:
 			at FolderListPage
 			folderMessageSources == ['Jane', 'Max']
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 	
 	def "message's folder details are shown in list"() {
@@ -26,6 +29,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			rowContents[2] == 'Jane'
 			rowContents[3] == 'Meeting at 10 am'
 			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 
 	def 'selected folder is highlighted'() {
@@ -37,6 +43,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def selectedMenuItem = $('#messages-menu .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 
 	def "should be able to reply for messages listed in the folder section"() {
@@ -55,6 +64,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value: message.src).getAttribute('checked')
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
@@ -75,6 +87,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Jane', 'Max'])
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 
 	}
 	
@@ -90,6 +105,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$("#btn_forward").click()
 			waitFor {$('div#tabs-1').displayed}
 			$('textArea', name:'messageText').text() == "I will be late"
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 	
 	def 'folder message list should also display message counts'() {
@@ -100,6 +118,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			"message"
 		then:
 			$("#activities-submenu li")*.text() == ['Work (2)', 'Projects (2)']
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 	
 	def "should display message count when multiple messages are selected"() {
@@ -112,6 +133,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$("#message")[2].click()
 		then:
 			$("#count").text() == "2 messages selected"
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -136,6 +160,11 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$('input', value:'Max').getAttribute('checked')
 			$('input', value:'Jane').getAttribute('checked')
 			!$('input', value:'June').getAttribute('checked')
+			
+		cleanup:
+			deleteTestFolders()
+			deleteTestMessages()
+			deleteTestContacts()
 	}
 
 }

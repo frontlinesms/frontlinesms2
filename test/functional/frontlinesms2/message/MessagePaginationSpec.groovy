@@ -5,6 +5,23 @@ import frontlinesms2.enums.MessageStatus
 
 class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
+	def cleanup() {
+		Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+
+		Folder.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+		
+		Fmessage.list().each {
+			it.refresh()
+			it.delete(flush: true)
+		}
+	}
+
 	def "should paginate inbox messages"() {
 		setup:
 			setupInboxMessages()
