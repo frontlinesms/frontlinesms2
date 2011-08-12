@@ -1,13 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-	<head>
-		<meta name="layout" content="settings" />
-		<title>Settings > Connections > Simple GSP page</title>
-	</head>
-	<body>
-		<ul id="connectionTypes">
-			<g:link action="createSmslib" class="smslib button">Phone/Modem</g:link>
-			<g:link action="createEmail" class="email button">Email</g:link>
-		</ul>
-	</body>
-</html>
+<div id="tabs" class="vertical-tabs">
+	<ol>
+		<li><a href="#tabs-1">Choose type</a></li>
+		<li><a href="#tabs-2">Enter details</a></li>
+		<li><a href="#tabs-3">Confirm</a></li>
+	</ol>
+
+	<g:form action="save" class='newConnection'>
+		<g:render template="type"/>
+		<g:render template="details"/>
+		<g:render template="confirm"/>
+	</g:form>
+</div>

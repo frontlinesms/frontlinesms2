@@ -126,14 +126,14 @@ class BootStrap {
 	}
 	
 	def initialiseSerial() {
-//		initialiseMockSerial()
+		initialiseMockSerial()
 //		initialiseRealSerial()
-//
-//		println "PORTS:"
-//		serial.CommPortIdentifier.portIdentifiers.each {
-//			println "> Port identifier: ${it.name}"
-//		}
-//		println "END OF PORTS LIST"
+
+		println "PORTS:"
+		serial.CommPortIdentifier.portIdentifiers.each {
+			println "> Port identifier: ${it}"
+		}
+		println "END OF PORTS LIST"
 	}
 	
 	def initialiseRealSerial() {
