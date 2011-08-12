@@ -39,20 +39,21 @@
 				<g:render  template="categorize_response"/>
 			</g:if>
 		</div>
-		<div class="multi-action buttons hide">
-			<div id="count"></div>
-			<g:if test="${messageSection != 'pending'}">
-				<a id='btn_reply_all'>Reply All</a>
-			</g:if>
-			<g:if test="${!params['archived'] && messageSection != 'poll'}">
-				<a id='btn_archive_all'>Archive All</a>
-			</g:if>
-			<g:if test="${!params['archived'] && messageSection == 'poll'}">
-				<g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link>
-			</g:if>
-			<a id='btn_delete_all'>Delete All</a>
-		</div>
 	</div>
+</div>
+
+<div class="multi-action buttons hide">
+	<div id="count"></div>
+	<g:if test="${messageSection != 'pending'}">
+		<a id='btn_reply_all'>Reply All</a>
+	</g:if>
+	<g:if test="${!params['archived'] && messageSection != 'poll'}">
+		<a id='btn_archive_all'>Archive All</a>
+	</g:if>
+	<g:if test="${!params['archived'] && messageSection == 'poll'}">
+		<g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link>
+	</g:if>
+	<a id='btn_delete_all'>Delete All</a>
 </div>
 
 <script>
