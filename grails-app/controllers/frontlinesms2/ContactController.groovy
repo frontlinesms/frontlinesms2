@@ -162,7 +162,6 @@ class ContactController {
 			fieldsToAdd.each() { name ->
 				def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
 				def fieldsByName = params."$name"
-				println name
 				if(fieldsByName?.class != String) {
 					fieldsByName.each() { val ->
 						if(val != "" && !existingFields.value.contains(val))

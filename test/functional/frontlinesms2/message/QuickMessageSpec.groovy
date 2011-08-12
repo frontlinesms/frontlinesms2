@@ -10,7 +10,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	def "quick message link opens the popup to send messages"() {
 		when:
 			to MessagesPage
-		    $("a.quick_message").click()
+		    $("a", text:"Quick message").click()
 		    waitFor {$('div#tabs-1').displayed}
 		then:
 	        $('div#tabs-1').displayed

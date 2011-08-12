@@ -40,7 +40,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-			def pollTitle = $("#poll-header #message-title h2").text()
+			def pollTitle = $("#poll-title div h2").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
@@ -109,7 +109,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')
 		then:
-			$('#message-details .message-name').text() == message.src
+			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-body').text() == message.text
 		
 		cleanup:
