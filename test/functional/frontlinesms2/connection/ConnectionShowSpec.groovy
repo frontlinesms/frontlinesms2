@@ -11,6 +11,8 @@ class ConnectionShowSpec extends ConnectionGebSpec {
 			lstConnections.find('h2').click()
 		then:
 			$('title').text() == "Settings > Connections > MTN Dongle"
+		cleanup:
+			deleteTestConnections()
 	}
 //FIXME: Build Fix
 /*	def 'Send test message button for particular connection appears when that connection is selected and started'() {

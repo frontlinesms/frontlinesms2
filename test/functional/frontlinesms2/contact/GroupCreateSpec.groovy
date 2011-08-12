@@ -3,6 +3,13 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 class GroupCreateSpec extends grails.plugin.geb.GebSpec {
+	def cleanup() {
+		Group.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+
 	def 'button to save new group is displayed and works'() {
 		when:
 			to CreateGroupPage

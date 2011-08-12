@@ -52,5 +52,23 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 			new Contact(name: 'Bob', primaryMobile: '+254987654')].each() { it.save(failOnError:true) }
 	}
 	
+	static deleteTestMessages() {
+		Poll.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+
+		Fmessage.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
+	
+	static deleteTestContacts() {
+		Contact.findAll().each() {
+			it.refresh()
+			it.delete(failOnError:true, flush:true)
+		}
+	}
 }
 

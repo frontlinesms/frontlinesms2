@@ -26,6 +26,8 @@ class CreateFolderSpec extends FolderGebSpec {
 			then:
 				Folder.count() == initialFolderCount + 1
 				title.contains("Inbox")
+			cleanup:
+				deleteTestFolders()
 	}
 
 	def 'existing folders appear in activities section of messages'() {
@@ -36,6 +38,8 @@ class CreateFolderSpec extends FolderGebSpec {
 			then:
 				$('#activities-submenu li')[0].text().contains('Work')
 				$('#activities-submenu li')[1].text().contains('Project')
+			cleanup:
+				deleteTestFolders()
 	}
 
 //

@@ -11,6 +11,10 @@ class ContactShowSpec extends ContactGebSpec {
 		createTestContacts()
 	}
 
+	def cleanup() {
+		deleteTestContacts()
+	}
+
 	def 'contacts link to their details'() {
 		given:
 			def alice = Contact.findByName('Alice')
@@ -87,6 +91,8 @@ class ContactShowSpec extends ContactGebSpec {
 			go "contact/show/${bob.id}"
 		then:
 			!$('#no-groups').displayed
+		cleanup:
+			deleteTestGroups()
 	}
 	
 	def "clicking on 'Send Message' should redirect to quick message dialog"() {
