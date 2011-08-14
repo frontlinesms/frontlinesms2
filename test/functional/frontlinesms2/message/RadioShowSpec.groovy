@@ -8,10 +8,10 @@ class RadioShowSpec extends grails.plugin.geb.GebSpec {
 	def "should be able to create new shows"() {
 		when:
 			go "message"
-			$("a", text: "Create new shows").click()
+			$("a", text: "Create new show").click()
 			waitFor { $("#modalBox").displayed }
 			$("input", name: 'name').value("show name")
-			$("input", name: 'create').click()
+			$("#done").click()
 			waitFor { $("a", text:"show name").displayed }
 		then:
 	       	$("a", text:"show name").displayed
@@ -36,10 +36,10 @@ class RadioShowSpec extends grails.plugin.geb.GebSpec {
 	def "should throw validation errors when name is not given for a show"() {
 		when:
 			go "message"
-			$("a", text: "Create new shows").click()
+			$("a", text: "Create new show").click()
 			waitFor { $("#modalBox").displayed }
 			$("input", name: 'name').value("")
-			$("input", name: 'create').click()
+			$("#done").click()
 			waitFor { $("div.flash", text:"Name is not valid").displayed }
 		then:
 			$("div.flash", text:"Name is not valid").displayed
