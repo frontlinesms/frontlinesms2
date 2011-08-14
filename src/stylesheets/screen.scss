@@ -575,6 +575,11 @@ body {
 						margin-right: 17px;
 					}
 					
+					#checked-message-count {
+						font-size: 14px;
+						padding: 5px 17px 5px 17px;
+					}
+					
 					.actions {
 						padding: 5px 17px 5px 17px;
 						
@@ -638,13 +643,13 @@ body {
 					}
 				}
 				.starred {
-					background-image:url('../images/star_on.png');
+					background-image:url('../images/icons/star_on.png');
 					width: 16px;
 					height: 16px;
 				}
 
 				.unstarred {
-					background-image:url('../images/star.png');
+					background-image:url('../images/icons/star.png');
 					width: 16px;
 					height: 16px;
 				}
@@ -691,6 +696,10 @@ body {
 
 .hide {
   display: none
+}
+
+.checked {
+	background-color: $highlight;
 }
 
 #trafficGraph {

@@ -38,7 +38,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			$('div#tabs-3').displayed
         when:
-			$("div#tabs-3 .back").click()
+			$("#prevPage").click()
 			waitFor {$('div#tabs-2').displayed}
 		then:
 			$('div#tabs-2').displayed
@@ -51,7 +51,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			loadFirstTab()
 			loadSecondTab()
 			$("#address").value("+919544426000")
-			$('.add-address').click()
+			$('.add-address').jquery.trigger('click')
 		then:
 			$('div#contacts div')[0].find('input').value() == "+919544426000"
 			$("#recipient-count").text() == "1"
@@ -135,19 +135,19 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def loadFirstTab() {
-		$("a.quick_message").click()
+		$("a", text:"Quick message").click()
 		waitFor {$('div#tabs-1').displayed}
 	}
 	def loadSecondTab() {
-		$("div#tabs-1 .next").click()
+		$("#nextPage").click()
 		waitFor {$('div#tabs-2').displayed}		
 	}
 	def loadThirdTab() {
-		$("div#tabs-2 .next").click()
-		waitFor {$('div#tabs-3').displayed}		
+		$("#nextPage").click()
+		waitFor {$('div#tabs-3').displayed}
 	}
 	def loadQuickMessageDialog() {
-		$("a.quick_message").click()
+		$("a", text:"Quick message").click()
 		waitFor {$('div#tabs-1').displayed}
 	}
 }

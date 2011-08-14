@@ -35,7 +35,7 @@
 
 					<td>
 					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
-							<div id="star-${m.id}" class="${m.starred? 'starred':''}">
+							<div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
 							</div>
 					  </g:remoteLink>
 					</td>
