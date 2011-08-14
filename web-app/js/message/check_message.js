@@ -62,13 +62,13 @@ function validateCheckedMessageCount(count) {
 
 function changeMessageCount(count){
 	setSelectedMessage();
-	$('#count').html("<p> "+count+" messages selected</p>");
+	$('#checked-message-count').html("<p> "+count+" messages selected</p>");
 	setMessageActions();
 }
 
 function setMessageActions() {
-	$('.multi-action').show()
-	$('#message-details').hide()
+	$('#multiple-message').show()
+	$('#single-message').hide()
 }
 
 function getSelectedGroupElements(groupName) {
@@ -142,11 +142,11 @@ $('#btn_archive_all').live('click', function() {
 function reloadPage(messageSection, ownerId) {
 	var params = location.search;
 	if(messageSection == 'poll' || messageSection == 'folder'){
-		var url = "/frontlinesms2/message/"+messageSection+"/"+ownerId + params;
-	} else{
-		var url = "/frontlinesms2/message/"+messageSection + params;
+		var url = "message/"+messageSection+"/"+ownerId + params;
+	} else {
+		var url = "message/"+messageSection + params;
 	}
-	window.location = url;
+	window.location = url_root + url
 }
 
 function setSelectedMessage() {
@@ -156,8 +156,8 @@ function setSelectedMessage() {
 }
 
 function enableSingleAction() {
-	$('.multi-action').hide()
-	$('#message-details').show()
+	$('#multiple-message').hide()
+	$('#single-message').show()
 }
 
 function showMessageDetails(){
