@@ -83,6 +83,11 @@ body {
 	  	height: 20px;
 	  	margin: 6px 16px;
 	  	text-align: center;
+	  	
+	  	.selected {
+	  		background-color: #E0E0E0;
+	  		boder-top: 3px solid #C03283;
+	  	}
 	}
 	
 	#top {
