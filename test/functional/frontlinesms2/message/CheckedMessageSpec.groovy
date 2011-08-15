@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 class CheckedMessageSpec extends MessageGebSpec {
 	
-	def 'should archived multiple messages'() {
+	def "should have archived multiple messages"() {
 		given:
 			createInboxTestMessages()
 		when:
@@ -140,7 +140,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].@checked == ""
 	}
 
-	def 'should archived multiple messages'() {
+	def "should archive multiple messages"() {
 		given:
 			createInboxTestMessages()
 		when:
