@@ -653,6 +653,11 @@ body {
   display: none
 }
 
+.error-panel {
+	text-align: center;
+	border: 2px solid #C03283;
+}
+
 .checked {
 	background-color: $highlight;
 }
