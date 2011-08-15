@@ -7,6 +7,9 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
 		<g:javascript src="message/check_message.js"></g:javascript>
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
@@ -18,7 +21,6 @@
 			<g:render template="/tabs"/>
 	        <g:render template="/flash"/>
 	        <div class="main">
-				<g:render template="menu"/>
 				<div class="content">
 					<div id='archive-header' class="content-header">
 						<div id="archive-title">

@@ -104,7 +104,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$("#count").text() == "2 messages selected"
+			$("#checked-message-count p").text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')
@@ -126,7 +126,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$("#count").text() == "2 messages selected"
+			$("#checked-message-count p").text() == "2 messages selected"
 		cleanup:
 			deleteTestPolls()
 			deleteTestMessages()
@@ -141,8 +141,8 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('.multi-action').displayed}
-			def btnReply = $('.multi-action a')[0]
+			waitFor {$('#multiple-message').displayed}
+			def btnReply = $('#multiple-message a')[0]
 		then:
 			btnReply
 		when:
@@ -171,7 +171,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			at MessagesPage
 			!$("a", text:'Football Teams').displayed
 		when:
-			$("#main-tabs a", text: "Archive").click()
+			$("#global-nav a", text: "Archive").click()
 			def activityArchiveButton = $("a", text: 'Activity archive')
 			waitFor{activityArchiveButton.displayed}
 			activityArchiveButton.click()
@@ -195,7 +195,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 					PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Alice')),
 					PollResponse.findByValue('response2').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
 		when:
-			$("#main-tabs a", text: "Archive").click()
+			$("#global-nav a", text: "Archive").click()
 			def activityArchiveButton = $("a", text: 'Activity archive')
 			waitFor{activityArchiveButton.displayed}
 			activityArchiveButton.click()
@@ -207,7 +207,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("a", text:"Delete All").click()
 			waitFor(5, 0.5) {$("div.flash").text() == "3 messages deleted"}
 		then:
-			$("#main-tabs a", text: "Archive").hasClass("selected")
+			$("#global-nav a", text: "Archive").hasClass("selected")
 	}
 
 }
