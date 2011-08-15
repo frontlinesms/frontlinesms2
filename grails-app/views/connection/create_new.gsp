@@ -6,7 +6,7 @@
 		<li><a href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:form action="save" class='newConnection'>
+	<g:form action="save" id='newConnection'>
 		<g:render template="type"/>
 		<g:render template="details"/>
 		<g:render template="confirm"/>
