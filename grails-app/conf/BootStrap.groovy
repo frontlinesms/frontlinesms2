@@ -126,8 +126,8 @@ class BootStrap {
 	}
 	
 	def initialiseSerial() {
-		initialiseMockSerial()
-//		initialiseRealSerial()
+//		initialiseMockSerial()
+		initialiseRealSerial()
 
 		println "PORTS:"
 		serial.CommPortIdentifier.portIdentifiers.each {

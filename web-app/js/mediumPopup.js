@@ -56,7 +56,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 }
 
 function cancel() {
-	$(this).remove();
+	$(this).dialog('close');
 }
 
 function prevButton() {
@@ -67,16 +67,10 @@ function prevButton() {
 }
 
 function nextButton() {
-	var $tabs = $('#tabs').tabs();
-	var index = $tabs.tabs('option', 'selected');
-	var validateInput = validate();
-	if(validateInput) {
-		$tabs.tabs('select', index + 1);
-		$(changeButtons);
-	} else {
-		//display error
-		displayError();
-	}
+	var tabs = $('#tabs').tabs();
+	var index = tabs.tabs('option', 'selected');
+	tabs.tabs('select', index + 1);
+	$(changeButtons);
 }
 
 function done() {
