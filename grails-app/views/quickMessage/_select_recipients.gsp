@@ -70,11 +70,6 @@
 		var contactsCount = $("#contacts-count");
 		contactsCount && contactsCount.html(count)
 	}
-	
-	function validate() {
-		//TODO change this to validate quick message dialog
-		return true;
-	}
 
 	$('.add-address').live('click', function() {
 		var address = $('#address').val();
