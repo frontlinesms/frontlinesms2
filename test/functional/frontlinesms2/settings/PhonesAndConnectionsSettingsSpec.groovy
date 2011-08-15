@@ -6,11 +6,15 @@ import frontlinesms2.connection.ConnectionListPage
 class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'add new connection option is available in connection settings panel'() {
+		given:
+			createTestConnections()
 		when:
-			to ConnectionListPage
+			to ConnectionPage
 		then:
 			btnNewConnection.text() == "Add new connection"
-			assert btnNewConnection.children().getAttribute("href") == "/frontlinesms2/connection/create"
+			assert btnNewConnection.getAttribute("href") == "/frontlinesms2/connection/create"
+		cleanup:
+			deleteTestConnections()
 	}
 	
 
@@ -18,10 +22,10 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestConnections()
 		when:
-			to ConnectionListPage
+			to ConnectionPage
 		then:
-			lstConnections != null
-			lstConnections.find('h2')*.text() == ['MTN Dongle','Miriam\'s Clickatell account']
+			connectionNames != null
+			connectionNames.find('a')*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
 		cleanup:	
 			deleteTestConnections()
 	}
@@ -38,6 +42,14 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		SmslibFconnection.findAll().each() { it?.delete(flush: true) }
 		EmailFconnection.findAll().each() { it?.delete(flush: true) }
 		Fconnection.findAll().each() { it?.delete(flush: true) }
+	}
+}
+
+class ConnectionPage extends geb.Page {
+	static url = 'settings/connections'
+	static content = {
+		btnNewConnection { $('#btnNewConnection a') }
+		connectionNames { $('.con-name') }
 	}
 }
 

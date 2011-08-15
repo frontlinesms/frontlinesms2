@@ -6,13 +6,13 @@
 			<g:each in="${connectionInstanceList}" status="i" var="c">
 					<li class="connection ${c == connectionInstance ? 'selected' : ''}">
 						<ol>
-							<li id='con-name' >
+							<li class='con-name' >
 								<g:link action="connections" id="${c.id}">'${c.name}'</g:link>
 							</li>
-							<li id='con-type'>
+							<li class='con-type'>
 								<g:link action="connections" id="${c.id}">(${c.type()})</g:link>
 							</li>
-							<li id="con-status">${c.status}</li>
+							<li class="con-status">${c.status}</li>
 						</ol><br />
 						<g:if test="${c == connectionInstance}">
 							<g:if test="${c.status == 'Not connected'}">
