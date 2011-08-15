@@ -1,5 +1,28 @@
 <div id="tabs-2">
+	<div id='smslib-form'>
+		<h2>Phone/Modem</h2>
+		<div class="input field">
+			<label for="name">Name</label>
+			<g:textField name="name" value="${fconnectionInstance?.name}" />
+		</div>
+		
+		<div class="field">
+			<label for="port">Port</label>
+			<g:textField name="port" value="${fconnectionInstance?.port}" />
+		</div>
+		
+		<div class="field">
+			<label for="baud">Baud rate</label>
+			<g:textField name="baud" value="${fconnectionInstance?.baud}" />
+		</div>
+		
+		<div class="field">
+			<label for="pin">PIN</label>
+			<g:passwordField name="pin" value="${fconnectionInstance?.pin}" />
+		</div>
+	</div>
 	<div id='email-form'>
+		<h2>Email</h2>
 		<div class="field">
 			<label for="name">Name</label>
 			<g:textField name="name" value="${fconnectionInstance?.name}" />
@@ -31,27 +54,6 @@
 		<div class="field">
 			<label for="password">Password</label>
 			<g:textField name="password" value="${fconnectionInstance?.password}" />
-		</div>
-	</div>
-	<div id='smslib-form'>
-		<div class="input field">
-			<label for="name">Name</label>
-			<g:textField name="name" value="${fconnectionInstance?.name}" />
-		</div>
-		
-		<div class="field">
-			<label for="port">Port</label>
-			<g:textField name="port" value="${fconnectionInstance?.port}" />
-		</div>
-		
-		<div class="field">
-			<label for="baud">Baud rate</label>
-			<g:textField name="baud" value="${fconnectionInstance?.baud}" />
-		</div>
-		
-		<div class="field">
-			<label for="pin">PIN</label>
-			<g:passwordField name="pin" value="${fconnectionInstance?.pin}" />
 		</div>
 	</div>
 </div>

@@ -3,13 +3,6 @@ package frontlinesms2
 import grails.plugin.spock.*
 
 class ConnectionControllerSpec extends ControllerSpec {
-	def "default action is 'list'"() {
-		when:
-			controller.index()
-		then:
-			controller.redirectArgs.controller == 'connection' || !controller.redirectArgs.controller
-			controller.redirectArgs.action == 'list'
-	}
 
 	def "test that createRoute actually calls FconnectionService"() {
 		setup:

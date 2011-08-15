@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 class CheckedMessageSpec extends MessageGebSpec {
 	
-	def 'should archived multiple messages'() {
+	def "should have archived multiple messages"() {
 		given:
 			createInboxTestMessages()
 		when:
@@ -138,5 +138,21 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$('#messages tr:last-child td:nth-child(3) a').click()
 		then: 
 			$("#message")[1].@checked == ""
+	}
+
+	def "should archive multiple messages"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[0].click()
+			waitFor { $(".multi-action").displayed }
+			def btnArchive = $('.multi-action #btn_archive_all')
+			btnArchive.click()
+			waitFor {$("div#messages").displayed}
+		then:
+			at MessagesPage
+			$("#messages").text() == 'No messages'
+
 	}
 }

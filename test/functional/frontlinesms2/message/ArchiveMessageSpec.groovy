@@ -115,14 +115,13 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	 def 'should not be able to archive activity messages'() {
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
-		 	def btnArchiveFromPoll = $('#message-details .buttons .activity-archive')
 		then:
-			withAlert {btnArchiveFromPoll.click()}  == "This message is part of activity name Miauow Mix and so cannot be archived. You must archive the activity type"
+			!$("#message-details a", text:"Archive").displayed
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			$("#message")[0].click()
 		 then:
-			withAlert {$('a', text: "Archive All").click()}  == "This message is part of activity name Miauow Mix and so cannot be archived. You must archive the activity type"
+			!$('a', text: "Archive All").displayed
 	 }
 
 	static createTestData() {

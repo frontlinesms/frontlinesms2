@@ -12,7 +12,7 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 		then:
 			btnNewConnection.text() == "Add new connection"
-			assert btnNewConnection.getAttribute("href") == "/frontlinesms2/connection/create"
+			assert btnNewConnection.getAttribute("href") == "/frontlinesms2/connection/create_new"
 		cleanup:
 			deleteTestConnections()
 	}

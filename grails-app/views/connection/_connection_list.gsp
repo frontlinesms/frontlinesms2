@@ -2,7 +2,7 @@
 		<div id='connections'>You have no connections configured.</div>
 	</g:if>
 	<g:else>
-		<ol>
+		<ol id='connections'>
 			<g:each in="${connectionInstanceList}" status="i" var="c">
 					<li class="connection ${c == connectionInstance ? 'selected' : ''}">
 						<ol>
@@ -33,7 +33,7 @@
 		</ol>
 	</g:else>
 	<div id='btnNewConnection'>
-		<g:remoteLink controller='connection' action="create" onSuccess="launchMediumWizard('New connection', data, 'Create');">
+		<g:remoteLink controller='connection' action="create_new" onSuccess="launchMediumWizard('New connection', data, 'Create');">
 			Add new connection
 		</g:remoteLink>
 	</div>

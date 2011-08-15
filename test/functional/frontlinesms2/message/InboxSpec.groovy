@@ -212,6 +212,38 @@ class InboxSpec extends MessageGebSpec {
 		cleanup:
 			deleteTestMessages()
 	}
+
+	def "should skip recipients tab if a message is replied"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message"
+		then:
+			$("#btn_reply").click()
+			waitFor {$('#tabs-1').displayed}
+		when:
+			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+	}
+
+	def "should skip recipients tab for reply-all option"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message"
+		then:
+			$("#message")[0].click()
+			$("a", text: "Reply All").click()
+			waitFor {$('#tabs-1').displayed}
+		when:
+			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+	}
+
 	
 //  NOTE: Need to find a better way to make this test work
 //	def "should remain in the same page, after moving the message to the destination folder"() {

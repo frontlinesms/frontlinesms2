@@ -15,6 +15,10 @@ $(document).ready(function() {
 				.buttonset();
 });
 
+function chooseType() {
+	alert('chosen');
+}
+
 function quickMessageClickAction() {
 	$("#dropdown_options").hide();
 	var me = $(this);
