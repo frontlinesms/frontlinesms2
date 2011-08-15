@@ -69,8 +69,14 @@ function prevButton() {
 function nextButton() {
 	var $tabs = $('#tabs').tabs();
 	var index = $tabs.tabs('option', 'selected');
-	$tabs.tabs('select', index + 1);
-	$(changeButtons);
+	var validateInput = validate();
+	if(validateInput) {
+		$tabs.tabs('select', index + 1);
+		$(changeButtons);
+	} else {
+		//display error
+		displayError();
+	}
 }
 
 function done() {
