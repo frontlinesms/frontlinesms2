@@ -198,7 +198,7 @@ class InboxSpec extends MessageGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$('#count').text() == "2 messages selected"
+			$('#checked-message-count').text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
 			def message = Fmessage.findBySrc('Bob')

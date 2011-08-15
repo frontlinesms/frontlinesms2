@@ -53,7 +53,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('.multi-action').displayed}
+			waitFor {$('#multiple-message').displayed}
 		then:
 			!$('.multi-action a', text:'Reply All').displayed
 	}

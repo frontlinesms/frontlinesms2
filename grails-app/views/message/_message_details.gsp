@@ -43,28 +43,28 @@
 		</div>
 	</div>
 
-	<div id="multiple-message" class="hide">
-		<div id="checked-message-count"></div>
-			<div class="actions">
-				<ol class="buttons">
-					<g:if test="${messageSection != 'pending'}">
-						<li class='static_btn'><a id='btn_reply_all'>Reply All</a></li>
-					</g:if>
-					<g:if test="${!params['archived'] && messageSection != 'poll'}">
-						<li class='static_btn'><a id='btn_archive_all'>Archive All</a></li>
-					</g:if>
-					<g:if test="${!params['archived'] && messageSection == 'poll'}">
-						<li class='static_btn'><g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link></li>
-					</g:if>
-					<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
-				</ol>
-				<g:if test="${!params['archived']}">
-					<g:render template="/message/action_list"/>
+	</div>
+<div id="multiple-message" class="hide">
+	<div id="checked-message-count"></div>
+		<div class="actions">
+			<ol class="buttons">
+				<g:if test="${messageSection != 'pending'}">
+					<li class='static_btn'><a id='btn_reply_all'>Reply All</a></li>
 				</g:if>
-			</div>
+				<g:if test="${!params['archived'] && messageSection != 'poll'}">
+					<li class='static_btn'><a id='btn_archive_all'>Archive All</a></li>
+				</g:if>
+				<g:if test="${!params['archived'] && messageSection == 'poll'}">
+					<li class='static_btn'><g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link></li>
+				</g:if>
+				<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
+			</ol>
+			<g:if test="${!params['archived']}">
+				<g:render template="/message/action_list"/>
+			</g:if>
 		</div>
 	</div>
-</div>
+
 <script>
 	$(".activity-archive").bind("click", function() {
 		var pollName = $(this).attr("name")
