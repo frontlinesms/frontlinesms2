@@ -37,7 +37,7 @@ class NewConnectionSpec extends grails.plugin.spock.IntegrationSpec {
 			controller2.params.connectionType = 'smslib'
 			controller2.params.name = 'test smslib connection'
 			controller2.params.port = 'COM1'
-			controller2.params.baud = '9600'
+			controller2.params.baud = 9600
 		when:
 			controller2.save()
 			println Fconnection.findAll()
@@ -45,6 +45,6 @@ class NewConnectionSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			conn2
 			conn2.port == 'COM1'
-			conn2.baud == '9600'
+			conn2.baud == 9600
 	}
 }
