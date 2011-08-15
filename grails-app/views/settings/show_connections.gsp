@@ -5,6 +5,6 @@
 		<title>Settings > Connections > ${connectionInstance?.name}</title>
 	</head>
 	<body>
-		<g:render template="connection_list"/>
+		<g:render template="/connection/connection_list"/>
 	</body>
 </html>

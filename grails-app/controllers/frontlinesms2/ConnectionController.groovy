@@ -10,45 +10,13 @@ class ConnectionController {
 		redirect(action:'list')
 	}
 
-	def list = {
-		def fconnectionInstanceList = Fconnection.list(params)
-		if(!params.id) {
-			params.id = Fconnection.list(params)[0]?.id
-		}		
-		def connectionInstance = Fconnection.get(params.id)
-		def fconnectionInstanceTotal = Fconnection.count()
-		if(params.id){
-			render(view:'show', model:show() << [connectionInstanceList: fconnectionInstanceList,
-				connectionInstance: connectionInstance,
-				fconnectionInstanceTotal: fconnectionInstanceTotal])
-		} else {
-			[settingsSection:'connections',
-				connectionInstanceList: fconnectionInstanceList,
-				connectionInstance: connectionInstance,
-				fconnectionInstanceTotal: fconnectionInstanceTotal]
-		}
+	def create = {
+		
 	}
-
-	def create = {}
-
-	def createEmail = {
-		if(params.flashMessage) { flash.message = params.flashMessage }
-		def fconnectionInstance = new EmailFconnection()
-		fconnectionInstance.properties = params
-		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
-	}
-
-	def createSmslib = {
-		if(params.flashMessage) { flash.message = params.flashMessage }
-		def fconnectionInstance = new SmslibFconnection()
-		fconnectionInstance.properties = params
-		[settingsSection:'connections', fconnectionInstance: fconnectionInstance]
-	}
-
-	def show = {
-		withFconnection {
-			[connectionInstance: it] << [settingsSection:'connections', connectionInstanceList: Fconnection.list(params), fconnectionInstanceTotal: Fconnection.list(params)]
-		}
+	
+	def save = {
+		if(params.connectionType == 'email') saveEmail()
+		else if(params.connectionType == 'smslib') saveSmslib()
 	}
 
 	def saveEmail = {
@@ -58,7 +26,7 @@ class ConnectionController {
 
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
-			redirect(action: "list", id: fconnectionInstance.id)
+			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
 			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
 			redirect(action: "createEmail", params: params)
@@ -68,10 +36,9 @@ class ConnectionController {
 	def saveSmslib = {
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
-
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
-			redirect(action: "list", id: fconnectionInstance.id)
+			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
 			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
 			redirect(action: "createSmslib", params: params)
@@ -82,7 +49,7 @@ class ConnectionController {
 		withFconnection { settings ->
 			fconnectionService.createRoute(settings)
 			flash.message = "Created route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
-			redirect action:'list', id:settings.id
+			redirect(controller:'settings', action:'connections', id: settings.id)
 		}
 	}
 
@@ -104,7 +71,7 @@ class ConnectionController {
 			def fmessage = new Fmessage(src:"$connection", dst: params.number, text: params.message)
 			println "passing arguments ${fmessage.class}, ${connection.class}"
 			messageSendService.send(fmessage, connection)
-			redirect (action:'show', id:params.id)
+			redirect (controller:'settings', action:'show_connections', id:params.id)
 		}
 	}
 	

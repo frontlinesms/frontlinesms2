@@ -74,10 +74,10 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 		    goToArchivePage()
 			$("#message")[0].click()
-			waitFor { $("#count").text().contains("3")}
+			waitFor { $("#checked-message-count").text().contains("3")}
 		then:
-			$(".multi-action a").size() == 2
-			$(".multi-action a").every() {it.text() != "Archive All"}
+			$("#multiple-message a").size() == 2
+			$("#multiple-message a").every() {it.text() != "Archive All"}
 	}
 
 	def 'archived messages do not show up in folder view'() {

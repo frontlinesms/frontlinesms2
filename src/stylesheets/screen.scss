@@ -83,6 +83,11 @@ body {
 	  	height: 20px;
 	  	margin: 6px 16px;
 	  	text-align: center;
+	  	
+	  	.selected {
+	  		background-color: #E0E0E0;
+	  		boder-top: 3px solid #C03283;
+	  	}
 	}
 	
 	#top {
@@ -144,7 +149,7 @@ body {
 		
 		.context-menu { padding-bottom: 40px; }
 		
-		#contacts-menu, #messages-menu, #archives-menu {
+		#settings-menu, #contacts-menu, #messages-menu, #archives-menu {
 			@include column(4, false);
 			text-align: left;
 			margin-right: 0px;
@@ -343,6 +348,46 @@ body {
 			
 			.content-body {
 				@include clearfix; // required
+				
+				
+				.connection .selected {
+					@include clearfix;
+					height: 50px;
+				}
+				
+				.connection {
+					@include horizontal-list(4px, left);
+					padding: 17px;
+					border-bottom: 1px solid #9E9E9E;
+					display: block;
+					
+					.selected { height: 50px; }
+										
+					.con-name {
+						display: block;
+						font-size: 14px;
+					}
+					.con-type {
+						display: block;
+						font-size: 13px;
+					}
+					.con-status {
+						font-style: italic;
+						float: right;
+					}
+					.buttons {
+						@include button-format;
+						float: right;
+						position: relative;
+						top: 20px;
+					}
+				}
+				
+				#btnNewConnection {
+					@include button-format;
+					float: right;
+					padding: 17px;
+				}
 				
 				table {
 					width: 100%;
