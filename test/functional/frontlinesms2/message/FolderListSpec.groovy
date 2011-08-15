@@ -119,7 +119,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$("#count").text() == "2 messages selected"
+			$("#checked-message-count").text() == "2 messages selected"
 		cleanup:
 			deleteTestFolders()
 			deleteTestMessages()
@@ -135,8 +135,8 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('.multi-action').displayed}
-			def btnReply = $('.multi-action a')[0]
+			waitFor {$('#multiple-message').displayed}
+			def btnReply = $('#multiple-message a')[0]
 		then:
 			btnReply
 		when:

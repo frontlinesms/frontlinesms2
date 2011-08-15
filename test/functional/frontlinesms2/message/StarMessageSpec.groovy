@@ -20,7 +20,7 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
-			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").text() == "Remove Star"}
+			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass("starred")}
 			Fmessage.findBySrc('+254287645').refresh()
 		then:
 			println "Messages: ${Fmessage.findAll()}"
@@ -33,7 +33,7 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 			Fmessage.findBySrc('+254287645').addStar().save(failOnError: true, flush: true)
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
-			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").text() == "Add Star"}
+			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass("unstarred")}
 			Fmessage.findBySrc('+254287645').refresh()
 		then:
 			!Fmessage.findBySrc('+254287645').starred
@@ -46,7 +46,7 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 			new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', status: MessageStatus.INBOUND, read: false).save(failOnError:true)
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").click()
-			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").text() == "Remove Star"}
+			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass("starred")}
 		then:
 			Fmessage.findBySrc('+254287645').refresh()
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass('starred')	
