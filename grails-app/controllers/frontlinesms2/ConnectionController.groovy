@@ -7,10 +7,10 @@ class ConnectionController {
 	def messageSendService
 
 	def index = {
-		redirect(action:'list')
+		redirect(action:'create_new')
 	}
 
-	def create = {
+	def create_new = {
 		
 	}
 	
@@ -29,7 +29,7 @@ class ConnectionController {
 			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
 			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
-			redirect(action: "createEmail", params: params)
+			redirect(controller:'settings', action: "connections", params: params)
 		}
 	}
 
@@ -41,7 +41,7 @@ class ConnectionController {
 			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
 			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
-			redirect(action: "createSmslib", params: params)
+			redirect(controller:'settings', action: "connections", params: params)
 		}
 	}
 
@@ -64,8 +64,6 @@ class ConnectionController {
 	}
 
 	def sendTest = {
-		println params
-
 		withFconnection { connection ->
 			flash.message = "Test message successfully sent to ${params.number} using ${connection.name}"
 			def fmessage = new Fmessage(src:"$connection", dst: params.number, text: params.message)
