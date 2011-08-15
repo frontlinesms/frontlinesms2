@@ -91,7 +91,7 @@ $('#btn_reply_all').live('click', function() {
 	$.ajax({
 		type:'POST',
 		traditional: true,
-		data: {recipients: recipients},
+		data: {recipients: recipients, configureTabs: 'tabs-1, tabs-3'},
 		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, 'Send'); }
 	});
