@@ -51,7 +51,7 @@ class QuickMessageControllerSpec extends ControllerSpec {
 
 	def "should set configure tabs when set in the incoming request"() {
 		setup:
-			mockParams.configureTabs = ['tabs-1', 'tabs-3']
+			mockParams.configureTabs = 'tabs-1 , tabs-3'
 		when:
 			def result = controller.create()
 		then:

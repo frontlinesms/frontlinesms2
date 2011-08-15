@@ -139,4 +139,20 @@ class CheckedMessageSpec extends MessageGebSpec {
 		then: 
 			$("#message")[1].@checked == ""
 	}
+
+	def 'should archived multiple messages'() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			$("#message")[0].click()
+			waitFor { $(".multi-action").displayed }
+			def btnArchive = $('.multi-action #btn_archive_all')
+			btnArchive.click()
+			waitFor {$("div#messages").displayed}
+		then:
+			at MessagesPage
+			$("#messages").text() == 'No messages'
+
+	}
 }
