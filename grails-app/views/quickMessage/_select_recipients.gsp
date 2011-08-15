@@ -48,7 +48,7 @@
 		updateCount()
 	}
 
-	$("input[contacts='true']").live('click', function() {
+	$("input[contacts='true']").live('change', function() {
 		if (!($(this).is(":checked"))) {
 			var contactNumber = this.value
 			$.each(groupAndMembers, function(key, value) {
@@ -62,6 +62,7 @@
 	function setValueForCheckBox(grpName, value, checked) {
 		var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
 		checkBox.attr('checked', checked);
+		checkBox.change()
 	}
 
 	function updateCount() {

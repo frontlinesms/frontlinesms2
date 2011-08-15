@@ -114,23 +114,28 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	def "selected group should get unchecked when a member drops off"() {
 		setup:
 			def group = new Group(name: "group1").save(flush: true)
+			def group2 = new Group(name: "group2").save(flush: true)
 			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
 			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
 			group.addToMembers(alice)
-			group.addToMembers(bob)
+			group2.addToMembers(alice)
+			group.addToMembers(alice)
+			group2.addToMembers(bob)
 			group.save(flush: true)
+			group2.save(flush: true)
 		when:
 			to MessagesPage
 			loadFirstTab()
 			loadSecondTab()
-			$("input[name='groups']").value("group1")
-			$("input[value='group1']").jquery.trigger("click")
+			$("input[value='group1']").click()
+			$("input[value='group2']").click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
 			$("input[value='12345678']").click()
 		then:
 			!$("input[value='group1']").getAttribute("checked")
+			!$("input[value='group2']").getAttribute("checked")
 			$("#recipient-count").text() == "1"
 	}
 
