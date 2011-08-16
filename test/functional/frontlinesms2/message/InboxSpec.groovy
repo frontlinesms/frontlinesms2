@@ -222,7 +222,7 @@ class InboxSpec extends MessageGebSpec {
 			$("#btn_reply").click()
 			waitFor {$('#tabs-1').displayed}
 		when:
-			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			$("#nextPage").jquery.trigger('click')
 			waitFor { $('#tabs-3 ').displayed }
 		then:
 			$("#tabs-3").displayed
@@ -238,7 +238,7 @@ class InboxSpec extends MessageGebSpec {
 			$("a", text: "Reply All").click()
 			waitFor {$('#tabs-1').displayed}
 		when:
-			$("#tabs-1  a", text:'Next').jquery.trigger('click')
+			$("#nextPage").jquery.trigger('click')
 			waitFor { $('#tabs-3 ').displayed }
 		then:
 			$("#tabs-3").displayed
