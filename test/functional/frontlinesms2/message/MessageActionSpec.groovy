@@ -68,13 +68,15 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def unknownResponse =  Poll.findByTitle("Shampoo Brands").getResponses().find { it.value == 'Unknown'}
-			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
+			moveTo(Poll.findByTitle('Shampoo Brands').id.toString())
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 			Fmessage.findAll().each { it.refresh() }
+			waitFor {$("div.flash").displayed}
 		then:
-			bob.messageOwner == unknownResponse
+			bob.refresh().messageOwner == unknownResponse
 	}
+
 
 	def 'possible poll responses are shown in action list and can be clicked to reassign a message to a different response'() {
 		given:
@@ -83,14 +85,16 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			assert Fmessage.findBySrc('Bob').messageOwner.value == 'manchester'
 		when:
 			to PollMessageViewPage
-			def barcelonaOption = $('#categorise_dropdown option', text:'barcelona') 
+			def barcelonaOption = $('#categorise_dropdown option', text:'barcelona')
 			$('#categorise_dropdown').value(barcelonaOption.@value)
 			def barceResponse = PollResponse.findByValue('barcelona')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			def bob = Fmessage.findBySrc('Bob')
 			bob.refresh()
+			waitFor {$("#poll-stats .count")[1].text() == "1"}
+
 		then:
-			bob.messageOwner == barceResponse
+			bob.refresh().messageOwner == barceResponse
 	}
 	
 	def 'clicking on folder moves the message to that folder and removes it from the previous location'() {
@@ -105,7 +109,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			unknownResponse.addToMessages(max).save(failOnError:true, flush:true)
 			def workFolder = Folder.findByName('Work')
 			go "message/poll/${footballPoll.id}/show/${Fmessage.findBySrc('Max').id}"
-			$('#message-actions').value("${Folder.findByName('Work').id}")
+			waitFor {$('#message-actions').displayed}
+		   	moveTo(Folder.findByName('Work').id.toString())
 			waitFor {$("div.flash").displayed}
 			footballPoll.responses.each { it.refresh() }
 			workFolder.refresh()
@@ -129,8 +134,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 			$("#message")[0].click()
-			
-			$('#message-actions').value("${Poll.findByTitle('Shampoo Brands').id}")
+			moveTo(Poll.findByTitle('Shampoo Brands').id.toString())
 			shampooPoll.responses.each{ it.refresh() }
 			footballPoll.responses.each{ it.refresh() }
 			waitFor {$("div.flash").displayed}
@@ -139,6 +143,11 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			alice != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == alice }
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == alice }
+	}
+
+	private def moveTo(value) {
+		$('#message-actions').getJquery().val(value)
+		$('#message-actions').getJquery().trigger("change")
 	}
 }
 

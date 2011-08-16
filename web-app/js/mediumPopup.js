@@ -21,9 +21,11 @@ function chooseType() {
 
 function quickMessageClickAction() {
 	$("#dropdown_options").hide();
+	var configureTabs= ""
 	var me = $(this);
 	var messageType = me.text();
 	if (messageType == 'Reply') {
+		configureTabs = "tabs-1, tabs-3"
 		var src = $("#message-src").val();
 	} else if(messageType == 'Forward') {
 		var text = $("#message-body").text();
@@ -32,7 +34,7 @@ function quickMessageClickAction() {
 	
 	$.ajax({
 		type:'POST',
-		data: {recipient: src, messageText: text},
+		data: {recipient: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchMediumWizard(messageType, data); }
 	});
@@ -60,7 +62,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 }
 
 function cancel() {
-	$(this).remove();
+	$(this).dialog('close');
 }
 
 function prevButton() {
@@ -71,9 +73,9 @@ function prevButton() {
 }
 
 function nextButton() {
-	var $tabs = $('#tabs').tabs();
-	var index = $tabs.tabs('option', 'selected');
-	$tabs.tabs('select', index + 1);
+	var tabs = $('#tabs').tabs();
+	var index = tabs.tabs('option', 'selected');
+	tabs.tabs('select', index + 1);
 	$(changeButtons);
 }
 
