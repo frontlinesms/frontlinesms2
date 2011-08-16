@@ -26,9 +26,6 @@
 						<g:if test="${!params['archived'] && messageSection != 'poll'}">
 							<li class='static_btn'><g:link elementId="message-archive" action="archiveMessage" params="[messageSection: messageSection, ownerId: ownerInstance?.id, ids: messageInstance.id]">Archive</g:link></li>
 						</g:if>
-						<g:if test="${!params['archived'] && messageSection == 'poll'}">
-							<li class='static_btn'><g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive</g:link></li>
-						</g:if>
 					</div>
 				</g:if>
 			</ol>
@@ -54,9 +51,6 @@
 				<g:if test="${!params['archived'] && messageSection != 'poll'}">
 					<li class='static_btn'><a id='btn_archive_all'>Archive All</a></li>
 				</g:if>
-				<g:if test="${!params['archived'] && messageSection == 'poll'}">
-					<li class='static_btn'><g:link class="activity-archive"  url="#" name="${ownerInstance.title}">Archive All</g:link></li>
-				</g:if>
 				<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
 			</ol>
 			<g:if test="${!params['archived']}">
@@ -64,10 +58,3 @@
 			</g:if>
 		</div>
 	</div>
-
-<script>
-	$(".activity-archive").bind("click", function() {
-		var pollName = $(this).attr("name")
-		alert("This message is part of activity name " + pollName + " and so cannot be archived. You must archive the activity type")
-	})
-</script>
