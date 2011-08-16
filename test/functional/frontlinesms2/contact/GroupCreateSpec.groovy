@@ -27,10 +27,11 @@ class GroupCreateSpec extends grails.plugin.geb.GebSpec {
 			to CreateGroupPage
 			def initNumGroups = Group.count()
 			$("li#create-group a").click()
-			$('input', name: "name").value('People')
+			waitFor { $("#modalBox").displayed}
+			$('#group-details input', name: "name").value('People')
 			$("#done").click()
+			waitFor {$("a", text: "People").displayed}
 		then:
-			at ContactListPage
 			assert Group.count() == (initNumGroups + 1)
 	}
 }
