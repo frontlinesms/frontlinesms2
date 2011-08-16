@@ -146,13 +146,13 @@ class CheckedMessageSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[0].click()
-			waitFor { $(".multi-action").displayed }
-			def btnArchive = $('.multi-action #btn_archive_all')
+			waitFor { $("#multiple-message").displayed }
+			def btnArchive = $('#multiple-message #btn_archive_all')
 			btnArchive.click()
-			waitFor {$("div#messages").displayed}
+			waitFor {$("div#no-messages").displayed}
 		then:
 			at MessagesPage
-			$("#messages").text() == 'No messages'
+			$("div#no-messages").text() == 'No messages'
 
 	}
 }
