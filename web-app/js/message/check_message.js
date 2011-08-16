@@ -12,8 +12,9 @@ function checkAllMessages(){
 				$(this).parent().parent().addClass('checked');
 			}
 		});
-
-		changeMessageCount($(':checkbox').size()-1);
+		
+		if(countCheckedMessages() > 1)
+			changeMessageCount($(':checkbox').size()-1);
 	} else {
 		$(':checkbox').each(function(index, element){
 			this.checked = false;

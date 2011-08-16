@@ -12,7 +12,7 @@
     </head>
     <body>
     	<div id="contact_details">
-			<g:form name="contact-details">
+			<g:form name="contact-details" class="single-action">
 				<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 				<g:hiddenField name="version" value="${contactInstance?.version}"/>
 				<g:if test="${contactsSection instanceof frontlinesms2.Group}">
@@ -29,7 +29,7 @@
 						</g:if>
 						<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
 						<g:if test="${contactInstance.id}">
-							<li><g:actionSubmit class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/></li>
+							<li class="single-action" ><g:actionSubmit id="btn_delete" class="delete" action="deleteContact" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('Delete ${contactInstance.name}')"/></li>
 						</g:if>
 					</ol>
 				</div>
@@ -122,6 +122,24 @@
 					</div>
 				</div>
 			</g:form>
+			<div class="multi-action hide">
+				<div class="buttons">
+					<ol>
+						<li class="multi-action hide"> <a id="btn_delete_all" class="delete"> Delete All</a></li>
+						<li><a id="btn_save_all" class="save"> Save </a></li>
+						<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+					</ol>
+				</div>
+				<div id="count"></div>
+				<div id='group-add' class="dropdown">
+					<select id="group-dropdown" name="group-dropdown">
+						<option class="not-group">Add to group...</option>
+						<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
+							<option value="${g.id}">${g.name}</option>
+						</g:each>
+					</select>
+				</div>
+			</div>
 		</div>
     </body>
 </html>
