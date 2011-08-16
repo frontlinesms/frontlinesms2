@@ -25,7 +25,12 @@
 <script>
 	function initializePoll() {
 		highlightPollResponses();
+				
 		$("#tabs").bind("tabsshow", function(event, ui) {
+			if(ui.index == 1 && $("input[name='poll-type']:checked").val() == "standard")
+				$("#tabs").tabs("select", ui.index+1);
+			if(ui.index == 3 && $("#collect-responses").is(':checked'))
+				$("#tabs").tabs("select", ui.index+1);
 			updateConfirmationMessage();
 		});
 		$(".poll-responses-tab .next").addClass('disabled');
