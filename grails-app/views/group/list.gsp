@@ -33,7 +33,6 @@
 		if(!validate() && $('.error-panel').hasClass('subscription')) {
 			displayError();
 			prevButton();
-			$('#nextPage').disabled = 'disabled';
 		} else {
 			$('.error-panel').hide();
 		}
