@@ -133,6 +133,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $("#multiple-message").displayed }
 			def btnArchive = $('#multiple-message #btn_archive_all')
 			btnArchive.click()
+			sleep 1000
 			waitFor {$("div#no-messages").displayed}
 		then:
 			at MessagesPage

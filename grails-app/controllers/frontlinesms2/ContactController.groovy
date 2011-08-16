@@ -15,7 +15,6 @@ class ContactController {
 
 	def list = {
 		def model = buildList()
-
 		params.contactId = params.contactId?:model.contactInstanceList[0]?.id
 		if(params.contactId) {
 			redirect(action:'show', params:params)
@@ -129,7 +128,7 @@ class ContactController {
 			redirect(controller:'group', action:'show', id: groupInstance.id, params: [flashMessage: flash.message])
 		} else {
 			flash.message = "error"
-			redirect(controller:'contact', action:'list', params: [flashMessage: flash.message, contactId: params.contactId])
+			redirect(action:'list', params: [flashMessage: flash.message, contactId: params.contactId])
 		}
 	}
 
