@@ -180,7 +180,7 @@ class MessageController {
 		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
 		addresses.unique().each { address ->
 			//TODO: Need to add source from app settings
-			def message = new Fmessage(dst: address, text: params.messageText)
+			def message = new Fmessage(src: "src", dst: address, text: params.messageText)
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
