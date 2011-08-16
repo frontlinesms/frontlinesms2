@@ -126,8 +126,10 @@ class BootStrap {
 	}
 	
 	def initialiseSerial() {
-//		initialiseMockSerial()
-		initialiseRealSerial()
+		if(Environment.current == Environment.TEST)
+			initialiseMockSerial()
+		else
+			initialiseRealSerial()
 
 		println "PORTS:"
 		serial.CommPortIdentifier.portIdentifiers.each {
