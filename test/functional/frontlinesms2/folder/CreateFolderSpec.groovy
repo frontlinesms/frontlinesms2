@@ -24,7 +24,7 @@ class CreateFolderSpec extends FolderGebSpec {
 				deleteTestFolders()
 	}
 
-//
+// FIXME
 //	def 'Errors are displayed when folder fails to save'() {
 //			when:
 //				to CreateFolderPage

@@ -22,7 +22,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-2").displayed }
 		then:
 			$("#tabs-2").displayed
@@ -34,12 +34,12 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-2").displayed }
-			$('.next').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
-			$("input", type:"submit").click()
+			$("#done").click()
 			waitFor({title == 'Inbox'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
@@ -53,12 +53,12 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("subscriptionKey", "ADD")
 			selectAValueFromDropDown()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-2").displayed }
-			$('.next').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
-			$("input", type:"submit").click()
+			$("#done").click()
 			waitFor({title == 'Inbox'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
@@ -72,12 +72,12 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-2").displayed }
-			$('.next').click()
+			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
-			$("input", type:"submit").click()
+			$("#done").click()
 			waitFor({title == 'Inbox'})
 			$('div.flash').text().contains('Group updated successfully')
 			def groupUpdated = Group.findByName("Listeners").refresh()
@@ -91,7 +91,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("subscriptionKey", "")
 			selectAValueFromDropDown()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { !($('div.error-panel').text().isEmpty())}
 		then:
 			$('.error-panel').text().contains("please enter all the details")
@@ -103,7 +103,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("unsubscriptionKey", "")
 			selectAValueFromDropDown()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { !($('div.error-panel').text().isEmpty())}
 		then:
 			$('.error-panel').text().contains("please enter all the details")
@@ -134,7 +134,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("subscriptionKey", "ADD")
 			inputKeywords("unsubscriptionKey", "REMOVE")
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { !($('div.error-panel').text().isEmpty())}
 
 		then:
@@ -144,7 +144,7 @@ class SubscriptionSpec extends GroupGebSpec  {
 	def "should not go to the next tab when all the fields are empty"() {
 		when:
 			goToManageSubscriptions()
-			$('.next-validate').click()
+			$('#nextPage').click()
 			waitFor { !($('div.error-panel').text().isEmpty())}
 
 		then:

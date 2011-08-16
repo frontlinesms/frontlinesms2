@@ -13,7 +13,7 @@ class GroupViewSpec extends GroupGebSpec {
 	def 'Group menu is displayed'() {
 		given:
 			createTestGroups()
-			def groupNames = ['Listeners', 'Friends']
+			def groupNames = ['Listeners', 'Friends', 'Create new group']
 		when:
 			to ContactListPage
 		then:
