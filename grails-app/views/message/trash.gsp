@@ -7,7 +7,9 @@
     <body>
 		<g:if test="${messageInstance != null}">
 		 	<g:select id="empty-trash" from="${['Empty trash','Show Recipients']}" noSelection="${['null':'Trash actions...']}"></g:select>
-			<g:render template="message_details" />
+			<g:set var="buttons">
+			</g:set>
+			<g:render template="message_details" model="${[buttons: buttons]}"/>
 			<g:javascript>
 				$('#empty-trash').change(function(){
 					switch($('#empty-trash option:selected').text()) {
