@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class MessageControllerSpec extends ControllerSpec {
 	def setup() {
@@ -19,11 +20,8 @@ class MessageControllerSpec extends ControllerSpec {
 		def sahara = new Group(name: "Sahara", members: [new Contact(primaryMobile: "12345"),new Contact(primaryMobile: "56484")])
 		def thar = new Group(name: "Thar", members: [new Contact(primaryMobile: "12121"), new Contact(primaryMobile: "22222")])
 		mockDomain Group, [sahara, thar]
-		mockConfig('''
-			pagination.max = 10
-		''')
+		controller.metaClass.getPaginationCount = {-> return 10}
 	}
-
 
 /*	def "should send message to all the members in a group"() {
 		setup:

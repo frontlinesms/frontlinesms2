@@ -10,7 +10,7 @@ class MessageController {
 	def messageSendService
 
 	def beforeInterceptor = {
-		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+		params['max'] = params['max'] ?: getPaginationCount()
 		params['offset']  = params['offset'] ?: 0
 		params['archived'] = params['archived'] ? params['archived'].toBoolean()  : false
 		true
@@ -92,8 +92,6 @@ class MessageController {
 	}
 
 	def radioShow = {
-		def max = params.max ?: GrailsConfig.getConfig().pagination.max
-		def offset = params.offset ?: 0
 		def showInstance = RadioShow.get(params.ownerId)
 		def messageInstanceList = showInstance?.getShowMessages(params)
 
@@ -202,5 +200,9 @@ class MessageController {
 
 	private def isAjaxRequest() {
 		return request.xhr
+	}
+
+	private def getPaginationCount() {
+		GrailsConfig.getConfig().pagination.max
 	}
 }
