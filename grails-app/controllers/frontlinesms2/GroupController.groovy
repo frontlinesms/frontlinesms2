@@ -19,7 +19,6 @@ class GroupController {
 		redirect(controller: "message", action: "inbox")
 	}
 
-	//FIXME: Need to refactor all group related activities from ContactController
 	def show = {
 		redirect(controller: "contact", action: "list", params:[groupId : params.id])
 	}

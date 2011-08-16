@@ -24,4 +24,19 @@
 		}
 		return isDropDownSelected("id") && isGroupChecked('keyword')
 	}
+	
+	function displayError() {
+		$('.error-panel').html('<p> please enter all the details </p>').show();
+	}
+	
+	$('#nextPage').live('click', function() {
+		if(!validate() && $('.error-panel').hasClass('subscription')) {
+			displayError();
+			prevButton();
+			$('#nextPage').disabled = 'disabled';
+		} else {
+			$('.error-panel').hide();
+		}
+		
+	});
 </script>

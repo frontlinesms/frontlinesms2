@@ -1,4 +1,5 @@
 <div id="tabs-1">
+	<div class="error-panel hide subscription"></div>
 	<p>Contacts can be added and removed from groups automatically when FrontlineSMS receives a message that includes a special keyword</p>
 	<div>
 		<g:select name="id" from="${groups.collect{it.name}}" keys="${groups.collect{it.id}}" noSelection="['':'Select group...']"/>

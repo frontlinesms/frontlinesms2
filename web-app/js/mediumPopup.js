@@ -62,7 +62,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 }
 
 function cancel() {
-	$(this).remove();
+	$(this).dialog('close');
 }
 
 function prevButton() {
@@ -73,9 +73,9 @@ function prevButton() {
 }
 
 function nextButton() {
-	var $tabs = $('#tabs').tabs();
-	var index = $tabs.tabs('option', 'selected');
-	$tabs.tabs('select', index + 1);
+	var tabs = $('#tabs').tabs();
+	var index = tabs.tabs('option', 'selected');
+	tabs.tabs('select', index + 1);
 	$(changeButtons);
 }
 
