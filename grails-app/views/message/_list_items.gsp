@@ -51,7 +51,7 @@
 					</td>
 					<td>
 							<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+								<g:formatDate date="${m.dateCreated}" />
 							</g:link>
 						</td>
 					</tr>
