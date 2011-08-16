@@ -7,7 +7,7 @@
 				<g:link class="button" id="add-contact" controller="contact" action="createContact" params='[primaryMobile: "${messageInstance.src ?: messageInstance.dst}"]'><img src='${resource(dir: 'images/icons', file: 'messagehistory.gif')}'/></g:link>
 			</g:if>
 		</h2>
-		<p id="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}"/></p>
+		<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
 		<p id="message-body">${messageInstance.text}</p>
 		<div class="actions buttons">
 			<ol class="buttons">
@@ -28,22 +28,21 @@
 			</div>
 		</div>
 	</div>
-
-</div>
-<div id="multiple-message" class="hide">
-	<div id="checked-message-count"></div>
-	<div class="actions">
-		<ol class="buttons">
-			<g:if test="${messageSection != 'pending'}">
-				<li class='static_btn'><a id='btn_reply_all'>Reply All</a></li>
+	<div id="multiple-message" class="hide">
+		<div id="checked-message-count"></div>
+		<div class="actions">
+			<ol class="buttons">
+				<g:if test="${messageSection != 'pending'}">
+					<li class='static_btn'><a id='btn_reply_all'>Reply All</a></li>
+				</g:if>
+				<g:if test="${!params['archived'] && messageSection != 'poll'}">
+					<li class='static_btn'><a id='btn_archive_all'>Archive All</a></li>
+				</g:if>
+				<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
+			</ol>
+			<g:if test="${!params['archived']}">
+				<g:render template="/message/action_list"/>
 			</g:if>
-			<g:if test="${!params['archived'] && messageSection != 'poll'}">
-				<li class='static_btn'><a id='btn_archive_all'>Archive All</a></li>
-			</g:if>
-			<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
-		</ol>
-		<g:if test="${!params['archived']}">
-			<g:render template="/message/action_list"/>
-		</g:if>
+		</div>
 	</div>
 </div>
