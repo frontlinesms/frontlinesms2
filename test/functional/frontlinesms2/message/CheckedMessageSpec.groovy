@@ -4,22 +4,6 @@ import frontlinesms2.*
 
 class CheckedMessageSpec extends MessageGebSpec {
 	
-	def "should have archived multiple messages"() {
-		given:
-			createInboxTestMessages()
-		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			$("#message")[0].click()
-			waitFor { $("#multiple-message").displayed }
-			def btnArchive = $('#multiple-message #btn_archive_all')
-			btnArchive.click()
-			waitFor { $("div.flash").displayed }
-		then:
-			at MessagesPage
-			$("#message-list").text() == 'No messages'
-
-	}
-	
 	def "should check the header checkbox when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
