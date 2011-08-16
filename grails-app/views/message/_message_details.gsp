@@ -4,7 +4,7 @@
 		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}" />
 		<h2 id="contact-name">${messageInstance.displayName}
 			<g:if test="${!messageInstance.contactExists}">
-				<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: '${messageInstance.src ?: messageInstance.dst}']"><img src='${resource(dir:'images/icons',file:'messagehistory.gif')}' /></g:link>
+				<g:link class="button" id="add-contact" controller="contact" action="createContact" params='[primaryMobile: "${messageInstance.src ?: messageInstance.dst}"]'><img src='${resource(dir:'images/icons',file:'messagehistory.gif')}' /></g:link>
 			</g:if>
 		</h2>
 		<p id="message-date"><g:formatDate format="dd-MMM-yyyy hh:mm" date="${messageInstance.dateCreated}" /></p>
