@@ -20,8 +20,6 @@ class CreateFolderSpec extends FolderGebSpec {
 			then:
 				$('#folders-submenu li')[0].text().contains('Work')
 				$('#folders-submenu li')[1].text().contains('Project')
-			cleanup:
-				deleteTestFolders()
 	}
 
 // FIXME

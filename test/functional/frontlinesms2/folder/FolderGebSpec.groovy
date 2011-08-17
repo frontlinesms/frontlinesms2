@@ -26,19 +26,5 @@ class FolderGebSpec extends grails.plugin.geb.GebSpec {
 			it.save(failOnError:true, flush:true)
 		}
 	}
-
-	static deleteTestFolders() {
-		Folder.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-
-	static deleteTestMessages() {
-		Fmessage.findAll().each() {
-			it?.refresh()
-			it?.delete(failOnError:true, flush:true)
-		}
-	}
 }
 

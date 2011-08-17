@@ -16,7 +16,5 @@ class DeleteContactSpec extends ContactGebSpec {
 			withConfirm(true) { deleteBtn.click()}
 		then:
 			!Contact.findAllByName('Alice')
-		cleanup:
-			deleteTestContacts()
 	}
 }

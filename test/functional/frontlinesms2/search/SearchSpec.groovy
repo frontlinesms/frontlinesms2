@@ -10,12 +10,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		createTestMessages()
 	}
 	
-	def cleanup() {
-		deleteTestGroups()
-		deleteTestMessages()
-		deleteTestPollsAndFolders()
-	}
-	
 	def "clicking on the search button links to the result show page"() {
 		when:
 			to SearchPage
@@ -116,18 +110,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
-	}
-	private deleteTestPollsAndFolders() {
-		Poll.findAll()*.delete(flush:true, failOnError:true)
-		Folder.findAll()*.delete(flush:true, failOnError:true)
-	}
-	
-	private deleteTestMessages() {
-		Fmessage.findAll()*.delete(flush:true, failOnError:true)
-	}
-	
-	private deleteTestGroups() {
-		Group.findAll()*.delete(flush:true, failOnError:true)
 	}
 }
 
