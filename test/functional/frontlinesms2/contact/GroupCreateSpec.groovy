@@ -3,13 +3,6 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 class GroupCreateSpec extends grails.plugin.geb.GebSpec {
-	def cleanup() {
-		Group.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-
 //	FIXME
 //	def 'Errors are displayed when group fails to save'() {
 //		when:

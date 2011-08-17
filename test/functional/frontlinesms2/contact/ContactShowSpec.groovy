@@ -11,10 +11,6 @@ class ContactShowSpec extends ContactGebSpec {
 		createTestContacts()
 	}
 
-	def cleanup() {
-		deleteTestContacts()
-	}
-
 	def 'contacts link to their details'() {
 		given:
 			def alice = Contact.findByName('Alice')

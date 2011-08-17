@@ -11,10 +11,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		assert Folder.findByName('Fools').messages.size() == 2	
 	}
 	
-	def cleanup() {
-		deleteTestData()
-	}
-		
 	def 'deleted messages do not show up in inbox view'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
@@ -152,23 +148,6 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		fools.addToMessages(message1)
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)
-	}
-	
-	static deleteTestData() {
-		Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-
-		Folder.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
 	}
 }
 

@@ -11,10 +11,6 @@ class ContactEditSpec extends ContactGebSpec {
 		createTestContacts()
 	}
 
-	def cleanup() {
-		deleteTestContacts()
-	}
-
 	def 'selected contact details can be edited and saved'() {
 		when:
 			to AliceDetailsPage
@@ -50,8 +46,6 @@ class ContactEditSpec extends ContactGebSpec {
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
 			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
 			$('#groups-submenu .selected').text() == 'Excellent'
-	  	cleanup:
-	  		g.delete()
 	}
 	
 	 def "'send Message' link should not displayed for invalid email address"() {

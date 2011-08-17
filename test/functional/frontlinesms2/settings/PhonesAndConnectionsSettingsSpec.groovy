@@ -13,8 +13,6 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		then:
 			btnNewConnection.text() == "Add new connection"
 			assert btnNewConnection.getAttribute("href") == "/frontlinesms2/connection/create_new"
-		cleanup:
-			deleteTestConnections()
 	}
 	
 
@@ -26,8 +24,6 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 		then:
 			connectionNames != null
 			connectionNames.find('a')*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
-		cleanup:	
-			deleteTestConnections()
 	}
 
 	def createTestConnections() {
@@ -36,12 +32,6 @@ class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
 			it.save(flush:true, failOnError: true)
 		}
-	}
-
-	def deleteTestConnections() {
-		SmslibFconnection.findAll().each() { it?.delete(flush: true) }
-		EmailFconnection.findAll().each() { it?.delete(flush: true) }
-		Fconnection.findAll().each() { it?.delete(flush: true) }
 	}
 }
 
