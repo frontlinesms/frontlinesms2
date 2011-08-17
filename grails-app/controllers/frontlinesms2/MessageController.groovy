@@ -28,11 +28,9 @@ class MessageController {
 		}
 		def responseInstance
 		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
-		if (params.multipleMessages) {
-			messageInstance == null
-			checkedMessages = params.multipleMessages
-		}
+		def messageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[messageInstance: messageInstance,
+				checkedMessageCount: messageCount,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
 				pollInstanceList: Poll.getNonArchivedPolls(),
@@ -48,7 +46,6 @@ class MessageController {
 	}
 
 	def inbox = {
-		println params
 		def messageInstanceList = Fmessage.getInboxMessages(params)
 		[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
