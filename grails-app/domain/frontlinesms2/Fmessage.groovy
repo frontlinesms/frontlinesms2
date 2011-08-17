@@ -45,7 +45,7 @@ class Fmessage {
 	
 	def fetchContactName(String number) {
 		Contact.withNewSession { session ->
-			contactName = Contact.findByPrimaryMobile(number)?.name ?: number
+			contactName = findContact(number)
 		}
 	}
 
@@ -171,7 +171,11 @@ class Fmessage {
 	def getDisplayName() {
 		contactName?:src
 	}
-	
+
+	def getRecipientDisplayName() {
+		 findContact(dst)
+	}
+
 	def toDelete() {
 		this.deleted = true
 		this
@@ -299,4 +303,9 @@ class Fmessage {
 		}
 		answer
 	}
+
+	private String findContact(String number) {
+		return Contact.findByPrimaryMobile(number)?.name ?: number
+	}
+	
 }
