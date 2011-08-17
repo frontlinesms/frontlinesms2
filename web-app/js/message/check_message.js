@@ -5,7 +5,7 @@ function messageChecked(messageId) {
 	if(checkedMessageRow.find('input[type=checkbox]').attr('checked')) {
 		if(count == 1) {
 			$('#messages-table').find('.selected').removeClass('selected');
-			updateSingleCheckedDetails(messageId);
+			upSingleCheckedDetails(messageId);
 		} else {
 			addToChecked(messageId);
 		}
@@ -16,7 +16,7 @@ function messageChecked(messageId) {
 			if (count == 1) {
 				var newMessageRowId = $('#messages-table').find('.selected').attr('id');
 				var newMessageId = newMessageRowId.substring('message-'.length);
-				updateSingleCheckedDetails(newMessageId);
+				downSingleCheckedDetails(newMessageId);
 			} else {
 				removeFromChecked(messageId);
 			}
@@ -31,12 +31,22 @@ function countCheckedMessages() {
     return $('input[name=message]:checked').size();
 }
 
-function updateSingleCheckedDetails(messageId){
+function upSingleCheckedDetails(messageId){
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	$.get(url_root + 'message/' + messageSection, { messageId: messageId }, function(data) {
-		$('#message-details #single-message #message-info').html($(data).find('#message-details #single-message #message-info'));
-		$('#message-details #single-message #other_btns').html($(data).find('#message-details #single-message #other_btns'));
-		$('#message-details #single-message #poll-actions').html($(data).find('#message-details #single-message #poll-actions'));
+		$('#message-details #single-message #message-info').replaceWith($(data).find('#message-details #single-message #message-info'));
+		$('#message-details #single-message #other_btns').replaceWith($(data).find('#message-details #single-message #other_btns'));
+		$('#message-details #single-message #poll-actions').replaceWith($(data).find('#message-details #single-message #poll-actions'));
+	});
+	var messageList = $('input:hidden[name=checkedMessageList]');
+	var newList = ',' + messageId + ',';
+	messageList.val(newList);
+}
+
+function downSingleCheckedDetails(messageId){
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	$.get(url_root + 'message/' + messageSection, { messageId: messageId }, function(data) {
+		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
@@ -48,7 +58,7 @@ function addToChecked(messageId) {
 	var oldList = messageList.val();
 	var newList = oldList + messageId + ',';
 	messageList.val(newList);
-	updateMultipleCheckedDetails(messageList);
+	updateMultipleCheckedDetails(messageId);
 }
 
 function removeFromChecked(messageId) {
@@ -56,15 +66,15 @@ function removeFromChecked(messageId) {
 	var oldList = messageList.val();
 	var newList = oldList.replace(','+ messageId +',', ',');
 	messageList.val(newList);
+	updateMultipleCheckedDetails(messageId);
 }
 
-function updateMultipleCheckedDetails(messageList) {
+function updateMultipleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	alert(messageSection);
-	$.get(url_root + 'message/' + messageSection, { messageId: 13, multipleMessages: messageList }, function(data) {
-		alert('gettting');
+	$.get(url_root + 'message/' + messageSection, { messageId: messageId, checkedMessageList: $("#checkedMessageList").val() }, function(data) {
+		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages').show());
+		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages').show());
 	});
-	alert('out');
 }
 
 function checkAll(){

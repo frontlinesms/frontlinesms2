@@ -1,6 +1,6 @@
 <div id="message-list">
 	<g:if test="${messageInstanceTotal > 0}">
-		<g:hiddenField name="checkedMessageIdList" value=""/>
+		<g:hiddenField name="checkedMessageIdList" value=","/>
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
