@@ -1,14 +1,16 @@
 <div id="message-details">
 	<div id="single-message">
-		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
-		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
-		<h2 id="contact-name">${messageInstance.displayName}
-			<g:if test="${!messageInstance.contactExists}">
-				<g:link class="button" id="add-contact" controller="contact" action="createContact" params='[primaryMobile: "${messageInstance.src ?: messageInstance.dst}"]'><img src='${resource(dir: 'images/icons', file: 'messagehistory.gif')}'/></g:link>
-			</g:if>
-		</h2>
-		<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
-		<p id="message-body">${messageInstance.text}</p>
+		<div id='message-info'>
+			<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
+			<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
+			<h2 id="contact-name">${messageInstance.displayName}
+				<g:if test="${!messageInstance.contactExists}">
+					<g:link class="button" id="add-contact" controller="contact" action="createContact" params='[primaryMobile: "${messageInstance.src ?: messageInstance.dst}"]'><img src='${resource(dir: 'images/icons', file: 'messagehistory.gif')}'/></g:link>
+				</g:if>
+			</h2>
+			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
+			<p id="message-body">${messageInstance.text}</p>
+		</div>
 		<div class="actions buttons">
 			<ol class="buttons">
 				<g:if test="${buttons != null}">
