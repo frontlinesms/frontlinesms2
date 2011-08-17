@@ -9,13 +9,6 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 		new Fmessage(src:'+254287645', dst:'+254112233', text:'css test', status: MessageStatus.INBOUND, read: false).save(failOnError:true)
 	}
 	
-	def cleanup() {
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-		
 	def 'clicking on an unstarred message changes its CSS to starred'() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"

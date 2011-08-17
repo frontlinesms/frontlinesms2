@@ -20,8 +20,6 @@ class CreateNewPollSpec extends PollGebSpec {
 			$('#activities-submenu li')[0].text().contains('Football Teams') // TODO: find/implement array contains
 			$('#activities-submenu li')[1].text().contains('Shampoo Brands')
 			$('#activities-submenu li')[2].text().contains('Rugby Brands')
-		cleanup:
-			deleteTestPolls()
 	}
 }
 

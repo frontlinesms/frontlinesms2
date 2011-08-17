@@ -20,10 +20,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def inboxActions = $('#message-actions').children()*.text()
 		then:
 			inboxActions[1] == "Football Teams"
-		cleanup:
-			deleteTestFolders()
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 	
 //	def 'clicking on poll moves the message to that poll and removes it from the previous poll or inbox'() {
@@ -117,10 +113,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			max != footballPoll.getMessages(['starred':false]).find { it == max }
 			max == workFolder.getFolderMessages(['starred':false]).find { it == max }
-		cleanup:
-			deleteTestFolders()
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 	
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {

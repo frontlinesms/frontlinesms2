@@ -12,10 +12,6 @@ class AddContactSpec extends MessageGebSpec {
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
 			getColumnAsArray($('#messages tr'), 2) == ['+254778899', 'Alice', 'Bob']
-			
-		cleanup:
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
@@ -28,7 +24,5 @@ class AddContactSpec extends MessageGebSpec {
 			btnAddContact.click()
 		then:
 			$('#contact-details').primaryMobile == "+254778899"
-		cleanup:
-			deleteTestMessages()
 	}
 }
