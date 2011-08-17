@@ -2,9 +2,8 @@ package frontlinesms2
 
 import frontlinesms2.enums.MessageStatus
 import grails.plugin.spock.UnitSpec
-import org.apache.camel.Exchange
-import org.smslib.CStatusReportMessage
 import org.apache.camel.CamelContext
+import org.apache.camel.Exchange
 
 class FmessageRouterServiceSpec extends UnitSpec {
 	def "should update the message when no route is found"() {
