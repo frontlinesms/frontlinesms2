@@ -28,7 +28,10 @@ class MessageController {
 		}
 		def responseInstance
 		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
-		
+		if (params.multipleMessages) {
+			messageInstance == null
+			checkedMessages = params.multipleMessages
+		}
 		[messageInstance: messageInstance,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
@@ -45,6 +48,7 @@ class MessageController {
 	}
 
 	def inbox = {
+		println params
 		def messageInstanceList = Fmessage.getInboxMessages(params)
 		[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
