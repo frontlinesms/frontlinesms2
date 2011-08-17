@@ -2,7 +2,42 @@ $(document).ready(function() {
 	$('tr :checkbox[checked="true"]').parent().parent().addClass('checked');
 });
 
-var selectedMessageId;
+function messageChecked(messageId) {
+	var count = countCheckedMessages();
+	var checkedMessageRow = $('#messages-table #message-' + messageId);
+	
+	if(checkedMessageRow.find('input[type=checkbox]').attr('checked')) {
+		if(count == 1) {
+			$('#messages-table').find('.selected').removeClass('selected');
+			updateMessageDetails(messageId);
+		} else {
+			multipleMessagesChecked(messageId);
+		}
+		checkedMessageRow.addClass('selected');
+	} else {
+		if(count != 0) {
+			checkedMessageRow.removeClass('selected');
+			if (count == 1) {
+				var newMessageRowId = $('#messages-table').find('.selected').attr('id');
+				var newMessageId = newMessageRowId.substring('message-'.length);
+				updateMessageDetails(newMessageId);
+			}
+		}
+	}
+}
+
+function updateMessageDetails(messageId){
+	$.get(url_root + 'message/inbox', { messageId: messageId }, function(data) {
+		$('#message-details #single-message #message-info').html($(data).find('#message-details #single-message #message-info'));
+		$('#message-details #single-message #other_btns').html($(data).find('#message-details #single-message #other_btns'));
+		$('#message-details #single-message #move-message').html($(data).find('#message-details #single-message #move-message'));
+		$('#message-details #single-message #poll-actions').html($(data).find('#message-details #single-message #poll-actions'));
+	});
+}
+
+function multipleMessagesChecked(messageId) {
+	
+}
 
 function checkAllMessages(){
 	if($(':checkbox')[0].checked){
@@ -22,17 +57,6 @@ function checkAllMessages(){
 		});
 		showMessageDetails();
 	}
-
-}
-
-function updateMessageDetails(id){
-	highlightRow(id);
-
-	var count = countCheckedMessages();
-	if(count == 1)
-		loadMessage($('tr :checkbox[checked="true"]').val(), true);
-	if(count > 1)
-		changeMessageCount(count);
 }
 
 function loadMessage(id, checked) {
@@ -162,14 +186,6 @@ function enableSingleAction() {
 
 function showMessageDetails(){
 	enableSingleAction();
-}
-
-function highlightRow(id){
-	if( $('tr :checkbox[value='+id+']').attr('checked') == 'checked'){
-		$("#message-"+id).addClass('checked')
-	} else {
-		$("#message-"+id).removeClass('checked')
-	}
 }
 
 function isValid(value) {

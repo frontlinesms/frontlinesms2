@@ -25,11 +25,11 @@
 
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id='messages-table'>
 			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
 					<td>
-						<g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/>
+						<g:checkBox class='checkbox' name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 					</td>
 
