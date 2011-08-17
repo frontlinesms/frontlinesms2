@@ -86,5 +86,16 @@ class FmessageSpec extends UnitSpec {
 		then:
 			message.archived == true
 	}
+
+	def "should fetch the display name of the recipient"() {
+		setup:
+			mockDomain Contact, [new Contact(name: "John", primaryMobile: "dst")]
+			mockDomain Fmessage, [new Fmessage(src: "src", dst: "dst")]
+		when:
+			def message = Fmessage.findBySrc("src")
+		then:
+			message.getRecipientDisplayName() == "john"
+
+	}
 }
 

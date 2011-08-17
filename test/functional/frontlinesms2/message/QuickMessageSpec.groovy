@@ -65,9 +65,14 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#address").value("+919544426000")
 			$('.add-address').click()
 			loadThirdTab()
-        	$("#sendMsg").click()
+			$("#done").click()
 		then:
-            at SentMessagesPage
+			at SentMessagesPage
+			waitFor{title == "Sent"}
+			$("a", text: "Pending").click()
+			waitFor{title == "Pending"}
+			$("#message-list tbody tr").size() == 1
+			$("#message-list tbody tr")[0].hasClass("send-failed")
 	}
 
 
