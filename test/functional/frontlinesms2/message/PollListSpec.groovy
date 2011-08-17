@@ -13,9 +13,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			at PollListPage
 			pollMessageSources == ['Alice', 'Bob']
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def "message's poll details are shown in list"() {
@@ -29,9 +26,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
 			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
@@ -54,9 +48,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor {$('#pollGraph svg').displayed}
 		then:
 			$('#pollGraph svg')
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def 'selected poll is highlighted'() {
@@ -67,9 +58,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
 			selectedMenuItem.text() == 'Football Teams'
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -90,9 +78,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 	
 	def "should only display message details when one message is checked"() {
@@ -111,10 +96,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-body').text() == message.text
-		
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 
 	def "should display message count when multiple messages are selected"() {
@@ -127,9 +108,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[2].click()
 		then:
 			$("#checked-message-count p").text() == "2 messages selected"
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -152,11 +130,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$('a', text:'Alice').parent().previous().previous().getAttribute('checked')
 			$('a', text:'Bob').parent().previous().previous().getAttribute('checked')
-			
-		cleanup:
-			deleteTestPolls()
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 
 	def "should be able to archive an activity"() {
