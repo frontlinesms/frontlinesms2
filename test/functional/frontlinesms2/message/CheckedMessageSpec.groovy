@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 class CheckedMessageSpec extends MessageGebSpec {
 	
-	def "should check the header checkbox when all the messages are checked"() {
+	def "header checkbox is checked when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
 		when:
@@ -15,33 +15,19 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[0].@checked == "true"
 	}
 	
-	def "should display message count when multiple messages are selected"() {
+	def "message count displayed when multiple messages are selected"() {
 		given:
 			createInboxTestMessages()
 		when:
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
+			sleep 1000
 		then:
 			$("#checked-message-count").text() == "2 messages selected"
 	}
 	
-	def "should remained checked when single message is checked"() {
-		given:
-			createInboxTestMessages()
-		when:
-			to MessagesPage
-			$("#message")[1].click()
-			$("#message")[2].click()
-		then:
-			$("#checked-message-count").text() == "2 messages selected"
-		when:
-			$("#message")[1].click()
-		then:
-			$("#message")[2].@checked == "true"
-	}
-	
-	def "should change CSS to CHECKED when message is checked"() {
+	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
 		when:
@@ -49,8 +35,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].click()
 			$("#message")[2].click()
 		then:
-			$("tr#message-${Fmessage.list()[0].id}").hasClass('checked')
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('checked')
+			$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
+			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -62,8 +48,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#multiple-message').displayed}
-			def btnReply = $('#multiple-message a')[0]
+			waitFor {$('#multiple-messages').displayed}
+			def btnReply = $('#multiple-messages a')[0]
 		then:
 			btnReply
 		when:
@@ -112,14 +98,14 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].@checked == ""
 	}
 
-	def "should archive multiple messages"() {
+	def "can archive multiple messages"() {
 		given:
 			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			$("#message")[0].click()
-			waitFor { $("#multiple-message").displayed }
-			def btnArchive = $('#multiple-message #btn_archive_all')
+			waitFor { $("#multiple-messages").displayed }
+			def btnArchive = $('#multiple-messages #btn_archive_all')
 			btnArchive.click()
 			sleep 1000
 			waitFor {$("div#no-messages").displayed}

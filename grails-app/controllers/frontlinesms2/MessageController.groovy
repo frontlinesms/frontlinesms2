@@ -133,32 +133,58 @@ class MessageController {
 		}
 	}
 
-	def deleteMessage = {
-		def ids = [params.ids].flatten()
-		ids.each {id ->
-			withFmessage id, {messageInstance ->
-				messageInstance.toDelete()
-				messageInstance.save(failOnError: true, flush: true)
-			}
+	def delete = {
+		withFmessage {messageInstance ->
+			messageInstance.toDelete()
+			messageInstance.save(failOnError: true, flush: true)
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), 'message'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
 			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}		
 	}
+	
+	def deleteAll = {
+		def messageIdList = params.checkedMessageList?.tokenize(',')
+		messageIdList.each { id ->
+			withFmessage id, {messageInstance ->
+				messageInstance.toDelete()
+				messageInstance.save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		if (isAjaxRequest()) {
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
 
-	def archiveMessage = {
-		def ids = [params.ids].flatten()
-		ids.each {id ->
-			withFmessage id, { messageInstance ->
+	def archive = {
+		withFmessage { messageInstance ->
+			messageInstance.archive()
+			messageInstance.save(failOnError: true, flush: true)
+		}
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), 'messages'])}"
+		if (request.xhr) {
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
+	
+	def archiveAll = {
+		def messageIdList = params.checkedMessageList?.tokenize(',')
+		messageIdList.each { id ->
+			withFmessage id, {messageInstance ->
 				messageInstance.archive()
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
-		if (request.xhr) {
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		if (isAjaxRequest()) {
 			render ""
 		}else {
 			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
