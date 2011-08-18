@@ -33,19 +33,29 @@
 	</div>
 	<div id="multiple-messages" class='hide'>
 		<div id='message-info'>
-			<h2>${checkedMessageCount} messages selected</h2>
+			<h2 id='checked-message-count'>${checkedMessageCount} messages selected</h2>
 			<div class="actions">
 				<ol class="buttons">
 					<div id='other_btns'>
 						<g:if test="${messageSection != 'pending'}">
 							<li class='static_btn'>
-								<a id='btn_reply_all'>Reply All</a>
+								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]" onSuccess="launchMediumWizard('Reply All', data, 'Send');">
+									Reply All
+								</g:remoteLink>
 							</li>
 						</g:if>
 						<g:if test="${!params['archived'] && messageSection != 'poll'}">
-							<li class='static_btn'><a id='btn_archive_all'>Archive All</a></li>
+							<li class='static_btn'>
+								<g:link elementId="btn_archive_all" action="archiveAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
+									Archive All
+								</g:link>
+							</li>
 						</g:if>
-						<li class="static_btn"><a id='btn_delete_all'>Delete All</a></li>
+						<li class='static_btn'>
+							<g:link elementId="btn_delete_all" action="deleteAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
+								Delete All
+							</g:link>
+						</li>
 					</div>
 				</ol>
 				<g:if test="${!params['archived']}">

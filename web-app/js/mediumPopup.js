@@ -1,9 +1,9 @@
 $(document).ready(function() {
 	$("#dropdown_options").hide()
-	$("#btn_forward").click(quickMessageClickAction)
-	$("#btn_reply" )
+	$("#btn_forward").click(messageResponseClick)
+	$("#btn_reply")
 		.button()
-		.click(quickMessageClickAction)
+		.click(messageResponseClick)
 		.next()
 			.button( {
 				text: false,
@@ -15,13 +15,9 @@ $(document).ready(function() {
 				.buttonset();
 });
 
-function chooseType() {
-	alert('chosen');
-}
-
-function quickMessageClickAction() {
+function messageResponseClick() {
 	$("#dropdown_options").hide();
-	var configureTabs= ""
+	var configureTabs= "";
 	var me = $(this);
 	var messageType = me.text();
 	if (messageType == 'Reply') {
@@ -36,7 +32,7 @@ function quickMessageClickAction() {
 		type:'POST',
 		data: {recipient: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, 'Send'); }
 	});
 	$("#reply-dropdown").val("na");
 }
