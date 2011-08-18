@@ -36,7 +36,7 @@ function quickMessageClickAction() {
 		type:'POST',
 		data: {recipient: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data);addTabValidations(); }
 	});
 	$("#reply-dropdown").val("na");
 }
@@ -44,7 +44,7 @@ function quickMessageClickAction() {
 function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
-		{
+		{                   
 			modal: true,
 			title: title,
 			width: 675,
@@ -53,7 +53,8 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 			          		{ text:"Prev", click: prevButton, id:"prevPage" },
 			          		{ text:"Next",  click: nextButton, id:"nextPage" },
 			          		{ text:btnFinishedText,  click: done, id:"done" }],
-			close: function() { $(this).remove(); }
+			close: function() { $(this).remove(); },
+			open: function() {$("#tabs-1").TabContentWidget();$("#tabs-2").TabContentWidget();$("#tabs-3").TabContentWidget()}
 		}
 	);
 	changeButtons();
@@ -75,8 +76,10 @@ function prevButton() {
 function nextButton() {
 	var tabs = $('#tabs').tabs();
 	var index = tabs.tabs('option', 'selected');
-	tabs.tabs('select', index + 1);
-	$(changeButtons);
+	if($("#tabs-" + (index + 1)).TabContentWidget("validate")) {
+		tabs.tabs('select', index + 1);
+		$(changeButtons);
+	}
 }
 
 function done() {
