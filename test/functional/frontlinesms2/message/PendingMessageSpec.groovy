@@ -24,7 +24,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			def messages = $('#messages tbody tr')
 		then:
 			messages.size() == 2
-		    messages.collect { it.find("td:nth-child(3) a").text()}.containsAll(["dst1", "dst2"])
+		    messages.collect { it.find("td:nth-child(3) a").text()}.containsAll(["src1", "src2"])
 	}
 
 
@@ -45,7 +45,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#multiple-message').displayed}
+			sleep 1000
 		then:
 			!$('.multi-action a', text:'Reply All').displayed
 	}
@@ -61,12 +61,12 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'dst1'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'src1'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['src1', 'src2'])
 	}
 	
 	

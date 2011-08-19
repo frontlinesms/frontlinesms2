@@ -25,7 +25,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 		then:
 			rowContents[2] == 'Jane'
 			rowContents[3] == 'Meeting at 10 am'
-			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
 
 	def 'selected folder is highlighted'() {
@@ -91,7 +91,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$('textArea', name:'messageText').text() == "I will be late"
 	}
 	
-	def "should display message count when multiple messages are selected"() {
+	def "message count displayed when multiple messages are selected"() {
 		given:
 			createTestFolders()
 			createTestMessages()
@@ -99,6 +99,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
+			sleep 1000
 		then:
 			$("#checked-message-count").text() == "2 messages selected"
 	}
@@ -113,8 +114,8 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#multiple-message').displayed}
-			def btnReply = $('#multiple-message a')[0]
+			sleep 1000
+			def btnReply = $('#multiple-messages a')[0]
 		then:
 			btnReply
 		when:

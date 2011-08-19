@@ -28,7 +28,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			rowContents[2] == 'Alice'
 			rowContents[3] == 'hi Alice'
-			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
     
 	def 'message to alice is first in the list, and links to the show page'() {
@@ -172,10 +172,12 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
+			sleep 1000
 		then:
 			$('#checked-message-count').text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
+			sleep 1000
 			def message = Fmessage.findBySrc('Bob')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
@@ -207,11 +209,12 @@ class InboxSpec extends MessageGebSpec {
 			go "message"
 		then:
 			$("#message")[0].click()
+			sleep 1000
 			$("a", text: "Reply All").click()
-			waitFor {$('#tabs-1').displayed}
+			sleep 1000
 		when:
 			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			sleep 1000
 		then:
 			$("#tabs-3").displayed
 	}
@@ -240,6 +243,6 @@ class InboxSpec extends MessageGebSpec {
 	}
 
 	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd-MMM-yyyy hh:mm")
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm")
 	}
 }

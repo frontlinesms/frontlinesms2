@@ -62,20 +62,6 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#global-nav a", text:"Archive").hasClass("selected")
 	}
 
-	def "should not display archive all in archive tab"() {
-		Fmessage.list().each {
-			it.archived = true
-			it.save(flush: true)
-		}
-		when:
-		    goToArchivePage()
-			$("#message")[0].click()
-			waitFor { $("#checked-message-count").text().contains("3")}
-		then:
-			$("#multiple-message a").size() == 2
-			$("#multiple-message a").every() {it.text() != "Archive All"}
-	}
-
 	def 'archived messages do not show up in folder view'() {
 		given:
 			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
@@ -116,8 +102,10 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			$("#message")[0].click()
+			$("#message")[1].click()
+			sleep 1000
 		 then:
-			!$('a', text: "Archive All").displayed
+			!$('#multiple-messages a', text: "Archive All").displayed
 	 }
 
 	static createTestData() {

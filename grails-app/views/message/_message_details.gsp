@@ -39,7 +39,7 @@
 					<div id='other_btns'>
 						<g:if test="${messageSection != 'pending'}">
 							<li class='static_btn'>
-								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]" onSuccess="launchMediumWizard('Reply All', data, 'Send');">
+								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived, configureTabs: 'tabs-1,tabs-3']" onSuccess="launchMediumWizard('Reply All', data, 'Send');">
 									Reply All
 								</g:remoteLink>
 							</li>

@@ -60,7 +60,7 @@ class Fmessage {
 	}
 	
 	static namedQueries = {
-			inbox { isStarred, archived ->
+			inbox { isStarred=false, archived=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", archived)
@@ -70,7 +70,7 @@ class Fmessage {
 					isNull("messageOwner")
 				}
 			}
-			sent { isStarred, archived ->
+			sent { isStarred=false, archived=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", archived)
@@ -80,7 +80,7 @@ class Fmessage {
 						eq("starred", true)
 				}
 			}
-			pending { isStarred ->
+			pending { isStarred=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", false)
@@ -90,7 +90,7 @@ class Fmessage {
 						eq('starred', true)
 				}
 			}
-			deleted { isStarred ->
+			deleted { isStarred=false ->
 				and {
 					eq("deleted", true)
 					eq("archived", false)
@@ -98,7 +98,7 @@ class Fmessage {
 						eq('starred', true)
 				}
 			}
-			owned { isStarred, responses ->
+			owned { isStarred=false, responses ->
 				and {
 					eq("deleted", false)
 					eq("archived", false)

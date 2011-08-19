@@ -9,7 +9,6 @@ class QuickMessageControllerSpec extends ControllerSpec {
 		def mohave = new Group(name:"Mojave", members: [jim])
 		mockDomain Contact, [jim]
 		mockDomain Group, [mohave]
-
 	}
 
 	def 'create returns the contact, group list'() {
