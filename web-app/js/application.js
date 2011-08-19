@@ -19,7 +19,7 @@ function isElementEmpty(selector) {
 function isEmpty(val) {
 	return val.trim().length == 0
 }
-	
+
 function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }
@@ -75,3 +75,11 @@ function findInputWithValue(value) {
 function isCheckboxSelected(value) {
 	return findInputWithValue(value).is(':checked')
 }
+
+
+$.widget("ui.TabContentWidget", {
+	validate: function() {
+		return this.options['validate'].call();			
+	},
+	options: {validate: function() {return true;}}
+});

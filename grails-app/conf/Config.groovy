@@ -95,8 +95,3 @@ log4j = {
     info  'serial',
            'org.apache.camel'
 }
-
-codenarc {
-	reportName = 'target/test-reports/CodeNarcReport.xml'
-	reportType = 'xml'
-}

@@ -80,7 +80,7 @@
 								</g:remoteLink>
 							</li>
 							<li>
-					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send');" id="quick_message">
+					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send');addTabValidations();" id="quick_message">
 					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
 									Quick message
 								</g:remoteLink>
