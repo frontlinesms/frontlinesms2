@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="messages-menu">
 	<li class="section">
+		<h2>Create new</h2>
+		<g:link url="#" elementId="create-new-activity">Activity</g:link>
+	</li>
+
+	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'messages.gif')}' />
 		<h2>Messages</h2>
 		<ol class='sub-menu' id="messages-submenu">
@@ -67,3 +72,19 @@
 		</ol>
 	</li>
  </ol>
+
+<script>
+$("#create-new-activity").bind('click', function() {
+	$.ajax({
+		type:'GET',
+		dataType: "html",
+		url: url_root + 'create_new_activity.gsp',
+		success: function(data) {
+			launchMediumWizard('Create New Activity', data, 'Next');
+			addTabValidations();
+		}
+	});
+
+});
+
+</script>

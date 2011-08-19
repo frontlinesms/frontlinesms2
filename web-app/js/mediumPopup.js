@@ -54,7 +54,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad) {
 			          		{ text:"Next",  click: nextButton, id:"nextPage" },
 			          		{ text:btnFinishedText,  click: done, id:"done" }],
 			close: function() { $(this).remove(); },
-			open: function() {$("#tabs-1").TabContentWidget();$("#tabs-2").TabContentWidget();$("#tabs-3").TabContentWidget()}
+			open: function() {for(var i=1; i<=$(".ui-tabs-panel").size(); i++) { $("#tabs-" + i).TabContentWidget()}}
 		}
 	);
 	changeButtons();
@@ -83,8 +83,12 @@ function nextButton() {
 }
 
 function done() {
-	$(this).find("form").submit(); // TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universally
-	$(this).remove();
+	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universally
+	var lastTab = $(".ui-tabs-panel").size();
+	if($("#tabs-" + lastTab).TabContentWidget("validate")) {
+		$(this).find("form").submit();
+		$(this).remove();
+	}
 }
 
 function changeButtons() {
