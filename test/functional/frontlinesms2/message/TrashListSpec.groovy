@@ -22,17 +22,6 @@ class TrashListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['src1', 'src2'])
 	}
-	
-	def "should not be able to check messages"() {
-		setup:
-	    	new Fmessage(src: "src1", dst: "dst1", deleted: true, starred: true).save(flush: true)
-	    	new Fmessage(src: "src2", dst: "dst1", deleted: true).save(flush: true)
-		when:
-			go "message/trash"
-			$("#message")[1].click()
-		then:
-			$("#message")[1].@checked == ""
-	}
 }
 
 

@@ -169,7 +169,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 
 	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd-MMM-yyyy hh:mm")
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm")
 	}
 }
 

@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class QuickMessageController {
 	def create = {
-		if( params['recipients'].contains(',')) {
+		if( params['recipients']?.contains(',')) {
 			def recipientList = []
 			params['recipients'].tokenize(',').each { recipientList << Fmessage.findById(it).src }
 			params['recipients'] = recipientList

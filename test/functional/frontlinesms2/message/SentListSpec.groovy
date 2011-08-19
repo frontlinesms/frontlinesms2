@@ -9,7 +9,7 @@ class SentListSpec extends grails.plugin.geb.GebSpec {
 		new Fmessage(src:"src2", dst:"dst2",status:MessageStatus.SENT).save(flush: true)
 	}
 
-	def "should filter folder messages for starred and unstarred messages"() {
+	def "can filter folder messages by starred and unstarred messages"() {
 		when:
 			go "message/sent"
 		then:
@@ -18,11 +18,11 @@ class SentListSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'dst1'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'src1'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['src1', 'src2'])
 	}
 }

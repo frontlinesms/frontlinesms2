@@ -48,6 +48,10 @@ class Poll {
 	static getNonArchivedPolls() {
 		Poll.findAllByArchived(false)
 	}
+	
+	static getArchivedPolls() {
+		Poll.findAllByArchived(true)
+	}
 
 	static Poll createPoll(attrs) {
 		def responses =[]

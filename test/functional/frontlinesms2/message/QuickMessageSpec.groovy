@@ -57,25 +57,6 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#recipient-count").text() == "1"
 	}
 
-	def "should send the message to the selected recipients"() {
-		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			$("#address").value("+919544426000")
-			$('.add-address').click()
-			loadThirdTab()
-			$("#done").click()
-		then:
-			at SentMessagesPage
-			waitFor{title == "Sent"}
-			$("a", text: "Pending").click()
-			waitFor{title == "Pending"}
-			$("#message-list tbody tr").size() == 1
-			$("#message-list tbody tr")[0].hasClass("send-failed")
-	}
-
-
 	def "should select members belonging to the selected group"() {
 		setup:
 			def group = new Group(name: "group1").save(flush: true)
