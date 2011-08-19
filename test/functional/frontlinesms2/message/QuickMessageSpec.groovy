@@ -21,6 +21,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 		    loadFirstTab()
 			loadSecondTab()
+			$("#address").value("+919544426000")
+			$('.add-address').click()
         then:
 			$('div#tabs-2').displayed
 		when:
@@ -34,6 +36,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			loadFirstTab()
 			loadSecondTab()
+			$("#address").value("+919544426000")
+			$('.add-address').click()
 			loadThirdTab()
 		then:
 			$('div#tabs-3').displayed
@@ -59,12 +63,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def "should select members belonging to the selected group"() {
 		setup:
-			def group = new Group(name: "group1").save(flush: true)
-			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
-			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
-			group.addToMembers(alice)
-			group.addToMembers(bob)
-			group.save(flush: true)
+			createData()
 		when:
 			to MessagesPage
 			loadFirstTab()
@@ -77,12 +76,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def "should deselect all member recipients when a group is un checked"() {
 		setup:
-			def group = new Group(name: "group1").save(flush: true)
-			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
-			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
-			group.addToMembers(alice)
-			group.addToMembers(bob)
-			group.save(flush: true)
+			createData()
 		when:
 			to MessagesPage
 			loadFirstTab()
@@ -97,18 +91,22 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#recipient-count").text() == "0"
 	}
 
+	def "should not allow to proceed if the recipients are not selected in the quick message screen"() {
+		setup:
+			createData()
+		when:
+			to MessagesPage
+			loadFirstTab()
+			loadSecondTab()
+			assert !$(".error-panel").displayed
+			$("#nextPage").click()
+		then:
+			$(".error-panel").displayed
+	}
+
 	def "selected group should get unchecked when a member drops off"() {
 		setup:
-			def group = new Group(name: "group1").save(flush: true)
-			def group2 = new Group(name: "group2").save(flush: true)
-			def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
-			def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
-			group.addToMembers(alice)
-			group2.addToMembers(alice)
-			group.addToMembers(alice)
-			group2.addToMembers(bob)
-			group.save(flush: true)
-			group2.save(flush: true)
+			createData()
 		when:
 			to MessagesPage
 			loadFirstTab()
@@ -123,6 +121,20 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			!$("input[value='group1']").getAttribute("checked")
 			!$("input[value='group2']").getAttribute("checked")
 			$("#recipient-count").text() == "1"
+	}
+
+
+	private def createData() {
+		def group = new Group(name: "group1").save(flush: true)
+		def group2 = new Group(name: "group2").save(flush: true)
+		def alice = new Contact(name: "alice", primaryMobile: "12345678").save(flush: true)
+		def bob = new Contact(name: "bob", primaryMobile: "567812445").save(flush: true)
+		group.addToMembers(alice)
+		group2.addToMembers(alice)
+		group.addToMembers(bob)
+		group2.addToMembers(bob)
+		group.save(flush: true)
+		group2.save(flush: true)
 	}
 
 	def loadFirstTab() {
