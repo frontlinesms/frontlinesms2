@@ -50,3 +50,15 @@ coverage {
 	xml = true
 	enabledByDefault = false
 }
+
+codenarc.reports = {
+	MyXmlReport('xml') {
+		outputFile = 'target/test-reports/CodeNarcReport.xml'
+		title = 'FrontlineSMS2 CodeNarc Report (xml)'
+	}
+	
+	MyHtmlReport('html') {
+		outputFile = 'target/test-reports/CodeNarcReport.html'
+		title = 'FrontlineSMS2 CodeNarc Report (html)'
+	}
+}
