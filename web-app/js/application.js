@@ -12,6 +12,51 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
+var remoteHash = {
+	"poll" :  function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'poll/create',
+			success: function(data) {
+				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();});
+			}})
+	},
+	
+	"subscription": function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'group/list',
+			success: function(data) {
+				launchMediumWizard('Manage Subscription', data, 'Create');
+			}})
+	},
+
+	"quickMessage": function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'quickMessage/create',
+			success: function(data) {
+				
+				launchMediumWizard('Quick Message', data, 'Send');addTabValidations();
+			}})
+	},
+
+	"announcements": function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			data: {configureTabs: "tabs-1, tabs-2, tabs-3"},
+			url: url_root + 'quickMessage/create',
+			success: function(data) {
+
+				launchMediumWizard('Quick Message', data, 'Send');addTabValidations();
+			}})
+	}
+}
+
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }
