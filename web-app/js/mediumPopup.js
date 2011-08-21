@@ -41,25 +41,41 @@ function quickMessageClickAction() {
 	$("#reply-dropdown").val("na");
 }
 
-function launchMediumWizard(title, html, btnFinishedText, onLoad) {
+var buttonIndex = {}
+
+function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmation) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#modalBox").dialog(
-		{                   
-			modal: true,
-			title: title,
-			width: 675,
-			height: 500,
-			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
-			          		{ text:"Prev", click: prevButton, id:"prevPage" },
-			          		{ text:"Next",  click: nextButton, id:"nextPage" },
-			          		{ text:btnFinishedText,  click: done, id:"done" }],
-			close: function() { $(this).remove(); },
-			open: function() {for(var i=1; i<=$(".ui-tabs-panel").size(); i++) { $("#tabs-" + i).TabContentWidget()}}
+	$("#modalBox").dialog({
+		modal: true,
+		title: title,
+		width: 675,
+		height: 500,
+		buttons: [
+			{ text:"Cancel", click: cancel, id:"cancel" },
+			{ text:"Prev", click: prevButton, id:"prevPage" },
+			{ text:"Next",  click: nextButton, id:"nextPage" },
+			{ text:"Confirm",  click: cancel, id:"confirmation" },
+			{ text:btnFinishedText,  click: done, id:"done" }
+		],
+		close: function() {             
+			$(this).remove();
 		}
-	);
-	changeButtons();
-	$(".ui-tabs-nav li a ").click(changeButtons);
+	});
+	var $tabs = $('#tabs').tabs();
+	var tabLength =$(".ui-tabs-panel").size() - 1;
 	onLoad && onLoad();
+	
+//	$(".ui-tabs-nav li a ").click(changeButtons);
+	buttonIndex = {
+		"cancel" : range(0, withConfirmation ? tabLength - 1 : tabLength),
+		"prevPage": range(1, withConfirmation ? tabLength - 1 : tabLength),
+		"nextPage": range(0, withConfirmation ? tabLength - 2 : tabLength - 1),
+		"done": withConfirmation ? [tabLength - 1] : [tabLength],
+		"confirmation": withConfirmation ? [tabLength] : []
+	}
+	changeButtons(0);
+//	console.log($(".ui-tabs-panel").size())
+
 }
 
 function cancel() {
@@ -70,7 +86,7 @@ function prevButton() {
 	var $tabs = $('#tabs').tabs();
 	var index = $tabs.tabs('option', 'selected');
 	$tabs.tabs('select', index - 1);
-	$(changeButtons);
+	changeButtons(index - 1);
 }
 
 function nextButton() {
@@ -78,38 +94,47 @@ function nextButton() {
 	var index = tabs.tabs('option', 'selected');
 	if($("#tabs-" + (index + 1)).TabContentWidget("validate")) {
 		tabs.tabs('select', index + 1);
-		$(changeButtons);
+		changeButtons(index + 1)
 	}
+}
+
+function moveToNextTab() {
+	var tabs = $('#tabs').tabs();
+	var index = tabs.tabs('option', 'selected');
+	tabs.tabs('select', index + 1);
+	changeButtons(index + 1)
 }
 
 function done() {
 	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universally
-	var lastTab = $(".ui-tabs-panel").size();
-	if($("#tabs-" + lastTab).TabContentWidget("validate")) {
+	var tabs = $('#tabs').tabs();
+	var index = tabs.tabs('option', 'selected');
+	if($("#tabs-" + (index + 1)).TabContentWidget("validate")) {
 		$(this).find("form").submit();
 		$(this).remove();
 	}
 }
 
-function changeButtons() {
-	var $tabs = $('#tabs').tabs();
-	var index = $tabs.tabs('option', 'selected');
-	var totalSize = $(".ui-tabs-panel").size() - 1;
-	if (index != totalSize) {
-		$(".ui-dialog-buttonpane #prevPage").show();
-		$(".ui-dialog-buttonpane #nextPage").show();
-		$(".ui-dialog-buttonpane #done").hide();
-	}
-	if (index != 0) { 
-		$(".ui-dialog-buttonpane #prevPage").show();
-		$(".ui-dialog-buttonpane #nextPage").show();
-	}
-	if (index == 0) { 
-		$(".ui-dialog-buttonpane #prevPage").hide();
-		$(".ui-dialog-buttonpane #nextPage").show();
-	}
-	if (index == totalSize) {
-		$(".ui-dialog-buttonpane #nextPage").hide();
-		$(".ui-dialog-buttonpane #done").show();
-	}
+function changeButtons(currentTabIndex) {
+	$.each(buttonIndex, function(key, value) {
+		if (value.indexOf(currentTabIndex) != -1)
+		{
+			$(".ui-dialog-buttonpane #" + key).show()
+		}
+	else
+		{
+			$(".ui-dialog-buttonpane #" + key).hide()
+		}
+
+	});
 }
+
+function range(first, last) {
+	var a = []
+	for (var i = first; i <= last; i++) {
+		a.push(i)
+	}
+	return a
+}
+
+
