@@ -7,7 +7,7 @@ class QuickMessageController {
 		def recipients = params['recipients'] ? [params['recipients']].flatten() : []
 		def fowardMessage = params['messageText'] ? params['messageText'] : []
 		def contacts = Contact.list()
-		def configureTabs = params['configureTabs'] ? configTabs(params['configureTabs']): ['tabs-1', 'tabs-2', 'tabs-3']
+		def configureTabs = params['configureTabs'] ? configTabs(params['configureTabs']): ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 		[contactList: contacts,
 			configureTabs: configureTabs,
 			groupList:Group.getGroupDetails(),
