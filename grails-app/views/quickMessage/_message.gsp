@@ -6,6 +6,11 @@
 <script>
 	$("#messageText").live("blur", function() {
 		var value = $(this).val();
-		$("#confirm-message-text").html(value)
+		if(value) {
+			$("#confirm-message-text").html(value)
+		}
+		else {
+			$("#confirm-message-text").html("none")
+		}
 	})
 </script>

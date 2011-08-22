@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="frontlinesms2.enums.MessageStatus" contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="messages-menu">
 	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'messages.gif')}' />
@@ -11,7 +11,7 @@
 				<g:link action="sent">Sent</g:link>
 			</li>
 			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending">Pending</g:link>
+				<g:link action="pending" class="${messageInstanceList.any {it.status == MessageStatus.SEND_FAILED} ? 'send-failed' : ''}">Pending</g:link>
 			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
