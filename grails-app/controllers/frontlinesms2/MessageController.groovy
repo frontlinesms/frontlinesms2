@@ -229,9 +229,7 @@ class MessageController {
 	}
 	
 	def changeAllResponses = {
-		println 'changing all'
 		def messageIdList = params.messageId?.tokenize(',')
-		println "list: $messageIdList"
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
 				println messageInstance

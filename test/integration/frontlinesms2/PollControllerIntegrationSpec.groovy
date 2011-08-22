@@ -34,5 +34,4 @@ class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec 
 			Poll.getArchivedPolls() == [poll]
 			Poll.getNonArchivedPolls() == []
 	}
-
 }

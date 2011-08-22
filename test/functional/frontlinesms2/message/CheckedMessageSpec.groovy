@@ -48,13 +48,13 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
-			waitFor {$('#multiple-messages').displayed}
+			sleep 1000
 			def btnReply = $('#multiple-messages a')[0]
 		then:
 			btnReply
 		when:
 			btnReply.click()
-			waitFor {$('div#tabs-1').displayed}
+			sleep 1000	
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'Alice').getAttribute('checked')
