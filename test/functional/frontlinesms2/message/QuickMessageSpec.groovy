@@ -70,9 +70,9 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$('.add-address').click()
 			loadThirdTab()
 			$("#done").click()
+			waitFor{$("#tabs-4").displayed }
+			$("#confirmation").click()
 		then:
-			at SentMessagesPage
-			waitFor{title == "Sent"}
 			$("a", text: "Pending").click()
 			waitFor{title == "Pending"}
 			$("#message-list tbody tr").size() == 1
