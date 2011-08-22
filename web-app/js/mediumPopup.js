@@ -1,25 +1,7 @@
-$(function() {
-	$("#dropdown_options").hide()
-	$("#btn_forward").click(messageResponseClick)
-	$("#btn_reply")
-		.button()
-		.click(messageResponseClick)
-		.next()
-			.button( {
-				text: false,
-			})
-			.click(function() {
-				$("#dropdown_options").toggle()
-			})
-			.parent()
-				.buttonset();
-});
-
-function messageResponseClick() {
+function messageResponseClick(messageType) {
 	$("#dropdown_options").hide();
 	var configureTabs= "";
 	var me = $(this);
-	var messageType = me.text();
 	if (messageType == 'Reply') {
 		configureTabs = "tabs-1, tabs-3"
 		var src = $("#message-src").val();
@@ -104,4 +86,9 @@ function changeButtons() {
 		$(".ui-dialog-buttonpane #nextPage").hide();
 		$(".ui-dialog-buttonpane #done").show();
 	}
+}
+
+
+function toggleDropdown() {
+	$("#dropdown_options").toggle();
 }

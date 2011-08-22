@@ -26,16 +26,6 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			messages.size() == 2
 		    messages.collect { it.find("td:nth-child(3) a").text()}.containsAll(["src1", "src2"])
 	}
-
-
-	def "reply option should not be available for messages listed in poll section"() {
-		when:
-			to MessagesPage
-			$('a', text: "Pending").click()
-			waitFor { title == "Pending" }
-		then:
-		    !$('a', text:'Reply').displayed
-	}
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:

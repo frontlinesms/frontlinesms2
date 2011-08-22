@@ -1,9 +1,7 @@
 function categoriseClickAction(responseId) {
 	var ownerId = $("#owner-id").val();
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	alert('hello');
 	if(countCheckedMessages() > 1) {
-		alert('2ish');
 		var change = 'changeAllResponses';
 		var messagesToChange = $('input:hidden[name=checkedMessageList]').val();
 	} else {
