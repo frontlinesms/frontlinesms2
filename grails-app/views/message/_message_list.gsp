@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.enums.MessageStatus" %>
 <div id="message-list">
 	<g:hiddenField name="checkedMessageIdList" value=","/>
 	<g:if test="${messageInstanceTotal > 0}">
@@ -27,7 +28,7 @@
 		</thead>
 		<tbody id='messages-table'>
 			<g:each in="${messageInstanceList}" status="i" var="m">
-				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
+				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
 					<td>
 						<g:checkBox class='checkbox' name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
