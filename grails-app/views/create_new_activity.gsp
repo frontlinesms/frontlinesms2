@@ -43,7 +43,6 @@
 	function addValidations() {
 		$("#tabs-1").TabContentWidget({
 			validate: function() {
-				console.log("validation called");
 				var selectedElement = $("input[name='activity']:checked")[0]
 				$("#modalBox").dialog("close");
 				remoteHash[selectedElement.value].call()

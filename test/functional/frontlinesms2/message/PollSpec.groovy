@@ -68,8 +68,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			go "message"
 		then:
-			$("#create-poll a").click()
-			waitFor {$('#tabs-1').displayed}
+			launchPollPopup()
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 		when:
@@ -86,8 +85,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			go "message"
 		then:
-			$("#create-poll a").click()
-			waitFor {$('#tabs-1').displayed}
+			launchPollPopup()
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 			$("input", name:"collect-responses").value('no-message')
@@ -105,8 +103,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			go "message"
 		then:
-			$("#create-poll a").click()
-			waitFor {$('#tabs-1').displayed}
+			launchPollPopup()
 			$("input", name:'poll-type').value("multiple")
 			$("input", value:'multiple').jquery.trigger('click')
 		when:
@@ -119,8 +116,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			go "message"
-			$("#create-poll a").click()
-		    waitFor {$('#tabs-1').displayed}
+			launchPollPopup()
 			$("input", name:'poll-type').value("multiple")
             $("textarea", name:'question').value("How often do you drink coffee?")
 			$("#nextPage").click()
@@ -161,6 +157,14 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		def element = $("input", name:selector)
 		element.value(value)
 		element.jquery.trigger('blur')
+	}
+
+	def launchPollPopup() {
+		$("#create-activity a").click()
+		waitFor {$('#tabs-1').displayed}
+		$("input", name: "activity").value("poll")
+		$("#done").click()
+		waitFor {$("#ui-dialog-title-modalBox").text() == "Create Poll"}
 	}
 
 	String dateToString(Date date) {
