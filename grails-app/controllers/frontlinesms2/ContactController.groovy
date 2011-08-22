@@ -62,15 +62,6 @@ class ContactController {
 	}
 
 	def update = {
-		if(params.contactIds) {
-			def contactIds = params.contactIds.tokenize(',').unique()
-			contactIds.each { id ->
-				withContact id, { contactInstance ->
-					updateData(contactInstance)
-				}
-			}
-			render ""
-		}
 		withContact { contactInstance ->
 			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
 				def version = params.version.toLong()
@@ -83,6 +74,18 @@ class ContactController {
 			contactInstance.properties = params
 			updateData(contactInstance)
 			render(view:'show', model:show()<<[contactInstance:contactInstance])
+		}
+	}
+	
+	def updateMultipleContacts = {
+		if(params.contactIds) {
+			def contactIds = params.contactIds.tokenize(',').unique()
+			contactIds.each { id ->
+				withContact id, { contactInstance ->
+					updateData(contactInstance)
+				}
+			}
+			redirect(action: 'show', params: [groupId: params.groupId])
 		}
 	}
 	
