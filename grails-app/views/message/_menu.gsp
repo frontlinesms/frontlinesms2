@@ -1,11 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="messages-menu">
 	<li class="section">
-		<h2>Create new</h2>
-		<g:link url="#" elementId="create-new-activity">Activity</g:link>
-	</li>
-
-	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'messages.gif')}' />
 		<h2>Messages</h2>
 		<ol class='sub-menu' id="messages-submenu">
@@ -32,10 +27,8 @@
 					<g:link action="poll" params="[ownerId: p.id]">${p.title}</g:link>
 				</li>
 			</g:each>
-			<li class='create' id="create-poll">
-				<g:remoteLink controller="poll" action="create" onSuccess="launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();})">
-					Create new poll
-				</g:remoteLink>				
+			<li class='create' id="create-activity">
+				<g:link url="#" elementId="create-new-activity">Create new activity</g:link>
 			</li>
 		</ol>
 	</li>
