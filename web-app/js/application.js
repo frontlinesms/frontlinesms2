@@ -43,13 +43,13 @@ var remoteHash = {
 			}})
 	},
 
-	"announcements": function() {
+	"announcement": function() {
 		$.ajax({
 			type:'GET',
 			dataType: "html",
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
-				launchMediumWizard('Announcements', data, 'Send', null, true);addTabValidations();
+				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
 			}})
 	}
 }
