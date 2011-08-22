@@ -142,20 +142,6 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#recipient-count").text() == "1"
 	}
 
-	def "should launch quick message screen from create new activity link" () {
-		when:
-			to MessagesPage
-			$("a", text:"Create new activity").click()
-			waitFor {$("#tabs-1").displayed}
-			$("input", name: "activity").value("quickMessage")
-			$("#done").click()
-			waitFor {$("#ui-dialog-title-modalBox").text() == "Quick Message"}
-		then:
-			$("#ui-dialog-title-modalBox").text() == "Quick Message"
-
-	}
-
-
 	def "should launch announcement screen from create new activity link" () {
 		when:
 			to MessagesPage
