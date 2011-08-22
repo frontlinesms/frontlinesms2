@@ -30,7 +30,7 @@
 					Manage subscription
 				</li>
 				<li>
-					<g:radio name="activity" value="announcements"/>
+					<g:radio name="activity" value="announcement"/>
 					Announcements
 				</li>
 			</ul>
