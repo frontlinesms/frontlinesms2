@@ -1,9 +1,9 @@
 <div id="message-details">
-	<g:hiddenField name="checkedMessageList" id="checkedMessageList" value=","/>
+	<g:hiddenField name="checkedMessageList" id="checkedMessageList" value="${checkedMessageList}" />
 	<div id="single-message">
+		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
+		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 		<div id='message-info'>
-			<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
-			<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 			<h2 id="contact-name">${messageInstance.displayName}
 				<g:if test="${!messageInstance.contactExists}">
 					<g:link class="button" id="add-contact" controller="contact" action="createContact" params='[primaryMobile: "${messageInstance.src ?: messageInstance.dst}"]'><img src='${resource(dir: 'images/icons', file: 'messagehistory.gif')}'/></g:link>
@@ -12,24 +12,8 @@
 			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
 			<p id="message-body">${messageInstance.text}</p>
 		</div>
-		<div class="actions buttons">
-			<ol class="buttons">
-				<g:if test="${buttons != null}">
-					${buttons}
-				</g:if>
-				<g:else>
-					<g:render template="message_actions"></g:render>
-				</g:else>
-			</ol>
-			<g:if test="${!params['archived']}">
-				<g:render template="/message/action_list"/>
-			</g:if>
-			<div id="poll-actions">
-				<g:if test="${messageInstance && messageSection == 'poll'}">
-					<g:render template="categorize_response"/>
-				</g:if>
-			</div>
-		</div>
+		<g:render template="message_actions"></g:render>
+		<g:render template="other_actions"></g:render>
 	</div>
 	<div id="multiple-messages" class='hide'>
 		<div id='message-info'>
@@ -58,9 +42,7 @@
 						</li>
 					</div>
 				</ol>
-				<g:if test="${!params['archived']}">
-					<g:render template="/message/action_list"/>
-				</g:if>
+				<g:render template="other_actions"></g:render>
 			</div>
 		</div>
 	</div>

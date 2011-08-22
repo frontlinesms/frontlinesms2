@@ -1,59 +1,31 @@
-$(document).ready(function() {
-	$("#message-actions").change(moveAction);
-});
-
 function moveAction() {
-	var count = countCheckedMessages();
-	var checkedMessageList = '';
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
-	if(messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow'){
-		var location = url_root + "message/"+messageSection+"/"+ownerId;
+	if(messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
+		var location = url_root + "message/" + messageSection + "/" + ownerId;
 	} else{
-		var location = url_root + "message/"+messageSection;
+		var location = url_root + "message/" + messageSection;
 	}
-	var me = $(this).find('option:selected');
-	if(count > 1) {
-		moveMultipleMessages(me, location);
-		return;
-	}
+	var me = $('#move-actions option:selected');
 
-	var mesId = $("#message-id").val()
-	if(me.hasClass('na')) return;
-	if(me.hasClass('poll')) {
-		var section = 'poll';
-	} else if(me.hasClass('folder')) {
-		var section = 'folder';
-	}
+	var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
 	
-	$.ajax({
-		type:'POST',
-		url: url_root + 'message/move',
-		data: {messageSection: section, ids: mesId, ownerId: me.val()},
-		success: function(data) {
-			window.location = location;
-		}
-	});
-}
+	if(me.hasClass('na')) return;
+	if(me.hasClass('poll')) var section = 'poll';
+	else if(me.hasClass('folder')) var section = 'folder';
 
-function moveMultipleMessages(object, location) {
-	var msgsToMove = []
-	$.each(getSelectedGroupElements('message'), function(index, value) {
-			msgsToMove.push(value.value)
-	});
-
-	if(object.hasClass('poll')) {
-		var section = 'poll';
-	} else if(object.hasClass('folder')) {
-		var section = 'folder';
+	if(countCheckedMessages() > 1) {
+		var move = 'moveAll';
+		var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
+	} else {
+		var move = 'move';
+		var messagesToMove = $("#message-id").val();
 	}
+
 	$.ajax({
 		type:'POST',
-		url: url_root + 'message/move',
-		traditional: true,
-		data: {messageSection: section, ownerId: object.val(), ids: msgsToMove},
-		success: function(data) {
-			window.location = location;
-		}
+		url: url_root + 'message/' + move,
+		data: {messageSection: section, messageId: messagesToMove, ownerId: me.val()},
+		success: function(data) { window.location = location; }
 	});
 }
