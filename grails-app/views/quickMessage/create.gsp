@@ -11,7 +11,7 @@
 		</g:each>
 	</ol>
 
-	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post">
+	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="goToNextTab()">
 		<g:render template="message"/>
 		<div id="tabs-2" class="${configureTabs.contains("tabs-2") ? "" : "hide"}">
 			<label for="address">Add phone number</label>
@@ -32,7 +32,6 @@
 </div>
 
 <script>
-
 	function addTabValidations() {
 		$("#tabs-2").TabContentWidget({
 			validate: function() {
@@ -48,18 +47,14 @@
 
 		$("#tabs-3").TabContentWidget({
 			validate: function() {
-//				$("#send-quick-message").submit()
-				moveToNextTab()
-				return false;
-			}
-		});
-
-		$("#tabs-4").TabContentWidget({
-			validate: function() {
-				$("#modalBox").dialog("close")
+				$("#send-quick-message").submit()
 				return false;
 			}
 		});
 	}
 
+
+	function goToNextTab() {
+		$('#tabs').tabs('select', getCurrentTab() + 1);
+	}
 </script>

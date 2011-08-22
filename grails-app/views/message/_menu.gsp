@@ -81,7 +81,7 @@ $("#create-new-activity").bind('click', function() {
 		url: url_root + 'create_new_activity.gsp',
 		success: function(data) {
 			launchMediumWizard('Create New Activity', data, 'Next');
-			addTabValidations();
+			addValidations();
 		}
 	});
 

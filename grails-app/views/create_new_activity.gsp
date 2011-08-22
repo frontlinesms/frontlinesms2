@@ -40,7 +40,7 @@
 </html>
 
 <script>
-	function addTabValidations() {
+	function addValidations() {
 		$("#tabs-1").TabContentWidget({
 			validate: function() {
 				console.log("validation called");

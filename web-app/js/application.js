@@ -22,7 +22,7 @@ var remoteHash = {
 				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();});
 			}})
 	},
-	
+
 	"subscription": function() {
 		$.ajax({
 			type:'GET',
@@ -39,11 +39,19 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
-				launchMediumWizard('Quick Message', data, 'Done', null, true);addTabValidations();
+				launchMediumWizard('Quick Message', data, 'Send', null, true);addTabValidations();
 			}})
 	},
 
-	"announcements": this["quickMessage"] 
+	"announcements": function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'quickMessage/create',
+			success: function(data) {
+				launchMediumWizard('Announcements', data, 'Send', null, true);addTabValidations();
+			}})
+	}
 }
 
 function isElementEmpty(selector) {
@@ -116,22 +124,4 @@ $.widget("ui.TabContentWidget", {
 		return this.options['validate'].call();			
 	},
 	options: {validate: function() {return true;}}
-});
-
-
-$.ui.tabs.subclass('ui.tabsSubclass', {
-
-	navigationButtons: function(){
-		var tabLength = this.length()
-		alert("hehe");
-		alert(tabLength)
-		//		buttonIndex = {
-//			"cancel" : range(0, false ? tabLength - 1 : tabLength),
-//			"prevPage": range(1, false ? tabLength - 1 : tabLength),
-//			"nextPage": range(0, false ? tabLength - 2 : tabLength - 1),
-//			"done": false ? [tabLength - 1] : [tabLength],
-//			"confirmation": false ? [tabLength] : []
-//		}
-	}
-
 });
