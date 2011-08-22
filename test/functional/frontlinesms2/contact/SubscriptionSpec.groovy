@@ -19,9 +19,9 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
 			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
+			waitFor { $("#tabs-3").displayed }
 		then:
-			$("#tabs-2").displayed
+			$("#tabs-3").displayed
 	}
 
 	def "should be able to set subscription keywords for a group"() {
@@ -30,8 +30,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
@@ -50,8 +48,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			selectAValueFromDropDown()
 			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
-			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
 			$("#done").click()
@@ -68,8 +64,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:

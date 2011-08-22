@@ -27,10 +27,8 @@
 					<g:link action="poll" params="[ownerId: p.id]">${p.title}</g:link>
 				</li>
 			</g:each>
-			<li class='create' id="create-poll">
-				<g:remoteLink controller="poll" action="create" onSuccess="launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();})">
-					Create new poll
-				</g:remoteLink>				
+			<li class='create' id="create-activity">
+				<g:link url="#" elementId="create-new-activity">Create new activity</g:link>
 			</li>
 		</ol>
 	</li>
@@ -67,3 +65,19 @@
 		</ol>
 	</li>
  </ol>
+
+<script>
+$("#create-new-activity").bind('click', function() {
+	$.ajax({
+		type:'GET',
+		dataType: "html",
+		url: url_root + 'create_new_activity.gsp',
+		success: function(data) {
+			launchMediumWizard('Create New Activity', data, 'Next');
+			addValidations();
+		}
+	});
+
+});
+
+</script>
