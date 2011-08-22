@@ -1,12 +1,13 @@
 $(document).ready(function() {
 	$("#group-list li a.remove-group").click(removeGroupClickAction);
 	$("#group-dropdown").change(addGroupClickAction);
+	$("#multi-group-dropdown").change(addGroupClickAction);
+	$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
 });
 
 function addGroupClickAction() {
 	var me = $(this).find('option:selected');
 	if(me.hasClass('not-group')) return;
-
 	var groupName = me.text();
 	var groupId = me.attr('value');
 
@@ -14,11 +15,19 @@ function addGroupClickAction() {
 	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '">Delete</a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
-
-	$('#group-list').append(groupListItem);
-	me.remove();
-	$("#no-groups").hide();
-	addGroupId(groupId);
+	
+	if($('.single-contact').is(':visible')) {
+		$('#group-list').append(groupListItem);
+		me.remove();
+		$("#no-groups").hide();
+		addGroupId(groupId);
+		
+	} else {
+		$('#multi-group-list').append(groupListItem);
+		me.remove();
+		$("#multi-no-groups").hide();
+		addGroupId(groupId);
+	}
 	// addIdToGroupHiddenField(groupId);
 }
 
@@ -29,13 +38,25 @@ function removeGroupClickAction() {
 
 	var option = $("<option value='" + groupId + "'>" + groupName + '</option>');
 	option.click(addGroupClickAction);
-
-	$('#group-dropdown').append(option);
-	var groupList = me.parent();
-	groupList.remove();
-	if($('#group-list li').children('input').length < 1) {
-		$('#no-groups').show();
+	
+	if($('.single-contact').is(':visible')) {
+		$('#group-dropdown').append(option);
+		var groupList = me.parent();
+		groupList.remove();
+		if($('#group-list li').children('input').length < 1) {
+			$('#no-groups').show();
+		}
+		
+	} else {
+		$('#multi-group-dropdown').append(option);
+		var groupList = me.parent();
+		groupList.remove();
+		if($('#multi-group-list li').children('input').length < 1) {
+			$('#multi-no-groups').show();
+		}
 	}
+	
+	
 
 	removeGroupId(groupId);
 	// removeIdFromGroupHiddenField(groupId);
