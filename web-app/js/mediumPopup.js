@@ -77,16 +77,14 @@ function prevButton() {
 }
 
 function nextButton() {
-	var tabIndex = getCurrentTab() + 1;
-	if($("#tabs-" + (tabIndex)).TabContentWidget("validate")) {
+	if(validateCurrentTab()) {
 		$("#tabs").tabs('select', getCurrentTab() + 1);
 	}
 }
 
 function done() {
-	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universally
-	var tabIndex = getCurrentTab() + 1;
-	if($("#tabs-" + (tabIndex)).TabContentWidget("validate")) {
+	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universall
+	if(validateCurrentTab()) {
 		$(this).find("form").submit();
 		$(this).remove();
 	}
@@ -131,5 +129,12 @@ function getButtonToTabIndexMapping(withConfirmationScreen) {
 			"confirmation": withConfirmationScreen ? [getTabLength()] : []
 		}
 }
+
+function validateCurrentTab() {
+	var selected = $("#tabs").tabs( "option", "selected" );
+	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
+	return currentTab.TabContentWidget("validate")
+}
+
 
 
