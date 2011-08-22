@@ -62,6 +62,15 @@ class ContactController {
 	}
 
 	def update = {
+		if(params.contactIds) {
+			def contactIds = params.contactIds.tokenize(',').unique()
+			contactIds.each { id ->
+				withContact id, { contactInstance ->
+					updateData(contactInstance)
+				}
+			}
+			render ""
+		}
 		withContact { contactInstance ->
 			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
 				def version = params.version.toLong()
@@ -76,7 +85,7 @@ class ContactController {
 			render(view:'show', model:show()<<[contactInstance:contactInstance])
 		}
 	}
-
+	
 	def createContact = {
 		def model = [contactInstance:new Contact(params),
 					contactFieldInstanceList: [],
@@ -105,20 +114,14 @@ class ContactController {
 	}
 	
 	def deleteContact = {
-		def contactIds = params.ids ? [params.ids].flatten() : [params.contactId]
+		def contactIds = params.contactIds ? params.contactIds.tokenize(',').unique() : [params.contactId]
 		contactIds.each { id ->
 			withContact id, { contactInstance ->
-				Group.removeContactFromGroups(contactInstance)
 				Contact.get(contactInstance.id).delete()
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-		
-		if (request.xhr) {
-			render ""
-		} else {
-			redirect(view: "list")		
-		}
+		redirect(view: "list")		
 	}
 
 	def saveGroup = {
@@ -154,8 +157,8 @@ class ContactController {
 		// Check for errors in groupsToAdd and groupsToRemove
 		def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
 		def groupsToRemove = params.groupsToRemove.tokenize(',')
-		def fieldsToAdd = params.fieldsToAdd.tokenize(',')
-		def fieldsToRemove = params.fieldsToRemove.tokenize(',')
+		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
+		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
 		} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {

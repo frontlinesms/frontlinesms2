@@ -11,7 +11,6 @@
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
-		<g:javascript src="popup.js"/>
 		<g:javascript src="contact/checked_contact.js"></g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />

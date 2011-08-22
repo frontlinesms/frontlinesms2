@@ -48,6 +48,19 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			!Contact.get(c.id).isMemberOf(Group.get(g.id))
 	}
+	
+	def "should move multiple selected contacts to the same group" () {
+		given:
+			def contact1 = new Contact(name: "Test 1").save(failOnError: true)
+			def contact2 = new Contact(name: "Test 2").save(failOnError: true)
+		when:
+			controller.params.contactIds = "${contact1.id}, ${contact2.id}"
+			controller.params.groupsToAdd = ",${g.id},"
+			controller.params.groupsToRemove = ","
+			controller.update()
+		then:
+			g.getMembers() == [contact1, contact2]
+	}
 
 	def 'when showing all contacts, the first contact in the list is selected if none is specified'() {
 		given:

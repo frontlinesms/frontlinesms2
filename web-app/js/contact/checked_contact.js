@@ -1,26 +1,41 @@
-var selectedContactId;
-
 function updateContactDetails(id){
 	highlightRow(id);
-
+	removeSelectedContact();
 	var count = countCheckedContacts();
+	
+	//update checked contact list
+	$('input:hidden[name=contactIds]').val(getCheckedContacts());
+	
 	if(count == 1) {
-		if(selectedContactId != $(':checkbox[checked="true"]').val())
-			loadContact($(':checkbox[checked="true"]').val(), true);
+		loadContact($(':checkbox[checked="true"]').val());
 	}
 	if(count > 1){
 		changeContactCount(count);
+		//loadGroupList();
 	}
 }
 
-function loadContact(id, checked) {
-	alert("Id-" + id);
-	var url = $(".displayName-" + id).attr("href")
-	if(checked == true){
-	   url = url + (url.indexOf("?") > -1 ? "&" : "?")
-		url = url + "checkedId="+id;
-	}
-	window.location = url
+function removeSelectedContact() {
+	if($('li.selected :checkbox[checked="false"]').is(':visible'))
+		$('#contact-' + $('li.selected :checkbox[checked="false"]').val()).removeClass('selected');
+}
+
+function loadContact(id) {
+	$.get(url_root + 'contact/show', { 'contactId': id, 'checkedId': id}, function(data) {
+		if($('div.single-contact').is(':hidden')) {
+			showContactDetails();
+		}
+		$('div.single-contact').replaceWith($(data).find('div.single-contact'));
+	});
+}
+
+function enableSingleAction() {
+	$('.multiple-contact').hide()
+	$('.single-contact').show()
+}
+
+function showContactDetails(){
+	enableSingleAction();
 }
 
 function countCheckedContacts(){
@@ -28,27 +43,21 @@ function countCheckedContacts(){
 }
 
 function changeContactCount(count){
-	setSelectedContact();
 	$('#count').html("<p> "+count+" contacts selected</p>");
 	setContactDetails();
 }
 
-function setSelectedContact() {
-	if(selectedContactId == null){
-		selectedContactId = $('li.selected').attr('id').substring('contact-'.length);
-	}
-}
 
 function setContactDetails() {
-	$('.multi-action').show();
-	$('.single-action').hide();
+	$('.multiple-contact').show();
+	$('.single-contact').hide();
 }
 
 function highlightRow(id){
-	if( $('li a :checkbox[value='+id+']').attr('checked') == 'checked'){
-		$("#contact-"+id).addClass('checked');
+	if($(':checkbox[value=' + id +']').attr('checked','true')){
+		$("#contact-" + id).addClass('selected');
 	} else {
-		$("#contact-"+id).removeClass('checked');
+		$("#contact-" + id).removeClass('selected');	
 	}
 }
 
@@ -56,24 +65,34 @@ function getSelectedContacts() {
 	return $('input[name=contact]:checked');
 }
 
-$('#btn_delete_all').live('click', function() {
+function getCheckedContacts() {
 	var idsToDelete = []
 	$.each(getSelectedContacts(), function(index, value) {
 		if(isValid(value.value)) {
 			idsToDelete.push(value.value)
 		}
 	});
-	if(confirm("Delete " + getSelectedContacts().size() + " contacts")) {
-		$.ajax({
-			type:'POST',
-			traditional: true,
-			data: {ids: idsToDelete},
-			url: '/frontlinesms2/contact/deleteContact',
-			success: function(data) { location.reload()}
-		});
-	}
-});
+	return idsToDelete;
+}
 
 function isValid(value) {
 		return value && value != "0"
+}
+
+function getSelectedContacts() {
+	return $('input[name=contact]:checked');
+}
+
+function validateDelete() {
+	return true;
+}
+
+function loadGroupList() {
+	$.get(url_root + 'contact/show', { 'contactIds': $('input:hidden[name=contactIds]').val()}, function(data) {
+		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
+		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
+		$("#multi-group-dropdown").change(addGroupClickAction);
+		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
+		alert($(data).find('#multi-group-add').text());
+	});
 }

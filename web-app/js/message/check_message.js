@@ -13,8 +13,9 @@ function checkAllMessages(){
 			}
 		});
 		
-		if(countCheckedMessages() > 1)
+		if($(':checkbox[checked=true]').size() > 2){
 			changeMessageCount($(':checkbox').size()-1);
+		}
 	} else {
 		$(':checkbox').each(function(index, element){
 			this.checked = false;
