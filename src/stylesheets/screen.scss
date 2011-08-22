@@ -71,6 +71,7 @@ body {
 /* SPECIFIC */
 #container {
 	@include container;
+	width: 100%;
 	border-top: 3px solid $top-bar;
 	background-image:url('../images/background.png');
 	background-repeat:no-repeat;

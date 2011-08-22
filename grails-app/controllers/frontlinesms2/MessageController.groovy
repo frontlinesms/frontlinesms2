@@ -26,11 +26,14 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		def responseInstance
+		def responseInstance, selectedMessageList
 		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
-		def messageCount = params.checkedMessageList?.tokenize(',')?.size()
+		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
+		if (!params.checkedMessageList) selectedMessageList = ',' + messageInstance?.id + ','
+		else selectedMessageList = params.checkedMessageList
 		[messageInstance: messageInstance,
-				checkedMessageCount: messageCount,
+				checkedMessageCount: checkedMessageCount,
+				checkedMessageList: selectedMessageList,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
 				pollInstanceList: Poll.getNonArchivedPolls(),
@@ -101,39 +104,22 @@ class MessageController {
 				messageInstanceTotal: showInstance.countMessages(params['starred']),
 				ownerInstance: showInstance] << show(messageInstanceList)
 	}
-
-	def move = {
-		def ids = [params.ids].flatten()
-		ids.each {id ->
-			withFmessage id, {messageInstance ->
-				def messageOwner
-				if (params.messageSection == 'poll') {
-					messageOwner = Poll.get(params.ownerId)
-				} else if (params.messageSection == 'folder') {
-					messageOwner = Folder.get(params.ownerId)
-				}
-				if (messageOwner instanceof Poll) {
-					def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-					unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-				} else if (messageOwner instanceof Folder) {
-					messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-				}
-			}
+	
+	def send = {
+		def addresses = [params.addresses].flatten() - null
+		def groups = [params.groups].flatten() - null
+		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses.unique().each { address ->
+			//TODO: Need to add source from app settings
+			def message = new Fmessage(src: "src", dst: address, text: params.messageText)
+			messageSendService.send(message)
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
-		render ""
+		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
+		redirect (action: 'sent')
 	}
-
-	def changeResponse = {
-		withFmessage { messageInstance ->
-			def responseInstance = PollResponse.get(params.responseId)
-			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			redirect(action: "poll", params: params)
-		}
-	}
-
+	
 	def delete = {
+		println 'deleting?'
 		withFmessage {messageInstance ->
 			messageInstance.toDelete()
 			messageInstance.save(failOnError: true, flush: true)
@@ -143,7 +129,7 @@ class MessageController {
 			render ""
 		}else {
 			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}		
+		}
 	}
 	
 	def deleteAll = {
@@ -191,6 +177,72 @@ class MessageController {
 		}
 	}
 
+
+	def move = {
+		withFmessage {messageInstance ->
+			def messageOwner
+			if (params.messageSection == 'poll') {
+				messageOwner = Poll.get(params.ownerId)
+			} else if (params.messageSection == 'folder') {
+				messageOwner = Folder.get(params.ownerId)
+			}
+			if (messageOwner instanceof Poll) {
+				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
+				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+			} else if (messageOwner instanceof Folder) {
+				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ' messages'])}"
+		render ""
+	}
+	
+	def moveAll = {
+		def messageIdList = params.messageId?.tokenize(',')
+		messageIdList.each { id ->
+			withFmessage id, {messageInstance ->
+				def messageOwner
+				if (params.messageSection == 'poll') {
+					messageOwner = Poll.get(params.ownerId)
+				} else if (params.messageSection == 'folder') {
+					messageOwner = Folder.get(params.ownerId)
+				}
+				if (messageOwner instanceof Poll) {
+					def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
+					unknownResponse.addToMessages(messageInstance).save(failOnError: true, flush: true)
+				} else if (messageOwner instanceof Folder) {
+					messageOwner.addToMessages(messageInstance).save(failOnError: true, flush: true)
+				}
+			}
+		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		render ""
+	}
+
+	def changeResponse = {
+		withFmessage { messageInstance ->
+			def responseInstance = PollResponse.get(params.responseId)
+			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message'])}"
+		render ""
+	}
+	
+	def changeAllResponses = {
+		println 'changing all'
+		def messageIdList = params.messageId?.tokenize(',')
+		println "list: $messageIdList"
+		messageIdList.each { id ->
+			withFmessage id, { messageInstance ->
+				println messageInstance
+				def responseInstance = PollResponse.get(params.responseId)
+				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'messages'])}"
+		render ""
+	}
+
 	def changeStarStatus = {
 		withFmessage { messageInstance ->
 			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
@@ -201,25 +253,12 @@ class MessageController {
 		}
 	}
 
-	def send = {
-		def addresses = [params.addresses].flatten() - null
-		def groups = [params.groups].flatten() - null
-		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
-		addresses.unique().each { address ->
-			//TODO: Need to add source from app settings
-			def message = new Fmessage(src: "src", dst: address, text: params.messageText)
-			messageSendService.send(message)
-		}
-		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
-		redirect (action: 'sent')
-	}
-
 	def emptyTrash = {
 		Fmessage.findAllByDeleted(true)*.delete()
 		redirect(action: 'inbox')
 	}
 
-	private def withFmessage(messageId= params.messageId, Closure c) {
+	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly

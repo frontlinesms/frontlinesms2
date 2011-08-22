@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
 	$("#dropdown_options").hide()
 	$("#btn_forward").click(messageResponseClick)
 	$("#btn_reply")
