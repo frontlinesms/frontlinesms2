@@ -752,6 +752,6 @@ label.bold {
 	color:#000 !important;
 }
 
-.send-failed td:last-child {
+a.send-failed, .send-failed td:last-child {
 	 background: url('../images/alert-icon.jpg') no-repeat center right;
 }

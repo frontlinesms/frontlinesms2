@@ -6,7 +6,7 @@ function launchSmallPopup(title, html, btnFinishedText) {
 			width: 285,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
-			          		{ text:btnFinishedText,  click: done, id:"done" }],
+			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
 			close: function() { $(this).remove(); }
 		}
 	);
@@ -16,7 +16,7 @@ function cancel() {
 	$(this).remove();
 }
 
-function done() {
+function doneAction() {
 	$(this).find("form").submit(); // TODO add validation. Should be able to add validate() function to individual popup gsp's so that this function works universally
 	$(this).remove();
 }

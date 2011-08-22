@@ -61,6 +61,25 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#recipient-count").text() == "1"
 	}
 
+	def "should send the message to the selected recipients"() {
+		when:
+			to MessagesPage
+			loadFirstTab()
+			loadSecondTab()
+			$("#address").value("+919544426000")
+			$('.add-address').click()
+			loadThirdTab()
+			$("#done").click()
+			waitFor{$("#tabs-4").displayed }
+			$("#confirmation").click()
+		then:
+			$("a", text: "Pending").click()
+			waitFor{title == "Pending"}
+			$("#message-list tbody tr").size() == 1
+			$("#message-list tbody tr")[0].hasClass("send-failed")
+	}
+
+
 	def "should select members belonging to the selected group"() {
 		setup:
 			createData()
@@ -121,6 +140,18 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			!$("input[value='group1']").getAttribute("checked")
 			!$("input[value='group2']").getAttribute("checked")
 			$("#recipient-count").text() == "1"
+	}
+
+	def "should launch announcement screen from create new activity link" () {
+		when:
+			to MessagesPage
+			$("a", text:"Create new activity").click()
+			waitFor {$("#tabs-1").displayed}
+			$("input", name: "activity").value("announcement")
+			$("#done").click()
+			waitFor {$("#ui-dialog-title-modalBox").text() == "Announcement"}
+		then:
+			$("#ui-dialog-title-modalBox").text() == "Announcement"
 	}
 
 
