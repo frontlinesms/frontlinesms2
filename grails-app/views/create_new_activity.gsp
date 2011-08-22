@@ -19,17 +19,17 @@
 		<ul>
 			<li>
 				<g:radio name="activity" value="announcement"/>
-				<div>Announcements</div>
+				<span>Announcements</span>
 				<div>Send an announcement message and organise the responses</div>
 			</li>
 			<li>
 				<g:radio name="activity" value="poll"/>
-				<div>Poll<</div>
+				<span>Poll</span>
 				<div>Send a question and analyse the responses</div>
 			</li>
 			<li>
 				<g:radio name="activity" value="subscription"/>
-				<div>Subscription Manager</div>
+				<span>Subscription Manager</span>
 				<div>Allow people to automatically join and leave contact groups using a message keyword</div>
 
 			</li>
