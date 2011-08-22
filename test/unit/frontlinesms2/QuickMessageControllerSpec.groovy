@@ -45,7 +45,7 @@ class QuickMessageControllerSpec extends ControllerSpec {
 		then:
 			result['recipients'] ==  address
 			result['nonExistingRecipients'] ==  []
-			result['configureTabs'] ==  ['tabs-1', 'tabs-2', 'tabs-3']
+			result['configureTabs'] ==  ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 	}
 
 	def "should set configure tabs when set in the incoming request"() {
