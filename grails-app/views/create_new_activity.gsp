@@ -18,20 +18,20 @@
 	<div id="tabs-1">
 		<ul>
 			<li>
-				<g:radio value="quickMessage" name="activity"/>
-				Quick message
+				<g:radio name="activity" value="announcement"/>
+				<div>Announcements</div>
+				<div>Send an announcement message and organise the responses</div>
 			</li>
 			<li>
 				<g:radio name="activity" value="poll"/>
-				Create new poll
+				<div>Poll<</div>
+				<div>Send a question and analyse the responses</div>
 			</li>
 			<li>
 				<g:radio name="activity" value="subscription"/>
-				Manage subscription
-			</li>
-			<li>
-				<g:radio name="activity" value="announcement"/>
-				Announcements
+				<div>Subscription Manager</div>
+				<div>Allow people to automatically join and leave contact groups using a message keyword</div>
+
 			</li>
 		</ul>
 	</div>
