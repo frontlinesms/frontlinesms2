@@ -15,7 +15,7 @@
 					${buttons}
 				</g:if>
 				<g:else>
-					<g:render template="message_actions"></g:render>
+					<g:render template="/message/message_actions"/>
 				</g:else>
 			</ol>
 			<g:if test="${!params['archived']}">
@@ -23,7 +23,7 @@
 			</g:if>
 			<div id="poll-actions">
 				<g:if test="${messageInstance && messageSection == 'poll'}">
-					<g:render template="categorize_response"/>
+					<g:render template="/message/categorize_response"/>
 				</g:if>
 			</div>
 		</div>
