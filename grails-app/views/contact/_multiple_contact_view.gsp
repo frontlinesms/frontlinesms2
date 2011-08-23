@@ -3,6 +3,9 @@
 		<g:hiddenField name="contactIds" value=""/>
 		<g:hiddenField name="groupsToAdd" value=","/>
 		<g:hiddenField name="groupsToRemove" value=","/>
+		<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+			<g:hiddenField name="groupId" value="${contactsSection.id}"/>
+		</g:if>
 		<div class="buttons">
 			<ol>
 				<li> <g:actionSubmit class="save" id="btn_save_all" action="updateMultipleContacts" value="${message(code: 'default.button.save.label', default: 'Save')}"/></li>
