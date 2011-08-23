@@ -31,6 +31,7 @@ class MessageController {
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		if (!params.checkedMessageList) selectedMessageList = ',' + messageInstance?.id + ','
 		else selectedMessageList = params.checkedMessageList
+		
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
