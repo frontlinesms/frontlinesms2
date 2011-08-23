@@ -11,8 +11,8 @@ class MessageController {
 
 	def beforeInterceptor = {
 		params['max'] = params['max'] ?: getPaginationCount()
-		params['offset']  = params['offset'] ?: 0
-		params['archived'] = params['archived'] ? params['archived'].toBoolean()  : false
+		params['offset'] = params['offset'] ?: 0
+		params['archived'] = false
 		true
 	}
 
@@ -20,7 +20,11 @@ class MessageController {
 		redirect(action:'inbox')
 	}
 
-	def show = { messageInstanceList ->
+	def show = {
+		render view:'standard', model:getShowModel()
+	}
+	
+	def getShowModel(messageInstanceList) {
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -41,30 +45,28 @@ class MessageController {
 		def messageInstanceList = Fmessage.getDeletedMessages(params)
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
-					messageInstanceTotal: Fmessage.countDeletedMessages(params['starred'])] << show(messageInstanceList)
+					messageInstanceTotal: Fmessage.countDeletedMessages(params['starred'])] << getShowModel(messageInstanceList)
 	}
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages(params)
-		[messageInstanceList: messageInstanceList,
+		render view:'standard', model:[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
-					messageInstanceTotal: Fmessage.countInboxMessages(params),
-					actionLayout : (params['archived'] ? "archive" : "messages")] << show(messageInstanceList)
+					messageInstanceTotal: Fmessage.countInboxMessages(params)] << getShowModel(messageInstanceList)
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params)
-		[messageSection: 'sent',
+		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList,
-				messageInstanceTotal: Fmessage.countSentMessages(params),
-				actionLayout : params['archived'] ? "archive" : "messages"] << show(messageInstanceList)
+				messageInstanceTotal: Fmessage.countSentMessages(params)] << getShowModel(messageInstanceList)
 	}
 
 	def pending = {
 		def messageInstanceList = Fmessage.getPendingMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
-				messageInstanceTotal: Fmessage.countPendingMessages(params['starred'])] << show(messageInstanceList)
+				messageInstanceTotal: Fmessage.countPendingMessages(params['starred'])] << getShowModel(messageInstanceList)
 	}
 
 	def poll = {
@@ -75,8 +77,7 @@ class MessageController {
 				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
 				ownerInstance: ownerInstance,
 				responseList: ownerInstance.responseStats,
-				pollResponse: ownerInstance.responseStats as JSON,
-				actionLayout : params['archived'] ? 'archive' : 'messages'] << show(messageInstanceList)
+				pollResponse: ownerInstance.responseStats as JSON] << getShowModel(messageInstanceList)
 	}
 	
 	def folder = {
@@ -85,10 +86,10 @@ class MessageController {
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
 
-		[messageInstanceList: messageInstanceList,
+		render view:'standard', model:[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
 				messageInstanceTotal: folderInstance.countMessages(params['starred']),
-				ownerInstance: folderInstance] << show(messageInstanceList)
+				ownerInstance: folderInstance] << getShowModel(messageInstanceList)
 	}
 
 	def radioShow = {
@@ -98,7 +99,7 @@ class MessageController {
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'radioShow',
 				messageInstanceTotal: showInstance.countMessages(params['starred']),
-				ownerInstance: showInstance] << show(messageInstanceList)
+				ownerInstance: showInstance] << getShowModel(messageInstanceList)
 	}
 
 	def move = {
