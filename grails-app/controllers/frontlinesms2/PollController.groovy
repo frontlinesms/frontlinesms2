@@ -2,10 +2,10 @@ package frontlinesms2
 
 class PollController {
 	def index = {
-		def archived = params['archived']
+		def archived = params['archive']
 		[polls: Poll.findAllByArchived(archived),
-		actionLayout : archived ? "archive" : "poll",
-		messageSection: "poll"]
+				actionLayout : archived ? "archive" : "poll",
+				messageSection: "poll"]
 	}
 
 	def create = {

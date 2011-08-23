@@ -95,7 +95,11 @@
 						</g:if>
 					</div>
 					<div class="content-body">
+<<<<<<< HEAD
 						<g:render template="message_list"/>
+=======
+						<g:render template="/message/message_list"/>
+>>>>>>> 691483e1bf25dc401695c2bd4a7a0bfb0e0c07d4
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">
