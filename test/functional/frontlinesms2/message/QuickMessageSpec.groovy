@@ -142,6 +142,26 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#recipient-count").text() == "1"
 	}
 
+	def "should not deselect common members across groups when one of the group is unchecked"() {
+		setup:
+			createData()
+		when:
+			to MessagesPage
+			loadFirstTab()
+			loadSecondTab()
+			$("input[value='group1']").click()
+			$("input[value='group2']").click()
+		then:
+			$("#recipient-count").text() == "2"
+		when:
+			$("input[value='group1']").click()
+		then:
+			!$("input[value='group1']").getAttribute("checked")
+			$("input[value='group2']").getAttribute("checked")
+			$("#recipient-count").text() == "2"
+
+	}
+
 	def "should launch announcement screen from create new activity link" () {
 		when:
 			to MessagesPage

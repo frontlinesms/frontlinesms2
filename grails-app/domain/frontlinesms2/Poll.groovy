@@ -3,7 +3,6 @@ package frontlinesms2
 class Poll {
 	String title
 	String autoReplyText
-	String instruction
 	String question
 	boolean archived
 	Date dateCreated
@@ -18,7 +17,6 @@ class Poll {
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoReplyText(nullable: true, blank: false)
-		instruction(nullable: true)
 		question(nullable: true)
 	}
 

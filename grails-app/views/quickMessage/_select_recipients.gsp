@@ -42,13 +42,21 @@
 	var groupAndMembers = {}
 	function selectMembers(groupName, allContacts) {
 		groupAndMembers[groupName] = allContacts
-		$.each(allContacts, function(index, value) {
-			setValueForCheckBox(groupName, value, isCheckboxSelected(groupName))
+		$.each(allContacts, function(index, contact) {
+			setValueForCheckBox(contact, isCheckboxSelected(groupName))
+		});
+
+		$.each(getSelectedGroupElements('groups'), function(index, groupInputElement) {
+			if(groupInputElement.value != groupName) {
+				$.each(groupAndMembers[groupInputElement.value], function(index, member) {
+					setValueForCheckBox(member, true)
+				});
+			}
 		});
 		updateCount()
 	}
 
-	$("input[contacts='true']").live('change', function() {
+	$("input[contacts='true']").live('click', function() {
 		if (!($(this).is(":checked"))) {
 			var contactNumber = this.value
 			$.each(groupAndMembers, function(key, value) {
@@ -59,7 +67,7 @@
 		updateCount()
 	});
 
-	function setValueForCheckBox(grpName, value, checked) {
+	function setValueForCheckBox(value, checked) {
 		var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
 		checkBox.attr('checked', checked);
 		checkBox.change()
