@@ -18,7 +18,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			messageSources == ['Alice', 'Bob']
 	}
-    
+
 	def 'message details are shown in list'() {
 		given:
 			createInboxTestMessages()
@@ -30,7 +30,7 @@ class InboxSpec extends MessageGebSpec {
 			rowContents[3] == 'hi Alice'
 			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
-    
+
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createInboxTestMessages()
@@ -41,7 +41,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			firstMessageLink.text() == 'Alice'
 	}
-        
+
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -54,7 +54,7 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
 	}
-    
+
 	def 'selected message is highlighted'() {
 		given:
 			createInboxTestMessages()
@@ -69,7 +69,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 	}
-	
+
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
 			def m1 = new Fmessage(status:MessageStatus.INBOUND, read: false).save(failOnError:true)
@@ -81,11 +81,11 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$("tr#message-${m1.id}").hasClass('unread')
 			!$("tr#message-${m1.id}").hasClass('read')
-			
+
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
 	}
-	
+
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
 			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
@@ -117,7 +117,7 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
-			go "message/inbox/show/${message.id}"	
+			go "message/inbox/show/${message.id}"
 			$('#btn_reply').click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
@@ -130,9 +130,9 @@ class InboxSpec extends MessageGebSpec {
 	    	createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
-		then:    	
+		then:
 			$("#messages tbody tr").size() == 2
-		when:	
+		when:
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
@@ -158,10 +158,10 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"
-			waitFor{$("#btn_dropdown").displayed}
-			$("#btn_dropdown").jquery.trigger('click')
-			waitFor{$("#btn_forward").displayed}
-			$('#btn_forward').click()			
+			waitFor{$("#static #btn_dropdown").displayed}
+			$("#static #btn_dropdown").click()
+			waitFor{$("#static #btn_forward").displayed}
+			$('#static #btn_forward').click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
@@ -222,21 +222,21 @@ class InboxSpec extends MessageGebSpec {
 	}
 
 	
-//  NOTE: Need to find a better way to make this test work
-//	def "should remain in the same page, after moving the message to the destination folder"() {
-//		setup:
-//			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
-//			new Folder(name: "my-folder").save(flush: true)
-//		when:
-//			go "message/inbox"
-//		then:
-//			$('#message-actions').value("${Folder.findByName('my-folder').id}")
-//			waitFor {$("#messages").text().contains("No messages")}
-//			$("#messages-submenu .selected").text().contains('Inbox')
-//		cleanup:
-//			Fmessage.list()*.refresh()
-//			Folder.findByName('my-folder').refresh().delete(flush: true)
-//	}
+  //NOTE: Need to find a better way to make this test work
+	def "should remain in the same page, after moving the message to the destination folder"() {
+		setup:
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
+			new Folder(name: "my-folder").save(flush: true)
+		when:
+			go "message/inbox"
+		then:
+			$('#message-actions').value("${Folder.findByName('my-folder').id}")
+			waitFor {$("#messages").text().contains("No messages")}
+			$("#messages-submenu .selected").text().contains('Inbox')
+		cleanup:
+			Fmessage.list()*.refresh()
+			Folder.findByName('my-folder').refresh().delete(flush: true)
+	}
 
 
 	String dateToString(Date date) {
