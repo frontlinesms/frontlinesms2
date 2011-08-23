@@ -73,7 +73,7 @@ $("#create-new-activity").bind('click', function() {
 		dataType: "html",
 		url: url_root + 'create_new_activity.gsp',
 		success: function(data) {
-			launchMediumWizard('Create New Activity', data, 'Next');
+			launchSmallPopup('Create New Activity', data, 'Next', 600);
 			addValidations();
 		}
 	});

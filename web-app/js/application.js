@@ -109,7 +109,7 @@ function isCheckboxSelected(value) {
 }
 
 
-$.widget("ui.TabContentWidget", {
+$.widget("ui.contentWidget", {
 	validate: function() {
 		return this.options['validate'].call();			
 	},

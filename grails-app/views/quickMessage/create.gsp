@@ -35,7 +35,7 @@
 
 <script>
 	function addTabValidations() {
-		$("#tabs-2").TabContentWidget({
+		$("#tabs-2").contentWidget({
 			validate: function() {
 				var isValid = isGroupChecked("groups") || isGroupChecked("addresses")
 				if (!isValid) {
@@ -47,7 +47,7 @@
 			}
 		});
 
-		$("#tabs-3").TabContentWidget({
+		$("#tabs-3").contentWidget({
 			validate: function() {
 				$("#send-quick-message").submit()
 				return false;
