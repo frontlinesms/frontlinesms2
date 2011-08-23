@@ -115,5 +115,5 @@ function getButtonToTabIndexMapping(withConfirmationScreen) {
 function validateCurrentTab() {
 	var selected = $("#tabs").tabs( "option", "selected" );
 	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
-	return currentTab.TabContentWidget("validate")
+	return currentTab.contentWidget("validate")
 }

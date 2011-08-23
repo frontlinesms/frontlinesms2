@@ -41,7 +41,7 @@
 
 <script>
 	function addValidations() {
-		$("#tabs-1").TabContentWidget({
+		$("#modalBox").contentWidget({
 			validate: function() {
 				var selectedElement = $("input[name='activity']:checked")[0]
 				if (selectedElement) {
