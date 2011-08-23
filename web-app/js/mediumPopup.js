@@ -90,10 +90,6 @@ function range(first, last) {
 	return a
 }
 
-function toggleDropdown() {
-	$("#dropdown_options").toggle();
-}
-
 function getTabLength() {
 	return $('#tabs').tabs("length") - 1;
 }
