@@ -158,8 +158,8 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"
-			waitFor{$("#static #btn_dropdown").displayed}
-			js.exec("toggleDropdown()")
+			waitFor{$("#btn_dropdown").displayed}
+			$("#btn_dropdown").click()
 			waitFor{$("#btn_forward").displayed}
 			$('#btn_forward').click()
 			waitFor {$('div#tabs-1').displayed}
@@ -230,6 +230,7 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox"
 		then:
+			waitFor{$("#message-actions").displayed}
 			$('#message-actions').value("${Folder.findByName('my-folder').id}")
 			waitFor {$("#messages").text().contains("No messages")}
 			$("#messages-submenu .selected").text().contains('Inbox')
