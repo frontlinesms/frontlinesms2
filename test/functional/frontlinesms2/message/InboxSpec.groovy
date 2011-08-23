@@ -158,6 +158,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"
+			waitFor{$("#btn_dropdown").displayed}
 			$('#btn_dropdown').click()
 			waitFor{$("#btn_forward").displayed}
 			$('#btn_forward').click()			

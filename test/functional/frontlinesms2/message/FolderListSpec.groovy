@@ -85,6 +85,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def folder = Folder.findByName("Work")
 			go "message/folder/${folder.id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
+			waitFor{$("#btn_dropdown").displayed}
 			$("#btn_dropdown").click()
 			waitFor{$("#btn_forward").displayed}
 			$("#btn_forward").click()
