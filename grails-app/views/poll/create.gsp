@@ -43,7 +43,7 @@
 		$(".choices").each(function() {
 			if (this.value) choices = choices + ' ' + this.name.substring(6,7) + ') ' + this.value
 		});
-		$("#poll-question-text").html('<pre>' + question + ' ' + choices + ' ' + instruction + '</pre>');
+		$("#poll-question-text").html('<pre>' + question + ' ' + choices + ' '  + '</pre>');
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val())
 	}
 
