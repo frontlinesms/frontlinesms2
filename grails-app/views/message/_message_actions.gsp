@@ -9,7 +9,7 @@
 					<a id="btn_reply" onclick="messageResponseClick('Reply')">Reply</a>
 					<a id='btn_dropdown'><img src='${resource(dir:'images/buttons',file:'paginationright_default.png')}' width='20px' height='25px' width="36" height="40"/></a>
 				</div>
-				<div id="dropdown_options" class=''>
+				<div id="dropdown_options" class='hide'>
 					<a class='dropdown-item' id="btn_forward" onclick="messageResponseClick('Forward')">Forward</a>
 				</div>
 			</li>
@@ -32,3 +32,14 @@
 		</g:else>
 	</ol>
 </div>
+
+<script>
+	$("#btn_dropdown").bind('click', function() {
+		if ($("#dropdown_options").is(":visible") ) {
+			$('#dropdown_options').hide();
+		}
+		else {
+			$('#dropdown_options').show();
+		}
+	});
+</script>
