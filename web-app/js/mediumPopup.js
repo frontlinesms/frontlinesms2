@@ -3,7 +3,7 @@ function messageResponseClick(messageType) {
 	var configureTabs= "";
 	var me = $(this);
 	if (messageType == 'Reply') {
-		configureTabs = "tabs-1, tabs-3"
+		configureTabs = "tabs-1, tabs-3, tabs-4"
 		var src = $("#message-src").val();
 	} else if(messageType == 'Forward') {
 		var text = $("#message-body").text();
