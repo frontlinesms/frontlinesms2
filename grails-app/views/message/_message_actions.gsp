@@ -7,7 +7,7 @@
 			<li id="btn_replace">
 				<div id='static'>
 					<a id="btn_reply" onclick="messageResponseClick('Reply')">Reply</a>
-					<a id='btn_dropdown'  href="#"><img src='${resource(dir:'images/buttons',file:'paginationright_default.png')}' width='20px' height='25px' width="36" height="40"/></a>
+					<a id='btn_dropdown' href="#"><img src='${resource(dir:'images/buttons',file:'paginationright_default.png')}' width='20px' height='25px' width="36" height="40"/></a>
 				</div>
 				<div id="dropdown_options" class='hide'>
 					<a class='dropdown-item' id="btn_forward" onclick="messageResponseClick('Forward')">Forward</a>
@@ -35,7 +35,8 @@
 
 <script>
 	$("#btn_dropdown").bind('click', function() {
-		$("#dropdown_options").toggle();
+		$("#dropdown_options").toggle()
+		$('#dropdown_options').removeClass('hide');
 		return false;
 	});
 </script>
