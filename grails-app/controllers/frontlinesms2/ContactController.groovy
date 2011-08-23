@@ -49,22 +49,16 @@ class ContactController {
 
 	def show = {
 		params.sort = "name"
-		def model = []
 		withContact { contactInstance ->
 			def contactGroupInstanceList = contactInstance.groups?: []
 			def contactFieldInstanceList = contactInstance.customFields
-			
-			model = [contactInstance:contactInstance,
+			[contactInstance:contactInstance,
 					contactFieldInstanceList: contactFieldInstanceList,
 					contactGroupInstanceList: contactGroupInstanceList,
 					contactGroupInstanceTotal: contactGroupInstanceList.size(),
 					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance),
 					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
 		}
-		if(params.contactIds) {
-			model << multipleContactGroupList()
-		}
-		model
 	}
 
 	def update = {
@@ -91,6 +85,7 @@ class ContactController {
 					updateData(contactInstance)
 				}
 			}
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
 			redirect(action: 'show', params: [groupId: params.groupId])
 		}
 	}
@@ -174,9 +169,8 @@ class ContactController {
 		}
 		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
 		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
-		println "Shared Groups: $sharedGroupInstanceList"
-		[sharedGroupInstanceList: sharedGroupInstanceList,
-			nonSharedGroupInstanceList: nonSharedGroupInstanceList]
+		render(view: "_group_dropdown", model: [sharedGroupInstanceList: sharedGroupInstanceList,
+			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
 	}
 	
 	private def getSharedGroupList(Collection groupList) {

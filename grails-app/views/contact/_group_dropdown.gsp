@@ -1,4 +1,4 @@
-<g:if test="contactInstance.id">
+<div class="single-contact">
 	<div id="group-section" class="field">
 		<label for="groups">Groups</label>
 		<div>
@@ -23,8 +23,8 @@
 			</g:each>
 		</select>
 	</div>
-</g:if>
-<g:else>
+</div>
+<div class="multiple-contact">
 	<div>
 		<ol id='multi-group-list'>
 			<g:each in="${sharedGroupInstanceList}" status="i" var="g">
@@ -46,4 +46,4 @@
 			</g:each>
 		</select>
 	</div>
-</g:else> 
+</div>

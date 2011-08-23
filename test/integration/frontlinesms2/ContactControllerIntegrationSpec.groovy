@@ -147,7 +147,8 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			contact2.addToGroups(group2)
 		when:
 			controller.params.contactIds = "${contact1.id}, ${contact2.id}"
-			def model = controller.multipleContactGroupList()
+			controller.multipleContactGroupList()
+			def model = controller.modelAndView.model
 		then:
 			model.sharedGroupInstanceList == [group1, group2]
 			model.nonSharedGroupInstanceList == [g]

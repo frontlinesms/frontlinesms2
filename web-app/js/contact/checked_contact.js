@@ -25,7 +25,9 @@ function loadContact(id) {
 		if($('div.single-contact').is(':hidden')) {
 			showContactDetails();
 		}
-		$('div.single-contact').replaceWith($(data).find('div.single-contact'));
+		$('#contact_details').replaceWith($(data).find('#contact_details'));
+		$("#group-list li a.remove-group").click(removeGroupClickAction);
+		$("#group-dropdown").change(addGroupClickAction);
 	});
 }
 
@@ -88,7 +90,8 @@ function validateDelete() {
 }
 
 function loadGroupList() {
-	$.get(url_root + 'contact/show', { 'contactIds': $('input:hidden[name=contactIds]').val()}, function(data) {
+	var contactIds = $('input:hidden[name=contactIds]').val();
+	$.get(url_root + 'contact/multipleContactGroupList', { 'contactIds': contactIds}, function(data) {
 		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
 		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
 		$("#multi-group-dropdown").change(addGroupClickAction);
