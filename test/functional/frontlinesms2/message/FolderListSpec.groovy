@@ -86,7 +86,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			go "message/folder/${folder.id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
 			waitFor{$("#btn_dropdown").displayed}
-			$("#btn_dropdown").click()
+			$("#btn_dropdown").jquery.trigger('click')
 			waitFor{$("#btn_forward").displayed}
 			$("#btn_forward").click()
 			waitFor {$('div#tabs-1').displayed}
