@@ -12,8 +12,8 @@
 						Sent Archive
 					</g:link>
 				</li>
-				<li class="${(messageSection == 'poll')? 'selected':''}" >
-					<g:link elementId="poll" controller="poll" params="${[archive:true]}">
+				<li class="${(messageSection == 'pollArchive')? 'selected':''}" >
+					<g:link elementId="poll" controller="archive" action='poll' params="${[archived:true]}">
 						Activity archive
 					</g:link>
 				</li>
@@ -24,7 +24,7 @@
 <script>
 	$("#archive-menu li a").bind("click", function(event) {
 		var source = $(this)
-		var allLinks = $("#archive-menu li ")
+		var allLinks = $("#archive-menu li a")
 		allLinks.each(function(index, element) {
 			$(element).removeClass("selected")
 
@@ -35,6 +35,4 @@
 	function loadAllData(data) {
 		$("#content").html(data)
 	}
-
-	$("#inbox").click()
 </script>

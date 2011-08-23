@@ -12,8 +12,8 @@
 			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
 			<p id="message-body">${messageInstance.text}</p>
 		</div>
-		<g:render template="message_actions"></g:render>
-		<g:render template="other_actions"></g:render>
+		<g:render template="../message/message_actions"></g:render>
+		<g:render template="../message/other_actions"></g:render>
 	</div>
 	<div id="multiple-messages" class='hide'>
 		<div id='message-info'>
@@ -23,26 +23,26 @@
 					<div id='other_btns'>
 						<g:if test="${messageSection != 'pending'}">
 							<li class='static_btn'>
-								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived, configureTabs: 'tabs-1,tabs-3']" onSuccess="launchMediumWizard('Reply All', data, 'Send');">
+								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, configureTabs: 'tabs-1,tabs-3']" onSuccess="launchMediumWizard('Reply All', data, 'Send');">
 									Reply All
 								</g:remoteLink>
 							</li>
 						</g:if>
 						<g:if test="${!params['archived'] && messageSection != 'poll'}">
 							<li class='static_btn'>
-								<g:link elementId="btn_archive_all" action="archiveAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
+								<g:link elementId="btn_archive_all" action="archiveAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id]">
 									Archive All
 								</g:link>
 							</li>
 						</g:if>
 						<li class='static_btn'>
-							<g:link elementId="btn_delete_all" action="deleteAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
+							<g:link elementId="btn_delete_all" action="deleteAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id]">
 								Delete All
 							</g:link>
 						</li>
 					</div>
 				</ol>
-				<g:render template="other_actions"></g:render>
+				<g:render template="../message/other_actions"></g:render>
 			</div>
 		</div>
 	</div>

@@ -24,9 +24,24 @@
 	        	<g:render template="../archive/menu"/>
 				<div class="content">
 					<div id='archive-header' class="content-header">
-						<div id="archive-title">
-							<h2>Archives</h2>
-			  			</div>
+			  			<g:if test="${messageSection == 'poll'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'activitiesarchive.gif')}' />
+								<h2>${ownerInstance?.name}</h2>
+							</div>
+						</g:if>
+						<g:elseif test="${messageSection == 'inbox'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'inboxarchive.gif')}' />
+								<h2>${messageSection} Archive</h2>
+							</div>
+						</g:elseif>
+						<g:elseif test="${messageSection == 'sent'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'sentarchive.gif')}' />
+								<h2>${messageSection} Archive</h2>
+							</div>
+						</g:elseif>
 					</div>
 					<div class="content-body">
 						<g:render template="../message/message_list"/>

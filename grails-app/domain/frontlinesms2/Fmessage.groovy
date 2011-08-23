@@ -203,32 +203,32 @@ class Fmessage {
 	}
 
 	static def getInboxMessages(params) {
-		def messages = Fmessage.inbox(params['starred'], params["archived"]).list(params)
+		def messages = Fmessage.inbox(params.starred, params.archived).list(params)
 		messages
 	}
 
 	static def getSentMessages(params) {
-		def messages = Fmessage.sent(params['starred'],  params["archived"]).list(params)
+		def messages = Fmessage.sent(params.starred,  params.archived).list(params)
 		messages
 	}
 
 	static def getPendingMessages(params) {
-		def messages = Fmessage.pending(params['starred']).list(params)
+		def messages = Fmessage.pending(params.starred).list(params)
 		messages
 	}
 
 	static def getDeletedMessages(params) {
-		def messages = Fmessage.deleted(params['starred']).list(params)
+		def messages = Fmessage.deleted(params.starred).list(params)
 		messages
 	}
 
 	static def countInboxMessages(params) {
-		def messageCount = Fmessage.inbox(params['starred'], params['archived']).count()
+		def messageCount = Fmessage.inbox(params.starred, params.archived).count()
 		messageCount
 	}
 	
 	static def countSentMessages(params) {
-		def messageCount = Fmessage.sent(params['starred'], params['archived']).count()
+		def messageCount = Fmessage.sent(params.starred, params.archived).count()
 		messageCount
 	}
 	
