@@ -10,7 +10,7 @@ class RadioShow extends MessageOwner {
 	}
 
 	def getShowMessages(params) {
-		Fmessage.owned(params['starred'], this).list(params)
+		Fmessage.owned(params.starred, this).list(params)
 	}
 
 	def countMessages(isStarred = false) {                                                                                       

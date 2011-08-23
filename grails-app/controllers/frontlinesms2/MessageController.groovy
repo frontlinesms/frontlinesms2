@@ -10,9 +10,9 @@ class MessageController {
 	def messageSendService
 
 	def beforeInterceptor = {
-		params['max'] = params['max'] ?: getPaginationCount()
-		params['offset'] = params['offset'] ?: 0
-		params['archived'] = false
+		params.max = params.max ?: getPaginationCount()
+		params.offset = params.offset ?: 0
+		params.archived = false
 		true
 	}
 
@@ -50,7 +50,7 @@ class MessageController {
 		def messageInstanceList = Fmessage.getDeletedMessages(params)
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
-					messageInstanceTotal: Fmessage.countDeletedMessages(params['starred'])] << getShowModel(messageInstanceList)
+					messageInstanceTotal: Fmessage.countDeletedMessages(params.starred)] << getShowModel(messageInstanceList)
 	}
 
 	def inbox = {
@@ -71,7 +71,7 @@ class MessageController {
 		def messageInstanceList = Fmessage.getPendingMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
-				messageInstanceTotal: Fmessage.countPendingMessages(params['starred'])] << getShowModel(messageInstanceList)
+				messageInstanceTotal: Fmessage.countPendingMessages(params.starred)] << getShowModel(messageInstanceList)
 	}
 
 	def poll = {
@@ -79,7 +79,7 @@ class MessageController {
 		def messageInstanceList = ownerInstance.getMessages(params)		
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
-				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
+				messageInstanceTotal: ownerInstance.countMessages(params.starred),
 				ownerInstance: ownerInstance,
 				responseList: ownerInstance.responseStats,
 				pollResponse: ownerInstance.responseStats as JSON] << getShowModel(messageInstanceList)
@@ -93,7 +93,7 @@ class MessageController {
 
 		render view:'standard', model:[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
-				messageInstanceTotal: folderInstance.countMessages(params['starred']),
+				messageInstanceTotal: folderInstance.countMessages(params.starred),
 				ownerInstance: folderInstance] << getShowModel(messageInstanceList)
 	}
 
@@ -103,7 +103,7 @@ class MessageController {
 
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'radioShow',
-				messageInstanceTotal: showInstance.countMessages(params['starred']),
+				messageInstanceTotal: showInstance.countMessages(params.starred),
 				ownerInstance: showInstance] << getShowModel(messageInstanceList)
 	}
 	

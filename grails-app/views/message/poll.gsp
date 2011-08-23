@@ -2,7 +2,7 @@
     <head>
         <title>Poll</title>
 		<g:render template="expanded_poll" />
-		<meta name="layout" content="${actionLayout}" />
+		<meta name="layout" content="message" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript src="raphael-min.js"/>
 		<g:javascript src="g.raphael-min.js"/>
@@ -24,7 +24,6 @@
 			});
 		});
 		</g:javascript>	
-		<title>Poll</title>
 	</head>
 	<body>
 		<g:if test="${messageInstance != null}">
