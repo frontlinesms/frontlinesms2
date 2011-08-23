@@ -35,6 +35,7 @@
 
 <script>
 	$("#btn_dropdown").bind('click', function() {
+		$('#dropdown_options').removeClass('hide');		
 		if ($("#dropdown_options").is(":visible") ) {
 			$('#dropdown_options').hide();
 		}
