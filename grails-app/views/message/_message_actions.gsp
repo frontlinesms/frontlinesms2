@@ -34,9 +34,8 @@
 </div>
 
 <script>
-	$("#btn_dropdown").bind('click', function() {
-		$("#dropdown_options").toggle()
-		$('#dropdown_options').removeClass('hide');
+	$("#static #btn_dropdown").bind('click', function() {
+		$("#static #dropdown_options").toggle()
 		return false;
 	});
 </script>
