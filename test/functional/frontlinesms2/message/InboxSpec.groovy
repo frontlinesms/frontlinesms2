@@ -159,7 +159,7 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${message.id}"
 			waitFor{$("#btn_dropdown").displayed}
-			$('#btn_dropdown').click()
+			$("#btn_dropdown").jquery.trigger('click')
 			waitFor{$("#btn_forward").displayed}
 			$('#btn_forward').click()			
 			waitFor {$('div#tabs-1').displayed}
