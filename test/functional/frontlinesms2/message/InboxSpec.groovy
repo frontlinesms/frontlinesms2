@@ -159,9 +159,9 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${message.id}"
 			waitFor{$("#static #btn_dropdown").displayed}
-			$("#static #btn_dropdown").click()
-			waitFor{$("#static #btn_forward").displayed}
-			$('#static #btn_forward').click()
+			js.exec("toggleDropdown()")
+			waitFor{$("#btn_forward").displayed}
+			$('#btn_forward').click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
