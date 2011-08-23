@@ -49,16 +49,22 @@ class ContactController {
 
 	def show = {
 		params.sort = "name"
+		def model = []
 		withContact { contactInstance ->
 			def contactGroupInstanceList = contactInstance.groups?: []
 			def contactFieldInstanceList = contactInstance.customFields
-			[contactInstance:contactInstance,
+			
+			model = [contactInstance:contactInstance,
 					contactFieldInstanceList: contactFieldInstanceList,
 					contactGroupInstanceList: contactGroupInstanceList,
 					contactGroupInstanceTotal: contactGroupInstanceList.size(),
 					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance),
 					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
 		}
+		if(params.contactIds) {
+			model << multipleContactGroupList()
+		}
+		model
 	}
 
 	def update = {
@@ -109,9 +115,7 @@ class ContactController {
 	def saveContact = {
 		def contactInstance = new Contact(params)
 		contactInstance.properties = params
-
 		updateData(contactInstance)
-
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
 		redirect(action:'createContact')
 	}
@@ -124,7 +128,7 @@ class ContactController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-		redirect(view: "list")		
+		redirect(action: "list")		
 	}
 
 	def saveGroup = {
@@ -154,6 +158,48 @@ class ContactController {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
 			redirect(action: "list")
 		}
+	}
+	
+	def multipleContactGroupList = {
+		if(!params.contactIds) {
+			return []
+		}
+		def contactIds = params.contactIds ? params.contactIds.tokenize(',').unique() : []
+		def sharedGroupInstanceList = []
+		def groupInstanceList = []
+		contactIds.each { id ->
+			withContact id, { contactInstance ->
+				groupInstanceList << contactInstance.getGroups()
+			}
+		}
+		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
+		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
+		println "Shared Groups: $sharedGroupInstanceList"
+		[sharedGroupInstanceList: sharedGroupInstanceList,
+			nonSharedGroupInstanceList: nonSharedGroupInstanceList]
+	}
+	
+	private def getSharedGroupList(Collection groupList) {
+		def groupIDList = groupList.collect {it.id}
+		def intersect = groupIDList.get(0)
+		for(int i=1 ; i<groupIDList.size; i++) {
+			if(!intersect.disjoint(groupIDList.get(i))) {
+				intersect = intersect.intersect(groupIDList.get(i))
+			} else {
+				intersect = []
+				break
+			}
+		}
+		if(intersect) {
+			return intersect.collect { Group.findById(it) }
+		}
+	}
+	
+	private def getNonSharedGroupList(Collection groupList1, Collection groupList2) {
+		def groupIdList1 = groupList1.collect {it.id}
+		def groupIdList2 = groupList2.collect {it.id}
+		def nonSharedGroupList = (groupIdList1 - groupIdList2).collect { Group.findById(it) } ?: []
+		nonSharedGroupList
 	}
 
 	private def updateData(Contact contactInstance) {

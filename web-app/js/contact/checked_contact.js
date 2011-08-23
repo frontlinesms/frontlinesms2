@@ -11,7 +11,7 @@ function updateContactDetails(id){
 	}
 	if(count > 1){
 		changeContactCount(count);
-		//loadGroupList();
+		loadGroupList();
 	}
 }
 
@@ -93,6 +93,5 @@ function loadGroupList() {
 		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
 		$("#multi-group-dropdown").change(addGroupClickAction);
 		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
-		alert($(data).find('#multi-group-add').text());
 	});
 }

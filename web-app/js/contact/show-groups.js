@@ -24,6 +24,7 @@ function addGroupClickAction() {
 		
 	} else {
 		$('#multi-group-list').append(groupListItem);
+		alert("Adding to screen");
 		me.remove();
 		$("#multi-no-groups").hide();
 		addGroupId(groupId);
@@ -38,7 +39,7 @@ function removeGroupClickAction() {
 
 	var option = $("<option value='" + groupId + "'>" + groupName + '</option>');
 	option.click(addGroupClickAction);
-	
+	alert("am here")
 	if($('.single-contact').is(':visible')) {
 		$('#group-dropdown').append(option);
 		var groupList = me.parent();
@@ -54,10 +55,8 @@ function removeGroupClickAction() {
 		if($('#multi-group-list li').children('input').length < 1) {
 			$('#multi-no-groups').show();
 		}
+		alert($('#multi-group-dropdown li').text());
 	}
-	
-	
-
 	removeGroupId(groupId);
 	// removeIdFromGroupHiddenField(groupId);
 }
