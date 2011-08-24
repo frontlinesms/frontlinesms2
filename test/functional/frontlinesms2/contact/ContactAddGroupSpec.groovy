@@ -21,7 +21,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		when:
 			go "contact/show/${bob.id}"
 		then:
-			def memberOf = $("#group-list li").children('input').collect() { it.value() }.sort()
+			def memberOf = $("#group-list li").children('input').*value().sort()
 			memberOf == ['Test', 'three']
 	}
 
@@ -85,7 +85,23 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			at ContactListPage
 			Group.findByName('Test').getMembers().contains(Contact.findByName('Bob'))
 	}
-
+	
+	def 'clicking save actually adds multiple contacts to newly selected groups'() {
+		given:
+			def bob = Contact.findByName("Bob")
+			def alice = Contact.findByName('Alice')
+		when:
+			go "contact/show/${bob.id}"
+			$("#contact")[0].click()
+			$("#contact")[1].click()
+			def groupSelecter = $("#contact-details").find('select', name:'multi-group-dropdown')
+			groupSelecter.find(name: 'multi-group-dropdown').value('Others')
+			$("#multiple-contact .save").click()
+		then:
+			at ContactListPage
+			Group.findByName('Test').getMembers().containsAll([bob, alice])
+	}
+	
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			to BobsContactPage
