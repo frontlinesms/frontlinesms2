@@ -155,12 +155,8 @@ class SubscriptionSpec extends GroupGebSpec  {
 		element.jquery.trigger('focus')
 		element.value(keyValue)
 	}
-    //FIXME: Need to find a better way to select dropdowns in GEB
 	private def selectAValueFromDropDown() {
-		$("select", id:"id" ).getJquery().val(Group.list()[0].id.toString());
+		$("select", id:"id" ).value(Group.list()[0].id.toString());
 	}
-
-
-
 }
 

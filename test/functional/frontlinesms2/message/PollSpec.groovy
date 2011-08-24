@@ -130,11 +130,14 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			assert $("#tabs-3 textarea").@disabled
 			$("#send_auto_reply").jquery.trigger('click')
-			$("#tabs-3 textarea", name:'autoReplyText').value("")
+			$("#tabs-3 textarea").value("")
 			$("#nextPage").click()
 			sleep(500)
 		then:
 			$('#tabs-3').displayed
+			$("#tabs li")[4].click()
+			$("#auto-reply-read-only-text").text() == "None"
+			
 	}
 
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
