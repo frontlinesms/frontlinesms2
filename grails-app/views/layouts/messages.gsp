@@ -74,11 +74,6 @@
 									Export
 								</g:remoteLink>
 							</li>
-							<li id="manage-subscription">
-								<g:remoteLink controller="group" action="list" onSuccess="launchMediumWizard('Manage Subscription', data, 'Create');">
-									Manage subscription
-								</g:remoteLink>
-							</li>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true);addTabValidations();" id="quick_message">
 					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
