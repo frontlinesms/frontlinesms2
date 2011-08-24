@@ -98,6 +98,16 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#tabs li")[1].hasClass("ui-state-disabled")
 			$("#tabs li")[3].hasClass("ui-state-disabled")
 			$('#tabs-5 ').displayed
+		when:
+			$("#prevPage").click()
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+		when:
+			$("#prevPage").click()
+			waitFor { $('#tabs-1 ').displayed }
+		then:
+			$("#tabs-1").displayed
 	}
 
 
