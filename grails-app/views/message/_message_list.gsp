@@ -15,7 +15,7 @@
 		<table id="messages">
 			<thead>
 				<tr>
-					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAll()"/></td>
+					<td><g:checkBox name="message" value="0" checked="false" onclick="checkAll()"/></td>
 					<td />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
 									params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
