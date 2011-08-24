@@ -11,12 +11,12 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/inbox"
 		then:
-			$("#messages tbody tr.INBOUND").size() == 50
+			$("#messages tbody tr").size() == 50
 		when:
 			$("#page-arrows a", text: 'Next').click()
 			waitFor {$("a", text:"Back").displayed}
 		then:
-			$("#messages tbody tr.INBOUND").size() == 1
+			$("#messages tbody tr").size() == 1
 
 	}
 
@@ -44,12 +44,12 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/pending"
 		then:
-			$("#messages tbody tr.SEND_PENDING").size() == 50
+			$("#messages tbody tr").size() == 50
 		when:
 			$("#page-arrows a", text: 'Next').click()
 			waitFor {$("a", text:"Back").displayed}
 		then:
-			$("#messages tbody tr.SEND_PENDING").size() == 1
+			$("#messages tbody tr").size() == 1
 
 	}
 
@@ -74,12 +74,12 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/sent"
 		then:
-			$("#messages tbody .SENT").size() == 50
+			$("#messages tbody tr").size() == 50
 		when:
 			$("a", text: 'Next').click()
 			waitFor {$("#page-arrows a", text:"Back").displayed}
 		then:
-			$("#messages tbody tr.SENT").size() == 1
+			$("#messages tbody tr").size() == 1
 
 	}
 

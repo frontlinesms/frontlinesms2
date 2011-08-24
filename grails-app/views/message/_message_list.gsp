@@ -1,6 +1,7 @@
+<%@ page import="frontlinesms2.enums.MessageStatus" %>
 <div id="message-list">
+	<g:hiddenField name="checkedMessageIdList" value=","/>
 	<g:if test="${messageInstanceTotal > 0}">
-		<g:hiddenField name="checkedMessageIdList" value=""/>
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
@@ -14,7 +15,7 @@
 		<table id="messages">
 			<thead>
 				<tr>
-					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAllMessages()"/></td>
+					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAll()"/></td>
 					<td />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
 									params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
@@ -25,11 +26,11 @@
 
 			</tr>
 		</thead>
-		<tbody>
+		<tbody id='messages-table'>
 			<g:each in="${messageInstanceList}" status="i" var="m">
-				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'} ${m.status}" id="message-${m.id}">
+				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
 					<td>
-						<g:checkBox name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="updateMessageDetails(${m.id});" disabled="${messageSection == 'trash' ? 'true': 'false'}"/>
+						<g:checkBox class='checkbox' name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 					</td>
 
@@ -51,7 +52,7 @@
 					</td>
 					<td>
 							<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate format="dd-MMM-yyyy hh:mm" date="${m.dateCreated}" />
+								<g:formatDate date="${m.dateCreated}" />
 							</g:link>
 						</td>
 					</tr>

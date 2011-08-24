@@ -45,7 +45,7 @@ class Fmessage {
 	
 	def fetchContactName(String number) {
 		Contact.withNewSession { session ->
-			contactName = Contact.findByPrimaryMobile(number)?.name ?: number
+			contactName = findContact(number)
 		}
 	}
 
@@ -60,7 +60,7 @@ class Fmessage {
 	}
 	
 	static namedQueries = {
-			inbox { isStarred, archived ->
+			inbox { isStarred=false, archived=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", archived)
@@ -70,7 +70,7 @@ class Fmessage {
 					isNull("messageOwner")
 				}
 			}
-			sent { isStarred, archived ->
+			sent { isStarred=false, archived=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", archived)
@@ -80,7 +80,7 @@ class Fmessage {
 						eq("starred", true)
 				}
 			}
-			pending { isStarred ->
+			pending { isStarred=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", false)
@@ -90,7 +90,7 @@ class Fmessage {
 						eq('starred', true)
 				}
 			}
-			deleted { isStarred ->
+			deleted { isStarred=false ->
 				and {
 					eq("deleted", true)
 					eq("archived", false)
@@ -98,7 +98,7 @@ class Fmessage {
 						eq('starred', true)
 				}
 			}
-			owned { isStarred, responses ->
+			owned { isStarred=false, responses ->
 				and {
 					eq("deleted", false)
 					eq("archived", false)
@@ -117,19 +117,26 @@ class Fmessage {
 				}
 			}
 
-			searchMessages {searchString, groupInstance, messageOwner -> 
-				def groupMembers = groupInstance?.getAddresses()
-				if(searchString)
-					ilike("text", "%${searchString}%")
-				and{
-					if(groupInstance) {
-						'in'("src",	 groupMembers)
+			searchMessages {searchString, contactInstance, groupInstance, messageOwner -> 
+				def groupMembersNumbers = groupInstance?.getAddresses()
+					and {
+						if(searchString) {
+							'ilike'("text", "%${searchString}%")
+						}
+						if(contactInstance) {
+							'ilike'("contactName", "%${contactInstance}%")
+						}
+						if(groupInstance) {
+							or {
+								'in'("src",	groupMembersNumbers)
+								'in'("dst", groupMembersNumbers)
+							}
+						}
+						if(messageOwner) {
+							'in'("messageOwner", messageOwner)
+						}
+						eq('deleted', false)
 					}
-					if(messageOwner) {
-						'in'("messageOwner", messageOwner)
-					}
-					eq('deleted', false)
-				}
 			}
 			
 			filterMessages { groupInstance, messageOwner, startDate, endDate -> 
@@ -171,7 +178,11 @@ class Fmessage {
 	def getDisplayName() {
 		contactName?:src
 	}
-	
+
+	def getRecipientDisplayName() {
+		 findContact(dst)
+	}
+
 	def toDelete() {
 		this.deleted = true
 		this
@@ -250,20 +261,23 @@ class Fmessage {
 		def deletedCount = Fmessage.countDeletedMessages()
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
+
+	static def hasUndeliveredMessages() {
+		Fmessage.getPendingMessages([:]).any {it.status == MessageStatus.SEND_FAILED}
+	}
 	
 	static def getMessageOwners(activity) {
 		activity instanceof Poll ? activity.responses : [activity]
 	}
 	
-	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
-		if(!searchString) return []
-		def searchResults = Fmessage.searchMessages(searchString, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
-		searchResults
+	static def search(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
+		if(!searchString && !contactInstance && !groupInstance) return []
+		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 	}
 
-	static def countAllSearchMessages(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
-		if(!searchString) return 0
-		return Fmessage.searchMessages(searchString, groupInstance, messageOwners).count()
+	static def countAllSearchMessages(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
+		if(!searchString && !contactInstance && !groupInstance) return 0
+		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwners).count()
 	}
 
 	static def getMessageStats( Group groupInstance=null, Collection<MessageOwner> messageOwner=[], Date startDate = new Date(Long.MIN_VALUE), Date endDate = new Date(Long.MAX_VALUE)) {
@@ -299,4 +313,9 @@ class Fmessage {
 		}
 		answer
 	}
+
+	private String findContact(String number) {
+		return Contact.findByPrimaryMobile(number)?.name ?: number
+	}
+	
 }

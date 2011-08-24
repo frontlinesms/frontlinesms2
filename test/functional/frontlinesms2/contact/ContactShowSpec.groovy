@@ -11,10 +11,6 @@ class ContactShowSpec extends ContactGebSpec {
 		createTestContacts()
 	}
 
-	def cleanup() {
-		deleteTestContacts()
-	}
-
 	def 'contacts link to their details'() {
 		given:
 			def alice = Contact.findByName('Alice')
@@ -125,11 +121,13 @@ class ContactShowSpec extends ContactGebSpec {
 			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
 			waitFor {$('div#tabs-1').displayed}
 			$("#nextPage").click()
+			waitFor {$("#done").displayed}
         	$("#done").click()
+			waitFor {$("#confirmation").displayed}
 		then:
-            $("title").text() == "Sent"
+			$("#confirm").click()
 		when:
-	  		go "contact/show/${alice.id}"
+			go "contact/show/${alice.id}"
 		then:
 	        $("#message-count p").first().text() == '1 messages sent'
 	        $("#message-count p").last().text() == '0 messages received'

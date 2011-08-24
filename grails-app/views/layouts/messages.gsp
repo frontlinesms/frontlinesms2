@@ -1,4 +1,4 @@
-	<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
@@ -74,13 +74,8 @@
 									Export
 								</g:remoteLink>
 							</li>
-							<li id="manage-subscription">
-								<g:remoteLink controller="group" action="list" onSuccess="launchMediumWizard('Manage Subscription', data, 'Create');">
-									Manage subscription
-								</g:remoteLink>
-							</li>
 							<li>
-					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send');" id="quick_message">
+					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true);addTabValidations();" id="quick_message">
 					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
 									Quick message
 								</g:remoteLink>
@@ -95,7 +90,7 @@
 						</g:if>
 					</div>
 					<div class="content-body">
-						<g:render template="list_items"/>
+						<g:render template="message_list"/>
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">

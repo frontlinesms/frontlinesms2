@@ -110,6 +110,12 @@
 				<img src='${resource(dir:'images/icons',file:'recievedmessages.gif')}' />
 				<p>${contactInstance.outboundMessagesCount} messages received</p>
 			</div>
+			<div id='message-search'>
+				<g:link class="buttons" controller='search' action='result' params="[contactSearchString: contactInstance?.name]" >
+					<img src='${resource(dir:'images/icons',file:'search.gif')}' />
+					Search for messages
+				</g:link>
+			</div>
 		</div>
 	</g:form>
 </div>

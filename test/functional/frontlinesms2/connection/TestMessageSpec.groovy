@@ -12,8 +12,6 @@ class TestMessageSpec extends ConnectionGebSpec {
 		then:
 			assertFieldDetailsCorrect('number', 'Number', '')
 			assertFieldDetailsCorrect('message', 'Message', "Congratulations from FrontlineSMS \\o/ you have successfully configured ${testyEmail.name} to send SMS \\o/")
-		cleanup:
-			deleteTestConnections()
 	}
 
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {

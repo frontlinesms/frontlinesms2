@@ -7,8 +7,12 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
 		<g:javascript src="application.js"/>
 		<g:javascript src="message/actions.js"/>
+		<g:javascript src="search/moreOptions.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 	</head>
@@ -41,7 +45,7 @@
 					  	</g:if>
 					</div>
 					<div class="content-body">
-						<g:render template="/message/list_items"/>
+						<g:render template="/message/message_list"/>
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">

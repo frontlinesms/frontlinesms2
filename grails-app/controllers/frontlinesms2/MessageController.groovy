@@ -10,7 +10,7 @@ class MessageController {
 	def messageSendService
 
 	def beforeInterceptor = {
-		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+		params['max'] = params['max'] ?: getPaginationCount()
 		params['offset']  = params['offset'] ?: 0
 		params['archived'] = params['archived'] ? params['archived'].toBoolean()  : false
 		true
@@ -26,15 +26,20 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		def responseInstance
+		def responseInstance, selectedMessageList
 		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
-		
+		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
+		if (!params.checkedMessageList) selectedMessageList = ',' + messageInstance?.id + ','
+		else selectedMessageList = params.checkedMessageList
 		[messageInstance: messageInstance,
+				checkedMessageCount: checkedMessageCount,
+				checkedMessageList: selectedMessageList,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
 				pollInstanceList: Poll.getNonArchivedPolls(),
 				radioShows: RadioShow.findAll(),
-				messageCount: Fmessage.countAllMessages(params)]
+				messageCount: Fmessage.countAllMessages(params),
+				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
 	}
 
 	def trash = {
@@ -92,8 +97,6 @@ class MessageController {
 	}
 
 	def radioShow = {
-		def max = params.max ?: GrailsConfig.getConfig().pagination.max
-		def offset = params.offset ?: 0
 		def showInstance = RadioShow.get(params.ownerId)
 		def messageInstanceList = showInstance?.getShowMessages(params)
 
@@ -102,10 +105,102 @@ class MessageController {
 				messageInstanceTotal: showInstance.countMessages(params['starred']),
 				ownerInstance: showInstance] << show(messageInstanceList)
 	}
+	
+	def send = {
+		def addresses = [params.addresses].flatten() - null
+		def groups = [params.groups].flatten() - null
+		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses.unique().each { address ->
+			//TODO: Need to add source from app settings
+			def message = new Fmessage(src: "src", dst: address, text: params.messageText)
+			messageSendService.send(message)
+		}
+		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
+		redirect (action: 'sent')
+	}
+	
+	def delete = {
+		println 'deleting?'
+		withFmessage {messageInstance ->
+			messageInstance.toDelete()
+			messageInstance.save(failOnError: true, flush: true)
+		}
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), 'message'])}"
+		if (isAjaxRequest()) {
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
+	
+	def deleteAll = {
+		def messageIdList = params.checkedMessageList?.tokenize(',')
+		messageIdList.each { id ->
+			withFmessage id, {messageInstance ->
+				messageInstance.toDelete()
+				messageInstance.save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		if (isAjaxRequest()) {
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
+
+	def archive = {
+		withFmessage { messageInstance ->
+			messageInstance.archive()
+			messageInstance.save(failOnError: true, flush: true)
+		}
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), 'messages'])}"
+		if (request.xhr) {
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
+	
+	def archiveAll = {
+		def messageIdList = params.checkedMessageList?.tokenize(',')
+		messageIdList.each { id ->
+			withFmessage id, {messageInstance ->
+				messageInstance.archive()
+				messageInstance.save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		if (isAjaxRequest()) {
+			render ""
+		}else {
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
+
 
 	def move = {
-		def ids = [params.ids].flatten()
-		ids.each {id ->
+		withFmessage {messageInstance ->
+			def messageOwner
+			if (params.messageSection == 'poll') {
+				messageOwner = Poll.get(params.ownerId)
+			} else if (params.messageSection == 'folder') {
+				messageOwner = Folder.get(params.ownerId)
+			}
+			if (messageOwner instanceof Poll) {
+				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
+				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+			} else if (messageOwner instanceof Folder) {
+				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+			}
+		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ' messages'])}"
+		render ""
+	}
+	
+	def moveAll = {
+		def messageIdList = params.messageId?.tokenize(',')
+		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				def messageOwner
 				if (params.messageSection == 'poll') {
@@ -115,13 +210,13 @@ class MessageController {
 				}
 				if (messageOwner instanceof Poll) {
 					def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-					unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+					unknownResponse.addToMessages(messageInstance).save(failOnError: true, flush: true)
 				} else if (messageOwner instanceof Folder) {
-					messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
+					messageOwner.addToMessages(messageInstance).save(failOnError: true, flush: true)
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
 		render ""
 	}
 
@@ -129,41 +224,22 @@ class MessageController {
 		withFmessage { messageInstance ->
 			def responseInstance = PollResponse.get(params.responseId)
 			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			redirect(action: "poll", params: params)
 		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message'])}"
+		render ""
 	}
-
-	def deleteMessage = {
-		def ids = [params.ids].flatten()
-		ids.each {id ->
-			withFmessage id, {messageInstance ->
-				messageInstance.toDelete()
-				messageInstance.save(failOnError: true, flush: true)
-			}
-		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
-		if (isAjaxRequest()) {
-			render ""
-		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}		
-	}
-
-	def archiveMessage = {
-		def ids = [params.ids].flatten()
-		ids.each {id ->
+	
+	def changeAllResponses = {
+		def messageIdList = params.messageId?.tokenize(',')
+		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				messageInstance.archive()
-				messageInstance.save(failOnError: true, flush: true)
+				println messageInstance
+				def responseInstance = PollResponse.get(params.responseId)
+				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), ids.size() + ' messages'])}"
-		if (request.xhr) {
-			render ""
-		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'messages'])}"
+		render ""
 	}
 
 	def changeStarStatus = {
@@ -176,25 +252,12 @@ class MessageController {
 		}
 	}
 
-	def send = {
-		def addresses = [params.addresses].flatten() - null
-		def groups = [params.groups].flatten() - null
-		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
-		addresses.unique().each { address ->
-			//TODO: Need to add source from app settings
-			def message = new Fmessage(dst: address, text: params.messageText)
-			messageSendService.send(message)
-		}
-		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
-		redirect (action: 'sent')
-	}
-
 	def emptyTrash = {
 		Fmessage.findAllByDeleted(true)*.delete()
 		redirect(action: 'inbox')
 	}
 
-	private def withFmessage(messageId= params.messageId, Closure c) {
+	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
@@ -202,5 +265,9 @@ class MessageController {
 
 	private def isAjaxRequest() {
 		return request.xhr
+	}
+
+	private def getPaginationCount() {
+		GrailsConfig.getConfig().pagination.max
 	}
 }

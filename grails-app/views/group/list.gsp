@@ -4,12 +4,10 @@
 	<div id="tabs">
 		<ul>
 			<li><a href="#tabs-1">Select Group</a></li>
-			<li><a href="#tabs-2">Automatic Reply</a></li>
 			<li><a href="#tabs-3">Confirm</a></li>
 		</ul>
 		<g:form id="manage-subscription" name="manage-subscription" url="${[action:'update']}" method="post" onsubmit='return validate();'>
 			<g:render template="select_group"/>
-			<g:render template="auto_reply"/>
 			<g:render template="confirm"/>                                            
 		</g:form>
 	</div>
