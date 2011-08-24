@@ -130,7 +130,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			assert $("#tabs-3 textarea").@disabled
 			$("#send_auto_reply").jquery.trigger('click')
-			$("#tabs-3 textarea").value("")
 			$("#nextPage").click()
 			sleep(500)
 		then:
