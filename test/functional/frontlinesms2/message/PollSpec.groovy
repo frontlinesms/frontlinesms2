@@ -115,6 +115,28 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#tabs-2').displayed 
 	}
 
+	def "should remain in the same tab when auto-reply text is empty"() {
+		when:
+			go "message"
+		then:
+			launchPollPopup()
+			$("input", name:'poll-type').value("standard")
+			$("input", value:'standard').jquery.trigger('click')
+		when:
+			$("#nextPage").click()
+			waitFor { $('#tabs-3').displayed }
+		then:
+			$('#tabs-3').displayed
+		when:
+			assert $("#tabs-3 textarea").@disabled
+			$("#send_auto_reply").jquery.trigger('click')
+			$("#tabs-3 textarea", name:'autoReplyText').value("")
+			$("#nextPage").click()
+			sleep(500)
+		then:
+			$('#tabs-3').displayed
+	}
+
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			go "message"
