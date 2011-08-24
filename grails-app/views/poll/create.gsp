@@ -40,14 +40,12 @@
 
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				var isValid = isGroupChecked('auto-reply') ? !isElementEmpty('.check-bound-text-area') : true;
+				var isValid = isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
 				if (isValid && isGroupChecked("collect-responses")) {
 					$("#tabs").tabs("select", 4);
+					return false;
 				}
-				else {
-					$("#tabs").tabs("select", 3);
-				}
-				return false;
+				return isValid;
 			}
 		});
 
