@@ -11,7 +11,7 @@
 				<g:link action="sent">Sent</g:link>
 			</li>
 			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending" class="${messageInstanceList.any {it.status == MessageStatus.SEND_FAILED} ? 'send-failed' : ''}">Pending</g:link>
+				<g:link action="pending" class="${hasUndeliveredMessages ? 'send-failed' : ''}">Pending</g:link>
 			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>

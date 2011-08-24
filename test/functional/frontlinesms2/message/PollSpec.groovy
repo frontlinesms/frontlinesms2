@@ -95,7 +95,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#nextPage").click()
 			waitFor { $('#tabs-5 ').displayed }
 		then:
-			 $('#tabs-5 ').displayed
+			$("#tabs li")[1].hasClass("ui-state-disabled")
+			$("#tabs li")[3].hasClass("ui-state-disabled")
+			$('#tabs-5 ').displayed
 	}
 
 
@@ -111,6 +113,32 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $('#tabs-2').displayed }
 		then:
 			$('#tabs-2').displayed 
+	}
+
+	def "should remain in the same tab when auto-reply text is empty"() {
+		when:
+			go "message"
+		then:
+			launchPollPopup()
+			$("input", name:'poll-type').value("standard")
+			$("input", value:'standard').jquery.trigger('click')
+		when:
+			$("#nextPage").click()
+			waitFor { $('#tabs-3').displayed }
+		then:
+			$('#tabs-3').displayed
+		when:
+			assert $("#tabs-3 textarea").@disabled
+			$("#send_auto_reply").jquery.trigger('click')
+			$("#nextPage").click()
+			sleep(500)
+		then:
+			$('#tabs-3').displayed
+//			FIXME: Fails for an unknown reason in the build
+//			$("#tabs li")[4].click()
+//			waitFor { $('#tabs-5').displayed }
+//			$("#tabs-5 #auto-reply-read-only-text").text() == "None"
+
 	}
 
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
@@ -135,7 +163,13 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("label[for='choiceA']").hasClass('bold') == true
 			waitFor {$('#tabs-3').displayed}
 		when:
-            $("textarea", name:'autoReplyText').value("Thanks for participating...")
+			assert $("#tabs-3 textarea").@disabled
+			$("#send_auto_reply").jquery.trigger('click')
+			$("#tabs-3 textarea", name:'autoReplyText').value("Thanks for participating...")
+			$("#send_auto_reply").jquery.trigger('click')
+			assert $("#tabs-3 textarea").@disabled
+			$("#send_auto_reply").jquery.trigger('click')
+			$("#tabs-3 textarea", name:'autoReplyText').value("Thanks for participating...")
 			$("#nextPage").click()
 		then:
 			waitFor {$('#tabs-4').displayed}

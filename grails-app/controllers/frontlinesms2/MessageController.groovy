@@ -38,7 +38,8 @@ class MessageController {
 				responseInstance: responseInstance,
 				pollInstanceList: Poll.getNonArchivedPolls(),
 				radioShows: RadioShow.findAll(),
-				messageCount: Fmessage.countAllMessages(params)]
+				messageCount: Fmessage.countAllMessages(params),
+				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
 	}
 
 	def trash = {

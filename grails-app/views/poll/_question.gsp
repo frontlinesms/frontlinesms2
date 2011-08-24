@@ -15,3 +15,13 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$("input[name='collect-responses']").live("change", function() {
+		if(isGroupChecked("collect-responses")) {
+			$('#tabs').tabs("disable",3);
+		} else {
+			$('#tabs').tabs("enable",3);
+		}
+	});
+</script>
