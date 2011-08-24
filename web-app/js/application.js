@@ -12,6 +12,38 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
+var remoteHash = {
+	"poll" :  function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'poll/create',
+			success: function(data) {
+				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();});
+			}})
+	},
+
+	"subscription": function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'group/list',
+			success: function(data) {
+				launchMediumWizard('Manage Subscription', data, 'Create');
+			}})
+	},
+
+	"announcement": function() {
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + 'quickMessage/create',
+			success: function(data) {
+				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
+			}})
+	}
+}
+
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }
@@ -19,7 +51,7 @@ function isElementEmpty(selector) {
 function isEmpty(val) {
 	return val.trim().length == 0
 }
-	
+
 function isGroupChecked(groupName) {
 	return getSelectedGroupElements(groupName).length > 0;
 }
@@ -75,3 +107,11 @@ function findInputWithValue(value) {
 function isCheckboxSelected(value) {
 	return findInputWithValue(value).is(':checked')
 }
+
+
+$.widget("ui.contentWidget", {
+	validate: function() {
+		return this.options['validate'].call();			
+	},
+	options: {validate: function() {return true;}}
+});

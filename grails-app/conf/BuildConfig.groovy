@@ -33,7 +33,9 @@ grails.project.dependency.resolution = {
 		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
 
 		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile 'net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT' // doesn't seem to cause problems if it's here, but should really only be included for dev scope
+		compile ('net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT') {
+			changing = true
+		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 
 		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.2-SNAPSHOT'
@@ -47,4 +49,16 @@ grails.project.dependency.resolution = {
 coverage {
 	xml = true
 	enabledByDefault = false
+}
+
+codenarc.reports = {
+	MyXmlReport('xml') {
+		outputFile = 'target/test-reports/CodeNarcReport.xml'
+		title = 'FrontlineSMS2 CodeNarc Report (xml)'
+	}
+	
+	MyHtmlReport('html') {
+		outputFile = 'target/test-reports/CodeNarcReport.html'
+		title = 'FrontlineSMS2 CodeNarc Report (html)'
+	}
 }

@@ -1,21 +1,18 @@
-$(document).ready(function() {
-	$("#categorise_options").hide()
-	$("#categorise_dropdown").change(categoriseClickAction)
-});
+function categoriseClickAction(responseId) {
+	var ownerId = $("#owner-id").val();
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	if(countCheckedMessages() > 1) {
+		var change = 'changeAllResponses';
+		var messagesToChange = $('input:hidden[name=checkedMessageList]').val();
+	} else {
+		var change = 'changeResponse';
+		var messagesToChange = $("#message-id").val();
+	}
 
-function categoriseClickAction() {
-	$("#categorise_options").hide();
-	var me = $(this);
-	var responseValue = me.val();
-	var responseId = responseValue.split("-");
-	var id = $("#message-id").val();
-	var owner = $("#owner-id").val();
-	
 	$.ajax({
 		type:'POST',
-		data: {responseId: responseId[1], messageId: id, ownerId: owner},
-		url: url_root + 'message/changeResponse',
-		success: function(data) { location.reload(); }
+		url: url_root + 'message/' + change,
+		data: {responseId: responseId, messageId: messagesToChange, ownerId: ownerId},
+		success: function(data) { window.location = url_root + "message/" + messageSection + "/" + ownerId; }
 	});
-	$("#categorize-dropdown").val("na");
 }

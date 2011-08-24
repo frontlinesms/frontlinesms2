@@ -71,6 +71,7 @@ body {
 /* SPECIFIC */
 #container {
 	@include container;
+	width: 100%;
 	border-top: 3px solid $top-bar;
 	background-image:url('../images/background.png');
 	background-repeat:no-repeat;
@@ -227,6 +228,8 @@ body {
 				padding-top: 7px;
 				
 				input, select { width: 170px; }
+				
+				h2 { display: inline; }
 				
 			}
 				
@@ -524,6 +527,41 @@ body {
 						border-top: 1px solid #B5C6CD;
 						padding: 17px;
 						
+						#message-search {
+							position: relative;
+							left: 120;
+							padding-top: 10px;
+							padding-bottom: 10px;
+							
+							
+							a:link, a:visited {
+								background-image:url('../images/buttons/button_default.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+							
+							a:hover {
+								background-image:url('../images/buttons/button_hover.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+							
+							a:active {
+								background-image:url('../images/buttons/button_pressed.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+						}
+						
 						img, p { 
 							display:inline;
 							vertical-align: middle;
@@ -554,7 +592,7 @@ body {
 					background-position: top;
 					padding-top: 43px;
 					
-					#contact-name {
+					h2 {
 						font-size: 14px;
 						padding-left: 17px;
 						padding-right: 17px;
@@ -749,4 +787,8 @@ body {
 label.bold {
 	font-weight: bold;
 	color:#000 !important;
+}
+
+a.send-failed, .send-failed td:last-child {
+	 background: url('../images/alert-icon.jpg') no-repeat center right;
 }

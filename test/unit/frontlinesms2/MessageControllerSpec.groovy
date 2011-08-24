@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
+import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class MessageControllerSpec extends ControllerSpec {
 	def setup() {
@@ -19,11 +20,8 @@ class MessageControllerSpec extends ControllerSpec {
 		def sahara = new Group(name: "Sahara", members: [new Contact(primaryMobile: "12345"),new Contact(primaryMobile: "56484")])
 		def thar = new Group(name: "Thar", members: [new Contact(primaryMobile: "12121"), new Contact(primaryMobile: "22222")])
 		mockDomain Group, [sahara, thar]
-		mockConfig('''
-			pagination.max = 10
-		''')
+		controller.metaClass.getPaginationCount = {-> return 10}
 	}
-
 
 /*	def "should send message to all the members in a group"() {
 		setup:
@@ -265,6 +263,7 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should fetch starred poll messages"() {
 		setup:
 			registerMetaClass(Poll)
+			Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
 			def starredFmessage = new Fmessage(starred: true)
 			def unstarredFmessage = new Fmessage(starred: false)
 			def poll = new Poll(id: 2L, responses: [new PollResponse()])
@@ -451,6 +450,7 @@ class MessageControllerSpec extends ControllerSpec {
 
      private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure)  {
 			registerMetaClass(Fmessage)
+		 	Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
 			def fmessage = new Fmessage(src: "src1", starred: isStarred)
 			mockDomain Folder
 			mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
@@ -468,6 +468,7 @@ class MessageControllerSpec extends ControllerSpec {
 			assert results['messageInstanceList']*.contactExists == [false]
 			assert results['messageInstanceList']*.contactExists == [false]
 			assert results['pollInstanceList'].every {!it.archived}
+			assert results['hasUndeliveredMessages']
 
     }
 }

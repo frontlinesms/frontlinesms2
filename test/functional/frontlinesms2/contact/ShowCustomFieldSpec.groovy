@@ -11,11 +11,6 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		createTestCustomFields()
 	}
 
-	def cleanup() {
-		deleteTestContacts()
-		deleteTestCustomFields()
-	}
-
 	def "'add new custom field' is shown in dropdown and redirects to create page"() {
 		when:
 			def bob = Contact.findByName("Bob")

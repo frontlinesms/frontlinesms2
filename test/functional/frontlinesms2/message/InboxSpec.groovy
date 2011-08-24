@@ -17,10 +17,8 @@ class InboxSpec extends MessageGebSpec {
 			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
-		cleanup:
-			deleteTestMessages()
 	}
-    
+
 	def 'message details are shown in list'() {
 		given:
 			createInboxTestMessages()
@@ -30,11 +28,9 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			rowContents[2] == 'Alice'
 			rowContents[3] == 'hi Alice'
-			rowContents[4] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
-		cleanup:
-			deleteTestMessages()
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
-    
+
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createInboxTestMessages()
@@ -44,10 +40,8 @@ class InboxSpec extends MessageGebSpec {
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Alice'
-		cleanup:
-			deleteTestMessages()
 	}
-        
+
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -59,10 +53,8 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
-		cleanup:
-			deleteTestMessages()
 	}
-    
+
 	def 'selected message is highlighted'() {
 		given:
 			createInboxTestMessages()
@@ -76,10 +68,8 @@ class InboxSpec extends MessageGebSpec {
 			go "message/inbox/show/${bobMessage.id}"
 		then:
 			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
-		cleanup:
-			deleteTestMessages()
 	}
-	
+
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
 			def m1 = new Fmessage(status:MessageStatus.INBOUND, read: false).save(failOnError:true)
@@ -91,13 +81,11 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$("tr#message-${m1.id}").hasClass('unread')
 			!$("tr#message-${m1.id}").hasClass('read')
-			
+
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
-		cleanup:
-			deleteTestMessages()
 	}
-	
+
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
 			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
@@ -107,9 +95,6 @@ class InboxSpec extends MessageGebSpec {
 			def rowContents = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			rowContents == ['June']
-		cleanup:
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 
 	def "should autopopulate the recipients name on click of reply for a inbox message"() {
@@ -124,9 +109,6 @@ class InboxSpec extends MessageGebSpec {
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'+254778899').getAttribute('checked')
-		cleanup:
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
@@ -135,15 +117,12 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
-			go "message/inbox/show/${message.id}"	
+			go "message/inbox/show/${message.id}"
 			$('#btn_reply').click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'+254999999').getAttribute('checked')
-		cleanup:
-			deleteTestMessages()
-			deleteTestContacts()
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
@@ -151,9 +130,9 @@ class InboxSpec extends MessageGebSpec {
 	    	createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
-		then:    	
+		then:
 			$("#messages tbody tr").size() == 2
-		when:	
+		when:
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
@@ -163,8 +142,6 @@ class InboxSpec extends MessageGebSpec {
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Alice', 'Bob'])
-		cleanup:
-			deleteTestMessages()
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
@@ -181,13 +158,13 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/${message.id}"
-			$('#btn_dropdown').click()
-			$('#btn_forward').click()			
+			waitFor{$("#btn_dropdown").displayed}
+			$("#btn_dropdown").click()
+			waitFor{$("#btn_forward").displayed}
+			$('#btn_forward').click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def "should only display message details when one message is checked"() {
@@ -197,10 +174,12 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
+			sleep 1000
 		then:
 			$('#checked-message-count').text() == "2 messages selected"
 		when:
 			$("#message")[1].click()
+			sleep 1000
 			def message = Fmessage.findBySrc('Bob')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
@@ -208,9 +187,6 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
-		
-		cleanup:
-			deleteTestMessages()
 	}
 
 	def "should skip recipients tab if a message is replied"() {
@@ -235,31 +211,31 @@ class InboxSpec extends MessageGebSpec {
 			go "message"
 		then:
 			$("#message")[0].click()
+			sleep 1000
 			$("a", text: "Reply All").click()
-			waitFor {$('#tabs-1').displayed}
+			sleep 1000
 		when:
 			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			sleep 1000
 		then:
 			$("#tabs-3").displayed
 	}
 
 	
-//  NOTE: Need to find a better way to make this test work
-//	def "should remain in the same page, after moving the message to the destination folder"() {
-//		setup:
-//			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
-//			new Folder(name: "my-folder").save(flush: true)
-//		when:
-//			go "message/inbox"
-//		then:
-//			$('#message-actions').value("${Folder.findByName('my-folder').id}")
-//			waitFor {$("#messages").text().contains("No messages")}
-//			$("#messages-submenu .selected").text().contains('Inbox')
-//		cleanup:
-//			Fmessage.list()*.refresh()
-//			Folder.findByName('my-folder').refresh().delete(flush: true)
-//	}
+	def "should remain in the same page, after moving the message to the destination folder"() {
+		setup:
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
+			new Folder(name: "my-folder").save(flush: true)
+		when:
+			go "message/inbox"
+			waitFor {$("#move-actions").displayed}
+			$("#move-actions").getJquery().val(Folder.findByName('my-folder').id.toString());
+			$("#move-actions").getJquery().trigger("change")
+			waitFor {$("#no-messages").displayed}
+		then:
+			$("#no-messages").text().contains("No messages")
+			$("#messages-submenu .selected").text().contains('Inbox')
+	}
 
 
 	String dateToString(Date date) {
@@ -268,6 +244,6 @@ class InboxSpec extends MessageGebSpec {
 	}
 
 	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd-MMM-yyyy hh:mm")
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm")
 	}
 }

@@ -12,10 +12,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 		createTestGroups()
 	}
 
-	def cleanup() {
-		Group.list()*.delete(flush: true)
-	}
-
 	def "should move to the next tab if all the values are provided"() {
 		when:
 			goToManageSubscriptions()
@@ -23,9 +19,9 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
 			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
+			waitFor { $("#tabs-3").displayed }
 		then:
-			$("#tabs-2").displayed
+			$("#tabs-3").displayed
 	}
 
 	def "should be able to set subscription keywords for a group"() {
@@ -34,8 +30,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
@@ -54,8 +48,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			selectAValueFromDropDown()
 			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
-			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
 			$("#done").click()
@@ -72,8 +64,6 @@ class SubscriptionSpec extends GroupGebSpec  {
 			goToManageSubscriptions()
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
-			$('#nextPage').click()
-			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
@@ -151,11 +141,13 @@ class SubscriptionSpec extends GroupGebSpec  {
 			$('.error-panel').text().contains("please enter all the details")
 	}
 
-
 	private def goToManageSubscriptions() {
 		go "/frontlinesms2/message"
-		$("#manage-subscription a").click()
-		waitFor { $('div#tabs-1').displayed}
+		$("#create-activity a").click()
+		waitFor {$('#tabs-1').displayed}
+		$("input", name: "activity").value("subscription")
+		$("#done").click()
+		waitFor {$("#ui-dialog-title-modalBox").text() == "Manage Subscription"}
 	}
 
 	private def inputKeywords(keyName, keyValue) {
@@ -163,12 +155,8 @@ class SubscriptionSpec extends GroupGebSpec  {
 		element.jquery.trigger('focus')
 		element.value(keyValue)
 	}
-    //FIXME: Need to find a better way to select dropdowns in GEB
 	private def selectAValueFromDropDown() {
-		$("select", id:"id" ).getJquery().val(Group.list()[0].id.toString());
+		$("select", id:"id" ).value(Group.list()[0].id.toString());
 	}
-
-
-
 }
 

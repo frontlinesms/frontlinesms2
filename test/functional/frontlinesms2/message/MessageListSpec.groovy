@@ -47,8 +47,6 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		$('#messages-submenu li')*.text()[1] == 'Sent'
 		$('#messages-submenu li')*.text()[2] == 'Pending'
 		$('#messages-submenu li')*.text()[3] == 'Trash'
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def 'Messages tab should have unread messages count next to it'() {
@@ -58,8 +56,6 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 		then:
 		$('#tab-messages').text() == 'Messages 1'
-		cleanup:
-			deleteTestMessages()
 	}
 	
 	def 'Should be able to sort messages'() {
@@ -74,8 +70,6 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			$("#message-header a").click()
 		then:
 			getColumnAsArray($("table tr"), 3) == ['An inbox message', 'Another inbox message']		
-		cleanup:
-			deleteTestMessages()
 	}
 	   
     def assertMenuItemSelected(String itemText) {
@@ -101,15 +95,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def createReadUnreadMessages() {
-		Fmessage readMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true,src:'1234567898').save(flush:true)
-		Fmessage unreadMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false,src:'1234567899').save(flush:true)
+		new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true,src:'1234567898').save(flush:true)
+		new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false,src:'1234567899').save(flush:true)
 	}
-	
-	def deleteTestMessages() {
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
-	
 }

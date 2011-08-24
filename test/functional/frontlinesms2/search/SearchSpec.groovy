@@ -10,12 +10,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		createTestMessages()
 	}
 	
-	def cleanup() {
-		deleteTestGroups()
-		deleteTestMessages()
-		deleteTestPollsAndFolders()
-	}
-	
 	def "clicking on the search button links to the result show page"() {
 		when:
 			to SearchPage
@@ -50,21 +44,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchBtn.click()
 		then:
 			searchFrm.searchString == 'bacon'
-	}
-	
-	def "selected group is still selected on form submit and consequent page reload"() {
-		given:
-			to SearchPage
-			def g = Group.findByName("Friends")
-			println "Grou: ${g.id}"
-			println "Trying to set it for: ${searchFrm.groupId}"
-			searchFrm.groupId = "${g.id}"
-			println "Value set successfully"
-		when:
-			searchBtn.click()
-			println "the class is ${searchFrm.groupId.value.class}"
-		then:
-			searchFrm.groupId == ["${g.id}"]
 	}
 	
 	def "selected activity is still selected on form submit and consequent page reload"() {
@@ -116,18 +95,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
-	}
-	private deleteTestPollsAndFolders() {
-		Poll.findAll()*.delete(flush:true, failOnError:true)
-		Folder.findAll()*.delete(flush:true, failOnError:true)
-	}
-	
-	private deleteTestMessages() {
-		Fmessage.findAll()*.delete(flush:true, failOnError:true)
-	}
-	
-	private deleteTestGroups() {
-		Group.findAll()*.delete(flush:true, failOnError:true)
 	}
 }
 

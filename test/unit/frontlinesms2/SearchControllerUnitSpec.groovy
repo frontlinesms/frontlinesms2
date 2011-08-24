@@ -5,12 +5,9 @@ import grails.plugin.spock.ControllerSpec
 class SearchControllerUnitSpec extends ControllerSpec {
 	def "should set max and offset parameters if not sent"() {
 		setup:
-			mockConfig('''
-				pagination.max = 10
-			''')
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.static.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
+			Fmessage.metaClass.static.search = {String searchString=null, String contactSearchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
 				assert max == 10
 				assert offset == 0
 				searchResults
@@ -20,6 +17,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 			mockDomain(Group)
 			mockDomain(Poll)
 			mockDomain(Folder)
+			controller.metaClass.getPaginationCount = {-> return 10 }
 		when:
 			def results = controller.result()
 		then:
@@ -30,7 +28,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.'static'.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
+			Fmessage.metaClass.'static'.search = {String searchString=null,  String contactSearchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
 				assert max == 5
 				assert offset == 7
 				searchResults
