@@ -51,7 +51,12 @@ function cancel() {
 }
 
 function prevButton() {
-	$("#tabs").tabs('select', getCurrentTab() - 1);
+	for (var i = 1; i <= getCurrentTab(); i++) {
+		if($.inArray(i, $("#tabs").tabs("option", "disabled")) == -1) {
+			$("#tabs").tabs('select', getCurrentTab() - i);
+			break;
+		}
+	}
 }
 
 function nextButton() {
