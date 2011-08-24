@@ -22,13 +22,14 @@ class SearchController {
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners, max, offset)
-		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
+		def searchResults = Fmessage.search(params.searchString, params.contactSearchString, groupInstance, messageOwners, max, offset)
+		[searchDescription: getSearchDescription(params.searchString, params.contactSearchString, groupInstance, activityInstance),
 				searchString: params.searchString,
+				contactInstance: params.contactSearchString,
 				groupInstance: groupInstance,
 				activityId: params.activityId,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: Fmessage.countAllSearchMessages(params.searchString, groupInstance, messageOwners)] << show(searchResults) << no_search()
+				messageInstanceTotal: Fmessage.countAllSearchMessages(params.searchString, params.contactSearchString, groupInstance, messageOwners)] << show(searchResults) << no_search()
 	}
 
 	def show = { searchResults ->
@@ -51,21 +52,22 @@ class SearchController {
 		}
 	}
 	
-	private def getSearchDescription(searchString, group, activity) {
-		if(!searchString && !group && !activity) null
-		else {
-			"Searching in " + {
-				if(!activity && !group) {
-					"all messages"
-				} else if(!activity) {
-					"'${group.name}'"
-				} else {
+	private def getSearchDescription(searchString, contact, group, activity) {
+		if(!searchString && !contact && !group && !activity) {
+			null
+		} else {
+			String searchDescriptor = "Searching in "
+			if(!activity && !group && !contact) {
+				searchDescriptor += "all messages"
+			} else {
+				if(contact) searchDescriptor += "$contact"
+				if(group) searchDescriptor += " '${group.name}'"
+				if(activity) {
 					String activityDescription = activity instanceof Poll? activity.title: activity.name
-					if(group) {
-						"'${group.name}' and '$activityDescription'"
-					} else "'$activityDescription'"
+					searchDescriptor += " '$activityDescription'"
 				}
-			}()
+			}
+			return searchDescriptor
 		}
 	}
 	

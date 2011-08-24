@@ -78,7 +78,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model.messageInstanceList == [Fmessage.findBySrc('+254111222')]
 	}
 	
-	def "message searches can be restricted to a contact group"() {
+	def "message searches can be restricted to a contact group, and choice is still present after search completes"() {
 		given:
 			makeGroupMember()
 		when:
@@ -87,6 +87,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
+			controller.params.groupId == Group.findByName('test').id
 	}
 	
 	def "message searches can be restricted to both contact groups and polls"() {
@@ -99,6 +100,15 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
+	}
+	
+	def "message searches can be restricted to individual contacts"() {
+		when:
+			controller.params.contactSearchString = "alex"
+			controller.params.searchString = "work"
+			def model = controller.result()
+		then:
+			model.messageInstanceList == [Fmessage.findBySrc('+254987654')]
 	}
 	
 	def "deleted messages do not appear in search results"() {

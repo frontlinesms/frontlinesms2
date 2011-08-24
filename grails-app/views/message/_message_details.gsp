@@ -12,8 +12,8 @@
 			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
 			<p id="message-body">${messageInstance.text}</p>
 		</div>
-		<g:render template="message_actions"></g:render>
-		<g:render template="other_actions"></g:render>
+		<g:render template="../message/message_actions"></g:render>
+		<g:render template="../message/other_actions"></g:render>
 	</div>
 	<div id="multiple-messages" class='hide'>
 		<div id='message-info'>
@@ -42,7 +42,7 @@
 						</li>
 					</div>
 				</ol>
-				<g:render template="other_actions"></g:render>
+				<g:render template="../message/other_actions"></g:render>
 			</div>
 		</div>
 	</div>

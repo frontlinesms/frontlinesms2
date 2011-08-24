@@ -24,7 +24,6 @@
 			});
 		});
 		</g:javascript>	
-		<title>Poll</title>
 	</head>
 	<body>
 		<g:if test="${messageInstance != null}">
