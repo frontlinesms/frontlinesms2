@@ -54,7 +54,7 @@ class ContactEditSpec extends ContactGebSpec {
 	  		g.delete()
 	}
 	
-	 def "'send Message' link should not displayed for invalid email address"() {
+	def "'send Message' link should not displayed for invalid email address"() {
 		when:
 			to AliceDetailsPage
 			frmDetails.primaryMobile = ''

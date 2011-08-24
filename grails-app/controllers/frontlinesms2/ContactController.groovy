@@ -67,7 +67,7 @@ class ContactController {
 				def version = params.version.toLong()
 				if (contactInstance.version > version) {
 					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-					render(view: "edit", model: [contactInstance: contactInstance])
+					render(view: "show", model: [contactInstance: contactInstance])
 					return
 				}
 			}
@@ -200,16 +200,17 @@ class ContactController {
 		// Check for errors in groupsToAdd and groupsToRemove
 		def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
 		def groupsToRemove = params.groupsToRemove.tokenize(',')
+		
 		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
 		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
-		} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-			groupsToAdd.each() {
-				contactInstance.addToGroups(Group.get(it))
+		} else if (contactInstance.validate() && !contactInstance.hasErrors()) {
+			groupsToAdd.each() { id ->
+				contactInstance.addToGroups(Group.get(id))
 			}
-			groupsToRemove.each() {
-				contactInstance.removeFromGroups(Group.get(it))
+			groupsToRemove.each() { id ->
+				contactInstance.removeFromGroups(Group.get(id))
 			}
 
 			fieldsToAdd.each() { name ->
@@ -230,11 +231,12 @@ class ContactController {
 				if(toRemove)
 					toRemove.delete(failOnError: true, flush:true)
 			}
-
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-			def redirectParams = [contactId:contactInstance.id]
-			if(params.groupId) redirectParams << [groupId: params.groupId]
-			return
+			
+			if(contactInstance.save(flush:true)) {
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+				def redirectParams = [contactId:contactInstance.id]
+				if(params.groupId) redirectParams << [groupId: params.groupId]
+			}
 		}
 	}
 }

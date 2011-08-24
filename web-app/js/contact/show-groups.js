@@ -43,6 +43,7 @@ function removeGroupClickAction() {
 		var groupList = me.parent();
 		groupList.remove();
 		if($('#group-list li').children('input').length < 1) {
+			alert("Showing no-groups object");
 			$('#no-groups').show();
 		}
 		
