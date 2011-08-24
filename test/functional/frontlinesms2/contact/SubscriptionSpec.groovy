@@ -141,11 +141,13 @@ class SubscriptionSpec extends GroupGebSpec  {
 			$('.error-panel').text().contains("please enter all the details")
 	}
 
-
 	private def goToManageSubscriptions() {
 		go "/frontlinesms2/message"
-		$("#manage-subscription a").click()
-		waitFor { $('div#tabs-1').displayed}
+		$("#create-activity a").click()
+		waitFor {$('#tabs-1').displayed}
+		$("input", name: "activity").value("subscription")
+		$("#done").click()
+		waitFor {$("#ui-dialog-title-modalBox").text() == "Manage Subscription"}
 	}
 
 	private def inputKeywords(keyName, keyValue) {
