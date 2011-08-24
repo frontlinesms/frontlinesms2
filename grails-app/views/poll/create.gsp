@@ -25,15 +25,35 @@
 <script>
 	function initializePoll() {
 		highlightPollResponses();
-				
+
+		$("#tabs-1").contentWidget({
+			validate: function() {
+				if($("input[name='poll-type']:checked").val() == "standard") {
+					$('#tabs').tabs("disable",1);
+					$("#tabs").tabs("select", 2);
+					return false;
+				}
+				$('#tabs').tabs("enable",1);
+				return true
+			}
+		});
+
+		$("#tabs-3").contentWidget({
+			validate: function() {
+				var isValid = isGroupChecked('auto-reply') ? !isElementEmpty('.check-bound-text-area') : true;
+				if (isValid && isGroupChecked("collect-responses")) {
+					$("#tabs").tabs("select", 4);
+				}
+				else {
+					$("#tabs").tabs("select", 3);
+				}
+				return false;
+			}
+		});
+
 		$("#tabs").bind("tabsshow", function(event, ui) {
-			if(ui.index == 1 && $("input[name='poll-type']:checked").val() == "standard")
-				$("#tabs").tabs("select", ui.index+1);
-			if(ui.index == 3 && $("#collect-responses").is(':checked'))
-				$("#tabs").tabs("select", ui.index+1);
 			updateConfirmationMessage();
 		});
-		$(".poll-responses-tab .next").addClass('disabled');
 	}
 
 	function updateConfirmationMessage() {
@@ -47,19 +67,6 @@
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val())
 	}
 
-	function validate() {
-		return isGroupChecked('auto-reply') ? !isElementEmpty('.check-bound-text-area') : true;
-	}
-
-	function skipTabBy(numberOfTabs, condition) {
-		if (condition) moveToTabBy(2)
-		else moveToTabBy(1)
-	}
-
-	function nextTabToMove() {
-		var selectedElements = getSelectedGroupElements('poll-type');
-		skipTabBy(2, selectedElements.size() > 0 && selectedElements[0].value == 'standard');
-	}
 
 	function highlightPollResponses() {
 		$(".choices").each(function() {

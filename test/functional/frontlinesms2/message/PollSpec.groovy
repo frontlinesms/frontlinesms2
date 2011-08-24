@@ -95,7 +95,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#nextPage").click()
 			waitFor { $('#tabs-5 ').displayed }
 		then:
-			 $('#tabs-5 ').displayed
+			$("#tabs li")[1].hasClass("ui-state-disabled")
+			$("#tabs li")[3].hasClass("ui-state-disabled")
+			$('#tabs-5 ').displayed
 	}
 
 
