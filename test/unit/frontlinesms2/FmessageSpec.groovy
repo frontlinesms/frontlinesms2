@@ -2,6 +2,7 @@ package frontlinesms2
 
 import spock.lang.*
 import grails.plugin.spock.*
+import frontlinesms2.enums.MessageStatus
 
 class FmessageSpec extends UnitSpec {
 	def 'check that READ flag cannot be null'() {
@@ -98,6 +99,26 @@ class FmessageSpec extends UnitSpec {
 			message.getRecipientDisplayName() == "John"
 			message1.getRecipientDisplayName() == "dst1"
 
+	}
+
+	def "should return true if there are failed messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			Fmessage.metaClass.'static'.getPendingMessages = {params -> [new Fmessage(status: MessageStatus.SEND_FAILED), new Fmessage(status: MessageStatus.SEND_PENDING)]}
+		when:
+			def result = Fmessage.hasUndeliveredMessages()
+		then:
+			result
+	}
+
+	def "should return false if there are no failed messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			Fmessage.metaClass.'static'.getPendingMessages = {params -> [new Fmessage(status: MessageStatus.SEND_PENDING), new Fmessage(status: MessageStatus.SEND_PENDING)]}
+		when:
+			def result = Fmessage.hasUndeliveredMessages()
+		then:
+			!result
 	}
 }
 
