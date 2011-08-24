@@ -73,6 +73,9 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor{$("#tabs-4").displayed }
 			$("#confirmation").click()
 		then:
+			$("a", text: "Inbox").click()
+			waitFor{title == "Inbox"}
+			$("a", text: "Pending").hasClass("send-failed")
 			$("a", text: "Pending").click()
 			waitFor{title == "Pending"}
 			$("#message-list tbody tr").size() == 1

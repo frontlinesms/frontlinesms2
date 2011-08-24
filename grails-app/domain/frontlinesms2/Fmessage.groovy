@@ -261,6 +261,10 @@ class Fmessage {
 		def deletedCount = Fmessage.countDeletedMessages()
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
+
+	static def hasUndeliveredMessages() {
+		Fmessage.getPendingMessages([:]).any {it.status == MessageStatus.SEND_FAILED}
+	}
 	
 	static def getMessageOwners(activity) {
 		activity instanceof Poll ? activity.responses : [activity]
