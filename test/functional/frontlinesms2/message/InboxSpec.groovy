@@ -222,21 +222,19 @@ class InboxSpec extends MessageGebSpec {
 	}
 
 	
-  //NOTE: Need to find a better way to make this test work
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
 			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
 			new Folder(name: "my-folder").save(flush: true)
 		when:
 			go "message/inbox"
+			waitFor {$("#move-actions").displayed}
+			$("#move-actions").getJquery().val(Folder.findByName('my-folder').id.toString());
+			$("#move-actions").getJquery().trigger("change")
+			waitFor {$("#no-messages").displayed}
 		then:
-			waitFor{$("#message-actions").displayed}
-			$('#message-actions').value("${Folder.findByName('my-folder').id}")
-			waitFor {$("#messages").text().contains("No messages")}
+			$("#no-messages").text().contains("No messages")
 			$("#messages-submenu .selected").text().contains('Inbox')
-		cleanup:
-			Fmessage.list()*.refresh()
-			Folder.findByName('my-folder').refresh().delete(flush: true)
 	}
 
 

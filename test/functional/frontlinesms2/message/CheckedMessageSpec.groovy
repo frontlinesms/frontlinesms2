@@ -104,11 +104,13 @@ class CheckedMessageSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			waitFor {title == "Inbox"}
 			$("#message")[0].click()
+			sleep(1000)
 			waitFor { $("#multiple-messages").displayed }
 			def btnArchive = $('#multiple-messages #btn_archive_all')
 			btnArchive.click()
-			sleep 1000
+			sleep 2000
 			waitFor {$("div#no-messages").displayed}
 		then:
 			at MessagesPage
