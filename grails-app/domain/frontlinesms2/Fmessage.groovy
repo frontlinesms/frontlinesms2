@@ -117,19 +117,26 @@ class Fmessage {
 				}
 			}
 
-			searchMessages {searchString, groupInstance, messageOwner -> 
-				def groupMembers = groupInstance?.getAddresses()
-				if(searchString)
-					ilike("text", "%${searchString}%")
-				and{
-					if(groupInstance) {
-						'in'("src",	 groupMembers)
+			searchMessages {searchString, contactInstance, groupInstance, messageOwner -> 
+				def groupMembersNumbers = groupInstance?.getAddresses()
+					and {
+						if(searchString) {
+							'ilike'("text", "%${searchString}%")
+						}
+						if(contactInstance) {
+							'ilike'("contactName", "%${contactInstance}%")
+						}
+						if(groupInstance) {
+							or {
+								'in'("src",	groupMembersNumbers)
+								'in'("dst", groupMembersNumbers)
+							}
+						}
+						if(messageOwner) {
+							'in'("messageOwner", messageOwner)
+						}
+						eq('deleted', false)
 					}
-					if(messageOwner) {
-						'in'("messageOwner", messageOwner)
-					}
-					eq('deleted', false)
-				}
 			}
 			
 			filterMessages { groupInstance, messageOwner, startDate, endDate -> 
@@ -259,15 +266,14 @@ class Fmessage {
 		activity instanceof Poll ? activity.responses : [activity]
 	}
 	
-	static def search(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
-		if(!searchString) return []
-		def searchResults = Fmessage.searchMessages(searchString, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
-		searchResults
+	static def search(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
+		if(!searchString && !contactInstance && !groupInstance) return []
+		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 	}
 
-	static def countAllSearchMessages(String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
-		if(!searchString) return 0
-		return Fmessage.searchMessages(searchString, groupInstance, messageOwners).count()
+	static def countAllSearchMessages(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
+		if(!searchString && !contactInstance && !groupInstance) return 0
+		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwners).count()
 	}
 
 	static def getMessageStats( Group groupInstance=null, Collection<MessageOwner> messageOwner=[], Date startDate = new Date(Long.MIN_VALUE), Date endDate = new Date(Long.MAX_VALUE)) {

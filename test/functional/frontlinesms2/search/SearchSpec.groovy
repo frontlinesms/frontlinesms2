@@ -46,21 +46,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.searchString == 'bacon'
 	}
 	
-	def "selected group is still selected on form submit and consequent page reload"() {
-		given:
-			to SearchPage
-			def g = Group.findByName("Friends")
-			println "Grou: ${g.id}"
-			println "Trying to set it for: ${searchFrm.groupId}"
-			searchFrm.groupId = "${g.id}"
-			println "Value set successfully"
-		when:
-			searchBtn.click()
-			println "the class is ${searchFrm.groupId.value.class}"
-		then:
-			searchFrm.groupId == ["${g.id}"]
-	}
-	
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
 			to SearchPage
