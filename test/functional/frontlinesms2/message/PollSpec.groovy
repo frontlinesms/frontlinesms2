@@ -137,7 +137,13 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("label[for='choiceA']").hasClass('bold') == true
 			waitFor {$('#tabs-3').displayed}
 		when:
-            $("textarea", name:'autoReplyText').value("Thanks for participating...")
+			assert $("#tabs-3 textarea").@disabled
+			$("#send_auto_reply").jquery.trigger('click')
+			$("#tabs-3 textarea", name:'autoReplyText').value("Thanks for participating...")
+			$("#send_auto_reply").jquery.trigger('click')
+			assert $("#tabs-3 textarea").@disabled
+			$("#send_auto_reply").jquery.trigger('click')
+			$("#tabs-3 textarea", name:'autoReplyText').value("Thanks for participating...")
 			$("#nextPage").click()
 		then:
 			waitFor {$('#tabs-4').displayed}
