@@ -136,7 +136,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$('#tabs-3').displayed
 			$("#tabs li")[4].click()
-			$("#auto-reply-read-only-text").text() == "None"
+			waitFor { $('#tabs-5').displayed }
+			$("#tabs-5 #auto-reply-read-only-text").text() == "None"
 			
 	}
 
