@@ -38,11 +38,10 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
         then:
 			$("#tabs li")[2].click()
 		when:
-			waitFor{ $("#tabs-3").displayed}
-		then:
 			$("#done").click()
 			sleep(1000)
-		    $("#tabs-3").displayed
+		then:
+			$("#tabs-3").displayed
 		when:
 			$("#tabs li")[3].click()
 			sleep(1000)
