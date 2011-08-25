@@ -19,6 +19,24 @@ function messageResponseClick(messageType) {
 	$("#reply-dropdown").val("na");
 }
 
+
+
+function launchMediumPopup(title, html, btnFinishedText) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#modalBox").dialog(
+		{
+			modal: true,
+			width: 675,
+			height: 400,
+			title: title,
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
+			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
+			close: function() { $(this).remove(); }
+		}
+	);
+}
+
+
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
 
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
@@ -38,10 +56,9 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 			$(this).remove();
 		}
 	});
-	$('#tabs').tabs({select: function(event, ui) {
-		changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
-	}});
+	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
+	initializeTabContentWidgets()
 	onLoad && onLoad();
 
 }
@@ -51,21 +68,41 @@ function cancel() {
 }
 
 function prevButton() {
-	$("#tabs").tabs('select', getCurrentTab() - 1);
+		for (var i = 1; i <= getCurrentTab(); i++) {
+			var prevTabToSelect = getCurrentTab() - i;
+			if ($.inArray(prevTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+				$("#tabs").tabs('select', prevTabToSelect);
+				break;
+			}
+		}
 }
 
 function nextButton() {
 	if(validateCurrentTab()) {
-		$("#tabs").tabs('select', getCurrentTab() + 1);
+		for (var i = 1; i <= getTabLength(); i++) {
+			var nextTabToSelect = getCurrentTab() + i;
+			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+				$("#tabs").tabs('select', nextTabToSelect);
+				break;
+			}
+		}
 	}
 }
 
 function done() {
-	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universall
-	if(validateCurrentTab()) {
-		$(this).find("form").submit();
+	if(validateWholeTab() && onDoneOfCurrentTab()) {
+		$(this).find("form").submit();                  
 		$(this).remove();
 	}
+}
+
+function validateWholeTab() {
+	var isValid = true
+	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
+		isValid = isValid && $("#" + value.id).contentWidget('validate')
+
+	});
+  	return isValid
 }
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
@@ -113,3 +150,30 @@ function validateCurrentTab() {
 	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
 	return currentTab.contentWidget("validate")
 }
+
+function onDoneOfCurrentTab() {
+	var selected = $("#tabs").tabs( "option", "selected" );
+	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
+	return currentTab.contentWidget("onDone")
+}
+
+function movingForward(nextIndex, currentIndex) {
+	return nextIndex > currentIndex
+}
+
+function onTabSelect(withConfirmationScreen) {
+	$('#tabs').tabs({select: function(event, ui) {
+		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
+		if (isValid) {
+			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
+		}
+		return isValid
+	}});
+}
+
+function initializeTabContentWidgets() {
+	for(i=0; i <= getTabLength(); i++) {
+		$("#tabs-" + (i + 1)).contentWidget()
+	}
+}
+

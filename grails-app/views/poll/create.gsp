@@ -2,7 +2,7 @@
 <div id="tabs" class="vertical-tabs">
 		<ol>
 			<li><a href="#tabs-1">Enter Question</a></li>
-			<li><a href="#tabs-2">Answer list</a></li>
+			<li><a href="#tabs-2">Response list</a></li>
 			<li><a href="#tabs-3">Automatic reply</a></li>
 			<li><a href="#tabs-4">Select recipients</a></li>
 			<li><a href="#tabs-5">Confirm</a></li>
@@ -28,24 +28,17 @@
 
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if($("input[name='poll-type']:checked").val() == "standard") {
-					$('#tabs').tabs("disable",1);
-					$("#tabs").tabs("select", 2);
-					return false;
-				}
-				$('#tabs').tabs("enable",1);
+				if ($("input[name='poll-type']:checked").val() == "standard")
+					$('#tabs').tabs("disable", 1);
+				else
+					$('#tabs').tabs("enable", 1);
 				return true
 			}
 		});
 
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				var isValid = isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
-				if (isValid && isGroupChecked("collect-responses")) {
-					$("#tabs").tabs("select", 4);
-					return false;
-				}
-				return isValid;
+				return isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
 			}
 		});
 
