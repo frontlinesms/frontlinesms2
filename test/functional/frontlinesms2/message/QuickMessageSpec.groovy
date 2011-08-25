@@ -31,6 +31,25 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$('div#tabs-3').displayed
 	}
 
+    def "should not send message when no recipients are selected"() {
+		when:
+			to MessagesPage
+		    loadFirstTab()
+        then:
+			$("#tabs a", text: "Confirm").click()
+			waitFor {$('div#tabs-3').displayed}
+		when:
+			$("#done").click()
+			sleep(1000)
+		then:
+			$("#tabs-3").displayed
+		when:
+			$(".confirm-tab").click()
+			sleep(1000)
+		then:
+			$("#tabs-3").displayed
+	}
+
     def "should select the previous tab on click of back"() {
 		when:
 			to MessagesPage
@@ -176,7 +195,6 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			$("#ui-dialog-title-modalBox").text() == "Announcement"
 	}
-
 
 	private def createData() {
 		def group = new Group(name: "group1").save(flush: true)

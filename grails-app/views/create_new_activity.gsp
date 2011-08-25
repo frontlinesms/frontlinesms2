@@ -41,8 +41,8 @@
 
 <script>
 	function addValidations() {
-		$("#modalBox").contentWidget({
-			validate: function() {
+		$("#tabs-1").contentWidget({
+			onDone: function() {
 				var selectedElement = $("input[name='activity']:checked")[0]
 				if (selectedElement) {
 					$("#modalBox").dialog("close");
