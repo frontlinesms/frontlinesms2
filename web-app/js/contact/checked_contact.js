@@ -94,7 +94,6 @@ function validateDelete() {
 function loadGroupList() {
 	var contactIds = $('input:hidden[name=contactIds]').val();
 	$.get(url_root + 'contact/multipleContactGroupList', { 'contactIds': contactIds}, function(data) {
-		$('#contact-title').empty();
 		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
 		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
 		$("#multi-group-dropdown").change(addGroupClickAction);
