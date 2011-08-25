@@ -24,7 +24,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			def messages = $('#messages tbody tr')
 		then:
 			messages.size() == 2
-		    messages.collect { it.find("td:nth-child(3) a").text()}.containsAll(["src1", "src2"])
+		    messages.collect { it.find("td:nth-child(3) a").text()}.containsAll(["dst1", "dst2"])
 	}
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
@@ -56,7 +56,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['src1', 'src2'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
 	}
 	
 	
