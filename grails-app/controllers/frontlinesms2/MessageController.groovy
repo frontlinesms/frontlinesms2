@@ -129,7 +129,8 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			if(params.messageSection == 'search') redirect(controller: params.messageSection)
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
 	
@@ -145,7 +146,8 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			if(params.messageSection == 'search') redirect(controller: params.messageSection)
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
 
@@ -158,7 +160,8 @@ class MessageController {
 		if (request.xhr) {
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			if(params.messageSection == 'search') redirect(controller: params.messageSection)
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
 	
@@ -174,7 +177,8 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			if(params.messageSection == 'search') redirect(controller: params.messageSection)
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
 
