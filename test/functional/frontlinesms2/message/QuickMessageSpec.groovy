@@ -36,14 +36,15 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 		    loadFirstTab()
         then:
-			$("#tabs li")[2].click()
+			$("#tabs a", text: "Confirm").click()
+			waitFor {$('div#tabs-3').displayed}
 		when:
 			$("#done").click()
 			sleep(1000)
 		then:
 			$("#tabs-3").displayed
 		when:
-			$("#tabs li")[3].click()
+			$(".confirm-tab").click()
 			sleep(1000)
 		then:
 			$("#tabs-3").displayed
