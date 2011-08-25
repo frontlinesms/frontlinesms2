@@ -114,8 +114,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			sleep 1000
 			$("#contact")[0].click()
 			sleep 1000
-			def btnRemoveFromGroup = $("#multi-group-list").find('a').first()
-			assert btnRemoveFromGroup != null && !(btnRemoveFromGroup instanceof EmptyNavigator)
+			$("#multi-group-list").find('a').first().click()
 			$("#btn_save_all").click()
 			bob.refresh()
 			alice.refresh()
