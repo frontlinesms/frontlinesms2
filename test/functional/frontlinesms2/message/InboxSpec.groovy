@@ -231,6 +231,7 @@ class InboxSpec extends MessageGebSpec {
 			waitFor {$("#move-actions").displayed}
 			$("#move-actions").getJquery().val(Folder.findByName('my-folder').id.toString());
 			$("#move-actions").getJquery().trigger("change")
+			sleep 1000
 			waitFor {$("#no-messages").displayed}
 		then:
 			$("#no-messages").text().contains("No messages")
