@@ -18,7 +18,7 @@ function cancel() {
 }
 
 function doneAction() {
-	if ($("#modalBox").contentWidget("validate")) {
+	if ($("#modalBox").contentWidget("onDone")) {
 		$(this).find("form").submit(); // TODO add validation. Should be able to add validate() function to individual popup gsp's so that this function works universally
 		$(this).remove();
 	}
