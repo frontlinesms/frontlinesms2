@@ -7,8 +7,12 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
 		<g:javascript src="application.js"/>
 		<g:javascript src="message/actions.js"/>
+		<g:javascript src="search/moreOptions.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 	</head>

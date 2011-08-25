@@ -229,6 +229,8 @@ body {
 				
 				input, select { width: 170px; }
 				
+				h2 { display: inline; }
+				
 			}
 				
 			.search {
@@ -524,6 +526,41 @@ body {
 					#message-stats {
 						border-top: 1px solid #B5C6CD;
 						padding: 17px;
+						
+						#message-search {
+							position: relative;
+							left: 120;
+							padding-top: 10px;
+							padding-bottom: 10px;
+							
+							
+							a:link, a:visited {
+								background-image:url('../images/buttons/button_default.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+							
+							a:hover {
+								background-image:url('../images/buttons/button_hover.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+							
+							a:active {
+								background-image:url('../images/buttons/button_pressed.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+						}
 						
 						img, p { 
 							display:inline;

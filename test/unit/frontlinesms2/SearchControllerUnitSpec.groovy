@@ -7,7 +7,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.static.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
+			Fmessage.metaClass.static.search = {String searchString=null, String contactSearchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
 				assert max == 10
 				assert offset == 0
 				searchResults
@@ -28,7 +28,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.'static'.search = {String searchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
+			Fmessage.metaClass.'static'.search = {String searchString=null,  String contactSearchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
 				assert max == 5
 				assert offset == 7
 				searchResults
