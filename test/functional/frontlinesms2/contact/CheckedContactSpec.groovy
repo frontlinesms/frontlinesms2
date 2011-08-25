@@ -18,7 +18,9 @@ class CheckedContactSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 			$("#contact")[1].click()
+			sleep 1000
 			$("#contact")[0].click()
+			sleep 1000
 		then:
 			$("#contact")[0].@checked == "true"
 			$("#contact")[1].@checked == "true"
