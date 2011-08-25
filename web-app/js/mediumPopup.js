@@ -39,7 +39,11 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 		}
 	});
 	$('#tabs').tabs({select: function(event, ui) {
-		changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
+		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
+		if (isValid) {
+			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
+		}
+		return isValid
 	}});
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	onLoad && onLoad();
@@ -51,18 +55,30 @@ function cancel() {
 }
 
 function prevButton() {
-	$("#tabs").tabs('select', getCurrentTab() - 1);
+		for (var i = 1; i <= getCurrentTab(); i++) {
+			var prevTabToSelect = getCurrentTab() - i;
+			if ($.inArray(prevTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+				$("#tabs").tabs('select', prevTabToSelect);
+				break;
+			}
+		}
 }
 
 function nextButton() {
 	if(validateCurrentTab()) {
-		$("#tabs").tabs('select', getCurrentTab() + 1);
+		for (var i = 1; i <= getTabLength(); i++) {
+			var nextTabToSelect = getCurrentTab() + i;
+			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+				$("#tabs").tabs('select', nextTabToSelect);
+				break;
+			}
+		}
 	}
 }
 
 function done() {
 	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universall
-	if(validateCurrentTab()) {
+	if(onDoneOfCurrentTab()) {
 		$(this).find("form").submit();
 		$(this).remove();
 	}
@@ -112,4 +128,14 @@ function validateCurrentTab() {
 	var selected = $("#tabs").tabs( "option", "selected" );
 	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
 	return currentTab.contentWidget("validate")
+}
+
+function onDoneOfCurrentTab() {
+	var selected = $("#tabs").tabs( "option", "selected" );
+	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
+	return currentTab.contentWidget("onDone")
+}
+
+function movingForward(nextIndex, currentIndex) {
+	return nextIndex > currentIndex
 }

@@ -30,6 +30,7 @@ var remoteHash = {
 			url: url_root + 'group/list',
 			success: function(data) {
 				launchMediumWizard('Manage Subscription', data, 'Create');
+				addTabValidations();
 			}})
 	},
 
@@ -113,5 +114,11 @@ $.widget("ui.contentWidget", {
 	validate: function() {
 		return this.options['validate'].call();			
 	},
-	options: {validate: function() {return true;}}
+
+	onDone: function() {
+		return this.options['onDone'].call();			
+	},
+
+	options: {validate: function() {return true;} ,
+	onDone: function() {return true;}}
 });
