@@ -43,6 +43,11 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#done").click()
 			sleep(1000)
 		    $("#tabs-3").displayed
+		when:
+			$("#tabs li")[3].click()
+			sleep(1000)
+		then:
+			$("#tabs-3").displayed
 	}
 
     def "should select the previous tab on click of back"() {

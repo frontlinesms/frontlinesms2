@@ -4,11 +4,12 @@
 	<div class="error-panel hide"></div>
 	<ol>
 		<g:each in="['tabs-1' : 'Enter Message', 'tabs-2' : 'Select Recipients',
-						'tabs-3' : 'Confirm', 'tabs-4': '']" var='entry'>
+						'tabs-3' : 'Confirm']" var='entry'>
 			<g:if test="${configureTabs.contains(entry.key)}">
 				<li><a href="#${entry.key}">${entry.value}</a></li>
 			</g:if>
 		</g:each>
+		<li class="confirm-tab"><a href="#tabs-4"></a></li>
 	</ol>
 
 	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="goToNextTab()">
@@ -35,6 +36,8 @@
 
 <script>
 	function addTabValidations() {
+		$("#tabs").tabs("disable", 3);
+
 		$("#tabs-2").contentWidget({
 			validate: function() {
 				var isValid = isGroupChecked("groups") || isGroupChecked("addresses")
@@ -57,6 +60,7 @@
 
 
 	function goToNextTab() {
+		$("#tabs").tabs("enable", 3);
 		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </script>
