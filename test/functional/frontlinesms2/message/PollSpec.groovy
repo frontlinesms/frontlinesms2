@@ -98,6 +98,16 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#tabs li")[1].hasClass("ui-state-disabled")
 			$("#tabs li")[3].hasClass("ui-state-disabled")
 			$('#tabs-5 ').displayed
+		when:
+			$("#prevPage").click()
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+		when:
+			$("#prevPage").click()
+			waitFor { $('#tabs-1 ').displayed }
+		then:
+			$("#tabs-1").displayed
 	}
 
 
@@ -132,13 +142,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#send_auto_reply").jquery.trigger('click')
 			$("#nextPage").click()
 			sleep(500)
+			$('#tabs-3').displayed
+			$("#tabs li")[4].click()
+			waitFor { $('#tabs-3').displayed }
 		then:
 			$('#tabs-3').displayed
-//			FIXME: Fails for an unknown reason in the build
-//			$("#tabs li")[4].click()
-//			waitFor { $('#tabs-5').displayed }
-//			$("#tabs-5 #auto-reply-read-only-text").text() == "None"
-
 	}
 
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
