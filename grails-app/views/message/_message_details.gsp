@@ -30,13 +30,13 @@
 						</g:if>
 						<g:if test="${!params['archived'] && messageSection != 'poll'}">
 							<li class='static_btn'>
-								<g:link elementId="btn_archive_all" action="archiveAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
+								<g:link elementId="btn_archive_all" controller='message' action="archiveAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
 									Archive All
 								</g:link>
 							</li>
 						</g:if>
 						<li class='static_btn'>
-							<g:link elementId="btn_delete_all" action="deleteAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
+							<g:link elementId="btn_delete_all" controller='message' action="deleteAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
 								Delete All
 							</g:link>
 						</li>
