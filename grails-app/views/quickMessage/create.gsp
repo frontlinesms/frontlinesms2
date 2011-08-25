@@ -48,7 +48,7 @@
 		});
 
 		$("#tabs-3").contentWidget({
-			validate: function() {
+			onDone: function() {
 				$("#send-quick-message").submit()
 				return false;
 			}
