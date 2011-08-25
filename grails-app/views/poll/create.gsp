@@ -28,24 +28,17 @@
 
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if($("input[name='poll-type']:checked").val() == "standard") {
-					$('#tabs').tabs("disable",1);
-					$("#tabs").tabs("select", 2);
-					return false;
-				}
-				$('#tabs').tabs("enable",1);
+				if ($("input[name='poll-type']:checked").val() == "standard")
+					$('#tabs').tabs("disable", 1);
+				else
+					$('#tabs').tabs("enable", 1);
 				return true
 			}
 		});
 
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				var isValid = isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
-				if (isValid && isGroupChecked("collect-responses")) {
-					$("#tabs").tabs("select", 4);
-					return false;
-				}
-				return isValid;
+				return isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
 			}
 		});
 
