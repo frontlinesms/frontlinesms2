@@ -1,6 +1,6 @@
-class SmslibOutgoingRoute {
+class OutgoingFmessageRoute {
 	def configure = {
-		from('seda:smslib-outgoing-fmessages')
+		from('seda:outgoing-fmessages')
 				.beanRef('messageStorageService', 'process')
 				.dynamicRouter(bean('fmessageRouterService', 'slip'))
 	}
