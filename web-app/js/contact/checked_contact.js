@@ -2,17 +2,18 @@ function updateContactDetails(id){
 	highlightRow(id);
 	removeSelectedContact();
 	var count = countCheckedContacts();
-	
 	//update checked contact list
 	$('input:hidden[name=contactIds]').val(getCheckedContacts());
 	
 	if(count == 1) {
 		loadContact($(':checkbox[checked="true"]').val());
 	}
+	
 	if(count > 1){
 		changeContactCount(count);
 		loadGroupList();
 	}
+	
 }
 
 function removeSelectedContact() {
@@ -25,6 +26,7 @@ function loadContact(id) {
 		if($('div.single-contact').is(':hidden')) {
 			showContactDetails();
 		}
+		$('#contact-title').replaceWith($(data).find('#contact-title'));
 		$('#contact_details').replaceWith($(data).find('#contact_details'));
 		$("#group-list li a.remove-group").click(removeGroupClickAction);
 		$("#group-dropdown").change(addGroupClickAction);
@@ -92,6 +94,7 @@ function validateDelete() {
 function loadGroupList() {
 	var contactIds = $('input:hidden[name=contactIds]').val();
 	$.get(url_root + 'contact/multipleContactGroupList', { 'contactIds': contactIds}, function(data) {
+		$('#contact-title').empty();
 		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
 		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
 		$("#multi-group-dropdown").change(addGroupClickAction);
