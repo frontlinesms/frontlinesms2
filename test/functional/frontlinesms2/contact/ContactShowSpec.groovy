@@ -124,7 +124,7 @@ class ContactShowSpec extends ContactGebSpec {
 			$("#nextPage").click()
 			waitFor {$("#done").displayed}
         	$("#done").click()
-			waitFor {$("#confirmation").displayed}
+			sleep 2000
 		then:
 			$("#confirm").click()
 		when:
