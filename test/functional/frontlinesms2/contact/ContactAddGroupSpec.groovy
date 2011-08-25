@@ -13,10 +13,12 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		given:
 			def bob = Contact.findByName("Bob")
+			println "no of groups is ${Group.count()}"
 		when:
 			go "contact/show/${bob.id}"
 		then:
-			def memberOf = $("#group-list li").children('input').*value().sort()
+			def memberOf = $("#group-list li").children('input')*.value().sort()
+			println "Group members are " + $("#group-list input")*.value()
 			memberOf == ['Test', 'three']
 	}
 
@@ -31,7 +33,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			nonMemberOf == ['Add to group...', 'Others', 'four']
 			
 		when:
-			$('#group-dropdown').value("${Group.findByName('Others').id}")
+			$("#contact-details").find('select', name:'group-dropdown').value("${Group.findByName('Others').id}")
 			def updatedMemberOf = $("#group-list").children().children('input').collect() { it.value() }.sort()
 		then:
 			updatedMemberOf == ['Others', 'Test', 'three']
