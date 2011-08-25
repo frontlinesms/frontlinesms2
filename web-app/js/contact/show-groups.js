@@ -10,24 +10,19 @@ function addGroupClickAction() {
 	if(me.hasClass('not-group')) return;
 	var groupName = me.text();
 	var groupId = me.attr('value');
+	var groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list')
+	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 
 	var groupListItem = $('<li><input type="text" readonly="readonly" value="' + groupName + '" />');
 	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '"><img src="' + url_root + 'images/icons/remove.gif" /></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
 	
-	if($('.single-contact').is(':visible')) {
-		$('#group-list').append(groupListItem);
-		me.remove();
-		$("#no-groups").hide();
-		addGroupId(groupId);
-		
-	} else {
-		$('#multi-group-list').append(groupListItem);
-		me.remove();
-		$("#multi-no-groups").hide();
-		addGroupId(groupId);
-	}
+	groupList.append(groupListItem);
+	me.remove();
+	noGroup.hide();
+	addGroupId(groupId);
+
 	// addIdToGroupHiddenField(groupId);
 }
 

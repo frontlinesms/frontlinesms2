@@ -169,7 +169,7 @@ class ContactController {
 		}
 		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
 		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
-		render(view: "_group_dropdown", model: [sharedGroupInstanceList: sharedGroupInstanceList,
+		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
 			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
 	}
 	

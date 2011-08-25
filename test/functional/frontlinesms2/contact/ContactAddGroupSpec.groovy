@@ -18,7 +18,6 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			go "contact/show/${bob.id}"
 		then:
 			def memberOf = $("#group-list li").children('input')*.value().sort()
-			println "Group members are " + $("#group-list input")*.value()
 			memberOf == ['Test', 'three']
 	}
 
@@ -88,15 +87,41 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 			def alice = Contact.findByName('Alice')
 		when:
-			go "contact/show/${bob.id}"
-			$("#contact")[0].click()
+			go 'contact'
 			$("#contact")[1].click()
-			def groupSelecter = $("#contact-details").find('select', name:'multi-group-dropdown')
-			groupSelecter.find(name: 'multi-group-dropdown').value('Others')
-			$("#multiple-contact .save").click()
+			sleep 1000
+			$("#contact")[0].click()
+			sleep 1000
+			def groupSelecter = $('#multi-group-dropdown')
+			groupSelecter.value("${Group.findByName('Others').id}")			
+			$("#btn_save_all").click()
 		then:
-			at ContactListPage
-			Group.findByName('Test').getMembers().containsAll([bob, alice])
+			Group.findByName('Others').getMembers().containsAll([bob, alice])
+	}
+	
+	def 'clicking save removes multiple contacts from selected groups'() {
+		given:
+			def bob = Contact.findByName("Bob")
+			def alice = Contact.findByName('Alice')
+			def otherGroup = Group.findByName('Others')
+			bob.addToGroups(otherGroup,true)
+			alice.addToGroups(otherGroup,true)
+			assert bob.isMemberOf(otherGroup)
+			assert alice.isMemberOf(otherGroup)
+		when:
+			go 'contact'
+			$("#contact")[1].click()
+			sleep 1000
+			$("#contact")[0].click()
+			sleep 1000
+			def btnRemoveFromGroup = $("#multi-group-list").find('a').first()
+			assert btnRemoveFromGroup != null && !(btnRemoveFromGroup instanceof EmptyNavigator)
+			$("#btn_save_all").click()
+			bob.refresh()
+			alice.refresh()
+			otherGroup.refresh()
+		then:
+			otherGroup.getMembers() == []
 	}
 	
 	def 'clicking save removes contact from newly removed groups'() {
