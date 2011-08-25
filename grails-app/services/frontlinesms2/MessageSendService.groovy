@@ -9,7 +9,7 @@ class MessageSendService {
 		m.status = MessageStatus.SEND_PENDING
 		def headers = [:]
 		if(c) headers.fconnection = c.id
-		sendMessageAndHeaders('seda:smslib-outgoing-fmessages', m, headers)
+		sendMessageAndHeaders('seda:outgoing-fmessages', m, headers)
 		println 'should be queued :)'
 	}
 }
