@@ -11,6 +11,7 @@ class ContactControllerSpec extends ControllerSpec {
 			def contact3 = new Contact(name:'Charlie')
 			mockDomain(Contact, [contact1, contact2, contact3])
 			mockDomain(Group)
+			mockDomain(GroupMembership)
 			mockDomain(CustomField)
 			registerMetaClass(CustomField)
 			CustomField.metaClass.'static'.getAllUniquelyNamed = {-> new CustomField()}

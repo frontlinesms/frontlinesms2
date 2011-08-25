@@ -17,9 +17,14 @@ class MessageControllerSpec extends ControllerSpec {
 		mockParams.starred = false
 	    controller.messageSendService = new MessageSendService()
 	 
-		def sahara = new Group(name: "Sahara", members: [new Contact(primaryMobile: "12345"),new Contact(primaryMobile: "56484")])
-		def thar = new Group(name: "Thar", members: [new Contact(primaryMobile: "12121"), new Contact(primaryMobile: "22222")])
+		def sahara = new Group(name: "Sahara")
+		def thar = new Group(name: "Thar")
 		mockDomain Group, [sahara, thar]
+		mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "12345")),
+			new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "56484")),
+			new GroupMembership(group: thar, contact: new Contact(primaryMobile: "12121")),
+			new GroupMembership(group: thar, contact: new Contact(primaryMobile: "22222"))]
+				
 		controller.metaClass.getPaginationCount = {-> return 10}
 	}
 
