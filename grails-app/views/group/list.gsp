@@ -47,5 +47,4 @@
 	function displayError() {
 		$('.error-panel').html('<p> please enter all the details </p>').show();
 	}
-
 </script>
