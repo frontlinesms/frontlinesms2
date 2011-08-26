@@ -29,7 +29,7 @@
 					</div>
 					<div class="content-body">
 						<g:render template="../archive/menu"/>
-						<g:render template="message_list"/>
+						<g:render template="list_items"/>
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">
