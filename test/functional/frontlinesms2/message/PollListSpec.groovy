@@ -120,6 +120,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("a", text:'archived poll').click()
 			waitFor {$("#messages").displayed}
 			$("#message")[0].click()
+			sleep(1000)
 			waitFor {$('#multiple-messages').displayed}
 			def btnDelete = $('#multiple-messages a')[1]
 		then:
