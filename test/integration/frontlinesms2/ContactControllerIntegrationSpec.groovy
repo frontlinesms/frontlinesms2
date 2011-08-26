@@ -48,6 +48,19 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			!Contact.get(c.id).isMemberOf(Group.get(g.id))
 	}
+	
+	def "should move multiple selected contacts to the same group" () {
+		given:
+			def contact1 = new Contact(name: "Test 1").save(failOnError: true)
+			def contact2 = new Contact(name: "Test 2").save(failOnError: true)
+		when:
+			controller.params.contactIds = "${contact1.id}, ${contact2.id}"
+			controller.params.groupsToAdd = ",${g.id},"
+			controller.params.groupsToRemove = ","
+			controller.updateMultipleContacts()
+		then:
+			g.getMembers() == [contact1, contact2]
+	}
 
 	def 'when showing all contacts, the first contact in the list is selected if none is specified'() {
 		given:
@@ -119,5 +132,25 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			!Contact.findByName('Bob')
 			!g.getMembers()
+	}
+	
+	def "should return list of shared groups and non shared groups for multiple contacts" () {
+		given: 
+			def contact1 = new Contact(name: "Lisa").save(failOnError: true)
+			def contact2 = new Contact(name: "Samantha").save(failOnError: true)
+			def group1 = new Group(name: "Test group 1").save(failOnError: true)
+			def group2 = new Group(name: "Test group 2").save(failOnError: true)
+			contact1.addToGroups(group1)
+			contact1.addToGroups(group2)
+			contact1.addToGroups(g)
+			contact2.addToGroups(group1)
+			contact2.addToGroups(group2)
+		when:
+			controller.params.contactIds = "${contact1.id}, ${contact2.id}"
+			controller.multipleContactGroupList()
+			def model = controller.modelAndView.model
+		then:
+			model.sharedGroupInstanceList == [group1, group2]
+			model.nonSharedGroupInstanceList == [g]
 	}
 }

@@ -4,7 +4,8 @@
 	<g:if test="${messageInstanceTotal > 0}">
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
+		<g:hiddenField name="isArchived" value="${params.archived}"/>
+		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 				message(code: 'fmessage.src.label', default: 'To')
 	 			: message(code: 'fmessage.dst.label', default: 'From')}" />
 		<g:if test="${messageSection == 'search'}">
@@ -15,7 +16,7 @@
 		<table id="messages">
 			<thead>
 				<tr>
-					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAll()"/></td>
+					<td><g:checkBox name="message" value="0" checked="false" onclick="checkAll()"/></td>
 					<td />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
 									params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
@@ -42,7 +43,7 @@
 					</td>
 					<td>
 							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-								${m.displayName}
+								${(messageSection == 'sent' || messageSection == 'pending')  ?   m.recipientDisplayName : m.displayName}
 							</g:link>
 					</td>
 					<td>

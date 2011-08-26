@@ -19,6 +19,24 @@ function messageResponseClick(messageType) {
 	$("#reply-dropdown").val("na");
 }
 
+
+
+function launchMediumPopup(title, html, btnFinishedText) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#modalBox").dialog(
+		{
+			modal: true,
+			width: 675,
+			height: 400,
+			title: title,
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
+			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
+			close: function() { $(this).remove(); }
+		}
+	);
+}
+
+
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
 
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
@@ -38,14 +56,9 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 			$(this).remove();
 		}
 	});
-	$('#tabs').tabs({select: function(event, ui) {
-		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
-		if (isValid) {
-			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
-		}
-		return isValid
-	}});
+	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
+	initializeTabContentWidgets()
 	onLoad && onLoad();
 
 }
@@ -77,11 +90,19 @@ function nextButton() {
 }
 
 function done() {
-	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universall
-	if(onDoneOfCurrentTab()) {
-		$(this).find("form").submit();
+	if(validateWholeTab() && onDoneOfCurrentTab()) {
+		$(this).find("form").submit();                  
 		$(this).remove();
 	}
+}
+
+function validateWholeTab() {
+	var isValid = true
+	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
+		isValid = isValid && $("#" + value.id).contentWidget('validate')
+
+	});
+  	return isValid
 }
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
@@ -139,3 +160,20 @@ function onDoneOfCurrentTab() {
 function movingForward(nextIndex, currentIndex) {
 	return nextIndex > currentIndex
 }
+
+function onTabSelect(withConfirmationScreen) {
+	$('#tabs').tabs({select: function(event, ui) {
+		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
+		if (isValid) {
+			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
+		}
+		return isValid
+	}});
+}
+
+function initializeTabContentWidgets() {
+	for(i=0; i <= getTabLength(); i++) {
+		$("#tabs-" + (i + 1)).contentWidget()
+	}
+}
+

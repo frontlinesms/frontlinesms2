@@ -48,7 +48,7 @@ class ContactEditSpec extends ContactGebSpec {
 			$('#groups-submenu .selected').text() == 'Excellent'
 	}
 	
-	 def "'send Message' link should not displayed for invalid email address"() {
+	def "'send Message' link should not displayed for invalid email address"() {
 		when:
 			to AliceDetailsPage
 			frmDetails.primaryMobile = ''

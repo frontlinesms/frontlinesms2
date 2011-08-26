@@ -67,7 +67,7 @@ class ContactController {
 				def version = params.version.toLong()
 				if (contactInstance.version > version) {
 					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-					render(view: "edit", model: [contactInstance: contactInstance])
+					render(view: "show", model: [contactInstance: contactInstance])
 					return
 				}
 			}
@@ -76,7 +76,20 @@ class ContactController {
 			render(view:'show', model:show()<<[contactInstance:contactInstance])
 		}
 	}
-
+	
+	def updateMultipleContacts = {
+		if(params.contactIds) {
+			def contactIds = params.contactIds.tokenize(',').unique()
+			contactIds.each { id ->
+				withContact id, { contactInstance ->
+					updateData(contactInstance)
+				}
+			}
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
+			redirect(action: 'show', params: [groupId: params.groupId])
+		}
+	}
+	
 	def createContact = {
 		def model = [contactInstance:new Contact(params),
 					contactFieldInstanceList: [],
@@ -97,20 +110,20 @@ class ContactController {
 	def saveContact = {
 		def contactInstance = new Contact(params)
 		contactInstance.properties = params
-
 		updateData(contactInstance)
-
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
 		redirect(action:'createContact')
 	}
 	
 	def deleteContact = {
-		withContact { contactInstance ->
-			Group.removeContactFromGroups(contactInstance)
-			Contact.get(contactInstance.id).delete()
+		def contactIds = params.contactIds ? params.contactIds.tokenize(',').unique() : [params.contactId]
+		contactIds.each { id ->
+			withContact id, { contactInstance ->
+				Contact.get(contactInstance.id).delete()
+			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-		redirect(action: "list")
+		redirect(action: "list")		
 	}
 
 	def saveGroup = {
@@ -132,8 +145,8 @@ class ContactController {
 				contactInstance: contactInstance]
 	}
 
-	private def withContact(Closure c) {
-		def contactInstance = Contact.get(params.contactId)
+	private def withContact(contactId = params.contactId, Closure c) {
+		def contactInstance = Contact.get(contactId)
 		if (contactInstance) {
 			c contactInstance
 		} else {
@@ -141,21 +154,63 @@ class ContactController {
 			redirect(action: "list")
 		}
 	}
+	
+	def multipleContactGroupList = {
+		if(!params.contactIds) {
+			return []
+		}
+		def contactIds = params.contactIds ? params.contactIds.tokenize(',').unique() : []
+		def sharedGroupInstanceList = []
+		def groupInstanceList = []
+		contactIds.each { id ->
+			withContact id, { contactInstance ->
+				groupInstanceList << contactInstance.getGroups()
+			}
+		}
+		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
+		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
+		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
+			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
+	}
+	
+	private def getSharedGroupList(Collection groupList) {
+		def groupIDList = groupList.collect {it.id}
+		def intersect = groupIDList.get(0)
+		for(int i=1 ; i<groupIDList.size; i++) {
+			if(!intersect.disjoint(groupIDList.get(i))) {
+				intersect = intersect.intersect(groupIDList.get(i))
+			} else {
+				intersect = []
+				break
+			}
+		}
+		if(intersect) {
+			return intersect.collect { Group.findById(it) }
+		}
+	}
+	
+	private def getNonSharedGroupList(Collection groupList1, Collection groupList2) {
+		def groupIdList1 = groupList1.collect {it.id}
+		def groupIdList2 = groupList2.collect {it.id}
+		def nonSharedGroupList = (groupIdList1 - groupIdList2).collect { Group.findById(it) } ?: []
+		nonSharedGroupList
+	}
 
 	private def updateData(Contact contactInstance) {
 		// Check for errors in groupsToAdd and groupsToRemove
 		def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
 		def groupsToRemove = params.groupsToRemove.tokenize(',')
-		def fieldsToAdd = params.fieldsToAdd.tokenize(',')
-		def fieldsToRemove = params.fieldsToRemove.tokenize(',')
+		
+		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
+		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
-		} else if (!contactInstance.hasErrors() && contactInstance.save(flush: true)) {
-			groupsToAdd.each() {
-				contactInstance.addToGroups(Group.get(it))
+		} else if (contactInstance.validate() && !contactInstance.hasErrors()) {
+			groupsToAdd.each() { id ->
+				contactInstance.addToGroups(Group.get(id))
 			}
-			groupsToRemove.each() {
-				contactInstance.removeFromGroups(Group.get(it))
+			groupsToRemove.each() { id ->
+				contactInstance.removeFromGroups(Group.get(id))
 			}
 
 			fieldsToAdd.each() { name ->
@@ -176,11 +231,12 @@ class ContactController {
 				if(toRemove)
 					toRemove.delete(failOnError: true, flush:true)
 			}
-
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-			def redirectParams = [contactId:contactInstance.id]
-			if(params.groupId) redirectParams << [groupId: params.groupId]
-			return
+			
+			if(contactInstance.save(flush:true)) {
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+				def redirectParams = [contactId:contactInstance.id]
+				if(params.groupId) redirectParams << [groupId: params.groupId]
+			}
 		}
 	}
 }

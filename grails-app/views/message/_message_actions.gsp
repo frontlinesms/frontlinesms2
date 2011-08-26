@@ -16,14 +16,14 @@
 			<div id='other_btns'>
 				<g:if test="${!params['archived'] && messageSection != 'poll'}">
 					<li class='static_btn'>
-						<g:link elementId="message-archive" action="archive" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">
+						<g:link elementId="message-archive" controller='message' action="archive" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">
 							Archive
 						</g:link>
 					</li>
 				</g:if>
 				<g:if test="${messageSection != 'trash'}">
 					<li class='static_btn'>
-						<g:link elementId="message-delete" action="delete" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">
+						<g:link elementId="message-delete" controller='message' action="delete" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">
 							Delete
 						</g:link>
 					</li>

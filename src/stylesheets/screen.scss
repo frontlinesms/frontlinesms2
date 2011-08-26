@@ -429,7 +429,7 @@ body {
 						height: 26px;
 						padding-top: 5px;
 						padding-bottom: 5px;
-						display: block;
+						display: inline-block;
 					}
 				}
 				
@@ -791,4 +791,8 @@ label.bold {
 
 a.send-failed, .send-failed td:last-child {
 	 background: url('../images/alert-icon.jpg') no-repeat center right;
+}
+
+.ui-tabs-nav li.ui-tabs-selected.confirm-tab {
+	background-color: white;
 }
