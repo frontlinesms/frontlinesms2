@@ -59,15 +59,16 @@ class ContactShowSpec extends ContactGebSpec {
 			assertContactSelected('Bob')
 	}
 
-	def 'selected contact details are displayed'() {
+	def 'checked contact details are displayed'() {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
 			go "contact/show/${alice.id}"
+			$("#contact")[1].click()
+			sleep 1000
 		then:
-			assertFieldDetailsCorrect('name', 'Name', 'Alice')
-			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '2541234567')
-			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
+			assertFieldDetailsCorrect('name', 'Name', 'Bob')
+			$("#contact-title").text() == "Bob"
 	}
 
 	def 'contact with no groups has NO GROUPS message visible'() {

@@ -7,8 +7,7 @@ class Contact {
 	String email
     String notes
 
-	static hasMany = [groups: Group, customFields: CustomField]
-	static belongsTo = Group
+	static hasMany = [customFields: CustomField]
 
 	def beforeUpdate = {
 		updateContactNames("", getOldContactNumber())
@@ -21,6 +20,7 @@ class Contact {
 	
 	def beforeDelete = {
 		updateContactNames(name, "")
+		GroupMembership.deleteFor(this)
 	}
 	
     static constraints = {
@@ -61,8 +61,25 @@ class Contact {
 		customFields sort: 'name','value'
 	}
 
+	def getGroups() {
+		GroupMembership.findAllByContact(this)*.group.sort{it.name}
+	}
+
+	def setGroups(groups) {
+		this.groups.each() { GroupMembership.remove(this, it) }
+		groups.each() { GroupMembership.create(this, it) }
+	}
+
+	def addToGroups(Group g, flush=false) {
+		GroupMembership.create(this, g, flush)
+	}
+
+	def removeFromGroups(Group g, flush=false) {
+		GroupMembership.remove(this, g, flush)
+	}
+
 	boolean isMemberOf(Group group) {
-	   groups.contains(group)
+	   GroupMembership.countByContactAndGroup(this, group) > 0
 	}
 
 	def getInboundMessagesCount() {

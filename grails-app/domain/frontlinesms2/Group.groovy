@@ -5,8 +5,6 @@ class Group {
 	String subscriptionKey
 	String unsubscriptionKey
 
-	static hasMany = [members: Contact]
-
 	static constraints = {
 		name(unique: true, nullable: false, blank: false, maxSize: 255)
 		subscriptionKey(nullable: true, blank: false, validator: { val, obj ->
@@ -28,9 +26,20 @@ class Group {
 	    table 'grup'
 	}
 
+	def beforeDelete = {
+		GroupMembership.deleteFor(this)
+	}
 
+	def getMembers() {
+		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
+	}
+
+	def addToMembers(Contact c) {
+		GroupMembership.create(c, this)
+	}
+	
 	def getAddresses() {
-		members*.primaryMobile
+		getMembers()*.primaryMobile
 	}
 
 	static HashMap<String, List<String>> getGroupDetails() {
@@ -56,10 +65,4 @@ class Group {
 		without as Set
 	}
 	
-	static removeContactFromGroups(Contact contact) {
-		def contactGroups = contact.groups
-		contactGroups.each() { cg ->
-			cg.getMembers().remove(contact)
-		}
-	}
 }

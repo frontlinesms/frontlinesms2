@@ -7,6 +7,7 @@ import spock.lang.Shared
 import frontlinesms2.SubscriptionService
 import frontlinesms2.Contact
 import frontlinesms2.Group
+import frontlinesms2.GroupMembership
 
 class SubscriptionServiceSpec extends UnitSpec {
 	@Shared
@@ -18,6 +19,7 @@ class SubscriptionServiceSpec extends UnitSpec {
 		service = new SubscriptionService()
 		def contact = new Contact(primaryMobile: "9533326555")
 		mockDomain(Contact, [contact])
+		mockDomain(GroupMembership)
 	}
 
 	def "should process subscription messages when subscribed"() {
@@ -88,7 +90,8 @@ class SubscriptionServiceSpec extends UnitSpec {
 			Exchange mockExchange = Mock()
 			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: " ÂDD ") }
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
-											unsubscriptionKey:"REMOVE", members: [contact])])
+										unsubscriptionKey:"REMOVE")])
+			mockDomain GroupMembership, [new GroupMembership(group: Group.findByName('MAC'), contact: contact)]
 		when:
 			service.process(mockExchange)
 		then:
@@ -101,7 +104,8 @@ class SubscriptionServiceSpec extends UnitSpec {
 			Exchange mockExchange = Mock()
 			service.metaClass.getMessage = {Exchange exchange -> new Fmessage(src: "9533326555", text: "REMOVE") }
 			mockDomain(Group, [new Group(name:"MAC", subscriptionKey:"ADD" ,
-										unsubscriptionKey:"REMOVE", members: [contact])])
+										unsubscriptionKey:"REMOVE")])
+			mockDomain GroupMembership, [new GroupMembership(group: Group.findByName('MAC'), contact: contact)]
 		when:
 			service.process(mockExchange)
 		then:
