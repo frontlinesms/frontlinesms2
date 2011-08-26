@@ -15,7 +15,7 @@ class SubscriptionService implements Processor {
 		def groupToAdd = Group.findBySubscriptionKeyIlike(keyword)
 		def groupToRemove = Group.findByUnsubscriptionKeyIlike(keyword)
 		groupToAdd?.addToMembers(findOrCreateContact(address))
-		groupToRemove?.removeFromMembers(findOrCreateContact(address))
+		if(groupToRemove) {GroupMembership.remove(findOrCreateContact(address), groupToRemove)}
 		groupToAdd?.save()
 		groupToRemove?.save()
 	}

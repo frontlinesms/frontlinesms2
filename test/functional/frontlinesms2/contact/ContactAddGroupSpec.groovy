@@ -13,10 +13,11 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		given:
 			def bob = Contact.findByName("Bob")
+			println "no of groups is ${Group.count()}"
 		when:
 			go "contact/show/${bob.id}"
 		then:
-			def memberOf = $("#group-list li").children('input').collect() { it.value() }.sort()
+			def memberOf = $("#group-list li").children('input')*.value().sort()
 			memberOf == ['Test', 'three']
 	}
 
@@ -31,7 +32,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			nonMemberOf == ['Add to group...', 'Others', 'four']
 			
 		when:
-			$('#group-dropdown').value("${Group.findByName('Others').id}")
+			$("#contact-details").find('select', name:'group-dropdown').value("${Group.findByName('Others').id}")
 			def updatedMemberOf = $("#group-list").children().children('input').collect() { it.value() }.sort()
 		then:
 			updatedMemberOf == ['Others', 'Test', 'three']
@@ -80,7 +81,48 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			at ContactListPage
 			Group.findByName('Test').getMembers().contains(Contact.findByName('Bob'))
 	}
-
+	
+	def 'clicking save actually adds multiple contacts to newly selected groups'() {
+		given:
+			def bob = Contact.findByName("Bob")
+			def alice = Contact.findByName('Alice')
+		when:
+			go 'contact'
+			$("#contact")[1].click()
+			sleep 1000
+			$("#contact")[0].click()
+			sleep 1000
+			def groupSelecter = $('#multi-group-dropdown')
+			groupSelecter.value("${Group.findByName('Others').id}")			
+			$("#btn_save_all").click()
+		then:
+			Group.findByName('Others').getMembers().containsAll([bob, alice])
+	}
+	
+	def 'clicking save removes multiple contacts from selected groups'() {
+		given:
+			def bob = Contact.findByName("Bob")
+			def alice = Contact.findByName('Alice')
+			def otherGroup = Group.findByName('Others')
+			bob.addToGroups(otherGroup,true)
+			alice.addToGroups(otherGroup,true)
+			assert bob.isMemberOf(otherGroup)
+			assert alice.isMemberOf(otherGroup)
+		when:
+			go 'contact'
+			$("#contact")[1].click()
+			sleep 1000
+			$("#contact")[0].click()
+			sleep 1000
+			$("#multi-group-list").find('a').first().click()
+			$("#btn_save_all").click()
+			bob.refresh()
+			alice.refresh()
+			otherGroup.refresh()
+		then:
+			otherGroup.getMembers() == []
+	}
+	
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			to BobsContactPage
