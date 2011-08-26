@@ -81,8 +81,9 @@ class Contact {
 	
 	def updateContactNames(contactName, contactNumber)
 	{
+		// FIXME this does not take account of secondary phone number - should accept varargs?
 		if(contactNumber) {
-			 // Prevent stackoverflow exception
+			 // Prevent stackoverflow exception // FIXME a little more info would be nice
 			Contact.withNewSession { session -> 
 				Fmessage.executeUpdate("update Fmessage m set m.contactName = ? where m.src = ?", [contactName, contactNumber])
 			}
