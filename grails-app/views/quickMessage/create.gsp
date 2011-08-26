@@ -15,9 +15,6 @@
 	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="goToNextTab()">
 		<g:render template="message"/>
 		<div id="tabs-2" class="${configureTabs.contains("tabs-2") ? "" : "hide"}">
-			<label for="address">Add phone number</label>
-			<g:textField id="address" name="address"/>
-			<g:link url="#" class="add-address">Add</g:link>
 			<g:render template="select_recipients"/>
 		</div>
 		<g:render template="confirm"/>

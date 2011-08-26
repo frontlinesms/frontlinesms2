@@ -27,7 +27,7 @@ function launchMediumPopup(title, html, btnFinishedText) {
 		{
 			modal: true,
 			width: 675,
-			height: 400,
+			height: 500,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
