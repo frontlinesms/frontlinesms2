@@ -100,37 +100,37 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#message-details #message-body').text() == message.text
 	}
 
-// FIXME: Fails in the build machine alone
-//	def "should remain in the same page when all archived poll messages are deleted"() {
-//		setup:
-//			createTestPolls()
-//			createTestMessages()
-//			def archivedPoll = new Poll(title: "archived poll", archived: true)
-//			archivedPoll.addToResponses(new PollResponse(value: "response1", key:"A"))
-//			archivedPoll.addToResponses(new PollResponse(value: "response2", key:"B"))
-//			archivedPoll.save(flush: true)
-//			[PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Bob')),
-//					PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Alice')),
-//					PollResponse.findByValue('response2').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
-//		when:
-//			$("#main-tabs a", text: "Archive").click()
-//			def activityArchiveButton = $("a", text: 'Activity archive')
-//			waitFor{activityArchiveButton.displayed}
-//			activityArchiveButton.click()
-//			waitFor{$("a", text:'archived poll').displayed}
-//			$("a", text:'archived poll').click()
-//			waitFor {$("#messages").displayed}
-//			$("#message")[0].click()
-//			waitFor {$('.multi-action').displayed}
-//			def btnDelete = $('.multi-action a')[1]
-//		then:
-//			btnDelete
-//		when:
-//			btnDelete.click()
-//			waitFor() {$("body").find("div.flash").text() ==("3 messages deleted") }
-//		then:
-//			$("#main-tabs a", text: "Archive").hasClass("selected")
-//	}
+	def "should remain in the same page when all archived poll messages are deleted"() {
+		setup:
+			createTestPolls()
+			createTestMessages()
+			def archivedPoll = new Poll(title: "archived poll", archived: true)
+			archivedPoll.addToResponses(new PollResponse(value: "response1", key:"A"))
+			archivedPoll.addToResponses(new PollResponse(value: "response2", key:"B"))
+			archivedPoll.save(flush: true)
+			[PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Bob')),
+					PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Alice')),
+					PollResponse.findByValue('response2').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
+		when:
+			$("#global-nav a", text: "Archive").click()
+			def activityArchiveButton = $("a", text: 'Activity archive')
+			waitFor{activityArchiveButton.displayed}
+			activityArchiveButton.click()
+			waitFor{$("a", text:'archived poll').displayed}
+			$("a", text:'archived poll').click()
+			waitFor {$("#messages").displayed}
+			$("#message")[0].click()
+			waitFor {$('#multiple-messages').displayed}
+			def btnDelete = $('#multiple-messages a')[1]
+		then:
+			btnDelete
+		when:
+			btnDelete.click()
+			sleep(2000)
+			waitFor() {$("div.flash").text().contains("messages deleted") }
+		then:
+			$("#global-nav a", text: "Archive").hasClass("selected")
+	}
 }
 
 class PollListPage extends geb.Page {
