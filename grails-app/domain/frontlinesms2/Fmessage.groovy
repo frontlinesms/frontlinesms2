@@ -28,9 +28,7 @@ class Fmessage {
 		dateCreated = dateCreated ? dateCreated : new Date()
 		def details = status == MessageStatus.INBOUND ? src : dst
 		if(details) {
-			Contact.withNewSession { session ->
-				contactName = Contact.findByPrimaryMobile(src)?.name ?: Contact.findBySecondaryMobile(src)?.name
-			}
+			updateContactName()
 		}
 	}
 		
@@ -45,7 +43,7 @@ class Fmessage {
 	
 	def fetchContactName(String number) {
 		Contact.withNewSession { session ->
-			contactName = findContact(number)
+			contactName = Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 		}
 	}
 
@@ -175,12 +173,8 @@ class Fmessage {
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
 	}
 	
-	def getDisplayName() { // FIXME this should be src OR dst depending on whether this message is incoming or outgoing
-		contactName?:src
-	}
-
-	def getRecipientDisplayName() { // FIXME this method should be removed once getDisplayName() has been correctly updated
-		 findContact(dst)
+	def getDisplayName() { \
+		contactName
 	}
 
 	def toDelete() { // FIXME is this method necessary?
@@ -304,8 +298,6 @@ class Fmessage {
 		answer
 	}
 
-	private String findContact(String number) {
-		return Contact.findByPrimaryMobile(number)?.name ?: number
-	}
+
 	
 }
