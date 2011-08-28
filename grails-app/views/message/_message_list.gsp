@@ -43,7 +43,7 @@
 					</td>
 					<td>
 							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-								${(messageSection == 'sent' || messageSection == 'pending')  ?   m.recipientDisplayName : m.displayName}
+								${m.displayName}
 							</g:link>
 					</td>
 					<td>
