@@ -11,10 +11,6 @@ class SearchControllerSpec {
 				}
 	}
 	
-	def cleanup() {
-		Fmessage.findAll()*.delete(flush:true, failOnError:true)
-	}
-	
 	def "csv file is generated from provided list of messages"() {
 		when:
 			def model = controller.generateCSVReport("test" ,[Fmessage.findBySrc('gerad'), Fmessage.findBySrc('steve')]).messageInstanceList
