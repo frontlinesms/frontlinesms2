@@ -203,6 +203,41 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$("#tabs-3").displayed
 	}
+	
+	def "should show the address of the contact in the confirm screen"() {
+		given:
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			
+		when:
+			go "message/inbox/show/${message.id}"
+		then:
+			$("#btn_reply").click()
+			waitFor {$('#tabs-1').displayed}
+		when:
+			$("#nextPage").jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+			$("#recipient").text() == "${message.src}"
+	}
+	
+	def "should show the name of the contact in the confirm screen if contact exists"() {
+		given:
+			new Contact(name: "Tom", primaryMobile: "+254999999").save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			
+		when:
+			go "message/inbox/show/${message.id}"
+		then:
+			$("#btn_reply").click()
+			waitFor {$('#tabs-1').displayed}
+		when:
+			$("#nextPage").jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+			$("#recipient").text() == "${Contact.findByPrimaryMobile(message.src).name}"
+	}
 
 	def "should skip recipients tab for reply-all option"() {
 		given:

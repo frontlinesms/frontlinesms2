@@ -2,5 +2,10 @@
 	<label>Summary</label>
 	<div class="confirm-header">Message:</div><span id="confirm-message-text">none</span>
 	<div class="clear"></div>
-	<div class="confirm-header">Recipients:</div><span id="confirm-recepients-count"><span id="contacts-count">${recipients.size() + nonExistingRecipients.size()}</span> contacts selected</span>
+	<g:if test="${recipients.size() == 1}">
+		<div class="confirm-header"> Recipient: <span id="recipient">${recipientName}</span></div>
+	</g:if>
+	<g:else>
+		<div class="confirm-header">Recipients:</div><span id="confirm-recepients-count"><span id="contacts-count">${recipients.size() + nonExistingRecipients.size()}</span> contacts selected</span>
+	</g:else>
 </div>
