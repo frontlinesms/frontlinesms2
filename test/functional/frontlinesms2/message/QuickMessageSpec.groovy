@@ -23,10 +23,12 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			loadSecondTab()
 			$("#address").value("+919544426000")
 			$('.add-address').click()
+			sleep 1000
         then:
 			$('div#tabs-2').displayed
 		when:
 			loadThirdTab()
+			sleep 3000
 		then:
 			$('div#tabs-3').displayed
 	}
@@ -55,13 +57,17 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			loadFirstTab()
 			loadSecondTab()
+			sleep 1000
 			$("#address").value("+919544426000")
 			$('.add-address').click()
+			sleep 1000
 			loadThirdTab()
+			sleep 3000
 		then:
 			$('div#tabs-3').displayed
         when:
 			$("#prevPage").click()
+			sleep 1000
 			waitFor {$('div#tabs-2').displayed}
 		then:
 			$('div#tabs-2').displayed
@@ -74,7 +80,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			loadFirstTab()
 			loadSecondTab()
 			$("#address").value("+919544426000")
-			$('.add-address').jquery.trigger('click')
+			$('.add-address').click()
+			sleep 1000
 		then:
 			$('div#contacts div')[0].find('input').value() == "+919544426000"
 			$("#recipient-count").text() == "1"
@@ -85,10 +92,13 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			loadFirstTab()
 			loadSecondTab()
+			sleep 3000
 			$("#address").value("+919544426000")
 			$('.add-address').click()
+			sleep 1000
 			loadThirdTab()
 			$("#done").click()
+			sleep 1000
 			waitFor{$("#tabs-4").displayed }
 			$("#confirmation").click()
 		then:
@@ -211,19 +221,19 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def loadFirstTab() {
 		$("a", text:"Quick message").click()
-		waitFor {$('div#tabs-1').displayed}
+		sleep 1000
 	}
 	def loadSecondTab() {
 		$("#nextPage").click()
-		waitFor {$('div#tabs-2').displayed}		
+		sleep 1000
 	}
 	def loadThirdTab() {
 		$("#nextPage").click()
-		waitFor {$('div#tabs-3').displayed}
+		sleep 1000
 	}
 	def loadQuickMessageDialog() {
 		$("a", text:"Quick message").click()
-		waitFor {$('div#tabs-1').displayed}
+		sleep 1000
 	}
 }
 

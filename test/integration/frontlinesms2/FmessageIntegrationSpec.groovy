@@ -109,6 +109,25 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		messages == ["12/10":[Sent:5, Received:4], "13/10":[Sent:0, Received:1]]
 	}
 
+	def "should update message contact name"() {
+		setup:
+			new Contact(name: "Alice", primaryMobile:"primaryNo", secondaryMobile: "secondaryNo").save(flush: true)
+		when:
+			def messageFromPrimaryNumber = new Fmessage(src: "primaryNo", dst: "dst", status: MessageStatus.INBOUND)
+			def messageFromSecondaryNumber = new Fmessage(src: "secondaryNo", dst: "dst", status: MessageStatus.INBOUND)
+			def outBoundMessageToPrimaryNo = new Fmessage(src: "src", dst: "primaryNo", status: MessageStatus.SENT)
+			def outBoundMessageToSecondayNo = new Fmessage(src: "src", dst: "secondaryNo", status: MessageStatus.SENT)
+			messageFromPrimaryNumber.save(flush: true)
+			messageFromSecondaryNumber.save(flush: true)
+			outBoundMessageToPrimaryNo.save(flush: true)
+			outBoundMessageToSecondayNo.save(flush: true)
+		then:
+			messageFromPrimaryNumber.contactName == "Alice"
+			messageFromSecondaryNumber.contactName == "Alice"
+			outBoundMessageToPrimaryNo.contactName == "Alice"
+			outBoundMessageToSecondayNo.contactName == "Alice"
+	}
+
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
 	}
@@ -117,7 +136,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		def c = new Contact(name: n, primaryMobile: a)
 		c.save(failOnError: true)
 	}
-	
+
 	private def setUpMessages() {
 			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message').save(flush:true)
 			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message').save(flush:true)

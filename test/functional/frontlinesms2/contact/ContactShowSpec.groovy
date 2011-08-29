@@ -113,27 +113,6 @@ class ContactShowSpec extends ContactGebSpec {
 	        	assert it.getAttribute('href') ==~ /.*recipients=\d+/
 			}
 	}
-	
-	def "sending a message to a contact address updates the statistics"() {
-		given:
-	  		def alice = Contact.findByName('Alice')
-		when:
-	  		go "contact/show/${alice.id}"
-			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
-			waitFor {$('div#tabs-1').displayed}
-			$("#nextPage").click()
-			waitFor {$("#done").displayed}
-        	$("#done").click()
-			sleep 2000
-		then:
-			$("#confirm").click()
-		when:
-			go "contact/show/${alice.id}"
-		then:
-	        $("#message-count p").first().text() == '1 messages sent'
-	        $("#message-count p").last().text() == '0 messages received'
-		
-	}
 
 	def assertContactSelected(String name) {
 		def selectedChildren = $('#contacts').children('li.selected')
