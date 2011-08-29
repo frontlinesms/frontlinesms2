@@ -173,7 +173,7 @@ class Fmessage {
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
 	}
 	
-	def getDisplayName() { \
+	def getDisplayName() { 
 		contactName
 	}
 
