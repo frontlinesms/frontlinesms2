@@ -57,6 +57,6 @@
 	opacity: .5;
 }
 
-.ui-dialog-content form{
+.ui-dialog-content form, .ui-dialog-content .content {
 	padding: 17px;
 }
