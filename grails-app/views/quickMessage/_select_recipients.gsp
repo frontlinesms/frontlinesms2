@@ -1,5 +1,9 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
+	<label for="address">Add phone number</label>
+	<g:textField id="address" name="address"/>
+	<g:link url="#" class="add-address">Add</g:link>
+	
 	<div id="groups">
 		<g:each in="${groupList}" var="entry">
 			<div>
@@ -82,10 +86,10 @@
 
 	$('.add-address').live('click', function() {
 		var address = $('#address').val();
-		$("#contacts").prepend("<div><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
+		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
 		updateCount()
+		dialog.close(function() { $(".manual").remove(); })
 	});
-
 </script>
 
 

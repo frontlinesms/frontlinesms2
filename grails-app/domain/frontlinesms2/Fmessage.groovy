@@ -28,27 +28,24 @@ class Fmessage {
 		dateCreated = dateCreated ? dateCreated : new Date()
 		def details = status == MessageStatus.INBOUND ? src : dst
 		if(details) {
-			Contact.withNewSession { session ->
-				contactName = Contact.findByPrimaryMobile(src)?.name ?: Contact.findBySecondaryMobile(src)?.name
-			}
-		}
-	}
-		
-	def updateContactName() {
-		if(status == MessageStatus.INBOUND) {
-			fetchContactName(src)
-		}
-		else {
-			fetchContactName(dst)
+			updateContactName()
 		}
 	}
 	
-	def fetchContactName(String number) {
-		Contact.withNewSession { session ->
-			contactName = findContact(number)
-		}
+	
+	private String findContact(String number) {
+		return Contact.findByPrimaryMobile(number)?.name ?: number
 	}
-
+		
+	def updateContactName() {
+		def fetchContactName = { number ->
+			Contact.withNewSession {
+				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
+			}
+		}
+		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
+	}
+	
 	static constraints = {
 		src(nullable:true)
 		dst(nullable:true)
@@ -175,83 +172,69 @@ class Fmessage {
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
 	}
 	
-	def getDisplayName() {
-		contactName?:src
+	def getDisplayName() { 
+		contactName
 	}
 
-	def getRecipientDisplayName() {
-		 findContact(dst)
-	}
-
-	def toDelete() {
+	def toDelete() { // FIXME is this method necessary?
 		this.deleted = true
 		this
 	}
 
-	def addStar() {
+	def addStar() { // FIXME is this method necessary?
 		this.starred = true
 		this
 	}
 
-	def removeStar() {
+	def removeStar() { // FIXME is this method necessary?
 		this.starred = false
 		this
 	}
 	
-	def archive() {
+	def archive() { // FIXME is this method necessary?
 		this.archived = true
 		this
 	}
 
 	static def getFolderMessages(folderId) {
-		def folder = Folder.get(folderId)
-		def messages = Fmessage.owned(folder).list()
-		messages
+		def folder = Folder.get(folderId) // TODO check if we need to fetch the folder here rather than just pass the ID
+		Fmessage.owned(folder).list()
 	}
 
 	static def getInboxMessages(params) {
-		def messages = Fmessage.inbox(params['starred'], params["archived"]).list(params)
-		messages
+		Fmessage.inbox(params['starred'], params["archived"]).list(params)
 	}
 
 	static def getSentMessages(params) {
-		def messages = Fmessage.sent(params['starred'],  params["archived"]).list(params)
-		messages
+		Fmessage.sent(params['starred'],  params["archived"]).list(params)
 	}
 
 	static def getPendingMessages(params) {
-		def messages = Fmessage.pending(params['starred']).list(params)
-		messages
+		Fmessage.pending(params['starred']).list(params)		
 	}
 
 	static def getDeletedMessages(params) {
-		def messages = Fmessage.deleted(params['starred']).list(params)
-		messages
+		Fmessage.deleted(params['starred']).list(params)
 	}
 
 	static def countInboxMessages(params) {
-		def messageCount = Fmessage.inbox(params['starred'], params['archived']).count()
-		messageCount
+		Fmessage.inbox(params['starred'], params['archived']).count()
 	}
 	
 	static def countSentMessages(params) {
-		def messageCount = Fmessage.sent(params['starred'], params['archived']).count()
-		messageCount
+		Fmessage.sent(params['starred'], params['archived']).count()
 	}
 	
 	static def countPendingMessages(isStarred) {
-		def messageCount = Fmessage.pending(isStarred).count()
-		messageCount
+		Fmessage.pending(isStarred).count()
 	}
 	
 	static def countDeletedMessages(isStarred) {
-		def messageCount = Fmessage.deleted(isStarred).count()
-		messageCount
+		Fmessage.deleted(isStarred).count()
 	}
 	
 	static def countUnreadMessages(isStarred) {
-		def messageCount = Fmessage.unread().count()
-		messageCount
+		Fmessage.unread().count()
 	}
 	
 	static def countAllMessages(params) {
@@ -313,9 +296,4 @@ class Fmessage {
 		}
 		answer
 	}
-
-	private String findContact(String number) {
-		return Contact.findByPrimaryMobile(number)?.name ?: number
-	}
-	
 }
