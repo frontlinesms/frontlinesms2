@@ -1,3 +1,7 @@
+$(document).ready(function() {
+	$('#message-details #multiple-messages').hide()
+});
+
 function messageChecked(messageId) {
 	var count = countCheckedMessages();
 	count = setCheckAllBox(count);
@@ -79,8 +83,9 @@ function updateMultipleCheckedDetails(messageId) {
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
 	$.get(url_root + 'message/' + messageSection, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), archived: isArchived}, function(data) {
-		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages').show());
-		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages').show());
+	$.get(url_root + 'message/' + messageSection, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val() }, function(data) {
+		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
+		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
 	});
 }
 

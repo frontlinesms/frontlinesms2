@@ -28,7 +28,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$('div#tabs-2').displayed
 		when:
 			loadThirdTab()
-			sleep 3000
+			sleep(1000)
 		then:
 			$('div#tabs-3').displayed
 	}
@@ -62,13 +62,14 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$('.add-address').click()
 			sleep 1000
 			loadThirdTab()
-			sleep 3000
+			sleep(1000)
 		then:
 			$('div#tabs-3').displayed
         when:
 			$("#prevPage").click()
 			sleep 1000
 			waitFor {$('div#tabs-2').displayed}
+			sleep(1000)
 		then:
 			$('div#tabs-2').displayed
 
@@ -79,6 +80,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			loadFirstTab()
 			loadSecondTab()
+			sleep(1000)
 			$("#address").value("+919544426000")
 			$('.add-address').click()
 			sleep 1000
@@ -92,11 +94,12 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			loadFirstTab()
 			loadSecondTab()
-			sleep 3000
+			sleep(1000)
 			$("#address").value("+919544426000")
 			$('.add-address').click()
 			sleep 1000
 			loadThirdTab()
+			sleep(1000)
 			$("#done").click()
 			sleep 1000
 			waitFor{$("#tabs-4").displayed }

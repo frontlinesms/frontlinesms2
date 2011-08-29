@@ -15,7 +15,7 @@
 		<g:render template="../message/message_actions"></g:render>
 		<g:render template="../message/other_actions"></g:render>
 	</div>
-	<div id="multiple-messages" class='hide'>
+	<div id="multiple-messages">
 		<div id='message-info'>
 			<h2 id='checked-message-count'>${checkedMessageCount} messages selected</h2>
 			<div class="actions">
