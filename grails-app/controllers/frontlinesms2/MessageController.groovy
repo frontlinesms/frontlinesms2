@@ -5,7 +5,8 @@ import grails.converters.JSON
 import javax.servlet.http.HttpServletRequest
 
 class MessageController {
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST", deleteAll: "POST",
+							archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
 
@@ -120,7 +121,6 @@ class MessageController {
 	}
 	
 	def delete = {
-		println 'deleting?'
 		withFmessage {messageInstance ->
 			messageInstance.toDelete()
 			messageInstance.save(failOnError: true, flush: true)

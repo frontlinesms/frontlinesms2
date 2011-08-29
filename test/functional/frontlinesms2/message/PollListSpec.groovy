@@ -122,7 +122,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#message")[0].click()
 			sleep(1000)
 			waitFor {$('#multiple-messages').displayed}
-			def btnDelete = $('#multiple-messages a')[1]
+			def btnDelete = $("#btn_delete_all")
 		then:
 			btnDelete
 		when:
