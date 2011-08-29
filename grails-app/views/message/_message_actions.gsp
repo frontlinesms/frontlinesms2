@@ -14,20 +14,21 @@
 				</div>
 			</li>
 			<div id='other_btns'>
+			<g:form name="message-action" controller="message" method="POST">
+				<g:hiddenField name="messageSection" value="${messageSection}"></g:hiddenField>
+				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"></g:hiddenField>
+				<g:hiddenField name="messageId" value="${messageInstance.id}"></g:hiddenField>
 				<g:if test="${!params['archived'] && messageSection != 'poll'}">
 					<li class='static_btn'>
-						<g:link elementId="message-archive" controller='message' action="archive" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">
-							Archive
-						</g:link>
+						<g:actionSubmit name="archive" value="Archive" id="message-archive" action="archive"/>
 					</li>
 				</g:if>
 				<g:if test="${messageSection != 'trash'}">
 					<li class='static_btn'>
-						<g:link elementId="message-delete" controller='message' action="delete" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance.id]">
-							Delete
-						</g:link>
+						<g:actionSubmit name="delete" value="Delete" id="message-delete" action="delete"/>
 					</li>
 				</g:if>
+				</g:form>
 			</div>
 		</g:else>
 	</ol>
