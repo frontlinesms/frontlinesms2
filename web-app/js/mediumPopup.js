@@ -47,7 +47,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 		height: 500,
 		buttons: [
 			{ text:"Cancel", click: cancel, id:"cancel" },
-			{ text:"Prev", click: prevButton, id:"prevPage" },
+			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
 			{ text:"Done",  click: cancel, id:"confirmation" },
 			{ text:btnFinishedText,  click: done, id:"done" }
