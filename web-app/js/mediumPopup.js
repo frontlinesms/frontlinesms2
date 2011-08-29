@@ -12,7 +12,7 @@ function messageResponseClick(messageType) {
 	
 	$.ajax({
 		type:'POST',
-		data: {recipient: src, messageText: text, configureTabs: configureTabs},
+		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true);addTabValidations(); }
 	});

@@ -79,6 +79,17 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.countAllSearchMessages("inbox", null, null) == 2
 	}
 	
+	def "should not error when searched for a group with no members"() {
+		setup:
+			new Group(name: "football").save(flush: true)
+		when:
+			def searchMessages = Fmessage.search(null, null, Group.findByName("football"), 10, 0)
+			def searchMessagesCount = Fmessage.countAllSearchMessages(null, null, Group.findByName("football"))
+		then:
+			!searchMessages
+			searchMessagesCount == 0
+	}
+
 	def "should get message traffic information for the filter criteria"() {
 		setup:
 			["Fsharp", 'Haskell'].each() { createGroup(it) }

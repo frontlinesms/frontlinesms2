@@ -254,12 +254,12 @@ class Fmessage {
 	}
 	
 	static def search(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
-		if(!searchString && !contactInstance && !groupInstance) return []
+		if(!searchString && !contactInstance && !groupInstance?.getAddresses()) {return []}
 		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 	}
 
 	static def countAllSearchMessages(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
-		if(!searchString && !contactInstance && !groupInstance) return 0
+		if(!searchString && !contactInstance && !groupInstance?.getAddresses()) return 0
 		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwners).count()
 	}
 

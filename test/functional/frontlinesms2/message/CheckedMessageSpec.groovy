@@ -114,6 +114,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#checked-message-count").text() == "3 messages selected"
 		when:
 			$('#message')[1].click()
+			sleep(1000)
 			waitFor { $("#checked-message-count").text().contains("2") }
 		then:
 			$("#checked-message-count").text() == "2 messages selected"
