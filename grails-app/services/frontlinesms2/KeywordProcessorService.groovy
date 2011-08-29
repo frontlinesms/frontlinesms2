@@ -4,7 +4,7 @@ class KeywordProcessorService {
 
     static transactional = true
 
-    def serviceMethod() {
-
+    boolean matches(String messageText) {
+	false
     }
 }
