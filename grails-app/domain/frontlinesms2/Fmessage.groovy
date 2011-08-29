@@ -31,22 +31,21 @@ class Fmessage {
 			updateContactName()
 		}
 	}
+	
+	
+	private String findContact(String number) {
+		return Contact.findByPrimaryMobile(number)?.name ?: number
+	}
 		
 	def updateContactName() {
-		if(status == MessageStatus.INBOUND) {
-			fetchContactName(src)
+		def fetchContactName = { number ->
+			Contact.withNewSession {
+				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
+			}
 		}
-		else {
-			fetchContactName(dst)
-		}
+		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
 	}
 	
-	def fetchContactName(String number) {
-		Contact.withNewSession { session ->
-			contactName = Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
-		}
-	}
-
 	static constraints = {
 		src(nullable:true)
 		dst(nullable:true)
@@ -297,7 +296,4 @@ class Fmessage {
 		}
 		answer
 	}
-
-
-	
 }
