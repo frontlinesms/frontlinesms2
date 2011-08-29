@@ -90,9 +90,9 @@
 								</li>
 								<li>
 									<button id="pollSettings">Show poll details</button>
-									<div id="pollGraph"></div>
 								</li>
 							</ol>
+							<div id="pollGraph"></div>
 						</g:if>
 					</div>
 					<div class="content-body">
