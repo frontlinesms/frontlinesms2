@@ -28,18 +28,20 @@
 								</g:remoteLink>
 							</li>
 						</g:if>
+						<g:form controller="message">
+						<g:hiddenField name="messageSection" value="${messageSection}"></g:hiddenField>
+						<g:hiddenField name="checkedMessageList" value="${params.checkedMessageList}"></g:hiddenField>
+						<g:hiddenField name="ownerId" value="${ownerInstance?.id}"></g:hiddenField>
+						<g:hiddenField name="archived" value="${params.archived}"></g:hiddenField>
 						<g:if test="${!params['archived'] && messageSection != 'poll'}">
 							<li class='static_btn'>
-								<g:link elementId="btn_archive_all" controller='message' action="archiveAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
-									Archive All
-								</g:link>
+								<g:actionSubmit value="Archive All" id="btn_archive_all" action="archiveAll"/>
 							</li>
 						</g:if>
 						<li class='static_btn'>
-							<g:link elementId="btn_delete_all" controller='message' action="deleteAll" params="[messageSection: messageSection, checkedMessageList: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived]">
-								Delete All
-							</g:link>
+							<g:actionSubmit value="Delete All" id="btn_delete_all" action="deleteAll"/>
 						</li>
+						</g:form>
 					</div>
 				</ol>
 				<g:render template="../message/other_actions"></g:render>

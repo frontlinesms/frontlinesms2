@@ -88,19 +88,6 @@ class FmessageSpec extends UnitSpec {
 			message.archived == true
 	}
 
-	def "should fetch the display name of the recipient"() {
-		setup:
-			mockDomain Contact, [new Contact(name: "John", primaryMobile: "dst")]
-			mockDomain Fmessage, [new Fmessage(src: "src", dst: "dst"), new Fmessage(src: "src1", dst: "dst1")]
-		when:
-			def message = Fmessage.findBySrc("src")
-			def message1 = Fmessage.findBySrc("src1")
-		then:
-			message.getRecipientDisplayName() == "John"
-			message1.getRecipientDisplayName() == "dst1"
-
-	}
-
 	def "should return true if there are failed messages"() {
 		setup:
 			registerMetaClass(Fmessage)

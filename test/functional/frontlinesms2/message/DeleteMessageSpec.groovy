@@ -40,15 +40,12 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
-		given:
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def message3 = Fmessage.findBySrc('+254778899')
 		when:
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
 			waitFor {$('#multiple-messages').displayed}
-			def btnDelete = $('#multiple-messages a')[2]
+			def btnDelete = $("#btn_delete_all")
 		then:
 			btnDelete
 		when:
@@ -58,6 +55,19 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor{$("div.flash").text().contains("deleted")}
 	}
 	
+	def "'Delete' button appears for individual messages and works"() {
+		when:
+			go "message/inbox"
+			def btnDelete = $("#message-delete")
+		then:
+			btnDelete
+		when:
+			btnDelete.click()
+		then:
+			at MessagesPage
+			waitFor{$("div.flash").text().contains("deleted")}
+	}
+
 	static createTestData() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),

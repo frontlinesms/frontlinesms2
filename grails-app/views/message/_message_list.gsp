@@ -4,7 +4,8 @@
 	<g:if test="${messageInstanceTotal > 0}">
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
+		<g:hiddenField name="isArchived" value="${params.archived}"/>
+		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 				message(code: 'fmessage.src.label', default: 'To')
 	 			: message(code: 'fmessage.dst.label', default: 'From')}" />
 		<g:if test="${messageSection == 'search'}">
@@ -42,7 +43,7 @@
 					</td>
 					<td>
 							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-								${(messageSection == 'sent' || messageSection == 'pending')  ?   m.recipientDisplayName : m.displayName}
+								${m.displayName}
 							</g:link>
 					</td>
 					<td>
