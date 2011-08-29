@@ -88,14 +88,8 @@
 		var address = $('#address').val();
 		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
 		updateCount()
-		$("#done").bind('click', removeManualAddresses());
-		$("#done").bind('click', removeManualAddresses());
+		dialog.close(function() { $(".manual").remove(); })
 	});
-
-	function removeManualAddresses() {
-		$(".manual").remove();
-	}
-
 </script>
 
 
