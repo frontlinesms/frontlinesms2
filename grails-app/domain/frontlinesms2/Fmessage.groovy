@@ -34,7 +34,7 @@ class Fmessage {
 	
 	
 	private String findContact(String number) {
-		return Contact.findByPrimaryMobile(number)?.name ?: number
+		return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 	}
 		
 	def updateContactName() {
