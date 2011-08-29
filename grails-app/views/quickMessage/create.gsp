@@ -33,7 +33,7 @@
 
 <script>
 	function addTabValidations() {
-		$("#tabs").tabs("disable", 3);
+		$("#tabs").tabs("disable", getTabLength());
 
 		$("#tabs-2").contentWidget({
 			validate: function() {
@@ -57,7 +57,7 @@
 
 
 	function goToNextTab() {
-		$("#tabs").tabs("enable", 3);
+		$("#tabs").tabs("enable", getTabLength());
 		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </script>

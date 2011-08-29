@@ -81,13 +81,20 @@
 								</g:remoteLink>
 							</li>
 						</ol>
-						<g:if test="${messageSection == 'poll'}">
-							<g:if test="${!params.archived}">
-								<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-							</g:if>
-							<button id="pollSettings">Show poll details</button>
-							<div id="pollGraph"></div>
-						</g:if>
+
+						<ol>
+							<li class='static_btn'>
+								<g:if test="${messageSection == 'poll'}">
+									<g:if test="${!params.archived}">
+										<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+									</g:if>
+								</g:if>
+							</li>
+							<li>
+								<button id="pollSettings">Show poll details</button>
+								<div id="pollGraph"></div>
+							</li>
+						</ol>
 					</div>
 					<div class="content-body">
 						<g:render template="message_list"/>

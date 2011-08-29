@@ -31,7 +31,7 @@
 			<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 			<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 			<g:if test="${contactInstance?.primaryMobile}">
-				<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);" class="send-message">
+				<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true, null, true);addTabValidations();" class="send-message">
 					<img src='${resource(dir:'images/icons',file:'send.gif')}' />
 				</g:remoteLink>
 			</g:if>
@@ -40,7 +40,7 @@
 			<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 			<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
 			<g:if test="${contactInstance?.secondaryMobile}">
-				<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);" class="send-message">
+				<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);addTabValidations();" class="send-message">
 					<img src='${resource(dir:'images/icons',file:'send.gif')}' />
 				</g:remoteLink>
 			</g:if>
