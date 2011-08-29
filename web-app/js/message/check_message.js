@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$('#message-details #multiple-messages').hide()
+	$('#message-details #multiple-messages').hide();
 });
 
 function messageChecked(messageId) {
@@ -83,7 +83,6 @@ function updateMultipleCheckedDetails(messageId) {
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
 	$.get(url_root + 'message/' + messageSection, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), archived: isArchived}, function(data) {
-	$.get(url_root + 'message/' + messageSection, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val() }, function(data) {
 		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
 		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
 	});
