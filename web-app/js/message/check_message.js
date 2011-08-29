@@ -69,8 +69,7 @@ function addToChecked(messageId) {
 
 function removeFromChecked(messageId) {
 	var messageList = $('input:hidden[name=checkedMessageList]');
-	var oldList = messageList.val();
-	var newList = oldList.replace(','+ messageId +',', ',');
+	var newList = jQuery.grep(messageList.val().split(","), function(element, index) {return element != messageId}).join(",");
 	messageList.val(newList);
 	updateMultipleCheckedDetails(messageId);
 }
@@ -91,6 +90,7 @@ function checkAll() {
 		$(':checkbox').each(function(index) {
 			this.checked = true;
 		});
+		$('input:hidden[name=checkedMessageList]').val("")
 		$('#messages-table tr').each(function(index) {
 			$(this).addClass('selected');
 			messageId = $(this).attr('id').substring('message-'.length);
