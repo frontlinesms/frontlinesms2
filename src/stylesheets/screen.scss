@@ -305,10 +305,8 @@ body {
 				}
 				
 				ol {		
-					@include clearfix;
-					@include column(14, true);
-					height: 46px;
-						
+					float: right;
+					clear: right;
 					li {
 						padding: 17px 17px 17px 0;
 						@include button-format;
