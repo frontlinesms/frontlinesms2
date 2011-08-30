@@ -1,4 +1,4 @@
-package frontlinesms2.services
+package frontlinesms2
 
 import frontlinesms2.*
 import spock.lang.*
@@ -9,12 +9,14 @@ class KeywordProcessorServiceSpec extends UnitSpec {
 	
 	def "test matches"() {
 		given:
-			mockDomain(Poll)
-			def response = new PollResponse()
-			mockDomain(PollResponse, [response])
-			def p = new Poll(title:"Football")
-			p.addToResponses(response)
-			p.save()
+/*			mockDomain(Poll)*/
+			def response1 = new PollResponse(value:"Barcelona")
+			def response2 = new PollResponse(value:"Manchester Utd")
+/*			mockDomain(PollResponse, [response1, response2])*/
+			def p = new Poll(title:"football")
+			p.addToResponses(response1)
+			p.addToResponses(response2)
+			p.save(failOnError:true)
 			
 			// TODO create football poll
 			def matchingMessageTexts = ['footballa', 'football a', ' football a', ' footballa   ', '''football
