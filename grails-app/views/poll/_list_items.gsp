@@ -2,10 +2,10 @@
 <table id="list-items">
 	<thead>
 	<tr>
-		<td>Name</td>
-		<td>Type</td>
-		<td>Date</td>
-		<td>Messages</td>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Date</th>
+		<th>Messages</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -20,17 +20,17 @@
 					<g:link controller="message" action="poll" params="[archived: true]" id="${poll.id}">
 						Poll
 					</g:link>
-				<td>
+				</td>
 				<td>
 					<g:link controller="message" action="poll" params="[archived: true]" id="${poll.id}">
 						<g:formatDate format="dd-MMM-yyyy hh:mm" date="${poll.dateCreated}"/>
 					</g:link>
-				<td>
+				</td>
 				<td>
 					<g:link controller="message" action="poll" params="[archived: true]" id="${poll.id}">
 						${poll.countMessages()}
 					</g:link>
-				<td>
+				</td>
 			</tr>
 		</g:each>
 	</tbody>
