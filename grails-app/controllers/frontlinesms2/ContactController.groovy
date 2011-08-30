@@ -62,34 +62,24 @@ class ContactController {
 	}
 
 	def update = {
-		withContact { contactInstance ->
-			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
-				def version = params.version.toLong()
-				if (contactInstance.version > version) {
-					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-					render(view: "show", model: [contactInstance: contactInstance])
-					return
+		def contactIds = params.checkedContactList != ',' ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
+		contactIds.each { id ->
+			withContact { contactInstance ->
+				if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
+					def version = params.version.toLong()
+					if (contactInstance.version > version) {
+						contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
+						render(view: "show", model: [contactInstance: contactInstance])
+						return
+					}
 				}
+				contactInstance.properties = params
+				updateData(contactInstance)
 			}
-			contactInstance.properties = params
-			updateData(contactInstance)
-			render(view:'show', model:show()<<[contactInstance:contactInstance])
 		}
+		render(view:'show', model:show())
 	}
-	
-	def updateMultipleContacts = {
-		if(params.contactIds) {
-			def contactIds = params.contactIds.tokenize(',').unique()
-			contactIds.each { id ->
-				withContact id, { contactInstance ->
-					updateData(contactInstance)
-				}
-			}
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-			redirect(action: 'show', params: [groupId: params.groupId])
-		}
-	}
-	
+
 	def createContact = {
 		def model = [contactInstance:new Contact(params),
 					contactFieldInstanceList: [],
@@ -101,12 +91,6 @@ class ContactController {
 		render(view:'show', model:model)
 	}
 
-	def createGroup = {
-		def groupInstance = new Group()
-		groupInstance.properties = params
-		[groupInstance: groupInstance] << buildList()
-	}
-
 	def saveContact = {
 		def contactInstance = new Contact(params)
 		contactInstance.properties = params
@@ -115,8 +99,10 @@ class ContactController {
 		redirect(action:'createContact')
 	}
 	
+	def confirmDelete = {	}
+	
 	def deleteContact = {
-		def contactIds = params.contactIds ? params.contactIds.tokenize(',').unique() : [params.contactId]
+		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 		contactIds.each { id ->
 			withContact id, { contactInstance ->
 				Contact.get(contactInstance.id).delete()
@@ -124,17 +110,6 @@ class ContactController {
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
 		redirect(action: "list")		
-	}
-
-	def saveGroup = {
-		def groupInstance = new Group(params)
-		if (!groupInstance.hasErrors() && groupInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
-			redirect(controller:'group', action:'show', id: groupInstance.id, params: [flashMessage: flash.message])
-		} else {
-			flash.message = "error"
-			redirect(action:'list', params: [flashMessage: flash.message, contactId: params.contactId])
-		}
 	}
 
 	def newCustomField = {
@@ -151,15 +126,14 @@ class ContactController {
 			c contactInstance
 		} else {
 			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-			redirect(action: "list")
 		}
 	}
 	
 	def multipleContactGroupList = {
-		if(!params.contactIds) {
+		if(!params.checkedContactList) {
 			return []
 		}
-		def contactIds = params.contactIds ? params.contactIds.tokenize(',').unique() : []
+		def contactIds = params.checkedContactList.tokenize(',').unique()
 		def sharedGroupInstanceList = []
 		def groupInstanceList = []
 		contactIds.each { id ->

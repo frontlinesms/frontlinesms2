@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form name="group-details" action="saveGroup" >
+	<g:form name="group-details" action="save" >
 		<div class="dialog">
 			<table>
 				<tbody>
@@ -12,7 +12,6 @@
 							<g:textField name="name" value="${groupInstance?.name}" />
 						</td>
 					</tr>
-
 				</tbody>
 			</table>
 		</div>

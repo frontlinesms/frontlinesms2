@@ -1,102 +1,75 @@
-function updateContactDetails(id){
-	highlightRow(id);
-	removeSelectedContact();
+function contactChecked(contactId) {
 	var count = countCheckedContacts();
-	//update checked contact list
-	$('input:hidden[name=contactIds]').val(getCheckedContacts());
-	
-	if(count == 1) {
-		loadContact($(':checkbox[checked="true"]').val());
+	if($('#contact-list #contact-' + contactId).find('input[type=checkbox]').attr('checked')) {
+		addToChecked(contactId);
+		if(count == 1) {
+			$('#contact-list').find('.selected').removeClass('selected');
+			loadSingleContact(contactId);
+		} else {
+			loadMultipleContacts(count);
+		}
+		$("#contact-" + contactId).addClass('selected');
+	} else {
+		if(count != 0) {
+			removeFromChecked(contactId);
+			$("#contact-" + contactId).removeClass('selected');
+			if (count == 1) {
+				var newContactRowId = $('#contact-list').find('.selected').attr('id');
+				var newContactId = newContactRowId.substring('contact-'.length);
+				loadSingleContact(newContactId);
+			} else {
+				loadMultipleContacts(count);
+			}
+		} else {
+			$('input:hidden[name=checkedContactList]').val(',');
+		}
 	}
-	
-	if(count > 1){
-		changeContactCount(count);
-		loadGroupList();
-	}
-	
 }
 
-function removeSelectedContact() {
-	if($('li.selected :checkbox[checked="false"]').is(':visible'))
-		$('#contact-' + $('li.selected :checkbox[checked="false"]').val()).removeClass('selected');
+function countCheckedContacts(){
+    return $('input[name=contact]:checked').size();
 }
 
-function loadContact(id) {
-	$.get(url_root + 'contact/show', { 'contactId': id, 'checkedId': id}, function(data) {
+function loadSingleContact(contactId) {
+	$('input:hidden[name=checkedContactList]').val(',' + contactId + ',');
+	$.get(url_root + 'contact/show', { 'contactId': contactId }, function(data) {
 		if($('div.single-contact').is(':hidden')) {
-			showContactDetails();
+			$('.multiple-contact').hide();
+			$('.single-contact').show();
 		}
 		$('#contact-title').replaceWith($(data).find('#contact-title'));
-		$('#contact_details').replaceWith($(data).find('#contact_details'));
+		$('.single-contact').replaceWith($(data).find('.single-contact'));
 		$("#group-list li a.remove-group").click(removeGroupClickAction);
 		$("#group-dropdown").change(addGroupClickAction);
 	});
 }
 
-function enableSingleAction() {
-	$('.multiple-contact').hide()
-	$('.single-contact').show()
-}
+function loadMultipleContacts(count) {
+	var contactIds = $('input:hidden[name=checkedContactList]').val();
 
-function showContactDetails(){
-	enableSingleAction();
-}
-
-function countCheckedContacts(){
-     return getSelectedContacts().size();
-}
-
-function changeContactCount(count){
-	$('#count').html("<p> "+count+" contacts selected</p>");
-	setContactDetails();
-}
-
-
-function setContactDetails() {
-	$('.multiple-contact').show();
-	$('.single-contact').hide();
-}
-
-function highlightRow(id){
-	if($(':checkbox[value=' + id +']').attr('checked','true')){
-		$("#contact-" + id).addClass('selected');
-	} else {
-		$("#contact-" + id).removeClass('selected');	
-	}
-}
-
-function getSelectedContacts() {
-	return $('input[name=contact]:checked');
-}
-
-function getCheckedContacts() {
-	var idsToDelete = []
-	$.each(getSelectedContacts(), function(index, value) {
-		if(isValid(value.value)) {
-			idsToDelete.push(value.value)
-		}
-	});
-	return idsToDelete;
-}
-
-function isValid(value) {
-		return value && value != "0"
-}
-
-function getSelectedContacts() {
-	return $('input[name=contact]:checked');
-}
-
-function validateDelete() {
-	return true;
-}
-
-function loadGroupList() {
-	var contactIds = $('input:hidden[name=contactIds]').val();
-	$.get(url_root + 'contact/multipleContactGroupList', { 'contactIds': contactIds}, function(data) {
+	$.get(url_root + 'contact/multipleContactGroupList', { 'checkedContactList': contactIds }, function(data) {
 		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
 		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
 		$("#multi-group-dropdown").change(addGroupClickAction);
 		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
 	});
+	$('#count').html("<p> " + count + " contacts selected</p>");
+	
+	if($('div.multiple-contact').is(':hidden')) {
+		$('.multiple-contact').show();
+		$('.single-contact').hide();
+	}
+}
+
+function addToChecked(contactId) {
+	var contactList = $('input:hidden[name=checkedContactList]');
+	var oldList = contactList.val();
+	var newList = oldList + contactId + ',';
+	contactList.val(newList);
+}
+
+function removeFromChecked(contactId) {
+	var contactList = $('input:hidden[name=checkedContactList]');
+	var newList = jQuery.grep(contactList.val().split(","), function(element, index) {return element != contactId}).join(",");
+	contactList.val(newList);
 }
