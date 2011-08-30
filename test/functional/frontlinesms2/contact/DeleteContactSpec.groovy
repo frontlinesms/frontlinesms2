@@ -34,8 +34,5 @@ class DeleteContactSpec extends ContactGebSpec {
 			withConfirm(true) { deleteBtn.click()}
 		then:
 			Contact.count() == 0
-			
-		cleanup:
-			deleteTestContacts()	
 	}
 }

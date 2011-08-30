@@ -12,7 +12,7 @@ function messageResponseClick(messageType) {
 	
 	$.ajax({
 		type:'POST',
-		data: {recipient: src, messageText: text, configureTabs: configureTabs},
+		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true);addTabValidations(); }
 	});
@@ -27,7 +27,7 @@ function launchMediumPopup(title, html, btnFinishedText) {
 		{
 			modal: true,
 			width: 675,
-			height: 400,
+			height: 500,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
@@ -47,7 +47,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 		height: 500,
 		buttons: [
 			{ text:"Cancel", click: cancel, id:"cancel" },
-			{ text:"Prev", click: prevButton, id:"prevPage" },
+			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
 			{ text:"Done",  click: cancel, id:"confirmation" },
 			{ text:btnFinishedText,  click: done, id:"done" }

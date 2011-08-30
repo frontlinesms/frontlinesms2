@@ -5,7 +5,8 @@ import grails.converters.JSON
 import javax.servlet.http.HttpServletRequest
 
 class MessageController {
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST", deleteAll: "POST",
+							archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
 
@@ -111,7 +112,7 @@ class MessageController {
 		def groups = [params.groups].flatten() - null
 		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
 		addresses.unique().each { address ->
-			//TODO: Need to add source from app settings
+			//TODO: Need to add source from app setting
 			def message = new Fmessage(src: "src", dst: address, text: params.messageText)
 			messageSendService.send(message)
 		}
@@ -120,7 +121,6 @@ class MessageController {
 	}
 	
 	def delete = {
-		println 'deleting?'
 		withFmessage {messageInstance ->
 			messageInstance.toDelete()
 			messageInstance.save(failOnError: true, flush: true)

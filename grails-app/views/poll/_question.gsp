@@ -19,9 +19,21 @@
 <script>
 	$("input[name='collect-responses']").live("change", function() {
 		if(isGroupChecked("collect-responses")) {
-			$('#tabs').tabs("disable",3);
+			$('#tabs').tabs("disable", 3);
+			$('#recipientsTab-text a').css('color', '#DFDFDF');
 		} else {
-			$('#tabs').tabs("enable",3);
+			$('#tabs').tabs("enable", 3);
+			$('#recipientsTab-text a').css('color', '#333333');
+		}
+	});
+
+	$("input[name='poll-type']").live("change", function() {
+		if ($("input[name='poll-type']:checked").val() == "standard") {
+			$('#tabs').tabs("disable", 1);
+			$('#responseTab-text a').css('color', '#DFDFDF');
+		} else {
+			$('#tabs').tabs("enable", 1);
+			$('#responseTab-text a').css('color', '#333333');
 		}
 	});
 </script>

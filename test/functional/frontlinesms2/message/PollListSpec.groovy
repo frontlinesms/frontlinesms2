@@ -120,8 +120,9 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("a", text:'archived poll').click()
 			waitFor {$("#messages").displayed}
 			$("#message")[0].click()
+			sleep(1000)
 			waitFor {$('#multiple-messages').displayed}
-			def btnDelete = $('#multiple-messages a')[1]
+			def btnDelete = $("#btn_delete_all")
 		then:
 			btnDelete
 		when:
@@ -130,6 +131,26 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor() {$("div.flash").text().contains("messages deleted") }
 		then:
 			$("#global-nav a", text: "Archive").hasClass("selected")
+	}
+
+	def "should hide the messages when poll detail chart is shown"() {
+		setup:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+			waitFor {$("#messages").displayed}
+		then:
+			$("#messages").displayed
+		when:
+			$("#pollSettings").click()
+			waitFor {!$("#messages").displayed}
+		then:
+			$(".response-count").text() == "2 responses total"
+		when:
+			$("#pollSettings").click()
+		then:
+			$("#messages").displayed
 	}
 }
 
