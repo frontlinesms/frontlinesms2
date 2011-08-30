@@ -4,8 +4,22 @@ class KeywordProcessorService {
 	private static final ALPHABET = "abcdefghijklmnopqrstuvwxyz"
 	static transactional = true
 
-	boolean matches(String messageText) {
-		getPollResponse(messageText) != null
+	def process(Fmessage message) {
+		processPollResponse(message)
+			// || processOtherStuff()
+	}
+	
+	def processPollResponse(Fmessage message) {
+		def pollResponse = getPollResponse(message.text)
+		if(pollResponse != null) {
+			processPollResponse(pollResponse, message)
+			return true
+		} else return false
+	}
+	
+	def processPollResponse(PollResponse response, Fmessage message) {
+		response.addToMessages(message)
+		response.save(failOnError: true)
 	}
 
 	PollResponse getPollResponse(String messageText) {

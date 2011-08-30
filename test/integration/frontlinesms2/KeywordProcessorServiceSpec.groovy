@@ -35,5 +35,15 @@ class KeywordProcessorServiceSpec extends UnitSpec {
 		then:
 			results.each { assert it == response2 }
 	}
+	
+	def "processPollResponse() should associate Fmessage with PollResponse"() {
+		given:
+			Fmessage m = new Fmessage().save(failOnError: true)
+			PollResponse r = new PollResponse(value: "whatever").save(failOnError: true)
+		when:
+			service.processPollResponse(r, m)
+		then:
+			r.messages?.size() == 1
+	}
 }
 
