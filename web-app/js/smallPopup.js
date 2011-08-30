@@ -1,8 +1,3 @@
-function launchConfirm(title, html, btnFinishedText) {
-	alert(html);
-	launchSmallPopup(title, html, btnFinishedText)
-}
-
 function launchSmallPopup(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
