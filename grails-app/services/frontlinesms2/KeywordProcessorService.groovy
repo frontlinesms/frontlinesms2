@@ -24,7 +24,6 @@ class KeywordProcessorService {
 			if(pollResponse) return pollResponse
 			else return getPollResponse(keyword) // TODO should do this in a single select
 		}
-		return null
 	}
 	
 	PollResponse getPollResponse(String keyword, String option) {
