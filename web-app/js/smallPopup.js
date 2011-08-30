@@ -1,10 +1,14 @@
-function launchSmallPopup(title, html, btnFinishedText, width) {
-	if(!width) {width = 285}
+function launchConfirm(title, html, btnFinishedText) {
+	alert(html);
+	launchSmallPopup(title, html, btnFinishedText)
+}
+
+function launchSmallPopup(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
 			modal: true,
-			width: width,
+			width: 285,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
