@@ -144,8 +144,8 @@ body {
 		top: -25px;
 		width: 100%;
 		
-		.selected {
-			background-color: $highlight;
+		#list-items tbody tr:first-child, .selected {
+			background-color: $highlight !important;
 		}
 		
 		.context-menu { padding-bottom: 40px; }
@@ -797,4 +797,21 @@ a.send-failed, .send-failed td:last-child {
 
 .flash {
 	margin: 20px;
+}
+
+#archive-submenu {
+	#inbox {
+		background: url('../images/icons/messages.gif') no-repeat center left transparent;
+		padding-left: 20px
+	}
+
+	#sent {
+		background: url('../images/icons/messages.gif') no-repeat center left transparent;
+		padding-left: 20px;
+	}
+
+	#poll {
+		background: url('../images/icons/activities.gif') no-repeat center left transparent;
+		padding-left: 20px;
+	}
 }
