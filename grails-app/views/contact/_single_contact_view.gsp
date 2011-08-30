@@ -11,7 +11,7 @@
 			<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
 			<g:if test="${contactInstance.id}">
 				<li>
-					<g:remoteLink class="delete" action="confirmDelete" params="[checkedContactList: contactInstance.id, message: 'Delete ' + contactInstance?.name + '?']" onSuccess="launchSmallPopup('Delete', data, 'Ok');">
+					<g:remoteLink class="delete" action="confirmDelete" params="[contactInstanceList: contactInstance.id, contactInstanceTotal: contactInstance?.name + '?']" onSuccess="launchSmallPopup('Delete', data, 'Ok');">
 						Delete
 					</g:remoteLink>
 				</li>

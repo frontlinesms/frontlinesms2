@@ -1,39 +1,37 @@
 <div class="multiple-contact hide">
-	<g:form name="multiple-contact-details">
-		<div class="buttons">
-			<ol>
-				<li><g:actionSubmit class="update" action="update" value="Save All"/></li>
-				<li> <g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
-				<li>
-					<g:remoteLink class="delete" action="confirmDelete" onSuccess="launchConfirm('Delete', data, 'Ok');">
-						Delete All
-					</g:remoteLink>
+	<div class="buttons">
+		<ol>
+			<li><g:actionSubmit class="update" action="update" value="Save All"/></li>
+			<li> <g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+			<li>
+				<g:remoteLink class="delete" action="confirmDelete" params="[checkedContactList: params.checkedContactList]" onSuccess="launchSmallPopup('Delete all', data, 'Ok');">
+					Delete all
+				</g:remoteLink>
+			</li>
+		</ol>
+	</div>
+	<div id="count"></div>
+	<div class="multiple-contact">
+		<div>
+			<ol id='multi-group-list'>
+				<g:each in="${sharedGroupInstanceList}" status="i" var="g">
+					<li class="${g == groupInstance ? 'selected' : ''}">
+						<input type="text" name="${g.name}" value="${g.name}" readonly="readonly" />
+						<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+					</li>
+				</g:each>
+				<li id="multi-no-groups" style="${sharedGroupInstanceList?'display: none':''}">
+					<p>Not part of any Groups</p>
 				</li>
 			</ol>
 		</div>
-		<div id="count"></div>
-		<div class="multiple-contact">
-			<div>
-				<ol id='multi-group-list'>
-					<g:each in="${sharedGroupInstanceList}" status="i" var="g">
-						<li class="${g == groupInstance ? 'selected' : ''}">
-							<input type="text" name="${g.name}" value="${g.name}" readonly="readonly" />
-							<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
-						</li>
-					</g:each>
-					<li id="multi-no-groups" style="${sharedGroupInstanceList?'display: none':''}">
-						<p>Not part of any Groups</p>
-					</li>
-				</ol>
-			</div>
-			<div id='multi-group-add' class="dropdown">
-				<select id="multi-group-dropdown" name="multi-group-dropdown">
-					<option class="not-group">Add to group...</option>
-					<g:each in="${nonSharedGroupInstanceList}" status="i" var="g">
-						<option value="${g.id}">${g.name}</option>
-					</g:each>
-				</select>
-			</div>
+		<div id='multi-group-add' class="dropdown">
+			<select id="multi-group-dropdown" name="multi-group-dropdown">
+				<option class="not-group">Add to group...</option>
+				<g:each in="${nonSharedGroupInstanceList}" status="i" var="g">
+					<option value="${g.id}">${g.name}</option>
+				</g:each>
+			</select>
 		</div>
-	</g:form>
+	</div>
 </div>

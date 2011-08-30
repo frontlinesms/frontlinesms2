@@ -53,6 +53,7 @@ class ContactController {
 			def contactGroupInstanceList = contactInstance.groups?: []
 			def contactFieldInstanceList = contactInstance.customFields
 			[contactInstance:contactInstance,
+					checkedContactList: ',',
 					contactFieldInstanceList: contactFieldInstanceList,
 					contactGroupInstanceList: contactGroupInstanceList,
 					contactGroupInstanceTotal: contactGroupInstanceList.size(),
@@ -99,7 +100,18 @@ class ContactController {
 		redirect(action:'createContact')
 	}
 	
-	def confirmDelete = {	}
+	def confirmDelete = {
+		println params.checkedContactList
+		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
+		def contactInstanceList = []
+		contactIds.each { id ->
+			withContact id, { contactInstance ->
+				contactInstanceList << contactInstance
+			}
+		}
+		[contactInstanceList: contactInstanceList,
+				contactInstanceTotal: contactInstanceList.count()]
+	}
 	
 	def deleteContact = {
 		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]

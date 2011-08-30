@@ -14,7 +14,7 @@
     	<div id="contact_details">
     		<g:form name="details">
 	    		<g:hiddenField name="version" value="${contactInstance?.version}"/>
-	    		<g:hiddenField name="checkedContactList" value=","/>
+	    		<g:hiddenField name="checkedContactList" id='checkedContactList' value="${params.checkedContactList}"/>
 	    		<g:hiddenField name="groupsToAdd" value=","/>
 				<g:hiddenField name="groupsToRemove" value=","/>
 				<g:hiddenField name="fieldsToAdd" value=","/>
