@@ -26,7 +26,7 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
-		updateContactName()
+		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
 	

@@ -12,8 +12,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 	        inbox*.src == ["+254778899", "Bob", "Alice", "9544426444"]
 	        inbox.every {it.status == MessageStatus.INBOUND}
 	        inbox.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "should fetch starred messages from inbox"() {
@@ -25,8 +23,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			inbox.size() == 1
 			inbox.every {it.starred}
 			inbox.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "check for offset and limit while fetching inbox messages"() {
@@ -38,8 +34,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			firstThreeInboxMsgs.size() == 3
 			firstThreeInboxMsgs*.src == ["+254778899", "Bob", "Alice"]
-		cleanup:
-			deleteTestData()
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
@@ -51,8 +45,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			assert sent.size() == 2
 			sent.every { it.status == MessageStatus.SENT}
 			sent.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "should return starred sent messages"() {
@@ -65,8 +57,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			sent[0].status == MessageStatus.SENT
 			sent[0].starred
 			sent.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "check for offset and limit while fetching sent messages"() {
@@ -77,8 +67,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			def firstSentMsg = Fmessage.getSentMessages(['archived': false, 'starred':false, 'max': 1, 'offset': 0])
 		then:
 			firstSentMsg*.src == ['+254445566']
-		cleanup:
-			deleteTestData()
 	}
 
 
@@ -90,8 +78,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			results*.src == ["Jim", "Bob", "Jack"]
 			results.every {it.archived == false}
-		cleanup:
-			Folder.list()*.delete()
 	}
 
 	def "should fetch starred folder messages"() {
@@ -102,8 +88,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			results*.src == ["Jack"]
 			results.every {it.archived == false}
-		cleanup:
-			Folder.list()*.delete()
 	}
 	
 
@@ -115,8 +99,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			def firstFolderMsg = Folder.findByName("home").getFolderMessages(['starred':false, 'max':1, 'offset': 0])
 		then:
 			firstFolderMsg*.src == ['Jim']
-		cleanup:
-			Folder.list()*.delete()
 	}
 
 	def "should fetch all pending messages"() {
@@ -128,8 +110,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		    results.size() == 2
 			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
 			results.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "should fetch starred pending messages"() {
@@ -142,8 +122,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			results[0].status == MessageStatus.SEND_PENDING
 			results[0].starred
 			results.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "check for offset and limit while fetching pending messages"() {
@@ -166,8 +144,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			results[0].deleted
 			results[0].starred
 			results.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "should fetch deleted messages"() {
@@ -180,8 +156,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		    results.size() == 2
 			results[0].deleted
 			results.every {it.archived == false}
-		cleanup:
-			deleteTestData()
 	}
 
 	def "check for offset and limit while fetching deleted messages"() {
@@ -218,19 +192,6 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		liverResponse.addToMessages(liverMessage).save(failOnError: true)
 		chickenResponse.addToMessages(chickenMessage).save(failOnError: true)
         new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
-	}
-
-	static deleteTestData() {
-
-		Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
 	}
 
 	private def setUpFolderMessages() {
