@@ -815,3 +815,12 @@ a.send-failed, .send-failed td:last-child {
 		padding-left: 20px;
 	}
 }
+
+.response-count {
+	float:right;
+}
+
+.poll-details {
+	clear:both;
+	font-weight: bold;
+}

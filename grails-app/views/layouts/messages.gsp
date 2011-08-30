@@ -92,14 +92,17 @@
 									<button id="pollSettings">Show poll details</button>
 								</li>
 							</ol>
-							<div id="pollGraph"></div>
+							<div class="poll-details" style="display:none">
+								<div id="pollGraph"></div>
+							</div>
 						</g:if>
 					</div>
-					<div class="content-body">
-						<g:render template="message_list"/>
-						<g:layoutBody />
-					</div>
-					<div class="content-footer">
+					<div class="container" style="display:block">
+						<div class="content-body">
+							<g:render template="message_list"/>
+							<g:layoutBody />
+						</div>
+						<div class="content-footer">
 						<g:if test="${!params.archived}">
 							<ul id="filter">
 								<li>Show:</li>
@@ -113,6 +116,7 @@
 									max="${grailsApplication.config.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
+					</div>
 					</div>
 				</div>
 			</div>
