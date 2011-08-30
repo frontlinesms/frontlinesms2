@@ -75,25 +75,34 @@
 								</g:remoteLink>
 							</li>
 							<li>
-					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true);addTabValidations();" id="quick_message">
+					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
 					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
 									Quick message
 								</g:remoteLink>
 							</li>
 						</ol>
 						<g:if test="${messageSection == 'poll'}">
-							<g:if test="${!params.archived}">
-								<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-							</g:if>
-							<button id="pollSettings">Show poll details</button>
-							<div id="pollGraph"></div>
+							<ol>
+								<li class='static_btn'>
+										<g:if test="${!params.archived}">
+											<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+										</g:if>
+								</li>
+								<li>
+									<button id="pollSettings">Show poll details</button>
+								</li>
+							</ol>
+							<div class="poll-details" style="display:none">
+								<div id="pollGraph"></div>
+							</div>
 						</g:if>
 					</div>
-					<div class="content-body">
-						<g:render template="message_list"/>
-						<g:layoutBody />
-					</div>
-					<div class="content-footer">
+					<div class="container" style="display:block">
+						<div class="content-body">
+							<g:render template="message_list"/>
+							<g:layoutBody />
+						</div>
+						<div class="content-footer">
 						<g:if test="${!params.archived}">
 							<ul id="filter">
 								<li>Show:</li>
@@ -107,6 +116,7 @@
 									max="${grailsApplication.config.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
+					</div>
 					</div>
 				</div>
 			</div>

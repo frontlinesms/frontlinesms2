@@ -7,10 +7,6 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class CheckedContactSpec extends ContactGebSpec {
-
-	def cleanup() {
-		deleteTestContacts()
-	}
 	
 	def 'should update screen to show number of selected messages'() {
 		given:

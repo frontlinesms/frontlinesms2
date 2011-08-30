@@ -26,29 +26,23 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
-		def details = status == MessageStatus.INBOUND ? src : dst
-		if(details) {
-			Contact.withNewSession { session ->
-				contactName = Contact.findByPrimaryMobile(src)?.name ?: Contact.findBySecondaryMobile(src)?.name
-			}
-		}
+		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
+	}
+	
+	
+	private String findContact(String number) {
+		return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 	}
 		
 	def updateContactName() {
-		if(status == MessageStatus.INBOUND) {
-			fetchContactName(src)
+		def fetchContactName = { number ->
+			Contact.withNewSession {
+				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
+			}
 		}
-		else {
-			fetchContactName(dst)
-		}
+		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
 	}
 	
-	def fetchContactName(String number) {
-		Contact.withNewSession { session ->
-			contactName = findContact(number)
-		}
-	}
-
 	static constraints = {
 		src(nullable:true)
 		dst(nullable:true)
@@ -175,12 +169,8 @@ class Fmessage {
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
 	}
 	
-	def getDisplayName() { // FIXME this should be src OR dst depending on whether this message is incoming or outgoing
-		contactName?:src
-	}
-
-	def getRecipientDisplayName() { // FIXME this method should be removed once getDisplayName() has been correctly updated
-		 findContact(dst)
+	def getDisplayName() { 
+		contactName
 	}
 
 	def toDelete() { // FIXME is this method necessary?
@@ -261,12 +251,12 @@ class Fmessage {
 	}
 	
 	static def search(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset) {
-		if(!searchString && !contactInstance && !groupInstance) return []
+		if(!searchString && !contactInstance && !groupInstance?.getAddresses()) {return []}
 		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwner).list(sort:"dateReceived", order:"desc", max: max, offset: offset)
 	}
 
 	static def countAllSearchMessages(String searchString=null, String contactInstance=null, Group groupInstance=null, Collection<MessageOwner> messageOwners=[]) {
-		if(!searchString && !contactInstance && !groupInstance) return 0
+		if(!searchString && !contactInstance && !groupInstance?.getAddresses()) return 0
 		return Fmessage.searchMessages(searchString, contactInstance, groupInstance, messageOwners).count()
 	}
 
@@ -303,9 +293,4 @@ class Fmessage {
 		}
 		answer
 	}
-
-	private String findContact(String number) {
-		return Contact.findByPrimaryMobile(number)?.name ?: number
-	}
-	
 }

@@ -1,3 +1,7 @@
+$(document).ready(function() {
+	$('#message-details #multiple-messages').hide();
+});
+
 function messageChecked(messageId) {
 	var count = countCheckedMessages();
 	count = setCheckAllBox(count);
@@ -69,8 +73,7 @@ function addToChecked(messageId) {
 
 function removeFromChecked(messageId) {
 	var messageList = $('input:hidden[name=checkedMessageList]');
-	var oldList = messageList.val();
-	var newList = oldList.replace(','+ messageId +',', ',');
+	var newList = jQuery.grep(messageList.val().split(","), function(element, index) {return element != messageId}).join(",");
 	messageList.val(newList);
 	updateMultipleCheckedDetails(messageId);
 }
@@ -80,8 +83,8 @@ function updateMultipleCheckedDetails(messageId) {
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
 	$.get(url_root + 'message/' + messageSection, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), archived: isArchived}, function(data) {
-		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages').show());
-		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages').show());
+		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
+		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
 	});
 }
 
@@ -91,6 +94,7 @@ function checkAll() {
 		$(':checkbox').each(function(index) {
 			this.checked = true;
 		});
+		$('input:hidden[name=checkedMessageList]').val("")
 		$('#messages-table tr').each(function(index) {
 			$(this).addClass('selected');
 			messageId = $(this).attr('id').substring('message-'.length);

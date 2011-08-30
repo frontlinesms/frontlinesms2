@@ -2,9 +2,9 @@
 <div id="tabs" class="vertical-tabs">
 		<ol>
 			<li><a href="#tabs-1">Enter Question</a></li>
-			<li><a href="#tabs-2">Response list</a></li>
+			<li id='responseTab-text'><a href="#tabs-2">Response list</a></li>
 			<li><a href="#tabs-3">Automatic reply</a></li>
-			<li><a href="#tabs-4">Select recipients</a></li>
+			<li id='recipientsTab-text'><a href="#tabs-4">Select recipients</a></li>
 			<li><a href="#tabs-5">Confirm</a></li>
 		</ol>
 

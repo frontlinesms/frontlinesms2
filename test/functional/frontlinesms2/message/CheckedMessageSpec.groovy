@@ -1,6 +1,7 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.enums.MessageStatus
 
 class CheckedMessageSpec extends MessageGebSpec {
 	
@@ -97,6 +98,32 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$('#messages tr:last-child td:nth-child(3) a').click()
 		then: 
 			$("#message")[1].@checked == ""
+	}
+
+
+	def "select all should update the total message count when messages are checked"() {
+		given:
+			createInboxTestMessages()
+			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+		when:
+			to MessagesPage
+			$("#message")[0].click()
+			sleep(1000)
+			waitFor { $('#multiple-messages').displayed}
+		then:
+			$("#checked-message-count").text() == "3 messages selected"
+		when:
+			$('#message')[1].click()
+			sleep(1000)
+			waitFor { $("#checked-message-count").text().contains("2") }
+		then:
+			$("#checked-message-count").text() == "2 messages selected"
+		when:
+			$('#message')[0].click()
+			sleep(1000)
+			waitFor { $("#checked-message-count").text().contains("3") }
+		then:
+			$("#checked-message-count").text() == "3 messages selected"
 	}
 
 	def "can archive multiple messages"() {
