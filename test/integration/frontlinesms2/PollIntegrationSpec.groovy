@@ -105,6 +105,17 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		cleanup:
 			Folder.list()*.delete()
 	}
+	
+	def "title uniqueness should be case-insensitive"() {
+		given:
+			setUpPollResponseAndItsMessages()
+		when:
+			def poll = new Poll(title: 'Question')
+			poll.addToResponses(new PollResponse(value: "response 1"))
+			poll.addToResponses(new PollResponse(value: "response 2"))
+		then:
+			!poll.validate()
+	}
 
 	private def setUpPollResponseAndItsMessages() {
 		def poll = new Poll(title: 'question')
