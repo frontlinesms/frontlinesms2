@@ -27,7 +27,8 @@ class MessageControllerSpec extends ControllerSpec {
 				
 		controller.metaClass.getPaginationCount = {-> return 10}
 	}
-
+	
+// FIXME why are these tests commented out?  Either fix them or delete them and file a ticket to test further.
 /*	def "should send message to all the members in a group"() {
 		setup:
 			mockParams.groups = "Sahara"
@@ -453,6 +454,7 @@ class MessageControllerSpec extends ControllerSpec {
 			})
 	}
 
+// TODO indentation is completely messed up here
      private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure)  {
 			registerMetaClass(Fmessage)
 		 	Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}

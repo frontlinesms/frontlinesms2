@@ -42,7 +42,7 @@
 							<g:if test="${params.action == 'results'}">
 								<div id="page-arrows">
 									<g:paginate next="Forward" prev="Back"
-										 max="${grailsApplication.config.pagination.max}"
+										 max="${grailsApplication.config.grails.views.pagination.max}"
 										action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
 								</div>
 							</g:if>

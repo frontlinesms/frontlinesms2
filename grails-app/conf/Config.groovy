@@ -41,7 +41,10 @@ grails.views.gsp.sitemesh.preprocess = true
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
 // jquery plugin
-grails.views.javascript.library="jquery"
+grails.views.javascript.library = "jquery"
+
+// pagination
+grails.views.pagination.max = 50
 
 // Set to false to use the new Grails 1.2 JSONBuilder in the render method
 grails.json.legacy.builder = false
@@ -57,7 +60,6 @@ grails.exceptionresolver.params.exclude = ['password']
 
 // set per-environment serverURL stem for creating absolute links
 environments {
-    pagination.max = 50
     production {
         grails.serverURL = "http://www.changeme.com"
     }
