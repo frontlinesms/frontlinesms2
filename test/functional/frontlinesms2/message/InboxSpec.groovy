@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class InboxSpec extends MessageGebSpec {
 	def 'inbox message list is displayed'() {

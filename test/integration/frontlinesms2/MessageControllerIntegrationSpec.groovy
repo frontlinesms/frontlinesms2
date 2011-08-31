@@ -4,7 +4,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import frontlinesms2.enums.MessageStatus
 
 class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
