@@ -1,7 +1,6 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 	def 'message actions menu is displayed for all individual messages'() {

@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 import grails.plugin.spock.UnitSpec
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange

@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 	

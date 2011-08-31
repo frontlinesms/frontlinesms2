@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 	def "getInboxMessages() returns the list of messages with inbound equal to true that are not part of an activity"() {

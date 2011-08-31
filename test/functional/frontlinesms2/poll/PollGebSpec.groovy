@@ -1,7 +1,6 @@
 package frontlinesms2.poll
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class PollGebSpec extends grails.plugin.geb.GebSpec {
 	static createTestPolls() {
