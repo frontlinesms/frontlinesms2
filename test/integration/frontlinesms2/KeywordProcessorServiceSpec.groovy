@@ -4,13 +4,13 @@ import frontlinesms2.*
 import spock.lang.*
 import grails.plugin.spock.*
 
-class KeywordProcessorServiceSpec extends UnitSpec {
+class KeywordProcessorServiceSpec extends IntegrationSpec {
 	def service = new KeywordProcessorService()
 	
 	def "test getPollResponse"() {
 		given:
-			def response1 = new PollResponse(value:"Barcelona")
-			def response2 = new PollResponse(value:"Manchester Utd")
+			def response1 = new PollResponse(value:"AC Milan")
+			def response2 = new PollResponse(value:"FC United of Manchester")
 			def p = new Poll(title:"football")
 			p.addToResponses(response1)
 			p.addToResponses(response2)

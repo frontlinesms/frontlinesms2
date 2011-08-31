@@ -2,7 +2,6 @@ package frontlinesms2
 
 class KeywordProcessorService {
 	private static final ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-	static transactional = true
 
 	def process(Fmessage message) {
 		processPollResponse(message)
