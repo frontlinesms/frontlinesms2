@@ -135,7 +135,7 @@ class MessageController {
 	}
 	
 	def deleteAll = {
-		def messageIdList = params.checkedMessageList?.tokenize(',')
+		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.toDelete()

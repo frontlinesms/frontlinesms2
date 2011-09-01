@@ -61,24 +61,34 @@ class ContactController {
 					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
 		}
 	}
-
+	
 	def update = {
-		def contactIds = params.checkedContactList != ',' ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
-		contactIds.each { id ->
-			withContact { contactInstance ->
-				if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
-					def version = params.version.toLong()
-					if (contactInstance.version > version) {
-						contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-						render(view: "show", model: [contactInstance: contactInstance])
-						return
-					}
+		withContact { contactInstance ->
+			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
+				def version = params.version.toLong()
+				if (contactInstance.version > version) {
+					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
+					render(view: "show", model: [contactInstance: contactInstance])
+					return
 				}
-				contactInstance.properties = params
-				updateData(contactInstance)
 			}
+			contactInstance.properties = params
+			updateData(contactInstance)
+			render(view:'show', model:show()<<[contactInstance:contactInstance])
 		}
-		render(view:'show', model:show())
+	}
+	
+	def updateMultipleContacts = {
+		if(params.checkedContactList) {
+			def contactIds = params.checkedContactList.tokenize(',').unique()
+			contactIds.each { id ->
+				withContact id, { contactInstance ->
+					updateData(contactInstance)
+				}
+			}
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
+			redirect(action: 'show')
+		}
 	}
 
 	def createContact = {
@@ -101,7 +111,6 @@ class ContactController {
 	}
 	
 	def confirmDelete = {
-		println params.checkedContactList
 		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 		def contactInstanceList = []
 		contactIds.each { id ->
@@ -113,7 +122,7 @@ class ContactController {
 				contactInstanceTotal: contactInstanceList.count()]
 	}
 	
-	def deleteContact = {
+	def delete = {
 		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 		contactIds.each { id ->
 			withContact id, { contactInstance ->

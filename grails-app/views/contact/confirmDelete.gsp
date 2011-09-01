@@ -1,6 +1,6 @@
 <div>
-	<g:form name="confirmDelete" action="deleteContact" >
+	<g:form name="confirmDelete" action="delete" >
 		<g:hiddenField name="checkedContactList" value="${params.checkedContactList}"/>
-		<h2>Delete contacts?</h2>
+			<h2>${params.message}</h2>
 	</g:form>
 </div>
