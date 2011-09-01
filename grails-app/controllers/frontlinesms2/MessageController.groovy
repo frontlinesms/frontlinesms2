@@ -155,7 +155,7 @@ class MessageController {
 	}
 
 	def move = {
-		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
+		def messageIdList = params.messageId.contains(',') ? params.messageId.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				def messageOwner
@@ -177,7 +177,7 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
+		def messageIdList = params.messageId.contains(',') ? params.messageId.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
 				println messageInstance
