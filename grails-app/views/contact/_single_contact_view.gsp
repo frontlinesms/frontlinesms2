@@ -1,19 +1,18 @@
 <div class="single-contact">
-	<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 	<div class="buttons">
 		<ol>
-			<g:if test="${contactInstance.id}">
-				<li><g:actionSubmit class="update" action="update" value="Save"/></li>
+			<g:if test="${contactInstance?.id}">
+				<li><g:actionSubmit id="update-single" action="update" value="Save"/></li>
 			</g:if>
 			<g:else>
-				<li><g:actionSubmit class="save" action="saveContact" value="Save"/></li>
+				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
 			</g:else>
 			<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
-			<g:if test="${contactInstance.id}">
+			<g:if test="${contactInstance?.id}">
 				<li>
-					<g:remoteLink class="delete" action="confirmDelete" params="[contactInstanceList: contactInstance.id, contactInstanceTotal: contactInstance?.name + '?']" onSuccess="launchSmallPopup('Delete', data, 'Ok');">
+					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">
 						Delete
-					</g:remoteLink>
+					</a>
 				</li>
 			</g:if>
 		</ol>
@@ -27,7 +26,7 @@
 		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 		<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
 		<g:if test="${contactInstance?.primaryMobile}">
-			<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true, null, true);addTabValidations();" class="send-message">
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true, null, true);addTabValidations();">
 				<img src='${resource(dir:'images/icons',file:'send.gif')}' />
 			</g:remoteLink>
 		</g:if>
@@ -36,7 +35,7 @@
 		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 		<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
 		<g:if test="${contactInstance?.secondaryMobile}">
-			<g:remoteLink controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);addTabValidations();" class="send-message">
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);addTabValidations();">
 				<img src='${resource(dir:'images/icons',file:'send.gif')}' />
 			</g:remoteLink>
 		</g:if>
@@ -44,8 +43,8 @@
    	<div class="basic-info field">
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email}"/>
-		<g:if test="${contactInstance?.email && contactInstance.validate(['email', contactInstance?.email])}">
-			<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance.email]" onSuccess="loadContents(data);" class="quick_message">
+		<g:if test="${contactInstance?.email && contactInstance?.validate(['email', contactInstance?.email])}">
+			<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
 				 <img src='${resource(dir:'images/icons',file:'send.gif')}' />
 			</g:remoteLink>
 		</g:if>
@@ -102,9 +101,9 @@
 		<label for="messages">Messages</label>
 		<div id="message-count">
 			<img src='${resource(dir:'images/icons',file:'sentmessages.gif')}' />
-			<p>${contactInstance.inboundMessagesCount} messages sent</p><br />
+			<p>${contactInstance?.inboundMessagesCount} messages sent</p><br />
 			<img src='${resource(dir:'images/icons',file:'recievedmessages.gif')}' />
-			<p>${contactInstance.outboundMessagesCount} messages received</p>
+			<p>${contactInstance?.outboundMessagesCount} messages received</p>
 		</div>
 		<div id='message-search'>
 			<g:link class="buttons" controller='search' action='result' params="[contactSearchString: contactInstance?.name]" >

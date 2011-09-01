@@ -17,8 +17,7 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 		then:
-			def firstContactListItem = $('#contacts').children().first()
-			def anchor = firstContactListItem.children('a').first()
+			def anchor = $(".displayName-${alice.id}")
 			anchor.text() == 'Alice'
 			anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
 	}
@@ -97,7 +96,7 @@ class ContactShowSpec extends ContactGebSpec {
 	  		def alice = Contact.findByName('Alice')
 		when:
 	  		go "contact/show/${alice.id}"
-			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
+			$("#contact_details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 	        $('div#tabs-1').displayed
@@ -109,13 +108,13 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 	  		go "contact/show/${alice.id}"
 		then:
-			$("#contact-details .send-message").each {
+			$("#contact_details .send-message").each {
 	        	assert it.getAttribute('href') ==~ /.*recipients=\d+/
 			}
 	}
 
 	def assertContactSelected(String name) {
-		def selectedChildren = $('#contacts').children('li.selected')
+		def selectedChildren = $('#contact-list').children('li.selected')
 		assert selectedChildren.size() == 1
 		assert selectedChildren.text() == name
 		true

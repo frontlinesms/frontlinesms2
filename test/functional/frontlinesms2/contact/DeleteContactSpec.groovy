@@ -13,7 +13,10 @@ class DeleteContactSpec extends ContactGebSpec {
 		when:
 			go "contact/show/${Contact.findByName('Alice').id}"
 			def deleteBtn = $('#btn_delete')
-			withConfirm(true) { deleteBtn.click()}
+			deleteBtn.click()
+			sleep 1000
+			$("#done").click()
+			sleep 1000
 		then:
 			!Contact.findAllByName('Alice')
 	}
@@ -31,11 +34,12 @@ class DeleteContactSpec extends ContactGebSpec {
 			sleep 1000
 			
 			def deleteBtn = $('#btn_delete_all')
-			withConfirm(true) { deleteBtn.click()}
+			deleteBtn.click()
+			sleep 1000
+			$("#done").click()
+			sleep 3000
 		then:
 			Contact.count() == 0
-			
-		cleanup:
-			deleteTestContacts()	
+
 	}
 }

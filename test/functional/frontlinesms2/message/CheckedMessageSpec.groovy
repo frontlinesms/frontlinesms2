@@ -12,6 +12,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
+			$("#message")[3].click()
 		then:
 			$("#message")[0].@checked == "true"
 	}

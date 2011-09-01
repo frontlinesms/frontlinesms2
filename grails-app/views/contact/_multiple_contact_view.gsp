@@ -1,12 +1,12 @@
 <div class="multiple-contact hide">
 	<div class="buttons">
 		<ol>
-			<li><g:actionSubmit class="update" action="update" value="Save All"/></li>
+			<li><g:actionSubmit id="update-all" action="updateMultipleContacts" value="Save All"/></li>
 			<li> <g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
 			<li>
-				<g:remoteLink class="delete" action="confirmDelete" params="[checkedContactList: params.checkedContactList]" onSuccess="launchSmallPopup('Delete all', data, 'Ok');">
+				<a id="btn_delete_all" onclick="launchConfirmationPopup('Delete all');">
 					Delete all
-				</g:remoteLink>
+				</a>
 			</li>
 		</ol>
 	</div>

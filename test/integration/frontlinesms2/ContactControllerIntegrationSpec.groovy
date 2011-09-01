@@ -54,7 +54,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			def contact1 = new Contact(name: "Test 1").save(failOnError: true)
 			def contact2 = new Contact(name: "Test 2").save(failOnError: true)
 		when:
-			controller.params.contactIds = "${contact1.id}, ${contact2.id}"
+			controller.params.checkedContactList = "${contact1.id}, ${contact2.id}"
 			controller.params.groupsToAdd = ",${g.id},"
 			controller.params.groupsToRemove = ","
 			controller.updateMultipleContacts()
@@ -116,7 +116,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	def "Deleting a contact removes it from the database" () {
 		when:
 			controller.params.contactId = c.id
-			controller.deleteContact()
+			controller.delete()
 		then:
 			!Contact.findAllByName('Bob')
 	}
@@ -127,7 +127,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			assert g.getMembers()
 		when:
 			controller.params.contactId = c.id
-			controller.deleteContact()
+			controller.delete()
 			g.refresh()
 		then:
 			!Contact.findByName('Bob')
@@ -146,7 +146,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			contact2.addToGroups(group1)
 			contact2.addToGroups(group2)
 		when:
-			controller.params.contactIds = "${contact1.id}, ${contact2.id}"
+			controller.params.checkedContactList = ",${contact1.id}, ${contact2.id},"
 			controller.multipleContactGroupList()
 			def model = controller.modelAndView.model
 		then:
