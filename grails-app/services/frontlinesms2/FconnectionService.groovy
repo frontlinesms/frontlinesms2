@@ -43,7 +43,7 @@ class FconnectionService {
 		}
 	}
 	
-	def createRoute(Fconnection c) {
+	def createRoutes(Fconnection c) { // FIXME should be called createRoutes <- plural
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		camelContext.addRouteDefinitions(routes)
 	}
