@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -31,14 +30,6 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
 		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true)
-	}
-
-	def cleanup() {
-		Group.findAll()*.delete(flush:true, failOnError:true)
-		Contact.findAll()*.delete(flush:true, failOnError:true)
-		Poll.findAll()*.delete(flush:true, failOnError:true)
-		MessageOwner.list()*.delete(flush:true, failOnError:true)
-		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 	
 	private def makeGroupMember() {

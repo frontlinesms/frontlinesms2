@@ -132,6 +132,26 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$("#global-nav a", text: "Archive").hasClass("selected")
 	}
+
+	def "should hide the messages when poll detail chart is shown"() {
+		setup:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+			waitFor {$("#messages").displayed}
+		then:
+			$("#messages").displayed
+		when:
+			$("#pollSettings").click()
+			waitFor {!$("#messages").displayed}
+		then:
+			$(".response-count").text() == "2 responses total"
+		when:
+			$("#pollSettings").click()
+		then:
+			$("#messages").displayed
+	}
 }
 
 class PollListPage extends geb.Page {

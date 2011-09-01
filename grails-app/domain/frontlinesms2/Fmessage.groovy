@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 import groovy.time.*
 
 class Fmessage {

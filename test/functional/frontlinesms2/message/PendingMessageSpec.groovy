@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {

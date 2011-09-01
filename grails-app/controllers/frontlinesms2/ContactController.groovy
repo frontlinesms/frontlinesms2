@@ -6,7 +6,7 @@ class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def beforeInterceptor = {
-		params['max'] = params['max'] ?: GrailsConfig.getConfig().pagination.max
+		params.max = params.max?: GrailsConfig.config.grails.views.pagination.max
 	}
 
 	def index = {

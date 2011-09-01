@@ -1,7 +1,6 @@
 package frontlinesms2.folder
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class FolderGebSpec extends grails.plugin.geb.GebSpec {
 	static createTestFolders() {

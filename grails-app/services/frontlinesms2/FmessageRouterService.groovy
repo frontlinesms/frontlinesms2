@@ -2,7 +2,6 @@ package frontlinesms2
 
 import org.apache.camel.Exchange
 import org.apache.camel.Header
-import frontlinesms2.enums.MessageStatus
 
 /** This is a Dynamic Router */
 class FmessageRouterService {

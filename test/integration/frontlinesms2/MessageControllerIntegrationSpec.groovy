@@ -4,7 +4,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import frontlinesms2.enums.MessageStatus
 
 class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -12,10 +11,6 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	def setup() {
 		controller = new MessageController()
 		controller.beforeInterceptor.call()
-	}
-	
-	def cleanup() {
-		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 
 	def "Inbound messages show up in inbox view"() {

@@ -11,7 +11,7 @@ class MessageController {
 	def messageSendService
 
 	def beforeInterceptor = {
-		params['max'] = params['max'] ?: getPaginationCount()
+		params['max'] = params.max?: GrailsConfig.config.grails.views.pagination.max
 		params['offset']  = params['offset'] ?: 0
 		params['archived'] = params['archived'] ? params['archived'].toBoolean()  : false
 		true
@@ -269,9 +269,5 @@ class MessageController {
 
 	private def isAjaxRequest() {
 		return request.xhr
-	}
-
-	private def getPaginationCount() {
-		GrailsConfig.getConfig().pagination.max
 	}
 }

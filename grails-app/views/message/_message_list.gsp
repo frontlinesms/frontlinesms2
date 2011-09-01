@@ -1,4 +1,4 @@
-<%@ page import="frontlinesms2.enums.MessageStatus" %>
+<%@ page import="frontlinesms2.MessageStatus" %>
 <div id="message-list">
 	<g:hiddenField name="checkedMessageList" value=","/>
 	<g:if test="${messageInstanceTotal > 0}">

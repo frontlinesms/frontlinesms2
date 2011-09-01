@@ -1,7 +1,6 @@
 package frontlinesms2.search
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class SearchSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
