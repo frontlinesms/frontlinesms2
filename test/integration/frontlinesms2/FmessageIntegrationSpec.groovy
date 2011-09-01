@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
@@ -10,8 +9,6 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage().save(failOnError:true, flush:true)
 		then:
 			Fmessage.count() == 1
-		cleanup:
-			Fmessage.findAll()*.delete()
 	}
 
 	def 'message can have an activity'() {
@@ -23,10 +20,6 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.count() == 1
 			Fmessage.get(m.id).messageOwner == response
-		cleanup:
-			Fmessage.findAll()*.delete()
-			PollResponse.findAll()*.delete()
-			Poll.findAll()*.delete()
 	}
 	
 	def 'get deleted messages gets all messages with deleted flag'() {

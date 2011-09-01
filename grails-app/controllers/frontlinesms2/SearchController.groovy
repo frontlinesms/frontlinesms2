@@ -17,7 +17,7 @@ class SearchController {
 	}
 	
 	def result = {
-		def max = params.max ?: getPaginationCount()
+		def max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		def offset = params.offset ?: 0
 		def groupInstance = params.groupId? Group.get(params.groupId): null
 		def activityInstance = getActivityInstance()
@@ -84,9 +84,5 @@ class SearchController {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
 		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
-	}
-
-	private def getPaginationCount() {
-		GrailsConfig.getConfig().pagination.max
 	}
 }

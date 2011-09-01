@@ -1,6 +1,11 @@
 package frontlinesms2
 
 class PollSpec extends grails.plugin.spock.UnitSpec {
+	def setup() {
+		registerMetaClass Poll
+		Poll.metaClass.static.withCriteria = { null } // this allows validation of 'title' field to pass
+	}
+	
 	def 'Poll must have at least two responses'() {
 		given:
 			mockDomain(Poll)

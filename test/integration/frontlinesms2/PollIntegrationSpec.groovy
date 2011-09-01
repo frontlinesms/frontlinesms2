@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Deleted messages do not show up as responses'() {
@@ -17,8 +16,6 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			message1.toDelete().save(flush:true, failOnError:true)
 		then:
 			p.getMessages(['starred':false]).size() == 1
-		cleanup:
-			deleteTestData()
 	}
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
@@ -51,8 +48,6 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 				[id:cnId, value:'Chuck-Norris', count:1, percent:100],
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
-		cleanup:
-			deleteTestData()
 	}
 
 	def "creating a new poll also creates a poll response with value 'Unknown'"() {
@@ -80,8 +75,6 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			results*.src == ["src3"]
 			results.every {it.archived == false}
-		cleanup:
-			Folder.list()*.delete()
 	}
 
 	def "should check for offset and limit while fetching poll messages"() {
@@ -91,8 +84,6 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Poll.findByTitle("question").getMessages(['starred':false, 'max':1, 'offset':0])
 		then:
 			results*.src == ["src2"]
-		cleanup:
-			Folder.list()*.delete()
 	}
 
 	def "should return count of poll messages"() {
@@ -102,8 +93,17 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Poll.findByTitle("question").countMessages(false)
 		then:
 			results == 3
-		cleanup:
-			Folder.list()*.delete()
+	}
+	
+	def "title uniqueness should be case-insensitive"() {
+		given:
+			setUpPollResponseAndItsMessages()
+		when:
+			def poll = new Poll(title: 'Question')
+			poll.addToResponses(new PollResponse(value: "response 1"))
+			poll.addToResponses(new PollResponse(value: "response 2"))
+		then:
+			!poll.validate()
 	}
 
 	private def setUpPollResponseAndItsMessages() {
@@ -118,17 +118,5 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
 	}
 
-
-	static deleteTestData() {
-		Poll.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-
-		Fmessage.findAll().each() {
-			it.refresh()
-			it.delete(failOnError:true, flush:true)
-		}
-	}
 }
 

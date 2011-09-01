@@ -6,12 +6,16 @@ class Poll {
 	String question
 	boolean archived
 	Date dateCreated
+	List responses
 
 	static hasMany = [responses: PollResponse]
 	static fetchMode = [responses: "eager"]
 
 	static constraints = {
-		title(unique: true, blank: false, nullable: false, maxSize: 255)
+		title(blank: false, nullable: false, maxSize: 255, validator: { title, me ->
+			def matching = Poll.findByTitleILike(title)
+			matching==null || matching==me
+		})
 		responses(validator: { val, obj ->
 			val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
@@ -69,5 +73,13 @@ class Poll {
 		responses << new PollResponse(value: unknownResponse, key: unknownResponse)
 		attrs['responses'] = responses
 		new Poll(attrs)
+	}
+	
+	static Poll findByTitleILike(String title) {
+		// not actually sure why this method needs defining, but 
+		def rez = Poll.withCriteria {
+			eq('title', title).ignoreCase()
+		}
+		rez? rez[0]: null
 	}
 }

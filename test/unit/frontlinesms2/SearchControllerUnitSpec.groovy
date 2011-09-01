@@ -17,7 +17,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 			mockDomain(Group)
 			mockDomain(Poll)
 			mockDomain(Folder)
-			controller.metaClass.getPaginationCount = {-> return 10 }
+			mockParams.max = 10
 		when:
 			def results = controller.result()
 		then:

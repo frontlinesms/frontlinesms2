@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class FolderSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller

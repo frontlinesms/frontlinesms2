@@ -40,6 +40,5 @@ class DeleteContactSpec extends ContactGebSpec {
 			sleep 3000
 		then:
 			Contact.count() == 0
-
 	}
 }

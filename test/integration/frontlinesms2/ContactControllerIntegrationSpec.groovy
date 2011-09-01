@@ -11,11 +11,6 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		g = new Group(name:'test group').save(failOnError:true)
 	}
 
-	def cleanup() {
-		Group.findAll()*.delete(flush:true, failOnError:true)
-		Contact.findAll()*.delete(flush:true, failOnError:true)
-	}
-
 	def makeGroupMember() {
 		c.addToGroups(g)
 		c.save(flush: true)

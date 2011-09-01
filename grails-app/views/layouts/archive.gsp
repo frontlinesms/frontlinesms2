@@ -21,6 +21,7 @@
 			<g:render template="/tabs"/>
 	        <g:render template="/flash"/>
 	        <div class="main">
+				<g:render template="../archive/menu"/>
 				<div class="content">
 					<div id='archive-header' class="content-header">
 						<div id="archive-title">
@@ -28,7 +29,6 @@
 			  			</div>
 					</div>
 					<div class="content-body">
-						<g:render template="../archive/menu"/>
 						<g:render template="list_items"/>
 						<g:layoutBody />
 					</div>
@@ -42,7 +42,7 @@
 							<g:if test="${params.action == 'results'}">
 								<div id="page-arrows">
 									<g:paginate next="Forward" prev="Back"
-										 max="${grailsApplication.config.pagination.max}"
+										 max="${grailsApplication.config.grails.views.pagination.max}"
 										action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
 								</div>
 							</g:if>
