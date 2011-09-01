@@ -35,11 +35,11 @@
 						<g:hiddenField name="archived" value="${params.archived}"></g:hiddenField>
 						<g:if test="${!params['archived'] && messageSection != 'poll'}">
 							<li class='static_btn'>
-								<g:actionSubmit value="Archive All" id="btn_archive_all" action="archiveAll"/>
+								<g:actionSubmit value="Archive All" id="btn_archive_all" action="archive"/>
 							</li>
 						</g:if>
 						<li class='static_btn'>
-							<g:actionSubmit value="Delete All" id="btn_delete_all" action="deleteAll"/>
+							<g:actionSubmit value="Delete All" id="btn_delete_all" action="delete"/>
 						</li>
 						</g:form>
 					</div>
