@@ -1,11 +1,26 @@
 package frontlinesms2.dev
 
-import serial.mock.SerialPortHandler
+import serial.mock.*
 
 import net.frontlinesms.test.serial.hayes.*
 
 class MockModemUtils {
+	static void initialiseMockSerial(Map portIdentifiers) {
+		// Set up modem simulation
+		MockSerial.init();
+		MockSerial.setMultipleOwnershipAllowed(true);
+		portIdentifiers.each { name, cpi ->
+			MockSerial.setIdentifier(name, cpi)
+		}
+/*		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));*/
+	}
+	
 	static SerialPortHandler createMockPortHandler() {
+		createMockPortHandler([2: '07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905',
+						3: '07915892000000F0040B915892214365F700007040213252242331493A283D0795C3F33C88FE06C9CB6132885EC6D341EDF27C1E3E97E7207B3A0C0A5241E377BB1D7693E72E'])
+	}
+	
+	static SerialPortHandler createMockPortHandler(Map messages) {
 		def state_initial = new GroovyHayesState([error: "ERROR: 1",
 				responses: ["AT", "OK",
 						"AT+CMEE=1", "OK",
@@ -43,8 +58,7 @@ class MockModemUtils {
 							"OK"
 						}],
 				// these are returned by ~/AT\+CMGL=\d/
-				messages: [2: '07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905',
-						3: '07915892000000F0040B915892214365F700007040213252242331493A283D0795C3F33C88FE06C9CB6132885EC6D341EDF27C1E3E97E7207B3A0C0A5241E377BB1D7693E72E']])
+				messages: messages])
 		// TODO reinstate this state
 		/*def state_waitingForPdu = HayesState.createState(new HayesResponse("ERROR: 2", state_initial),
 				~/.+/, new HayesResponse('+CMGS: 0\rOK', state_initial))
