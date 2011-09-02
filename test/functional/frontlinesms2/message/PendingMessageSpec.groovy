@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
@@ -18,9 +17,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def 'should list all the pending messages'() {
 		when:
-			to MessagesPage
-			$('a', text: "Pending").click()
-			waitFor { title == "Pending" }
+			goToPendingPage()
 			def messages = $('#messages tbody tr')
 		then:
 			messages.size() == 2
@@ -29,10 +26,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:
-			to MessagesPage
-			$('a', text:"Pending").click()
-			waitFor { title == "Pending" }
-			
+		    goToPendingPage()
 			$("#message")[1].click()
 			$("#message")[2].click()
 			sleep 1000
@@ -42,9 +36,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def "should filter pending messages for starred and unstarred messages"() {
 		when:
-			to MessagesPage
-			$('a', text: "Pending").click()
-			waitFor { title == "Pending" }
+			goToPendingPage()
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -58,6 +50,64 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
 	}
-	
-	
+
+    def "retry button must not apper if there are no failed messages"() {
+		setup:
+			Fmessage.list()*.delete(flush: true)
+			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+		when:
+			assert Fmessage.count() == 2
+			goToPendingPage()
+		then:
+			!$("#retry").displayed
+		when:
+			$("#message")[0].click()
+			sleep(1000)
+			waitFor{$("#multiple-messages").displayed}
+		then:
+			!$("#retry-failed").displayed
+	}
+
+	def "should be able to retry a failed message"() {
+		when:
+			goToPendingPage()
+			$("a", text:"dst1").click()
+			sleep(1000)
+		then:
+			$("#retry").displayed
+		when:
+			$("#retry").click()
+			sleep(2000)
+			waitFor{$(".flash").text().contains("dst1")}
+		then:
+			$(".flash").text().contains("dst1")
+	}
+
+	def "should be able to retry all failed messages"() {
+		setup:
+			new Fmessage(src: "src1", dst:"dst2", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true)
+		when:
+			goToPendingPage()
+		then:
+			$("#retry").displayed
+		when:
+			$("#message")[0].click()
+			sleep(1000)
+			waitFor {$("#retry-failed").displayed}
+			$("#retry-failed").click()
+			sleep(1000)
+			waitFor{$(".flash").text().contains("dst1, dst2")}
+		then:
+			$(".flash").text().contains("dst1, dst2")
+	}
+
+	def goToPendingPage() {
+		to MessagesPage
+		$('a', text: "Pending").click()
+		waitFor { title == "Pending" }
+	}
+
+
+
 }

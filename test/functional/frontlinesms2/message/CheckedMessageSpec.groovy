@@ -1,7 +1,6 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class CheckedMessageSpec extends MessageGebSpec {
 	
@@ -12,6 +11,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			to MessagesPage
 			$("#message")[1].click()
 			$("#message")[2].click()
+			$("#message")[3].click()
 		then:
 			$("#message")[0].@checked == "true"
 	}

@@ -13,7 +13,7 @@ class ContactListSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 		then:
-			def contactList = $('#contacts')
+			def contactList = $('#contact-list')
 			assert contactList.tag() == 'ol'
 			
 			def contactNames = contactList.children().collect() {
@@ -26,7 +26,7 @@ class ContactListSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 		then:
-			def c = $('#contacts')
+			def c = $('#contact-list')
 			assert c.tag() == "div"
 			assert c.text() == 'You have no contacts saved'
 	}
@@ -44,7 +44,7 @@ class ContactListSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 		then:
-			def contactList = $('#contacts')
+			def contactList = $('#contact-list')
 			def contactNames = contactList.children().collect() {
 				it.text()
 			}

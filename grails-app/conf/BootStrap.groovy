@@ -9,7 +9,6 @@ import serial.mock.CommPortIdentifier
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
-import frontlinesms2.enums.MessageStatus
 import net.frontlinesms.test.serial.hayes.*
 import frontlinesms2.dev.MockModemUtils
 

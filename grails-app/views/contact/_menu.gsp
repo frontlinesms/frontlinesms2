@@ -24,7 +24,7 @@
 				</li>
 			</g:each>
 			<li class='create' id="create-group">
-				<g:remoteLink action="createGroup" onSuccess="launchSmallPopup('Group', data, 'Create');">
+				<g:remoteLink controller="group" action="create" onSuccess="launchSmallPopup('Group', data, 'Create');">
 					Create new group
 				</g:remoteLink>
 			</li>

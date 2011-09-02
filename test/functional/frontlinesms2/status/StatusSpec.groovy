@@ -1,7 +1,6 @@
 package frontlinesms2.status
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class StatusSpec extends grails.plugin.geb.GebSpec {
 	def setup() {

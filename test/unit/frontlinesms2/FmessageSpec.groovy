@@ -2,7 +2,6 @@ package frontlinesms2
 
 import spock.lang.*
 import grails.plugin.spock.*
-import frontlinesms2.enums.MessageStatus
 
 class FmessageSpec extends UnitSpec {
 	def 'check that READ flag cannot be null'() {

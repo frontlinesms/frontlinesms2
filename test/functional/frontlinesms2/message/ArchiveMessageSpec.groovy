@@ -1,10 +1,6 @@
 package frontlinesms2.message
 
-import frontlinesms2.Fmessage
-import frontlinesms2.Folder
-import frontlinesms2.Poll
-import frontlinesms2.PollResponse
-import frontlinesms2.enums.MessageStatus
+import frontlinesms2.*
 
 class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {

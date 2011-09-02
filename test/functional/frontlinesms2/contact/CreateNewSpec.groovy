@@ -14,7 +14,7 @@ class CreateNewSpec extends grails.plugin.geb.GebSpec {
 			to ContactListPage
 			def btnCreateGroup = $("#create-group").find('a')
 		then:
-			assert btnCreateGroup.getAttribute('href') == "/frontlinesms2/contact/createGroup"
+			assert btnCreateGroup.getAttribute('href') == "/frontlinesms2/group/create"
 	}
 
 }

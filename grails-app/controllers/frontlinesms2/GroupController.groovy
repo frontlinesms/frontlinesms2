@@ -22,4 +22,20 @@ class GroupController {
 	def show = {
 		redirect(controller: "contact", action: "list", params:[groupId : params.id])
 	}
+	
+	def create = {
+		def groupInstance = new Group()
+		groupInstance.properties = params
+		[groupInstance: groupInstance]
+	}
+	
+	def save = {
+		def groupInstance = new Group(params)
+		if (!groupInstance.hasErrors() && groupInstance.save(flush: true)) {
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
+		} else {
+			flash.message = "error"
+		}
+		redirect(controller: "contact", params:[flashMessage: flash.message])
+	}
 }
