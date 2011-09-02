@@ -7,6 +7,13 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 		createTestMessages()
 	}
 	
+	def "status tab should visible in the global navigations"() {
+		when:
+			go 'message'
+		then:
+			$('a#tab-status').displayed
+	}
+	
 	def "clicking on update chart button renders chart"() {
 		when:
 			to StatusPage
