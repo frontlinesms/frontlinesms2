@@ -96,7 +96,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			sleep(1000)
 			waitFor {$("#retry-failed").displayed}
 			$("#retry-failed").click()
-			sleep(1000)
+			sleep(2000)
 			waitFor{$(".flash").text().contains("dst1, dst2")}
 		then:
 			$(".flash").text().contains("dst1, dst2")
