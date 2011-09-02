@@ -37,8 +37,8 @@ class MockModemUtils {
 						"AT+CREG?", "+CREG: 1,1\rOK",
 						"AT+CMGF=0", "OK",
 						"+++", "",
-						"AT+CPMS?", "+CPMS:\r\"ME\",1,15,\"SM\",0,100\rOK",
-						'AT+CPMS="ME"', "OK",
+						"AT+CPMS?", '+CPMS:\r"SM",0,100\rOK',
+						'AT+CPMS="ME"', "ERROR",
 						'AT+CPMS="SM"', "OK",
 						~/AT\+CMGL=\d/, { handler, request ->
 							println "Hello I have been called.  What am I going to do?"

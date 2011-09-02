@@ -13,24 +13,25 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 	
 	def "should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor"() {
 		given:
-			def mockPortHandler = MockModemUtils.createMockPortHandler([1:'0123456789abcdef']) /* TODO insert proper PDU payload */
+			def mockPortHandler = MockModemUtils.createMockPortHandler([1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C'])
 			// initialise mock serial device with message available
  			MockModemUtils.initialiseMockSerial(['/def/test-modem': new CommPortIdentifier("COM99",
 					mockPortHandler)])
 			// start route
-			def connection = new SmslibFconnection('/def/test-modem').save(failOnError:true)
+			def connection = new SmslibFconnection(name:'test connection', port:'/def/test-modem', baud:9600).save(failOnError:true)
 			fconnectionService.createRoutes(connection)
-		when:
+		when:	
 			// wait for message to be read from mock serial device
-			while(mockPortHandler.hasMessages()) { /* wait */ }
-		then:
-			// assert Fmessage is saved
-			Fmessage.findAll().size() == 1
-			// TODO check Fmessage content?
+			while(mockPortHandler.messages.size() > 0) { Thread.sleep(50) }
+			// wait for message to be processed
+			Thread.sleep(5000) // TODO must be a neater way of doing this
+		then:	
+			// assert Fmessage is saved and has expected content
+			Fmessage.findAll()*.text == ['Good morning']
 			// TODO assert KeywordProcessor is called
-		cleanup:
+		cleanup:	
 			// stop route
-			fconnectionService.destroyRoutes(connection)
+			if(connection) fconnectionService.destroyRoutes(connection)
 			// remove mock serial port
 			MockSerial.reset()
 	}
