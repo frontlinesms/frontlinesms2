@@ -12,7 +12,7 @@
 			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
 			<p id="message-body">${messageInstance.text}</p>
 		</div>
-		<g:render template="../message/message_actions" model="[buttons: buttons]"></g:render>
+		<g:render template="../message/message_actions"></g:render>
 		<g:render template="../message/other_actions"></g:render>
 	</div>
 	<div id="multiple-messages">
@@ -26,7 +26,7 @@
 								<g:link elementId="retry-failed" action="send" params="${[failedMessageIds : checkedMessageList.tokenize(',').intersect(failedMessageIds*.toString())]}">Retry failed</g:link>
 							</g:if>
 						</li>
-						<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'deleteAll']}"></g:render>
+						<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'delete']}"></g:render>
 					</g:if>
 					<g:elseif test="${messageSection != 'trash'}">
 						<div id='other_btns'>
@@ -35,8 +35,8 @@
 									Reply All
 								</g:remoteLink>
 							</li>
-							<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archiveAll']}"></g:render>
-							<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'deleteAll']}"></g:render>
+							<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archive']}"></g:render>
+							<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'delete']}"></g:render>
 						</div>
 					</g:elseif>
 				</ol>

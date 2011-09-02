@@ -74,7 +74,7 @@
 								<li>
 									<select id="trash-actions">
 										<option value="na" class="na">Trash actions...</option>
-										<option value="empty-trash" onclick="launchEmptyTrashConfirmation();">Empty trash</option>
+										<option id="empty-trash" value="empty-trash" onclick="launchEmptyTrashConfirmation();">Empty trash</option>
 									</select>
 								</li>
 							</g:if>
