@@ -31,6 +31,14 @@ function launchConfirmationPopup(title) {
 	});
 }
 
+function launchEmptyTrashConfirmation() {
+	$.ajax({
+		type:'POST',
+		url: url_root + 'message/confirmEmptyTrash',
+		success: function(data, textStatus){ launchSmallPopup('Empty Trash?', data, "Ok"); }
+	});
+}
+
 function cancel() {
 	$(this).remove();
 }
