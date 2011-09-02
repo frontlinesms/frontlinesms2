@@ -74,14 +74,11 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			goToPendingPage()
 			$("a", text:"dst1").click()
 			sleep(1000)
+			def failedMessage = Fmessage.findByStatus(MessageStatus.SEND_FAILED)
 		then:
 			$("#retry").displayed
-		when:
-			$("#retry").click()
-			sleep(2000)
-			waitFor{$(".flash").text().contains("dst1")}
-		then:
-			$(".flash").text().contains("dst1")
+			$("#retry").getAttribute('href').contains("message/send?failedMessageIds=${failedMessage.id}")
+
 	}
 
 	def "should be able to retry all failed messages"() {
@@ -95,11 +92,11 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#message")[0].click()
 			sleep(1000)
 			waitFor {$("#retry-failed").displayed}
-			$("#retry-failed").click()
-			sleep(2000)
-			waitFor{$(".flash").text().contains("dst1, dst2")}
+			def failedMessages = Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)
 		then:
-			$(".flash").text().contains("dst1, dst2")
+			$("#retry-failed").getAttribute('href').contains("message/send")
+			$("#retry-failed").getAttribute('href').contains("failedMessageIds=${failedMessages[0].id}")
+			$("#retry-failed").getAttribute('href').contains("failedMessageIds=${failedMessages[1].id}")
 	}
 
 	def goToPendingPage() {
