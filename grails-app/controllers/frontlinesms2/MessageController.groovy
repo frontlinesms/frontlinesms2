@@ -155,7 +155,7 @@ class MessageController {
 	}
 
 	def move = {
-		def messageIdList = params.messageId.contains(',') ? params.messageId.tokenize(',') : [params.messageId]
+		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				def messageOwner
@@ -177,10 +177,9 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def messageIdList = params.messageId.contains(',') ? params.messageId.tokenize(',') : [params.messageId]
+		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				println messageInstance
 				def responseInstance = PollResponse.get(params.responseId)
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
