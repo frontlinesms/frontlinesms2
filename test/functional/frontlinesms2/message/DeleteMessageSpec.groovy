@@ -43,6 +43,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/inbox"
 			$("#message")[1].click()
 			$("#message")[2].click()
+			sleep(1000)
 			waitFor {$('#multiple-messages').displayed}
 			def btnDelete = $("#btn_delete_all")
 		then:
