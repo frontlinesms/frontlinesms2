@@ -8,15 +8,15 @@ $(document.documentElement).keyup(function (event) {
 	}
 	
 	if(key === 38) {
-		previousMessage();
+		showPreviousMessage();
 	}
 	
 	if(key === 40) {
-		nextMessage();
+		showNextMessage();
 	}
 });
 
-function previousMessage() {
+function showPreviousMessage() {
 	if(countSelectedMessages() == 1) {
 		var selectedMessage = $('tr.selected');
 		var previousMessage = selectedMessage.prev()
@@ -26,7 +26,7 @@ function previousMessage() {
 	}
 }
 
-function nextMessage() {
+function showNextMessage() {
 	if(countSelectedMessages() == 1) {
 		var selectedMessage = $('tr.selected');
 		var nextMessage = selectedMessage.next()
