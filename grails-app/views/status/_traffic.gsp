@@ -26,7 +26,7 @@ $(function() {
 Traffic
 <div id="trafficGraph"></div>
 <g:form action="show" method="post">
-	<g:render template="../search/filters" />
+	<g:render template="../search/basic_filters" />
 	<div>
 		<g:radio name="rangeOption" value="two-weeks" checked="true" />
 		<g:select id="pre-defined-range-options" name='pre-defined-range-options'
