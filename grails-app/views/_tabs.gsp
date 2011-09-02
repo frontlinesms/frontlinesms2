@@ -12,6 +12,11 @@
 		<li>
 			<g:link class="tab ${params.controller=='contact'?'selected':''}" url="${[controller:'contact']}" id="tab-contacts">Contacts</g:link>
 		</li>
+		
+		<li>
+			<g:link class="tab ${params.controller=='status'?'selected':''}" url="${[controller:'status']}" id="tab-status">Status</g:link>
+		</li>
+		
 		<li>
 			<g:link  class="tab ${params.controller=='search'?'selected':''}" url="${[controller:'search']}" id="tab-search">Search</g:link>
 		</li>
