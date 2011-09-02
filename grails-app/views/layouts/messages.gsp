@@ -11,6 +11,7 @@
 			url_root = "${request.contextPath}/";
 		</script>
 		<g:javascript src="message/check_message.js"/>
+		<g:javascript src="message/arrow_navigation.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
