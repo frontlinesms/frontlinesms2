@@ -209,6 +209,8 @@ class MessageController {
 		}
 	}
 
+	def confirmEmptyTrash = { }
+	
 	def emptyTrash = {
 		Fmessage.findAllByDeleted(true)*.delete()
 		redirect(action: 'inbox')
