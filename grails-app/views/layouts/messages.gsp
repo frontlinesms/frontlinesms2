@@ -85,9 +85,7 @@
 						<g:if test="${messageSection == 'poll'}">
 							<ol>
 								<li class='static_btn'>
-										<g:if test="${!params.archived}">
-											<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-										</g:if>
+									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
 								</li>
 								<li>
 									<button id="pollSettings">Show poll details</button>
@@ -104,14 +102,12 @@
 							<g:layoutBody />
 						</div>
 						<div class="content-footer">
-						<g:if test="${!params.archived}">
 							<ul id="filter">
 								<li>Show:</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
 								<li>|</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
-						</g:if>
 							<div id="page-arrows">
 								<g:paginate next="Next" prev="Back"
 									max="${grailsApplication.config.grails.views.pagination.max}"
