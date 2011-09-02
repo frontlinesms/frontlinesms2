@@ -201,6 +201,7 @@ class ContactController {
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
 		} else if (contactInstance.validate() && !contactInstance.hasErrors()) {
+			contactInstance.save()
 			groupsToAdd.each() { id ->
 				contactInstance.addToGroups(Group.get(id))
 			}
