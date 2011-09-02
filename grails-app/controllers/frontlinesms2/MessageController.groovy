@@ -3,7 +3,7 @@ package frontlinesms2
 import grails.util.GrailsConfig
 import grails.converters.JSON
 
-import frontlinesms2.enums.MessageStatus
+import frontlinesms2.MessageStatus
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", deleteAll: "POST",

@@ -1,7 +1,7 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
-import frontlinesms2.enums.MessageStatus
+import frontlinesms2.MessageStatus
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class MessageControllerSpec extends ControllerSpec {
@@ -491,7 +491,7 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 
-     private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure, status= MessageStatus.SENT)  {
+     private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
 		registerMetaClass(Fmessage)
 		Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
 		def fmessage = new Fmessage(id:1L, src: "src1", starred: isStarred, status: status)
