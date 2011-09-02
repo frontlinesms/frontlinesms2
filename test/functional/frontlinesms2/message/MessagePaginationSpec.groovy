@@ -1,7 +1,6 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 

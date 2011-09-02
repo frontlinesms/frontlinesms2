@@ -1,4 +1,4 @@
-<%@ page import="frontlinesms2.enums.MessageStatus" contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="messages-menu">
 	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'messages.gif')}' />

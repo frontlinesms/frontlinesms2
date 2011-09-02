@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Deleted messages do not show up as responses'() {
@@ -94,6 +93,17 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Poll.findByTitle("question").countMessages(false)
 		then:
 			results == 3
+	}
+	
+	def "title uniqueness should be case-insensitive"() {
+		given:
+			setUpPollResponseAndItsMessages()
+		when:
+			def poll = new Poll(title: 'Question')
+			poll.addToResponses(new PollResponse(value: "response 1"))
+			poll.addToResponses(new PollResponse(value: "response 2"))
+		then:
+			!poll.validate()
 	}
 
 	private def setUpPollResponseAndItsMessages() {

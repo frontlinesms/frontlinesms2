@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
-
 class MessageSendService {	
 	def send(Fmessage m, Fconnection c=null) {
 		println "MessageSendService.send($m, $c)"

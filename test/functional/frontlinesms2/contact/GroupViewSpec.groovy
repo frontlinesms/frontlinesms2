@@ -59,6 +59,6 @@ class FriendsGroupPage extends geb.Page {
 	static getUrl() { "group/show/${Group.findByName('Friends').id}" }
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
-		contactsList { $('#contacts') }
+		contactsList { $('#contact-list') }
 	}
 }

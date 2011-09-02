@@ -3,8 +3,6 @@ package frontlinesms2
 import org.apache.camel.Processor
 import org.apache.camel.Exchange
 
-import frontlinesms2.enums.MessageStatus // FIXME remove "enums" package
-
 class EmailTranslationService implements Processor {
 	static final String EMAIL_PROTOCOL_PREFIX = 'email:'
 	static final char UNDERLINE_CHAR = '='
