@@ -87,7 +87,7 @@ class ContactController {
 				}
 			}
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-			redirect(action: 'show')
+			render(view:'show', model: show())
 		}
 	}
 
