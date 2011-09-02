@@ -43,9 +43,16 @@ class FconnectionService {
 		}
 	}
 	
-	def createRoutes(Fconnection c) { // FIXME should be called createRoutes <- plural
+	def createRoutes(Fconnection c) {
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		camelContext.addRouteDefinitions(routes)
+	}
+	
+	def destroyRoutes(Fconnection c) {
+		["in-$c.id", "out-$c.id"].each {
+			camelContext.removeRoute(it)	
+			camelContext.stopRoute(it)
+		}
 	}
 	
 	def getRouteStatus(Fconnection c) {
