@@ -131,22 +131,7 @@ class MessageController {
 		return messages
 	}
 
-
 	def delete = {
-		withFmessage {messageInstance ->
-			messageInstance.toDelete()
-			messageInstance.save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), 'message'])}"
-		if (isAjaxRequest()) {
-			render ""
-		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection)
-			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}
-	}
-	
-	def deleteAll = {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
@@ -164,21 +149,7 @@ class MessageController {
 	}
 
 	def archive = {
-		withFmessage { messageInstance ->
-			messageInstance.archive()
-			messageInstance.save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), 'messages'])}"
-		if (request.xhr) {
-			render ""
-		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection)
-			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}
-	}
-	
-	def archiveAll = {
-		def messageIdList = params.checkedMessageList?.tokenize(',')
+		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.archive()
@@ -194,28 +165,8 @@ class MessageController {
 		}
 	}
 
-
 	def move = {
-		withFmessage {messageInstance ->
-			def messageOwner
-			if (params.messageSection == 'poll') {
-				messageOwner = Poll.get(params.ownerId)
-			} else if (params.messageSection == 'folder') {
-				messageOwner = Folder.get(params.ownerId)
-			}
-			if (messageOwner instanceof Poll) {
-				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-			} else if (messageOwner instanceof Folder) {
-				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-			}
-		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ' messages'])}"
-		render ""
-	}
-	
-	def moveAll = {
-		def messageIdList = params.messageId?.tokenize(',')
+		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				def messageOwner
@@ -237,19 +188,9 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		withFmessage { messageInstance ->
-			def responseInstance = PollResponse.get(params.responseId)
-			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message'])}"
-		render ""
-	}
-	
-	def changeAllResponses = {
-		def messageIdList = params.messageId?.tokenize(',')
+		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				println messageInstance
 				def responseInstance = PollResponse.get(params.responseId)
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
