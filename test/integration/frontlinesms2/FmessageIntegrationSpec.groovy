@@ -44,7 +44,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
 		then:
 			messageCounts['inbox'] == 2
-			messageCounts['sent'] == 2
+			messageCounts['sent'] == 3
 			messageCounts['pending'] == 2
 			messageCounts['deleted'] == 1
 	}
@@ -64,20 +64,36 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpMessages()
 		when:
-			def firstInboxMessage = Fmessage.search("inbox", null, null, 1, 0)
-			def firstTwoInboxMessages = Fmessage.search("inbox", null, null, 2, 0)
+			def firstInboxMessage = Fmessage.search([searchString: "inbox", max: 1,  offset:0])
+			def firstTwoInboxMessages = Fmessage.search([searchString: "inbox", max: 2, offset: 0])
+			def allMsgsWithTheGivenSearchString = Fmessage.search([searchString: "inbox"])
 		then:
 			firstInboxMessage.size() == 1
 			firstTwoInboxMessages.size() == 2
-			Fmessage.countAllSearchMessages("inbox", null, null) == 2
+			allMsgsWithTheGivenSearchString.size() == 3
+			Fmessage.countAllSearchMessages([searchString: "inbox"]) == 3
+	}
+
+	def "should fetch messages based on message status"() {
+		setup:
+			setUpMessages()
+		when:
+			def allInboundMessages = Fmessage.search([messageStatus: ['INBOUND']])
+			def allSentMessages = Fmessage.search([messageStatus: ['SENT', 'SEND_PENDING', 'SEND_FAILED']])
+			def allMessages = Fmessage.search([:])
+		then:
+			allInboundMessages*.every {it.status == MessageStatus.INBOUND}
+			allSentMessages*.every {it.status != MessageStatus.INBOUND}
+			allMessages.size() == 7
+
 	}
 	
 	def "should not error when searched for a group with no members"() {
 		setup:
 			new Group(name: "football").save(flush: true)
 		when:
-			def searchMessages = Fmessage.search(null, null, Group.findByName("football"), 10, 0)
-			def searchMessagesCount = Fmessage.countAllSearchMessages(null, null, Group.findByName("football"))
+			def searchMessages = Fmessage.search([groupInstance: Group.findByName("football")])
+			def searchMessagesCount = Fmessage.countAllSearchMessages([groupInstance: Group.findByName("football")])
 		then:
 			!searchMessages
 			searchMessagesCount == 0
@@ -131,6 +147,27 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			outBoundMessageToPrimaryNo.contactName == "Alice"
 			outBoundMessageToSecondayNo.contactName == "Alice"
 	}
+	
+	def "should fail when archive message has a message owner" () {
+		setup:
+			def f = new Folder(name:'test').save(failOnError:true)
+			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
+			f.addToMessages(m)
+			f.save()
+		when:
+			m.archived = true
+		then:
+			!m.validate()
+	}
+	
+	def "should be able to archive message when it has no message owner" () {
+		setup:
+			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
+		when:
+			m.archived = true
+		then:
+			m.validate()
+	}
 
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
@@ -147,6 +184,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message').save(flush:true)
 			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message').save(flush:true)
 			new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message').save(flush:true)
+			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'This msg will not show up in inbox view').save(flush:true)
 			new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
 			new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)
 	}

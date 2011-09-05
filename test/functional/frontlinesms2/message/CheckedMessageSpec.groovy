@@ -33,8 +33,14 @@ class CheckedMessageSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
-			$("#message")[1].click()
 			$("#message")[2].click()
+			sleep 1000
+		then:
+			$("#message-details #contact-name").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text()
+		
+		when:
+			$("#message")[1].click()
+			sleep 1000
 		then:
 			$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
 			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
@@ -128,6 +134,27 @@ class CheckedMessageSpec extends MessageGebSpec {
 //		then:
 //			$('textArea', name:'messageText').text() == "hi Alice"
 //	}
+	def "'Forward' button still work when all messages are unchecked"() {
+		given:
+			createInboxTestMessages()
+			def message = Fmessage.findBySrc('Alice')
+		when: 
+			to MessagesPage
+			$("#message")[0].click()
+		then:
+			$("#message")*.@checked == ["true", "true", "true"]
+		when:
+			$("#message")[0].click()
+		then: 
+			$("#message")*.@checked == ["", "", ""]
+		when:
+			$('#btn_dropdown').click()
+			sleep 1000
+			$('#btn_forward').click()			
+			sleep 1000
+		then:
+			$('textArea', name:'messageText').text() == "hi Alice"
+	}
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:
