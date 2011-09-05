@@ -249,7 +249,6 @@ class MessageController {
 		def messageIdList = params.messageId?.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				println messageInstance
 				def responseInstance = PollResponse.get(params.responseId)
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
