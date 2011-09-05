@@ -23,11 +23,11 @@ class SearchController {
 	}
 	
 	def result = {
-		def messageCategory = params.messageCategory
+		def messageStatus = params.messageStatus
 		params.groupInstance = params.groupId? Group.get(params.groupId): null
 		params.activityInstance =  getActivityInstance()
 		params.messageOwner = params.activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		params.messageCategory = messageCategory ? messageCategory.tokenize(",")*.trim() : null
+		params.messageStatus = messageStatus ? messageStatus.tokenize(",")*.trim() : null
 		def searchResults = Fmessage.search(params)
 		[searchDescription: getSearchDescription(),
 				searchString: params.searchString,
@@ -36,7 +36,7 @@ class SearchController {
 				activityId: params.activityId,
 				messageInstanceList: searchResults,
 				messageInstanceTotal: Fmessage.countAllSearchMessages(params),
-				messageCategory: messageCategory] << show(searchResults) << no_search()
+				messageStatus: messageStatus] << show(searchResults) << no_search()
 	}
 
 	def show = { searchResults ->

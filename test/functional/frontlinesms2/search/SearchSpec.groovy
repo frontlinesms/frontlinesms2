@@ -72,13 +72,13 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "should fetch all inbound messages alone"() {
 		given:
 			to SearchPage
-			searchFrm.messageCategory = "INBOUND"
+			searchFrm.messageStatus = "INBOUND"
 		when:
 			searchBtn.click()
 			sleep(2000)
 			waitFor{searchBtn.displayed}
 		then:
-			searchFrm.messageCategory == ['INBOUND']
+			searchFrm.messageStatus == ['INBOUND']
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
@@ -88,13 +88,13 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
 			to SearchPage
-			searchFrm.messageCategory = "SENT, SEND_PENDING, SEND_FAILED"
+			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
 			searchBtn.click()
 			sleep(2000)
 			waitFor{searchBtn.displayed}
 		then:
-			searchFrm.messageCategory == ['SENT, SEND_PENDING, SEND_FAILED']
+			searchFrm.messageStatus == ['SENT, SEND_PENDING, SEND_FAILED']
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 
