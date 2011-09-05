@@ -37,8 +37,8 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 		}
 	}
 
-	abstract String getFrom();
-	abstract String getTo();
+	abstract String getTestRouteFrom();
+	abstract String getTestRouteTo();
 
 	ProducerTemplate createProducerTemplate() {
 		new DefaultProducerTemplate(camelContext,
@@ -48,11 +48,8 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 	private RouteBuilder createRouteBuilder() {
 		return new RouteBuilder() {
 			public void configure() {
-				def from = getFrom()
-				if(from) from('direct:start').to(from).routeId('test-from')
-				
-				def to = getTo()
-				if(to) from(to).to('mock:result').routeId('test-to')
+				if(getTestRouteFrom()) from('direct:start').to(getTestRouteFrom()).routeId('test-from')
+				if(getTestRouteTo()) from(getTestRouteTo()).to('mock:result').routeId('test-to')
 			}
 		}
 	}
