@@ -15,21 +15,28 @@ class SearchController {
 				pollInstanceList: Poll.findAll(),
 				messageSection: 'search']
 	}
+
+	def beforeInterceptor = {
+		params['max'] = params.max?: GrailsConfig.config.grails.views.pagination.max
+		params['offset']  = params['offset'] ?: 0
+		true
+	}
 	
 	def result = {
-		def max = params.max ?: GrailsConfig.config.grails.views.pagination.max
-		def offset = params.offset ?: 0
-		def groupInstance = params.groupId? Group.get(params.groupId): null
-		def activityInstance = getActivityInstance()
-		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		def searchResults = Fmessage.search(params.searchString, params.contactSearchString, groupInstance, messageOwners, max, offset)
-		[searchDescription: getSearchDescription(params.searchString, params.contactSearchString, groupInstance, activityInstance),
+		def messageCategory = params.messageCategory
+		params.groupInstance = params.groupId? Group.get(params.groupId): null
+		params.activityInstance =  getActivityInstance()
+		params.messageOwner = params.activityInstance? Fmessage.getMessageOwners(activityInstance): null
+		params.messageCategory = messageCategory ? messageCategory.tokenize(",")*.trim() : null
+		def searchResults = Fmessage.search(params)
+		[searchDescription: getSearchDescription(),
 				searchString: params.searchString,
 				contactInstance: params.contactSearchString,
-				groupInstance: groupInstance,
+				groupInstance: params.groupInstance,
 				activityId: params.activityId,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: Fmessage.countAllSearchMessages(params.searchString, params.contactSearchString, groupInstance, messageOwners)] << show(searchResults) << no_search()
+				messageInstanceTotal: Fmessage.countAllSearchMessages(params),
+				messageCategory: messageCategory] << show(searchResults) << no_search()
 	}
 
 	def show = { searchResults ->
@@ -52,7 +59,11 @@ class SearchController {
 		}
 	}
 	
-	private def getSearchDescription(searchString, contact, group, activity) {
+	private def getSearchDescription() {
+		def searchString = params.searchString
+		def contact = params.contactSearchString
+		def group = params.groupInstance
+		def activity = params.activityInstance
 		if(!searchString && !contact && !group && !activity) {
 			null
 		} else {

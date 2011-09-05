@@ -13,5 +13,10 @@
 					  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.name}}"
 					  noSelection="${['':'Select activity / folder']}"/>
 		</li>
+		<li class="field">
+			<g:select name="messageCategory" from="${['All sent and received', 'Only received messages', 'Only sent messages']}"
+					value="${messageCategory}"
+					keys="${['', 'INBOUND', 'SENT, SEND_PENDING, SEND_FAILED']}"/>
+		</li>
 	</ol>
 </g:if>
