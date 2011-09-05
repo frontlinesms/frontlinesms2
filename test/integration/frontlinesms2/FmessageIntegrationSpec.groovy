@@ -78,8 +78,8 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpMessages()
 		when:
-			def allInboundMessages = Fmessage.search([messageCategory: ['INBOUND']])
-			def allSentMessages = Fmessage.search([messageCategory: ['SENT', 'SEND_PENDING', 'SEND_FAILED']])
+			def allInboundMessages = Fmessage.search([messageStatus: ['INBOUND']])
+			def allSentMessages = Fmessage.search([messageStatus: ['SENT', 'SEND_PENDING', 'SEND_FAILED']])
 			def allMessages = Fmessage.search([:])
 		then:
 			allInboundMessages*.every {it.status == MessageStatus.INBOUND}

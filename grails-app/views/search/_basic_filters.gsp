@@ -14,8 +14,8 @@
 					  noSelection="${['':'Select activity / folder']}"/>
 		</li>
 		<li class="field">
-			<g:select name="messageCategory" from="${['All sent and received', 'Only received messages', 'Only sent messages']}"
-					value="${messageCategory}"
+			<g:select name="messageStatus" from="${['All sent and received', 'Only received messages', 'Only sent messages']}"
+					value="${messageStatus}"
 					keys="${['', 'INBOUND', 'SENT, SEND_PENDING, SEND_FAILED']}"/>
 		</li>
 	</ol>

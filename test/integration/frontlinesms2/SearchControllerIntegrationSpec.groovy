@@ -71,7 +71,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "search for inbound messages only"() {
 		when:
-			controller.params.messageCategory = "INBOUND"
+			controller.params.messageStatus = "INBOUND"
 			def model = controller.result()
 		then:
 			model.messageInstanceTotal == 7
@@ -84,7 +84,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			new Fmessage(src: "src", dst: "dst", status: MessageStatus.SENT).save(flush: true)
 			new Fmessage(src: "src", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
-			controller.params.messageCategory = "SENT, SEND_PENDING, SEND_FAILED"
+			controller.params.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 			def model = controller.result()
 		then:
 			model.messageInstanceList.size() == 3

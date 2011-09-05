@@ -125,8 +125,8 @@ class Fmessage {
 								'in'("dst", groupMembersNumbers)
 							}
 						}
-						if(params.messageCategory) {
-							'in'('status', params.messageCategory.collect { Enum.valueOf(MessageStatus.class, it)})
+						if(params.messageStatus) {
+							'in'('status', params.messageStatus.collect { Enum.valueOf(MessageStatus.class, it)})
 						}
 						if(params.messageOwner) {
 							'in'("messageOwner", params.messageOwner)
