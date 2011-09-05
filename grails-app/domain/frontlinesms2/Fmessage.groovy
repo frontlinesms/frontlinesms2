@@ -50,6 +50,11 @@ class Fmessage {
 		dateReceived(nullable:true)
 		status(nullable:true)
 		contactName(nullable:true)
+		archived(validator: { val, obj ->
+				if(val) {
+					obj.messageOwner == null
+				}
+		})
 	}
 	
 	static namedQueries = {
