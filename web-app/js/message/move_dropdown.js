@@ -15,16 +15,14 @@ function moveAction() {
 	else if(me.hasClass('folder')) var section = 'folder';
 
 	if(countCheckedMessages() > 1) {
-		var move = 'moveAll';
 		var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
 	} else {
-		var move = 'move';
 		var messagesToMove = $("#message-id").val();
 	}
 
 	$.ajax({
 		type:'POST',
-		url: url_root + 'message/' + move,
+		url: url_root + 'message/move',
 		data: {messageSection: section, messageId: messagesToMove, ownerId: me.val()},
 		success: function(data) { window.location = location; }
 	});

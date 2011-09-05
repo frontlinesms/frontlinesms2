@@ -58,19 +58,6 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#global-nav a", text:"Archive").hasClass("selected")
 	}
 
-	def 'archived messages do not show up in folder view'() {
-		given:
-			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
-			assert Folder.findByName('Fools').messages.size() == 2
-		when:
-			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
-			def btnArchiveFromFolder = $('#message-details .buttons #message-archive')
-			btnArchiveFromFolder.click()
-			waitFor { $("div.flash.message").text().contains("archived") }
-		then:
-			Folder.findByName('Fools').getFolderMessages(['starred':false]).size() == 1
-	}
-
 	def 'archive button appears in message show view and works'() {
 		given:
 			def bob = Fmessage.findBySrc("Bob")

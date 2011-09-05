@@ -1,5 +1,5 @@
 <div id="top">
-	<div id="logo"><img src='${resource(dir:'images',file:'logo_radio.png')}' width="36" height="40"/></div>
+	<div id="logo"><img src='${resource(dir:'images',file:'logo.png')}' width="36" height="40"/></div>
 	<ul id="global-nav">
 		<li>
 			<g:link class="tab ${!(params['archived']?.toBoolean()) && ['message','folder','poll'].contains(params.controller)?'selected':''}" url="${[controller:'message']}"	id="tab-messages">Messages ${frontlinesms2.Fmessage.countUnreadMessages()}</g:link>
@@ -12,6 +12,11 @@
 		<li>
 			<g:link class="tab ${params.controller=='contact'?'selected':''}" url="${[controller:'contact']}" id="tab-contacts">Contacts</g:link>
 		</li>
+		
+		<li>
+			<g:link class="tab ${params.controller=='status'?'selected':''}" url="${[controller:'status']}" id="tab-status">Status</g:link>
+		</li>
+		
 		<li>
 			<g:link  class="tab ${params.controller=='search'?'selected':''}" url="${[controller:'search']}" id="tab-search">Search</g:link>
 		</li>

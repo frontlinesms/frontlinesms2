@@ -15,7 +15,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
 			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
@@ -25,7 +25,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
 			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
@@ -45,7 +45,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
 			def list = $("#custom-field-list").children().children('label').collect() { it.text() }
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			fieldSelecter.value('lake')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 			def updatedList = $("#custom-field-list").children().children('label').collect() { it.text() }
@@ -79,8 +79,8 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			go "contact/show/${bob.id}"
 			def lstFields = $("#custom-field-list")
 			lstFields.find('a').first().click()
-			$("#contact-details .update").click()
-			waitFor {$("div.flash.message").displayed}
+			$("#contact_details #update-single").click()
+			sleep 1000
 		then:
 			bob.getCustomFields() == null
 	}
@@ -89,12 +89,12 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			fieldSelecter.value('lake')
-			def inputField =  $("#contact-details ").find('input', name:'lake')
+			def inputField =  $("#contact_details ").find('input', name:'lake')
 			inputField.value('erie')
-			$("#contact-details .update").click()
-			waitFor {$("div.flash.message").displayed}
+			$("#contact_details #update-single").click()
+			sleep 1000
 		then:
 			bob.refresh()
 			println "Bob has fields: ${bob.customFields}"
@@ -105,10 +105,10 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			fieldSelecter.value('lake')
-			$("#contact-details .update").click()
-			waitFor {$("div.flash.message").displayed}
+			$("#contact-details #update-single").click()
+			sleep 1000	
 		then:
 			bob.refresh()
 			bob.customFields.name == ['town']

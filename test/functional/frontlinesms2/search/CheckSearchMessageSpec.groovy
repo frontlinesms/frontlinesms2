@@ -1,14 +1,14 @@
-package frontlinesms2.message
+package frontlinesms2.search
 
 import frontlinesms2.*
 
-class CheckedMessageSpec extends MessageGebSpec {
+class CheckSearchMessageSpec extends SearchGebSpec {
 	
 	def "header checkbox is checked when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to SearchPage
 			$("#message")[1].click()
 			$("#message")[2].click()
 			$("#message")[3].click()
@@ -20,7 +20,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to SearchPage
 			$("#message")[1].click()
 			$("#message")[2].click()
 			sleep 1000
@@ -32,7 +32,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.list()[0].id}"
+			to SearchPage
 			$("#message")[2].click()
 			sleep 1000
 		then:
@@ -52,7 +52,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			go "message/inbox"
+			to SearchPage
 			$("#message")[1].click()
 			$("#message")[2].click()
 			sleep 1000
@@ -61,7 +61,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			btnReply
 		when:
 			btnReply.click()
-			sleep 1000	
+			sleep 1000
 			$("div#tabs-1 .next").click()
 		then:
 			$('input', value:'Alice').getAttribute('checked')
@@ -73,37 +73,35 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
-		when: 
-			to MessagesPage
+		when:
+			to SearchPage
 			$("#message")[0].click()
 		then:
-			$("#message")*.@checked == ["true", "true", "true"]
+			$("#message")*.@checked == ["true", "true", "true", "true"]
 		when:
 			$("#message")[0].click()
-		then: 
-			$("#message")*.@checked == ["", "", ""]
+			sleep 1000
+		then:
+			$("#message")*.@checked == ["", "", "", ""]
 		when:
 			$('#btn_dropdown').click()
-			sleep 1000
-			$('#btn_forward').click()			
-			sleep 4000
+			sleep 2000
+			$('#btn_forward').click()
+			sleep 2000
 		then:
 			$('textArea', name:'messageText').text() == "hi Alice"
 	}
 	
-	def "should uncheck message when a different message is clicked"() {
+	def "should set row as selected when a message is checked"() {
 		given:
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Bob')
-		when: 
-			to MessagesPage
-			$("#message")[1].click()
-		then:
-			$("#message")[1].@checked == "true";
 		when:
-			$('#messages tr:last-child td:nth-child(3) a').click()
-		then: 
-			$("#message")[1].@checked == ""
+			to SearchPage
+			$("#message")[2].click()
+		then:
+			$("#message")[2].@checked == "true"
+			$("#message")[2].parent().parent().hasClass("selected")
 	}
 
 
@@ -112,7 +110,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			createInboxTestMessages()
 			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
 		when:
-			to MessagesPage
+			to SearchPage
 			$("#message")[0].click()
 			sleep(1000)
 			waitFor { $('#multiple-messages').displayed}
@@ -130,22 +128,5 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $("#checked-message-count").text().contains("3") }
 		then:
 			$("#checked-message-count").text() == "3 messages selected"
-	}
-
-	def "can archive multiple messages"() {
-		given:
-			createInboxTestMessages()
-		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			waitFor {title == "Inbox"}
-			$("#message")[0].click()
-			sleep 1000
-			def btnArchive = $('#multiple-messages #btn_archive_all')
-			btnArchive.click()
-			sleep 1000
-		then:
-			at MessagesPage
-			$("div#no-messages").text() == 'No messages'
-
 	}
 }

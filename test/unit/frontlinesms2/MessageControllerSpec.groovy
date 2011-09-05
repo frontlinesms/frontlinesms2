@@ -1,9 +1,12 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
+import frontlinesms2.MessageStatus
 import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class MessageControllerSpec extends ControllerSpec {
+	MessageSendService mockMessageSendService
+
 	def setup() {
 		mockDomain Contact
 		mockDomain Fmessage
@@ -16,7 +19,7 @@ class MessageControllerSpec extends ControllerSpec {
 		mockParams.offset = 0
 		mockParams.starred = false
 	    controller.messageSendService = new MessageSendService()
-	 
+
 		def sahara = new Group(name: "Sahara")
 		def thar = new Group(name: "Thar")
 		mockDomain Group, [sahara, thar]
@@ -24,19 +27,21 @@ class MessageControllerSpec extends ControllerSpec {
 			new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "56484")),
 			new GroupMembership(group: thar, contact: new Contact(primaryMobile: "12121")),
 			new GroupMembership(group: thar, contact: new Contact(primaryMobile: "22222"))]
-				
+
 		controller.metaClass.getPaginationCount = {-> return 10}
+		mockMessageSendService = Mock()
+		controller.messageSendService = mockMessageSendService
 	}
-	
-// FIXME why are these tests commented out?  Either fix them or delete them and file a ticket to test further.
-/*	def "should send message to all the members in a group"() {
+
+	def "should send message to all the members in a group"() {
 		setup:
 			mockParams.groups = "Sahara"
 		when:
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.list()*.dst.containsAll(["12345","56484"])
+			1 * mockMessageSendService.send({it.dst == "12345" })
+			1 * mockMessageSendService.send({it.dst == "56484" })
 	}
 
 	def "should send message to all the members in multiple groups"() {
@@ -46,9 +51,12 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.list()*.dst.containsAll(["12345","56484","12121","22222"])
+			1 * mockMessageSendService.send({it.dst == "12345" })
+			1 * mockMessageSendService.send({it.dst == "56484" })
+			1 * mockMessageSendService.send({it.dst == "12121" })
+			1 * mockMessageSendService.send({it.dst == "22222" })
 	}
-	
+
 	def "should send a message to the given address"() {
 		setup:
 			mockParams.addresses = "+919544426000"
@@ -56,7 +64,28 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.count() == 1
+			1 * mockMessageSendService.send({it.dst == "+919544426000" })
+	}
+
+	def "should resend multiple failed message"() {
+		setup:
+			mockDomain(Fmessage, [new Fmessage(id: 1L), new Fmessage(id: 2L), new Fmessage(id: 3L)])
+			mockParams.failedMessageIds = [1, 2]
+		when:
+			controller.send()
+		then:
+			1 * mockMessageSendService.send({it.id == 1L})
+			1 * mockMessageSendService.send({it.id == 2L})
+	}
+
+	def "should resend a single failed message"() {
+		setup:
+			mockDomain(Fmessage, [new Fmessage(id: 1L), new Fmessage(id: 2L), new Fmessage(id: 3L)])
+			mockParams.failedMessageIds = "1"
+		when:
+			controller.send()
+		then:
+			1 * mockMessageSendService.send({it.id == 1L})
 	}
 
 	def "should eliminate duplicate address if present"() {
@@ -67,7 +96,8 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.count() == 2
+			1 * mockMessageSendService.send({it.dst == "12345" })
+			1 * mockMessageSendService.send({it.dst == "56484" })
 	}
 
 	def "should send message to each recipient in the list of address"() {
@@ -78,10 +108,11 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			Fmessage.list()*.dst.containsAll(addresses)
-			Fmessage.count() == 3
+			1 * mockMessageSendService.send({it.dst == "+919544426000" })
+			1 * mockMessageSendService.send({it.dst == "+919004030030" })
+			1 * mockMessageSendService.send({it.dst == "+1312456344" })
 	}
-	
+
 	def "should display flash message on successful message sending"() {
 		setup:
 			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
@@ -91,8 +122,8 @@ class MessageControllerSpec extends ControllerSpec {
 			controller.send()
 		then:
 			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
-			
-	}*/
+
+	}
 
 	def "should fetch starred inbox messages"() {
 		def isStarred = true
@@ -192,8 +223,10 @@ class MessageControllerSpec extends ControllerSpec {
 					2
 				}
 
-				controller.pending()
-		})
+				def model = controller.pending()
+				assert model["failedMessageIds"] == [1]
+				model
+		}, MessageStatus.SEND_FAILED)
 	}
 
 	def "should fetch all pending messages"() {
@@ -212,7 +245,10 @@ class MessageControllerSpec extends ControllerSpec {
 					2
 				}
 
-				controller.pending()
+				def model = controller.pending()
+				assert model["failedMessageIds"] == []
+				model
+
 		})
 	}
 
@@ -454,28 +490,28 @@ class MessageControllerSpec extends ControllerSpec {
 			})
 	}
 
-// TODO indentation is completely messed up here
-     private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure)  {
-			registerMetaClass(Fmessage)
-		 	Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
-			def fmessage = new Fmessage(src: "src1", starred: isStarred)
-			mockDomain Folder
-			mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
-			mockDomain Contact
-			mockDomain RadioShow 
-			mockParams.starred = isStarred
-			mockParams.max = max
-			mockParams.offset = offset
 
-			def results = closure.call(fmessage)
+     private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
+		registerMetaClass(Fmessage)
+		Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
+		def fmessage = new Fmessage(id:1L, src: "src1", starred: isStarred, status: status)
+		mockDomain Folder
+		mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
+		mockDomain Contact
+		mockDomain RadioShow
+		mockParams.starred = isStarred
+		mockParams.max = max
+		mockParams.offset = offset
+		mockDomain Fmessage, [fmessage]
 
-			assert results['messageInstanceList'] == [fmessage]
-			assert results['messageInstanceTotal'] == 2
-			assert results['messageInstance'] == fmessage
-			assert results['messageInstanceList']*.contactExists == [false]
-			assert results['messageInstanceList']*.contactExists == [false]
-			assert results['pollInstanceList'].every {!it.archived}
-			assert results['hasUndeliveredMessages']
+		def results = closure.call(fmessage)
 
+		assert results['messageInstanceList'] == [fmessage]
+		assert results['messageInstanceTotal'] == 2
+		assert results['messageInstance'] == fmessage
+		assert results['messageInstanceList']*.contactExists == [false]
+		assert results['messageInstanceList']*.contactExists == [false]
+		assert results['pollInstanceList'].every {!it.archived}
+		assert results['hasUndeliveredMessages']
     }
 }

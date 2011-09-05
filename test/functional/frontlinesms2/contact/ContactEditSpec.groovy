@@ -65,7 +65,7 @@ class AliceDetailsPage extends geb.Page {
 	}
 
 	static content = {
-		frmDetails { $("#contact-details") }
-		btnSave { frmDetails.find('.update') }
+		frmDetails { $("#contact_details") }
+		btnSave { frmDetails.find('#update-single') }
 	}
 }

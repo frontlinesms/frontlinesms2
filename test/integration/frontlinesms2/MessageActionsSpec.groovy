@@ -14,7 +14,7 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true)
 		when:
-			controller.params.messageId = message.id
+			controller.params.messageId = ',' + message.id + ','
 			controller.params.ownerId = poll.id
 			controller.params.messageSection = 'poll'
 			controller.move()
@@ -31,7 +31,7 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true)
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob')).save(failOnError: true)
 		when:
-			controller.params.messageId = message.id
+			controller.params.messageId = ',' + message.id + ','
 			controller.params.responseId = r2.id
 			controller.params.ownerId = poll.id
 			controller.changeResponse()
@@ -44,7 +44,7 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true)
 		when:
-			controller.params.messageId = message.id
+			controller.params.messageId = ',' + message.id + ','
 			controller.params.ownerId = folder.id
 			controller.params.messageSection = 'folder'
 			controller.move()

@@ -13,7 +13,6 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		given:
 			def bob = Contact.findByName("Bob")
-			println "no of groups is ${Group.count()}"
 		when:
 			go "contact/show/${bob.id}"
 		then:
@@ -26,13 +25,13 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 		when:
 			go "contact/show/${bob.id}"
-			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
+			def groupSelecter = $("#group-dropdown")
 			def nonMemberOf = groupSelecter.children().collect() { it.text() }.sort()
 		then:
 			nonMemberOf == ['Add to group...', 'Others', 'four']
 			
 		when:
-			$("#contact-details").find('select', name:'group-dropdown').value("${Group.findByName('Others').id}")
+			$("#group-dropdown").value("${Group.findByName('Others').id}")
 			def updatedMemberOf = $("#group-list").children().children('input').collect() { it.value() }.sort()
 		then:
 			updatedMemberOf == ['Others', 'Test', 'three']
@@ -91,10 +90,10 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			$("#contact")[1].click()
 			sleep 1000
 			$("#contact")[0].click()
-			sleep 1000
+			sleep 3000
 			def groupSelecter = $('#multi-group-dropdown')
 			groupSelecter.value("${Group.findByName('Others').id}")			
-			$("#btn_save_all").click()
+			$("#update-all").click()
 		then:
 			Group.findByName('Others').getMembers().containsAll([bob, alice])
 	}
@@ -113,9 +112,9 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			$("#contact")[1].click()
 			sleep 1000
 			$("#contact")[0].click()
-			sleep 1000
-			$("#multi-group-list").find('a').first().click()
-			$("#btn_save_all").click()
+			sleep 3000
+			$("#multi-group-list #remove-group-${otherGroup.id}").click()
+			$("#update-all").click()
 			bob.refresh()
 			alice.refresh()
 			otherGroup.refresh()
@@ -125,17 +124,15 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
+			def otherGroup = Group.findByName('Others')
 			to BobsContactPage
-			def btnRemoveFromGroup = $("#group-list").find('a').first()
-		    def groupDeletedFrom = $("#group-list").find('input').first().value()
-			assert btnRemoveFromGroup != null && !(btnRemoveFromGroup instanceof EmptyNavigator)
+			def btnRemoveFromGroup = $("#remove-group-${otherGroup.id}")
 			btnRemoveFromGroup.click()
-			def btnUpdate = $("#contact-details .update")
-			assert btnUpdate != null && !(btnUpdate instanceof EmptyNavigator)
+			def btnUpdate = $("#single-contact #update-single")
 			btnUpdate.click()
 		then:
 			at ContactListPage
-			Group.findByName(groupDeletedFrom).refresh().members.size() == 0
+			otherGroup.refresh().members.size() == 0
 	}
 
 	// TODO test cancel button - remove from 1 group
