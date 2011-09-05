@@ -43,6 +43,16 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			bob == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == bob }
 			alice == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == alice }
 	}
+	
+	def "archive action should not be available for messages that belongs to a message owner  such as activities"() {
+		setup:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollMessageViewPage
+		then:
+			!$("#message-archive").displayed
+	}
 
 	private def moveTo(value) {
 		$('#move-actions').getJquery().val(value)
