@@ -15,18 +15,18 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
-			to SearchPage
+			to SearchingPage
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at SearchPage
+			at SearchingPage
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
 																'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
 	def "group list and activity lists are displayed when they exist"() {
 		when:
-			to SearchPage
+			to SearchingPage
 		then:
 			searchFrm.find('select', name:'groupId').children().collect() { it.text() } == ['Select group','Listeners', 'Friends']
 			searchFrm.find('select', name:'activityId').children().collect() { it.text() } == ['Select activity / folder', "Miauow Mix", 'Work']
@@ -34,7 +34,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "search description is shown in header when searching by group"() {
 		when:
-			to SearchPage
+			to SearchingPage
 			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
@@ -43,7 +43,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "search string is still shown on form submit and consequent page reload"() {
 		given:
-			to SearchPage
+			to SearchingPage
 			searchFrm.searchString = 'bacon'
 		when:
 			searchBtn.click()
@@ -53,7 +53,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
-			to SearchPage
+			to SearchingPage
 			def a = Folder.findByName("Work")
 			searchFrm.activityId = "folder-${a.id}"
 		when:
@@ -64,14 +64,14 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Export Results' link is disabled when search is null "() {
 		when:
-			to SearchPage
+			to SearchingPage
 		then:
 			!$('h2:nth-child(2) div#export-results a').present();
 	}
 
 	def "should fetch all inbound messages alone"() {
 		given:
-			to SearchPage
+			to SearchingPage
 			searchFrm.messageStatus = "INBOUND"
 		when:
 			searchBtn.click()
@@ -87,7 +87,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
-			to SearchPage
+			to SearchingPage
 			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
 			searchBtn.click()
@@ -100,7 +100,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 
 //	def "message list returned from a search operation is displayed, regardless of search case"() {
 //		when:
-//			to SearchPage
+//			to SearchingPage
 //			searchFrm.searchString = "AlEx"
 //			searchBtn.click()
 //			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
@@ -132,7 +132,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	}
 }
 
-class SearchPage extends geb.Page {
+class SearchingPage extends geb.Page {
 	static url = 'search'
 	static at = {
 		title.startsWith('Results')
