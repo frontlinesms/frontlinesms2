@@ -2,7 +2,7 @@ class SmslibTranslationRoute {
 	def configure = {	
 		from('seda:raw-smslib')
 				.beanRef('smslibTranslationService', 'toFmessage')
-				.to('seda:fmessages-to-store')
+				.to('seda:incoming-fmessages-to-store')
 				.id('smslib-translation')
 	}
 }
