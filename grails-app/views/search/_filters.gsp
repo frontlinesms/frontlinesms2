@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.MessageStatus" %>
 <div id='filters'>
 	<g:if test="${groupInstanceList || pollInstanceList}">
 		<h2>Limit Search to:</h2>
@@ -13,6 +14,11 @@
 						  optionKey="${{(it instanceof frontlinesms2.Poll?'poll':'folder') + '-' + it.id}}"
 						  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.name}}"
 						  noSelection="${['':'Select activity / folder']}"/>
+			</li>
+			<li class="field">
+				<g:select name="messageCategory" from="${['All sent and received', 'Only received messages', 'Only sent messages']}"
+					    value="${messageCategory}"
+						keys="${['', 'INBOUND', 'SENT, SEND_PENDING, SEND_FAILED']}"/>
 			</li>
 		</ol>
 	</g:if>

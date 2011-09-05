@@ -7,9 +7,9 @@ class SearchControllerUnitSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.static.search = {String searchString=null, String contactSearchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
-				assert max == 10
-				assert offset == 0
+			Fmessage.metaClass.static.search = {params ->
+				assert params.max == 10
+				assert params.offset == 0
 				searchResults
 			}
 			mockDomain(Fmessage)
@@ -18,6 +18,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 			mockDomain(Poll)
 			mockDomain(Folder)
 			mockParams.max = 10
+			controller.beforeInterceptor()
 		when:
 			def results = controller.result()
 		then:
@@ -28,9 +29,9 @@ class SearchControllerUnitSpec extends ControllerSpec {
 		setup:
 			registerMetaClass(Fmessage)
 			def searchResults = [new Fmessage()]
-			Fmessage.metaClass.'static'.search = {String searchString=null,  String contactSearchString=null, Group groupInstance=null, Collection<MessageOwner> messageOwner=[], max, offset ->
-				assert max == 5
-				assert offset == 7
+			Fmessage.metaClass.'static'.search = {params ->
+				assert params.max == 5
+				assert params.offset == 7
 				searchResults
 			}
 			mockDomain(Fmessage)
@@ -40,6 +41,7 @@ class SearchControllerUnitSpec extends ControllerSpec {
 			mockDomain(Folder)
 			mockParams.max = 5
 		    mockParams.offset = 7
+			controller.beforeInterceptor()
 		when:
 			def results = controller.result()
 		then:

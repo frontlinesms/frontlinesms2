@@ -33,8 +33,8 @@
 									</g:remoteLink>
 								</li>
 							</g:if>
-							<g:render template="message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archiveAll']}"></g:render>
-							<g:render template="message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'deleteAll']}"></g:render>
+							<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archiveAll']}"></g:render>
+							<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'deleteAll']}"></g:render>
 						</div>
 					</g:else>
 				</ol>
