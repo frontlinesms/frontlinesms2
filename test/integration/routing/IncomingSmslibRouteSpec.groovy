@@ -20,6 +20,10 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 			// start route
 			def connection = new SmslibFconnection(name:'test connection', port:'/def/test-modem', baud:9600).save(failOnError:true)
 			fconnectionService.createRoutes(connection)
+			
+			// create a poll called GOO with an answer D
+			Poll.createPoll(title: 'goo', choiceA:'i like goo', choiceB:'goo is ok',
+					choiceC:'i have no strong opinion on goo', choiceD:'goo is horrible').save(failOnError:true, flush:true)
 		when:	
 			// wait for message to be read from mock serial device
 			while(mockPortHandler.messages.size() > 0) { Thread.sleep(50) }
@@ -28,7 +32,8 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 		then:	
 			// assert Fmessage is saved and has expected content
 			Fmessage.findAll()*.text == ['Good morning']
-			// TODO assert KeywordProcessor is called
+			// assert KeywordProcessor is called
+			Fmessage.findAll()[0].messageOwner == PollResponse.findByValue('goo is horrible')
 		cleanup:	
 			// stop route
 			if(connection) fconnectionService.destroyRoutes(connection)
