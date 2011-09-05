@@ -147,6 +147,27 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			outBoundMessageToPrimaryNo.contactName == "Alice"
 			outBoundMessageToSecondayNo.contactName == "Alice"
 	}
+	
+	def "should fail when archive message has a message owner" () {
+		setup:
+			def f = new Folder(name:'test').save(failOnError:true)
+			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
+			f.addToMessages(m)
+			f.save()
+		when:
+			m.archived = true
+		then:
+			!m.validate()
+	}
+	
+	def "should be able to archive message when it has no message owner" () {
+		setup:
+			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
+		when:
+			m.archived = true
+		then:
+			m.validate()
+	}
 
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
