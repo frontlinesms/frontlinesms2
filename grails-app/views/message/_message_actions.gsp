@@ -19,7 +19,9 @@
 				</div>
 			</li>
 			<div id='other_btns'>
-				<g:render template="../message/message_button_renderer" model="${[value:'Archive',id:'message-archive',action:'archive']}"></g:render>
+				<g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
+					<g:render template="../message/message_button_renderer" model="${[value:'Archive',id:'message-archive',action:'archive']}"></g:render>
+				</g:if>
 				<g:render template="../message/message_button_renderer" model="${[value:'Delete',id:'message-delete',action:'delete']}"></g:render>
 			</div>
 		</g:elseif>
