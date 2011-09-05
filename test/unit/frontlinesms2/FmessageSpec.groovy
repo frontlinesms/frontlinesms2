@@ -69,13 +69,6 @@ class FmessageSpec extends UnitSpec {
 			m.validate()
 	}
 
-	def "should return count as zero if no search string is given"() {
-		when:
-			def count = Fmessage.countAllSearchMessages()
-		then:
-			count == 0
-	}
-
 	def 'archiving messages sets the archived flag to true'() {
 		when:
 			Fmessage message = new Fmessage()

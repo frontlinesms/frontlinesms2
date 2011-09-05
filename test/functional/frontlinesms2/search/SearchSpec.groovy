@@ -10,12 +10,18 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def "clicking on the search button links to the result show page"() {
+		setup:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
 			to SearchPage
 			searchBtn.present()
 			searchBtn.click()
 		then:
 			at SearchPage
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
+																'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
 	def "group list and activity lists are displayed when they exist"() {
@@ -62,7 +68,36 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			!$('h2:nth-child(2) div#export-results a').present();
 	}
+
+	def "should fetch all inbound messages alone"() {
+		given:
+			to SearchPage
+			searchFrm.messageStatus = "INBOUND"
+		when:
+			searchBtn.click()
+			sleep(2000)
+			waitFor{searchBtn.displayed}
+		then:
+			searchFrm.messageStatus == ['INBOUND']
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'meeting at 11.00'])
+	}
 	
+	def "should fetch all sent messages alone"() {
+		given:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			to SearchPage
+			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
+		when:
+			searchBtn.click()
+			sleep(2000)
+			waitFor{searchBtn.displayed}
+		then:
+			searchFrm.messageStatus == ['SENT, SEND_PENDING, SEND_FAILED']
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
+	}
+
 //	def "message list returned from a search operation is displayed, regardless of search case"() {
 //		when:
 //			to SearchPage
