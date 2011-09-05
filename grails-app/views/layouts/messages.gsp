@@ -11,8 +11,9 @@
 			url_root = "${request.contextPath}/";
 		</script>
 		<g:javascript src="message/check_message.js"/>
+		<g:javascript src="message/arrow_navigation.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
-		<g:javascript src="message/star_message.js"></g:javascript>
+		<g:javascript src="message/star_message.js" />
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
@@ -69,6 +70,14 @@
 							</div>
 						</g:else>
 						<ol>
+							<g:if test="${messageSection == 'trash' && messageInstance != null}">
+								<li>
+									<select id="trash-actions">
+										<option value="na" class="na">Trash actions...</option>
+										<option id="empty-trash" value="empty-trash" onclick="launchEmptyTrashConfirmation();">Empty trash</option>
+									</select>
+								</li>
+							</g:if>
 							<li>
 								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
 									Export
@@ -84,9 +93,7 @@
 						<g:if test="${messageSection == 'poll'}">
 							<ol>
 								<li class='static_btn'>
-										<g:if test="${!params.archived}">
-											<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-										</g:if>
+									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
 								</li>
 								<li>
 									<button id="pollSettings">Show poll details</button>
@@ -103,14 +110,12 @@
 							<g:layoutBody />
 						</div>
 						<div class="content-footer">
-						<g:if test="${!params.archived}">
 							<ul id="filter">
 								<li>Show:</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
 								<li>|</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
-						</g:if>
 							<div id="page-arrows">
 								<g:paginate next="Next" prev="Back"
 									max="${grailsApplication.config.grails.views.pagination.max}"

@@ -41,14 +41,14 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		assert(Contact.get(secondContact.id).isMemberOf(Group.get(group.id)))
 	}
 	
-	def "blank search does not return a list of messages"() {
+	def "blank search string returns a list of messages"() {
 		when:
 			controller.params.searchString = ""
 			def model = controller.result()
 		then:
-			model.messageInstanceList.isEmpty()
+			model.messageInstanceList.size() == 7
 	}
-	
+
 	def "message searches can be restricted to a poll"() {
 		when:
 			controller.params.searchString = "chicken"
@@ -69,6 +69,28 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model.messageInstanceList == [Fmessage.findBySrc('+254111222')]
 	}
 	
+	def "search for inbound messages only"() {
+		when:
+			controller.params.messageStatus = "INBOUND"
+			def model = controller.result()
+		then:
+			model.messageInstanceTotal == 7
+			model.messageInstanceList.every {it.status == MessageStatus.INBOUND}
+	}
+
+	def "search for sent messages only"() {
+		setup:
+			new Fmessage(src: "src", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", dst: "dst", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+		when:
+			controller.params.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 3
+			model.messageInstanceList.every {it.status != MessageStatus.INBOUND}
+	}
+
 	def "message searches can be restricted to a contact group, and choice is still present after search completes"() {
 		given:
 			makeGroupMember()

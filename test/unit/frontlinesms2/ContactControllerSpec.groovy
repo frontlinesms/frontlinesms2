@@ -33,7 +33,7 @@ class ContactControllerSpec extends ControllerSpec {
 			mockDomain GroupMembership, [new GroupMembership(group: Group.findByName('group1'), contact: alice),
 				new GroupMembership(group: Group.findByName('group1'), contact: bob) ,
 				new GroupMembership(group: Group.findByName('group2'), contact: bob)]
-			mockParams.contactIds = "$alice.id, $bob.id"
+			mockParams.checkedContactList = "$alice.id, $bob.id"
 		when:
 			controller.multipleContactGroupList()
 			def model = controller.modelAndView.model

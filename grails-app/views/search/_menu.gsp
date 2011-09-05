@@ -9,7 +9,10 @@
 			</ol>
 		</li>
 		<li class='section' id="search-filters">
-			<g:render template="filters"/>
+			<div id='filters'>
+				<g:render template="basic_filters"/>
+				<g:render template="other_filters"/>
+			</div>
 		</li>
 		<li class='section buttons'>
 			<ol class='sub-menu'>

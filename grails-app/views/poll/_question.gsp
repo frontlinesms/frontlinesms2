@@ -35,5 +35,6 @@
 			$('#tabs').tabs("enable", 1);
 			$('#responseTab-text a').css('color', '#333333');
 		}
+		updateConfirmationMessage();
 	});
 </script>
