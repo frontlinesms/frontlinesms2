@@ -8,8 +8,8 @@ import serial.mock.*
 class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 	def fconnectionService
 	
-	String getFrom() { '' }
-	String getTo() { '' }
+	String getTestRouteFrom() { '' }
+	String getTestRouteTo() { '' }
 	
 	def "should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor"() {
 		given:
