@@ -69,27 +69,79 @@ class CheckedMessageSpec extends MessageGebSpec {
 			!$('input', value:'June').getAttribute('checked')
 	}
 	
-	def "'Forward' button still work when all messages are unchecked"() {
+	def "Should show the correct contact count when replying to multiple checked messages"() {
+		given:
+			[new Fmessage(src:'Alice', text:'hi Alice'),
+				new Fmessage(src:'Alice', text:'test')].each() {
+					it.status = MessageStatus.INBOUND
+					it.save(failOnError:true)
+				}
+			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+		when:
+			go "message/inbox"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			sleep 2000
+			def btnReply = $('#multiple-messages a')[0]
+		then:
+			btnReply
+		when:
+			btnReply.click()
+			sleep 2000	
+			$("#tabs a", text: "Confirm").click()
+			waitFor {$('div#tabs-3').displayed}
+		then:
+			$('#recipient').text() == "Alice"
+	}
+	
+	def "Should show the contact's name when replying to multiple messages from the same contact"() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
-		when: 
-			to MessagesPage
-			$("#message")[0].click()
-		then:
-			$("#message")*.@checked == ["true", "true", "true"]
+			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			$("#message")[0].click()
-		then: 
-			$("#message")*.@checked == ["", "", ""]
-		when:
-			$('#btn_dropdown').click()
-			sleep 1000
-			$('#btn_forward').click()			
-			sleep 4000
+			go "message/inbox"
+			$("#message")[1].click()
+			$("#message")[2].click()
+			sleep 2000
+			def btnReply = $('#multiple-messages a')[0]
 		then:
-			$('textArea', name:'messageText').text() == "hi Alice"
+			btnReply
+		when:
+			btnReply.click()
+			sleep 2000
+			$("#tabs a", text: "Confirm").click()
+			waitFor {$('div#tabs-3').displayed}
+		then:
+			$('#confirm-recipients-count').text() == "2 contacts selected"
 	}
+//	FIXME
+//	def "'Forward' button still work when all messages are unchecked"() {
+//		given:
+//			createInboxTestMessages()
+//			def message = Fmessage.findBySrc('Alice')
+//		when: 
+//			to MessagesPage
+//			$("#message")[0].click()
+//		then:
+//			$("#message")*.@checked == ["true", "true", "true"]
+//		when:
+//			$("#message")[0].click()
+//		then: 
+//			$("#message")*.@checked == ["", "", ""]
+//		when:
+//			$('#btn_dropdown').click()
+//			$('#btn_forward').click()			
+//			waitFor {$('div#tabs-1').displayed}
+//		then:
+//			$('textArea', name:'messageText').text() == "hi Alice"
+//	}
+//			sleep 1000
+//			$('#btn_forward').click()			
+//			sleep 4000
+//		then:
+//			$('textArea', name:'messageText').text() == "hi Alice"
+//	}
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:

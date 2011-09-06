@@ -150,17 +150,22 @@ class MessageController {
 
 	def archive = {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
+		def listSize = messageIdList.size();
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.archive()
-				messageInstance.save(failOnError: true, flush: true)
+				if(!messageInstance.messageOwner) {
+					messageInstance.archive()
+					messageInstance.save(failOnError: true, flush: true)
+				} else {
+					listSize--
+				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' messages'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection)
+			if(params.messageSection == 'search') redirect(controller: 'search', params: [flashMessage: flash.message])
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}

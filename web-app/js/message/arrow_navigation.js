@@ -9,10 +9,14 @@ $(document.documentElement).keyup(function (event) {
 	
 	if(key === 38) {
 		showPreviousMessage();
+		event.stopPropagation();
+		return false;
 	}
 	
 	if(key === 40) {
 		showNextMessage();
+		event.stopPropagation();
+		return false;
 	}
 });
 
