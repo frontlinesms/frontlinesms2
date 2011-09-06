@@ -36,8 +36,9 @@ class FmessageRouterService {
 				println "Haven't found any routes. updating message status as failed"
 				// TODO could we just return reference to message storage service here?
 				def message = exchange.in.body
+				message = message.id ? Fmessage.findById(message.id) : message
 				message.status = MessageStatus.SEND_FAILED
-				message.save()
+				message.save(flush:true) 
 				return null
 			}
 		}

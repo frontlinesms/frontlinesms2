@@ -16,6 +16,6 @@ class ConnectionControllerSpec extends ControllerSpec {
 			mockParams.id = 1 // mock the parameters for the request.  NB. mockParams cannot be overridden - only added and removed from
 			controller.createRoute()
 		then:
-			1 * service.createRoute(fconnection1) // Verify that createRoute was called on the correct Fconnection instance
+			1 * service.createRoutes(fconnection1) // Verify that createRoute was called on the correct Fconnection instance
 	}
 }
