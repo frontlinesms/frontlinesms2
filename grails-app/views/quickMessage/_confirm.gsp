@@ -6,6 +6,6 @@
 		<div class="confirm-header"> Recipient: <span id="recipient">${recipientName}</span></div>
 	</g:if>
 	<g:else>
-		<div class="confirm-header">Recipients:</div><span id="confirm-recepients-count"><span id="contacts-count">${recipients.size()}</span> contacts selected</span>
+		<div class="confirm-header">Recipients:</div><span id="confirm-recipients-count"><span id="contacts-count">${recipients.size()}</span> contacts selected</span>
 	</g:else>
 </div>
