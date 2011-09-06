@@ -125,7 +125,8 @@ class BootStrap {
 	}
 	
 	def initialiseSerial() {
-		if(Environment.current == Environment.TEST)
+		if(Environment.current == Environment.TEST
+				|| Boolean.parseBoolean(System.properties['serial.mock']))
 			initialiseMockSerial()
 		else
 			initialiseRealSerial()
@@ -174,13 +175,8 @@ class BootStrap {
 	}
 
 	def initialiseMockSerial() {
-		// Set up modem simulation
-		MockSerial.init();
-		MockSerial.setMultipleOwnershipAllowed(true);
-		CommPortIdentifier cpi = new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler());
-		MockSerial.setIdentifier("COM98", cpi);
-		MockSerial.setIdentifier("COM99", cpi);
-		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));
+		CommPortIdentifier cpi = new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler())
+		MockModemUtils.initialiseMockSerial([COM98:cpi, COM99:cpi])
 	}
 
 	Date createDate(String dateAsString) {

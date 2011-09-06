@@ -28,12 +28,14 @@ class SearchController {
 		params.activityInstance =  getActivityInstance()
 		params.messageOwner = params.activityInstance? Fmessage.getMessageOwners(activityInstance): null
 		params.messageStatus = messageStatus ? messageStatus.tokenize(",")*.trim() : null
+		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		def searchResults = Fmessage.search(params)
 		[searchDescription: getSearchDescription(),
 				searchString: params.searchString,
 				contactInstance: params.contactSearchString,
 				groupInstance: params.groupInstance,
 				activityId: params.activityId,
+				checkedMessageCount: checkedMessageCount,
 				messageInstanceList: searchResults,
 				messageInstanceTotal: Fmessage.countAllSearchMessages(params),
 				messageStatus: messageStatus] << show(searchResults) << no_search()
