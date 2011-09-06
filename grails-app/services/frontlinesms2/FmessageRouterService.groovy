@@ -37,7 +37,7 @@ class FmessageRouterService {
 				// TODO could we just return reference to message storage service here?
 				def message = exchange.in.body
 				message.status = MessageStatus.SEND_FAILED
-				message.save()
+				message.save(flush:true)
 				return null
 			}
 		}
