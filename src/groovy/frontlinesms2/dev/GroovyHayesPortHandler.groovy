@@ -17,7 +17,6 @@ class GroovyHayesPortHandler extends BaseHayesPortHandler {
 	protected String getResponseText(String request) {
 		println "Getting response for $request"
 		def response = currentState.getResponse(request)
-//		println "Response: $response"
 		if(response instanceof String) {
 			println "Got response as String"
 			return response

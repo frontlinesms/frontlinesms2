@@ -47,7 +47,7 @@ class ConnectionController {
 
 	def createRoute = {
 		withFconnection { settings ->
-			fconnectionService.createRoute(settings)
+			fconnectionService.createRoutes(settings)
 			flash.message = "Created route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
 			redirect(controller:'settings', action:'connections', id: settings.id)
 		}
