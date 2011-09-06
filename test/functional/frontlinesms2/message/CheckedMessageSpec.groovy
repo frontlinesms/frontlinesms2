@@ -69,6 +69,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			!$('input', value:'June').getAttribute('checked')
 	}
 	
+<<<<<<< HEAD
 	def "Should show the correct contact count when replying to multiple checked messages"() {
 		given:
 			[new Fmessage(src:'Alice', text:'hi Alice'),
@@ -157,6 +158,14 @@ class CheckedMessageSpec extends MessageGebSpec {
 		then:
 			$('textArea', name:'messageText').text() == "hi Alice"
 	}
+=======
+//			sleep 1000
+//			$('#btn_forward').click()			
+//			sleep 4000
+//		then:
+//			$('textArea', name:'messageText').text() == "hi Alice"
+//	}
+>>>>>>> f40343b616e9cc3ac796d6bfbf24e5ff58de1203
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:
