@@ -7,7 +7,7 @@ class QuickMessageController {
 		if( params.recipients?.contains(',')) {
 			def recipientList = []
 			params.recipients.tokenize(',').each { recipientList << Fmessage.findById(it).src }
-			params.recipients = recipientList
+			params.recipients = recipientList.unique()
 		}
 		def recipients = params.recipients ? [params.recipients].flatten() : []
 		def recipientName = recipients.size() == 1 ? (Contact.findByPrimaryMobile(recipients[0])?.name ?: Contact.findBySecondaryMobile(recipients[0])?.name ?: recipients[0]) : ""
