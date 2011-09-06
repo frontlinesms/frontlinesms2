@@ -88,7 +88,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 		when:
 			btnReply.click()
 			sleep 2000	
-			$("div#tabs-1 .next").click()
+			$("#tabs a", text: "Confirm").click()
+			waitFor {$('div#tabs-3').displayed}
 		then:
 			$('#recipient').text() == "Alice"
 	}
@@ -108,8 +109,9 @@ class CheckedMessageSpec extends MessageGebSpec {
 			btnReply
 		when:
 			btnReply.click()
-			sleep 2000	
-			$("div#tabs-1 .next").click()
+			sleep 2000
+			$("#tabs a", text: "Confirm").click()
+			waitFor {$('div#tabs-3').displayed}
 		then:
 			$('#confirm-recipients-count').text() == "2 contacts selected"
 	}
