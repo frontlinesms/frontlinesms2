@@ -153,7 +153,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$('#btn_dropdown').click()
 			sleep 1000
 			$('#btn_forward').click()			
-			sleep 1000
+			sleep 4000
 		then:
 			$('textArea', name:'messageText').text() == "hi Alice"
 	}
