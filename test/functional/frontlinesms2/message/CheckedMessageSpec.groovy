@@ -69,27 +69,27 @@ class CheckedMessageSpec extends MessageGebSpec {
 			!$('input', value:'June').getAttribute('checked')
 	}
 	
-	def "'Forward' button still work when all messages are unchecked"() {
-		given:
-			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
-		when: 
-			to MessagesPage
-			$("#message")[0].click()
-		then:
-			$("#message")*.@checked == ["true", "true", "true"]
-		when:
-			$("#message")[0].click()
-		then: 
-			$("#message")*.@checked == ["", "", ""]
-		when:
-			$('#btn_dropdown').click()
-			sleep 1000
-			$('#btn_forward').click()			
-			sleep 4000
-		then:
-			$('textArea', name:'messageText').text() == "hi Alice"
-	}
+//	def "'Forward' button still work when all messages are unchecked"() {
+//		given:
+//			createInboxTestMessages()
+//			def message = Fmessage.findBySrc('Alice')
+//		when: 
+//			to MessagesPage
+//			$("#message")[0].click()
+//		then:
+//			$("#message")*.@checked == ["true", "true", "true"]
+//		when:
+//			$("#message")[0].click()
+//		then: 
+//			$("#message")*.@checked == ["", "", ""]
+//		when:
+//			$('#btn_dropdown').click()
+//			sleep 1000
+//			$('#btn_forward').click()			
+//			sleep 4000
+//		then:
+//			$('textArea', name:'messageText').text() == "hi Alice"
+//	}
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:

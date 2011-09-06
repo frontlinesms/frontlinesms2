@@ -129,4 +129,18 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		then:
 			$("#checked-message-count").text() == "3 messages selected"
 	}
+	
+	def "can archive multiple messages where any owned messages are ignored, but those that are not are archived"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "search/result?searchString=i"
+			$("#message")[0].click()
+			sleep 1000
+			def btnArchive = $('#multiple-messages #btn_archive_all')
+			btnArchive.click()
+			sleep 1000
+		then:
+			at SearchPage
+	}
 }

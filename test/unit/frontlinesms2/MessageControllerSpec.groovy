@@ -1,8 +1,6 @@
 package frontlinesms2
 
 import grails.plugin.spock.*
-import frontlinesms2.MessageStatus
-import org.codehaus.groovy.grails.commons.ConfigurationHolder
 
 class MessageControllerSpec extends ControllerSpec {
 	MessageSendService mockMessageSendService
@@ -40,8 +38,8 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.dst == "12345" })
-			1 * mockMessageSendService.send({it.dst == "56484" })
+			1 * mockMessageSendService.send {it.dst == "12345"}
+			1 * mockMessageSendService.send {it.dst == "56484" }
 	}
 
 	def "should send message to all the members in multiple groups"() {
@@ -51,10 +49,10 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.dst == "12345" })
-			1 * mockMessageSendService.send({it.dst == "56484" })
-			1 * mockMessageSendService.send({it.dst == "12121" })
-			1 * mockMessageSendService.send({it.dst == "22222" })
+			1 * mockMessageSendService.send {it.dst == "12345" }
+			1 * mockMessageSendService.send {it.dst == "56484" }
+			1 * mockMessageSendService.send {it.dst == "12121" }
+			1 * mockMessageSendService.send {it.dst == "22222" }
 	}
 
 	def "should send a message to the given address"() {
@@ -64,7 +62,7 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.dst == "+919544426000" })
+			1 * mockMessageSendService.send {it.dst == "+919544426000" }
 	}
 
 	def "should resend multiple failed message"() {
@@ -74,8 +72,8 @@ class MessageControllerSpec extends ControllerSpec {
 		when:
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.id == 1L})
-			1 * mockMessageSendService.send({it.id == 2L})
+			1 * mockMessageSendService.send {it.id == 1L}
+			1 * mockMessageSendService.send {it.id == 2L}
 	}
 
 	def "should resend a single failed message"() {
@@ -85,7 +83,7 @@ class MessageControllerSpec extends ControllerSpec {
 		when:
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.id == 1L})
+			1 * mockMessageSendService.send {it.id == 1L}
 	}
 
 	def "should eliminate duplicate address if present"() {
@@ -96,8 +94,8 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.dst == "12345" })
-			1 * mockMessageSendService.send({it.dst == "56484" })
+			1 * mockMessageSendService.send {it.dst == "12345" }
+			1 * mockMessageSendService.send {it.dst == "56484" }
 	}
 
 	def "should send message to each recipient in the list of address"() {
@@ -108,9 +106,9 @@ class MessageControllerSpec extends ControllerSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			1 * mockMessageSendService.send({it.dst == "+919544426000" })
-			1 * mockMessageSendService.send({it.dst == "+919004030030" })
-			1 * mockMessageSendService.send({it.dst == "+1312456344" })
+			1 * mockMessageSendService.send {it.dst == "+919544426000" }
+			1 * mockMessageSendService.send {it.dst == "+919004030030" }
+			1 * mockMessageSendService.send {it.dst == "+1312456344" }
 	}
 
 	def "should display flash message on successful message sending"() {
