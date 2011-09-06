@@ -46,7 +46,7 @@ class FconnectionServiceSpec extends UnitSpec  {
 		given:
 			def connected = new Fconnection(id:1)
 		when:
-			service.createRoute(connected)
+			service.createRoutes(connected)
 		then:
 			1 * context.addRouteDefinitions({it*.id == ['in-1', 'out-1']})
 	}*/
