@@ -19,7 +19,8 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'poll/create',
 			success: function(data) {
-				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();});
+				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();}, true);
+				addTabValidations();
 			}})
 	},
 

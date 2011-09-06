@@ -76,7 +76,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $('#tabs-5').displayed }
 			$("input", name:'title').value("POLL NAME")
 			$("#done").click()
-			waitFor {!$("div.flash").text().isEmpty()}
+			waitFor {$("#confirmation").displayed}
+			$("#confirmation").click()
 		then:
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes","No", "Unknown")
 	}
@@ -149,6 +150,44 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#tabs-3').displayed
 	}
 
+	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
+		when:
+			go "message"
+		then:
+			launchPollPopup()
+			$("input", name:'poll-type').value("multiple")
+			$("input", value:'multiple').jquery.trigger('click')
+		when:
+			$("#nextPage").click()
+			waitFor { $('#tabs-2').displayed }
+			$("#nextPage").click()
+			sleep(500)
+		then:
+			$('#tabs-2').displayed
+	}
+
+	def "should not proceed when the poll is not named"() {
+		when:
+			go "message"
+		then:
+			launchPollPopup()
+			$("input", name:'poll-type').value("standard")
+			$("input", value:'standard').jquery.trigger('click')
+			$("input", name:"collect-responses").value('no-message')
+		when:
+			$("#nextPage").click()
+			waitFor { $('#tabs-3').displayed }
+		then:
+			$('#tabs-3').displayed
+		when:
+			$("#nextPage").click()
+			waitFor { $('#tabs-5').displayed }
+			$("#done").click()
+		then:
+			$('#tabs-5').displayed
+				
+	}
+
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			go "message"
@@ -191,8 +230,10 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
             $("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
 			$("#done").click()
+			waitFor {$("#confirmation").displayed}
+			$("#confirmation").click()
 		then:
-			waitFor { $("div.flash").text().contains("The poll has been created!") }
+			Poll.findByTitle("Cofee Poll")
 	}
 
 	def keyInData(String selector, String value) {
