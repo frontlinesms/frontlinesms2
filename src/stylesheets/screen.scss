@@ -824,3 +824,25 @@ a.send-failed, .send-failed td:last-child {
 	clear:both;
 	font-weight: bold;
 }
+
+.poll-response-reply h3 {
+  font-weight: bold;
+  padding: 0 0 10px 0;
+}
+
+.poll-response-reply div {
+  padding: 0 10px 10px 25px;
+}
+
+.poll-response-reply #send_auto_reply {
+  float: left;
+  margin: 0 0 10px 25px;
+}
+
+.poll-response-reply label {
+  margin: 0 0 10px 50px;
+}
+
+.poll-response-reply textarea {
+  margin: 0 0 0 50px;
+}
