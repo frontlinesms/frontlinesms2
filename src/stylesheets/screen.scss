@@ -846,3 +846,7 @@ a.send-failed, .send-failed td:last-child {
 .poll-response-reply textarea {
   margin: 0 0 0 50px;
 }
+
+.ui-dialog-titlebar-close {
+  display: none;
+}
