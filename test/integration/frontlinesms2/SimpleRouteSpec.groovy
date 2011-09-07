@@ -13,12 +13,12 @@ class SimpleRouteSpec extends CamelIntegrationSpec {
 	}
 
 	@Override
-	String getFrom() {
+	String getTestRouteFrom() {
 		'seda:simple'
 	}
 
 	@Override
-	String getTo() {
+	String getTestRouteTo() {
 		'seda:simple'
 	}
 }
