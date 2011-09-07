@@ -168,7 +168,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			m.validate()
 	}
-
+	
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
 	}
