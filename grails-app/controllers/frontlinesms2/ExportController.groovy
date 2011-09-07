@@ -21,7 +21,9 @@ class ExportController {
 			ownerId: params.ownerId,
 			activityId: params.activityId,
 			searchString: params.searchString,
-			groupId: params.groupId]
+			groupId: params.groupId,
+			reportName:getActivityDescription()
+			]
 	}
 	
 	def downloadReport = {
@@ -84,6 +86,22 @@ class ExportController {
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null
+	}
+	
+	private def getActivityDescription() {
+		if(params.ownerId){
+			String name
+		 	switch(params.messageSection) {
+				case 'poll':
+					def poll = Poll.findById(params.ownerId)
+					name = "${poll.title} (${poll.countMessages(false)} Messages)"
+					break
+				case 'folder':
+					def folder = Folder.findById(params.ownerId)
+					name = "${folder.name} (${folder.countMessages(false)} Messages)"
+					break
+			}
+		}
 	}
 
 	private String dateToString(Date date) {
