@@ -205,19 +205,19 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 
-	def "should fetch starred pending messages"() {
-		def isStarred = true
+	def "should fetch failed pending messages"() {
+		def hasFailed = true
 		expect:
-			setupDataAndAssert(isStarred, 3, 4, {fmessage ->
+			setupDataAndAssert(hasFailed, 3, 4, {fmessage ->
 				Fmessage.metaClass.'static'.getPendingMessages = { params ->
-					assert params['starred'] == isStarred
+					assert params['failed'] == hasFailed
 					assert params['max'] == mockParams.max
 					assert params['offset'] == mockParams.offset
 					return [fmessage]
 				}
 
-				Fmessage.metaClass.'static'.countPendingMessages = {starred ->
-					assert isStarred == starred
+				Fmessage.metaClass.'static'.countPendingMessages = {failed ->
+					assert hasFailed == failed
 					2
 				}
 
@@ -228,18 +228,18 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 	def "should fetch all pending messages"() {
-		def isStarred = false
+		def hasFailed = false
 		expect:
-			setupDataAndAssert(isStarred, 10, 0, {fmessage ->
+			setupDataAndAssert(hasFailed, 10, 0, {fmessage ->
 				Fmessage.metaClass.'static'.getPendingMessages = {params->
-					assert params['starred'] == isStarred 
+					assert params['failed'] == hasFailed 
 					assert params['max'] == 10
 					assert params['offset'] == 0
 					return [fmessage]
 				}
 
-				Fmessage.metaClass.'static'.countPendingMessages = {starred ->
-					assert isStarred == starred
+				Fmessage.metaClass.'static'.countPendingMessages = {failed ->
+					assert hasFailed == failed
 					2
 				}
 
@@ -489,15 +489,16 @@ class MessageControllerSpec extends ControllerSpec {
 	}
 
 
-     private void setupDataAndAssert(boolean isStarred, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
+     private void setupDataAndAssert(boolean flag, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
 		registerMetaClass(Fmessage)
 		Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
-		def fmessage = new Fmessage(id:1L, src: "src1", starred: isStarred, status: status)
+		def fmessage = new Fmessage(id:1L, src: "src1", starred: flag, status: status)
 		mockDomain Folder
 		mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
 		mockDomain Contact
 		mockDomain RadioShow
-		mockParams.starred = isStarred
+		mockParams.starred = flag
+		mockParams.failed = flag
 		mockParams.max = max
 		mockParams.offset = offset
 		mockDomain Fmessage, [fmessage]
