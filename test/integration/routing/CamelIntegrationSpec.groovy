@@ -31,7 +31,7 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 						camelContext.getRouteDefinition('test-to')]
 		camelContext.removeRouteDefinitions(testRoutes - null)
 
-		// TODO Work around for apparent non-transactional nature of Spock integration specs // this really shouldn't be necessary... possibly instead to do with asynchronous nature of route processing?
+		// Work around as domain objects created within routes are not cleaned up by the transaction of the integration test
 		Fmessage.findAll().each {
 			it.delete()
 		}
