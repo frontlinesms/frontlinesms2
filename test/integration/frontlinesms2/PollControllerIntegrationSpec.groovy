@@ -33,4 +33,19 @@ class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec 
 			Poll.getArchivedPolls() == [poll]
 			Poll.getNonArchivedPolls() == []
 	}
+
+	def  "should update a given poll object"() {
+		setup:
+			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = Poll.findByTitle("Who is badder?")
+			controller.params.id = poll.id
+			controller.params.title = "renamed poll name"
+		when:
+			controller.update()
+			def updatedPoll = Poll.get(poll.id)
+		then:
+			updatedPoll.title == "renamed poll name"
+			updatedPoll.question == "question"
+			updatedPoll.autoReplyText == "Thanks"
+	}
 }

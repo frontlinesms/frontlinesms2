@@ -5,14 +5,12 @@
 		<g:hiddenField name="messageSection" value="${messageSection}"/>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 		<g:hiddenField name="isArchived" value="${params.archived}"/>
+		<g:hiddenField name="activityId" value="${params.activityId}"/>
+		<g:hiddenField name="groupId" value="${params.groupId}"/>
+		<g:hiddenField name="searchString" value="${params.searchString}"/>
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 				message(code: 'fmessage.src.label', default: 'To')
 	 			: message(code: 'fmessage.dst.label', default: 'From')}" />
-		<g:if test="${messageSection == 'search'}">
-		  	<g:hiddenField name="activityId" value="${params.activityId}"/>
-		  	<g:hiddenField name="groupId" value="${params.groupId}"/>
-		  	<g:hiddenField name="searchString" value="${params.searchString}"/>
-		</g:if>
 		<table id="messages">
 			<thead>
 				<tr>

@@ -78,11 +78,38 @@
 									</select>
 								</li>
 							</g:if>
-							<li>
-								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
-									Export
-								</g:remoteLink>
-							</li>
+
+
+
+							<g:if test="${messageSection == 'poll'}">
+								<ol>
+									<li class='static_btn'>
+										<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+									</li>
+								</ol>
+								<ol>
+									<li>
+										<g:select name="poll-actions" from="${['Export messages', 'Rename activity']}"
+													keys="${['export', 'renameActivity']}"
+													noSelection="${['': 'More actions...']}"/>
+									</li>
+								</ol>
+								<ol>
+									<li>
+										<button id="pollSettings">Show poll details</button>
+									</li>
+								</ol>
+								<div class="poll-details" style="display:none">
+									<div id="pollGraph"></div>
+								</div>
+							</g:if>
+							<g:else>
+								<li>
+									<g:link elementId="export" url="#">
+										Export
+									</g:link>
+								</li>
+							</g:else>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
 					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
@@ -90,19 +117,6 @@
 								</g:remoteLink>
 							</li>
 						</ol>
-						<g:if test="${messageSection == 'poll'}">
-							<ol>
-								<li class='static_btn'>
-									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-								</li>
-								<li>
-									<button id="pollSettings">Show poll details</button>
-								</li>
-							</ol>
-							<div class="poll-details" style="display:none">
-								<div id="pollGraph"></div>
-							</div>
-						</g:if>
 					</div>
 					<div class="container" style="display:block">
 						<div class="content-body">
@@ -128,3 +142,15 @@
 		</div>
 	</body>
 </html>
+<script>
+	$("#poll-actions").change(function() {
+		var selected = $(this).find('option:selected').val();
+		if(selected)
+			remoteHash[selected].call();
+	});
+
+	$("#export").click(function() {
+		remoteHash['export'].call();
+
+	})
+</script>

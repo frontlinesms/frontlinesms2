@@ -42,6 +42,27 @@ var remoteHash = {
 			success: function(data) {
 				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
 			}})
+	},
+
+	"export": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + 'export/wizard',
+			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
+					searchString: $("#searchString").val(), groupId: $("#groupId").val()},
+			success: function(data) {
+				launchSmallPopup('Export', data, 'Export');
+			}})
+	},
+
+	"renameActivity": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + 'poll/rename',
+			data: {ownerId: $("#ownerId").val()},
+			success: function(data) {
+				launchSmallPopup('Rename activity', data, 'Rename');
+			}})
 	}
 }
 

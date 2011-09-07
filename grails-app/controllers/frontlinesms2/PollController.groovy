@@ -8,6 +8,16 @@ class PollController {
 		messageSection: "poll"]
 	}
 
+	def rename = {
+	}
+
+	def update = {
+		def poll = Poll.get(params.id)
+		poll.properties = params
+		poll.save()
+		redirect(controller: "message")
+	}
+
 	def create = {
 		[contactList: Contact.list(),
 			groupList:Group.getGroupDetails()]
