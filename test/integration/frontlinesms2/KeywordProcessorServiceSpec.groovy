@@ -11,7 +11,7 @@ class KeywordProcessorServiceSpec extends IntegrationSpec {
 		given:
 			def response1 = new PollResponse(value:"AC Milan")
 			def response2 = new PollResponse(value:"FC United of Manchester")
-			def p = new Poll(title:"football")
+			def p = new Poll(title:'Who is the best football team in the world?', keyword:"football")
 			p.addToResponses(response1)
 			p.addToResponses(response2)
 			p.save(failOnError:true)
