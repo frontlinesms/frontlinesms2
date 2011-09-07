@@ -104,22 +104,21 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(['starred':false])
+			def results = Fmessage.getPendingMessages(['failed':false])
 		then:
 		    results.size() == 2
 			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
 			results.every {it.archived == false}
 	}
 
-	def "should fetch starred pending messages"() {
+	def "should fetch failed pending messages"() {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(['starred':true])
+			def results = Fmessage.getPendingMessages(['failed':true])
 		then:
 		    results.size() == 1
-			results[0].status == MessageStatus.SEND_PENDING
-			results[0].starred
+			results[0].status == MessageStatus.SEND_FAILED
 			results.every {it.archived == false}
 	}
 

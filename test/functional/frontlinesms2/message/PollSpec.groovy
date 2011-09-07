@@ -187,7 +187,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $('#tabs-5 ').displayed }
             $("input", name:'title').value("Cofee Poll")
             $("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
-            $("#confirm-recepients-count").text() == "0 contacts selected"
+            $("#confirm-recepients-count").text() == "0 contacts selected (0 messages will be sent)"
             $("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
 			$("#done").click()

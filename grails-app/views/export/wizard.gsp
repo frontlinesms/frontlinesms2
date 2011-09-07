@@ -14,3 +14,8 @@
 			</div>
 	</g:form>
 </div>
+<script>
+function updateExportInfo() {
+	$(".ui-dialog-title").html("Export ${reportName}");
+}
+</script>
