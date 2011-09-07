@@ -2,6 +2,7 @@ package frontlinesms2
 
 class Poll {
 	String title
+	String keyword
 	String autoReplyText
 	String question
 	boolean archived
@@ -20,13 +21,20 @@ class Poll {
 			val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
-		autoReplyText(nullable: true, blank: false)
-		question(nullable: true)
+		autoReplyText(nullable:true, blank:false)
+		question(nullable:true)
+		keyword(nullable:true)
 	}
 
 	static mapping = {
 		responses cascade: 'all'
 	}
+	
+	def beforeSave = {
+		keyword = !keyword?:keyword.toUpperCase()
+	}
+	def beforeUpdate = beforeSave
+	def beforeInsert = beforeSave
 
 	def getMessages(params) {
 		Fmessage.owned(params['starred'], this.responses).list(params)
@@ -56,7 +64,7 @@ class Poll {
 	}
 
 	static Poll createPoll(attrs) {
-		def responses =[]
+		def responses = []
 		if(attrs['poll-type'] == 'standard') {
 			['Yes','No'].each { responses << new PollResponse(value:it, key:it)}
 		}
