@@ -142,7 +142,7 @@ class Fmessage {
 			}
 			
 			filterMessages { groupInstance, messageOwner, startDate, endDate -> 
-				def groupMembers = groupInstance?.getAddresses()
+				def groupMembers = groupInstance?.getAddresses() ?: ''
 				and {
 					if(groupInstance) {
 						'in'("src",	 groupMembers)
