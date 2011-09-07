@@ -12,14 +12,7 @@ class SimpleRouteSpec extends CamelIntegrationSpec {
 //			resultEndpoint.assertIsSatisfied()
 //	}
 //
-	@Override
-	String getTestRouteFrom() {
-		'seda:simple'
-	}
-
-	@Override
-	String getTestRouteTo() {
-		'seda:simple'
-	}
+	String getTestRouteFrom() { '' }
+	String getTestRouteTo() { '' }
 }
 
