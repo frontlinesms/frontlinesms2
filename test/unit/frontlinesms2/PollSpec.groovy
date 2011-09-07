@@ -7,6 +7,7 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 	def setup() {
 		registerMetaClass Poll
 		Poll.metaClass.static.withCriteria = { null } // this allows validation of 'title' field to pass
+		Poll.metaClass.static.findByTitleIlike = { null }
 	}
 	
 	def 'Poll must have at least two responses'() {
@@ -51,37 +52,9 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		given:
 			mockForConstraintsTests(Poll)
 		when:
-			def p = new Poll(keyword:'with space')
+			def p = new Poll(keyword:'with space', title:'test', responses:OK_RESPONSES)
 		then:
 			!p.validate()
-	}
-	
-	def "Poll keyword should be unique, ignoring case, among unarchived polls"() {
-		given:
-			mockForConstraintsTests(Poll, [new Poll(keyword:'something')])
-		when:
-			Poll p = new Poll(keyword:'someTHING', title:'test', responses:OK_RESPONSES)
-		then:
-			!p.validate()
-	}
-	
-	def "Poll keyword should not be unique between archived polls"() {
-		given:
-			mockDomain(Poll)
-			Poll p1 = new Poll(keyword:'something', archived:true).save(failOnError:true)
-		when:
-			Poll p2 = new Poll(keyword:'someTHING', archived:true)
-		then:
-			p2.validate()
-	}
-	
-	def "Poll keyword in unarchived poll may be the same as that in an archived poll"() {
-		given:
-			mockDomain(Poll)
-			Poll p1 = new Poll(keyword:'something', archived:true).save(failOnError:true)
-		when:
-			Poll p2 = new Poll(keyword:'someTHING', archived:false)
-		then:
-			p2.validate()
+			p.errors.keyword
 	}
 }

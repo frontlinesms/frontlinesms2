@@ -14,7 +14,7 @@ class Poll {
 
 	static constraints = {
 		title(blank: false, nullable: false, maxSize: 255, validator: { title, me ->
-			def matching = Poll.findByTitleILike(title)
+			def matching = Poll.findByTitleIlike(title)
 			matching==null || matching==me
 		})
 		responses(validator: { val, obj ->
@@ -23,7 +23,19 @@ class Poll {
 		})
 		autoReplyText(nullable:true, blank:false)
 		question(nullable:true)
-		keyword(nullable:true)
+		keyword(nullable:true, validator: { keyword, me ->
+			if(!keyword) return true
+			else {
+				if(keyword.find(/\s/)) return false
+				else {
+					if(me.archived) return true
+					else {
+						def matching = Poll.findByArchivedAndKeyword(false, keyword.toUpperCase())
+						return matching == null || matching.id == me.id
+					}
+				}
+			}
+		})
 	}
 
 	static mapping = {
@@ -81,13 +93,5 @@ class Poll {
 		responses << new PollResponse(value: unknownResponse, key: unknownResponse)
 		attrs['responses'] = responses
 		new Poll(attrs)
-	}
-	
-	static Poll findByTitleILike(String title) {
-		// not actually sure why this method needs defining, but 
-		def rez = Poll.withCriteria {
-			eq('title', title).ignoreCase()
-		}
-		rez? rez[0]: null
 	}
 }

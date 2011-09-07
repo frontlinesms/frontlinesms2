@@ -119,6 +119,33 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			p1.keyword == 'TOFU'
 	}
+
+	def "Poll keyword should be unique, ignoring case, among unarchived polls"() {
+		given:
+			def p1 = Poll.createPoll(keyword:'something', title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+		when:
+			def p2 = Poll.createPoll(keyword:'someTHING', title:'p2', choiceA:'yes', choiceB:'no')
+		then:
+			!p2.validate()
+	}
+
+	def "Poll keyword should not be unique between archived polls"() {
+		given:
+			def p1 = Poll.createPoll(keyword:'something', archived:true, title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+		when:
+			def p2 = Poll.createPoll(keyword:'someTHING', archived:true, title:'p2', choiceA:'yes', choiceB:'no')
+		then:
+			p2.validate()
+	}
+
+	def "Poll keyword in unarchived poll may be the same as that in an archived poll"() {
+		given:
+			def p1 = Poll.createPoll(keyword:'something', archived:true, title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+		when:
+			def p2 = Poll.createPoll(keyword:'someTHING', archived:false, title:'p2', choiceA:'yes', choiceB:'no')
+		then:
+			p2.validate()
+	}
 	
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(title: 'question')
