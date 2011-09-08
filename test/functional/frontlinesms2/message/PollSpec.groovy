@@ -195,7 +195,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $("div.flash").text().contains("The poll has been created!") }
 	}
 
-	def "should be able to export all messages related to an activity"() {
+	def "should launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			go "message"
