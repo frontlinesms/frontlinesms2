@@ -7,6 +7,7 @@ class Search {
 	String activityId
 	Group group
 	String status
+	boolean inArchive
 	
 	static constraints = {
 		searchString(blank: true, maxSize: 255)
@@ -15,5 +16,6 @@ class Search {
 		owners(nullable: true)
 		group(nullable: true)
 		status(nullable: true)
+		inArchive(nullable: true)
 	}
 }
