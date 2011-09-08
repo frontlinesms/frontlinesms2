@@ -9,7 +9,7 @@ class ExportControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	}
 
 	def "should export messages from a poll"() {
-		setup:
+		given:
 			Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona').save(flush: true)
 			[PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob')),
 				PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))]*.save(failOnError:true, flush:true)
@@ -23,14 +23,10 @@ class ExportControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 
 
 	def "should export messages from a folder"() {
-		setup:
-			def folder = new Folder(name: "folder")
-			Fmessage.list().each {
-				folder.addToMessages(it)
-			}
-			folder.save(flush: true)
+		given:
+			createTestFolders()
 			controller.params.messageSection = "folder"
-			controller.params.ownerId = Folder.findByName("folder").id
+			controller.params.ownerId = Folder.findByName("Work").id
 		when:
 			def result = controller.downloadReport()
 		then:
@@ -38,13 +34,23 @@ class ExportControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	}
 
 
-	static createTestMessages() {
+	def createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', dateReceived: new Date() - 4, starred: true),
 			new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester', dateReceived: new Date() - 3)].each {
 					it.status = MessageStatus.INBOUND
 					it.save(failOnError:true, flush:true)
 			}
-
 	}
+
+	def createTestFolders() {
+		//FIXME: Need to remove.Test fails without this line.
+		Folder.list()
+
+		def workFolder = new Folder(name: 'Work')
+		workFolder.addToMessages(new Fmessage(src: "Bob", dst: "dst"))
+		workFolder.addToMessages(new Fmessage(src: "Alice", dst: "dst"))
+		workFolder.save(flush: true)
+	}
+
 
 }
