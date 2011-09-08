@@ -78,14 +78,15 @@ class Fmessage {
 						eq("starred", true)
 				}
 			}
-			pending { isStarred=false ->
+			pending { hasFailed=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", false)
 					isNull("messageOwner")
-					'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
-					if(isStarred)
-						eq('starred', true)
+					if(hasFailed)
+						'in'("status", [MessageStatus.SEND_FAILED])
+					else 
+						'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 				}
 			}
 			deleted { isStarred=false ->
@@ -214,7 +215,7 @@ class Fmessage {
 	}
 
 	static def getPendingMessages(params) {
-		Fmessage.pending(params['starred']).list(params)		
+		Fmessage.pending(params['failed']).list(params)		
 	}
 
 	static def getDeletedMessages(params) {

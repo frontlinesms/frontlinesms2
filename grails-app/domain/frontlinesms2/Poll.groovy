@@ -2,6 +2,7 @@ package frontlinesms2
 
 class Poll {
 	String title
+	String keyword
 	String autoReplyText
 	String question
 	boolean archived
@@ -13,20 +14,39 @@ class Poll {
 
 	static constraints = {
 		title(blank: false, nullable: false, maxSize: 255, validator: { title, me ->
-			def matching = Poll.findByTitleILike(title)
+			def matching = Poll.findByTitleIlike(title)
 			matching==null || matching==me
 		})
 		responses(validator: { val, obj ->
 			val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
-		autoReplyText(nullable: true, blank: false)
-		question(nullable: true)
+		autoReplyText(nullable:true, blank:false)
+		question(nullable:true)
+		keyword(nullable:true, validator: { keyword, me ->
+			if(!keyword) return true
+			else {
+				if(keyword.find(/\s/)) return false
+				else {
+					if(me.archived) return true
+					else {
+						def matching = Poll.findByArchivedAndKeyword(false, keyword.toUpperCase())
+						return matching == null || matching.id == me.id
+					}
+				}
+			}
+		})
 	}
 
 	static mapping = {
 		responses cascade: 'all'
 	}
+	
+	def beforeSave = {
+		keyword = !keyword?:keyword.toUpperCase()
+	}
+	def beforeUpdate = beforeSave
+	def beforeInsert = beforeSave
 
 	def getMessages(params) {
 		Fmessage.owned(params['starred'], this.responses).list(params)
@@ -56,7 +76,7 @@ class Poll {
 	}
 
 	static Poll createPoll(attrs) {
-		def responses =[]
+		def responses = []
 		if(attrs['poll-type'] == 'standard') {
 			['Yes','No'].each { responses << new PollResponse(value:it, key:it)}
 		}
@@ -73,13 +93,5 @@ class Poll {
 		responses << new PollResponse(value: unknownResponse, key: unknownResponse)
 		attrs['responses'] = responses
 		new Poll(attrs)
-	}
-	
-	static Poll findByTitleILike(String title) {
-		// not actually sure why this method needs defining, but 
-		def rez = Poll.withCriteria {
-			eq('title', title).ignoreCase()
-		}
-		rez? rez[0]: null
 	}
 }
