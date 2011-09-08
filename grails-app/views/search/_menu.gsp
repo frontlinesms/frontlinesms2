@@ -19,6 +19,9 @@
 				<li>
 					<g:actionSubmit class="search" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" action="result"/>
 				</li>
+				<li>
+					<g:link action="no_search">${message(code: 'default.search.label', default: 'Clear search')}</g:link>
+				</li>
 			</ol>
 		</li>
 	</g:form>
