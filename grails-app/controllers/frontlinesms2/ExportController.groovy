@@ -15,7 +15,6 @@ class ExportController {
     def index = { redirect(action:'wizard', params: params) }
 	
 	def wizard = {
-		println "params: $params"
 		[messageInstanceList: params.messageList,
 			messageSection: params.messageSection,
 			ownerId: params.ownerId,
@@ -45,10 +44,10 @@ class ExportController {
 				messageInstanceList = Fmessage.trash.list()
 				break
 			case 'poll':
-				messageInstanceList = Poll.get(params.ownerId).getMessages()
+				messageInstanceList = Poll.get(params.ownerId).getMessages(['starred':false])
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages()
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(['starred':false])
 				break
 			case 'result':
 				def activityInstance = getActivityInstance()
@@ -70,7 +69,7 @@ class ExportController {
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
 		Map parameters = [title: "FrontlineSMS Message Export"]
-		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.${params.format}")
+		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Export_${formatedTime}.${params.format}")
 		try{
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:],parameters)
 		} catch(Exception e){
@@ -110,6 +109,6 @@ class ExportController {
 	}
 
 	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy-MMM-dd", request.locale)
+		return new SimpleDateFormat("yyyyMMdd", request.locale)
 	}
 }

@@ -62,6 +62,18 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.activityId == ["folder-${a.id}"]
 	}
 	
+	def "can search in archive or not, is enabled by default"() {
+		when:
+			to SearchingPage
+		then:
+			searchFrm.inArchive == 'on'
+		when:
+			searchFrm.inArchive = null
+			searchBtn.click()
+		then:
+			searchFrm.inArchive == null
+	}
+	
 	def "'Export Results' link is disabled when search is null "() {
 		when:
 			to SearchingPage

@@ -17,28 +17,35 @@ class SearchController {
 	}
 
 	def beforeInterceptor = {
-		params['max'] = params.max?: GrailsConfig.config.grails.views.pagination.max
-		params['offset']  = params['offset'] ?: 0
+		params.offset  = params.offset ?: 0
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		true
 	}
 	
 	def result = {
-		def messageStatus = params.messageStatus
-		params.groupInstance = params.groupId? Group.get(params.groupId): null
-		params.activityInstance =  getActivityInstance()
-		params.messageOwner = params.activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		params.messageStatus = messageStatus ? messageStatus.tokenize(",")*.trim() : null
+		def search = new Search()
+		println "start search ${search.inArchive}"
+		println "start param ${params.inArchive}"
+		def activity =  getActivityInstance()
+		search.searchString = params.searchString
+		search.contactString = params.contactString
+		search.group = params.groupId ? Group.get(params.groupId) : null
+		search.owners = activity ? Fmessage.getMessageOwners(activity): null
+		search.status = params.messageStatus
+		search.activityId = params.activityId
+		search.inArchive = params.inArchive ? true : false
+		println "end search ${search.inArchive}"
+		println "end param ${params.inArchive}"
+		def rawSearchResults = Fmessage.search(search)
+		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
+		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
-		def searchResults = Fmessage.search(params)
-		[searchDescription: getSearchDescription(),
-				searchString: params.searchString,
-				contactInstance: params.contactSearchString,
-				groupInstance: params.groupInstance,
-				activityId: params.activityId,
+		[searchDescription: searchDescription,
+				search: search,
 				checkedMessageCount: checkedMessageCount,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: Fmessage.countAllSearchMessages(params),
-				messageStatus: messageStatus] << show(searchResults) << no_search()
+				messageInstanceTotal: rawSearchResults.count()] << 
+			show(searchResults) << no_search()
 	}
 
 	def show = { searchResults ->
@@ -50,44 +57,26 @@ class SearchController {
 		[messageInstance: messageInstance]
 	}
 	
-	def deleteMessage = {
-		withFmessage { messageInstance ->
-			messageInstance.toDelete()
-			messageInstance.save(failOnError: true, flush: true)
-			Fmessage.get(params.messageId).messageOwner?.refresh()
-			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			params.remove('messageId')
-			redirect(action: result, params:params)
-		}
-	}
-	
-	private def getSearchDescription() {
-		def searchString = params.searchString
-		def contact = params.contactSearchString
-		def group = params.groupInstance
-		def activity = params.activityInstance
-		if(!searchString && !contact && !group && !activity) {
-			null
+	private def getSearchDescription(search) {
+		String searchDescriptor = "Searching in "
+		if(!search.owners && !search.group && !search.contactString) {
+			searchDescriptor += "all messages"
 		} else {
-			String searchDescriptor = "Searching in "
-			if(!activity && !group && !contact) {
-				searchDescriptor += "all messages"
-			} else {
-				if(contact) searchDescriptor += "$contact"
-				if(group) searchDescriptor += " '${group.name}'"
-				if(activity) {
-					String activityDescription = activity instanceof Poll? activity.title: activity.name
-					searchDescriptor += " '$activityDescription'"
-				}
+			if(search.contactString) searchDescriptor += "${search.contactString}"
+			if(search.group) searchDescriptor += " '${search.group.name}'"
+			if(search.owners) {
+				def activity = getActivityInstance()
+				String ownerDescription = activity instanceof Poll ? activity.title: activity.name
+				searchDescriptor += " '$ownerDescription'"
 			}
-			return searchDescriptor
 		}
+		return searchDescriptor
 	}
 	
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll: Folder
+			def activityType = stringParts[0] == 'poll'? Poll : Folder
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null

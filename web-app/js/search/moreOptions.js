@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	if(!$("#contactSearchString").val()) {
+	if(!$("#contactString").val()) {
 		$("#contact-name-field").hide();
 	}
 	$("#expanded-search-options").hide();
