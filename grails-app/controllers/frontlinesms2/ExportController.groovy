@@ -15,7 +15,6 @@ class ExportController {
     def index = { redirect(action:'wizard', params: params) }
 	
 	def wizard = {
-		println "params: $params"
 		[messageInstanceList: params.messageList,
 			messageSection: params.messageSection,
 			ownerId: params.ownerId,
