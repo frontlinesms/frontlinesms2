@@ -195,6 +195,38 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $("div.flash").text().contains("The poll has been created!") }
 	}
 
+	def "should be able to export all messages related to an activity"() {
+		when:
+			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			go "message"
+			$("a", text: "Who is badder?").click()
+			waitFor{title == "Poll"}
+			$("#poll-actions").value("export")
+			waitFor {$("#ui-dialog-title-modalBox").text() == "Export"}
+		then:
+			$("#ui-dialog-title-modalBox").text() == "Export"
+	}
+
+	def "should be able to rename an activity"() {
+		setup:
+			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		when:
+			go "message"
+			$("a", text: "Who is badder?").click()
+			sleep(1000)
+			waitFor{title == "Poll"}
+			$("#poll-actions").value("renameActivity")
+			waitFor {$("#ui-dialog-title-modalBox").text() == "Rename activity"}
+			$("#title").value("Rename poll")
+			$("#done").click()
+			waitFor {title == "Inbox"}
+		then:
+			!$("a", text: "Who is badder?")
+			$("a", text: 'Rename poll')
+
+
+	}
+
 	def keyInData(String selector, String value) {
 		def element = $("input", name:selector)
 		element.value(value)

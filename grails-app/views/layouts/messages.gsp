@@ -78,9 +78,6 @@
 									</select>
 								</li>
 							</g:if>
-
-
-
 							<g:if test="${messageSection == 'poll'}">
 								<ol>
 									<li class='static_btn'>

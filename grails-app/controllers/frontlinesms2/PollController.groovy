@@ -1,6 +1,8 @@
 package frontlinesms2
 
 class PollController {
+	static allowedMethods = [update: "POST"]
+
 	def index = {
 		def archived = params['archived']
 		[polls: Poll.findAllByArchived(archived),
