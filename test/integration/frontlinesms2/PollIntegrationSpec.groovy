@@ -106,17 +106,62 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			!poll.validate()
 	}
 
-	private def setUpPollResponseAndItsMessages() {
+	def "keyword should always be saved as uppercase"() {
+		when:
+			def p1 = setUpPollAndResponses()
+			p1.keyword = 'tofu'
+			p1.save(failOnError:true, flush:true)
+		then:
+			p1.keyword == 'TOFU'
+		when:
+			p1.keyword = 'tOFu'
+			p1.save(failOnError:true, flush:true) // this is actually an UPDATE rather than a save
+		then:
+			p1.keyword == 'TOFU'
+	}
+
+	def "Poll keyword should be unique, ignoring case, among unarchived polls"() {
+		given:
+			def p1 = Poll.createPoll(keyword:'something', title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+		when:
+			def p2 = Poll.createPoll(keyword:'someTHING', title:'p2', choiceA:'yes', choiceB:'no')
+		then:
+			!p2.validate()
+	}
+
+	def "Poll keyword should not be unique between archived polls"() {
+		given:
+			def p1 = Poll.createPoll(keyword:'something', archived:true, title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+		when:
+			def p2 = Poll.createPoll(keyword:'someTHING', archived:true, title:'p2', choiceA:'yes', choiceB:'no')
+		then:
+			p2.validate()
+	}
+
+	def "Poll keyword in unarchived poll may be the same as that in an archived poll"() {
+		given:
+			def p1 = Poll.createPoll(keyword:'something', archived:true, title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+		when:
+			def p2 = Poll.createPoll(keyword:'someTHING', archived:false, title:'p2', choiceA:'yes', choiceB:'no')
+		then:
+			p2.validate()
+	}
+	
+	private def setUpPollAndResponses() {		
 		def poll = new Poll(title: 'question')
 		poll.addToResponses(new PollResponse(value: "response 1"))
 		poll.addToResponses(new PollResponse(value: "response 2"))
 		poll.addToResponses(new PollResponse(value: "response 3"))
 		poll.save(flush: true, failOnError:true)
+		return poll
+	}
+
+	private def setUpPollResponseAndItsMessages() {
+		def poll = setUpPollAndResponses()
 
 		PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", dateReceived: new Date() - 10)).save(flush: true, failOnError:true)
 		PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", dateReceived: new Date() - 2)).save(flush: true, failOnError:true)
 		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", dateReceived: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
 	}
-
 }
 

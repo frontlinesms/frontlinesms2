@@ -120,6 +120,22 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			Fmessage.list() == inboxMessages
 	}
+	
+	def "should filter out failed messages in the pending section"() {
+		setup:
+			(1..3).each {new Fmessage(status: MessageStatus.SEND_PENDING).save(failOnError: true)}
+			(1..2).each {new Fmessage(status: MessageStatus.SEND_FAILED).save(failOnError: true)}
+		when:
+			def model = controller.pending()
+		then:
+			model.messageInstanceTotal == 5
+			
+		when:
+			controller.params.failed = true
+			model = controller.pending()
+		then:
+			model.messageInstanceTotal == 2
+	}
 
 	Date createDate(String dateAsString) {
 		DateFormat format = createDateFormat();
