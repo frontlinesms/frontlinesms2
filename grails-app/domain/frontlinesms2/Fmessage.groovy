@@ -117,7 +117,6 @@ class Fmessage {
 
 			search { search -> 
 				def groupMembersNumbers = search.group?.getAddresses()
-				println "members numbers: $groupMembersNumbers"
 					and {
 						if(search.searchString) {
 							'ilike'("text", "%${search.searchString}%")
@@ -136,6 +135,9 @@ class Fmessage {
 						}
 						if(search.owners) {
 							'in'("messageOwner", search.owners)
+						}
+						if(!search.inArchive) {
+							eq('archived', false)
 						}
 						eq('deleted', false)
 					}

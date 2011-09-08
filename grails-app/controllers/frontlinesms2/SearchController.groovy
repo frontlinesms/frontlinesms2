@@ -24,6 +24,8 @@ class SearchController {
 	
 	def result = {
 		def search = new Search()
+		println "start search ${search.inArchive}"
+		println "start param ${params.inArchive}"
 		def activity =  getActivityInstance()
 		search.searchString = params.searchString
 		search.contactString = params.contactString
@@ -31,6 +33,9 @@ class SearchController {
 		search.owners = activity ? Fmessage.getMessageOwners(activity): null
 		search.status = params.messageStatus
 		search.activityId = params.activityId
+		search.inArchive = params.inArchive ? true : false
+		println "end search ${search.inArchive}"
+		println "end param ${params.inArchive}"
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)

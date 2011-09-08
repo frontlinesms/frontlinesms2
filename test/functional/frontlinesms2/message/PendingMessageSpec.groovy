@@ -63,7 +63,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			!$("#retry").displayed
 		when:
 			$("#message")[0].click()
-			sleep(1000)
+			sleep(4000)
 			waitFor{$("#multiple-messages").displayed}
 		then:
 			!$("#retry-failed").displayed
