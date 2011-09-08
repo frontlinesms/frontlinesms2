@@ -17,7 +17,7 @@ class PollController {
 		def poll = Poll.get(params.id)
 		poll.properties = params
 		poll.save()
-		redirect(controller: "message")
+		redirect(controller: "message", action: "poll", params: [ownerId: params.id])
 	}
 
 	def create = {

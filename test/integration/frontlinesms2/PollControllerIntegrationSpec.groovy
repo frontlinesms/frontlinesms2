@@ -44,6 +44,7 @@ class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec 
 			controller.update()
 			def updatedPoll = Poll.get(poll.id)
 		then:
+			controller.response.redirectedUrl == "/message/poll/${poll.id}"
 			updatedPoll.title == "renamed poll name"
 			updatedPoll.question == "question"
 			updatedPoll.autoReplyText == "Thanks"
