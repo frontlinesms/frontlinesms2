@@ -115,14 +115,15 @@ class Fmessage {
 				}
 			}
 
-			searchMessages {params -> 
-				def groupMembersNumbers = params.groupInstance?.getAddresses()
+			search { search -> 
+				def groupMembersNumbers = search.group?.getAddresses()
+				println "members numbers: $groupMembersNumbers"
 					and {
-						if(params.searchString) {
-							'ilike'("text", "%${params.searchString}%")
+						if(search.searchString) {
+							'ilike'("text", "%${search.searchString}%")
 						}
-						if(params.contactSearchString) {
-							'ilike'("contactName", "%${params.contactSearchString}%")
+						if(search.contactString) {
+							'ilike'("contactName", "%${search.contactString}%")
 						}
 						if(groupMembersNumbers) {
 							or {
@@ -130,11 +131,11 @@ class Fmessage {
 								'in'("dst", groupMembersNumbers)
 							}
 						}
-						if(params.messageStatus) {
-							'in'('status', params.messageStatus.collect { Enum.valueOf(MessageStatus.class, it)})
+						if(search.status) {
+							'in'('status', search.status.tokenize(",")*.trim().collect { Enum.valueOf(MessageStatus.class, it)})
 						}
-						if(params.messageOwner) {
-							'in'("messageOwner", params.messageOwner)
+						if(search.owners) {
+							'in'("messageOwner", search.owners)
 						}
 						eq('deleted', false)
 					}
@@ -255,14 +256,6 @@ class Fmessage {
 	
 	static def getMessageOwners(activity) {
 		activity instanceof Poll ? activity.responses : [activity]
-	}
-	
-	static def search(params) {
-		return Fmessage.searchMessages(params).list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
-	}
-
-	static def countAllSearchMessages(params) {
-		return Fmessage.searchMessages(params).count()
 	}
 
 	static def getMessageStats( Group groupInstance=null, Collection<MessageOwner> messageOwner=[], Date startDate = new Date(Long.MIN_VALUE), Date endDate = new Date(Long.MAX_VALUE)) {

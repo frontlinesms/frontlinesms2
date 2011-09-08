@@ -43,7 +43,10 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "blank search string returns a list of messages"() {
 		when:
-			controller.params.searchString = ""
+			def search = new Search(searchString: "")
+			search.save(failOnError: true, flush: true)
+			println search.searchString
+			controller.params.search = search
 			def model = controller.result()
 		then:
 			model.messageInstanceList.size() == 7
@@ -71,7 +74,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "search for inbound messages only"() {
 		when:
-			controller.params.messageStatus = "INBOUND"
+			controller.params.messageStatus = ["INBOUND"]
 			def model = controller.result()
 		then:
 			model.messageInstanceTotal == 7
@@ -117,7 +120,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "message searches can be restricted to individual contacts"() {
 		when:
-			controller.params.contactSearchString = "alex"
+			controller.params.contactString = "alex"
 			controller.params.searchString = "work"
 			def model = controller.result()
 		then:
