@@ -213,7 +213,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			go "message"
 			$("a", text: "Who is badder?").click()
-			sleep(1000)
 			waitFor{title == "Poll"}
 			$("#poll-actions").value("renameActivity")
 			waitFor {$("#ui-dialog-title-modalBox").text() == "Rename activity"}
