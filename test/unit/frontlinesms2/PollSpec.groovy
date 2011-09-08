@@ -1,9 +1,13 @@
 package frontlinesms2
 
 class PollSpec extends grails.plugin.spock.UnitSpec {
+	/** some responses that should pass validation */
+	def OK_RESPONSES = [new PollResponse(value: "one"), new PollResponse(value: "two")]
+	
 	def setup() {
 		registerMetaClass Poll
 		Poll.metaClass.static.withCriteria = { null } // this allows validation of 'title' field to pass
+		Poll.metaClass.static.findByTitleIlike = { null }
 	}
 	
 	def 'Poll must have at least two responses'() {
@@ -31,7 +35,7 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		setup:
 			mockDomain(Poll)
 		when:
-			def poll = new Poll(title: "title", autoReplyText: " ", responses : [new PollResponse(value: "one"), new PollResponse(value: "two")])
+			def poll = new Poll(title:"title", autoReplyText:" ", responses:OK_RESPONSES)
 		then:
 			!poll.validate()
 	}
@@ -42,5 +46,15 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 			def results = Poll.getNonArchivedPolls()
 		then:
 			results.every {!it.archived}
+	}
+	
+	def "Poll keyword may not contain whitespace"() {
+		given:
+			mockForConstraintsTests(Poll)
+		when:
+			def p = new Poll(keyword:'with space', title:'test', responses:OK_RESPONSES)
+		then:
+			!p.validate()
+			p.errors.keyword
 	}
 }

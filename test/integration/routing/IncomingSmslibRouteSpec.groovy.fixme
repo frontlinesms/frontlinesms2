@@ -22,7 +22,7 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 			fconnectionService.createRoutes(connection)
 			
 			// create a poll called GOO with an answer D
-			Poll.createPoll(title: 'goo', choiceA:'i like goo', choiceB:'goo is ok',
+			Poll.createPoll(title:'What do you think of goo?', keyword: 'goo', choiceA:'i like goo', choiceB:'goo is ok',
 					choiceC:'i have no strong opinion on goo', choiceD:'goo is horrible').save(failOnError:true, flush:true)
 		when:	
 			// wait for message to be read from mock serial device

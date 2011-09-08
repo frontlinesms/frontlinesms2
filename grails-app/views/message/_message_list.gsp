@@ -1,9 +1,10 @@
 <%@ page import="frontlinesms2.MessageStatus" %>
 <div id="message-list">
 	<g:hiddenField name="checkedMessageList" value=","/>
+	<g:hiddenField name="messageSection" value="${messageSection}"/>
+	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
+
 	<g:if test="${messageInstanceTotal > 0}">
-		<g:hiddenField name="messageSection" value="${messageSection}"/>
-		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 		<g:hiddenField name="isArchived" value="${params.archived}"/>
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 				message(code: 'fmessage.src.label', default: 'To')

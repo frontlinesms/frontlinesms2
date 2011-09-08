@@ -1,11 +1,23 @@
 package frontlinesms2
 
 class PollController {
+	static allowedMethods = [update: "POST"]
+
 	def index = {
 		def archived = params['archived']
 		[polls: Poll.findAllByArchived(archived),
 		actionLayout : archived ? "archive" : "poll",
 		messageSection: "poll"]
+	}
+
+	def rename = {
+	}
+
+	def update = {
+		def poll = Poll.get(params.id)
+		poll.properties = params
+		poll.save()
+		redirect(controller: "message", action: "poll", params: [ownerId: params.id])
 	}
 
 	def create = {
@@ -15,14 +27,8 @@ class PollController {
 
 	def save = {
 		def pollInstance = Poll.createPoll(params)
-		if (pollInstance.validate()) {
-			pollInstance.save()
-			flash.message = "${message(code: 'default.created.poll', args: [message(code: 'poll.label', default: 'Poll'), pollInstance.id])}"
-			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
-		} else {
-			flash.message = "error"
-			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
-		}
+		pollInstance.save()
+		render ""
 	}
 
 	def archive = {
