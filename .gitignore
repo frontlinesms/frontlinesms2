@@ -6,6 +6,7 @@ target/
 .project
 .settings/
 web-app/WEB-INF/classes/
+.metadata
 
 # IntelliJ IDEA Project files
 *.iml
