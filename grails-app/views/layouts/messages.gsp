@@ -78,11 +78,13 @@
 									</select>
 								</li>
 							</g:if>
-							<li>
-								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');updateExportInfo();">
-									Export
-								</g:remoteLink>
-							</li>
+							<g:if test="${messageSection != 'trash'}">
+								<li>
+									<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');updateExportInfo();">
+										Export
+									</g:remoteLink>
+								</li>
+							</g:if>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
 					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
