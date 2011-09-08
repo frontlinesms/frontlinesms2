@@ -42,10 +42,10 @@ class ExportController {
 				messageInstanceList = Fmessage.trash.list()
 				break
 			case 'poll':
-				messageInstanceList = Poll.get(params.ownerId).getMessages()
+				messageInstanceList = Poll.get(params.ownerId).getMessages(params)
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages()
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params)
 				break
 			case 'result':
 				def activityInstance = getActivityInstance()

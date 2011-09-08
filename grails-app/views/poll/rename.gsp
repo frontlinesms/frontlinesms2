@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form name="group-details" action="update" >
+	<g:form action="update" method="post" >
 		<g:hiddenField name="id" value="${params.ownerId}"></g:hiddenField>
 		<div class="dialog">
 			<table>
