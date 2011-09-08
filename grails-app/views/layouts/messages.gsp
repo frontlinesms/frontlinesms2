@@ -157,5 +157,15 @@
 	$("#export").click(function() {
 		remoteHash['export'].call();
 
-	})
+	});
+
+	if($(".prevLink").size() == 0) {
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled>Back</a>');
+	}
+
+	if($(".nextLink").size() == 0) {
+		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled>Next</a>');
+	}
+
+
 </g:javascript>
