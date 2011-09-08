@@ -72,7 +72,7 @@ class MessageController {
 		def messageInstanceList = Fmessage.getPendingMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
-				messageInstanceTotal: Fmessage.countPendingMessages(params['starred']),
+				messageInstanceTotal: Fmessage.countPendingMessages(params['failed']),
 				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << show(messageInstanceList)
 	}
 

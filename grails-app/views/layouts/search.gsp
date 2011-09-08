@@ -35,7 +35,7 @@
 			  			<ol>
 				  			<li>
 					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
-									Export
+									Export results
 								</g:remoteLink>
 							</li>
 						</ol>

@@ -1,6 +1,6 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
-	<label for="address">Add phone number</label>
+	<label class="header" for="address">Add phone number</label>
 	<g:textField id="address" name="address"/>
 	<g:link url="#" class="add-address">Add</g:link>
 	
@@ -78,10 +78,11 @@
 	}
 
 	function updateCount() {
-		var count = getSelectedGroupElements("addresses").size();
-		$("#recipient-count").html(count)
-		var contactsCount = $("#contacts-count");
-		contactsCount && contactsCount.html(count)
+	    var count = getSelectedGroupElements("addresses").size();
+	    $.each(["#recipient-count", "#contacts-count", "#messages-count"],
+	    function(index, id) {
+	        $(id) && $(id).html(count);
+	    });
 	}
 
 	$('.add-address').live('click', function() {

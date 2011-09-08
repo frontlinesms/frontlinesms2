@@ -22,6 +22,13 @@ class TrashListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
 	}
+	
+	def "should not contain export button" () {
+		when:
+			go "message/trash"
+		then:
+			!$('a', text:'Export')
+	}
 }
 
 

@@ -40,6 +40,4 @@ class RadioShowIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			starredHealthShowMessages == 1
 			unstarredHealthShowMessages == 3
 	}
-
-
 }

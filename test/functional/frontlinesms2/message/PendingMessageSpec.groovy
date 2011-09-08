@@ -34,13 +34,13 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			!$('.multi-action a', text:'Reply All').displayed
 	}
 
-	def "should filter pending messages for starred and unstarred messages"() {
+	def "should filter pending messages for pending and failed messages"() {
 		when:
 			goToPendingPage()
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
-			$('a', text:'Starred').click()
+			$('a', text:'Failed').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
 			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'dst1'

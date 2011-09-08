@@ -19,7 +19,8 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'poll/create',
 			success: function(data) {
-				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();});
+				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();}, true);
+				addTabValidations();
 			}})
 	},
 
@@ -41,6 +42,28 @@ var remoteHash = {
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
 				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
+			}})
+	},
+
+	"export": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + 'export/wizard',
+			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
+					searchString: $("#searchString").val(), groupId: $("#groupId").val()},
+			success: function(data) {
+				launchSmallPopup('Export', data, 'Export');
+				updateExportInfo();
+			}})
+	},
+
+	"renameActivity": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + 'poll/rename',
+			data: {ownerId: $("#ownerId").val()},
+			success: function(data) {
+				launchSmallPopup('Rename activity', data, 'Rename');
 			}})
 	}
 }

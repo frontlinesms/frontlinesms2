@@ -6,9 +6,10 @@
 			<li><a href="#tabs-3">Automatic reply</a></li>
 			<li id='recipientsTab-text'><a href="#tabs-4">Select recipients</a></li>
 			<li><a href="#tabs-5">Confirm</a></li>
+			<li class="confirm-tab"><a href="#tabs-6"></a></li>
 		</ol>
 
-	<g:form action="save" name="poll-details" controller="poll" method="post">
+	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToNextTab()">
 		<g:render template="question"/>
 		<g:render template="answers"/>
 		<g:render template="replies"/>
@@ -19,11 +20,22 @@
 																			'recipients': []]"></g:render>
 		</div>
 		<g:render template="confirm"/>
-	</g:form>
+		<div id="tabs-6">
+			<h2>The poll has been created!</h2>
+			<h2>The messages  have been added to the pending message queue.</h2>
+
+			<h2>It may take some time for all the messages to be sent, depending on the
+			number of messages and the network connection.</h2>
+
+			<h2>To see the status of your message, open the 'Pending' messages folder.</h2>
+		</div>
+	</g:formRemote>
 </div>
 
 <script>
 	function initializePoll() {
+		$("#tabs").tabs("disable", getTabLength());
+		
 		highlightPollResponses();
 
 		$("#tabs-1").contentWidget({
@@ -36,11 +48,29 @@
 			}
 		});
 
+		$("#tabs-2").contentWidget({
+			validate: function() {
+				return $("input[name='poll-type']:checked").val() != "standard" ?  validatePollResponses() : true;
+			}
+		});
+
 		$("#tabs-3").contentWidget({
 			validate: function() {
 				return isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
 			}
 		});
+
+		$("#tabs-5").contentWidget({
+			validate: function() {
+				return !isElementEmpty($("#tabs-5 #title"));	
+			},
+			
+			onDone: function() {
+				$("#poll-details").submit();
+				return false;
+			}
+		});
+
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
@@ -66,7 +96,6 @@
 	function highlightPollResponses() {
 		$(".choices").each(function() {
 			$(this).blur(function() {
-				validatePollResponses();
 				var label = $("label[for='" + this.id + "']");
 				if (!$.trim(this.value).length) label.removeClass('bold');
 				else label.addClass('bold');
@@ -79,12 +108,11 @@
 		$("#poll-choices input[type=text]").each(function() {
 			if ($.trim($(this).val()).length > 0) validResponsesCount++;
 		});
-		if (validResponsesCount < 2) {
-			$(".poll-responses-tab .next").addClass('disabled');
-			$(".error-panel").html("Please enter at least two responses");
-		} else {
-			$(".poll-responses-tab .next").removeClass('disabled');
-			$(".error-panel").html("");
-		}
+		return validResponsesCount >= 2		
+	}
+
+	function goToNextTab() {
+		$("#tabs").tabs("enable", getTabLength());
+		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </script>
