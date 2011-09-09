@@ -13,7 +13,7 @@ function addGroupClickAction() {
 	var groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list')
 	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 
-	var groupListItem = $('<li><input type="text" readonly="readonly" value="' + groupName + '" />');
+	var groupListItem = $('<li><input type="text" disabled="true" value="' + groupName + '" />');
 	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '"><img src="' + url_root + 'images/icons/remove.gif" /></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
