@@ -39,7 +39,14 @@ class Group {
 	}
 	
 	def getAddresses() {
-		getMembers()*.primaryMobile
+		def addressList = []
+		getMembers()*.primaryMobile.each {  
+			if(it)	addressList << it
+		}
+		getMembers()*.secondaryMobile.each {
+			if(it)	addressList << it
+		}
+		addressList
 	}
 
 	static HashMap<String, List<String>> getGroupDetails() {

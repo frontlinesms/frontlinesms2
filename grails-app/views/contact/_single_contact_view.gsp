@@ -82,7 +82,7 @@
 		<ol id='group-list'>
 			<g:each in="${contactGroupInstanceList}" status="i" var="g">
 				<li class="${g == groupInstance ? 'selected' : ''}">
-					<input type="text" name="${g.name}" value="${g.name}" readonly="readonly" />
+					<input type="text" name="${g.name}" value="${g.name}" disabled="true" />
 					<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 				</li>
 			</g:each>
