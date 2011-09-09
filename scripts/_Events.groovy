@@ -35,12 +35,10 @@ eventTestPhaseStart = { name ->
 
 eventTestStart = { name ->
 	if (inFunctionalTestPhase) {
-		println "In _Events.groovy"
 		def sql = Sql.newInstance("jdbc:hsqldb:mem:testDb", "sa",
 				"", "org.hsqldb.jdbcDriver")
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
 		sql.eachRow("SELECT * FROM  INFORMATION_SCHEMA.SYSTEM_TABLES where TABLE_SCHEM = 'PUBLIC'") { row ->
-			println "deleting from ${row.TABLE_NAME}"
 			sql.execute "DELETE FROM " + row.TABLE_NAME
 		}
 
