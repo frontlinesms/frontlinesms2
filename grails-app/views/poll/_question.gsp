@@ -19,22 +19,24 @@
 <script>
 	$("input[name='collect-responses']").live("change", function() {
 		if(isGroupChecked("collect-responses")) {
-			$('#tabs').tabs("disable", 3);
-			$('#recipientsTab-text a').css('color', '#DFDFDF');
+			$('#tabs').tabs("disable", 4);
+			$('#recipientsTab-text a').css('color', '#DFDFDF'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
 		} else {
-			$('#tabs').tabs("enable", 3);
-			$('#recipientsTab-text a').css('color', '#333333');
+			$('#tabs').tabs("enable", 4);
+			$('#recipientsTab-text a').css('color', '#333333'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
 		}
 	});
 
 	$("input[name='poll-type']").live("change", function() {
 		if ($("input[name='poll-type']:checked").val() == "standard") {
 			$('#tabs').tabs("disable", 1);
-			$('#responseTab-text a').css('color', '#DFDFDF');
+			$('#responseTab-text a').css('color', '#DFDFDF'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
 		} else {
 			$('#tabs').tabs("enable", 1);
-			$('#responseTab-text a').css('color', '#333333');
+			$('#responseTab-text a').css('color', '#333333'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
 		}
 		updateConfirmationMessage();
 	});
+	
+	// TODO refactor above repeated code
 </script>

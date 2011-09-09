@@ -79,7 +79,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
-			launchPollPopup()
+			launchPollPopup('standard', null, false)
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
@@ -88,7 +88,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { autoReplyTab.displayed }
 		when:
 			next.click()
-			println "Tabs with classes: ${tabMenu*.hasClass('ui-state-disabled')}"
 		then:
 			waitFor { confirmationTab.displayed }
 			tabMenu[1].hasClass("ui-state-disabled")
@@ -190,7 +189,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		element.jquery.trigger('blur')
 	}
 
-	def launchPollPopup(pollType='standard', question=null) {
+	def launchPollPopup(pollType='standard', question=null, enableMessage=true) {
 		to MessagePage
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
@@ -199,6 +198,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		waitFor { at PollCreatePage }
 		$("input", name:'poll-type').value(pollType)
 		if(question) $("textarea", name:'question').value(question)
+		$("input", name:"collect-responses").value(!enableMessage)
 		next.click()
 	}
 }
