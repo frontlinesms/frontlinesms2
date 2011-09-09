@@ -78,11 +78,11 @@
 									</select>
 								</li>
 							</g:if>
-							<g:if test="${messageSection != 'trash'}">
+							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
-									<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');updateExportInfo();">
-										Export
-									</g:remoteLink>
+									<g:link elementId="export" url="#">
+										Export results
+									</g:link>
 								</li>
 							</g:if>
 							<li>
@@ -92,11 +92,21 @@
 								</g:remoteLink>
 							</li>
 						</ol>
+
 						<g:if test="${messageSection == 'poll'}">
 							<ol>
 								<li class='static_btn'>
 									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
 								</li>
+							</ol>
+							<ol>
+								<li>
+									<g:select name="poll-actions" from="${['Export messages', 'Rename activity']}"
+											keys="${['export', 'renameActivity']}"
+											noSelection="${['': 'More actions...']}"/>
+								</li>
+							</ol>
+							<ol>
 								<li>
 									<button id="pollSettings">Show poll details</button>
 								</li>
@@ -137,3 +147,25 @@
 		</div>
 	</body>
 </html>
+<g:javascript>
+	$("#poll-actions").bind('change', function() {
+		var selected = $(this).find('option:selected').val();
+		if(selected)
+			remoteHash[selected].call();
+	});
+
+	$("#export").click(function() {
+		remoteHash['export'].call();
+
+	});
+
+	if($(".prevLink").size() == 0) {
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled>Back</a>');
+	}
+
+	if($(".nextLink").size() == 0) {
+		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled>Next</a>');
+	}
+
+
+</g:javascript>

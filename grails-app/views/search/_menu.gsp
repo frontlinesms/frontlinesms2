@@ -4,7 +4,7 @@
 			<h2 id="search-string">Keyword or phrase:</h2>
 			<ol class='sub-menu'>
 				<li class='field'>
-					<g:textField name="searchString" id="searchString" value="${searchString}"/>
+					<g:textField name="searchString" id="searchString" value="${search?.searchString}"/>
 				</li>
 			</ol>
 		</li>
