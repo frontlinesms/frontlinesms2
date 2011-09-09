@@ -71,6 +71,10 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup()
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
+			$("a", text:"Confirm").click()
+			$(".error-panel").displayed
+			$("#question").value("question")
+			$("input", name:"collect-responses").value('no-message')
 		when:
 			$("a", text:"Confirm").click()
 			waitFor { $('#tabs-5').displayed }
@@ -90,6 +94,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 			$("input", name:"collect-responses").value('no-message')
+			$("#question").value('question')
 		when:
 			$("#nextPage").click()
 			waitFor { $('#tabs-3 ').displayed }
@@ -119,6 +124,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup()
 			$("input", name:'poll-type').value("multiple")
 			$("input", value:'multiple').jquery.trigger('click')
+			$("#question").value("question")
 		when:
 			$("#nextPage").click()
 			waitFor { $('#tabs-2').displayed }
@@ -133,6 +139,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup()
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
+			$("#question").value("question")
 		when:
 			$("#nextPage").click()
 			waitFor { $('#tabs-3').displayed }
@@ -148,6 +155,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $('#tabs-3').displayed }
 		then:
 			$('#tabs-3').displayed
+			$('.error-panel').displayed
 	}
 
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
@@ -157,6 +165,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup()
 			$("input", name:'poll-type').value("multiple")
 			$("input", value:'multiple').jquery.trigger('click')
+			$("#question").value('question')
 		when:
 			$("#nextPage").click()
 			waitFor { $('#tabs-2').displayed }
@@ -164,6 +173,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			sleep(500)
 		then:
 			$('#tabs-2').displayed
+			$('.error-panel').displayed
 	}
 
 	def "should not proceed when the poll is not named"() {
@@ -174,6 +184,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("input", name:'poll-type').value("standard")
 			$("input", value:'standard').jquery.trigger('click')
 			$("input", name:"collect-responses").value('no-message')
+			$("#question").value('question')
 		when:
 			$("#nextPage").click()
 			waitFor { $('#tabs-3').displayed }
@@ -185,6 +196,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#done").click()
 		then:
 			$('#tabs-5').displayed
+			$('.error-panel').displayed
 				
 	}
 
@@ -197,8 +209,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#nextPage").click()
 		then:
 			waitFor {$('#tabs-2').displayed}
-			$("label[for='choiceA']").hasClass('bold') == false
-			$("label[for='choiceA']").hasClass('bold') == false
+			$("label[for='choiceA']").hasClass('bold')
+			$("label[for='choiceB']").hasClass('bold')
+			!$("label[for='choiceC']").hasClass('bold')
+			!$("label[for='choiceD']").hasClass('bold')
+			!$("label[for='choiceE']").hasClass('bold')
 		when:
 			$("input", name:'instruction').value("Reply A,B etc")
             keyInData('choiceA', "Never")
@@ -207,7 +222,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
             $("#nextPage").click()
 		then:
 			$("label[for='choiceA']").hasClass('bold') == true
-			$("label[for='choiceA']").hasClass('bold') == true
+			$("label[for='choiceB']").hasClass('bold') == true
 			waitFor {$('#tabs-3').displayed}
 		when:
 			assert $("#tabs-3 textarea").@disabled
@@ -223,10 +238,14 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			$("#nextPage").click()
 		then:
+			$(".error-panel").displayed
+			$("#address").value("6789012345")
+			$(".add-address").click()
+			$("#nextPage").click()
 			waitFor { $('#tabs-5 ').displayed }
             $("input", name:'title').value("Cofee Poll")
             $("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
-            $("#confirm-recepients-count").text() == "0 contacts selected (0 messages will be sent)"
+            $("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
             $("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
 			$("#done").click()

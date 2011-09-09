@@ -1,7 +1,7 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div id="tabs">
 
-	<div class="error-panel hide"></div>
+	<div class="error-panel hide">please enter all the details</div>
 	<ol>
 		<g:each in="['tabs-1' : 'Enter Message', 'tabs-2' : 'Select Recipients',
 						'tabs-3' : 'Confirm']" var='entry'>
@@ -37,13 +37,7 @@
 
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				var isValid = isGroupChecked("groups") || isGroupChecked("addresses")
-				if (!isValid) {
-					$('.error-panel').html('<p> please enter all the details </p>').show();
-				} else {
-					$('.error-panel').hide()
-				}
-				return isValid
+				return isGroupChecked("groups") || isGroupChecked("addresses")
 			}
 		});
 
