@@ -109,19 +109,16 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.messageStatus == ['SENT, SEND_PENDING, SEND_FAILED']
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
-
-//	def "message list returned from a search operation is displayed, regardless of search case"() {
-//		when:
-//			to SearchingPage
-//			searchFrm.searchString = "AlEx"
-//			searchBtn.click()
-//			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
-//		then:
-//			rowContents[1] == 'Alex'
-//			rowContents[2] == 'hi alex'
-//			rowContents[3] ==~ /[0-9]{2}-[A-Z][a-z]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}/
-//			sleep(1000)
-//	}
+	
+	def "should clear search results" () {
+		when:
+			to SearchingPage
+			searchBtn.click()
+			waitFor{searchBtn.displayed}
+			$("a", text:"Clear search").click()
+		then:
+			$("#no-search-description").text() == "Start new search on the left"
+	}
 	
 	private createTestGroups() {
 		new Group(name: 'Listeners').save(flush: true)
