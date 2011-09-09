@@ -3,7 +3,7 @@
 		<div>
 			<h3>Select the kind of poll to create</h3>
 			<div>
-				<g:radio name="poll-type" value="standard"/>Question with a 'Yes' or 'No' answer
+				<g:radio name="poll-type" value="standard" checked='checked'/>Question with a 'Yes' or 'No' answer
 			</div>
 			<div>
 				<g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
@@ -16,7 +16,7 @@
 	</div>
 </div>
 
-<script>
+<g:javascript>
 	$("input[name='collect-responses']").live("change", function() {
 		if(isGroupChecked("collect-responses")) {
 			$('#tabs').tabs("disable", 3);
@@ -37,4 +37,4 @@
 		}
 		updateConfirmationMessage();
 	});
-</script>
+</g:javascript>

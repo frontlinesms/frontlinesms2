@@ -1,5 +1,4 @@
 <div id="tabs-3" class="poll-response-reply">
-	<div class="error-panel hide"></div>
 	<h3>
 		Reply automatically to poll responses (optional)
 	</h3>

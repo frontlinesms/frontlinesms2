@@ -10,6 +10,7 @@
 		</ol>
 
 	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToNextTab()">
+		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
 		<g:render template="answers"/>
 		<g:render template="replies"/>
@@ -32,31 +33,56 @@
 	</g:formRemote>
 </div>
 
-<script>
+<g:javascript>
 	function initializePoll() {
 		$("#tabs").tabs("disable", getTabLength());
+		$('#tabs').tabs("disable", 1);
+		$('#responseTab-text a').css('color', '#DFDFDF');
 		
 		highlightPollResponses();
 
 		$("#tabs-1").contentWidget({
 			validate: function() {
+				$("#question").removeClass('error');
+				var isValid = !isElementEmpty($("#question"));
 				if ($("input[name='poll-type']:checked").val() == "standard")
 					$('#tabs').tabs("disable", 1);
 				else
 					$('#tabs').tabs("enable", 1);
-				return true
+				if(!isValid)
+					$("#question").addClass('error');
+				return isValid;
+
 			}
 		});
 
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				return $("input[name='poll-type']:checked").val() != "standard" ?  validatePollResponses() : true;
+				$('#choiceA').removeClass('error');
+				$('#choiceB').removeClass('error');
+				var isValid =  $("input[name='poll-type']:checked").val() != "standard" ?  validatePollResponses() : true;
+				if(!isValid) {
+					isElementEmpty($('#choiceA')) && $('#choiceA').addClass('error');
+					isElementEmpty($('#choiceB')) && $('#choiceB').addClass('error');
+				}
+				return isValid;
 			}
 		});
 
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				return isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
+				$('#tabs-3 textarea').removeClass("error");
+				var isValid = isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
+				if(!isValid) {
+					$('#tabs-3 textarea').addClass("error");
+				}
+				return isValid;
+			}
+		});
+
+		$("#tabs-4").contentWidget({
+			validate: function() {
+				return isGroupChecked('collect-responses') ?  true : isGroupChecked('addresses');
 			}
 		});
 
@@ -96,23 +122,21 @@
 	function highlightPollResponses() {
 		$(".choices").each(function() {
 			$(this).blur(function() {
-				var label = $("label[for='" + this.id + "']");
-				if (!$.trim(this.value).length) label.removeClass('bold');
-				else label.addClass('bold');
+				if(this.id != "choiceA" && this.id != "choiceB") {
+					var label = $("label[for='" + this.id + "']");
+					if (!$.trim(this.value).length) label.removeClass('bold');
+					else label.addClass('bold');
+				}
 			});
 		})
 	}
 
 	function validatePollResponses() {
-		var validResponsesCount = 0;
-		$("#poll-choices input[type=text]").each(function() {
-			if ($.trim($(this).val()).length > 0) validResponsesCount++;
-		});
-		return validResponsesCount >= 2		
+		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
 	}
 
 	function goToNextTab() {
 		$("#tabs").tabs("enable", getTabLength());
 		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
-</script>
+</g:javascript>
