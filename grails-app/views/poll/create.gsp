@@ -88,7 +88,12 @@
 
 		$("#tabs-5").contentWidget({
 			validate: function() {
-				return !isElementEmpty($("#tabs-5 #title"));	
+				$("#tabs-5 #title").removeClass("error");
+				var isEmpty = isElementEmpty($("#tabs-5 #title"));
+				if(isEmpty) {
+					$("#tabs-5 #title").addClass("error");
+				}
+				return !isEmpty;
 			},
 			
 			onDone: function() {

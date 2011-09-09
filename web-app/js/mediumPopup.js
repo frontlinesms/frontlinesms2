@@ -29,7 +29,7 @@ function launchMediumPopup(title, html, btnFinishedText) {
 			width: 675,
 			height: 500,
 			title: title,
-			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
 			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
 			close: function() { $(this).remove(); }
 		}
@@ -47,6 +47,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 		height: 500,
 		buttons: [
 			{ text:"Cancel", click: cancel, id:"cancel" },
+			{ text:"Back", id:"disabledBack", disabled: true },
 			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
 			{ text:"Done",  click: cancel, id:"confirmation" },
@@ -99,8 +100,7 @@ function done() {
 function validateWholeTab() {
 	var isValid = true
 	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
-		isValid = isValid && validateTab($("#" + value.id))
-
+		isValid =  validateTab($("#" + value.id)) && isValid
 	});
   	return isValid
 }
@@ -142,7 +142,8 @@ function getButtonToTabIndexMapping(withConfirmationScreen) {
 			"prevPage": range(1, withConfirmationScreen ? getTabLength() - 1 : getTabLength()),
 			"nextPage": range(0, withConfirmationScreen ? getTabLength() - 2 : getTabLength() - 1),
 			"done": withConfirmationScreen ? [getTabLength() - 1] : [getTabLength()],
-			"confirmation": withConfirmationScreen ? [getTabLength()] : []
+			"confirmation": withConfirmationScreen ? [getTabLength()] : [],
+			"disabledBack": [0]
 		}
 }
 
