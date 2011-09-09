@@ -44,11 +44,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/pending"
 		then:
 			$("#messages tbody tr").size() == 50
+			$("#page-arrows a", text:"Back").hasClass('disabled')
 		when:
 			$("#page-arrows a", text: 'Next').click()
-			waitFor {$("a", text:"Back").displayed}
+			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
 		then:
 			$("#messages tbody tr").size() == 1
+			$(".nextLink").hasClass("disabled")
 
 	}
 
@@ -59,12 +61,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/trash"
 		then:
 			$("#messages tbody tr").size() == 50
+			$("#page-arrows a", text:"Back").hasClass('disabled')
 		when:
 			$("#page-arrows a", text: 'Next').click()
-			waitFor {$("a", text:"Back").displayed}
+			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
 		then:
 			$("#messages tbody tr").size() == 1
-
+			$(".nextLink").hasClass("disabled")
 	}
 
 	def "should paginate sent messages"() {
@@ -74,12 +77,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/sent"
 		then:
 			$("#messages tbody tr").size() == 50
+			$("#page-arrows a", text:"Back").hasClass('disabled')
 		when:
 			$("a", text: 'Next').click()
-			waitFor {$("#page-arrows a", text:"Back").displayed}
+			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
 		then:
 			$("#messages tbody tr").size() == 1
-
+			$(".nextLink").hasClass("disabled")
 	}
 
 	def "should paginate folder messages"() {
@@ -90,13 +94,14 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "/frontlinesms2/message/folder/${folderId}"
 		then:
 			$("#messages tbody tr").size() == 50
+			$("#page-arrows a", text:"Back").hasClass('disabled')
 		when:
 			$("#page-arrows a", text: 'Next').click()
-			waitFor {$("a", text:"Back").displayed}
+			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
 		then:
 			$("#messages tbody tr").size() == 1
-
-}
+			$(".nextLink").hasClass("disabled")
+	}
 
 	def "should paginate poll messages"() {
 		setup:
@@ -106,12 +111,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/poll/${pollId}"
 		then:
 			$("#messages tbody tr").size() == 50
+			$("#page-arrows a", text:"Back").hasClass('disabled')
 		when:
 			$("#page-arrows a", text: 'Next').click()
-			waitFor {$("a", text:"Back").displayed}
+			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
 		then:
 			$("#messages tbody tr").size() == 1
-
+			$(".nextLink").hasClass("disabled")
 	}
 
 	private def setupInboxMessages() {

@@ -43,7 +43,7 @@ class KeywordProcessorService {
 		if(option.size() != 1 || keyword.size() < 1) {
 			return null
 		} else {
-			return Poll.findByTitleILike(keyword)?.responses?.getAt(getPollResponseIndex(option))
+			return Poll.findByKeywordIlike(keyword)?.responses?.getAt(getPollResponseIndex(option))
 		}
 	}
 	

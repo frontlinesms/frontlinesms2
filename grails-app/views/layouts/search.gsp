@@ -35,7 +35,7 @@
 			  			<ol>
 				  			<li>
 					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
-									Export
+									Export results
 								</g:remoteLink>
 							</li>
 						</ol>
@@ -54,15 +54,15 @@
 					<div class="content-footer">
 							<ul id="filter">
 								<li>Show:</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'offset'})}">All</g:link></li>
 								<li>|</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
 							<g:if test="${params.action == 'results'}">
 								<div id="page-arrows">
 									<g:paginate next="Forward" prev="Back"
-										 max="${grailsApplication.config.grails.views.pagination.max}"
-										action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+										max="${grailsApplication.config.grails.views.pagination.max}"
+										action="result" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
 								</div>
 							</g:if>
 					</div>

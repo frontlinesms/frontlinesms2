@@ -1,6 +1,6 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
-	<label for="address">Add phone number</label>
+	<label class="header" for="address">Add phone number</label>
 	<g:textField id="address" name="address"/>
 	<g:link url="#" class="add-address">Add</g:link>
 	

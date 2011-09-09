@@ -846,3 +846,32 @@ a.send-failed, .send-failed td:last-child {
 .poll-response-reply textarea {
   margin: 0 0 0 50px;
 }
+
+.ui-dialog-titlebar-close {
+  display: none;
+}
+
+div.confirm-header label {
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+div.confirm-header .title {
+  font-weight: bold;
+  margin: 0 10px 10px 20px;
+  float: left;
+  width: 20%;
+}
+
+div.confirm-header .message {
+  height:30px;
+}
+
+label.header {
+ font-weight: bold;
+ margin: 0 0 10px 0;
+}
+
+#page-arrows a.disabled {
+	color: #AAAAAA;
+}
