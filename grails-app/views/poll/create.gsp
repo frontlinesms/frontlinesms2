@@ -16,9 +16,9 @@
 		<g:render template="replies"/>
 		<div id="tabs-5">
 			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,
-																			'groupList': groupList,
-																			'nonExistingRecipients': [],
-																			'recipients': []]"></g:render>
+			                                                                'groupList': groupList,
+			                                                                'nonExistingRecipients': [],
+			                                                                'recipients': []]"/>
 		</div>
 		<g:render template="confirm"/>
 	</g:form>
@@ -38,9 +38,9 @@
 			}
 		});
 
-		$("#tabs-3").contentWidget({
+		$("#tabs-4").contentWidget({
 			validate: function() {
-				return isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-3 textarea')) : true;
+				return isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-4 textarea')) : true;
 			}
 		});
 
