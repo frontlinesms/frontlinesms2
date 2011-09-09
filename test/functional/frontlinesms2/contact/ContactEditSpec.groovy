@@ -57,6 +57,69 @@ class ContactEditSpec extends ContactGebSpec {
 		then:
 			$(".quick_message")*.text() == []
 	}
+	
+	def "should remove secondary mobile address when delete icon is clicked"() {
+		when:
+			go "contact/show/${Contact.findByName('Bob').id}"
+			assert $('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
+			assert $('div.basic-info:nth-child(4) a', class: 'send-message').displayed
+			$('div.basic-info:nth-child(4) a', class: 'remove-field').click()
+		then:
+			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
+			!$('div.basic-info:nth-child(4) a', class: 'send-message').displayed
+		when:		
+			btnSave.click()
+		then:
+			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
+			!$('div.basic-info:nth-child(4) a', class: 'send-message').displayed
+			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '')
+		when: 
+			go "contact/show/${Contact.findByName('Bob').id}"
+		then:
+			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
+	}
+	
+	def "should remove email data when delete icon is clicked"() {
+		when:
+			go "contact/show/${Contact.findByName('Bob').id}"
+			assert $('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
+			assert $('div.basic-info:nth-child(5) a', class: 'quick_message').displayed
+			$('div.basic-info:nth-child(5) a', class: 'remove-field').click()
+		then:
+			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
+			!$('div.basic-info:nth-child(5) a', class: 'send-message').displayed
+		when:
+			btnSave.click()
+		then:
+			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
+			!$('div.basic-info:nth-child(5) a', class: 'send-message').displayed
+			assertFieldDetailsCorrect('email', 'Email', '')
+		when: 
+			go "contact/show/${Contact.findByName('Bob').id}"
+		then:
+			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
+	}
+	
+	def "should remove primary mobile address when delete icon is clicked"() {
+		when:
+			go "contact/show/${Contact.findByName('Bob').id}"
+			assert $('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
+			assert $('div.basic-info:nth-child(3) a', class: 'send-message').displayed
+			$('div.basic-info:nth-child(3) a', class: 'remove-field').click()
+		then:
+			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
+			!$('div.basic-info:nth-child(3) a', class: 'send-message').displayed
+		when:
+			btnSave.click()
+		then:
+			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
+			!$('div.basic-info:nth-child(3) a', class: 'send-message').displayed
+			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '')
+		when: 
+			go "contact/show/${Contact.findByName('Bob').id}"
+		then:
+			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
+	}
 }
 
 class AliceDetailsPage extends geb.Page {
