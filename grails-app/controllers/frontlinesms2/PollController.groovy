@@ -14,6 +14,8 @@ class PollController {
 	}
 
 	def save = {
+		if(!params.enableKeyword) params.keyword = null
+		
 		def pollInstance = Poll.createPoll(params)
 		if (pollInstance.validate()) {
 			pollInstance.save()
