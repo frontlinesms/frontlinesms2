@@ -16,9 +16,14 @@ $(function() {
 		var c = r.plotStackedBarGraph(holder, data, xdata, dataCaption, {colors : ["#D4D5D6", "#949494"], textStyle: textStyle, 
 		padding : padding});
 		var sent =  data1.sum(), received = data2.sum(), total = data.pack().sum();
+		var sentPercent = "", receivedPercent = "";
+		if(total > 0) {
+			sentPercent = " (" + Math.round(sent * 100 / total) + "%) ";
+			receivedPercent = " (" + Math.round(received * 100 / total) + "%) ";
+		} 
 		var summary = r.text(r.width/2, r.height- padding.bottom, 
-			"Sent: " + sent +  " (" + Math.round(sent * 100 / total) + "%) " +
-			"Received: " + received + " (" + Math.round(received * 100 / total) + "%) " +
+			"Sent: " + sent +  sentPercent +
+			"Received: " + receivedPercent +
 			"Total: " +  total)
 			.attr(textStyle);
 	});
@@ -28,13 +33,13 @@ Traffic
 <g:form action="show" method="post">
 	<g:render template="../search/basic_filters" />
 	<div>
-		<g:radio name="rangeOption" value="two-weeks" checked="true" />
+		<g:radio name="rangeOption" value="two-weeks" checked="${params.rangeOption == 'two-weeks'}" />
 		<g:select id="pre-defined-range-options" name='pre-defined-range-options'
 		    noSelection="${['null':'Show last two weeks']}" >
 		</g:select>
 	</div>
 	<div>
-	<g:radio name="rangeOption" value="between-dates" />Between dates
+	<g:radio name="rangeOption" value="between-dates" checked="${params.rangeOption == 'between-dates'}"/>Between dates
 	</div>
 	<g:datePicker name="startDate" value="${params['startDate'] ?: new Date()-14}" noSelection="['':'-Choose-']" precision="day"/>
 	<g:datePicker name="endDate" value="${params['endDate'] ?: new Date()}" noSelection="['':'-Choose-']" precision="day"/>
