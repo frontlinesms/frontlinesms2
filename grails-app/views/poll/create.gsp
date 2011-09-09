@@ -25,12 +25,12 @@
 		<g:render template="confirm"/>
 		<div id="tabs-7">
 			<h2>The poll has been created!</h2>
-			<h2>The messages  have been added to the pending message queue.</h2>
-
-			<h2>It may take some time for all the messages to be sent, depending on the
-			number of messages and the network connection.</h2>
-
-			<h2>To see the status of your message, open the 'Pending' messages folder.</h2>
+			<p>The messages  have been added to the pending message queue.</p>
+			<p>
+				It may take some time for all the messages to be sent, depending on the
+				number of messages and the network connection.
+			</p>
+			<p>To see the status of your message, open the 'Pending' messages folder.</p>
 		</div>
 	</g:formRemote>
 </div>
@@ -46,11 +46,11 @@
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
-				var isValid = !isElementEmpty($("#question"));
 				if ($("input[name='poll-type']:checked").val() == "standard")
 					$('#tabs').tabs("disable", 1);
 				else
 					$('#tabs').tabs("enable", 1);
+				var isValid = !isElementEmpty($("#question"));
 				if(!isValid)
 					$("#question").addClass('error');
 				return isValid;
@@ -62,10 +62,10 @@
 			validate: function() {
 				$('#choiceA').removeClass('error');
 				$('#choiceB').removeClass('error');
-				var isValid =  $("input[name='poll-type']:checked").val() != "standard" ?  validatePollResponses() : true;
+				var isValid =  $("input[name='poll-type']:checked").val() == "standard" || validatePollResponses();
 				if(!isValid) {
-					isElementEmpty($('#choiceA')) && $('#choiceA').addClass('error');
-					isElementEmpty($('#choiceB')) && $('#choiceB').addClass('error');
+					if(isElementEmpty($('#choiceA'))) $('#choiceA').addClass('error');
+					if(isElementEmpty($('#choiceB'))) $('#choiceB').addClass('error');
 				}
 				return isValid;
 			}
@@ -74,7 +74,7 @@
 		$("#tabs-4").contentWidget({
 			validate: function() {
 				$('#tabs-4 textarea').removeClass("error");
-				var isValid = isGroupChecked('auto-reply') ? !(isElementEmpty('#tabs-4 textarea')) : true;
+				var isValid = !isGroupChecked('enableAutoReply') || !(isElementEmpty('#tabs-4 textarea'));
 				if(!isValid) {
 					$('#tabs-4 textarea').addClass("error");
 				}
@@ -84,7 +84,7 @@
 
 		$("#tabs-5").contentWidget({
 			validate: function() {
-				return isGroupChecked('collect-responses') ?  true : isGroupChecked('addresses');
+				return isGroupChecked('collect-responses') || isGroupChecked('addresses');
 			}
 		});
 
