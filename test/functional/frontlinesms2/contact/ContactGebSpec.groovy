@@ -35,7 +35,6 @@ class ContactGebSpec extends grails.plugin.geb.GebSpec {
 		def label = $('label', for:fieldName)
 		assert label.text() == labelText
 		assert label.getAttribute('for') == fieldName
-
 		def input = $("#$fieldName")
 		assert input.getAttribute('name') == fieldName
 		assert input.getAttribute('id') == fieldName
