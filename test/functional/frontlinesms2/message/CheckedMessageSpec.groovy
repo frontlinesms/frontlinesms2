@@ -191,7 +191,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			waitFor {title == "Inbox"}
 			$("#message")[0].click()
-			sleep 1000
+			sleep 3000
 			def btnArchive = $('#multiple-messages #btn_archive_all')
 			btnArchive.click()
 			sleep 1000
