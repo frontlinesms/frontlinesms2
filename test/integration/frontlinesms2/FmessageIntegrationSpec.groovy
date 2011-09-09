@@ -63,25 +63,30 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def "should return search results with a given max and offset"() {
 		setup:
 			setUpMessages()
+			def search = new Search(searchString: 'inbox')
 		when:
-			def firstInboxMessage = Fmessage.search([searchString: "inbox", max: 1,  offset:0])
-			def firstTwoInboxMessages = Fmessage.search([searchString: "inbox", max: 2, offset: 0])
-			def allMsgsWithTheGivenSearchString = Fmessage.search([searchString: "inbox"])
+			def firstInboxMessage = Fmessage.search(search).list(max: 1,  offset:0)
+			def firstTwoInboxMessages = Fmessage.search(search).list(max: 2, offset: 0)
+			def allMsgsWithTheGivenSearchString = Fmessage.search(search).list()
 		then:
 			firstInboxMessage.size() == 1
 			firstTwoInboxMessages.size() == 2
 			allMsgsWithTheGivenSearchString.size() == 3
-			Fmessage.countAllSearchMessages([searchString: "inbox"]) == 3
+			Fmessage.search(search).count() == 3
 	}
 
 	def "should fetch messages based on message status"() {
 		setup:
 			setUpMessages()
+			def search = new Search(status: ['INBOUND'])
+			def search2 = new Search(status: ['SENT', 'SEND_PENDING', 'SEND_FAILED'])
+			def search3 = new Search(searchString: "")
 		when:
-			def allInboundMessages = Fmessage.search([messageStatus: ['INBOUND']])
-			def allSentMessages = Fmessage.search([messageStatus: ['SENT', 'SEND_PENDING', 'SEND_FAILED']])
-			def allMessages = Fmessage.search([:])
+			def allInboundMessages = Fmessage.search(search).list()
+			def allSentMessages = Fmessage.search(search2).list()
+			def allMessages = Fmessage.search(search3).list()
 		then:
+			println allInboundMessages
 			allInboundMessages*.every {it.status == MessageStatus.INBOUND}
 			allSentMessages*.every {it.status != MessageStatus.INBOUND}
 			allMessages.size() == 7
@@ -90,10 +95,11 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should not error when searched for a group with no members"() {
 		setup:
-			new Group(name: "football").save(flush: true)
+			def footballGroup = new Group(name: "football").save(flush: true)
+			def search = new Search(group: footballGroup)
 		when:
-			def searchMessages = Fmessage.search([groupInstance: Group.findByName("football")])
-			def searchMessagesCount = Fmessage.countAllSearchMessages([groupInstance: Group.findByName("football")])
+			def searchMessages = Fmessage.search(search).list()
+			def searchMessagesCount = Fmessage.search(search).count()
 		then:
 			!searchMessages
 			searchMessagesCount == 0

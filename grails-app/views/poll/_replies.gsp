@@ -6,8 +6,7 @@
 		When an incoming message is identified as a poll response, send a
 		message to the person who sent the response.
 	</div>
-	<g:checkBox name="auto-reply" id="send_auto_reply" />
-	<label for='auto-reply'>Send an automatic reply to poll responses</label>
+	<g:checkBox name="auto-reply" id="send_auto_reply" />Send an automatic reply to poll responses
 	<g:textArea name="autoReplyText" rows="5" cols="40" disabled='disabled'></g:textArea>
 </div>
 

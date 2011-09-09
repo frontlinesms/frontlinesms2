@@ -4,7 +4,7 @@
 			<h2 id="search-string">Keyword or phrase:</h2>
 			<ol class='sub-menu'>
 				<li class='field'>
-					<g:textField name="searchString" id="searchString" value="${searchString}"/>
+					<g:textField name="searchString" id="searchString" value="${search?.searchString}"/>
 				</li>
 			</ol>
 		</li>
@@ -18,6 +18,9 @@
 			<ol class='sub-menu'>
 				<li>
 					<g:actionSubmit class="search" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" action="result"/>
+				</li>
+				<li>
+					<g:link action="no_search">${message(code: 'default.search.label', default: 'Clear search')}</g:link>
 				</li>
 			</ol>
 		</li>

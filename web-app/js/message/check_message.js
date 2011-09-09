@@ -4,7 +4,6 @@ $(document).ready(function() {
 
 function messageChecked(messageId) {
 	var count = countCheckedMessages();
-	count = setCheckAllBox(count);
 	var checkedMessageRow = $('#messages-table #message-' + messageId);
 	
 	if(checkedMessageRow.find('input[type=checkbox]').attr('checked')) {
@@ -29,10 +28,11 @@ function messageChecked(messageId) {
 			$('input:hidden[name=checkedMessageList]').val(',');
 		}
 	}
+	count = setCheckAllBox(count);
 }
 
 function countCheckedMessages() {
-    return $('input[name=message]:checked').size();
+    return $('#messages-table tr :checked').size();
 }
 
 function upSingleCheckedDetails(messageId) {
@@ -103,9 +103,9 @@ function updateMultipleCheckedDetails(messageId) {
 }
 
 function checkAll() {
-	if($(':checkbox')[0].checked){
+	if($('#messages :checkbox')[0].checked){
 		var messageId;
-		$(':checkbox').each(function(index) {
+		$('#messages-table tr :checkbox').each(function(index) {
 			this.checked = true;
 		});
 		$('input:hidden[name=checkedMessageList]').val(",")
@@ -119,7 +119,7 @@ function checkAll() {
 		});
 		if(countCheckedMessages() != 2) updateMultipleCheckedDetails(messageId);
 	} else {
-		$(':checkbox').each(function(index, element) {
+		$('#messages-table tr :checkbox').each(function(index, element) {
 			this.checked = false;
 		});
 		$('#messages-table tr').each(function(index) {
@@ -135,10 +135,10 @@ function checkAll() {
 
 function setCheckAllBox(count) {
 	//Check whether all messages are checked
-	if(count == $(':checkbox').size()-1 && !$(':checkbox')[0].checked){
-		$(':checkbox')[0].checked = true;
-	} else if($(':checkbox')[0].checked){
-		$(':checkbox')[0].checked = false;
+	if(count == $('#messages-table tr :checkbox').size() && !$('#messages :checkbox')[0].checked){
+		$('#messages :checkbox')[0].checked = true;
+	} else if($('#messages :checkbox')[0].checked){
+		$('#messages :checkbox')[0].checked = false;
 		count--;
 	}
 	return count;
