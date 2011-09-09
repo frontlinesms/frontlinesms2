@@ -15,20 +15,14 @@ class ExportController {
     def index = { redirect(action:'wizard', params: params) }
 	
 	def wizard = {
-		[messageInstanceList: params.messageList,
-			messageSection: params.messageSection,
+		[messageSection: params.messageSection,
+			searchId: params.searchId,
 			ownerId: params.ownerId,
-			activityId: params.activityId,
-			searchString: params.searchString,
-			groupId: params.groupId,
-			reportName:getActivityDescription()
-			]
+			reportName:getActivityDescription()]
 	}
 	
 	def downloadReport = {
 		def messageSection = params.messageSection
-		println "section: ${messageSection}"
-		println "wiz params: $params"
 		def messageInstanceList
 		switch(messageSection) {
 			case 'inbox':
@@ -49,14 +43,10 @@ class ExportController {
 			case 'folder':
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(['starred':false])
 				break
-			case 'result':
-				def activityInstance = getActivityInstance()
-				def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-				messageInstanceList = Fmessage.searchMessages(params.searchString, Group.get(params.groupId), messageOwners).list()
-				println "list: $messageInstanceList"
+			case 'search':
+				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
 				break
 			default:
-				println "default"
 				messageInstanceList = Fmessage.findAll()
 				break
 		}
@@ -76,15 +66,6 @@ class ExportController {
 			render(text: "Error creating report")
 		}
 		[messageInstanceList: messageInstanceList]
-	}
-	
-	private def getActivityInstance() {
-		if(params.activityId) {
-			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll: Folder
-			def activityId = stringParts[1]
-			activityType.findById(activityId)
-		} else return null
 	}
 	
 	private def getActivityDescription() {
