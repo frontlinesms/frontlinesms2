@@ -43,7 +43,7 @@ class Poll {
 	}
 	
 	def beforeSave = {
-		keyword = !keyword?:keyword.toUpperCase()
+		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
 	}
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
