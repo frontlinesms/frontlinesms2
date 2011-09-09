@@ -78,11 +78,12 @@
 	}
 
 	function updateCount() {
-	    var count = getSelectedGroupElements("addresses").size();
-	    $.each(["#recipient-count", "#contacts-count", "#messages-count"],
-	    function(index, id) {
-	        $(id) && $(id).html(count);
-	    });
+		var count = getSelectedGroupElements("addresses").size();
+		$.each(["#recipient-count", "#contacts-count", "#messages-count"],
+			function(index, id) {
+				if($(id)) $(id).html(count);
+			}
+		);
 	}
 
 	$('.add-address').live('click', function() {

@@ -1,18 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="tabs" class="vertical-tabs">
-		<ol>
-			<li><a href="#tabs-1">Enter Question</a></li>
-			<li id='responseTab-text'><a href="#tabs-2">Response list</a></li>
-			<li><a href="#tabs-3">Automatic reply</a></li>
-			<li id='recipientsTab-text'><a href="#tabs-4">Select recipients</a></li>
-			<li><a href="#tabs-5">Confirm</a></li>
-		</ol>
+	<ol>
+		<li><a href="#tabs-1">Enter Question</a></li>
+		<li id='responseTab-text'><a href="#tabs-2">Response list</a></li>
+		<li><a href="#tabs-3">Automatic sorting</a></li>
+		<li><a href="#tabs-4">Automatic reply</a></li>
+		<li id='recipientsTab-text'><a href="#tabs-5">Select recipients</a></li>
+		<li><a href="#tabs-6">Confirm</a></li>
+	</ol>
 
 	<g:form action="save" name="poll-details" controller="poll" method="post">
 		<g:render template="question"/>
 		<g:render template="answers"/>
+		<g:render template="sorting"/>
 		<g:render template="replies"/>
-		<div id="tabs-4">
+		<div id="tabs-5">
 			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,
 																			'groupList': groupList,
 																			'nonExistingRecipients': [],
@@ -22,7 +24,7 @@
 	</g:form>
 </div>
 
-<script>
+<g:javascript>
 	function initializePoll() {
 		highlightPollResponses();
 
@@ -45,6 +47,15 @@
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
 		});
+		
+		/* SET UP KEYWORD SORTING PAGE */
+		// Add change listener to enableKeyword radio group such that when value is false
+		// poll-keyword is disabled, and when value is true then poll-keyword is enabled
+		$("input[name='enableKeyword']").change(function() {
+			var enabled = $(this).val() == 'true';
+			if(enabled) $('#poll-keyword').removeAttr("disabled");
+			else $('#poll-keyword').attr("disabled", "disabled");
+		});
 	}
 
 	function updateConfirmationMessage() {
@@ -60,6 +71,19 @@
 		}
 		$("#poll-question-text").html('<pre>' + question + ' ' + choices + ' '  + '</pre>');
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
+		
+		// update auto-sort
+		var autoSort = $("input[name='enableKeyword']:checked").val();
+		var autoSortMessages = $('#auto-sort-confirm p');
+		if(autoSort == 'true') {
+			var keyword = $("input[name='keyword']").val();
+			autoSortMessages.eq(0).hide();
+			autoSortMessages.eq(1).show();
+			$('#auto-sort-confirm-keyword').text(keyword);
+		} else {
+			autoSortMessages.eq(0).show();
+			autoSortMessages.eq(1).hide();
+		}
 	}
 
 
@@ -87,4 +111,4 @@
 			$(".error-panel").html("");
 		}
 	}
-</script>
+</g:javascript>
