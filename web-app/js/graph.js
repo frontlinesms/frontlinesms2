@@ -125,6 +125,7 @@ Raphael.fn.plotBarGraph = function(holder, data, xdata, opts) {
 		});
 		max_val = h > max_val ? h : max_val;
 		self.text(x, y + h / 2, val).attr(textStyle);
+		if(sum > 0)
 		self.text(x, y - 10, Math.round(val * 100 / sum) + "%").attr(textStyle);
 		self.text(x, y + h + 15, xdata[--len]).attr(textStyle);
 	});
