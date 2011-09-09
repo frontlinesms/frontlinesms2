@@ -6,16 +6,16 @@
 		When an incoming message is identified as a poll response, send a
 		message to the person who sent the response.
 	</div>
-	<g:checkBox name="auto-reply" id="send_auto_reply" />Send an automatic reply to poll responses
-	<g:textArea name="autoReplyText" rows="5" cols="40" disabled='disabled'></g:textArea>
+	<g:checkBox name="enableAutoReply" />Send an automatic reply to poll responses
+	<g:textArea name="autoReplyText" rows="5" cols="40" disabled='disabled'/>
 </div>
 
 <g:javascript>
-	$("#send_auto_reply").live("change", function() {
-		if(isGroupChecked('auto-reply')) {
-			$("#autoReplyText").removeAttr("disabled")
-		}
-		else {
+	// FIXME change this to a checked/unchecked listener and remove the lookup of 'auto-reply' "group"
+	$("#enableAutoReply").live("change", function() {
+		if(isGroupChecked('enableAutoReply')) {
+			$("#autoReplyText").removeAttr("disabled");
+		} else {
 			$("#autoReplyText").attr('disabled','disabled');
 		}
 	})

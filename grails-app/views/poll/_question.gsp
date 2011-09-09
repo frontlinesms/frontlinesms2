@@ -9,7 +9,7 @@
 				<g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
 			</div>
 			<label for='question'>Enter question:</label>
-			<g:textArea name="question" id="question" value="" />
+			<g:textArea name="question"/>
 			
 			<g:checkBox name="collect-responses" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
 		</div>

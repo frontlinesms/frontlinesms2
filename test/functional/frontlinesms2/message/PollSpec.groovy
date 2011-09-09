@@ -17,7 +17,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
 		then:
 			firstMessageLink.text() == 'Alice'
 	}
@@ -27,7 +27,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 			def message = Fmessage.findBySrc('Alice')
-			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
 		then:
@@ -69,19 +68,18 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			errorMessage.displayed
 		when:
-			$("#question").value("question")
-			$("input", name:"collect-responses").value('no-message')
+			pollForm.question = "question"
+			pollForm.'collect-responses' = 'no-message'
 			$("a", text:"Confirm").click()
 		then:
 			waitFor { confirmationTab.displayed }
 		when:
-			$("input", name:'title').value("POLL NAME")
+			pollForm.title = "POLL NAME"
 			done.click()
 		then:
-			waitFor {$("#confirmation").displayed}
+			waitFor { $("#confirmation").displayed }
 		when:
 			$("#confirmation").click()
-			println "Responses: ${Poll.findByTitle("POLL NAME").responses}"
 		then:
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
@@ -99,8 +97,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			tabMenu[1].hasClass("ui-state-disabled")
-			tabMenu[4].hasClass("ui-state-disabled")
+			responseListTabLink.hasClass("ui-state-disabled")
+			selectRecipientsTabLink.hasClass("ui-state-disabled")
 		when:
 			prev.click()
 		then:
@@ -131,18 +129,21 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
-			autoReplyText.@disabled
+			waitFor {
+				println "autoreply text: ${$('textarea', name:'autoReplyText')}"
+				autoReplyTab.displayed
+			}
+			pollForm.autoReplyText().@disabled
 		when:
-			$("#send_auto_reply").jquery.trigger('click')
+			pollForm.enableAutoReply = true
 			next.click()
 		then:
 			autoReplyTab.displayed
 		when:
-			tabMenu[4].click()
+			selectRecipientsTabLink.click()
 		then:
-			waitFor { autoReplyTab.displayed }
-			errorMessage.displayed
+			waitFor { errorMessage.displayed }
+			autoReplyTab.displayed
 	}
 
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
@@ -182,18 +183,18 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
 			waitFor { responseListTab.displayed }
-			$("label[for='choiceA']").hasClass('bold')
-			$("label[for='choiceB']").hasClass('bold')
-			!$("label[for='choiceC']").hasClass('bold')
-			!$("label[for='choiceD']").hasClass('bold')
-			!$("label[for='choiceE']").hasClass('bold')
+			choiceALabel.hasClass('bold')
+			choiceBLabel.hasClass('bold')
+			!choiceCLabel.hasClass('bold')
+			!choiceDLabel.hasClass('bold')
+			!choiceELabel.hasClass('bold')
 		when:
-			keyInData('choiceA', "Never")
-			keyInData('choiceB',"Once a day")
+			pollForm.choiceA = 'Never'
+			pollForm.choiceB = 'Once a day'
 		then:
-			true || $("label[for='choiceC']").hasClass('bold')
+			true || choiceCLabel.hasClass('bold')
 		when:
-			keyInData('choiceC', "Twice a day")
+			pollForm.choiceC = 'Twice a day'
 			next.click()
 		then:
 			waitFor { autoSortTab.displayed }
@@ -201,16 +202,16 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			autoReplyText.@disabled
+			pollForm.autoReplyText().@disabled
 		when:
-			enableAutoReply.value(true)
-			autoReplyText.value("Thanks for participating...")
-			enableAutoReply.value(false)
+			pollForm.enableAutoReply = true
+			pollForm.autoReplyText = "Thanks for participating..."
+			pollForm.enableAutoReply = false
 		then:	
-			autoReplyText.value() == "Thanks for participating..."
-			autoReplyText.@disabled
+			pollForm.autoReplyText == "Thanks for participating..."
+			pollForm.autoReplyText().@disabled
 		when:
-			enableAutoReply.value(true)
+			pollForm.enableAutoReply = true
 			next.click()
 		then:
 			waitFor { selectRecipientsTab.displayed }
@@ -219,8 +220,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			waitFor { errorMessage.displayed }
 		when:
-			$('#address').value('1234567890');
-			$('.add-address').click()
+			pollForm.address = '1234567890'
+			addManualAddress.click()
 		then:
 			waitFor { $('.manual').displayed }
 		when:
@@ -230,8 +231,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
-		when:	
-			$("input", name:'title').value("Coffee Poll")
+		when:
+			pollForm.title = "Coffee Poll"
 			done.click()
 		then:
 			Poll.findByTitle("Coffee Poll")
@@ -240,37 +241,34 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	def "should launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			go "message"
+			to MessagePage
 			$("a", text: "Who is badder?").click()
-			waitFor{title == "Poll"}
-			$("#poll-actions").value("export")
-			$("#poll-actions").jquery.trigger("change")
-			waitFor {$("#ui-dialog-title-modalBox").displayed}
 		then:
-			$("#ui-dialog-title-modalBox").displayed
+			waitFor { title == "Poll" }
+		when:
+			$("#poll-actions").value("export")
+		then:	
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
 
 	def "should be able to rename a poll"() {
 		given:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
-			go "message"
+			to MessagePage
 			$("a", text: "Who is badder?").click()
+		then:
 			waitFor { title == "Poll" }
+		when:
 			$("#poll-actions").value("renameActivity")
-			$("#poll-actions").jquery.trigger("change")
+		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
 			$("#title").value("Rename poll")
 			$("#done").click()
 		then:
 			waitFor { $("a", text: 'Rename poll') }
 			!$("a", text: "Who is badder?")
-	}
-
-	def keyInData(String selector, String value) {
-		def element = $("input", name:selector)
-		element.value(value)
-		element.jquery.trigger('blur')
 	}
 
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
@@ -280,9 +278,9 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		$("input", name: "activity").value("poll")
 		$("#done").click()
 		waitFor { at PollCreatePage }
-		$("input", name:'poll-type').value(pollType)
-		if(question) $("textarea", name:'question').value(question)
-		$("input", name:"collect-responses").value(!enableMessage)
+		pollForm.'poll-type' = pollType
+		if(question) pollForm.question = question
+		pollForm."collect-responses" = !enableMessage
 		next.click()
 	}
 }
@@ -304,17 +302,26 @@ class PollCreatePage extends geb.Page {
 		
 		enterQuestionTab { $("#tabs-1") }
 		responseListTab { $("#tabs-2") }
+		responseListTabLink { tabMenu[1] }
 		autoSortTab { $("#tabs-3") }
 		autoReplyTab { $("#tabs-4") }
 		selectRecipientsTab { $("#tabs-5") }
+		selectRecipientsTabLink { tabMenu[4] }
 		confirmationTab { $("#tabs-6") }
-		
-		enableAutoReply { $('input', name:'auto-reply') }
-		autoReplyText { autoReplyTab.find("textarea", name:'autoReplyText') }
 		
 		next { $("#nextPage") }
 		prev { $("#prevPage") }
 		done { $("#done") }
+		
+		pollForm { $('form', name:'poll-details') }
+
+		choiceALabel { $('label', for:'choiceA') }
+		choiceBLabel { $('label', for:'choiceB') }
+		choiceCLabel { $('label', for:'choiceC') }
+		choiceDLabel { $('label', for:'choiceD') }
+		choiceELabel { $('label', for:'choiceE') }
+		
+		addManualAddress { $('.add-address') }
 		
 		errorMessage(required:false) { $('.error-panel') }
 	}
