@@ -7,14 +7,33 @@
 	<li>
 		<g:checkBox name="inArchive" value="${search ? (search.inArchive ? true : null) : true}" />Include Archive
 	</li>
-	<li class="field" id='contact-name-field'>
+		<li class="field" id='contact-name-field'>
 		<img src='${resource(dir:'images/icons', file:'contacts.gif')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" id="contactString" value="${search?.contactString}"/>
 	</li>
 </ol>
 <h2>
+	${message(code:'default.search.betweendates.title', default:'Between dates:') }
+</h2>
+<ol class="sub-menu">
+	<li>
+		<g:datePicker name="startDate" value="${params.startDate ?: new Date()-14}" noSelection="['':'-Choose-']" precision="day"/>
+	</li>
+	<li>
+		<g:datePicker name="endDate" value="${params.endDate ?: new Date()}" noSelection="['':'-Choose-']" precision="day"/>
+	</li>
+</ol>
+<h2>
+	${message(code: 'default.seach.phonenumbersstartwith.title', default:'Phone numbers starting with:') }	
+</h2>
+	<ol class='sub-menu'>
+		<li class='field'>
+			<g:textField name="phoneNumbersStartWithString" id="phoneNumbersStartWithString" value="${search?.phoneNumbersStartWithString}"/>
+		</li>
+	</ol>
+<h2>
 	<a id="more-search-options" onclick="expandOptions()"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
-	More search options
+	${message(code:'default.search.moresearchoption.label', default:'More search options') }
 </h2>
 <ol class="sub-menu" id="expanded-search-options">
 	<li><a id='contact-name' onclick="addContactField()">Contact name</a></li>

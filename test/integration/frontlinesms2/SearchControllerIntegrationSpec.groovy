@@ -13,13 +13,14 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
 		group = new Group(name:'test').save(failOnError:true)
 		
+		
 		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00', archived: true),
-			new Fmessage(src:'+254111222', dst:'+254937634', text:'work is awesome'),
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
-					it.status = MessageStatus.INBOUND
-					it.save(failOnError:true)
-				}
+				new Fmessage(src:'+254111222', dst:'+254937634', text:'work is awesome'),
+				new Fmessage(src:'Bob', dst:'+254987654', dateReceived: new Date()-5, text:'hi Bob'),
+				new Fmessage(src:'Michael', dst:'+2541234567', dateReceived: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
+			it.status = MessageStatus.INBOUND
+			it.save(failOnError:true)
+			}
 
 		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND).save(failOnError:true)
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', status: MessageStatus.INBOUND).save(failOnError:true)
@@ -135,7 +136,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254987654'), Fmessage.findBySrc('+254111222')]
+			model.messageInstanceList == [Fmessage.findBySrc('+254111222'), Fmessage.findBySrc('+254987654')]
 			
 		when:
 			controller.params.searchString = "work"
@@ -166,5 +167,47 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model.messageInstanceList.size() == 1
 			model.messageInstanceTotal == 3
 
+	}
+	
+	def "only return message within the specific time range"() {
+		when:
+			controller.params.startDate = new Date()-4
+			controller.params.endDate = new Date()
+			def model = controller.result()
+		then:
+			model.messageInstanceTotal == 4
+		when:
+			controller.params.startDate = new Date()-6
+			controller.params.endDate = new Date()-3
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 1
+		when:
+			controller.params.startDate = new Date()-8
+			controller.params.endDate = new Date()-3
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 2
+	}
+	
+	def "only return message with source phone numbers that are starting with specific number"() {
+		when:
+			controller.params.phoneNumbersStartWith = ""
+			def model = controller.result()
+		then:
+			model.messageInstanceTotal == 6
+		when:
+			controller.params.phoneNumbersStartWith = "+"
+			model = controller.result()
+		then:
+			model.messageInstanceList.each { message ->
+				println "results ${message.src}" 
+			}
+			model.messageInstanceTotal == 4
+		when:
+			controller.params.phoneNumbersStartWith ="+2"
+			model= controller.result()
+		then:
+			model.messageInstanceTotal == 3
 	}
 }

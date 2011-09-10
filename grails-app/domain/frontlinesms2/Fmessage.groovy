@@ -25,6 +25,7 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
+		dateReceived = dateReceived ? dateReceived : dateCreated
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
@@ -136,6 +137,12 @@ class Fmessage {
 						}
 						if(search.owners) {
 							'in'("messageOwner", search.owners)
+						}
+						if(search.startDate && search.endDate){
+							between("dateReceived", search.startDate, search.endDate)
+						}
+						if(search.phoneNumbersStartWithString){
+							'ilike'("src", "+2%")
 						}
 						if(!search.inArchive) {
 							eq('archived', false)
