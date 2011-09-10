@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import groovy.time.*
+
 class Search {
 	String searchString
 	String contactString
@@ -7,6 +9,9 @@ class Search {
 	String activityId
 	Group group
 	String status
+	Date startDate
+	Date endDate
+	String phoneNumbersStartWithString
 	boolean inArchive
 	
 	static constraints = {
@@ -16,6 +21,9 @@ class Search {
 		owners(nullable: true)
 		group(nullable: true)
 		status(nullable: true)
+		startDate(nullable: true)
+		endDate(nullable: true)
+		phoneNumbersStartWithString(nullable:true)
 		inArchive(nullable: true)
 	}
 }
