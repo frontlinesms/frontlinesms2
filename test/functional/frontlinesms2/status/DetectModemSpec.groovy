@@ -18,7 +18,7 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 		then:
 			detectedDevicesSection.displayed
 			detectedDevicesSection.find('h2').text() == 'Detected devices'
-			noDevicesDetectedNotification.visible
+			noDevicesDetectedNotification.displayed
 			noDevicesDetectedNotification.text() == 'No devices have been detected yet.'
 			!detectedDevicesList.visible
 	}
@@ -28,8 +28,8 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 			deviceDetectionService.publishDetection new DetectedDevice(port:'COM1', description:'Kiwanja T1 Test Modem')
 			go StatusPage
 		then:
-			!noDevicesDetectedNotification.visible
-			detectedDevicesList.visible
+			!noDevicesDetectedNotification.displayed
+			detectedDevicesList.displayed
 		cleanup:
 			deviceDetectionService.reset()
 	}
@@ -38,8 +38,8 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 		when:
 			go StatusPage
 		then:
-			noDevicesDetectedNotification.visible
-			!detectedDevicesList.visible
+			noDevicesDetectedNotification.displayed
+			!detectedDevicesList.displayed
 			detectedDevicesList.find('li').size() == 0
 		when:
 			deviceDetectionService.publishDetection new DetectedDevice(port:'COM2', description:'Kiwanja T2 Test Modem')
