@@ -48,8 +48,8 @@ class Poll {
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
-	def getMessages(params) {
-		Fmessage.owned(params['starred'], this.responses).list(params)
+	def getMessages() {
+		Fmessage.owned(params.starred, this.responses).list(params)
 	}
 
 	def countMessages(isStarred = false) {
@@ -65,6 +65,12 @@ class Poll {
 					count: messageCount,
 					percent: totalMessageCount ? messageCount * 100 / totalMessageCount as Integer : 0]
 		}
+	}
+	
+	def archivePoll() {
+		this.archived = true
+		messagesToArchive = Fmessage.owned(params.starred, this.responses).list()
+		messagesToArchive.each { it.archived = true }
 	}
 
 	static getNonArchivedPolls() {

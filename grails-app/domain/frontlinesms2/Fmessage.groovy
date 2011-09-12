@@ -50,9 +50,9 @@ class Fmessage {
 		dateReceived(nullable:true)
 		status(nullable:true)
 		contactName(nullable:true)
-		archived(validator: { val, obj ->
+		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null
+					obj.messageOwner == null || obj.messageOwner.poll?.archived == true				
 				}
 		})
 	}
@@ -199,7 +199,7 @@ class Fmessage {
 		this
 	}
 	
-	def archive() { // FIXME is this method necessary?
+	def archive() {
 		this.archived = true
 		this
 	}
