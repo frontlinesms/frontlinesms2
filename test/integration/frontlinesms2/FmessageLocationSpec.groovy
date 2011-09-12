@@ -165,6 +165,35 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			firstDeletedMsg*.src == ['Jim']
 	}
+	
+	def "can only archive ownerless messages, unless owner is archived"() {
+		when:
+			createTestData()
+			def minime = Fmessage.findBySrc("Minime")
+		then:
+			minime.archived == false
+		when:
+			minime.messageOwner.poll.archivePoll()
+			minime.messageOwner.poll.save(flush: true)
+			minime.save(flush: true)
+		then:
+			Poll.findByTitle("Miauow Mix").archived == true
+			minime.archived == true
+	}
+	
+	def "can un-archive a message if the owner is archived"() {
+		when:
+			createTestData()
+			def minime = Fmessage.findBySrc("Minime")
+			minime.archived = false
+			minime.messageOwner.poll.archivePoll()
+			minime.messageOwner.poll.save(flush:true)
+			minime.archived = false
+			minime.save(flush: true)
+		then:
+			Poll.findByTitle("Miauow Mix").archived == true
+			minime.archived == true
+	}
 
 	static createTestData() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4),
