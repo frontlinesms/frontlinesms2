@@ -2,7 +2,7 @@ package frontlinesms2.search
 
 import frontlinesms2.*
 
-class SearchSpec extends grails.plugin.geb.GebSpec {
+class SearchSpec extends frontlinesms2.search.SearchGrebSpec {
 	def setup() {
 		createTestGroups()
 		createTestPollsAndFolders()
