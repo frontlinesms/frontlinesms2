@@ -235,7 +235,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			pollForm.title = "Coffee Poll"
 			done.click()
 		then:
-			Poll.findByTitle("Coffee Poll")
+			waitFor { Poll.findByTitle("Coffee Poll") }
 	}
 
 	def "should launch export popup"() {
