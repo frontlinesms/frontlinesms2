@@ -33,6 +33,8 @@ class SearchController {
 		search.status = params.messageStatus?: null
 		search.activityId = params.activityId?: null
 		search.inArchive = params.inArchive ? true : false
+		search.startDate = params.startDate?:null
+		search.endDate = params.endDate?:null
 		search.save(failOnError: true, flush: true)
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)

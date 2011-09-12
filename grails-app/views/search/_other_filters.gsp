@@ -15,13 +15,13 @@
 	</li>
 	<li class="field" id='field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.gif')}'" /><h2>Contact Name:</h2>
-		<g:textField name="contactString" id="contactString" value="${search?.contactString}"/>
+		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 	</li>
 	<g:each var="customField" in="${customFieldInstanceList}">
 		<li class="field" id="custom-field-field-${customField.name}">
 			<h2>${customField.name}:</h2><br>
-			<g:textField name="${customField.name}" id="${customField.name}" />
+			<g:textField name="${customField.name}" />
 			<a onclick="toggleCustomField('${customField.name}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 		</li>
 	</g:each>

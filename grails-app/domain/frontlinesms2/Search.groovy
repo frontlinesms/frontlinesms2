@@ -12,7 +12,6 @@ class Search {
 	String status
 	Date startDate
 	Date endDate
-	String contactString
 	List selectedCustomFields
 	boolean inArchive
 	
