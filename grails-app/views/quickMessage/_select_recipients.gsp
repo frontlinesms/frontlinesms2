@@ -3,7 +3,7 @@
 	<div>
 		<label class="header" for="address">Add phone number</label>
 		<g:textField id="address" name="address"/>
-		<g:link url="#" class="add-address">Add</g:link> <!-- FIXME this should be a button, surely? -->
+		<g:link url="#" class="add-address" onclick="addAddressHandler();">Add</g:link> <!-- FIXME this should be a button, surely? -->
 	</div>
 	
 	<!-- FIXME contacts and groups should probably be part of the same list here, with different classes assigned -->
@@ -92,12 +92,11 @@
 		);
 	}
 
-	$('.add-address').live('click', function() {
+	 function addAddressHandler() {
 		var address = $('#address').val();
 		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
-		updateCount()
-		dialog.close(function() { $(".manual").remove(); })
-	});
+		updateCount();
+	}
 </script>
 
 
