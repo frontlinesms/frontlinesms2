@@ -11,6 +11,7 @@ class Search {
 	String status
 	Date startDate
 	Date endDate
+	String contactString
 	List selectedCustomFields
 	boolean inArchive
 	
@@ -23,6 +24,7 @@ class Search {
 		status(nullable: true)
 		startDate(nullable: true)
 		endDate(nullable: true)
+		contactString(nullable:true)
 		selectedCustomFields(nullable:true)
 		inArchive(nullable: true)
 	}
