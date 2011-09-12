@@ -183,18 +183,20 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
 			waitFor { responseListTab.displayed }
-			choiceALabel.hasClass('bold')
-			choiceBLabel.hasClass('bold')
-			!choiceCLabel.hasClass('bold')
-			!choiceDLabel.hasClass('bold')
-			!choiceELabel.hasClass('bold')
+			choiceALabel.hasClass('field-enabled')
+			choiceBLabel.hasClass('field-enabled')
+			!choiceCLabel.hasClass('field-enabled')
+			!choiceDLabel.hasClass('field-enabled')
+			!choiceELabel.hasClass('field-enabled')
 		when:
 			pollForm.choiceA = 'Never'
 			pollForm.choiceB = 'Once a day'
 		then:
-			true || choiceCLabel.hasClass('bold')
+			waitFor { choiceCLabel.hasClass('field-enabled') }
 		when:
 			pollForm.choiceC = 'Twice a day'
+		then:
+			waitFor { choiceDLabel.hasClass('field-enabled') }
 			next.click()
 		then:
 			waitFor { autoSortTab.displayed }
