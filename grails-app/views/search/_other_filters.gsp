@@ -19,23 +19,23 @@
 		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 	</li>
 	<g:each var="customField" in="${customFieldInstanceList}">
-		<li class="field" id="custom-field-${customField.name}">
+		<li class="field" id="custom-field-field-${customField.name}">
 			<h2>${customField.name}:</h2><br>
-			<g:textField name="${customField.name}" id="${customField.name}"/>
+			<g:textField name="${customField.name}" id="${customField.name}" />
 			<a onclick="toggleCustomField('${customField.name}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 		</li>
 	</g:each>
 </ol>
 <h2>
-	<a id="more-search-options" onclick="expandOptions()"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
+	<a id="more-search-options"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
 	${message(code:'default.search.moresearchoption.label', default:'More search options') }
 </h2>
 <ol class="sub-menu" id="expanded-search-options">
-	<li>
+	<li id="field-link-contact-name">
 		<a onclick="toggleContactNameField()">Contact Name</a>
 	</li>
 	<g:each var="customField" in="${customFieldInstanceList}">
-		<li>
+		<li id="custom-field-link-${customField.name}">
 			<a onclick="toggleCustomField('${customField.name}')">${customField.name}</a>
 		</li>
 	</g:each>
