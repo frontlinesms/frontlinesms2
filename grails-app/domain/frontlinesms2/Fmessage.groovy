@@ -25,7 +25,7 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
-		dateReceived = dateReceived ? dateReceived : dateCreated
+		dateReceived = dateReceived ? dateReceived : new Date()
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
@@ -141,16 +141,6 @@ class Fmessage {
 						if(search.startDate && search.endDate){
 							between("dateReceived", search.startDate, search.endDate)
 						}
-						if(search.phoneNumbersStartWithString){
-							'ilike'("src", "${search.phoneNumbersStartWithString}%")
-						}
-						/*
-						 * if(search.selectedCustomFields){
-						 * 		search.selectedCustomFields.each { customField ->
-						 * 			'ilike'("${customField.name}","%${customField.value}%")
-						 * 		}
-						 * }
-						 */
 						if(!search.inArchive) {
 							eq('archived', false)
 						}

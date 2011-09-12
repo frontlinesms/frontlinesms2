@@ -2,7 +2,7 @@ package frontlinesms2.search
 
 import frontlinesms2.*
 
-class SearchSpec extends frontlinesms2.search.SearchGrebSpec {
+class SearchSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestGroups()
 		createTestPollsAndFolders()
@@ -11,9 +11,9 @@ class SearchSpec extends frontlinesms2.search.SearchGrebSpec {
 	
 	def "clicking on the search button links to the result show page"() {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
 		when:
 			to SearchingPage
 			searchBtn.present()
@@ -96,9 +96,9 @@ class SearchSpec extends frontlinesms2.search.SearchGrebSpec {
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
 			to SearchingPage
 			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
@@ -126,8 +126,8 @@ class SearchSpec extends frontlinesms2.search.SearchGrebSpec {
 	}
 	
 	private createTestMessages() {
-		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00'),
-				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex')].each() {
+		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
+				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex', dateReceived: new Date()-1)].each() {
 			it.status = MessageStatus.INBOUND
 			it.save(failOnError:true)
 		}

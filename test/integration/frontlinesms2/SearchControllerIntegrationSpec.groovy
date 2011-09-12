@@ -190,24 +190,24 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model.messageInstanceTotal == 2
 	}
 	
-	def "only return message with source phone numbers that are starting with specific number"() {
-		when:
-			controller.params.phoneNumbersStartWith = ""
-			def model = controller.result()
-		then:
-			model.messageInstanceTotal == 6
-		when:
-			controller.params.phoneNumbersStartWith = "+"
-			model = controller.result()
-		then:
-			model.messageInstanceList.each { message ->
-				println "results ${message.src}" 
-			}
-			model.messageInstanceTotal == 4
-		when:
-			controller.params.phoneNumbersStartWith ="+2"
-			model= controller.result()
-		then:
-			model.messageInstanceTotal == 3
-	}
+//	def "only return message with custom fields"() {
+//		when:
+//			controller.params.phoneNumbersStartWith = ""
+//			def model = controller.result()
+//		then:
+//			model.messageInstanceTotal == 6
+//		when:
+//			controller.params.phoneNumbersStartWith = "+"
+//			model = controller.result()
+//		then:
+//			model.messageInstanceList.each { message ->
+//				println "results ${message.src}" 
+//			}
+//			model.messageInstanceTotal == 4
+//		when:
+//			controller.params.phoneNumbersStartWith ="+2"
+//			model= controller.result()
+//		then:
+//			model.messageInstanceTotal == 3
+//	}
 }
