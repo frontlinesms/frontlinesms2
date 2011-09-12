@@ -28,7 +28,6 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		println params
 		def responseInstance, selectedMessageList
 		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
