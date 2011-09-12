@@ -150,13 +150,15 @@
 
 	function highlightPollResponses() {
 		$(".choices").each(function() {
-			$(this).blur(function() {
-				if(this.id != "choiceA" && this.id != "choiceB") {
-					var label = $("label[for='" + this.id + "']");
-					if (!$.trim(this.value).length) label.removeClass('bold');
-					else label.addClass('bold');
+			var changeHandler = function() {
+				if(this.id != "choiceA" && this.id != "choiceE") {
+					var label = $(this).parent().next().find('label');
+					if (!$.trim(this.value).length) label.removeClass('field-enabled');
+					else label.addClass('field-enabled');
 				}
-			});
+			}
+			$(this).keyup(changeHandler);
+			$(this).change(changeHandler);
 		})
 	}
 
