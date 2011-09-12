@@ -737,6 +737,9 @@ body {
 .error-panel {
 	text-align: center;
 	border: 2px solid #C03283;
+	position: relative;
+	left: 169px;
+	width: 70%;
 }
 
 .checked {
@@ -782,7 +785,7 @@ body {
 	margin: 10px 0 0 0
 }
 
-label.bold {
+label.field-enabled {
 	font-weight: bold;
 	color:#000 !important;
 }
@@ -874,4 +877,8 @@ label.header {
 
 #page-arrows a.disabled {
 	color: #AAAAAA;
+}
+
+.error {
+	border: 1px solid red;
 }
