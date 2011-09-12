@@ -24,8 +24,9 @@
 	</div>
 	<div class="basic-info field">
 		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
-		<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile}"/>
-		<g:if test="${contactInstance?.primaryMobile}">
+		<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}"/>
+		<g:if test="${contactInstance?.primaryMobile?.trim()}">
+			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true, null, true);addTabValidations();">
 				<img src='${resource(dir:'images/icons',file:'send.gif')}' />
 			</g:remoteLink>
@@ -33,8 +34,9 @@
 	</div>
 	<div class="basic-info field">
 		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
-		<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile}"/>
-		<g:if test="${contactInstance?.secondaryMobile}">
+		<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}"/>
+		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
+			<a class="remove-field" id="remove-secondaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);addTabValidations();">
 				<img src='${resource(dir:'images/icons',file:'send.gif')}' />
 			</g:remoteLink>
@@ -42,8 +44,9 @@
 	</div>
    	<div class="basic-info field">
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
-		<g:textField name="email" id="email" value="${contactInstance?.email}"/>
-		<g:if test="${contactInstance?.email && contactInstance?.validate(['email', contactInstance?.email])}">
+		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
+		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">
+			<a class="remove-field" id="remove-email"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 			<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
 				 <img src='${resource(dir:'images/icons',file:'send.gif')}' />
 			</g:remoteLink>

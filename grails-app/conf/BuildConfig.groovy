@@ -4,7 +4,7 @@ grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
 	// Everything with a version that ends with -SNAPSHOT is changing
-	chainResolver.changingPattern = '.*-SNAPSHOT'
+//		chainResolver.changingPattern = '.*-SNAPSHOT'
 
 	// inherit Grails' default dependencies
 	inherits("global") {
@@ -29,12 +29,12 @@ grails.project.dependency.resolution = {
 
 		// from https://github.com/alkemist/grails-snapshot-dependencies-fix
 		// Register the new JAR
-		def classLoader = getClass().classLoader
-		classLoader.addURL(new File(baseFile, "lib/grails-snapshot-dependencies-fix-0.1.jar").toURL())
+//		def classLoader = getClass().classLoader
+//		classLoader.addURL(new File(baseFile, "lib/grails-snapshot-dependencies-fix-0.1.jar").toURL())
 		// Get a hold of the class for the new resolver
-		def snapshotResolverClass = classLoader.loadClass("grails.resolver.SnapshotAwareM2Resolver")
+//		def snapshotResolverClass = classLoader.loadClass("grails.resolver.SnapshotAwareM2Resolver")
 		// Define a new resolver that is snapshot aware
-		resolver(snapshotResolverClass.newInstance(name: "spock-snapshots", root: "http://m2repo.spockframework.org/snapshots"))
+//		resolver(snapshotResolverClass.newInstance(name: "spock-snapshots", root: "http://m2repo.spockframework.org/snapshots"))
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.

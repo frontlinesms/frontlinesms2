@@ -148,4 +148,20 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			model.sharedGroupInstanceList == [group1, group2]
 			model.nonSharedGroupInstanceList == [g]
 	}
+	
+	def "should update contact when optional fields are removed" () {
+		given: 
+			def tom = new Contact(name: 'Tom', primaryMobile: '09876543', secondaryMobile:'23456789', email: 'tom@tom.com').save(failOnError: true, flush: true)
+		when:
+			controller.params.contactId = tom.id
+			controller.params.groupsToAdd = ","
+			controller.params.groupsToRemove = ","
+			controller.params.fieldsToAdd = ","
+			controller.params.fieldsToRemove = ","
+			tom.secondaryMobile = null
+			controller.update()	
+			tom.refresh()		
+		then:
+			tom.secondaryMobile == null
+	}
 }
