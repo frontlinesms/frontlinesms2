@@ -3,7 +3,7 @@
 	<ul id='poll-choices'>
 		<g:each in="${['A','B','C','D','E']}" var="option">
 			<li>
-				<label for='choice${option}'>${option}</label>
+				<label for='choice${option}' class="${option == 'A' || option == 'B' ? 'bold': ''}">${option}</label>
 			   	<g:textField class='choices' name="choice${option}" id="choice${option}" value="" />
 			</li>
 		</g:each>

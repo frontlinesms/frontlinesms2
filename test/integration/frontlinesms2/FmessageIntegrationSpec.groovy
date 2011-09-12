@@ -130,7 +130,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def startDate = new Date("2011/10/12")
 			def endDate   = new Date("2011/10/13")
-			def messages = Fmessage.getMessageStats(fsharp, null, startDate, endDate)
+			def messages = Fmessage.getMessageStats([groupInstance:fsharp, messageOwner:null, startDate:startDate, endDate:endDate])
 		then:
 		messages == ["12/10":[Sent:5, Received:4], "13/10":[Sent:0, Received:1]]
 	}
