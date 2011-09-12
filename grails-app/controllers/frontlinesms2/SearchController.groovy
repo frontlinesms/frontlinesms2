@@ -13,6 +13,7 @@ class SearchController {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
+				customFieldInstanceList : CustomField.findAll(),
 				messageSection: 'search']
 	}
 
@@ -33,7 +34,9 @@ class SearchController {
 		search.activityId = params.activityId
 		search.startDate = params.startDate
 		search.endDate = params.endDate
-		search.phoneNumbersStartWithString = params.phoneNumbersStartWithString
+		//search.selectedCustomFields.each { customField ->
+		//	customField.value = params.${customField.name}
+		//}
 		search.inArchive = params.inArchive ? true : false
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
@@ -55,6 +58,11 @@ class SearchController {
 		}
 		[messageInstance: messageInstance]
 	}
+	
+	//def add_customField = { customFieldName ->
+	//	def customField = new CustomField(name = customFieldName)
+	//	search.selectedCustomFields.push(customField)
+	//}
 	
 	private def getSearchDescription(search) {
 		String searchDescriptor = "Searching in "
