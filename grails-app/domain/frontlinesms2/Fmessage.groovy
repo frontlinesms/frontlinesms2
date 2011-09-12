@@ -142,8 +142,15 @@ class Fmessage {
 							between("dateReceived", search.startDate, search.endDate)
 						}
 						if(search.phoneNumbersStartWithString){
-							'ilike'("src", "+2%")
+							'ilike'("src", "${search.phoneNumbersStartWithString}%")
 						}
+						/*
+						 * if(search.selectedCustomFields){
+						 * 		search.selectedCustomFields.each { customField ->
+						 * 			'ilike'("${customField.name}","%${customField.value}%")
+						 * 		}
+						 * }
+						 */
 						if(!search.inArchive) {
 							eq('archived', false)
 						}

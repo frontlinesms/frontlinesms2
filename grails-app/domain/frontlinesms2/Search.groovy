@@ -11,7 +11,7 @@ class Search {
 	String status
 	Date startDate
 	Date endDate
-	String phoneNumbersStartWithString
+	List selectedCustomFields
 	boolean inArchive
 	
 	static constraints = {
@@ -23,7 +23,7 @@ class Search {
 		status(nullable: true)
 		startDate(nullable: true)
 		endDate(nullable: true)
-		phoneNumbersStartWithString(nullable:true)
+		selectedCustomFields(nullable:true)
 		inArchive(nullable: true)
 	}
 }
