@@ -79,15 +79,13 @@ function prevButton() {
 }
 
 function nextButton() {
-	if(validateCurrentTab()) {
-		for (var i = 1; i <= getTabLength(); i++) {
-			var nextTabToSelect = getCurrentTab() + i;
-			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+	for (var i = 1; i <= getTabLength(); i++) {
+		var nextTabToSelect = getCurrentTab() + i;
+		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
 				$("#tabs").tabs('select', nextTabToSelect);
 				break;
 			}
 		}
-	}
 }
 
 function done() {
