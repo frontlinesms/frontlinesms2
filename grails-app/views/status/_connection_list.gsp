@@ -7,10 +7,10 @@
 			<li id="connection-${c.id}" style="display: inline">
 				<div class="name">
 					<g:if test="${c.status == 'Connected'}">
-						<img src="../images/icons/status_green.gif"/>
+						<img src="../images/icons/status_green.png"/>
 					</g:if>
 					<g:else>
-						<img src="../images/icons/status_orange.gif"/>
+						<img src="../images/icons/status_orange.png"/>
 					</g:else>
 					${c.name}
 				</div>
