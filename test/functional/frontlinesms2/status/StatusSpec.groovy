@@ -24,6 +24,13 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 			$('#trafficGraph svg')
 	}
 	
+	def "should not display connections when there are no connections available"() {
+		when:
+			go 'status'
+		then:
+			$("#connections").text() == "You have no connections configured."
+	}
+	
 	def "should show a list of devices that FrontlineSMS can connect to"() {
 		given:
 			createTestConnections()
