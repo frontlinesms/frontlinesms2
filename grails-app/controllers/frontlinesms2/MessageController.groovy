@@ -13,8 +13,8 @@ class MessageController {
 
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
-		params.archived = params.archived ? params.archived.toBoolean()  : false
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.archived = params.archived ? params.archived.toBoolean() : false
 		true
 	}
 
