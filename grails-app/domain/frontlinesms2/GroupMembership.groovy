@@ -39,6 +39,12 @@ class GroupMembership implements Serializable {
 	static void deleteFor(Group g) {
 		executeUpdate("DELETE FROM GroupMembership WHERE group=:group", [group: g])
 	}
+	
+	static def searchForContacts(params) {
+		def searchString = "${params.contactName}%"
+		params.groupName ? GroupMembership.findAll("from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}"]).collect{it[1]} :
+		Contact.findAllByNameIlike(searchString)
+	}
 
    static mapping = {
       id composite: ['group', 'contact']
