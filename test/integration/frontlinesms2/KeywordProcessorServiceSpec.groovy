@@ -39,7 +39,11 @@ class KeywordProcessorServiceSpec extends IntegrationSpec {
 	def "processPollResponse() should associate Fmessage with PollResponse"() {
 		given:
 			Fmessage m = new Fmessage().save(failOnError: true)
-			PollResponse r = new PollResponse(value: "whatever").save(failOnError: true)
+			def p = new Poll(title:'Who is the best football team in the world?')
+			PollResponse r = new PollResponse(value: "whatever")
+			PollResponse r2 = new PollResponse(value: "2")
+			p.addToResponses(r2)
+			p.addToResponses(r).save(failOnError: true)
 		when:
 			service.processPollResponse(r, m)
 		then:

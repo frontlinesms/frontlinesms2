@@ -48,7 +48,7 @@ class MessageController {
 		def messageInstanceList = Fmessage.getDeletedMessages(params)
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
-					messageInstanceTotal: Fmessage.countDeletedMessages(params['starred'])] << show(messageInstanceList)
+					messageInstanceTotal: Fmessage.countDeletedMessages(params.starred)] << show(messageInstanceList)
 	}
 
 	def inbox = {
@@ -56,7 +56,7 @@ class MessageController {
 		[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
 					messageInstanceTotal: Fmessage.countInboxMessages(params),
-					actionLayout : (params['archived'] ? "archive" : "messages")] << show(messageInstanceList)
+					actionLayout : (params.archived ? "archive" : "messages")] << show(messageInstanceList)
 	}
 
 	def sent = {
@@ -64,27 +64,27 @@ class MessageController {
 		[messageSection: 'sent',
 				messageInstanceList: messageInstanceList,
 				messageInstanceTotal: Fmessage.countSentMessages(params),
-				actionLayout : params['archived'] ? "archive" : "messages"] << show(messageInstanceList)
+				actionLayout : params.archived ? "archive" : "messages"] << show(messageInstanceList)
 	}
 
 	def pending = {
 		def messageInstanceList = Fmessage.getPendingMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
-				messageInstanceTotal: Fmessage.countPendingMessages(params['failed']),
+				messageInstanceTotal: Fmessage.countPendingMessages(params.failed),
 				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << show(messageInstanceList)
 	}
 
 	def poll = {
-		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.getMessages(params)		
+		def activityInstance = Poll.get(params.ownerId)
+		def messageInstanceList = activityInstance.getMessages(params)		
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
-				messageInstanceTotal: ownerInstance.countMessages(params['starred']),
-				ownerInstance: ownerInstance,
-				responseList: ownerInstance.responseStats,
-				pollResponse: ownerInstance.responseStats as JSON,
-				actionLayout : params['archived'] ? 'archive' : 'messages'] << show(messageInstanceList)
+				messageInstanceTotal: activityInstance.countMessages(params.starred),
+				ownerInstance: activityInstance,
+				responseList: activityInstance.responseStats,
+				pollResponse: activityInstance.responseStats as JSON,
+				actionLayout : params.archived ? 'archive' : 'messages'] << show(messageInstanceList)
 	}
 
 	def folder = {
@@ -95,7 +95,7 @@ class MessageController {
 
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
-				messageInstanceTotal: folderInstance.countMessages(params['starred']),
+				messageInstanceTotal: folderInstance.countMessages(params.starred),
 				ownerInstance: folderInstance] << show(messageInstanceList)
 	}
 
@@ -105,7 +105,7 @@ class MessageController {
 
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'radioShow',
-				messageInstanceTotal: showInstance.countMessages(params['starred']),
+				messageInstanceTotal: showInstance.countMessages(params.starred),
 				ownerInstance: showInstance] << show(messageInstanceList)
 	}
 
