@@ -40,6 +40,8 @@ class Fmessage {
 			}
 		}
 		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
+		if(contactName != src && contactName != dst) contactExists = true
+		else contactExists = false
 	}
 	
 	static constraints = {

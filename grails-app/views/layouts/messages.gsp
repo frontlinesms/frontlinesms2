@@ -35,37 +35,37 @@
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'folders.png')}' />
 								<h2>${ownerInstance?.name}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'sent'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'sent.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'sent.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'pending'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'pending.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'pending.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'trash'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'trash.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'trash.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'radioShow'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'onair.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'onair.png')}' />
 								<h2>on air</h2>
 							</div>
 						</g:elseif>
 						<g:else>
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'inbox.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'inbox.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:else>
@@ -87,7 +87,7 @@
 							</g:if>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
-					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
+					        		<img src='${resource(dir:'images/icons',file:'quickmessage.png')}' />
 									Quick message
 								</g:remoteLink>
 							</li>
