@@ -17,6 +17,7 @@ class ContactController {
 		def model = buildList()
 		params.contactId = params.contactId?:model.contactInstanceList[0]?.id
 		if(params.contactId) {
+			flash.message = flash.message // re-set the flash message when handling a 2nd redirect
 			redirect(action:'show', params:params)
 		} else {
 			model
