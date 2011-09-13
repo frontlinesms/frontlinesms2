@@ -19,7 +19,7 @@ $(function() {
 			$("#"+holder).height($("#pollGraph").height);
 			$(".poll-details").prepend(responseCountTag);
 			var r = Raphael(holder);
-			r.plotBarGraph(holder, data, xdata, {
+			r.plotBarGraph(holder, data, xdata, { // TODO find an alternative to putting this style info here - should be set via CSS class
 				colors: ["#949494", "#F2202B", "#40B857"],
 				textStyle: {
 					"font-weight": "bold",

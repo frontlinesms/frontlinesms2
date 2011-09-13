@@ -145,7 +145,11 @@ class Fmessage {
 					}
 			}
 			
-			filterMessages { groupInstance, messageOwner, startDate, endDate -> 
+			filterMessages { params ->
+				def groupInstance = params.groupInstance
+				def messageOwner = params.messageOwner
+				def startDate = params.startDate
+				def endDate = params.endDate
 				def groupMembers = groupInstance?.getAddresses() ?: ''
 				and {
 					if(groupInstance) {
@@ -153,6 +157,9 @@ class Fmessage {
 					}
 					if(messageOwner) {
 						'in'("messageOwner", messageOwner)
+					}
+					if(params.messageStatus) {
+						'in'('status', params.messageStatus.collect { Enum.valueOf(MessageStatus.class, it)})
 					}
 					eq('deleted', false)
 					or {
@@ -262,11 +269,11 @@ class Fmessage {
 		activity instanceof Poll ? activity.responses : [activity]
 	}
 
-	static def getMessageStats( Group groupInstance=null, Collection<MessageOwner> messageOwner=[], Date startDate = new Date(Long.MIN_VALUE), Date endDate = new Date(Long.MAX_VALUE)) {
-		def messages = Fmessage.filterMessages(groupInstance, messageOwner, startDate, endDate).list(sort:"dateReceived", order:"desc")
+	static def getMessageStats(params) {
+		def messages = Fmessage.filterMessages(params).list(sort:"dateReceived", order:"desc")
 	
 		def dates = [:]
-		(startDate..endDate).each {
+		(params.startDate..params.endDate).each {
 			dates[it.format('dd/MM')] = ["Sent" :0, "Received" : 0]
 		}
 		
