@@ -10,7 +10,6 @@ class Poll {
 	List responses
 
 	static hasMany = [responses: PollResponse]
-	static fetchMode = [responses: "eager"]
 
 	static constraints = {
 		title(blank: false, nullable: false, maxSize: 255, validator: { title, me ->
@@ -37,10 +36,6 @@ class Poll {
 			}
 		})
 	}
-
-	static mapping = {
-		responses cascade: 'all'
-	}
 	
 	def beforeSave = {
 		keyword = !keyword?:keyword.toUpperCase()
@@ -48,7 +43,7 @@ class Poll {
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
-	def getMessages() {
+	def getMessages(params) {
 		Fmessage.owned(params.starred, this.responses).list(params)
 	}
 
@@ -69,7 +64,7 @@ class Poll {
 	
 	def archivePoll() {
 		this.archived = true
-		messagesToArchive = Fmessage.owned(params.starred, this.responses).list()
+		def messagesToArchive = Fmessage.owned(this.responses).list()
 		messagesToArchive.each { it.archived = true }
 	}
 
@@ -82,22 +77,16 @@ class Poll {
 	}
 
 	static Poll createPoll(attrs) {
-		def responses = []
+		def poll = new Poll(attrs)
 		if(attrs['poll-type'] == 'standard') {
-			['Yes','No'].each { responses << new PollResponse(value:it, key:it)}
-		}
-		else
-		{
+			['Yes','No'].each { poll.addToResponses(new PollResponse(value:it, key:it)) }
+		} else {
 			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
 			choices.each { k,v -> 
-				if(v) 
-					responses << new PollResponse(value: v, key:k)
+				if(v) poll.addToResponses(new PollResponse(value: v, key:k))
 			}
 		}
-
-		def unknownResponse = 'Unknown'
-		responses << new PollResponse(value: unknownResponse, key: unknownResponse)
-		attrs['responses'] = responses
-		new Poll(attrs)
+		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
+		poll
 	}
 }

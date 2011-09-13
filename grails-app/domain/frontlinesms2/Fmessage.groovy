@@ -52,7 +52,9 @@ class Fmessage {
 		contactName(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null || obj.messageOwner.poll?.archived == true				
+					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived)				
+				} else {
+					obj.messageOwner == null || !(obj.messageOwner instanceof PollResponse) || !obj.messageOwner.poll.archived
 				}
 		})
 	}
@@ -100,7 +102,6 @@ class Fmessage {
 			owned { isStarred=false, responses ->
 				and {
 					eq("deleted", false)
-					eq("archived", false)
 					'in'("messageOwner", responses)
 					if(isStarred)
 						eq("starred", true)

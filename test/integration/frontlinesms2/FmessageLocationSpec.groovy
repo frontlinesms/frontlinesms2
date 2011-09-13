@@ -181,7 +181,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			minime.archived == true
 	}
 	
-	def "can un-archive a message if the owner is archived"() {
+	def "cannot un-archive a message if the owner is archived"() {
 		when:
 			createTestData()
 			def minime = Fmessage.findBySrc("Minime")
@@ -190,6 +190,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			minime.messageOwner.poll.save(flush:true)
 			minime.archived = false
 			minime.save(flush: true)
+			minime.refresh()
 		then:
 			Poll.findByTitle("Miauow Mix").archived == true
 			minime.archived == true
@@ -216,9 +217,10 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
         def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 		liverResponse.addToMessages(liverMessage).save(failOnError: true)
 		chickenResponse.addToMessages(chickenMessage).save(failOnError: true)
-        new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 	}
 
 	private def setUpFolderMessages() {

@@ -4,7 +4,7 @@ class PollController {
 	static allowedMethods = [update: "POST"]
 
 	def index = {
-		def archived = params['archived']
+		def archived = params.archived
 		[polls: Poll.findAllByArchived(archived),
 		actionLayout : archived ? "archive" : "poll",
 		messageSection: "poll"]
@@ -35,7 +35,7 @@ class PollController {
 		def poll = Poll.get(params.id)
 		poll.archivePoll()
 		poll.save()
-		flash['message'] = "Activity was archived successfully!"
+		flash.message = "Activity was archived successfully!"
 		redirect(controller: "message", action: "inbox")
 	}
 }
