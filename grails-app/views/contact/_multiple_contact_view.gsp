@@ -17,7 +17,7 @@
 				<g:each in="${sharedGroupInstanceList}" status="i" var="g">
 					<li class="${g == groupInstance ? 'selected' : ''}">
 						<input type="text" name="${g.name}" value="${g.name}" disabled="true" />
-						<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+						<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 					</li>
 				</g:each>
 				<li id="multi-no-groups" style="${sharedGroupInstanceList?'display: none':''}">
