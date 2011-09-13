@@ -168,6 +168,25 @@ class ContactController {
 			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
 	}
 	
+	private def searchContacts() {
+		def groupInstance = params.groupId? Group.findById(params.groupId): null
+		params.max = Math.min(params.max ? params.int('max') : 10, 100)
+		params.sort = "name"
+ 		def results = GroupMembership.searchForContacts([groupName:groupInstance?.name, contactName:params.searchString])
+		results?.each{println it.name}
+		[contactInstanceList: results,
+				contactInstanceTotal: results.size(),
+				fieldInstanceList: CustomField.findAll(),
+				groupInstanceList: Group.findAll(),
+				groupInstanceTotal: Group.count(),
+				contactsSection: groupInstance]
+	}
+	
+	def search = {
+		println "params: ${params}"
+		render (template:'contact_list', model:searchContacts())
+	}
+	
 	private def getSharedGroupList(Collection groupList) {
 		def groupIDList = groupList.collect {it.id}
 		def intersect = groupIDList.get(0)

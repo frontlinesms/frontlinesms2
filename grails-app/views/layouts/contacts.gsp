@@ -26,6 +26,7 @@
 					<div class="content-header">
 						<div  id="contact-title">
 							<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+								<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
 								<h2>${contactsSection.name}</h2>
 							</g:if>
@@ -43,6 +44,7 @@
 						<g:render template="contact_list"/>
 						<g:layoutBody />
 					</div>
+					<input id="contact-search" type="text" onkeyup="${remoteFunction(action:'search', update:'contacts-list', params:'\'searchString=\' + this.value + \$(\'#groupId\').val()')}" />
 				</div>
 			</div>
 		</div>
