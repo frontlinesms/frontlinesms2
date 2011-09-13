@@ -11,20 +11,16 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	}
 	
 	def 'groups that selected contact belongs to are shown in contact details'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			go "contact/show/${bob.id}"
+			to BobsContactPage
 		then:
 			def memberOf = $("#group-list li").children('input')*.value().sort()
 			memberOf == ['Test', 'three']
 	}
 
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			go "contact/show/${bob.id}"
+			to BobsContactPage
 			def groupSelecter = $("#group-dropdown")
 			def nonMemberOf = groupSelecter.children().collect() { it.text() }.sort()
 		then:
@@ -69,10 +65,8 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	}
 
 	def 'clicking save actually adds contact to newly selected groups'() {
-		given:
-			def bob = Contact.findByName("Bob")
 		when:
-			go "contact/show/${bob.id}"
+			to BobsContactPage
 			def groupSelecter = $("#contact-details").find('select', name:'group-dropdown')
 			groupSelecter.find(name: 'group-dropdown').value('Others')
 			$("#contact-details .save").click()
@@ -86,14 +80,17 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			def bob = Contact.findByName("Bob")
 			def alice = Contact.findByName('Alice')
 		when:
-			go 'contact'
-			$("#contact")[1].click()
-			sleep 1000
-			$("#contact")[0].click()
-			sleep 3000
-			def groupSelecter = $('#multi-group-dropdown')
-			groupSelecter.value("${Group.findByName('Others').id}")			
-			$("#update-all").click()
+			to ContactListPage
+		then:
+			waitFor { contactSelect.displayed }
+		when:
+			contactSelect[1].click()
+			contactSelect[0].click()
+		then:
+			waitFor { multiGroupSelect.displayed }
+		when:
+			multiGroupSelect.value("${Group.findByName('Others').id}")
+			updateAll.click()
 		then:
 			Group.findByName('Others').getMembers().containsAll([bob, alice])
 	}
@@ -108,18 +105,23 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			assert bob.isMemberOf(otherGroup)
 			assert alice.isMemberOf(otherGroup)
 		when:
-			go 'contact'
-			$("#contact")[1].click()
-			sleep 1000
-			$("#contact")[0].click()
-			sleep 3000
+			to ContactListPage
+		then:
+			waitFor { contactSelect.displayed }
+		when:
+			contactSelect[1].click()
+			contactSelect[0].click()
+		then:
+			waitFor { $("#multi-group-list #remove-group-${otherGroup.id}").displayed }
+		when:
 			$("#multi-group-list #remove-group-${otherGroup.id}").click()
-			$("#update-all").click()
-			bob.refresh()
-			alice.refresh()
+			updateAll.click()
+		then:
+			waitFor { flashMessage.displayed }
+		when:
 			otherGroup.refresh()
 		then:
-			otherGroup.getMembers() == []
+			otherGroup.members == []
 	}
 	
 	def 'clicking save removes contact from newly removed groups'() {
@@ -139,13 +141,21 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	// TODO test cancel button - add to one group
 }
 
-// TODO use bob's contact page... once the tests are passing!
-//
 class BobsContactPage extends geb.Page {
 	static bobby = Contact.findByName("Bob")
 	static url = "contact/show/${bobby.id}"
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
 		groupsList { $('#groups-submenu') }
+	}
+}
+
+class ContactListPage extends geb.Page {
+	static url = 'contact'
+	static content = {
+		contactSelect(required:false) { $(".contact-select") }	
+		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
+		updateAll(required:false) { $("#update-all") }
+		flashMessage(required:false) { $('div.flash') }
 	}
 }

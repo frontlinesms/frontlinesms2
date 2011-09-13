@@ -27,7 +27,7 @@ function contactChecked(contactId) {
 }
 
 function countCheckedContacts(){
-    return $('input[name=contact]:checked').size();
+    return $('input[name=contact-select]:checked').size();
 }
 
 function loadSingleContact(contactId) {
@@ -53,7 +53,7 @@ function loadMultipleContacts(count) {
 		$("#multi-group-dropdown").change(addGroupClickAction);
 		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
 	});
-	$('#count').html("<p> " + count + " contacts selected</p>");
+	$('#contact-count').html("<p> " + count + " contacts selected</p>");
 	
 	if($('div.multiple-contact').is(':hidden')) {
 		$('.multiple-contact').show();

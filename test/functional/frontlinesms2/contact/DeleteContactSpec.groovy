@@ -29,9 +29,6 @@ class DeleteContactSpec extends ContactGebSpec {
 			assert Contact.count() == 2
 		when:
 			to ContactPage
-		then:
-			waitFor { contactSelect.displayed }
-		when:
 			contactSelect[0].click()
 			contactSelect[1].click()
 		then:
