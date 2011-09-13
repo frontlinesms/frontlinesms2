@@ -1,9 +1,14 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
-	<label class="header" for="address">Add phone number</label>
-	<g:textField id="address" name="address"/>
-	<g:link url="#" class="add-address">Add</g:link>
+	<div>
+		<label class="header" for="address">Add phone number</label>
+		<g:textField id="address" name="address"/>
+		<g:link url="#" class="add-address" onclick="addAddressHandler();">Add</g:link> <!-- FIXME this should be a button, surely? -->
+	</div>
 	
+	<!-- FIXME contacts and groups should probably be part of the same list here, with different classes assigned -->
+	
+	<!-- FIXME should be a list of groups, not just a load of divs -->
 	<div id="groups">
 		<g:each in="${groupList}" var="entry">
 			<div>
@@ -12,7 +17,8 @@
 			</div>
 		</g:each>
 	</div>
-
+	
+	<!-- FIXME should be a list of contacts, not just a load of divs -->
 	<div id="contacts">
 		<g:each in="${nonExistingRecipients}" var="address">
 			<div>
@@ -78,19 +84,19 @@
 	}
 
 	function updateCount() {
-	    var count = getSelectedGroupElements("addresses").size();
-	    $.each(["#recipient-count", "#contacts-count", "#messages-count"],
-	    function(index, id) {
-	        $(id) && $(id).html(count);
-	    });
+		var count = getSelectedGroupElements("addresses").size();
+		$.each(["#recipient-count", "#contacts-count", "#messages-count"],
+			function(index, id) {
+				if($(id)) $(id).html(count);
+			}
+		);
 	}
 
-	$('.add-address').live('click', function() {
+	 function addAddressHandler() {
 		var address = $('#address').val();
 		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
-		updateCount()
-		dialog.close(function() { $(".manual").remove(); })
-	});
+		updateCount();
+	}
 </script>
 
 
