@@ -50,14 +50,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#pollGraph svg')
 	}
 
-	def 'selected poll is highlighted'() {
+	def 'selected poll should be highlighted'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
-			selectedMenuItem.text() == 'Football Teams'
+			$('#messages-menu .selected').text() == 'Football Teams'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {

@@ -5,6 +5,7 @@ class MessagesPage extends geb.Page {
 	static content = {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
+		messagesSelect { $(".message-select") }
 	}
 }
 

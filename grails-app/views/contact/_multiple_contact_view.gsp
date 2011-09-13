@@ -10,7 +10,7 @@
 			</li>
 		</ol>
 	</div>
-	<div id="count"></div>
+	<div id="contact-count"/>
 	<div class="multiple-contact">
 		<div>
 			<ol id='multi-group-list'>
