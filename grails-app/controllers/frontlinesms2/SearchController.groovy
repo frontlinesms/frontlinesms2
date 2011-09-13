@@ -36,11 +36,19 @@ class SearchController {
 		search.startDate = params.startDate?:null
 		search.endDate = params.endDate?:null
 		//Assumed that we only pass the customFields that exist
-		CustomField.findAll().each() {
-			if (params[it.name+'CustomField']){
-				search.customFields = search.customFields? search.customFields.add(it) : [it]
+		def usedCustomField = [:]
+		CustomField.getAllUniquelyNamed().each() {
+			if (params[it+'CustomField'] && params[it+'CustomField']!=''){
+				usedCustomField[it] = params[it+'CustomField']
 			} 
 		}
+		//usedCustomField.each(){ println "${it}"}
+		search.customFieldContactList = []
+		usedCustomField?.each { name, value ->
+			search.customFieldContactList = search.customFieldContactList + CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+		}
+		search.println("List of contact that match"+search.customFieldContactList)
+		
 		search.save(failOnError: true, flush: true)
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
@@ -63,10 +71,10 @@ class SearchController {
 		[messageInstance: messageInstance]
 	}
 	
-	//def add_customField = { customFieldName ->
-	//	def customField = new CustomField(name = customFieldName)
-	//	search.selectedCustomFields.push(customField)
-	//}
+//	def getContactMatchingCustomField = { customFieldName ->
+//		def customField = new CustomField(name = customFieldName)
+//		search.selectedCustomFields.push(customField)
+//	}
 	
 	private def getSearchDescription(search) {
 		String searchDescriptor = "Searching in "

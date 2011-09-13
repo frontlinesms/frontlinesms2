@@ -12,8 +12,7 @@ class Search {
 	String status
 	Date startDate
 	Date endDate
-	List customFields
-	List customFieldContacts
+	List customFieldContactList
 	boolean inArchive
 	
 	static constraints = {
@@ -26,8 +25,7 @@ class Search {
 		status(nullable: true)
 		startDate(nullable: true)
 		endDate(nullable: true)
-		customFields(nullable:true)
-		customFieldContacts(nullable:true)
+		customFieldContactList(nullable:true)
 		inArchive(nullable: true)
 	}
 }

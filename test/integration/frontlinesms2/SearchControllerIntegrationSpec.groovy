@@ -3,7 +3,7 @@ package frontlinesms2
 
 class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
-	def firstContact, secondContact
+	def firstContact, secondContact, thirdContact
 	def group
 	def folder
 
@@ -11,6 +11,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		controller = new SearchController()
 		firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
 		secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
+		thirdContact = new Contact(name:"", primaryMobile:'+666666666').save(failOnError:true)
 		group = new Group(name:'test').save(failOnError:true)
 		
 		//message in the same day will still be return even if in the future
@@ -18,6 +19,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		futureDate.hours = futureDate.hours + 1
 		
 		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00', archived: true),
+				new Fmessage(src:'+254987654', dst:'+666666666', text:'finaly i stay in bed'),
 				new Fmessage(src:'+254111222', dst:'+254937634', dateReceived: futureDate, text:'work is awesome'),
 				new Fmessage(src:'Bob', dst:'+254987654', dateReceived: new Date()-5, text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', dateReceived: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
@@ -26,7 +28,10 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			}
 				
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
-				new CustomField(name:'like', value:'cake', contact: secondContact)].each {
+				new CustomField(name:'like', value:'cake', contact: secondContact),
+				new CustomField(name:'ik', value:'car', contact: secondContact),
+				new CustomField(name:'like', value:'cake', contact: secondContact),
+				new CustomField(name:'dob', value:'12/06/79', contact: secondContact)].each {
 			it.save(failOnError:true)
 		}
 
@@ -58,7 +63,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 7
+			model.messageInstanceList.size() == 8
 	}
 
 	def "message searches can be restricted to a poll"() {
@@ -87,7 +92,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 7
+			model.messageInstanceTotal == 8
 			model.messageInstanceList.every {it.status == MessageStatus.INBOUND}
 	}
 
@@ -183,7 +188,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.endDate = new Date()
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 4
+			model.messageInstanceTotal == 5
 		when:
 			controller.params.startDate = new Date()-6
 			controller.params.endDate = new Date()-3
@@ -195,27 +200,35 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.endDate = new Date()-5
 			model = controller.result()
 		then:
-
 			model.messageInstanceList == [Fmessage.findBySrc('Bob'), Fmessage.findBySrc('Michael')]
 		when:
 			controller.params.startDate = new Date()-14
 			controller.params.endDate = new Date()
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 6
+			model.messageInstanceTotal == 7
 	}
 	
 	def "only return message with custom fields"() {
 		when:
 			controller.params['cityCustomField'] = 'Paris'
+			//controller.params.inArchive = true
 			def model = controller.result()
+			println("the fmessage.contactName is "+Fmessage.findBySrcLike("+254987654").contactName)
 		then:
 			model.messageInstanceTotal == 1
 		when:
-			controller.params['cityCustomField'] = 'Paris'
+			//controller.params['cityCustomField'] = 'Paris'
 			controller.params['likeCustomField'] = 'ak'
 		    model = controller.result()
 		then:
 			model.messageInstanceTotal == 2
+		when:
+			controller.params['cityCustomField'] = ''
+			controller.params['likeCustomField'] = ''
+			controller.params['dobCustomField'] = '7'
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 1
 	}
 }
