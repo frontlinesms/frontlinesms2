@@ -83,6 +83,31 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
+	
+	def "should require keyword if sorting is enabled"() {
+		when:
+			launchPollPopup()
+		then:
+			waitFor { autoSortTab.displayed }
+			pollForm.keyword().disabled
+		when:
+			pollForm.enableKeyword = 'true'
+			!pollForm.keyword
+		then:
+			waitFor { !pollForm.keyword().disabled }
+			!pollForm.keyword
+		when:
+			next.click()
+		then:
+			waitFor { errorMessage.displayed }
+			pollForm.keyword().hasClass('error')
+			autoSortTab.displayed
+		when:
+			pollForm.keyword = 'trigger'
+			next.click()
+		then:
+			waitFor { autoReplyTab.displayed }
+	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
