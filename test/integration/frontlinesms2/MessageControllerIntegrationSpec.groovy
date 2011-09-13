@@ -67,7 +67,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def "first message in the inbox view is selected by default"() {
         setup:
-             def message1 = new Fmessage(status:MessageStatus.INBOUND).save(failOnError: true)
+             def message1 = new Fmessage(status: MessageStatus.INBOUND).save(failOnError: true)
         when:
             def resultMap =  controller.inbox()
         then:

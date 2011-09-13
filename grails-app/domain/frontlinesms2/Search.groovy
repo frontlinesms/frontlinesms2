@@ -6,6 +6,7 @@ class Search {
 	String contactString
 	List owners
 	String activityId
+	def activity
 	Group group
 	String status
 	boolean inArchive

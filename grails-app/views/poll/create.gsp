@@ -43,6 +43,7 @@
 		
 		highlightPollResponses();
 
+		/* Poll type tab */
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
@@ -58,6 +59,7 @@
 			}
 		});
 
+		/* Replies tab */
 		$("#tabs-2").contentWidget({
 			validate: function() {
 				$('#choiceA').removeClass('error');
@@ -70,7 +72,20 @@
 				return isValid;
 			}
 		});
+		
+		/* Auto-sort tab */
+		$("#tabs-3").contentWidget({
+			validate: function() {
+				var pollKeywordTextfield = $("input[name='keyword']");
+				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||
+						pollKeywordTextfield.val().trim().length > 0;
+				if(isValid) pollKeywordTextfield.removeClass('error');
+				else pollKeywordTextfield.addClass('error');
+				return isValid;
+			}
+		});
 
+		/* Auto-reply tab */
 		$("#tabs-4").contentWidget({
 			validate: function() {
 				$('#tabs-4 textarea').removeClass("error");
@@ -150,13 +165,15 @@
 
 	function highlightPollResponses() {
 		$(".choices").each(function() {
-			$(this).blur(function() {
-				if(this.id != "choiceA" && this.id != "choiceB") {
-					var label = $("label[for='" + this.id + "']");
-					if (!$.trim(this.value).length) label.removeClass('bold');
-					else label.addClass('bold');
+			var changeHandler = function() {
+				if(this.id != "choiceA" && this.id != "choiceE") {
+					var label = $(this).parent().next().find('label');
+					if (!$.trim(this.value).length) label.removeClass('field-enabled');
+					else label.addClass('field-enabled');
 				}
-			});
+			}
+			$(this).keyup(changeHandler);
+			$(this).change(changeHandler);
 		})
 	}
 
