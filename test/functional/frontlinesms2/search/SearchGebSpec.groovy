@@ -26,7 +26,9 @@ class SearchGebSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		def poll = new Poll(title:'Miauow Mix')
+		poll.addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 	}
 	
 	static createSearchTestMessages() {

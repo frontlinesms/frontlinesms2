@@ -25,11 +25,14 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "message can be moved to a different poll response"() {
 		setup:
-			def r = new PollResponse(value: 'known unknown').save(failOnError:true, flush:true)
-			def r2 = new PollResponse(value: 'unknown unknowns').save(failOnError:true, flush:true)
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA: 'known unknown', choiceB: 'unknown unknowns').save(failOnError:true, flush:true)
+			def r = new PollResponse(value:'known unknown')
+			def r2 = new PollResponse(value:'unknown unknown')
+			def poll = new Poll(title: 'Who is badder?')
+			poll.addToResponses(r2)
+			poll.addToResponses(r).save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true)
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob')).save(failOnError: true)
+			
 		when:
 			controller.params.messageId = ',' + message.id + ','
 			controller.params.responseId = r2.id
