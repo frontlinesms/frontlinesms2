@@ -21,8 +21,10 @@ class StatusController {
 
 	//FIXME: This is a stub method.
 	private def fetchAllStatus() {
-		['MTNDONGLE' : ConnectionStatus.ERROR, "GMAIL": ConnectionStatus.CONNECTED, "INTERNET": ConnectionStatus.CONNECTED,
-			"MESSAGEQUEUE": ConnectionStatus.CONNECTED]
+		def fconnectionInstanceList = Fconnection.list()
+		def fconnectionInstanceTotal = Fconnection.count()
+		[connectionInstanceList: fconnectionInstanceList,
+			fconnectionInstanceTotal: fconnectionInstanceTotal]
 	}
 	
 	private def getMessageStats() {
