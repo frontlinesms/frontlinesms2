@@ -43,6 +43,7 @@
 		
 		highlightPollResponses();
 
+		/* Poll type tab */
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
@@ -58,6 +59,7 @@
 			}
 		});
 
+		/* Replies tab */
 		$("#tabs-2").contentWidget({
 			validate: function() {
 				$('#choiceA').removeClass('error');
@@ -70,7 +72,20 @@
 				return isValid;
 			}
 		});
+		
+		/* Auto-sort tab */
+		$("#tabs-3").contentWidget({
+			validate: function() {
+				var pollKeywordTextfield = $("input[name='keyword']");
+				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||
+						pollKeywordTextfield.val().trim().length > 0;
+				if(isValid) pollKeywordTextfield.removeClass('error');
+				else pollKeywordTextfield.addClass('error');
+				return isValid;
+			}
+		});
 
+		/* Auto-reply tab */
 		$("#tabs-4").contentWidget({
 			validate: function() {
 				$('#tabs-4 textarea').removeClass("error");
