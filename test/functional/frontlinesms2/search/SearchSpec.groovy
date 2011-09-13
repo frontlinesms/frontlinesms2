@@ -136,8 +136,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#message-delete").click()
 		then:
 			at SearchingPage
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
-																'sent', 'send_pending', 'meeting at 11.00'])
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
+			waitFor { $('.flash').displayed }
+			
 	}
 	
 	private createTestGroups() {
