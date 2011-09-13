@@ -2,6 +2,7 @@ package frontlinesms2
 
 import groovy.time.*
 
+
 class Fmessage {
 	String src
 	String dst
@@ -139,7 +140,13 @@ class Fmessage {
 							'in'("messageOwner", search.owners)
 						}
 						if(search.startDate && search.endDate){
+							search.startDate.clearTime()
+							search.endDate.clearTime()
+							search.endDate = search.endDate.next()
 							between("dateReceived", search.startDate, search.endDate)
+						}
+						if(search.customFieldContacts) {
+							'in'("contactName", search.customFieldContacts)
 						}
 						if(!search.inArchive) {
 							eq('archived', false)

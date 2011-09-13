@@ -35,6 +35,12 @@ class SearchController {
 		search.inArchive = params.inArchive ? true : false
 		search.startDate = params.startDate?:null
 		search.endDate = params.endDate?:null
+		//Assumed that we only pass the customFields that exist
+		CustomField.findAll().each() {
+			if (params[it.name+'CustomField']){
+				search.customFields = search.customFields? search.customFields.add(it) : [it]
+			} 
+		}
 		search.save(failOnError: true, flush: true)
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)

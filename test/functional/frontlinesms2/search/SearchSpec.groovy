@@ -150,5 +150,6 @@ class SearchingPage extends geb.Page {
 		searchFrm { $('#search-details') }
 		searchBtn { $('#search-details .buttons .search') }
 		searchDescription { $('#search-description') }
+		searchMoreOptionLink { $('#more-search-options')}
 	}
 }
