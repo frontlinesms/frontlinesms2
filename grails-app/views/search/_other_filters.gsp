@@ -8,7 +8,7 @@
 		<g:checkBox name="inArchive" value="${search ? (search.inArchive ? true : null) : true}" />Include Archive
 	</li>
 	<li class="field" id='contact-name-field'>
-		<img src='${resource(dir:'images/icons', file:'contacts.gif')}'" /><h2>Contact Name:</h2>
+		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" id="contactString" value="${search?.contactString}"/>
 	</li>
 </ol>

@@ -26,6 +26,6 @@
 	$.ajax({
 		type:'GET',
 		url: url_root + 'status/trafficLightIndicator',
-		success: function(data){$('#indicator').attr("src", "../images/status_" + data + ".gif") }
+		success: function(data){$('#indicator').attr("src", "../images/status_" + data + ".png") }
 	});
 </script>

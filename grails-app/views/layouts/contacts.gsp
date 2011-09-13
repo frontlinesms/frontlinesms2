@@ -26,15 +26,15 @@
 					<div class="content-header">
 						<div  id="contact-title">
 							<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-								<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name}</h2>
 							</g:if>
 							<g:elseif test="${!contactInstance}">
-								<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>New Group</h2>
 							</g:elseif>
 							<g:else>
-								<img src='${resource(dir:'images/icons',file:'contacts.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
 								<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
 							</g:else>
 						</div>
