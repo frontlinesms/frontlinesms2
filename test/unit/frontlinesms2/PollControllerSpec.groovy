@@ -32,18 +32,5 @@ class PollControllerSpec extends ControllerSpec {
 			resultMap['groupList']["group1"].containsAll(["12345", "54321"])
 			resultMap['groupList']["group2"].containsAll(["54321"])
 	}
-
-	def "should archive a poll"() {
-		setup:
-			mockDomain(Poll, [new Poll(id: 2L, archived: false)])
-			controller.params.id = 2L
-		when:
-			controller.archive()
-		then:
-			Poll.get(2).archived
-			redirectArgs.controller == "message"
-			redirectArgs.action == "inbox"
-			controller.flash.message
-	}
 }
 
