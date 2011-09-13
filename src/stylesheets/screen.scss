@@ -594,7 +594,6 @@ body {
 						font-size: 14px;
 						padding-left: 17px;
 						padding-right: 17px;
-						a { float: right;}
 					}
 					
 					#message-date {
@@ -704,11 +703,6 @@ body {
 				#filter {
 					@include column(10, false);
 					@include horizontal-list;
-					text-align: bottom;
-				}
-					
-				#page-arrows {
-					@include column(14, true);
 					text-align: bottom;
 				}
 			}
@@ -875,8 +869,24 @@ label.header {
  margin: 0 0 10px 0;
 }
 
-#page-arrows a.disabled {
-	color: #AAAAAA;
+#page-arrows .nextLink {
+	background: url('../images/buttons/paginationright_default.png') no-repeat center right;
+	padding: 13px;
+}
+
+#page-arrows .prevLink {
+	background: url('../images/buttons/paginationleft_default.png') no-repeat center right;
+	padding: 13px;
+}
+
+#page-arrows .nextLink.disabled {
+	background: url('../images/buttons/paginationright_disabled.png') no-repeat center right;
+	padding: 13px;
+}
+
+#page-arrows .prevLink.disabled {
+	background: url('../images/buttons/paginationleft_disabled.png') no-repeat center right;
+	padding: 13px;
 }
 
 .error {

@@ -53,6 +53,28 @@ class GroupViewSpec extends GroupGebSpec {
 				assert it.@href ==~ '/frontlinesms2/group/show/\\d+/contact/show/\\d+'
 			}
 	}
+	
+	def 'group members list is paginated'() {
+		given:
+			createTestGroups()
+			createManyContacts()
+		when:
+			go "/frontlinesms2/group/show/${Group.findByName('Friends').id}"
+		then:
+			def contactList = $('#contact-list')
+			def contactNames = contactList.children().collect() {
+				it.text()
+			}
+			def expectedNames = (11..60).collect{"Contact${it}"}
+			assert contactNames == expectedNames
+	}
+	
+	static createManyContacts() {
+		(11..90).each {
+			def c = new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
+			c.addToGroups(Group.findByName('Friends')).save(failOnError:true)
+		}
+	}
 }
 
 class FriendsGroupPage extends geb.Page {

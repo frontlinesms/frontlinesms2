@@ -13,8 +13,8 @@ class MessageController {
 
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
-		params.archived = params.archived ? params.archived.toBoolean()  : false
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.archived = params.archived ? params.archived.toBoolean() : false
 		true
 	}
 
@@ -174,17 +174,20 @@ class MessageController {
 		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				def messageOwner
-				if (params.messageSection == 'poll') {
-					messageOwner = Poll.get(params.ownerId)
-				} else if (params.messageSection == 'folder') {
-					messageOwner = Folder.get(params.ownerId)
+				if (params.messageSection == 'poll')  {
+					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
+					unknownResponse.addToMessages(messageInstance).save()
 				}
-				if (messageOwner instanceof Poll) {
-					def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-					unknownResponse.addToMessages(messageInstance).save(failOnError: true, flush: true)
-				} else if (messageOwner instanceof Folder) {
-					messageOwner.addToMessages(messageInstance).save(failOnError: true, flush: true)
+				else if (params.messageSection == 'folder')
+					Folder.get(params.ownerId).addToMessages(messageInstance).save()
+				else {
+					messageInstance.with {
+						messageOwner?.removeFromMessages messageInstance
+						messageOwner = null
+						status = MessageStatus.INBOUND
+						messageOwner?.save()
+						save()
+					}
 				}
 			}
 		}
