@@ -140,7 +140,7 @@
 									max="${grailsApplication.config.grails.views.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
-					</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -28,7 +28,7 @@ class ContactListSpec extends ContactGebSpec {
 		then:
 			def c = $('#contact-list')
 			assert c.tag() == "div"
-			assert c.text() == 'You have no contacts saved'
+			assert c.text() == 'No contacts here!'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {

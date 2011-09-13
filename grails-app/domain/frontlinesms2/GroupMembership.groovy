@@ -39,6 +39,14 @@ class GroupMembership implements Serializable {
 	static void deleteFor(Group g) {
 		executeUpdate("DELETE FROM GroupMembership WHERE group=:group", [group: g])
 	}
+	
+	static getMembers(groupInstance, max, offset) {
+		GroupMembership.executeQuery("SELECT gm.contact FROM GroupMembership gm WHERE gm.group=:group", [group: groupInstance], [max: max, offset: offset])
+	}
+	
+	static countMembers(groupInstance) {
+		GroupMembership.executeQuery("SELECT gm.contact FROM GroupMembership gm WHERE gm.group=:group", [group: groupInstance]).size()
+	}
 
    static mapping = {
       id composite: ['group', 'contact']

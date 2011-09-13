@@ -43,6 +43,13 @@
 						<g:render template="contact_list"/>
 						<g:layoutBody />
 					</div>
+					<div class="content-footer">
+							<div id="page-arrows">
+								<g:paginate next="Next" prev="Back"
+									max="${grailsApplication.config.grails.views.pagination.max}"
+									action="list" total="${contactInstanceTotal}" params="${params}"/>
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>
