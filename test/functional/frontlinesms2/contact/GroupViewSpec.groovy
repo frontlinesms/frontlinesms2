@@ -34,7 +34,7 @@ class GroupViewSpec extends GroupGebSpec {
 		when:
 			to FriendsGroupPage
 		then:
-			contactsList.children().collect()*.text().sort() == ['Bobby', 'Duchamps']
+			contactsList.children()*.text().sort() == ['Bobby', 'Duchamps']
 	}
 
 	def 'Group members list has correct href when viewing corresponding group'() {

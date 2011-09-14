@@ -149,13 +149,3 @@ class BobsContactPage extends geb.Page {
 		groupsList { $('#groups-submenu') }
 	}
 }
-
-class ContactListPage extends geb.Page {
-	static url = 'contact'
-	static content = {
-		contactSelect(required:false) { $(".contact-select") }	
-		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
-		updateAll(required:false) { $("#update-all") }
-		flashMessage(required:false) { $('div.flash') }
-	}
-}
