@@ -4,6 +4,7 @@ function launchSmallPopup(title, html, btnFinishedText) {
 		{
 			modal: true,
 			width: 285,
+			height: auto,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],

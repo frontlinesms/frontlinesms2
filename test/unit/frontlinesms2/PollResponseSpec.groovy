@@ -5,7 +5,7 @@ import grails.plugin.spock.*
 
 class PollResponseSpec extends UnitSpec {
 
-	def 'PollResponse must have a response value'() {
+	def 'PollResponse must have a response value and a poll'() {
 		given:
 			mockForConstraintsTests(PollResponse)
 		when:
@@ -14,6 +14,7 @@ class PollResponseSpec extends UnitSpec {
 			!noResponse.validate()
 		when:
 			noResponse.value = 'something'
+			noResponse.poll = new Poll()
 		then:
 			noResponse.validate()
 	}
@@ -22,7 +23,7 @@ class PollResponseSpec extends UnitSpec {
 		given:
 			mockDomain(PollResponse)
 		when:
-			def r = new PollResponse(value:'yes')
+			def r = new PollResponse(value:'yes', poll: new Poll())
 		then:
 			r.validate()
 		when:

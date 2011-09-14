@@ -37,7 +37,7 @@
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
 
 .ui-dialog .ui-dialog-content {
-	overflow: hidden;
+	overflow: auto;
 }
 
 .ui-dialog .ui-dialog-buttonpane {

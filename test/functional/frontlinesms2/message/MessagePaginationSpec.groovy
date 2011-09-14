@@ -12,8 +12,8 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		then:
 			$("#messages tbody tr").size() == 50
 		when:
-			$("#page-arrows a", text: 'Next').click()
-			waitFor {$("a", text:"Back").displayed}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$("#messages tbody tr").size() == 1
 
@@ -27,12 +27,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			def element = $("#messages tr:nth-child(2) td:nth-child(3) a")
 			def expectedText = element.text()
 			element.click()
-			println $("#contact-name").text()
-			println expectedText
 			waitFor { $("#contact-name").text().contains(expectedText) }
 		then:
-			$("#page-arrows a", text: "Next").click()
-			waitFor {$("a", text:"Back").displayed}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$('#contact-name').text().contains( $(".selected td:nth-child(3) a").text())
 	}
@@ -44,10 +42,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/pending"
 		then:
 			$("#messages tbody tr").size() == 50
-			$("#page-arrows a", text:"Back").hasClass('disabled')
+			$(".prevLink").hasClass("disabled")
 		when:
-			$("#page-arrows a", text: 'Next').click()
-			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$("#messages tbody tr").size() == 1
 			$(".nextLink").hasClass("disabled")
@@ -61,10 +59,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/trash"
 		then:
 			$("#messages tbody tr").size() == 50
-			$("#page-arrows a", text:"Back").hasClass('disabled')
+			$(".prevLink").hasClass("disabled")
 		when:
-			$("#page-arrows a", text: 'Next').click()
-			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$("#messages tbody tr").size() == 1
 			$(".nextLink").hasClass("disabled")
@@ -77,10 +75,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/sent"
 		then:
 			$("#messages tbody tr").size() == 50
-			$("#page-arrows a", text:"Back").hasClass('disabled')
+			$(".prevLink").hasClass("disabled")
 		when:
-			$("a", text: 'Next').click()
-			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$("#messages tbody tr").size() == 1
 			$(".nextLink").hasClass("disabled")
@@ -94,10 +92,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "/frontlinesms2/message/folder/${folderId}"
 		then:
 			$("#messages tbody tr").size() == 50
-			$("#page-arrows a", text:"Back").hasClass('disabled')
+			$(".prevLink").hasClass("disabled")
 		when:
-			$("#page-arrows a", text: 'Next').click()
-			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$("#messages tbody tr").size() == 1
 			$(".nextLink").hasClass("disabled")
@@ -111,10 +109,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			go "message/poll/${pollId}"
 		then:
 			$("#messages tbody tr").size() == 50
-			$("#page-arrows a", text:"Back").hasClass('disabled')
+			$(".prevLink").hasClass("disabled")
 		when:
-			$("#page-arrows a", text: 'Next').click()
-			waitFor {!$("#page-arrows a", text:"Back").hasClass('disabled')}
+			$(".nextLink").click()
+			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
 			$("#messages tbody tr").size() == 1
 			$(".nextLink").hasClass("disabled")
