@@ -34,14 +34,15 @@
 							<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 								<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name}</h2>
 							</g:if>
 							<g:elseif test="${!contactInstance}">
-								<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>New Group</h2>
 							</g:elseif>
 							<g:else>
-								<img src='${resource(dir:'images/icons',file:'contacts.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
 								<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
 							</g:else>
 						</div>
@@ -51,6 +52,18 @@
 						<g:layoutBody />
 					</div>
 					<input id="contact-search" type="text" onkeyup="${remoteFunction(action:'search', update:'contacts-list', params:'\'searchString=\' + this.value + getGroupId()')}" value="${params.searchString}" />
+					<div class="content-footer">
+							<div id="page-arrows">
+								<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+									<g:set var="parameters" value="${[searchString:params.searchString,groupId:contactsSection.id]}" />
+								</g:if>
+								<g:else>
+									<g:set var="parameters" value="${[searchString:params.searchString]}" />
+								</g:else>
+								<g:paginate next="Next" prev="Back"  action="list" total="${contactInstanceTotal}" params="${parameters}"
+									max="${grailsApplication.config.grails.views.pagination.max}" />
+							</div>
+						</div>
 				</div>
 			</div>
 		</div>

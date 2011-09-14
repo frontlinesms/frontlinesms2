@@ -29,7 +29,7 @@
 				<div class="content">
 					<div id='search-header' class="content-header">
 						<div id="search-title">
-							<img src='${resource(dir:'images/icons',file:'search.gif')}' />
+							<img src='${resource(dir:'images/icons',file:'search.png')}' />
 							<h2>Search</h2>
 			  			</div>
 			  			<ol>

@@ -175,5 +175,22 @@ class ContactSpec extends UnitSpec {
         then:
         	!c.validate()
 	}
+	
+	def "should delete optional contact fields"() {
+		setup:
+			mockForConstraintsTests(Contact)
+        when:
+			def c = new Contact(name: "Tim", primaryMobile: "+0724 356271", secondaryMobile: "+44 53 356271", email: "tim@tim.com")
+        then:
+        	c.validate()
+        when:
+        	c.secondaryMobile = null
+        then:
+        	c.validate()
+        when:
+        	c.email = null
+        then:
+        	c.validate()
+	}
 }
 

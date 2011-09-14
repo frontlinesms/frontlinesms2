@@ -594,7 +594,6 @@ body {
 						font-size: 14px;
 						padding-left: 17px;
 						padding-right: 17px;
-						a { float: right;}
 					}
 					
 					#message-date {
@@ -706,11 +705,6 @@ body {
 					@include horizontal-list;
 					text-align: bottom;
 				}
-					
-				#page-arrows {
-					@include column(14, true);
-					text-align: bottom;
-				}
 			}
 		}
 	}
@@ -737,6 +731,9 @@ body {
 .error-panel {
 	text-align: center;
 	border: 2px solid #C03283;
+	position: relative;
+	left: 169px;
+	width: 70%;
 }
 
 .checked {
@@ -782,7 +779,7 @@ body {
 	margin: 10px 0 0 0
 }
 
-label.bold {
+label.field-enabled {
 	font-weight: bold;
 	color:#000 !important;
 }
@@ -872,6 +869,26 @@ label.header {
  margin: 0 0 10px 0;
 }
 
-#page-arrows a.disabled {
-	color: #AAAAAA;
+#page-arrows .nextLink {
+	background: url('../images/buttons/paginationright_default.png') no-repeat center right;
+	padding: 13px;
+}
+
+#page-arrows .prevLink {
+	background: url('../images/buttons/paginationleft_default.png') no-repeat center right;
+	padding: 13px;
+}
+
+#page-arrows .nextLink.disabled {
+	background: url('../images/buttons/paginationright_disabled.png') no-repeat center right;
+	padding: 13px;
+}
+
+#page-arrows .prevLink.disabled {
+	background: url('../images/buttons/paginationleft_disabled.png') no-repeat center right;
+	padding: 13px;
+}
+
+.error {
+	border: 1px solid red;
 }

@@ -136,8 +136,10 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	private createTestPollsAndFolders() {
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		new Fmessage(src:'Joe', dst:'+254987654', text:'eat more cow', messageOwner:'chickenResponse')
 		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
+		
 	}
 }
 

@@ -35,37 +35,37 @@
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'folders.png')}' />
 								<h2>${ownerInstance?.name}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'sent'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'sent.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'sent.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'pending'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'pending.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'pending.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'trash'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'trash.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'trash.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'radioShow'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'onair.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'onair.png')}' />
 								<h2>on air</h2>
 							</div>
 						</g:elseif>
 						<g:else>
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'inbox.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'inbox.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:else>
@@ -87,7 +87,7 @@
 							</g:if>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
-					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
+					        		<img src='${resource(dir:'images/icons',file:'quickmessage.png')}' />
 									Quick message
 								</g:remoteLink>
 							</li>
@@ -136,11 +136,11 @@
 								</li>
 							</ul>
 							<div id="page-arrows">
-								<g:paginate next="Next" prev="Back"
+								<g:paginate next=" " prev=" "
 									max="${grailsApplication.config.grails.views.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
-					</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -160,11 +160,11 @@
 	});
 
 	if($(".prevLink").size() == 0) {
-		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled>Back</a>');
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled></a>');
 	}
 
 	if($(".nextLink").size() == 0) {
-		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled>Next</a>');
+		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled></a>');
 	}
 
 

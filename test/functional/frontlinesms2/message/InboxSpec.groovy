@@ -116,7 +116,7 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
-			go "message/inbox/show/${message.id}"
+			go "message/inbox/show/$message.id"
 			$('#btn_reply').click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
@@ -156,7 +156,7 @@ class InboxSpec extends MessageGebSpec {
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
-			go "message/inbox/show/${message.id}"
+			go "message/inbox/show/$message.id"
 			waitFor{$("#btn_dropdown").displayed}
 			$("#btn_dropdown").click()
 			waitFor{$("#btn_forward").displayed}

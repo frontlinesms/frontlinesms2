@@ -18,7 +18,7 @@ class ContactController {
 
 	def list = {
 		def model = searchContacts()
-		params.contactId = params.contactId?:model.contactInstanceList[0]?.id
+		params.contactId = params.contactId ?: model.contactInstanceList[0]?.id
 		if(params.contactId) {
 			return redirect(action:'show', params:params)
 		} else {
@@ -30,7 +30,7 @@ class ContactController {
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
-		def groupInstance = params.groupId? Group.findById(params.groupId): null
+		def groupInstance = params.groupId ? Group.findById(params.groupId): null
 		params.groupName = groupInstance?.name
  		def results = GroupMembership.searchForContacts(params)
 		[contactInstanceList: results,
