@@ -12,6 +12,12 @@
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="contact/checked_contact.js"></g:javascript>
+		<g:javascript>
+		function getGroupId(){
+			var group = $('#groupId')
+			return group.length ? group.val() : ''
+		}
+		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
@@ -44,7 +50,7 @@
 						<g:render template="contact_list"/>
 						<g:layoutBody />
 					</div>
-					<input id="contact-search" type="text" onkeyup="${remoteFunction(action:'search', update:'contacts-list', params:'\'searchString=\' + this.value + \$(\'#groupId\').val()')}" />
+					<input id="contact-search" type="text" onkeyup="${remoteFunction(action:'search', update:'contacts-list', params:'\'searchString=\' + this.value + getGroupId()')}" value="${params.searchString}" />
 				</div>
 			</div>
 		</div>

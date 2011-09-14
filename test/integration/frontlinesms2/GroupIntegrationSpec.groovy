@@ -39,12 +39,16 @@ class GroupIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			samJones.addToGroups(fpGroup,true)
 			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
 		when:
-			def results = GroupMembership.searchForContacts([groupName:fpGroup.name,contactName:"Sam"])
+			def results = GroupMembership.searchForContacts([groupName:fpGroup.name,searchString:"Sam",max:50, offset:0])
+			def resultsCount = GroupMembership.countForContacts([groupName:fpGroup.name,searchString:"Sam"])
 		then:
 			assert results == [samAnderson, samJones]
+			assert resultsCount == 2
 		when:
-			results = GroupMembership.searchForContacts([contactName:"Sam"])
+			results = GroupMembership.searchForContacts([searchString:"Sam",max:50, offset:0])
+			resultsCount = GroupMembership.countForContacts([searchString:"Sam"])			
 		then:
 			assert results == [samAnderson, samJones, samTina]
+			assert resultsCount == 3
 	}
 }
