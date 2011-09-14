@@ -11,7 +11,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		controller = new SearchController()
 		firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
 		secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
-		thirdContact = new Contact(name:"", primaryMobile:'+666666666').save(failOnError:true)
+		thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
 		group = new Group(name:'test').save(failOnError:true)
 		
 		//message in the same day will still be return even if in the future
@@ -19,7 +19,8 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		futureDate.hours = futureDate.hours + 1
 		
 		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00', archived: true),
-				new Fmessage(src:'+254987654', dst:'+666666666', text:'finaly i stay in bed'),
+				new Fmessage(src:'+254987654', dst:'+6645666666', text:'finaly i stay in bed'),
+				//new Fmessage(src:'+666666666', dst:'+254987654', text:'finaly i stay in bed'),
 				new Fmessage(src:'+254111222', dst:'+254937634', dateReceived: futureDate, text:'work is awesome'),
 				new Fmessage(src:'Bob', dst:'+254987654', dateReceived: new Date()-5, text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', dateReceived: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
@@ -30,8 +31,9 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
 				new CustomField(name:'like', value:'cake', contact: secondContact),
 				new CustomField(name:'ik', value:'car', contact: secondContact),
-				new CustomField(name:'like', value:'cake', contact: secondContact),
-				new CustomField(name:'dob', value:'12/06/79', contact: secondContact)].each {
+				new CustomField(name:'like', value:'ake', contact: thirdContact),
+				new CustomField(name:'dob', value:'12/06/79', contact: secondContact),
+				new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', status:MessageStatus.INBOUND)].each {
 			it.save(failOnError:true)
 		}
 
@@ -63,7 +65,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList.size() == 8
+			model.messageInstanceList.size() == 9
 	}
 
 	def "message searches can be restricted to a poll"() {
@@ -92,7 +94,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 8
+			model.messageInstanceTotal == 9
 			model.messageInstanceList.every {it.status == MessageStatus.INBOUND}
 	}
 
@@ -188,7 +190,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.endDate = new Date()
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 5
+			model.messageInstanceTotal == 6
 		when:
 			controller.params.startDate = new Date()-6
 			controller.params.endDate = new Date()-3
@@ -206,7 +208,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params.endDate = new Date()
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 7
+			model.messageInstanceTotal == 8
 	}
 	
 	def "only return message with custom fields"() {
@@ -214,14 +216,18 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			controller.params['cityCustomField'] = 'Paris'
 			//controller.params.inArchive = true
 			def model = controller.result()
-			println("the fmessage.contactName is "+Fmessage.findBySrcLike("+254987654").contactName)
+			//println("the fmessage.contactName is "+Fmessage.findBySrcLike("+254987654").contactName)
 		then:
-			model.messageInstanceTotal == 1
+			model.messageInstanceList == Fmessage.findAllByContactNameLikeAndArchived('Alex', false)
+			//model.messageInstanceTotal == 1
 		when:
-			//controller.params['cityCustomField'] = 'Paris'
+			controller.params['cityCustomField'] = ''
 			controller.params['likeCustomField'] = 'ak'
 		    model = controller.result()
 		then:
+			//println(model.messageInstanceList.toString()+" "+model.messageInstanceList.src+" => "+model.messageInstanceList.dst)
+			//println("toto message: "+Fmessage.findByDst('+666666666').contactName)
+			//model.messageInstanceList == Fmessage.findAllByDst('+666666666')+ Fmessage.findAllBySrc('+254333222')
 			model.messageInstanceTotal == 2
 		when:
 			controller.params['cityCustomField'] = ''
@@ -231,14 +237,15 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		then:
 			model.messageInstanceTotal == 1
 		when:
+			controller.params['dobCustomField'] = ''
 			controller.params['cityCustomField'] = 'sometingthatdoesntexit'
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 0
 		when:
-			controller.params['dobCustomField'] = ''
+			controller.params['cityCustomField'] = ''
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 7
+			model.messageInstanceTotal == 8
 	}
 }
