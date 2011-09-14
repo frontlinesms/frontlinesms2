@@ -145,7 +145,7 @@ class Fmessage {
 							search.endDate = search.endDate.next()
 							between("dateReceived", search.startDate, search.endDate)
 						}
-						if(search.customFieldContactList) {
+						if(search.usedCustomField) {
 							'in'("contactName", search.customFieldContactList)
 						}
 						if(!search.inArchive) {

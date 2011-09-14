@@ -120,6 +120,14 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#no-search-description").text() == "Start new search on the left"
 	}
 	
+	def "should expand the expand more options"(){
+		when:
+			to SearchingPage
+			searchMoreOptionLink.click()
+		then:
+			waitFor { $("#custom-field-field-city").displayed }
+	}
+	
 	private createTestGroups() {
 		new Group(name: 'Listeners').save(flush: true)
 		new Group(name: 'Friends').save(flush: true)

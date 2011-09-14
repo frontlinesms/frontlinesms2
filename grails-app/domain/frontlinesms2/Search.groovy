@@ -12,6 +12,7 @@ class Search {
 	String status
 	Date startDate
 	Date endDate
+	Map usedCustomField
 	List customFieldContactList
 	boolean inArchive
 	
@@ -25,6 +26,7 @@ class Search {
 		status(nullable: true)
 		startDate(nullable: true)
 		endDate(nullable: true)
+		usedCustomField(nullable: true)
 		customFieldContactList(nullable:true)
 		inArchive(nullable: true)
 	}
