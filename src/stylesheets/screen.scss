@@ -421,7 +421,8 @@ body {
 					margin-right: 0px;
 					display: block;
 					border-top: 1px solid #9E9E9E;
-					
+					overflow-y: scroll;
+				  	height:75%;
 					li { height: 26px; }
 					a {
 						height: 26px;
@@ -704,6 +705,9 @@ body {
 					@include column(10, false);
 					@include horizontal-list;
 					text-align: bottom;
+				}
+				input {
+				float:left
 				}
 			}
 		}
