@@ -18,13 +18,24 @@
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 	</li>
-	<g:each var="customField" in="${customFieldInstanceList}">
-		<li class="field" id="custom-field-field-${customField.name}">
-			<h2>${customField.name}:</h2><br>
-			<g:textField name="${customField.name}" />
-			<a onclick="toggleCustomField('${customField.name}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
-		</li>
-	</g:each>
+	<g:if test="${search==null}">
+		<g:each var="customField" in="${customFieldList}">
+			<li class="field" id="custom-field-field-${customField}">
+				<h2>${customField}:</h2><br>
+				<g:textField name="${customField}CustomField" />
+				<a onclick="toggleCustomField('${customField}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+			</li>
+		</g:each>
+	</g:if>
+	<g:else>
+		<g:each var="customField" in="${search.usedCustomField}">
+			<li class="field" id="custom-field-field-${customField.key}">
+				<h2>${customField.key}:</h2><br>
+				<g:textField name="${customField.key}CustomField" value="${customField.value}"/>
+				<a onclick="toggleCustomField('${customField.key}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+			</li>
+		</g:each>
+	</g:else>
 </ol>
 <h2>
 	<a id="more-search-options"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
@@ -34,9 +45,9 @@
 	<li id="field-link-contact-name">
 		<a onclick="toggleContactNameField()">Contact Name</a>
 	</li>
-	<g:each var="customField" in="${customFieldInstanceList}">
-		<li id="custom-field-link-${customField.name}">
-			<a onclick="toggleCustomField('${customField.name}')">${customField.name}</a>
+	<g:each var="customField" in="${customFieldList}">
+		<li id="custom-field-link-${customField}">
+			<a onclick="toggleCustomField('${customField}')">${customField}</a>
 		</li>
 	</g:each>
 </ol>

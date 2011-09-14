@@ -13,7 +13,7 @@ class SearchController {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
-				customFieldInstanceList : CustomField.findAll(),
+				customFieldList : CustomField.getAllUniquelyNamed(),
 				messageSection: 'search']
 	}
 
@@ -36,19 +36,28 @@ class SearchController {
 		search.startDate = params.startDate?:null
 		search.endDate = params.endDate?:null
 		//Assumed that we only pass the customFields that exist
-		def usedCustomField = [:]
+		search.usedCustomField = [:]
 		CustomField.getAllUniquelyNamed().each() {
-			if (params[it+'CustomField'] && params[it+'CustomField']!=''){
-				usedCustomField[it] = params[it+'CustomField']
-			} 
-		}
+			if (params[it+'CustomField']){
+				search.usedCustomField[it] = params[it+'CustomField']
+			} else {
+				search.usedCustomField[it] = ''
+			}
+		} 
+		println(search.usedCustomField)
 		//usedCustomField.each(){ println "${it}"}
 		search.customFieldContactList = []
-		usedCustomField?.each { name, value ->
-			search.customFieldContactList = search.customFieldContactList + CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+		if (search.usedCustomField) {
+			search.usedCustomField?.each { name, value ->
+				//use interserct with each custom field list
+				//search.customFieldContactList?  CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name : []
+				if (value) {
+					println("one is "+ CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+					search.customFieldContactList = search.customFieldContactList + CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+				}
+			}
+			search.println("List of contact that match"+search.customFieldContactList)
 		}
-		search.println("List of contact that match"+search.customFieldContactList)
-		
 		search.save(failOnError: true, flush: true)
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)

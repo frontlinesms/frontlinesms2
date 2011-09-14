@@ -230,5 +230,15 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 1
+		when:
+			controller.params['cityCustomField'] = 'sometingthatdoesntexit'
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 0
+		when:
+			controller.params['dobCustomField'] = ''
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 7
 	}
 }
