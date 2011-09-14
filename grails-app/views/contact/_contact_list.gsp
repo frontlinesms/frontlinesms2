@@ -18,7 +18,13 @@
 				</li>
 			</g:each>
 		</ol>
-			<g:paginate next="Forward" prev="Back"  action="list" total="${contactInstanceTotal}"/>
+			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+				<g:set var="parameters" value="${[searchString:params.searchString,groupId:contactsSection.id]}" />
+			</g:if>
+			<g:else>
+				<g:set var="parameters" value="${[searchString:params.searchString]}" />
+			</g:else>
+			<g:paginate next="Forward" prev="Back"  action="list" total="${contactInstanceTotal}" params="${parameters}"/>
 	</g:if>
 	<g:else>
 		<div id="contact-list">

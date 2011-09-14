@@ -41,9 +41,15 @@ class GroupMembership implements Serializable {
 	}
 	
 	static def searchForContacts(params) {
-		def searchString = "${params.contactName}%"
-		params.groupName ? GroupMembership.findAll("from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}"]).collect{it[1]} :
-		Contact.findAllByNameIlike(searchString)
+		def searchString = "%${params.searchString?:''}%"
+		params.groupName ? GroupMembership.findAll("from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}", max:params.max?.toInteger(), offset:params.offset?.toInteger()]).collect{it[1]} :
+		Contact.findAllByNameIlike(searchString, params)
+	}
+	
+	static def countForContacts(params) {
+		def searchString = "%${params.searchString?:''}%"
+		params.groupName ? GroupMembership.executeQuery("select count(c) from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}"])[0] :
+		Contact.countByNameIlike(searchString)
 	}
 
    static mapping = {
