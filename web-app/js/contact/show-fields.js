@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	$("#custom-field-list li a.remove-field").click(removeFieldClickAction);
 	$("#new-field-dropdown").change(addFieldClickAction);
+	$("div.basic-info a.remove-field").click(clearField);
 });
 
 function customFieldPopup(data) {
@@ -92,4 +93,13 @@ function createCustomField_submit() {
 function createCustomField_cancel() {
 	$("#custom-field-popup").remove();
 	return false;
+}
+
+function clearField() {
+	if($(this).attr('id')) {
+		var field = $(this).attr('id').substring('remove-'.length);
+		$('#' + field).val('');
+		$(this).hide()
+		$(this).next().hide()
+	}		
 }

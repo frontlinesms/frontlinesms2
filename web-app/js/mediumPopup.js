@@ -29,7 +29,7 @@ function launchMediumPopup(title, html, btnFinishedText) {
 			width: 675,
 			height: 500,
 			title: title,
-			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
 			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
 			close: function() { $(this).remove(); }
 		}
@@ -47,6 +47,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 		height: 500,
 		buttons: [
 			{ text:"Cancel", click: cancel, id:"cancel" },
+			{ text:"Back", id:"disabledBack", disabled: true },
 			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
 			{ text:"Done",  click: cancel, id:"confirmation" },
@@ -78,32 +79,30 @@ function prevButton() {
 }
 
 function nextButton() {
-	if(validateCurrentTab()) {
-		for (var i = 1; i <= getTabLength(); i++) {
-			var nextTabToSelect = getCurrentTab() + i;
-			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+	for (var i = 1; i <= getTabLength(); i++) {
+		var nextTabToSelect = getCurrentTab() + i;
+		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
 				$("#tabs").tabs('select', nextTabToSelect);
 				break;
 			}
 		}
-	}
 }
 
 function done() {
 	if(validateWholeTab() && onDoneOfCurrentTab()) {
 		$(this).find("form").submit();                  
 		$(this).remove();
-	}
+	} 
 }
 
 function validateWholeTab() {
 	var isValid = true
 	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
-		isValid = isValid && $("#" + value.id).contentWidget('validate')
-
+		isValid =  validateTab($("#" + value.id)) && isValid
 	});
   	return isValid
 }
+
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
 	$.each(buttonToTabIndexMapping, function(key, value) {
@@ -141,20 +140,22 @@ function getButtonToTabIndexMapping(withConfirmationScreen) {
 			"prevPage": range(1, withConfirmationScreen ? getTabLength() - 1 : getTabLength()),
 			"nextPage": range(0, withConfirmationScreen ? getTabLength() - 2 : getTabLength() - 1),
 			"done": withConfirmationScreen ? [getTabLength() - 1] : [getTabLength()],
-			"confirmation": withConfirmationScreen ? [getTabLength()] : []
+			"confirmation": withConfirmationScreen ? [getTabLength()] : [],
+			"disabledBack": [0]
 		}
 }
 
 function validateCurrentTab() {
-	var selected = $("#tabs").tabs( "option", "selected" );
-	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
-	return currentTab.contentWidget("validate")
+	return validateTab(getCurrentTabWidget())
 }
 
 function onDoneOfCurrentTab() {
+	return getCurrentTabWidget().contentWidget("onDone")
+}
+
+function getCurrentTabWidget() {
 	var selected = $("#tabs").tabs( "option", "selected" );
-	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
-	return currentTab.contentWidget("onDone")
+	return $("#tabs").find('.ui-tabs-panel').eq(selected)
 }
 
 function movingForward(nextIndex, currentIndex) {
@@ -165,6 +166,7 @@ function onTabSelect(withConfirmationScreen) {
 	$('#tabs').tabs({select: function(event, ui) {
 		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
 		if (isValid) {
+			$('.error-panel') && $('.error-panel').hide();
 			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
 		}
 		return isValid
@@ -176,4 +178,13 @@ function initializeTabContentWidgets() {
 		$("#tabs-" + (i + 1)).contentWidget()
 	}
 }
+
+function validateTab(tab) {
+	var isValid = tab.contentWidget('validate');
+	if(!isValid) {
+		$('.error-panel').show();
+	}
+	return isValid;
+}
+
 

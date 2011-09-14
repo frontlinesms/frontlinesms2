@@ -7,289 +7,350 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class PollSpec extends frontlinesms2.poll.PollGebSpec {
-		def 'message from alice is first in the list, and links to the show page'() {
-			given:
-				createTestPolls()
-				createTestMessages()
-				def message = Fmessage.findBySrc('Alice')
-				def poll = Poll.findByTitle('Football Teams')
-			when:
-				to PollShowPage
-				def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/${poll.id}/show/${message.id}")
-			then:
-				firstMessageLink.text() == 'Alice'
-		}
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+	
+	def 'message from alice is first in the list, and links to the show page'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+			def message = Fmessage.findBySrc('Alice')
+			def poll = Poll.findByTitle('Football Teams')
+		when:
+			to PollShowPage
+			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
+		then:
+			firstMessageLink.text() == 'Alice'
+	}
 
-		def 'selected message and its details are displayed'() {
-			given:
-				createTestPolls()
-				createTestMessages()
-				def message = Fmessage.findBySrc('Alice')
-				def poll = Poll.findByTitle('Football Teams')
-			when:
-				to PollShowPage
-				def formatedDate = dateToString(message.dateCreated)
-			then:
-				$('#message-details #contact-name').text() == message.src
-				$('#message-details #message-date').text() == formatedDate
-				$('#message-details #message-body').text() == message.text
-		}
+	def 'selected message and its details are displayed'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+			def message = Fmessage.findBySrc('Alice')
+		when:
+			to PollShowPage
+		then:
+			$('#message-details #contact-name').text() == message.src
+			$('#message-details #message-date').text() == DATE_FORMAT.format(message.dateCreated)
+			$('#message-details #message-body').text() == message.text
+	}
 
-		def 'selected message is highlighted'() {
-			given:
-				createTestPolls()
-				createTestMessages()
-				def poll = Poll.findByTitle('Football Teams')
-				def aliceMessage = Fmessage.findBySrc('Alice')
-				def bobMessage = Fmessage.findBySrc('Bob')
-			when:
-				to PollShowPage
-			then:
-				$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${aliceMessage.id}"
-			when:
-				go "message//poll/${poll.id}/show/${bobMessage.id}"
-			then:
-				$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/poll/${poll.id}/show/${bobMessage.id}"
-		}
-		
-		def 'activities should also list message counts'() {
-			given:
-				createTestPolls()
-				createTestMessages()
-			when:
-				to PollShowPage
-			then:
-				$('#activities-submenu li')[0].text() ==  'Football Teams'
-				$('#activities-submenu li')[1].text() ==  'Shampoo Brands'
-				$('#activities-submenu li')[2].text() ==  'Rugby Brands'
-		}
+	def 'selected message is highlighted'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+			def poll = Poll.findByTitle('Football Teams')
+			def aliceMessage = Fmessage.findBySrc('Alice')
+			def bobMessage = Fmessage.findBySrc('Bob')
+		when:
+			to PollShowPage
+		then:
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$aliceMessage.id"
+		when:
+			go "message/poll/$poll.id/show/$bobMessage.id"
+		then:
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$bobMessage.id"
+	}
+	
+	def 'activities should also list message counts'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollShowPage
+		then:
+			$('#activities-submenu li')[0..2]*.text() == ['Football Teams', 'Shampoo Brands', 'Rugby Brands']
+	}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
-			go "message"
+			launchPollPopup('standard', null)
 		then:
-			launchPollPopup()
-			$("input", name:'poll-type').value("standard")
-			$("input", value:'standard').jquery.trigger('click')
+			errorMessage.displayed
 		when:
+			pollForm.question = "question"
+			pollForm.'collect-responses' = 'no-message'
 			$("a", text:"Confirm").click()
-			waitFor { $('#tabs-5').displayed }
-			$("input", name:'title').value("POLL NAME")
-			$("#done").click()
-			waitFor {$("#confirmation").displayed}
+		then:
+			waitFor { confirmationTab.displayed }
+		when:
+			pollForm.title = "POLL NAME"
+			done.click()
+		then:
+			waitFor { $("#confirmation").displayed }
+		when:
 			$("#confirmation").click()
 		then:
-			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes","No", "Unknown")
+			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
+	}
+	
+	def "should require keyword if sorting is enabled"() {
+		when:
+			launchPollPopup()
+		then:
+			waitFor { autoSortTab.displayed }
+			pollForm.keyword().disabled
+		when:
+			pollForm.enableKeyword = 'true'
+			!pollForm.keyword
+		then:
+			waitFor { !pollForm.keyword().disabled }
+			!pollForm.keyword
+		when:
+			next.click()
+		then:
+			waitFor { errorMessage.displayed }
+			pollForm.keyword().hasClass('error')
+			autoSortTab.displayed
+		when:
+			pollForm.keyword = 'trigger'
+			next.click()
+		then:
+			waitFor { autoReplyTab.displayed }
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
-			go "message"
+			launchPollPopup('standard', 'question', false)
 		then:
-			launchPollPopup()
-			$("input", name:'poll-type').value("standard")
-			$("input", value:'standard').jquery.trigger('click')
-			$("input", name:"collect-responses").value('no-message')
+			waitFor { autoSortTab.displayed }
 		when:
-			$("#nextPage").click()
-			waitFor { $('#tabs-3 ').displayed }
-			$("#nextPage").click()
-			waitFor { $('#tabs-5 ').displayed }
+			next.click()
 		then:
-			$("#tabs li")[1].hasClass("ui-state-disabled")
-			$("#tabs li")[3].hasClass("ui-state-disabled")
-			$('#tabs-5 ').displayed
+			waitFor { autoReplyTab.displayed }
 		when:
-			$("#prevPage").click()
-			waitFor { $('#tabs-3 ').displayed }
+			next.click()
 		then:
-			$("#tabs-3").displayed
+			waitFor { confirmationTab.displayed }
+			responseListTabLink.hasClass("ui-state-disabled")
+			selectRecipientsTabLink.hasClass("ui-state-disabled")
 		when:
-			$("#prevPage").click()
-			waitFor { $('#tabs-1 ').displayed }
+			prev.click()
 		then:
-			$("#tabs-1").displayed
+			waitFor { autoReplyTab.displayed }
+		when:
+			prev.click()
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			prev.click()
+		then:
+			waitFor { enterQuestionTab.displayed }
 	}
 
 
 	def "should move to the next tab when multiple choice poll is selected"() {
 		when:
-			go "message"
-		then:
-			launchPollPopup()
-			$("input", name:'poll-type').value("multiple")
-			$("input", value:'multiple').jquery.trigger('click')
-		when:
-			$("#nextPage").click()
-			waitFor { $('#tabs-2').displayed }
-		then:
-			$('#tabs-2').displayed 
+			launchPollPopup('multiple')
+		then:	
+			waitFor { responseListTab.displayed }
 	}
 
 	def "should remain in the same tab when auto-reply text is empty"() {
 		when:
-			go "message"
-		then:
 			launchPollPopup()
-			$("input", name:'poll-type').value("standard")
-			$("input", value:'standard').jquery.trigger('click')
-		when:
-			$("#nextPage").click()
-			waitFor { $('#tabs-3').displayed }
 		then:
-			$('#tabs-3').displayed
+			waitFor { autoSortTab.displayed }
 		when:
-			assert $("#tabs-3 textarea").@disabled
-			$("#send_auto_reply").jquery.trigger('click')
-			$("#nextPage").click()
-			sleep(500)
-			$('#tabs-3').displayed
-			$("#tabs li")[4].click()
-			waitFor { $('#tabs-3').displayed }
+			next.click()
 		then:
-			$('#tabs-3').displayed
+			waitFor {
+				println "autoreply text: ${$('textarea', name:'autoReplyText')}"
+				autoReplyTab.displayed
+			}
+			pollForm.autoReplyText().@disabled
+		when:
+			pollForm.enableAutoReply = true
+			next.click()
+		then:
+			autoReplyTab.displayed
+		when:
+			selectRecipientsTabLink.click()
+		then:
+			waitFor { errorMessage.displayed }
+			autoReplyTab.displayed
 	}
 
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
 		when:
-			go "message"
+			launchPollPopup('multiple', 'question')
 		then:
-			launchPollPopup()
-			$("input", name:'poll-type').value("multiple")
-			$("input", value:'multiple').jquery.trigger('click')
+			waitFor { responseListTab.displayed }
 		when:
-			$("#nextPage").click()
-			waitFor { $('#tabs-2').displayed }
-			$("#nextPage").click()
-			sleep(500)
+			next.click()
 		then:
-			$('#tabs-2').displayed
+			waitFor { errorMessage.displayed }
+			responseListTab.displayed
 	}
 
 	def "should not proceed when the poll is not named"() {
 		when:
-			go "message"
+			launchPollPopup('standard', 'question', false)
 		then:
-			launchPollPopup()
-			$("input", name:'poll-type').value("standard")
-			$("input", value:'standard').jquery.trigger('click')
-			$("input", name:"collect-responses").value('no-message')
+			waitFor { autoSortTab.displayed }
 		when:
-			$("#nextPage").click()
-			waitFor { $('#tabs-3').displayed }
+			next.click()
 		then:
-			$('#tabs-3').displayed
+			waitFor { autoReplyTab.displayed }
 		when:
-			$("#nextPage").click()
-			waitFor { $('#tabs-5').displayed }
-			$("#done").click()
+			next.click()
 		then:
-			$('#tabs-5').displayed
-				
+			waitFor { confirmationTab.displayed }
+		when:
+			done.click()
+		then:
+			waitFor { errorMessage.displayed }
+			confirmationTab.displayed
 	}
 
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
-			go "message"
-			launchPollPopup()
-			$("input", name:'poll-type').value("multiple")
-            $("textarea", name:'question').value("How often do you drink coffee?")
-			$("#nextPage").click()
+			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
-			waitFor {$('#tabs-2').displayed}
-			$("label[for='choiceA']").hasClass('bold') == false
-			$("label[for='choiceA']").hasClass('bold') == false
+			waitFor { responseListTab.displayed }
+			choiceALabel.hasClass('field-enabled')
+			choiceBLabel.hasClass('field-enabled')
+			!choiceCLabel.hasClass('field-enabled')
+			!choiceDLabel.hasClass('field-enabled')
+			!choiceELabel.hasClass('field-enabled')
 		when:
-			$("input", name:'instruction').value("Reply A,B etc")
-            keyInData('choiceA', "Never")
-            keyInData('choiceB',"Once a day")
-            keyInData('choiceC', "Twice a day")
-            $("#nextPage").click()
+			pollForm.choiceA = 'Never'
+			pollForm.choiceB = 'Once a day'
 		then:
-			$("label[for='choiceA']").hasClass('bold') == true
-			$("label[for='choiceA']").hasClass('bold') == true
-			waitFor {$('#tabs-3').displayed}
+			waitFor { choiceCLabel.hasClass('field-enabled') }
 		when:
-			assert $("#tabs-3 textarea").@disabled
-			$("#send_auto_reply").jquery.trigger('click')
-			$("#tabs-3 textarea", name:'autoReplyText').value("Thanks for participating...")
-			$("#send_auto_reply").jquery.trigger('click')
-			assert $("#tabs-3 textarea").@disabled
-			$("#send_auto_reply").jquery.trigger('click')
-			$("#tabs-3 textarea", name:'autoReplyText').value("Thanks for participating...")
-			$("#nextPage").click()
+			pollForm.choiceC = 'Twice a day'
 		then:
-			waitFor {$('#tabs-4').displayed}
+			waitFor { choiceDLabel.hasClass('field-enabled') }
+			next.click()
+		then:
+			waitFor { autoSortTab.displayed }
 		when:
-			$("#nextPage").click()
+			next.click()
 		then:
-			waitFor { $('#tabs-5 ').displayed }
-            $("input", name:'title').value("Cofee Poll")
-            $("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
-            $("#confirm-recepients-count").text() == "0 contacts selected (0 messages will be sent)"
-            $("#auto-reply-read-only-text").text() == "Thanks for participating..."
+			waitFor { autoReplyTab.displayed }
+			pollForm.autoReplyText().@disabled
 		when:
-			$("#done").click()
-			waitFor {$("#confirmation").displayed}
-			$("#confirmation").click()
+			pollForm.enableAutoReply = true
+			pollForm.autoReplyText = "Thanks for participating..."
+			pollForm.enableAutoReply = false
+		then:	
+			pollForm.autoReplyText == "Thanks for participating..."
+			pollForm.autoReplyText().@disabled
+		when:
+			pollForm.enableAutoReply = true
+			next.click()
 		then:
-			Poll.findByTitle("Cofee Poll")
+			waitFor { selectRecipientsTab.displayed }
+		when:
+			next.click()
+		then:
+			waitFor { errorMessage.displayed }
+		when:
+			pollForm.address = '1234567890'
+			addManualAddress.click()
+		then:
+			waitFor { $('.manual').displayed }
+		when:
+			next.click()
+		then:
+			waitFor { confirmationTab.displayed }
+			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
+			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
+		when:
+			pollForm.title = "Coffee Poll"
+			done.click()
+		then:
+			waitFor { Poll.findByTitle("Coffee Poll") }
 	}
 
 	def "should launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			go "message"
+			to MessagePage
 			$("a", text: "Who is badder?").click()
-			waitFor{title == "Poll"}
-			$("#poll-actions").value("export")
-			$("#poll-actions").jquery.trigger("change")
-			waitFor {$("#ui-dialog-title-modalBox").displayed}
 		then:
-			$("#ui-dialog-title-modalBox").displayed
+			waitFor { title == "Poll" }
+		when:
+			$("#poll-actions").value("export")
+		then:	
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
 
-	def "should be able to rename an activity"() {
-		setup:
+	def "should be able to rename a poll"() {
+		given:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
-			go "message"
+			to MessagePage
 			$("a", text: "Who is badder?").click()
-			waitFor{title == "Poll"}
+		then:
+			waitFor { title == "Poll" }
+		when:
 			$("#poll-actions").value("renameActivity")
-			$("#poll-actions").jquery.trigger("change")
-			waitFor {$("#ui-dialog-title-modalBox").displayed}
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
 			$("#title").value("Rename poll")
 			$("#done").click()
-			sleep(1000)
 		then:
+			waitFor { $("a", text: 'Rename poll') }
 			!$("a", text: "Who is badder?")
-			$("a", text: 'Rename poll')
-
-
 	}
 
-	def keyInData(String selector, String value) {
-		def element = $("input", name:selector)
-		element.value(value)
-		element.jquery.trigger('blur')
-	}
-
-	def launchPollPopup() {
-		$("#create-activity a").click()
-		waitFor {$('#tabs-1').displayed}
+	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
+		to MessagePage
+		createActivityButton.click()
+		waitFor { createActivityDialog.displayed }
 		$("input", name: "activity").value("poll")
 		$("#done").click()
-		waitFor {$("#ui-dialog-title-modalBox").text() == "Create Poll"}
+		waitFor { at PollCreatePage }
+		pollForm.'poll-type' = pollType
+		if(question) pollForm.question = question
+		pollForm."collect-responses" = !enableMessage
+		next.click()
 	}
+}
 
-	String dateToString(Date date) {
-		DateFormat formatedDate = createDateFormat();
-		return formatedDate.format(date)
+class MessagePage extends geb.Page {
+	static url = "message"
+	static content = {
+		createActivityButton { $("#create-activity a") }
+		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
 	}
+}
 
-	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+class PollCreatePage extends geb.Page {
+	static at = { 
+		$("#ui-dialog-title-modalBox").text() == "Create Poll"
+	}
+	static content = {
+		tabMenu { $("#tabs li") }
+		
+		enterQuestionTab { $("#tabs-1") }
+		responseListTab { $("#tabs-2") }
+		responseListTabLink { tabMenu[1] }
+		autoSortTab { $("#tabs-3") }
+		autoReplyTab { $("#tabs-4") }
+		selectRecipientsTab { $("#tabs-5") }
+		selectRecipientsTabLink { tabMenu[4] }
+		confirmationTab { $("#tabs-6") }
+		
+		next { $("#nextPage") }
+		prev { $("#prevPage") }
+		done { $("#done") }
+		
+		pollForm { $('form', name:'poll-details') }
+
+		choiceALabel { $('label', for:'choiceA') }
+		choiceBLabel { $('label', for:'choiceB') }
+		choiceCLabel { $('label', for:'choiceC') }
+		choiceDLabel { $('label', for:'choiceD') }
+		choiceELabel { $('label', for:'choiceE') }
+		
+		addManualAddress { $('.add-address') }
+		
+		errorMessage(required:false) { $('.error-panel') }
 	}
 }
 

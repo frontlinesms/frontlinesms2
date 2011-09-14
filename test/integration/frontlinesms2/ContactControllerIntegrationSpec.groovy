@@ -66,17 +66,6 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.response.redirectedUrl == "/contact/show/${c.id}?max=10&sort=name"
 	}
 
-	def 'when showing a group, the first contact in the group is selected if none is specified'() {
-		given:
-			makeGroupMember()
-			controller.params.groupId = g.id
-			controller.params.contactId = null
-		when:
-			controller.list()
-		then:
-			controller.response.redirectedUrl == "/group/show/${g.id}/contact/show/${c.id}?max=10&sort=name"
-	}
-
 	def "adding and removing a contact from the same group triggers error"() {
 		given:
 			controller.params.contactId = c.id
@@ -147,5 +136,21 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			model.sharedGroupInstanceList == [group1, group2]
 			model.nonSharedGroupInstanceList == [g]
+	}
+	
+	def "should update contact when optional fields are removed" () {
+		given: 
+			def tom = new Contact(name: 'Tom', primaryMobile: '09876543', secondaryMobile:'23456789', email: 'tom@tom.com').save(failOnError: true, flush: true)
+		when:
+			controller.params.contactId = tom.id
+			controller.params.groupsToAdd = ","
+			controller.params.groupsToRemove = ","
+			controller.params.fieldsToAdd = ","
+			controller.params.fieldsToRemove = ","
+			tom.secondaryMobile = null
+			controller.update()	
+			tom.refresh()		
+		then:
+			tom.secondaryMobile == null
 	}
 }
