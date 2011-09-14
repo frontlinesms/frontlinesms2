@@ -126,7 +126,7 @@ class Fmessage {
 						}
 						if(search.contactString) {
 							'ilike'("contactName", "%${search.contactString}%")
-						}
+						} 
 						if(groupMembersNumbers) {
 							or {
 								'in'("src",	groupMembersNumbers)
@@ -145,8 +145,10 @@ class Fmessage {
 							search.endDate = search.endDate.next()
 							between("dateReceived", search.startDate, search.endDate)
 						}
-						if(search.usedCustomField) {
-							'in'("contactName", search.customFieldContactList)
+						if(search.usedCustomField.find{it.value!=''}) {
+							if(!search.customFieldContactList)
+								eq('src', null)
+							else 'in'("contactName", search.customFieldContactList)
 						}
 						if(!search.inArchive) {
 							eq('archived', false)

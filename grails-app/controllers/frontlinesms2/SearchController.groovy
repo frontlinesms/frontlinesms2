@@ -38,25 +38,27 @@ class SearchController {
 		//Assumed that we only pass the customFields that exist
 		search.usedCustomField = [:]
 		CustomField.getAllUniquelyNamed().each() {
-			if (params[it+'CustomField']){
-				search.usedCustomField[it] = params[it+'CustomField']
-			} else {
-				search.usedCustomField[it] = ''
-			}
+			search.usedCustomField[it] = params[it+'CustomField']?:""
 		} 
-		println(search.usedCustomField)
-		//usedCustomField.each(){ println "${it}"}
+		//FIXME easy i discover groovy, so my usage of collection is not good
+		//FIXME hard we should rather do a Join but very few documentation available
 		search.customFieldContactList = []
-		if (search.usedCustomField) {
-			search.usedCustomField?.each { name, value ->
-				//use interserct with each custom field list
-				//search.customFieldContactList?  CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name : []
-				if (value) {
-					println("one is "+ CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
-					search.customFieldContactList = search.customFieldContactList + CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
-				}
+		if (search.usedCustomField.find{it.value!=''}) {
+			def firstLoop = true
+			search.usedCustomField.findAll{it.value!=''}.each { name, value ->
+//				if (value) {
+					println("we are looping on "+name+" = "+value)
+					if (firstLoop) {
+						//println("first loop")
+						search.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+						firstLoop = false
+					} else {
+						//println("one is "+ CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+						search.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+					}
+//				}
 			}
-			search.println("List of contact that match"+search.customFieldContactList)
+			search.println("List of contact that match "+search.customFieldContactList)
 		}
 		search.save(failOnError: true, flush: true)
 		def rawSearchResults = Fmessage.search(search)
