@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.Contact" %>
 <g:if test="${fconnectionInstanceTotal==0}">
 	<div id='connections'>You have no connections configured.</div>
 </g:if>
@@ -16,8 +17,6 @@
 				</div>
 				<div class="value">             
 					<div>${c.status}</div>
-					<div>Signal Strength</div>
-					<div>Balance</div>
 				</div>
 			</li>
 		</g:each>
