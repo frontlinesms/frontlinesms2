@@ -12,15 +12,36 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollMessageViewPage
 			def actions = $('#move-actions').children()*.text()
 		then:
-			actions[1] == "Shampoo Brands"
-
+			actions[1] == "Inbox"
+			actions[2] == "Shampoo Brands"
+			actions.every {it != "Football Teams"}
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
 			def inboxActions = $('#move-actions').children()*.text()
 		then:
 			inboxActions[1] == "Football Teams"
+			inboxActions.every {it != "Inbox"}
 	}
-	
+
+	def "move to inbox option should be displayed for folder messages and should work"() {
+		given:
+			createTestFolders()
+			Folder.findByName("Work").addToMessages(new Fmessage(src: "src", dst: "dst")).save(flush: true)
+		when:
+			go "message/folder/${Folder.findByName("Work").id}"
+			waitFor {title == "Folder"}
+			moveTo("inbox")
+			sleep 1000
+			waitFor {$("div.flash").displayed}
+		then:
+			$("div.flash").text()
+		when:
+			$("a", text: "Inbox").click()
+			waitFor {title == "Inbox"}
+		then:
+			$("tbody tr").size() == 1
+	}
+
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
 		given:
 			createTestPolls()
@@ -35,15 +56,12 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			sleep 1000
 			moveTo(Poll.findByTitle('Shampoo Brands').id.toString())
 			sleep 1000
-			shampooPoll.responses.each{ it.refresh() }
-			footballPoll.responses.each{ it.refresh() }
+			waitFor {$("div.flash").displayed}
 		then:
-			bob != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == bob }
-			alice != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == alice }
-			bob == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == bob }
-			alice == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == alice }
+			Poll.findByTitle("Football Teams").getMessages(['starred':false]).size() == 0
+			Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).size() == 3
 	}
-	
+
 	def "archive action should not be available for messages that belongs to a message owner  such as activities"() {
 		setup:
 			createTestPolls()
@@ -52,6 +70,25 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			to PollMessageViewPage
 		then:
 			!$("#message-archive").displayed
+	}
+
+	def "should move poll messages to inbox"(){
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PollMessageViewPage
+			$("#message")[0].click()
+			sleep 1000
+			moveTo("inbox")
+			sleep 1000
+		then:
+			$("div.flash").text()
+		when:
+			$("a", text: "Inbox").click()
+			waitFor {title == "Inbox"}
+		then:
+			$("tbody tr").size() == 3
 	}
 
 	private def moveTo(value) {

@@ -20,6 +20,9 @@
 		<div id='move-message' class='dropdown'>
 			<select id="move-actions" onchange="moveAction()">
 				<option value="na" class="na">Move message to...</option>
+				<g:if test="${messageSection != 'inbox'}">
+					<option class="inbox" value="inbox">Inbox</option>
+				</g:if>
 				<g:each in="${pollInstanceList}" status="i" var="p">
 					<g:if test="${(messageSection == 'inbox') || (p != ownerInstance)}">
 						<option class="poll" value="${p.id}">${p.title}</option>

@@ -109,7 +109,9 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		def poll = new Poll(title:'Miauow Mix')
+		poll.addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 
 		def message1 = new Fmessage(src:'Cheney', dst:'+12345678', text:'i hate chicken')
 		def message2 = new Fmessage(src:'Bush', dst:'+12345678', text:'i hate liver')

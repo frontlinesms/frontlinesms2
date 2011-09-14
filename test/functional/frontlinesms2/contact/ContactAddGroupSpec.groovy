@@ -78,7 +78,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			$("#contact-details .save").click()
 		then:
 			at ContactListPage
-			Group.findByName('Test').getMembers().contains(Contact.findByName('Bob'))
+			GroupMembership.getMembers(Group.findByName('Test'), 100, 0).contains(bob)
 	}
 	
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
@@ -95,7 +95,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			groupSelecter.value("${Group.findByName('Others').id}")			
 			$("#update-all").click()
 		then:
-			Group.findByName('Others').getMembers().containsAll([bob, alice])
+			GroupMembership.getMembers(Group.findByName('Others'), 100, 0).containsAll([bob, alice])
 	}
 	
 	def 'clicking save removes multiple contacts from selected groups'() {
@@ -119,7 +119,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			alice.refresh()
 			otherGroup.refresh()
 		then:
-			otherGroup.getMembers() == []
+			GroupMembership.getMembers(otherGroup, 100, 0) == []
 	}
 	
 	def 'clicking save removes contact from newly removed groups'() {
@@ -132,7 +132,8 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			btnUpdate.click()
 		then:
 			at ContactListPage
-			otherGroup.refresh().members.size() == 0
+			otherGroup.refresh()
+			GroupMembership.countMembers(otherGroup) == 0
 	}
 
 	// TODO test cancel button - remove from 1 group

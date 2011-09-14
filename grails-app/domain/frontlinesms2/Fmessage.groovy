@@ -40,6 +40,8 @@ class Fmessage {
 			}
 		}
 		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
+		if(contactName != src && contactName != dst) contactExists = true
+		else contactExists = false
 	}
 	
 	static constraints = {
@@ -50,9 +52,11 @@ class Fmessage {
 		dateReceived(nullable:true)
 		status(nullable:true)
 		contactName(nullable:true)
-		archived(validator: { val, obj ->
+		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null
+					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived)				
+				} else {
+					obj.messageOwner == null || !(obj.messageOwner instanceof PollResponse) || !obj.messageOwner.poll.archived
 				}
 		})
 	}
@@ -100,7 +104,6 @@ class Fmessage {
 			owned { isStarred=false, responses ->
 				and {
 					eq("deleted", false)
-					eq("archived", false)
 					'in'("messageOwner", responses)
 					if(isStarred)
 						eq("starred", true)
@@ -206,7 +209,7 @@ class Fmessage {
 		this
 	}
 	
-	def archive() { // FIXME is this method necessary?
+	def archive() {
 		this.archived = true
 		this
 	}
