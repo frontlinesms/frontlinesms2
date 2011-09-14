@@ -17,6 +17,10 @@
 			var group = $('#groupId')
 			return group.length ? group.val() : ''
 		}
+		function updateContacts(data) {
+			$("#contacts-list").html($(data).filter('#contacts-list').html())
+			$(".content-footer #page-arrows").html($(data).filter('.content-footer').children()[1].innerHTML)
+		}
 		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
@@ -51,19 +55,7 @@
 						<g:render template="contact_list"/>
 						<g:layoutBody />
 					</div>
-					<input id="contact-search" type="text" onkeyup="${remoteFunction(action:'search', update:'contacts-list', params:'\'searchString=\' + this.value + getGroupId()')}" value="${params.searchString}" />
-					<div class="content-footer">
-							<div id="page-arrows">
-								<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-									<g:set var="parameters" value="${[searchString:params.searchString,groupId:contactsSection.id]}" />
-								</g:if>
-								<g:else>
-									<g:set var="parameters" value="${[searchString:params.searchString]}" />
-								</g:else>
-								<g:paginate next="Next" prev="Back"  action="list" total="${contactInstanceTotal}" params="${parameters}"
-									max="${grailsApplication.config.grails.views.pagination.max}" />
-							</div>
-						</div>
+					<g:render template="contact_footer"/>
 				</div>
 			</div>
 		</div>

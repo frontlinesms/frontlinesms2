@@ -50,7 +50,8 @@ class GroupMembership implements Serializable {
 		def searchString = "%${params.searchString?:''}%"
 		params.groupName ? GroupMembership.executeQuery("select count(c) from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}"])[0] :
 		Contact.countByNameIlike(searchString)
-
+	}
+	
 	static getMembers(groupInstance, max, offset) {
 		GroupMembership.executeQuery("SELECT gm.contact FROM GroupMembership gm WHERE gm.group=:group", [group: groupInstance], [max: max, offset: offset])
 	}

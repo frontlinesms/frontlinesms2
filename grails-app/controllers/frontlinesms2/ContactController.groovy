@@ -163,7 +163,7 @@ class ContactController {
 	
 	def search = {
 		println "params: ${params}"
-		render (template:'contact_list', model:searchContacts())
+		render (template:'contact_details', model:searchContacts())
 	}
 	
 	private def getSharedGroupList(Collection groupList) {
