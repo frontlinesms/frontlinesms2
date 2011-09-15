@@ -50,7 +50,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			go "message/folder/${folder.id}/show/${message.id}"
 			$("#btn_reply").click()
 		then:
-			waitFor {$('div#tabs-1').displayed}
+			waitFor { $('div#tabs-1').displayed }
 		when:
 			$("div#tabs-1 .next").click()
 		then:
@@ -67,8 +67,8 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			$("#messages tbody tr").size() == 2
 		when:
 			$('a', text:'Starred').click()
-			waitFor {$("#messages tbody tr").size() == 1}
 		then:
+			waitFor { $("#messages tbody tr").size() == 1 }
 			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Max'
 		when:
 			$('a', text:'All').click()
@@ -84,13 +84,13 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 		when:
 			to FolderListPage
 		then:
-			waitFor{ $("#btn_dropdown").displayed }
+			waitFor{ btnDropdown.displayed }
 		when:
-			$("#btn_dropdown").click()
+			btnDropdown.click()
 		then:
-			waitFor{ $("#btn_forward").displayed }
+			waitFor{ btnForward.displayed }
 		when:
-			$("#btn_forward").click()
+			btnForward.click()
 		then:
 			waitFor { $('div#tabs-1').displayed }
 			$('textArea', name:'messageText').text() == "I will be late"
@@ -142,6 +142,10 @@ class FolderListPage extends geb.Page {
 	static content = {
 		messagesList { $('#messages-submenu') }
 		messagesSelect { $(".message-select") }
+		
 		btnReplyMultiple { $('#multiple-messages a')[0] }
+		
+		btnDropdown { $("#btn_dropdown") }
+		btnForward { $("#btn_forward") }
 	}
 }
