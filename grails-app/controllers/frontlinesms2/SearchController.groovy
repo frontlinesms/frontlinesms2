@@ -13,7 +13,7 @@ class SearchController {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
-				messageSection: 'search']
+				messageSection: 'result']
 	}
 
 	def beforeInterceptor = {
@@ -23,22 +23,17 @@ class SearchController {
 	}
 	
 	def result = {
-		def search
-		if(params.searchId) {
-			search = Search.findById(params.searchId)
-		} else {
-			search = Search.findByName("TempSearchObject") ?: new Search(name: "TempSearchObject")
-			def activity =  getActivityInstance()
-			search.owners = activity ? Fmessage.getMessageOwners(activity): null
-			search.searchString = params.searchString?: ""
-			search.contactString = params.contactString?: null
-			search.group = params.groupId ? Group.get(params.groupId) : null
-			search.status = params.messageStatus ?: null
-			search.activityId = params.activityId ?: null
-			search.activity =  getActivityInstance()
-			search.inArchive = params.inArchive ? true : false
-			search.save(failOnError: true, flush: true)
-		}
+		def search = Search.findByName("TempSearchObject") ?: new Search(name: "TempSearchObject")
+		def activity =  getActivityInstance()
+		search.owners = activity ? Fmessage.getMessageOwners(activity): null
+		search.searchString = params.searchString?: ""
+		search.contactString = params.contactString?: null
+		search.group = params.groupId ? Group.get(params.groupId) : null
+		search.status = params.messageStatus ?: null
+		search.activityId = params.activityId ?: null
+		search.activity =  getActivityInstance()
+		search.inArchive = params.inArchive ? true : false
+		search.save(failOnError: true, flush: true)
 		
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
