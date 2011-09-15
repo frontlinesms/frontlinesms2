@@ -80,10 +80,10 @@ function nextButton() {
 	for (var i = 1; i <= getTabLength(); i++) {
 		var nextTabToSelect = getCurrentTab() + i;
 		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
-				$("#tabs").tabs('select', nextTabToSelect);
-				break;
-			}
+			$("#tabs").tabs('select', nextTabToSelect);
+			break;
 		}
+	}
 }
 
 function done() {
@@ -100,7 +100,6 @@ function validateWholeTab() {
 	});
   	return isValid
 }
-
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
 	$.each(buttonToTabIndexMapping, function(key, value) {
