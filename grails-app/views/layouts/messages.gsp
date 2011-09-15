@@ -81,7 +81,7 @@
 							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
 									<g:link elementId="export" url="#">
-										Export results
+										Export
 									</g:link>
 								</li>
 							</g:if>
@@ -136,7 +136,7 @@
 								</li>
 							</ul>
 							<div id="page-arrows">
-								<g:paginate next=" " prev=" "
+								<g:paginate next="Next" prev="Back"
 									max="${grailsApplication.config.grails.views.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
@@ -156,16 +156,13 @@
 
 	$("#export").click(function() {
 		remoteHash['export'].call();
-
 	});
 
 	if($(".prevLink").size() == 0) {
-		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled></a>');
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled">Back</a>');
 	}
 
 	if($(".nextLink").size() == 0) {
-		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled></a>');
+		$("#page-arrows").append('<a href="#" class="nextLink disabled">Back</a>');
 	}
-
-
 </g:javascript>

@@ -4,6 +4,9 @@
 	<g:hiddenField name="messageId" value="${messageInstance.id}"></g:hiddenField>
 	<g:hiddenField name="checkedMessageList" value="${params.checkedMessageList}"></g:hiddenField>
 	<g:hiddenField name="archived" value="${params.archived}"></g:hiddenField>
+	<g:if test="${messageSection == 'search'}">
+		<g:hiddenField name="searchId" value="${search.id}"></g:hiddenField>
+	</g:if>
 		<li class='static_btn'>
 			<g:actionSubmit value="${value}" id="${id}" action="${action}"/>
 		</li>

@@ -120,6 +120,27 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#no-search-description").text() == "Start new search on the left"
 	}
 	
+	def "should return to the same search results when message is deleted" () {
+		setup:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+		when:
+			to SearchingPage
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			at SearchingPage
+		when:
+			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
+			$("#message-delete").click()
+		then:
+			at SearchingPage
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
+			waitFor { $('.flash').displayed }
+			
+	}
+	
 	private createTestGroups() {
 		new Group(name: 'Listeners').save(flush: true)
 		new Group(name: 'Friends').save(flush: true)

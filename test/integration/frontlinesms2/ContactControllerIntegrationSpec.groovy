@@ -63,7 +63,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		when:
 			controller.list()
 		then:
-			controller.response.redirectedUrl == "/contact/show/${c.id}?max=10&sort=name"
+			controller.response.redirectedUrl.startsWith("/contact/show/${c.id}")
 	}
 
 	def "adding and removing a contact from the same group triggers error"() {
@@ -89,6 +89,7 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.params.groupsToRemove = ","
 			controller.params.fieldsToAdd = ","
 			controller.params.fieldsToRemove = ","
+			controller.params.sort = 'name'
 			assert controller.show() != null
 		when:
 			def model = controller.show()
