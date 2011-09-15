@@ -19,7 +19,6 @@ class StatusController {
 	}
 		
 	private def getSystemStatus(allConnections) {
-		println allConnections
 		if(allConnections.any { it.getStatus() == "Not connected"}) return ConnectionStatus.NOT_CONNECTED
 		else return ConnectionStatus.CONNECTED
 	}

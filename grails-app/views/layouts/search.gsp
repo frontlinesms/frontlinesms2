@@ -33,11 +33,20 @@
 							<h2>Search</h2>
 			  			</div>
 			  			<ol>
-				  			<li>
-					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
-									Export results
-								</g:remoteLink>
-							</li>
+			  				<g:if test="${search}">
+					  			<li id="export-btn">
+						  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
+										Export results
+									</g:remoteLink>
+								</li>
+							</g:if>
+							<g:else>
+								<li id="export-btn">
+						  			<a class="disabled">
+										Export results
+									</a>
+								</li>
+							</g:else>
 						</ol>
 						<g:if test="${searchDescription}">
 							<div id="search-description">
