@@ -64,6 +64,7 @@ class ContactListSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 			$("a", text:"Friends").click()
+			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 			sleep 2000
 		then:

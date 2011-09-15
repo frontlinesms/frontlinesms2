@@ -33,8 +33,10 @@
 			$(".disabled").click(function(e) {e.preventDefault()});
 		}
 		$(function() {  
-		   disablePaginationControls();  
+		   disablePaginationControls();
+		   $("#contact-search").renderDefaultText();
 		});
+
 		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
