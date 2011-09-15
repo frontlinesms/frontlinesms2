@@ -40,7 +40,8 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
-				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
+				launchMediumWizard('Announcement', data, 'Send', null, true);
+				addTabValidations();
 			}})
 	},
 
