@@ -25,9 +25,8 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
-		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
+		if(status == MessageStatus.INBOUND ? src : dst) updateContactName()
 	}
-	
 	
 	private String findContact(String number) {
 		return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
@@ -39,9 +38,8 @@ class Fmessage {
 				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 			}
 		}
-		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
-		if(contactName != src && contactName != dst) contactExists = true
-		else contactExists = false
+		contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst)
+		contactExists = contactName && contactName != src && contactName != dst
 	}
 	
 	static constraints = {
