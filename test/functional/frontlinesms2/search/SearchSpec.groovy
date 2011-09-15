@@ -21,15 +21,15 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at SearchingPage
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
-																'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
+					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
 	def "group list and activity lists are displayed when they exist"() {
 		when:
 			to SearchingPage
 		then:
-			searchFrm.find('select', name:'groupId').children().collect() { it.text() } == ['Select group','Listeners', 'Friends']
-			searchFrm.find('select', name:'activityId').children().collect() { it.text() } == ['Select activity / folder', "Miauow Mix", 'Work']
+			searchFrm.find('select', name:'groupId').children()*.text() == ['Select group','Listeners', 'Friends']
+			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
 	def "search description is shown in header when searching by group"() {
@@ -55,11 +55,11 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		given:
 			to SearchingPage
 			def a = Folder.findByName("Work")
-			searchFrm.activityId = "folder-${a.id}"
+			searchFrm.activityId = "folder-$a.id"
 		when:
 			searchBtn.click()
 		then:
-			searchFrm.activityId == ["folder-${a.id}"]
+			searchFrm.activityId == "folder-$a.id"
 	}
 	
 	def "can search in archive or not, is enabled by default"() {
@@ -78,7 +78,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to SearchingPage
 		then:
-			!$('h2:nth-child(2) div#export-results a').present();
+			!$('h2:nth-child(2) div#export-results a').present()
 	}
 
 	def "should fetch all inbound messages alone"() {
@@ -87,10 +87,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.messageStatus = "INBOUND"
 		when:
 			searchBtn.click()
-			sleep(2000)
-			waitFor{searchBtn.displayed}
-		then:
-			searchFrm.messageStatus == ['INBOUND']
+		then:	
+			waitFor{ searchBtn.displayed }
+			searchFrm.messageStatus == 'INBOUND'
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
@@ -103,10 +102,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
 			searchBtn.click()
-			sleep(2000)
-			waitFor{searchBtn.displayed}
 		then:
-			searchFrm.messageStatus == ['SENT, SEND_PENDING, SEND_FAILED']
+			waitFor{ searchBtn.displayed }
+			searchFrm.messageStatus == 'SENT, SEND_PENDING, SEND_FAILED'
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
@@ -114,7 +112,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to SearchingPage
 			searchBtn.click()
-			waitFor{searchBtn.displayed}
+		then:
+			waitFor{ searchBtn.displayed }
+		when:
 			$("a", text:"Clear search").click()
 		then:
 			$("#no-search-description").text() == "Start new search on the left"
