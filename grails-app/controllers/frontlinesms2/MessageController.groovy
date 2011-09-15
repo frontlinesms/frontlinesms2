@@ -143,7 +143,17 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
+			if(params.messageSection == 'result') {
+				def search = Search.findById(params.searchId)
+				params.clear()
+				params.searchString = search.searchString
+				params.contactString = search.contactString
+				params.groupId = search.group
+				params.messageStatus = search.status
+				params.activityId = search.activityId
+				params.inArchive = search.inArchive
+				redirect(controller: 'search', action: 'result', params: params)
+			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId,archived: params.archived])
 		}
 	}
@@ -165,7 +175,17 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: 'search', params: [flashMessage: flash.message])
+			if(params.messageSection == 'result') {
+				def search = Search.findById(params.searchId)
+				params.clear()
+				params.searchString = search.searchString
+				params.contactString = search.contactString
+				params.groupId = search.group
+				params.messageStatus = search.status
+				params.activityId = search.activityId
+				params.inArchive = search.inArchive
+				redirect(controller: 'search', action: 'result', params: params)
+			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}

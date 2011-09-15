@@ -1,6 +1,7 @@
 package frontlinesms2.search
 
 import frontlinesms2.*
+import org.openqa.selenium.Keys
 
 class SearchSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
@@ -140,7 +141,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 																'sent', 'send_pending', 'meeting at 11.00'])
 	}
 	
-	def "should return to the same search results when message is archived" () {
+	def "archiving message should not break message navigation "() {
 		setup:
 			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
@@ -156,8 +157,12 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#message-archive").click()
 		then:
 			at SearchingPage
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
-																'sent', 'send_pending', 'meeting at 11.00'])
+		when:
+			def messageBody = $("#message-body").text()
+			$("a.displayName-${Fmessage.findByText('sent').id}").click()
+		then:
+			at SearchingPage
+			$("#message-body").text() == 'sent'
 	}
 	
 	private createTestGroups() {
