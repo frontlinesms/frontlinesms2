@@ -6,25 +6,24 @@ class StatusController {
 	}
 
 	def trafficLightIndicator = {
-		render text:getStatus(fetchAllStatus()).getIndicator(), contentType:'text/plain'
+		if(getSystemStatus(Fconnection.list()) == ConnectionStatus.CONNECTED) { render text:"green", contentType:'text/plain' }
+		else { render text:"red", contentType:'text/plain' }
 	}
 	
 	def show = {
-		fetchAllStatus() << getMessageStats() << getFilters()
+		def fconnectionInstanceList = Fconnection.list()
+		def fconnectionInstanceTotal = Fconnection.count()
+		[connectionInstanceList: fconnectionInstanceList,
+				fconnectionInstanceTotal: fconnectionInstanceTotal] <<
+			getMessageStats() << getFilters()
 	}
 		
-	private def getStatus(allStatus) {
-		if(fetchAllStatus().any { it.value == ConnectionStatus.NOT_CONNECTED}) return ConnectionStatus.NOT_CONNECTED
-		else if(fetchAllStatus().any { it.value ==  ConnectionStatus.ERROR}) return ConnectionStatus.ERROR
+	private def getSystemStatus(allConnections) {
+		println allConnections
+		if(allConnections.any { it.getStatus() == "Not connected"}) return ConnectionStatus.NOT_CONNECTED
 		else return ConnectionStatus.CONNECTED
 	}
 
-	//FIXME: This is a stub method.
-	private def fetchAllStatus() {
-		['MTNDONGLE' : ConnectionStatus.ERROR, "GMAIL": ConnectionStatus.CONNECTED, "INTERNET": ConnectionStatus.CONNECTED,
-			"MESSAGEQUEUE": ConnectionStatus.CONNECTED]
-	}
-	
 	private def getMessageStats() {
 		def messageStatus = params.messageStatus
 		def groupInstance = params.groupId? Group.get(params.groupId): null

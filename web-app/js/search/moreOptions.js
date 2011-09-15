@@ -14,6 +14,9 @@ $(document).ready(function() {
 
 function expandOptions() {
 	$("#expanded-search-options").show();
+	if ($("#field-contact-name").is(":visible")) {
+		$("#field-link-contact-name").hide();
+	}
 	$("[id^=custom-field-field]:visible").each(function()
 	{
 		$("#"+this.id.replace("custom-field-field","custom-field-link")).hide();

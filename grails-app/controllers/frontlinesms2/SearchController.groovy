@@ -30,8 +30,9 @@ class SearchController {
 		search.searchString = params.searchString?: ""
 		search.contactString = params.contactString?: null
 		search.group = params.groupId ? Group.get(params.groupId) : null
-		search.status = params.messageStatus?: null
-		search.activityId = params.activityId?: null
+		search.status = params.messageStatus ?: null
+		search.activityId = params.activityId ?: null
+		search.activity =  getActivityInstance()
 		search.inArchive = params.inArchive ? true : false
 		search.startDate = params.startDate?:null
 		search.endDate = params.endDate?:null
@@ -100,6 +101,7 @@ class SearchController {
 				searchDescriptor += " '$ownerDescription'"
 			}
 		}
+		searchDescriptor += "between ${search.startDate} and ${search.endDate}"
 		return searchDescriptor
 	}
 	

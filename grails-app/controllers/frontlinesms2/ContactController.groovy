@@ -6,7 +6,9 @@ class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
 	def beforeInterceptor = {
-		params.max = params.max?: GrailsConfig.config.grails.views.pagination.max
+		params.offset  = params.offset ?: 0
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		true
 	}
 
 	def index = {
@@ -15,7 +17,7 @@ class ContactController {
 
 	def list = {
 		def model = buildList()
-		params.contactId = params.contactId?:model.contactInstanceList[0]?.id
+		params.contactId = params.contactId ?: model.contactInstanceList[0]?.id
 		if(params.contactId) {
 			redirect(action:'show', params:params)
 		} else {
@@ -24,14 +26,14 @@ class ContactController {
 	}
 
 	def buildList = {
-		def groupInstance = params.groupId? Group.findById(params.groupId): null
+		def groupInstance = params.groupId ? Group.findById(params.groupId) : null
 		params.max = Math.min(params.max ? params.int('max') : 10, 100)
 		params.sort = "name"
 
 		def contactInstanceList, contactInstanceTotal
 		if(groupInstance) {
-			contactInstanceList = groupInstance.members as List
-			contactInstanceTotal = groupInstance.members.size()
+			contactInstanceList = GroupMembership.getMembers(groupInstance, params.max, params.offset)
+			contactInstanceTotal = GroupMembership.countMembers(groupInstance)
 		} else {
 			contactInstanceList = Contact.list(params)
 			contactInstanceTotal = Contact.count()

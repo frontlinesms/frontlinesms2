@@ -83,6 +83,31 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
+	
+	def "should require keyword if sorting is enabled"() {
+		when:
+			launchPollPopup()
+		then:
+			waitFor { autoSortTab.displayed }
+			pollForm.keyword().disabled
+		when:
+			pollForm.enableKeyword = 'true'
+			!pollForm.keyword
+		then:
+			waitFor { !pollForm.keyword().disabled }
+			!pollForm.keyword
+		when:
+			next.click()
+		then:
+			waitFor { errorMessage.displayed }
+			pollForm.keyword().hasClass('error')
+			autoSortTab.displayed
+		when:
+			pollForm.keyword = 'trigger'
+			next.click()
+		then:
+			waitFor { autoReplyTab.displayed }
+	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
@@ -183,18 +208,20 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
 			waitFor { responseListTab.displayed }
-			choiceALabel.hasClass('bold')
-			choiceBLabel.hasClass('bold')
-			!choiceCLabel.hasClass('bold')
-			!choiceDLabel.hasClass('bold')
-			!choiceELabel.hasClass('bold')
+			choiceALabel.hasClass('field-enabled')
+			choiceBLabel.hasClass('field-enabled')
+			!choiceCLabel.hasClass('field-enabled')
+			!choiceDLabel.hasClass('field-enabled')
+			!choiceELabel.hasClass('field-enabled')
 		when:
 			pollForm.choiceA = 'Never'
 			pollForm.choiceB = 'Once a day'
 		then:
-			true || choiceCLabel.hasClass('bold')
+			waitFor { choiceCLabel.hasClass('field-enabled') }
 		when:
 			pollForm.choiceC = 'Twice a day'
+		then:
+			waitFor { choiceDLabel.hasClass('field-enabled') }
 			next.click()
 		then:
 			waitFor { autoSortTab.displayed }

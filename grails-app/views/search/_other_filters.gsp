@@ -14,7 +14,7 @@
 		<g:datePicker name="endDate" value="${params.endDate ?: new Date()}" noSelection="['':'-Choose-']" precision="day"/>
 	</li>
 	<li class="field" id='field-contact-name'>
-		<img src='${resource(dir:'images/icons', file:'contacts.gif')}'" /><h2>Contact Name:</h2>
+		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
 	</li>
