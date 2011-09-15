@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<div>
+<div id="contacts-list">
 	<g:if test="${contactInstanceTotal > 0}">
 		<ol id="contact-list">
 			<g:each in="${contactInstanceList}" status="i" var="c">

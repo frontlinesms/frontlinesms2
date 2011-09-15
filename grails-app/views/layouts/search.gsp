@@ -34,7 +34,7 @@
 			  			</div>
 			  			<ol>
 				  			<li>
-					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
+					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
 									Export results
 								</g:remoteLink>
 							</li>
