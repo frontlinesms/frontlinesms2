@@ -38,7 +38,8 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
-			searchDescription.text() == 'Searching in all messages'
+			waitFor {searchDescription}
+			searchDescription.text().contains('Searching "test", include archived messages, between')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
