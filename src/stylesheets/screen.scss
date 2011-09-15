@@ -148,13 +148,15 @@ body {
 			background-color: $highlight !important;
 		}
 		
-		.context-menu { padding-bottom: 40px; }
+		.context-menu { 
+			padding-bottom: 40px;
+			border:none; 
+		}
 		
 		#settings-menu, #contacts-menu, #messages-menu, #archives-menu {
 			@include column(4, false);
 			text-align: left;
 			margin-right: 0px;
-			border-right: 1px solid #9E9E9E;
 			
 			.section { padding-top: 17px; }
 			
@@ -199,7 +201,6 @@ body {
 			@include column(4, false);
 			text-align: left;
 			margin-right: 0px;
-			border-right: 1px solid #9E9E9E;
 			
 			.section {
 				padding-top: 17px;
@@ -247,7 +248,8 @@ body {
 		.content {
 			@include clearfix;
 			border-bottom: 1px solid #9E9E9E;
-			
+			border-left: 1px solid #9E9E9E; 
+		
 			.content-header {
 				@include clearfix; // required
 				@include horizontal-list(5px, right);
@@ -421,7 +423,8 @@ body {
 					margin-right: 0px;
 					display: block;
 					border-top: 1px solid #9E9E9E;
-					
+					overflow-y: scroll;
+				  	height:75%;
 					li { height: 26px; }
 					a {
 						height: 26px;
@@ -705,6 +708,9 @@ body {
 					@include horizontal-list;
 					text-align: bottom;
 				}
+				input {
+				float:left
+				}
 			}
 		}
 	}
@@ -785,7 +791,7 @@ label.field-enabled {
 }
 
 a.send-failed, .send-failed td:last-child {
-	 background: url('../images/alert-icon.jpg') no-repeat center right;
+	 background: url('../images/icons/error_on.png') no-repeat center right;
 }
 
 .ui-tabs-nav li.ui-tabs-selected.confirm-tab {
@@ -871,22 +877,28 @@ label.header {
 
 #page-arrows .nextLink {
 	background: url('../images/buttons/paginationright_default.png') no-repeat center right;
-	padding: 13px;
 }
 
 #page-arrows .prevLink {
 	background: url('../images/buttons/paginationleft_default.png') no-repeat center right;
-	padding: 13px;
+}
+
+#page-arrows .prevLink, #page-arrows .nextLink {
+  display: block;
+  float:left;
+  text-indent:-9999em;
+  width: 25px;
+  padding: 5px;
 }
 
 #page-arrows .nextLink.disabled {
 	background: url('../images/buttons/paginationright_disabled.png') no-repeat center right;
-	padding: 13px;
+	padding: 5px;
 }
 
 #page-arrows .prevLink.disabled {
 	background: url('../images/buttons/paginationleft_disabled.png') no-repeat center right;
-	padding: 13px;
+	padding: 5px;
 }
 
 .error {

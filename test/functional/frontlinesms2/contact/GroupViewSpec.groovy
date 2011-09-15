@@ -62,17 +62,15 @@ class GroupViewSpec extends GroupGebSpec {
 			go "/frontlinesms2/group/show/${Group.findByName('Friends').id}"
 		then:
 			def contactList = $('#contact-list')
-			def contactNames = contactList.children().collect() {
-				it.text()
-			}
+			def contactNames = contactList.children()*.text()
 			def expectedNames = (11..60).collect{"Contact${it}"}
-			assert contactNames == expectedNames
+			contactNames == expectedNames
 	}
 	
-	static createManyContacts() {
+	def createManyContacts() {
 		(11..90).each {
-			def c = new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
-			c.addToGroups(Group.findByName('Friends')).save(failOnError:true)
+			def c = new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
+			c.addToGroups(Group.findByName('Friends')).save(failOnError:true, flush:true)
 		}
 	}
 }
