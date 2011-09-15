@@ -81,7 +81,7 @@
 							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
 									<g:link elementId="export" url="#">
-										Export results
+										Export
 									</g:link>
 								</li>
 							</g:if>
