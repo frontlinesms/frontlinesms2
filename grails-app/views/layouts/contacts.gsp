@@ -45,7 +45,7 @@
 					</div>
 					<div class="content-footer">
 							<div id="page-arrows">
-								<g:paginate next="Next" prev="Back"
+								<g:paginate next=" " prev=" "
 									max="${grailsApplication.config.grails.views.pagination.max}"
 									action="list" total="${contactInstanceTotal}" params="${params}"/>
 							</div>
@@ -55,3 +55,12 @@
 		</div>
 	</body>
 </html>
+<g:javascript>
+	if($(".prevLink").size() == 0) {
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled></a>');
+	}
+
+	if($(".nextLink").size() == 0) {
+		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled></a>');
+	}
+</g:javascript>
