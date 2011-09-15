@@ -16,14 +16,14 @@
 	<li class="field" id='field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
-		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 	</li>
 	<g:if test="${search==null}">
 		<g:each var="customField" in="${customFieldList}">
 			<li class="field" id="custom-field-field-${customField}">
 				<h2>${customField}:</h2><br>
 				<g:textField name="${customField}CustomField" />
-				<a onclick="toggleCustomField('${customField}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+				<a onclick="toggleCustomField('${customField}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			</li>
 		</g:each>
 	</g:if>
@@ -32,7 +32,7 @@
 			<li class="field" id="custom-field-field-${customField.key}">
 				<h2>${customField.key}:</h2><br>
 				<g:textField name="${customField.key}CustomField" value="${customField.value}"/>
-				<a onclick="toggleCustomField('${customField.key}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+				<a onclick="toggleCustomField('${customField.key}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			</li>
 		</g:each>
 	</g:else>
