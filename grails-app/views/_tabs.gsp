@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.Fconnection" %>
 <div id="top">
 	<div id="logo"><img src='${resource(dir:'images',file:'logo.png')}' width="36" height="40"/></div>
 	<ul id="global-nav">
@@ -14,7 +15,10 @@
 		</li>
 		
 		<li>
-			<g:link class="tab ${params.controller=='status'?'selected':''}" url="${[controller:'status']}" id="tab-status">Status</g:link>
+			<g:link class="tab ${params.controller=='status'?'selected':''}" url="${[controller:'status']}" id="tab-status">
+				Status
+				<img id="indicator" src="${resource(dir:'images/icons',file:'status_red.png')}" />
+			</g:link>
 		</li>
 		
 		<li>
@@ -23,9 +27,8 @@
 	</ul>
 </div>
 <script>
-	$.ajax({
-		type:'GET',
-		url: url_root + 'status/trafficLightIndicator',
-		success: function(data){$('#indicator').attr("src", "../images/status_" + data + ".png") }
+	$.get(url_root + 'status/trafficLightIndicator', function(data) {
+			var imageRoot = "${resource(dir:'images/icons', file:'status_')}";
+			$('#indicator').replaceWith("<img id='indicator' src='" + imageRoot + data + ".png'/>");
 	});
 </script>

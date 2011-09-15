@@ -14,13 +14,27 @@
 		<g:javascript src="contact/checked_contact.js"></g:javascript>
 		<g:javascript>
 		function getGroupId(){
-			var group = $('#groupId')
-			return group.length ? group.val() : ''
+			var group = $('#groupId');
+			return group.length ? group.val() : '';
 		}
 		function updateContacts(data) {
-			$("#contacts-list").html($(data).filter('#contacts-list').html())
-			$(".content-footer #page-arrows").html($(data).filter('.content-footer').children()[1].innerHTML)
+			var snippet = $(data);
+			$("#contacts-list").html(snippet.filter('#contacts-list').html());
+			$(".content-footer #page-arrows").html(snippet.filter('.content-footer').children()[1].innerHTML);
+			disablePaginationControls();
 		}
+		function disablePaginationControls() {
+			if($(".prevLink").size() == 0) {
+				$("#page-arrows").prepend('<a href="#" class="prevLink disabled">Back</a>');
+			}
+			if($(".nextLink").size() == 0) {
+				$("#page-arrows").append('<a href="#" class="nextLink disabled">Back</a>');
+			}
+			$(".disabled").click(function(e) {e.preventDefault()});
+		}
+		$(function() {  
+		   disablePaginationControls();  
+		});
 		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
