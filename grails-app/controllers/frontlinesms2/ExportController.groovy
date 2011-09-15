@@ -74,13 +74,15 @@ class ExportController {
 		 	switch(params.messageSection) {
 				case 'poll':
 					def poll = Poll.findById(params.ownerId)
-					name = "${poll.title} (${poll.countMessages(false)} Messages)"
+					name = "${poll.title} poll (${poll.countMessages(false)} messages)"
 					break
 				case 'folder':
 					def folder = Folder.findById(params.ownerId)
-					name = "${folder.name} (${folder.countMessages(false)} Messages)"
+					name = "${folder.name} folder (${folder.countMessages(false)} messages)"
 					break
 			}
+		} else {
+			String name = "${params.messageSection} (${params.messageTotal} messages)"
 		}
 	}
 
