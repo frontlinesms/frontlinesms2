@@ -1,16 +1,13 @@
 function launchSmallPopup(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#modalBox").dialog(
-		{
+	$("#modalBox").dialog({
 			modal: true,
 			width: 285,
-			height: auto,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
 			close: function() { $(this).remove(); }
-		}
-	);
+	});
 }
 
 function launchConfirmationPopup(title) {
