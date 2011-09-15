@@ -37,7 +37,7 @@ function countCheckedMessages() {
 
 function upSingleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'search') {
+	if (messageSection == 'result') {
 		var url = 'search/result';
 	} else {
 		var url = 'message/' + messageSection;
@@ -57,7 +57,7 @@ function upSingleCheckedDetails(messageId) {
 
 function downSingleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'search') {
+	if (messageSection == 'result') {
 		var url = 'search/result';
 	} else {
 		var url = 'message/' + messageSection;
@@ -89,7 +89,7 @@ function removeFromChecked(messageId) {
 
 function updateMultipleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'search') {
+	if (messageSection == 'result') {
 		var url = 'search/result';
 	} else {
 		var url = 'message/' + messageSection;
