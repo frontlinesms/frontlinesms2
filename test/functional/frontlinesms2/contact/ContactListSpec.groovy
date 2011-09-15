@@ -52,6 +52,28 @@ class ContactListSpec extends ContactGebSpec {
 			assert contactNames == expectedNames
 	}
 	
+	def 'should be able to search within contacts'() {
+		given:
+			def fpGroup = new Group(name: "Friends").save(failOnError: true, flush: true)
+			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
+			def samJones = new Contact(name: 'SAm Jones', primaryMobile: "1234567892").save(failOnError: true)
+			def samTina = new Contact(name: 'SaM Tina', primaryMobile: "1234567893").save(failOnError: true)
+			samAnderson.addToGroups(fpGroup, true)
+			samJones.addToGroups(fpGroup,true)
+			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
+		when:
+			go 'contact'
+			$("a", text:"Friends").click()
+			$("#contact-search") << "Sam"
+			sleep 1000
+		then:
+			def contactList = $('#contact-list')
+			def contactNames = contactList.children().collect() {
+				it.text()
+			}
+			assert contactNames == ['Sam Anderson', 'SAm Jones']
+	}
+	
 	static createManyContacts() {	
 		(11..90).each {
 			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
