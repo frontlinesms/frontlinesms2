@@ -49,7 +49,7 @@ var remoteHash = {
 			type:'GET',
 			url: url_root + 'export/wizard',
 			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
-					searchString: $("#searchString").val(), groupId: $("#groupId").val()},
+					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val()},
 			success: function(data) {
 				launchSmallPopup('Export', data, 'Export');
 				updateExportInfo();
