@@ -65,7 +65,7 @@ class ContactListSpec extends ContactGebSpec {
 			go 'contact'
 			$("a", text:"Friends").click()
 			$("#contact-search") << "Sam"
-			sleep 1000
+			sleep 2000
 		then:
 			def contactList = $('#contact-list')
 			def contactNames = contactList.children().collect() {
