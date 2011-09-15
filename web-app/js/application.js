@@ -145,3 +145,15 @@ $.widget("ui.contentWidget", {
 	options: {validate: function() {return true;} ,
 	onDone: function() {return true;}}
 });
+
+$.fn.renderDefaultText = function() {
+	return this.focus( function() {
+		$(this).toggleClass('default-text-input', false);
+		var element = $(this).val();
+		$(this).val( element === this.defaultValue ? '' : element );
+	}).blur(function(){
+		var element = $(this).val();
+		$(this).val( element.match(/^\s+$|^$/) ? this.defaultValue : element );
+		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
+		});
+};
