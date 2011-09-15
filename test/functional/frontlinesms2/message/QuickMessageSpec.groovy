@@ -208,9 +208,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	def launchQuickMessageDialog() {
 		to MessagesPage
 		$("a", text:"Quick message").click()
-		waitFor { 
-			println "Dialog title: ${$("#ui-dialog-title-modalBox").text()}"
-			at QuickMessageDialog }
+		waitFor { at QuickMessageDialog }
 	}
 	
 	def toSelectRecipientsTab() {
