@@ -314,7 +314,18 @@ body {
 						@include button-format;
 						
 						a img { vertical-align: middle; }
+						
 					}
+				}
+				
+				#export-btn .disabled {
+					padding: 17px 17px 17px 0;
+					color: #9E9E9E;
+					background-image:url('../images/buttons/button_hover.png');
+					background-repeat:no-repeat;
+					background-size: 100% 100%;
+					padding: 8px 10px;
+					text-align: center;
 				}
 				
 				#show-graph {
@@ -733,7 +744,7 @@ body {
 .hide {
   display: none
 }
-
+					
 .error-panel {
 	text-align: center;
 	border: 2px solid #C03283;
