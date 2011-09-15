@@ -19,8 +19,6 @@ function messageResponseClick(messageType) {
 	$("#reply-dropdown").val("na");
 }
 
-
-
 function launchMediumPopup(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
