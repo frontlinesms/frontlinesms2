@@ -28,7 +28,7 @@ class DeleteContactSpec extends ContactGebSpec {
 			createTestContacts()
 			assert Contact.count() == 2
 		when:
-			to ContactPage
+			to AliceContactPage
 			contactSelect[0].click()
 			contactSelect[1].click()
 		then:
