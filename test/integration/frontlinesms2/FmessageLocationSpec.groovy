@@ -165,6 +165,36 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			firstDeletedMsg*.src == ['Jim']
 	}
+	
+	def "can only archive ownerless messages, unless owner is archived"() {
+		when:
+			createTestData()
+			def minime = Fmessage.findBySrc("Minime")
+		then:
+			minime.archived == false
+		when:
+			minime.messageOwner.poll.archivePoll()
+			minime.messageOwner.poll.save(flush: true)
+			minime.save(flush: true)
+		then:
+			Poll.findByTitle("Miauow Mix").archived == true
+			minime.archived == true
+	}
+	
+	def "cannot un-archive a message if the owner is archived"() {
+		when:
+			createTestData()
+			def minime = Fmessage.findBySrc("Minime")
+			minime.archived = false
+			minime.messageOwner.poll.archivePoll()
+			minime.messageOwner.poll.save(flush:true)
+			minime.archived = false
+			minime.save(flush: true)
+			minime.refresh()
+		then:
+			Poll.findByTitle("Miauow Mix").archived == true
+			minime.archived == true
+	}
 
 	static createTestData() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4),
@@ -187,9 +217,10 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
         def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 		liverResponse.addToMessages(liverMessage).save(failOnError: true)
 		chickenResponse.addToMessages(chickenMessage).save(failOnError: true)
-        new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 	}
 
 	private def setUpFolderMessages() {

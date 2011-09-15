@@ -24,6 +24,7 @@ stacktrace.log
 CodeNarcReport.html
 cobertura.ser
 .idea/
+plugin.xml
 
 # Temp files and directories
 temp/

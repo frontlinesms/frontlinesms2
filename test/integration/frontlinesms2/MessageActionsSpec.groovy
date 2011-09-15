@@ -25,11 +25,14 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "message can be moved to a different poll response"() {
 		setup:
-			def r = new PollResponse(value: 'known unknown').save(failOnError:true, flush:true)
-			def r2 = new PollResponse(value: 'unknown unknowns').save(failOnError:true, flush:true)
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA: 'known unknown', choiceB: 'unknown unknowns').save(failOnError:true, flush:true)
+			def r = new PollResponse(value:'known unknown')
+			def r2 = new PollResponse(value:'unknown unknown')
+			def poll = new Poll(title: 'Who is badder?')
+			poll.addToResponses(r2)
+			poll.addToResponses(r).save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true)
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob')).save(failOnError: true)
+			
 		when:
 			controller.params.messageId = ',' + message.id + ','
 			controller.params.responseId = r2.id
@@ -51,5 +54,36 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			folder.getFolderMessages([:]).find {message}
 			message.messageOwner == folder
+	}
+
+	def "should move a folder message to inbox section"() {
+		setup:
+			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like nairobi', status:MessageStatus.INBOUND).save(failOnError: true)
+			folder.addToMessages(message)
+			folder.save(flush: true)
+		when:
+			assert message.messageOwner
+			controller.params.messageId = ',' + message.id + ','
+			controller.params.messageSection = 'inbox'
+			controller.move()
+		then:
+			!message.messageOwner
+			message.status == MessageStatus.INBOUND
+	}
+
+	def "should move a poll message to inbox section"() {
+		setup:
+			Poll.createPoll(title: 'Who is badder?', choiceA: 'known unknown', choiceB: 'unknown unknowns').save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true)
+			PollResponse.findByValue('known unknown').addToMessages(message).save(failOnError: true)
+		when:
+			assert message.messageOwner
+			controller.params.messageId = ',' + message.id + ','
+			controller.params.messageSection = 'inbox'
+			controller.move()
+		then:
+			!message.messageOwner
+			message.status == MessageStatus.INBOUND
 	}
 }

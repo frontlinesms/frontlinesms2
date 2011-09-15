@@ -45,7 +45,9 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
-		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true)
+		def poll = new Poll(title:'Miauow Mix')
+		poll.addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true)
 	}
 	
 	private def makeGroupMember() {
