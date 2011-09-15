@@ -51,17 +51,13 @@ class SearchController {
 			if (search.usedCustomField.find{it.value!=''}) {
 				def firstLoop = true
 				search.usedCustomField.findAll{it.value!=''}.each { name, value ->
-	//				if (value) {
-						println("we are looping on "+name+" = "+value)
-						if (firstLoop) {
-							//println("first loop")
-							search.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
-							firstLoop = false
-						} else {
-							//println("one is "+ CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
-							search.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
-						}
-	//				}
+					println("we are looping on "+name+" = "+value)
+					if (firstLoop) {
+						search.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+						firstLoop = false
+					} else {
+						search.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+					}
 				}
 				search.println("List of contact that match "+search.customFieldContactList)
 			}
@@ -87,14 +83,15 @@ class SearchController {
 		}
 		[messageInstance: messageInstance]
 	}
-	
-//	def getContactMatchingCustomField = { customFieldName ->
-//		def customField = new CustomField(name = customFieldName)
-//		search.selectedCustomFields.push(customField)
-//	}
-	
+		
 	private def getSearchDescription(search) {
 		String searchDescriptor = "Searching"
+		if(search.searchString) {
+			searchDescriptor += ' "'+search.searchString+'"'
+		} else {
+			searchDescriptor += ' all messages'
+		}
+		 
 		if(search.group) searchDescriptor += ", in "+search.group.name
 		if(search.owners) {
 			def activity = getActivityInstance()
@@ -108,9 +105,11 @@ class SearchController {
 				searchDescriptor += ", with contact having "+it.key+"="+it.value
 			}
 		}
-		search.startDate.format('dd-MM-yyyy')
-		search.endDate.format('dd-MM-yyyy')
-		searchDescriptor += ", between ${search.startDate.dateString} and ${search.endDate.dateString}"
+		if(search.startDate && search.endDate){
+			search.startDate.format('dd-MM-yyyy')
+			search.endDate.format('dd-MM-yyyy')
+			searchDescriptor += ", between "+search.startDate.dateString+" and "+search.endDate.dateString
+		}
 		return searchDescriptor
 	}
 	
