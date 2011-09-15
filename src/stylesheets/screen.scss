@@ -114,6 +114,10 @@ body {
 		  	text-transform:uppercase;
 		  	text-align: center;
 		  	padding: 20px;
+		  	
+		  	li #tab-status img {
+	  			vertical-align: middle;
+		  	}
 			
 			a:link, a:visited {
 				display: block;
