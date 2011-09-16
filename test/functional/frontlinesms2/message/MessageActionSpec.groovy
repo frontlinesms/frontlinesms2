@@ -35,7 +35,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			waitFor { $('#move-actions').displayed }
 		when:
-			$('#move-actions').jquery.val('2') // bug selecting option - seems to be solved by using jquery...
+			$('#move-actions').jquery.val("$shampooPoll.id".toString()) // bug selecting option - seems to be solved by using jquery...
 			$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
 		then:
 			waitFor { $('#no-messages').displayed }
