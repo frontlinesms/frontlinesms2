@@ -102,7 +102,7 @@ class Contact {
 		if(contactNumber) {
 			 // can't update in current hibernate session. will lead to recursive update. so updating in new session
 			Contact.withNewSession { session -> 
-				Fmessage.executeUpdate("update Fmessage m set m.contactName = ? where m.src = ?", [contactName, contactNumber])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [contactName, true, contactNumber])
 			}
 		}
 	}

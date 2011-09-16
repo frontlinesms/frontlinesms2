@@ -93,13 +93,11 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#retry").displayed
 		when:
 			$("#message")[0].click()
-			sleep(1000)
 			waitFor {$("#retry-failed").displayed}
 			$("#retry-failed").click()
-			sleep(2000)
-			waitFor{$(".flash").text().contains("dst1, dst2")}
+			waitFor{$(".flash").displayed}
 		then:
-			$(".flash").text().contains("dst1, dst2")
+			$(".flash").text().contains("dst2, dst1")
 	}
 
 	def goToPendingPage() {

@@ -2,6 +2,7 @@ package frontlinesms2
 
 import groovy.time.*
 
+
 class Fmessage {
 	String src
 	String dst
@@ -25,9 +26,9 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
+		dateReceived = dateReceived ? dateReceived : new Date()
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
-	
 	
 	private String findContact(String number) {
 		return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
@@ -39,9 +40,8 @@ class Fmessage {
 				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 			}
 		}
-		contactName = fetchContactName(status==MessageStatus.INBOUND? src: dst)
-		if(contactName != src && contactName != dst) contactExists = true
-		else contactExists = false
+		contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst)
+		contactExists = contactName && contactName != src && contactName != dst
 	}
 	
 	static constraints = {
@@ -127,7 +127,7 @@ class Fmessage {
 						}
 						if(search.contactString) {
 							'ilike'("contactName", "%${search.contactString}%")
-						}
+						} 
 						if(groupMembersNumbers) {
 							or {
 								'in'("src",	groupMembersNumbers)
@@ -139,6 +139,17 @@ class Fmessage {
 						}
 						if(search.owners) {
 							'in'("messageOwner", search.owners)
+						}
+						if(search.startDate && search.endDate){
+							search.startDate.clearTime()
+							search.endDate.clearTime()
+							search.endDate = search.endDate.next()
+							between("dateReceived", search.startDate, search.endDate)
+						}
+						if(search.usedCustomField.find{it.value!=''}) {
+							if(!search.customFieldContactList)
+								eq('src', null)
+							else 'in'("contactName", search.customFieldContactList)
 						}
 						if(!search.inArchive) {
 							eq('archived', false)

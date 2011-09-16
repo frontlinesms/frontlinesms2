@@ -166,6 +166,20 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			!m.validate()
 	}
 	
+	def "when number added as contact, all messages should have that contacts name and have contactExists set to true"() {
+		when:
+			def message = new Fmessage(src: "number", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+		then:
+			message.contactName == "number";
+			message.contactExists == false;
+		when:
+			new Contact(name: "Alice", primaryMobile:"number", secondaryMobile: "secondaryNo").save(flush: true)
+			message.refresh()
+		then:
+			message.contactName == "Alice";
+			message.contactExists == true;
+	}
+	
 	def "should be able to archive message when it has no message owner" () {
 		setup:
 			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
