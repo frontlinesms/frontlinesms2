@@ -162,24 +162,15 @@ class ContactController {
 	}
 	
 	def search = {
-		println "params: ${params}"
 		render (template:'contact_details', model:searchContacts())
 	}
 	
 	private def getSharedGroupList(Collection groupList) {
-		def groupIDList = groupList.collect {it.id}
-		def intersect = groupIDList.get(0)
-		for(int i=1 ; i<groupIDList.size; i++) {
-			if(!intersect.disjoint(groupIDList.get(i))) {
-				intersect = intersect.intersect(groupIDList.get(i))
-			} else {
-				intersect = []
-				break
-			}
-		}
-		if(intersect) {
-			return intersect.collect { Group.findById(it) }
-		}
+		def groupIds = groupList*.id
+		def sharedGroupIds = groupIds?.inject(groupIds[0]){ acc, current -> acc.intersect(current)}
+		sharedGroupIds ? Group.createCriteria().list {
+			'in' ("id", sharedGroupIds)
+		} : []
 	}
 	
 	private def getNonSharedGroupList(Collection groupList1, Collection groupList2) {
