@@ -5,9 +5,13 @@ $(document).ready(function() {
 			$(this).hide()
 		}
 	})
+//	if(!$("#contactString").val()) {
+//		$("#field-contact-name").hide();
+//	}
 	if(!$("#contactString").val()) {
-		$("#field-contact-name").hide();
+		$("#more-option-field-contact-name").hide();
 	}
+	
 	$("#expanded-search-options").hide();
 	$("#more-search-options").live("click",expandOptions)
 });
@@ -43,6 +47,15 @@ function toggleCustomField(customFieldName) {
 	$("#custom-field-link-"+customFieldName).toggle();
 	if (!$("#custom-field-field-"+customFieldName).is(":visible")) {
 		$("#"+customFieldName+"CustomField").val("")
+	}
+	hideOptions();
+}
+
+function toggleMoreOptionElement(id) {
+	$("#more-option-field-"+id).toggle();
+	$("#more-option-link-"+id).toggle();
+	if (!$("#more-option-field-"+id).is(":visible")) {
+		$("#more-option-field-"+id).children("input").val("")
 	}
 	hideOptions();
 }
