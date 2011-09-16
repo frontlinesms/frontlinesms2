@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import groovy.time.*
+
 class Search {
 	String name
 	String searchString
@@ -9,6 +11,10 @@ class Search {
 	def activity
 	Group group
 	String status
+	Date startDate
+	Date endDate
+	Map usedCustomField
+	List customFieldContactList
 	boolean inArchive
 	
 	static constraints = {
@@ -19,6 +25,10 @@ class Search {
 		owners(nullable: true)
 		group(nullable: true)
 		status(nullable: true)
+		startDate(nullable: true)
+		endDate(nullable: true)
+		usedCustomField(nullable: true)
+		customFieldContactList(nullable:true)
 		inArchive(nullable: true)
 	}
 }

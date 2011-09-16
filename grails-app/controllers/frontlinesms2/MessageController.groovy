@@ -143,7 +143,7 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection)
+			if(params.messageSection == 'search') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId,archived: params.archived])
 		}
 	}

@@ -13,6 +13,7 @@ class SearchController {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
+				customFieldList : CustomField.getAllUniquelyNamed(),
 				messageSection: 'search']
 	}
 
@@ -23,18 +24,45 @@ class SearchController {
 	}
 	
 	def result = {
-		def search = Search.findByName("TempSearchObject") ?: new Search(name: "TempSearchObject")
-		def activity =  getActivityInstance()
-		search.owners = activity ? Fmessage.getMessageOwners(activity): null
-		search.searchString = params.searchString?: ""
-		search.contactString = params.contactString?: null
-		search.group = params.groupId ? Group.get(params.groupId) : null
-		search.status = params.messageStatus ?: null
-		search.activityId = params.activityId ?: null
-		search.activity =  getActivityInstance()
-		search.inArchive = params.inArchive ? true : false
-		search.save(failOnError: true, flush: true)
-		
+		def search
+		if(params.searchId) {
+			search = Search.findById(params.searchId)
+		} else {
+			search = Search.findByName("TempSearchObject") ?: new Search(name: "TempSearchObject")
+			def activity =  getActivityInstance()
+			search.owners = activity ? Fmessage.getMessageOwners(activity): null
+			search.searchString = params.searchString?: ""
+			search.contactString = params.contactString?: null
+			search.group = params.groupId ? Group.get(params.groupId) : null
+			search.status = params.messageStatus ?: null
+			search.activityId = params.activityId ?: null
+			search.activity =  getActivityInstance()
+			search.inArchive = params.inArchive ? true : false
+			search.startDate = params.startDate?:null
+			search.endDate = params.endDate?:null
+			//Assumed that we only pass the customFields that exist
+			search.usedCustomField = [:]
+			CustomField.getAllUniquelyNamed().each() {
+				search.usedCustomField[it] = params[it+'CustomField']?:""
+			} 
+			//FIXME easy i discover groovy, so my usage of collection is not good
+			//FIXME hard we should rather do a Join but very few documentation available
+			search.customFieldContactList = []
+			if (search.usedCustomField.find{it.value!=''}) {
+				def firstLoop = true
+				search.usedCustomField.findAll{it.value!=''}.each { name, value ->
+					println("we are looping on "+name+" = "+value)
+					if (firstLoop) {
+						search.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+						firstLoop = false
+					} else {
+						search.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+					}
+				}
+				search.println("List of contact that match "+search.customFieldContactList)
+			}
+			search.save(failOnError: true, flush: true)
+		}
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
@@ -55,19 +83,32 @@ class SearchController {
 		}
 		[messageInstance: messageInstance]
 	}
-	
+		
 	private def getSearchDescription(search) {
-		String searchDescriptor = "Searching in "
-		if(!search.owners && !search.group && !search.contactString) {
-			searchDescriptor += "all messages"
+		String searchDescriptor = "Searching"
+		if(search.searchString) {
+			searchDescriptor += ' "'+search.searchString+'"'
 		} else {
-			if(search.contactString) searchDescriptor += "${search.contactString}"
-			if(search.group) searchDescriptor += " '${search.group.name}'"
-			if(search.owners) {
-				def activity = getActivityInstance()
-				String ownerDescription = activity instanceof Poll ? activity.title: activity.name
-				searchDescriptor += " '$ownerDescription'"
+			searchDescriptor += ' all messages'
+		}
+		 
+		if(search.group) searchDescriptor += ", in "+search.group.name
+		if(search.owners) {
+			def activity = getActivityInstance()
+			String ownerDescription = activity instanceof Poll ? activity.title: activity.name
+			searchDescriptor += ", in"+ownerDescription
+		}
+		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
+		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
+		if (search.usedCustomField.find{it.value!=''}) {
+			search.usedCustomField.find{it.value!=''}.each{
+				searchDescriptor += ", with contact having "+it.key+"="+it.value
 			}
+		}
+		if(search.startDate && search.endDate){
+			search.startDate.format('dd-MM-yyyy')
+			search.endDate.format('dd-MM-yyyy')
+			searchDescriptor += ", between "+search.startDate.dateString+" and "+search.endDate.dateString
 		}
 		return searchDescriptor
 	}

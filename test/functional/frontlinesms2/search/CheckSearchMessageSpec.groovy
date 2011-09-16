@@ -23,7 +23,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			to SearchPage
 			$("#message")[1].click()
 			$("#message")[2].click()
-			sleep 1000
+			waitFor { $('#multiple-messages').displayed}
 		then:
 			$("#checked-message-count").text() == "2 messages selected"
 	}
@@ -34,16 +34,16 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		when:
 			to SearchPage
 			$("#message")[2].click()
-			sleep 1000
 		then:
-			$("#message-details #contact-name").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text()
-		
+			waitFor { $(".displayName-${Fmessage.findBySrc('Bob').id}").displayed}
+
 		when:
 			$("#message")[1].click()
-			sleep 1000
+			".displayName-${Fmessage.findBySrc('Bob').id}"
+			waitFor { $('#multiple-messages').displayed}
 		then:
-			$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
+			$("#message")[2].parent().parent().hasClass("selected")
+			$("#message")[1].parent().parent().hasClass("selected")
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -89,7 +89,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			$('#btn_forward').click()
 			sleep 2000
 		then:
-			$('textArea', name:'messageText').text() == "hi Alice"
+			$('textArea', name:'messageText').text() == "i like chicken"
 	}
 	
 	def "should set row as selected when a message is checked"() {

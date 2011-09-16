@@ -11,7 +11,7 @@
 						<img src="../images/icons/status_green.png"/>
 					</g:if>
 					<g:else>
-						<img src="../images/icons/status_orange.png"/>
+						<img src="../images/icons/status_red.png"/>
 					</g:else>
 					${c.name}
 				</div>
