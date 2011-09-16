@@ -22,7 +22,6 @@ class DeleteContactSpec extends ContactGebSpec {
 			!Contact.findByName('Alice')
 	}
 	
-	@spock.lang.IgnoreRest
 	def 'should delete multiple selected contacts'() {
 		given:
 			createTestContacts()
