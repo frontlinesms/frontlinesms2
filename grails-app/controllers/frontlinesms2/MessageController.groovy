@@ -37,7 +37,7 @@ class MessageController {
 				checkedMessageList: selectedMessageList,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
-				pollInstanceList: Poll.getNonArchivedPolls(),
+				pollInstanceList: Poll.nonArchivedPolls,
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
 				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
