@@ -6,7 +6,7 @@
 		<div id='message-info'>
 			<h2 id="contact-name">${messageInstance.contactName}
 				<g:if test="${!messageInstance.contactExists}">
-					<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'messagehistory.gif')}'/></g:link>
+					<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
 				</g:if>
 			</h2>
 			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>

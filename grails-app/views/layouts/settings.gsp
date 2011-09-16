@@ -6,6 +6,9 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+		</script>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>

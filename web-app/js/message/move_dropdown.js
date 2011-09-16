@@ -11,6 +11,7 @@ function moveAction() {
 	var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
 	
 	if(me.hasClass('na')) return;
+	if(me.hasClass('inbox')) var section = 'inbox';
 	if(me.hasClass('poll')) var section = 'poll';
 	else if(me.hasClass('folder')) var section = 'folder';
 

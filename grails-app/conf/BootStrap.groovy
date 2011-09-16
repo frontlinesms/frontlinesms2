@@ -32,7 +32,11 @@ class BootStrap {
 				it.addToGroups(notCats)
 			}
 			createContact("Kate", "+198730948")
-
+			
+			(1..101).each {
+				new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
+			}
+			
 			[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
 					new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
 				it.save(failOnError:true, flush:true)
@@ -57,7 +61,7 @@ class BootStrap {
 						it.status = MessageStatus.INBOUND
 						it.save(failOnError:true)
 					}
-			(1..11).each {
+			(1..101).each {
 				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
 			}
 
