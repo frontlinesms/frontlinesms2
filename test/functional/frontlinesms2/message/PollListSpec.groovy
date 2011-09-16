@@ -86,7 +86,6 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			to PollListPage
-			println "Message text: ${$('#message-body').text()}"
 			messagesSelect[1].click()
 		then:
 			waitFor { $('#message-body').text() == 'go manchester' }
@@ -124,7 +123,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 }
 
 class PollListPage extends geb.Page {
- 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+ 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}" }
 	static at = {
 		title.endsWith('Poll')
 	}
