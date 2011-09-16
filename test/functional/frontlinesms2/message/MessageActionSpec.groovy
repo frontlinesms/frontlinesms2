@@ -25,23 +25,24 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-		when:
-			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
 			def alice = Fmessage.findBySrc('Alice')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
-			$("#message")[0].click()
-			sleep 1000
-			moveTo(Poll.findByTitle('Shampoo Brands').id.toString())
-			sleep 1000
-			shampooPoll.responses.each{ it.refresh() }
-			footballPoll.responses.each{ it.refresh() }
+		when:
+			to PollMessageViewPage
+			messagesSelect[0].click()
 		then:
-			bob != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == bob }
-			alice != Poll.findByTitle("Football Teams").getMessages(['starred':false]).find { it == alice }
-			bob == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == bob }
-			alice == Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).find { it == alice }
+			waitFor { $('#move-actions').displayed }
+		when:
+			$('#move-actions').jquery.val('2') // bug selecting option - seems to be solved by using jquery...
+			$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
+		then:
+			waitFor { $('#no-messages').displayed }
+			!(bob in footballPoll.messages)
+			!(alice in footballPoll.messages)
+			bob in shampooPoll.messages
+			alice in shampooPoll.messages
 	}
 	
 	def "archive action should not be available for messages that belongs to a message owner  such as activities"() {
@@ -53,13 +54,11 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			!$("#message-archive").displayed
 	}
-
-	private def moveTo(value) {
-		$('#move-actions').getJquery().val(value)
-		$('#move-actions').getJquery().trigger("change")
-	}
 }
 
 class PollMessageViewPage extends geb.Page {
  	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
+	static content = {
+		messagesSelect { $(".message-select") }
+	}
 }
