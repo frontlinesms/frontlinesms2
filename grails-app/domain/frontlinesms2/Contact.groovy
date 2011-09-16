@@ -100,9 +100,9 @@ class Contact {
 	def updateContactNames(contactName, contactNumber) {
 		// FIXME this does not take account of secondary phone number - should accept varargs?
 		if(contactNumber) {
-			 // Prevent stackoverflow exception // FIXME a little more info would be nice
+			 // can't update in current hibernate session. will lead to recursive update. so updating in new session
 			Contact.withNewSession { session -> 
-				Fmessage.executeUpdate("update Fmessage m set m.contactName = ? where m.src = ?", [contactName, contactNumber])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [contactName, true, contactNumber])
 			}
 		}
 	}

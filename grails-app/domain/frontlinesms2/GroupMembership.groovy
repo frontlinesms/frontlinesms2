@@ -39,6 +39,26 @@ class GroupMembership implements Serializable {
 	static void deleteFor(Group g) {
 		executeUpdate("DELETE FROM GroupMembership WHERE group=:group", [group: g])
 	}
+	
+	static def searchForContacts(params) {
+		def searchString = "%${params.searchString?:''}%"
+		params.groupName ? GroupMembership.findAll("from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}", max:params.max?.toInteger(), offset:params.offset?.toInteger()]).collect{it[1]} :
+		Contact.findAllByNameIlike(searchString, params)
+	}
+	
+	static def countForContacts(params) {
+		def searchString = "%${params.searchString?:''}%"
+		params.groupName ? GroupMembership.executeQuery("select count(c) from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}"])[0] :
+		Contact.countByNameIlike(searchString)
+	}
+	
+	static getMembers(groupInstance, max, offset) {
+		GroupMembership.executeQuery("SELECT gm.contact FROM GroupMembership gm WHERE gm.group=:group", [group: groupInstance], [max: max, offset: offset])
+	}
+	
+	static countMembers(groupInstance) {
+		GroupMembership.executeQuery("SELECT gm.contact FROM GroupMembership gm WHERE gm.group=:group", [group: groupInstance]).size()
+	}
 
    static mapping = {
       id composite: ['group', 'contact']

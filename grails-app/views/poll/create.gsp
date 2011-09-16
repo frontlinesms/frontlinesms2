@@ -23,7 +23,7 @@
 			                                                                'recipients': []]"/>
 		</div>
 		<g:render template="confirm"/>
-		<div id="tabs-7">
+		<div id="tabs-7" class='summary'>
 			<h2>The poll has been created!</h2>
 			<p>The messages  have been added to the pending message queue.</p>
 			<p>

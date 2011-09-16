@@ -7,7 +7,7 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 		createTestMessages()
 	}
 	
-	def "status tab should visible in the global navigations"() {
+	def "status tab should be visible in the global navigations"() {
 		when:
 			go 'message'
 		then:
@@ -24,7 +24,21 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 			$('#trafficGraph svg')
 	}
 	
-	def "should show a list of devices that FrontlineSMS can connect to"() {
+	def "status tab should show the system status"() {
+		when:
+			to StatusPage
+		then:
+			waitFor { $("#indicator").@src == "/frontlinesms2/images/icons/status_green.png" }
+	}
+	
+	def "Does not display connections when there are no connections available"() {
+		when:
+			go 'status'
+		then:
+			$("#connections").text() == "You have no connections configured."
+	}
+	
+	def "Shows a list of devices that FrontlineSMS can connect to"() {
 		given:
 			createTestConnections()
 		when:

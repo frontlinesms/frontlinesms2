@@ -34,13 +34,13 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			to SearchPage
 			messagesSelect[2].click()
 		then:
-			waitFor { $("#message-details #contact-name").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text() }
-		
+			waitFor { $("#message-details #contact-name").text() == 'Alice' }
 		when:
 			messagesSelect[1].click()
 		then:
-			waitFor { $("tr#message-${Fmessage.list()[0].id}").hasClass('selected') }
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
+			waitFor { $('#multiple-messages').displayed }
+			messagesSelect[2].parent().parent().hasClass("selected")
+			messagesSelect[1].parent().parent().hasClass("selected")
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -66,7 +66,6 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 	def "'Forward' button still work when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
 		when:
 			to SearchPage
 			messagesSelect[0].click()
@@ -78,9 +77,14 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			waitFor { !messagesSelect*.@checked.any() }
 		when:
 			$('#btn_dropdown').click()
+		then:
+			waitFor { $('#btn_forward').displayed }
+		when:
 			$('#btn_forward').click()
 		then:
-			waitFor { $('textArea', name:'messageText').text() == "hi Alice" }
+			waitFor {
+				println "Text is ${$('textArea', name:'messageText').text()}" 
+				$('textArea', name:'messageText').text() == "i like chicken" }
 	}
 	
 	def "should set row as selected when a message is checked"() {

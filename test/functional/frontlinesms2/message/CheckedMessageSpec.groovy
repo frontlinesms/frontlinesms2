@@ -38,8 +38,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 		when:
 			$(".message-select")[1].click()
 		then:
-			waitFor { $("tr#message-${Fmessage.list()[0].id}").hasClass('selected') }
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
+			waitFor { $(".message-select")[1].parent().parent().hasClass("selected") }
+			$(".message-select")[2].parent().parent().hasClass("selected")
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -108,33 +108,31 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $('div#tabs-3').displayed }
 			$('#confirm-recipients-count').text() == "2 contacts selected"
 	}
-//	FIXME
-//	def "'Forward' button still work when all messages are unchecked"() {
-//		given:
-//			createInboxTestMessages()
-//			def message = Fmessage.findBySrc('Alice')
-//		when: 
-//			to MessagesPage
-//			messagesSelect[0].click()
-//		then:
-//			messagesSelect*.@checked == ["true", "true", "true"]
-//		when:
-//			messagesSelect[0].click()
-//		then: 
-//			messagesSelect*.@checked == ["", "", ""]
-//		when:
-//			$('#btn_dropdown').click()
-//			$('#btn_forward').click()			
-//			waitFor {$('div#tabs-1').displayed}
-//		then:
-//			$('textArea', name:'messageText').text() == "hi Alice"
-//	}
-//			sleep 1000
-//			$('#btn_forward').click()			
-//			sleep 4000
-//		then:
-//			$('textArea', name:'messageText').text() == "hi Alice"
-//	}
+
+	def "'Forward' button still works when all messages are unchecked"() {
+		given:
+			createInboxTestMessages()
+			def message = Fmessage.findBySrc('Alice')
+		when: 
+			to MessagesPage
+			messagesSelect[0].click()
+		then:
+			waitFor { messagesSelect*.@checked == ["true", "true", "true"] }
+		when:
+			messagesSelect[0].click()
+		then: 
+			waitFor { messagesSelect*.@checked == [null, null, null] }
+		when:
+			$('#btn_dropdown').click()
+		then:
+			waitFor { $('#btn_forward').displayed }
+		when:
+			$('#btn_forward').click()
+		then:
+			waitFor { $('div#tabs-1').displayed }
+		then:
+			$('textArea', name:'messageText').text() == "hi Alice"
+	}
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:
@@ -171,21 +169,22 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $("#checked-message-count").text() == "3 messages selected" }
 	}
 
-//	FIXME
-//	def "can archive multiple messages"() {
-//		given:
-//			createInboxTestMessages()
-//		when:
-//			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-//			waitFor {title == "Inbox"}
-//			messagesSelect[0].click()
-//			sleep 3000
-//			def btnArchive = $('#multiple-messages #btn_archive_all')
-//			btnArchive.click()
-//			sleep 1000
-//		then:
-//			at MessagesPage
-//			$("div#no-messages").text() == 'No messages'
-//
-//	}
+	def "can archive multiple messages"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+		then:
+			waitFor {title == "Inbox"}
+		when:
+			$(".message-select")[0].click()
+		then:
+			waitFor { $('#multiple-messages #btn_archive_all').displayed }
+		when:
+			$('#multiple-messages #btn_archive_all').click()
+		then:
+			waitFor { at MessagesPage }
+			$("div#no-messages").text() == 'No messages'
+
+	}
 }

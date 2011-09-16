@@ -15,6 +15,6 @@
 </div>
 <script>
 function updateExportInfo() {
-	$(".ui-dialog-title").html("Export ${reportName}");
+	$(".ui-dialog-title").html("Export Messages: ${reportName}");
 }
 </script>
