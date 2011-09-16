@@ -144,7 +144,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			
 	}
 	
-	//@spock.lang.IgnoreRest
+//	@spock.lang.IgnoreRest
 	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
 		when:
 		createTestContactsAndCustomFieldsAndMessages()
