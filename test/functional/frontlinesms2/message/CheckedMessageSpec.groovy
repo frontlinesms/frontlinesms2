@@ -42,8 +42,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#message")[1].click()
 			sleep 1000
 		then:
-			$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
+			$("#message")[1].parent().parent().hasClass("selected")
+			$("#message")[2].parent().parent().hasClass("selected")
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
