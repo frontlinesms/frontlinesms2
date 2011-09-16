@@ -104,7 +104,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(['failed':false])
+			def results = Fmessage.pending(false).list()
 		then:
 		    results.size() == 2
 			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
@@ -115,7 +115,7 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(['failed':true])
+			def results = Fmessage.pending(true).list()
 		then:
 		    results.size() == 1
 			results[0].status == MessageStatus.SEND_FAILED
@@ -126,9 +126,9 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def firstPendingMessage = Fmessage.getPendingMessages(['starred':false, 'max':1, 'offset': 0])
+			def firstPendingMessage = Fmessage.pending(false).list(max: 1, offset: 0)
 		then:
-			firstPendingMessage*.dst == ['dst1']
+			firstPendingMessage*.dst == ['dst2']
 	}
 
 	def "should fetch starred deleted messages"() {

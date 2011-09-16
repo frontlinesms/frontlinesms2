@@ -42,12 +42,12 @@
 	${message(code:'default.search.moresearchoption.label', default:'More search options') }
 </h2>
 <ol class="sub-menu" id="expanded-search-options">
-	<li id="field-link-contact-name">
-		<a onclick="toggleContactNameField()">Contact Name</a>
+	<li>
+		<a id="field-link-contact-name" onclick="toggleContactNameField()">Contact Name</a>
 	</li>
 	<g:each var="customField" in="${customFieldList}">
-		<li id="custom-field-link-${customField}">
-			<a onclick="toggleCustomField('${customField}')">${customField}</a>
+		<li>
+			<a id="custom-field-link-${customField}" onclick="toggleCustomField('${customField}')">${customField}</a>
 		</li>
 	</g:each>
 </ol>
