@@ -45,20 +45,21 @@ function loadSingleContact(contactId) {
 }
 
 function loadMultipleContacts(count) {
-	var contactIds = $('input:hidden[name=checkedContactList]').val();
-
-	$.get(url_root + 'contact/multipleContactGroupList', { 'checkedContactList': contactIds }, function(data) {
-		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
-		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
-		$("#multi-group-dropdown").change(addGroupClickAction);
-		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
-	});
 	$('#contact-count').html("<p> " + count + " contacts selected</p>");
 	
 	if($('div.multiple-contact').is(':hidden')) {
 		$('.multiple-contact').show();
 		$('.single-contact').hide();
 	}
+
+	// The following call is asynchronous, so we need to perform it after others have completed.
+	var contactIds = $('input:hidden[name=checkedContactList]').val();
+	$.get(url_root + 'contact/multipleContactGroupList', { 'checkedContactList': contactIds }, function(data) {
+		$('#multi-group-list').replaceWith($(data).find('#multi-group-list'));
+		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
+		$("#multi-group-dropdown").change(addGroupClickAction);
+		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
+	});
 }
 
 function addToChecked(contactId) {
