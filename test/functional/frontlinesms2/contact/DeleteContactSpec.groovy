@@ -19,18 +19,20 @@ class DeleteContactSpec extends ContactGebSpec {
 			confirmDeleteButton.click()
 		then:
 			waitFor { flashMessage.displayed }
-			!Contact.findAllByName('Alice')
+			!Contact.findByName('Alice')
 	}
 	
-	
+	@spock.lang.IgnoreRest
 	def 'should delete multiple selected contacts'() {
 		given:
 			createTestContacts()
-			assert Contact.count() == 2
 		when:
 			to AliceContactPage
-			contactSelect[0].click()
 			contactSelect[1].click()
+		then:
+			waitFor { $('input', name:'name').value() == 'Bob' }
+		when:
+			contactSelect[0].click()
 		then:
 			waitFor { deleteAllButton.displayed }
 		when:
