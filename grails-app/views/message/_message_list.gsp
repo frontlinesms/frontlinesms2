@@ -3,7 +3,7 @@
 	<g:hiddenField name="checkedMessageList" value=","/>
 	<g:hiddenField name="messageSection" value="${messageSection}"/>
 	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-
+	<g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
 	<g:if test="${messageInstanceTotal > 0}">
 		<g:hiddenField name="isArchived" value="${params.archived}"/>
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?

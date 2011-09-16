@@ -40,7 +40,8 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
-				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
+				launchMediumWizard('Announcement', data, 'Send', null, true);
+				addTabValidations();
 			}})
 	},
 
@@ -49,7 +50,7 @@ var remoteHash = {
 			type:'GET',
 			url: url_root + 'export/wizard',
 			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
-					searchString: $("#searchString").val(), groupId: $("#groupId").val()},
+					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val()},
 			success: function(data) {
 				launchSmallPopup('Export', data, 'Export');
 				updateExportInfo();
@@ -144,3 +145,15 @@ $.widget("ui.contentWidget", {
 	options: {validate: function() {return true;} ,
 	onDone: function() {return true;}}
 });
+
+$.fn.renderDefaultText = function() {
+	return this.focus( function() {
+		$(this).toggleClass('default-text-input', false);
+		var element = $(this).val();
+		$(this).val( element === this.defaultValue ? '' : element );
+	}).blur(function(){
+		var element = $(this).val();
+		$(this).val( element.match(/^\s+$|^$/) ? this.defaultValue : element );
+		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
+		});
+};

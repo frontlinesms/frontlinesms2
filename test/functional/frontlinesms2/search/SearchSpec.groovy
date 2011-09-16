@@ -12,9 +12,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "clicking on the search button links to the result show page"() {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
 		when:
 			to SearchingPage
 			searchBtn.present()
@@ -39,7 +39,8 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
-			searchDescription.text() == 'Searching in all messages'
+			waitFor {searchDescription}
+			searchDescription.text().contains('Searching "test", include archived messages, between')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -97,9 +98,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
 			to SearchingPage
 			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
@@ -137,8 +138,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#message-delete").click()
 		then:
 			at SearchingPage
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
-																'sent', 'send_pending', 'meeting at 11.00'])
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
+			waitFor { $('.flash').displayed }
+			
 	}
 	
 	def "archiving message should not break message navigation "() {
@@ -165,14 +167,64 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#message-body").text() == 'sent'
 	}
 	
+	def "should describe the behavior of the expand more options"(){
+		when:
+			createTestContactsAndCustomFieldsAndMessages()
+			to SearchingPage
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			contactNameLink.displayed
+			townCustomFieldLink.displayed
+			likeCustomFieldLink.displayed
+			ikCustomFieldLink.displayed
+		when:
+			contactNameLink.click()
+			//SearchBtn.click()
+		then:
+			waitFor { contactNameField.displayed }
+			!expendedSearchOption.displayed
+		when:
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			!contactNameLink.displayed
+			townCustomFieldLink.displayed
+			likeCustomFieldLink.displayed
+			ikCustomFieldLink.displayed
+		when:
+			townCustomFieldLink.click()
+		then:
+			waitFor{townCustomFieldField.displayed}
+		when:
+			searchFrm.contactString = "toto"
+			searchBtn.click()
+		then:
+			waitFor { contactNameField.displayed }
+			!townCustomFieldField.displayed
+			searchFrm.contactString == "toto"
+		when:
+			//println($("#field-contact-name a"))
+			//$("#field-contact-name a").click()
+			contactNameField.children('a').click()
+			waitFor { !contactNameField.displayed }
+			searchMoreOptionLink.click()
+			waitFor {contactNameLink.displayed }
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
+			searchFrm.contactString == null
+	}
+	
+	
 	private createTestGroups() {
 		new Group(name: 'Listeners').save(flush: true)
 		new Group(name: 'Friends').save(flush: true)
 	}
 	
 	private createTestMessages() {
-		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00'),
-				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex')].each() {
+		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
+				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex', dateReceived: new Date()-1)].each() {
 			it.status = MessageStatus.INBOUND
 			it.save(failOnError:true)
 		}
@@ -186,6 +238,20 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
 		
 	}
+	
+	private createTestContactsAndCustomFieldsAndMessages(){
+		def firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
+		def secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
+		def thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
+		
+		[new CustomField(name:'town', value:'Paris', contact: firstContact),
+			new CustomField(name:'like', value:'cake', contact: secondContact),
+			new CustomField(name:'ik', value:'car', contact: secondContact),
+			new CustomField(name:'like', value:'ake', contact: thirdContact),
+			new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', status:MessageStatus.INBOUND)].each {
+		it.save(failOnError:true)
+		}
+	}
 }
 
 class SearchingPage extends geb.Page {
@@ -197,5 +263,13 @@ class SearchingPage extends geb.Page {
 		searchFrm { $('#search-details') }
 		searchBtn { $('#search-details .buttons .search') }
 		searchDescription { $('#search-description') }
+		searchMoreOptionLink { $('#more-search-options')}
+		townCustomFieldLink(required:false) { $('#custom-field-link-town')}
+		townCustomFieldField(required:false) { $('#custom-field-field-town')}
+		likeCustomFieldLink(required:false) { $('#custom-field-link-like')}
+		ikCustomFieldLink(required:false) { $('#custom-field-link-ik')}
+		contactNameLink(required:false) {$('#field-link-contact-name')}
+		contactNameField(required:false) {$('#field-contact-name')}
+		expendedSearchOption(required:false) {$('#expanded-search-options')}
 	}
 }

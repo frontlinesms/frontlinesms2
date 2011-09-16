@@ -28,7 +28,7 @@ class ContactListSpec extends ContactGebSpec {
 		then:
 			def c = $('#contact-list')
 			assert c.tag() == "div"
-			assert c.text() == 'You have no contacts saved'
+			assert c.text() == 'No contacts here!'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
@@ -50,6 +50,29 @@ class ContactListSpec extends ContactGebSpec {
 			}
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			assert contactNames == expectedNames
+	}
+	
+	def 'should be able to search within contacts'() {
+		given:
+			def fpGroup = new Group(name: "Friends").save(failOnError: true, flush: true)
+			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
+			def samJones = new Contact(name: 'SAm Jones', primaryMobile: "1234567892").save(failOnError: true)
+			def samTina = new Contact(name: 'SaM Tina', primaryMobile: "1234567893").save(failOnError: true)
+			samAnderson.addToGroups(fpGroup, true)
+			samJones.addToGroups(fpGroup,true)
+			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
+		when:
+			go 'contact'
+			$("a", text:"Friends").click()
+			$("#contact-search").jquery.trigger('focus')
+			$("#contact-search") << "Sam"
+			sleep 2000
+		then:
+			def contactList = $('#contact-list')
+			def contactNames = contactList.children().collect() {
+				it.text()
+			}
+			assert contactNames == ['Sam Anderson', 'SAm Jones']
 	}
 	
 	static createManyContacts() {	

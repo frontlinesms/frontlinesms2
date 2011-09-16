@@ -115,33 +115,28 @@ class CheckedMessageSpec extends MessageGebSpec {
 		then:
 			$('#confirm-recipients-count').text() == "2 contacts selected"
 	}
-//	FIXME
-//	def "'Forward' button still work when all messages are unchecked"() {
-//		given:
-//			createInboxTestMessages()
-//			def message = Fmessage.findBySrc('Alice')
-//		when: 
-//			to MessagesPage
-//			$("#message")[0].click()
-//		then:
-//			$("#message")*.@checked == ["true", "true", "true"]
-//		when:
-//			$("#message")[0].click()
-//		then: 
-//			$("#message")*.@checked == ["", "", ""]
-//		when:
-//			$('#btn_dropdown').click()
-//			$('#btn_forward').click()			
-//			waitFor {$('div#tabs-1').displayed}
-//		then:
-//			$('textArea', name:'messageText').text() == "hi Alice"
-//	}
-//			sleep 1000
-//			$('#btn_forward').click()			
-//			sleep 4000
-//		then:
-//			$('textArea', name:'messageText').text() == "hi Alice"
-//	}
+
+	def "'Forward' button still works when all messages are unchecked"() {
+		given:
+			createInboxTestMessages()
+			def message = Fmessage.findBySrc('Alice')
+		when: 
+			to MessagesPage
+			$("#message")[0].click()
+		then:
+			$("#message")*.@checked == ["true", "true", "true"]
+		when:
+			$("#message")[0].click()
+		then: 
+			$("#message")*.@checked == ["", "", ""]
+		when:
+			$('#btn_dropdown').click()
+			waitFor {$('#btn_forward').displayed}
+			$('#btn_forward').click()			
+			waitFor {$('div#tabs-1').displayed}
+		then:
+			$('textArea', name:'messageText').text() == "hi Alice"
+	}
 	
 	def "should uncheck message when a different message is clicked"() {
 		given:
@@ -184,21 +179,20 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$("#checked-message-count").text() == "3 messages selected"
 	}
 
-//	FIXME
-//	def "can archive multiple messages"() {
-//		given:
-//			createInboxTestMessages()
-//		when:
-//			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-//			waitFor {title == "Inbox"}
-//			$("#message")[0].click()
-//			sleep 3000
-//			def btnArchive = $('#multiple-messages #btn_archive_all')
-//			btnArchive.click()
-//			sleep 1000
-//		then:
-//			at MessagesPage
-//			$("div#no-messages").text() == 'No messages'
-//
-//	}
+	def "can archive multiple messages"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			waitFor {title == "Inbox"}
+			$("#message")[0].click()
+			sleep 3000
+			def btnArchive = $('#multiple-messages #btn_archive_all')
+			btnArchive.click()
+			sleep 1000
+		then:
+			at MessagesPage
+			$("div#no-messages").text() == 'No messages'
+
+	}
 }
