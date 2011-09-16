@@ -111,6 +111,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
+	//@spock.lang.IgnoreRest
 	def "should clear search results" () {
 		when:
 			to SearchingPage
@@ -118,7 +119,8 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			waitFor{searchBtn.displayed}
 			$("a", text:"Clear search").click()
 		then:
-			$("#no-search-description").text() == "Start new search on the left"
+			waitFor{ !$("#search-description").displayed }
+			//$("#no-search-description").text() == "Start new search on the left"
 	}
 	
 	def "should return to the same search results when message is deleted" () {
@@ -142,46 +144,78 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			
 	}
 	
+	//@spock.lang.IgnoreRest
+	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
+		when:
+		createTestContactsAndCustomFieldsAndMessages()
+		to SearchingPage
+		searchMoreOptionLink.click()
+	then:
+		waitFor { expendedSearchOption.displayed }
+		contactNameLink.displayed
+		townCustomFieldLink.displayed
+		likeCustomFieldLink.displayed
+		ikCustomFieldLink.displayed
+	when:
+		contactNameLink.click()
+		//SearchBtn.click()
+	then:
+		waitFor { contactNameField.displayed }
+		!expendedSearchOption.displayed
+	when:
+		searchMoreOptionLink.click()
+	then:
+		waitFor { expendedSearchOption.displayed }
+		!contactNameLink.displayed
+	}
 
-	def "should describe the behavior of the expand more options"(){
+	def "should expand the more option and select a customField then the link to custom field is hiden"(){
+		when:
+		createTestContactsAndCustomFieldsAndMessages()
+		to SearchingPage
+		searchMoreOptionLink.click()
+	then:
+		waitFor { expendedSearchOption.displayed }
+		contactNameLink.displayed
+		townCustomFieldLink.displayed
+		likeCustomFieldLink.displayed
+		ikCustomFieldLink.displayed
+	when:
+		townCustomFieldLink.click()
+	then:
+		waitFor { townCustomFieldField.displayed }
+	when:
+		searchMoreOptionLink.click()
+	then:
+		waitFor { expendedSearchOption.displayed }
+		!townCustomFieldLink.displayed
+	}
+	
+	def "should show the contact name that have been fillin after a search"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to SearchingPage
 			searchMoreOptionLink.click()
-		then:
 			waitFor { expendedSearchOption.displayed }
-			contactNameLink.displayed
-			townCustomFieldLink.displayed
-			likeCustomFieldLink.displayed
-			ikCustomFieldLink.displayed
-		when:
 			contactNameLink.click()
-			//SearchBtn.click()
-		then:
 			waitFor { contactNameField.displayed }
-			!expendedSearchOption.displayed
-		when:
-			searchMoreOptionLink.click()
-		then:
-			waitFor { expendedSearchOption.displayed }
-			!contactNameLink.displayed
-			townCustomFieldLink.displayed
-			likeCustomFieldLink.displayed
-			ikCustomFieldLink.displayed
-		when:
-			townCustomFieldLink.click()
-		then:
-			waitFor{townCustomFieldField.displayed}
-		when:
 			searchFrm.contactString = "toto"
 			searchBtn.click()
 		then:
 			waitFor { contactNameField.displayed }
-			!townCustomFieldField.displayed
-			searchFrm.contactString == "toto"
+			searchFrm.contactString == "toto"		
+	}
+	
+	
+	def "when clicking on a remove button on a more search option, the field should be hiden and cleared then the link should appear"(){
 		when:
-			//println($("#field-contact-name a"))
-			//$("#field-contact-name a").click()
+			createTestContactsAndCustomFieldsAndMessages()
+			to SearchingPage
+			searchMoreOptionLink.click()
+			waitFor { expendedSearchOption.displayed }
+			contactNameLink.click()
+			waitFor { contactNameField.displayed }
+			searchFrm.contactString = "toto"
 			contactNameField.children('a').click()
 			waitFor { !contactNameField.displayed }
 			searchMoreOptionLink.click()
