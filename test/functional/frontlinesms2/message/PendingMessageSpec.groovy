@@ -50,24 +50,22 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
 	}
 
-//	FIXME
-//    def "retry button must not apper if there are no failed messages"() {
-//		setup:
-//			Fmessage.list()*.delete(flush: true)
-//			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-//			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-//		when:
-//			assert Fmessage.count() == 2
-//			goToPendingPage()
-//		then:
-//			!$("#retry").displayed
-//		when:
-//			$("#message")[0].click()
-//			sleep(4000)
-//			waitFor{$("#multiple-messages").displayed}
-//		then:
-//			!$("#retry-failed").displayed
-//	}
+	def "retry button must not apper if there are no failed messages"() {
+		setup:
+			Fmessage.list()*.delete(flush: true)
+			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			assert Fmessage.count() == 2
+		when:
+			goToPendingPage()
+		then:
+			!$("#retry").displayed
+		when:
+			messagesSelect[0].click()
+		then:
+			waitFor { $("#multiple-messages").displayed }
+			!$("#retry-failed").displayed
+	}
 
 	def "should be able to retry a failed message"() {
 		when:
@@ -95,7 +93,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("#retry-failed").click()
 		then:
-			waitFor{ $(".flash").text().contains("dst1, dst2") }
+			waitFor{ $(".flash").text().contains("dst2, dst1") }
 	}
 
 	def goToPendingPage() {

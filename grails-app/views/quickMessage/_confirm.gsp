@@ -1,4 +1,4 @@
-<div id="tabs-3"  class="${configureTabs.contains('tabs-3') ? '' : 'hide'}">
+<div id="tabs-3"  class="confirm ${configureTabs.contains('tabs-3') ? '' : 'hide'}">
 	<div class="confirm-header">
 		<label>Confirm details:</label>
 		<div class="message">

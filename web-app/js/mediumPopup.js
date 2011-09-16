@@ -19,8 +19,6 @@ function messageResponseClick(messageType) {
 	$("#reply-dropdown").val("na");
 }
 
-
-
 function launchMediumPopup(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
@@ -79,13 +77,11 @@ function prevButton() {
 }
 
 function nextButton() {
-	if(validateCurrentTab()) {
-		for (var i = 1; i <= getTabLength(); i++) {
-			var nextTabToSelect = getCurrentTab() + i;
-			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
-				$("#tabs").tabs('select', nextTabToSelect);
-				break;
-			}
+	for (var i = 1; i <= getTabLength(); i++) {
+		var nextTabToSelect = getCurrentTab() + i;
+		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+			$("#tabs").tabs('select', nextTabToSelect);
+			break;
 		}
 	}
 }
@@ -104,7 +100,6 @@ function validateWholeTab() {
 	});
   	return isValid
 }
-
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
 	$.each(buttonToTabIndexMapping, function(key, value) {

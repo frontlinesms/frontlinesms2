@@ -7,6 +7,9 @@ class ContactController {
 
 	def beforeInterceptor = {
 		params.max = params.max?: GrailsConfig.config.grails.views.pagination.max
+		params.sort = params.sort ?: 'name'
+		params.offset = params.offset ?: 0
+		true
 	}
 
 	def index = {
@@ -14,34 +17,26 @@ class ContactController {
 	}
 
 	def list = {
-		def model = buildList()
-		params.contactId = params.contactId?:model.contactInstanceList[0]?.id
+		def model = searchContacts()
+		params.contactId = params.contactId ?: model.contactInstanceList[0]?.id
 		if(params.contactId) {
 			flash.message = flash.message // re-set the flash message when handling a 2nd redirect
 			redirect(action:'show', params:params)
+			return
 		} else {
 			model
 		}
 	}
-
-	def buildList = {
-		def groupInstance = params.groupId? Group.findById(params.groupId): null
-		params.max = Math.min(params.max ? params.int('max') : 10, 100)
-		params.sort = "name"
-
-		def contactInstanceList, contactInstanceTotal
-		if(groupInstance) {
-			contactInstanceList = groupInstance.members as List
-			contactInstanceTotal = groupInstance.members.size()
-		} else {
-			contactInstanceList = Contact.list(params)
-			contactInstanceTotal = Contact.count()
-		}
+	
+	private def searchContacts() {
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
-		[contactInstanceList: contactInstanceList,
-				contactInstanceTotal: contactInstanceTotal,
+		def groupInstance = params.groupId ? Group.findById(params.groupId): null
+		params.groupName = groupInstance?.name
+ 		def results = GroupMembership.searchForContacts(params)
+		[contactInstanceList: results,
+				contactInstanceTotal: GroupMembership.countForContacts(params),
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
 				groupInstanceTotal: Group.count(),
@@ -49,7 +44,6 @@ class ContactController {
 	}
 
 	def show = {
-		params.sort = "name"
 		withContact { contactInstance ->
 			def contactGroupInstanceList = contactInstance.groups?: []
 			def contactFieldInstanceList = contactInstance.customFields
@@ -59,7 +53,7 @@ class ContactController {
 					contactGroupInstanceList: contactGroupInstanceList,
 					contactGroupInstanceTotal: contactGroupInstanceList.size(),
 					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance),
-					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
+					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << searchContacts()
 		}
 	}
 	
@@ -98,7 +92,7 @@ class ContactController {
 					contactGroupInstanceList: [],
 					contactGroupInstanceTotal: 0,
 					nonContactGroupInstanceList: Group.findAll(),
-					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << buildList()
+					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << searchContacts()
 
 		render(view:'show', model:model)
 	}
@@ -169,20 +163,16 @@ class ContactController {
 			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
 	}
 	
+	def search = {
+		render (template:'contact_details', model:searchContacts())
+	}
+	
 	private def getSharedGroupList(Collection groupList) {
-		def groupIDList = groupList.collect {it.id}
-		def intersect = groupIDList.get(0)
-		for(int i=1 ; i<groupIDList.size; i++) {
-			if(!intersect.disjoint(groupIDList.get(i))) {
-				intersect = intersect.intersect(groupIDList.get(i))
-			} else {
-				intersect = []
-				break
-			}
-		}
-		if(intersect) {
-			return intersect.collect { Group.findById(it) }
-		}
+		def groupIds = groupList*.id
+		def sharedGroupIds = groupIds?.inject(groupIds[0]){ acc, current -> acc.intersect(current)}
+		sharedGroupIds ? Group.createCriteria().list {
+			'in' ("id", sharedGroupIds)
+		} : []
 	}
 	
 	private def getNonSharedGroupList(Collection groupList1, Collection groupList2) {

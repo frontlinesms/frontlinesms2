@@ -126,7 +126,8 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			btnUpdate.click()
 		then:
 			at ContactListPage
-			otherGroup.refresh().members.size() == 0
+			otherGroup.refresh()
+			GroupMembership.countMembers(otherGroup) == 0
 	}
 
 	// TODO test cancel button - remove from 1 group

@@ -117,7 +117,7 @@ function checkAll() {
 			var newList = oldList + messageId + ',';
 			messageList.val(newList);
 		});
-		if(countCheckedMessages() != 2) updateMultipleCheckedDetails(messageId);
+		if(countCheckedMessages() != 1) updateMultipleCheckedDetails(messageId);
 	} else {
 		$('#messages-table tr :checkbox').each(function(index, element) {
 			this.checked = false;
