@@ -8,30 +8,32 @@ class MessageNavigationSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.list()[0].id}"
+			go "message/inbox/"
 		then:
-			$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
+			$("#message")[1].parent().parent().hasClass("selected")
 		when:
 			$("#message-list") << Keys.chord(Keys.ARROW_DOWN)
 			sleep 1000
 		then:
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
-			!$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
+			$("#message")[2].parent().parent().hasClass("selected")
+			!$("#message")[1].parent().parent().hasClass("selected")
 	}
 	
 	def "should move to the previous message when 'up' arrow is pressed"() {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.list()[1].id}"
+			go "message/inbox/"
+			$("#message")[2].click()
+			sleep 1000
 		then:
-			$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
+			$("#message")[2].parent().parent().hasClass("selected")
 		when:
 			$("#message-list") << Keys.chord(Keys.ARROW_UP)
 			sleep 1000
 		then:
-			!$("tr#message-${Fmessage.list()[1].id}").hasClass('selected')
-			$("tr#message-${Fmessage.list()[0].id}").hasClass('selected')
+			!$("#message")[2].parent().parent().hasClass("selected")
+			$("#message")[1].parent().parent().hasClass("selected")
 	}
 
 }
