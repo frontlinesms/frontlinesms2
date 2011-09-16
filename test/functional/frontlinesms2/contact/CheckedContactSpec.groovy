@@ -13,10 +13,10 @@ class CheckedContactSpec extends ContactGebSpec {
 			createTestContacts()
 		when:
 			to ContactShowPage
-		then:
-			waitFor { contactSelect.displayed }
-		when:
 			contactSelect[1].click()
+		then:
+			waitFor { $('input', name:'name').value() == 'Bob' }
+		when:
 			contactSelect[0].click()
 		then:
 			waitFor { contactCount.text() == '2 contacts selected' }
