@@ -35,11 +35,12 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "search description is shown in header when searching by group"() {
 		when:
 			to SearchingPage
+			searchBtn.present()
 			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().contains('Searching "test", include archived messages, between')
+			searchDescription.text() == 'Searching "test", include archived messages'
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -115,12 +116,12 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "should clear search results" () {
 		when:
 			to SearchingPage
+			searchBtn.present()
 			searchBtn.click()
 			waitFor{searchBtn.displayed}
 			$("a", text:"Clear search").click()
 		then:
 			waitFor{ !$("#search-description").displayed }
-			//$("#no-search-description").text() == "Start new search on the left"
 	}
 	
 	def "should return to the same search results when message is deleted" () {
@@ -144,7 +145,28 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			
 	}
 	
-	//@spock.lang.IgnoreRest
+//	@spock.lang.IgnoreRest
+	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
+		when:
+			to SearchingPage
+			searchBtn.present()
+		then:
+			searchFrm.startDate_day == ['none']
+			searchFrm.startDate_month == ['none']
+			searchFrm.startDate_year == ['none']
+		when:
+			searchFrm.startDate_day = '4'
+			searchFrm.startDate_month = '9'
+			searchFrm.startDate_year = '2010'
+			searchBtn.click()
+			waitFor {searchDescription}
+		then:
+			searchFrm.startDate_day == ['4']
+			searchFrm.startDate_month == ['9']
+			searchFrm.startDate_year == ['2010']
+	}
+	
+//	@spock.lang.IgnoreRest
 	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
 		when:
 		createTestContactsAndCustomFieldsAndMessages()
@@ -274,12 +296,12 @@ class SearchingPage extends geb.Page {
 		searchBtn { $('#search-details .buttons .search') }
 		searchDescription { $('#search-description') }
 		searchMoreOptionLink { $('#more-search-options')}
-		townCustomFieldLink(required:false) { $('#custom-field-link-town')}
-		townCustomFieldField(required:false) { $('#custom-field-field-town')}
-		likeCustomFieldLink(required:false) { $('#custom-field-link-like')}
-		ikCustomFieldLink(required:false) { $('#custom-field-link-ik')}
-		contactNameLink(required:false) {$('#field-link-contact-name')}
-		contactNameField(required:false) {$('#field-contact-name')}
+		townCustomFieldLink(required:false) { $('#more-option-link-custom-field-town')}
+		townCustomFieldField(required:false) { $('#more-option-field-custom-field-town')}
+		likeCustomFieldLink(required:false) { $('#more-option-link-custom-field-like')}
+		ikCustomFieldLink(required:false) { $('#more-option-link-custom-field-ik')}
+		contactNameLink(required:false) {$('#more-option-link-contact-name')}
+		contactNameField(required:false) {$('#more-option-field-contact-name')}
 		expendedSearchOption(required:false) {$('#expanded-search-options')}
 	}
 }

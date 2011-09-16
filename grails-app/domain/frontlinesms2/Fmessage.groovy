@@ -140,7 +140,7 @@ class Fmessage {
 						if(search.owners) {
 							'in'("messageOwner", search.owners)
 						}
-						if(search.startDate && search.endDate){
+						if(search.startDate && search.endDate) {
 							search.startDate.clearTime()
 							search.endDate.clearTime()
 							search.endDate = search.endDate.next()
