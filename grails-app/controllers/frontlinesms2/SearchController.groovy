@@ -55,7 +55,6 @@ class SearchController {
 						searchInstance.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
 					}
 				}
-				searchInstance.println("List of contact that match "+search.customFieldContactList)
 			}
 			searchInstance.save(failOnError: true, flush: true)
 		}
