@@ -154,10 +154,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			next.click()
 		then:
-			waitFor {
-				println "autoreply text: ${$('textarea', name:'autoReplyText')}"
-				autoReplyTab.displayed
-			}
+			waitFor { autoReplyTab.displayed }
 			pollForm.autoReplyText().@disabled
 		when:
 			pollForm.enableAutoReply = true
@@ -202,7 +199,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { errorMessage.displayed }
 			confirmationTab.displayed
 	}
-
+	
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
@@ -229,14 +226,24 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			pollForm.autoReplyText().@disabled
+			pollForm.autoReplyText().@disabled == 'true'
 		when:
 			pollForm.enableAutoReply = true
+		then:
+			waitFor { pollForm.autoReplyText().@disabled == 'false' }
+		when:
+			
 			pollForm.autoReplyText = "Thanks for participating..."
+		then:
+			waitFor {
+				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
+				pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
+			}
+		when:
 			pollForm.enableAutoReply = false
 		then:	
-			pollForm.autoReplyText == "Thanks for participating..."
-			pollForm.autoReplyText().@disabled
+			waitFor { pollForm.autoReplyText().@disabled == 'true' }
+			pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
 		when:
 			pollForm.enableAutoReply = true
 			next.click()

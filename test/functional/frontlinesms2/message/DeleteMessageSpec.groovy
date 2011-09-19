@@ -40,19 +40,16 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
 		when:
-			go "message/inbox"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep(1000)
-			waitFor {$('#multiple-messages').displayed}
-			def btnDelete = $("#btn_delete_all")
+			to MessagesPage
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			btnDelete
+			waitFor { multipleMessagesThing.displayed }
+			deleteAllButton.displayed
 		when:
-			btnDelete.click()
+			deleteAllButton.click()
 		then:
-			at MessagesPage
-			waitFor{$("div.flash").text().contains("deleted")}
+			waitFor{ flashMessage.text().contains("deleted") }
 	}
 	
 	def "'Delete' button appears for individual messages and works"() {

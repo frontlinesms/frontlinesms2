@@ -11,8 +11,8 @@
 </div>
 
 <g:javascript>
-	// FIXME change this to a checked/unchecked listener and remove the lookup of 'auto-reply' "group"
 	$("#enableAutoReply").live("change", function() {
+		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
 		if(isGroupChecked('enableAutoReply')) {
 			$("#autoReplyText").removeAttr("disabled");
 		} else {

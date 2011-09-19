@@ -20,7 +20,9 @@ class ContactController {
 		def model = searchContacts()
 		params.contactId = params.contactId ?: model.contactInstanceList[0]?.id
 		if(params.contactId) {
-			return redirect(action:'show', params:params)
+			flash.message = flash.message // re-set the flash message when handling a 2nd redirect
+			redirect(action:'show', params:params)
+			return
 		} else {
 			model
 		}

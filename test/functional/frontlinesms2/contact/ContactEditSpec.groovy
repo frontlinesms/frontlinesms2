@@ -31,9 +31,9 @@ class ContactEditSpec extends ContactGebSpec {
 			def alice = Contact.findByName('Alice')
 			Group g = new Group(name: 'Excellent').save(failOnError:true, flush:true)
 			alice.addToGroups(g)
-		    alice.save(flush: true)
+			alice.save(flush: true)
 		when:
-			go "/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
+			to AliceInExcellentPage
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
 			frmDetails.secondaryMobile = '+2542334567'
@@ -60,7 +60,7 @@ class ContactEditSpec extends ContactGebSpec {
 	
 	def "should remove secondary mobile address when delete icon is clicked"() {
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to BobDetailsPage
 			assert $('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
 			assert $('div.basic-info:nth-child(4) a', class: 'send-message').displayed
 			$('div.basic-info:nth-child(4) a', class: 'remove-field').click()
@@ -74,14 +74,14 @@ class ContactEditSpec extends ContactGebSpec {
 			!$('div.basic-info:nth-child(4) a', class: 'send-message').displayed
 			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '')
 		when: 
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to BobDetailsPage
 		then:
 			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
 	}
 	
 	def "should remove email data when delete icon is clicked"() {
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to BobDetailsPage
 			assert $('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
 			assert $('div.basic-info:nth-child(5) a', class: 'quick_message').displayed
 			$('div.basic-info:nth-child(5) a', class: 'remove-field').click()
@@ -95,14 +95,14 @@ class ContactEditSpec extends ContactGebSpec {
 			!$('div.basic-info:nth-child(5) a', class: 'send-message').displayed
 			assertFieldDetailsCorrect('email', 'Email', '')
 		when: 
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to BobDetailsPage
 		then:
 			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
 	}
 	
 	def "should remove primary mobile address when delete icon is clicked"() {
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to BobDetailsPage
 			assert $('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
 			assert $('div.basic-info:nth-child(3) a', class: 'send-message').displayed
 			$('div.basic-info:nth-child(3) a', class: 'remove-field').click()
@@ -116,19 +116,35 @@ class ContactEditSpec extends ContactGebSpec {
 			!$('div.basic-info:nth-child(3) a', class: 'send-message').displayed
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '')
 		when: 
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to BobDetailsPage
 		then:
 			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
 	}
 }
 
-class AliceDetailsPage extends geb.Page {
-	static def getUrl() {
-		"contact/show/${Contact.findByName('Alice').id}"
-	}
-
+abstract class ContactDetailsPage extends geb.Page {
 	static content = {
 		frmDetails { $("#contact_details") }
 		btnSave { frmDetails.find('#update-single') }
+	}
+}
+
+class AliceInExcellentPage extends ContactDetailsPage {
+	static def getUrl() {
+		def alice = Contact.findByName('Alice')
+		Group g = Group.findByName('Excellent')
+		"/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
+	}
+}
+
+class AliceDetailsPage extends ContactDetailsPage {
+	static def getUrl() {
+		"contact/show/${Contact.findByName('Alice').id}"
+	}
+}
+
+class BobDetailsPage extends ContactDetailsPage {
+	static def getUrl() {
+		"contact/show/${Contact.findByName('Bob').id}"
 	}
 }

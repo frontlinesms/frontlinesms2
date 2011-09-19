@@ -9,11 +9,11 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			createInboxTestMessages()
 		when:
 			to SearchPage
-			$("#message")[1].click()
-			$("#message")[2].click()
-			$("#message")[3].click()
+			messagesSelect[1].click()
+			messagesSelect[2].click()
+			messagesSelect[3].click()
 		then:
-			$("#message")[0].@checked == "true"
+			waitFor { messagesSelect[0].@checked == "true" }
 	}
 	
 	def "message count displayed when multiple messages are selected"() {
@@ -21,11 +21,10 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			createInboxTestMessages()
 		when:
 			to SearchPage
-			$("#message")[1].click()
-			$("#message")[2].click()
-			waitFor { $('#multiple-messages').displayed}
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			$("#checked-message-count").text() == "2 messages selected"
+			waitFor { checkedMessageCount == 2}
 	}
 	
 	def "checked message details are displayed when message is checked"() {
@@ -33,17 +32,15 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			createInboxTestMessages()
 		when:
 			to SearchPage
-			$("#message")[2].click()
+			messagesSelect[2].click()
 		then:
-			waitFor { $(".displayName-${Fmessage.findBySrc('Bob').id}").displayed}
-
+			waitFor { $("#message-details #contact-name").text() == 'Alice' }
 		when:
-			$("#message")[1].click()
-			".displayName-${Fmessage.findBySrc('Bob').id}"
-			waitFor { $('#multiple-messages').displayed}
+			messagesSelect[1].click()
 		then:
-			$("#message")[2].parent().parent().hasClass("selected")
-			$("#message")[1].parent().parent().hasClass("selected")
+			waitFor { $('#multiple-messages').displayed }
+			messagesSelect[2].parent().parent().hasClass("selected")
+			messagesSelect[1].parent().parent().hasClass("selected")
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -53,43 +50,41 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to SearchPage
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
-			def btnReply = $('#multiple-messages a')[0]
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			btnReply
+			waitFor { replyToMultipleButton.displayed }
 		when:
-			btnReply.click()
-			sleep 1000
+			replyToMultipleButton.click() // click the reply button
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'Alice').getAttribute('checked')
-			$('input', value:'Bob').getAttribute('checked')
-			!$('input', value:'June').getAttribute('checked')
+			waitFor { $('input', value:'Alice').@checked }
+			$('input', value:'Bob').@checked
+			!$('input', value:'June').@checked
 	}
 	
 	def "'Forward' button still work when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
 		when:
 			to SearchPage
-			$("#message")[0].click()
+			messagesSelect[0].click()
 		then:
-			$("#message")*.@checked == ["true", "true", "true", "true"]
+			waitFor { checkedMessageCount == 3 }
 		when:
-			$("#message")[0].click()
-			sleep 1000
+			messagesSelect[0].click()
 		then:
-			$("#message")*.@checked == ["", "", "", ""]
+			waitFor { checkedMessageCount == 0 }
 		when:
 			$('#btn_dropdown').click()
-			sleep 2000
-			$('#btn_forward').click()
-			sleep 2000
 		then:
-			$('textArea', name:'messageText').text() == "i like chicken"
+			waitFor { $('#btn_forward').displayed }
+		when:
+			$('#btn_forward').click()
+		then:
+			waitFor {
+				println "Text is ${$('textArea', name:'messageText').text()}" 
+				$('textArea', name:'messageText').text() == "i like chicken" }
 	}
 	
 	def "should set row as selected when a message is checked"() {
@@ -98,10 +93,10 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			def message = Fmessage.findBySrc('Bob')
 		when:
 			to SearchPage
-			$("#message")[2].click()
+			messagesSelect[2].click()
 		then:
-			$("#message")[2].@checked == "true"
-			$("#message")[2].parent().parent().hasClass("selected")
+			waitFor { messagesSelect[2].@checked == "true" }
+			messagesSelect[2].parent().parent().hasClass("selected")
 	}
 
 
@@ -111,36 +106,35 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
 		when:
 			to SearchPage
-			$("#message")[0].click()
-			sleep(1000)
-			waitFor { $('#multiple-messages').displayed}
+			messagesSelect[0].click()
 		then:
-			$("#checked-message-count").text() == "3 messages selected"
+			waitFor { checkedMessageCount == 3 }
+			
 		when:
-			$('#message')[1].click()
-			sleep(1000)
-			waitFor { $("#checked-message-count").text().contains("2") }
+			messagesSelect[1].click()
 		then:
-			$("#checked-message-count").text() == "2 messages selected"
+			waitFor { checkedMessageCount == 2 }
 		when:
-			$('#message')[0].click()
-			sleep(1000)
-			waitFor { $("#checked-message-count").text().contains("3") }
+			messagesSelect[0].click()
 		then:
-			$("#checked-message-count").text() == "3 messages selected"
+			waitFor { checkedMessageCount == 3 }
 	}
 	
 	def "can archive multiple messages where any owned messages are ignored, but those that are not are archived"() {
 		given:
 			createInboxTestMessages()
 		when:
-			go "search/result?searchString=i"
-			$("#message")[0].click()
-			sleep 1000
-			def btnArchive = $('#multiple-messages #btn_archive_all')
-			btnArchive.click()
-			sleep 1000
+			to SearchForIPage
+			messagesSelect[0].click()
 		then:
-			at SearchPage
+			waitFor { archiveAllButton.displayed }
+		when:
+			archiveAllButton.click()
+		then:
+			waitFor { $('title').text() == "Results"}
 	}
+}
+
+class SearchForIPage extends SearchPage {
+	static def url = "search/result?searchString=i"
 }
