@@ -144,15 +144,7 @@ class MessageController {
 			render ""
 		}else {
 			if(params.messageSection == 'result') {
-				def search = Search.findById(params.searchId)
-				params.clear()
-				params.searchString = search.searchString
-				params.contactString = search.contactString
-				params.groupId = search.group
-				params.messageStatus = search.status
-				params.activityId = search.activityId
-				params.inArchive = search.inArchive
-				redirect(controller: 'search', action: 'result', params: params)
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId,archived: params.archived])
 		}
@@ -176,15 +168,8 @@ class MessageController {
 			render ""
 		}else {
 			if(params.messageSection == 'result') {
-				def search = Search.findById(params.searchId)
-				params.clear()
-				params.searchString = search.searchString
-				params.contactString = search.contactString
-				params.groupId = search.group
-				params.messageStatus = search.status
-				params.activityId = search.activityId
-				params.inArchive = search.inArchive
-				redirect(controller: 'search', action: 'result', params: params)
+				println "Search params: $params"
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
