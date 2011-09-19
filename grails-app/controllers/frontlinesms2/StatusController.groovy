@@ -6,48 +6,53 @@ class StatusController {
 	}
 
 	def trafficLightIndicator = {
-		render text:getStatus(fetchAllStatus()).getIndicator(), contentType:'text/plain'
+		if(getSystemStatus(Fconnection.list()) == ConnectionStatus.CONNECTED) { render text:"green", contentType:'text/plain' }
+		else { render text:"red", contentType:'text/plain' }
 	}
 	
 	def show = {
-		fetchAllStatus() << getMessageStats() << getFilters()
+		def fconnectionInstanceList = Fconnection.list()
+		def fconnectionInstanceTotal = Fconnection.count()
+		[connectionInstanceList: fconnectionInstanceList,
+				fconnectionInstanceTotal: fconnectionInstanceTotal] <<
+			getMessageStats() << getFilters()
 	}
 		
-	private def getStatus(allStatus) {
-		if(fetchAllStatus().any { it.value == ConnectionStatus.NOT_CONNECTED}) return ConnectionStatus.NOT_CONNECTED
-		else if(fetchAllStatus().any { it.value ==  ConnectionStatus.ERROR}) return ConnectionStatus.ERROR
+	private def getSystemStatus(allConnections) {
+		if(allConnections.any { it.getStatus() == "Not connected"}) return ConnectionStatus.NOT_CONNECTED
 		else return ConnectionStatus.CONNECTED
 	}
 
-	//FIXME: This is a stub method.
-	private def fetchAllStatus() {
-		['MTNDONGLE' : ConnectionStatus.ERROR, "GMAIL": ConnectionStatus.CONNECTED, "INTERNET": ConnectionStatus.CONNECTED,
-			"MESSAGEQUEUE": ConnectionStatus.CONNECTED]
-	}
-	
 	private def getMessageStats() {
+		def messageStatus = params.messageStatus
 		def groupInstance = params.groupId? Group.get(params.groupId): null
+		params.messageStatus = messageStatus ? messageStatus.tokenize(",")*.trim() : null
 		def activityInstance = getActivityInstance()
 		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
 		def startDate, endDate
 		(startDate, endDate) = params.rangeOption == "between-dates" ? 
 			[params.startDate, params.endDate] :
 			[new Date() - 14, new Date()]
-		def messageStats = Fmessage.getMessageStats(groupInstance, messageOwners, startDate, endDate)
+		params.groupInstance = groupInstance
+		params.messageOwner = messageOwners
+		params.startDate = startDate
+		params.endDate = endDate
+		def messageStats = Fmessage.getMessageStats(params)
 		[messageStats: [xdata: messageStats.collect{k,v -> "'${k}'"}, 
 						sent: messageStats.collect{k,v -> "${v["Sent"]}"},
-						received: messageStats.collect{k,v -> "${v["Received"]}"} ]]
+						received: messageStats.collect{k,v -> "${v["Received"]}"} ], messageStatus: messageStatus]
 	}
 	
 	private def getFilters() {
 			def groupInstance = params.groupId? Group.get(params.groupId): null
 			def activityInstance = getActivityInstance()
-			def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null		
+			def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
+			params.rangeOption = params.rangeOption?: "two-weeks"
 			[groupInstance: groupInstance,
 					activityId: params.activityId,
 					groupInstanceList : Group.findAll(),
 					folderInstanceList: Folder.findAll(),
-					pollInstanceList: Poll.findAll()]
+					pollInstanceList: Poll.findAll(), search:new Search(group:groupInstance, activityId:params.activityId)]
 	}
 	
 	private def getActivityInstance() {

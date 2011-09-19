@@ -1,2 +1,2 @@
-<div id="tabs-3">
+<div id="tabs-3" class='confirm'>
 </div>

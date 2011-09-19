@@ -1,10 +1,6 @@
 package frontlinesms2.message
 
-import frontlinesms2.Fmessage
-import frontlinesms2.Folder
-import frontlinesms2.Poll
-import frontlinesms2.PollResponse
-import frontlinesms2.enums.MessageStatus
+import frontlinesms2.*
 
 class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
@@ -62,19 +58,6 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#global-nav a", text:"Archive").hasClass("selected")
 	}
 
-	def 'archived messages do not show up in folder view'() {
-		given:
-			println "Message count: ${Folder.findByName('Fools').messages.size() == 2}"
-			assert Folder.findByName('Fools').messages.size() == 2
-		when:
-			go "message/folder/${Folder.findByName('Fools').id}/show/${Fmessage.findBySrc('Cheney').id}"
-			def btnArchiveFromFolder = $('#message-details .buttons #message-archive')
-			btnArchiveFromFolder.click()
-			waitFor { $("div.flash.message").text().contains("archived") }
-		then:
-			Folder.findByName('Fools').getFolderMessages(['starred':false]).size() == 1
-	}
-
 	def 'archive button appears in message show view and works'() {
 		given:
 			def bob = Fmessage.findBySrc("Bob")
@@ -126,7 +109,9 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		def poll = new Poll(title:'Miauow Mix')
+		poll.addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 
 		def message1 = new Fmessage(src:'Cheney', dst:'+12345678', text:'i hate chicken')
 		def message2 = new Fmessage(src:'Bush', dst:'+12345678', text:'i hate liver')

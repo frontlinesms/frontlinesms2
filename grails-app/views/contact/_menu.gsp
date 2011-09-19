@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="contacts-menu">
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'contacts.gif')}' />
+		<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
 		<h2>Contacts</h2>
 		<ol class='sub-menu' id="contacts-submenu">
 			<li class="${contactsSection ? '' : 'selected'}">
@@ -15,7 +15,7 @@
 		</ol>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
+		<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 		<h2>Groups</h2>
 		<ol class='sub-menu' id="groups-submenu">
 			<g:each in="${groupInstanceList}" status="i" var="g">
@@ -24,7 +24,7 @@
 				</li>
 			</g:each>
 			<li class='create' id="create-group">
-				<g:remoteLink action="createGroup" onSuccess="launchSmallPopup('Group', data, 'Create');">
+				<g:remoteLink controller="group" action="create" onSuccess="launchSmallPopup('Group', data, 'Create');">
 					Create new group
 				</g:remoteLink>
 			</li>

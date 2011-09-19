@@ -44,8 +44,10 @@ class GroupSpec extends UnitSpec {
 
 	def "should get all the member addresses for a group"() {
 		setup:
-			def group = new Group(name: "Sahara",
-							members:[new Contact(primaryMobile: "12345"), new Contact(primaryMobile: "56484")])
+			def group = new Group(name: "Sahara")
+			mockDomain Group, [group]
+			mockDomain GroupMembership, [new GroupMembership(group: group, contact: new Contact(primaryMobile: "12345")),
+				new GroupMembership(group: group, contact: new Contact(primaryMobile: "56484"))]
 		when:
 			def result = group.getAddresses()
 		then:
@@ -55,15 +57,17 @@ class GroupSpec extends UnitSpec {
 
 	def "should list all the group names with a count of number of people in the group"() {
 		setup:
-			def sahara = new Group(name: "sahara", members: [new Contact(name: "Bob", primaryMobile: "address1"),
-															new Contact(name: "Jim", primaryMobile: "address2")])
-			def thar = new Group(name: "thar", members: [new Contact(name: "Kate", primaryMobile: "address3")])
+			def sahara = new Group(name: "sahara")
+			def thar = new Group(name: "thar")
 			mockDomain(Group, [sahara, thar])
+			mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(name: "Bob", primaryMobile: "address1")), new GroupMembership(group: sahara, contact: new Contact(name: "Jim", primaryMobile: "address2")),
+				new GroupMembership(group: thar, contact: new Contact(name: "Kate", primaryMobile: "address3"))]
+			
 		when:
 			def result = Group.getGroupDetails()
 		then:
-			result['sahara'].containsAll(["address1", "address2"])
-			result['thar'] == ["address3"]
+			result.sahara == ["address1", "address2"]
+			result.thar == ["address3"]
 	}
 
 	def "should reject special characters for subscription keys"() {

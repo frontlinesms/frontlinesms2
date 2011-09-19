@@ -1,5 +1,14 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
+	<div>
+		<label class="header" for="address">Add phone number</label>
+		<g:textField id="address" name="address"/>
+		<g:link url="#" class="add-address" onclick="addAddressHandler();">Add</g:link> <!-- FIXME this should be a button, surely? -->
+	</div>
+	
+	<!-- FIXME contacts and groups should probably be part of the same list here, with different classes assigned -->
+	
+	<!-- FIXME should be a list of groups, not just a load of divs -->
 	<div id="groups">
 		<g:each in="${groupList}" var="entry">
 			<div>
@@ -8,7 +17,8 @@
 			</div>
 		</g:each>
 	</div>
-
+	
+	<!-- FIXME should be a list of contacts, not just a load of divs -->
 	<div id="contacts">
 		<g:each in="${nonExistingRecipients}" var="address">
 			<div>
@@ -42,13 +52,21 @@
 	var groupAndMembers = {}
 	function selectMembers(groupName, allContacts) {
 		groupAndMembers[groupName] = allContacts
-		$.each(allContacts, function(index, value) {
-			setValueForCheckBox(groupName, value, isCheckboxSelected(groupName))
+		$.each(allContacts, function(index, contact) {
+			setValueForCheckBox(contact, isCheckboxSelected(groupName))
+		});
+
+		$.each(getSelectedGroupElements('groups'), function(index, groupInputElement) {
+			if(groupInputElement.value != groupName) {
+				$.each(groupAndMembers[groupInputElement.value], function(index, member) {
+					setValueForCheckBox(member, true)
+				});
+			}
 		});
 		updateCount()
 	}
 
-	$("input[contacts='true']").live('change', function() {
+	$("input[contacts='true']").live('click', function() {
 		if (!($(this).is(":checked"))) {
 			var contactNumber = this.value
 			$.each(groupAndMembers, function(key, value) {
@@ -59,7 +77,7 @@
 		updateCount()
 	});
 
-	function setValueForCheckBox(grpName, value, checked) {
+	function setValueForCheckBox(value, checked) {
 		var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
 		checkBox.attr('checked', checked);
 		checkBox.change()
@@ -67,17 +85,18 @@
 
 	function updateCount() {
 		var count = getSelectedGroupElements("addresses").size();
-		$("#recipient-count").html(count)
-		var contactsCount = $("#contacts-count");
-		contactsCount && contactsCount.html(count)
+		$.each(["#recipient-count", "#contacts-count", "#messages-count"],
+			function(index, id) {
+				if($(id)) $(id).html(count);
+			}
+		);
 	}
 
-	$('.add-address').live('click', function() {
+	 function addAddressHandler() {
 		var address = $('#address').val();
-		$("#contacts").prepend("<div><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
-		updateCount()
-	});
-
+		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
+		updateCount();
+	}
 </script>
 
 

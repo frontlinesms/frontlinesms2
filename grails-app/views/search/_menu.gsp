@@ -4,33 +4,23 @@
 			<h2 id="search-string">Keyword or phrase:</h2>
 			<ol class='sub-menu'>
 				<li class='field'>
-					<g:textField name="searchString" id="searchString" value="${searchString}"/>
+					<g:textField name="searchString" id="searchString" value="${search?.searchString}"/>
 				</li>
 			</ol>
 		</li>
 		<li class='section' id="search-filters">
-			<g:if test="${groupInstanceList || pollInstanceList}">
-				<h2>Limit Search to:</h2>
-				<ol class="sub-menu">
-					<li class='field'>
-						<g:select name="groupId" from="${groupInstanceList}" value="${groupInstance?.id}"
-								  optionKey="id" optionValue="name"
-								  noSelection="${['':'Select group']}"/>
-					</li>
-					<li class="field">
-						<g:select name="activityId" from="${pollInstanceList + folderInstanceList}"
-								  value="${activityId}"
-								  optionKey="${{(it instanceof frontlinesms2.Poll?'poll':'folder') + '-' + it.id}}"
-								  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.name}}"
-								  noSelection="${['':'Select activity / folder']}"/>
-					</li>
-				</ol>
-			</g:if>
+			<div id='filters'>
+				<g:render template="basic_filters"/>
+				<g:render template="other_filters"/>
+			</div>
 		</li>
 		<li class='section buttons'>
 			<ol class='sub-menu'>
 				<li>
 					<g:actionSubmit class="search" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" action="result"/>
+				</li>
+				<li>
+					<g:link action="no_search">${message(code: 'default.search.label', default: 'Clear search')}</g:link>
 				</li>
 			</ol>
 		</li>

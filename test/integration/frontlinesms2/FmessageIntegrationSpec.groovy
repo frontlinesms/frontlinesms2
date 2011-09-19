@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
@@ -10,8 +9,6 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage().save(failOnError:true, flush:true)
 		then:
 			Fmessage.count() == 1
-		cleanup:
-			Fmessage.findAll()*.delete()
 	}
 
 	def 'message can have an activity'() {
@@ -23,10 +20,6 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.count() == 1
 			Fmessage.get(m.id).messageOwner == response
-		cleanup:
-			Fmessage.findAll()*.delete()
-			PollResponse.findAll()*.delete()
-			Poll.findAll()*.delete()
 	}
 	
 	def 'get deleted messages gets all messages with deleted flag'() {
@@ -51,7 +44,7 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
 		then:
 			messageCounts['inbox'] == 2
-			messageCounts['sent'] == 2
+			messageCounts['sent'] == 3
 			messageCounts['pending'] == 2
 			messageCounts['deleted'] == 1
 	}
@@ -70,15 +63,48 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def "should return search results with a given max and offset"() {
 		setup:
 			setUpMessages()
+			def search = new Search(searchString: 'inbox')
 		when:
-			def firstInboxMessage = Fmessage.search("inbox", null, null, 1, 0)
-			def firstTwoInboxMessages = Fmessage.search("inbox", null, null, 2, 0)
+			def firstInboxMessage = Fmessage.search(search).list(max: 1,  offset:0)
+			def firstTwoInboxMessages = Fmessage.search(search).list(max: 2, offset: 0)
+			def allMsgsWithTheGivenSearchString = Fmessage.search(search).list()
 		then:
 			firstInboxMessage.size() == 1
 			firstTwoInboxMessages.size() == 2
-			Fmessage.countAllSearchMessages("inbox", null, null) == 2
+			allMsgsWithTheGivenSearchString.size() == 3
+			Fmessage.search(search).count() == 3
+	}
+
+	def "should fetch messages based on message status"() {
+		setup:
+			setUpMessages()
+			def search = new Search(status: ['INBOUND'])
+			def search2 = new Search(status: ['SENT', 'SEND_PENDING', 'SEND_FAILED'])
+			def search3 = new Search(searchString: "")
+		when:
+			def allInboundMessages = Fmessage.search(search).list()
+			def allSentMessages = Fmessage.search(search2).list()
+			def allMessages = Fmessage.search(search3).list()
+		then:
+			println allInboundMessages
+			allInboundMessages*.every {it.status == MessageStatus.INBOUND}
+			allSentMessages*.every {it.status != MessageStatus.INBOUND}
+			allMessages.size() == 7
+
 	}
 	
+	def "should not error when searched for a group with no members"() {
+		setup:
+			def footballGroup = new Group(name: "football").save(flush: true)
+			def search = new Search(group: footballGroup)
+		when:
+			def searchMessages = Fmessage.search(search).list()
+			def searchMessagesCount = Fmessage.search(search).count()
+		then:
+			!searchMessages
+			searchMessagesCount == 0
+	}
+
 	def "should get message traffic information for the filter criteria"() {
 		setup:
 			["Fsharp", 'Haskell'].each() { createGroup(it) }
@@ -104,11 +130,65 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def startDate = new Date("2011/10/12")
 			def endDate   = new Date("2011/10/13")
-			def messages = Fmessage.getMessageStats(fsharp, null, startDate, endDate)
+			def messages = Fmessage.getMessageStats([groupInstance:fsharp, messageOwner:null, startDate:startDate, endDate:endDate])
 		then:
 		messages == ["12/10":[Sent:5, Received:4], "13/10":[Sent:0, Received:1]]
 	}
 
+	def "should update message contact name"() {
+		setup:
+			new Contact(name: "Alice", primaryMobile:"primaryNo", secondaryMobile: "secondaryNo").save(flush: true)
+		when:
+			def messageFromPrimaryNumber = new Fmessage(src: "primaryNo", dst: "dst", status: MessageStatus.INBOUND)
+			def messageFromSecondaryNumber = new Fmessage(src: "secondaryNo", dst: "dst", status: MessageStatus.INBOUND)
+			def outBoundMessageToPrimaryNo = new Fmessage(src: "src", dst: "primaryNo", status: MessageStatus.SENT)
+			def outBoundMessageToSecondayNo = new Fmessage(src: "src", dst: "secondaryNo", status: MessageStatus.SENT)
+			messageFromPrimaryNumber.save(flush: true)
+			messageFromSecondaryNumber.save(flush: true)
+			outBoundMessageToPrimaryNo.save(flush: true)
+			outBoundMessageToSecondayNo.save(flush: true)
+		then:
+			messageFromPrimaryNumber.contactName == "Alice"
+			messageFromSecondaryNumber.contactName == "Alice"
+			outBoundMessageToPrimaryNo.contactName == "Alice"
+			outBoundMessageToSecondayNo.contactName == "Alice"
+	}
+	
+	def "should fail when archive message has a message owner" () {
+		setup:
+			def f = new Folder(name:'test').save(failOnError:true)
+			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
+			f.addToMessages(m)
+			f.save()
+		when:
+			m.archived = true
+		then:
+			!m.validate()
+	}
+	
+	def "when number added as contact, all messages should have that contacts name and have contactExists set to true"() {
+		when:
+			def message = new Fmessage(src: "number", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+		then:
+			message.contactName == "number";
+			message.contactExists == false;
+		when:
+			new Contact(name: "Alice", primaryMobile:"number", secondaryMobile: "secondaryNo").save(flush: true)
+			message.refresh()
+		then:
+			message.contactName == "Alice";
+			message.contactExists == true;
+	}
+	
+	def "should be able to archive message when it has no message owner" () {
+		setup:
+			def m = new Fmessage(src:'+123456789', text:'hello').save(failOnError:true)
+		when:
+			m.archived = true
+		then:
+			m.validate()
+	}
+	
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
 	}
@@ -117,13 +197,14 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		def c = new Contact(name: n, primaryMobile: a)
 		c.save(failOnError: true)
 	}
-	
+
 	private def setUpMessages() {
 			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message').save(flush:true)
 			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message').save(flush:true)
 			new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message').save(flush:true)
 			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message').save(flush:true)
 			new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message').save(flush:true)
+			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'This msg will not show up in inbox view').save(flush:true)
 			new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
 			new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)
 	}

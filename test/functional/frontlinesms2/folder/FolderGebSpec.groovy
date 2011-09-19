@@ -1,17 +1,15 @@
 package frontlinesms2.folder
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class FolderGebSpec extends grails.plugin.geb.GebSpec {
-	static createTestFolders() {
-		[new Folder(name: 'Work'), 
-				new Folder(name: 'Projects')].each() {
-			it.save(failOnError:true, flush:true)
+	def createTestFolders() {
+		['Work', 'Projects'].each() {
+			new Folder(name:it).save(failOnError:true, flush:true)
 		}
 	}
 
-	static createTestMessages() {
+	def createTestMessages() {
 		[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, starred: true),
 				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3),
 				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started', dateReceived: new Date() - 2),

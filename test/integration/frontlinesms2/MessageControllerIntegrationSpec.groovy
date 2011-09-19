@@ -4,7 +4,6 @@ import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import frontlinesms2.enums.MessageStatus
 
 class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -12,10 +11,6 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 	def setup() {
 		controller = new MessageController()
 		controller.beforeInterceptor.call()
-	}
-	
-	def cleanup() {
-		Fmessage.findAll()*.delete(flush:true, failOnError:true)
 	}
 
 	def "Inbound messages show up in inbox view"() {
@@ -72,7 +67,7 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 
 	def "first message in the inbox view is selected by default"() {
         setup:
-             def message1 = new Fmessage(status:MessageStatus.INBOUND).save(failOnError: true)
+             def message1 = new Fmessage(status: MessageStatus.INBOUND).save(failOnError: true)
         when:
             def resultMap =  controller.inbox()
         then:
@@ -124,6 +119,22 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.emptyTrash()
 		then:
 			Fmessage.list() == inboxMessages
+	}
+	
+	def "should filter out failed messages in the pending section"() {
+		setup:
+			(1..3).each {new Fmessage(status: MessageStatus.SEND_PENDING).save(failOnError: true)}
+			(1..2).each {new Fmessage(status: MessageStatus.SEND_FAILED).save(failOnError: true)}
+		when:
+			def model = controller.pending()
+		then:
+			model.messageInstanceTotal == 5
+			
+		when:
+			controller.params.failed = true
+			model = controller.pending()
+		then:
+			model.messageInstanceTotal == 2
 	}
 
 	Date createDate(String dateAsString) {

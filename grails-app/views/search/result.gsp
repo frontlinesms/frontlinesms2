@@ -6,7 +6,7 @@
     </head>
     <body>
 		<g:if test="${messageInstance != null}">
-			<g:render template="/message/message_details" />
+			<g:render template="../message/message_details" />
 		</g:if>
     </body>
 </html>

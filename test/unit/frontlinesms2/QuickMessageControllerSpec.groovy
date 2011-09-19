@@ -6,7 +6,8 @@ class QuickMessageControllerSpec extends ControllerSpec {
 
 	def setup() {
 		def jim = new Contact(name:"jim", primaryMobile:"12345")
-		def mohave = new Group(name:"Mojave", members: [jim])
+		def mohave = new Group(name:"Mojave")
+		mockDomain GroupMembership, [new GroupMembership(group: mohave, contact: jim)]
 		mockDomain Contact, [jim]
 		mockDomain Group, [mohave]
 	}

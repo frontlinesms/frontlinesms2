@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class InboxSpec extends MessageGebSpec {
 	def 'inbox message list is displayed'() {
@@ -18,7 +17,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			messageSources == ['Alice', 'Bob']
 	}
-    
+
 	def 'message details are shown in list'() {
 		given:
 			createInboxTestMessages()
@@ -30,7 +29,7 @@ class InboxSpec extends MessageGebSpec {
 			rowContents[3] == 'hi Alice'
 			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
-    
+
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createInboxTestMessages()
@@ -41,7 +40,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			firstMessageLink.text() == 'Alice'
 	}
-        
+
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -54,7 +53,7 @@ class InboxSpec extends MessageGebSpec {
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
 	}
-    
+
 	def 'selected message is highlighted'() {
 		given:
 			createInboxTestMessages()
@@ -69,7 +68,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 	}
-	
+
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
 			def m1 = new Fmessage(status:MessageStatus.INBOUND, read: false).save(failOnError:true)
@@ -81,11 +80,11 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$("tr#message-${m1.id}").hasClass('unread')
 			!$("tr#message-${m1.id}").hasClass('read')
-			
+
 			!$("tr#message-${m2.id}").hasClass('unread')
 			$("tr#message-${m2.id}").hasClass('read')
 	}
-	
+
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
 			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
@@ -117,7 +116,7 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
-			go "message/inbox/show/${message.id}"	
+			go "message/inbox/show/$message.id"
 			$('#btn_reply').click()
 			waitFor {$('div#tabs-1').displayed}
 			$("div#tabs-1 .next").click()
@@ -130,9 +129,9 @@ class InboxSpec extends MessageGebSpec {
 	    	createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
-		then:    	
+		then:
 			$("#messages tbody tr").size() == 2
-		when:	
+		when:
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
@@ -157,9 +156,11 @@ class InboxSpec extends MessageGebSpec {
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
-			go "message/inbox/show/${message.id}"
-			$('#btn_dropdown').click()
-			$('#btn_forward').click()			
+			go "message/inbox/show/$message.id"
+			waitFor{$("#btn_dropdown").displayed}
+			$("#btn_dropdown").click()
+			waitFor{$("#btn_forward").displayed}
+			$('#btn_forward').click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
@@ -170,18 +171,16 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			$('#checked-message-count').text() == "2 messages selected"
+			waitFor { $('#checked-message-count').text() == "2 messages selected" }
 		when:
-			$("#message")[1].click()
-			sleep 1000
+			messagesSelect[1].click()
 			def message = Fmessage.findBySrc('Bob')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
-			$("#message-details").displayed
+			waitFor { $("#message-details").displayed }
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
@@ -201,40 +200,76 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			$("#tabs-3").displayed
 	}
-
-	def "should skip recipients tab for reply-all option"() {
+	
+	def "should show the address of the contact in the confirm screen"() {
 		given:
-			createInboxTestMessages()
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			
 		when:
-			go "message"
+			go "message/inbox/show/${message.id}"
 		then:
-			$("#message")[0].click()
-			sleep 1000
-			$("a", text: "Reply All").click()
-			sleep 1000
+			$("#btn_reply").click()
+			waitFor {$('#tabs-1').displayed}
 		when:
 			$("#nextPage").jquery.trigger('click')
-			sleep 1000
+			waitFor { $('#tabs-3 ').displayed }
 		then:
 			$("#tabs-3").displayed
+			$("#recipient").text() == "${message.src}"
+	}
+	
+	def "should show the name of the contact in the confirm screen if contact exists"() {
+		given:
+			new Contact(name: "Tom", primaryMobile: "+254999999").save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			
+		when:
+			go "message/inbox/show/${message.id}"
+		then:
+			$("#btn_reply").click()
+			waitFor {$('#tabs-1').displayed}
+		when:
+			$("#nextPage").jquery.trigger('click')
+			waitFor { $('#tabs-3 ').displayed }
+		then:
+			$("#tabs-3").displayed
+			$("#recipient").text() == "${Contact.findByPrimaryMobile(message.src).name}"
 	}
 
-	
-//  NOTE: Need to find a better way to make this test work
-//	def "should remain in the same page, after moving the message to the destination folder"() {
-//		setup:
-//			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
-//			new Folder(name: "my-folder").save(flush: true)
+	//FIXME
+//	def "should skip recipients tab for reply-all option"() {
+//		given:
+//			createInboxTestMessages()
 //		when:
-//			go "message/inbox"
+//			go "message"
+//			$("#message")[0].click()
+//			sleep 1000
+//			$("#reply-all").click()
+//			sleep 10000
 //		then:
-//			$('#message-actions').value("${Folder.findByName('my-folder').id}")
-//			waitFor {$("#messages").text().contains("No messages")}
-//			$("#messages-submenu .selected").text().contains('Inbox')
-//		cleanup:
-//			Fmessage.list()*.refresh()
-//			Folder.findByName('my-folder').refresh().delete(flush: true)
+//			$("#tabs").find { $("a").@href == '#tabs1' }
+//			!$("#tabs").find { $("a").@href == '#tabs2' }
+//			$("#tabs").find { $("a").@href == '#tabs3' }
+//			!$("#tabs a").@href('#tabs2').displayed
+//			$("#tabs a").@href('#tabs3').displayed
 //	}
+
+	
+	def "should remain in the same page, after moving the message to the destination folder"() {
+		setup:
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
+			new Folder(name: "my-folder").save(flush: true)
+		when:
+			go "message/inbox"
+			waitFor {$("#move-actions").displayed}
+			$("#move-actions").getJquery().val(Folder.findByName('my-folder').id.toString());
+			$("#move-actions").getJquery().trigger("change")
+			sleep 1000
+			waitFor {$("#no-messages").displayed}
+		then:
+			$("#no-messages").text().contains("No messages")
+			$("#messages-submenu .selected").text().contains('Inbox')
+	}
 
 
 	String dateToString(Date date) {
