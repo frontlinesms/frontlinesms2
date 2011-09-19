@@ -4,21 +4,24 @@
 				value="${search?.status}"
 				keys="${['', 'INBOUND', 'SENT, SEND_PENDING, SEND_FAILED']}"/>
 	</li>
+	
 	<li>
 		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" />Include Archive
 	</li>
+	
 	<li>
 		<h2>${message(code:'default.search.betweendates.title', default:'Between dates:') }</h2>
-		<g:datePicker name="startDate" value="${params.startDate ?: new Date()-14}" noSelection="['':'-Choose-']" precision="day"/>
+		<g:datePicker name="startDate" value="none" noSelection="['none':'']" precision="day"/>
 		<br>
-		<g:datePicker name="endDate" value="${params.endDate ?: new Date()}" noSelection="['':'-Choose-']" precision="day"/>
+		<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day"/>
 	</li>
+	
 	<li class="field" id='field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 	</li>
-	<g:if test="${search==null}">
+	<g:if test="${search == null}">
 		<g:each var="customField" in="${customFieldList}">
 			<li class="field" id="custom-field-field-${customField}">
 				<h2>${customField}:</h2><br>
@@ -42,12 +45,12 @@
 	${message(code:'default.search.moresearchoption.label', default:'More search options') }
 </h2>
 <ol class="sub-menu" id="expanded-search-options">
-	<li id="field-link-contact-name">
-		<a onclick="toggleContactNameField()">Contact Name</a>
+	<li>
+		<a id="field-link-contact-name" onclick="toggleContactNameField()">Contact Name</a>
 	</li>
 	<g:each var="customField" in="${customFieldList}">
-		<li id="custom-field-link-${customField}">
-			<a onclick="toggleCustomField('${customField}')">${customField}</a>
+		<li>
+			<a id="custom-field-link-${customField}" onclick="toggleCustomField('${customField}')">${customField}</a>
 		</li>
 	</g:each>
 </ol>

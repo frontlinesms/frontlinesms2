@@ -20,7 +20,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			"message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max')}"
+			to FolderListPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[2] == 'Jane'
@@ -33,7 +33,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			"message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max')}"
+			to FolderListPage
 			def selectedMenuItem = $('#messages-menu .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
@@ -48,13 +48,13 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def messages = folder.getMessages() as List
 			def message = messages[0]
 			go "message/folder/${folder.id}/show/${message.id}"
-		then:
 			$("#btn_reply").click()
-			waitFor {$('div#tabs-1').displayed}
+		then:
+			waitFor { $('div#tabs-1').displayed }
 		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value: message.src).getAttribute('checked')
+			$('input', value: message.src).@checked
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
@@ -62,18 +62,18 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+			to FolderListPage
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
 			$('a', text:'Starred').click()
-			waitFor {$("#messages tbody tr").size() == 1}
 		then:
+			waitFor { $("#messages tbody tr").size() == 1 }
 			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Max'
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#messages tbody tr").size() == 2}
 		then:
+			waitFor { $("#messages tbody tr").size() == 2 }
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Jane', 'Max'])
 	}
 	
@@ -82,14 +82,17 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			def folder = Folder.findByName("Work")
-			go "message/folder/${folder.id}/show/${Fmessage.findBySrc('Max').id}"
+			to FolderListPage
 		then:
-			waitFor{$("#btn_dropdown").displayed}
-			$("#btn_dropdown").jquery.trigger('click')
-			waitFor{$("#btn_forward").displayed}
-			$("#btn_forward").click()
-			waitFor {$('div#tabs-1').displayed}
+			waitFor{ btnDropdown.displayed }
+		when:
+			btnDropdown.click()
+		then:
+			waitFor{ btnForward.displayed }
+		when:
+			btnForward.click()
+		then:
+			waitFor { $('div#tabs-1').displayed }
 			$('textArea', name:'messageText').text() == "I will be late"
 	}
 	
@@ -98,12 +101,11 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			to FolderListPage
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			$("#checked-message-count").text() == "2 messages selected"
+			waitFor { $("#checked-message-count").text() == "2 messages selected" }
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -113,31 +115,37 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
-			def btnReply = $('#multiple-messages a')[0]
+			to FolderListPage
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			btnReply
+			waitFor { btnReplyMultiple.displayed }
 		when:
-			btnReply.click()
-			waitFor {$('div#tabs-1').displayed}
+			btnReplyMultiple.click()
+		then:
+			waitFor { $('div#tabs-1').displayed }
+		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'Max').getAttribute('checked')
-			$('input', value:'Jane').getAttribute('checked')
-			!$('input', value:'June').getAttribute('checked')
+			$('input', value:'Max').@checked
+			$('input', value:'Jane').@checked
+			!$('input', value:'June').@checked
 	}
 
 }
 
 class FolderListPage extends geb.Page {
- 	static url = "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+ 	static def getUrl() { "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}" }
 	static at = {
 		title.endsWith('Folder')
 	}
 	static content = {
 		messagesList { $('#messages-submenu') }
+		messagesSelect { $(".message-select") }
+		
+		btnReplyMultiple { $('#multiple-messages a')[0] }
+		
+		btnDropdown { $("#btn_dropdown") }
+		btnForward { $("#btn_forward") }
 	}
 }
