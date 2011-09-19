@@ -24,7 +24,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+			waitFor { checkedMessageCount == 2 }
 	}
 	
 	def "checked message details are displayed when message is checked"() {
@@ -112,16 +112,15 @@ class CheckedMessageSpec extends MessageGebSpec {
 	def "'Forward' button still works when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
 		when: 
 			to MessagesPage
 			messagesSelect[0].click()
 		then:
-			waitFor { messagesSelect*.@checked == ["true", "true", "true"] }
+			waitFor { checkedMessageCount == 2 }
 		when:
 			messagesSelect[0].click()
 		then: 
-			waitFor { messagesSelect*.@checked == [null, null, null] }
+			waitFor { checkedMessageCount == 0 }
 		when:
 			$('#btn_dropdown').click()
 		then:
@@ -158,15 +157,15 @@ class CheckedMessageSpec extends MessageGebSpec {
 			messagesSelect[0].click()
 		then:
 			waitFor { $('#multiple-messages').displayed }
-			$("#checked-message-count").text() == "3 messages selected"
+			checkedMessageCount == 3
 		when:
 			messagesSelect[1].click()
 		then:
-			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+			waitFor { checkedMessageCount == 2 }
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { $("#checked-message-count").text() == "3 messages selected" }
+			waitFor { checkedMessageCount == 3 }
 	}
 
 	def "can archive multiple messages"() {
