@@ -14,7 +14,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			actions[1] == "Inbox"
 			actions[2] == "Shampoo Brands"
-			actions.every {it != "Football Teams"}
+			!actions.contains("Football Teams")
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
 			def inboxActions = $('#move-actions').children()*.text()
@@ -29,37 +29,36 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			Folder.findByName("Work").addToMessages(new Fmessage(src: "src", dst: "dst")).save(flush: true)
 		when:
 			go "message/folder/${Folder.findByName("Work").id}"
-			waitFor {title == "Folder"}
-			moveTo("inbox")
-			sleep 1000
-			waitFor {$("div.flash").displayed}
+			$('#move-actions').jquery.val('inbox') // bug selecting option - seems to be solved by using jquery...
+			$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
 		then:
-			$("div.flash").text()
+			waitFor { $("div.flash").displayed }
 		when:
 			$("a", text: "Inbox").click()
 			waitFor {title == "Inbox"}
 		then:
 			$("tbody tr").size() == 1
 	}
-
+	
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
 		given:
 			createTestPolls()
 			createTestMessages()
-		when:
-			to PollMessageViewPage
 			def bob = Fmessage.findBySrc('Bob')
 			def alice = Fmessage.findBySrc('Alice')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
-			$("#message")[0].click()
-			sleep 1000
-			moveTo(Poll.findByTitle('Shampoo Brands').id.toString())
-			sleep 1000
-			waitFor {$("div.flash").displayed}
+		when:
+			to PollMessageViewPage
+			messagesSelect[0].click()
 		then:
-			Poll.findByTitle("Football Teams").getMessages(['starred':false]).size() == 0
-			Poll.findByTitle("Shampoo Brands").getMessages(['starred':false]).size() == 3
+			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
+		when:
+			setMoveActionsValue(shampooPoll.id.toString())
+		then:
+			waitFor { $('#no-messages').displayed }
+			footballPoll.messages.size() == 0
+			shampooPoll.messages.size() == 3
 	}
 
 	def "archive action should not be available for messages that belongs to a message owner  such as activities"() {
@@ -72,31 +71,35 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			!$("#message-archive").displayed
 	}
 
-	def "should move poll messages to inbox"(){
+	def "should move poll messages to inbox"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
 			to PollMessageViewPage
-			$("#message")[0].click()
-			sleep 1000
-			moveTo("inbox")
-			sleep 1000
+			messagesSelect[0].click()
 		then:
-			$("div.flash").text()
+			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
+		when:
+			setMoveActionsValue('inbox')
+		then:
+			waitFor { $("div.flash").text() }
 		when:
 			$("a", text: "Inbox").click()
-			waitFor {title == "Inbox"}
-		then:
+		then:	
+			waitFor { title == "Inbox" }
 			$("tbody tr").size() == 3
 	}
-
-	private def moveTo(value) {
-		$('#move-actions').getJquery().val(value)
-		$('#move-actions').getJquery().trigger("change")
+	
+	private def setMoveActionsValue(value) {
+		$('#move-actions').jquery.val(value) // bug selecting option - seems to be solved by using jquery...
+		$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
 	}
 }
 
 class PollMessageViewPage extends geb.Page {
  	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
+	static content = {
+		messagesSelect { $(".message-select") }
+	}
 }

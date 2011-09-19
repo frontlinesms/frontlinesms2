@@ -50,14 +50,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#pollGraph svg')
 	}
 
-	def 'selected poll is highlighted'() {
+	def 'selected poll should be highlighted'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
-			selectedMenuItem.text() == 'Football Teams'
+			$('#messages-menu .selected').text() == 'Football Teams'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -79,24 +79,25 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
 	}
-	
+
 	def "should only display message details when one message is checked"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			to PollListPage
+			messagesSelect[1].click()
 		then:
-			$("#checked-message-count").text() == "2 messages selected"
+			waitFor { $('#message-body').text() == 'go manchester' }
 		when:
-			$("#message")[1].click()
-			sleep 1000
+			messagesSelect[2].click()
+		then:
+			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+		when:
+			messagesSelect[1].click()
 			def message = Fmessage.findBySrc('Bob')
 		then:
-			$('#message-details #contact-name').text() == message.src
+			waitFor { $('#message-details #contact-name').text() == message.src }
 			$('#message-details #message-body').text() == message.text
 	}
 
@@ -122,12 +123,13 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 }
 
 class PollListPage extends geb.Page {
- 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+ 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}" }
 	static at = {
 		title.endsWith('Poll')
 	}
 	static content = {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
+		messagesSelect(required:false) { $(".message-select") }
 	}
 }

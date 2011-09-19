@@ -21,17 +21,16 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			def messages = $('#messages tbody tr')
 		then:
 			messages.size() == 2
-		    messages.collect { it.find("td:nth-child(3) a").text()}.containsAll(["dst1", "dst2"])
+			messages.collect { it.find("td:nth-child(3) a").text() }.containsAll(["dst1", "dst2"])
 	}
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:
-		    goToPendingPage()
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			goToPendingPage()
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			!$('.multi-action a', text:'Reply All').displayed
+			waitFor { !$('.multi-action a', text:'Reply All').displayed }
 	}
 
 	def "should filter pending messages for pending and failed messages"() {
@@ -41,31 +40,30 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#messages tbody tr").size() == 2
 		when:
 			$('a', text:'Failed').click()
-			waitFor {$("#messages tbody tr").size() == 1}
-		then:
+		then:	
+			waitFor { $("#messages tbody tr").size() == 1 }
 			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'dst1'
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#messages tbody tr").size() == 2}
-		then:
+		then:	
+			waitFor { $("#messages tbody tr").size() == 2 }
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
 	}
 
-    def "retry button must not apper if there are no failed messages"() {
+	def "retry button must not apper if there are no failed messages"() {
 		setup:
 			Fmessage.list()*.delete(flush: true)
 			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
 			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-		when:
 			assert Fmessage.count() == 2
+		when:
 			goToPendingPage()
 		then:
 			!$("#retry").displayed
 		when:
-			$("#message")[0].click()
-			sleep(4000)
-			waitFor{$("#multiple-messages").displayed}
+			messagesSelect[0].click()
 		then:
+			waitFor { $("#multiple-messages").displayed }
 			!$("#retry-failed").displayed
 	}
 
@@ -73,31 +71,29 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			goToPendingPage()
 			$("a", text:"dst1").click()
-			sleep(1000)
 		then:
-			$("#retry").displayed
+			waitFor { $("#retry").displayed }
 		when:
 			$("#retry").click()
-			sleep(2000)
-			waitFor{$(".flash").text().contains("dst1")}
-		then:
-			$(".flash").text().contains("dst1")
+		then:	
+			waitFor{ $(".flash").text().contains("dst1") }
 	}
 
 	def "should be able to retry all failed messages"() {
 		setup:
-			new Fmessage(src: "src1", dst:"dst2", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true)
+			new Fmessage(src: "src1", dst:"dst2", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true, failOnError:true)
 		when:
 			goToPendingPage()
 		then:
 			$("#retry").displayed
 		when:
-			$("#message")[0].click()
-			waitFor {$("#retry-failed").displayed}
-			$("#retry-failed").click()
-			waitFor{$(".flash").displayed}
+			messagesSelect[0].click()
 		then:
-			$(".flash").text().contains("dst2, dst1")
+			waitFor { $("#retry-failed").displayed }
+		when:
+			$("#retry-failed").click()
+		then:
+			waitFor{ $(".flash").text().contains("dst2, dst1") }
 	}
 
 	def goToPendingPage() {
@@ -105,7 +101,4 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 		$('a', text: "Pending").click()
 		waitFor { title == "Pending" }
 	}
-
-
-
 }

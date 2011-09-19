@@ -9,107 +9,88 @@ import java.util.Date
 class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	def "quick message link opens the popup to send messages"() {
 		when:
-			to MessagesPage
-		    $("a", text:"Quick message").click()
-		    waitFor {$('div#tabs-1').displayed}
+			launchQuickMessageDialog()
 		then:
-	        $('div#tabs-1').displayed
+			at QuickMessageDialog
 	}
 
-    def "should select the next tab on click of next"() {
+	def "should select the next tab on click of next"() {
 		when:
-			to MessagesPage
-		    loadFirstTab()
-			loadSecondTab()
-			$("#address").value("+919544426000")
-			$('.add-address').click()
-			sleep 1000
-        then:
-			$('div#tabs-2').displayed
-		when:
-			loadThirdTab()
-			sleep(1000)
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
 		then:
-			$('div#tabs-3').displayed
+			waitFor { selectRecipientsTab.displayed }
+		when:
+			toConfirmTab()
+		then:
+			waitFor { confirmTab.displayed }
 	}
 
-    def "should not send message when no recipients are selected"() {
+	def "should not send message when no recipients are selected"() {
 		when:
-			to MessagesPage
-		    loadFirstTab()
+			launchQuickMessageDialog()
+					$("#tabs a", text: "Confirm").click()
         then:
-			$("#tabs a", text: "Confirm").click()
-			waitFor {$('div#tabs-3').displayed}
+			waitFor { confirmTab.displayed }
 		when:
-			$("#done").click()
-			sleep(1000)
+			doneButton.click()
 		then:
-			$("#tabs-3").displayed
+			waitFor { confirmTab.displayed }
 		when:
 			$(".confirm-tab").click()
-			sleep(1000)
 		then:
-			$("#tabs-3").displayed
+			waitFor { confirmTab.displayed }
 	}
 
     def "should select the previous tab on click of back"() {
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			sleep 1000
-			$("#address").value("+919544426000")
-			$('.add-address').click()
-			sleep 1000
-			loadThirdTab()
-			sleep(1000)
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+			toConfirmTab()
 		then:
-			$('div#tabs-3').displayed
+			waitFor { confirmTab.displayed }
         when:
 			$("#prevPage").click()
-			sleep 1000
-			waitFor {$('div#tabs-2').displayed}
-			sleep(1000)
 		then:
-			$('div#tabs-2').displayed
+			waitFor { selectRecipientsTab.displayed }
 
 	}
 
 	def "should add the manually entered contacts to the list "() {
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			sleep(1000)
-			$("#address").value("+919544426000")
-			$('.add-address').click()
-			sleep 1000
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
 		then:
-			$('div#contacts div')[0].find('input').value() == "+919544426000"
+			waitFor { $('div#contacts div')[0].find('input').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 	}
 
 	def "should send the message to the selected recipients"() {
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			sleep(1000)
-			$("#address").value("+919544426000")
-			$('.add-address').click()
-			sleep 1000
-			loadThirdTab()
-			sleep(1000)
-			$("#done").click()
-			sleep 1000
-			waitFor{$("#tabs-4").displayed }
-			$("#confirmation").click()
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+			toConfirmTab()
+			doneButton.click()
 		then:
+			waitFor{ $("#tabs-4").displayed }
+		when:
+			$("#confirmation").click()
 			$("a", text: "Inbox").click()
-			waitFor{title == "Inbox"}
+		then:
+			waitFor{ title == "Inbox" }
 			$("a", text: "Pending").hasClass("send-failed")
+		when:
 			$("a", text: "Pending").click()
-			waitFor{title == "Pending"}
+		then:
+			waitFor{ title == "Pending" }
 			$("#message-list tbody tr").size() == 1
 			$("#message-list tbody tr")[0].hasClass("send-failed")
 	}
@@ -119,52 +100,54 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		setup:
 			createData()
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			$("input[name=groups]").value("group1")
-			$("input[value=group1]").jquery.trigger("click")
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
 		then:
-			$("#recipient-count").text() == "2"
+			$("input[name=groups]").displayed
+		when:
+			$("input[name=groups]").value("group1")
+		then:
+			waitFor { $("#recipient-count").text() == "2" }
 	}
 
 	def "should deselect all member recipients when a group is un checked"() {
 		setup:
 			createData()
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			$("input[name=groups]").value("group1")
-			$("input[value=group1]").jquery.trigger("click")
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
 		then:
-			$("#recipient-count").text() == "2"
+			$("input[name=groups]").displayed
 		when:
-			$("input[value=group1]").jquery.trigger("click")
+			$("input[name=groups]").value("group1")
 		then:
-			$("#recipient-count").text() == "0"
+			waitFor { $("#recipient-count").text() == "2" }
+		when:
+			$("input[value=group1]").click()
+		then:
+			waitFor { $("#recipient-count").text() == "0" }
 	}
 
 	def "should not allow to proceed if the recipients are not selected in the quick message screen"() {
 		setup:
 			createData()
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
-			assert !$(".error-panel").displayed
-			$("#nextPage").click()
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
 		then:
-			$(".error-panel").displayed
+			!$(".error-panel").displayed
+		when:
+			nextPageButton.click()
+		then:
+			waitFor { $(".error-panel").displayed }
 	}
 
 	def "selected group should get unchecked when a member drops off"() {
 		setup:
 			createData()
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
 			$("input[value='group1']").click()
 			$("input[value='group2']").click()
 		then:
@@ -172,8 +155,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("input[value='12345678']").click()
 		then:
-			!$("input[value='group1']").getAttribute("checked")
-			!$("input[value='group2']").getAttribute("checked")
+			!$("input[value='group1']").@checked
+			!$("input[value='group2']").@checked
 			$("#recipient-count").text() == "1"
 	}
 
@@ -181,9 +164,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		setup:
 			createData()
 		when:
-			to MessagesPage
-			loadFirstTab()
-			loadSecondTab()
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
 			$("input[value='group1']").click()
 			$("input[value='group2']").click()
 		then:
@@ -191,22 +173,23 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("input[value='group1']").click()
 		then:
-			!$("input[value='group1']").getAttribute("checked")
-			$("input[value='group2']").getAttribute("checked")
+			!$("input[value='group1']").@checked
+			$("input[value='group2']").@checked
 			$("#recipient-count").text() == "2"
 
 	}
 
-	def "should launch announcement screen from create new activity link" () {
+	def "should launch announcement screen from create new activity link" () { // FIXME why is this test here??
 		when:
 			to MessagesPage
 			$("a", text:"Create new activity").click()
-			waitFor {$("#tabs-1").displayed}
+		then:
+			waitFor { $("#tabs-1").displayed }
+		when:
 			$("input", name: "activity").value("announcement")
 			$("#done").click()
-			waitFor {$("#ui-dialog-title-modalBox").text() == "Announcement"}
-		then:
-			$("#ui-dialog-title-modalBox").text() == "Announcement"
+		then:	
+			waitFor { $("#ui-dialog-title-modalBox").text() == "Announcement" }
 	}
 
 	private def createData() {
@@ -221,22 +204,37 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		group.save(flush: true)
 		group2.save(flush: true)
 	}
+	
+	def launchQuickMessageDialog() {
+		to MessagesPage
+		$("a", text:"Quick message").click()
+		waitFor { at QuickMessageDialog }
+	}
+	
+	def toSelectRecipientsTab() {
+		$('a', text:'Select Recipients').click()
+		waitFor { selectRecipientsTab.displayed }
+	}
+	
+	def toConfirmTab() {
+		$('a', text:'Confirm').click()
+		waitFor { confirmTab.displayed }
+	}
+}
 
-	def loadFirstTab() {
-		$("a", text:"Quick message").click()
-		sleep 1000
+class QuickMessageDialog extends geb.Page {
+	static at = {
+		$("#ui-dialog-title-modalBox").text() == 'Quick Message'
 	}
-	def loadSecondTab() {
-		$("#nextPage").click()
-		sleep 1000
-	}
-	def loadThirdTab() {
-		$("#nextPage").click()
-		sleep 1000
-	}
-	def loadQuickMessageDialog() {
-		$("a", text:"Quick message").click()
-		sleep 1000
+	static content = {
+		selectRecipientsTab { $('div#tabs-2') }
+		confirmTab { $('div#tabs-3') }
+		
+		addressField { $('#address') }
+		addAddressButton { $('.add-address') }
+		
+		doneButton { $("#done") }
+		nextPageButton { $("#nextPage") }
 	}
 }
 

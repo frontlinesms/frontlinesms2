@@ -6,8 +6,9 @@ import grails.converters.JSON
 import frontlinesms2.MessageStatus
 
 class MessageController {
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST", deleteAll: "POST",
-							archive: "POST", archiveAll: "POST"]
+	static allowedMethods = [save: "POST", update: "POST",
+			delete: "POST", deleteAll: "POST",
+			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
 
@@ -28,17 +29,15 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		def responseInstance, selectedMessageList
-		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
+		def responseInstance = messageInstance?.messageOwner
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
-		if (!params.checkedMessageList) selectedMessageList = ',' + messageInstance?.id + ','
-		else selectedMessageList = params.checkedMessageList
+		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
-				pollInstanceList: Poll.getNonArchivedPolls(),
+				pollInstanceList: Poll.nonArchivedPolls,
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
 				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
@@ -77,7 +76,7 @@ class MessageController {
 
 	def poll = {
 		def activityInstance = Poll.get(params.ownerId)
-		def messageInstanceList = activityInstance.getMessages(params)		
+		def messageInstanceList = activityInstance.getMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
 				messageInstanceTotal: activityInstance.countMessages(params.starred),
@@ -143,7 +142,9 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
+			if(params.messageSection == 'result') {
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId,archived: params.archived])
 		}
 	}
@@ -165,7 +166,10 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: 'search', params: [flashMessage: flash.message])
+			if(params.messageSection == 'result') {
+				println "Search params: $params"
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
