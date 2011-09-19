@@ -3,9 +3,8 @@
 	<g:form name="export-form" controller="export" action="downloadReport">
 		<g:hiddenField name="messageSection" value="${messageSection}" />
 		<g:hiddenField name="ownerId" value="${ownerId}" />
-		<g:hiddenField name="searchString" value="${searchString}" />
-		<g:hiddenField name="groupInstance" value="${groupId}" />
-		<g:hiddenField name="activityId" value="${activityId}" />
+		<g:hiddenField name="searchId" value="${searchId}" />
+
 		<p>To export messages from FrontlineSMS, choose the type of export and the information to be included in the exported data.</p>
 			<div>
 				<h2>Select an output format:</h2>
@@ -14,3 +13,8 @@
 			</div>
 	</g:form>
 </div>
+<script>
+function updateExportInfo() {
+	$(".ui-dialog-title").html("Export Messages: ${reportName}");
+}
+</script>

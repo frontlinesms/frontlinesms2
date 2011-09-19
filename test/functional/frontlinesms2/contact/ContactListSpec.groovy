@@ -12,23 +12,15 @@ class ContactListSpec extends ContactGebSpec {
 			createTestContacts()
 		when:
 			go 'contact'
-		then:
-			def contactList = $('#contacts')
-			assert contactList.tag() == 'ol'
-			
-			def contactNames = contactList.children().collect() {
-				it.text()
-			}
-			assert contactNames == ['Alice', 'Bob']
+		then:	
+			$('ol#contact-list').children()*.text() == ['Alice', 'Bob']
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
 		when:
 			go 'contact'
 		then:
-			def c = $('#contacts')
-			assert c.tag() == "div"
-			assert c.text() == 'You have no contacts saved'
+			$('div#contact-list').text() == 'No contacts here!'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
@@ -44,12 +36,27 @@ class ContactListSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 		then:
-			def contactList = $('#contacts')
-			def contactNames = contactList.children().collect() {
-				it.text()
-			}
+			def contactList = $('#contact-list')
+			def contactNames = contactList.children()*.text()
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			assert contactNames == expectedNames
+	}
+	
+	def 'should be able to search within contacts'() {
+		given:
+			def fpGroup = new Group(name: "Friends").save(failOnError: true, flush: true)
+			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
+			def samJones = new Contact(name: 'SAm Jones', primaryMobile: "1234567892").save(failOnError: true)
+			def samTina = new Contact(name: 'SaM Tina', primaryMobile: "1234567893").save(failOnError: true)
+			samAnderson.addToGroups(fpGroup, true)
+			samJones.addToGroups(fpGroup,true)
+			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
+		when:
+			go "group/show/$fpGroup.id"
+			$("#contact-search").jquery.trigger('focus')
+			$("#contact-search") << "Sam"
+		then:
+			waitFor { $('#contact-list').children()*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
 	static createManyContacts() {	

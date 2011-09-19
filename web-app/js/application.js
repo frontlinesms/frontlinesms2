@@ -19,7 +19,7 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'poll/create',
 			success: function(data) {
-				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();});
+				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();}, true);
 			}})
 	},
 
@@ -30,6 +30,7 @@ var remoteHash = {
 			url: url_root + 'group/list',
 			success: function(data) {
 				launchMediumWizard('Manage Subscription', data, 'Create');
+				addTabValidations();
 			}})
 	},
 
@@ -39,7 +40,30 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
-				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
+				launchMediumWizard('Announcement', data, 'Send', null, true);
+				addTabValidations();
+			}})
+	},
+
+	"export": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + 'export/wizard',
+			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
+					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val()},
+			success: function(data) {
+				launchSmallPopup('Export', data, 'Export');
+				updateExportInfo();
+			}})
+	},
+
+	"renameActivity": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + 'poll/rename',
+			data: {ownerId: $("#ownerId").val()},
+			success: function(data) {
+				launchSmallPopup('Rename activity', data, 'Rename');
 			}})
 	}
 }
@@ -109,9 +133,27 @@ function isCheckboxSelected(value) {
 }
 
 
-$.widget("ui.TabContentWidget", {
+$.widget("ui.contentWidget", {
 	validate: function() {
 		return this.options['validate'].call();			
 	},
-	options: {validate: function() {return true;}}
+
+	onDone: function() {
+		return this.options['onDone'].call();			
+	},
+
+	options: {validate: function() {return true;} ,
+	onDone: function() {return true;}}
 });
+
+$.fn.renderDefaultText = function() {
+	return this.focus( function() {
+		$(this).toggleClass('default-text-input', false);
+		var element = $(this).val();
+		$(this).val( element === this.defaultValue ? '' : element );
+	}).blur(function(){
+		var element = $(this).val();
+		$(this).val( element.match(/^\s+$|^$/) ? this.defaultValue : element );
+		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
+		});
+};

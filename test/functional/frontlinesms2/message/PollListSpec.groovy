@@ -50,14 +50,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#pollGraph svg')
 	}
 
-	def 'selected poll is highlighted'() {
+	def 'selected poll should be highlighted'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
-			selectedMenuItem.text() == 'Football Teams'
+			$('#messages-menu .selected').text() == 'Football Teams'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -79,67 +79,57 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
 	}
-	
+
 	def "should only display message details when one message is checked"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			to PollListPage
+			messagesSelect[1].click()
 		then:
-			$("#checked-message-count").text() == "2 messages selected"
+			waitFor { $('#message-body').text() == 'go manchester' }
 		when:
-			$("#message")[1].click()
-			sleep 1000
+			messagesSelect[2].click()
+		then:
+			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+		when:
+			messagesSelect[1].click()
 			def message = Fmessage.findBySrc('Bob')
 		then:
-			$('#message-details #contact-name').text() == message.src
+			waitFor { $('#message-details #contact-name').text() == message.src }
 			$('#message-details #message-body').text() == message.text
 	}
 
-// FIXME: Fails in the build machine alone
-//	def "should remain in the same page when all archived poll messages are deleted"() {
-//		setup:
-//			createTestPolls()
-//			createTestMessages()
-//			def archivedPoll = new Poll(title: "archived poll", archived: true)
-//			archivedPoll.addToResponses(new PollResponse(value: "response1", key:"A"))
-//			archivedPoll.addToResponses(new PollResponse(value: "response2", key:"B"))
-//			archivedPoll.save(flush: true)
-//			[PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Bob')),
-//					PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Alice')),
-//					PollResponse.findByValue('response2').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
-//		when:
-//			$("#main-tabs a", text: "Archive").click()
-//			def activityArchiveButton = $("a", text: 'Activity archive')
-//			waitFor{activityArchiveButton.displayed}
-//			activityArchiveButton.click()
-//			waitFor{$("a", text:'archived poll').displayed}
-//			$("a", text:'archived poll').click()
-//			waitFor {$("#messages").displayed}
-//			$("#message")[0].click()
-//			waitFor {$('.multi-action').displayed}
-//			def btnDelete = $('.multi-action a')[1]
-//		then:
-//			btnDelete
-//		when:
-//			btnDelete.click()
-//			waitFor() {$("body").find("div.flash").text() ==("3 messages deleted") }
-//		then:
-//			$("#main-tabs a", text: "Archive").hasClass("selected")
-//	}
+	def "should hide the messages when poll detail chart is shown"() {
+		setup:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+			waitFor {$("#messages").displayed}
+		then:
+			$("#messages").displayed
+		when:
+			$("#pollSettings").click()
+			waitFor {!$("#messages").displayed}
+		then:
+			$(".response-count").text() == "2 responses total"
+		when:
+			$("#pollSettings").click()
+		then:
+			$("#messages").displayed
+	}
 }
 
 class PollListPage extends geb.Page {
- 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+ 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}" }
 	static at = {
 		title.endsWith('Poll')
 	}
 	static content = {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
+		messagesSelect(required:false) { $(".message-select") }
 	}
 }

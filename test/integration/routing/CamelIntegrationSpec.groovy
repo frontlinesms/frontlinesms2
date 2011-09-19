@@ -12,7 +12,6 @@ import frontlinesms2.Fmessage
 abstract class CamelIntegrationSpec extends IntegrationSpec {
 	// This is the CamelContext used by Grails.  It will be injected for you.
 	def camelContext
-
 	// This is the endpoint of the route to be tested
 	def resultEndpoint
 	// This is the start of the route to be tested
@@ -21,40 +20,36 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 	def setup() {
 		camelContext.addRoutes(createRouteBuilder())
 		resultEndpoint = camelContext.getEndpoint('mock:result')
-		template = new DefaultProducerTemplate(
-			camelContext,
-			camelContext.getEndpoint('direct:start'))
-//		template = createProducerTemplate()
+		template = createProducerTemplate()
 		template.start()
 	}
 
 	def cleanup() {
 		template?.stop()
 		MockEndpoint.resetMocks(camelContext)
-		def testRoutes = [camelContext.getRouteDefinition('test-1'),
-						camelContext.getRouteDefinition('test-2')]
-		camelContext.removeRouteDefinitions(testRoutes)
+		def testRoutes = [camelContext.getRouteDefinition('test-from'),
+						camelContext.getRouteDefinition('test-to')]
+		camelContext.removeRouteDefinitions(testRoutes - null)
 
-		// TODO Work around for apparent non-transactional nature of Spock integration specs
-		Fmessage.findAll().each() {
+		// Work around as domain objects created within routes are not cleaned up by the transaction of the integration test
+		Fmessage.findAll().each {
 			it.delete()
 		}
 	}
 
-	abstract String getFrom();
-	abstract String getTo();
+	abstract String getTestRouteFrom();
+	abstract String getTestRouteTo();
 
 	ProducerTemplate createProducerTemplate() {
-		new DefaultProducerTemplate(
-				camelContext,
+		new DefaultProducerTemplate(camelContext,
 				camelContext.getEndpoint('direct:start'))
 	}
 
 	private RouteBuilder createRouteBuilder() {
 		return new RouteBuilder() {
 			public void configure() {
-				from('direct:start').to(getFrom()).routeId('test-1')
-				from(getTo()).to('mock:result').routeId('test-2')
+				if(getTestRouteFrom()) from('direct:start').to(getTestRouteFrom()).routeId('test-from')
+				if(getTestRouteTo()) from(getTestRouteTo()).to('mock:result').routeId('test-to')
 			}
 		}
 	}

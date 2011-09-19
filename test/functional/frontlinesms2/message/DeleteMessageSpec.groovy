@@ -1,7 +1,6 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 
 class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
@@ -29,26 +28,34 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 			assert Fmessage.findAllByDeleted(true).size == 1
 		when:
-			def trashAction = $("select", id:"empty-trash")
-			trashAction.getJquery().val('Empty trash')
-			trashAction.jquery.trigger('change')
-			waitFor {$('.ui-button')}
-			$('.ui-button')[0].click()
+			def trashAction = $("#empty-trash")
+			trashAction.click()
+			sleep 1000
+			$("#done").click()
+			sleep 1000
 		then:
 			at MessagesPage
 			Fmessage.findAllByDeleted(true).size == 0
 	}
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
-		given:
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def message3 = Fmessage.findBySrc('+254778899')
+		when:
+			to MessagesPage
+			messagesSelect[1].click()
+			messagesSelect[2].click()
+		then:
+			waitFor { multipleMessagesThing.displayed }
+			deleteAllButton.displayed
+		when:
+			deleteAllButton.click()
+		then:
+			waitFor{ flashMessage.text().contains("deleted") }
+	}
+	
+	def "'Delete' button appears for individual messages and works"() {
 		when:
 			go "message/inbox"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			waitFor {$('#multiple-messages').displayed}
-			def btnDelete = $('#multiple-messages a')[2]
+			def btnDelete = $("#message-delete")
 		then:
 			btnDelete
 		when:
@@ -57,7 +64,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			at MessagesPage
 			waitFor{$("div.flash").text().contains("deleted")}
 	}
-	
+
 	static createTestData() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
@@ -76,7 +83,9 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		def poll = new Poll(title:'Miauow Mix')
+		poll.addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 
 		def message1 = new Fmessage(src:'Cheney', dst:'+12345678', text:'i hate chicken')
 		def message2 = new Fmessage(src:'Bush', dst:'+12345678', text:'i hate liver')

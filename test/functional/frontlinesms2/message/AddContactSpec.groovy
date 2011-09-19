@@ -23,6 +23,7 @@ class AddContactSpec extends MessageGebSpec {
 			assert btnAddContact instanceof geb.navigator.NonEmptyNavigator
 			btnAddContact.click()
 		then:
-			$('#contact-details').primaryMobile == "+254778899"
+			waitFor {$('#contact_details').displayed}
+			$('#contact_details').primaryMobile == "+254778899"
 	}
 }

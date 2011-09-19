@@ -3,7 +3,7 @@ function messageResponseClick(messageType) {
 	var configureTabs= "";
 	var me = $(this);
 	if (messageType == 'Reply') {
-		configureTabs = "tabs-1, tabs-3"
+		configureTabs = "tabs-1, tabs-3, tabs-4"
 		var src = $("#message-src").val();
 	} else if(messageType == 'Forward') {
 		var text = $("#message-body").text();
@@ -12,12 +12,28 @@ function messageResponseClick(messageType) {
 	
 	$.ajax({
 		type:'POST',
-		data: {recipient: src, messageText: text, configureTabs: configureTabs},
+		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true);addTabValidations(); }
 	});
 	$("#reply-dropdown").val("na");
 }
+
+function launchMediumPopup(title, html, btnFinishedText) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#modalBox").dialog(
+		{
+			modal: true,
+			width: 675,
+			height: 500,
+			title: title,
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
+			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
+			close: function() { $(this).remove(); }
+		}
+	);
+}
+
 
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
 
@@ -29,7 +45,8 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 		height: 500,
 		buttons: [
 			{ text:"Cancel", click: cancel, id:"cancel" },
-			{ text:"Prev", click: prevButton, id:"prevPage" },
+			{ text:"Back", id:"disabledBack", disabled: true },
+			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
 			{ text:"Done",  click: cancel, id:"confirmation" },
 			{ text:btnFinishedText,  click: done, id:"done" }
@@ -38,10 +55,9 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 			$(this).remove();
 		}
 	});
-	$('#tabs').tabs({select: function(event, ui) {
-		changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
-	}});
+	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
+	initializeTabContentWidgets()
 	onLoad && onLoad();
 
 }
@@ -51,21 +67,38 @@ function cancel() {
 }
 
 function prevButton() {
-	$("#tabs").tabs('select', getCurrentTab() - 1);
+		for (var i = 1; i <= getCurrentTab(); i++) {
+			var prevTabToSelect = getCurrentTab() - i;
+			if ($.inArray(prevTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+				$("#tabs").tabs('select', prevTabToSelect);
+				break;
+			}
+		}
 }
 
 function nextButton() {
-	if(validateCurrentTab()) {
-		$("#tabs").tabs('select', getCurrentTab() + 1);
+	for (var i = 1; i <= getTabLength(); i++) {
+		var nextTabToSelect = getCurrentTab() + i;
+		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+			$("#tabs").tabs('select', nextTabToSelect);
+			break;
+		}
 	}
 }
 
 function done() {
-	// TODO add validation. Sould be able to add validate() function to individual popup gsp's so that this function works universall
-	if(validateCurrentTab()) {
-		$(this).find("form").submit();
+	if(validateWholeTab() && onDoneOfCurrentTab()) {
+		$(this).find("form").submit();                  
 		$(this).remove();
-	}
+	} 
+}
+
+function validateWholeTab() {
+	var isValid = true
+	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
+		isValid =  validateTab($("#" + value.id)) && isValid
+	});
+  	return isValid
 }
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
@@ -90,10 +123,6 @@ function range(first, last) {
 	return a
 }
 
-function toggleDropdown() {
-	$("#dropdown_options").toggle();
-}
-
 function getTabLength() {
 	return $('#tabs').tabs("length") - 1;
 }
@@ -108,12 +137,51 @@ function getButtonToTabIndexMapping(withConfirmationScreen) {
 			"prevPage": range(1, withConfirmationScreen ? getTabLength() - 1 : getTabLength()),
 			"nextPage": range(0, withConfirmationScreen ? getTabLength() - 2 : getTabLength() - 1),
 			"done": withConfirmationScreen ? [getTabLength() - 1] : [getTabLength()],
-			"confirmation": withConfirmationScreen ? [getTabLength()] : []
+			"confirmation": withConfirmationScreen ? [getTabLength()] : [],
+			"disabledBack": [0]
 		}
 }
 
 function validateCurrentTab() {
-	var selected = $("#tabs").tabs( "option", "selected" );
-	var currentTab = $("#tabs").find('.ui-tabs-panel').eq(selected)
-	return currentTab.TabContentWidget("validate")
+	return validateTab(getCurrentTabWidget())
 }
+
+function onDoneOfCurrentTab() {
+	return getCurrentTabWidget().contentWidget("onDone")
+}
+
+function getCurrentTabWidget() {
+	var selected = $("#tabs").tabs( "option", "selected" );
+	return $("#tabs").find('.ui-tabs-panel').eq(selected)
+}
+
+function movingForward(nextIndex, currentIndex) {
+	return nextIndex > currentIndex
+}
+
+function onTabSelect(withConfirmationScreen) {
+	$('#tabs').tabs({select: function(event, ui) {
+		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
+		if (isValid) {
+			$('.error-panel') && $('.error-panel').hide();
+			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
+		}
+		return isValid
+	}});
+}
+
+function initializeTabContentWidgets() {
+	for(i=0; i <= getTabLength(); i++) {
+		$("#tabs-" + (i + 1)).contentWidget()
+	}
+}
+
+function validateTab(tab) {
+	var isValid = tab.contentWidget('validate');
+	if(!isValid) {
+		$('.error-panel').show();
+	}
+	return isValid;
+}
+
+

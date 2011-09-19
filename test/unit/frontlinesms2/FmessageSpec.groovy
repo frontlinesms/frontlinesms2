@@ -69,13 +69,6 @@ class FmessageSpec extends UnitSpec {
 			m.validate()
 	}
 
-	def "should return count as zero if no search string is given"() {
-		when:
-			def count = Fmessage.countAllSearchMessages()
-		then:
-			count == 0
-	}
-
 	def 'archiving messages sets the archived flag to true'() {
 		when:
 			Fmessage message = new Fmessage()
@@ -87,17 +80,24 @@ class FmessageSpec extends UnitSpec {
 			message.archived == true
 	}
 
-	def "should fetch the display name of the recipient"() {
+	def "should return true if there are failed messages"() {
 		setup:
-			mockDomain Contact, [new Contact(name: "John", primaryMobile: "dst")]
-			mockDomain Fmessage, [new Fmessage(src: "src", dst: "dst"), new Fmessage(src: "src1", dst: "dst1")]
+			registerMetaClass(Fmessage)
+			Fmessage.metaClass.'static'.getPendingMessages = {params -> [new Fmessage(status: MessageStatus.SEND_FAILED), new Fmessage(status: MessageStatus.SEND_PENDING)]}
 		when:
-			def message = Fmessage.findBySrc("src")
-			def message1 = Fmessage.findBySrc("src1")
+			def result = Fmessage.hasUndeliveredMessages()
 		then:
-			message.getRecipientDisplayName() == "John"
-			message1.getRecipientDisplayName() == "dst1"
+			result
+	}
 
+	def "should return false if there are no failed messages"() {
+		setup:
+			registerMetaClass(Fmessage)
+			Fmessage.metaClass.'static'.getPendingMessages = {params -> [new Fmessage(status: MessageStatus.SEND_PENDING), new Fmessage(status: MessageStatus.SEND_PENDING)]}
+		when:
+			def result = Fmessage.hasUndeliveredMessages()
+		then:
+			!result
 	}
 }
 

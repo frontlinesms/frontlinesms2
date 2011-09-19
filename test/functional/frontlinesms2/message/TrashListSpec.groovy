@@ -15,12 +15,19 @@ class TrashListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'src1'
+			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'dst1'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['src1', 'src2'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
+	}
+	
+	def "should not contain export button" () {
+		when:
+			go "message/trash"
+		then:
+			!$('a', text:'Export')
 	}
 }
 

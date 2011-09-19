@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.enums.MessageStatus
 
 class RadioShowIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 
@@ -41,6 +40,4 @@ class RadioShowIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			starredHealthShowMessages == 1
 			unstarredHealthShowMessages == 3
 	}
-
-
 }

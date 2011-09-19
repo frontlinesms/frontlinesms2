@@ -1,7 +1,6 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import frontlinesms2.enums.MessageStatus
 import frontlinesms2.utils.*
 
 @Mixin(GebUtil)
@@ -95,7 +94,8 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def createReadUnreadMessages() {
-		new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true,src:'1234567898').save(flush:true)
-		new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false,src:'1234567899').save(flush:true)
+		new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true, src:'1234567898').save(flush:true)
+		new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'Another unread message', read:false, src:'1234567898').save(flush:true)
+		new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An unread message', read:false, src:'1234567899').save(flush:true)
 	}
 }

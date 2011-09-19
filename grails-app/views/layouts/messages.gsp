@@ -1,4 +1,4 @@
-	<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
@@ -11,8 +11,9 @@
 			url_root = "${request.contextPath}/";
 		</script>
 		<g:javascript src="message/check_message.js"/>
+		<g:javascript src="message/arrow_navigation.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
-		<g:javascript src="message/star_message.js"></g:javascript>
+		<g:javascript src="message/star_message.js" />
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
@@ -34,83 +35,134 @@
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'folders.png')}' />
 								<h2>${ownerInstance?.name}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'sent'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'sent.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'sent.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'pending'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'pending.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'pending.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'trash'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'trash.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'trash.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'radioShow'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'onair.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'onair.png')}' />
 								<h2>on air</h2>
 							</div>
 						</g:elseif>
 						<g:else>
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'inbox.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'inbox.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:else>
 						<ol>
+							<g:if test="${messageSection == 'trash' && messageInstance != null}">
+								<li>
+									<select id="trash-actions">
+										<option value="na" class="na">Trash actions...</option>
+										<option id="empty-trash" value="empty-trash" onclick="launchEmptyTrashConfirmation();">Empty trash</option>
+									</select>
+								</li>
+							</g:if>
+							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
+								<li>
+									<g:link elementId="export" url="#">
+										Export
+									</g:link>
+								</li>
+							</g:if>
 							<li>
-								<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", ownerId: "${ownerInstance?.id}", activityId: "${activityId}", searchString: "${searchString}", groupId: "${groupInstance?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
-									Export
-								</g:remoteLink>
-							</li>
-							<li id="manage-subscription">
-								<g:remoteLink controller="group" action="list" onSuccess="launchMediumWizard('Manage Subscription', data, 'Create');">
-									Manage subscription
-								</g:remoteLink>
-							</li>
-							<li>
-					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true);addTabValidations();" id="quick_message">
-					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
+					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
+					        		<img src='${resource(dir:'images/icons',file:'quickmessage.png')}' />
 									Quick message
 								</g:remoteLink>
 							</li>
 						</ol>
+
 						<g:if test="${messageSection == 'poll'}">
-							<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-							<button id="pollSettings">Show poll details</button>
-							<div id="pollGraph"></div>
+							<ol>
+								<li class='static_btn'>
+									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+								</li>
+							</ol>
+							<ol>
+								<li>
+									<g:select name="poll-actions" from="${['Export messages', 'Rename activity']}"
+											keys="${['export', 'renameActivity']}"
+											noSelection="${['': 'More actions...']}"/>
+								</li>
+							</ol>
+							<ol>
+								<li>
+									<button id="pollSettings">Show poll details</button>
+								</li>
+							</ol>
+							<div class="poll-details" style="display:none">
+								<div id="pollGraph"></div>
+							</div>
 						</g:if>
 					</div>
-					<div class="content-body">
-						<g:render template="message_list"/>
-						<g:layoutBody />
-					</div>
-					<div class="content-footer">
+					<div class="container" style="display:block">
+						<div class="content-body">
+							<g:render template="message_list"/>
+							<g:layoutBody />
+						</div>
+						<div class="content-footer">
 							<ul id="filter">
 								<li>Show:</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
+								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'failed' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
 								<li>|</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
+								<li>
+								<g:if test="${messageSection == 'pending'}">
+									<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [failed: true]}" >Failed</g:link>
+								</g:if>
+								<g:else>
+									<g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link>
+								</g:else>
+								</li>
 							</ul>
 							<div id="page-arrows">
 								<g:paginate next="Next" prev="Back"
-									max="${grailsApplication.config.pagination.max}"
+									max="${grailsApplication.config.grails.views.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</body>
 </html>
+<g:javascript>
+	$("#poll-actions").bind('change', function() {
+		var selected = $(this).find('option:selected').val();
+		if(selected)
+			remoteHash[selected].call();
+	});
+
+	$("#export").click(function() {
+		remoteHash['export'].call();
+	});
+
+	if($(".prevLink").size() == 0) {
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled">Back</a>');
+	}
+
+	if($(".nextLink").size() == 0) {
+		$("#page-arrows").append('<a href="#" class="nextLink disabled">Back</a>');
+	}
+</g:javascript>

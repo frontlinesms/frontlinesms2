@@ -114,6 +114,10 @@ body {
 		  	text-transform:uppercase;
 		  	text-align: center;
 		  	padding: 20px;
+		  	
+		  	li #tab-status img {
+	  			vertical-align: middle;
+		  	}
 			
 			a:link, a:visited {
 				display: block;
@@ -144,17 +148,19 @@ body {
 		top: -25px;
 		width: 100%;
 		
-		.selected {
-			background-color: $highlight;
+		#list-items tbody tr:first-child, .selected {
+			background-color: $highlight !important;
 		}
 		
-		.context-menu { padding-bottom: 40px; }
+		.context-menu { 
+			padding-bottom: 40px;
+			border:none; 
+		}
 		
 		#settings-menu, #contacts-menu, #messages-menu, #archives-menu {
 			@include column(4, false);
 			text-align: left;
 			margin-right: 0px;
-			border-right: 1px solid #9E9E9E;
 			
 			.section { padding-top: 17px; }
 			
@@ -199,7 +205,6 @@ body {
 			@include column(4, false);
 			text-align: left;
 			margin-right: 0px;
-			border-right: 1px solid #9E9E9E;
 			
 			.section {
 				padding-top: 17px;
@@ -229,6 +234,8 @@ body {
 				
 				input, select { width: 170px; }
 				
+				h2 { display: inline; }
+				
 			}
 				
 			.search {
@@ -245,7 +252,8 @@ body {
 		.content {
 			@include clearfix;
 			border-bottom: 1px solid #9E9E9E;
-			
+			border-left: 1px solid #9E9E9E; 
+		
 			.content-header {
 				@include clearfix; // required
 				@include horizontal-list(5px, right);
@@ -303,16 +311,25 @@ body {
 				}
 				
 				ol {		
-					@include clearfix;
-					@include column(14, true);
-					height: 46px;
-						
+					float: right;
+					clear: right;
 					li {
 						padding: 17px 17px 17px 0;
 						@include button-format;
 						
 						a img { vertical-align: middle; }
+						
 					}
+				}
+				
+				#export-btn .disabled {
+					padding: 17px 17px 17px 0;
+					color: #9E9E9E;
+					background-image:url('../images/buttons/button_hover.png');
+					background-repeat:no-repeat;
+					background-size: 100% 100%;
+					padding: 8px 10px;
+					text-align: center;
 				}
 				
 				#show-graph {
@@ -421,13 +438,14 @@ body {
 					margin-right: 0px;
 					display: block;
 					border-top: 1px solid #9E9E9E;
-					
+					overflow-y: scroll;
+				  	height:75%;
 					li { height: 26px; }
 					a {
 						height: 26px;
 						padding-top: 5px;
 						padding-bottom: 5px;
-						display: block;
+						display: inline-block;
 					}
 				}
 				
@@ -525,6 +543,41 @@ body {
 						border-top: 1px solid #B5C6CD;
 						padding: 17px;
 						
+						#message-search {
+							position: relative;
+							left: 120;
+							padding-top: 10px;
+							padding-bottom: 10px;
+							
+							
+							a:link, a:visited {
+								background-image:url('../images/buttons/button_default.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+							
+							a:hover {
+								background-image:url('../images/buttons/button_hover.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+							
+							a:active {
+								background-image:url('../images/buttons/button_pressed.png');
+								background-repeat:no-repeat;
+								background-size: 100% 100%;
+								padding: 8px 10px;
+								text-align: left;
+								display: inline;
+							}
+						}
+						
 						img, p { 
 							display:inline;
 							vertical-align: middle;
@@ -559,7 +612,6 @@ body {
 						font-size: 14px;
 						padding-left: 17px;
 						padding-right: 17px;
-						a { float: right;}
 					}
 					
 					#message-date {
@@ -671,10 +723,8 @@ body {
 					@include horizontal-list;
 					text-align: bottom;
 				}
-					
-				#page-arrows {
-					@include column(14, true);
-					text-align: bottom;
+				input {
+				float:left
 				}
 			}
 		}
@@ -698,10 +748,13 @@ body {
 .hide {
   display: none
 }
-
+					
 .error-panel {
 	text-align: center;
 	border: 2px solid #C03283;
+	position: relative;
+	left: 169px;
+	width: 70%;
 }
 
 .checked {
@@ -747,11 +800,126 @@ body {
 	margin: 10px 0 0 0
 }
 
-label.bold {
+label.field-enabled {
 	font-weight: bold;
 	color:#000 !important;
 }
 
 a.send-failed, .send-failed td:last-child {
-	 background: url('../images/alert-icon.jpg') no-repeat center right;
+	 background: url('../images/icons/error_on.png') no-repeat center right;
+}
+
+.ui-tabs-nav li.ui-tabs-selected.confirm-tab {
+	background-color: white;
+}
+
+.flash {
+	margin: 20px;
+}
+
+#archive-submenu {
+	#inbox {
+		background: url('../images/icons/messages.gif') no-repeat center left transparent;
+		padding-left: 20px
+	}
+
+	#sent {
+		background: url('../images/icons/messages.gif') no-repeat center left transparent;
+		padding-left: 20px;
+	}
+
+	#poll {
+		background: url('../images/icons/activities.gif') no-repeat center left transparent;
+		padding-left: 20px;
+	}
+}
+
+.response-count {
+	float:right;
+}
+
+.poll-details {
+	clear:both;
+	font-weight: bold;
+}
+
+.poll-response-reply h3 {
+  font-weight: bold;
+  padding: 0 0 10px 0;
+}
+
+.poll-response-reply div {
+  padding: 0 10px 10px 25px;
+}
+
+.poll-response-reply #send_auto_reply {
+  float: left;
+  margin: 0 0 10px 25px;
+}
+
+.poll-response-reply label {
+  margin: 0 0 10px 50px;
+}
+
+.poll-response-reply textarea {
+  margin: 0 0 0 50px;
+}
+
+.ui-dialog-titlebar-close {
+  display: none;
+}
+
+div.confirm-header label {
+  font-weight: bold;
+  margin: 0 0 20px 0;
+}
+
+div.confirm-header .title {
+  font-weight: bold;
+  margin: 0 10px 10px 20px;
+  float: left;
+  width: 20%;
+}
+
+div.confirm-header .message {
+  height:30px;
+}
+
+label.header {
+ font-weight: bold;
+ margin: 0 0 10px 0;
+}
+
+#page-arrows .nextLink {
+	background: url('../images/buttons/paginationright_default.png') no-repeat center right;
+}
+
+#page-arrows .prevLink {
+	background: url('../images/buttons/paginationleft_default.png') no-repeat center right;
+}
+
+#page-arrows .prevLink, #page-arrows .nextLink {
+  display: block;
+  float:left;
+  text-indent:-9999em;
+  width: 25px;
+  padding: 5px;
+}
+
+#page-arrows .nextLink.disabled {
+	background: url('../images/buttons/paginationright_disabled.png') no-repeat center right;
+	padding: 5px;
+}
+
+#page-arrows .prevLink.disabled {
+	background: url('../images/buttons/paginationleft_disabled.png') no-repeat center right;
+	padding: 5px;
+}
+
+.error {
+	border: 1px solid red;
+}
+
+.default-text-input {
+ color:#9E9E9E;
 }

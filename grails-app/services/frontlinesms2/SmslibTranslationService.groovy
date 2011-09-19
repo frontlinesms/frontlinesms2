@@ -5,8 +5,6 @@ import org.smslib.CIncomingMessage
 import org.smslib.CStatusReportMessage
 import org.smslib.COutgoingMessage
 
-import frontlinesms2.enums.MessageStatus // FIXME remove "enums" package
-
 class SmslibTranslationService {
 	void toFmessage(Exchange exchange) {
 		println("exchange ${exchange}")

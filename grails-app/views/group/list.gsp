@@ -6,35 +6,46 @@
 			<li><a href="#tabs-1">Select Group</a></li>
 			<li><a href="#tabs-3">Confirm</a></li>
 		</ul>
-		<g:form id="manage-subscription" name="manage-subscription" url="${[action:'update']}" method="post" onsubmit='return validate();'>
+		<g:form id="manage-subscription" name="manage-subscription" url="${[action:'update']}" method="post">
+			<div class="error-panel hide subscription">please enter all the details</div>
 			<g:render template="select_group"/>
-			<g:render template="confirm"/>                                            
+			<g:render template="confirm"/>
 		</g:form>
 	</div>
 </div>
 
-<script>
+<g:javascript>
+	function addTabValidations() {
+		$("#tabs-1").contentWidget({
+			validate: function() {
+				$("#subscriptionKey").removeClass('error');
+				$("#unsubscriptionKey").removeClass('error');
+				return validate();
+			}
+		});
+
+		$("#tabs-3").contentWidget({
+			onDone: function() {
+				return validate();
+			}
+		});
+	}
+
+
 	function validate() {
 		var selectedElements = getSelectedGroupElements('keyword');
+		var isValid = true;
 		for (var i = 0; i < selectedElements.size(); i++) {
-			if (isElementEmpty('$input[checkbox_id=' + selectedElements[i].id + ']'))
-				return false;
+			var inputKeyword =  $("#" + selectedElements[i].value);
+			if (isEmpty(inputKeyword.val())) {
+				inputKeyword.addClass('error');
+				isValid = false;
+			}
 		}
-		return isDropDownSelected("id") && isGroupChecked('keyword')
+		return isDropDownSelected("id") && isValid
 	}
-	
+
 	function displayError() {
 		$('.error-panel').html('<p> please enter all the details </p>').show();
 	}
-	
-	$('#nextPage').live('click', function() {
-		if(!validate() && $('.error-panel').hasClass('subscription')) {
-			displayError();
-			prevButton();
-			$('#nextPage').disabled = 'disabled';
-		} else {
-			$('.error-panel').hide();
-		}
-		
-	});
-</script>
+</g:javascript>

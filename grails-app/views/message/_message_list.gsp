@@ -1,10 +1,12 @@
-<%@ page import="frontlinesms2.enums.MessageStatus" %>
+<%@ page import="frontlinesms2.MessageStatus" %>
 <div id="message-list">
-	<g:hiddenField name="checkedMessageIdList" value=","/>
+	<g:hiddenField name="checkedMessageList" value=","/>
+	<g:hiddenField name="messageSection" value="${messageSection}"/>
+	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
+	<g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
 	<g:if test="${messageInstanceTotal > 0}">
-		<g:hiddenField name="messageSection" value="${messageSection}"/>
-		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ? 
+		<g:hiddenField name="isArchived" value="${params.archived}"/>
+		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 				message(code: 'fmessage.src.label', default: 'To')
 	 			: message(code: 'fmessage.dst.label', default: 'From')}" />
 		<g:if test="${messageSection == 'search'}">
@@ -15,22 +17,22 @@
 		<table id="messages">
 			<thead>
 				<tr>
-					<td><g:checkBox name="message" value="0" disabled="${messageSection == 'trash' ? 'true': 'false'}" checked="false" onclick="checkAll()"/></td>
+					<td>
+						<g:checkBox name="message-select" class="message-select" id="message-select-all" id= value="0" checked="false" onclick="checkAll()"/></td>
 					<td />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
-									params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
+							params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
 		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-									params='[ownerId: "${ownerInstance?.id}"]' id="message-header" />
-						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-									params='[ownerId: "${ownerInstance?.id}"]' id="timestamp-header" defaultOrder="desc" />
-
+							params='[ownerId: "${ownerInstance?.id}"]' id="message-header" />
+					<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+							params='[ownerId: "${ownerInstance?.id}"]' id="timestamp-header" defaultOrder="desc" />
 			</tr>
 		</thead>
 		<tbody id='messages-table'>
 			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
 					<td>
-						<g:checkBox class='checkbox' name="message" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
+						<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 					</td>
 
@@ -42,7 +44,7 @@
 					</td>
 					<td>
 							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-								${m.displayName}
+								${m.contactName}
 							</g:link>
 					</td>
 					<td>

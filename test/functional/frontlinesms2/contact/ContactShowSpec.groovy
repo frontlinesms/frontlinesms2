@@ -17,20 +17,19 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 			go 'contact'
 		then:
-			def firstContactListItem = $('#contacts').children().first()
-			def anchor = firstContactListItem.children('a').first()
+			def anchor = $(".displayName-${alice.id}")
 			anchor.text() == 'Alice'
-			anchor.getAttribute('href') == "/frontlinesms2/contact/show/${alice.id}"
+			anchor.@href == "/frontlinesms2/contact/show/$alice.id"
 	}
 
 	def 'selected contacts show message statistics' () {
 		given:
 	  		def alice = Contact.findByName('Alice')
 		when:
-	  		go "contact/show/${alice.id}"
+	  		go "contact/show/$alice.id"
 		then:
-	        $("#message-count p").first().text() == '0 messages sent'
-	        $("#message-count p").last().text() == '0 messages received'
+			$("#message-count p").first().text() == '0 messages sent'
+			$("#message-count p").last().text() == '0 messages received'
 	}
 
 	def 'contact with no name can be clicked and edited because his primaryMobile is displayed'() {
@@ -38,10 +37,8 @@ class ContactShowSpec extends ContactGebSpec {
 			def empty = new Contact(name:'', primaryMobile:"+987654321")
 			empty.save(failOnError:true)
 			go "contact/list"
-			def noName = Contact.findByName('')
 		then:
-			noName != null
-			$('a', href:"/frontlinesms2/contact/show/${noName.id}").text().trim() == noName.primaryMobile
+			$('a', href:"/frontlinesms2/contact/show/$empty.id").text().trim() == "+987654321"
 	}
 
 	def 'selected contact is highlighted'() {
@@ -49,32 +46,31 @@ class ContactShowSpec extends ContactGebSpec {
 			def alice = Contact.findByName('Alice')
 			def bob = Contact.findByName('Bob')
 		when:
-			go "contact/show/${alice.id}"
+			go "contact/show/$alice.id"
 		then:
 			assertContactSelected('Alice')
-		    
 		when:
-			go "contact/show/${bob.id}"
+			go "contact/show/$bob.id"
 		then:
 			assertContactSelected('Bob')
 	}
 
-	def 'selected contact details are displayed'() {
+	def 'checked contact details are displayed'() {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
-			go "contact/show/${alice.id}"
-		then:
-			assertFieldDetailsCorrect('name', 'Name', 'Alice')
-			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '2541234567')
-			assertFieldDetailsCorrect('notes', 'Notes', 'notes')
+			go "contact/show/$alice.id"
+			$(".contact-select")[1].click()
+		then:	
+			waitFor { $("#contact-title").text() == "Bob" }
+			assertFieldDetailsCorrect('name', 'Name', 'Bob')
 	}
 
 	def 'contact with no groups has NO GROUPS message visible'() {
 		given:
 			def alice = Contact.findByName('Alice')
 		when:
-			go "contact/show/${alice.id}"
+			go "contact/show/$alice.id"
 		then:
 			$('#no-groups').displayed
 	}
@@ -84,7 +80,7 @@ class ContactShowSpec extends ContactGebSpec {
 			createTestGroups()
 			def bob = Contact.findByName('Bob')
 		when:
-			go "contact/show/${bob.id}"
+			go "contact/show/$bob.id"
 		then:
 			!$('#no-groups').displayed
 		cleanup:
@@ -95,47 +91,25 @@ class ContactShowSpec extends ContactGebSpec {
 		given:
 	  		def alice = Contact.findByName('Alice')
 		when:
-	  		go "contact/show/${alice.id}"
-			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
-			waitFor {$('div#tabs-1').displayed}
-		then:
-	        $('div#tabs-1').displayed
+	  		go "contact/show/$alice.id"
+			$("#contact_details .send-message").find { it.@href.contains('2541234567') }.click()
+		then:	
+			waitFor { $('div#tabs-1').displayed }
 	}
 	
 	def "'send Message' link should not displayed for blank addresses"() {
 		given:
 	  		def alice = Contact.findByName('Alice')
 		when:
-	  		go "contact/show/${alice.id}"
+	  		go "contact/show/$alice.id"
 		then:
-			$("#contact-details .send-message").each {
-	        	assert it.getAttribute('href') ==~ /.*recipients=\d+/
+			$("#contact_details .send-message").each {
+				assert it.@href ==~ /.*recipients=\d+/
 			}
-	}
-	
-	def "sending a message to a contact address updates the statistics"() {
-		given:
-	  		def alice = Contact.findByName('Alice')
-		when:
-	  		go "contact/show/${alice.id}"
-			$("#contact-details .send-message").find{it.getAttribute('href').contains('2541234567')}.click()
-			waitFor {$('div#tabs-1').displayed}
-			$("#nextPage").click()
-			waitFor {$("#done").displayed}
-        	$("#done").click()
-			waitFor {$("#confirmation").displayed}
-		then:
-			$("#confirm").click()
-		when:
-			go "contact/show/${alice.id}"
-		then:
-	        $("#message-count p").first().text() == '1 messages sent'
-	        $("#message-count p").last().text() == '0 messages received'
-		
 	}
 
 	def assertContactSelected(String name) {
-		def selectedChildren = $('#contacts').children('li.selected')
+		def selectedChildren = $('#contact-list').children('li.selected')
 		assert selectedChildren.size() == 1
 		assert selectedChildren.text() == name
 		true

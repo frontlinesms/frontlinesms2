@@ -3,6 +3,9 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
+	// Everything with a version that ends with -SNAPSHOT is changing
+		chainResolver.changingPattern = '.*-SNAPSHOT'
+
 	// inherit Grails' default dependencies
 	inherits("global") {
 		// uncomment to disable ehcache
@@ -23,6 +26,15 @@ grails.project.dependency.resolution = {
 		grailsPlugins()
 		grailsHome()
 		grailsCentral()
+
+		// from https://github.com/alkemist/grails-snapshot-dependencies-fix
+		// Register the new JAR
+		def classLoader = getClass().classLoader
+		classLoader.addURL(new File(baseFile, "lib/grails-snapshot-dependencies-fix-0.1.jar").toURL())
+		// Get a hold of the class for the new resolver
+		def snapshotResolverClass = classLoader.loadClass("grails.resolver.SnapshotAwareM2Resolver")
+		// Define a new resolver that is snapshot aware
+		resolver(snapshotResolverClass.newInstance(name: "spock-snapshots", root: "http://m2repo.spockframework.org/snapshots"))
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
@@ -31,9 +43,10 @@ grails.project.dependency.resolution = {
 		test 'org.apache.camel:camel-test:2.5.0'
 		test 'org.mockito:mockito-all:1.8.5'
 		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
+		test "org.codehaus.geb:geb-spock:0.6.0"
 
 		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile ('net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT') {
+		compile ('net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT'){
 			changing = true
 		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 

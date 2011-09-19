@@ -15,19 +15,14 @@ class ExportController {
     def index = { redirect(action:'wizard', params: params) }
 	
 	def wizard = {
-		println "params: $params"
-		[messageInstanceList: params.messageList,
-			messageSection: params.messageSection,
+		[messageSection: params.messageSection,
+			searchId: params.searchId,
 			ownerId: params.ownerId,
-			activityId: params.activityId,
-			searchString: params.searchString,
-			groupId: params.groupId]
+			reportName:getActivityDescription()]
 	}
 	
 	def downloadReport = {
 		def messageSection = params.messageSection
-		println "section: ${messageSection}"
-		println "wiz params: $params"
 		def messageInstanceList
 		switch(messageSection) {
 			case 'inbox':
@@ -43,19 +38,15 @@ class ExportController {
 				messageInstanceList = Fmessage.trash.list()
 				break
 			case 'poll':
-				messageInstanceList = Poll.get(params.ownerId).getMessages()
+				messageInstanceList = Poll.get(params.ownerId).getMessages(['starred':false])
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages()
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(['starred':false])
 				break
-			case 'result':
-				def activityInstance = getActivityInstance()
-				def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-				messageInstanceList = Fmessage.searchMessages(params.searchString, Group.get(params.groupId), messageOwners).list()
-				println "list: $messageInstanceList"
+			case 'search':
+				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
 				break
 			default:
-				println "default"
 				messageInstanceList = Fmessage.findAll()
 				break
 		}
@@ -68,7 +59,7 @@ class ExportController {
 		List fields = ["id", "src", "dst", "text", "dateCreated"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateReceived":"Date"]
 		Map parameters = [title: "FrontlineSMS Message Export"]
-		response.setHeader("Content-disposition", "attachment; filename=frontlineSMS-searchReport-${formatedTime}.${params.format}")
+		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Export_${formatedTime}.${params.format}")
 		try{
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:],parameters)
 		} catch(Exception e){
@@ -77,13 +68,22 @@ class ExportController {
 		[messageInstanceList: messageInstanceList]
 	}
 	
-	private def getActivityInstance() {
-		if(params.activityId) {
-			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll: Folder
-			def activityId = stringParts[1]
-			activityType.findById(activityId)
-		} else return null
+	private def getActivityDescription() {
+		if(params.ownerId){
+			String name
+		 	switch(params.messageSection) {
+				case 'poll':
+					def poll = Poll.findById(params.ownerId)
+					name = "${poll.title} poll (${poll.countMessages(false)} messages)"
+					break
+				case 'folder':
+					def folder = Folder.findById(params.ownerId)
+					name = "${folder.name} folder (${folder.countMessages(false)} messages)"
+					break
+			}
+		} else {
+			String name = "${params.messageSection} (${params.messageTotal} messages)"
+		}
 	}
 
 	private String dateToString(Date date) {
@@ -92,6 +92,6 @@ class ExportController {
 	}
 
 	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy-MMM-dd", request.locale)
+		return new SimpleDateFormat("yyyyMMdd", request.locale)
 	}
 }

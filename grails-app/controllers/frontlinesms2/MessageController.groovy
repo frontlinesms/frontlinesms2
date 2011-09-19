@@ -2,17 +2,20 @@ package frontlinesms2
 
 import grails.util.GrailsConfig
 import grails.converters.JSON
-import javax.servlet.http.HttpServletRequest
+
+import frontlinesms2.MessageStatus
 
 class MessageController {
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [save: "POST", update: "POST",
+			delete: "POST", deleteAll: "POST",
+			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
 
 	def beforeInterceptor = {
-		params.max = params.max ?: getPaginationCount()
-		params.offset = params.offset ?: 0
-		params.archived = false
+		params.offset  = params.offset ?: 0
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.archived = params.archived ? params.archived.toBoolean() : false
 		true
 	}
 
@@ -30,61 +33,63 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		def responseInstance, selectedMessageList
-		if (messageInstance?.messageOwner) { responseInstance = messageInstance.messageOwner }
+		def responseInstance = messageInstance?.messageOwner
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
-		if (!params.checkedMessageList) selectedMessageList = ',' + messageInstance?.id + ','
-		else selectedMessageList = params.checkedMessageList
-		
+		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
 				folderInstanceList: Folder.findAll(),
 				responseInstance: responseInstance,
-				pollInstanceList: Poll.getNonArchivedPolls(),
+				pollInstanceList: Poll.nonArchivedPolls,
 				radioShows: RadioShow.findAll(),
-				messageCount: Fmessage.countAllMessages(params)]
+				messageCount: Fmessage.countAllMessages(params),
+				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
 	}
 
 	def trash = {
 		def messageInstanceList = Fmessage.getDeletedMessages(params)
 			[messageInstanceList: messageInstanceList,
 					messageSection: 'trash',
-					messageInstanceTotal: Fmessage.countDeletedMessages(params.starred)] << getShowModel(messageInstanceList)
+					messageInstanceTotal: Fmessage.countDeletedMessages(params.starred)] << show(messageInstanceList)
 	}
 
 	def inbox = {
 		def messageInstanceList = Fmessage.getInboxMessages(params)
 		render view:'standard', model:[messageInstanceList: messageInstanceList,
 					messageSection: 'inbox',
-					messageInstanceTotal: Fmessage.countInboxMessages(params)] << getShowModel(messageInstanceList)
+					messageInstanceTotal: Fmessage.countInboxMessages(params),
+					actionLayout : (params.archived ? "archive" : "messages")] << show(messageInstanceList)
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.getSentMessages(params)
 		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList,
-				messageInstanceTotal: Fmessage.countSentMessages(params)] << getShowModel(messageInstanceList)
+				messageInstanceTotal: Fmessage.countSentMessages(params),
+				actionLayout : params.archived ? "archive" : "messages"] << show(messageInstanceList)
 	}
 
 	def pending = {
 		def messageInstanceList = Fmessage.getPendingMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'pending',
-				messageInstanceTotal: Fmessage.countPendingMessages(params.starred)] << getShowModel(messageInstanceList)
+				messageInstanceTotal: Fmessage.countPendingMessages(params.failed),
+				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << show(messageInstanceList)
 	}
 
 	def poll = {
-		def ownerInstance = Poll.get(params.ownerId)
-		def messageInstanceList = ownerInstance.getMessages(params)		
+		def activityInstance = Poll.get(params.ownerId)
+		def messageInstanceList = activityInstance.getMessages(params)
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'poll',
-				messageInstanceTotal: ownerInstance.countMessages(params.starred),
-				ownerInstance: ownerInstance,
-				responseList: ownerInstance.responseStats,
-				pollResponse: ownerInstance.responseStats as JSON] << getShowModel(messageInstanceList)
+				messageInstanceTotal: activityInstance.countMessages(params.starred),
+				ownerInstance: activityInstance,
+				responseList: activityInstance.responseStats,
+				pollResponse: activityInstance.responseStats as JSON,
+				actionLayout : params.archived ? 'archive' : 'messages'] << show(messageInstanceList)
 	}
-	
+
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
 		def messageInstanceList = folderInstance?.getFolderMessages(params)
@@ -94,7 +99,7 @@ class MessageController {
 		render view:'standard', model:[messageInstanceList: messageInstanceList,
 				messageSection: 'folder',
 				messageInstanceTotal: folderInstance.countMessages(params.starred),
-				ownerInstance: folderInstance] << getShowModel(messageInstanceList)
+				ownerInstance: folderInstance] << show(messageInstanceList)
 	}
 
 	def radioShow = {
@@ -104,38 +109,33 @@ class MessageController {
 		[messageInstanceList: messageInstanceList,
 				messageSection: 'radioShow',
 				messageInstanceTotal: showInstance.countMessages(params.starred),
-				ownerInstance: showInstance] << getShowModel(messageInstanceList)
+				ownerInstance: showInstance] << show(messageInstanceList)
 	}
-	
+
 	def send = {
+		def failedMessageIds = params.failedMessageIds
+		def messages = failedMessageIds ? Fmessage.getAll([failedMessageIds].flatten()): getMessagesToSend()
+		messages.each { message ->
+			messageSendService.send(message)
+		}
+		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
+		redirect (action: 'sent')
+	}
+
+	def getMessagesToSend() {
+		def messages = []
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
 		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
 		addresses.unique().each { address ->
-			//TODO: Need to add source from app settings
-			def message = new Fmessage(src: "src", dst: address, text: params.messageText)
-			messageSendService.send(message)
+			//TODO: Need to add source from app setting
+			messages << new Fmessage(src: "src", dst: address, text: params.messageText)
 		}
-		flash.message = "Message has been queued to send to " + addresses.unique().join(", ")
-		redirect (action: 'sent')
+		return messages
 	}
-	
+
 	def delete = {
-		println 'deleting?'
-		withFmessage {messageInstance ->
-			messageInstance.toDelete()
-			messageInstance.save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), 'message'])}"
-		if (isAjaxRequest()) {
-			render ""
-		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}
-	}
-	
-	def deleteAll = {
-		def messageIdList = params.checkedMessageList?.tokenize(',')
+		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.toDelete()
@@ -146,74 +146,51 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			if(params.messageSection == 'search') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId,archived: params.archived])
 		}
 	}
 
 	def archive = {
-		withFmessage { messageInstance ->
-			messageInstance.archive()
-			messageInstance.save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), 'messages'])}"
-		if (request.xhr) {
-			render ""
-		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
-		}
-	}
-	
-	def archiveAll = {
-		def messageIdList = params.checkedMessageList?.tokenize(',')
+		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
+		def listSize = messageIdList.size();
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.archive()
-				messageInstance.save(failOnError: true, flush: true)
+				if(!messageInstance.messageOwner) {
+					messageInstance.archive()
+					messageInstance.save(failOnError: true, flush: true)
+				} else {
+					listSize--
+				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' messages'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			if(params.messageSection == 'search') redirect(controller: 'search', params: [flashMessage: flash.message])
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
-
 
 	def move = {
-		withFmessage {messageInstance ->
-			def messageOwner
-			if (params.messageSection == 'poll') {
-				messageOwner = Poll.get(params.ownerId)
-			} else if (params.messageSection == 'folder') {
-				messageOwner = Folder.get(params.ownerId)
-			}
-			if (messageOwner instanceof Poll) {
-				def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-				unknownResponse.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-			} else if (messageOwner instanceof Folder) {
-				messageOwner.addToMessages(Fmessage.get(params.messageId) ?: messageInstance).save(failOnError: true, flush: true)
-			}
-		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), ' messages'])}"
-		render ""
-	}
-	
-	def moveAll = {
-		def messageIdList = params.messageId?.tokenize(',')
+		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				def messageOwner
-				if (params.messageSection == 'poll') {
-					messageOwner = Poll.get(params.ownerId)
-				} else if (params.messageSection == 'folder') {
-					messageOwner = Folder.get(params.ownerId)
+				if (params.messageSection == 'poll')  {
+					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
+					unknownResponse.addToMessages(messageInstance).save()
 				}
-				if (messageOwner instanceof Poll) {
-					def unknownResponse = messageOwner.getResponses().find { it.value == 'Unknown'}
-					unknownResponse.addToMessages(messageInstance).save(failOnError: true, flush: true)
-				} else if (messageOwner instanceof Folder) {
-					messageOwner.addToMessages(messageInstance).save(failOnError: true, flush: true)
+				else if (params.messageSection == 'folder')
+					Folder.get(params.ownerId).addToMessages(messageInstance).save()
+				else {
+					messageInstance.with {
+						messageOwner?.removeFromMessages messageInstance
+						messageOwner = null
+						status = MessageStatus.INBOUND
+						messageOwner?.save()
+						save()
+					}
 				}
 			}
 		}
@@ -222,19 +199,9 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		withFmessage { messageInstance ->
-			def responseInstance = PollResponse.get(params.responseId)
-			responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
-		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message'])}"
-		render ""
-	}
-	
-	def changeAllResponses = {
-		def messageIdList = params.messageId?.tokenize(',')
+		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				println messageInstance
 				def responseInstance = PollResponse.get(params.responseId)
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
@@ -253,6 +220,8 @@ class MessageController {
 		}
 	}
 
+	def confirmEmptyTrash = { }
+	
 	def emptyTrash = {
 		Fmessage.findAllByDeleted(true)*.delete()
 		redirect(action: 'inbox')
@@ -266,9 +235,5 @@ class MessageController {
 
 	private def isAjaxRequest() {
 		return request.xhr
-	}
-
-	private def getPaginationCount() {
-		GrailsConfig.getConfig().pagination.max
 	}
 }

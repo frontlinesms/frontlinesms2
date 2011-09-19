@@ -13,22 +13,66 @@ class SearchController {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
+				customFieldList : CustomField.getAllUniquelyNamed(),
 				messageSection: 'search']
+	}
+
+	def beforeInterceptor = {
+		params.offset  = params.offset ?: 0
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		true
 	}
 	
 	def result = {
-		def max = params.max ?: getPaginationCount()
-		def offset = params.offset ?: 0
-		def groupInstance = params.groupId? Group.get(params.groupId): null
-		def activityInstance = getActivityInstance()
-		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		def searchResults = Fmessage.search(params.searchString, groupInstance, messageOwners, max, offset)
-		[searchDescription: getSearchDescription(params.searchString, groupInstance, activityInstance),
-				searchString: params.searchString,
-				groupInstance: groupInstance,
-				activityId: params.activityId,
+		def search
+		if(params.searchId) {
+			search = Search.findById(params.searchId)
+		} else {
+			search = Search.findByName("TempSearchObject") ?: new Search(name: "TempSearchObject")
+			def activity =  getActivityInstance()
+			search.owners = activity ? Fmessage.getMessageOwners(activity): null
+			search.searchString = params.searchString?: ""
+			search.contactString = params.contactString?: null
+			search.group = params.groupId ? Group.get(params.groupId) : null
+			search.status = params.messageStatus ?: null
+			search.activityId = params.activityId ?: null
+			search.activity =  getActivityInstance()
+			search.inArchive = params.inArchive ? true : false
+			search.startDate = params.startDate?:null
+			search.endDate = params.endDate?:null
+			//Assumed that we only pass the customFields that exist
+			search.usedCustomField = [:]
+			CustomField.getAllUniquelyNamed().each() {
+				search.usedCustomField[it] = params[it+'CustomField']?:""
+			} 
+			//FIXME easy i discover groovy, so my usage of collection is not good
+			//FIXME hard we should rather do a Join but very few documentation available
+			search.customFieldContactList = []
+			if (search.usedCustomField.find{it.value!=''}) {
+				def firstLoop = true
+				search.usedCustomField.findAll{it.value!=''}.each { name, value ->
+					println("we are looping on "+name+" = "+value)
+					if (firstLoop) {
+						search.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+						firstLoop = false
+					} else {
+						search.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+					}
+				}
+				search.println("List of contact that match "+search.customFieldContactList)
+			}
+			search.save(failOnError: true, flush: true)
+		}
+		def rawSearchResults = Fmessage.search(search)
+		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
+		def searchDescription = getSearchDescription(search)
+		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
+		[searchDescription: searchDescription,
+				search: search,
+				checkedMessageCount: checkedMessageCount,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: Fmessage.countAllSearchMessages(params.searchString, groupInstance, messageOwners)] << show(searchResults) << no_search()
+				messageInstanceTotal: rawSearchResults.count()] << 
+			show(searchResults) << no_search()
 	}
 
 	def show = { searchResults ->
@@ -39,40 +83,40 @@ class SearchController {
 		}
 		[messageInstance: messageInstance]
 	}
-	
-	def deleteMessage = {
-		withFmessage { messageInstance ->
-			messageInstance.toDelete()
-			messageInstance.save(failOnError: true, flush: true)
-			Fmessage.get(params.messageId).messageOwner?.refresh()
-			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: 'Fmessage'), messageInstance.id])}"
-			params.remove('messageId')
-			redirect(action: result, params:params)
+		
+	private def getSearchDescription(search) {
+		String searchDescriptor = "Searching"
+		if(search.searchString) {
+			searchDescriptor += ' "'+search.searchString+'"'
+		} else {
+			searchDescriptor += ' all messages'
 		}
-	}
-	
-	private def getSearchDescription(searchString, group, activity) {
-		if(!searchString && !group && !activity) null
-		else {
-			"Searching in " + {
-				if(!activity && !group) {
-					"all messages"
-				} else if(!activity) {
-					"'${group.name}'"
-				} else {
-					String activityDescription = activity instanceof Poll? activity.title: activity.name
-					if(group) {
-						"'${group.name}' and '$activityDescription'"
-					} else "'$activityDescription'"
-				}
-			}()
+		 
+		if(search.group) searchDescriptor += ", in "+search.group.name
+		if(search.owners) {
+			def activity = getActivityInstance()
+			String ownerDescription = activity instanceof Poll ? activity.title: activity.name
+			searchDescriptor += ", in"+ownerDescription
 		}
+		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
+		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
+		if (search.usedCustomField.find{it.value!=''}) {
+			search.usedCustomField.find{it.value!=''}.each{
+				searchDescriptor += ", with contact having "+it.key+"="+it.value
+			}
+		}
+		if(search.startDate && search.endDate){
+			search.startDate.format('dd-MM-yyyy')
+			search.endDate.format('dd-MM-yyyy')
+			searchDescriptor += ", between "+search.startDate.dateString+" and "+search.endDate.dateString
+		}
+		return searchDescriptor
 	}
 	
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll: Folder
+			def activityType = stringParts[0] == 'poll'? Poll : Folder
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null
@@ -82,9 +126,5 @@ class SearchController {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
 		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
-	}
-
-	private def getPaginationCount() {
-		GrailsConfig.getConfig().pagination.max
 	}
 }

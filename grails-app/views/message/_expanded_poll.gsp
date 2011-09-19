@@ -12,11 +12,14 @@ $(function() {
 		{
 			var xdata = $.map(${pollResponse}, function(a) {return a.value;});
 			var data =  $.map(${pollResponse}, function(a) {return a.count;});
+			var responseCountTag= "<span class='response-count'>${messageInstanceTotal} responses total</span>"
+			$(".poll-details").toggle();
 			var holder = "pollGraph";
 			$("#"+holder).width($("#pollGraph").width);
 			$("#"+holder).height($("#pollGraph").height);
+			$(".poll-details").prepend(responseCountTag);
 			var r = Raphael(holder);
-			r.plotBarGraph(holder, data, xdata, {
+			r.plotBarGraph(holder, data, xdata, { // TODO find an alternative to putting this style info here - should be set via CSS class
 				colors: ["#949494", "#F2202B", "#40B857"],
 				textStyle: {
 					"font-weight": "bold",
@@ -26,7 +29,8 @@ $(function() {
 			loaded = true;
 		}
 		else
-			$("#pollGraph").toggle();		
+			$(".poll-details").toggle();
+		$('.container').toggle();
 	});
 });
 </g:javascript>

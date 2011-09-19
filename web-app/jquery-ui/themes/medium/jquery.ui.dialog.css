@@ -37,7 +37,12 @@
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
 
 .ui-dialog .ui-dialog-content {
-	overflow: hidden;
+	overflow: hide;
+}
+
+.ui-dialog .summary {
+	position: relative;
+	top: -400px;
 }
 
 .ui-dialog .ui-dialog-buttonpane {
@@ -57,6 +62,8 @@
 	opacity: .5;
 }
 
-.ui-dialog-content form{
+.ui-dialog-content form, .ui-dialog-content .content {
 	padding: 17px;
+	overflow: auto;
+	height: 363px;
 }

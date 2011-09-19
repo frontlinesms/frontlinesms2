@@ -9,7 +9,6 @@ import serial.mock.CommPortIdentifier
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
-import frontlinesms2.enums.MessageStatus
 import net.frontlinesms.test.serial.hayes.*
 import frontlinesms2.dev.MockModemUtils
 
@@ -33,7 +32,11 @@ class BootStrap {
 				it.addToGroups(notCats)
 			}
 			createContact("Kate", "+198730948")
-
+			
+			(1..101).each {
+				new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
+			}
+			
 			[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
 					new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
 				it.save(failOnError:true, flush:true)
@@ -51,25 +54,25 @@ class BootStrap {
 			
 			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
 					new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
-					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best'),
+					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateReceived:new Date()-1),
 					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
 					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
 					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
 						it.status = MessageStatus.INBOUND
 						it.save(failOnError:true)
 					}
-			(1..11).each {
+			(1..101).each {
 				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
 			}
 
-			[new Fmessage(src: '+123456789', dst: '+254114433', text: "time over?", status: MessageStatus.SEND_FAILED),
-							new Fmessage(src: 'Jhonny', dst: '+254114433', text: "I am in a meeting", status: MessageStatus.SENT),
+			[new Fmessage(src: '+3245678', dst: '+123456789', text: "time over?", status: MessageStatus.SEND_FAILED),
+							new Fmessage(src: 'Johnny', dst: '+254114433', text: "I am in a meeting", status: MessageStatus.SENT),
 							new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", status: MessageStatus.SENT),
 							new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
 						it.save(failOnError: true)
 					}
 
-			[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona', question:'who will win?', instruction:'Reply A,B'),
+			[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona', question:'who will win?'),
 					Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele')].each() {
 				it.save(failOnError:true, flush:true)
 			}
@@ -126,7 +129,8 @@ class BootStrap {
 	}
 	
 	def initialiseSerial() {
-		if(Environment.current == Environment.TEST)
+		if(Environment.current == Environment.TEST
+				|| Boolean.parseBoolean(System.properties['serial.mock']))
 			initialiseMockSerial()
 		else
 			initialiseRealSerial()
@@ -175,13 +179,8 @@ class BootStrap {
 	}
 
 	def initialiseMockSerial() {
-		// Set up modem simulation
-		MockSerial.init();
-		MockSerial.setMultipleOwnershipAllowed(true);
-		CommPortIdentifier cpi = new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler());
-		MockSerial.setIdentifier("COM98", cpi);
-		MockSerial.setIdentifier("COM99", cpi);
-		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));
+		CommPortIdentifier cpi = new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler())
+		MockModemUtils.initialiseMockSerial([COM98:cpi, COM99:cpi])
 	}
 
 	Date createDate(String dateAsString) {

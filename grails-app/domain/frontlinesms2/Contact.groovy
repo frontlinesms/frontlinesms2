@@ -7,10 +7,10 @@ class Contact {
 	String email
     String notes
 
-	static hasMany = [groups: Group, customFields: CustomField]
-	static belongsTo = Group
+	static hasMany = [customFields: CustomField]
 
 	def beforeUpdate = {
+		// FIXME should check if relevant fields are "dirty" here before doing update
 		updateContactNames("", getOldContactNumber())
 		updateContactNames(name, primaryMobile)
 	}
@@ -21,6 +21,7 @@ class Contact {
 	
 	def beforeDelete = {
 		updateContactNames(name, "")
+		GroupMembership.deleteFor(this)
 	}
 	
     static constraints = {
@@ -61,8 +62,25 @@ class Contact {
 		customFields sort: 'name','value'
 	}
 
+	def getGroups() {
+		GroupMembership.findAllByContact(this)*.group.sort{it.name}
+	}
+
+	def setGroups(groups) {
+		this.groups.each() { GroupMembership.remove(this, it) }
+		groups.each() { GroupMembership.create(this, it) }
+	}
+
+	def addToGroups(Group g, flush=false) {
+		GroupMembership.create(this, g, flush)
+	}
+
+	def removeFromGroups(Group g, flush=false) {
+		GroupMembership.remove(this, g, flush)
+	}
+
 	boolean isMemberOf(Group group) {
-	   groups.contains(group)
+	   GroupMembership.countByContactAndGroup(this, group) > 0
 	}
 
 	def getInboundMessagesCount() {
@@ -79,20 +97,19 @@ class Contact {
 		primary + secondary + email
 	}
 	
-	def updateContactNames(contactName, contactNumber)
-	{
+	def updateContactNames(contactName, contactNumber) {
+		// FIXME this does not take account of secondary phone number - should accept varargs?
 		if(contactNumber) {
-			 // Prevent stackoverflow exception
+			 // can't update in current hibernate session. will lead to recursive update. so updating in new session
 			Contact.withNewSession { session -> 
-				Fmessage.executeUpdate("update Fmessage m set m.contactName = ? where m.src = ?", [contactName, contactNumber])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [contactName, true, contactNumber])
 			}
 		}
 	}
 	
-	private def getOldContactNumber()
-	{
+	private def getOldContactNumber() {
 		Contact.withNewSession {session ->
-			Contact.get(id).refresh().primaryMobile
+			Contact.get(id).refresh().primaryMobile // FIXME why not use this.loadedState?
 		}
 	}
 }
