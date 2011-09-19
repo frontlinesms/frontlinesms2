@@ -5,5 +5,12 @@ class SearchPage extends geb.Page {
 	static at = {
 		title.startsWith("Search")
 	}
+	static content = {
+		messagesSelect { $(".message-select") }
+		checkedMessageCountText { $("#checked-message-count").text() }
+		archiveAllButton { $('#multiple-messages #btn_archive_all') }
+		multipleMessagesPanel { $('#multiple-messages') }
+		replyToMultipleButton { $('#multiple-messages a')[0] }
+	}
 }
 

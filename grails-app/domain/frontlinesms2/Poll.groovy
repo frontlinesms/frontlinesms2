@@ -43,7 +43,7 @@ class Poll {
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
-	def getMessages(params) {
+	def getMessages(params=[:]) {
 		Fmessage.owned(params.starred, this.responses).list(params)
 	}
 

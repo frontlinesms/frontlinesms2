@@ -21,16 +21,16 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchBtn.click()
 		then:
 			at SearchingPage
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex',
-																'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
+			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
+					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
 	def "group list and activity lists are displayed when they exist"() {
 		when:
 			to SearchingPage
 		then:
-			searchFrm.find('select', name:'groupId').children().collect() { it.text() } == ['Select group','Listeners', 'Friends']
-			searchFrm.find('select', name:'activityId').children().collect() { it.text() } == ['Select activity / folder', "Miauow Mix", 'Work']
+			searchFrm.find('select', name:'groupId').children()*.text() == ['Select group','Listeners', 'Friends']
+			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
 	def "search description is shown in header when searching by group"() {
@@ -39,8 +39,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
-			waitFor {searchDescription}
-			searchDescription.text().contains('Searching "test", include archived messages, between')
+			waitFor { searchDescription.text().contains('Searching "test", include archived messages') }
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -57,11 +56,11 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		given:
 			to SearchingPage
 			def a = Folder.findByName("Work")
-			searchFrm.activityId = "folder-${a.id}"
+			searchFrm.activityId = "folder-$a.id"
 		when:
 			searchBtn.click()
 		then:
-			searchFrm.activityId == ["folder-${a.id}"]
+			searchFrm.activityId == "folder-$a.id"
 	}
 	
 	def "can search in archive or not, is enabled by default"() {
@@ -80,7 +79,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to SearchingPage
 		then:
-			!$('h2:nth-child(2) div#export-results a').present();
+			!$('h2:nth-child(2) div#export-results a').present()
 	}
 
 	def "should fetch all inbound messages alone"() {
@@ -89,11 +88,10 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.messageStatus = "INBOUND"
 		when:
 			searchBtn.click()
-			sleep(2000)
-			waitFor{searchBtn.displayed}
-		then:
-			searchFrm.messageStatus == ['INBOUND']
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'meeting at 11.00'])
+		then:	
+			waitFor { searchBtn.displayed }
+			searchFrm.messageStatus == 'INBOUND'
+			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
 	def "should fetch all sent messages alone"() {
@@ -105,21 +103,23 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
 			searchBtn.click()
-			sleep(2000)
-			waitFor{searchBtn.displayed}
 		then:
-			searchFrm.messageStatus == ['SENT, SEND_PENDING, SEND_FAILED']
+			waitFor{ searchBtn.displayed }
+			searchFrm.messageStatus == 'SENT, SEND_PENDING, SEND_FAILED'
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
+	//@spock.lang.IgnoreRest
 	def "should clear search results" () {
 		when:
 			to SearchingPage
 			searchBtn.click()
-			waitFor{searchBtn.displayed}
+		then:
+			waitFor{ searchBtn.displayed }
+		when:
 			$("a", text:"Clear search").click()
 		then:
-			$("#no-search-description").text() == "Start new search on the left"
+			waitFor{ !$("#search-description").displayed }
 	}
 	
 	def "should return to the same search results when message is deleted" () {
@@ -167,7 +167,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("#message-body").text() == 'sent'
 	}
 	
-	def "should describe the behavior of the expand more options"(){
+	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to SearchingPage
@@ -180,7 +180,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			ikCustomFieldLink.displayed
 		when:
 			contactNameLink.click()
-			//SearchBtn.click()
 		then:
 			waitFor { contactNameField.displayed }
 			!expendedSearchOption.displayed
@@ -189,31 +188,77 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { expendedSearchOption.displayed }
 			!contactNameLink.displayed
+	}
+
+	def "should expand the more option and select a customField then the link to custom field is hiden"(){
+		when:
+			createTestContactsAndCustomFieldsAndMessages()
+			to SearchingPage
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			contactNameLink.displayed
 			townCustomFieldLink.displayed
 			likeCustomFieldLink.displayed
 			ikCustomFieldLink.displayed
 		when:
 			townCustomFieldLink.click()
 		then:
-			waitFor{townCustomFieldField.displayed}
+			waitFor { townCustomFieldField.displayed }
+		when:
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			!townCustomFieldLink.displayed
+	}
+	
+	def "should show the contact name that have been fillin after a search"(){
+		given:
+			createTestContactsAndCustomFieldsAndMessages()
+		when:
+			to SearchingPage
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+		when:
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
 		when:
 			searchFrm.contactString = "toto"
 			searchBtn.click()
 		then:
 			waitFor { contactNameField.displayed }
-			!townCustomFieldField.displayed
-			searchFrm.contactString == "toto"
+			searchFrm.contactString == "toto"		
+	}
+	
+	
+	def "when clicking on a remove button on a more search option, the field should be hiden and cleared then the link should appear"() {
+		given:
+			createTestContactsAndCustomFieldsAndMessages()
 		when:
-			//println($("#field-contact-name a"))
-			//$("#field-contact-name a").click()
-			contactNameField.children('a').click()
-			waitFor { !contactNameField.displayed }
+			to SearchingPage
 			searchMoreOptionLink.click()
-			waitFor {contactNameLink.displayed }
+		then:
+			waitFor { expendedSearchOption.displayed }
+		when:
 			contactNameLink.click()
 		then:
 			waitFor { contactNameField.displayed }
-			searchFrm.contactString == null
+		when:
+			searchFrm.contactString = "toto"
+			contactNameField.children('a').click()
+		then:
+			waitFor { !contactNameField.displayed }
+		when:
+			searchMoreOptionLink.click()
+		then:
+			waitFor {contactNameLink.displayed }
+		when:
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
+			!searchFrm.contactString
 	}
 	
 	

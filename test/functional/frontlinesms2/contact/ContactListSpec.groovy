@@ -12,23 +12,15 @@ class ContactListSpec extends ContactGebSpec {
 			createTestContacts()
 		when:
 			go 'contact'
-		then:
-			def contactList = $('#contact-list')
-			assert contactList.tag() == 'ol'
-			
-			def contactNames = contactList.children().collect() {
-				it.text()
-			}
-			assert contactNames == ['Alice', 'Bob']
+		then:	
+			$('ol#contact-list').children()*.text() == ['Alice', 'Bob']
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
 		when:
 			go 'contact'
 		then:
-			def c = $('#contact-list')
-			assert c.tag() == "div"
-			assert c.text() == 'No contacts here!'
+			$('div#contact-list').text() == 'No contacts here!'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
@@ -45,9 +37,7 @@ class ContactListSpec extends ContactGebSpec {
 			go 'contact'
 		then:
 			def contactList = $('#contact-list')
-			def contactNames = contactList.children().collect() {
-				it.text()
-			}
+			def contactNames = contactList.children()*.text()
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			assert contactNames == expectedNames
 	}
@@ -62,17 +52,11 @@ class ContactListSpec extends ContactGebSpec {
 			samJones.addToGroups(fpGroup,true)
 			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
 		when:
-			go 'contact'
-			$("a", text:"Friends").click()
+			go "group/show/$fpGroup.id"
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
-			sleep 2000
 		then:
-			def contactList = $('#contact-list')
-			def contactNames = contactList.children().collect() {
-				it.text()
-			}
-			assert contactNames == ['Sam Anderson', 'SAm Jones']
+			waitFor { $('#contact-list').children()*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
 	static createManyContacts() {	
