@@ -6,7 +6,7 @@
 	</li>
 	
 	<li>
-		<g:checkBox name="inArchive" value="${search ? (search.inArchive ? true : null) : true}" />Include Archive
+		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" />Include Archive
 	</li>
 	
 	<li>

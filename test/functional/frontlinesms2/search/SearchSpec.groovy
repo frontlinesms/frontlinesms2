@@ -1,6 +1,7 @@
 package frontlinesms2.search
 
 import frontlinesms2.*
+import org.openqa.selenium.Keys
 
 class SearchSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
@@ -140,6 +141,30 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
 			waitFor { $('.flash').displayed }
 			
+	}
+	
+	def "archiving message should not break message navigation "() {
+		setup:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+		when:
+			to SearchingPage
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			at SearchingPage
+		when:
+			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
+			$("#message-archive").click()
+		then:
+			at SearchingPage
+		when:
+			def messageBody = $("#message-body").text()
+			$("a.displayName-${Fmessage.findByText('sent').id}").click()
+		then:
+			at SearchingPage
+			$("#message-body").text() == 'sent'
 	}
 	
 	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
