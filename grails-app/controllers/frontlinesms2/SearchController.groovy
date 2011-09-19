@@ -13,7 +13,7 @@ class SearchController {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
-				messageSection: 'result'
+				messageSection: 'result',
 				customFieldList : CustomField.getAllUniquelyNamed()]
 	}
 
@@ -24,40 +24,41 @@ class SearchController {
 	}
 	
 	def result = {
-			search = Search.findByName("TempSearchObject") ?: new Search(name: "TempSearchObject")
+		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
-			search.owners = activity ? Fmessage.getMessageOwners(activity): null
-			search.searchString = params.searchString?: ""
-			search.contactString = params.contactString?: null
-			search.group = params.groupId ? Group.get(params.groupId) : null
-			search.status = params.messageStatus ?: null
-			search.activityId = params.activityId ?: null
-			search.activity =  getActivityInstance()
-			search.inArchive = params.inArchive ? true : false
-			search.startDate = params.startDate?:null
-			search.endDate = params.endDate?:null
+			searchInstance.owners = activity ? Fmessage.getMessageOwners(activity): null
+			searchInstance.searchString = params.searchString?: ""
+			searchInstance.contactString = params.contactString?: null
+			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
+			searchInstance.status = params.messageStatus ?: null
+			searchInstance.activityId = params.activityId ?: null
+			searchInstance.activity =  getActivityInstance()
+			searchInstance.inArchive = params.inArchive ? true : false
+			searchInstance.startDate = params.startDate?:null
+			searchInstance.endDate = params.endDate?:null
 			//Assumed that we only pass the customFields that exist
-			search.usedCustomField = [:]
+			searchInstance.usedCustomField = [:]
 			CustomField.getAllUniquelyNamed().each() {
-				search.usedCustomField[it] = params[it+'CustomField']?:""
+				searchInstance.usedCustomField[it] = params[it+'CustomField']?:""
 			} 
 			//FIXME easy i discover groovy, so my usage of collection is not good
 			//FIXME hard we should rather do a Join but very few documentation available
-			search.customFieldContactList = []
-			if (search.usedCustomField.find{it.value!=''}) {
+			searchInstance.customFieldContactList = []
+			if (searchInstance.usedCustomField.find{it.value!=''}) {
 				def firstLoop = true
-				search.usedCustomField.findAll{it.value!=''}.each { name, value ->
+				searchInstance.usedCustomField.findAll{it.value!=''}.each { name, value ->
 					println("we are looping on "+name+" = "+value)
 					if (firstLoop) {
-						search.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
+						searchInstance.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
 						firstLoop = false
 					} else {
-						search.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
+						searchInstance.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
 					}
 				}
-				search.println("List of contact that match "+search.customFieldContactList)
+				searchInstance.println("List of contact that match "+search.customFieldContactList)
 			}
-			search.save(failOnError: true, flush: true)
+			searchInstance.save(failOnError: true, flush: true)
+		}
 		
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
@@ -122,5 +123,24 @@ class SearchController {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
 		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+	}
+	
+	private def withSearch(Closure c) {
+		def search = Search.get(params.searchId)
+		if(search) {
+			params.searchString = search.searchString
+			params.contactString = search.contactString
+			params.groupId = search.group
+			params.messageStatus = search.status
+			params.activityId = search.activityId
+			params.inArchive = search.inArchive
+			params.startDate = search.startDate
+			params.endDate = search.endDate
+			c.call(search)
+		}
+		else {
+			search = new Search(name: "TempSearchObject")
+			c.call(search)
+		}
 	}
 }
