@@ -174,13 +174,13 @@ class InboxSpec extends MessageGebSpec {
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor { $('#checked-message-count').text() == "2 messages selected" }
+			waitFor { checkedMessageCount == 2 }
 		when:
 			messagesSelect[1].click()
 			def message = Fmessage.findBySrc('Bob')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
-			waitFor { $("#message-details").displayed }
+			waitFor { checkedMessageCount == 1 }
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
