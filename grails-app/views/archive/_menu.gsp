@@ -3,17 +3,17 @@
 	<li class='section'>
 		<ol class='sub-menu' id="archive-submenu">
 				<li class="${(messageSection == 'inbox')? 'selected':''}" >
-					<g:link action="inbox" elementId="inbox" onSuccess="loadAllData(data)">
+					<g:link controller="archive" action="inbox" elementId="inbox" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
 						Inbox Archive
 					</g:link>
 				</li>
 				<li class="${(messageSection == 'sent')? 'selected':''}" >
-					<g:link action="sent" elementId="sent" onSuccess="loadAllData(data)">
+					<g:link controller="archive" action="sent" elementId="sent" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
 						Sent Archive
 					</g:link>
 				</li>
-				<li class="${(messageSection == 'pollArchive')? 'selected':''}" >
-					<g:link elementId="poll" controller="archive" action='poll' params="${[archived:true]}">
+				<li class="${(messageSection == 'poll')? 'selected':''}" >
+					<g:link controller="archive" action='pollView' elementId="poll" params="[viewingArchive: true]">
 						Activity archive
 					</g:link>
 				</li>

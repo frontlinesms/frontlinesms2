@@ -5,10 +5,9 @@ class PollController {
 	static allowedMethods = [update: "POST"]
 
 	def index = {
-		def archived = params.archived
-		[polls: Poll.findAllByArchived(archived),
-		actionLayout : archived ? "archive" : "poll",
-		messageSection: "poll"]
+		[polls: Poll.findAllByArchived(params.viewingArchive),
+				actionLayout : params.viewingArchive ? "archive" : "poll",
+				messageSection: "poll"]
 	}
 
 	def rename = {

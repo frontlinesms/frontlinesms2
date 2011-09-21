@@ -14,9 +14,9 @@
 					</g:each>
 				</select>
 			</div>
-		</g:if>
+		</div>
 	</g:if>
-	<g:if test="${!params.archived}">
+	<g:if test="${!params.viewingArchive}">
 		<div id='move-message' class='dropdown'>
 			<select name="move-actions" id="move-actions" onchange="moveAction()">
 				<option value="na" class="na">Move message to...</option>

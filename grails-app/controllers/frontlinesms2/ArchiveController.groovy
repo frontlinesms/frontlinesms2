@@ -1,10 +1,12 @@
 package frontlinesms2
 
+import grails.util.GrailsConfig
+
 class ArchiveController extends MessageController {
 	def beforeInterceptor = {
-		params.max = params.max ?: getPaginationCount()
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
-		params.archived = true
+		params.viewingArchive = true
 		true
 	}
 	
@@ -12,10 +14,10 @@ class ArchiveController extends MessageController {
 		redirect(action:'inbox')
 	}
 	
-	def poll = {
-		render view:'standard', model:[polls: Poll.getArchivedPolls(),
+	def pollView = {
+		render view:'standard', model:[pollInstanceList: Poll.findAllByArchived(true),
 											actionLayout : "archive",
-											messageSection: "pollArchive"]
+											messageSection: "poll"]
 	}
 	
 	

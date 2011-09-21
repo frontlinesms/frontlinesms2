@@ -43,16 +43,12 @@ class Poll {
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
-	def getMessages(params=[:]) {
-		Fmessage.owned(params.starred, this.responses).list(params)
-	}
-
-	def countMessages(isStarred = false) {
-		Fmessage.owned(isStarred, this.responses).count()
+	def getPollMessages(getOnlyStarred=false) {
+		Fmessage.owned(getOnlyStarred, this.responses)
 	}
 
 	def getResponseStats() {
-		def totalMessageCount = countMessages(false)
+		def totalMessageCount = getPollMessages(false).count()
 		responses.sort {it.id}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
@@ -66,14 +62,6 @@ class Poll {
 		this.archived = true
 		def messagesToArchive = Fmessage.owned(this.responses).list()
 		messagesToArchive.each { it.archived = true }
-	}
-
-	static getNonArchivedPolls() {
-		Poll.findAllByArchived(false)
-	}
-	
-	static getArchivedPolls() {
-		Poll.findAllByArchived(true)
 	}
 
 	static Poll createPoll(attrs) {

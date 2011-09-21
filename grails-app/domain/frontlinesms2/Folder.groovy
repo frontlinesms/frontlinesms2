@@ -7,12 +7,7 @@ class Folder extends MessageOwner {
 		name(blank:false, nullable:false, maxSize:255)
 	}
 	
-	def getFolderMessages(params) {
-		Fmessage.owned(params['starred'], this).list(params)
+	def getFolderMessages(getOnlyStarred = false) {
+		Fmessage.owned(getOnlyStarred, this)
 	}
-
-	def countMessages(isStarred) {
-		Fmessage.owned(isStarred,this).count()
-	}
-	
 }
