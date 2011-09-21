@@ -70,6 +70,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			Contact.findByName('Bob') in Group.findByName('Test').members
 	}
 	
+	//@spock.lang.IgnoreRest
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
 			to ContactListPage
@@ -84,7 +85,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			multiGroupSelect.value("${Group.findByName('Others').id}")
 			updateAll.click()
 		then:
-			Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice'])
+			waitFor {Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice'])}
 	}
 	
 	def 'clicking save removes multiple contacts from selected groups'() {

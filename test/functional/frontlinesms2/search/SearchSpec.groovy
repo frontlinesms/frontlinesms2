@@ -125,11 +125,12 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			waitFor{ !$("#search-description").displayed }
 	}
 	
+	//@spock.lang.IgnoreRest
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
 			to SearchingPage
 			searchBtn.present()
@@ -137,13 +138,13 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at SearchingPage
 		when:
-			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
+			//println "Link to bob message " + $("a:contains('bob')")
+			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
 			$("#message-delete").click()
 		then:
 			at SearchingPage
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
-			waitFor { $('.flash').displayed }
-			
+			$('.flash').displayed
 	}
 	
 
@@ -153,9 +154,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			to SearchingPage
 			searchBtn.present()
 		then:
-			searchFrm.startDate_day == ['none']
-			searchFrm.startDate_month == ['none']
-			searchFrm.startDate_year == ['none']
+			searchFrm.startDate_day == 'none'
+			searchFrm.startDate_month == 'none'
+			searchFrm.startDate_year == 'none'
 		when:
 			searchFrm.startDate_day = '4'
 			searchFrm.startDate_month = '9'
@@ -163,9 +164,9 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchBtn.click()
 			waitFor {searchDescription}
 		then:
-			searchFrm.startDate_day == ['4']
-			searchFrm.startDate_month == ['9']
-			searchFrm.startDate_year == ['2010']
+			searchFrm.startDate_day == '4'
+			searchFrm.startDate_month == '9'
+			searchFrm.startDate_year == '2010'
 	}
 	
 //	@spock.lang.IgnoreRest

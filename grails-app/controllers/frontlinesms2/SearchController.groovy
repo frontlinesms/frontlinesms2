@@ -37,29 +37,20 @@ class SearchController {
 			searchInstance.startDate = params.startDate?:null
 			searchInstance.endDate = params.endDate?:null
 			//Assumed that we only pass the customFields that exist
-			searchInstance.usedCustomField = [:]
+			searchInstance.customFields = [:]	
+
 			CustomField.getAllUniquelyNamed().each() {
-				searchInstance.usedCustomField[it] = params[it+'CustomField']?:""
+				searchInstance.customFields[it] = params[it+'CustomField']?:""
 			} 
-			//FIXME easy i discover groovy, so my usage of collection is not good
-			//FIXME hard we should rather do a Join but very few documentation available
-			searchInstance.customFieldContactList = []
-			if (searchInstance.usedCustomField.find{it.value!=''}) {
-				def firstLoop = true
-				searchInstance.usedCustomField.findAll{it.value!=''}.each { name, value ->
-					println("we are looping on "+name+" = "+value)
-					if (firstLoop) {
-						searchInstance.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
-						firstLoop = false
-					} else {
-						searchInstance.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
-					}
-				}
-			}
 			searchInstance.save(failOnError: true, flush: true)
 		}
-		
-		def rawSearchResults = Fmessage.search(search)
+
+		//FIXME Need to combine the 2 search part (the name matching custom field and the message matching all criteria) in one service or domain
+		def contactNameMatchingCustomField
+		if (search.customFields.find{it.value!=''}) {
+			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
+		}
+		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
@@ -96,8 +87,8 @@ class SearchController {
 		}
 		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
 		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
-		if (search.usedCustomField.find{it.value!=''}) {
-			search.usedCustomField.find{it.value!=''}.each{
+		if (search.customFields.find{it.value!=''}) {
+			search.customFields.find{it.value!=''}.each{
 				searchDescriptor += ", with contact having "+it.key+"="+it.value
 			}
 		}

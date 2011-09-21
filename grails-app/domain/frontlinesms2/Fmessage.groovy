@@ -119,7 +119,7 @@ class Fmessage {
 				}
 			}
 
-			search { search -> 
+			search { search, contactNameMatchingCustomField=null -> 
 				def groupMembersNumbers = search.group?.getAddresses()
 					and {
 						if(search.searchString) {
@@ -146,10 +146,10 @@ class Fmessage {
 							search.endDate = search.endDate.next()
 							between("dateReceived", search.startDate, search.endDate)
 						}
-						if(search.usedCustomField.find{it.value!=''}) {
-							if(!search.customFieldContactList)
+						if(search.customFields.find{it.value!=''}) {
+							if(!contactNameMatchingCustomField)
 								eq('src', null)
-							else 'in'("contactName", search.customFieldContactList)
+							else 'in'("contactName", contactNameMatchingCustomField)
 						}
 						if(!search.inArchive) {
 							eq('archived', false)
