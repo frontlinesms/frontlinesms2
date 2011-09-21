@@ -17,7 +17,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bobMessage.save(flush:true)
 			go "message/trash"
 		then:
-			Fmessage.delete(false).count() == 1
+			Fmessage.deleted(false).count() == 1
 			$('#message-details #contact-name').text() == bobMessage.displayName
 			!$('#message-details .buttons #message-delete')
 	}
