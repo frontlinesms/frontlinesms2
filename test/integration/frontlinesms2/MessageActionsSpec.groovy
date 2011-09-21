@@ -19,7 +19,7 @@ class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.messageSection = 'poll'
 			controller.move()
 		then:
-			poll.getMessages([:]).find {message}
+			poll.getPollMessages().list().find {message}
 			message.messageOwner.value == 'Unknown'
 	}
 	

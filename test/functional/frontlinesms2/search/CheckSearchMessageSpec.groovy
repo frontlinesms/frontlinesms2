@@ -74,7 +74,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { !messagesSelect*.@checked.any() }
+			waitFor { messagesSelect*.@checked == [null, null, null] }
 		when:
 			$('#btn_dropdown').click()
 		then:

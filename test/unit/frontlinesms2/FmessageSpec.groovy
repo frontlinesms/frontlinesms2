@@ -52,8 +52,9 @@ class FmessageSpec extends UnitSpec {
 	def 'unstarring messages sets the star flag to false'() {
 		when:
 			Fmessage message = new Fmessage()
-		then:
 			message.addStar()
+		then:
+			message.starred == true
 		when:
 			message.removeStar()
 		then:
@@ -78,26 +79,6 @@ class FmessageSpec extends UnitSpec {
 			message.archive()
 		then:
 			message.archived == true
-	}
-
-	def "should return true if there are failed messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			Fmessage.metaClass.'static'.getPendingMessages = {params -> [new Fmessage(status: MessageStatus.SEND_FAILED), new Fmessage(status: MessageStatus.SEND_PENDING)]}
-		when:
-			def result = Fmessage.hasUndeliveredMessages()
-		then:
-			result
-	}
-
-	def "should return false if there are no failed messages"() {
-		setup:
-			registerMetaClass(Fmessage)
-			Fmessage.metaClass.'static'.getPendingMessages = {params -> [new Fmessage(status: MessageStatus.SEND_PENDING), new Fmessage(status: MessageStatus.SEND_PENDING)]}
-		when:
-			def result = Fmessage.hasUndeliveredMessages()
-		then:
-			!result
 	}
 }
 

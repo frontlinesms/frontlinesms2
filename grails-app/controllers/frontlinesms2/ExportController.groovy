@@ -12,13 +12,23 @@ import grails.util.GrailsConfig
 class ExportController {
 	def exportService
 	
+	def beforeInterceptor = {
+		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
+		params.starred = params.starred ? params.starred.toBoolean() : false
+		params.failed = params.failed ? params.failed.toBoolean() : false
+		true
+	}
+	
     def index = { redirect(action:'wizard', params: params) }
 	
 	def wizard = {
 		[messageSection: params.messageSection,
-			searchId: params.searchId,
-			ownerId: params.ownerId,
-			reportName:getActivityDescription()]
+				searchId: params.searchId,
+				ownerId: params.ownerId,
+				starred: params.starred,
+				failed: params.failed,
+				viewingArchive: params.viewingArchive,
+				reportName:getActivityDescription()]
 	}
 	
 	def downloadReport = {
@@ -26,22 +36,23 @@ class ExportController {
 		def messageInstanceList
 		switch(messageSection) {
 			case 'inbox':
-				messageInstanceList = Fmessage.inbox.list()
+				println "starred: ${params.starred}"
+				messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
 				break
 			case 'sent':
-				messageInstanceList = Fmessage.sent.list()
+				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
 				break
 			case 'pending':
-				messageInstanceList = Fmessage.pending.list()
+				messageInstanceList = Fmessage.pending(params.failed).list()
 				break
 			case 'trash':
-				messageInstanceList = Fmessage.trash.list()
+				messageInstanceList = Fmessage.trash().list()
 				break
 			case 'poll':
-				messageInstanceList = Poll.get(params.ownerId).getMessages(['starred':false])
+				messageInstanceList = Poll.get(params.ownerId).getPollMessages(params.starred).list()
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(['starred':false])
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
 				break
 			case 'search':
 				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
@@ -74,11 +85,11 @@ class ExportController {
 		 	switch(params.messageSection) {
 				case 'poll':
 					def poll = Poll.findById(params.ownerId)
-					name = "${poll.title} poll (${poll.countMessages(false)} messages)"
+					name = "${poll.title} poll (${poll.getPollMessages(false).count()} messages)"
 					break
 				case 'folder':
 					def folder = Folder.findById(params.ownerId)
-					name = "${folder.name} folder (${folder.countMessages(false)} messages)"
+					name = "${folder.name} folder (${folder.getFolderMessages(false).count} messages)"
 					break
 			}
 		} else {

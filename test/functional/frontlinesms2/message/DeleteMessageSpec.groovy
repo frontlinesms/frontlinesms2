@@ -5,9 +5,9 @@ import frontlinesms2.*
 class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.getInboxMessages(['starred':false, 'archived': false]).size() == 3
-		assert Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 2
-		assert Folder.findByName('Fools').messages.size() == 2	
+		assert Fmessage.inbox().count() == 3
+		assert Poll.findByTitle('Miauow Mix').getPollMessages().count() == 2
+		assert Folder.findByName('Fools').getFolderMessages().count() == 2	
 	}
 
 	def 'delete button does not show up for messages in shown in trash view'() {
@@ -17,7 +17,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			bobMessage.save(flush:true)
 			go "message/trash"
 		then:
-			Fmessage.getDeletedMessages(['starred':false]).size() == 1
+			Fmessage.delete(false).count() == 1
 			$('#message-details #contact-name').text() == bobMessage.displayName
 			!$('#message-details .buttons #message-delete')
 	}

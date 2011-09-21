@@ -7,7 +7,7 @@ class PollControllerSpec extends ControllerSpec {
 
 	def "should list all the polls"() {
 		mockDomain(Poll, [new Poll(archived: true), new Poll(archived: false), new Poll(archived : true)])
-		controller.params.archived = true
+		controller.params.viewingArchive = true
 		when:
 			def results = controller.index()
 		then:

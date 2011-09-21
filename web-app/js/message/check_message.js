@@ -64,7 +64,7 @@ function downSingleCheckedDetails(messageId) {
 	}
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, archived: isArchived}, function(data) {
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, viewingArchive: isArchived}, function(data) {
 		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
@@ -96,7 +96,7 @@ function updateMultipleCheckedDetails(messageId) {
 	}
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), archived: isArchived}, function(data) {
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: isArchived}, function(data) {
 		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
 		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
 	});

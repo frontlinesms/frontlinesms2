@@ -57,8 +57,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			setMoveActionsValue(shampooPoll.id.toString())
 		then:
 			waitFor { $('#no-messages').displayed }
-			footballPoll.messages.size() == 0
-			shampooPoll.messages.size() == 3
+			footballPoll.getPollMessages().count() == 0
+			shampooPoll.getPollMessages().count() == 3
 	}
 
 	def "archive action should not be available for messages that belongs to a message owner  such as activities"() {

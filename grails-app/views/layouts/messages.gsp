@@ -28,9 +28,12 @@
 				<g:render template="menu"/>
 				<div class="content">
 					<div class="content-header ${messageSection}">
+						<g:hiddenField name="starred" value="${params.starred}" />
+						<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
+						<g:hiddenField name="failed" value="${params.failed}" />
 						<g:if test="${messageSection == 'poll'}">
 							<div id="poll-title">
-								<g:render template="poll_header"/>
+								<g:render template="../message/poll_header"/>
 							</div>
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
@@ -101,7 +104,7 @@
 							</ol>
 							<ol>
 								<li>
-									<g:select name="poll-actions" from="${['Export messages', 'Rename activity']}"
+									<g:select name="poll-actions" from="${['Export', 'Rename activity']}"
 											keys="${['export', 'renameActivity']}"
 											noSelection="${['': 'More actions...']}"/>
 								</li>
@@ -118,7 +121,7 @@
 					</div>
 					<div class="container" style="display:block">
 						<div class="content-body">
-							<g:render template="message_list"/>
+							<g:render template="../message/message_list"/>
 							<g:layoutBody />
 						</div>
 						<div class="content-footer">

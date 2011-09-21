@@ -5,26 +5,12 @@ import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
-class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 
 	def setup() {
 		controller = new MessageController()
 		controller.beforeInterceptor.call()
-	}
-
-	def "Inbound messages show up in inbox view"() {
-		setup:
-			def messageIn1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/21")).save(failOnError: true)
-			def messageIn2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/20")).save(failOnError: true)
-			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester').save(failOnError: true)
-			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester').save(failOnError: true)
-		when:
-			controller.params.messageSection = 'inbox'
-			def model = controller.inbox()
-		then:
-			model.messageInstanceTotal == 2
-			model.messageInstanceList == [messageIn1, messageIn2]
 	}
 
 	def 'Messages are sorted by date' () {
@@ -34,12 +20,11 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/23")).save(failOnError: true)
 			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/21")).save(failOnError: true)
 		when:
-			controller.params.messageSection = 'inbox'
-			def model = controller.inbox()
+			def messageInstanceList = Fmessage.inbox(false, false)
 		then:
-			model.messageInstanceTotal == 4
-			model.messageInstanceList == [message2, message3, message4, message1]
-			model.messageInstanceList != [message1, message2, message3, message4]
+			messageInstanceList.count() == 4
+			messageInstanceList.list(sort:'dateReceived', order: 'desc') == [message2, message3, message4, message1]
+			messageInstanceList.list(sort:'dateReceived', order: 'desc') != [message1, message2, message3, message4]
 	}
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {
@@ -64,15 +49,6 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		then:
 			Fmessage.get(id).read
 	}
-
-	def "first message in the inbox view is selected by default"() {
-        setup:
-             def message1 = new Fmessage(status: MessageStatus.INBOUND).save(failOnError: true)
-        when:
-            def resultMap =  controller.inbox()
-        then:
-            resultMap['messageInstance'].id == message1.id
-    }
 	
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
@@ -98,18 +74,6 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			Fmessage.get(id).starred == false
 	}
 
-	def 'deleted messages are returned by trash method and the first message is displayed'() {
-		setup:
-			(1..3).each {new Fmessage(deleted:true).save()}
-			def deletedMessages = Fmessage.list()
-			(1..2).each {new Fmessage(deleted:false).save()}
-		when:
-			def resultMap = controller.trash()
-		then:
-			resultMap['messageInstanceList'] == deletedMessages
-			resultMap['messageInstance'].id == deletedMessages[0].id
-	}
-
 	def 'empty trash permanently deletes messages with deleted flag true'() {
 		setup:
 			(1..3).each {new Fmessage(deleted:false).save()}
@@ -119,22 +83,6 @@ class MessageControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 			controller.emptyTrash()
 		then:
 			Fmessage.list() == inboxMessages
-	}
-	
-	def "should filter out failed messages in the pending section"() {
-		setup:
-			(1..3).each {new Fmessage(status: MessageStatus.SEND_PENDING).save(failOnError: true)}
-			(1..2).each {new Fmessage(status: MessageStatus.SEND_FAILED).save(failOnError: true)}
-		when:
-			def model = controller.pending()
-		then:
-			model.messageInstanceTotal == 5
-			
-		when:
-			controller.params.failed = true
-			model = controller.pending()
-		then:
-			model.messageInstanceTotal == 2
 	}
 
 	Date createDate(String dateAsString) {
