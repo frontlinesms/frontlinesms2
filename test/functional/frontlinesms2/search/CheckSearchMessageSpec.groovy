@@ -24,7 +24,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor { checkedMessageCountText == "2 messages selected" }
+			waitFor { checkedMessageCount == 2}
 	}
 	
 	def "checked message details are displayed when message is checked"() {
@@ -70,11 +70,11 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			to SearchPage
 			messagesSelect[0].click()
 		then:
-			waitFor { messagesSelect*.@checked == ["true", "true", "true", "true"] }
+			waitFor { checkedMessageCount == 3 }
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { messagesSelect*.@checked == [null, null, null] }
+			waitFor { checkedMessageCount == 0 }
 		when:
 			$('#btn_dropdown').click()
 		then:
@@ -108,16 +108,16 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			to SearchPage
 			messagesSelect[0].click()
 		then:
-			waitFor { multipleMessagesPanel.displayed }
-			checkedMessageCountText == "3 messages selected"
+			waitFor { checkedMessageCount == 3 }
+			
 		when:
 			messagesSelect[1].click()
 		then:
-			waitFor { checkedMessageCountText == "2 messages selected" }
+			waitFor { checkedMessageCount == 2 }
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { checkedMessageCountText == "3 messages selected" }
+			waitFor { checkedMessageCount == 3 }
 	}
 	
 	def "can archive multiple messages where any owned messages are ignored, but those that are not are archived"() {
@@ -131,7 +131,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		when:
 			archiveAllButton.click()
 		then:
-			waitFor { at SearchPage }
+			waitFor { $('title').text() == "Results"}
 	}
 }
 
