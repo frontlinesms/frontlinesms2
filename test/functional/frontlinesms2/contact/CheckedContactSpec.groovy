@@ -23,6 +23,23 @@ class CheckedContactSpec extends ContactGebSpec {
 			contactSelect[0].@checked == "true"
 			contactSelect[1].@checked == "true"
 	}
+	
+	def 'should not display that they are not part of any groups'() {
+		given:
+			createTestContacts()
+		when:
+			to ContactShowPage
+			contactSelect[1].click()
+		then:
+			waitFor { contactSelect[1].@checked == "true" }
+		when:
+			contactSelect[0].click()
+		then:
+			waitFor { contactSelect[0].@checked == "true" }
+			//println "contact group:"+contactGroup+" text "+contactGroup.text()
+			!contactForm.text().contains("Not part of any Groups") 
+	}
+	
 }
 
 class ContactShowPage extends geb.Page {
@@ -30,5 +47,7 @@ class ContactShowPage extends geb.Page {
 	static content = {
 		contactSelect(required:false) { $(".contact-select") }	
 		contactCount(required:false) { $('#contact-count') }
+		contactGroup(required:false) { $('#multiple-contact')}
+		contactForm(required:true) {$('#details')}
 	}
 }

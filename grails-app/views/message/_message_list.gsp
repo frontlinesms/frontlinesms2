@@ -62,7 +62,7 @@
 			</tbody>
 		</table>
 	</g:if>
-	<g:elseif test="${(messageSection == 'search') && (searchDescription != 'null')}">
+	<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
 		<div id="no-search-description">
 			<h1>Start new search on the left</h1>
 		</div>

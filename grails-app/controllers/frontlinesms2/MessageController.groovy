@@ -143,7 +143,7 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
+			if(params.messageSection == 'result') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive])
 		}
 	}
@@ -165,7 +165,10 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'search') redirect(controller: 'search', params: [flashMessage: flash.message])
+			if(params.messageSection == 'result') {
+				println "Search params: $params"
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
