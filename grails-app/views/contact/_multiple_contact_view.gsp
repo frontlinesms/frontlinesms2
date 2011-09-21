@@ -20,9 +20,9 @@
 						<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 					</li>
 				</g:each>
-				<li id="multi-no-groups" style="${sharedGroupInstanceList?'display: none':''}">
-					<p>Not part of any Groups</p>
-				</li>
+<%--				<li id="multi-no-groups" style="${sharedGroupInstanceList?'display: none':''}">--%>
+<%--					<p>Not part of any Groups</p>--%>
+<%--				</li>--%>
 			</ol>
 		</div>
 		<div id='multi-group-add' class="dropdown">
