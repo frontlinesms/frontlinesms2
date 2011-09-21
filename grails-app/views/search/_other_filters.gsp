@@ -30,7 +30,7 @@
 		</g:each>
 	</g:if>
 	<g:else>
-		<g:each var="customField" in="${search.usedCustomField}">
+		<g:each var="customField" in="${search.customFields}">
 			<li class="field" id="more-option-field-custom-field-${customField.key}">
 				<h2>${customField.key}:</h2><br>
 				<g:textField name="${customField.key}CustomField" value="${customField.value}"/>
