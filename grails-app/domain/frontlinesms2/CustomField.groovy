@@ -23,13 +23,11 @@ class CustomField {
 		def matchingString = ""
 		def conditionString 
 		customFields.each{ name, value -> 
-//			println "starting namestring:"+matchingString+" name:"+name+" value:"+value
-			conditionString = " WHERE  name='"+name+"' AND value like '%"+value+"%'"
-			matchingString = matchingString? (matchingString+" AND cf.contact.name in (SELECT DISTINCT cf2.contact.name FROM CustomField cf2 join cf2.contact"+conditionString+")") : conditionString
-//			matchingString +=  
-			
+			if (value!=null && value!=''){
+				conditionString = " WHERE  name='"+name+"' AND lower(value) like lower('%"+value+"%')"
+				matchingString = matchingString? (matchingString+" AND cf.contact.name in (SELECT DISTINCT cf2.contact.name FROM CustomField cf2 join cf2.contact"+conditionString+")") : conditionString  
+			}
 		}
-		println "final namestring"+matchingString
 		CustomField.executeQuery("SELECT DISTINCT cf.contact.name FROM CustomField cf join cf.contact"+matchingString)
 	}
 }

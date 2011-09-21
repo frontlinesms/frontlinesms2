@@ -21,6 +21,7 @@ class ExportController {
 			reportName:getActivityDescription()]
 	}
 	
+	//FIXME need to notify the user when the default case is return.
 	def downloadReport = {
 		def messageSection = params.messageSection
 		def messageInstanceList
@@ -43,7 +44,7 @@ class ExportController {
 			case 'folder':
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(['starred':false])
 				break
-			case 'search':
+			case 'result':
 				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
 				break
 			default:

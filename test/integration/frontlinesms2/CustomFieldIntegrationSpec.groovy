@@ -20,6 +20,7 @@ class CustomFieldIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		then:	
 			CustomField.getAllContactNameMatchingCustomField([:])==['Alex','Mark','Toto']
 			CustomField.getAllContactNameMatchingCustomField(['city':'Paris'])==['Alex','Mark']
+			CustomField.getAllContactNameMatchingCustomField(['city':'paris'])==['Alex','Mark']
 			CustomField.getAllContactNameMatchingCustomField(['city':'Paris','like':'ca'])==['Alex','Mark']
 			CustomField.getAllContactNameMatchingCustomField(['city':'Paris','like':'ca','dob':'06'])==['Mark']
 			CustomField.getAllContactNameMatchingCustomField(['city':'Paris','like':'ca','dob':'06','car':'yes'])==[]
