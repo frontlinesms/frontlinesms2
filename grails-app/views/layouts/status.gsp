@@ -9,6 +9,8 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 		</script>
+		<g:javascript src="jquery.timers.js"/>
+		<g:javascript src="application.js"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
     </head>
 	<body>

@@ -107,6 +107,20 @@ class ContactShowSpec extends ContactGebSpec {
 				assert it.@href ==~ /.*recipients=\d+/
 			}
 	}
+	
+	def "should update message count when in contacts tab"() {
+		when:
+			go "contact"
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 0"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 1"
+			}
+	}
 
 	def assertContactSelected(String name) {
 		def selectedChildren = $('#contact-list').children('li.selected')

@@ -10,6 +10,7 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 		</script>
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="search/moreOptions.js"/>
 		<g:javascript src="message/check_message.js"/>
