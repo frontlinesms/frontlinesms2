@@ -54,9 +54,9 @@ class Fmessage {
 		contactName(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived)				
+					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) ||	(obj.messageOwner instanceof Folder && obj.messageOwner.archived)
 				} else {
-					obj.messageOwner == null || !(obj.messageOwner instanceof PollResponse) || !obj.messageOwner.poll.archived
+					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (obj.messageOwner instanceof Folder && !obj.messageOwner.archived)
 				}
 		})
 	}
@@ -101,10 +101,10 @@ class Fmessage {
 						eq('starred', true)
 				}
 			}
-			owned { getOnlyStarred=false, responses ->
+			owned { getOnlyStarred=false, owners ->
 				and {
 					eq("deleted", false)
-					'in'("messageOwner", responses)
+					'in'("messageOwner", owners)
 					if(getOnlyStarred)
 						eq("starred", true)
 				}

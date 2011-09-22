@@ -37,7 +37,7 @@ class MessageController {
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
-				folderInstanceList: Folder.findAll(),
+				folderInstanceList: Folder.findAllByArchived(params.viewingArchive),
 				responseInstance: responseInstance,
 				pollInstanceList: Poll.findAllByArchived(params.viewingArchive),
 				radioShows: RadioShow.findAll(),
@@ -78,7 +78,7 @@ class MessageController {
 
 	def poll = {
 		def pollInstance = Poll.get(params.ownerId)
-		def messageInstanceList = pollInstance.getPollMessages(params.starred ?: false)
+		def messageInstanceList = pollInstance.getPollMessages(params.starred)
 		render view:'../message/poll', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'poll',
 				messageInstanceTotal: messageInstanceList.count(),
@@ -91,24 +91,26 @@ class MessageController {
 	
 	def radioShow = {
 		def showInstance = RadioShow.get(params.ownerId)
-		def messageInstanceList = showInstance?.getShowMessages(params.starred ?: false)
+		def messageInstanceList = showInstance?.getShowMessages(params.starred)
 
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
-				messageSection: 'radioShow',
-				messageInstanceTotal: messageInstanceList.count(),
-				ownerInstance: showInstance] << getShowModel(messageInstanceList.list(params))
+					messageSection: 'radioShow',
+					messageInstanceTotal: messageInstanceList.count(),
+					ownerInstance: showInstance] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance?.getFolderMessages(params.starred ?: false)
+		def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
 
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
-					ownerInstance: folderInstance] << getShowModel(messageInstanceList.list(params))
+					ownerInstance: folderInstance,
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
+					actionLayout : params.viewingArchive ? 'archive' : 'messages'] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def send = {

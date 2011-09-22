@@ -8,6 +8,7 @@ class Poll {
 	boolean archived
 	Date dateCreated
 	List responses
+	static transients = ['liveMessageCount']
 
 	static hasMany = [responses: PollResponse]
 
@@ -76,5 +77,10 @@ class Poll {
 		}
 		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
 		poll
+	}
+	
+	def getLiveMessageCount() {
+		def messageTotal = 0
+		responses.each { messageTotal += (it.liveMessageCount ?: 0) }
 	}
 }
