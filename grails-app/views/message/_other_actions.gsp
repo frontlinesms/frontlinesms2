@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</g:if>
-	<g:if test="${!params.viewingArchive}">
+	<g:if test="${!params.viewingArchive && messageSection != 'pending'}">
 		<div id='move-message' class='dropdown'>
 			<select name="move-actions" id="move-actions" onchange="moveAction()">
 				<option value="na" class="na">Move message to...</option>

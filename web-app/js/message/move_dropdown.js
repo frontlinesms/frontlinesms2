@@ -1,7 +1,9 @@
 function moveAction() {
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
-	if(messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
+	if(messageSection == 'result') {
+		var location = url_root + "search/" + messageSection;
+	} else if(messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
 		var location = url_root + "message/" + messageSection + "/" + ownerId;
 	} else{
 		var location = url_root + "message/" + messageSection;
