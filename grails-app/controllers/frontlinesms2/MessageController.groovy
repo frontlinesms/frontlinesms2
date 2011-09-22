@@ -42,7 +42,7 @@ class MessageController {
 				pollInstanceList: Poll.findAllByArchived(params.viewingArchive),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
-				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
+				hasFailedMessages: Fmessage.hasFailedMessages()]
 	}
 
 	def inbox = {

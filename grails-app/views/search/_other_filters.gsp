@@ -15,11 +15,13 @@
 		<br>
 		<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day"/>
 	</li>
+	
 	<li class="field" id='more-option-field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a onclick="toggleMoreOptionElement('contact-name')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 	</li>
+	
 	<g:if test="${search == null}">
 		<g:each var="customField" in="${customFieldList}">
 			<li class="field" id="more-option-field-custom-field-${customField}">

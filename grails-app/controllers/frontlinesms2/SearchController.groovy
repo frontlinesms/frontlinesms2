@@ -34,13 +34,13 @@ class SearchController {
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate?:null
-			searchInstance.endDate = params.endDate?:null
+			searchInstance.startDate = params.startDate ?: null
+			searchInstance.endDate = params.endDate ?: null
 			//Assumed that we only pass the customFields that exist
-			searchInstance.customFields = [:]	
+			searchInstance.customFields = [:]
 
 			CustomField.getAllUniquelyNamed().each() {
-				searchInstance.customFields[it] = params[it+'CustomField']?:""
+				searchInstance.customFields[it] = params[it+'CustomField'] ?: ""
 			} 
 			searchInstance.save(failOnError: true, flush: true)
 		}
@@ -51,7 +51,7 @@ class SearchController {
 			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
 		}
 		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
-		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
+		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[searchDescription: searchDescription,
@@ -63,7 +63,7 @@ class SearchController {
 	}
 
 	def show = { searchResults ->
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) :searchResults[0]
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : searchResults[0]
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -95,7 +95,7 @@ class SearchController {
 		if(search.startDate && search.endDate){
 			search.startDate.format('dd-MM-yyyy')
 			search.endDate.format('dd-MM-yyyy')
-			searchDescriptor += ", between "+search.startDate.dateString+" and "+search.endDate.dateString
+			searchDescriptor += ", between " + search.startDate.dateString + " and " + search.endDate.dateString
 		}
 		return searchDescriptor
 	}

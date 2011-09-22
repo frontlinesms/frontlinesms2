@@ -224,11 +224,6 @@ class Fmessage {
 		this.archived = true
 		this
 	}
-
-	static def getFolderMessages(folderId) {
-		def folder = Folder.get(folderId) // TODO check if we need to fetch the folder here rather than just pass the ID
-		Fmessage.owned(folder).list()
-	}
 	
 	static def countUnreadMessages(isStarred) {
 		Fmessage.unread().count()
@@ -242,8 +237,8 @@ class Fmessage {
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
 
-	static def hasUndeliveredMessages() {
-		Fmessage.pending(true) != null ? true : false
+	static def hasFailedMessages() {
+		Fmessage.findAllByStatus(MessageStatus.SEND_FAILED) ? true : false
 	}
 	
 	static def getMessageOwners(activity) {
