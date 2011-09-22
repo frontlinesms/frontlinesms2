@@ -13,7 +13,7 @@
 		<g:else>
 			<div class="title">Recipients:</div>
 			<span id="confirm-recipients-count"><span id="contacts-count">${recipients.size()}</span> contacts selected</span>
-			<span id="confirm-messages-count">(<span id="messages-count"></span>messages will be sent)</span>
+			<span id="confirm-messages-count">(<span id="messages-count"></span> messages will be sent)</span>
 		</g:else>
 	</div>
 </div>
