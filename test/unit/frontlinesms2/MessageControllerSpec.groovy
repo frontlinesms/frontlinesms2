@@ -124,7 +124,7 @@ class MessageControllerSpec extends ControllerSpec {
 
      private void setupDataAndAssert(boolean flag, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
 		registerMetaClass(Fmessage)
-		Fmessage.metaClass.'static'.hasUndeliveredMessages = { -> return true}
+		Fmessage.metaClass.'static'.hasFailedMessages = { -> return true}
 		def fmessage = new Fmessage(id:1L, src: "src1", starred: flag, status: status)
 		mockDomain Folder
 		mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
@@ -144,6 +144,6 @@ class MessageControllerSpec extends ControllerSpec {
 		assert results['messageInstanceList']*.contactExists == [false]
 		assert results['messageInstanceList']*.contactExists == [false]
 		assert results['pollInstanceList'].every {!it.archived}
-		assert results['hasUndeliveredMessages']
+		assert results['hasFailedMessages']
     }
 }
