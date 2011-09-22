@@ -14,6 +14,7 @@
 		<g:javascript src="message/arrow_navigation.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js" />
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>

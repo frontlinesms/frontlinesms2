@@ -12,6 +12,7 @@
 		</script>
 		<g:javascript src="message/check_message.js"></g:javascript>
 		<g:javascript src="message/star_message.js"></g:javascript>
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
     </head>

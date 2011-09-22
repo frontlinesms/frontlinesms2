@@ -12,6 +12,21 @@ class ConnectionShowSpec extends ConnectionGebSpec {
 		then:
 			$('title').text() == "Settings > Connections > MTN Dongle"
 	}
+	
+	def "should update message count when in Settings section"() {
+		when:
+			to ConnectionListPage
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 0"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 1"
+			}
+	}
+	
 //FIXME: Build Fix
 /*	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 		given:

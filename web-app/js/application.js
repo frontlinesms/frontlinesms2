@@ -12,6 +12,16 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
+$(document).ready(function() {
+	$('#tab-messages').everyTime(10000, "10s", refreshMessageCount);
+});
+
+function refreshMessageCount() {
+	$.get(url_root + 'message/getUnreadMessageCount', function(data) {
+		$('#tab-messages').html("Messages " + data);
+	});
+}
+
 var remoteHash = {
 	"poll" :  function() {
 		$.ajax({
@@ -131,7 +141,6 @@ function findInputWithValue(value) {
 function isCheckboxSelected(value) {
 	return findInputWithValue(value).is(':checked')
 }
-
 
 $.widget("ui.contentWidget", {
 	validate: function() {

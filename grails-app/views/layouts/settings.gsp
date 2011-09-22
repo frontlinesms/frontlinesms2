@@ -12,6 +12,8 @@
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
+		<g:javascript src="jquery.timers.js"/>
+		<g:javascript src="application.js"/>
 	</head>
 	<body>
 		<div id="container">
