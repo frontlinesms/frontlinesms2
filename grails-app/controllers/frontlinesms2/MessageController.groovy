@@ -16,6 +16,8 @@ class MessageController {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
+		params.starred = params.starred ? params.starred.toBoolean() : false
+		params.failed = params.failed ? params.failed.toBoolean() : false
 		true
 	}
 
@@ -76,7 +78,7 @@ class MessageController {
 
 	def poll = {
 		def pollInstance = Poll.get(params.ownerId)
-		def messageInstanceList = pollInstance.getPollMessages(params.starred)
+		def messageInstanceList = pollInstance.getPollMessages(params.starred ?: false)
 		render view:'../message/poll', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'poll',
 				messageInstanceTotal: messageInstanceList.count(),
@@ -89,7 +91,7 @@ class MessageController {
 	
 	def radioShow = {
 		def showInstance = RadioShow.get(params.ownerId)
-		def messageInstanceList = showInstance?.getShowMessages(params)
+		def messageInstanceList = showInstance?.getShowMessages(params.starred ?: false)
 
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'radioShow',
@@ -99,7 +101,7 @@ class MessageController {
 
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
+		def messageInstanceList = folderInstance?.getFolderMessages(params.starred ?: false)
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
 
@@ -143,8 +145,8 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'result') redirect(controller: params.messageSection, params: [searchId: params.searchId] ,action: 'result')
-			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive])
+			if(params.messageSection == 'result') redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 		}
 	}
 

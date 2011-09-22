@@ -138,7 +138,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at SearchingPage
 		when:
-			//println "Link to bob message " + $("a:contains('bob')")
 			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
 			$("#message-delete").click()
 		then:

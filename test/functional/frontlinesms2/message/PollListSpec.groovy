@@ -85,16 +85,16 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
-			messagesSelect[1].click()
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$(".message-select")[1].click()
 		then:
 			waitFor { $('#message-body').text() == 'go manchester' }
 		when:
-			messagesSelect[2].click()
+			$(".message-select")[2].click()
 		then:
 			waitFor { $("#checked-message-count").text() == "2 messages selected" }
 		when:
-			messagesSelect[1].click()
+			$(".message-select")[1].click()
 			def message = Fmessage.findBySrc('Bob')
 		then:
 			waitFor { $('#message-details #contact-name').text() == message.src }
@@ -123,7 +123,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 }
 
 class PollListPage extends geb.Page {
- 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}" }
+ 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 	static at = {
 		title.endsWith('Poll')
 	}

@@ -98,8 +98,8 @@ function updateMultipleCheckedDetails(messageId) {
 	}
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
-	var searchId = $('input:hidden[name=searchId]').val() || '';
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: isArchived, searchId: searchId, function(data) {
+	var searchId = $('input:hidden[name=searchId]').val();
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: isArchived, searchId: searchId}, function(data) {
 		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
 		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
 	});
