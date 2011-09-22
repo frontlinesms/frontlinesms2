@@ -8,7 +8,7 @@ class RadioShowIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		radioShow.addToMessages(new Fmessage(text: "eat fruits", starred : true))
 		radioShow.addToMessages(new Fmessage(text: "eat vegetables"))
 		radioShow.addToMessages(new Fmessage(text: "excerise"))
-		radioShow.save(flush: true)
+		radioShow.save(failOnError: true, flush: true)
 	}
 
 	def "should fetch all messages for a radio show"() {

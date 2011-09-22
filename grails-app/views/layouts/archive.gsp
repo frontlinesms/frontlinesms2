@@ -41,11 +41,20 @@
 								<h2>${messageSection} Archive</h2>
 							</div>
 						</g:elseif>
+						<g:elseif test="${messageSection == 'folder'}">
+							<div class="message-title">
+								<img src='${resource(dir:'images/icons',file:'foldersarchive.png')}' />
+								<h2>${messageSection} Archive</h2>
+							</div>
+						</g:elseif>
 					</div>
 					<div class="content-body">
 						<g:if test="${messageSection == 'poll' && !viewingMessages}">
 							<g:render template="archived_poll_list"/>
 						</g:if>
+						<g:elseif test="${messageSection == 'folder' && !viewingMessages}">
+							<g:render template="archived_folder_list"/>
+						</g:elseif>
 						<g:else>
 							<g:render template="../message/message_list"/>
 						</g:else>
@@ -58,13 +67,16 @@
 								<li>|</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
-							<g:if test="${params.action == 'results'}">
+							<g:if test="${(messageSection == 'poll' || messageSection == 'folder') && !viewingMessages}">
 								<div id="page-arrows">
-									<g:paginate next="Forward" prev="Back"
-										 max="${grailsApplication.config.grails.views.pagination.max}"
-										action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+									<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${itemInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
 								</div>
 							</g:if>
+							<g:else>
+								<div id="page-arrows">
+									<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+								</div>
+							</g:else>
 					</div>
 				</div>
 			</div>

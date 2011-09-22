@@ -81,6 +81,11 @@
 									</select>
 								</li>
 							</g:if>
+							<g:if test="${messageSection == 'folder'}">
+								<li class='static_btn'>
+									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
+								</li>
+							</g:if>
 							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
 									<g:link elementId="export" url="#">
@@ -95,11 +100,10 @@
 								</g:remoteLink>
 							</li>
 						</ol>
-
 						<g:if test="${messageSection == 'poll'}">
 							<ol>
 								<li class='static_btn'>
-									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
+									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
 								</li>
 							</ol>
 							<ol>

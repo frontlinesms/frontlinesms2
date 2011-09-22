@@ -28,7 +28,7 @@
 				</td>
 				<td>
 					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingMessages: true]">
-						${p}
+						${p.liveMessageCount}
 					</g:link>
 				</td>
 			</tr>

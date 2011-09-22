@@ -122,8 +122,8 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	private def goToArchivePage() {
-		go ""
+		go "message"
 		$("a", class:"tab",text: "Archive").click()
-		waitFor { $("a", text: 'Inbox Archive').displayed}
+		waitFor { $("a", text: 'Inbox archive').displayed}
 	}
 }
