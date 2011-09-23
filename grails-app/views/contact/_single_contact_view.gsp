@@ -87,9 +87,8 @@
 	<div>
 		<ol id='group-list'>
 			<g:each in="${contactGroupInstanceList}" status="i" var="g">
-				<li class="${g == groupInstance ? 'selected' : ''}">
-					<input type="text" name="${g.name}" value="${g.name}" disabled="true" />
-					<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+				<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
+					<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 				</li>
 			</g:each>
 			<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
