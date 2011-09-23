@@ -155,8 +155,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("input[value='12345678']").click()
 		then:
-			!$("input[value='group1']").@checked
-			!$("input[value='group2']").@checked
+			!$("input[value='group1']").checked
+			!$("input[value='group2']").checked
 			$("#recipient-count").text() == "1"
 	}
 
@@ -173,8 +173,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("input[value='group1']").click()
 		then:
-			!$("input[value='group1']").@checked
-			$("input[value='group2']").@checked
+			!$("input[value='group1']").checked
+			$("input[value='group2']").checked
 			$("#recipient-count").text() == "2"
 
 	}

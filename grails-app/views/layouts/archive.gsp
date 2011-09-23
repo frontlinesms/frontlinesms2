@@ -14,13 +14,13 @@
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
-    </head>
+	</head>
 	<body>
 		<div id="container">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-	        <g:render template="/flash"/>
-	        <div class="main">
+			<g:render template="/flash"/>
+			<div class="main">
 				<g:render template="../archive/menu"/>
 				<div class="content">
 					<div id='archive-header' class="content-header">
