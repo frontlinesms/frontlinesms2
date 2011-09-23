@@ -13,7 +13,7 @@ if (Ajax && (Ajax != null)) {
 }
 
 $(document).ready(function() {
-	$('#tab-messages').everyTime(10000, "10s", refreshMessageCount);
+	$('#tab-messages').everyTime(30000, "30s", refreshMessageCount);
 });
 
 function refreshMessageCount() {
