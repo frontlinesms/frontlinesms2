@@ -26,7 +26,7 @@
 			<g:render template="/tabs"/>
         </div>
         <g:render template="/flash"/>
-        <div class="main">
+        <div id="main" class="main">
             <g:render template="menu"/>
             <div class="content">
                 <div class="content-header ${messageSection}">

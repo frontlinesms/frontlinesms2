@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<ol class="context-menu" id="messages-menu">
+<div id="sidebar">
+<ul class="main-list" id="messages-menu">
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'messages.png')}' />
+
 		<h2>Messages</h2>
-		<ol class='sub-menu' id="messages-submenu">
+		<ul class='sublist' id="messages-submenu">
 			<li class="${(messageSection=='inbox')? 'selected':''}">
 				<g:link action="inbox">Inbox</g:link>
 			</li>
@@ -16,12 +17,12 @@
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
 			</li>
-		</ol>
+		</ul>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'activities.png')}' />
+
 		<h2>Polls</h2>
-		<ol class='sub-menu' id="activities-submenu">
+		<ul class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li class="${p == ownerInstance ? 'selected' : ''}">
 					<g:link action="poll" params="[ownerId: p.id]">${p.title}</g:link>
@@ -30,12 +31,12 @@
 			<li class='create' id="create-activity">
 				<g:link url="#" elementId="create-new-activity">Create new activity</g:link>
 			</li>
-		</ol>
+		</ul>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'shows.png')}' />
+
 		<h2>Shows</h2>
-		<ol class='sub-menu' id="shows-submenu">
+		<ul class='sub-menu' id="shows-submenu">
 			<g:each in="${radioShows}" status="i" var="s">
 				<li class="${s == ownerInstance ? 'selected' : ''}">
 					<g:link action="radioShow" params="[ownerId: s.id]">${s.name}</g:link>
@@ -46,12 +47,12 @@
 					Create new show
 				</g:remoteLink>
 			</li>
-		</ol>
+		</ul>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'folders.png')}' />
+
 		 <h2>Folders</h2>
-	 	<ol class='sub-menu' id='folders-submenu' >
+	 	<ul class='sub-menu' id='folders-submenu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li class="${f == ownerInstance ? 'selected' : ''}">
 					<g:link action="folder" params="[ownerId: f.id]">${f.name}</g:link>
@@ -62,10 +63,10 @@
 					Create new folder
 				</g:remoteLink>
 			</li>
-		</ol>
+		</ul>
 	</li>
- </ol>
-
+ </ul>
+</div>
 <script>
 $("#create-new-activity").bind('click', function() {
 	$.ajax({

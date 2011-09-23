@@ -1,5 +1,5 @@
 <%@ page import="frontlinesms2.MessageStatus" %>
-<div id="message-list">
+<div id="content">
 	<g:hiddenField name="checkedMessageList" value=","/>
 	<g:hiddenField name="messageSection" value="${messageSection}"/>
 	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
@@ -14,7 +14,7 @@
 		  	<g:hiddenField name="groupId" value="${params.groupId}"/>
 		  	<g:hiddenField name="searchString" value="${params.searchString}"/>
 		</g:if>
-		<table id="messages">
+		<table id="messages-list">
 			<thead>
 				<tr>
 					<td>
