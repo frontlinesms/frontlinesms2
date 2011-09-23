@@ -1,7 +1,7 @@
 package frontlinesms2
 
 
-class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+class PollControllerSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def setup() {
 		controller = new PollController()
@@ -60,11 +60,11 @@ class PollControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec 
 		setup:
 			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
 		when:
-			assert Poll.getNonArchivedPolls() == [poll]
+			assert Poll.findAllByArchived(false) == [poll]
 			poll.archived = true;
 		then:
-			Poll.getArchivedPolls() == [poll]
-			Poll.getNonArchivedPolls() == []
+			Poll.findAllByArchived(true) == [poll]
+			Poll.findAllByArchived(false) == []
 	}
 
 	def  "should update a given poll object"() {

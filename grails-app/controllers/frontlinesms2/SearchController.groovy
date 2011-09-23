@@ -34,33 +34,24 @@ class SearchController {
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate?:null
-			searchInstance.endDate = params.endDate?:null
+			searchInstance.startDate = params.startDate ?: null
+			searchInstance.endDate = params.endDate ?: null
 			//Assumed that we only pass the customFields that exist
-			searchInstance.usedCustomField = [:]
+			searchInstance.customFields = [:]
+
 			CustomField.getAllUniquelyNamed().each() {
-				searchInstance.usedCustomField[it] = params[it+'CustomField']?:""
+				searchInstance.customFields[it] = params[it+'CustomField'] ?: ""
 			} 
-			//FIXME easy i discover groovy, so my usage of collection is not good
-			//FIXME hard we should rather do a Join but very few documentation available
-			searchInstance.customFieldContactList = []
-			if (searchInstance.usedCustomField.find{it.value!=''}) {
-				def firstLoop = true
-				searchInstance.usedCustomField.findAll{it.value!=''}.each { name, value ->
-					println("we are looping on "+name+" = "+value)
-					if (firstLoop) {
-						searchInstance.customFieldContactList = CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name
-						firstLoop = false
-					} else {
-						searchInstance.customFieldContactList.intersect(CustomField.findAllByNameLikeAndValueIlike(name,"%"+value+"%")*.contact.name)
-					}
-				}
-			}
 			searchInstance.save(failOnError: true, flush: true)
 		}
-		
-		def rawSearchResults = Fmessage.search(search)
-		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
+
+		//FIXME Need to combine the 2 search part (the name matching custom field and the message matching all criteria) in one service or domain
+		def contactNameMatchingCustomField
+		if (search.customFields.find{it.value!=''}) {
+			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
+		}
+		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
+		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[searchDescription: searchDescription,
@@ -72,7 +63,7 @@ class SearchController {
 	}
 
 	def show = { searchResults ->
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) :searchResults[0]
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : searchResults[0]
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -96,15 +87,15 @@ class SearchController {
 		}
 		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
 		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
-		if (search.usedCustomField.find{it.value!=''}) {
-			search.usedCustomField.find{it.value!=''}.each{
+		if (search.customFields.find{it.value!=''}) {
+			search.customFields.find{it.value!=''}.each{
 				searchDescriptor += ", with contact having "+it.key+"="+it.value
 			}
 		}
 		if(search.startDate && search.endDate){
 			search.startDate.format('dd-MM-yyyy')
 			search.endDate.format('dd-MM-yyyy')
-			searchDescriptor += ", between "+search.startDate.dateString+" and "+search.endDate.dateString
+			searchDescriptor += ", between " + search.startDate.dateString + " and " + search.endDate.dateString
 		}
 		return searchDescriptor
 	}

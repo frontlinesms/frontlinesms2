@@ -39,14 +39,6 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			!poll.validate()
 	}
-
-	def "should fetch all non archived polls"() {
-		mockDomain(Poll, [new Poll(archived: true), new Poll(archived: false), new Poll(archived: false)])
-		when:
-			def results = Poll.getNonArchivedPolls()
-		then:
-			results.every {!it.archived}
-	}
 	
 	def "Poll keyword may not contain whitespace"() {
 		given:

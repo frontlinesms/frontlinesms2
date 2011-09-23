@@ -15,16 +15,18 @@ class MessageController {
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
-		params.archived = params.archived ? params.archived.toBoolean() : false
+		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
+		params.starred = params.starred ? params.starred.toBoolean() : false
+		params.failed = params.failed ? params.failed.toBoolean() : false
 		true
 	}
 
 	def index = {
 		redirect(action:'inbox')
 	}
-
-	def show = { messageInstanceList ->
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
+	
+	def getShowModel(messageInstanceList) {
+		def messageInstance = (params.messageId) ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -35,77 +37,80 @@ class MessageController {
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
-				folderInstanceList: Folder.findAll(),
+				folderInstanceList: Folder.findAllByArchived(params.viewingArchive),
 				responseInstance: responseInstance,
-				pollInstanceList: Poll.nonArchivedPolls,
+				pollInstanceList: Poll.findAllByArchived(params.viewingArchive),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
-				hasUndeliveredMessages: Fmessage.hasUndeliveredMessages()]
-	}
-
-	def trash = {
-		def messageInstanceList = Fmessage.getDeletedMessages(params)
-			[messageInstanceList: messageInstanceList,
-					messageSection: 'trash',
-					messageInstanceTotal: Fmessage.countDeletedMessages(params.starred)] << show(messageInstanceList)
+				hasFailedMessages: Fmessage.hasFailedMessages()]
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.getInboxMessages(params)
-		[messageInstanceList: messageInstanceList,
+		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
+		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
-					messageInstanceTotal: Fmessage.countInboxMessages(params),
-					actionLayout : (params.archived ? "archive" : "messages")] << show(messageInstanceList)
+					messageInstanceTotal: messageInstanceList.count(),
+					actionLayout : (params.viewingArchive ? "archive" : "messages")] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def sent = {
-		def messageInstanceList = Fmessage.getSentMessages(params)
-		[messageSection: 'sent',
-				messageInstanceList: messageInstanceList,
-				messageInstanceTotal: Fmessage.countSentMessages(params),
-				actionLayout : params.archived ? "archive" : "messages"] << show(messageInstanceList)
+		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
+		render view:'standard', model:[messageSection: 'sent',
+				messageInstanceList: messageInstanceList.list(params),
+				messageInstanceTotal: messageInstanceList.count(),
+				actionLayout : params.viewingArchive ? "archive" : "messages"] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def pending = {
-		def messageInstanceList = Fmessage.getPendingMessages(params)
-		[messageInstanceList: messageInstanceList,
+		def messageInstanceList = Fmessage.pending(params.failed)
+		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
-				messageInstanceTotal: Fmessage.countPendingMessages(params.failed),
-				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << show(messageInstanceList)
+				messageInstanceTotal: messageInstanceList.count(),
+				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << getShowModel(messageInstanceList.list(params))
+	}
+	
+	def trash = {
+		def messageInstanceList = Fmessage.deleted(params.starred)
+		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+					messageSection: 'trash',
+					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def poll = {
-		def activityInstance = Poll.get(params.ownerId)
-		def messageInstanceList = activityInstance.getMessages(params)
-		[messageInstanceList: messageInstanceList,
+		def pollInstance = Poll.get(params.ownerId)
+		def messageInstanceList = pollInstance.getPollMessages(params.starred)
+		render view:'../message/poll', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'poll',
-				messageInstanceTotal: activityInstance.countMessages(params.starred),
-				ownerInstance: activityInstance,
-				responseList: activityInstance.responseStats,
-				pollResponse: activityInstance.responseStats as JSON,
-				actionLayout : params.archived ? 'archive' : 'messages'] << show(messageInstanceList)
+				messageInstanceTotal: messageInstanceList.count(),
+				ownerInstance: pollInstance,
+				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
+				responseList: pollInstance.responseStats,
+				pollResponse: pollInstance.responseStats as JSON,
+				actionLayout : params.viewingArchive ? 'archive' : 'messages'] << getShowModel(messageInstanceList.list(params))
+	}
+	
+	def radioShow = {
+		def showInstance = RadioShow.get(params.ownerId)
+		def messageInstanceList = showInstance?.getShowMessages(params.starred)
+
+		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+					messageSection: 'radioShow',
+					messageInstanceTotal: messageInstanceList.count(),
+					ownerInstance: showInstance] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance?.getFolderMessages(params)
+		def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
 
 		if(params.flashMessage) { flash.message = params.flashMessage }
 
-		[messageInstanceList: messageInstanceList,
-				messageSection: 'folder',
-				messageInstanceTotal: folderInstance.countMessages(params.starred),
-				ownerInstance: folderInstance] << show(messageInstanceList)
-	}
-
-	def radioShow = {
-		def showInstance = RadioShow.get(params.ownerId)
-		def messageInstanceList = showInstance?.getShowMessages(params)
-
-		[messageInstanceList: messageInstanceList,
-				messageSection: 'radioShow',
-				messageInstanceTotal: showInstance.countMessages(params.starred),
-				ownerInstance: showInstance] << show(messageInstanceList)
+		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
+					messageSection: 'folder',
+					messageInstanceTotal: messageInstanceList.count(),
+					ownerInstance: folderInstance,
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
+					actionLayout : params.viewingArchive ? 'archive' : 'messages'] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def send = {
@@ -142,10 +147,8 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
-			if(params.messageSection == 'result') {
-				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
-			}
-			else redirect(action: params.messageSection, params: [ownerId: params.ownerId,archived: params.archived])
+			if(params.messageSection == 'result') redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 		}
 	}
 

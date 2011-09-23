@@ -36,10 +36,12 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "search description is shown in header when searching by group"() {
 		when:
 			to SearchingPage
+			searchBtn.present()
 			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
-			waitFor { searchDescription.text().contains('Searching "test", include archived messages') }
+			waitFor {searchDescription}
+			searchDescription.text() == 'Searching "test", include archived messages'
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -113,6 +115,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "should clear search results" () {
 		when:
 			to SearchingPage
+			searchBtn.present()
 			searchBtn.click()
 		then:
 			waitFor{ searchBtn.displayed }
@@ -122,11 +125,12 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			waitFor{ !$("#search-description").displayed }
 	}
 	
+	//@spock.lang.IgnoreRest
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
 			to SearchingPage
 			searchBtn.present()
@@ -134,15 +138,37 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at SearchingPage
 		when:
-			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
+			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
 			$("#message-delete").click()
 		then:
 			at SearchingPage
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
-			waitFor { $('.flash').displayed }
-			
+			$('.flash').displayed
 	}
 	
+
+//	@spock.lang.IgnoreRest
+	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
+		when:
+			to SearchingPage
+			searchBtn.present()
+		then:
+			searchFrm.startDate_day == 'none'
+			searchFrm.startDate_month == 'none'
+			searchFrm.startDate_year == 'none'
+		when:
+			searchFrm.startDate_day = '4'
+			searchFrm.startDate_month = '9'
+			searchFrm.startDate_year = '2010'
+			searchBtn.click()
+			waitFor {searchDescription}
+		then:
+			searchFrm.startDate_day == '4'
+			searchFrm.startDate_month == '9'
+			searchFrm.startDate_year == '2010'
+	}
+	
+//	@spock.lang.IgnoreRest
 	def "archiving message should not break message navigation "() {
 		setup:
 			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
@@ -309,12 +335,12 @@ class SearchingPage extends geb.Page {
 		searchBtn { $('#search-details .buttons .search') }
 		searchDescription { $('#search-description') }
 		searchMoreOptionLink { $('#more-search-options')}
-		townCustomFieldLink(required:false) { $('#custom-field-link-town')}
-		townCustomFieldField(required:false) { $('#custom-field-field-town')}
-		likeCustomFieldLink(required:false) { $('#custom-field-link-like')}
-		ikCustomFieldLink(required:false) { $('#custom-field-link-ik')}
-		contactNameLink(required:false) {$('#field-link-contact-name')}
-		contactNameField(required:false) {$('#field-contact-name')}
+		townCustomFieldLink(required:false) { $('#more-option-link-custom-field-town')}
+		townCustomFieldField(required:false) { $('#more-option-field-custom-field-town')}
+		likeCustomFieldLink(required:false) { $('#more-option-link-custom-field-like')}
+		ikCustomFieldLink(required:false) { $('#more-option-link-custom-field-ik')}
+		contactNameLink(required:false) {$('#more-option-link-contact-name')}
+		contactNameField(required:false) {$('#more-option-field-contact-name')}
 		expendedSearchOption(required:false) {$('#expanded-search-options')}
 	}
 }

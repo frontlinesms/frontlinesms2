@@ -5,7 +5,7 @@
 	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 	<g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
 	<g:if test="${messageInstanceTotal > 0}">
-		<g:hiddenField name="isArchived" value="${params.archived}"/>
+		<g:hiddenField name="viewingArchive" value="${params.viewingArchive}"/>
 		<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 				message(code: 'fmessage.src.label', default: 'To')
 	 			: message(code: 'fmessage.dst.label', default: 'From')}" />

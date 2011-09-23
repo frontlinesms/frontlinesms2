@@ -54,58 +54,58 @@ class Fmessage {
 		contactName(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived)				
+					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) ||	(obj.messageOwner instanceof Folder && obj.messageOwner.archived)
 				} else {
-					obj.messageOwner == null || !(obj.messageOwner instanceof PollResponse) || !obj.messageOwner.poll.archived
+					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (obj.messageOwner instanceof Folder && !obj.messageOwner.archived)
 				}
 		})
 	}
 	
 	static namedQueries = {
-			inbox { isStarred=false, archived=false ->
+			inbox { getOnlyStarred=false, getOnlyArchived=false ->
 				and {
 					eq("deleted", false)
-					eq("archived", archived)
-					if(isStarred)
+					eq("archived", getOnlyArchived)
+					if(getOnlyStarred)
 						eq("starred", true)
 					eq("status", MessageStatus.INBOUND)
 					isNull("messageOwner")
 				}
 			}
-			sent { isStarred=false, archived=false ->
+			sent { getOnlyStarred=false, getOnlyArchived=false ->
 				and {
 					eq("deleted", false)
-					eq("archived", archived)
+					eq("archived", getOnlyArchived)
 					eq("status", MessageStatus.SENT)
 					isNull("messageOwner")
-					if(isStarred)
+					if(getOnlyStarred)
 						eq("starred", true)
 				}
 			}
-			pending { hasFailed=false ->
+			pending { getOnlyFailed=false ->
 				and {
 					eq("deleted", false)
 					eq("archived", false)
 					isNull("messageOwner")
-					if(hasFailed)
+					if(getOnlyFailed)
 						'in'("status", [MessageStatus.SEND_FAILED])
 					else 
 						'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 				}
 			}
-			deleted { isStarred=false ->
+			deleted { getOnlyStarred=false ->
 				and {
 					eq("deleted", true)
 					eq("archived", false)
-					if(isStarred)
+					if(getOnlyStarred)
 						eq('starred', true)
 				}
 			}
-			owned { isStarred=false, responses ->
+			owned { getOnlyStarred=false, owners ->
 				and {
 					eq("deleted", false)
-					'in'("messageOwner", responses)
-					if(isStarred)
+					'in'("messageOwner", owners)
+					if(getOnlyStarred)
 						eq("starred", true)
 				}
 			}
@@ -119,7 +119,7 @@ class Fmessage {
 				}
 			}
 
-			search { search -> 
+			search { search, contactNameMatchingCustomField=null -> 
 				def groupMembersNumbers = search.group?.getAddresses()
 					and {
 						if(search.searchString) {
@@ -146,10 +146,10 @@ class Fmessage {
 							search.endDate = search.endDate.next()
 							between("dateReceived", search.startDate, search.endDate)
 						}
-						if(search.usedCustomField.find{it.value!=''}) {
-							if(!search.customFieldContactList)
+						if(search.customFields.find{it.value!=''}) {
+							if(!contactNameMatchingCustomField)
 								eq('src', null)
-							else 'in'("contactName", search.customFieldContactList)
+							else 'in'("contactName", contactNameMatchingCustomField)
 						}
 						if(!search.inArchive) {
 							eq('archived', false)
@@ -224,58 +224,21 @@ class Fmessage {
 		this.archived = true
 		this
 	}
-
-	static def getFolderMessages(folderId) {
-		def folder = Folder.get(folderId) // TODO check if we need to fetch the folder here rather than just pass the ID
-		Fmessage.owned(folder).list()
-	}
-
-	static def getInboxMessages(params) {
-		Fmessage.inbox(params['starred'], params["archived"]).list(params)
-	}
-
-	static def getSentMessages(params) {
-		Fmessage.sent(params['starred'],  params["archived"]).list(params)
-	}
-
-	static def getPendingMessages(params) {
-		Fmessage.pending(params['failed']).list(params)		
-	}
-
-	static def getDeletedMessages(params) {
-		Fmessage.deleted(params['starred']).list(params)
-	}
-
-	static def countInboxMessages(params) {
-		Fmessage.inbox(params['starred'], params['archived']).count()
-	}
-	
-	static def countSentMessages(params) {
-		Fmessage.sent(params['starred'], params['archived']).count()
-	}
-	
-	static def countPendingMessages(isStarred) {
-		Fmessage.pending(isStarred).count()
-	}
-	
-	static def countDeletedMessages(isStarred) {
-		Fmessage.deleted(isStarred).count()
-	}
 	
 	static def countUnreadMessages(isStarred) {
 		Fmessage.unread().count()
 	}
 	
 	static def countAllMessages(params) {
-		def inboxCount = Fmessage.countInboxMessages(params)
-		def sentCount = Fmessage.countSentMessages(params)
-		def pendingCount = Fmessage.countPendingMessages()
-		def deletedCount = Fmessage.countDeletedMessages()
+		def inboxCount = Fmessage.inbox.count()
+		def sentCount = Fmessage.sent.count()
+		def pendingCount = Fmessage.pending.count()
+		def deletedCount = Fmessage.deleted.count()
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
 
-	static def hasUndeliveredMessages() {
-		Fmessage.getPendingMessages([:]).any {it.status == MessageStatus.SEND_FAILED}
+	static def hasFailedMessages() {
+		Fmessage.findAllByStatus(MessageStatus.SEND_FAILED) ? true : false
 	}
 	
 	static def getMessageOwners(activity) {

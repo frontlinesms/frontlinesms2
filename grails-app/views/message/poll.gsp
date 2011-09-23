@@ -1,8 +1,8 @@
 <html>
     <head>
         <title>Poll</title>
-		<g:render template="expanded_poll" />
-		<meta name="layout" content="${actionLayout}" />
+		<g:render template="../message/expanded_poll" />
+		<meta name="layout" content="messages" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript src="raphael-min.js"/>
 		<g:javascript src="g.raphael-min.js"/>
@@ -27,7 +27,7 @@
 	</head>
 	<body>
 		<g:if test="${messageInstance != null}">
-			<g:render template="message_details" />
+			<g:render template="../message/message_details" />
 		</g:if>
 	</body>
 </html>

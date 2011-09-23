@@ -272,7 +272,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { Poll.findByTitle("Coffee Poll") }
 	}
 
-	def "should launch export popup"() {
+	def "can launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			to MessagesPage
@@ -285,7 +285,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
 
-	def "should be able to rename a poll"() {
+	def "can rename a poll"() {
 		given:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
