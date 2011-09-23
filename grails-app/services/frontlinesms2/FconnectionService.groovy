@@ -19,9 +19,11 @@ class FconnectionService {
 						.routeId("out-${c.id}")
 			} else if(c instanceof EmailFconnection) {
 				incoming = 'seda:raw-email'
-				routes << from('seda:email-messages-to-send')
-						.to(c.camelProducerAddress)
-						.routeId("out-${c.id}")
+				if(c.camelProducerAddress) {
+					routes << from('seda:email-messages-to-send')
+							.to(c.camelProducerAddress)
+							.routeId("out-${c.id}")
+				}
 			} else if(grails.util.Environment.current == grails.util.Environment.TEST && c instanceof Fconnection) {
 				incoming = 'stream:out'
 				routes << from('seda:nowhere')
