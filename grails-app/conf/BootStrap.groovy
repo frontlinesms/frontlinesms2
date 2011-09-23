@@ -30,7 +30,7 @@ class BootStrap {
 					emptyMc."$getterName" = { false }
 					nonEmptyMc."$getterName" = {
 						def v = delegate.getAttribute(name)
-						v != null && !v.equalsIgnoreCase('false')
+						!(v == null || v.length()==0 || v.equalsIgnoreCase('false'))
 					}
 				}
 				emptyMc.initialize()
