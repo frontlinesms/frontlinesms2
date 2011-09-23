@@ -11,11 +11,11 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
 		then:
-			p.getMessages(['starred':false]).size() == 2
+			p.getPollMessages().count() == 2
 		when:
 			message1.toDelete().save(flush:true, failOnError:true)
 		then:
-			p.getMessages(['starred':false]).size() == 1
+			p.getPollMessages().count() == 1
 	}
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
@@ -61,27 +61,27 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle('question').getMessages(['starred':false])
+			def results = Poll.findByTitle('question').getPollMessages()
 		then:
-			results*.src == ["src2", "src3", "src1"]
-			results.every {it.archived == false}
+			results.list(sort:'dateReceived', order:'desc')*.src == ["src2", "src3", "src1"]
+			results.list().every {it.archived == false}
     }
 
 	def "should fetch starred poll messages"() {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").getMessages(['starred':true])
+			def results = Poll.findByTitle("question").getPollMessages(['starred':true])
 		then:
-			results*.src == ["src3"]
-			results.every {it.archived == false}
+			results.list()*.src == ["src3"]
+			results.list().every {it.archived == false}
 	}
 
 	def "should check for offset and limit while fetching poll messages"() {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").getMessages(['starred':false, 'max':1, 'offset':0])
+			def results = Poll.findByTitle("question").getPollMessages().list(max:1, offset:0)
 		then:
 			results*.src == ["src2"]
 	}
@@ -90,7 +90,7 @@ class PollIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").countMessages(false)
+			def results = Poll.findByTitle("question").getPollMessages().count()
 		then:
 			results == 3
 	}

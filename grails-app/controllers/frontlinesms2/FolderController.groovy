@@ -23,5 +23,13 @@ class FolderController {
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		}
 	}
+	
+	def archive = {
+		def folder = Folder.get(params.id)
+		folder.archiveFolder()
+		folder.save()
+		flash.message = "Folder was archived successfully!"
+		redirect(controller: "message", action: "inbox")
+	}
 }
 

@@ -5,9 +5,9 @@ import frontlinesms2.*
 class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.getInboxMessages(['starred':false, 'archived': false]).size() == 3
-		assert Poll.findByTitle('Miauow Mix').getMessages(['starred':false]).size() == 2
-		assert Folder.findByName('Fools').messages.size() == 2
+		assert Fmessage.inbox(false, false).count() == 3
+		assert Poll.findByTitle('Miauow Mix').getPollMessages().count() == 2
+		assert Folder.findByName('Fools').getFolderMessages().count() == 2
 	}
 
 	def 'archived messages do not show up in inbox view'() {
@@ -122,8 +122,8 @@ class ArchiveMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	private def goToArchivePage() {
-		go ""
+		go "message"
 		$("a", class:"tab",text: "Archive").click()
-		waitFor { $("a", text: 'Inbox Archive').displayed}
+		waitFor { $("a", text: 'Inbox archive').displayed}
 	}
 }

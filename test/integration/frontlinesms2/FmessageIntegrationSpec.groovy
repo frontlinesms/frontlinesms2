@@ -31,9 +31,9 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 					new Fmessage(deleted:false,src:"+987654321").save(flush:true)
 				}
 		when:
-			def deletedMessages = Fmessage.getDeletedMessages(['starred': false])
+			def deletedMessages = Fmessage.deleted(false)
 		then:
-			deletedMessages.size() == 3
+			deletedMessages.count() == 3
 	}
 	
 	def "should return all message counts"() {
@@ -86,7 +86,6 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def allSentMessages = Fmessage.search(search2).list()
 			def allMessages = Fmessage.search(search3).list()
 		then:
-			println allInboundMessages
 			allInboundMessages*.every {it.status == MessageStatus.INBOUND}
 			allSentMessages*.every {it.status != MessageStatus.INBOUND}
 			allMessages.size() == 7

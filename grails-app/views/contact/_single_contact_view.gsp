@@ -7,7 +7,7 @@
 			<g:else>
 				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
 			</g:else>
-			<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+			<li><g:link class="cancel" action="list" default="Cancel" params="[contactId: contactInstance?.id]">Cancel</g:link></li>
 			<g:if test="${contactInstance?.id}">
 				<li>
 					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">

@@ -4,6 +4,9 @@
 		<g:hiddenField name="messageSection" value="${messageSection}" />
 		<g:hiddenField name="ownerId" value="${ownerId}" />
 		<g:hiddenField name="searchId" value="${searchId}" />
+		<g:hiddenField name="starred" value="${starred}" />
+		<g:hiddenField name="viewingArchive" value="${viewingArchive}" />
+		<g:hiddenField name="failed" value="${failed}" />
 
 		<p>To export messages from FrontlineSMS, choose the type of export and the information to be included in the exported data.</p>
 			<div>

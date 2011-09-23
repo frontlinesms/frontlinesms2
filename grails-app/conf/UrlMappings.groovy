@@ -30,6 +30,17 @@ class UrlMappings {
 		"/folder/create"(controller:'folder', action:'create')
 		"/folder/save"(controller:'folder', action:'save')
 		
+		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
+		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
+		
+		"/archive/poll"(controller:'archive', action:'pollView') {}
+		"/archive/poll/$ownerId"(controller:'archive', action:'poll') {}
+		"/archive/poll/$ownerId/show/$messageId"(controller:'archive', action:'poll') {}
+		
+		"/archive/folder"(controller:'archive', action:'folderView') {}
+		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
+		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
+		
 		"/search/result/$messageId"(controller:'search', action:'result') {}
 		
 		"/$controller/$action?/$id?"{

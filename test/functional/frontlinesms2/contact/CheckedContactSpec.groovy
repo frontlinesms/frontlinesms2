@@ -30,5 +30,7 @@ class ContactShowPage extends geb.Page {
 	static content = {
 		contactSelect(required:false) { $(".contact-select") }	
 		contactCount(required:false) { $('#contact-count') }
+		contactGroup(required:false) { $('#multiple-contact')}
+		contactForm(required:true) {$('#details')}
 	}
 }

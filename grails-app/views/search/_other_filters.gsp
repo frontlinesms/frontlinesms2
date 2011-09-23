@@ -9,33 +9,34 @@
 		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" />Include Archive
 	</li>
 	
-	<li>
+	<li class="field">
 		<h2>${message(code:'default.search.betweendates.title', default:'Between dates:') }</h2>
-		<g:datePicker name="startDate" value="none" noSelection="['none':'']" precision="day"/>
+		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day"/>
 		<br>
 		<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day"/>
 	</li>
 	
-	<li class="field" id='field-contact-name'>
+	<li class="field" id='more-option-field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
-		<a onclick="toggleContactNameField()"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+		<a onclick="toggleMoreOptionElement('contact-name')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 	</li>
+	
 	<g:if test="${search == null}">
 		<g:each var="customField" in="${customFieldList}">
-			<li class="field" id="custom-field-field-${customField}">
+			<li class="field" id="more-option-field-custom-field-${customField}">
 				<h2>${customField}:</h2><br>
 				<g:textField name="${customField}CustomField" />
-				<a onclick="toggleCustomField('${customField}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+				<a onclick="toggleMoreOptionElement('custom-field-${customField}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			</li>
 		</g:each>
 	</g:if>
 	<g:else>
-		<g:each var="customField" in="${search.usedCustomField}">
-			<li class="field" id="custom-field-field-${customField.key}">
+		<g:each var="customField" in="${search.customFields}">
+			<li class="field" id="more-option-field-custom-field-${customField.key}">
 				<h2>${customField.key}:</h2><br>
 				<g:textField name="${customField.key}CustomField" value="${customField.value}"/>
-				<a onclick="toggleCustomField('${customField.key}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+				<a onclick="toggleMoreOptionElement('custom-field-${customField.key}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			</li>
 		</g:each>
 	</g:else>
@@ -46,11 +47,11 @@
 </h2>
 <ol class="sub-menu" id="expanded-search-options">
 	<li>
-		<a id="field-link-contact-name" onclick="toggleContactNameField()">Contact Name</a>
+		<a id="more-option-link-contact-name" onclick="toggleMoreOptionElement('contact-name')">Contact Name</a>
 	</li>
 	<g:each var="customField" in="${customFieldList}">
 		<li>
-			<a id="custom-field-link-${customField}" onclick="toggleCustomField('${customField}')">${customField}</a>
+			<a id="more-option-link-custom-field-${customField}" onclick="toggleMoreOptionElement('custom-field-${customField}')">${customField}</a>
 		</li>
 	</g:each>
 </ol>

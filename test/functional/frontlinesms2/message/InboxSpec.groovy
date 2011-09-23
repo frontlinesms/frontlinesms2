@@ -41,6 +41,9 @@ class InboxSpec extends MessageGebSpec {
 			firstMessageLink.text() == 'Alice'
 	}
 
+	//FIXME this test fail when the local computer language is different than english. The Date return
+	//in the test in English while the UI date is in the local context
+	//@spock.lang.IgnoreRest
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -281,6 +284,8 @@ class InboxSpec extends MessageGebSpec {
 	}
 
 	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+		//println ("Local context:"+Locale.getDefault())
+		//System.setProperty('user.timezone', 'GMT')
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.getDefault())
 	}
 }

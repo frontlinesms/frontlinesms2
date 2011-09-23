@@ -11,7 +11,7 @@
 				<g:link action="sent">Sent</g:link>
 			</li>
 			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending" class="${hasUndeliveredMessages ? 'send-failed' : ''}">Pending</g:link>
+				<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}">Pending</g:link>
 			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
@@ -20,7 +20,7 @@
 	</li>
 	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'activities.png')}' />
-		<h2>Activities</h2>
+		<h2>Polls</h2>
 		<ol class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li class="${p == ownerInstance ? 'selected' : ''}">
