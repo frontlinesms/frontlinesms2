@@ -155,7 +155,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			pollForm.autoReplyText().@disabled
+			pollForm.autoReplyText().disabled
 		when:
 			pollForm.enableAutoReply = true
 			next.click()
@@ -226,11 +226,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			pollForm.autoReplyText().@disabled == 'true'
+			pollForm.autoReplyText().disabled
 		when:
 			pollForm.enableAutoReply = true
 		then:
-			waitFor { pollForm.autoReplyText().@disabled == 'false' }
+			waitFor { !pollForm.autoReplyText().disabled }
 		when:
 			
 			pollForm.autoReplyText = "Thanks for participating..."
@@ -242,7 +242,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			pollForm.enableAutoReply = false
 		then:	
-			waitFor { pollForm.autoReplyText().@disabled == 'true' }
+			waitFor { pollForm.autoReplyText().disabled }
 			pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
 		when:
 			pollForm.enableAutoReply = true
@@ -275,7 +275,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	def "should launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			to MessagePage
+			to MessagesPage
 			$("a", text: "Who is badder?").click()
 		then:
 			waitFor { title == "Poll" }
@@ -289,7 +289,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
-			to MessagePage
+			to MessagesPage
 			$("a", text: "Who is badder?").click()
 		then:
 			waitFor { title == "Poll" }
@@ -306,7 +306,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
-		to MessagePage
+		to MessagesPage
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
 		$("input", name: "activity").value("poll")
@@ -316,14 +316,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		if(question) pollForm.question = question
 		pollForm."collect-responses" = !enableMessage
 		next.click()
-	}
-}
-
-class MessagePage extends geb.Page {
-	static url = "message"
-	static content = {
-		createActivityButton { $("#create-activity a") }
-		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
 	}
 }
 

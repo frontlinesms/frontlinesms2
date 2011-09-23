@@ -97,7 +97,6 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			sleep 1000
 		then:
 			bob.refresh()
-			println "Bob has fields: ${bob.customFields}"
 			bob.customFields.name == ['lake', 'town']
 	}
 
