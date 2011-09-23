@@ -38,7 +38,12 @@
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'folders.png')}' />
+								<g:if test="${params.viewingArchive}">
+									<g:link controller="archive" action="folder">&lt; Back</g:link>
+								</g:if>
+								<g:else>
+									<img src='${resource(dir:'images/icons',file:'folders.png')}' />
+								</g:else>
 								<h2>${ownerInstance?.name}</h2>
 							</div>
 						</g:elseif>
