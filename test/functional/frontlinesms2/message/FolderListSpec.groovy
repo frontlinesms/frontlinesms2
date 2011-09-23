@@ -54,7 +54,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value: message.src).@checked
+			$('input', value: message.src).checked
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
@@ -127,9 +127,9 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'Max').@checked
-			$('input', value:'Jane').@checked
-			!$('input', value:'June').@checked
+			$('input', value:'Max').checked
+			$('input', value:'Jane').checked
+			!$('input', value:'June').checked
 	}
 
 }

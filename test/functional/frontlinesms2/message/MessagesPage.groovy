@@ -17,6 +17,7 @@ class MessagesPage extends geb.Page {
 				return $('.message-select:checked').size()
 			}
 		}
+		createActivityButton { $("#create-activity a") }
+		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
 	}
 }
-
