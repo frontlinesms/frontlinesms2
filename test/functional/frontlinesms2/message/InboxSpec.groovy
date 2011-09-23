@@ -276,7 +276,37 @@ class InboxSpec extends MessageGebSpec {
 			$("#no-messages").text().contains("No messages")
 			$("#messages-submenu .selected").text().contains('Inbox')
 	}
-
+	
+	def "should update message count when new message is received"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 1"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 2"
+			}
+	}
+	
+	def "should refresh message count according to the specified refresh rate"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}?rRate=5000"
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			assert js.refresh_rate == 5000
+		then:
+			$("#tab-messages").text() == "Messages 1"
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 2"
+			}
+	}
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();

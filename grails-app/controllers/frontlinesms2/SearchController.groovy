@@ -51,7 +51,7 @@ class SearchController {
 			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
 		}
 		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
-		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", offset: params.offset)
+		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[searchDescription: searchDescription,

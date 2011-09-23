@@ -9,11 +9,13 @@
 		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
+			refresh_rate = ${params.rRate ?: 30000}
 		</script>
 		<g:javascript src="message/check_message.js"/>
 		<g:javascript src="message/arrow_navigation.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js" />
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
@@ -38,7 +40,12 @@
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'folders.png')}' />
+								<g:if test="${params.viewingArchive}">
+									<g:link controller="archive" action="folder">&lt; Back</g:link>
+								</g:if>
+								<g:else>
+									<img src='${resource(dir:'images/icons',file:'folders.png')}' />
+								</g:else>
 								<h2>${ownerInstance?.name}</h2>
 							</div>
 						</g:elseif>
@@ -81,16 +88,16 @@
 									</select>
 								</li>
 							</g:if>
-							<g:if test="${messageSection == 'folder'}">
-								<li class='static_btn'>
-									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
-								</li>
-							</g:if>
 							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
 									<g:link elementId="export" url="#">
 										Export
 									</g:link>
+								</li>
+							</g:if>
+							<g:if test="${messageSection == 'folder' && !params.viewingArchive}">
+								<li class='static_btn'>
+									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
 								</li>
 							</g:if>
 							<li>
@@ -101,11 +108,13 @@
 							</li>
 						</ol>
 						<g:if test="${messageSection == 'poll'}">
-							<ol>
-								<li class='static_btn'>
-									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
-								</li>
-							</ol>
+							<g:if test="${!params.viewingArchive}">
+								<ol>
+									<li class='static_btn'>
+										<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
+									</li>
+								</ol>
+							</g:if>
 							<ol>
 								<li>
 									<g:select name="poll-actions" from="${['Export', 'Rename activity']}"

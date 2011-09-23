@@ -66,10 +66,16 @@
 	<div id='info-add' class="dropdown">
 		<select id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na">Add more information...</option>
-			<option class="create-custom-field" value='add-new'>Create custom field</option>
+			<option class="predefined-field" value="Street address">Street address</option>
+			<option class="predefined-field" value="City">City</option>
+			<option class="predefined-field" value="Postcode">Postcode</option>
+			<option class="predefined-field" value="State">State</option>
 			<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
-				<option value="${f}">${f}</option>
+				<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
+					<option value="${f}">${f}</option>
+				</g:if>
 			</g:each>
+			<option class="create-custom-field" value='add-new'>Create new...</option>
 		</select>
 	</div>
 	<div id='note-area' class="field">
@@ -81,9 +87,8 @@
 	<div>
 		<ol id='group-list'>
 			<g:each in="${contactGroupInstanceList}" status="i" var="g">
-				<li class="${g == groupInstance ? 'selected' : ''}">
-					<input type="text" name="${g.name}" value="${g.name}" disabled="true" />
-					<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+				<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
+					<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 				</li>
 			</g:each>
 			<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">

@@ -9,9 +9,11 @@
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
+			refresh_rate = ${params.rRate ?: 30000}
 		</script>
 		<g:javascript src="message/check_message.js"></g:javascript>
 		<g:javascript src="message/star_message.js"></g:javascript>
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 	</head>
@@ -61,22 +63,22 @@
 						<g:layoutBody />
 					</div>
 					<div class="content-footer">
+						<g:if test="${(messageSection == 'poll' || messageSection == 'folder') && !viewingMessages}">
+								<div id="page-arrows">
+									<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${itemInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+								</div>
+						</g:if>
+						<g:else>
 							<ul id="filter">
 								<li>Show:</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
 								<li>|</li>
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
-							<g:if test="${(messageSection == 'poll' || messageSection == 'folder') && !viewingMessages}">
-								<div id="page-arrows">
-									<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${itemInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
-								</div>
-							</g:if>
-							<g:else>
-								<div id="page-arrows">
-									<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
-								</div>
-							</g:else>
+							<div id="page-arrows">
+								<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+							</div>
+						</g:else>
 					</div>
 				</div>
 			</div>
