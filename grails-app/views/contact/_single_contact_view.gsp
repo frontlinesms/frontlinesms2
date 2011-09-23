@@ -70,10 +70,12 @@
 			<option class="predefined-field" value="City">City</option>
 			<option class="predefined-field" value="Postcode">Postcode</option>
 			<option class="predefined-field" value="State">State</option>
-			<option class="create-custom-field" value='add-new'>Create new...</option>
 			<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
-				<option value="${f}">${f}</option>
+				<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
+					<option value="${f}">${f}</option>
+				</g:if>
 			</g:each>
+			<option class="create-custom-field" value='add-new'>Create new...</option>
 		</select>
 	</div>
 	<div id='note-area' class="field">
