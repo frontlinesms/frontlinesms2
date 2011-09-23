@@ -23,7 +23,7 @@ class KeywordProcessorService {
 
 	PollResponse getPollResponse(String messageText) {
 		def words = messageText.split()
-		if(words.size() == 0) {
+		if(words.size() == 0 || (words.size() == 1 && words[0].length() < 2)) {
 			return null
 		} else if(words.size() == 1) {
 			def word = words[0]
