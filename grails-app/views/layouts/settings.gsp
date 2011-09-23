@@ -8,6 +8,7 @@
 		<g:javascript library="jquery" plugin="jquery"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
+			refresh_rate = ${params.rRate ?: 30000}
 		</script>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<g:javascript src="mediumPopup.js"/>
