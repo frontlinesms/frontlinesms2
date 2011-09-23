@@ -1,5 +1,5 @@
 <div>
-	<g:if test="${params.viewingArchive}">
+	<g:if test="${params.viewingArchive && params.viewingMessages}">
 		<g:link controller="archive" action="poll"> &lt; Back </g:link>
 	</g:if>
 	<g:else>
