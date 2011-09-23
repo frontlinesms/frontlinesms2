@@ -230,7 +230,11 @@ class MessageController {
 		Fmessage.findAllByDeleted(true)*.delete()
 		redirect(action: 'inbox')
 	}
-
+	
+	def getUnreadMessageCount = {
+		render text: Fmessage.countUnreadMessages()
+	}
+	
 	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
