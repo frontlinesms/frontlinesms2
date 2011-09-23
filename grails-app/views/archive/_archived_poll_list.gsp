@@ -12,22 +12,22 @@
 		<g:each in="${pollInstanceList}" var="p">
 			<tr>
 				<td>
-					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingMessages: true]">
+					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingArchive: true, viewingMessages: true]">
 						${p.title}
 					</g:link>
 				</td>
 				<td>
-					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingMessages: true]">
+					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingArchive: true, viewingMessages: true]">
 						Poll
 					</g:link>
 				</td>
 				<td>
-					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingMessages: true]">
+					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingArchive: true, viewingMessages: true]">
 						<g:formatDate date="${p.dateCreated}"/>
 					</g:link>
 				</td>
 				<td>
-					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingMessages: true]">
+					<g:link controller="archive" action="poll" params="[ownerId: p.id, viewingArchive: true, viewingMessages: true]">
 						${p.liveMessageCount}
 					</g:link>
 				</td>

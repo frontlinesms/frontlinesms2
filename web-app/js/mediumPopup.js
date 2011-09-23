@@ -14,7 +14,7 @@ function messageResponseClick(messageType) {
 		type:'POST',
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true);addTabValidations(); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true); addTabValidations(); }
 	});
 	$("#reply-dropdown").val("na");
 }
@@ -59,7 +59,6 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	initializeTabContentWidgets()
 	onLoad && onLoad();
-
 }
 
 function cancel() {

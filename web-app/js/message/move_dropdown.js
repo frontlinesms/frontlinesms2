@@ -22,11 +22,13 @@ function moveAction() {
 	} else {
 		var messagesToMove = $("#message-id").val();
 	}
+	
+	var searchId = $("#searchId").val();
 
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/move',
-		data: {messageSection: section, messageId: messagesToMove, ownerId: me.val()},
+		data: {messageSection: section, messageId: messagesToMove, ownerId: me.val(), searchId: searchId},
 		success: function(data) { window.location = location; }
 	});
 }
