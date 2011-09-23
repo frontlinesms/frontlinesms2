@@ -81,16 +81,16 @@
 									</select>
 								</li>
 							</g:if>
-							<g:if test="${messageSection == 'folder'}">
-								<li class='static_btn'>
-									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
-								</li>
-							</g:if>
 							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
 									<g:link elementId="export" url="#">
 										Export
 									</g:link>
+								</li>
+							</g:if>
+							<g:if test="${messageSection == 'folder' && !params.viewingArchive}">
+								<li class='static_btn'>
+									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
 								</li>
 							</g:if>
 							<li>
@@ -101,11 +101,13 @@
 							</li>
 						</ol>
 						<g:if test="${messageSection == 'poll'}">
-							<ol>
-								<li class='static_btn'>
-									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
-								</li>
-							</ol>
+							<g:if test="${!params.viewingArchive}">
+								<ol>
+									<li class='static_btn'>
+										<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
+									</li>
+								</ol>
+							</g:if>
 							<ol>
 								<li>
 									<g:select name="poll-actions" from="${['Export', 'Rename activity']}"
