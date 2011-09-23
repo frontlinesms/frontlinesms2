@@ -1,5 +1,6 @@
-function launchSmallPopup(title, html, btnFinishedText) {
+function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	if (doneAction == null) { doneAction = defaultDoneAction }
 	$("#modalBox").dialog({
 			modal: true,
 			width: 285,
@@ -41,7 +42,7 @@ function cancel() {
 	$(this).remove();
 }
 
-function doneAction() {
+function defaultDoneAction() {
 	if ($("#modalBox").contentWidget("onDone")) {
 		$(this).find("form").submit(); 
 		$(this).remove();

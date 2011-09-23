@@ -14,7 +14,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		when:
 			to BobsContactPage
 		then:
-			def memberOf = $("#group-list li").children('input')*.value().sort()
+			def memberOf = $("#group-list li").children('span')*.text().sort()
 			memberOf == ['Test', 'three']
 	}
 
@@ -26,7 +26,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 		when:
 			$("#group-dropdown").value("${Group.findByName('Others').id}")
 		then:
-			$("#group-list").children().children('input')*.value().sort() == ['Others', 'Test', 'three']
+			$("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three']
 			$("#group-dropdown").children()*.text() == ['Add to group...', 'four']
 	}
 
@@ -39,15 +39,15 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			go "contact/show/${bob.id}"
 			def lstGroups = $("#group-list")
 		then:
-			lstGroups.children().children('input').size() == 2
-			def groupsText = lstGroups.children().children('input').collect() { it.value() }
+			lstGroups.children().children('span').size() == 2
+			def groupsText = lstGroups.children().children('span').collect() { it.text() }
 			groupsText.containsAll(['Test', 'three'])
 		when:
 			lstGroups.find('a').first().click()
 			bobsGroups = bob.groups
 		then:
-			lstGroups.children().children('input').size() == 1
-			lstGroups.children().children('input').value() == groupsText[1]
+			lstGroups.children().children('span').size() == 1
+			lstGroups.children().children('span').text() == groupsText[1]
 			bobsGroups == bobsDatabaseGroups
 
 		when:

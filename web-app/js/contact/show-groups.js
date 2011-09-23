@@ -13,8 +13,8 @@ function addGroupClickAction() {
 	var groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list')
 	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 
-	var groupListItem = $('<li><input type="text" disabled="true" value="' + groupName + '" />');
-	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '"><img src="' + url_root + 'images/icons/remove.gif" /></a></li>');
+	var groupListItem = $('<li class="" id="' + groupName + '"><span>' + groupName + '</span>');
+	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '"><img src="' + url_root + 'images/icons/remove.png" /></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
 	
@@ -29,10 +29,10 @@ function addGroupClickAction() {
 function removeGroupClickAction() {
 	var me = $(this);
 	var groupId = me.attr('id').substring('remove-group-'.length);
-	var groupName = me.parent().children('input').val();
+	var groupName = me.parent().children('span').text();
 	
 	var groupDropdown = $('.single-contact').is(':visible') ? $('#group-dropdown') : $('#multi-group-dropdown')
-	var groupListElements = $('.single-contact').is(':visible') ? $('#group-list li input') : $('#multi-group-list input')
+	var groupListElements = $('.single-contact').is(':visible') ? $('#group-list li span') : $('#multi-group-list ')
 	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 	var option = $("<option value='" + groupId + "'>" + groupName + '</option>');
 	

@@ -120,7 +120,7 @@ class MessageController {
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
-		redirect (action: 'sent')
+		redirect (action: 'pending')
 	}
 
 	def getMessagesToSend() {
@@ -230,7 +230,11 @@ class MessageController {
 		Fmessage.findAllByDeleted(true)*.delete()
 		redirect(action: 'inbox')
 	}
-
+	
+	def getUnreadMessageCount = {
+		render text: Fmessage.countUnreadMessages()
+	}
+	
 	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
