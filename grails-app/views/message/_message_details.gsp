@@ -35,7 +35,9 @@
 									Reply All
 								</g:remoteLink>
 							</li>
-							<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archive']}"></g:render>
+							<g:if test="${(messageSection != 'poll' && messageSection != 'folder') && !params.viewingArchive}">
+								<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archive']}"></g:render>
+							</g:if>
 							<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'delete']}"></g:render>
 						</div>
 					</g:elseif>
