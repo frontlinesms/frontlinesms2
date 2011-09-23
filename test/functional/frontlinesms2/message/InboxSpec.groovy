@@ -62,11 +62,11 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -102,12 +102,13 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
-			println $('#btn_reply').text()
 			$('#btn_reply').click()
-			waitFor {$('div#tabs-1').displayed}
+		then:
+			waitFor { $('div#tabs-1').displayed }
+		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'+254778899').getAttribute('checked')
+			$('input', value:'+254778899').checked
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
@@ -118,10 +119,12 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/$message.id"
 			$('#btn_reply').click()
-			waitFor {$('div#tabs-1').displayed}
+		then:
+			waitFor { $('div#tabs-1').displayed }
+		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'+254999999').getAttribute('checked')
+			waitFor { $('input', value:'+254999999').checked }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {

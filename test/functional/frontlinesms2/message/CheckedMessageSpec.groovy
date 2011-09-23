@@ -13,7 +13,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			messagesSelect[2].click()
 			messagesSelect[3].click()
 		then:
-			waitFor { messagesSelect[0].@checked == "true" }
+			waitFor { messagesSelect[0].checked }
 	}
 	
 	def "message count displayed when multiple messages are selected"() {
@@ -57,9 +57,9 @@ class CheckedMessageSpec extends MessageGebSpec {
 			$('#multiple-messages a')[0].click()
 			$("div#tabs-1 .next").click()
 		then:
-			waitFor { $('input', value:'Alice').@checked }
-			$('input', value:'Bob').@'checked'
-			!$('input', value:'June').@'checked'
+			waitFor { $('input', value:'Alice').checked }
+			$('input', value:'Bob').checked
+			!$('input', value:'June').checked
 	}
 	
 	def "Should show the correct contact count when replying to multiple checked messages"() {
@@ -140,11 +140,11 @@ class CheckedMessageSpec extends MessageGebSpec {
 			to MessagesPage
 			messagesSelect[1].click()
 		then:
-			messagesSelect[1].@checked == "true"
+			messagesSelect[1].checked
 		when:
 			$('#messages tr:last-child td:nth-child(3) a').click()
 		then: 
-			!messagesSelect[1].@checked
+			!messagesSelect[1].checked
 	}
 
 

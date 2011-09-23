@@ -13,7 +13,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			messagesSelect[2].click()
 			messagesSelect[3].click()
 		then:
-			waitFor { messagesSelect[0].@checked == "true" }
+			waitFor { messagesSelect[0].checked }
 	}
 	
 	def "message count displayed when multiple messages are selected"() {
@@ -58,9 +58,9 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			replyToMultipleButton.click() // click the reply button
 			$("div#tabs-1 .next").click()
 		then:
-			waitFor { $('input', value:'Alice').@checked }
-			$('input', value:'Bob').@checked
-			!$('input', value:'June').@checked
+			waitFor { $('input', value:'Alice').checked }
+			$('input', value:'Bob').checked
+			!$('input', value:'June').checked
 	}
 	
 	def "'Forward' button still work when all messages are unchecked"() {
@@ -82,9 +82,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		when:
 			$('#btn_forward').click()
 		then:
-			waitFor {
-				println "Text is ${$('textArea', name:'messageText').text()}" 
-				$('textArea', name:'messageText').text() == "i like chicken" }
+			waitFor { $('textArea', name:'messageText').text() == "i like chicken" }
 	}
 	
 	def "should set row as selected when a message is checked"() {
@@ -95,7 +93,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			to SearchPage
 			messagesSelect[2].click()
 		then:
-			waitFor { messagesSelect[2].@checked == "true" }
+			waitFor { messagesSelect[2].checked }
 			messagesSelect[2].parent().parent().hasClass("selected")
 	}
 

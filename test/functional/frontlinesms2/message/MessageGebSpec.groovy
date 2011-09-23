@@ -33,7 +33,7 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	
 	static createSearchTestMessages() {
 		[new Fmessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00'),
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
+				new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
 					it.status = MessageStatus.INBOUND
 					it.save(failOnError:true)

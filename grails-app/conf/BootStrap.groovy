@@ -17,8 +17,34 @@ class BootStrap {
 	
 	def init = { servletContext ->
 		initialiseSerial()
-
-		if (Environment.current == Environment.DEVELOPMENT) {
+		
+		switch(Environment.current) {
+			case Environment.TEST:
+				def emptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.EmptyNavigator))
+				def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
+				
+				/** list of boolean vars from https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#getAttribute(java.lang.String) */
+				final def BOOLEAN_PROPERTIES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete', 'controls', 'declare', 'defaultchecked', 'defaultselected', 'defer', 'disabled', 'draggable', 'ended', 'formnovalidate', 'hidden', 'indeterminate', 'iscontenteditable', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nohref', 'noresize', 'noshade', 'novalidate', 'nowrap', 'open', 'paused', 'pubdate', 'readonly', 'required', 'reversed', 'scoped', 'seamless', 'seeking', 'selected', 'spellcheck', 'truespeed', 'willvalidate']
+				BOOLEAN_PROPERTIES.each { name ->
+					def getterName = "is${name.capitalize()}"
+					emptyMc."$getterName" = { false }
+					nonEmptyMc."$getterName" = {
+						println "Getting value for $name"
+						def v = delegate.getAttribute(name)
+						println "Got attribute '$name' value: $v (${v.getClass()})"
+						def r = v == null? false:
+								v instanceof String? Boolean.parseBoolean(v):
+								v as boolean
+						println "Evaluating attribute '$name' value $v as $r"
+						r
+					}
+				}
+				emptyMc.initialize()
+				geb.navigator.EmptyNavigator.metaClass = emptyMc
+				nonEmptyMc.initialize()
+				geb.navigator.NonEmptyNavigator.metaClass = nonEmptyMc
+				break
+			case Environment.DEVELOPMENT:
 			//DB Viewer
 			//org.hsqldb.util.DatabaseManager.main()
 			// do custom init for dev here
@@ -32,11 +58,11 @@ class BootStrap {
 				it.addToGroups(notCats)
 			}
 			createContact("Kate", "+198730948")
-			
+		
 			(1..101).each {
 				new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
 			}
-			
+		
 			[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
 					new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
 				it.save(failOnError:true, flush:true)
@@ -44,14 +70,14 @@ class BootStrap {
 
 			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
-			
+		
 			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
-			
+		
 			new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
 			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
-			
+		
 			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
 					new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
 					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateReceived:new Date()-1),
@@ -80,18 +106,18 @@ class BootStrap {
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
 			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
 			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
-			
+		
 			def barcelonaResponse = PollResponse.findByValue('barcelona');
 			10.times {
 				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", status: MessageStatus.INBOUND);
 				msg.save(failOnError: true);
 				barcelonaResponse.addToMessages(msg);
 			}
-			
+		
 			['Work', 'Projects'].each {
 				new Folder(name:it).save(failOnError:true, flush:true)
 			}
-			
+		
 			[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
 					new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
 					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
@@ -100,7 +126,7 @@ class BootStrap {
 				it.dateReceived = new Date()
 				it.save(failOnError:true, flush:true)
 			}
-			
+		
 			[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
 					Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
 					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),

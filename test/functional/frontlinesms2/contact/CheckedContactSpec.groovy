@@ -20,8 +20,8 @@ class CheckedContactSpec extends ContactGebSpec {
 			contactSelect[0].click()
 		then:
 			waitFor { contactCount.text() == '2 contacts selected' }
-			contactSelect[0].@checked == "true"
-			contactSelect[1].@checked == "true"
+			contactSelect[0].checked
+			contactSelect[1].checked
 	}
 }
 
