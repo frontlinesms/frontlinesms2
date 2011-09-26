@@ -7,54 +7,40 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 
 	def 'DETECT MODEMS button should be visible on STATUS tab'() {
 		when:
-			go StatusPage
+			to StatusPage
 		then:
 			detectModems.displayed
 	}
 	
 	def 'DETECTED DEVICES section should be visible on STATUS tab'() {
 		when:
-			go StatusPage
+			to StatusPage
 		then:
 			detectedDevicesSection.displayed
 			detectedDevicesSection.find('h2').text() == 'Detected devices'
 			noDevicesDetectedNotification.displayed
 			noDevicesDetectedNotification.text() == 'No devices have been detected yet.'
-			!detectedDevicesList.visible
+			!detectedDevicesTable.displayed
 	}
 
 	def 'DETECTED DEVICES list should appear when a device has been detected'() {
+		setup:
+			// TODO mock a single connection on COM1 with manufacturer Kiwanja and model T1 Test Modem
 		when:
-			deviceDetectionService.publishDetection new DetectedDevice(port:'COM1', description:'Kiwanja T1 Test Modem')
-			go StatusPage
-		then:
-			!noDevicesDetectedNotification.displayed
-			detectedDevicesList.displayed
-		cleanup:
-			deviceDetectionService.reset()
-	}
-
-	def 'DETECTED DEVICES list should update when a device detection is published'() {
-		when:
-			go StatusPage
+			to StatusPage
 		then:
 			noDevicesDetectedNotification.displayed
-			!detectedDevicesList.displayed
-			detectedDevicesList.find('li').size() == 0
+			!detectedDevicesTable.displayed
+			detectedDevicesTable.find('tbody tr').size() == 0
 		when:
-			deviceDetectionService.publishDetection new DetectedDevice(port:'COM2', description:'Kiwanja T2 Test Modem')
+			detectModems.click()
+		then:
+			waitFor { !noDevicesDetectedNotification.displayed } // TODO we need to refresh the page here?  Should JS be updating this automatically?
+			detectedDevicesTable.displayed
 		when:
-			waitFor { detectedDevicesList.find('li').size() == 1 }
-		cleanup:
-			deviceDetectionService.reset()
-	}
-}
-
-class StatusPage extends geb.Page {
-	static url = 'status'
-	static content = {
-		detectModems { $('.button', href:'status/detectModems') }
-		detectedDevicesSection { $('div#detectedDevices') }
-		noDevicesDetectedNotification { detectedDevicesSection.find('p') }
+			go 'status/resetDetection'
+		then:
+			!detectedDevicesTable.displayed
+			noDevicesDetectedNotification.displayed
 	}
 }
