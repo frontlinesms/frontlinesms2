@@ -13,8 +13,9 @@
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
-    </head>
+	</head>
 	<body>
+		<div><h1>LOOKS LIKE SOMETHING IS MESSED</h1></div>
 		<div id="container">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>

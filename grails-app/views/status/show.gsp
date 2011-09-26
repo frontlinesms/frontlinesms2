@@ -1,37 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<meta name="layout" content="status" />
+		<meta name="layout" content="status_layout" />
 	</head>
 	<body>
 		<g:render template="traffic" />
 		<g:render template="connection_list" />
-		
-		<div id="device-detection">
-			<h2>Detected devices</h2>
-			<g:link class="button" action="detectDevices">Detect Modems</g:link>
-			<g:if test="${detectedDevices.size() == 0}">
-				<p>No devices have been detected yet.</p>
-			</g:if>
-			<g:else>
-				<table id="detected-devices">
-					<thead>
-						<tr>
-							<td>Port</td>
-							<td>Description</td>
-						</tr>
-					</thead>
-					<tbody>
-						<g:each in="${detectedDevices}" var="d">
-							<tr>
-								<td>${d.port}</td>
-								<td>${d.description}</td>
-							</tr>
-						</g:each>
-					</tbody>
-				</table>
-			</g:else>
-		</div>
+		<g:render template="device_detection"/>
+
+		<g:javascript>
+			// alert("Executing this new bit of javascript...");
+
+			// Update the list of detected devices
+			$(document).everyTime(10000, function() {
+				// alert("Fetching detected devices update...");
+				$.get(url_root + 'status/listDetected',
+						function(data) {
+							// alert("Got list of detected devices: " + data);
+							$('#device-detection').replaceWith($(data));
+						});
+			});
+		</g:javascript>
 	</body>
 </html>
-

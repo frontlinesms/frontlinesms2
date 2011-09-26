@@ -13,7 +13,7 @@ if (Ajax && (Ajax != null)) {
 }
 
 $(document).ready(function() {
-	$('#tab-messages').everyTime(refresh_rate, refresh_rate || "30s", refreshMessageCount);
+	$('#tab-messages').everyTime(refresh_rate || '30s', "refreshMessageCount", refreshMessageCount);
 });
 
 function refreshMessageCount() {
