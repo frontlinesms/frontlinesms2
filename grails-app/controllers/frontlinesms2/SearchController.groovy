@@ -7,6 +7,9 @@ import grails.util.GrailsConfig
 
 class SearchController {
 	
+	def dateFormatString = "d/M/yyyy"
+	def dateFormat = new SimpleDateFormat(dateFormatString)
+	
 	def index = { redirect(action:'no_search') }
 	
 	def no_search = {
@@ -34,8 +37,10 @@ class SearchController {
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate ?: null
-			searchInstance.endDate = params.endDate ?: null
+			searchInstance.startDate = params.startDate ? dateFormat.parse(params.startDate): null
+			searchInstance.startDate?.format(dateFormatString)
+			searchInstance.endDate = params.endDate ? dateFormat.parse(params.endDate): null
+			searchInstance.endDate?.format(dateFormatString)
 			//Assumed that we only pass the customFields that exist
 			searchInstance.customFields = [:]
 
@@ -50,8 +55,13 @@ class SearchController {
 		if (search.customFields.find{it.value!=''}) {
 			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
 		}
+		println "calling the Fmessage.search"
 		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
+		println "return the Fmessage.search"
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
+		println "return the sorted"
+		def count = rawSearchResults.count()
+		println "return the countt"
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[searchDescription: searchDescription,
@@ -93,9 +103,11 @@ class SearchController {
 			}
 		}
 		if(search.startDate && search.endDate){
-			search.startDate.format('dd-MM-yyyy')
-			search.endDate.format('dd-MM-yyyy')
-			searchDescriptor += ", between " + search.startDate.dateString + " and " + search.endDate.dateString
+			searchDescriptor += ", between " + search.startDate.format(dateFormatString) + " and " + search.endDate.format(dateFormatString) 
+		} else if (search.startDate) {
+			searchDescriptor += ", after " + search.startDate.format(dateFormatString)
+		} else if (search.endDate) {
+			searchDescriptor += ", before " + search.endDate.format(dateFormatString)
 		}
 		return searchDescriptor
 	}

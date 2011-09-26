@@ -1,4 +1,9 @@
 $(document).ready(function() {
+	//init the page javascript element
+	$(".datepicker").datepicker({dateFormat: 'dd/mm/yy'});
+	
+	
+	//hide the more options fields
 	$("[id^=more-option-field]").each(function(){
 		if (!$(this).children("input").val()) {
 			$(this).hide()
