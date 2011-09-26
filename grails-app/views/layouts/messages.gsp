@@ -9,11 +9,13 @@
 		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
+			refresh_rate = ${params.rRate ?: 30000}
 		</script>
 		<g:javascript src="message/check_message.js"/>
 		<g:javascript src="message/arrow_navigation.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js" />
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
@@ -28,44 +30,52 @@
 				<g:render template="menu"/>
 				<div class="content">
 					<div class="content-header ${messageSection}">
+						<g:hiddenField name="starred" value="${params.starred}" />
+						<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
+						<g:hiddenField name="failed" value="${params.failed}" />
 						<g:if test="${messageSection == 'poll'}">
 							<div id="poll-title">
-								<g:render template="poll_header"/>
+								<g:render template="../message/poll_header"/>
 							</div>
 						</g:if>
 						<g:elseif test="${messageSection == 'folder'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
+								<g:if test="${params.viewingArchive}">
+									<g:link controller="archive" action="folder">&lt; Back</g:link>
+								</g:if>
+								<g:else>
+									<img src='${resource(dir:'images/icons',file:'folders.png')}' />
+								</g:else>
 								<h2>${ownerInstance?.name}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'sent'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'sent.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'sent.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'pending'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'pending.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'pending.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'trash'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'trash.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'trash.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'radioShow'}">
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'onair.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'onair.png')}' />
 								<h2>on air</h2>
 							</div>
 						</g:elseif>
 						<g:else>
 							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'inbox.gif')}' />
+								<img src='${resource(dir:'images/icons',file:'inbox.png')}' />
 								<h2>${messageSection}</h2>
 							</div>
 						</g:else>
@@ -81,27 +91,33 @@
 							<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
 								<li>
 									<g:link elementId="export" url="#">
-										Export results
+										Export
 									</g:link>
+								</li>
+							</g:if>
+							<g:if test="${messageSection == 'folder' && !params.viewingArchive}">
+								<li class='static_btn'>
+									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
 								</li>
 							</g:if>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
-					        		<img src='${resource(dir:'images/icons',file:'quickmessage.gif')}' />
+					        		<img src='${resource(dir:'images/icons',file:'quickmessage.png')}' />
 									Quick message
 								</g:remoteLink>
 							</li>
 						</ol>
-
 						<g:if test="${messageSection == 'poll'}">
-							<ol>
-								<li class='static_btn'>
-									<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Activity</g:link>
-								</li>
-							</ol>
+							<g:if test="${!params.viewingArchive}">
+								<ol>
+									<li class='static_btn'>
+										<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
+									</li>
+								</ol>
+							</g:if>
 							<ol>
 								<li>
-									<g:select name="poll-actions" from="${['Export messages', 'Rename activity']}"
+									<g:select name="poll-actions" from="${['Export', 'Rename activity']}"
 											keys="${['export', 'renameActivity']}"
 											noSelection="${['': 'More actions...']}"/>
 								</li>
@@ -118,7 +134,7 @@
 					</div>
 					<div class="container" style="display:block">
 						<div class="content-body">
-							<g:render template="message_list"/>
+							<g:render template="../message/message_list"/>
 							<g:layoutBody />
 						</div>
 						<div class="content-footer">
@@ -140,7 +156,7 @@
 									max="${grailsApplication.config.grails.views.pagination.max}"
 									action="${messageSection}" total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
-					</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -156,16 +172,13 @@
 
 	$("#export").click(function() {
 		remoteHash['export'].call();
-
 	});
 
 	if($(".prevLink").size() == 0) {
-		$("#page-arrows").prepend('<a href="#" class="prevLink disabled" disabled>Back</a>');
+		$("#page-arrows").prepend('<a href="#" class="prevLink disabled">Back</a>');
 	}
 
 	if($(".nextLink").size() == 0) {
-		$("#page-arrows").append('<a href="#" class="nextLink disabled" disabled>Next</a>');
+		$("#page-arrows").append('<a href="#" class="nextLink disabled">Back</a>');
 	}
-
-
 </g:javascript>

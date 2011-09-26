@@ -31,9 +31,9 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 					new Fmessage(deleted:false,src:"+987654321").save(flush:true)
 				}
 		when:
-			def deletedMessages = Fmessage.getDeletedMessages(['starred': false])
+			def deletedMessages = Fmessage.deleted(false)
 		then:
-			deletedMessages.size() == 3
+			deletedMessages.count() == 3
 	}
 	
 	def "should return all message counts"() {
@@ -86,7 +86,6 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			def allSentMessages = Fmessage.search(search2).list()
 			def allMessages = Fmessage.search(search3).list()
 		then:
-			println allInboundMessages
 			allInboundMessages*.every {it.status == MessageStatus.INBOUND}
 			allSentMessages*.every {it.status != MessageStatus.INBOUND}
 			allMessages.size() == 7
@@ -164,6 +163,20 @@ class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 			m.archived = true
 		then:
 			!m.validate()
+	}
+	
+	def "when number added as contact, all messages should have that contacts name and have contactExists set to true"() {
+		when:
+			def message = new Fmessage(src: "number", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+		then:
+			message.contactName == "number";
+			message.contactExists == false;
+		when:
+			new Contact(name: "Alice", primaryMobile:"number", secondaryMobile: "secondaryNo").save(flush: true)
+			message.refresh()
+		then:
+			message.contactName == "Alice";
+			message.contactExists == true;
 	}
 	
 	def "should be able to archive message when it has no message owner" () {

@@ -26,12 +26,14 @@ class SearchGebSpec extends grails.plugin.geb.GebSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		def poll = new Poll(title:'Miauow Mix')
+		poll.addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 	}
 	
 	static createSearchTestMessages() {
-		[new Fmessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00'),
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
+		[new Fmessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date()-1),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
 					it.status = MessageStatus.INBOUND
 					it.save(failOnError:true)

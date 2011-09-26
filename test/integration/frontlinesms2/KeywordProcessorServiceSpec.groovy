@@ -15,35 +15,42 @@ class KeywordProcessorServiceSpec extends IntegrationSpec {
 			p.addToResponses(response1)
 			p.addToResponses(response2)
 			p.save(failOnError:true)
-			
+		when:
 			def matchingMessageTexts = ['footballa', 'football a', ' football a', ' footballa   ', '''football
    a''', 'FOOTBALL A', 'foOTBaLLa']
-		when:
-			def results = matchingMessageTexts.collect {
-				service.getPollResponse(it)
-			}
 		then:
-			results.each { assert it == response1 }
+			getResults(matchingMessageTexts).every { it == response1 }
 		
 		when:
 			matchingMessageTexts = matchingMessageTexts.collect {
 				it.reverse().replaceFirst("[a|A]", "b").reverse()
 			}
-			results = matchingMessageTexts.collect {
-				service.getPollResponse(it)
-			}
 		then:
-			results.each { assert it == response2 }
+			getResults(matchingMessageTexts).every { it == response2 }
+		when:
+			def nonMatchingMessageTexts = ['', 'f', 'footbal', 'footbal a', 'football', 'a football']
+		then:
+			getResults(nonMatchingMessageTexts).every { it == null }
 	}
 	
 	def "processPollResponse() should associate Fmessage with PollResponse"() {
 		given:
 			Fmessage m = new Fmessage().save(failOnError: true)
-			PollResponse r = new PollResponse(value: "whatever").save(failOnError: true)
+			def p = new Poll(title:'Who is the best football team in the world?')
+			PollResponse r = new PollResponse(value: "whatever")
+			PollResponse r2 = new PollResponse(value: "2")
+			p.addToResponses(r2)
+			p.addToResponses(r).save(failOnError: true)
 		when:
 			service.processPollResponse(r, m)
 		then:
 			r.messages?.size() == 1
+	}
+	
+	private def getResults(messageTexts) {
+		messageTexts.collect {
+			service.getPollResponse(it)
+		}
 	}
 }
 

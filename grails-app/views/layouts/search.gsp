@@ -9,7 +9,9 @@
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
+			refresh_rate = ${params.rRate ?: 30000}
 		</script>
+		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="search/moreOptions.js"/>
 		<g:javascript src="message/check_message.js"/>
@@ -29,15 +31,24 @@
 				<div class="content">
 					<div id='search-header' class="content-header">
 						<div id="search-title">
-							<img src='${resource(dir:'images/icons',file:'search.gif')}' />
+							<img src='${resource(dir:'images/icons',file:'search.png')}' />
 							<h2>Search</h2>
 			  			</div>
 			  			<ol>
-				  			<li>
-					  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export', data, 'Export');">
-									Export results
-								</g:remoteLink>
-							</li>
+			  				<g:if test="${search}">
+					  			<li id="export-btn">
+						  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
+										Export results
+									</g:remoteLink>
+								</li>
+							</g:if>
+							<g:else>
+								<li id="export-btn">
+						  			<a class="disabled">
+										Export results
+									</a>
+								</li>
+							</g:else>
 						</ol>
 						<g:if test="${searchDescription}">
 							<div id="search-description">

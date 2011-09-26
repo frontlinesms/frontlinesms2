@@ -1,15 +1,14 @@
-function launchSmallPopup(title, html, btnFinishedText) {
+function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#modalBox").dialog(
-		{
+	if (doneAction == null) { doneAction = defaultDoneAction }
+	$("#modalBox").dialog({
 			modal: true,
 			width: 285,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
 			close: function() { $(this).remove(); }
-		}
-	);
+	});
 }
 
 function launchConfirmationPopup(title) {
@@ -43,7 +42,7 @@ function cancel() {
 	$(this).remove();
 }
 
-function doneAction() {
+function defaultDoneAction() {
 	if ($("#modalBox").contentWidget("onDone")) {
 		$(this).find("form").submit(); 
 		$(this).remove();

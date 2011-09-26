@@ -11,34 +11,48 @@ class DeleteContactSpec extends ContactGebSpec {
 		given:
 			createTestContacts()
 		when:
-			go "contact/show/${Contact.findByName('Alice').id}"
-			def deleteBtn = $('#btn_delete')
-			deleteBtn.click()
-			sleep 1000
-			$("#done").click()
-			sleep 1000
+			to AliceContactPage
+			deleteSingleButton.click()
 		then:
-			!Contact.findAllByName('Alice')
+			waitFor { confirmDeleteButton.displayed }
+		when:
+			confirmDeleteButton.click()
+		then:
+			waitFor { flashMessage.displayed }
+			!Contact.findByName('Alice')
 	}
-	
 	
 	def 'should delete multiple selected contacts'() {
 		given:
 			createTestContacts()
-			Contact.count() == 2
 		when:
-			go 'contact'
-			$("#contact")[0].click()
-			sleep 1000
-			$("#contact")[1].click()
-			sleep 1000
-			
-			def deleteBtn = $('#btn_delete_all')
-			deleteBtn.click()
-			sleep 1000
-			$("#done").click()
-			sleep 3000
+			to AliceContactPage
+			contactSelect[1].click()
 		then:
+			waitFor { $('input', name:'name').value() == 'Bob' }
+		when:
+			contactSelect[0].click()
+		then:
+			waitFor { deleteAllButton.displayed }
+		when:
+			deleteAllButton.click()
+		then:
+			waitFor { confirmDeleteButton.displayed }
+		when:
+			confirmDeleteButton.click()
+		then:
+			waitFor { flashMessage.displayed }
 			Contact.count() == 0
+	}
+}
+
+class AliceContactPage extends geb.Page {
+	static getUrl() { "contact/show/${Contact.findByName('Alice').id}" } 
+	static content = {
+		contactSelect(required:false) { $(".contact-select") }
+		deleteSingleButton(required:false) { $('#btn_delete') }
+		deleteAllButton(required:false) { $('#btn_delete_all') }
+		confirmDeleteButton(required:false) { $("#done") }
+		flashMessage(required:false) { $('div.flash') }
 	}
 }

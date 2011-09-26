@@ -20,7 +20,7 @@
 		<g:render template="confirm"/>
 	</g:formRemote>
 
-	<div id="tabs-4">
+	<div id="tabs-4" class='quick-message-summary'>
 		<h2>The messages  have been added to the pending message queue.</h2>
 
 		<h2>It may take some time for all the messages to be sent, depending on the

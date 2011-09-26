@@ -6,9 +6,9 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(['starred':false, 'archived': false])
+			def inbox = Fmessage.inbox(false, false).list(sort:'src')
 		then:
-	        inbox*.src == ["+254778899", "Bob", "Alice", "9544426444"]
+	        inbox*.src == ["+254778899", "9544426444", "Alice", "Bob"]
 	        inbox.every {it.status == MessageStatus.INBOUND}
 	        inbox.every {it.archived == false}
 	}
@@ -17,19 +17,20 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def inbox = Fmessage.getInboxMessages(['starred':true, 'archived': false])
+			def inbox = Fmessage.inbox(['starred':true, 'archived': false])
 		then:
-			inbox.size() == 1
-			inbox.every {it.starred}
-			inbox.every {it.archived == false}
+			inbox.count() == 1
+			inbox.list().every {it.starred}
+			inbox.list().every {it.archived == false}
 	}
 
 	def "check for offset and limit while fetching inbox messages"() {
 		setup:
 			createTestData()
 		when:
-			assert 4 == Fmessage.countInboxMessages(['archived': false, 'starred': false])
-			def firstThreeInboxMsgs = Fmessage.getInboxMessages(['archived': false,'starred':false, 'max': 3, 'offset': 0])
+			assert 4 == Fmessage.inbox(false, false).count()
+			def inboxMsgs = Fmessage.inbox(false, false)
+			def firstThreeInboxMsgs = inboxMsgs.list(max: 3, offset: 0)
 		then:
 			firstThreeInboxMsgs.size() == 3
 			firstThreeInboxMsgs*.src == ["+254778899", "Bob", "Alice"]
@@ -39,31 +40,31 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages(['archived': false, 'starred':false])
+			def sent = Fmessage.sent(false, false)
 		then:
-			assert sent.size() == 2
-			sent.every { it.status == MessageStatus.SENT}
-			sent.every {it.archived == false}
+			sent.count() == 2
+			sent.list().every { it.status == MessageStatus.SENT}
+			sent.list().every { it.archived == false }
 	}
 
 	def "should return starred sent messages"() {
 		setup:
 			createTestData()
 		when:
-			def sent = Fmessage.getSentMessages(['archived': false, 'starred':true])
+			def sent = Fmessage.sent(true, false)
 		then:
-			assert sent.size() == 1
-			sent[0].status == MessageStatus.SENT
-			sent[0].starred
-			sent.every {it.archived == false}
+			assert sent.count() == 1
+			sent.list()[0].status == MessageStatus.SENT
+			sent.list()[0].starred
+			sent.list().every { it.archived == false }
 	}
 
 	def "check for offset and limit while fetching sent messages"() {
 		setup:
 			createTestData()
 		when:
-			assert 2 == Fmessage.countSentMessages(['archived': false, 'starred': false])
-			def firstSentMsg = Fmessage.getSentMessages(['archived': false, 'starred':false, 'max': 1, 'offset': 0])
+			assert 2 == Fmessage.sent(false, false).count()
+			def firstSentMsg = Fmessage.sent(['archived': false, 'starred':false]).list(max: 1, offset: 0)
 		then:
 			firstSentMsg*.src == ['+254445566']
 	}
@@ -73,20 +74,20 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpFolderMessages()
 		when:
-			def results = Folder.findByName("home").getFolderMessages(['starred':false])
+			def results = Folder.findByName("home").getFolderMessages(false)
 		then:
-			results*.src == ["Jim", "Bob", "Jack"]
-			results.every {it.archived == false}
+			results.list(sort: 'src')*.src == ["Bob", "Jack", "Jim"]
+			results.list().every { it.archived == false }
 	}
 
 	def "should fetch starred folder messages"() {
 		setup:
 			setUpFolderMessages()
 		when:
-			def results = Folder.findByName("home").getFolderMessages(['starred':true])
+			def results = Folder.findByName("home").getFolderMessages(true)
 		then:
-			results*.src == ["Jack"]
-			results.every {it.archived == false}
+			results.list(sort:'src')*.src == ["Jack"]
+			results.list().every {it.archived == false}
 	}
 	
 
@@ -94,66 +95,66 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpFolderMessages()
 		when:
-			assert 3 == Folder.findByName("home").countMessages(false)
-			def firstFolderMsg = Folder.findByName("home").getFolderMessages(['starred':false, 'max':1, 'offset': 0])
+			assert Folder.findByName("home").getFolderMessages(false).count() == 3
+			def firstFolderMsg = Folder.findByName("home").getFolderMessages(false).list(max:1, offset: 0)
 		then:
 			firstFolderMsg*.src == ['Jim']
 	}
 
-	def "should fetch all pending messages"() {
+	def "can fetch all pending messages"() {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(['failed':false])
+			def results = Fmessage.pending(false)
 		then:
-		    results.size() == 2
-			results*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
-			results.every {it.archived == false}
+		    results.count() == 2
+			results.list()*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
+			results.list().every {it.archived == false}
 	}
 
-	def "should fetch failed pending messages"() {
+	def "can fetch failed pending messages"() {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.getPendingMessages(['failed':true])
+			def results = Fmessage.pending(true)
 		then:
-		    results.size() == 1
-			results[0].status == MessageStatus.SEND_FAILED
-			results.every {it.archived == false}
+		    results.count() == 1
+			results.list()[0].status == MessageStatus.SEND_FAILED
+			results.list().every {it.archived == false}
 	}
 
 	def "check for offset and limit while fetching pending messages"() {
 		setup:
 			createTestData()
 		when:
-			def firstPendingMessage = Fmessage.getPendingMessages(['starred':false, 'max':1, 'offset': 0])
+			def firstPendingMessage = Fmessage.pending(false).list(max: 1, offset: 0)
 		then:
-			firstPendingMessage*.dst == ['dst1']
+			firstPendingMessage*.dst == ['dst2']
 	}
 
-	def "should fetch starred deleted messages"() {
+	def "can fetch starred deleted messages"() {
 		setup:
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def results = Fmessage.getDeletedMessages(['starred':true])
+			def results = Fmessage.deleted(true)
 		then:
-		    results.size() == 1
-			results[0].deleted
-			results[0].starred
-			results.every {it.archived == false}
+		    results.count() == 1
+			results.list()[0].deleted
+			results.list()[0].starred
+			results.list().every {it.archived == false}
 	}
 
-	def "should fetch deleted messages"() {
+	def "can fetch all deleted messages"() {
 		setup:
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def results = Fmessage.getDeletedMessages(['starred':false])
+			def results = Fmessage.deleted(false)
 		then:
-		    results.size() == 2
-			results[0].deleted
-			results.every {it.archived == false}
+		    results.count() == 2
+			results.list()[0].deleted
+			results.list().every {it.archived == false}
 	}
 
 	def "check for offset and limit while fetching deleted messages"() {
@@ -161,9 +162,39 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
 		when:
-			def firstDeletedMsg = Fmessage.getDeletedMessages(['starred':false, 'max':1, 'offset': 0])
+			def firstDeletedMsg = Fmessage.deleted(false).list(max:1, offset: 0)
 		then:
 			firstDeletedMsg*.src == ['Jim']
+	}
+	
+	def "can only archive ownerless messages, unless owner is archived"() {
+		when:
+			createTestData()
+			def minime = Fmessage.findBySrc("Minime")
+		then:
+			minime.archived == false
+		when:
+			minime.messageOwner.poll.archivePoll()
+			minime.messageOwner.poll.save(flush: true)
+			minime.save(flush: true)
+		then:
+			Poll.findByTitle("Miauow Mix").archived == true
+			minime.archived == true
+	}
+	
+	def "cannot un-archive a message if the owner is archived"() {
+		when:
+			createTestData()
+			def minime = Fmessage.findBySrc("Minime")
+			minime.archived = false
+			minime.messageOwner.poll.archivePoll()
+			minime.messageOwner.poll.save(flush:true)
+			minime.archived = false
+			minime.save(flush: true)
+			minime.refresh()
+		then:
+			Poll.findByTitle("Miauow Mix").archived == true
+			minime.archived == true
 	}
 
 	static createTestData() {
@@ -187,9 +218,10 @@ class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
         def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)
+		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
 		liverResponse.addToMessages(liverMessage).save(failOnError: true)
 		chickenResponse.addToMessages(chickenMessage).save(failOnError: true)
-        new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
 	}
 
 	private def setUpFolderMessages() {

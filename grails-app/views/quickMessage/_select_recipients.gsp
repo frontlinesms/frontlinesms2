@@ -3,49 +3,48 @@
 	<div>
 		<label class="header" for="address">Add phone number</label>
 		<g:textField id="address" name="address"/>
-		<g:link url="#" class="add-address">Add</g:link> <!-- FIXME this should be a button, surely? -->
+		<g:link url="#" class="add-address" onclick="addAddressHandler();">Add</g:link> <!-- FIXME this should be a button, surely? -->
 	</div>
 	
-	<!-- FIXME contacts and groups should probably be part of the same list here, with different classes assigned -->
-	
-	<!-- FIXME should be a list of groups, not just a load of divs -->
-	<div id="groups">
-		<g:each in="${groupList}" var="entry">
-			<div>
-				<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", ${entry.value as JSON})'>
-				${entry.key}(${entry.value.size()}) <br/>
+	<div id="recipients-list">
+		<ol>
+			<div id="groups">
+				<g:each in="${groupList}" var="entry">
+					<li class="group">
+						<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", ${entry.value as JSON})'>
+						${entry.key}(${entry.value.size()}) <br/>
+					</li>
+				</g:each>
+		
+				<g:each in="${nonExistingRecipients}" var="address">
+					<li>
+						<input type="checkbox" name="addresses" value="${address}" checked>${address} <br/>
+					</li>
+				</g:each>
 			</div>
-		</g:each>
+			<div id="contacts">
+				<g:each in="${contactList}" var="contact">
+					<li class="contact">
+						<input contacts="true" class="" type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
+						${contact.name ?: contact.primaryMobile} <g:if test="${recipients.contains(contact.secondaryMobile) || recipients.contains(contact.email)}">(Primary)</g:if><br/>
+					</li>
+					<li class="contact">
+						<g:if test="${recipients.contains(contact.secondaryMobile)}">
+							<input type="checkbox" name="addresses" value="${contact.secondaryMobile}" checked>
+							${contact.name ?: contact.secondaryMobile} (Secondary)<br/>
+						</g:if>
+					</li>
+					<li class="contact">
+						<g:if test="${recipients.contains(contact.email)}">
+							<input type="checkbox" name="addresses" value="${contact.email}" checked>
+							${contact.name ?: contact.email} (Email)<br/>
+						</g:if>
+					</li>
+				</g:each>
+			</div>
+		</ol>
 	</div>
-	
-	<!-- FIXME should be a list of contacts, not just a load of divs -->
-	<div id="contacts">
-		<g:each in="${nonExistingRecipients}" var="address">
-			<div>
-				<input type="checkbox" name="addresses" value="${address}" checked>${address} <br/>
-			</div>
-		</g:each>
-
-		<g:each in="${contactList}" var="contact">
-			<div>
-				<input contacts="true" class="" type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
-				${contact.name ?: contact.primaryMobile} <g:if test="${recipients.contains(contact.secondaryMobile) || recipients.contains(contact.email)}">(Primary)</g:if><br/>
-			</div>
-			<div>
-				<g:if test="${recipients.contains(contact.secondaryMobile)}">
-					<input type="checkbox" name="addresses" value="${contact.secondaryMobile}" checked>
-					${contact.name ?: contact.secondaryMobile} (Secondary)<br/>
-				</g:if>
-			</div>
-			<div>
-				<g:if test="${recipients.contains(contact.email)}">
-					<input type="checkbox" name="addresses" value="${contact.email}" checked>
-					${contact.name ?: contact.email} (Email)<br/>
-				</g:if>
-			</div>
-		</g:each>
-		<span id="recipient-count">0</span> recipients selected
-	</div>
+	<span id="recipient-count">0</span> recipients selected
 </div>
 
 <script>
@@ -53,9 +52,9 @@
 	function selectMembers(groupName, allContacts) {
 		groupAndMembers[groupName] = allContacts
 		$.each(allContacts, function(index, contact) {
-			setValueForCheckBox(contact, isCheckboxSelected(groupName))
+			setValueForCheckBox(contact, isCheckboxSelected(groupName));
 		});
-
+		
 		$.each(getSelectedGroupElements('groups'), function(index, groupInputElement) {
 			if(groupInputElement.value != groupName) {
 				$.each(groupAndMembers[groupInputElement.value], function(index, member) {
@@ -92,12 +91,11 @@
 		);
 	}
 
-	$('.add-address').live('click', function() {
+	 function addAddressHandler() {
 		var address = $('#address').val();
 		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
-		updateCount()
-		dialog.close(function() { $(".manual").remove(); })
-	});
+		updateCount();
+	}
 </script>
 
 

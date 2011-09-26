@@ -37,18 +37,17 @@ function countCheckedMessages() {
 
 function upSingleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'search') {
+	if (messageSection == 'result') {
 		var url = 'search/result';
 	} else {
 		var url = 'message/' + messageSection;
 	}
+	var searchId = $('input:hidden[name=searchId]').val() || '';
 	var ownerId = $('input:hidden[name=ownerId]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId }, function(data) {
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId}, function(data) {
 		$('#message-details #message-id').replaceWith($(data).find('#message-details #message-id'));
 		$('#message-details #message-src').replaceWith($(data).find('#message-details #message-src'));
-		$('#message-details #single-message #message-info').replaceWith($(data).find('#message-details #single-message #message-info'));
-		$('#message-details #single-message #other_btns').replaceWith($(data).find('#message-details #single-message #other_btns'));
-		$('#message-details #single-message #poll-actions').replaceWith($(data).find('#message-details #single-message #poll-actions'));
+		$('#message-details #single-message').replaceWith($(data).find('#message-details #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
@@ -57,14 +56,15 @@ function upSingleCheckedDetails(messageId) {
 
 function downSingleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'search') {
+	if (messageSection == 'result') {
 		var url = 'search/result';
 	} else {
 		var url = 'message/' + messageSection;
 	}
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, archived: isArchived}, function(data) {
+	var searchId = $('input:hidden[name=searchId]').val() || '';
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, viewingArchive: isArchived, searchId: searchId}, function(data) {
 		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
@@ -89,14 +89,15 @@ function removeFromChecked(messageId) {
 
 function updateMultipleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'search') {
+	if (messageSection == 'result') {
 		var url = 'search/result';
 	} else {
 		var url = 'message/' + messageSection;
 	}
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var isArchived = $('input:hidden[name=isArchived]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), archived: isArchived}, function(data) {
+	var searchId = $('input:hidden[name=searchId]').val();
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: isArchived, searchId: searchId}, function(data) {
 		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
 		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
 	});
@@ -117,7 +118,7 @@ function checkAll() {
 			var newList = oldList + messageId + ',';
 			messageList.val(newList);
 		});
-		if(countCheckedMessages() != 2) updateMultipleCheckedDetails(messageId);
+		if(countCheckedMessages() != 1) updateMultipleCheckedDetails(messageId);
 	} else {
 		$('#messages-table tr :checkbox').each(function(index, element) {
 			this.checked = false;

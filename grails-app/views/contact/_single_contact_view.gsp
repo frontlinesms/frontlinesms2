@@ -7,7 +7,7 @@
 			<g:else>
 				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
 			</g:else>
-			<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+			<li><g:link class="cancel" action="list" default="Cancel" params="[contactId: contactInstance?.id]">Cancel</g:link></li>
 			<g:if test="${contactInstance?.id}">
 				<li>
 					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">
@@ -26,9 +26,9 @@
 		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 		<g:textField name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}"/>
 		<g:if test="${contactInstance?.primaryMobile?.trim()}">
-			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true, null, true);addTabValidations();">
-				<img src='${resource(dir:'images/icons',file:'send.gif')}' />
+				<img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>
 	</div>
@@ -36,9 +36,9 @@
 		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 		<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}"/>
 		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
-			<a class="remove-field" id="remove-secondaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+			<a class="remove-field" id="remove-secondaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);addTabValidations();">
-				<img src='${resource(dir:'images/icons',file:'send.gif')}' />
+				<img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>
 	</div>
@@ -46,9 +46,9 @@
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
 		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">
-			<a class="remove-field" id="remove-email"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+			<a class="remove-field" id="remove-email"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
-				 <img src='${resource(dir:'images/icons',file:'send.gif')}' />
+				 <img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>
 	</div>
@@ -58,7 +58,7 @@
 				  <li class="${f == fieldInstance ? 'selected' : ''}">
 					  <label for="custom-field-${f.name}">${f.name}</label>
 					  <input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
-					  <a class="remove-field" id="remove-field-${f.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+					  <a class="remove-field" id="remove-field-${f.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 				  </li>
 			  </g:each>
 		</ol>
@@ -66,10 +66,16 @@
 	<div id='info-add' class="dropdown">
 		<select id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na">Add more information...</option>
-			<option class="create-custom-field" value='add-new'>Create custom field</option>
+			<option class="predefined-field" value="Street address">Street address</option>
+			<option class="predefined-field" value="City">City</option>
+			<option class="predefined-field" value="Postcode">Postcode</option>
+			<option class="predefined-field" value="State">State</option>
 			<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
-				<option value="${f}">${f}</option>
+				<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
+					<option value="${f}">${f}</option>
+				</g:if>
 			</g:each>
+			<option class="create-custom-field" value='add-new'>Create new...</option>
 		</select>
 	</div>
 	<div id='note-area' class="field">
@@ -81,9 +87,8 @@
 	<div>
 		<ol id='group-list'>
 			<g:each in="${contactGroupInstanceList}" status="i" var="g">
-				<li class="${g == groupInstance ? 'selected' : ''}">
-					<input type="text" name="${g.name}" value="${g.name}" disabled="true" />
-					<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.gif')}' /></a>
+				<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
+					<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 				</li>
 			</g:each>
 			<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
@@ -103,14 +108,14 @@
 	<div id='message-stats' class="field">
 		<label for="messages">Messages</label>
 		<div id="message-count">
-			<img src='${resource(dir:'images/icons',file:'sentmessages.gif')}' />
+			<img src='${resource(dir:'images/icons',file:'sentmessages.png')}' />
 			<p>${contactInstance?.inboundMessagesCount} messages sent</p><br />
-			<img src='${resource(dir:'images/icons',file:'recievedmessages.gif')}' />
+			<img src='${resource(dir:'images/icons',file:'recievedmessages.png')}' />
 			<p>${contactInstance?.outboundMessagesCount} messages received</p>
 		</div>
 		<div id='message-search'>
 			<g:link class="buttons" controller='search' action='result' params="[contactSearchString: contactInstance?.name]" >
-				<img src='${resource(dir:'images/icons',file:'search.gif')}' />
+				<img src='${resource(dir:'images/icons',file:'search.png')}' />
 				Search for messages
 			</g:link>
 		</div>
