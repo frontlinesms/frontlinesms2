@@ -1,10 +1,19 @@
 package frontlinesms2
 
 class DeviceDetectionService {
+	static transactional = true
+	
+	boolean detected
 
-    static transactional = true
+	def detect() {
+		detected = true
+	}
+	
+	def reset() {
+		detected = false
+	}
 
-    def detect() {
-
-    }
+	def getDetected() {
+		detected ? [new DetectedDevice(port:'scsi0', description:'zip drive!')] : []
+	}
 }

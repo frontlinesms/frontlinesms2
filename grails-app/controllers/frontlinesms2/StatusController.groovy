@@ -17,13 +17,22 @@ class StatusController {
 		def fconnectionInstanceTotal = Fconnection.count()
 		[connectionInstanceList: fconnectionInstanceList,
 				fconnectionInstanceTotal: fconnectionInstanceTotal,
-				detectedDevices:[]] <<
+				detectedDevices:deviceDetectionService.detected] <<
 			getMessageStats() << getFilters()
 	}
 	
 	def detectDevices = {
 		deviceDetectionService.detect()
 		redirect action:'show'
+	}
+	
+	def listDetected = {
+		render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
+	}
+	
+	def resetDetection = {
+		deviceDetectionService.reset()
+		redirect action:'index'
 	}
 
 	private def getMessageStats() {

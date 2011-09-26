@@ -12,7 +12,7 @@ class StatusPage extends geb.Page {
 		
 		detectModems { $('.button', href:'/frontlinesms2/status/detectDevices') }
 		detectedDevicesSection { $('div#device-detection') }
-		noDevicesDetectedNotification { detectedDevicesSection.find('p') }
+		noDevicesDetectedNotification(required:false) { detectedDevicesSection.find('p') }
 		detectedDevicesTable(required:false) { detectedDevicesSection.find('table') }
 	}
 }
