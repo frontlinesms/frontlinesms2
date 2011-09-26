@@ -1,11 +1,37 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
-    <head>
-        <meta name="layout" content="status" />
-    </head>
-    <body>
+	<head>
+		<meta name="layout" content="status" />
+	</head>
+	<body>
 		<g:render template="traffic" />
 		<g:render template="connection_list" />
-    </body>
+		
+		<div id="device-detection">
+			<h2>Detected devices</h2>
+			<g:link class="button" action="detectDevices">Detect Modems</g:link>
+			<g:if test="${detectedDevices.size() == 0}">
+				<p>No devices have been detected yet.</p>
+			</g:if>
+			<g:else>
+				<table id="detected-devices">
+					<thead>
+						<tr>
+							<td>Port</td>
+							<td>Description</td>
+						</tr>
+					</thead>
+					<tbody>
+						<g:each in="${detectedDevices}" var="d">
+							<tr>
+								<td>${d.port}</td>
+								<td>${d.description}</td>
+							</tr>
+						</g:each>
+					</tbody>
+				</table>
+			</g:else>
+		</div>
+	</body>
 </html>
 

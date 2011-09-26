@@ -1,26 +1,29 @@
 package frontlinesms2
 
 class StatusController {
+	def deviceDetectionService
+	
 	def index = {
 		redirect action: "show", params:params
 	}
 
 	def trafficLightIndicator = {
-		if(getSystemStatus(Fconnection.list()) == ConnectionStatus.CONNECTED) { render text:"green", contentType:'text/plain' }
-		else { render text:"red", contentType:'text/plain' }
+		def color = Fconnection.list()*.status.any { it == RouteStatus.NOT_CONNECTED } ? 'red': 'green'
+		render text:color, contentType:'text/plain'
 	}
 	
 	def show = {
 		def fconnectionInstanceList = Fconnection.list()
 		def fconnectionInstanceTotal = Fconnection.count()
 		[connectionInstanceList: fconnectionInstanceList,
-				fconnectionInstanceTotal: fconnectionInstanceTotal] <<
+				fconnectionInstanceTotal: fconnectionInstanceTotal,
+				detectedDevices:[]] <<
 			getMessageStats() << getFilters()
 	}
-		
-	private def getSystemStatus(allConnections) {
-		if(allConnections.any { it.getStatus() == "Not connected"}) return ConnectionStatus.NOT_CONNECTED
-		else return ConnectionStatus.CONNECTED
+	
+	def detectDevices = {
+		deviceDetectionService.detect()
+		redirect action:'show'
 	}
 
 	private def getMessageStats() {
