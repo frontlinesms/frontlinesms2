@@ -83,6 +83,31 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
+	
+	def "should require keyword if sorting is enabled"() {
+		when:
+			launchPollPopup()
+		then:
+			waitFor { autoSortTab.displayed }
+			pollForm.keyword().disabled
+		when:
+			pollForm.enableKeyword = 'true'
+			!pollForm.keyword
+		then:
+			waitFor { !pollForm.keyword().disabled }
+			!pollForm.keyword
+		when:
+			next.click()
+		then:
+			waitFor { errorMessage.displayed }
+			pollForm.keyword().hasClass('error')
+			autoSortTab.displayed
+		when:
+			pollForm.keyword = 'trigger'
+			next.click()
+		then:
+			waitFor { autoReplyTab.displayed }
+	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
@@ -129,11 +154,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		when:
 			next.click()
 		then:
-			waitFor {
-				println "autoreply text: ${$('textarea', name:'autoReplyText')}"
-				autoReplyTab.displayed
-			}
-			pollForm.autoReplyText().@disabled
+			waitFor { autoReplyTab.displayed }
+			pollForm.autoReplyText().disabled
 		when:
 			pollForm.enableAutoReply = true
 			next.click()
@@ -177,24 +199,26 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { errorMessage.displayed }
 			confirmationTab.displayed
 	}
-
+	
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
 			waitFor { responseListTab.displayed }
-			choiceALabel.hasClass('bold')
-			choiceBLabel.hasClass('bold')
-			!choiceCLabel.hasClass('bold')
-			!choiceDLabel.hasClass('bold')
-			!choiceELabel.hasClass('bold')
+			choiceALabel.hasClass('field-enabled')
+			choiceBLabel.hasClass('field-enabled')
+			!choiceCLabel.hasClass('field-enabled')
+			!choiceDLabel.hasClass('field-enabled')
+			!choiceELabel.hasClass('field-enabled')
 		when:
 			pollForm.choiceA = 'Never'
 			pollForm.choiceB = 'Once a day'
 		then:
-			true || choiceCLabel.hasClass('bold')
+			waitFor { choiceCLabel.hasClass('field-enabled') }
 		when:
 			pollForm.choiceC = 'Twice a day'
+		then:
+			waitFor { choiceDLabel.hasClass('field-enabled') }
 			next.click()
 		then:
 			waitFor { autoSortTab.displayed }
@@ -202,14 +226,24 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			pollForm.autoReplyText().@disabled
+			pollForm.autoReplyText().disabled
 		when:
 			pollForm.enableAutoReply = true
+		then:
+			waitFor { !pollForm.autoReplyText().disabled }
+		when:
+			
 			pollForm.autoReplyText = "Thanks for participating..."
+		then:
+			waitFor {
+				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
+				pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
+			}
+		when:
 			pollForm.enableAutoReply = false
 		then:	
-			pollForm.autoReplyText == "Thanks for participating..."
-			pollForm.autoReplyText().@disabled
+			waitFor { pollForm.autoReplyText().disabled }
+			pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
 		when:
 			pollForm.enableAutoReply = true
 			next.click()
@@ -238,10 +272,10 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { Poll.findByTitle("Coffee Poll") }
 	}
 
-	def "should launch export popup"() {
+	def "can launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			to MessagePage
+			to MessagesPage
 			$("a", text: "Who is badder?").click()
 		then:
 			waitFor { title == "Poll" }
@@ -251,11 +285,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
 
-	def "should be able to rename a poll"() {
+	def "can rename a poll"() {
 		given:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
-			to MessagePage
+			to MessagesPage
 			$("a", text: "Who is badder?").click()
 		then:
 			waitFor { title == "Poll" }
@@ -272,7 +306,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
-		to MessagePage
+		to MessagesPage
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
 		$("input", name: "activity").value("poll")
@@ -282,14 +316,6 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		if(question) pollForm.question = question
 		pollForm."collect-responses" = !enableMessage
 		next.click()
-	}
-}
-
-class MessagePage extends geb.Page {
-	static url = "message"
-	static content = {
-		createActivityButton { $("#create-activity a") }
-		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
 	}
 }
 

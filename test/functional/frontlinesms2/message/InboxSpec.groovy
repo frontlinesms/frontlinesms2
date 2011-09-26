@@ -41,6 +41,9 @@ class InboxSpec extends MessageGebSpec {
 			firstMessageLink.text() == 'Alice'
 	}
 
+	//FIXME this test fail when the local computer language is different than english. The Date return
+	//in the test in English while the UI date is in the local context
+	//@spock.lang.IgnoreRest
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -62,11 +65,11 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').getAttribute('href') == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -102,12 +105,13 @@ class InboxSpec extends MessageGebSpec {
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to MessagesPage
-			println $('#btn_reply').text()
 			$('#btn_reply').click()
-			waitFor {$('div#tabs-1').displayed}
+		then:
+			waitFor { $('div#tabs-1').displayed }
+		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'+254778899').getAttribute('checked')
+			$('input', value:'+254778899').checked
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
@@ -118,10 +122,12 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			go "message/inbox/show/$message.id"
 			$('#btn_reply').click()
-			waitFor {$('div#tabs-1').displayed}
+		then:
+			waitFor { $('div#tabs-1').displayed }
+		when:
 			$("div#tabs-1 .next").click()
 		then:
-			$('input', value:'+254999999').getAttribute('checked')
+			waitFor { $('input', value:'+254999999').checked }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
@@ -171,18 +177,16 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
-			$('#checked-message-count').text() == "2 messages selected"
+			waitFor { checkedMessageCount == 2 }
 		when:
-			$("#message")[1].click()
-			sleep 1000
+			messagesSelect[1].click()
 			def message = Fmessage.findBySrc('Bob')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
-			$("#message-details").displayed
+			waitFor { checkedMessageCount == 1 }
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
 			$('#message-details #message-body').text() == message.text
@@ -272,7 +276,37 @@ class InboxSpec extends MessageGebSpec {
 			$("#no-messages").text().contains("No messages")
 			$("#messages-submenu .selected").text().contains('Inbox')
 	}
-
+	
+	def "should update message count when new message is received"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 1"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 2"
+			}
+	}
+	
+	def "should refresh message count according to the specified refresh rate"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}?rRate=5000"
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			assert js.refresh_rate == 5000
+		then:
+			$("#tab-messages").text() == "Messages 1"
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 2"
+			}
+	}
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
@@ -280,6 +314,8 @@ class InboxSpec extends MessageGebSpec {
 	}
 
 	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+		//println ("Local context:"+Locale.getDefault())
+		//System.setProperty('user.timezone', 'GMT')
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.getDefault())
 	}
 }

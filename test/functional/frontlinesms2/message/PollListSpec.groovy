@@ -50,14 +50,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$('#pollGraph svg')
 	}
 
-	def 'selected poll is highlighted'() {
+	def 'selected poll should be highlighted'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 		then:
-			selectedMenuItem.text() == 'Football Teams'
+			$('#messages-menu .selected').text() == 'Football Teams'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -79,58 +79,26 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
 	}
-	
+
 	def "should only display message details when one message is checked"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
-			$("#message")[1].click()
-			$("#message")[2].click()
-			sleep 1000
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			$(".message-select")[1].click()
 		then:
-			$("#checked-message-count").text() == "2 messages selected"
+			waitFor { $('#message-body').text() == 'go manchester' }
 		when:
-			$("#message")[1].click()
-			sleep 1000
+			$(".message-select")[2].click()
+		then:
+			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+		when:
+			$(".message-select")[1].click()
 			def message = Fmessage.findBySrc('Bob')
 		then:
-			$('#message-details #contact-name').text() == message.src
+			waitFor { $('#message-details #contact-name').text() == message.src }
 			$('#message-details #message-body').text() == message.text
-	}
-
-	def "should remain in the same page when all archived poll messages are deleted"() {
-		setup:
-			createTestPolls()
-			createTestMessages()
-			def archivedPoll = new Poll(title: "archived poll", archived: true)
-			archivedPoll.addToResponses(new PollResponse(value: "response1", key:"A"))
-			archivedPoll.addToResponses(new PollResponse(value: "response2", key:"B"))
-			archivedPoll.save(flush: true)
-			[PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Bob')),
-					PollResponse.findByValue('response1').addToMessages(Fmessage.findBySrc('Alice')),
-					PollResponse.findByValue('response2').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
-		when:
-			$("#global-nav a", text: "Archive").click()
-			def activityArchiveButton = $("a", text: 'Activity archive')
-			waitFor{activityArchiveButton.displayed}
-			activityArchiveButton.click()
-			waitFor{$("a", text:'archived poll').displayed}
-			$("a", text:'archived poll').click()
-			waitFor {$("#messages").displayed}
-			$("#message")[0].click()
-			sleep(1000)
-			waitFor {$('#multiple-messages').displayed}
-			def btnDelete = $("#btn_delete_all")
-		then:
-			btnDelete
-		when:
-			btnDelete.click()
-			sleep(2000)
-			waitFor() {$("div.flash").text().contains("messages deleted") }
-		then:
-			$("#global-nav a", text: "Archive").hasClass("selected")
 	}
 
 	def "should hide the messages when poll detail chart is shown"() {
@@ -162,5 +130,6 @@ class PollListPage extends geb.Page {
 	static content = {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
+		messagesSelect(required:false) { $(".message-select") }
 	}
 }

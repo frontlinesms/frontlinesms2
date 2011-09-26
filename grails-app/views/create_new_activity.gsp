@@ -20,12 +20,12 @@
 					<li>
 						<g:radio name="activity" value="announcement"/>
 						<span>Announcements</span>
-						<div>Send an announcement message and organise the responses</div>
+						<div>Send an announcement message and organize the responses</div>
 					</li>
 					<li>
 						<g:radio name="activity" value="poll"/>
 						<span>Poll</span>
-						<div>Send a question and analyse the responses</div>
+						<div>Send a question and analyze the responses</div>
 					</li>
 					<li>
 						<g:radio name="activity" value="subscription"/>

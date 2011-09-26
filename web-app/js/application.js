@@ -12,6 +12,16 @@ if (Ajax && (Ajax != null)) {
 	});
 }
 
+$(document).ready(function() {
+	$('#tab-messages').everyTime(refresh_rate, refresh_rate || "30s", refreshMessageCount);
+});
+
+function refreshMessageCount() {
+	$.get(url_root + 'message/getUnreadMessageCount', function(data) {
+		$('#tab-messages').html("Messages " + data);
+	});
+}
+
 var remoteHash = {
 	"poll" :  function() {
 		$.ajax({
@@ -40,7 +50,8 @@ var remoteHash = {
 			dataType: "html",
 			url: url_root + 'quickMessage/create',
 			success: function(data) {
-				launchMediumWizard('Announcement', data, 'Send', null, true);addTabValidations();
+				launchMediumWizard('Announcement', data, 'Send', null, true);
+				addTabValidations();
 			}})
 	},
 
@@ -49,7 +60,8 @@ var remoteHash = {
 			type:'GET',
 			url: url_root + 'export/wizard',
 			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
-					searchString: $("#searchString").val(), groupId: $("#groupId").val()},
+					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
+					failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: $("#viewingArchive").val()},
 			success: function(data) {
 				launchSmallPopup('Export', data, 'Export');
 				updateExportInfo();
@@ -131,7 +143,6 @@ function isCheckboxSelected(value) {
 	return findInputWithValue(value).is(':checked')
 }
 
-
 $.widget("ui.contentWidget", {
 	validate: function() {
 		return this.options['validate'].call();			
@@ -144,3 +155,15 @@ $.widget("ui.contentWidget", {
 	options: {validate: function() {return true;} ,
 	onDone: function() {return true;}}
 });
+
+$.fn.renderDefaultText = function() {
+	return this.focus( function() {
+		$(this).toggleClass('default-text-input', false);
+		var element = $(this).val();
+		$(this).val( element === this.defaultValue ? '' : element );
+	}).blur(function(){
+		var element = $(this).val();
+		$(this).val( element.match(/^\s+$|^$/) ? this.defaultValue : element );
+		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
+		});
+};

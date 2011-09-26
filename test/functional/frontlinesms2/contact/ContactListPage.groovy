@@ -9,6 +9,10 @@ class ContactListPage extends geb.Page {
 	}
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
-		groupsList { $('#groups-submenu') }
+		groupsList(required:false) { $('#groups-submenu') }
+		contactSelect(required:false) { $(".contact-select") }	
+		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
+		updateAll(required:false) { $("#update-all") }
+		flashMessage(required:false) { $('div.flash') }
 	}
 }

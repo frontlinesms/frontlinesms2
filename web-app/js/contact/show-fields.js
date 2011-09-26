@@ -4,35 +4,39 @@ $(document).ready(function() {
 	$("div.basic-info a.remove-field").click(clearField);
 });
 
-function customFieldPopup(data) {
-		$(data).dialog({title: "Create Custom Field", width: 600});
-}
-
 function addFieldClickAction() {
 	var me = $(this).find('option:selected');
+	$("#new-field-dropdown").val("na");
 	if(me.hasClass('not-field')) return;
 	if(me.hasClass('create-custom-field')) {
 		$.ajax({
 			type:'POST',
 			url: url_root + 'contact/newCustomField',
-			success: function(data, textStatus){ customFieldPopup(data); }
+			success: function(data, textStatus) { launchSmallPopup("Create Custom Field", data, "Ok", clickDone); }
 		});
-		$("#new-field-dropdown").val("na");
-		return false;
+	} else {
+		var fieldName = me.text();
+		var fieldValue = "";
+		addCustomField(fieldName);
 	}
-	$("#new-field-dropdown").val("na");
-
-	var fieldName = me.text();
-	var fieldValue = "";
-	addCustomField(fieldName, fieldValue);
 }
 
-function addCustomField(name, value) {
+function clickDone() {
+	if ($("#custom-field-name").val() != "") {
+		var name = $("#custom-field-name").val();
+		addCustomField(name);
+		$(this).remove();
+	} else {
+		$("#custom-field-popup .error-panel").removeClass("hide");
+	}
+}
+
+function addCustomField(name) {
 	var fieldId = Math.floor(Math.random()*100001)
 	var fieldListItem = $('<li><label for="' + fieldId + '">' + name + '</label>');
-	var textFieldItem = $('<input type="text" name="' + name + '" value="' + value + '" />');
-	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '">Delete</a></li>');
-
+	var textFieldItem = $('<input type="text" name="' + name + '" value="" />');
+	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '"><img src="' + url_root + 'images/icons/remove.png" /></a></li>');
+	
 	fieldListItem.append(textFieldItem);
 	fieldListItem.append(deleteButton);
 	deleteButton.click(removeFieldClickAction);
@@ -74,25 +78,6 @@ function addFieldIdToList(id, fieldName) {
 	var oldList = f.val();
 	var newList = oldList + id + ',';
 	f.val(newList);
-}
-
-function createCustomField_submit() {
-	var name = $('#custom-field-name').val();
-	var value = $('#custom-field-value').val();
-	if(!name.length || !value.length) {
-		if(!$('#invalid').length) {
-			$('#custom-field-popup').prepend("<p id='invalid'>invalid details</p>");
-		}
-	} else {
-		addCustomField(name, value);
-		$("#custom-field-popup").remove();
-	}
-	return false;
-}
-
-function createCustomField_cancel() {
-	$("#custom-field-popup").remove();
-	return false;
 }
 
 function clearField() {

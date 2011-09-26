@@ -17,97 +17,122 @@ class BootStrap {
 	
 	def init = { servletContext ->
 		initialiseSerial()
-
-		if (Environment.current == Environment.DEVELOPMENT) {
-			//DB Viewer
-			//org.hsqldb.util.DatabaseManager.main()
-			// do custom init for dev here
-			['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
-			def alice = createContact("Alice", "+123456789")
-			def friends = Group.findByName('Friends')
-			def notCats = Group.findByName('Not Cats')
-			def bob = createContact("Bob", "+198765432")
-			Contact.findAll().each() {
-				it.addToGroups(friends)
-				it.addToGroups(notCats)
-			}
-			createContact("Kate", "+198730948")
-
-			[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
-					new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
-				it.save(failOnError:true, flush:true)
-			}
-
-			new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
-					serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
-			
-			new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
-			new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-			new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
-			
-			new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
-			new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
-			
-			[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
-					new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
-					new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateReceived:new Date()-1),
-					new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
-					new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
-					new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
-						it.status = MessageStatus.INBOUND
-						it.save(failOnError:true)
+		
+		switch(Environment.current) {
+			case Environment.TEST:
+				def emptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.EmptyNavigator))
+				def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
+				
+				/** list of boolean vars from https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#getAttribute(java.lang.String) */
+				final def BOOLEAN_PROPERTIES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete', 'controls', 'declare', 'defaultchecked', 'defaultselected', 'defer', 'disabled', 'draggable', 'ended', 'formnovalidate', 'hidden', 'indeterminate', 'iscontenteditable', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nohref', 'noresize', 'noshade', 'novalidate', 'nowrap', 'open', 'paused', 'pubdate', 'readonly', 'required', 'reversed', 'scoped', 'seamless', 'seeking', 'selected', 'spellcheck', 'truespeed', 'willvalidate']
+				BOOLEAN_PROPERTIES.each { name ->
+					def getterName = "is${name.capitalize()}"
+					emptyMc."$getterName" = { false }
+					nonEmptyMc."$getterName" = {
+						def v = delegate.getAttribute(name)
+						!(v == null || v.length()==0 || v.equalsIgnoreCase('false'))
 					}
-			(1..11).each {
-				new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
-			}
+				}
+				emptyMc.initialize()
+				geb.navigator.EmptyNavigator.metaClass = emptyMc
+				nonEmptyMc.initialize()
+				geb.navigator.NonEmptyNavigator.metaClass = nonEmptyMc
+				break
+				
+			case Environment.DEVELOPMENT:
+				//DB Viewer
+				//org.hsqldb.util.DatabaseManager.main()
+				// do custom init for dev here
+				['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
+				def alice = createContact("Alice", "+123456789")
+				def friends = Group.findByName('Friends')
+				def notCats = Group.findByName('Not Cats')
+				def bob = createContact("Bob", "+198765432")
+				Contact.findAll().each() {
+					it.addToGroups(friends)
+					it.addToGroups(notCats)
+				}
+				createContact("Kate", "+198730948")
+	
+				(1..101).each {
+					new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
+				}
+	
+				[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
+						new CustomField(name: 'town', value: 'Kusumu', contact: bob)].each() {
+					it.save(failOnError:true, flush:true)
+				}
 
-			[new Fmessage(src: '+3245678', dst: '+123456789', text: "time over?", status: MessageStatus.SEND_FAILED),
-							new Fmessage(src: 'Johnny', dst: '+254114433', text: "I am in a meeting", status: MessageStatus.SENT),
-							new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", status: MessageStatus.SENT),
-							new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
-						it.save(failOnError: true)
-					}
+				new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
+						serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
+	
+				new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+				new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+				new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
+	
+				new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
+				new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
+	
+				[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
+						new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
+						new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateReceived:new Date()-1),
+						new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
+						new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
+						new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
+							it.status = MessageStatus.INBOUND
+							it.save(failOnError:true)
+						}
+				(1..101).each {
+					new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, status:MessageStatus.INBOUND).save(failOnError:true)
+				}
 
-			[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona', question:'who will win?'),
-					Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele')].each() {
-				it.save(failOnError:true, flush:true)
-			}
+				[new Fmessage(src: '+3245678', dst: '+123456789', text: "time over?", status: MessageStatus.SEND_FAILED),
+								new Fmessage(src: 'Johnny', dst: '+254114433', text: "I am in a meeting", status: MessageStatus.SENT),
+								new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", status: MessageStatus.SENT),
+								new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", status: MessageStatus.SEND_PENDING)].each {
+							it.save(failOnError: true)
+						}
 
-			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
-			PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
-			PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
-			
-			def barcelonaResponse = PollResponse.findByValue('barcelona');
-			10.times {
-				def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", status: MessageStatus.INBOUND);
-				msg.save(failOnError: true);
-				barcelonaResponse.addToMessages(msg);
-			}
-			
-			['Work', 'Projects'].each {
-				new Folder(name:it).save(failOnError:true, flush:true)
-			}
-			
-			[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
-					new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
-					new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
-					new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
-				it.status = MessageStatus.INBOUND
-				it.dateReceived = new Date()
-				it.save(failOnError:true, flush:true)
-			}
-			
-			[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
-					Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
-					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
-					Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
-				it.save(failOnError:true, flush:true)
-			}
+				[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona', question:'who will win?'),
+						Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele')].each() {
+					it.save(failOnError:true, flush:true)
+				}
 
-			def radioShow = new RadioShow(name: "Health")
-			radioShow.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
-			radioShow.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
-			radioShow.save(flush: true)
+				PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
+				PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
+				PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
+	
+				def barcelonaResponse = PollResponse.findByValue('barcelona');
+				10.times {
+					def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", status: MessageStatus.INBOUND);
+					msg.save(failOnError: true);
+					barcelonaResponse.addToMessages(msg);
+				}
+	
+				['Work', 'Projects'].each {
+					new Folder(name:it).save(failOnError:true, flush:true)
+				}
+	
+				[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
+						new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
+						new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
+						new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+					it.status = MessageStatus.INBOUND
+					it.dateReceived = new Date()
+					it.save(failOnError:true, flush:true)
+				}
+	
+				[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
+						Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
+						Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
+						Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
+					it.save(failOnError:true, flush:true)
+				}
+
+				def radioShow = new RadioShow(name: "Health")
+				radioShow.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
+				radioShow.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
+				radioShow.save(failOnError: true, flush: true)
 		}
 	}
 

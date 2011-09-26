@@ -14,12 +14,10 @@ function messageResponseClick(messageType) {
 		type:'POST',
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true);addTabValidations(); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", null, true); addTabValidations(); }
 	});
 	$("#reply-dropdown").val("na");
 }
-
-
 
 function launchMediumPopup(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
@@ -61,7 +59,6 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	initializeTabContentWidgets()
 	onLoad && onLoad();
-
 }
 
 function cancel() {
@@ -79,13 +76,11 @@ function prevButton() {
 }
 
 function nextButton() {
-	if(validateCurrentTab()) {
-		for (var i = 1; i <= getTabLength(); i++) {
-			var nextTabToSelect = getCurrentTab() + i;
-			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
-				$("#tabs").tabs('select', nextTabToSelect);
-				break;
-			}
+	for (var i = 1; i <= getTabLength(); i++) {
+		var nextTabToSelect = getCurrentTab() + i;
+		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
+			$("#tabs").tabs('select', nextTabToSelect);
+			break;
 		}
 	}
 }
@@ -104,7 +99,6 @@ function validateWholeTab() {
 	});
   	return isValid
 }
-
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
 	$.each(buttonToTabIndexMapping, function(key, value) {

@@ -18,7 +18,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
-			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
+			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
 	}
 
 	def 'custom fields with no value for that contact are shown in dropdown'() {
@@ -28,7 +28,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
-			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
+			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
 	}
 
 	def 'custom fields with value for that contact are shown in list of details'() {
@@ -52,7 +52,7 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 		then:
 			list == ['town']
 			updatedList.sort() == ['lake', 'town']
-			nonfields == ['Add more information...', 'Create custom field', 'lake', 'town']
+			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
 	}
 
 	def 'clicking X next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {
@@ -97,7 +97,6 @@ class ShowCustomFieldSpec extends ContactGebSpec {
 			sleep 1000
 		then:
 			bob.refresh()
-			println "Bob has fields: ${bob.customFields}"
 			bob.customFields.name == ['lake', 'town']
 	}
 

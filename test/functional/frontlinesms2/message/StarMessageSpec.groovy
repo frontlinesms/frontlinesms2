@@ -15,7 +15,6 @@ class StarMessageSpec extends grails.plugin.geb.GebSpec{
 			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass("starred")}
 			Fmessage.findBySrc('+254287645').refresh()
 		then:
-			println "Messages: ${Fmessage.findAll()}"
 			Fmessage.findBySrc('+254287645').starred
 			$("tr #star-${Fmessage.findBySrc('+254287645').id}").hasClass('starred')
 	}

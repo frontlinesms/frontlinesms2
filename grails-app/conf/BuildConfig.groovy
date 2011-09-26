@@ -4,7 +4,7 @@ grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
 	// Everything with a version that ends with -SNAPSHOT is changing
-	chainResolver.changingPattern = '.*-SNAPSHOT'
+		chainResolver.changingPattern = '.*-SNAPSHOT'
 
 	// inherit Grails' default dependencies
 	inherits("global") {
@@ -43,9 +43,10 @@ grails.project.dependency.resolution = {
 		test 'org.apache.camel:camel-test:2.5.0'
 		test 'org.mockito:mockito-all:1.8.5'
 		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
+		test "org.codehaus.geb:geb-spock:0.6.0"
 
 		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile ('net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT') {
+		compile ('net.frontlinesms.test:hayescommandset-test:0.0.2-SNAPSHOT'){
 			changing = true
 		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 

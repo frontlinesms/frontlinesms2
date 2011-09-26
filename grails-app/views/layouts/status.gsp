@@ -6,6 +6,12 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
+		<script type="text/javascript">
+			url_root = "${request.contextPath}/";
+			refresh_rate = ${params.rRate ?: 30000}
+		</script>
+		<g:javascript src="jquery.timers.js"/>
+		<g:javascript src="application.js"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
     </head>
 	<body>

@@ -6,7 +6,7 @@
 		<div id='message-info'>
 			<h2 id="contact-name">${messageInstance.contactName}
 				<g:if test="${!messageInstance.contactExists}">
-					<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'messagehistory.gif')}'/></g:link>
+					<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
 				</g:if>
 			</h2>
 			<p id="message-date"><g:formatDate date="${messageInstance.dateCreated}"/></p>
@@ -31,11 +31,13 @@
 					<g:elseif test="${messageSection != 'trash'}">
 						<div id='other_btns'>
 							<li class='static_btn'>
-								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, archived: params.archived, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard('Reply All', data, 'Send', null, true);addTabValidations()">
+								<g:remoteLink elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, viewingArchive: params.viewingArchive, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard('Reply All', data, 'Send', null, true);addTabValidations()">
 									Reply All
 								</g:remoteLink>
 							</li>
-							<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archive']}"></g:render>
+							<g:if test="${(messageSection != 'poll' && messageSection != 'folder') && !params.viewingArchive}">
+								<g:render template="../message/message_button_renderer" model="${[value:'Archive All',id:'btn_archive_all',action:'archive']}"></g:render>
+							</g:if>
 							<g:render template="../message/message_button_renderer" model="${[value:'Delete All',id:'btn_delete_all',action:'delete']}"></g:render>
 						</div>
 					</g:elseif>

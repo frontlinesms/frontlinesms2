@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <ol class="context-menu" id="messages-menu">
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'messages.gif')}' />
+		<img src='${resource(dir:'images/icons',file:'messages.png')}' />
 		<h2>Messages</h2>
 		<ol class='sub-menu' id="messages-submenu">
 			<li class="${(messageSection=='inbox')? 'selected':''}">
@@ -11,7 +11,7 @@
 				<g:link action="sent">Sent</g:link>
 			</li>
 			<li class="${(messageSection=='pending')? 'selected':''}">
-				<g:link action="pending" class="${hasUndeliveredMessages ? 'send-failed' : ''}">Pending</g:link>
+				<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}">Pending</g:link>
 			</li>
 			<li class="${(messageSection=='trash')? 'selected':''}">
 				<g:link action="trash">Trash</g:link>
@@ -19,8 +19,8 @@
 		</ol>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'activities.gif')}' />
-		<h2>Activities</h2>
+		<img src='${resource(dir:'images/icons',file:'activities.png')}' />
+		<h2>Polls</h2>
 		<ol class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li class="${p == ownerInstance ? 'selected' : ''}">
@@ -33,7 +33,7 @@
 		</ol>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'shows.gif')}' />
+		<img src='${resource(dir:'images/icons',file:'shows.png')}' />
 		<h2>Shows</h2>
 		<ol class='sub-menu' id="shows-submenu">
 			<g:each in="${radioShows}" status="i" var="s">
@@ -49,7 +49,7 @@
 		</ol>
 	</li>
 	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'folders.gif')}' />
+		<img src='${resource(dir:'images/icons',file:'folders.png')}' />
 		 <h2>Folders</h2>
 	 	<ol class='sub-menu' id='folders-submenu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">

@@ -12,15 +12,25 @@ class CheckedContactSpec extends ContactGebSpec {
 		given:
 			createTestContacts()
 		when:
-			go 'contact'
-			$("#contact")[1].click()
-			sleep 1000
-			$("#contact")[0].click()
-			sleep 1000
+			to ContactShowPage
+			contactSelect[1].click()
 		then:
-			$("#contact")[0].@checked == "true"
-			$("#contact")[1].@checked == "true"
-			$('#count').text() == '2 contacts selected'
+			waitFor { $('input', name:'name').value() == 'Bob' }
+		when:
+			contactSelect[0].click()
+		then:
+			waitFor { contactCount.text() == '2 contacts selected' }
+			contactSelect[0].checked
+			contactSelect[1].checked
 	}
+}
 
+class ContactShowPage extends geb.Page {
+	static url = 'contact'
+	static content = {
+		contactSelect(required:false) { $(".contact-select") }	
+		contactCount(required:false) { $('#contact-count') }
+		contactGroup(required:false) { $('#multiple-contact')}
+		contactForm(required:true) {$('#details')}
+	}
 }
