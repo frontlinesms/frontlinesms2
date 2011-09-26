@@ -28,7 +28,8 @@
 					<div id='archive-header' class="content-header">
 			  			<g:if test="${messageSection == 'poll'}">
 			  				<div id="poll-title">
-								<g:render template="../message/poll_header"/>
+								<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
+								<h2>Poll Archive</h2>
 							</div>
 						</g:if>
 						<g:elseif test="${messageSection == 'inbox'}">
