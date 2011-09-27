@@ -22,8 +22,8 @@ function addGroupClickAction() {
 	me.remove();
 	noGroup.hide();
 	addGroupId(groupId);
-
 	// addIdToGroupHiddenField(groupId);
+	enableSaveAndCancel();
 }
 
 function removeGroupClickAction() {
@@ -45,6 +45,7 @@ function removeGroupClickAction() {
 	}
 	removeGroupId(groupId);
 	// removeIdFromGroupHiddenField(groupId);
+	enableSaveAndCancel()
 }
 
 function removeGroupId(id) {
