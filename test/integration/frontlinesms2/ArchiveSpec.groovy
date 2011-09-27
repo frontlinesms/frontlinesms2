@@ -15,6 +15,7 @@ class ArchiveSpec extends IntegrationSpec {
 			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
 		when:
 			controller.params.id = folder.id
+			println folder.id
 			controller.archive()
 		then:
 			folder.archived == true
