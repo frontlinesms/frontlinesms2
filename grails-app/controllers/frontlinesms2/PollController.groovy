@@ -6,7 +6,6 @@ class PollController {
 
 	def index = {
 		[polls: Poll.findAllByArchived(params.viewingArchive),
-				actionLayout : params.viewingArchive ? "archive" : "poll",
 				messageSection: "poll"]
 	}
 

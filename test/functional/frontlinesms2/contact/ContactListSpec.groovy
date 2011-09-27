@@ -56,7 +56,8 @@ class ContactListSpec extends ContactGebSpec {
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			waitFor { $('#contact-list').children()*.text() == ['Sam Anderson', 'SAm Jones'] }
+			println $('#contact-list').children('a')*.text()
+			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
 	static createManyContacts() {	

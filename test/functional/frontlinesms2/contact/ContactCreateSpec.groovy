@@ -7,14 +7,6 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class ContactCreateSpec extends ContactGebSpec {
-	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
-		when:
-			to CreateContactPage
-			def cancelContact = $('.buttons .cancel')
-		then:
-			cancelContact.text() == "Cancel"
-			at ContactListPage
-	}
 
 	def 'ALL CONTACTS menu item is selected when creating a contact'() {
 		when:

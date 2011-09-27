@@ -2,8 +2,14 @@
 <div id="contacts-list">
 	<g:if test="${contactInstanceTotal > 0}">
 		<ol id="contact-list">
+			<g:if test="${!contactInstance ? false : !contactInstance.id}">
+				<li class="selected" id="newContact">
+					<g:checkBox disabled="disabled" name='new-contact-select' />
+					<a disabled="disabled" href="">[New Contact]</a>
+				</li>
+			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">
-				<li class="${c == contactInstance ? 'selected' : ''}" id="contact-${c.id}">
+				<li class="${c.id == contactInstance?.id ? 'selected' : ''}" id="contact-${c.id}">
 					<g:checkBox name="contact-select" class="contact-select" id="contact-select-${c.id}"
 							checked="${params.checkedId == c.id + '' ? 'true': 'false'}" value="${c.id}" onclick="contactChecked(${c.id});"/>
 					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
@@ -12,7 +18,7 @@
 						</g:link>
 					</g:if>
 					<g:else>
-						<g:link class="displayName-${c.id}" action="show" id="${c.id}">
+						<g:link class="displayName-${c.id}" action="show" params="[contactId: c.id]">
 							${c.name?:c.primaryMobile?:c.secondaryMobile?:'[No Name]'}
 						</g:link>
 					</g:else>

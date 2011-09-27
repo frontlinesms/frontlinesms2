@@ -13,48 +13,43 @@ class ContactController {
 	}
 
 	def index = {
-		redirect action: "list", params:params
-	}
-
-	def list = {
-		def model = searchContacts()
-		params.contactId = params.contactId ?: model.contactInstanceList[0]?.id
-		if(params.contactId) {
-			flash.message = flash.message // re-set the flash message when handling a 2nd redirect
-			redirect(action:'show', params:params)
-			return
-		} else {
-			model
-		}
+		redirect action: "show", params:params
 	}
 	
-	private def searchContacts() {
-		if(params.flashMessage) {
-			flash.message = params.flashMessage
-		}
-		def groupInstance = params.groupId ? Group.findById(params.groupId): null
+	private def contactList(params) {
+		def groupInstance = params.groupId ? Group.findById(params.groupId) : null
 		params.groupName = groupInstance?.name
- 		def results = GroupMembership.searchForContacts(params)
+		def results = GroupMembership.searchForContacts(params)
 		[contactInstanceList: results,
 				contactInstanceTotal: GroupMembership.countForContacts(params),
-				fieldInstanceList: CustomField.findAll(),
-				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count(),
 				contactsSection: groupInstance]
 	}
 
-	def show = {
-		withContact { contactInstance ->
-			def contactGroupInstanceList = contactInstance.groups?: []
-			def contactFieldInstanceList = contactInstance.customFields
-			[contactInstance:contactInstance,
-					checkedContactList: ',',
-					contactFieldInstanceList: contactFieldInstanceList,
-					contactGroupInstanceList: contactGroupInstanceList,
-					contactGroupInstanceTotal: contactGroupInstanceList.size(),
-					nonContactGroupInstanceList: Group.findAllWithoutMember(contactInstance),
-					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << searchContacts()
+	def show = { contactInstance ->
+		if(params.flashMessage) {
+			flash.message = params.flashMessage
 		}
+		def contactList = contactList(params)
+		def contactInstanceList = contactList.contactInstanceList
+		def contactInstanceTotal = contactList.contactInstanceTotal
+		println "group: ${contactList.contactsSection?.name}"
+		if (!contactInstance)
+			contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def contactGroupInstanceList = contactInstance?.groups ?: []
+		def contactFieldInstanceList = contactInstance?.customFields ?: []
+		[contactInstance: contactInstance,
+				checkedContactList: ',',
+				contactInstanceList: contactInstanceList,
+				contactInstanceTotal: contactInstanceTotal,
+				contactsSection: contactList.contactsSection,
+				contactFieldInstanceList: contactFieldInstanceList,
+				contactGroupInstanceList: contactGroupInstanceList,
+				contactGroupInstanceTotal: contactGroupInstanceList.size(),
+				nonContactGroupInstanceList: contactInstance ? Group.findAllWithoutMember(contactInstance) : null,
+				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
+				fieldInstanceList: CustomField.findAll(),
+				groupInstanceList: Group.findAll(),
+				groupInstanceTotal: Group.count()]
 	}
 	
 	def update = {
@@ -69,7 +64,7 @@ class ContactController {
 			}
 			contactInstance.properties = params
 			updateData(contactInstance)
-			render(view:'show', model:show()<<[contactInstance:contactInstance])
+			render(view:'show', model:show(contactInstance))
 		}
 	}
 	
@@ -87,14 +82,15 @@ class ContactController {
 	}
 
 	def createContact = {
-		def model = [contactInstance:new Contact(params),
-					contactFieldInstanceList: [],
-					contactGroupInstanceList: [],
-					contactGroupInstanceTotal: 0,
-					nonContactGroupInstanceList: Group.findAll(),
-					uniqueFieldInstanceList: CustomField.getAllUniquelyNamed()] << searchContacts()
-
-		render(view:'show', model:model)
+		render view:'show', model: [contactInstance: new Contact(params),
+											contactFieldInstanceList: [],
+											contactGroupInstanceList: [],
+											contactGroupInstanceTotal: 0,
+											nonContactGroupInstanceList: Group.findAll(),
+											uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
+											fieldInstanceList: CustomField.findAll(),
+											groupInstanceList: Group.findAll(),
+											groupInstanceTotal: Group.count()] << contactList(params)
 	}
 
 	def saveContact = {
@@ -102,7 +98,7 @@ class ContactController {
 		contactInstance.properties = params
 		updateData(contactInstance)
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
-		redirect(action:'createContact')
+		redirect(action:'show')
 	}
 	
 	def confirmDelete = {
@@ -125,7 +121,7 @@ class ContactController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-		redirect(action: "list")		
+		redirect(action: "show")		
 	}
 
 	def newCustomField = {
@@ -136,15 +132,6 @@ class ContactController {
 				contactInstance: contactInstance]
 	}
 
-	private def withContact(contactId = params.contactId, Closure c) {
-		def contactInstance = Contact.get(contactId)
-		if (contactInstance) {
-			c contactInstance
-		} else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
-		}
-	}
-	
 	def multipleContactGroupList = {
 		if(!params.checkedContactList) {
 			return []
@@ -164,7 +151,13 @@ class ContactController {
 	}
 	
 	def search = {
-		render (template:'contact_details', model:searchContacts())
+		render template: 'contact_details', model: contactList(params)
+	}
+	
+	private def withContact(contactId=params.contactId, Closure c) {
+		def contactInstance = Contact.get(contactId)
+		if (contactInstance) c contactInstance
+		else flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
 	}
 	
 	private def getSharedGroupList(Collection groupList) {

@@ -12,7 +12,6 @@ class PollControllerSpec extends ControllerSpec {
 			def results = controller.index()
 		then:
 			results['polls'].every {it.archived}
-			results['actionLayout'] == 'archive'
 			results['messageSection'] == 'poll'
 	}
 
