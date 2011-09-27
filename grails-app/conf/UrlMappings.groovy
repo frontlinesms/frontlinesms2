@@ -2,7 +2,7 @@ class UrlMappings {
 	static mappings = {
 		"/"(controller:'message')
 		
-		"/contact/show/$contactId"(controller:'contact', action:'show') {}
+		"/contact/show/$contactId?"(controller:'contact', action:'show') {}
 		
 		"/group/show/$groupId/contact/show/$contactId" {
 			controller = 'contact'

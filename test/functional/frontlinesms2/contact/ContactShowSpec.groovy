@@ -36,7 +36,7 @@ class ContactShowSpec extends ContactGebSpec {
 		when:
 			def empty = new Contact(name:'', primaryMobile:"+987654321")
 			empty.save(failOnError:true)
-			go "contact/list"
+			go "contact/show/${empty.id}"
 		then:
 			$('a', href:"/frontlinesms2/contact/show/$empty.id").text().trim() == "+987654321"
 	}

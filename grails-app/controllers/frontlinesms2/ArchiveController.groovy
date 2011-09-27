@@ -19,7 +19,6 @@ class ArchiveController extends MessageController {
 		def pollInstanceList = Poll.findAllByArchived(true)
 		render view:'standard', model:[pollInstanceList: pollInstanceList,
 											itemInstanceTotal: pollInstanceList.size(),
-											actionLayout : "archive",
 											messageSection: "poll"]
 	}
 	
@@ -27,7 +26,6 @@ class ArchiveController extends MessageController {
 		def folderInstanceList = Folder.findAllByArchived(true)
 		render view:'standard', model:[folderInstanceList: folderInstanceList,
 											itemInstanceTotal: folderInstanceList.size(),
-											actionLayout : "archive",
 											messageSection: "folder"]
 	}
 }

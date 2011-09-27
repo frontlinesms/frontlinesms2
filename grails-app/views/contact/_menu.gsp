@@ -5,10 +5,10 @@
 		<h2>Contacts</h2>
 		<ol class='sub-menu' id="contacts-submenu">
 			<li class="${contactsSection ? '' : 'selected'}">
-				<g:link action="list">All contacts</g:link>
+				<g:link action="show">All contacts</g:link>
 			</li>
 			<li class='create' id="create-contact">
-				<g:link class="create contact" action="createContact">
+				<g:link class="create contact" controller="contact" action="createContact" >
 					Create new contact
 				</g:link>
 			</li>

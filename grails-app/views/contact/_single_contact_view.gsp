@@ -5,10 +5,10 @@
 				<li><g:actionSubmit id="update-single" action="update" value="Save"/></li>
 			</g:if>
 			<g:else>
-				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
+				<li><g:actionSubmit id="save-new" action="saveContact" value="Save" /></li>
 			</g:else>
-			<li><g:link class="cancel" action="list" default="Cancel" params="[contactId: contactInstance?.id]">Cancel</g:link></li>
 			<g:if test="${contactInstance?.id}">
+				<li><g:link class="cancel" action="show" default="Cancel" params="[contactId: contactInstance?.id]">Cancel</g:link></li>
 				<li>
 					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">
 						Delete

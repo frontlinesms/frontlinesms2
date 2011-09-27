@@ -49,16 +49,14 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.count(),
-					actionLayout : (params.viewingArchive ? "archive" : "messages")] << getShowModel(messageInstanceList.list(params))
+					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
-				messageInstanceTotal: messageInstanceList.count(),
-				actionLayout : params.viewingArchive ? "archive" : "messages"] << getShowModel(messageInstanceList.list(params))
+				messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def pending = {
@@ -85,8 +83,7 @@ class MessageController {
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance.responseStats,
-				pollResponse: pollInstance.responseStats as JSON,
-				actionLayout : params.viewingArchive ? 'archive' : 'messages'] << getShowModel(messageInstanceList.list(params))
+				pollResponse: pollInstance.responseStats as JSON] << getShowModel(messageInstanceList.list(params))
 	}
 	
 	def radioShow = {
@@ -109,8 +106,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
-					actionLayout : params.viewingArchive ? 'archive' : 'messages'] << getShowModel(messageInstanceList.list(params))
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def send = {

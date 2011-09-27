@@ -55,7 +55,6 @@
 						<div  id="contact-title">
 							<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 								<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
-								<img src='${resource(dir:'images/icons',file:'groups.gif')}' />
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name}</h2>
 							</g:if>

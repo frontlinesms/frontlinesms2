@@ -61,9 +61,9 @@ class ContactControllerIntegrationSpec extends grails.plugin.spock.IntegrationSp
 		given:
 			controller.params.contactId = null
 		when:
-			controller.list()
+			controller.index()
 		then:
-			controller.response.redirectedUrl.startsWith("/contact/show/${c.id}")
+			controller.response.redirectedUrl.endsWith("/contact/show")
 	}
 
 	def "adding and removing a contact from the same group triggers error"() {
