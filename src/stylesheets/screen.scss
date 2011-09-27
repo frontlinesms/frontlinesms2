@@ -761,6 +761,18 @@ body {
 	background-color: $highlight;
 }
 
+.desc {
+	background-image:url('../images/skin/sorted_desc.gif');
+	background-repeat:no-repeat;
+	background-position: left center;
+}
+
+.asc {
+	background-image:url('../images/skin/sorted_asc.gif');
+	background-repeat:no-repeat;
+	background-position: left center;
+}
+
 #trafficGraph {
 	width:600px;
 	height:400px;
