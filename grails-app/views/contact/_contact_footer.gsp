@@ -7,7 +7,7 @@
 		<g:else>
 			<g:set var="parameters" value="${[searchString:params.searchString]}" />
 		</g:else>
-		<g:paginate next="Next" prev="Back"  action="list" total="${contactInstanceTotal}" params="${parameters}"
+		<g:paginate next="Next" prev="Back"  action="show" total="${contactInstanceTotal}" params="${parameters}"
 			max="${grailsApplication.config.grails.views.pagination.max}" />
 	</div>
 </div>

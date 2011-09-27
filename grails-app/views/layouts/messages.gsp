@@ -19,7 +19,13 @@
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
+		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/categorize-dropdown.js"/>
+		<g:javascript>
+		$(function() {  
+		   disablePaginationControls();
+		});
+		</g:javascript>
     </head>
 	<body>
 		<div id="container">
@@ -173,12 +179,4 @@
 	$("#export").click(function() {
 		remoteHash['export'].call();
 	});
-
-	if($(".prevLink").size() == 0) {
-		$("#page-arrows").prepend('<a href="#" class="prevLink disabled">Back</a>');
-	}
-
-	if($(".nextLink").size() == 0) {
-		$("#page-arrows").append('<a href="#" class="nextLink disabled">Back</a>');
-	}
 </g:javascript>
