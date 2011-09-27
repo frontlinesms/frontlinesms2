@@ -141,12 +141,13 @@ class Fmessage {
 							'in'("messageOwner", search.owners)
 						}
 						if(search.startDate && search.endDate) {
-							search.startDate.clearTime()
-							search.endDate.clearTime()
-							search.endDate = search.endDate.next()
-							between("dateReceived", search.startDate, search.endDate)
+							between("dateReceived", search.startDate, search.endDate.next())
+						} else if (search.startDate){	
+							ge("dateReceived", search.startDate)
+						} else if (search.endDate) {
+							le("dateReceived", search.endDate.next())
 						}
-						if(search.customFields.find{it.value!=''}) {
+						if(search.customFields.find{it.value}) {
 							if(!contactNameMatchingCustomField)
 								eq('src', null)
 							else 'in'("contactName", contactNameMatchingCustomField)
