@@ -11,7 +11,6 @@
 			</g:else>
 			
 			<g:if test="${contactInstance?.id}">
-				<li><g:link class="cancel" action="show" default="Cancel" params="[contactId: contactInstance?.id]">Cancel</g:link></li>
 				<li>
 					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">
 						Delete
