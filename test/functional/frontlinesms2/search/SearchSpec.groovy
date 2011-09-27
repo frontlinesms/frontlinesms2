@@ -144,7 +144,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$('.flash').displayed
 	}
 	
-	@spock.lang.IgnoreRest
 	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
 		when:
 			to SearchingPage
@@ -152,12 +151,13 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		then:
 			searchFrm.startDate == ''
 		when:
-			searchFrm.startDate.click()// = '4/9/2010'
-			searchBtn.click()
+			searchFrm.startDate = '4/9/2010'
+			$("#ui-datepicker-div").jquery.hide()
+			waitFor { !$("#ui-datepicker-div").displayed }
 			searchBtn.click()
 			waitFor {searchDescription}
 		then:
-			searchFrm.startDate_day == '4/9/2010'
+			searchFrm.startDate == '4/9/2010'
 	}
 	
 	def "archiving message should not break message navigation "() {

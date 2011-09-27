@@ -120,7 +120,6 @@ class Fmessage {
 			}
 
 			search { search, contactNameMatchingCustomField=null -> 
-				println "Fmessage Search Called"
 				def groupMembersNumbers = search.group?.getAddresses()
 					and {
 						if(search.searchString) {
@@ -148,7 +147,7 @@ class Fmessage {
 						} else if (search.endDate) {
 							le("dateReceived", search.endDate.next())
 						}
-						if(search.customFields.find{it.value!=''}) {
+						if(search.customFields.find{it.value}) {
 							if(!contactNameMatchingCustomField)
 								eq('src', null)
 							else 'in'("contactName", contactNameMatchingCustomField)
