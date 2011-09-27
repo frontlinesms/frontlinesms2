@@ -26,6 +26,7 @@ class FolderController {
 	
 	def archive = {
 		def folder = Folder.get(params.id)
+		assert folder != null // FIXME there should be a withFolder closure here following the standard pattern
 		folder.archiveFolder()
 		folder.save()
 		flash.message = "Folder was archived successfully!"
