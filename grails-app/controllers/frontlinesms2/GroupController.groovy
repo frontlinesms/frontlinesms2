@@ -20,7 +20,6 @@ class GroupController {
 	}
 
 	def show = {
-		println "clicking: ${params.id}"
 		redirect(controller: "contact", action: "show", params:[groupId : params.id])
 	}
 	

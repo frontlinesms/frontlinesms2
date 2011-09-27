@@ -15,6 +15,7 @@ class MessageController {
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.sort = params.sort ?: 'dateCreated'
 		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
 		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.failed = params.failed ? params.failed.toBoolean() : false
@@ -22,7 +23,8 @@ class MessageController {
 	}
 
 	def index = {
-		redirect(action:'inbox')
+		params.sort = 'dateCreated'
+		redirect(action:'inbox', params:params)
 	}
 	
 	def getShowModel(messageInstanceList) {
