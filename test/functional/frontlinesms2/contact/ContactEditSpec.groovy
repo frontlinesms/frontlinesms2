@@ -120,12 +120,31 @@ class ContactEditSpec extends ContactGebSpec {
 		then:
 			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
 	}
+	
+	def "should disable the save and cancel buttons when viewing a contact details"() {
+		when:
+			to BobDetailsPage
+		then:
+			btnSave.disabled
+			btnCancel.disabled
+	}
+	
+	def "should enable save and cancel buttons when contact details are edited"() {
+		when:
+			to BobDetailsPage
+			frmDetails.email = 'bob@gmail.com'
+		then:
+			!btnSave.disabled
+			!btnCancel.disabled
+	}
+	
 }
 
 abstract class ContactDetailsPage extends geb.Page {
 	static content = {
 		frmDetails { $("#contact_details") }
 		btnSave { frmDetails.find('#update-single') }
+		btnCancel { $(".buttons .cancel")}
 	}
 }
 
