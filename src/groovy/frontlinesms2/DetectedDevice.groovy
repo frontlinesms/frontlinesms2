@@ -12,7 +12,10 @@ class DetectedDevice {
 	}
 
 	static def getDescription(ATDeviceDetector d) {
-
+		def man = d.manufacturer?:'[unknown manufacturer]'
+		def model = d.model?:'[unknown model]'
+		def num = d.phoneNumber?: 'unknown number'
+		"$man $model ($num)"
 	}
 
 	static def getStatus(ATDeviceDetector d) {

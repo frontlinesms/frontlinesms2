@@ -50,9 +50,9 @@ class DetectedDeviceSpec extends UnitSpec {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.manufacturer = "Nokia"
-			d.model = "5110"
-			d.phoneNumber = "+447890123456"
+			d.manufacturer >> 'Nokia'
+			d.model >> '5110'
+			d.phoneNumber >> '+447890123456'
 		then:
 			DetectedDevice.getDescription(d) == 'Nokia 5110 (+447890123456)'
 	}
@@ -61,8 +61,9 @@ class DetectedDeviceSpec extends UnitSpec {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.model = "5110"
-			d.phoneNumber = "+447890123456"
+			d.model >> "5110"
+			d.manufacturer >> null
+			d.phoneNumber >> "+447890123456"
 		then:
 			DetectedDevice.getDescription(d) == '[unknown manufacturer] 5110 (+447890123456)'
 	}
@@ -71,8 +72,9 @@ class DetectedDeviceSpec extends UnitSpec {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.manufacturer = "Nokia"
-			d.phoneNumber = "+447890123456"
+			d.manufacturer >> "Nokia"
+			d.getModel() >> null
+			d.phoneNumber >> "+447890123456"
 		then:
 			DetectedDevice.getDescription(d) == 'Nokia [unknown model] (+447890123456)'
 	}
@@ -80,11 +82,12 @@ class DetectedDeviceSpec extends UnitSpec {
 	def "if phone number is unavailable, description should display 'unknown number'"() {
 		given:
 			ATDeviceDetector d = Mock()
+			d.manufacturer >> "Nokia"
+			d.model >> "5110"
 		when:
-			d.manufacturer = "Nokia"
-			d.model = "5110"
+			def desc = DetectedDevice.getDescription(d)
 		then:
-			DetectedDevice.getDescription(d) == 'Nokia 5110 (unknown number)'
+			desc == 'Nokia 5110 (unknown number)'
 	}
 }
 
