@@ -12,7 +12,6 @@ class MockModemUtils {
 		portIdentifiers.each { name, cpi ->
 			MockSerial.setIdentifier(name, cpi)
 		}
-/*		Mockito.when(MockSerial.getMock().values()).thenReturn(Arrays.asList([cpi]));*/
 	}
 	
 	static SerialPortHandler createMockPortHandler() {

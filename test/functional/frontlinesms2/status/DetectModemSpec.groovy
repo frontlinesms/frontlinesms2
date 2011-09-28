@@ -2,6 +2,8 @@ package frontlinesms2.status
 
 import frontlinesms2.*
 
+import serial.mock.MockSerial
+
 class DetectModemSpec extends grails.plugin.geb.GebSpec {
 	def deviceDetectionService
 
@@ -25,7 +27,8 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 
 	def 'DETECTED DEVICES list should appear when a device has been detected'() {
 		setup:
-			// TODO mock a single connection on COM1 with manufacturer Kiwanja and model T1 Test Modem
+			MockSerial.reset()
+			MockSerial.setIdentifier('COM1', new serial.mock.PermanentlyOwnedCommPortIdentifier('COM1', 'a naughty windows application'))
 		when:
 			to StatusPage
 		then:
@@ -35,12 +38,14 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 		when:
 			detectModems.click()
 		then:
-			waitFor { !noDevicesDetectedNotification.displayed } // TODO we need to refresh the page here?  Should JS be updating this automatically?
+			waitFor { !noDevicesDetectedNotification.displayed }
 			detectedDevicesTable.displayed
 		when:
 			go 'status/resetDetection'
 		then:
 			!detectedDevicesTable.displayed
 			noDevicesDetectedNotification.displayed
+		cleanup:
+			MockSerial.reset()
 	}
 }
