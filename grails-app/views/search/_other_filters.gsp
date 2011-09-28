@@ -4,18 +4,14 @@
 				value="${search?.status}"
 				keys="${['', 'INBOUND', 'SENT, SEND_PENDING, SEND_FAILED']}"/>
 	</li>
-	
 	<li>
 		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" />Include Archive
 	</li>
-	
 	<li class="field">
 		<h2>${message(code:'default.search.betweendates.title', default:'Between dates:') }</h2>
-		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day"/>
-		<br>
-		<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day"/>
+		<input type="text" name="startDate" class="datepicker" value="${ search?.startDate? search.startDate.format('d/M/yyyy'):''}"/>
+		<input type="text" name="endDate" class="datepicker" value="${ search?.endDate? search.endDate.format('d/M/yyyy'):''}"/>
 	</li>
-	
 	<li class="field" id='more-option-field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>

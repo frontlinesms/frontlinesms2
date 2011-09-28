@@ -7,6 +7,9 @@ import grails.util.GrailsConfig
 
 class SearchController {
 	
+	def dateFormatString = message(code:"default.search.date.format", default:"d/M/yyyy")
+	def dateFormat = new SimpleDateFormat(dateFormatString)
+	
 	def index = { redirect(action:'no_search') }
 	
 	def no_search = {
@@ -20,6 +23,7 @@ class SearchController {
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.sort = params.sort ?: 'dateCreated'
 		true
 	}
 	
@@ -34,20 +38,22 @@ class SearchController {
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate ?: null
-			searchInstance.endDate = params.endDate ?: null
+			searchInstance.startDate = params.startDate ? dateFormat.parse(params.startDate): null
+			searchInstance.startDate?.format(dateFormatString)
+			searchInstance.endDate = params.endDate ? dateFormat.parse(params.endDate): null
+			searchInstance.endDate?.format(dateFormatString)
 			//Assumed that we only pass the customFields that exist
 			searchInstance.customFields = [:]
 
 			CustomField.getAllUniquelyNamed().each() {
-				searchInstance.customFields[it] = params[it+'CustomField'] ?: ""
+				searchInstance.customFields[it] = params[it+'CustomField'] ?: null
 			} 
 			searchInstance.save(failOnError: true, flush: true)
 		}
 
 		//FIXME Need to combine the 2 search part (the name matching custom field and the message matching all criteria) in one service or domain
 		def contactNameMatchingCustomField
-		if (search.customFields.find{it.value!=''}) {
+		if (search.customFields.find{it.value}) {
 			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
 		}
 		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
@@ -87,15 +93,17 @@ class SearchController {
 		}
 		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
 		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
-		if (search.customFields.find{it.value!=''}) {
-			search.customFields.find{it.value!=''}.each{
+		if (search.customFields.find{it.value}) {
+			search.customFields.find{it.value}.each{
 				searchDescriptor += ", with contact having "+it.key+"="+it.value
 			}
 		}
 		if(search.startDate && search.endDate){
-			search.startDate.format('dd-MM-yyyy')
-			search.endDate.format('dd-MM-yyyy')
-			searchDescriptor += ", between " + search.startDate.dateString + " and " + search.endDate.dateString
+			searchDescriptor += ", between " + search.startDate.format(dateFormatString) + " and " + search.endDate.format(dateFormatString) 
+		} else if (search.startDate) {
+			searchDescriptor += ", from the " + search.startDate.format(dateFormatString)
+		} else if (search.endDate) {
+			searchDescriptor += ", until the " + search.endDate.format(dateFormatString)
 		}
 		return searchDescriptor
 	}

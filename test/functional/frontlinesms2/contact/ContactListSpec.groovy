@@ -56,7 +56,24 @@ class ContactListSpec extends ContactGebSpec {
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			waitFor { $('#contact-list').children()*.text() == ['Sam Anderson', 'SAm Jones'] }
+			println $('#contact-list').children('a')*.text()
+			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
+	}
+	
+	def "should remain on the same page when a contact is selected"() {
+		given:
+			createManyContacts()
+		when:
+			go 'contact'
+			$("a.nextLink").click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+		when:
+			$('#contact-list li').children('a')[1].click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
 	}
 	
 	static createManyContacts() {	
