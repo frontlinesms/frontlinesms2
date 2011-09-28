@@ -60,6 +60,22 @@ class ContactListSpec extends ContactGebSpec {
 			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
+	def "should remain on the same page when a contact is selected"() {
+		given:
+			createManyContacts()
+		when:
+			go 'contact'
+			$("a.nextLink").click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+		when:
+			$('#contact-list li').children('a')[1].click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+	}
+	
 	static createManyContacts() {	
 		(11..90).each {
 			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)

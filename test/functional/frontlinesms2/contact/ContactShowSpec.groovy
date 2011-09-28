@@ -19,7 +19,7 @@ class ContactShowSpec extends ContactGebSpec {
 		then:
 			def anchor = $(".displayName-${alice.id}")
 			anchor.text() == 'Alice'
-			anchor.@href == "/frontlinesms2/contact/show/$alice.id"
+			anchor.@href.contains("/frontlinesms2/contact/show/$alice.id")
 	}
 
 	def 'selected contacts show message statistics' () {
@@ -35,10 +35,10 @@ class ContactShowSpec extends ContactGebSpec {
 	def 'contact with no name can be clicked and edited because his primaryMobile is displayed'() {
 		when:
 			def empty = new Contact(name:'', primaryMobile:"+987654321")
-			empty.save(failOnError:true)
+			empty.save(failOnError:true, flush:true)
 			go "contact/show/${empty.id}"
 		then:
-			$('a', href:"/frontlinesms2/contact/show/$empty.id").text().trim() == "+987654321"
+			$('a', href:"/frontlinesms2/contact/show/$empty.id?sort=&offset=").text().trim() == "+987654321"
 	}
 
 	def 'selected contact is highlighted'() {

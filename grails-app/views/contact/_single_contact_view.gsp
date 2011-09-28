@@ -2,13 +2,15 @@
 	<div class="buttons">
 		<ol>
 			<g:if test="${contactInstance?.id}">
-				<li><g:actionSubmit id="update-single" action="update" value="Save"/></li>
+				<li><g:actionSubmit id="update-single" action="update" value="Save" disabled="disabled"/></li>
+				<li><input type="button" class="cancel" value="Cancel" disabled="disabled"/></li>
 			</g:if>
 			<g:else>
-				<li><g:actionSubmit id="save-new" action="saveContact" value="Save" /></li>
+				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
+				<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
 			</g:else>
+			
 			<g:if test="${contactInstance?.id}">
-				<li><g:link class="cancel" action="show" default="Cancel" params="[contactId: contactInstance?.id]">Cancel</g:link></li>
 				<li>
 					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">
 						Delete
@@ -121,3 +123,26 @@
 		</div>
 	</div>
 </div>
+
+<g:javascript>
+
+	$(function() {
+		$(".buttons .cancel").click(function() {
+			window.location = window.location
+		});
+	});
+	
+	$("div.single-contact").keyup(function(event) {
+		enableSaveAndCancel()
+	});
+
+	$("a.remove-field").click(function(event) {
+		enableSaveAndCancel()
+	});
+	
+	function enableSaveAndCancel() {
+		$("#update-single").attr("disabled", false);
+		$("#update-all").attr("disabled", false);
+		$(".buttons .cancel").attr("disabled", false);
+	}
+</g:javascript>
