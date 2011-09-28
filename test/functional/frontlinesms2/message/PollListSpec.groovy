@@ -12,7 +12,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			def pollMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			at PollListPage
-			pollMessageSources == ['Alice', 'Bob']
+			pollMessageSources == ['Bob', 'Alice']
 	}
 
 	def "message's poll details are shown in list"() {
@@ -21,7 +21,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
@@ -88,14 +88,14 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
 			$(".message-select")[1].click()
 		then:
-			waitFor { $('#message-body').text() == 'go manchester' }
+			waitFor { $('#message-body').text() == 'I like manchester' }
 		when:
 			$(".message-select")[2].click()
 		then:
 			waitFor { $("#checked-message-count").text() == "2 messages selected" }
 		when:
 			$(".message-select")[1].click()
-			def message = Fmessage.findBySrc('Bob')
+			def message = Fmessage.findBySrc('Alice')
 		then:
 			waitFor { $('#message-details #contact-name').text() == message.src }
 			$('#message-details #message-body').text() == message.text
