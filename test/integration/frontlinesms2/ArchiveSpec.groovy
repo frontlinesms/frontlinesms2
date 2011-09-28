@@ -17,8 +17,10 @@ class ArchiveSpec extends IntegrationSpec {
 			assert !folder.archived
 			controller.params.id = folder.id
 			controller.archive()
+			println Folder.list()
+			folder.refresh()
 		then:
-			Folder.findByName('rain').archived
+			folder.archived
 	}
 }
 
