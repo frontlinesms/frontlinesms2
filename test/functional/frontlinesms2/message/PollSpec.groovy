@@ -9,17 +9,17 @@ import java.util.Date
 class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
 	
-	def 'message from alice is first in the list, and links to the show page'() {
+	def 'message from bob is first in the list, and links to the show page'() {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def message = Fmessage.findBySrc('Alice')
+			def message = Fmessage.findBySrc('Bob')
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
 		then:
-			firstMessageLink.text() == 'Alice'
+			firstMessageLink.text() == 'Bob'
 	}
 
 	def 'selected message and its details are displayed'() {
