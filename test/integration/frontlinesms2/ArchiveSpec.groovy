@@ -4,23 +4,16 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class ArchiveSpec extends IntegrationSpec {
-	def controller
-	def folder 
-	
-	def setup() {
-		controller = new FolderController()
-		folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
-	}
-	
 	def "can archive a folder"() {
-		when:
+		given:
+			def controller = new FolderController()
+			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
 			assert !folder.archived
+		when:
 			controller.params.id = folder.id
 			controller.archive()
-			println Folder.list()
-			folder.refresh()
 		then:
-			folder.archived
+			folder.refresh().archived
 	}
 }
 
