@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import net.frontlinesms.messaging.ATDeviceDetector
+
 class DetectedDevice {
 	String port
 	String description
@@ -14,6 +16,8 @@ class DetectedDevice {
 	}
 
 	static def getStatus(ATDeviceDetector d) {
-
+		if(!d.finished) DetectionStatus.AMBER
+		else if(d.detected) DetectionStatus.GREEN
+		else DetectionStatus.RED
 	}
 }
