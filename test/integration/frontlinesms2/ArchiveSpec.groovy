@@ -9,13 +9,13 @@ class ArchiveSpec extends IntegrationSpec {
 	def setup() {
 		pollcontroller = new PollController()
 		controller = new FolderController()
-		
 	}
 	
 	def "can archive a folder"() {
 		when:
 			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
 			assert !folder.archived
+		when:
 			controller.params.id = folder.id
 			controller.archive()
 		then:
