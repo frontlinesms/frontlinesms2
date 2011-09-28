@@ -15,7 +15,7 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
-			messageSources == ['Alice', 'Bob']
+			messageSources == ['Bob', 'Alice']
 	}
 
 	def 'message details are shown in list'() {
@@ -25,20 +25,20 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[2] == 'Alice'
-			rowContents[3] == 'hi Alice'
+			rowContents[2] == 'Bob'
+			rowContents[3] == 'hi Bob'
 			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
 
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
+			def message = Fmessage.findBySrc('Bob')
 		when:
 			to MessagesPage
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
-			firstMessageLink.text() == 'Alice'
+			firstMessageLink.text() == 'Bob'
 	}
 
 	//FIXME this test fail when the local computer language is different than english. The Date return
@@ -164,7 +164,7 @@ class InboxSpec extends MessageGebSpec {
 			waitFor { checkedMessageCount == 2 }
 		when:
 			messagesSelect[1].click()
-			def message = Fmessage.findBySrc('Bob')
+			def message = Fmessage.findBySrc('Alice')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			waitFor { checkedMessageCount == 1 }
