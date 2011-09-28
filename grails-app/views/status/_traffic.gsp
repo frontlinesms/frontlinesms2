@@ -1,7 +1,7 @@
-<g:javascript src="raphael-min.js"/>
-<g:javascript src="g.raphael-min.js"/>
-<g:javascript src="g.bar-min.js"/>
-<g:javascript src="graph.js"/>
+<g:javascript src="/graph/raphael-min.js"/>
+<g:javascript src="/graph/g.raphael-min.js"/>
+<g:javascript src="/graph/g.bar-min.js"/>
+<g:javascript src="/graph/graph.js"/>
 <g:javascript>
 $(function() {
 		var data1 = ${messageStats["sent"]};
