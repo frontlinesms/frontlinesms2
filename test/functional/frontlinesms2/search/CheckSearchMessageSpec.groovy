@@ -56,11 +56,8 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			waitFor { replyToMultipleButton.displayed }
 		when:
 			replyToMultipleButton.click() // click the reply button
-			$("div#tabs-1 .next").click()
 		then:
-			waitFor { $('input', value:'Alice').checked }
-			$('input', value:'Bob').checked
-			!$('input', value:'June').checked
+			waitFor { $("div#tabs-1").displayed }
 	}
 	
 	def "'Forward' button still work when all messages are unchecked"() {

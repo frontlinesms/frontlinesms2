@@ -130,7 +130,22 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			otherGroup.refresh()
 			GroupMembership.countMembers(otherGroup) == 0
 	}
-
+	
+	def "should enable save and cancel buttons when new group is added"() {
+		when:
+			to BobsContactPage
+		then:
+			btnSave.disabled
+			btnCancel.disabled
+		when:
+			$("#group-dropdown").value("${Group.findByName('Others').id}")
+		then:
+			$("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three']
+			!btnSave.disabled
+			!btnCancel.disabled
+			
+	}
+	
 	// TODO test cancel button - remove from 1 group
 	// TODO test cancel button - add to one group
 }
@@ -140,5 +155,7 @@ class BobsContactPage extends geb.Page {
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
 		groupsList { $('#groups-submenu') }
+		btnSave { $('#update-single') }
+		btnCancel { $(".buttons .cancel")}
 	}
 }

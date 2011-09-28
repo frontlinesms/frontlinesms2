@@ -55,11 +55,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $('#multiple-messages a')[0].displayed }
 		when:
 			$('#multiple-messages a')[0].click()
-			$("div#tabs-1 .next").click()
 		then:
-			waitFor { $('input', value:'Alice').checked }
-			$('input', value:'Bob').checked
-			!$('input', value:'June').checked
+			waitFor { $("div#tabs-1").displayed }
 	}
 	
 	def "Should show the correct contact count when replying to multiple checked messages"() {

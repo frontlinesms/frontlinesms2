@@ -65,7 +65,7 @@ class GroupControllerSpec extends ControllerSpec {
 			controller.show()
 		then:
 			assert controller.redirectArgs.controller == 'contact'
-			assert controller.redirectArgs.action == 'list'
+			assert controller.redirectArgs.action == 'show'
 			assert controller.redirectArgs.params.groupId == 3L
 
 	}

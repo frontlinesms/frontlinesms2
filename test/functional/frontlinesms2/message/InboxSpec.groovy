@@ -99,21 +99,6 @@ class InboxSpec extends MessageGebSpec {
 			rowContents == ['June']
 	}
 
-	def "should autopopulate the recipients name on click of reply for a inbox message"() {
-		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
-		when:
-			to MessagesPage
-			$('#btn_reply').click()
-		then:
-			waitFor { $('div#tabs-1').displayed }
-		when:
-			$("div#tabs-1 .next").click()
-		then:
-			$('input', value:'+254778899').checked
-	}
-
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
@@ -124,10 +109,6 @@ class InboxSpec extends MessageGebSpec {
 			$('#btn_reply').click()
 		then:
 			waitFor { $('div#tabs-1').displayed }
-		when:
-			$("div#tabs-1 .next").click()
-		then:
-			waitFor { $('input', value:'+254999999').checked }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {

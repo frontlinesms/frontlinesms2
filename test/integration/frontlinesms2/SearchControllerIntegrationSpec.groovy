@@ -1,11 +1,13 @@
 package frontlinesms2
 
+import java.text.SimpleDateFormat
 
 class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def firstContact, secondContact, thirdContact
 	def group
 	def folder
+	def dateFormatString = 'd/M/yyyy'
 
 	def setup() {
 		controller = new SearchController()
@@ -186,28 +188,74 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 
 	}
 	
-	def "only return message within the specific time range"() {
+	//There is a total of 9 messages but one is achived. So a maximum of 8 will be returned.
+	def "if only end date is define, return message before this date"() {
 		when:
-			controller.params.startDate = new Date()-4
-			controller.params.endDate = new Date()
+			def dateFormat = new SimpleDateFormat(dateFormatString)
+			controller.params.endDate = dateFormat.format(new Date()-1)
+			def model = controller.result()
+		then:
+			model.messageInstanceTotal == 2
+		when:
+			controller.params.endDate = dateFormat.format(new Date()-5)
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 2
+		when:
+			controller.params.endDate = dateFormat.format(new Date()-6)
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 1
+	}
+	
+	def "if only start date is define, return message after this date"() {
+		when:
+			def dateFormat = new SimpleDateFormat(dateFormatString)
+			controller.params.startDate = dateFormat.format(new Date()-1)
 			def model = controller.result()
 		then:
 			model.messageInstanceTotal == 6
 		when:
-			controller.params.startDate = new Date()-6
-			controller.params.endDate = new Date()-3
+			controller.params.startDate = dateFormat.format(new Date()-4)
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 6
+		when:
+			controller.params.startDate = dateFormat.format(new Date()-5)
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 7
+	}
+	
+	def "only return message within the specific time range"() {
+		when:
+			def dateFormat = new SimpleDateFormat(dateFormatString)
+			controller.params.startDate = dateFormat.format(new Date()-4)
+			controller.params.endDate = dateFormat.format(new Date())
+			def model = controller.result()
+		then:
+			model.messageInstanceTotal == 6
+		when:
+			controller.params.startDate = dateFormat.format(new Date())
+			controller.params.endDate = dateFormat.format(new Date())
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 6
+		when:
+			controller.params.startDate = dateFormat.format(new Date()-6)
+			controller.params.endDate = dateFormat.format(new Date()-3)
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 1
 		when:
-			controller.params.startDate = new Date()-7
-			controller.params.endDate = new Date()-5
+			controller.params.startDate = dateFormat.format(new Date()-7)
+			controller.params.endDate = dateFormat.format(new Date()-5)
 			model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Bob'), Fmessage.findBySrc('Michael')]
 		when:
-			controller.params.startDate = new Date()-14
-			controller.params.endDate = new Date()
+			controller.params.startDate = dateFormat.format(new Date()-14)
+			controller.params.endDate = dateFormat.format(new Date())
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 8
