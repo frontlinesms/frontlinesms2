@@ -63,6 +63,23 @@ class GroupViewSpec extends GroupGebSpec {
 			contactNames == expectedNames
 	}
 	
+	def "should remain on the same page when a contact is selected from a group"() {
+		given:
+			createTestGroups()
+			createManyContacts()
+		when:
+			go "/frontlinesms2/group/show/${Group.findByName('Friends').id}"
+			$("a.nextLink").click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+		when:
+			$('#contact-list li').children('a')[1].click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+	}
+	
 	def createManyContacts() {
 		(11..90).each {
 			def c = new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
