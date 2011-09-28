@@ -2,7 +2,7 @@
 <div id="tabs" class="vertical-tabs">
 	<ol>
 		<li><a class="tabs-1" href="#tabs-1">Enter Question</a></li>
-		<li><a class="tabs-2 disabled-tab" href="#tabs-2">Response list</a></li>
+		<li><a class="tabs-2" href="#tabs-2">Response list</a></li>
 		<li><a class="tabs-3" href="#tabs-3">Automatic sorting</a></li>
 		<li><a class="tabs-4" href="#tabs-4">Automatic reply</a></li>
 		<li><a class="tabs-5" href="#tabs-5">Select recipients</a></li>
@@ -38,6 +38,7 @@
 <g:javascript>
 	function initializePoll() {
 		$("#tabs").tabs("disable", getTabLength());
+		disableTab(1);
 		highlightPollResponses();
 
 		/* Poll type tab */
