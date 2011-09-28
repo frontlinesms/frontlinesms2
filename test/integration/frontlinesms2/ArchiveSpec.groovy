@@ -15,6 +15,7 @@ class ArchiveSpec extends IntegrationSpec {
 	def "can archive a folder"() {
 		when:
 			assert !folder.archived
+			println "Folder ID: ${folder.id}"
 			controller.params.id = folder.id
 			controller.archive()
 		then:
