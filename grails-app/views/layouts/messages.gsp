@@ -102,10 +102,17 @@
 									</g:link>
 								</li>
 							</g:if>
-							<g:if test="${messageSection == 'folder' && !params.viewingArchive}">
-								<li class='static_btn'>
-									<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
-								</li>
+							<g:if test="${messageSection == 'folder'}">
+								<g:if test="${!params.viewingArchive}">
+									<li class='static_btn'>
+										<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
+									</li>
+								</g:if>
+								<g:else>
+									<li class='static_btn'>
+										<g:link controller="folder" action="unarchive" id="${ownerInstance.id}">Unarchive Folder</g:link>
+									</li>
+								</g:else>
 							</g:if>
 							<li>
 					        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
@@ -115,14 +122,17 @@
 							</li>
 						</ol>
 						<g:if test="${messageSection == 'poll'}">
-							<g:if test="${!params.viewingArchive}">
-								<ol>
+							<ol>
+								<g:if test="${!params.viewingArchive}">
 									<li class='static_btn'>
 										<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
 									</li>
-								</ol>
-							</g:if>
-							<ol>
+								</g:if>
+								<g:else>
+									<li class='static_btn'>
+										<g:link controller="poll" action="unarchive" id="${ownerInstance.id}">Unarchive Poll</g:link>
+									</li>
+								</g:else>
 								<li>
 									<g:select name="poll-actions" from="${['Export', 'Rename activity']}"
 											keys="${['export', 'renameActivity']}"

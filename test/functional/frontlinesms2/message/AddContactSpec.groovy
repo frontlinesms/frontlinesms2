@@ -4,6 +4,7 @@ import frontlinesms2.*
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class AddContactSpec extends MessageGebSpec {
+
 	def 'if source of message does not exists in the database then number is displayed'() {
 		when:
 			createTestMessages()
@@ -11,7 +12,7 @@ class AddContactSpec extends MessageGebSpec {
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
-			getColumnAsArray($('#messages tr'), 2) == ['+254778899', 'Alice', 'Bob']
+			getColumnAsArray($('#messages tr'), 2) == ['Bob', 'Alice', '+254778899']
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
