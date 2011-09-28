@@ -41,7 +41,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text() == 'Searching "test", include archived messages'
+			searchDescription.text().contains('Searching "test", include archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -146,18 +146,28 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
 		when:
+			def date = new Date()
 			to SearchingPage
 			searchBtn.present()
 		then:
-			searchFrm.startDate == ''
+			searchFrm.startDate_day == 'none'
+			searchFrm.startDate_month == 'none'
+			searchFrm.startDate_year == 'none'
+			String.format('%td',date).contains(searchFrm.endDate_day)
+			String.format('%tm',date).contains(searchFrm.endDate_month) 
+			searchFrm.endDate_year == String.format('%tY',date)
 		when:
-			searchFrm.startDate = '4/9/2010'
+			 searchFrm.startDate_day = '4'
+			 searchFrm.startDate_month = '9'
+			 searchFrm.startDate_year = '2010'
 			$("#ui-datepicker-div").jquery.hide()
 			waitFor { !$("#ui-datepicker-div").displayed }
 			searchBtn.click()
 			waitFor {searchDescription}
 		then:
-			searchFrm.startDate == '4/9/2010'
+			searchFrm.startDate_day == '4'
+			searchFrm.startDate_month == '9'
+			searchFrm.startDate_year == '2010'
 	}
 	
 	def "archiving message should not break message navigation "() {
