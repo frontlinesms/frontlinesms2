@@ -31,18 +31,7 @@ $(function() {
 Traffic
 <div id="trafficGraph"></div>
 <g:form action="show" method="post">
-	<g:render template="../search/basic_filters" />
-	<div>
-		<g:radio name="rangeOption" value="two-weeks" checked="${params.rangeOption == 'two-weeks'}" />
-		<g:select id="pre-defined-range-options" name='pre-defined-range-options'
-		    noSelection="${['null':'Show last two weeks']}" >
-		</g:select>
-	</div>
-	<div>
-	<g:radio name="rangeOption" value="between-dates" checked="${params.rangeOption == 'between-dates'}"/>Between dates
-	</div>
-	<g:datePicker name="startDate" value="${params['startDate'] ?: new Date()-14}" noSelection="['':'-Choose-']" precision="day"/>
-	<g:datePicker name="endDate" value="${params['endDate'] ?: new Date()}" noSelection="['':'-Choose-']" precision="day"/>
+	<g:render template="../status/filters" />
 	<div class="buttons">
 		<g:actionSubmit id="update-chart" value="Update chart" action="show"/>
 	</div>
