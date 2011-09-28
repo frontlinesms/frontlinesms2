@@ -25,11 +25,19 @@ class FolderController {
 	}
 	
 	def archive = {
-		def folder = Folder.get(params.id)
-		folder.archiveFolder()
-		folder.save()
+		withFolder { folder ->
+			folder.archiveFolder()
+			folder.save(flush:true, failOnError:true)
+		}
+		
 		flash.message = "Folder was archived successfully!"
 		redirect(controller: "message", action: "inbox")
+	}
+	
+	private def withFolder(Closure c) {
+		def folderInstance = Folder.get(params.id)
+		if (folderInstance) c folderInstance
+		else render(text: "Could not find folder with id ${params.id}") // TODO handle error state properly
 	}
 }
 

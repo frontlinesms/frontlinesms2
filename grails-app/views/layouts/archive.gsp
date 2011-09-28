@@ -16,6 +16,13 @@
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
+		<g:javascript src="pagination.js"/>
+		<g:javascript src="/message/messageSorting.js"/>
+		<g:javascript>
+			$(function() {  
+			   disablePaginationControls();
+			});
+		</g:javascript>
 	</head>
 	<body>
 		<div id="container">
@@ -77,7 +84,8 @@
 								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
 							</ul>
 							<div id="page-arrows">
-								<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
+								<g:paginate next="Next" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" 
+								total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
 							</div>
 						</g:else>
 					</div>

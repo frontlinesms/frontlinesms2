@@ -17,7 +17,7 @@
 		<li class='section buttons'>
 			<ol class='sub-menu'>
 				<li>
-					<g:actionSubmit class="search" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" action="result"/>
+					<g:actionSubmit class="search" controller="search" action="result" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" />
 				</li>
 				<li>
 					<g:link action="no_search">${message(code: 'default.search.label', default: 'Clear search')}</g:link>

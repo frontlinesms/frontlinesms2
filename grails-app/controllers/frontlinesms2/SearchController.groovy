@@ -23,6 +23,7 @@ class SearchController {
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.sort = params.sort ?: 'dateCreated'
 		true
 	}
 	
