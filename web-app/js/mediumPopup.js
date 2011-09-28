@@ -183,4 +183,14 @@ function validateTab(tab) {
 	return isValid;
 }
 
+function disableTab(tabNumber) {
+	$('#tabs').tabs("disable", tabNumber);
+	$('.tabs-' + (tabNumber + 1)).addClass('disabled-tab');
+}
+
+function enableTab(tabNumber) {
+	$('#tabs').tabs("enable", tabNumber);
+	$('.tabs-' + (tabNumber + 1)).removeClass('disabled-tab');
+}
+
 

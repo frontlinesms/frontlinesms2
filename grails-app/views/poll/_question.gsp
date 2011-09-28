@@ -15,28 +15,21 @@
 		</div>
 	</div>
 </div>
-
 <g:javascript>
 	$("input[name='collect-responses']").live("change", function() {
 		if(isGroupChecked("collect-responses")) {
-			$('#tabs').tabs("disable", 4);
-			$('#recipientsTab-text a').css('color', '#DFDFDF'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
+			disableTab(4);
 		} else {
-			$('#tabs').tabs("enable", 4);
-			$('#recipientsTab-text a').css('color', '#333333'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
+			enableTab(4);
 		}
 	});
 
 	$("input[name='poll-type']").live("change", function() {
 		if ($("input[name='poll-type']:checked").val() == "standard") {
-			$('#tabs').tabs("disable", 1);
-			$('#responseTab-text a').css('color', '#DFDFDF'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
+			disableTab(1);
 		} else {
-			$('#tabs').tabs("enable", 1);
-			$('#responseTab-text a').css('color', '#333333'); // FIXME should be doing this with CSS class reflecting enabled/disabled rather than directly modifying style
+			enableTab(1);
 		}
 		updateConfirmationMessage();
 	});
-	
-	// TODO refactor above repeated code
 </g:javascript>
