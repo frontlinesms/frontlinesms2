@@ -12,7 +12,7 @@ class ArchiveSpec extends IntegrationSpec {
 	}
 	
 	def "can archive a folder"() {
-		when:
+		given:
 			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
 			assert !folder.archived
 		when:
