@@ -8,7 +8,6 @@ class ArchiveFolderPage extends geb.Page {
 	}
 	
 	static content = {
-		FolderTable { $('#folder-table') }
-		FolderNames { $(".folder-name") }
+		folderNames { $(".folder-name") }
 	}
 }

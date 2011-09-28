@@ -32,7 +32,6 @@ class ContactController {
 		def contactList = contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
-		println "group: ${contactList.contactsSection?.name}"
 		if (!contactInstance)
 			contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
 		def contactGroupInstanceList = contactInstance?.groups ?: []
