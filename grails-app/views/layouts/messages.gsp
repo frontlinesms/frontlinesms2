@@ -20,6 +20,7 @@
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
+		<g:javascript src="/message/messageSorting.js"/>
 		<g:javascript src="/message/categorize-dropdown.js"/>
 		<g:javascript>
 		$(function() {  
