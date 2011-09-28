@@ -3,13 +3,15 @@ package frontlinesms2
 import spock.lang.*
 import grails.plugin.spock.*
 
+import net.frontlinesms.messaging.ATDeviceDetector
+
 class DetectedDeviceSpec extends UnitSpec {
 	def "detected modem should have status GREEN"() {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.finished = true
-			d.detected = true
+			d.finished >> true
+			d.detected >> true
 		then:
 			DetectedDevice.getStatus(d) == DetectionStatus.GREEN
 	}
@@ -18,8 +20,8 @@ class DetectedDeviceSpec extends UnitSpec {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.finished = true
-			d.detected = false
+			d.finished >> true
+			d.detected >> false
 		then:
 			DetectedDevice.getStatus(d) == DetectionStatus.RED
 	}
@@ -28,8 +30,8 @@ class DetectedDeviceSpec extends UnitSpec {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.finished = false
-			d.detected = true
+			d.finished >> false
+			d.detected >> true
 		then:
 			DetectedDevice.getStatus(d) == DetectionStatus.AMBER
 	}
@@ -38,8 +40,8 @@ class DetectedDeviceSpec extends UnitSpec {
 		given:
 			ATDeviceDetector d = Mock()
 		when:
-			d.finished = false
-			d.detected = false
+			d.finished >> false
+			d.detected >> false
 		then:
 			DetectedDevice.getStatus(d) == DetectionStatus.AMBER
 	}
