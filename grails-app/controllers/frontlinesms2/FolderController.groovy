@@ -36,7 +36,7 @@ class FolderController {
 	
 	def unarchive = {
 		withFolder { folder ->
-			folder.unarchiveFolder()
+			folder.setArchivedProperty(false)
 			folder.save()
 		}
 
