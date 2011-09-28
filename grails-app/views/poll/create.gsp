@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="tabs" class="vertical-tabs">
 	<ol>
-		<li><a href="#tabs-1">Enter Question</a></li>
-		<li id='responseTab-text'><a href="#tabs-2">Response list</a></li>
-		<li><a href="#tabs-3">Automatic sorting</a></li>
-		<li><a href="#tabs-4">Automatic reply</a></li>
-		<li id='recipientsTab-text'><a href="#tabs-5">Select recipients</a></li>
-		<li><a href="#tabs-6">Confirm</a></li>
-		<li class="confirm-tab"><a href="#tabs-7"></a></li>
+		<li><a class="tabs-1" href="#tabs-1">Enter Question</a></li>
+		<li><a class="tabs-2 disabled-tab" href="#tabs-2">Response list</a></li>
+		<li><a class="tabs-3" href="#tabs-3">Automatic sorting</a></li>
+		<li><a class="tabs-4" href="#tabs-4">Automatic reply</a></li>
+		<li><a class="tabs-5" href="#tabs-5">Select recipients</a></li>
+		<li><a class="tabs-6" href="#tabs-6">Confirm</a></li>
+		<li class="confirm-tab"><a class="tabs-7" href="#tabs-7"></a></li>
 	</ol>
 
 	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToNextTab()">
@@ -38,9 +38,6 @@
 <g:javascript>
 	function initializePoll() {
 		$("#tabs").tabs("disable", getTabLength());
-		$('#tabs').tabs("disable", 1);
-		$('#responseTab-text a').css('color', '#DFDFDF');
-		
 		highlightPollResponses();
 
 		/* Poll type tab */
