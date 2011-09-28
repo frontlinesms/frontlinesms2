@@ -5,22 +5,17 @@ import net.frontlinesms.messaging.AllModemsDetector
 class DeviceDetectionService {
 	static transactional = true
 	
-	def allModemsDetector = new AllModemsDetector()
-	
-	// temp variable used to pass acceptance tests.  should be removed when integration tests are in place
-	boolean detected
+	def detector = new AllModemsDetector()
 
 	def detect() {
-		detected = true
-		allModemsDetector.detect()
+		detector.detect()
 	}
 	
 	def reset() {
-		detected = false
-		allModemsDetector.reset()
+		detector.reset()
 	}
 
 	def getDetected() {
-		allModemsDetector.detected.collect { DetectedDevice.create(it) }
+		detector.detectors.collect { DetectedDevice.create(it) }
 	}
 }
