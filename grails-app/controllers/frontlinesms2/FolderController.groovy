@@ -32,5 +32,14 @@ class FolderController {
 		flash.message = "Folder was archived successfully!"
 		redirect(controller: "message", action: "inbox")
 	}
+	
+	def unarchive = {
+		def folder = Folder.get(params.id)
+		assert folder != null // FIXME there should be a withFolder closure here following the standard pattern
+		folder.unarchiveFolder()
+		folder.save()
+		flash.message = "Folder was unarchived successfully!"
+		redirect(controller: "archive", action: "folderView")
+	}
 }
 
