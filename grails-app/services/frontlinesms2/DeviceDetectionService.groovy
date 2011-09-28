@@ -12,13 +12,15 @@ class DeviceDetectionService {
 
 	def detect() {
 		detected = true
+		allModemsDetector.detect()
 	}
 	
 	def reset() {
 		detected = false
+		allModemsDetector.reset()
 	}
 
 	def getDetected() {
-		detected ? [new DetectedDevice(port:'scsi0', description:'zip drive!')] : []
+		allModemsDetector.detected.collect { DetectedDevice.create(it) }
 	}
 }
