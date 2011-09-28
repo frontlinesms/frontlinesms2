@@ -9,8 +9,12 @@
 	</li>
 	<li class="field">
 		<h2>${message(code:'default.search.betweendates.title', default:'Between dates:') }</h2>
-		<input type="text" name="startDate" class="datepicker" value="${ search?.startDate? search.startDate.format('d/M/yyyy'):''}"/>
-		<input type="text" name="endDate" class="datepicker" value="${ search?.endDate? search.endDate.format('d/M/yyyy'):''}"/>
+		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day"/>
+		<input type="hidden" class="datepicker"/>
+     </li>
+     <li class="field">
+     	<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day"/>
+		<input type="hidden" class="datepicker">
 	</li>
 	<li class="field" id='more-option-field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>

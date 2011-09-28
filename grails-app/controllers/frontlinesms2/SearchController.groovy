@@ -38,11 +38,10 @@ class SearchController {
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate ? dateFormat.parse(params.startDate): null
-			searchInstance.startDate?.format(dateFormatString)
-			searchInstance.endDate = params.endDate ? dateFormat.parse(params.endDate): null
-			searchInstance.endDate?.format(dateFormatString)
-			//Assumed that we only pass the customFields that exist
+			searchInstance.startDate = params.startDate?: null
+			searchInstance.startDate?.clearTime()
+			searchInstance.endDate = params.endDate?: null
+			searchInstance.endDate?.clearTime()
 			searchInstance.customFields = [:]
 
 			CustomField.getAllUniquelyNamed().each() {
