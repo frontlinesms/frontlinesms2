@@ -10,12 +10,12 @@ import net.frontlinesms.messaging.ATDeviceDetector
  */
 
 class DeviceDetectionServiceISpec extends grails.plugin.spock.IntegrationSpec {
-	DeviceDetectionService deviceDetectionService
+	def deviceDetectionService
 	AllModemsDetector detector
 	
 	def setup() {
-/*		service = new DeviceDetectionService() // should this be injected?  we will see... */
 		detector = Mock()
+		deviceDetectionService.detector = detector
 	}
 	
 	def 'reset should stop detection of all smslib devices and remove references for them from the service'() {
@@ -43,14 +43,22 @@ class DeviceDetectionServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'getDetected() should return a list containing detected devices and ports being searched'() {		
 		given:
-			detector.getDetectors() >> [new ATDeviceDetector(port:'tty0', manufacturer:'test device', model:'1'),
-					new ATDeviceDetector(port:'COM1', manufacturer:'test device', model:'2'),
-					new ATDeviceDetector(port:'dev/modem', manufacturer:'test device', model:'3')]
+			detector.getDetectors() >> [createDetector(portName:'tty0', manufacturer:'test device', model:'1', finished:true),
+					createDetector(portName:'COM1', manufacturer:'test device', model:'2'),
+					createDetector(portName:'dev/modem', manufacturer:'test device', model:'3', finished:true, detected:true)]
 		when:
 			def detected = deviceDetectionService.detected
 		then:
 			detected*.port == ['tty0', 'COM1', 'dev/modem']
-			detected*.description == ['test device 1', 'test device 2', 'test device 3']
+			detected*.description == ['test device 1 (unknown number)', 'test device 2 (unknown number)', 'test device 3 (unknown number)']
 			detected*.status == [DetectionStatus.RED, DetectionStatus.AMBER, DetectionStatus.GREEN]
+	}
+	
+	private ATDeviceDetector createDetector(p) {
+		def d = Mock(ATDeviceDetector)
+		p.each { k, v ->
+			d."$k" >> v
+		}
+		return d
 	}
 }
