@@ -26,14 +26,24 @@ class FolderController {
 	
 	def archive = {
 		withFolder { folder ->
-			folder.archiveFolder()
+			folder.archive()
 			folder.save(flush:true, failOnError:true)
-		}
 		
-		flash.message = "Folder was archived successfully!"
-		redirect(controller: "message", action: "inbox")
+			flash.message = "Folder was archived successfully!"
+			redirect(controller: "message", action: "inbox")
+		}
 	}
 	
+	def unarchive = {
+		withFolder { folder ->
+			folder.unarchive()
+			folder.save()
+		}
+
+		flash.message = "Folder was unarchived successfully!"
+		redirect(controller: "archive", action: "folderView")
+	}
+
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)
 		if (folderInstance) c folderInstance

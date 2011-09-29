@@ -24,7 +24,7 @@ class FolderSpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			f.archived == false
 		when:
-			f.archiveFolder()
+			f.archive()
 			f.save(failOnError:true, flush: true)
 		then:
 			f.archived == true
@@ -42,7 +42,7 @@ class FolderSpec extends grails.plugin.spock.IntegrationSpec {
 			f.archived == false
 			m.archived == false
 		when:
-			f.archiveFolder()
+			f.archive()
 			f.save(failOnError:true, flush: true)
 		then:
 			f.archived == true

@@ -4,10 +4,6 @@
 		<g:render template="../message/expanded_poll" />
 		<meta name="layout" content="messages" />
 		<g:javascript library="jquery" plugin="jquery"/>
-		<g:javascript src="raphael-min.js"/>
-		<g:javascript src="g.raphael-min.js"/>
-		<g:javascript src="g.bar-min.js"/>
-		<g:javascript src="graph.js"/>
 		<g:javascript>
 		$(function() {
 			var pollDisplay = $("#pollSettings");

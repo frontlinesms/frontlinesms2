@@ -17,7 +17,7 @@
 		<input type="hidden" class="datepicker">
 	</li>
 	<li class="field" id='more-option-field-contact-name'>
-		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact Name:</h2>
+		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a onclick="toggleMoreOptionElement('contact-name')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 	</li>
@@ -41,13 +41,14 @@
 		</g:each>
 	</g:else>
 </ol>
+
 <h2>
 	<a id="more-search-options"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
 	${message(code:'default.search.moresearchoption.label', default:'More search options') }
 </h2>
 <ol class="sub-menu" id="expanded-search-options">
 	<li>
-		<a id="more-option-link-contact-name" onclick="toggleMoreOptionElement('contact-name')">Contact Name</a>
+		<a id="more-option-link-contact-name" onclick="toggleMoreOptionElement('contact-name')">Contact name</a>
 	</li>
 	<g:each var="customField" in="${customFieldList}">
 		<li>

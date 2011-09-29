@@ -765,12 +765,15 @@ body {
 	background-image:url('../images/skin/sorted_desc.gif');
 	background-repeat:no-repeat;
 	background-position: left center;
+	a { font-weight: bold; }
 }
 
 .asc {
 	background-image:url('../images/skin/sorted_asc.gif');
 	background-repeat:no-repeat;
 	background-position: left center;
+	
+	a { font-weight: bold; }
 }
 
 #trafficGraph {
@@ -838,22 +841,18 @@ a.send-failed, .send-failed td:last-child {
 #archive-submenu {
 	#inbox {
 		background: url('../images/icons/messages.gif') no-repeat center left transparent;
-		padding-left: 20px
 	}
 
 	#sent {
 		background: url('../images/icons/messages.gif') no-repeat center left transparent;
-		padding-left: 20px;
 	}
 
 	#poll {
 		background: url('../images/icons/activities.gif') no-repeat center left transparent;
-		padding-left: 20px;
 	}
 	
 	#folder {
 		background: url('../images/icons/folders.gif') no-repeat center left transparent;
-		padding-left: 20px;
 	}
 }
 

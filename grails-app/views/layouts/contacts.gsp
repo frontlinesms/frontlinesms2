@@ -65,7 +65,7 @@
 						<g:render template="contact_list"/>
 						<g:layoutBody />
 					</div>
-					<g:render template="contact_footer"/>
+					<g:render template="footer"/>
 				</div>
 			</div>
 		</div>
