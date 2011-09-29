@@ -138,6 +138,29 @@ class ContactEditSpec extends ContactGebSpec {
 			!btnCancel.disabled
 	}
 	
+	def "should remain on the same page after updating a contact"() {
+		given:
+			createManyContacts()
+		when:
+			to BobDetailsPage
+			$("a.nextLink").click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+		when:
+			frmDetails.name = 'Kate'
+			btnSave.click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+	}
+	
+	static createManyContacts() {	
+		(11..90).each {
+			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
+		}
+	}
+	
 }
 
 abstract class ContactDetailsPage extends geb.Page {
