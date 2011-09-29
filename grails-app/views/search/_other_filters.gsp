@@ -9,11 +9,11 @@
 	</li>
 	<li class="field">
 		<h2>${message(code:'default.search.betweendates.title', default:'Between dates:') }</h2>
-		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day"/>
+		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
 		<input type="hidden" class="datepicker"/>
      </li>
      <li class="field">
-     	<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day"/>
+     	<g:datePicker name="endDate" value="${search?.endDate}" noSelection="['':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
 		<input type="hidden" class="datepicker">
 	</li>
 	<li class="field" id='more-option-field-contact-name'>
