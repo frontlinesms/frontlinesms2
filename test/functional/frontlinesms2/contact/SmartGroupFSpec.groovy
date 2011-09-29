@@ -68,13 +68,13 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			launchCreateDialog()
 		then:
 			rules.size() == 1
-		when:	
-			rules[0].val('+44')
+		when:		
+			setRuleValue(0, '+44')
 			addRuleButton.click()
 		then:
 			rules.size() == 2
-		when:	
-			rules[0].val('boris')
+		when:		
+			setRuleValue(1, 'boris')
 			addRuleButton.click()
 		then:
 			rules.size() == 3
@@ -83,7 +83,7 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 	def 'filling in rule details will enable the FINISH button'() {
 		when:
 			launchCreateDialog()
-			rules[0].val('+44')
+			setRuleValue(0, '+44')
 		then:
 			waitFor { finishButton.enabled }
 	}
@@ -97,6 +97,40 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			addRuleButton.click()
 		then:
 			rules.size() == 1
+	}
+
+	def "there is no remove button for first rule, even when other rules are displayed"() {
+		when:
+			launchCreateDialog()
+		then:
+			!removeRuleButtons[0].displayed
+		when:
+			setRuleValue(0, '+44')
+			addRuleButton.click()
+		then:
+			!removeRuleButtons[0].displayed
+			removeRuleButtons[1].displayed
+	}
+
+	def "can remove old rule if it's not the first"() {
+		when:
+			launchCreateDialog()
+			setRuleValue(0, '+44')
+			addRuleButton.click()
+		then:
+			rules.size() == 2
+		when:
+			removeRule(1)
+	}
+	
+	private def removeRule(i) {
+		int ruleCount = rules.size()
+		rules[i].find('.button.remove-rule').click()
+		waitFor { rules.size() == ruleCount-1 }
+	}
+	
+	private def setRuleValue(i, val) {
+		ruleValues[i].val(val)
 	}
 	
 	private def launchCreateDialog() {
@@ -113,6 +147,9 @@ class CreateSmartGroupDialog extends geb.Page {
 	
 	content = {
 		rules { $('ul#smart-group-criteria li') }
+		ruleValues { rules.find('input', type:'textfield') }
+		removeRuleButtons { rules.find('.button.remove-rule') }
+		
 		addRuleButton { $('.button', text:"Add more rules") }
 		finishButton { $('.button', text:'Finish') }
 	}
