@@ -5,7 +5,7 @@ class Contact {
 	String primaryMobile
 	String secondaryMobile
 	String email
-    String notes
+	String notes
 
 	static hasMany = [customFields: CustomField]
 
@@ -24,7 +24,7 @@ class Contact {
 		GroupMembership.deleteFor(this)
 	}
 	
-    static constraints = {
+	static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
 				if(val == '') {
 					obj.primaryMobile != ''

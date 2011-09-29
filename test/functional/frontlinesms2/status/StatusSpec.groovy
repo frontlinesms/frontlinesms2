@@ -76,13 +76,3 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 		}
 	}
 }
-
-class StatusPage extends geb.Page {
-	static url = 'status'
-	static at = {
-		title.startsWith('Status')
-	}
-	static content = {
-		statusButton { $('#update-chart') }
-	}
-}
