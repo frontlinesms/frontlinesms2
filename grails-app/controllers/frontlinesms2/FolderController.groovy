@@ -26,7 +26,7 @@ class FolderController {
 	
 	def archive = {
 		withFolder { folder ->
-			folder.archive(true)
+			folder.archive()
 			folder.save(flush:true, failOnError:true)
 		
 			flash.message = "Folder was archived successfully!"
