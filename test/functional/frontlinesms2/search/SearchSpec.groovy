@@ -33,15 +33,14 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
-	def "search description is shown in header when searching by group"() {
+	def "search description is shown in header"() {
 		when:
 			to SearchingPage
 			searchBtn.present()
-			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().contains('Searching "test", include archived messages')
+			searchDescription.text().contains('Searching all messages, include archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {

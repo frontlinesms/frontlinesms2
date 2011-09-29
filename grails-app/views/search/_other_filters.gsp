@@ -1,4 +1,5 @@
 <ol class="sub-menu" id="added-options">
+	
 	<li class="field" id='more-option-field-contact-name'>
 		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h2>Contact name:</h2>
 		<g:textField name="contactString" value="${search?.contactString}"/>
