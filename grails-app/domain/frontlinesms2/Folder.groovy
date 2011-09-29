@@ -23,9 +23,9 @@ class Folder extends MessageOwner {
 	}
 	
 	def unarchive() {
-		this.archived = true
+		this.archived = false
 		def messagesToArchive = Fmessage?.owned(this)?.list()
-		messagesToArchive.each { it?.archived = true }
+		messagesToArchive.each { it?.archived = false }
 	}
 		
 	def getLiveMessageCount() {
