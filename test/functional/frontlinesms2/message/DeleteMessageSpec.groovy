@@ -28,13 +28,14 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 			go "message/trash"
 			assert Fmessage.findAllByDeleted(true).size == 1
 		when:
-			def trashAction = $("#empty-trash")
-			trashAction.click()
-			sleep 1000
-			$("#done").click()
-			sleep 1000
+			$("#trash-actions").jquery.val("empty-trash")
+			$('#trash-actions').jquery.trigger('change')
 		then:
-			at MessagesPage
+			waitFor { $("#done").displayed }
+		when:
+			$("#done").click()
+		then:
+			waitFor { at MessagesPage }
 			Fmessage.findAllByDeleted(true).size == 0
 	}
 	

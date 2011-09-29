@@ -31,6 +31,7 @@ function launchConfirmationPopup(title) {
 }
 
 function launchEmptyTrashConfirmation() {
+	$("#trash-actions").val("na");
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/confirmEmptyTrash',
