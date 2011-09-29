@@ -113,7 +113,7 @@ class InboxSpec extends MessageGebSpec {
 
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
-	    	createInboxTestMessages()
+			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 		then:
@@ -177,7 +177,7 @@ class InboxSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message"
+			to MessagesPage
 		then:
 			$("#btn_reply").click()
 			waitFor {$('#tabs-1').displayed}
@@ -244,17 +244,15 @@ class InboxSpec extends MessageGebSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
-			new Folder(name: "my-folder").save(flush: true)
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			go "message/inbox"
-			waitFor {$("#move-actions").displayed}
-			$("#move-actions").getJquery().val(Folder.findByName('my-folder').id.toString());
-			$("#move-actions").getJquery().trigger("change")
-			sleep 1000
-			waitFor {$("#no-messages").displayed}
-		then:
-			$("#no-messages").text().contains("No messages")
+			to MessagesPage
+			waitFor { $("#move-actions").displayed }
+			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
+			$("#move-actions").jquery.trigger("change")
+		then:	
+			waitFor { $("#no-messages").displayed && $("#no-messages").text().contains("No messages") }
 			$("#messages-submenu .selected").text().contains('Inbox')
 	}
 	
@@ -269,24 +267,7 @@ class InboxSpec extends MessageGebSpec {
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ 
-				$("#tab-messages").text() == "Messages 2"
-			}
-	}
-	
-	def "should refresh message count according to the specified refresh rate"() {
-		given:
-			createInboxTestMessages()
-		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}?rRate=5000"
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
-			assert js.refresh_rate == 5000
-		then:
-			$("#tab-messages").text() == "Messages 1"
-		then:
-			waitFor{ 
-				$("#tab-messages").text() == "Messages 2"
-			}
+			waitFor { $("#tab-messages").text() == "Messages 2" }
 	}
 
 	String dateToString(Date date) {

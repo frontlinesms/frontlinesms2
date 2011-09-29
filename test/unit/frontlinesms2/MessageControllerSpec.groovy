@@ -15,15 +15,15 @@ class MessageControllerSpec extends ControllerSpec {
 		mockParams.max = 10
 		mockParams.offset = 0
 		mockParams.starred = false
-	    controller.messageSendService = new MessageSendService()
+		controller.messageSendService = new MessageSendService()
 
 		def sahara = new Group(name: "Sahara")
 		def thar = new Group(name: "Thar")
 		mockDomain Group, [sahara, thar]
 		mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "12345")),
-			new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "56484")),
-			new GroupMembership(group: thar, contact: new Contact(primaryMobile: "12121")),
-			new GroupMembership(group: thar, contact: new Contact(primaryMobile: "22222"))]
+				new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "56484")),
+				new GroupMembership(group: thar, contact: new Contact(primaryMobile: "12121")),
+				new GroupMembership(group: thar, contact: new Contact(primaryMobile: "22222"))]
 
 		controller.metaClass.getPaginationCount = {-> return 10}
 		mockMessageSendService = Mock()
@@ -141,7 +141,6 @@ class MessageControllerSpec extends ControllerSpec {
 		assert results['messageInstanceList'] == [fmessage]
 		assert results['messageInstanceTotal'] == 2
 		assert results['messageInstance'] == fmessage
-		assert results['messageInstanceList']*.contactExists == [false]
 		assert results['messageInstanceList']*.contactExists == [false]
 		assert results['pollInstanceList'].every {!it.archived}
 		assert results['hasFailedMessages']
