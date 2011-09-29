@@ -2,7 +2,7 @@ package frontlinesms2
 
 import grails.plugin.spock.UnitSpec
 
-class RadioShowUnitSpec extends UnitSpec {
+class RadioShowSpec extends UnitSpec {
 
 	def "should check for validations"() {
 		setup:
