@@ -28,7 +28,7 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 				new Fmessage(src:'Michael', dst:'+2541234567', dateReceived: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
 			it.status = MessageStatus.INBOUND
 			it.save(failOnError:true)
-			}
+		}
 				
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
 				new CustomField(name:'like', value:'cake', contact: secondContact),
@@ -82,9 +82,12 @@ class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpe
 	}
 	
 	def "message searches can be restricted to a folder"() {
-		when:
+		given:
 			folder = new Folder(name: 'work').save(failOnError:true, flush:true)
-			folder.addToMessages(Fmessage.findBySrc('+254111222')).save(failOnError: true, flush:true)
+			def m = Fmessage.findBySrc('+254111222')
+			folder.addToMessages(m).save(failOnError: true, flush:true)
+			m.save(flush:true, failOnError:true)
+		when:
 			controller.params.searchString = "work"
 			controller.params.activityId = "folder-${folder.id}"
 			def model = controller.result()
