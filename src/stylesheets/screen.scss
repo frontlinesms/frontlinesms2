@@ -765,12 +765,15 @@ body {
 	background-image:url('../images/skin/sorted_desc.gif');
 	background-repeat:no-repeat;
 	background-position: left center;
+	a { font-weight: bold; }
 }
 
 .asc {
 	background-image:url('../images/skin/sorted_asc.gif');
 	background-repeat:no-repeat;
 	background-position: left center;
+	
+	a { font-weight: bold; }
 }
 
 #trafficGraph {
