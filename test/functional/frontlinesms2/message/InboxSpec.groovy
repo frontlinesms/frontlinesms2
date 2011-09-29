@@ -297,6 +297,6 @@ class InboxSpec extends MessageGebSpec {
 	DateFormat createDateFormat() {
 		//println ("Local context:"+Locale.getDefault())
 		//System.setProperty('user.timezone', 'GMT')
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.getDefault())
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
 	}
 }
