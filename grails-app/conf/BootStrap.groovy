@@ -43,6 +43,9 @@ class BootStrap {
 				//DB Viewer
 				//org.hsqldb.util.DatabaseManager.main()
 				// do custom init for dev here
+				
+				dev_initSmartGroups()
+				
 				['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 				def alice = createContact("Alice", "+123456789")
 				def friends = Group.findByName('Friends')
@@ -136,6 +139,11 @@ class BootStrap {
 		}
 	}
 
+	/** Initialise SmartGroup domain objects for development and demos. */
+	def dev_initSmartGroups() {
+		new SmartGroup(name:'Kenyans', phoneNumber:'+254').save(failOnError:true)
+		new SmartGroup(name:'Test Contacts', contactName:'test-').save(failOnError:true)
+	}
 
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
