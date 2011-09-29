@@ -60,7 +60,7 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			launchCreateDialog()
 			cancelButton.click()
 		then:
-			waitFor { !at CreateSmartGroupDialog }
+			waitFor { !at(CreateSmartGroupDialog) }
 	}
 	
 	def 'Add more rules button will add more rules'() {
@@ -121,11 +121,13 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			rules.size() == 2
 		when:
 			removeRule(1)
+		then:
+			rules.size() == 1
 	}
 	
 	private def removeRule(i) {
 		int ruleCount = rules.size()
-		rules[i].find('.button.remove-rule').click()
+		removeRuleButtons[i].click()
 		waitFor { rules.size() == ruleCount-1 }
 	}
 	
@@ -141,11 +143,11 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 }
 
 class CreateSmartGroupDialog extends geb.Page {
-	at = {
+	static at = {
 		$("#ui-dialog-title-modalBox").text() == 'Create group'
 	}
 	
-	content = {
+	static content = {
 		rules { $('ul#smart-group-criteria li') }
 		ruleValues { rules.find('input', type:'textfield') }
 		removeRuleButtons { rules.find('.button.remove-rule') }
