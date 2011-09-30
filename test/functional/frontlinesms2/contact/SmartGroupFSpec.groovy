@@ -11,6 +11,28 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			noSmartGroupsMessage.displayed
 	}
 	
+	def 'smart groups list is visible if there are smart groups created'() {
+		when:
+			to ContactsPage
+			launchCreateDialog()
+			ruleValues[0].value('+44')
+			finishButton.click()
+		then:
+			smartGroupsList.displayed
+			!noSmartGroupsMessage.displayed	
+	}
+	
+	def 'smart group members should be displayed when the list is clicked'() {
+		when:
+			to ContactsPage
+			launchCreateDialog()
+			ruleValues[0].value('+44')
+			finishButton.click()
+			smartGroupsList.find('a').click()
+		then:
+			title.endsWith('English Contacts')
+	}
+	
 	def 'CREATE NEW SMART GROUP button is available when there are no smart groups'() {
 		when:
 			to ContactsPage
