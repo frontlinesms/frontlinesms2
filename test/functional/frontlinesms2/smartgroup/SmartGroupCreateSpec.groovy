@@ -1,5 +1,7 @@
 package frontlinesms2.smartgroup
 
+import frontlinesms2.*
+
 class SmartGroupCreateSpec extends grails.plugin.geb.GebSpec {
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
 		when:

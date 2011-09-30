@@ -1,5 +1,7 @@
 package frontlinesms2.smartgroup
 
+import frontlinesms2.*
+
 class SmartGroupViewSpec extends grails.plugin.geb.GebSpec {
 	def 'smart groups list is not visible if there are no smart groups'() {
 		when:
