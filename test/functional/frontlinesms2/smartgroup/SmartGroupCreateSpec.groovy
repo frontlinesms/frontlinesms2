@@ -1,54 +1,6 @@
-package frontlinesms2.contact
+package frontlinesms2.smartgroup
 
-import frontlinesms2.*
-
-class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
-	def 'smart groups list is not visible if there are no smart groups'() {
-		when:
-			to ContactsPage
-		then:
-			!smartGroupsList.displayed
-			noSmartGroupsMessage.displayed
-	}
-	
-	def 'smart groups list is visible if there are smart groups created'() {
-		when:
-			to ContactsPage
-			launchCreateDialog()
-			ruleValues[0].value('+44')
-			finishButton.click()
-		then:
-			smartGroupsList.displayed
-			!noSmartGroupsMessage.displayed	
-	}
-	
-	def 'smart group members should be displayed when the list is clicked'() {
-		when:
-			to ContactsPage
-			launchCreateDialog()
-			ruleValues[0].value('+44')
-			finishButton.click()
-			smartGroupsList.find('a').click()
-		then:
-			title.endsWith('English Contacts')
-	}
-	
-	def 'CREATE NEW SMART GROUP button is available when there are no smart groups'() {
-		when:
-			to ContactsPage
-		then:
-			createSmartGroupButton.displayed
-	}
-
-	def 'CREATE NEW SMART GROUP button is available when there are smart groups'() {
-		given:
-			new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true)
-		when:
-			to ContactsPage
-		then:
-			createSmartGroupButton.displayed
-	}
-	
+class SmartGroupCreateSpec extends grails.plugin.geb.GebSpec {
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
 		when:
 			launchCreateDialog()
@@ -82,7 +34,7 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			launchCreateDialog()
 			cancelButton.click()
 		then:
-			waitFor { !at(CreateSmartGroupDialog) }
+			waitFor { !at(SmartGroupCreateDialog) }
 	}
 	
 	def 'SMART GROUP NAME FIELD is displayed'() {
@@ -242,7 +194,7 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 	private def launchCreateDialog(smartGroupName='English Contacts') {
 		to ContactsPage
 		createSmartGroupButton.click()
-		waitFor { at CreateSmartGroupDialog }
+		waitFor { at SmartGroupCreateDialog }
 		if(smartGroupName) smartGroupNameField.value(smartGroupName)
 	}
 
@@ -250,23 +202,5 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 		int ruleCount = rules.size()
 		addRuleButton.click()
 		waitFor { rules.size() == ruleCount+1 }
-	}
-}
-
-class CreateSmartGroupDialog extends geb.Page {
-	static at = {
-		$("#ui-dialog-title-modalBox").text() == 'Create group'
-	}
-	
-	static content = {
-		rules { $('ul#smart-group-criteria li') }
-		ruleField { rules.find('select', name:'field') }
-		ruleValues { rules.find('input', type:'textfield') }
-		removeRuleButtons { rules.find('.button.remove-rule') }
-		
-		smartGroupNameField { $('input', type:'text', name:'name') }
-		
-		addRuleButton { $('.button', text:"Add more rules") }
-		finishButton { $('.button', text:'Finish') }
 	}
 }
