@@ -27,7 +27,7 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			createSmartGroupButton.displayed
 	}
 	
-	def 'Add More Rules button is visible'() {
+	def 'ADD MORE RULES button is visible in CREATE dialog'() {
 		when:
 			launchCreateDialog()
 		then:
@@ -41,11 +41,11 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			rules.size() == 1
 	}
 
-	def 'FINISH button is disabled by default'() {
+	def 'FINISH button is enabled by default'() {
 		when:
 			launchCreateDialog()
 		then:
-			finishButton.disabled
+			finishButton.enabled
 	}
 	
 	def 'there is no BACK button'() {
@@ -63,66 +63,148 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { !at(CreateSmartGroupDialog) }
 	}
 	
-	def 'Add more rules button will add more rules'() {
+	def 'SMART GROUP NAME FIELD is displayed'() {
+		when:
+			launchCreateDialog(null)
+		then:
+			nameField.displayed
+	}
+	
+	def 'error message is not displayed by default'() {
+		when:
+			launchCreateDialog(null)
+		then:
+			!errorMessage.displayed
+	}
+	
+	def 'Clicking FINISH when no name is defined should display validation error'() {
+		when:
+			launchCreateDialog(null)
+			finishButton.click()
+		then:
+			waitFor { errorMessage.displayed }
+	}
+	
+	def 'ADD MORE RULES button should add one more rule'() {
 		when:
 			launchCreateDialog()
 		then:
 			rules.size() == 1
 		when:		
-			setRuleValue(0, '+44')
-			addRuleButton.click()
+			addRule()
 		then:
 			rules.size() == 2
-		when:		
-			setRuleValue(1, 'boris')
-			addRuleButton.click()
+		when:
+			addRule()
 		then:
 			rules.size() == 3
 	}
 	
-	def 'filling in rule details will enable the FINISH button'() {
-		when:
-			launchCreateDialog()
-			setRuleValue(0, '+44')
-		then:
-			waitFor { finishButton.enabled }
-	}
-	
-	def 'cannot add new rule when previous rule does not validate'() {
+	def 'can add new rule when previous rule does not validate'() {
 		when:
 			launchCreateDialog()
 		then:
 			rules.size() == 1
 		when:
-			addRuleButton.click()
+			addRule()
 		then:
-			rules.size() == 1
+			rules.size() == 2
 	}
 
-	def "there is no remove button for first rule, even when other rules are displayed"() {
+	def "there is no remove button for first rule, except when other rules are displayed"() {
 		when:
 			launchCreateDialog()
 		then:
 			!removeRuleButtons[0].displayed
 		when:
-			setRuleValue(0, '+44')
-			addRuleButton.click()
+			addRule()
 		then:
-			!removeRuleButtons[0].displayed
+			removeRuleButtons[0].displayed
 			removeRuleButtons[1].displayed
 	}
 
 	def "can remove old rule if it's not the first"() {
 		when:
 			launchCreateDialog()
-			setRuleValue(0, '+44')
-			addRuleButton.click()
+			addRule()
 		then:
 			rules.size() == 2
 		when:
 			removeRule(1)
 		then:
 			rules.size() == 1
+	}
+	
+	def "can remove first rule if there are other rules"() {
+		when:
+			launchCreateDialog()
+			addRule()
+		then:
+			rules.size() == 2
+		when:
+			removeRule(0)
+		then:
+			rules.size() == 1
+	}
+	
+	def "cannot remove lone first rule even if it was previously not first rule"() {
+		when:
+			launchCreateDialog()
+			addRule()
+		then:
+			rules.size() == 2
+		when:
+			removeRule(0)
+		then:
+			rules.size() == 1
+		when:
+			removeRule(0)
+		then:
+			rules.size() == 1
+	}
+	
+	def 'selecting PHONE NUMBER should set matcher text to STARTS WITH'() {
+		when:
+			launchCreateDialog()
+		then:
+			ruleField[0].value() == 'Phone Number'
+			ruleMatchText[0] == 'starts with'
+	}
+	
+	def 'selecting fields other than PHONE NUMBER should set matcher text to CONTAINS'() {
+		when:
+			launchCreateDialog()
+		then:
+			ruleField[0].value() == 'Phone Number'
+			ruleMatchText[0] == 'starts with'
+		when:
+			ruleField[0].value('Name')
+		then:
+			ruleMatchText[0] == 'contains'
+		when:
+			ruleField[0].value('Phone Number')
+		then:
+			ruleMatchText[0] == 'starts with'
+	}
+	
+	def 'adding multiple rules on the same field should fail validation'() {
+		when:
+			launchCreateDialog()
+			ruleValues[0].value('+44')
+			addRule()
+			ruleValues[1].value('+254')
+			finishButton.click()
+		then:
+			waitFor { errorMessage.displayed }
+	}
+	
+	def 'successfully creating a smart group should show a flash message'() {
+		when:
+			launchCreateDialog()
+			setRuleValue(0, '+44')
+			finishButton.click()
+		then:
+			waitFor { flashMessage.text() == "Created new smart group 'English Contacts'" }
 	}
 	
 	private def removeRule(i) {
@@ -132,13 +214,20 @@ class SmartGroupFSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	private def setRuleValue(i, val) {
-		ruleValues[i].val(val)
+		ruleValues[i].value(val)
 	}
 	
-	private def launchCreateDialog() {
+	private def launchCreateDialog(smartGroupName='English Contacts') {
 		to ContactsPage
 		createSmartGroupButton.click()
 		waitFor { at CreateSmartGroupDialog }
+		if(smartGroupName) smartGroupNameField.value(smartGroupName)
+	}
+
+	private def addRule() {
+		int ruleCount = rules.size()
+		addRuleButton.click()
+		waitFor { rules.size() == ruleCount+1 }
 	}
 }
 
@@ -149,8 +238,11 @@ class CreateSmartGroupDialog extends geb.Page {
 	
 	static content = {
 		rules { $('ul#smart-group-criteria li') }
+		ruleField { rules.find('select', name:'field') }
 		ruleValues { rules.find('input', type:'textfield') }
 		removeRuleButtons { rules.find('.button.remove-rule') }
+		
+		smartGroupNameField { $('input', type:'text', name:'name') }
 		
 		addRuleButton { $('.button', text:"Add more rules") }
 		finishButton { $('.button', text:'Finish') }
