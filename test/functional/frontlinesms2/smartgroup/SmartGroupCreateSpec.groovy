@@ -1,6 +1,7 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
+import frontlinesms2.contact.ContactListPage
 
 class SmartGroupCreateSpec extends grails.plugin.geb.GebSpec {
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
@@ -194,7 +195,7 @@ class SmartGroupCreateSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	private def launchCreateDialog(smartGroupName='English Contacts') {
-		to ContactsPage
+		to ContactListPage
 		createSmartGroupButton.click()
 		waitFor { at SmartGroupCreateDialog }
 		if(smartGroupName) smartGroupNameField.value(smartGroupName)
