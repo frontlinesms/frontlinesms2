@@ -6,9 +6,23 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactShowSpec extends ContactGebSpec {
+class ContactViewSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
+	}
+	
+	def 'should update screen to show number of selected messages'() {
+		when:
+			to PageContact
+			contactSelect[1].click()
+		then:
+			waitFor { $('input', name:'name').value() == 'Bob' }
+		when:
+			contactSelect[0].click()
+		then:
+			waitFor { contactCount.text() == '2 contacts selected' }
+			contactSelect[0].checked
+			contactSelect[1].checked
 	}
 
 	def 'contacts link to their details'() {
@@ -127,21 +141,5 @@ class ContactShowSpec extends ContactGebSpec {
 		assert selectedChildren.size() == 1
 		assert selectedChildren.text() == name
 		true
-	}
-}
-
-class EmptyContactPage extends geb.Page {
-	static def getUrl() {
-		"contact/show/${Contact.findByName('').id}"
-	}
-
-	static at = {
-		assert url == "contact/show/${Contact.findByName('').id}"
-		true
-	}
-
-	static content = {
-		frmDetails { $("#contact-details") }
-		btnSave { frmDetails.find('.update') }
 	}
 }

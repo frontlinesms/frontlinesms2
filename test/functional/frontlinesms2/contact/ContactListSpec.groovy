@@ -6,7 +6,7 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactListSpec extends ContactGebSpec {
+class ContactListSpec extends ContactBaseSpec {
 	def 'contacts list is displayed'() {
 		given:
 			createTestContacts()
@@ -25,7 +25,7 @@ class ContactListSpec extends ContactGebSpec {
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			selectedMenuItem.text() == 'All contacts'
 	}

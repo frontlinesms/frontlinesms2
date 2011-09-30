@@ -2,7 +2,7 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-abstract class GroupGebSpec extends grails.plugin.geb.GebSpec {
+abstract class GroupBaseSpec extends grails.plugin.geb.GebSpec {
 	def createTestGroups() {
 		new Group(name: 'Listeners').save()
 		new Group(name: 'Friends').save()

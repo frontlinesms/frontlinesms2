@@ -3,7 +3,7 @@ package frontlinesms2.contact
 import frontlinesms2.*
 import geb.navigator.EmptyNavigator
 
-class ContactAddGroupSpec extends ContactGebSpec {
+class ContactAddGroupSpec extends ContactBaseSpec {
 
 	def setup() {
 		createTestContacts()
@@ -12,7 +12,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		when:
-			to BobsContactPage
+			to PageContactShowBob
 		then:
 			def memberOf = $("#group-list li").children('span')*.text().sort()
 			memberOf == ['Test', 'three']
@@ -20,7 +20,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
 		when:
-			to BobsContactPage
+			to PageContactShowBob
 		then:
 			$("#group-dropdown").children()*.text().sort() == ['Add to group...', 'Others', 'four']
 		when:
@@ -62,18 +62,18 @@ class ContactAddGroupSpec extends ContactGebSpec {
 
 	def 'clicking save actually adds contact to newly selected groups'() {
 		when:
-			to BobsContactPage
+			to PageContactShowBob
 			$('#contact-details select', name:'group-dropdown').value('Others')
 			$("#contact-details .save").click()
 		then:
-			at ContactListPage
+			at PageContactShow
 			Contact.findByName('Bob') in Group.findByName('Test').members
 	}
 	
 	//@spock.lang.IgnoreRest
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
-			to ContactListPage
+			to PageContactShow
 			contactSelect[1].click()
 		then:
 			waitFor { $('input', name:'name').value() == 'Bob' }
@@ -98,7 +98,7 @@ class ContactAddGroupSpec extends ContactGebSpec {
 			assert bob.isMemberOf(otherGroup)
 			assert alice.isMemberOf(otherGroup)
 		when:
-			to ContactListPage
+			to PageContactShow
 			contactSelect[1].click()
 		then:
 			waitFor { $('input', name:'name').value() == 'Bob' }
@@ -120,20 +120,20 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			def otherGroup = Group.findByName('Others')
-			to BobsContactPage
+			to PageContactShowBob
 			def btnRemoveFromGroup = $("#remove-group-${otherGroup.id}")
 			btnRemoveFromGroup.click()
 			def btnUpdate = $("#single-contact #update-single")
 			btnUpdate.click()
 		then:
-			at ContactListPage
+			at PageContactShow
 			otherGroup.refresh()
 			GroupMembership.countMembers(otherGroup) == 0
 	}
 	
 	def "should enable save and cancel buttons when new group is added"() {
 		when:
-			to BobsContactPage
+			to PageContactShowBob
 		then:
 			btnSave.disabled
 			btnCancel.disabled
@@ -150,12 +150,3 @@ class ContactAddGroupSpec extends ContactGebSpec {
 	// TODO test cancel button - add to one group
 }
 
-class BobsContactPage extends geb.Page {
-	static def getUrl() { "contact/show/${Contact.findByName("Bob").id}" }
-	static content = {
-		selectedMenuItem { $('#contacts-menu .selected') }
-		groupsList { $('#groups-submenu') }
-		btnSave { $('#update-single') }
-		btnCancel { $(".buttons .cancel")}
-	}
-}
