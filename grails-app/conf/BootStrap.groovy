@@ -141,7 +141,7 @@ class BootStrap {
 
 	/** Initialise SmartGroup domain objects for development and demos. */
 	def dev_initSmartGroups() {
-		new SmartGroup(name:'Kenyans', phoneNumber:'+254').save(failOnError:true)
+		new SmartGroup(name:'Kenyans', mobile:'+254').save(failOnError:true)
 		new SmartGroup(name:'Test Contacts', contactName:'test-').save(failOnError:true)
 	}
 

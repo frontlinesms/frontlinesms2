@@ -14,5 +14,14 @@ class ContactListPage extends geb.Page {
 		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
 		updateAll(required:false) { $("#update-all") }
 		flashMessage(required:false) { $('div.flash') }
+		
+		//> SMART GROUPS
+		smartGroupsList { $('ol#smart-groups-submenu') }
+		smartGroupsListItems {
+			def list = smartGroupsList.find('li')
+			list.size() <= 2? []: list[0..-3]
+		}
+		noSmartGroupsMessage(required:false) { smartGroupsList.find('li#no-smart-groups') }
+		createSmartGroupButton { $('li#create-smart-group a') }
 	}
 }

@@ -16,22 +16,21 @@
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="contact/checked_contact.js" />
 		<g:javascript>
-		function getGroupId(){
-			var group = $('#groupId');
-			return group.length ? group.val() : '';
-		}
-		function updateContacts(data) {
-			var snippet = $(data);
-			$("#contacts-list").html(snippet.filter('#contacts-list').html());
-			$(".content-footer #page-arrows").html(snippet.filter('.content-footer').children()[1].innerHTML);
-			disablePaginationControls();
-		}
+			function getGroupId(){
+				var group = $('#groupId');
+				return group.length ? group.val() : '';
+			}
+			function updateContacts(data) {
+				var snippet = $(data);
+				$("#contacts-list").html(snippet.filter('#contacts-list').html());
+				$(".content-footer #page-arrows").html(snippet.filter('.content-footer').children()[1].innerHTML);
+				disablePaginationControls();
+			}
 		
-		$(function() {  
-		   disablePaginationControls();
-		   $("#contact-search").renderDefaultText();
-		});
-
+			$(function() {  
+			   disablePaginationControls();
+			   $("#contact-search").renderDefaultText();
+			});
 		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
