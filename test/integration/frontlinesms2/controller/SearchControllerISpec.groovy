@@ -1,8 +1,9 @@
-package frontlinesms2
+package frontlinesms2.controller
 
 import java.text.SimpleDateFormat
+import frontlinesms2.*
 
-class SearchControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def firstContact, secondContact, thirdContact
 	def group

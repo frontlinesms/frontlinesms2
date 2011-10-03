@@ -1,6 +1,8 @@
-package frontlinesms2
+package frontlinesms2.controller
 
-class NewConnectionSpec extends grails.plugin.spock.IntegrationSpec {
+import frontlinesms2.*
+
+class NewConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def controller1
 	def controller2

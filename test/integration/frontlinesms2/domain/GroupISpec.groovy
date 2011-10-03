@@ -1,6 +1,8 @@
-package frontlinesms2
+package frontlinesms2.domain
 
-class GroupIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+import frontlinesms2.*
+
+class GroupISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should check for uniqueness across subscription and unsubscription keywords"() {
 		setup:

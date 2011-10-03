@@ -1,9 +1,10 @@
-package frontlinesms2
+package frontlinesms2.controller
 
 import spock.lang.*
 import grails.plugin.spock.*
+import frontlinesms2.*
 
-class ArchiveSpec extends IntegrationSpec {
+class ArchiveISpec extends IntegrationSpec {
 	def controller, pollcontroller
 
 	def setup() {

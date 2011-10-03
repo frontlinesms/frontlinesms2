@@ -1,7 +1,8 @@
-package frontlinesms2
+package frontlinesms2.controller
 
+import frontlinesms2.*
 
-class PollControllerSpec extends grails.plugin.spock.IntegrationSpec {
+class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def setup() {
 		controller = new PollController()

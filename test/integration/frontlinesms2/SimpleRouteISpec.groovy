@@ -2,7 +2,7 @@ package frontlinesms2
 
 import routing.CamelIntegrationSpec
 
-class SimpleRouteSpec extends CamelIntegrationSpec {
+class SimpleRouteISpec extends CamelIntegrationSpec {
 	def "test simple route"() {
 		given:
 			resultEndpoint.expectedBodiesReceived("hello")

@@ -1,5 +1,6 @@
-package frontlinesms2
+package frontlinesms2.domain
 
+import frontlinesms2.*
 
 class FolderSpec extends grails.plugin.spock.IntegrationSpec {
 	def controller

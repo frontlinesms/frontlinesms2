@@ -1,6 +1,8 @@
-package frontlinesms2
+package frontlinesms2.domain
 
-class UniqueResponsesSpec extends grails.plugin.spock.IntegrationSpec {
+import frontlinesms2.*
+
+class UniqueResponsesISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Poll must have unique responses'() {
 		when:
 			def p = new Poll(title:'Poll Fail', responses:[new PollResponse(value:'same'),
