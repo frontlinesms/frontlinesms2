@@ -1,7 +1,8 @@
-package frontlinesms2
+package frontlinesms2.domain
 
+import frontlinesms2.*
 
-class RadioShowIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def setup() {
 		def radioShow = new RadioShow(name: "Health & fitness")

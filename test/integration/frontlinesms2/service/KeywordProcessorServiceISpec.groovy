@@ -1,10 +1,10 @@
-package frontlinesms2
+package frontlinesms2.service
 
 import frontlinesms2.*
 import spock.lang.*
 import grails.plugin.spock.*
 
-class KeywordProcessorServiceSpec extends IntegrationSpec {
+class KeywordProcessorServiceISpec extends IntegrationSpec {
 	def service = new KeywordProcessorService()
 	
 	def "test getPollResponse"() {

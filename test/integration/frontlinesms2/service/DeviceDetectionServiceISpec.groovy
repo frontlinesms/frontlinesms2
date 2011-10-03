@@ -1,5 +1,6 @@
-package frontlinesms2
+package frontlinesms2.service
 
+import frontlinesms2.*
 import net.frontlinesms.messaging.AllModemsDetector
 import net.frontlinesms.messaging.ATDeviceDetector
 

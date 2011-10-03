@@ -1,7 +1,8 @@
-package frontlinesms2
+package frontlinesms2.controller
 
+import frontlinesms2.*
 
-class MessageActionsSpec extends grails.plugin.spock.IntegrationSpec {
+class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def controller
 	
