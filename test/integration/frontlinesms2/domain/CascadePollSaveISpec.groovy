@@ -1,9 +1,10 @@
-package frontlinesms2
+package frontlinesms2.domain
 
 import spock.lang.*
 import grails.plugin.spock.*
+import frontlinesms2.*
 
-class CascadePollSaveSpec extends grails.plugin.spock.IntegrationSpec {
+class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'saving a poll cascades to saving poll responses'() {
 		when:

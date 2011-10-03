@@ -1,6 +1,7 @@
-package frontlinesms2
+package frontlinesms2.controller
 
-class CustomFieldIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+import frontlinesms2.*
+class CustomFieldISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should return only the list of name that match all the custom field"(){ 
 		when:

@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class MessageAndActivityUrlMappingTests extends grails.test.GrailsUrlMappingsTestCase {
+class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTestCase {
 	def testInboxView() {
 		assertForwardUrlMapping('/message/inbox/show/123', controller:'message', action:'inbox') {
 			messageId = 123

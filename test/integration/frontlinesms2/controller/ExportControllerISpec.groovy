@@ -1,6 +1,8 @@
-package frontlinesms2
+package frontlinesms2.controller
 
-class ExportControllerIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+import frontlinesms2.*
+
+class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 
 	def setup() {
