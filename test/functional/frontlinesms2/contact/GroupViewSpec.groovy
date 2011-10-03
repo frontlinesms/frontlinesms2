@@ -2,28 +2,28 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class GroupViewSpec extends GroupGebSpec {
+class GroupViewSpec extends GroupBaseSpec {
 	def 'Group menu is displayed'() {
 		given:
 			createTestGroups()
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
-			groupsList.children()*.text() == ['Listeners', 'Friends', 'Create new group']
+			groupSubmenu.children()*.text() == ['Listeners', 'Friends', 'Create new group']
 	}
 
 	def 'Group menu item is highlighted when viewing corresponding group'() {
 		given:
 			createTestGroups()
 		when:
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 		then:
 			selectedMenuItem.text() == 'Friends'
 		when:
 			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
 			c.addToGroups(Group.findByName('Friends'))
 			c.save(failOnError:true, flush:true)
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 		then:
 			selectedMenuItem.text() == 'Friends'
 	}
@@ -32,7 +32,7 @@ class GroupViewSpec extends GroupGebSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 		then:
 			contactsList.children()*.text().sort() == ['Bobby', 'Duchamps']
 	}
@@ -41,7 +41,7 @@ class GroupViewSpec extends GroupGebSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 			def links = contactsList.find('a')
 		then:
 			links.size() == 2
@@ -53,12 +53,11 @@ class GroupViewSpec extends GroupGebSpec {
 	def 'group members list is paginated'() {
 		given:
 			createTestGroups()
-			createManyContacts()
+			createManyContactsAddToGroups()
 		when:
-			go "/frontlinesms2/group/show/${Group.findByName('Friends').id}"
+			to PageContactShowGroupFriends
 		then:
-			def contactList = $('#contact-list')
-			def contactNames = contactList.children()*.text()
+			def contactNames = contactsList.children()*.text()
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			contactNames == expectedNames
 	}
@@ -66,9 +65,9 @@ class GroupViewSpec extends GroupGebSpec {
 	def "should remain on the same page when a contact is selected from a group"() {
 		given:
 			createTestGroups()
-			createManyContacts()
+			createManyContactsAddToGroups()
 		when:
-			go "/frontlinesms2/group/show/${Group.findByName('Friends').id}"
+			to PageContactShowGroupFriends
 			$("a.nextLink").click()
 			$("#page-arrows .currentStep").jquery.show();
 		then:
@@ -80,18 +79,8 @@ class GroupViewSpec extends GroupGebSpec {
 			$("#page-arrows .currentStep").text() == "2"
 	}
 	
-	def createManyContacts() {
-		(11..90).each {
-			def c = new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
-			c.addToGroups(Group.findByName('Friends')).save(failOnError:true, flush:true)
-		}
-	}
+	
+	
 }
 
-class FriendsGroupPage extends geb.Page {
-	static getUrl() { "group/show/${Group.findByName('Friends').id}" }
-	static content = {
-		selectedMenuItem { $('#contacts-menu .selected') }
-		contactsList { $('#contact-list') }
-	}
-}
+

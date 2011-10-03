@@ -3,7 +3,7 @@ package frontlinesms2.contact
 import frontlinesms2.*
 import java.util.regex.*
 
-class AddCustomFieldSpec extends grails.plugin.geb.GebSpec {
+class CustomFieldCedSpec extends grails.plugin.geb.GebSpec {
 	
 	def "selecting add custom field from dropdown opens the popup"() {
 		when:
@@ -31,10 +31,3 @@ class AddCustomFieldSpec extends grails.plugin.geb.GebSpec {
 	}
 }
 
-class CustomFieldPage extends geb.Page {
-	static url = 'contact/show'
-	static content = {
-		selectedMenuItem { $('#messages-menu .selected') }
-		messagesList { $('#messages-submenu') }
-	}
-}
