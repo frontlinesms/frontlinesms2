@@ -2,7 +2,7 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class ContactListPage extends geb.Page {
+class PageContactShow extends geb.Page {
 	static url = 'contact/show'
 	static at = {
 		title.endsWith('Contacts')

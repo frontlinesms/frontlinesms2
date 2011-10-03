@@ -2,7 +2,7 @@ package frontlinesms2.connection
 
 import frontlinesms2.*
 
-class ConnectionListPage extends geb.Page {
+class ConnectionPage extends geb.Page {
 	static url = 'settings/connections'
 	static at = {
 		assert title == "Settings > Connections"

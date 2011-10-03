@@ -2,7 +2,7 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class ContactGebSpec extends grails.plugin.geb.GebSpec {
+class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestContacts() {
 		new Contact(name: 'Alice', primaryMobile: '2541234567', notes: 'notes').save(failOnError:true, flush: true)
