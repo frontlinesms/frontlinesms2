@@ -6,7 +6,7 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.Keys
 
-class SubscriptionSpec extends GroupGebSpec  {
+class SubscriptionSpec extends GroupBaseSpec  {
 
 	def setup() {
 		createTestGroups()

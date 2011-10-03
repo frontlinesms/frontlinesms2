@@ -1,7 +1,7 @@
 package frontlinesms2.settings
 
 import frontlinesms2.*
-import frontlinesms2.connection.ConnectionListPage
+
 
 class PhonesAndConnectionsSettingsSpec extends grails.plugin.geb.GebSpec {
 	

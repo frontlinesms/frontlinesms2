@@ -5,7 +5,7 @@ import frontlinesms2.*
 import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 
-class ShowCustomFieldSpec extends ContactGebSpec {
+class CustomFieldViewSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
 		createTestCustomFields()
