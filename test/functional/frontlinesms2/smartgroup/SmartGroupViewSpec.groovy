@@ -1,12 +1,12 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
-import frontlinesms2.contact.ContactListPage
+import frontlinesms2.contact.PageContactShow
 
 class SmartGroupViewSpec extends SmartGroupBaseSpec {
 	def 'smart groups list is not visible if there are no smart groups'() {
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			smartGroupsListItems.size() == 0
 			noSmartGroupsMessage.displayed
@@ -34,7 +34,7 @@ class SmartGroupViewSpec extends SmartGroupBaseSpec {
 	
 	def 'CREATE NEW SMART GROUP button is available when there are no smart groups'() {
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			createSmartGroupButton.displayed
 	}
@@ -43,7 +43,7 @@ class SmartGroupViewSpec extends SmartGroupBaseSpec {
 		given:
 			new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true)
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			createSmartGroupButton.displayed
 	}

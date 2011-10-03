@@ -1,7 +1,6 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
-import frontlinesms2.contact.ContactListPage
 
 class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
