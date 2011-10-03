@@ -48,7 +48,8 @@ class ContactController {
 				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
-				groupInstanceTotal: Group.count()]
+				groupInstanceTotal: Group.count(),
+				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
 	def update = {

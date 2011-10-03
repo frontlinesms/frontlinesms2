@@ -3,29 +3,27 @@ package frontlinesms2.smartgroup
 import frontlinesms2.*
 import frontlinesms2.contact.ContactListPage
 
-class SmartGroupViewSpec extends grails.plugin.geb.GebSpec {
+class SmartGroupViewSpec extends SmartGroupBaseSpec {
 	def 'smart groups list is not visible if there are no smart groups'() {
 		when:
 			to ContactListPage
 		then:
-			!smartGroupsList.displayed
+			smartGroupsListItems.size() == 0
 			noSmartGroupsMessage.displayed
 	}
 	
 	def 'smart groups list is visible if there are smart groups created'() {
 		when:
-			to ContactListPage
 			launchCreateDialog()
 			ruleValues[0].value('+44')
 			finishButton.click()
 		then:
-			waitFor { smartGroupsList.displayed }
+			waitFor { smartGroupsListItems.size() > 0 }
 			!noSmartGroupsMessage.displayed	
 	}
 	
 	def 'smart group members should be displayed when the list is clicked'() {
 		when:
-			to ContactListPage
 			launchCreateDialog()
 			ruleValues[0].value('+44')
 			finishButton.click()

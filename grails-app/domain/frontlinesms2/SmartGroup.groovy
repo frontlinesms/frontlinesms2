@@ -12,10 +12,10 @@ class SmartGroup {
 	String notes
 	
 	static constraints = {
-		contactName(nullable:true, validator: atLeastOneSearchParamValidator)
-		mobile(nullable:true)
-		email(nullable:true)
-		notes(nullable:true)
+		contactName(nullable:true, validator:atLeastOneSearchParamValidator)
+		mobile(nullable:true, validator:atLeastOneSearchParamValidator)
+		email(nullable:true, validator:atLeastOneSearchParamValidator)
+		notes(nullable:true, validator:atLeastOneSearchParamValidator)
 	}
 	
 	static def atLeastOneSearchParamValidator = { val, obj ->
