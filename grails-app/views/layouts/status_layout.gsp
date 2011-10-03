@@ -15,7 +15,6 @@
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 	</head>
 	<body>
-		<div><h1>LOOKS LIKE SOMETHING IS MESSED</h1></div>
 		<div id="container">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
