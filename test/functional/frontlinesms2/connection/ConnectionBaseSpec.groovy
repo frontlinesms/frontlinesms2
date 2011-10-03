@@ -2,7 +2,7 @@ package frontlinesms2.connection
 
 import frontlinesms2.*
 
-abstract class ConnectionGebSpec extends grails.plugin.geb.GebSpec {
+abstract class ConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestConnection() {
 		[new EmailFconnection(name:'test email connection', receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',

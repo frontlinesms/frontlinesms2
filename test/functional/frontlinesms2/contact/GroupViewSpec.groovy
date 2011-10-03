@@ -2,12 +2,12 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class GroupViewSpec extends GroupGebSpec {
+class GroupViewSpec extends GroupBaseSpec {
 	def 'Group menu is displayed'() {
 		given:
 			createTestGroups()
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			groupsList.children()*.text() == ['Listeners', 'Friends', 'Create new group']
 	}
@@ -16,14 +16,14 @@ class GroupViewSpec extends GroupGebSpec {
 		given:
 			createTestGroups()
 		when:
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 		then:
 			selectedMenuItem.text() == 'Friends'
 		when:
 			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
 			c.addToGroups(Group.findByName('Friends'))
 			c.save(failOnError:true, flush:true)
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 		then:
 			selectedMenuItem.text() == 'Friends'
 	}
@@ -32,7 +32,7 @@ class GroupViewSpec extends GroupGebSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 		then:
 			contactsList.children()*.text().sort() == ['Bobby', 'Duchamps']
 	}
@@ -41,7 +41,7 @@ class GroupViewSpec extends GroupGebSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to FriendsGroupPage
+			to PageContactShowGroupFriends
 			def links = contactsList.find('a')
 		then:
 			links.size() == 2
@@ -88,10 +88,4 @@ class GroupViewSpec extends GroupGebSpec {
 	}
 }
 
-class FriendsGroupPage extends geb.Page {
-	static getUrl() { "group/show/${Group.findByName('Friends').id}" }
-	static content = {
-		selectedMenuItem { $('#contacts-menu .selected') }
-		contactsList { $('#contact-list') }
-	}
-}
+

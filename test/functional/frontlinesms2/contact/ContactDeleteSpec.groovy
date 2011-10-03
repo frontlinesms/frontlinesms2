@@ -6,12 +6,12 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class DeleteContactSpec extends ContactGebSpec {
+class ContactDeleteSpec extends ContactBaseSpec {
 	def 'delete button is displayed and works'() {
 		given:
 			createTestContacts()
 		when:
-			to AliceContactPage
+			to PageContactShowAlice
 			deleteSingleButton.click()
 		then:
 			waitFor { confirmDeleteButton.displayed }
@@ -26,7 +26,7 @@ class DeleteContactSpec extends ContactGebSpec {
 		given:
 			createTestContacts()
 		when:
-			to AliceContactPage
+			to PageContactShowAlice
 			contactSelect[1].click()
 		then:
 			waitFor { $('input', name:'name').value() == 'Bob' }
@@ -43,16 +43,5 @@ class DeleteContactSpec extends ContactGebSpec {
 		then:
 			waitFor { flashMessage.displayed }
 			Contact.count() == 0
-	}
-}
-
-class AliceContactPage extends geb.Page {
-	static getUrl() { "contact/show/${Contact.findByName('Alice').id}" } 
-	static content = {
-		contactSelect(required:false) { $(".contact-select") }
-		deleteSingleButton(required:false) { $('#btn_delete') }
-		deleteAllButton(required:false) { $('#btn_delete_all') }
-		confirmDeleteButton(required:false) { $("#done") }
-		flashMessage(required:false) { $('div.flash') }
 	}
 }
