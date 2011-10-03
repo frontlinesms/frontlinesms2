@@ -1,11 +1,12 @@
-package frontlinesms2
+package frontlinesms2.controller
 
 import spock.lang.*
 import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import frontlinesms2.*
 
-class MessageControllerSpec extends grails.plugin.spock.IntegrationSpec {
+class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 
 	def setup() {

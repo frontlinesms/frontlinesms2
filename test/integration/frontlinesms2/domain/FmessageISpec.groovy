@@ -1,7 +1,8 @@
-package frontlinesms2
+package frontlinesms2.domain
 
+import frontlinesms2.*
 
-class FmessageIntegrationSpec extends grails.plugin.spock.IntegrationSpec {
+class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "message doesn't have to have an activity"() {
 		given:

@@ -1,7 +1,8 @@
-package frontlinesms2
+package frontlinesms2.domain
 
+import frontlinesms2.*
 
-class FmessageLocationSpec extends grails.plugin.spock.IntegrationSpec {
+class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	def "getInboxMessages() returns the list of messages with inbound equal to true that are not part of an activity"() {
 		setup:
 			createTestData()
