@@ -33,7 +33,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			alice.addToGroups(g)
 			alice.save(flush: true)
 		when:
-			to AliceInExcellentPage
+			to PageContactShowGroupContactAlice
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
 			frmDetails.secondaryMobile = '+2542334567'
@@ -155,38 +155,9 @@ class ContactEditSpec extends ContactBaseSpec {
 			$("#page-arrows .currentStep").text() == "2"
 	}
 	
-	static createManyContacts() {	
-		(11..90).each {
-			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
-		}
-	}
-	
 }
 
-//abstract class ContactDetailsPage extends geb.Page {
-//	static content = {
-//		frmDetails { $("#contact_details") }
-//		btnSave { frmDetails.find('#update-single') }
-//		btnCancel { $(".buttons .cancel")}
-//	}
-//}
 
-class AliceInExcellentPage extends ContactDetailsPage {
-	static def getUrl() {
-		def alice = Contact.findByName('Alice')
-		Group g = Group.findByName('Excellent')
-		"/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
-	}
-}
 
-//class AliceDetailsPage extends ContactDetailsPage {
-//	static def getUrl() {
-//		"contact/show/${Contact.findByName('Alice').id}"
-//	}
-//}
 
-//class PageContactShowBob extends ContactDetailsPage {
-//	static def getUrl() {
-//		"contact/show/${Contact.findByName('Bob').id}"
-//	}
-//}
+

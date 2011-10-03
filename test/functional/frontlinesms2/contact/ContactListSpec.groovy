@@ -34,7 +34,7 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			go 'contact'
+			to PageContactShow
 		then:
 			def contactList = $('#contact-list')
 			def contactNames = contactList.children()*.text()
@@ -56,7 +56,7 @@ class ContactListSpec extends ContactBaseSpec {
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			println $('#contact-list').children('a')*.text()
+			//println $('#contact-list').children('a')*.text()
 			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
@@ -64,7 +64,7 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			go 'contact'
+			to PageContactShow
 			$("a.nextLink").click()
 			$("#page-arrows .currentStep").jquery.show();
 		then:
@@ -76,9 +76,4 @@ class ContactListSpec extends ContactBaseSpec {
 			$("#page-arrows .currentStep").text() == "2"
 	}
 	
-	static createManyContacts() {	
-		(11..90).each {
-			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
-		}
-	}
 }

@@ -36,25 +36,25 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			def bobsDatabaseGroups = bob.groups
 			def bobsGroups = bobsDatabaseGroups
 		when:
-			go "contact/show/${bob.id}"
-			def lstGroups = $("#group-list")
+			to PageContactShowBob
+			//def groupList = $("#group-list")
 		then:
-			lstGroups.children().children('span').size() == 2
-			def groupsText = lstGroups.children().children('span').collect() { it.text() }
+			groupList.children().children('span').size() == 2
+			def groupsText = groupList.children().children('span').collect() { it.text() }
 			groupsText.containsAll(['Test', 'three'])
 		when:
-			lstGroups.find('a').first().click()
+			groupList.find('a').first().click()
 			bobsGroups = bob.groups
 		then:
-			lstGroups.children().children('span').size() == 1
-			lstGroups.children().children('span').text() == groupsText[1]
+			groupList.children().children('span').size() == 1
+			groupList.children().children('span').text() == groupsText[1]
 			bobsGroups == bobsDatabaseGroups
 
 		when:
-			lstGroups.find('a').first().click()
+			groupList.find('a').first().click()
 			bobsGroups = bob.getGroups()
 		then:
-			lstGroups.children().children('input').size() == 0
+			groupList.children().children('input').size() == 0
 			bobsGroups == bobsDatabaseGroups
 			$("#group-list").text() == 'Not part of any Groups'
 			bobsGroups == bobsDatabaseGroups

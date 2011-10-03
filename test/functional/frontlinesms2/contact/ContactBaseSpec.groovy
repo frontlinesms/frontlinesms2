@@ -41,4 +41,18 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		assert input.getAttribute('value')  == expectedValue
 		true
 	}
+	
+	def createManyContacts() {
+		(11..90).each {
+			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
+		}
+	}
+	
+//	def createManyContactsAddToGroups() {
+//		(11..90).each {
+//			def c = new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
+//			c.addToGroups(Group.findByName('Friends')).save(failOnError:true, flush:true)
+//		}
+//	}
+	
 }

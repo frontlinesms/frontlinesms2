@@ -13,7 +13,7 @@ class ContactViewSpec extends ContactBaseSpec {
 	
 	def 'should update screen to show number of selected messages'() {
 		when:
-			to PageContact
+			to PageContactShow
 			contactSelect[1].click()
 		then:
 			waitFor { $('input', name:'name').value() == 'Bob' }
