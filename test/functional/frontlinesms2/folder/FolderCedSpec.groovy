@@ -2,7 +2,7 @@ package frontlinesms2.folder
 
 import frontlinesms2.*
 
-class CreateFolderSpec extends FolderGebSpec {
+class FolderCedSpec extends FolderBaseSpec {
 	
 	def 'button to create new folder from messages links to create folder page'() {
 		when:
@@ -25,24 +25,11 @@ class CreateFolderSpec extends FolderGebSpec {
 // FIXME
 //	def 'Errors are displayed when folder fails to save'() {
 //			when:
-//				to CreateFolderPage
+//				to PageFolderCreate
 //				def btnSave = $('input', name:'save')
 ////				def errorMessages(required:false) { $('.flash.errors') }
 //				btnSave.click()
 //			then:
 //				errorMessages.present
 //	}
-}
-
-class CreateFolderPage extends geb.Page {
-	static url = 'folder/create'
-	static at = {
-		// FIXME put in a test here
-		true
-	}
-	static content = {
-//		frmDetails { $("#folder-details") }
-//		btnSave { $('input', name:'save') }
-//		errorMessages(required:false) { $('.flash.errors') }
-	}
 }

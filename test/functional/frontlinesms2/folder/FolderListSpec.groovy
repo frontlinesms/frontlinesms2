@@ -1,17 +1,17 @@
-package frontlinesms2.message
+package frontlinesms2.folder
 
 import frontlinesms2.*
 
-class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
+class FolderListSpec extends FolderBaseSpec {
 	def 'folder message list is displayed'() {
 		given:
 			createTestFolders()
 			createTestMessages()
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 			def folderMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
-			at FolderListPage
+			at PageMessageFolderWork
 			folderMessageSources == ['Max', 'Jane']
 	}
 	
@@ -20,7 +20,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[2] == 'Max'
@@ -33,7 +33,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 			def selectedMenuItem = $('#messages-menu .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
@@ -58,7 +58,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -78,7 +78,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 		then:
 			waitFor{ btnDropdown.displayed }
 		when:
@@ -97,7 +97,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -111,7 +111,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			to FolderListPage
+			to PageMessageFolderWork
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -124,18 +124,3 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 
 }
 
-class FolderListPage extends geb.Page {
- 	static def getUrl() { "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}" }
-	static at = {
-		title.endsWith('Folder')
-	}
-	static content = {
-		messagesList { $('#messages-submenu') }
-		messagesSelect { $(".message-select") }
-		
-		btnReplyMultiple { $('#multiple-messages a')[0] }
-		
-		btnDropdown { $("#btn_dropdown") }
-		btnForward { $("#btn_forward") }
-	}
-}
