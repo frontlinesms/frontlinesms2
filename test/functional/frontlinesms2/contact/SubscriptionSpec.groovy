@@ -144,10 +144,10 @@ class SubscriptionSpec extends GroupBaseSpec  {
 	private def goToManageSubscriptions() {
 		go "/frontlinesms2/message"
 		$("#create-activity a").click()
-		waitFor {$('#tabs-1').displayed}
-		$("input", name: "activity").value("subscription")
-		$("#done").click()
-		waitFor {$("#ui-dialog-title-modalBox").text() == "Manage Subscription"}
+		waitFor {$('#activity-list').displayed}
+		$("input", class: "subscription").click()
+		$("#choose").click()
+		waitFor {$("#ui-dialog-title-modalBox").text() == "New subscription"}
 	}
 
 	private def inputKeywords(keyName, keyValue) {
