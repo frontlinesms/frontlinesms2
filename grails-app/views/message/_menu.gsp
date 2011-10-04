@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="sidebar">
-<ul class="main-list" id="messages-menu">
-	<li class="section">
+<ul class="main-list"> 
+	<li>
 
-		<h2>Messages</h2>
+		<h3>MESSAGES</h3>
 		<ul class='sublist' id="messages-submenu">
 			<li class="${(messageSection=='inbox')? 'selected':''}">
 				<g:link action="inbox">Inbox</g:link>
@@ -19,9 +19,9 @@
 			</li>
 		</ul>
 	</li>
-	<li class="section">
+	<li>
 
-		<h2>Polls</h2>
+		<h3>Polls</h3>
 		<ul class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li class="${p == ownerInstance ? 'selected' : ''}">
@@ -33,7 +33,7 @@
 			</li>
 		</ul>
 	</li>
-	<li class="section">
+	<li>
 
 		<h2>Shows</h2>
 		<ul class='sub-menu' id="shows-submenu">
@@ -49,7 +49,7 @@
 			</li>
 		</ul>
 	</li>
-	<li class="section">
+	<li>
 
 		 <h2>Folders</h2>
 	 	<ul class='sub-menu' id='folders-submenu' >
