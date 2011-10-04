@@ -21,14 +21,14 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			finishButton.enabled
+			!finishButton.disabled
 	}
 	
 	def 'there is no BACK button'() {
 		when:
 			launchCreateDialog()
 		then:
-			!$('.button', text:'Back').displayed
+			backButton.disabled
 	}
 	
 	def 'CANCEL button removes dialog'() {
@@ -50,7 +50,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog(null)
 		then:
-			!errorMessage.displayed
+			!errorMessages.displayed
 	}
 	
 	def 'Clicking FINISH when no name is defined should display validation error'() {
@@ -58,7 +58,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			launchCreateDialog(null)
 			finishButton.click()
 		then:
-			waitFor { errorMessage.displayed }
+			waitFor { errorMessages.displayed }
 	}
 	
 	def 'ADD MORE RULES button should add one more rule'() {
@@ -171,7 +171,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			ruleValues[1].value('+254')
 			finishButton.click()
 		then:
-			waitFor { errorMessage.displayed }
+			waitFor { errorMessages.displayed }
 	}
 	
 	def 'successfully creating a smart group should show a flash message'() {

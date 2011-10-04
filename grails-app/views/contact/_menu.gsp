@@ -44,7 +44,7 @@
 				<li id="no-smart-groups">No smart groups.</p>
 			</g:else>
 			<li class='create' id="create-smart-group">
-				<g:remoteLink controller="smartgroup" action="create">
+				<g:remoteLink controller="smartGroup" action="create" onSuccess="launchMediumPopup('Create smart group', data, 'Create');">
 					Create new smart group
 				</g:remoteLink>
 			</li>
