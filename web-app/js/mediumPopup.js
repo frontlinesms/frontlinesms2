@@ -28,15 +28,34 @@ function launchMediumPopup(title, html, btnFinishedText) {
 			height: 500,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
-			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
+			          		{ text:btnFinishedText,  click:chooseActivity, id:"choose"}],
 			close: function() { $(this).remove(); }
 		}
 	);
 }
 
+function chooseActivity() {
+	var activity = $("#activity-list input[checked=checked]").val();
+	if (activity == 'announcement') {
+		var activityUrl = 'quickMessage/create';
+		var title = 'New announcement'
+	} else if (activity == 'poll'){
+		var activityUrl = 'poll/create';
+		var title = 'New Poll'
+	} else if (activity == 'subscription'){
+		var activityUrl = 'group/list';
+		var title = 'New subscription'
+	}
+	$(this).dialog('close');
+	$.ajax({
+		type:'GET',
+		dataType: "html",
+		url: url_root + activityUrl,
+		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); addTabValidations(); }
+	});
+}
 
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
-
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog({
 		modal: true,
@@ -55,6 +74,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 			$(this).remove();
 		}
 	});
+	makeTabsUnfocusable();
 	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	initializeTabContentWidgets()
@@ -76,6 +96,7 @@ function prevButton() {
 }
 
 function nextButton() {
+	$("#tabs-" + getCurrentTab()).find('input', 'textarea', 'textfield').first().focus();
 	for (var i = 1; i <= getTabLength(); i++) {
 		var nextTabToSelect = getCurrentTab() + i;
 		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
@@ -120,6 +141,11 @@ function range(first, last) {
 		a.push(i)
 	}
 	return a
+}
+
+function makeTabsUnfocusable() {
+	$("#tabs").find('input', 'textarea', 'textfield').first().focus();
+	$('a[href^="#tabs"]').attr('tabindex', '-1');
 }
 
 function getTabLength() {
