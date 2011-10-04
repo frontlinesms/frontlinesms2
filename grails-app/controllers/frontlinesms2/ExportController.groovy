@@ -37,7 +37,6 @@ class ExportController {
 		def messageInstanceList
 		switch(messageSection) {
 			case 'inbox':
-				println "starred: ${params.starred}"
 				messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
 				break
 			case 'sent':
