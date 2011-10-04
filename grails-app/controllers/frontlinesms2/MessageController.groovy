@@ -41,7 +41,7 @@ class MessageController {
 				checkedMessageList: selectedMessageList,
 				folderInstanceList: Folder.findAllByArchived(params.viewingArchive),
 				responseInstance: responseInstance,
-				pollInstanceList: Poll.findAllByArchived(params.viewingArchive),
+				pollInstanceList: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages()]
