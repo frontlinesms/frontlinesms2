@@ -1,5 +1,4 @@
 <%@ page import="frontlinesms2.MessageStatus" %>
-<div id="content">
 	<g:hiddenField name="sortField" value="${params.sort}"/>
 	<g:hiddenField name="checkedMessageList" value=","/>
 	<g:hiddenField name="messageSection" value="${messageSection}"/>
@@ -15,12 +14,12 @@
 		  	<g:hiddenField name="groupId" value="${params.groupId}"/>
 		  	<g:hiddenField name="searchString" value="${params.searchString}"/>
 		</g:if>
+    <div id="messages">
 		<table id="messages-list">
-			<thead>
-				<tr>
-					<td>
+				<tr id="message-sorter">
+					<th>
 						<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/></td>
-					<td />
+					<th />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
 							params="${params}" id='source-header' />
 		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
@@ -28,10 +27,8 @@
 						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
 			</tr>
-		</thead>
-		<tbody id='messages-table'>
 			<g:each in="${messageInstanceList}" status="i" var="m">
-				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
+				<tr class="message-preview ${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
 					<td>
 						<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
@@ -60,9 +57,10 @@
 						</td>
 					</tr>
 				</g:each>
-			</tbody>
 		</table>
+    </div>
 	</g:if>
+
 	<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
 		<div id="no-search-description">
 			<h1>Start new search on the left</h1>
@@ -73,4 +71,3 @@
 			No messages
 		</div>
 	</g:else>
-</div>

@@ -35,8 +35,8 @@
 	</li>
 	<li>
 
-		<h2>Shows</h2>
-		<ul class='sub-menu' id="shows-submenu">
+		<h3>Shows</h3>
+		<ul class='sublist' id="shows-submenu">
 			<g:each in="${radioShows}" status="i" var="s">
 				<li class="${s == ownerInstance ? 'selected' : ''}">
 					<g:link action="radioShow" params="[ownerId: s.id]">${s.name}</g:link>
@@ -51,8 +51,8 @@
 	</li>
 	<li>
 
-		 <h2>Folders</h2>
-	 	<ul class='sub-menu' id='folders-submenu' >
+		<h3>Folders</h3>
+	 	<ul class='sublist' id='folders-submenu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li class="${f == ownerInstance ? 'selected' : ''}">
 					<g:link action="folder" params="[ownerId: f.id]">${f.name}</g:link>

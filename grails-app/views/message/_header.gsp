@@ -1,4 +1,4 @@
-<div class="content-header ${messageSection}">
+<div class="section-actions ${messageSection}" id="inbox-actions">
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
@@ -8,7 +8,6 @@
 		</div>
 	</g:if>
 	<g:elseif test="${messageSection == 'folder'}">
-		<div class="message-title">
 			<g:if test="${params.viewingArchive}">
 				<g:link controller="archive" action="folder">&lt; Back</g:link>
 			</g:if>
@@ -16,39 +15,23 @@
 				<img src='${resource(dir:'images/icons',file:'folders.png')}' />
 			</g:else>
 			<h2>${ownerInstance?.name}</h2>
-		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'sent'}">
-		<div class="message-title">
-			<img src='${resource(dir:'images/icons',file:'sent.png')}' />
-			<h2>${messageSection}</h2>
-		</div>
+	    <h3>${messageSection}</h3>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'pending'}">
-		<div class="message-title">
-			<img src='${resource(dir:'images/icons',file:'pending.png')}' />
 			<h2>${messageSection}</h2>
-		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'trash'}">
-		<div class="message-title">
-			<img src='${resource(dir:'images/icons',file:'trash.png')}' />
 			<h2>${messageSection}</h2>
-		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'radioShow'}">
-		<div class="message-title">
-			<img src='${resource(dir:'images/icons',file:'onair.png')}' />
 			<h2>On air</h2>
-		</div>
 	</g:elseif>
 	<g:else>
-		<div class="message-title">
-			<img src='${resource(dir:'images/icons',file:'inbox.png')}' />
-			<h2>${messageSection}</h2>
-		</div>
+	    <h3>${messageSection}</h3>
 	</g:else>
-	<ol>
+	<div class="section-actions-buttons">
 		<g:if test="${messageSection == 'trash' && messageInstance != null}">
 			<li>
 				<select id="trash-actions" onchange="launchEmptyTrashConfirmation();">
@@ -58,11 +41,9 @@
 			</li>
 		</g:if>
 		<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
-			<li>
 				<g:link elementId="export" url="#">
-					Export
+					<button>Export</button>
 				</g:link>
-			</li>
 		</g:if>
 		<g:if test="${messageSection == 'folder'}">
 			<g:if test="${!params.viewingArchive}">
@@ -76,36 +57,21 @@
 				</li>
 			</g:else>
 		</g:if>
-		<li>
         	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
-        		<img src='${resource(dir:'images/icons',file:'quickmessage.png')}' />
-				Quick message
+				<button class="section-action-button">Quick message</button>
 			</g:remoteLink>
-		</li>
-	</ol>
+	</div>
 	<g:if test="${messageSection == 'poll'}">
-		<ol>
 			<g:if test="${!params.viewingArchive}">
-				<li class='static_btn'>
 					<g:link controller="poll" action="archive" id="${ownerInstance.id}">Archive Poll</g:link>
-				</li>
 			</g:if>
 			<g:else>
-				<li class='static_btn'>
 					<g:link controller="poll" action="unarchive" id="${ownerInstance.id}">Unarchive Poll</g:link>
-				</li>
 			</g:else>
-			<li>
 				<g:select name="poll-actions" from="${['Export', 'Rename activity']}"
 						keys="${['export', 'renameActivity']}"
 						noSelection="${['': 'More actions...']}"/>
-			</li>
-		</ol>
-		<ol>
-			<li>
 				<button id="pollSettings">Show poll details</button>
-			</li>
-		</ol>
 		<div class="poll-details" style="display:none">
 			<div id="pollGraph"></div>
 		</div>

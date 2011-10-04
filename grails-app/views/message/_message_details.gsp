@@ -1,4 +1,4 @@
-<div id="message-details">
+<div id="message-detail">
 	<g:hiddenField name="checkedMessageList" id="checkedMessageList" value="${checkedMessageList}" />
 	<div id="single-message">
 		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
