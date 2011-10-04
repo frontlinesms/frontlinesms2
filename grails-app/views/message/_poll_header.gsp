@@ -5,9 +5,10 @@
 	<g:else>
 		<img src='${resource(dir:'images/icons',file:'activities.png')}' />
 	</g:else>
-	<h2>${ownerInstance?.title}</h2>
-	<div>${ownerInstance?.question}</div>
+	<h2>${ownerInstance?.title} poll</h2>
 	<g:if test="$responseList">
+		<div><g:formatDate date="${ownerInstance?.dateCreated}" /><span> (${ownerInstance?.sentMessageCount} messages sent)</span></div>
+		<div>${ownerInstance?.question}</div>
 		<table id="poll-stats">
 			<tbody>
 				<g:each in="${responseList}" var="r">

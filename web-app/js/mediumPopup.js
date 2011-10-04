@@ -42,9 +42,23 @@ function chooseActivity() {
 	} else if (activity == 'poll'){
 		var activityUrl = 'poll/create';
 		var title = 'New Poll'
+		$(this).dialog('close');
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + activityUrl,
+			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); }
+		});
+		return;
 	} else if (activity == 'subscription'){
 		var activityUrl = 'group/list';
 		var title = 'New subscription'
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + activityUrl,
+			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); addTabValidations(); }
+		});
 	}
 	$(this).dialog('close');
 	$.ajax({
@@ -218,5 +232,47 @@ function enableTab(tabNumber) {
 	$('#tabs').tabs("enable", tabNumber);
 	$('.tabs-' + (tabNumber + 1)).removeClass('disabled-tab');
 }
+function moveToTabBy(index) {
+	var tabWidget = $('#tabs').tabs();
+	var selected = tabWidget.tabs('option', 'selected')
+	tabWidget.tabs('select', selected + index);
+	return false;
+}
+
+function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
+	onSuccess = onSuccess || null
+	if (canMoveToNextTab) {
+		if (onSuccess != null)
+			onSuccess()
+		else
+			moveToTabBy(1);
+	}
+	else
+		onFailure()
+	return false
+
+}
+
+$('.next').live('click', function() {
+	if($(this).hasClass('disabled')) return;
+	return moveToNextTab(true);
+});
+
+$('.back').live('click', function() {
+	return moveToTabBy(-1);
+});
+
+$.widget("ui.contentWidget", {
+	validate: function() {
+		return this.options['validate'].call();			
+	},
+
+	onDone: function() {
+		return this.options['onDone'].call();			
+	},
+
+	options: {validate: function() {return true;} ,
+	onDone: function() {return true;}}
+});
 
 
