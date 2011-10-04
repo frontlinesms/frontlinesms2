@@ -80,7 +80,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			toConfirmTab()
 			doneButton.click()
 		then:
-			waitFor{ $("#tabs-4").displayed }
+			waitFor{ $(".quick-message-summary").displayed }
 		when:
 			$("#confirmation").click()
 			$("a", text: "Inbox").click()
@@ -184,12 +184,14 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			to MessagesPage
 			$("a", text:"Create new activity").click()
 		then:
-			waitFor { $("#tabs-1").displayed }
+			waitFor { $("#activity-list").displayed }
 		when:
-			$("input", name: "activity").value("announcement")
-			$("#done").click()
-		then:	
-			waitFor { $("#ui-dialog-title-modalBox").text() == "Announcement" }
+			$("input", class: "announcement").click()
+			$("#choose").click()
+		then:
+			sleep 1000
+			$("#ui-dialog-title-modalBox").text() == "New announcement"
+			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
 	}
 
 	private def createData() {

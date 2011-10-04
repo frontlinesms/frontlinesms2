@@ -39,7 +39,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
 		then:
-			pollTitle == 'Football Teams'
+			pollTitle == 'Football Teams poll'
 			statsLabels == ['manchester', 'barcelona','Unknown']
 			statsNums == ['2', '0', '0']
 			statsPercents == ['(100%)', '(0%)', '(0%)']

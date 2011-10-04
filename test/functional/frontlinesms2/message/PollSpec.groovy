@@ -309,8 +309,8 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		to MessagesPage
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
-		$("input", name: "activity").value("poll")
-		$("#done").click()
+		$("input", class: "poll").click()
+		$("#choose").click()
 		waitFor { at PollCreatePage }
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
@@ -321,7 +321,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 
 class PollCreatePage extends geb.Page {
 	static at = { 
-		$("#ui-dialog-title-modalBox").text() == "Create Poll"
+		$("#ui-dialog-title-modalBox").text() == "New Poll"
 	}
 	static content = {
 		tabMenu { $("#tabs li") }
