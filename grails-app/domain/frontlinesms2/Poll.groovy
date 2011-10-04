@@ -6,6 +6,7 @@ class Poll {
 	String autoReplyText
 	String question
 	boolean archived
+	boolean deleted
 	Date dateCreated
 	List responses
 	static transients = ['liveMessageCount']
@@ -89,4 +90,9 @@ class Poll {
 		def messageTotal = 0
 		responses.each { messageTotal += (it.liveMessageCount ?: 0) }
 	}
+
+    def toDelete() {
+        this.deleted = true
+        this
+    }
 }
