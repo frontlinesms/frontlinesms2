@@ -8,6 +8,7 @@ class Poll {
 	boolean archived
 	Date dateCreated
 	List responses
+	int sentMessageCount
 	static transients = ['liveMessageCount']
 
 	static hasMany = [responses: PollResponse]

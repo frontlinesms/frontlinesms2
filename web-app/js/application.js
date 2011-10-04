@@ -23,38 +23,6 @@ function refreshMessageCount() {
 }
 
 var remoteHash = {
-	"poll" :  function() {
-		$.ajax({
-			type:'GET',
-			dataType: "html",
-			url: url_root + 'poll/create',
-			success: function(data) {
-				launchMediumWizard('Create Poll', data, 'Create', function(){initializePoll();}, true);
-			}})
-	},
-
-	"subscription": function() {
-		$.ajax({
-			type:'GET',
-			dataType: "html",
-			url: url_root + 'group/list',
-			success: function(data) {
-				launchMediumWizard('Manage Subscription', data, 'Create');
-				addTabValidations();
-			}})
-	},
-
-	"announcement": function() {
-		$.ajax({
-			type:'GET',
-			dataType: "html",
-			url: url_root + 'quickMessage/create',
-			success: function(data) {
-				launchMediumWizard('Announcement', data, 'Send', null, true);
-				addTabValidations();
-			}})
-	},
-
 	"export": function() {
 		$.ajax({
 			type:'GET',
@@ -100,36 +68,6 @@ function isDropDownSelected(id) {
 	return selectedOptions.length > 0  && (!isEmpty(selectedOptions[0].value))
 }
 
-function moveToTabBy(index) {
-	var tabWidget = $('#tabs').tabs();
-	var selected = tabWidget.tabs('option', 'selected')
-	tabWidget.tabs('select', selected + index);
-	return false;
-}
-
-function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
-	onSuccess = onSuccess || null
-	if (canMoveToNextTab) {
-		if (onSuccess != null)
-			onSuccess()
-		else
-			moveToTabBy(1);
-	}
-	else
-		onFailure()
-	return false
-
-}
-
-$('.next').live('click', function() {
-	if($(this).hasClass('disabled')) return;
-	return moveToNextTab(true);
-});
-
-$('.back').live('click', function() {
-	return moveToTabBy(-1);
-});
-
 $('.check-bound-text-area').live('focus', function() {
   	var checkBoxId = $(this).attr('checkbox_id');
 	$('#' + checkBoxId).attr('checked', true);
@@ -142,19 +80,6 @@ function findInputWithValue(value) {
 function isCheckboxSelected(value) {
 	return findInputWithValue(value).is(':checked')
 }
-
-$.widget("ui.contentWidget", {
-	validate: function() {
-		return this.options['validate'].call();			
-	},
-
-	onDone: function() {
-		return this.options['onDone'].call();			
-	},
-
-	options: {validate: function() {return true;} ,
-	onDone: function() {return true;}}
-});
 
 $.fn.renderDefaultText = function() {
 	return this.focus( function() {
