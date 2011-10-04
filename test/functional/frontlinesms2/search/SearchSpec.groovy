@@ -33,15 +33,14 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
-	def "search description is shown in header when searching by group"() {
+	def "search description is shown in header"() {
 		when:
 			to SearchingPage
 			searchBtn.present()
-			searchFrm.searchString = "test"
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text() == 'Searching "test", include archived messages'
+			searchDescription.text().contains('Searching all messages, include archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -111,7 +110,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
-	//@spock.lang.IgnoreRest
 	def "should clear search results" () {
 		when:
 			to SearchingPage
@@ -125,7 +123,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			waitFor{ !$("#search-description").displayed }
 	}
 	
-	//@spock.lang.IgnoreRest
 	def "should return to the same search results when message is deleted" () {
 		setup:
 			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), status: MessageStatus.SENT).save(flush: true)
@@ -146,20 +143,24 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			$('.flash').displayed
 	}
 	
-
-//	@spock.lang.IgnoreRest
 	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
 		when:
+			def date = new Date()
 			to SearchingPage
 			searchBtn.present()
 		then:
 			searchFrm.startDate_day == 'none'
 			searchFrm.startDate_month == 'none'
 			searchFrm.startDate_year == 'none'
+			String.format('%td',date).contains(searchFrm.endDate_day)
+			String.format('%tm',date).contains(searchFrm.endDate_month) 
+			searchFrm.endDate_year == String.format('%tY',date)
 		when:
-			searchFrm.startDate_day = '4'
-			searchFrm.startDate_month = '9'
-			searchFrm.startDate_year = '2010'
+			 searchFrm.startDate_day = '4'
+			 searchFrm.startDate_month = '9'
+			 searchFrm.startDate_year = '2010'
+			$("#ui-datepicker-div").jquery.hide()
+			waitFor { !$("#ui-datepicker-div").displayed }
 			searchBtn.click()
 			waitFor {searchDescription}
 		then:
@@ -168,7 +169,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			searchFrm.startDate_year == '2010'
 	}
 	
-//	@spock.lang.IgnoreRest
 	def "archiving message should not break message navigation "() {
 		setup:
 			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
@@ -287,6 +287,19 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			!searchFrm.contactString
 	}
 	
+	def "should update message count when in search tab"() {
+		when:
+			to SearchingPage
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 2"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 3"
+			}
+	}
 	
 	private createTestGroups() {
 		new Group(name: 'Listeners').save(flush: true)

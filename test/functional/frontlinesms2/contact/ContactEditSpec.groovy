@@ -6,14 +6,14 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactEditSpec extends ContactGebSpec {
+class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
 	}
 
 	def 'selected contact details can be edited and saved'() {
 		when:
-			to AliceDetailsPage
+			to PageContactShowAlice
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
 			frmDetails.secondaryMobile = '+2542334567'
@@ -33,7 +33,7 @@ class ContactEditSpec extends ContactGebSpec {
 			alice.addToGroups(g)
 			alice.save(flush: true)
 		when:
-			to AliceInExcellentPage
+			to PageContactShowGroupContactAlice
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
 			frmDetails.secondaryMobile = '+2542334567'
@@ -50,7 +50,7 @@ class ContactEditSpec extends ContactGebSpec {
 	
 	def "'send Message' link should not displayed for invalid email address"() {
 		when:
-			to AliceDetailsPage
+			to PageContactShowAlice
 			frmDetails.primaryMobile = ''
 	  		frmDetails.email = 'gagasaas'
 			btnSave.click()
@@ -60,7 +60,7 @@ class ContactEditSpec extends ContactGebSpec {
 	
 	def "should remove secondary mobile address when delete icon is clicked"() {
 		when:
-			to BobDetailsPage
+			to PageContactShowBob
 			assert $('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
 			assert $('div.basic-info:nth-child(4) a', class: 'send-message').displayed
 			$('div.basic-info:nth-child(4) a', class: 'remove-field').click()
@@ -74,14 +74,14 @@ class ContactEditSpec extends ContactGebSpec {
 			!$('div.basic-info:nth-child(4) a', class: 'send-message').displayed
 			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '')
 		when: 
-			to BobDetailsPage
+			to PageContactShowBob
 		then:
 			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
 	}
 	
 	def "should remove email data when delete icon is clicked"() {
 		when:
-			to BobDetailsPage
+			to PageContactShowBob
 			assert $('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
 			assert $('div.basic-info:nth-child(5) a', class: 'quick_message').displayed
 			$('div.basic-info:nth-child(5) a', class: 'remove-field').click()
@@ -95,14 +95,14 @@ class ContactEditSpec extends ContactGebSpec {
 			!$('div.basic-info:nth-child(5) a', class: 'send-message').displayed
 			assertFieldDetailsCorrect('email', 'Email', '')
 		when: 
-			to BobDetailsPage
+			to PageContactShowBob
 		then:
 			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
 	}
 	
 	def "should remove primary mobile address when delete icon is clicked"() {
 		when:
-			to BobDetailsPage
+			to PageContactShowBob
 			assert $('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
 			assert $('div.basic-info:nth-child(3) a', class: 'send-message').displayed
 			$('div.basic-info:nth-child(3) a', class: 'remove-field').click()
@@ -116,35 +116,48 @@ class ContactEditSpec extends ContactGebSpec {
 			!$('div.basic-info:nth-child(3) a', class: 'send-message').displayed
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '')
 		when: 
-			to BobDetailsPage
+			to PageContactShowBob
 		then:
 			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
 	}
+	
+	def "should disable the save and cancel buttons when viewing a contact details"() {
+		when:
+			to PageContactShowBob
+		then:
+			btnSave.disabled
+			btnCancel.disabled
+	}
+	
+	def "should enable save and cancel buttons when contact details are edited"() {
+		when:
+			to PageContactShowBob
+			frmDetails.email = 'bob@gmail.com'
+		then:
+			!btnSave.disabled
+			!btnCancel.disabled
+	}
+	
+	def "should remain on the same page after updating a contact"() {
+		given:
+			createManyContacts()
+		when:
+			to PageContactShowBob
+			$("a.nextLink").click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+		when:
+			frmDetails.name = 'Kate'
+			btnSave.click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+	}
+	
 }
 
-abstract class ContactDetailsPage extends geb.Page {
-	static content = {
-		frmDetails { $("#contact_details") }
-		btnSave { frmDetails.find('#update-single') }
-	}
-}
 
-class AliceInExcellentPage extends ContactDetailsPage {
-	static def getUrl() {
-		def alice = Contact.findByName('Alice')
-		Group g = Group.findByName('Excellent')
-		"/frontlinesms2/group/show/${g.id}/contact/show/${alice.id}"
-	}
-}
 
-class AliceDetailsPage extends ContactDetailsPage {
-	static def getUrl() {
-		"contact/show/${Contact.findByName('Alice').id}"
-	}
-}
 
-class BobDetailsPage extends ContactDetailsPage {
-	static def getUrl() {
-		"contact/show/${Contact.findByName('Bob').id}"
-	}
-}
+

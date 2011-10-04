@@ -10,10 +10,10 @@ class ArchiveSpec extends frontlinesms2.archive.ArchiveGebSpec {
 			createTestMessages()
 		when:
 			def folder = Folder.findByName('Work')
-			folder.archiveFolder()
+			folder.archive()
 			folder.save(flush: true, failOnError: true)
 			to ArchiveFolderPage
 		then:
-			FolderNames*.text() == ["Work"]
+			folderNames*.text() == ["Work"]
 	}
 }

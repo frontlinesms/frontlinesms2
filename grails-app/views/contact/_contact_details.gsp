@@ -2,4 +2,4 @@
 <g:set var="model" value="${[contactInstanceTotal:contactInstanceTotal,contactInstanceList:contactInstanceList,
 	contactsSection:contactsSection,params:params]}" />
 <g:render template="contact_list" model="${model}" />
-<g:render template="contact_footer" model="${model}" />
+<g:render template="footer" model="${model}" />

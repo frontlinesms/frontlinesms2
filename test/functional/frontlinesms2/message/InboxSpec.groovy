@@ -15,7 +15,7 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
-			messageSources == ['Alice', 'Bob']
+			messageSources == ['Bob', 'Alice']
 	}
 
 	def 'message details are shown in list'() {
@@ -25,20 +25,20 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
-			rowContents[2] == 'Alice'
-			rowContents[3] == 'hi Alice'
+			rowContents[2] == 'Bob'
+			rowContents[3] == 'hi Bob'
 			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
 	}
 
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
+			def message = Fmessage.findBySrc('Bob')
 		when:
 			to MessagesPage
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
-			firstMessageLink.text() == 'Alice'
+			firstMessageLink.text() == 'Bob'
 	}
 
 	//FIXME this test fail when the local computer language is different than english. The Date return
@@ -99,21 +99,6 @@ class InboxSpec extends MessageGebSpec {
 			rowContents == ['June']
 	}
 
-	def "should autopopulate the recipients name on click of reply for a inbox message"() {
-		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
-		when:
-			to MessagesPage
-			$('#btn_reply').click()
-		then:
-			waitFor { $('div#tabs-1').displayed }
-		when:
-			$("div#tabs-1 .next").click()
-		then:
-			$('input', value:'+254778899').checked
-	}
-
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
@@ -124,15 +109,11 @@ class InboxSpec extends MessageGebSpec {
 			$('#btn_reply').click()
 		then:
 			waitFor { $('div#tabs-1').displayed }
-		when:
-			$("div#tabs-1 .next").click()
-		then:
-			waitFor { $('input', value:'+254999999').checked }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
-	    	createInboxTestMessages()
+			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 		then:
@@ -183,7 +164,7 @@ class InboxSpec extends MessageGebSpec {
 			waitFor { checkedMessageCount == 2 }
 		when:
 			messagesSelect[1].click()
-			def message = Fmessage.findBySrc('Bob')
+			def message = Fmessage.findBySrc('Alice')
 			def formatedDate = dateToString(message.dateCreated)
 		then:
 			waitFor { checkedMessageCount == 1 }
@@ -196,7 +177,7 @@ class InboxSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message"
+			to MessagesPage
 		then:
 			$("#btn_reply").click()
 			waitFor {$('#tabs-1').displayed}
@@ -263,20 +244,31 @@ class InboxSpec extends MessageGebSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(flush: true)
-			new Folder(name: "my-folder").save(flush: true)
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			go "message/inbox"
-			waitFor {$("#move-actions").displayed}
-			$("#move-actions").getJquery().val(Folder.findByName('my-folder').id.toString());
-			$("#move-actions").getJquery().trigger("change")
-			sleep 1000
-			waitFor {$("#no-messages").displayed}
-		then:
-			$("#no-messages").text().contains("No messages")
+			to MessagesPage
+			waitFor { $("#move-actions").displayed }
+			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
+			$("#move-actions").jquery.trigger("change")
+		then:	
+			waitFor { $("#no-messages").displayed && $("#no-messages").text().contains("No messages") }
 			$("#messages-submenu .selected").text().contains('Inbox')
 	}
-
+	
+	def "should update message count when new message is received"() {
+		given:
+			createInboxTestMessages()
+		when:
+			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 1"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor { $("#tab-messages").text() == "Messages 2" }
+	}
 
 	String dateToString(Date date) {
 		DateFormat formatedDate = createDateFormat();
@@ -286,6 +278,6 @@ class InboxSpec extends MessageGebSpec {
 	DateFormat createDateFormat() {
 		//println ("Local context:"+Locale.getDefault())
 		//System.setProperty('user.timezone', 'GMT')
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.getDefault())
+		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
 	}
 }

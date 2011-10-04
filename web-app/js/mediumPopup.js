@@ -28,15 +28,48 @@ function launchMediumPopup(title, html, btnFinishedText) {
 			height: 500,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
-			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
+			          		{ text:btnFinishedText,  click:chooseActivity, id:"choose"}],
 			close: function() { $(this).remove(); }
 		}
 	);
 }
 
+function chooseActivity() {
+	var activity = $("#activity-list input[checked=checked]").val();
+	if (activity == 'announcement') {
+		var activityUrl = 'quickMessage/create';
+		var title = 'New announcement'
+	} else if (activity == 'poll'){
+		var activityUrl = 'poll/create';
+		var title = 'New Poll'
+		$(this).dialog('close');
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + activityUrl,
+			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); }
+		});
+		return;
+	} else if (activity == 'subscription'){
+		var activityUrl = 'group/list';
+		var title = 'New subscription'
+		$.ajax({
+			type:'GET',
+			dataType: "html",
+			url: url_root + activityUrl,
+			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); addTabValidations(); }
+		});
+	}
+	$(this).dialog('close');
+	$.ajax({
+		type:'GET',
+		dataType: "html",
+		url: url_root + activityUrl,
+		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); addTabValidations(); }
+	});
+}
 
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
-
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog({
 		modal: true,
@@ -55,6 +88,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 			$(this).remove();
 		}
 	});
+	makeTabsUnfocusable();
 	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	initializeTabContentWidgets()
@@ -76,6 +110,7 @@ function prevButton() {
 }
 
 function nextButton() {
+	$("#tabs-" + getCurrentTab()).find('input', 'textarea', 'textfield').first().focus();
 	for (var i = 1; i <= getTabLength(); i++) {
 		var nextTabToSelect = getCurrentTab() + i;
 		if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
@@ -120,6 +155,11 @@ function range(first, last) {
 		a.push(i)
 	}
 	return a
+}
+
+function makeTabsUnfocusable() {
+	$("#tabs").find('input', 'textarea', 'textfield').first().focus();
+	$('a[href^="#tabs"]').attr('tabindex', '-1');
 }
 
 function getTabLength() {
@@ -182,5 +222,57 @@ function validateTab(tab) {
 	}
 	return isValid;
 }
+
+function disableTab(tabNumber) {
+	$('#tabs').tabs("disable", tabNumber);
+	$('.tabs-' + (tabNumber + 1)).addClass('disabled-tab');
+}
+
+function enableTab(tabNumber) {
+	$('#tabs').tabs("enable", tabNumber);
+	$('.tabs-' + (tabNumber + 1)).removeClass('disabled-tab');
+}
+function moveToTabBy(index) {
+	var tabWidget = $('#tabs').tabs();
+	var selected = tabWidget.tabs('option', 'selected')
+	tabWidget.tabs('select', selected + index);
+	return false;
+}
+
+function moveToNextTab(canMoveToNextTab, onFailure, onSuccess) {
+	onSuccess = onSuccess || null
+	if (canMoveToNextTab) {
+		if (onSuccess != null)
+			onSuccess()
+		else
+			moveToTabBy(1);
+	}
+	else
+		onFailure()
+	return false
+
+}
+
+$('.next').live('click', function() {
+	if($(this).hasClass('disabled')) return;
+	return moveToNextTab(true);
+});
+
+$('.back').live('click', function() {
+	return moveToTabBy(-1);
+});
+
+$.widget("ui.contentWidget", {
+	validate: function() {
+		return this.options['validate'].call();			
+	},
+
+	onDone: function() {
+		return this.options['onDone'].call();			
+	},
+
+	options: {validate: function() {return true;} ,
+	onDone: function() {return true;}}
+});
 
 

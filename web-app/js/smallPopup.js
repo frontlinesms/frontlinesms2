@@ -4,6 +4,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 	$("#modalBox").dialog({
 			modal: true,
 			width: 285,
+			maxHeight: 300,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
@@ -31,6 +32,7 @@ function launchConfirmationPopup(title) {
 }
 
 function launchEmptyTrashConfirmation() {
+	$("#trash-actions").val("na");
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/confirmEmptyTrash',

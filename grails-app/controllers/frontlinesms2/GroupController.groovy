@@ -20,7 +20,7 @@ class GroupController {
 	}
 
 	def show = {
-		redirect(controller: "contact", action: "list", params:[groupId : params.id])
+		redirect(controller: "contact", action: "show", params:[groupId : params.id])
 	}
 	
 	def create = {

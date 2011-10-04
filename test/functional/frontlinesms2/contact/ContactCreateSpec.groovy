@@ -6,30 +6,32 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactCreateSpec extends ContactGebSpec {
-	def 'link to cancel creating a new contact is displayed and goes back to main contact page'() {
-		when:
-			to CreateContactPage
-			def cancelContact = $('.buttons .cancel')
-		then:
-			cancelContact.text() == "Cancel"
-			at ContactListPage
-	}
+class ContactCreateSpec extends ContactBaseSpec {
 
 	def 'ALL CONTACTS menu item is selected when creating a contact'() {
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			selectedMenuItem.text() == 'All contacts'
 	}
+
+	def 'button to create new contact exists and goes to NEW CONTACT page'() {
+		when:
+			to PageContactShow
+			def btnCreateContact = $("#create-contact").find('a')
+		then:
+			assert btnCreateContact.getAttribute('href') == "/frontlinesms2/contact/createContact"
+	}
+
+	def 'button to create new group exists and goes to NEW GROUP page'() {
+		when:
+			to PageContactShow
+			def btnCreateGroup = $("#create-group").find('a')
+		then:
+			assert btnCreateGroup.getAttribute('href') == "/frontlinesms2/group/create"
+	}
+	
 }
 
-class CreateContactPage extends geb.Page {
-	static url = 'contact/createContact'
-	static at = {
-		title.endsWith('Create Contact')
-	}
-	static content = {
-		errorMessages { $('.flash.errors') }
-	}
-}
+
+

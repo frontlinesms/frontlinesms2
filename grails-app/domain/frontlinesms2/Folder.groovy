@@ -16,12 +16,18 @@ class Folder extends MessageOwner {
 		Fmessage.owned(getOnlyStarred, this)
 	}
 	
-	def archiveFolder() {
+	def archive() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(this).list()
-		messagesToArchive.each { it.archived = true }
+		def messagesToArchive = Fmessage?.owned(this)?.list()
+		messagesToArchive.each { it?.archived = true }
 	}
 	
+	def unarchive() {
+		this.archived = false
+		def messagesToArchive = Fmessage?.owned(this)?.list()
+		messagesToArchive.each { it?.archived = false }
+	}
+		
 	def getLiveMessageCount() {
 		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
 		m ? m.size() : 0

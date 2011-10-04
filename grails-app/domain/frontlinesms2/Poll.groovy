@@ -8,6 +8,7 @@ class Poll {
 	boolean archived
 	Date dateCreated
 	List responses
+	int sentMessageCount
 	static transients = ['liveMessageCount']
 
 	static hasMany = [responses: PollResponse]
@@ -63,6 +64,12 @@ class Poll {
 		this.archived = true
 		def messagesToArchive = Fmessage.owned(this.responses).list()
 		messagesToArchive.each { it.archived = true }
+	}
+	
+	def unarchivePoll() {
+		this.archived = false
+		def messagesToUnarchive = Fmessage.owned(this.responses).list()
+		messagesToUnarchive.each { it.archived = false }
 	}
 
 	static Poll createPoll(attrs) {

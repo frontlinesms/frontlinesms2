@@ -6,7 +6,6 @@ class PollController {
 
 	def index = {
 		[polls: Poll.findAllByArchived(params.viewingArchive),
-				actionLayout : params.viewingArchive ? "archive" : "poll",
 				messageSection: "poll"]
 	}
 
@@ -39,5 +38,13 @@ class PollController {
 		poll.save()
 		flash.message = "Poll was archived successfully!"
 		redirect(controller: "message", action: "inbox")
+	}
+	
+	def unarchive = {
+		def poll = Poll.get(params.id)
+		poll.unarchivePoll()
+		poll.save()
+		flash.message = "Poll was unarchived successfully!"
+		redirect(controller: "archive", action: "pollView")
 	}
 }

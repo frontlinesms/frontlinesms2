@@ -19,8 +19,10 @@
 				<g:hiddenField name="groupsToRemove" value=","/>
 				<g:hiddenField name="fieldsToAdd" value=","/>
 				<g:hiddenField name="fieldsToRemove" value=","/>
+				<g:hiddenField name="sort" value="${params.sort}"/>
+				<g:hiddenField name="offset" value="${params.offset}"/>
 				<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-					<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
+					<g:hiddenField name="groupId" id="groupId" value="${contactsSection?.id}"/>
 				</g:if>
 				<g:if test="${contactInstance}">
 					<g:hiddenField name="contactId" value="${contactInstance?.id}"/>

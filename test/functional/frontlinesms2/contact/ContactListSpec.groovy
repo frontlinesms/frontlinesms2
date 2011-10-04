@@ -6,7 +6,7 @@ import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
-class ContactListSpec extends ContactGebSpec {
+class ContactListSpec extends ContactBaseSpec {
 	def 'contacts list is displayed'() {
 		given:
 			createTestContacts()
@@ -25,7 +25,7 @@ class ContactListSpec extends ContactGebSpec {
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
 		when:
-			to ContactListPage
+			to PageContactShow
 		then:
 			selectedMenuItem.text() == 'All contacts'
 	}
@@ -34,7 +34,7 @@ class ContactListSpec extends ContactGebSpec {
 		given:
 			createManyContacts()
 		when:
-			go 'contact'
+			to PageContactShow
 		then:
 			def contactList = $('#contact-list')
 			def contactNames = contactList.children()*.text()
@@ -56,12 +56,23 @@ class ContactListSpec extends ContactGebSpec {
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			waitFor { $('#contact-list').children()*.text() == ['Sam Anderson', 'SAm Jones'] }
+			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
-	static createManyContacts() {	
-		(11..90).each {
-			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
-		}
+	def "should remain on the same page when a contact is selected"() {
+		given:
+			createManyContacts()
+		when:
+			to PageContactShow
+			$("a.nextLink").click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
+		when:
+			$('#contact-list li').children('a')[1].click()
+			$("#page-arrows .currentStep").jquery.show();
+		then:
+			$("#page-arrows .currentStep").text() == "2"
 	}
+	
 }

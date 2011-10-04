@@ -34,7 +34,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 			$(".message-select")[2].click()
 		then:
-			waitFor { $("#message-details #contact-name").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text() }
+			waitFor { $("#message-details #contact-name").text() == $(".displayName-${Fmessage.findBySrc('Alice').id}").text() }
 		when:
 			$(".message-select")[1].click()
 		then:
@@ -55,11 +55,8 @@ class CheckedMessageSpec extends MessageGebSpec {
 			waitFor { $('#multiple-messages a')[0].displayed }
 		when:
 			$('#multiple-messages a')[0].click()
-			$("div#tabs-1 .next").click()
 		then:
-			waitFor { $('input', value:'Alice').checked }
-			$('input', value:'Bob').checked
-			!$('input', value:'June').checked
+			waitFor { $("div#tabs-1").displayed }
 	}
 	
 	def "Should show the correct contact count when replying to multiple checked messages"() {
@@ -130,7 +127,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		then:
 			waitFor { $('div#tabs-1').displayed }
 		then:
-			$('textArea', name:'messageText').text() == "hi Alice"
+			$('textArea', name:'messageText').text() == "hi Bob"
 	}
 	
 	def "should uncheck message when a different message is clicked"() {

@@ -1,5 +1,6 @@
 <%@ page import="frontlinesms2.MessageStatus" %>
 <div id="content">
+	<g:hiddenField name="sortField" value="${params.sort}"/>
 	<g:hiddenField name="checkedMessageList" value=","/>
 	<g:hiddenField name="messageSection" value="${messageSection}"/>
 	<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
@@ -18,14 +19,14 @@
 			<thead>
 				<tr>
 					<td>
-						<g:checkBox name="message-select" class="message-select" id="message-select-all" id= value="0" checked="false" onclick="checkAll()"/></td>
+						<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/></td>
 					<td />
 				    	<g:sortableColumn property="contactName" title="${messageLabel}"
-							params='[ownerId: "${ownerInstance?.id}"]' id='source-header' />
+							params="${params}" id='source-header' />
 		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-							params='[ownerId: "${ownerInstance?.id}"]' id="message-header" />
-					<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-							params='[ownerId: "${ownerInstance?.id}"]' id="timestamp-header" defaultOrder="desc" />
+							params="${params}" id="message-header" />
+						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+							params="${params}" id="timestamp-header" defaultOrder="desc" />
 			</tr>
 		</thead>
 		<tbody id='messages-table'>

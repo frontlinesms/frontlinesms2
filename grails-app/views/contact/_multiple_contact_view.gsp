@@ -1,8 +1,8 @@
 <div class="multiple-contact hide">
 	<div class="buttons">
 		<ol>
-			<li><g:actionSubmit id="update-all" action="updateMultipleContacts" value="Save All"/></li>
-			<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+			<li><g:actionSubmit id="update-all" action="updateMultipleContacts" value="Save All" disabled="disabled"/></li>
+			<li><input type="button" class="cancel" value="Cancel" disabled="disabled"/></li>
 			<li>
 				<a id="btn_delete_all" onclick="launchConfirmationPopup('Delete all');">
 					Delete all
@@ -15,14 +15,11 @@
 		<div>
 			<ol id='multi-group-list'>
 				<g:each in="${sharedGroupInstanceList}" status="i" var="g">
-					<li class="${g == groupInstance ? 'selected' : ''}">
-						<input type="text" name="${g.name}" value="${g.name}" disabled="true" />
+					<li id="${g.name}" class="${g == groupInstance ? 'selected' : ''}">
+						<span>${g.name}</span>
 						<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 					</li>
 				</g:each>
-<%--				<li id="multi-no-groups" style="${sharedGroupInstanceList?'display: none':''}">--%>
-<%--					<p>Not part of any Groups</p>--%>
-<%--				</li>--%>
 			</ol>
 		</div>
 		<div id='multi-group-add' class="dropdown">
