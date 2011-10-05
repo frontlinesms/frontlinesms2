@@ -86,11 +86,11 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-			$(".message-select")[1].click()
+			$(".message-select")[2].click()
 		then:
 			waitFor { $('#message-body').text() == 'I like manchester' }
 		when:
-			$(".message-select")[2].click()
+			$(".message-select")[1].click()
 		then:
 			waitFor { $("#checked-message-count").text() == "2 messages selected" }
 		when:
