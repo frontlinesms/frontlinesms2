@@ -189,8 +189,6 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("input", class: "announcement").click()
 			$("#choose").click()
 		then:
-			sleep 1000
-			$("#ui-dialog-title-modalBox").text() == "New announcement"
 			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
 	}
 
