@@ -12,7 +12,7 @@ class AddContactSpec extends MessageGebSpec {
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
-			getColumnAsArray($('#messages tr'), 2) == ['Bob', 'Alice', '+254778899']
+			getColumnAsArray($('#messages tr'), 2) == ['+254778899', 'Alice', 'Bob']
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {

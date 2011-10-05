@@ -12,7 +12,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			def folderMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			at FolderListPage
-			folderMessageSources == ['Max', 'Jane']
+			folderMessageSources == ['Jane', 'Max']
 	}
 	
 	def "message's folder details are shown in list"() {
@@ -21,7 +21,7 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 			createTestMessages()
 		when:
 			to FolderListPage
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'

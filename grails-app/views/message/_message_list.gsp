@@ -25,8 +25,14 @@
 							params="${params}" id='source-header' />
 		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />
-						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-							params="${params}" id="timestamp-header" defaultOrder="desc" />
+						<g:if test="${messageSection == sent || messageSection == pending}">
+							<g:sortableColumn property="dateSent" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+								params="${params}" id="timestamp-header" defaultOrder="desc" />
+						</g:if>
+						<g:else>
+							<g:sortableColumn property="dateReceived" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+								params="${params}" id="timestamp-header" defaultOrder="desc" />
+						</g:else>
 			</tr>
 		</thead>
 		<tbody id='messages-table'>
@@ -55,7 +61,12 @@
 					</td>
 					<td>
 							<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate date="${m.dateCreated}" />
+								<g:if test="${messageSection == sent || messageSection == pending}">
+									<g:formatDate date="${m.dateSent}" />
+								</g:if>
+								<g:else>
+									<g:formatDate date="${m.dateReceived}" />
+								</g:else>
 							</g:link>
 						</td>
 					</tr>
