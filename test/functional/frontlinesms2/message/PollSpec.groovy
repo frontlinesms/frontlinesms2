@@ -17,7 +17,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			def poll = Poll.findByTitle('Football Teams')
 		when:
 			to PollShowPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
+			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
 		then:
 			firstMessageLink.text() == 'Bob'
 	}

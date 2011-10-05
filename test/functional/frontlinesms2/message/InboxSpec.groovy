@@ -15,7 +15,7 @@ class InboxSpec extends MessageGebSpec {
 			to MessagesPage
 			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
-			messageSources == ['Bob', 'Alice']
+			messageSources == ['Alice', 'Bob']
 	}
 
 	def 'message details are shown in list'() {
@@ -23,7 +23,7 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 		when:
 			to MessagesPage
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'hi Bob'
@@ -36,7 +36,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = Fmessage.findBySrc('Bob')
 		when:
 			to MessagesPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
+			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Bob'
 	}
@@ -163,7 +163,7 @@ class InboxSpec extends MessageGebSpec {
 		then:
 			waitFor { checkedMessageCount == 2 }
 		when:
-			messagesSelect[1].click()
+			messagesSelect[2].click()
 			def message = Fmessage.findBySrc('Alice')
 			def formatedDate = dateToString(message.dateCreated)
 		then:

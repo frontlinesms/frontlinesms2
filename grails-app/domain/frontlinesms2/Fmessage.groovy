@@ -10,6 +10,7 @@ class Fmessage {
 	String contactName
 	Date dateCreated
 	Date dateReceived
+	Date dateSent
 	boolean contactExists
 	MessageStatus status
 	boolean read
@@ -21,12 +22,14 @@ class Fmessage {
 	static mapping = {
 		sort dateCreated:'desc'
 		sort dateReceived:'desc'
+		sort dateSent:'desc'
 		autoTimestamp false
 	}
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
 		dateReceived = dateReceived ? dateReceived : new Date()
+		dateSent = dateSent ? dateSent : new Date()
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
@@ -50,6 +53,7 @@ class Fmessage {
 		text(nullable:true)
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
+		dateSent(nullable:true)
 		status(nullable:true)
 		contactName(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
