@@ -43,6 +43,20 @@ class FolderController {
 		flash.message = "Folder was unarchived successfully!"
 		redirect(controller: "archive", action: "folderView")
 	}
+	
+	def confirmDelete = {
+		def folderInstance = Folder.get(params.id)
+		[folderInstance: folderInstance]
+	}
+	
+	def delete = {
+		withFolder { folder ->
+			folder.toDelete()
+			folder.save()
+		}
+		flash.message = "Folder has been trashed!"
+		redirect(controller:"message", action:"inbox")
+	}
 
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)

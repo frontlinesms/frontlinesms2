@@ -314,7 +314,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$("#poll-actions").value("deleteActivity")
+			$("#poll-actions").value("deleteAction")
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
