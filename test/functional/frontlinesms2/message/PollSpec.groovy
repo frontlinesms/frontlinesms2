@@ -305,6 +305,26 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 			!$("a", text: "Who is badder?")
 	}
 
+	def "can delete a poll"() {
+		given:
+			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		when:
+			to MessagesPage
+			$("a", text: "Who is badder?").click()
+		then:
+			waitFor { title == "Poll" }
+		when:
+			$("#poll-actions").value("deleteActivity")
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
+			$("#title").value("Delete poll")
+			$("#done").click()
+		then:
+			$("title").text() == "Inbox"
+			!$("a", text: "Who is badder?")
+	}
+	
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
 		to MessagesPage
 		createActivityButton.click()
