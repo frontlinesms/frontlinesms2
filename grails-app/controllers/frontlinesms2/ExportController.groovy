@@ -90,7 +90,7 @@ class ExportController {
 					break
 				case 'folder':
 					def folder = Folder.findById(params.ownerId)
-					name = "${folder.name} folder (${folder.getFolderMessages(false).count} messages)"
+					name = "${folder.name} folder (${folder.getFolderMessages(false).count()} messages)"
 					break
 			}
 		} else {

@@ -121,6 +121,27 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 		then:
 			waitFor { $('div#tabs-1').displayed }
 	}
+	
+	def "can delete a folder"() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			to FolderListPage
+			$("a", text: "Work").click()
+		then:
+			waitFor { title == "Folder" }
+		when:
+			$("#folder-actions").value("deleteAction")
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
+			$("#title").value("Delete folder")
+			$("#done").click()
+		then:
+			$("title").text() == "Inbox"
+			!$("a", text: "Work")
+	}
 
 }
 
