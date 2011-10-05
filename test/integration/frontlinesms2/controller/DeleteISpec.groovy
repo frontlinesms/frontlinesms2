@@ -15,17 +15,17 @@ class DeleteISpec extends IntegrationSpec {
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
-		when: "model is returned"
+		when:
 			messageController.beforeInterceptor()
 			def model1 = messageController.getShowModel()
-		then: "it contains one poll"
+		then:
 			model1.pollInstanceList == [p]
-		when: "poll is deleted"
+		when:
 			pollController.params.id = p.id
 			pollController.delete()
 			messageController.beforeInterceptor()
 			def model2 = messageController.getShowModel()
-		then: "poll instance list is empty"
+		then:
 			!model2.pollInstanceList
 	}
 	
@@ -38,18 +38,40 @@ class DeleteISpec extends IntegrationSpec {
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
 			p.save(flush:true, failOnError:true)
-		when: "model is returned"
+		when:
 			pollController.params.viewingArchive = false
 			def model1 = pollController.index()
-		then: "it contains one poll"
+		then:
 			model1.polls == [p]
-		when: "poll is deleted"
+		when:
 			pollController.params.id = p.id
 			pollController.delete()
 			pollController.params.viewingArchive = false
 			def model2 = pollController.index()
-		then: "polls list is empty"
+		then:
 			!model2.polls
+	}
+	
+	def "deleted folders are not included in the folderInstanceList"() {
+		given:
+			def f = new Folder(name:'test').save(failOnError:true)
+			def m = new Fmessage()
+			def messageController = new MessageController()
+			def folderController = new FolderController()
+			f.addToMessages(m)
+			f.save(flush:true, failOnError:true)
+		when:
+			messageController.beforeInterceptor()
+			def model1 = messageController.getShowModel()
+		then:
+			model1.folderInstanceList == [f]
+		when:
+			folderController.params.id = f.id
+			folderController.delete()
+			messageController.beforeInterceptor()
+			def model2 = messageController.getShowModel()
+		then:
+			!model2.folderInstanceList
 	}
 }
 
