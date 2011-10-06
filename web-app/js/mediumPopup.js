@@ -19,7 +19,7 @@ function messageResponseClick(messageType) {
 	$("#reply-dropdown").val("na");
 }
 
-function launchMediumPopup(title, html, btnFinishedText) {
+function launchMediumPopup(title, html, btnFinishedText, onLoad) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
@@ -28,10 +28,24 @@ function launchMediumPopup(title, html, btnFinishedText) {
 			height: 500,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
-			          		{ text:btnFinishedText,  click: function() {$("#tabs-1").contentWidget("onDone")}, id:"done" }],
+			          		{ text:btnFinishedText,  click: mediumPopupDone, id:"done" }],
 			close: function() { $(this).remove(); }
 		}
 	);
+	if(onLoad!=null) onLoad();
+}
+
+function mediumPopupDone() {
+	var isValid = $("#tabs-1").contentWidget('validate');
+	
+	if(isValid) {
+		// done
+		$(this).find("form").submit();                  
+		$(this).remove();
+	} else {
+		// show the error panel
+		$('.error-panel').show();
+	}
 }
 
 
@@ -58,7 +72,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	initializeTabContentWidgets()
-	onLoad && onLoad();
+	if(onLoad!=null) onLoad();
 }
 
 function cancel() {
@@ -93,24 +107,20 @@ function done() {
 }
 
 function validateWholeTab() {
-	var isValid = true
-	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
-		isValid =  validateTab($("#" + value.id)) && isValid
+	var isValid = true;
+	$("#tabs").find('.ui-tabs-panel').each(function(index, value) {
+		isValid = isValid && validateTab($("#" + value.id))
 	});
-  	return isValid
+  	return isValid;
 }
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
 	$.each(buttonToTabIndexMapping, function(key, value) {
-		if (value.indexOf(tabIndex) != -1)
-		{
+		if (value.indexOf(tabIndex) != -1) {
 			$(".ui-dialog-buttonpane #" + key).show()
-		}
-	else
-		{
+		} else {
 			$(".ui-dialog-buttonpane #" + key).hide()
 		}
-
 	});
 }
 
@@ -160,12 +170,12 @@ function movingForward(nextIndex, currentIndex) {
 
 function onTabSelect(withConfirmationScreen) {
 	$('#tabs').tabs({select: function(event, ui) {
-		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
+		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true;
 		if (isValid) {
-			$('.error-panel') && $('.error-panel').hide();
+			if($('.error-panel')) $('.error-panel').hide();
 			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
 		}
-		return isValid
+		return isValid;
 	}});
 }
 

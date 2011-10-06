@@ -1,6 +1,7 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
+import frontlinesms2.contact.PageContactShow
 
 class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
@@ -43,7 +44,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog(null)
 		then:
-			nameField.displayed
+			smartGroupNameField.displayed
 	}
 	
 	def 'error message is not displayed by default'() {
@@ -143,7 +144,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			ruleField[0].value() == 'Phone Number'
+			ruleField[0].value() == 'Phone number'
 			ruleMatchText[0] == 'starts with'
 	}
 	
@@ -151,14 +152,14 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			ruleField[0].value() == 'Phone Number'
+			ruleField[0].value() == 'Phone number'
 			ruleMatchText[0] == 'starts with'
 		when:
-			ruleField[0].value('Name')
+			ruleField[0].value('Contact name')
 		then:
 			ruleMatchText[0] == 'contains'
 		when:
-			ruleField[0].value('Phone Number')
+			ruleField[0].value('Phone number')
 		then:
 			ruleMatchText[0] == 'starts with'
 	}
@@ -173,6 +174,36 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			waitFor { errorMessages.displayed }
 	}
+
+	def 'a single empty rule should fail validation'() {
+		when:
+			launchCreateDialog()
+			finishButton.click()
+		then:
+			waitFor { errorMessages.displayed }
+	}
+
+	def 'a single empty rule followed by filled rules should fail validation'() {
+		when:
+			launchCreateDialog()
+			addRule()
+			ruleField[1].value('Contact name')
+			ruleValues[1].value('bob')
+			finishButton.click()
+		then:
+			waitFor { errorMessages.displayed }
+	}
+	
+	def 'filled rule followed by empty rule should fail validation'() {
+		when:
+			launchCreateDialog()
+			addRule()
+			ruleField[1].value('Contact name')
+			ruleValues[1].value('bob')
+			finishButton.click()
+		then:
+			waitFor { errorMessages.displayed }
+	}
 	
 	def 'successfully creating a smart group should show a flash message'() {
 		when:
@@ -180,6 +211,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			setRuleValue(0, '+44')
 			finishButton.click()
 		then:
-			waitFor { flashMessage.text() == "Created new smart group 'English Contacts'" }
+			waitFor { println "Flash message: ${flashMessage.text()}" 
+				flashMessage.text() == "Created new smart group: 'English Contacts'" }
 	}
 }

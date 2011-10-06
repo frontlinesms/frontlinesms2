@@ -6,8 +6,10 @@ import frontlinesms2.contact.PageContactShow
 abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 	def removeRule(i) {
 		int ruleCount = rules.size()
-		removeRuleButtons[i].click()
-		waitFor { rules.size() == ruleCount-1 }
+		if(removeRuleButtons[i].displayed && !removeRuleButtons[i].disabled) {
+			removeRuleButtons[i].click()
+			waitFor { rules.size() == ruleCount-1 }
+		}
 	}
 	
 	def setRuleValue(i, val) {
