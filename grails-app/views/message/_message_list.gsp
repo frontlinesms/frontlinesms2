@@ -29,18 +29,16 @@
 			</tr>
 			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="message-preview ${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
-					<td>
+					<td class="message-preview-select">
 						<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 					</td>
 
-					<td>
+					<td class="message-preview-star">
 					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
-							<div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
-							</div>
 					  </g:remoteLink>
 					</td>
-					<td>
+					<td class="message-preview-sender">
 							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 								${m.contactName}
 							</g:link>
@@ -58,6 +56,7 @@
 					</tr>
 				</g:each>
 		</table>
+	    <g:render template="../message/message_details" />
     </div>
 	</g:if>
 

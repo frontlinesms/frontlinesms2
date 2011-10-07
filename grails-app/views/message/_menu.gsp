@@ -3,7 +3,7 @@
 <ul class="main-list"> 
 	<li>
 
-		<h3>MESSAGES</h3>
+		<h3 id="messages-list-title" class="list-title">MESSAGES</h3>
 		<ul class='sublist' id="messages-submenu">
 			<li class="${(messageSection=='inbox')? 'selected':''}">
 				<g:link action="inbox">Inbox</g:link>
@@ -21,8 +21,8 @@
 	</li>
 	<li>
 
-		<h3>Polls</h3>
-		<ul class='sub-menu' id="activities-submenu">
+		<h3 class="list-title activities-list-title">Polls</h3>
+		<ul class='sublist' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li class="${p == ownerInstance ? 'selected' : ''}">
 					<g:link action="poll" params="[ownerId: p.id]">${p.title}</g:link>
@@ -35,7 +35,7 @@
 	</li>
 	<li>
 
-		<h3>Shows</h3>
+		<h3 id="shows-list-title" class="list-title">Shows</h3>
 		<ul class='sublist' id="shows-submenu">
 			<g:each in="${radioShows}" status="i" var="s">
 				<li class="${s == ownerInstance ? 'selected' : ''}">
@@ -51,7 +51,7 @@
 	</li>
 	<li>
 
-		<h3>Folders</h3>
+		<h3 id="folders-list-title" class="list-title">Folders</h3>
 	 	<ul class='sublist' id='folders-submenu' >
 			<g:each in="${folderInstanceList}" status="i" var="f">
 				<li class="${f == ownerInstance ? 'selected' : ''}">
