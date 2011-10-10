@@ -2,7 +2,8 @@ package frontlinesms2.folder
 
 import frontlinesms2.*
 
-class FolderGebSpec extends grails.plugin.geb.GebSpec {
+class FolderBaseSpec extends grails.plugin.geb.GebSpec {
+	
 	def createTestFolders() {
 		['Work', 'Projects'].each() {
 			new Folder(name:it).save(failOnError:true, flush:true)

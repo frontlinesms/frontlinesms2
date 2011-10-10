@@ -79,8 +79,6 @@ class GroupViewSpec extends GroupBaseSpec {
 			$("#page-arrows .currentStep").text() == "2"
 	}
 	
-	
-	
 }
 
 

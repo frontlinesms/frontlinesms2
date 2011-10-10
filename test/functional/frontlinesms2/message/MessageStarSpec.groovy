@@ -2,7 +2,7 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
-class StarMessageSpec extends grails.plugin.geb.GebSpec{
+class MessageStarSpec extends grails.plugin.geb.GebSpec{
 		
 	def setup() {
 		new Fmessage(src:'+254287645', dst:'+254112233', text:'css test', status: MessageStatus.INBOUND, read: false).save(failOnError:true)
