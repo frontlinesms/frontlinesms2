@@ -3,7 +3,7 @@ package frontlinesms2.message
 import frontlinesms2.*
 
 @Mixin(frontlinesms2.utils.GebUtil)
-class AddContactSpec extends MessageGebSpec {
+class MessageAddContactSpec extends MessageBaseSpec {
 
 	def 'if source of message does not exists in the database then number is displayed'() {
 		when:

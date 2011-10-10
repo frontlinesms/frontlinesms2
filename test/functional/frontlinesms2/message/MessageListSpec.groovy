@@ -8,7 +8,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
-            to MessagesPage
+            to PageMessageInbox
 			def btnInbox = $('#messages-menu li a', href:"/frontlinesms2/message/inbox")
         then:
 			btnInbox.text() == 'Inbox'
@@ -16,7 +16,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
-	        to MessagesPage
+	        to PageMessageInbox
 			def btnSentItems = $('#messages-menu li a', href:'/frontlinesms2/message/sent')
         then:
 			btnSentItems.text() == 'Sent'
@@ -40,7 +40,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 		then:
 		$('#messages-submenu li')*.text()[0] == 'Inbox'
 		$('#messages-submenu li')*.text()[1] == 'Sent'
@@ -52,7 +52,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createReadUnreadMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 		then:
 		$('#tab-messages').text() == 'Messages 1'
 	}
@@ -61,7 +61,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			$("#source-header a").click()
 		then:
 			getColumnAsArray($("table tr"), 2) == ['Contact 1', 'Contact 2']

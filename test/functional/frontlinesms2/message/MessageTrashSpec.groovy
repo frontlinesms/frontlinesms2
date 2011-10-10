@@ -2,15 +2,13 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
-class SentListSpec extends grails.plugin.geb.GebSpec {
-	def setup() {
-		new Fmessage(src:"src1", dst:"dst1",status:MessageStatus.SENT, starred:true).save(flush: true)
-		new Fmessage(src:"src2", dst:"dst2",status:MessageStatus.SENT).save(flush: true)
-	}
-
-	def "can filter folder messages by starred and unstarred messages"() {
+class MessageTrashSpec extends grails.plugin.geb.GebSpec {
+	def "should filter inbox messages for starred and unstarred messages"() {
+		setup:
+	    	new Fmessage(src: "src1", dst: "dst1", deleted: true, starred: true).save(flush: true)
+	    	new Fmessage(src: "src2", dst: "dst2", deleted: true).save(flush: true)
 		when:
-			go "message/sent"
+			to PageMessageTrash
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -24,4 +22,14 @@ class SentListSpec extends grails.plugin.geb.GebSpec {
 		then:
 			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
 	}
+	
+	def "should not contain export button" () {
+		when:
+			to PageMessageTrash
+		then:
+			!$('a', text:'Export')
+	}
 }
+
+
+

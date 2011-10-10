@@ -1,15 +1,17 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.poll.PageMessagePollFootballTeamsBob
 
-class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
+class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
+	
 	def 'message actions menu is displayed for all individual messages'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 			createTestFolders()
 		when:
-			to PollMessageViewPage
+			to PageMessagePollFootballTeamsBob
 			def actions = $('#move-actions').children()*.text()
 		then:
 			actions[1] == "Inbox"
@@ -49,7 +51,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 		when:
-			to PollMessageViewPage
+			to PageMessagePollFootballTeamsBob
 			messagesSelect[0].click()
 		then:
 			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
@@ -66,7 +68,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollMessageViewPage
+			to PageMessagePollFootballTeamsBob
 		then:
 			!$("#message-archive").displayed
 	}
@@ -76,7 +78,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollMessageViewPage
+			to PageMessagePollFootballTeamsBob
 			messagesSelect[0].click()
 		then:
 			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
@@ -97,9 +99,4 @@ class MessageActionSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 }
 
-class PollMessageViewPage extends geb.Page {
- 	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
-	static content = {
-		messagesSelect { $(".message-select") }
-	}
-}
+
