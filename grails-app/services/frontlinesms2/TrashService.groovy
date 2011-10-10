@@ -2,11 +2,9 @@ package frontlinesms2
 
 class TrashService {
 
-    def trashPoll(Poll poll) {
-    	poll.delete()
-    }
-    
-    def trashFolder(Folder folder) {
-        folder.delete()
+    def emptyTrash() {
+		Fmessage.findAllByDeleted(true)*.delete()
+		Poll.findAllByDeleted(true)*.delete()
+		Folder.findAllByDeleted(true)*.delete()
     }
 }

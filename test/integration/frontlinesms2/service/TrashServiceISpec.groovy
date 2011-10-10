@@ -11,7 +11,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = new Fmessage().save(failOnError: true)
 			def response1 = new PollResponse(value:"FC Manchester United")
 			def response2 = new PollResponse(value:"FC United of Manchester")
-			def p = new Poll(title:'Who is the best football team in the world?', keyword:"football")
+			def p = new Poll(title:'Who is the best football team in the world?', keyword:"football", deleted:true)
 			p.addToResponses(response1)
 			p.addToResponses(response2)
 			response2.addToMessages(message)
@@ -19,7 +19,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			assert Poll.count() == 1
 			assert p.getPollMessages().count() == 1
-			service.trashPoll(p)
+			service.emptyTrash()
 		then:
 			Poll.count() == 0
 			PollResponse.count() == 0
@@ -29,14 +29,14 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def "should permanently delete a folder and its messages when trashed"() {
 		given:
 			def message = new Fmessage().save(failOnError:true)
-			def folder = new Folder(name:"test").save(failOnError:true)
+			def folder = new Folder(name:"test", deleted:true).save(failOnError:true)
 			folder.addToMessages(message)
 		when:
             assert Fmessage.count() == 1
 			assert folder.getLiveMessageCount() == 1
-			service.trashFolder(folder)
+			service.emptyTrash()
 		then:
-			Folder.count() == 0
+			Poll.count() == 0
 			Fmessage.count() == 0
 	}
 }

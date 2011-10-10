@@ -11,6 +11,7 @@ class MessageController {
 			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
+	def trashService
 
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -70,10 +71,31 @@ class MessageController {
 	}
 	
 	def trash = {
-		def messageInstanceList = Fmessage.deleted(params.starred)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+		def activityInstance
+		params.type = params.type ? params.type.substring('frontlinesms2.'.length()) : false
+		def instanceType = params.type
+		if(instanceType == "Fmessage") {
+			params.messageId = params.id
+		} else if(instanceType) {
+			activityInstance = getActivityInstance(instanceType, params.id)
+		}
+		
+		def messageInstanceList = Fmessage.deleted(params.starred).list(params)
+		def folderInstanceList = Folder.findAllByDeleted(true) ?: []
+		def pollInstanceList = Poll.findAllByDeleted(true) ?:[]
+		def trashInstanceList = [] 
+		trashInstanceList += messageInstanceList + folderInstanceList + pollInstanceList
+		trashInstanceList.sort{ obj1, obj2 ->
+			if(params.sort == "dateCreated") {
+				(obj2.lastUpdated).compareTo(obj1.lastUpdated)
+			} else {
+					obj2."${params.sort}".compareTo(obj1."${params.sort}")
+			}
+		}
+		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageSection: 'trash',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
+					messageInstanceTotal: trashInstanceList.size,
+					ownerInstance: activityInstance] << getShowModel()
 	}
 
 	def poll = {
@@ -225,12 +247,17 @@ class MessageController {
 	def confirmEmptyTrash = { }
 	
 	def emptyTrash = {
-		Fmessage.findAllByDeleted(true)*.delete()
+		trashService.emptyTrash()
 		redirect(action: 'inbox')
 	}
 	
 	def getUnreadMessageCount = {
 		render text: Fmessage.countUnreadMessages()
+	}
+	
+	private def getActivityInstance(instanceType, id) {
+		def instanceClass = instanceType == "Poll" ? Poll : Folder
+		instanceClass.findByIdAndDeleted(id, true)
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {

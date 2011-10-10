@@ -1,4 +1,4 @@
-<%@ page import="frontlinesms2.MessageStatus" %>
+<%@ page import="frontlinesms2.MessageStatus"%>
 <div id="message-list">
 	<g:hiddenField name="sortField" value="${params.sort}"/>
 	<g:hiddenField name="checkedMessageList" value=","/>
@@ -27,39 +27,43 @@
 							params="${params}" id="message-header" />
 						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
-			</tr>
-		</thead>
-		<tbody id='messages-table'>
-			<g:each in="${messageInstanceList}" status="i" var="m">
-				<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
-					<td>
-						<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
-						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
-					</td>
-
-					<td>
-					  <g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
-							<div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
-							</div>
-					  </g:remoteLink>
-					</td>
-					<td>
-							<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-								${m.contactName}
-							</g:link>
-					</td>
-					<td>
-							<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-							  ${m.displayText}
-							</g:link>
-					</td>
-					<td>
-							<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate date="${m.dateCreated}" />
-							</g:link>
-						</td>
-					</tr>
-				</g:each>
+				</tr>
+			</thead>
+			<tbody id='messages-table'>
+				<g:if test="${messageSection == 'trash'}">
+					<g:render template="../message/trash_list"></g:render>
+				</g:if>
+				<g:else>
+					<g:each in="${messageInstanceList}" status="i" var="m">
+						<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
+							<td>
+								<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
+								<g:hiddenField name="src-${m.id}" value="${m.src}"/>
+							</td>
+							<td>
+								<g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)">
+									<div id="star-${m.id}" class="${m.starred? 'starred':'unstarred'}">
+									</div>
+								</g:remoteLink>
+							</td>
+							<td>
+								<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+									${m.contactName}
+								</g:link>
+							</td>
+							<td>
+								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+									${m.displayText}
+								</g:link>
+							</td>
+							<td>
+								<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
+									<g:formatDate date="${m.dateCreated}" />
+								</g:link>
+							</td>
+						</tr>
+					</g:each>
+				</g:else>
 			</tbody>
 		</table>
 	</g:if>
