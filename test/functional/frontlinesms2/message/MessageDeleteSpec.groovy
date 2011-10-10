@@ -2,7 +2,7 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
-class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
+class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
 		assert Fmessage.inbox().count() == 3
@@ -35,13 +35,13 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("#done").click()
 		then:
-			waitFor { at MessagesPage }
+			waitFor { at PageMessageInbox }
 			Fmessage.findAllByDeleted(true).size == 0
 	}
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -62,7 +62,7 @@ class DeleteMessageSpec extends grails.plugin.geb.GebSpec {
 		when:
 			btnDelete.click()
 		then:
-			at MessagesPage
+			at PageMessageInbox
 			waitFor{$("div.flash").text().contains("deleted")}
 	}
 

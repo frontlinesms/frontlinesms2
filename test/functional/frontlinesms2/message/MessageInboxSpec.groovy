@@ -7,12 +7,12 @@ import java.util.Date
 
 import frontlinesms2.*
 
-class InboxSpec extends MessageGebSpec {
+class MessageInboxSpec extends MessageBaseSpec {
 	def 'inbox message list is displayed'() {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			messageSources == ['Bob', 'Alice']
@@ -22,7 +22,7 @@ class InboxSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
@@ -35,7 +35,7 @@ class InboxSpec extends MessageGebSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Bob')
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
 			firstMessageLink.text() == 'Bob'
@@ -93,7 +93,7 @@ class InboxSpec extends MessageGebSpec {
 			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			def rowContents = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			rowContents == ['June']
@@ -157,7 +157,7 @@ class InboxSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -177,7 +177,7 @@ class InboxSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 		then:
 			$("#btn_reply").click()
 			waitFor {$('#tabs-1').displayed}
@@ -247,7 +247,7 @@ class InboxSpec extends MessageGebSpec {
 			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			waitFor { $("#move-actions").displayed }
 			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
 			$("#move-actions").jquery.trigger("change")

@@ -7,7 +7,7 @@ import java.util.Date
 
 import frontlinesms2.*
 
-class PendingMessageSpec extends grails.plugin.geb.GebSpec {
+class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		new Fmessage(src: "src1", dst:"dst1", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true)
 		new Fmessage(src: "src2", dst:"dst2", status: MessageStatus.SEND_PENDING).save(flush: true)
@@ -97,7 +97,7 @@ class PendingMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def goToPendingPage() {
-		to MessagesPage
+		to PageMessageInbox
 		$('a', text: "Pending").click()
 		waitFor { title == "Pending" }
 	}

@@ -1,7 +1,7 @@
 package frontlinesms2.message
 
-class MessagesPage extends geb.Page {
-	static url = 'message/inbox'
+abstract class PageMessage extends geb.Page {
+	static url = 'message/'
 	static content = {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
@@ -9,7 +9,7 @@ class MessagesPage extends geb.Page {
 		flashMessage(required:false) { $("div.flash") }
 		multipleMessagesThing(required:false) { $('#multiple-messages') }
 		deleteAllButton(required:false) { $("#btn_delete_all") }
-		checkedMessageCount { 
+		checkedMessageCount {
 			def t = $("#checked-message-count").text()
 			if(t != null) {
 				return t - ' messages selected' as Integer
@@ -19,5 +19,8 @@ class MessagesPage extends geb.Page {
 		}
 		createActivityButton { $("#create-activity a") }
 		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
+		archiveBtn(required:false){$("#message-details .buttons #message-archive")}
+		deleteBtn(required:false) {$("#message-details .buttons #message-delete")}
 	}
+	
 }

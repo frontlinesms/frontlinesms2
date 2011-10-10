@@ -2,7 +2,8 @@ package frontlinesms2.poll
 
 import frontlinesms2.*
 
-class PollGebSpec extends grails.plugin.geb.GebSpec {
+class PollBaseSpec extends grails.plugin.geb.GebSpec {
+	
 	static createTestPolls() {
 		[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona'),
 				Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB: 'oriele'),

@@ -4,7 +4,7 @@ import frontlinesms2.RadioShow
 import frontlinesms2.Fmessage
 
 
-class RadioShowSpec extends grails.plugin.geb.GebSpec {
+class ShowsFSpec extends grails.plugin.geb.GebSpec {
 	def "should be able to create new shows"() {
 		when:
 			go "message"
