@@ -6,7 +6,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class QuickMessageSpec extends grails.plugin.geb.GebSpec {
+class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "quick message link opens the popup to send messages"() {
 		when:
 			launchQuickMessageDialog()
@@ -181,7 +181,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 
 	def "should launch announcement screen from create new activity link" () { // FIXME why is this test here??
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			$("a", text:"Create new activity").click()
 		then:
 			waitFor { $("#tabs-1").displayed }
@@ -206,7 +206,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def launchQuickMessageDialog() {
-		to MessagesPage
+		to PageMessageInbox
 		$("a", text:"Quick message").click()
 		waitFor { at QuickMessageDialog }
 	}

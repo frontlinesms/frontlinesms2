@@ -2,13 +2,13 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
-class CheckedMessageSpec extends MessageGebSpec {
+class MessageCheckSpec extends MessageBaseSpec {
 	
 	def "header checkbox is checked when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 			messagesSelect[3].click()
@@ -20,7 +20,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -48,7 +48,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -68,7 +68,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 				}
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -90,7 +90,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -110,7 +110,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when: 
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[0].click()
 		then:
 			waitFor { checkedMessageCount == 2 }
@@ -134,7 +134,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when: 
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[1].click()
 		then:
 			messagesSelect[1].checked
@@ -150,7 +150,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 			createInboxTestMessages()
 			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[0].click()
 		then:
 			waitFor { $('#multiple-messages').displayed }
@@ -179,7 +179,7 @@ class CheckedMessageSpec extends MessageGebSpec {
 		when:
 			$('#multiple-messages #btn_archive_all').click()
 		then:
-			waitFor { at MessagesPage }
+			waitFor { at PageMessageInbox }
 			$("div#no-messages").text() == 'No messages'
 
 	}

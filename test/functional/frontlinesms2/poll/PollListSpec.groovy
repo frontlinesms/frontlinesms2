@@ -1,17 +1,17 @@
-package frontlinesms2.message
+package frontlinesms2.poll
 
 import frontlinesms2.*
 
-class PollListSpec extends frontlinesms2.poll.PollGebSpec {
+class PollListSpec extends PollBaseSpec {
 	def 'poll message list is displayed'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PollListPage
+			to PageMessagePollFootballTeamsBob
 			def pollMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
-			at PollListPage
+			at PageMessagePollFootballTeamsBob
 			pollMessageSources == ['Bob', 'Alice']
 	}
 
@@ -20,7 +20,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessagePollFootballTeamsBob
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
@@ -33,7 +33,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessagePollFootballTeamsBob
 			def pollTitle = $("#poll-title div h2").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
@@ -55,7 +55,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessagePollFootballTeamsBob
 		then:
 			$('#messages-menu .selected').text() == 'Football Teams'
 	}
@@ -65,7 +65,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessagePollFootballTeamsBob
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -85,7 +85,7 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessagePollFootballTeamsBob
 			$(".message-select")[1].click()
 		then:
 			waitFor { $('#message-body').text() == 'I like manchester' }
@@ -119,17 +119,5 @@ class PollListSpec extends frontlinesms2.poll.PollGebSpec {
 			$("#pollSettings").click()
 		then:
 			$("#messages").displayed
-	}
-}
-
-class PollListPage extends geb.Page {
- 	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Bob').id}"
-	static at = {
-		title.endsWith('Poll')
-	}
-	static content = {
-		selectedMenuItem { $('#messages-menu .selected') }
-		messagesList { $('#messages-submenu') }
-		messagesSelect(required:false) { $(".message-select") }
 	}
 }

@@ -1,66 +1,13 @@
-package frontlinesms2.message
+package frontlinesms2.poll
 
 import frontlinesms2.*
+import frontlinesms2.message.PageMessageInbox
 import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class PollSpec extends frontlinesms2.poll.PollGebSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
-	
-	def 'message from bob is first in the list, and links to the show page'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-			def message = Fmessage.findBySrc('Bob')
-			def poll = Poll.findByTitle('Football Teams')
-		when:
-			to PollShowPage
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
-		then:
-			firstMessageLink.text() == 'Bob'
-	}
-
-	def 'selected message and its details are displayed'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-			def message = Fmessage.findBySrc('Alice')
-		when:
-			to PollShowPage
-		then:
-			$('#message-details #contact-name').text() == message.src
-			$('#message-details #message-date').text() == DATE_FORMAT.format(message.dateCreated)
-			$('#message-details #message-body').text() == message.text
-	}
-
-	def 'selected message is highlighted'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-			def poll = Poll.findByTitle('Football Teams')
-			def aliceMessage = Fmessage.findBySrc('Alice')
-			def bobMessage = Fmessage.findBySrc('Bob')
-		when:
-			to PollShowPage
-		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$aliceMessage.id"
-		when:
-			go "message/poll/$poll.id/show/$bobMessage.id"
-		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$bobMessage.id"
-	}
-	
-	def 'activities should also list message counts'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			to PollShowPage
-		then:
-			$('#activities-submenu li')[0..2]*.text() == ['Football Teams', 'Shampoo Brands', 'Rugby Brands']
-	}
+class PollCedSpec extends PollBaseSpec {
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
@@ -275,7 +222,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	def "can launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			to MessagesPage
+			to PageMessageInbox
 			$("a", text: "Who is badder?").click()
 		then:
 			waitFor { title == "Poll" }
@@ -289,7 +236,7 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		given:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			$("a", text: "Who is badder?").click()
 		then:
 			waitFor { title == "Poll" }
@@ -306,12 +253,12 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
-		to MessagesPage
+		to PageMessageInbox
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
 		$("input", name: "activity").value("poll")
 		$("#done").click()
-		waitFor { at PollCreatePage }
+		waitFor { at PagePollCreate }
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
 		pollForm."collect-responses" = !enableMessage
@@ -319,43 +266,11 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 }
 
-class PollCreatePage extends geb.Page {
-	static at = { 
-		$("#ui-dialog-title-modalBox").text() == "Create Poll"
-	}
-	static content = {
-		tabMenu { $("#tabs li") }
-		
-		enterQuestionTab { $("#tabs-1") }
-		responseListTab { $("#tabs-2") }
-		responseListTabLink { tabMenu[1] }
-		autoSortTab { $("#tabs-3") }
-		autoReplyTab { $("#tabs-4") }
-		selectRecipientsTab { $("#tabs-5") }
-		selectRecipientsTabLink { tabMenu[4] }
-		confirmationTab { $("#tabs-6") }
-		
-		next { $("#nextPage") }
-		prev { $("#prevPage") }
-		done { $("#done") }
-		
-		pollForm { $('form', name:'poll-details') }
 
-		choiceALabel { $('label', for:'choiceA') }
-		choiceBLabel { $('label', for:'choiceB') }
-		choiceCLabel { $('label', for:'choiceC') }
-		choiceDLabel { $('label', for:'choiceD') }
-		choiceELabel { $('label', for:'choiceE') }
-		
-		addManualAddress { $('.add-address') }
-		
-		errorMessage(required:false) { $('.error-panel') }
-	}
-}
 
-class PollShowPage extends geb.Page {
-	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}" }
-	static at = {
-		title.endsWith('Poll')
-	}
-}
+//class PollShowPage extends geb.Page {
+//	static getUrl() { "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}" }
+//	static at = {
+//		title.endsWith('Poll')
+//	}
+//}
