@@ -49,7 +49,7 @@
 		</div>
 	</g:else>
 	<ol>
-		<g:if test="${messageSection == 'trash' && messageInstance != null}">
+		<g:if test="${messageSection == 'trash' && messageInstanceTotal != 0}">
 			<li>
 				<select id="trash-actions" onchange="launchEmptyTrashConfirmation();">
 					<option value="na" class="na">Trash actions...</option>

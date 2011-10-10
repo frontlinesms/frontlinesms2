@@ -73,5 +73,23 @@ class DeleteISpec extends IntegrationSpec {
 		then:
 			!model2.folderInstanceList
 	}
+	
+	def "deleted folders are included in the trash list"() {
+		given:
+			def f = new Folder(name:'test', deleted:true).save(failOnError:true)
+			def m = new Fmessage(dateReceived: new Date())
+			def m2 = new Fmessage(dateReceived: new Date()-1)
+			def messageController = new MessageController()
+			f.addToMessages(m)
+			f.addToMessages(m2)
+			f.save(flush:true, failOnError:true)
+			def m3 = new Fmessage(text:"not in folder", deleted: true).save(flush:true, failOnError:true)
+		when:
+			messageController.beforeInterceptor()
+			messageController.trash()
+			def model = messageController.modelAndView.model.trashInstanceList
+		then:
+			model == [m3,f]
+	}
 }
 
