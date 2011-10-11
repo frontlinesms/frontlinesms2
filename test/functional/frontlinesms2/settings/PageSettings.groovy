@@ -2,7 +2,7 @@ package frontlinesms2.settings
 
 import frontlinesms2.*
 
-class SettingsPage extends geb.Page {
+class PageSettings extends geb.Page {
 	static url = 'settings'
 	static at = {
 		title.startsWith('Settings')
