@@ -16,17 +16,17 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			$("#no-messages").text() == 'No messages'
 		when:
 			to PageMessageInbox
+			$("a", text:"hi Bob").click()
+			waitFor { $("a", text:"hi Bob").parent().parent().hasClass("selected")}
 			archiveBtn.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
 			to PageArchive
-			waitFor { $("a", text:"hi Bob").displayed}
 		then:
 	        $("a", text:"hi Bob").displayed
 		when:
 	        $("a", text:"hi Bob").click()
-			!$("#message-archive").displayed()
 		then:
-			$("#global-nav a", text:"Archive").hasClass("selected")
+			!$("#message-archive").displayed()
 	}
 
 	def 'archived messages do not show up in sent view'() {
@@ -40,18 +40,18 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			$("#no-messages").text() == 'No messages'
 		when:
 			to PageMessageSent
+			$("a", text:"hi Mary").click()
+			waitFor { $("a", text:"hi Mary").parent().parent().hasClass("selected")}
 			archiveBtn.click()
 			waitFor { $("div.flash.message").text().contains("archived") }
 			to PageArchive
 			$("#sent").click()
-			waitFor { $("table", id:'messages').displayed}
 		then:
-	        $("a", text:"hi Mary").displayed
+	        waitFor {$("a", text:"hi Mary").displayed}
 		when:
 			$("a", text:"hi Mary").click()
-			!$("#message-archive").displayed()
 		then:
-			$("#global-nav a", text:"Archive").hasClass("selected")
+			!$("#message-archive").displayed()
 	}
 
 
