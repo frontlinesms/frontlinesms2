@@ -20,7 +20,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at PageSearch
+			at PageSearchResult
 			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
 					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
@@ -133,12 +133,12 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at PageSearch
+			at PageSearchResult
 		when:
 			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
 			$("#message-delete").click()
 		then:
-			at PageSearch
+			at PageSearchResult
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
 			$('.flash').displayed
 	}
@@ -179,17 +179,17 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at PageSearch
+			at PageSearchResult
 		when:
 			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
 			$("#message-archive").click()
 		then:
-			at PageSearch
+			at PageSearchResult
 		when:
 			def messageBody = $("#message-body").text()
 			$("a.displayName-${Fmessage.findByText('sent').id}").click()
 		then:
-			at PageSearch
+			at PageSearchResult
 			$("#message-body").text() == 'sent'
 	}
 	
