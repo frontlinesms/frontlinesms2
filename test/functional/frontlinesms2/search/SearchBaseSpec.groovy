@@ -2,7 +2,7 @@ package frontlinesms2.search
 
 import frontlinesms2.*
 
-class SearchGebSpec extends grails.plugin.geb.GebSpec {
+class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
@@ -11,6 +11,42 @@ class SearchGebSpec extends grails.plugin.geb.GebSpec {
 					it.status = MessageStatus.INBOUND
 					it.save(failOnError:true)
 				}
+	}
+	
+	static createTestGroups() {
+		new Group(name: 'Listeners').save(flush: true)
+		new Group(name: 'Friends').save(flush: true)
+	}
+	
+	static createTestMessages2() {
+		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
+				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex', dateReceived: new Date()-1)].each() {
+			it.status = MessageStatus.INBOUND
+			it.save(failOnError:true)
+		}
+	}
+	
+	static createTestPollsAndFolders() {
+		def chickenResponse = new PollResponse(value:'chicken')
+		def liverResponse = new PollResponse(value:'liver')
+		new Fmessage(src:'Joe', dst:'+254987654', text:'eat more cow', messageOwner:'chickenResponse')
+		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
+		
+	}
+	
+	static createTestContactsAndCustomFieldsAndMessages(){
+		def firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
+		def secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
+		def thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
+		
+		[new CustomField(name:'town', value:'Paris', contact: firstContact),
+			new CustomField(name:'like', value:'cake', contact: secondContact),
+			new CustomField(name:'ik', value:'car', contact: secondContact),
+			new CustomField(name:'like', value:'ake', contact: thirdContact),
+			new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', status:MessageStatus.INBOUND)].each {
+		it.save(failOnError:true)
+		}
 	}
 	
 	static createInboxTestMessages() {

@@ -1,6 +1,6 @@
 package frontlinesms2.search
 
-class SearchPage extends geb.Page {
+class PageSearchResultHi extends PageSearch {
 	static url = 'search/result?searchString=hi'
 	static at = {
 		title.startsWith("Search")
