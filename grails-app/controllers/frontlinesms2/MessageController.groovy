@@ -76,7 +76,7 @@ class MessageController {
 		def trashInstance
 		def trashInstanceList
 		def messageInstanceList
-		params.sort = params.sort != "dateReceived" ?: 'dateCreated'
+		params.sort = params.sort != "dateReceived" ? params.sort : 'dateCreated'
 		if(params.id) {
 			def setTrashInstance = { obj ->
 				if(obj.linkClassName == "frontlinesms2.Fmessage") {
@@ -87,7 +87,6 @@ class MessageController {
 			}
 			setTrashInstance(Trash.findById(params.id))
 		}
-		
 		if(params.starred) {
 			messageInstanceList = Fmessage.deleted(params.starred)
 		} else {
