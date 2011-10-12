@@ -21,16 +21,24 @@
 					<td>
 						<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/></td>
 					<td />
-				    	<g:sortableColumn property="contactName" title="${messageLabel}"
-							params="${params}" id='source-header' />
-		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-							params="${params}" id="message-header" />
+				    	<g:if test="${messageSection == 'trash'}">
+				    		<g:sortableColumn property="identifier" title="${messageLabel}"
+								params="${params}" id='source-header' />
+			    			<g:sortableColumn property="message" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+								params="${params}" id="message-header" />
+				    	</g:if>
+				    	<g:else>
+				    		<g:sortableColumn property="contactName" title="${messageLabel}"
+								params="${params}" id='source-header' />
+		    				<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+								params="${params}" id="message-header" />
+				    	</g:else>
 						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
 				</tr>
 			</thead>
 			<tbody id='messages-table'>
-				<g:if test="${messageSection == 'trash'}">
+				<g:if test="${messageSection == 'trash' && !params.starred}">
 					<g:render template="../message/trash_list"></g:render>
 				</g:if>
 				<g:else>

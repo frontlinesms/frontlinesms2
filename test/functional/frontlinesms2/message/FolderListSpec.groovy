@@ -1,8 +1,11 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import java.text.SimpleDateFormat
 
 class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+	
 	def 'folder message list is displayed'() {
 		given:
 			createTestFolders()
@@ -123,24 +126,61 @@ class FolderListSpec extends frontlinesms2.folder.FolderGebSpec {
 	}
 	
 	def "can delete a folder"() {
-		given:
-			createTestFolders()
-			createTestMessages()
 		when:
-			to FolderListPage
-			$("a", text: "Work").click()
-		then:
-			waitFor { title == "Folder" }
-		when:
-			$("#folder-actions").value("deleteAction")
-		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
-		when:
-			$("#title").value("Delete folder")
-			$("#done").click()
+			deleteFolder()
 		then:
 			$("title").text() == "Inbox"
 			!$("a", text: "Work")
+	}
+	
+	def "deleted folders show up in the trash section"() {
+		setup:
+			def folder = deleteFolder()
+		when:
+			go "message/trash/show/${Trash.findByLinkId(folder.id).id}"
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+		then:
+			rowContents[2] == 'Work'
+			rowContents[3] == '2 messages'
+			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folder.id).dateCreated)
+	}
+	
+	def "selected folder and its details are displayed"() {
+		setup:
+			def folder = deleteFolder()
+		when:
+			go "message/trash/show/${Trash.findByLinkId(folder.id).id}"
+		then:
+			$('#activity-name').text() == folder.name
+			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folder.id).dateCreated)
+			$('#activity-body').text() == "${folder.getLiveMessageCount()} messages"
+	}
+	
+	def "clicking on empty trash permanently deletes a folder"() {
+		setup:
+			def folder = deleteFolder()
+		when:
+			go "message/trash"
+			$("#trash-actions").value("empty-trash")
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
+			$("#title").value("Empty trash")
+			$("#done").click()
+		then:
+			!Folder.findById(folder.id)
+	}
+	
+	def deleteFolder() {
+		createTestFolders()
+		createTestMessages()
+		def folder = Folder.findByName("Work")
+		go "message/folder/${folder.id}"
+		$("#folder-actions").value("deleteAction")
+		waitFor { $("#ui-dialog-title-modalBox").displayed }
+		$("#title").value("Delete folder")
+		$("#done").click()
+		folder
 	}
 
 }

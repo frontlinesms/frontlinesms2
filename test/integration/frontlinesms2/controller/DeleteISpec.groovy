@@ -76,20 +76,49 @@ class DeleteISpec extends IntegrationSpec {
 	
 	def "deleted folders are included in the trash list"() {
 		given:
-			def f = new Folder(name:'test', deleted:true).save(failOnError:true)
+			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(dateReceived: new Date())
 			def m2 = new Fmessage(dateReceived: new Date()-1)
 			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
+			f.toDelete()
 			f.save(flush:true, failOnError:true)
-			def m3 = new Fmessage(text:"not in folder", deleted: true).save(flush:true, failOnError:true)
 		when:
 			messageController.beforeInterceptor()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model == [m3,f]
+			model.collect {it.link} == [f]
 	}
+	
+	def "polls, folders and messages appear in the trash section"() {
+		given:
+			def f = new Folder(name:'test').save(failOnError:true)
+			def m = new Fmessage(dateReceived: new Date())
+			def m2 = new Fmessage(dateReceived: new Date()-1)
+			def messageController = new MessageController()
+			f.addToMessages(m)
+			f.addToMessages(m2)
+			f.toDelete()
+			f.save(flush:true, failOnError:true)
+			
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
+			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
+			
+			def m3 = new Fmessage(text:"not in folder", deleted: true).save(flush:true, failOnError:true)
+			m3.toDelete()
+			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
+			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
+			p.toDelete()
+			p.save(flush:true, failOnError:true)
+		when:
+			messageController.beforeInterceptor()
+			messageController.trash()
+			def model = messageController.modelAndView.model.trashInstanceList
+		then:
+			model.collect {it.link} == [p, m3, f]
+		}
 }
 
