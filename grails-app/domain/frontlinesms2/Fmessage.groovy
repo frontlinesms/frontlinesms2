@@ -11,6 +11,7 @@ class Fmessage {
 	Date dateCreated
 	Date dateReceived
 	Date dateSent
+	Date lastUpdated
 	boolean contactExists
 	MessageStatus status
 	boolean read
@@ -23,13 +24,16 @@ class Fmessage {
 		sort dateCreated:'desc'
 		sort dateReceived:'desc'
 		sort dateSent:'desc'
-		autoTimestamp false
 	}
 
 	def beforeInsert = {
 		dateCreated = dateCreated ? dateCreated : new Date()
 		dateReceived = dateReceived ? dateReceived : new Date()
 		dateSent = dateSent ? dateSent : new Date()
+	}
+
+	def beforeInsert = {
+		dateReceived = dateReceived ?: new Date()
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
@@ -212,6 +216,7 @@ class Fmessage {
 
 	def toDelete() { // FIXME is this method necessary?
 		this.deleted = true
+		new Trash(identifier:this.contactName, message:this.text, linkClassName:this.class.name, linkId:this.id).save()
 		this
 	}
 
