@@ -18,5 +18,6 @@ class PageSearchResult extends PageSearch {
 				return $('.message-select:checked').size()
 			}
 		}
+		messageList {$("#messages tbody tr")}
 	}
 }
