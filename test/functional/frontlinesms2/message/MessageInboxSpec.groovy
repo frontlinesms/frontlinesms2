@@ -47,7 +47,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			go "message/inbox/show/${message.id}"
-			def formatedDate = dateToString(message.dateCreated)
+			def formatedDate = dateToString(message.dateReceived)
 		then:
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
@@ -162,7 +162,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			messagesSelect[2].click()
 			def message = Fmessage.findBySrc('Alice')
-			def formatedDate = dateToString(message.dateCreated)
+			def formatedDate = dateToString(message.dateReceived)
 		then:
 			waitFor { checkedMessageCount == 1 }
 			$('#message-details #contact-name').text() == message.src
@@ -241,7 +241,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox

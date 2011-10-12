@@ -11,7 +11,6 @@ class Fmessage {
 	Date dateCreated
 	Date dateReceived
 	Date dateSent
-	Date lastUpdated
 	boolean contactExists
 	MessageStatus status
 	boolean read
@@ -24,16 +23,13 @@ class Fmessage {
 		sort dateCreated:'desc'
 		sort dateReceived:'desc'
 		sort dateSent:'desc'
+		autoTimestamp false
 	}
 
 	def beforeInsert = {
-		dateCreated = dateCreated ? dateCreated : new Date()
-		dateReceived = dateReceived ? dateReceived : new Date()
-		dateSent = dateSent ? dateSent : new Date()
-	}
-
-	def beforeInsert = {
+		dateCreated = dateCreated ?: new Date()
 		dateReceived = dateReceived ?: new Date()
+		dateSent = dateSent ?: new Date()
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
