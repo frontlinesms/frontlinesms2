@@ -34,5 +34,17 @@ class FolderSpec extends UnitSpec {
 		then:
 			m.messageOwner == f
 	}
+
+    def "toDelete should change the deleted flad to true"() {
+        given:
+			mockDomain(Trash)
+			mockDomain(Fmessage)
+			Folder f = new Folder(name:"test")
+		when:
+            assert !f.deleted
+			f.toDelete()
+		then:
+			f.deleted
+    }
 }
 

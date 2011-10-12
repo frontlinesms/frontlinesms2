@@ -1,12 +1,14 @@
 package frontlinesms2
 
-import java.util.Date;
+import java.util.Date
 
 class Folder extends MessageOwner {
 	static transients = ['liveMessageCount']
 	String name
 	Date dateCreated
+	Date lastUpdated
 	boolean archived
+	boolean deleted
 	
 	static constraints = {
 		name(blank:false, nullable:false, maxSize:255)
@@ -32,4 +34,10 @@ class Folder extends MessageOwner {
 		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
 		m ? m.size() : 0
 	}
+
+    def toDelete() {
+        this.deleted = true
+		new Trash(identifier:this.name, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
+        this
+    }
 }

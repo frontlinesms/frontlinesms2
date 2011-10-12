@@ -1,12 +1,16 @@
 package frontlinesms2
 
+import java.util.Date;
+
 class Poll {
 	String title
 	String keyword
 	String autoReplyText
 	String question
 	boolean archived
+	boolean deleted
 	Date dateCreated
+	Date lastUpdated
 	List responses
 	int sentMessageCount
 	static transients = ['liveMessageCount']
@@ -42,6 +46,7 @@ class Poll {
 	def beforeSave = {
 		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
 	}
+	
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
@@ -89,5 +94,12 @@ class Poll {
 	def getLiveMessageCount() {
 		def messageTotal = 0
 		responses.each { messageTotal += (it.liveMessageCount ?: 0) }
+		messageTotal
 	}
+
+    def toDelete() {
+        this.deleted = true
+		new Trash(identifier:this.title, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
+        this
+    }
 }

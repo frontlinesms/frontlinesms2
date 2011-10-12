@@ -5,7 +5,7 @@ class PollController {
 	static allowedMethods = [update: "POST"]
 
 	def index = {
-		[polls: Poll.findAllByArchived(params.viewingArchive),
+		[polls: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				messageSection: "poll"]
 	}
 
@@ -46,5 +46,18 @@ class PollController {
 		poll.save()
 		flash.message = "Poll was unarchived successfully!"
 		redirect(controller: "archive", action: "pollView")
+	}
+	
+	def confirmDelete = {
+		def pollInstance = Poll.get(params.id)
+		render view: 'confirmDelete', model: [pollInstance: pollInstance]
+	}
+	
+	def delete = {
+		def poll = Poll.get(params.id)
+		poll.toDelete()
+		poll.save()
+		flash.message = "Poll has been trashed!"
+		redirect(controller:"message", action:"inbox")
 	}
 }
