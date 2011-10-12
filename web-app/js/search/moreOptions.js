@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	//init the page javascript element
 	$(".datepicker").datepicker({
-		buttonImage : '../images/buttons/calendar.png',
+		buttonImage : '../images/icons/calendar.png',
 		buttonImageOnly: true,
 	    showOn: 'both',
 	    onSelect: function (dateText, inst) {
