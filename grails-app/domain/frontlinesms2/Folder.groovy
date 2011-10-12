@@ -37,6 +37,7 @@ class Folder extends MessageOwner {
 
     def toDelete() {
         this.deleted = true
+		new Trash(identifier:this.name, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
         this
     }
 }

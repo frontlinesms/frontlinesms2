@@ -306,23 +306,49 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 	}
 
 	def "can delete a poll"() {
-		given:
-			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
-			to MessagesPage
-			$("a", text: "Who is badder?").click()
-		then:
-			waitFor { title == "Poll" }
-		when:
-			$("#poll-actions").value("deleteAction")
-		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
-		when:
-			$("#title").value("Delete poll")
-			$("#done").click()
+			deletePoll()
 		then:
 			$("title").text() == "Inbox"
 			!$("a", text: "Who is badder?")
+	}
+	
+	def "deleted polls show up in the trash section"() {
+		setup:
+			def poll = deletePoll()
+		when:
+			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+		then:
+			rowContents[2] == 'Who is badder?'
+			rowContents[3] == '0 messages'
+			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+	}
+	
+	def "selected poll and its details are displayed"() {
+		setup:
+			def poll = deletePoll()
+		when:
+			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+		then:
+			$('#activity-name').text() == poll.title
+			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+			$('#activity-body').text() == "${poll.getLiveMessageCount()} messages"
+	}
+	
+	def "clicking on empty trash permanently deletes a poll"() {
+		setup:
+			deletePoll()
+		when:
+			go "message/trash"
+			$("#trash-actions").value("empty-trash")
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
+			$("#title").value("Empty trash")
+			$("#done").click()
+		then:
+			!Poll.findAll()
 	}
 	
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
@@ -336,6 +362,16 @@ class PollSpec extends frontlinesms2.poll.PollGebSpec {
 		if(question) pollForm.question = question
 		pollForm."collect-responses" = !enableMessage
 		next.click()
+	}
+	
+	def deletePoll() {
+		def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		go "message/poll/${poll.id}"
+		$("#poll-actions").value("deleteAction")
+		waitFor { $("#ui-dialog-title-modalBox").displayed }
+		$("#title").value("Delete poll")
+		$("#done").click()
+		poll
 	}
 }
 

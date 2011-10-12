@@ -207,6 +207,7 @@ class Fmessage {
 
 	def toDelete() { // FIXME is this method necessary?
 		this.deleted = true
+		new Trash(identifier:this.contactName, message:this.text, linkClassName:this.class.name, linkId:this.id).save()
 		this
 	}
 

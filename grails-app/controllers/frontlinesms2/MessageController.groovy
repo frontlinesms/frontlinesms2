@@ -71,31 +71,32 @@ class MessageController {
 	}
 	
 	def trash = {
-		def activityInstance
-		params.type = params.type ? params.type.substring('frontlinesms2.'.length()) : false
-		def instanceType = params.type
-		if(instanceType == "Fmessage") {
-			params.messageId = params.id
-		} else if(instanceType) {
-			activityInstance = getActivityInstance(instanceType, params.id)
+		def trashInstance
+		def trashInstanceList
+		def messageInstanceList
+		params.order = params.order ?: "desc"
+		
+		if(params.id) {
+			def setTrashInstance = { obj ->
+				if(obj.linkClassName == "frontlinesms2.Fmessage") {
+					params.messageId = obj.linkId
+				} else {
+					trashInstance = obj.link
+				}
+			}
+			setTrashInstance(Trash.findById(params.id))
 		}
 		
-		def messageInstanceList = Fmessage.deleted(params.starred).list(params)
-		def folderInstanceList = Folder.findAllByDeleted(true) ?: []
-		def pollInstanceList = Poll.findAllByDeleted(true) ?:[]
-		def trashInstanceList = [] 
-		trashInstanceList += messageInstanceList + folderInstanceList + pollInstanceList
-		trashInstanceList.sort{ obj1, obj2 ->
-			if(params.sort == "dateCreated") {
-				(obj2.lastUpdated).compareTo(obj1.lastUpdated)
-			} else {
-					obj2."${params.sort}".compareTo(obj1."${params.sort}")
-			}
+		if(params.starred) {
+			messageInstanceList = Fmessage.deleted(params.starred)
+		} else {
+			trashInstanceList =  Trash.list(params)
 		}
-		render view:'standard', model:[trashInstanceList: trashInstanceList,
+		render view:'standard', model:[trashInstanceList:trashInstanceList,
+					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
-					messageInstanceTotal: trashInstanceList.size,
-					ownerInstance: activityInstance] << getShowModel()
+					messageInstanceTotal: Trash.count(),
+					ownerInstance: trashInstance] << getShowModel()
 	}
 
 	def poll = {
@@ -253,11 +254,6 @@ class MessageController {
 	
 	def getUnreadMessageCount = {
 		render text: Fmessage.countUnreadMessages()
-	}
-	
-	private def getActivityInstance(instanceType, id) {
-		def instanceClass = instanceType == "Poll" ? Poll : Folder
-		instanceClass.findByIdAndDeleted(id, true)
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {

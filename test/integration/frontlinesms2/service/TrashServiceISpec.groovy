@@ -24,6 +24,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			Poll.count() == 0
 			PollResponse.count() == 0
 			Fmessage.count() == 0
+			Trash.count() == 0
 	}
 	
 	def "should permanently delete a folder and its messages when trashed"() {
@@ -38,5 +39,6 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Poll.count() == 0
 			Fmessage.count() == 0
+			Trash.count() == 0
 	}
 }
