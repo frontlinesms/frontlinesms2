@@ -10,7 +10,7 @@
 						<g:link class="button" id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
 					</g:if>
 				</h2>
-				<p id="message-date"><g:formatDate date="${messageInstance.dateCreated ?: ownerInstance.lastUpdated}"/></p>
+				<p id="message-date"><g:formatDate date="${messageInstance.dateReceived ?: messageInstance.dateSent}"/></p>
 				<p id="message-body">${messageInstance.text}</p>
 			</div>
 			<g:render template="../message/message_actions"></g:render>
