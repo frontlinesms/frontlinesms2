@@ -7,7 +7,7 @@
 			</g:if>
 			<g:else>
 				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
-				<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+				<li><g:link class="cancel" action="index" default="Cancel">Cancel</g:link></li>
 			</g:else>
 			
 			<g:if test="${contactInstance?.id}">
