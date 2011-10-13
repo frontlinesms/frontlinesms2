@@ -5,7 +5,7 @@ class PollController {
 	static allowedMethods = [update: "POST"]
 
 	def index = {
-		[polls: Poll.findAllByArchived(params.viewingArchive),
+		[polls: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				messageSection: "poll"]
 	}
 
