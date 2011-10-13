@@ -115,24 +115,26 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			jessy.addToGroups(fsharp)
 			lucy.addToGroups(haskell)
 			
-			(new Date("2011/10/10")..new Date("2011/10/20")).each {
-				new Fmessage(dateReceived: it, dateCreated: it, src:jessy.primaryMobile, status: MessageStatus.INBOUND, text: "A message received on ${it}").save()
-				new Fmessage(dateReceived: it, dateCreated: it, src:lucy.primaryMobile, status: MessageStatus.SENT, text: "A message sent on ${it}").save()
+			int i =0
+			(new Date()-6 ..new Date() + 5).each {
+				new Fmessage(dateReceived: it, src:jessy.primaryMobile, status: MessageStatus.INBOUND, text: "A message received on ${it}").save()
+				new Fmessage(dateReceived: it, src:lucy.primaryMobile, status: MessageStatus.SENT, text: "A message sent on ${it}").save()
 			}
 			
 			3.times {				
-				new Fmessage(dateReceived: new Date("2011/10/12"), dateCreated: new Date("2011/10/12"), src:jessy.primaryMobile, status: MessageStatus.INBOUND, text: "Message {it}").save()
+				new Fmessage(dateReceived: new Date()-1, src:jessy.primaryMobile, status: MessageStatus.INBOUND, text: "Message {it}").save()
 			}
 			5.times {				
-				new Fmessage(dateReceived: new Date("2011/10/12"), dateCreated: new Date("2011/10/12"), src:jessy.primaryMobile, status: MessageStatus.SENT, text: "Message {it}").save()
+				new Fmessage(dateReceived: new Date()-1, src:jessy.primaryMobile, status: MessageStatus.SENT, text: "Message {it}").save()
 			}
 
 		when:
-			def startDate = new Date("2011/10/12")
-			def endDate   = new Date("2011/10/13")
+			def startDate = new Date()-2
+			def endDate   = new Date()
 			def messages = Fmessage.getMessageStats([groupInstance:fsharp, messageOwner:null, startDate:startDate, endDate:endDate])
 		then:
-		messages == ["12/10":[Sent:5, Received:4], "13/10":[Sent:0, Received:1]]
+			messages["${(startDate + 1).format('dd/MM')}"] == [Sent:0, Received:4]
+			messages["${endDate.format('dd/MM')}"] == [Sent:5, Received:1]
 	}
 
 	def "should update message contact name"() {

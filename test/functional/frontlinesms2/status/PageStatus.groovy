@@ -2,7 +2,7 @@ package frontlinesms2.status
 
 import frontlinesms2.*
 
-class StatusPage extends geb.Page {
+class PageStatus extends geb.Page {
 	static url = 'status'
 	static at = {
 		title.startsWith('Status')

@@ -4,6 +4,8 @@ class Group {
 	String name
 	String subscriptionKey
 	String unsubscriptionKey
+	String joinReplyMessage
+	String leaveReplyMessage
 
 	static constraints = {
 		name(unique: true, nullable: false, blank: false, maxSize: 255)
@@ -13,6 +15,8 @@ class Group {
 		unsubscriptionKey(nullable: true, blank: false, validator: { val, obj ->
 			return isUniqueAcrossColumns(val, obj.subscriptionKey, obj)
 		})
+		joinReplyMessage(nullable:true)
+		leaveReplyMessage(nullable:true)
 	}
 
 	private static boolean isUniqueAcrossColumns(val, otherVal, obj) {

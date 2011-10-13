@@ -12,6 +12,7 @@ class SubscriptionSpec extends GroupBaseSpec  {
 		createTestGroups()
 	}
 
+
 	def "should move to the next tab if all the values are provided"() {
 		when:
 			goToManageSubscriptions()
@@ -19,9 +20,9 @@ class SubscriptionSpec extends GroupBaseSpec  {
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
 			$('#nextPage').click()
-			waitFor { $("#tabs-3").displayed }
+			waitFor { $("#tabs-2").displayed }
 		then:
-			$("#tabs-3").displayed
+			$("#tabs-2").displayed
 	}
 
 	def "should be able to set subscription keywords for a group"() {
@@ -30,6 +31,8 @@ class SubscriptionSpec extends GroupBaseSpec  {
 			inputKeywords("subscriptionKey", "ADD")
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
+			$('#nextPage').click()
+			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
@@ -41,12 +44,52 @@ class SubscriptionSpec extends GroupBaseSpec  {
 			groupUpdated.unsubscriptionKey == "REMOVE"
 	}
 
+	def "should be able to set automatic replies for a group"() {
+		when:
+			goToManageSubscriptions()
+			inputKeywords("subscriptionKey", "ADD")
+			selectAValueFromDropDown()
+			$('#nextPage').click()
+			waitFor { $("#tabs-2").displayed }
+			inputKeywords("joinReplyMessage","Welcome")
+			inputKeywords("leaveReplyMessage","Bye")
+			$('#nextPage').click()
+			waitFor { $("#tabs-3").displayed }
+		then:
+			$("#done").click()
+			waitFor({title == 'Inbox'})
+			$('div.flash').text().contains('Group updated successfully')
+			def groupUpdated = Group.findByName("Listeners").refresh()
+			groupUpdated.joinReplyMessage == "Welcome"
+			groupUpdated.leaveReplyMessage == "Bye"
+	}
+	
+	def "magic stick should generate a join or leave message"(){
+		when:
+			goToManageSubscriptions()
+			inputKeywords("subscriptionKey", "ADD")
+			selectAValueFromDropDown()
+			$('#nextPage').click()
+			waitFor { $("#tabs-2").displayed }
+			$('#join_reply_checkbox ~ img').click()
+		then:
+			$('input[name=joinReplyMessage]').value() == "Welcome"
+			$('#join_reply_checkbox').checked
+		when:
+			$('#leave_reply_checkbox ~ img').click()
+		then:
+			$('input[name=leaveReplyMessage]').value() == "Bye"
+			$('#leave_reply_checkbox').checked
+	}
+	
 
 	def "should be able to set subscription keyword alone for a group"() {
 		when:
 			goToManageSubscriptions()
 			inputKeywords("subscriptionKey", "ADD")
 			selectAValueFromDropDown()
+			$('#nextPage').click()
+			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:
@@ -64,6 +107,8 @@ class SubscriptionSpec extends GroupBaseSpec  {
 			goToManageSubscriptions()
 			inputKeywords("unsubscriptionKey", "REMOVE")
 			selectAValueFromDropDown()
+			$('#nextPage').click()
+			waitFor { $("#tabs-2").displayed }
 			$('#nextPage').click()
 			waitFor { $("#tabs-3").displayed }
 		then:

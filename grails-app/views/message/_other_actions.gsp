@@ -8,7 +8,7 @@
 				<select id="categorise_dropdown" >
 					<option value="btn-${responseInstance.id}" class="na" onclick="categoriseClickAction(${responseInstance.id});">${responseInstance.value}</option>
 					<g:each in="${responseList}" status="i" var="r">
-						<g:if test="${r.id != responseInstance.id}">
+						<g:if test="${r.id != responseInstance?.id}">
 							<option value="btn-${r.id}" onclick="categoriseClickAction(${r.id});">${r.value}</option>
 						</g:if>
 					</g:each>

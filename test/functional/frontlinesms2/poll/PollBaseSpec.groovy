@@ -7,7 +7,7 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestPolls() {
 		[Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona'),
 				Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB: 'oriele'),
-				Poll.createPoll(title: 'Rugby Brands', choiceA: 'newzealand', choiceB: 'britain')]*.save(failOnError:true, flush:true)
+				Poll.createPoll(title: 'Rugby Brands', choiceA: 'newzealand', choiceB: 'britain')]*.save(failOnError:true)
 	}
 
 	static createTestMessages() {

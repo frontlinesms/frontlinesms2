@@ -28,7 +28,7 @@ class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTe
 
 	def testTrashView() {
 		assertForwardUrlMapping('/message/trash/show/123', controller:'message', action:'trash') {
-			messageId = 123
+			id = 123
 		}
 	}
 

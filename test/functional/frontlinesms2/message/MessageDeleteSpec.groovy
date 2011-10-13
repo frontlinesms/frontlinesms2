@@ -5,17 +5,15 @@ import frontlinesms2.*
 class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
 		createTestData()
-		assert Fmessage.inbox().count() == 3
-		assert Poll.findByTitle('Miauow Mix').getPollMessages().count() == 2
-		assert Folder.findByName('Fools').getFolderMessages().count() == 2	
 	}
 
 	def 'delete button does not show up for messages in shown in trash view'() {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
-			bobMessage.deleted = true
+			bobMessage.toDelete()
 			bobMessage.save(flush:true)
 			go "message/trash"
+			$("a", text: "Bob").click()
 		then:
 			Fmessage.deleted(false).count() == 1
 			$('#message-details #contact-name').text() == bobMessage.displayName
@@ -24,15 +22,16 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
-			new Fmessage(deleted:true).save(flush:true)
+			def message = new Fmessage(text:"to delete").save(failOnError:true)
+			message.toDelete()
 			go "message/trash"
 			assert Fmessage.findAllByDeleted(true).size == 1
 		when:
-			$("#trash-actions").jquery.val("empty-trash")
-			$('#trash-actions').jquery.trigger('change')
+			$("#trash-actions").value("empty-trash")
 		then:
-			waitFor { $("#done").displayed }
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
+			$("#title").value("Empty trash")
 			$("#done").click()
 		then:
 			waitFor { at PageMessageInbox }
@@ -77,23 +76,6 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 				new Fmessage(src:'+254445566', dst:'+254112233', text:'test')].each() {
 					it.save(failOnError:true)
 				}
-
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
-		def poll = new Poll(title:'Miauow Mix')
-		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
-
-		def message1 = new Fmessage(src:'Cheney', dst:'+12345678', text:'i hate chicken')
-		def message2 = new Fmessage(src:'Bush', dst:'+12345678', text:'i hate liver')
-		def fools = new Folder(name:'Fools').save(failOnError:true, flush:true)
-		fools.addToMessages(message1)
-		fools.addToMessages(message2)
-		fools.save(failOnError:true, flush:true)
 	}
 }
 

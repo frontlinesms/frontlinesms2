@@ -1,6 +1,6 @@
 package frontlinesms2.archive
 
-class ArchiveFolderPage extends geb.Page {
+class PageArchiveFolder extends PageArchive {
 	static def url = "archive/folder"
 	
 	static at = {
