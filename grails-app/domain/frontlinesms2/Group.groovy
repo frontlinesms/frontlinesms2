@@ -15,8 +15,8 @@ class Group {
 		unsubscriptionKey(nullable: true, blank: false, validator: { val, obj ->
 			return isUniqueAcrossColumns(val, obj.subscriptionKey, obj)
 		})
-		joinReplyMessage(nullable:true, maxSize:255)
-		leaveReplyMessage(nullable:true, maxSize:255)
+		joinReplyMessage(nullable:true)
+		leaveReplyMessage(nullable:true)
 	}
 
 	private static boolean isUniqueAcrossColumns(val, otherVal, obj) {
