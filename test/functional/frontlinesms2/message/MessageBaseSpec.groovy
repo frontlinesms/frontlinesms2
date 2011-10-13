@@ -28,7 +28,7 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		chickenResponse.addToMessages(chickenMessage)
 		def poll = new Poll(title:'Miauow Mix')
 		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
+		poll.addToResponses(liverResponse).save(failOnError:true)
 	}
 	
 	static createSearchTestMessages() {
@@ -36,7 +36,7 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 				new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
 					it.status = MessageStatus.INBOUND
-					it.save(failOnError:true)
+					it.save(failOnError:true, flush:true)
 				}
 
 		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
@@ -75,11 +75,11 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		chickenResponse.addToMessages(chickenMessage)
 		def poll = new Poll(title:'Miauow Mix')
 		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
+		poll.addToResponses(liverResponse).save(failOnError:true)
 
 		def message1 = new Fmessage(src:'Cheney', dst:'+12345678', text:'i hate chicken')
 		def message2 = new Fmessage(src:'Bush', dst:'+12345678', text:'i hate liver')
-		def fools = new Folder(name:'Fools').save(failOnError:true, flush:true)
+		def fools = new Folder(name:'Fools').save(failOnError:true)
 		fools.addToMessages(message1)
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)

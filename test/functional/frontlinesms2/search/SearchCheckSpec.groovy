@@ -2,13 +2,13 @@ package frontlinesms2.search
 
 import frontlinesms2.*
 
-class CheckSearchMessageSpec extends SearchGebSpec {
+class SearchCheckSpec extends SearchBaseSpec {
 	
 	def "header checkbox is checked when all the messages are checked"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 			messagesSelect[3].click()
@@ -20,7 +20,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -31,7 +31,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[2].click()
 		then:
 			waitFor { $("#message-details #contact-name").text() == 'Alice' }
@@ -49,7 +49,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -64,7 +64,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[0].click()
 		then:
 			waitFor { checkedMessageCount == 3 }
@@ -87,7 +87,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Bob')
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[2].click()
 		then:
 			waitFor { messagesSelect[2].checked }
@@ -100,7 +100,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 			createInboxTestMessages()
 			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
 		when:
-			to SearchPage
+			to PageSearchResultHi
 			messagesSelect[0].click()
 		then:
 			waitFor { checkedMessageCount == 3 }
@@ -119,7 +119,7 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to SearchForIPage
+			to PageSearchResultI
 			messagesSelect[0].click()
 		then:
 			waitFor { archiveAllButton.displayed }
@@ -128,8 +128,4 @@ class CheckSearchMessageSpec extends SearchGebSpec {
 		then:
 			waitFor { $('title').text() == "Results"}
 	}
-}
-
-class SearchForIPage extends SearchPage {
-	static def url = "search/result?searchString=i"
 }

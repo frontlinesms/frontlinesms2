@@ -598,7 +598,7 @@ body {
 					}
 				}
 					
-				#message-details {
+				#message-details, #activity-details {
 					@include column(7, true);
 					display: block;
 					background-color: $highlight;
@@ -614,12 +614,12 @@ body {
 						padding-right: 17px;
 					}
 					
-					#message-date {
+					#message-date, #activity-date {
 						font-size: 11px;
 						padding-left: 17px;
 					}
 					
-					#message-body {
+					#message-body, #activity-body {
 						font-size: 14px;
 						background-color: white;
 						border: 1px solid #B5C6CD;
@@ -695,6 +695,7 @@ body {
 						}
 					}
 				}
+				
 				.starred {
 					background-image:url('../images/icons/star_on.png');
 					width: 16px;

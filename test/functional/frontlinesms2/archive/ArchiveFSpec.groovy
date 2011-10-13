@@ -2,7 +2,7 @@ package frontlinesms2.archive
 
 import frontlinesms2.*
 
-class ArchiveSpec extends frontlinesms2.archive.ArchiveGebSpec {
+class ArchiveFSpec extends ArchiveBaseSpec {
 	
 	def 'archived folder list is displayed'() {
 		given:
@@ -12,7 +12,7 @@ class ArchiveSpec extends frontlinesms2.archive.ArchiveGebSpec {
 			def folder = Folder.findByName('Work')
 			folder.archive()
 			folder.save(flush: true, failOnError: true)
-			to ArchiveFolderPage
+			to PageArchiveFolder
 		then:
 			folderNames*.text() == ["Work"]
 	}

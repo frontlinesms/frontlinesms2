@@ -50,7 +50,7 @@
 	</body>
 </html>
 <g:javascript>
-	$("#poll-actions").bind('change', function() {
+	$("#poll-actions, #folder-actions").bind('change', function() {
 		var selected = $(this).find('option:selected').val();
 		if(selected)
 			remoteHash[selected].call();

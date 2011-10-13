@@ -3,11 +3,11 @@ package frontlinesms2.search
 import frontlinesms2.*
 import org.openqa.selenium.Keys
 
-class SearchSpec extends grails.plugin.geb.GebSpec {
+class SearchViewSpec extends SearchBaseSpec {
 	def setup() {
 		createTestGroups()
 		createTestPollsAndFolders()
-		createTestMessages()
+		createTestMessages2()
 	}
 	
 	def "clicking on the search button links to the result show page"() {
@@ -16,18 +16,18 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
 		when:
-			to SearchingPage
+			to PageSearch
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at SearchingPage
+			at PageSearchResult
 			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
 					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
 	def "group list and activity lists are displayed when they exist"() {
 		when:
-			to SearchingPage
+			to PageSearch
 		then:
 			searchFrm.find('select', name:'groupId').children()*.text() == ['Select group','Listeners', 'Friends']
 			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
@@ -35,7 +35,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "search description is shown in header"() {
 		when:
-			to SearchingPage
+			to PageSearch
 			searchBtn.present()
 			searchBtn.click()
 		then:
@@ -45,7 +45,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "search string is still shown on form submit and consequent page reload"() {
 		given:
-			to SearchingPage
+			to PageSearch
 			searchFrm.searchString = 'bacon'
 		when:
 			searchBtn.click()
@@ -55,7 +55,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
-			to SearchingPage
+			to PageSearch
 			def a = Folder.findByName("Work")
 			searchFrm.activityId = "folder-$a.id"
 		when:
@@ -66,7 +66,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "can search in archive or not, is enabled by default"() {
 		when:
-			to SearchingPage
+			to PageSearch
 		then:
 			searchFrm.inArchive == 'on'
 		when:
@@ -78,14 +78,14 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Export Results' link is disabled when search is null "() {
 		when:
-			to SearchingPage
+			to PageSearch
 		then:
 			!$('h2:nth-child(2) div#export-results a').present()
 	}
 
 	def "should fetch all inbound messages alone"() {
 		given:
-			to SearchingPage
+			to PageSearch
 			searchFrm.messageStatus = "INBOUND"
 		when:
 			searchBtn.click()
@@ -100,7 +100,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
-			to SearchingPage
+			to PageSearch
 			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
 		when:
 			searchBtn.click()
@@ -112,7 +112,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "should clear search results" () {
 		when:
-			to SearchingPage
+			to PageSearch
 			searchBtn.present()
 			searchBtn.click()
 		then:
@@ -129,16 +129,16 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, status: MessageStatus.SEND_PENDING).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
-			to SearchingPage
+			to PageSearch
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at SearchingPage
+			at PageSearchResult
 		when:
 			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
 			$("#message-delete").click()
 		then:
-			at SearchingPage
+			at PageSearchResult
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
 			$('.flash').displayed
 	}
@@ -146,7 +146,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
 		when:
 			def date = new Date()
-			to SearchingPage
+			to PageSearch
 			searchBtn.present()
 		then:
 			searchFrm.startDate_day == 'none'
@@ -175,28 +175,28 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
 			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
-			to SearchingPage
+			to PageSearch
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			at SearchingPage
+			at PageSearchResult
 		when:
 			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
 			$("#message-archive").click()
 		then:
-			at SearchingPage
+			at PageSearchResult
 		when:
 			def messageBody = $("#message-body").text()
 			$("a.displayName-${Fmessage.findByText('sent').id}").click()
 		then:
-			at SearchingPage
+			at PageSearchResult
 			$("#message-body").text() == 'sent'
 	}
 	
 	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
-			to SearchingPage
+			to PageSearch
 			searchMoreOptionLink.click()
 		then:
 			waitFor { expendedSearchOption.displayed }
@@ -219,7 +219,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	def "should expand the more option and select a customField then the link to custom field is hiden"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
-			to SearchingPage
+			to PageSearch
 			searchMoreOptionLink.click()
 		then:
 			waitFor { expendedSearchOption.displayed }
@@ -242,7 +242,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
-			to SearchingPage
+			to PageSearch
 			searchMoreOptionLink.click()
 		then:
 			waitFor { expendedSearchOption.displayed }
@@ -263,7 +263,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
-			to SearchingPage
+			to PageSearch
 			searchMoreOptionLink.click()
 		then:
 			waitFor { expendedSearchOption.displayed }
@@ -289,7 +289,7 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 	
 	def "should update message count when in search tab"() {
 		when:
-			to SearchingPage
+			to PageSearch
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
 			$("#tab-messages").text() == "Messages 2"
@@ -301,59 +301,6 @@ class SearchSpec extends grails.plugin.geb.GebSpec {
 			}
 	}
 	
-	private createTestGroups() {
-		new Group(name: 'Listeners').save(flush: true)
-		new Group(name: 'Friends').save(flush: true)
-	}
-	
-	private createTestMessages() {
-		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
-				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex', dateReceived: new Date()-1)].each() {
-			it.status = MessageStatus.INBOUND
-			it.save(failOnError:true)
-		}
-	}
-	
-	private createTestPollsAndFolders() {
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		new Fmessage(src:'Joe', dst:'+254987654', text:'eat more cow', messageOwner:'chickenResponse')
-		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
-		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
-		
-	}
-	
-	private createTestContactsAndCustomFieldsAndMessages(){
-		def firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
-		def secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
-		def thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
-		
-		[new CustomField(name:'town', value:'Paris', contact: firstContact),
-			new CustomField(name:'like', value:'cake', contact: secondContact),
-			new CustomField(name:'ik', value:'car', contact: secondContact),
-			new CustomField(name:'like', value:'ake', contact: thirdContact),
-			new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', status:MessageStatus.INBOUND)].each {
-		it.save(failOnError:true)
-		}
-	}
 }
 
-class SearchingPage extends geb.Page {
-	static url = 'search'
-	static at = {
-		title.startsWith('Results')
-	}
-	static content = {
-		searchFrm { $('#search-details') }
-		searchBtn { $('#search-details .buttons .search') }
-		searchDescription { $('#search-description') }
-		searchMoreOptionLink { $('#more-search-options')}
-		townCustomFieldLink(required:false) { $('#more-option-link-custom-field-town')}
-		townCustomFieldField(required:false) { $('#more-option-field-custom-field-town')}
-		likeCustomFieldLink(required:false) { $('#more-option-link-custom-field-like')}
-		ikCustomFieldLink(required:false) { $('#more-option-link-custom-field-ik')}
-		contactNameLink(required:false) {$('#more-option-link-contact-name')}
-		contactNameField(required:false) {$('#more-option-field-contact-name')}
-		expendedSearchOption(required:false) {$('#expanded-search-options')}
-	}
-}
+

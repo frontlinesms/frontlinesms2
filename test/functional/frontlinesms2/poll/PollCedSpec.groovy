@@ -9,7 +9,8 @@ import java.util.Date
 
 
 class PollCedSpec extends PollBaseSpec {
-
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+	
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
 			launchPollPopup('standard', null)
@@ -253,6 +254,63 @@ class PollCedSpec extends PollBaseSpec {
 			!$("a", text: "Who is badder?")
 	}
 
+	def "can delete a poll"() {
+		when:
+			deletePoll()
+			waitFor { $("div.flash").displayed }
+		then:
+			$("title").text() == "Inbox"
+			!$("a", text: "Who is badder?")
+	}
+	
+	def "deleted polls show up in the trash section"() {
+		setup:
+			def poll = deletePoll()
+		when:
+			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+		then:
+			rowContents[2] == 'Who is badder?'
+			rowContents[3] == '0 messages'
+			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+	}
+	
+	def "selected poll and its details are displayed"() {
+		setup:
+			def poll = deletePoll()
+		when:
+			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+		then:
+			$('#activity-name').text() == poll.title
+			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+			$('#activity-body').text() == "${poll.getLiveMessageCount()} messages"
+	}
+	
+	def "clicking on empty trash permanently deletes a poll"() {
+		setup:
+			deletePoll()
+		when:
+			go "message/trash"
+			$("#trash-actions").value("empty-trash")
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
+			$("#title").value("Empty trash")
+			$("#done").click()
+		then:
+			!Poll.findAll()
+	}
+	
+	def deletePoll() {
+		def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		go "message/poll/${poll.id}"
+		$("#poll-actions").value("deleteAction")
+		waitFor { $("#ui-dialog-title-modalBox").displayed }
+		$("#title").value("Delete poll")
+		$("#done").click()
+		poll
+	}
+	
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
 		to PageMessageInbox
 		createActivityButton.click()

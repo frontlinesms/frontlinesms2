@@ -18,12 +18,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageSources == ['Alice', 'Bob']
 	}
 
-	def 'message details are shown in list'() {
+	def 'message details are shown in row'() {
 		given:
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'hi Bob'
@@ -33,24 +33,21 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def 'message to alice is first in the list, and links to the show page'() {
 		given:
 			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Bob')
+			def message = Fmessage.findBySrc('Alice')
 		when:
 			to PageMessageInbox
 			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
 		then:
-			firstMessageLink.text() == 'Bob'
+			firstMessageLink.text() == 'Alice'
 	}
 
-	//FIXME this test fail when the local computer language is different than english. The Date return
-	//in the test in English while the UI date is in the local context
-	//@spock.lang.IgnoreRest
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			go "message/inbox/show/${message.id}"
-			def formatedDate = dateToString(message.dateCreated)
+			def formatedDate = dateToString(message.dateReceived)
 		then:
 			$('#message-details #contact-name').text() == message.src
 			$('#message-details #message-date').text() == formatedDate
@@ -165,7 +162,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			messagesSelect[2].click()
 			def message = Fmessage.findBySrc('Alice')
-			def formatedDate = dateToString(message.dateCreated)
+			def formatedDate = dateToString(message.dateReceived)
 		then:
 			waitFor { checkedMessageCount == 1 }
 			$('#message-details #contact-name').text() == message.src
@@ -244,7 +241,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox

@@ -11,6 +11,7 @@ class MessageController {
 			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
+	def trashService
 
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -41,9 +42,9 @@ class MessageController {
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
-				folderInstanceList: Folder.findAllByArchived(params.viewingArchive),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				responseInstance: responseInstance,
-				pollInstanceList: Poll.findAllByArchived(params.viewingArchive),
+				pollInstanceList: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages()]
@@ -72,10 +73,31 @@ class MessageController {
 	}
 	
 	def trash = {
-		def messageInstanceList = Fmessage.deleted(params.starred)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+		def trashInstance
+		def trashInstanceList
+		def messageInstanceList
+		params.sort = params.sort != "dateReceived" ? params.sort : 'dateCreated'
+		if(params.id) {
+			def setTrashInstance = { obj ->
+				if(obj.linkClassName == "frontlinesms2.Fmessage") {
+					params.messageId = obj.linkId
+				} else {
+					trashInstance = obj.link
+				}
+			}
+			setTrashInstance(Trash.findById(params.id))
+		}
+		
+		if(params.starred) {
+			messageInstanceList = Fmessage.deleted(params.starred)
+		} else {
+			trashInstanceList =  Trash.list(params)
+		}
+		render view:'standard', model:[trashInstanceList:trashInstanceList,
+					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
+					messageInstanceTotal: Trash.count(),
+					ownerInstance: trashInstance] << getShowModel()
 	}
 
 	def poll = {
@@ -227,7 +249,7 @@ class MessageController {
 	def confirmEmptyTrash = { }
 	
 	def emptyTrash = {
-		Fmessage.findAllByDeleted(true)*.delete()
+		trashService.emptyTrash()
 		redirect(action: 'inbox')
 	}
 	

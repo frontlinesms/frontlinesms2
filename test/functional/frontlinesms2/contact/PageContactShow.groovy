@@ -21,6 +21,7 @@ class PageContactShow extends geb.Page {
 		deleteSingleButton(required:false) { $('#btn_delete') }
 		deleteAllButton(required:false) { $('#btn_delete_all') }
 		contactCount(required:false) {$('#contact-count')}
+		searchBtn(required:false){$('#message-search .buttons')}
 		
 		//Popup
 		confirmDeleteButton(required:false) { $("#done") }

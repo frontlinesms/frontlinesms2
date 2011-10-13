@@ -1,6 +1,7 @@
 package frontlinesms2.contact
 
 import frontlinesms2.*
+import frontlinesms2.search.PageSearchResult
 
 import geb.Browser
 import org.openqa.selenium.firefox.FirefoxDriver
@@ -37,10 +38,8 @@ class ContactViewSpec extends ContactBaseSpec {
 	}
 
 	def 'selected contacts show message statistics' () {
-		given:
-	  		def alice = Contact.findByName('Alice')
 		when:
-	  		go "contact/show/$alice.id"
+			to PageContactShowAlice
 		then:
 			$("#message-count p").first().text() == '0 messages sent'
 			$("#message-count p").last().text() == '0 messages received'
@@ -56,24 +55,19 @@ class ContactViewSpec extends ContactBaseSpec {
 	}
 
 	def 'selected contact is highlighted'() {
-		given:
-			def alice = Contact.findByName('Alice')
-			def bob = Contact.findByName('Bob')
 		when:
-			go "contact/show/$alice.id"
+			to PageContactShowAlice
 		then:
 			assertContactSelected('Alice')
 		when:
-			go "contact/show/$bob.id"
+			to PageContactShowBob
 		then:
 			assertContactSelected('Bob')
 	}
 
 	def 'checked contact details are displayed'() {
-		given:
-			def alice = Contact.findByName('Alice')
 		when:
-			go "contact/show/$alice.id"
+			to PageContactShowAlice
 			$(".contact-select")[1].click()
 		then:	
 			waitFor { $("#contact-title").text() == "Bob" }
@@ -81,10 +75,8 @@ class ContactViewSpec extends ContactBaseSpec {
 	}
 
 	def 'contact with no groups has NO GROUPS message visible'() {
-		given:
-			def alice = Contact.findByName('Alice')
 		when:
-			go "contact/show/$alice.id"
+			to PageContactShowAlice
 		then:
 			$('#no-groups').displayed
 	}
@@ -92,9 +84,8 @@ class ContactViewSpec extends ContactBaseSpec {
 	def 'contact with groups has NO GROUPS message hidden'() {
 		given:
 			createTestGroups()
-			def bob = Contact.findByName('Bob')
 		when:
-			go "contact/show/$bob.id"
+			to PageContactShowBob
 		then:
 			!$('#no-groups').displayed
 		cleanup:
@@ -102,20 +93,16 @@ class ContactViewSpec extends ContactBaseSpec {
 	}
 	
 	def "clicking on 'Send Message' should redirect to quick message dialog"() {
-		given:
-	  		def alice = Contact.findByName('Alice')
 		when:
-	  		go "contact/show/$alice.id"
+			to PageContactShowAlice
 			$("#contact_details .send-message").find { it.@href.contains('2541234567') }.click()
 		then:	
 			waitFor { $('div#tabs-1').displayed }
 	}
 	
 	def "'send Message' link should not displayed for blank addresses"() {
-		given:
-	  		def alice = Contact.findByName('Alice')
 		when:
-	  		go "contact/show/$alice.id"
+			to PageContactShowAlice
 		then:
 			$("#contact_details .send-message").each {
 				assert it.@href ==~ /.*recipients=\d+/
@@ -124,7 +111,7 @@ class ContactViewSpec extends ContactBaseSpec {
 	
 	def "should update message count when in contacts tab"() {
 		when:
-			go "contact"
+			to PageContactShow
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
 			$("#tab-messages").text() == "Messages 0"
@@ -134,6 +121,17 @@ class ContactViewSpec extends ContactBaseSpec {
 			waitFor{ 
 				$("#tab-messages").text() == "Messages 1"
 			}
+	}
+
+	def "clicking on search should only shows contact's messages"(){
+		setup:
+			createTestMessages()
+		when:
+			to PageContactShowAlice
+			searchBtn.click()
+		then:
+			at PageSearchResult
+			messageList.each { assert it.find("td:nth-child(3)").text() == 'Alice' }
 	}
 
 	def assertContactSelected(String name) {

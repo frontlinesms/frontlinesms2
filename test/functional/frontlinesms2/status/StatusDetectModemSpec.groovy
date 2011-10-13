@@ -4,19 +4,19 @@ import frontlinesms2.*
 
 import serial.mock.MockSerial
 
-class DetectModemSpec extends grails.plugin.geb.GebSpec {
+class StatusDetectModemSpec extends grails.plugin.geb.GebSpec {
 	def deviceDetectionService
 
 	def 'DETECT MODEMS button should be visible on STATUS tab'() {
 		when:
-			to StatusPage
+			to PageStatus
 		then:
 			detectModems.displayed
 	}
 	
 	def 'DETECTED DEVICES section should be visible on STATUS tab'() {
 		when:
-			to StatusPage
+			to PageStatus
 		then:
 			detectedDevicesSection.displayed
 			detectedDevicesSection.find('h2').text() == 'Detected devices'
@@ -30,7 +30,7 @@ class DetectModemSpec extends grails.plugin.geb.GebSpec {
 			MockSerial.reset()
 			MockSerial.setIdentifier('COM1', new serial.mock.PermanentlyOwnedCommPortIdentifier('COM1', 'a naughty windows application'))
 		when:
-			to StatusPage
+			to PageStatus
 		then:
 			noDevicesDetectedNotification.displayed
 			!detectedDevicesTable.displayed
