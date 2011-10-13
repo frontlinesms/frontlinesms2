@@ -77,6 +77,7 @@ class MessageController {
 		def trashInstanceList
 		def messageInstanceList
 		params.order = params.order ?: "desc"
+		params.sort = params.sort != "dateReceived" ? params.sort : 'dateCreated'
 		
 		if(params.id) {
 			def setTrashInstance = { obj ->

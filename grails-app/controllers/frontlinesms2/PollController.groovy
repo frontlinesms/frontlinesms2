@@ -47,4 +47,6 @@ class PollController {
 		flash.message = "Poll was unarchived successfully!"
 		redirect(controller: "archive", action: "pollView")
 	}
+	
+	def confirmDelete = { }
 }
