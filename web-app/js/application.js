@@ -44,7 +44,7 @@ var remoteHash = {
 			success: function(data) {
 				launchSmallPopup('Rename activity', data, 'Rename');
 			}})
-	}
+	},
 	
 	"deleteAction": function() {
 		var messageSection = $("#messageSection").val();

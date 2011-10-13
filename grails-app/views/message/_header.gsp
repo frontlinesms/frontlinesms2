@@ -49,7 +49,7 @@
 		</div>
 	</g:else>
 	<ol>
-		<g:if test="${messageSection == 'trash' && messageInstance != null}">
+		<g:if test="${messageSection == 'trash' && messageInstanceTotal > 0}">
 			<li>
 				<select id="trash-actions" onchange="launchEmptyTrashConfirmation();">
 					<option value="na" class="na">Trash actions...</option>
@@ -96,8 +96,8 @@
 				</li>
 			</g:else>
 			<li>
-				<g:select name="poll-actions" from="${['Export', 'Rename activity']}"
-						keys="${['export', 'renameActivity']}"
+				<g:select name="poll-actions" from="${['Export', 'Rename activity', 'Delete Poll']}"
+						keys="${['export', 'renameActivity', 'deleteAction']}"
 						noSelection="${['': 'More actions...']}"/>
 			</li>
 		</ol>

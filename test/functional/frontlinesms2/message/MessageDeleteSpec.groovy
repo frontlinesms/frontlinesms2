@@ -16,6 +16,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			bobMessage.deleted = true
 			bobMessage.save(flush:true)
 			go "message/trash"
+			$("a", text: "Bob").click()
 		then:
 			Fmessage.deleted(false).count() == 1
 			$('#message-details #contact-name').text() == bobMessage.displayName
@@ -24,15 +25,15 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
-			new Fmessage(deleted:true).save(flush:true)
-			go "message/trash"
+			def m = new Fmessage(deleted:true).save(flush:true)
+			m.toDelete()
 			assert Fmessage.findAllByDeleted(true).size == 1
 		when:
-			$("#trash-actions").jquery.val("empty-trash")
-			$('#trash-actions').jquery.trigger('change')
+			$("#trash-actions").value("empty-trash")
 		then:
-			waitFor { $("#done").displayed }
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
+			$("#title").value("Empty trash")
 			$("#done").click()
 		then:
 			waitFor { at PageMessageInbox }
