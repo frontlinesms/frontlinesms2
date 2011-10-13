@@ -111,7 +111,6 @@ class ContactViewSpec extends ContactBaseSpec {
 	
 	def "should update message count when in contacts tab"() {
 		when:
-//			go "contact"
 			to PageContactShow
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
