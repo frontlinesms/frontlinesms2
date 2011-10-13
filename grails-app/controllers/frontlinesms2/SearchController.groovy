@@ -50,12 +50,7 @@ class SearchController {
 			searchInstance.save(failOnError: true, flush: true)
 		}
 
-		//FIXME Need to combine the 2 search part (the name matching custom field and the message matching all criteria) in one service or domain
-		def contactNameMatchingCustomField
-		if (search.customFields.find{it.value}) {
-			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
-		}
-		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
+		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()

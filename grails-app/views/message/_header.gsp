@@ -49,7 +49,7 @@
 		</div>
 	</g:else>
 	<ol>
-		<g:if test="${messageSection == 'trash' && messageInstanceTotal > 0}">
+		<g:if test="${messageSection == 'trash' && messageInstanceTotal != 0}">
 			<li>
 				<select id="trash-actions" onchange="launchEmptyTrashConfirmation();">
 					<option value="na" class="na">Trash actions...</option>
@@ -57,7 +57,7 @@
 				</select>
 			</li>
 		</g:if>
-		<g:if test="${messageSection != 'trash' && messageSection != 'poll'&& messageSection != 'folder'}">
+		<g:if test="${messageSection != 'trash' && messageSection != 'poll' && messageSection != 'folder'}">
 			<li>
 				<g:link elementId="export" url="#">
 					Export

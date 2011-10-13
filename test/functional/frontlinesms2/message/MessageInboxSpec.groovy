@@ -241,7 +241,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true, flush:true)
+			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox

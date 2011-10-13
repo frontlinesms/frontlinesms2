@@ -21,7 +21,7 @@ class FmessageSpec extends UnitSpec {
 	}
 	
 	def 'deleting message sets deleted flag to true'() {
-		given:
+		setup:
 			mockDomain(Trash)
 		when:
 			Fmessage message = new Fmessage()
@@ -32,7 +32,7 @@ class FmessageSpec extends UnitSpec {
 		then:
 			message.deleted == true
 	}
-
+	
 	def 'messages are unstarred by default'() {
 		when:
 			Fmessage message = new Fmessage()

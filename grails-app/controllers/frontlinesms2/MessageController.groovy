@@ -12,7 +12,7 @@ class MessageController {
 
 	def messageSendService
 	def trashService
-	
+
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
@@ -76,9 +76,7 @@ class MessageController {
 		def trashInstance
 		def trashInstanceList
 		def messageInstanceList
-		params.order = params.order ?: "desc"
 		params.sort = params.sort != "dateReceived" ? params.sort : 'dateCreated'
-		
 		if(params.id) {
 			def setTrashInstance = { obj ->
 				if(obj.linkClassName == "frontlinesms2.Fmessage") {
