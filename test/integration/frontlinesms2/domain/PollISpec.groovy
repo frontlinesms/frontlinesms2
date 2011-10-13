@@ -84,7 +84,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def results = Poll.findByTitle("question").getPollMessages().list(max:1, offset:0)
 		then:
-			results*.src == ["src2"]
+			results*.src == ["src3"]
 	}
 
 	def "should return count of poll messages"() {
