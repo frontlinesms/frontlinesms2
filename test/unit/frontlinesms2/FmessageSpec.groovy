@@ -21,6 +21,8 @@ class FmessageSpec extends UnitSpec {
 	}
 	
 	def 'deleting message sets deleted flag to true'() {
+		given:
+			mockDomain(Trash)
 		when:
 			Fmessage message = new Fmessage()
 		then:
