@@ -13,7 +13,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def 'delete button does not show up for messages in shown in trash view'() {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
-			bobMessage.deleted = true
+			bobMessage.toDelete()
 			bobMessage.save(flush:true)
 			go "message/trash"
 			$("a", text: "Bob").click()
