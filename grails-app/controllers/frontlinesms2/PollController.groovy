@@ -48,5 +48,16 @@ class PollController {
 		redirect(controller: "archive", action: "pollView")
 	}
 	
-	def confirmDelete = { }
+	def confirmDelete = {
+		def pollInstance = Poll.get(params.id)
+		render view: 'confirmDelete', model: [pollInstance: pollInstance]
+	}
+	
+	def delete = {
+		def poll = Poll.get(params.id)
+		poll.toDelete()
+		poll.save()
+		flash.message = "Poll has been trashed!"
+		redirect(controller:"message", action:"inbox")
+	}
 }

@@ -43,7 +43,7 @@ class PollViewSpec extends PollBaseSpec {
 			to PageMessagePollFootballTeamsAlice
 		then:
 			$('#message-details #contact-name').text() == message.src
-			$('#message-details #message-date').text() == DATE_FORMAT.format(message.dateCreated)
+			$('#message-details #message-date').text() == DATE_FORMAT.format(message.dateReceived)
 			$('#message-details #message-body').text() == message.text
 	}
 

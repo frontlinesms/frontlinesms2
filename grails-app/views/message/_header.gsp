@@ -57,7 +57,7 @@
 				</select>
 			</li>
 		</g:if>
-		<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
+		<g:if test="${messageSection != 'trash' && messageSection != 'poll'&& messageSection != 'folder'}">
 			<li>
 				<g:link elementId="export" url="#">
 					Export
@@ -65,6 +65,11 @@
 			</li>
 		</g:if>
 		<g:if test="${messageSection == 'folder'}">
+			<li>
+				<g:select name="folder-actions" from="${['Export', 'Delete folder']}"
+						keys="${['export', 'deleteAction']}"
+						noSelection="${['': 'More actions...']}"/>
+			</li>
 			<g:if test="${!params.viewingArchive}">
 				<li class='static_btn'>
 					<g:link controller="folder" action="archive" id="${ownerInstance.id}">Archive Folder</g:link>
