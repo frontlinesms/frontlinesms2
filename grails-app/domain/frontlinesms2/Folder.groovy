@@ -7,6 +7,7 @@ class Folder extends MessageOwner {
 	String name
 	Date dateCreated
 	boolean archived
+	boolean deleted
 	
 	static constraints = {
 		name(blank:false, nullable:false, maxSize:255)
@@ -31,5 +32,11 @@ class Folder extends MessageOwner {
 	def getLiveMessageCount() {
 		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
 		m ? m.size() : 0
+	}
+	
+	def toDelete() {
+		this.deleted = true
+		new Trash(identifier:this.name, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
+		this
 	}
 }

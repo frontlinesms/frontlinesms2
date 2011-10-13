@@ -6,6 +6,7 @@ class Poll {
 	String autoReplyText
 	String question
 	boolean archived
+	boolean deleted
 	Date dateCreated
 	List responses
 	int sentMessageCount
@@ -89,5 +90,12 @@ class Poll {
 	def getLiveMessageCount() {
 		def messageTotal = 0
 		responses.each { messageTotal += (it.liveMessageCount ?: 0) }
+		messageTotal
+	}
+	
+	def toDelete() {
+		this.deleted = true
+		new Trash(identifier:this.title, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
+		this
 	}
 }
