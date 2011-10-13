@@ -11,7 +11,8 @@ class MessageController {
 			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
-
+	def trashService
+	
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
@@ -72,10 +73,32 @@ class MessageController {
 	}
 	
 	def trash = {
-		def messageInstanceList = Fmessage.deleted(params.starred)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+		def trashInstance
+		def trashInstanceList
+		def messageInstanceList
+		params.order = params.order ?: "desc"
+		
+		if(params.id) {
+			def setTrashInstance = { obj ->
+				if(obj.linkClassName == "frontlinesms2.Fmessage") {
+					params.messageId = obj.linkId
+				} else {
+					trashInstance = obj.link
+				}
+			}
+			setTrashInstance(Trash.findById(params.id))
+		}
+		
+		if(params.starred) {
+			messageInstanceList = Fmessage.deleted(params.starred)
+		} else {
+			trashInstanceList =  Trash.list(params)
+		}
+		render view:'standard', model:[trashInstanceList:trashInstanceList,
+					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
+					messageInstanceTotal: Trash.count(),
+					ownerInstance: trashInstance] << getShowModel()
 	}
 
 	def poll = {
@@ -227,7 +250,7 @@ class MessageController {
 	def confirmEmptyTrash = { }
 	
 	def emptyTrash = {
-		Fmessage.findAllByDeleted(true)*.delete()
+		trashService.emptyTrash()
 		redirect(action: 'inbox')
 	}
 	
