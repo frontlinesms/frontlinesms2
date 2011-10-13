@@ -16,6 +16,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
 		thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
 		group = new Group(name:'test').save(failOnError:true)
+		new Group(name:'nobody').save(failOnError:true, flush:true )
 		
 		//message in the same day will still be return even if in the future
 		def futureDate = new Date()
@@ -130,6 +131,14 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
 			controller.params.groupId == Group.findByName('test').id
+	}
+	
+	def "message searches in a group with no member return empty list"(){
+		when:
+			controller.params.groupId = Group.findByName('nobody').id
+			def model = controller.result()
+		then:
+			model.messageInstanceList == []
 	}
 	
 	def "message searches can be restricted to both contact groups and polls"() {

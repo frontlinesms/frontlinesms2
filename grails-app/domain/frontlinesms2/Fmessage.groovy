@@ -123,8 +123,7 @@ class Fmessage {
 				}
 			}
 
-			search { search, contactNameMatchingCustomField=null -> 
-				def groupMembersNumbers = search.group?.getAddresses()
+			search { search -> 
 					and {
 						if(search.searchString) {
 							'ilike'("text", "%${search.searchString}%")
@@ -132,7 +131,9 @@ class Fmessage {
 						if(search.contactString) {
 							'ilike'("contactName", "%${search.contactString}%")
 						} 
-						if(groupMembersNumbers) {
+						if(search.group) {
+							def groupMembersNumbers = search.group.getAddresses()
+							groupMembersNumbers = groupMembersNumbers?:[""] //otherwise hibernate fail to search 'in' empty list
 							or {
 								'in'("src",	groupMembersNumbers)
 								'in'("dst", groupMembersNumbers)
@@ -152,9 +153,9 @@ class Fmessage {
 							le("dateReceived", search.endDate.next())
 						}
 						if(search.customFields.find{it.value}) {
-							if(!contactNameMatchingCustomField)
-								eq('src', null)
-							else 'in'("contactName", contactNameMatchingCustomField)
+							def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
+							contactNameMatchingCustomField = contactNameMatchingCustomField?:[""] //otherwise hibernate fail to search 'in' empty list
+							'in'("contactName", contactNameMatchingCustomField)
 						}
 						if(!search.inArchive) {
 							eq('archived', false)
