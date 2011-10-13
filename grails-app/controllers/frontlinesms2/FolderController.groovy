@@ -57,7 +57,7 @@ class FolderController {
 		flash.message = "Folder has been trashed!"
 		redirect(controller:"message", action:"inbox")
 	}
-	
+
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)
 		if (folderInstance) c folderInstance

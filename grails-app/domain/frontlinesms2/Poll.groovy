@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import java.util.Date;
+
 class Poll {
 	String title
 	String keyword
@@ -43,6 +45,7 @@ class Poll {
 	def beforeSave = {
 		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
 	}
+	
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
@@ -93,9 +96,9 @@ class Poll {
 		messageTotal
 	}
 	
-	def toDelete() {
-		this.deleted = true
+    def toDelete() {
+        this.deleted = true
 		new Trash(identifier:this.title, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
-		this
-	}
+        this
+    }
 }
