@@ -25,6 +25,16 @@ class GroupCedSpec extends GroupBaseSpec {
 			to PageContactShowGroupFriends
 		then:
 			$('#group-actions').displayed
+		when:
+			$('#group-actions').value("renameGroup").click()
+		then:
+			waitFor{ $('#ui-dialog-title-modalBox').displayed}
+		when:
+			$("#name").value("Renamed Group")
+			$('#done').click()
+		then:
+			waitFor{$('a', text:'Renamed Group')}
+			$('#contact-title h2', text:'Renamed Group')
 	}
 }
 

@@ -58,7 +58,13 @@ var remoteHash = {
 	},
 	
 	"renameGroup":function(){
-		alert("popup rename group")
+		$.ajax({
+			type:'GET',
+			url: url_root + 'group/rename',
+			data: {groupId: $("#groupId").val()},
+			success: function(data){
+				launchSmallPopup('Rename group', data, 'Rename');
+			}})
 	}
 }
 
