@@ -98,7 +98,6 @@ class Poll {
 	
     def toDelete() {
         this.deleted = true
-		new Trash(identifier:this.title, message:"${this.liveMessageCount}", linkClassName:this.class.name, linkId:this.id).save()
         this
     }
 }

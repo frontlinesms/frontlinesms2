@@ -141,8 +141,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	private def setupDeletedMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "deleted ${i}").save(flush: true).toDelete()
+			deleteMessage(new Fmessage(src: "src${i}", dst: "dst${i}", text: "deleted ${i}").save(flush: true))
 		}
+	}
+
+	def deleteMessage(Fmessage message) {
+		message.toDelete().save(flush:true)
+		new Trash(identifier:message.contactName, message:message.text, linkClassName:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
 	}
 
 	private def setupFolderAndItsMessages() {
