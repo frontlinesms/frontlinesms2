@@ -31,6 +31,15 @@
 		   disablePaginationControls();
 		   $("#contact-search").renderDefaultText();
 		});
+		
+		$(document).ready(function(){
+			$('#group-actions').bind('change', function() {
+				var selected = $(this).find('option:selected').val();
+				alert("option changed"+selected);
+				if(selected)
+					remoteHash[selected].call();
+			});
+		});
 
 		</g:javascript>
 		<g:render template="/css"/>
@@ -45,21 +54,28 @@
 				<g:render template="menu"/>
 				<div class="content">
 					<div class="content-header">
-						<div  id="contact-title">
-							<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+						<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+							<div  id="contact-title">
 								<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name}</h2>
-							</g:if>
-							<g:elseif test="${!contactInstance}">
+							</div>
+							<g:select name="group-actions" from="${['Rename group']}"
+								keys="${['renameGroup']}"
+								noSelection="${['': 'More actions...']}"/>
+						</g:if>
+						<g:elseif test="${!contactInstance}">
+							<div  id="contact-title">
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>New Group</h2>
-							</g:elseif>
-							<g:else>
+							</div>
+						</g:elseif>
+						<g:else>
+							<div  id="contact-title">
 								<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
 								<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
-							</g:else>
-						</div>
+							</div>
+						</g:else>
 					</div>
 					<div class="content-body">
 						<g:render template="contact_list"/>
