@@ -30,7 +30,7 @@
 		</tr>
 	</g:if>
 	<g:else>
-		<tr class="${m.link == ownerInstance?'selected':''}" id="${m.id}">
+		<tr class="${m.link == ownerInstance?'selected':''}" id="activity-${m.id}">
 			<td>
 				<g:checkBox disabled="true" name="message-select"/>
 			</td>

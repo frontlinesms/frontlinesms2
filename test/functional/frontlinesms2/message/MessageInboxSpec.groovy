@@ -41,6 +41,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 			firstMessageLink.text() == 'Alice'
 	}
 
+	def 'no message is selected when inbox is first loaded'() {
+		given:
+			createInboxTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			$('#message-details #message-body').text() == "No message selected"
+	}
+	
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
