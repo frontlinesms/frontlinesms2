@@ -55,6 +55,10 @@ var remoteHash = {
 			success: function(data) {
 				launchSmallPopup('Delete ' + messageSection, data, 'Delete');
 			}})
+	},
+	
+	"renameGroup":function(){
+		alert("popup rename group")
 	}
 }
 
