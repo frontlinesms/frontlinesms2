@@ -22,7 +22,7 @@
 		</g:javascript>	
 	</head>
 	<body>
-		<g:if test="${messageInstance != null}">
+		<g:if test="${messageInstanceTotal > 0}">
 			<g:render template="../message/message_details" />
 		</g:if>
 	</body>
