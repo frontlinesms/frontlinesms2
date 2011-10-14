@@ -35,7 +35,6 @@
 		$(document).ready(function(){
 			$('#group-actions').bind('change', function() {
 				var selected = $(this).find('option:selected').val();
-				alert("option changed"+selected);
 				if(selected)
 					remoteHash[selected].call();
 			});
@@ -56,7 +55,7 @@
 					<div class="content-header">
 						<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 							<div  id="contact-title">
-								<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
+								<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name}</h2>
 							</div>
