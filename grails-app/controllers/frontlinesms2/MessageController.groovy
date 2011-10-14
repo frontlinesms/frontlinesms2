@@ -162,6 +162,7 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.toDelete()
+				new Trash(identifier:messageInstance.contactName, message:messageInstance.text, linkClassName:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
