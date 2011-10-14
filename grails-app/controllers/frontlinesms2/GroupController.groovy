@@ -19,7 +19,11 @@ class GroupController {
 		}
 		else
 			flash['message'] = "Group not saved successfully"
-		redirect(controller: "contact", action: "show", params:[groupId : params.id])
+		if (params.name){
+			redirect(controller: "contact", action: "show", params:[groupId : params.id])
+		} else {
+			redirect(controller:"message", action:"inbox")
+		}
 	}
 
 	def show = {

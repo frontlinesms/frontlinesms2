@@ -17,7 +17,6 @@ class GroupCedSpec extends GroupBaseSpec {
 			assert Group.count() == (initNumGroups + 1)
 	}
 	
-	@spock.lang.IgnoreRest
 	def 'More action to rename the group is displayed and open a popup'(){
 		given:
 			createTestGroupsAndContacts()
