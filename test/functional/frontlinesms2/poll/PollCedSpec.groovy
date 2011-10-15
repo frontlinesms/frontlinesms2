@@ -197,6 +197,10 @@ class PollCedSpec extends PollBaseSpec {
 			pollForm.enableAutoReply = true
 			next.click()
 		then:
+			waitFor { editMessageTab.displayed }
+		when:
+			next.click()
+		then:
 			waitFor { selectRecipientsTab.displayed }
 		when:
 			next.click()
@@ -221,6 +225,59 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { Poll.findByTitle("Coffee Poll") }
 	}
 
+	def "can enter instructions for the poll and allow user to edit message"() {
+		when:
+			launchPollPopup('multiple', 'How often do you drink coffee?')
+		then:
+			waitFor { responseListTab.displayed }
+			choiceALabel.hasClass('field-enabled')
+			choiceBLabel.hasClass('field-enabled')
+		when:
+			pollForm.choiceA = 'Never'
+			pollForm.choiceB = 'Once a day'
+		then:
+			waitFor { choiceCLabel.hasClass('field-enabled') }
+		when:
+			pollForm.choiceC = 'Twice a day'
+		then:
+			waitFor { choiceDLabel.hasClass('field-enabled') }
+		when:
+			next.click()
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			next.click()
+		then:
+			waitFor { autoReplyTab.displayed }
+		when:
+			next.click()
+		then:
+			waitFor { editMessageTab.displayed }
+			pollForm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+		when:
+			pollForm.message = 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
+			next.click()
+		then:
+			waitFor { selectRecipientsTab.displayed }
+		when:
+			pollForm.address = '1234567890'
+			addManualAddress.click()
+		then:
+			waitFor { $('.manual').displayed }
+		when:
+			next.click()
+		then:
+			waitFor { confirmationTab.displayed }
+			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
+			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
+		when:
+			pollForm.title = "Coffee Poll"
+			done.click()
+		then:
+			waitFor { Poll.findByTitle("Coffee Poll") }
+	}
+	
 	def "can launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
