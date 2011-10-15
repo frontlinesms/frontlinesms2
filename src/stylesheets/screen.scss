@@ -19,8 +19,8 @@ $core-highlight-blue: #D8E8EF;
 $radio-purple: #C79CDD; // top bar highlight
 $radio-highlight-green: #E0F0DE;
 
-$highlight: $radio-highlight-green;
-$top-bar: $radio-purple;
+$highlight: $core-highlight-blue;
+$top-bar: $core-pink;
 
 @mixin button-format {
 	padding-left: 5px;

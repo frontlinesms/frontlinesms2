@@ -5,32 +5,28 @@
 		<li><a class="tabs-2" href="#tabs-2">Response list</a></li>
 		<li><a class="tabs-3" href="#tabs-3">Automatic sorting</a></li>
 		<li><a class="tabs-4" href="#tabs-4">Automatic reply</a></li>
-		<li><a class="tabs-5" href="#tabs-5">Select recipients</a></li>
-		<li><a class="tabs-6" href="#tabs-6">Confirm</a></li>
-		<li class="confirm-tab"><a class="tabs-7" href="#tabs-7"></a></li>
+		<li><a class="tabs-5" href="#tabs-5">Edit Message</a></li>
+		<li><a class="tabs-6" href="#tabs-6">Select recipients</a></li>
+		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
+		<li class="confirm-tab"><a class="tabs-8" href="#tabs-8"></a></li>
 	</ol>
 
 	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToNextTab()">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
-		<g:render template="answers"/>
+		<g:render template="responses"/>
 		<g:render template="sorting"/>
 		<g:render template="replies"/>
-		<div id="tabs-5">
+		<g:render template="message"/>
+		<div id="tabs-6">
 			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,
 			                                                                'groupList': groupList,
 			                                                                'nonExistingRecipients': [],
 			                                                                'recipients': []]"/>
 		</div>
 		<g:render template="confirm"/>
-		<div id="tabs-7" class='summary'>
-			<h2>The poll has been created!</h2>
-			<p>The messages  have been added to the pending message queue.</p>
-			<p>
-				It may take some time for all the messages to be sent, depending on the
-				number of messages and the network connection.
-			</p>
-			<p>To see the status of your message, open the 'Pending' messages folder.</p>
+		<div id="tabs-8" class='summary'>
+			<g:render template="summary"/>
 		</div>
 	</g:formRemote>
 </div>
@@ -94,19 +90,23 @@
 				return isValid;
 			}
 		});
+		
+		$("#tabs-5").bind("tabsshow", function(event, ui) {
+			updateSendMessage();
+		});
 
-		$("#tabs-5").contentWidget({
+		$("#tabs-6").contentWidget({
 			validate: function() {
 				return isGroupChecked('collect-responses') || isGroupChecked('addresses');
 			}
 		});
 
-		$("#tabs-6").contentWidget({
+		$("#tabs-7").contentWidget({
 			validate: function() {
-				$("#tabs-6 #title").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-6 #title"));
+				$("#tabs-7 #title").removeClass("error");
+				var isEmpty = isElementEmpty($("#tabs-7 #title"));
 				if(isEmpty) {
-					$("#tabs-6 #title").addClass("error");
+					$("#tabs-7 #title").addClass("error");
 				}
 				return !isEmpty;
 			},

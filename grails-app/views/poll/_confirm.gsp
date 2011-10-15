@@ -1,4 +1,4 @@
-<div id="tabs-6" class="confirm confirm-responses-tab">
+<div id="tabs-7" class="confirm confirm-responses-tab">
 	<div>
 		<h3><label for="title">Name this poll:</label></h3>
 		<g:textField name="title" id="title"></g:textField>
