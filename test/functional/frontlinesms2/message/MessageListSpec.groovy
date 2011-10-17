@@ -54,7 +54,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageMessageInbox
 		then:
-		$('#tab-messages').text() == 'Messages 1'
+		$('#tab-messages').text() == 'Messages 2'
 	}
 	
 	def 'Should be able to sort messages'() {
