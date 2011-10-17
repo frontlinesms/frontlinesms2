@@ -1,16 +1,14 @@
 package frontlinesms2.message
 
-import java.text.SimpleDateFormat
-
 import frontlinesms2.*
 
 class MessageTrashSpec extends grails.plugin.geb.GebSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
 	
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
-	    	def m1 = new Fmessage(src: "src1", dst: "dst1", starred: true).save(failOnError:true, flush:true).toDelete()
-	    	def m2 = new Fmessage(src: "src2", dst: "dst2").save(failOnError:true, flush:true).toDelete()
+	    	def m1 = new Fmessage(src: "src1", dst: "dst1", starred: true, deleted:true).save(failOnError:true, flush:true)
+	    	def m2 = new Fmessage(src: "src2", dst: "dst2", deleted:true).save(failOnError:true, flush:true)
+			Fmessage.findAll().collect{ new Trash(identifier:it.contactName, message:it.text, linkClassName:it.class.name, linkId:it.id).save(failOnError: true, flush: true)}
 		when:
 			to PageMessageTrash
 		then:

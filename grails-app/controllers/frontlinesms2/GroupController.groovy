@@ -6,6 +6,9 @@ class GroupController {
 	def list = {
 		['groups' : Group.list()]
 	}
+	
+	def rename = {
+	}
 
 	def update = {
 		def group = Group.get(params['id'])
@@ -16,7 +19,11 @@ class GroupController {
 		}
 		else
 			flash['message'] = "Group not saved successfully"
-		redirect(controller: "message", action: "inbox")
+		if (params.name){
+			redirect(controller: "contact", action: "show", params:[groupId : params.id])
+		} else {
+			redirect(controller:"message", action:"inbox")
+		}
 	}
 
 	def show = {

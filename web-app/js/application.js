@@ -55,6 +55,16 @@ var remoteHash = {
 			success: function(data) {
 				launchSmallPopup('Delete ' + messageSection, data, 'Delete');
 			}})
+	},
+	
+	"renameGroup":function(){
+		$.ajax({
+			type:'GET',
+			url: url_root + 'group/rename',
+			data: {groupId: $("#groupId").val()},
+			success: function(data){
+				launchSmallPopup('Rename group', data, 'Rename');
+			}})
 	}
 }
 
