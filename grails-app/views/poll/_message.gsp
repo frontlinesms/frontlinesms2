@@ -1,17 +1,19 @@
 <div id="tabs-5">
 	<h3>Edit message to be sent to recipients</h3>
 	<p>The following message will be sent to the recipients of the poll. This message can be edited before sending.</p>
-	<g:textArea name="message" value="" />
+	<g:textArea name="message" />
 </div>
 <g:javascript>
 	function updateSendMessage() {
-		var questionText = $("#question").val() + "?";
+		var questionText = $("#question").val();
+		if (questionText.substring(questionText.length - 1) != '?') questionText = questionText + '?';
+		questionText = questionText + '\n';
 		var choicesText = '';
 		var keywordText = '';
 		var replyText = '';
-		if (!$('#poll-keyword').hasAttr("disabled")) {
+		if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 			choicesText = 'Reply';
-			keywordText = $("#poll-keyword").val().toUppercase();
+			keywordText = $("#poll-keyword").val().toUpperCase();
 			if($("input[name='poll-type']:checked").val() == "standard") {
 				replyText = choicesText + ' "' + keywordText + ' A" for Yes, "' + keywordText + ' B" for No.';
 			} else {
@@ -23,7 +25,7 @@
 				replyText = replyText + '.';
 			}
 		}
-		var sendMessage = questionText + ' ' + replyText;
-		$("input[name='message']").val(sendMessage);
+		var sendMessage = questionText + replyText;
+		$("#message").val(sendMessage);
 	}
 </g:javascript>

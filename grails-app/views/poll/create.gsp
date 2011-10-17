@@ -119,6 +119,7 @@
 
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
+			updateSendMessage();
 			updateConfirmationMessage();
 		});
 		
@@ -133,17 +134,8 @@
 	}
 
 	function updateConfirmationMessage() {
-		var question = $("#question").val();
-		var instruction = $("#instruction").val();
-		var choices = '';
-		if($("input[name='poll-type']:checked").val() == "standard") {
-			choices = "A) Yes  B) No";
-		} else {
-			$(".choices").each(function() {
-				if (this.value) choices = choices + ' ' + this.name.substring(6,7) + ') ' + this.value
-			});
-		}
-		$("#poll-question-text").html('<pre>' + question + ' ' + choices + ' '  + '</pre>');
+		var sendMessage = $('#message').val();
+		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
 		
 		// update auto-sort

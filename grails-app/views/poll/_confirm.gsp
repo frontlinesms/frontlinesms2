@@ -8,7 +8,7 @@
 		<table>
 			<tr>
 				<td><h3>Message: </h3></td>
-				<td id="poll-question-text"/>
+				<td id="poll-message"/>
 			</tr>
 			<tr>
 				<td><h3>Auto-sort: </h3></td>
