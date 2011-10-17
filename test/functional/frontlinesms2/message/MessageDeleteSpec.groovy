@@ -54,7 +54,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Delete' button appears for individual messages and works"() {
 		when:
-			go "message/inbox"
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 			def btnDelete = $("#message-delete")
 		then:
 			btnDelete
