@@ -4,7 +4,7 @@ import frontlinesms2.*
 import java.text.SimpleDateFormat
 
 class FolderListSpec extends FolderBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
 	
 	def 'folder message list is displayed'() {
 		given:
