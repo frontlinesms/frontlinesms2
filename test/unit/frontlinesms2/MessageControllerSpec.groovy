@@ -139,7 +139,7 @@ class MessageControllerSpec extends ControllerSpec {
 			mockParams.message = message2
 			controller.countMessageCharacters()
 		then:
-			controller.response.contentAsString == "300 characters (3 SMS messages)"
+			controller.response.contentAsString == "300 characters (2 SMS messages)"
 	}
 	
 	def "should calculate the total number of mixed characters being sent"() {
@@ -149,7 +149,7 @@ class MessageControllerSpec extends ControllerSpec {
 			mockParams.message = message3
 			controller.countMessageCharacters()
 		then:
-			controller.response.contentAsString == "300 characters (3 SMS messages)"
+			controller.response.contentAsString == "300 characters (2 SMS messages)"
 				
 	}
 
