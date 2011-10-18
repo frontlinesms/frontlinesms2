@@ -2,9 +2,7 @@ package frontlinesms2
 
 import spock.lang.*
 import grails.plugin.spock.*
-
 import org.apache.camel.Exchange
-
 import org.smslib.CStatusReportMessage
 
 class SmslibTranslationServiceSpec extends UnitSpec {
