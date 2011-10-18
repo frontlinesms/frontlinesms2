@@ -30,7 +30,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestFolders()
 			Folder.findByName("Work").addToMessages(new Fmessage(src: "src", dst: "dst")).save(flush: true)
 		when:
-			go "message/folder/${Folder.findByName("Work").id}"
+			go "message/folder/${Folder.findByName("Work").id}/show/${Fmessage.findBySrc('src').id}"
 			$('#move-actions').jquery.val('inbox') // bug selecting option - seems to be solved by using jquery...
 			$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
 		then:
@@ -46,8 +46,6 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def bob = Fmessage.findBySrc('Bob')
-			def alice = Fmessage.findBySrc('Alice')
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 		when:
@@ -59,8 +57,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			setMoveActionsValue(shampooPoll.id.toString())
 		then:
 			waitFor { $('#no-messages').displayed }
-			footballPoll.getPollMessages().count() == 0
-			shampooPoll.getPollMessages().count() == 3
+			footballPoll.pollMessages.count() == 0
+			shampooPoll.pollMessages.count() == 3
 	}
 
 	def "archive action should not be available for messages that belongs to a message owner  such as activities"() {

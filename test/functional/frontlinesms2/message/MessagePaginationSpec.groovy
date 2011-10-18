@@ -19,22 +19,6 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	}
 
-	def "should display the message details for the message selected by default"() {
-		setup:
-			setupInboxMessages()
-		when:
-			go "message/inbox"
-			def element = $("#messages tr:nth-child(2) td:nth-child(3) a")
-			def expectedText = element.text()
-			element.click()
-			waitFor { $("#contact-name").text().contains(expectedText) }
-		then:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
-		then:
-			$('#contact-name').text().contains( $(".selected td:nth-child(3) a").text())
-	}
-
 	def "should paginate pending messages"() {
 		setup:
 			setupPendingMessages()

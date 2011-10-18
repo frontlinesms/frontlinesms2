@@ -120,4 +120,14 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			$("#messages").displayed
 	}
+	
+	def 'no message is selected when a poll is first loaded'() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}"
+		then:
+			$('#message-details #message-body').text() == "No message selected"
+	}
 }
