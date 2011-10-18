@@ -16,21 +16,21 @@
 			<g:render template="../message/message_actions"></g:render>
 			<g:render template="../message/other_actions"></g:render>
 		</g:if>
-		<g:if test="${messageSection == 'trash' && ownerInstance}"
+		<g:elseif test="${messageSection == 'trash' && ownerInstance}"
 			<div id='activity-info'>
 				<h2 id="activity-name">${ownerInstance instanceof frontlinesms2.Poll ? ownerInstance.title : ownerInstance.name}	</h2>
 				<p id="activity-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
 				<p id="activity-body">${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p>
 			</div>
-		</g:if>
-		<g:if test="${!messageInstance && !ownerInstance}"
+		</g:elseif>
+		<g:else>
 			<div id='message-info'>
 				<p id="message-body">No message selected</p>
 			</div>
-		</g:if>
+		</g:else>
 	</div>
 	<div id="multiple-messages">
-		<g:if test="${messageInstance}"
+		<g:if test="${checkedMessageCount}"
 			<div id='message-info'>
 				<h2 id='checked-message-count'>${checkedMessageCount} messages selected</h2>
 				<div class="actions">

@@ -17,7 +17,17 @@ class FolderListSpec extends FolderBaseSpec {
 			at PageMessageFolderWork
 			folderMessageSources == ['Jane', 'Max']
 	}
-	
+
+	def 'no message is selected when a folder is first loaded'() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			go "message/folder/${Folder.findByName('Work').id}"
+		then:
+			$('#message-details #message-body').text() == "No message selected"
+	}
+
 	def "message's folder details are shown in list"() {
 		given:
 			createTestFolders()

@@ -3,6 +3,7 @@ package frontlinesms2.domain
 import frontlinesms2.*
 
 class GroupISpec extends grails.plugin.spock.IntegrationSpec {
+	def contactSearchService
 
 	def "should check for uniqueness across subscription and unsubscription keywords"() {
 		setup:
@@ -41,14 +42,14 @@ class GroupISpec extends grails.plugin.spock.IntegrationSpec {
 			samJones.addToGroups(fpGroup,true)
 			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
 		when:
-			def results = GroupMembership.searchForContacts([groupName:fpGroup.name,searchString:"Sam",max:50, offset:0])
-			def resultsCount = GroupMembership.countForContacts([groupName:fpGroup.name,searchString:"Sam"])
+			def results = contactSearchService.getContacts([groupId:fpGroup.id, searchString:"Sam", max:50, offset:0])
+			def resultsCount = contactSearchService.countContacts([groupId:fpGroup.id, searchString:"Sam"])
 		then:
 			assert results == [samAnderson, samJones]
 			assert resultsCount == 2
 		when:
-			results = GroupMembership.searchForContacts([searchString:"Sam",max:50, offset:0])
-			resultsCount = GroupMembership.countForContacts([searchString:"Sam"])			
+			results = contactSearchService.getContacts([searchString:"Sam", max:50, offset:0])
+			resultsCount = contactSearchService.countContacts([searchString:"Sam"])			
 		then:
 			assert results == [samAnderson, samJones, samTina]
 			assert resultsCount == 3
