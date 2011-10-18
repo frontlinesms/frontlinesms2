@@ -7,6 +7,10 @@ class SmartGroupControllerISpec extends grails.plugin.spock.ControllerSpec {
 		controller = new ContactController()
 	}
 	
+	def cleanup() {
+		Contact.findAll()*.delete(flush:true)
+	}
+	
 	def 'viewing smart group displays contents of that smart group'() {
 		given:
 			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+44').save(flush:true, failOnError:true)
