@@ -1,7 +1,7 @@
 <div id="tabs-1" class="${configureTabs.contains('tabs-1') ? '' : 'hide'}">
 	<label class="header" for="messageText">Enter message</label><br />
 	<g:textArea name="messageText" value="${messageText}" rows="5" cols="40"/>
-	<span id="character-count">0 characters (1 SMS message)</span> 
+	<span id="message-stats">0 characters (1 SMS message)</span> 
 </div>
 
 <script>
@@ -18,12 +18,12 @@
 		keyup: function() {
 			var value = $(this).val();
 			if(value.length > 140) {
-				$.get(url_root + 'message/countMessageCharacters', {message: value}, function(data) {
-					$("#character-count").html(data);
+				$.get(url_root + 'message/getSendMessageCount', {message: value}, function(data) {
+					$("#message-stats").html(value.length + " characters " + data);
 				});
 			}
 			else {
-				$("#character-count").html(value.length + " characters (1 SMS message)");
+				$("#message-stats").html(value.length + " characters (1 SMS message)");
 			}
 		}	
 	})

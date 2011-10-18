@@ -83,12 +83,18 @@
 	}
 
 	function updateCount() {
-		var count = getSelectedGroupElements("addresses").size();
-		$.each(["#recipient-count", "#contacts-count", "#messages-count"],
+		var addressCount = getSelectedGroupElements("addresses").size();
+		$.each(["#recipient-count", "#contacts-count"],
 			function(index, id) {
-				if($(id)) $(id).html(count);
+				if($(id)) $(id).html(addressCount);
 			}
 		);
+		
+		var messageStats = $("#message-stats").text()
+		noOfMessages = messageStats.substring(messageStats.indexOf("(")+1, messageStats.indexOf(" S"));
+		noOfMessages = noOfMessages == 0 ? 1 : noOfMessages
+		messageCount = addressCount * parseInt(noOfMessages)
+		$("#messages-count").html(messageCount)
 	}
 
 	 function addAddressHandler() {
