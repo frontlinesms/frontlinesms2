@@ -259,12 +259,11 @@ class MessageController {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 	
-	def countMessageCharacters = {
+	def getSendMessageCount = {
 		def message = params.message ?: null
 		def messageParts = GsmAlphabet.splitText(message, true)
-		def characterCount = message.size()
 		def messageCount = messageParts.size() == 1 ? "${messageParts.size()} SMS message" : "${messageParts.size()} SMS messages"
-		render text: "$characterCount characters ($messageCount)", contentType:'text/plain'
+		render text: "($messageCount)", contentType:'text/plain'
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {
