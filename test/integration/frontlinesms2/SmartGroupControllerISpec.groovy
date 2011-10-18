@@ -8,7 +8,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.ControllerSpec {
 	}
 	
 	def cleanup() {
-		Contact.findAll()*.delete(flush:true)
+		Contact.findAll()*.delete()
 	}
 	
 	def 'viewing smart group displays contents of that smart group'() {
