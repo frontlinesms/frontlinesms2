@@ -4,6 +4,7 @@ import grails.util.GrailsConfig
 import grails.converters.JSON
 
 import frontlinesms2.MessageStatus
+import org.smslib.util.GsmAlphabet
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST",
@@ -256,6 +257,14 @@ class MessageController {
 	
 	def getUnreadMessageCount = {
 		render text: Fmessage.countUnreadMessages()
+	}
+	
+	def countMessageCharacters = {
+		def message = params.message ?: null
+		def messageParts = GsmAlphabet.splitText(message, true)
+		def characterCount = message.size()
+		def messageCount = messageParts.size() == 1 ? "${messageParts.size()} SMS message" : "${messageParts.size()} SMS messages"
+		render text: "$characterCount characters ($messageCount)"
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {
