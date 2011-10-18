@@ -191,6 +191,28 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
 	}
+	
+	def "should show the character count of each message"() {
+		setup:
+			createData()
+		when:
+			launchQuickMessageDialog()
+		then:
+			characterCount.text() == "0 characters (1 SMS message)"
+		when:
+			$("#messageText").value("h")
+		then:
+			characterCount.text() == "1 characters (1 SMS message)"
+		when:
+			$("#messageText").value("${'a' * 120}")
+		then:
+			characterCount.text() == "120 characters (1 SMS message)"
+		when:
+			def longText = '0123abc[]@' * 16
+			$("#messageText").value(longText)
+		then:
+			waitFor { characterCount.text() == "${longText.size()} characters (2 SMS messages)"}
+	}
 
 	private def createData() {
 		def group = new Group(name: "group1").save(flush: true)
@@ -235,6 +257,7 @@ class QuickMessageDialog extends geb.Page {
 		
 		doneButton { $("#done") }
 		nextPageButton { $("#nextPage") }
+		characterCount { $("#character-count")}
 	}
 }
 

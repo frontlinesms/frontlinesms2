@@ -33,7 +33,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
-			controller.params.id = id
+			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
 			controller.inbox()
 		then:
@@ -85,7 +85,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.list() == inboxMessages
 	}
-
+	
 	Date createDate(String dateAsString) {
 		DateFormat format = createDateFormat();
 		return format.parse(dateAsString)
