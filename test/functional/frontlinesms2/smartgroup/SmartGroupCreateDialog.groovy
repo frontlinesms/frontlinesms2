@@ -1,14 +1,14 @@
 package frontlinesms2.smartgroup
 
-class SmartGroupCreateDialog extends geb.Page {
+class SmartGroupCreateDialog extends frontlinesms2.contact.PageContactShow {
 	static at = {
 		$("#ui-dialog-title-modalBox").text() == 'Create smart group'
 	}
 	
 	static content = {	
 		rules { $('tr.smart-group-criteria') }
-		ruleField { rules.find('select', name:'field') }
-		ruleValues { rules.find('input', type:'text') }
+		ruleField { rules.find('select', name:'rule-field') }
+		ruleValues { rules.find('input', name:'rule-text') }
 		ruleMatchText { rules.find('.rule-match-text')*.text() }
 		removeRuleButtons { rules.find('.button.remove-rule') }
 		

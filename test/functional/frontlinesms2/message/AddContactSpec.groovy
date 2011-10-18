@@ -6,25 +6,27 @@ import frontlinesms2.*
 class AddContactSpec extends MessageGebSpec {
 
 	def 'if source of message does not exists in the database then number is displayed'() {
-		when:
+		setup:
 			createTestMessages()
 			def contactlessMessage = Fmessage.findBySrc('+254778899')
+		when:
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
-			getColumnAsArray($('#messages tr'), 2) == ['Bob', 'Alice', '+254778899']
+			getColumnText('messages', 2) == ['Bob', 'Alice', '+254778899']
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
-		when:
+		setup:
 			createTestMessages()
 			def message = Fmessage.findBySrc('+254778899')
+		when:
 			go "message/inbox/show/${message.id}"
 			def btnAddContact = $('a.button')
 			assert btnAddContact instanceof geb.navigator.NonEmptyNavigator
 			btnAddContact.click()
 		then:
-			waitFor {$('#contact_details').displayed}
+			waitFor { $('#contact_details').displayed }
 			$('#contact_details').primaryMobile == "+254778899"
 	}
 }

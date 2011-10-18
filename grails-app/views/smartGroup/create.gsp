@@ -17,8 +17,9 @@
 					</tr>
 					<tr class="prop smart-group-criteria">
 						<td>
-							<g:select name="field"
+							<g:select name="rule-field"
 									from="['Phone number', 'Contact name', 'email', 'notes']"
+									keys="['mobile', 'contactName', 'email', 'notes']"
 									onchange="smartGroupCriteriaChanged(this)"/>
 						</td>
 						<td class="rule-match-text">
@@ -26,7 +27,7 @@
 							<span class="starts">starts with</span>
 						</td>
 						<td>
-							<g:textField name="rule" class="rule-text"/>
+							<g:textField name="rule-text" class="rule-text"/>
 						</td>
 						<td>
 							<a onclick="removeRule(this)" class="button remove-rule hide">remove</a>
@@ -51,7 +52,7 @@
 		var select = $(_select);
 		var row = select.closest('.smart-group-criteria');
 		var ruleMatchText = row.find('.rule-match-text');
-		if(select.val() == 'Phone number') {
+		if(select.val() == 'mobile') {
 			ruleMatchText.find('.starts').show();
 			ruleMatchText.find('.contains').hide();
 		} else {
@@ -61,7 +62,12 @@
 	}
 
 	function initSmartGroupWizard() {
-		$("#tabs-1").contentWidget({			
+		$("#tabs-1").contentWidget({
+			onDone: function() {
+				var popupForm = $("#tabs-1").closest("form");
+				popupForm.submit();
+			},
+					
 			validate: function() {
 				var valid = true;
 				

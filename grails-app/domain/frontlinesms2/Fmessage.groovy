@@ -221,7 +221,7 @@ class Fmessage {
 		this
 	}
 	
-	def archive() {
+	def archive() { // FIXME is this method necessary?
 		this.archived = true
 		this
 	}

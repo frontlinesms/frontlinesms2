@@ -3,7 +3,7 @@ package frontlinesms2.smartgroup
 import frontlinesms2.*
 import frontlinesms2.contact.PageContactShow
 
-class SmartGroupViewSpec extends SmartGroupBaseSpec {
+class SmartGroupListSpec extends SmartGroupBaseSpec {
 	def 'smart groups list is not visible if there are no smart groups'() {
 		when:
 			to PageContactShow
@@ -20,16 +20,6 @@ class SmartGroupViewSpec extends SmartGroupBaseSpec {
 		then:
 			waitFor { smartGroupsListItems.size() > 0 }
 			!noSmartGroupsMessage.displayed	
-	}
-	
-	def 'smart group members should be displayed when the list is clicked'() {
-		when:
-			launchCreateDialog()
-			ruleValues[0].value('+44')
-			finishButton.click()
-			smartGroupsList.find('a').click()
-		then:
-			title.endsWith('English Contacts')
 	}
 	
 	def 'CREATE NEW SMART GROUP button is available when there are no smart groups'() {

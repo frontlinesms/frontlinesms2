@@ -28,7 +28,7 @@ class StatusSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to StatusPage
 		then:
-			waitFor { $("#indicator").@src == "/frontlinesms2/images/icons/status_green.png" }
+			waitFor { $("#indicator").@src ==~ "/frontlinesms2/images/icons/status_.*\\.png" }
 	}
 	
 	def "Does not display connections when there are no connections available"() {

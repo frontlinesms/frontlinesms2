@@ -50,7 +50,6 @@ class PollControllerSpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.save()
 			def p = Poll.findByTitle("test-poll-2")
-			println "From the database, p.keyword is $p.keyword"
 		then:
 			p
 			!p.keyword

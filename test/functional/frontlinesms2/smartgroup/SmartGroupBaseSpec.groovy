@@ -28,4 +28,8 @@ abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 		addRuleButton.click()
 		waitFor { rules.size() == ruleCount+1 }
 	}
+	
+	def getMenuLink(smartGroupName) {
+		$('#smart-groups-submenu li a', text:smartGroupName)
+	}
 }
