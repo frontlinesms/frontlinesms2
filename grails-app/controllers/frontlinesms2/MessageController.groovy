@@ -260,10 +260,10 @@ class MessageController {
 	}
 	
 	def countMessageCharacters = {
-		def message = params.message ?: null
-		def messageParts = GsmAlphabet.splitText(message, true)
+		def message = params.message?: ''
+		def messageParts = GsmAlphabet.splitText(message, false)
 		def characterCount = message.size()
-		def messageCount = messageParts.size() == 1 ? "${messageParts.size()} SMS message" : "${messageParts.size()} SMS messages"
+		def messageCount = messageParts.size()>1? "${messageParts.size()} SMS messages": "1 SMS message"
 		render text: "$characterCount characters ($messageCount)", contentType:'text/plain'
 	}
 	

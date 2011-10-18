@@ -3,7 +3,7 @@ package frontlinesms2.message
 import frontlinesms2.*
 import frontlinesms2.utils.*
 
-@Mixin(GebUtil)
+@Mixin(frontlinesms2.utils.GebUtil)
 class MessageListSpec extends grails.plugin.geb.GebSpec {
 
     def 'button to view inbox messages exists and goes to INBOX page'() {
@@ -64,11 +64,11 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			to PageMessageInbox
 			$("#source-header a").click()
 		then:
-			getColumnAsArray($("table tr"), 2) == ['Contact 1', 'Contact 2']
+			getColumnText('messages', 2) == ['Contact 1', 'Contact 2']
 		when:
 			$("#message-header a").click()
 		then:
-			getColumnAsArray($("table tr"), 3) == ['An inbox message', 'Another inbox message']		
+			getColumnText('messages', 3) == ['An inbox message', 'Another inbox message']		
 	}
 	   
     def assertMenuItemSelected(String itemText) {

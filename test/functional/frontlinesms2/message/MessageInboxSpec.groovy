@@ -50,6 +50,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			$('#message-details #message-body').text() == "No message selected"
 	}
 	
+	//FIXME this test fail when the local computer language is different than english. The Date return
+	//in the test in English while the UI date is in the local context
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -276,11 +278,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	String dateToString(Date date) {
-		DateFormat formatedDate = createDateFormat();
-		return formatedDate.format(date)
-	}
-
-	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
+		new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US).format(date)
 	}
 }

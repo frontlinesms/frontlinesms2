@@ -3,36 +3,39 @@ package frontlinesms2
 import org.apache.commons.lang.builder.HashCodeBuilder
 
 class GroupMembership implements Serializable {
-    Contact contact
-    Group group
+	static mapping = {
+		id composite: ['group', 'contact']
+		version false
+		table 'group_member'
+	}
 
-    boolean equals(other) {
-        if (!(other instanceof GroupMembership)) {
-            return false
-        }
+	Contact contact
+	Group group
 
-        return other.contact.id == contact.id && other.group.id == group.id
-    }
+	boolean equals(that) {
+		that instanceof GroupMembership &&
+				that.contact.id == this.contact.id &&
+				that.group.id == this.group.id
+	}
 
-    int hashCode() {
-        return new HashCodeBuilder().append(contact.id).append(group.id).toHashCode()
-    }
+	int hashCode() {
+		return new HashCodeBuilder().append(contact.id).append(group.id).toHashCode()
+	}
 
-    static GroupMembership create(Contact contact, Group group, boolean flush=true) {
-        new GroupMembership(contact: contact, group: group).save(flush: flush, insert: true)
-    }
+	static GroupMembership create(Contact contact, Group group, boolean flush=true) {
+		new GroupMembership(contact: contact, group: group).save(flush: flush, insert: true)
+	}
 
-    static GroupMembership create(Contact contact, Long groupId, boolean flush=true) {
-        new GroupMembership(contact: contact, group: groupId).save(flush: flush, insert: true)
-    }
+	static GroupMembership create(Contact contact, Long groupId, boolean flush=true) {
+		new GroupMembership(contact: contact, group: groupId).save(flush: flush, insert: true)
+	}
 
-    static boolean remove(Contact contact, Group group, boolean flush=false) {
-        GroupMembership contactGroup = GroupMembership.findByContactAndGroup(contact, group)
-        return contactGroup ? contactGroup.delete(flush: flush) : false
-    }
+	static boolean remove(Contact contact, Group group, boolean flush=false) {
+		GroupMembership contactGroup = GroupMembership.findByContactAndGroup(contact, group)
+		return contactGroup ? contactGroup.delete(flush: flush) : false
+	}
 
 	static void deleteFor(Contact c, boolean flush=false) {
-//		GroupMembership.delete
 		executeUpdate("DELETE FROM GroupMembership WHERE contact=:contact", [contact: c])
 	}
 
@@ -40,16 +43,16 @@ class GroupMembership implements Serializable {
 		executeUpdate("DELETE FROM GroupMembership WHERE group=:group", [group: g])
 	}
 	
-	static def searchForContacts(params) {
-		def searchString = "%${params.searchString?:''}%"
-		params.groupName ? GroupMembership.findAll("from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}", max:params.max?.toInteger(), offset:params.offset?.toInteger()]).collect{it[1]} :
-		Contact.findAllByNameIlike(searchString, params)
+	static def searchForContacts(Long groupId, String contactSearchString, max, offset) {
+		def groupMembershipsAndContacts = Contact.executeQuery("SELECT c FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND lower(c.name) LIKE :contactSearchString",
+				[groupId:groupId, contactSearchString:contactSearchString], [max:max, offset:offset])
+		return groupMembershipsAndContacts
 	}
 	
-	static def countForContacts(params) {
-		def searchString = "%${params.searchString?:''}%"
-		params.groupName ? GroupMembership.executeQuery("select count(c) from GroupMembership g join g.contact c where g.group.name=:groupName and lower(c.name) like :contactName",[groupName:params.groupName, contactName:"${searchString.toLowerCase()}"])[0] :
-		Contact.countByNameIlike(searchString)
+	static def countSearchForContacts(groupId, String contactSearchString) {
+		def count = GroupMembership.executeQuery("SELECT count(c) FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND lower(c.name) LIKE :contactSearchString",
+				[groupId:groupId, contactSearchString:contactSearchString])
+		return count[0]
 	}
 	
 	static getMembers(groupInstance, max, offset) {
@@ -59,10 +62,4 @@ class GroupMembership implements Serializable {
 	static countMembers(groupInstance) {
 		GroupMembership.executeQuery("SELECT gm.contact FROM GroupMembership gm WHERE gm.group=:group", [group: groupInstance]).size()
 	}
-
-   static mapping = {
-      id composite: ['group', 'contact']
-      version false
-      table 'group_member'
-   }
 }

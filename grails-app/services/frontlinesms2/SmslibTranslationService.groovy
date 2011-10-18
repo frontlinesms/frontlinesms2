@@ -7,10 +7,7 @@ import org.smslib.COutgoingMessage
 
 class SmslibTranslationService {
 	void toFmessage(Exchange exchange) {
-		println("exchange ${exchange}")
 		def i = exchange.in
-		println("smslib translation service - in: $i")
-		println("smslib translation service - inclass: ${i.class}")
 		CIncomingMessage bod = exchange.in.body
 		
 		// Ignore CStatusReportMessages
@@ -28,13 +25,10 @@ class SmslibTranslationService {
 	}
 	
 	void toCmessage(Exchange exchange) {
-		println "Should be translating to CMessage: $exchange"
 		def f = exchange.in.body
 		def c = new COutgoingMessage(f.dst, f.text)
 		c.originator = f.src
 		c.date = f.dateCreated.time
-		
-		println "Created CMessage $c"
 		
 		exchange.out.body = c
 	}

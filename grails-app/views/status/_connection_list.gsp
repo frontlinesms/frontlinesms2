@@ -1,5 +1,5 @@
 <%@ page import="frontlinesms2.Contact" %>
-<g:if test="${fconnectionInstanceTotal==0}">
+<g:if test="${connectionInstanceTotal == 0}">
 	<div id='connections'>You have no connections configured.</div>
 </g:if>
 <g:else>

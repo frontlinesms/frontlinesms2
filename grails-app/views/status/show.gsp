@@ -9,14 +9,10 @@
 		<g:render template="device_detection"/>
 
 		<g:javascript>
-			// alert("Executing this new bit of javascript...");
-
 			// Update the list of detected devices
 			$(document).everyTime(10000, function() {
-				// alert("Fetching detected devices update...");
 				$.get(url_root + 'status/listDetected',
 						function(data) {
-							// alert("Got list of detected devices: " + data);
 							$('#device-detection').replaceWith($(data));
 						});
 			});

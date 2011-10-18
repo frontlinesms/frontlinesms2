@@ -31,8 +31,8 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "should not send message when no recipients are selected"() {
 		when:
 			launchQuickMessageDialog()
-					$("#tabs a", text: "Confirm").click()
-        then:
+			$("#tabs a", text: "Confirm").click()
+		then:
 			waitFor { confirmTab.displayed }
 		when:
 			doneButton.click()
@@ -44,7 +44,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { confirmTab.displayed }
 	}
 
-    def "should select the previous tab on click of back"() {
+	def "should select the previous tab on click of back"() {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
@@ -53,7 +53,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			toConfirmTab()
 		then:
 			waitFor { confirmTab.displayed }
-        when:
+		when:
 			$("#prevPage").click()
 		then:
 			waitFor { selectRecipientsTab.displayed }
@@ -67,7 +67,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			addressField.value("+919544426000")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input').value() == "+919544426000" }
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 	}
 
@@ -77,10 +77,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			toSelectRecipientsTab()
 			addressField.value("+919544426000")
 			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+		when:
 			toConfirmTab()
 			doneButton.click()
 		then:
-			waitFor{ $(".quick-message-summary").displayed }
+			waitFor { messagesQueuedNotification.displayed }
 		when:
 			$("#confirmation").click()
 			$("a", text: "Inbox").click()
@@ -94,7 +97,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			$("#message-list tbody tr").size() == 1
 			$("#message-list tbody tr")[0].hasClass("send-failed")
 	}
-
 
 	def "should select members belonging to the selected group"() {
 		setup:
@@ -198,20 +200,24 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			characterCount.text() == "0 characters (1 SMS message)"
+			waitFor { characterCount.text() == "0 characters (1 SMS message)" }
 		when:
 			$("#messageText").value("h")
 		then:
-			characterCount.text() == "1 characters (1 SMS message)"
+			waitFor { characterCount.text() == "1 characters (1 SMS message)" }
 		when:
-			$("#messageText").value("${'a' * 120}")
+			$("#messageText").value('a' * 120)
 		then:
-			characterCount.text() == "120 characters (1 SMS message)"
+			waitFor { characterCount.text() == "120 characters (1 SMS message)" }
 		when:
 			def longText = '0123abc[]@' * 16
 			$("#messageText").value(longText)
 		then:
-			waitFor { characterCount.text() == "${longText.size()} characters (2 SMS messages)"}
+			waitFor { characterCount.text() == "160 characters (1 SMS message)" }
+		when:
+			$("#messageText") << 'a'
+		then:
+			waitFor { characterCount.text() == "161 characters (2 SMS messages)" }
 	}
 
 	private def createData() {
@@ -251,6 +257,7 @@ class QuickMessageDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
+		messagesQueuedNotification { $("div#tabs-4.quick-message-summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }
