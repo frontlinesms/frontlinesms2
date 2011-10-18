@@ -14,10 +14,8 @@ class StatusController {
 	}
 	
 	def show = {
-		def fconnectionInstanceList = Fconnection.list()
-		def fconnectionInstanceTotal = Fconnection.count()
-		[connectionInstanceList: fconnectionInstanceList,
-				fconnectionInstanceTotal: fconnectionInstanceTotal,
+		[connectionInstanceList: Fconnection.list(),
+				connectionInstanceTotal: Fconnection.count(),
 				detectedDevices:deviceDetectionService.detected] <<
 			getMessageStats() << getFilters()
 	}

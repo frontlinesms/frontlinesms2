@@ -9,13 +9,35 @@ class SmartGroupController {
 	def save = {
 		def smartGroupInstance = new SmartGroup()
 		smartGroupInstance.name = params.smartgroupname
-		params.rules.each {
-			println "Rule: $it"
+		getRuleText().eachWithIndex { ruleText, i ->
+			def ruleField = getRuleField(i)
+			assert ruleField in ['contactName', 'mobile', 'email', 'notes'] // prevent injection - these should match the sanctioned fields user can set
+			smartGroupInstance."$ruleField" = ruleText
 		}
 		
-		println "Adding flash message..."
-		flash.message = "Created new smart group: '$params.smartgroupname'"
-		println "Redirecting..."
-		redirect controller:'contact', action:'show'
+		if(smartGroupInstance.save()) {
+			println "Adding flash message..	."
+			flash.message = "Created new smart group: '$params.smartgroupname'"
+			println "Redirecting..."
+			redirect controller:'contact', action:'show'
+		} else render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
+	}
+	
+	def show = {
+		redirect(controller: "contact", action: "show", params:[smartGroupId : params.id])
+	}
+	
+	private def getRuleText() {
+		def t = params['rule-text']
+		t instanceof List? t: [t]
+	}
+	
+	private def getRuleField(i) {
+		def f = params['rule-field']
+		if(f instanceof List) return f[i]
+		else {
+			assert i == 0
+			return f
+		}
 	}
 }

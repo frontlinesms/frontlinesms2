@@ -19,6 +19,10 @@ function messageResponseClick(messageType) {
 	$("#reply-dropdown").val("na");
 }
 
+function launchMediumPopup(title, html, btnFinishedText) {
+	launchMediumPopup(title, html, btnFinishedText, null);
+}
+
 function launchMediumPopup(title, html, btnFinishedText, onLoad) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
@@ -39,8 +43,7 @@ function mediumPopupDone() {
 	var isValid = $("#tabs-1").contentWidget('validate');
 	
 	if(isValid) {
-		// done
-		$(this).find("form").submit();                  
+		$("#tabs-1").contentWidget("onDone");
 		$(this).remove();
 	} else {
 		// show the error panel
@@ -50,7 +53,6 @@ function mediumPopupDone() {
 
 
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
-
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog({
 		modal: true,

@@ -4,6 +4,8 @@ import grails.util.GrailsConfig
 
 class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	
+	def contactSearchService
 
 	def beforeInterceptor = {
 		params.max = params.max?: GrailsConfig.config.grails.views.pagination.max
@@ -15,28 +17,20 @@ class ContactController {
 	def index = {
 		redirect action: "show", params:params
 	}
-	
-	private def contactList(params) {
-		def groupInstance = params.groupId ? Group.findById(params.groupId) : null
-		params.groupName = groupInstance?.name
-		def results = GroupMembership.searchForContacts(params)
-		[contactInstanceList: results,
-				contactInstanceTotal: GroupMembership.countForContacts(params),
-				contactsSection: groupInstance]
-	}
 
 	def show = { contactInstance ->
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
-		def contactList = contactList(params)
+		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
 		if (!contactInstance)
 			contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		def contactFieldInstanceList = contactInstance?.customFields ?: []
-		[contactInstance: contactInstance,
+		[pageTitle: getPageTitle(),
+				contactInstance: contactInstance,
 				checkedContactList: ',',
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
@@ -83,14 +77,15 @@ class ContactController {
 
 	def createContact = {
 		render view:'show', model: [contactInstance: new Contact(params),
-											contactFieldInstanceList: [],
-											contactGroupInstanceList: [],
-											contactGroupInstanceTotal: 0,
-											nonContactGroupInstanceList: Group.findAll(),
-											uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
-											fieldInstanceList: CustomField.findAll(),
-											groupInstanceList: Group.findAll(),
-											groupInstanceTotal: Group.count()] << contactList(params)
+				contactFieldInstanceList: [],
+				contactGroupInstanceList: [],
+				contactGroupInstanceTotal: 0,
+				nonContactGroupInstanceList: Group.findAll(),
+				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
+				fieldInstanceList: CustomField.findAll(),
+				groupInstanceList: Group.findAll(),
+				groupInstanceTotal: Group.count(),
+				smartGroupInstanceList: SmartGroup.list()] << contactSearchService.contactList(params)
 	}
 
 	def saveContact = {
@@ -151,7 +146,12 @@ class ContactController {
 	}
 	
 	def search = {
-		render template: 'contact_details', model: contactList(params)
+		render template: 'contact_details', model: contactSearchService.contactList(params)
+	}
+	
+	private def getPageTitle() {
+		if(params.smartGroupId) SmartGroup.get(params.smartGroupId)?.name
+		else null
 	}
 	
 	private def withContact(contactId=params.contactId, Closure c) {

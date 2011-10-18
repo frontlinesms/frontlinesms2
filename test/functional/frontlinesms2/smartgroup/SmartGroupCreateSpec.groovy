@@ -144,7 +144,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			ruleField[0].value() == 'Phone number'
+			ruleField[0].value() == 'mobile'
 			ruleMatchText[0] == 'starts with'
 	}
 	
@@ -152,7 +152,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			ruleField[0].value() == 'Phone number'
+			ruleField[0].value() == 'mobile'
 			ruleMatchText[0] == 'starts with'
 		when:
 			ruleField[0].value('Contact name')
@@ -211,7 +211,20 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			setRuleValue(0, '+44')
 			finishButton.click()
 		then:
-			waitFor { println "Flash message: ${flashMessage.text()}" 
-				flashMessage.text() == "Created new smart group: 'English Contacts'" }
+			waitFor { flashMessage.text() == "Created new smart group: 'English Contacts'" }
+	}
+
+	def 'successfully creating a smart group should add it to the smart groups menu'() {
+		when:
+			to PageContactShow
+		then:
+			!getMenuLink('All the bobs!').displayed
+		when:
+			launchCreateDialog('All the bobs!')
+			ruleField[0].value('Contact name')
+			setRuleValue(0, 'bob')
+			finishButton.click()
+		then:
+			waitFor { getMenuLink('All the bobs!').displayed }
 	}
 }

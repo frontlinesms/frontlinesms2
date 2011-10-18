@@ -56,7 +56,6 @@ class ContactListSpec extends ContactBaseSpec {
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			println $('#contact-list').children('a')*.text()
 			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	

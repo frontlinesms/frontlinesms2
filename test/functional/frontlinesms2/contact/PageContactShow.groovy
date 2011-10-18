@@ -19,9 +19,16 @@ class PageContactShow extends geb.Page {
 		smartGroupsList { $('ol#smart-groups-submenu') }
 		smartGroupsListItems {
 			def list = smartGroupsList.find('li')
-			list.size() <= 2? []: list[0..-3]
+			assert list[-1].@id == 'create-smart-group'
+			list = list[0..-2] // remove 'create new smart group' item from list
+			if(list.size()==1 && list[0].@id == 'no-smart-groups') {
+				return []
+			} else return list
 		}
 		noSmartGroupsMessage(required:false) { smartGroupsList.find('li#no-smart-groups') }
 		createSmartGroupButton { $('li#create-smart-group a') }
+		
+		frmDetails { $("#contact_details") }
+		btnSave { frmDetails.find('#update-single') }
 	}
 }

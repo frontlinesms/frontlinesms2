@@ -36,7 +36,7 @@
 			<g:if test="${smartGroupInstanceList.size() > 0}">
 				<g:each in="${smartGroupInstanceList}" var="g">
 					<li>
-						${g.name}
+						<g:link controller="smartGroup" action="show" id="${g.id}">${g.name}</g:link>
 					</li>
 				</g:each>
 			</g:if>		

@@ -31,8 +31,8 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 	def "should not send message when no recipients are selected"() {
 		when:
 			launchQuickMessageDialog()
-					$("#tabs a", text: "Confirm").click()
-        then:
+			$("#tabs a", text: "Confirm").click()
+		then:
 			waitFor { confirmTab.displayed }
 		when:
 			doneButton.click()
@@ -44,7 +44,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			waitFor { confirmTab.displayed }
 	}
 
-    def "should select the previous tab on click of back"() {
+	def "should select the previous tab on click of back"() {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
@@ -53,7 +53,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			toConfirmTab()
 		then:
 			waitFor { confirmTab.displayed }
-        when:
+		when:
 			$("#prevPage").click()
 		then:
 			waitFor { selectRecipientsTab.displayed }
@@ -67,7 +67,7 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			addressField.value("+919544426000")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input').value() == "+919544426000" }
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 	}
 
@@ -77,10 +77,13 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			toSelectRecipientsTab()
 			addressField.value("+919544426000")
 			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+		when:
 			toConfirmTab()
 			doneButton.click()
 		then:
-			waitFor{ $("#tabs-4").displayed }
+			waitFor { messagesQueuedNotification.displayed }
 		when:
 			$("#confirmation").click()
 			$("a", text: "Inbox").click()
@@ -94,7 +97,6 @@ class QuickMessageSpec extends grails.plugin.geb.GebSpec {
 			$("#message-list tbody tr").size() == 1
 			$("#message-list tbody tr")[0].hasClass("send-failed")
 	}
-
 
 	def "should select members belonging to the selected group"() {
 		setup:
@@ -229,6 +231,7 @@ class QuickMessageDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
+		messagesQueuedNotification { $("div#tabs-4") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }

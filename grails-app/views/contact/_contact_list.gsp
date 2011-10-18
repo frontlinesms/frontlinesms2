@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="contacts-list">
+	total = ${contactInstanceTotal}
 	<g:if test="${contactInstanceTotal > 0}">
 		<ol id="contact-list">
 			<g:if test="${!contactInstance ? false : !contactInstance.id}">
