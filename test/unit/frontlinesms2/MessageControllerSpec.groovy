@@ -127,9 +127,9 @@ class MessageControllerSpec extends ControllerSpec {
 			def message1 = "abc123" * 40
 		when:
 			mockParams.message = message1
-			controller.countMessageCharacters()
+			controller.getSendMessageCount()
 		then:
-			controller.response.contentAsString == "240 characters (2 SMS messages)"
+			controller.response.contentAsString == "(2 SMS messages)"
 	}
 	
 	def "should calculate the total number of special characters being sent"() {
@@ -137,9 +137,9 @@ class MessageControllerSpec extends ControllerSpec {
 			def message2 = "!@:%^&*(){" * 30
 		when:
 			mockParams.message = message2
-			controller.countMessageCharacters()
+			controller.getSendMessageCount()
 		then:
-			controller.response.contentAsString == "300 characters (3 SMS messages)"
+			controller.response.contentAsString == "(3 SMS messages)"
 	}
 	
 	def "should calculate the total number of mixed characters being sent"() {
@@ -147,9 +147,9 @@ class MessageControllerSpec extends ControllerSpec {
 			def message3 = "qwer234%}£" * 30
 		when:
 			mockParams.message = message3
-			controller.countMessageCharacters()
+			controller.getSendMessageCount()
 		then:
-			controller.response.contentAsString == "300 characters (3 SMS messages)"
+			controller.response.contentAsString == "(3 SMS messages)"
 				
 	}
 

@@ -211,7 +211,26 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			def longText = '0123abc[]@' * 16
 			$("#messageText").value(longText)
 		then:
-			waitFor { characterCount.text() == "${longText.size()} characters (2 SMS messages)"}
+			characterCount.text() == "${longText.size()} characters (2 SMS messages)"
+	}
+	
+	def "should show the total number of message to be sent to recipients"() {
+		setup:
+			createData()
+		when:
+			launchQuickMessageDialog()
+			def longText = '0123abc[]@' * 16
+			$("#messageText").value(longText)
+		then:
+			characterCount.text() == "${longText.size()} characters (2 SMS messages)"
+		when:
+			toSelectRecipientsTab()
+			$("input[value='group1']").click()
+			$("input[value='group2']").click()
+			nextPageButton.click()
+		then:
+			messagesCount.text() == "4"
+		
 	}
 
 	private def createData() {
@@ -257,7 +276,8 @@ class QuickMessageDialog extends geb.Page {
 		
 		doneButton { $("#done") }
 		nextPageButton { $("#nextPage") }
-		characterCount { $("#character-count")}
+		characterCount { $("#message-stats")}
+		messagesCount { $("#messages-count")}
 	}
 }
 
