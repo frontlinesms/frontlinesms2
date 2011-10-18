@@ -70,7 +70,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			Contact.findByName('Bob') in Group.findByName('Test').members
 	}
 	
-	//@spock.lang.IgnoreRest
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
 			to PageContactShow

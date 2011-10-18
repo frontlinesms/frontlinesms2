@@ -1,7 +1,10 @@
 <%@ page import="frontlinesms2.Contact" %>
 <html>
-    <head>
-        <meta name="layout" content="contacts" />
+	<head>
+		<g:if test="${pageTitle != null}">
+			<title>${pageTitle}</title>
+		</g:if>
+		<meta name="layout" content="contacts"/>
 		<g:javascript src="contact/show-groups.js"></g:javascript>
 		<g:javascript src="contact/show-fields.js"></g:javascript>
 		<script type="text/javascript">
@@ -9,7 +12,7 @@
 				$('input[name="name"]').focus();
 			});
 		</script>
-    </head>
+	</head>
     <body>
     	<div id="contact_details">
     		<g:form name="details">

@@ -29,8 +29,7 @@ class StatusFSpec extends StatusBaseSpec {
 		when:
 			to PageStatus
 		then:
-			waitFor { $("#indicator").@src == "/frontlinesms2/images/icons/status_green.png" || 
-				$("#indicator").@src == "/frontlinesms2/images/icons/status_red.png"}
+			waitFor { $("#indicator").@src ==~ "/frontlinesms2/images/icons/status_.*\\.png" }
 	}
 	
 	def "Does not display connections when there are no connections available"() {

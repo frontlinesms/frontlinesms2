@@ -57,6 +57,9 @@ class MessageArchiveSpec extends MessageBaseSpec {
 	def 'archive button appears in message show view and works'() {
 		when:
 			to PageMessageInboxBob
+		then:
+			archiveBtn.displayed
+		when:
 			archiveBtn.click()
 		then:
 			waitFor {$("div.flash").displayed}

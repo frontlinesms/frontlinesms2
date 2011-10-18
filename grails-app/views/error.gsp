@@ -19,7 +19,7 @@
 	</g:set>
 
 	<form action="mailto:support@frontlinesms.com?subject=Error%20Report-%20${exception.message?.encodeAsHTML()}" method="post" enctype="text/plain">
-		<textarea name="body">${content}</textarea>
+		<textarea name="body" cols="150" rows="20">${content}</textarea>
 		<input type="submit" value="Send report to admin team"> 
 	</form>
   </body>
