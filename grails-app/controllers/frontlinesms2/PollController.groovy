@@ -29,7 +29,7 @@ class PollController {
 		
 		def pollInstance = Poll.createPoll(params)
 		pollInstance.save()
-		forward(controller:"message", action:"send", params: params)
+		if(!params.dontSendMessage) forward(controller:"message", action:"send", params: params)
 		render ""
 	}
 
