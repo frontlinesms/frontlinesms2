@@ -205,13 +205,14 @@ class MessageController {
 		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
+				if (messageInstance.deleted == true) messageInstance.deleted = false
+				
 				if (params.messageSection == 'poll')  {
 					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
 					unknownResponse.addToMessages(messageInstance).save()
-				}
-				else if (params.messageSection == 'folder')
+				} else if (params.messageSection == 'folder') {
 					Folder.get(params.ownerId).addToMessages(messageInstance).save()
-				else {
+				} else {
 					messageInstance.with {
 						messageOwner?.removeFromMessages messageInstance
 						messageOwner = null

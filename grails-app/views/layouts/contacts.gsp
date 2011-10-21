@@ -56,7 +56,7 @@
 							<div  id="contact-title">
 								<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
-								<h2>${contactsSection.name}</h2>
+								<h2>${contactsSection.name} (${contactInstanceTotal})</h2>
 							</div>
 							<g:select name="group-actions" from="${['Rename group']}"
 								keys="${['renameGroup']}"
