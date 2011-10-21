@@ -187,6 +187,8 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor {
 				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
 				pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
+				println "message stats are " + $("#message-stats").text() 
+				$("#message-stats").text() == "27 characters (1 SMS message)"
 			}
 		when:
 			pollForm.enableAutoReply = false

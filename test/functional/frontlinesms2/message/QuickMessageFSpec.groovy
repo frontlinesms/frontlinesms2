@@ -225,10 +225,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			def longText = '0123abc[]@' * 16
+			def longText = 'w' * 161
 			$("#messageText").value(longText)
 		then:
-			characterCount.text() == "160 characters (1 SMS message)"
+			waitFor { characterCount.text() == "161 characters (2 SMS messages)" }
 		when:
 			toSelectRecipientsTab()
 			$("input[value='group1']").click()
