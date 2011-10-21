@@ -8,19 +8,22 @@
 			<div>
 				<g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
 			</div>
-			<label for='question'>Enter question:</label>
-			<g:textArea name="question"/>
-			
-			<g:checkBox name="collect-responses" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
+			<div>
+				<label for='question'>Enter question:</label>
+				<g:textArea name="question"/>
+			</div>
+			<g:checkBox name="dontSendMessage" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
 		</div>
 	</div>
 </div>
 <g:javascript>
-	$("input[name='collect-responses']").live("change", function() {
-		if(isGroupChecked("collect-responses")) {
+	$("input[name='dontSendMessage']").live("change", function() {
+		if(isGroupChecked("dontSendMessage")) {
 			disableTab(4);
+			disableTab(5);
 		} else {
 			enableTab(4);
+			enableTab(5);
 		}
 	});
 
@@ -30,6 +33,7 @@
 		} else {
 			enableTab(1);
 		}
+		autoUpdate = true;
 		updateConfirmationMessage();
 	});
 </g:javascript>

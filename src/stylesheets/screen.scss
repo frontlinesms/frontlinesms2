@@ -19,8 +19,8 @@ $core-highlight-blue: #D8E8EF;
 $radio-purple: #C79CDD; // top bar highlight
 $radio-highlight-green: #E0F0DE;
 
-$highlight: $radio-highlight-green;
-$top-bar: $radio-purple;
+$highlight: $core-highlight-blue;
+$top-bar: $core-pink;
 
 @mixin button-format {
 	padding-left: 5px;
@@ -870,28 +870,12 @@ a.send-failed, .send-failed td:last-child {
 	font-weight: bold;
 }
 
-.poll-response-reply h3 {
-  font-weight: bold;
-  padding: 0 0 10px 0;
+.poll-response-reply #enableAutoReply {
+	float: left;
+	margin: 0 0 10px 25px;
 }
 
-.poll-response-reply div {
-  padding: 0 10px 10px 25px;
-}
-
-.poll-response-reply #send_auto_reply {
-  float: left;
-  margin: 0 0 10px 25px;
-}
-
-.poll-response-reply label {
-  margin: 0 0 10px 50px;
-}
-
-.poll-response-reply textarea {
-  margin: 0 0 0 50px;
-}
-
+// FIXME things related to tabs and dialogs should be in their respective files in web-apps/jquery-ui/themes/medium/*
 .ui-dialog-titlebar-close {
   display: none;
 }
