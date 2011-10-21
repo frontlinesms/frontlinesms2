@@ -73,6 +73,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 		then:
 			waitFor { checkedMessageCount == 0 }
 		when:
+			$('a', text:'Barnabus').click()	
 			$('#btn_dropdown').click()
 		then:
 			waitFor { $('#btn_forward').displayed }

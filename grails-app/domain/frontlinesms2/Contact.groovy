@@ -71,11 +71,19 @@ class Contact {
 		groups.each() { GroupMembership.create(this, it) }
 	}
 
-	def addToGroups(Group g, flush=false) {
+	def addToGroup(Group g, flush=false) {
+		addToGroups(g, flush)
+	}
+
+	def addToGroups(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
 		GroupMembership.create(this, g, flush)
 	}
 
-	def removeFromGroups(Group g, flush=false) {
+	def removeFromGroup(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
+		removeFromGroups(g, flush)
+	}
+
+	def removeFromGroups(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
 		GroupMembership.remove(this, g, flush)
 	}
 

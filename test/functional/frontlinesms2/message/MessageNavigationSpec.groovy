@@ -9,6 +9,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
+			$("a", text: "Alice").click()
 		then:
 			messagesSelect[1].parent().parent().hasClass("selected")
 		when:

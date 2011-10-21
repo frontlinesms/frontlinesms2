@@ -20,6 +20,10 @@ function messageResponseClick(messageType) {
 }
 
 function launchMediumPopup(title, html, btnFinishedText) {
+	launchMediumPopup(title, html, btnFinishedText, null);
+}
+
+function launchGenericMediumPopup(title, html, btnFinishedText, onLoad) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
 		{
@@ -28,7 +32,23 @@ function launchMediumPopup(title, html, btnFinishedText) {
 			height: 500,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
-			          		{ text:btnFinishedText,  click:chooseActivity, id:"choose"}],
+			          		{ text:btnFinishedText,  click: mediumPopupDone, id:"done" }],
+			close: function() { $(this).remove(); }
+		}
+	);
+	if(onLoad!=null) onLoad();
+}
+
+function launchActivityMediumPopup(title, html, btnFinishedText) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#modalBox").dialog(
+		{
+			modal: true,
+			width: 675,
+			height: 500,
+			title: title,
+			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
+			          		{ text:btnFinishedText,  click:chooseActivity, id:"choose" }],
 			close: function() { $(this).remove(); }
 		}
 	);
@@ -38,10 +58,10 @@ function chooseActivity() {
 	var activity = $("#activity-list input[checked=checked]").val();
 	if (activity == 'announcement') {
 		var activityUrl = 'quickMessage/create';
-		var title = 'New announcement'
-	} else if (activity == 'poll'){
+		var title = 'New announcement';
+	} else if (activity == 'poll') {
 		var activityUrl = 'poll/create';
-		var title = 'New Poll'
+		var title = 'New Poll';
 		$(this).dialog('close');
 		$.ajax({
 			type:'GET',
@@ -50,9 +70,9 @@ function chooseActivity() {
 			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); }
 		});
 		return;
-	} else if (activity == 'subscription'){
+	} else if (activity == 'subscription') {
 		var activityUrl = 'group/list';
-		var title = 'New subscription'
+		var title = 'New subscription';
 		$.ajax({
 			type:'GET',
 			dataType: "html",
@@ -69,6 +89,18 @@ function chooseActivity() {
 	});
 }
 
+function mediumPopupDone() {
+	var isValid = $("#tabs-1").contentWidget('validate');
+	
+	if(isValid) {
+		$("#tabs-1").contentWidget("onDone");
+		$(this).remove();
+	} else {
+		// show the error panel
+		$('.error-panel').show();
+	}
+}
+ 
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog({
@@ -92,7 +124,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 	onTabSelect(withConfirmationScreen);
 	changeButtons(getButtonToTabIndexMapping(withConfirmationScreen),  getCurrentTab())
 	initializeTabContentWidgets()
-	onLoad && onLoad();
+	if(onLoad!=null) onLoad();
 }
 
 function cancel() {
@@ -128,24 +160,20 @@ function done() {
 }
 
 function validateWholeTab() {
-	var isValid = true
-	$.each($("#tabs").find('.ui-tabs-panel'), function(index, value) {
-		isValid =  validateTab($("#" + value.id)) && isValid
+	var isValid = true;
+	$("#tabs").find('.ui-tabs-panel').each(function(index, value) {
+		isValid = isValid && validateTab($("#" + value.id))
 	});
-  	return isValid
+  	return isValid;
 }
 
 function changeButtons(buttonToTabIndexMapping, tabIndex) {
 	$.each(buttonToTabIndexMapping, function(key, value) {
-		if (value.indexOf(tabIndex) != -1)
-		{
+		if (value.indexOf(tabIndex) != -1) {
 			$(".ui-dialog-buttonpane #" + key).show()
-		}
-	else
-		{
+		} else {
 			$(".ui-dialog-buttonpane #" + key).hide()
 		}
-
 	});
 }
 
@@ -200,12 +228,12 @@ function movingForward(nextIndex, currentIndex) {
 
 function onTabSelect(withConfirmationScreen) {
 	$('#tabs').tabs({select: function(event, ui) {
-		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true
+		var isValid = movingForward(ui.index, getCurrentTab()) ? validateCurrentTab() : true;
 		if (isValid) {
-			$('.error-panel') && $('.error-panel').hide();
+			if($('.error-panel')) $('.error-panel').hide();
 			changeButtons(getButtonToTabIndexMapping(withConfirmationScreen), ui.index)
 		}
-		return isValid
+		return isValid;
 	}});
 }
 
@@ -274,5 +302,3 @@ $.widget("ui.contentWidget", {
 	options: {validate: function() {return true;} ,
 	onDone: function() {return true;}}
 });
-
-

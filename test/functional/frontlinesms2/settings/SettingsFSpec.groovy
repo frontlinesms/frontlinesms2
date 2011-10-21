@@ -3,7 +3,6 @@ package frontlinesms2.settings
 import frontlinesms2.*
 
 import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
 import frontlinesms2.contact.PageContactShow
 
 class SettingsFSpec extends SettingsBaseSpec {

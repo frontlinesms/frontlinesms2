@@ -4,6 +4,7 @@ import grails.util.GrailsConfig
 import grails.converters.JSON
 
 import frontlinesms2.MessageStatus
+import org.smslib.util.GsmAlphabet
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST",
@@ -54,14 +55,14 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
+					messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
-				messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
+				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def pending = {
@@ -69,7 +70,7 @@ class MessageController {
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.count(),
-				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << getShowModel(messageInstanceList.list(params))
+				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << getShowModel()
 	}
 	
 	def trash = {
@@ -109,7 +110,7 @@ class MessageController {
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance.responseStats,
-				pollResponse: pollInstance.responseStats as JSON] << getShowModel(messageInstanceList.list(params))
+				pollResponse: pollInstance.responseStats as JSON] << getShowModel()
 	}
 	
 	def radioShow = {
@@ -132,7 +133,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel(messageInstanceList.list(params))
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
 	}
 
 	def send = {
@@ -162,6 +163,7 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.toDelete()
+				new Trash(identifier:messageInstance.contactName, message:messageInstance.text, linkClassName:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
@@ -254,7 +256,14 @@ class MessageController {
 	}
 	
 	def getUnreadMessageCount = {
-		render text: Fmessage.countUnreadMessages()
+		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
+	}
+	
+	def getSendMessageCount = {
+		def message = params.message ?: ''
+		def messageParts = GsmAlphabet.splitText(message, false)
+		def messageCount = messageParts.size()>1 ? "${messageParts.size()} SMS messages": "1 SMS message"
+		render text: "($messageCount)", contentType:'text/plain'
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {

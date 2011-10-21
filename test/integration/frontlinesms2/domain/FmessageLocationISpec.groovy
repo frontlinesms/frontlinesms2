@@ -91,7 +91,6 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			results.list().every {it.archived == false}
 	}
 	
-
 	def "check for offset and limit while fetching folder messages"() {
 		setup:
 			setUpFolderMessages()

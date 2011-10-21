@@ -9,7 +9,7 @@ import java.util.Date
 
 
 class PollCedSpec extends PollBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
 	
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:

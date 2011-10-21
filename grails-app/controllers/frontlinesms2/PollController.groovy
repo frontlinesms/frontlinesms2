@@ -57,7 +57,8 @@ class PollController {
 	def delete = {
 		def poll = Poll.get(params.id)
 		poll.toDelete()
-		poll.save()
+		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", linkClassName:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
+		poll.save(failOnError: true, flush: true)
 		flash.message = "Poll has been trashed!"
 		redirect(controller:"message", action:"inbox")
 	}

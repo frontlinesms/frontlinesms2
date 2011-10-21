@@ -213,7 +213,6 @@ class Fmessage {
 
 	def toDelete() { // FIXME is this method necessary?
 		this.deleted = true
-		new Trash(identifier:this.contactName, message:this.text, linkClassName:this.class.name, linkId:this.id).save()
 		this
 	}
 
@@ -227,7 +226,7 @@ class Fmessage {
 		this
 	}
 	
-	def archive() {
+	def archive() { // FIXME is this method necessary?
 		this.archived = true
 		this
 	}

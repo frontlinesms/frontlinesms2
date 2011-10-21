@@ -1,18 +1,4 @@
-var Ajax;
-if (Ajax && (Ajax != null)) {
-	Ajax.Responders.register({
-	  onCreate: function() {
-        if($('spinner') && Ajax.activeRequestCount>0)
-          Effect.Appear('spinner',{duration:0.5,queue:'end'});
-	  },
-	  onComplete: function() {
-        if($('spinner') && Ajax.activeRequestCount==0)
-          Effect.Fade('spinner',{duration:0.5,queue:'end'});
-	  }
-	});
-}
-
-$(document).ready(function() {
+$(function() {
 	$('#tab-messages').everyTime(refresh_rate || '30s', "refreshCountTimer", refreshMessageCount);
 });
 
@@ -54,6 +40,16 @@ var remoteHash = {
 			data: {id: $("#ownerId").val()},
 			success: function(data) {
 				launchSmallPopup('Delete ' + messageSection, data, 'Delete');
+			}})
+	},
+	
+	"renameGroup":function(){
+		$.ajax({
+			type:'GET',
+			url: url_root + 'group/rename',
+			data: {groupId: $("#groupId").val()},
+			success: function(data){
+				launchSmallPopup('Rename group', data, 'Rename');
 			}})
 	}
 }

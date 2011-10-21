@@ -3,7 +3,6 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class ContactEditSpec extends ContactBaseSpec {
@@ -156,8 +155,3 @@ class ContactEditSpec extends ContactBaseSpec {
 	}
 	
 }
-
-
-
-
-

@@ -3,7 +3,6 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class ContactListSpec extends ContactBaseSpec {
@@ -42,7 +41,21 @@ class ContactListSpec extends ContactBaseSpec {
 			assert contactNames == expectedNames
 	}
 	
-	def 'should be able to search within contacts'() {
+	def 'should be able to search contacts'() {
+		given:
+			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
+			def samJones = new Contact(name: 'SAm Jones', primaryMobile: "1234567892").save(failOnError: true)
+			def samTina = new Contact(name: 'SaM Tina', primaryMobile: "1234567893").save(failOnError: true)
+			def bob = new Contact(name: 'bob', primaryMobile: "99999").save(failOnError: true)
+		when:
+			to PageContactShow
+			$("#contact-search").jquery.trigger('focus')
+			$("#contact-search") << "Sam"
+		then:
+			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones','SaM Tina'] }
+	}
+	
+	def 'should be able to search contacts within a group'() {
 		given:
 			def fpGroup = new Group(name: "Friends").save(failOnError: true, flush: true)
 			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
@@ -52,7 +65,7 @@ class ContactListSpec extends ContactBaseSpec {
 			samJones.addToGroups(fpGroup,true)
 			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
 		when:
-			go "group/show/$fpGroup.id"
+			go "group/show/${fpGroup.id}"
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
