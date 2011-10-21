@@ -119,6 +119,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then: 
 			waitFor { checkedMessageCount == 0 }
 		when:
+			$('a', text:'Alice').click()
 			$('#btn_dropdown').click()
 		then:
 			waitFor { $('#btn_forward').displayed }

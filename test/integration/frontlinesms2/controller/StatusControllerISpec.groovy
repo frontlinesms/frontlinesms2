@@ -18,13 +18,13 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def model = controller.show()
 		then:
-			model.fconnectionInstanceTotal == 2
+			model.connectionInstanceTotal == 2
 			model.connectionInstanceList == [SmslibFconnection.findByName('MTN Dongle'), EmailFconnection.findByUsername('mr.testy@zoho.com')]
 		when:
 			SmslibFconnection.findByName('MTN Dongle').delete(flush:true)
 			model = controller.show()
 		then:
-			model.fconnectionInstanceTotal == 1
+			model.connectionInstanceTotal == 1
 			model.connectionInstanceList == [EmailFconnection.findByUsername('mr.testy@zoho.com')]
 	}
 }

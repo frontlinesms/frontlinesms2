@@ -272,6 +272,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceTotal == 8
 	}
 	
+	// TODO this needs a proper cleanup
 	def "only return message with custom fields"() {
 		when:
 			controller.params['cityCustomField'] = 'Paris'

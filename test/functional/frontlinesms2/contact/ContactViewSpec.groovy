@@ -4,7 +4,6 @@ import frontlinesms2.*
 import frontlinesms2.search.PageSearchResult
 
 import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
 import grails.plugin.geb.GebSpec
 
 class ContactViewSpec extends ContactBaseSpec {

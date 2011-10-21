@@ -42,7 +42,6 @@ class NewConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 			controller2.params.baud = 9600
 		when:
 			controller2.save()
-			println Fconnection.findAll()
 			def conn2 = SmslibFconnection.findByPort("COM1")
 		then:
 			conn2

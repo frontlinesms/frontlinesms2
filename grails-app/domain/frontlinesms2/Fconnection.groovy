@@ -28,7 +28,7 @@ class Fconnection {
 		} else throw new IllegalStateException()
 	}
 	
-	String getStatus() {
+	RouteStatus getStatus() {
 		fconnectionService.getRouteStatus(this)
 	}
 }

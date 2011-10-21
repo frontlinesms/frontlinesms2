@@ -41,6 +41,17 @@ class MessageInboxSpec extends MessageBaseSpec {
 			firstMessageLink.text() == 'Alice'
 	}
 
+	def 'no message is selected when inbox is first loaded'() {
+		given:
+			createInboxTestMessages()
+		when:
+			to PageMessageInbox
+		then:
+			$('#message-details #message-body').text() == "No message selected"
+	}
+	
+	//FIXME this test fail when the local computer language is different than english. The Date return
+	//in the test in English while the UI date is in the local context
 	def 'selected message and its details are displayed'() {
 		given:
 			createInboxTestMessages()
@@ -174,7 +185,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox
+			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 		then:
 			$("#btn_reply").click()
 			waitFor {$('#tabs-1').displayed}
@@ -238,13 +249,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 //			$("#tabs a").@href('#tabs3').displayed
 //	}
 
-	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
 			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			to PageMessageInbox
+			go "message/inbox/show/${Fmessage.findByText('hello').id}"
 			waitFor { $("#move-actions").displayed }
 			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
 			$("#move-actions").jquery.trigger("change")
@@ -268,11 +278,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	String dateToString(Date date) {
-		DateFormat formatedDate = createDateFormat();
-		return formatedDate.format(date)
-	}
-
-	DateFormat createDateFormat() {
-		return new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
+		new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US).format(date)
 	}
 }

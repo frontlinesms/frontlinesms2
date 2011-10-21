@@ -4,7 +4,7 @@ import frontlinesms2.*
 import java.text.SimpleDateFormat
 
 class FolderListSpec extends FolderBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm")
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
 	
 	def 'folder message list is displayed'() {
 		given:
@@ -17,7 +17,17 @@ class FolderListSpec extends FolderBaseSpec {
 			at PageMessageFolderWork
 			folderMessageSources == ['Jane', 'Max']
 	}
-	
+
+	def 'no message is selected when a folder is first loaded'() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			go "message/folder/${Folder.findByName('Work').id}"
+		then:
+			$('#message-details #message-body').text() == "No message selected"
+	}
+
 	def "message's folder details are shown in list"() {
 		given:
 			createTestFolders()

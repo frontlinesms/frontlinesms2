@@ -84,8 +84,9 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src1", dst:"dst2", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true, failOnError:true)
 		when:
 			goToPendingPage()
+			$("a", text:"dst1").click()
 		then:
-			$("#retry").displayed
+			waitFor { $("#retry").displayed }
 		when:
 			messagesSelect[0].click()
 		then:
