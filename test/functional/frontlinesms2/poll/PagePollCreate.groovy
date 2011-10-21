@@ -14,7 +14,8 @@ class PagePollCreate extends geb.Page {
 		responseListTabLink { tabMenu[1] }
 		autoSortTab { $("#tabs-3") }
 		autoReplyTab { $("#tabs-4") }
-		selectRecipientsTab { $("#tabs-5") }
+		editMessageTab { $("#tabs-5") }
+		selectRecipientsTab { $("#tabs-6") }
 		selectRecipientsTabLink { tabMenu[4] }
 		confirmationTab { $("#tabs-6") }
 		
