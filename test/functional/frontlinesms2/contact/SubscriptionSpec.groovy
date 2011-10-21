@@ -3,7 +3,6 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 import geb.Browser
-import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.Keys
 
 class SubscriptionSpec extends GroupBaseSpec  {
