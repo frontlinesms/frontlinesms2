@@ -91,13 +91,9 @@
 			}
 		});
 		
-		$("#tabs-5").bind("tabsshow", function(event, ui) {
-			updateSendMessage();
-		});
-
 		$("#tabs-6").contentWidget({
 			validate: function() {
-				return isGroupChecked('collect-responses') || isGroupChecked('addresses');
+				return isGroupChecked('dontSendMessage') || isGroupChecked('addresses');
 			}
 		});
 
