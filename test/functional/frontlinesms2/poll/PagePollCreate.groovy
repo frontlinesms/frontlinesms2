@@ -33,5 +33,6 @@ class PagePollCreate extends geb.Page {
 		addManualAddress { $('.add-address') }
 		
 		errorMessage(required:false) { $('.error-panel') }
+		tabTitle { $("#ui-dialog-title-modalBox")}
 	}
 }
