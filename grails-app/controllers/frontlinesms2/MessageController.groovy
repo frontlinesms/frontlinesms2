@@ -206,6 +206,9 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				if (messageInstance.deleted == true) messageInstance.deleted = false
+				if(Trash.findByLinkId(messageInstance.id)) {
+					Trash.findByLinkId(messageInstance.id).delete(flush:true)
+				}
 				
 				if (params.messageSection == 'poll')  {
 					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
