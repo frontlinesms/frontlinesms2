@@ -130,7 +130,11 @@
 	}
 
 	function updateConfirmationMessage() {
-		var sendMessage = $('#message').val();
+		if(isGroupChecked("dontSendMessage"))
+			var sendMessage = "No messages will be sent";
+		else
+			var sendMessage = $('#messageText').val();
+			
 		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
 		
