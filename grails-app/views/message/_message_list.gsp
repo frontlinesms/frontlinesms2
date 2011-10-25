@@ -69,7 +69,7 @@
 							</td>
 							<td>
 								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-									${m.displayText}
+									${m.displayText.size() < 60 ? m.displayText : m.displayText.substring(0,60) + "..."}
 								</g:link>
 							</td>
 							<td>
