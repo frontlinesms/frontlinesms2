@@ -13,6 +13,7 @@ class SettingsController {
 			params.id = Fconnection.list(params)[0]?.id
 		}		
 		def connectionInstance = Fconnection.get(params.id)
+		println "connection status is ${connectionInstance.status}"
 		def fconnectionInstanceTotal = Fconnection.count()
 		if(params.id){
 			render(view:'show_connections', model:show_connections() << [connectionInstanceList: fconnectionInstanceList,
