@@ -20,7 +20,7 @@
 		<ol class='sub-menu' id="groups-submenu">
 			<g:each in="${groupInstanceList}" var="g">
 				<li class="${contactsSection instanceof frontlinesms2.Group && contactsSection.id==g.id ? 'selected' : ''}">
-					<g:link controller="group" action="show" id="${g.id}">${g.name}</g:link>
+					<g:link controller="group" action="show" id="group-link-${g.id}">${g.name}</g:link>
 				</li>
 			</g:each>
 			<li class='create' id="create-group">
@@ -36,7 +36,7 @@
 			<g:if test="${smartGroupInstanceList.size() > 0}">
 				<g:each in="${smartGroupInstanceList}" var="g">
 					<li>
-						<g:link controller="smartGroup" action="show" id="${g.id}">${g.name}</g:link>
+						<g:link controller="smartGroup" action="show" id="smartgroup-link-${g.id}">${g.name}</g:link>
 					</li>
 				</g:each>
 			</g:if>		
