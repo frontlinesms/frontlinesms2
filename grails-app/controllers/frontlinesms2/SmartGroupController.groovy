@@ -24,7 +24,7 @@ class SmartGroupController {
 	}
 	
 	def show = {
-		redirect(controller: "contact", action: "show", params:[smartGroupId : params.id])
+		redirect(controller: "contact", action: "show", params:[smartGroupId:params.id])
 	}
 	
 	private def getRuleText() {
