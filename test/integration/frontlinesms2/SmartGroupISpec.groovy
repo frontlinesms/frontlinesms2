@@ -59,10 +59,15 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def 'custom field should match only specified custom field'() {
+		given:
+			new Contact(name:'Wov').addToCustomFields(new CustomField(name:'shoe', value:'flip flop')).save(failOnError:true, flush:true)
+			new Contact(name:'Xav').addToCustomFields(new CustomField(name:'shoe', value:'brogue')).save(failOnError:true, flush:true)
+			new Contact(name:'Yaz').addToCustomFields(new CustomField(name:'shoe', value:'clog')).save(failOnError:true, flush:true)
+			new Contact(name:'Zab').addToCustomFields(new CustomField(name:'hat', value:'clog')).save(failOnError:true, flush:true)
 		when:
-			def x = 1 + 1
+			def s = createSmartGroup(name:'Cloggers').addToCustomFields(new CustomField(name:'shoe', value:'lo'))
 		then:
-			x == 2 // TODO need to implement custom field searching
+			getMembers(s) == ['Wov', 'Yaz']
 	}
 	
 	private def getMembers(SmartGroup s) {
