@@ -1,4 +1,5 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
+<g:javascript src="characterSMS-count.js"/>
 <div id="tabs">
 
 	<div class="error-panel hide">please enter all the details</div>
