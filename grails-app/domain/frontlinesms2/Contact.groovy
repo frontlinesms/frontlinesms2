@@ -26,34 +26,19 @@ class Contact {
 	
 	static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
-				if(val == '') {
-					obj.primaryMobile != ''
-					obj.primaryMobile != null
-				}
+			val || obj.primaryMobile
 		})
 		primaryMobile(unique: true, nullable: true, validator: { val, obj ->
-				if(val == '') {
-					obj.name != ''
-					obj.name != null
-				}
+			val || obj.name
 		})
 		secondaryMobile(unique: false, nullable: true, validator: { val, obj ->
-				if(val == '') {
-					obj.name != ''
-					obj.name != null
-				}
-				if(val && obj.primaryMobile){
-					val != obj.primaryMobile
-				}
+			if(val) val != obj.primaryMobile
+			else obj.name && true
 		})
 		email(unique: false, nullable: true, email: true, validator: { val, obj ->
-				if(val == '') {
-					obj.name != ''
-					obj.name != null
-				}
+			val || obj.name
 		})
-
-        notes(nullable: true, maxSize: 1024)
+		notes(nullable: true, maxSize: 1024)
 		customFields(nullable: true, unique: false)
 	}
 
