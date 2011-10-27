@@ -35,8 +35,8 @@
 		<ol class="sub-menu" id="smart-groups-submenu">
 			<g:if test="${smartGroupInstanceList.size() > 0}">
 				<g:each in="${smartGroupInstanceList}" var="g">
-					<li>
-						<g:link controller="smartGroup" action="show" id="${g.id}">${g.name}</g:link>
+					<li class="${contactsSection instanceof frontlinesms2.SmartGroup && contactsSection.id==g.id ? 'selected' : ''}">
+						<g:link controller="smartGroup" action="show" id="${g.id}" elementId="smartgroup-link-${g.id}">${g.name}</g:link>
 					</li>
 				</g:each>
 			</g:if>		
