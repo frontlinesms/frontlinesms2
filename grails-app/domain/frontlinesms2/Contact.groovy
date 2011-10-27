@@ -32,13 +32,10 @@ class Contact {
 			val || obj.name
 		})
 		secondaryMobile(unique: false, nullable: true, validator: { val, obj ->
-			if(val) val != obj.primaryMobile
-			else obj.name && true
+			!(val && val==obj.primaryMobile)
 		})
-		email(unique: false, nullable: true, email: true, validator: { val, obj ->
-			val || obj.name
-		})
-		notes(nullable: true, maxSize: 1024)
+		email(unique:false, nullable:true, email:true)
+		notes(nullable:true, maxSize:1024)
 		customFields(nullable: true, unique: false)
 	}
 
