@@ -56,10 +56,10 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 	}
 	
 	private def goToSmartGroupPage(SmartGroup g) {
-		go "smartGroup/$g.id"
+		go "smartGroup/show/$g.id"
 	}
 	
 	private def menuItemHighlighted(SmartGroup g) {
-		$("smartgroup-link-$g.id").hasClass('selected')
+		$("#smartgroup-link-$g.id").closest('li').hasClass('selected')
 	}
 }
