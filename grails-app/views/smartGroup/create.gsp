@@ -18,8 +18,8 @@
 					<tr class="prop smart-group-criteria">
 						<td>
 							<g:select name="rule-field"
-									from="['Phone number', 'Contact name', 'email', 'notes']"
-									keys="['mobile', 'contactName', 'email', 'notes']"
+									from="${fieldNames}"
+									keys="${fieldIds}"
 									onchange="smartGroupCriteriaChanged(this)"/>
 						</td>
 						<td class="rule-match-text">

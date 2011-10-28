@@ -124,44 +124,44 @@ class Fmessage {
 			}
 
 			search { search -> 
-					and {
-						if(search.searchString) {
-							'ilike'("text", "%${search.searchString}%")
-						}
-						if(search.contactString) {
-							'ilike'("contactName", "%${search.contactString}%")
-						} 
-						if(search.group) {
-							def groupMembersNumbers = search.group.getAddresses()
-							groupMembersNumbers = groupMembersNumbers?:[""] //otherwise hibernate fail to search 'in' empty list
-							or {
-								'in'("src",	groupMembersNumbers)
-								'in'("dst", groupMembersNumbers)
-							}
-						}
-						if(search.status) {
-							'in'('status', search.status.tokenize(",")*.trim().collect { Enum.valueOf(MessageStatus.class, it)})
-						}
-						if(search.owners) {
-							'in'("messageOwner", search.owners)
-						}
-						if(search.startDate && search.endDate) {
-							between("dateReceived", search.startDate, search.endDate.next())
-						} else if (search.startDate){	
-							ge("dateReceived", search.startDate)
-						} else if (search.endDate) {
-							le("dateReceived", search.endDate.next())
-						}
-						if(search.customFields.find{it.value}) {
-							def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
-							contactNameMatchingCustomField = contactNameMatchingCustomField?:[""] //otherwise hibernate fail to search 'in' empty list
-							'in'("contactName", contactNameMatchingCustomField)
-						}
-						if(!search.inArchive) {
-							eq('archived', false)
-						}
-						eq('deleted', false)
+				and {
+					if(search.searchString) {
+						ilike("text", "%${search.searchString}%")
 					}
+					if(search.contactString) {
+						ilike("contactName", "%${search.contactString}%")
+					} 
+					if(search.group) {
+						def groupMembersNumbers = search.group.getAddresses()
+						groupMembersNumbers = groupMembersNumbers?:[""] //otherwise hibernate fail to search 'in' empty list
+						or {
+							'in'("src", groupMembersNumbers)
+							'in'("dst", groupMembersNumbers)
+						}
+					}
+					if(search.status) {
+						'in'('status', search.status.tokenize(",")*.trim().collect { Enum.valueOf(MessageStatus.class, it)})
+					}
+					if(search.owners) {
+						'in'("messageOwner", search.owners)
+					}
+					if(search.startDate && search.endDate) {
+						between("dateReceived", search.startDate, search.endDate.next())
+					} else if (search.startDate) {	
+						ge("dateReceived", search.startDate)
+					} else if (search.endDate) {
+						le("dateReceived", search.endDate.next())
+					}
+					if(search.customFields.find{it.value}) {
+						def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
+						contactNameMatchingCustomField = contactNameMatchingCustomField?:[""] //otherwise hibernate fail to search 'in' empty list
+						'in'("contactName", contactNameMatchingCustomField)
+					}
+					if(!search.inArchive) {
+						eq('archived', false)
+					}
+					eq('deleted', false)
+				}
 			}
 			
 			filterMessages { params ->

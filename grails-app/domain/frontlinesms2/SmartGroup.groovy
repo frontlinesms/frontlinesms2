@@ -11,6 +11,8 @@ class SmartGroup {
 	String email
 	String notes
 	
+	static hasMany = [customFields: CustomField]
+	
 	static constraints = {
 		contactName(nullable:true, validator:atLeastOneSearchParamValidator)
 		mobile(nullable:true, validator:atLeastOneSearchParamValidator)
@@ -19,7 +21,7 @@ class SmartGroup {
 	}
 	
 	static def atLeastOneSearchParamValidator = { val, obj ->
-		obj.contactName || obj.mobile || obj.email || obj.notes
+		obj.contactName || obj.mobile || obj.email || obj.notes || (obj.customFields && obj.customFields.each { it.value })
 	}
 	
 	def getMembers() {
@@ -63,6 +65,16 @@ class SmartGroup {
 		if(notes) {
 			w << "lower(c.notes) LIKE lower(:notes)"
 			p.notes = "%$notes%"
+		}
+		
+		if(customFields) {
+			customFields.each {
+				// FIXME potential for injection via it.name?
+				w << "c IN (SELECT DISTINCT cf.contact FROM CustomField AS cf WHERE \
+cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name}_value))"
+				p."custom_${it.name}_name" = it.name
+				p."custom_${it.name}_value" = "%$it.value%"
+			}
 		}
 		
 		def where = w.join(' AND ')
