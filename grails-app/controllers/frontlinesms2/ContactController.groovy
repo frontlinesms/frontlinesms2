@@ -211,6 +211,7 @@ class ContactController {
 				if(toRemove)
 					toRemove.delete(failOnError: true, flush:true)
 			}
+			contactInstance.stripNumberFields()
 			
 			if(contactInstance.save(flush:true)) {
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"

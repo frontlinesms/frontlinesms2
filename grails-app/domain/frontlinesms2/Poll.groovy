@@ -7,6 +7,7 @@ class Poll {
 	String keyword
 	String autoReplyText
 	String question
+	String message
 	boolean archived
 	boolean deleted
 	Date dateCreated
@@ -26,6 +27,7 @@ class Poll {
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoReplyText(nullable:true, blank:false)
+		message(nullable:true)
 		question(nullable:true)
 		keyword(nullable:true, validator: { keyword, me ->
 			if(!keyword) return true

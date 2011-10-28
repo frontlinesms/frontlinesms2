@@ -96,7 +96,7 @@ class BootStrap {
 							it.save(failOnError: true)
 						}
 
-				[Poll.createPoll(title: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', question:'who will win?'),
+				[Poll.createPoll(title: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?'),
 						Poll.createPoll(title: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele')].each() {
 					it.save(failOnError:true, flush:true)
 				}

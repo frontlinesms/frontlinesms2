@@ -101,7 +101,7 @@
 				</li>
 			</g:else>
 			<li>
-				<g:select name="poll-actions" from="${['Export', 'Rename activity', 'Delete Poll']}"
+				<g:select name="poll-actions" from="${['Export', 'Rename activity', 'Delete poll']}"
 						keys="${['export', 'renameActivity', 'deleteAction']}"
 						noSelection="${['': 'More actions...']}"/>
 			</li>

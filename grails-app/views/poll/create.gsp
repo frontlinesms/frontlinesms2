@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<g:javascript src="characterSMS-count.js"/>
+
 <div id="tabs" class="vertical-tabs">
 	<ol>
 		<li><a class="tabs-1" href="#tabs-1">Enter Question</a></li>

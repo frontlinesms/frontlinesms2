@@ -17,6 +17,7 @@ class Contact {
 	
 	def beforeInsert = {
 		updateContactNames(name, primaryMobile)
+		stripNumberFields()
 	}
 	
 	def beforeDelete = {
@@ -95,6 +96,15 @@ class Contact {
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [contactName, true, contactNumber])
 			}
 		}
+	}
+	
+	def stripNumberFields() {
+		def n = primaryMobile?.replaceAll(/\D/, '')
+		if(primaryMobile && primaryMobile[0] == '+') n = '+' + n
+		primaryMobile = n
+		def s = secondaryMobile?.replaceAll(/\D/, '')
+		if(secondaryMobile && secondaryMobile[0] == '+') s = '+' + s
+		secondaryMobile = s
 	}
 	
 	private def getOldContactNumber() {

@@ -2,14 +2,16 @@
 	<h3>Edit message to be sent to recipients</h3>
 	<p>The following message will be sent to the recipients of the poll. This message can be edited before sending.</p>
 	<g:textArea name="messageText" rows="5" cols="40" />
+	<span id="message-stats">0 characters (1 SMS message)</span>
 </div>
 <g:javascript>
 	var autoUpdate = true;
+	$("#messageText").live("keyup", updateCount);
 	
 	function updateSendMessage() {
-		$("#messageText").bind("keypress", stopAutoUpdate);
-		$(".choices").bind("keypress", autoUpdateMessage);
-		$("#question").bind("keypress", autoUpdateMessage);
+		$("#messageText").live("keypress", autoUpdateOff);
+		$(".choices").live("keypress", autoUpdateOn);
+		$("#question").live("keypress", autoUpdateOn);
 		
 		if(autoUpdate) {
 			var questionText = $("#question").val();
@@ -34,14 +36,15 @@
 			}
 			var sendMessage = questionText + replyText;
 			$("#messageText").val(sendMessage);
+			$("#messageText").keyup();
 		}
 	}
 	
-	function stopAutoUpdate() {
+	function autoUpdateOff() {
 		autoUpdate = false;
 	}
 	
-	function autoUpdateMessage() {
+	function autoUpdateOn() {
 		autoUpdate = true;
 	}
 </g:javascript>
