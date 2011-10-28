@@ -21,7 +21,7 @@ class CustomField {
 	}
 	
 	static def getAllContactNameMatchingCustomField(customFields) {
-		def matchingString
+		def matchingString = ''
 		customFields.each { name, value -> 
 			if (value) {
 				// FIXME this query should use named variables instead of inserting values directly into the HQL
