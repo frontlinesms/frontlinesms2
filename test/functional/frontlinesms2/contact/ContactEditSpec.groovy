@@ -17,7 +17,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			frmDetails.primaryMobile = '+2541234567'
 			frmDetails.secondaryMobile = '+2542334567'
 			frmDetails.email = 'gaga@gmail.com'
-			btnSave.click()
+			$('#update-single').click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
@@ -37,7 +37,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			frmDetails.primaryMobile = '+2541234567'
 			frmDetails.secondaryMobile = '+2542334567'
 			frmDetails.email = 'gaga@gmail.com'
-			btnSave.click()
+			$('#update-single').click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			Contact.findByName('Kate') != null

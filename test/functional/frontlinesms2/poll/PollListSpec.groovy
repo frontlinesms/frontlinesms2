@@ -20,7 +20,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
@@ -33,7 +34,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			def pollTitle = $("#poll-title div h2").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
@@ -55,7 +57,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$('#messages-menu .selected').text() == 'Football Teams'
 	}
@@ -65,7 +68,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -85,7 +89,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			$(".message-select")[2].click()
 		then:
 			waitFor { $('#message-body').text() == 'I like manchester' }

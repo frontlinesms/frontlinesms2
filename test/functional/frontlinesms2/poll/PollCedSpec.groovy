@@ -18,7 +18,7 @@ class PollCedSpec extends PollBaseSpec {
 			errorMessage.displayed
 		when:
 			pollForm.question = "question"
-			pollForm.'collect-responses' = 'no-message'
+			pollForm.'dontSendMessage' = 'no-message'
 			$("a", text:"Confirm").click()
 		then:
 			waitFor { confirmationTab.displayed }
@@ -172,6 +172,8 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
+			pollForm.enableKeyword = true
+			pollForm.keyword = 'coffee'
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
@@ -217,7 +219,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
+			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
@@ -248,6 +250,8 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
+			pollForm.enableKeyword = true
+			pollForm.keyword = 'coffee'
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
@@ -255,9 +259,9 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { editMessageTab.displayed }
-			pollForm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 		when:
-			pollForm.message = 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
+			$("#messageText").value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
 			next.click()
 		then:
 			waitFor { selectRecipientsTab.displayed }
@@ -270,9 +274,8 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
+			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
-			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
 			pollForm.title = "Coffee Poll"
 			done.click()
@@ -379,7 +382,7 @@ class PollCedSpec extends PollBaseSpec {
 		waitFor { at PagePollCreate }
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
-		pollForm."collect-responses" = !enableMessage
+		pollForm."dontSendMessage" = !enableMessage
 		next.click()
 	}
 }

@@ -17,7 +17,7 @@ class PagePollCreate extends geb.Page {
 		editMessageTab { $("#tabs-5") }
 		selectRecipientsTab { $("#tabs-6") }
 		selectRecipientsTabLink { tabMenu[4] }
-		confirmationTab { $("#tabs-6") }
+		confirmationTab { $("#tabs-7") }
 		
 		next { $("#nextPage") }
 		prev { $("#prevPage") }
