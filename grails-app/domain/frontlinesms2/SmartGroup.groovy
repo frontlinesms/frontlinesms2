@@ -30,9 +30,6 @@ class SmartGroup {
 	
 	def getMembersByName(String searchString, Map pageParams) {
 		def query = getMembersByNameQuery(searchString)
-		println """Executing query:
-:::::::$query.where
-params:$query.params"""
 		Contact.findAll(query.where, query.params)
 	}
 	
