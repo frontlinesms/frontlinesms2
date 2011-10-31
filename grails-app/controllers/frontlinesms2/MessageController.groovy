@@ -126,9 +126,8 @@ class MessageController {
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
 		def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
-
 		if(params.flashMessage) { flash.message = params.flashMessage }
-
+		println "message instance list is $messageInstanceList"
 		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
