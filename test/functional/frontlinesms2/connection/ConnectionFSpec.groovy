@@ -18,6 +18,14 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 		then:
 			$('.con-status')[0].text() == "Not connected"
 	}
+	
+	def 'should show "create route" button for inactive connection '() {
+		when:
+			createTestConnection()
+			to ConnectionPage
+		then:
+			$('.route')[0].text() == "Create route"
+	}
 //FIXME: Build Fix	
 /*	def 'There is a Connected label shown for working connection'() {
 		when:
