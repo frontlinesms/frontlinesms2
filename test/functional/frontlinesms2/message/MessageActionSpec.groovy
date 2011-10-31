@@ -49,10 +49,11 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			messagesSelect[0].click()
 		then:
-			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
+			waitFor { $('#multiple-messages').displayed }
 		when:
 			setMoveActionsValue(shampooPoll.id.toString())
 		then:
@@ -76,10 +77,11 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+//			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			messagesSelect[0].click()
 		then:
-			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
+			waitFor { $('#multiple-messages').displayed }
 		when:
 			setMoveActionsValue('inbox')
 		then:

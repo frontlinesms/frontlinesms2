@@ -54,17 +54,6 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			!$("#message-archive").displayed()
 	}
 
-	def 'archive button appears in message show view and works'() {
-		when:
-			to PageMessageInboxBob
-		then:
-			archiveBtn.displayed
-		when:
-			archiveBtn.click()
-		then:
-			waitFor {$("div.flash").displayed}
-	}
-
 	 def 'should not be able to archive activity messages'() {
 		when:
 			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
