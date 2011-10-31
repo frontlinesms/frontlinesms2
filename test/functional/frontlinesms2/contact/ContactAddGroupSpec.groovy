@@ -17,17 +17,19 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			def memberOf = $("#group-list li").children('span')*.text().sort()
 			memberOf == ['Test', 'three']
 	}
-
+	
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
 		when:
-			to PageContactShowBob
+			go "contact/show/${Contact.findByName('Bob').id}"
 		then:
+			at PageContactShowBob
 			$("#group-dropdown").children()*.text().sort() == ['Add to group...', 'Others', 'four']
 		when:
-			$("#group-dropdown").value("${Group.findByName('Others').id}")
+			$("#group-dropdown").value("Others")
 		then:
-			$("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three']
+			waitFor { $("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three'] }
 			$("#group-dropdown").children()*.text() == ['Add to group...', 'four']
+			
 	}
 
 	def 'clicking X next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
@@ -36,9 +38,9 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			def bobsDatabaseGroups = bob.groups
 			def bobsGroups = bobsDatabaseGroups
 		when:
-			to PageContactShowBob
-			//def groupList = $("#group-list")
+			go "contact/show/${bob.id}"
 		then:
+			at PageContactShowBob
 			groupList.children().children('span').size() == 2
 			def groupsText = groupList.children().children('span').collect() { it.text() }
 			groupsText.containsAll(['Test', 'three'])
@@ -46,18 +48,11 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			groupList.find('a').first().click()
 			bobsGroups = bob.groups
 		then:
-			groupList.children().children('span').size() == 1
-			groupList.children().children('span').text() == groupsText[1]
-			bobsGroups == bobsDatabaseGroups
-
+			waitFor { groupList.children().children('span').size() == 1 }
 		when:
-			groupList.find('a').first().click()
-			bobsGroups = bob.getGroups()
+			$(".buttons .cancel").click()
 		then:
-			groupList.children().children('input').size() == 0
-			bobsGroups == bobsDatabaseGroups
-			$("#group-list").text() == 'Not part of any Groups'
-			bobsGroups == bobsDatabaseGroups
+			waitFor { groupList.children().children('span').size() == 2 }
 	}
 
 	def 'clicking save actually adds contact to newly selected groups'() {
@@ -119,7 +114,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			def otherGroup = Group.findByName('Others')
-			to PageContactShowBob
+			at PageContactShowBob
 			def btnRemoveFromGroup = $("#remove-group-${otherGroup.id}")
 			btnRemoveFromGroup.click()
 			def btnUpdate = $("#single-contact #update-single")
@@ -132,20 +127,16 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def "should enable save and cancel buttons when new group is added"() {
 		when:
-			to PageContactShowBob
+			at PageContactShowBob
 		then:
 			btnSave.disabled
 			btnCancel.disabled
 		when:
-			$("#group-dropdown").value("${Group.findByName('Others').id}")
+			$("#group-dropdown").value("Others")
 		then:
-			$("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three']
-			!btnSave.disabled
+			waitFor { !btnSave.disabled }
 			!btnCancel.disabled
 			
 	}
-	
-	// TODO test cancel button - remove from 1 group
-	// TODO test cancel button - add to one group
 }
 
