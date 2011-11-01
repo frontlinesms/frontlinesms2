@@ -10,9 +10,13 @@ class ContactEditSpec extends ContactBaseSpec {
 		createTestContacts()
 	}
 
+	
 	def 'selected contact details can be edited and saved'() {
 		when:
-			to PageContactShowAlice
+			go "contact/show/${Contact.findByName('Alice').id}"
+		then:
+			at PageContactShowAlice
+		when:
 			def changingContact = Contact.findByName('Alice')
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
@@ -20,12 +24,13 @@ class ContactEditSpec extends ContactBaseSpec {
 			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
-			changingContact.refresh()
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
 			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
+			sleep 5000
+			changingContact.refresh()
 			println Contact.findAll()*.name
-			waitFor { Contact.findByName('Kate') != null }
+			changingContact.name == 'Kate'
 	}
 
 	def "Updating a contact within a group keeps the view inside the group"() {

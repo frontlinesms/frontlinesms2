@@ -8,7 +8,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			def pollMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
 		then:
 			at PageMessagePollFootballTeamsBob

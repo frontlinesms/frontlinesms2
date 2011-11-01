@@ -24,8 +24,9 @@ class GroupViewSpec extends GroupBaseSpec {
 			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
 			c.addToGroups(Group.findByName('Friends'))
 			c.save(failOnError:true, flush:true)
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
 		then:
+			at PageContactShowGroupFriends
 			$('#contacts-menu .selected').text() == 'Friends'
 	}
 

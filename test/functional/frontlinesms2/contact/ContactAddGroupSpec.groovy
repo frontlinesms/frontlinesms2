@@ -50,7 +50,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { groupList.children().children('span').size() == 1 }
 		when:
-			$(".buttons .cancel").click()
+			go "contact/show/${bob.id}"
 		then:
 			waitFor { groupList.children().children('span').size() == 2 }
 	}
