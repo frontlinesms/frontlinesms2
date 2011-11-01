@@ -9,7 +9,7 @@ class PageMessageFolderWork extends geb.Page {
 	}
 	static content = {
 		messagesList { $('#messages-submenu') }
-		messagesSelect { $(".message-select") }
+		messagesSelect(wait: true) { $(".message-select") }
 		btnReplyMultiple { $('#multiple-messages a')[0] }
 		btnDropdown { $("#btn_dropdown") }
 		btnForward { $("#btn_forward") }

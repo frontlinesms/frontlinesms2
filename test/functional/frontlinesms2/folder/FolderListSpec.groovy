@@ -33,7 +33,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolderWork
+			at PageMessageFolderWork
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Max'
@@ -44,9 +44,8 @@ class FolderListSpec extends FolderBaseSpec {
 	def 'selected folder is highlighted'() {
 		given:
 			createTestFolders()
-			createTestMessages()
 		when:
-			to PageMessageFolderWork
+			at PageMessageFolderWork
 			def selectedMenuItem = $('#messages-menu .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
@@ -71,7 +70,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolderWork
+			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -91,11 +90,13 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolderWork
+			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+			def btnDropdown = $("#btn_dropdown")
 		then:
 			waitFor{ btnDropdown.displayed }
 		when:
 			btnDropdown.click()
+			def btnForward = $("#btn_forward")
 		then:
 			waitFor{ btnForward.displayed }
 		when:
@@ -110,7 +111,10 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolderWork
+			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+		then:
+			at PageMessageFolderWork
+		when:
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -124,11 +128,14 @@ class FolderListSpec extends FolderBaseSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			to PageMessageFolderWork
+			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+		then:
+			at PageMessageFolderWork
+		when:
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor { btnReplyMultiple.displayed }
+			waitFor { $('#multiple-messages a').displayed }
 		when:
 			btnReplyMultiple.click()
 		then:

@@ -20,6 +20,8 @@
 		} else {
 			$("#autoReplyText").attr('disabled','disabled');
 			$("#message-stats").addClass("hide");
+			$("#autoReplyText").removeClass('error');
+			$(".error-panel").hide();
 		}
 	})
 	
