@@ -21,8 +21,9 @@ class GroupCedSpec extends GroupBaseSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
 		then:
+			at PageContactShowGroupFriends
 			$('#group-actions').displayed
 		when:
 			$('#group-actions').value("renameGroup").click()
@@ -32,8 +33,8 @@ class GroupCedSpec extends GroupBaseSpec {
 			$("#name").value("Renamed Group")
 			$('#done').click()
 		then:
-			waitFor{$('a', text:'Renamed Group')}
-			$('#contact-title h2', text:'Renamed Group')
+			waitFor{ $('a', text:'Renamed Group') }
+			$('#contact-title h2').text() == 'Renamed Group (2)'
 	}
 }
 

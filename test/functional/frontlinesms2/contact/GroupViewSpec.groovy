@@ -16,8 +16,9 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroups()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
 		then:
+			at PageContactShowGroupFriends
 			selectedMenuItem.text() == 'Friends'
 		when:
 			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
@@ -25,15 +26,16 @@ class GroupViewSpec extends GroupBaseSpec {
 			c.save(failOnError:true, flush:true)
 			to PageContactShowGroupFriends
 		then:
-			selectedMenuItem.text() == 'Friends'
+			$('#contacts-menu .selected').text() == 'Friends'
 	}
 
 	def 'Group members list is displayed when viewing corresponding group'() {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
 		then:
+			at PageContactShowGroupFriends
 			contactsList.children()*.text().sort() == ['Bobby', 'Duchamps']
 	}
 
@@ -41,7 +43,10 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
+		then:
+			at PageContactShowGroupFriends
+		when:
 			def links = contactsList.find('a')
 		then:
 			links.size() == 2
@@ -55,8 +60,9 @@ class GroupViewSpec extends GroupBaseSpec {
 			createTestGroups()
 			createManyContactsAddToGroups()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
 		then:
+			at PageContactShowGroupFriends
 			def contactNames = contactsList.children()*.text()
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			contactNames == expectedNames
@@ -67,7 +73,10 @@ class GroupViewSpec extends GroupBaseSpec {
 			createTestGroups()
 			createManyContactsAddToGroups()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
+		then:
+			at PageContactShowGroupFriends
+		when:
 			$("a.nextLink").click()
 			$("#page-arrows .currentStep").jquery.show();
 		then:

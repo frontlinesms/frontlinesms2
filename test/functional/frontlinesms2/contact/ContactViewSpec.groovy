@@ -36,14 +36,6 @@ class ContactViewSpec extends ContactBaseSpec {
 			anchor.@href.contains("/frontlinesms2/contact/show/$alice.id")
 	}
 
-	def 'selected contacts show message statistics' () {
-		when:
-			to PageContactShowAlice
-		then:
-			$("#message-count p").first().text() == '0 messages sent'
-			$("#message-count p").last().text() == '0 messages received'
-	}
-
 	def 'contact with no name can be clicked and edited because his primaryMobile is displayed'() {
 		when:
 			def empty = new Contact(name:'', primaryMobile:"+987654321")
@@ -55,12 +47,14 @@ class ContactViewSpec extends ContactBaseSpec {
 
 	def 'selected contact is highlighted'() {
 		when:
-			to PageContactShowAlice
+			go "contact/show/${Contact.findByName('Alice').id}"
 		then:
+			at PageContactShowAlice
 			assertContactSelected('Alice')
 		when:
-			to PageContactShowBob
+			go "contact/show/${Contact.findByName('Bob').id}"
 		then:
+			at PageContactShowBob
 			assertContactSelected('Bob')
 	}
 
@@ -84,8 +78,9 @@ class ContactViewSpec extends ContactBaseSpec {
 		given:
 			createTestGroups()
 		when:
-			to PageContactShowBob
+			go "contact/show/${Contact.findByName('Bob').id}"
 		then:
+			at PageContactShowBob	
 			!$('#no-groups').displayed
 		cleanup:
 			deleteTestGroups()
@@ -93,7 +88,10 @@ class ContactViewSpec extends ContactBaseSpec {
 	
 	def "clicking on 'Send Message' should redirect to quick message dialog"() {
 		when:
-			to PageContactShowAlice
+			go "contact/show/${Contact.findByName('Alice').id}"
+		then:
+			at PageContactShowAlice
+		when:
 			$("#contact_details .send-message").find { it.@href.contains('2541234567') }.click()
 		then:	
 			waitFor { $('div#tabs-1').displayed }
@@ -101,8 +99,9 @@ class ContactViewSpec extends ContactBaseSpec {
 	
 	def "'send Message' link should not displayed for blank addresses"() {
 		when:
-			to PageContactShowAlice
+			go "contact/show/${Contact.findByName('Alice').id}"
 		then:
+			at PageContactShowAlice
 			$("#contact_details .send-message").each {
 				assert it.@href ==~ /.*recipients=\d+/
 			}
@@ -126,7 +125,10 @@ class ContactViewSpec extends ContactBaseSpec {
 		setup:
 			createTestMessages()
 		when:
-			to PageContactShowAlice
+			go "contact/show/${Contact.findByName('Alice').id}"
+		then:
+			at PageContactShowAlice
+		when:
 			searchBtn.click()
 		then:
 			at PageSearchResult

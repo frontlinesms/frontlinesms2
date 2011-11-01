@@ -16,7 +16,7 @@ class PageContactShow extends geb.Page {
 		updateAll(required:false) { $("#update-all") }
 		flashMessage(required:false) { $('div.flash') }
 
-		frmDetails { $("#contact_details") }
+		frmDetails { $("#details") }
 		btnSave { frmDetails.find('#update-single') }
 		btnCancel { $(".buttons .cancel") }
 		deleteSingleButton { $('#btn_delete') }
