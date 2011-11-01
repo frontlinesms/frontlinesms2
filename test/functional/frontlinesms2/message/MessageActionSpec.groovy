@@ -49,8 +49,10 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+		then:
+			at PageMessagePollFootballTeamsBob
+		when:
 			messagesSelect[0].click()
 		then:
 			waitFor { $('#multiple-messages').displayed }
@@ -77,8 +79,10 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+		then:
+			at PageMessagePollFootballTeamsBob
+		when:
 			messagesSelect[0].click()
 		then:
 			waitFor { $('#multiple-messages').displayed }
