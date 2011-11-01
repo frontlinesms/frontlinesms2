@@ -30,6 +30,9 @@ class Fmessage {
 		dateCreated = dateCreated ?: new Date()
 		dateReceived = dateReceived ?: new Date()
 		dateSent = dateSent ?: new Date()
+	}
+	
+	def afterInsert = {
 		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
 	}
 	
@@ -40,9 +43,11 @@ class Fmessage {
 	def updateContactName() {
 		def fetchContactName = { number ->
 			Contact.withNewSession {
+				println "number $number"
 				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 			}
 		}
+		println fetchContactName(status == MessageStatus.INBOUND ? src : dst)
 		contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst)
 		contactExists = contactName && contactName != src && contactName != dst
 	}

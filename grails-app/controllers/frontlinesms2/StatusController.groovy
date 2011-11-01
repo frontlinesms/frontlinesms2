@@ -9,12 +9,18 @@ class StatusController {
 
 	def trafficLightIndicator = {
 		def connections = SmslibFconnection.list() + EmailFconnection.list()
-		def color = !connections || connections*.status.any { it == "${RouteStatus.NOT_CONNECTED}" } ? 'red': 'green'
+		def color = !connections || connections*.status.any { 
+			println it
+			if (it == "Not Connected")
+				println "true"
+		} ? 'red': 'green'
+		
+		println color
 		render text:color, contentType:'text/plain'
 	}
 	
 	def show = {
-		[connectionInstanceList: Fconnection.list(),
+		[connectionInstanceList: SmslibFconnection.list() + EmailFconnection.list(),
 				connectionInstanceTotal: Fconnection.count(),
 				detectedDevices:deviceDetectionService.detected] <<
 			getMessageStats() << getFilters()
