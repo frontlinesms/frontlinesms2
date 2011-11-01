@@ -24,6 +24,5 @@
 			$(".error-panel").hide();
 		}
 	})
-	
 	$("#autoReplyText").live("keyup", updateCount);
 </g:javascript>

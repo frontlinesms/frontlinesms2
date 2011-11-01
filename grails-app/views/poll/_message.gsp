@@ -7,7 +7,6 @@
 <g:javascript>
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateCount);
-	
 	function updateSendMessage() {
 		$("#messageText").live("keypress", autoUpdateOff);
 		$(".choices").live("keypress", autoUpdateOn);
@@ -36,7 +35,7 @@
 			}
 			var sendMessage = questionText + replyText;
 			$("#messageText").val(sendMessage);
-			$("#messageText").keyup();
+			$("#messageText").keyup()
 		}
 	}
 	
