@@ -30,10 +30,7 @@ class Fmessage {
 		dateCreated = dateCreated ?: new Date()
 		dateReceived = dateReceived ?: new Date()
 		dateSent = dateSent ?: new Date()
-	}
-	
-	def afterInsert = {
-		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
+		if(status == MessageStatus.INBOUND ? src : dst) updateContactName()
 	}
 	
 	private String findContact(String number) {
@@ -43,13 +40,11 @@ class Fmessage {
 	def updateContactName() {
 		def fetchContactName = { number ->
 			Contact.withNewSession {
-				println "number $number"
 				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 			}
 		}
-		println fetchContactName(status == MessageStatus.INBOUND ? src : dst)
-		contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst)
 		contactExists = contactName && contactName != src && contactName != dst
+		contactExists ?: (contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst))
 	}
 	
 	static constraints = {
@@ -61,6 +56,7 @@ class Fmessage {
 		dateSent(nullable:true)
 		status(nullable:true)
 		contactName(nullable:true)
+		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
 					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) ||	(obj.messageOwner instanceof Folder && obj.messageOwner.archived)
