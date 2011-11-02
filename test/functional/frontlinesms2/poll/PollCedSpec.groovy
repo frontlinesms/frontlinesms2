@@ -2,6 +2,7 @@ package frontlinesms2.poll
 
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
+import frontlinesms2.message.PageMessagePending
 import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -30,6 +31,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$("#confirmation").click()
 		then:
+			at PageMessagePending
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	

@@ -54,6 +54,16 @@ var remoteHash = {
 	}
 }
 
+$("#poll-actions, #folder-actions").bind('change', function() {
+	var selected = $(this).find('option:selected').val();
+	if(selected)
+		remoteHash[selected].call();
+});
+
+$("#export").click(function() {
+	remoteHash['export'].call();
+});
+
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }

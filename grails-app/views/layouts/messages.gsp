@@ -20,7 +20,7 @@
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/messageSorting.js"/>
-		<g:javascript src="/message/categorize-dropdown.js"/>
+		<g:javascript src="message/categorize-dropdown.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript>
 		$(function() {  
@@ -49,14 +49,3 @@
 		</div>
 	</body>
 </html>
-<g:javascript>
-	$("#poll-actions, #folder-actions").bind('change', function() {
-		var selected = $(this).find('option:selected').val();
-		if(selected)
-			remoteHash[selected].call();
-	});
-
-	$("#export").click(function() {
-		remoteHash['export'].call();
-	});
-</g:javascript>

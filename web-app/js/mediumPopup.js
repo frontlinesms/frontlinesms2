@@ -113,7 +113,7 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 			{ text:"Back", id:"disabledBack", disabled: true },
 			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
-			{ text:"Done",  click: cancel, id:"confirmation" },
+			{ text:"Done",  click: finished, id:"confirmation" },
 			{ text:btnFinishedText,  click: done, id:"done" }
 		],
 		close: function() {             
@@ -129,6 +129,11 @@ function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmati
 
 function cancel() {
 	$(this).dialog('close');
+}
+
+function finished() {
+	$(this).dialog('close');
+	window.location.replace(url_root + "message/pending");
 }
 
 function prevButton() {
