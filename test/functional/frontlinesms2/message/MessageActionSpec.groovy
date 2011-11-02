@@ -45,6 +45,28 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			$("tbody tr").size() == 1
 	}
 	
+	def "can categorize poll messages using dropdown"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			def barce = "btn-" + PollResponse.findByValue('barcelona').id
+		then:
+			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester')
+		when:
+			$('#categorise_dropdown').jquery.val(barce) // bug selecting option - seems to be solved by using jquery...
+			$('#categorise_dropdown').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
+		then:
+			waitFor { $("div.flash").displayed }
+		when:
+			PollResponse.findByValue('manchester').refresh()
+			PollResponse.findByValue('barcelona').refresh()
+			Fmessage.findBySrc("Bob").refresh()
+		then:
+			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('barcelona')
+	}
+	
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
 		given:
 			createTestPolls()
@@ -77,7 +99,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			!$("#message-archive").displayed
 	}
 
-	def "should move poll messages to inbox"() {
+	def "can move poll messages to inbox"() {
 		given:
 			createTestPolls()
 			createTestMessages()

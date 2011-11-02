@@ -30,7 +30,7 @@ class PollController {
 		def pollInstance = Poll.createPoll(params)
 		pollInstance.save()
 		if(!params.dontSendMessage) forward(controller:"message", action:"send", params: params)
-		redirect(controller: "message")
+		render ""
 	}
 
 	def archive = {

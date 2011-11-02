@@ -144,7 +144,7 @@ class MessageController {
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
-		redirect (action: 'pending')
+		redirect (controller: "message", action: 'pending')
 	}
 
 	def getMessagesToSend() {
