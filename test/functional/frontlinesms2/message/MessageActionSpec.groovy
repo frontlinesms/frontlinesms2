@@ -11,7 +11,10 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestMessages()
 			createTestFolders()
 		when:
-			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+		then:
+			at PageMessagePollFootballTeamsBob
+		when:
 			def actions = $('#move-actions').children()*.text()
 		then:
 			actions[1] == "Inbox"

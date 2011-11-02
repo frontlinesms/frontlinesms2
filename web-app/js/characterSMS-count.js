@@ -1,14 +1,15 @@
 function updateCount() {
 	var value = $(this).val();
+	var wordCount = value.length
 	var messageStats = $(this).siblings("#message-stats")
-	if(value.length > 3000) {
+	if(wordCount > 3000) {
 		//prevent addition of new content to message
 		$(this).val(value.substring(0, 3000));
-	} else if(value.length > 59) {
+	} else if(wordCount >= 160) {
 		$.get(url_root + 'message/getSendMessageCount', {message: value}, function(data) {
-			messageStats.html(value.length + " characters " + data);
+			messageStats.html(wordCount + " characters " + data);
 		});
 	} else {
-		messageStats.html(value.length + " characters (1 SMS message)");
+		messageStats.html(wordCount + " characters (1 SMS message)");
 	}
 }

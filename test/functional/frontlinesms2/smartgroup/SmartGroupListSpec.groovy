@@ -38,7 +38,6 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			createSmartGroupButton.displayed
 	}
 	
-	@spock.lang.IgnoreRest
 	def 'selected smartgroup should be highlighted in the smartgroup menu'() {
 		given:
 			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)

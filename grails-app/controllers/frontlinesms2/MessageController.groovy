@@ -104,12 +104,15 @@ class MessageController {
 	def poll = {
 		def pollInstance = Poll.get(params.ownerId)
 		def messageInstanceList = pollInstance.getPollMessages(params.starred)
+		def pollReplyMessage = "Please answer" + getPollReplyMessage(pollInstance)
+		
 		render view:'../message/poll', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'poll',
 				messageInstanceTotal: messageInstanceList.count(),
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance.responseStats,
+				pollReplyMessage: pollReplyMessage,
 				pollResponse: pollInstance.responseStats as JSON] << getShowModel()
 	}
 	
@@ -127,7 +130,6 @@ class MessageController {
 		def folderInstance = Folder.get(params.ownerId)
 		def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
 		if(params.flashMessage) { flash.message = params.flashMessage }
-		println "message instance list is $messageInstanceList"
 		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
@@ -193,7 +195,6 @@ class MessageController {
 			render ""
 		}else {
 			if(params.messageSection == 'result') {
-				println "Search params: $params"
 				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
@@ -277,5 +278,23 @@ class MessageController {
 
 	private def isAjaxRequest() {
 		return request.xhr
+	}
+	
+	private def getPollReplyMessage(pollInstance) {
+		if(!pollInstance) return null
+		
+		String pollReplyMessage = ""
+		def responseValues = pollInstance.responseStats.value
+		def responseKeys = pollInstance.responses*.key
+		for(int i=0; i < responseValues.size()-1; i++) {
+			//prevent unknown response from appearing in message
+			if(pollInstance.keyword) {
+				i == (responseValues.size()-2) ? (pollReplyMessage += "${pollInstance.keyword?.capitalize() + ' '+ responseKeys[i].substring('choice'.size())} for '${responseValues[i]}'") : (pollReplyMessage += " ${pollInstance.keyword.capitalize() + ' '+ responseKeys[i].substring('choice'.size())} for '${responseValues[i]}' or ")
+			} else {
+			i == (responseValues.size()-2) ? (pollReplyMessage += "'${responseValues[i]}'") : (pollReplyMessage += " '${responseValues[i]}' or ")
+			}
+			
+		}
+		pollReplyMessage
 	}
 }
