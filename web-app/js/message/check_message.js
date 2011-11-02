@@ -45,8 +45,6 @@ function upSingleCheckedDetails(messageId) {
 	var searchId = $('input:hidden[name=searchId]').val() || '';
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId}, function(data) {
-		$('#message-details #message-id').replaceWith($(data).find('#message-details #message-id'));
-		$('#message-details #message-src').replaceWith($(data).find('#message-details #message-src'));
 		$('#message-details #single-message').replaceWith($(data).find('#message-details #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');

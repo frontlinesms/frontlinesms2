@@ -228,7 +228,6 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			waitFor { getMenuLink('All the bobs!').displayed }
 	}
 	
-	@spock.lang.IgnoreRest
 	def 'rules should include custom fields'() {
 		given:
 			['Town', 'Height'].each { new CustomField(name:it).save(failOnError:true, flush:true) }
