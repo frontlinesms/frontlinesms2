@@ -4,8 +4,8 @@
 		<tr>
 			<td>
 				<div><g:formatDate date="${ownerInstance?.dateCreated}" /><span> (${ownerInstance?.sentMessageCount} messages sent)</span></div>
-				<div>${ownerInstance?.message}
-					<span id="poll-reply-message">${pollReplyMessage}</span>
+				<div>
+					${ownerInstance?.messageText}
 				</div>
 				<table id="poll-stats">
 					<tbody>
