@@ -158,10 +158,13 @@ function nextButton() {
 }
 
 function done() {
+	$("#done").attr('disabled', 'disabled');
 	if(validateWholeTab() && onDoneOfCurrentTab()) {
 		$(this).find("form").submit();                  
 		$(this).remove();
-	} 
+	} else {
+		$("#done").removeAttr('disabled');
+	}
 }
 
 function validateWholeTab() {
