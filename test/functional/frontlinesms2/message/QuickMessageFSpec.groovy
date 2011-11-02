@@ -70,7 +70,44 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 	}
+	
+	def "should not add the same manually entered contact more than once "() {
+		when:
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+			$("#recipient-count").text() == "1"
+		when:
+			addressField.value("3232")
+			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "3232" }
+			$("#recipient-count").text() == "2"
+	}
 
+	def "unchecking a manually added contact updates the recipients count "() {
+		when:
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+			addressField.value("+919544426009")
+			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426009" }
+			$("#recipient-count").text() == "2"
+		when:
+			println $("div.manual").find("input", name:"addresses")[0]*.@value
+			$("div.manual").find("input", name:"addresses")[0].click()
+		then:
+			$("#recipient-count").text() == "1"
+	}
+	
 	def "should send the message to the selected recipients"() {
 		when:
 			launchQuickMessageDialog()
@@ -281,6 +318,3 @@ class QuickMessageDialog extends geb.Page {
 class SentMessagesPage extends geb.Page {
 	static url = 'message/sent'
 }
-
-
-
