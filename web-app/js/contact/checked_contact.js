@@ -7,6 +7,7 @@ function contactChecked(contactId) {
 			loadSingleContact(contactId);
 		} else {
 			loadMultipleContacts(count);
+			enableCancel();
 		}
 		$("#contact-" + contactId).addClass('selected');
 	} else {
@@ -28,6 +29,10 @@ function contactChecked(contactId) {
 
 function countCheckedContacts(){
     return $('input[name=contact-select]:checked').size();
+}
+
+function enableCancel() {
+	$(".buttons .cancel").attr("disabled", false);
 }
 
 function loadSingleContact(contactId) {
