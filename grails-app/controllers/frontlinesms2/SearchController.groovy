@@ -79,25 +79,25 @@ class SearchController {
 			searchDescriptor += ' all messages'
 		}
 		 
-		if(search.group) searchDescriptor += ", in "+search.group.name
+		if(search.group) searchDescriptor += ", "+search.group.name
 		if(search.owners) {
 			def activity = getActivityInstance()
 			String ownerDescription = activity instanceof Poll ? activity.title: activity.name
-			searchDescriptor += ", in"+ownerDescription
+			searchDescriptor += ", "+ownerDescription
 		}
-		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
-		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
+		searchDescriptor += search.inArchive? ", archived messages":", without archived messages" 
+		if(search.contactString) searchDescriptor += ", "+search.contactString
 		if (search.customFields.find{it.value}) {
 			search.customFields.find{it.value}.each{
-				searchDescriptor += ", with contact having "+it.key+"="+it.value
+				searchDescriptor += ", "+it.key+"="+it.value
 			}
 		}
 		if(search.startDate && search.endDate){
 			searchDescriptor += ", between " + search.startDate.format(dateFormatString) + " and " + search.endDate.format(dateFormatString) 
 		} else if (search.startDate) {
-			searchDescriptor += ", from the " + search.startDate.format(dateFormatString)
+			searchDescriptor += ", from " + search.startDate.format(dateFormatString)
 		} else if (search.endDate) {
-			searchDescriptor += ", until the " + search.endDate.format(dateFormatString)
+			searchDescriptor += ", until " + search.endDate.format(dateFormatString)
 		}
 		return searchDescriptor
 	}

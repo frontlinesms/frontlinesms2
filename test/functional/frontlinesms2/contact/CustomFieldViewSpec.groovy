@@ -93,7 +93,6 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			def inputField =  $("#contact_details ").find('input', name:'lake')
 			inputField.value('erie')
 			$("#contact_details #update-single").click()
-			sleep 1000
 		then:
 			bob.refresh()
 			bob.customFields.name == ['lake', 'town']

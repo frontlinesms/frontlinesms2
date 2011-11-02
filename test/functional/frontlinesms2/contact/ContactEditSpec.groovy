@@ -27,7 +27,6 @@ class ContactEditSpec extends ContactBaseSpec {
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
 			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
-			sleep 5000
 			changingContact.refresh()
 			println Contact.findAll()*.name
 			changingContact.name == 'Kate'
