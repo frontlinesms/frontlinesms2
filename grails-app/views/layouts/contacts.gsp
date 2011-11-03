@@ -14,6 +14,7 @@
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
+		<g:javascript src="contact/changingNumberAlert.js"/>
 		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
 		<g:javascript src="contact/moreGroupActions.js" />
