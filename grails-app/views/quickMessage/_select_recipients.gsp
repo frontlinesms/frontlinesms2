@@ -90,7 +90,7 @@
 			}
 		);
 		
-		var messageStats = $("#message-stats").text()
+		var messageStats = $("#send-message-stats").text()
 		noOfMessages = messageStats.substring(messageStats.indexOf("(")+1, messageStats.indexOf(" S"));
 		noOfMessages = noOfMessages == 0 ? 1 : noOfMessages
 		messageCount = addressCount * parseInt(noOfMessages)

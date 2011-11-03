@@ -191,8 +191,8 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor {
 				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
 				pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
-				println "message stats are " + $("#message-stats").text() 
-				$("#message-stats").text() == "27 characters (1 SMS message)"
+				println "message stats are " + $("span.character-count").text() 
+				$("span.character-count").text() == "27 characters (1 SMS message)"
 			}
 		when:
 			pollForm.enableAutoReply = false
@@ -286,6 +286,50 @@ class PollCedSpec extends PollBaseSpec {
 			done.click()
 		then:
 			waitFor { Poll.findByTitle("Coffee Poll") }
+	}
+	
+	def "should show the right number of messages to be sent to selected recipients"() {
+		when:
+			def longQuestion = 'who' * 54
+			launchPollPopup('standard', longQuestion)
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			goToTab(6)
+			pollForm.address = '1234567890'
+			addManualAddress.click()
+		then:
+			waitFor { $('.manual').displayed }
+		when:
+			next.click()
+		then:
+			waitFor { confirmationTab.displayed }
+			$("#confirm-recepients-count").text() == "1 contacts selected (2 messages will be sent)"
+	}
+	
+	def "should update confirm screen when user decides not to send messages"() {
+		when:
+			launchPollPopup('standard', "Will you send messages to this poll")
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			goToTab(6)
+			pollForm.address = '1234567890'
+			addManualAddress.click()
+		then:
+			waitFor { $('.manual').displayed }
+		when:
+			next.click()
+		then:
+			waitFor { confirmationTab.displayed }
+			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+		when:
+			goToTab(1)
+			pollForm."dontSendMessage" = true
+			goToTab(7)
+		then:
+			waitFor { $("#no-recepients").displayed }
+			$("#no-recepients").text() == "None"
 	}
 	
 	def "can launch export popup"() {
@@ -389,6 +433,10 @@ class PollCedSpec extends PollBaseSpec {
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage
 		next.click()
+	}
+	
+	def goToTab(tab) {
+		$(".tabs-$tab").click()	
 	}
 }
 

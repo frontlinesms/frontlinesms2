@@ -310,7 +310,7 @@ class QuickMessageDialog extends geb.Page {
 		
 		doneButton { $("#done") }
 		nextPageButton { $("#nextPage") }
-		characterCount { $("#message-stats")}
+		characterCount { $("#send-message-stats")}
 		messagesCount { $("#messages-count")}
 	}
 }

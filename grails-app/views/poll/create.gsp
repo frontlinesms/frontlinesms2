@@ -132,12 +132,7 @@
 	}
 
 	function updateConfirmationMessage() {
-		if(isGroupChecked("dontSendMessage"))
-			var sendMessage = "No messages will be sent";
-		else
-			var sendMessage = $('#messageText').val();
-			
-		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
+		updateSendMessageDetails();
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
 		
 		// update auto-sort
@@ -153,7 +148,22 @@
 			autoSortMessages.eq(1).hide();
 		}
 	}
+	
+	function updateSendMessageDetails() {
+		var sendMessage
+		isGroupChecked("dontSendMessage") ?	sendMessage = "No messages will be sent" : sendMessage = $('#messageText').val();
 
+		var contactNo = $("#contacts-count").text()
+		
+		if(contactNo == 0 || isGroupChecked("dontSendMessage")) {
+			$("#confirm-recepients-count").addClass("hide")
+			$("#no-recepients").removeClass("hide")
+		} else {
+			$("#confirm-recepients-count").removeClass("hide")
+			$("#no-recepients").addClass("hide")
+		}
+		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
+	}
 
 	function highlightPollResponses() {
 		$(".choices").each(function() {

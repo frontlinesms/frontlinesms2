@@ -21,6 +21,8 @@
 		if(isGroupChecked("dontSendMessage")) {
 			disableTab(4);
 			disableTab(5);
+			//update confirm screen
+			updateSendMessageDetails();
 		} else {
 			enableTab(4);
 			enableTab(5);
