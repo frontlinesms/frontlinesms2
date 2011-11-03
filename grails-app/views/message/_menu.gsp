@@ -28,7 +28,7 @@
 				</li>
 			</g:each>
 			<li class='create' id="create-activity">
-				<g:link url="#" elementId="create-new-activity">Create new activity</g:link>
+				<g:remoteLink controller="poll" action="create_new_activity" id="create-new-activity" onSuccess="launchActivityMediumPopup('Create New Activity : Select type', data, 'Next'); addValidations();" >Create new activity</g:remoteLink>
 			</li>
 		</ol>
 	</li>
@@ -65,18 +65,3 @@
 		</ol>
 	</li>
  </ol>
-
-<script>
-$("#create-new-activity").bind('click', function() {
-	$.ajax({
-		type:'GET',
-		dataType: "html",
-		url: url_root + 'create_new_activity.gsp',
-		success: function(data) {
-			launchActivityMediumPopup('Create New Activity : Select type', data, 'Next');
-			addValidations();
-		}
-	});
-});
-
-</script>

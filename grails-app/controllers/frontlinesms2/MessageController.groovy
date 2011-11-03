@@ -80,7 +80,7 @@ class MessageController {
 		params.sort = params.sort != "dateReceived" ? params.sort : 'dateCreated'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.linkClassName == "frontlinesms2.Fmessage") {
+				if(obj.objectType == "frontlinesms2.Fmessage") {
 					params.messageId = obj.linkId
 				} else {
 					trashInstance = obj.link
@@ -162,7 +162,7 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.toDelete()
-				new Trash(identifier:messageInstance.contactName, message:messageInstance.text, linkClassName:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
+				new Trash(identifier:messageInstance.contactName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}

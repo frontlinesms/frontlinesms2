@@ -16,6 +16,7 @@
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
+		<g:javascript src="contact/moreGroupActions.js" />
 		<g:javascript>
 			function getGroupId(){
 				var group = $('#groupId');
@@ -31,14 +32,6 @@
 			$(function() {  
 			   disablePaginationControls();
 			   $("#contact-search").renderDefaultText();
-			});
-		
-			$(document).ready(function(){
-				$('#group-actions').bind('change', function() {
-					var selected = $(this).find('option:selected').val();
-					if(selected)
-						remoteHash[selected].call();
-				});
 			});
 		</g:javascript>
 		<g:render template="/css"/>
@@ -59,9 +52,13 @@
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name} (${contactInstanceTotal})</h2>
 							</div>
-							<g:select name="group-actions" from="${['Rename group']}"
-								keys="${['renameGroup']}"
-								noSelection="${['': 'More actions...']}"/>
+							<ol>
+								<li>
+									<g:select name="group-actions" from="${['Rename group', 'Delete group']}"
+											keys="${['rename', 'delete']}"
+											noSelection="${['': 'More actions...']}"/>
+								</li>
+							</ol>
 						</g:if>
 						<g:elseif test="${!contactInstance}">
 							<div  id="contact-title">
