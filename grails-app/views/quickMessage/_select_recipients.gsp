@@ -105,6 +105,8 @@
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
 			$("#manual-address").append("<div id='address-error'>Your address cannot contain letters</div>");
+		} else if(address == '') {
+
 		} else {
 			$("#address").removeClass('error');
 			$("#manual-address").find('#address-error').remove();
