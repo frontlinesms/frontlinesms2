@@ -215,8 +215,11 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			pollForm.address = '1234567890'
 			addManualAddress.click()
+			pollForm.address = '1234567890'
+			addManualAddress.click()
 		then:
 			waitFor { $('.manual').displayed }
+			$("#recipient-count").text() == "1"
 		when:
 			next.click()
 		then:

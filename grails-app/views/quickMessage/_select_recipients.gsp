@@ -99,8 +99,12 @@
 
 	 function addAddressHandler() {
 		var address = $('#address').val();
-		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
-		updateCount();
+		var checkbox = $("div.manual").find(":checkbox[value=" + address + "]").val()
+		if(checkbox !== address) {
+			$("#contacts").prepend("<div class='manual'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
+			updateCount();
+		}
+		$('#address').val("")
 	}
 </script>
 
