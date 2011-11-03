@@ -135,25 +135,4 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			$('#message-details #message-body').text() == "No message selected"
 	}
-	
-	def "should display poll answer message in the poll header"() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-			def pollReply = $("#poll-reply-message").text()
-		then:
-			pollReply == "Please answer 'manchester' or 'barcelona'"
-	}
-	
-	def "should display poll answer message with keywords in the poll header"() {
-		given:
-			Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona', keyword:"football").save(failOnError:true, flush:true)
-		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}"
-			def pollReply = $("#poll-reply-message").text()
-		then:
-			pollReply == "Please answer FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'"
-	}
 }
