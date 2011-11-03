@@ -8,7 +8,7 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 		setup:
 	    	def m1 = new Fmessage(src: "src1", dst: "dst1", starred: true, deleted:true).save(failOnError:true, flush:true)
 	    	def m2 = new Fmessage(src: "src2", dst: "dst2", deleted:true).save(failOnError:true, flush:true)
-			Fmessage.findAll().collect{ new Trash(identifier:it.contactName, message:it.text, linkClassName:it.class.name, linkId:it.id).save(failOnError: true, flush: true)}
+			Fmessage.findAll().collect{ new Trash(identifier:it.contactName, message:it.text, objectType:it.class.name, linkId:it.id).save(failOnError: true, flush: true)}
 		when:
 			to PageMessageTrash
 		then:

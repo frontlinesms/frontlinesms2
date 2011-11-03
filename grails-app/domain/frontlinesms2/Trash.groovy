@@ -3,11 +3,11 @@ package frontlinesms2
 class Trash {
 	Date dateCreated
 	Long linkId
-	String linkClassName
+	String objectType
 	String message
 	String identifier
 	
-	def getLink() { getClass().classLoader.loadClass(linkClassName).get(linkId) }
+	def getLink() { getClass().classLoader.loadClass(objectType).get(linkId) }
 	
 	static constraints = {
 		message(nullable: true)

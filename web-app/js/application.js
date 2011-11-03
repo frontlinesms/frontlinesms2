@@ -8,6 +8,8 @@ function refreshMessageCount() {
 	});
 }
 
+// Please DO NOT add to this. Functions should be in their own file with a relevant name so that they can easily found
+// FIXME move these functions somewhere more useful
 var remoteHash = {
 	"export": function() {
 		$.ajax({
@@ -42,16 +44,6 @@ var remoteHash = {
 				launchSmallPopup('Delete ' + messageSection, data, 'Delete');
 			}})
 	},
-	
-	"renameGroup":function(){
-		$.ajax({
-			type:'GET',
-			url: url_root + 'group/rename',
-			data: {groupId: $("#groupId").val()},
-			success: function(data){
-				launchSmallPopup('Rename group', data, 'Rename');
-			}})
-	}
 }
 
 $(function() {

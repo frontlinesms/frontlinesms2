@@ -52,7 +52,7 @@ class FolderController {
 	def delete = {
 		withFolder { folder ->
 			folder.toDelete()
-			new Trash(identifier:folder.name, message:"${folder.liveMessageCount}", linkClassName:folder.class.name, linkId:folder.id).save(failOnError: true, flush: true)
+			new Trash(identifier:folder.name, message:"${folder.liveMessageCount}", objectType:folder.class.name, linkId:folder.id).save(failOnError: true, flush: true)
 			folder.save(failOnError: true, flush: true)
 		}
 		flash.message = "Folder has been trashed!"
