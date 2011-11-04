@@ -19,6 +19,12 @@ class KeywordProcessorService {
 	def processPollResponse(PollResponse response, Fmessage message) {
 		response.addToMessages(message)
 		response.save(failOnError: true)
+		if(response.poll.autoReplyText) {
+			println "Autoreply message sent to ${message.src}"
+			Fmessage autoReply = new Fmessage(dst:message.src, text:response.poll.autoReplyText)
+			def messageSendService = new MessageSendService()
+			messageSendService.send(autoReply)
+		}
 	}
 
 	PollResponse getPollResponse(String messageText) {
