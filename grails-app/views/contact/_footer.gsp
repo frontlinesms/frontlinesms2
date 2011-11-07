@@ -1,4 +1,4 @@
-<div class="content-footer">
+<div class="footer">
 	<input id="contact-search" class="default-text-input" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' + this.value + getGroupId()')}" value="${params.searchString?:'Search'}" defaultValue='Search' />
 	<div id="page-arrows">
 		<g:if test="${contactsSection instanceof frontlinesms2.Group}">

@@ -11,7 +11,8 @@
 		</script>
     </head>
     <body>
-    	<div id="contact_details">
+		<g:render template="contact_list"/>
+    	<div id="contact-editor">
     		<g:form name="details">
 	    		<g:hiddenField name="version" value="${contactInstance?.version}"/>
 	    		<g:hiddenField name="checkedContactList" id='checkedContactList' value=","/>

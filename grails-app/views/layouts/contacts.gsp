@@ -36,38 +36,36 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
-	<body>
-		<div id="container">
-			<g:render template="/system_menu"/>
-			<g:render template="/tabs"/>
-			<g:render template="/flash"/>
-			<div class="main">
-				<g:render template="menu"/>
-				<div class="content">
-					<div class="content-header">
-						<div  id="contact-title">
-							<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-								<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
-								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
-								<h2>${contactsSection.name}</h2>
-							</g:if>
-							<g:elseif test="${!contactInstance}">
-								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
-								<h2>New Group</h2>
-							</g:elseif>
-							<g:else>
-								<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
-								<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
-							</g:else>
-						</div>
-					</div>
-					<div class="content-body">
-						<g:render template="contact_list"/>
-						<g:layoutBody />
-					</div>
-					<g:render template="footer"/>
+	<body id="contacts-tab">
+        <div id="header">
+            <img src="/frontlinesms2/images/logo.png" id="logo"/>
+		    <g:render template="/system_menu"/>
+	    	<g:render template="/tabs"/>
+    		<g:render template="/flash"/>
+        </div>
+	    <div class="main">
+            <div id="sidebar">
+		        <g:render template="menu"/>
+            </div>
+		    <div class="content">
+				<div class="section-actions" id="contact-actions">
+					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+						<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
+						<h3>${contactsSection.name}</h3>
+                    </g:if>
+					<g:elseif test="${!contactInstance}">
+						<h3>New Group</h3>
+					</g:elseif>
+					<g:else>
+						<h3>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h3>
+					</g:else>
 				</div>
-			</div>
-		</div>
+			    <div  id="contacts">
+				    <g:layoutBody />
+    			</div>
+	        </div>
+            <div style="clear:both;"></div>
+	    </div>
+        <g:render template="footer"/>
 	</body>
 </html>

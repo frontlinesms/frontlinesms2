@@ -1,9 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<ol class="context-menu" id="contacts-menu">
-	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
-		<h2>Contacts</h2>
-		<ol class='sub-menu' id="contacts-submenu">
+<ul class="main-list" id="contacts-menu">
+	<li>
+		<h3 class="list-title">Contacts</h3>
+		<ul class='sublist' id="contacts-submenu">
 			<li class="${contactsSection ? '' : 'selected'}">
 				<g:link action="show">All contacts</g:link>
 			</li>
@@ -12,12 +11,11 @@
 					Create new contact
 				</g:link>
 			</li>
-		</ol>
+		</ul>
 	</li>
-	<li class="section">
-		<img src='${resource(dir:'images/icons',file:'groups.png')}' />
-		<h2>Groups</h2>
-		<ol class='sub-menu' id="groups-submenu">
+	<li>
+		<h3 class="list-title">Groups</h3>
+		<ul class='sublist' id="groups-submenu">
 			<g:each in="${groupInstanceList}" status="i" var="g">
 				<li class="${contactsSection instanceof frontlinesms2.Group && contactsSection.id==g.id ? 'selected' : ''}">
 					<g:link controller="group" action="show" id="${g.id}">${g.name}</g:link>
@@ -28,6 +26,6 @@
 					Create new group
 				</g:remoteLink>
 			</li>
-		</ol>
+		</ul>
 	</li>
-</ol>
+</ul>
