@@ -70,6 +70,17 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		then:
 			getColumnText('messages', 3) == ['An inbox message', 'Another inbox message']		
 	}
+	
+	def 'Should be able to shorten very long messages'() {
+		given:
+			new Fmessage(src:"long", status:MessageStatus.INBOUND,deleted:false, text:"This is an extremely loooooooooooooooooooooooooooooooooooooooooooooooooooooooong message").save(flush:true)
+		when:
+			to PageMessageInbox
+			$("#source-header a").click()
+		then:
+			getColumnText('messages', 2) == ['long']
+			getColumnText('messages', 3) == ['This is an extremely loooooooooooooooooooooooooooooooooooooo...']
+	}
 	   
     def assertMenuItemSelected(String itemText) {
         def selectedChildren = $('#messages-menu li.selected')
