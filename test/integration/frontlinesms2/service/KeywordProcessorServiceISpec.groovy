@@ -47,6 +47,34 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 			r.messages?.size() == 1
 	}
 	
+	def "processPollResponse() should send reply text for a poll requiring autoreply"() {
+		given:
+			Fmessage m = new Fmessage(src:"0722334455").save(failOnError: true)
+			def p = new Poll(title:'Who is the best football team in the world?', autoReplyText:"Thank you for participating in this poll")
+			PollResponse r = new PollResponse(value: "whatever")
+			PollResponse r2 = new PollResponse(value: "2")
+			p.addToResponses(r2)
+			p.addToResponses(r).save(failOnError: true)
+		when:
+			service.processPollResponse(r, m)
+		then:
+			Fmessage.findByText("Thank you for participating in this poll")
+	}	
+	
+	def "processPollResponse() should not send reply text for a poll without autoreply"() {
+		given:
+			Fmessage m = new Fmessage(src:"0722334455").save(failOnError: true)
+			def p = new Poll(title:'Who is the best football team in the world?')
+			PollResponse r = new PollResponse(value: "whatever")
+			PollResponse r2 = new PollResponse(value: "2")
+			p.addToResponses(r2)
+			p.addToResponses(r).save(failOnError: true)
+		when:
+			service.processPollResponse(r, m)
+		then:
+			Fmessage.count() == 1
+	}
+	
 	private def getResults(messageTexts) {
 		messageTexts.collect {
 			service.getPollResponse(it)

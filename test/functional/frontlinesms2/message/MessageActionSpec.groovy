@@ -55,8 +55,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester')
 		when:
-			$('#categorise_dropdown').jquery.val(barce) // bug selecting option - seems to be solved by using jquery...
-			$('#categorise_dropdown').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
+			$('#categorise_dropdown').value(barce) // bug selecting option - seems to be solved by using jquery...
+			$('#categorise_dropdown').change() // again this should not be necessary, but works around apparent bugs
 		then:
 			waitFor { $("div.flash").displayed }
 		when:
