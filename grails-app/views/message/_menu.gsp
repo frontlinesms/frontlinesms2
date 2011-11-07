@@ -20,11 +20,16 @@
 	</li>
 	<li class="section">
 		<img src='${resource(dir:'images/icons',file:'activities.png')}' />
-		<h2>Polls</h2>
+		<h2>Activities</h2>
 		<ol class='sub-menu' id="activities-submenu">
 			<g:each in="${pollInstanceList}" status="i" var="p">
 				<li class="${p == ownerInstance ? 'selected' : ''}">
-					<g:link action="poll" params="[ownerId: p.id]">${p.title}</g:link>
+					<g:link action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
+				</li>
+			</g:each>
+			<g:each in="${announcementInstanceList}" status="i" var="a">
+				<li class="${a == ownerInstance ? 'selected' : ''}">
+					<g:link action="announcement" params="[ownerId: a.id]">${a.name} announcement</g:link>
 				</li>
 			</g:each>
 			<li class='create' id="create-activity">

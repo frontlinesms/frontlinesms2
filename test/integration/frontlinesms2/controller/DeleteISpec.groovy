@@ -133,7 +133,7 @@ class DeleteISpec extends IntegrationSpec {
 	
 	def deletePoll(Poll poll){
 		poll.toDelete()
-		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", linkClassName:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
+		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", objectType:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
 	}
 }
 

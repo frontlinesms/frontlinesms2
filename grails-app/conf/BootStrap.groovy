@@ -115,13 +115,25 @@ class BootStrap {
 				['Work', 'Projects'].each {
 					new Folder(name:it).save(failOnError:true, flush:true)
 				}
+				
+				new Announcement(name: 'Free cars!', sentMessage:"Everyone who recieves this message will also recieve a free Subaru").save(failOnError:true, flush:true)
+				new Announcement(name: 'Office Party', sentMessage:"Office Party on Friday!").save(failOnError:true, flush:true)
 	
 				[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
 						new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
 						new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
-						new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+						new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked'),
+						new Fmessage(src:'Roy', dst:'+254987654', text:'hooooray!'),
+						new Fmessage(src:'Mike', dst:'+254987654', text:'Word'),
+						new Fmessage(src:'Marie', dst:'+254987654', text:'I dont drive')].each() {
 					it.status = MessageStatus.INBOUND
 					it.dateReceived = new Date()
+					it.save(failOnError:true, flush:true)
+				}
+					
+				[Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Roy')),
+						Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Marie')),
+						Announcement.findByName('Office Party').addToMessages(Fmessage.findBySrc('Mike'))].each() {
 					it.save(failOnError:true, flush:true)
 				}
 	

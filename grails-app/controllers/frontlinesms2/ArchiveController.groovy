@@ -19,10 +19,12 @@ class ArchiveController extends MessageController {
 		redirect(action:'inbox', params:params)
 	}
 	
-	def pollView = {
+	def activityView = {
 		def pollInstanceList = Poll.findAllByArchived(true)
+		def announcementInstanceList = Announcement.findAllByArchived(true)
 		render view:'standard', model:[pollInstanceList: pollInstanceList,
-											itemInstanceTotal: pollInstanceList.size(),
+											announcementInstanceList: announcementInstanceList,
+											itemInstanceTotal: announcementInstanceList.size() + pollInstanceList.size(),
 											messageSection: "poll"]
 	}
 	

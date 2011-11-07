@@ -336,7 +336,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			to PageMessageInbox
-			$("a", text: "Who is badder?").click()
+			$("a", text: "Who is badder? poll").click()
 		then:
 			waitFor { title == "Poll" }
 		when:
@@ -350,11 +350,11 @@ class PollCedSpec extends PollBaseSpec {
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
-			$("a", text: "Who is badder?").click()
+			$("a", text: "Who is badder? poll").click()
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$("#poll-actions").value("renameActivity")
+			$("#poll-actions").value("rename")
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
@@ -362,7 +362,7 @@ class PollCedSpec extends PollBaseSpec {
 			$("#done").click()
 		then:
 			waitFor { $("a", text: 'Rename poll') }
-			!$("a", text: "Who is badder?")
+			!$("a", text: "Who is badder? poll")
 	}
 
 	def "can delete a poll"() {
@@ -415,7 +415,7 @@ class PollCedSpec extends PollBaseSpec {
 	def deletePoll() {
 		def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
-		$("#poll-actions").value("deleteAction")
+		$("#poll-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete poll")
 		$("#done").click()

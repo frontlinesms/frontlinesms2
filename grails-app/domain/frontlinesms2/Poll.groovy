@@ -102,4 +102,8 @@ class Poll {
         this.deleted = true
         this
     }
+	
+	def addToMessages(message) {
+		this.responses.findByName('Unknown').addToMessages(message)
+	}
 }

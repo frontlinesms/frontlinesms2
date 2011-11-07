@@ -9,4 +9,16 @@ class MessageSendService {
 		m.save(failOnError:true,flush:true) // FIXME this should be saving inside the outgoing messages route, not here
 		sendMessageAndHeaders('seda:outgoing-fmessages', m, headers)
 	}
+	
+	def getMessagesToSend(params) {
+		def messages = []
+		def addresses = [params.addresses].flatten() - null
+		def groups = [params.groups].flatten() - null
+		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses.unique().each { address ->
+			//TODO: Need to add source from app setting
+			messages << new Fmessage(src: "src", dst: address, text: params.messageText)
+		}
+		return messages
+	}
 }

@@ -218,19 +218,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 
 	}
 
-	def "should launch announcement screen from create new activity link" () { // FIXME why is this test here??
-		when:
-			to PageMessageInbox
-			$("a", text:"Create new activity").click()
-		then:
-			waitFor { $("#activity-list").displayed }
-		when:
-			$("input", class: "announcement").click()
-			$("#choose").click()
-		then:
-			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
-	}
-	
 	def "should show the character count of each message"() {
 		setup:
 			createData()

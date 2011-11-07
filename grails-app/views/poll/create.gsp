@@ -13,7 +13,7 @@
 		<li class="confirm-tab"><a class="tabs-8" href="#tabs-8"></a></li>
 	</ol>
 
-	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToNextTab()">
+	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToSummaryTab()">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
 		<g:render template="responses"/>
@@ -34,7 +34,7 @@
 </div>
 
 <g:javascript>
-	function initializePoll() {
+	function initialize() {
 		$("#tabs").tabs("disable", getTabLength());
 		disableTab(1);
 		highlightPollResponses();
@@ -183,7 +183,7 @@
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
 	}
 
-	function goToNextTab() {
+	function goToSummaryTab() {
 		$("#tabs").tabs("enable", getTabLength());
 		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
