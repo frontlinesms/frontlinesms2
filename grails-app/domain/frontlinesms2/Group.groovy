@@ -7,13 +7,6 @@ class Group {
 		name(unique: true, nullable: false, blank: false, maxSize: 255)
 	}
 
-	private static boolean isUniqueAcrossColumns(val, otherVal, obj) {
-		return val == null ?:
-				((val ==~ /([a-zA-Z0-9]+)/) && (val != otherVal) &&
-						Group.findAllBySubscriptionKeyOrUnsubscriptionKey(val, val).every {it.id == obj.id})
-	}
-
-
 	static mapping = {
 	    table 'grup'
 	}
