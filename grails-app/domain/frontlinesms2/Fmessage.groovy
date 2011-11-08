@@ -212,11 +212,6 @@ class Fmessage {
 		contactName
 	}
 
-	def toDelete() { // FIXME is this method necessary?
-		this.deleted = true
-		this
-	}
-
 	def addStar() { // FIXME is this method necessary?
 		this.starred = true
 		this

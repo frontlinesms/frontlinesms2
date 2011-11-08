@@ -161,7 +161,7 @@ class MessageController {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.toDelete()
+				messageInstance.deleted = true
 				new Trash(identifier:messageInstance.contactName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
 				messageInstance.save(failOnError: true, flush: true)
 			}
@@ -174,7 +174,7 @@ class MessageController {
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 		}
 	}
-
+	
 	def archive = {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		def listSize = messageIdList.size();
