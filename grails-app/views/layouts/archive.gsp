@@ -36,9 +36,15 @@
 			  			<g:if test="${messageSection == 'poll'}">
 			  				<div id="poll-title">
 								<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-								<h2>Poll Archive</h2>
+								<h2>Activity Archive</h2>
 							</div>
 						</g:if>
+						<g:elseif test="${messageSection == 'announcement'}">
+			  				<div id="poll-title">
+								<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
+								<h2>Activity Archive</h2>
+							</div>
+						</g:elseif>
 						<g:elseif test="${messageSection == 'inbox'}">
 							<div class="message-title">
 								<img src='${resource(dir:'images/icons',file:'inboxarchive.png')}' />
@@ -59,8 +65,8 @@
 						</g:elseif>
 					</div>
 					<div class="content-body">
-						<g:if test="${messageSection == 'poll' && !viewingMessages}">
-							<g:render template="archived_poll_list"/>
+						<g:if test="${(messageSection == 'poll' || messageSection == 'announcement') && !viewingMessages}">
+							<g:render template="archived_activity_list"/>
 						</g:if>
 						<g:elseif test="${messageSection == 'folder' && !viewingMessages}">
 							<g:render template="archived_folder_list"/>

@@ -75,7 +75,7 @@ class PollViewSpec extends PollBaseSpec {
 //			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
-			$('#activities-submenu li')[0..2]*.text() == ['Football Teams', 'Shampoo Brands', 'Rugby Brands']
+			$('#activities-submenu li')[0..2]*.text() == ['Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll']
 	}
 	
 }

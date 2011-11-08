@@ -46,6 +46,7 @@ class MessageController {
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				responseInstance: responseInstance,
 				pollInstanceList: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
+				announcementInstanceList: Announcement.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages()]
@@ -114,6 +115,17 @@ class MessageController {
 				pollResponse: pollInstance.responseStats as JSON] << getShowModel()
 	}
 	
+	def announcement = {
+		def announcementInstance = Announcement.get(params.ownerId)
+		def messageInstanceList = announcementInstance.getAnnouncementMessages(params.starred)
+		if(params.flashMessage) { flash.message = params.flashMessage }
+		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
+					messageSection: 'announcement',
+					messageInstanceTotal: messageInstanceList.count(),
+					ownerInstance: announcementInstance,
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+	}
+	
 	def radioShow = {
 		def showInstance = RadioShow.get(params.ownerId)
 		def messageInstanceList = showInstance?.getShowMessages(params.starred)
@@ -137,24 +149,12 @@ class MessageController {
 
 	def send = {
 		def failedMessageIds = params.failedMessageIds
-		def messages = failedMessageIds ? Fmessage.getAll([failedMessageIds].flatten()): getMessagesToSend()
+		def messages = failedMessageIds ? Fmessage.getAll([failedMessageIds].flatten()): messageSendService.getMessagesToSend(params)
 		messages.each { message ->
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
 		redirect (controller: "message", action: 'pending')
-	}
-
-	def getMessagesToSend() {
-		def messages = []
-		def addresses = [params.addresses].flatten() - null
-		def groups = [params.groups].flatten() - null
-		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
-		addresses.unique().each { address ->
-			//TODO: Need to add source from app setting
-			messages << new Fmessage(src: "src", dst: address, text: params.messageText)
-		}
-		return messages
 	}
 
 	def delete = {

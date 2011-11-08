@@ -56,37 +56,17 @@ function launchActivityMediumPopup(title, html, btnFinishedText) {
 
 function chooseActivity() {
 	var activity = $("#activity-list input[checked=checked]").val();
-	if (activity == 'announcement') {
-		var activityUrl = 'quickMessage/create';
-		var title = 'New announcement';
-	} else if (activity == 'poll') {
-		var activityUrl = 'poll/create';
-		var title = 'New Poll';
-		$(this).dialog('close');
-		$.ajax({
-			type:'GET',
-			dataType: "html",
-			url: url_root + activityUrl,
-			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); }
-		});
-		return;
-	} else if (activity == 'subscription') {
-		var activityUrl = 'group/list';
-		var title = 'New subscription';
-		$.ajax({
-			type:'GET',
-			dataType: "html",
-			url: url_root + activityUrl,
-			success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function(){initializePoll();}, true); addTabValidations(); }
-		});
-	}
+	var activityUrl = activity + '/create';
+	var title = 'New ' + activity;
+	
 	$(this).dialog('close');
 	$.ajax({
 		type:'GET',
 		dataType: "html",
 		url: url_root + activityUrl,
-		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); addTabValidations(); }
+		success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function() { initialize(); }, true); }
 	});
+	return;
 }
 
 function mediumPopupDone() {

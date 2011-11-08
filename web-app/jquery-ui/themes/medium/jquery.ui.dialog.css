@@ -40,7 +40,7 @@
 	overflow: hide;
 }
 
-.ui-dialog .quick-message-summary {
+.ui-dialog .summary {
 	position: relative;
 	top: -400px;
 }

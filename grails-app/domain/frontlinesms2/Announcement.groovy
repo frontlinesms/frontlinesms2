@@ -1,16 +1,18 @@
 package frontlinesms2
 
-import java.util.Date
+import java.util.Date;
 
-class Folder extends MessageOwner {
+class Announcement extends MessageOwner {
 	static transients = ['liveMessageCount']
 	String name
+	String sentMessage
 	
-	static constraints = {
-		name(blank:false, nullable:false, maxSize:255)
-	}
+    static constraints = {
+		name(nullable:false)
+		sentMessage(nullable:false, blank: false)
+    }
 	
-	def getFolderMessages(getOnlyStarred = false) {
+	def getAnnouncementMessages(getOnlyStarred = false) {
 		Fmessage.owned(getOnlyStarred, this)
 	}
 	
@@ -25,14 +27,9 @@ class Folder extends MessageOwner {
 		def messagesToArchive = Fmessage?.owned(this)?.list()
 		messagesToArchive.each { it?.archived = false }
 	}
-		
+	
 	def getLiveMessageCount() {
 		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
 		m ? m.size() : 0
 	}
-
-    def toDelete() {
-        this.deleted = true
-        this
-    }
 }

@@ -14,8 +14,8 @@
 						Sent archive
 					</g:link>
 				</li>
-				<li class="${(messageSection == 'poll')? 'selected':''}" >
-					<g:link controller="archive" action='pollView' elementId="poll" params="[viewingArchive: true]">
+				<li class="${(messageSection == 'poll' || messageSection == 'announcement') ? 'selected':''}" >
+					<g:link controller="archive" action='activityView' elementId="activity" params="[viewingArchive: true]">
 						<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
 						Activity archive
 					</g:link>

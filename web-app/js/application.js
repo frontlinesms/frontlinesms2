@@ -8,56 +8,6 @@ function refreshMessageCount() {
 	});
 }
 
-// Please DO NOT add to this. Functions should be in their own file with a relevant name so that they can easily found
-// FIXME move these functions somewhere more useful
-var remoteHash = {
-	"export": function() {
-		$.ajax({
-			type:'GET',
-			url: url_root + 'export/wizard',
-			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
-					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
-					failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: $("#viewingArchive").val()},
-			success: function(data) {
-				launchSmallPopup('Export', data, 'Export');
-				updateExportInfo();
-			}})
-	},
-
-	"renameActivity": function() {
-		$.ajax({
-			type:'GET',
-			url: url_root + 'poll/rename',
-			data: {ownerId: $("#ownerId").val()},
-			success: function(data) {
-				launchSmallPopup('Rename activity', data, 'Rename');
-			}})
-	},
-	
-	"deleteAction": function() {
-		var messageSection = $("#messageSection").val();
-		$.ajax({
-			type:'GET',
-			url: url_root + messageSection + '/confirmDelete',
-			data: {id: $("#ownerId").val()},
-			success: function(data) {
-				launchSmallPopup('Delete ' + messageSection, data, 'Delete');
-			}})
-	},
-}
-
-$(function() {
-	$("#poll-actions, #folder-actions").bind('change', function() {
-		var selected = $(this).find('option:selected').val();
-		if(selected)
-			remoteHash[selected].call();
-	});
-});
-
-$("#export").click(function() {
-	remoteHash['export'].call();
-});
-
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }

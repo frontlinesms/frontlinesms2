@@ -35,6 +35,7 @@ class BootStrap {
 				dev_initFmessages()
 				dev_initPolls()
 				dev_initFolders()
+				dev_initAnnouncements()
 				dev_initRadioShows()
 				break
 		}
@@ -154,6 +155,17 @@ class BootStrap {
 				Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
 				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
 				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
+			it.save(failOnError:true, flush:true)
+		}
+	}
+	
+	private def dev_initAnnouncements() {
+		new Announcement(name: 'Free cars!', sentMessage:"Everyone who recieves this message will also recieve a free Subaru").save(failOnError:true, flush:true)
+		new Announcement(name: 'Office Party', sentMessage:"Office Party on Friday!").save(failOnError:true, flush:true)
+		
+		[Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Roy')),
+				Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Marie')),
+				Announcement.findByName('Office Party').addToMessages(Fmessage.findBySrc('Mike'))].each() {
 			it.save(failOnError:true, flush:true)
 		}
 	}

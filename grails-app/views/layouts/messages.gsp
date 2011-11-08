@@ -22,6 +22,7 @@
 		<g:javascript src="/message/messageSorting.js"/>
 		<g:javascript src="/message/categorize_dropdown.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
+		<g:javascript src="/message/moreActions.js"/>
 		<g:javascript>
 		$(function() {  
 		   disablePaginationControls();
