@@ -63,7 +63,7 @@ class PollController {
 	
 	def confirmDelete = {
 		def pollInstance = Poll.get(params.id)
-		render view: 'confirmDelete', model: [pollInstance: pollInstance]
+		render view: "../message/confirmDelete", model: [ownerInstance: pollInstance]
 	}
 	
 	def delete = {
