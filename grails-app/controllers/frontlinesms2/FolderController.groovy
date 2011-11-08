@@ -46,7 +46,7 @@ class FolderController {
 	
 	def confirmDelete = {
 		def folderInstance = Folder.get(params.id)
-		[folderInstance: folderInstance]
+		render view: "../message/confirmDelete", model: [ownerInstance: folderInstance]
 	}
 	
 	def delete = {

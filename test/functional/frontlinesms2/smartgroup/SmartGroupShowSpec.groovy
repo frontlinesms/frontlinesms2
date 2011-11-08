@@ -37,7 +37,7 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		then:
 			contactLink[1].click()
 		then:
-			$('#contact-title').text() == 'Bertie'
+			$('#contact-title').text() == 'English Contacts (2)'
 			at PageEnglishSmartGroupShow
 	}
 }

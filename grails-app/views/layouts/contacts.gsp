@@ -47,9 +47,10 @@
 				<g:render template="menu"/>
 				<div class="content">
 					<div class="content-header">
-						<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+						<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
 							<div  id="contact-title">
 								<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
+								<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name} (${contactInstanceTotal})</h2>
 							</div>

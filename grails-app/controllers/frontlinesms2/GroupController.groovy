@@ -19,7 +19,7 @@ class GroupController {
 		if (params.name){
 			redirect(controller: "contact", action: "show", params:[groupId : params.id])
 		} else {
-			redirect(controller:"message", action:"inbox")
+			redirect(controller:"contact")
 		}
 	}
 

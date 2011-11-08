@@ -33,8 +33,40 @@ class SmartGroupController {
 		}
 	}
 	
+	def update = {
+		def smartGroup = SmartGroup.get(params.id)
+		smartGroup.properties = params
+		if(smartGroup.validate()){
+			smartGroup.save(failOnError: true, flush: true)
+			flash['message'] = "Smart Group updated successfully"
+		}
+		else
+			flash['message'] = "Smart Group not saved successfully"
+		if (params.name){
+			redirect(controller: "contact", action: "show", params:[smartGroupId : params.id])
+		} else {
+			redirect(controller:"contact")
+		}
+	}
+	
 	def show = {
 		redirect(controller: "contact", action: "show", params:[smartGroupId:params.id])
+	}
+	
+	def rename = {
+		render view: "../group/rename", model: [groupName: SmartGroup.get(params.groupId)?.name]
+	}
+
+	def confirmDelete = {
+		render view: "../group/confirmDelete", model: [groupName: SmartGroup.get(params.groupId)?.name]
+	}
+	
+	def delete = {
+		if (SmartGroup.get(params.id)?.delete(flush: true))
+				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
+		else
+			flash.message = "unable to delete smartgroup"
+		redirect(controller: "contact")
 	}
 	
 	private def getRuleText() {

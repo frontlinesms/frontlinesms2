@@ -76,6 +76,36 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			cf.value == 'London'
 	}
 	
+	def 'can update smart group name'() {
+		given:
+			def smartGroup = new SmartGroup(name:'Smart Group', mobile:'+44').save(flush:true, failOnError:true)
+			controller.params.id = smartGroup.id
+			controller.params.name = "renamed smart group"
+		when:
+			controller.update()
+			def updatedGroup = SmartGroup.get(smartGroup.id)
+		then:
+			updatedGroup.name == "renamed smart group"
+			controller.response.redirectedUrl == "/contact/show?smartGroupId=${smartGroup.id}"
+	}
+	
+	def 'calling DELETE should permanently remove a smart group and not its contacts'() {
+		given:
+			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+44').save(flush:true, failOnError:true)
+			createContact('Alfred', '+4423456789')
+			createContact('Charles', '+440987654')
+		when:
+			def members = englishContacts.members
+		then:
+			members*.name == ['Alfred', 'Charles'] 
+		when:
+			controller.params.id = englishContacts.id
+			controller.delete()
+		then:
+			!SmartGroup.list()
+			Contact.list()*.name.containsAll(["Alfred","Charles"])
+	}
+	
 	private def createContact(String name, String mobile, String secondaryMobile=null) {
 		new Contact(name:name, primaryMobile:mobile, secondaryMobile:secondaryMobile).save(flush:true, failOnError:true)
 	}
