@@ -132,7 +132,7 @@
 	}
 
 	function updateConfirmationMessage() {
-		updateSendMessageDetails();
+		updateMessageDetails();
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
 		
 		// update auto-sort
@@ -149,7 +149,7 @@
 		}
 	}
 	
-	function updateSendMessageDetails() {
+	function updateMessageDetails() {
 		var sendMessage
 		isGroupChecked("dontSendMessage") ?	sendMessage = "No messages will be sent" : sendMessage = $('#messageText').val();
 

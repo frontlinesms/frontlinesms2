@@ -14,7 +14,10 @@ class MessageSendService {
 		def messages = []
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
-		addresses += groups.collect {Group.findByName(it).getAddresses()}.flatten()
+		addresses += groups.collect {
+			println it
+			Group.findByName(it).getAddresses()
+		}.flatten()
 		addresses.unique().each { address ->
 			//TODO: Need to add source from app setting
 			messages << new Fmessage(src: "src", dst: address, text: params.messageText)

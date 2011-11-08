@@ -35,10 +35,10 @@
 		
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				$("#tabs-3 #title").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-3 #title"));
+				$("#tabs-3 #announcement-name").removeClass("error");
+				var isEmpty = isElementEmpty($("#tabs-3 #announcement-name"));
 				if(isEmpty) {
-					$("#tabs-3 #title").addClass("error");
+					$("#tabs-3 #announcement-name").addClass("error");
 				}
 				return !isEmpty;
 			},
@@ -48,10 +48,28 @@
 				return false;
 			}
 		});
+		
+		$("#tabs").bind("tabsshow", function(event, ui) {
+			updateConfirmationMessage();
+		});
+	}
+	
+	function updateConfirmationMessage() {
+		var sendMessage = $('#messageText').val();
+
+		var contactNo = $("#contacts-count").text()
+		
+		if(contactNo == 0 || isGroupChecked("dontSendMessage")) {
+			$("#confirm-recepients-count").addClass("hide")
+			$("#no-recepients").removeClass("hide")
+		} else {
+			$("#confirm-recepients-count").removeClass("hide")
+			$("#no-recepients").addClass("hide")
+		}
+		$("#confirm-message-text").html('<pre>' + sendMessage  + '</pre>');
 	}
 	
 	function goToSummaryTab() {
-		alert('going');
 		$("#tabs").tabs("enable", getTabLength());
 		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}

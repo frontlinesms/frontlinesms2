@@ -65,7 +65,7 @@ class AnnouncementDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
-		messagesQueuedNotification { $("div#tabs-4.quick-message-summary") }
+		messagesQueuedNotification { $("div#tabs-4.summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }

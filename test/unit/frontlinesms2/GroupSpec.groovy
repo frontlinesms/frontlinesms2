@@ -69,14 +69,5 @@ class GroupSpec extends UnitSpec {
 			result.sahara == ["address1", "address2"]
 			result.thar == ["address3"]
 	}
-
-	def "should reject special characters for subscription keys"() {
-		setup:
-			mockDomain(Group)
-		when:
-			def group = new Group(name: "name", subscriptionKey: "sub@key", unsubscriptionKey: "unsubkey")
-		then:
-			!group.validate()
-	}
 }
 

@@ -104,6 +104,6 @@ class Poll {
     }
 	
 	def addToMessages(message) {
-		this.responses.findByName('Unknown').addToMessages(message)
+		this.responses.find { it.value == 'Unknown' }.addToMessages(message)
 	}
 }

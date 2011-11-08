@@ -361,7 +361,7 @@ class PollCedSpec extends PollBaseSpec {
 			$("#title").value("Rename poll")
 			$("#done").click()
 		then:
-			waitFor { $("a", text: 'Rename poll') }
+			waitFor { $("a", text: 'Rename poll poll') }
 			!$("a", text: "Who is badder? poll")
 	}
 

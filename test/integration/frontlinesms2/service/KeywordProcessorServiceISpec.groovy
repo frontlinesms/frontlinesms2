@@ -5,7 +5,8 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class KeywordProcessorServiceISpec extends IntegrationSpec {
-	def service = new KeywordProcessorService()
+	def keywordProcessorService
+//	def service = new KeywordProcessorService()
 	
 	def "test getPollResponse"() {
 		given:
@@ -42,7 +43,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 			p.addToResponses(r2)
 			p.addToResponses(r).save(failOnError: true)
 		when:
-			service.processPollResponse(r, m)
+			keywordProcessorService.processPollResponse(r, m)
 		then:
 			r.messages?.size() == 1
 	}
@@ -56,7 +57,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 			p.addToResponses(r2)
 			p.addToResponses(r).save(failOnError: true)
 		when:
-			service.processPollResponse(r, m)
+			keywordProcessorService.processPollResponse(r, m)
 		then:
 			Fmessage.findByText("Thank you for participating in this poll")
 	}	
@@ -70,14 +71,14 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 			p.addToResponses(r2)
 			p.addToResponses(r).save(failOnError: true)
 		when:
-			service.processPollResponse(r, m)
+			keywordProcessorService.processPollResponse(r, m)
 		then:
 			Fmessage.count() == 1
 	}
 	
 	private def getResults(messageTexts) {
 		messageTexts.collect {
-			service.getPollResponse(it)
+			keywordProcessorService.getPollResponse(it)
 		}
 	}
 }

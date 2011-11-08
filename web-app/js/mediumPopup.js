@@ -64,7 +64,7 @@ function chooseActivity() {
 		type:'GET',
 		dataType: "html",
 		url: url_root + activityUrl,
-		success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function() { initialize(); }, true); addTabValidations(); }
+		success: function(data, textStatus){ launchMediumWizard(title, data, "Create", function() { initialize(); }, true); }
 	});
 	return;
 }
