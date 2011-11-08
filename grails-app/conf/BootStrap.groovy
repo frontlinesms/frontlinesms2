@@ -160,6 +160,14 @@ class BootStrap {
 	}
 	
 	private def dev_initAnnouncements() {
+		[new Fmessage(src:'Roy', dst:'+254987654', text:'I will be late'),
+			new Fmessage(src:'Marie', dst:'+2541234567', text:'Meeting at 10 am'),
+			new Fmessage(src:'Mike', dst:'+254112233', text:'Project has started')].each() {
+				it.status = MessageStatus.INBOUND
+				it.dateReceived = new Date()
+			it.save(failOnError:true, flush:true)
+		}
+			
 		new Announcement(name: 'Free cars!', sentMessage:"Everyone who recieves this message will also recieve a free Subaru").save(failOnError:true, flush:true)
 		new Announcement(name: 'Office Party', sentMessage:"Office Party on Friday!").save(failOnError:true, flush:true)
 		
