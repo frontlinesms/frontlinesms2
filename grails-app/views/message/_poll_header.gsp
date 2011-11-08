@@ -14,6 +14,8 @@
 					<div><g:formatDate date="${ownerInstance?.dateCreated}" /><span> (${ownerInstance?.sentMessageCount} messages sent)</span></div>
 					<div>
 						${ownerInstance?.messageText}
+						.&nbsp;
+						${ownerInstance.autoReplyText ? "Auto Reponse Enabled" : ""}
 					</div>
 					<table id="poll-stats">
 						<tbody>
