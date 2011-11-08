@@ -33,6 +33,22 @@ class SmartGroupController {
 		}
 	}
 	
+	def update = {
+		def smartGroup = SmartGroup.get(params.id)
+		smartGroup.properties = params
+		if(smartGroup.validate()){
+			smartGroup.save(failOnError: true, flush: true)
+			flash['message'] = "Smart Group updated successfully"
+		}
+		else
+			flash['message'] = "Smart Group not saved successfully"
+		if (params.name){
+			redirect(controller: "contact", action: "show", params:[smartGroupId : params.id])
+		} else {
+			redirect(controller:"contact")
+		}
+	}
+	
 	def show = {
 		redirect(controller: "contact", action: "show", params:[smartGroupId:params.id])
 	}
