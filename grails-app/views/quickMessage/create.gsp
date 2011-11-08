@@ -13,23 +13,14 @@
 		<li class="confirm-tab"><a href="#tabs-4"></a></li>
 	</ol>
 
-	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="goToNextTab()">
+	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="goToSummaryTab()">
 		<g:render template="message"/>
 		<div id="tabs-2" class="${configureTabs.contains("tabs-2") ? "" : "hide"}">
 			<g:render template="select_recipients"/>
 		</div>
 		<g:render template="confirm"/>
 	</g:formRemote>
-
-	<div id="tabs-4" class='quick-message-summary'>
-		<h2>The messages  have been added to the pending message queue.</h2>
-
-		<h2>It may take some time for all the messages to be sent, depending on the
-		number of messages and the network connection.</h2>
-
-		<h2>To see the status of your message, open the 'Pending' messages folder.</h2>
-	</div>
-
+	<g:render template="summary"/>
 </div>
 
 <script>
@@ -50,8 +41,7 @@
 		});
 	}
 
-
-	function goToNextTab() {
+	function goToSummaryTab() {
 		$("#tabs").tabs("enable", getTabLength());
 		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}

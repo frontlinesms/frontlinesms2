@@ -52,5 +52,12 @@ class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTe
 			ownerId = 123
 		}
 	}
+	
+	def testAnnouncementMessageView() {
+		assertForwardUrlMapping('/message/announcement/123/show/456', controller:'message', action:'announcement') {
+			messageId = 456
+			ownerId = 123
+		}
+	}
 }
 

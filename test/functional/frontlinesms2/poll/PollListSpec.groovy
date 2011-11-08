@@ -60,7 +60,7 @@ class PollListSpec extends PollBaseSpec {
 //			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
-			$('#messages-menu .selected').text() == 'Football Teams'
+			$('#messages-menu .selected').text() == 'Football Teams poll'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {

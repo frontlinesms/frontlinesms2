@@ -30,40 +30,6 @@ class MessageControllerSpec extends ControllerSpec {
 		controller.messageSendService = mockMessageSendService
 	}
 
-	def "should send message to all the members in a group"() {
-		setup:
-			mockParams.groups = "Sahara"
-		when:
-			assert Fmessage.count() == 0
-			controller.send()
-		then:
-			1 * mockMessageSendService.send {it.dst == "12345"}
-			1 * mockMessageSendService.send {it.dst == "56484" }
-	}
-
-	def "should send message to all the members in multiple groups"() {
-		setup:
-			mockParams.groups = ["Sahara", "Thar"]
-		when:
-			assert Fmessage.count() == 0
-			controller.send()
-		then:
-			1 * mockMessageSendService.send {it.dst == "12345" }
-			1 * mockMessageSendService.send {it.dst == "56484" }
-			1 * mockMessageSendService.send {it.dst == "12121" }
-			1 * mockMessageSendService.send {it.dst == "22222" }
-	}
-
-	def "should send a message to the given address"() {
-		setup:
-			mockParams.addresses = "+919544426000"
-		when:
-			assert Fmessage.count() == 0
-			controller.send()
-		then:
-			1 * mockMessageSendService.send {it.dst == "+919544426000" }
-	}
-
 	def "should resend multiple failed message"() {
 		setup:
 			mockDomain(Fmessage, [new Fmessage(id: 1L), new Fmessage(id: 2L), new Fmessage(id: 3L)])
@@ -85,43 +51,6 @@ class MessageControllerSpec extends ControllerSpec {
 			1 * mockMessageSendService.send {it.id == 1L}
 	}
 
-	def "should eliminate duplicate address if present"() {
-		setup:
-			mockParams.addresses = "12345"
-			mockParams.groups = "Sahara"
-		when:
-			assert Fmessage.count() == 0
-			controller.send()
-		then:
-			1 * mockMessageSendService.send {it.dst == "12345" }
-			1 * mockMessageSendService.send {it.dst == "56484" }
-	}
-
-	def "should send message to each recipient in the list of address"() {
-		setup:
-			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
-			mockParams.addresses = addresses
-		when:
-			assert Fmessage.count() == 0
-			controller.send()
-		then:
-			1 * mockMessageSendService.send {it.dst == "+919544426000" }
-			1 * mockMessageSendService.send {it.dst == "+919004030030" }
-			1 * mockMessageSendService.send {it.dst == "+1312456344" }
-	}
-
-	def "should display flash message on successful message sending"() {
-		setup:
-			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
-			mockParams.addresses = addresses
-		when:
-			assert Fmessage.count() == 0
-			controller.send()
-		then:
-			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
-
-	}
-	
 	def "should calculate the total number of alphanumeric characters being sent"() {
 		setup:
 			def message1 = "abc123" * 40

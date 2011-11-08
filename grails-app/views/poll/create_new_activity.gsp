@@ -27,10 +27,6 @@
 					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span>Poll</span>
 					<div>Send a question and analyze the responses</div>
 				</li>
-				<li>
-					<input type="radio" name="activity" value="subscription" class="subscription" onclick="setChecked('subscription')"/><span>Subscription manager</span>
-					<div>Allow people to automatically join and leave contact groups using a message keyword</div>
-				</li>
 			</ul>
 		</form>
 	</body>

@@ -12,6 +12,48 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def setup() {
 		controller = new MessageController()
 		controller.beforeInterceptor.call()
+
+		controller.params.messageText = "text"
+		controller.params.max = 10
+		controller.params.offset = 0
+		controller.params.starred = false
+		
+		def sahara = new Group(name: "Sahara").save(flush: true)
+		def thar = new Group(name: "Thar").save(flush: true)
+
+		controller.metaClass.getPaginationCount = {-> return 10}
+	}
+
+	def "should send a message to the given address"() {
+		setup:
+			controller.params.addresses = "+919544426000"
+		when:
+			assert Fmessage.count() == 0
+			controller.send()
+		then:
+			controller.flash.message == "Message has been queued to send to +919544426000"
+	}
+
+	def "should send message to each recipient in the list of address"() {
+		setup:
+			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
+			controller.params.addresses = addresses
+		when:
+			assert Fmessage.count() == 0
+			controller.send()
+		then:
+			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
+	}
+
+	def "should display flash message on successful message sending"() {
+		setup:
+			def addresses = ["+919544426000", "+919004030030", "+1312456344"]
+			controller.params.addresses = addresses
+		when:
+			assert Fmessage.count() == 0
+			controller.send()
+		then:
+			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
 	}
 
 	def 'Messages are sorted by date' () {

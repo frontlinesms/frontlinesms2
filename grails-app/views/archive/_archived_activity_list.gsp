@@ -33,9 +33,33 @@
 				</td>
 			</tr>
 		</g:each>
+		<g:each in="${announcementInstanceList}" var="a">
+			<tr>
+				<td>
+					<g:link controller="archive" action="announcement" params="[ownerId: a.id, viewingArchive: true, viewingMessages: true]">
+						${a.name}
+					</g:link>
+				</td>
+				<td>
+					<g:link controller="archive" action="announcement" params="[ownerId: a.id, viewingArchive: true, viewingMessages: true]">
+						Announcement
+					</g:link>
+				</td>
+				<td>
+					<g:link controller="archive" action="announcement" params="[ownerId: a.id, viewingArchive: true, viewingMessages: true]">
+						<g:formatDate date="${a.dateCreated}"/>
+					</g:link>
+				</td>
+				<td>
+					<g:link controller="archive" action="announcement" params="[ownerId: a.id, viewingArchive: true, viewingMessages: true]">
+						${a.liveMessageCount}
+					</g:link>
+				</td>
+			</tr>
+		</g:each>
 	</tbody>
 </table>
 </g:if>
 <g:else>
-	No archived polls
+	No archived activities
 </g:else>

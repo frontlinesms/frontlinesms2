@@ -22,6 +22,7 @@
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/messageSorting.js"/>
+		<g:javascript src="/message/moreActions.js"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();

@@ -193,7 +193,7 @@ class FolderListSpec extends FolderBaseSpec {
 		createTestMessages()
 		def folder = Folder.findByName("Work")
 		go "message/folder/${folder.id}"
-		$("#folder-actions").value("deleteAction")
+		$("#folder-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete folder")
 		$("#done").click()

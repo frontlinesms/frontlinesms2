@@ -17,7 +17,10 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 
 	def 'should list all the pending messages'() {
 		when:
-			goToPendingPage()
+			go "message/pending"
+		then:
+			at PageMessagePending
+		when:
 			def messages = $('#messages tbody tr')
 		then:
 			messages.size() == 2
@@ -26,7 +29,10 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:
-			goToPendingPage()
+			go "message/pending"
+		then:
+			at PageMessagePending
+		when:
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -35,8 +41,9 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 
 	def "should filter pending messages for pending and failed messages"() {
 		when:
-			goToPendingPage()
+			go "message/pending"
 		then:
+			at PageMessagePending
 			$("#messages tbody tr").size() == 2
 		when:
 			$('a', text:'Failed').click()
@@ -57,8 +64,9 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
 			assert Fmessage.count() == 2
 		when:
-			goToPendingPage()
+			go "message/pending"
 		then:
+			at PageMessagePending
 			!$("#retry").displayed
 		when:
 			messagesSelect[0].click()
@@ -69,7 +77,10 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 
 	def "should be able to retry a failed message"() {
 		when:
-			goToPendingPage()
+			go "message/pending"
+		then:
+			at PageMessagePending
+		when:
 			$("a", text:"dst1").click()
 		then:
 			waitFor { $("#retry").displayed }
@@ -83,7 +94,10 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 		setup:
 			new Fmessage(src: "src1", dst:"dst2", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true, failOnError:true)
 		when:
-			goToPendingPage()
+			go "message/pending"
+		then:
+			at PageMessagePending
+		when:
 			$("a", text:"dst1").click()
 		then:
 			waitFor { $("#retry").displayed }
@@ -94,12 +108,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("#retry-failed").click()
 		then:
+			println $(".flash").text()
 			waitFor{ $(".flash").text().contains("dst2, dst1") }
-	}
-
-	def goToPendingPage() {
-		to PageMessageInbox
-		$('a', text: "Pending").click()
-		waitFor { title == "Pending" }
 	}
 }
