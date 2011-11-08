@@ -1,28 +1,34 @@
-$(document).ready(function() {
+$(function() {
 	$('#group-actions').bind('change', function() {
-		if($(this).find('option:selected').val() == 'rename')
-			renameGroup();
-		else if ($(this).find('option:selected').val() == 'delete')
-			deleteGroup();
+		var selected = $(this).find('option:selected').val();
+		if(selected)
+			groupActions[selected].call();
 	});
 });
 
-function renameGroup() {
-	$.ajax({
-		type:'GET',
-		url: url_root + 'group/rename',
-		data: {groupId: $("#groupId").val()},
-		success: function(data){
-			launchSmallPopup('Rename group', data, 'Rename');
-	}})
+var groupActions = {
+	"rename": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + getContactSection() +'/rename',
+			data: {groupId: $("#groupId").val()},
+			success: function(data){
+				launchSmallPopup('Rename group', data, 'Rename');
+		}})
+	},
+	
+	"delete": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + getContactSection() + '/confirmDelete',
+			data: {groupId: $("#groupId").val()},
+			success: function(data){
+				launchSmallPopup('Delete group', data, 'Ok');
+		}})
+	}
 }
 
-function deleteGroup() {
-	$.ajax({
-		type:'GET',
-		url: url_root + 'group/confirmDelete',
-		data: {groupId: $("#groupId").val()},
-		success: function(data){
-			launchSmallPopup('Delete group', data, 'Ok');
-	}})
+function getContactSection() {
+	var contactSection = $("#contactSection").val()
+	return contactSection
 }

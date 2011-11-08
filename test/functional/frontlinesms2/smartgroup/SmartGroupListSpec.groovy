@@ -54,6 +54,23 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			menuItemHighlighted(b)
 	}
 	
+	def "deleting a smart group displays a confirmation popup"() {
+		given:
+			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
+		when:
+			goToSmartGroupPage(a)
+		then:
+			$('#group-actions').displayed
+		when:
+			$('#group-actions').value("delete").click()
+		then:
+			waitFor{ $('#ui-dialog-title-modalBox').displayed}
+		when:
+			$('#done').click()
+		then:
+			!SmartGroup.findByName("Test Group A")
+	}
+	
 	private def goToSmartGroupPage(SmartGroup g) {
 		go "smartGroup/show/$g.id"
 	}
