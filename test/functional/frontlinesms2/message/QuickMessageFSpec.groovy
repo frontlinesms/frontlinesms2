@@ -218,14 +218,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 
 	}
 
-	@spock.lang.IgnoreRest
 	def "should show the character count of each message"() {
 		setup:
 			createData()
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message)" }
+			waitFor { characterCount.text() == "Characters remaining 0 (1 SMS message)" }
 		when:
 			$("#messageText").value("h")
 		then:
