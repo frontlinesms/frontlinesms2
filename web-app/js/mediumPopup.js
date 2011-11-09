@@ -83,6 +83,7 @@ function mediumPopupDone() {
  
 function launchMediumWizard(title, html, btnFinishedText, onLoad, withConfirmationScreen) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#messageText").keyup()
 	$("#modalBox").dialog({
 		modal: true,
 		title: title,

@@ -4,6 +4,7 @@
 	<span id="send-message-stats" class="character-count">Characters remaining 160 (1 SMS message)</span> 
 </div>
 <g:javascript>
+	$("#messageText").live("keyup", updateCount);
 	$("#messageText").live("blur", function() {
 		var value = $(this).val();
 		if(value) {
@@ -12,6 +13,4 @@
 			$("#confirm-message-text").html("none");
 		}
 	})
-	
-	$("#messageText").live("keyup", updateCount);
 </g:javascript>
