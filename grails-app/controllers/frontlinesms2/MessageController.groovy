@@ -4,14 +4,15 @@ import grails.util.GrailsConfig
 import grails.converters.JSON
 
 import frontlinesms2.MessageStatus
-import org.smslib.util.GsmAlphabet
 
 class MessageController {
+	
 	static allowedMethods = [save: "POST", update: "POST",
 			delete: "POST", deleteAll: "POST",
 			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
+	def fmessageInfoService
 	def trashService
 
 	def beforeInterceptor = {
@@ -263,11 +264,17 @@ class MessageController {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 	
-	def getSendMessageCount = {
+	def getSendMessageCount = {	
+		def messageInfo
 		def message = params.message ?: ''
-		def messageParts = GsmAlphabet.splitText(message, false)
-		def messageCount = messageParts.size()>1 ? "${messageParts.size()} SMS messages": "1 SMS message"
-		render text: "($messageCount)", contentType:'text/plain'
+		if(message)	{ 
+			messageInfo = fmessageInfoService.getMessageInfos(message)
+			def messageCount = messageInfo.partCount > 1 ? "${messageInfo.partCount} SMS messages": "1 SMS message"
+			render text: "Characters remaining ${messageInfo.remaining} ($messageCount)", contentType:'text/plain'
+		} else {
+			render text: "Characters remaining ${message.size()} (1 SMS message)", contentType:'text/plain'
+		}
+		
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {

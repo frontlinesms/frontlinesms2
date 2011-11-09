@@ -31,10 +31,11 @@
     </head>
 	<body>
 		<div id="container">
+			<g:render template="/system_notifications"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-	        <g:render template="/flash"/>
-	        <div class="main">
+	        	<g:render template="/flash"/>
+	        	<div class="main">
 				<g:render template="menu"/>
 				<div class="content">
 					<g:render template="../message/header"/>

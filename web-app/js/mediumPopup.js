@@ -54,7 +54,7 @@ function chooseActivity() {
  
 function launchMediumWizard(title, html, btnFinishedText, hasConfirmationScreen) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-
+	$("#messageText").keyup()
 	$("#modalBox").dialog({
 		modal: true,
 		title: title,

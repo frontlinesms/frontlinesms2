@@ -60,8 +60,8 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def "retry button must not apper if there are no failed messages"() {
 		setup:
 			Fmessage.list()*.delete(flush: true)
-			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", "dst": "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src:"src", dst:"dst", status:MessageStatus.SEND_PENDING).save(flush:true)
+			new Fmessage(src:"src", dst:"dst", status:MessageStatus.SEND_PENDING).save(flush:true)
 			assert Fmessage.count() == 2
 		when:
 			go "message/pending"
@@ -87,7 +87,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("#retry").click()
 		then:	
-			waitFor{ $(".flash").text().contains("dst1") }
+			waitFor { $(".flash").text()?.contains("dst1") }
 	}
 
 	def "should be able to retry all failed messages"() {
@@ -108,7 +108,6 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("#retry-failed").click()
 		then:
-			println $(".flash").text()
-			waitFor{ $(".flash").text().contains("dst2, dst1") }
+			waitFor{ $(".flash").text()?.contains("dst2, dst1") }
 	}
 }

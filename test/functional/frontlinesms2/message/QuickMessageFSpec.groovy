@@ -224,37 +224,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { characterCount.text() == "0 characters (1 SMS message)" }
+			waitFor { characterCount.text() == "Characters remaining 0 (1 SMS message)" }
 		when:
 			$("#messageText").value("h")
 		then:
-			waitFor { characterCount.text() == "1 characters (1 SMS message)" }
-		when:
-			$("#messageText").value('1' * 120)
-		then:
-			waitFor { characterCount.text() == "120 characters (1 SMS message)" }
+			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}
 	
-	
-	// FIX ME fails on the waitFor, javascript seems to get stuck going from 1 to 2 SMS
-//	def "should show the total number of message to be sent to recipients"() {
-//		setup:
-//			createData()
-//		when:
-//			launchQuickMessageDialog()
-//			def longText = 'x' * 161
-//			$("#messageText").value(longText)
-//		then:
-//			waitFor(10, 0.5) { characterCount.text() == "161 characters (2 SMS messages)" }
-//		when:
-//			toSelectRecipientsTab()
-//			$("input[value='group1']").click()
-//			$("input[value='group2']").click()
-//			nextPageButton.click()
-//		then:
-//			messagesCount.text() == "4"
-//	}
-
 	private def createData() {
 		def group = new Group(name: "group1").save(flush: true)
 		def group2 = new Group(name: "group2").save(flush: true)

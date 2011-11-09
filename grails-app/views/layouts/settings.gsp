@@ -17,6 +17,7 @@
 		<g:javascript src="application.js"/>
 	</head>
 	<body>
+		<g:render template="/system_notifications"/>
 		<div id="container">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
