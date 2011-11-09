@@ -12,6 +12,7 @@ class SmartGroupController {
 	}
 	
 	def save = {
+		println "controller save smartgroup"
 		def smartGroupInstance = new SmartGroup()
 		smartGroupInstance.name = params.smartgroupname
 		getRuleText().eachWithIndex { ruleText, i ->
@@ -26,9 +27,11 @@ class SmartGroupController {
 		}
 		
 		if(smartGroupInstance.save()) {
+			println "smargtgroup successfully saved"
 			flash.message = "Created new smart group: '$params.smartgroupname'"
 			redirect controller:'contact', action:'show'
 		} else {
+		println "smargroup save dfailed oops errors were $smartGroupInstance.errors"
 			render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
 		}
 	}

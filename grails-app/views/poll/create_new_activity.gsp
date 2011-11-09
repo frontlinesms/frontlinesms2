@@ -6,10 +6,14 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 			
+			function initializePopup() {
+				$("#submit").attr('disabled', 'disabled');
+			}
+			
 			function setChecked(activityType) {
 				$("#activity-list input[checked=checked]").attr('checked', '');
 				$("#activity-list ." + activityType).attr('checked', 'checked');
-				$("#choose").removeAttr('disabled');
+				$("#submit").removeAttr('disabled');
 			}
 		</script>
 		<g:javascript src="application.js"/>

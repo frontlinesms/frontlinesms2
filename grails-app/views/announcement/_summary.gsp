@@ -1,4 +1,5 @@
 <div id="tabs-4" class='announcement-summary summary'>
+	<g:hiddenField name="ownerId"/>
 	<h2>The announcement has been created and the messages have been added to the pending message queue.</h2>
 
 	<h2>It may take some time for all the messages to be sent, depending on the

@@ -24,25 +24,13 @@
 </div>
 
 <script>
-	function addTabValidations() {
+	function initializePopup() {
 		$("#tabs").tabs("disable", getTabLength());
 
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				return isGroupChecked("groups") || isGroupChecked("addresses")
+				return isGroupChecked("addresses")
 			}
 		});
-
-		$("#tabs-3").contentWidget({
-			onDone: function() {
-				$("#send-quick-message").submit()
-				return false;
-			}
-		});
-	}
-
-	function goToSummaryTab() {
-		$("#tabs").tabs("enable", getTabLength());
-		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </script>

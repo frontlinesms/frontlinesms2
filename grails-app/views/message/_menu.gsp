@@ -33,7 +33,7 @@
 				</li>
 			</g:each>
 			<li class='create' id="create-activity">
-				<g:remoteLink controller="poll" action="create_new_activity" id="create-new-activity" onSuccess="launchActivityMediumPopup('Create New Activity : Select type', data, 'Next'); addValidations();" >Create new activity</g:remoteLink>
+				<g:remoteLink controller="poll" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" >Create new activity</g:remoteLink>
 			</li>
 		</ol>
 	</li>

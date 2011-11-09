@@ -21,7 +21,7 @@ class PagePollCreate extends geb.Page {
 		
 		next { $("#nextPage") }
 		prev { $("#prevPage") }
-		done { $("#done") }
+		done { $("#submit") }
 		
 		pollForm { $('form', name:'poll-details') }
 

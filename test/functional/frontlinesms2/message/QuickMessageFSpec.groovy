@@ -297,7 +297,7 @@ class QuickMessageDialog extends geb.Page {
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }
 		
-		doneButton { $("#done") }
+		doneButton { $("#submit") }
 		nextPageButton { $("#nextPage") }
 		characterCount { $("#send-message-stats")}
 		messagesCount { $("#messages-count")}

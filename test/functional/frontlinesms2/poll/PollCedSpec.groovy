@@ -427,7 +427,7 @@ class PollCedSpec extends PollBaseSpec {
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
 		$("input", class: "poll").click()
-		$("#choose").click()
+		$("#submit").click()
 		waitFor { at PagePollCreate }
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question

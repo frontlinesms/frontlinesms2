@@ -23,13 +23,22 @@
 	<g:render template="summary"/>
 </div>
 <g:javascript>
-	function initialize() {
+	function initializePopup() {
 		$("#tabs").tabs("disable", getTabLength());
-	
+		
+		$("#tabs-1").contentWidget({
+			validate: function() {
+				if (isElementEmpty($("#tabs-1 #messageText"))) {
+					$("#tabs-1 #messageText").addClass("error");
+					return false;
+				}
+				return true;
+			}
+		});
 	
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				return isGroupChecked("groups") || isGroupChecked("addresses")
+				return isGroupChecked("addresses")
 			}
 		});
 		
@@ -41,11 +50,6 @@
 					$("#tabs-3 #announcement-name").addClass("error");
 				}
 				return !isEmpty;
-			},
-			
-			onDone: function() {
-				$("#create_announcement").submit();
-				return false;
 			}
 		});
 		
@@ -67,10 +71,5 @@
 			$("#no-recepients").addClass("hide")
 		}
 		$("#confirm-message-text").html('<pre>' + sendMessage  + '</pre>');
-	}
-	
-	function goToSummaryTab() {
-		$("#tabs").tabs("enable", getTabLength());
-		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </g:javascript>

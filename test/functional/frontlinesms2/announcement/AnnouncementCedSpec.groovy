@@ -12,7 +12,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			waitFor { $("#activity-list").displayed }
 		when:
 			$("input", class: "announcement").click()
-			$("#choose").click()
+			$("#submit").click()
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
 	}
@@ -25,7 +25,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			waitFor { $("#activity-list").displayed }
 		when:
 			$("input", class: "announcement").click()
-			$("#choose").click()
+			$("#submit").click()
 		then:
 			waitFor { at AnnouncementDialog }
 		when:

@@ -34,7 +34,8 @@
 </div>
 
 <g:javascript>
-	function initialize() {
+	function initializePopup() {
+		
 		$("#tabs").tabs("disable", getTabLength());
 		disableTab(1);
 		highlightPollResponses();
@@ -107,11 +108,6 @@
 					$("#tabs-7 #title").addClass("error");
 				}
 				return !isEmpty;
-			},
-			
-			onDone: function() {
-				$("#poll-details").submit();
-				return false;
 			}
 		});
 
@@ -181,10 +177,5 @@
 
 	function validatePollResponses() {
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
-	}
-
-	function goToSummaryTab() {
-		$("#tabs").tabs("enable", getTabLength());
-		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </g:javascript>

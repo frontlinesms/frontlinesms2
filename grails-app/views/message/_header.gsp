@@ -26,15 +26,18 @@
 		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'announcement'}">
-		<div class="message-title">
-			<g:if test="${params.viewingArchive}">
-				<g:link controller="archive" action="activityView"> &lt;Back </g:link>
-				<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-			</g:if>
-			<g:else>
-				<img src='${resource(dir:'images/icons',file:'activities.png')}' />
-			</g:else>
-			<h2>${ownerInstance?.name}</h2>
+		<div class="poll-title">
+			<div>
+				<g:if test="${params.viewingArchive}">
+					<g:link controller="archive" action="activityView"> &lt;Back </g:link>
+					<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
+				</g:if>
+				<g:else>
+					<img src='${resource(dir:'images/icons',file:'activities.png')}' />
+				</g:else>
+				<h2>${ownerInstance?.name}</h2>
+				<p>${ownerInstance?.sentMessage}</p>
+			</div>
 		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'radioShow'}">
@@ -111,7 +114,7 @@
 			</g:else>
 		</g:if>
 		<li>
-        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
+        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
         		<img src='${resource(dir:'images/icons',file:'quickmessage.png')}' />
 				Quick message
 			</g:remoteLink>

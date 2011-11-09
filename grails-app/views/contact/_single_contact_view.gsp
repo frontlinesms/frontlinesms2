@@ -29,7 +29,7 @@
 		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
 		<g:if test="${contactInstance?.primaryMobile?.trim()}">
 			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true, null, true);addTabValidations();">
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
 				<img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>
@@ -39,7 +39,7 @@
 		<g:textField class="numberField" name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
 		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
 			<a class="remove-field" id="remove-secondaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', null, true);addTabValidations();">
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
 				<img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>

@@ -104,11 +104,11 @@ class MessageController {
 
 	def poll = {
 		def pollInstance = Poll.get(params.ownerId)
-		def messageInstanceList = pollInstance.getPollMessages(params.starred)
+		def messageInstanceList = pollInstance?.getPollMessages(params.starred)
 		
-		render view:'../message/poll', model:[messageInstanceList: messageInstanceList.list(params),
+		render view:'../message/poll', model:[messageInstanceList: messageInstanceList?.list(params),
 				messageSection: 'poll',
-				messageInstanceTotal: messageInstanceList.count(),
+				messageInstanceTotal: messageInstanceList?.count(),
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance.responseStats,
@@ -117,11 +117,11 @@ class MessageController {
 	
 	def announcement = {
 		def announcementInstance = Announcement.get(params.ownerId)
-		def messageInstanceList = announcementInstance.getAnnouncementMessages(params.starred)
+		def messageInstanceList = announcementInstance?.getAnnouncementMessages(params.starred)
 		if(params.flashMessage) { flash.message = params.flashMessage }
-		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
+		render view:'../message/standard', model:[messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'announcement',
-					messageInstanceTotal: messageInstanceList.count(),
+					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: announcementInstance,
 					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
 	}
@@ -130,9 +130,9 @@ class MessageController {
 		def showInstance = RadioShow.get(params.ownerId)
 		def messageInstanceList = showInstance?.getShowMessages(params.starred)
 
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+		render view:'standard', model:[messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'radioShow',
-					messageInstanceTotal: messageInstanceList.count(),
+					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: showInstance] << getShowModel(messageInstanceList.list(params))
 	}
 
@@ -211,6 +211,8 @@ class MessageController {
 				if (params.messageSection == 'poll')  {
 					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
 					unknownResponse.addToMessages(messageInstance).save()
+				} else if (params.messageSection == 'announcement') {
+					Announcement.get(params.ownerId).addToMessages(messageInstance).save()
 				} else if (params.messageSection == 'folder') {
 					Folder.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
