@@ -41,8 +41,8 @@
 			</li>
 		</g:if>
 		<g:if test="${messageSection != 'trash' && messageSection != 'poll'}">
-				<g:link elementId="export" url="#">
-					<button>Export</button>
+				<g:link elementId="export" url="#" class="btn">
+					Export
 				</g:link>
 		</g:if>
 		<g:if test="${messageSection == 'folder'}">
@@ -57,8 +57,8 @@
 				</li>
 			</g:else>
 		</g:if>
-        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message">
-				<button class="section-action-button">Quick message</button>
+        	<g:remoteLink controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', null, true); addTabValidations();" id="quick_message" class="section-action-button btn">
+				Quick message
 			</g:remoteLink>
 	</div>
 	<g:if test="${messageSection == 'poll'}">

@@ -43,11 +43,11 @@
 	    	<g:render template="/tabs"/>
     		<g:render template="/flash"/>
         </div>
-	    <div class="main">
+	    <div id="main">
             <div id="sidebar">
 		        <g:render template="menu"/>
             </div>
-		    <div class="content">
+		    <div id="content">
 				<div class="section-actions" id="contact-actions">
 					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 						<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>

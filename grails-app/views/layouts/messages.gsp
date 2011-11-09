@@ -28,7 +28,7 @@
 		});
 		</g:javascript>
     </head>
-	<body>
+	<body id="messages-tab">
 		<div id="header">
             <img src='${resource(dir:'images',file:'logo.png')}' id="logo"/>
 			<g:render template="/system_menu"/>

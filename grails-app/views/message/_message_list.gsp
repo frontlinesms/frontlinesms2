@@ -15,7 +15,7 @@
 		  	<g:hiddenField name="searchString" value="${params.searchString}"/>
 		</g:if>
     <div id="messages">
-		<table id="messages-list">
+		<table id="message-list" cellspacing=0>
 				<tr id="message-sorter">
 					<th>
 						<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/></td>
@@ -30,7 +30,7 @@
 			<g:each in="${messageInstanceList}" status="i" var="m">
 				<tr class="message-preview ${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
 					<td class="message-preview-select">
-						<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
+						<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 						<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 					</td>
 
