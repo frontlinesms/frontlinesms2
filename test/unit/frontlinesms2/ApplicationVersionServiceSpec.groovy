@@ -8,14 +8,10 @@ class ApplicationVersionServiceSpec extends UnitSpec {
 	
 	def 'check get newest'() {
 		expect:
-			assertNewest '1.1', ['1.0', '1.1']
-			assertNewest '1.2', ['1.0', '1.2', '1.1']
-			assertNewest '1.0.1', ['1.0', '1.0.1']
-			assertNewest '1.1', ['1.0', '1.0.1', '1.1']
-	}
-	
-	private def assertNewest(expected, options) {
-		expected == s.getNewest(options)
+			'1.1' == s.getNewest('1.0', '1.1')
+			'1.2' == s.getNewest('1.0', '1.2', '1.1')
+			'1.0.1' == s.getNewest('1.0', '1.0.1')
+			'1.1' == s.getNewest('1.0', '1.0.1', '1.1')
 	}
 }
 
