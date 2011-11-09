@@ -22,6 +22,7 @@
 				<p id="activity-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
 				<p id="activity-body">${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p>
 			</div>
+			<g:remoteLink controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" >Restore</g:remoteLink>
 		</g:elseif>
 		<g:else>
 			<div id='message-info'>

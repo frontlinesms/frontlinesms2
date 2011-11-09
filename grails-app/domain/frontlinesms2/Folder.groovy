@@ -30,9 +30,4 @@ class Folder extends MessageOwner {
 		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
 		m ? m.size() : 0
 	}
-
-    def toDelete() {
-        this.deleted = true
-        this
-    }
 }
