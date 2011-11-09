@@ -128,6 +128,22 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.list() == inboxMessages
 	}
 	
+	def 'calling "getSendMessageCount" returns the number of messages to be sent'() {
+		when:
+			controller.params.message = "!@:%^&*(){" * 30
+			controller.getSendMessageCount()
+		then:
+			controller.response.contentAsString == "Characters remaining 105 (3 SMS messages)"
+	}
+	
+	def 'calling "getSendMessageCount" returns the number of characters remaining'() {
+		when:
+			controller.params.message = "abc123"
+			controller.getSendMessageCount()
+		then:
+			controller.response.contentAsString == "Characters remaining 154 (1 SMS message)"
+	}
+	
 	Date createDate(String dateAsString) {
 		DateFormat format = createDateFormat();
 		return format.parse(dateAsString)

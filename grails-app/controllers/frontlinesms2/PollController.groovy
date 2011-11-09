@@ -63,16 +63,25 @@ class PollController {
 	
 	def confirmDelete = {
 		def pollInstance = Poll.get(params.id)
-		render view: 'confirmDelete', model: [pollInstance: pollInstance]
+		render view: "../message/confirmDelete", model: [ownerInstance: pollInstance]
 	}
 	
 	def delete = {
 		def poll = Poll.get(params.id)
-		poll.toDelete()
+		poll.deleted = true
 		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", objectType:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
 		poll.save(failOnError: true, flush: true)
 		flash.message = "Poll has been trashed!"
 		redirect(controller:"message", action:"inbox")
+	}
+	
+	def restore = {
+		def poll = Poll.get(params.id)
+		poll.deleted = false
+		Trash.findByLinkId(poll.id)?.delete()
+		poll.save(failOnError: true, flush: true)
+		flash.message = "Poll has been restored!"
+		redirect(controller: "message", action: "trash")
 	}
 	
 	def create_new_activity = {

@@ -76,14 +76,4 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			p.keyword == null
 	}
-
-    def "toDelete should change deleted flag to true"() {
-        given:
-			Poll p = new Poll(keyword:null)
-		when:
-            assert !p.deleted
-			p.toDelete()
-		then:
-			p.deleted
-    }
 }

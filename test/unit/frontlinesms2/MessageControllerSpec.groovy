@@ -51,38 +51,7 @@ class MessageControllerSpec extends ControllerSpec {
 			1 * mockMessageSendService.send {it.id == 1L}
 	}
 
-	def "should calculate the total number of alphanumeric characters being sent"() {
-		setup:
-			def message1 = "abc123" * 40
-		when:
-			mockParams.message = message1
-			controller.getSendMessageCount()
-		then:
-			controller.response.contentAsString == "(2 SMS messages)"
-	}
-	
-	def "should calculate the total number of special characters being sent"() {
-		setup:
-			def message2 = "!@:%^&*(){" * 30
-		when:
-			mockParams.message = message2
-			controller.getSendMessageCount()
-		then:
-			controller.response.contentAsString == "(2 SMS messages)"
-	}
-	
-	def "should calculate the total number of mixed characters being sent"() {
-		setup:
-			def message3 = "qwer234%}£" * 30
-		when:
-			mockParams.message = message3
-			controller.getSendMessageCount()
-		then:
-			controller.response.contentAsString == "(2 SMS messages)"
-				
-	}
-
-     private void setupDataAndAssert(boolean flag, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
+	private void setupDataAndAssert(boolean flag, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
 		registerMetaClass(Fmessage)
 		Fmessage.metaClass.'static'.hasFailedMessages = { -> return true}
 		def fmessage = new Fmessage(id:1L, src: "src1", starred: flag, status: status)

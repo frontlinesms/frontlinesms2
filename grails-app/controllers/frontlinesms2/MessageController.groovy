@@ -4,14 +4,15 @@ import grails.util.GrailsConfig
 import grails.converters.JSON
 
 import frontlinesms2.MessageStatus
-import org.smslib.util.GsmAlphabet
 
 class MessageController {
+	
 	static allowedMethods = [save: "POST", update: "POST",
 			delete: "POST", deleteAll: "POST",
 			archive: "POST", archiveAll: "POST"]
 
 	def messageSendService
+	def fmessageInfoService
 	def trashService
 
 	def beforeInterceptor = {
@@ -161,7 +162,7 @@ class MessageController {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.toDelete()
+				messageInstance.deleted = true
 				new Trash(identifier:messageInstance.contactName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
 				messageInstance.save(failOnError: true, flush: true)
 			}
@@ -174,7 +175,7 @@ class MessageController {
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 		}
 	}
-
+	
 	def archive = {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		def listSize = messageIdList.size();
@@ -261,11 +262,17 @@ class MessageController {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 	
-	def getSendMessageCount = {
+	def getSendMessageCount = {	
+		def messageInfo
 		def message = params.message ?: ''
-		def messageParts = GsmAlphabet.splitText(message, false)
-		def messageCount = messageParts.size()>1 ? "${messageParts.size()} SMS messages": "1 SMS message"
-		render text: "($messageCount)", contentType:'text/plain'
+		if(message)	{ 
+			messageInfo = fmessageInfoService.getMessageInfos(message)
+			def messageCount = messageInfo.partCount > 1 ? "${messageInfo.partCount} SMS messages": "1 SMS message"
+			render text: "Characters remaining ${messageInfo.remaining} ($messageCount)", contentType:'text/plain'
+		} else {
+			render text: "Characters remaining ${message.size()} (1 SMS message)", contentType:'text/plain'
+		}
+		
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {

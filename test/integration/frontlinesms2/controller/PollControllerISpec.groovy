@@ -82,4 +82,30 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			updatedPoll.question == "question"
 			updatedPoll.autoReplyText == "Thanks"
 	}
+	
+	def "can delete a poll to send it to the trash"() {
+		setup:
+			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		when:
+			assert Poll.findAllByDeleted(false) == [poll]
+			controller.params.id  = poll.id
+			controller.delete()
+		then:
+			Poll.findAllByDeleted(true) == [poll]
+			Poll.findAllByDeleted(false) == []
+	}
+	
+	def "can restore a poll to move out of the trash"() {
+		setup:
+			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			poll.deleted = true
+			poll.save(failOnError:true, flush:true)
+		when:
+			assert Poll.findAllByDeleted(true) == [poll]
+			controller.params.id  = poll.id
+			controller.restore()
+		then:
+			Poll.findAllByDeleted(false) == [poll]
+			Poll.findAllByDeleted(true) == []
+	}
 }
