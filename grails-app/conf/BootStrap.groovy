@@ -18,6 +18,7 @@ class BootStrap {
 	def init = { servletContext ->
 		initialiseSerial()
 		addTruncateMethodToStrings()
+		createWelcomeNote()
 		
 		switch(Environment.current) {
 			case Environment.TEST:
@@ -42,6 +43,12 @@ class BootStrap {
 	}
 
 	def destroy = {
+	}
+	
+	private def createWelcomeNote() {
+		if(!SystemNotification.count()) {
+			new SystemNotification(text:'Welcome to FrontlineSMS.  I hope you enjoy your stay!').save(failOnError:true)
+		}
 	}
 	
 	private def addTruncateMethodToStrings() {
