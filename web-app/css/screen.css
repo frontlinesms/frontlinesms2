@@ -573,7 +573,7 @@ a.tab-link:hover{
     padding: none;
     margin: none;
 }
-#message-list td:hover{
+#message-list tr:hover{
     background-color: #e5eff3;
 }
 #message-list span{
