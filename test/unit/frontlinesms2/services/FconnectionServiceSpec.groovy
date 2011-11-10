@@ -7,7 +7,7 @@ import frontlinesms2.FconnectionService
 import frontlinesms2.Fconnection
 import frontlinesms2.RouteStatus
 
-class FconnectionServiceSpec extends UnitSpec  {
+class FconnectionServiceSpec extends UnitSpec {
 	def service
 	def context
 

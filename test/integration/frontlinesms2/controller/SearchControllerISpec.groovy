@@ -183,7 +183,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
-			Fmessage.findBySrc("+254333222").toDelete().save(flush: true)
+			Fmessage.findBySrc("+254333222").deleted = true
+			Fmessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Minime')]

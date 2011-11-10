@@ -17,23 +17,42 @@ class GroupCedSpec extends GroupBaseSpec {
 			assert Group.count() == (initNumGroups + 1)
 	}
 	
-	def 'More action to rename the group is displayed and open a popup'(){
+	def 'More action dropdown has option to rename the group'(){
 		given:
 			createTestGroupsAndContacts()
 		when:
-			to PageContactShowGroupFriends
+			go "group/show/${Group.findByName('Friends').id}"
 		then:
+			at PageContactShowGroupFriends
 			$('#group-actions').displayed
 		when:
-			$('#group-actions').value("renameGroup").click()
+			$('#group-actions').value("rename").click()
 		then:
 			waitFor{ $('#ui-dialog-title-modalBox').displayed}
 		when:
 			$("#name").value("Renamed Group")
 			$('#done').click()
 		then:
-			waitFor{$('a', text:'Renamed Group')}
-			$('#contact-title h2', text:'Renamed Group')
+			waitFor{ $('a', text:'Renamed Group') }
+			$('#contact-title h2').text() == 'Renamed Group (2)'
+	}
+	
+	def 'More action dropdown has option to delete the group and opens a confirmation popup'(){
+		given:
+			createTestGroupsAndContacts()
+		when:
+			go "group/show/${Group.findByName('Friends').id}"
+		then:
+			at PageContactShowGroupFriends
+			$('#group-actions').displayed
+		when:
+			$('#group-actions').value("delete").click()
+		then:
+			waitFor{ $('#ui-dialog-title-modalBox').displayed}
+		when:
+			$('#done').click()
+		then:
+			!Group.findByName('Friends')
 	}
 }
 

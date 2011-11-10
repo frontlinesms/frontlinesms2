@@ -8,52 +8,6 @@ function refreshMessageCount() {
 	});
 }
 
-var remoteHash = {
-	"export": function() {
-		$.ajax({
-			type:'GET',
-			url: url_root + 'export/wizard',
-			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
-					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
-					failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: $("#viewingArchive").val()},
-			success: function(data) {
-				launchSmallPopup('Export', data, 'Export');
-				updateExportInfo();
-			}})
-	},
-
-	"renameActivity": function() {
-		$.ajax({
-			type:'GET',
-			url: url_root + 'poll/rename',
-			data: {ownerId: $("#ownerId").val()},
-			success: function(data) {
-				launchSmallPopup('Rename activity', data, 'Rename');
-			}})
-	},
-	
-	"deleteAction": function() {
-		var messageSection = $("#messageSection").val();
-		$.ajax({
-			type:'GET',
-			url: url_root + messageSection + '/confirmDelete',
-			data: {id: $("#ownerId").val()},
-			success: function(data) {
-				launchSmallPopup('Delete ' + messageSection, data, 'Delete');
-			}})
-	},
-	
-	"renameGroup":function(){
-		$.ajax({
-			type:'GET',
-			url: url_root + 'group/rename',
-			data: {groupId: $("#groupId").val()},
-			success: function(data){
-				launchSmallPopup('Rename group', data, 'Rename');
-			}})
-	}
-}
-
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }

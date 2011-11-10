@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import frontlinesms2.RouteStatus
+
 class StatusController {
 	def deviceDetectionService
 	
@@ -9,12 +11,12 @@ class StatusController {
 
 	def trafficLightIndicator = {
 		def connections = SmslibFconnection.list() + EmailFconnection.list()
-		def color = !connections || connections*.status.any { it == RouteStatus.NOT_CONNECTED } ? 'red': 'green'
+		def color = !connections || connections.status.any { it.toString() == "Not connected" } ? 'red': 'green'
 		render text:color, contentType:'text/plain'
 	}
 	
 	def show = {
-		[connectionInstanceList: Fconnection.list(),
+		[connectionInstanceList: SmslibFconnection.list() + EmailFconnection.list(),
 				connectionInstanceTotal: Fconnection.count(),
 				detectedDevices:deviceDetectionService.detected] <<
 			getMessageStats() << getFilters()

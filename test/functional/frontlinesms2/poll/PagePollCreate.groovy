@@ -4,7 +4,7 @@ import frontlinesms2.*
 
 class PagePollCreate extends geb.Page {
 	static at = { 
-		$("#ui-dialog-title-modalBox").text() == "New Poll"
+		$("#ui-dialog-title-modalBox").text() == "New poll"
 	}
 	static content = {
 		tabMenu { $("#tabs li") }
@@ -17,11 +17,11 @@ class PagePollCreate extends geb.Page {
 		editMessageTab { $("#tabs-5") }
 		selectRecipientsTab { $("#tabs-6") }
 		selectRecipientsTabLink { tabMenu[4] }
-		confirmationTab { $("#tabs-6") }
+		confirmationTab { $("#tabs-7") }
 		
 		next { $("#nextPage") }
 		prev { $("#prevPage") }
-		done { $("#done") }
+		done { $("#submit") }
 		
 		pollForm { $('form', name:'poll-details') }
 

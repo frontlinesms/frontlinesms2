@@ -8,7 +8,7 @@
 	</div>
 	<g:checkBox name="enableAutoReply" />Send an automatic reply to poll responses
 	<g:textArea name="autoReplyText" rows="5" cols="40" disabled='disabled'/>
-	<span id="message-stats" class="hide">0 characters (1 SMS message)</span> 
+	<span class="hide character-count">0 characters (1 SMS message)</span> 
 </div>
 
 <g:javascript>
@@ -16,26 +16,13 @@
 		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
 		if(isGroupChecked('enableAutoReply')) {
 			$("#autoReplyText").removeAttr("disabled");
-			$("#message-stats").removeClass("hide");
+			$("span.character-count").removeClass("hide");
 		} else {
 			$("#autoReplyText").attr('disabled','disabled');
-			$("#message-stats").addClass("hide");
+			$("span.character-count").addClass("hide");
+			$("#autoReplyText").removeClass('error');
+			$(".error-panel").hide();
 		}
 	})
-	
-	$("#autoReplyText").live("keyup", function() {
-		var value = $(this).val();
-		if(value.length > 3000) {
-			//prevent addition of new content to message
-			$(this).val(value.substring(0, 3000));
-			
-		} else if(value.length > 140) {
-			$.get(url_root + 'message/getSendMessageCount', {message: value}, function(data) {
-				$("#message-stats").html(value.length + " characters " + data);
-			});
-		}
-		else {
-			$("#message-stats").html(value.length + " characters (1 SMS message)");
-		}
-	})
+	$("#autoReplyText").live("keyup", updateCount);
 </g:javascript>

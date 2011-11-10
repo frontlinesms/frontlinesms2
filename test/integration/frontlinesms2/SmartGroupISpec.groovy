@@ -58,11 +58,30 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 			getMembers(s) == ['Alice Apple', 'Bob Burnquist']
 	}
 	
-	def 'custom field should match only specified custom field'() {
+	def 'customfield should match only specified customfield'() {
+		given:
+			createContact(name:'Wov', shoe:'flip flop')
+			createContact(name:'Xav', shoe:'brogue')
+			createContact(name:'Yaz', shoe:'clog')
+			createContact(name:'Zab', hat:'clog')
 		when:
-			def x = 1 + 1
+			def s = createSmartGroup(name:'Cloggers').addToCustomFields(new CustomField(name:'shoe', value:'lo'))
 		then:
-			x == 2 // TODO need to implement custom field searching
+			getMembers(s) == ['Wov', 'Yaz']
+	}
+
+	def 'customfield should match only specified customfields'() {
+		given:
+			createContact(name:'Wov', shoe:'flip flop', hat:'stetson')
+			createContact(name:'Xav', shoe:'brogue', hat:'trilby')
+			createContact(name:'Yaz', shoe:'clog', hat:'bowler')
+			createContact(name:'Zab', shoe:'stetson', hat:'clog')
+		when:
+			def s = createSmartGroup(name:'Cloggers')
+			s.addToCustomFields(new CustomField(name:'shoe', value:'lo'))
+			s.addToCustomFields(new CustomField(name:'hat', value:'so'))
+		then:
+			getMembers(s) == ['Wov']
 	}
 	
 	private def getMembers(SmartGroup s) {
@@ -71,5 +90,12 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	private def createSmartGroup(properties) {
 		new SmartGroup(properties)//.save(failOnError:true, flush:true)
+	}
+	
+	private def createContact(params) {
+		def c = new Contact(name:params.name)
+		if(params.shoe) c.addToCustomFields(new CustomField(name:'shoe', value:params.shoe))
+		if(params.hat) c.addToCustomFields(new CustomField(name:'hat', value:params.hat))
+		c.save(failOnError:true, flush:true)
 	}
 }

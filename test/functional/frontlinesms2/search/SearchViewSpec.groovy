@@ -40,7 +40,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().contains('Searching all messages, include archived messages')
+			searchDescription.text().contains('Searching all messages, archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {

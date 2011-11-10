@@ -35,8 +35,8 @@
 		<ol class="sub-menu" id="smart-groups-submenu">
 			<g:if test="${smartGroupInstanceList.size() > 0}">
 				<g:each in="${smartGroupInstanceList}" var="g">
-					<li>
-						<g:link controller="smartGroup" action="show" id="${g.id}">${g.name}</g:link>
+					<li class="${contactsSection instanceof frontlinesms2.SmartGroup && contactsSection.id==g.id ? 'selected' : ''}">
+						<g:link controller="smartGroup" action="show" id="${g.id}" elementId="smartgroup-link-${g.id}">${g.name}</g:link>
 					</li>
 				</g:each>
 			</g:if>		
@@ -44,7 +44,7 @@
 				<li id="no-smart-groups">No smart groups.</p>
 			</g:else>
 			<li class='create' id="create-smart-group">
-				<g:remoteLink controller="smartGroup" action="create" onSuccess="launchGenericMediumPopup('Create smart group', data, 'Create', function() { initSmartGroupWizard(); });">
+				<g:remoteLink controller="smartGroup" action="create" onSuccess="launchMediumPopup('Create smart group', data, 'Create', createSmartGroup);">
 					Create new smart group
 				</g:remoteLink>
 			</li>

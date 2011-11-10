@@ -14,7 +14,10 @@
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
+		<g:javascript src="contact/changingNumberAlert.js"/>
+		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
+		<g:javascript src="contact/moreGroupActions.js" />
 		<g:javascript>
 			function getGroupId(){
 				var group = $('#groupId');
@@ -31,20 +34,13 @@
 			   disablePaginationControls();
 			   $("#contact-search").renderDefaultText();
 			});
-		
-			$(document).ready(function(){
-				$('#group-actions').bind('change', function() {
-					var selected = $(this).find('option:selected').val();
-					if(selected)
-						remoteHash[selected].call();
-				});
-			});
 		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
 	<body>
 		<div id="container">
+			<g:render template="/system_notifications"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
@@ -52,15 +48,20 @@
 				<g:render template="menu"/>
 				<div class="content">
 					<div class="content-header">
-						<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+						<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
 							<div  id="contact-title">
 								<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
+								<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
 								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
 								<h2>${contactsSection.name} (${contactInstanceTotal})</h2>
 							</div>
-							<g:select name="group-actions" from="${['Rename group']}"
-								keys="${['renameGroup']}"
-								noSelection="${['': 'More actions...']}"/>
+							<ol>
+								<li>
+									<g:select name="group-actions" from="${['Rename group', 'Delete group']}"
+											keys="${['rename', 'delete']}"
+											noSelection="${['': 'More actions...']}"/>
+								</li>
+							</ol>
 						</g:if>
 						<g:elseif test="${!contactInstance}">
 							<div  id="contact-title">

@@ -2,7 +2,8 @@ package frontlinesms2
 
 class KeywordProcessorService {
 	private static final ALPHABET = "abcdefghijklmnopqrstuvwxyz"
-
+	def messageSendService
+	
 	def process(Fmessage message) {
 		processPollResponse(message)
 			// || processOtherStuff()
@@ -19,6 +20,11 @@ class KeywordProcessorService {
 	def processPollResponse(PollResponse response, Fmessage message) {
 		response.addToMessages(message)
 		response.save(failOnError: true)
+		if(response.poll.autoReplyText) {
+			println "Autoreply message sent to ${message.src}"
+			Fmessage autoReply = new Fmessage(dst:message.src, text:response.poll.autoReplyText)
+			messageSendService.send(autoReply)
+		}
 	}
 
 	PollResponse getPollResponse(String messageText) {

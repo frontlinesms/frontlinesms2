@@ -14,7 +14,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			p.getPollMessages().count() == 2
 		when:
-			message1.toDelete().save(flush:true, failOnError:true)
+			message1.deleted = true
+			message1.save(flush:true, failOnError:true)
 		then:
 			p.getPollMessages().count() == 1
 	}
@@ -42,7 +43,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		when:
-			Fmessage.findByText('MJ').toDelete()
+			Fmessage.findByText('MJ').deleted = true
+			Fmessage.findByText('MJ').save(flush:true)
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:0, percent:0],

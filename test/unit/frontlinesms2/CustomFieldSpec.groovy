@@ -12,7 +12,7 @@ class CustomFieldSpec extends UnitSpec {
 			mockForConstraintsTests(CustomField, [namelessField, namedField, contactField])
 		then:
 			!namelessField.validate()
-			!namedField.validate()
+			namedField.validate()
 			contactField.validate()
 	}
 

@@ -13,7 +13,6 @@
 		</script>
 		<g:javascript src="message/check_message.js"/>
 		<g:javascript src="message/arrow_navigation.js"/>
-		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js" />
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
@@ -21,7 +20,9 @@
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/messageSorting.js"/>
-		<g:javascript src="/message/categorize-dropdown.js"/>
+		<g:javascript src="/message/categorize_dropdown.js"/>
+		<g:javascript src="/message/move_dropdown.js"/>
+		<g:javascript src="/message/moreActions.js"/>
 		<g:javascript>
 		$(function() {  
 		   disablePaginationControls();
@@ -30,10 +31,11 @@
     </head>
 	<body>
 		<div id="container">
+			<g:render template="/system_notifications"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-	        <g:render template="/flash"/>
-	        <div class="main">
+	        	<g:render template="/flash"/>
+	        	<div class="main">
 				<g:render template="menu"/>
 				<div class="content">
 					<g:render template="../message/header"/>
@@ -49,14 +51,3 @@
 		</div>
 	</body>
 </html>
-<g:javascript>
-	$("#poll-actions, #folder-actions").bind('change', function() {
-		var selected = $(this).find('option:selected').val();
-		if(selected)
-			remoteHash[selected].call();
-	});
-
-	$("#export").click(function() {
-		remoteHash['export'].call();
-	});
-</g:javascript>

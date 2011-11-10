@@ -16,6 +16,7 @@
 	</head>
 	<body>
 		<div id="container">
+			<g:render template="/system_notifications"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>

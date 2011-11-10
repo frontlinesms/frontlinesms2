@@ -1,6 +1,6 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
-	<div>
+	<div id="manual-address">
 		<label class="header" for="address">Add phone number</label>
 		<g:textField id="address" name="address"/>
 		<g:link url="#" class="add-address" onclick="addAddressHandler();">Add</g:link> <!-- FIXME this should be a button, surely? -->
@@ -90,7 +90,7 @@
 			}
 		);
 		
-		var messageStats = $("#message-stats").text()
+		var messageStats = $("#send-message-stats").text()
 		noOfMessages = messageStats.substring(messageStats.indexOf("(")+1, messageStats.indexOf(" S"));
 		noOfMessages = noOfMessages == 0 ? 1 : noOfMessages
 		messageCount = addressCount * parseInt(noOfMessages)
@@ -99,8 +99,28 @@
 
 	 function addAddressHandler() {
 		var address = $('#address').val();
-		$("#contacts").prepend("<div class='manual'><input type='checkbox' checked='true' name='addresses' value=" + address + ">" + address + "</input></div>")
-		updateCount();
+		var containsLetters = jQuery.grep(address, function(a) {
+			return a.match(/[a-zA-Z]/) != null;
+		}).join('');
+		if(containsLetters != '' && containsLetters != null) {
+			$("#address").addClass('error');
+			$("#manual-address").append("<div id='address-error'>Your address cannot contain letters</div>");
+		} else if(address == '') {
+
+		} else {
+			$("#address").removeClass('error');
+			$("#manual-address").find('#address-error').remove();
+			var sanitizedAddress = jQuery.grep(address, function(a) {
+				return a.match(/[0-9]/) != null;
+			}).join('');
+			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress
+			var checkbox = $("div.manual").find(":checkbox[value=" + sanitizedAddress + "]").val()
+			if(checkbox !== address) {
+				$("#contacts").prepend("<div class='manual'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + sanitizedAddress + ">" + sanitizedAddress + "</input></div>")
+				updateCount();
+			}
+			$('#address').val("")
+		}
 	}
 </script>
 

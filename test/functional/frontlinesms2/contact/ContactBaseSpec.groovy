@@ -13,7 +13,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		[new Fmessage(src:'Bob', dst:'MyNumber', text:'hi Bob'),
 			new Fmessage(src:'Alice', dst:'MyNumber', text:'hi Alice')].each() {
 				it.status = MessageStatus.INBOUND
-				it.save(failOnError:true)
+				it.save(failOnError:true, flush: true)
 			}
 	}
 

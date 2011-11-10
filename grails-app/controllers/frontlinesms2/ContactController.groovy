@@ -185,7 +185,7 @@ class ContactController {
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
 		} else if (contactInstance.validate() && !contactInstance.hasErrors()) {
-			contactInstance.save()
+			contactInstance.save(flush:true)
 			groupsToAdd.each() { id ->
 				contactInstance.addToGroups(Group.get(id))
 			}
@@ -211,6 +211,7 @@ class ContactController {
 				if(toRemove)
 					toRemove.delete(failOnError: true, flush:true)
 			}
+			contactInstance.stripNumberFields()
 			
 			if(contactInstance.save(flush:true)) {
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"

@@ -139,17 +139,20 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should update message contact name"() {
 		setup:
-			new Contact(name: "Alice", primaryMobile:"primaryNo", secondaryMobile: "secondaryNo").save(flush: true)
+			new Contact(name: "Alice", primaryMobile:"1234", secondaryMobile: "4321").save(flush: true)
 		when:
-			def messageFromPrimaryNumber = new Fmessage(src: "primaryNo", dst: "dst", status: MessageStatus.INBOUND)
-			def messageFromSecondaryNumber = new Fmessage(src: "secondaryNo", dst: "dst", status: MessageStatus.INBOUND)
-			def outBoundMessageToPrimaryNo = new Fmessage(src: "src", dst: "primaryNo", status: MessageStatus.SENT)
-			def outBoundMessageToSecondayNo = new Fmessage(src: "src", dst: "secondaryNo", status: MessageStatus.SENT)
+			def alice = Contact.findByName('Alice')
+			def messageFromPrimaryNumber = new Fmessage(src: "1234", dst: "dst", status: MessageStatus.INBOUND)
+			def messageFromSecondaryNumber = new Fmessage(src: "4321", dst: "dst", status: MessageStatus.INBOUND)
+			def outBoundMessageToPrimaryNo = new Fmessage(src: "src", dst: "1234", status: MessageStatus.SENT)
+			def outBoundMessageToSecondayNo = new Fmessage(src: "src", dst: "4321", status: MessageStatus.SENT)
 			messageFromPrimaryNumber.save(flush: true)
 			messageFromSecondaryNumber.save(flush: true)
 			outBoundMessageToPrimaryNo.save(flush: true)
 			outBoundMessageToSecondayNo.save(flush: true)
 		then:
+			println alice
+			println messageFromPrimaryNumber.contactExists
 			messageFromPrimaryNumber.contactName == "Alice"
 			messageFromSecondaryNumber.contactName == "Alice"
 			outBoundMessageToPrimaryNo.contactName == "Alice"

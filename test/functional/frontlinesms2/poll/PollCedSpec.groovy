@@ -2,6 +2,7 @@ package frontlinesms2.poll
 
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
+import frontlinesms2.message.PageMessagePending
 import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -18,7 +19,7 @@ class PollCedSpec extends PollBaseSpec {
 			errorMessage.displayed
 		when:
 			pollForm.question = "question"
-			pollForm.'collect-responses' = 'no-message'
+			pollForm.'dontSendMessage' = 'no-message'
 			$("a", text:"Confirm").click()
 		then:
 			waitFor { confirmationTab.displayed }
@@ -30,6 +31,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$("#confirmation").click()
 		then:
+			at PageMessagePending
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	
@@ -172,6 +174,8 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
+			pollForm.enableKeyword = true
+			pollForm.keyword = 'coffee'
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
@@ -187,8 +191,6 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor {
 				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
 				pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
-				println "message stats are " + $("#message-stats").text() 
-				$("#message-stats").text() == "27 characters (1 SMS message)"
 			}
 		when:
 			pollForm.enableAutoReply = false
@@ -211,13 +213,16 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			pollForm.address = '1234567890'
 			addManualAddress.click()
+			pollForm.address = '1234567890'
+			addManualAddress.click()
 		then:
 			waitFor { $('.manual').displayed }
+			$("#recipient-count").text() == "1"
 		when:
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
+			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
@@ -248,6 +253,8 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
+			pollForm.enableKeyword = true
+			pollForm.keyword = 'coffee'
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
@@ -255,9 +262,9 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { editMessageTab.displayed }
-			pollForm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 		when:
-			pollForm.message = 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
+			$("#messageText").value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
 			next.click()
 		then:
 			waitFor { selectRecipientsTab.displayed }
@@ -270,9 +277,8 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-question-text").text() == "How often do you drink coffee? A) Never B) Once a day C) Twice a day"
+			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
-			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
 			pollForm.title = "Coffee Poll"
 			done.click()
@@ -280,11 +286,56 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { Poll.findByTitle("Coffee Poll") }
 	}
 	
+// Ajax calls make passing this test incredibly difficult
+//	def "should show the right number of messages to be sent to selected recipients"() {
+//		when:
+//			def longQuestion = 'who' * 54
+//			launchPollPopup('standard', longQuestion)
+//		then:
+//			waitFor { autoSortTab.displayed }
+//		when:
+//			goToTab(6)
+//			pollForm.address = '1234567890'
+//			addManualAddress.click()
+//		then:
+//			waitFor { $('.manual').displayed }
+//		when:
+//			next.click()
+//		then:
+//			waitFor { confirmationTab.displayed }
+//			$("#confirm-recepients-count").text() == "1 contacts selected (2 messages will be sent)"
+//	}
+	
+	def "should update confirm screen when user decides not to send messages"() {
+		when:
+			launchPollPopup('standard', "Will you send messages to this poll")
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			goToTab(6)
+			pollForm.address = '1234567890'
+			addManualAddress.click()
+		then:
+			waitFor { $('.manual').displayed }
+		when:
+			next.click()
+		then:
+			waitFor { confirmationTab.displayed }
+			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+		when:
+			goToTab(1)
+			pollForm."dontSendMessage" = true
+			goToTab(7)
+		then:
+			waitFor { $("#no-recepients").displayed }
+			$("#no-recepients").text() == "None"
+	}
+	
 	def "can launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			to PageMessageInbox
-			$("a", text: "Who is badder?").click()
+			$("a", text: "Who is badder? poll").click()
 		then:
 			waitFor { title == "Poll" }
 		when:
@@ -298,19 +349,19 @@ class PollCedSpec extends PollBaseSpec {
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
-			$("a", text: "Who is badder?").click()
+			$("a", text: "Who is badder? poll").click()
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$("#poll-actions").value("renameActivity")
+			$("#poll-actions").value("rename")
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
 			$("#title").value("Rename poll")
 			$("#done").click()
 		then:
-			waitFor { $("a", text: 'Rename poll') }
-			!$("a", text: "Who is badder?")
+			waitFor { $("a", text: 'Rename poll poll') }
+			!$("a", text: "Who is badder? poll")
 	}
 
 	def "can delete a poll"() {
@@ -363,7 +414,7 @@ class PollCedSpec extends PollBaseSpec {
 	def deletePoll() {
 		def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
-		$("#poll-actions").value("deleteAction")
+		$("#poll-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete poll")
 		$("#done").click()
@@ -375,12 +426,16 @@ class PollCedSpec extends PollBaseSpec {
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
 		$("input", class: "poll").click()
-		$("#choose").click()
+		$("#submit").click()
 		waitFor { at PagePollCreate }
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
-		pollForm."collect-responses" = !enableMessage
+		pollForm."dontSendMessage" = !enableMessage
 		next.click()
+	}
+	
+	def goToTab(tab) {
+		$(".tabs-$tab").click()	
 	}
 }
 

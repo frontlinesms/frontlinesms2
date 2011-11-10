@@ -16,8 +16,8 @@ class ContactControllerSpec extends ControllerSpec {
 			def groupCriteria = [list: {Closure c-> [group1]}]
 			Group.metaClass.static.createCriteria = {groupCriteria}
 			mockDomain GroupMembership, [new GroupMembership(group: Group.findByName('group1'), contact: alice),
-				new GroupMembership(group: Group.findByName('group1'), contact: bob) ,
-				new GroupMembership(group: Group.findByName('group2'), contact: bob)]
+					new GroupMembership(group: Group.findByName('group1'), contact: bob) ,
+					new GroupMembership(group: Group.findByName('group2'), contact: bob)]
 			mockParams.checkedContactList = "$alice.id, $bob.id"
 		when:
 			controller.multipleContactGroupList()

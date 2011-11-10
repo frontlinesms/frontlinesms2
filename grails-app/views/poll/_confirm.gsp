@@ -27,6 +27,7 @@
 					<span id="contacts-count">0</span> contacts selected
 					(<span id="messages-count">0</span> messages will be sent)
 				</td>
+				<td id="no-recepients" class="hide">None</td>
 			</tr>
 		</table>
 	</div>

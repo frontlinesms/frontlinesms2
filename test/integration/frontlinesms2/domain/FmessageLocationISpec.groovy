@@ -98,7 +98,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			assert Folder.findByName("home").getFolderMessages(false).count() == 3
 			def firstFolderMsg = Folder.findByName("home").getFolderMessages(false).list(max:1, offset: 0)
 		then:
-			firstFolderMsg*.src == ['Jim']
+			firstFolderMsg.size() == 1
 	}
 
 	def "can fetch all pending messages"() {

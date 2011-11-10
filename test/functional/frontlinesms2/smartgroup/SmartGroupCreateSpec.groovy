@@ -227,4 +227,31 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			waitFor { getMenuLink('All the bobs!').displayed }
 	}
+	
+	def 'rules should include custom fields'() {
+		given:
+			['Town', 'Height'].each { new CustomField(name:it).save(failOnError:true, flush:true) }
+		when:
+			launchCreateDialog('Field Dwellers')
+		then:
+			ruleField[0].find('option')*.text().containsAll(['Town', 'Height'])
+	}
+	
+	def 'setting a custom field rule should persist to the smartgroup instance'() {
+		given:
+			['Town'].each { new CustomField(name:it).save(failOnError:true, flush:true) }
+		when:
+			launchCreateDialog('Field Dwellers')
+			ruleField[0].value('Town')
+			setRuleValue(0, 'field')
+			finishButton.click()
+		then:
+			waitFor { getMenuLink('Field Dwellers') }
+		when:
+			def g = SmartGroup.findByName('Field Dwellers')
+			println([g.name, g.contactName, g.mobile, g.email, g.notes, g.customFields])
+		then:
+			SmartGroup.findByName('Field Dwellers').customFields.size() == 1
+			SmartGroup.findByName('Field Dwellers').customFields.every { it.name=='Town' && it.value=='field' }
+	}
 }

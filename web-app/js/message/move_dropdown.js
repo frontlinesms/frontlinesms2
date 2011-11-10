@@ -9,7 +9,8 @@ function moveAction() {
 	
 	if(me.hasClass('na')) return;
 	if(me.hasClass('inbox')) var section = 'inbox';
-	if(me.hasClass('poll')) var section = 'poll';
+	else if(me.hasClass('poll')) var section = 'poll';
+	else if(me.hasClass('announcement')) var section = 'announcement';
 	else if(me.hasClass('folder')) var section = 'folder';
 
 	if(countCheckedMessages() > 1) {
@@ -22,7 +23,7 @@ function moveAction() {
 		var location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
 		var location = url_root + "search/" + messageSection + '?searchId=' + searchId;
-	} else if(messageSection == 'poll' || messageSection == 'folder' || messageSection == 'radioShow') {
+	} else if(messageSection == 'poll' || messageSection == 'announcement' || messageSection == 'folder' || messageSection == 'radioShow') {
 		var location = url_root + "message/" + messageSection + "/" + ownerId;
 	} else{
 		var location = url_root + "message/" + messageSection;

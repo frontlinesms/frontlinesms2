@@ -1,7 +1,8 @@
 package frontlinesms2
 
 class PollController {
-	
+
+	def messageSendService
 	static allowedMethods = [update: "POST"]
 
 	def index = {
@@ -10,13 +11,6 @@ class PollController {
 	}
 
 	def rename = {
-	}
-
-	def update = {
-		def poll = Poll.get(params.id)
-		poll.properties = params
-		poll.save()
-		redirect(controller: "message", action: "poll", params: [ownerId: params.id])
 	}
 
 	def create = {
@@ -28,9 +22,27 @@ class PollController {
 		if(!params.enableKeyword) params.keyword = null
 		
 		def pollInstance = Poll.createPoll(params)
-		pollInstance.save()
-		if(!params.dontSendMessage) forward(controller:"message", action:"send", params: params)
-		redirect(controller: "message")
+		if(!params.dontSendMessage) {
+			def messages = messageSendService.getMessagesToSend(params)
+			messages.each { message ->
+				pollInstance.addToMessages(message)
+				pollInstance.save()
+				messageSendService.send(message)
+			}
+			flash.message = "Poll has been saved and message(s) has been queued to send to " + messages*.dst.join(", ")
+		} else {
+			pollInstance.save()
+			flash.message = "Poll has been saved"
+		}
+		pollInstance.save(flush: true)
+		redirect(controller: "message", action: "pending", params:params)
+	}
+	
+	def update = {
+		def poll = Poll.get(params.id)
+		poll.properties = params
+		poll.save()
+		redirect(controller: "message", action: "poll", params: [ownerId: params.id])
 	}
 
 	def archive = {
@@ -51,15 +63,27 @@ class PollController {
 	
 	def confirmDelete = {
 		def pollInstance = Poll.get(params.id)
-		render view: 'confirmDelete', model: [pollInstance: pollInstance]
+		render view: "../message/confirmDelete", model: [ownerInstance: pollInstance]
 	}
 	
 	def delete = {
 		def poll = Poll.get(params.id)
-		poll.toDelete()
-		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", linkClassName:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
+		poll.deleted = true
+		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", objectType:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
 		poll.save(failOnError: true, flush: true)
 		flash.message = "Poll has been trashed!"
 		redirect(controller:"message", action:"inbox")
+	}
+	
+	def restore = {
+		def poll = Poll.get(params.id)
+		poll.deleted = false
+		Trash.findByLinkId(poll.id)?.delete()
+		poll.save(failOnError: true, flush: true)
+		flash.message = "Poll has been restored!"
+		redirect(controller: "message", action: "trash")
+	}
+	
+	def create_new_activity = {
 	}
 }

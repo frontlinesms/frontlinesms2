@@ -1,6 +1,6 @@
 <%@ page import="frontlinesms2.MessageStatus"%>
 <g:each in="${trashInstanceList}" status="i" var="m">
-	<g:if test="${m.linkClassName == 'frontlinesms2.Fmessage'}">
+	<g:if test="${m.objectType == 'frontlinesms2.Fmessage'}">
 		<tr class="${m.link == messageInstance?'selected':''} ${m.link.read ? 'read':'unread'}  ${m.link.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.link.id}">
 			<td>
 				<g:checkBox class="message-select" name="message-select" id="message-select-${m.link.id}" checked="${params.checkedId == m.link.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.link.id});" />
@@ -14,12 +14,12 @@
 			</td>
 			<td>
 				<g:link class="displayName-${m.linkId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					${m.identifier}
+					<g:if test="${m.link.status != null && m.link.status != MessageStatus.INBOUND}"><span>To:</span></g:if>${m.identifier}
 				</g:link>
 			</td>
 			<td>
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					${m.message}
+					${m.message?.size() < 60 ? m.message : m.message?.substring(0,60) + "..."}
 				</g:link>
 			</td>
 			<td>

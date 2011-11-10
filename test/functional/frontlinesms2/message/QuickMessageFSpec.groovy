@@ -70,7 +70,44 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 	}
+	
+	def "should not add the same manually entered contact more than once "() {
+		when:
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+			$("#recipient-count").text() == "1"
+		when:
+			addressField.value("3232")
+			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "3232" }
+			$("#recipient-count").text() == "2"
+	}
 
+	def "unchecking a manually added contact updates the recipients count "() {
+		when:
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			addressField.value("+919544426000")
+			addAddressButton.click()
+			addressField.value("+919544426009")
+			addAddressButton.click()
+		then:
+			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426009" }
+			$("#recipient-count").text() == "2"
+		when:
+			println $("div.manual").find("input", name:"addresses")[0]*.@value
+			$("div.manual").find("input", name:"addresses")[0].click()
+		then:
+			$("#recipient-count").text() == "1"
+	}
+	
 	def "should send the message to the selected recipients"() {
 		when:
 			launchQuickMessageDialog()
@@ -181,63 +218,19 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 
 	}
 
-	def "should launch announcement screen from create new activity link" () { // FIXME why is this test here??
-		when:
-			to PageMessageInbox
-			$("a", text:"Create new activity").click()
-		then:
-			waitFor { $("#activity-list").displayed }
-		when:
-			$("input", class: "announcement").click()
-			$("#choose").click()
-		then:
-			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
-	}
-	
 	def "should show the character count of each message"() {
 		setup:
 			createData()
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { characterCount.text() == "0 characters (1 SMS message)" }
+			waitFor { characterCount.text() == "Characters remaining 0 (1 SMS message)" }
 		when:
 			$("#messageText").value("h")
 		then:
-			waitFor { characterCount.text() == "1 characters (1 SMS message)" }
-		when:
-			$("#messageText").value('a' * 120)
-		then:
-			waitFor { characterCount.text() == "120 characters (1 SMS message)" }
-		when:
-			def longText = '0123abc[]@' * 16
-			$("#messageText").value(longText)
-		then:
-			waitFor { characterCount.text() == "160 characters (1 SMS message)" }
-		when:
-			$("#messageText") << 'a'
-		then:
-			waitFor { characterCount.text() == "161 characters (2 SMS messages)" }
+			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}
 	
-	def "should show the total number of message to be sent to recipients"() {
-		setup:
-			createData()
-		when:
-			launchQuickMessageDialog()
-			def longText = 'w' * 161
-			$("#messageText").value(longText)
-		then:
-			waitFor { characterCount.text() == "161 characters (2 SMS messages)" }
-		when:
-			toSelectRecipientsTab()
-			$("input[value='group1']").click()
-			$("input[value='group2']").click()
-			nextPageButton.click()
-		then:
-			messagesCount.text() == "4"
-	}
-
 	private def createData() {
 		def group = new Group(name: "group1").save(flush: true)
 		def group2 = new Group(name: "group2").save(flush: true)
@@ -275,14 +268,14 @@ class QuickMessageDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
-		messagesQueuedNotification { $("div#tabs-4.quick-message-summary") }
+		messagesQueuedNotification { $("div#tabs-4.summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }
 		
-		doneButton { $("#done") }
+		doneButton { $("#submit") }
 		nextPageButton { $("#nextPage") }
-		characterCount { $("#message-stats")}
+		characterCount { $("#send-message-stats")}
 		messagesCount { $("#messages-count")}
 	}
 }
@@ -290,6 +283,3 @@ class QuickMessageDialog extends geb.Page {
 class SentMessagesPage extends geb.Page {
 	static url = 'message/sent'
 }
-
-
-

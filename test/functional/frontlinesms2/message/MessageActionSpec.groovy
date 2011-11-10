@@ -11,7 +11,10 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestMessages()
 			createTestFolders()
 		when:
-			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+		then:
+			at PageMessagePollFootballTeamsBob
+		when:
 			def actions = $('#move-actions').children()*.text()
 		then:
 			actions[1] == "Inbox"
@@ -42,6 +45,27 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			$("tbody tr").size() == 1
 	}
 	
+	def "can categorize poll messages using dropdown"() {
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			def barce = "btn-" + PollResponse.findByValue('barcelona').id
+		then:
+			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester')
+		when:
+			$('#categorise_dropdown').value(barce)
+		then:
+			waitFor { $("div.flash").displayed }
+		when:
+			PollResponse.findByValue('manchester').refresh()
+			PollResponse.findByValue('barcelona').refresh()
+			Fmessage.findBySrc("Bob").refresh()
+		then:
+			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('barcelona')
+	}
+	
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
 		given:
 			createTestPolls()
@@ -49,10 +73,13 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			def shampooPoll = Poll.findByTitle('Shampoo Brands')
 			def footballPoll = Poll.findByTitle('Football Teams')
 		when:
-			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+		then:
+			at PageMessagePollFootballTeamsBob
+		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
+			waitFor { $('#multiple-messages').displayed }
 		when:
 			setMoveActionsValue(shampooPoll.id.toString())
 		then:
@@ -71,15 +98,18 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			!$("#message-archive").displayed
 	}
 
-	def "should move poll messages to inbox"() {
+	def "can move poll messages to inbox"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+		then:
+			at PageMessagePollFootballTeamsBob
+		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { $('#move-actions').size() == 1 } // not sure why this should decrease to 1...
+			waitFor { $('#multiple-messages').displayed }
 		when:
 			setMoveActionsValue('inbox')
 		then:

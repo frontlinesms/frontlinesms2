@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<g:javascript src="characterSMS-count.js"/>
+
 <div id="tabs" class="vertical-tabs">
 	<ol>
 		<li><a class="tabs-1" href="#tabs-1">Enter Question</a></li>
@@ -11,7 +13,7 @@
 		<li class="confirm-tab"><a class="tabs-8" href="#tabs-8"></a></li>
 	</ol>
 
-	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToNextTab()">
+	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToSummaryTab()">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
 		<g:render template="responses"/>
@@ -32,7 +34,8 @@
 </div>
 
 <g:javascript>
-	function initializePoll() {
+	function initializePopup() {
+		
 		$("#tabs").tabs("disable", getTabLength());
 		disableTab(1);
 		highlightPollResponses();
@@ -105,11 +108,6 @@
 					$("#tabs-7 #title").addClass("error");
 				}
 				return !isEmpty;
-			},
-			
-			onDone: function() {
-				$("#poll-details").submit();
-				return false;
 			}
 		});
 
@@ -130,8 +128,7 @@
 	}
 
 	function updateConfirmationMessage() {
-		var sendMessage = $('#message').val();
-		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
+		updateMessageDetails();
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
 		
 		// update auto-sort
@@ -147,7 +144,22 @@
 			autoSortMessages.eq(1).hide();
 		}
 	}
+	
+	function updateMessageDetails() {
+		var sendMessage
+		isGroupChecked("dontSendMessage") ?	sendMessage = "No messages will be sent" : sendMessage = $('#messageText').val();
 
+		var contactNo = $("#contacts-count").text()
+		
+		if(contactNo == 0 || isGroupChecked("dontSendMessage")) {
+			$("#confirm-recepients-count").addClass("hide")
+			$("#no-recepients").removeClass("hide")
+		} else {
+			$("#confirm-recepients-count").removeClass("hide")
+			$("#no-recepients").addClass("hide")
+		}
+		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
+	}
 
 	function highlightPollResponses() {
 		$(".choices").each(function() {
@@ -165,10 +177,5 @@
 
 	function validatePollResponses() {
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
-	}
-
-	function goToNextTab() {
-		$("#tabs").tabs("enable", getTabLength());
-		$('#tabs').tabs('select', getCurrentTab() + 1);
 	}
 </g:javascript>
