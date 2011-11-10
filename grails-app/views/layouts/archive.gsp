@@ -25,9 +25,9 @@
 		</g:javascript>
 	</head>
 	<body>
+		<g:render template="/system_notifications"/>
 		<div id="header">
 			<img id="logo" src="/frontlinesms2/images/logo.png">
-			<g:render template="/system_notifications"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
