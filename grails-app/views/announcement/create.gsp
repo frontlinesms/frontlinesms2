@@ -19,8 +19,8 @@
 			                                                                'recipients': []]"/>
 		</div>
 		<g:render template="confirm"/>
+		<g:render template="summary"/>
 	</g:formRemote>
-	<g:render template="summary"/>
 </div>
 <g:javascript>
 	function initializePopup() {

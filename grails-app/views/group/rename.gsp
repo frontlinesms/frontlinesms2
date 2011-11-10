@@ -7,7 +7,7 @@
 				<tbody>
 					<tr class="prop">
 						<td valign="top" class="name">
-							<label for="title">Name</label>
+							<label class="bold inline" for="title">Name:</label>
 						</td>
 						<td valign="top" class="value">
 							<g:textField name="name" />

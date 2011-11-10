@@ -1,9 +1,9 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label class="header" for="address">Add phone number</label>
+		<label id="label" class="bold" for="address">Add phone number: </label>
 		<g:textField id="address" name="address"/>
-		<g:link url="#" class="add-address" onclick="addAddressHandler();">Add</g:link> <!-- FIXME this should be a button, surely? -->
+		<g:link url="#" class="btn add-address" onclick="addAddressHandler();">Add</g:link>
 	</div>
 	
 	<div id="recipients-list">
@@ -44,7 +44,7 @@
 			</div>
 		</ol>
 	</div>
-	<span id="recipient-count">0</span> recipients selected
+	<div id="recipients-selected"><span id="recipient-count">0</span> recipients selected</div>
 </div>
 
 <script>

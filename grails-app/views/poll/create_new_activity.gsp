@@ -21,15 +21,15 @@
 	</head>
 	<body>
 		<form>
-			<h2>Create new activity</h2>
+			<h2 class="bold">Create new activity:</h2>
 			<ul id="activity-list">
-				<li>
-					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')" /><span>Announcement</span>
-					<div>Send an announcement message and organize the responses</div>
+				<li class="activity-list-item">
+					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')" /><span class="activity-choice">Announcement</span>
+					<div class="activity-description">Send an announcement message and organize the responses</div>
 				</li>
-				<li>
-					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span>Poll</span>
-					<div>Send a question and analyze the responses</div>
+				<li class="activity-list-item">
+					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span class="activity-choice">Poll</span>
+					<div class="activity-description">Send a question and analyze the responses</div>
 				</li>
 			</ul>
 		</form>

@@ -8,7 +8,7 @@
 		<g:hiddenField name="viewingArchive" value="${viewingArchive}" />
 		<g:hiddenField name="failed" value="${failed}" />
 
-		<p>To export messages from FrontlineSMS, choose the type of export and the information to be included in the exported data.</p>
+		<p class="info">To export messages from FrontlineSMS, choose the type of export and the information to be included in the exported data.</p>
 			<div>
 				<h2>Select an output format:</h2>
 				<input type="radio" name="format" value="csv" checked="checked" /> CSV format for use in spreadsheet<br />

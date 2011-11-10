@@ -129,11 +129,11 @@
 			</g:if>
 			<g:else>
 				<li class='static_btn'>
-					<g:link controller="poll" action="unarchive" id="${ownerInstance.id}">Unarchive Poll</g:link>
+					<g:link controller="poll" action="unarchive" id="${ownerInstance.id}">Unarchive poll</g:link>
 				</li>
 			</g:else>
 			<li>
-				<g:select name="poll-actions" class="more-actions" from="${['Export', 'Rename activity', 'Delete poll']}"
+				<g:select name="poll-actions" class="more-actions" from="${['Export', 'Rename poll', 'Delete poll']}"
 						keys="${['export', 'rename', 'delete']}"
 						noSelection="${['': 'More actions...']}"/>
 			</li>
