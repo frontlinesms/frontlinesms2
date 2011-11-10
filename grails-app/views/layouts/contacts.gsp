@@ -63,9 +63,9 @@
 			    <div  id="contacts">
 				    <g:layoutBody />
     			</div>
+                <g:render template="footer"/>
 	        </div>
             <div style="clear:both;"></div>
 	    </div>
-        <g:render template="footer"/>
 	</body>
 </html>

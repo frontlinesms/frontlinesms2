@@ -25,37 +25,29 @@
 		</g:javascript>
 	</head>
 	<body>
-		<div id="container">
+        <div id="header">
+            <img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
-			<div class="main">
-				<g:render template="../archive/menu"/>
-				<div class="content">
-					<div id='archive-header' class="content-header">
+        </div>
+			<div id="main" class="main">
+                <div id="sidebar">
+    				<g:render template="../archive/menu"/>
+                </div>
+				<div id="content" class="content">
+					<div id='archive-header' class="content-header section-actions">
 			  			<g:if test="${messageSection == 'poll'}">
-			  				<div id="poll-title">
-								<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-								<h2>Poll Archive</h2>
-							</div>
+								<h3>Poll Archive</h3>
 						</g:if>
 						<g:elseif test="${messageSection == 'inbox'}">
-							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'inboxarchive.png')}' />
-								<h2>${messageSection} Archive</h2>
-							</div>
+								<h3>${messageSection} Archive</h3>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'sent'}">
-							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'sentarchive.png')}' />
-								<h2>${messageSection} Archive</h2>
-							</div>
+								<h3>${messageSection} Archive</h3>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'folder'}">
-							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'foldersarchive.png')}' />
-								<h2>${messageSection} Archive</h2>
-							</div>
+								<h3>${messageSection} Archive</h3>
 						</g:elseif>
 					</div>
 					<div class="content-body">
@@ -91,6 +83,5 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</body>
 </html>

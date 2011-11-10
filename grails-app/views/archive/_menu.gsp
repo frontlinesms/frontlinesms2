@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<ol class="context-menu" id="archives-menu">
+<ul class="context-menu main-list" id="archives-menu">
 	<li class='section'>
-		<ol class='sub-menu' id="archive-submenu">
+		<ul class='sublist' id="archive-submenu">
 				<li class="${(messageSection == 'inbox')? 'selected':''}" >
 					<g:link controller="archive" action="inbox" elementId="inbox" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
 						<img src='${resource(dir:'images/icons',file:'inboxarchive.png')}' />
@@ -26,9 +26,9 @@
 						Folder archive
 					</g:link>
 				</li>
-		</ol>
+		</ul>
 	</li>
-</ol>                                                                                                                            
+</ul>                                                                                                                            
 
 <script>
 	$("#archive-menu li a").bind("click", function(event) {

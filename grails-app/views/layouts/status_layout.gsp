@@ -14,11 +14,13 @@
 		<g:javascript src="application.js"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 	</head>
-	<body>
-		<div id="container">
+	<body id="status-tab">
+        <div id="header">
+            <img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
+        </div>
 			<div class="main">
 				<div class="content">
 					<div class="content-body">
@@ -26,6 +28,5 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</body>
 </html>

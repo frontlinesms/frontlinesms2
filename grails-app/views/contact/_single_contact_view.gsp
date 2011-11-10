@@ -1,26 +1,22 @@
 <div class="single-contact">
-	<div class="buttons">
-		<ol>
+<div id="action-buttons" class="buttons">
 			<g:if test="${contactInstance?.id}">
-				<li><g:actionSubmit id="update-single" action="update" value="Save" disabled="disabled"/></li>
-				<li><input type="button" class="cancel" value="Cancel" disabled="disabled"/></li>
+				<g:actionSubmit id="update-single" action="update" value="Save" disabled="disabled"/>
+				<input type="button" class="cancel" value="Cancel" disabled="disabled"/>
 			</g:if>
 			<g:else>
-				<li><g:actionSubmit id="save-new" action="saveContact" value="Save"/></li>
-				<li><g:link class="cancel" action="list" default="Cancel">Cancel</g:link></li>
+				<g:actionSubmit id="save-new" action="saveContact" value="Save"/>
+				<g:link class="cancel" action="list" default="Cancel">Cancel</g:link>
 			</g:else>
 			
 			<g:if test="${contactInstance?.id}">
-				<li>
-					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');">
+					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
 						Delete
 					</a>
-				</li>
 			</g:if>
-		</ol>
-	</div>
-	
-	<div class="basic-info field">
+</div>
+
+		<div class="basic-info form-field field">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
@@ -34,7 +30,7 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-	<div class="basic-info field">
+	<div class="basic-info form-field field">
 		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 		<g:textField name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}"/>
 		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
@@ -44,7 +40,7 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-   	<div class="basic-info field">
+   	<div class="basic-info field form-field">
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
 		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">

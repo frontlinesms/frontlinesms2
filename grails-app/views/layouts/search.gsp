@@ -29,10 +29,12 @@
 		</g:javascript>
 	</head>
 	<body>
-		<div id="container">
+        <div id="header">
+            <img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 	        <g:render template="/flash"/>
+        </div>
 	        <div class="main">
 				<g:render template="menu"/>
 				<div class="content">
@@ -86,6 +88,5 @@
 					</div>
 				</div>
 			</div>
-		</div>
 	</body>
 </html>
