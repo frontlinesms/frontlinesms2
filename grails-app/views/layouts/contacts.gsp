@@ -14,45 +14,56 @@
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
+		<g:javascript src="contact/changingNumberAlert.js"/>
+		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
+		<g:javascript src="contact/moreGroupActions.js" />
 		<g:javascript>
-		function getGroupId(){
-			var group = $('#groupId');
-			return group.length ? group.val() : '';
-		}
-		function updateContacts(data) {
-			var snippet = $(data);
-			$("#contacts-list").html(snippet.filter('#contacts-list').html());
-			$(".content-footer #page-arrows").html(snippet.filter('.content-footer').children()[1].innerHTML);
-			disablePaginationControls();
-		}
-		
-		$(function() {  
-		   disablePaginationControls();
-		   $("#contact-search").renderDefaultText();
-		});
+			function getGroupId(){
+				var group = $('#groupId');
+				return group.length ? group.val() : '';
+			}
+			function updateContacts(data) {
+				var snippet = $(data);
+				$("#contacts-list").html(snippet.filter('#contacts-list').html());
+				$(".content-footer #page-arrows").html(snippet.filter('.content-footer').children()[1].innerHTML);
+				disablePaginationControls();
+			}
 
+			$(function() {  
+			   disablePaginationControls();
+			   $("#contact-search").renderDefaultText();
+			});
 		</g:javascript>
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
 	<body id="contacts-tab">
-        <div id="header">
-            <img src="/frontlinesms2/images/logo.png" id="logo"/>
-		    <g:render template="/system_menu"/>
-	    	<g:render template="/tabs"/>
-    		<g:render template="/flash"/>
-        </div>
-	    <div id="main">
-            <div id="sidebar">
-		        <g:render template="menu"/>
-            </div>
-		    <div id="content">
+		<g:render template="/system_notifications"/>
+		<div id="header">
+			<img src="/frontlinesms2/images/logo.png" id="logo"/>
+			<g:render template="/system_menu"/>
+			<g:render template="/tabs"/>
+			<g:render template="/flash"/>
+		</div>
+		<div id="main">
+			<div id="sidebar">
+				<g:render template="menu"/>
+			</div>
+			<div id="content">
 				<div class="section-actions" id="contact-actions">
-					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
+					<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
 						<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
+						<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
 						<h3>${contactsSection.name}</h3>
-                    </g:if>
+						<ol>
+							<li>
+								<g:select name="group-actions" from="${['Rename group', 'Delete group']}"
+										keys="${['rename', 'delete']}"
+										noSelection="${['': 'More actions...']}"/>
+							</li>
+						</ol>
+					</g:if>
 					<g:elseif test="${!contactInstance}">
 						<h3>New Group</h3>
 					</g:elseif>
@@ -60,12 +71,12 @@
 						<h3>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h3>
 					</g:else>
 				</div>
-			    <div  id="contacts">
-				    <g:layoutBody />
-    			</div>
-                <g:render template="footer"/>
-	        </div>
-            <div style="clear:both;"></div>
-	    </div>
+				<div  id="contacts">
+					<g:layoutBody />
+				</div>
+				<g:render template="footer"/>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
 	</body>
 </html>

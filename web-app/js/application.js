@@ -1,18 +1,4 @@
-var Ajax;
-if (Ajax && (Ajax != null)) {
-	Ajax.Responders.register({
-	  onCreate: function() {
-        if($('spinner') && Ajax.activeRequestCount>0)
-          Effect.Appear('spinner',{duration:0.5,queue:'end'});
-	  },
-	  onComplete: function() {
-        if($('spinner') && Ajax.activeRequestCount==0)
-          Effect.Fade('spinner',{duration:0.5,queue:'end'});
-	  }
-	});
-}
-
-$(document).ready(function() {
+$(function() {
 	$('#tab-messages').everyTime(refresh_rate || '30s', "refreshCountTimer", refreshMessageCount);
 });
 
@@ -20,31 +6,6 @@ function refreshMessageCount() {
 	$.get(url_root + 'message/getUnreadMessageCount', function(data) {
 		$('#tab-messages').html("Messages " + data);
 	});
-}
-
-var remoteHash = {
-	"export": function() {
-		$.ajax({
-			type:'GET',
-			url: url_root + 'export/wizard',
-			data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
-					searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
-					failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: $("#viewingArchive").val()},
-			success: function(data) {
-				launchSmallPopup('Export', data, 'Export');
-				updateExportInfo();
-			}})
-	},
-
-	"renameActivity": function() {
-		$.ajax({
-			type:'GET',
-			url: url_root + 'poll/rename',
-			data: {ownerId: $("#ownerId").val()},
-			success: function(data) {
-				launchSmallPopup('Rename activity', data, 'Rename');
-			}})
-	}
 }
 
 function isElementEmpty(selector) {

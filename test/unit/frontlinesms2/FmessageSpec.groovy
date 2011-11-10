@@ -20,17 +20,6 @@ class FmessageSpec extends UnitSpec {
 			message.read == false
 	}
 	
-	def 'deleting message sets deleted flag to true'() {
-		when:
-			Fmessage message = new Fmessage()
-		then:
-			message.deleted == false
-		when:
-			message.toDelete()
-		then:
-			message.deleted == true
-	}
-
 	def 'messages are unstarred by default'() {
 		when:
 			Fmessage message = new Fmessage()

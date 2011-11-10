@@ -2,28 +2,15 @@ package frontlinesms2
 
 class Group {
 	String name
-	String subscriptionKey
-	String unsubscriptionKey
 
 	static constraints = {
 		name(unique: true, nullable: false, blank: false, maxSize: 255)
-		subscriptionKey(nullable: true, blank: false, validator: { val, obj ->
-			return isUniqueAcrossColumns(val, obj.unsubscriptionKey, obj)
-		})
-		unsubscriptionKey(nullable: true, blank: false, validator: { val, obj ->
-			return isUniqueAcrossColumns(val, obj.subscriptionKey, obj)
-		})
 	}
-
-	private static boolean isUniqueAcrossColumns(val, otherVal, obj) {
-		return val == null ?:
-				((val ==~ /([a-zA-Z0-9]+)/) && (val != otherVal) &&
-						Group.findAllBySubscriptionKeyOrUnsubscriptionKey(val, val).every {it.id == obj.id})
-	}
-
 
 	static mapping = {
-	    table 'grup'
+		// 'group' is a SQL keyword, and so automatic mapping of this class to a
+		// table does not work.
+		table 'grup'
 	}
 
 	def beforeDelete = {

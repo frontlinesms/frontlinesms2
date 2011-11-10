@@ -16,6 +16,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
 		thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
 		group = new Group(name:'test').save(failOnError:true)
+		new Group(name:'nobody').save(failOnError:true, flush:true )
 		
 		//message in the same day will still be return even if in the future
 		def futureDate = new Date()
@@ -132,6 +133,14 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId == Group.findByName('test').id
 	}
 	
+	def "message searches in a group with no member return empty list"(){
+		when:
+			controller.params.groupId = Group.findByName('nobody').id
+			def model = controller.result()
+		then:
+			model.messageInstanceList == []
+	}
+	
 	def "message searches can be restricted to both contact groups and polls"() {
 		given:
 			makeGroupMember()
@@ -174,7 +183,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
-			Fmessage.findBySrc("+254333222").toDelete().save(flush: true)
+			Fmessage.findBySrc("+254333222").deleted = true
+			Fmessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Minime')]
@@ -263,6 +273,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceTotal == 8
 	}
 	
+	// TODO this needs a proper cleanup
 	def "only return message with custom fields"() {
 		when:
 			controller.params['cityCustomField'] = 'Paris'

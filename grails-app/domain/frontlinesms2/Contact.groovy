@@ -17,6 +17,7 @@ class Contact {
 	
 	def beforeInsert = {
 		updateContactNames(name, primaryMobile)
+		stripNumberFields()
 	}
 	
 	def beforeDelete = {
@@ -26,34 +27,16 @@ class Contact {
 	
 	static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
-				if(val == '') {
-					obj.primaryMobile != ''
-					obj.primaryMobile != null
-				}
+			val || obj.primaryMobile
 		})
 		primaryMobile(unique: true, nullable: true, validator: { val, obj ->
-				if(val == '') {
-					obj.name != ''
-					obj.name != null
-				}
+			val || obj.name
 		})
 		secondaryMobile(unique: false, nullable: true, validator: { val, obj ->
-				if(val == '') {
-					obj.name != ''
-					obj.name != null
-				}
-				if(val && obj.primaryMobile){
-					val != obj.primaryMobile
-				}
+			!(val && val==obj.primaryMobile)
 		})
-		email(unique: false, nullable: true, email: true, validator: { val, obj ->
-				if(val == '') {
-					obj.name != ''
-					obj.name != null
-				}
-		})
-
-        notes(nullable: true, maxSize: 1024)
+		email(unique:false, nullable:true, email:true)
+		notes(nullable:true, maxSize:1024)
 		customFields(nullable: true, unique: false)
 	}
 
@@ -71,11 +54,19 @@ class Contact {
 		groups.each() { GroupMembership.create(this, it) }
 	}
 
-	def addToGroups(Group g, flush=false) {
+	def addToGroup(Group g, flush=false) {
+		addToGroups(g, flush)
+	}
+
+	def addToGroups(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
 		GroupMembership.create(this, g, flush)
 	}
 
-	def removeFromGroups(Group g, flush=false) {
+	def removeFromGroup(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
+		removeFromGroups(g, flush)
+	}
+
+	def removeFromGroups(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
 		GroupMembership.remove(this, g, flush)
 	}
 
@@ -105,6 +96,15 @@ class Contact {
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [contactName, true, contactNumber])
 			}
 		}
+	}
+	
+	def stripNumberFields() {
+		def n = primaryMobile?.replaceAll(/\D/, '')
+		if(primaryMobile && primaryMobile[0] == '+') n = '+' + n
+		primaryMobile = n
+		def s = secondaryMobile?.replaceAll(/\D/, '')
+		if(secondaryMobile && secondaryMobile[0] == '+') s = '+' + s
+		secondaryMobile = s
 	}
 	
 	private def getOldContactNumber() {

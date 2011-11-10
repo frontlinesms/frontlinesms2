@@ -3,12 +3,13 @@ package frontlinesms2.message
 import frontlinesms2.*
 import org.openqa.selenium.Keys
 
-class MessageNavigationSpec extends MessageGebSpec {
+class MessageNavigationSpec extends MessageBaseSpec {
 	def "should move to the next message when 'down' arrow is pressed"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
+			$("a", text: "Alice").click()
 		then:
 			messagesSelect[1].parent().parent().hasClass("selected")
 		when:
@@ -22,7 +23,7 @@ class MessageNavigationSpec extends MessageGebSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			messagesSelect[2].click()
 		then:
 			waitFor { messagesSelect[2].parent().parent().hasClass("selected") }

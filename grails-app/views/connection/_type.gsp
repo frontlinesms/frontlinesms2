@@ -1,4 +1,6 @@
 <div id="tabs-1">
-	<input type="radio" class='con-type' name="connectionType" value="smslib" checked='checked' />Phone/Modem<br />
-	<input type="radio" class='con-type' name="connectionType" value="email" />Email<br />
+	<ul id="type-list">
+		<li><input type="radio" class='smslib' name="connectionType" value="smslib" checked='checked' onclick="setChecked('smslib')" />Phone/Modem<br /></li>
+		<li><input type="radio" class='email' name="connectionType" value="email" onclick="setChecked('email')" />Email<br /></li>
+	</ul>
 </div>

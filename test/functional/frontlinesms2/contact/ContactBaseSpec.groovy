@@ -8,6 +8,14 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		new Contact(name: 'Alice', primaryMobile: '2541234567', notes: 'notes').save(failOnError:true, flush: true)
 		new Contact(name: 'Bob', primaryMobile: '+254987654', secondaryMobile: "+232345675", email: "bob@bob.com").save(failOnError:true, flush: true)
 	}
+	
+	static createTestMessages() {
+		[new Fmessage(src:'Bob', dst:'MyNumber', text:'hi Bob'),
+			new Fmessage(src:'Alice', dst:'MyNumber', text:'hi Alice')].each() {
+				it.status = MessageStatus.INBOUND
+				it.save(failOnError:true, flush: true)
+			}
+	}
 
 	static createTestGroups() {
 		def bob = Contact.findByName('Bob')

@@ -50,12 +50,7 @@ class SearchController {
 			searchInstance.save(failOnError: true, flush: true)
 		}
 
-		//FIXME Need to combine the 2 search part (the name matching custom field and the message matching all criteria) in one service or domain
-		def contactNameMatchingCustomField
-		if (search.customFields.find{it.value}) {
-			contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
-		}
-		def rawSearchResults = Fmessage.search(search, contactNameMatchingCustomField)
+		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
@@ -64,11 +59,11 @@ class SearchController {
 				checkedMessageCount: checkedMessageCount,
 				messageInstanceList: searchResults,
 				messageInstanceTotal: rawSearchResults.count()] << 
-			show(searchResults) << no_search()
+			show() << no_search()
 	}
 
-	def show = { searchResults ->
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : searchResults[0]
+	def show = {
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
@@ -84,25 +79,25 @@ class SearchController {
 			searchDescriptor += ' all messages'
 		}
 		 
-		if(search.group) searchDescriptor += ", in "+search.group.name
+		if(search.group) searchDescriptor += ", "+search.group.name
 		if(search.owners) {
 			def activity = getActivityInstance()
 			String ownerDescription = activity instanceof Poll ? activity.title: activity.name
-			searchDescriptor += ", in"+ownerDescription
+			searchDescriptor += ", "+ownerDescription
 		}
-		searchDescriptor += search.inArchive? ", include archived messages":", without archived messages" 
-		if(search.contactString) searchDescriptor += ", with contact name="+search.contactString
+		searchDescriptor += search.inArchive? ", archived messages":", without archived messages" 
+		if(search.contactString) searchDescriptor += ", "+search.contactString
 		if (search.customFields.find{it.value}) {
 			search.customFields.find{it.value}.each{
-				searchDescriptor += ", with contact having "+it.key+"="+it.value
+				searchDescriptor += ", "+it.key+"="+it.value
 			}
 		}
 		if(search.startDate && search.endDate){
 			searchDescriptor += ", between " + search.startDate.format(dateFormatString) + " and " + search.endDate.format(dateFormatString) 
 		} else if (search.startDate) {
-			searchDescriptor += ", from the " + search.startDate.format(dateFormatString)
+			searchDescriptor += ", from " + search.startDate.format(dateFormatString)
 		} else if (search.endDate) {
-			searchDescriptor += ", until the " + search.endDate.format(dateFormatString)
+			searchDescriptor += ", until " + search.endDate.format(dateFormatString)
 		}
 		return searchDescriptor
 	}

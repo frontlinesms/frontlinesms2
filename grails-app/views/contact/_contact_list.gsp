@@ -12,15 +12,15 @@
 					<g:checkBox name="contact-select" class="contact-select" id="contact-select-${c.id}"
 							checked="${params.checkedId == c.id + '' ? 'true': 'false'}" value="${c.id}" onclick="contactChecked(${c.id});"/>
 					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
-						<g:link class="contact-name displayName-${c.id}" controller="contact" action="show" params="[contactId:c.id, groupId:contactsSection.id, sort: params.sort, offset: params.offset]">
-							${c.name?:c.primaryMobile?:c.secondaryMobile?:'[No Name]'}
-						</g:link>
+						<g:set var="contactLinkParams" value="[groupId:contactsSection.id]"/>
 					</g:if>
-					<g:else>
-						<g:link class="displayName-${c.id} contact-name" action="show" params="[contactId: c.id, sort: params.sort, offset: params.offset]">
-							${c.name?:c.primaryMobile?:c.secondaryMobile?:'[No Name]'}
-						</g:link>
-					</g:else>
+					<g:elseif test="${contactsSection instanceof frontlinesms2.SmartGroup}">
+						<g:set var="contactLinkParams" value="[smartGroupId:contactsSection.id]"/>
+					</g:elseif>
+					<g:else><g:set var="contactLinkParams" value="[:]"/></g:else>
+					<g:link class="displayName-${c.id} contact-name" action="show" params="${contactLinkParams + [contactId:c.id, sort:params.sort, offset:params.offset]}">
+						${c.name?:c.primaryMobile?:c.secondaryMobile?:'[No Name]'}
+					</g:link>
 				</li>
 			</g:each>
 		</ul>

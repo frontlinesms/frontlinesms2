@@ -3,12 +3,12 @@ package frontlinesms2.message
 import frontlinesms2.*
 import frontlinesms2.utils.*
 
-@Mixin(GebUtil)
+@Mixin(frontlinesms2.utils.GebUtil)
 class MessageListSpec extends grails.plugin.geb.GebSpec {
 
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
-            to MessagesPage
+            to PageMessageInbox
 			def btnInbox = $('#messages-menu li a', href:"/frontlinesms2/message/inbox")
         then:
 			btnInbox.text() == 'Inbox'
@@ -16,7 +16,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
-	        to MessagesPage
+	        to PageMessageInbox
 			def btnSentItems = $('#messages-menu li a', href:'/frontlinesms2/message/sent')
         then:
 			btnSentItems.text() == 'Sent'
@@ -40,7 +40,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 		then:
 		$('#messages-submenu li')*.text()[0] == 'Inbox'
 		$('#messages-submenu li')*.text()[1] == 'Sent'
@@ -52,7 +52,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createReadUnreadMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 		then:
 		$('#tab-messages').text() == 'Messages 2'
 	}
@@ -61,14 +61,14 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestMessages()
 		when:
-			to MessagesPage
+			to PageMessageInbox
 			$("#source-header a").click()
 		then:
-			getColumnAsArray($("table tr"), 2) == ['Contact 1', 'Contact 2']
+			getColumnText('messages', 2) == ['Contact 1', 'Contact 2']
 		when:
 			$("#message-header a").click()
 		then:
-			getColumnAsArray($("table tr"), 3) == ['An inbox message', 'Another inbox message']		
+			getColumnText('messages', 3) == ['An inbox message', 'Another inbox message']		
 	}
 	   
     def assertMenuItemSelected(String itemText) {
@@ -80,7 +80,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 	
 	def createTestMessages() {
 		9.times {
-			new Contact(name:"Contact ${it}", primaryMobile:"123456789${it}").save(flush:true)
+			new Contact(name:"Contact ${it}", primaryMobile:"123456789${it}").save(failOnError:true)
 		}
 		Fmessage inboxMessage = new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message', src:'1234567891', dateCreated:new Date()-10).save(flush:true)
 		Fmessage anotherInboxMessage = new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message', src:'1234567892', dateCreated:new Date()-20).save(flush:true)

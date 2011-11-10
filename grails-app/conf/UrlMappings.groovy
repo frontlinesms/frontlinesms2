@@ -12,11 +12,13 @@ class UrlMappings {
 		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
 		"/message/sent/show/$messageId"(controller:'message', action:'sent') {}
 		"/message/pending/show/$messageId"(controller:'message', action: 'pending') {}
-		"/message/trash/show/$messageId"(controller:'message', action: 'trash') {}
+		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
 
 		"/message/poll/$ownerId"(controller:'message', action:'poll') {}
 		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
-
+		
+		"/message/announcement/$ownerId"(controller:'message', action:'announcement') {}
+		"/message/announcement/$ownerId/show/$messageId"(controller:'message', action:'announcement') {}
 
 		"/message/radioShow/$ownerId"(controller:'message', action:'radioShow') {}
 		"/message/radioShow/$ownerId/show/$messageId"(controller:'message', action:'radioShow') {}
@@ -29,6 +31,8 @@ class UrlMappings {
 		"/poll/save"(controller:'poll', action:'save')
 		"/folder/create"(controller:'folder', action:'create')
 		"/folder/save"(controller:'folder', action:'save')
+		"/announcement/create"(controller:'announcement', action: 'create')
+		"/announcement/save"(controller:'announcement', action: 'save')
 		
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}

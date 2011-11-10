@@ -8,47 +8,51 @@ $(document.documentElement).keyup(function (event) {
 	}
 	
 	if(key === 38) {
-		showPreviousMessage();
+		showPreviousRow();
 		event.stopPropagation();
 		return false;
 	}
 	
 	if(key === 40) {
-		showNextMessage();
+		showNextRow();
 		event.stopPropagation();
 		return false;
 	}
 });
 
-function showPreviousMessage() {
+function showPreviousRow() {
 	if(countSelectedMessages() == 1) {
-		var selectedMessage = $('tr.selected');
-		var previousMessage = selectedMessage.prev()
-		if(previousMessage.attr('id') !== undefined) {
-			loadMessage(previousMessage.attr('id').substring('message-'.length));
+		var selectedRow = $('tr.selected');
+		var previousRow = selectedRow.prev()
+		if(previousRow.attr('id') !== undefined) {
+			if(previousRow.attr('id').indexOf("activity") !=-1) {
+				loadRow(previousRow.attr('id').substring('activity-'.length));
+			} else {
+				loadRow(previousRow.attr('id').substring('message-'.length));
+			}
 		}
 	}
 }
 
-function showNextMessage() {
+function showNextRow() {
 	if(countSelectedMessages() == 1) {
-		var selectedMessage = $('tr.selected');
-		var nextMessage = selectedMessage.next()
-		if(nextMessage.attr('id') !== undefined) {
-			loadMessage(nextMessage.attr('id').substring('message-'.length));
+		var selectedRow = $('tr.selected');
+		var nextRow = selectedRow.next()
+		if(nextRow.attr('id') !== undefined) {
+			if(nextRow.attr('id').indexOf("activity") !=-1) {
+				loadRow(nextRow.attr('id').substring('activity-'.length));
+			} else {
+				loadRow(nextRow.attr('id').substring('message-'.length));
+			}
 		}
 	}
 }
 
-function loadMessage(id) {
+function loadRow(id) {
 	var url = $(".displayName-" + id).attr("href");
 	$.get(url, function(data) {
 		$('#message-list').replaceWith($(data).find('#message-list'));
-		$('#message-details #message-id').replaceWith($(data).find('#message-details #message-id'));
-		$('#message-details #message-src').replaceWith($(data).find('#message-details #message-src'));
-		$('#message-details #single-message #message-info').replaceWith($(data).find('#message-details #single-message #message-info'));
-		$('#message-details #single-message #other_btns').replaceWith($(data).find('#message-details #single-message #other_btns'));
-		$('#message-details #single-message #poll-actions').replaceWith($(data).find('#message-details #single-message #poll-actions'));
+		$('#message-details').replaceWith($(data).find('#message-details'));
 	});
 }
 function countSelectedMessages() {

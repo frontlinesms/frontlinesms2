@@ -10,6 +10,7 @@ class Fmessage {
 	String contactName
 	Date dateCreated
 	Date dateReceived
+	Date dateSent
 	boolean contactExists
 	MessageStatus status
 	boolean read
@@ -21,13 +22,15 @@ class Fmessage {
 	static mapping = {
 		sort dateCreated:'desc'
 		sort dateReceived:'desc'
+		sort dateSent:'desc'
 		autoTimestamp false
 	}
 
 	def beforeInsert = {
-		dateCreated = dateCreated ? dateCreated : new Date()
-		dateReceived = dateReceived ? dateReceived : new Date()
-		if(status==MessageStatus.INBOUND? src: dst) updateContactName()
+		dateCreated = dateCreated ?: new Date()
+		dateReceived = dateReceived ?: new Date()
+		dateSent = dateSent ?: new Date()
+		if(status == MessageStatus.INBOUND ? src : dst) updateContactName()
 	}
 	
 	private String findContact(String number) {
@@ -40,8 +43,8 @@ class Fmessage {
 				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
 			}
 		}
-		contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst)
 		contactExists = contactName && contactName != src && contactName != dst
+		contactExists ?: (contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst))
 	}
 	
 	static constraints = {
@@ -50,144 +53,147 @@ class Fmessage {
 		text(nullable:true)
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
+		dateSent(nullable:true)
 		status(nullable:true)
 		contactName(nullable:true)
+		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) ||	(obj.messageOwner instanceof Folder && obj.messageOwner.archived)
+					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) ||	obj.messageOwner.archived
 				} else {
-					obj.messageOwner == null || obj.messageOwner instanceof RadioShow || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (obj.messageOwner instanceof Folder && !obj.messageOwner.archived)
+					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (!(obj.messageOwner instanceof PollResponse) && !obj.messageOwner.archived)
 				}
 		})
 	}
 	
 	static namedQueries = {
-			inbox { getOnlyStarred=false, getOnlyArchived=false ->
-				and {
-					eq("deleted", false)
-					eq("archived", getOnlyArchived)
-					if(getOnlyStarred)
-						eq("starred", true)
-					eq("status", MessageStatus.INBOUND)
-					isNull("messageOwner")
-				}
+		inbox { getOnlyStarred=false, getOnlyArchived=false ->
+			and {
+				eq("deleted", false)
+				eq("archived", getOnlyArchived)
+				if(getOnlyStarred)
+					eq("starred", true)
+				eq("status", MessageStatus.INBOUND)
+				isNull("messageOwner")
 			}
-			sent { getOnlyStarred=false, getOnlyArchived=false ->
-				and {
-					eq("deleted", false)
-					eq("archived", getOnlyArchived)
-					eq("status", MessageStatus.SENT)
-					isNull("messageOwner")
-					if(getOnlyStarred)
-						eq("starred", true)
-				}
+		}
+		sent { getOnlyStarred=false, getOnlyArchived=false ->
+			and {
+				eq("deleted", false)
+				eq("archived", getOnlyArchived)
+				eq("status", MessageStatus.SENT)
+				isNull("messageOwner")
+				if(getOnlyStarred)
+					eq("starred", true)
 			}
-			pending { getOnlyFailed=false ->
-				and {
-					eq("deleted", false)
-					eq("archived", false)
-					isNull("messageOwner")
-					if(getOnlyFailed)
-						'in'("status", [MessageStatus.SEND_FAILED])
-					else 
-						'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
-				}
+		}
+		pending { getOnlyFailed=false ->
+			and {
+				eq("deleted", false)
+				eq("archived", false)
+				isNull("messageOwner")
+				if(getOnlyFailed)
+					'in'("status", [MessageStatus.SEND_FAILED])
+				else 
+					'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 			}
-			deleted { getOnlyStarred=false ->
-				and {
-					eq("deleted", true)
-					eq("archived", false)
-					if(getOnlyStarred)
-						eq('starred', true)
-				}
+		}
+		deleted { getOnlyStarred=false ->
+			and {
+				eq("deleted", true)
+				eq("archived", false)
+				if(getOnlyStarred)
+					eq('starred', true)
 			}
-			owned { getOnlyStarred=false, owners ->
-				and {
-					eq("deleted", false)
-					'in'("messageOwner", owners)
-					if(getOnlyStarred)
-						eq("starred", true)
-				}
+		}
+		owned { getOnlyStarred=false, owners ->
+			and {
+				eq("deleted", false)
+				'in'("messageOwner", owners)
+				if(getOnlyStarred)
+					eq("starred", true)
 			}
-			unread {
-				and {
-					eq("deleted", false)
-					eq("archived", false)
-					eq("status", MessageStatus.INBOUND)
-					eq("read", false)
-					isNull("messageOwner")
-				}
+		}
+		unread {
+			and {
+				eq("deleted", false)
+				eq("archived", false)
+				eq("status", MessageStatus.INBOUND)
+				eq("read", false)
+				isNull("messageOwner")
 			}
+		}
 
-			search { search, contactNameMatchingCustomField=null -> 
-				def groupMembersNumbers = search.group?.getAddresses()
-					and {
-						if(search.searchString) {
-							'ilike'("text", "%${search.searchString}%")
-						}
-						if(search.contactString) {
-							'ilike'("contactName", "%${search.contactString}%")
-						} 
-						if(groupMembersNumbers) {
-							or {
-								'in'("src",	groupMembersNumbers)
-								'in'("dst", groupMembersNumbers)
-							}
-						}
-						if(search.status) {
-							'in'('status', search.status.tokenize(",")*.trim().collect { Enum.valueOf(MessageStatus.class, it)})
-						}
-						if(search.owners) {
-							'in'("messageOwner", search.owners)
-						}
-						if(search.startDate && search.endDate) {
-							between("dateReceived", search.startDate, search.endDate.next())
-						} else if (search.startDate){	
-							ge("dateReceived", search.startDate)
-						} else if (search.endDate) {
-							le("dateReceived", search.endDate.next())
-						}
-						if(search.customFields.find{it.value}) {
-							if(!contactNameMatchingCustomField)
-								eq('src', null)
-							else 'in'("contactName", contactNameMatchingCustomField)
-						}
-						if(!search.inArchive) {
-							eq('archived', false)
-						}
-						eq('deleted', false)
-					}
-			}
-			
-			filterMessages { params ->
-				def groupInstance = params.groupInstance
-				def messageOwner = params.messageOwner
-				def startDate = params.startDate
-				def endDate = params.endDate
-				def groupMembers = groupInstance?.getAddresses() ?: ''
-				and {
-					if(groupInstance) {
-						'in'("src",	 groupMembers)
-					}
-					if(messageOwner) {
-						'in'("messageOwner", messageOwner)
-					}
-					if(params.messageStatus) {
-						'in'('status', params.messageStatus.collect { Enum.valueOf(MessageStatus.class, it)})
-					}
-					eq('deleted', false)
+		search { search -> 
+			and {
+				if(search.searchString) {
+					ilike("text", "%${search.searchString}%")
+				}
+				if(search.contactString) {
+					ilike("contactName", "%${search.contactString}%")
+				} 
+				if(search.group) {
+					def groupMembersNumbers = search.group.getAddresses()
+					groupMembersNumbers = groupMembersNumbers?:[""] //otherwise hibernate fail to search 'in' empty list
 					or {
-						and {
-							between("dateReceived", startDate, endDate)
-							eq("status", MessageStatus.INBOUND)
-						}
-						and {
-							between("dateCreated", startDate, endDate)
-							eq("status", MessageStatus.SENT)
-						}
+						'in'("src", groupMembersNumbers)
+						'in'("dst", groupMembersNumbers)
+					}
+				}
+				if(search.status) {
+					'in'('status', search.status.tokenize(",")*.trim().collect { Enum.valueOf(MessageStatus.class, it)})
+				}
+				if(search.owners) {
+					'in'("messageOwner", search.owners)
+				}
+				if(search.startDate && search.endDate) {
+					between("dateReceived", search.startDate, search.endDate.next())
+				} else if (search.startDate) {	
+					ge("dateReceived", search.startDate)
+				} else if (search.endDate) {
+					le("dateReceived", search.endDate.next())
+				}
+				if(search.customFields.find{it.value}) {
+					def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
+					contactNameMatchingCustomField = contactNameMatchingCustomField?:[""] //otherwise hibernate fail to search 'in' empty list
+					'in'("contactName", contactNameMatchingCustomField)
+				}
+				if(!search.inArchive) {
+					eq('archived', false)
+				}
+				eq('deleted', false)
+			}
+		}
+		
+		filterMessages { params ->
+			def groupInstance = params.groupInstance
+			def messageOwner = params.messageOwner
+			def startDate = params.startDate
+			def endDate = params.endDate
+			def groupMembers = groupInstance?.getAddresses() ?: ''
+			and {
+				if(groupInstance) {
+					'in'("src",	 groupMembers)
+				}
+				if(messageOwner) {
+					'in'("messageOwner", messageOwner)
+				}
+				if(params.messageStatus) {
+					'in'('status', params.messageStatus.collect { Enum.valueOf(MessageStatus.class, it)})
+				}
+				eq('deleted', false)
+				or {
+					and {
+						between("dateReceived", startDate, endDate)
+						eq("status", MessageStatus.INBOUND)
+					}
+					and {
+						between("dateCreated", startDate, endDate)
+						eq("status", MessageStatus.SENT)
 					}
 				}
 			}
+		}
 	}
 
 	def getDisplayText() {
@@ -206,11 +212,6 @@ class Fmessage {
 		contactName
 	}
 
-	def toDelete() { // FIXME is this method necessary?
-		this.deleted = true
-		this
-	}
-
 	def addStar() { // FIXME is this method necessary?
 		this.starred = true
 		this
@@ -221,7 +222,7 @@ class Fmessage {
 		this
 	}
 	
-	def archive() {
+	def archive() { // FIXME is this method necessary?
 		this.archived = true
 		this
 	}

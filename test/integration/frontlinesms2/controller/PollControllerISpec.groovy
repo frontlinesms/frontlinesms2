@@ -51,7 +51,6 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.save()
 			def p = Poll.findByTitle("test-poll-2")
-			println "From the database, p.keyword is $p.keyword"
 		then:
 			p
 			!p.keyword
@@ -82,5 +81,31 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			updatedPoll.title == "renamed poll name"
 			updatedPoll.question == "question"
 			updatedPoll.autoReplyText == "Thanks"
+	}
+	
+	def "can delete a poll to send it to the trash"() {
+		setup:
+			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		when:
+			assert Poll.findAllByDeleted(false) == [poll]
+			controller.params.id  = poll.id
+			controller.delete()
+		then:
+			Poll.findAllByDeleted(true) == [poll]
+			Poll.findAllByDeleted(false) == []
+	}
+	
+	def "can restore a poll to move out of the trash"() {
+		setup:
+			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			poll.deleted = true
+			poll.save(failOnError:true, flush:true)
+		when:
+			assert Poll.findAllByDeleted(true) == [poll]
+			controller.params.id  = poll.id
+			controller.restore()
+		then:
+			Poll.findAllByDeleted(false) == [poll]
+			Poll.findAllByDeleted(true) == []
 	}
 }

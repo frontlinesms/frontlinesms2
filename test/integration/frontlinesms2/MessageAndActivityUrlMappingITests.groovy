@@ -28,7 +28,7 @@ class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTe
 
 	def testTrashView() {
 		assertForwardUrlMapping('/message/trash/show/123', controller:'message', action:'trash') {
-			messageId = 123
+			id = 123
 		}
 	}
 
@@ -48,6 +48,13 @@ class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTe
 
 	def testFolderMessageView() {
 		assertForwardUrlMapping('/message/folder/123/show/456', controller:'message', action:'folder') {
+			messageId = 456
+			ownerId = 123
+		}
+	}
+	
+	def testAnnouncementMessageView() {
+		assertForwardUrlMapping('/message/announcement/123/show/456', controller:'message', action:'announcement') {
 			messageId = 456
 			ownerId = 123
 		}

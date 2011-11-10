@@ -1,0 +1,306 @@
+package frontlinesms2.search
+
+import frontlinesms2.*
+import org.openqa.selenium.Keys
+
+class SearchViewSpec extends SearchBaseSpec {
+	def setup() {
+		createTestGroups()
+		createTestPollsAndFolders()
+		createTestMessages2()
+	}
+	
+	def "clicking on the search button links to the result show page"() {
+		setup:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
+		when:
+			to PageSearch
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			at PageSearchResult
+			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
+					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
+	}
+	
+	def "group list and activity lists are displayed when they exist"() {
+		when:
+			to PageSearch
+		then:
+			searchFrm.find('select', name:'groupId').children()*.text() == ['Select group','Listeners', 'Friends']
+			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
+	}
+	
+	def "search description is shown in header"() {
+		when:
+			to PageSearch
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			waitFor {searchDescription}
+			searchDescription.text().contains('Searching all messages, archived messages')
+	}
+	
+	def "search string is still shown on form submit and consequent page reload"() {
+		given:
+			to PageSearch
+			searchFrm.searchString = 'bacon'
+		when:
+			searchBtn.click()
+		then:
+			searchFrm.searchString == 'bacon'
+	}
+	
+	def "selected activity is still selected on form submit and consequent page reload"() {
+		given:
+			to PageSearch
+			def a = Folder.findByName("Work")
+			searchFrm.activityId = "folder-$a.id"
+		when:
+			searchBtn.click()
+		then:
+			searchFrm.activityId == "folder-$a.id"
+	}
+	
+	def "can search in archive or not, is enabled by default"() {
+		when:
+			to PageSearch
+		then:
+			searchFrm.inArchive == 'on'
+		when:
+			searchFrm.inArchive = null
+			searchBtn.click()
+		then:
+			searchFrm.inArchive == null
+	}
+	
+	def "'Export Results' link is disabled when search is null "() {
+		when:
+			to PageSearch
+		then:
+			!$('h2:nth-child(2) div#export-results a').present()
+	}
+
+	def "should fetch all inbound messages alone"() {
+		given:
+			to PageSearch
+			searchFrm.messageStatus = "INBOUND"
+		when:
+			searchBtn.click()
+		then:	
+			waitFor { searchBtn.displayed }
+			searchFrm.messageStatus == 'INBOUND'
+			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex', 'meeting at 11.00'])
+	}
+	
+	def "should fetch all sent messages alone"() {
+		given:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
+			to PageSearch
+			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
+		when:
+			searchBtn.click()
+		then:
+			waitFor{ searchBtn.displayed }
+			searchFrm.messageStatus == 'SENT, SEND_PENDING, SEND_FAILED'
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
+	}
+	
+	def "should clear search results" () {
+		when:
+			to PageSearch
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			waitFor{ searchBtn.displayed }
+		when:
+			$("a", text:"Clear search").click()
+		then:
+			waitFor{ !$("#search-description").displayed }
+	}
+	
+	def "should return to the same search results when message is deleted" () {
+		setup:
+			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, status: MessageStatus.SEND_FAILED).save(flush: true)
+		when:
+			to PageSearch
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			at PageSearchResult
+		when:
+			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
+			$("#message-delete").click()
+		then:
+			at PageSearchResult
+			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
+			$('.flash').displayed
+	}
+	
+	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
+		when:
+			def date = new Date()
+			to PageSearch
+			searchBtn.present()
+		then:
+			searchFrm.startDate_day == 'none'
+			searchFrm.startDate_month == 'none'
+			searchFrm.startDate_year == 'none'
+			String.format('%td',date).contains(searchFrm.endDate_day)
+			String.format('%tm',date).contains(searchFrm.endDate_month) 
+			searchFrm.endDate_year == String.format('%tY',date)
+		when:
+			 searchFrm.startDate_day = '4'
+			 searchFrm.startDate_month = '9'
+			 searchFrm.startDate_year = '2010'
+			$("#ui-datepicker-div").jquery.hide()
+			waitFor { !$("#ui-datepicker-div").displayed }
+			searchBtn.click()
+			waitFor {searchDescription}
+		then:
+			searchFrm.startDate_day == '4'
+			searchFrm.startDate_month == '9'
+			searchFrm.startDate_year == '2010'
+	}
+	
+	def "archiving message should not break message navigation "() {
+		setup:
+			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
+		when:
+			to PageSearch
+			searchBtn.present()
+			searchBtn.click()
+		then:
+			at PageSearchResult
+		when:
+			$("table#messages tbody tr:nth-child(3) td:nth-child(3)").click()
+			$("#message-archive").click()
+		then:
+			at PageSearchResult
+		when:
+			def messageBody = $("#message-body").text()
+			$("a.displayName-${Fmessage.findByText('sent').id}").click()
+		then:
+			at PageSearchResult
+			$("#message-body").text() == 'sent'
+	}
+	
+	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
+		when:
+			createTestContactsAndCustomFieldsAndMessages()
+			to PageSearch
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			contactNameLink.displayed
+			townCustomFieldLink.displayed
+			likeCustomFieldLink.displayed
+			ikCustomFieldLink.displayed
+		when:
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
+			!expendedSearchOption.displayed
+		when:
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			!contactNameLink.displayed
+	}
+
+	def "should expand the more option and select a customField then the link to custom field is hiden"(){
+		when:
+			createTestContactsAndCustomFieldsAndMessages()
+			to PageSearch
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			contactNameLink.displayed
+			townCustomFieldLink.displayed
+			likeCustomFieldLink.displayed
+			ikCustomFieldLink.displayed
+		when:
+			townCustomFieldLink.click()
+		then:
+			waitFor { townCustomFieldField.displayed }
+		when:
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+			!townCustomFieldLink.displayed
+	}
+	
+	def "should show the contact name that have been fillin after a search"(){
+		given:
+			createTestContactsAndCustomFieldsAndMessages()
+		when:
+			to PageSearch
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+		when:
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
+		when:
+			searchFrm.contactString = "toto"
+			searchBtn.click()
+		then:
+			waitFor { contactNameField.displayed }
+			searchFrm.contactString == "toto"		
+	}
+	
+	
+	def "when clicking on a remove button on a more search option, the field should be hiden and cleared then the link should appear"() {
+		given:
+			createTestContactsAndCustomFieldsAndMessages()
+		when:
+			to PageSearch
+			searchMoreOptionLink.click()
+		then:
+			waitFor { expendedSearchOption.displayed }
+		when:
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
+		when:
+			searchFrm.contactString = "toto"
+			contactNameField.children('a').click()
+		then:
+			waitFor { !contactNameField.displayed }
+		when:
+			searchMoreOptionLink.click()
+		then:
+			waitFor {contactNameLink.displayed }
+		when:
+			contactNameLink.click()
+		then:
+			waitFor { contactNameField.displayed }
+			!searchFrm.contactString
+	}
+	
+	def "should update message count when in search tab"() {
+		when:
+			to PageSearch
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+		then:
+			$("#tab-messages").text() == "Messages 2"
+		when:
+			js.refreshMessageCount()
+		then:
+			waitFor{ 
+				$("#tab-messages").text() == "Messages 3"
+			}
+	}
+	
+}
+
+

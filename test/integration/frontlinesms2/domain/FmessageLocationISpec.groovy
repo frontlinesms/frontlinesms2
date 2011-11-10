@@ -34,7 +34,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			def firstThreeInboxMsgs = inboxMsgs.list(max: 3, offset: 0)
 		then:
 			firstThreeInboxMsgs.size() == 3
-			firstThreeInboxMsgs*.src == ["+254778899", "Bob", "Alice"]
+			firstThreeInboxMsgs*.src == ["9544426444", "+254778899", "Alice"]
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
@@ -91,7 +91,6 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			results.list().every {it.archived == false}
 	}
 	
-
 	def "check for offset and limit while fetching folder messages"() {
 		setup:
 			setUpFolderMessages()
@@ -99,7 +98,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			assert Folder.findByName("home").getFolderMessages(false).count() == 3
 			def firstFolderMsg = Folder.findByName("home").getFolderMessages(false).list(max:1, offset: 0)
 		then:
-			firstFolderMsg*.src == ['Jim']
+			firstFolderMsg.size() == 1
 	}
 
 	def "can fetch all pending messages"() {

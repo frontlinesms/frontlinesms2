@@ -1,4 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<g:javascript library="jquery" plugin="jquery"/>
+<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
+<script type="text/javascript">
+	url_root = "${request.contextPath}/";
+	
+	function setChecked(connectionType) {
+		$("#type-list input[checked=checked]").attr('checked', '');
+		$("#type-list ." + connectionType).attr('checked', 'checked');
+		$("#smslib-form").css('display', 'none');
+		$("#email-form").css('display', 'none');
+		$("#" + connectionType + "-form").css('display', 'inline');
+	}
+</script>
+<g:javascript src="application.js"/>
+<g:javascript src="mediumPopup.js"/>
 <div id="tabs" class="vertical-tabs">
 	<ol>
 		<li><a href="#tabs-1">Choose type</a></li>

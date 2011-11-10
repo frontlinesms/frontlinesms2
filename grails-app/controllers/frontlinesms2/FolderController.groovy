@@ -43,6 +43,31 @@ class FolderController {
 		flash.message = "Folder was unarchived successfully!"
 		redirect(controller: "archive", action: "folderView")
 	}
+	
+	def confirmDelete = {
+		def folderInstance = Folder.get(params.id)
+		render view: "../message/confirmDelete", model: [ownerInstance: folderInstance]
+	}
+	
+	def delete = {
+		withFolder { folder ->
+			folder.deleted = true
+			new Trash(identifier:folder.name, message:"${folder.liveMessageCount}", objectType:folder.class.name, linkId:folder.id).save(failOnError: true, flush: true)
+			folder.save(failOnError: true, flush: true)
+		}
+		flash.message = "Folder has been trashed!"
+		redirect(controller:"message", action:"inbox")
+	}
+	
+	def restore = {
+		withFolder { folder ->
+			folder.deleted = false
+			folder.save(failOnError: true, flush: true)
+			Trash.findByLinkId(folder.id)?.delete()
+		}
+		flash.message = "Folder has been restored!"
+		redirect(controller: "message", action: "trash")
+	}
 
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)

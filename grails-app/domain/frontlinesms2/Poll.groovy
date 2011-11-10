@@ -1,11 +1,15 @@
 package frontlinesms2
 
+import java.util.Date;
+
 class Poll {
 	String title
 	String keyword
 	String autoReplyText
 	String question
+	String messageText
 	boolean archived
+	boolean deleted
 	Date dateCreated
 	List responses
 	int sentMessageCount
@@ -23,6 +27,7 @@ class Poll {
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoReplyText(nullable:true, blank:false)
+		messageText(nullable:true)
 		question(nullable:true)
 		keyword(nullable:true, validator: { keyword, me ->
 			if(!keyword) return true
@@ -42,6 +47,7 @@ class Poll {
 	def beforeSave = {
 		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
 	}
+	
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
@@ -89,5 +95,10 @@ class Poll {
 	def getLiveMessageCount() {
 		def messageTotal = 0
 		responses.each { messageTotal += (it.liveMessageCount ?: 0) }
+		messageTotal
+	}
+	
+	def addToMessages(message) {
+		this.responses.find { it.value == 'Unknown' }.addToMessages(message)
 	}
 }

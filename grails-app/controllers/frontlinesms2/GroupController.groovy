@@ -6,9 +6,9 @@ class GroupController {
 	def list = {
 		['groups' : Group.list()]
 	}
-
+	
 	def update = {
-		def group = Group.get(params['id'])
+		def group = Group.get(params.id)
 		group.properties = params
 		if(group.validate()){
 			group.save(failOnError: true, flush: true)
@@ -16,7 +16,11 @@ class GroupController {
 		}
 		else
 			flash['message'] = "Group not saved successfully"
-		redirect(controller: "message", action: "inbox")
+		if (params.name){
+			redirect(controller: "contact", action: "show", params:[groupId : params.id])
+		} else {
+			redirect(controller:"contact")
+		}
 	}
 
 	def show = {
@@ -37,5 +41,20 @@ class GroupController {
 			flash.message = "error"
 		}
 		redirect(controller: "contact", params:[flashMessage: flash.message])
+	}
+	
+	def rename = {
+	}
+
+	def confirmDelete = {
+		[groupName: Group.get(params.groupId)?.name]
+	}
+	
+	def delete = {
+		if (Group.get(params.id)?.delete(flush: true))
+			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'group.label', default: 'Group'), ''])}"
+		else
+			flash.message = "unable to delete group"
+		redirect(controller: "contact")
 	}
 }

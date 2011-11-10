@@ -13,7 +13,6 @@
 		</script>
 		<g:javascript src="message/check_message.js"/>
 		<g:javascript src="message/arrow_navigation.js"/>
-		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="message/star_message.js" />
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
@@ -21,39 +20,31 @@
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/messageSorting.js"/>
-		<g:javascript src="/message/categorize-dropdown.js"/>
+		<g:javascript src="/message/categorize_dropdown.js"/>
+		<g:javascript src="/message/move_dropdown.js"/>
+		<g:javascript src="/message/moreActions.js"/>
 		<g:javascript>
 		$(function() {  
 		   disablePaginationControls();
 		});
 		</g:javascript>
-    </head>
+	</head>
 	<body id="messages-tab">
+		<g:render template="/system_notifications"/>
 		<div id="header">
-            <img src='${resource(dir:'images',file:'logo.png')}' id="logo"/>
+			<img src='${resource(dir:'images',file:'logo.png')}' id="logo"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-	        <g:render template="/flash"/>
+			<g:render template="/flash"/>
 		</div>
-        <div id="main">
-            <g:render template="menu"/>
-            <div id="content">
-                <g:render template="../message/header"/>
-                <g:render template="../message/message_list"/>
-                <g:layoutBody/>
-                <g:render template="../message/footer"/>
-            </div>
-        </div>
+		<div id="main">
+			<g:render template="menu"/>
+			<div id="content">
+				<g:render template="/message/header"/>
+				<g:render template="../message/message_list"/>
+				<g:layoutBody/>
+				<g:render template="../message/footer"/>
+			</div>
+		</div>
 	</body>
 </html>
-<g:javascript>
-	$("#poll-actions").bind('change', function() {
-		var selected = $(this).find('option:selected').val();
-		if(selected)
-			remoteHash[selected].call();
-	});
-
-	$("#export").click(function() {
-		remoteHash['export'].call();
-	});
-</g:javascript>

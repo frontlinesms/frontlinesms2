@@ -19,22 +19,6 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	}
 
-	def "should display the message details for the message selected by default"() {
-		setup:
-			setupInboxMessages()
-		when:
-			go "message/inbox"
-			def element = $("#messages tr:nth-child(2) td:nth-child(3) a")
-			def expectedText = element.text()
-			element.click()
-			waitFor { $("#contact-name").text().contains(expectedText) }
-		then:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
-		then:
-			$('#contact-name').text().contains( $(".selected td:nth-child(3) a").text())
-	}
-
 	def "should paginate pending messages"() {
 		setup:
 			setupPendingMessages()
@@ -141,8 +125,14 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	private def setupDeletedMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "deleted ${i}",deleted: true).save(flush: true)
+			deleteMessage(new Fmessage(src: "src${i}", dst: "dst${i}", text: "deleted ${i}").save(flush: true))
 		}
+	}
+
+	def deleteMessage(Fmessage message) {
+		message.deleted = true
+		message.save(flush:true)
+		new Trash(identifier:message.contactName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
 	}
 
 	private def setupFolderAndItsMessages() {

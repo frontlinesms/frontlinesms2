@@ -22,6 +22,7 @@
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/messageSorting.js"/>
+		<g:javascript src="/message/moreActions.js"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();
@@ -29,12 +30,13 @@
 		</g:javascript>
 	</head>
 	<body>
-        <div id="header">
-            <img id="logo" src="/frontlinesms2/images/logo.png">
+		<g:render template="/system_notifications"/>
+		<div id="header">
+			<img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-	        <g:render template="/flash"/>
-        </div>
+			<g:render template="/flash"/>
+		</div>
 	        <div class="main">
 				<g:render template="menu"/>
 				<div class="content">

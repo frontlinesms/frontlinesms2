@@ -25,34 +25,35 @@
 		</g:javascript>
 	</head>
 	<body>
-        <div id="header">
-            <img id="logo" src="/frontlinesms2/images/logo.png">
+		<div id="header">
+			<img id="logo" src="/frontlinesms2/images/logo.png">
+			<g:render template="/system_notifications"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
-        </div>
-			<div id="main" class="main">
-                <div id="sidebar">
+        	</div>
+		<div id="main" class="main">
+			<div id="sidebar">
     				<g:render template="../archive/menu"/>
-                </div>
+			</div>
 				<div id="content" class="content">
 					<div id='archive-header' class="content-header section-actions">
-			  			<g:if test="${messageSection == 'poll'}">
-								<h3>Poll Archive</h3>
+			  			<g:if test="${messageSection in ['poll', 'announcement']}">
+							<h3>Activity Archive</h3>
 						</g:if>
 						<g:elseif test="${messageSection == 'inbox'}">
-								<h3>${messageSection} Archive</h3>
+							<h3>${messageSection} Archive</h3>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'sent'}">
-								<h3>${messageSection} Archive</h3>
+							<h3>${messageSection} Archive</h3>
 						</g:elseif>
 						<g:elseif test="${messageSection == 'folder'}">
-								<h3>${messageSection} Archive</h3>
+							<h3>${messageSection} Archive</h3>
 						</g:elseif>
 					</div>
 					<div class="content-body">
-						<g:if test="${messageSection == 'poll' && !viewingMessages}">
-							<g:render template="archived_poll_list"/>
+						<g:if test="${(messageSection == 'poll' || messageSection == 'announcement') && !viewingMessages}">
+							<g:render template="archived_activity_list"/>
 						</g:if>
 						<g:elseif test="${messageSection == 'folder' && !viewingMessages}">
 							<g:render template="archived_folder_list"/>
