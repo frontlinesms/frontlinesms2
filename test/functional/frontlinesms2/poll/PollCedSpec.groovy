@@ -27,7 +27,7 @@ class PollCedSpec extends PollBaseSpec {
 			pollForm.title = "POLL NAME"
 			done.click()
 		then:
-			waitFor { $("#confirmation").displayed }
+			waitFor { $("#summary").displayed }
 		when:
 			$("#confirmation").click()
 		then:

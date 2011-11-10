@@ -1,19 +1,17 @@
 <div id="tabs-1">
 	<div class="section">
-		<div>
-			<h3>Select the kind of poll to create</h3>
-			<div>
-				<g:radio name="poll-type" value="standard" checked='checked'/>Question with a 'Yes' or 'No' answer
-			</div>
-			<div>
-				<g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')
-			</div>
-			<div>
-				<label for='question'>Enter question:</label>
-				<g:textArea name="question"/>
-			</div>
-			<g:checkBox name="dontSendMessage" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
+		<div id="poll-type">
+			<h2 class="bold">Select the kind of poll to create:</h2>
+			<ul>
+				<li><g:radio name="poll-type" value="standard" checked='checked'/>Question with a 'Yes' or 'No' answer</li>
+				<li><g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
+			</ul>
 		</div>
+		<div>
+			<label class="bold" for='question'>Enter question:</label>
+			<g:textArea name="question"/>
+		</div>
+		<g:checkBox name="dontSendMessage" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
 	</div>
 </div>
 <g:javascript>

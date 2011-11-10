@@ -1,6 +1,6 @@
 <div id="tabs-5">
-	<h3>Edit message to be sent to recipients</h3>
-	<p>The following message will be sent to the recipients of the poll. This message can be edited before sending.</p>
+	<h2 class="bold">Edit message to be sent to recipients</h2>
+	<p class="info">The following message will be sent to the recipients of the poll. This message can be edited before sending.</p>
 	<g:textArea name="messageText" rows="5" cols="40" />
 	<span id="send-message-stats" class="character-count">Characters remaining 160 (1 SMS message)</span>
 </div>

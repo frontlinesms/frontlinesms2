@@ -19,8 +19,8 @@
 			<g:render template="select_recipients"/>
 		</div>
 		<g:render template="confirm"/>
+		<g:render template="summary"/>
 	</g:formRemote>
-	<g:render template="summary"/>
 </div>
 
 <script>
