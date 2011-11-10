@@ -31,7 +31,7 @@
 	</div>
 	<div id="multiple-messages">
 		<div id='message-info'>
-			<h2 id='checked-message-count'>${checkedMessageCount} messages selected</h2>
+			<p id='checked-message-count'>${checkedMessageCount} messages selected</p>
 			<div class="actions">
 				<ul class="buttons">
 					<g:if test="${messageSection == 'pending'}">
