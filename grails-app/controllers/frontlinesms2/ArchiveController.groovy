@@ -23,7 +23,6 @@ class ArchiveController extends MessageController {
 	def activityView = {
 		def pollInstanceList = Poll.findAllByArchivedAndDeleted(true, false)
 		def announcementInstanceList = Announcement.findAllByArchivedAndDeleted(true,false)
-		println announcementInstanceList
 		render view:'standard', model:[pollInstanceList: pollInstanceList,
 											announcementInstanceList: announcementInstanceList,
 											itemInstanceTotal: announcementInstanceList.size() + pollInstanceList.size(),
