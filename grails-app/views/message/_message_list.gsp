@@ -57,8 +57,8 @@
 								<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 							</td>
 
-							<td class="message-preview-star">
-								<g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)"/>
+							<td class="message-preview-star" id="star-${m.id}" >
+								<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}',data)"/>
 							</td>
 							<td class="message-preview-sender">
 									<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">

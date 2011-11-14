@@ -1,12 +1,12 @@
 <div class="single-contact">
 <div id="action-buttons" class="buttons">
 			<g:if test="${contactInstance?.id}">
-				<g:actionSubmit id="update-single" action="update" value="Save" disabled="disabled"/>
-				<input type="button" class="cancel" value="Cancel" disabled="disabled"/>
+				<g:actionSubmit class="btn" id="update-single" action="update" value="Save" disabled="disabled"/>
+				<input type="button" class="cancel btn" value="Cancel" disabled="disabled"/>
 			</g:if>
 			<g:else>
-				<g:actionSubmit id="save-new" action="saveContact" value="Save"/>
-				<g:link class="cancel" action="index" default="Cancel">Cancel</g:link>
+				<g:actionSubmit id="save-new" class="btn" action="saveContact" value="Save"/>
+				<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
 			</g:else>
 			
 			<g:if test="${contactInstance?.id}">

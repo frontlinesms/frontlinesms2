@@ -1,9 +1,9 @@
 function setStarStatus(object,data){
 	if(data == 'starred') {
-		$("#"+object).addClass(data);
-		$("#"+object).removeClass("unstarred");
+		$("#" + object + " a").removeClass("unstarred");
+		$("#" + object + " a").addClass(data);
 	} else {
-		$("#"+object).addClass(data);
-		$("#"+object).removeClass("starred");
+		$("#" + object + " a").removeClass("starred");
+		$("#" + object + " a").addClass(data);
 	}	
 }
