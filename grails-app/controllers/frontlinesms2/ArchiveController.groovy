@@ -19,7 +19,7 @@ class ArchiveController extends MessageController {
 		redirect(action:'inbox', params:params)
 	}
 	
-	def activityView = {
+	def activityList = {
 		def pollInstanceList = Poll.findAllByArchived(true)
 		def announcementInstanceList = Announcement.findAllByArchived(true)
 		println announcementInstanceList
@@ -29,7 +29,7 @@ class ArchiveController extends MessageController {
 											messageSection: "poll"]
 	}
 	
-	def folderView = {
+	def folderList = {
 		def folderInstanceList = Folder.findAllByArchived(true)
 		render view:'standard', model:[folderInstanceList: folderInstanceList,
 											itemInstanceTotal: folderInstanceList.size(),

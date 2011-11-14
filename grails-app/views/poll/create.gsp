@@ -13,7 +13,7 @@
 		<li class="confirm-tab"><a class="tabs-8" href="#tabs-8"></a></li>
 	</ol>
 
-	<g:formRemote url="${[action:'save', controller:'poll']}" name='poll-details' method="post" onSuccess="goToSummaryTab()">
+	<g:formRemote url="${[action:'save', controller:'poll']}" name='new-poll-form' method="post" onSuccess="goToSummaryTab()">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
 		<g:render template="responses"/>

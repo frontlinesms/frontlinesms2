@@ -15,12 +15,12 @@
 	<g:if test="${messageSection == 'announcement' || messageSection == 'folder'}">
 		<g:if test="${!params.viewingArchive}">
 			<li>
-				<g:link class="btn" controller="$messageSection" action="archive" id="${ownerInstance.id}">Archive ${messageSection}</g:link>
+				<g:link class="btn" controller="$messageSection" action="archive" id="${ownerInstance?.id}">Archive ${messageSection}</g:link>
 			</li>
 		</g:if>
 		<g:else>
 			<li>
-				<g:link class="btn" controller="$messageSection" action="unarchive" id="${ownerInstance.id}">Unarchive ${messageSection}</g:link>
+				<g:link class="btn" controller="$messageSection" action="unarchive" id="${ownerInstance?.id}">Unarchive ${messageSection}</g:link>
 			</li>
 		</g:else>
 		<li>

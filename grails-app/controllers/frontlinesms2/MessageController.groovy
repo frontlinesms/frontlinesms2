@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.util.GrailsConfig
 import grails.converters.JSON
+import java.lang.*
 
 import frontlinesms2.MessageStatus
 
@@ -278,7 +279,7 @@ class MessageController {
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {
-			def m = Fmessage.get(messageId)
+			def m = Fmessage.get(messageId.toLong())
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
 	}

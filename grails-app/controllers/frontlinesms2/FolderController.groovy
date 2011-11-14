@@ -41,7 +41,7 @@ class FolderController {
 		}
 
 		flash.message = "Folder was unarchived successfully!"
-		redirect(controller: "archive", action: "folderView")
+		redirect(controller: "archive", action: "folderList")
 	}
 	
 	def confirmDelete = {

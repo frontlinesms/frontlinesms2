@@ -69,26 +69,13 @@
 					  		</div>
 					  	</g:if>
 					</div>
-					<div class="content-body">
-						<g:render template="/message/message_list"/>
-						<g:layoutBody />
-					</div>
-					<div class="content-footer">
-							<ul id="filter">
-								<li>Show:</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'offset'})}">All</g:link></li>
-								<li>|</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
-							</ul>
-							<g:if test="${params.action != 'no_search'}">
-								<div id="page-arrows">
-									<g:paginate next="Forward" prev="Back"
-										max="${grailsApplication.config.grails.views.pagination.max}"
-										action="result" total="${messageInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
-								</div>
-							</g:if>
-					</div>
+					<g:render template="/message/message_list"/>
+					<g:layoutBody />
+					<g:if test="${params.action != 'no_search'}">
+						<g:render template="../message/footer" />
+					</g:if>
 				</div>
 			</div>
+		</div>
 	</body>
 </html>

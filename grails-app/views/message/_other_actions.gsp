@@ -4,8 +4,8 @@
 			<div class="dropdown">
 				<g:hiddenField name="owner-id" value="${ownerInstance.id}" />
 				<g:hiddenField name="responseId" value="${responseInstance?.id}" />
-				<h2>Categorize Response</h2>
 				<select class="extra-msg-btn" name="categorise_dropdown" id="categorise_dropdown" onchange="categorizeClickAction()">
+					<option value="na" class="na">Categorize response</option>
 					<option value="btn-${responseInstance?.id}" class="na">${responseInstance?.value}</option>
 					<g:each in="${responseList}" status="i" var="r">
 						<g:if test="${r.id != responseInstance?.id}">

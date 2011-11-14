@@ -35,12 +35,4 @@
 			<g:render template="../message/section_action_buttons"/>
 		</div>
 	</g:else>
-	<g:if test="${messageSection == 'trash' && messageInstanceTotal != 0}">
-		<li>
-			<select id="trash-actions" onchange="launchEmptyTrashConfirmation();">
-				<option value="na" class="na">Trash actions...</option>
-				<option id="empty-trash" value="empty-trash" >Empty trash</option>
-			</select>
-		</li>
-	</g:if>
 </div>

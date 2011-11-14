@@ -16,6 +16,15 @@ body{
     padding: 0;
 }
 
+ul, ol {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
 /*Header*/
 
 #header{
@@ -404,7 +413,7 @@ a.tab-link:hover{
     width: 82%;
     height: 93%
 }
-.section-actions .message-title{
+.section-actions .message-title, .section-actions #archive-title{
     padding: 0;
     margin: 0;
     min-height: 43px;
@@ -420,7 +429,7 @@ a.tab-link:hover{
     border-left: 1px solid #9e9e9e;
 }
 
-.section-actions .message-title h3{
+.section-actions .message-title h3, .section-actions .activity-title h3,.section-actions h3{
     text-transform: uppercase;
     padding:10px;
     padding-left: 28px;
@@ -430,13 +439,6 @@ a.tab-link:hover{
     float:left;
 }
 
-.section-actions .activity-title h3{
-    text-transform: uppercase;
-    padding:10px;
-    padding-left: 28px;
-    margin: 0;
-    float:left;
-}
 .section-actions .activity-title #poll-sent{
     padding:10px;
     margin: 0;
@@ -451,7 +453,7 @@ a.tab-link:hover{
 	padding: 10px;
 	text-align: right;
 }
-.section-actions .message-title .button-list li{
+.section-actions .message-title .button-list li, .section-actions #archive-title .button-list li{
 	padding: 10px 0 10px 10px;
 	text-align: right;
 	display: inline;
@@ -471,6 +473,9 @@ a.tab-link:hover{
 
 #messages-tab .section-actions .message-title h3{
     background-image: url('../images/icons/inbox.png');
+}
+.section-actions #archive-title h3{
+    background-image: url('../images/icons/inboxarchive.png');
 }
 #contacts-tab .section-actions h3{
     background-image: url('assets/icons/png/groups.png');
@@ -506,22 +511,27 @@ a.tab-link:hover{
 .footer #message-toggler,
 .footer form{
     float: left;
-    margin-left: 10px;
     position: relative;
     left: 17%;
 }
-
+.footer form {
+	margin-left: 10px;
+}
 .footer #paging{
 	float:right;
-	margin-right:35%;
+	position: relative;
+	right:31%;
 }
 .footer #message-toggler{
     padding: 3px;
+    text-decoration: none;
+    font-size: .8em;
 }
 
 .footer #message-toggler a{
     color: inherit;
     padding: 0 10px;
+    text-decoration: none;
 }
 
 .footer #paging .step, .footer #paging .currentStep {
@@ -590,9 +600,8 @@ a.tab-link:hover{
     width:65%;
 }
 #message-list tr{
-    height: 24px;
+    height: 28px;
     margin: 0;
-    padding: 0;
     border: none;
     text-align: left;
 }
@@ -699,20 +708,35 @@ button, input[type=submit], a.btn{
     display: inline-block;
     border: none;
     background-image: url('../images/buttons/button_default_2.png');
-    height: 25px;
+    background-repeat: repeat-x;
     border-left: 1px solid #6b6b6b;
     border-right: 1px solid #6b6b6b;
     border-radius: 2px;
-    padding: 0 10px;
+    padding: 2px 10px;
+    height:21px;
     cursor: pointer;
     text-decoration: none;
+    text-align: center;
     color: #000;
     background-color: none;
+    min-width:80px;
 }
 
 button:hover, input[type=submit]:hover, a.btn:hover{
+	display: inline-block;
     background-image: url('../images/icons/button_hover_2.png');
-    height: 25px;
+    background-repeat: repeat-x;
+    border-left: 1px solid #6b6b6b;
+    border-right: 1px solid #6b6b6b;
+    border-radius: 2px;
+    padding: 2px 10px;
+    height: 21px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: #000;
+    background-color: none;
+    min-width:80px;
 }
 /*Contacts*/
 #contacts{

@@ -37,11 +37,11 @@ class UrlMappings {
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
 		
-		"/archive/poll"(controller:'archive', action:'pollView') {}
+		"/archive/poll"(controller:'archive', action:'activityList') {}
 		"/archive/poll/$ownerId"(controller:'archive', action:'poll') {}
 		"/archive/poll/$ownerId/show/$messageId"(controller:'archive', action:'poll') {}
 		
-		"/archive/folder"(controller:'archive', action:'folderView') {}
+		"/archive/folder"(controller:'archive', action:'folderList') {}
 		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
 		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
 		

@@ -32,7 +32,7 @@
 					</li>
 				</g:each>
 				<li class='create' id="create-activity">
-					<g:remoteLink controller="poll" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" >Create new activity</g:remoteLink>
+					<g:remoteLink class="btn" controller="poll" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" >Create new activity</g:remoteLink>
 				</li>
 			</ul>
 		</li>
@@ -45,7 +45,7 @@
 					</li>
 				</g:each>
 				<li class="create" id='create-show'>
-					<g:remoteLink controller="radioShow" action="create" onSuccess="launchSmallPopup('Radio Show', data, 'Create')">
+					<g:remoteLink class="btn" controller="radioShow" action="create" onSuccess="launchSmallPopup('Radio Show', data, 'Create')">
 						Create new show
 					</g:remoteLink>
 				</li>
@@ -60,7 +60,7 @@
 					</li>
 				</g:each>
 				<li class='create' id="create-folder">
-					<g:remoteLink controller="folder" action="create" onSuccess="launchSmallPopup('Folder', data, 'Create');">
+					<g:remoteLink class="btn" controller="folder" action="create" onSuccess="launchSmallPopup('Folder', data, 'Create');">
 						Create new folder
 					</g:remoteLink>
 				</li>

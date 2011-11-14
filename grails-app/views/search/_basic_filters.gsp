@@ -1,6 +1,6 @@
 <g:if test="${groupInstanceList || pollInstanceList}">
-	<h2>Limit Search to:</h2>
-	<ol class="sub-menu">
+	<h3 class="list-title">Limit Search to:</h3>
+	<ul class="sub-list">
 		<li class='field'>
 			<g:select name="groupId" from="${groupInstanceList}" value="${search?.group?.id}"
 					  optionKey="id" optionValue="name"
@@ -21,10 +21,10 @@
 		<li>
 			<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" />Include Archive
 		</li>
-	</ol>
+	</ul>
 </g:if>
-<h2>${message(code:'default.search.betweendates.title', default:'Between dates:') }</h2>
-<ol class="sub-menu">
+<h3 class="list-title">${message(code:'default.search.betweendates.title', default:'Between dates:') }</h3>
+<ul class="sub-list">
 	<li class="field">
 		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
 		<input type="hidden" class="datepicker"/>
