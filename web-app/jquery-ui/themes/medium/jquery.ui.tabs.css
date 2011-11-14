@@ -10,15 +10,8 @@
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-hide { display: none !important; }
 
-.ui-tabs .ui-tabs-panel {
-	position: relative;
-	left: 169px;
-	padding: 17px;
-	width: 70%;
-}
-
 .ui-tabs-nav {
-	position: absolute;
+	float: left;
 	width: 135px;
 	height: 365px;
 	padding-top: 17px;
@@ -51,11 +44,87 @@
 	color: #DFDFDF;
 }
 
-.ui-tabs-panel h3 {
+.ui-tabs-panel h2 {
 	font-weight: bold;
-	padding-bottom: 10px;		
+	padding-bottom: 10px;	
+}
+
+.ui-tabs-panel tr {
+	height: 40px;	
+}
+
+.ui-tabs-panel td {
+	min-width: 100px;	
 }
 
 .ui-tabs-panel textarea {
-	margin: 10px 10px 10px 50px;
+	margin: 10px 10px 10px 30px;
+}
+
+.ui-tabs-panel #send-message-stats {
+	margin-left: 30px;
+	display: block;
+}
+
+.ui-tabs-panel #label {
+	padding-right: 10px;
+	float: left;
+}
+
+.ui-tabs-panel #address {
+	width: 250px;
+}
+
+.ui-tabs-panel #recipients-selected {
+	float: right;
+}
+
+.ui-tabs-panel #poll-type {
+	padding-bottom: 25px;
+}
+
+.ui-tabs-panel #poll-type li {
+	height: 30px;
+}
+
+.ui-tabs-panel #reply-count {
+	padding-left: 60px;
+}
+
+.ui-tabs-panel .radios {
+	padding: 20px 0 20px 5px;
+	line-height: 200%;
+}
+
+.ui-tabs-panel #poll-keyword {
+	width: 350px;
+	margin-left: 60px;
+}
+
+.ui-tabs-panel #poll-choices li {
+	padding: 10px 0;
+}
+
+.ui-tabs-panel #recipients-list {
+	height: 270px;
+	overflow: auto;
+	padding: 10px;
+	margin: 15px;
+}
+
+.ui-tabs-panel #recipients-list li {
+	line-height: 200%;
+}
+
+.ui-tabs-panel #groups {
+	border-bottom: 1px solid grey;
+}
+
+.ui-tabs-panel .name-field {
+	margin-left: 30px;
+	width: 350px;
+}
+
+.ui-tabs-panel .create-name {
+	padding-bottom: 20px;
 }

@@ -2,18 +2,13 @@
 <div>
 	<g:form name="smart-group-details" controller="smartGroup" action="save" >
 		<div class="error-panel hide">Please fill in all the required fields.  You may only specify one rule per field.</div>
-		<table>
+		<p class="info">To create a Smart group, select the criteria you need to be matched for contacts for this group</p>
+		<div class="smartgroupname">
+			<label class="bold inline" for="smartgroupname"><g:message code="smartgroup.name.label" default="Name" />:</label>
+			<g:textField id="smartgroupname-field" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}" name="smartgroupname" value="${smartGroupInstance?.name}" />
+		</div>
+		<table id="smartGroup-table">
 			<tbody>
-				<tr class="prop">
-					<td valign="top" class="smartgroupname">
-						<label for="smartgroupname"><g:message code="smartgroup.name.label" default="Name" /></label>
-					</td>
-					<td valign="top" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}">
-						<g:textField name="smartgroupname" value="${smartGroupInstance?.name}" />
-					</td>
-					<td></td>
-					<td></td>
-				</tr>
 				<tr class="prop smart-group-criteria">
 					<td>
 						<g:select name="rule-field"
@@ -29,7 +24,7 @@
 						<g:textField name="rule-text" class="rule-text"/>
 					</td>
 					<td>
-						<a onclick="removeRule(this)" class="button remove-rule hide">remove</a>
+						<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 					</td>
 				</tr>
 			</tbody>

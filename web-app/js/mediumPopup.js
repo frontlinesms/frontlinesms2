@@ -250,15 +250,15 @@ $('.next').live('click', function() {
 	if($(this).hasClass('disabled')) return;
 	moveToRelativeTab(1);
 });
-
+	
 $('.back').live('click', function() {
-	moveToRelativeTab(-1);
+       moveToRelativeTab(-1);
 });
 
 $.widget("ui.contentWidget", {
 	validate: function() {
-		return this.options['validate'].call();			
-	},
+		return this.options['validate'].call();                 
+    },
 
-	options: {validate: function() {return true;} }
+    options: {validate: function() {return true;} }
 });

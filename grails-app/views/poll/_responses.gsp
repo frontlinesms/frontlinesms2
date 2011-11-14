@@ -1,5 +1,5 @@
 <div id="tabs-2" class="poll-responses-tab">
-	<label for='poll-choices'>Enter possible responses (between 2 and 5):</label>
+	<label class="bold" for='poll-choices'>Enter possible responses (between 2 and 5):</label>
 	<ul id='poll-choices'>
 		<g:each in="${['A','B','C','D','E']}" var="option">
 			<li>

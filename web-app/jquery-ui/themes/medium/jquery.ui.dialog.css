@@ -65,5 +65,52 @@
 .ui-dialog-content form, .ui-dialog-content .content {
 	padding: 17px;
 	overflow: auto;
-	height: 363px;
+}
+
+.ui-dialog .activity-choice {
+	color: grey;
+	padding: 0 5px;
+}
+
+.ui-dialog .activity-list-item {
+	padding: 10px 0;
+}
+
+.ui-dialog .activity-description {
+	padding: 10px 25px;
+}
+
+.ui-dialog .bold {
+	font-weight: bold;
+}
+
+.ui-dialog .inline {
+	display: inline;
+}
+
+.ui-dialog .info {
+	padding: 20px 0 20px 20px;
+	line-height: 200%;
+}
+
+.ui-dialog .smartgroupname {
+	padding-top: 17px;
+	padding-bottom: 30px;
+}
+
+.ui-dialog #smartgroupname-field {
+	width: 400px;
+	margin-left: 10px;
+}
+
+.ui-dialog #smartGroup-table tr {
+	height: 50px;
+}
+
+.ui-dialog #smartGroup-table td {
+	width: 200px;
+}
+
+.ui-dialog #smartGroup-table td input {
+	width: 250px;
 }

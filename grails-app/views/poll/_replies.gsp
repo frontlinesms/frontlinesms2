@@ -1,14 +1,11 @@
 <div id="tabs-4" class="poll-response-reply">
-	<h3>
-		Reply automatically to poll responses (optional)
-	</h3>
-	<div>
-		When an incoming message is identified as a poll response, send a
+	<h2 class="bold">Reply automatically to poll responses (optional)</h2>
+	<p class="info">When an incoming message is identified as a poll response, send a
 		message to the person who sent the response.
-	</div>
+	</p>
 	<g:checkBox name="enableAutoReply" />Send an automatic reply to poll responses
 	<g:textArea name="autoReplyText" rows="5" cols="40" disabled='disabled'/>
-	<span class="hide character-count">0 characters (1 SMS message)</span> 
+	<span class="hide character-count" id="reply-count">Characters remaining 160 (1 SMS message)</span> 
 </div>
 
 <g:javascript>
