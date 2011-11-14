@@ -72,6 +72,6 @@ class AnnouncementDialog extends geb.Page {
 		addName { $("#announcement-name") }
 		
 		nextPageButton { $("#nextPage") }
-		doneButton { $("#done") }
+		doneButton { $("#submit") }
 	}
 }

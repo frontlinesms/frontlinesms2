@@ -1,22 +1,15 @@
-<div>
-	<g:if test="${params.viewingArchive && params.viewingMessages}">
-		<g:link controller="archive" action="activityView"> &lt;Back </g:link>
-		<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-	</g:if>
-	<g:else>
-		<img src='${resource(dir:'images/icons',file:'activities.png')}' />
-	</g:else>
-	<h2>${ownerInstance?.title} poll</h2>
-	<table>
-		<g:if test="$responseList">
+<h3>${ownerInstance?.title} poll</h3><span id="poll-sent">(${ownerInstance?.sentMessageCount} messages sent)</span>
+<g:render template="../message/poll_buttons"/>
+<div id="activity-details">
+	<g:if test="$responseList">
+		<table>
 			<tr>
 				<td>
-					<div><g:formatDate date="${ownerInstance?.dateCreated}" /><span> (${ownerInstance?.sentMessageCount} messages sent)</span></div>
-					<div>
-						${ownerInstance?.messageText}
-						.&nbsp;
-						${ownerInstance.autoReplyText ? "Auto Reponse Enabled" : ""}
-					</div>
+					<g:formatDate date="${ownerInstance?.dateCreated}" />
+					<p>${ownerInstance?.messageText}</p>
+					<p>${ownerInstance.autoReplyText ? "Auto Reponse Enabled" : ""}</p>
+				</td>
+				<td>
 					<table id="poll-stats">
 						<tbody>
 							<g:each in="${responseList}" var="r">
@@ -36,6 +29,6 @@
 					</table>
 				</td>
 			</tr>
-		</g:if>
-	</table>
+		</table>
+	</g:if>
 </div>

@@ -1,4 +1,4 @@
-<div class="secondary-section-actions">
+<div class="footer">
 	<div id="message-toggler">
 		Show:
 		<g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'failed' && it.key != 'max' && it.key != 'offset'})}">All</g:link>

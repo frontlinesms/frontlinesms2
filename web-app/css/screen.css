@@ -3,6 +3,11 @@
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
 
+html {
+	height: 100%;
+	width: 100%;
+	overflow-x: hidden;
+}
 
 body{
     font-family: Arial;
@@ -28,6 +33,10 @@ body{
 #logo{
     margin-left: 17px;
     margin-top: 10px;
+}
+
+.selected{
+    background-color: #e5eff3;
 }
 
 .standard-nav{
@@ -156,7 +165,7 @@ a.tab-link:hover{
 #main{
     padding: 0;
     margin: 0;
-    position: relative;
+    height: 85%;
 }
 #status-tab #main{
     background-color: #eee;
@@ -307,15 +316,12 @@ a.tab-link:hover{
     width: 4em;
 }
 #sidebar{
-    padding: 0;
-    padding-top: 17px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 196px;
-    margin-top:0;
-    height: 600px;
-    overflow: hidden;
+    padding: 17px 17px 0 17px;
+    float: left;
+    width: 15%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #sidebar ul{
@@ -331,8 +337,7 @@ a.tab-link:hover{
 }
 
 #sidebar .sublist a{
-    display: inline-block;
-    width: 100%;
+    display: block;
     text-decoration: none;
     color: #333;
     padding-left: 23px;
@@ -392,57 +397,101 @@ a.tab-link:hover{
 
 #content{
     padding: 0;
-    position: relative;
     margin: 0;
-    margin-left: 197px;
-    right: 0;
     border-left: 1px solid #9e9e9e;
-    clear: both;
-    height: 100%;
-    overflow: hidden;
     background-color: #fff;
     font-size: 0.95em;
+    float: left;
+    width: 83%;
+    height: 100%
 }
-.section-actions{
-    position: relative;
+.section-actions .message-title{
     padding: 0;
     margin: 0;
-    height: 43px;
+    min-height: 43px;
+    height: 7%;
+    padding: 0 17px;
+}
+.section-actions .activity-title{
+    margin: 0;
+    min-height: 123px;
+    height: 30%;
+    padding: 0 17px;
+    background-color: #e5eff3;
 }
 
-.section-actions h3{
+.section-actions .message-title h3{
     text-transform: uppercase;
     padding:10px;
     padding-left: 28px;
     margin: 0;
     background-repeat: no-repeat;
     background-position: 6px 10px;
+    float:left;
 }
-#messages-tab .section-actions h3{
+
+.section-actions .activity-title h3{
+    text-transform: uppercase;
+    padding:10px;
+    padding-left: 28px;
+    margin: 0;
+    float:left;
+}
+.section-actions .activity-title #poll-sent{
+    padding:10px;
+    margin: 0;
+    float:left;
+}
+.section-actions .button-list{
+	list-style: none;
+	float: right;
+	margin: 0;
+}
+.section-actions .activity-title .button-list li{
+	padding: 10px;
+	text-align: right;
+}
+.section-actions .message-title .button-list li{
+	padding: 10px 0 10px 10px;
+	text-align: right;
+	display: inline;
+}
+.section-actions .button-list .poll-btn{
+	width: 200px;
+}
+.section-actions .activity-title #activity-details{
+	width:70%;
+	float:left;
+	padding-left:28px;
+	height: 30%;
+}
+.section-actions .activity-title td{
+	padding: 0 10px;
+}
+
+#messages-tab .section-actions .message-title h3{
     background-image: url('../images/icons/inbox.png');
 }
 #contacts-tab .section-actions h3{
     background-image: url('assets/icons/png/groups.png');
 }
 .section-actions-buttons{
-    position: absolute;
-    right: 0;
-    top: 0;
     margin: 0;
-
-    padding: 5px 10px;
+    padding: 10px 10px;
+    float:right;
 }
 
-.secondary-section-actions{
+.footer{
     width: 100%;
     float: left;
     height: 43px;
     padding: 5px;
     border-top: 1px solid #9e9e9e;
     background-color: #f0f0f0;
+    vertical-align: bottom;
 }
 
-.secondary-section-actions input[type=text]{
+.footer input[type=text]{
     display: block;
     width: 170px;
     height: 19px;
@@ -455,28 +504,28 @@ a.tab-link:hover{
     background-repeat: no-repeat;
     background-position: right;
 }
-.secondary-section-actions #paging,
-.secondary-section-actions #message-toggler,
-.secondary-section-actions form{
+.footer #paging,
+.footer #message-toggler,
+.footer form{
     float: left;
     margin-left: 10px;
 }
 
-.secondary-section-actions #message-toggler{
+.footer #message-toggler{
     padding: 3px;
 }
 
-.secondary-section-actions #message-toggler a{
+.footer #message-toggler a{
     color: inherit;
     padding: 0 10px;
 }
 
-.secondary-section-actions #paging{
+.footer #paging{
     padding: 3px;
     margin-left: 40px;
 }
 
-.secondary-section-actions #paging a{
+.footer #paging a{
     display: inline-block;
     text-indent: -99999px;
     background-repeat: no-repeat;
@@ -485,30 +534,30 @@ a.tab-link:hover{
     padding: 0;
 }
 
-.secondary-section-actions #paging a.previous-page{
+.footer #paging a.previous-page{
     background-image: url('../images/icons/paginationleft_default.png');
     margin-right: 0;
     
 }
 
-.secondary-section-actions #paging a.previous-page:hover{
+.footer #paging a.previous-page:hover{
     background-image: url('../images/icons/paginationleft_hover.png');
 }
 
-.secondary-section-actions #paging a.previous-page.disabled{
+.footer #paging a.previous-page.disabled{
     background-image: url('../images/icons/paginationleft_disabled.png');
 }
 
-.secondary-section-actions #paging a.next-page{
+.footer #paging a.next-page{
     background-image: url('../images/icons/paginationright_default.png');
     margin-left: 0;
 }
 
-.secondary-section-actions #paging a.next-page:hover{
+.footer #paging a.next-page:hover{
     background-image: url('../images/icons/paginationright_hover.png');
 }
 
-.secondary-section-actions #paging a.next-page.disabled{
+.footer #paging a.next-page.disabled{
     background-image: url('../images/icons/paginationright_disabled.png');
 }
 
@@ -517,27 +566,21 @@ a.tab-link:hover{
     padding: 0;
 }
 #messages{
-    min-height: 500px;
-    height: 100%;
-    position: relative;
     padding: 0;
     margin: 0;
-    clear: both;
     background-image: url("../images/menubar.png");
     background-repeat: repeat-x;
-    overflow: hidden;
     width: 100%;
+    height:100%;
+    overflow-x: hidden;
 }
 #message-list{
     float:left;
-    height: 100%;
     list-style: none;
     padding: 0;
     margin: 0;
     margin-top: 2px;
-    overflow: hidden;
-    width: 65%;
-
+    width:65%;
 }
 #message-list tr{
     height: 24px;
@@ -570,11 +613,17 @@ a.tab-link:hover{
 }
 #message-list td{
     border: none;
-    padding: none;
-    margin: none;
+    padding: 0;
+    margin: 0;
+    height: 24px;
+}
+#message-list .message-preview-sender {
+    padding-left: 17px;
 }
 #message-list tr:hover{
     background-color: #e5eff3;
+   	padding: 0;
+    margin: 0;
 }
 #message-list span{
     margin: 5px;
@@ -582,7 +631,6 @@ a.tab-link:hover{
 }
 #message-sorter{
     width: 100%;
-    height: 26px;
     padding: 0;
     margin: 0;
 }
@@ -591,12 +639,20 @@ a.tab-link:hover{
     width: 35%;
     max-width: 35%;
     min-width: 196px;
+    height: 100%;
     margin: 0;
     margin-top: 26px;
     background-color: #e5eff3;
-    background-repeat: no-repeat;
-    background-image: url('../images/icons/messagehistory.png');
-    background-position: 95% 10px;
+}
+
+#message-detail .msg-btn{
+	width:26%;
+	margin: 0 2%;
+}
+
+#message-detail .extra-msg-btn{
+	width:50%;
+	margin: 17px 2%;
 }
 
 #message-detail-content{
@@ -607,11 +663,12 @@ a.tab-link:hover{
     padding: 0;
     width: 90%;
     border: 1px solid #b5c6cd;
-    margin: 5px auto;
+    margin: 17px auto;
 }
 
 #message-detail-content p{
-    padding: 10px;
+	margin: 0;
+    padding: 17px;
 }
 
 #message-detail-sender, #message-detail-date{
@@ -624,8 +681,8 @@ a.tab-link:hover{
 }
 
 #message-detail-buttons{
-    width: 90%;
-    margin: 15px auto;
+    width: 100%;
+    margin: 17px;
     padding: 0;
 }
 
@@ -644,8 +701,9 @@ button, input[type=submit], a.btn{
     background-color: none;
 }
 
-button:hover, input[type=submit]:hover{
+button:hover, input[type=submit]:hover, a.btn:hover{
     background-image: url('../images/icons/button_hover_2.png');
+    height: 25px;
 }
 /*Contacts*/
 #contacts{
