@@ -99,7 +99,7 @@ a.tab-link.current{
     background-image: url('../images/buttons/tab_active.png');
 }
 a.tab-link:active{
-    background-image: url('../images/buttons/tab_active.png');
+    background-image: url('../images/buttons/tab_pressed.png');
 }
 a.tab-link:hover{
     background-image: url('../images/buttons/tab_hover.png');
@@ -139,9 +139,6 @@ a.tab-link:hover{
 }
 #status-indicator{
     background-image: url('../images/icons/status_green.png');
-}
-#message-tab-link.current{
-    background-image: url('../images/buttons/tab_message_active.png');
 }
 #secondary-nav{
     font-size: 0.85em;
@@ -565,6 +562,11 @@ a.tab-link:hover{
     background-repeat: no-repeat;
 }
 
+.footer #paging a.prevLink:active{
+    background-image: url('../images/buttons/paginationleft_pressed.png');
+    background-repeat: no-repeat;
+}
+
 .footer #paging a.prevLink.disabled{
     background-image: url('../images/buttons/paginationleft_disabled.png');
     background-repeat: no-repeat;
@@ -578,6 +580,11 @@ a.tab-link:hover{
 
 .footer #paging a.nextLink:hover{
     background-image: url('../images/buttons/paginationright_hover.png');
+    background-repeat: no-repeat;
+}
+
+.footer #paging a.nextLink:active{
+    background-image: url('../images/buttons/paginationright_pressed.png');
     background-repeat: no-repeat;
 }
 
@@ -730,6 +737,15 @@ button, input[type=submit], a.btn{
     background-color: none;
     min-width:80px;
 }
+
+button:hover, input[type=submit]:hover, a.btn:hover{
+    background-image: url('../images/buttons/button_hover_part.png');
+}
+
+button:active, input[type=submit]:active, a.btn:active{
+    background-image: url('../images/buttons/button_pressed_part.png');
+}
+
 a.btn{
 	height:21px;
 	padding: 2px 10px;
@@ -794,24 +810,9 @@ a.btn{
 	width:26%;
 	text-align: center;
 	height: 25px;
+	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 
-button:hover, input[type=submit]:hover, a.btn:hover{
-	display: inline-block;
-    background-image: url('../images/icons/button_hover_2.png');
-    background-repeat: repeat-x;
-    border-left: 1px solid #6b6b6b;
-    border-right: 1px solid #6b6b6b;
-    border-radius: 2px;
-    padding: 2px 10px;
-    height: 21px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    color: #000;
-    background-color: none;
-    min-width:80px;
-}
 /*Contacts*/
 #contacts{
     position: relative;

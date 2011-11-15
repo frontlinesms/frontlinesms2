@@ -47,36 +47,12 @@
 			<g:render template="/flash"/>
 		</div>
 		<div id="main">
-			<div id="sidebar">
-				<g:render template="menu"/>
-			</div>
+			<g:render template="menu"/>
 			<div id="content">
-				<div class="section-actions" id="contact-actions">
-					<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
-						<g:hiddenField name="groupId" value="&groupId=${contactsSection?.id}"/>
-						<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
-						<h3>${contactsSection.name}</h3>
-						<ol>
-							<li>
-								<g:select name="group-actions" from="${['Rename group', 'Delete group']}"
-										keys="${['rename', 'delete']}"
-										noSelection="${['': 'More actions...']}"/>
-							</li>
-						</ol>
-					</g:if>
-					<g:elseif test="${!contactInstance}">
-						<h3>New Group</h3>
-					</g:elseif>
-					<g:else>
-						<h3>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h3>
-					</g:else>
-				</div>
-				<div  id="contacts">
-					<g:layoutBody />
-				</div>
-				<g:render template="footer"/>
+				<g:render template="header"/>
+				<g:layoutBody />
 			</div>
-			<div style="clear:both;"></div>
+			<g:render template="footer"/>
 		</div>
 	</body>
 </html>
