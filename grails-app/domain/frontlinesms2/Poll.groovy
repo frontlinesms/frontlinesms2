@@ -57,7 +57,7 @@ class Poll {
 
 	def getResponseStats() {
 		def totalMessageCount = getPollMessages(false).count()
-		responses.sort {it.key.toLowerCase()}.collect {
+		responses.sort {it.key?.toLowerCase()}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,

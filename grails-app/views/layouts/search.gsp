@@ -27,6 +27,9 @@
 			$(function() {  
 			   disablePaginationControls();
 			});
+			function isArchived() {
+				return ${params.viewingArchive}
+			}
 		</g:javascript>
 	</head>
 	<body>
