@@ -23,10 +23,6 @@
 				</g:if>
 				
 				<g:render template="../message/message_actions"></g:render>
-				<g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
-					<g:actionSubmit class="msg-btn" value="Archive" action="archive"/>
-				</g:if>
-				<g:actionSubmit class="msg-btn" value="Delete" action="delete"/>
 				<g:render template="../message/other_actions"/>
 			</g:form>
 		</div>

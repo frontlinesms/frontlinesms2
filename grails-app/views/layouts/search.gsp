@@ -37,45 +37,16 @@
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
 		</div>
-	        <div class="main">
+	        <div id="main">
 				<g:render template="menu"/>
-				<div class="content">
-					<div id='search-header' class="content-header">
-						<div id="search-title">
-							<img src='${resource(dir:'images/icons',file:'search.png')}' />
-							<h2>Search</h2>
-			  			</div>
-			  			<ol>
-			  				<g:if test="${search}">
-					  			<li id="export-btn">
-						  			<g:remoteLink controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
-										Export results
-									</g:remoteLink>
-								</li>
-							</g:if>
-							<g:else>
-								<li id="export-btn">
-						  			<a class="disabled">
-										Export results
-									</a>
-								</li>
-							</g:else>
-						</ol>
-						<g:if test="${searchDescription}">
-							<div id="search-description">
-								<p>
-									${searchDescription}
-						  		</p>
-					  		</div>
-					  	</g:if>
-					</div>
+				<div id="content">
+					<g:render template="/search/header" />
 					<g:render template="/message/message_list"/>
 					<g:layoutBody />
-					<g:if test="${params.action != 'no_search'}">
-						<g:render template="../message/footer" />
-					</g:if>
 				</div>
+				<g:if test="${params.action != 'no_search'}">
+					<g:render template="../message/footer" />
+				</g:if>
 			</div>
-		</div>
 	</body>
 </html>

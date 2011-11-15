@@ -48,6 +48,14 @@ a {
     background-color: #e5eff3;
 }
 
+.field{
+	padding: 10px 0 0 23px;
+}
+
+.create {
+	margin-left: 23px;
+}
+
 .standard-nav{
     list-style: none;
     padding: 0;
@@ -433,6 +441,7 @@ a.tab-link:hover{
     text-transform: uppercase;
     padding:10px;
     padding-left: 28px;
+    width:30%;
     margin: 0;
     background-repeat: no-repeat;
     background-position: 6px 10px;
@@ -712,7 +721,37 @@ button, input[type=submit], a.btn{
     border-left: 1px solid #6b6b6b;
     border-right: 1px solid #6b6b6b;
     border-radius: 2px;
-    padding: 2px 10px;
+    padding: 0px 10px;
+    height:25px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: #000;
+    background-color: none;
+    min-width:80px;
+}
+a.btn{
+	height:21px;
+	padding: 2px 10px;
+}
+
+#msg-response-dropdown{
+	display: inline;	
+	min-height:25px;
+	padding: 3px 0;
+	width: 26%;
+	max-width: 26%;	
+}
+#btn_reply{
+	float:left;
+	display: inline-block;
+	margin: 0 0 0 2%;
+    border: none;
+    background-image: url('../images/buttons/button_default_2.png');
+    background-repeat: repeat-x;
+    border-left: 1px solid #6b6b6b;
+    border-radius: 2px;
+    padding: 3px 10px;
     height:21px;
     cursor: pointer;
     text-decoration: none;
@@ -720,6 +759,41 @@ button, input[type=submit], a.btn{
     color: #000;
     background-color: none;
     min-width:80px;
+    width: 10%;
+}
+#btn_dropdown{
+	float:left;
+	display: inline-block;
+	margin: 0 2% 0 0;
+    border: none;
+    background-image: url('../images/buttons/dropdown_default_arrow.png');
+    background-repeat: no-repeat;
+    padding: 3px 0;
+    height:25px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: #000;
+    background-color: none;
+    min-width: 25px;
+    width:25px;
+}
+#btn_forward{
+	float:left;
+	display:block;
+	width:100%;
+	padding: 3px 0;
+}
+#dropdown_options{
+	float:left;
+	position:relative;
+	top: 25px;
+	right: 29%;
+	background-color: white;
+	border: 1px solid #6b6b6b;
+	width:26%;
+	text-align: center;
+	height: 25px;
 }
 
 button:hover, input[type=submit]:hover, a.btn:hover{
