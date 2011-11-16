@@ -36,7 +36,7 @@ class PollListSpec extends PollBaseSpec {
 		when:
 //			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-			def pollTitle = $("#poll-title div h2").text()
+			def pollTitle = $(".activity-title div h3").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
@@ -60,7 +60,7 @@ class PollListSpec extends PollBaseSpec {
 //			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
-			$('#messages-menu .selected').text() == 'Football Teams poll'
+			$('#sidebar .selected').text() == 'Football Teams poll'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -93,7 +93,7 @@ class PollListSpec extends PollBaseSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			$(".message-select")[2].click()
 		then:
-			waitFor { $('#message-body').text() == 'I like manchester' }
+			waitFor { $('#message-detail-content').text() == 'I like manchester' }
 		when:
 			$(".message-select")[1].click()
 		then:
@@ -102,8 +102,8 @@ class PollListSpec extends PollBaseSpec {
 			$(".message-select")[2].click()
 			def message = Fmessage.findBySrc('Alice')
 		then:
-			waitFor { $('#message-details #contact-name').text() == message.src }
-			$('#message-details #message-body').text() == message.text
+			waitFor { $('#message-detail #message-detail-sender').text() == message.src }
+			$('#message-detail #message-detail-content').text() == message.text
 	}
 
 	def "should hide the messages when poll detail chart is shown"() {
@@ -133,6 +133,6 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}"
 		then:
-			$('#message-details #message-body').text() == "No message selected"
+			$('#message-detail #message-detail-sender').text() == "No message selected"
 	}
 }

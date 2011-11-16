@@ -25,7 +25,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			go "message/announcement/${Announcement.findByName('New Office').id}"
 		then:
-			$('#message-details #message-body').text() == "No message selected"
+			$('#message-detail #message-detail-content').text() == "No message selected"
 	}
 
 	def "message's Announcement details are shown in list"() {
@@ -46,7 +46,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 		when:
 			at PageMessageAnnouncementNewOffice
-			def selectedMenuItem = $('#messages-menu .selected')
+			def selectedMenuItem = $('#sidebar .selected')
 		then:
 			selectedMenuItem.text() == 'New Office announcement'
 	}
@@ -146,7 +146,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			deleteAnnouncement()
 		then:
-			$("title").text() == "Inbox"
+			$("#sidebar .selected").text() == "Inbox"
 			!$("a", text: "New Office")
 	}
 	
@@ -155,10 +155,10 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		createTestMessages()
 		def announcement = Announcement.findByName("New Office")
 		go "message/announcement/${announcement.id}"
-		$("#announcement-actions").value("delete")
+		$("#more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete announcement")
-		$("#done").click()
+		$("#submit").click()
 		announcement
 	}
 

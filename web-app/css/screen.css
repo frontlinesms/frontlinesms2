@@ -56,6 +56,10 @@ a {
 	margin-left: 23px;
 }
 
+.hide {
+	display:none;
+}
+
 .standard-nav{
     list-style: none;
     padding: 0;

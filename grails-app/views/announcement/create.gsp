@@ -6,10 +6,9 @@
 		<li><a class="tabs-1" href="#tabs-1">Enter message</a></li>
 		<li><a class="tabs-2" href="#tabs-2">Select recipients</a></li>
 		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
-		<li class="confirm-tab"><a class="tabs-4" href="#tabs-4"></a></li>
 	</ol>
 
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="goToSummaryTab()">
+	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'Ok', redirect())">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="message"/>
 		<div id="tabs-2">
@@ -19,36 +18,39 @@
 			                                                                'recipients': []]"/>
 		</div>
 		<g:render template="confirm"/>
-		<g:render template="summary"/>
 	</g:formRemote>
 </div>
 <g:javascript>
 	function initializePopup() {
-		$("#tabs").tabs("disable", getTabLength());
 		
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if (isElementEmpty($("#tabs-1 #messageText"))) {
+				if (isElementEmpty("#tabs-1 #messageText")) {
 					$("#tabs-1 #messageText").addClass("error");
 					return false;
 				}
+				alert('done');
 				return true;
 			}
 		});
 	
 		$("#tabs-2").contentWidget({
 			validate: function() {
+				if (isGroupChecked("addresses"))
+					alert('yes');
 				return isGroupChecked("addresses")
 			}
 		});
 		
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				$("#tabs-3 #announcement-name").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-3 #announcement-name"));
+				alert('hi?');
+				$("#tabs-3 #name").removeClass("error");
+				var isEmpty = isElementEmpty($("#tabs-3 #name"));
 				if(isEmpty) {
-					$("#tabs-3 #announcement-name").addClass("error");
+					$("#tabs-3 #name").addClass("error");
 				}
+				alert(isEmpty);
 				return !isEmpty;
 			}
 		});
@@ -71,5 +73,10 @@
 			$("#no-recepients").addClass("hide")
 		}
 		$("#confirm-message-text").html('<pre>' + sendMessage  + '</pre>');
+	}
+		
+	function redirect() {
+		window.location.replace(url_root + "message/announcement/show/" + $("#ownerId").val());
+		$(this).dialog('close');
 	}
 </g:javascript>

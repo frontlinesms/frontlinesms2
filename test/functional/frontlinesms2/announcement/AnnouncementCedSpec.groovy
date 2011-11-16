@@ -69,7 +69,7 @@ class AnnouncementDialog extends geb.Page {
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }
-		addName { $("#announcement-name") }
+		addName { $("#name") }
 		
 		nextPageButton { $("#nextPage") }
 		doneButton { $("#submit") }

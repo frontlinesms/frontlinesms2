@@ -26,8 +26,8 @@ class AnnouncementController {
 			messageSendService.send(message)
 		}
 		announcementInstance.save(flush: true)
-		flash.message = "Annoucement has been saved and message(s) has been queued to send to " + messages*.dst.join(", ")
-		redirect(controller: "message", action: "announcement", params:[ownerId: announcementInstance.id])
+		flash.message = "Announcement has been saved and message(s) have been queued to send to " + messages*.dst.join(", ")
+		[ownerId: announcementInstance.id]
 	}
 	
 	def archive = {

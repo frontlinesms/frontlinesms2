@@ -25,7 +25,7 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			go "message/folder/${Folder.findByName('Work').id}"
 		then:
-			$('#message-details #message-body').text() == "No message selected"
+			$('#message-detail #message-detail-content').text() == "No message selected"
 	}
 
 	def "message's folder details are shown in list"() {
@@ -46,7 +46,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 		when:
 			at PageMessageFolderWork
-			def selectedMenuItem = $('#messages-menu .selected')
+			def selectedMenuItem = $('#sidebar .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
 	}
@@ -146,7 +146,7 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			deleteFolder()
 		then:
-			$("title").text() == "Inbox"
+			$("#sidebar .selected").text() == "Inbox"
 			!$("a", text: "Work")
 	}
 	
@@ -154,7 +154,7 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			def folder = deleteFolder()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(folder.id).id}"
+			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 		then:
 			rowContents[2] == 'Work'
@@ -166,10 +166,11 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			def folder = deleteFolder()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(folder.id).id}"
+			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
+			folder = Folder.get(folderId)
 		then:
 			$('#activity-name').text() == folder.name
-			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folder.id).dateCreated)
+			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
 			$('#activity-body').text() == "${folder.getLiveMessageCount()} messages"
 	}
 	
@@ -183,21 +184,21 @@ class FolderListSpec extends FolderBaseSpec {
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
 			$("#title").value("Empty trash")
-			$("#done").click()
+			$("#submit").click()
 		then:
-			!Folder.findById(folder.id)
+			!Folder.findById(folderId)
 	}
 	
 	def deleteFolder() {
 		createTestFolders()
 		createTestMessages()
-		def folder = Folder.findByName("Work")
-		go "message/folder/${folder.id}"
-		$("#folder-actions").value("delete")
+		def folderId = Folder.findByName("Work").id
+		go "message/folder/${folderid}"
+		$("#more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete folder")
-		$("#done").click()
-		folder
+		$("#submit").click()
+		folderId
 	}
 
 }
