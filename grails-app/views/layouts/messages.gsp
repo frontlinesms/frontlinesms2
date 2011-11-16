@@ -43,8 +43,8 @@
 				<g:render template="/message/header"/>
 				<g:render template="../message/message_list"/>
 				<g:layoutBody/>
+			    <g:render template="../message/footer"/>
 			</div>
-			<g:render template="../message/footer"/>
 		</div>
 	</body>
 </html>
