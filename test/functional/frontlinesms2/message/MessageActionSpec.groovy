@@ -57,7 +57,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			$('#categorise_dropdown').value(barce)
 		then:
-			waitFor { $("div.flash").displayed }
+			waitFor { $(".flash").displayed }
 		when:
 			PollResponse.findByValue('manchester').refresh()
 			PollResponse.findByValue('barcelona').refresh()

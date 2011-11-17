@@ -22,25 +22,25 @@ $(document).ready(function() {
 		}
 	})
 	$("#expanded-search-options").hide();
-	$("#more-search-options").live("click",expandOptions)
+	$("#extra-options").live("click",expandOptions)
 });
 
 function expandOptions() {
 	$("#expanded-search-options").show();
-	$("#more-search-options").die("click").live("click",hideOptions)
+	$("#extra-options").die("click").live("click",hideOptions)
 }
 
 function hideOptions() {
 	$("#expanded-search-options").hide();
-	$("#more-search-options").die("click").live("click",expandOptions)
+	$("#extra-options").die("click").live("click",expandOptions)
 }
 
 
-function toggleMoreOptionElement(id) {
-	$("#more-option-field-"+id).toggle();
-	$("#more-option-link-"+id).toggle();
-	if (!$("#more-option-field-"+id).is(":visible")) {
-		$("#more-option-field-"+id).children("input").val("")
+function toggleExtraSearchOption(option) {
+	$("#extra-option-field-" + option).toggle();
+	$("#extra-option-link-" + option).toggle();
+	if (!$("#extra-option-field-" + option).is(":visible")) {
+		$("#extra-option-field-" + option).children("input").val("")
 	}
 	hideOptions();
 }

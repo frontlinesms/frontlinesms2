@@ -6,7 +6,7 @@ function messageResponseClick(messageType) {
 		configureTabs = "tabs-1, tabs-3, tabs-4"
 		var src = $("#message-src").val();
 	} else if(messageType == 'Forward') {
-		var text = $("#message-body").text();
+		var text = $("#single-message #message-detail-content p").text();
 	}
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	

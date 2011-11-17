@@ -17,9 +17,9 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 			$("a", text:"hi Bob").click()
-			waitFor { $("a", text:"hi Bob").parent().parent().hasClass("selected")}
+			waitFor { $("#message-detail-content p").text() == "hi Bob" }
 			archiveBtn.click()
-			waitFor { $("div.flash.message").text().contains("archived") }
+			waitFor { $(".flash").text().contains("archived") }
 			to PageArchive
 		then:
 	        $("a", text:"hi Bob").displayed
@@ -41,9 +41,9 @@ class MessageArchiveSpec extends MessageBaseSpec {
 		when:
 			to PageMessageSent
 			$("a", text:"hi Mary").click()
-			waitFor { $("a", text:"hi Mary").parent().parent().hasClass("selected")}
+			waitFor { $("#message-detail-content p").text() == "hi Mary" }
 			archiveBtn.click()
-			waitFor { $("div.flash.message").text().contains("archived") }
+			waitFor { $(".flash").text().contains("archived") }
 			to PageArchive
 			$("#sent").click()
 		then:

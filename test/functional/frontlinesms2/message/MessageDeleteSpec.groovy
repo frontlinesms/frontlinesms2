@@ -7,7 +7,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 		createTestData()
 	}
 
-	def 'delete button does not show up for messages in shown in trash view'() {
+	def 'delete button does not show up for messages in trash view'() {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
 			bobMessage.save(flush:true)
@@ -16,8 +16,8 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			$("a", text: "Bob").click()
 		then:
 			Fmessage.deleted(false).count() == 1
-			$('#message-details #contact-name').text() == bobMessage.displayName
-			!$('#message-details .buttons #message-delete')
+			$('#message-detail #message-detail-sender').text() == bobMessage.displayName
+			!$('#message-detail .buttons #delete-msg')
 	}
 	
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
@@ -55,7 +55,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def "'Delete' button appears for individual messages and works"() {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			def btnDelete = $("#message-delete")
+			def btnDelete = $("#delete-msg")
 		then:
 			btnDelete
 		when:

@@ -146,37 +146,29 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			deleteFolder()
 		then:
-			$("#sidebar .selected").text() == "Inbox"
+			waitFor { $("#sidebar .selected").text() == "Inbox" }
 			!$("a", text: "Work")
 	}
 	
 	def "deleted folders show up in the trash section"() {
 		setup:
-			def folder = deleteFolder()
+			def folderId = deleteFolder()
 		when:
 			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			$('#messages tbody tr:nth-child(1) td a').click()
 		then:
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folder.id).dateCreated)
-	}
-	
-	def "selected folder and its details are displayed"() {
-		setup:
-			def folder = deleteFolder()
-		when:
-			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
-			folder = Folder.get(folderId)
-		then:
-			$('#activity-name').text() == folder.name
+			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			$('#activity-name').text() == 'Work'
 			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
 			$('#activity-body').text() == "${folder.getLiveMessageCount()} messages"
 	}
 	
 	def "clicking on empty trash permanently deletes a folder"() {
 		setup:
-			def folder = deleteFolder()
+			def folderId = deleteFolder()
 		when:
 			go "message/trash"
 			$("#trash-actions").value("empty-trash")
@@ -184,7 +176,7 @@ class FolderListSpec extends FolderBaseSpec {
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
 			$("#title").value("Empty trash")
-			$("#submit").click()
+			$("#done").click()
 		then:
 			!Folder.findById(folderId)
 	}
@@ -193,11 +185,11 @@ class FolderListSpec extends FolderBaseSpec {
 		createTestFolders()
 		createTestMessages()
 		def folderId = Folder.findByName("Work").id
-		go "message/folder/${folderid}"
+		go "message/folder/${folderId}"
 		$("#more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete folder")
-		$("#submit").click()
+		$("#done").click()
 		folderId
 	}
 

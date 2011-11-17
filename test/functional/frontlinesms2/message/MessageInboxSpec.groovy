@@ -47,7 +47,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			$('#message-details #message-body').text() == "No message selected"
+			$('#message-detail #message-detail-content').text() == "No message selected"
 	}
 	
 	//FIXME this test fail when the local computer language is different than english. The Date return
@@ -60,9 +60,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${message.id}"
 			def formatedDate = dateToString(message.dateReceived)
 		then:
-			$('#message-details #contact-name').text() == message.src
-			$('#message-details #message-date').text() == formatedDate
-			$('#message-details #message-body').text() == message.text
+			$('#message-detail #message-detail-sender').text() == message.src
+			$('#message-detail #message-detail-date').text() == formatedDate
+			$('#message-detail #message-detail-content').text() == message.text
 	}
 
 	def 'selected message is highlighted'() {
@@ -176,9 +176,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def formatedDate = dateToString(message.dateReceived)
 		then:
 			waitFor { checkedMessageCount == 1 }
-			$('#message-details #contact-name').text() == message.src
-			$('#message-details #message-date').text() == formatedDate
-			$('#message-details #message-body').text() == message.text
+			$('#message-detail #message-detail-sender').text() == message.src
+			$('#message-detail #message-detail-date').text() == formatedDate
+			$('#message-detail #message-detail-content').text() == message.text
 	}
 
 	def "should skip recipients tab if a message is replied"() {
@@ -270,11 +270,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
-			$("#tab-messages").text() == "Messages 1"
+			$("##message-tab-link").text() == "Messages\n1"
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#tab-messages").text() == "Messages 2" }
+			waitFor { $("#message-tab-link").text() == "Messages\n2" }
 	}
 
 	String dateToString(Date date) {

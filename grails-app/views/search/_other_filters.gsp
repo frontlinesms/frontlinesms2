@@ -1,30 +1,41 @@
 <ul class="sub-list" id="added-options">
-	
-	<li class='field' id='more-option-field-contact-name'>
-		<img src='${resource(dir:'images/icons', file:'contacts.png')}'" /><h3 class="list-title">Contact name:</h3>
+	<li class='field' id='extra-option-contact-name'>
+		<h3 class="list-title">Contact name:</h3>
 		<g:textField name="contactString" value="${search?.contactString}"/>
-		<a onclick="toggleMoreOptionElement('contact-name')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+		<a onclick="toggleExtraSearchOption('contact-name')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 	</li>
-	<g:each var="customField" in="${search?.customFields}">
-		<li class='field' id="more-option-field-custom-field-${customField.key}">
-			<h3 class="list-title">${customField?.key}:</h3><br>
-			<g:textField name="${customField?.key}CustomField" value="${customField.value}"/>
-			<a onclick="toggleMoreOptionElement('custom-field-${customField.key}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+	<g:each in="${customFieldList}" status="i" var="c" >
+		<li class='field' id="extra-option-custom-field-${c.value}">
+			<h3 class="list-title">${c.value}:</h3><br>
+			<g:each in="${search?.customFields}" status="j" var="s">
+				<g:if test="${s == c}">
+					<g:textField name="${s.value}CustomField" value="${s.value}"/>
+					<a onclick="toggleExtraSearchOption('custom-field-${c.value}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+				</g:if>
+				<g:elseif test="${customFieldList.size() == i}">
+					<g:textField name="${c.value}CustomField" value="${c.value}"/>
+					<a onclick="toggleExtraSearchOption('custom-field-${c.value}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+				</g:elseif>
+			</g:each>
+			<g:if test="${!search?.customFields || search?.customFields == null}">
+				<g:textField name="${c.value}CustomField" value="${c.value}"/>
+				<a onclick="toggleExtraSearchOption('custom-field-${c.value}')"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+			</g:if>
 		</li>
 	</g:each>
 </ul>
 
 <h3 class="list-title">
-	<a id="more-search-options"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
+	<a id="extra-options"><img src='${resource(dir:'images', file:'move-down.png')}' /></a>
 	${message(code:'default.search.moresearchoption.label', default:'More search options') }
 </h3>
 <ul class="sub-list" id="expanded-search-options">
 	<li>
-		<a id="more-option-link-contact-name" onclick="toggleMoreOptionElement('contact-name')">Contact name</a>
+		<a id="extra-option-link-contact-name" onclick="toggleExtraSearchOption('contact-name')">Contact name</a>
 	</li>
-	<g:each var="customField" in="${customFieldList}">
+	<g:each in="${customFieldList}" status="i" var="c" >
 		<li>
-			<a id="more-option-link-custom-field-${customField}" onclick="toggleMoreOptionElement('custom-field-${customField}')">${customField}</a>
+			<a id="extra-option-link-custom-field-${c.name}" onclick="toggleExtraSearchOption('custom-field-${c.name}')">${c.name}</a>
 		</li>
 	</g:each>
 </ul>

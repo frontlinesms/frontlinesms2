@@ -34,9 +34,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-			def pollTitle = $(".activity-title div h3").text()
+			def pollTitle = $(".activity-title h3").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
@@ -112,9 +111,8 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
-			waitFor {$("#messages").displayed}
 		then:
-			$("#messages").displayed
+			waitFor {$("#messages").displayed}
 		when:
 			$("#pollSettings").click()
 			waitFor {!$("#messages").displayed}
@@ -133,6 +131,6 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}"
 		then:
-			$('#message-detail #message-detail-sender').text() == "No message selected"
+			$('#message-detail #message-detail-content').text() == "No message selected"
 	}
 }

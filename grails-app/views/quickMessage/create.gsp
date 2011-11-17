@@ -11,7 +11,7 @@
 		</g:each>
 	</ul>
 
-	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post">
+	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="addFlashMessage(data)">
 		<g:render template="message"/>
 		<div id="tabs-2" class="${configureTabs.contains("tabs-2") ? "" : "hide"}">
 			<g:render template="select_recipients"/>
@@ -27,5 +27,10 @@
 				return isGroupChecked("addresses")
 			}
 		});
+	}
+
+	function addFlashMessage(data) {
+		$("#header .flash").remove();
+		$("#header").prepend("<div class='flash message'>" + data + "</div>");
 	}
 </script>

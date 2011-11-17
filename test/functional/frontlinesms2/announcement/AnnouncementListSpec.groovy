@@ -146,8 +146,8 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			deleteAnnouncement()
 		then:
-			$("#sidebar .selected").text() == "Inbox"
-			!$("a", text: "New Office")
+			waitFor { $("#sidebar .selected").text() == "Inbox" }
+			!$("a", text: "New Office announcement")
 	}
 	
 	def deleteAnnouncement() {
@@ -158,7 +158,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		$("#more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete announcement")
-		$("#submit").click()
+		$("#done").click()
 		announcement
 	}
 
