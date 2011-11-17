@@ -14,7 +14,7 @@ function messageResponseClick(messageType) {
 		type:'POST',
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send", true); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send"); }
 	});
 	$("#reply-dropdown").val("na");
 }
@@ -52,7 +52,7 @@ function chooseActivity() {
 	return;
 }
  
-function launchMediumWizard(title, html, btnFinishedText, hasConfirmationScreen) {
+function launchMediumWizard(title, html, btnFinishedText) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup()
 	$("#modalBox").dialog({
@@ -65,88 +65,78 @@ function launchMediumWizard(title, html, btnFinishedText, hasConfirmationScreen)
 			{ text:"Back", id:"disabledBack", disabled: true },
 			{ text:"Back", click: prevButton, id:"prevPage" },
 			{ text:"Next",  click: nextButton, id:"nextPage" },
-			{ text:btnFinishedText,  click: submit, id:"submit" },
-			{ text:"Done",  click: finished, id:"finished" }
+			{ text:btnFinishedText,  click: submit, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
 	makeTabsUnfocusable();
-	$('[class^="tabs-"]').bind('click', onTabSelect(hasConfirmationScreen));
-	onTabSelect(hasConfirmationScreen);
-	changeButtons(getButtonToTabIndexMapping(hasConfirmationScreen),  getCurrentTabDom())
-	initializeTabContentWidgets()
+	validateTabSelections();
+	changeButtons(getButtonToTabMappings(),  getCurrentTabDom());
+	initializeTabContentWidgets();
 	initializePopup();
 }
 
 function submit() {
 	$("#submit").attr('disabled', 'disabled');
-	if(validateWholeForm()) {
+	if(tabValidates(getCurrentTab())) {
 		$(this).find("form").submit();
-		if(getCurrentTabIndex() == getTabLength())
-			$(this).dialog('close');
+		$(this).dialog('close');
 	} else {
 		$("#submit").removeAttr('disabled');
 		$('.error-panel').show();
 	}
 }
 
-function finished() {
-	var title = $("#ui-dialog-title-modalBox").text();
-	$(this).dialog('close');
-	if(title == "New announcement")
-		window.location.replace(url_root + "message/pending");
-	else if(title == "New poll")
-		window.location.replace(url_root + "message/pending");
-	else if(title == "Quick message")
-		window.location.replace(url_root + "message/pending");
-	else if(title == "Create smart group")
-		window.location.replace(url_root + "contact");
-	else
-		window.location.replace(url_root + "message");
+function prevButton() {
+	for (var i = 1; i <= getCurrentTabIndex(); i++) {
+		var prevTab = getCurrentTabIndex() - i;
+		if ($.inArray(prevTab, $("#tabs").tabs("option", "disabled")) == -1) {
+			$("#tabs").tabs('select', prevTab);
+			break;
+		}
+	}
+}
+
+function nextButton() {
+	for (var i = 1; i <= getTabLength(); i++) {
+		var nextTab = getCurrentTabIndex() + i;
+		if ($.inArray(nextTab, $("#tabs").tabs("option", "disabled")) == -1) {
+			$("#tabs").tabs('select', nextTab);
+			break;
+		}
+	}
 }
 
 function cancel() {
 	$(this).dialog('close');
 }
 
-function prevButton() {
-	for (var i = 1; i <= getCurrentTabDom(); i++) {
-		var prevTabToSelect = getCurrentTabDom() - i;
-		if ($.inArray(prevTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
-			$("#tabs").tabs('select', prevTabToSelect);
-				break;
-		}
-	}
-}
-
-function nextButton() {
-	if(validateCurrentTab()) {
-		for (var i = 1; i <= getTabLength(); i++) {
-			var nextTabToSelect = getCurrentTabDom() + i;
-			if ($.inArray(nextTabToSelect, $("#tabs").tabs("option", "disabled")) == -1) {
-				$("#tabs").tabs('select', nextTabToSelect);
-				break;
+function validateTabSelections() {
+	$('#tabs').tabs({select: function(event, ui) {
+		if(ui.index > getCurrentTabIndex()) {
+			var thisTabValidates = tabValidates(getCurrentTab());
+			if(thisTabValidates) {
+				changeButtons(getButtonToTabMappings(), ui.index)
+				if(thisTabValidates && $('.error-panel'))
+					$('.error-panel').hide();
+				$("#tab-" + getCurrentTabIndex() + ".ui-tabs-panel").find('input', 'textarea', 'textfield').first().focus();
+			} else if(!thisTabValidates) {
+				$('.error-panel').show();
 			}
+			return thisTabValidates;
+		} else {
+			changeButtons(getButtonToTabMappings(), ui.index);
+			return true;
 		}
-		$("#tabs-" + getCurrentTabDom()).find('input', 'textarea', 'textfield').first().focus();
-	}
+	}});
 }
 
-function goToSummaryTab() {
-	$("#tabs").tabs("enable", getTabLength());
-	moveToRelativeTab(1);
+function tabValidates(tab) {
+	return tab.contentWidget('validate');
 }
 
-function validateWholeForm() {
-	var isValid = true;
-	$("#tabs").find('.ui-tabs-panel').each(function(index, value) {
-		isValid = isValid && validateTab($("#" + value.id))
-	});
-  	return isValid;
-}
-
-function changeButtons(buttonToTabIndexMapping, tabIndex) {
-	$.each(buttonToTabIndexMapping, function(key, value) {
+function changeButtons(buttonToTabMappings, tabIndex) {
+	$.each(buttonToTabMappings, function(key, value) {
 		if (value.indexOf(tabIndex) != -1) {
 			$(".ui-dialog-buttonpane #" + key).show()
 		} else {
@@ -172,19 +162,14 @@ function getTabLength() {
 	return $('#tabs').tabs("length") - 1;
 }
 
-function getButtonToTabIndexMapping(hasConfirmationScreen) {
+function getButtonToTabMappings() {
 	return {
-			"cancel" : range(0, hasConfirmationScreen ? getTabLength() - 1 : getTabLength()),
-			"prevPage": range(1, hasConfirmationScreen ? getTabLength() - 1 : getTabLength()),
-			"nextPage": range(0, hasConfirmationScreen ? getTabLength() - 2 : getTabLength() - 1),
-			"submit": hasConfirmationScreen ? [getTabLength() - 1] : [getTabLength()],
-			"finished": hasConfirmationScreen ? [getTabLength()] : [],
+			"cancel" : range(0, getTabLength()),
+			"prevPage": range(1, getTabLength()),
+			"nextPage": range(0, getTabLength() - 1),
+			"submit": [getTabLength()],
 			"disabledBack": [0]
 		}
-}
-
-function validateCurrentTab() {
-	return validateTab(getCurrentTab())
 }
 
 function getCurrentTab() {
@@ -202,34 +187,10 @@ function getCurrentTabIndex() {
 	return current;
 }
 
-function movingForward(nextIndex, currentIndex) {
-	return nextIndex > currentIndex
-}
-
-function onTabSelect(hasConfirmationScreen) {
-	$('#tabs').tabs({select: function(event, ui) {
-		var isValid = movingForward(ui.index, getCurrentTabIndex()) ? validateCurrentTab() : true;
-		if (isValid) {
-			if($('.error-panel'))
-				$('.error-panel').hide();
-			changeButtons(getButtonToTabIndexMapping(hasConfirmationScreen), ui.index)
-		}
-		return isValid;
-	}});
-}
-
 function initializeTabContentWidgets() {
 	for(i=0; i <= getTabLength(); i++) {
 		$("#tabs-" + (i + 1)).contentWidget()
 	}
-}
-
-function validateTab(tab) {
-	var isValid = tab.contentWidget('validate');
-	if(!isValid) {
-		$('.error-panel').show();
-	}
-	return isValid;
 }
 
 function disableTab(tabNumber) {

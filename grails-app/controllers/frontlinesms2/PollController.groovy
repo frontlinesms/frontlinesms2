@@ -35,7 +35,7 @@ class PollController {
 			flash.message = "Poll has been saved"
 		}
 		pollInstance.save(flush: true)
-		redirect(controller: "message", action: "pending", params:params)
+		[ownerId: pollInstance.id]
 	}
 	
 	def update = {

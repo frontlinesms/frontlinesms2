@@ -168,7 +168,7 @@ class MessageController {
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
@@ -190,7 +190,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' messages'])}"
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
@@ -228,7 +228,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		render ""
 	}
 
@@ -240,7 +240,7 @@ class MessageController {
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message(s)'])}"
 		render ""
 	}
 

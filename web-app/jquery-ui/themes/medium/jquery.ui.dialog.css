@@ -16,6 +16,14 @@
 	border: 5px solid rgba(0,0,0,0.4);
 	border-radius: 4px;
 	background-color: white;
+	font-family: Arial,Georgia,Helvetica,sans-serif;
+	font-size: .7em;
+}
+
+.ui-dialog h2{
+	font-size: 1.2em;
+	margin: 0;
+	padding:0;
 }
 
 .ui-dialog .ui-dialog-titlebar { 
@@ -38,11 +46,6 @@
 
 .ui-dialog .ui-dialog-content {
 	overflow: hide;
-}
-
-.ui-dialog .summary {
-	position: relative;
-	top: -400px;
 }
 
 .ui-dialog .ui-dialog-buttonpane {

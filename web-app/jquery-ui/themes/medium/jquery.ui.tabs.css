@@ -72,11 +72,7 @@
 }
 
 .ui-tabs-panel #address {
-	width: 250px;
-}
-
-.ui-tabs-panel #recipients-selected {
-	float: right;
+	width: 200px;
 }
 
 .ui-tabs-panel #poll-type {
@@ -105,19 +101,32 @@
 	padding: 10px 0;
 }
 
+.ui-tabs-panel #manual-address {
+	height: 10%;
+	overflow: hide;
+}
 .ui-tabs-panel #recipients-list {
-	height: 270px;
+	height: 75%;
 	overflow: auto;
 	padding: 10px;
-	margin: 15px;
+	margin: 0;
+}
+.ui-tabs-panel #recipients-selected {
+	height: 10%;
+	float: right;
+	padding: 2px 0;
 }
 
+.ui-tabs-panel #recipients-list ul{
+	padding: 0;
+	margin: 0;
+}
 .ui-tabs-panel #recipients-list li {
 	line-height: 200%;
 }
 
 .ui-tabs-panel #groups {
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid #9E9E9E;
 }
 
 .ui-tabs-panel .name-field {

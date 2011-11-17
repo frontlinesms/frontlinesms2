@@ -10,10 +10,9 @@
 		<li><a class="tabs-5" href="#tabs-5">Edit Message</a></li>
 		<li><a class="tabs-6" href="#tabs-6">Select recipients</a></li>
 		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
-		<li class="confirm-tab"><a class="tabs-8" href="#tabs-8"></a></li>
 	</ol>
 
-	<g:formRemote url="${[action:'save', controller:'poll']}" name='new-poll-form' method="post" onSuccess="goToSummaryTab()">
+	<g:formRemote url="${[action:'save', controller:'poll']}" name='new-poll-form' method="post" onSuccess="launchMediumPopup('Poll created!', data, 'Ok', summaryRedirect)">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
 		<g:render template="responses"/>
@@ -27,16 +26,12 @@
 			                                                                'recipients': []]"/>
 		</div>
 		<g:render template="confirm"/>
-		<div id="tabs-8" class='summary'>
-			<g:render template="summary"/>
-		</div>
 	</g:formRemote>
 </div>
 
 <g:javascript>
 	function initializePopup() {
 		
-		$("#tabs").tabs("disable", getTabLength());
 		disableTab(1);
 		highlightPollResponses();
 
@@ -177,5 +172,11 @@
 
 	function validatePollResponses() {
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
+	}
+	
+	function summaryRedirect() {
+		var ownerId = $(".summary #ownerId").val();
+		$(this).dialog('close');
+		window.location.replace(url_root + "message/poll/" + ownerId);
 	}
 </g:javascript>

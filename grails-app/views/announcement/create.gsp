@@ -8,7 +8,7 @@
 		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'Ok', redirect())">
+	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'Ok', summaryRedirect)">
 		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="message"/>
 		<div id="tabs-2">
@@ -29,28 +29,23 @@
 					$("#tabs-1 #messageText").addClass("error");
 					return false;
 				}
-				alert('done');
 				return true;
 			}
 		});
 	
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				if (isGroupChecked("addresses"))
-					alert('yes');
 				return isGroupChecked("addresses")
 			}
 		});
 		
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				alert('hi?');
 				$("#tabs-3 #name").removeClass("error");
 				var isEmpty = isElementEmpty($("#tabs-3 #name"));
 				if(isEmpty) {
 					$("#tabs-3 #name").addClass("error");
 				}
-				alert(isEmpty);
 				return !isEmpty;
 			}
 		});
@@ -75,8 +70,9 @@
 		$("#confirm-message-text").html('<pre>' + sendMessage  + '</pre>');
 	}
 		
-	function redirect() {
-		window.location.replace(url_root + "message/announcement/show/" + $("#ownerId").val());
+	function summaryRedirect() {
+		var ownerId = $(".summary #ownerId").val();
 		$(this).dialog('close');
+		window.location.replace(url_root + "message/announcement/" + ownerId);
 	}
 </g:javascript>

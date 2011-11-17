@@ -48,6 +48,20 @@ a {
     background-color: #e5eff3;
 }
 
+.flash{
+	width: 50%;
+	position: absolute;
+	top: 0px;
+	margin-right: 25%;
+	margin-left: 25%;
+	z-index: 1;
+	text-align: center;
+	background-color: #C03283;
+	background-color: rgba(192, 50, 131, 0.4);
+	border-radius: 2px;
+	padding: 2px 0;
+}
+
 .field{
 	padding: 10px 0 0 23px;
 }

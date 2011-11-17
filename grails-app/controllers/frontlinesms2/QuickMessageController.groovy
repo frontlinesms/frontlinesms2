@@ -22,6 +22,19 @@ class QuickMessageController {
 			messageText: fowardMessage,
 			nonExistingRecipients:recipients - contacts*.getPrimaryMobile() - contacts*.getSecondaryMobile() - contacts*.getEmail()]
 	}
+	
+	def send = {
+		def failedMessageIds = params.failedMessageIds
+		def messages = failedMessageIds ? Fmessage.getAll([failedMessageIds].flatten()): messageSendService.getMessagesToSend(params)
+		messages.each { message ->
+			messageSendService.send(message)
+		}
+		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
+		if(params.hasSummary)
+			[]
+		else
+			redirect (controller: "message", action: 'pending')
+	}
 
 	private def configTabs(configTabs) {
 		return configTabs.tokenize(",")*.trim()

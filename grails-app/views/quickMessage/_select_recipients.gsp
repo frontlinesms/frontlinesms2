@@ -7,7 +7,7 @@
 	</div>
 	
 	<div id="recipients-list">
-		<ol>
+		<ul>
 			<div id="groups">
 				<g:each in="${groupList}" var="entry">
 					<li class="group">
@@ -42,7 +42,7 @@
 					</li>
 				</g:each>
 			</div>
-		</ol>
+		</ul>
 	</div>
 	<div id="recipients-selected"><span id="recipient-count">0</span> recipients selected</div>
 </div>
