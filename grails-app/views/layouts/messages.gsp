@@ -10,6 +10,10 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 			refresh_rate = ${params.rRate ?: 30000}
+			
+			function isArchived() {
+				return ${params.viewingArchive}
+			}
 		</script>
 		<g:javascript src="message/check_message.js"/>
 		<g:javascript src="message/arrow_navigation.js"/>

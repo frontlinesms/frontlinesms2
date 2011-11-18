@@ -194,7 +194,7 @@ class MessageController {
 			render ""
 		}else {
 			if(params.messageSection == 'result') {
-				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
