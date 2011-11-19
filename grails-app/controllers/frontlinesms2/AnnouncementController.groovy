@@ -26,7 +26,7 @@ class AnnouncementController {
 			messageSendService.send(message)
 		}
 		announcementInstance.save(flush: true)
-		flash.message = "Announcement has been saved and message(s) have been queued to send to " + messages*.dst.join(", ")
+		flash.message = "Announcement has been saved and message(s) have been queued to send"
 		[ownerId: announcementInstance.id]
 	}
 	
@@ -35,7 +35,7 @@ class AnnouncementController {
 			announcement.archive()
 			announcement.save(flush:true, failOnError:true)
 		
-			flash.message = "Announcement was archived successfully!"
+			flash.message = "Announcement archived successfully!"
 			redirect(controller: "message", action: "inbox")
 		}
 	}
@@ -46,7 +46,7 @@ class AnnouncementController {
 			announcement.save()
 		}
 
-		flash.message = "Announcement was unarchived successfully!"
+		flash.message = "Announcement unarchived successfully!"
 		redirect(controller: "archive", action: "folderList")
 	}
 	
@@ -60,7 +60,7 @@ class AnnouncementController {
 		withAnnouncement { announcement ->
 			announcement.delete()
 		}
-		flash.message = "announcement has been permanently deleted!"
+		flash.message = "Announcement has been permanently deleted!"
 		redirect(controller:"message", action:"inbox")
 	}
 

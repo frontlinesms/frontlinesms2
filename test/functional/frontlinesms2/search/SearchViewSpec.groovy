@@ -134,6 +134,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			at PageSearchResult
+			println $("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}
 		when:
 			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
 			$("#delete-msg").click()
@@ -182,11 +183,10 @@ class SearchViewSpec extends SearchBaseSpec {
 			at PageSearchResult
 		when:
 			$("#messages tbody tr:nth-child(3) td:nth-child(3)").click()
-			$("#message-archive").click()
+			$("#archive-msg").click()
 		then:
 			at PageSearchResult
 		when:
-			def messageBody = $("#message-body").text()
 			$("a.displayName-${Fmessage.findByText('sent').id}").click()
 		then:
 			at PageSearchResult
@@ -298,9 +298,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ 
-				$("#message-tab-link").text() == "Messages\n3"
-			}
+			waitFor{ $("#message-tab-link").text().endsWith("3") }
 	}
 	
 }

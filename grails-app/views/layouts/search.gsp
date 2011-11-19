@@ -13,6 +13,7 @@
 		</script>
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
+		<g:javascript src="jquery.ui.selectmenu.js"/>
 		<g:javascript src="search/moreOptions.js"/>
 		<g:javascript src="message/check_message.js"/>
 		<g:javascript src="message/arrow_navigation.js"/>

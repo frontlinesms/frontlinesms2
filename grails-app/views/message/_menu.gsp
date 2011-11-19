@@ -31,7 +31,7 @@
 						<g:link action="announcement" params="[ownerId: a.id]">${a.name} announcement</g:link>
 					</li>
 				</g:each>
-				<li id="create-activity">
+				<li id="create-activity" class="create">
 					<g:remoteLink class="btn create" controller="poll" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" >Create new activity</g:remoteLink>
 				</li>
 			</ul>
@@ -44,7 +44,7 @@
 						<g:link action="radioShow" params="[ownerId: s.id]">${s.name}</g:link>
 					</li>
 				</g:each>
-				<li id='create-show'>
+				<li id='create-show' class="create">
 					<g:remoteLink class="btn create" controller="radioShow" action="create" onSuccess="launchSmallPopup('Radio Show', data, 'Create')">
 						Create new show
 					</g:remoteLink>
@@ -59,7 +59,7 @@
 						<g:link action="folder" params="[ownerId: f.id]">${f.name}</g:link>
 					</li>
 				</g:each>
-				<li id="create-folder">
+				<li id="create-folder" class="create">
 					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup('Folder', data, 'Create');">
 						Create new folder
 					</g:remoteLink>

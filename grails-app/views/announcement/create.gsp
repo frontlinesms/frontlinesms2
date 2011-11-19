@@ -2,6 +2,7 @@
 <g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
+	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
 	<ol>
 		<li><a class="tabs-1" href="#tabs-1">Enter message</a></li>
 		<li><a class="tabs-2" href="#tabs-2">Select recipients</a></li>
@@ -9,7 +10,6 @@
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'Ok', summaryRedirect)">
-		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="message"/>
 		<div id="tabs-2">
 			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,

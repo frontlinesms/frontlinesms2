@@ -26,6 +26,13 @@
 	padding:0;
 }
 
+.ui-dialog .error-panel{
+	background-color: #ffefd8;
+	border-bottom: 1px solid #9E9E9E;
+	padding: 3px 30px;
+	text-align: center;
+}
+
 .ui-dialog .ui-dialog-titlebar { 
 	position: relative;
 	padding-top: 17px;
@@ -52,6 +59,7 @@
 	text-align: right;
 	border-top: 1px solid #9E9E9E;
 	height: 43px;
+	background: white;
 }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
 .ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }

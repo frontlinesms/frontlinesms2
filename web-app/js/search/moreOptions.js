@@ -13,34 +13,26 @@ $(document).ready(function() {
 		});
 	
 	
-	//hide the more options fields
-	$("[id^=more-option-field]").each(function(){
-		if (!$(this).children("input").val()) {
+	$(".extra-option").each(function() {
+		if (!$(this).children("input").val())
 			$(this).hide()
-		} else {
-			$("#"+this.id.replace("more-option-field","more-option-link")).hide();
-		}
+		else
+			$(".extra-option-link#" + $(this).attr('id')).hide();
 	})
-	$("#expanded-search-options").hide();
-	$("#extra-options").live("click",expandOptions)
+	$("#extra-options-list").hide();
+	$("#toggle-extra-options").find("#minus").hide();
+	$("#toggle-extra-options").live("click", function() {
+		$("#extra-options-list").toggle();
+		$("#toggle-extra-options").find("#minus").toggle();
+		$("#toggle-extra-options").find("#plus").toggle();
+	});
 });
 
-function expandOptions() {
-	$("#expanded-search-options").show();
-	$("#extra-options").die("click").live("click",hideOptions)
-}
-
-function hideOptions() {
-	$("#expanded-search-options").hide();
-	$("#extra-options").die("click").live("click",expandOptions)
-}
-
-
 function toggleExtraSearchOption(option) {
-	$("#extra-option-field-" + option).toggle();
-	$("#extra-option-link-" + option).toggle();
-	if (!$("#extra-option-field-" + option).is(":visible")) {
-		$("#extra-option-field-" + option).children("input").val("")
-	}
-	hideOptions();
+	$(".extra-option#" + option + "-list-item").toggle();
+	$(".extra-option-link#" + option + "-add").toggle();
+}
+
+function removeValue(element) {
+	$(".extra-option#" + element + "-list-item").find("input").val("");
 }

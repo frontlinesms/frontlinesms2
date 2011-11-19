@@ -2,6 +2,7 @@
 <g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
+	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
 	<ol>
 		<li><a class="tabs-1" href="#tabs-1">Enter Question</a></li>
 		<li><a class="tabs-2" href="#tabs-2">Response list</a></li>
@@ -13,7 +14,6 @@
 	</ol>
 
 	<g:formRemote url="${[action:'save', controller:'poll']}" name='new-poll-form' method="post" onSuccess="launchMediumPopup('Poll created!', data, 'Ok', summaryRedirect)">
-		<div class="error-panel hide">Please fill in all the required fields</div>
 		<g:render template="question"/>
 		<g:render template="responses"/>
 		<g:render template="sorting"/>

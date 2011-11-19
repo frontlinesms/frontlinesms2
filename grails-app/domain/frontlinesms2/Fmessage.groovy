@@ -147,16 +147,15 @@ class Fmessage {
 					'in'("messageOwner", search.owners)
 				}
 				if(search.startDate && search.endDate) {
-					between("dateReceived", search.startDate, search.endDate.next())
+					between("dateReceived", search.startDate, search.endDate)
 				} else if (search.startDate) {	
 					ge("dateReceived", search.startDate)
 				} else if (search.endDate) {
-					le("dateReceived", search.endDate.next())
+					le("dateReceived", search.endDate)
 				}
-				if(search.customFields.find{it.value}) {
-					def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
-					contactNameMatchingCustomField = contactNameMatchingCustomField?:[""] //otherwise hibernate fail to search 'in' empty list
-					'in'("contactName", contactNameMatchingCustomField)
+				if(search.customFields != [:]) {
+					def matchingContacts = CustomField.getAllContactsWithCustomField(search.customFields) ?: [""] //otherwise hibernate fails to search 'in' empty list
+					'in'("contactName", matchingContacts)
 				}
 				if(!search.inArchive) {
 					eq('archived', false)

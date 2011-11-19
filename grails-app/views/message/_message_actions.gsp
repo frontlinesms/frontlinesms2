@@ -19,7 +19,6 @@
 
 <script>
 	function toggleDropdown() {
-		$()
 		$("#dropdown_options").toggle()
 		return false;
 	};

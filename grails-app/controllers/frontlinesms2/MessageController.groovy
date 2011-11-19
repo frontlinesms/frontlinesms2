@@ -156,7 +156,11 @@ class MessageController {
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
-		render(text: flash.message)
+		if(params.failedMessageIds)
+			redirect(action: pending)
+		else
+			render(text: flash.message)
+		
 	}
 
 	def delete = {

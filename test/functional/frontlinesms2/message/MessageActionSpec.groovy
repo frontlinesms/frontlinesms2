@@ -55,7 +55,8 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester')
 		when:
-			$('#categorise_dropdown').value(barce)
+			$('#categorise_dropdown').jquery.val(barce)
+			$('#categorise_dropdown').jquery.trigger('change')
 		then:
 			waitFor { $(".flash").displayed }
 		when:

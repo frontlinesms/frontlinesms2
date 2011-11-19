@@ -2,13 +2,19 @@ package frontlinesms2
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Date;
+
 import grails.util.GrailsConfig
 
 
 class SearchController {
 	
-	def dateFormatString = message(code:"default.search.date.format", default:"d/M/yyyy")
-	def dateFormat = new SimpleDateFormat(dateFormatString)
+	def beforeInterceptor = {
+		params.offset  = params.offset ?: 0
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.sort = params.sort ?: 'dateCreated'
+		true
+	}
 	
 	def index = { redirect(action:'no_search') }
 	
@@ -20,33 +26,24 @@ class SearchController {
 				customFieldList : CustomField.getAllUniquelyNamed()]
 	}
 
-	def beforeInterceptor = {
-		params.offset  = params.offset ?: 0
-		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
-		params.sort = params.sort ?: 'dateCreated'
-		true
-	}
-	
 	def result = {
 		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
 			searchInstance.owners = activity ? Fmessage.getMessageOwners(activity): null
-			searchInstance.searchString = params.searchString?: ""
-			searchInstance.contactString = params.contactString?: null
+			searchInstance.searchString = params.searchString ?: ""
+			searchInstance.contactString = params.contactString ?: null
 			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
 			searchInstance.status = params.messageStatus ?: null
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate?: null
-			searchInstance.startDate?.clearTime()
-			searchInstance.endDate = params.endDate?: null
-			searchInstance.endDate?.clearTime()
+			searchInstance.startDate = params.startDate ?: null
+			searchInstance.endDate = params.endDate ?: null
 			searchInstance.customFields = [:]
-
-			CustomField.getAllUniquelyNamed().each() {
-				searchInstance.customFields[it] = params[it+'CustomField'] ?: null
-			} 
+			CustomField.getAllUniquelyNamed().each() { customFieldName ->
+				if(params[customFieldName])
+					searchInstance.customFields[customFieldName] = params[customFieldName]
+			}
 			searchInstance.save(failOnError: true, flush: true)
 		}
 
@@ -93,11 +90,11 @@ class SearchController {
 			}
 		}
 		if(search.startDate && search.endDate){
-			searchDescriptor += ", between " + search.startDate.format(dateFormatString) + " and " + search.endDate.format(dateFormatString) 
+			searchDescriptor += ", between " + search.startDate + " and " + search.endDate
 		} else if (search.startDate) {
-			searchDescriptor += ", from " + search.startDate.format(dateFormatString)
+			searchDescriptor += ", from " + search.startDate
 		} else if (search.endDate) {
-			searchDescriptor += ", until " + search.endDate.format(dateFormatString)
+			searchDescriptor += ", until " + search.endDate
 		}
 		return searchDescriptor
 	}
@@ -114,7 +111,7 @@ class SearchController {
 	private def withFmessage(Closure c) {
 		def m = Fmessage.get(params.messageId)
 		if(m) c.call(m)
-		else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+		else render(text: "Could not find message with id $params.messageId") // TODO handle error state properly
 	}
 	
 	private def withSearch(Closure c) {
@@ -128,11 +125,15 @@ class SearchController {
 			params.inArchive = search.inArchive
 			params.startDate = search.startDate
 			params.endDate = search.endDate
-			c.call(search)
+			search.customFields.each() { customFieldName, val ->
+				println customFieldName
+				params[customFieldName] = val
+			}
 		}
 		else {
-			search = new Search(name: "TempSearchObject")
-			c.call(search)
+			search = new Search(name: 'TempSearchObject')
 		}
+		c.call(search)
+		search
 	}
 }

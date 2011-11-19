@@ -25,6 +25,34 @@ a {
 	color: black;
 }
 
+.error{
+	border: 2px solid #ff9600;
+}
+.error-message{
+	background-image: url('../images/icons/error_on.png');
+	background-repeat: no-repeat;
+	background-position: left;
+	min-width:18px;
+	min-height:18px;
+	padding: 2px 20px;
+	vertical-align: bottom;
+}
+#address-error{
+	position: relative;
+	left: 150px;
+}
+
+/*Popup Dialogs (should be in jquery.ui.dialog.css, but image reference problems occur*/
+.ui-dialog .error-panel #error-icon{
+	display:inline-block;
+	background-image: url('../images/icons/error_on.png');
+	background-repeat: no-repeat;
+	min-width:18px;
+	min-height:18px;
+	padding-right: 10px;
+	vertical-align: bottom;
+}
+
 /*Header*/
 
 #header{
@@ -44,8 +72,8 @@ a {
     margin-top: 10px;
 }
 
-.selected{
-    background-color: #e5eff3;
+.selected{	
+    background-color: #D8E8EF;
 }
 
 .flash{
@@ -395,12 +423,18 @@ a.tab-link:hover{
 #sidebar .sublist li:hover{
     background-color: #e5eff3;
 }
+#sidebar .sublist li.create:hover{
+    background-color: white;
+}
 #sidebar .sublist a:hover{
     background-color: #e5eff3;
 }
+#sidebar .sublist a.create:hover{
+    background-color: white;
+}
 
 #sidebar .sublist li.active-section{
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
 }
 .list-title{
     background-repeat: no-repeat;
@@ -449,7 +483,7 @@ a.tab-link:hover{
     min-height: 200px;
     height: 200px;
     padding: 0 17px;
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
     border-left: 1px solid #9e9e9e;
 }
 
@@ -695,7 +729,7 @@ a.tab-link:hover{
     height: 96%;
     margin: 0;
     margin-top: 26px;
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
 }
 
 #message-detail .msg-btn{
@@ -862,7 +896,7 @@ a.btn{
 #contact-editor{
     padding: 10px;
     margin-left: 200px;
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
 }
 #contact-editor form{
     width: 400px;
@@ -936,7 +970,7 @@ a.btn{
 /* Polls */
 
 #poll-details{
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
     height: 100%;
 }
 

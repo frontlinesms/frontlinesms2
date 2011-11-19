@@ -36,7 +36,7 @@ class GroupController {
 	def save = {
 		def groupInstance = new Group(params)
 		if (!groupInstance.hasErrors() && groupInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.id])}"
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.name])}"
 		} else {
 			flash.message = "error"
 		}

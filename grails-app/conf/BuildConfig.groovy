@@ -4,8 +4,11 @@ grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.dependency.resolution = {
 	// Everything with a version that ends with -SNAPSHOT is changing
-		chainResolver.changingPattern = '.*-SNAPSHOT'
-
+//		chainResolver.changingPattern = '.*-SNAPSHOT'  // This causes all snapshot dependencies to be looked for in remote repos
+	if(Boolean.parseBoolean(System.properties['snapshots'])) {
+		chainResolver.changingPattern = '.*-SNAPSHOT'  // This causes all snapshot dependencies to be looked for in remote repos
+	}
+	
 	// inherit Grails' default dependencies
 	inherits("global") {
 		// uncomment to disable ehcache
@@ -13,6 +16,8 @@ grails.project.dependency.resolution = {
 	}
 	log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 	repositories {
+		grailsHome()
+		
 		// uncomment the below to enable remote dependency resolution
 		// from public Maven repositories
 		mavenLocal()
@@ -25,17 +30,18 @@ grails.project.dependency.resolution = {
 		mavenRepo "https://nexus.codehaus.org/content/repositories/snapshots/"
 		
 		grailsPlugins()
-		grailsHome()
 		grailsCentral()
 
-		// from https://github.com/alkemist/grails-snapshot-dependencies-fix
-		// Register the new JAR
-		def classLoader = getClass().classLoader
-		classLoader.addURL(new File(baseFile, "lib/grails-snapshot-dependencies-fix-0.1.jar").toURL())
-		// Get a hold of the class for the new resolver
-		def snapshotResolverClass = classLoader.loadClass("grails.resolver.SnapshotAwareM2Resolver")
-		// Define a new resolver that is snapshot aware
-		resolver(snapshotResolverClass.newInstance(name: "spock-snapshots", root: "http://m2repo.spockframework.org/snapshots"))
+		if(Boolean.parseBoolean(System.properties['snapshots'])) {
+			// from https://github.com/alkemist/grails-snapshot-dependencies-fix
+			// Register the new JAR
+			def classLoader = getClass().classLoader
+			classLoader.addURL(new File(baseFile, "lib/grails-snapshot-dependencies-fix-0.1.jar").toURL())
+			// Get a hold of the class for the new resolver
+			def snapshotResolverClass = classLoader.loadClass("grails.resolver.SnapshotAwareM2Resolver")
+			// Define a new resolver that is snapshot aware
+			resolver(snapshotResolverClass.newInstance(name: "spock-snapshots", root: "http://m2repo.spockframework.org/snapshots"))
+		}
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.

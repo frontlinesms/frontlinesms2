@@ -29,7 +29,7 @@ class PollController {
 				pollInstance.save()
 				messageSendService.send(message)
 			}
-			flash.message = "Poll has been saved and message(s) has been queued to send to " + messages*.dst.join(", ")
+			flash.message = "Poll has been saved and message(s) has been queued to send"
 		} else {
 			pollInstance.save()
 			flash.message = "Poll has been saved"
@@ -49,7 +49,7 @@ class PollController {
 		def poll = Poll.get(params.id)
 		poll.archivePoll()
 		poll.save()
-		flash.message = "Poll was archived successfully!"
+		flash.message = "Poll archived successfully!"
 		redirect(controller: "message", action: "inbox")
 	}
 	
@@ -57,7 +57,7 @@ class PollController {
 		def poll = Poll.get(params.id)
 		poll.unarchivePoll()
 		poll.save()
-		flash.message = "Poll was unarchived successfully!"
+		flash.message = "Poll unarchived successfully!"
 		redirect(controller: "archive", action: "pollView")
 	}
 	

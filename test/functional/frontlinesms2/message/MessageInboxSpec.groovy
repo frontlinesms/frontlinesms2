@@ -270,7 +270,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
-			$("##message-tab-link").text() == "Messages\n1"
+			$("#message-tab-link").text() == "Messages\n1"
 		when:
 			js.refreshMessageCount()
 		then:
