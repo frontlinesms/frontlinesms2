@@ -28,8 +28,8 @@ class Fmessage {
 
 	def beforeInsert = {
 		dateCreated = dateCreated ?: new Date()
-		dateReceived = dateReceived ?: new Date()
-		dateSent = dateSent ?: new Date()
+		if(status == MessageStatus.INBOUND) dateReceived = dateReceived ?: new Date()
+		else dateSent = dateSent ?: new Date()
 		if(status == MessageStatus.INBOUND ? src : dst) updateContactName()
 	}
 	

@@ -171,10 +171,6 @@ class SearchViewSpec extends SearchBaseSpec {
 	}
 	
 	def "archiving message should not break message navigation "() {
-		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -182,15 +178,15 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			at PageSearchResult
 		when:
-			$("#messages tbody tr:nth-child(3) td:nth-child(3)").click()
+			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
 			$("#archive-msg").click()
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findByText('sent').id}").click()
+			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
 		then:
 			at PageSearchResult
-			$("#message-detail-content").text() == 'sent'
+			$("#message-detail-content").text() == 'hi alex'
 	}
 	
 	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){

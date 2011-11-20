@@ -57,7 +57,7 @@ class Poll {
 
 	def getResponseStats() {
 		def totalMessageCount = getPollMessages(false).count()
-		responses.sort {it.id}.collect {
+		responses.sort {it.key?.toLowerCase()}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
@@ -80,8 +80,7 @@ class Poll {
 
 	static Poll createPoll(attrs) {
 		def poll = new Poll(attrs)
-		if(attrs['poll-type'] == 'standard') {
-			['Yes','No'].each { poll.addToResponses(new PollResponse(value:it, key:it)) }
+		if(attrs['poll-type'] == 'standard') {	['Yes','No'].each { poll.addToResponses(new PollResponse(value:it, key:it)) }
 		} else {
 			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
 			choices.each { k,v -> 
