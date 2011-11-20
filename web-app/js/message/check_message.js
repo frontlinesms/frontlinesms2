@@ -43,14 +43,14 @@ function upSingleCheckedDetails(messageId) {
 	
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else if(isArchived())
+	} else if(viewingArchive)
 		var url = 'archive/' + messageSection;
 	else {
 		var url = 'message/' + messageSection;
 	}
 	
 	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId, viewingArchive: viewingArchive}, function(data) {
-		$('#message-details #single-message').replaceWith($(data).find('#message-details #single-message'));
+		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
@@ -64,7 +64,7 @@ function downSingleCheckedDetails(messageId) {
 	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else if(isArchived())
+	} else if(viewingArchive)
 		var url = 'archive/' + messageSection;
 	else {
 		var url = 'message/' + messageSection;
@@ -100,15 +100,15 @@ function updateMultipleCheckedDetails(messageId) {
 	
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else if(isArchived())
+	} else if(viewingArchive)
 		var url = 'archive/' + messageSection;
 	else {
 		var url = 'message/' + messageSection;
 	}
 	
 	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: viewingArchive, searchId: searchId}, function(data) {
-		$('#message-details #single-message').replaceWith($(data).find('#message-details #multiple-messages'));
-		$('#message-details #multiple-messages').replaceWith($(data).find('#message-details #multiple-messages'));
+		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #multiple-messages'));
+		$('#message-detail #multiple-messages').replaceWith($(data).find('#message-detail #multiple-messages'));
 	});
 }
 
