@@ -34,7 +34,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 			$(".message-select")[2].click()
 		then:
-			waitFor { $("#message-details #contact-name").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text() }
+			waitFor { $("#message-detail #message-detail-sender").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text() }
 		when:
 			$(".message-select")[1].click()
 		then:
@@ -181,7 +181,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			$('#multiple-messages #btn_archive_all').click()
 		then:
 			waitFor { at PageMessageInbox }
-			$("div#no-messages").text() == 'No messages'
+			$("#message-detail-content").text() == 'No message selected'
 
 	}
 }

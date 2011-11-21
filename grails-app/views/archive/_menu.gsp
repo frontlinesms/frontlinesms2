@@ -1,34 +1,36 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<ol class="context-menu" id="archives-menu">
-	<li class='section'>
-		<ol class='sub-menu' id="archive-submenu">
-				<li class="${(messageSection == 'inbox')? 'selected':''}" >
-					<g:link controller="archive" action="inbox" elementId="inbox" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
-						<img src='${resource(dir:'images/icons',file:'inboxarchive.png')}' />
-						Inbox archive
-					</g:link>
-				</li>
-				<li class="${(messageSection == 'sent')? 'selected':''}" >
-					<g:link controller="archive" action="sent" elementId="sent" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
-						<img src='${resource(dir:'images/icons',file:'sentarchive.png')}' />
-						Sent archive
-					</g:link>
-				</li>
-				<li class="${(messageSection == 'poll' || messageSection == 'announcement') ? 'selected':''}" >
-					<g:link controller="archive" action='activityView' elementId="activity" params="[viewingArchive: true]">
-						<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-						Activity archive
-					</g:link>
-				</li>
-				<li class="${(messageSection == 'folder')? 'selected':''}" >
-					<g:link controller="archive" action='folderView' elementId="folder" params="[viewingArchive: true]">
-						<img src='${resource(dir:'images/icons',file:'foldersarchive.png')}' />
-						Folder archive
-					</g:link>
-				</li>
-		</ol>
-	</li>
-</ol>                                                                                                                            
+<div id="sidebar">
+	<ul class="context-menu main-list" id="archives-menu">
+		<li class='section'>
+			<ul class='sublist' id="archive-submenu">
+					<li class="${(messageSection == 'inbox')? 'selected':''}" >
+						<g:link controller="archive" action="inbox" elementId="inbox" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
+							<img src='${resource(dir:'images/icons',file:'inboxarchive.png')}' />
+							Inbox archive
+						</g:link>
+					</li>
+					<li class="${(messageSection == 'sent')? 'selected':''}" >
+						<g:link controller="archive" action="sent" elementId="sent" onSuccess="loadAllData(data)" params="[viewingArchive: true]">
+							<img src='${resource(dir:'images/icons',file:'sentarchive.png')}' />
+							Sent archive
+						</g:link>
+					</li>
+					<li class="${(messageSection == 'poll' || messageSection == 'announcement') ? 'selected':''}" >
+						<g:link controller="archive" action='activityList' elementId="activity" params="[viewingArchive: true]">
+							<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
+							Activity archive
+						</g:link>
+					</li>
+					<li class="${(messageSection == 'folder')? 'selected':''}" >
+						<g:link controller="archive" action='folderList' elementId="folder" params="[viewingArchive: true]">
+							<img src='${resource(dir:'images/icons',file:'foldersarchive.png')}' />
+							Folder archive
+						</g:link>
+					</li>
+			</ul>
+		</li>
+	</ul>        
+</div>                                                                                                                    
 
 <script>
 	$("#archive-menu li a").bind("click", function(event) {

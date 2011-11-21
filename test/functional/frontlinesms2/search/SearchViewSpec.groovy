@@ -21,7 +21,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			at PageSearchResult
-			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
+			$("#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
 					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
@@ -92,7 +92,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:	
 			waitFor { searchBtn.displayed }
 			searchFrm.messageStatus == 'INBOUND'
-			$("table#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex', 'meeting at 11.00'])
+			$("#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
 	def "should fetch all sent messages alone"() {
@@ -107,7 +107,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor{ searchBtn.displayed }
 			searchFrm.messageStatus == 'SENT, SEND_PENDING, SEND_FAILED'
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
+			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
 	def "should clear search results" () {
@@ -134,12 +134,13 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			at PageSearchResult
+			println $("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}
 		when:
 			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
-			$("#message-delete").click()
+			$("#delete-msg").click()
 		then:
 			at PageSearchResult
-			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
 			$('.flash').displayed
 	}
 	
@@ -178,15 +179,14 @@ class SearchViewSpec extends SearchBaseSpec {
 			at PageSearchResult
 		when:
 			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
+			$("#archive-msg").click()
 		then:
 			at PageSearchResult
 		when:
-			def messageBody = $("#message-body").text()
-			$("#message-archive").click()
+			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
 		then:
 			at PageSearchResult
-			!$("#message-archive").displayed
-			$("#message-body").text() == 'hi alex'
+			$("#message-detail-content").text() == 'hi alex'
 	}
 	
 	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
@@ -195,7 +195,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			searchMoreOptionLink.click()
 		then:
-			waitFor { expendedSearchOption.displayed }
+			waitFor { expandedSearchOption.displayed }
 			contactNameLink.displayed
 			townCustomFieldLink.displayed
 			likeCustomFieldLink.displayed
@@ -204,21 +204,21 @@ class SearchViewSpec extends SearchBaseSpec {
 			contactNameLink.click()
 		then:
 			waitFor { contactNameField.displayed }
-			!expendedSearchOption.displayed
+			!expandedSearchOption.displayed
 		when:
 			searchMoreOptionLink.click()
 		then:
-			waitFor { expendedSearchOption.displayed }
+			waitFor { expandedSearchOption.displayed }
 			!contactNameLink.displayed
 	}
 
-	def "should expand the more option and select a customField then the link to custom field is hiden"(){
+	def "Can select a customField in More options"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to PageSearch
 			searchMoreOptionLink.click()
 		then:
-			waitFor { expendedSearchOption.displayed }
+			waitFor { expandedSearchOption.displayed }
 			contactNameLink.displayed
 			townCustomFieldLink.displayed
 			likeCustomFieldLink.displayed
@@ -226,11 +226,13 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			townCustomFieldLink.click()
 		then:
+			println 'here'
 			waitFor { townCustomFieldField.displayed }
 		when:
 			searchMoreOptionLink.click()
 		then:
-			waitFor { expendedSearchOption.displayed }
+			println 'there'
+			waitFor { expandedSearchOption.displayed }
 			!townCustomFieldLink.displayed
 	}
 	
@@ -241,7 +243,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			searchMoreOptionLink.click()
 		then:
-			waitFor { expendedSearchOption.displayed }
+			waitFor { expandedSearchOption.displayed }
 		when:
 			contactNameLink.click()
 		then:
@@ -262,7 +264,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			searchMoreOptionLink.click()
 		then:
-			waitFor { expendedSearchOption.displayed }
+			waitFor { expandedSearchOption.displayed }
 		when:
 			contactNameLink.click()
 		then:
@@ -288,13 +290,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
-			$("#tab-messages").text() == "Messages 2"
+			$("#message-tab-link").text() == "Messages\n2"
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ 
-				$("#tab-messages").text() == "Messages 3"
-			}
+			waitFor{ $("#message-tab-link").text().endsWith("3") }
 	}
 	
 }

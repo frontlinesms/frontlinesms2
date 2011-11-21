@@ -28,22 +28,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { confirmTab.displayed }
 	}
 
-	def "should not send message when no recipients are selected"() {
-		when:
-			launchQuickMessageDialog()
-			$("#tabs a", text: "Confirm").click()
-		then:
-			waitFor { confirmTab.displayed }
-		when:
-			doneButton.click()
-		then:
-			waitFor { confirmTab.displayed }
-		when:
-			$(".confirm-tab").click()
-		then:
-			waitFor { confirmTab.displayed }
-	}
-
 	def "should select the previous tab on click of back"() {
 		when:
 			launchQuickMessageDialog()
@@ -120,15 +104,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			toConfirmTab()
 			doneButton.click()
 		then:
-			waitFor { messagesQueuedNotification.displayed }
+			waitFor { $(".flash").displayed }
+			$("a", href: "/frontlinesms2/message/pending").hasClass("send-failed")
 		when:
-			$("#confirmation").click()
-			$("a", text: "Inbox").click()
-		then:
-			waitFor{ title == "Inbox" }
-			$("a", text: "Pending").hasClass("send-failed")
-		when:
-			$("a", text: "Pending").click()
+			$("a", href: "/frontlinesms2/message/pending").click()
 		then:
 			waitFor{ title == "Pending" }
 			$("#message-list tbody tr").size() == 1
@@ -251,7 +230,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def toSelectRecipientsTab() {
-		$('a', text:'Select Recipients').click()
+		$('a', text:'Select recipients').click()
 		waitFor { selectRecipientsTab.displayed }
 	}
 	
@@ -268,7 +247,7 @@ class QuickMessageDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
-		messagesQueuedNotification { $("div#tabs-4.summary") }
+		messagesQueuedNotification { $(".summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }

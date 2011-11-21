@@ -25,7 +25,7 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			go "message/folder/${Folder.findByName('Work').id}"
 		then:
-			$('#message-details #message-body').text() == "No message selected"
+			$('#message-detail #message-detail-content').text() == "No message selected"
 	}
 
 	def "message's folder details are shown in list"() {
@@ -46,7 +46,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 		when:
 			at PageMessageFolderWork
-			def selectedMenuItem = $('#messages-menu .selected')
+			def selectedMenuItem = $('#sidebar .selected')
 		then:
 			selectedMenuItem.text() == 'Work'
 	}
@@ -146,36 +146,29 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			deleteFolder()
 		then:
-			$("title").text() == "Inbox"
+			waitFor { $("#sidebar .selected").text() == "Inbox" }
 			!$("a", text: "Work")
 	}
 	
 	def "deleted folders show up in the trash section"() {
 		setup:
-			def folder = deleteFolder()
+			def folderId = deleteFolder()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(folder.id).id}"
+			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			$('#messages tbody tr:nth-child(1) td a').click()
 		then:
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folder.id).dateCreated)
-	}
-	
-	def "selected folder and its details are displayed"() {
-		setup:
-			def folder = deleteFolder()
-		when:
-			go "message/trash/show/${Trash.findByLinkId(folder.id).id}"
-		then:
-			$('#activity-name').text() == folder.name
-			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folder.id).dateCreated)
+			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			$('#activity-name').text() == 'Work'
+			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
 			$('#activity-body').text() == "${folder.getLiveMessageCount()} messages"
 	}
 	
 	def "clicking on empty trash permanently deletes a folder"() {
 		setup:
-			def folder = deleteFolder()
+			def folderId = deleteFolder()
 		when:
 			go "message/trash"
 			$("#trash-actions").value("empty-trash")
@@ -185,19 +178,19 @@ class FolderListSpec extends FolderBaseSpec {
 			$("#title").value("Empty trash")
 			$("#done").click()
 		then:
-			!Folder.findById(folder.id)
+			!Folder.findById(folderId)
 	}
 	
 	def deleteFolder() {
 		createTestFolders()
 		createTestMessages()
-		def folder = Folder.findByName("Work")
-		go "message/folder/${folder.id}"
-		$("#folder-actions").value("delete")
+		def folderId = Folder.findByName("Work").id
+		go "message/folder/${folderId}"
+		$("#more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete folder")
 		$("#done").click()
-		folder
+		folderId
 	}
 
 }

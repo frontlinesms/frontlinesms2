@@ -3,10 +3,10 @@
 		<div id="poll-actions">
 			<div class="dropdown">
 				<g:hiddenField name="owner-id" value="${ownerInstance.id}" />
-				<g:hiddenField name="responseId" value="${responseInstance.id}" />
-				<h2>Categorize Response</h2>
-				<select name="categorise_dropdown" id="categorise_dropdown" onchange="categorizeClickAction()">
-					<option value="btn-${responseInstance.id}" class="na">${responseInstance.value}</option>
+				<g:hiddenField name="responseId" value="${responseInstance?.id}" />
+				<select class="extra-msg-btn" name="categorise_dropdown" id="categorise_dropdown" onchange="categorizeClickAction()">
+					<option value="na" class="na">Categorize response</option>
+					<option value="btn-${responseInstance?.id}" class="na">${responseInstance?.value}</option>
 					<g:each in="${responseList}" status="i" var="r">
 						<g:if test="${r.id != responseInstance?.id}">
 							<option value="btn-${r.id}" >${r.value}</option>
@@ -18,7 +18,7 @@
 	</g:if>
 	<g:if test="${!params.viewingArchive && messageSection != 'pending'}">
 		<div id='move-message' class='dropdown'>
-			<select name="move-actions" id="move-actions" onchange="moveAction()">
+			<select class="extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction()">
 				<option value="na" class="na">Move message to...</option>
 				<g:if test="${messageSection != 'inbox'}">
 					<option class="inbox" value="inbox">Inbox</option>
@@ -42,3 +42,6 @@
 		</div>
 	</g:if>
 </div>
+<script>
+	$("#move-actions").selectmenu();
+</script>

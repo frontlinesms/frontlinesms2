@@ -15,6 +15,7 @@
 		<g:javascript src="message/star_message.js"></g:javascript>
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
+		<g:javascript src="jquery.ui.selectmenu.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="pagination.js"/>
 		<g:javascript src="/message/messageSorting.js"/>
@@ -25,45 +26,32 @@
 		</g:javascript>
 	</head>
 	<body>
-		<div id="container">
-			<g:render template="/system_notifications"/>
+		<g:render template="/system_notifications"/>
+		<div id="header">
+			<img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
-			<div class="main">
-				<g:render template="../archive/menu"/>
-				<div class="content">
-					<div id='archive-header' class="content-header">
-			  			<g:if test="${messageSection == 'poll'}">
-			  				<div id="poll-title">
-								<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-								<h2>Activity Archive</h2>
-							</div>
-						</g:if>
-						<g:elseif test="${messageSection == 'announcement'}">
-			  				<div id="poll-title">
-								<img src='${resource(dir:'images/icons',file:'activitiesarchive.png')}' />
-								<h2>Activity Archive</h2>
-							</div>
-						</g:elseif>
-						<g:elseif test="${messageSection == 'inbox'}">
-							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'inboxarchive.png')}' />
-								<h2>${messageSection} Archive</h2>
-							</div>
-						</g:elseif>
-						<g:elseif test="${messageSection == 'sent'}">
-							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'sentarchive.png')}' />
-								<h2>${messageSection} Archive</h2>
-							</div>
-						</g:elseif>
-						<g:elseif test="${messageSection == 'folder'}">
-							<div class="message-title">
-								<img src='${resource(dir:'images/icons',file:'foldersarchive.png')}' />
-								<h2>${messageSection} Archive</h2>
-							</div>
-						</g:elseif>
+        	</div>
+		<div id="main" class="main">
+    			<g:render template="../archive/menu"/>
+				<div id="content" class="content">
+					<div id='archive-header' class="content-header section-actions">
+						<div id="archive-title">
+				  			<g:if test="${messageSection in ['poll', 'announcement']}">
+								<h3>Activity Archive</h3>
+							</g:if>
+							<g:elseif test="${messageSection == 'inbox'}">
+								<h3>${messageSection} Archive</h3>
+							</g:elseif>
+							<g:elseif test="${messageSection == 'sent'}">
+								<h3>${messageSection} Archive</h3>
+							</g:elseif>
+							<g:elseif test="${messageSection == 'folder'}">
+								<h3>${messageSection} Archive</h3>
+							</g:elseif>
+							<g:render template="../message/section_action_buttons"/>
+						</div>
 					</div>
 					<div class="content-body">
 						<g:if test="${(messageSection == 'poll' || messageSection == 'announcement') && !viewingMessages}">
@@ -77,27 +65,10 @@
 						</g:else>
 						<g:layoutBody />
 					</div>
-					<div class="content-footer">
-						<g:if test="${(messageSection == 'poll' || messageSection == 'folder') && !viewingMessages}">
-								<div id="page-arrows">
-									<g:paginate next="Forward" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" total="${itemInstanceTotal}" params= "${params.findAll({it.key != 'messageId'})}"/>
-								</div>
-						</g:if>
-						<g:else>
-							<ul id="filter">
-								<li>Show:</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'starred' && it.key != 'max' && it.key != 'offset'})}">All</g:link></li>
-								<li>|</li>
-								<li><g:link action="${messageSection}" params="${params.findAll({it.key != 'max' && it.key != 'offset'}) + [starred: true]}" >Starred</g:link></li>
-							</ul>
-							<div id="page-arrows">
-								<g:paginate next="Next" prev="Back" max="${grailsApplication.config.grails.views.pagination.max}" action="${messageSection}" 
-								total="${messageInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>
-							</div>
-						</g:else>
-					</div>
 				</div>
+				<g:if test="${(messageSection == 'inbox' || messageSection == 'sent' || viewingMessages)}">
+					<g:render template="../message/footer"/>
+				</g:if>
 			</div>
-		</div>
 	</body>
 </html>

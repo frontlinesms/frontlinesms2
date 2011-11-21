@@ -20,15 +20,13 @@ class CustomField {
 		}
 	}
 	
-	static def getAllContactNameMatchingCustomField(customFields) {
+	static def getAllContactsWithCustomField(customFields) {
 		def matchingString = ''
 		customFields.each { name, value -> 
-			if (value) {
-				// FIXME this query should use named variables instead of inserting values directly into the HQL
-				def conditionString = "WHERE name='$name' AND LOWER(value) LIKE LOWER('%$value%')"
-				matchingString = matchingString? "$matchingString AND cf.contact.name IN (SELECT DISTINCT cf2.contact.name FROM CustomField cf2 JOIN cf2.contact $conditionString)":
-			 			conditionString  
-			}
+			// FIXME this query should use named variables instead of inserting values directly into the HQL
+			def conditionString = "WHERE name='$name' AND LOWER(value) LIKE LOWER('%$value%')"
+			matchingString = matchingString? "$matchingString AND cf.contact.name IN (SELECT DISTINCT cf2.contact.name FROM CustomField cf2 JOIN cf2.contact $conditionString)":
+		 	conditionString  
 		}	
 		// FIXME this query should use named variables instead of inserting values directly into the HQL
 		CustomField.executeQuery("SELECT DISTINCT cf.contact.name FROM CustomField cf JOIN cf.contact $matchingString")

@@ -65,13 +65,13 @@ class AnnouncementDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
-		messagesQueuedNotification { $("div#tabs-4.summary") }
+		messagesQueuedNotification { $(".summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }
-		addName { $("#announcement-name") }
+		addName { $("#name") }
 		
 		nextPageButton { $("#nextPage") }
-		doneButton { $("#done") }
+		doneButton { $("#submit") }
 	}
 }

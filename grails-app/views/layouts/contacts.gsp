@@ -38,51 +38,21 @@
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
-	<body>
-		<div id="container">
-			<g:render template="/system_notifications"/>
+	<body id="contacts-tab">
+		<g:render template="/system_notifications"/>
+		<div id="header">
+			<img src="/frontlinesms2/images/logo.png" id="logo"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
-			<div class="main">
-				<g:render template="menu"/>
-				<div class="content">
-					<div class="content-header">
-						<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
-							<div  id="contact-title">
-								<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
-								<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
-								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
-								<h2>${contactsSection.name} (${contactInstanceTotal})</h2>
-							</div>
-							<ol>
-								<li>
-									<g:select name="group-actions" from="${['Rename group', 'Delete group']}"
-											keys="${['rename', 'delete']}"
-											noSelection="${['': 'More actions...']}"/>
-								</li>
-							</ol>
-						</g:if>
-						<g:elseif test="${!contactInstance}">
-							<div  id="contact-title">
-								<img src='${resource(dir:'images/icons',file:'groups.png')}' />
-								<h2>New Group</h2>
-							</div>
-						</g:elseif>
-						<g:else>
-							<div  id="contact-title">
-								<img src='${resource(dir:'images/icons',file:'contacts.png')}' />
-								<h2>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h2>
-							</div>
-						</g:else>
-					</div>
-					<div class="content-body">
-						<g:render template="contact_list"/>
-						<g:layoutBody />
-					</div>
-					<g:render template="footer"/>
-				</div>
+		</div>
+		<div id="main">
+			<g:render template="menu"/>
+			<div id="content">
+				<g:render template="header"/>
+				<g:layoutBody />
 			</div>
+			<g:render template="footer"/>
 		</div>
 	</body>
 </html>

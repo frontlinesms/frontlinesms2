@@ -20,7 +20,7 @@ class ArchiveController extends MessageController {
 		redirect(action:messageSection, params:params)
 	}
 	
-	def activityView = {
+	def activityList = {
 		def pollInstanceList = Poll.findAllByArchivedAndDeleted(true, false)
 		def announcementInstanceList = Announcement.findAllByArchivedAndDeleted(true,false)
 		render view:'standard', model:[pollInstanceList: pollInstanceList,
@@ -29,7 +29,7 @@ class ArchiveController extends MessageController {
 											messageSection: "poll"]
 	}
 	
-	def folderView = {
+	def folderList = {
 		def folderInstanceList = Folder.findAllByArchivedAndDeleted(true, false)
 		render view:'standard', model:[folderInstanceList: folderInstanceList,
 											itemInstanceTotal: folderInstanceList.size(),

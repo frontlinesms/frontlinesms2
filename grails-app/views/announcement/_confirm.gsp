@@ -1,7 +1,7 @@
 <div id="tabs-3" class="confirm">
 	<div class="create-name">
 		<h2 class="bold name-label">Name this announcement:</h2>
-		<g:textField name="name" class="name-field"></g:textField>
+		<span>*</span><g:textField name="name" class="name-field"></g:textField>
 	</div>
 	<h2>Confirm details</h2>
 	<table>

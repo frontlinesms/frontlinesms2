@@ -23,7 +23,7 @@ class PagePollCreate extends geb.Page {
 		prev { $("#prevPage") }
 		done { $("#submit") }
 		
-		pollForm { $('form', name:'poll-details') }
+		pollForm { $('form', name:'new-poll-form') }
 
 		choiceALabel { $('label', for:'choiceA') }
 		choiceBLabel { $('label', for:'choiceB') }

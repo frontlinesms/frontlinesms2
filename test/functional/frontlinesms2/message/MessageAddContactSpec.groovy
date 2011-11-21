@@ -13,7 +13,6 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
 			!Contact.findByPrimaryMobile(contactlessMessage.src)
-			getColumnText('messages', 2) == ['+254778899', 'Alice', 'Bob']
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
@@ -22,7 +21,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('+254778899')
 		when:
 			go "message/inbox/show/${message.id}"
-			def btnAddContact = $('a.button')
+			def btnAddContact = $('a#add-contact')
 			assert btnAddContact instanceof geb.navigator.NonEmptyNavigator
 			btnAddContact.click()
 		then:

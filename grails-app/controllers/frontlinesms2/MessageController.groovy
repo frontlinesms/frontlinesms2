@@ -2,6 +2,7 @@ package frontlinesms2
 
 import grails.util.GrailsConfig
 import grails.converters.JSON
+import java.lang.*
 
 import frontlinesms2.MessageStatus
 
@@ -155,7 +156,11 @@ class MessageController {
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
-		redirect (controller: "message", action: 'pending')
+		if(params.failedMessageIds)
+			redirect(action: pending)
+		else
+			render(text: flash.message)
+		
 	}
 
 	def delete = {
@@ -167,7 +172,7 @@ class MessageController {
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
@@ -189,7 +194,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' messages'])}"
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
@@ -227,7 +232,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		render ""
 	}
 
@@ -239,7 +244,7 @@ class MessageController {
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message(s)'])}"
 		render ""
 	}
 
@@ -278,7 +283,7 @@ class MessageController {
 	}
 	
 	private def withFmessage(messageId = params.messageId, Closure c) {
-			def m = Fmessage.get(messageId)
+			def m = Fmessage.get(messageId.toLong())
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
 	}

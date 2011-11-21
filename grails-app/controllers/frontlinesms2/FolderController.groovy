@@ -16,7 +16,7 @@ class FolderController {
 	def save = {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.created.message', args: [message(code: 'folder.label', default: 'Folder'), folderInstance.id])}"
+			flash.message = "${message(code: 'default.created.message', args: [message(code: 'folder.label', default: 'Folder'), folderInstance.name])}"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {
 			flash.message = "error"
@@ -41,7 +41,7 @@ class FolderController {
 		}
 
 		flash.message = "Folder was unarchived successfully!"
-		redirect(controller: "archive", action: "folderView")
+		redirect(controller: "archive", action: "folderList")
 	}
 	
 	def confirmDelete = {

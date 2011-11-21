@@ -34,7 +34,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResultHi
 			messagesSelect[2].click()
 		then:
-			waitFor { $("#message-details #contact-name").text() == 'Alice' }
+			waitFor { $("#message-detail #message-detail-sender").text() == 'Alice' }
 		when:
 			messagesSelect[1].click()
 		then:

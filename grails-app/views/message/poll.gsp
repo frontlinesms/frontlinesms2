@@ -22,9 +22,6 @@
 		</g:javascript>	
 	</head>
 	<body>
-		<g:if test="${messageInstanceTotal > 0}">
-			<g:render template="../message/message_details" />
-		</g:if>
 	</body>
 </html>
 

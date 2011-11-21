@@ -14,17 +14,18 @@
 		<g:javascript src="application.js"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 	</head>
-	<body>
-		<div id="container">
-			<g:render template="/system_notifications"/>
+	<body id="status-tab">
+		<g:render template="/system_notifications"/>
+		<div id="header">
+			<img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
-			<div class="main">
-				<div class="content">
-					<div class="content-body">
-						<g:layoutBody />
-					</div>
+		</div>
+		<div class="main">
+			<div class="content">
+				<div class="content-body">
+					<g:layoutBody />
 				</div>
 			</div>
 		</div>

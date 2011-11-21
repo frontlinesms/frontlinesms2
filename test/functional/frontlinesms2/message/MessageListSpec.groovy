@@ -9,7 +9,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
             to PageMessageInbox
-			def btnInbox = $('#messages-menu li a', href:"/frontlinesms2/message/inbox")
+			def btnInbox = $('#sidebar li a', href:"/frontlinesms2/message/inbox")
         then:
 			btnInbox.text() == 'Inbox'
     }
@@ -17,7 +17,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
 	        to PageMessageInbox
-			def btnSentItems = $('#messages-menu li a', href:'/frontlinesms2/message/sent')
+			def btnSentItems = $('#sidebar li a', href:'/frontlinesms2/message/sent')
         then:
 			btnSentItems.text() == 'Sent'
     }
@@ -35,18 +35,6 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
         then:
             assertMenuItemSelected("Sent")
     }
-
-	def 'Messages should list count of messages next to them'() {
-		given:
-			createTestMessages()
-		when:
-			to PageMessageInbox
-		then:
-		$('#messages-submenu li')*.text()[0] == 'Inbox'
-		$('#messages-submenu li')*.text()[1] == 'Sent'
-		$('#messages-submenu li')*.text()[2] == 'Pending'
-		$('#messages-submenu li')*.text()[3] == 'Trash'
-	}
 	
 	def 'Messages tab should have unread messages count next to it'() {
 		given:
@@ -54,7 +42,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageMessageInbox
 		then:
-		$('#tab-messages').text() == 'Messages 2'
+		$('#inbox-indicator').text() == '2'
 	}
 	
 	def 'Should be able to sort messages'() {
@@ -72,7 +60,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 	}
 	   
     def assertMenuItemSelected(String itemText) {
-        def selectedChildren = $('#messages-menu li.selected')
+        def selectedChildren = $('#sidebar li.selected')
         assert selectedChildren.size() == 1
         assert selectedChildren.text().contains(itemText)
         true

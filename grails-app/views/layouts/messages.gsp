@@ -10,19 +10,16 @@
 		<script type="text/javascript">
 			url_root = "${request.contextPath}/";
 			refresh_rate = ${params.rRate ?: 30000}
-			
-			function isArchived() {
-				return ${params.viewingArchive}
-			}
 		</script>
-		<g:javascript src="message/check_message.js"/>
-		<g:javascript src="message/arrow_navigation.js"/>
-		<g:javascript src="message/star_message.js" />
 		<g:javascript src="jquery.timers.js"/>
+		<g:javascript src="jquery.ui.selectmenu.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
 		<g:javascript src="pagination.js"/>
+		<g:javascript src="/message/check_message.js"/>
+		<g:javascript src="/message/arrow_navigation.js"/>
+		<g:javascript src="/message/star_message.js" />
 		<g:javascript src="/message/messageSorting.js"/>
 		<g:javascript src="/message/categorize_dropdown.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
@@ -32,26 +29,23 @@
 		   disablePaginationControls();
 		});
 		</g:javascript>
-    </head>
-	<body>
-		<div id="container">
-			<g:render template="/system_notifications"/>
+	</head>
+	<body id="messages-tab">
+		<g:render template="/system_notifications"/>
+		<div id="header">
+			<img src='${resource(dir:'images',file:'logo.png')}' id="logo"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-	        	<g:render template="/flash"/>
-	        	<div class="main">
-				<g:render template="menu"/>
-				<div class="content">
-					<g:render template="../message/header"/>
-					<div class="container" style="display:block">
-						<div class="content-body">
-							<g:render template="../message/message_list"/>
-							<g:layoutBody />
-						</div>
-						<g:render template="../message/footer"/>
-					</div>
-				</div>
+			<g:render template="/flash"/>
+		</div>
+		<div id="main">
+			<g:render template="menu"/>
+			<div id="content">
+				<g:render template="/message/header"/>
+				<g:render template="../message/message_list"/>
+				<g:layoutBody/>
 			</div>
+			<g:render template="../message/footer"/>
 		</div>
 	</body>
 </html>

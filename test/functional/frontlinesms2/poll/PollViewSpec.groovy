@@ -43,9 +43,9 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessagePollFootballTeamsAlice
 		then:
-			$('#message-details #contact-name').text() == message.src
-			$('#message-details #message-date').text() == DATE_FORMAT.format(message.dateReceived)
-			$('#message-details #message-body').text() == message.text
+			$('#message-detail #message-detail-sender').text() == message.src
+			$('#message-detail #message-detail-date').text() == DATE_FORMAT.format(message.dateReceived)
+			$('#message-detail #message-detail-content').text() == message.text
 	}
 
 	def 'selected message is highlighted'() {
