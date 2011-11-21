@@ -34,10 +34,10 @@
 			} else if ($("input[name='poll-type']:checked").val() == "standard") {
 				replyText = "Please answer 'Yes' or 'No'";
 			} else {
-				replyText = 'Please answer';
+				replyText = 'Please answer ';
 				$(".choices").each(function() {
-					if (replyText != 'Please answer' && this.value) replyText = replyText + ' or ';
-					if (this.value) replyText = replyText + "'" + this.value + "'"
+					if (replyText!='Please answer ' && this.value) replyText += ' or ';
+					if (this.value) replyText += "'" + this.value + "'";
 				});
 			} 
 			var sendMessage = questionText + replyText;
