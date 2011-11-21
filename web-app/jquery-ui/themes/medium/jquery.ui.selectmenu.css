@@ -1,0 +1,48 @@
+/* Selectmenu
+----------------------------------*/
+.ui-selectmenu-menu { padding:0; margin:0; position:absolute; top: 0; display: none; z-index: 1005;} /* z-index: 1005 to make selectmenu work with dialog */
+.ui-selectmenu-menu  ul { padding:0; margin:0; list-style:none; position: relative; overflow: auto; overflow-y: auto ; overflow-x: hidden; } 
+.ui-selectmenu-open {
+	display: block;
+	background-color: white;
+	border: 1px solid grey;
+	box-shadow: 
+}
+
+.ui-selectmenu-menu li a,.ui-selectmenu-status {
+	display: block;
+	padding: 3px 26px 3px 10px;
+	height:25px;
+	outline:none;
+	text-decoration:none;
+}
+.ui-selectmenu-menu li a:hover {
+	background-color: #E5EFF3;
+}
+.ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; }
+.ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
+.ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left: 20px; position: relative; margin-left: 5px; }
+
+/* for optgroups */
+.ui-selectmenu-menu .ui-selectmenu-group ul { margin: 0; padding: 0; }
+
+.ui-selectmenu {
+	float:left;
+	display: inline-block;
+	vertical-align: middle;
+	text-decoration: none;
+	overflow: hidden;
+	height: 25px;
+	width: 50%;
+}
+
+
+.ui-selectmenu-status {
+	display:block;
+	background-image: url("../../../images/buttons/button_default_2.png");
+	background-repeat: repeat-x;
+	background-position: 0% 0%;
+	border-left: 1px solid #6b6b6b;
+	border-radius: 2px;
+	height: 25px;
+}

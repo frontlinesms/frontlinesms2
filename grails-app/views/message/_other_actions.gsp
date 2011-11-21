@@ -42,3 +42,6 @@
 		</div>
 	</g:if>
 </div>
+<script>
+	$("#move-actions").selectmenu();
+</script>

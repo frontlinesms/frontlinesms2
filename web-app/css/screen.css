@@ -101,7 +101,7 @@ a.tab-link.current{
     background-image: url('../images/buttons/tab_active.png');
 }
 a.tab-link:active{
-    background-image: url('../images/buttons/tab_active.png');
+    background-image: url('../images/buttons/tab_pressed.png');
 }
 a.tab-link:hover{
     background-image: url('../images/buttons/tab_hover.png');
@@ -141,9 +141,6 @@ a.tab-link:hover{
 }
 #status-indicator{
     background-image: url('../images/icons/status_green.png');
-}
-#message-tab-link.current{
-    background-image: url('../images/buttons/tab_message_active.png');
 }
 #secondary-nav{
     font-size: 0.85em;
@@ -583,6 +580,11 @@ a.tab-link:hover{
     background-repeat: no-repeat;
 }
 
+.footer #paging a.prevLink:active{
+    background-image: url('../images/buttons/paginationleft_pressed.png');
+    background-repeat: no-repeat;
+}
+
 .footer #paging a.prevLink.disabled{
     background-image: url('../images/buttons/paginationleft_disabled.png');
     background-repeat: no-repeat;
@@ -596,6 +598,11 @@ a.tab-link:hover{
 
 .footer #paging a.nextLink:hover{
     background-image: url('../images/buttons/paginationright_hover.png');
+    background-repeat: no-repeat;
+}
+
+.footer #paging a.nextLink:active{
+    background-image: url('../images/buttons/paginationright_pressed.png');
     background-repeat: no-repeat;
 }
 
@@ -619,6 +626,7 @@ a.tab-link:hover{
     overflow-x: hidden;
     display: block;
 }
+
 #message-list{
     float:left;
     list-style: none;
@@ -627,6 +635,7 @@ a.tab-link:hover{
     margin-top: 45px;
     width:65%;
 }
+
 #message-list thead{
     position: fixed;
     top: 128px;
@@ -647,6 +656,7 @@ a.tab-link:hover{
     overflow: hidden;
     width: 100%;
 }
+
 #message-list tr{
     height: 28px;
     margin: 0;
@@ -772,6 +782,15 @@ button, input[type=submit], a.btn{
     background-color: none;
     min-width:80px;
 }
+
+button:hover, input[type=submit]:hover, a.btn:hover{
+    background-image: url('../images/buttons/button_hover_part.png');
+}
+
+button:active, input[type=submit]:active, a.btn:active{
+    background-image: url('../images/buttons/button_pressed_part.png');
+}
+
 a.btn{
 	height:21px;
 	padding: 2px 10px;
@@ -833,8 +852,10 @@ a.btn{
 	width:26%;
 	text-align: center;
 	height: 25px;
+	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 
+<<<<<<< HEAD
 button:hover, input[type=submit]:hover, a.btn:hover {
 	display: inline-block;
     background-image: url('../images/buttons/button_hover_2.png');
@@ -851,6 +872,8 @@ button:hover, input[type=submit]:hover, a.btn:hover {
     background-color: none;
     min-width:80px;
 }
+=======
+>>>>>>> aa3b30f1d012d4c75514e7f5ddeaf7bbc632fbd3
 /*Contacts*/
 #contacts{
     position: relative;
