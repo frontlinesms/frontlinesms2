@@ -27,4 +27,42 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.connectionInstanceTotal == 1
 			model.connectionInstanceList == [EmailFconnection.findByUsername('mr.testy@zoho.com')]
 	}
+	
+	def "message stat dates should be inclusive"() {
+		given:
+			def m1 = new Fmessage(src:"src1", dateReceived:createDate(2011, 10, 18, 0, 0, 1), status:MessageStatus.INBOUND).save(flush:true, failOnError:true)
+			def m2 = new Fmessage(src:"src2", dateSent:createDate(2011, 10, 18, 23, 58, 59), status:MessageStatus.SENT).save(flush:true, failOnError:true)
+		when:
+			// TODO set start and end dates to the same day as messages were sent
+			controller.params.rangeOption = "between-dates"
+			controller.params.startDate = createDate(2011, 10, 18, 0, 0, 0)
+			controller.params.endDate = createDate(2011, 10, 18, 23, 59, 59)
+			def model = controller.show()
+		then:
+			model.messageStats.sent == [1]
+			model.messageStats.received == [1]
+			
+		when:
+			controller.params.rangeOption = "between-dates"
+			controller.params.startDate = createDate(2011, 10, 18, 23, 58, 59)
+			controller.params.endDate = createDate(2011, 10, 19, 0, 0, 0)
+			model = controller.show()
+		then:
+			model.messageStats.sent == [1]
+			model.messageStats.received == [1]
+		when:
+			controller.params.rangeOption = "between-dates"
+			controller.params.startDate = createDate(2011, 10, 18, 0, 0, 0)
+			controller.params.endDate = createDate(2011, 10, 19, 23, 57, 59)
+			model = controller.show()
+		then:
+			model.messageStats.sent == [1, 0]
+			model.messageStats.received == [1, 0]
+	}
+	
+	def createDate(int year, int month, int date, int hour, int minute, int second) {
+		def calc = Calendar.getInstance()
+		calc.set(year, month, date, hour, minute, second)
+		calc.getTime()
+	}
 }

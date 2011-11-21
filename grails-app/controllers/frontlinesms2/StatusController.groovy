@@ -50,10 +50,10 @@ class StatusController {
 		params.messageOwner = messageOwners
 		params.startDate = startDate
 		params.endDate = endDate
-		def messageStats = Fmessage.getMessageStats(params)
+		def messageStats = Fmessage.getMessageStats(params) // TODO consider changing the output of this method to match the data we actually want
 		[messageStats: [xdata: messageStats.collect{k,v -> "'${k}'"}, 
-						sent: messageStats.collect{k,v -> "${v["Sent"]}"},
-						received: messageStats.collect{k,v -> "${v["Received"]}"} ], messageStatus: messageStatus]
+						sent: messageStats.values()*.sent,
+						received: messageStats.values()*.received], messageStatus: messageStatus]
 	}
 	
 	private def getFilters() {
