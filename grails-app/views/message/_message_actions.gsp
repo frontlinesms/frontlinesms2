@@ -13,13 +13,12 @@
 	</div>
 </g:elseif>
 <g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
-	<g:actionSubmit class="msg-btn" value="Archive" action="archive"/>
+	<g:actionSubmit id="archive-msg" class="msg-btn" value="Archive" action="archive"/>
 </g:if>
-<g:actionSubmit class="msg-btn" value="Delete" action="delete"/>
+<g:actionSubmit id="delete-msg" class="msg-btn" value="Delete" action="delete"/>
 
 <script>
 	function toggleDropdown() {
-		$()
 		$("#dropdown_options").toggle()
 		return false;
 	};

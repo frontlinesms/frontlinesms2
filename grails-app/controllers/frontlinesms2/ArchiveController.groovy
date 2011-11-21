@@ -16,13 +16,13 @@ class ArchiveController extends MessageController {
 	
 	def index = {
 		params.sort = 'dateReceived'
-		redirect(action:'inbox', params:params)
+		def messageSection = params.messageSection ?: 'inbox'
+		redirect(action:messageSection, params:params)
 	}
 	
 	def activityList = {
-		def pollInstanceList = Poll.findAllByArchived(true)
-		def announcementInstanceList = Announcement.findAllByArchived(true)
-		println announcementInstanceList
+		def pollInstanceList = Poll.findAllByArchivedAndDeleted(true, false)
+		def announcementInstanceList = Announcement.findAllByArchivedAndDeleted(true,false)
 		render view:'standard', model:[pollInstanceList: pollInstanceList,
 											announcementInstanceList: announcementInstanceList,
 											itemInstanceTotal: announcementInstanceList.size() + pollInstanceList.size(),
@@ -30,7 +30,7 @@ class ArchiveController extends MessageController {
 	}
 	
 	def folderList = {
-		def folderInstanceList = Folder.findAllByArchived(true)
+		def folderInstanceList = Folder.findAllByArchivedAndDeleted(true, false)
 		render view:'standard', model:[folderInstanceList: folderInstanceList,
 											itemInstanceTotal: folderInstanceList.size(),
 											messageSection: "folder"]

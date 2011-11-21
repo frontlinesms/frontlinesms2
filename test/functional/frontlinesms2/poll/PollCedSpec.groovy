@@ -27,11 +27,7 @@ class PollCedSpec extends PollBaseSpec {
 			pollForm.title = "POLL NAME"
 			done.click()
 		then:
-			waitFor { $("#summary").displayed }
-		when:
-			$("#confirmation").click()
-		then:
-			at PageMessagePending
+			waitFor { $(".summary").displayed }
 			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	
@@ -334,7 +330,10 @@ class PollCedSpec extends PollBaseSpec {
 	def "can launch export popup"() {
 		when:
 			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			to PageMessageInbox
+			go 'message/inbox'
+		then:
+			at PageMessageInbox
+		when:	
 			$("a", text: "Who is badder? poll").click()
 		then:
 			waitFor { title == "Poll" }

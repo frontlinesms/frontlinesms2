@@ -25,6 +25,34 @@ a {
 	color: black;
 }
 
+.error{
+	border: 2px solid #ff9600;
+}
+.error-message{
+	background-image: url('../images/icons/error_on.png');
+	background-repeat: no-repeat;
+	background-position: left;
+	min-width:18px;
+	min-height:18px;
+	padding: 2px 20px;
+	vertical-align: bottom;
+}
+#address-error{
+	position: relative;
+	left: 150px;
+}
+
+/*Popup Dialogs (should be in jquery.ui.dialog.css, but image reference problems occur*/
+.ui-dialog .error-panel #error-icon{
+	display:inline-block;
+	background-image: url('../images/icons/error_on.png');
+	background-repeat: no-repeat;
+	min-width:18px;
+	min-height:18px;
+	padding-right: 10px;
+	vertical-align: bottom;
+}
+
 /*Header*/
 
 #header{
@@ -46,8 +74,23 @@ a {
     margin-top: 10px;
 }
 
-.selected{
-    background-color: #e5eff3;
+.selected{	
+    background-color: #D8E8EF;
+}
+
+.flash{
+	width: 50%;
+	position: absolute;
+	top: 0px;
+	margin-right: 25%;
+	margin-left: 25%;
+	z-index: 100;
+	text-align: center;
+	background-color: #C03283;
+	background-color: rgba(192, 50, 131, 0.4);
+	border-radius: 2px;
+	padding: 2px 0;
+	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 
 .field{
@@ -56,6 +99,10 @@ a {
 
 .create {
 	margin-left: 23px;
+}
+
+.hide {
+	display:none;
 }
 
 .standard-nav{
@@ -381,12 +428,18 @@ a.tab-link:hover{
 #sidebar .sublist li:hover{
     background-color: #e5eff3;
 }
+#sidebar .sublist li.create:hover{
+    background-color: white;
+}
 #sidebar .sublist a:hover{
     background-color: #e5eff3;
 }
+#sidebar .sublist a.create:hover{
+    background-color: white;
+}
 
 #sidebar .sublist li.active-section{
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
 }
 .list-title{
     background-repeat: no-repeat;
@@ -446,7 +499,7 @@ a.tab-link:hover{
     min-height: 200px;
     height: 200px;
     padding: 0 17px;
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
     border-left: 1px solid #9e9e9e;
 }
 
@@ -695,7 +748,8 @@ a.tab-link:hover{
 #message-list .message-preview-sender {
     padding-left: 17px;
 }
-#message-list tbody tr:hover{
+
+#message-list tbody tr:hover {
     background-color: #e5eff3;
    	padding: 0;
     margin: 0;
@@ -855,7 +909,6 @@ a.btn{
 	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 
-<<<<<<< HEAD
 button:hover, input[type=submit]:hover, a.btn:hover {
 	display: inline-block;
     background-image: url('../images/buttons/button_hover_2.png');
@@ -872,8 +925,6 @@ button:hover, input[type=submit]:hover, a.btn:hover {
     background-color: none;
     min-width:80px;
 }
-=======
->>>>>>> aa3b30f1d012d4c75514e7f5ddeaf7bbc632fbd3
 /*Contacts*/
 #contacts{
     position: relative;
@@ -904,7 +955,7 @@ button:hover, input[type=submit]:hover, a.btn:hover {
 #contact-editor{
     padding: 10px;
     margin-left: 200px;
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
 }
 #contact-editor form{
     width: 400px;
@@ -978,7 +1029,7 @@ button:hover, input[type=submit]:hover, a.btn:hover {
 /* Polls */
 
 #poll-details{
-    background-color: #e5eff3;
+    background-color: #D8E8EF;
     height: 100%;
 }
 

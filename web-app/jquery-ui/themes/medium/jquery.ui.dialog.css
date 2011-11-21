@@ -16,6 +16,21 @@
 	border: 5px solid rgba(0,0,0,0.4);
 	border-radius: 4px;
 	background-color: white;
+	font-family: Arial,Georgia,Helvetica,sans-serif;
+	font-size: .7em;
+}
+
+.ui-dialog h2{
+	font-size: 1.2em;
+	margin: 0;
+	padding:0;
+}
+
+.ui-dialog .error-panel{
+	background-color: #ffefd8;
+	border-bottom: 1px solid #9E9E9E;
+	padding: 3px 30px;
+	text-align: center;
 }
 
 .ui-dialog .ui-dialog-titlebar { 
@@ -40,15 +55,11 @@
 	overflow: hide;
 }
 
-.ui-dialog .summary {
-	position: relative;
-	top: -400px;
-}
-
 .ui-dialog .ui-dialog-buttonpane {
 	text-align: right;
 	border-top: 1px solid #9E9E9E;
 	height: 43px;
+	background: white;
 }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
 .ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }

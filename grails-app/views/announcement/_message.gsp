@@ -1,5 +1,5 @@
 <div id="tabs-1">
-	<label class="header" for="messageText">Enter message:</label><br />
+	<h2 class="bold" for="messageText">Enter message:</h2><br />
 	<g:textArea name="messageText" value="${messageText}" rows="5" cols="40"/>
 	<span id="send-message-stats" class="character-count">0 characters (1 SMS message)</span> 
 </div>

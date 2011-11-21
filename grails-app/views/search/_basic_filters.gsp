@@ -26,7 +26,7 @@
 <h3 class="list-title">${message(code:'default.search.betweendates.title', default:'Between dates:') }</h3>
 <ul class="sub-list">
 	<li>
-		<g:datePicker name="startDate" value="${search?.startDate?:'none'}" noSelection="['none':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
+		<g:datePicker name="startDate" value="${search?.startDate ?: 'none'}" noSelection="['none':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
 		<input type="hidden" class="datepicker"/>
      </li>
      <li>

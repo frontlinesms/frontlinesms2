@@ -68,7 +68,7 @@ class SmartGroupController {
 		if (SmartGroup.get(params.id)?.delete(flush: true))
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		else
-			flash.message = "unable to delete smartgroup"
+			flash.message = "Unable to delete smartgroup"
 		redirect(controller: "contact")
 	}
 	

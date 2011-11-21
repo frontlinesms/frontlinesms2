@@ -10,7 +10,7 @@
 	<g:else>
 		<li><g:link class="poll-btn btn" controller="poll" action="unarchive" id="${ownerInstance.id}">Unarchive Poll</g:link></li>
 	</g:else>
-	<li><g:select class="poll-btn btn" name="poll-actions" from="${['Export', 'Rename activity', 'Delete poll']}"
+	<li><g:select class="more-actions poll-btn btn" name="more-actions" from="${['Export', 'Rename poll', 'Delete poll']}"
 			keys="${['export', 'rename', 'delete']}"
 			noSelection="${['': 'More actions...']}"/></li>
 	<li><button class="poll-btn btn" id="pollSettings">Show poll details</button></li>

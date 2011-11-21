@@ -156,7 +156,11 @@ class MessageController {
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
-		redirect (controller: "message", action: 'pending')
+		if(params.failedMessageIds)
+			redirect(action: pending)
+		else
+			render(text: flash.message)
+		
 	}
 
 	def delete = {
@@ -168,7 +172,7 @@ class MessageController {
 				messageInstance.save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
@@ -190,12 +194,12 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' messages'])}"
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
 		}else {
 			if(params.messageSection == 'result') {
-				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 			}
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
 		}
@@ -228,7 +232,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		render ""
 	}
 
@@ -240,7 +244,7 @@ class MessageController {
 				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'messages'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message(s)'])}"
 		render ""
 	}
 

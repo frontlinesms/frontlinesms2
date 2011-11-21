@@ -4,11 +4,11 @@ $(document).ready(function() {
 
 function messageChecked(messageId) {
 	var count = countCheckedMessages();
-	var checkedMessageRow = $('#message-list #message-' + messageId);
+	var checkedMessageRow = $('#message-list tbody #message-' + messageId);
 	
 	if(checkedMessageRow.find('input[type=checkbox]').attr('checked')) {
 		if(count == 1) {
-			$('#message-list').find('.selected').removeClass('selected');
+			$('#message-list tbody').find('.selected').removeClass('selected');
 			upSingleCheckedDetails(messageId);
 		} else {
 			addToChecked(messageId);
@@ -18,7 +18,7 @@ function messageChecked(messageId) {
 		if(count != 0) {
 			checkedMessageRow.removeClass('selected');
 			if (count == 1) {
-				var newMessageRowId = $('#message-list').find('.selected').attr('id');
+				var newMessageRowId = $('#message-list tbody').find('.selected').attr('id');
 				var newMessageId = newMessageRowId.substring('message-'.length);
 				downSingleCheckedDetails(newMessageId);
 			} else {
@@ -32,19 +32,24 @@ function messageChecked(messageId) {
 }
 
 function countCheckedMessages() {
-    return $('#message-list tr :checked').size();
+    return $('#message-list tbody tr :checked').size();
 }
 
 function upSingleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
-	if (messageSection == 'result') {
-		var url = 'search/result';
-	} else {
-		var url = 'message/' + messageSection;
-	}
 	var searchId = $('input:hidden[name=searchId]').val() || '';
 	var ownerId = $('input:hidden[name=ownerId]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId}, function(data) {
+	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
+	
+	if (messageSection == 'result') {
+		var url = 'search/result';
+	} else if(viewingArchive)
+		var url = 'archive/' + messageSection;
+	else {
+		var url = 'message/' + messageSection;
+	}
+	
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId, viewingArchive: viewingArchive}, function(data) {
 		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
@@ -54,15 +59,17 @@ function upSingleCheckedDetails(messageId) {
 
 function downSingleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
+	var searchId = $('input:hidden[name=searchId]').val() || '';
+	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else {
+	} else if(viewingArchive)
+		var url = 'archive/' + messageSection;
+	else {
 		var url = 'message/' + messageSection;
 	}
-	var ownerId = $('input:hidden[name=ownerId]').val();
-	var isArchived = $('input:hidden[name=isArchived]').val();
-	var searchId = $('input:hidden[name=searchId]').val() || '';
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, viewingArchive: isArchived, searchId: searchId}, function(data) {
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, viewingArchive: viewingArchive, searchId: searchId}, function(data) {
 		$('#message-detail #multiple-messages').replaceWith($(data).find('#message-detail #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
@@ -87,28 +94,32 @@ function removeFromChecked(messageId) {
 
 function updateMultipleCheckedDetails(messageId) {
 	var messageSection = $('input:hidden[name=messageSection]').val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
+	var searchId = $('input:hidden[name=searchId]').val();
+	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
+	
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else {
+	} else if(viewingArchive)
+		var url = 'archive/' + messageSection;
+	else {
 		var url = 'message/' + messageSection;
 	}
-	var ownerId = $('input:hidden[name=ownerId]').val();
-	var isArchived = $('input:hidden[name=isArchived]').val();
-	var searchId = $('input:hidden[name=searchId]').val();
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: isArchived, searchId: searchId}, function(data) {
+	
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: viewingArchive, searchId: searchId}, function(data) {
 		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #multiple-messages'));
 		$('#message-detail #multiple-messages').replaceWith($(data).find('#message-detail #multiple-messages'));
 	});
 }
 
 function checkAll() {
-	if($('#messages :checkbox')[0].checked){
+	if($('#messages thead :checkbox')[0].checked){
 		var messageId;
-		$('#message-list tr :checkbox').each(function(index) {
+		$('#message-list tbody tr :checkbox').each(function(index) {
 			this.checked = true;
 		});
 		$('input:hidden[name=checkedMessageList]').val(",")
-		$('#message-list tr').each(function(index) {
+		$('#message-list tbody tr').each(function(index) {
 			$(this).addClass('selected');
 			messageId = $(this).attr('id').substring('message-'.length);
 			var messageList = $('input:hidden[name=checkedMessageList]');
@@ -124,7 +135,7 @@ function checkAll() {
 		$('#message-list tr').each(function(index) {
 			$(this).removeClass('selected');
 		});
-		var selectFirst = $('#message-list tr').first();
+		var selectFirst = $('#message-list tbody tr').first();
 		selectFirst.addClass('selected');
 		var messageId = selectFirst.attr('id').substring('message-'.length);
 		if(countCheckedMessages() == downSingleCheckedDetails(messageId));
@@ -134,7 +145,7 @@ function checkAll() {
 
 function setCheckAllBox(count) {
 	//Check whether all messages are checked
-	if(count == $('#message-list tr :checkbox').size() && !$('#messages :checkbox')[0].checked){
+	if(count == $('#message-list tbody tr :checkbox').size() && !$('#messages :checkbox')[0].checked){
 		$('#messages :checkbox')[0].checked = true;
 	} else if($('#messages :checkbox')[0].checked){
 		$('#messages :checkbox')[0].checked = false;

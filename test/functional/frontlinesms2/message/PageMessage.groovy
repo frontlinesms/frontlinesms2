@@ -19,8 +19,8 @@ abstract class PageMessage extends geb.Page {
 		}
 		createActivityButton { $("#create-activity a") }
 		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
-		archiveBtn(required:false){$("#message-details .buttons #message-archive")}
-		deleteBtn(required:false) {$("#message-details .buttons #message-delete")}
+		archiveBtn(required:false){$("#message-detail #archive-msg")}
+		deleteBtn(required:false) {$("#message-detail #delete-msg")}
 	}
 	
 }

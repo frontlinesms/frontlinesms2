@@ -5,11 +5,12 @@ import grails.plugin.spock.*
 import frontlinesms2.*
 
 class ArchiveISpec extends IntegrationSpec {
-	def controller, pollcontroller
+	def controller, pollcontroller, archiveController
 
 	def setup() {
 		pollcontroller = new PollController()
 		controller = new FolderController()
+		archiveController = new ArchiveController()
 	}
 	
 	// FIXME
@@ -44,6 +45,40 @@ class ArchiveISpec extends IntegrationSpec {
 			pollcontroller.unarchive()
 		then:
 			!poll.refresh().archived
+	}
+	
+	def "deleted folders do not appear in the archive section"() {
+		given:
+			def folder = new Folder(name: 'rain', archived:true).save(failOnError:true, flush:true)
+			assert folder.archived
+		when:
+			archiveController.folderView()
+			def model = archiveController.modelAndView.model
+		then:
+			model.folderInstanceList == [folder]
+		when:
+			folder.deleted = true
+			archiveController.folderView()
+			model = archiveController.modelAndView.model
+		then:
+			!model.folderInstanceList
+	}
+	
+	def "deleted polls do not appear in the archive section"() {
+		given:
+			def poll = Poll.createPoll(title: 'thingy', choiceA:  'One', choiceB: 'Other', archived: true).save(failOnError:true, flush:true)
+			assert poll.archived
+		when:
+			archiveController.activityView()
+			def model = archiveController.modelAndView.model
+		then:
+			model.pollInstanceList == [poll]
+		when:
+			poll.deleted = true
+			archiveController.activityView()
+			model = archiveController.modelAndView.model
+		then:
+			!model.pollInstanceList
 	}
 }
 

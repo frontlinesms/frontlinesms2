@@ -92,7 +92,7 @@ class ContactController {
 		def contactInstance = new Contact(params)
 		contactInstance.properties = params
 		updateData(contactInstance)
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
 		redirect(action:'show')
 	}
 	
@@ -214,7 +214,7 @@ class ContactController {
 			contactInstance.stripNumberFields()
 			
 			if(contactInstance.save(flush:true)) {
-				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.id])}"
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
 				def redirectParams = [contactId:contactInstance.id]
 				if(params.groupId) redirectParams << [groupId: params.groupId]
 			}
