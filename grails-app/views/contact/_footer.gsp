@@ -1,4 +1,4 @@
-<div class="secondary-section-actions">
+<div class="footer">
 	<form method="get">
 		<input id="contact-search" class="default-text-input" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' + this.value + \'&groupId=\'+getGroupId()')}" value="${params.searchString?:'Search'}" defaultValue='Search' />
 	</form>

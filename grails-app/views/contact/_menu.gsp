@@ -8,7 +8,7 @@
 					<g:link action="show">All contacts</g:link>
 				</li>
 				<li class='create' id="create-contact">
-					<g:link class="create contact" controller="contact" action="createContact" >
+					<g:link class="create btn contact" controller="contact" action="createContact" >
 						Create new contact
 					</g:link>
 				</li>
@@ -23,7 +23,7 @@
 					</li>
 				</g:each>
 				<li class='create' id="create-group">
-					<g:remoteLink controller="group" action="create" onSuccess="launchSmallPopup('Group', data, 'Create');">
+					<g:remoteLink class="btn create" controller="group" action="create" onSuccess="launchSmallPopup('Group', data, 'Create');">
 						Create new group
 					</g:remoteLink>
 				</li>
@@ -43,7 +43,7 @@
 					<li id="no-smart-groups">No smart groups.</p>
 				</g:else>
 				<li class='create' id="create-smart-group">
-					<g:remoteLink controller="smartGroup" action="create" onSuccess="launchMediumPopup('Create smart group', data, 'Create', createSmartGroup);">
+					<g:remoteLink class="create btn" controller="smartGroup" action="create" onSuccess="launchMediumPopup('Create smart group', data, 'Create', createSmartGroup);">
 						Create new smart group
 					</g:remoteLink>
 				</li>
