@@ -27,29 +27,6 @@ class FmessageSpec extends UnitSpec {
 			message.starred == false
 	}
 
-	def 'starring messages sets the star flag to true'() {
-		when:
-			Fmessage message = new Fmessage()
-		then:
-			message.starred == false
-		when:
-			message.addStar()
-		then:
-			message.starred == true
-	}
-	
-	def 'unstarring messages sets the star flag to false'() {
-		when:
-			Fmessage message = new Fmessage()
-			message.addStar()
-		then:
-			message.starred == true
-		when:
-			message.removeStar()
-		then:
-			message.starred == false
-	}
-
 	def "Fmessage can have null status"() {
 		setup:
 			mockDomain(Fmessage)
@@ -57,17 +34,6 @@ class FmessageSpec extends UnitSpec {
 			def m = new Fmessage(status: null)
 		then:
 			m.validate()
-	}
-
-	def 'archiving messages sets the archived flag to true'() {
-		when:
-			Fmessage message = new Fmessage()
-		then:
-			message.archived == false
-		when:
-			message.archive()
-		then:
-			message.archived == true
 	}
 }
 

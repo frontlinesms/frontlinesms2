@@ -182,7 +182,7 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				if(!messageInstance.messageOwner) {
-					messageInstance.archive()
+					messageInstance.archived = true
 					messageInstance.save(failOnError: true, flush: true)
 				} else {
 					listSize--
@@ -245,7 +245,7 @@ class MessageController {
 
 	def changeStarStatus = {
 		withFmessage { messageInstance ->
-			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
+			messageInstance.starred =! messageInstance.starred
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
             params.remove('messageId')
