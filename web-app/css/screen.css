@@ -26,7 +26,7 @@ a {
 }
 
 .unread {
-	font-weight: bold;
+	font-weight: bolder;
 }
 
 .error{
@@ -159,9 +159,8 @@ a.tab-link:hover{
 }
 #message-tab-link{
     display: inline-block;
-    background-image: url('../images/buttons/tab_message.png');
-    background-repeat: no-repeat;
-    width: 115px;
+    background-size: cover;
+    width: 120px;
     padding-left: 10px;
     text-align: left;
 }
@@ -399,8 +398,8 @@ a.tab-link:hover{
 }
 #sidebar .main-list li h3{
     text-transform: uppercase;
-    padding: 17px 17px 0 40px;
-    margin: 0;
+    margin: 17px 17px 0 15px;
+    padding-left: 25px;
 }
 
 #sidebar .sublist a{
@@ -568,8 +567,8 @@ a.tab-link:hover{
 .footer{
     width: 100%;
     float: left;
-    height: 7%;
-    padding: 5px;
+    height: 23px;
+    padding: 10px 0;
     border-top: 1px solid #9e9e9e;
     background-color: #f0f0f0;
     bottom: 0;
@@ -580,7 +579,7 @@ a.tab-link:hover{
 .footer input[type=text]{
     display: block;
     width: 170px;
-    height: 19px;
+    height: 25px;
     border-radius: 2px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -593,11 +592,12 @@ a.tab-link:hover{
 .footer #message-toggler,
 .footer form{
     float: left;
+    margin-left: 10px;
 }
 .footer form {
-	margin-left: 10px;
+	margin: 0 17px 0 10px;
 }
-.footer #paging{
+#messages-tab .footer #paging{
 	float:right;
 	position: relative;
 	right:48%;
@@ -863,7 +863,7 @@ button:hover, input[type=submit]:hover, a.btn:hover{
 }
 
 button:active, input[type=submit]:active, a.btn:active{
-    background-image: url('../images/buttons/button_pressed_part.png');
+    background-image: url('../images/buttons/button_default_2.png');
 }
 
 a.btn{
@@ -957,7 +957,7 @@ button:hover, input[type=submit]:hover, a.btn:hover {
 #contact-list{
 	position: fixed;
     float:left;
-    height: 78%;
+    height: 83%;
     margin: 0;
     top: 129px;
     padding: 10px;
@@ -987,13 +987,18 @@ button:hover, input[type=submit]:hover, a.btn:hover {
 	position: fixed;
     float: right;
     width: 68%;
-    height: 77%;
+    height: 83%;
     margin: 0;
     top: 129px;
     margin-left: 250px;
     background-color: #D8E8EF;
     overflow-y: auto;
     overflow-x: hide;
+}
+
+#contact-editor #update-single{
+	height: 25px;
+	width: 110px;
 }
 
 #contact-editor .basic-info{
@@ -1016,10 +1021,13 @@ button:hover, input[type=submit]:hover, a.btn:hover {
     -webkit-border-radius: 2px;
 }
 
-#contact-editor select, #contact-editor #group-list, #contact-editor #msg-search, #contact-editor #message-count{
+#contact-editor select, #contact-editor #group-list, #contact-editor #message-stats a, #contact-editor #message-count{
 	width: 250px;
 	margin-left: 234px;
 	padding:0;
+}
+#contact-editor #message-stats a{
+	height:25px;
 }
 
 #contact-editor #action-buttons{
@@ -1032,7 +1040,8 @@ button:hover, input[type=submit]:hover, a.btn:hover {
 
 #message-stats{
     border-top: 1px solid #b5c6cd;
-    position: relative;
+    margin: 150px 17px 17px 17px;
+    width: 96%;
 }
 #message-stats label{
     margin: 1em 0;
@@ -1040,10 +1049,14 @@ button:hover, input[type=submit]:hover, a.btn:hover {
 #message-stats #num-sent{
 	background-image: url('../images/icons/sentmessages.png');
 	background-repeat: no-repeat;
+	background-position: left;
+	padding-left: 25px;
 }
-#message-stats #num-received{
+#message-stats #num-recieved{
     background-image: url('../images/icons/recievedmessages.png');
     background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
 }
 
 /* Polls */

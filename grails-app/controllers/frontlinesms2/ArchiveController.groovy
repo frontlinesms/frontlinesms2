@@ -4,19 +4,21 @@ import grails.util.GrailsConfig
 
 class ArchiveController extends MessageController {
 	def beforeInterceptor = {
-		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
-		params.offset  = params.offset ?: 0
-		if(params.action == sent || params.action == pending) params.sort = params.sort ?: 'dateSent'
-		else params.sort = params.sort ?: 'dateReceived'
-		params.order = params.order ?: 'desc'
+//		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+//		params.offset  = params.offset ?: 0
+//		if(params.action == sent || params.action == pending) params.sort = params.sort ?: 'dateSent'
+//		else params.sort = params.sort ?: 'dateReceived'
+//		params.order = params.order ?: 'desc'
+//		params.viewingArchive = true
+//		params.viewingMessages = params.viewingMessages ? params.viewingMessages.toBoolean() : true
+//		true
 		params.viewingArchive = true
-		params.viewingMessages = params.viewingMessages ? params.viewingMessages.toBoolean() : false
-		true
 	}
-	
+	 
 	def index = {
 		params.sort = 'dateReceived'
 		def messageSection = params.messageSection ?: 'inbox'
+		println "index: $params"
 		redirect(action:messageSection, params:params)
 	}
 	
@@ -34,5 +36,12 @@ class ArchiveController extends MessageController {
 		render view:'standard', model:[folderInstanceList: folderInstanceList,
 											itemInstanceTotal: folderInstanceList.size(),
 											messageSection: "folder"]
+	}
+	
+	def getShowModel(messageInstanceList) {
+		println "Welcome to archive controller"
+		def model = super.getShowModel(messageInstanceList)
+		model << [viewingArchive: true]
+		return model
 	}
 }

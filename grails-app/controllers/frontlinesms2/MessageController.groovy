@@ -16,7 +16,7 @@ class MessageController {
 	def fmessageInfoService
 	def trashService
 
-	def beforeInterceptor = {
+	def bobInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		if(params.action == sent || params.action == pending) params.sort = params.sort ?: 'dateSent'
@@ -27,6 +27,7 @@ class MessageController {
 		params.failed = params.failed ? params.failed.toBoolean() : false
 		true
 	}
+	def beforeInterceptor = bobInterceptor
 
 	def index = {
 		params.sort = 'dateReceived'
@@ -42,6 +43,7 @@ class MessageController {
 		def responseInstance = messageInstance?.messageOwner
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
+		println "show model archive? ${params.viewingArchive}"
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
@@ -51,21 +53,23 @@ class MessageController {
 				announcementInstanceList: Announcement.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
-				hasFailedMessages: Fmessage.hasFailedMessages()]
+				hasFailedMessages: Fmessage.hasFailedMessages(),
+				viewingArchvive: params.viewingArchive]
 	}
 
 	def inbox = {
+		println "inbox $params"
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+					messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
-				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				messageInstanceTotal: messageInstanceList.count()] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def pending = {
@@ -73,7 +77,7 @@ class MessageController {
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.count(),
-				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << getShowModel()
+				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << getShowModel(messageInstanceList.list(params))
 	}
 	
 	def trash = {
@@ -101,7 +105,7 @@ class MessageController {
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashInstance] << getShowModel()
+					ownerInstance: trashInstance] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def poll = {
@@ -114,7 +118,7 @@ class MessageController {
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance.responseStats,
-				pollResponse: pollInstance.responseStats as JSON] << getShowModel()
+				pollResponse: pollInstance.responseStats as JSON] << getShowModel(messageInstanceList.list(params))
 	}
 	
 	def announcement = {
@@ -125,7 +129,7 @@ class MessageController {
 					messageSection: 'announcement',
 					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: announcementInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel(messageInstanceList.list(params))
 	}
 	
 	def radioShow = {
@@ -146,7 +150,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel(messageInstanceList.list(params))
 	}
 
 	def send = {
@@ -176,7 +180,9 @@ class MessageController {
 		if (isAjaxRequest()) {
 			render ""
 		}else {
+			println "deleting from archive? ${params.viewingArchive}"
 			if(params.messageSection == 'result') redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			else if(params.controller == 'archive') redirect(controller:'archive', action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 		}
 	}

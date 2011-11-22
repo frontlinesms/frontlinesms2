@@ -1,22 +1,21 @@
 <div class="single-contact">
-<div id="action-buttons" class="buttons">
-			<g:if test="${contactInstance?.id}">
-				<g:actionSubmit class="btn" id="update-single" action="update" value="Save" disabled="disabled"/>
-				<input type="button" class="cancel btn" value="Cancel" disabled="disabled"/>
-			</g:if>
-			<g:else>
-				<g:actionSubmit id="save-new" class="btn" action="saveContact" value="Save"/>
-				<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
-			</g:else>
-			
-			<g:if test="${contactInstance?.id}">
-					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
-						Delete
-					</a>
-			</g:if>
-</div>
-
-		<div class="basic-info">
+	<div id="action-buttons" class="buttons">
+		<g:if test="${contactInstance?.id}">
+			<g:actionSubmit class="btn" id="update-single" action="update" value="Save" disabled="disabled"/>
+			<g:link class="cancel btn" disabled="disabled">Cancel</g:link>
+		</g:if>
+		<g:else>
+			<g:actionSubmit id="save-new" class="btn" action="saveContact" value="Save"/>
+			<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
+		</g:else>
+		
+		<g:if test="${contactInstance?.id}">
+			<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
+				Delete
+			</a>
+		</g:if>
+	</div>
+	<div class="basic-info">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
@@ -103,17 +102,15 @@
 			</g:each>
 		</select>
 	</div>
-	<div id='message-stats' class="basic-info">
+	<div id='message-stats'>
 		<label for="messages">Messages</label>
 		<div id="message-count">
 			<p id="num-sent">${contactInstance?.inboundMessagesCount} messages sent</p>
 			<p id="num-recieved">${contactInstance?.outboundMessagesCount} messages received</p>
 		</div>
-		<div id='message-search'>
-			<g:link id="msg-search" class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
-				<img src='${resource(dir:'images/icons',file:'search.png')}' />
-				Search for messages
-			</g:link>
-		</div>
+		<g:link class="btn" id="msg-search" controller='search' action='result' params="[contactString: contactInstance?.name]" >
+			<img src='${resource(dir:'images/icons',file:'search.png')}' />
+			Search for messages
+		</g:link>
 	</div>
 </div>

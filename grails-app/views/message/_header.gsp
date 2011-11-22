@@ -1,4 +1,4 @@
-<div class="section-actions ${messageSection}" id="inbox-actions">
+<div class="section-header ${messageSection}" id="inbox-actions">
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
