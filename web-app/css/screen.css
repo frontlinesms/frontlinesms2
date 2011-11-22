@@ -56,7 +56,7 @@ a {
 /*Header*/
 
 #header{
-    position: relative;
+    position: fixed;
     padding: 0;
     margin: 0;
     background-image: url("../images/background.png");
@@ -65,6 +65,8 @@ a {
     height: 80px;
     max-height: 80px;
     border-top: 3px solid #d8aec6;
+    width: 100%;
+    z-index: 2;
 }
 
 #logo{
@@ -377,12 +379,15 @@ a.tab-link:hover{
     width: 4em;
 }
 #sidebar{
+    position: fixed;
+    top: 84px;
     padding: 17px 17px 0 17px;
     float: left;
     width: 15%;
     height: 93%;
     overflow-y: auto;
     overflow-x: hidden;
+    border-right: 1px solid #9e9e9e;
 }
 
 #sidebar ul{
@@ -469,14 +474,25 @@ a.tab-link:hover{
     font-size: 0.95em;
     float: left;
     width: 82%;
-    height: 93%
+    height: 93%;
+    margin-left: 17.8%;
+}
+
+.section-actions {
+    position: fixed;
+    z-index: 4;
+    margin-bottom: 50px;
+    width: 83%;
+    background-color: #fff;
+    top: 83px;
 }
 .section-actions .message-title, .section-actions #archive-title{
     padding: 0;
+    position: relative;
     margin: 0;
     min-height: 43px;
     padding: 0 17px;
-    border-left: 1px solid #9e9e9e;
+    /* border-left: 1px solid #9e9e9e; */
 }
 .section-actions .activity-title{
     margin: 0;
@@ -551,7 +567,9 @@ a.tab-link:hover{
     padding: 5px;
     border-top: 1px solid #9e9e9e;
     background-color: #f0f0f0;
-    vertical-align: bottom;
+    bottom: 0;
+    position: fixed;
+    z-index: 2;
 }
 
 .footer input[type=text]{
@@ -654,25 +672,50 @@ a.tab-link:hover{
     padding: 0;
     margin: 0;
     background-image: url("../images/menubar.png");
+    background-position: 0 2px;
     background-repeat: repeat-x;
-    border-left: 1px solid #9e9e9e;
     width: 100%;
     height:96%;
     overflow-x: hidden;
+    display: block;
 }
+
 #message-list{
     float:left;
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-top: 2px;
+    margin-top: 45px;
     width:65%;
 }
+
+#message-list thead{
+    position: fixed;
+    top: 128px;
+    width: 100%;
+    z-index: 12;
+    padding: 0;
+    margin-bottom: 23px;
+    border: 0;
+    background-image: url('../images/menubar.png');
+    background-repeat: repeat-x;
+    /* border-left: 1px solid #9e9e9e; */
+}
+
+#message-list tbody{
+    position: absolute;
+    margin-top: 25px;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+}
+
 #message-list tr{
     height: 28px;
     margin: 0;
     border: none;
     text-align: left;
+    width: 100%;
 }
 #message-list .message-preview td a, #message-list th a{
     text-decoration: inherit;
@@ -696,7 +739,7 @@ a.tab-link:hover{
 .message-preview-star a.starred{
     background-image: url('../images/icons/star_on.png');
 }
-#message-list td{
+#message-list td, #message-list th{
     border: none;
     padding: 0;
     margin: 0;
@@ -705,7 +748,8 @@ a.tab-link:hover{
 #message-list .message-preview-sender {
     padding-left: 17px;
 }
-#message-list tr:hover{
+
+#message-list tbody tr:hover {
     background-color: #e5eff3;
    	padding: 0;
     margin: 0;
@@ -722,14 +766,16 @@ a.tab-link:hover{
     margin: 0;
 }
 #message-detail{
+    position: fixed;
     float:left;
-    width: 35%;
+    right: 0;
+    width: 30%;
     max-width: 35%;
     min-width: 196px;
     height: 96%;
     margin: 0;
-    margin-top: 26px;
-    background-color: #D8E8EF;
+    top: 154px;
+    background-color: #e5eff3;
 }
 
 #message-detail .msg-btn{
@@ -805,15 +851,14 @@ a.btn{
 }
 
 #msg-response-dropdown{
-	display: inline;	
-	min-height:25px;
+	float: left;
+    position: relative;
+    min-height:25px;
 	padding: 3px 0;
 	width: 26%;
-	max-width: 26%;	
 }
 #btn_reply{
 	float:left;
-	display: inline-block;
 	margin: 0 0 0 2%;
     border: none;
     background-image: url('../images/buttons/button_default_2.png');
@@ -832,7 +877,6 @@ a.btn{
 }
 #btn_dropdown{
 	float:left;
-	display: inline-block;
 	margin: 0 2% 0 0;
     border: none;
     background-image: url('../images/buttons/dropdown_default_arrow.png');
@@ -845,7 +889,6 @@ a.btn{
     color: #000;
     background-color: none;
     min-width: 25px;
-    width:25px;
 }
 #btn_forward{
 	float:left;
@@ -866,6 +909,22 @@ a.btn{
 	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 
+button:hover, input[type=submit]:hover, a.btn:hover {
+	display: inline-block;
+    background-image: url('../images/buttons/button_hover_2.png');
+    background-repeat: repeat-x;
+    border-left: 1px solid #6b6b6b;
+    border-right: 1px solid #6b6b6b;
+    border-radius: 2px;
+    padding: 2px 10px;
+    height: 21px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    color: #000;
+    background-color: none;
+    min-width:80px;
+}
 /*Contacts*/
 #contacts{
     position: relative;
