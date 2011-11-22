@@ -59,7 +59,7 @@ class Fmessage {
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) ||	obj.messageOwner.archived
+					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) || obj.messageOwner.archived
 				} else {
 					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (!(obj.messageOwner instanceof PollResponse) && !obj.messageOwner.archived)
 				}
@@ -92,10 +92,9 @@ class Fmessage {
 				eq("deleted", false)
 				eq("archived", false)
 				isNull("messageOwner")
-				if(getOnlyFailed)
-					'in'("status", [MessageStatus.SEND_FAILED])
-				else 
-					'in'("status", [MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
+				'in'("status", getOnlyFailed?
+						[MessageStatus.SEND_FAILED]:
+						[MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
 			}
 		}
 		deleted { getOnlyStarred=false ->
@@ -133,8 +132,7 @@ class Fmessage {
 					ilike("contactName", "%${search.contactString}%")
 				} 
 				if(search.group) {
-					def groupMembersNumbers = search.group.getAddresses()
-					groupMembersNumbers = groupMembersNumbers?:[""] //otherwise hibernate fail to search 'in' empty list
+					def groupMembersNumbers = search.group.getAddresses()?:[""] //otherwise hibernate fail to search 'in' empty list
 					or {
 						'in'("src", groupMembersNumbers)
 						'in'("dst", groupMembersNumbers)
@@ -154,8 +152,7 @@ class Fmessage {
 					le("dateReceived", search.endDate.next())
 				}
 				if(search.customFields.find{it.value}) {
-					def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)
-					contactNameMatchingCustomField = contactNameMatchingCustomField?:[""] //otherwise hibernate fail to search 'in' empty list
+					def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)?:[''] //otherwise hibernate fail to search 'in' empty list
 					'in'("contactName", contactNameMatchingCustomField)
 				}
 				if(!search.inArchive) {
@@ -173,7 +170,7 @@ class Fmessage {
 			def groupMembers = groupInstance?.getAddresses() ?: ''
 			and {
 				if(groupInstance) {
-					'in'("src",	 groupMembers)
+					'in'("src", groupMembers)
 				}
 				if(messageOwner) {
 					'in'("messageOwner", messageOwner)
@@ -225,7 +222,7 @@ class Fmessage {
 	}
 
 	static def hasFailedMessages() {
-		Fmessage.findAllByStatus(MessageStatus.SEND_FAILED) ? true : false
+		Fmessage.countByStatus(MessageStatus.SEND_FAILED) > 0
 	}
 	
 	static def getMessageOwners(activity) {
