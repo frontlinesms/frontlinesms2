@@ -13,7 +13,7 @@
 			</ul>
 		</g:if>
 		<g:else>
-			<h3>${contactInstance.name?:contactInstance.primaryMobile?:'New Contact'}</h3>
+			<h3>${contactInstance?.name ?: contactInstance?.primaryMobile ?: 'New Contact'}</h3>
 		</g:else>
 	</div>
 </div>
