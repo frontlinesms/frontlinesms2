@@ -41,6 +41,7 @@ class Contact {
 	}
 
 	static mapping = {
+		sort: 'name'
 		customFields cascade: 'all'
 		customFields sort: 'name','value'
 	}

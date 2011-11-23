@@ -141,7 +141,7 @@ class Fmessage {
 					}
 				}
 				if(search.status) {
-					'in'('status', search.status.tokenize(",")*.trim().collect { Enum.valueOf(MessageStatus.class, it)})
+					'in'('status', search.status.tokenize(",")*.trim().collect { MessageStatus.valueOf(it) })
 				}
 				if(search.owners) {
 					'in'("messageOwner", search.owners)
@@ -167,8 +167,8 @@ class Fmessage {
 		filterMessages { params ->
 			def groupInstance = params.groupInstance
 			def messageOwner = params.messageOwner
-			def startDate = params.startDate
-			def endDate = params.endDate
+			def startDate = toStartOfDay(params.startDate)
+			def endDate = toEndOfDay(params.endDate)
 			def groupMembers = groupInstance?.getAddresses() ?: ''
 			and {
 				if(groupInstance) {
@@ -187,7 +187,7 @@ class Fmessage {
 						eq("status", MessageStatus.INBOUND)
 					}
 					and {
-						between("dateCreated", startDate, endDate)
+						between("dateSent", startDate, endDate)
 						eq("status", MessageStatus.SENT)
 					}
 				}
@@ -210,21 +210,6 @@ class Fmessage {
 	def getDisplayName() { 
 		contactName
 	}
-
-	def addStar() { // FIXME is this method necessary?
-		this.starred = true
-		this
-	}
-
-	def removeStar() { // FIXME is this method necessary?
-		this.starred = false
-		this
-	}
-	
-	def archive() { // FIXME is this method necessary?
-		this.archived = true
-		this
-	}
 	
 	static def countUnreadMessages(isStarred) {
 		Fmessage.unread().count()
@@ -246,16 +231,17 @@ class Fmessage {
 		activity instanceof Poll ? activity.responses : [activity]
 	}
 
+	// TODO should this be in a service?
 	static def getMessageStats(params) {
 		def messages = Fmessage.filterMessages(params).list(sort:"dateReceived", order:"desc")
 	
 		def dates = [:]
 		(params.startDate..params.endDate).each {
-			dates[it.format('dd/MM')] = ["Sent" :0, "Received" : 0]
+			dates[it.format('dd/MM')] = [sent :0, received : 0]
 		}
-		
+				
 		def stats = messages.collect {
-			it.status == MessageStatus.INBOUND ? [date: it.dateReceived, type: "Received"] : [date: it.dateCreated, type: "Sent"]
+			it.status == MessageStatus.INBOUND ? [date: it.dateReceived, type: "received"] : [date: it.dateSent, type: "sent"]
 		}
 		def messageGroups = countBy(stats.iterator(), {[it.date.format('dd/MM'), it.type]})
 		messageGroups.each { key, value -> dates[key[0]][key[1]] += value }
@@ -278,5 +264,22 @@ class Fmessage {
 			countAnswer(answer, value)
 		}
 		answer
+	}
+	
+	private static def toStartOfDay(Date d) {
+		setTime(d, 0, 0, 0)
+	}
+	
+	private static def toEndOfDay(Date d) {
+		setTime(d, 23, 59, 59)
+	}
+	
+	private static def setTime(Date d, int h, int m, int s) {
+		def calc = Calendar.getInstance()
+		calc.setTime(d)
+		calc.set(Calendar.HOUR_OF_DAY, h)
+		calc.set(Calendar.MINUTE, m)
+		calc.set(Calendar.SECOND, s)
+		calc.getTime()
 	}
 }

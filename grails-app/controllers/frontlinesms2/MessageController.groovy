@@ -193,7 +193,7 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				if(!messageInstance.messageOwner) {
-					messageInstance.archive()
+					messageInstance.archived = true
 					messageInstance.save(failOnError: true, flush: true)
 				} else {
 					listSize--
@@ -256,7 +256,7 @@ class MessageController {
 
 	def changeStarStatus = {
 		withFmessage { messageInstance ->
-			messageInstance.starred ? messageInstance.removeStar() : messageInstance.addStar()
+			messageInstance.starred =! messageInstance.starred
 			messageInstance.save(failOnError: true, flush: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
             params.remove('messageId')
@@ -283,7 +283,7 @@ class MessageController {
 			def messageCount = messageInfo.partCount > 1 ? "${messageInfo.partCount} SMS messages": "1 SMS message"
 			render text: "Characters remaining ${messageInfo.remaining} ($messageCount)", contentType:'text/plain'
 		} else {
-			render text: "Characters remaining ${message.size()} (1 SMS message)", contentType:'text/plain'
+			render text: "Characters remaining 160 (1 SMS message)", contentType:'text/plain'
 		}
 		
 	}
