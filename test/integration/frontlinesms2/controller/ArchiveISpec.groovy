@@ -52,14 +52,12 @@ class ArchiveISpec extends IntegrationSpec {
 			def folder = new Folder(name: 'rain', archived:true).save(failOnError:true, flush:true)
 			assert folder.archived
 		when:
-			archiveController.folderView()
-			def model = archiveController.modelAndView.model
+			def model = archiveController.folderView()
 		then:
 			model.folderInstanceList == [folder]
 		when:
 			folder.deleted = true
-			archiveController.folderView()
-			model = archiveController.modelAndView.model
+			model = archiveController.folderView()
 		then:
 			!model.folderInstanceList
 	}
