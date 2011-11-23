@@ -710,8 +710,7 @@ a.tab-link:hover{
     margin-top: 25px;
     z-index: 1;
     overflow: hidden;
-    max-width: 632px;
-    width: 50%
+    width: 53%;
     padding: 90px 0;
 }
 
@@ -732,11 +731,11 @@ a.tab-link:hover{
 	min-width: 125px;
 }
 #message-list .message-text-cell{
-	min-width: 500px;
+	min-width: 300px;
 	padding: 0px 10px;
 }
 #message-list .message-date-cell{
-	min-width: 150px;
+	min-width: 200px;
 }
 
 #message-list .message-preview td a, #message-list th a{
