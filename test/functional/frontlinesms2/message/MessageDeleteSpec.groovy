@@ -75,7 +75,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
 				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
-					it.status = MessageStatus.INBOUND
+					it.inbound = true
 					it.save(flush:true, failOnError:true)
 				}
 		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary'),

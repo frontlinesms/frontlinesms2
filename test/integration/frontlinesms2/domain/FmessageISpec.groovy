@@ -52,9 +52,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should return unread messages count"() {
 		setup:
-			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'A read message', read:true).save(flush:true)
-			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false).save(flush:true)
-			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'An unread message', read:false, archived: true).save(flush:true)
+			new Fmessage(inbound:true, deleted:false, text:'A read message', read:true).save(flush:true)
+			new Fmessage(inbound:true,deleted:false, text:'An unread message', read:false).save(flush:true)
+			new Fmessage(inbound:true,deleted:false, text:'An unread message', read:false, archived: true).save(flush:true)
 		when:
 			def unreadMessageCount = Fmessage.countUnreadMessages()
 		then:
@@ -80,15 +80,15 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpMessages()
 			def search = new Search(status: ['INBOUND'])
-			def search2 = new Search(status: ['SENT', 'SEND_PENDING', 'SEND_FAILED'])
+			def search2 = new Search(status: ['SENT', 'PENDING', 'FAILED'])
 			def search3 = new Search(searchString: "")
 		when:
 			def allInboundMessages = Fmessage.search(search).list()
 			def allSentMessages = Fmessage.search(search2).list()
 			def allMessages = Fmessage.search(search3).list()
 		then:
-			allInboundMessages*.every {it.status == MessageStatus.INBOUND}
-			allSentMessages*.every {it.status != MessageStatus.INBOUND}
+			allInboundMessages*.every { it.inbound }
+			allSentMessages*.every { !it.inbound }
 			allMessages.size() == 7
 
 	}
@@ -117,15 +117,15 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			
 			int i =0
 			(new Date()-6 ..new Date() + 5).each {
-				new Fmessage(dateReceived: it, src:jessy.primaryMobile, status: MessageStatus.INBOUND, text: "A message received on ${it}").save()
-				new Fmessage(dateReceived: it, src:lucy.primaryMobile, status: MessageStatus.SENT, text: "A message sent on ${it}").save()
+				new Fmessage(dateReceived: it, src:jessy.primaryMobile, inbound:true, text: "A message received on ${it}").save()
+				new Fmessage(dateReceived: it, src:lucy.primaryMobile, hasSent:true, text: "A message sent on ${it}").save()
 			}
 			
 			3.times {				
-				new Fmessage(dateReceived: new Date()-1, src:jessy.primaryMobile, status: MessageStatus.INBOUND, text: "Message {it}").save()
+				new Fmessage(dateReceived: new Date()-1, src:jessy.primaryMobile, inbound:true, text: "Message {it}").save()
 			}
 			5.times {				
-				new Fmessage(dateReceived: new Date()-1, src:jessy.primaryMobile, status: MessageStatus.SENT, text: "Message {it}").save()
+				new Fmessage(dateReceived: new Date()-1, src:jessy.primaryMobile, hasSent:true, text: "Message {it}").save()
 			}
 
 		when:
@@ -133,8 +133,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def endDate   = new Date()
 			def messages = Fmessage.getMessageStats([groupInstance:fsharp, messageOwner:null, startDate:startDate, endDate:endDate])
 		then:
-			messages["${(startDate + 1).format('dd/MM')}"] == [Sent:0, Received:4]
-			messages["${endDate.format('dd/MM')}"] == [Sent:5, Received:1]
+			messages["${(startDate + 1).format('dd/MM')}"] == [sent:0, received:4]
+			messages["${endDate.format('dd/MM')}"] == [sent:5, received:1]
 	}
 
 	def "should update message contact name"() {
@@ -142,10 +142,10 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			new Contact(name: "Alice", primaryMobile:"1234", secondaryMobile: "4321").save(flush: true)
 		when:
 			def alice = Contact.findByName('Alice')
-			def messageFromPrimaryNumber = new Fmessage(src: "1234", dst: "dst", status: MessageStatus.INBOUND)
-			def messageFromSecondaryNumber = new Fmessage(src: "4321", dst: "dst", status: MessageStatus.INBOUND)
-			def outBoundMessageToPrimaryNo = new Fmessage(src: "src", dst: "1234", status: MessageStatus.SENT)
-			def outBoundMessageToSecondayNo = new Fmessage(src: "src", dst: "4321", status: MessageStatus.SENT)
+			def messageFromPrimaryNumber = new Fmessage(src:"1234", dst:"dst", inbound:true)
+			def messageFromSecondaryNumber = new Fmessage(src:"4321", dst:"dst", inbound:true)
+			def outBoundMessageToPrimaryNo = new Fmessage(src:"src", dst:"1234", hasSent:true)
+			def outBoundMessageToSecondayNo = new Fmessage(src:"src", dst:"4321", hasSent:true)
 			messageFromPrimaryNumber.save(flush: true)
 			messageFromSecondaryNumber.save(flush: true)
 			outBoundMessageToPrimaryNo.save(flush: true)
@@ -173,7 +173,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "when number added as contact, all messages should have that contacts name and have contactExists set to true"() {
 		when:
-			def message = new Fmessage(src: "number", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+			def message = new Fmessage(src: "number", dst: "dst", inbound:true).save(flush: true)
 		then:
 			message.contactName == "number";
 			message.contactExists == false;
@@ -204,13 +204,13 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def setUpMessages() {
-			new Fmessage(status:MessageStatus.INBOUND, deleted:false, text:'An inbox message').save(flush:true)
-			new Fmessage(status:MessageStatus.INBOUND,deleted:false, text:'Another inbox message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT, deleted:false, text:'A sent message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'Another sent message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT,deleted:true, text:'Deleted sent message').save(flush:true)
-			new Fmessage(status:MessageStatus.SENT,deleted:false, text:'This msg will not show up in inbox view').save(flush:true)
-			new Fmessage(status:MessageStatus.SEND_FAILED, deleted:false, text:'A sent failed message').save(flush:true)
-			new Fmessage(status:MessageStatus.SEND_PENDING,deleted:false, text:'A pending message').save(flush:true)
+			new Fmessage(inbound:true, deleted:false, text:'An inbox message').save(flush:true)
+			new Fmessage(inbound:true,deleted:false, text:'Another inbox message').save(flush:true)
+			new Fmessage(hasSent:true, deleted:false, text:'A sent message').save(flush:true)
+			new Fmessage(hasSent:true,deleted:false, text:'Another sent message').save(flush:true)
+			new Fmessage(hasSent:true,deleted:true, text:'Deleted sent message').save(flush:true)
+			new Fmessage(hasSent:true,deleted:false, text:'This msg will not show up in inbox view').save(flush:true)
+			new Fmessage(hasFailed:true, deleted:false, text:'A sent failed message').save(flush:true)
+			new Fmessage(hasPending:true,deleted:false, text:'A pending message').save(flush:true)
 	}
 }

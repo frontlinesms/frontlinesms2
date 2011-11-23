@@ -110,7 +110,7 @@ class ContactViewSpec extends ContactBaseSpec {
 	def "should update message count when in contacts tab"() {
 		when:
 			to PageContactShow
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
 			$("#tab-messages").text() == "Messages 0"
 		when:

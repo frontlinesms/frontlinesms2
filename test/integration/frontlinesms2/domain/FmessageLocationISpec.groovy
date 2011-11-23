@@ -3,15 +3,17 @@ package frontlinesms2.domain
 import frontlinesms2.*
 
 class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
+	private static final Date BASE_DATE = new Date(1322048115127L)
+	
 	def "getInboxMessages() returns the list of messages with inbound equal to true that are not part of an activity"() {
 		setup:
 			createTestData()
 		when:
 			def inbox = Fmessage.inbox(false, false).list(sort:'src')
 		then:
-	        inbox*.src == ["+254778899", "9544426444", "Alice", "Bob"]
-	        inbox.every {it.status == MessageStatus.INBOUND}
-	        inbox.every {it.archived == false}
+			inbox*.src == ["+254778899", "9544426444", "Alice", "Bob"]
+			inbox.every { it.inbound }
+			inbox.every { !it.archived }
 	}
 
 	def "should fetch starred messages from inbox"() {
@@ -22,19 +24,18 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			inbox.count() == 1
 			inbox.list().every {it.starred}
-			inbox.list().every {it.archived == false}
+			inbox.list().every { !it.archived }
 	}
 
 	def "check for offset and limit while fetching inbox messages"() {
-		setup:
-			createTestData()
 		when:
-			assert 4 == Fmessage.inbox(false, false).count()
-			def inboxMsgs = Fmessage.inbox(false, false)
-			def firstThreeInboxMsgs = inboxMsgs.list(max: 3, offset: 0)
+			createTestData()
+			def inboxMessages = Fmessage.inbox()
+			println "class: ${inboxMessages.getClass()}"
+			println(inboxMessages.list().collect { [it.id,it.dateReceived,it.src] })			
 		then:
-			firstThreeInboxMsgs.size() == 3
-			firstThreeInboxMsgs*.src == ["9544426444", "+254778899", "Alice"]
+			Fmessage.inbox().count() == 4
+			Fmessage.inbox().list(max:3, offset:0)*.src == ["9544426444", "Alice", 'Bob']
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
@@ -44,8 +45,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			def sent = Fmessage.sent(false, false)
 		then:
 			sent.count() == 2
-			sent.list().every { it.status == MessageStatus.SENT}
-			sent.list().every { it.archived == false }
+			sent.list().every { it.hasSent }
+			sent.list().every { !it.archived }
 	}
 
 	def "should return starred sent messages"() {
@@ -55,9 +56,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			def sent = Fmessage.sent(true, false)
 		then:
 			assert sent.count() == 1
-			sent.list()[0].status == MessageStatus.SENT
+			sent.list()[0].hasSent
 			sent.list()[0].starred
-			sent.list().every { it.archived == false }
+			sent.list().every { !it.archived }
 	}
 
 	def "check for offset and limit while fetching sent messages"() {
@@ -78,7 +79,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Folder.findByName("home").getFolderMessages(false)
 		then:
 			results.list(sort: 'src')*.src == ["Bob", "Jack", "Jim"]
-			results.list().every { it.archived == false }
+			results.list().every { !it.archived }
 	}
 
 	def "should fetch starred folder messages"() {
@@ -88,7 +89,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Folder.findByName("home").getFolderMessages(true)
 		then:
 			results.list(sort:'src')*.src == ["Jack"]
-			results.list().every {it.archived == false}
+			results.list().every { !it.archived }
 	}
 	
 	def "check for offset and limit while fetching folder messages"() {
@@ -107,9 +108,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def results = Fmessage.pending(false)
 		then:
-		    results.count() == 2
-			results.list()*.status.containsAll([MessageStatus.SEND_FAILED, MessageStatus.SEND_PENDING])
-			results.list().every {it.archived == false}
+			results.count() == 2
+			results.list()*.every { it.hasFailed || it.hasPending }
+			results.list().every { !it.archived }
 	}
 
 	def "can fetch failed pending messages"() {
@@ -119,8 +120,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			def results = Fmessage.pending(true)
 		then:
 		    results.count() == 1
-			results.list()[0].status == MessageStatus.SEND_FAILED
-			results.list().every {it.archived == false}
+			results.list()[0].hasFailed
+			results.list().every { !it.archived }
 	}
 
 	def "check for offset and limit while fetching pending messages"() {
@@ -134,33 +135,33 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch starred deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true).save(flush: true)
 		when:
 			def results = Fmessage.deleted(true)
 		then:
 		    results.count() == 1
 			results.list()[0].deleted
 			results.list()[0].starred
-			results.list().every {it.archived == false}
+			results.list().every { !it.archived }
 	}
 
 	def "can fetch all deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true).save(flush: true)
 		when:
 			def results = Fmessage.deleted(false)
 		then:
 		    results.count() == 2
 			results.list()[0].deleted
-			results.list().every {it.archived == false}
+			results.list().every { !it.archived }
 	}
 
 	def "check for offset and limit while fetching deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:new Date() - 1, deleted:true).save(flush:true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived:new Date(), deleted:true).save(flush:true)
 		when:
 			def firstDeletedMsg = Fmessage.deleted(false).list(max:1, offset: 0)
 		then:
@@ -172,14 +173,14 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			createTestData()
 			def minime = Fmessage.findBySrc("Minime")
 		then:
-			minime.archived == false
+			!minime.archived
 		when:
 			minime.messageOwner.poll.archivePoll()
 			minime.messageOwner.poll.save(flush: true)
 			minime.save(flush: true)
 		then:
-			Poll.findByTitle("Miauow Mix").archived == true
-			minime.archived == true
+			Poll.findByTitle("Miauow Mix").archived
+			minime.archived
 	}
 	
 	def "cannot un-archive a message if the owner is archived"() {
@@ -193,30 +194,33 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			minime.save(flush: true)
 			minime.refresh()
 		then:
-			Poll.findByTitle("Miauow Mix").archived == true
-			minime.archived == true
+			Poll.findByTitle("Miauow Mix").archived
+			minime.archived
 	}
-
-	static createTestData() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 4),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 5),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', dateReceived: new Date() - 3),
-				new Fmessage(src: "9544426444", dst: "34562265", starred: true, dateReceived: new Date() - 10)].each() {
-					it.status = MessageStatus.INBOUND
-					it.save(failOnError:true)
-				}
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived: new Date() - 2, status:MessageStatus.SENT),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived: new Date() - 1, status:MessageStatus.SENT, starred: true)].each() {
-					it.save(failOnError:true)
-				}
-		[new Fmessage(src:"src", dst:"dst1", text:"text",  status: MessageStatus.SEND_FAILED),
-			new Fmessage(src:"src", dst:"dst2", text:"text",  status: MessageStatus.SEND_PENDING, starred: true)].each {
-				it.save(failOnError:true)
+	
+	def createTestData() {
+		// INCOMING MESSAGES
+		println([new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4000),
+				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived:BASE_DATE - 5000),
+				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', dateReceived:BASE_DATE - 3000),
+				new Fmessage(src: "9544426444", dst: "34562265", starred:true, dateReceived:BASE_DATE - 10000)].collect() {
+			it.inbound = true
+			it.save(failOnError:true)
+			println "Created message to $it.src with dateReceived: $it.dateReceived"
+			it
+		}.sort { it.dateReceived }*.src)
+				
+		// OUTGOING MESSAGES
+		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived:BASE_DATE - 2, hasSent:true),
+				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived:BASE_DATE - 1, hasSent:true, starred: true),
+				new Fmessage(src:"src", dst:"dst1", text:"text",  hasFailed:true),
+				new Fmessage(src:"src", dst:"dst2", text:"text",  hasPending:true, starred: true)].each() {
+			it.save(failOnError:true)
 		}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
-        def chickenResponse = new PollResponse(value:'chicken')
+		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
@@ -230,9 +234,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 		new Folder(name: 'home').save(flush: true)
 		def folder = Folder.findByName('home')
-		folder.addToMessages(new Fmessage(src: "Bob", dateReceived: new Date() - 14))
-		folder.addToMessages(new Fmessage(src: "Jim", dateReceived: new Date() - 10))
-		folder.addToMessages(new Fmessage(src: "Jack", starred: true, dateReceived: new Date() - 15))
+		folder.addToMessages(new Fmessage(src: "Bob", dateReceived:BASE_DATE - 14))
+		folder.addToMessages(new Fmessage(src: "Jim", dateReceived:BASE_DATE - 10))
+		folder.addToMessages(new Fmessage(src: "Jack", starred: true, dateReceived:BASE_DATE - 15))
 
 		folder.save(flush: true)
 	}

@@ -11,26 +11,32 @@ class Fmessage {
 	Date dateCreated
 	Date dateReceived
 	Date dateSent
+	boolean inbound
 	boolean contactExists
-	MessageStatus status
 	boolean read
 	boolean deleted
 	boolean starred
 	boolean archived
+	
+	boolean hasSent
+	boolean hasPending
+	boolean hasFailed
+	
 	static belongsTo = [messageOwner:MessageOwner]
+	static hasMany = [dispatches:Dispatch]
 
 	static mapping = {
-		sort dateCreated:'desc'
 		sort dateReceived:'desc'
 		sort dateSent:'desc'
-		autoTimestamp false
 	}
 
 	def beforeInsert = {
-		dateCreated = dateCreated ?: new Date()
-		if(status == MessageStatus.INBOUND) dateReceived = dateReceived ?: new Date()
-		else dateSent = dateSent ?: new Date()
-		if(status == MessageStatus.INBOUND ? src : dst) updateContactName()
+		if(inbound) {
+			dateReceived = dateReceived ?: new Date()
+		} else {
+			dateSent = dateSent ?: new Date()
+		}
+		if(inbound ? src : dst) updateContactName()
 	}
 	
 	private String findContact(String number) {
@@ -44,7 +50,7 @@ class Fmessage {
 			}
 		}
 		contactExists = contactName && contactName != src && contactName != dst
-		contactExists ?: (contactName = fetchContactName(status == MessageStatus.INBOUND ? src : dst))
+		contactExists ?: (contactName = fetchContactName(inbound ? src : dst))
 	}
 	
 	static constraints = {
@@ -54,7 +60,6 @@ class Fmessage {
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
 		dateSent(nullable:true)
-		status(nullable:true)
 		contactName(nullable:true)
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
@@ -67,21 +72,21 @@ class Fmessage {
 	}
 	
 	static namedQueries = {
-		inbox { getOnlyStarred=false, getOnlyArchived=false ->
+		inbox { getOnlyStarred=false, archived=false ->
 			and {
 				eq("deleted", false)
-				eq("archived", getOnlyArchived)
+				eq("archived", archived)
 				if(getOnlyStarred)
 					eq("starred", true)
-				eq("status", MessageStatus.INBOUND)
+				eq("inbound", true)
 				isNull("messageOwner")
 			}
 		}
-		sent { getOnlyStarred=false, getOnlyArchived=false ->
+		sent { getOnlyStarred=false, archived=false ->
 			and {
 				eq("deleted", false)
-				eq("archived", getOnlyArchived)
-				eq("status", MessageStatus.SENT)
+				eq("archived", archived)
+				eq("hasSent", true)
 				isNull("messageOwner")
 				if(getOnlyStarred)
 					eq("starred", true)
@@ -92,9 +97,15 @@ class Fmessage {
 				eq("deleted", false)
 				eq("archived", false)
 				isNull("messageOwner")
-				'in'("status", getOnlyFailed?
-						[MessageStatus.SEND_FAILED]:
-						[MessageStatus.SEND_PENDING, MessageStatus.SEND_FAILED])
+				if(getOnlyFailed) {
+					eq("hasFailed", true)
+				} else {
+					or {
+						eq("hasPending", true)	
+						eq("hasFailed", true)
+					}
+				}
+					
 			}
 		}
 		deleted { getOnlyStarred=false ->
@@ -117,7 +128,7 @@ class Fmessage {
 			and {
 				eq("deleted", false)
 				eq("archived", false)
-				eq("status", MessageStatus.INBOUND)
+				eq("inbound", true)
 				eq("read", false)
 				isNull("messageOwner")
 			}
@@ -138,8 +149,15 @@ class Fmessage {
 						'in'("dst", groupMembersNumbers)
 					}
 				}
-				if(search.status) {
-					'in'('status', search.status.tokenize(",")*.trim().collect { MessageStatus.valueOf(it) })
+				// FIXME re-implement search by status
+				if(search.status) {					
+					def statuses = search.status.collect { it.toLowerCase() }
+					or {
+						if('sent' in statuses) eq('hasSent', true)
+						if('pending' in statuses) eq('hasPending', true)
+						if('failed' in statuses) eq('hasFailed', true)
+						if('inbound' in statuses) eq('inbound', true)
+					}
 				}
 				if(search.owners) {
 					'in'("messageOwner", search.owners)
@@ -176,17 +194,23 @@ class Fmessage {
 					'in'("messageOwner", messageOwner)
 				}
 				if(params.messageStatus) {
-					'in'('status', params.messageStatus.collect { Enum.valueOf(MessageStatus.class, it)})
+					def statuses = params.messageStatus.collect { it.toLowerCase() }
+					or {
+						if('sent' in statuses) eq('hasSent', true)
+						if('pending' in statuses) eq('hasPending', true)
+						if('failed' in statuses) eq('hasFailed', true)
+						if('inbound' in statuses) eq('inbound', true)
+					}
 				}
 				eq('deleted', false)
 				or {
 					and {
 						between("dateReceived", startDate, endDate)
-						eq("status", MessageStatus.INBOUND)
+						eq("inbound", true)
 					}
 					and {
 						between("dateSent", startDate, endDate)
-						eq("status", MessageStatus.SENT)
+						eq("hasSent", true)
 					}
 				}
 			}
@@ -222,7 +246,7 @@ class Fmessage {
 	}
 
 	static def hasFailedMessages() {
-		Fmessage.countByStatus(MessageStatus.SEND_FAILED) > 0
+		Fmessage.countByHasFailed(true) > 0
 	}
 	
 	static def getMessageOwners(activity) {
@@ -239,7 +263,7 @@ class Fmessage {
 		}
 				
 		def stats = messages.collect {
-			it.status == MessageStatus.INBOUND ? [date: it.dateReceived, type: "received"] : [date: it.dateSent, type: "sent"]
+			it.inbound ? [date: it.dateReceived, type: "received"] : [date: it.dateSent, type: "sent"]
 		}
 		def messageGroups = countBy(stats.iterator(), {[it.date.format('dd/MM'), it.type]})
 		messageGroups.each { key, value -> dates[key[0]][key[1]] += value }

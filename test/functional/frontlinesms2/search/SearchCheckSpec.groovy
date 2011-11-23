@@ -99,7 +99,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+			new Fmessage(src: "src", dst: "dst", inbound:true).save(flush: true)
 		when:
 			to PageSearchResultHi
 			messagesSelect[0].click()

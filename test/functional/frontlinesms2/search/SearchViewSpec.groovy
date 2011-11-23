@@ -12,9 +12,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "clicking on the search button links to the result show page"() {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"sent", dst:"dst", hasSent:true, dateReceived:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"send_pending", dst:"dst", hasPending:true, dateReceived:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"send_failed", dst:"dst", hasFailed:true, dateReceived:new Date()-1).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -97,16 +97,16 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", hasSent:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", hasPending:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", hasFailed:true, dateReceived: new Date()-1).save(flush: true)
 			to PageSearch
-			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
+			searchFrm.messageStatus = "SENT, PENDING, FAILED"
 		when:
 			searchBtn.click()
 		then:
 			waitFor{ searchBtn.displayed }
-			searchFrm.messageStatus == 'SENT, SEND_PENDING, SEND_FAILED'
+			searchFrm.messageStatus == 'SENT, PENDING, FAILED'
 			$("table#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
@@ -125,9 +125,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), hasSent:true).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, hasPending:true).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, hasFailed:true).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -286,7 +286,7 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should update message count when in search tab"() {
 		when:
 			to PageSearch
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
 			$("#tab-messages").text() == "Messages 2"
 		when:

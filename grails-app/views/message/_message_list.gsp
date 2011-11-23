@@ -1,4 +1,3 @@
-<%@ page import="frontlinesms2.MessageStatus"%>
 <div id="message-list">
 	<g:hiddenField name="sortField" value="${params.sort}"/>
 	<g:hiddenField name="checkedMessageList" value=","/>
@@ -51,7 +50,7 @@
 				</g:if>
 				<g:else>
 					<g:each in="${messageInstanceList}" status="i" var="m">
-						<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
+						<tr class="${m == messageInstance?'selected':''} ${m.read?'read':'unread'}  ${m.hasFailed? 'send-failed' : '' }" id="message-${m.id}">
 							<td>
 								<g:checkBox class="message-select" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 								<g:hiddenField name="src-${m.id}" value="${m.src}"/>

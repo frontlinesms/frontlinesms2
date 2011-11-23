@@ -31,7 +31,7 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	def 'archived messages do not show up in sent view'() {
 		setup:
-			new Fmessage(src:'src', status: MessageStatus.SENT,dst:'+254112233', text:'hi Mary').save(flush: true)
+			new Fmessage(src:'src', hasSent:true, dst:'+254112233', text:'hi Mary').save(flush: true)
 		when:
 		    to PageArchive
 			$("#sent").click()

@@ -50,28 +50,4 @@ class MessageControllerSpec extends ControllerSpec {
 		then:
 			1 * mockMessageSendService.send {it.id == 1L}
 	}
-
-	private void setupDataAndAssert(boolean flag, Integer max, Integer offset, Closure closure, status=MessageStatus.SENT)  {
-		registerMetaClass(Fmessage)
-		Fmessage.metaClass.'static'.hasFailedMessages = { -> return true}
-		def fmessage = new Fmessage(id:1L, src: "src1", starred: flag, status: status)
-		mockDomain Folder
-		mockDomain Poll, [new Poll(archived: true), new Poll(archived: false)]
-		mockDomain Contact
-		mockDomain RadioShow
-		mockParams.starred = flag
-		mockParams.failed = flag
-		mockParams.max = max
-		mockParams.offset = offset
-		mockDomain Fmessage, [fmessage]
-
-		def results = closure.call(fmessage)
-
-		assert results['messageInstanceList'] == [fmessage]
-		assert results['messageInstanceTotal'] == 2
-		assert results['messageInstance'] == fmessage
-		assert results['messageInstanceList']*.contactExists == [false]
-		assert results['pollInstanceList'].every {!it.archived}
-		assert results['hasFailedMessages']
-    }
 }

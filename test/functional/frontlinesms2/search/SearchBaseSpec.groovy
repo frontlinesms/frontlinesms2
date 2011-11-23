@@ -8,7 +8,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
 				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
-					it.status = MessageStatus.INBOUND
+					it.status = true
 					it.save(failOnError:true)
 				}
 	}
@@ -21,7 +21,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestMessages2() {
 		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
 				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex', dateReceived: new Date()-1)].each() {
-			it.status = MessageStatus.INBOUND
+			it.status = true
 			it.save(failOnError:true)
 		}
 	}
@@ -44,7 +44,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 			new CustomField(name:'like', value:'cake', contact: secondContact),
 			new CustomField(name:'ik', value:'car', contact: secondContact),
 			new CustomField(name:'like', value:'ake', contact: thirdContact),
-			new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', status:MessageStatus.INBOUND)].each {
+			new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', inbound:true)].each {
 		it.save(failOnError:true)
 		}
 	}
@@ -52,11 +52,11 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createInboxTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 2),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 1, starred: true)].each() {
-					it.status = MessageStatus.INBOUND
+					it.status = true
 					it.save(failOnError:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
@@ -71,11 +71,11 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		[new Fmessage(src:'Alex', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date()-1),
 				new Fmessage(src:'Michael', dst:'+2541234567', text:'Can we get meet in 5 minutes')].each() {
-					it.status = MessageStatus.INBOUND
+					it.status = true
 					it.save(failOnError:true)
 				}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', status:MessageStatus.INBOUND)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
 		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')

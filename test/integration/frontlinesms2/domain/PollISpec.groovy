@@ -5,8 +5,8 @@ import frontlinesms2.*
 class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Deleted messages do not show up as responses'() {
 		when:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save()
+			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true).save()
 			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
