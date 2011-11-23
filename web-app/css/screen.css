@@ -707,7 +707,8 @@ a.tab-link:hover{
     margin-top: 25px;
     z-index: 1;
     overflow: hidden;
-    width: 100%;
+    max-width: 632px;
+    width: 50%
 }
 
 #message-list tr{
