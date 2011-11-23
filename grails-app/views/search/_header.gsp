@@ -1,7 +1,7 @@
-<div class="section-actions ${messageSection}" id="search-actions">
+<div class="section-header ${messageSection}" id="search-actions">
 	<div class="activity-title">
 		<h3>Search</h3>
-		<ul class="section-actions-buttons button-list">
+		<ul class="section-header-buttons button-list">
 			<g:if test="${search}">
 	 			<li id="export-btn">
 		  			<g:remoteLink class="btn" controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">

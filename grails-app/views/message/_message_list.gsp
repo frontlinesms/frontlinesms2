@@ -17,28 +17,29 @@
 	<table id="message-list" cellspacing=0>
 		<thead>
 			<tr id="message-sorter">
-				<th>
+				<th class="message-select-cell">
 					<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/></td>
 				<th/>
+				<th class="message-star-cell"></th>
 			    	<g:if test="${messageSection == 'trash'}">
-			    		<g:sortableColumn class="message-preview-sender" property="identifier" title="${messageLabel}"
+			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="identifier" title="${messageLabel}"
 							params="${params}" id='source-header' />
-		    			<g:sortableColumn property="message" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+		    			<g:sortableColumn class="message-text-cell" property="message" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />
-						<g:sortableColumn property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+						<g:sortableColumn class="message-date-cell" property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 						params="${params}" id="timestamp-header" defaultOrder="desc" />
 			    	</g:if>
 			    	<g:else>
-			    		<g:sortableColumn class="message-preview-sender" property="contactName" title="${messageLabel}"
+			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="contactName" title="${messageLabel}"
 							params="${params}" id='source-header' />
-		    			<g:sortableColumn property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+		    			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />
 						<g:if test="${messageSection == sent || messageSection == pending}">
-							<g:sortableColumn property="dateSent" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+							<g:sortableColumn class="message-date-cell" property="dateSent" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 								params="${params}" id="timestamp-header" defaultOrder="desc" />
 						</g:if>
 						<g:else>
-							<g:sortableColumn property="dateReceived" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+							<g:sortableColumn class="message-date-cell" property="dateReceived" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 								params="${params}" id="timestamp-header" defaultOrder="desc" />
 						</g:else>
 			    	</g:else>
@@ -52,31 +53,31 @@
 				<g:else>
 					<g:each in="${messageInstanceList}" status="i" var="m">
 						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
-							<td class="message-preview-select">
+							<td class="message-preview-select message-select-cell">
 								<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 								<g:hiddenField name="src-${m.id}" value="${m.src}"/>
 							</td>
 
-							<td class="message-preview-star" id="star-${m.id}" >
+							<td class="message-preview-star message-star-cell" id="star-${m.id}" >
 								<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 							</td>
-							<td class="message-preview-sender">
+							<td class="message-preview-sender message-sender-cell">
 									<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 										${m.contactName}
 									</g:link>
 							</td>
-							<td>
+							<td class="message-text-cell">
 								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 									${m.displayText?.truncate(60)}
 								</g:link>
 							</td>
-							<td>
+							<td class="message-date-cell">
 								<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
 									<g:if test="${messageSection == sent || messageSection == pending}">
-										<g:formatDate date="${m.dateSent}" />
+										<g:formatDate format="dd MMMM, yyyy" date="${m.dateSent}" />
 									</g:if>
 									<g:else>
-										<g:formatDate date="${m.dateReceived}" />
+										<g:formatDate format="dd MMMM, yyyy" date="${m.dateReceived}" />
 									</g:else>
 								</g:link>
 							</td>

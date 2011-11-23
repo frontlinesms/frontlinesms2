@@ -1,4 +1,4 @@
-<ul class="section-actions-buttons button-list">
+<ul class="section-header-buttons button-list">
 	<g:if test="${messageSection != 'poll'}">
         <li><g:remoteLink class="btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message" class="section-action-button btn">
 			Quick message

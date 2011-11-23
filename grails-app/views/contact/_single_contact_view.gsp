@@ -1,26 +1,25 @@
 <div class="single-contact">
-<div id="action-buttons" class="buttons">
-			<g:if test="${contactInstance?.id}">
-				<g:actionSubmit class="btn" id="update-single" action="update" value="Save" disabled="disabled"/>
-				<input type="button" class="cancel btn" value="Cancel" disabled="disabled"/>
-			</g:if>
-			<g:else>
-				<g:actionSubmit id="save-new" class="btn" action="saveContact" value="Save"/>
-				<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
-			</g:else>
-			
-			<g:if test="${contactInstance?.id}">
-					<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
-						Delete
-					</a>
-			</g:if>
-</div>
-
-		<div class="basic-info form-field field">
+	<div id="action-buttons" class="buttons">
+		<g:if test="${contactInstance?.id}">
+			<g:actionSubmit class="btn" id="update-single" action="update" value="Save" disabled="disabled"/>
+			<g:link class="cancel btn" disabled="disabled">Cancel</g:link>
+		</g:if>
+		<g:else>
+			<g:actionSubmit id="save-new" class="btn" action="saveContact" value="Save"/>
+			<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
+		</g:else>
+		
+		<g:if test="${contactInstance?.id}">
+			<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
+				Delete
+			</a>
+		</g:if>
+	</div>
+	<div class="basic-info">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
-	<div class="basic-info field">
+	<div class="basic-info">
 		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
 		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
 		<g:if test="${contactInstance?.primaryMobile?.trim()}">
@@ -30,7 +29,7 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-	<div class="basic-info form-field field">
+	<div class="basic-info">
 		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
 		<g:textField class="numberField" name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
 		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
@@ -40,7 +39,7 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-   	<div class="basic-info field form-field">
+   	<div class="basic-info">
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
 		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">
@@ -50,8 +49,8 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-	<div id='custom-list' class="field">
-		<ol id="custom-field-list">
+	<div id='custom-list' class="basic-info">
+		<ul id="custom-field-list">
 			  <g:each in="${contactFieldInstanceList}" status="i" var="f">
 				  <li class="${f == fieldInstance ? 'selected' : ''}">
 					  <label for="custom-field-${f.name}">${f.name}</label>
@@ -59,9 +58,9 @@
 					  <a class="remove-field" id="remove-field-${f.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 				  </li>
 			  </g:each>
-		</ol>
+		</ul>
 	</div>
-	<div id='info-add' class="dropdown">
+	<div id='info-add' class="dropdown basic-info">
 		<select id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na">Add more information...</option>
 			<option class="predefined-field" value="Street address">Street address</option>
@@ -76,26 +75,26 @@
 			<option class="create-custom-field" value='add-new'>Create new...</option>
 		</select>
 	</div>
-	<div id='note-area' class="field">
+	<div id='note-area' class="basic-info">
 		<label for="notes">Notes</label>
 		<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
 	</div>
-	<div id="group-section" class="field">
-	<label for="groups">Groups</label>
-	<div>
-		<ol id='group-list'>
-			<g:each in="${contactGroupInstanceList}" status="i" var="g">
-				<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
-					<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+	<div id="group-section" class="basic-info">
+		<label for="groups">Groups</label>
+		<div>
+			<ol id='group-list'>
+				<g:each in="${contactGroupInstanceList}" status="i" var="g">
+					<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
+						<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+					</li>
+				</g:each>
+				<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
+					<p>Not part of any Groups</p>
 				</li>
-			</g:each>
-			<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
-				<p>Not part of any Groups</p>
-			</li>
-		</ol>
+			</ol>
+		</div>
 	</div>
-	</div>
-	<div id='group-add' class="dropdown">
+	<div id='group-add' class="dropdown basic-info">
 		<select id="group-dropdown" name="group-dropdown">
 			<option class="not-group">Add to group...</option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
@@ -103,19 +102,15 @@
 			</g:each>
 		</select>
 	</div>
-	<div id='message-stats' class="field">
+	<div id='message-stats'>
 		<label for="messages">Messages</label>
 		<div id="message-count">
-			<img src='${resource(dir:'images/icons',file:'sentmessages.png')}' />
-			<p>${contactInstance?.inboundMessagesCount} messages sent</p><br />
-			<img src='${resource(dir:'images/icons',file:'recievedmessages.png')}' />
-			<p>${contactInstance?.outboundMessagesCount} messages received</p>
+			<p id="num-sent">${contactInstance?.inboundMessagesCount} messages sent</p>
+			<p id="num-recieved">${contactInstance?.outboundMessagesCount} messages received</p>
 		</div>
-		<div id='message-search'>
-			<g:link class="buttons" controller='search' action='result' params="[contactString: contactInstance?.name]" >
-				<img src='${resource(dir:'images/icons',file:'search.png')}' />
-				Search for messages
-			</g:link>
-		</div>
+		<g:link class="btn" id="msg-search" controller='search' action='result' params="[contactString: contactInstance?.name]" >
+			<img src='${resource(dir:'images/icons',file:'search.png')}' />
+			Search for messages
+		</g:link>
 	</div>
 </div>

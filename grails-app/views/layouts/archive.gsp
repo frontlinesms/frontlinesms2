@@ -36,7 +36,7 @@
 		<div id="main" class="main">
     			<g:render template="../archive/menu"/>
 				<div id="content" class="content">
-					<div id='archive-header' class="content-header section-actions">
+					<div id='archive-header' class="content-header section-header">
 						<div id="archive-title">
 				  			<g:if test="${messageSection in ['poll', 'announcement']}">
 								<h3>Activity Archive</h3>

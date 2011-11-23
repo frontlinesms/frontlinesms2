@@ -51,8 +51,8 @@
 			<div id="content">
 				<g:render template="header"/>
 				<g:layoutBody />
+				<g:render template="footer"/>
 			</div>
-			<g:render template="footer"/>
 		</div>
 	</body>
 </html>
