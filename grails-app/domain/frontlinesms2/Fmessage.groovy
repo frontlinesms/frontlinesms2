@@ -143,15 +143,14 @@ class Fmessage {
 					ilike("contactName", "%${search.contactString}%")
 				} 
 				if(search.group) {
-					def groupMembersNumbers = search.group.getAddresses()?:[""] //otherwise hibernate fail to search 'in' empty list
+					def groupMembersNumbers = search.group.getAddresses()?:[''] //otherwise hibernate fail to search 'in' empty list
 					or {
 						'in'("src", groupMembersNumbers)
 						'in'("dst", groupMembersNumbers)
 					}
 				}
-				// FIXME re-implement search by status
-				if(search.status) {					
-					def statuses = search.status.collect { it.toLowerCase() }
+				if(search.status) {
+					def statuses = search.status.tokenize(',').collect { it.trim().toLowerCase() }
 					or {
 						if('sent' in statuses) eq('hasSent', true)
 						if('pending' in statuses) eq('hasPending', true)

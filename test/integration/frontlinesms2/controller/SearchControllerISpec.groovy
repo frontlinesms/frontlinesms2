@@ -108,6 +108,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceList.every { it.inbound }
 	}
 
+	@spock.lang.IgnoreRest
 	def "search for sent messages only"() {
 		setup:
 			new Fmessage(src:"src", dst:"dst", hasPending:true).save(flush:true)
@@ -116,9 +117,10 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.messageStatus = "SENT, PENDING, FAILED"
 			def model = controller.result()
+			println model.messageInstanceList.collect { [hasSent:it.hasSent, inbound:it.inbound, hasPending:it.hasPending, hasFailed:it.hasFailed] }
 		then:
 			model.messageInstanceList.size() == 3
-			model.messageInstanceList.every { it.inbound }
+			model.messageInstanceList.every { !it.inbound }
 	}
 
 	def "message searches can be restricted to a contact group, and choice is still present after search completes"() {
