@@ -210,21 +210,6 @@ class Fmessage {
 	def getDisplayName() { 
 		contactName
 	}
-
-	def addStar() { // FIXME is this method necessary?
-		this.starred = true
-		this
-	}
-
-	def removeStar() { // FIXME is this method necessary?
-		this.starred = false
-		this
-	}
-	
-	def archive() { // FIXME is this method necessary?
-		this.archived = true
-		this
-	}
 	
 	static def countUnreadMessages(isStarred) {
 		Fmessage.unread().count()

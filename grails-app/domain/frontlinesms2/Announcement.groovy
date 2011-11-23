@@ -7,10 +7,10 @@ class Announcement extends MessageOwner {
 	String name
 	String sentMessage
 	
-    static constraints = {
+	static constraints = {
 		name(nullable:false)
 		sentMessage(nullable:false, blank: false)
-    }
+	}
 	
 	def getAnnouncementMessages(getOnlyStarred = false) {
 		Fmessage.owned(getOnlyStarred, this)
