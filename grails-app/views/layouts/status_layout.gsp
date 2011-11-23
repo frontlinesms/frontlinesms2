@@ -22,11 +22,9 @@
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
 		</div>
-		<div class="main">
+		<div id="main">
 			<div class="content">
-				<div class="content-body">
-					<g:layoutBody />
-				</div>
+				<g:layoutBody />
 			</div>
 		</div>
 	</body>

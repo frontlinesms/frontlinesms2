@@ -28,11 +28,11 @@ $(function() {
 			.attr(textStyle);
 	});
 </g:javascript>
-Traffic
-<div id="trafficGraph"></div>
-<g:form action="show" method="post">
-	<g:render template="../status/filters" />
-	<div class="buttons">
+<h3 id="traffic-title">Traffic</h3>
+<div id="traffic-status">
+	<div id="trafficGraph"></div>
+	<g:form action="show" method="post">
+		<g:render template="../status/filters" />
 		<g:actionSubmit id="update-chart" value="Update chart" action="show"/>
-	</div>
-</g:form>
+	</g:form>
+</div>

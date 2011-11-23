@@ -1,6 +1,5 @@
 <div id="device-detection">
-	<h2>Detected devices</h2>
-	<g:link class="button" action="detectDevices">Detect Modems</g:link>
+	<g:link class="btn" action="detectDevices">Detect Modems</g:link>
 	<g:if test="${detectedDevices.size() == 0}">
 		<p>No devices have been detected yet.</p>
 	</g:if>

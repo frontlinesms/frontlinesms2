@@ -5,9 +5,11 @@
 	</head>
 	<body>
 		<g:render template="traffic" />
-		<g:render template="connection_list" />
-		<g:render template="device_detection"/>
-
+		<div id="right-column">
+			<g:render template="connection_list" />
+			<h3 id="detection-title">Detected devices</h3>
+			<g:render template="device_detection"/>
+		</div>
 		<g:javascript>
 			// Update the list of detected devices
 			$(document).everyTime(10000, function() {
