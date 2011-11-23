@@ -23,8 +23,8 @@
 				</g:if>
 				
 				<g:render template="../message/message_actions"></g:render>
-				<g:render template="../message/other_actions"/>
 			</g:form>
+			<g:render template="../message/other_actions"/>
 		</div>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}"
@@ -37,6 +37,7 @@
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
+			<g:hiddenField name="viewingArchive" value="${viewingArchive}"></g:hiddenField>
 			<div  id="message-detail-content"><p>No message selected</p></div>
 		</div>
 	</g:else>

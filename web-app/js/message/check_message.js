@@ -40,16 +40,15 @@ function upSingleCheckedDetails(messageId) {
 	var searchId = $('input:hidden[name=searchId]').val() || '';
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
-	
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else if(viewingArchive)
+	} else if(viewingArchive == "true"){
 		var url = 'archive/' + messageSection;
-	else {
+	} else {
 		var url = 'message/' + messageSection;
 	}
 	
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId, viewingArchive: viewingArchive}, function(data) {
+	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId, viewingArchive: Boolean(viewingArchive)}, function(data) {
 		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
@@ -64,7 +63,7 @@ function downSingleCheckedDetails(messageId) {
 	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else if(viewingArchive)
+	} else if(viewingArchive == "true")
 		var url = 'archive/' + messageSection;
 	else {
 		var url = 'message/' + messageSection;
@@ -97,10 +96,9 @@ function updateMultipleCheckedDetails(messageId) {
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var searchId = $('input:hidden[name=searchId]').val();
 	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
-	
 	if (messageSection == 'result') {
 		var url = 'search/result';
-	} else if(viewingArchive)
+	} else if(viewingArchive == "true")
 		var url = 'archive/' + messageSection;
 	else {
 		var url = 'message/' + messageSection;

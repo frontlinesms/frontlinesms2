@@ -107,6 +107,7 @@ a {
 
 .hide {
 	display:none;
+	height:0;
 }
 
 .standard-nav{
