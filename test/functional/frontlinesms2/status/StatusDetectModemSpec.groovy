@@ -19,7 +19,7 @@ class StatusDetectModemSpec extends grails.plugin.geb.GebSpec {
 			to PageStatus
 		then:
 			detectedDevicesSection.displayed
-			detectedDevicesSection.find('h2').text() == 'Detected devices'
+			$("#detection-title").text() == 'Detected devices'
 			noDevicesDetectedNotification.displayed
 			noDevicesDetectedNotification.text() == 'No devices have been detected yet.'
 			!detectedDevicesTable.displayed

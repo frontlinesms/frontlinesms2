@@ -123,7 +123,6 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			at PageContactShowBob
 			btnSave.disabled
-			btnCancel.disabled
 	}
 	
 	def "should enable save and cancel buttons when contact details are edited"() {
@@ -142,17 +141,18 @@ class ContactEditSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			to PageContactShowBob
-			$("a.nextLink").click()
-			$("#page-arrows .currentStep").jquery.show();
+			go "contact/show/${Contact.findByName('Bob').id}"
+			$("#paging .nextLink").click()
+			$("#paging .currentStep").jquery.show();
 		then:
-			$("#page-arrows .currentStep").text() == "2"
+			at PageContactShowBob
+			$("#paging .currentStep").text() == "2"
 		when:
 			frmDetails.name = 'Kate'
 			btnSave.click()
-			$("#page-arrows .currentStep").jquery.show();
+			$("#paging .currentStep").jquery.show();
 		then:
-			$("#page-arrows .currentStep").text() == "2"
+			$("#paging .currentStep").text() == "2"
 	}
 	
 }

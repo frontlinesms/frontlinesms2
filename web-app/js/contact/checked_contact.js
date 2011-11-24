@@ -42,7 +42,7 @@ function loadSingleContact(contactId) {
 			$('.multiple-contact').hide();
 			$('.single-contact').show();
 		}
-		$('#contact-title').replaceWith($(data).find('#contact-title'));
+		$('#contact-header').replaceWith($(data).find('#contact-header'));
 		$('.single-contact').replaceWith($(data).find('.single-contact'));
 		$("#group-list li a.remove-group").click(removeGroupClickAction);
 		$("#group-dropdown").change(addGroupClickAction);

@@ -12,7 +12,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			go 'contact'
 		then:	
-			$('ol#contact-list').children()*.text() == ['Alice', 'Bob']
+			$('#contact-list').children()*.text() == ['Alice', 'Bob']
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
@@ -76,16 +76,17 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			to PageContactShow
-			$("a.nextLink").click()
-			$("#page-arrows .currentStep").jquery.show();
+			go 'contact/show'
+			$("#paging .nextLink").click()
+			$("#paging .currentStep").jquery.show();
 		then:
-			$("#page-arrows .currentStep").text() == "2"
+			at PageContactShow
+			$("#paging .currentStep").text() == "2"
 		when:
 			$('#contact-list li').children('a')[1].click()
-			$("#page-arrows .currentStep").jquery.show();
+			$("#paging .currentStep").jquery.show();
 		then:
-			$("#page-arrows .currentStep").text() == "2"
+			$("#paging .currentStep").text() == "2"
 	}
 	
 }

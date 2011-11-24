@@ -31,7 +31,8 @@ class SmartGroupController {
 			flash.message = "Created new smart group: '$params.smartgroupname'"
 			redirect controller:'contact', action:'show'
 		} else {
-		println "smargroup save dfailed oops errors were $smartGroupInstance.errors"
+			println "smargroup save failed. Errors were $smartGroupInstance.errors"
+			flash.error = "Smart group save failed. Errors were $smartGroupInstance.errors"
 			render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
 		}
 	}

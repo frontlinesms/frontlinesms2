@@ -65,10 +65,10 @@
 						</g:else>
 						<g:layoutBody />
 					</div>
+					<g:if test="${(messageSection == 'inbox' || messageSection == 'sent' || viewingMessages)}">
+						<g:render template="../message/footer"/>
+					</g:if>
 				</div>
-				<g:if test="${(messageSection == 'inbox' || messageSection == 'sent' || viewingMessages)}">
-					<g:render template="../message/footer"/>
-				</g:if>
 			</div>
 	</body>
 </html>

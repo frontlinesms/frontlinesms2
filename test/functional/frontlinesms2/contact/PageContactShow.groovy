@@ -31,7 +31,7 @@ class PageContactShow extends geb.Page {
 		contactsList(required:false) { $('#contact-list') }
 		
 		//> SMART GROUPS
-		smartGroupsList { $('ol#smart-groups-submenu') }
+		smartGroupsList { $('#smart-groups-submenu') }
 		smartGroupsListItems {
 			def list = smartGroupsList.find('li')
 			assert list[-1].@id == 'create-smart-group'

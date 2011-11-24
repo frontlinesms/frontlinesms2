@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form name="smart-group-details" controller="smartGroup" action="save" >
+	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup']}" method='post' onSuccess="createSmartGroup(data);">
 		<div class="error-panel hide"><div id="error-icon"></div>Please fill in all the required fields.  You may only specify one rule per field.</div>
 		<p class="info">To create a Smart group, select the criteria you need to be matched for contacts for this group</p>
 		<div class="smartgroupname">
@@ -33,7 +33,7 @@
 	</g:form>
 </div>
 
-<g:javascript>
+<script>
 	function removeRule(_removeAnchor) {
 		var row = $(_removeAnchor).closest('.smart-group-criteria').remove();
 		var rows = $('.smart-group-criteria');
@@ -54,12 +54,24 @@
 		}
 	}
 	
-	function initializePopup() {
-		$('#submit').bind('click', validates);
-	}
-
-	function validates() {
+	function createSmartGroup(data) {
 		$("#submit").attr('disabled', 'disabled');
+		if(validateSmartGroup()) {
+			alert('hello');
+			$(this).find("form").submit();
+			$(this).dialog('close');
+			window.location = window.location;
+			$("#header .flash").remove();
+			$("#header").prepend("<div class='flash message'>" + data + "</div>");
+		} else {
+			$("#submit").removeAttr('disabled');
+			$('.error-panel').show();
+		}
+	}
+	
+	function initializePopup() {}
+
+	function validateSmartGroup() {
 		var valid = true;
 		
 		// check the name
@@ -74,9 +86,8 @@
 		var reusedFields = new Array();
 		$('.smart-group-criteria select').each(function() {
 			var field = $(this).val();
-			if(!$.inArray(field, usedFields)) {
+			if(!$.inArray(field, usedFields))
 				reusedFields.push(field);
-			}
 			usedFields.push(field);
 		});
 		
@@ -100,17 +111,9 @@
 				i.removeClass('error');
 			}
 		});
-
-		if(valid) {
-			$("#smart-group-details").submit();
-			$(this).dialog('close');
-			window.location = window.location;
-		} else {
-			$("#submit").removeAttr('disabled');
-			$('.error-panel').show();
-		}
+		return valid;
 	}
-
+	
 	function addNewRule() {
 		var template = $('.smart-group-criteria').first();
 		template.find('.button.remove-rule').show();
@@ -119,4 +122,4 @@
 		newRow.find('.button.remove-rule').show();
 		$('form[name="smart-group-details"] tbody').append(newRow);
 	}
-</g:javascript>
+</script>

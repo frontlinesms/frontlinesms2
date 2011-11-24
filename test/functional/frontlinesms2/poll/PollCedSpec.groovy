@@ -338,7 +338,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$("#poll-actions").value("export")
+			$(".more-actions").value("export").click()
 		then:	
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
@@ -352,7 +352,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$("#poll-actions").value("rename")
+			$(".more-actions").value("rename").click()
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
@@ -413,7 +413,7 @@ class PollCedSpec extends PollBaseSpec {
 	def deletePoll() {
 		def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
-		$("#poll-actions").value("delete")
+		$(".more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete poll")
 		$("#done").click()

@@ -10,7 +10,7 @@ class PageStatus extends geb.Page {
 	static content = {
 		statusButton { $('#update-chart') }
 		
-		detectModems { $('.button', href:'/frontlinesms2/status/detectDevices') }
+		detectModems { $('.btn', href:'/frontlinesms2/status/detectDevices') }
 		detectedDevicesSection { $('div#device-detection') }
 		noDevicesDetectedNotification(required:false) { detectedDevicesSection.find('p') }
 		detectedDevicesTable(required:false) { detectedDevicesSection.find('table') }

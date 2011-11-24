@@ -108,7 +108,7 @@
 			<p id="num-sent">${contactInstance?.inboundMessagesCount} messages sent</p>
 			<p id="num-recieved">${contactInstance?.outboundMessagesCount} messages received</p>
 		</div>
-		<g:link class="btn" id="msg-search" controller='search' action='result' params="[contactString: contactInstance?.name]" >
+		<g:link class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
 			<img src='${resource(dir:'images/icons',file:'search.png')}' />
 			Search for messages
 		</g:link>

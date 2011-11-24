@@ -24,9 +24,9 @@
 				return group.length ? group.val() : '';
 			}
 			function updateContacts(data) {
-				var snippet = $(data);
-				$("#contacts-list").html(snippet.filter('#contacts-list').html());
-				$(".content-footer #page-arrows").html(snippet.filter('.content-footer').children()[1].innerHTML);
+				var replacement = $(data);
+				$("#contact-list").html(replacement.filter('#contact-list').html());
+				$(".footer #paging").html(replacement.filter('.footer #paging').html());
 				disablePaginationControls();
 			}
 

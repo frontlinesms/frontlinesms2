@@ -35,7 +35,20 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 	initializePopup();
 }
 
-function createSmartGroup() {}
+function doNothing(data) {
+	$("#submit").attr('disabled', 'disabled');
+	if(validateSmartGroup()) {
+		alert('hello');
+		$(this).find("form").submit();
+		$(this).dialog('close');
+		window.location = window.location;
+		$("#header .flash").remove();
+		$("#header").prepend("<div class='flash message'>" + data + "</div>");
+	} else {
+		$("#submit").removeAttr('disabled');
+		$('.error-panel').show();
+	}
+}
 
 function chooseActivity() {
 	var activity = $("#activity-list input[checked=checked]").val();

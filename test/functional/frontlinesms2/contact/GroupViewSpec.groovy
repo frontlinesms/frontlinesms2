@@ -78,15 +78,15 @@ class GroupViewSpec extends GroupBaseSpec {
 		then:
 			at PageContactShowGroupFriends
 		when:
-			$("a.nextLink").click()
-			$("#page-arrows .currentStep").jquery.show();
+			$("#paging .nextLink").click()
+			$("#paging .currentStep").jquery.show();
 		then:
-			$("#page-arrows .currentStep").text() == "2"
+			$("#paging .currentStep").text() == "2"
 		when:
 			$('#contact-list li').children('a')[1].click()
-			$("#page-arrows .currentStep").jquery.show();
+			$("#paging .currentStep").jquery.show();
 		then:
-			$("#page-arrows .currentStep").text() == "2"
+			$("#paging .currentStep").text() == "2"
 	}
 	
 }

@@ -130,7 +130,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			at PageContactShowBob
 		then:
 			btnSave.disabled
-			btnCancel.disabled
 		when:
 			$("#group-dropdown").value("Others")
 		then:

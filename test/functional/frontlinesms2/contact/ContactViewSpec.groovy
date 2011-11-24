@@ -42,7 +42,7 @@ class ContactViewSpec extends ContactBaseSpec {
 			empty.save(failOnError:true, flush:true)
 			go "contact/show/${empty.id}"
 		then:
-			$('a', href:"/frontlinesms2/contact/show/$empty.id?sort=&offset=").text().trim() == "+987654321"
+			$('a', text:"+987654321")
 	}
 
 	def 'selected contact is highlighted'() {
@@ -60,10 +60,11 @@ class ContactViewSpec extends ContactBaseSpec {
 
 	def 'checked contact details are displayed'() {
 		when:
-			to PageContactShowAlice
+			go "contact/show/${Contact.findByName('Alice').id}"
 			$(".contact-select")[1].click()
-		then:	
-			waitFor { $("#contact-title").text() == "Bob" }
+		then:
+			at PageContactShowAlice
+			waitFor { $("#contact-header h3").text() == "Bob" }
 			assertFieldDetailsCorrect('name', 'Name', 'Bob')
 	}
 
@@ -92,7 +93,7 @@ class ContactViewSpec extends ContactBaseSpec {
 		then:
 			at PageContactShowAlice
 		when:
-			$("#contact_details .send-message").find { it.@href.contains('2541234567') }.click()
+			$("#contact-editor .send-message").find { it.@href.contains('2541234567') }.click()
 		then:	
 			waitFor { $('div#tabs-1').displayed }
 	}
@@ -102,7 +103,7 @@ class ContactViewSpec extends ContactBaseSpec {
 			go "contact/show/${Contact.findByName('Alice').id}"
 		then:
 			at PageContactShowAlice
-			$("#contact_details .send-message").each {
+			$("#contact-editor .send-message").each {
 				assert it.@href ==~ /.*recipients=\d+/
 			}
 	}
@@ -112,13 +113,11 @@ class ContactViewSpec extends ContactBaseSpec {
 			to PageContactShow
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
-			$("#tab-messages").text() == "Messages 0"
+			$("#inbox-indicator").text() == "0"
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ 
-				$("#tab-messages").text() == "Messages 1"
-			}
+			waitFor{ $("#inbox-indicator").text() == "1" }
 	}
 
 	def "clicking on search should only shows contact's messages"(){
@@ -129,7 +128,7 @@ class ContactViewSpec extends ContactBaseSpec {
 		then:
 			at PageContactShowAlice
 		when:
-			searchBtn.click()
+			$("#message-stats a").click()
 		then:
 			at PageSearchResult
 			messageList.each { assert it.find("td:nth-child(3)").text() == 'Alice' }

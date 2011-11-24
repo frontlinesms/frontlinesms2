@@ -8,13 +8,6 @@ class StatusFSpec extends StatusBaseSpec {
 		createTestMessages()
 	}
 	
-	def "status tab should be visible in the global navigations"() {
-		when:
-			to PageMessageInbox
-		then:
-			$('a#tab-status').displayed
-	}
-	
 	def "clicking on update chart button renders chart"() {
 		when:
 			to PageStatus
@@ -23,13 +16,6 @@ class StatusFSpec extends StatusBaseSpec {
 		then:
 			at PageStatus
 			$('#trafficGraph svg')
-	}
-	
-	def "status tab should show the system status"() {
-		when:
-			to PageStatus
-		then:
-			waitFor { $("#indicator").@src ==~ "/frontlinesms2/images/icons/status_.*\\.png" }
 	}
 	
 	def "Does not display connections when there are no connections available"() {
@@ -48,17 +34,15 @@ class StatusFSpec extends StatusBaseSpec {
 			$("#connection-${SmslibFconnection.findByName('MTN Dongle').id}").displayed
 	}
 	
-	def "should update message count when in Settings section"() {
+	def "should update message count when in status section"() {
 		when:
 			to PageStatus
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
-			$("#tab-messages").text() == "Messages 15"
+			$("#inbox-indicator").text() == "15"
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ 
-				$("#tab-messages").text() == "Messages 16"
-			}
+			waitFor { $("#inbox-indicator").text() == "16" }
 	}
 }

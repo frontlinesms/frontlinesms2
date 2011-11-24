@@ -146,7 +146,7 @@ class ContactController {
 	}
 	
 	def search = {
-		render template: 'contact_details', model: contactSearchService.contactList(params)
+		render template: 'search_results', model: contactSearchService.contactList(params)
 	}
 	
 	private def getPageTitle() {

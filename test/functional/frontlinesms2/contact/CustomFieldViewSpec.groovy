@@ -14,7 +14,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
 			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
@@ -24,7 +24,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
+			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
 			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
 			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
@@ -44,10 +44,10 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
 			def list = $("#custom-field-list").children().children('label').collect() { it.text() }
-			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
-			fieldSelecter.value('lake')
+			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
+			fieldSelecter.value('lake').click()
 			def nonfields = fieldSelecter.children().collect() { it.text() }
-			def updatedList = $("#custom-field-list").children().children('label').collect() { it.text() }
+			def updatedList = $("#custom-field-list").find('label').collect() { it.text() }
 		then:
 			list == ['town']
 			updatedList.sort() == ['lake', 'town']
@@ -78,8 +78,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			go "contact/show/${bob.id}"
 			def lstFields = $("#custom-field-list")
 			lstFields.find('a').first().click()
-			$("#contact_details #update-single").click()
-			sleep 1000
+			$("#contact-editor #update-single").click()
 		then:
 			bob.getCustomFields() == null
 	}
@@ -88,14 +87,15 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
-			fieldSelecter.value('lake')
-			def inputField =  $("#contact_details ").find('input', name:'lake')
+			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
+			fieldSelecter.value('lake').click()
+			def inputField =  $("#contact-editor").find('input', name:'lake')
 			inputField.value('erie')
-			$("#contact_details #update-single").click()
+			$("#contact-editor #update-single").click()
+			go "contact/show/${bob.id}"
+			def updatedList = $("#custom-field-list").children().children('label').collect() { it.text() }
 		then:
-			bob.refresh()
-			bob.customFields.name == ['lake', 'town']
+			updatedList == ['lake', 'town']
 	}
 
 	def "clicking save doesn't add field to contact in database if there is a blank value for field"() {

@@ -8,7 +8,7 @@ class GroupController {
 	}
 	
 	def update = {
-		def group = Group.get(params.id)
+		def group = Group.get(params.id.toLong())
 		group.properties = params
 		if(group.validate()){
 			group.save(failOnError: true, flush: true)

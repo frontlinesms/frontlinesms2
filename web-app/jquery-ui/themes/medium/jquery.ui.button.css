@@ -16,7 +16,6 @@
 	cursor: pointer;
 	text-align: center;
 	overflow: visible; /* the overflow property removes extra width in IE */
-//	background-image:url('/frontlinesms2/images/buttons/button_default.png');
 	background-repeat:no-repeat;
 	background-size: 100% 100%;
 }

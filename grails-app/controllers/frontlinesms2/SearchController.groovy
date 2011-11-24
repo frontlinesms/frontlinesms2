@@ -55,12 +55,11 @@ class SearchController {
 				search: search,
 				checkedMessageCount: checkedMessageCount,
 				messageInstanceList: searchResults,
-				messageInstanceTotal: rawSearchResults.count()] << 
-			show() << no_search()
+				messageInstanceTotal: rawSearchResults.count()] << show() << no_search()
 	}
 
 	def show = {
-		def messageInstance = params.messageId ? Fmessage.get(params.messageId) : null
+		def messageInstance = params.messageId ? Fmessage.get(params.messageId.toLong()) : null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
 			messageInstance.save()
