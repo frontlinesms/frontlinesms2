@@ -168,7 +168,7 @@ class Fmessage {
 				} else if (search.endDate) {
 					le("dateReceived", search.endDate.next())
 				}
-				if(search.customFields.find{it.value}) {
+				if(search.customFields.any { it.value }) {
 					def contactNameMatchingCustomField = CustomField.getAllContactNameMatchingCustomField(search.customFields)?:[''] //otherwise hibernate fail to search 'in' empty list
 					'in'("contactName", contactNameMatchingCustomField)
 				}

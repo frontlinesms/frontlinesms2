@@ -5,44 +5,43 @@ import grails.plugin.spock.*
 import frontlinesms2.*
 
 class ArchiveISpec extends IntegrationSpec {
-	def controller, pollcontroller, archiveController
+	def folderController, pollController, archiveController
 
 	def setup() {
-		pollcontroller = new PollController()
-		controller = new FolderController()
+		pollController = new PollController()
+		folderController = new FolderController()
 		archiveController = new ArchiveController()
 	}
 	
-	// FIXME
-//	def "can archive a folder"() {
-//		given:
-//			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
-//			assert !folder.archived
-//		when:
-//			controller.params.id = folder.id
-//			controller.archive()
-//		then:
-//			folder.refresh().archived
-//	}
-//	
-//	def "can unarchive a folder"() {
-//		given:
-//			def folder = new Folder(name: 'rain', archived: true).save(failOnError:true, flush:true)
-//			assert folder.archived
-//		when:
-//			controller.params.id = folder.id
-//			controller.unarchive()
-//		then:
-//			!folder.refresh().archived
-//	}
+	def "can archive a folder"() {
+		given:
+			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
+			assert !folder.archived
+		when:
+			folderController.params.id = folder.id
+			folderController.archive()
+		then:
+			folder.refresh().archived
+	}
+	
+	def "can unarchive a folder"() {
+		given:
+			def folder = new Folder(name:'rain', archived:true).save(failOnError:true, flush:true)
+			assert folder.archived
+		when:
+			folderController.params.id = folder.id
+			folderController.unarchive()
+		then:
+			!folder.refresh().archived
+	}
 	
 	def "can unarchive a poll"() {
 		given:
-			def poll = Poll.createPoll(title: 'thingy', choiceA:  'One', choiceB: 'Other', archived: true).save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(title:'thingy', choiceA:'One', choiceB:'Other', archived:true).save(failOnError:true, flush:true)
 			assert poll.archived
 		when:
-			pollcontroller.params.id = poll.id
-			pollcontroller.unarchive()
+			pollController.params.id = poll.id
+			pollController.unarchive()
 		then:
 			!poll.refresh().archived
 	}
