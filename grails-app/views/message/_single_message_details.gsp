@@ -23,12 +23,21 @@
 				</g:if>
 				
 				<g:render template="../message/message_actions"></g:render>
-				<g:render template="../message/other_actions"/>
 			</g:form>
+			<g:render template="../message/other_actions"/>
 		</div>
 	</g:if>
+	<g:elseif test="${messageSection == 'trash' && ownerInstance}"
+		<div id='message-info'>
+			<h2 id="message-detail-sender">${ownerInstance instanceof frontlinesms2.Poll ? ownerInstance.title : ownerInstance.name} </h2>
+			<p id="message-detail-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
+			<p id="message-detail-content">${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p>
+		</div>
+		<g:remoteLink controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" >Restore</g:remoteLink>
+	</g:elseif>
 	<g:else>
 		<div id='message-info'>
+			<g:hiddenField name="viewingArchive" value="${viewingArchive}"></g:hiddenField>
 			<div  id="message-detail-content"><p>No message selected</p></div>
 		</div>
 	</g:else>

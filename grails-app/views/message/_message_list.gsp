@@ -4,7 +4,6 @@
 <g:hiddenField name="messageSection" value="${messageSection}"/>
 <g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 <g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
-<g:hiddenField name="viewingArchive" value="${params.viewingArchive}"/>
 <g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
 		message(code: 'fmessage.src.label', default: 'To')
 			: message(code: 'fmessage.dst.label', default: 'From')}" />
@@ -62,22 +61,22 @@
 								<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 							</td>
 							<td class="message-preview-sender message-sender-cell">
-									<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+									<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
 										${m.contactName}
 									</g:link>
 							</td>
 							<td class="message-text-cell">
-								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
+								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
 									${m.displayText?.truncate(60)}
 								</g:link>
 							</td>
 							<td class="message-date-cell">
-								<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
+								<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id, viewingArchive:viewingArchive]}">
 									<g:if test="${messageSection == sent || messageSection == pending}">
-										<g:formatDate format="dd MMMM, yyyy" date="${m.dateSent}" />
+										<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateSent}" />
 									</g:if>
 									<g:else>
-										<g:formatDate format="dd MMMM, yyyy" date="${m.dateReceived}" />
+										<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateReceived}" />
 									</g:else>
 								</g:link>
 							</td>
