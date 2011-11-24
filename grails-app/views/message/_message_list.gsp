@@ -73,10 +73,10 @@
 							<td class="message-date-cell">
 								<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id, viewingArchive:viewingArchive]}">
 									<g:if test="${messageSection == sent || messageSection == pending}">
-										<g:formatDate format="dd MMMM, yyyy" date="${m.dateSent}" />
+										<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateSent}" />
 									</g:if>
 									<g:else>
-										<g:formatDate format="dd MMMM, yyyy" date="${m.dateReceived}" />
+										<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateReceived}" />
 									</g:else>
 								</g:link>
 							</td>

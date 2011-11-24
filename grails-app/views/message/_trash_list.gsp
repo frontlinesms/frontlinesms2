@@ -24,7 +24,7 @@
 			</td>
 			<td>
 				<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:formatDate date="${m.dateCreated}" />
+					<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateCreated}" />
 				</g:link>
 			</td>
 		</tr>
@@ -50,7 +50,7 @@
 			</td>
 			<td>
 				<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:formatDate date="${m.dateCreated}" />
+					<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateCreated}" />
 				</g:link>
 			</td>
 		</tr>
