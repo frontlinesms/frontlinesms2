@@ -8,7 +8,7 @@
 					<g:link id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
 				</g:if>
 			</p>
-			<p id="message-detail-date"><g:formatDate date="${messageInstance.dateReceived ?: messageInstance.dateSent}"/></p>
+			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.dateReceived ?: messageInstance.dateSent}"/></p>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
 		<div id="message-detail-buttons">

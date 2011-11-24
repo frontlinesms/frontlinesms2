@@ -57,7 +57,6 @@ class MessageController {
 	}
 
 	def inbox = {
-		println "inbox $params"
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
