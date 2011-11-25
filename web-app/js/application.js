@@ -4,7 +4,7 @@ $(function() {
 
 function refreshMessageCount() {
 	$.get(url_root + 'message/getUnreadMessageCount', function(data) {
-		$('#tab-messages').html("Messages " + data);
+		$('#inbox-indicator').html(data);
 	});
 }
 

@@ -152,10 +152,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
 		when:
 			go "message/inbox/show/$message.id"
-			waitFor{$("#btn_reply").displayed}
-			$('a', text:'More').click()
-			waitFor{$('a', text:'Forward').displayed}
-			$('a', text:'Forward').click()
+			waitFor{$("#btn_dropdown").displayed}
+			$("#btn_dropdown").click()
+			waitFor{$("#btn_forward").displayed}
+			$("#btn_forward").click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
@@ -255,7 +255,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			go "message/inbox/show/${Fmessage.findByText('hello').id}"
-			waitFor { $("#move-message").displayed }
 			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
 			$("#move-actions").jquery.trigger("change")
 		then:	
