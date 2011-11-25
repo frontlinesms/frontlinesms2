@@ -454,6 +454,7 @@ a.tab-link:hover{
     overflow-y: auto;
     overflow-x: hidden;
     border-right: 1px solid #9e9e9e;
+    z-index: 200;
 }
 
 #sidebar ul{
@@ -561,7 +562,6 @@ a.tab-link:hover{
     margin: 0;
     min-height: 43px;
     padding: 0 17px;
-    /* border-left: 1px solid #9e9e9e; */
 }
 .section-header .activity-title{
     margin: 0;
@@ -569,10 +569,9 @@ a.tab-link:hover{
     height: 200px;
     padding: 0 17px;
     background-color: #D8E8EF;
-    border-left: 1px solid #9e9e9e;
 }
 
-.section-header .message-title h3, .section-header .activity-title h3,.section-header h3{
+.section-header .message-title h3, .section-header .activity-title h3, .section-header h3{
     text-transform: uppercase;
     padding:10px;
     padding-left: 28px;
@@ -657,15 +656,15 @@ a.tab-link:hover{
 .footer #message-toggler,
 .footer form{
     float: left;
-    margin-left: 10px;
+    margin-left: 17px;
 }
 .footer form {
 	margin: 0 17px 0 10px;
 }
-#messages-tab .footer #paging{
+#messages-tab .footer #paging, #search-tab .footer #paging, #status-tab .footer #paging{
 	float:right;
 	position: relative;
-	right:48%;
+	right:43%;
 }
 .footer #message-toggler{
     padding: 3px;
@@ -753,8 +752,16 @@ a.tab-link:hover{
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-top: 45px;
-    width:65%;
+    margin-top: 40px;
+    width:75%;
+}
+.tall-header #message-list{
+    float:left;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 190px;
+    width:75%;
 }
 
 #message-list thead{
@@ -767,7 +774,9 @@ a.tab-link:hover{
     border: 0;
     background-image: url('../images/menubar.png');
     background-repeat: repeat-x;
-    /* border-left: 1px solid #9e9e9e; */
+}
+.tall-header #message-list thead{
+    top: 278px;
 }
 
 #message-list tbody{
@@ -775,8 +784,8 @@ a.tab-link:hover{
     margin-top: 25px;
     z-index: 1;
     overflow: hidden;
-    width: 53%;
-    padding: 90px 0;
+    width: 58%;
+    padding: 90px 0 45px 0;
 }
 
 #message-list tr{
@@ -788,19 +797,24 @@ a.tab-link:hover{
 }
 #message-list .message-select-cell{
 	min-width: 30px;
+	padding-left: 17px;
 }
 #message-list .message-star-cell{
 	min-width: 15px;
 }
 #message-list .message-sender-cell{
-	min-width: 125px;
+	min-width: 120px;
+	width: 125px;
+	padding-right: 10px;
 }
 #message-list .message-text-cell{
 	min-width: 300px;
-	padding: 0px 10px;
+	width: 455px;
 }
 #message-list .message-date-cell{
-	min-width: 200px;
+	min-width: 300px;
+	width: 300px;
+	padding-right: 10px;
 }
 
 #message-list .message-preview td a, #message-list th a{
@@ -853,15 +867,18 @@ a.tab-link:hover{
 }
 #message-detail{
     position: fixed;
-    float:left;
+    float:right;
     right: 0;
-    width: 30%;
+    width: 25%;
     max-width: 35%;
     min-width: 196px;
     height: 96%;
     margin: 0;
     top: 154px;
     background-color: #D8E8EF;
+}
+.tall-header #message-detail{
+    top: 304px;
 }
 
 #message-detail .msg-btn{

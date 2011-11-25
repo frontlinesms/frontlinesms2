@@ -38,7 +38,7 @@ class FolderListSpec extends FolderBaseSpec {
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [a-z][A-Z]{2}/
 	}
 
 	def 'selected folder is highlighted'() {
@@ -156,14 +156,13 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
-			$('#messages tbody tr:nth-child(1) td a').click()
 		then:
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
 			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
-			$('#activity-name').text() == 'Work'
-			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
-			$('#activity-body').text() == "${folder.getLiveMessageCount()} messages"
+			$('#message-detail-sender').text() == 'Work'
+			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			$('#message-detail-content').text() == "${folder.getLiveMessageCount()} messages"
 	}
 	
 	def "clicking on empty trash permanently deletes a folder"() {

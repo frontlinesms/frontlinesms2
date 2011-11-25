@@ -43,7 +43,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			addName.value("newbie")
 			doneButton.click()
 		then:
-			waitFor { summaryPopup.displayed }
+			waitFor { $("#ui-dialog-title-modalBox").text() == "Announcement created!" }
 			Announcement.findByName("newbie").sentMessage == "announcing this new announcement!"
 	}
 
@@ -65,7 +65,6 @@ class AnnouncementDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
-		summaryPopup { $("#announcement-summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }

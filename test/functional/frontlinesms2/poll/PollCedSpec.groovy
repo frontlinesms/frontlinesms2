@@ -10,7 +10,7 @@ import java.util.Date
 
 
 class PollCedSpec extends PollBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
@@ -390,9 +390,9 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
 		then:
-			$('#activity-name').text() == poll.title
-			$('#activity-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
-			$('#activity-body').text() == "${poll.getLiveMessageCount()} messages"
+			$('#message-detail-sender').text() == poll.title
+			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+			$('#message-detail-content').text() == "${poll.getLiveMessageCount()} messages"
 	}
 	
 	def "clicking on empty trash permanently deletes a poll"() {

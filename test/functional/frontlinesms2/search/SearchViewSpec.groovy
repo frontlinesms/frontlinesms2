@@ -140,7 +140,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#delete-msg").click()
 		then:
 			at PageSearchResult
-			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(['hi alex', 'sent', 'send_pending', 'meeting at 11.00'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["hi alex", "sent", "send_pending", "meeting at 11.00"])
 			$('.flash').displayed
 	}
 	
@@ -294,7 +294,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ $("#message-tab-link").text().endsWith("3") }
+			waitFor{ $("#inbox-indicator").text == "3" }
 	}
 	
 }

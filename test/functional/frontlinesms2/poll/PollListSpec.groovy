@@ -20,13 +20,12 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [a-z][A-Z]{2}/
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
