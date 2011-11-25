@@ -110,9 +110,9 @@
 				return a.match(/[0-9]/) != null;
 			}).join('');
 			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress
-			var checkbox = $("div.manual").find(":checkbox[value=" + sanitizedAddress + "]").val()
+			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val()
 			if(checkbox !== address) {
-				$("#contacts").prepend("<div class='manual'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + sanitizedAddress + ">" + sanitizedAddress + "</input></div>")
+				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + sanitizedAddress + ">" + sanitizedAddress + "</input></li>")
 				updateCount();
 			}
 			$('#address').val("")
