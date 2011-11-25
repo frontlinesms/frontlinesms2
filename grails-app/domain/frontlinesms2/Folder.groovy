@@ -14,13 +14,13 @@ class Folder extends MessageOwner {
 		Fmessage.owned(getOnlyStarred, this)
 	}
 	
-	def archive() {
+	def archive() { // FIXME this should be setArchived(true)
 		this.archived = true
 		def messagesToArchive = Fmessage?.owned(this)?.list()
 		messagesToArchive.each { it?.archived = true }
 	}
 	
-	def unarchive() {
+	def unarchive() { // FIXME this should be setArchived(false)
 		this.archived = false
 		def messagesToArchive = Fmessage?.owned(this)?.list()
 		messagesToArchive.each { it?.archived = false }

@@ -104,21 +104,21 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	private def setupInboxMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "inbox ${i}", dateReceived: new Date() - i, status: MessageStatus.INBOUND).save(flush: true)
+			new Fmessage(src: "src${i}", dst: "dst${i}", text: "inbox ${i}", dateReceived: new Date() - i, inbound:true).save(flush: true)
 		}
 	}
 
 
 	private def setupSentMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "sent ${i}", status: MessageStatus.SENT).save(flush: true)
+			new Fmessage(src: "src${i}", dst: "dst${i}", text: "sent ${i}", hasSent:true).save(flush: true)
 		}
 	}
 
 
 	private def setupPendingMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "pending ${i}", status: MessageStatus.SEND_PENDING).save(flush: true)
+			new Fmessage(src: "src${i}", dst: "dst${i}", text: "pending ${i}", hasPending:true).save(flush: true)
 		}
 	}
 

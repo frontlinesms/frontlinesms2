@@ -15,7 +15,7 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 			new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester', dateReceived: new Date() - 3),
 				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best',  dateReceived: new Date() - 2),
 				new Fmessage(src:'Jill', dst:'+234234', text:'I fell down the hill',  dateReceived: new Date() - 1)].each() {
-					it.status = MessageStatus.INBOUND
+					it.status = true
 					it.save(failOnError:true, flush:true)
 				}
 

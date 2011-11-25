@@ -3,7 +3,7 @@ package frontlinesms2
 class MessageSendService {
 	def send(Fmessage m, Fconnection c=null) {
 		assert m instanceof Fmessage
-		m.status = MessageStatus.SEND_PENDING
+		m.hasPending = true
 		def headers = [:]
 		if(c) headers.fconnection = c.id
 		m.save(failOnError:true,flush:true) // FIXME this should be saving inside the outgoing messages route, not here
@@ -11,6 +11,7 @@ class MessageSendService {
 	}
 	
 	def getMessagesToSend(params) {
+		// FIXME this method should create 1 Fmessage with multiple Dispatches attached
 		def messages = []
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null

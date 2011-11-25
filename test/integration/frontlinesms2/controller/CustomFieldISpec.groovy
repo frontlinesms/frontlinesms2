@@ -15,7 +15,7 @@ class CustomFieldISpec extends grails.plugin.spock.IntegrationSpec {
 					new CustomField(name:'like', value:'ca', contact: firstContact),
 					new CustomField(name:'like', value:'ake', contact: thirdContact),
 					new CustomField(name:'dob', value:'12/06/79', contact: secondContact),
-					new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', status:MessageStatus.INBOUND)].each {
+					new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', inbound:true)].each {
 				it.save(failOnError:true)
 			}
 		then:	

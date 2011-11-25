@@ -13,7 +13,7 @@ class EmailTranslationService implements Processor {
 		println("exchange ${exchange}")
 		def i = exchange.in
 		println("in: ${i}")
-		Fmessage message = new Fmessage(status:MessageStatus.INBOUND)
+		Fmessage message = new Fmessage(inbound:true)
 		message.src = EMAIL_PROTOCOL_PREFIX + i.getHeader('From')
 		println("src: ${message.src}")
 		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')

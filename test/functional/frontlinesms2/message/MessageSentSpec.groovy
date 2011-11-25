@@ -4,8 +4,8 @@ import frontlinesms2.*
 
 class MessageSentSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src:"src1", dst:"dst1",status:MessageStatus.SENT, starred:true).save(failOnError:true, flush: true)
-		new Fmessage(src:"src2", dst:"dst2",status:MessageStatus.SENT).save(failOnError:true, flush: true)
+		new Fmessage(src:"src1", dst:"dst1", hasSent:true, starred:true).save(failOnError:true, flush: true)
+		new Fmessage(src:"src2", dst:"dst2", hasSent:true).save(failOnError:true, flush: true)
 	}
 
 	def "can filter messages by starred and unstarred messages"() {

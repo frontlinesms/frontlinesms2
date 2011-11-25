@@ -20,19 +20,5 @@ class FolderSpec extends UnitSpec {
 		then:
 			f.validate()
 	}
-	
-	def "Adding a message to a Folder will cascade to the message's activity value"() {
-		// FIXME this almost certainly needs to be an integration test due to reliance on cascades (cascades are probably enforced by Hibernate rather than GORM)
-		given:
-			mockDomain(Fmessage)
-			mockDomain(MessageOwner)
-			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage()
-		when:
-			f.addToMessages(m)
-			f.save()
-		then:
-			m.messageOwner == f
-	}
 }
 

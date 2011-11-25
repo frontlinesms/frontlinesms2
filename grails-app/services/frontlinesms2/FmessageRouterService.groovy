@@ -37,8 +37,9 @@ class FmessageRouterService {
 				println "Haven't found any routes. updating message status as failed"
 				// TODO could we just return reference to message storage service here?
 				def message = exchange.in.body
-				message = message.id ? Fmessage.findById(message.id) : message
-				message.status = MessageStatus.SEND_FAILED
+				message = message.id ? Fmessage.get(message.id) : message // TODO what's the point of this?
+				// FIXME should set details of the dispatch to FAILED
+				message.hasFailed = true
 				message.save(flush:true) 
 				return null
 			}

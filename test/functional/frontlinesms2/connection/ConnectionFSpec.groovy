@@ -76,7 +76,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 	def "should update message count when in Settings section"() {
 		when:
 			to ConnectionPage
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
 			$("#tab-messages").text() == "Messages 0"
 		when:

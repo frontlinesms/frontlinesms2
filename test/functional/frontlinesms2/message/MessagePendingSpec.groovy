@@ -9,10 +9,10 @@ import frontlinesms2.*
 
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src: "src1", dst:"dst1", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true)
-		new Fmessage(src: "src2", dst:"dst2", status: MessageStatus.SEND_PENDING).save(flush: true)
-		new Fmessage(src: "src", dst:"dst1", status: MessageStatus.SENT).save(flush: true)
-		new Fmessage(src: "src", status: MessageStatus.INBOUND).save(flush: true)
+		new Fmessage(src: "src1", dst:"dst1", hasFailed:true, starred: true).save(flush: true)
+		new Fmessage(src: "src2", dst:"dst2", hasPending:true).save(flush: true)
+		new Fmessage(src: "src", dst:"dst1", hasSent:true).save(flush: true)
+		new Fmessage(src: "src", inbound:true).save(flush: true)
 	}
 
 	def 'should list all the pending messages'() {
@@ -60,8 +60,8 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def "retry button must not apper if there are no failed messages"() {
 		setup:
 			Fmessage.list()*.delete(flush: true)
-			new Fmessage(src:"src", dst:"dst", status:MessageStatus.SEND_PENDING).save(flush:true)
-			new Fmessage(src:"src", dst:"dst", status:MessageStatus.SEND_PENDING).save(flush:true)
+			new Fmessage(src:"src", dst:"dst", hasPending:true).save(flush:true)
+			new Fmessage(src:"src", dst:"dst", hasPending:true).save(flush:true)
 			assert Fmessage.count() == 2
 		when:
 			go "message/pending"
@@ -92,7 +92,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 
 	def "should be able to retry all failed messages"() {
 		setup:
-			new Fmessage(src: "src1", dst:"dst2", status: MessageStatus.SEND_FAILED, starred: true).save(flush: true, failOnError:true)
+			new Fmessage(src: "src1", dst:"dst2", hasFailed:true, starred: true).save(flush: true, failOnError:true)
 		when:
 			go "message/pending"
 		then:

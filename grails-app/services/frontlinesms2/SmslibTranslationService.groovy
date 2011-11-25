@@ -14,7 +14,7 @@ class SmslibTranslationService {
 		if(bod instanceof CStatusReportMessage) {
 			return
 		} else {
-			Fmessage message = new Fmessage(status:MessageStatus.INBOUND)
+			Fmessage message = new Fmessage(inbound:true)
 			message.src = bod.originator
 			message.dst = bod.recipient
 			message.text = bod.text
