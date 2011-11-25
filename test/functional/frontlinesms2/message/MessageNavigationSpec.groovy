@@ -13,7 +13,7 @@ class MessageNavigationSpec extends MessageBaseSpec {
 		then:
 			messagesSelect[1].parent().parent().hasClass("selected")
 		when:
-			$("#message-list") << Keys.chord(Keys.ARROW_DOWN)
+			$("#messages") << Keys.chord(Keys.ARROW_DOWN)
 		then:
 			waitFor { messagesSelect[2].parent().parent().hasClass("selected") }
 			!messagesSelect[1].parent().parent().hasClass("selected")
@@ -24,11 +24,11 @@ class MessageNavigationSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelect[2].click()
+			$("a", text: "Bob").click()
 		then:
 			waitFor { messagesSelect[2].parent().parent().hasClass("selected") }
 		when:
-			$("#message-list") << Keys.chord(Keys.ARROW_UP)
+			$("#messages") << Keys.chord(Keys.ARROW_UP)
 		then:
 			waitFor { !messagesSelect[2].parent().parent().hasClass("selected") }
 			messagesSelect[1].parent().parent().hasClass("selected")

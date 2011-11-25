@@ -38,7 +38,6 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 function doNothing(data) {
 	$("#submit").attr('disabled', 'disabled');
 	if(validateSmartGroup()) {
-		alert('hello');
 		$(this).find("form").submit();
 		$(this).dialog('close');
 		window.location = window.location;

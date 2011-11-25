@@ -52,11 +52,11 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			to PageMessageInbox
 			$("#source-header a").click()
 		then:
-			getColumnText('messages', 2) == ['Contact 1', 'Contact 2']
+			getColumnText('message-list', 2) == ['Contact 1', 'Contact 2']
 		when:
 			$("#message-header a").click()
 		then:
-			getColumnText('messages', 3) == ['An inbox message', 'Another inbox message']		
+			getColumnText('message-list', 3) == ['An inbox message', 'Another inbox message']		
 	}
 	   
     def assertMenuItemSelected(String itemText) {

@@ -51,7 +51,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			addressField.value("+919544426000")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 	}
 	
@@ -64,13 +64,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			addressField.value("+919544426000")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426000" }
 			$("#recipient-count").text() == "1"
 		when:
 			addressField.value("3232")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "3232" }
+			waitFor { $('#contacts').find('input', type:'checkbox').value() == "3232" }
 			$("#recipient-count").text() == "2"
 	}
 
@@ -83,11 +83,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			addressField.value("+919544426009")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426009" }
+			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426009" }
 			$("#recipient-count").text() == "2"
 		when:
-			println $("div.manual").find("input", name:"addresses")[0]*.@value
-			$("div.manual").find("input", name:"addresses")[0].click()
+			$("li.manual").find("input", name:"addresses")[0].click()
 		then:
 			$("#recipient-count").text() == "1"
 	}
@@ -99,7 +98,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			addressField.value("+919544426000")
 			addAddressButton.click()
 		then:
-			waitFor { $('div#contacts div')[0].find('input', type:'checkbox').value() == "+919544426000" }
+			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426000" }
 		when:
 			toConfirmTab()
 			doneButton.click()

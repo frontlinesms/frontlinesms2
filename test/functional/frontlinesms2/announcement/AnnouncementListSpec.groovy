@@ -4,7 +4,7 @@ import frontlinesms2.*
 import java.text.SimpleDateFormat
 
 class AnnouncementListSpec extends AnnouncementBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
 	def 'Announcement message list is displayed'() {
 		given:
@@ -38,7 +38,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z][a-z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'selected announcement is highlighted'() {

@@ -5,10 +5,10 @@
 		<div id='message-info'>
 			<p id="message-detail-sender">${messageInstance.contactName}
 				<g:if test="${!messageInstance.contactExists}">
-					<g:link id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
+					<g:link controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img id="add-contact" src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
 				</g:if>
 			</p>
-			<p id="message-detail-date"><g:formatDate date="${messageInstance.dateReceived ?: messageInstance.dateSent}"/></p>
+			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.dateReceived ?: messageInstance.dateSent}"/></p>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
 		<div id="message-detail-buttons">
@@ -30,7 +30,7 @@
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}"
 		<div id='message-info'>
 			<h2 id="message-detail-sender">${ownerInstance instanceof frontlinesms2.Poll ? ownerInstance.title : ownerInstance.name} </h2>
-			<p id="message-detail-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
+			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<p id="message-detail-content">${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p>
 		</div>
 		<g:remoteLink controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" >Restore</g:remoteLink>

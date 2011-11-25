@@ -15,17 +15,17 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			at PageMessagePollFootballTeamsBob
 		when:
-			def actions = $('#move-actions').children()*.text()
+			def actions = $('select', name: 'move-actions').children()*.value()
 		then:
-			actions[1] == "Inbox"
-			actions[2] == "Shampoo Brands"
-			!actions.contains("Football Teams")
+			actions[1] == "inbox"
+			actions[2] == "${Poll.findByTitle("Shampoo Brands").id}"
+			!actions.contains("${Poll.findByTitle("Football Teams").id}")
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
-			def inboxActions = $('#move-actions').children()*.text()
+			def inboxActions = $('#move-actions').children()*.value()
 		then:
-			inboxActions[1] == "Football Teams"
-			inboxActions.every {it != "Inbox"}
+			inboxActions[1] == "${Poll.findByTitle("Football Teams").id}"
+			inboxActions.every {it != "inbox"}
 	}
 
 	def "move to inbox option should be displayed for folder messages and should work"() {

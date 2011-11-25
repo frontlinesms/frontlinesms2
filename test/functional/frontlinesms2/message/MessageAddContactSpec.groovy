@@ -21,11 +21,9 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('+254778899')
 		when:
 			go "message/inbox/show/${message.id}"
-			def btnAddContact = $('a#add-contact')
-			assert btnAddContact instanceof geb.navigator.NonEmptyNavigator
-			btnAddContact.click()
+			$('#add-contact').click()
 		then:
-			waitFor { $('#contact_details').displayed }
-			$('#contact_details').primaryMobile == "+254778899"
+			waitFor { $('title').text() == 'Contacts'}
+			$('#details').primaryMobile == "+254778899"
 	}
 }

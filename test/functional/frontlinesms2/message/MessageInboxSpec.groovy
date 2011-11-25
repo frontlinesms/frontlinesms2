@@ -27,7 +27,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'hi Bob'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'message to alice is first in the list, and links to the show page'() {
@@ -36,7 +36,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to PageMessageInbox
-			def firstMessageLink = $('#messages tbody tr:nth-child(1) a', href:"/frontlinesms2/message/inbox/show/${message.id}")
+			def firstMessageLink = $('a', href:"/frontlinesms2/message/inbox/show/${message.id}?viewingArchive=")
 		then:
 			firstMessageLink.text() == 'Alice'
 	}
@@ -73,11 +73,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${aliceMessage.id}"
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${aliceMessage.id}?viewingArchive="
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${bobMessage.id}"
+			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${bobMessage.id}?viewingArchive="
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -155,7 +155,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			waitFor{$("#btn_dropdown").displayed}
 			$("#btn_dropdown").click()
 			waitFor{$("#btn_forward").displayed}
-			$('#btn_forward').click()
+			$("#btn_forward").click()
 			waitFor {$('div#tabs-1').displayed}
 		then:
 			$('textArea', name:'messageText').text() == "test"
@@ -248,14 +248,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 //			!$("#tabs a").@href('#tabs2').displayed
 //			$("#tabs a").@href('#tabs3').displayed
 //	}
-
+	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
 			new Fmessage(text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			go "message/inbox/show/${Fmessage.findByText('hello').id}"
-			waitFor { $("#move-actions").displayed }
 			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
 			$("#move-actions").jquery.trigger("change")
 		then:	
@@ -278,6 +277,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	String dateToString(Date date) {
-		new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US).format(date)
+		new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).format(date)
 	}
 }

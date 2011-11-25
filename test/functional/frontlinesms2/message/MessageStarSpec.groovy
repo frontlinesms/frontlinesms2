@@ -19,14 +19,17 @@ class MessageStarSpec extends grails.plugin.geb.GebSpec{
 	}
 	
 	def 'clicking on a starred messages removes the starred CSS'() {
+		given:
+			def message = Fmessage.findBySrc('+254287645')
+			message.starred = true
+			message.save(flush:true)
 		when:
-			Fmessage.findBySrc('+254287645').addStar().save(failOnError: true, flush: true)
-			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
-			$("tr #star-${Fmessage.findBySrc('+254287645').id} a").click()
+			go "message/inbox/show/${message.id}"
+			$("tr #star-${message.id} a").click()
 		then:
-			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id} a").hasClass("unstarred")}
-			Fmessage.findBySrc('+254287645').refresh()
-			!Fmessage.findBySrc('+254287645').starred
+			waitFor {$("tr #star-${message.id} a").hasClass("unstarred")}
+			message.refresh()
+			!message.starred
 			
 	}
 	

@@ -4,7 +4,7 @@ import frontlinesms2.*
 import java.text.SimpleDateFormat
 
 class FolderListSpec extends FolderBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
 	def 'folder message list is displayed'() {
 		given:
@@ -38,7 +38,7 @@ class FolderListSpec extends FolderBaseSpec {
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [a-z][A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'selected folder is highlighted'() {
@@ -162,7 +162,7 @@ class FolderListSpec extends FolderBaseSpec {
 			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
 			$('#message-detail-sender').text() == 'Work'
 			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
-			$('#message-detail-content').text() == "${folder.getLiveMessageCount()} messages"
+			$('#message-detail-content').text() == "${Folder.findById(folderId).getLiveMessageCount()} messages"
 	}
 	
 	def "clicking on empty trash permanently deletes a folder"() {
