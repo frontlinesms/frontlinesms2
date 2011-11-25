@@ -25,7 +25,7 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [a-z][A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
@@ -111,10 +111,10 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
 		then:
-			waitFor {$("#messages").displayed}
+			$("#message-list").displayed
 		when:
 			$("#pollSettings").click()
-			waitFor {!$("#messages").displayed}
+			waitFor {!$("#message-list").displayed}
 		then:
 			$(".response-count").text() == "2 responses total"
 		when:

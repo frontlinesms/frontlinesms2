@@ -8,7 +8,7 @@ import java.util.Date
 
 class PollViewSpec extends PollBaseSpec {
 	
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm", Locale.US)
+	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
 	def 'existing polls appear in activities section of messages'() {
 		given:
