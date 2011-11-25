@@ -52,7 +52,7 @@ function loadRow(id) {
 	var url = $(".displayName-" + id).attr("href");
 	$.get(url, function(data) {
 		$('#message-list').replaceWith($(data).find('#message-list'));
-		$('#message-details').replaceWith($(data).find('#message-details'));
+		$('#single-message').replaceWith($(data).find('#single-message'));
 	});
 }
 function countSelectedMessages() {
