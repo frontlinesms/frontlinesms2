@@ -57,7 +57,6 @@
 	function createSmartGroup(data) {
 		$("#submit").attr('disabled', 'disabled');
 		if(validateSmartGroup()) {
-			alert('hello');
 			$(this).find("form").submit();
 			$(this).dialog('close');
 			window.location = window.location;

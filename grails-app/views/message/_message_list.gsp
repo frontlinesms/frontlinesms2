@@ -12,7 +12,7 @@
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
-<div id="messages">
+<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow') ? '' : 'tall-header'}">
 	<table id="message-list" cellspacing=0>
 		<thead>
 			<tr id="message-sorter">
@@ -67,7 +67,7 @@
 							</td>
 							<td class="message-text-cell">
 								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
-									${m.displayText?.truncate(60)}
+									${m.displayText?.truncate(50)}
 								</g:link>
 							</td>
 							<td class="message-date-cell">

@@ -16,6 +16,6 @@ class PageSearch extends geb.Page {
 		ikCustomFieldLink(required:false) { $('#ik-add')}
 		contactNameLink(required:false) {$('#contact-name-add')}
 		contactNameField(required:false) {$('#contact-name-list-item')}
-		expandedSearchOption(required:false) {$('#expanded-search-options')}
+		expandedSearchOption(required:false) {$('#extra-options-list')}
 	}
 }

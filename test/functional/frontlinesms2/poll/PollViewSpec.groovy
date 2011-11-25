@@ -28,11 +28,9 @@ class PollViewSpec extends PollBaseSpec {
 			def message = Fmessage.findBySrc('Bob')
 			def poll = Poll.findByTitle('Football Teams')
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-			def firstMessageLink = $('#messages tbody tr:nth-child(2) a', href:"/frontlinesms2/message/poll/$poll.id/show/$message.id")
 		then:
-			firstMessageLink.text() == 'Bob'
+			$('#messages tbody a', text: "Bob").displayed
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -56,15 +54,13 @@ class PollViewSpec extends PollBaseSpec {
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-//			to PageMessagePollFootballTeamsAlice
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
 		then:
 			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$aliceMessage.id"
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$bobMessage.id"
+			$('#messages .selected a', text: "Bob").displayed
 	}
 	
 	def 'activities should also list message counts'() {

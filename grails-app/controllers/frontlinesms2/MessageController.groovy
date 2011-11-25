@@ -148,7 +148,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel(messageInstanceList.list(params))
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
 	}
 
 	def send = {

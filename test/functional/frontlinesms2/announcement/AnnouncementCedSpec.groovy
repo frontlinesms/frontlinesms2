@@ -17,7 +17,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
 	}
 	
-	def "can create a new Activity" () {
+	def "can create a new Announcement" () {
 		when:
 			go "message"
 			$("a", text:"Create new activity").click()
@@ -43,7 +43,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			addName.value("newbie")
 			doneButton.click()
 		then:
-			waitFor { messagesQueuedNotification.displayed }
+			waitFor { $("#ui-dialog-title-modalBox").text() == "Announcement created!" }
 			Announcement.findByName("newbie").sentMessage == "announcing this new announcement!"
 	}
 
@@ -65,7 +65,6 @@ class AnnouncementDialog extends geb.Page {
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }
 		confirmTab { $('div#tabs-3') }
-		messagesQueuedNotification { $(".summary") }
 		
 		addressField { $('#address') }
 		addAddressButton { $('.add-address') }
