@@ -10,7 +10,7 @@ class SettingsFSpec extends SettingsBaseSpec {
 	def 'settings menu item is available in system menu'() {
 		when:
 			to PageContactShow
-			def btnGotoSettings = $('#system-menu #settings-nav a')
+			def btnGotoSettings = $('#secondary-nav a:first-child')
 		then:
 			btnGotoSettings.text() == 'Settings & Plugins'
 	}
