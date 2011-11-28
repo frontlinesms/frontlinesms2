@@ -209,6 +209,28 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}
 	
+	@spock.lang.IgnoreRest
+	def "should not deselect group when a non-member contact is unchecked"() {
+		setup:
+			createData()
+			def contact = new Contact(name:"Test", primaryMobile:"876543212").save(flush:true)
+		when:
+			launchQuickMessageDialog()
+			toSelectRecipientsTab()
+			$("input[value='group1']").click()
+		then:
+			$("input[value='group1']").checked
+		when:
+			$("input[value='876543212']").click()
+		then:
+			$("input[value='group1']").checked
+		when:
+			$("input[value='876543212']").click()
+		then:
+			$("input[value='group1']").checked
+
+	}
+	
 	private def createData() {
 		def group = new Group(name: "group1").save(flush: true)
 		def group2 = new Group(name: "group2").save(flush: true)
