@@ -4,6 +4,8 @@
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead />
 		<g:render template="/css"/>
+		<g:javascript src="mediumPopup.js"/>
+		<g:javascript src="smallPopup.js"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<script type="text/javascript">

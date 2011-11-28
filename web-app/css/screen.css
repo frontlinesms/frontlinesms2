@@ -159,17 +159,20 @@ a.tab-link{
 a.tab-link.current{
     background-image: url('../images/buttons/tab_active.png');
 }
-a.tab-link:active{
-    background-image: url('../images/buttons/tab_pressed.png');
-}
 a.tab-link:hover{
     background-image: url('../images/buttons/tab_hover.png');
 }
+a.tab-link:active{
+    background-image: url('../images/buttons/tab_pressed.png');
+    z-index: 10;
+}
+
 #message-tab-link{
     display: inline-block;
     background-size: cover;
     width: 120px;
     padding-left: 10px;
+    padding-right: 10px;
     text-align: left;
 }
 #status-tab-link{
@@ -1004,7 +1007,7 @@ button, input[type=submit], a.btn{
     border-left: 1px solid #6b6b6b;
     border-right: 1px solid #6b6b6b;
     border-radius: 2px;
-    padding: 0px 10px;
+    padding: 2px 10px;
     height:25px;
     cursor: pointer;
     text-decoration: none;
@@ -1016,6 +1019,7 @@ button, input[type=submit], a.btn{
 
 button:hover, input[type=submit]:hover, a.btn:hover{
     background-image: url('../images/buttons/button_hover_part.png');
+    background-repeat: repeat-x;
 }
 
 a.btn, a.btn:hover{
@@ -1025,6 +1029,7 @@ a.btn, a.btn:hover{
 
 button:active, input[type=submit]:active, a.btn:active{
     background-image: url('../images/buttons/button_pressed_part.png');
+    background-repeat: repeat-x;
 }
 
 button[disabled=disabled], input[type=submit][disabled=disabled], a.btn[disabled=disabled]{
@@ -1096,22 +1101,6 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 
-button:hover, input[type=submit]:hover, a.btn:hover {
-	display: inline-block;
-    background-image: url('../images/buttons/button_hover_2.png');
-    background-repeat: repeat-x;
-    border-left: 1px solid #6b6b6b;
-    border-right: 1px solid #6b6b6b;
-    border-radius: 2px;
-    padding: 2px 10px;
-    height: 21px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    color: #000;
-    background-color: none;
-    min-width:80px;
-}
 /*Contacts*/
 #contacts{
     position: relative;

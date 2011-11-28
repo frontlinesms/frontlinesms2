@@ -1,16 +1,14 @@
 <div class="multiple-contact hide">
-	<div class="buttons">
-		<ol>
-			<li><g:actionSubmit id="update-all" action="updateMultipleContacts" value="Save All" disabled="disabled"/></li>
-			<li><input type="button" class="cancel" value="Cancel" disabled="disabled"/></li>
-			<li>
-				<a id="btn_delete_all" onclick="launchConfirmationPopup('Delete all');">
-					Delete all
-				</a>
-			</li>
-		</ol>
+	<div id="action-buttons" class="buttons">
+			<g:actionSubmit class="btn" id="update-all" action="updateMultipleContacts" value="Save All" disabled="disabled"/>
+			<g:link class="cancel btn" disabled="disabled">Cancel</g:link>
+			<a class="btn" id="btn_delete_all" onclick="launchConfirmationPopup('Delete all');">
+				Delete all
+			</a>
 	</div>
-	<div id="contact-count">&nbsp;</div>
+	<div class="basic-info">
+		<div id="contact-count">&nbsp;</div>
+	</div>
 	<div class="multiple-contact">
 		<div>
 			<ol id='multi-group-list'>

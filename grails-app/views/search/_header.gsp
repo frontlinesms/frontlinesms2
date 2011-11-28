@@ -11,7 +11,7 @@
 			</g:if>
 			<g:else>
 				<li id="export-btn">
-		  			<a class="btn disabled">
+		  			<a class="btn" disabled="disabled">
 						Export results
 					</a>
 				</li>

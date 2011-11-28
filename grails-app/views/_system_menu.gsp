@@ -6,8 +6,11 @@
 		</g:link>
 	</li>
 	<li id='settings-nav' class="nav ${params.controller=='help'?'selected':''}">
-		<g:link controller="help">
+		<g:remoteLink controller="help" onSuccess="launchMediumPopup('Help', data, 'Done', cancel)">
 			Help
-		</g:link>
+		</g:remoteLink>
 	</li>
 </ul>
+<g:javascript>
+function initializePopup() {}
+</g:javascript>
