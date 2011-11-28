@@ -62,7 +62,6 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			Fmessage.list()*.delete(flush: true)
 			new Fmessage(src:"src", dst:"dst", hasPending:true).save(flush:true)
 			new Fmessage(src:"src", dst:"dst", hasPending:true).save(flush:true)
-			assert Fmessage.count() == 2
 		when:
 			go "message/pending"
 		then:

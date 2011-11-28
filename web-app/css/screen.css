@@ -46,6 +46,13 @@ a {
 	left: 150px;
 }
 
+.send-failed{
+	background-image: url('../images/icons/error_on.png');
+	background-repeat: no-repeat;
+	background-position: right center;
+	margin-right: 17px;
+}
+
 /*Popup Dialogs (should be in jquery.ui.dialog.css, but image reference problems occur*/
 .ui-dialog .error-panel #error-icon{
 	display:inline-block;
