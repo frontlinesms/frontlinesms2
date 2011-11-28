@@ -8,7 +8,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
 				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
-					it.status = true
+					it.inbound = true
 					it.save(failOnError:true)
 				}
 	}
@@ -21,7 +21,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestMessages2() {
 		[new Fmessage(src:'Doe', dst:'+254987654', text:'meeting at 11.00', dateReceived: new Date()-1),
 				new Fmessage(src:'Alex', dst:'+254987654', text:'hi alex', dateReceived: new Date()-1)].each() {
-			it.status = true
+			it.inbound = true
 			it.save(failOnError:true)
 		}
 	}
@@ -52,7 +52,7 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createInboxTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived: new Date() - 2),
 				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived: new Date() - 1, starred: true)].each() {
-					it.status = true
+					it.inbound = true
 					it.save(failOnError:true)
 				}
 
