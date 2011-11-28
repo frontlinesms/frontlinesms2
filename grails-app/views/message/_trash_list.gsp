@@ -13,7 +13,7 @@
 			</td>
 			<td>
 				<g:link class="displayName-${m.linkId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:if test="${m.link.status != null && !m.link.inbound}"><span>To:</span></g:if>${m.identifier}
+					<g:if test="${!m.link.inbound}"><span>To:</span></g:if>${m.identifier}
 				</g:link>
 			</td>
 			<td>

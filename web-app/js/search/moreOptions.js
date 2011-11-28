@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	//init the page javascript element
+
 	$(".datepicker").datepicker({
 		buttonImage : '../images/icons/calendar.png',
 		buttonImageOnly: true,
@@ -15,10 +15,11 @@ $(document).ready(function() {
 	
 	$(".extra-option").each(function() {
 		if (!$(this).children("input").val())
-			$(this).hide()
+			$(this).hide();
 		else
-			$(".extra-option-link#" + $(this).attr('id')).hide();
+			$(".extra-option-link#" + $(this).children("input").attr('id') + "-add").hide();
 	})
+	
 	$("#extra-options-list").hide();
 	$("#toggle-extra-options").find("#minus").hide();
 	$("#toggle-extra-options").live("click", function() {
@@ -34,5 +35,5 @@ function toggleExtraSearchOption(option) {
 }
 
 function removeValue(element) {
-	$(".extra-option#" + element + "-list-item").find("input").val("");
+	$(".extra-option#" + element + "-list-item").find("input").val('');
 }

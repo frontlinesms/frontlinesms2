@@ -44,9 +44,7 @@
 					<g:render template="/search/header" />
 					<g:render template="/message/message_list"/>
 					<g:layoutBody />
-					<g:if test="${params.action != 'no_search'}">
-						<g:render template="../message/footer" />
-					</g:if>
+					<g:render template="../message/footer" />
 				</div>
 			</div>
 	</body>

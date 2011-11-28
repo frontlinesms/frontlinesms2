@@ -189,7 +189,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#message-detail-content").text() == 'hi alex'
 	}
 	
-	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
+	def "should expand the more option and select a contactName then the link to add contactName is hidden"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to PageSearch
@@ -197,18 +197,13 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor { expandedSearchOption.displayed }
 			contactNameLink.displayed
-			townCustomFieldLink.displayed
+			addTownCustomFieldLink.displayed
 			likeCustomFieldLink.displayed
 			ikCustomFieldLink.displayed
 		when:
 			contactNameLink.click()
 		then:
 			waitFor { contactNameField.displayed }
-			!expandedSearchOption.displayed
-		when:
-			searchMoreOptionLink.click()
-		then:
-			waitFor { expandedSearchOption.displayed }
 			!contactNameLink.displayed
 	}
 
@@ -219,24 +214,14 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchMoreOptionLink.click()
 		then:
 			waitFor { expandedSearchOption.displayed }
-			contactNameLink.displayed
-			townCustomFieldLink.displayed
-			likeCustomFieldLink.displayed
-			ikCustomFieldLink.displayed
 		when:
-			townCustomFieldLink.click()
+			addTownCustomFieldLink.click()
 		then:
-			println 'here'
-			waitFor { townCustomFieldField.displayed }
-		when:
-			searchMoreOptionLink.click()
-		then:
-			println 'there'
-			waitFor { expandedSearchOption.displayed }
-			!townCustomFieldLink.displayed
+			waitFor { townCustomField.displayed }
+			!addTownCustomFieldLink.displayed
 	}
 	
-	def "should show the contact name that have been fillin after a search"(){
+	def "should show the contact name that has been filled in after a search"(){
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
@@ -257,7 +242,7 @@ class SearchViewSpec extends SearchBaseSpec {
 	}
 	
 	
-	def "when clicking on a remove button on a more search option, the field should be hiden and cleared then the link should appear"() {
+	def "when clicking on a remove button on a more search option, the field should be hidden and cleared then the link should appear"() {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
@@ -274,10 +259,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			contactNameField.children('a').click()
 		then:
 			waitFor { !contactNameField.displayed }
-		when:
-			searchMoreOptionLink.click()
-		then:
-			waitFor {contactNameLink.displayed }
+			contactNameLink.displayed
 		when:
 			contactNameLink.click()
 		then:
@@ -290,7 +272,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#message-tab-link").text() == "Messages\n2"
+			$("#inbox-indicator").text() == "2"
 		when:
 			js.refreshMessageCount()
 		then:
