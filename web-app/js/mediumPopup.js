@@ -35,14 +35,11 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 	initializePopup();
 }
 
-function doNothing(data) {
+function createSmartGroup() {
 	$("#submit").attr('disabled', 'disabled');
 	if(validateSmartGroup()) {
 		$(this).find("form").submit();
 		$(this).dialog('close');
-		window.location = window.location;
-		$("#header .flash").remove();
-		$("#header").prepend("<div class='flash message'>" + data + "</div>");
 	} else {
 		$("#submit").removeAttr('disabled');
 		$('.error-panel').show();
