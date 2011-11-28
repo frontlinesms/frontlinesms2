@@ -111,16 +111,16 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
 		then:
-			$("#message-list").displayed
+			waitFor { $("#messages").displayed}
 		when:
 			$("#pollSettings").click()
-			waitFor {!$("#message-list").displayed}
+			waitFor {!$("#messages").displayed}
 		then:
 			$(".response-count").text() == "2 responses total"
 		when:
 			$("#pollSettings").click()
 		then:
-			$("#messages").displayed
+			waitFor { $('#messages').displayed }
 	}
 	
 	def 'no message is selected when a poll is first loaded'() {

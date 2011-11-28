@@ -101,7 +101,6 @@
 						<td></td>
 					</tr>
 				</g:else>
-			</div>
 		</tbody>
 	</table>
 	<g:render template="../message/message_details" />
