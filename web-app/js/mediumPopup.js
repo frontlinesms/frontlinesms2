@@ -85,6 +85,17 @@ function submit() {
 	}
 }
 
+function createSmartGroup() {
+	$("#submit").attr('disabled', 'disabled');
+	if(validateSmartGroup()) {
+		$(this).find("form").submit();
+		$(this).dialog('close');
+	} else {
+		$("#submit").removeAttr('disabled');
+		$('.error-panel').show();
+	}
+}
+
 function prevButton() {
 	for (var i = 1; i <= getCurrentTabIndex(); i++) {
 		var prevTab = getCurrentTabIndex() - i;
