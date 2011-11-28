@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup']}" method='post' onSuccess="createSmartGroup(data);">
+	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup']}" method='post'">
 		<div class="error-panel hide"><div id="error-icon"></div>Please fill in all the required fields.  You may only specify one rule per field.</div>
 		<p class="info">To create a Smart group, select the criteria you need to be matched for contacts for this group</p>
 		<div class="smartgroupname">
@@ -53,23 +53,20 @@
 			ruleMatchText.find('.contains').show();
 		}
 	}
-	
-	function createSmartGroup(data) {
+		
+	function initializePopup() {}
+
+	function createSmartGroup() {
 		$("#submit").attr('disabled', 'disabled');
 		if(validateSmartGroup()) {
 			$(this).find("form").submit();
 			$(this).dialog('close');
-			window.location = window.location;
-			$("#header .flash").remove();
-			$("#header").prepend("<div class='flash message'>" + data + "</div>");
 		} else {
 			$("#submit").removeAttr('disabled');
 			$('.error-panel').show();
 		}
 	}
 	
-	function initializePopup() {}
-
 	function validateSmartGroup() {
 		var valid = true;
 		

@@ -78,12 +78,12 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 			to ConnectionPage
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
 		then:
-			$("#tab-messages").text() == "Messages 0"
+			$("#message-tab-link").text() == "Messages\n0"
 		when:
 			js.refreshMessageCount()
 		then:
 			waitFor{
-				$("#tab-messages").text() == "Messages 1"
+				$("#message-tab-link").text() == "Messages\n1"
 			}
 	}
 	
