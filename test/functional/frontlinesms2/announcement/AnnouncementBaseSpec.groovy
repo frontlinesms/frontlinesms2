@@ -14,7 +14,7 @@ class AnnouncementBaseSpec extends grails.plugin.geb.GebSpec {
 				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3),
 				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started', dateReceived: new Date() - 2),
 				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked', dateReceived: new Date() - 1)].each() {
-			it.status = MessageStatus.INBOUND
+			it.inbound = true
 			it.save(failOnError:true, flush:true)
 		}
 		[Announcement.findByName('New Office').addToMessages(Fmessage.findBySrc('Max')),

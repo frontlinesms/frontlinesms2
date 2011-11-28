@@ -4,8 +4,6 @@ import grails.util.GrailsConfig
 import grails.converters.JSON
 import java.lang.*
 
-import frontlinesms2.MessageStatus
-
 class MessageController {
 	
 	static allowedMethods = [save: "POST", update: "POST",
@@ -75,7 +73,7 @@ class MessageController {
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.count(),
-				failedMessageIds : Fmessage.findAllByStatus(MessageStatus.SEND_FAILED)*.id] << getShowModel()
+				failedMessageIds : Fmessage.findHasFailed(true)*.id] << getShowModel()
 	}
 	
 	def trash = {
@@ -229,7 +227,7 @@ class MessageController {
 					messageInstance.with {
 						messageOwner?.removeFromMessages messageInstance
 						messageOwner = null
-						status = MessageStatus.INBOUND
+						inbound = true
 						messageOwner?.save()
 						save()
 					}

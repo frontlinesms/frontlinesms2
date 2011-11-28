@@ -10,18 +10,16 @@
 				</ul>
 			</li>
 			<li class='section' id="search-filters">
-				<div id='filters'>
-					<g:render template="basic_filters"/>
-					<g:render template="other_filters"/>
-				</div>
+				<g:render template="basic_filters"/>
+				<g:render template="other_filters"/>
 			</li>
-			<li class='section buttons'>
+			<li class='section buttons' id="search-btn" >
 				<ul class='sub-list'>
 					<li>
-						<g:actionSubmit class="btn search" controller="search" action="result" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" />
+						<g:actionSubmit class="btn create" controller="search" action="result" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" />
 					</li>
 					<li>
-						<g:link action="no_search">${message(code: 'default.search.label', default: 'Clear search')}</g:link>
+						<g:link id="clear" action="no_search">${message(code: 'default.search.label', default: 'Clear search')}</g:link>
 					</li>
 				</ul>
 			</li>

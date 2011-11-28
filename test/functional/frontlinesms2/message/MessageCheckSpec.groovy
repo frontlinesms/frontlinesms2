@@ -63,7 +63,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		given:
 			[new Fmessage(src:'Alice', text:'hi Alice'),
 				new Fmessage(src:'Alice', text:'test')].each() {
-					it.status = MessageStatus.INBOUND
+					it.inbound = true
 					it.save(failOnError:true)
 				}
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
@@ -149,7 +149,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			new Fmessage(src: "src", dst: "dst", status: MessageStatus.INBOUND).save(flush: true)
+			new Fmessage(src: "src", dst: "dst", inbound:true).save(flush: true)
 		when:
 			to PageMessageInbox
 			messagesSelect[0].click()

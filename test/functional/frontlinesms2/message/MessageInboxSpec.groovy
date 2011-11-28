@@ -82,8 +82,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = new Fmessage(status:MessageStatus.INBOUND, read: false).save(failOnError:true)
-			def m2 = new Fmessage(status:MessageStatus.INBOUND, read: true).save(failOnError:true)
+			def m1 = new Fmessage(inbound:true, read: false).save(failOnError:true)
+			def m2 = new Fmessage(inbound:true, read: true).save(failOnError:true)
 			assert !m1.read
 			assert m2.read
 		when:
@@ -98,7 +98,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
@@ -109,9 +109,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
 			go "message/inbox/show/$message.id"
 			$('#btn_reply').click()
@@ -148,8 +148,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
 			go "message/inbox/show/$message.id"
 			waitFor{$("#btn_dropdown").displayed}
@@ -198,7 +198,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the address of the contact in the confirm screen"() {
 		given:
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
 			go "message/inbox/show/${message.id}"
@@ -216,7 +216,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def "should show the name of the contact in the confirm screen if contact exists"() {
 		given:
 			new Contact(name: "Tom", primaryMobile: "+254999999").save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', status:MessageStatus.INBOUND).save(failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
 			go "message/inbox/show/${message.id}"
@@ -251,7 +251,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", status: MessageStatus.INBOUND).save(failOnError:true)
+			new Fmessage(text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			go "message/inbox/show/${Fmessage.findByText('hello').id}"
@@ -267,7 +267,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
 			$("#message-tab-link").text() == "Messages\n1"
 		when:

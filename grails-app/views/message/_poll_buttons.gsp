@@ -13,8 +13,5 @@
 	<li><g:select class="more-actions poll-btn btn" name="more-actions" from="${['Export', 'Rename poll', 'Delete poll']}"
 			keys="${['export', 'rename', 'delete']}"
 			noSelection="${['': 'More actions...']}"/></li>
-	<li><button class="poll-btn btn" id="pollSettings">Show poll details</button></li>
 </ul>
-<div class="poll-details" style="display:none">
-	<div id="pollGraph"></div>
-</div>
+<a id='poll-graph-btn' class='show-arrow'>Show poll details</a>

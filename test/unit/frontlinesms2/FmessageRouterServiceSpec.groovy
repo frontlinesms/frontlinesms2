@@ -21,7 +21,7 @@ class FmessageRouterServiceSpec extends UnitSpec {
 		when:
 			service.slip(exchange, null, null)
 		then:
-			Fmessage.findBySrc("src").status == MessageStatus.SEND_FAILED
+			Fmessage.findBySrc("src").hasFailed
 	}
 }
 

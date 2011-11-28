@@ -1,4 +1,3 @@
-<%@ page import="frontlinesms2.MessageStatus" %>
 <g:hiddenField name="sortField" value="${params.sort}"/>
 <g:hiddenField name="checkedMessageList" value=","/>
 <g:hiddenField name="messageSection" value="${messageSection}"/>
@@ -38,7 +37,7 @@
 								params="${params}" id="timestamp-header" defaultOrder="desc" />
 						</g:if>
 						<g:else>
-							<g:sortableColumn class="message-date-cell" property="dateReceived" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+							<g:sortableColumn class="message-date-cell" property="dateSent" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 								params="${params}" id="timestamp-header" defaultOrder="desc" />
 						</g:else>
 			    	</g:else>
@@ -51,7 +50,7 @@
 				</g:if>
 				<g:else>
 					<g:each in="${messageInstanceList}" status="i" var="m">
-						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.id}">
+						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
 							<td class="message-preview-select message-select-cell">
 								<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 								<g:hiddenField name="src-${m.id}" value="${m.src}"/>

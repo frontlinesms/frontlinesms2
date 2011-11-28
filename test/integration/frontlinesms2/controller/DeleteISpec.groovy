@@ -7,8 +7,8 @@ import grails.plugin.spock.*
 class DeleteISpec extends IntegrationSpec {
 	def "deleted polls are not included in the pollInstanceList"() {
 		given:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save()
+			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true).save()
 			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			def messageController = new MessageController()
 			def pollController = new PollController()
@@ -31,8 +31,8 @@ class DeleteISpec extends IntegrationSpec {
 	
 	def "deleted polls are not included in the polls list"() {
 		given:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save()
+			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true).save()
 			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			def pollController = new PollController()
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
@@ -103,8 +103,8 @@ class DeleteISpec extends IntegrationSpec {
 			deleteFolder(f)
 			f.save(flush:true, failOnError:true)
 			
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', status:MessageStatus.INBOUND).save()
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save()
+			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true).save()
 			
 			def m3 = new Fmessage(text:"not in folder", deleted: true).save(flush:true, failOnError:true)
 			deleteMessage(m3)

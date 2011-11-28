@@ -39,7 +39,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def createTestMessages() {
 		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', dateReceived: new Date() - 4, starred: true),
 			new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester', dateReceived: new Date() - 3)].each {
-					it.status = MessageStatus.INBOUND
+					it.inbound = true
 					it.save(failOnError:true, flush:true)
 			}
 	}

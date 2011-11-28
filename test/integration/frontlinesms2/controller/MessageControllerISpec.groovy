@@ -58,10 +58,10 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/20")).save(failOnError: true)
-			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/24")).save(failOnError: true)
-			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/23")).save(failOnError: true)
-			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND, dateReceived:createDate("2011/01/21")).save(failOnError: true)
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/20")).save(failOnError: true)
+			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/24")).save(failOnError: true)
+			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/23")).save(failOnError: true)
+			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			def messageInstanceList = Fmessage.inbox(false, false)
 		then:
@@ -72,7 +72,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
-			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', status:MessageStatus.INBOUND).save(failOnError: true).id
+			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id

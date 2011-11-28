@@ -20,8 +20,8 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	
 	def 'should show list of remaining messages when a message is deleted'() {
 		given:
-			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, archived:true, status:MessageStatus.INBOUND).save(flush:true)
-			new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3, archived:true, status:MessageStatus.INBOUND).save(flush:true)
+			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, archived:true, inbound:true).save(flush:true)
+			new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3, archived:true, inbound:true).save(flush:true)
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 		then:
@@ -35,8 +35,8 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	
 	def '"Archive All" button does not appear in archive section'() {
 		given:
-			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, archived:true, status:MessageStatus.INBOUND).save(flush:true)
-			new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3, archived:true, status:MessageStatus.INBOUND).save(flush:true)
+			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, archived:true, inbound:true).save(flush:true)
+			new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3, archived:true, inbound:true).save(flush:true)
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 			$(".message-select")[0].click()

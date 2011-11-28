@@ -49,4 +49,15 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 			f.archived == true
 			m.archived == true
 	}
+	
+	def "Adding a message to a Folder will cascade to the message's activity value"() {
+		given:
+			def f = new Folder(name:'test').save(failOnError:true)
+			def m = new Fmessage()
+		when:
+			f.addToMessages(m)
+			f.save(failOnError:true)
+		then:
+			m.messageOwner == f
+	}
 }

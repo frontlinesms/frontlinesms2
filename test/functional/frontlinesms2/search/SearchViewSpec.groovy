@@ -12,9 +12,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "clicking on the search button links to the result show page"() {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"sent", dst:"dst", hasSent:true, dateReceived:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"send_pending", dst:"dst", hasPending:true, dateReceived:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"send_failed", dst:"dst", hasFailed:true, dateReceived:new Date()-1).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -97,16 +97,16 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			new Fmessage(src: "src", text:"sent", dst: "dst", status: MessageStatus.SENT, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", status: MessageStatus.SEND_PENDING, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", status: MessageStatus.SEND_FAILED, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", hasSent:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", hasPending:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "dst", hasFailed:true, dateReceived: new Date()-1).save(flush: true)
 			to PageSearch
-			searchFrm.messageStatus = "SENT, SEND_PENDING, SEND_FAILED"
+			searchFrm.messageStatus = "SENT, PENDING, FAILED"
 		when:
 			searchBtn.click()
 		then:
 			waitFor{ searchBtn.displayed }
-			searchFrm.messageStatus == 'SENT, SEND_PENDING, SEND_FAILED'
+			searchFrm.messageStatus == 'SENT, PENDING, FAILED'
 			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
@@ -125,9 +125,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), status: MessageStatus.SENT).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, status: MessageStatus.SEND_PENDING).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, status: MessageStatus.SEND_FAILED).save(flush: true)
+			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), hasSent:true).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, hasPending:true).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, hasFailed:true).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -189,7 +189,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#message-detail-content").text() == 'hi alex'
 	}
 	
-	def "should expand the more option and select a contactName then the link to add contactName is hiden"(){
+	def "should expand the more option and select a contactName then the link to add contactName is hidden"(){
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to PageSearch
@@ -197,18 +197,13 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor { expandedSearchOption.displayed }
 			contactNameLink.displayed
-			townCustomFieldLink.displayed
+			addTownCustomFieldLink.displayed
 			likeCustomFieldLink.displayed
 			ikCustomFieldLink.displayed
 		when:
 			contactNameLink.click()
 		then:
 			waitFor { contactNameField.displayed }
-			!expandedSearchOption.displayed
-		when:
-			searchMoreOptionLink.click()
-		then:
-			waitFor { expandedSearchOption.displayed }
 			!contactNameLink.displayed
 	}
 
@@ -219,24 +214,14 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchMoreOptionLink.click()
 		then:
 			waitFor { expandedSearchOption.displayed }
-			contactNameLink.displayed
-			townCustomFieldLink.displayed
-			likeCustomFieldLink.displayed
-			ikCustomFieldLink.displayed
 		when:
-			townCustomFieldLink.click()
+			addTownCustomFieldLink.click()
 		then:
-			println 'here'
-			waitFor { townCustomFieldField.displayed }
-		when:
-			searchMoreOptionLink.click()
-		then:
-			println 'there'
-			waitFor { expandedSearchOption.displayed }
-			!townCustomFieldLink.displayed
+			waitFor { townCustomField.displayed }
+			!addTownCustomFieldLink.displayed
 	}
 	
-	def "should show the contact name that have been fillin after a search"(){
+	def "should show the contact name that has been filled in after a search"(){
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
@@ -257,7 +242,7 @@ class SearchViewSpec extends SearchBaseSpec {
 	}
 	
 	
-	def "when clicking on a remove button on a more search option, the field should be hiden and cleared then the link should appear"() {
+	def "when clicking on a remove button on a more search option, the field should be hidden and cleared then the link should appear"() {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
@@ -274,10 +259,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			contactNameField.children('a').click()
 		then:
 			waitFor { !contactNameField.displayed }
-		when:
-			searchMoreOptionLink.click()
-		then:
-			waitFor {contactNameLink.displayed }
+			contactNameLink.displayed
 		when:
 			contactNameLink.click()
 		then:
@@ -288,9 +270,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should update message count when in search tab"() {
 		when:
 			to PageSearch
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", status: MessageStatus.INBOUND).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#message-tab-link").text() == "Messages\n2"
+			$("#inbox-indicator").text() == "2"
 		when:
 			js.refreshMessageCount()
 		then:

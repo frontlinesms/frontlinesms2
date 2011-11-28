@@ -7,15 +7,15 @@ class PageSearch extends geb.Page {
 	}
 	static content = {
 		searchFrm { $('#search-details') }
-		searchBtn { $('#search-details .buttons .search') }
+		searchBtn { $('#search-details #search-btn .create') }
 		searchDescription { $('#activity-details') }
 		searchMoreOptionLink { $('#toggle-extra-options')}
 		addTownCustomFieldLink(required:false) { $('#town-add')}
-		townCustomFieldField(required:false) { $('#town-list-item')}
+		townCustomField(required:false) { $('#town-list-item')}
 		likeCustomFieldLink(required:false) { $('#like-add')}
 		ikCustomFieldLink(required:false) { $('#ik-add')}
-		contactNameLink(required:false) {$('#contact-name-add')}
-		contactNameField(required:false) {$('#contact-name-list-item')}
+		contactNameLink(required:false) {$('#contactString-add')}
+		contactNameField(required:false) {$('#contactString-list-item')}
 		expandedSearchOption(required:false) {$('#extra-options-list')}
 	}
 }

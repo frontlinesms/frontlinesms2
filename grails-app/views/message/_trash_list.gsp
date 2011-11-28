@@ -1,7 +1,6 @@
-<%@ page import="frontlinesms2.MessageStatus"%>
 <g:each in="${trashInstanceList}" status="i" var="m">
 	<g:if test="${m.objectType == 'frontlinesms2.Fmessage'}">
-		<tr class="${m.link == messageInstance?'selected':''} ${m.link.read ? 'read':'unread'}  ${m.link.status == MessageStatus.SEND_FAILED ? 'send-failed' : '' }" id="message-${m.link.id}">
+		<tr class="${m.link == messageInstance?'selected':''} ${m.link.read ? 'read':'unread'}  ${m.link.hasFailed? 'send-failed' : '' }" id="message-${m.link.id}">
 			<td>
 				<g:checkBox class="message-select" name="message-select" id="message-select-${m.link.id}" checked="${params.checkedId == m.link.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.link.id});" />
 				<g:hiddenField name="src-${m.link.id}" value="${m.link.src}"/>
@@ -14,7 +13,7 @@
 			</td>
 			<td>
 				<g:link class="displayName-${m.linkId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:if test="${m.link.status != null && m.link.status != MessageStatus.INBOUND}"><span>To:</span></g:if>${m.identifier}
+					<g:if test="${!m.link.inbound}"><span>To:</span></g:if>${m.identifier}
 				</g:link>
 			</td>
 			<td>
