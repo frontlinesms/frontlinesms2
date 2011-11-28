@@ -17,7 +17,7 @@
 			<g:hiddenField name="ownerId" value="${ownerInstance?.id}"></g:hiddenField>
 			<g:hiddenField name="messageId" value="${messageInstance?.id}"></g:hiddenField>
 			<g:hiddenField name="checkedMessageList" value="${params.checkedMessageList}"></g:hiddenField>
-			<g:hiddenField name="viewingArchive" value="${params.viewingArchive}"></g:hiddenField>
+			<g:hiddenField name="viewingArchive" value="${viewingArchive}"></g:hiddenField>
 			<g:if test="${messageSection == 'result'}">
 				<g:hiddenField name="searchId" value="${search?.id}"></g:hiddenField>
 			</g:if>
@@ -33,12 +33,15 @@
 			</g:elseif>	
 			<g:elseif test="${messageSection != 'trash'}">
 					<g:remoteLink class="msg-btn btn" elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, viewingArchive: params.viewingArchive, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard('Reply All', data, 'Send', true);">
-						Reply All
+						Reply all
 					</g:remoteLink>
 					<g:if test="${(messageSection != 'poll' && messageSection != 'folder') && params.controller !='archive'}">
-						<g:actionSubmit class="msg-btn" value="Archive All" id="btn_archive_all" action="archive"/>
+						<g:actionSubmit class="msg-btn" value="Archive all" id="btn_archive_all" action="archive"/>
 					</g:if>
-					<g:actionSubmit class="msg-btn" value="Delete All" id="btn_delete_all" action="delete"/>
+					<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
+						<g:actionSubmit id="unarchive-msg" class="msg-btn" value="Unarchive all" action="unarchive"/>
+					</g:elseif>
+					<g:actionSubmit class="msg-btn" value="Delete all" id="btn_delete_all" action="delete"/>
 			</g:elseif>
 			<g:render template="../message/other_actions"/>
 		</g:form>

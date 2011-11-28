@@ -25,7 +25,7 @@
 			});
 		</g:javascript>
 	</head>
-	<body>
+	<body id="archive-tab">
 		<g:render template="/system_notifications"/>
 		<div id="header">
 			<img id="logo" src="/frontlinesms2/images/logo.png">

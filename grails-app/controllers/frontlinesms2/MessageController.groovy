@@ -175,7 +175,7 @@ class MessageController {
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
 		if (isAjaxRequest()) {
 			render ""
-		}else {
+		} else {
 			println "deleting from archive? ${params.viewingArchive}"
 			if(params.messageSection == 'result') redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 			else if(params.controller == 'archive') redirect(controller:'archive', action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
@@ -203,7 +203,32 @@ class MessageController {
 			if(params.messageSection == 'result') {
 				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 			}
-			else redirect(action: params.messageSection, params: [ownerId: params.ownerId])
+			else redirect(controller: 'message', action: params.messageSection, params: [ownerId: params.ownerId])
+		}
+	}
+	
+	def unarchive = {
+		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
+		def listSize = messageIdList.size();
+		messageIdList.each { id ->
+			withFmessage id, {messageInstance ->
+				if(!messageInstance.messageOwner) {
+					messageInstance.archived = false
+					messageInstance.save(failOnError: true, flush: true)
+				} else {
+					listSize--
+				}
+			}
+		}
+		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
+		if (isAjaxRequest()) {
+			println 'why?'
+			render ""
+		}else {
+			if(params.messageSection == 'result') {
+				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+			}
+			else redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 		}
 	}
 

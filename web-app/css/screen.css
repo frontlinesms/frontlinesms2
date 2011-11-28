@@ -735,7 +735,7 @@ a.tab-link:hover{
 .footer form {
 	margin: 0 17px 0 10px;
 }
-#messages-tab .footer #paging, #search-tab .footer #paging, #status-tab .footer #paging{
+#messages-tab .footer #paging, #search-tab .footer #paging, #status-tab .footer #paging, #archive-tab .footer #paging{
 	float:right;
 	position: relative;
 	right:43%;

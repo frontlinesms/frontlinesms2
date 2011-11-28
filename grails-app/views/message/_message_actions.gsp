@@ -15,6 +15,9 @@
 <g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
 	<g:actionSubmit id="archive-msg" class="msg-btn" value="Archive" action="archive"/>
 </g:if>
+<g:elseif test="${!messageInstance.messageOwner && messageInstance.archived}">
+	<g:actionSubmit id="unarchive-msg" class="msg-btn" value="Unarchive" action="unarchive"/>
+</g:elseif>
 <g:actionSubmit id="delete-msg" class="msg-btn" value="Delete" action="delete"/>
 
 <script>
