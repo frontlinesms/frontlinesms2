@@ -30,7 +30,7 @@ $(function() {
 		}
 		else
 			$(".poll-details").toggle();
-		$('.container').toggle();
+		$('#messages').toggle();
 	});
 });
 </g:javascript>

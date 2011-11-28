@@ -39,7 +39,6 @@ class ArchiveController extends MessageController {
 	}
 	
 	def getShowModel(messageInstanceList) {
-		println "Welcome to archive controller"
 		def model = super.getShowModel(messageInstanceList)
 		model << [viewingArchive: true]
 		return model
