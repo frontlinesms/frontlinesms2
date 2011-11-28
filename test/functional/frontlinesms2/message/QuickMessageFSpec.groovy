@@ -104,7 +104,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			doneButton.click()
 		then:
 			waitFor { $(".flash").displayed }
-			$("a", href: "/frontlinesms2/message/pending").hasClass("send-failed")
+			$("a", text: "Pending").hasClass("send-failed")
 		when:
 			$("a", href: "/frontlinesms2/message/pending").click()
 		then:

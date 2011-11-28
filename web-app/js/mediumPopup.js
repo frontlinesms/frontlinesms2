@@ -35,17 +35,6 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 	initializePopup();
 }
 
-function createSmartGroup() {
-	$("#submit").attr('disabled', 'disabled');
-	if(validateSmartGroup()) {
-		$(this).find("form").submit();
-		$(this).dialog('close');
-	} else {
-		$("#submit").removeAttr('disabled');
-		$('.error-panel').show();
-	}
-}
-
 function chooseActivity() {
 	var activity = $("#activity-list input[checked=checked]").val();
 	var activityUrl = activity + '/create';
