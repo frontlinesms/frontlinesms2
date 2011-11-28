@@ -1046,18 +1046,16 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 	float: left;
     position: relative;
     min-height:25px;
-	padding: 3px 0;
 	width: 26%;
 }
 #btn_reply{
 	float:left;
-	margin: 0 0 0 2%;
     border: none;
     background-image: url('../images/buttons/button_default_2.png');
     background-repeat: repeat-x;
     border-left: 1px solid #6b6b6b;
     border-radius: 2px;
-    padding: 3px 10px;
+    padding: 2px 0;
     height:21px;
     cursor: pointer;
     text-decoration: none;
@@ -1065,22 +1063,33 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
     color: #000;
     background-color: none;
     min-width:80px;
-    width: 10%;
 }
 #btn_dropdown{
-	float:left;
-	margin: 0 2% 0 0;
+	float: right;
+	margin-right:2%;
     border: none;
     background-image: url('../images/buttons/dropdown_default_arrow.png');
     background-repeat: no-repeat;
-    padding: 3px 0;
     height:25px;
     cursor: pointer;
     text-decoration: none;
-    text-align: center;
     color: #000;
     background-color: none;
     min-width: 25px;
+}
+#dropdown_options{
+	position: fixed;
+	top:327px;
+	left:76.6%;
+	float:left;
+	background-color: white;
+	border: 1px solid #6b6b6b;
+	text-align: center;
+	height: 25px;
+	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
+	z-index: 1000;
+	min-width: 80px;
+	width: 6.2%
 }
 #btn_forward{
 	float:left;
@@ -1088,18 +1097,7 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 	width:100%;
 	padding: 3px 0;
 }
-#dropdown_options{
-	float:left;
-	position:relative;
-	top: 25px;
-	right: 29%;
-	background-color: white;
-	border: 1px solid #6b6b6b;
-	width:26%;
-	text-align: center;
-	height: 25px;
-	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
-}
+
 
 /*Contacts*/
 #contacts{

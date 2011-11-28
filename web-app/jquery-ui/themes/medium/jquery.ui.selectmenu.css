@@ -39,9 +39,10 @@
 
 .ui-selectmenu-status {
 	display:block;
-	background-image: url("../../../images/buttons/button_default_2.png");
-	background-repeat: repeat-x;
+	background-image: url("../../../images/buttons/dropdown_default.png");
+	background-repeat: no-repeat;
 	background-position: 0% 0%;
+	background-size: 100% 25px;
 	border-left: 1px solid #6b6b6b;
 	border-radius: 2px;
 	height: 25px;
