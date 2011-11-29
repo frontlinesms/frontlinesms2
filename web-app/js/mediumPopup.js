@@ -123,19 +123,13 @@ function cancel() {
 function validateTabSelections() {
 	$('#tabs').tabs({select: function(event, ui) {
 		if(ui.index > getCurrentTabIndex()) {
-			for(i = 0; i < ui.index; i++) {
-				if(!tabValidates($("#tabs").find('.ui-tabs-panel').eq(i))) {
-					$('#tabs').tabs('select', i);
-					$('.error-panel').show();
-					return false;
-				}
-			}
+			validateAllPreviousTabs(ui.index);
 			var thisTabValidates = tabValidates(getCurrentTab());
 			if(thisTabValidates) {
 				changeButtons(getButtonToTabMappings(), ui.index)
 				if(thisTabValidates && $('.error-panel'))
 					$('.error-panel').hide();
-				$("#tab-" + getCurrentTabIndex() + ".ui-tabs-panel").find('input', 'textarea', 'textfield').first().focus();
+				$(ui.panel).find('input', 'textarea', 'textfield').first().focus();
 			} else {
 				$('.error-panel').show();
 			}
@@ -149,6 +143,16 @@ function validateTabSelections() {
 
 function tabValidates(tab) {
 	return tab.contentWidget('validate');
+}
+
+function validateAllPreviousTabs(selectedTabIndex) {
+	for(i = 0; i < selectedTabIndex; i++) {
+		if(!tabValidates($("#tabs").find('.ui-tabs-panel').eq(i))) {
+			$('#tabs').tabs('select', i);
+			$('.error-panel').show();
+			return false;
+		}
+	}
 }
 
 function changeButtons(buttonToTabMappings, tabIndex) {

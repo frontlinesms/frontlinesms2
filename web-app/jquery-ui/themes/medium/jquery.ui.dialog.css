@@ -31,6 +31,7 @@
 	border-bottom: 1px solid #9E9E9E;
 	padding: 3px 30px;
 	text-align: center;
+	min-height: 16px;
 }
 
 .ui-dialog .ui-dialog-titlebar { 
