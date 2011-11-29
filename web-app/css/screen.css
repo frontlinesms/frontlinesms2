@@ -1082,6 +1082,12 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
     background-color: none;
     min-width:80px;
 }
+#btn_reply:hover{
+	 background-image: url('../images/buttons/button_hover_part.png');
+}
+#btn_reply:active{
+	 background-image: url('../images/buttons/button_pressed_part.png');
+}
 #btn_dropdown{
 	float: left;
 	margin-right:2%;
@@ -1095,6 +1101,12 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
     color: #000;
     background-color: none;
     min-width: 25px;
+}
+#btn_dropdown:hover{
+    background-image: url('../images/buttons/dropdown_hover_arrow.png');
+}
+#btn_dropdown:active{
+    background-image: url('../images/buttons/dropdown_pressed_arrow.png');
 }
 #dropdown_options{
 	position: fixed;
@@ -1167,10 +1179,14 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
     background-color: #e5eff3;
     
 }
+.contact-select{
+	float: left;
+	margin: 3px 17px;
+}
 #contact-list .contact-name{
-    padding: 5px;
     text-decoration: none;
     color: #333;
+    display:block;
 }
 
 #contact-editor{

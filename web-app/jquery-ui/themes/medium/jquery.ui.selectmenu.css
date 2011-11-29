@@ -47,3 +47,9 @@
 	border-radius: 2px;
 	height: 25px;
 }
+.ui-selectmenu-status:hover{
+	background-image: url("../../../images/buttons/dropdown_hover.png");
+}
+.ui-selectmenu-status:active{
+	background-image: url("../../../images/buttons/dropdown_pressed.png");
+}
