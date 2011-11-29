@@ -272,11 +272,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#inbox-indicator").text() == "2"
+			$("#message-tab-link").text() == "Messages\n2"
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{ $("#inbox-indicator").text == "3" }
+			waitFor { $("#message-tab-link").text() == "Messages\n3" }
 	}
 	
 }
