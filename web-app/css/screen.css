@@ -1047,6 +1047,7 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
     position: relative;
     min-height:25px;
 	width: 26%;
+	min-width: 110px;
 }
 #btn_reply{
 	float:left;
@@ -1065,11 +1066,12 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
     min-width:80px;
 }
 #btn_dropdown{
-	float: right;
+	float: left;
 	margin-right:2%;
     border: none;
     background-image: url('../images/buttons/dropdown_default_arrow.png');
     background-repeat: no-repeat;
+   	border-left: 1px solid #9e9e9e;
     height:25px;
     cursor: pointer;
     text-decoration: none;
@@ -1090,6 +1092,24 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 	z-index: 1000;
 	min-width: 80px;
 	width: 6.2%
+}
+.tall-header #dropdown_options{
+	position: fixed;
+	top:477px;
+	left:76.6%;
+	float:left;
+	background-color: white;
+	border: 1px solid #6b6b6b;
+	text-align: center;
+	height: 25px;
+	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
+	z-index: 1000;
+	min-width: 80px;
+	width: 6.2%
+}
+#dropdown_options:hover{
+	background-color: #e5eff3;
+	cursor: pointer;
 }
 #btn_forward{
 	float:left;
