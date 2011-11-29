@@ -107,7 +107,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("a", href: "/frontlinesms2/message/pending").click()
 		then:
-			waitFor{ title == "Pending" }
+			waitFor{ $('title').text() == "Pending" }
 			$("a", href: "/frontlinesms2/message/pending").hasClass("send-failed")
 			$("#message-list tbody tr").size() == 1
 			$("#message-list tbody tr")[0].hasClass("send-failed")
@@ -209,7 +209,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}
 	
-	@spock.lang.IgnoreRest
 	def "should not deselect group when a non-member contact is unchecked"() {
 		setup:
 			createData()
