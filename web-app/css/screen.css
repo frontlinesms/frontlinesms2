@@ -812,7 +812,7 @@ a.tab-link:active{
     margin: 0;
     padding: 0;
 }
-#messages{
+#messages, #folders, #activities{
     padding: 0;
     margin: 0;
     background-image: url("../images/menubar.png");
@@ -832,6 +832,14 @@ a.tab-link:active{
     margin-top: 40px;
     width:75%;
 }
+ #folder-list, #activity-list{
+ 	float:left;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 40px;
+	width: 100%;
+ }
 .tall-header #message-list{
     float:left;
     list-style: none;
@@ -841,7 +849,7 @@ a.tab-link:active{
     width:75%;
 }
 
-#message-list thead{
+#message-list thead, #folder-list thead, #activity-list thead{
     position: fixed;
     top: 128px;
     width: 100%;
@@ -864,31 +872,40 @@ a.tab-link:active{
     width: 58%;
     padding: 90px 0 45px 0;
 }
+#folder-list tbody, #activity-list tbody{
+	position: absolute;
+    margin-top: 25px;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+    padding: 90px 0 45px 0;
+}
 
-#message-list tr{
+#message-list tr, #folder-list tr, #activity-list tr{
     height: 28px;
     margin: 0;
     border: none;
     text-align: left;
     width: 100%;
+    display:block;
 }
-#message-list .message-select-cell{
+#message-list .message-select-cell, #folder-list .folder-message-count-cell, #activity-list .activity-message-count-cell{
 	min-width: 30px;
 	padding-left: 17px;
 }
 #message-list .message-star-cell{
 	min-width: 15px;
 }
-#message-list .message-sender-cell{
+#message-list .message-sender-cell, #activity-list .activity-type-cell{
 	min-width: 120px;
 	width: 125px;
 	padding-right: 10px;
 }
-#message-list .message-text-cell{
+#message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
 	min-width: 300px;
 	width: 455px;
 }
-#message-list .message-date-cell{
+#message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
 	min-width: 300px;
 	width: 300px;
 	padding-right: 10px;
@@ -898,7 +915,7 @@ a.tab-link:active{
     text-decoration: inherit;
     color: inherit;
 }
-#message-list .message-preview:hover{
+#message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
     background-color: #e5eff3;
 }
 
@@ -934,7 +951,7 @@ a.tab-link:active{
 #message-list span{
     margin: 5px;
 }
-#message-list a{
+#message-list a, #folder-list a, #activity-list a{
     display: block;
 }
 #message-sorter{

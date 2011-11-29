@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</g:if>
-	<g:if test="${params.controller != 'archive' && messageSection != 'pending'}">
+	<g:if test="${messageSection != 'pending'}">
 		<div id='move-message' class='dropdown'>
 			<select class="extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction()">
 				<option value="na" class="na">Move message to...</option>
