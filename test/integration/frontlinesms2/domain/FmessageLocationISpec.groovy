@@ -35,7 +35,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			println(inboxMessages.list().collect { [it.id,it.dateReceived,it.src] })			
 		then:
 			Fmessage.inbox().count() == 4
-			Fmessage.inbox().list(max:3, offset:0)*.src == ["9544426444", "Alice", 'Bob']
+			Fmessage.inbox().list(max:3, offset:0)*.src == ["+254778899", "9544426444", 'Bob']
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {

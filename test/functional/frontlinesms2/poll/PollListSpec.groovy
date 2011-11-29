@@ -44,10 +44,9 @@ class PollListSpec extends PollBaseSpec {
 			statsNums == ['2', '0', '0']
 			statsPercents == ['(100%)', '(0%)', '(0%)']
 		when:
-			$("#pollSettings").click()
-			waitFor {$('#pollGraph svg').displayed}
+			$("#poll-graph-btn").click()
 		then:
-			$('#pollGraph svg')
+			waitFor {$('#pollGraph').displayed}
 	}
 
 	def 'selected poll should be highlighted'() {
@@ -113,12 +112,12 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			waitFor { $("#messages").displayed}
 		when:
-			$("#pollSettings").click()
-			waitFor {!$("#messages").displayed}
+			$("#poll-graph-btn").click()
 		then:
+			waitFor {!$("#messages").displayed}
 			$(".response-count").text() == "2 responses total"
 		when:
-			$("#pollSettings").click()
+			$("#poll-graph-btn").click()
 		then:
 			waitFor { $('#messages').displayed }
 	}
