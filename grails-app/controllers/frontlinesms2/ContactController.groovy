@@ -218,6 +218,9 @@ class ContactController {
 				def redirectParams = [contactId:contactInstance.id]
 				if(params.groupId) redirectParams << [groupId: params.groupId]
 			}
+			else {
+				flash.message = "Contact failed to save!"
+			}
 		}
 	}
 }

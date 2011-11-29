@@ -123,13 +123,20 @@ function cancel() {
 function validateTabSelections() {
 	$('#tabs').tabs({select: function(event, ui) {
 		if(ui.index > getCurrentTabIndex()) {
+			for(i = 0; i < ui.index; i++) {
+				if(!tabValidates($("#tabs").find('.ui-tabs-panel').eq(i))) {
+					$('#tabs').tabs('select', i);
+					$('.error-panel').show();
+					return false;
+				}
+			}
 			var thisTabValidates = tabValidates(getCurrentTab());
 			if(thisTabValidates) {
 				changeButtons(getButtonToTabMappings(), ui.index)
 				if(thisTabValidates && $('.error-panel'))
 					$('.error-panel').hide();
 				$("#tab-" + getCurrentTabIndex() + ".ui-tabs-panel").find('input', 'textarea', 'textfield').first().focus();
-			} else if(!thisTabValidates) {
+			} else {
 				$('.error-panel').show();
 			}
 			return thisTabValidates;
@@ -146,20 +153,18 @@ function tabValidates(tab) {
 
 function changeButtons(buttonToTabMappings, tabIndex) {
 	$.each(buttonToTabMappings, function(key, value) {
-		if (value.indexOf(tabIndex) != -1) {
+		if (value.indexOf(tabIndex) != -1)
 			$(".ui-dialog-buttonpane #" + key).show()
-		} else {
+		else
 			$(".ui-dialog-buttonpane #" + key).hide()
-		}
 	});
 }
 
 function range(first, last) {
-	var a = []
-	for (var i = first; i <= last; i++) {
-		a.push(i)
-	}
-	return a
+	var a = [];
+	for (var i = first; i <= last; i++)
+		a.push(i);
+	return a;
 }
 
 function makeTabsUnfocusable() {
@@ -182,7 +187,7 @@ function getButtonToTabMappings() {
 }
 
 function getCurrentTab() {
-	var selected = $("#tabs").tabs( "option", "selected" );
+	var selected = $("#tabs").tabs("option", "selected");
 	return $("#tabs").find('.ui-tabs-panel').eq(selected)
 }
 
