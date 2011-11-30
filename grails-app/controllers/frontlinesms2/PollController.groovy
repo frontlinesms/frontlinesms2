@@ -58,7 +58,7 @@ class PollController {
 		poll.unarchivePoll()
 		poll.save()
 		flash.message = "Poll unarchived successfully!"
-		redirect(controller: "archive", action: "pollList", params:[viewingArchive: true])
+		redirect(controller: "archive", action: "activityList", params:[viewingArchive: true])
 	}
 	
 	def confirmDelete = {
