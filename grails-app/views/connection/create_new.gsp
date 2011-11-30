@@ -27,3 +27,42 @@
 		<g:render template="confirm"/>
 	</g:form>
 </div>
+<script>
+function initializePopup() {
+	$("#tabs").bind("tabsshow", function(event, ui) {
+		updateConfirmationMessage();
+	});
+}
+
+function updateConfirmationMessage() {
+	var type = $("#type-list").find("input[checked=checked]").val();
+	var name = $('#' + type + '-form #name').val();
+	if(type == 'smslib') {
+		$("#email-confirm").hide();
+		$("#smslib-confirm").show();
+		var port = $('#' + type + '-form #port').val();
+		var baud = $('#' + type + '-form #baud').val();
+		var pin = $('#' + type + '-form #pin').val();
+		$("#confirm-name").text(name);
+		$("#confirm-type").text('smslib');
+		$("#confirm-port").text(port);
+		$("#confirm-baud").text(baud);
+		$("#confirm-pin").text(pin);
+		
+	} else if (type == 'email') {
+		$("#smslib-confirm").hide();
+		$("#email-confirm").show();
+		var receiveProtocol = $('#' + type + '-form #receiveProtocol').val();
+		var serverName = $('#' + type + '-form #serverName').val();
+		var serverPort = $('#' + type + '-form #serverPort').val();
+		var username = $('#' + type + '-form #username').val();
+		var password = $('#' + type + '-form #password').val();
+		$("#confirm-name").text(name);
+		$("#confirm-type").text('email');
+		$("#confirm-protocol").text(receiveProtocol);
+		$("#confirm-server-name").text(serverName);
+		$("#confirm-server-port").text(serverPort);
+		$("#confirm-username").text(username);
+	}
+}
+</script>
