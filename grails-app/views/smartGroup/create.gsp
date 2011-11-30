@@ -56,17 +56,6 @@
 		
 	function initializePopup() {}
 
-	function createSmartGroup() {
-		$("#submit").attr('disabled', 'disabled');
-		if(validateSmartGroup()) {
-			$(this).find("form").submit();
-			$(this).dialog('close');
-		} else {
-			$("#submit").removeAttr('disabled');
-			$('.error-panel').show();
-		}
-	}
-	
 	function validateSmartGroup() {
 		var valid = true;
 		

@@ -22,7 +22,7 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
+			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['To:dst1', 'To:dst2'])
 	}
 	
 	def "should not contain export button" () {

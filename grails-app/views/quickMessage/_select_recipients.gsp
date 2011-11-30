@@ -65,7 +65,8 @@
 		if (!($(this).is(":checked"))) {
 			var contactNumber = this.value
 			$.each(groupAndMembers, function(key, value) {
-				if (jQuery.inArray(contactNumber, groupAndMembers[key] > -1))
+				var partOfGroup = jQuery.inArray(contactNumber, groupAndMembers[key]) > -1 ? true : false 
+				if (partOfGroup)
 					findInputWithValue(key).attr('checked', false);
 			});
 		}
