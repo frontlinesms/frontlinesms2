@@ -1,7 +1,5 @@
 <div class="section-header" id="contact-header">
 	<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
-		<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
-		<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
 		<h3>${contactsSection.name} (${contactInstanceTotal})</h3>
 		<ul class="section-header-buttons button-list">
 			<li>
