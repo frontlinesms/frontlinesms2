@@ -20,4 +20,17 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 		then:
 			model.contactList == [contact3, contact2]
 	}
+	
+	def "list of smart groups should be included in the group list"() {
+		given:
+			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
+		when:
+			def model = controller.create()
+		then:
+			model.groupList.collect { k,v ->
+				k == "English numbers"
+				v == []			
+				}
+				
+	}
 }
