@@ -8,6 +8,6 @@ class PageArchiveFolder extends PageArchive {
 	}
 	
 	static content = {
-		folderNames { $(".folder-name") }
+		folderNames { $("folder-name-cell a") }
 	}
 }

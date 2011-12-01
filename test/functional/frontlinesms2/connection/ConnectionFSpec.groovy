@@ -8,7 +8,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 			to ConnectionPage
 		then:
 			lstConnections.tag() == 'div'
-			lstConnections.text() == 'You have no connections configured.'
+			lstConnections.text().startsWith() == 'You have no connections configured.'
 	}
 	
 	def 'There is a Not Connected label shown for inactive connection'() {
@@ -16,7 +16,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 			createTestConnection()
 			to ConnectionPage
 		then:
-			$('.con-status')[0].text() == "Not connected"
+			$('connection-status')[0].text() == "Not connected"
 	}
 	
 	def 'should show "create route" button for inactive connection '() {

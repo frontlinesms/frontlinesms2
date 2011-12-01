@@ -72,7 +72,7 @@ a {
     max-height: 80px;
     border-top: 3px solid #d8aec6;
     width: 100%;
-    z-index: 2;
+    z-index: 100;
 }
 
 #logo{
@@ -208,7 +208,6 @@ a.tab-link:active{
     top: -3px;
     margin: 0;
     padding: 0;
-
 }
 
 #secondary-nav a{
@@ -220,6 +219,7 @@ a.tab-link:active{
 #secondary-nav li{
     margin: 0;
     padding: 0;
+    background-color: #e2e2e2;
 }
 #secondary-nav a:hover{
     background-color:#e0e0e0;
@@ -368,17 +368,17 @@ a.tab-link:active{
     padding-right: 30px;
 }
 
-#connection-status #connections tr{
+#connection-status #stored-connections tr{
 	height: 50px;
 }
-#connection-status #connections .name{
+#connection-status #stored-connections .name{
 	width: 300px;
 	padding: 0 30px 20px 30px;
 	background-image: url('../images/icons/status_green.png');
     background-repeat: no-repeat;
     background-position: left middle;
 }
-#connection-status #connections .not{
+#connection-status #stored-connections .not{
 	background-image: url('../images/icons/status_red.png');
 	background-repeat: no-repeat;
     background-position: left middle;
@@ -604,7 +604,7 @@ a.tab-link:active{
 
 .section-header {
     position: fixed;
-    z-index: 4;
+    z-index: 10;
     width: 83%;
     background-color: #fff;
     top: 83px;
@@ -872,7 +872,7 @@ a.tab-link:active{
 }
 
 #message-list tr, #folder-list tr, #activity-list tr{
-    height: 28px;
+    min-height: 28px;
     margin: 0;
     border: none;
     text-align: left;
