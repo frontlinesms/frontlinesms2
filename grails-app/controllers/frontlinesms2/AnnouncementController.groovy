@@ -11,10 +11,11 @@ class AnnouncementController {
 	}
 	
 	def create = {
+		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: Contact.list(),
-			groupList: Group.getGroupDetails()]
+			groupList:groupList]
 	}
-
+	
 	def save = {
 		def announcementInstance = new Announcement()
 		announcementInstance.properties = params
