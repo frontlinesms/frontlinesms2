@@ -21,7 +21,7 @@ class ExportController {
 	
     def index = { redirect(action:'wizard', params: params) }
 	
-	def wizard = {
+	def messageWizard = {
 		[messageSection: params.messageSection,
 				searchId: params.searchId,
 				ownerId: params.ownerId,
@@ -32,7 +32,7 @@ class ExportController {
 	}
 	
 	//FIXME need to notify the user when the default case is return.
-	def downloadReport = {
+	def downloadMessageReport = {
 		def messageSection = params.messageSection
 		def messageInstanceList
 		switch(messageSection) {
@@ -61,22 +61,55 @@ class ExportController {
 				messageInstanceList = Fmessage.findAll()
 				break
 		}
-		generateReport(messageInstanceList)
+		generateMessageReport(messageInstanceList)
 	}
 	
-	private def generateReport(messageInstanceList) {
+	def contactWizard = {
+		[groupId: params.groupId, 
+			contactsSection: params.contactsSection,
+			reportName:getGroupDescription()]
+	}
+	
+	def downloadContactReport = {
+		def groupId = params.groupId
+		def contactInstanceList
+		if(!params.groupId)
+			contactInstanceList = Contact.getAll()
+		else if(contactsSection == 'group')
+			contactInstanceList = GroupMembership(groupId)
+		else if(contactsSection == 'smartGroup')
+			contactInstanceList = SmartGroup.get(params.groupId).getMembers()
+		generateContactReport(contactInstanceList)
+	}
+	
+	private def generateMessageReport(messageInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
 		List fields = ["id", "src", "dst", "text", "dateSent", "dateReceived"]
 		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateSent":"Date Sent", "dateReceived":"Date Received"]
 		Map parameters = [title: "FrontlineSMS Message Export"]
-		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Export_${formatedTime}.${params.format}")
+		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try{
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:],parameters)
 		} catch(Exception e){
 			render(text: "Error creating report")
 		}
 		[messageInstanceList: messageInstanceList]
+	}
+	
+	private def generateContactReport(contactInstanceList) {
+		def currentTime = new Date()
+		def formatedTime = dateToString(currentTime)
+		List fields = ["id", "name", "primaryMobile", "secondaryMobile", "email", "notes"]
+		Map labels = ["id":"DatabaseID", "name":"Name", "primaryMobile":"Primary Mobile", "secondaryMobile":"Secondary Mobile", "email":"Email", "notes":"Notes"]
+		Map parameters = [title: "FrontlineSMS Contact Export"]
+		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
+		try{
+			exportService.export(params.format, response.outputStream, contactInstanceList, fields, labels, [:],parameters)
+		} catch(Exception e){
+			render(text: "Error creating report")
+		}
+		[contactInstanceList: contactInstanceList]
 	}
 	
 	private def getActivityDescription() {
@@ -94,6 +127,24 @@ class ExportController {
 			}
 		} else {
 			String name = "${params.messageSection} (${params.messageTotal} messages)"
+		}
+	}
+	
+	private def getGroupDescription() {
+		if(params.groupId){
+			String name
+			 switch(params.contactsSection) {
+				case 'group':
+					def group = Group.findById(params.groupId)
+					name = "${group.name} group (${group.getMembers().count()} contacts)"
+					break
+				case 'smartGroup':
+					def smartGroup = Smartgroup.findById(params.groupId)
+					name = "${smartGroup.name} smart group (${smartGroup.getMembers().count()} contacts)"
+					break
+			}
+		} else {
+			String name = "All contacts (${params.contactTotal} contacts)"
 		}
 	}
 

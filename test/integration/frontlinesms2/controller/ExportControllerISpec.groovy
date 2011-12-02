@@ -10,7 +10,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new ExportController()
 	}
 
-	def "should export messages from a poll"() {
+	def "can export messages from a poll"() {
 		given:
 			Poll.createPoll(title: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona').save(flush: true)
 			[PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob')),
@@ -18,21 +18,30 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.messageSection = "poll"
 			controller.params.ownerId = Poll.findByTitle("Football Teams").id
 		when:
-			def result = controller.downloadReport()
+			def result = controller.downloadMessageReport()
 		then:
 			result['messageInstanceList'].size() == 2
 	}
 
 
-	def "should export messages from a folder"() {
+	def "can export messages from a folder"() {
 		given:
 			createTestFolders()
 			controller.params.messageSection = "folder"
 			controller.params.ownerId = Folder.findByName("Work").id
 		when:
-			def result = controller.downloadReport()
+			def result = controller.downloadMessageReport()
 		then:
 			result['messageInstanceList'].size() == 2
+	}
+	
+	def "can export all contacts"() {
+		given:
+			createTestContacts()
+		when:
+			def result = controller.downloadContactReport()
+		then:
+			result['contactInstanceList'].size() == 3
 	}
 
 
@@ -54,5 +63,18 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		workFolder.save(flush: true)
 	}
 
-
+	def createTestContacts() {
+		[new Contact(name:'Gimli'),
+			new Contact(name: "Borthon"),
+			new Contact(name: "Legolas")].each {
+				it.save(failOnError: true, flush: true)
+		}
+	}
+	
+	def createTestGroups() {
+		def dwarves = new Group(name: 'Dwarves').save(flush: true)
+		dwarves.addToMembers(Contact.findByName('Gimli'))
+		dwarves.addToMembers(Contact.findByName('Borthon'))
+		dwarves.save(failOnError: true, flush: true)
+	}
 }

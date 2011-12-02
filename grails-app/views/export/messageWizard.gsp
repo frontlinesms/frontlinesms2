@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form name="export-form" controller="export" action="downloadReport">
+	<g:form name="export-form" controller="export" action="downloadMessageReport">
 		<g:hiddenField name="messageSection" value="${messageSection}" />
 		<g:hiddenField name="ownerId" value="${ownerId}" />
 		<g:hiddenField name="searchId" value="${searchId}" />
