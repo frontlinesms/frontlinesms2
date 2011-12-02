@@ -41,6 +41,10 @@ class UrlMappings {
 		"/archive/poll/$ownerId"(controller:'archive', action:'poll') {}
 		"/archive/poll/$ownerId/show/$messageId"(controller:'archive', action:'poll') {}
 		
+		"/archive/announcement"(controller:'archive', action:'activityList') {}
+		"/archive/announcement/$ownerId"(controller:'archive', action:'announcement') {}
+		"/archive/announcement/$ownerId/show/$messageId"(controller:'archive', action:'announcement') {}
+		
 		"/archive/folder"(controller:'archive', action:'folderList') {}
 		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
 		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
