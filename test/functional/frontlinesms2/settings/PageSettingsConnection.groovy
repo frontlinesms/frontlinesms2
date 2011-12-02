@@ -5,7 +5,7 @@ import frontlinesms2.*
 class ConnectionPage extends geb.Page {
 	static url = 'settings/connections'
 	static content = {
-		btnNewConnection { $('#btnNewConnection a') }
-		connectionNames { $('.con-name') }
+		btnNewConnection { $('#create-connection-btn a') }
+		connectionNames { $('connection-header h2') }
 	}
 }

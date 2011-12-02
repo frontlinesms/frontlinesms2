@@ -8,8 +8,9 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 		given:
 			createTestConnections()
 		when:
-			to ConnectionPage
+			go 'settings/connections'
 		then:
+			at PageSettingsConnection
 			btnNewConnection.text() == "Add new connection"
 			assert btnNewConnection.getAttribute("href") == "/frontlinesms2/connection/create_new"
 	}
@@ -19,8 +20,9 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 		given:
 			createTestConnections()
 		when:
-			to ConnectionPage
+			go 'settings/connections'
 		then:
+			at PageSettingsConnection
 			connectionNames != null
 			connectionNames.find('a')*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
 	}

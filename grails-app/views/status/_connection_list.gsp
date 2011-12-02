@@ -5,7 +5,7 @@
 		<div id='connections'>You have no connections configured.</div>
 	</g:if>
 	<g:else>
-		<table id='connections'>
+		<table id='stored-connections'>
 			<g:each in="${connectionInstanceList}" status="i" var="c">
 				<tr id="connection-${c.id}">
 					<td class="name ${c.status}">

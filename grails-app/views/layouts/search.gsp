@@ -38,14 +38,14 @@
 			<g:render template="/tabs"/>
 			<g:render template="/flash"/>
 		</div>
-	        <div id="main">
-				<g:render template="menu"/>
-				<div id="content">
-					<g:render template="/search/header" />
-					<g:render template="/message/message_list"/>
-					<g:layoutBody />
-					<g:render template="../message/footer" />
-				</div>
+        <div id="main">
+			<g:render template="menu"/>
+			<div id="content">
+				<g:render template="/search/header" />
+				<g:render template="/message/message_list"/>
+				<g:layoutBody />
+				<g:render template="../message/footer" />
 			</div>
+		</div>
 	</body>
 </html>

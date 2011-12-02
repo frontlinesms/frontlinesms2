@@ -1,6 +1,11 @@
 <div class="footer">
 	<form method="get">
-		<input id="contact-search" class="default-text-input" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' + this.value + \'&groupId=\'+getGroupId()')}" value="${params.searchString?:'Search'}" defaultValue='Search' />
+		<g:if test="${contactsSection instanceof frontlinesms2.SmartGroup}">
+			<input id="contact-search" class="default-text-input" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' +this.value+ \'&smartGroupId=\' +getGroupId()')}" value="${params.searchString?:'Search'}" defaultValue='Search' />
+		</g:if>
+		<g:else>
+			<input id="contact-search" class="default-text-input" type="text" onkeyup="${remoteFunction(action:'search', onSuccess: 'updateContacts(data)', params:'\'searchString=\' +this.value+ \'&groupId=\' +getGroupId()')}" value="${params.searchString?:'Search'}" defaultValue='Search' />
+		</g:else>
 	</form>
 	<div id="paging">
 		<g:if test="${contactsSection instanceof frontlinesms2.Group}">

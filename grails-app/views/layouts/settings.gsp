@@ -16,26 +16,21 @@
 		<g:javascript src="jquery.timers.js"/>
 		<g:javascript src="application.js"/>
 	</head>
-	<body>
+	<body id="settings-tab">
 		<g:render template="/system_notifications"/>
-		<div id="container">
+		<div id="header">
+			<img src='${resource(dir:'images',file:'logo.png')}' id="logo"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
 	        <g:render template="/flash"/>
-	        <div class="main">
-				<g:render template="menu"/>
-				<div class="content">
-					<div class="content-header">
-						<div class="settings-title">
-							<h2>Settings</h2>
-						</div>
-					</div>
-					<div class="content-body">
-						<g:layoutBody />
-					</div>
-					<div class="content-footer">
-					</div>
+		</div>
+        <div id="main">
+			<g:render template="menu"/>
+			<div id="content">
+				<div class="section-header">
+					<h3>Settings</h3>
 				</div>
+				<g:layoutBody />
 			</div>
 		</div>
 	</body>

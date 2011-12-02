@@ -46,35 +46,6 @@ class ContactController {
 				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
-	def update = {
-		withContact { contactInstance ->
-			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
-				def version = params.version.toLong()
-				if (contactInstance.version > version) {
-					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-					render(view: "show", model: [contactInstance: contactInstance])
-					return
-				}
-			}
-			contactInstance.properties = params
-			updateData(contactInstance)
-			render(view:'show', model:show(contactInstance))
-		}
-	}
-	
-	def updateMultipleContacts = {
-		if(params.checkedContactList) {
-			def contactIds = params.checkedContactList.tokenize(',').unique()
-			contactIds.each { id ->
-				withContact id, { contactInstance ->
-					updateData(contactInstance)
-				}
-			}
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
-			render(view:'show', model: show())
-		}
-	}
-
 	def createContact = {
 		render view:'show', model: [contactInstance: new Contact(params),
 				contactFieldInstanceList: [],
@@ -89,11 +60,46 @@ class ContactController {
 	}
 
 	def saveContact = {
-		def contactInstance = new Contact(params)
+		def contactInstance = Contact.get(params.contactId)?:new Contact()
 		contactInstance.properties = params
-		updateData(contactInstance)
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
-		redirect(action:'show')
+		if(attemptSave(contactInstance)) {
+			parseContactFields(contactInstance)
+			if(attemptSave(contactInstance))
+				redirect(action:'show', params:[contactId:contactInstance.id])
+		} else {
+			flash.message = "Failed to save contact because $contactInstance.errors"
+			render view: 'show', params: params
+		}
+	}
+	
+	def update = {
+		withContact { contactInstance ->
+			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
+				def version = params.version.toLong()
+				if (contactInstance.version > version) {
+					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
+					render(view: "show", model: [contactInstance: contactInstance])
+					return
+				}
+			}
+			contactInstance.properties = params
+			parseContactFields(contactInstance)
+			attemptSave(contactInstance)
+			render(view:'show', model:show(contactInstance))
+		}
+	}
+	
+	def updateMultipleContacts = {
+		if(params.checkedContactList) {
+			def contactIds = params.checkedContactList.tokenize(',').unique()
+			contactIds.each { id ->
+				withContact id, { contactInstance ->
+					parseContactFields(contactInstance)
+					attemptSave(contactInstance)
+				}
+			}
+			render(view:'show', model: show())
+		}
 	}
 	
 	def confirmDelete = {
@@ -149,15 +155,29 @@ class ContactController {
 		render template: 'search_results', model: contactSearchService.contactList(params)
 	}
 	
+	private def attemptSave(contactInstance) {
+		if(contactInstance.save(flush:true)) {
+			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
+			def redirectParams = [contactId: contactInstance.id]
+			if(params.groupId) redirectParams << [groupId: params.groupId]
+			return true
+		}
+		return false
+	}
+	
 	private def getPageTitle() {
 		if(params.smartGroupId) SmartGroup.get(params.smartGroupId)?.name
 		else null
 	}
 	
-	private def withContact(contactId=params.contactId, Closure c) {
+	private def withContact(contactId = params.contactId, Closure c) {
 		def contactInstance = Contact.get(contactId)
-		if (contactInstance) c contactInstance
-		else flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+		if(contactInstance) {
+			c.call(contactInstance)
+		} else {
+			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+			c.call(new Contact())
+		}
 	}
 	
 	private def getSharedGroupList(Collection groupList) {
@@ -175,52 +195,53 @@ class ContactController {
 		nonSharedGroupList
 	}
 
-	private def updateData(Contact contactInstance) {
-		// Check for errors in groupsToAdd and groupsToRemove
+	private def parseContactFields(Contact contactInstance) {
+		updateCustomFields(contactInstance)
+		updateGroups(contactInstance)
+		return contactInstance.stripNumberFields()
+	}
+	
+	private def updateGroups(Contact contactInstance) {
 		def groupsToAdd = params.groupsToAdd.tokenize(',').unique()
 		def groupsToRemove = params.groupsToRemove.tokenize(',')
 		
-		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
-		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
+		// Check for errors in groupsToAdd and groupsToRemove
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
 			contactInstance.errors.reject('Cannot add and remove from the same group!')
-		} else if (contactInstance.validate() && !contactInstance.hasErrors()) {
-			contactInstance.save(flush:true)
-			groupsToAdd.each() { id ->
-				contactInstance.addToGroups(Group.get(id))
-			}
-			groupsToRemove.each() { id ->
-				contactInstance.removeFromGroups(Group.get(id))
-			}
-
-			fieldsToAdd.each() { name ->
-				def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
-				def fieldsByName = params."$name"
-				if(fieldsByName?.class != String) {
-					fieldsByName.each() { val ->
-						if(val != "" && !existingFields.value.contains(val))
-							contactInstance.addToCustomFields(new CustomField(name: name, value: val)).save(flush:true)
-							existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
-					}
-				} else if(fieldsByName != "" && !existingFields.value.contains(fieldsByName)) {
-					contactInstance.addToCustomFields(new CustomField(name: name, value: fieldsByName))
+			return false
+		}
+		
+		groupsToAdd.each() { id ->
+			contactInstance.addToGroups(Group.get(id))
+		}
+		groupsToRemove.each() { id ->
+			contactInstance.removeFromGroups(Group.get(id))
+		}
+		return contactInstance
+	}
+	
+	private def updateCustomFields(Contact contactInstance) {
+		def fieldsToAdd = params.fieldsToAdd ? params.fieldsToAdd.tokenize(',') : []
+		def fieldsToRemove = params.fieldsToRemove ? params.fieldsToRemove.tokenize(',') : []
+		
+		fieldsToAdd.each() { name ->
+			def existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
+			def fieldsByName = params."$name"
+			if(fieldsByName?.class != String) {
+				fieldsByName.each() { val ->
+					if(val != "" && !existingFields.value.contains(val))
+						contactInstance.addToCustomFields(new CustomField(name: name, value: val)).save(flush:true)
+						existingFields = CustomField.findAllByNameAndContact(name, contactInstance)
 				}
-			}
-			fieldsToRemove.each() { id ->
-				def toRemove = CustomField.get(id)
-				if(toRemove)
-					toRemove.delete(failOnError: true, flush:true)
-			}
-			contactInstance.stripNumberFields()
-			
-			if(contactInstance.save(flush:true)) {
-				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
-				def redirectParams = [contactId:contactInstance.id]
-				if(params.groupId) redirectParams << [groupId: params.groupId]
-			}
-			else {
-				flash.message = "Contact failed to save!"
+			} else if(fieldsByName != "" && !existingFields.value.contains(fieldsByName)) {
+				contactInstance.addToCustomFields(new CustomField(name: name, value: fieldsByName))
 			}
 		}
+		fieldsToRemove.each() { id ->
+			def toRemove = CustomField.get(id)
+			if(toRemove)
+				toRemove.delete(failOnError: true, flush:true)
+		}
+		return contactInstance
 	}
 }

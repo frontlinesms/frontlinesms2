@@ -173,16 +173,13 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
-		if (isAjaxRequest()) {
-			render ""
-		} else {
-			println "deleting from archive? ${params.viewingArchive}"
-			if(params.messageSection == 'result') redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
-			else if(params.viewingArchive) {
-				redirect(controller:'archive', action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
-				}
-			else redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
-		}
+		println "deleting from archive? ${params.viewingArchive}"
+		if(params.messageSection == 'result')
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+		else if(params.viewingArchive)
+			redirect(controller:'archive', action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
+		else
+			redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 	}
 	
 	def archive = {
@@ -199,14 +196,10 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
-		if (isAjaxRequest()) {
-			render ""
-		}else {
-			if(params.messageSection == 'result') {
-				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
-			}
-			else redirect(controller: 'message', action: params.messageSection, params: [ownerId: params.ownerId])
-		}
+		if(params.messageSection == 'result')
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+		else
+			redirect(controller: 'message', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
 	
 	def unarchive = {
@@ -223,15 +216,10 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
-		if (isAjaxRequest()) {
-			println 'why?'
-			render ""
-		}else {
-			if(params.messageSection == 'result') {
-				redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
-			}
-			else redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
-		}
+		if(params.messageSection == 'result')
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+		else
+			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
 
 	def move = {
@@ -315,9 +303,5 @@ class MessageController {
 			def m = Fmessage.get(messageId.toLong())
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
-	}
-
-	private def isAjaxRequest() {
-		return request.xhr
 	}
 }
