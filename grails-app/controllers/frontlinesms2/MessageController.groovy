@@ -113,8 +113,8 @@ class MessageController {
 				messageInstanceTotal: messageInstanceList?.count(),
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
-				responseList: pollInstance.responseStats,
-				pollResponse: pollInstance.responseStats as JSON] << getShowModel()
+				responseList: pollInstance?.responseStats,
+				pollResponse: pollInstance?.responseStats as JSON] << getShowModel()
 	}
 	
 	def announcement = {

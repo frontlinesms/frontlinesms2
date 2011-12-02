@@ -10,6 +10,7 @@ class QuickMessageControllerSpec extends ControllerSpec {
 		mockDomain GroupMembership, [new GroupMembership(group: mohave, contact: jim)]
 		mockDomain Contact, [jim]
 		mockDomain Group, [mohave]
+		mockDomain SmartGroup, []
 	}
 
 	def 'create returns the contact, group list'() {
