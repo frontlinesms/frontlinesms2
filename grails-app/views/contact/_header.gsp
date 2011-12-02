@@ -11,5 +11,10 @@
 	</g:if>
 	<g:else>
 		<h3>${contactInstance?.name ?: contactInstance?.primaryMobile ?: 'New Contact'}</h3>
+		<ul class="section-header-buttons button-list">
+			<li>
+				<g:remoteLink class="btn" controller="export" action="contactWizard" params='[groupId: "${contactsSection?.id}", contactsSection:"${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"]' onSuccess="launchSmallPopup('Export', data, 'Export')">Export</g:remoteLink>
+			</li>
+		</ul>
 	</g:else>
 </div>

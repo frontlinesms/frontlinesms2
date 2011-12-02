@@ -26,7 +26,7 @@
 				<g:hiddenField name="sort" value="${params.sort}"/>
 				<g:hiddenField name="offset" value="${params.offset}"/>
 				<g:hiddenField name="groupId" value="${contactsSection?.id}"/>
-				<g:hiddenField name="contactSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
+				<g:hiddenField name="contactsSection" value="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smartGroup'}"/>
 				<g:if test="${contactInstance}">
 					<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 				</g:if>

@@ -17,7 +17,7 @@
 			<g:if test="${messageSection != 'pending'}">
 			 	<div id="msg-response-dropdown" class="msg-btn">
 					<a id="btn_reply" onclick="messageResponseClick('Reply')">Reply</a>
-					<a id='btn_dropdown' href="#" onclick="toggleDropdown();">More</a>
+					<a id='btn_dropdown' href="#" onclick="toggleDropdown();"></a>
 				</div>
 				<div id="dropdown_options" style='display: none'>
 					<a class='dropdown-item' id="btn_forward" onclick="messageResponseClick('Forward')">Forward</a>
@@ -41,6 +41,4 @@
 		$("#dropdown_options").toggle()
 		return false;
 	};
-
-	$("#btn_dropdown").empty();
 </script>
