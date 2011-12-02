@@ -47,9 +47,8 @@ function upSingleCheckedDetails(messageId) {
 	} else {
 		var url = 'message/' + messageSection;
 	}
-	
 	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId, viewingArchive: Boolean(viewingArchive)}, function(data) {
-		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #single-message'));
+		$('#single-message').replaceWith($(data).find('#single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
@@ -69,7 +68,7 @@ function downSingleCheckedDetails(messageId) {
 		var url = 'message/' + messageSection;
 	}
 	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, viewingArchive: viewingArchive, searchId: searchId}, function(data) {
-		$('#message-detail #multiple-messages').replaceWith($(data).find('#message-detail #single-message'));
+		$('#multiple-messages').replaceWith($(data).find('#single-message'));
 	});
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
@@ -103,10 +102,9 @@ function updateMultipleCheckedDetails(messageId) {
 	else {
 		var url = 'message/' + messageSection;
 	}
-	
 	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: viewingArchive, searchId: searchId}, function(data) {
-		$('#message-detail #single-message').replaceWith($(data).find('#message-detail #multiple-messages'));
-		$('#message-detail #multiple-messages').replaceWith($(data).find('#message-detail #multiple-messages'));
+		$('#single-message').replaceWith($(data).find('#multiple-messages'));
+		$('#multiple-messages').replaceWith($(data).find('#multiple-messages'));
 	});
 }
 

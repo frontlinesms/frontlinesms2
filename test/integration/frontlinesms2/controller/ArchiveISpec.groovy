@@ -44,6 +44,7 @@ class ArchiveISpec extends IntegrationSpec {
 			pollController.unarchive()
 		then:
 			!poll.refresh().archived
+			pollController.response.redirectedUrl == "/archive/poll?viewingArchive=true"
 	}
 	
 	def "deleted folders do not appear in the archive section"() {
@@ -51,12 +52,14 @@ class ArchiveISpec extends IntegrationSpec {
 			def folder = new Folder(name: 'rain', archived:true).save(failOnError:true, flush:true)
 			assert folder.archived
 		when:
-			def model = archiveController.folderView()
+			archiveController.folderList()
+			def model = archiveController.modelAndView.model
 		then:
 			model.folderInstanceList == [folder]
 		when:
 			folder.deleted = true
-			model = archiveController.folderView()
+			archiveController.folderList()
+			model = archiveController.modelAndView.model
 		then:
 			!model.folderInstanceList
 	}
@@ -66,13 +69,13 @@ class ArchiveISpec extends IntegrationSpec {
 			def poll = Poll.createPoll(title: 'thingy', choiceA:  'One', choiceB: 'Other', archived: true).save(failOnError:true, flush:true)
 			assert poll.archived
 		when:
-			archiveController.activityView()
+			archiveController.activityList()
 			def model = archiveController.modelAndView.model
 		then:
 			model.pollInstanceList == [poll]
 		when:
 			poll.deleted = true
-			archiveController.activityView()
+			archiveController.activityList()
 			model = archiveController.modelAndView.model
 		then:
 			!model.pollInstanceList

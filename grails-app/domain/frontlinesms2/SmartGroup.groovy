@@ -1,5 +1,8 @@
 package frontlinesms2
 
+import java.util.HashMap;
+import java.util.List;
+
 class SmartGroup {
 //> SMART GROUP PROPERTIES
 	/** the name of this smart group itself.  This is mandatory. */
@@ -87,5 +90,22 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 
 	static def countMembersByNameIlike(id, String searchString) {
 		SmartGroup.get(id).countMembersByName(searchString)
+	}
+	
+	static HashMap<String, List<String>> getGroupDetails() {
+		def resultMap= [:]
+		SmartGroup.list()?.each {resultMap[it.name] = it.getAddresses()}
+		resultMap
+	}
+	
+	def getAddresses() {
+		def addressList = []
+		getMembers()*.primaryMobile.each {
+			if(it)	addressList << it
+		}
+		getMembers()*.secondaryMobile.each {
+			if(it)	addressList << it
+		}
+		addressList
 	}
 }

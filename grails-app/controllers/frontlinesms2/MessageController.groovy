@@ -113,8 +113,8 @@ class MessageController {
 				messageInstanceTotal: messageInstanceList?.count(),
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
-				responseList: pollInstance.responseStats,
-				pollResponse: pollInstance.responseStats as JSON] << getShowModel()
+				responseList: pollInstance?.responseStats,
+				pollResponse: pollInstance?.responseStats as JSON] << getShowModel()
 	}
 	
 	def announcement = {
@@ -176,7 +176,7 @@ class MessageController {
 		println "deleting from archive? ${params.viewingArchive}"
 		if(params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
-		else if(params.controller == 'archive')
+		else if(params.viewingArchive)
 			redirect(controller:'archive', action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
 		else
 			redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
