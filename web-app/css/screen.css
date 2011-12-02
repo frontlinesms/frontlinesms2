@@ -252,6 +252,7 @@ a.tab-link:active{
     float:left;
     position:fixed;
     top: 142px;
+    bottom: 17px;
     width: 47%;
     background: white;
     margin: 0 25px;
@@ -609,7 +610,7 @@ a.tab-link:active{
     background-color: #fff;
     top: 83px;
 }
-.section-header .message-title, .section-header #archive-title{
+.section-header .message-title, .section-header #archive-title, .section-header #contact-title{
     padding: 0;
     position: relative;
     margin: 0;
@@ -692,7 +693,7 @@ a.tab-link:active{
 }
 .section-header-buttons{
     margin: 0;
-    padding: 10px 10px;
+    padding: 10px 0px 10px 10px;
     float:right;
 }
 .footer{
@@ -1149,9 +1150,9 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 #contact-list{
 	position: fixed;
     float:left;
-    height: 83%;
     margin: 0;
     top: 129px;
+    bottom: 43px;
     padding: 10px;
     min-width: 250px;
     width: 14%;
@@ -1183,15 +1184,14 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 	position: fixed;
     float: right;
     width: 68%;
-    height: 83%;
     margin: 0;
     top: 129px;
+    bottom: 43px;
     margin-left: 250px;
     background-color: #D8E8EF;
-    overflow-y: auto;
     overflow-x: hide;
+    overflow-y:auto;
 }
-
 #contact-editor #update-single{
 	height: 25px;
 	width: 110px;
