@@ -108,4 +108,14 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Poll.findAllByDeleted(false) == [poll]
 			Poll.findAllByDeleted(true) == []
 	}
+	
+	def "list of smart groups should be included in the group list"() {
+		given:
+			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
+		when:
+			def model = controller.create()
+		then:
+			model.groupList == [ "English numbers": [] ]
+				
+	}
 }

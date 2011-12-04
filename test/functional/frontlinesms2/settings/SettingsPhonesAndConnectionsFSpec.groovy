@@ -15,7 +15,6 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 			assert btnNewConnection.getAttribute("href") == "/frontlinesms2/connection/create_new"
 	}
 	
-
 	def 'connections are listed in PHONE & CONNECTIONS panel'() {
 		given:
 			createTestConnections()
@@ -23,8 +22,7 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 			go 'settings/connections'
 		then:
 			at PageSettingsConnection
-			connectionNames != null
-			connectionNames.find('a')*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
+			connectionNames*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
 	}
 }
 

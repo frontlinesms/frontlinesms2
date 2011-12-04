@@ -27,10 +27,7 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 		when:
 			def model = controller.create()
 		then:
-			model.groupList.collect { k,v ->
-				k == "English numbers"
-				v == []			
-				}
+			model.groupList == ["English numbers": [] ]
 				
 	}
 }

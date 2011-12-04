@@ -29,6 +29,6 @@ var groupActions = {
 }
 
 function getContactSection() {
-	var contactSection = $("#contactSection").val()
+	var contactSection = $("#contactsSection").val()
 	return contactSection
 }

@@ -38,7 +38,7 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec  {
 	
 	def "When an announcement is archived all of its messages are archived"() {
 		setup:
-			def a = new Announcement(name:'test', sentMessage: 'test message').save(failOnError:true)
+			def a = new Announcement(name:'test1x', sentMessage: 'test message').save(failOnError:true)
 			def m = new Fmessage()
 		when:
 			a.addToMessages(m)
@@ -53,6 +53,16 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec  {
 		then:
 			a.archived == true
 			m.archived == true
+	}
+	
+	def "list of smart groups should be included in the group list"() {
+		given:
+			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
+		when:
+			def model = controller.create()
+		then:
+			model.groupList == ["English numbers": [] ]
+				
 	}
 }
 
