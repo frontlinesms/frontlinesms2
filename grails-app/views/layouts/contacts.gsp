@@ -39,12 +39,14 @@
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
 	<body id="contacts-tab">
-		<g:render template="/system_notifications"/>
+		<div id="notifications">
+			<g:render template="/system_notifications"/>
+			<g:render template="/flash"/>
+		</div>
 		<div id="header">
 			<img src="/frontlinesms2/images/logo.png" id="logo"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-			<g:render template="/flash"/>
 		</div>
 		<div id="main">
 			<g:render template="menu"/>

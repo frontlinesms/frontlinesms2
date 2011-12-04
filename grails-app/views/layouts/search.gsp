@@ -31,12 +31,14 @@
 		</g:javascript>
 	</head>
 	<body id="search-tab">
-		<g:render template="/system_notifications"/>
+		<div id="notifications">
+			<g:render template="/system_notifications"/>
+			<g:render template="/flash"/>
+		</div>
 		<div id="header">
 			<img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
-			<g:render template="/flash"/>
 		</div>
         <div id="main">
 			<g:render template="menu"/>
