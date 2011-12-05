@@ -31,6 +31,6 @@
 
 	function addFlashMessage(data) {
 		$("#header .flash").remove();
-		$("#header").prepend("<div class='flash message'>" + data + "</div>");
+		$("#header").prepend("<div class='flash message'>" + data + "<a class="hide-flash">x</a></div>");
 	}
 </script>

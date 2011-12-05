@@ -43,6 +43,18 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			result['contactInstanceList'].size() == 3
 	}
+	
+	def "can export contacts from a group"() {
+		given:
+			createTestContacts()
+			createTestGroups()
+		when:
+			controller.params.contactsSection = 'group'
+			controller.params.groupId = Group.findByName('Dwarves').id
+			def result = controller.downloadContactReport()
+		then:
+			result['contactInstanceList'].size() == 3
+	}
 
 
 	def createTestMessages() {

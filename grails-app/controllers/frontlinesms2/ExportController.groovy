@@ -65,6 +65,7 @@ class ExportController {
 	}
 	
 	def contactWizard = {
+		println params
 		[groupId: params.groupId, 
 			contactsSection: params.contactsSection,
 			reportName:getGroupDescription()]
@@ -75,9 +76,9 @@ class ExportController {
 		def contactInstanceList
 		if(!params.groupId)
 			contactInstanceList = Contact.getAll()
-		else if(contactsSection == 'group')
-			contactInstanceList = GroupMembership(groupId)
-		else if(contactsSection == 'smartGroup')
+		else if(params.contactsSection == 'group')
+			contactInstanceList = Group.get(params.groupId).getMembers()
+		else if(params.contactsSection == 'smartGroup')
 			contactInstanceList = SmartGroup.get(params.groupId).getMembers()
 		generateContactReport(contactInstanceList)
 	}

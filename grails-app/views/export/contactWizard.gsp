@@ -2,6 +2,7 @@
 <div>
 	<g:form name="export-form" controller="export" action="downloadContactReport">
 		<g:hiddenField name="contactsSection" value="${contactsSection}" />
+		<g:hiddenField name="groupId" value="${groupId}" />
 		<p class="info">To export contacts from FrontlineSMS, choose the type of export and the information to be included in the exported data.</p>
 			<div>
 				<h2>Select an output format:</h2>
