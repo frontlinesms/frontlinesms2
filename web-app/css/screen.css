@@ -281,13 +281,15 @@ a.tab-link:active{
     overflow-y: auto;
 }
 #status-tab #right-column{
-    min-height: 700px;
     position:fixed;
     right:0;
     top: 83px;
+    bottom: 17px;
     width: 47%;
     float: right;
     margin: 0 25px;
+    overflow-x: hide;
+    overflow-y: auto;
 }
 #status-tab #connection-status{
     min-height: 200px;
