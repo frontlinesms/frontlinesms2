@@ -267,7 +267,6 @@ a.tab-link:active{
     height: 96%;
 }
 #status-tab #traffic-status{
-    min-height: 700px;
     float:left;
     position:fixed;
     top: 142px;
@@ -278,6 +277,8 @@ a.tab-link:active{
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+    overflow-x: hide;
+    overflow-y: auto;
 }
 #status-tab #right-column{
     min-height: 700px;
