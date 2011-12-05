@@ -92,16 +92,29 @@ a {
 	margin-left: 25%;
 	z-index: 1000;
 	text-align: center;
-	background-color: #C03283;
-	background-color: rgba(192, 50, 131, 0.4);
-	border-radius: 2px;
-	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
+	font-weight: bolder;
 }
 #notifications div{
 	min-height: 21px;
-	margin: 3px 0;
+	padding: 2px 0;
+	background-color: #C03283;
+	background-color: rgba(192, 50, 131, 0.5);
+	border-radius: 2px;
+	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
 #notifications a{
+	text-decoration: underline;
+}
+#notifications .hide-flash{
+	float: right;
+	top: 0;
+	right: 0;
+	text-decoration: none;
+	font-weight: normal;
+	padding-right: 8px;
+	position:absolute;
+}
+#notifications .hide-flash:hover{
 	text-decoration: underline;
 }
 

@@ -17,11 +17,11 @@
 		<g:javascript src="application.js"/>
 	</head>
 	<body id="settings-tab">
-		<div id="notifications">
-			<g:render template="/system_notifications"/>
-			<g:render template="/flash"/>
-		</div>
 		<div id="header">
+			<div id="notifications">
+				<g:render template="/system_notifications"/>
+				<g:render template="/flash"/>
+			</div>
 			<img src='${resource(dir:'images',file:'logo.png')}' id="logo"/>
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>

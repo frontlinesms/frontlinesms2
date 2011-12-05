@@ -17,11 +17,11 @@
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 	</head>
 	<body id="status-tab">
-		<div id="notifications">
-			<g:render template="/system_notifications"/>
-			<g:render template="/flash"/>
-		</div>
 		<div id="header">
+			<div id="notifications">
+				<g:render template="/system_notifications"/>
+				<g:render template="/flash"/>
+			</div>
 			<img id="logo" src="/frontlinesms2/images/logo.png">
 			<g:render template="/system_menu"/>
 			<g:render template="/tabs"/>
