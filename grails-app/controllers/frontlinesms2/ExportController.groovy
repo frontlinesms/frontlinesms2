@@ -140,7 +140,7 @@ class ExportController {
 					name = "${group.name} group (${group.getMembers().count()} contacts)"
 					break
 				case 'smartGroup':
-					def smartGroup = Smartgroup.findById(params.groupId)
+					def smartGroup = SmartGroup.findById(params.groupId)
 					name = "${smartGroup.name} smart group (${smartGroup.getMembers().count()} contacts)"
 					break
 			}
