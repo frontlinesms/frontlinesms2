@@ -21,7 +21,8 @@ class ArchiveISpec extends IntegrationSpec {
 			folderController.params.id = folder.id
 			folderController.archive()
 		then:
-			folder.refresh().archived
+			folder.refresh()
+			folder.archived
 	}
 	
 	def "can unarchive a folder"() {
