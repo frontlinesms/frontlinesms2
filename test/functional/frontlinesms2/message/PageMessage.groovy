@@ -11,7 +11,7 @@ abstract class PageMessage extends geb.Page {
 		deleteAllButton(required:false) { $("#btn_delete_all") }
 		checkedMessageCount {
 			def t = $("#checked-message-count").text()
-			if(t != null) {
+			if(t != null || t != "") {
 				return t - ' messages selected' as Integer
 			} else {
 				return $('.message-select:checked').size()

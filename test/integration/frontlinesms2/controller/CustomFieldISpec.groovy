@@ -19,12 +19,12 @@ class CustomFieldISpec extends grails.plugin.spock.IntegrationSpec {
 				it.save(failOnError:true)
 			}
 		then:	
-			CustomField.getAllContactNameMatchingCustomField([:])==['Alex','Mark','Toto']
-			CustomField.getAllContactNameMatchingCustomField(['city':'Paris'])==['Alex','Mark']
-			CustomField.getAllContactNameMatchingCustomField(['city':'paris'])==['Alex','Mark']
-			CustomField.getAllContactNameMatchingCustomField(['city':'Paris','like':'ca'])==['Alex','Mark']
-			CustomField.getAllContactNameMatchingCustomField(['city':'Paris','like':'ca','dob':'06'])==['Mark']
-			CustomField.getAllContactNameMatchingCustomField(['city':'Paris','like':'ca','dob':'06','car':'yes'])==[]
+			CustomField.getAllContactsWithCustomField([:])==['Alex','Mark','Toto']
+			CustomField.getAllContactsWithCustomField(['city':'Paris'])==['Alex','Mark']
+			CustomField.getAllContactsWithCustomField(['city':'paris'])==['Alex','Mark']
+			CustomField.getAllContactsWithCustomField(['city':'Paris','like':'ca'])==['Alex','Mark']
+			CustomField.getAllContactsWithCustomField(['city':'Paris','like':'ca','dob':'06'])==['Mark']
+			CustomField.getAllContactsWithCustomField(['city':'Paris','like':'ca','dob':'06','car':'yes'])==[]
 	}
 	
 }

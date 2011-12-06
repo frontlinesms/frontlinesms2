@@ -53,7 +53,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('Dwarves').id
 			def result = controller.downloadContactReport()
 		then:
-			result['contactInstanceList'].size() == 3
+			result['contactInstanceList'].size() == 2
 	}
 
 
