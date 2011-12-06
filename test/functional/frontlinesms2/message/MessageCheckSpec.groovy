@@ -172,9 +172,9 @@ class MessageCheckSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 		then:
-			waitFor {title == "Inbox"}
+			waitFor { at PageMessageInbox }
 		when:
-			$(".message-select")[0].click()
+			messagesSelect[0].click()
 		then:
 			waitFor { $('#multiple-messages #btn_archive_all').displayed }
 		when:

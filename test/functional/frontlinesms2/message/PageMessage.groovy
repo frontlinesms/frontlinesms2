@@ -9,7 +9,14 @@ abstract class PageMessage extends geb.Page {
 		flashMessage(required:false) { $("div.flash") }
 		multipleMessagesThing(required:false) { $('#multiple-messages') }
 		deleteAllButton(required:false) { $("#btn_delete_all") }
-		checkedMessageCount { $("#checked-message-count").text() }
+		checkedMessageCount {
+			def t = $("#checked-message-count").text()
+			if(t != null || t != "") {
+				return t - ' messages selected' as Integer
+			} else {
+				return $('.message-select:checked').size()
+			}
+		}
 		createActivityButton { $("#create-activity a") }
 		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
 		archiveBtn(required:false){$("#message-detail #archive-msg")}
