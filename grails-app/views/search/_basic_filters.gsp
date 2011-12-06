@@ -16,7 +16,7 @@
 		<li class='field'>
 		<g:select name="messageStatus" from="${['All sent and received', 'Only received messages', 'Only sent messages']}"
 				value="${search?.status}"
-				keys="${['', 'INBOUND', 'SENT, SEND_PENDING, SEND_FAILED']}"/>
+				keys="${['', 'INBOUND', 'SENT, PENDING, FAILED']}"/>
 		</li>
 		<li class='field'>
 			<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" />Include Archive

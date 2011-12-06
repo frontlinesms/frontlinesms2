@@ -153,9 +153,9 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchFrm.startDate_day == 'none'
 			searchFrm.startDate_month == 'none'
 			searchFrm.startDate_year == 'none'
-			String.format('%td',date).contains(searchFrm.endDate_day)
-			String.format('%tm',date).contains(searchFrm.endDate_month) 
-			searchFrm.endDate_year == String.format('%tY',date)
+			searchFrm.endDate_day == 'none'
+			searchFrm.endDate_month == 'none'
+			searchFrm.endDate_year == 'none'
 		when:
 			 searchFrm.startDate_day = '4'
 			 searchFrm.startDate_month = '9'
