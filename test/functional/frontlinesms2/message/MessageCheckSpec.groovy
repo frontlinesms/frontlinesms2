@@ -117,7 +117,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		when:
 			messagesSelect[0].click()
 		then: 
-			waitFor { checkedMessageCount == 0 }
+			waitFor { $('#message-detail #message-detail-sender').text() == "Alice" }
 		when:
 			$('a', text:'Alice').click()
 			$('#btn_dropdown').click()
@@ -178,7 +178,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then:
 			waitFor { $('#multiple-messages #btn_archive_all').displayed }
 		when:
-			$('#multiple-messages #btn_archive_all').click()
+			$('input',value:'Archive all').click()
 		then:
 			waitFor { at PageMessageInbox }
 			$("#message-detail-content").text() == 'No message selected'

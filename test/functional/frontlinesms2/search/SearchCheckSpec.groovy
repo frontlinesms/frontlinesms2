@@ -71,7 +71,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { checkedMessageCount == 0 }
+			waitFor { $('#message-detail #message-detail-sender').text() == "Barnabus" }
 		when:
 			$('a', text:'Barnabus').click()	
 			$('#btn_dropdown').click()
@@ -123,9 +123,9 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResultI
 			messagesSelect[0].click()
 		then:
-			waitFor { archiveAllButton.displayed }
+			waitFor { checkedMessageCount == 4}
 		when:
-			archiveAllButton.click()
+			$('#btn_archive_all').click()
 		then:
 			waitFor { $('title').text() == "Results"}
 	}
