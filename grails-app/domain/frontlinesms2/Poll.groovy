@@ -68,14 +68,12 @@ class Poll {
 	
 	def archivePoll() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(this.responses).list()
-		messagesToArchive.each { it.archived = true }
+		this.responses.archive()
 	}
 	
 	def unarchivePoll() {
 		this.archived = false
-		def messagesToUnarchive = Fmessage.owned(this.responses).list()
-		messagesToUnarchive.each { it.archived = false }
+		this.responses.unarchive()
 	}
 
 	static Poll createPoll(attrs) {
