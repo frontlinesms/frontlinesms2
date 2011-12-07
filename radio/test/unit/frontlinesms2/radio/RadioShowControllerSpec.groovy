@@ -1,4 +1,4 @@
-package frontlinesms2
+package frontlinesms2.radio
 
 import grails.plugin.spock.ControllerSpec
 

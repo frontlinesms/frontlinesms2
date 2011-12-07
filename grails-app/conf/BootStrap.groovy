@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import net.frontlinesms.test.serial.hayes.*
 import frontlinesms2.dev.MockModemUtils
+import frontlinesms2.radio.*
 
 class BootStrap {
 	def grailsApplication
@@ -187,8 +188,6 @@ class BootStrap {
 	
 	private def dev_initRadioShows() {
 		def r = new RadioShow(name: "Health")
-		r.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
-		r.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
 		r.save(failOnError: true, flush: true)
 	}
 

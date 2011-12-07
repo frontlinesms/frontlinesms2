@@ -1,6 +1,8 @@
-package frontlinesms2
+package frontlinesms2.radio
 
-class RadioShow extends MessageOwner {
+import frontlinesms2.*
+
+class RadioShow {
 	String name
 
 	static constraints = {

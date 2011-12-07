@@ -1,4 +1,4 @@
-package frontlinesms2.domain
+package frontlinesms2.radio
 
 import frontlinesms2.*
 
