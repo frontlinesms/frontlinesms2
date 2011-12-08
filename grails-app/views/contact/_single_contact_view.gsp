@@ -60,8 +60,8 @@
 			  </g:each>
 		</ul>
 	</div>
-	<div id='info-add' class="dropdown basic-info">
-		<select id="new-field-dropdown" name="new-field-dropdown">
+	<div id='info-add' class="basic-info">
+		<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na">Add more information...</option>
 			<option class="predefined-field" value="Street address">Street address</option>
 			<option class="predefined-field" value="City">City</option>
@@ -94,8 +94,8 @@
 			</ol>
 		</div>
 	</div>
-	<div id='group-add' class="dropdown basic-info">
-		<select id="group-dropdown" name="group-dropdown">
+	<div id='group-add' class="basic-info">
+		<select class="dropdown" id="group-dropdown" name="group-dropdown">
 			<option class="not-group">Add to group...</option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 				<option value="${g.id}">${g.name}</option>
@@ -108,9 +108,10 @@
 			<p id="num-sent">${contactInstance?.inboundMessagesCount} messages sent</p>
 			<p id="num-recieved">${contactInstance?.outboundMessagesCount} messages received</p>
 		</div>
-		<g:link class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
-			<img src='${resource(dir:'images/icons',file:'search.png')}' />
-			Search for messages
-		</g:link>
+		<div id="contact-msg-search">
+			<g:link class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
+				<span id="search-image">Search for messages</span>
+			</g:link>
+		</div>
 	</div>
 </div>

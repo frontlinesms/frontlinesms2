@@ -1,5 +1,6 @@
 $(function() {
 	$('#tab-messages').everyTime(refresh_rate || '30s', "refreshCountTimer", refreshMessageCount);
+	$(".dropdown").selectmenu();
 });
 
 function refreshMessageCount() {
@@ -53,3 +54,4 @@ $.fn.renderDefaultText = function() {
 		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
 		});
 };
+

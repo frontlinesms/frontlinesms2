@@ -1,0 +1,54 @@
+#settings-tab .section-header{
+	border-bottom: 1px solid #9e9e9e;
+}
+#connections{
+	position: absolute;
+    margin-top: 25px;
+    z-index: 1;
+    overflow: hidden;
+    width: 83%;
+    padding: 90px 0 45px 0;
+}
+#connections ul{
+	padding: 0;
+}
+
+#connections ul .selected{
+	height: 120px;
+}
+.connection{
+	border-bottom: 1px solid #9e9e9e;
+}
+.connection .btn{
+	float: right;
+	margin: 17px;
+}
+
+.connection-header{
+	height: 1.5em;
+	padding: 17px 17px 17px 25px;
+	margin-left: 17px;
+	background-image: url('../images/icons/toggle_plus.png');
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+#connections .selected .connection-header{
+	background-image: url('../images/icons/toggle_minus.png');
+}
+.connection-header h2, .connection-header a, .connection-header p{
+	display:inline;
+}
+.connection-header .connection-type{
+	padding: 0 17px;
+	font-size: 1.2em;
+}
+.connection-status{
+	display: inline;
+	float:right;
+}
+#create-connection-btn{
+	padding: 17px;
+}
+#email-form{
+	display:none;
+}

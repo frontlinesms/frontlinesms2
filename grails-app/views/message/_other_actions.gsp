@@ -1,10 +1,10 @@
 <div id='other-actions' class="actions buttons">
 	<g:if test="${messageSection == 'poll'}">
 		<div id="poll-actions">
-			<div class="dropdown">
+			<div>
 				<g:hiddenField name="owner-id" value="${ownerInstance.id}" />
 				<g:hiddenField name="responseId" value="${responseInstance?.id}" />
-				<select class="extra-msg-btn" name="categorise_dropdown" id="categorise_dropdown" onchange="categorizeClickAction()">
+				<select class="dropdown extra-msg-btn" name="categorise_dropdown" id="categorise_dropdown" onchange="categorizeClickAction()">
 					<option value="na" class="na">Categorize response</option>
 					<option value="btn-${responseInstance?.id}" class="na">${responseInstance?.value}</option>
 					<g:each in="${responseList}" status="i" var="r">
@@ -17,8 +17,8 @@
 		</div>
 	</g:if>
 	<g:if test="${messageSection != 'pending'}">
-		<div id='move-message' class='dropdown'>
-			<select class="extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction()">
+		<div id='move-message'>
+			<select class="dropdown extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction()">
 				<option value="na" class="na">Move message to...</option>
 				<g:if test="${messageSection != 'inbox'}">
 					<option class="inbox" value="inbox">Inbox</option>
@@ -42,6 +42,3 @@
 		</div>
 	</g:if>
 </div>
-<script>
-	$("#move-actions").selectmenu();
-</script>

@@ -1,6 +1,6 @@
 <ul id='poll-button-list' class="button-list">
 	<li>
-		<g:remoteLink class="poll-btn btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message" class="section-action-button btn">
+		<g:remoteLink class="section-action-button poll-btn btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
 			Quick message
 		</g:remoteLink>
 	</li>
@@ -10,7 +10,7 @@
 	<g:else>
 		<li><g:link class="poll-btn btn" controller="poll" action="unarchive" id="${ownerInstance.id}">Unarchive Poll</g:link></li>
 	</g:else>
-	<li><g:select class="more-actions poll-btn btn" name="more-actions" from="${['Export', 'Rename poll', 'Delete poll']}"
+	<li><g:select class="dropdown more-actions poll-btn" name="more-actions" from="${['Export', 'Rename poll', 'Delete poll']}"
 			keys="${['export', 'rename', 'delete']}"
 			noSelection="${['': 'More actions...']}"/></li>
 </ul>

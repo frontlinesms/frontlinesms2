@@ -6,15 +6,18 @@
 	display: block;
 	background-color: white;
 	border: 1px solid grey;
-	box-shadow: 
+	min-width: 200px;
+}
+.ui-selectmenu-menu-dropdown{
+	min-width:200px;
 }
 
-.ui-selectmenu-menu li a,.ui-selectmenu-status {
+.ui-selectmenu-menu li a{
 	display: block;
-	padding: 3px 26px 3px 10px;
 	height:25px;
 	outline:none;
 	text-decoration:none;
+	padding: 2px 26px 2px 10px;
 }
 .ui-selectmenu-menu li a:hover {
 	background-color: #E5EFF3;
@@ -33,23 +36,55 @@
 	text-decoration: none;
 	overflow: hidden;
 	height: 25px;
+	min-width: 200px;
 	width: 50%;
 }
 
-
 .ui-selectmenu-status {
-	display:block;
-	background-image: url("../../../images/buttons/dropdown_default.png");
-	background-repeat: no-repeat;
-	background-position: 0% 0%;
-	background-size: 100% 25px;
+	display: block;
+	background-image: url("../../../images/buttons/button_default_2.png");
+	background-repeat: repeat-x;
 	border-left: 1px solid #6b6b6b;
+	border-right: 1px solid #6b6b6b;
 	border-radius: 2px;
-	height: 25px;
+	height: 21px;
+	padding: 2px 26px 2px 10px;
+	text-align: left;
 }
 .ui-selectmenu-status:hover{
-	background-image: url("../../../images/buttons/dropdown_hover.png");
+	background-image: url("../../../images/buttons/button_hover_part.png");
 }
 .ui-selectmenu-status:active{
-	background-image: url("../../../images/buttons/dropdown_pressed.png");
+	background-image: url("../../../images/buttons/button_pressed_part.png");
+}
+
+.ui-icon-triangle-1-s{
+	margin: 0;
+	display:inline-block;
+	border-top-color: black;
+	border-right-color: rgba(0,0,0,0);
+	border-bottom-color: black;
+	border-left-color: rgba(0,0,0,0);
+	border-style: solid;
+	border-width: 4px 4px 0;
+}
+#message-detail .ui-icon-triangle-1-s{
+	position:relative;
+	left: 190px;
+	top: -15px;
+}
+.activity-btn .ui-icon-triangle-1-s, .poll-btn .ui-icon-triangle-1-s, .trash .ui-icon-triangle-1-s, #contact-header .ui-icon-triangle-1-s{
+	position:relative;
+	left: -15px;
+	top: -15px;
+}
+#contact-editor .ui-icon-triangle-1-s{
+	position:relative;
+	left: 230px;
+	top: -15px;
+}
+#search-menu .ui-icon-triangle-1-s{
+	position:relative;
+	left: 205px;
+	top: -15px;
 }

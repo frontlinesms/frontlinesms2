@@ -3,6 +3,9 @@
 	<head>
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead />
+		<g:javascript src="jquery.timers.js"/>
+		<g:javascript src="jquery.ui.selectmenu.js"/>
+		<g:javascript src="application.js"/>
 		<g:render template="/css"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
@@ -12,8 +15,6 @@
 			url_root = "${request.contextPath}/";
 			refresh_rate = ${params.rRate ?: 30000}
 		</script>
-		<g:javascript src="jquery.timers.js"/>
-		<g:javascript src="application.js"/>
 		<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 	</head>
 	<body id="status-tab">

@@ -20,8 +20,8 @@
 				</g:each>
 			</ol>
 		</div>
-		<div id='multi-group-add' class="dropdown">
-			<g:select name="multi-group-dropdown"
+		<div id='multi-group-add'>
+			<g:select class="dropdown" name="multi-group-dropdown"
 					noSelection="['_':'Add to group...']"
 					from="${nonSharedGroupInstanceList}"
 					optionKey="id"

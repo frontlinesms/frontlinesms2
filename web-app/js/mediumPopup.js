@@ -225,15 +225,6 @@ function moveToRelativeTab(offset) {
 	$('#tabs').tabs('select', getCurrentTabIndex() + offset);
 }
 
-$('.next').live('click', function() {
-	if($(this).hasClass('disabled')) return;
-	moveToRelativeTab(1);
-});
-	
-$('.back').live('click', function() {
-       moveToRelativeTab(-1);
-});
-
 $.widget("ui.contentWidget", {
 	validate: function() {
 		return this.options['validate'].call();                 
