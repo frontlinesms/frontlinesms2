@@ -7,7 +7,7 @@ class PageSearchResult extends PageSearch {
 	}
 	static content = {
 		messagesSelect { $(".message-select") }
-		archiveAllButton { $('#multiple-messages #btn_archive_all') }
+		archiveAllButton { $('#btn_archive_all') }
 		multipleMessagesPanel { $('#multiple-messages') }
 		replyToMultipleButton { $('#multiple-messages a')[0] }
 		checkedMessageCount {

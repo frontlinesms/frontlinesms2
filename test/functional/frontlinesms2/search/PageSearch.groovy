@@ -7,7 +7,7 @@ class PageSearch extends geb.Page {
 	}
 	static content = {
 		searchFrm { $('#search-details') }
-		searchBtn { $('#search-details #search-btn .create') }
+		searchBtn { $('input', class:'btn create') }
 		searchDescription { $('#activity-details') }
 		searchMoreOptionLink { $('#toggle-extra-options')}
 		addTownCustomFieldLink(required:false) { $('#town-add')}
