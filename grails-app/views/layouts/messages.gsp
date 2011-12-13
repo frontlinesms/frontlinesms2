@@ -24,10 +24,11 @@
 		<g:javascript src="/message/categorize_dropdown.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="/message/moreActions.js"/>
+		<g:javascript src="/message/check_for_new_messages.js" />
 		<g:javascript>
-		$(function() {  
-		   disablePaginationControls();
-		});
+			$(function() {  
+			   disablePaginationControls();
+			});
 		</g:javascript>
 	</head>
 	<body id="messages-tab">

@@ -19,23 +19,7 @@
 		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
 		<g:javascript src="contact/moreGroupActions.js" />
-		<g:javascript>
-			function getGroupId(){
-				var group = $('#groupId');
-				return group.length ? group.val() : '';
-			}
-			function updateContacts(data) {
-				var replacement = $(data);
-				$("#contact-list").html(replacement.filter('#contact-list').html());
-				$(".footer #paging").html(replacement.filter('.footer #paging').html());
-				disablePaginationControls();
-			}
-
-			$(function() {  
-			   disablePaginationControls();
-			   $("#contact-search").renderDefaultText();
-			});
-		</g:javascript>
+		<g:javascript src="contact/search_within_list.js" />
 		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>

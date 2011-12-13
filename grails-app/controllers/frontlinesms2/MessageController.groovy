@@ -1,7 +1,7 @@
 package frontlinesms2
 
 import grails.util.GrailsConfig
-import grails.converters.JSON
+import grails.converters.*
 import java.lang.*
 
 class MessageController {
@@ -13,6 +13,7 @@ class MessageController {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
+	def newMessagesService
 
 	def bobInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -30,6 +31,15 @@ class MessageController {
 	def index = {
 		params.sort = 'dateReceived'
 		redirect(action:'inbox', params:params)
+	}
+	
+	def getNewMessageCount = {
+		def section = params.messageSection
+		if(section != 'trash') {
+			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
+			render messageCount as JSON
+		} else
+			render ""
 	}
 	
 	def getShowModel(messageInstanceList) {
@@ -58,14 +68,14 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+					messageInstanceTotal: messageInstanceList.count()] << (!request.xhr ? getShowModel() : [:])
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
-				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				messageInstanceTotal: messageInstanceList.count()] << (!request.xhr ? getShowModel() : [:])
 	}
 
 	def pending = {
@@ -73,7 +83,7 @@ class MessageController {
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.count(),
-				failedMessageIds : Fmessage.findHasFailed(true)*.id] << getShowModel()
+				failedMessageIds : Fmessage.findHasFailed(true)*.id] << (!request.xhr ? getShowModel() : [:])
 	}
 	
 	def trash = {
@@ -101,7 +111,7 @@ class MessageController {
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashInstance] << getShowModel()
+					ownerInstance: trashInstance] << (!request.xhr ? getShowModel() : [:])
 	}
 
 	def poll = {
@@ -114,7 +124,7 @@ class MessageController {
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance?.responseStats,
-				pollResponse: pollInstance?.responseStats as JSON] << getShowModel()
+				pollResponse: pollInstance?.responseStats as JSON] << (!request.xhr ? getShowModel() : [:])
 	}
 	
 	def announcement = {
@@ -125,7 +135,7 @@ class MessageController {
 					messageSection: 'announcement',
 					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: announcementInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << (!request.xhr ? getShowModel() : [:])
 	}
 	
 	def radioShow = {
@@ -146,7 +156,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << (!request.xhr ? getShowModel() : [:])
 	}
 
 	def send = {
