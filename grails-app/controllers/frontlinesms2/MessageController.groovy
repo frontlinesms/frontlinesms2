@@ -68,22 +68,23 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.count()] << (!request.xhr ? getShowModel() : [:])
+					messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
 		render view:'standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
-				messageInstanceTotal: messageInstanceList.count()] << (!request.xhr ? getShowModel() : [:])
+				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def pending = {
 		def messageInstanceList = Fmessage.pending(params.failed)
+		println 'hello'
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.count(),
-				failedMessageIds : Fmessage.findHasFailed(true)*.id] << (!request.xhr ? getShowModel() : [:])
+				failedMessageIds : Fmessage.findHasFailed(true)*.id] << getShowModel()
 	}
 	
 	def trash = {
@@ -111,7 +112,7 @@ class MessageController {
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashInstance] << (!request.xhr ? getShowModel() : [:])
+					ownerInstance: trashInstance] << getShowModel()
 	}
 
 	def poll = {
@@ -124,7 +125,7 @@ class MessageController {
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance?.responseStats,
-				pollResponse: pollInstance?.responseStats as JSON] << (!request.xhr ? getShowModel() : [:])
+				pollResponse: pollInstance?.responseStats as JSON] << getShowModel()
 	}
 	
 	def announcement = {
@@ -135,7 +136,7 @@ class MessageController {
 					messageSection: 'announcement',
 					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: announcementInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << (!request.xhr ? getShowModel() : [:])
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
 	}
 	
 	def radioShow = {
@@ -156,7 +157,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << (!request.xhr ? getShowModel() : [:])
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
 	}
 
 	def send = {

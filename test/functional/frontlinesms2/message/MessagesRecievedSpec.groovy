@@ -41,7 +41,7 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			sleep 11000
 		then:
 			waitFor { newMessageNotification.displayed }
-			visibleMessageTotal == 3
+			visibleMessageTotal == 2
 		when:
 			newMessageNotification.find("a").click()
 		then:
@@ -49,7 +49,7 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			!newMessageNotification.displayed
 	}
 		
-	def 'when clicking the new message notification the view stays at the current page and details'() {
+	def 'when clicking the new message notification, the view stays at the current page and details'() {
 		when:
 			createInboxTestMessages()
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
@@ -65,9 +65,5 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 			newMessageNotification.click()
 		then:
 			at PageMessageInboxBob
-	}
-	
-	def 'new messages flash yellow when they appear' () {
-		
 	}
 }

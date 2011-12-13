@@ -639,6 +639,21 @@ a.tab-link:active{
     overflow-x: hidden;
     display: block;
 }
+
+@keyframes newMessage {
+	from {background: rgba(192, 50, 131, 0.3);}
+	to {background: white;}
+}
+
+@-moz-keyframes newMessage /* Firefox */ {
+	from {background: rgba(192, 50, 131, 0.3);}
+	to {background: white;}
+}
+
+@-webkit-keyframes newMessage /* Safari and Chrome */ {
+	from {background: rgba(192, 50, 131, 0.3);}
+	to {background: white;}
+}
 #new-message-notification {
 	position: relative;
 	top: 154px;
@@ -652,6 +667,11 @@ a.tab-link:active{
 #new-message-notification a{
 	display: block;
 	cursor: pointer;
+}
+.message-added-to-list {
+animation: newMessage 2s;
+-moz-animation: newMessage 2s; /* Firefox */
+-webkit-animation: newMessage 2s; /* Safari and Chrome */
 }
 #message-list{
     float:left;
