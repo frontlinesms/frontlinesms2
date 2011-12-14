@@ -105,7 +105,7 @@ a {
 #notifications div{
 	min-height: 21px;
 	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.5);
+	background-color: rgba(192, 50, 131, 0.4);
 	border-radius: 2px;
 	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
@@ -657,6 +657,16 @@ a.tab-link:active{
 #new-message-notification {
 	position: relative;
 	top: 154px;
+	width: 70%;
+	text-align: center;
+	min-height: 21px;
+	padding: 2px 0;
+	background-color: rgba(192, 50, 131, 0.3);
+	z-index: 100;
+}
+.tall-header #new-message-notification {
+	position: relative;
+	top: 304px;
 	width: 70%;
 	text-align: center;
 	min-height: 21px;

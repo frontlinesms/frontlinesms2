@@ -35,8 +35,17 @@ class MessageController {
 	
 	def getNewMessageCount = {
 		def section = params.messageSection
-		if(section != 'trash') {
+		if(!params.ownerId && section != 'trash') {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
+			render messageCount as JSON
+		} else if(section == 'poll') {
+			def messageCount = [totalMessages:[Poll.get(params.ownerId)?.getPollMessages().count()]]
+			render messageCount as JSON
+		} else if(section == 'announcement') {
+			def messageCount = [totalMessages:[Announcement.get(params.ownerId)?.getAnnouncementMessages().count()]]
+			render messageCount as JSON
+		} else if(section == 'folder') {
+			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages().count()]]
 			render messageCount as JSON
 		} else
 			render ""
@@ -80,7 +89,6 @@ class MessageController {
 
 	def pending = {
 		def messageInstanceList = Fmessage.pending(params.failed)
-		println 'hello'
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
 				messageInstanceTotal: messageInstanceList.count(),
@@ -184,7 +192,6 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
-		println "deleting from archive? ${params.viewingArchive}"
 		if(params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else if(params.viewingArchive)

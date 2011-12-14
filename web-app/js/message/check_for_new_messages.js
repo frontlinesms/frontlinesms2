@@ -5,10 +5,11 @@ $(function() {
 
 function checkForNew() {
 	var section = $("#messageSection").val();
+	var ownerId = $('input:hidden[name=ownerId]').val();
 	var currentTotal = $("#messageTotal").val();
 	var newTotal = $("#messageTotal").val();
 	
-	$.getJSON(url_root + 'message/getNewMessageCount', {messageSection: section}, function(data) {
+	$.getJSON(url_root + 'message/getNewMessageCount', {messageSection: section, ownerId: ownerId}, function(data) {
 		$.each(data, function(key, val) {
 		    newTotal = val;
 		});
@@ -31,7 +32,6 @@ function refreshList() {
 	var messageId = $('input:hidden[name=messageId]').val();
 	var sortField = $('input:hidden[name=sortField]').val();
 	var sortOrder = $('input:hidden[name=sortOrder]').val();
-	
 	var mostRecentOldMessage;
 	$("#message-list tbody tr").each(function() {
 		if($(this).find("#message-created-date").val() > mostRecentOldMessage || !mostRecentOldMessage)
