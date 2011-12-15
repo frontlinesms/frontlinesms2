@@ -14,44 +14,44 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
-			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
-			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
+			at PageContactShowBob
+		then:
+			fieldSelecter.children('option')*.value() == ['na', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'add-new']
 	}
 
 	def 'custom fields with no value for that contact are shown in dropdown'() {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
-			def nonfields = fieldSelecter.children().collect() { it.text() }
 		then:
-			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
+			at PageContactShowBob
+		then:
+			fieldSelecter.children('option')*.value() == ['na', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'add-new']
 	}
 
 	def 'custom fields with value for that contact are shown in list of details'() {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def list = $("#custom-field-list").children().children('label').collect() { it.text() }
 		then:
-			list == ['town']
+			$("#custom-field-list").children().children('label')*.text() == ['town']
 	}
 
+	@spock.lang.IgnoreRest
 	def 'clicking an existing custom field in dropdown adds it to list with blank value'() {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def list = $("#custom-field-list").children().children('label').collect() { it.text() }
-			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
-			fieldSelecter.value('lake').click()
-			def nonfields = fieldSelecter.children().collect() { it.text() }
-			def updatedList = $("#custom-field-list").find('label').collect() { it.text() }
 		then:
-			list == ['town']
-			updatedList.sort() == ['lake', 'town']
-			nonfields == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
+			at PageContactShowBob
+			$("#custom-field-list").children().children('label')*.text() == ['town']
+			waitFor { fieldSelecter.displayed }
+		when:
+			fieldSelecter.value('lake]').click()
+		then:
+			$("#custom-field-list").find('label')*.text().sort() == ['lake', 'town']
+			fieldSelecter.children()*.text() == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
 	}
 
 	def 'clicking X next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {
@@ -87,7 +87,9 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact-editor").find('select', name:'new-field-dropdown')
+		then:
+			at PageContactShowBob
+		when:
 			fieldSelecter.value('lake').click()
 			def inputField =  $("#contact-editor").find('input', name:'lake')
 			inputField.value('erie')
@@ -102,10 +104,11 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		when:
 			def bob = Contact.findByName("Bob")
 			go "contact/show/${bob.id}"
-			def fieldSelecter = $("#contact_details").find('select', name:'new-field-dropdown')
+		then:
+			at PageContactShowBob
+		when:
 			fieldSelecter.value('lake')
 			$("#contact-details #update-single").click()
-			sleep 1000	
 		then:
 			bob.refresh()
 			bob.customFields.name == ['town']

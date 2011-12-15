@@ -24,13 +24,17 @@ class PageContactShow extends geb.Page {
 		contactCount { $('#contact-count') }
 		searchBtn { $('#message-search .buttons') }
 		
-		//Popup
+		// Popup
 		confirmDeleteButton(required:false) { $("#done") }
 		
-		//When showing a group
+		// When showing a group
 		contactsList(required:false) { $('#contact-list') }
 		
-		//> SMART GROUPS
+		// Groups
+		
+		moreGroupActions(required:false) { $('.section-header #group-actions') }
+		
+		// SMART GROUPS
 		smartGroupsList { $('#smart-groups-submenu') }
 		smartGroupsListItems {
 			def list = smartGroupsList.find('li')
@@ -42,5 +46,8 @@ class PageContactShow extends geb.Page {
 		}
 		noSmartGroupsMessage(required:false) { smartGroupsList.find('li#no-smart-groups') }
 		createSmartGroupButton { $('li#create-smart-group a') }
+		
+		// Custom Fields
+		fieldSelecter { $('#new-field-dropdown') }
 	}
 }

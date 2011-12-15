@@ -23,7 +23,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			go "contact/show/${Contact.findByName('Bob').id}"
 		then:
 			at PageContactShowBob
-			$("#group-dropdown").children()*.text().sort() == ['Add to group...', 'Others', 'four']
+			$("#group-dropdown").children('option')*.text().sort() == ['Add to group...', 'Others', 'four']
 		when:
 			$("#group-dropdown").value("Others")
 		then:
@@ -131,7 +131,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			btnSave.disabled
 		when:
-			$("#group-dropdown").value("Others")
+			$("#group-dropdown").value("Others").click()
 		then:
 			waitFor { !btnSave.disabled }
 			!btnCancel.disabled

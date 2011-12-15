@@ -23,6 +23,17 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 				PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice')),
 				PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))]*.save(failOnError:true, flush:true)
 	}
+	
+	static createMoreTestMessages() {
+		[new Fmessage(src:'Jill', dst:'+254987654', text:'barcelona sucks!', dateReceived: new Date() - 4, starred: true),
+			new Fmessage(src:'Tony', dst:'+2541234567', text:'Gormahia!', dateReceived: new Date() - 3)].each() {
+					it.inbound = true
+					it.save(failOnError:true, flush:true)
+				}
+
+		[PollResponse.findByValue('manchester').addToMessages(Fmessage.findByText('barcelona sucks!')),
+				PollResponse.findByValue('barcelona').addToMessages(Fmessage.findBySrc('Tony'))]*.save(failOnError:true, flush:true)
+	}
 
 	static createTestFolders() {
 		['Work', 'Projects'].each {
