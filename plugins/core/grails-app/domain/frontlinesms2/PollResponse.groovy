@@ -11,9 +11,4 @@ class PollResponse extends MessageOwner {
 		key(nullable: true)
 		poll(nullable: false)
 	}
-
-	def getLiveMessageCount() {
-		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
-		m ? m.size() : 0
-	}
 }
