@@ -3,7 +3,9 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-grails.plugin.location.radio = "radio"
+grails.plugin.location.core = "plugins/core"
+grails.plugin.location.radio = "plugins/radio"
+
 
 grails.project.dependency.resolution = {
 	// Everything with a version that ends with -SNAPSHOT is changing
