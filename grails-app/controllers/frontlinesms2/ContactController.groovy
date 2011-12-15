@@ -4,7 +4,7 @@ import grails.util.GrailsConfig
 
 class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	
+	def messageSource
 	def contactSearchService
 
 	def beforeInterceptor = {
@@ -66,10 +66,9 @@ class ContactController {
 			parseContactFields(contactInstance)
 			if(attemptSave(contactInstance))
 				redirect(action:'show', params:[contactId:contactInstance.id])
-		} else {
-			flash.message = "Failed to save contact because $contactInstance.errors"
-			render view: 'show', params: params
 		}
+		flash.message = contactInstance.errors.allErrors*.defaultMessage
+		render(view:'show', model:show())
 	}
 	
 	def update = {

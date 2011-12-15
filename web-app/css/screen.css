@@ -226,7 +226,13 @@ a.tab-link:active{
 	padding:0;
 	width:25px;
 	height:25px;
+    background-image: url('../images/icons/status_red.png');
+}
+#status-indicator.green{
     background-image: url('../images/icons/status_green.png');
+}
+#status-indicator.orange{
+    background-image: url('../images/icons/status_orange.png');
 }
 #secondary-nav{
     font-size: 0.85em;

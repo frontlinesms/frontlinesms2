@@ -28,9 +28,3 @@
     </ul>
 </div>
 <div id="tabbar"></div>
-<script>
-	$.get(url_root + 'status/trafficLightIndicator', function(data) {
-			var imageRoot = "${resource(dir:'images/icons', file:'status_')}";
-			$('#indicator').replaceWith("<img id='indicator' src='" + imageRoot + data + ".png'/>");
-	});
-</script>
