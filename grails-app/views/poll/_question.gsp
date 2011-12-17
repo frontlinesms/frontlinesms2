@@ -7,7 +7,7 @@
 				<li><g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
 			</ul>
 		</div>
-		<div>
+		<div id="poll-question" >
 			<label class="bold" for='question'>Enter question:</label>
 			<g:textArea name="question"/>
 		</div>

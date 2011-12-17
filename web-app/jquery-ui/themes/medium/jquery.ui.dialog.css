@@ -17,7 +17,7 @@
 	border-radius: 4px;
 	background-color: white;
 	font-family: Arial,Georgia,Helvetica,sans-serif;
-	font-size: .7em;
+	font-size: .75em;
 }
 
 .ui-dialog h2{
@@ -125,4 +125,18 @@
 
 .ui-dialog #smartGroup-table td input {
 	width: 250px;
+}
+
+.ui-dialog #poll-question label{
+	position: relative;
+	top: -95px;
+}
+
+.ui-dialog #poll-question textarea{
+	width: 50%;
+	min-height: 100px;
+}
+
+.ui-dialog .field-enabled{
+	font-weight: bolder;
 }

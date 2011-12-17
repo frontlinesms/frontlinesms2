@@ -7,7 +7,7 @@
     float:left;
     position:fixed;
     top: 142px;
-    bottom: 17px;
+    bottom: 50px;
     width: 47%;
     background: white;
     margin: 0 25px;
@@ -64,10 +64,14 @@
 }
 	
 #status-tab #traffic-status #trafficGraph{
-	min-height:500px;
+	min-height: 200px;
+	height:50%;
 	border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
+}
+#status-tab #traffic-status form{
+	height:40%;
 }
 
 #status-tab #traffic-status .export-button{
@@ -96,6 +100,8 @@
 #traffic-status #time-filters{
    width: 50%;
    float:right;
+   position: relative;
+   top:10px;
 }
 #traffic-status #time-filters li{
    margin: 10px 0;
@@ -119,6 +125,27 @@
 }
 #traffic-status input[type=submit]:hover{
 	height:25px;
+}
+#traffic-status .dropdown{
+	margin: 10px 20%;
+	max-margin: 10px 60px;
+}
+#traffic-status #time-filters .dropdown{
+	position: relative;
+	top: 5px;
+	left: 5px;
+	margin: 0;
+}
+#traffic-status #time-filters input[type=radio]{
+	position: relative;
+}
+#traffic-status #time-filters #dates-text{
+	position: relative;
+	top: -3px;
+	left: 5px;
+}
+#traffic-status #time-filters div{
+	display: inline-block;
 }
 
 #traffic-status #time-filter #start-date, #traffic-status #time-filter #end-date{
@@ -154,9 +181,6 @@
     margin: 5px;
     padding: 5px;
 }
-.update-status-detail span{
-    font-size: 0.95em;
-}
 .update-status-detail button{
     min-width: 150px;
     float: right;
@@ -191,7 +215,6 @@
     clear: right;
 }
 .connection-status-detail span{
-    font-size: 0.9em;
     display: block;
 }
 

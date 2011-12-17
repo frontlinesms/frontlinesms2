@@ -46,6 +46,7 @@ function loadSingleContact(contactId) {
 		$('.single-contact').replaceWith($(data).find('.single-contact'));
 		$("#group-list li a.remove-group").click(removeGroupClickAction);
 		$("#group-dropdown").change(addGroupClickAction);
+		$(".dropdown").selectmenu();
 	});
 }
 
@@ -64,6 +65,7 @@ function loadMultipleContacts(count) {
 		$('#multi-group-add').replaceWith($(data).find('#multi-group-add'));
 		$("#multi-group-dropdown").change(addGroupClickAction);
 		$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
+		$(".dropdown").selectmenu();
 	});
 }
 

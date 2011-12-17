@@ -22,7 +22,13 @@ class CheckForNewVersionJob {
 			println "Latest version: $latestAvailable"
 			if(applicationVersionService.shouldUpgrade(latestAvailable)) {
 				println "Should upgrade - creating sys notification"
-				new SystemNotification(text:"There is a new version of FrontlineSMS available, <a href=\"$DOWNLOAD_URL\">click here to download it now</a>.").save(failOnError:true)
+				if(SystemNotification.findByText("There is a new version of FrontlineSMS available, <a href=\"$DOWNLOAD_URL\">click here to download it now</a>.")) {
+					def existingNotification = SystemNotification.findByText("There is a new version of FrontlineSMS available, <a href=\"$DOWNLOAD_URL\">click here to download it now</a>.")
+					existingNotification.read = false
+					existingNotification.save(failOnError: true, flush: true)
+				} else {
+					new SystemNotification(text:"There is a new version of FrontlineSMS available, <a href=\"$DOWNLOAD_URL\">click here to download it now</a>.").save(failOnError:true)
+				}
 			}
 		} catch(Exception ex) {
 			println "Exception while checking latest version"

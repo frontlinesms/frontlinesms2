@@ -22,6 +22,10 @@
 .ui-selectmenu-menu li a:hover {
 	background-color: #E5EFF3;
 }
+.ui-selectmenu-menu li a:active {
+	background-color: #D8E8EF;
+}
+
 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; }
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
 .ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left: 20px; position: relative; margin-left: 5px; }
@@ -48,7 +52,7 @@
 	border-right: 1px solid #6b6b6b;
 	border-radius: 2px;
 	height: 21px;
-	padding: 2px 26px 2px 10px;
+	padding: 5px 26px 0 10px;
 	text-align: left;
 }
 .ui-selectmenu-status:hover{
@@ -86,5 +90,10 @@
 #search-menu .ui-icon-triangle-1-s{
 	position:relative;
 	left: 205px;
+	top: -15px;
+}
+#traffic-status .ui-icon-triangle-1-s{
+	position:relative;
+	left: 180px;
 	top: -15px;
 }

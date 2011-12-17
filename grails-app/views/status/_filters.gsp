@@ -22,7 +22,8 @@
 		</g:select>
 	</li>
 	<li>
-		<g:radio name="rangeOption" value="between-dates" checked="${params.rangeOption == 'between-dates'}"/>Between dates
+		<g:radio name="rangeOption" value="between-dates" checked="${params.rangeOption == 'between-dates'}"/>
+		<span id="dates-text">Between dates</span>
 	</li>
 	<li class='datepicker'><g:datePicker class='datepicker' name="startDate" value="${params['startDate'] ?: new Date()-14}" noSelection="['':'-Choose-']" precision="day"/></li>
 	<li class='datepicker'><g:datePicker class='datepicker' name="endDate" value="${params['endDate'] ?: new Date()}" noSelection="['':'-Choose-']" precision="day"/></li>

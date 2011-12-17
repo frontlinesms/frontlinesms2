@@ -12,7 +12,7 @@
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
-<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow') ? '' : 'tall-header'}">
+<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' ||  messageSection == 'folder' || messageSection == 'radioShow') ? '' : 'tall-header'}">
 	<table id="message-list" cellspacing=0>
 		<thead>
 			<tr id="message-sorter">
