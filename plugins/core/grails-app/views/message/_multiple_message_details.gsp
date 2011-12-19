@@ -43,7 +43,12 @@
 					</g:elseif>
 					<g:actionSubmit class="msg-btn" value="Delete all" id="btn_delete_all" action="delete"/>
 			</g:elseif>
-			<g:render template="../message/other_actions"/>
+			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
+				<g:render template="../message/other_actions"/>
+			</g:if>
+			<g:else>
+				<g:render template="/message/other_actions" plugin="core"/>
+			</g:else>
 		</g:form>
 	</div>
 </div>

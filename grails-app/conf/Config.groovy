@@ -44,7 +44,7 @@ grails.scaffolding.templates.domainSuffix = 'Instance'
 grails.views.javascript.library = "jquery"
 
 //fronlinesms2 plugin
-frontlinesms2.plugin = "core"
+frontlinesms2.plugin = "radio"
 
 // pagination
 grails.views.pagination.max = 50

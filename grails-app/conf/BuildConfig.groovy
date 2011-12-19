@@ -3,7 +3,7 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-grails.plugin.location.core = "plugins/core"
+//grails.plugin.location.core = "plugins/core"
 grails.plugin.location.radio = "plugins/radio"
 
 

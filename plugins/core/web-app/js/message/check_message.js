@@ -46,6 +46,8 @@ function upSingleCheckedDetails(messageId) {
 		var url = 'archive/' + messageSection + '/' + ownerId + '/show/' + messageId;
 	} else if(viewingArchive == "true") {
 		var url = 'archive/' + messageSection;
+	} else if (messageSection == 'radioShow') {
+		var url = 'radioShow';
 	} else {
 		var url = 'message/' + messageSection;
 	}

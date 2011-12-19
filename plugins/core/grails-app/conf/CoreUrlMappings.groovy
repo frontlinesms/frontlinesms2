@@ -1,4 +1,4 @@
-class UrlMappings {
+class CoreUrlMappings {
 	static mappings = {
 		"/"(controller:'message')
 		

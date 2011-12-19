@@ -5,16 +5,16 @@
 			<h3 id="messages-list-title" class="list-title">MESSAGES</h3>
 			<ul class='sublist' id="messages-submenu">
 				<li class="${(messageSection=='inbox')? 'selected':''}">
-					<g:link action="inbox">Inbox</g:link>
+					<g:link controller="message" action="inbox">Inbox</g:link>
 				</li>
 				<li class="${(messageSection=='sent')? 'selected':''}">
-					<g:link action="sent">Sent</g:link>
+					<g:link controller="message" action="sent">Sent</g:link>
 				</li>
 				<li class="${(messageSection=='pending')? 'selected':''}">
-					<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}">Pending</g:link>
+					<g:link controller="message" action="pending" class="${hasFailedMessages ? 'send-failed' : ''}">Pending</g:link>
 				</li>
 				<li class="${(messageSection=='trash')? 'selected':''}">
-					<g:link action="trash">Trash</g:link>
+					<g:link controller="message" action="trash">Trash</g:link>
 				</li>
 			</ul>
 		</li>
@@ -23,12 +23,12 @@
 			<ul class='sublist' id="activities-submenu">
 				<g:each in="${pollInstanceList}" status="i" var="p">
 					<li class="${p == ownerInstance ? 'selected' : ''}">
-						<g:link action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
+						<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
 					</li>
 				</g:each>
 				<g:each in="${announcementInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">
-						<g:link action="announcement" params="[ownerId: a.id]">${a.name} announcement</g:link>
+						<g:link controller="message" action="announcement" params="[ownerId: a.id]">${a.name} announcement</g:link>
 					</li>
 				</g:each>
 				<li id="create-activity" class="create">
@@ -56,7 +56,7 @@
 		 	<ul class='sublist' id='folders-submenu' >
 				<g:each in="${folderInstanceList}" status="i" var="f">
 					<li class="${f == ownerInstance ? 'selected' : ''}">
-						<g:link action="folder" params="[ownerId: f.id]">${f.name}</g:link>
+						<g:link controller="message" action="folder" params="[ownerId: f.id]">${f.name}</g:link>
 					</li>
 				</g:each>
 				<li id="create-folder" class="create">

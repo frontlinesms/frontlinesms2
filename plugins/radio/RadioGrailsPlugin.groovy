@@ -28,8 +28,6 @@ class RadioGrailsPlugin {
 
     def doWithDynamicMethods = { ctx ->
         // TODO Implement registering dynamic methods to classes (optional)
-//		def pluginFilter = application.allClasses.find {it.name == "PluginFilters"}
-//		application.config.frontlinesms2.plugin = "radio"
 	}
 
     def doWithApplicationContext = { applicationContext ->

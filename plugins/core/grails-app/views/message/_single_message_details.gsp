@@ -11,8 +11,14 @@
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.dateReceived ?: messageInstance.dateSent}"/></p>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
-		<g:render template="../message/message_actions"></g:render>
-		<g:render template="../message/other_actions"/>
+		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
+			<g:render template="../message/message_actions" />
+			<g:render template="../message/other_actions"/>
+		</g:if>
+		<g:else>
+			<g:render template="/message/message_actions" plugin="core"/>
+			<g:render template="/message/other_actions" plugin="core"/>
+		</g:else>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">
 		<div id='message-info'>
