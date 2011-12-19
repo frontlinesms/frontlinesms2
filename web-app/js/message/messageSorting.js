@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	if($("#sortField").val() == 'dateCreated') {
+	if($("#sortField").val() == 'date' + *) {
 		$("#timestamp-header").addClass('desc');
 	}
 });
