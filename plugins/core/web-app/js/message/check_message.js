@@ -47,7 +47,7 @@ function upSingleCheckedDetails(messageId) {
 	} else if(viewingArchive == "true") {
 		var url = 'archive/' + messageSection;
 	} else if (messageSection == 'radioShow') {
-		var url = 'radioShow/' + ownerId;
+		var url = 'message/radioShow/' + ownerId;
 	} else {
 		var url = 'message/' + messageSection;
 	}
@@ -71,7 +71,7 @@ function downSingleCheckedDetails(messageId) {
 	} else if(viewingArchive == "true") {
 		var url = 'archive/' + messageSection;
 	} else if(messageSection == "radioShow") {
-		var url = messageSection + '/' + ownerId + '/show/' + messageId;
+		var url = "message/" +messageSection + '/' + ownerId + '/show/' + messageId;
 	} else {
 		var url = 'message/' + messageSection;
 	}
@@ -111,7 +111,7 @@ function updateMultipleCheckedDetails(messageId) {
 	} else if(viewingArchive == "true") {
 		var url = 'archive/' + messageSection;
 	} else if(messageSection == "radioShow") {
-		var url = messageSection + '/' + ownerId + '/show/' + messageId;
+		var url = "message/" +messageSection + '/' + ownerId + '/show/' + messageId;
 	} else {
 		var url = 'message/' + messageSection;
 	}

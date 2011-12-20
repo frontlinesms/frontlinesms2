@@ -9,9 +9,7 @@ class RadioUrlMappings extends CoreUrlMappings{
 
 		"/"(controller:'message')
 		
-		"/radioShow/$ownerId"(controller:'radioShow', action:'radioShow') {}
 		"/message/radioShow/$ownerId"(controller:'radioShow', action:'radioShow') {}
-		"/radioShow/$ownerId/show/$messageId"(controller:'radioShow', action:'radioShow') {}
 		"/message/radioShow/$ownerId/show/$messageId"(controller:'radioShow', action:'radioShow') {}
 		
 		"500"(view:'/error')
