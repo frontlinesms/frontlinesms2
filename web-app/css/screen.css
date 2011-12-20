@@ -43,25 +43,6 @@ a {
 	vertical-align: bottom;
 }
 
-.desc{
-	margin: 0;
-	border-top-color: black;
-	border-right-color: rgba(0,0,0,0);
-	border-bottom-color: black;
-	border-left-color: rgba(0,0,0,0);
-	border-style: solid;
-	border-width: 4px 4px 0;
-}
-.asc{
-	margin: 0;
-	border-top-color: black;
-	border-right-color: rgba(0,0,0,0);
-	border-bottom-color: black;
-	border-left-color: rgba(0,0,0,0);
-	border-style: solid;
-	border-width: 4px 4px 0;
-}
-
 #address-error{
 	position: relative;
 	left: 150px;

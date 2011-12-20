@@ -8,20 +8,12 @@ class Contact {
 	String notes
 
 	static hasMany = [customFields: CustomField]
-
-	def beforeUpdate = {
-		// FIXME should check if relevant fields are "dirty" here before doing update
-		updateContactNames("", getOldContactNumber())
-		updateContactNames(name, primaryMobile)
-	}
 	
 	def beforeInsert = {
-		updateContactNames(name, primaryMobile)
 		stripNumberFields()
 	}
 	
 	def beforeDelete = {
-		updateContactNames(name, "")
 		GroupMembership.deleteFor(this)
 	}
 	
@@ -87,16 +79,6 @@ class Contact {
 		def secondary = secondaryMobile? Fmessage.countBySrc(secondaryMobile): 0
 		def email = email? Fmessage.countBySrc(email): 0
 		primary + secondary + email
-	}
-	
-	def updateContactNames(contactName, contactNumber) {
-		// FIXME this does not take account of secondary phone number - should accept varargs?
-		if(contactNumber) {
-			 // can't update in current hibernate session. will lead to recursive update. so updating in new session
-			Contact.withNewSession { session -> 
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [contactName, true, contactNumber])
-			}
-		}
 	}
 	
 	def stripNumberFields() {

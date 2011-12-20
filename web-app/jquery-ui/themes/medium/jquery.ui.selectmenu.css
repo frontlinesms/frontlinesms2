@@ -14,10 +14,10 @@
 
 .ui-selectmenu-menu li a{
 	display: block;
-	height:21px;
+	min-height:21px;
 	outline:none;
 	text-decoration:none;
-	padding: 4px 26px 0px 10px;
+	padding: 4px 10px 0px 10px;
 }
 .ui-selectmenu-menu li a:hover {
 	background-color: #E5EFF3;
