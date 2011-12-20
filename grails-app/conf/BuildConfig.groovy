@@ -3,8 +3,13 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-//grails.plugin.location.core = "plugins/core"
-grails.plugin.location.radio = "plugins/radio"
+if(Boolean.parseBoolean(System.properties['radio.plugin'])) {
+	println "Loading radio plugin"
+	grails.plugin.location.radio = "plugins/radio"
+} else {
+	println "Loading core plugin" 
+	grails.plugin.location.core = "plugins/core"
+}
 
 
 grails.project.dependency.resolution = {

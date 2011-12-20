@@ -36,7 +36,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			to PageMessageInbox
-			def firstMessageLink = $('a', href:"/frontlinesms2/message/inbox/show/${message.id}?viewingArchive=")
+			def firstMessageLink = $('a', text:"Alice")
 		then:
 			firstMessageLink.text() == 'Alice'
 	}
@@ -73,11 +73,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${aliceMessage.id}?viewingArchive="
+			$('#messages .selected td:nth-child(3) a').@href == "/core/message/inbox/show/${aliceMessage.id}?viewingArchive="
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/inbox/show/${bobMessage.id}?viewingArchive="
+			$('#messages .selected td:nth-child(3) a').@href == "/core/message/inbox/show/${bobMessage.id}?viewingArchive="
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {

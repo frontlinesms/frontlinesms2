@@ -68,12 +68,12 @@ class Poll {
 	
 	def archivePoll() {
 		this.archived = true
-		this.responses.archive()
+		this.responses*.archive()
 	}
 	
 	def unarchivePoll() {
 		this.archived = false
-		this.responses.unarchive()
+		this.responses*.unarchive()
 	}
 
 	static Poll createPoll(attrs) {

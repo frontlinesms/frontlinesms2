@@ -19,13 +19,6 @@ class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTe
 		}
 	}
 
-	def testRadioShowView() {
-		assertForwardUrlMapping('/message/radioShow/123', controller:'message', action:'radioShow') {
-			ownerId = 123
-		}
-
-	}
-
 	def testTrashView() {
 		assertForwardUrlMapping('/message/trash/show/123', controller:'message', action:'trash') {
 			id = 123
@@ -36,13 +29,6 @@ class MessageAndActivityUrlMappingITests extends grails.test.GrailsUrlMappingsTe
 		assertForwardUrlMapping('/message/poll/123/show/456', controller:'message', action:'poll') {
 			messageId = 456
 			ownerId = 123
-		}
-	}
-
-	def testRadioMessageView() {
-		assertForwardUrlMapping('/message/radioShow/123/show/3', controller:'message', action:'radioShow') {
-			ownerId = 123
-			messageId = 3
 		}
 	}
 

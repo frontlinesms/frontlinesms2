@@ -56,7 +56,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/frontlinesms2/message/poll/$poll.id/show/$aliceMessage.id?viewingArchive="
+			$('#messages .selected td:nth-child(3) a').@href == "/core/message/poll/$poll.id/show/$aliceMessage.id?viewingArchive="
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:

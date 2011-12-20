@@ -33,7 +33,7 @@ class ContactViewSpec extends ContactBaseSpec {
 		then:
 			def anchor = $(".displayName-${alice.id}")
 			anchor.text() == 'Alice'
-			anchor.@href.contains("/frontlinesms2/contact/show/$alice.id")
+			anchor.@href.contains("/contact/show/$alice.id")
 	}
 
 	def 'contact with no name can be clicked and edited because his primaryMobile is displayed'() {

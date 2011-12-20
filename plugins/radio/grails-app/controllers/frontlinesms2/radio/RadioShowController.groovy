@@ -21,7 +21,6 @@ class RadioShowController extends MessageController {
 	}
 	
 	def radioShow = {
-		println "ownerId : ${params.ownerId}"
 		def showInstance = RadioShow.get(params.ownerId)
 		def messageInstanceList = showInstance?.getShowMessages(params.starred)
 		render view:'standard', model:[messageInstanceList: messageInstanceList?.list(params),

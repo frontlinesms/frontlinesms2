@@ -19,7 +19,7 @@ class ContactCreateSpec extends ContactBaseSpec {
 			to PageContactShow
 			def btnCreateContact = $("#create-contact").find('a')
 		then:
-			assert btnCreateContact.getAttribute('href') == "/frontlinesms2/contact/createContact"
+			assert btnCreateContact.getAttribute('href') == "/core/contact/createContact"
 	}
 
 	def 'button to create new group exists and goes to NEW GROUP page'() {
@@ -27,7 +27,7 @@ class ContactCreateSpec extends ContactBaseSpec {
 			to PageContactShow
 			def btnCreateGroup = $("#create-group").find('a')
 		then:
-			assert btnCreateGroup.getAttribute('href') == "/frontlinesms2/group/create"
+			assert btnCreateGroup.getAttribute('href') == "/core/group/create"
 	}
 	
 }

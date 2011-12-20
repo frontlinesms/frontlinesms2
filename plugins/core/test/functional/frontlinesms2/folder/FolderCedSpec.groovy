@@ -9,7 +9,7 @@ class FolderCedSpec extends FolderBaseSpec {
 			go 'message'
 			def btnNewFolder = $('#create-folder a')
 		then:
-			btnNewFolder.getAttribute('href') == "/frontlinesms2/folder/create"
+			btnNewFolder.getAttribute('href').contains("/folder/create")
 	}
 
 	def 'existing folders appear in activities section of messages'() {
