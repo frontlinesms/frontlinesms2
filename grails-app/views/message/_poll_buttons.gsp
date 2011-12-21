@@ -1,7 +1,7 @@
 <ul id='poll-button-list' class="button-list">
 	<li>
 		<g:remoteLink class="section-action-button poll-btn btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
-			Quick message
+			<div id="quick-message">Quick message</div>
 		</g:remoteLink>
 	</li>
 	<g:if test="${!params.viewingArchive}">

@@ -101,7 +101,7 @@
 		}).join('');
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
-			$("#manual-address").append("<div id='address-error' class='error-message'>Your address cannot contain letters</div>");
+			$("#manual-address").append("<div id='address-error' class='error-message'>Phone number cannot contain letters</div>");
 		} else if(address == '') {
 
 		} else {

@@ -1,11 +1,11 @@
-<h3>${ownerInstance?.title} poll</h3><span id="poll-sent">(${ownerInstance?.sentMessageCount} messages sent)</span>
+<h3 id="poll-title">${ownerInstance?.title} poll</h3>
 <g:render template="../message/poll_buttons"/>
 <div id="activity-details">
 	<g:if test="$responseList">
 		<table>
 			<tr>
 				<td>
-					<g:formatDate date="${ownerInstance?.dateCreated}" />
+					<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="poll-sent">   (${ownerInstance?.sentMessageCount} messages sent)</span>
 					<p>${ownerInstance?.messageText}</p>
 					<p>${ownerInstance.autoReplyText ? "Auto Reponse Enabled" : ""}</p>
 				</td>

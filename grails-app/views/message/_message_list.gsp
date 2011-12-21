@@ -86,22 +86,14 @@
 				</g:else>
 				</g:if>
 				<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
-					<tr id="no-search-description">
-						<td></td>
-						<td></td>
-						<td><h1>Start new search on the left</h1></td>
-						<td></td>
-						<td></td>
-					</tr>
+					<h1 id="no-search-description">
+						Start new search on the left
+					</h1>
 				</g:elseif>
 				<g:else>
-					<tr id="no-messages">
-						<td></td>
-						<td></td>
-						<td>No messages</td>
-						<td></td>
-						<td></td>
-					</tr>
+					<h1 id="no-messages">
+						No messages
+					</h1>
 				</g:else>
 		</tbody>
 	</table>

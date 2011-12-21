@@ -26,6 +26,11 @@
 	padding:0;
 }
 
+.ui-dialog textarea {
+	max-width: 300px;
+	max-height: 300px;
+}
+
 .ui-dialog .error-panel{
 	background-color: #ffefd8;
 	border-bottom: 1px solid #9E9E9E;
