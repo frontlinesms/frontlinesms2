@@ -21,7 +21,7 @@
 	</div>
 	<div class="basic-info">
 		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
-		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
+		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
 		<g:if test="${contactInstance?.primaryMobile?.trim()}">
 			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
