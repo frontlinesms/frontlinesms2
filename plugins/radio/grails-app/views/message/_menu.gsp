@@ -19,6 +19,21 @@
 			</ul>
 		</li>
 		<li>
+			<h3 id="shows-list-title" class="list-title">Shows</h3>
+			<ul class='sublist' id="shows-submenu">
+				<g:each in="${radioShows}" status="i" var="s">
+					<li class="${s == ownerInstance ? 'selected' : ''}">
+						<g:link controller="radioShow" action="radioShow" params="[ownerId: s.id]">${s.name}</g:link>
+					</li>
+				</g:each>
+				<li id='create-show' class="create">
+					<g:remoteLink class="btn create" controller="radioShow" action="create" onSuccess="launchSmallPopup('Radio Show', data, 'Create')">
+						Create new show
+					</g:remoteLink>
+				</li>
+			</ul>
+		</li>
+		<li>
 			<h3 class="list-title activities-list-title">Activities</h3>
 			<ul class='sublist' id="activities-submenu">
 				<g:each in="${pollInstanceList}" status="i" var="p">
@@ -37,21 +52,6 @@
 			</ul>
 		</li>
 		<li>
-			<h3 id="shows-list-title" class="list-title">Shows</h3>
-			<ul class='sublist' id="shows-submenu">
-				<g:each in="${radioShows}" status="i" var="s">
-					<li class="${s == ownerInstance ? 'selected' : ''}">
-						<g:link controller="radioShow" action="radioShow" params="[ownerId: s.id]">${s.name}</g:link>
-					</li>
-				</g:each>
-				<li id='create-show' class="create">
-					<g:remoteLink class="btn create" controller="radioShow" action="create" onSuccess="launchSmallPopup('Radio Show', data, 'Create')">
-						Create new show
-					</g:remoteLink>
-				</li>
-			</ul>
-		</li>
-		<li>
 			<h3 id="folders-list-title" class="list-title">Folders</h3>
 		 	<ul class='sublist' id='folders-submenu' >
 				<g:each in="${folderInstanceList}" status="i" var="f">
@@ -60,7 +60,7 @@
 					</li>
 				</g:each>
 				<li id="create-folder" class="create">
-					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup('Folder', data, 'Create');">
+					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup('Folder', data, 'Create')">
 						Create new folder
 					</g:remoteLink>
 				</li>

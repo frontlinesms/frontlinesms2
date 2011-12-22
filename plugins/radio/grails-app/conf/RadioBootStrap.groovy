@@ -2,6 +2,7 @@ import grails.util.Environment
 import frontlinesms2.radio.*
 import frontlinesms2.*
 
+import java.util.Date
 
 class RadioBootStrap extends CoreBootStrap {
 	def grailsApplication
@@ -22,10 +23,12 @@ class RadioBootStrap extends CoreBootStrap {
 	
 	private def dev_initRadioShows() {
 		 def r = new RadioShow(name: "Health")
-		 def messageA = new Fmessage(src: '+3245678', dst: '+123456789', text: "What is diabetes?").save(failOnError: true)
-		 def messageB = new Fmessage(src: 'Jill', dst: '+254115533', text: "I love life").save(failOnError: true)
-		 r.addToMessages(messageA)
-		 r.addToMessages(messageB)
+		 (1..20).collect {
+			if(it > 10)
+			 	r.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-1).save(failOnError: true))
+			else
+				r.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-2).save(failOnError: true))
+		 }
 		 r.save(failOnError: true, flush: true)
 	}
 	

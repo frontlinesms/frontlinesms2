@@ -28,6 +28,10 @@ a {
 	width: 36px;
 }
 
+.message-list-separator {
+	background-color: #DFDFDF;
+}
+
 .unread {
 	font-weight: bolder;
 }
