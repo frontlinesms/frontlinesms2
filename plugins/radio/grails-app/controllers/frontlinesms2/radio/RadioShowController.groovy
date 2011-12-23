@@ -48,7 +48,7 @@ class RadioShowController extends MessageController {
 		return model
 	}
 	
-	String dateToString(Date date) {
+	private String dateToString(Date date) {
 		new SimpleDateFormat("EEEE, MMMM dd", Locale.US).format(date)
 	}
 	

@@ -25,7 +25,7 @@
 	</g:elseif>
 	<g:elseif test="${messageSection == 'radioShow'}">
 		<div class="message-title">
-			<h3 id="on-air">On air</h3>
+			<h3 id="on-air" class="inactive">On air</h3>
 			<g:render template="/message/section_action_buttons" plugin="core"/>
 		</div>
 	</g:elseif>

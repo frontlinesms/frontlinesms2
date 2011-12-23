@@ -1,0 +1,51 @@
+package frontlinesms2.radio
+
+import frontlinesms2.*
+import frontlinesms2.dev.MockModemUtils
+
+import serial.mock.*
+import routing.CamelIntegrationSpec
+
+class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
+	def fconnectionService
+	def radioShowService
+	
+	String getTestRouteFrom() { '' }
+	String getTestRouteTo() { '' }
+	
+	def "should translate a CIncomingMessage into a Fmessage then save it then add it to the running radio show"() {
+		given:
+			def mockPortHandler = MockModemUtils.createMockPortHandler([1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C'])
+			// initialise mock serial device with message available
+ 			MockModemUtils.initialiseMockSerial(['/def/test-modem': new CommPortIdentifier("COM99",
+					mockPortHandler)])
+			// start route
+			def connection = new SmslibFconnection(name:'test connection', port:'/def/test-modem', baud:9600).save(failOnError:true)
+			def show = new RadioShow(name:"Health Show").save(flush:true)
+			fconnectionService.createRoutes(connection)
+			
+		when:	
+			//start radio show
+			radioShowService.startShow(show)
+			assert show.showMessages.count() == 0
+			// wait for message to be read from mock serial device
+			while(mockPortHandler.messages.size() > 0) { Thread.sleep(50) }
+			// wait for message to be processed
+			Thread.sleep(5000) // TODO must be a neater way of doing this
+			show.refresh()
+		then:	
+			// assert Fmessage is saved and has expected content
+			Fmessage.findAll()*.text == ['Good morning']
+			// assert RadioShow processor is called
+			show.showMessages.count() == 1
+			
+		cleanup:	
+			// stop route
+			if(connection) fconnectionService.destroyRoutes(connection)
+			// remove mock serial port
+			MockSerial.reset()
+			//stop show
+			radioShowService.stopShow()
+			RadioShow.findAll()*.delete()
+	}
+}
