@@ -6,7 +6,6 @@ class BootStrap {
 		
 		switch(Environment.current) {
 			case Environment.TEST:
-				test_initGeb()
 				break
 				
 			case Environment.DEVELOPMENT:

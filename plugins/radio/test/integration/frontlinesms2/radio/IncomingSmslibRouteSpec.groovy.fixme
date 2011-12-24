@@ -21,12 +21,11 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 					mockPortHandler)])
 			// start route
 			def connection = new SmslibFconnection(name:'test connection', port:'/def/test-modem', baud:9600).save(failOnError:true)
-			def show = new RadioShow(name:"Health Show").save(flush:true)
+			def show = new RadioShow(name:"Health Show", isRunning:true).save(flush:true)
 			fconnectionService.createRoutes(connection)
 			
 		when:	
 			//start radio show
-			radioShowService.start(show)
 			assert show.showMessages.count() == 0
 			// wait for message to be read from mock serial device
 			while(mockPortHandler.messages.size() > 0) { Thread.sleep(50) }
@@ -61,15 +60,13 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 					mockPortHandler)])
 			// start route
 			def connection = new SmslibFconnection(name:'test connection', port:'/def/test-modem', baud:9600).save(failOnError:true)
-			def show = new RadioShow(name:"Health Show").save(flush:true)
+			def show = new RadioShow(name:"Health Show",isRunning:true).save(flush:true)
 			Poll.createPoll(title:'What football team do you like?', keyword: 'football', choiceA:'manchester',
 				choiceB:'gor', choiceC:'sofapaka', choiceD:'arsenal').save(failOnError:true, flush:true)
 			fconnectionService.createRoutes(connection)
 			
 		when:
 			//start radio show
-			show.startShow()
-			show.save(flush:true)
 			assert show.showMessages.count() == 0
 			// wait for message to be read from mock serial device
 			while(mockPortHandler.messages.size() > 0) { Thread.sleep(50) }
