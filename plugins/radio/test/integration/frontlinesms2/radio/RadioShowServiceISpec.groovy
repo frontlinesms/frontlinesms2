@@ -22,7 +22,7 @@ class RadioShowServiceISpec extends UnitSpec {
 			def show = new RadioShow(name:"Morning Show").save(failOnError:true)
 			def message = new Fmessage(src:"123456").save(failOnError:true, flush:true)
 		when:
-			radioService.startShow(show)
+			show.start()
 			radioService.process(message)
 			message.refresh()
 			show.refresh()

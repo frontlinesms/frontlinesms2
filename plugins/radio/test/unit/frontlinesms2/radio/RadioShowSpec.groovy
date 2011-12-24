@@ -26,4 +26,35 @@ class RadioShowSpec extends UnitSpec {
 			!invalidShow2.validate()
 			validShow.validate()
 	}
+	
+	def "only one radio show can be active any given time"() {
+		setup:
+			mockDomain(RadioShow)
+			def show = new RadioShow(name:"Health Show").save()
+			def show2 = new RadioShow(name:"Agriculture Show").save()
+		when:
+			show.start()
+		then:
+			show.isRunning
+		when:
+			show2.start()
+		then:
+			!show2.isRunning
+	}
+	
+	def "radioShow can only be started when the current running one is stopped"() {
+		setup:
+			mockDomain(RadioShow)
+			def show = new RadioShow(name:"Health Show").save()
+			def show2 = new RadioShow(name:"Agriculture Show").save()
+		when:
+			show.start()
+		then:
+			show.isRunning
+		when:
+			show.stop()
+			show2.start()
+		then:
+			show2.isRunning
+	}
 }
