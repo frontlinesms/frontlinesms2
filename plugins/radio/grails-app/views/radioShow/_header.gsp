@@ -1,4 +1,4 @@
-<div class="section-header ${messageSection}" id="inbox-actions">
+<div class="section-header ${messageSection}" id="radio-inbox">
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
@@ -25,8 +25,9 @@
 	</g:elseif>
 	<g:elseif test="${messageSection == 'radioShow'}">
 		<div class="message-title">
-			<h3 id="on-air" class="inactive">On air</h3>
+			<h3 id="on-air" class="${ownerInstance.isRunning ? 'active' : ''}">On air</h3>
 			<g:render template="/message/section_action_buttons" plugin="core"/>
+			<g:render template="radio_actions" />
 		</div>
 	</g:elseif>
 	<g:else>

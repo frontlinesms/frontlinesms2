@@ -22,14 +22,15 @@ class RadioBootStrap extends CoreBootStrap {
 	}
 	
 	private def dev_initRadioShows() {
-		 def r = new RadioShow(name: "Health")
+		 def show1 = new RadioShow(name: "Health")
 		 (1..20).collect {
 			if(it > 10)
-			 	r.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-1).save(failOnError: true))
+			 	show1.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-1).save(failOnError: true))
 			else
-				r.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-2).save(failOnError: true))
+				show1.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-2).save(failOnError: true))
 		 }
-		 r.save(failOnError: true, flush: true)
+		 show1.save(failOnError: true, flush: true)
+		 def show2 = new RadioShow(name: "Morning Show").save(flush:true)
 	}
 	
 }

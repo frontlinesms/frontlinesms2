@@ -34,7 +34,7 @@ class ShowsFSpec extends RadioBaseSpec {
 	
 	def "separator is displayed for radio messages from different days"() {
 		given:
-			def show = RadioShow.findByName("Test")
+			def show = new RadioShow(name:"Test").save()
 			def messageA = new Fmessage(src: '+3245678', dst: '+123456789', text: "What is diabetes?", dateReceived: new Date() - 2).save(failOnError: true)
 			def messageB = new Fmessage(src: 'Jill', dst: '+254115533', text: "I love life", dateReceived: new Date() - 1).save(failOnError: true)
 			show.addToMessages(messageA)
@@ -45,25 +45,18 @@ class ShowsFSpec extends RadioBaseSpec {
 		then:
 			getColumnText('message-list', 0)[1] == "${dateToString(new Date()-2)}"
 	}
-	
-	def "'on air' messsage has 'inactive' css when radio show is off"() {
-		given:
-			createRadioShows()
-		when:
-			to PageMorningShow
-		then:
-			at PageMorningShow
-			onAir.hasClass('inactive')
-	}
-	
+		
 	def "'on air' messsage has 'active' css when radio show is on"() {
 		given:
 			createRadioShows()
 		when:
 			to PageMorningShow
-			startShow.click()
 		then:
 			at PageMorningShow
+			!onAir.classes()
+		when:
+			startShow.click()
+		then:
 			onAir.hasClass('active')
 	}
 	

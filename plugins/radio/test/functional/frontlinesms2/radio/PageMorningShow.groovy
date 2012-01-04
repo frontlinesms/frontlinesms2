@@ -8,6 +8,6 @@ class PageMorningShow extends geb.Page {
 	
 	static content = {
 		onAir { $('#on-air')}
-		startShow { $('#start-show')}
+		startShow { $('#radio-actions').find('a.start-show')}
 	}
 }

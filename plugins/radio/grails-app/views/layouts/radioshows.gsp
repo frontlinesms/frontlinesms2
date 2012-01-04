@@ -24,6 +24,7 @@
 		<g:javascript src="/message/categorize_dropdown.js" plugin="core"/>
 		<g:javascript src="/message/move_dropdown.js" plugin="core"/>
 		<g:javascript src="/message/moreActions.js" plugin="core"/>
+		<g:javascript src="on_air.js"/>
 		<g:javascript>
 		$(function() {  
 		   disablePaginationControls();

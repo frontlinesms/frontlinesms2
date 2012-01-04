@@ -28,6 +28,10 @@ a {
 	width: 36px;
 }
 
+.active {
+	color: #C03283
+}
+
 .message-list-separator {
 	background-color: #DFDFDF;
 }
@@ -644,7 +648,7 @@ a.tab-link:active{
     background-color: #fff;
     top: 83px;
 }
-.section-header .message-title, .section-header #archive-title, .section-header #contact-title{
+.section-header .message-title .section-header #archive-title, .section-header #contact-title{
     padding: 0;
     position: relative;
     margin: 0;
@@ -1077,6 +1081,7 @@ button:active, input[type=submit]:active, a.btn:active{
 button[disabled=disabled], input[type=submit][disabled=disabled], a.btn[disabled=disabled]{
 	background-image: url('../images/buttons/button_disabled_part.png');
 	color: #9E9E9E;
+	pointer-events: none;
 	cursor: default;
 }
 button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.btn[disabled=disabled]:hover{

@@ -23,6 +23,8 @@ class RadioShow extends MessageOwner {
 	def start() {
 		if(!RadioShow.findByIsRunning(true)) {
 			this.isRunning = true
+		} else {
+			return false
 		}
 	}
 	
