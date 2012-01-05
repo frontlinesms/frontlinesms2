@@ -7,7 +7,11 @@ class PageMorningShow extends geb.Page {
 	}
 	
 	static content = {
-		onAir { $('#on-air')}
+		MessagePageOnAirNotice { $('#on-air')}
 		startShow { $('#radio-actions').find('a.start-show')}
+		stopShow { $('#radio-actions').find('a.stop-show')}
+		ShowListOnAirNotice {id ->
+					$("#show-$id")
+			}
 	}
 }

@@ -47,7 +47,7 @@ class RadioShowController extends MessageController {
 		if(showInstance.start()) {
 			println "${showInstance.name} show started"
 			showInstance.save(flush:true)
-			render "show started"
+			render "$showInstance.id"
 		} else {
 			flash.message = "${RadioShow.findByIsRunning(true).name} show is already on air"
 			render text:flash.message
@@ -57,7 +57,7 @@ class RadioShowController extends MessageController {
 	def stopShow = {
 		def showInstance = RadioShow.findById(params.id)
 		showInstance.stop()
-		redirect action:radioShow, params: [ownerId: params.id]
+		render "$showInstance.id"
 	}
 	
 	def getShowModel(messageInstanceList) {

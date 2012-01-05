@@ -6,7 +6,7 @@ import java.util.Date
 import frontlinesms2.*
 
 @Mixin(frontlinesms2.utils.GebUtil)
-class ShowsFSpec extends RadioBaseSpec {
+class ShowFSpec extends RadioBaseSpec {
 
 	def "should be able to create new shows"() {
 		when:
@@ -46,18 +46,38 @@ class ShowsFSpec extends RadioBaseSpec {
 			getColumnText('message-list', 0)[1] == "${dateToString(new Date()-2)}"
 	}
 		
-	def "'on air' messsage has 'active' css when radio show is on"() {
+	def "'on air' notice does not have 'active' css when radio show is stopped"() {
 		given:
 			createRadioShows()
 		when:
 			to PageMorningShow
 		then:
 			at PageMorningShow
-			!onAir.classes()
+			!MessagePageOnAirNotice.classes()
 		when:
 			startShow.click()
 		then:
-			onAir.hasClass('active')
+			waitFor { MessagePageOnAirNotice.hasClass('active')}
+			ShowListOnAirNotice(RadioShow.findByName("Morning Show").id).hasClass('active')
+		when:
+			stopShow.click()
+		then:
+			waitFor { !MessagePageOnAirNotice.classes()}
+			!ShowListOnAirNotice(RadioShow.findByName("Morning Show").id).hasClass('active')
+			
+	}
+	
+	def "'on air' notice is shown against active radio show in show list"() {
+		given:
+			createRadioShows()
+			def show = new RadioShow(name:"Health Show")
+			show.start()
+			show.save(flush:true)
+		when:
+			to PageMorningShow
+		then:
+			at PageMorningShow
+			ShowListOnAirNotice(RadioShow.findByName("Health Show").id).hasClass('active')
 	}
 	
 	private String dateToString(Date date) {
