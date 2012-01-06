@@ -60,7 +60,7 @@ class ContactController {
 	}
 
 	def saveContact = {
-		def contactInstance = Contact.get(params.contactId)?:new Contact()
+		def contactInstance = Contact.get(params.contactId) ?: new Contact()
 		contactInstance.properties = params
 		if(attemptSave(contactInstance)) {
 			parseContactFields(contactInstance)
