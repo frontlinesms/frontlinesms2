@@ -585,6 +585,13 @@ animation: newMessage 2s;
 	top: 400px;
 	left: 35%;
 }
+#messages #no-messages-search{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 400px;
+	left: 27%;
+}
 
 #folder-list, #activity-list{
  	float:left;
