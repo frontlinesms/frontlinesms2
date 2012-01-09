@@ -9,7 +9,7 @@
 			refresh_rate = ${params.rRate ?: 30000}
 		</script>
 		<g:layoutHead />
-		<g:javascript src="jquery.timers.js"/>
+		<g:javascript src="jquery.ui.selectmenu.js"/>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
 		<g:javascript src="smallPopup.js"/>
@@ -18,24 +18,8 @@
 		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
 		<g:javascript src="contact/moreGroupActions.js" />
-		<g:javascript>
-			function getGroupId(){
-				var group = $('#groupId');
-				return group.length ? group.val() : '';
-			}
-			function updateContacts(data) {
-				var replacement = $(data);
-				$("#contact-list").html(replacement.filter('#contact-list').html());
-				$(".footer #paging").html(replacement.filter('.footer #paging').html());
-				disablePaginationControls();
-			}
-
-			$(function() {  
-			   disablePaginationControls();
-			   $("#contact-search").renderDefaultText();
-			});
-		</g:javascript>
-		<g:render template="/css" />
+		<g:javascript src="contact/search_within_list.js" />
+		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 	</head>
 	<body id="contacts-tab">

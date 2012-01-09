@@ -1,3 +1,9 @@
+<script>
+	function toggleDropdown() {
+		$("#dropdown_options").toggle()
+		return false;
+	};
+</script>
 <div id="message-detail-buttons">
 	<g:form controller="${params.viewingArchive ? 'archive' : 'message'}" method="POST">
 		<g:hiddenField name="messageSection" value="${messageSection}"></g:hiddenField>
@@ -36,9 +42,3 @@
 		</g:elseif>
 	</g:form>
 </div>
-<script>
-	function toggleDropdown() {
-		$("#dropdown_options").toggle()
-		return false;
-	};
-</script>

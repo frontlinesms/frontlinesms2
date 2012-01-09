@@ -1,7 +1,7 @@
 package frontlinesms2
 
 import grails.util.GrailsConfig
-import grails.converters.JSON
+import grails.converters.*
 import java.lang.*
 import frontlinesms2.radio.*
 
@@ -14,6 +14,7 @@ class MessageController {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
+	def newMessagesService
 
 	def bobInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -31,6 +32,24 @@ class MessageController {
 	def index = {
 		params.sort = 'dateReceived'
 		redirect(action:'inbox', params:params)
+	}
+	
+	def getNewMessageCount = {
+		def section = params.messageSection
+		if(!params.ownerId && section != 'trash') {
+			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
+			render messageCount as JSON
+		} else if(section == 'poll') {
+			def messageCount = [totalMessages:[Poll.get(params.ownerId)?.getPollMessages().count()]]
+			render messageCount as JSON
+		} else if(section == 'announcement') {
+			def messageCount = [totalMessages:[Announcement.get(params.ownerId)?.getAnnouncementMessages().count()]]
+			render messageCount as JSON
+		} else if(section == 'folder') {
+			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages().count()]]
+			render messageCount as JSON
+		} else
+			render ""
 	}
 	
 	def getShowModel(messageInstanceList) {
@@ -163,7 +182,6 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
-		println "deleting from archive? ${params.viewingArchive}"
 		if(params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else if(params.viewingArchive)

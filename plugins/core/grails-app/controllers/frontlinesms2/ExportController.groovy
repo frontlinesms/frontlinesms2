@@ -31,7 +31,6 @@ class ExportController {
 				reportName:getActivityDescription()]
 	}
 	
-	//FIXME need to notify the user when the default case is return.
 	def downloadMessageReport = {
 		def messageSection = params.messageSection
 		def messageInstanceList
@@ -65,7 +64,6 @@ class ExportController {
 	}
 	
 	def contactWizard = {
-		println params
 		[groupId: params.groupId, 
 			contactsSection: params.contactsSection,
 			reportName:getGroupDescription()]

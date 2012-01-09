@@ -1,10 +1,21 @@
 $(function() {
-	$('#tab-messages').everyTime(refresh_rate || '30s', "refreshCountTimer", refreshMessageCount);
+	$(".dropdown").selectmenu();
+	setInterval(refreshMessageCount, 30000);
+	setInterval(refreshStatusIndicator, 30000);
+	refreshStatusIndicator();
 });
 
 function refreshMessageCount() {
 	$.get(url_root + 'message/getUnreadMessageCount', function(data) {
 		$('#inbox-indicator').html(data);
+	});
+}
+
+function refreshStatusIndicator() {
+	$.get(url_root + 'status/trafficLightIndicator', function(data) {
+		$('#status-indicator').removeClass('green');
+		$('#status-indicator').removeClass('red');
+		$('#status-indicator').addClass(data);
 	});
 }
 
@@ -53,3 +64,4 @@ $.fn.renderDefaultText = function() {
 		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
 		});
 };
+

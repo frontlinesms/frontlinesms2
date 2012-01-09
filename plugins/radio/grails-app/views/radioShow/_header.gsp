@@ -13,12 +13,12 @@
 	<g:elseif test="${messageSection == 'announcement'}">
 		<div class="activity-title">
 			<h3>${ownerInstance?.name}</h3>
-			<g:render template="../message/section_action_buttons"/>
+			<g:render template="../message/poll_buttons"/>
 			<p id="activity-details">${ownerInstance?.sentMessage}</p>
 		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'folder'}">
-		<div class="activity-title">
+		<div class="message-title">
 			<h3>${ownerInstance?.name} ${messageSection}</h3>
 			<g:render template="../message/section_action_buttons"/>
 		</div>

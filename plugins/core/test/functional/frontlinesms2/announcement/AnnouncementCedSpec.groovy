@@ -43,8 +43,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			addName.value("newbie")
 			doneButton.click()
 		then:
-			sleep 1000
-			$("#ui-dialog-title-modalBox").text() == "Announcement created!"
+			waitFor { $("#ui-dialog-title-modalBox").text() == "Announcement created!" }
 			Announcement.findByName("newbie").sentMessage == "announcing this new announcement!"
 	}
 

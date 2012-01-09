@@ -11,13 +11,13 @@
 			<g:render template="device_detection"/>
 		</div>
 		<g:javascript>
-			// Update the list of detected devices
-			$(document).everyTime(10000, function() {
-				$.get(url_root + 'status/listDetected',
-						function(data) {
-							$('#device-detection').replaceWith($(data));
-						});
-			});
+			setInterval(refreshDevices, 10000);
+			
+			function refreshDevices() {
+				$.get(url_root + 'status/listDetected', function(data) {
+					$('#device-detection').replaceWith($(data));
+				});
+			}
 		</g:javascript>
 	</body>
 </html>

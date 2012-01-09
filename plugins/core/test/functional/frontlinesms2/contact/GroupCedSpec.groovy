@@ -24,7 +24,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			go "group/show/${Group.findByName('Friends').id}"
 		then:
 			at PageContactShowGroupFriends
-			$('#group-actions').displayed
+			waitFor { moreGroupActions.displayed }
 		when:
 			$('#group-actions').value("rename").click()
 		then:
@@ -44,9 +44,9 @@ class GroupCedSpec extends GroupBaseSpec {
 			go "group/show/${Group.findByName('Friends').id}"
 		then:
 			at PageContactShowGroupFriends
-			$('#group-actions').displayed
+			waitFor { moreGroupActions.displayed }
 		when:
-			$('#group-actions').value("delete").click()
+			moreGroupActions.value("delete").click()
 		then:
 			waitFor{ $('#ui-dialog-title-modalBox').displayed}
 		when:

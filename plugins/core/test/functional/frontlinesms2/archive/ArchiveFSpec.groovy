@@ -25,12 +25,12 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 		then:
-			getColumnText('message-list', 2) == ['Max', 'Jane']
+			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane', 'Max'])
 		when:
 			def btnDelete = $("#delete-msg")
 			btnDelete.click()
 		then:
-			getColumnText('message-list', 2) == ['Jane']
+			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane'])
 	}
 	
 	def '"Archive All" button does not appear in archive section'() {
@@ -63,7 +63,6 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			go "archive/poll/${poll.id}"
 			$(".message-select")[0].click()
 		then:
-			$("#btn_delete_all").displayed
-		
+			waitFor { $("#btn_delete_all").displayed }
 	}
 }

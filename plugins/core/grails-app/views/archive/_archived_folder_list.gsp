@@ -1,5 +1,5 @@
 <g:if test="${folderInstanceList.size() > 0}">
-	<div id="folders" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow') ? '' : 'tall-header'}">
+	<div id="folders">
 		<table id="folder-list" cellspacing=0>
 			<thead>
 				<tr>

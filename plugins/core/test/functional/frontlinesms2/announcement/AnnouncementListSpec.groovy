@@ -12,7 +12,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			go "message/announcement/${Announcement.findByName('New Office').id}"
-			def announcementMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
+			def announcementMessageSources = $('#messages tbody tr .message-preview-sender')*.text()
 		then:
 			at PageMessageAnnouncementNewOffice
 			announcementMessageSources == ['Jane', 'Max']
@@ -77,12 +77,12 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			$('a', text:'Starred').click()
 		then:
 			waitFor { $("#messages tbody tr").size() == 1 }
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Max'
+			$("#messages tbody tr")[0].find(".message-preview-sender").text() == 'Max'
 		when:
 			$('a', text:'All').click()
 		then:
 			waitFor { $("#messages tbody tr").size() == 2 }
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Jane', 'Max'])
+			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane', 'Max'])
 	}
 	
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -144,23 +144,19 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 	
 	def "can delete a announcement"() {
 		when:
-			deleteAnnouncement()
+			createTestAnnouncements()
+			createTestMessages()
+			def announcement = Announcement.findByName("New Office")
+			go "message/announcement/${announcement.id}"
+			$(".section-header-buttons .more-actions").value("delete").click()
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			$("#title").value("Delete announcement")
+		when:
+			$("#done").click()
 		then:
 			waitFor { $("#sidebar .selected").text() == "Inbox" }
 			!$("a", text: "New Office announcement")
 	}
-	
-	def deleteAnnouncement() {
-		createTestAnnouncements()
-		createTestMessages()
-		def announcement = Announcement.findByName("New Office")
-		go "message/announcement/${announcement.id}"
-		$("#more-actions").value("delete")
-		waitFor { $("#ui-dialog-title-modalBox").displayed }
-		$("#title").value("Delete announcement")
-		$("#done").click()
-		announcement
-	}
-
 }
 

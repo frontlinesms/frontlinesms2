@@ -1,4 +1,5 @@
 <g:hiddenField name="sortField" value="${params.sort}"/>
+<g:hiddenField name="sortOrder" value="${params.order}"/>
 <g:hiddenField name="checkedMessageList" value=","/>
 <g:hiddenField name="messageSection" value="${messageSection}"/>
 <g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
@@ -27,6 +28,7 @@
 				<g:each in="${messageInstanceList}" status="i" var="m">
 					<g:if test="${m instanceof frontlinesms2.Fmessage}">
 						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
+							<g:hiddenField name="message-created-date" value="${m.dateCreated}"/>
 							<td class="message-select-cell">
 								<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 								<g:hiddenField name="src-${m.id}" value="${m.src}"/>

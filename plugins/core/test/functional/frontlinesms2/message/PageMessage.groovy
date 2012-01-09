@@ -21,6 +21,8 @@ abstract class PageMessage extends geb.Page {
 		createActivityDialog(required:false) { $("#ui-dialog-title-modalBox") }
 		archiveBtn(required:false){$("#message-detail #archive-msg")}
 		deleteBtn(required:false) {$("#message-detail #delete-msg")}
+		visibleMessageTotal(required:false) { $("#message-list tbody tr").size() }
+		newMessageNotification(required: false) { $("#new-message-notification") }
 	}
 	
 }

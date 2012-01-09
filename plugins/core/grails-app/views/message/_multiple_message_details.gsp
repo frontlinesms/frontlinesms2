@@ -23,7 +23,7 @@
 			</g:if>
 			
 			<g:if test="${messageSection == 'pending'}">
-				<g:if test="${checkedMessageList.tokenize(',').intersect(failedMessageIds*.toString())}">
+				<g:if test="${checkedMessageList?.tokenize(',')?.intersect(failedMessageIds*.toString())}">
 					<g:link class="msg-btn btn" elementId="retry-failed" action="send" params="${[failedMessageIds : checkedMessageList.tokenize(',').intersect(failedMessageIds*.toString())]}">Retry failed</g:link>
 				</g:if>
 				<g:actionSubmit class="msg-btn" value="Delete All" id="btn_delete_all" action="delete"/>
@@ -32,7 +32,7 @@
 				<g:remoteLink class="msg-btn btn" controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" >Restore</g:remoteLink>
 			</g:elseif>	
 			<g:elseif test="${messageSection != 'trash'}">
-					<g:remoteLink class="msg-btn btn" elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, viewingArchive: params.viewingArchive, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard('Reply All', data, 'Send', true);">
+					<g:remoteLink class="btn" elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, viewingArchive: params.viewingArchive, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard('Reply All', data, 'Send', true);">
 						Reply all
 					</g:remoteLink>
 					<g:if test="${(messageSection != 'poll' && messageSection != 'folder') && params.controller !='archive'}">
@@ -49,6 +49,5 @@
 			<g:else>
 				<g:render template="/message/other_actions" plugin="core"/>
 			</g:else>
-		</g:form>
 	</div>
 </div>

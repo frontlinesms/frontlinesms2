@@ -9,7 +9,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-			def pollMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
+			def pollMessageSources = $('#messages tbody tr .message-preview-sender')*.text()
 		then:
 			at PageMessagePollFootballTeamsBob
 			pollMessageSources == ['Alice', 'Bob']
@@ -54,7 +54,6 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$('#sidebar .selected').text() == 'Football Teams poll'
@@ -65,7 +64,6 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$("#messages tbody tr").size() == 2
@@ -73,12 +71,12 @@ class PollListSpec extends PollBaseSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Bob'
+			$("#messages tbody tr")[0].find(".message-preview-sender").text() == 'Bob'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Bob', 'Alice'])
+			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Bob', 'Alice'])
 	}
 
 	def "should only display message details when one message is checked"() {
@@ -86,7 +84,6 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-//			to PageMessagePollFootballTeamsBob
 			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 			$(".message-select")[2].click()
 		then:
@@ -130,5 +127,30 @@ class PollListSpec extends PollBaseSpec {
 			go "message/poll/${Poll.findByTitle('Football Teams').id}"
 		then:
 			$('#message-detail #message-detail-content').text() == "No message selected"
+	}
+	
+	def 'new messages are checked for in the backround every ten seconds and cause a notification to appear if there are new messages'() {
+		when:
+			createTestPolls()
+			createTestMessages()
+			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+		then:
+			at PageMessagePollFootballTeamsAlice
+			visibleMessageTotal == 2
+		when:
+			sleep 11000
+		then:
+			visibleMessageTotal == 2
+			!newMessageNotification.displayed
+		when:
+			createMoreTestMessages()
+			sleep 5000
+		then:
+			visibleMessageTotal == 2
+			!newMessageNotification.displayed
+		when:
+			sleep 5000
+		then:
+			waitFor { newMessageNotification.displayed }
 	}
 }

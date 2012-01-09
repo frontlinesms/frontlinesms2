@@ -1,6 +1,6 @@
 <%@ page import="frontlinesms2.Fconnection" %>
 <div id="primary-nav" class="standard-nav">
-    <ul>
+    <ul id='tab-list'>
         <li>
             <g:link class="tab-link ${params.controller == 'message' ? 'current' : ''}" url="${[controller:'message']}"	id="message-tab-link">
                 Messages <span id="inbox-indicator" class="indicator">${frontlinesms2.Fmessage.countUnreadMessages()}</span>
@@ -26,11 +26,6 @@
             <g:link class="tab-link ${params.controller=='search'?'current':''}" url="${[controller:'search']}" id="tab-search">Search</g:link>
         </li>
     </ul>
+    <div id="tabbar"></div>
 </div>
-<div id="tabbar"></div>
-<script>
-	$.get(url_root + 'status/trafficLightIndicator', function(data) {
-			var imageRoot = "${resource(dir:'images/icons', file:'status_')}";
-			$('#indicator').replaceWith("<img id='indicator' src='" + imageRoot + data + ".png'/>");
-	});
-</script>
+

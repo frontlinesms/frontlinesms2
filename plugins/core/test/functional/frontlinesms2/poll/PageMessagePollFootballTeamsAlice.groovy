@@ -11,5 +11,7 @@ class PageMessagePollFootballTeamsAlice extends geb.Page {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
 		messagesSelect(required:false) { $(".message-select") }
+		visibleMessageTotal(required:false) { $("#message-list tbody tr").size() }
+		newMessageNotification(required: false) { $("#new-message-notification") }
 	}
 }
