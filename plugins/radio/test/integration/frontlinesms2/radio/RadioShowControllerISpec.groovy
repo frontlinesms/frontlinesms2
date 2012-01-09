@@ -49,6 +49,6 @@ class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.stopShow()
 			show.refresh()
 		then:
-			!show.isRunning
+			!RadioShow.findByName("Test 1").isRunning
 	}
 }

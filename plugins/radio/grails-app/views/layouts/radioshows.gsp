@@ -3,7 +3,7 @@
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
 		<g:layoutHead/>
-		<g:render template="/css" plugin="core"/>
+		<g:render template="/css"/>
 		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
 		<g:javascript library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>

@@ -57,6 +57,7 @@ class RadioShowController extends MessageController {
 	def stopShow = {
 		def showInstance = RadioShow.findById(params.id)
 		showInstance.stop()
+		showInstance.save(flush:true)
 		render "$showInstance.id"
 	}
 	
