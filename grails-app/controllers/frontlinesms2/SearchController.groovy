@@ -48,7 +48,7 @@ class SearchController {
 		}
 
 		def rawSearchResults = Fmessage.search(search)
-		def searchResults = rawSearchResults.list(sort:"dateReceived", order:"desc", max: params.max, offset: params.offset)
+		def searchResults = rawSearchResults.list(sort:"dateCreated", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[searchDescription: searchDescription,

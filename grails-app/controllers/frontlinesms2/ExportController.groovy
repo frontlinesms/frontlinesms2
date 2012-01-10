@@ -84,8 +84,8 @@ class ExportController {
 	private def generateMessageReport(messageInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "src", "dst", "text", "dateSent", "dateReceived"]
-		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateSent":"Date Sent", "dateReceived":"Date Received"]
+		List fields = ["id", "src", "dst", "text", "dateCreated"]
+		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "dateCreated":"Date Created"]
 		Map parameters = [title: "FrontlineSMS Message Export"]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try{

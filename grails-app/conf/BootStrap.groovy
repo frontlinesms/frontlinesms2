@@ -91,25 +91,30 @@ class BootStrap {
 	private def dev_initFmessages() {
 		new Fmessage(src:'+123987123', dst:'+44123456789',
 				text:'A really long message which should be beautifully truncated so we can all see what happens in the UI when truncation is required.',
-				inbound:true).save(failOnError:true)
+				inbound:true,
+				dateCreated: new Date()).save(failOnError:true)
 		
-		[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
-				new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
-				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateReceived:new Date()-1),
-				new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
-				new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
-				new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
+		[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!', dateCreated:new Date()),
+				new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester', dateCreated:new Date()),
+				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateCreated:new Date()-1),
+				new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateCreated:createDate("2011/01/21")),
+				new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateCreated:createDate("2011/01/20")),
+				new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateCreated:createDate("2011/01/23"))].each() {
 			it.inbound = true
 			it.save(failOnError:true)
 		}
+		println "message date: ${Fmessage.findBySrc('Jill').dateCreated}"
+		println "shpuld be: ${createDate('2011/01/21')}"
+		
 		(1..101).each {
-			new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - it, inbound:true).save(failOnError:true)
+			new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateCreated: new Date() - it, inbound:true).save(failOnError:true)
 		}
 
 		[new Fmessage(src: '+3245678', dst: '+123456789', text: "time over?", hasFailed:true),
 				new Fmessage(src: 'Johnny', dst: '+254114433', text: "I am in a meeting", hasSent:true),
 				new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", hasSent:true),
 				new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", hasPending:true)].each {
+			it.dateCreated = new Date()
 			it.save(failOnError: true)
 		}
 	}
@@ -138,7 +143,7 @@ class BootStrap {
 
 		def barcelonaResponse = PollResponse.findByValue('barcelona');
 		10.times {
-			def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", inbound:true);
+			def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateCreated: new Date() - it, text: "Yes", inbound:true);
 			msg.save(failOnError: true);
 			barcelonaResponse.addToMessages(msg);
 		}
@@ -154,7 +159,7 @@ class BootStrap {
 				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
 				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
 			it.inbound = true
-			it.dateReceived = new Date()
+			it.dateCreated = new Date()
 			it.save(failOnError:true, flush:true)
 		}
 
@@ -171,7 +176,7 @@ class BootStrap {
 			new Fmessage(src:'Marie', dst:'+2541234567', text:'Meeting at 10 am'),
 			new Fmessage(src:'Mike', dst:'+254112233', text:'Project has started')].each() {
 				it.inbound = true
-				it.dateReceived = new Date()
+				it.dateCreated = new Date()
 			it.save(failOnError:true, flush:true)
 		}
 			
@@ -187,8 +192,8 @@ class BootStrap {
 	
 	private def dev_initRadioShows() {
 		def r = new RadioShow(name: "Health")
-		r.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst"))
-		r.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst"))
+		r.addToMessages(new Fmessage(text: "eat fruits", src: "src", dst: "dst", dateCreated: new Date()))
+		r.addToMessages(new Fmessage(text: "excerise", src: "src", dst: "dst", dateCreated: new Date()))
 		r.save(failOnError: true, flush: true)
 	}
 

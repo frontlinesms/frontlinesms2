@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import groovy.time.*
+import java.util.Date
 
 
 class Fmessage {
@@ -8,9 +9,7 @@ class Fmessage {
 	String dst
 	String text
 	String displayName
-	Date dateCreated
-	Date dateReceived
-	Date dateSent
+	Date dateCreated	// No need for dateReceived since this will be the same as dateCreated for received messages and the Dispatch will have a dateSent
 	boolean inbound
 	boolean contactExists
 	boolean read
@@ -26,17 +25,17 @@ class Fmessage {
 	static hasMany = [dispatches:Dispatch]
 
 	static mapping = {
-		sort dateReceived:'desc'
-		sort dateSent:'desc'
+		sort dateCreated:'desc'
 	}
 
 	def beforeInsert = {
-		if(inbound) {
-			dateReceived = dateReceived ?: new Date()
-		} else {
-			dateSent = dateSent ?: new Date()
-		}
 		updateFmessageDisplayName()
+		dateCreated: dateCreated ?: new Date()
+		println "${src} message date before save: ${dateCreated}"
+	}
+	
+	def afterInsert = {
+		println "${src} message date after save: ${dateCreated}"
 	}
 	
 	private String findContact(String number) {
@@ -45,11 +44,9 @@ class Fmessage {
 	
 	static constraints = {
 		src(nullable:true)
-		dst(nullable:true)
 		text(nullable:true)
 		messageOwner(nullable:true)
-		dateReceived(nullable:true)
-		dateSent(nullable:true)
+		dateCreated(nullable:false)
 		displayName(nullable:true)
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
@@ -152,11 +149,11 @@ class Fmessage {
 					'in'("messageOwner", search.owners)
 				}
 				if(search.startDate && search.endDate) {
-					between("dateReceived", search.startDate, search.endDate)
+					between("dateCreated", search.startDate, search.endDate)
 				} else if (search.startDate) {	
-					ge("dateReceived", search.startDate)
+					ge("dateCreated", search.startDate)
 				} else if (search.endDate) {
-					le("dateReceived", search.endDate)
+					le("dateCreated", search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
 					def matchingContacts = CustomField.getAllContactsWithCustomField(search.customFields) ?: [""] //otherwise hibernate fails to search 'in' empty list
@@ -192,15 +189,9 @@ class Fmessage {
 					}
 				}
 				eq('deleted', false)
-				or {
-					and {
-						between("dateReceived", startDate, endDate)
-						eq("inbound", true)
-					}
-					and {
-						between("dateSent", startDate, endDate)
-						eq("hasSent", true)
-					}
+				and {
+					between("dateCreated", startDate, endDate)
+					eq("inbound", true)
 				}
 			}
 		}
@@ -240,7 +231,7 @@ class Fmessage {
 
 	// TODO should this be in a service?
 	static def getMessageStats(params) {
-		def messages = Fmessage.filterMessages(params).list(sort:"dateReceived", order:"desc")
+		def messages = Fmessage.filterMessages(params).list(sort:"dateCreated", order:"desc")
 	
 		def dates = [:]
 		(params.startDate..params.endDate).each {
@@ -248,7 +239,7 @@ class Fmessage {
 		}
 				
 		def stats = messages.collect {
-			it.inbound ? [date: it.dateReceived, type: "received"] : [date: it.dateSent, type: "sent"]
+			it.inbound ? [date: it.dateCreated, type: "received"] : [date: it.dateCreated, type: "sent"]
 		}
 		def messageGroups = countBy(stats.iterator(), {[it.date.format('dd/MM'), it.type]})
 		messageGroups.each { key, value -> dates[key[0]][key[1]] += value }

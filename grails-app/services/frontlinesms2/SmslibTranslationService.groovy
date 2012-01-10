@@ -18,7 +18,7 @@ class SmslibTranslationService {
 			message.src = bod.originator
 			message.dst = bod.recipient
 			message.text = bod.text
-			message.dateReceived = new Date(bod.date)
+			message.dateCreated = new Date(bod.date)
 			assert exchange.out != null
 			exchange.out.body = message	
 		}
