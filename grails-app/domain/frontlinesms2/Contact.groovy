@@ -15,6 +15,15 @@ class Contact {
 	
 	def beforeDelete = {
 		GroupMembership.deleteFor(this)
+		removeFmessageContacts()
+	}
+	
+	def afterInsert = {
+		updateFmessageContacts()
+	}
+
+	def afterUpdate = {
+		updateFmessageContacts()
 	}
 	
 	static constraints = {
@@ -95,4 +104,23 @@ class Contact {
 			Contact.get(id).refresh().primaryMobile // FIXME why not use this.loadedState?
 		}
 	}
+	
+	def updateFmessageContacts() {
+		Fmessage.withNewSession { session ->
+			Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
+			Dispatch.findAllByDst(primaryMobile).each {
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.dispatches=?", [name, true, it])
+			}
+		}
+	}
+	
+	private def removeFmessageContacts() {
+		Fmessage.withNewSession { session ->
+			Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", ['', false, primaryMobile])
+			Dispatch.findAllByDst(primaryMobile).each {
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.dispatches=?", ['', false, it])
+			}
+		}
+	}
+		
 }

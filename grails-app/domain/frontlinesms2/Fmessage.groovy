@@ -36,7 +36,7 @@ class Fmessage {
 		} else {
 			dateSent = dateSent ?: new Date()
 		}
-		if(inbound ? src : dst) updateContactName()
+		updateFmessageContact()
 	}
 	
 	private String findContact(String number) {
@@ -302,5 +302,15 @@ class Fmessage {
 		calc.set(Calendar.MINUTE, m)
 		calc.set(Calendar.SECOND, s)
 		calc.getTime()
+	}
+	
+	private def updateFmessageContact() {
+		if(inbound && Contact.findByPrimaryMobile(src)) {
+			contactName = Contact.findByPrimaryMobile(src).name
+			contactExists = true
+		} else if(!inbound && dispatches?.count() == 1 && Contact.findByPrimaryMobile(dispatches*.dst.flatten())) {
+			contactName = Contact.findByPrimaryMobile(dispatches*.dst.flatten())
+			contactExists = true
+		}
 	}
 }
