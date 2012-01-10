@@ -294,8 +294,17 @@ class Fmessage {
 		if(inbound && Contact.findByPrimaryMobile(src)) {
 			displayName = Contact.findByPrimaryMobile(src).name
 			contactExists = true
+		} else if(inbound) {
+			displayName = src
+			contactExists = false
 		} else if(!inbound && dispatches?.count() == 1 && Contact.findByPrimaryMobile(dispatches*.dst.flatten())) {
 			displayName = Contact.findByPrimaryMobile(dispatches*.dst.flatten())
+			contactExists = true
+		} else if(!inbound && dispatches?.count() == 1) {
+			displayName = dispatches*.dst.flatten()
+			contactExists = false
+		} else if(!inbound && dispatches?.count() > 1) {
+			displayName = dispatches?.count() + " recipients"
 			contactExists = true
 		}
 	}

@@ -15,15 +15,15 @@ class Contact {
 	
 	def beforeDelete = {
 		GroupMembership.deleteFor(this)
-		removeFmessageContacts()
+		removeFmessageDisplayName()
 	}
 	
 	def afterInsert = {
-		updateFmessageContacts()
+		updateFmessageDisplayName()
 	}
 
 	def afterUpdate = {
-		updateFmessageContacts()
+		updateFmessageDisplayName()
 	}
 	
 	static constraints = {
@@ -105,7 +105,7 @@ class Contact {
 		}
 	}
 	
-	def updateFmessageContacts() {
+	def updateFmessageDisplayName() {
 		Fmessage.withNewSession { session ->
 			Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
 			Dispatch.findAllByDst(primaryMobile).each {
@@ -114,11 +114,11 @@ class Contact {
 		}
 	}
 	
-	private def removeFmessageContacts() {
+	private def removeFmessageDisplayName() {
 		Fmessage.withNewSession { session ->
-			Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", ['', false, primaryMobile])
+			Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
 			Dispatch.findAllByDst(primaryMobile).each {
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", ['', false, it])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [primaryMobile, false, it])
 			}
 		}
 	}
