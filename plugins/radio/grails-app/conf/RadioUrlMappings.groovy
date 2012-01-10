@@ -9,6 +9,8 @@ class RadioUrlMappings extends CoreUrlMappings{
 
 		"/"(controller:'message')
 		
+		"/message/getNewMessageCount"(controller:'radioShow', action:'getNewRadioMessageCount') {}
+		"/message/radioShow"(controller:'radioShow', action:'radioShow'){}
 		"/message/radioShow/$ownerId"(controller:'radioShow', action:'radioShow') {}
 		"/message/radioShow/$ownerId/show/$messageId"(controller:'radioShow', action:'radioShow') {}
 		

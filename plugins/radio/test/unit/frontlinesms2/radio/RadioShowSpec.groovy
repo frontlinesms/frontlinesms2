@@ -1,6 +1,7 @@
 package frontlinesms2.radio
 
 import grails.plugin.spock.UnitSpec
+import frontlinesms2.Poll
 
 class RadioShowSpec extends UnitSpec {
 
@@ -56,5 +57,16 @@ class RadioShowSpec extends UnitSpec {
 			show2.start()
 		then:
 			show2.isRunning
+	}
+	
+	def "radioShow can own one more shows"() {
+		setup:
+			mockDomain(RadioShow)
+			mockDomain(Poll)
+			def show = new RadioShow(name:"Health Show").save()
+		when:
+			show.addToPolls(new Poll(title:"Test Poll"))
+		then:
+			show.validate()
 	}
 }

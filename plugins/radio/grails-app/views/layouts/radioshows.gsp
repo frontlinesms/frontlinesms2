@@ -11,7 +11,6 @@
 			url_root = "${request.contextPath}/";
 			refresh_rate = ${params.rRate ?: 30000}
 		</script>
-		<g:javascript src="jquery.timers.js" plugin="core"/>
 		<g:javascript src="jquery.ui.selectmenu.js" plugin="core"/>
 		<g:javascript src="application.js" plugin="core"/>
 		<g:javascript src="mediumPopup.js" plugin="core"/>
@@ -20,10 +19,10 @@
 		<g:javascript src="/message/check_message.js" plugin="core"/>
 		<g:javascript src="/message/arrow_navigation.js" plugin="core"/>
 		<g:javascript src="/message/star_message.js" plugin="core"/>
-		<g:javascript src="/message/messageSorting.js" plugin="core"/>
 		<g:javascript src="/message/categorize_dropdown.js" plugin="core"/>
 		<g:javascript src="/message/move_dropdown.js" plugin="core"/>
 		<g:javascript src="/message/moreActions.js" plugin="core"/>
+		<g:javascript src="/message/check_for_new_messages.js" plugin="core"/>
 		<g:javascript src="on_air.js"/>
 		<g:javascript>
 		$(function() {  

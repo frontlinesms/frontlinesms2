@@ -2,6 +2,7 @@ package frontlinesms2.radio
 
 import frontlinesms2.MessageController
 import java.util.Date
+import grails.converters.*
 import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
@@ -44,12 +45,13 @@ class RadioShowController extends MessageController {
 	
 	def startShow = {
 		def showInstance = RadioShow.findById(params.id)
-		if(showInstance.start()) {
+		println "params.id: ${params.id}"
+		if(showInstance?.start()) {
 			println "${showInstance.name} show started"
 			showInstance.save(flush:true)
 			render "$showInstance.id"
 		} else {
-			flash.message = "${RadioShow.findByIsRunning(true).name} show is already on air"
+			flash.message = "${RadioShow.findByIsRunning(true)?.name} show is already on air"
 			render text:flash.message
 		}
 	}
@@ -65,6 +67,16 @@ class RadioShowController extends MessageController {
 		def model = super.getShowModel(messageInstanceList)
 		model << [radioShows: RadioShow.findAll()]
 		return model
+	}
+	
+	def getNewRadioMessageCount = {
+		if(params.messageSection == 'radioShow') {
+			def messageCount = [totalMessages:[RadioShow.get(params.ownerId)?.getShowMessages()?.count()]]
+			render messageCount as JSON
+		} else {
+			getNewMessageCount()
+		}
+		
 	}
 	
 	private String dateToString(Date date) {

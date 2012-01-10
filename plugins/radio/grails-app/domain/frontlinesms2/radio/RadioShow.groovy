@@ -7,7 +7,8 @@ class RadioShow extends MessageOwner {
 	String name
 	boolean isRunning
 	Date dateCreated
-
+	
+	static hasMany = [polls:Poll]
 	static constraints = {
 		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
 			if(!obj.id) {

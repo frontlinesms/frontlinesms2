@@ -41,4 +41,15 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 			starredHealthShowMessages.count() == 1
 			unstarredHealthShowMessages.count() == 3
 	}
+	
+	def "radioShows can be associated with one or more polls"() {
+		when:
+			def show = RadioShow.findByName("Health & fitness")
+			show.addToPolls(new Poll(title:"YesNo"))
+			show.addToPolls(new Poll(title:"Test"))
+			show.save(flush:true)
+			show.refresh()
+		then:
+			show.polls.size() == 2
+	}
 }

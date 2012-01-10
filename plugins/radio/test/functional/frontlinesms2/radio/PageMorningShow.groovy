@@ -13,5 +13,7 @@ class PageMorningShow extends geb.Page {
 		ShowListOnAirNotice {id ->
 					$("#show-$id")
 			}
+		visibleMessageTotal(required:false) { $("#message-list tbody tr").size() }
+		newMessageNotification(required: false) { $("#new-message-notification") }
 	}
 }
