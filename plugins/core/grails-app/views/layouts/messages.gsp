@@ -19,7 +19,6 @@
 		<g:javascript src="/message/check_message.js"/>
 		<g:javascript src="/message/arrow_navigation.js"/>
 		<g:javascript src="/message/star_message.js" />
-		<g:javascript src="/message/messageSorting.js"/>
 		<g:javascript src="/message/categorize_dropdown.js"/>
 		<g:javascript src="/message/move_dropdown.js"/>
 		<g:javascript src="/message/moreActions.js"/>

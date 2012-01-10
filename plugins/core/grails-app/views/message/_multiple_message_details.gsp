@@ -49,5 +49,6 @@
 			<g:else>
 				<g:render template="/message/other_actions" plugin="core"/>
 			</g:else>
+		</g:form>
 	</div>
 </div>
