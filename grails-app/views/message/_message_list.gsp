@@ -29,7 +29,7 @@
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
 			    	</g:if>
 			    	<g:else>
-			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="contactName" title="${messageLabel}"
+			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="displayName" title="${messageLabel}"
 							params="${params}" id='source-header' />
 		    			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />
@@ -63,7 +63,7 @@
 							</td>
 							<td class="message-preview-sender message-sender-cell">
 									<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
-										${m.contactName}
+										${m.displayName}
 									</g:link>
 							</td>
 							<td class="message-text-cell">

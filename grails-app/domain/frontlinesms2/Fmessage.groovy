@@ -7,7 +7,7 @@ class Fmessage {
 	String src
 	String dst
 	String text
-	String contactName
+	String displayName
 	Date dateCreated
 	Date dateReceived
 	Date dateSent
@@ -36,21 +36,11 @@ class Fmessage {
 		} else {
 			dateSent = dateSent ?: new Date()
 		}
-		updateFmessageContact()
+		updateFmessageDisplayName()
 	}
 	
 	private String findContact(String number) {
 		return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
-	}
-		
-	def updateContactName() {
-		def fetchContactName = { number ->
-			Contact.withNewSession {
-				return Contact.findByPrimaryMobile(number)?.name ?: (Contact.findBySecondaryMobile(number)?.name ?: number)
-			}
-		}
-		contactExists = contactName && contactName != src && contactName != dst
-		contactExists ?: (contactName = fetchContactName(inbound ? src : dst))
 	}
 	
 	static constraints = {
@@ -60,7 +50,7 @@ class Fmessage {
 		messageOwner(nullable:true)
 		dateReceived(nullable:true)
 		dateSent(nullable:true)
-		contactName(nullable:true)
+		displayName(nullable:true)
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
@@ -140,7 +130,7 @@ class Fmessage {
 					ilike("text", "%${search.searchString}%")
 				}
 				if(search.contactString) {
-					ilike("contactName", "%${search.contactString}%")
+					ilike("displayName", "%${search.contactString}%")
 				} 
 				if(search.group) {
 					def groupMembersNumbers = search.group.getAddresses()?:[''] //otherwise hibernate fail to search 'in' empty list
@@ -170,7 +160,7 @@ class Fmessage {
 				}
 				if(search.customFields.any { it.value }) {
 					def matchingContacts = CustomField.getAllContactsWithCustomField(search.customFields) ?: [""] //otherwise hibernate fails to search 'in' empty list
-					'in'("contactName", matchingContacts)
+					'in'("displayName", matchingContacts)
 				}
 				if(!search.inArchive) {
 					eq('archived', false)
@@ -226,10 +216,6 @@ class Fmessage {
 		}
 
 		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
-	}
-	
-	def getDisplayName() { 
-		contactName
 	}
 	
 	static def countUnreadMessages(isStarred) {
@@ -304,12 +290,12 @@ class Fmessage {
 		calc.getTime()
 	}
 	
-	private def updateFmessageContact() {
+	private def updateFmessageDisplayName() {
 		if(inbound && Contact.findByPrimaryMobile(src)) {
-			contactName = Contact.findByPrimaryMobile(src).name
+			displayName = Contact.findByPrimaryMobile(src).name
 			contactExists = true
 		} else if(!inbound && dispatches?.count() == 1 && Contact.findByPrimaryMobile(dispatches*.dst.flatten())) {
-			contactName = Contact.findByPrimaryMobile(dispatches*.dst.flatten())
+			displayName = Contact.findByPrimaryMobile(dispatches*.dst.flatten())
 			contactExists = true
 		}
 	}

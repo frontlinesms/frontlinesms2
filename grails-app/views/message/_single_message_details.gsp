@@ -3,7 +3,7 @@
 		<g:hiddenField id="message-src" name="message-src" value="${messageInstance.src}"/>
 		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 		<div id='message-info'>
-			<p id="message-detail-sender">${messageInstance.contactName}
+			<p id="message-detail-sender">${messageInstance.displayName}
 				<g:if test="${!messageInstance.contactExists}">
 					<g:link controller="contact" action="createContact" params="[primaryMobile: (messageSection == 'sent' || messageSection == 'pending') ? messageInstance.dst : messageInstance.src]"><img id="add-contact" src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
 				</g:if>
