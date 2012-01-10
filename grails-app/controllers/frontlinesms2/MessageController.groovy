@@ -16,14 +16,14 @@ class MessageController {
 	def newMessagesService
 
 	def bobInterceptor = {
-		params.offset  = params.offset ?: 0
-		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		if(params.action == sent || params.action == pending) params.sort = params.sort ?: 'dateSent'
 		else params.sort = params.sort ?: 'dateReceived'
 		params.order = params.order ?: 'desc'
 		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
 		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.failed = params.failed ? params.failed.toBoolean() : false
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.offset  = params.offset ?: 0
 	}
 	def beforeInterceptor = bobInterceptor
 
