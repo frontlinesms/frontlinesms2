@@ -14,7 +14,7 @@ class FmessageRouterServiceSpec extends UnitSpec {
 
 			def camelMessage = Mock(org.apache.camel.Message)
 			exchange.getIn() >> camelMessage
-			camelMessage.getBody() >> new Fmessage(src: "src")
+			camelMessage.getBody() >> new Fmessage(src: "src", date: new Date())
 
 			def service = new FmessageRouterService()
 			service.camelContext = camelContext

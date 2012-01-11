@@ -31,11 +31,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			createTestData()
 			def inboxMessages = Fmessage.inbox()
-			println "class: ${inboxMessages.getClass()}"
-			println(inboxMessages.list().collect { [it.id,it.dateReceived,it.src] })			
 		then:
 			Fmessage.inbox().count() == 4
-			Fmessage.inbox().list(max:3, offset:0)*.src == ["+254778899", "9544426444", 'Bob']
+			Fmessage.inbox().list(max:3, offset:0)*.src == ["+254778899", , "Bob", "9544426444"]
 	}
 
 	def "getSentMessages() returns the list of messages with inbound equal to false that are not part of an activity"() {
@@ -135,8 +133,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch starred deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true).save(flush: true)
 		when:
 			def results = Fmessage.deleted(true)
 		then:
@@ -148,8 +146,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch all deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true).save(flush: true)
 		when:
 			def results = Fmessage.deleted(false)
 		then:
@@ -160,8 +158,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "check for offset and limit while fetching deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:new Date() - 1, deleted:true).save(flush:true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', dateReceived:new Date(), deleted:true).save(flush:true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:new Date() - 1, deleted:true).save(flush:true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', date:new Date(), deleted:true).save(flush:true)
 		when:
 			def firstDeletedMsg = Fmessage.deleted(false).list(max:1, offset: 0)
 		then:
@@ -171,6 +169,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can only archive ownerless messages, unless owner is archived"() {
 		when:
 			createTestData()
+			createPollTestData()
 			def minime = Fmessage.findBySrc("Minime")
 		then:
 			!minime.archived
@@ -186,6 +185,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	def "cannot un-archive a message if the owner is archived"() {
 		when:
 			createTestData()
+			createPollTestData()
 			def minime = Fmessage.findBySrc("Minime")
 			minime.archived = false
 			minime.messageOwner.poll.archivePoll()
@@ -200,26 +200,26 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def createTestData() {
 		// INCOMING MESSAGES
-		println([new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', dateReceived:BASE_DATE - 4000),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', dateReceived:BASE_DATE - 5000),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', dateReceived:BASE_DATE - 3000),
-				new Fmessage(src: "9544426444", dst: "34562265", starred:true, dateReceived:BASE_DATE - 10000)].collect() {
+		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4000),
+				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', date:BASE_DATE - 10000),
+				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', date:BASE_DATE - 3000),
+				new Fmessage(src: "9544426444", dst: "34562265", starred:true, date:BASE_DATE - 5000)].collect() {
 			it.inbound = true
 			it.save(failOnError:true)
-			println "Created message to $it.src with dateReceived: $it.dateReceived"
-			it
-		}.sort { it.dateReceived }*.src)
+		}
 				
 		// OUTGOING MESSAGES
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', dateReceived:BASE_DATE - 2, hasSent:true),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', dateReceived:BASE_DATE - 1, hasSent:true, starred: true),
-				new Fmessage(src:"src", dst:"dst1", text:"text",  hasFailed:true),
-				new Fmessage(src:"src", dst:"dst2", text:"text",  hasPending:true, starred: true)].each() {
+		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', date:BASE_DATE - 2, hasSent:true),
+				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', date:BASE_DATE - 1, hasSent:true, starred: true),
+				new Fmessage(src:"src", dst:"dst1", text:"text",  hasFailed:true, date: new Date()),
+				new Fmessage(src:"src", dst:"dst2", text:"text",  hasPending:true, starred: true, date: new Date())].each() {
 			it.save(failOnError:true)
 		}
-
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver')
+	}
+	
+	def createPollTestData() {
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true, date: new Date())
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', date: new Date(), inbound:true)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)
@@ -234,9 +234,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 		new Folder(name: 'home').save(flush: true)
 		def folder = Folder.findByName('home')
-		folder.addToMessages(new Fmessage(src: "Bob", dateReceived:BASE_DATE - 14))
-		folder.addToMessages(new Fmessage(src: "Jim", dateReceived:BASE_DATE - 10))
-		folder.addToMessages(new Fmessage(src: "Jack", starred: true, dateReceived:BASE_DATE - 15))
+		folder.addToMessages(new Fmessage(src: "Bob", date:BASE_DATE - 14))
+		folder.addToMessages(new Fmessage(src: "Jim", date:BASE_DATE - 10))
+		folder.addToMessages(new Fmessage(src: "Jack", starred: true, date:BASE_DATE - 15))
 
 		folder.save(flush: true)
 	}

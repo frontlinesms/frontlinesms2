@@ -58,21 +58,21 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/20")).save(failOnError: true)
-			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/24")).save(failOnError: true)
-			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/23")).save(failOnError: true)
-			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, dateReceived:createDate("2011/01/21")).save(failOnError: true)
+			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/20")).save(failOnError: true)
+			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/24")).save(failOnError: true)
+			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/23")).save(failOnError: true)
+			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/21")).save(failOnError: true)
 		when:
 			def messageInstanceList = Fmessage.inbox(false, false)
 		then:
 			messageInstanceList.count() == 4
-			messageInstanceList.list(sort:'dateReceived', order: 'desc') == [message2, message3, message4, message1]
-			messageInstanceList.list(sort:'dateReceived', order: 'desc') != [message1, message2, message3, message4]
+			messageInstanceList.list(sort:'date', order: 'desc') == [message2, message3, message4, message1]
+			messageInstanceList.list(sort:'date', order: 'desc') != [message1, message2, message3, message4]
 	}
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
-			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save(failOnError: true).id
+			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -84,7 +84,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action leads to read message staying read'() {
 		setup:
-			def id = new Fmessage(read:true).save(failOnError: true).id
+			def id = new Fmessage(read:true, date: new Date()).save(failOnError: true).id
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
@@ -95,7 +95,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
-			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true).save(failOnError: true).id
+			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -107,7 +107,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling "starMessage" action leads to starred message becoming unstarred'() {
 		setup:
-			def id = new Fmessage(read:true, starred:true).save(failOnError: true).id
+			def id = new Fmessage(read:true, starred:true, date: new Date()).save(failOnError: true).id
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageId = id
@@ -119,9 +119,9 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'empty trash permanently deletes messages with deleted flag true'() {
 		setup:
-			(1..3).each {new Fmessage(deleted:false).save()}
+			(1..3).each {new Fmessage(deleted:false, date: new Date()).save()}
 			def inboxMessages = Fmessage.list()
-			(1..3).each {new Fmessage(deleted:true).save()}
+			(1..3).each {new Fmessage(deleted:true, date: new Date()).save()}
 		when:
 			controller.emptyTrash()
 		then:

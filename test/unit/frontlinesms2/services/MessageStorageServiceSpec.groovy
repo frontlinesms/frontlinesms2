@@ -24,7 +24,7 @@ class MessageStorageServiceSpec extends UnitSpec {
 	def "it saves the incoming Fmessage"() {
 		given:
 			mockDomain(Fmessage.class)
-			def m = new Fmessage()
+			def m = new Fmessage(date: new Date())
 		when:
 			s.process(createTestExchange(m))
 		then:

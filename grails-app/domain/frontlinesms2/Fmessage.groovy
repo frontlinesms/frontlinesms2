@@ -5,19 +5,20 @@ import java.util.Date
 
 
 class Fmessage {
+	Date date	// No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
+	Date dateCreated // This is unused and should be removed, but doing so throws and exception when running the app and I cannot determine why
 	String src
 	String dst
 	String text
 	String displayName
-	Date date	// No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
-	Date dateCreated // This is unused and should be removed, but doing so throws and exception when running the app and I cannot determine why
-	boolean inbound
 	boolean contactExists
+	
 	boolean read
 	boolean deleted
 	boolean starred
 	boolean archived
 	
+	boolean inbound
 	boolean hasSent
 	boolean hasPending
 	boolean hasFailed
@@ -40,6 +41,7 @@ class Fmessage {
 	
 	static constraints = {
 		src(nullable:true)
+		dst(nullable:true)
 		text(nullable:true)
 		messageOwner(nullable:true)
 		date(nullable:false)

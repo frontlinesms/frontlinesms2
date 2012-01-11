@@ -30,6 +30,7 @@ class ContactSpec extends UnitSpec {
 	def "duplicate names are allowed"(){
 		setup:
 			mockDomain(Contact)
+			mockDomain(Fmessage)
 		when:
 			def Contact contact1 = new Contact(name:'John')
 			def Contact contact2 = new Contact(name:'John')

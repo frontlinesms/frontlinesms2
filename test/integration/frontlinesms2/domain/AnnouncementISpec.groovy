@@ -39,7 +39,7 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec  {
 	def "When an announcement is archived all of its messages are archived"() {
 		setup:
 			def a = new Announcement(name:'test1x', sentMessage: 'test message').save(failOnError:true)
-			def m = new Fmessage()
+			def m = new Fmessage(date: new Date())
 		when:
 			a.addToMessages(m)
 			a.save()

@@ -30,8 +30,8 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "message stat dates should be inclusive"() {
 		given:
-			def m1 = new Fmessage(src:"src1", dateReceived:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
-			def m2 = new Fmessage(src:"src2", dateSent:createDate(2011, 10, 18, 23, 58, 59), hasSent:true).save(flush:true, failOnError:true)
+			def m1 = new Fmessage(src:"src1", date:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
+			def m2 = new Fmessage(src:"src2", date:createDate(2011, 10, 18, 23, 58, 59), hasSent:true).save(flush:true, failOnError:true)
 		when:
 			// TODO set start and end dates to the same day as messages were sent
 			controller.params.rangeOption = "between-dates"

@@ -22,12 +22,12 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def futureDate = new Date()
 		futureDate.hours = futureDate.hours + 1
 		
-		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00', archived: true),
-				new Fmessage(src:'+254987654', dst:'+6645666666', text:'finaly i stay in bed'),
-				//new Fmessage(src:'+666666666', dst:'+254987654', text:'finaly i stay in bed'),
-				new Fmessage(src:'+254111222', dst:'+254937634', dateReceived: futureDate, text:'work is awesome'),
-				new Fmessage(src:'Bob', dst:'+254987654', dateReceived: new Date()-5, text:'hi Bob'),
-				new Fmessage(src:'Michael', dst:'+2541234567', dateReceived: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
+		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00', archived: true, date: new Date()),
+				new Fmessage(src:'+254987654', dst:'+6645666666', text:'finaly i stay in bed', date: new Date()),
+				//new Fmessage(src:'+666666666', dst:'+254987654', text:'finaly i stay in bed', date: new Date()),
+				new Fmessage(src:'+254111222', dst:'+254937634', date: futureDate, text:'work is awesome'),
+				new Fmessage(src:'Bob', dst:'+254987654', date: new Date()-5, text:'hi Bob'),
+				new Fmessage(src:'Michael', dst:'+2541234567', date: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
 			it.inbound = true
 			it.save(failOnError:true)
 		}
@@ -37,13 +37,13 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 				new CustomField(name:'ik', value:'car', contact: secondContact),
 				new CustomField(name:'like', value:'ake', contact: thirdContact),
 				new CustomField(name:'dob', value:'12/06/79', contact: secondContact),
-				new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', inbound:true)].each {
+				new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', inbound:true, date: new Date())].each {
 			it.save(failOnError:true)
 		}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true).save(failOnError:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:true).save(failOnError:true)
-		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', inbound:true).save(failOnError:true)
+		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true, date: new Date()).save(failOnError:true)
+		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:true, date: new Date()).save(failOnError:true)
+		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', inbound:true, date: new Date()).save(failOnError:true)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
@@ -111,9 +111,9 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	@spock.lang.IgnoreRest
 	def "search for sent messages only"() {
 		setup:
-			new Fmessage(src:"src", dst:"dst", hasPending:true).save(flush:true)
-			new Fmessage(src:"src", dst:"dst", hasSent:true).save(flush:true)
-			new Fmessage(src:"src", dst:"dst", hasFailed:true).save(flush:true)
+			new Fmessage(src:"src", dst:"dst", hasPending:true, date: new Date()).save(flush:true)
+			new Fmessage(src:"src", dst:"dst", hasSent:true, date: new Date()).save(flush:true)
+			new Fmessage(src:"src", dst:"dst", hasFailed:true, date: new Date()).save(flush:true)
 		when:
 			controller.params.messageStatus = "SENT, PENDING, FAILED"
 			def model = controller.result()

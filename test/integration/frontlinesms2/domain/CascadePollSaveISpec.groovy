@@ -31,7 +31,7 @@ class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.addToResponses(new PollResponse(value:'manchester'))
 			poll.addToResponses(new PollResponse(value:'barcelona')).save(failOnError:true, flush:true)
 			def r = PollResponse.findByValue('barcelona')
-			def m = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester').save(failOnError:true, flush:true)
+			def m = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', date: new Date()).save(failOnError:true, flush:true)
 		when:
 			r.addToMessages(m)
 			r.save(flush: true)

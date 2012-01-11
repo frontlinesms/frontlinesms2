@@ -106,19 +106,23 @@ class Contact {
 	}
 	
 	def updateFmessageDisplayName() {
-		Fmessage.withNewSession { session ->
-			Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
-			Dispatch.findAllByDst(primaryMobile).each {
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [name, true, it])
+		if(primaryMobile) {
+			Fmessage.withNewSession { session ->
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
+				Dispatch.findAllByDst(primaryMobile).each {
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [name, true, it])
+				}
 			}
 		}
 	}
 	
 	private def removeFmessageDisplayName() {
-		Fmessage.withNewSession { session ->
-			Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
-			Dispatch.findAllByDst(primaryMobile).each {
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [primaryMobile, false, it])
+		if(primaryMobile) {
+			Fmessage.withNewSession { session ->
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
+				Dispatch.findAllByDst(primaryMobile).each {
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [primaryMobile, false, it])
+				}
 			}
 		}
 	}

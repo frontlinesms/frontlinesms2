@@ -161,7 +161,7 @@ class ContactController {
 	}
 	
 	private def attemptSave(contactInstance) {
-		def existingContact = Contact.findByPrimaryMobileLike(params.primaryMobile)
+		def existingContact = params.primaryMobile ? Contact.findByPrimaryMobileLike(params.primaryMobile) : null
 		if(existingContact && existingContact != contactInstance) {
 			flash.message = "There is already a contact with that primary mobile, you cannot create another!  <a href='/frontlinesms2/contact/show/" + Contact.findByPrimaryMobileLike(params.primaryMobile)?.id + "'>View duplicate</g:link>"
 			return false

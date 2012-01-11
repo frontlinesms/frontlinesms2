@@ -97,7 +97,7 @@ class MessageController {
 		def trashInstance
 		def trashInstanceList
 		def messageInstanceList
-		params.sort = params.sort ?: "date"
+		params.sort = (params.sort && params.sort != 'date') ?: "dateCreated"
 		if(params.id) {
 			def setTrashInstance = { obj ->
 				if(obj.objectType == "frontlinesms2.Fmessage") {

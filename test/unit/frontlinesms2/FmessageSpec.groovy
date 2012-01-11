@@ -8,7 +8,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(read: null)
+			Fmessage message = new Fmessage(read: null, date: new Date())
 		then:
 			message.read != null || !message.validate()
 	}
@@ -31,9 +31,22 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockDomain(Fmessage)
 		when:
-			def m = new Fmessage(status: null)
+			def m = new Fmessage(status: null,  date: new Date())
 		then:
 			m.validate()
 	}
+	
+	def "Fmessage must have a date"() {
+		setup:
+			mockForConstraintsTests(Fmessage)
+		when:
+			def m = new Fmessage()
+		then:
+			!m.validate()
+		when:
+			def f = new Fmessage(date: new Date())
+		then:
+			f.validate()
+	} 
 }
 
