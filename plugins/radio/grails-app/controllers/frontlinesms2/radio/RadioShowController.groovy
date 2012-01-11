@@ -76,7 +76,6 @@ class RadioShowController extends MessageController {
 		} else {
 			getNewMessageCount()
 		}
-		
 	}
 	
 	private String dateToString(Date date) {
