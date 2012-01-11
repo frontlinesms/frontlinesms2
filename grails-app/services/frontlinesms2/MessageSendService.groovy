@@ -21,7 +21,7 @@ class MessageSendService {
 		}.flatten()
 		addresses.unique().each { address ->
 			//TODO: Need to add source from app setting
-			messages << new Fmessage(src: "src", dst: address, text: params.messageText, dateCreated: new Date())
+			messages << new Fmessage(src: "src", dst: address, text: params.messageText, date: new Date())
 		}
 		return messages
 	}

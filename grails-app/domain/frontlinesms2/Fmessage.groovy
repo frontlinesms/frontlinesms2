@@ -9,7 +9,8 @@ class Fmessage {
 	String dst
 	String text
 	String displayName
-	Date dateCreated	// No need for dateReceived since this will be the same as dateCreated for received messages and the Dispatch will have a dateSent
+	Date date	// No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
+	Date dateCreated // This is unused and should be removed, but doing so throws and exception when running the app and I cannot determine why
 	boolean inbound
 	boolean contactExists
 	boolean read
@@ -25,17 +26,12 @@ class Fmessage {
 	static hasMany = [dispatches:Dispatch]
 
 	static mapping = {
-		sort dateCreated:'desc'
+		sort date:'desc'
 	}
 
 	def beforeInsert = {
 		updateFmessageDisplayName()
-		dateCreated: dateCreated ?: new Date()
-		println "${src} message date before save: ${dateCreated}"
-	}
-	
-	def afterInsert = {
-		println "${src} message date after save: ${dateCreated}"
+		date: date ?: new Date()
 	}
 	
 	private String findContact(String number) {
@@ -46,7 +42,7 @@ class Fmessage {
 		src(nullable:true)
 		text(nullable:true)
 		messageOwner(nullable:true)
-		dateCreated(nullable:false)
+		date(nullable:false)
 		displayName(nullable:true)
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
@@ -149,11 +145,11 @@ class Fmessage {
 					'in'("messageOwner", search.owners)
 				}
 				if(search.startDate && search.endDate) {
-					between("dateCreated", search.startDate, search.endDate)
+					between("date", search.startDate, search.endDate)
 				} else if (search.startDate) {	
-					ge("dateCreated", search.startDate)
+					ge("date", search.startDate)
 				} else if (search.endDate) {
-					le("dateCreated", search.endDate)
+					le("date", search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
 					def matchingContacts = CustomField.getAllContactsWithCustomField(search.customFields) ?: [""] //otherwise hibernate fails to search 'in' empty list
@@ -190,7 +186,7 @@ class Fmessage {
 				}
 				eq('deleted', false)
 				and {
-					between("dateCreated", startDate, endDate)
+					between("date", startDate, endDate)
 					eq("inbound", true)
 				}
 			}
@@ -231,7 +227,7 @@ class Fmessage {
 
 	// TODO should this be in a service?
 	static def getMessageStats(params) {
-		def messages = Fmessage.filterMessages(params).list(sort:"dateCreated", order:"desc")
+		def messages = Fmessage.filterMessages(params).list(sort:"date", order:"desc")
 	
 		def dates = [:]
 		(params.startDate..params.endDate).each {
@@ -239,7 +235,7 @@ class Fmessage {
 		}
 				
 		def stats = messages.collect {
-			it.inbound ? [date: it.dateCreated, type: "received"] : [date: it.dateCreated, type: "sent"]
+			it.inbound ? [date: it.date, type: "received"] : [date: it.date, type: "sent"]
 		}
 		def messageGroups = countBy(stats.iterator(), {[it.date.format('dd/MM'), it.type]})
 		messageGroups.each { key, value -> dates[key[0]][key[1]] += value }

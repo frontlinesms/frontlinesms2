@@ -33,7 +33,7 @@
 							params="${params}" id='source-header' />
 		    			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />
-						<g:sortableColumn class="message-date-cell" property="dateCreated" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+						<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
 			    	</g:else>
 			</tr>
@@ -46,7 +46,7 @@
 				<g:else>
 					<g:each in="${messageInstanceList}" status="i" var="m">
 						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
-							<g:hiddenField name="message-created-date" value="${m.dateCreated}"/>
+							<g:hiddenField name="message-created-date" value="${m.date}"/>
 							<td class="message-select-cell">
 								<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />
 								<g:hiddenField name="src-${m.id}" value="${m.src}"/>
@@ -67,7 +67,7 @@
 							</td>
 							<td class="message-date-cell">
 								<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id, viewingArchive:viewingArchive]}">
-									<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateCreated}" />
+									<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}" />
 								</g:link>
 							</td>
 						</tr>

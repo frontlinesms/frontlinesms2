@@ -18,7 +18,7 @@ class SmslibTranslationService {
 			message.src = bod.originator
 			message.dst = bod.recipient
 			message.text = bod.text
-			message.dateCreated = new Date(bod.date)
+			message.date = new Date(bod.date)
 			assert exchange.out != null
 			exchange.out.body = message	
 		}
@@ -28,7 +28,7 @@ class SmslibTranslationService {
 		def f = exchange.in.body
 		def c = new COutgoingMessage(f.dst, f.text)
 		c.originator = f.src
-		c.date = f.dateCreated.time
+		c.date = f.date.time
 		
 		exchange.out.body = c
 	}

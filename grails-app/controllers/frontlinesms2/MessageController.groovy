@@ -16,7 +16,7 @@ class MessageController {
 	def newMessagesService
 
 	def bobInterceptor = {
-		params.sort = params.sort ?: 'dateCreated'
+		params.sort = params.sort ?: 'date'
 		params.order = params.order ?: 'desc'
 		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
 		params.starred = params.starred ? params.starred.toBoolean() : false
@@ -27,7 +27,7 @@ class MessageController {
 	def beforeInterceptor = bobInterceptor
 
 	def index = {
-		params.sort = 'dateCreated'
+		params.sort = 'date'
 		redirect(action:'inbox', params:params)
 	}
 	
@@ -97,7 +97,7 @@ class MessageController {
 		def trashInstance
 		def trashInstanceList
 		def messageInstanceList
-		params.sort = params.sort ?: "dateCreated"
+		params.sort = params.sort ?: "date"
 		if(params.id) {
 			def setTrashInstance = { obj ->
 				if(obj.objectType == "frontlinesms2.Fmessage") {

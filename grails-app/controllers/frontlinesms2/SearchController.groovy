@@ -12,7 +12,7 @@ class SearchController {
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
-		params.sort = params.sort ?: 'dateCreated'
+		params.sort = params.sort ?: 'date'
 		true
 	}
 	
@@ -48,7 +48,7 @@ class SearchController {
 		}
 
 		def rawSearchResults = Fmessage.search(search)
-		def searchResults = rawSearchResults.list(sort:"dateCreated", order:"desc", max: params.max, offset: params.offset)
+		def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		[searchDescription: searchDescription,

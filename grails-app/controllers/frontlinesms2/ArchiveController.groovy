@@ -6,7 +6,7 @@ class ArchiveController extends MessageController {
 	def beforeInterceptor = {
 //		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 //		params.offset  = params.offset ?: 0
-//		params.sort = params.sort ?: 'dateCreated'
+//		params.sort = params.sort ?: 'date'
 //		params.order = params.order ?: 'desc'
 //		params.viewingArchive = true
 //		params.viewingMessages = params.viewingMessages ? params.viewingMessages.toBoolean() : true
@@ -15,7 +15,7 @@ class ArchiveController extends MessageController {
 	}
 	 
 	def index = {
-		params.sort = 'dateCreated'
+		params.sort = 'date'
 		def messageSection = params.messageSection ?: 'inbox'
 		println "index: $params"
 		redirect(action:messageSection, params:params)

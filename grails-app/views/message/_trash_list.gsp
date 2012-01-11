@@ -23,13 +23,13 @@
 			</td>
 			<td class="message-date-cell">
 				<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.dateCreated}" />
+					<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}" />
 				</g:link>
 			</td>
 		</tr>
 	</g:if>
 	<g:else>
-		<tr class="${m.link == ownerInstance?'selected':''}" id="activity-${m.id}">
+		<tr class="${m.link == ownerInstance ? 'selected' : ''}" id="activity-${m.id}">
 			<td class="message-select-cell">
 				<g:checkBox disabled="true" name="message-select"/>
 			</td>
