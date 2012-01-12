@@ -23,11 +23,6 @@ class MessageController {
 		params.failed = params.failed ? params.failed.toBoolean() : false
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
-		Fmessage.withNewSession { session ->
-			Fmessage.each {
-				it.updateFmessageStatus()
-			}
-		}
 	}
 	def beforeInterceptor = bobInterceptor
 
@@ -72,7 +67,7 @@ class MessageController {
 				announcementInstanceList: Announcement.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
-				hasFailedMessages: Fmessage.hasFailedMessages(),
+				hasUnsentMessages: Fmessage.hasUnsentMessages(),
 				viewingArchvive: params.viewingArchive]
 	}
 
@@ -183,7 +178,7 @@ class MessageController {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.deleted = true
+				messageInstance.isDeleted = true
 				new Trash(identifier:messageInstance.displayName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save(failOnError: true, flush: true)
 				messageInstance.save(failOnError: true, flush: true)
 			}
@@ -241,7 +236,7 @@ class MessageController {
 		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				if (messageInstance.deleted == true) messageInstance.deleted = false
+				if (messageInstance.isDeleted == true) messageInstance.isDeleted = false
 				if(Trash.findByLinkId(messageInstance.id)) {
 					Trash.findByLinkId(messageInstance.id).delete(flush:true)
 				}

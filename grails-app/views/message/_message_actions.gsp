@@ -15,7 +15,7 @@
 			<g:hiddenField name="searchId" value="${search.id}"></g:hiddenField>
 		</g:if>
 		<g:if test="${messageSection == 'pending'}">
-			<g:if test="${messageInstance.status == FmessageStatus.HASFAILED}">
+			<g:if test="${messageInstance.hasFailed}">
 				<g:link class="msg-btn btn" elementId="retry" action="send" params="${[addresses: messageInstance.getFailedDispatchAddresses()]}">Retry</g:link>
 			</g:if>
 		</g:if>

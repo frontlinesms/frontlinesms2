@@ -3,7 +3,7 @@ package frontlinesms2
 class MessageSendService {
 	def send(Fmessage m, Fconnection c=null) {
 		assert m instanceof Fmessage
-		m.status = FmessageStatus.HASPENDING
+		m.hasPending = true
 		def headers = [:]
 		if(c) headers.fconnection = c.id
 		m.save(failOnError:true,flush:true) // FIXME this should be saving inside the outgoing messages route, not here

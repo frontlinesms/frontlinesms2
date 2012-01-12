@@ -42,7 +42,7 @@
 				</g:if>
 				<g:else>
 					<g:each in="${messageInstanceList}" status="i" var="m">
-						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
+						<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${(m.hasPending || m.hasFailed) ? 'send-failed' : '' }" id="message-${m.id}">
 							<g:hiddenField name="message-created-date" value="${m.date}"/>
 							<td class="message-select-cell">
 								<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});" />

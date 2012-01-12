@@ -108,18 +108,20 @@ class BootStrap {
 			new Fmessage(src:'+198765432', text:"text-${it}", date: new Date() - it, inbound:true).save(failOnError:true)
 		}
 		
-		[new Dispatch(dst:'+123456789', status: DispatchStatus.FAILED),
-			new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: new Date()),
-			new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date()),
-			new Dispatch(dst:'+254115533', status: DispatchStatus.PENDING)]
+		def d1 = new Dispatch(dst:'+123456789', status: DispatchStatus.FAILED)
+		def d2 = new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: new Date())
+		def d3 = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
+		def d4 = new Dispatch(dst:'+254115533', status: DispatchStatus.PENDING)
 
-		[new Fmessage(src: '+3245678', dispatches: [new Dispatch(dst:'+123456789', status: DispatchStatus.FAILED)], text: "time over?"),
-				new Fmessage(src: 'Johnny', dispatches: [new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: new Date())], text: "I am in a meeting"),
-				new Fmessage(src: 'Sony', dispatches: [new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())], text: "Hurry up"),
-				new Fmessage(src: 'Jill', dispatches: [new Dispatch(dst:'+254115533', status: DispatchStatus.PENDING)], text: "sample sms")].each {
-			it.date = new Date()
-			it.save(failOnError: true)
-		}
+		def m1 = new Fmessage(src: '+3245678', date: new Date(), text: "time over?")
+		def m2 = new Fmessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
+		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
+		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "sample sms")
+		
+		m1.addToDispatches(d1).save(failOnError: true)
+		m2.addToDispatches(d2).save(failOnError: true)
+		m3.addToDispatches(d3).save(failOnError: true)
+		m4.addToDispatches(d4).save(failOnError: true)
 	}
 	
 	private def dev_initFconnections() {
@@ -156,7 +158,6 @@ class BootStrap {
 		['Work', 'Projects'].each {
 			new Folder(name:it).save(failOnError:true, flush:true)
 		}
-
 		[new Fmessage(src:'Max', text:'I will be late'),
 				new Fmessage(src:'Jane', text:'Meeting at 10 am'),
 				new Fmessage(src:'Patrick', text:'Project has started'),

@@ -16,14 +16,16 @@ class Fmessage {
 	boolean contactExists
 	
 	boolean read
-	boolean deleted
 	boolean starred
 	boolean archived
+	boolean isDeleted
 	
 	boolean inbound
-	FmessageStatus status
-	static hasMany = [dispatches:Dispatch]
+	boolean hasSent
+	boolean hasPending
+	boolean hasFailed
 	int failedCount
+	static hasMany = [dispatches:Dispatch]
 
 	static mapping = {
 		sort date:'desc'
@@ -45,13 +47,24 @@ class Fmessage {
 		})
 		inbound(nullable: false, validator: { val, obj ->
 				if(val) {
-					obj.status == null
+					obj.hasSent == null || obj.hasSent == false
+					obj.hasPending == null || obj.hasPending == false
+					obj.hasFailed == null || obj.hasFailed == false
 					obj.dispatches == null || obj.dispatches.size() == 0
 				} else {
+					obj.hasSent != false || obj.hasPending != false || obj.hasFailed != false
 					obj.dispatches != null && obj.dispatches.size() >= 1
 				}
 		})
-		status(nullable: true, validator: { val, obj ->
+		hasSent(nullable: true, validator: { val, obj ->
+			if(val)
+				!obj.inbound
+		})
+		hasPending(nullable: true, validator: { val, obj ->
+			if(val)
+				!obj.inbound
+		})
+		hasFailed(nullable: true, validator: { val, obj ->
 			if(val)
 				!obj.inbound
 		})
@@ -60,17 +73,17 @@ class Fmessage {
 
 	def beforeInsert = {
 		updateFmessageDisplayName()
-		updateFmessageStatus()
+		updateFmessageStatuses()
 	}
 	
 	def beforeUpdate = {
-		updateFmessageStatus()
+		updateFmessageStatuses()
 	}
 	
 	static namedQueries = {
 		inbox { getOnlyStarred=false, archived=false ->
 			and {
-				eq("deleted", false)
+				eq("isDeleted", false)
 				eq("archived", archived)
 				if(getOnlyStarred)
 					eq("starred", true)
@@ -80,9 +93,9 @@ class Fmessage {
 		}
 		sent { getOnlyStarred=false, archived=false ->
 			and {
-				eq("deleted", false)
+				eq("isDeleted", false)
 				eq("archived", archived)
-				eq("status", FmessageStatus.HASSENT)
+				eq("hasSent", true)
 				isNull("messageOwner")
 				if(getOnlyStarred)
 					eq("starred", true)
@@ -90,22 +103,22 @@ class Fmessage {
 		}
 		pending { getOnlyFailed=false ->
 			and {
-				eq("deleted", false)
+				eq("isDeleted", false)
 				eq("archived", false)
 				isNull("messageOwner")
 				if(getOnlyFailed) {
-					eq("status", FmessageStatus.HASFAILED)
+					eq("hasFailed", true)
 				} else {
 					or {
-						eq("status", FmessageStatus.HASFAILED)	
-						eq("status", FmessageStatus.HASPENDING)
+						eq("hasPending", true)	
+						eq("hasFailed", true)
 					}
 				}
 			}
 		}
 		deleted { getOnlyStarred=false ->
 			and {
-				eq("deleted", true)
+				eq("isDeleted", true)
 				eq("archived", false)
 				if(getOnlyStarred)
 					eq('starred', true)
@@ -113,7 +126,7 @@ class Fmessage {
 		}
 		owned { getOnlyStarred=false, owners ->
 			and {
-				eq("deleted", false)
+				eq("isDeleted", false)
 				'in'("messageOwner", owners)
 				if(getOnlyStarred)
 					eq("starred", true)
@@ -121,7 +134,7 @@ class Fmessage {
 		}
 		unread {
 			and {
-				eq("deleted", false)
+				eq("isDeleted", false)
 				eq("archived", false)
 				eq("inbound", true)
 				eq("read", false)
@@ -147,9 +160,9 @@ class Fmessage {
 				if(search.status) {
 					def statuses = search.status.tokenize(',').collect { it.trim().toLowerCase() }
 					or {
-						if('sent' in statuses) eq('status', FmessageStatus.HASSENT)
-						if('pending' in statuses) eq('status', FmessageStatus.HASPENDING)
-						if('failed' in statuses) eq('status', FmessageStatus.HASFAILED)
+						if('sent' in statuses) eq('hasSent', true)
+						if('pending' in statuses) eq('hasPending', true)
+						if('failed' in statuses) eq('hasFailed', true)
 						if('inbound' in statuses) eq('inbound', true)
 					}
 				}
@@ -170,7 +183,7 @@ class Fmessage {
 				if(!search.inArchive) {
 					eq('archived', false)
 				}
-				eq('deleted', false)
+				eq('isDeleted', false)
 			}
 		}
 		
@@ -190,13 +203,13 @@ class Fmessage {
 				if(params.messageStatus) {
 					def statuses = params.messageStatus.collect { it.toLowerCase() }
 					or {
-						if('sent' in statuses) eq('status', FmessageStatus.HASSENT)
-						if('pending' in statuses) eq('status', FmessageStatus.HASPENDING)
-						if('failed' in statuses) eq('status', FmessageStatus.HASFAILED)
+						if('sent' in statuses) eq('hasSent', true)
+						if('pending' in statuses) eq('hasPending', true)
+						if('failed' in statuses) eq('hasFailed', true)
 						if('inbound' in statuses) eq('inbound', true)
 					}
 				}
-				eq('deleted', false)
+				eq('isDeleted', false)
 				and {
 					between("date", startDate, endDate)
 					eq("inbound", true)
@@ -208,7 +221,7 @@ class Fmessage {
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
-				eq('deleted', false)
+				eq('isDeleted', false)
 				eq('archived', false)
 				eq('id', this.id)
 			}
@@ -229,8 +242,10 @@ class Fmessage {
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
 
-	static def hasFailedMessages() {
-		Fmessage.countByHasFailed(true) > 0
+	static def hasUnsentMessages() {
+		if(Fmessage.findByHasFailed(true) || Fmessage.findByHasPending(true))
+			return true
+		return false
 	}
 	
 	static def getMessageOwners(activity) {
@@ -300,7 +315,7 @@ class Fmessage {
 			displayName = Contact.findByPrimaryMobile(dispatches.dst[0]).name
 			contactExists = true
 		} else if(!inbound && dispatches?.size() == 1) {
-			displayName = dispatches*.dst.flatten()
+			displayName = dispatches.dst[0]
 			contactExists = false
 		} else if(!inbound && dispatches?.size() > 1) {
 			displayName = dispatches?.size() + " recipients"
@@ -308,19 +323,22 @@ class Fmessage {
 		}
 	}
 	
-	def updateFmessageStatus() {
-		if(!inbound) {
-			def lowestCommonDenominatorStatus = FmessageStatus.HASSENT
-			failedCount = 0
-			dispatches.each {
+	def updateFmessageStatuses() {
+		if(!this.inbound) {
+			this.failedCount = 0
+			this.hasFailed = false
+			this.hasPending = false
+			this.hasSent = false
+			this.dispatches.each {
 				if(it.status == DispatchStatus.FAILED) {
-					lowestCommonDenominatorStatus = FmessageStatus.HASFAILED
-					failedCount++
-				} else if(it.status == DispatchStatus.PENDING && lowestCommonDenominatorStatus != FmessageStatus.HASFAILED) {
-					lowestCommonDenominatorStatus = FmessageStatus.HASPENDING
+					this.hasFailed = true
+					this.failedCount++
+				} else if(it.status == DispatchStatus.PENDING) {
+					this.hasPending = true
+				} else if(it.status == DispatchStatus.SENT) {
+					this.hasSent = true
 				}
 			}
-			status = lowestCommonDenominatorStatus
 		}
 	}
 }

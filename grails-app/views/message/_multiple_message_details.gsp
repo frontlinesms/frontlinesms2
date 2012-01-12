@@ -23,7 +23,7 @@
 			</g:if>
 			
 			<g:if test="${messageSection == 'pending'}">
-				<g:link class="msg-btn btn" elementId="retry-failed" action="send" params="${[addresses: messageInstance.getFailedDispatchAddresses()]}">Retry failed</g:link>
+				<g:link class="msg-btn btn" elementId="retry-failed" action="send" params="${[type: 'multiple_failed']}">Retry failed</g:link>
 				<g:actionSubmit class="msg-btn" value="Delete All" id="btn_delete_all" action="delete"/>
 			</g:if>
 			<g:elseif test="${messageSection == 'trash' && ownerInstance}">
