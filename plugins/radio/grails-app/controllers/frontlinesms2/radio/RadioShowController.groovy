@@ -1,6 +1,7 @@
 package frontlinesms2.radio
 
 import frontlinesms2.MessageController
+import frontlinesms2.Poll
 import java.util.Date
 import grails.converters.*
 import java.text.SimpleDateFormat
@@ -76,6 +77,21 @@ class RadioShowController extends MessageController {
 		} else {
 			getNewMessageCount()
 		}
+	}
+	
+	def addPoll = {
+		def pollInstance = Poll.get(params.pollId)
+		def showInstance = RadioShow.get(params.radioShowId)
+		
+		if(showInstance) {
+			showInstance.addToPolls(pollInstance)
+		}
+		redirect controller:"message", action:"poll", params: [ownerId: params.pollId]
+	}
+	
+	def selectPoll = {
+		def pollInstance = Poll.get(params.ownerId)
+		[ownerInstance:pollInstance]
 	}
 	
 	private String dateToString(Date date) {

@@ -10,17 +10,11 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 			def show = new RadioShow(name:"Morning Show").save(flush:true)
 			assert !show.polls
 		when:
-			launchPollPopup('standard', "Will you send messages to this poll")
+			launchPollPopup('standard', "Will you send messages to this poll", false)
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
-			goToTab(6)
-			pollForm.address = '1234567890'
-			addManualAddress.click()
-		then:
-			waitFor { $('.manual').displayed }
-		when:
-			next.click()
+			goToTab(7)
 		then:
 			waitFor { confirmationTab.displayed }
 			$(".radio-show-select").displayed
@@ -30,8 +24,29 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 			done.click()
 			show.refresh()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { $(".summary").displayed }
 			show.polls.size() == 1
+	}
+	
+	def "poll can be associated to radioshow from the 'More Actions' dropdown"() {
+		setup:
+			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def show = new RadioShow(name:"Morning Show").save(flush:true)
+		when:
+			go "message/poll/${poll.id}"
+		then:
+			waitFor { title == "Poll" }
+		when:
+			$("#poll-button-list").find("li:nth-child(3) select").jquery.val("radioShow")
+			$("#poll-button-list").find("li:nth-child(3) select").jquery.trigger("change")
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+		when:
+			$(".radio-show-select").value(show.id)
+			$("#done").click()
+			show.refresh()
+		then:
+			show.polls.size() == 1			
 	}
 	
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
@@ -50,4 +65,5 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 	def goToTab(tab) {
 		$(".tabs-$tab").click()
 	}
+	
 }

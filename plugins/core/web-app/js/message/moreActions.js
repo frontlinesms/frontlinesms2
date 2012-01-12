@@ -6,6 +6,8 @@ $(document).ready(function() {
 			renameAction();
 		else if($(this).find('option:selected').val() == 'export')
 			exportAction();
+		else if($(this).find('option:selected').val() == 'radioShow')
+			radioShowAction();
 	});
 	
 	$("#export").click(exportAction);

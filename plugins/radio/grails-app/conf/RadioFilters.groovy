@@ -10,12 +10,12 @@ class RadioFilters {
 		
 		justPoll(controller:'poll', action:'save') {
 			after = { model ->
-				if(params.radioShow) {
-					println "ID returned is ${model.ownerId} and params.radioShow is ${params.radioShow}"
-					def showInstance = RadioShow.get(params.radioShow)
+				if(params.radioShowId) {
+					def showInstance = RadioShow.get(params.radioShowId)
 					def poll = Poll.get(model.ownerId)
 					showInstance.addToPolls(poll)
-					showInstance.save(flush:true)
+					showInstance.save(flush:true, failOnError:true)
+					println "${poll.title} has been added to ${showInstance.name}"
 				}
 			}
 		}

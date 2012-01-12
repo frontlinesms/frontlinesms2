@@ -5,7 +5,7 @@
 		<g:textField name="title" class="name-field"></g:textField>
 	</div>
 	<div class="add-to-radioshow">
-		<g:select class="radio-show-select" name='radioShow' value=""
+		<g:select class="radio-show-select" name='radioShowId' value=""
 		    noSelection="${['':'Assign to Radio Show...']}"
 		    from='${RadioShow.findAll()}'
 		    optionKey="id" optionValue="name"/>
