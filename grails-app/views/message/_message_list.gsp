@@ -4,9 +4,6 @@
 <g:hiddenField name="messageSection" value="${messageSection}"/>
 <g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 <g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
-<g:set var="messageLabel" value="${(messageSection == 'sent' || messageSection == 'pending') ?
-		message(code: 'fmessage.src.label', default: 'To')
-			: message(code: 'fmessage.dst.label', default: 'From')}" />
 <g:if test="${messageSection == 'search'}">
   	<g:hiddenField name="activityId" value="${params.activityId}"/>
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
@@ -21,7 +18,7 @@
 				<th/>
 				<th class="message-star-cell"></th>
 			    	<g:if test="${messageSection == 'trash'}">
-			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="identifier" title="${messageLabel}"
+			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="identifier" title="${message(code: 'fmessage.displayName.label', default: 'Contact')}"
 							params="${params}" id='source-header' />
 		    			<g:sortableColumn class="message-text-cell" property="message" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />
@@ -29,7 +26,7 @@
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
 			    	</g:if>
 			    	<g:else>
-			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="displayName" title="${messageLabel}"
+			    		<g:sortableColumn class="message-preview-sender message-sender-cell" property="displayName" title="${message(code: 'fmessage.displayName.label', default: 'Contact')}"
 							params="${params}" id='source-header' />
 		    			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 							params="${params}" id="message-header" />

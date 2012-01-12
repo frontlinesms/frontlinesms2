@@ -23,9 +23,7 @@
 			</g:if>
 			
 			<g:if test="${messageSection == 'pending'}">
-				<g:if test="${checkedMessageList?.tokenize(',')?.intersect(failedMessageIds*.toString())}">
-					<g:link class="msg-btn btn" elementId="retry-failed" action="send" params="${[failedMessageIds : checkedMessageList.tokenize(',').intersect(failedMessageIds*.toString())]}">Retry failed</g:link>
-				</g:if>
+				<g:link class="msg-btn btn" elementId="retry-failed" action="send" params="${[addresses: messageInstance.getFailedDispatchAddresses()]}">Retry failed</g:link>
 				<g:actionSubmit class="msg-btn" value="Delete All" id="btn_delete_all" action="delete"/>
 			</g:if>
 			<g:elseif test="${messageSection == 'trash' && ownerInstance}">

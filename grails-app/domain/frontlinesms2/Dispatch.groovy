@@ -7,4 +7,20 @@ class Dispatch {
 	String dst
 	DispatchStatus status
 	Date dateSent
+	
+	static constraints = {
+		dst(nullable:false)
+		status(nullable: false, validator: { val, obj ->
+				if(val == DispatchStatus.SENT)
+					obj.dateSent != null
+				else
+					obj.dateSent == null
+		})
+		dateSent(nullable: true, validator: { val, obj ->
+				if(val)
+					obj.status == DispatchStatus.SENT
+				else
+					obj.status != DispatchStatus.SENT
+		})
+	}
 }

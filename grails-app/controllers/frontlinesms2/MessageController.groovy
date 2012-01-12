@@ -23,6 +23,11 @@ class MessageController {
 		params.failed = params.failed ? params.failed.toBoolean() : false
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
+		Fmessage.withNewSession { session ->
+			Fmessage.each {
+				it.updateFmessageStatus()
+			}
+		}
 	}
 	def beforeInterceptor = bobInterceptor
 
@@ -89,8 +94,7 @@ class MessageController {
 		def messageInstanceList = Fmessage.pending(params.failed)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
 				messageSection: 'pending',
-				messageInstanceTotal: messageInstanceList.count(),
-				failedMessageIds : Fmessage.findHasFailed(true)*.id] << getShowModel()
+				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 	
 	def trash = {
@@ -167,17 +171,12 @@ class MessageController {
 	}
 
 	def send = {
-		def failedMessageIds = params.failedMessageIds
-		def messages = failedMessageIds ? Fmessage.getAll([failedMessageIds].flatten()): messageSendService.getMessagesToSend(params)
+		def messages = messageSendService.getMessagesToSend(params)
 		messages.each { message ->
 			messageSendService.send(message)
 		}
 		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
-		if(params.failedMessageIds)
-			redirect(action: pending)
-		else
-			render(text: flash.message)
-		
+		render(text: flash.message)
 	}
 
 	def delete = {
