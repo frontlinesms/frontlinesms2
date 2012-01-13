@@ -28,6 +28,15 @@
 							<span id="show-${s.id}" class="${s?.isRunning ? 'active' : 'hide'}">On air</span>
 						</g:link>
 					</li>
+					<g:if test="${s.activePolls}">
+						<ul id="radio-show-polls">
+							<g:each in="${s.activePolls}" status="j" var="p">
+								<li class="${p == ownerInstance ? 'selected' : ''}">
+									<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
+								</li>
+							</g:each>
+						</ul>
+					</g:if>
 				</g:each>
 				<li id='create-show' class="create">
 					<g:remoteLink class="btn create" controller="radioShow" action="create" onSuccess="launchSmallPopup('Radio Show', data, 'Create')">
@@ -40,9 +49,11 @@
 			<h3 class="list-title activities-list-title">Activities</h3>
 			<ul class='sublist' id="activities-submenu">
 				<g:each in="${pollInstanceList}" status="i" var="p">
-					<li class="${p == ownerInstance ? 'selected' : ''}">
-						<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
-					</li>
+					<g:if test="${p.messageOwner == null}">
+						<li class="${p == ownerInstance ? 'selected' : ''}">
+							<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
+						</li>
+					</g:if>
 				</g:each>
 				<g:each in="${announcementInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">

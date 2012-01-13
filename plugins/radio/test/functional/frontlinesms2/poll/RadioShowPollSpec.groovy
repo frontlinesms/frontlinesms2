@@ -49,6 +49,21 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 			show.polls.size() == 1			
 	}
 	
+	def "polls associated to a radio show are listed below the currently viewed show"() {
+		setup:
+			def poll = Poll.createPoll(title: 'Who is badder', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll2 = Poll.createPoll(title: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
+			def show = new RadioShow(name:"Morning Show").save(flush:true)
+			show.addToPolls(poll)
+			show.save(flush:true)
+		when:
+			go "message/radioShow/${show.id}"
+		then:
+			waitFor { title == "RadioShow" }
+			$("#shows-submenu").find("#radio-show-polls")*.text() == ["Who is badder poll"]
+			!$("#activities-submenu").text().contains("Who is badder poll")
+	}
+	
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
 		go 'message'
 		$("#create-activity a").click()

@@ -8,7 +8,12 @@ class RadioShow extends MessageOwner {
 	boolean isRunning
 	Date dateCreated
 	
-	static hasMany = [polls:Poll]
+	static hasMany = [polls: Poll]
+	
+	static mapping = {
+		polls cascade:'save-update'
+	}
+	
 	static constraints = {
 		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
 			if(!obj.id) {
@@ -31,5 +36,9 @@ class RadioShow extends MessageOwner {
 	
 	def stop() {
 		isRunning = false
+	}
+	
+	def getActivePolls() {
+		Poll.owned(this).list()
 	}
 }
