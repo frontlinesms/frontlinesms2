@@ -1,6 +1,18 @@
-includeTargets << grailsScript("Init")
+includeTargets << grailsScript("Init") << grailsScript("War")
 
-target(main: "Build installers for various platforms.") {
+target(main: 'Build installers for various platforms.') {
+	depends(clean, war)
+	def appName = metadata.'app.name'
+	def appVersion = metadata.'app.version'
+	delete(dir:'install/webapp')
+	unzip(src:"target/${appName}-${appVersion}.war", dest:'install/webapp')
+	exec(dir:'install', executable:'mvn') {
+		arg value:'clean'
+		arg value:'package'
+	}
+}
+
+target(main_old: "Build installers for various platforms.") {
 	def appVersion = metadata.'app.version'
 
 	def jarFile = new File("target/frontlinesms2-${appVersion}.jar")
