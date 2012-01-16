@@ -155,4 +155,20 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			tom.secondaryMobile == null
 	}
+	
+	
+	def "checkForDuplicates returns any contact whose number ends with the string of numbers it is given"() {
+		when:
+			def alice = new Contact(name: "Alice", primaryMobile: "12345").save(flush: true)
+			def bob = new Contact(name: "Bob", primaryMobile: "54321").save(flush: true)
+			controller.params.number = '5678'
+			controller.checkForDuplicates()
+		then:
+			controller.response.contentAsString == '' || controller.response.contentAsString == null
+		when:
+			controller.params.number = '12345'
+			controller.checkForDuplicates()
+		then:
+			controller.response.contentAsString != '' && controller.response.contentAsString != null
+	}
 }

@@ -24,7 +24,18 @@ class MessageController {
 		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
 		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.failed = params.failed ? params.failed.toBoolean() : false
-		true
+		Fmessage.withNewSession { session ->
+			Fmessage.findAll().each {
+				if(it.inbound && Contact.findByPrimaryMobile(it.src))
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.src=?", [Contact.findByPrimaryMobile(it.src).name, true, it.src])
+				else if(!it.inbound && Contact.findByPrimaryMobile(it.dst))
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.contactName=?,m.contactExists=? WHERE m.dst=?", [Contact.findByPrimaryMobile(it.dst).name, true, it.dst])
+				else if(it.contactExists) {
+					it.contactName = ''
+					it.contactExists = false
+				}
+			}
+		}
 	}
 	def beforeInterceptor = bobInterceptor
 	

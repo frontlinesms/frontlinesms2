@@ -10,5 +10,5 @@
 		                                                                'nonExistingRecipients': [],
 		                                                                'recipients': []]"/>
 	</div>
-	<g:render template="confirm"/>
+	<g:render template="confirm" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 </g:formRemote>

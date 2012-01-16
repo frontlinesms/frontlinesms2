@@ -145,11 +145,20 @@
 
 	function highlightPollResponses() {
 		$(".choices").each(function() {
+			if(this.id != "choiceA" && this.id != "choiceB")
+				$(this).attr('disabled', 'disabled');
 			var changeHandler = function() {
 				if(this.id != "choiceA" && this.id != "choiceE") {
-					var label = $(this).parent().next().find('label');
-					if (!$.trim(this.value).length) label.removeClass('field-enabled');
-					else label.addClass('field-enabled');
+					var nextLabel = $(this).parent().next().find('label');
+					var nextInput = $(this).parent().next().find('.choices');
+					if (!$.trim(this.value).length) {
+						nextLabel.removeClass('field-enabled');
+						nextInput.val('');
+						nextInput.attr('disabled', 'disabled');
+					} else {
+						nextLabel.addClass('field-enabled');
+						nextInput.removeAttr('disabled');
+					}
 				}
 			}
 			$(this).keyup(changeHandler);

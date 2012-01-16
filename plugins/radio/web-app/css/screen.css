@@ -2,6 +2,7 @@
 @import url("contacts.css");
 @import url("settings.css");
 @import url("status.css");
+@import url("header.css");
 
 html {
 	height: 100%;
@@ -56,8 +57,8 @@ a {
 	min-width:18px;
 	min-height:18px;
 	padding: 2px 20px;
-	vertical-align: bottom;
 }
+
 #address-error{
 	position: relative;
 	left: 150px;
@@ -297,7 +298,7 @@ a.tab-link:active{
 
 #sidebar{
     position: fixed;
-    top: 84px;
+    top: 83px;
     bottom: 0;
     float: left;
     width: 17%;
@@ -355,26 +356,46 @@ a.tab-link:active{
 .list-title{
     background-repeat: no-repeat;
 }
-#messages-list-title{
+#messages-tab #messages-list-title{
     background-image: url('../images/icons/messages.png');
 }
-.activities-list-title{
+#messages-tab .activities-list-title{
     background-image: url('../images/icons/activities.png');
 }
-#folders-list-title{
+#messages-tab #folders-list-title{
     background-image: url('../images/icons/folders.png');
 }
-#create-new-list-title{
-    background-image: url('../images/icons/createnew.png');
+#messages-tab #shows-list-title{
+    background-image: url('../images/icons/shows.png');
 }
-#groups-list-title{
-    background-image: url('../images/icons/groups.png');
-}
-#contacts-list-title{
+
+#contacts-tab  #contacts-list-title{
     background-image: url('../images/icons/contacts.png');
 }
-#shows-list-title{
-    background-image: url('../images/icons/shows.png');
+#contacts-tab #groups-list-title{
+    background-image: url('../images/icons/groups.png');
+}
+#contacts-tab  #smart-groups-list-title{
+    background-image: url('../images/icons/smartgroups.png');
+}
+
+#archive-tab .sublist .archive-section-list{
+	background-repeat: no-repeat;
+	margin-left: 42px;
+	height: 21px;
+	padding: 4px 25px 0 25px;
+}
+#archive-tab .sublist #inbox{
+    background-image: url('../images/icons/inboxarchive.png');
+}
+#archive-tab .sublist #sent{
+    background-image: url('../images/icons/sentarchive.png');
+}
+#archive-tab .sublist #activity{
+    background-image: url('../images/icons/activitiesarchive.png');
+}
+#archive-tab .sublist #folder{
+    background-image: url('../images/icons/foldersarchive.png');
 }
 
 #sidebar #search-menu{
@@ -459,7 +480,7 @@ a.tab-link:active{
 
 .section-header .message-title h3, .section-header .activity-title h3, .section-header h3{
     text-transform: uppercase;
-    padding:10px 0;
+    padding:12px 0;
     padding-left: 28px;
     width:30%;
     margin: 0;
@@ -468,11 +489,6 @@ a.tab-link:active{
     float:left;
 }
 
-.section-header .activity-title #poll-sent{
-    padding:10px;
-    margin: 0;
-    float:left;
-}
 .section-header .button-list{
 	list-style: none;
 	float: right;
@@ -504,6 +520,7 @@ a.tab-link:active{
 	top: 250px;
 	right: 27px;
 	padding-left: 25px;
+	cursor: pointer;
 }
 .section-header .activity-title #poll-graph-btn.show-arrow{
 	background-image: url('../images/icons/toggle_plus.png');
@@ -514,24 +531,73 @@ a.tab-link:active{
 	background-repeat: no-repeat;
 }
 .section-header .activity-title #activity-details{
-	width:70%;
 	float:left;
-	padding-left:28px;
-	height: 30%;
+	max-height: 125px;
+	max-width: 70%;
+	margin-top: 25px;
 }
 .section-header .activity-title td{
-	padding: 0 10px;
+	padding: 0 25px;
+	font-size: 11px;
+}
+.section-header .activity-title #activity-details #poll-sent{
+}
+.section-header .activity-title #activity-details #poll-sent{
+	font-size: 10px;
 }
 
-#messages-tab .section-header .message-title h3{
+#messages-tab .section-header #inbox-title{
     background-image: url('../images/icons/inbox.png');
 }
-.section-header #archive-title h3{
+#messages-tab .section-header #sent-title{
+    background-image: url('../images/icons/sent.png');
+}
+#messages-tab .section-header #pending-title{
+    background-image: url('../images/icons/pending.png');
+}
+#messages-tab .section-header #trash-title{
+    background-image: url('../images/icons/trash.png');
+}
+#messages-tab .section-header #poll-title, #messages-tab .section-header #announcement-title{
+    background-image: url('../images/icons/activities.png');
+}
+#messages-tab .section-header #folder-title{
+    background-image: url('../images/icons/folders.png');
+}
+#messages-tab .section-header #show-title{
+    background-image: url('../images/icons/shows.png');
+}
+
+#archive-tab .section-header #inbox-title{
     background-image: url('../images/icons/inboxarchive.png');
 }
-#contacts-tab .section-header h3{
+#archive-tab .section-header #sent-title{
+    background-image: url('../images/icons/sentarchive.png');
+}
+#archive-tab .section-header #activity-title{
+    background-image: url('../images/icons/activitiesarchive.png');
+}
+#archive-tab .section-header #folder-title{
+    background-image: url('../images/icons/foldersarchive.png');
+}
+
+#contacts-tab .section-header #all-contacts-title{
+    background-image: url('../images/icons/contacts.png');
+}
+#contacts-tab .section-header #group-title{
     background-image: url('../images/icons/groups.png');
 }
+#contacts-tab .section-header #smart-group-title{
+    background-image: url('../images/icons/smartgroups.png');
+}
+
+#quick-message{
+	display:inline-block;
+	background-image: url('../images/icons/quickmessage.png');
+	background-repeat: no-repeat;
+	padding-left: 25px;
+}
+
 .footer{
     width: 100%;
     float: left;
@@ -701,7 +767,40 @@ animation: newMessage 2s;
     margin-top: 39px;
     width:75%;
 }
- #folder-list, #activity-list{
+#message-list .message-select-cell input[type='checkbox']{
+	margin-top: 5px;
+}
+
+.tall-header #no-messages{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 350px;
+	left: 40%;
+}
+#no-messages{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 200px;
+	left: 40%;
+}
+#messages #no-search-description{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 400px;
+	left: 35%;
+}
+#messages #no-messages-search{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 400px;
+	left: 27%;
+}
+
+#folder-list, #activity-list{
  	float:left;
     list-style: none;
     padding: 0;
@@ -771,8 +870,9 @@ animation: newMessage 2s;
 	padding-right: 10px;
 }
 #message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
-	min-width: 300px;
-	width: 455px;
+	min-width: 400px;
+	padding-right: 10px;
+	width: 400px;
 }
 #message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
 	min-width: 300px;

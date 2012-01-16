@@ -4,7 +4,7 @@
 		<g:each in="${['A','B','C','D','E']}" var="option">
 			<li>
 				<label for='choice${option}' class="${option == 'A' || option == 'B' ? 'field-enabled': ''}">${option}</label>
-			   	<g:textField class='choices' name="choice${option}"/>
+			   	<g:textField class='choices' name="choice${option}" class="${option == 'A' || option == 'B' ? '': 'disabled'}" />
 			</li>
 		</g:each>
 	</ul>

@@ -17,7 +17,7 @@ class MessageSendService {
 		def groups = [params.groups].flatten() - null
 		addresses += groups.collect {
 			println it
-			Group.findByName(it).getAddresses()
+			Group.findByName(it) ? Group.findByName(it).getAddresses() : SmartGroup.findByName(it).getAddresses()
 		}.flatten()
 		addresses.unique().each { address ->
 			//TODO: Need to add source from app setting

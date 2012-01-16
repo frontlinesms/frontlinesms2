@@ -17,7 +17,7 @@ class ContactController {
 	def index = {
 		redirect action: "show", params:params
 	}
-
+	
 	def show = { contactInstance ->
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
@@ -60,15 +60,14 @@ class ContactController {
 	}
 
 	def saveContact = {
-		def contactInstance = Contact.get(params.contactId)?:new Contact()
+		def contactInstance = Contact.get(params.contactId) ?: new Contact()
 		contactInstance.properties = params
 		if(attemptSave(contactInstance)) {
 			parseContactFields(contactInstance)
 			if(attemptSave(contactInstance))
 				redirect(action:'show', params:[contactId:contactInstance.id])
 		}
-		flash.message = contactInstance.errors.allErrors*.defaultMessage
-		render(view:'show', model:show())
+		redirect(action:'show')
 	}
 	
 	def update = {
@@ -84,7 +83,7 @@ class ContactController {
 			contactInstance.properties = params
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
-			render(view:'show', model:show(contactInstance))
+			redirect(action:'show', params:[contactId: contactInstance.id])
 		}
 	}
 	
@@ -154,7 +153,19 @@ class ContactController {
 		render template: 'search_results', model: contactSearchService.contactList(params)
 	}
 	
+	def checkForDuplicates = {
+		if (Contact.findByPrimaryMobile(params.number))
+			render(text: "There is already a contact with that number!")
+		else
+			render ""
+	}
+	
 	private def attemptSave(contactInstance) {
+		def existingContact = Contact.findByPrimaryMobileLike(params.primaryMobile)
+		if(existingContact && existingContact != contactInstance) {
+			flash.message = "There is already a contact with that primary mobile, you cannot create another!  <a href='/frontlinesms2/contact/show/" + Contact.findByPrimaryMobileLike(params.primaryMobile)?.id + "'>View duplicate</g:link>"
+			return false
+		}
 		if(contactInstance.save(flush:true)) {
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
 			def redirectParams = [contactId: contactInstance.id]

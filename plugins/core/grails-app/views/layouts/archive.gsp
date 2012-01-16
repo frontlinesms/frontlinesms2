@@ -35,23 +35,7 @@
 		<div id="main" class="main">
     			<g:render template="../archive/menu"/>
 				<div id="content" class="content">
-					<div id='archive-header' class="content-header section-header">
-						<div id="archive-title">
-				  			<g:if test="${messageSection in ['poll', 'announcement']}">
-								<h3>Activity Archive</h3>
-							</g:if>
-							<g:elseif test="${messageSection == 'inbox'}">
-								<h3>${messageSection} Archive</h3>
-							</g:elseif>
-							<g:elseif test="${messageSection == 'sent'}">
-								<h3>${messageSection} Archive</h3>
-							</g:elseif>
-							<g:elseif test="${messageSection == 'folder'}">
-								<h3>${messageSection} Archive</h3>
-							</g:elseif>
-							<g:render template="../message/section_action_buttons"/>
-						</div>
-					</div>
+					<g:render template="../archive/header"/>
 					<div class="content-body">
 						<g:if test="${(messageSection == 'poll' || messageSection == 'announcement') && !viewingMessages}">
 							<g:render template="archived_activity_list"/>

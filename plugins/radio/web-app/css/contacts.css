@@ -74,6 +74,9 @@
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
 }
+#contact-editor input[type=text].error{
+	border: 2px solid #ff9600;
+}
 
 #contact-editor select, #contact-editor #group-list, #contact-editor #message-count{
 	width: 250px;

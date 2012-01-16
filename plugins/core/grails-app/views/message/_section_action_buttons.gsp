@@ -30,6 +30,6 @@
 		</g:else>
 	</g:if>
        <li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
-			Quick message
+			<div id="quick-message">Quick message</div>
 		</g:remoteLink></li>
 </ul>

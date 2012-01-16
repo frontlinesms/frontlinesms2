@@ -1,7 +1,7 @@
 <div class="section-header" id="contact-header">
 	<div id="contact-title">
 		<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
-			<h3>${contactsSection.name} (${contactInstanceTotal})</h3>
+			<h3 id="${contactsSection instanceof frontlinesms2.Group ? 'group' : 'smart-group'}-title">${contactsSection.name} (${contactInstanceTotal})</h3>
 			<ul class="section-header-buttons button-list">
 				<li>
 					<g:select class="dropdown" name="group-actions" from="${['Rename group', 'Delete group']}"
@@ -14,7 +14,7 @@
 			</ul>
 		</g:if>
 		<g:else>
-			<h3>${contactInstance?.name ?: contactInstance?.primaryMobile ?: 'New Contact'}</h3>
+			<h3 id="all-contacts-title">${contactInstance?.name ?: contactInstance?.primaryMobile ?: 'New Contact'}</h3>
 			<ul class="section-header-buttons button-list">
 				<li>
 					<g:remoteLink class="btn" controller="export" action="contactWizard" onSuccess="launchSmallPopup('Export', data, 'Export')">Export</g:remoteLink>

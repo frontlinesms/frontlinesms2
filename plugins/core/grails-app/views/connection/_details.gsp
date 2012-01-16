@@ -3,7 +3,7 @@
 		<h2>Phone/Modem</h2>
 		<div class="input field">
 			<label for="name">Name</label>
-			<g:textField name="name" value="${fconnectionInstance?.name}" />
+			<g:textField name="sms-name" value="${fconnectionInstance?.name}" />
 		</div>
 		
 		<div class="field">
@@ -25,7 +25,7 @@
 		<h2>Email</h2>
 		<div class="field">
 			<label for="name">Name</label>
-			<g:textField name="name" value="${fconnectionInstance?.name}" />
+			<g:textField name="email-name" value="${fconnectionInstance?.name}" />
 		</div>
 		
 		<div class="field">
