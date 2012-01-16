@@ -85,9 +85,14 @@
 					</g:each>
 				</g:else>
 				</g:if>
-				<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
+				<g:elseif test="${(messageSection == 'result') && !search}">
 					<h1 id="no-search-description">
 						Start new search on the left
+					</h1>
+				</g:elseif>
+				<g:elseif test="${(messageSection == 'result') && search && messageInstanceTotal == 0}">
+					<h1 id="no-messages-search">
+						No messages found! Try a new search on the left
 					</h1>
 				</g:elseif>
 				<g:else>
