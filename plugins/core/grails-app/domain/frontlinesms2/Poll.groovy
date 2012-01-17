@@ -15,7 +15,6 @@ class Poll {
 	int sentMessageCount
 	static transients = ['liveMessageCount']
 	
-	static belongsTo = [messageOwner: MessageOwner]
 	static hasMany = [responses: PollResponse]
 
 	static constraints = {
@@ -29,7 +28,6 @@ class Poll {
 		})
 		autoReplyText(nullable:true, blank:false)
 		messageText(nullable:true)
-		messageOwner(nullable:true)
 		question(nullable:true)
 		keyword(nullable:true, validator: { keyword, me ->
 			if(!keyword) return true
@@ -53,16 +51,6 @@ class Poll {
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 
-	static namedQueries = {
-		owned { owner ->
-			and {
-				eq("deleted", false)
-				eq("archived", false)
-				eq("messageOwner", owner)
-			}
-		}
-	}
-	
 	def getPollMessages(getOnlyStarred=false) {
 		Fmessage.owned(getOnlyStarred, this.responses)
 	}

@@ -66,6 +66,7 @@ class RadioShowController extends MessageController {
 	
 	def getShowModel(messageInstanceList) {
 		def model = super.getShowModel(messageInstanceList)
+		model.pollInstanceList = model.pollInstanceList - RadioShow.getAllRadioPolls()
 		model << [radioShows: RadioShow.findAll()]
 		return model
 	}

@@ -66,7 +66,6 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			show.activePolls.size() == 2
 		when:
-			println "poll messageOwner = ${poll.responses}" 
 			poll.deleted = true
 		then:
 			show.activePolls.size() == 1
@@ -83,9 +82,9 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			show.activePolls.size() == 2
 		when:
-			println "poll messageOwner = ${poll.responses}"
 			poll.archived = true
 		then:
 			show.activePolls.size() == 1
 	}
+	
 }

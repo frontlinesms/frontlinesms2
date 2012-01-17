@@ -49,11 +49,9 @@
 			<h3 class="list-title activities-list-title">Activities</h3>
 			<ul class='sublist' id="activities-submenu">
 				<g:each in="${pollInstanceList}" status="i" var="p">
-					<g:if test="${p.messageOwner == null}">
-						<li class="${p == ownerInstance ? 'selected' : ''}">
-							<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
-						</li>
-					</g:if>
+					<li class="${p == ownerInstance ? 'selected' : ''}">
+						<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
+					</li>
 				</g:each>
 				<g:each in="${announcementInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">

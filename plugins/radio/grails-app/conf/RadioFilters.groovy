@@ -4,7 +4,10 @@ class RadioFilters {
 	def filters = {
 		justMessage(controller:'message', action:'*') {
 			after = { model ->
-				if(model) model << [radioShows: listRadioShows()]
+				if(model) {
+					model.pollInstanceList = model.pollInstanceList - RadioShow.getAllRadioPolls()
+					model << [radioShows: listRadioShows()]
+					}
 			}
 		}
 		

@@ -7,12 +7,8 @@ class RadioShow extends MessageOwner {
 	String name
 	boolean isRunning
 	Date dateCreated
-	
+	List polls
 	static hasMany = [polls: Poll]
-	
-	static mapping = {
-		polls cascade:'save-update'
-	}
 	
 	static constraints = {
 		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
@@ -39,6 +35,19 @@ class RadioShow extends MessageOwner {
 	}
 	
 	def getActivePolls() {
-		Poll.owned(this).list()
+		def pollList
+		if(polls) {
+			pollList = Poll.withCriteria {
+				'in'("id", polls*.id)
+				eq("archived", false)
+				eq("deleted", false)
+			}
+		}
+		pollList
+	}
+	
+	static def getAllRadioPolls() {
+		def radioPollsInstanceList = RadioShow.findAll()*.polls
+		radioPollsInstanceList.flatten()
 	}
 }
