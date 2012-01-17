@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0.9" transformSequenceNumber="3">
-  <directoryPresets config="../target/frontlinesms2-${compiler:sys.version}.jar" />
-  <application name="FrontlineSMS 2.0" distributionSourceDir="" applicationId="5413-0079-8858-2349" mediaDir="../target/install/media" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="FrontlineSMS2" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="0.1" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+<install4j version="5.0.10" transformSequenceNumber="3">
+  <directoryPresets config="./src/main/resources/tray" />
+  <application name="FrontlineSMS2 Alpha" distributionSourceDir="" applicationId="9038-1538-7100-7772" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="frontlinesms2-alpha" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:project.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -14,64 +14,41 @@
     <variables />
     <mergedProjects />
   </application>
-  <files keepModificationTimes="false" missingFilesStrategy="warn" globalExcludeSuffixes="" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
+  <files keepModificationTimes="true" missingFilesStrategy="error" globalExcludeSuffixes="" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
     <filesets />
     <roots />
     <mountPoints>
-      <mountPoint id="22" root="" location="" mode="755" />
+      <mountPoint id="25" root="" location="." mode="755" />
+      <mountPoint id="23" root="" location="webapp" mode="755" />
     </mountPoints>
     <entries>
-      <fileEntry mountPoint="22" file="./launch_browser.bat" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" />
-      <fileEntry mountPoint="22" file="../target/frontlinesms2-${compiler:sys.version}.jar" overwriteMode="4" shared="true" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="22" file="./FrontlineSMS.ico" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="true" overrideUninstallMode="true" />
-      <fileEntry mountPoint="22" file="./FrontlineSMS_Splash_Logo.jpg" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="true" />
+      <dirEntry mountPoint="25" file="${compiler:assembly.dir}" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
+      <dirEntry mountPoint="23" file="webapp" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+        <exclude />
+      </dirEntry>
     </entries>
     <components />
   </files>
   <launchers>
-    <launcher name="FrontlineSMS 2" id="23" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="" icnsFile="" swtApp="false" fileset="">
-      <executable name="FrontlineSMS 2" type="1" iconSet="true" iconFile="FrontlineSMS.ico" executableDir="" redirectStderr="false" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="highestAvailable" checkConsoleParameter="false" globalSingleInstance="false">
+    <launcher name="FrontlineSMS TrayIcon" id="24" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="" icnsFile="./src/assemble/resources/FrontlineSMS.icns" swtApp="false" fileset="">
+      <executable name="FrontlineSMS TrayIcon" type="1" iconSet="true" iconFile="./src/assemble/resources/FrontlineSMS.ico" executableDir="." redirectStderr="false" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="true" workingDirectory="." singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
       </executable>
-      <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="C:/FrontlineSMS Installers/Test Setup/FrontlineSMS_Splash_Logo.jpg" java6SplashScreen="false">
+      <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="./src/assemble/resources/splash.jpg" java6SplashScreen="false">
         <text>
           <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="standalone.Start" vmParameters="-jar frontlinesms2-0.1.jar" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="net.frontlinesms2.systraymonitor.Main" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
-          <archive location="frontlinesms2-0.1.jar" failOnError="false" />
+          <scanDirectory location="cp" failOnError="true" />
         </classPath>
-        <nativeLibraryDirectories />
-      </java>
-      <includedFiles />
-      <unextractableFiles />
-      <vmOptionsFile mode="content" overwriteMode="0" fileMode="644">
-        <content>-jar frontlinesms2-0.1.jar</content>
-      </vmOptionsFile>
-      <customScript mode="1" file="">
-        <content />
-      </customScript>
-      <iconImageFiles>
-        <file path="FrontlineSMS.ico" />
-      </iconImageFiles>
-    </launcher>
-    <launcher name="FrontlineSMS2-service" id="72" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="" icnsFile="./FrontlineSMS.icns" swtApp="false" fileset="">
-      <executable name="FrontlineSMS2-service" type="1" iconSet="true" iconFile="./FrontlineSMS.ico" executableDir="" redirectStderr="false" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="3" changeWorkingDirectory="true" workingDirectory="." singleInstance="true" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false">
-        <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" />
-      </executable>
-      <splashScreen show="true" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="./icon.png" java6SplashScreen="true">
-        <text>
-          <statusLine x="20" y="20" text="" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
-          <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
-        </text>
-      </splashScreen>
-      <java mainClass="standalone.Start" vmParameters="java -jar frontlinesms2-*.jar" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
-        <classPath>
-          <directory location="." failOnError="false" />
-        </classPath>
-        <nativeLibraryDirectories />
+        <nativeLibraryDirectories>
+          <directory name="jni" />
+        </nativeLibraryDirectories>
       </java>
       <includedFiles />
       <unextractableFiles />
@@ -82,10 +59,9 @@
         <content />
       </customScript>
       <iconImageFiles>
-        <file path="./icon.png" />
+        <file path="./src/main/resources/tray/running.png" />
       </iconImageFiles>
     </launcher>
-    <launcher name="launch_browser.bat" id="74" customizedId="" external="true" excludeFromMenu="false" unixMode="755" menuName="Launch FrontlineSMS in Windows browser" externalFile="launch_browser.bat" />
   </launchers>
   <installerGui installerType="1" addOnAppId="" suggestPreviousLocations="true" autoUpdateDescriptorUrl="" useAutoUpdateBaseUrl="false" autoUpdateBaseUrl="">
     <customCode />
@@ -378,7 +354,7 @@
     </applications>
   </installerGui>
   <mediaSets>
-    <windows name="Windows" id="24" customizedId="" mediaFileName="" installDir="FrontlineSMS" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-x86-1.6.0_29" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Windows" id="27" customizedId="" mediaFileName="" installDir="frontlinesms2-alpha" overridePrincipalLanguage="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-x86-1.6.0_30" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
       <excludedLaunchers />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
@@ -393,6 +369,6 @@
     </windows>
   </mediaSets>
   <buildIds buildAll="true" />
-  <buildOptions verbose="true" faster="true" debug="false" />
+  <buildOptions verbose="false" faster="false" debug="false" />
 </install4j>
 
