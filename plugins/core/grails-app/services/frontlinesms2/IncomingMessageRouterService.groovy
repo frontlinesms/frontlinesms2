@@ -1,30 +1,38 @@
 package frontlinesms2
 
-import org.apache.camel.Exchange
-import org.apache.camel.Header
+import java.util.List;
+
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.RouteDefinition
+import org.apache.camel.*
 
 class IncomingMessageRouterService {
-
-	def incomingMessageProcessorService
-	int counter = 0
-	
-	def slip(@Header(Exchange.SLIP_ENDPOINT) String previous) {
-		if(previous) {
-			// We only want to pass this message to a single endpoint, so if there
-			// is a previous one set, we should exit the slip.
-			println "Exchange has previous endpoint from this slip.  Returning null."
-			return null
-		} else {
-			println "route definition is: ${incomingMessageProcessorService.routes}"
-			def routeNames = ""
-			if(incomingMessageProcessorService.routes.size() > 1) {
-				routeNames = incomingMessageProcessorService.routes*.endpoint.endpointUri.join(", ")
-			} else {
-				routeNames = incomingMessageProcessorService.routes.endpoint.endpointUri
-			}
-			
-			return routeNames
+	def camelContext
+	def camelRouteBuilder = new RouteBuilder() {
+		@Override
+		void configure() {}
+		List getRouteDefinitions() {
+			def routes = []
+			routes = filter(camelContext.routes, { it.endpoint.endpointUri.contains('fmessages-to-process') })
+			getLog().info "Creating routes: $routes..."
+			routes
 		}
-		return null
+	}
+	
+	def getRoutes() {
+		camelRouteBuilder.getRouteDefinitions()
+	}
+	
+	def Endpoint[] route(String body) {
+		def endPoints = routes*.endpoint
+		return endPoints
+	}
+	
+	def filter(List l, Closure c) {
+		def r = []
+		l.each {
+			if(c(it)) r << it
+		}
+		r
 	}
 }
