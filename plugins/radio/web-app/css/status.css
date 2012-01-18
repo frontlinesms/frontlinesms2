@@ -1,0 +1,231 @@
+#status-tab #main{
+    background-color: #eee;
+    padding: 17px;
+    height: 96%;
+}
+#status-tab #traffic-status{
+    float:left;
+    position:fixed;
+    top: 142px;
+    bottom: 50px;
+    width: 47%;
+    background: white;
+    margin: 0 25px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    overflow-x: hide;
+    overflow-y: auto;
+}
+#status-tab #right-column{
+    position:fixed;
+    right:0;
+    top: 83px;
+    bottom: 17px;
+    width: 47%;
+    float: right;
+    margin: 0 25px;
+    overflow-x: hide;
+    overflow-y: auto;
+}
+#status-tab #connection-status{
+    min-height: 200px;
+    background: white;
+    margin: 0 25px 25px 25px;
+    border-radius: 4px;
+    padding: 17px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+#status-tab #device-detection{
+	min-height: 100px;
+    background: white;
+    margin: 0 25px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    padding: 17px
+}
+#status-tab #device-detection a{
+	float: right;
+}
+
+#status-tab h3{
+	padding: 17px;
+    background: #eee;
+    margin: 0 25px;
+    text-transform: uppercase;
+}
+#status-tab #traffic-title{
+    float:left;
+    position:fixed;
+    top: 83px;
+    width: 45%;
+}
+	
+#status-tab #traffic-status #trafficGraph{
+	min-height: 200px;
+	height:50%;
+	border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+#status-tab #traffic-status form{
+	height:40%;
+}
+
+#status-tab #traffic-status .export-button{
+    float: right;
+}
+
+#traffic-status ul{
+    float: left;
+    margin-left: 17px;
+    margin-bottom: 10px;
+    padding: 0;
+}
+
+#traffic-status #type-filters{
+	width: 40%;
+    margin: 17px 17px;
+    height: 200px;
+}
+#traffic-status #type-filters li{
+	margin: 10px 0;
+}
+#traffic-status #type-filters select{
+	width: 200px;
+	margin: 10px 17px 10px 33px;
+}
+#traffic-status #time-filters{
+   width: 50%;
+   float:right;
+   position: relative;
+   top:10px;
+}
+#traffic-status #time-filters li{
+   margin: 10px 0;
+   float:right;
+   width:100%;
+}
+#traffic-status #time-filters li.datepicker{
+   margin: 10px 0 10px 25px;
+   float:right;
+   width:100%;
+}
+#traffic-status #time-filters #pre-defined-range-options{
+   	width: 200px;
+	margin: 10px 0;
+}
+
+#traffic-status input[type=submit]{
+	display:block;
+	float: right;
+	margin: 43px 17px 17px 17px;
+}
+#traffic-status input[type=submit]:hover{
+	height:25px;
+}
+#traffic-status .dropdown{
+	margin: 10px 20%;
+	max-margin: 10px 60px;
+}
+#traffic-status #time-filters .dropdown{
+	position: relative;
+	top: 5px;
+	left: 5px;
+	margin: 0;
+}
+#traffic-status #time-filters input[type=radio]{
+	position: relative;
+}
+#traffic-status #time-filters #dates-text{
+	position: relative;
+	top: -3px;
+	left: 5px;
+}
+#traffic-status #time-filters div{
+	display: inline-block;
+}
+
+#traffic-status #time-filter #start-date, #traffic-status #time-filter #end-date{
+    background-image: url('assets/icons/png/calendar.png');
+    background-repeat: no-repeat;
+    background-position: right top;
+    padding-right: 30px;
+}
+
+#connection-status #stored-connections tr{
+	height: 50px;
+}
+#connection-status #stored-connections .name{
+	width: 300px;
+	padding: 0 30px 20px 30px;
+	background-image: url('../images/icons/status_green.png');
+    background-repeat: no-repeat;
+    background-position: left middle;
+}
+#connection-status #stored-connections .not{
+	background-image: url('../images/icons/status_red.png');
+	background-repeat: no-repeat;
+    background-position: left middle;
+}
+
+#status-tab #update-status{
+    height: 200px;
+    margin: 26px;
+}
+
+.update-status-detail{
+    position: relative;
+    margin: 5px;
+    padding: 5px;
+}
+.update-status-detail button{
+    min-width: 150px;
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.connection-status-overview{
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.connection-status-overview h4{
+    margin: 8px 0;
+    float: left;
+    padding-left: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 1px;
+}
+
+.connection-status-overview h4.okay{
+    background-image: url('assets/icons/png/status_green.png');
+}
+.connection-status-overview h4.attention{
+    background-image: url('assets/icons/png/status_orange.png');
+}
+.connection-status-detail{
+    padding-top: 8px;
+    width: 270px;
+    float: right;
+    clear: right;
+}
+.connection-status-detail span{
+    display: block;
+}
+
+.connection-status-detail span.network-strength-indicator{
+    position:absolute;
+    top: 20px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.connection-status-detail span.network-strength-indicator.full{
+    background-image: url('assets/icons/png/signal_four.png');
+}

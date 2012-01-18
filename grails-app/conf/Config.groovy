@@ -43,6 +43,9 @@ grails.scaffolding.templates.domainSuffix = 'Instance'
 // jquery plugin
 grails.views.javascript.library = "jquery"
 
+//fronlinesms2 plugin
+frontlinesms2.plugin = "core"
+
 // pagination
 grails.views.pagination.max = 50
 
@@ -76,9 +79,15 @@ log4j = {
     // Example of changing the log pattern for the default console
     // appender:
     //
-    //appenders {
+	appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+		rollingFile name:'trace-file', file:"${System.properties.'user.home'}/.frontlinesms2/frontlinesms2-trace.log"
+	}
+
+	root {
+		trace 'trace-file'
+		additivity = true
+	}
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP

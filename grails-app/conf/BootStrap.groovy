@@ -1,43 +1,20 @@
 import grails.util.Environment
-import frontlinesms2.*
-import org.mockito.Mockito
-import java.lang.reflect.Field
-import serial.SerialClassFactory
-import serial.mock.MockSerial
-import serial.mock.SerialPortHandler
-import serial.mock.CommPortIdentifier
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import net.frontlinesms.test.serial.hayes.*
-import frontlinesms2.dev.MockModemUtils
-
 class BootStrap {
 	def grailsApplication
 	
 	def init = { servletContext ->
-		initialiseSerial()
-		addTruncateMethodToStrings()
-		createWelcomeNote()
 		
 		switch(Environment.current) {
 			case Environment.TEST:
-				test_initGeb()
 				break
 				
 			case Environment.DEVELOPMENT:
 				//DB Viewer
 				//org.hsqldb.util.DatabaseManager.main()
 				// do custom init for dev here
-				dev_initSmartGroups()
-				dev_initGroups()
-				dev_initContacts()
-				dev_initFconnections()
-				dev_initFmessages()
-				dev_initPolls()
-				dev_initFolders()
-				dev_initAnnouncements()
-				dev_initRadioShows()
+				if(System.properties['radio.plugin']) {
+					grailsApplication.config.frontlinesms2.plugin = "radio"
+				}
 				break
 		}
 	}

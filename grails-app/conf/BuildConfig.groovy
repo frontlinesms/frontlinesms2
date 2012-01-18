@@ -2,6 +2,16 @@ grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
+
+if(Boolean.parseBoolean(System.properties['radio.plugin'])) {
+	println "Loading radio plugin"
+	grails.plugin.location.radio = "plugins/radio"
+} else {
+	println "Loading core plugin" 
+	grails.plugin.location.core = "plugins/core"
+}
+
+
 grails.project.dependency.resolution = {
 	// Everything with a version that ends with -SNAPSHOT is changing
 //		chainResolver.changingPattern = '.*-SNAPSHOT'  // This causes all snapshot dependencies to be looked for in remote repos
