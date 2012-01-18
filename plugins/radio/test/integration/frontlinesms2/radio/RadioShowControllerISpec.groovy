@@ -52,23 +52,4 @@ class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!RadioShow.findByName("Test 1").isRunning
 	}
-	
-	def "list of polls belonging to radio shows are not included in the pollInstanceList"() {
-		setup:
-			def show = new RadioShow(name:"Health & fitness")
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(title: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
-			show.addToPolls(poll)
-			show.addToPolls(poll2)
-			show.save(flush:true)
-			[Poll.createPoll(title: 'Health Poll', choiceA:'Healthy', choiceB:'Unhealthy', question: "question"),
-				Poll.createPoll(title: 'Water Poll', choiceA:'hard water', choiceB:'soft water', question: "question")].each {
-				it.save(failOnError:true, flush:true)
-				}
-			println "no. of polls are ${Poll.findAll()}"
-		when:
-			def model = controller.getShowModel(null)
-		then:
-			model.pollInstanceList.size() == 2
-	}
 }
