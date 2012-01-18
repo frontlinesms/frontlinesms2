@@ -40,12 +40,10 @@ class Contact {
 	}
 	
 	def afterInsert = {
-		println "in Contact insert, updating DisplayName"
 		updateFmessageDisplayName()
 	}
 
 	def afterUpdate = {
-		println "in Contact update, updating DisplayName"
 		updateFmessageDisplayName()
 	}
 	

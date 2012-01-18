@@ -88,29 +88,39 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initFmessages() {
-		new Fmessage(src:'+123987123', dst:'+44123456789',
+		new Fmessage(src:'+123987123',
 				text:'A really long message which should be beautifully truncated so we can all see what happens in the UI when truncation is required.',
-				inbound:true).save(failOnError:true)
+				inbound:true,
+				date: new Date()).save(failOnError:true)
 		
-		[new Fmessage(src:'+123456789', dst:'+2541234567', text:'manchester rules!'),
-				new Fmessage(src:'+198765432', dst:'+254987654', text:'go manchester'),
-				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best', dateReceived:new Date()-1),
-				new Fmessage(src:'Jill', dst:'+254987654', text:"where's the hill?", dateReceived:createDate("2011/01/21")),
-				new Fmessage(src:'+254675334', dst:'+254112233', text:"where's the pale?", dateReceived:createDate("2011/01/20")),
-				new Fmessage(src:'Humpty', dst:'+254112233', text:"where're the king's men?", starred:true, dateReceived:createDate("2011/01/23"))].each() {
+		[new Fmessage(src:'+123456789', text:'manchester rules!', date:new Date()),
+				new Fmessage(src:'+198765432', text:'go manchester', date:new Date()),
+				new Fmessage(src:'Joe', text:'pantene is the best', date:new Date()-1),
+				new Fmessage(src:'Jill', text:"where's the hill?", date:createDate("2011/01/21")),
+				new Fmessage(src:'+254675334', text:"where's the pale?", date:createDate("2011/01/20")),
+				new Fmessage(src:'Humpty', text:"where're the king's men?", starred:true, date:createDate("2011/01/23"))].each() {
 			it.inbound = true
 			it.save(failOnError:true)
 		}
+		
 		(1..101).each {
-			new Fmessage(src:'+198765432', dst:'+254987654', text:"text-${it}", dateReceived: new Date() - 1, inbound:true).save(failOnError:true)
+			new Fmessage(src:'+198765432', text:"text-${it}", date: new Date() - it, inbound:true).save(failOnError:true)
 		}
+		
+		def d1 = new Dispatch(dst:'+123456789', status: DispatchStatus.FAILED)
+		def d2 = new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: new Date())
+		def d3 = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
+		def d4 = new Dispatch(dst:'+254115533', status: DispatchStatus.PENDING)
 
-		[new Fmessage(src: '+3245678', dst: '+123456789', text: "time over?", hasFailed:true),
-				new Fmessage(src: 'Johnny', dst: '+254114433', text: "I am in a meeting", hasSent:true),
-				new Fmessage(src: 'Sony', dst: '+254116633', text: "Hurry up", hasSent:true),
-				new Fmessage(src: 'Jill', dst: '+254115533', text: "sample sms", hasPending:true)].each {
-			it.save(failOnError: true)
-		}
+		def m1 = new Fmessage(src: '+3245678', date: new Date(), text: "time over?")
+		def m2 = new Fmessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
+		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
+		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "sample sms")
+		
+		m1.addToDispatches(d1).save(failOnError: true)
+		m2.addToDispatches(d2).save(failOnError: true)
+		m3.addToDispatches(d3).save(failOnError: true)
+		m4.addToDispatches(d4).save(failOnError: true)
 	}
 	
 	private def dev_initFconnections() {
@@ -137,7 +147,7 @@ class CoreBootStrap {
 
 		def barcelonaResponse = PollResponse.findByValue('barcelona');
 		10.times {
-			def msg = new Fmessage(src: "+9198765432${it}", dst: "+4498765432${it}",dateReceived: new Date() - it, text: "Yes", inbound:true);
+			def msg = new Fmessage(src: "+9198765432${it}", date: new Date() - it, text: "Yes", inbound:true);
 			msg.save(failOnError: true);
 			barcelonaResponse.addToMessages(msg);
 		}
@@ -147,13 +157,12 @@ class CoreBootStrap {
 		['Work', 'Projects'].each {
 			new Folder(name:it).save(failOnError:true, flush:true)
 		}
-
-		[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late'),
-				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am'),
-				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started'),
-				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked')].each() {
+		[new Fmessage(src:'Max', text:'I will be late'),
+				new Fmessage(src:'Jane', text:'Meeting at 10 am'),
+				new Fmessage(src:'Patrick', text:'Project has started'),
+				new Fmessage(src:'Zeuss', text:'Sewage blocked')].each() {
 			it.inbound = true
-			it.dateReceived = new Date()
+			it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
 
@@ -166,16 +175,22 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initAnnouncements() {
-		[new Fmessage(src:'Roy', dst:'+254987654', text:'I will be late'),
-			new Fmessage(src:'Marie', dst:'+2541234567', text:'Meeting at 10 am'),
-			new Fmessage(src:'Mike', dst:'+254112233', text:'Project has started')].each() {
+		[new Fmessage(src:'Roy', text:'I will be late'),
+			new Fmessage(src:'Marie', text:'Meeting at 10 am'),
+			new Fmessage(src:'Mike', text:'Project has started')].each() {
 				it.inbound = true
-				it.dateReceived = new Date()
+				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-			
-		new Announcement(name: 'Free cars!', sentMessage:"Everyone who recieves this message will also recieve a free Subaru").save(failOnError:true, flush:true)
-		new Announcement(name: 'Office Party', sentMessage:"Office Party on Friday!").save(failOnError:true, flush:true)
+		def dispatch = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
+		def a1 = new Announcement(name: 'Free cars!')
+		def a2 = new Announcement(name: 'Office Party')
+		def sent1 = new Fmessage(src: 'me', inbound: false, date: new Date(), text:"Everyone who recieves this message will also recieve a free Subaru")
+		def sent2 = new Fmessage(src: 'me', inbound: false, date: new Date(), text:"Office Party on Friday!")
+		sent1.addToDispatches(dispatch).save(failOnError:true, flush:true)
+		sent2.addToDispatches(dispatch).save(failOnError:true, flush:true)
+		a1.addToSentMessages(sent1).save(failOnError:true, flush:true)
+		a2.addToSentMessages(sent2).save(failOnError:true, flush:true)
 		
 		[Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Roy')),
 				Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Marie')),
@@ -183,7 +198,7 @@ class CoreBootStrap {
 			it.save(failOnError:true, flush:true)
 		}
 	}
-	
+
 	private def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
 	}

@@ -10,8 +10,7 @@ class MessageOwner {
 
 	static mapping = {
 		messages cascade:'all'
-		messages sort:'dateCreated'
-		messages sort:'dateReceived'
+		messages sort:'date'
 	}
 	
 	def archive() {
