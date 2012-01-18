@@ -16,7 +16,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.save(failOnError: true)
 			message.refresh()
 		then:
-			message.status == FmessageStatus.HASFAILED
+			message.hasFailed == true
 	}
 	
 	def 'If any of a Fmessages dispatches are pending, but none have failed its status is HASPENDING'() {
@@ -31,7 +31,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.save(failOnError: true)
 			message.refresh()
 		then:
-			message.status == FmessageStatus.HASPENDING
+			message.hasPending == true
 	}
 	
 	def 'If all of a Fmessages dispatches have sent is status is HASSENT'() {
@@ -46,16 +46,16 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.save(failOnError: true)
 			message.refresh()
 		then:
-			message.status == FmessageStatus.HASSENT
+			message.hasSent
 	}
 	
 	def 'get deleted messages gets all messages with deleted flag'() {
 		setup:
 				(1..3).each {
-				    new Fmessage(deleted:true,src:"+123456789", date: new Date()).save(flush:true)
+				    new Fmessage(isDeleted:true,src:"+123456789", date: new Date()).save(flush:true)
 				}
 				(1..2).each {
-					new Fmessage(deleted:false,src:"+987654321", date: new Date()).save(flush:true)
+					new Fmessage(isDeleted:false,src:"+987654321", date: new Date()).save(flush:true)
 				}
 		when:
 			def deletedMessages = Fmessage.deleted(false)
@@ -77,9 +77,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "countUnreadMessages returns unread messages count"() {
 		setup:
-			new Fmessage(src: '1234', inbound:true, deleted:false, text:'A read message', read:true, date: new Date()).save(flush:true)
-			new Fmessage(src: '1234', inbound:true,deleted:false, text:'An unread message', read:false, date: new Date()).save(flush:true)
-			new Fmessage(src: '1234', inbound:true,deleted:false, text:'An unread message', read:false, archived: true, date: new Date()).save(flush:true)
+			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'A read message', read:true, date: new Date()).save(flush:true)
+			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'An unread message', read:false, date: new Date()).save(flush:true)
+			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'An unread message', read:false, archived: true, date: new Date()).save(flush:true)
 		when:
 			def unreadMessageCount = Fmessage.countUnreadMessages()
 		then:
@@ -185,7 +185,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def "cannot archive a message that has an owner" () {
 		setup:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(src:'+123456789', text:'hello', date: new Date()).save(failOnError:true)
+			def m = new Fmessage(src:'+123456789', text:'hello', date: new Date(), inbound: true).save(failOnError:true)
 			f.addToMessages(m)
 			f.save()
 		when:
@@ -196,7 +196,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "when a new contact is created, all messages with that contacts number should be updated"() {
 		when:
-			def message = new Fmessage(src: "number", dst: "dst", inbound:true, date: new Date()).save(flush: true)
+			def message = new Fmessage(src: "number", inbound:true, date: new Date()).save(flush: true)
 		then:
 			message.displayName == "number";
 			message.contactExists == false;
@@ -213,7 +213,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can archive message when it has no message owner" () {
 		setup:
-			def m = new Fmessage(src:'+123456789', text:'hello', date: new Date()).save(failOnError:true)
+			def m = new Fmessage(src:'+123456789', text:'hello', date: new Date(), inbound: true).save(failOnError:true)
 		when:
 			m.archived = true
 		then:
@@ -230,13 +230,13 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def setUpMessages() {
-			new Fmessage(src: '1234', inbound:true, deleted:false, text:'An inbox message', date: new Date()).save(flush:true)
-			new Fmessage(src: '1234', inbound:true,deleted:false, text:'Another inbox message', date: new Date()).save(flush:true)
-			new Fmessage(src: '1234', hasSent:true, deleted:false, text:'A sent message', date: new Date()).save(flush:true)
-			new Fmessage(status: FmessageStatus.HASSENT, deleted:false, text:'Another sent message', date: new Date()).save(flush:true)
-			new Fmessage(status: FmessageStatus.HASSENT, deleted:true, text:'Deleted sent message', date: new Date()).save(flush:true)
-			new Fmessage(status: FmessageStatus.HASSENT, deleted:false, text:'This msg will not show up in inbox view', date: new Date()).save(flush:true)
-			new Fmessage(status: FmessageStatus.HASFAILED, deleted:false, text:'A sent failed message', date: new Date()).save(flush:true)
-			new Fmessage(status: FmessageStatus.HASPENDING, deleted:false, text:'A pending message', date: new Date()).save(flush:true)
+			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'An inbox message', date: new Date()).save(flush:true)
+			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'Another inbox message', date: new Date()).save(flush:true)
+			new Fmessage(src: '1234', hasSent:true, isDeleted:false, text:'A sent message', date: new Date()).save(flush:true)
+			new Fmessage(hasSent: true, isDeleted:false, text:'Another sent message', date: new Date()).save(flush:true)
+			new Fmessage(hasSent: true, isDeleted:true, text:'Deleted sent message', date: new Date()).save(flush:true)
+			new Fmessage(hasSent: true, isDeleted:false, text:'This msg will not show up in inbox view', date: new Date()).save(flush:true)
+			new Fmessage(hasFailed: true, isDeleted:false, text:'A sent failed message', date: new Date()).save(flush:true)
+			new Fmessage(hasPending: true, isDeleted:false, text:'A pending message', date: new Date()).save(flush:true)
 	}
 }

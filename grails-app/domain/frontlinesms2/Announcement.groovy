@@ -5,11 +5,11 @@ import java.util.Date;
 class Announcement extends MessageOwner {
 	static transients = ['liveMessageCount']
 	String name
-	String sentMessage
+	static hasMany = [sentMessages: Fmessage]
 	
 	static constraints = {
 		name(nullable:false)
-		sentMessage(nullable:false, blank: false)
+		sentMessages(nullable:false)
 	}
 	
 	def getAnnouncementMessages(getOnlyStarred = false) {
@@ -18,13 +18,13 @@ class Announcement extends MessageOwner {
 	
 	def archive() {
 		this.archived = true
-		def messagesToArchive = Fmessage?.owned(this)?.list()
+		def messagesToArchive = Fmessage?.owned(this, true)?.list()
 		messagesToArchive.each { it?.archived = true }
 	}
 	
 	def unarchive() {
 		this.archived = false
-		def messagesToArchive = Fmessage?.owned(this)?.list()
+		def messagesToArchive = Fmessage?.owned(this, true)?.list()
 		messagesToArchive.each { it?.archived = false }
 	}
 	

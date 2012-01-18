@@ -18,15 +18,11 @@ class AnnouncementController {
 	
 	def save = {
 		def announcementInstance = new Announcement()
-		announcementInstance.properties = params
-		announcementInstance.sentMessage = params.messageText
-		def messages = messageSendService.getMessagesToSend(params)
-		messages.each { message ->
-			announcementInstance.addToMessages(message)
-			announcementInstance.save()
-			messageSendService.send(message)
-		}
-		announcementInstance.save(flush: true)
+		announcementInstance.name = params.name
+		def message = messageSendService.getMessagesToSend(params)
+		announcementInstance.addToSentMessages(message)
+		messageSendService.send(message)
+		announcementInstance.save()
 		flash.message = "Announcement has been saved and message(s) have been queued to send"
 		[ownerId: announcementInstance.id]
 	}

@@ -73,35 +73,33 @@ class ContactSpec extends UnitSpec {
 			c.validate()
 	}
 
-	def "should return the count of all messages sent to a given contact"() {
+	def "should return the count of all messages sent to a given contact except deleted messages"() {
 		setup:
 			String johnsprimaryMobile = "9876543210"
 			String johnssecondaryMobile = "123456789"
 			Contact contact = new Contact(name: "John", primaryMobile: johnsprimaryMobile, secondaryMobile: johnssecondaryMobile)
-			mockDomain Fmessage, [new Fmessage(dst: johnsprimaryMobile, deleted: false),
-					new Fmessage(dst: johnsprimaryMobile, deleted: true),
-					new Fmessage(dst: johnssecondaryMobile, deleted: true)]
+			mockDomain Fmessage, [new Fmessage(isDeleted: false, inbound: false, date: new Date(), dispatches: [new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED), new Dispatch(dst: johnssecondaryMobile, status: DispatchStatus.FAILED)]),
+					new Fmessage(isDeleted: true, inbound: false, date: new Date(), dispatches: [new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)]),
+					new Fmessage(isDeleted: false, inbound: false, date: new Date(), dispatches: [new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)])]
 	    when:
-	        def count = contact.inboundMessagesCount
+	        def count = contact.outboundMessagesCount
 	    then:
 	        count == 3
   	}
 
-	def "should return the count of all messages received from a given contact"() {
+	def "should return the count of all messages received from a given contact except deleted messages"() {
 		setup:
 			String georgesAddress = "1234567890"
 			String georgeAddress2 = "0987654151"
-			String georgeEmail = "george@gmail.com"
-			Contact contact = new Contact(name: "George", primaryMobile: georgesAddress, secondaryMobile: georgeAddress2, email: georgeEmail)
-			mockDomain Fmessage, [new Fmessage(dst: georgesAddress, deleted: false),
-					new Fmessage(src: georgesAddress, deleted: true),
-					new Fmessage(src: georgesAddress, deleted: false),
-					new Fmessage(dst: georgeAddress2, deleted: true),
-					new Fmessage(src: georgeEmail, deleted: true)]
+			Contact contact = new Contact(name: "George", primaryMobile: georgesAddress, secondaryMobile: georgeAddress2)
+			mockDomain Fmessage, [new Fmessage(src: georgesAddress, isDeleted: false, inbound: true, date: new Date()),
+					new Fmessage(src: georgesAddress, isDeleted: true, inbound: true, date: new Date()),
+					new Fmessage(src: georgesAddress, isDeleted: false, inbound: true, date: new Date()),
+					new Fmessage(src: georgeAddress2, isDeleted: true, inbound: true, date: new Date())]
 	    when:
-	        def count = contact.outboundMessagesCount
+	        def count = contact.inboundMessagesCount
 	    then:                                     
-	        count == 3
+	        count == 2
   	}
 
   	def "should return the count as zero is there is no address present for a given contact"() {

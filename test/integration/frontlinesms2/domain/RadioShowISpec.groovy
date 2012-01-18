@@ -6,9 +6,9 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def setup() {
 		def radioShow = new RadioShow(name: "Health & fitness")
-		radioShow.addToMessages(new Fmessage(text: "eat fruits", starred : true, date: new Date()))
-		radioShow.addToMessages(new Fmessage(text: "eat vegetables", date: new Date()))
-		radioShow.addToMessages(new Fmessage(text: "excerise", date: new Date()))
+		radioShow.addToMessages(new Fmessage(text: "eat fruits", starred : true, date: new Date(), inbound: true, src: 'src'))
+		radioShow.addToMessages(new Fmessage(text: "eat vegetables", date: new Date(), inbound: true, src: 'src'))
+		radioShow.addToMessages(new Fmessage(text: "excerise", date: new Date(), inbound: true, src: 'src'))
 		radioShow.save(failOnError: true, flush: true)
 	}
 

@@ -16,8 +16,8 @@ class EmailTranslationService implements Processor {
 		Fmessage message = new Fmessage(inbound:true)
 		message.src = EMAIL_PROTOCOL_PREFIX + i.getHeader('From')
 		println("src: ${message.src}")
-		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')
-		println("dst: ${message.dst}")
+//		message.dst = EMAIL_PROTOCOL_PREFIX + i.getHeader('To')
+//		println("dst: ${message.dst}")
 		def emailBody = i.body
 		def emailSubject = i.getHeader('Subject')
 		println("emailBody: ${emailBody}")

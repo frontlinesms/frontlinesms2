@@ -16,7 +16,6 @@ class SmslibTranslationService {
 		} else {
 			Fmessage message = new Fmessage(inbound:true)
 			message.src = bod.originator
-			message.dst = bod.recipient
 			message.text = bod.text
 			message.date = new Date(bod.date)
 			assert exchange.out != null
@@ -25,10 +24,11 @@ class SmslibTranslationService {
 	}
 	
 	void toCmessage(Exchange exchange) {
-		def f = exchange.in.body
-		def c = new COutgoingMessage(f.dst, f.text)
-		c.originator = f.src
-		c.date = f.date.time
+		def m = exchange.in.body.message
+		def address = exchange.in.body.dst
+		def c = new COutgoingMessage(address, m.text)
+		c.originator = m.src
+		c.date = m.date.time
 		
 		exchange.out.body = c
 	}

@@ -12,10 +12,9 @@ class Poll {
 	boolean deleted
 	Date dateCreated
 	List responses
-	int sentMessageCount
 	static transients = ['liveMessageCount']
 
-	static hasMany = [responses: PollResponse]
+	static hasMany = [responses: PollResponse, sentMessages: Fmessage]
 
 	static constraints = {
 		title(blank: false, nullable: false, maxSize: 255, validator: { title, me ->
@@ -68,13 +67,13 @@ class Poll {
 	
 	def archivePoll() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(this.responses).list()
+		def messagesToArchive = Fmessage.owned(this.responses, true).list()
 		messagesToArchive.each { it.archived = true }
 	}
 	
 	def unarchivePoll() {
 		this.archived = false
-		def messagesToUnarchive = Fmessage.owned(this.responses).list()
+		def messagesToUnarchive = Fmessage.owned(false, this.responses, true).list()
 		messagesToUnarchive.each { it.archived = false }
 	}
 

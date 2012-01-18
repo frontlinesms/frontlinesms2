@@ -122,15 +122,6 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			results.list().every { !it.archived }
 	}
 
-	def "check for offset and limit while fetching pending messages"() {
-		setup:
-			createTestData()
-		when:
-			def firstPendingMessage = Fmessage.pending(false).list(max: 1, offset: 0)
-		then:
-			firstPendingMessage*.dst == ['dst2']
-	}
-
 	def "can fetch starred deleted messages"() {
 		setup:
 			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
@@ -200,26 +191,39 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def createTestData() {
 		// INCOMING MESSAGES
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4000),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice', date:BASE_DATE - 10000),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test', date:BASE_DATE - 3000),
-				new Fmessage(src: "9544426444", dst: "34562265", starred:true, date:BASE_DATE - 5000)].collect() {
+		[new Fmessage(src:'Bob', text:'hi Bob', date:BASE_DATE - 4000),
+				new Fmessage(src:'Alice', text:'hi Alice', date:BASE_DATE - 10000),
+				new Fmessage(src:'+254778899', text:'test', date:BASE_DATE - 3000),
+				new Fmessage(src: "9544426444", starred:true, date:BASE_DATE - 5000)].collect() {
 			it.inbound = true
 			it.save(failOnError:true)
 		}
 				
+		def d1 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT)
+		def d2 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT)
+		def d3 = new Dispatch(dst:'1234567', status: DispatchStatus.FAILED)
+		def d4 = new Dispatch(dst:'1234567', status: DispatchStatus.PENDING)
+		
 		// OUTGOING MESSAGES
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary', date:BASE_DATE - 2, hasSent:true),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test', date:BASE_DATE - 1, hasSent:true, starred: true),
-				new Fmessage(src:"src", dst:"dst1", text:"text",  hasFailed:true, date: new Date()),
-				new Fmessage(src:"src", dst:"dst2", text:"text",  hasPending:true, starred: true, date: new Date())].each() {
-			it.save(failOnError:true)
-		}
+		def m1 = new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2, hasSent:true)
+		def m2 = new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, hasSent:true, starred: true)
+		def m3 = new Fmessage(src:"src", text:"text",  hasFailed:true, date: new Date())
+		def m4 = new Fmessage(src:"src", text:"text",  hasPending:true, starred: true, date: new Date())
+		
+		m1.addToDispatches(d1)
+		m2.addToDispatches(d2)
+		m3.addToDispatches(d3)
+		m4.addToDispatches(d4)
+		
+		m1.save(flush:true)
+		m2.save(flush:true)
+		m3.save(flush:true)
+		m4.save(flush:true)
 	}
 	
 	def createPollTestData() {
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', date: new Date(), inbound:true)
+		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
+		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', date: new Date(), inbound:true)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)

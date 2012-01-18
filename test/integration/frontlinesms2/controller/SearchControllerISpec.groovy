@@ -111,9 +111,15 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	@spock.lang.IgnoreRest
 	def "search for sent messages only"() {
 		setup:
-			new Fmessage(src:"src", dst:"dst", hasPending:true, date: new Date()).save(flush:true)
-			new Fmessage(src:"src", dst:"dst", hasSent:true, date: new Date()).save(flush:true)
-			new Fmessage(src:"src", dst:"dst", hasFailed:true, date: new Date()).save(flush:true)
+			def d1 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
+			def d2 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
+			def d3 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
+			def m1 = new Fmessage(src:"src", hasPending:true, date: new Date())
+			def m2 = new Fmessage(src:"src", hasSent:true, date: new Date())
+			def m3 = new Fmessage(src:"src", hasFailed:true, date: new Date())
+			m1.addToDispatches(d1).save(flush: true, failOnError: true)
+			m2.addToDispatches(d2).save(flush: true, failOnError: true)
+			m3.addToDispatches(d3).save(flush: true, failOnError: true)
 		when:
 			controller.params.messageStatus = "SENT, PENDING, FAILED"
 			def model = controller.result()

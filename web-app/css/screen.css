@@ -324,10 +324,12 @@ a {
 	background-repeat: no-repeat;
 }
 .section-header .activity-title #activity-details{
-	float:left;
-	max-height: 125px;
+	position: fixed;
+	top: 140px;
+	left: 19%;
+	height: 125px;
 	max-width: 70%;
-	margin-top: 25px;
+	z-index: 10;
 }
 .section-header .activity-title td{
 	padding: 0 25px;

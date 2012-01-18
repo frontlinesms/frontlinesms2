@@ -9,7 +9,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(read: null, date: new Date(), inbound: true)
+			Fmessage message = new Fmessage(src: '21345', read: null, date: new Date(), inbound: true)
 		then:
 			message.read != null || !message.validate()
 	}
@@ -32,20 +32,16 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			def m = new Fmessage(status: null,  date: new Date(), inbound: false)
+			def m = new Fmessage(src: 'src', hasSent: null, hasPending: null, hasFailed: true,  date: new Date(), inbound: true, dispatches: [new Dispatch()])
 		then:
 			!m.validate()
 		when:
-			m.inbound = true
+			m.hasFailed = false
 		then:
 			m.validate()
-		when:
-			m.status = FmessageStatus.HASFAILED
-		then:
-			!m.validate()
 	}
 	
-	def "Fmessage must have a date"() {
+	def "Fmessage must have a date, and a src if inbound"() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
@@ -55,18 +51,22 @@ class FmessageSpec extends UnitSpec {
 		when:
 			def f = new Fmessage(inbound: true, date: new Date())
 		then:
-			f.validate()
+			!f.validate()
+		when:
+			def t = new Fmessage(src: 'src', inbound: true, date: new Date())
+		then:
+			t.validate()
 	}
 	
 	def "Fmessages with a status must have a least 1 Dispatch"() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(date: new Date(), status: FmessageStatus.HASFAILED)
+			Fmessage message = new Fmessage(date: new Date(), hasFailed: true)
 		then:
 			!message.validate()
 		when:
-			Fmessage message2 = new Fmessage(date: new Date(), status: FmessageStatus.HASFAILED, dispatches: [new Dispatch()])
+			Fmessage message2 = new Fmessage(date: new Date(), hasFailed: true, dispatches: [new Dispatch()])
 		then:
 			message2.validate()
 	}
@@ -75,7 +75,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(date: new Date(), status: FmessageStatus.HASFAILED, dispatches: [new Dispatch(), new Dispatch()])
+			Fmessage message = new Fmessage(date: new Date(), hasFailed: true, dispatches: [new Dispatch(), new Dispatch()])
 		then:
 			message.validate()
 	}
@@ -84,7 +84,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(date: new Date(), inbound: true, dispatches: [new Dispatch()])
+			Fmessage message = new Fmessage(src: '23456', date: new Date(), inbound: true, dispatches: [new Dispatch()])
 		then:
 			!message.validate()
 	}
@@ -93,7 +93,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			def message = new Fmessage(date: new Date(), inbound: true, messageOwner: new Folder(archived: false))
+			def message = new Fmessage(src: 'src', date: new Date(), inbound: true, messageOwner: new Folder(archived: false))
 		then:
 			message.validate()
 	}

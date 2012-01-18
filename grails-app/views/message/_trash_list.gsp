@@ -1,6 +1,6 @@
 <g:each in="${trashInstanceList}" status="i" var="m">
 	<g:if test="${m.objectType == 'frontlinesms2.Fmessage'}">
-		<tr class="${m.link == messageInstance?'selected':''} ${m.link.read ? 'read':'unread'}  ${(m.hasPending || m.hasFailed) ? 'send-failed' : '' }" id="message-${m.link.id}">
+		<tr class="${m.link == messageInstance?'selected':''} ${m.link.read ? 'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.link.id}">
 			<td class="message-select-cell">
 				<g:checkBox class="message-select" name="message-select" id="message-select-${m.link.id}" checked="${params.checkedId == m.link.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.link.id});" />
 				<g:hiddenField name="src-${m.link.id}" value="${m.link.src}"/>

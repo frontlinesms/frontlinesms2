@@ -2,6 +2,7 @@ package frontlinesms2
 
 import groovy.time.*
 import java.util.Date
+import org.hibernate.FlushMode
 
 
 class Fmessage {
@@ -34,7 +35,10 @@ class Fmessage {
 	static constraints = {
 		messageOwner(nullable:true)
 		date(nullable:false)
-		src(nullable:true)
+		src(nullable:true, validator: { val, obj ->
+				if(!val)
+					!obj.inbound
+		})
 		text(nullable:true)
 		displayName(nullable:true)
 		contactExists(nullable:true)
@@ -45,14 +49,13 @@ class Fmessage {
 					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (!(obj.messageOwner instanceof PollResponse) && !obj.messageOwner.archived)
 				}
 		})
-		inbound(nullable: false, validator: { val, obj ->
+		inbound(nullable: true, validator: { val, obj ->
 				if(val) {
 					obj.hasSent == null || obj.hasSent == false
 					obj.hasPending == null || obj.hasPending == false
 					obj.hasFailed == null || obj.hasFailed == false
 					obj.dispatches == null || obj.dispatches.size() == 0
 				} else {
-					obj.hasSent != false || obj.hasPending != false || obj.hasFailed != false
 					obj.dispatches != null && obj.dispatches.size() >= 1
 				}
 		})
@@ -72,7 +75,15 @@ class Fmessage {
 	}
 
 	def beforeInsert = {
-		updateFmessageDisplayName()
+		withSession { session -> 
+	       FlushMode flushMode = session.flushMode 
+	       session.flushMode = FlushMode.MANUAL 
+	       try { 
+			   updateFmessageDisplayName()
+	       } finally {
+		   		session.flushMode = flushMode
+	       }
+	   }
 		updateFmessageStatuses()
 	}
 	
@@ -96,7 +107,6 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", archived)
 				eq("hasSent", true)
-				isNull("messageOwner")
 				if(getOnlyStarred)
 					eq("starred", true)
 			}
@@ -105,7 +115,6 @@ class Fmessage {
 			and {
 				eq("isDeleted", false)
 				eq("archived", false)
-				isNull("messageOwner")
 				if(getOnlyFailed) {
 					eq("hasFailed", true)
 				} else {
@@ -124,12 +133,14 @@ class Fmessage {
 					eq('starred', true)
 			}
 		}
-		owned { getOnlyStarred=false, owners ->
+		owned { getOnlyStarred=false, owners, getSent=false ->
 			and {
 				eq("isDeleted", false)
 				'in'("messageOwner", owners)
 				if(getOnlyStarred)
 					eq("starred", true)
+				if(!getSent)
+					eq("inbound", true)
 			}
 		}
 		unread {
@@ -154,7 +165,7 @@ class Fmessage {
 					def groupMembersNumbers = search.group.getAddresses()?:[''] //otherwise hibernate fail to search 'in' empty list
 					or {
 						'in'("src", groupMembersNumbers)
-						'in'("dispatches*.dst", groupMembersNumbers)
+						'in'("dispatches.dst", groupMembersNumbers)
 					}
 				}
 				if(search.status) {
@@ -203,9 +214,13 @@ class Fmessage {
 				if(params.messageStatus) {
 					def statuses = params.messageStatus.collect { it.toLowerCase() }
 					or {
-						if('sent' in statuses) eq('hasSent', true)
-						if('pending' in statuses) eq('hasPending', true)
-						if('failed' in statuses) eq('hasFailed', true)
+						if('sent' in statuses) {
+							or {
+								eq('hasSent', true)
+								eq('hasPending', true)
+								eq('hasFailed', true)
+							}
+						}
 						if('inbound' in statuses) eq('inbound', true)
 					}
 				}
@@ -242,23 +257,19 @@ class Fmessage {
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
 
-	static def hasUnsentMessages() {
-		if(Fmessage.findByHasFailed(true) || Fmessage.findByHasPending(true))
+	static def hasFailedMessages() {
+		if(Fmessage.findByHasFailedAndIsDeleted(true, false))
 			return true
 		return false
 	}
 	
-	static def getMessageOwners(activity) {
-		activity instanceof Poll ? activity.responses : [activity]
-	}
-
 	// TODO should this be in a service?
 	static def getMessageStats(params) {
 		def messages = Fmessage.filterMessages(params).list(sort:"date", order:"desc")
 	
 		def dates = [:]
 		(params.startDate..params.endDate).each {
-			dates[it.format('dd/MM')] = [sent :0, received : 0]
+			dates[it.format('dd/MM')] = [sent : 0, received : 0]
 		}
 				
 		def stats = messages.collect {
@@ -340,5 +351,12 @@ class Fmessage {
 				}
 			}
 		}
+	}
+	
+	def updateDispatches() {
+		if(this.isDeleted)
+			this.dispatches.each {
+				it.isDeleted = true
+			}
 	}
 }

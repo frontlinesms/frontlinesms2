@@ -13,7 +13,7 @@ class PollResponse extends MessageOwner {
 	}
 
 	def getLiveMessageCount() {
-		def m = Fmessage.findAllByMessageOwnerAndDeleted(this, false)
+		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
 }

@@ -36,7 +36,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 	
 	def "processPollResponse() should associate Fmessage with PollResponse"() {
 		given:
-			Fmessage m = new Fmessage(date: new Date()).save(failOnError: true)
+			Fmessage m = new Fmessage(src: "source", date: new Date(), inbound: true).save(failOnError: true)
 			def p = new Poll(title:'Who is the best football team in the world?')
 			PollResponse r = new PollResponse(value: "whatever")
 			PollResponse r2 = new PollResponse(value: "2")
@@ -50,12 +50,12 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 	
 	def "processPollResponse() should send reply text for a poll requiring autoreply"() {
 		given:
-			def m = new Fmessage(src:"0722334455", date: new Date()).save(failOnError: true)
+			def m = new Fmessage(src:"0722334455", date: new Date(), inbound: true).save(failOnError: true, flush: true)
 			def p = new Poll(title:'Who is the best football team in the world?', autoReplyText:"Thank you for participating in this poll")
 			PollResponse r = new PollResponse(value: "whatever")
 			PollResponse r2 = new PollResponse(value: "2")
 			p.addToResponses(r2)
-			p.addToResponses(r).save(failOnError: true)
+			p.addToResponses(r).save(failOnError: true, flush: true)
 		when:
 			keywordProcessorService.processPollResponse(r, m)
 		then:
@@ -64,7 +64,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 	
 	def "processPollResponse() should not send reply text for a poll without autoreply"() {
 		given:
-			Fmessage m = new Fmessage(src:"0722334455", date: new Date()).save(failOnError: true)
+			Fmessage m = new Fmessage(src:"0722334455", date: new Date(), inbound: true).save(failOnError: true)
 			def p = new Poll(title:'Who is the best football team in the world?')
 			PollResponse r = new PollResponse(value: "whatever")
 			PollResponse r2 = new PollResponse(value: "2")

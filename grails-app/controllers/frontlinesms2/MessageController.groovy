@@ -37,13 +37,13 @@ class MessageController {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
 			render messageCount as JSON
 		} else if(section == 'poll') {
-			def messageCount = [totalMessages:[Poll.get(params.ownerId)?.getPollMessages().count()]]
+			def messageCount = [totalMessages:[Poll.get(params.ownerId)?.getPollMessages()?.count()]]
 			render messageCount as JSON
 		} else if(section == 'announcement') {
-			def messageCount = [totalMessages:[Announcement.get(params.ownerId)?.getAnnouncementMessages().count()]]
+			def messageCount = [totalMessages:[Announcement.get(params.ownerId)?.getAnnouncementMessages()?.count()]]
 			render messageCount as JSON
 		} else if(section == 'folder') {
-			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages().count()]]
+			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages()?.count()]]
 			render messageCount as JSON
 		} else
 			render ""
@@ -67,7 +67,8 @@ class MessageController {
 				announcementInstanceList: Announcement.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				radioShows: RadioShow.findAll(),
 				messageCount: Fmessage.countAllMessages(params),
-				hasUnsentMessages: Fmessage.hasUnsentMessages(),
+				hasFailedMessages: Fmessage.hasFailedMessages(),
+				failedDispatchCount: (messageInstance && messageInstance.hasFailed) ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0,
 				viewingArchvive: params.viewingArchive]
 	}
 
@@ -123,6 +124,10 @@ class MessageController {
 	def poll = {
 		def pollInstance = Poll.get(params.ownerId)
 		def messageInstanceList = pollInstance?.getPollMessages(params.starred)
+		def sentMessageCount = 0
+		pollInstance?.sentMessages.each {
+			sentMessageCount += it.dispatches.size()
+		}
 		
 		render view:'../message/poll', model:[messageInstanceList: messageInstanceList?.list(params),
 				messageSection: 'poll',
@@ -130,18 +135,24 @@ class MessageController {
 				ownerInstance: pollInstance,
 				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 				responseList: pollInstance?.responseStats,
-				pollResponse: pollInstance?.responseStats as JSON] << getShowModel()
+				pollResponse: pollInstance?.responseStats as JSON, 
+				sentMessageCount: sentMessageCount] << getShowModel()
 	}
 	
 	def announcement = {
 		def announcementInstance = Announcement.get(params.ownerId)
+		def sentMessageCount = 0
+		announcementInstance?.sentMessages.each {
+			sentMessageCount += it.dispatches.size()
+		}
 		def messageInstanceList = announcementInstance?.getAnnouncementMessages(params.starred)
 		if(params.flashMessage) { flash.message = params.flashMessage }
 		render view:'../message/standard', model:[messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'announcement',
 					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: announcementInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
+					sentMessageCount: sentMessageCount] << getShowModel()
 	}
 	
 	def radioShow = {
@@ -166,12 +177,14 @@ class MessageController {
 	}
 
 	def send = {
-		def messages = messageSendService.getMessagesToSend(params)
-		messages.each { message ->
-			messageSendService.send(message)
-		}
-		flash.message = "Message has been queued to send to " + messages*.dst.join(", ")
+		def message = messageSendService.getMessagesToSend(params)
+		messageSendService.send(message)
+		flash.message = "Message has been queued to send to " + message.dispatches*.dst.join(", ")
 		render(text: flash.message)
+	}
+	
+	def retry = {
+		
 	}
 
 	def delete = {

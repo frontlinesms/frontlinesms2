@@ -9,23 +9,6 @@ class Contact {
 
 	static hasMany = [customFields: CustomField]
 	
-	def beforeInsert = {
-		stripNumberFields()
-	}
-	
-	def beforeDelete = {
-		GroupMembership.deleteFor(this)
-		removeFmessageDisplayName()
-	}
-	
-	def afterInsert = {
-		updateFmessageDisplayName()
-	}
-
-	def afterUpdate = {
-		updateFmessageDisplayName()
-	}
-	
 	static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
 			val || obj.primaryMobile
@@ -47,6 +30,25 @@ class Contact {
 		customFields sort: 'name','value'
 	}
 
+	def beforeInsert = {
+		stripNumberFields()
+	}
+	
+	def beforeDelete = {
+		GroupMembership.deleteFor(this)
+		removeFmessageDisplayName()
+	}
+	
+	def afterInsert = {
+		println "in Contact insert, updating DisplayName"
+		updateFmessageDisplayName()
+	}
+
+	def afterUpdate = {
+		println "in Contact update, updating DisplayName"
+		updateFmessageDisplayName()
+	}
+	
 	def getGroups() {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
 	}
@@ -77,17 +79,15 @@ class Contact {
 	}
 
 	def getInboundMessagesCount() {
-		def primary = primaryMobile? Fmessage.countByDst(primaryMobile): 0
-		def secondary = secondaryMobile? Fmessage.countByDst(secondaryMobile): 0
-		def email = email? Fmessage.countByDst(email): 0
-		primary + secondary + email
+		def primary = primaryMobile ? Fmessage.countBySrcAndIsDeleted(primaryMobile, false) : 0
+		def secondary = secondaryMobile ? Fmessage.countBySrcAndIsDeleted(secondaryMobile, false) : 0
+		primary + secondary
 	}
 
 	def getOutboundMessagesCount() {
-		def primary = primaryMobile? Fmessage.countBySrc(primaryMobile): 0
-		def secondary = secondaryMobile? Fmessage.countBySrc(secondaryMobile): 0
-		def email = email? Fmessage.countBySrc(email): 0
-		primary + secondary + email
+		def primary = primaryMobile ? Dispatch.countByDst(primaryMobile) : 0
+		def secondary = secondaryMobile ? Dispatch.countByDst(secondaryMobile) : 0
+		primary + secondary
 	}
 	
 	def stripNumberFields() {

@@ -14,7 +14,10 @@
 		<div class="activity-title">
 			<h3 id="announcement-title">${ownerInstance?.name}</h3>
 			<g:render template="../message/poll_buttons"/>
-			<p id="activity-details">${ownerInstance?.sentMessage}</p>
+			<div id="activity-details">
+				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="announcement-sent">   (${sentMessageCount} messages sent)</span>
+				<p>${ownerInstance?.sentMessages?.text[0]}</p>
+			</div>
 		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'folder'}">

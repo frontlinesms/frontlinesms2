@@ -5,9 +5,9 @@
 		<table>
 			<tr>
 				<td>
-					<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="poll-sent">   (${ownerInstance?.sentMessageCount} messages sent)</span>
+					<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="poll-sent">   (${sentMessageCount} messages sent)</span>
 					<p>${ownerInstance?.messageText}</p>
-					<p>${ownerInstance.autoReplyText ? "Auto Reponse Enabled" : ""}</p>
+					<p>${ownerInstance.autoReplyText ? "Auto Response Enabled" : ""}</p>
 				</td>
 				<td>
 					<table id="poll-stats">

@@ -39,15 +39,6 @@ class EmailTranslationServiceSpec extends UnitSpec {
 			assert testExchange.out.body.src == "email:test@example.com"
 	}
 
-	def "email to field is converted to a suitable Fmessage to desitination field"() {
-		given:
-			def testExchange = createTestExchange()
-		when:
-			t.process(testExchange)
-		then:
-			assert testExchange.out.body.dst == "email:frontlinesms1@example.com"
-	}
-
 	def "email body is converted to a suitable Fmessage body"() {
 		given:
 			def testExchange = createTestExchange([body:"Here's the test email body converted into a textual message."])

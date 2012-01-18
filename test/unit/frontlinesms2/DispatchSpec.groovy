@@ -4,10 +4,9 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class DispatchSpec extends UnitSpec {
-	def "Dispatch must have a dst, an Fmessage, and a status"() {
+	def "Dispatch must have a dst, a message, and a status"() {
 		setup:
 			mockForConstraintsTests(Dispatch)
-			mockForConstraintsTests(Fmessage)
 		when:
 			Dispatch dis = new Dispatch()
 		then:
@@ -21,7 +20,7 @@ class DispatchSpec extends UnitSpec {
 		then:
 			!dis.validate()
 		when:
-			dis.fmessage = new Fmessage()
+			dis.message = new Fmessage()
 		then:
 			dis.validate()
 	}
@@ -32,14 +31,13 @@ class DispatchSpec extends UnitSpec {
 			mockForConstraintsTests(Fmessage)
 		when:
 			def now = new Date()
-			Dispatch dis = new Dispatch(dst: '12345', fmessage: new Fmessage(), status: DispatchStatus.FAILED, dateSent: now)
+			Dispatch dis = new Dispatch(dst: '12345', message: new Fmessage(), status: DispatchStatus.FAILED, dateSent: now)
 		then:
 			!dis.validate()
 		when:
 			dis.status = DispatchStatus.SENT
 		then:
 			dis.dateSent == now
-			println dis.status
 			dis.validate()
 	}
 }

@@ -42,7 +42,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			assert Fmessage.count() == 0
 			controller.send()
 		then:
-			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
+			controller.flash.message == "Message has been queued to send to +$number, +$number, +$number"
 	}
 
 	def "should display flash message on successful message sending"() {
@@ -84,7 +84,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action leads to read message staying read'() {
 		setup:
-			def id = new Fmessage(read:true, date: new Date()).save(failOnError: true).id
+			def id = new Fmessage(src: '1234567', read:true, date: new Date(), inbound:true).save(failOnError: true).id
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
@@ -95,7 +95,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
-			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
+			def id = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -107,7 +107,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling "starMessage" action leads to starred message becoming unstarred'() {
 		setup:
-			def id = new Fmessage(read:true, starred:true, date: new Date()).save(failOnError: true).id
+			def id = new Fmessage(src:'1234567', read:true, starred:true, date: new Date(), inbound: true).save(failOnError: true).id
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageId = id
@@ -119,9 +119,9 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'empty trash permanently deletes messages with deleted flag true'() {
 		setup:
-			(1..3).each {new Fmessage(deleted:false, date: new Date()).save()}
+			(1..3).each {new Fmessage(src: '123456', isDeleted:false, date: new Date(), inbound: true).save()}
 			def inboxMessages = Fmessage.list()
-			(1..3).each {new Fmessage(deleted:true, date: new Date()).save()}
+			(1..3).each {new Fmessage(src: '123456', isDeleted:true, date: new Date(), inbound: true).save()}
 		when:
 			controller.emptyTrash()
 		then:

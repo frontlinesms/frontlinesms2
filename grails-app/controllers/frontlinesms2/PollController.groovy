@@ -24,18 +24,15 @@ class PollController {
 		
 		def pollInstance = Poll.createPoll(params)
 		if(!params.dontSendMessage) {
-			def messages = messageSendService.getMessagesToSend(params)
-			messages.each { message ->
-				pollInstance.addToMessages(message)
-				pollInstance.save()
-				messageSendService.send(message)
-			}
+			def message = messageSendService.getMessagesToSend(params)
+			pollInstance.addToSentMessages(message)
+			messageSendService.send(message)
+			pollInstance.save()
 			flash.message = "Poll has been saved and message(s) has been queued to send"
 		} else {
 			pollInstance.save()
 			flash.message = "Poll has been saved"
 		}
-		pollInstance.save(flush: true)
 		[ownerId: pollInstance.id]
 	}
 	

@@ -37,41 +37,33 @@ class StatusController {
 	}
 
 	private def getMessageStats() {
-		def messageStatus = params.messageStatus
-		def groupInstance = params.groupId? Group.get(params.groupId): null
-		params.messageStatus = messageStatus ? messageStatus.tokenize(",")*.trim() : null
 		def activityInstance = getActivityInstance()
-		def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-		def startDate, endDate
-		(startDate, endDate) = params.rangeOption == "between-dates" ? 
-			[params.startDate, params.endDate] :
-			[new Date() - 14, new Date()]
-		params.groupInstance = groupInstance
-		params.messageOwner = messageOwners
-		params.startDate = startDate
-		params.endDate = endDate
+		params.startDate = params.rangeOption == "between-dates" ? params.startDate : new Date() - 14
+		params.endDate = params.rangeOption == "between-dates" ? params.endDate : new Date()
+		params.messageOwner = (activityInstance && activityInstance instanceof Poll) ? activityInstance.responses : activityInstance
+		params.groupInstance = params.groupId ? Group.get(params.groupId) : null
+		params.messageStatus = params.messageStatus?.tokenize(",")*.trim()
 		def messageStats = Fmessage.getMessageStats(params) // TODO consider changing the output of this method to match the data we actually want
-		[messageStats: [xdata: messageStats.collect{k,v -> "'${k}'"}, 
-						sent: messageStats.values()*.sent,
-						received: messageStats.values()*.received], messageStatus: messageStatus]
+		[messageStats: [xdata: messageStats.keySet()*.toString(),
+							sent: messageStats.values()*.sent,
+							received: messageStats.values()*.received]]
 	}
 	
 	private def getFilters() {
 			def groupInstance = params.groupId? Group.get(params.groupId): null
-			def activityInstance = getActivityInstance()
-			def messageOwners = activityInstance? Fmessage.getMessageOwners(activityInstance): null
-			params.rangeOption = params.rangeOption?: "two-weeks"
+			params.rangeOption = params.rangeOption ?: "two-weeks"
 			[groupInstance: groupInstance,
 					activityId: params.activityId,
 					groupInstanceList : Group.findAll(),
 					folderInstanceList: Folder.findAll(),
-					pollInstanceList: Poll.findAll(), search:new Search(group:groupInstance, activityId:params.activityId)]
+					pollInstanceList: Poll.findAll(),
+					search: new Search(group:groupInstance,	activityId: params.activityId)]
 	}
 	
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll: Folder
+			def activityType = stringParts[0] == 'poll' ? Poll : Folder
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null

@@ -11,7 +11,7 @@
 					<g:link action="sent">Sent</g:link>
 				</li>
 				<li class="${(messageSection=='pending')? 'selected':''}">
-					<g:link action="pending" class="${hasUnsentMessages ? 'send-failed' : ''}">Pending</g:link>
+					<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}">Pending</g:link>
 				</li>
 				<li class="${(messageSection=='trash')? 'selected':''}">
 					<g:link action="trash">Trash</g:link>

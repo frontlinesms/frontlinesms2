@@ -55,7 +55,7 @@ class DeleteISpec extends IntegrationSpec {
 	def "deleted folders are not included in the folderInstanceList"() {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(date: new Date())
+			def m = new Fmessage(src: '123456', date: new Date(), inbound: true)
 			def messageController = new MessageController()
 			def folderController = new FolderController()
 			f.addToMessages(m)
@@ -77,8 +77,8 @@ class DeleteISpec extends IntegrationSpec {
 	def "deleted folders are included in the trash list"() {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(date: new Date())
-			def m2 = new Fmessage(date: new Date()-1)
+			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
+			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
 			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
@@ -95,18 +95,18 @@ class DeleteISpec extends IntegrationSpec {
 	def "polls, folders and messages appear in the trash section"() {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(date: new Date())
-			def m2 = new Fmessage(date: new Date()-1)
+			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
+			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
 			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
 			deleteFolder(f)
 			f.save(flush:true, failOnError:true)
 			
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
+			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			
-			def m3 = new Fmessage(text:"not in folder", deleted: true, date: new Date()).save(flush:true, failOnError:true)
+			def m3 = new Fmessage(src: '1235', text:"not in folder", isDeleted: true, date: new Date(), inbound: true).save(flush:true, failOnError:true)
 			deleteMessage(m3)
 			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
@@ -122,7 +122,7 @@ class DeleteISpec extends IntegrationSpec {
 		}
 	
 	def deleteMessage(Fmessage message) {
-		message.deleted = true
+		message.isDeleted = true
 		message.save()
 		new Trash(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
 	}

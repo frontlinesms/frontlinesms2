@@ -1,18 +1,22 @@
 package frontlinesms2
 
 class MessageSendService {
+	static transactional = false
+	
 	def send(Fmessage m, Fconnection c=null) {
 		assert m instanceof Fmessage
-		m.hasPending = true
 		def headers = [:]
 		if(c) headers.fconnection = c.id
-		m.save(failOnError:true,flush:true) // FIXME this should be saving inside the outgoing messages route, not here
-		sendMessageAndHeaders('seda:outgoing-fmessages', m, headers)
+		m.save() // have to do this here or it can cause problems with the session when there is a messageOwner
+		m.dispatches.each {
+			sendMessageAndHeaders('seda:dispatches', it, headers)
+		}
 	}
 	
 	def getMessagesToSend(params) {
-		// FIXME this method should create 1 Fmessage with multiple Dispatches attached
-		def messages = []
+		//TODO: Need to add source from app setting
+		def message = new Fmessage(src: 'src', date: new Date(), text: params.messageText, inbound: false, hasPending: true)
+		def dispatches = []
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
 		addresses += groups.collect {
@@ -20,9 +24,11 @@ class MessageSendService {
 			Group.findByName(it) ? Group.findByName(it).getAddresses() : SmartGroup.findByName(it).getAddresses()
 		}.flatten()
 		addresses.unique().each { address ->
-			//TODO: Need to add source from app setting
-			messages << new Fmessage(src: "src", dst: address, text: params.messageText, date: new Date())
+			dispatches << new Dispatch(dst: address, status: DispatchStatus.PENDING)
 		}
-		return messages
+		dispatches.each {
+			message.addToDispatches(it)
+		}
+		return message
 	}
 }

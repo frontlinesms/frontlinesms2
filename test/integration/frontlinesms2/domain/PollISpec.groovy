@@ -5,8 +5,8 @@ import frontlinesms2.*
 class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Deleted messages do not show up as responses'() {
 		when:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
+			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
 			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
@@ -14,7 +14,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			p.getPollMessages().count() == 2
 		when:
-			message1.deleted = true
+			message1.isDeleted = true
 			message1.save(flush:true, failOnError:true)
 		then:
 			p.getPollMessages().count() == 1
@@ -34,8 +34,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:"Unknown", count:0, percent:0]
 			]
 		when:
-			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ', date: new Date()).save(failOnError:true, flush:true))
-			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie', date: new Date()).save(failOnError:true, flush:true))
+			PollResponse.findByValue('Michael-Jackson').addToMessages(new Fmessage(text:'MJ', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
+			PollResponse.findByValue('Chuck-Norris').addToMessages(new Fmessage(text:'big charlie', date: new Date(), inbound: true, src: '12345').save(failOnError:true, flush:true))
 		then:
 			p.responseStats == [
 				[id:mjId, value:'Michael-Jackson', count:1, percent:50],
@@ -43,7 +43,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 				[id:ukId, value:'Unknown', count:0, percent:0]
 			]
 		when:
-			Fmessage.findByText('MJ').deleted = true
+			Fmessage.findByText('MJ').isDeleted = true
 			Fmessage.findByText('MJ').save(flush:true)
 		then:
 			p.responseStats == [
@@ -162,9 +162,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	private def setUpPollResponseAndItsMessages() {
 		def poll = setUpPollAndResponses()
 
-		PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", date: new Date() - 10)).save(flush: true, failOnError:true)
-		PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", date: new Date() - 2)).save(flush: true, failOnError:true)
-		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", date: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
+		PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", inbound: true, date: new Date() - 10)).save(flush: true, failOnError:true)
+		PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", inbound: true, date: new Date() - 2)).save(flush: true, failOnError:true)
+		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", inbound: true, date: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
 	}
 }
 

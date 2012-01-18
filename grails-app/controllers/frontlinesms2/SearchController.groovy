@@ -29,7 +29,7 @@ class SearchController {
 	def result = {
 		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
-			searchInstance.owners = activity ? Fmessage.getMessageOwners(activity): null
+			searchInstance.owners = (activity && activity instanceof Poll) ? activity.responses : activity
 			searchInstance.searchString = params.searchString ?: ""
 			searchInstance.contactString = params.contactString ?: null
 			searchInstance.group = params.groupId ? Group.get(params.groupId) : null

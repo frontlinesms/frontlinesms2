@@ -4,7 +4,7 @@ import org.apache.camel.Exchange
 import org.apache.camel.Header
 
 /** This is a Dynamic Router */
-class FmessageRouterService {
+class DispatchRouterService {
 	def camelContext
 
 	int counter = 0
@@ -21,7 +21,7 @@ class FmessageRouterService {
 			println "Exchange has previous endpoint from this slip.  Returning null."
 			return null
 		} else if(target) {
-			println "Target is set, so forwarding to specific fconnection"
+			println "Target is set, so forwarding each dispatch to specific fconnection"
 			return "seda:out-$target"
 		} else {
 			println "Routes available: ${camelContext.routes*.id}"
@@ -34,13 +34,10 @@ class FmessageRouterService {
 				return routeName
 			} else {
 				// TODO do something like increment retry header for message, and then re-add to queue
-				println "Haven't found any routes. updating message status as failed"
-				// TODO could we just return reference to message storage service here?
-				def message = exchange.in.body
-				message = message.id ? Fmessage.get(message.id) : message // TODO what's the point of this?
-				// FIXME should set details of the dispatch to FAILED
-				message.hasFailed = true
-				message.save(flush:true) 
+				println "Haven't found any routes. updating dispatch status as failed"
+				def dispatch = exchange.in.body
+				dispatch.status = DispatchStatus.FAILED
+				dispatch.save(failOnError: true, flush:true)
 				return null
 			}
 		}

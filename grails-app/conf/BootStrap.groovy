@@ -183,9 +183,15 @@ class BootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-			
-		new Announcement(name: 'Free cars!', sentMessage:"Everyone who recieves this message will also recieve a free Subaru").save(failOnError:true, flush:true)
-		new Announcement(name: 'Office Party', sentMessage:"Office Party on Friday!").save(failOnError:true, flush:true)
+		def dispatch = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
+		def a1 = new Announcement(name: 'Free cars!')
+		def a2 = new Announcement(name: 'Office Party')
+		def sent1 = new Fmessage(src: 'me', inbound: false, date: new Date(), text:"Everyone who recieves this message will also recieve a free Subaru")
+		def sent2 = new Fmessage(src: 'me', inbound: false, date: new Date(), text:"Office Party on Friday!")
+		sent1.addToDispatches(dispatch).save(failOnError:true, flush:true)
+		sent2.addToDispatches(dispatch).save(failOnError:true, flush:true)
+		a1.addToSentMessages(sent1).save(failOnError:true, flush:true)
+		a2.addToSentMessages(sent2).save(failOnError:true, flush:true)
 		
 		[Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Roy')),
 				Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Marie')),

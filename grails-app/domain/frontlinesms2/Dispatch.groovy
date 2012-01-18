@@ -8,6 +8,8 @@ class Dispatch {
 	DispatchStatus status
 	Date dateSent
 	
+	boolean isDeleted
+	
 	static constraints = {
 		dst(nullable:false)
 		status(nullable: false, validator: { val, obj ->
@@ -21,6 +23,10 @@ class Dispatch {
 					obj.status == DispatchStatus.SENT
 				else
 					obj.status != DispatchStatus.SENT
+		})
+		isDeleted(nullable: true, validator: { val, obj ->
+				if(val)
+					obj.message.isDeleted
 		})
 	}
 }

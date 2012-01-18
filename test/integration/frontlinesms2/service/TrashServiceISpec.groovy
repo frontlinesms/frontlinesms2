@@ -8,7 +8,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should permanently delete a poll and its messages when trashed"() {
 		setup:
-			def message = new Fmessage(date: new Date()).save(failOnError: true)
+			def message = new Fmessage(src: '123456', date: new Date(), inbound: true).save(failOnError: true)
 			def response1 = new PollResponse(value:"FC Manchester United")
 			def response2 = new PollResponse(value:"FC United of Manchester")
 			def p = new Poll(title:'Who is the best football team in the world?', keyword:"football", deleted:true)
@@ -29,7 +29,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should permanently delete a folder and its messages when trashed"() {
 		given:
-			def message = new Fmessage(date: new Date()).save(failOnError:true)
+			def message = new Fmessage(src: '1234567', date: new Date(), inbound: true).save(failOnError:true)
 			def folder = new Folder(name:"test", deleted:true).save(failOnError:true)
 			folder.addToMessages(message)
 		when:

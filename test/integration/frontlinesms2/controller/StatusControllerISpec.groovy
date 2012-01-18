@@ -28,10 +28,13 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.connectionInstanceList == [EmailFconnection.findByUsername('mr.testy@zoho.com')]
 	}
 	
-	def "message stat dates should be inclusive"() {
+	def "message start dates should be inclusive"() {
 		given:
 			def m1 = new Fmessage(src:"src1", date:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
-			def m2 = new Fmessage(src:"src2", date:createDate(2011, 10, 18, 23, 58, 59), hasSent:true).save(flush:true, failOnError:true)
+			def m2 = new Fmessage(src:"src2", date:createDate(2011, 10, 18, 23, 58, 59), hasSent:true, inbound: false)
+			def d = new Dispatch(dst:'123', status: DispatchStatus.PENDING)
+			m2.addToDispatches(d)
+			m2.save(flush:true, failOnError:true)
 		when:
 			// TODO set start and end dates to the same day as messages were sent
 			controller.params.rangeOption = "between-dates"
