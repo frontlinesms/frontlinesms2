@@ -25,9 +25,9 @@ class RadioBootStrap extends CoreBootStrap {
 		 def show1 = new RadioShow(name: "Health")
 		 (1..20).collect {
 			if(it > 10)
-			 	show1.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-1).save(failOnError: true))
+			 	show1.addToMessages(new Fmessage(src: '+3245678', text: "health show message $it", date:new Date()-1, inbound: true).save(failOnError: true))
 			else
-				show1.addToMessages(new Fmessage(src: '+3245678', dst: '+123456789', text: "health show message $it", dateReceived:new Date()-2).save(failOnError: true))
+				show1.addToMessages(new Fmessage(src: '+3245678', text: "health show message $it", date:new Date()-2, inbound: true).save(failOnError: true))
 		 }
 		 show1.save(failOnError: true, flush: true)
 		 def show2 = new RadioShow(name: "Morning Show").save(flush:true)
