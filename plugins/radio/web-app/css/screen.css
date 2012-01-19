@@ -4,6 +4,36 @@
 @import url("status.css");
 @import url("header.css");
 
+/* RADIO */
+
+#on-air {
+	color: #DFDFDF;
+}
+#on-air.onAirIsActive, .onAirIsActive {
+	color: #9433C7;
+}
+
+.message-list-separator {
+	background-color: #DFDFDF;
+	padding: 0 17px;
+	font-weight: bold;
+}
+.message-list-separator:hover {
+	background-color: #DFDFDF;
+	padding-left: 17px;
+}
+
+#radio-actions, #radio-actions li {
+	display: inline;
+	text-transform: none;
+	font-weight: normal;
+	font-size: normal;
+}
+#radio-actions .btn {
+	padding: 2px 10px 0 10px;
+	height: 23px;
+}
+
 html {
 	height: 100%;
 	width: 100%;
@@ -27,20 +57,8 @@ a {
 	color: black;
 }
 
-#logo {
-	background-image: url('../images/logo_radio.png');
-	background-repeat: no-repeat;
-	background-position: left;
-	height: 40px;
-	width: 36px;
-}
-
-.active {
-	color: #C03283
-}
-
-.message-list-separator {
-	background-color: #DFDFDF;
+.selected{	
+    background-color: #E0F0DE;
 }
 
 .unread {
@@ -85,66 +103,6 @@ a {
 	vertical-align: bottom;
 }
 
-/*Header*/
-
-#header{
-    position: fixed;
-    padding: 0;
-    margin: 0;
-    background-image: url("../images/background.png");
-    background-repeat: no-repeat;
-    background-color: #e2e2e2;
-    height: 80px;
-    max-height: 80px;
-    border-top: 3px solid #C79CDD;
-    width: 100%;
-    z-index: 11;
-}
-
-#logo{
-    margin-left: 17px;
-    margin-top: 10px;
-}
-
-.selected{	
-    background-color: #E0F0DE;
-}
-
-#notifications{
-	width: 50%;
-	position: absolute;
-	top: 0px;
-	margin-right: 25%;
-	margin-left: 25%;
-	z-index: 100;
-	text-align: center;
-	font-weight: bolder;
-	font-size: 115%;
-}
-#notifications div{
-	min-height: 21px;
-	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.4);
-	border-radius: 2px;
-	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
-}
-#notifications a{
-	text-decoration: underline;
-}
-#notifications .hide-flash{
-	float: right;
-	top: 0;
-	right: 0;
-	text-decoration: none;
-	font-weight: normal;
-	padding-right: 8px;
-	position:absolute;
-	cursor: pointer;
-}
-#notifications .hide-flash:hover{
-	text-decoration: underline;
-}
-
 .field{
 	padding: 10px 0 0 23px;
 }
@@ -158,138 +116,15 @@ a {
 	height:0;
 }
 
-.standard-nav{
-    list-style: none;
-    padding: 0;
-}
-
-.standard-nav li{
-    position: relative;
-    display: inline-block;
-    padding: 0;
-    margin: 0;
-}
-
-.standard-nav a {
-    text-decoration: none;
-    color: #333;
-}
-
-#tabbar{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 11px;
-    padding: 0;
-    margin: 0;
-    background-image: url('../images/tabbar.png');
-    z-index: 5;
-}
-#primary-nav{
-    margin: 0;
-    width: 100%;
-    height: 50px;
-}
-#primary-nav #tab-list{
-	position: fixed;
-	left:70px;
-	top: 35px;
-}
-a.tab-link{
-	position: relative;
-    display: inline-block;
-    margin: 0;
-    background-image: url('../images/buttons/tab.png');
-    width: 110px;
-    height: 22px;
-    max-height: 21px;
-    padding: 0;
-    padding-top: 5px;
-    background-repeat: no-repeat;
-    text-align: center;
-    text-transform: uppercase;
-    z-index: 1;
-}
-a.tab-link.current{
-    background-image: url('../images/buttons/tab_active.png');
-    z-index: 10;
-}
-a.tab-link:hover{
-    background-image: url('../images/buttons/tab_hover.png');
-}
-a.tab-link:active{
-    background-image: url('../images/buttons/tab_pressed.png');
-}
-#message-tab-link{
-    display: inline-block;
-    background-size: cover;
-    width: 120px;
-    padding-left: 10px;
-    padding-right: 10px;
-    text-align: left;
-}
-#status-tab-link{
-    text-align: left;
-    padding-left: 15px;
-    width: 95px;
-}
-
-.indicator{
-    background-repeat: no-repeat;
-    display: inline-block;
-    padding: 2px;
-    margin: 4px 7px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #fff;
-    font-weight: bolder;
-    text-align:center;
-}
-#inbox-indicator{
-	background-color: #693F80;
-	border-radius: 10px;
-	padding: 2px;
-	font-size: .65em;
-}
-#status-indicator{
-	margin:0 5px;
-	padding:0;
-	width:25px;
-	height:25px;
-    background-image: url('../images/icons/status_red.png');
-}
-#status-indicator.green{
-    background-image: url('../images/icons/status_green.png');
-}
-#status-indicator.orange{
-    background-image: url('../images/icons/status_orange.png');
-}
-#secondary-nav{
-    position: absolute;
-    right: 0;
-    top: -3px;
-    margin: 0;
-    padding: 0;
-}
-
-#secondary-nav a{
-    display: inline-block;
-    border-top: 3px solid #C79CDD;
-    padding: 6px;
-    margin: 0;
-}
-#secondary-nav li{
-    margin: 0;
-    padding: 0;
-    background-color: #e2e2e2;
-}
-#secondary-nav a:hover{
-    background-color:#e0e0e0;
-    border-top: 3px solid #ca2d92;
-}
-
 /*Main*/
+#logo {
+       background-image: url('../images/logo_radio.png');
+       background-repeat: no-repeat;
+       background-position: left;
+       height: 40px;
+       width: 36px;
+}
+
 #main{
     padding: 0;
     margin: 0;
@@ -338,21 +173,18 @@ a.tab-link:active{
     margin: 0;
 }
 #sidebar .sublist li:hover{
-    background-color: #e5eff3;
+    background-color: #E0F0DE;
 }
 #sidebar .sublist li.create:hover{
     background-color: white;
 }
 #sidebar .sublist a:hover{
-    background-color: #e5eff3;
+    background-color: #E0F0DE;
 }
 #sidebar .sublist a.create:hover{
     background-color: white;
 }
 
-#sidebar .sublist li.active-section{
-    background-color: #D8E8EF;
-}
 .list-title{
     background-repeat: no-repeat;
 }
@@ -463,7 +295,7 @@ a.tab-link:active{
     background-color: #fff;
     top: 83px;
 }
-.section-header .message-title .section-header #archive-title, .section-header #contact-title{
+.section-header .message-title, .section-header #archive-title, .section-header #contact-title{
     padding: 0;
     position: relative;
     margin: 0;
@@ -475,14 +307,13 @@ a.tab-link:active{
     min-height: 200px;
     height: 200px;
     padding: 0 17px;
-    background-color: #D8E8EF;
+    background-color: #E0F0DE;
 }
 
 .section-header .message-title h3, .section-header .activity-title h3, .section-header h3{
     text-transform: uppercase;
-    padding:12px 0;
-    padding-left: 28px;
-    width:30%;
+    padding: 10px 0 10px 28px;
+    width:40%;
     margin: 0;
     background-repeat: no-repeat;
     background-position: 6px 10px;
@@ -531,16 +362,16 @@ a.tab-link:active{
 	background-repeat: no-repeat;
 }
 .section-header .activity-title #activity-details{
-	float:left;
-	max-height: 125px;
+	position: fixed;
+	top: 140px;
+	left: 19%;
+	height: 125px;
 	max-width: 70%;
-	margin-top: 25px;
+	z-index: 10;
 }
 .section-header .activity-title td{
 	padding: 0 25px;
 	font-size: 11px;
-}
-.section-header .activity-title #activity-details #poll-sent{
 }
 .section-header .activity-title #activity-details #poll-sent{
 	font-size: 10px;
@@ -717,17 +548,17 @@ a.tab-link:active{
 }
 
 @keyframes newMessage {
-	from {background: rgba(192, 50, 131, 0.3);}
+	from {	background-color: rgba(199, 156, 221, 0.6);}
 	to {background: white;}
 }
 
 @-moz-keyframes newMessage /* Firefox */ {
-	from {background: rgba(192, 50, 131, 0.3);}
+	from {	background-color: rgba(199, 156, 221, 0.6);}
 	to {background: white;}
 }
 
 @-webkit-keyframes newMessage /* Safari and Chrome */ {
-	from {background: rgba(192, 50, 131, 0.3);}
+	from {	background-color: rgba(199, 156, 221, 0.6);}
 	to {background: white;}
 }
 #new-message-notification {
@@ -737,7 +568,7 @@ a.tab-link:active{
 	text-align: center;
 	min-height: 21px;
 	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.3);
+	background-color: rgba(199, 156, 221, 0.6);
 	z-index: 100;
 }
 .tall-header #new-message-notification {
@@ -747,7 +578,7 @@ a.tab-link:active{
 	text-align: center;
 	min-height: 21px;
 	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.3);
+	background-color: rgba(199, 156, 221, 0.6);
 	z-index: 100;
 }
 #new-message-notification a{
@@ -885,7 +716,7 @@ animation: newMessage 2s;
     color: inherit;
 }
 #message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
-    background-color: #e5eff3;
+    background-color: #E0F0DE;
 }
 
 .message-preview-star a{
@@ -912,7 +743,7 @@ animation: newMessage 2s;
     padding-left: 17px;
 }
 
-#message-list tbody tr:hover {
+#message-list .message-preview:hover {
     background-color: #E0F0DE;
    	padding: 0;
     margin: 0;
@@ -1060,11 +891,11 @@ animation: newMessage 2s;
 	width: 6.2%
 }
 #dropdown_options:hover{
-	background-color: #e5eff3;
+	background-color: #E0F0DE;
 	cursor: pointer;
 }
 #dropdown_options:active{
-	background-color: #D8E8EF;
+	background-color: #E0F0DE;
 	cursor: pointer;
 }
 #btn_forward{
@@ -1082,10 +913,10 @@ animation: newMessage 2s;
     bottom: 0;
     width: 100%;
     height:100%;
-    background-color: #D8E8EF;
+    background-color: #E0F0DE;
 }
 #pollGraph{
-	background-color: #D8E8EF;
+	background-color: #E0F0DE;
     position: fixed;
     bottom: 0;
     width: 85%;

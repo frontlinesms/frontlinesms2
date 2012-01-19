@@ -25,7 +25,7 @@
 					<li class="${s == ownerInstance ? 'selected' : ''}">
 						<g:link controller="radioShow" action="radioShow" params="[ownerId: s.id]">
 							${s.name}
-							<span id="show-${s.id}" class="${s?.isRunning ? 'active' : 'hide'}">On air</span>
+							<span id="show-${s.id}" class="${s?.isRunning ? 'onAirIsActive' : 'hide'}">On air</span>
 						</g:link>
 					</li>
 					<g:if test="${s.activePolls}">

@@ -1,4 +1,4 @@
-<div class="section-header ${messageSection}" id="inbox-actions">
+<div class="section-header ${messageSection}" id="radio-inbox">
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
@@ -12,20 +12,23 @@
 	</g:if>
 	<g:elseif test="${messageSection == 'announcement'}">
 		<div class="activity-title">
-			<h3>${ownerInstance?.name}</h3>
-			<g:render template="../message/section_action_buttons"/>
-			<p id="activity-details">${ownerInstance?.sentMessage}</p>
+			<h3 id="announcement-title">${ownerInstance?.name}</h3>
+			<g:render template="../message/poll_buttons"/>
+			<div id="activity-details">
+				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="announcement-sent">   (${sentMessageCount} messages sent)</span>
+				<p>${ownerInstance?.sentMessages?.text[0]}</p>
+			</div>
 		</div>
 	</g:elseif>
 	<g:elseif test="${messageSection == 'folder'}">
-		<div class="activity-title">
-			<h3>${ownerInstance?.name} ${messageSection}</h3>
+		<div class="message-title">
+			<h3 id="folder-title">${ownerInstance?.name} ${messageSection}</h3>
 			<g:render template="../message/section_action_buttons"/>
 		</div>
 	</g:elseif>
 	<g:else>
 		<div class="message-title">
-			<h3>${messageSection}</h3>
+			<h3 id="${messageSection}-title">${messageSection}</h3>
 			<g:render template="../message/section_action_buttons"/>
 		</div>
 	</g:else>
