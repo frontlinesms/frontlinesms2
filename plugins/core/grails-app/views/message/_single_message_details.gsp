@@ -11,6 +11,12 @@
 				</g:if>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
+			<g:if test="${messageInstance.messageOwner && (messageInstance.messageOwner instanceof frontlinesms2.PollResponse)}">
+				<p id="message-detail-owner">${messageInstance.messageOwner.poll.title} poll</p>
+			</g:if>
+			<g:elseif test="${messageInstance.messageOwner}">
+				<p id="message-detail-owner">${messageInstance.messageOwner.name} ${messageInstance.messageOwner instanceof frontlinesms2.Announcement ? 'announcement' : 'folder'}</p>
+			</g:elseif>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
 		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">

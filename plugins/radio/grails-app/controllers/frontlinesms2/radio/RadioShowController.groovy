@@ -33,8 +33,8 @@ class RadioShowController extends MessageController {
 		
 		def radioMessageInstanceList = []
 		messageInstanceList?.list(params).inject([]) { messageB, messageA ->
-		    if(messageB && dateToString(messageB.dateReceived) != dateToString(messageA.dateReceived))
-		        radioMessageInstanceList.add(dateToString(messageA.dateReceived))
+		    if(messageB && dateToString(messageB.date) != dateToString(messageA.date))
+		        radioMessageInstanceList.add(dateToString(messageA.date))
 		    radioMessageInstanceList.add(messageA)
 		    return messageA
 		}

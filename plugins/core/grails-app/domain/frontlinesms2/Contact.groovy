@@ -108,7 +108,8 @@ class Contact {
 			Fmessage.withNewSession { session ->
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
 				Dispatch.findAllByDst(primaryMobile).each {
-					Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [name, true, it])
+					it.message.displayName = "To: " + name
+					it.message.contactExists = true
 				}
 			}
 		}
@@ -117,9 +118,10 @@ class Contact {
 	private def removeFmessageDisplayName() {
 		if(primaryMobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
 				Dispatch.findAllByDst(primaryMobile).each {
-					Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.dispatches=?", [primaryMobile, false, it])
+					it.message.displayName = "To: " + primaryMobile
+					it.message.contactExists = false
 				}
 			}
 		}

@@ -124,8 +124,10 @@ class MessageController {
 		def pollInstance = Poll.get(params.ownerId)
 		def messageInstanceList = pollInstance?.getPollMessages(params.starred)
 		def sentMessageCount = 0
-		pollInstance?.sentMessages.each {
-			sentMessageCount += it.dispatches.size()
+		pollInstance.responses.each {
+			Fmessage.findAllByMessageOwnerAndInbound(it, false).each {
+				sentMessageCount += it.dispatches.size()
+			}
 		}
 		
 		render view:'../message/poll', model:[messageInstanceList: messageInstanceList?.list(params),
@@ -141,9 +143,10 @@ class MessageController {
 	def announcement = {
 		def announcementInstance = Announcement.get(params.ownerId)
 		def sentMessageCount = 0
-		announcementInstance?.sentMessages.each {
+		Fmessage.findAllByMessageOwnerAndInbound(announcementInstance, false).each {
 			sentMessageCount += it.dispatches.size()
 		}
+		def sentMessageText = Fmessage.findByMessageOwnerAndInbound(announcementInstance, false).text
 		def messageInstanceList = announcementInstance?.getAnnouncementMessages(params.starred)
 		if(params.flashMessage) { flash.message = params.flashMessage }
 		render view:'../message/standard', model:[messageInstanceList: messageInstanceList?.list(params),
@@ -151,7 +154,8 @@ class MessageController {
 					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: announcementInstance,
 					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
-					sentMessageCount: sentMessageCount] << getShowModel()
+					sentMessageCount: sentMessageCount,
+					sentMessageText: sentMessageText] << getShowModel()
 	}
 	
 	def folder = {

@@ -83,6 +83,14 @@ a {
 }
 
 /*Main*/
+#logo {
+       background-image: url('../images/logo.png');
+       background-repeat: no-repeat;
+       background-position: left;
+       height: 40px;
+       width: 36px;
+}
+
 #main{
     padding: 0;
     margin: 0;
@@ -664,6 +672,16 @@ animation: newMessage 2s;
 	width: 125px;
 	padding-right: 10px;
 }
+#message-list .folderOwner {
+	background-image: url('../images/icons/folder.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#message-list .activityOwner {
+	background-image: url('../images/icons/activities.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
 #message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
 	min-width: 400px;
 	padding-right: 10px;
@@ -764,6 +782,12 @@ animation: newMessage 2s;
 
 #message-detail-sender, #message-detail-date{
 	margin: 0;
+}
+#message-detail-owner {
+	background-image: url('../images/icons/activities.png');
+	background-repeat: no-repeat;
+	margin: 0;
+	padding-left: 25px;
 }
 
 #reply-all{

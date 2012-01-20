@@ -14,7 +14,7 @@ class Poll {
 	List responses
 	static transients = ['liveMessageCount']
 
-	static hasMany = [responses: PollResponse, sentMessages: Fmessage]
+	static hasMany = [responses: PollResponse, messages: Fmessage]
 
 	static constraints = {
 		title(blank: false, nullable: false, maxSize: 255, validator: { title, me ->

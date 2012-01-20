@@ -7,7 +7,7 @@
     background-color: #e2e2e2;
     height: 80px;
     max-height: 80px;
-    border-top: 3px solid #d8aec6;
+    border-top: 3px solid #C79CDD;
     width: 100%;
     z-index: 11;
 }
@@ -15,10 +15,6 @@
 #logo{
     margin-left: 17px;
     margin-top: 10px;
-}
-
-.selected{	
-    background-color: #D8E8EF;
 }
 
 #notifications{
@@ -35,7 +31,7 @@
 #notifications div{
 	min-height: 21px;
 	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.4);
+	background-color: rgba(199, 156, 221, 0.6);
 	border-radius: 2px;
 	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
@@ -87,7 +83,6 @@
 #primary-nav{
     margin: 0;
     width: 100%;
-    height: 50px;
 }
 #primary-nav #tab-list{
 	position: fixed;
@@ -146,7 +141,7 @@ a.tab-link:active{
     text-align:center;
 }
 #inbox-indicator{
-	background-color: #C03283;
+	background-color: #693F80;
 	border-radius: 10px;
 	padding: 2px;
 	font-size: .65em;
@@ -174,7 +169,7 @@ a.tab-link:active{
 
 #secondary-nav a{
     display: inline-block;
-    border-top: 3px solid #d8aec6;
+    border-top: 3px solid #C79CDD;
     padding: 6px;
     margin: 0;
 }
@@ -185,5 +180,5 @@ a.tab-link:active{
 }
 #secondary-nav a:hover{
     background-color:#e0e0e0;
-    border-top: 3px solid #ca2d92;
+    border-top: 3px solid #C79CDD;
 }

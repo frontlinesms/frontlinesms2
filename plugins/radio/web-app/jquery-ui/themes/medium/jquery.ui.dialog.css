@@ -17,13 +17,18 @@
 	border-radius: 4px;
 	background-color: white;
 	font-family: Arial,Georgia,Helvetica,sans-serif;
-	font-size: .7em;
+	font-size: .75em;
 }
 
 .ui-dialog h2{
 	font-size: 1.2em;
 	margin: 0;
 	padding:0;
+}
+
+.ui-dialog textarea {
+	max-width: 300px;
+	max-height: 300px;
 }
 
 .ui-dialog .error-panel{
@@ -125,4 +130,18 @@
 
 .ui-dialog #smartGroup-table td input {
 	width: 250px;
+}
+
+.ui-dialog #poll-question label{
+	position: relative;
+	top: -95px;
+}
+
+.ui-dialog #poll-question textarea{
+	width: 50%;
+	min-height: 100px;
+}
+
+.ui-dialog .field-enabled{
+	font-weight: bolder;
 }

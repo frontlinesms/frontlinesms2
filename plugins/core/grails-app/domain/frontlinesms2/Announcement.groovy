@@ -5,11 +5,9 @@ import java.util.Date;
 class Announcement extends MessageOwner {
 	static transients = ['liveMessageCount']
 	String name
-	static hasMany = [sentMessages: Fmessage]
 	
 	static constraints = {
 		name(nullable:false)
-		sentMessages(nullable:false)
 	}
 	
 	def getAnnouncementMessages(getOnlyStarred = false) {

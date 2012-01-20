@@ -25,7 +25,7 @@ class KeywordProcessorService {
 			Fmessage autoReply = new Fmessage(text:response.poll.autoReplyText, date: new Date(), inbound: false)
 			autoReply.addToDispatches(d)
 			messageSendService.send(autoReply)
-			response.poll.addToSentMessages(autoReply)
+			response.poll.addToMessages(autoReply)
 			println "Autoreply message sent to ${message.src}"
 		}
 	}
