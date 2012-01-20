@@ -56,7 +56,7 @@ class Fmessage {
 					obj.hasFailed == null || obj.hasFailed == false
 					obj.dispatches == null || obj.dispatches.size() == 0
 				} else {
-					obj.dispatches != null && obj.dispatches.size() >= 1
+					obj.dispatches != null && obj.dispatches?.size() >= 1
 				}
 		})
 		hasSent(nullable: true, validator: { val, obj ->

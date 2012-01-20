@@ -41,8 +41,12 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			assert Fmessage.count() == 0
 			controller.send()
+			def flashMessage = controller.flash.message 
 		then:
-			controller.flash.message == "Message has been queued to send to +$number, +$number, +$number"
+			 flashMessage.contains("Message has been queued to send to")
+			 addresses.each {
+				 flashMessage.contains(it)
+			 }
 	}
 
 	def "should display flash message on successful message sending"() {
@@ -52,8 +56,12 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			assert Fmessage.count() == 0
 			controller.send()
+			def flashMessage = controller.flash.message 
 		then:
-			controller.flash.message == "Message has been queued to send to +919544426000, +919004030030, +1312456344"
+			 flashMessage.contains("Message has been queued to send to")
+			 addresses.each {
+				 flashMessage.contains(it)
+			 }
 	}
 
 	def 'Messages are sorted by date' () {
