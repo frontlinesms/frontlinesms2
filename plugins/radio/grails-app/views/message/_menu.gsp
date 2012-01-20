@@ -22,7 +22,7 @@
 			<h3 id="shows-list-title" class="list-title">Shows</h3>
 			<ul class='sublist' id="shows-submenu">
 				<g:each in="${radioShows}" status="i" var="s">
-					<li class="${s == ownerInstance ? 'selected' : ''}${ownerInstance in s.activePolls ? 'secondarySelected' : ''}">
+					<li class="${s == ownerInstance ? 'selected' : ''}${ownerInstance && ownerInstance in s.activePolls ? 'secondarySelected' : ''}">
 						<g:link controller="radioShow" action="radioShow" params="[ownerId: s.id]">
 							${s.name}
 							<span id="show-${s.id}" class="${s?.isRunning ? 'onAirIsActive' : 'hide'}">On air</span>

@@ -45,7 +45,7 @@ function chooseActivity() {
 		type:'GET',
 		dataType: "html",
 		url: url_root + activityUrl,
-		success: function(data, textStatus){ launchMediumWizard(title, data, "Create", true); }
+		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); }
 	});
 	return;
 }
