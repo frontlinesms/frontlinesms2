@@ -177,7 +177,10 @@ class MessageController {
 	}
 	
 	def retry = {
-		
+		def message = Fmessage.get(params.messageId)
+		messageSendService.send(message)
+		flash.message = "Message has been queued to send to " + message.dispatches*.dst.join(", ")
+		redirect(action: params.messageSection, params: [messageId: params.messageId])
 	}
 
 	def delete = {

@@ -15,18 +15,27 @@
 			<g:hiddenField name="searchId" value="${search.id}"></g:hiddenField>
 		</g:if>
 		<g:if test="${messageSection == 'pending' && messageInstance.hasFailed}">
-			<g:link class="msg-btn btn" elementId="retry" action="retry" params="${[messageId: messageInstance.id]}">Retry</g:link>
+			
 		</g:if>
 		<g:if test="${messageSection != 'trash'}">
-			<g:if test="${messageSection != 'pending'}">
-			 	<div id="msg-response-dropdown" class="msg-btn">
+		 	<div id="msg-response-dropdown" class="msg-btn">
+		 		<g:if test="${messageSection == 'sent'}">
+					<g:link elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
+				</g:if>
+				<g:elseif test="${messageSection == 'pending' && messageInstance.hasFailed}">
+					<g:link elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Retry</g:link>
+				</g:elseif>
+				<g:elseif test="${messageSection == 'pending'}">
+					<g:link elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
+				</g:elseif>
+				<g:else>
 					<a id="btn_reply" onclick="messageResponseClick('Reply')">Reply</a>
-					<a id='btn_dropdown' href="#" onclick="toggleDropdown();"></a>
-				</div>
-				<div id="dropdown_options" style='display: none'>
-					<a class='dropdown-item' id="btn_forward" onclick="messageResponseClick('Forward')">Forward</a>
-				</div>
-			</g:if>
+				</g:else>
+				<a id='btn_dropdown' href="#" onclick="toggleDropdown();"></a>
+			</div>
+			<div id="dropdown_options" style='display: none'>
+				<a class='dropdown-item' id="btn_forward" onclick="messageResponseClick('Forward')">Forward</a>
+			</div>
 			<g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
 				<g:actionSubmit id="archive-msg" class="msg-btn" value="Archive" action="archive"/>
 			</g:if>
