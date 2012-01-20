@@ -141,11 +141,17 @@ a {
 #sidebar .sublist li:hover{
     background-color: #e5eff3;
 }
+#sidebar .sublist li:active{
+    background-color: #D8E8EF;
+}
 #sidebar .sublist li.create:hover{
     background-color: white;
 }
 #sidebar .sublist a:hover{
     background-color: #e5eff3;
+}
+#sidebar .sublist a:active{
+    background-color: #D8E8EF;
 }
 #sidebar .sublist a.create:hover{
     background-color: white;
@@ -700,6 +706,9 @@ animation: newMessage 2s;
 #message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
     background-color: #e5eff3;
 }
+#message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
+    background-color: #D8E8EF;
+}
 
 .message-preview-star a{
     display: inline-block;
@@ -729,6 +738,9 @@ animation: newMessage 2s;
     background-color: #e5eff3;
    	padding: 0;
     margin: 0;
+}
+#message-list tbody tr:active {
+    background-color: #D8E8EF;
 }
 #message-list span{
     margin: 5px;
