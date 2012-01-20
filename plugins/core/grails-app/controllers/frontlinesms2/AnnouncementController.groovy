@@ -20,8 +20,8 @@ class AnnouncementController {
 		def announcementInstance = new Announcement()
 		announcementInstance.name = params.name
 		def message = messageSendService.getMessagesToSend(params)
-		announcementInstance.addToMessages(message)
 		messageSendService.send(message)
+		announcementInstance.addToMessages(message)
 		announcementInstance.save()
 		flash.message = "Announcement has been saved and message(s) have been queued to send"
 		[ownerId: announcementInstance.id]
