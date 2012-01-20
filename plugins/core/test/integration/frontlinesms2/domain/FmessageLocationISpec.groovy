@@ -199,8 +199,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			it.save(failOnError:true)
 		}
 				
-		def d1 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT)
-		def d2 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT)
+		def d1 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT, dateSent: new Date())
+		def d2 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT, dateSent: new Date())
 		def d3 = new Dispatch(dst:'1234567', status: DispatchStatus.FAILED)
 		def d4 = new Dispatch(dst:'1234567', status: DispatchStatus.PENDING)
 		
@@ -215,10 +215,10 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		m3.addToDispatches(d3)
 		m4.addToDispatches(d4)
 		
-		m1.save(flush:true)
-		m2.save(flush:true)
-		m3.save(flush:true)
-		m4.save(flush:true)
+		m1.save(flush:true, failOnError:true)
+		m2.save(flush:true, failOnError:true)
+		m3.save(flush:true, failOnError:true)
+		m4.save(flush:true, failOnError:true)
 	}
 	
 	def createPollTestData() {
@@ -228,8 +228,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		def liverResponse = new PollResponse(value:'liver')
 		def poll = new Poll(title:'Miauow Mix').addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse).save(failOnError:true, flush:true)
-		liverResponse.addToMessages(liverMessage).save(failOnError: true)
-		chickenResponse.addToMessages(chickenMessage).save(failOnError: true)
+		liverResponse.addToMessages(liverMessage).save(flush:true, failOnError: true)
+		chickenResponse.addToMessages(chickenMessage).save(flush:true, failOnError: true)
 	}
 
 	private def setUpFolderMessages() {
