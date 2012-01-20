@@ -30,6 +30,13 @@
 	height: 23px;
 }
 
+#sidebar .sublist #radio-show-polls li {
+	padding-left: 17px;
+}
+.secondarySelected {
+	background-color: #E0F0DE;
+}
+
 html {
 	height: 100%;
 	width: 100%;
@@ -54,7 +61,7 @@ a {
 }
 
 .selected{	
-    background-color: #E0F0DE;
+    background-color: rgba(194, 219, 191, 0.65);
 }
 
 .unread {
@@ -171,11 +178,17 @@ a {
 #sidebar .sublist li:hover{
     background-color: #E0F0DE;
 }
+#sidebar .sublist li:active{
+    background-color: #C2DBBF;
+}
 #sidebar .sublist li.create:hover{
     background-color: white;
 }
 #sidebar .sublist a:hover{
     background-color: #E0F0DE;
+}
+#sidebar .sublist a:active{
+    background-color: #C2DBBF;
 }
 #sidebar .sublist a.create:hover{
     background-color: white;
@@ -303,7 +316,7 @@ a {
     min-height: 200px;
     height: 200px;
     padding: 0 17px;
-    background-color: #E0F0DE;
+    background-color: rgba(194, 219, 191, 0.65);
 }
 
 .section-header .message-title h3, .section-header .activity-title h3, .section-header h3{
@@ -724,6 +737,9 @@ animation: newMessage 2s;
 #message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
     background-color: #E0F0DE;
 }
+#message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
+    background-color: #C2DBBF;
+}
 
 .message-preview-star a{
     display: inline-block;
@@ -754,6 +770,9 @@ animation: newMessage 2s;
    	padding: 0;
     margin: 0;
 }
+#message-list .message-preview:active {
+    background-color: #C2DBBF;
+}
 #message-list span{
     margin: 5px;
 }
@@ -775,7 +794,7 @@ animation: newMessage 2s;
     height: 96%;
     margin: 0;
     top: 154px;
-    background-color: #E0F0DE;
+    background-color: rgba(194, 219, 191, 0.65);
 }
 #single-message, #multiple-messages{
 	padding: 17px 17px;
@@ -907,7 +926,7 @@ animation: newMessage 2s;
 	cursor: pointer;
 }
 #dropdown_options:active{
-	background-color: #E0F0DE;
+	background-color: #C2DBBF;
 	cursor: pointer;
 }
 #btn_forward{
@@ -925,10 +944,9 @@ animation: newMessage 2s;
     bottom: 0;
     width: 100%;
     height:100%;
-    background-color: #E0F0DE;
+    background-color: rgba(194, 219, 191, 0.65);
 }
 #pollGraph{
-	background-color: #E0F0DE;
     position: fixed;
     bottom: 0;
     width: 85%;
