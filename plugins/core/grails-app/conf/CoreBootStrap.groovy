@@ -189,8 +189,8 @@ class CoreBootStrap {
 		def sent2 = new Fmessage(src: 'me', inbound: false, date: new Date(), text:"Office Party on Friday!")
 		sent1.addToDispatches(dispatch).save(failOnError:true, flush:true)
 		sent2.addToDispatches(dispatch).save(failOnError:true, flush:true)
-		a1.addToSentMessages(sent1).save(failOnError:true, flush:true)
-		a2.addToSentMessages(sent2).save(failOnError:true, flush:true)
+		a1.addToMessages(sent1).save(failOnError:true, flush:true)
+		a2.addToMessages(sent2).save(failOnError:true, flush:true)
 		
 		[Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Roy')),
 				Announcement.findByName('Free cars!').addToMessages(Fmessage.findBySrc('Marie')),

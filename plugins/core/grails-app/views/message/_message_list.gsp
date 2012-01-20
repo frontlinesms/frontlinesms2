@@ -56,7 +56,7 @@
 										${m.displayName}
 									</g:link>
 							</td>
-							<td class="message-text-cell">
+							<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
 								<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
 									${m.displayText?.truncate(50)}
 								</g:link>

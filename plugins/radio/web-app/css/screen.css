@@ -15,12 +15,8 @@
 
 .message-list-separator {
 	background-color: #DFDFDF;
-	padding: 0 17px;
+	padding: 0 25px;
 	font-weight: bold;
-}
-.message-list-separator:hover {
-	background-color: #DFDFDF;
-	padding-left: 17px;
 }
 
 #radio-actions, #radio-actions li {
@@ -700,6 +696,16 @@ animation: newMessage 2s;
 	width: 125px;
 	padding-right: 10px;
 }
+#message-list .folderOwner {
+	background-image: url('../images/icons/folders.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#message-list .activityOwner {
+	background-image: url('../images/icons/activities.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
 #message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
 	min-width: 400px;
 	padding-right: 10px;
@@ -800,6 +806,12 @@ animation: newMessage 2s;
 
 #message-detail-sender, #message-detail-date{
 	margin: 0;
+}
+#message-detail-owner {
+	background-image: url('../images/icons/activities.png');
+	background-repeat: no-repeat;
+	margin: 0;
+	padding-left: 25px;
 }
 
 #reply-all{

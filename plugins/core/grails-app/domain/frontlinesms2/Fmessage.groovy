@@ -323,13 +323,13 @@ class Fmessage {
 			displayName = src
 			contactExists = false
 		} else if(!inbound && dispatches?.size() == 1 && Contact.findByPrimaryMobile(dispatches.dst[0])) {
-			displayName = Contact.findByPrimaryMobile(dispatches.dst[0]).name
+			displayName = "To: " + Contact.findByPrimaryMobile(dispatches.dst[0]).name
 			contactExists = true
 		} else if(!inbound && dispatches?.size() == 1) {
-			displayName = dispatches.dst[0]
+			displayName = "To: " + dispatches.dst[0]
 			contactExists = false
 		} else if(!inbound && dispatches?.size() > 1) {
-			displayName = dispatches?.size() + " recipients"
+			displayName = "To: " + dispatches?.size() + " recipients"
 			contactExists = true
 		}
 	}
