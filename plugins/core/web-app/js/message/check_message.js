@@ -127,11 +127,11 @@ function updateMultipleCheckedDetails(messageId) {
 function checkAll() {
 	if($('#messages thead :checkbox')[0].checked){
 		var messageId;
-		$('#message-list tbody tr :checkbox').each(function(index) {
+		$('#message-list .message-preview :checkbox').each(function(index) {
 			this.checked = true;
 		});
 		$('input:hidden[name=checkedMessageList]').val(",")
-		$('#message-list tbody tr').each(function(index) {
+		$('#message-list .message-preview').each(function(index) {
 			$(this).addClass('selected');
 			messageId = $(this).attr('id').substring('message-'.length);
 			var messageList = $('input:hidden[name=checkedMessageList]');
@@ -141,13 +141,13 @@ function checkAll() {
 		});
 		if(countCheckedMessages() != 1) updateMultipleCheckedDetails(messageId);
 	} else {
-		$('#message-list tr :checkbox').each(function(index, element) {
+		$('#message-list .message-preview :checkbox').each(function(index, element) {
 			this.checked = false;
 		});
-		$('#message-list tr').each(function(index) {
+		$('#message-list .message-preview').each(function(index) {
 			$(this).removeClass('selected');
 		});
-		var selectFirst = $('#message-list tbody tr').first();
+		var selectFirst = $('#message-list .message-preview').first();
 		selectFirst.addClass('selected');
 		var messageId = selectFirst.attr('id').substring('message-'.length);
 		if(countCheckedMessages() == downSingleCheckedDetails(messageId));
@@ -157,7 +157,7 @@ function checkAll() {
 
 function setCheckAllBox(count) {
 	//Check whether all messages are checked
-	if(count == $('#message-list tbody tr :checkbox').size() && !$('#messages :checkbox')[0].checked){
+	if(count == $('#message-list .message-preview :checkbox').size() && !$('#messages :checkbox')[0].checked){
 		$('#messages :checkbox')[0].checked = true;
 	} else if($('#messages :checkbox')[0].checked){
 		$('#messages :checkbox')[0].checked = false;
