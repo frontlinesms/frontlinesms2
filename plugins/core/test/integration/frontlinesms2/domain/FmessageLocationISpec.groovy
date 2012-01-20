@@ -124,33 +124,33 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch starred deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', inbound:true, text:'hi Bob', date:BASE_DATE - 4, isDeleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', inbound:true, text:'hi Bob', date:BASE_DATE - 4, isDeleted: true).save(flush: true)
 		when:
 			def results = Fmessage.deleted(true)
 		then:
 		    results.count() == 1
-			results.list()[0].deleted
+			results.list()[0].isDeleted
 			results.list()[0].starred
 			results.list().every { !it.archived }
 	}
 
 	def "can fetch all deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', date:BASE_DATE - 4, deleted: true).save(flush: true)
+			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', inbound:true, date:BASE_DATE - 4, isDeleted: true, starred: true).save(flush: true)
+			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', inbound:true, date:BASE_DATE - 4, isDeleted: true).save(flush: true)
 		when:
 			def results = Fmessage.deleted(false)
 		then:
 		    results.count() == 2
-			results.list()[0].deleted
+			results.list()[0].isDeleted
 			results.list().every { !it.archived }
 	}
 
 	def "check for offset and limit while fetching deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', date:new Date() - 1, deleted:true).save(flush:true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', date:new Date(), deleted:true).save(flush:true)
+			new Fmessage(src:'Bob', dst:'+254987654', inbound:true, text:'hi Bob', date:new Date() - 1, isDeleted:true).save(flush:true)
+			new Fmessage(src:'Jim', dst:'+254987654', inbound:true, text:'hi Bob', date:new Date(), isDeleted:true).save(flush:true)
 		when:
 			def firstDeletedMsg = Fmessage.deleted(false).list(max:1, offset: 0)
 		then:
@@ -238,9 +238,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 		new Folder(name: 'home').save(flush: true)
 		def folder = Folder.findByName('home')
-		folder.addToMessages(new Fmessage(src: "Bob", date:BASE_DATE - 14))
-		folder.addToMessages(new Fmessage(src: "Jim", date:BASE_DATE - 10))
-		folder.addToMessages(new Fmessage(src: "Jack", starred: true, date:BASE_DATE - 15))
+		folder.addToMessages(new Fmessage(src: "Bob", inbound:true, date:BASE_DATE - 14))
+		folder.addToMessages(new Fmessage(src: "Jim", inbound:true, date:BASE_DATE - 10))
+		folder.addToMessages(new Fmessage(src: "Jack", inbound:true, starred: true, date:BASE_DATE - 15))
 
 		folder.save(flush: true)
 	}

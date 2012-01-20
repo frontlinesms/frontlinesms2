@@ -67,7 +67,7 @@ class Poll {
 	
 	def archivePoll() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(this.responses, true).list()
+		def messagesToArchive = Fmessage.owned(false, this.responses, true).list()
 		messagesToArchive.each { it.archived = true }
 	}
 	
