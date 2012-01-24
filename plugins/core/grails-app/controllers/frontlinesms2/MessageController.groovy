@@ -13,7 +13,6 @@ class MessageController {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
-	def newMessagesService
 
 	def bobInterceptor = {
 		params.sort = params.sort ?: 'date'
@@ -36,11 +35,8 @@ class MessageController {
 		if(!params.ownerId && section != 'trash') {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
 			render messageCount as JSON
-		} else if(section == 'poll') {
-			def messageCount = [totalMessages:[Poll.get(params.ownerId)?.getPollMessages()?.count()]]
-			render messageCount as JSON
-		} else if(section == 'announcement') {
-			def messageCount = [totalMessages:[Announcement.get(params.ownerId)?.getAnnouncementMessages()?.count()]]
+		} else if(section == 'activity') {
+			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages()?.count()]]
 			render messageCount as JSON
 		} else if(section == 'folder') {
 			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages()?.count()]]
@@ -55,16 +51,13 @@ class MessageController {
 			messageInstance.read = true
 			messageInstance.save()
 		}
-		def responseInstance = messageInstance?.messageOwner
 		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(params.viewingArchive, false),
-				responseInstance: responseInstance,
-				pollInstanceList: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
-				announcementInstanceList: Announcement.findAllByArchivedAndDeleted(params.viewingArchive, false),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages(),
 				failedDispatchCount: (messageInstance && messageInstance.hasFailed) ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0,
@@ -73,9 +66,10 @@ class MessageController {
 
 	def inbox = {
 		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
-					messageSection: 'inbox',
-					messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+		render view:'standard',
+					model:[messageInstanceList: messageInstanceList.list(params),
+							messageSection: 'inbox',
+							messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
@@ -120,42 +114,22 @@ class MessageController {
 					ownerInstance: trashInstance] << getShowModel()
 	}
 
-	def poll = {
-		def pollInstance = Poll.get(params.ownerId)
-		def messageInstanceList = pollInstance?.getPollMessages(params.starred)
+	def activity = {
+		def activityInstance = Activity.get(params.ownerId)
+		def messageInstanceList = activityInstance?.getActivityMessages(params.starred)
 		def sentMessageCount = 0
-		pollInstance.responses.each {
-			Fmessage.findAllByMessageOwnerAndInbound(it, false).each {
-				sentMessageCount += it.dispatches.size()
-			}
-		}
-		
-		render view:'../message/poll', model:[messageInstanceList: messageInstanceList?.list(params),
-				messageSection: 'poll',
-				messageInstanceTotal: messageInstanceList?.count(),
-				ownerInstance: pollInstance,
-				viewingMessages: params.viewingArchive ? params.viewingMessages : null,
-				responseList: pollInstance?.responseStats,
-				pollResponse: pollInstance?.responseStats as JSON, 
-				sentMessageCount: sentMessageCount] << getShowModel()
-	}
-	
-	def announcement = {
-		def announcementInstance = Announcement.get(params.ownerId)
-		def sentMessageCount = 0
-		Fmessage.findAllByMessageOwnerAndInbound(announcementInstance, false).each {
+		Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
 			sentMessageCount += it.dispatches.size()
 		}
-		def sentMessageText = Fmessage.findByMessageOwnerAndInbound(announcementInstance, false).text
-		def messageInstanceList = announcementInstance?.getAnnouncementMessages(params.starred)
-		if(params.flashMessage) { flash.message = params.flashMessage }
-		render view:'../message/standard', model:[messageInstanceList: messageInstanceList?.list(params),
-					messageSection: 'announcement',
+		
+		render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
+			model:[messageInstanceList: messageInstanceList?.list(params),
+					messageSection: 'activity',
 					messageInstanceTotal: messageInstanceList?.count(),
-					ownerInstance: announcementInstance,
+					ownerInstance: activityInstance,
 					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
-					sentMessageCount: sentMessageCount,
-					sentMessageText: sentMessageText] << getShowModel()
+					pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
+					sentMessageCount: sentMessageCount] << getShowModel()
 	}
 	
 	def folder = {
@@ -245,16 +219,13 @@ class MessageController {
 		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				if (messageInstance.isDeleted == true) messageInstance.isDeleted = false
-				if(Trash.findByLinkId(messageInstance.id)) {
+				if (messageInstance.isDeleted == true)
+					messageInstance.isDeleted = false
+				if(Trash.findByLinkId(messageInstance.id))
 					Trash.findByLinkId(messageInstance.id).delete(flush:true)
-				}
 				
-				if (params.messageSection == 'poll')  {
-					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
-					unknownResponse.addToMessages(messageInstance).save()
-				} else if (params.messageSection == 'announcement') {
-					Announcement.get(params.ownerId).addToMessages(messageInstance).save()
+				if (params.messageSection == 'activity')  {
+					def unknownResponse = Activity.get(params.ownerId).addToMessages(messageInstance).save()
 				} else if (params.messageSection == 'folder') {
 					Folder.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {

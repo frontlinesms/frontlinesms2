@@ -48,7 +48,7 @@ class ExportController {
 				messageInstanceList = Fmessage.trash().list()
 				break
 			case 'poll':
-				messageInstanceList = Poll.get(params.ownerId).getPollMessages(params.starred).list()
+				messageInstanceList = Poll.get(params.ownerId).getActivityMessages(params.starred).list()
 				break
 			case 'folder':
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
@@ -117,7 +117,7 @@ class ExportController {
 		 	switch(params.messageSection) {
 				case 'poll':
 					def poll = Poll.findById(params.ownerId)
-					name = "${poll.title} poll (${poll.getPollMessages(false).count()} messages)"
+					name = "${poll.title} poll (${poll.getActivityMessages(false).count()} messages)"
 					break
 				case 'folder':
 					def folder = Folder.findById(params.ownerId)

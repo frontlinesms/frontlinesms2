@@ -6,11 +6,8 @@
 				<g:hiddenField name="responseId" value="${responseInstance?.id}" />
 				<select class="dropdown extra-msg-btn" name="categorise_dropdown" id="categorise_dropdown" onchange="categorizeClickAction()">
 					<option value="na" class="na">Categorize response</option>
-					<option value="btn-${responseInstance?.id}" class="na">${responseInstance?.value}</option>
-					<g:each in="${responseList}" status="i" var="r">
-						<g:if test="${r.id != responseInstance?.id}">
-							<option value="btn-${r.id}" >${r.value}</option>
-						</g:if>
+					<g:each in="${activityInstance?.responses}" status="i" var="r">
+						<option value="btn-${r.id}" >${r.value}</option>
 					</g:each>
 				</select>
 			</div>
@@ -22,14 +19,9 @@
 			<g:if test="${messageSection != 'inbox'}">
 				<option class="inbox" value="inbox">Inbox</option>
 			</g:if>
-			<g:each in="${pollInstanceList}" status="i" var="p">
-				<g:if test="${(messageSection == 'inbox') || (p != ownerInstance)}">
-					<option class="poll" value="${p.id}">${p.title}</option>
-				</g:if>
-			</g:each>
-			<g:each in="${announcementInstanceList}" status="i" var="a">
+			<g:each in="${activityInstanceList}" status="i" var="a">
 				<g:if test="${(messageSection == 'inbox') || (a != ownerInstance)}">
-					<option class="announcement" value="${a.id}">${a.name}</option>
+					<option class="activity" value="${a.id}">${a.name}</option>
 				</g:if>
 			</g:each>
 			<g:each in="${folderInstanceList}" status="i" var="f">

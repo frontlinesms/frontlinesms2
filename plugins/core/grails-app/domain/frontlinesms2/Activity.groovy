@@ -2,15 +2,23 @@ package frontlinesms2
 
 import java.util.Date
 
-class Folder extends MessageOwner{
-	static transients = ['liveMessageCount']
+class Activity extends MessageOwner{
 	String name
-	
-	static constraints = {
-		name(blank:false, nullable:false, maxSize:255)
+	String sentMessageText
+	Date dateCreated
+	static transients = ['liveMessageCount']
+
+	static mapping = {
+		messages cascade:'all'
+		messages sort:'date'
 	}
 	
-	def getFolderMessages(getOnlyStarred = false) {
+	static constraints = {
+		name(blank: false, nullable: false)
+		sentMessageText(nullable:true)
+	}
+	
+	def getActivityMessages(getOnlyStarred = false) {
 		Fmessage.owned(getOnlyStarred, this)
 	}
 	
@@ -27,7 +35,7 @@ class Folder extends MessageOwner{
 	}
 	
 	def getLiveMessageCount() {
-		def m = Fmessage.findAllByFolderAndIsDeleted(this, false)
+		def m = Fmessage.findAllByActivityAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
 }

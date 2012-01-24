@@ -1,7 +1,7 @@
 <div id="tabs-7" class="confirm confirm-responses-tab">
 	<div class="create-name">
 		<h2 class="bold name-label">Name this poll:</h2>
-		<g:textField name="title" class="name-field"></g:textField>
+		<g:textField name="name" class="name-field"></g:textField>
 	</div>
 	<div>
 		<h2 class="bold">Confirm details</h2>

@@ -44,9 +44,9 @@ class Fmessage {
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				if(val) {
-					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && obj.messageOwner.poll.archived) || obj.messageOwner.archived
+					obj.messageOwner == null || obj.messageOwner.archived
 				} else {
-					obj.messageOwner == null || (obj.messageOwner instanceof PollResponse && !obj.messageOwner.poll.archived) || (!(obj.messageOwner instanceof PollResponse) && !obj.messageOwner.archived)
+					obj.messageOwner == null ||  !obj.messageOwner.archived
 				}
 		})
 		inbound(nullable: true, validator: { val, obj ->

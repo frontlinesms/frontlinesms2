@@ -16,7 +16,7 @@
 			<g:render template="../message/poll_buttons"/>
 			<div id="activity-details">
 				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="announcement-sent">   (${sentMessageCount} messages sent)</span>
-				<p>${sentMessageText}</p>
+				<p>${ownerInstance.sentMessageText}</p>
 			</div>
 		</div>
 	</g:elseif>

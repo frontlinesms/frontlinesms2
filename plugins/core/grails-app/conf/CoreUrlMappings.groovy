@@ -14,11 +14,8 @@ class CoreUrlMappings {
 		"/message/pending/show/$messageId"(controller:'message', action: 'pending') {}
 		"/message/trash/show/$id"(controller:'message', action: 'trash') {}
 
-		"/message/poll/$ownerId"(controller:'message', action:'poll') {}
-		"/message/poll/$ownerId/show/$messageId"(controller:'message', action:'poll') {}
-		
-		"/message/announcement/$ownerId"(controller:'message', action:'announcement') {}
-		"/message/announcement/$ownerId/show/$messageId"(controller:'message', action:'announcement') {}
+		"/message/activity/$ownerId"(controller:'message', action:'activity') {}
+		"/message/activity/$ownerId/show/$messageId"(controller:'message', action:'activity') {}
 
 		"/message/folder/$ownerId"(controller:'message', action:'folder') {}
 		"/message/folder/$ownerId/show/$messageId"(controller:'message', action:'folder') {}
