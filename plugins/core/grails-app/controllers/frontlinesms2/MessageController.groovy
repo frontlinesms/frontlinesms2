@@ -293,6 +293,33 @@ class MessageController {
 			render(text: messageInstance.starred ? "starred" : "unstarred")
 		}
 	}
+	
+	def showRecipients = {
+		def groupList = []
+		def contactList = []
+		def addressList = []
+		def message = Fmessage.get(params.messageId) ?: null
+		if(message) {
+			addressList = message.dispatches.dst
+			Group.getAll().each {
+				def groupAddressList = it.getAddresses()
+				if (groupAddressList != [] && addressList.containsAll(groupAddressList)) {
+					groupList += it
+				}
+			}
+			message.dispatches.each {
+				if(Contact.findByPrimaryMobile(it.dst) || Contact.findBySecondaryMobile(it.dst)) {
+					contactList += Contact.findByPrimaryMobile(it.dst)
+					contactList += Contact.findBySecondaryMobile(it.dst)
+					addressList -= it.dst
+				}
+			}
+		}
+		contactList = contactList - null
+		[groupList: groupList,
+			contactList: contactList,
+			addressList: addressList]
+	}
 
 	def confirmEmptyTrash = { }
 	
