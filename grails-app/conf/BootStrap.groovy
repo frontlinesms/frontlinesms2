@@ -122,8 +122,8 @@ class BootStrap {
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 
-		new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"COM98 mock smslib device - a naughty port that won't connect", port:'COM98', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"COM99 mock smslib device - a good device which has some incoming messages and should send messages", port:'COM99', baud:9600).save(failOnError:true)
 	}
 	
 	private def dev_initPolls() {
@@ -252,8 +252,10 @@ class BootStrap {
 	}
 
 	private def initialiseMockSerial() {
-		CommPortIdentifier cpi = new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler())
-		MockModemUtils.initialiseMockSerial([COM98:cpi, COM99:cpi])
+		println 'BootStrap.initialiseMockSerial()'
+		MockModemUtils.initialiseMockSerial([
+				COM98:new CommPortIdentifier("COM98 - a mock port which throws IOExceptions", MockModemUtils.createMockPortHandler_badPort()),
+				COM99:new CommPortIdentifier("COM99 - a mock port which has some incoming messages in and can send messages too", MockModemUtils.createMockPortHandler())])
 	}
 	
 	private def test_initGeb() {

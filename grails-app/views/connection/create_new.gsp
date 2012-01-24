@@ -38,7 +38,7 @@ function initializePopup() {
 		validate: function() {
 			var tabIsValid
 			if($("#type-list").find("input[checked=checked]").val() == 'smslib')
-				tabIsValid = !(isElementEmpty('#sms-name')) && !(isElementEmpty('#port'));
+				tabIsValid = !(isElementEmpty('#name')) && !(isElementEmpty('#port'));
 			else if($("#type-list").find("input[checked=checked]").val() == 'email')
 				tabIsValid = !(isElementEmpty('#email-name')) && ($("#receiveProtocol").val() != 'null') && !(isElementEmpty('#serverName')) && !(isElementEmpty('#serverPort')) && !(isElementEmpty('#username')) && !(isElementEmpty('#password'));
 			return tabIsValid;
@@ -51,7 +51,7 @@ function updateConfirmationMessage() {
 	if(type == 'smslib') {
 		$("#email-confirm").hide();
 		$("#smslib-confirm").show();
-		var name = $('#' + type + '-form #sms-name').val();
+		var name = $('#' + type + '-form #name').val();
 		var port = $('#' + type + '-form #port').val();
 		var baud = $('#' + type + '-form #baud').val();
 		$("#confirm-name").text(name);

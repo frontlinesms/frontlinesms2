@@ -13,8 +13,17 @@ class MockModemUtils {
 			MockSerial.setIdentifier(name, cpi)
 		}
 	}
+
+	static SerialPortHandler createMockPortHandler_badPort() {
+		new GroovyHayesPortHandler(new GroovyHayesState([error: 'ERROR: 123',
+				responses: ['AT', new IOException("This is a bad mock port :(")]]));
+	}
+
+	static SerialPortHandler createMockPortHandler_sendFails() {
+		// TODO create mock port handler which returns CMSERROR: 500 whenever it is given a PDU to send
+	}
 	
-	static SerialPortHandler createMockPortHandler() {
+	static SerialPortHandler createMockPortHandler_withMessages() {
 		createMockPortHandler([2: '07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905',
 						3: '07915892000000F0040B915892214365F700007040213252242331493A283D0795C3F33C88FE06C9CB6132885EC6D341EDF27C1E3E97E7207B3A0C0A5241E377BB1D7693E72E',
 						6:'07915892000000F0040B915274204365F70000704021325224230AE6F79B2E0EB3D9A030',
