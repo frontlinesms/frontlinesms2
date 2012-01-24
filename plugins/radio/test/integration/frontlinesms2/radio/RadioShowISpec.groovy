@@ -1,14 +1,15 @@
 package frontlinesms2.radio
 
 import frontlinesms2.*
+import java.util.Date
 
 class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def setup() {
 		def radioShow = new RadioShow(name: "Health & fitness")
-		radioShow.addToMessages(new Fmessage(text: "eat fruits", starred : true))
-		radioShow.addToMessages(new Fmessage(text: "eat vegetables"))
-		radioShow.addToMessages(new Fmessage(text: "excerise"))
+		radioShow.addToMessages(new Fmessage(src:"123", date:new Date(), text: "eat fruits", inbound:true, starred : true))
+		radioShow.addToMessages(new Fmessage(src:"123", date:new Date(), text: "eat vegetables", inbound:true))
+		radioShow.addToMessages(new Fmessage(src:"123", date:new Date(), text: "excerise", inbound:true))
 		radioShow.save(failOnError: true, flush: true)
 	}
 
@@ -86,5 +87,4 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			show.activePolls.size() == 1
 	}
-	
 }

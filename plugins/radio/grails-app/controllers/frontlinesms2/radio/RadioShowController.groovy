@@ -8,10 +8,12 @@ import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
-//	static layout = 'radioShows'
+	
 	def index = {
-		redirect action:radioShow
+		params.sort = 'date'
+		redirect(action:messageSection, params:params)
 	}
+	
 	def create = {}
 
 	def save = {	
@@ -67,7 +69,7 @@ class RadioShowController extends MessageController {
 	def getShowModel(messageInstanceList) {
 		def model = super.getShowModel(messageInstanceList)
 		model.pollInstanceList = model.pollInstanceList - RadioShow.getAllRadioPolls()
-		model << [radioShows: RadioShow.findAll()]
+		model << [radioShowInstanceList: RadioShow.findAll()]
 		return model
 	}
 	
@@ -85,6 +87,7 @@ class RadioShowController extends MessageController {
 		def showInstance = RadioShow.get(params.radioShowId)
 		
 		if(showInstance) {
+			removePollFromRadioShow(pollInstance)
 			showInstance.addToPolls(pollInstance)
 		}
 		redirect controller:"message", action:"poll", params: [ownerId: params.pollId]
@@ -93,6 +96,15 @@ class RadioShowController extends MessageController {
 	def selectPoll = {
 		def pollInstance = Poll.get(params.ownerId)
 		[ownerInstance:pollInstance]
+	}
+	
+	private void removePollFromRadioShow(Poll poll) {
+		def showInstance = RadioShow.findAll().collect { showInstance ->
+			if(poll in showInstance.polls) {
+				showInstance.removeFromPolls(poll)
+				showInstance.save()
+			}
+		}
 	}
 	
 	private String dateToString(Date date) {

@@ -250,13 +250,13 @@ class MessageController {
 					Trash.findByLinkId(messageInstance.id).delete(flush:true)
 				}
 				
-				if (params.messageSection == 'poll')  {
+				if (params.messageSection == 'poll') {
 					def unknownResponse = Poll.get(params.ownerId).responses.find { it.value == 'Unknown'}
 					unknownResponse.addToMessages(messageInstance).save()
 				} else if (params.messageSection == 'announcement') {
 					Announcement.get(params.ownerId).addToMessages(messageInstance).save()
-				} else if (params.messageSection == 'folder') {
-					Folder.get(params.ownerId).addToMessages(messageInstance).save()
+				} else if (params.messageSection != 'inbox') {
+					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
 						messageOwner?.removeFromMessages messageInstance

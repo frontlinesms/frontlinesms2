@@ -29,4 +29,8 @@ class MessageOwner {
 		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
+	
+	def getFmessages(getOnlyStarred = false) {
+		Fmessage.owned(getOnlyStarred, this)
+	}
 }

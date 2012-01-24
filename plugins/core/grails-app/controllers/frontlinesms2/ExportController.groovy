@@ -34,32 +34,37 @@ class ExportController {
 	def downloadMessageReport = {
 		def messageSection = params.messageSection
 		def messageInstanceList
-		switch(messageSection) {
-			case 'inbox':
-				messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
-				break
-			case 'sent':
-				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
-				break
-			case 'pending':
-				messageInstanceList = Fmessage.pending(params.failed).list()
-				break
-			case 'trash':
-				messageInstanceList = Fmessage.trash().list()
-				break
-			case 'poll':
+		if(params.ownerId) {
+			if(messageSection == 'poll') {
 				messageInstanceList = Poll.get(params.ownerId).getPollMessages(params.starred).list()
-				break
-			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
-				break
-			case 'result':
-				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
-				break
-			default:
-				messageInstanceList = Fmessage.findAll()
-				break
+			} else if(messageSection == 'announcement') {
+				messageInstanceList = Announcement.get(params.ownerId).getAnnouncementMessages(params.starred).list()
+			} else {
+				messageInstanceList = MessageOwner.get(params.ownerId).getFmessages(params.starred).list()
+			}
+		} else {
+			switch(messageSection) {
+				case 'inbox':
+					messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
+					break
+				case 'sent':
+					messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
+					break
+				case 'pending':
+					messageInstanceList = Fmessage.pending(params.failed).list()
+					break
+				case 'trash':
+					messageInstanceList = Fmessage.trash().list()
+					break
+				case 'result':
+					messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
+					break
+				default:
+					messageInstanceList = Fmessage.findAll()
+					break
+			}
 		}
+		
 		generateMessageReport(messageInstanceList)
 	}
 	

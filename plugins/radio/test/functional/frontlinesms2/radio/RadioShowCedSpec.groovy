@@ -35,8 +35,8 @@ class RadioShowCedSpec extends RadioBaseSpec {
 	def "separator is displayed for radio messages from different days"() {
 		given:
 			def show = new RadioShow(name:"Test").save()
-			def messageA = new Fmessage(src: '+3245678', dst: '+123456789', text: "What is diabetes?", dateReceived: new Date() - 2).save(failOnError: true)
-			def messageB = new Fmessage(src: 'Jill', dst: '+254115533', text: "I love life", dateReceived: new Date() - 1).save(failOnError: true)
+			def messageA = new Fmessage(src: '+3245678', inbound:true, text: "What is diabetes?", dateReceived: new Date() - 2).save(failOnError: true)
+			def messageB = new Fmessage(src: 'Jill',  inbound:true, text: "I love life", dateReceived: new Date() - 1).save(failOnError: true)
 			show.addToMessages(messageA)
 			show.addToMessages(messageB)
 			show.save(failOnError: true, flush: true)

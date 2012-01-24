@@ -6,7 +6,7 @@ class RadioFilters {
 			after = { model ->
 				if(model) {
 					model.pollInstanceList = model.pollInstanceList - RadioShow.getAllRadioPolls()
-					model << [radioShows: listRadioShows()]
+					model << [radioShowInstanceList: listRadioShows()]
 					}
 			}
 		}
