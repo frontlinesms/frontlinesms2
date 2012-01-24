@@ -11,6 +11,14 @@ class RadioFilters {
 			}
 		}
 		
+		justSearch(controller:'search', action:'*') {
+			after = { model ->
+				if(model) {
+					model << [radioShowInstanceList: listRadioShows()]
+					}
+			}
+		}
+		
 		justPoll(controller:'poll', action:'save') {
 			after = { model ->
 				if(params.radioShowId) {
