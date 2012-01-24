@@ -2,12 +2,12 @@
 
 echo "Clearing snapshot directories..."
 
-dirs=( $( < 'snapshots.list') )
-for dir in $dirs
-do
-	echo "Removing snapshot directory: $dir"
-	rm -rf ~/.ivy2/cache/$dir
-done
+while read dir; do
+	if [ -n "$dir" ]; then
+		echo "Removing snapshot directory: $dir"
+		rm -rf ~/.ivy2/cache/$dir
+	fi
+done < 'snapshots.list'
 
 echo "Calling 'grails $@'"
 grails $@
