@@ -162,7 +162,7 @@ class Fmessage {
 					ilike("displayName", "%${search.contactString}%")
 				} 
 				if(search.group) {
-					def groupMembersNumbers = search.group.getAddresses()?:[''] //otherwise hibernate fail to search 'in' empty list
+					def groupMembersNumbers = search.group.getAddresses() ?: [''] //otherwise hibernate fail to search 'in' empty list
 					or {
 						'in'("src", groupMembersNumbers)
 						'in'("dispatches.dst", groupMembersNumbers)
