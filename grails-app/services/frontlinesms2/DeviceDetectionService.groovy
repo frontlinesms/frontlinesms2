@@ -18,4 +18,14 @@ class DeviceDetectionService {
 	def getDetected() {
 		detector.detectors.collect { DetectedDevice.create(it) }
 	}
+	
+	def stopFor(String port) {
+		println "DeviceDetectionService.stopFor($port)..."
+		detector.detectors.each {
+			println "Checking $it.portIdentifier.name..."
+			if(it.portIdentifier.name == port) {
+				it.interrupt()
+			} else println "not the right port."
+		}
+	}
 }

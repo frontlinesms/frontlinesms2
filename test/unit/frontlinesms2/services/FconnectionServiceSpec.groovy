@@ -3,9 +3,7 @@ package frontlinesms2.services
 import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.CamelContext
-import frontlinesms2.FconnectionService
-import frontlinesms2.Fconnection
-import frontlinesms2.RouteStatus
+import frontlinesms2.*	
 
 class FconnectionServiceSpec extends UnitSpec {
 	def service
@@ -41,7 +39,32 @@ class FconnectionServiceSpec extends UnitSpec {
 			service.getRouteStatus(notConnected) == RouteStatus.NOT_CONNECTED
 			service.getRouteStatus(alsoConnected) == RouteStatus.CONNECTED
 	}
-//FIXME:Build fix	
+
+	def 'creating a SMSLib route should stop detection on the corresponding port'() {
+		given:
+			final String PORT = 'COM77'
+			DeviceDetectionService detector = Mock()
+			service.deviceDetectionService = detector
+			Fconnection f = new SmslibFconnection(port:PORT)
+		when:
+			service.createRoutes(f)
+		then:
+			1 * detector.stopFor(PORT)
+	}
+	
+	def 'creating a non-smslib rout should not affect the device detector'() {
+		given:
+			DeviceDetectionService detector = Mock()
+			service.deviceDetectionService = detector
+			Fconnection f = Mock()
+			f.getCamelProducerAddress() >> 'nothing'
+		when:
+			service.createRoutes(f)
+		then:
+			0 * detector.stopFor(_)
+	}
+//FIXME:Build fix
+// FIXME ADD A PROPER COMMENT WHEN COMMENTING OUT CODE LIKE THIS
 /*	def 'Created routes have ids derived from supplied Fconnection id'() {
 		given:
 			def connected = new Fconnection(id:1)
