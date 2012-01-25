@@ -4,6 +4,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 
 class FconnectionService {
+	def deviceDetectionService
 	def camelContext
 	def camelRouteBuilder = new RouteBuilder() {
 		@Override
@@ -46,6 +47,9 @@ class FconnectionService {
 	}
 	
 	def createRoutes(Fconnection c) {
+		if(c instanceof SmslibFconnection) {
+			deviceDetectionService.stopFor(c.port)
+		}
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		camelContext.addRouteDefinitions(routes)
 	}
