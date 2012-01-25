@@ -289,7 +289,7 @@ a {
     text-transform: uppercase;
     padding:12px 0;
     padding-left: 28px;
-    width:30%;
+    width:50%;
     margin: 0;
     background-repeat: no-repeat;
     background-position: 6px 10px;
@@ -301,7 +301,7 @@ a {
 	float: right;
 	margin: 0;
 	padding: 10px 0px 10px 10px;
-	width: 50%;
+	width: 40%;
 }
 .section-header .activity-title .button-list{
 	width:250px;
