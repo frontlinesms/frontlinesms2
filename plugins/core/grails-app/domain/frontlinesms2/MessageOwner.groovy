@@ -7,10 +7,14 @@ class MessageOwner {
 	Date dateCreated
 	boolean archived
 	boolean deleted
-
+	String name
 	static mapping = {
 		messages cascade:'all'
 		messages sort:'date'
+	}
+	
+	static constraints = {
+		name(nullable:true)
 	}
 	
 	def archive() {

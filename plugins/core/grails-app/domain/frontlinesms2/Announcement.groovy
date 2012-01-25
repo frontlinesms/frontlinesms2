@@ -4,7 +4,6 @@ import java.util.Date;
 
 class Announcement extends MessageOwner {
 	static transients = ['liveMessageCount']
-	String name
 	
 	static constraints = {
 		name(nullable:false)

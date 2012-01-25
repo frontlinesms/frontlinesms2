@@ -29,7 +29,7 @@ class SearchController {
 	def result = {
 		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
-			searchInstance.owners = (activity && activity instanceof Poll) ? activity.responses : activity
+			searchInstance.owners = activity ? (activity instanceof Poll ? activity.responses : [activity]) : null
 			searchInstance.searchString = params.searchString ?: ""
 			searchInstance.contactString = params.contactString ?: null
 			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
@@ -46,7 +46,7 @@ class SearchController {
 			}
 			searchInstance.save(failOnError: true, flush: true)
 		}
-
+		
 		def rawSearchResults = Fmessage.search(search)
 		def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
 		def searchDescription = getSearchDescription(search)
@@ -101,7 +101,7 @@ class SearchController {
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll : Folder
+			def activityType = stringParts[0] == 'poll'? Poll : MessageOwner
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null

@@ -4,7 +4,6 @@ import java.util.Date
 
 class Folder extends MessageOwner {
 	static transients = ['liveMessageCount']
-	String name
 	
 	static constraints = {
 		name(blank:false, nullable:false, maxSize:255)

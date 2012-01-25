@@ -91,7 +91,7 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 	def "message searches can be restricted to a radio show"() {
 		given:
 			def show = RadioShow.findByName("Health & fitness")
-			def m = new Fmessage(src:"123", date:new Date(), text: "eat fruits now", inbound:true)).save(flush:true)
+			def m = new Fmessage(src:"123", date:new Date(), text: "eat fruits now", inbound:true).save(flush:true)
 			def controller = new SearchController()
 		when:
 			controller.params.searchString = "fruits"
