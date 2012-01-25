@@ -4,7 +4,7 @@
 			<li>${g.name}</li>
 		</g:each>
 		<g:each in="${contactList}" status="i" var="c">
-			<li>${c.name}</li>
+			<li>${c}</li>
 		</g:each>
 		<g:each in="${addressList}" status="i" var="a">
 			<li>${a}</li>

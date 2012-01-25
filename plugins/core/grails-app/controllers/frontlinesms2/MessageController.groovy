@@ -298,27 +298,32 @@ class MessageController {
 		def groupList = []
 		def contactList = []
 		def addressList = []
+		def finalAddressList = []
+		
 		def message = Fmessage.get(params.messageId) ?: null
 		if(message) {
-			addressList = message.dispatches.dst
+			addressList = message.dispatches
 			Group.getAll().each {
 				def groupAddressList = it.getAddresses()
-				if (groupAddressList != [] && addressList.containsAll(groupAddressList)) {
+				if (groupAddressList != [] && addressList.dst.containsAll(groupAddressList)) {
 					groupList += it
 				}
 			}
 			message.dispatches.each {
 				if(Contact.findByPrimaryMobile(it.dst) || Contact.findBySecondaryMobile(it.dst)) {
-					contactList += Contact.findByPrimaryMobile(it.dst)
-					contactList += Contact.findBySecondaryMobile(it.dst)
-					addressList -= it.dst
+					contactList += Contact.findByPrimaryMobile(it.dst) ? "${Contact.findByPrimaryMobile(it.dst).name} (${it.status})" : null
+					contactList += Contact.findBySecondaryMobile(it.dst) ? "${Contact.findBySecondaryMobile(it.dst).name} (${it.status})" : null
+					addressList -= it
 				}
 			}
+		}
+		addressList.each {
+			finalAddressList += "${it.dst} (${it.status})"
 		}
 		contactList = contactList - null
 		[groupList: groupList,
 			contactList: contactList,
-			addressList: addressList]
+			addressList: finalAddressList]
 	}
 
 	def confirmEmptyTrash = { }
