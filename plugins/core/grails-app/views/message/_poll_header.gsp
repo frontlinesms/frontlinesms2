@@ -1,5 +1,5 @@
 <h3 id="poll-title">${ownerInstance?.name} poll</h3>
-<g:render template="../message/poll_buttons"/>
+<g:render template="../message/activity_buttons"/>
 <div id="activity-details">
 	<table>
 		<tr>

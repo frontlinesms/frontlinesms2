@@ -6,7 +6,7 @@
 		<g:elseif test="${messageSection == 'sent'}">
 			<h3 id="sent-title">${messageSection} Archive</h3>
 		</g:elseif>
-		<g:elseif test="${messageSection in ['poll', 'announcement']}">
+		<g:elseif test="${messageSection == 'activity'}">
 			<h3 id="activity-title">Activity Archive</h3>
 		</g:elseif>
 		<g:elseif test="${messageSection == 'folder'}">

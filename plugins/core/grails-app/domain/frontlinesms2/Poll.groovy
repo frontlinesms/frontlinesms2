@@ -35,6 +35,13 @@ class Poll extends Activity {
 		})
 	}
 	
+	void addToMessages(Fmessage message) {
+		message.messageOwner = this
+		if(message.inbound) {
+			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+		}
+	}
+	
 	def beforeSave = {
 		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
 	}
@@ -52,7 +59,7 @@ class Poll extends Activity {
 					percent: totalMessageCount ? messageCount * 100 / totalMessageCount as Integer : 0]
 		}
 	}
-
+	
 	static Poll createPoll(attrs) {
 		def poll = new Poll(attrs)
 		if(attrs['poll-type'] == 'standard') {	['Yes','No'].each { poll.addToResponses(new PollResponse(value:it, key:it)) }
@@ -63,11 +70,6 @@ class Poll extends Activity {
 			}
 		}
 		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
-		poll
-	}
-	
-	def addToMessages(message) {
-		this.addToMessages(message)
-		this.responses.find { it.value == 'Unknown' }.addToMessages(message)
+		poll.save(flush: true, failOnError: true)
 	}
 }

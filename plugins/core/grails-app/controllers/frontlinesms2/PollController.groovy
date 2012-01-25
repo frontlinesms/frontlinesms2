@@ -7,7 +7,7 @@ class PollController {
 
 	def index = {
 		[polls: Poll.findAllByArchivedAndDeleted(params.viewingArchive, false),
-				messageSection: "poll"]
+				messageSection: "activity"]
 	}
 
 	def rename = {
@@ -45,7 +45,7 @@ class PollController {
 
 	def archive = {
 		def poll = Poll.get(params.id)
-		poll.archivePoll()
+		poll.archive()
 		poll.save()
 		flash.message = "Poll archived successfully!"
 		redirect(controller: "message", action: "inbox")
@@ -53,7 +53,7 @@ class PollController {
 	
 	def unarchive = {
 		def poll = Poll.get(params.id)
-		poll.unarchivePoll()
+		poll.unarchive()
 		poll.save()
 		flash.message = "Poll unarchived successfully!"
 		redirect(controller: "archive", action: "activityList", params:[viewingArchive: true])

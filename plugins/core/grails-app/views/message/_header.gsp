@@ -5,15 +5,15 @@
 	<g:if test="${params.viewingArchive && params.viewingArchive == false}">
 		<g:link controller="archive" action="folder"> &lt;Back </g:link>
 	</g:if>
-	<g:if test="${messageSection == 'poll'}">
+	<g:if test="${messageSection == 'activity' && ownerInstance?.type == 'poll'}">
 		<div class="activity-title">
 			<g:render template="../message/poll_header"/>
 		</div>
 	</g:if>
-	<g:elseif test="${messageSection == 'announcement'}">
+	<g:elseif test="${messageSection == 'activity' && ownerInstance?.type == 'announcement'}">
 		<div class="activity-title">
-			<h3 id="announcement-title">${ownerInstance?.name}</h3>
-			<g:render template="../message/poll_buttons"/>
+			<h3 id="announcement-title">${ownerInstance?.name} ${ownerInstance?.type}</h3>
+			<g:render template="../message/activity_buttons"/>
 			<div id="activity-details">
 				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="announcement-sent">   (${sentMessageCount} messages sent)</span>
 				<p>${ownerInstance.sentMessageText}</p>

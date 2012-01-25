@@ -151,7 +151,8 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	private def setUpPollAndResponses() {		
-		def poll = new Poll(title: 'question')
+		def poll = new Poll(name: 'question')
+		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
 		poll.addToResponses(new PollResponse(value: "response 1"))
 		poll.addToResponses(new PollResponse(value: "response 2"))
 		poll.addToResponses(new PollResponse(value: "response 3"))
@@ -165,6 +166,32 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", inbound: true, date: new Date() - 10)).save(flush: true, failOnError:true)
 		PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", inbound: true, date: new Date() - 2)).save(flush: true, failOnError:true)
 		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", inbound: true, date: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
+	}
+
+	@spock.lang.IgnoreRest
+	def 'Adding a message will propogate it to the Unknown response'() {
+		given:
+			Poll p = setUpPollAndResponses()
+println "p: $p"
+println "p.messages: $p.messages"
+			Fmessage m = new Fmessage(date:new Date(), inbound:true, src:"a-unit-test!").save(flush:true, failOnError:true)
+			p.refresh()
+			m.refresh()
+			p.responses*.refresh()
+			println "p.responses: $p.responses"
+						println "p.responses.messages: $p.responses.messages"
+		when:
+			println "p.responses*.value: ${p.responses*.value}"
+			println "p.responses.find { it.value == 'Unknown' }: ${p.responses.find { it.value == 'Unknown' }}"
+			p.addToMessages(m)
+			p.save(failOnError:true, flush:true)
+		then:
+			p.refresh()
+			m.refresh()
+			p.responses*.refresh()
+			p.messages*.id == [m.id]
+			p.responses.find { it.value == 'Unknown' }.messages*.id == [m.id]
+			p.messages*.id == [m.id]
 	}
 }
 

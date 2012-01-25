@@ -242,7 +242,7 @@ class Fmessage {
 			}
 		}
 
-		p?.size()?"${p[0].value} (\"${this.text}\")":this.text
+		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
 	}
 	
 	static def countUnreadMessages(isStarred) {

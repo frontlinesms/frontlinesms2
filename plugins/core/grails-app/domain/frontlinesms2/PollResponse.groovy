@@ -5,6 +5,7 @@ class PollResponse {
 	String key
 	static belongsTo = [poll: Poll]
 	static hasMany = [messages: Fmessage]
+	List messages = []
 	static transients = ['liveMessageCount']
 	
 	static constraints = {
@@ -14,10 +15,12 @@ class PollResponse {
 		messages(nullable: true)
 	}
 	
-	def addToMessages(message) {
-		this.poll.addToMessages(message)
-		this.poll.save(flush: true)
-		this.addToMessages(message)
+	void addToMessages(Fmessage message) {
+		this.poll.responses.each {
+			it.removeFromMessages(message)
+		}
+		this.messages.add(message)
+		message.messageOwner = this.poll
 	}
 	
 	def getLiveMessageCount() {

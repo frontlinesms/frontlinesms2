@@ -2,7 +2,7 @@ package frontlinesms2
 
 import java.util.Date
 
-class Activity extends MessageOwner{
+class Activity extends MessageOwner {
 	String name
 	String sentMessageText
 	Date dateCreated
@@ -35,7 +35,7 @@ class Activity extends MessageOwner{
 	}
 	
 	def getLiveMessageCount() {
-		def m = Fmessage.findAllByActivityAndIsDeleted(this, false)
+		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
 }

@@ -7,7 +7,7 @@
 			</select>
 		</li>
 	</g:if>
-	<g:if test="${!(messageSection in ['trash', 'poll', 'folder', 'announcement'])}">
+	<g:if test="${!(messageSection in ['trash', 'folder', 'activity'])}">
 		<li><g:link elementId="export" url="#" class="btn">
 			Export
 		</g:link></li>

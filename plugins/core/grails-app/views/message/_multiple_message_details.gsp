@@ -33,7 +33,7 @@
 					<g:remoteLink class="btn" elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, viewingArchive: params.viewingArchive, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard('Reply All', data, 'Send', true);">
 						Reply all
 					</g:remoteLink>
-					<g:if test="${(messageSection != 'poll' && messageSection != 'folder') && params.controller !='archive'}">
+					<g:if test="${(messageSection != 'activity' && messageSection != 'folder') && params.controller !='archive'}">
 						<g:actionSubmit class="msg-btn" value="Archive all" id="btn_archive_all" action="archive"/>
 					</g:if>
 					<g:elseif test="${!ownerInstance && params.controller == 'archive'}">

@@ -121,7 +121,6 @@ class MessageController {
 		Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
 			sentMessageCount += it.dispatches.size()
 		}
-		
 		render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
 			model:[messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'activity',
@@ -223,16 +222,16 @@ class MessageController {
 					messageInstance.isDeleted = false
 				if(Trash.findByLinkId(messageInstance.id))
 					Trash.findByLinkId(messageInstance.id).delete(flush:true)
-				
 				if (params.messageSection == 'activity')  {
-					def unknownResponse = Activity.get(params.ownerId).addToMessages(messageInstance).save()
+					def activity = Activity.get(params.ownerId)
+					activity.addToMessages(messageInstance)
+					activity.save(failOnError: true, flush: true)					
 				} else if (params.messageSection == 'folder') {
 					Folder.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
 						messageOwner?.removeFromMessages messageInstance
 						messageOwner = null
-						inbound = true
 						messageOwner?.save()
 						save()
 					}
@@ -248,7 +247,8 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
 				def responseInstance = PollResponse.get(params.responseId)
-				responseInstance.addToMessages(messageInstance).save(failOnError: true, flush: true)
+				responseInstance.addToMessages(messageInstance)
+				responseInstance.save(failOnError: true, flush: true)
 			}
 		}
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message(s)'])}"
