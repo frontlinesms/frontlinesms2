@@ -48,7 +48,7 @@
 		<li>
 			<h3 class="list-title activities-list-title">Activities</h3>
 			<ul class='sublist' id="activities-submenu">
-				<g:each in="${pollInstanceList}" status="i" var="p">
+				<g:each in="${pollInstanceList - radioShowPollInstanceList}" status="i" var="p">
 					<li class="${p == ownerInstance ? 'selected' : ''}">
 						<g:link controller="message" action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
 					</li>
