@@ -19,7 +19,7 @@
 						params="${params}" id='source-header' />
 	    			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
 						params="${params}" id="message-header" />
-					<g:sortableColumn class="message-date-cell" property="dateSent" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+					<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
 							params="${params}" id="timestamp-header" defaultOrder="desc" />
 			</tr>
 		</thead>

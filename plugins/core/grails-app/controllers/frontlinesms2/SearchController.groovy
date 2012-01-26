@@ -21,9 +21,8 @@ class SearchController {
 	def no_search = {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
+				activityInstanceList: Activity.findAll(),
 				messageSection: 'result',
-				announcementInstanceList: Announcement.findAll(),
 				customFieldList : CustomField.getAllUniquelyNamed()]
 	}
 

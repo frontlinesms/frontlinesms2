@@ -4,10 +4,12 @@ import java.util.Date
 import frontlinesms2.*
 
 class RadioShow extends MessageOwner {
+	String name
 	boolean isRunning
 	Date dateCreated
 	List polls
 	static hasMany = [polls: Poll]
+	String type = 'Radio Show'
 	
 	static constraints = {
 		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
