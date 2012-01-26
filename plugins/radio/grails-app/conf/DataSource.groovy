@@ -33,7 +33,7 @@ environments {
 	production {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+			url = "jdbc:hsqldb:file:${System.properties.'user.home'}/.frontlinesms2/prodDb;shutdown=true"
 		}
 
 	}
