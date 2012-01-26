@@ -6,13 +6,7 @@
 					  optionKey="id" optionValue="name"
 					  noSelection="${['':'Select group']}"/>
 		</li>
-		<li class='field'>
-			<g:select class="dropdown" name="activityId" from="${pollInstanceList + folderInstanceList}"
-					  value="${search?.activityId}"
-					  optionKey="${{(it instanceof frontlinesms2.Poll ? 'poll' : 'folder') + '-' + it.id}}"
-					  optionValue="${{it?.name}}"
-					  noSelection="${['':'Select activity / folder']}"/>
-		</li>
+		<g:render template="../search/activity_list" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 		<li class='field'>
 		<g:select class="dropdown" name="messageStatus" from="${['All sent and received', 'Only received messages', 'Only sent messages']}"
 				value="${search?.status}"

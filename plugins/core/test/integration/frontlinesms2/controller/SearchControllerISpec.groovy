@@ -41,9 +41,9 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			it.save(failOnError:true)
 		}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', dst:'+12345678', text:'i like chicken', inbound:true, date: new Date()).save(failOnError:true)
-		def liverMessage = new Fmessage(src:'Minime', dst:'+12345678', text:'i like liver', inbound:true, date: new Date()).save(failOnError:true)
-		def liverMessage2 = new Fmessage(src:'+254333222', dst:'+12345678', text:'liver for lunch?', inbound:true, date: new Date()).save(failOnError:true)
+		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date()).save(failOnError:true)
+		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound:true, date: new Date()).save(failOnError:true)
+		def liverMessage2 = new Fmessage(src:'+254333222', text:'liver for lunch?', inbound:true, date: new Date()).save(failOnError:true)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		liverResponse.addToMessages(liverMessage)
@@ -190,7 +190,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.searchString = "liver"
 			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
-			Fmessage.findBySrc("+254333222").deleted = true
+			Fmessage.findBySrc("+254333222").isDeleted = true
 			Fmessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
 		then:

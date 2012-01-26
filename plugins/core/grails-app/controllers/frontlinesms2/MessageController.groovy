@@ -226,8 +226,8 @@ class MessageController {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save(failOnError: true, flush: true)					
-				} else if (params.messageSection == 'folder') {
-					Folder.get(params.ownerId).addToMessages(messageInstance).save()
+				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
+					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
 						messageOwner?.removeFromMessages messageInstance
@@ -263,6 +263,38 @@ class MessageController {
             params.remove('messageId')
 			render(text: messageInstance.starred ? "starred" : "unstarred")
 		}
+	}
+	
+	def showRecipients = {
+		def groupList = []
+		def contactList = []
+		def addressList = []
+		def finalAddressList = []
+		
+		def message = Fmessage.get(params.messageId) ?: null
+		if(message) {
+			addressList = message.dispatches
+			Group.getAll().each {
+				def groupAddressList = it.getAddresses()
+				if (groupAddressList != [] && addressList.dst.containsAll(groupAddressList)) {
+					groupList += it
+				}
+			}
+			message.dispatches.each {
+				if(Contact.findByPrimaryMobile(it.dst) || Contact.findBySecondaryMobile(it.dst)) {
+					contactList += Contact.findByPrimaryMobile(it.dst) ? "${Contact.findByPrimaryMobile(it.dst).name} (${it.status})" : null
+					contactList += Contact.findBySecondaryMobile(it.dst) ? "${Contact.findBySecondaryMobile(it.dst).name} (${it.status})" : null
+					addressList -= it
+				}
+			}
+		}
+		addressList.each {
+			finalAddressList += "${it.dst} (${it.status})"
+		}
+		contactList = contactList - null
+		[groupList: groupList,
+			contactList: contactList,
+			addressList: finalAddressList]
 	}
 
 	def confirmEmptyTrash = { }

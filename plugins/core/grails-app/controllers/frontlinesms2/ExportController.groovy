@@ -53,6 +53,9 @@ class ExportController {
 			case 'folder':
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
 				break
+			case 'radioShow':
+				messageInstanceList = MessageOwner.get(params.ownerId).getFmessages(params.starred).list()
+				break
 			case 'result':
 				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
 				break
@@ -60,6 +63,7 @@ class ExportController {
 				messageInstanceList = Fmessage.findAll()
 				break
 		}
+		
 		generateMessageReport(messageInstanceList)
 	}
 	

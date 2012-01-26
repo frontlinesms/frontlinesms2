@@ -5,7 +5,7 @@ import frontlinesms2.*
 import spock.lang.*
 import grails.plugin.spock.*
 
-class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec  {
+class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def setup() {
 		controller = new AnnouncementController()

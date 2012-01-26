@@ -4,7 +4,6 @@ import java.util.Date
 import frontlinesms2.*
 
 class RadioShow extends MessageOwner {
-	String name
 	boolean isRunning
 	Date dateCreated
 	List polls
@@ -17,7 +16,7 @@ class RadioShow extends MessageOwner {
 			}
 		})
 	}
-
+	
 	def getShowMessages(getOnlyStarred = false) {
 		Fmessage.owned(getOnlyStarred, this)
 	}

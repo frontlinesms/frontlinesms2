@@ -5,8 +5,15 @@ class RadioFilters {
 		justMessage(controller:'message', action:'*') {
 			after = { model ->
 				if(model) {
-					model.pollInstanceList = model.pollInstanceList - RadioShow.getAllRadioPolls()
-					model << [radioShows: listRadioShows()]
+					model << [radioShowInstanceList: listRadioShows(), radioShowPollInstanceList: RadioShow.getAllRadioPolls()]
+					}
+			}
+		}
+		
+		justSearch(controller:'search', action:'*') {
+			after = { model ->
+				if(model) {
+					model << [radioShowInstanceList: listRadioShows()]
 					}
 			}
 		}
