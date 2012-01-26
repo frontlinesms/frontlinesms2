@@ -22,12 +22,10 @@ class ArchiveController extends MessageController {
 	}
 	
 	def activityList = {
-		def pollInstanceList = Poll.findAllByArchivedAndDeleted(true, false)
-		def announcementInstanceList = Announcement.findAllByArchivedAndDeleted(true,false)
-		render view:'standard', model:[pollInstanceList: pollInstanceList,
-											announcementInstanceList: announcementInstanceList,
-											itemInstanceTotal: announcementInstanceList.size() + pollInstanceList.size(),
-											messageSection: "poll"]
+		def activityInstanceList = Activity.findAllByArchivedAndDeleted(true, false)
+		render view:'standard', model:[activityInstanceList: activityInstanceList,
+											activityInstanceTotal: activityInstanceList.size(),
+											messageSection: "activity"]
 	}
 	
 	def folderList = {

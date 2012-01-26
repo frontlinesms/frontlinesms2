@@ -19,15 +19,9 @@
 				</g:if>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
-			<g:if test="${messageInstance.messageOwner && (messageInstance.messageOwner instanceof frontlinesms2.PollResponse)}">
-				<p id="message-detail-owner"><g:link action="poll" params="[ownerId: messageInstance.messageOwner.poll.id]">${messageInstance.messageOwner.poll.title} (Poll)</g:link></p>
+			<g:if test="${messageInstance.messageOwner}">
+				<p id="message-detail-owner"><g:link action="${messageInstance.messageOwner.type}" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (${messageInstance.messageOwner.type})</g:link></p>
 			</g:if>
-			<g:elseif test="${messageInstance.messageOwner && messageInstance.messageOwner instanceof frontlinesms2.Announcement}">
-				<p id="message-detail-owner"><g:link action="announcement" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (Announcement)</g:link></p>
-			</g:elseif>
-			<g:elseif test="${messageInstance.messageOwner}">
-				<p id="message-detail-owner"><g:link action="folder" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (Folder)</g:link></p>
-			</g:elseif>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
 		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
@@ -41,7 +35,7 @@
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">
 		<div id='message-info'>
-			<p id="message-detail-sender">${ownerInstance instanceof frontlinesms2.Poll ? ownerInstance.title : ownerInstance.name} </p>
+			<p id="message-detail-sender">${ownerInstance.name} ${ownerInstance.type}</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p></div>
 		</div>

@@ -14,7 +14,7 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		given:
 			mockDomain(Poll)
 		when:
-			def p = new Poll(title:'test poll')
+			def p = new Poll(name:'test poll')
 		then:
 			!p.validate()
 		when:

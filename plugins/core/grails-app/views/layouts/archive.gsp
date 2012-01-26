@@ -37,7 +37,7 @@
 				<div id="content" class="content">
 					<g:render template="../archive/header"/>
 					<div class="content-body">
-						<g:if test="${(messageSection == 'poll' || messageSection == 'announcement') && !viewingMessages}">
+						<g:if test="${(messageSection == 'activity') && !viewingMessages}">
 							<g:render template="archived_activity_list"/>
 						</g:if>
 						<g:elseif test="${messageSection == 'folder' && !viewingMessages}">

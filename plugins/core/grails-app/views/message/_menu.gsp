@@ -21,14 +21,9 @@
 		<li>
 			<h3 class="list-title activities-list-title">Activities</h3>
 			<ul class='sublist' id="activities-submenu">
-				<g:each in="${pollInstanceList}" status="i" var="p">
-					<li class="${p == ownerInstance ? 'selected' : ''}">
-						<g:link action="poll" params="[ownerId: p.id]">${p.title} poll</g:link>
-					</li>
-				</g:each>
-				<g:each in="${announcementInstanceList}" status="i" var="a">
+				<g:each in="${activityInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">
-						<g:link action="announcement" params="[ownerId: a.id]">${a.name} announcement</g:link>
+						<g:link action="activity" params="[ownerId: a.id]">${a.name} ${a.type}</g:link>
 					</li>
 				</g:each>
 				<li id="create-activity" class="create">

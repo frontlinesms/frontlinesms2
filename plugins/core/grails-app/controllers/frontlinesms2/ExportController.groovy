@@ -34,35 +34,34 @@ class ExportController {
 	def downloadMessageReport = {
 		def messageSection = params.messageSection
 		def messageInstanceList
-		if(params.ownerId) {
-			if(messageSection == 'poll') {
-				messageInstanceList = Poll.get(params.ownerId).getPollMessages(params.starred).list()
-			} else if(messageSection == 'announcement') {
-				messageInstanceList = Announcement.get(params.ownerId).getAnnouncementMessages(params.starred).list()
-			} else {
+		switch(messageSection) {
+			case 'inbox':
+				messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
+				break
+			case 'sent':
+				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
+				break
+			case 'pending':
+				messageInstanceList = Fmessage.pending(params.failed).list()
+				break
+			case 'trash':
+				messageInstanceList = Fmessage.trash().list()
+				break
+			case 'activity':
+				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred).list()
+				break
+			case 'folder':
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
+				break
+			case 'radioShow':
 				messageInstanceList = MessageOwner.get(params.ownerId).getFmessages(params.starred).list()
-			}
-		} else {
-			switch(messageSection) {
-				case 'inbox':
-					messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive).list()
-					break
-				case 'sent':
-					messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
-					break
-				case 'pending':
-					messageInstanceList = Fmessage.pending(params.failed).list()
-					break
-				case 'trash':
-					messageInstanceList = Fmessage.trash().list()
-					break
-				case 'result':
-					messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
-					break
-				default:
-					messageInstanceList = Fmessage.findAll()
-					break
-			}
+				break
+			case 'result':
+				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
+				break
+			default:
+				messageInstanceList = Fmessage.findAll()
+				break
 		}
 		
 		generateMessageReport(messageInstanceList)
@@ -118,17 +117,8 @@ class ExportController {
 	
 	private def getActivityDescription() {
 		if(params.ownerId){
-			String name
-		 	switch(params.messageSection) {
-				case 'poll':
-					def poll = Poll.findById(params.ownerId)
-					name = "${poll.title} poll (${poll.getPollMessages(false).count()} messages)"
-					break
-				case 'folder':
-					def folder = Folder.findById(params.ownerId)
-					name = "${folder.name} folder (${folder.getFolderMessages(false).count()} messages)"
-					break
-			}
+			def messageOwner = MessageOwner.findById(params.ownerId)
+			String name = "${messageOwner.name} ${messageOwner.type} (${params.messageTotal} messages)"
 		} else {
 			String name = "${params.messageSection} (${params.messageTotal} messages)"
 		}

@@ -1,16 +1,9 @@
 package frontlinesms2
 
-import java.util.Date;
+class Announcement extends Activity {
+	String type = 'announcement'
 
-class Announcement extends MessageOwner {
-	static transients = ['liveMessageCount']
-	
 	static constraints = {
-		name(nullable:false)
+		messages(nullable:false)
 	}
-	
-	def getAnnouncementMessages(getOnlyStarred = false) {
-		Fmessage.owned(getOnlyStarred, this)
-	}
-	
 }

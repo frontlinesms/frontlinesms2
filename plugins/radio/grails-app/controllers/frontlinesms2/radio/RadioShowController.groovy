@@ -89,7 +89,7 @@ class RadioShowController extends MessageController {
 			removePollFromRadioShow(pollInstance)
 			showInstance.addToPolls(pollInstance)
 		}
-		redirect controller:"message", action:"poll", params: [ownerId: params.pollId]
+		redirect controller:"message", action:"activity", params: [ownerId: params.pollId]
 	}
 	
 	def selectPoll = {

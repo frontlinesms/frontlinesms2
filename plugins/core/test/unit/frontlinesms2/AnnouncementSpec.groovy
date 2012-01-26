@@ -15,7 +15,7 @@ class AnnouncementSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			!a.validate()
 		when:
-			a.addToSentMessages(new Fmessage(date: new Date(), inbound: true, src:'12345'))
+			a.addToMessages(new Fmessage(date: new Date(), inbound: true, src:'12345'))
 		then:
 			a.validate()
 	}
@@ -25,7 +25,7 @@ class AnnouncementSpec extends grails.plugin.spock.UnitSpec {
 			mockDomain(Announcement)
 			mockDomain(Fmessage)
 		when:
-			def a = new Announcement(name:'test announcement', sentMessages: [new Fmessage(date: new Date(), inbound: true, src:'12345')])
+			def a = new Announcement(name:'test announcement', messages: [new Fmessage(date: new Date(), inbound: true, src:'12345')])
 		then:
 			a.validate()
 		when:

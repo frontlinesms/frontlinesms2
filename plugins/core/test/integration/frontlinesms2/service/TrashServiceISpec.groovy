@@ -11,7 +11,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = new Fmessage(src: '123456', date: new Date(), inbound: true).save(failOnError: true)
 			def response1 = new PollResponse(value:"FC Manchester United")
 			def response2 = new PollResponse(value:"FC United of Manchester")
-			def p = new Poll(title:'Who is the best football team in the world?', keyword:"football", deleted:true)
+			def p = new Poll(name:'Who is the best football team in the world?', keyword:"football", deleted:true)
 			p.addToResponses(response1)
 			p.addToResponses(response2)
 			response2.addToMessages(message)

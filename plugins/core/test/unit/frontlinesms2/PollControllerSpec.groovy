@@ -12,7 +12,7 @@ class PollControllerSpec extends ControllerSpec {
 			def results = controller.index()
 		then:
 			results['polls'].every {it.archived}
-			results['messageSection'] == 'poll'
+			results['messageSection'] == 'activity'
 	}
 
 	def "test create"() {

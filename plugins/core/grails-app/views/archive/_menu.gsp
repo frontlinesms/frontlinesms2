@@ -13,7 +13,7 @@
 							Sent archive
 						</g:link>
 					</li>
-					<li class="${(messageSection == 'poll' || messageSection == 'announcement') ? 'selected':''}" >
+					<li class="${(messageSection == 'activity') ? 'selected':''}" >
 						<g:link controller="archive" action='activityList' elementId="activity" class="archive-section-list" params="[viewingArchive: true]">
 							Activity archive
 						</g:link>

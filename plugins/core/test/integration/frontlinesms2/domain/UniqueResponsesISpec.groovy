@@ -21,10 +21,10 @@ class UniqueResponsesISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	static createTestData() {
-		new Poll(title:'Test', responses:[new PollResponse(value:'one'),
+		new Poll(name:'Test', responses:[new PollResponse(value:'one'),
 						new PollResponse(value:'other')]).save(flush:true, failOnError:true)
 
-		new Poll(title:'Second', responses:[new PollResponse(value:'one'),
+		new Poll(name:'Second', responses:[new PollResponse(value:'one'),
 						new PollResponse(value:'two'), new PollResponse(value:'three')]).save(flush:true, failOnError:true)
 	}
 

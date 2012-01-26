@@ -21,9 +21,8 @@ class SearchController {
 	def no_search = {
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
-				pollInstanceList: Poll.findAll(),
+				activityInstanceList: Activity.findAll(),
 				messageSection: 'result',
-				announcementInstanceList: Announcement.findAll(),
 				customFieldList : CustomField.getAllUniquelyNamed()]
 	}
 
@@ -82,7 +81,7 @@ class SearchController {
 			String ownerDescription = activity instanceof Poll ? activity.title: activity.name
 			searchDescriptor += ", "+ownerDescription
 		}
-		searchDescriptor += search.inArchive? ", archived messages":", without archived messages" 
+		searchDescriptor += search.inArchive? ", including archived messages":", without archived messages" 
 		if(search.contactString) searchDescriptor += ", "+search.contactString
 		if (search.customFields.find{it.value}) {
 			search.customFields.find{it.value}.each{

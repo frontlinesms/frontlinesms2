@@ -46,7 +46,7 @@
 				<g:render template="/message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 			</g:else>
 			<div id="content">
-				<g:render template="/message/header"/>
+				<g:render template="../message/header"/>
 				<g:render template="../message/message_list"/>
 				<g:layoutBody/>
 			    <g:render template="../message/footer"/>

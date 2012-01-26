@@ -20,7 +20,7 @@ function moveAction() {
 		var location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
 		var location = url_root + "search/" + messageSection + '?searchId=' + searchId;
-	} else if(messageSection == 'poll' || messageSection == 'announcement' || messageSection == 'folder' || messageSection == 'radioShow') {
+	} else if(messageSection == 'activity' || messageSection == 'folder' || messageSection == 'radioShow') {
 		var location = url_root + "message/" + messageSection + "/" + ownerId;
 	} else{
 		var location = url_root + "message/" + messageSection;
