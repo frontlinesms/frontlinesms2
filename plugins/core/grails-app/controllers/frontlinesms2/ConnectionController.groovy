@@ -50,9 +50,19 @@ class ConnectionController {
 			println "creating route for fconnection $settings"
 			fconnectionService.createRoutes(settings)
 			flash.message = "Created route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
-			redirect(controller:'settings', action:'connections', id: settings.id)
+			redirect(controller:'settings', action:'connections', id:settings.id)
 		}
 	}
+  
+  def destroyRoute = {
+    withFconnection { c ->
+      println "Destroying connection: $c"
+      fconnectionService.destroyRoutes(c)
+      flash.message = "Destroy route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
+			redirect(controller:'settings', action:'connections', id:c.id)
+
+    }
+  }
 
 	def listComPorts = {
 		// This is a secret debug method for now to help devs see what ports are available
