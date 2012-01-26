@@ -19,15 +19,9 @@
 				</g:if>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
-			<g:if test="${messageInstance.messageOwner && (messageInstance.messageOwner instanceof frontlinesms2.PollResponse)}">
-				<p id="message-detail-owner"><g:link action="poll" params="[ownerId: messageInstance.messageOwner.poll.id]">${messageInstance.messageOwner.poll.title} (Poll)</g:link></p>
+			<g:if test="${messageInstance.messageOwner}">
+				<p id="message-detail-owner"><g:link action="${messageInstance.messageOwner.type}" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (${messageInstance.messageOwner.type})</g:link></p>
 			</g:if>
-			<g:elseif test="${messageInstance.messageOwner && messageInstance.messageOwner instanceof frontlinesms2.Announcement}">
-				<p id="message-detail-owner"><g:link action="announcement" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (Announcement)</g:link></p>
-			</g:elseif>
-			<g:elseif test="${messageInstance.messageOwner}">
-				<p id="message-detail-owner"><g:link action="folder" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (Folder)</g:link></p>
-			</g:elseif>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
 		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
