@@ -23,6 +23,7 @@ class SearchController {
 				folderInstanceList: Folder.findAll(),
 				pollInstanceList: Poll.findAll(),
 				messageSection: 'result',
+				announcementInstanceList: Announcement.findAll(),
 				customFieldList : CustomField.getAllUniquelyNamed()]
 	}
 

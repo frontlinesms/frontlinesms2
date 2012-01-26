@@ -40,3 +40,5 @@ out/
 
 # jetty-standalone plugin run files
 standalone.*
+
+snapshots.list

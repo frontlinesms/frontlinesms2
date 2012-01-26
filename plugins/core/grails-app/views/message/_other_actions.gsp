@@ -16,5 +16,10 @@
 			</div>
 		</div>
 	</g:if>
-	<g:render template="../message/move_message" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
+	<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
+		<g:render template="../message/move_message" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
+	</g:if>
+	<g:else>
+		<g:render template="/message/move_message" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
+	</g:else>
 </div>
