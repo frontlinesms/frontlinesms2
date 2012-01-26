@@ -145,3 +145,7 @@
 .ui-dialog .field-enabled{
 	font-weight: bolder;
 }
+
+#group-recipients, .ui-dialog #contact-recipients, .ui-dialog #address-recipients {
+	border: 1px solid #DFDFDF;
+}

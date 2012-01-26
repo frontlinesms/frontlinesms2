@@ -225,7 +225,7 @@ class MessageController {
 				if (params.messageSection == 'activity')  {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
-					activity.save(failOnError: true, flush: true)					
+					activity.save(failOnError: true, flush: true)				
 				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {

@@ -9,14 +9,9 @@
 				<option class="radioShow" value="${s.id}">${s.name}</option>
 			</g:if>
 		</g:each>
-		<g:each in="${pollInstanceList}" status="i" var="p">
-			<g:if test="${(messageSection == 'inbox') || (p != ownerInstance)}">
-				<option class="poll" value="${p.id}">${p.title}</option>
-			</g:if>
-		</g:each>
-		<g:each in="${announcementInstanceList}" status="i" var="a">
+		<g:each in="${activityInstanceList}" status="i" var="a">
 			<g:if test="${(messageSection == 'inbox') || (a != ownerInstance)}">
-				<option class="announcement" value="${a.id}">${a.name}</option>
+				<option class="activity" value="${a.id}">${a.name}</option>
 			</g:if>
 		</g:each>
 		<g:each in="${folderInstanceList}" status="i" var="f">
