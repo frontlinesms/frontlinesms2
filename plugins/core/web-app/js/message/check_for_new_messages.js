@@ -13,15 +13,16 @@ function checkForNew() {
 		$.each(data, function(key, val) {
 		    newTotal = val;
 		});
-		
+
 		if(newTotal > currentTotal) {
 			var newMessageCount = newTotal - currentTotal;
 			var notificationContents = "<a id='refreshMessageList'>You have " + newMessageCount + " new messages. Click to view</a>"
-			
 			if(!$("#new-message-notification").html())
 				$('#messages').prepend('<div id="new-message-notification">' + notificationContents + '</div>');
-			else
+			else {
 				$("#new-message-notification a").replaceWith(notificationContents);
+				$("#new-message-notification a").show();
+			}
 		}
 	});
 }
@@ -41,6 +42,7 @@ function refreshList() {
 	$.get(url_root + 'message/' + section, { messageId: messageId, ownerId: ownerId, viewingArchive: false, sort: sortField, order: sortOrder}, function(data) {
 		$('#messageTotal').replaceWith($(data).find('#messageTotal'));
 		$("#new-message-notification").slideUp(500);
+		$("#new-message-notification").remove();
 		$('#message-list').replaceWith($(data).find('#message-list'));
 		flashNewMessages(mostRecentOldMessage);
 	});
