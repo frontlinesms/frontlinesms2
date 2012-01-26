@@ -38,7 +38,7 @@ class ArchiveISpec extends IntegrationSpec {
 	
 	def "can unarchive a poll"() {
 		given:
-			def poll = Poll.createPoll(title:'thingy', choiceA:'One', choiceB:'Other', archived:true).save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other', archived:true).save(failOnError:true, flush:true)
 			assert poll.archived
 		when:
 			pollController.params.id = poll.id
@@ -67,19 +67,19 @@ class ArchiveISpec extends IntegrationSpec {
 	
 	def "deleted polls do not appear in the archive section"() {
 		given:
-			def poll = Poll.createPoll(title: 'thingy', choiceA:  'One', choiceB: 'Other', archived: true).save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'thingy', choiceA:  'One', choiceB: 'Other', archived: true).save(failOnError:true, flush:true)
 			assert poll.archived
 		when:
 			archiveController.activityList()
 			def model = archiveController.modelAndView.model
 		then:
-			model.pollInstanceList == [poll]
+			model.activityInstanceList == [poll]
 		when:
 			poll.deleted = true
 			archiveController.activityList()
 			model = archiveController.modelAndView.model
 		then:
-			!model.pollInstanceList
+			!model.activityInstanceList
 	}
 }
 

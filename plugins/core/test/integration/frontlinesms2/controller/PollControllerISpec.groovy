@@ -10,14 +10,14 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can save new poll"() {
 		setup:
-			controller.params.title = "poll"
+			controller.params.name = "poll"
 			controller.params.choiceA = "yes"
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
 			controller.params.autoReplyText = "automatic reply text"
 		when:
 			controller.save()
-			def poll = Poll.findByTitle("poll")
+			def poll = Poll.findByName("poll")
 		then:
 			poll
 			poll.autoReplyText == "automatic reply text"
@@ -26,7 +26,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "saving new poll with keyword enabled should save the keyword"() {
 		given:
-			controller.params.title = 'test-poll-1'
+			controller.params.name = 'test-poll-1'
 			controller.params.choiceA = "yes"
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
@@ -36,12 +36,12 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.save()
 		then:
-			Poll.findByTitle("test-poll-1")?.keyword == 'HELLO'
+			Poll.findByName("test-poll-1")?.keyword == 'HELLO'
 	}
 
 	def "saving new poll with keyword disabled does should not save the keyword"() {
 		given:
-			controller.params.title = 'test-poll-2'
+			controller.params.name = 'test-poll-2'
 			controller.params.choiceA = "yes"
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
@@ -50,7 +50,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keyword = "goodbye"
 		when:
 			controller.save()
-			def p = Poll.findByTitle("test-poll-2")
+			def p = Poll.findByName("test-poll-2")
 		then:
 			p
 			!p.keyword
@@ -58,7 +58,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can archive a poll"() {
 		setup:
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
 		when:
 			assert Poll.findAllByArchived(false) == [poll]
 			poll.archived = true;
@@ -69,23 +69,23 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def  "should update a given poll object"() {
 		setup:
-			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			def poll = Poll.findByTitle("Who is badder?")
+			Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = Poll.findByName("Who is badder?")
 			controller.params.id = poll.id
-			controller.params.title = "renamed poll name"
+			controller.params.name = "renamed poll name"
 		when:
 			controller.update()
 			def updatedPoll = Poll.get(poll.id)
 		then:
-			controller.response.redirectedUrl == "/message/poll/${poll.id}"
-			updatedPoll.title == "renamed poll name"
+			controller.response.redirectedUrl == "/message/activity/${poll.id}"
+			updatedPoll.name == "renamed poll name"
 			updatedPoll.question == "question"
 			updatedPoll.autoReplyText == "Thanks"
 	}
 	
 	def "can delete a poll to send it to the trash"() {
 		setup:
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
 			assert Poll.findAllByDeleted(false) == [poll]
 			controller.params.id  = poll.id
@@ -97,7 +97,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can restore a poll to move out of the trash"() {
 		setup:
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			poll.deleted = true
 			poll.save(failOnError:true, flush:true)
 		when:

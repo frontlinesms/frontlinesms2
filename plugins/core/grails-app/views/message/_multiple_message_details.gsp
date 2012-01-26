@@ -2,7 +2,7 @@
 	<div id='message-info'>
 		<g:if test="${messageSection == 'trash' && ownerInstance}">
 			<div id='activity-info'>
-				<p id="message-detail-sender">${ownerInstance instanceof frontlinesms2.Poll ? ownerInstance.title : ownerInstance.name}</p>
+				<p id="message-detail-sender">${ownerInstance.name}</p>
 				<p id="message-detail-date"><g:formatDate date="${ownerInstance.dateCreated}"/></p>
 				<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p></div>
 			</div>

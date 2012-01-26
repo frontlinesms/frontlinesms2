@@ -9,34 +9,34 @@ class DeleteISpec extends IntegrationSpec {
 		given:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
-			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			def messageController = new MessageController()
 			def pollController = new PollController()
-			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
-			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
+			def r1 = PollResponse.findByValue('Manchester').addToMessages(message1)
+			def r2 = PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
 			messageController.beforeInterceptor()
 			def model1 = messageController.getShowModel()
 		then:
-			model1.pollInstanceList == [p]
+			model1.activityInstanceList == [p]
 		when:
 			pollController.params.id = p.id
 			pollController.delete()
 			messageController.beforeInterceptor()
 			def model2 = messageController.getShowModel()
 		then:
-			!model2.pollInstanceList
+			!model2.activityInstanceList
 	}
 	
 	def "deleted polls are not included in the polls list"() {
 		given:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
-			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
 			def pollController = new PollController()
-			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
-			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
+			PollResponse.findByValue('Manchester').addToMessages(message1)
+			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
 			pollController.params.viewingArchive = false
@@ -108,9 +108,9 @@ class DeleteISpec extends IntegrationSpec {
 			
 			def m3 = new Fmessage(src: '1235', text:"not in folder", isDeleted: true, date: new Date(), inbound: true).save(flush:true, failOnError:true)
 			deleteMessage(m3)
-			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
-			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
-			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
+			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			PollResponse.findByValue('Manchester').addToMessages(message1)
+			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			deletePoll(p)
 			p.save(flush:true, failOnError:true)
 		when:
@@ -136,7 +136,7 @@ class DeleteISpec extends IntegrationSpec {
 	def deletePoll(Poll poll){
 		poll.deleted = true
 		poll.save()
-		new Trash(identifier:poll.title, message:"${poll.liveMessageCount}", objectType:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
+		new Trash(identifier:poll.name, message:"${poll.liveMessageCount}", objectType:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
 	}
 }
 

@@ -47,8 +47,8 @@ class ExportController {
 			case 'trash':
 				messageInstanceList = Fmessage.trash().list()
 				break
-			case 'poll':
-				messageInstanceList = Poll.get(params.ownerId).getActivityMessages(params.starred).list()
+			case 'activity':
+				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred).list()
 				break
 			case 'folder':
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
@@ -113,17 +113,8 @@ class ExportController {
 	
 	private def getActivityDescription() {
 		if(params.ownerId){
-			String name
-		 	switch(params.messageSection) {
-				case 'poll':
-					def poll = Poll.findById(params.ownerId)
-					name = "${poll.title} poll (${poll.getActivityMessages(false).count()} messages)"
-					break
-				case 'folder':
-					def folder = Folder.findById(params.ownerId)
-					name = "${folder.name} folder (${folder.getFolderMessages(false).count()} messages)"
-					break
-			}
+			def messageOwner = MessageOwner.findById(params.ownerId)
+			String name = "${messageOwner.name} ${messageOwner.type} (${params.messageTotal} messages)"
 		} else {
 			String name = "${params.messageSection} (${params.messageTotal} messages)"
 		}

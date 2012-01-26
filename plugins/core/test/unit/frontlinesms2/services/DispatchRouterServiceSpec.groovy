@@ -3,6 +3,7 @@ package frontlinesms2.services
 import frontlinesms2.DispatchRouterService;
 import frontlinesms2.Fmessage;
 import frontlinesms2.Dispatch;
+import frontlinesms2.DispatchStatus
 import grails.plugin.spock.UnitSpec
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange

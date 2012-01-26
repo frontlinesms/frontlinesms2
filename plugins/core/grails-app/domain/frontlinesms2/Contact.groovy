@@ -83,8 +83,8 @@ class Contact {
 	}
 
 	def getOutboundMessagesCount() {
-		def primary = primaryMobile ? Dispatch.countByDst(primaryMobile) : 0
-		def secondary = secondaryMobile ? Dispatch.countByDst(secondaryMobile) : 0
+		def primary = primaryMobile ? Dispatch.findByDst(primaryMobile).count() : 0
+		def secondary = secondaryMobile ? Dispatch.findByDst(secondaryMobile).count() : 0
 		primary + secondary
 	}
 	

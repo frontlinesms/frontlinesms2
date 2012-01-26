@@ -12,7 +12,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 		given:
 			def response1 = new PollResponse(value:"AC Milan")
 			def response2 = new PollResponse(value:"FC United of Manchester")
-			def p = new Poll(title:'Who is the best football team in the world?', keyword:"football")
+			def p = new Poll(name:'Who is the best football team in the world?', keyword:"football")
 			p.addToResponses(response1)
 			p.addToResponses(response2)
 			p.save(failOnError:true)
@@ -37,7 +37,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 	def "processPollResponse() should associate Fmessage with PollResponse"() {
 		given:
 			Fmessage m = new Fmessage(src: "source", date: new Date(), inbound: true).save(failOnError: true)
-			def p = new Poll(title:'Who is the best football team in the world?')
+			def p = new Poll(name:'Who is the best football team in the world?')
 			PollResponse r = new PollResponse(value: "whatever")
 			PollResponse r2 = new PollResponse(value: "2")
 			p.addToResponses(r2)
@@ -51,7 +51,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 	def "processPollResponse() should send reply text for a poll requiring autoreply"() {
 		given:
 			def m = new Fmessage(src:"0722334455", date: new Date(), inbound: true).save(failOnError: true, flush: true)
-			def p = new Poll(title:'Who is the best football team in the world?', autoReplyText:"Thank you for participating in this poll")
+			def p = new Poll(name:'Who is the best football team in the world?', autoReplyText:"Thank you for participating in this poll")
 			PollResponse r = new PollResponse(value: "whatever")
 			PollResponse r2 = new PollResponse(value: "2")
 			p.addToResponses(r2)
@@ -65,7 +65,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 	def "processPollResponse() should not send reply text for a poll without autoreply"() {
 		given:
 			Fmessage m = new Fmessage(src:"0722334455", date: new Date(), inbound: true).save(failOnError: true)
-			def p = new Poll(title:'Who is the best football team in the world?')
+			def p = new Poll(name:'Who is the best football team in the world?')
 			PollResponse r = new PollResponse(value: "whatever")
 			PollResponse r2 = new PollResponse(value: "2")
 			p.addToResponses(r2)

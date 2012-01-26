@@ -10,7 +10,7 @@
 							<label class="bold inline" for="title">Name:</label>
 						</td>
 						<td valign="top" class="value">
-							<g:textField name="title" />
+							<g:textField name="name" />
 						</td>
 					</tr>
 				</tbody>

@@ -21,13 +21,13 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec  {
 			def announcement = Announcement.findByName("announcement")
 		then:
 			announcement.name == 'announcement'
-			announcement.announcementMessages.list()[0].text.contains('sending this')
+			announcement.activityMessages.list()[0].text.contains('sending this')
 			announcement
 	}
 	
 	def "A announcement can be archived"() {
 		when:
-			def a = new Announcement(name:'test', sentMessages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
+			def a = new Announcement(name:'test', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
 		then:
 			a.archived == false
 		when:
@@ -39,7 +39,7 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec  {
 	
 	def "When an announcement is archived all of its messages are archived"() {
 		setup:
-			def a = new Announcement(name:'test1x', sentMessages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
+			def a = new Announcement(name:'test1x', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
 			def m = new Fmessage(date: new Date(), src: 'src', inbound: true)
 		when:
 			a.addToMessages(m)
