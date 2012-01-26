@@ -17,14 +17,17 @@
 					<g:if test="${c == connectionInstance}">
 						<g:if test="${c.status == 'Not connected'}">
 							<div>
-								<g:link controller='connection' action="createRoute" class="btn route" id="${c.id}" >Create route</g:link>
+								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}" >Create route</g:link>
 							</div>
 						</g:if>
 						<g:else>
 							<div>
-								<g:remoteLink controller='connection' action="createTest" class="btn test" id="${c.id}"  onSuccess="launchSmallPopup('Test message', data, 'Send');">
+								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup('Test message', data, 'Send');">
 									Send test message
 								</g:remoteLink>
+                <g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">
+                  Destroy route
+                </g:link>
 							</div>
 						</g:else>
 					</g:if>
