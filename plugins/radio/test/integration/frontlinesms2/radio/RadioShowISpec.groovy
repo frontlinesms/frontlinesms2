@@ -46,8 +46,8 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 	def "radioShows can be associated with one or more polls"() {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(title: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
+			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
 			show.addToPolls(poll)
 			show.addToPolls(poll2)
 			show.save(flush:true)
@@ -59,8 +59,8 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 	def "deleted polls are nolonger listed with radioShows"() {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(title: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
+			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
 			show.addToPolls(poll)
 			show.addToPolls(poll2)
 			show.save(flush:true)
@@ -75,8 +75,8 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 	def "archived polls are nolonger listed with radioShows"() {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(title: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
+			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
 			show.addToPolls(poll)
 			show.addToPolls(poll2)
 			show.save(flush:true)
