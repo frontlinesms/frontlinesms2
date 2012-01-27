@@ -4,7 +4,7 @@
 		<ul class="section-header-buttons button-list">
 			<g:if test="${search}">
 	 			<li id="export-btn">
-		  			<g:remoteLink class="btn" controller="export" action="wizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
+		  			<g:remoteLink class="btn" controller="export" action="messageWizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
 						Export results
 					</g:remoteLink>
 				</li>
