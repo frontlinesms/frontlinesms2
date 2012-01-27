@@ -58,7 +58,7 @@ class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def show1 = new RadioShow(name:"Test 1").save(flush:true)
 			def show2 = new RadioShow(name:"Test 2").save(flush:true)
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
 			show1.addToPolls(poll)
 			show1.save(flush:true)
 			assert show1.activePolls.size() == 1
