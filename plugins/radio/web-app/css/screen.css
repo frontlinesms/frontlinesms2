@@ -538,34 +538,129 @@ a {
     background-repeat: no-repeat;
 }
 
-#inbox-action-buttons button{
-    margin: 0;
-    padding: 0;
-}
 #messages, #folders, #activities{
+	position: fixed;
+	top: 128px;
+	left: 17%;
+	right: 0;
+	bottom: 43px;
     padding: 0;
     margin: 0;
     background-image: url("../images/menubar.png");
     background-position: 0 2px;
     background-repeat: repeat-x;
-    width: 100%;
-    height:96%;
-    overflow-x: hidden;
     display: block;
+    overflow: auto;
+}
+
+#messages.tall-header{
+	position: fixed;
+	top: 281px;
+	left: 17%;
+	right: 0;
+	bottom: 43px;
+    padding: 0;
+    margin: 0;
+    background-image: url("../images/menubar.png");
+    background-position: 0 2px;
+    background-repeat: repeat-x;
+    display: block;
+    overflow: auto;
+}
+
+#message-list {
+	position: absolute;
+	left: 0;
+	right: 400px;
+	top: 0;
+	bottom: 0;
+    float:left;
+    padding: 0;
+    margin: 0;
+}
+
+#folder-list, #activity-list{
+ 	float:left;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 37px;
+	width: 100%;
+}
+
+#message-list thead, #folder-list thead, #activity-list thead{
+	position: fixed;
+	top: 132px;
+	right: 400px;
+	left: 17%;
+    z-index: 10;
+    padding: 0;
+    border: 0;
+}
+.tall-header #message-list thead{
+    top: 285px;
+}
+#message-list td a{
+	min-height: 20px;
+	padding: 4px 0;
+}
+#message-list tbody{
+	position: absolute;
+	top: 28px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+    z-index: 1;
+    overflow: auto;
+}
+#folder-list tbody, #activity-list tbody{
+	position: absolute;
+    margin-top: 25px;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+    padding: 90px 0 45px 0;
+}
+
+#message-list tr, #folder-list tr, #activity-list tr{
+    min-height: 28px;
+    text-align: left;
+}
+#message-list .message-select-cell, #folder-list .folder-message-count-cell, #activity-list .activity-message-count-cell{
+	min-width: 30px;
+	padding-left: 17px;
+}
+#message-list .message-star-cell{
+	min-width: 15px;
+	padding-right: 10px;
+}
+#message-list .message-sender-cell, #activity-list .activity-type-cell{
+	min-width: 140px;
+	padding-right: 10px;
+}
+#message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
+	min-width: 400px;
+	padding-right: 17px;
+}
+#message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
+	min-width: 300px;
+	padding: 0 10px;
+}
+
+#message-list .message-select-cell input[type='checkbox']{
+	margin-top: 5px;
 }
 
 @keyframes newMessage {
-	from {	background-color: rgba(199, 156, 221, 0.6);}
+	from {background: rgba(192, 50, 131, 0.3);}
 	to {background: white;}
 }
-
 @-moz-keyframes newMessage /* Firefox */ {
-	from {	background-color: rgba(199, 156, 221, 0.6);}
+	from {background: rgba(192, 50, 131, 0.3);}
 	to {background: white;}
 }
-
 @-webkit-keyframes newMessage /* Safari and Chrome */ {
-	from {	background-color: rgba(199, 156, 221, 0.6);}
+	from {background: rgba(192, 50, 131, 0.3);}
 	to {background: white;}
 }
 #new-message-notification {
@@ -575,7 +670,7 @@ a {
 	text-align: center;
 	min-height: 21px;
 	padding: 2px 0;
-	background-color: rgba(199, 156, 221, 0.6);
+	background-color: rgba(192, 50, 131, 0.3);
 	z-index: 100;
 }
 .tall-header #new-message-notification {
@@ -585,7 +680,7 @@ a {
 	text-align: center;
 	min-height: 21px;
 	padding: 2px 0;
-	background-color: rgba(199, 156, 221, 0.6);
+	background-color: rgba(192, 50, 131, 0.3);
 	z-index: 100;
 }
 #new-message-notification a{
@@ -597,18 +692,6 @@ animation: newMessage 2s;
 -moz-animation: newMessage 2s; /* Firefox */
 -webkit-animation: newMessage 2s; /* Safari and Chrome */
 }
-#message-list{
-    float:left;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-top: 39px;
-    width:75%;
-}
-#message-list .message-select-cell input[type='checkbox']{
-	margin-top: 5px;
-}
-
 .tall-header #no-messages{
 	position: fixed;
 	height: 10%;
@@ -637,78 +720,18 @@ animation: newMessage 2s;
 	top: 400px;
 	left: 27%;
 }
-
-#folder-list, #activity-list{
- 	float:left;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-top: 37px;
-	width: 100%;
- }
-.tall-header #message-list{
-    float:left;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-top: 189px;
-    width:75%;
+#message-list .message-preview td a, #message-list th a{
+    text-decoration: inherit;
+    color: inherit;
 }
-
-#message-list thead, #folder-list thead, #activity-list thead{
-    position: fixed;
-    top: 128px;
-    width: 100%;
-    z-index: 10;
-    padding: 0;
-    margin-bottom: 23px;
-    border: 0;
-    background-image: url('../images/menubar.png');
-    background-repeat: repeat-x;
+#message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
+    background-color: #e5eff3;
 }
-.tall-header #message-list thead{
-    top: 278px;
-}
-
-#message-list tbody{
-    position: absolute;
-    margin-top: 25px;
-    z-index: 1;
-    overflow: hidden;
-    width: 58%;
-    padding: 90px 0 45px 0;
-}
-#folder-list tbody, #activity-list tbody{
-	position: absolute;
-    margin-top: 25px;
-    z-index: 1;
-    overflow: hidden;
-    width: 100%;
-    padding: 90px 0 45px 0;
-}
-
-#message-list tr, #folder-list tr, #activity-list tr{
-    min-height: 28px;
-    margin: 0;
-    border: none;
-    text-align: left;
-    width: 100%;
-    display:block;
-}
-#message-list .message-select-cell, #folder-list .folder-message-count-cell, #activity-list .activity-message-count-cell{
-	min-width: 30px;
-	padding-left: 17px;
-}
-#message-list .message-star-cell{
-	min-width: 15px;
-}
-#message-list .message-sender-cell, #activity-list .activity-type-cell{
-	min-width: 120px;
-	width: 125px;
-	padding-right: 10px;
+#message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
+    background-color: #D8E8EF;
 }
 #message-list .folderOwner {
-	background-image: url('../images/icons/folders.png');
+	background-image: url('../images/icons/folder.png');
     background-repeat: no-repeat;
     background-position: right;
 }
@@ -717,28 +740,6 @@ animation: newMessage 2s;
     background-repeat: no-repeat;
     background-position: right;
 }
-#message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
-	min-width: 400px;
-	padding-right: 10px;
-	width: 400px;
-}
-#message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
-	min-width: 300px;
-	width: 300px;
-	padding-right: 10px;
-}
-
-#message-list .message-preview td a, #message-list th a{
-    text-decoration: inherit;
-    color: inherit;
-}
-#message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
-    background-color: #E0F0DE;
-}
-#message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
-    background-color: #C2DBBF;
-}
-
 .message-preview-star a{
     display: inline-block;
     padding: 0;
@@ -753,52 +754,25 @@ animation: newMessage 2s;
 .message-preview-star a.starred{
     background-image: url('../images/icons/star_on.png');
 }
-#message-list td, #message-list th{
-    border: none;
-    padding: 0;
-    margin: 0;
-    height: 24px;
+#message-list tbody tr:hover {
+    background-color: #e5eff3;
 }
-#message-list .message-preview-sender {
-    padding-left: 17px;
-}
-
-#message-list .message-preview:hover {
-    background-color: #E0F0DE;
-   	padding: 0;
-    margin: 0;
-}
-#message-list .message-preview:active {
-    background-color: #C2DBBF;
-}
-#message-list span{
-    margin: 5px;
+#message-list tbody tr:active {
+    background-color: #D8E8EF;
 }
 #message-list a, #folder-list a, #activity-list a{
     display: block;
 }
-#message-sorter{
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
+
 #message-detail{
-    position: fixed;
+	position: absolute;
+	top: 28px;
+	bottom: 0;
+	right: 0;
+	width: 400px;
     float:right;
-    right: 0;
-    width: 25%;
-    max-width: 35%;
-    min-width: 196px;
-    height: 96%;
-    margin: 0;
-    top: 154px;
-    background-color: rgba(194, 219, 191, 0.65);
-}
-#single-message, #multiple-messages{
-	padding: 17px 17px;
-}
-.tall-header #message-detail{
-    top: 304px;
+    background-color: #D8E8EF;
+    overflow: auto;
 }
 
 #message-detail .extra-msg-btn{
