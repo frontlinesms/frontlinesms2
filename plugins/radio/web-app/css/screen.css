@@ -742,7 +742,7 @@ animation: newMessage 2s;
     color: inherit;
 }
 #message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
-    background-color: #e5eff3;
+    background-color: #E0F0DE;
 }
 #message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
     background-color: #D8E8EF;
@@ -772,7 +772,7 @@ animation: newMessage 2s;
     background-image: url('../images/icons/star_on.png');
 }
 #message-list tbody tr:hover {
-    background-color: #e5eff3;
+    background-color: #E0F0DE;
 }
 #message-list tbody tr:active {
     background-color: #D8E8EF;
@@ -786,10 +786,11 @@ animation: newMessage 2s;
 	top: 28px;
 	bottom: 0;
 	right: 0;
-	width: 400px;
+	width: 366px;
     float:right;
-    background-color: #D8E8EF;
+    background-color: rgba(194, 219, 191, 0.65);;
     overflow: auto;
+    padding: 17px;
 }
 
 #message-detail .extra-msg-btn{
