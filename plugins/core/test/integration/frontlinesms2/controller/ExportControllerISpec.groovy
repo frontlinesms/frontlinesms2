@@ -37,9 +37,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can export messages from an announcement"() {
 		given:
 			createTestAnnouncement()
-			controller.params.messageSection = "announcement"
+			controller.params.messageSection = "activity"
 			controller.params.ownerId = Announcement.findByName("Free Food").id
-			println "Announcement messages are ${Announcement.findByName("Free Food").getAnnouncementMessages(false).count()}"
 		when:
 			def result = controller.downloadMessageReport()
 		then:
@@ -103,7 +102,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def createTestAnnouncement() {
 		def m = new Fmessage(src: "Bob", inbound: true, date: new Date())
-		def a = new Announcement(name:'Free Food', sentMessages: [m]).save(failOnError:true, flush:true)
+		def a = new Announcement(name:'Free Food', messages: [m]).save(failOnError:true, flush:true)
 		a.addToMessages(new Fmessage(src: "Alice", inbound: true, date: new Date())).save(flush:true)
 	}
 }

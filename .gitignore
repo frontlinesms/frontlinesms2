@@ -20,6 +20,9 @@ target-eclipse/
 # vi temporary files
 *.swp
 
+# redcar settings directory
+.redcar
+
 # Grails-generated files
 stacktrace.log
 CodeNarcReport.html

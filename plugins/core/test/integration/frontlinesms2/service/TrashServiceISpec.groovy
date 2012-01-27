@@ -18,7 +18,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			p.save(failOnError:true)
 		when:
 			assert Poll.count() == 1
-			assert p.getPollMessages().count() == 1
+			assert p.getActivityMessages(false).count() == 1
 			service.emptyTrash()
 		then:
 			Poll.count() == 0

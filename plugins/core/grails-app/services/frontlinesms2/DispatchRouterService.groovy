@@ -33,17 +33,11 @@ class DispatchRouterService {
 				println "Routing to $routeName"
 				return routeName
 			} else {
-				// TODO do something like increment retry header for message, and then re-add to queue
-				println "Haven't found any routes. updating dispatch status as failed"
-				def dispatch = exchange.in.body
-				dispatch.status = DispatchStatus.FAILED
-				dispatch.save(failOnError: true, flush:true)
-				return null
+				// TODO may want to queue for retry here, after incrementing retry-count header
+				throw new RuntimeException("No outbound route available for dispatch.")
 			}
 		}
 	}
-
-
 
 	def filter(List l, Closure c) {
 		def r = []
@@ -51,5 +45,35 @@ class DispatchRouterService {
 			if(c(it)) r << it
 		}
 		r
+	}
+
+	def handleCompleted(Exchange x) {
+		println "DispatchRouterService.handleCompleted() : Updating status to SENT for ${x.in.body.getClass()}"
+		updateDispatch(x, DispatchStatus.SENT)
+	}
+
+  def handleFailed(Exchange x) {
+		println "DispatchRouterService.handleFailed() : Updating status to FAILED for ${x.in.body.getClass()}"
+		updateDispatch(x, DispatchStatus.FAILED)
+	}
+	
+	private Dispatch updateDispatch(Exchange x, DispatchStatus s) {
+		println "DispatchRouterService.updateDispatch() : updateDispatch to $s..."
+		def id = x.in.getHeader('frontlinesms.dispatch.id')
+
+		def d
+		if(x.in.body instanceof Dispatch) {
+			d = x.in.body
+		} else {
+			d = Dispatch.get(id)
+			println "DispatchRouterService.updateDispatch() : Dispatch.get($id) => $d"
+		}
+		println "DispatchRouterService.updateDispatch() : Updating dispatch: $d"
+		if(d) {
+			assert d instanceof Dispatch
+			d.status = s
+			d.save()
+		}
+		println "DispatchRouterService.updateDispatch() : Dispatch update completed."
 	}
 }

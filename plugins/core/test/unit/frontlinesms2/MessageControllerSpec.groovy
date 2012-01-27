@@ -33,9 +33,9 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should resend multiple failed message"() {
 		setup:
 			mockDomain(Fmessage,
-					[new Fmessage(id: 1L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()]),
-				new Fmessage(id: 2L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()]),
-				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()])])
+					[new Fmessage(id: 1L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)]),
+				new Fmessage(id: 2L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)]),
+				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)])])
 			mockParams.failedMessageIds = [1, 2]
 		when:
 			controller.send()

@@ -24,12 +24,14 @@ class SmslibTranslationService {
 	}
 	
 	void toCmessage(Exchange exchange) {
-		def m = exchange.in.body.message
-		def address = exchange.in.body.dst
+		Dispatch d = exchange.in.body
+		Fmessage m = d.message
+		def address = d.dst
 		def c = new COutgoingMessage(address, m.text)
 		c.originator = m.src
 		c.date = m.date.time
 		
 		exchange.out.body = c
+		exchange.out.setHeader('frontlinesms.dispatch.id', d.id)
 	}
 }
