@@ -20,6 +20,9 @@ class GroovyHayesPortHandler extends BaseHayesPortHandler {
 		if(response instanceof String) {
 			println "Got response as String"
 			return response
+		} else if(response instanceof GroovyHayesResponse) {
+			currentState = response.nextState
+			return response.text
 		} else if(response instanceof Closure) {
 			println "Calling closure with ($this, $request) as arguments"
 			return response.call(this, request)

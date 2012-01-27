@@ -12,6 +12,10 @@ class GroovyHayesState {
 		responses = args.responses
 		extraProperties = args
 	}
+  
+	def setResponse(request, response) {
+		responses << request << response
+	}
 	
 	def getResponse(String request) {
 		for(int i=0; i<responses.size; i+=2) {

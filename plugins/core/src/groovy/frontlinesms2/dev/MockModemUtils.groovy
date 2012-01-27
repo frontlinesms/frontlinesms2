@@ -20,11 +20,11 @@ class MockModemUtils {
 	}
 
 	static SerialPortHandler createMockPortHandler_sendFails() {
-		// TODO create mock port handler which returns CMSERROR: 500 whenever it is given a PDU to send
+		return createMockPortHandler(false, [:])
 	}
 	
 	static SerialPortHandler createMockPortHandler_withMessages() {
-		createMockPortHandler([2: '07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905',
+		createMockPortHandler(true, [2: '07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905',
 						3: '07915892000000F0040B915892214365F700007040213252242331493A283D0795C3F33C88FE06C9CB6132885EC6D341EDF27C1E3E97E7207B3A0C0A5241E377BB1D7693E72E',
 						6:'07915892000000F0040B915274204365F70000704021325224230AE6F79B2E0EB3D9A030',
 						7:'07915892000000F0040B915274204365F70000704021325224230D201008647C3EA9C220931906',
@@ -36,7 +36,7 @@ class MockModemUtils {
 						13:'07915892000000F0040B915274204365F70000704021325224230A6679982E0EB3D9203A'])
 	}
 	
-	static SerialPortHandler createMockPortHandler(Map messages) {
+	static SerialPortHandler createMockPortHandler(boolean canSend, Map messages) {
 		def state_initial = new GroovyHayesState([error: "ERROR: 1",
 				responses: ["AT", "OK",
 						"AT+CMEE=1", "OK",
@@ -75,11 +75,13 @@ class MockModemUtils {
 						}],
 				// these are returned by ~/AT\+CMGL=\d/
 				messages: messages])
-		// TODO reinstate this state
-		/*def state_waitingForPdu = HayesState.createState(new HayesResponse("ERROR: 2", state_initial),
-				~/.+/, new HayesResponse('+CMGS: 0\rOK', state_initial))
-		state_initial.setResponse(~/AT\+CMGS=\d+/, "OK", state_waitingForPdu)*/
-		
+
+		if(canSend) {
+			def state_waitingForPdu = new GroovyHayesState([error:new GroovyHayesResponse("ERROR: 2", state_initial),
+					responses:[~/.+/, new GroovyHayesResponse('+CMGS: 0\rOK', state_initial)]])
+			state_initial.setResponse(~/AT\+CMGS=\d+/, new GroovyHayesResponse("OK", state_waitingForPdu))
+		}
+
 		new GroovyHayesPortHandler(state_initial)
 	}
 }

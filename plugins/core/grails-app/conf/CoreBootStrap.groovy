@@ -131,8 +131,9 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 
-		new SmslibFconnection(name:"COM98 mock smslib device", port:'COM98', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"COM99 mock smslib device", port:'COM99', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"COM97 mock with bad port", port:'COM98', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"COM98 mock which cannot send", port:'COM98', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"COM99 mock with incoming, and can send", port:'COM99', baud:9600).save(failOnError:true)
 	}
 	
 	private def dev_initPolls() {
@@ -259,8 +260,10 @@ class CoreBootStrap {
 	}
 
 	private def initialiseMockSerial() {
-		CommPortIdentifier cpi = new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler())
-		MockModemUtils.initialiseMockSerial([COM98:cpi, COM99:cpi])
+		MockModemUtils.initialiseMockSerial([
+				COM97:new CommPortIdentifier("COM97", MockModemUtils.createMockPortHandler_badPort()),
+				COM98:new CommPortIdentifier("COM98", MockModemUtils.createMockPortHandler_sendFails()),
+				COM99:new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler_withMessages())])
 	}
 	
 	private def test_initGeb() {
