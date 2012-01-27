@@ -32,13 +32,13 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			def m = new Fmessage(src: 'src', hasSent: null, hasPending: null, hasFailed: true,  date: new Date(), inbound: true, dispatches: [new Dispatch()])
-		then:
-			!m.validate()
-		when:
-			m.hasFailed = false
+			def m = new Fmessage(src: 'src', hasSent: null, hasPending: null, hasFailed: false,  date: new Date(), inbound: true)
 		then:
 			m.validate()
+		when:
+			m.hasFailed = true
+		then:
+			!m.validate()
 	}
 	
 	def "Fmessage must have a date, and a src if inbound"() {
