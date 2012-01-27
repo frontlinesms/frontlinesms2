@@ -15,8 +15,14 @@
 
 .message-list-separator {
 	background-color: #DFDFDF;
-	padding: 0 25px;
 	font-weight: bold;
+}
+.message-list-separator:hover {
+	background-color: #DFDFDF;
+}
+.message-list-separator td{
+	padding: 0 25px;
+	height: 28px;
 }
 
 #radio-actions, #radio-actions li {

@@ -62,9 +62,7 @@
 						</g:if>
 						<g:else>
 							<tr class="message-list-separator">
-								<td>
-									${m}
-								</td>
+							<td colspan="6">${m}</td>
 							</tr>
 						</g:else>
 					</g:each>
