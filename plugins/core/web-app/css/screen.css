@@ -549,21 +549,28 @@ a {
 }
 
 #folder-list, #activity-list{
- 	float:left;
-    list-style: none;
-    padding: 0;
+    float:left;
     margin: 0;
-    margin-top: 37px;
-	width: 100%;
+    width: 100%;
+    height: 100%;
 }
 
-#message-list thead, #folder-list thead, #activity-list thead{
+#message-list thead {
 	position: fixed;
 	top: 132px;
 	right: 400px;
 	left: 17%;
     z-index: 10;
     padding: 0;
+    border: 0;
+}
+#folder-list thead, #activity-list thead {
+	position: fixed;
+	top: 132px;
+	right: 0;
+	left: 17%;
+    z-index: 10;
+    padding-left: 17px;
     border: 0;
 }
 .tall-header #message-list thead{
@@ -584,11 +591,12 @@ a {
 }
 #folder-list tbody, #activity-list tbody{
 	position: absolute;
-    margin-top: 25px;
+	top: 28px;
+	bottom: 0;
+	left: 0;
+	right: 0;
     z-index: 1;
-    overflow: hidden;
-    width: 100%;
-    padding: 90px 0 45px 0;
+    overflow: auto;
 }
 
 #message-list tr, #folder-list tr, #activity-list tr{
@@ -604,15 +612,24 @@ a {
 	padding-right: 10px;
 }
 #message-list .message-sender-cell, #activity-list .activity-type-cell{
-	min-width: 140px;
 	padding-right: 10px;
 }
 #message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
-	min-width: 400px;
 	padding-right: 17px;
 }
 #message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
-	min-width: 300px;
+	padding: 0 10px;
+}
+#message-list thead .message-sender-cell {
+	min-width: 100px;
+	padding-right: 10px;
+}
+#message-list thead .message-text-cell {
+	min-width: 200px;
+	padding-right: 17px;
+}
+#message-list thead .message-date-cell {
+	min-width: 100px;
 	padding: 0 10px;
 }
 

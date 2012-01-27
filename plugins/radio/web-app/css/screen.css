@@ -580,12 +580,14 @@ a {
 }
 
 #folder-list, #activity-list{
- 	float:left;
-    list-style: none;
+ 	position: absolute;
+	left: 0;
+	right: 400px;
+	top: 0;
+	bottom: 0;
+    float:left;
     padding: 0;
     margin: 0;
-    margin-top: 37px;
-	width: 100%;
 }
 
 #message-list thead, #folder-list thead, #activity-list thead{
@@ -635,15 +637,24 @@ a {
 	padding-right: 10px;
 }
 #message-list .message-sender-cell, #activity-list .activity-type-cell{
-	min-width: 140px;
 	padding-right: 10px;
 }
 #message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
-	min-width: 400px;
 	padding-right: 17px;
 }
 #message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
-	min-width: 300px;
+	padding: 0 10px;
+}
+#message-list thead .message-sender-cell {
+	min-width: 100px;
+	padding-right: 10px;
+}
+#message-list thead .message-text-cell {
+	min-width: 200px;
+	padding-right: 17px;
+}
+#message-list thead .message-date-cell {
+	min-width: 100px;
 	padding: 0 10px;
 }
 
