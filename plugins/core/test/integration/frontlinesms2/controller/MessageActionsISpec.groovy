@@ -21,7 +21,7 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.move()
 		then:
 			poll.getActivityMessages().list().find {message}
-			message.messageOwner.value == 'Unknown'
+			poll.responses.find { it.value == 'Unknown' }.messages.find {message} 
 	}
 	
 	def "message can be moved to a different poll response"() {

@@ -9,7 +9,7 @@
 			<g:select class="dropdown" name="activityId" from="${pollInstanceList + folderInstanceList}"
 					  value="${search?.activityId}"
 					  optionKey="${{(it instanceof frontlinesms2.Poll?'poll':'folder') + '-' + it.id}}"
-					  optionValue="${{it instanceof frontlinesms2.Poll? it.title: it.name}}"
+					  optionValue="${{it.name}}"
 					  noSelection="${['':'Show all activities/folders']}"/>
 		</li>
 	</ul>

@@ -5,17 +5,15 @@ import grails.plugin.spock.*
 import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.Exchange
 import org.apache.camel.CamelContext
-import frontlinesms2.DispatchStorageService
+import frontlinesms2.MessageStorageService
 import frontlinesms2.Fmessage
-import frontlinesms2.Dispatch
-import frontlinesms2.DispatchStatus
 
-class DispatchStorageServiceSpec extends UnitSpec {
+class MessageStorageServiceSpec extends UnitSpec {
 	@Shared
-	DispatchStorageService s
+	MessageStorageService s
 
 	def setupSpec() {
-		s = new DispatchStorageService()
+		s = new MessageStorageService()
 	}
 
 	def "it's a processor"() {
@@ -26,22 +24,18 @@ class DispatchStorageServiceSpec extends UnitSpec {
 	def "it saves the incoming Fmessage"() {
 		given:
 			mockDomain(Fmessage.class)
-			mockDomain(Dispatch.class)
-			def m = new Fmessage(date: new Date(), inbound: true)
-			def d = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
-			m.addToDispatches(d)
-			m.save(flush: true)
+			def m = new Fmessage(src:"12345", inbound:true, date:new Date())
 		when:
-			s.process(createTestExchange(d))
+			s.process(createTestExchange(m))
 		then:
 			Fmessage.findAll() == [m]
 	}
 
-	def createTestExchange(def dispatch) {
+	def createTestExchange(def fmessage) {
 		CamelContext context = Mock(CamelContext)
 		Exchange exchange = new DefaultExchange(context)
 		org.apache.camel.Message message = exchange.in
-		message.setBody(dispatch);
+		message.setBody(fmessage);
 		return exchange;
 	}
 }

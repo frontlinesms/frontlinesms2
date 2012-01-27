@@ -3,9 +3,8 @@ package frontlinesms2
 class TrashService {
 
     def emptyTrash() {
+		MessageOwner.findAllByDeleted(true)*.delete()
 		Fmessage.findAllByIsDeleted(true)*.delete()
-		Poll.findAllByDeleted(true)*.delete()
-		Folder.findAllByDeleted(true)*.delete()
 		Trash.findAll()*.delete()
     }
 }

@@ -44,12 +44,12 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date()).save(failOnError:true)
 		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound:true, date: new Date()).save(failOnError:true)
 		def liverMessage2 = new Fmessage(src:'+254333222', text:'liver for lunch?', inbound:true, date: new Date()).save(failOnError:true)
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
+		def poll = new Poll(name:'Miauow Mix')
+		def chickenResponse = new PollResponse(value:'chicken', poll:poll)
+		def liverResponse = new PollResponse(value:'liver', poll:poll)
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
-		def poll = new Poll(name:'Miauow Mix')
 		poll.addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse).save(failOnError:true)
 	}
@@ -77,7 +77,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "message searches can be restricted to a poll"() {
 		when:
 			controller.params.searchString = "chicken"
-			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
+			controller.params.activityId = "activity-${Poll.findByName('Miauow Mix').id}"
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Barnabus')]
@@ -153,7 +153,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			makeGroupMember()
 		when:
 			controller.params.searchString = "liver"
-			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
+			controller.params.activityId = "activity-${Poll.findByName('Miauow Mix').id}"
 			controller.params.groupId = Group.findByName('test').id
 			def model = controller.result()
 		then:
@@ -189,7 +189,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "deleted messages do not appear in search results"() {
 		when:
 			controller.params.searchString = "liver"
-			controller.params.activityId = "poll-${Poll.findByTitle('Miauow Mix').id}"
+			controller.params.activityId = "activity-${Poll.findByName('Miauow Mix').id}"
 			Fmessage.findBySrc("+254333222").isDeleted = true
 			Fmessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
@@ -288,7 +288,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def model = controller.result()
 			//println("the fmessage.contactName is "+Fmessage.findBySrcLike("+254987654").contactName)
 		then:
-			model.messageInstanceList == Fmessage.findAllByContactNameLikeAndArchived('Alex', false)
+			model.messageInstanceList == Fmessage.findAllByDisplayNameLikeAndArchived('Alex', false)
 			//model.messageInstanceTotal == 1
 		when:
 			controller.params['cityCustomField'] = ''

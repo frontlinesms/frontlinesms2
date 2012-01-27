@@ -29,13 +29,12 @@ class SearchController {
 	def result = {
 		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
-			searchInstance.owners = activity ? (activity instanceof Poll ? activity.responses : [activity]) : null
+			searchInstance.owners = activity ? [activity] : null
 			searchInstance.searchString = params.searchString ?: ""
 			searchInstance.contactString = params.contactString ?: null
 			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
 			searchInstance.status = params.messageStatus ?: null
 			searchInstance.activityId = params.activityId ?: null
-			searchInstance.activity =  getActivityInstance()
 			searchInstance.inArchive = params.inArchive ? true : false
 			searchInstance.startDate = params.startDate ?: null
 			searchInstance.endDate = params.endDate ?: null
@@ -78,7 +77,7 @@ class SearchController {
 		if(search.group) searchDescriptor += ", "+search.group.name
 		if(search.owners) {
 			def activity = getActivityInstance()
-			String ownerDescription = activity instanceof Poll ? activity.title: activity.name
+			String ownerDescription = activity.name
 			searchDescriptor += ", "+ownerDescription
 		}
 		searchDescriptor += search.inArchive? ", including archived messages":", without archived messages" 
@@ -101,7 +100,7 @@ class SearchController {
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'poll'? Poll : MessageOwner
+			def activityType = stringParts[0] == 'activity'? Activity : MessageOwner
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null
