@@ -10,8 +10,8 @@ class Poll extends Activity {
 	static hasMany = [responses: PollResponse]
 
 	static constraints = {
-		name(blank: false, nullable: false, maxSize: 255, validator: { title, me ->
-			def matching = Poll.findByNameIlike(title)
+		name(blank: false, nullable: false, maxSize: 255, validator: { name, me ->
+			def matching = Poll.findByNameIlike(name)
 			matching==null || matching==me
 		})
 		responses(validator: { val, obj ->

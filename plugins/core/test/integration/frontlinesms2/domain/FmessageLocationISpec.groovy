@@ -165,11 +165,11 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!minime.archived
 		when:
-			minime.messageOwner.poll.archivePoll()
-			minime.messageOwner.poll.save(flush: true)
+			minime.messageOwner.archive()
+			minime.messageOwner.save(flush: true)
 			minime.save(flush: true)
 		then:
-			Poll.findByTitle("Miauow Mix").archived
+			Poll.findByName("Miauow Mix").archived
 			minime.archived
 	}
 	
@@ -179,13 +179,13 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			createPollTestData()
 			def minime = Fmessage.findBySrc("Minime")
 			minime.archived = false
-			minime.messageOwner.poll.archivePoll()
-			minime.messageOwner.poll.save(flush:true)
+			minime.messageOwner.archive()
+			minime.messageOwner.save(flush:true)
 			minime.archived = false
 			minime.save(flush: true)
 			minime.refresh()
 		then:
-			Poll.findByTitle("Miauow Mix").archived
+			Poll.findByName("Miauow Mix").archived
 			minime.archived
 	}
 	

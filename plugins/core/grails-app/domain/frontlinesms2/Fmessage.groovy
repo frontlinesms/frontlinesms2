@@ -165,7 +165,13 @@ class Fmessage {
 					def groupMembersNumbers = search.group.getAddresses() ?: [''] //otherwise hibernate fail to search 'in' empty list
 					or {
 						'in'("src", groupMembersNumbers)
-						'in'("dispatches.dst", groupMembersNumbers)
+					}
+					
+					def dispatchList = Dispatch.findAllByDstInList(groupMembersNumbers) ?: ['']
+					if(dispatchList) {
+						or {
+							'in'("dispatches", dispatchList)
+						}
 					}
 				}
 				if(search.status) {

@@ -36,7 +36,7 @@ class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
 			r.addToMessages(m)
 			poll.save(flush: true)
 		then:
-			r.messages.find(m)
+			r.messages.find {it == m}
 			Fmessage.find(m)
 		when:
 			poll.deleted = true
