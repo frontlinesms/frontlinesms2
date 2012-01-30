@@ -38,7 +38,7 @@ class MessageControllerSpec extends ControllerSpec {
 				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)])])
 			mockParams.failedMessageIds = [1, 2]
 		when:
-			controller.send()
+			controller.retry()
 		then:
 			1 * mockMessageSendService.send {it.id == 1L}
 			1 * mockMessageSendService.send {it.id == 2L}
@@ -52,7 +52,7 @@ class MessageControllerSpec extends ControllerSpec {
 				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()])])
 			mockParams.failedMessageIds = "1"
 		when:
-			controller.send()
+			controller.retry()
 		then:
 			1 * mockMessageSendService.send {it.id == 1L}
 	}
