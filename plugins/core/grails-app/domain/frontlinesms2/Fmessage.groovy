@@ -76,14 +76,14 @@ class Fmessage {
 
 	def beforeInsert = {
 		withSession { session -> 
-	       FlushMode flushMode = session.flushMode 
-	       session.flushMode = FlushMode.MANUAL 
-	       try { 
-			   updateFmessageDisplayName()
-	       } finally {
-		   		session.flushMode = flushMode
-	       }
-	   }
+			FlushMode flushMode = session.flushMode 
+			session.flushMode = FlushMode.MANUAL 
+			try { 
+				updateFmessageDisplayName()
+			} finally {
+				session.flushMode = flushMode
+			}
+		}
 		updateFmessageStatuses()
 	}
 	
@@ -297,21 +297,31 @@ class Fmessage {
 	}
 	
 	private def updateFmessageDisplayName() {
-		if(inbound && Contact.findByPrimaryMobile(src)) {
-			displayName = Contact.findByPrimaryMobile(src).name
-			contactExists = true
-		} else if(inbound) {
-			displayName = src
-			contactExists = false
-		} else if(!inbound && dispatches?.size() == 1 && Contact.findByPrimaryMobile(dispatches.dst[0])) {
-			displayName = "To: " + Contact.findByPrimaryMobile(dispatches.dst[0]).name
-			contactExists = true
-		} else if(!inbound && dispatches?.size() == 1) {
-			displayName = "To: " + dispatches.dst[0]
-			contactExists = false
-		} else if(!inbound && dispatches?.size() > 1) {
-			displayName = "To: " + dispatches?.size() + " recipients"
-			contactExists = true
+		Contact c
+		if(inbound) {
+			if((c = Contact.findByPrimaryMobile(src)) ||
+					(c = Contact.findBySecondaryMobile(src))) {
+				displayName = c.name
+				contactExists = true
+			} else {
+				displayName = src
+				contactExists = false
+			}
+		} else {
+			if(dispatches?.size() == 1) {
+				def dst = dispatches.dst[0]
+				if((c = Contact.findByPrimaryMobile(dst)) ||
+						(c = Contact.findBySecondaryMobile(dst))) {
+					displayName = "To: " + c.name
+					contactExists = true
+				} else {
+					displayName = "To: " + dst
+					contactExists = false
+				}
+			} else if(dispatches?.size() > 1) {
+				displayName = "To: " + dispatches?.size() + " recipients"
+				contactExists = true
+			}
 		}
 	}
 	
