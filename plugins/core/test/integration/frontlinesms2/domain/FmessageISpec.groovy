@@ -224,7 +224,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.displayName == "Alice"
 			message.contactExists
 	}
-	
+
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
 			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
