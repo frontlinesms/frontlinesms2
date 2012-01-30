@@ -78,14 +78,34 @@ class ContactSpec extends UnitSpec {
 			String johnsprimaryMobile = "9876543210"
 			String johnssecondaryMobile = "123456789"
 			Contact contact = new Contact(name: "John", primaryMobile: johnsprimaryMobile, secondaryMobile: johnssecondaryMobile)
-			mockDomain Fmessage, [new Fmessage(isDeleted: false, inbound: false, date: new Date(), dispatches: [new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED), new Dispatch(dst: johnssecondaryMobile, status: DispatchStatus.FAILED)]),
-					new Fmessage(isDeleted: true, inbound: false, date: new Date(), dispatches: [new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)]),
-					new Fmessage(isDeleted: false, inbound: false, date: new Date(), dispatches: [new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)])]
+			def d1 = new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)
+			def d2 = new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)
+			def d3 = new Dispatch(dst: johnssecondaryMobile, status: DispatchStatus.FAILED)
+			mockDomain(Dispatch, [d1, d2, d3])
+			mockDomain Fmessage, [new Fmessage(isDeleted: false, inbound: false, date: new Date(), dispatches: [d1, d3]),
+					new Fmessage(isDeleted: true, inbound: false, date: new Date(), dispatches: [d2]),
+					new Fmessage(isDeleted: false, inbound: false, date: new Date(), hasFailed:true, dispatches: [d1])]
 	    when:
 	        def count = contact.outboundMessagesCount
 	    then:
 	        count == 3
   	}
+	
+	def "should return the right count of all messages sent to a contact's primary address"() {
+		setup:
+			String johnsprimaryMobile = "9876543210"
+			Contact contact = new Contact(name: "John", primaryMobile: johnsprimaryMobile)
+			def d1 = new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)
+			def d2 = new Dispatch(dst: johnsprimaryMobile, status: DispatchStatus.FAILED)
+			mockDomain(Dispatch, [d1, d2])
+			mockDomain Fmessage, [new Fmessage(isDeleted: false, inbound: false, date: new Date(), dispatches: [d1]),
+					new Fmessage(isDeleted: true, inbound: false, date: new Date(), dispatches: [d2]),
+					new Fmessage(isDeleted: false, inbound: false, date: new Date(), hasFailed:true, dispatches: [d1])]
+		when:
+			def count = contact.outboundMessagesCount
+		then:
+			count == 2
+	}
 
 	def "should return the count of all messages received from a given contact except deleted messages"() {
 		setup:
