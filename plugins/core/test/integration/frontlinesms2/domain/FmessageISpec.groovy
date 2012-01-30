@@ -198,21 +198,32 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			!m.validate()
 	}
 	
-	def "when a new contact is created, all messages with that contacts number should be updated"() {
+	def "when a new contact is created, all messages with that contacts primary number should be updated"() {
 		when:
-			def message = new Fmessage(src: "number", inbound:true, date: new Date()).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'1', inbound:true, date:new Date()).save(flush: true, failOnError:true)
 		then:
-			message.displayName == "number";
-			message.contactExists == false;
+			message.displayName == '1'
+			!message.contactExists
 		when:
-			new Contact(name: "Alice", primaryMobile:"number", secondaryMobile: "secondaryNo").save(flush: true)
-		then:
-			sleep 10000 // necessary since Fmessage is updated in a new thread
-		when:
+			new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
 			message.refresh()
 		then:
 			message.displayName == "Alice"
-			message.contactExists == true
+			message.contactExists
+	}
+	
+	def "when a new contact is created, all messages with that contacts secondary number should be updated"() {
+		when:
+			def message = new Fmessage(src:'2', inbound:true, date:new Date()).save(flush: true, failOnError:true)
+		then:
+			message.displayName == '2'
+			!message.contactExists
+		when:
+			new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			message.refresh()
+		then:
+			message.displayName == "Alice"
+			message.contactExists
 	}
 	
 	def "can archive message when it has no message owner" () {
