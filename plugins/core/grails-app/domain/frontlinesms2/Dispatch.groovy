@@ -47,4 +47,21 @@ class Dispatch {
 			this.message.hasSent = true
 		}
 	}
+	
+	static namedQueries = {
+		forSentStats { params ->
+			def groupInstance = params.groupInstance
+			def messageOwner = params.messageOwner
+			def startDate = params.startDate.startOfDay
+			def endDate = params.endDate.endOfDay
+			def statuses = params.messageStatus.collect { it.toLowerCase() }
+			
+			and {
+				eq('isDeleted', false)
+				between("dateSent", startDate, endDate)
+				if(groupInstance) 'in'('dst', groupInstance.addresses)
+				if(messageOwner) 'in'('messageOwner', messageOwner)
+			}
+		}
+	}
 }
