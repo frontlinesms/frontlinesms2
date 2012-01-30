@@ -40,11 +40,83 @@ class Contact {
 	}
 	
 	def afterInsert = {
-		updateFmessageDisplayName()
+		if(primaryMobile || secondaryMobile) {
+			Fmessage.withNewSession { session ->
+				def clauses = []
+				def variables = [name, true]
+				if(primaryMobile) {
+					clauses << 'm.src=?'
+					variables << primaryMobile
+				}
+				if(secondaryMobile) {
+					clauses << 'm.src=?'
+					variables << secondaryMobile
+				}
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
+				Dispatch.findAllByDst(primaryMobile).each {
+					it.message.displayName = "To: " + name
+					it.message.contactExists = true
+				}
+			}
+		}
+	}
+	
+	def beforeUpdate = {
+		final def old1 = isDirty('primaryMobile')? getPersistentValue('primaryMobile'): null
+		final def old2 = isDirty('secondaryMobile')? getPersistentValue('secondaryMobile'): null
+		if(old1 || old2) {
+			Fmessage.withNewSession { session ->
+		println "beforeUpdate() : primaryMobile.dirty=${isDirty('primaryMobile')}; secondaryMobile.dirty=${isDirty('secondaryMobile')}"
+		println "beforeUpdate() : getPersistentValue('primaryMobile'):${getPersistentValue('primaryMobile')}"
+		println "beforeUpdate() : getPersistentValue('secondaryMobile'):${getPersistentValue('secondaryMobile')}"
+				def clauses = []
+				def variables = [false]
+				if(old1) {
+					println "appending primaryMobile to varialbes"
+					clauses << 'm.src=?'
+					variables << old1
+				}
+				if(old2) {
+					println "appending secondaryMobile to varialbes"
+					clauses << 'm.src=?'
+					variables << old2
+				}
+				println "Variables: $variables; clauses: $clauses"
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
+				Dispatch.findAllByDst(primaryMobile).each {
+					it.message.displayName = "To: " + name
+					it.message.contactExists = true
+				}
+			}
+		}
+		println "beforeUpdate() : EXIT"
 	}
 
 	def afterUpdate = {
-		updateFmessageDisplayName()
+		println "afterUpdate() : ENTRY (primaryMobile=$primaryMobile; secondaryMobile=$secondaryMobile)"
+		println "afterUpdate() : primaryMobile.dirty=${isDirty('primaryMobile')}; secondaryMobile.dirty=${isDirty('secondaryMobile')}"
+		if(primaryMobile || secondaryMobile) {
+			println "afterUpdate() : creating new session..."
+			Fmessage.withNewSession { session ->
+				println "afterUpdate() : inside new session..."
+				def clauses = []
+				def variables = [name, true]
+				if(primaryMobile) {
+					clauses << 'm.src=?'
+					variables << primaryMobile
+				}
+				if(secondaryMobile) {
+					clauses << 'm.src=?'
+					variables << secondaryMobile
+				}
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
+				Dispatch.findAllByDst(primaryMobile).each {
+					it.message.displayName = "To: " + name
+					it.message.contactExists = true
+				}
+			}
+		}
+		println "afterUpdate() : EXIT"
 	}
 	
 	def getGroups() {
@@ -102,18 +174,6 @@ class Contact {
 	private def getOldContactNumber() {
 		Contact.withNewSession {session ->
 			Contact.get(id).refresh().primaryMobile // FIXME why not use this.loadedState?
-		}
-	}
-	
-	def updateFmessageDisplayName() {
-		if(primaryMobile) {
-			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=? OR m.src=?", [name, true, primaryMobile, secondaryMobile])
-				Dispatch.findAllByDst(primaryMobile).each {
-					it.message.displayName = "To: " + name
-					it.message.contactExists = true
-				}
-			}
 		}
 	}
 	
