@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat
 import frontlinesms2.*
 
 class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
+	final Date TEST_DATE = new Date()
+	
 	def controller
 	def firstContact, secondContact, thirdContact
 	def group
@@ -22,12 +24,12 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def futureDate = new Date()
 		futureDate.hours = futureDate.hours + 1
 		
-		[new Fmessage(src:'+254987654', dst:'+254987654', text:'work at 11.00', archived: true, date: new Date()),
-				new Fmessage(src:'+254987654', dst:'+6645666666', text:'finaly i stay in bed', date: new Date()),
-				//new Fmessage(src:'+666666666', dst:'+254987654', text:'finaly i stay in bed', date: new Date()),
-				new Fmessage(src:'+254111222', dst:'+254937634', date: futureDate, text:'work is awesome'),
-				new Fmessage(src:'Bob', dst:'+254987654', date: new Date()-5, text:'hi Bob'),
-				new Fmessage(src:'Michael', dst:'+2541234567', date: new Date()-7,text:'Can we get meet in 5 minutes')].each() {
+		[new Fmessage(src:'+254987654', text:'work at 11.00', archived: true, date: TEST_DATE),
+				new Fmessage(src:'+254987654', text:'finaly i stay in bed', date: TEST_DATE),
+				new Fmessage(src:'+254111222', date: futureDate, text:'work is awesome'),
+				new Fmessage(src:'Bob', date: TEST_DATE-5, text:'hi Bob'),
+				new Fmessage(src:'Michael', date: TEST_DATE-7, text:'Can we get meet in 5 minutes'),
+				new Fmessage(src:'+666666666', text:'finally i stay in bed', date: TEST_DATE)].each() {
 			it.inbound = true
 			it.save(failOnError:true)
 		}
@@ -36,14 +38,13 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 				new CustomField(name:'like', value:'cake', contact: secondContact),
 				new CustomField(name:'ik', value:'car', contact: secondContact),
 				new CustomField(name:'like', value:'ake', contact: thirdContact),
-				new CustomField(name:'dob', value:'12/06/79', contact: secondContact),
-				new Fmessage(src:'+666666666', dst:'+2549', text:'finaly i stay in bed', inbound:true, date: new Date())].each {
+				new CustomField(name:'dob', value:'12/06/79', contact: secondContact)].each {
 			it.save(failOnError:true)
 		}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date()).save(failOnError:true)
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound:true, date: new Date()).save(failOnError:true)
-		def liverMessage2 = new Fmessage(src:'+254333222', text:'liver for lunch?', inbound:true, date: new Date()).save(failOnError:true)
+		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: TEST_DATE).save(failOnError:true)
+		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound:true, date: TEST_DATE).save(failOnError:true)
+		def liverMessage2 = new Fmessage(src:'+254333222', text:'liver for lunch?', inbound:true, date: TEST_DATE).save(failOnError:true)
 		def poll = new Poll(name:'Miauow Mix')
 		def chickenResponse = new PollResponse(value:'chicken', poll:poll)
 		def liverResponse = new PollResponse(value:'liver', poll:poll)
@@ -113,9 +114,9 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def d1 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
 			def d2 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
 			def d3 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
-			def m1 = new Fmessage(src:"src", hasPending:true, date: new Date())
-			def m2 = new Fmessage(src:"src", hasSent:true, date: new Date())
-			def m3 = new Fmessage(src:"src", hasFailed:true, date: new Date())
+			def m1 = new Fmessage(src:"src", hasPending:true, date: TEST_DATE)
+			def m2 = new Fmessage(src:"src", hasSent:true, date: TEST_DATE)
+			def m3 = new Fmessage(src:"src", hasFailed:true, date: TEST_DATE)
 			m1.addToDispatches(d1).save(flush: true, failOnError: true)
 			m2.addToDispatches(d2).save(flush: true, failOnError: true)
 			m3.addToDispatches(d3).save(flush: true, failOnError: true)
@@ -210,38 +211,41 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	}
 	
-	//There is a total of 9 messages but one is achived. So a maximum of 8 will be returned.
-	def "if only end date is define, return message before this date"() {
+	def "if only end date is defined, return message before or on this date"() {
 		when:
-			controller.params.endDate = new Date()-1
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 2
+			model.messageInstanceTotal == 8
 		when:
-			controller.params.endDate = new Date()-5
+			controller.params.endDate = TEST_DATE-1
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 2
 		when:
-			controller.params.endDate = new Date()-6
+			controller.params.endDate = TEST_DATE-5
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 2
+		when:
+			controller.params.endDate = TEST_DATE-6
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 1
 	}
 	
-	def "if only start date is define, return message after this date"() {
+	def "if only start date is defined, return only messages on or after this date"() {
 		when:
-			controller.params.startDate = new Date()-1
+			controller.params.startDate = TEST_DATE-1
 			def model = controller.result()
 		then:
 			model.messageInstanceTotal == 6
 		when:
-			controller.params.startDate = new Date()-4
+			controller.params.startDate = TEST_DATE-4
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 6
 		when:
-			controller.params.startDate = new Date()-5
+			controller.params.startDate = TEST_DATE-5
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 7
@@ -249,32 +253,36 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "only return message within the specific time range"() {
 		when:
-			controller.params.startDate = new Date()-4
-			controller.params.endDate = new Date()
+			controller.params.startDate = TEST_DATE-4
+			controller.params.endDate = TEST_DATE
 			def model = controller.result()
 		then:
-			model.messageInstanceTotal == 6
+			println "list dates: ${model.messageInstanceList.date}"
+			println "list messages text: ${model.messageInstanceList.text}"
+			println "test date: ${TEST_DATE-5}"
+			model.messageInstanceTotal == 5  // does not include archived message
 		when:
-			controller.params.startDate = new Date()
-			controller.params.endDate = new Date()
+			controller.params.startDate = TEST_DATE
+			controller.params.endDate = TEST_DATE
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 6
+			model.messageInstanceTotal == 5
 		when:
-			controller.params.startDate = new Date()-6
-			controller.params.endDate = new Date()-3
+			controller.params.startDate = TEST_DATE-6
+			controller.params.endDate = TEST_DATE-3
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 1
 		when:
-			controller.params.startDate = new Date()-7
-			controller.params.endDate = new Date()-5
+			controller.params.startDate = TEST_DATE-7
+			controller.params.endDate = TEST_DATE-5
 			model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findBySrc('Bob'), Fmessage.findBySrc('Michael')]
 		when:
-			controller.params.startDate = new Date()-14
-			controller.params.endDate = new Date()
+			controller.params.startDate = TEST_DATE-14
+			controller.params.endDate = TEST_DATE
+			controller.params.inArchive = true
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 8
@@ -283,16 +291,15 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	// TODO this needs a proper cleanup
 	def "only return message with custom fields"() {
 		when:
-			controller.params['cityCustomField'] = 'Paris'
-			//controller.params.inArchive = true
+			controller.params.city = 'Paris'
+			controller.params.inArchive = true
 			def model = controller.result()
-			//println("the fmessage.contactName is "+Fmessage.findBySrcLike("+254987654").contactName)
 		then:
-			model.messageInstanceList == Fmessage.findAllByDisplayNameLikeAndArchived('Alex', false)
-			//model.messageInstanceTotal == 1
+			model.messageInstanceList == Fmessage.findAllByDisplayNameLike('Alex')
+			model.messageInstanceTotal == 2
 		when:
-			controller.params['cityCustomField'] = ''
-			controller.params['likeCustomField'] = 'ak'
+			controller.params.city = ''
+			controller.params.like = 'ak'
 		    model = controller.result()
 		then:
 			//println(model.messageInstanceList.toString()+" "+model.messageInstanceList.src+" => "+model.messageInstanceList.dst)
@@ -300,22 +307,22 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			//model.messageInstanceList == Fmessage.findAllByDst('+666666666')+ Fmessage.findAllBySrc('+254333222')
 			model.messageInstanceTotal == 2
 		when:
-			controller.params['cityCustomField'] = ''
-			controller.params['likeCustomField'] = ''
-			controller.params['dobCustomField'] = '7'
+			controller.params.city = ''
+			controller.params.like = ''
+			controller.params.dob = '7'
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 1
 		when:
-			controller.params['dobCustomField'] = ''
-			controller.params['cityCustomField'] = 'sometingthatdoesntexit'
+			controller.params.dob = ''
+			controller.params.city = 'sometingthatdoesntexit'
 			model = controller.result()
 		then:
 			model.messageInstanceTotal == 0
 		when:
-			controller.params['cityCustomField'] = ''
+			controller.params.city = ''
 			model = controller.result()
 		then:
-			model.messageInstanceTotal == 8
+			model.messageInstanceTotal == 9
 	}
 }

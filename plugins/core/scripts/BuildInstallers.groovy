@@ -1,7 +1,7 @@
 includeTargets << grailsScript("Init") << grailsScript("War")
 
 target(main: 'Build installers for various platforms.') {
-	depends(clean, war)
+//	depends(clean, war)
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
 	delete(dir:'install/webapp')

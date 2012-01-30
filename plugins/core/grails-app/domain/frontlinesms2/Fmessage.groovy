@@ -165,12 +165,8 @@ class Fmessage {
 					def groupMembersNumbers = search.group.getAddresses() ?: [''] //otherwise hibernate fail to search 'in' empty list
 					or {
 						'in'("src", groupMembersNumbers)
-					}
-					
-					def dispatchList = Dispatch.findAllByDstInList(groupMembersNumbers) ?: ['']
-					if(dispatchList) {
-						or {
-							'in'("dispatches", dispatchList)
+						dispatches {
+							'in'("dst", groupMembersNumbers)
 						}
 					}
 				}
@@ -194,8 +190,13 @@ class Fmessage {
 					le("date", search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
-					def matchingContacts = CustomField.getAllContactsWithCustomField(search.customFields) ?: [""] //otherwise hibernate fails to search 'in' empty list
-					'in'("displayName", matchingContacts)
+					def matchingContactsNumbers = CustomField.getAllContactsWithCustomField(search.customFields).primaryMobile ?: [""] //otherwise hibernate fails to search 'in' empty list
+					or {
+						'in'("src", matchingContactsNumbers)
+						dispatches {
+							'in'("dst", matchingContactsNumbers)
+						}
+					}
 				}
 				if(!search.inArchive) {
 					eq('archived', false)

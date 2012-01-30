@@ -15,13 +15,12 @@ class ArchiveISpec extends IntegrationSpec {
 	
 	def "can archive a folder"() {
 		given:
-			def folder = new Folder(name: 'rain').save(failOnError:true, flush:true)
+			def folder = new Folder(name: 'rain').save(failOnError:true)
 			assert !folder.archived
 		when:
 			folderController.params.id = folder.id
 			folderController.archive()
 		then:
-			folder.refresh()
 			folder.archived
 	}
 	
