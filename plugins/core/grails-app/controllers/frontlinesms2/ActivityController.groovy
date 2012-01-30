@@ -54,6 +54,10 @@ class ActivityController {
 	def delete = {
 		withActivity { activity ->
 			activity.deleted = true
+			activity.messages.each {
+				it.isDeleted = true
+				it.save(flush: true)
+			}
 			new Trash(identifier:activity.name, message:"${activity.liveMessageCount}", objectType:activity.class.name, linkId:activity.id).save(failOnError: true, flush: true)
 			activity.save(failOnError: true, flush: true)
 		}

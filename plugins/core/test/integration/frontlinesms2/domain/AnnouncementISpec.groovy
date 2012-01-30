@@ -21,7 +21,7 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 			def announcement = Announcement.findByName("announcement")
 		then:
 			announcement.name == 'announcement'
-			announcement.activityMessages.list()[0].text.contains('sending this')
+			announcement.sentMessageText.contains('sending this')
 			announcement
 	}
 	

@@ -8,11 +8,6 @@ class Activity extends MessageOwner {
 	Date dateCreated
 	static transients = ['liveMessageCount']
 
-	static mapping = {
-		messages cascade:'all'
-		messages sort:'date'
-	}
-	
 	static constraints = {
 		name(blank: false, nullable: false)
 		sentMessageText(nullable:true)

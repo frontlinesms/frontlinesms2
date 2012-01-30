@@ -28,9 +28,7 @@ class Fmessage {
 	int failedCount
 	static hasMany = [dispatches:Dispatch]
 
-	static mapping = {
-		sort date:'desc'
-	}
+	static mapping = { sort date:'desc'	}
 	
 	static constraints = {
 		messageOwner(nullable:true)

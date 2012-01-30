@@ -5,6 +5,10 @@ import grails.plugin.spock.*
 import frontlinesms2.*
 
 class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
+	def controller
+	def setup() {
+		controller = new PollController()
+	}
 
 	def 'saving a poll cascades to saving poll responses'() {
 		when:
@@ -25,8 +29,8 @@ class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
 			p.responses.size() == 2
 	}
 	
-	def "Deleting a Poll will cascade to delete its responses and its messages"() {
-		given:
+	def "Deleting a Poll will cascade to delete its messages"() {
+		setup:
 			def poll = new Poll(name:'Football Teams')
 			poll.addToResponses(new PollResponse(value:'manchester'))
 			poll.addToResponses(new PollResponse(value:'barcelona')).save(failOnError:true, flush:true)
@@ -39,9 +43,9 @@ class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
 			r.messages.find {it == m}
 			Fmessage.find(m)
 		when:
-			poll.deleted = true
+			poll.delete(flush: true)
 		then:
-			m.isDeleted
+			!Fmessage.find(m.id)
 	}
 }
 
