@@ -205,37 +205,18 @@ class Fmessage {
 			}
 		}
 		
-		filterMessages { params ->
+		forReceivedStats { params ->
 			def groupInstance = params.groupInstance
 			def messageOwner = params.messageOwner
-			def startDate = toStartOfDay(params.startDate)
-			def endDate = toEndOfDay(params.endDate)
-			def groupMembers = groupInstance?.getAddresses() ?: ''
+			def startDate = params.startDate.startOfDay
+			def endDate = params.endDate.endOfDay
+			
 			and {
-				if(groupInstance) {
-					'in'("src", groupMembers)
-				}
-				if(messageOwner) {
-					'in'("messageOwner", messageOwner)
-				}
-				if(params.messageStatus) {
-					def statuses = params.messageStatus.collect { it.toLowerCase() }
-					or {
-						if('sent' in statuses) {
-							or {
-								eq('hasSent', true)
-								eq('hasPending', true)
-								eq('hasFailed', true)
-							}
-						}
-						if('inbound' in statuses) eq('inbound', true)
-					}
-				}
+				eq('inbound', true)
 				eq('isDeleted', false)
-				and {
-					between("date", startDate, endDate)
-					eq("inbound", true)
-				}
+				between("date", startDate, endDate)
+				if(groupInstance) 'in'('src', groupInstance.addresses)
+				if(messageOwner) 'in'('messageOwner', messageOwner)
 			}
 		}
 	}
@@ -272,18 +253,29 @@ class Fmessage {
 	
 	// TODO should this be in a service?
 	static def getMessageStats(params) {
-		def messages = Fmessage.filterMessages(params).list(sort:"date", order:"desc")
-	
+		println "Fmessage.getMessageStats : params:$params"
+		
+		def asKey = { date -> date.format('dd/MM') }
+		
 		def dates = [:]
-		(params.startDate..params.endDate).each {
-			dates[it.format('dd/MM')] = [sent : 0, received : 0]
+		(params.startDate..params.endDate).each { date ->
+			dates[asKey(date)] = [sent:0, received:0]
 		}
-				
-		def stats = messages.collect {
-			it.inbound ? [date: it.date, type: "received"] : [date: it.date, type: "sent"]
+		
+		if(!params.inbound) {
+			// TODO the named query should ideally do the counts for us
+			Dispatch.forSentStats(params).list().each { d ->
+				++dates[asKey(d.dateSent)].sent
+			}
 		}
-		def messageGroups = countBy(stats.iterator(), {[it.date.format('dd/MM'), it.type]})
-		messageGroups.each { key, value -> dates[key[0]][key[1]] += value }
+		
+		if(params.inbound == null || params.inbound) {
+			// TODO the named query should ideally do the counts for us
+			Fmessage.forReceivedStats(params).list().each { m ->
+				++dates[asKey(m.date)].received
+			}
+		}
+		
 		dates
 	}
 	
@@ -303,23 +295,6 @@ class Fmessage {
 			countAnswer(answer, value)
 		}
 		answer
-	}
-	
-	private static def toStartOfDay(Date d) {
-		setTime(d, 0, 0, 0)
-	}
-	
-	private static def toEndOfDay(Date d) {
-		setTime(d, 23, 59, 59)
-	}
-	
-	private static def setTime(Date d, int h, int m, int s) {
-		def calc = Calendar.getInstance()
-		calc.setTime(d)
-		calc.set(Calendar.HOUR_OF_DAY, h)
-		calc.set(Calendar.MINUTE, m)
-		calc.set(Calendar.SECOND, s)
-		calc.getTime()
 	}
 	
 	private def updateFmessageDisplayName() {

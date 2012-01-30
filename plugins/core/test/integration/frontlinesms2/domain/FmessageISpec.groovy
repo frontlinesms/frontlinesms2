@@ -130,38 +130,52 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			searchMessagesCount == 0
 	}
 
-	def "getMessageStats returns message traffic information for the filter criteria"() {
+	def "getMessageStats should return message traffic information for the filter criteria"() {
 		setup:
-			["Fsharp", 'Haskell'].each() { createGroup(it) }
-			def fsharp = Group.findByName('Fsharp')
-			def haskell = Group.findByName('Haskell')
+			final Date TEST_DATE = new Date()
+		
+			def fsharp = createGroup('Fsharp')
+			def haskell = createGroup('Haskell')
+			
 			def jessy = createContact("Jessy", "+8139878055")
-			def lucy = createContact("Lucy", "+8139878056")
 			jessy.addToGroups(fsharp)
+			
+			def lucy = createContact("Lucy", "+8139878056")
 			lucy.addToGroups(haskell)
 			
-			int i =0
-			def dispatch = new Dispatch(dst: '123456', status: DispatchStatus.SENT, dateSent: new Date()-1)
-			(new Date()-6 ..new Date() + 5).each {
-				new Fmessage(date: it, src:jessy.primaryMobile, inbound:true, text: "A message received on ${it}").save(flush:true)
-				new Fmessage(date: it, src:lucy.primaryMobile, hasSent:true, text: "A message sent on ${it}").addToDispatches(dispatch).save(flush:true)
+			(TEST_DATE-6..TEST_DATE+5).each { date ->
+				new Fmessage(date:date, src:jessy.primaryMobile, inbound:true,
+								text:"A message received on $date")
+						.save(failOnError:true, flush:true)
+				new Fmessage(date:date, src:'1234567890', hasSent:true,
+								text:"A message sent on $date")
+						// this dispatch should be counted because Jessy is in the target group
+						.addToDispatches(new Dispatch(dst:jessy.primaryMobile, status:DispatchStatus.SENT, dateSent:date))
+						.save(failOnError:true, flush:true)
 			}
 			
-			3.times {				
-				new Fmessage(date: new Date()-1, src:jessy.primaryMobile, inbound:true, text: "Message {it}").save(flush:true)
+			3.times {
+				new Fmessage(date:TEST_DATE-1, src:jessy.primaryMobile, inbound:true, text: "Message {it}")
+						.save(failOnError:true, flush:true)
 			}
 			
-			5.times {				
-				new Fmessage(date: new Date()-1, src:jessy.primaryMobile, hasSent:true, text: "Message {it}").addToDispatches(dispatch).save(flush:true, failOnError:true)
+			5.times {
+				new Fmessage(date:TEST_DATE, src:'0000000', hasSent:true, text:"Message {it}")
+						// this dispatch should be counted because Jessy is in the target group
+						.addToDispatches(new Dispatch(dst:jessy.primaryMobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
+						// this dispatch should be ignored because Lucy is not in the target group
+						.addToDispatches(new Dispatch(dst:lucy.primaryMobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
+						.save(failOnError:true, flush:true)
 			}
 
 		when:
-			def startDate = new Date()-2
-			def endDate   = new Date()
-			def messages = Fmessage.getMessageStats([groupInstance:fsharp, messageOwner:null, startDate:startDate, endDate:endDate])
+			def asKey = { date -> date.format('dd/MM') }
+			def stats = Fmessage.getMessageStats([groupInstance:fsharp, messageOwner:null,
+					startDate:TEST_DATE-2, endDate:TEST_DATE])
 		then:
-			messages["${(startDate + 1).format('dd/MM')}"] == [sent:0, received:4]
-			messages["${endDate.format('dd/MM')}"] == [sent:5, received:1]
+			stats.keySet().sort() == [TEST_DATE-2, TEST_DATE-1, TEST_DATE].collect { asKey it }
+			stats["${asKey TEST_DATE-1}"] == [sent:1, received:4]
+			stats["${asKey TEST_DATE}"] == [sent:6, received:1]
 	}
 
 	def "new messages displayName are automatically given the matching contacts name"() {
@@ -198,21 +212,81 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			!m.validate()
 	}
 	
-	def "when a new contact is created, all messages with that contacts number should be updated"() {
+	def "when a new contact is created, all messages with that contacts primary number should be updated"() {
 		when:
-			def message = new Fmessage(src: "number", inbound:true, date: new Date()).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'1', inbound:true, date:new Date()).save(flush: true, failOnError:true)
 		then:
-			message.displayName == "number";
-			message.contactExists == false;
+			message.displayName == '1'
+			!message.contactExists
 		when:
-			new Contact(name: "Alice", primaryMobile:"number", secondaryMobile: "secondaryNo").save(flush: true)
-		then:
-			sleep 10000 // necessary since Fmessage is updated in a new thread
-		when:
+			new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
 			message.refresh()
 		then:
 			message.displayName == "Alice"
-			message.contactExists == true
+			message.contactExists
+	}
+	
+	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
+		when:
+			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'1', inbound:true, date:new Date()).save(failOnError:true, flush:true)
+		then:
+			message.displayName == 'Alice'
+			message.contactExists
+		when:
+			alice.primaryMobile = '3'
+			alice.save(failOnError:true, flush:true)
+			message.refresh()
+		then:
+			message.displayName == '1'
+			!message.contactExists
+	}
+	
+	def "when a new contact is created, all messages with that contacts secondary number should be updated"() {
+		when:
+			def message = new Fmessage(src:'2', inbound:true, date:new Date()).save(flush: true, failOnError:true)
+		then:
+			message.displayName == '2'
+			!message.contactExists
+		when:
+			new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			message.refresh()
+		then:
+			message.displayName == "Alice"
+			message.contactExists
+	}
+	
+	def "when a contact is updated, all messages with that contacts secondary number should be updated"() {
+		when:
+			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'2', inbound:true, date:new Date()).save(failOnError:true, flush:true)
+		then:
+			message.displayName == 'Alice'
+			message.contactExists
+		when:
+			alice.secondaryMobile = '3'
+			alice.save(failOnError:true, flush:true)
+			message.refresh()
+		then:
+			message.displayName == '2'
+			!message.contactExists
+	}
+	
+	def "when a contact is updated and primary number is moved to secondary number messages from that number should still appear from that contact"() {
+		when:
+			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'1', inbound:true, date:new Date()).save(failOnError:true, flush:true)
+		then:
+			message.displayName == 'Alice'
+			message.contactExists
+		when:
+			alice.primaryMobile = '3'
+			alice.secondaryMobile = '1'
+			alice.save(failOnError:true, flush:true)
+			message.refresh()
+		then:
+			message.displayName == 'Alice'
+			message.contactExists
 	}
 	
 	def "can archive message when it has no message owner" () {

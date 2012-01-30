@@ -83,9 +83,11 @@ class Contact {
 	}
 
 	def getOutboundMessagesCount() {
-		def primary = primaryMobile ? Dispatch.findByDst(primaryMobile).count() : 0
-		def secondary = secondaryMobile ? Dispatch.findByDst(secondaryMobile).count() : 0
-		primary + secondary
+		def count = 0
+		if(primaryMobile || secondaryMobile) {
+			count = Dispatch.findByDstInList([primaryMobile, secondaryMobile]).count()
+		}
+		count
 	}
 	
 	def stripNumberFields() {
@@ -106,7 +108,7 @@ class Contact {
 	def updateFmessageDisplayName() {
 		if(primaryMobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=? OR m.src=?", [name, true, primaryMobile, secondaryMobile])
 				Dispatch.findAllByDst(primaryMobile).each {
 					it.message.displayName = "To: " + name
 					it.message.contactExists = true
