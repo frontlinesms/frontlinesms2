@@ -150,10 +150,15 @@ class MessageController {
 	}
 	
 	def retry = {
-		def message = Fmessage.get(params.messageId)
-		messageSendService.send(message)
-		flash.message = "Message has been queued to send to " + message.dispatches*.dst.join(", ")
-		redirect(action: params.messageSection, params: [messageId: params.messageId])
+		def failedMessageIds = params.failedMessageIds ?: params.messageId
+		def messages = Fmessage.getAll([failedMessageIds].flatten())
+		if(messages) {
+			messages.each { message ->
+				messageSendService.send(message)
+			}
+			flash.message = "Message has been queued to send to " + messages*.dispatches*.dst.flatten().join(", ")
+		}
+		redirect (controller: "message", action: 'pending')
 	}
 
 	def delete = {
