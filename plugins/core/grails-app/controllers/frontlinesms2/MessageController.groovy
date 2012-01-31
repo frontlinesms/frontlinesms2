@@ -114,6 +114,8 @@ class MessageController {
 					ownerInstance: trashInstance] << getShowModel()
 	}
 
+	def poll = { redirect(action: 'activity', params: params) }
+	def announcement = { redirect(action: 'activity', params: params) }
 	def activity = {
 		def activityInstance = Activity.get(params.ownerId)
 		def messageInstanceList = activityInstance?.getActivityMessages(params.starred)
@@ -225,7 +227,7 @@ class MessageController {
 					messageInstance.isDeleted = false
 				if(Trash.findByLinkId(messageInstance.id))
 					Trash.findByLinkId(messageInstance.id).delete(flush:true)
-				if (params.messageSection == 'activity')  {
+				if (params.messageSection == 'activity') {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save(failOnError: true, flush: true)				

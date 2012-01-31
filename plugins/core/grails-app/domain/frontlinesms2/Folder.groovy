@@ -12,8 +12,8 @@ class Folder extends MessageOwner{
 		name(blank:false, nullable:false, maxSize:255)
 	}
 	
-	def getFolderMessages(getOnlyStarred = false) {
-		Fmessage.owned(getOnlyStarred, this)
+	def getFolderMessages(getOnlyStarred=false, getSent=true) {
+		Fmessage.owned(getOnlyStarred, this, getSent)
 	}
 	
 	def archive() {

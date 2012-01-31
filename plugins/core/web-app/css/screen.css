@@ -717,7 +717,7 @@ animation: newMessage 2s;
     background-color: #D8E8EF;
 }
 #message-list .folderOwner {
-	background-image: url('../images/icons/folder.png');
+	background-image: url('../images/icons/folders.png');
     background-repeat: no-repeat;
     background-position: right;
 }
@@ -787,11 +787,16 @@ animation: newMessage 2s;
 #message-detail-sender, #message-detail-date{
 	margin: 0;
 }
-#message-detail-owner {
-	background-image: url('../images/icons/activities.png');
+#message-detail-owner{
 	background-repeat: no-repeat;
 	margin: 0;
 	padding-left: 25px;
+}
+#message-detail-owner.poll, #message-detail-owner.announcement {
+	background-image: url('../images/icons/activities.png');
+}
+#message-detail-owner.folder {
+	background-image: url('../images/icons/folders.png');
 }
 
 #reply-all{
