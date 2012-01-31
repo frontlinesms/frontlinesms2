@@ -56,8 +56,7 @@
 		$("#tabs-3").contentWidget({
 			validate: function() {
 				var pollKeywordTextfield = $("input[name='keyword']");
-				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||
-						pollKeywordTextfield.val().trim().length > 0;
+				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||	pollKeywordTextfield.val().trim().length > 0;
 				if(isValid) pollKeywordTextfield.removeClass('error');
 				else pollKeywordTextfield.addClass('error');
 				return isValid;
@@ -84,10 +83,10 @@
 
 		$("#tabs-7").contentWidget({
 			validate: function() {
-				$("#tabs-7 #title").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-7 #title"));
+				$("#tabs-7 #name").removeClass("error");
+				var isEmpty = isElementEmpty($("#tabs-7 #name"));
 				if(isEmpty) {
-					$("#tabs-7 #title").addClass("error");
+					$("#tabs-7 #name").addClass("error");
 				}
 				return !isEmpty;
 			}
@@ -112,7 +111,6 @@
 	function updateConfirmationMessage() {
 		updateMessageDetails();
 		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
-		
 		// update auto-sort
 		var autoSort = $("input[name='enableKeyword']:checked").val();
 		var autoSortMessages = $('#auto-sort-confirm p');
@@ -173,6 +171,6 @@
 	function summaryRedirect() {
 		var ownerId = $(".summary #ownerId").val();
 		$(this).dialog('close');
-		window.location.replace(url_root + "message/poll/" + ownerId);
+		window.location.replace(url_root + "message/activity/" + ownerId);
 	}
 </g:javascript>

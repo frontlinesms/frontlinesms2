@@ -7,7 +7,6 @@ class MessageSendService {
 		assert m instanceof Fmessage
 		def headers = [:]
 		if(c) headers.fconnection = c.id
-		m.save() // have to do this here or it can cause problems with the session when there is a messageOwner
 		m.dispatches.each {
 			sendMessageAndHeaders('seda:dispatches', it, headers)
 		}
