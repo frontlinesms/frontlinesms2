@@ -13,7 +13,7 @@ function categorizeClickAction() {
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/changeResponse',
-		data: {responseId: responseId, messageId: messagesToChange, ownerId: ownerId},
+		data: {responseId: responseId, messageIdList: messagesToChange, ownerId: ownerId},
 		success: function(data) { window.location = url_root + successUrl; }
 	});
 }

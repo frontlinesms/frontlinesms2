@@ -4,7 +4,7 @@
 	<table>
 		<tr>
 			<td>
-				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="poll-sent">   (${sentMessageCount} messages sent)</span>
+				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="poll-sent">   (${sentDispatchCount} messages sent)</span>
 				<p>${ownerInstance?.sentMessageText}</p>
 				<p>${ownerInstance.autoReplyText ? "Auto Response Enabled" : ""}</p>
 			</td>
@@ -17,8 +17,10 @@
 									${r.value}
 								</td>
 								<td class='count'>
+									${r.liveMessageCount}
 								</td>
 								<td class='percent'>
+									<span>${ownerInstance.liveMessageCount - sentMessageCount != 0 ? (r.liveMessageCount/(ownerInstance.liveMessageCount - sentMessageCount))*100 : 0}%</span>
 								</td>
 							</tr>
 						</g:each>
