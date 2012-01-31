@@ -10,6 +10,7 @@ class MessageSendService {
 		m.dispatches.each {
 			sendMessageAndHeaders('seda:dispatches', it, headers)
 		}
+		m.save()
 	}
 	
 	def getMessagesToSend(params) {
