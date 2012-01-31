@@ -63,5 +63,13 @@ class Dispatch {
 				if(messageOwner) 'in'('messageOwner', messageOwner)
 			}
 		}
+		
+		messageCount { contact ->
+			and {
+				eq('isDeleted', false)
+				if(contact.primaryMobile) 'in'('dst', contact.primaryMobile)
+				if(contact.secondaryMobile) 'in'('dst', contact.secondaryMobile)
+			}
+		}
 	}
 }

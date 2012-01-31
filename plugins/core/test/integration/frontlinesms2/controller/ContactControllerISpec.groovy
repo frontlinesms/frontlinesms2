@@ -1,6 +1,8 @@
 package frontlinesms2.controller
 
 import frontlinesms2.*
+import grails.converters.JSON
+
 class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def c
@@ -170,5 +172,19 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.checkForDuplicates()
 		then:
 			controller.response.contentAsString != '' && controller.response.contentAsString != null
+	}
+	
+	def "getMessageStats returns the correct number of messages for a given contact"() {
+		setup:
+			def contact =new Contact(name:'Bob', primaryMobile:"1234567").save(failOnError:true, flush:true)
+			new Fmessage(src: '1234567', read:true, date: new Date(), inbound:true).save(failOnError: true, flush:true)
+		when:
+			controller.params.id = contact.id
+			controller.getMessageStats()
+			def response = controller.response.contentAsString
+			def stats = JSON.parse(response)
+		then:
+			stats.inboundMessagesCount == 1
+			stats.outboundMessagesCount == 0
 	}
 }

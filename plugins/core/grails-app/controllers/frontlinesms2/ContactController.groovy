@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.util.GrailsConfig
+import grails.converters.JSON
 
 class ContactController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -158,6 +159,14 @@ class ContactController {
 			render(text: "There is already a contact with that number!")
 		else
 			render ""
+	}
+	
+	def getMessageStats = {
+		def contactInstance = Contact.get(params.id)
+		if(contactInstance) {
+			def messageStats = [inboundMessagesCount: contactInstance.inboundMessagesCount, outboundMessagesCount: contactInstance.outboundMessagesCount]
+			render messageStats as JSON
+		}
 	}
 	
 	private def attemptSave(contactInstance) {

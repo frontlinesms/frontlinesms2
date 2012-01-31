@@ -105,8 +105,8 @@
 	<div id='message-stats'>
 		<label for="messages">Messages</label>
 		<div id="message-count">
-			<p id="num-sent">${contactInstance?.inboundMessagesCount} messages sent</p>
-			<p id="num-recieved">${contactInstance?.outboundMessagesCount} messages received</p>
+			<p id="num-sent">${contactInstance?.outboundMessagesCount} messages sent</p>
+			<p id="num-recieved">${contactInstance?.inboundMessagesCount} messages received</p>
 		</div>
 		<div id="contact-msg-search">
 			<g:link class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
@@ -115,3 +115,19 @@
 		</div>
 	</div>
 </div>
+<g:javascript>
+	function refreshMessageStats(data) {
+		var url = 'contact/getMessageStats'
+		var numSent = $('#num-sent')
+		var numRecieved = $('#num-recieved')
+		$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
+			numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount))
+			numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount))
+		});
+		
+	}
+	
+	$(function() {
+		setInterval(refreshMessageStats, 15000);
+	});
+</g:javascript>
