@@ -157,7 +157,7 @@ class Contact {
 	def getOutboundMessagesCount() {
 		def count = 0
 		if(primaryMobile || secondaryMobile) {
-			count = Dispatch.findByDstInList([primaryMobile, secondaryMobile]).count()
+			count = Dispatch.messageCount(this).count()
 		}
 		count
 	}
