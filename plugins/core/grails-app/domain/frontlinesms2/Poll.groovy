@@ -62,7 +62,9 @@ class Poll extends Activity {
 	
 	static Poll createPoll(attrs) {
 		def poll = new Poll(attrs)
-		if(attrs['poll-type'] == 'standard') {	['Yes','No'].each { poll.addToResponses(new PollResponse(value:it, key:it)) }
+		if(attrs['poll-type'] == 'standard') {
+			poll.addToResponses(new PollResponse(value:'Yes', key:'A'))
+			poll.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {
 			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
 			choices.each { k,v -> 

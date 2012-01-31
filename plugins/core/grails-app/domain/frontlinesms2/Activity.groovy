@@ -13,8 +13,8 @@ class Activity extends MessageOwner {
 		sentMessageText(nullable:true)
 	}
 	
-	def getActivityMessages(getOnlyStarred = false) {
-		Fmessage.owned(getOnlyStarred, this)
+	def getActivityMessages(getOnlyStarred=false, getSent=true) {
+		Fmessage.owned(getOnlyStarred, this, getSent)
 	}
 	
 	def archive() {

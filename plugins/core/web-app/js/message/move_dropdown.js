@@ -25,7 +25,6 @@ function moveAction() {
 	} else{
 		var location = url_root + "message/" + messageSection;
 	}
-	
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/move',
