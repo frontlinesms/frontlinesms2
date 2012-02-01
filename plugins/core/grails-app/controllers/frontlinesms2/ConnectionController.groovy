@@ -76,10 +76,10 @@ class ConnectionController {
 
 	def sendTest = {
 		withFconnection { connection ->
-			flash.message = "Test message successfully sent to ${params.number} using ${connection.name}"
-			def fmessage = new Fmessage(src:"$connection", dst: params.number, text: params.message)
-			println "passing arguments ${fmessage.class}, ${connection.class}"
-			messageSendService.send(fmessage, connection)
+			def message = messageSendService.getMessagesToSend(params)
+			println "passing arguments ${message.class}, ${connection.class}"
+			messageSendService.send(message, connection)
+			flash.message = "Test message successfully sent to ${params.addresses} using ${connection.name}"
 			redirect (controller:'settings', action:'show_connections', id:params.id)
 		}
 	}
