@@ -586,23 +586,28 @@ a {
 }
 
 #folder-list, #activity-list{
- 	position: absolute;
-	left: 0;
-	right: 400px;
-	top: 0;
-	bottom: 0;
-    float:left;
-    padding: 0;
+	float:left;
     margin: 0;
+    width: 100%;
+    height: 100%;
 }
 
-#message-list thead, #folder-list thead, #activity-list thead{
+#message-list thead {
 	position: fixed;
 	top: 132px;
 	right: 400px;
 	left: 17%;
     z-index: 10;
     padding: 0;
+    border: 0;
+}
+#folder-list thead, #activity-list thead {
+	position: fixed;
+	top: 132px;
+	right: 0;
+	left: 17%;
+    z-index: 10;
+    padding-left: 17px;
     border: 0;
 }
 .tall-header #message-list thead{
