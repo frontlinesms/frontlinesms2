@@ -83,6 +83,7 @@ class Fmessage {
 			}
 		}
 		updateFmessageStatuses()
+		if(!this.inbound) this.read = true
 	}
 	
 	def beforeUpdate = {
