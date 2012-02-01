@@ -36,7 +36,7 @@ class MessageControllerSpec extends ControllerSpec {
 					[new Fmessage(id: 1L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)]),
 				new Fmessage(id: 2L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)]),
 				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)])])
-			mockParams.failedMessageIds = [1, 2]
+			mockParams.checkedMessageList = (", 1, 2,")
 		when:
 			controller.retry()
 		then:
@@ -50,7 +50,7 @@ class MessageControllerSpec extends ControllerSpec {
 					[new Fmessage(id: 1L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()]),
 				new Fmessage(id: 2L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()]),
 				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()])])
-			mockParams.failedMessageIds = "1"
+			mockParams.messageId = "1"
 		when:
 			controller.retry()
 		then:
