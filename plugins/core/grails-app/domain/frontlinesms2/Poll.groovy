@@ -38,7 +38,18 @@ class Poll extends Activity {
 	void addToMessages(Fmessage message) {
 		message.messageOwner = this
 		if(message.inbound) {
+			this.responses.each {
+				it.removeFromMessages(message)
+			}
 			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+		}
+	}
+	void removeFromMessages(Fmessage message) {
+		this.messages.remove(this)
+		if(message.inbound) {
+			this.responses.each {
+				it.removeFromMessages(message)
+			}
 		}
 	}
 	
@@ -50,7 +61,7 @@ class Poll extends Activity {
 	def beforeInsert = beforeSave
 
 	def getResponseStats() {
-		def totalMessageCount = getActivityMessages(false).count()
+		def totalMessageCount = getActivityMessages(false, false).count()
 		responses.sort {it.key?.toLowerCase()}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,

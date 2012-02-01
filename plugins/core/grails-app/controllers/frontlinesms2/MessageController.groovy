@@ -120,8 +120,10 @@ class MessageController {
 		def activityInstance = Activity.get(params.ownerId)
 		def messageInstanceList = activityInstance?.getActivityMessages(params.starred)
 		def sentMessageCount = 0
+		def sentDispatchCount = 0
 		Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
-			sentMessageCount += it.dispatches.size()
+			sentDispatchCount += it.dispatches.size()
+			sentMessageCount++
 		}
 		render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
 			model:[messageInstanceList: messageInstanceList?.list(params),
@@ -130,7 +132,8 @@ class MessageController {
 					ownerInstance: activityInstance,
 					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
 					pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
-					sentMessageCount: sentMessageCount] << getShowModel()
+					sentMessageCount: sentMessageCount,
+					sentDispatchCount: sentDispatchCount] << getShowModel()
 	}
 	
 	def folder = {
@@ -230,12 +233,12 @@ class MessageController {
 				if (params.messageSection == 'activity') {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
-					activity.save(failOnError: true, flush: true)				
+					activity.save()				
 				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
-						messageOwner?.removeFromMessages messageInstance
+						messageOwner?.removeFromMessages(messageInstance)
 						messageOwner = null
 						messageOwner?.save()
 						save()
@@ -248,12 +251,13 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def messageIdList = params.messageId.tokenize(',')
+		def messageIdList = params.messageIdList.tokenize(',')
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
 				def responseInstance = PollResponse.get(params.responseId)
+				responseInstance.poll.removeFromMessages(messageInstance)
 				responseInstance.addToMessages(messageInstance)
-				responseInstance.save(failOnError: true, flush: true)
+				responseInstance.poll.save()
 			}
 		}
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message(s)'])}"

@@ -12,15 +12,19 @@ class PollResponse {
 		value(blank: false, nullable: false, maxSize: 255)
 		key(nullable: true)
 		poll(nullable: false)
-		messages(nullable: true)
+		messages(nullable: true, validator: { val, obj ->
+			
+		})
 	}
 	
 	void addToMessages(Fmessage message) {
-		this.poll.responses.each {
-			it.removeFromMessages(message)
+		if(message.inbound) {
+			this.poll.responses.each {
+				it.removeFromMessages(message)
+			}
+			this.messages.add(message)
+			message.messageOwner = this.poll
 		}
-		this.messages.add(message)
-		message.messageOwner = this.poll
 	}
 	
 	def getLiveMessageCount() {
