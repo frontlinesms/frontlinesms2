@@ -97,7 +97,7 @@
 }
 
 .ui-tabs-panel #reply-count {
-	padding-left: 60px;
+	display: block;
 }
 
 .ui-tabs-panel .radios {
