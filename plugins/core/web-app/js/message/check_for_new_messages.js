@@ -18,7 +18,7 @@ function checkForNew() {
 			var newMessageCount = newTotal - currentTotal;
 			var notificationContents = "<a id='refreshMessageList'>You have " + newMessageCount + " new messages. Click to view</a>"
 			if(!$("#new-message-notification").html())
-				$('#messages').prepend('<div id="new-message-notification">' + notificationContents + '</div>');
+				$('#message-list table tbody').prepend('<div id="new-message-notification">' + notificationContents + '</div>');
 			else {
 				$("#new-message-notification a").replaceWith(notificationContents);
 				$("#new-message-notification a").show();
