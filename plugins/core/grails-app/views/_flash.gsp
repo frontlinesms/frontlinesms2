@@ -30,7 +30,7 @@
 </g:hasErrors>
 <g:javascript>
 	$(function() {
-		$('.hide-flash').click(function() {
+		$('.hide-flash').live("click", function() {
 			$(this).parent(".flash").slideUp(500);
 			return true;
 		});

@@ -24,4 +24,18 @@ class PollController extends ActivityController {
 		}
 		[ownerId: pollInstance.id]
 	}
+	
+	def sendReply = {
+		def poll = Poll.get(params.pollId)
+		def incomingMessage = Fmessage.get(params.messageId)
+		if(poll.autoReplyText) {
+			params.addresses = incomingMessage.src
+			params.messageText = poll.autoReplyText
+			def outgoingMessage = messageSendService.getMessagesToSend(params)
+			poll.addToMessages(outgoingMessage)
+			messageSendService.send(outgoingMessage)
+			poll.save()
+		}
+		render ''
+	}
 }

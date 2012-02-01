@@ -44,12 +44,9 @@
 }
 #notifications .hide-flash{
 	float: right;
-	top: 0;
-	right: 0;
 	text-decoration: none;
 	font-weight: normal;
 	padding-right: 8px;
-	position:absolute;
 	cursor: pointer;
 }
 #notifications .hide-flash:hover{

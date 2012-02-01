@@ -20,14 +20,17 @@ class KeywordProcessorService {
 	def processPollResponse(PollResponse response, Fmessage message) {
 		response.addToMessages(message)
 		response.save(failOnError: true)
-		if(response.poll.autoReplyText) {
-			Dispatch d = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
-			Fmessage autoReply = new Fmessage(text:response.poll.autoReplyText, date: new Date(), inbound: false)
-			autoReply.addToDispatches(d)
-			messageSendService.send(autoReply)
-			response.poll.addToMessages(autoReply)
+		def poll = response.poll
+		if(poll.autoReplyText) {
+			params.addresses = params.message.src
+			params.messageText = poll.autoReplyText
+			def outgoingMessage = messageSendService.getMessagesToSend(params)
+			poll.addToMessages(outgoingMessage)
+			messageSendService.send(outgoingMessage)
+			poll.save()
 			println "Autoreply message sent to ${message.src}"
 		}
+		return true
 	}
 
 	PollResponse getPollResponse(String messageText) {
