@@ -52,7 +52,6 @@ a {
 	background-image: url('../images/icons/error_on.png');
 	background-repeat: no-repeat;
 	background-position: right center;
-	margin-right: 17px;
 }
 
 /* FIXME */
@@ -507,6 +506,13 @@ a {
     background-repeat: no-repeat;
 }
 
+#new-message-notification {
+	text-align: center;
+	min-height: 21px;
+	background-color: rgba(192, 50, 131, 0.3);
+	z-index: 100;
+}
+
 #messages, #folders, #activities{
 	position: fixed;
 	top: 128px;
@@ -540,14 +546,16 @@ a {
 #message-list {
 	position: absolute;
 	left: 0;
-	right: 400px;
+	right: 350px;
 	top: 0;
 	bottom: 0;
     float:left;
     padding: 0;
     margin: 0;
 }
-
+#message-list table tr {
+	display: block;
+}
 #folder-list, #activity-list{
     float:left;
     margin: 0;
@@ -558,7 +566,7 @@ a {
 #message-list thead {
 	position: fixed;
 	top: 132px;
-	right: 400px;
+	right: 350px;
 	left: 17%;
     z-index: 10;
     padding: 0;
@@ -612,25 +620,17 @@ a {
 	padding-right: 10px;
 }
 #message-list .message-sender-cell, #activity-list .activity-type-cell{
+	min-width: 200px;
 	padding-right: 10px;
 }
 #message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
+	min-width: 150px;
+	width: 100%;
 	padding-right: 17px;
 }
 #message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
-	padding: 0 10px;
-}
-#message-list thead .message-sender-cell {
-	min-width: 100px;
-	padding-right: 10px;
-}
-#message-list thead .message-text-cell {
-	min-width: 200px;
-	padding-right: 17px;
-}
-#message-list thead .message-date-cell {
-	min-width: 100px;
-	padding: 0 10px;
+	min-width: 250px;
+	padding: 0 40px;
 }
 
 #message-list .message-select-cell input[type='checkbox']{
@@ -649,26 +649,7 @@ a {
 	from {background: rgba(192, 50, 131, 0.3);}
 	to {background: white;}
 }
-#new-message-notification {
-	position: relative;
-	top: 154px;
-	width: 70%;
-	text-align: center;
-	min-height: 21px;
-	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.3);
-	z-index: 100;
-}
-.tall-header #new-message-notification {
-	position: relative;
-	top: 304px;
-	width: 70%;
-	text-align: center;
-	min-height: 21px;
-	padding: 2px 0;
-	background-color: rgba(192, 50, 131, 0.3);
-	z-index: 100;
-}
+
 #new-message-notification a{
 	display: block;
 	cursor: pointer;
@@ -755,7 +736,7 @@ animation: newMessage 2s;
 	top: 28px;
 	bottom: 0;
 	right: 0;
-	width: 400px;
+	width: 350px;
     float:right;
     background-color: #D8E8EF;
     overflow: auto;
@@ -765,7 +746,7 @@ animation: newMessage 2s;
 }
 
 #message-detail .extra-msg-btn{
-	width:55%;
+	width:69%;
 	margin: 17px 2%;
 }
 
@@ -808,7 +789,7 @@ animation: newMessage 2s;
     padding: 0;
 }
 #message-detail-buttons .msg-btn{
-	width:28%;
+	width:26%;
 	margin: 0 2%;
 }
 
@@ -861,9 +842,7 @@ animation: newMessage 2s;
     background-image: url('../images/buttons/dropdown_pressed_arrow.png');
 }
 #dropdown_options{
-	position: fixed;
-	top:319px;
-	left:76.5%;
+	position: absolute;
 	float:left;
 	background-color: white;
 	border: 1px solid #6b6b6b;
