@@ -24,7 +24,8 @@
 	function initializePopup() {
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				return isGroupChecked("addresses")
+				addAddressHandler();
+				return isGroupChecked("addresses");
 			}
 		});
 	}

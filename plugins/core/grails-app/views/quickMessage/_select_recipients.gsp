@@ -2,7 +2,7 @@
 <div>
 	<div id="manual-address">
 		<label id="label" class="bold" for="address">Add phone number: </label>
-		<g:textField id="address" name="address"/>
+		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
 		<g:link url="#" class="btn add-address" onclick="addAddressHandler();">Add</g:link>
 	</div>
 	<div id="recipients-list">
@@ -94,19 +94,27 @@
 		$("#messages-count").html(messageCount)
 	}
 
-	 function addAddressHandler() {
+	function validateAddressEntry() {
 		var address = $('#address').val();
 		var containsLetters = jQuery.grep(address, function(a) {
 			return a.match(/[a-zA-Z]/) != null;
 		}).join('');
+		$("#address").removeClass('error');
+		$("#manual-address").find('#address-error').remove();
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
 			$("#manual-address").append("<div id='address-error' class='error-message'>Phone number cannot contain letters</div>");
-		} else if(address == '') {
-
+			return false;
 		} else {
-			$("#address").removeClass('error');
-			$("#manual-address").find('#address-error').remove();
+			return true;
+		}
+	}
+
+	 function addAddressHandler() {
+		var address = $('#address').val();
+		if(address == '') {
+			return true;
+		} else if(validateAddressEntry()) {
 			var sanitizedAddress = jQuery.grep(address, function(a) {
 				return a.match(/[0-9]/) != null;
 			}).join('');
@@ -117,7 +125,9 @@
 				updateCount();
 			}
 			$('#address').val("")
+			return true;
 		}
+		return false;
 	}
 </script>
 
