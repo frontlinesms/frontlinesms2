@@ -155,14 +155,17 @@ class MessageController {
 	}
 	
 	def retry = {
-		def failedMessageIds = params.failedMessageIds ?: params.messageId
-		def messages = Fmessage.getAll([failedMessageIds].flatten())
-		if(messages) {
-			messages.each { message ->
-				messageSendService.send(message)
+		println "params are $params"
+		def dst = []
+		def failedMessageIdList = params.checkedMessageList?.tokenize(',') ?: [params.messageId]
+		failedMessageIdList.each { id ->
+			withFmessage id, {messageInstance ->
+				dst << messageInstance.dispatches*.dst
+				messageSendService.send(messageInstance)
 			}
-			flash.message = "Message has been queued to send to " + messages*.dispatches*.dst.flatten().join(", ")
 		}
+		
+		flash.message = "Message has been queued to send to " + dst.flatten().join(", ")
 		redirect (controller: "message", action: 'pending')
 	}
 
