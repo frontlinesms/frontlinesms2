@@ -19,6 +19,9 @@
 							<div>
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}" >Create route</g:link>
 							</div>
+							<div>
+								<g:remoteLink controller="connection" action="connection_wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Edit');">Edit Connection</g:remoteLink>
+							</div>
 						</g:if>
 						<g:else>
 							<div>
@@ -36,7 +39,7 @@
 		</ul>
 	</g:else>
 	<div id="create-connection-btn">
-		<g:remoteLink class="btn" controller='connection' action="create_new" onSuccess="launchMediumWizard('New connection', data, 'Create');">
+		<g:remoteLink class="btn" controller='connection' action="connection_wizard" onSuccess="launchMediumWizard('New connection', data, 'Create');">
 			Add new connection
 		</g:remoteLink>
 	</div>

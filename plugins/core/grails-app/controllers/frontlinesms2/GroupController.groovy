@@ -10,16 +10,13 @@ class GroupController {
 	def update = {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
-		if(group.validate()){
-			group.save(failOnError: true, flush: true)
-			flash['message'] = "Group updated successfully"
-		}
-		else
-			flash['message'] = "Group not saved successfully"
-		if (params.name){
+		if(group.save(flush: true)) {
+			flash.message = "Group updated successfully"
 			redirect(controller: "contact", action: "show", params:[groupId : params.id])
-		} else {
-			redirect(controller:"contact")
+		}
+		else {
+			flash.message = "Group not saved successfully"
+			redirect(controller: "contact", action: "show", params:params)
 		}
 	}
 
