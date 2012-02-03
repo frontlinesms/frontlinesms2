@@ -77,7 +77,11 @@
 		
 		$("#tabs-6").contentWidget({
 			validate: function() {
-				return isGroupChecked('dontSendMessage') || isGroupChecked('addresses');
+				if(!isGroupChecked('dontSendMessage')) {
+					addAddressHandler();
+					return isGroupChecked('addresses');
+				}
+				return true
 			}
 		});
 
