@@ -22,7 +22,8 @@ class KeywordProcessorService {
 		response.save(failOnError: true)
 		def poll = response.poll
 		if(poll.autoReplyText) {
-			params.addresses = params.message.src
+			def params = [:]
+			params.addresses = message.src
 			params.messageText = poll.autoReplyText
 			def outgoingMessage = messageSendService.getMessagesToSend(params)
 			poll.addToMessages(outgoingMessage)

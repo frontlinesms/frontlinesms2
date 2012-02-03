@@ -17,19 +17,24 @@
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
 	<ol>
-		<li><a href="#tabs-1">Choose type</a></li>
+		<g:if test="${!fconnectionInstance}">
+			<li><a href="#tabs-1">Choose type</a></li>
+		</g:if>
 		<li><a href="#tabs-2">Enter details</a></li>
 		<li><a href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:form action="save" id='newConnection'>
+	<g:form action="${action}" id='${fconnectionInstance?.id}'>
 		<g:render template="type"/>
 		<g:render template="details"/>
 		<g:render template="confirm"/>
 	</g:form>
 </div>
-<script>
+<g:javascript>
 function initializePopup() {
+	<g:if test="${fconnectionInstance}">
+		setChecked("${fconnectionInstance instanceof frontlinesms2.EmailFconnection ? 'email':'smslib'}");
+	</g:if>
 	$("#tabs").bind("tabsshow", function(event, ui) {
 		updateConfirmationMessage();
 	});
@@ -47,7 +52,13 @@ function initializePopup() {
 }
 
 function updateConfirmationMessage() {
-	var type = $("#type-list").find("input[checked=checked]").val();
+	<g:if test="${fconnectionInstance}">
+		var type = "${fconnectionInstance instanceof frontlinesms2.EmailFconnection ? 'email':'smslib'}";
+	</g:if>
+	<g:else>
+		var type = $("#type-list").find("input[checked=checked]").val();		
+	</g:else>
+	
 	if(type == 'smslib') {
 		$("#email-confirm").hide();
 		$("#smslib-confirm").show();
@@ -88,4 +99,4 @@ function updateConfirmationMessage() {
 			$("#confirm-password").text('None');
 	}
 }
-</script>
+</g:javascript>

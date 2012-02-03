@@ -13,5 +13,5 @@
 	</li>
 </ul>
 <g:javascript>
-function initializePopup() {}
+	function initializePopup() {}
 </g:javascript>

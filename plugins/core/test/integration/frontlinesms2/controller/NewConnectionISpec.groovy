@@ -48,4 +48,48 @@ class NewConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 			conn2.port == 'COM1'
 			conn2.baud == 9600
 	}
+	
+	def "can edit email connection"() {
+		setup:
+			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.valueOf("imap".toUpperCase()), name:"test connection",
+					 serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
+
+			controller1.params.id = emailConnection.id
+			controller1.params.receiveProtocol = 'imap'
+			controller1.params.connectionType = 'email'
+			controller1.params.name = 'test email connection'
+			controller1.params.serverName = 'mail.example.com'
+			controller1.params.serverPort = '1234'
+			controller1.params.username = 'greg'
+			controller1.params.password = 'pastie'
+		when:
+			controller1.update()
+			emailConnection.refresh()
+		then:
+			!emailConnection.hasErrors()
+			emailConnection.receiveProtocol.toString() == 'imap'
+			emailConnection.serverName == 'mail.example.com'
+			emailConnection.serverPort == 1234
+			emailConnection.username == 'greg'
+			emailConnection.password =='pastie'
+	}
+	
+	def "can edit sms connection"() {
+		setup:
+			def smslibConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+			controller1.params.id = smslibConnection.id
+			controller2.params.connectionType = 'smslib'
+			controller2.params.name = 'test smslib connection'
+			controller2.params.port = 'COM1'
+			controller2.params.baud = 9600
+			controller2.params.pin = "1234"
+		when:
+			controller2.update()
+			smslibConnection.refresh()
+		then:
+			!smslibConnection.hasErrors()
+			smslibConnection.port == 'COM1'
+			smslibConnection.baud == 9600
+			smslibConnection.pin == "1234"
+	}
 }

@@ -10,15 +10,35 @@ class ConnectionController {
 		redirect(action:'create_new')
 	}
 
-	def create_new = {
-		
+	def connection_wizard = {
+		def action = "save"
+		def fconnectionInstance
+		if(params.id) {
+			fconnectionInstance = Fconnection.get(params.id)
+			action = "update"
+		}
+		[action: action, fconnectionInstance: fconnectionInstance]
 	}
 	
 	def save = {
 		if(params.connectionType == 'email') saveEmail()
 		else if(params.connectionType == 'smslib') saveSmslib()
 	}
-
+	
+	def update = {
+		withFconnection { fconnectionInstance ->
+			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
+			fconnectionInstance.properties = params
+			if(fconnectionInstance.save(flush:true)) {
+				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
+				redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
+			} else {
+				flash.message = "fail!  ${fconnectionInstance.errors}"
+				redirect(controller:'settings', action: "connections", params: params)
+			}
+		}
+	}
+	
 	def saveEmail = {
 		def fconnectionInstance = new EmailFconnection()
 		if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
@@ -28,7 +48,7 @@ class ConnectionController {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
 			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
-			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
+			flash.message = "fail!  ${fconnectionInstance.errors}"
 			redirect(controller:'settings', action: "connections", params: params)
 		}
 	}
@@ -44,7 +64,7 @@ class ConnectionController {
 			redirect(controller:'settings', action: "connections", params: params)
 		}
 	}
-
+	
 	def createRoute = {
 		withFconnection { settings ->
 			println "creating route for fconnection $settings"
@@ -73,7 +93,7 @@ class ConnectionController {
 		def connectionInstance = Fconnection.get(params.id)
 		[connectionInstance:connectionInstance]
 	}
-
+	
 	def sendTest = {
 		withFconnection { connection ->
 			def message = messageSendService.getMessagesToSend(params)
@@ -86,7 +106,7 @@ class ConnectionController {
 	
 	private def withFconnection(Closure c) {
 		println "Fetching connection with id $params.id"
-		def connection = Fconnection.get(params.id)
+		def connection = Fconnection.get(params.id.toLong())
 		println "Connection: $connection"
 		if(connection) {
 			c connection
