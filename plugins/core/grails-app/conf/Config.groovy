@@ -83,8 +83,8 @@ log4j = {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
 	
-	appender new DailyRollingFileAppender(name:"myLogger1", datePattern:"'.'yyyy-MM-dd", layout:pattern(conversionPattern:'%d %-5p [%c{2}] %m%n'), file:"${System.properties.'user.home'}/.frontlinesms2/.log");
-	appender new DailyRollingFileAppender(name:"myLogger1-Stacktrace", datePattern:"'.'yyyy-MM-dd", layout:pattern(conversionPattern:'%d %-5p [%c{2}] %m%n'), file:"${System.properties.'user.home'}/.frontlinesms2/stacktrace.log");
+	appender new org.apache.log4j.DailyRollingFileAppender(name:"myLogger1", datePattern:"'.'yyyy-MM-dd", layout:pattern(conversionPattern:'%d %-5p [%c{2}] %m%n'), file:"${System.properties.'user.home'}/.frontlinesms2/standard.log");
+	appender new org.apache.log4j.DailyRollingFileAppender(name:"myLogger1-Stacktrace", datePattern:"'.'yyyy-MM-dd", layout:pattern(conversionPattern:'%d %-5p [%c{2}] %m%n'), file:"${System.properties.'user.home'}/.frontlinesms2/stacktrace.log");
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP
