@@ -39,13 +39,8 @@ class Dispatch {
 	}
 	
 	def updateMessageStatus() {
-		if(this.status == DispatchStatus.FAILED) {
-			this.message.hasFailed = true
-		} else if(this.status == DispatchStatus.PENDING) {
-			this.message.hasPending = true
-		} else if(this.status == DispatchStatus.SENT) {
-			this.message.hasSent = true
-		}
+		message.updateFmessageStatuses()
+		message.save()
 	}
 	
 	static namedQueries = {

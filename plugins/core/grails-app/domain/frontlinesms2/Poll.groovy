@@ -1,7 +1,6 @@
 package frontlinesms2
 
 class Poll extends Activity {
-	String type = 'poll'
 	String keyword
 	String autoReplyText
 	String question
@@ -84,5 +83,9 @@ class Poll extends Activity {
 		}
 		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
 		poll.save(flush: true, failOnError: true)
+	}
+	
+	def getType() {
+		return 'poll'
 	}
 }

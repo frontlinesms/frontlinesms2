@@ -6,7 +6,6 @@ class Folder extends MessageOwner{
 	static transients = ['liveMessageCount']
 	String name
 	Date dateCreated
-	String type = 'folder'
 	
 	static constraints = {
 		name(blank:false, nullable:false, maxSize:255)
@@ -31,5 +30,9 @@ class Folder extends MessageOwner{
 	def getLiveMessageCount() {
 		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
+	}
+	
+	def getType() {
+		return 'folder'
 	}
 }
