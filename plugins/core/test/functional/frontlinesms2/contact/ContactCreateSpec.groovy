@@ -17,17 +17,15 @@ class ContactCreateSpec extends ContactBaseSpec {
 	def 'button to create new contact exists and goes to NEW CONTACT page'() {
 		when:
 			to PageContactShow
-			def btnCreateContact = $("#create-contact").find('a')
 		then:
-			assert btnCreateContact.getAttribute('href') == "/core/contact/createContact"
+			$("#create-contact a").@href == "/contact/createContact"
 	}
 
 	def 'button to create new group exists and goes to NEW GROUP page'() {
 		when:
 			to PageContactShow
-			def btnCreateGroup = $("#create-group").find('a')
 		then:
-			assert btnCreateGroup.getAttribute('href') == "/core/group/create"
+			$("#create-group a").@href == "/group/create"
 	}
 	
 }

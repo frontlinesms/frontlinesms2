@@ -14,18 +14,18 @@ class Activity extends MessageOwner {
 	}
 	
 	def getActivityMessages(getOnlyStarred=false, getSent=true) {
-		Fmessage.owned(getOnlyStarred, this, getSent)
+		Fmessage.owned(this, getOnlyStarred, getSent)
 	}
 	
 	def archive() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(false, this, true)?.list()
+		def messagesToArchive = Fmessage.owned(this, false, true)?.list()
 		messagesToArchive.each { it?.archived = true }
 	}
 	
 	def unarchive() {
 		this.archived = false
-		def messagesToArchive = Fmessage?.owned(false, this, true)?.list()
+		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
 		messagesToArchive.each { it?.archived = false }
 	}
 	

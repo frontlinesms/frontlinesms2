@@ -23,7 +23,7 @@ class CoreBootStrap {
 		
 		switch(Environment.current) {
 			case Environment.TEST:
-				test_initGeb()
+				test_initGeb(servletContext)
 				break
 				
 			case Environment.DEVELOPMENT:
@@ -289,9 +289,21 @@ class CoreBootStrap {
 				COM99:new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler_withMessages())])
 	}
 	
-	private def test_initGeb() {
+	private def test_initGeb(def servletContext) {
+		// N.B. this setup uses undocumented features of Geb which could be subject
+		// to unnanounced changes in the future - take care when upgrading Geb!
 		def emptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.EmptyNavigator))
 		def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
+		
+		final String contextPath = servletContext.contextPath
+		final String baseUrl = grailsApplication.config.grails.serverURL
+		nonEmptyMc.'get@href' = {
+			def val = getAttribute('href')
+			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())
+			// check for baseUrl second, as it includes the context path
+			if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
+			return val
+		}
 		
 		/** list of boolean vars from https://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebElement.html#getAttribute(java.lang.String) */
 		final def BOOLEAN_PROPERTIES = ['async', 'autofocus', 'autoplay', 'checked', 'compact', 'complete', 'controls', 'declare', 'defaultchecked', 'defaultselected', 'defer', 'disabled', 'draggable', 'ended', 'formnovalidate', 'hidden', 'indeterminate', 'iscontenteditable', 'ismap', 'itemscope', 'loop', 'multiple', 'muted', 'nohref', 'noresize', 'noshade', 'novalidate', 'nowrap', 'open', 'paused', 'pubdate', 'readonly', 'required', 'reversed', 'scoped', 'seamless', 'seeking', 'selected', 'spellcheck', 'truespeed', 'willvalidate']

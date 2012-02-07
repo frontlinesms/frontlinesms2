@@ -116,7 +116,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
 		def label = $('label', for:fieldName)
 		assert label.text() == labelText
-		assert label.getAttribute('for') == fieldName
+		assert label.@for == fieldName
 		def input
 		if (fieldName == 'addresses') {
 			input = $('input', name: fieldName)
