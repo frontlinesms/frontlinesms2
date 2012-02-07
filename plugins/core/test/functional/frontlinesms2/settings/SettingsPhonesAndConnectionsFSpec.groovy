@@ -12,7 +12,7 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 		then:
 			at PageSettingsConnection
 			btnNewConnection.text() == "Add new connection"
-			assert btnNewConnection.getAttribute("href").contains("/connection/create_new")
+			btnNewConnection.@href == "/connection/create_new"
 	}
 	
 	def 'connections are listed in PHONE & CONNECTIONS panel'() {

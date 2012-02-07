@@ -42,11 +42,11 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
 		def label = $('label', for:fieldName)
 		assert label.text() == labelText
-		assert label.getAttribute('for') == fieldName
+		assert label.@for == fieldName
 		def input = $("#$fieldName")
-		assert input.getAttribute('name') == fieldName
-		assert input.getAttribute('id') == fieldName
-		assert input.getAttribute('value')  == expectedValue
+		assert input.@name == fieldName
+		assert input.@id == fieldName
+		assert input.@value  == expectedValue
 		true
 	}
 	

@@ -7,9 +7,8 @@ class FolderCedSpec extends FolderBaseSpec {
 	def 'button to create new folder from messages links to create folder page'() {
 		when:
 			go 'message'
-			def btnNewFolder = $('#create-folder a')
 		then:
-			btnNewFolder.getAttribute('href').contains("/folder/create")
+			$('#create-folder a').@href == "/folder/create"
 	}
 
 	def 'existing folders appear in activities section of messages'() {
