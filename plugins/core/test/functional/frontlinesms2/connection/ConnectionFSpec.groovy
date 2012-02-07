@@ -50,7 +50,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 	}
 	
 	def createTestConnections() {
-		[new SmslibFconnection(name:'MTN Dongle', port:'stormyPort'),
+		[new SmslibFconnection(name:'MTN Dongle', port:'COM99'),
 				new EmailFconnection(name:'Miriam\'s Clickatell account', receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
 			it.save(flush:true, failOnError: true)
@@ -76,33 +76,31 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 	def "should update message count when in Settings section"() {
 		when:
 			to ConnectionPage
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
+			def message = new Fmessage(src:'+254999999', text: "message count", inbound:true, date: new Date()).save(flush: true, failOnError:true)
 		then:
-			$("#message-tab-link").text() == "Messages\n0"
+			$("#message-tab-link").text().equalsIgnoreCase("Messages\n0")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor{
-				$("#message-tab-link").text() == "Messages\n1"
-			}
+			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n1") }
 	}
 	
-	//FIXME: Build Fix
-	/*	def 'Send test message button for particular connection appears when that connection is selected and started'() {
+	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 			given:
-				createTestConnection()
-				def testyEmail = EmailFconnection.findByName('test email connection')
+				createTestSMSConnection()
+				def testConnection = Fconnection.findByName('MTN Dongle')
 			when:
-				go "connection/show/${testyEmail.id}"
+				to ConnectionPage
 			then:
 				$('#connections .selected .test').isEmpty()
 			when:
+				waitFor{ $("#connections .selected .route").displayed }
 				$("#connections .selected .route").click()
 			then:
-				$('#connections .selected .test').@href == "/frontlinesms2/connection/createTest/${testyEmail.id}"
+				$('#connections .selected .test').@href == "/core/connection/createTest/${testConnection.id}"
 			cleanup:
 				deleteTestConnections()
-		}*/
+		}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
 		given:
@@ -111,16 +109,16 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 			def testyEmail = EmailFconnection.findByName('test email connection')
 			go "connection/createTest/${testyEmail.id}"
 		then:
-			assertFieldDetailsCorrect('number', 'Number', '')
-			assertFieldDetailsCorrect('message', 'Message', "Congratulations from FrontlineSMS \\o/ you have successfully configured ${testyEmail.name} to send SMS \\o/")
+			assertFieldDetailsCorrect('addresses', 'Number', '')
+			assertFieldDetailsCorrect('messageText', 'Message', "Congratulations from FrontlineSMS \\o/ you have successfully configured ${testyEmail.name} to send SMS \\o/")
 	}
 
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
 		def label = $('label', for:fieldName)
 		assert label.text() == labelText
-		assert label.getAttribute('for') == fieldName
+		assert label.@for == fieldName
 		def input
-		if (fieldName == 'number') {
+		if (fieldName == 'addresses') {
 			input = $('input', name: fieldName)
 		} else {
 			input = $('textarea', name: fieldName)

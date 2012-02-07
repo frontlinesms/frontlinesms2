@@ -56,12 +56,6 @@ grails.project.dependency.resolution = {
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-		// TEST
-		test 'org.apache.camel:camel-test:2.5.0'
-		test 'org.mockito:mockito-all:1.8.5'
-		test 'org.seleniumhq.selenium:selenium-firefox-driver:2.0b3'
-		test "org.codehaus.geb:geb-spock:0.6.0"
-
 		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
 		compile ('net.frontlinesms.test:hayescommandset-test:0.0.4') {
 			changing = true

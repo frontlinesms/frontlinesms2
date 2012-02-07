@@ -10,6 +10,6 @@ abstract class ConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createTestSMSConnection() {
-		[new SmslibFconnection(name:'MTN Dongle', port:'stormyPort')].each() { it.save(failOnError:true) }
+		[new SmslibFconnection(name:'MTN Dongle', port:'COM99')].each() { it.save(failOnError:true) }
 	}
 }

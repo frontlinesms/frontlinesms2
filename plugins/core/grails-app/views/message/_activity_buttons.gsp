@@ -10,7 +10,7 @@
 	<g:else>
 		<li><g:link class="poll-btn btn" controller="${ownerInstance?.type}" action="unarchive" id="${ownerInstance?.id}">Unarchive ${ownerInstance?.type}</g:link></li>
 	</g:else>
-	<li><g:render template="/poll/activity_more_actions" plugin="${grailsApplication.config.frontlinesms2.plugin}"/></li>
+	<li><g:render template="/message/activity_more_actions" plugin="${grailsApplication.config.frontlinesms2.plugin}"/></li>
 </ul>
 <g:if test="${messageSection == 'activity' && ownerInstance.type == 'poll'}">
 	<a id='poll-graph-btn' class='show-arrow'>Show poll details</a>

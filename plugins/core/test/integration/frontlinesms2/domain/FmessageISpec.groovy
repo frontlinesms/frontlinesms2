@@ -297,6 +297,63 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			m.validate()
 	}
 	
+	def "Fmessage_owned should get archived vs non_archived"() {
+		when:
+			MessageOwner archivedOwner = getTestFolder(name:'test-archived', archived:true)
+			Fmessage archived = createMessage(archived:true)
+			addMessages archivedOwner, archived
+			
+			MessageOwner unarchivedOwner = getTestFolder(name:'test-archived')
+			Fmessage notArchived = createMessage(archived:false)
+			addMessages unarchivedOwner, notArchived
+		then:
+			Fmessage.owned(archivedOwner, false, true).list() == [archived]
+			Fmessage.owned(unarchivedOwner, false, true).list() == [notArchived]
+	}
+	
+	def "Fmessage_owned should get starred-and-non-starred vs only-starred"() {
+		when:
+			MessageOwner owner = testFolder
+			Fmessage starred = createMessage(starred:true)
+			Fmessage notStarred = createMessage(starred:false)
+			addMessages owner, starred, notStarred
+		then:
+			Fmessage.owned(owner, true).list() == [starred]
+			Fmessage.owned(owner, false).list() == [starred, notStarred]
+	}
+	
+	def "Fmessage_owned should get sent-and-received vs sent-only"() {
+		when:
+			MessageOwner owner = testFolder
+			Fmessage sent = createMessage(inbound:false)
+			Fmessage received = createMessage(inbound:true)
+			addMessages owner, sent, received
+		then:
+			Fmessage.owned(owner, false, true).list() == [sent, received]
+			println "Not sent: " + Fmessage.owned(owner, false, false).list()*.inbound
+			Fmessage.owned(owner, false, false).list() == [received]
+	}
+	
+	private Folder getTestFolder(params=[]) {
+		new Folder(name:params.name?:'test',
+				archived:params.archived?:false).save(failOnError:true, flush:true)
+	}
+	
+	private Fmessage createMessage(params) {
+		def m = new Fmessage(
+				src: '1-POTATO',
+				archived:params.archived?:false,
+				starred:params.starred?:false,
+				inbound:params.inbound!=null?params.inbound:true)
+		if(params.inbound != null && !params.inbound) m.addToDispatches(new Dispatch(
+				dst:'1234567890', status:DispatchStatus.SENT, dateSent:new Date()))
+		m.save(failOnError:true, flush:true)
+	}
+	
+	private void addMessages(MessageOwner o, Fmessage...messages) {
+		messages.each { o.addToMessages(it).save(failOnError:true, flush:true) }
+	}
+	
 	def createGroup(String n) {
 		new Group(name: n).save(failOnError: true)
 	}

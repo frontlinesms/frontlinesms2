@@ -52,7 +52,7 @@ class GroupViewSpec extends GroupBaseSpec {
 		then:
 			links.size() == 2
 			links.each() {
-				assert it.@href ==~ '/core/group/show/\\d+/contact/show/\\d+\\?.+'
+				assert it.@href ==~ '/group/show/\\d+/contact/show/\\d+\\?.+'
 			}
 	}
 	

@@ -3,9 +3,9 @@ package frontlinesms2.announcement
 import frontlinesms2.*
 
 class PageMessageAnnouncementNewOffice extends geb.Page {
-	static url = "message/announcement/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
+	static getUrl() { "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}" }
 	static at = {
-		title.endsWith('Announcement')
+		title.endsWith('Activity')
 	}
 	static content = {
 		messagesList { $('#messages-submenu') }
