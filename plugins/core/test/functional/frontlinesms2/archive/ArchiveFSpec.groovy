@@ -4,6 +4,7 @@ import frontlinesms2.*
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class ArchiveFSpec extends ArchiveBaseSpec {
+	final Date TEST_DATE = new Date()
 	
 	def 'archived folder list is displayed'() {
 		given:
@@ -20,8 +21,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	
 	def 'should show list of remaining messages when a message is deleted'() {
 		given:
-			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, archived:true, inbound:true).save(flush:true)
-			new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3, archived:true, inbound:true).save(flush:true)
+			createTestMessages2()
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 		then:
@@ -35,8 +35,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	
 	def '"Archive All" button does not appear in archive section'() {
 		given:
-			new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, archived:true, inbound:true).save(flush:true)
-			new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3, archived:true, inbound:true).save(flush:true)
+			createTestMessages2()
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 			$(".message-select")[0].click()
@@ -52,17 +51,21 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {
 		given:
-			def poll = Poll.createPoll(title:'thingy', choiceA:'One', choiceB:'Other').save(failOnError:true, flush:true)
-			def message1 = new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4).save(flush:true)
-			def message2 = new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3).save(flush:true)
-			poll.addToMessages(message1).save(flush: true)
-			poll.addToMessages(message2).save(flush: true)
-			poll.archivePoll()
-			poll.save(flush:true)
+			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other').save(failOnError:true, flush:true)
+			def messages = createTestMessages2()
+			poll.addToMessages(messages[0]).save(failOnError:true, flush:true)
+			poll.addToMessages(messages[1]).save(failOnError:true, flush:true)
+			poll.archive()
+			poll.save(failOnError:true, flush:true)
 		when:
 			go "archive/poll/${poll.id}"
 			$(".message-select")[0].click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }
+	}
+	
+	private def createTestMessages2() {
+		[new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, archived:true, inbound:true).save(failOnError:true, flush:true),
+			new Fmessage(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3, archived:true, inbound:true).save(failOnError:true, flush:true)]
 	}
 }

@@ -35,7 +35,7 @@ class Poll extends Activity {
 		})
 	}
 	
-	void addToMessages(Fmessage message) {
+	Poll addToMessages(Fmessage message) {
 		message.messageOwner = this
 		if(message.inbound) {
 			this.responses.each {
@@ -43,14 +43,17 @@ class Poll extends Activity {
 			}
 			this.responses.find { it.value == 'Unknown' }.messages.add(message)
 		}
+		this
 	}
-	void removeFromMessages(Fmessage message) {
+	
+	Poll removeFromMessages(Fmessage message) {
 		this.messages.remove(this)
 		if(message.inbound) {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
 		}
+		this
 	}
 	
 	def beforeSave = {

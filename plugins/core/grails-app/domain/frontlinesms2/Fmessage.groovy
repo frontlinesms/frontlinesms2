@@ -8,7 +8,7 @@ import org.hibernate.FlushMode
 class Fmessage {
 	static belongsTo = [messageOwner:MessageOwner]
 	
-	Date date	// No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
+	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
 	
 	String src
@@ -261,8 +261,6 @@ class Fmessage {
 	
 	// TODO should this be in a service?
 	static def getMessageStats(params) {
-		println "Fmessage.getMessageStats : params:$params"
-		
 		def asKey = { date -> date.format('dd/MM') }
 		
 		def dates = [:]
