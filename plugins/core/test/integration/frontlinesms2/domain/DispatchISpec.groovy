@@ -6,19 +6,10 @@ class DispatchISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			def dis = new Dispatch(dst: '12345', status: DispatchStatus.PENDING)
 			def message = new Fmessage(text:"test", inbound:false, date:new Date()).addToDispatches(dis).save(flush:true, failOnError:true)
-		when:
-			dis.save()
 			message = Fmessage.get(message.id)
-		then:
-			message.hasPending && !message.hasFailed && !message.hasSent
+			assert message.hasPending && !message.hasFailed && !message.hasSent
 		when:
-			dis.status = DispatchStatus.FAILED
-			dis.save(failOnError:true, flush:true)
-			message = Fmessage.get(message.id)
-		then:
-			!message.hasPending && message.hasFailed && !message.hasSent
-		when:
-			dis.refresh()
+			dis = Dispatch.get(dis.id)
 			dis.status = DispatchStatus.SENT
 			dis.dateSent = new Date()
 			dis.save(failOnError:true, flush:true)
@@ -26,4 +17,20 @@ class DispatchISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!message.hasPending && !message.hasFailed && message.hasSent
 	}
+	
+	def "updating dispatch status should update the associated message status"() {
+		setup:
+			def dis = new Dispatch(dst: '12345', status: DispatchStatus.PENDING)
+			def message = new Fmessage(text:"test", inbound:false, date:new Date()).addToDispatches(dis).save(flush:true, failOnError:true)
+			message = Fmessage.get(message.id)
+			assert message.hasPending && !message.hasFailed && !message.hasSent
+		when:
+			dis = Dispatch.get(dis.id)
+			dis.status = DispatchStatus.FAILED
+			dis.save(failOnError:true, flush:true)
+			message = Fmessage.get(message.id)
+		then:
+			!message.hasPending && message.hasFailed && !message.hasSent
+	}
 }
+
