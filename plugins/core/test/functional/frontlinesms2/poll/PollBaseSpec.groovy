@@ -11,10 +11,10 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	static createTestMessages() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', dateReceived: new Date() - 4, starred: true),
-			new Fmessage(src:'Alice', dst:'+2541234567', text:'go manchester', dateReceived: new Date() - 3),
-				new Fmessage(src:'Joe', dst:'+254112233', text:'pantene is the best',  dateReceived: new Date() - 2),
-				new Fmessage(src:'Jill', dst:'+234234', text:'I fell down the hill',  dateReceived: new Date() - 1)].each() {
+		[new Fmessage(src:'Bob', text:'I like manchester', date: new Date() - 4, starred: true, inbound: true),
+			new Fmessage(src:'Alice', text:'go manchester', date: new Date() - 3, inbound: true),
+				new Fmessage(src:'Joe', text:'pantene is the best',  date: new Date() - 2, inbound: true),
+				new Fmessage(src:'Jill', text:'I fell down the hill',  date: new Date() - 1, inbound: true)].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
@@ -25,8 +25,8 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createMoreTestMessages() {
-		[new Fmessage(src:'Jill', dst:'+254987654', text:'barcelona sucks!', dateReceived: new Date() - 4, starred: true),
-			new Fmessage(src:'Tony', dst:'+2541234567', text:'Gormahia!', dateReceived: new Date() - 3)].each() {
+		[new Fmessage(src:'Jill', text:'barcelona sucks!', date: new Date() - 4, starred: true),
+			new Fmessage(src:'Tony', text:'Gormahia!', date: new Date() - 3)].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
