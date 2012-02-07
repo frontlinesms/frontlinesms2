@@ -87,6 +87,15 @@ class Fmessage {
 	}
 	
 	def beforeUpdate = {
+		withSession { session ->
+			FlushMode flushMode = session.flushMode
+			session.flushMode = FlushMode.MANUAL
+			try {
+				updateFmessageDisplayName()
+			} finally {
+				session.flushMode = flushMode
+			}
+		}
 		updateFmessageStatuses()
 	}
 	

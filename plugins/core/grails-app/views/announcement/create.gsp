@@ -35,6 +35,7 @@
 	
 		$("#tabs-2").contentWidget({
 			validate: function() {
+				addAddressHandler();
 				return isGroupChecked("addresses")
 			}
 		});

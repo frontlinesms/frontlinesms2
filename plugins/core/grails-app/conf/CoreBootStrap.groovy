@@ -128,6 +128,7 @@ class CoreBootStrap {
 		}
 		
 		def d1 = new Dispatch(dst:'+123456789', status: DispatchStatus.FAILED)
+		def d5 = new Dispatch(dst:'+254114533', status: DispatchStatus.SENT, dateSent: new Date())
 		def d2 = new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: new Date())
 		def d3 = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
 		def d4 = new Dispatch(dst:'+254115533', status: DispatchStatus.PENDING)
@@ -137,7 +138,8 @@ class CoreBootStrap {
 		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
 		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "sample sms")
 		
-		m1.addToDispatches(d1).save(failOnError: true)
+		m1.addToDispatches(d1)
+		m1.addToDispatches(d5).save(failOnError: true)
 		m2.addToDispatches(d2).save(failOnError: true)
 		m3.addToDispatches(d3).save(failOnError: true)
 		m4.addToDispatches(d4).save(failOnError: true)
