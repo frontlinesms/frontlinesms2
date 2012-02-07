@@ -6,7 +6,6 @@ class DispatchRoute {
 						.beanRef('dispatchRouterService', 'handleFailed')
 				
 		from('seda:dispatches')
-				.beanRef('dispatchStorageService', 'process')
 				.dynamicRouter(bean('dispatchRouterService', 'slip'))
 	}
 }

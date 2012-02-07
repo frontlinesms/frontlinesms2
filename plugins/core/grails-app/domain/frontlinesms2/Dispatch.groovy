@@ -40,7 +40,6 @@ class Dispatch {
 	
 	def updateMessageStatus() {
 		message.updateFmessageStatuses()
-		message.save()
 	}
 	
 	static namedQueries = {

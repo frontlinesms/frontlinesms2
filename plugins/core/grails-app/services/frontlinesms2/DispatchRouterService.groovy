@@ -68,11 +68,16 @@ class DispatchRouterService {
 			d = Dispatch.get(id)
 			println "DispatchRouterService.updateDispatch() : Dispatch.get($id) => $d"
 		}
+		
 		println "DispatchRouterService.updateDispatch() : Updating dispatch: $d"
 		if(d) {
 			assert d instanceof Dispatch
 			d.status = s
-			d.save()
+			if(s == DispatchStatus.SENT) d.dateSent = new Date()
+			d.message.updateFmessageStatuses()
+			d.message.save()
+			println "DispatchRouterService.updateDispatch dispatch.status: ${d.status}"
+			println "DispatchRouterService.updateDispatch message.hasSent: ${d.message.hasSent} message.hasFailed: ${d.message.hasFailed}"
 		}
 		println "DispatchRouterService.updateDispatch() : Dispatch update completed."
 	}

@@ -87,13 +87,16 @@ class Fmessage {
 	}
 	
 	def beforeUpdate = {
-		withSession { session ->
-			FlushMode flushMode = session.flushMode
-			session.flushMode = FlushMode.MANUAL
-			try {
-				updateFmessageDisplayName()
-			} finally {
-				session.flushMode = flushMode
+		println "Fmessage.beforeUpdate() called"
+		if(isDirty('src')) {
+			withSession { session ->
+				FlushMode flushMode = session.flushMode
+				session.flushMode = FlushMode.MANUAL
+				try {
+					updateFmessageDisplayName()
+				} finally {
+					session.flushMode = flushMode
+				}
 			}
 		}
 		updateFmessageStatuses()

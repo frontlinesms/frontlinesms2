@@ -18,6 +18,7 @@ class DispatchISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!message.hasPending && message.hasFailed && !message.hasSent
 		when:
+			dis.refresh()
 			dis.status = DispatchStatus.SENT
 			dis.dateSent = new Date()
 			dis.save(failOnError:true, flush:true)
