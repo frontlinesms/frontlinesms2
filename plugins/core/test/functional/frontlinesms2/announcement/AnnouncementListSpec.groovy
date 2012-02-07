@@ -59,7 +59,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			def announcement = Announcement.findByName("New Office")
 			def messages = announcement.getMessages() as List
 			def message = messages[0]
-			go "message/announcement/${announcement.id}/show/${message.id}"
+			go "message/activity/${announcement.id}/show/${message.id}"
 			$("#btn_reply").click()
 		then:
 			waitFor { $('div#tabs-1').displayed }
@@ -70,7 +70,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/announcement/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
+			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -90,7 +90,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/announcement/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
+			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
 			def btnDropdown = $("#btn_dropdown")
 		then:
 			waitFor{ btnDropdown.displayed }
@@ -111,7 +111,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/announcement/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
+			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
 			at PageMessageAnnouncementNewOffice
 		when:
@@ -128,7 +128,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			go "message/announcement/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
+			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
 			at PageMessageAnnouncementNewOffice
 		when:
@@ -147,7 +147,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 			def announcement = Announcement.findByName("New Office")
-			go "message/announcement/${announcement.id}"
+			go "message/activity/${announcement.id}"
 			$(".section-header-buttons .more-actions").value("delete").click()
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }

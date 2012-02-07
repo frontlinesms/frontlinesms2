@@ -10,10 +10,10 @@ class AnnouncementBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def createTestMessages() {
-		[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, starred: true),
-				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3),
-				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started', dateReceived: new Date() - 2),
-				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked', dateReceived: new Date() - 1)].each() {
+		[new Fmessage(src:'Max', text:'I will be late', date: new Date() - 4, starred: true),
+				new Fmessage(src:'Jane', text:'Meeting at 10 am', date: new Date() - 3),
+				new Fmessage(src:'Patrick', text:'Project has started', date: new Date() - 2),
+				new Fmessage(src:'Zeuss', text:'Sewage blocked', date: new Date() - 1)].each() {
 			it.inbound = true
 			it.save(failOnError:true, flush:true)
 		}
