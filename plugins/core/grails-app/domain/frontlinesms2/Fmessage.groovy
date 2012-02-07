@@ -141,7 +141,7 @@ class Fmessage {
 					eq('starred', true)
 			}
 		}
-		owned { getOnlyStarred=false, owner, getSent=false ->
+		owned { MessageOwner owner, boolean getOnlyStarred=false, boolean getSent=false ->
 			and {
 				eq("isDeleted", false)
 				eq("messageOwner", owner)
