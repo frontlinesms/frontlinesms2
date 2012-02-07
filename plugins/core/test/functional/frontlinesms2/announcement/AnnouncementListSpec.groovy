@@ -11,10 +11,9 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/announcement/${Announcement.findByName('New Office').id}"
-			def announcementMessageSources = $('#messages tbody tr .message-preview-sender')*.text()
+			to PageMessageAnnouncementNewOffice
+			def announcementMessageSources = $('#message-list tbody tr .message-preview-sender a')*.text()
 		then:
-			at PageMessageAnnouncementNewOffice
 			announcementMessageSources == ['Jane', 'Max']
 	}
 
@@ -33,7 +32,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			at PageMessageAnnouncementNewOffice
+			to PageMessageAnnouncementNewOffice
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Max'
@@ -45,7 +44,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		given:
 			createTestAnnouncements()
 		when:
-			at PageMessageAnnouncementNewOffice
+			go "message/activity/${Announcement.findByName('New Office').id}"
 			def selectedMenuItem = $('#sidebar .selected')
 		then:
 			selectedMenuItem.text() == 'New Office announcement'
@@ -111,10 +110,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
-		then:
-			at PageMessageAnnouncementNewOffice
-		when:
+			to PageMessageAnnouncementNewOffice
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -128,10 +124,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
-			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
-		then:
-			at PageMessageAnnouncementNewOffice
-		when:
+			to PageMessageAnnouncementNewOffice
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
@@ -147,11 +140,11 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 			def announcement = Announcement.findByName("New Office")
-			go "message/activity/${announcement.id}"
-			$(".section-header-buttons .more-actions").value("delete").click()
+			to PageMessageAnnouncementNewOffice
+			$(".button-list #more-actions").value("delete")
 		then:
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
-			$("#title").value("Delete announcement")
+			$("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete activity")
 		when:
 			$("#done").click()
 		then:

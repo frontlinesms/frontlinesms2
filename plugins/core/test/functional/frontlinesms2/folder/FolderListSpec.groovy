@@ -12,9 +12,8 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageFolderWork
-			def folderMessageSources = $('#messages tbody tr td:nth-child(3)')*.text()
+			def folderMessageSources = $('#messages tbody tr .message-preview-sender a')*.text()
 		then:
-			at PageMessageFolderWork
 			folderMessageSources == ['Jane', 'Max']
 	}
 
@@ -77,12 +76,12 @@ class FolderListSpec extends FolderBaseSpec {
 			$('a', text:'Starred').click()
 		then:
 			waitFor { $("#messages tbody tr").size() == 1 }
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Max'
+			$("#messages tbody tr .message-preview-sender a")[0].text() == 'Max'
 		when:
 			$('a', text:'All').click()
 		then:
 			waitFor { $("#messages tbody tr").size() == 2 }
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Jane', 'Max'])
+			$("#messages tbody tr .message-preview-sender a")*.text().containsAll(['Jane', 'Max'])
 	}
 	
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -160,7 +159,7 @@ class FolderListSpec extends FolderBaseSpec {
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
 			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
-			$('#message-detail-sender').text() == 'Work'
+			$('#message-detail-sender').text() == 'Work folder'
 			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
 			$('#message-detail-content').text() == "${Folder.findById(folderId).getLiveMessageCount()} messages"
 	}
@@ -185,9 +184,9 @@ class FolderListSpec extends FolderBaseSpec {
 		createTestMessages()
 		def folderId = Folder.findByName("Work").id
 		go "message/folder/${folderId}"
-		$("#more-actions").value("delete")
+		$(".button-list #more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
-		$("#title").value("Delete folder")
+		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete folder")
 		$("#done").click()
 		folderId
 	}
