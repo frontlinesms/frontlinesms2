@@ -5,8 +5,8 @@ import frontlinesms2.*
 class AnnouncementBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	def createTestAnnouncements() {
-		new Announcement(name: 'New Office', sentMessage:"We are opening a new office in Kitali next week!").save(failOnError:true, flush:true)
-		new Announcement(name: 'Office Party', sentMessage:"Office Party on Friday!").save(failOnError:true, flush:true)
+		new Announcement(messages:[], name:'New Office', sentMessageText:"We are opening a new office in Kitali next week!").save(failOnError:true, flush:true)
+		new Announcement(messages:[], name:'Office Party', sentMessageText:"Office Party on Friday!").save(failOnError:true, flush:true)
 	}
 
 	def createTestMessages() {

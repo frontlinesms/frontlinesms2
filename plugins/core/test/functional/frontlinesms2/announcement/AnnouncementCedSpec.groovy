@@ -14,7 +14,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			$("input", class: "announcement").click()
 			$("#submit").click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text() == "New announcement" }
+			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("New announcement") }
 	}
 	
 	def "can create a new Announcement" () {
@@ -43,8 +43,8 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			addName.value("newbie")
 			doneButton.click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text() == "Announcement created!" }
-			Announcement.findByName("newbie").sentMessage == "announcing this new announcement!"
+			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Announcement created!") }
+			Announcement.findByName("newbie").sentMessageText == "announcing this new announcement!"
 	}
 
 	def 'existing announcements appear in activities section of messages'() {
@@ -60,7 +60,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 	
 class AnnouncementDialog extends geb.Page {
 	static at = {
-		$("#ui-dialog-title-modalBox").text() == 'New announcement'
+		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('New announcement')
 	}
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }

@@ -138,4 +138,3 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			
 	}
 }
-
