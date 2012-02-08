@@ -92,7 +92,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:	
 			waitFor { searchBtn.displayed }
 			searchFrm.messageStatus == 'INBOUND'
-			$("#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex', 'meeting at 11.00'])
+			$("#messages tbody tr .message-text-cell a")*.text().containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
 	def "should fetch all sent messages alone"() {
@@ -107,7 +107,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor{ searchBtn.displayed }
 			searchFrm.messageStatus == 'SENT, PENDING, FAILED'
-			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["sent", "send_pending", "send_failed"]) 
+			$("#messages tbody tr .message-text-cell a")*.text().containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
 	def "should clear search results" () {
@@ -140,7 +140,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#delete-msg").click()
 		then:
 			at PageSearchResult
-			$("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}.containsAll(["hi alex", "sent", "send_pending", "meeting at 11.00"])
+			$("#messages tbody tr .message-text-cell a")*.text().containsAll(["hi alex", "sent", "send_pending", "meeting at 11.00"])
 			$('.flash').displayed
 	}
 	

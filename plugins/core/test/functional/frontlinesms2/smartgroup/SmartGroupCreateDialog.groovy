@@ -2,7 +2,7 @@ package frontlinesms2.smartgroup
 
 class SmartGroupCreateDialog extends frontlinesms2.contact.PageContactShow {
 	static at = {
-		$("#ui-dialog-title-modalBox").text() == 'Create smart group'
+		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('Create smart group')
 	}
 	
 	static content = {	

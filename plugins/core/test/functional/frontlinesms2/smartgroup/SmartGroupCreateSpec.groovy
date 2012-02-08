@@ -32,14 +32,6 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			backButton.disabled
 	}
 	
-	def 'CANCEL button removes dialog'() {
-		when:
-			launchCreateDialog()
-			cancelButton.click()
-		then:
-			waitFor { !at(SmartGroupCreateDialog) }
-	}
-	
 	def 'SMART GROUP NAME FIELD is displayed'() {
 		when:
 			launchCreateDialog(null)
@@ -218,7 +210,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			!getMenuLink('All the bobs!').displayed
+			!$('#smart-groups-submenu li a').contains('All the bobs!')
 		when:
 			launchCreateDialog('All the bobs!')
 			ruleField[0].value('Contact name')

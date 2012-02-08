@@ -354,9 +354,9 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$(".more-actions").value("rename").click()
 		then:
-			waitFor { $("#ui-dianameitle-modalBox").displayed }
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 		when:
-			$("#title").value("Rename poll")
+			$("#name").value("Rename poll")
 			$("#done").click()
 		then:
 			waitFor { $("a", text: 'Rename poll poll') }
@@ -390,7 +390,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
 		then:
-			$('#message-detail-sender').text() == poll.name
+			$('#message-detail-sender').text() == "${poll.name} poll"
 			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
 			$('#message-detail-content').text() == "${poll.getLiveMessageCount()} messages"
 	}
