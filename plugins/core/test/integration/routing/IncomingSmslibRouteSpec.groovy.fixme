@@ -13,7 +13,7 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 	
 	def "should translate a CIncomingMessage into a Fmessage then save it then deliver it to KeywordProcessor"() {
 		given:
-			def mockPortHandler = MockModemUtils.createMockPortHandler([1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C'])
+			def mockPortHandler = MockModemUtils.createMockPortHandler(false, [1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C'])
 			// initialise mock serial device with message available
  			MockModemUtils.initialiseMockSerial(['/def/test-modem': new CommPortIdentifier("COM99",
 					mockPortHandler)])
@@ -22,7 +22,7 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 			fconnectionService.createRoutes(connection)
 			
 			// create a poll called GOO with an answer D
-			Poll.createPoll(title:'What do you think of goo?', keyword: 'goo', choiceA:'i like goo', choiceB:'goo is ok',
+			Poll.createPoll(name:'What do you think of goo?', keyword: 'goo', choiceA:'i like goo', choiceB:'goo is ok',
 					choiceC:'i have no strong opinion on goo', choiceD:'goo is horrible').save(failOnError:true, flush:true)
 		when:	
 			// wait for message to be read from mock serial device
@@ -33,7 +33,8 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 			// assert Fmessage is saved and has expected content
 			Fmessage.findAll()*.text == ['Good morning']
 			// assert KeywordProcessor is called
-			Fmessage.findAll()[0].messageOwner == PollResponse.findByValue('goo is horrible')
+			Fmessage.findAll()[0].messageOwner == Poll.findByName('What do you think of goo?')
+			PollResponse.findByValue('goo is horrible').messages == Fmessage.findAll()
 		cleanup:	
 			// stop route
 			if(connection) fconnectionService.destroyRoutes(connection)

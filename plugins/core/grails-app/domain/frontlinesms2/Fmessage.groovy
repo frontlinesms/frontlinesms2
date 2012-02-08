@@ -73,6 +73,7 @@ class Fmessage {
 	}
 
 	def beforeInsert = {
+		updateFmessageStatuses()
 		withSession { session -> 
 			FlushMode flushMode = session.flushMode 
 			session.flushMode = FlushMode.MANUAL 
@@ -82,23 +83,10 @@ class Fmessage {
 				session.flushMode = flushMode
 			}
 		}
-		updateFmessageStatuses()
 		if(!this.inbound) this.read = true
 	}
 	
 	def beforeUpdate = {
-		println "Fmessage.beforeUpdate() called"
-		if(isDirty('src')) {
-			withSession { session ->
-				FlushMode flushMode = session.flushMode
-				session.flushMode = FlushMode.MANUAL
-				try {
-					updateFmessageDisplayName()
-				} finally {
-					session.flushMode = flushMode
-				}
-			}
-		}
 		updateFmessageStatuses()
 	}
 	
