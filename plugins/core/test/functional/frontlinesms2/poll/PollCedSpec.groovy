@@ -24,11 +24,11 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirmationTab.displayed }
 		when:
-			pollForm.title = "POLL NAME"
+			pollForm.name = "POLL NAME"
 			done.click()
 		then:
 			waitFor { $(".summary").displayed }
-			Poll.findByTitle("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
+			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	
 	def "should require keyword if sorting is enabled"() {
@@ -218,14 +218,14 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			$("#poll-message").text() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
-			pollForm.title = "Coffee Poll"
+			pollForm.name = "Coffee Poll"
 			done.click()
 		then:
-			waitFor { Poll.findByTitle("Coffee Poll") }
+			waitFor { Poll.findByName("Coffee Poll") }
 	}
 
 	def "can enter instructions for the poll and allow user to edit message"() {
@@ -276,10 +276,10 @@ class PollCedSpec extends PollBaseSpec {
 			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
 			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
 		when:
-			pollForm.title = "Coffee Poll"
+			pollForm.name = "Coffee Poll"
 			done.click()
 		then:
-			waitFor { Poll.findByTitle("Coffee Poll") }
+			waitFor { Poll.findByName("Coffee Poll") }
 	}
 	
 // Ajax calls make passing this test incredibly difficult
@@ -329,7 +329,7 @@ class PollCedSpec extends PollBaseSpec {
 	
 	def "can launch export popup"() {
 		when:
-			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			go 'message/inbox'
 		then:
 			at PageMessageInbox
@@ -338,14 +338,14 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$(".more-actions").value("export").click()
+			$(".button-list #more-actions").value("export").click()
 		then:	
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
 
 	def "can rename a poll"() {
 		given:
-			Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
 			$("a", text: "Who is badder? poll").click()
@@ -354,7 +354,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$(".more-actions").value("rename").click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { $("#ui-dianameitle-modalBox").displayed }
 		when:
 			$("#title").value("Rename poll")
 			$("#done").click()
@@ -390,7 +390,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
 		then:
-			$('#message-detail-sender').text() == poll.title
+			$('#message-detail-sender').text() == poll.name
 			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
 			$('#message-detail-content').text() == "${poll.getLiveMessageCount()} messages"
 	}
@@ -411,9 +411,9 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def deletePoll() {
-		def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
-		$(".more-actions").value("delete")
+		$(".button-list #more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete poll")
 		$("#done").click()

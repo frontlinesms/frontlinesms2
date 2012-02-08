@@ -116,6 +116,8 @@ class SearchCheckSpec extends SearchBaseSpec {
 			waitFor { checkedMessageCount == 3 }
 	}
 	
+	
+	//FIXME this could easily be an integration test
 	def "can archive multiple messages where any owned messages are ignored, but those that are not are archived"() {
 		given:
 			createInboxTestMessages()

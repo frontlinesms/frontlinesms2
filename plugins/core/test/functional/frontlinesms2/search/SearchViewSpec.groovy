@@ -12,16 +12,16 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "clicking on the search button links to the result show page"() {
 		setup:
-			new Fmessage(src:"src", text:"sent", dst:"dst", hasSent:true, dateReceived:new Date()-1).save(flush: true)
-			new Fmessage(src:"src", text:"send_pending", dst:"dst", hasPending:true, dateReceived:new Date()-1).save(flush: true)
-			new Fmessage(src:"src", text:"send_failed", dst:"dst", hasFailed:true, dateReceived:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"sent", inbound:true, date:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"send_pending", inbound:true, date:new Date()-1).save(flush: true)
+			new Fmessage(src:"src", text:"send_failed", inbound:true, date:new Date()-1).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
 			searchBtn.click()
 		then:
 			at PageSearchResult
-			$("#messages tbody tr td:nth-child(4)")*.text().containsAll(['hi alex',
+			$("#messages tbody tr td:nth-child(5)")*.text().containsAll(['hi alex',
 					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
@@ -29,8 +29,8 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearch
 		then:
-			searchFrm.find('select', name:'groupId').children()*.text() == ['Select group','Listeners', 'Friends']
-			searchFrm.find('select', name:'activityId').children()*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
+			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group','Listeners', 'Friends']
+			searchFrm.find('select', name:'activityId').children('option')*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
 	def "search description is shown in header"() {
@@ -40,7 +40,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().contains('Searching all messages, archived messages')
+			searchDescription.text().contains('Searching all messages, including archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -97,9 +97,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			new Fmessage(src: "src", text:"sent", dst: "dst", hasSent:true, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", hasPending:true, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "dst", hasFailed:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"sent", hasSent:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", hasPending:true, dateReceived: new Date()-1).save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", hasFailed:true, dateReceived: new Date()-1).save(flush: true)
 			to PageSearch
 			searchFrm.messageStatus = "SENT, PENDING, FAILED"
 		when:
@@ -125,9 +125,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			new Fmessage(src: "src", text:"sent", dst: "dst", dateReceived: new Date(), hasSent:true).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", dst: "dst", dateReceived: new Date()-1, hasPending:true).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", dst: "bob", dateReceived: new Date()-2, hasFailed:true).save(flush: true)
+			new Fmessage(src: "src", text:"sent", date: new Date(), inbound:true).save(flush: true)
+			new Fmessage(src: "src", text:"send_pending", date: new Date()-1, inbound:true).save(flush: true)
+			new Fmessage(src: "src3", text:"send_failed", date: new Date()-2, inbound:true).save(flush: true)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -136,7 +136,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			at PageSearchResult
 			println $("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}
 		when:
-			$("a.displayName-${Fmessage.findByDst('bob').id}").click()
+			$("a.displayName-${Fmessage.findBySrc('src3').id}").click()
 			$("#delete-msg").click()
 		then:
 			at PageSearchResult
@@ -272,11 +272,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#message-tab-link").text() == "Messages\n2"
+			$("#message-tab-link").text().equalsIgnoreCase("Messages\n2")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text() == "Messages\n3" }
+			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n3") }
 	}
 	
 }
