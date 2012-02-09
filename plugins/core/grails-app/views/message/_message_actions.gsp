@@ -5,7 +5,7 @@
 	};
 </script>
 <div id="message-detail-buttons">
-	<g:form controller="${params.viewingArchive ? 'archive' : 'message'}" method="POST">
+	<g:form controller="${params.controller}">
 		<g:hiddenField name="messageSection" value="${messageSection}"></g:hiddenField>
 		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"></g:hiddenField>
 		<g:hiddenField name="messageId" value="${messageInstance?.id}"></g:hiddenField>
