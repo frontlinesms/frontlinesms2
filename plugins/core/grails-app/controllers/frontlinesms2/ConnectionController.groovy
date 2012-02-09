@@ -31,7 +31,7 @@ class ConnectionController {
 			fconnectionInstance.properties = params
 			if(fconnectionInstance.save(flush:true)) {
 				flash.message = "${message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
-				redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
+				redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 			} else {
 				flash.message = "fail!  ${fconnectionInstance.errors}"
 				redirect(controller:'settings', action: "connections", params: params)
@@ -58,7 +58,7 @@ class ConnectionController {
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
-			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
+			redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 		} else {
 			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
 			redirect(controller:'settings', action: "connections", params: params)
@@ -66,11 +66,11 @@ class ConnectionController {
 	}
 	
 	def createRoute = {
-		withFconnection { settings ->
-			println "creating route for fconnection $settings"
-			fconnectionService.createRoutes(settings)
-			flash.message = "Created route from ${settings.camelConsumerAddress} and to ${settings.camelProducerAddress}"
-			redirect(controller:'settings', action:'connections', id:settings.id)
+		withFconnection { connection ->
+			println "creating route for fconnection $connection"
+			fconnectionService.createRoutes(connection)
+			flash.message = "Created route from ${connection.camelConsumerAddress} and to ${connection.camelProducerAddress}"
+			redirect(controller:'settings', action:'connections', id:connection.id)
 		}
 	}
   
