@@ -20,7 +20,9 @@
 									${r.liveMessageCount}
 								</td>
 								<td class='percent'>
-									<span>${ownerInstance.liveMessageCount - sentMessageCount != 0 ? (r.liveMessageCount/(ownerInstance.liveMessageCount - sentMessageCount))*100 : 0}%</span>
+									<span>
+										<g:formatNumber number="${ownerInstance.liveMessageCount - sentMessageCount != 0 ? r.liveMessageCount/(ownerInstance.liveMessageCount - sentMessageCount) : 0}" type="percent" maxFractionDigits="2" />
+									</span>
 								</td>
 							</tr>
 						</g:each>
