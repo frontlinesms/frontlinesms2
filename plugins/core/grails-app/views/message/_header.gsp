@@ -5,7 +5,6 @@
 	<g:if test="${params.viewingArchive && params.viewingArchive == false}">
 		<g:link controller="archive" action="folder"> &lt;Back </g:link>
 	</g:if>
-	
 	<g:if test="${messageSection == 'activity' && ownerInstance?.type == 'poll'}">
 		<div class="activity-title">
 			<g:render template="../message/poll_header"/>

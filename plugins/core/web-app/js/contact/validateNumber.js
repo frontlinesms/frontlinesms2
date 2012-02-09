@@ -1,6 +1,8 @@
 function checkForNonDigits() {
-	if($("#duplicate-error").length == 0)
+	if($("#duplicate-error").length == 0) {
 		$(".numberField").removeClass('error');
+		$(".error-message").remove();
+	}
 	$('#letter-error').remove();
 	
 	var field = $(".numberField").filter(function() {
@@ -23,8 +25,10 @@ function checkForDuplicates() {
 //	if(inputNumber.length > 9)
 //		truncatedNumber = inputNumber.substring(inputNumber.length - 9);
 	
-	if($("#letter-error").length == 0)
+	if($("#letter-error").length == 0) {
 		$(".numberField").removeClass('error');
+		$(".error-message").remove();
+	}
 	$('#duplicate-error').remove();
 	
 	$.ajax({
