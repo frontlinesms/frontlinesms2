@@ -48,32 +48,32 @@ class DispatchRouterService {
 	}
 
 	def handleCompleted(Exchange x) {
-		println "DispatchRouterService.handleCompleted() : Updating status to SENT for ${x.in.body.getClass()}"
 		updateDispatch(x, DispatchStatus.SENT)
 	}
 
-  def handleFailed(Exchange x) {
-		println "DispatchRouterService.handleFailed() : Updating status to FAILED for ${x.in.body.getClass()}"
+	def handleFailed(Exchange x) {
 		updateDispatch(x, DispatchStatus.FAILED)
 	}
 	
-	private Dispatch updateDispatch(Exchange x, DispatchStatus s) {
-		println "DispatchRouterService.updateDispatch() : updateDispatch to $s..."
+	private Dispatch updateDispatch(Exchange x, s) {
 		def id = x.in.getHeader('frontlinesms.dispatch.id')
-
-		def d
+		Dispatch d
 		if(x.in.body instanceof Dispatch) {
 			d = x.in.body
+			d.refresh()
 		} else {
 			d = Dispatch.get(id)
-			println "DispatchRouterService.updateDispatch() : Dispatch.get($id) => $d"
 		}
-		println "DispatchRouterService.updateDispatch() : Updating dispatch: $d"
+		
 		if(d) {
-			assert d instanceof Dispatch
 			d.status = s
-			d.save()
-		}
-		println "DispatchRouterService.updateDispatch() : Dispatch update completed."
+			if(s == DispatchStatus.SENT) d.dateSent = new Date()
+
+			try {
+				d.save(failOnError:true, flush:true)
+			} catch(Exception ex) {
+				log.error("Could not save dispatch $d with message $d.message", ex)
+			}
+		} else log.info("No dispatch found for id: $id")
 	}
 }

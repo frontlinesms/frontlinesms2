@@ -150,7 +150,7 @@ class MessageController {
 	def send = {
 		def message = messageSendService.getMessagesToSend(params)
 		messageSendService.send(message)
-		flash.message = "Message has been queued to send to " + message.dispatches*.dst.join(", ")
+		flash.message = "Message has been queued to send to " + message.dispatches*.dst?.join(", ")
 		render(text: flash.message)
 	}
 	

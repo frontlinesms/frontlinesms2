@@ -38,14 +38,22 @@ class Dispatch {
 		updateMessageStatus()
 	}
 	
+	def afterUpdate = {
+		Fmessage.withNewSession { session ->
+				println "afterUpdate() : inside new session..."
+				def variables = [true, false, message.id]
+				if(status == DispatchStatus.FAILED) {
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.hasFailed=?,m.hasPending=? WHERE m.id=?" , variables)
+				}
+				if(status == DispatchStatus.SENT) {
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.hasSent=?,m.hasPending=? WHERE m.id=?" , variables)
+				}
+			}
+		println "afterUpdate() : EXIT"
+	}
+	
 	def updateMessageStatus() {
-		if(this.status == DispatchStatus.FAILED) {
-			this.message.hasFailed = true
-		} else if(this.status == DispatchStatus.PENDING) {
-			this.message.hasPending = true
-		} else if(this.status == DispatchStatus.SENT) {
-			this.message.hasSent = true
-		}
+		message.updateFmessageStatuses()
 	}
 	
 	static namedQueries = {

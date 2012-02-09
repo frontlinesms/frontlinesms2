@@ -24,6 +24,7 @@ class PollResponse {
 			}
 			this.messages.add(message)
 			message.messageOwner = this.poll
+			message.save()
 		}
 	}
 	

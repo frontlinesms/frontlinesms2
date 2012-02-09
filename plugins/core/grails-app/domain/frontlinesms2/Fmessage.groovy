@@ -73,6 +73,7 @@ class Fmessage {
 	}
 
 	def beforeInsert = {
+		updateFmessageStatuses()
 		withSession { session -> 
 			FlushMode flushMode = session.flushMode 
 			session.flushMode = FlushMode.MANUAL 
@@ -82,20 +83,10 @@ class Fmessage {
 				session.flushMode = flushMode
 			}
 		}
-		updateFmessageStatuses()
 		if(!this.inbound) this.read = true
 	}
 	
 	def beforeUpdate = {
-		withSession { session ->
-			FlushMode flushMode = session.flushMode
-			session.flushMode = FlushMode.MANUAL
-			try {
-				updateFmessageDisplayName()
-			} finally {
-				session.flushMode = flushMode
-			}
-		}
 		updateFmessageStatuses()
 	}
 	
@@ -241,8 +232,8 @@ class Fmessage {
 		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
 	}
 	
-	static def countUnreadMessages(isStarred) {
-		Fmessage.unread().count()
+	static def countUnreadMessages() {
+		Fmessage.unread.count()
 	}
 	
 	static def countAllMessages(params) {
@@ -254,9 +245,7 @@ class Fmessage {
 	}
 
 	static def hasFailedMessages() {
-		if(Fmessage.findByHasFailedAndIsDeleted(true, false))
-			return true
-		return false
+		return Fmessage.countByHasFailedAndIsDeleted(true, false) > 0
 	}
 	
 	// TODO should this be in a service?
@@ -333,28 +322,18 @@ class Fmessage {
 	}
 	
 	def updateFmessageStatuses() {
-		if(!this.inbound) {
-			this.failedCount = 0
-			this.hasFailed = false
-			this.hasPending = false
-			this.hasSent = false
-			this.dispatches.each {
-				if(it.status == DispatchStatus.FAILED) {
-					this.hasFailed = true
-					this.failedCount++
-				} else if(it.status == DispatchStatus.PENDING) {
-					this.hasPending = true
-				} else if(it.status == DispatchStatus.SENT) {
-					this.hasSent = true
-				}
-			}
+		if(!inbound) {
+			hasFailed = dispatches.any { it.status == DispatchStatus.FAILED }
+			hasPending = dispatches.any { it.status == DispatchStatus.PENDING }
+			hasSent = dispatches.any { it.status == DispatchStatus.SENT }
 		}
 	}
 	
 	def updateDispatches() {
-		if(this.isDeleted)
-			this.dispatches.each {
+		if(isDeleted) {
+			dispatches.each {
 				it.isDeleted = true
 			}
+		}
 	}
 }
