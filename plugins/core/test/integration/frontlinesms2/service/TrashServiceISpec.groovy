@@ -4,7 +4,7 @@ import frontlinesms2.*
 import spock.lang.*
 
 class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
-	def service = new TrashService()
+	def trashService
 	
 	def "should permanently delete a poll and its messages when trashed"() {
 		setup:
@@ -19,7 +19,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			assert Poll.count() == 1
 			assert p.getActivityMessages(false).count() == 1
-			service.emptyTrash()
+			trashService.emptyTrash()
 		then:
 			Poll.count() == 0
 			PollResponse.count() == 0
@@ -35,7 +35,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
             assert Fmessage.count() == 1
 			assert folder.getLiveMessageCount() == 1
-			service.emptyTrash()
+			trashService.emptyTrash()
 		then:
 			Poll.count() == 0
 			Fmessage.count() == 0

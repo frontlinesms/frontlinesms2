@@ -155,13 +155,16 @@ class MessageController {
 	}
 	
 	def retry = {
-		println "params are $params"
 		def dst = []
 		def failedMessageIdList = params.checkedMessageList?.tokenize(',') ?: [params.messageId]
 		failedMessageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				dst << messageInstance.dispatches*.dst
-				messageSendService.send(messageInstance)
+				messageInstance.dispatches.each { 
+					if(it.status == DispatchStatus.FAILED) { 
+						dst << Contact.findByPrimaryMobile(it.dst).name ?: Contact.findBySecondaryMobile(it.dst).name ?: it.dst
+					}
+				}
+				messageSendService.retry(messageInstance)
 			}
 		}
 		

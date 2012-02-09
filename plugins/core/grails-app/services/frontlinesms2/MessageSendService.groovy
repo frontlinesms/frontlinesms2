@@ -13,6 +13,17 @@ class MessageSendService {
 		}
 	}
 	
+	def retry(Fmessage m, Fconnection c=null) {
+		assert m instanceof Fmessage
+		def headers = [:]
+		if(c) headers.fconnection = c.id
+		m.dispatches.each { dispatch ->
+			if(dispatch.status == DispatchStatus.FAILED) {
+				sendMessageAndHeaders('seda:dispatches', dispatch, headers)
+			}
+		}
+	}
+	
 	def getMessagesToSend(params) {
 		//TODO: Need to add source from app setting
 		def message = new Fmessage(src: 'src', date: new Date(), text: params.messageText, inbound: false, hasPending: true)
