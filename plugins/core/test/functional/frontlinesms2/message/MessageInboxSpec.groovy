@@ -13,7 +13,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def messageSources = $('#messages tbody tr td:nth-child(3)')*.text()
+			def messageSources = $('#messages tbody tr .message-preview-sender a')*.text()
 		then:
 			messageSources == ['Alice', 'Bob']
 	}
@@ -58,7 +58,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('Alice')
 		when:
 			go "message/inbox/show/${message.id}"
-			def formatedDate = dateToString(message.dateReceived)
+			def formatedDate = dateToString(message.date)
 		then:
 			$('#message-detail #message-detail-sender').text() == message.src
 			$('#message-detail #message-detail-date').text() == formatedDate
@@ -73,17 +73,17 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/core/message/inbox/show/${aliceMessage.id}?viewingArchive="
+			$('#messages .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}?viewingArchive="
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/core/message/inbox/show/${bobMessage.id}?viewingArchive="
+			$('#messages .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}?viewingArchive="
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = new Fmessage(inbound:true, read: false).save(failOnError:true)
-			def m2 = new Fmessage(inbound:true, read: true).save(failOnError:true)
+			def m1 = new Fmessage(inbound:true, read: false, date: new Date(), src: '1256').save(failOnError:true)
+			def m2 = new Fmessage(inbound:true, read: true, date: new Date(), src: '1256').save(failOnError:true)
 			assert !m1.read
 			assert m2.read
 		when:
@@ -98,11 +98,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			def message = new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			def message = new Fmessage(src:'+254778899', text:'test', inbound:true, date: new Date()).save(failOnError:true)
 			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
-			def rowContents = $('#messages tbody tr td:nth-child(3)')*.text()
+			def rowContents = $('#messages tbody tr .message-preview-sender a')*.text()
 		then:
 			rowContents == ['June']
 	}
@@ -130,12 +130,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 			$('a', text:'Starred').click()
 			waitFor {$("#messages tbody tr").size() == 1}
 		then:
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'Alice'
+			$("#messages tbody tr .message-preview-sender a")[0].text() == 'Alice'
 		when:
 			$('a', text:'All').click()
 			waitFor {$("#messages tbody tr").size() == 2}
 		then:
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['Alice', 'Bob'])
+			$("#messages tbody tr .message-preview-sender a")*.text().containsAll(['Alice', 'Bob'])
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
@@ -173,7 +173,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			messagesSelect[2].click()
 			def message = Fmessage.findBySrc('Alice')
-			def formatedDate = dateToString(message.dateReceived)
+			def formatedDate = dateToString(message.date)
 		then:
 			waitFor { checkedMessageCount == 1 }
 			$('#message-detail #message-detail-sender').text() == message.src
@@ -251,7 +251,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
-			new Fmessage(text: "hello", inbound:true).save(failOnError:true)
+			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			go "message/inbox/show/${Fmessage.findByText('hello').id}"
@@ -269,11 +269,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#message-tab-link").text() == "Messages\n1"
+			$("#message-tab-link").text().equalsIgnoreCase("Messages\n1")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text() == "Messages\n2" }
+			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n2") }
 	}
 
 	String dateToString(Date date) {

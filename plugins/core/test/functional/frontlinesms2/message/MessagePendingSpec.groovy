@@ -9,22 +9,10 @@ import frontlinesms2.*
 
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src: "src1", dst:"dst1", hasFailed:true, starred: true).save(flush: true)
-		new Fmessage(src: "src2", dst:"dst2", hasPending:true).save(flush: true)
-		new Fmessage(src: "src", dst:"dst1", hasSent:true).save(flush: true)
-		new Fmessage(src: "src", inbound:true).save(flush: true)
-	}
-
-	def 'should list all the pending messages'() {
-		when:
-			go "message/pending"
-		then:
-			at PageMessagePending
-		when:
-			def messages = $('#messages tbody tr')
-		then:
-			messages.size() == 2
-			messages.collect { it.find("td:nth-child(3) a").text() }.containsAll(["dst1", "dst2"])
+		new Fmessage(src: "src1", hasFailed:true, starred: true, date: new Date()).save(flush: true)
+		new Fmessage(src: "src2", hasPending:true, date: new Date()).save(flush: true)
+		new Fmessage(src: "src", hasSent:true, date: new Date()).save(flush: true)
+		new Fmessage(src: "src", inbound:true, date: new Date()).save(flush: true)
 	}
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {

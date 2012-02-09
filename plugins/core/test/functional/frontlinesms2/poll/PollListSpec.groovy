@@ -8,10 +8,9 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-			def pollMessageSources = $('#messages tbody tr .message-preview-sender')*.text()
+			to PageMessagePollFootballTeamsBob
+			def pollMessageSources = $('#messages tbody tr .message-preview-sender a')*.text()
 		then:
-			at PageMessagePollFootballTeamsBob
 			pollMessageSources == ['Alice', 'Bob']
 	}
 
@@ -20,7 +19,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePollFootballTeamsBob
 			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
@@ -33,16 +32,16 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePollFootballTeamsBob
 			def pollTitle = $(".activity-title h3").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
 		then:
-			pollTitle == 'Football Teams poll'
+			pollTitle.equalsIgnoreCase('Football Teams poll')
 			statsLabels == ['manchester', 'barcelona','Unknown']
 			statsNums == ['2', '0', '0']
-			statsPercents == ['(100%)', '(0%)', '(0%)']
+			statsPercents == ['100%', '0%', '0%']
 		when:
 			$("#poll-graph-btn").click()
 		then:
@@ -54,7 +53,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePollFootballTeamsBob
 		then:
 			$('#sidebar .selected').text() == 'Football Teams poll'
 	}
@@ -64,7 +63,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePollFootballTeamsBob
 		then:
 			$("#messages tbody tr").size() == 2
 		when:
@@ -84,7 +83,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePollFootballTeamsBob
 			$(".message-select")[2].click()
 		then:
 			waitFor { $('#message-detail-content').text() == 'I like manchester' }
@@ -105,7 +104,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+			to PageMessagePollFootballTeamsBob
 		then:
 			waitFor { $("#messages").displayed}
 		when:
@@ -124,7 +123,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}"
+			go "message/activity/${Poll.findByName('Football Teams').id}"
 		then:
 			$('#message-detail #message-detail-content').text() == "No message selected"
 	}
@@ -133,9 +132,8 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			createTestPolls()
 			createTestMessages()
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc('Alice').id}"
+			to PageMessagePollFootballTeamsAlice
 		then:
-			at PageMessagePollFootballTeamsAlice
 			visibleMessageTotal == 2
 		when:
 			sleep 11000

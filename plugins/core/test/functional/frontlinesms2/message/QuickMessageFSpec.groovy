@@ -107,7 +107,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("a", href: "/frontlinesms2/message/pending").click()
 		then:
-			waitFor{ $('title').text() == "Pending" }
+			waitFor{ $('.message-title h3').text().equalsIgnoreCase("Pending") }
 			$("a", href: "/frontlinesms2/message/pending").hasClass("send-failed")
 			$("#message-list tbody tr").size() == 1
 			$("#message-list tbody tr")[0].hasClass("send-failed")
@@ -262,7 +262,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 
 class QuickMessageDialog extends geb.Page {
 	static at = {
-		$("#ui-dialog-title-modalBox").text() == 'Quick Message'
+		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('Quick Message')
 	}
 	static content = {
 		selectRecipientsTab { $('div#tabs-2') }

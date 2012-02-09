@@ -26,9 +26,9 @@ class PollViewSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 			def message = Fmessage.findBySrc('Bob')
-			def poll = Poll.findByTitle('Football Teams')
+			def poll = Poll.findByName('Football Teams')
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$('#messages tbody a', text: "Bob").displayed
 	}
@@ -39,10 +39,10 @@ class PollViewSpec extends PollBaseSpec {
 			createTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
-			to PageMessagePollFootballTeamsAlice
+			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
 		then:
 			$('#message-detail #message-detail-sender').text() == message.src
-			$('#message-detail #message-detail-date').text() == DATE_FORMAT.format(message.dateReceived)
+			$('#message-detail #message-detail-date').text() == DATE_FORMAT.format(message.date)
 			$('#message-detail #message-detail-content').text() == message.text
 	}
 
@@ -50,15 +50,15 @@ class PollViewSpec extends PollBaseSpec {
 		given:
 			createTestPolls()
 			createTestMessages()
-			def poll = Poll.findByTitle('Football Teams')
+			def poll = Poll.findByName('Football Teams')
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
+			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
 		then:
-			$('#messages .selected td:nth-child(3) a').@href == "/core/message/poll/$poll.id/show/$aliceMessage.id?viewingArchive="
+			$('#messages .selected a')[3].@href == "/message/activity/$poll.id/show/$aliceMessage.id?viewingArchive="
 		when:
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$('#messages .selected a', text: "Bob").displayed
 	}
@@ -69,7 +69,7 @@ class PollViewSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 //			to PageMessagePollFootballTeamsBob
-			go "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
 			$('#activities-submenu li')[0..2]*.text() == ['Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll']
 	}

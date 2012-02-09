@@ -45,7 +45,7 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 		when:
 			newMessageNotification.find("a").click()
 		then:
-			waitFor { visibleMessageTotal == 4 }
+			waitFor { visibleMessageTotal == 5 }
 			!newMessageNotification.displayed
 	}
 		

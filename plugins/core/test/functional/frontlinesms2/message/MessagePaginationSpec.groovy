@@ -25,13 +25,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/pending"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#messages tbody tr")*.size() == 50
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#messages tbody tr")*.size() == 1
 			$(".nextLink").hasClass("disabled")
 
 	}
@@ -42,13 +42,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/trash"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#messages tbody tr")*.size() == 50
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#messages tbody tr")*.size() == 1
 			$(".nextLink").hasClass("disabled")
 	}
 
@@ -58,13 +58,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/sent"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#messages tbody tr")*.size() == 50
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#messages tbody tr")*.size() == 1
 			$(".nextLink").hasClass("disabled")
 	}
 
@@ -75,13 +75,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "/frontlinesms2/message/folder/${folderId}"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#messages tbody tr")*.size() == 50
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#messages tbody tr")*.size() == 1
 			$(".nextLink").hasClass("disabled")
 	}
 
@@ -92,45 +92,45 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/poll/${pollId}"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#messages tbody tr")*.size() == 50
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#messages tbody tr")*.size() == 1
 			$(".nextLink").hasClass("disabled")
 	}
 
 	private def setupInboxMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "inbox ${i}", dateReceived: new Date() - i, inbound:true).save(flush: true)
+			new Fmessage(src: "src${i}", text: "inbox ${i}", date: new Date() - i, inbound:true).save(flush: true)
 		}
 	}
 
 
 	private def setupSentMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "sent ${i}", hasSent:true).save(flush: true)
+			new Fmessage(src: "src${i}", text: "sent ${i}", hasSent:true, date: new Date()).save(flush: true)
 		}
 	}
 
 
 	private def setupPendingMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", dst: "dst${i}", text: "pending ${i}", hasPending:true).save(flush: true)
+			new Fmessage(src: "src${i}", text: "pending ${i}", hasPending:true, date: new Date()).save(flush: true)
 		}
 	}
 
 
 	private def setupDeletedMessages() {
 		(1..51).each { i ->
-			deleteMessage(new Fmessage(src: "src${i}", dst: "dst${i}", text: "deleted ${i}").save(flush: true))
+			deleteMessage(new Fmessage(src: "src${i}", text: "deleted ${i}", inbound: true, date: new Date()).save(flush: true))
 		}
 	}
 
 	def deleteMessage(Fmessage message) {
-		message.deleted = true
+		message.isDeleted = true
 		message.save(flush:true)
 		new Trash(identifier:message.contactName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
 	}
@@ -138,7 +138,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	private def setupFolderAndItsMessages() {
 		def folder = new Folder(name:'folder').save(failOnError:true, flush:true)
 		(1..51).each { i ->
-			folder.addToMessages(new Fmessage(src: "src${i}", dst: "dst${i}", text: "folder ${i}"))
+			folder.addToMessages(new Fmessage(src: "src${i}", text: "folder ${i}", inbound: true, date: new Date()))
 		}
 		folder.save(flush: true)
 	}
@@ -148,17 +148,15 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		def poll = new Poll(title:'poll')
 		poll.addToResponses(new PollResponse(value: "Yes"))
 		poll.addToResponses(new PollResponse(value: "No"))
-		poll.save(flush: true)
 		def yes = PollResponse.findByValue('Yes')
 		def no = PollResponse.findByValue('No')
 		(1..25).each { i ->
-			yes.addToMessages(new Fmessage(src: "src${i}", dst: "dst${i}", text: "yes ${i}"))
+			yes.addToMessages(new Fmessage(src: "src${i}", text: "yes ${i}", inbound: true, date: new Date()))
 		}
 		(1..26).each { i ->
-			no.addToMessages(new Fmessage(src: "src${i}", dst: "dst${i}", text: "no ${i}"))
+			no.addToMessages(new Fmessage(src: "src${i}", text: "no ${i}", inbound: true, date: new Date()))
 		}
-		yes.save(flush: true)
-		no.save(flush: true)
+		poll.save(flush: true)
 	}
 
 

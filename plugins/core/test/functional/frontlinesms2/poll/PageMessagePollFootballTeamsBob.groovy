@@ -3,7 +3,7 @@ package frontlinesms2.poll
 import frontlinesms2.*
 
 class PageMessagePollFootballTeamsBob extends geb.Page {
-	static url = "message/poll/${Poll.findByTitle('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+	static getUrl() { "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}" }
 	static at = {
 		title.endsWith('Poll')
 	}

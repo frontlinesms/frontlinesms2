@@ -8,7 +8,7 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			smartGroupsListItems.size() == 0
+			smartGroupsList.children('li')*.size() == [1]
 			noSmartGroupsMessage.displayed
 	}
 	
