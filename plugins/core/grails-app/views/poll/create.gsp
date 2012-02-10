@@ -136,11 +136,11 @@
 		var contactNo = $("#contacts-count").text()
 		
 		if(contactNo == 0 || isGroupChecked("dontSendMessage")) {
-			$("#confirm-recepients-count").addClass("hide")
-			$("#no-recepients").removeClass("hide")
+			$("#confirm-recipients-count #sending-messages").hide()
+			$("#no-recipients").show()
 		} else {
-			$("#confirm-recepients-count").removeClass("hide")
-			$("#no-recepients").addClass("hide")
+			$("#confirm-recipients-count #sending-messages").show()
+			$("#no-recipients").hide()
 		}
 		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
 	}

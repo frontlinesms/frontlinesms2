@@ -9,7 +9,6 @@ class PollController extends ActivityController {
 
 	def save = {
 		if(!params.enableKeyword) params.keyword = null
-		
 		def pollInstance = Poll.createPoll(params)
 		pollInstance.sentMessageText = params.messageText
 		if(!params.dontSendMessage) {

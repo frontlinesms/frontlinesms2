@@ -219,7 +219,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirmationTab.displayed }
 			$("#poll-message").text() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
-			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
 			pollForm.name = "Coffee Poll"
@@ -274,7 +274,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirmationTab.displayed }
 			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
-			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
 		when:
 			pollForm.name = "Coffee Poll"
 			done.click()
@@ -317,14 +317,14 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#confirm-recepients-count").text() == "1 contacts selected (1 messages will be sent)"
+			$("#confirm-recipients-count  #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
 		when:
 			goToTab(1)
 			pollForm."dontSendMessage" = true
 			goToTab(7)
 		then:
-			waitFor { $("#no-recepients").displayed }
-			$("#no-recepients").text() == "None"
+			waitFor { $("#no-recipients").displayed }
+			$("#no-recipients").text() == "None"
 	}
 	
 	def "can launch export popup"() {
