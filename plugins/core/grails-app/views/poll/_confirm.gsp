@@ -23,9 +23,12 @@
 			</tr>
 			<tr>
 				<td class="bold">Recipients:</td>
-				<td id="confirm-recepients-count">
-					<span id="contacts-count">0</span> contacts selected
-					(<span id="messages-count">0</span> messages will be sent)
+				<td id="confirm-recipients-count">
+					<span id="sending-messages">
+						<span id="contacts-count">0</span> contacts selected
+						(<span id="messages-count">0</span> messages will be sent)
+					</span>
+					<span id="no-recipients">None</span>
 				</td>
 			</tr>
 		</table>
