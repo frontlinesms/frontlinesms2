@@ -5,22 +5,23 @@ import frontlinesms2.radio.RadioShow
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class RadioShowPollSpec extends geb.spock.GebReportingSpec {
-	def "poll can be associated with a radioShow from the poll confirm screen"() {
+	def "poll can be associated with a radioShow from the poll walk through"() {
 		setup:
 			def show = new RadioShow(name:"Morning Show").save(flush:true)
 			assert !show.polls
 		when:
 			launchPollPopup('standard', "Will you send messages to this poll", false)
+			$(".radio-show-select").displayed
+			$(".radio-show-select").value(show.id)
+			next.click()
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
 			goToTab(7)
 		then:
 			waitFor { confirmationTab.displayed }
-			$(".radio-show-select").displayed
 		when:
-			$(".radio-show-select").value(show.id)
-			pollForm.title = "Morning Show Poll"
+			pollForm.name = "Morning Show Poll"
 			done.click()
 			show.refresh()
 		then:
@@ -30,7 +31,7 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 	
 	def "poll can be associated to radioshow from the 'More Actions' dropdown"() {
 		setup:
-			def poll = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 			def show = new RadioShow(name:"Morning Show").save(flush:true)
 		when:
 			go "message/poll/${poll.id}"
@@ -51,8 +52,8 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 	
 	def "polls associated to a radio show are listed below the currently viewed show"() {
 		setup:
-			def poll = Poll.createPoll(title: 'Who is badder', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(title: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
+			def poll = Poll.createPoll(name: 'Who is badder', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
 			def show = new RadioShow(name:"Morning Show").save(flush:true)
 			show.addToPolls(poll)
 			show.save(flush:true)
@@ -74,7 +75,6 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage
-		next.click()
 	}
 	
 	def goToTab(tab) {

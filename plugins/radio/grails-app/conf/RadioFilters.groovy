@@ -25,7 +25,7 @@ class RadioFilters {
 					def poll = Poll.get(model.ownerId)
 					showInstance.addToPolls(poll)
 					showInstance.save(flush:true, failOnError:true)
-					println "${poll.title} has been added to ${showInstance.name}"
+					println "${poll.name} has been added to ${showInstance.name}"
 				}
 			}
 		}
