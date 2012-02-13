@@ -28,7 +28,7 @@ class StatusController {
 	}
 	
 	def listDetected = {
-		render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
+		render template:'device_detection', plugin:'core', model:[detectedDevices:deviceDetectionService.detected]
 	}
 	
 	def resetDetection = {
