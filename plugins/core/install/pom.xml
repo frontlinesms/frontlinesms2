@@ -79,7 +79,6 @@
 						<property><name>install4j.windows.launcher.splashScreen.bitmapFile</name><value>resources/${build.name}_Splash_Logo.jpg</value></property>
 						<property><name>install4j.windows.launcher.iconImageFiles.file.path</name><value>src/assemble/resources/${build.name}.ico</value></property>
 						<property><name>install4j.windows.installDir</name><value>${build.name}</value></property>
-
 					</compilerVariables>
 					<verbose>true</verbose>
 				</configuration>

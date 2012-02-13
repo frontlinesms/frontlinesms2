@@ -15,7 +15,6 @@ def isSet(String var) {
 
 target(main: 'Build installers for various platforms.') {
 	envCheck()
-	println "args: $args"
 	if(isSet('skipWar')) {
 		println "Skipping WAR build..."
 		depends(clean)
@@ -26,11 +25,8 @@ target(main: 'Build installers for various platforms.') {
 	delete(dir:'install/webapp')
 	unzip(src:"target/${appName}-${appVersion}.war", dest:'install/webapp')
 	
-	def compress = !isSet('skipCompression') && grailsSettings.grailsEnv=='production'
-	println "Compressing installer? $compress"
 	exec(dir:'install', executable:'mvn', args) {
 		arg value:"-Dbuild.version=$appVersion"
-		arg value:"-Dbuild.compress=$compress"
 		arg value:'clean'
 		arg value:'package'
 	}
