@@ -1,37 +1,41 @@
 includeTargets << grailsScript("Init") << grailsScript("War")
 
-target(main: 'Build installers for various platforms.') {
-	depends(clean, war)
-	def appName = metadata.'app.name'
-	def appVersion = metadata.'app.version'
-	delete(dir:'install/webapp')
-	unzip(src:"target/${appName}-${appVersion}.war", dest:'install/webapp')
-	exec(dir:'install', executable:'mvn') {
-		arg value:'clean'
-		arg value:'package'
+def envCheck = {
+	if(grailsSettings.grailsEnv != 'production') {
+		def middleLine = "# !! WARNING !! You are building for $grailsSettings.grailsEnv !! WARNING !! #"
+		println '#' * middleLine.size()
+		println middleLine
+		println '#' * middleLine.size()
+		sleep 2000
 	}
 }
 
-target(main_old: "Build installers for various platforms.") {
-	def appVersion = metadata.'app.version'
-	def jarFile = new File("target/frontlinesms2-${appVersion}.jar")
-	def warFile = new File("target/frontlinesms2-${appVersion}.war")
-	if(!jarFile.exists()) {
-		if(!warFile.exists()) {
-			println "You have not built the standlone WAR so we can't actually run this target."
-			println "Please execute `grails -Dgrails.env=standalone createStandaloneWar`"
-			exit(-1)
-		} else {
-			println "Renaming WAR to JAR..."
-			warFile.renameTo(jarFile)
-		}
-	} else println "JAR found."
+def isSet(String var) {
+	return System.properties."$var"? true: false
+}
 
-	exec(dir:'install', executable:'install4jc') {
-		arg value:"-D"
-		arg value:"sys.version=$appVersion"
-		arg value:"windows.install4j"
+target(main: 'Build installers for various platforms.') {
+	envCheck()
+	println "args: $args"
+	if(isSet('frontlinesms2.build.skipWar')) {
+		println "Skipping WAR build..."
+		depends(clean)
+	} else depends(clean, war)
+	def appName = metadata.'app.name'
+	def appVersion = metadata.'app.version'
+	println "Building $appName, v$appVersion"
+	delete(dir:'install/webapp')
+	unzip(src:"target/${appName}-${appVersion}.war", dest:'install/webapp')
+	
+	def compress = !isSet('skipCompression') && grailsSettings.grailsEnv=='production'
+	println "Compressing installer? $compress"
+	exec(dir:'install', executable:'mvn', args) {
+		arg value:"-Dbuild.version=$appVersion"
+		arg value:"-Dbuild.compress=$compress"
+		arg value:'clean'
+		arg value:'package'
 	}
+	envCheck()
 }
 
 setDefaultTarget(main)
