@@ -20,7 +20,7 @@ class RadioShow extends MessageOwner {
 	}
 	
 	def getShowMessages(getOnlyStarred = false) {
-		Fmessage.owned(getOnlyStarred, this)
+		Fmessage.owned(this, getOnlyStarred)
 	}
 	
 	def start() {

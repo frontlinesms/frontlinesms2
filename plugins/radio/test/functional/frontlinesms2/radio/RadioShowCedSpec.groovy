@@ -35,15 +35,15 @@ class RadioShowCedSpec extends RadioBaseSpec {
 	def "separator is displayed for radio messages from different days"() {
 		given:
 			def show = new RadioShow(name:"Test").save()
-			def messageA = new Fmessage(src: '+3245678', inbound:true, text: "What is diabetes?", dateReceived: new Date() - 2).save(failOnError: true)
-			def messageB = new Fmessage(src: 'Jill',  inbound:true, text: "I love life", dateReceived: new Date() - 1).save(failOnError: true)
+			def messageA = new Fmessage(src: '+3245678', inbound:true, text: "What is diabetes?", date: new Date() - 2).save(failOnError: true)
+			def messageB = new Fmessage(src: 'Jill',  inbound:true, text: "I love life", date: new Date() - 1).save(failOnError: true)
 			show.addToMessages(messageA)
 			show.addToMessages(messageB)
 			show.save(failOnError: true, flush: true)
 		when:
 			go "message/radioShow/${show.id}"
 		then:
-			getColumnText('message-list', 0)[0] == "${dateToString(new Date()-2)}"
+			$(".message-list-separator").text() == "${dateToString(new Date()-2)}"
 	}
 
 //FIXME Test fails when all the test-app is run
@@ -80,7 +80,7 @@ class RadioShowCedSpec extends RadioBaseSpec {
 			to PageMorningShow
 		then:
 			at PageMorningShow
-			ShowListOnAirNotice(RadioShow.findByName("Health Show").id).hasClass('active')
+			ShowListOnAirNotice(RadioShow.findByName("Health Show").id).hasClass('onAirIsActive')
 	}
 	
 	private String dateToString(Date date) {
