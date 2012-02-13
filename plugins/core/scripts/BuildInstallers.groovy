@@ -11,13 +11,13 @@ def envCheck = {
 }
 
 def isSet(String var) {
-	return System.properties."$var"? true: false
+	return System.properties."frontlinesms2.build.$var"? true: false
 }
 
 target(main: 'Build installers for various platforms.') {
 	envCheck()
 	println "args: $args"
-	if(isSet('frontlinesms2.build.skipWar')) {
+	if(isSet('skipWar')) {
 		println "Skipping WAR build..."
 		depends(clean)
 	} else depends(clean, war)
