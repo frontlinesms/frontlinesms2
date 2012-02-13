@@ -40,8 +40,8 @@ class MessageControllerSpec extends ControllerSpec {
 		when:
 			controller.retry()
 		then:
-			1 * mockMessageSendService.send {it.id == 1L}
-			1 * mockMessageSendService.send {it.id == 2L}
+			1 * mockMessageSendService.retry {it.id == 1L}
+			1 * mockMessageSendService.retry {it.id == 2L}
 	}
 
 	def "should resend a single failed message"() {
@@ -54,6 +54,6 @@ class MessageControllerSpec extends ControllerSpec {
 		when:
 			controller.retry()
 		then:
-			1 * mockMessageSendService.send {it.id == 1L}
+			1 * mockMessageSendService.retry {it.id == 1L}
 	}
 }
