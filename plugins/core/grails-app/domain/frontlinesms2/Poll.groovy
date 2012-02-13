@@ -46,7 +46,7 @@ class Poll extends Activity {
 	}
 	
 	Poll removeFromMessages(Fmessage message) {
-		this.messages.remove(this)
+		this.messages?.remove(this) // FIXME surely this should say remove(message)?!?!?!
 		if(message.inbound) {
 			this.responses.each {
 				it.removeFromMessages(message)

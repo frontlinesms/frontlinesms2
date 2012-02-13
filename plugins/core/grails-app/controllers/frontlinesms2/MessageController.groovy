@@ -260,9 +260,9 @@ class MessageController {
 
 	def changeResponse = {
 		def messageIdList = params.messageIdList?.tokenize(',') ?: [params.messageId]
+		def responseInstance = PollResponse.get(params.responseId)
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				def responseInstance = PollResponse.get(params.responseId)
 				responseInstance.poll.removeFromMessages(messageInstance)
 				responseInstance.addToMessages(messageInstance)
 				responseInstance.poll.save()

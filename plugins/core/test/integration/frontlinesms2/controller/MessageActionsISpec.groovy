@@ -81,7 +81,7 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.save(failOnError: true)
 		when:
 			assert message.messageOwner
-			controller.params.messageIdList = ',' + message.id + ','
+			controller.params.messageId = ',' + message.id + ','
 			controller.params.messageSection = 'inbox'
 			controller.move()
 		then:
