@@ -1,5 +1,4 @@
 $(function() {
-	$(".dropdown").selectmenu();
 	setInterval(refreshMessageCount, 30000);
 	setInterval(refreshStatusIndicator, 30000);
 	refreshStatusIndicator();

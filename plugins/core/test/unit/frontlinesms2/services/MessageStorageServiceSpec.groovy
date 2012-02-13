@@ -14,6 +14,7 @@ class MessageStorageServiceSpec extends UnitSpec {
 
 	def setupSpec() {
 		s = new MessageStorageService()
+		Fmessage.metaClass.static.withSession = { Closure c -> }
 	}
 
 	def "it's a processor"() {

@@ -161,7 +161,7 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				messageInstance.dispatches.each { 
 					if(it.status == DispatchStatus.FAILED) { 
-						dst << Contact.findByPrimaryMobile(it.dst).name ?: Contact.findBySecondaryMobile(it.dst).name ?: it.dst
+						dst << Contact.findByPrimaryMobile(it.dst)?.name ?: Contact.findBySecondaryMobile(it.dst)?.name ?: it.dst
 					}
 				}
 				messageSendService.retry(messageInstance)
