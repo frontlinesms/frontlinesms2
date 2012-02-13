@@ -6,7 +6,6 @@ def envCheck = {
 		println '#' * middleLine.size()
 		println middleLine
 		println '#' * middleLine.size()
-		sleep 2000
 	}
 }
 
