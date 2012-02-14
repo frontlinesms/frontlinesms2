@@ -42,16 +42,16 @@ class ExportController {
 				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
 				break
 			case 'pending':
-				messageInstanceList = Fmessage.pending(params.failed).list()
+				messageInstanceList = Fmessage.pending(params.failed?:false).list()
 				break
 			case 'trash':
 				messageInstanceList = Fmessage.trash().list()
 				break
 			case 'activity':
-				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred).list()
+				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false).list()
 				break
 			case 'folder':
-				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred).list()
+				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false).list()
 				break
 			case 'radioShow':
 				messageInstanceList = MessageOwner.get(params.ownerId).getMessages()
@@ -93,7 +93,7 @@ class ExportController {
 		Map parameters = [title: "FrontlineSMS Message Export"]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try{
-			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:],parameters)
+			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:], parameters)
 		} catch(Exception e){
 			render(text: "Error creating report")
 		}

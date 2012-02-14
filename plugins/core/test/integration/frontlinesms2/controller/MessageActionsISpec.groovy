@@ -35,7 +35,7 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob'))
 			poll.save(failOnError: true)
 		when:
-			controller.params.messageId = ',' + message.id + ','
+			controller.params.messageIdList = ',' + message.id + ','
 			controller.params.responseId = r2.id
 			controller.params.ownerId = poll.id
 			controller.changeResponse()
@@ -43,7 +43,6 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			r2.messages.contains(message)
 	}
 	
-// FIXME
 	def "message can be moved to a folder"() {
 		setup:
 			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
