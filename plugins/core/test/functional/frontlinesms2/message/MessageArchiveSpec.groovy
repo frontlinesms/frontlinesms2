@@ -31,7 +31,8 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	def 'archived messages do not show up in sent view'() {
 		setup:
-			new Fmessage(src:'src', hasSent:true, dst:'+254112233', text:'hi Mary').save(flush: true)
+			def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
+			new Fmessage(src:'src', hasSent:true, inbound:false, dst:'+254112233', text:'hi Mary').addToDispatches(d).save(flush: true, failOnError:true)
 		when:
 		    to PageArchive
 			$("#sent").click()
@@ -56,11 +57,11 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	 def 'should not be able to archive activity messages'() {
 		when:
-			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
+			go "message/poll/${Poll.findByName('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 		then:
 			!$("#message-details a", text:"Archive").displayed
 		when:
-			go "message/poll/${Poll.findByTitle('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
+			go "message/poll/${Poll.findByName('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
 			$("#message")[0].click()
 			$("#message")[1].click()
 			sleep 1000
