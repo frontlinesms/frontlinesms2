@@ -5,18 +5,7 @@
 	};
 </script>
 <div id="message-detail-buttons">
-	<g:form controller="${params.controller}">
-		<g:hiddenField name="messageSection" value="${messageSection}"></g:hiddenField>
-		<g:hiddenField name="ownerId" value="${ownerInstance?.id}"></g:hiddenField>
-		<g:hiddenField name="messageId" value="${messageInstance?.id}"></g:hiddenField>
-		<g:hiddenField name="checkedMessageList" value="${params.checkedMessageList}"></g:hiddenField>
-		<g:hiddenField name="viewingArchive" value="${params.viewingArchive}"></g:hiddenField>
-		<g:if test="${messageSection == 'result'}">
-			<g:hiddenField name="searchId" value="${search.id}"></g:hiddenField>
-		</g:if>
-		<g:if test="${messageSection == 'pending' && messageInstance.hasFailed}">
-			
-		</g:if>
+	<g:form controller="${params.controller}" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, checkedMessageList: checkedMessageList, viewingArchive: viewingArchive, searchId: search?.id]">
 		<g:if test="${messageSection != 'trash'}">
 		 	<div id="msg-response-dropdown" class="msg-btn">
 		 		<g:if test="${messageSection == 'sent'}">

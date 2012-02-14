@@ -850,7 +850,7 @@ animation: newMessage 2s;
 	height: 25px;
 	z-index: 100;
 	min-width: 80px;
-	width: 6.2%
+	width: 6.2%;
 }
 .tall-header #dropdown_options{
 	position: fixed;
