@@ -1,10 +1,9 @@
 package frontlinesms2
 
 class TrashService {
-
     def emptyTrash() {
-		MessageOwner.findAllByDeleted(true)*.delete()
 		Fmessage.findAllByIsDeleted(true)*.delete()
+		MessageOwner.findAllByDeleted(true)*.delete()
 		Trash.findAll()*.delete()
     }
 }

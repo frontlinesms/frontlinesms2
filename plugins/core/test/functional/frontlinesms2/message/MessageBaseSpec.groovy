@@ -58,14 +58,15 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestData() {
 		[new Contact(name: 'Bob', primaryMobile: '+254987654')].each() {it.save(flush:true, failOnError:true)}
 		
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
+		[new Fmessage(src:'Bob',text:'hi Bob'),
+				new Fmessage(src:'Alice', text:'hi Alice'),
+				new Fmessage(src:'+254778899', text:'test')].each() {
 					it.inbound = true
 					it.save(flush:true, failOnError:true)
 				}
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary'),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test')].each() {
+		[new Fmessage(src:'Mary', text:'hi Mary'),
+				new Fmessage(src:'+254445566', text:'test')].each() {
+					it.inbound = true
 					it.save(flush:true, failOnError:true)
 				}
 		
@@ -73,11 +74,12 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
-		def poll = new Poll(title:'Miauow Mix')
+		def poll = new Poll(name:'Miauow Mix')
 		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse).save(flush:true, failOnError:true)
+		poll.addToResponses(liverResponse)
+		poll.save(flush:true, failOnError:true)
+		chickenResponse.addToMessages(chickenMessage)
+		liverResponse.addToMessages(liverMessage)
 
 		def message1 = new Fmessage(src:'Cheney', text:'i hate chicken', inbound:true, date: new Date())
 		def message2 = new Fmessage(src:'Bush', text:'i hate liver', inbound:true, date: new Date())

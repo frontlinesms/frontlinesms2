@@ -71,7 +71,8 @@ class RadioShowPollSpec extends geb.spock.GebReportingSpec {
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("input", class: "poll").click()
 		$("#submit").click()
-		waitFor { at PagePollCreate }
+		waitFor(10) { $("#ui-dialog-title-modalBox").text()?.equalsIgnoreCase("New poll") }
+		at PagePollCreate
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage

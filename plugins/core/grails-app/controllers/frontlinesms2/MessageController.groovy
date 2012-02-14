@@ -36,7 +36,7 @@ class MessageController {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
 			render messageCount as JSON
 		} else if(section == 'activity') {
-			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages()?.count()]]
+			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages()?.size()]]
 			render messageCount as JSON
 		} else if(section == 'folder') {
 			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages()?.count()]]
