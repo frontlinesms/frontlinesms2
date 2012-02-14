@@ -161,7 +161,7 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				messageInstance.dispatches.each { 
 					if(it.status == DispatchStatus.FAILED) { 
-						dst << Contact.findByPrimaryMobile(it.dst).name ?: Contact.findBySecondaryMobile(it.dst).name ?: it.dst
+						dst << Contact.findByPrimaryMobile(it.dst)?.name ?: Contact.findBySecondaryMobile(it.dst)?.name ?: it.dst
 					}
 				}
 				messageSendService.retry(messageInstance)
@@ -259,10 +259,10 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def messageIdList = params.messageIdList.tokenize(',')
+		def messageIdList = params.messageIdList?.tokenize(',') ?: [params.messageId]
+		def responseInstance = PollResponse.get(params.responseId)
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				def responseInstance = PollResponse.get(params.responseId)
 				responseInstance.poll.removeFromMessages(messageInstance)
 				responseInstance.addToMessages(messageInstance)
 				responseInstance.poll.save()

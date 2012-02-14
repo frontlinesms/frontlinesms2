@@ -11,7 +11,7 @@
 			platform default. -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jetty.version>8.0.4.v20111024</jetty.version>
-		<build.name>FrontlineSMS2-alpha</build.name>
+		<build.name>FrontlineSMS2.${build.version}</build.name>
 	</properties>
 
 	<pluginRepositories>
@@ -56,7 +56,7 @@
 				<configuration>
 					<executable>${devenv.install4jc}</executable>
 					<configFile>${basedir}/build.install4j</configFile>
-					<releaseId>${project.version}</releaseId>
+					<releaseId>2.${build.version}</releaseId>
 					<attach>true</attach>
 					<skipOnMissingExecutable>true</skipOnMissingExecutable>
 					<compilerVariables>
@@ -79,7 +79,6 @@
 						<property><name>install4j.windows.launcher.splashScreen.bitmapFile</name><value>resources/${build.name}_Splash_Logo.jpg</value></property>
 						<property><name>install4j.windows.launcher.iconImageFiles.file.path</name><value>src/assemble/resources/${build.name}.ico</value></property>
 						<property><name>install4j.windows.installDir</name><value>${build.name}</value></property>
-
 					</compilerVariables>
 					<verbose>true</verbose>
 				</configuration>
