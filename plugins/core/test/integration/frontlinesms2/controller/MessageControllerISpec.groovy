@@ -124,17 +124,6 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.get(id).starred == false
 	}
-
-	def 'empty trash permanently deletes messages with deleted flag true'() {
-		setup:
-			(1..3).each {new Fmessage(src: '123456', isDeleted:false, date: new Date(), inbound: true).save()}
-			def inboxMessages = Fmessage.list()
-			(1..3).each {new Fmessage(src: '123456', isDeleted:true, date: new Date(), inbound: true).save()}
-		when:
-			controller.emptyTrash()
-		then:
-			Fmessage.list() == inboxMessages
-	}
 	
 	def 'calling "getSendMessageCount" returns the number of messages to be sent'() {
 		when:

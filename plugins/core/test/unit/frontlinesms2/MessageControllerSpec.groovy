@@ -6,6 +6,9 @@ class MessageControllerSpec extends ControllerSpec {
 	MessageSendService mockMessageSendService
 
 	def setup() {
+		controller.metaClass.message = { Map args -> args.code }
+		controller.metaClass.getPaginationCount = { -> 10 }
+			
 		mockDomain Contact
 		mockDomain Fmessage
 		registerMetaClass(Fmessage)
@@ -15,7 +18,6 @@ class MessageControllerSpec extends ControllerSpec {
 		mockParams.max = 10
 		mockParams.offset = 0
 		mockParams.starred = false
-		controller.messageSendService = new MessageSendService()
 
 		def sahara = new Group(name: "Sahara")
 		def thar = new Group(name: "Thar")
@@ -25,7 +27,6 @@ class MessageControllerSpec extends ControllerSpec {
 				new GroupMembership(group: thar, contact: new Contact(primaryMobile: "12121")),
 				new GroupMembership(group: thar, contact: new Contact(primaryMobile: "22222"))]
 
-		controller.metaClass.getPaginationCount = {-> return 10}
 		mockMessageSendService = Mock()
 		controller.messageSendService = mockMessageSendService
 	}
@@ -55,5 +56,32 @@ class MessageControllerSpec extends ControllerSpec {
 			controller.retry()
 		then:
 			1 * mockMessageSendService.retry {it.id == 1L}
+	}
+	
+	def 'emptyTrash should call trashService_emptyTrash'() {
+		given:
+			controller.trashService = Mock(TrashService)
+		when:
+			controller.emptyTrash()
+		then:
+			1 * controller.trashService.emptyTrash()
+	}
+	
+	def 'move action should work for activities'() {
+		given:
+			def messageId = 7
+			def pollId = 9
+			Poll poll = Mock()
+			Fmessage message = Mock()
+			Activity.metaClass.static.get = { id -> id == pollId? poll: null }
+			Fmessage.metaClass.static.get = { id -> id == messageId? message: null }
+			Trash.metaClass.static.findByLinkId = { id -> }
+		when:
+			mockParams.messageId = ',' + messageId + ','
+			mockParams.ownerId = pollId
+			mockParams.messageSection = 'activity'
+			controller.move()
+		then:
+			1 * poll.addToMessages(message)
 	}
 }
