@@ -23,7 +23,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			go "message/inbox/show/${message.id}"
 			$('#add-contact').click()
 		then:
-			waitFor { $('title').text() == 'Contacts'}
+			waitFor(10) {$('title').text() == 'Contacts'}
 			$('#details').primaryMobile == "+254778899"
 	}
 }
