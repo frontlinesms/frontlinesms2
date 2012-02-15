@@ -10,20 +10,6 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new MessageController()
 	}
 	
-	def "moving message to poll puts it in Unknown response"() {
-		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
-		when:
-			controller.params.messageId = ',' + message.id + ','
-			controller.params.ownerId = poll.id
-			controller.params.messageSection = 'activity'
-			controller.move()
-		then:
-			poll.getActivityMessages().list().find {message}
-			poll.responses.find { it.value == 'Unknown' }.messages.find {message} 
-	}
-	
 	def "message can be moved to a different poll response"() {
 		setup:
 			def r = new PollResponse(value:'known unknown')

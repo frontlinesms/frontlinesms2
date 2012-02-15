@@ -28,7 +28,7 @@ class Fmessage {
 	int failedCount
 	static hasMany = [dispatches:Dispatch]
 
-	static mapping = { sort date:'desc'	}
+	static mapping = { sort date:'desc' }
 	
 	static constraints = {
 		messageOwner(nullable:true)
@@ -295,8 +295,9 @@ class Fmessage {
 	private def updateFmessageDisplayName() {
 		Contact c
 		if(inbound) {
-			if((c = Contact.findByPrimaryMobile(src)) ||
-					(c = Contact.findBySecondaryMobile(src))) {
+			if(src &&
+					(c = Contact.findByPrimaryMobile(src)?:
+							Contact.findBySecondaryMobile(src))) {
 				displayName = c.name
 				contactExists = true
 			} else {

@@ -140,7 +140,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		then:
 			messagesSelect[1].checked
 		when:
-			$('#messages tr:last-child td:nth-child(3) a').click()
+			messagesSelect[1].click()
 		then: 
 			!messagesSelect[1].checked
 	}
@@ -176,9 +176,10 @@ class MessageCheckSpec extends MessageBaseSpec {
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { $('#multiple-messages #btn_archive_all').displayed }
+			waitFor { deleteAllButton.displayed }
 		when:
-			$('input',value:'Archive all').click()
+			assert $('#multiple-messages #btn_archive_all').displayed			
+			$('#multiple-messages #btn_archive_all').jquery.trigger('click')
 		then:
 			waitFor { at PageMessageInbox }
 			$("#message-detail-content").text() == 'No message selected'
