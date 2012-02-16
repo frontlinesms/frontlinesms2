@@ -7,11 +7,15 @@ import java.util.Date
 
 import frontlinesms2.*
 
+@Mixin(frontlinesms2.utils.GebUtil)
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src: "src1", hasFailed:true, starred: true, date: new Date()).save(flush: true)
-		new Fmessage(src: "src2", hasPending:true, date: new Date()).save(flush: true)
-		new Fmessage(src: "src", hasSent:true, date: new Date()).save(flush: true)
+		def pendingDispatch = new Dispatch(dst:"dst1", status:DispatchStatus.PENDING)
+		def failedDispatch = new Dispatch(dst:"dst2", status:DispatchStatus.FAILED)
+		def sentDispatch = new Dispatch(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date())
+		new Fmessage(src: "src1", hasFailed:true, inbound:false, starred: true, date: new Date()).addToDispatches(failedDispatch).save(flush: true)
+		new Fmessage(src: "src2", hasPending:true, inbound:false, date: new Date()).addToDispatches(pendingDispatch).save(flush: true)
+		new Fmessage(src: "src", inbound:false, hasSent:true, date: new Date()).addToDispatches(sentDispatch).save(flush: true)
 		new Fmessage(src: "src", inbound:true, date: new Date()).save(flush: true)
 	}
 	
@@ -37,12 +41,12 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'Failed').click()
 		then:	
 			waitFor { $("#messages tbody tr").size() == 1 }
-			$("#messages tbody tr")[0].find("td:nth-child(3)").text() == 'dst1'
+			getColumnText('message-list', 3) == ['To: dst2']
 		when:
 			$('a', text:'All').click()
 		then:	
 			waitFor { $("#messages tbody tr").size() == 2 }
-			$("#messages tbody tr").collect {it.find("td:nth-child(3)").text()}.containsAll(['dst1', 'dst2'])
+			getColumnText('message-list', 3).containsAll(['To: dst1', 'To: dst2'])
 	}
 
 	def "retry button must not apper if there are no failed messages"() {
@@ -68,33 +72,31 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 		then:
 			at PageMessagePending
 		when:
-			$("a", text:"dst1").click()
+			$("a", text:contains("dst2")).click()
 		then:
-			waitFor { $("#retry").displayed }
+			waitFor { $("#btn_reply").displayed }
 		when:
-			$("#retry").click()
+			$("#btn_reply").click()
 		then:	
-			waitFor { $(".flash").text()?.contains("dst1") }
+			waitFor { $(".flash").displayed }
 	}
 
 	def "should be able to retry all failed messages"() {
-		setup:
-			new Fmessage(src: "src1", dst:"dst2", hasFailed:true, starred: true).save(flush: true, failOnError:true)
 		when:
 			go "message/pending"
 		then:
 			at PageMessagePending
 		when:
-			$("a", text:"dst1").click()
+			$("a", text: contains("dst2")).click()
 		then:
-			waitFor { $("#retry").displayed }
+			waitFor { $("#btn_reply").displayed }
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { $("#retry-failed").displayed }
+			waitFor { $("#btn_reply").displayed }
 		when:
-			$("#retry-failed").click()
+			$("#btn_reply").click()
 		then:
-			waitFor{ $(".flash").text()?.contains("dst2, dst1") }
+			waitFor{ $(".flash").displayed }
 	}
 }
