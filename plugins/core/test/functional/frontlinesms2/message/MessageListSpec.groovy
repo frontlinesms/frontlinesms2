@@ -8,8 +8,8 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
-            to PageMessageInbox
-		  def btnInbox = $('#sidebar li a', href:"/frontlinesms2/message/inbox")
+          to PageMessageInbox
+		  def btnInbox = $('#messages-submenu li a', text:"Inbox")
         then:
 		btnInbox.text() == 'Inbox'
     }
@@ -17,7 +17,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
 	        to PageMessageInbox
-			def btnSentItems = $('#sidebar li a', href:'/frontlinesms2/message/sent')
+			def btnSentItems = $('#messages-submenu li a', text:"Sent")
         then:
 		btnSentItems.text() == 'Sent'
     }
@@ -52,11 +52,11 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			to PageMessageInbox
 			$("#source-header a").click()
 		then:
-			getColumnText('message-list', 2) == ['Contact 1', 'Contact 2']
+			waitFor { getColumnText('message-list', 3) == ['Contact 1', 'Contact 2']}
 		when:
 			$("#message-header a").click()
 		then:
-			getColumnText('message-list', 3) == ['An inbox message', 'Another inbox message']		
+			getColumnText('message-list', 4) == ['An inbox message', 'Another inbox message']		
 	}
 	   
     def assertMenuItemSelected(String itemText) {
