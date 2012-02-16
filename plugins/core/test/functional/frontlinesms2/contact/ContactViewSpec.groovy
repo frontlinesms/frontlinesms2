@@ -60,11 +60,10 @@ class ContactViewSpec extends ContactBaseSpec {
 
 	def 'checked contact details are displayed'() {
 		when:
-			go "contact/show/${Contact.findByName('Alice').id}"
+			to PageContactShowAlice
 			$(".contact-select")[1].click()
 		then:
-			at PageContactShowAlice
-			waitFor { $("#contact-header h3").text() == "Bob" }
+			waitFor { $("#contact-title h3").text().equalsIgnoreCase("Bob") }
 			assertFieldDetailsCorrect('name', 'Name', 'Bob')
 	}
 
@@ -124,14 +123,11 @@ class ContactViewSpec extends ContactBaseSpec {
 		setup:
 			createTestMessages()
 		when:
-			go "contact/show/${Contact.findByName('Alice').id}"
-		then:
-			at PageContactShowAlice
-		when:
+			to PageContactShowAlice
 			$("#message-stats a").click()
 		then:
 			at PageSearchResult
-			messageList.each { assert it.find("td:nth-child(3)").text() == 'Alice' }
+			messageList.each { assert it.find(".message-sender-cell").text() == 'Alice' }
 	}
 
 	def assertContactSelected(String name) {

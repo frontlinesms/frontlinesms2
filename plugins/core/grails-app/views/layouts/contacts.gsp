@@ -2,13 +2,15 @@
 <html>
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
-		<g:layoutHead />
 		<g:render template="/includes"/>
 		<g:javascript src="contact/validateNumber.js"/>
 		<g:javascript src="contact/buttonStates.js" />
 		<g:javascript src="contact/checked_contact.js" />
 		<g:javascript src="contact/moreGroupActions.js" />
 		<g:javascript src="contact/search_within_list.js" />
+		<g:javascript src="contact/show-groups.js" />
+		<g:javascript src="contact/show-fields.js" />
+		<g:layoutHead />
 	</head>
 	<body id="contacts-tab">
 		<div id="header">

@@ -6,11 +6,14 @@ import geb.Browser
 import grails.plugin.geb.GebSpec
 
 class ContactDeleteSpec extends ContactBaseSpec {
+	
+	//These are both broken because they do not appear directly on the screen, you have to scroll to see the delete button
+	// if you maximize firefox when the test starts they pass
 	def 'delete button is displayed and works'() {
 		given:
 			createTestContacts()
 		when:
-			to PageContactShowAlice
+			to PageContactShow
 			deleteSingleButton.click()
 		then:
 			waitFor { confirmDeleteButton.displayed }
