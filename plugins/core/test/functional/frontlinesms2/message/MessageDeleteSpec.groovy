@@ -3,6 +3,7 @@ package frontlinesms2.message
 import frontlinesms2.*
 
 class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
+	
 	def setup() {
 		createTestData()
 	}
@@ -19,7 +20,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			$('#message-detail #message-detail-sender').text() == bobMessage.displayName
 			!$('#message-detail .buttons #delete-msg')
 	}
-	
+
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
 			def message = new Fmessage(text:"to delete").save(failOnError:true)
@@ -66,20 +67,21 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def deleteMessage(Fmessage message) {
-		message.deleted = true
+		message.isDeleted = true
 		message.save(flush:true)
 		new Trash(identifier:message.contactName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
 	}
 	
 	static createTestData() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob'),
-				new Fmessage(src:'Alice', dst:'+2541234567', text:'hi Alice'),
-				new Fmessage(src:'+254778899', dst:'+254112233', text:'test')].each() {
+		[new Fmessage(src:'Bob', text:'hi Bob'),
+				new Fmessage(src:'Alice', text:'hi Alice'),
+				new Fmessage(src:'+254778899', text:'test')].each() {
 					it.inbound = true
 					it.save(flush:true, failOnError:true)
 				}
-		[new Fmessage(src:'Mary', dst:'+254112233', text:'hi Mary'),
-				new Fmessage(src:'+254445566', dst:'+254112233', text:'test')].each() {
+		[new Fmessage(src:'Mary', text:'hi Mary'),
+				new Fmessage(src:'+254445566', text:'test')].each() {
+				    it.inbound = true
 					it.save(flush:true, failOnError:true)
 				}
 	}
