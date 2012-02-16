@@ -86,27 +86,38 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should fetch all inbound messages alone"() {
 		given:
 			to PageSearch
-			searchFrm.messageStatus = "INBOUND"
+			searchFrm.messageStatus = "inbound"
 		when:
 			searchBtn.click()
 		then:	
 			waitFor { searchBtn.displayed }
-			searchFrm.messageStatus == 'INBOUND'
+			searchFrm.messageStatus == 'inbound'
 			$("#messages tbody tr .message-text-cell a")*.text().containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			new Fmessage(src: "src", text:"sent", hasSent:true, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", hasPending:true, dateReceived: new Date()-1).save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", hasFailed:true, dateReceived: new Date()-1).save(flush: true)
+			def d1 = new Dispatch(dst: '123', status: DispatchStatus.SENT, dateSent: new Date())
+			def d2 = new Dispatch(dst: '123', status: DispatchStatus.PENDING)
+			def d3 = new Dispatch(dst: '123', status: DispatchStatus.FAILED)
+			def m1 = new Fmessage(src: "src", text:"sent", hasSent:true, date: new Date()-1)
+			m1.addToDispatches(d1)
+			m1.save(flush: true)
+			def m2 = new Fmessage(src: "src", text:"send_pending", hasPending:true, date: new Date()-1)
+			m2.addToDispatches(d2)
+			m2.save(flush: true)
+			def m3 = new Fmessage(src: "src", text:"send_failed", hasFailed:true, date: new Date()-1)
+			m3.addToDispatches(d3)
+			m3.save(flush: true)
+			new Fmessage(src: "src", text:"send_failed", inbound:true, date: new Date()-1).save(flush: true)
+			
 			to PageSearch
-			searchFrm.messageStatus = "SENT, PENDING, FAILED"
+			searchFrm.messageStatus = "outbound"
 		when:
 			searchBtn.click()
 		then:
 			waitFor{ searchBtn.displayed }
-			searchFrm.messageStatus == 'SENT, PENDING, FAILED'
+			searchFrm.messageStatus == 'outbound'
 			$("#messages tbody tr .message-text-cell a")*.text().containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
@@ -134,7 +145,6 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			at PageSearchResult
-			println $("#messages tbody tr").collect {it.find("td:nth-child(4)").text()}
 		when:
 			$("a.displayName-${Fmessage.findBySrc('src3').id}").click()
 			$("#delete-msg").click()

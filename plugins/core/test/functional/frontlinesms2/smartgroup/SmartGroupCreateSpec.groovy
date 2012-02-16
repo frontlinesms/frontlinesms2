@@ -203,15 +203,12 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			setRuleValue(0, '+44')
 			finishButton.click()
 		then:
-			waitFor { flashMessage.text() == "Created new smart group: 'English Contacts'" }
+			waitFor { flashMessage.text().contains('English Contacts') }
 	}
 
 	def 'successfully creating a smart group should add it to the smart groups menu'() {
 		when:
 			to PageContactShow
-		then:
-			!$('#smart-groups-submenu li a').contains('All the bobs!')
-		when:
 			launchCreateDialog('All the bobs!')
 			ruleField[0].value('Contact name')
 			setRuleValue(0, 'bob')

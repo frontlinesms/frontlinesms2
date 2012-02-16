@@ -125,9 +125,9 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResultI
 			messagesSelect[0].click()
 		then:
-			waitFor { checkedMessageCount == 4}
+			waitFor { archiveAllBtn.displayed }
 		when:
-			$('#btn_archive_all').click()
+			archiveAllBtn.click()
 		then:
 			waitFor { $('title').text() == "Results"}
 	}

@@ -20,12 +20,11 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to PageContactShowBob
 		then:
-			at PageContactShowBob
 			$("#group-dropdown").children('option')*.text().sort() == ['Add to group...', 'Others', 'four']
 		when:
-			$("#group-dropdown").value("Others")
+			$("#group-dropdown").value("Others").click()
 		then:
 			waitFor { $("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three'] }
 			$("#group-dropdown").children()*.text() == ['Add to group...', 'four']
@@ -38,9 +37,8 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			def bobsDatabaseGroups = bob.groups
 			def bobsGroups = bobsDatabaseGroups
 		when:
-			go "contact/show/${bob.id}"
+			to PageContactShowBob
 		then:
-			at PageContactShowBob
 			groupList.children().children('span').size() == 2
 			def groupsText = groupList.children().children('span').collect() { it.text() }
 			groupsText.containsAll(['Test', 'three'])
@@ -50,7 +48,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { groupList.children().children('span').size() == 1 }
 		when:
-			go "contact/show/${bob.id}"
+			to PageContactShowBob
 		then:
 			waitFor { groupList.children().children('span').size() == 2 }
 	}
@@ -74,7 +72,8 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			contactSelect[0].click()
 		then:
-			waitFor { multiGroupSelect.displayed && multiGroupSelect.find('option').size() > 1 }
+			waitFor { multiGroupSelect.displayed }
+			multiGroupSelect.find('option').size() > 1
 		when:
 			multiGroupSelect.value("${Group.findByName('Others').id}")
 			updateAll.click()
@@ -114,7 +113,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			def otherGroup = Group.findByName('Others')
-			at PageContactShowBob
+			to PageContactShowBob
 			def btnRemoveFromGroup = $("#remove-group-${otherGroup.id}")
 			btnRemoveFromGroup.click()
 			def btnUpdate = $("#single-contact #update-single")
@@ -127,7 +126,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def "should enable save and cancel buttons when new group is added"() {
 		when:
-			at PageContactShowBob
+			to PageContactShowBob
 		then:
 			btnSave.disabled
 		when:

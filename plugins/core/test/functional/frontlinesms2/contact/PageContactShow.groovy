@@ -44,7 +44,6 @@ class PageContactShow extends geb.Page {
 				return []
 			} else return list
 		}
-		noSmartGroupsMessage(required:false) { smartGroupsList.find('li#no-smart-groups') }
 		createSmartGroupButton { $('li#create-smart-group a') }
 		
 		// Custom Fields
