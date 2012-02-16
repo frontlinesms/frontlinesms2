@@ -20,7 +20,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			$('#message-detail #message-detail-sender').text() == bobMessage.displayName
 			!$('#message-detail .buttons #delete-msg')
 	}
-	@spock.lang.IgnoreRest
+
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
 			def message = new Fmessage(text:"to delete").save(failOnError:true)
