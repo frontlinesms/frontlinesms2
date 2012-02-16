@@ -23,10 +23,10 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
-			def message = new Fmessage(text:"to delete").save(failOnError:true)
+			def message = new Fmessage(text:"to delete", inbound:true, src:"src").save(failOnError:true)
 			deleteMessage(message)
 			go "message/trash"
-			assert Fmessage.findAllByDeleted(true).size == 1
+			assert Fmessage.findAllByIsDeleted(true).size == 1
 		when:
 			$("#trash-actions").value("empty-trash")
 		then:
@@ -36,7 +36,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			$("#done").click()
 		then:
 			waitFor { at PageMessageInbox }
-			Fmessage.findAllByDeleted(true).size == 0
+			Fmessage.findAllByIsDeleted(true).size == 0
 	}
 	
 	def "'Delete All' button appears for multiple selected messages and works"() {
@@ -44,13 +44,10 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			to PageMessageInbox
 			messagesSelect[1].click()
 			messagesSelect[2].click()
-		then:
 			waitFor { multipleMessagesThing.displayed }
-			deleteAllButton.displayed
-		when:
-			deleteAllButton.click()
+			$("#btn_delete_all").jquery.trigger('click')
 		then:
-			waitFor{ flashMessage.text().contains("deleted") }
+			waitFor{ flashMessage.text()?.contains("deleted") }
 	}
 	
 	def "'Delete' button appears for individual messages and works"() {
@@ -69,7 +66,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def deleteMessage(Fmessage message) {
 		message.isDeleted = true
 		message.save(flush:true)
-		new Trash(identifier:message.contactName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
+		new Trash(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
 	}
 	
 	static createTestData() {
