@@ -1,7 +1,7 @@
 package frontlinesms2.search
 
 class PageSearchResult extends PageSearch {
-	static url = 'search/result'
+	static getUrl() { 'search/result' }
 	static at = {
 		title.startsWith("Results")
 	}

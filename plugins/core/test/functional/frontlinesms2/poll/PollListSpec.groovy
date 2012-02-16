@@ -147,7 +147,7 @@ class PollListSpec extends PollBaseSpec {
 			visibleMessageTotal == 2
 			!newMessageNotification.displayed
 		when:
-			sleep 5000
+			sleep 7000
 		then:
 			waitFor { newMessageNotification.displayed }
 	}

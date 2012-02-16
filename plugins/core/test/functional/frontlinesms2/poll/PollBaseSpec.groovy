@@ -26,14 +26,15 @@ class PollBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createMoreTestMessages() {
-		[new Fmessage(src:'Jill', text:'barcelona sucks!', date: new Date() - 4, starred: true),
-			new Fmessage(src:'Tony', text:'Gormahia!', date: new Date() - 3)].each() {
+		[new Fmessage(src:'Jill', text:'barcelona sucks!', date: new Date(), starred: true),
+			new Fmessage(src:'Tony', text:'Gormahia!', date: new Date())].each() {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 				}
 
-		[PollResponse.findByValue('manchester').addToMessages(Fmessage.findByText('barcelona sucks!')),
-				PollResponse.findByValue('barcelona').addToMessages(Fmessage.findBySrc('Tony'))]*.save(failOnError:true, flush:true)
+		PollResponse.findByValue('manchester').addToMessages(Fmessage.findByText('barcelona sucks!'))
+		PollResponse.findByValue('barcelona').addToMessages(Fmessage.findBySrc('Tony'))
+		Poll.findByName('Football Teams').save(failOnError:true, flush:true)
 	}
 
 	static createTestFolders() {

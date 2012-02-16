@@ -100,6 +100,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 				$('#connections .selected .test').@href == "/core/connection/createTest/${testConnection.id}"
 			cleanup:
 				deleteTestConnections()
+				
 		}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {

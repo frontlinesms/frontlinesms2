@@ -9,7 +9,6 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			to PageContactShow
 		then:
 			smartGroupsList.children('li')*.size() == [1]
-			noSmartGroupsMessage.displayed
 	}
 	
 	def 'smartgroups list is visible if there are smart groups created'() {
@@ -19,7 +18,6 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			finishButton.click()
 		then:
 			waitFor { smartGroupsListItems.size() > 0 }
-			!noSmartGroupsMessage.displayed	
 	}
 	
 	def 'CREATE NEW SMARTGROUP button is available when there are no smart groups'() {

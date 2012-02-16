@@ -170,13 +170,8 @@ class Fmessage {
 					}
 				}
 				if(search.status) {
-					def statuses = search.status.tokenize(',').collect { it.trim().toLowerCase() }
-					or {
-						if('sent' in statuses) eq('hasSent', true)
-						if('pending' in statuses) eq('hasPending', true)
-						if('failed' in statuses) eq('hasFailed', true)
-						if('inbound' in statuses) eq('inbound', true)
-					}
+					if(search.status == 'inbound') eq('inbound', true)
+					else eq('inbound', false)
 				}
 				if(search.owners) {
 					'in'("messageOwner", search.owners)

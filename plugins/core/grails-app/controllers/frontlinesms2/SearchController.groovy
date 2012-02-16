@@ -7,7 +7,7 @@ import java.util.Date;
 import grails.util.GrailsConfig
 
 
-class SearchController {
+class SearchController extends MessageController {
 	
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
@@ -16,7 +16,7 @@ class SearchController {
 		true
 	}
 	
-	def index = { redirect(action:'no_search') }
+	def index = { redirect(action:'no_search', params: params) }
 	
 	def no_search = {
 		[groupInstanceList : Group.findAll(),
@@ -86,6 +86,9 @@ class SearchController {
 			search.customFields.find{it.value}.each{
 				searchDescriptor += ", "+it.key+"="+it.value
 			}
+		}
+		if(search.status) {
+			searchDescriptor += ", only " + search.status
 		}
 		if(search.startDate && search.endDate){
 			searchDescriptor += ", between " + search.startDate + " and " + search.endDate
