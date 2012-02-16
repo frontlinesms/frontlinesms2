@@ -24,9 +24,9 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			$("#group-dropdown").children('option')*.text().sort() == ['Add to group...', 'Others', 'four']
 		when:
-			$("#group-dropdown").value("Others").click()
+			$("#group-dropdown").value("${Group.findByName('Others').id}")
 		then:
-			waitFor { $("#group-list").children().children('span')*.text().sort() == ['Others', 'Test', 'three'] }
+			waitFor { $("#group-list li span")*.text().sort() == ['Others', 'Test', 'three'] }
 			$("#group-dropdown").children()*.text() == ['Add to group...', 'four']
 			
 	}
@@ -39,18 +39,18 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			to PageContactShowBob
 		then:
-			groupList.children().children('span').size() == 2
-			def groupsText = groupList.children().children('span').collect() { it.text() }
+			groupList.find('li span').size() == 2
+			def groupsText = groupList.find('li span')*.text()
 			groupsText.containsAll(['Test', 'three'])
 		when:
 			groupList.find('a').first().click()
 			bobsGroups = bob.groups
 		then:
-			waitFor { groupList.children().children('span').size() == 1 }
+			waitFor { groupList.find('li span').size() == 1 }
 		when:
 			to PageContactShowBob
 		then:
-			waitFor { groupList.children().children('span').size() == 2 }
+			waitFor { groupList.find('li span').size() == 2 }
 	}
 
 	def 'clicking save actually adds contact to newly selected groups'() {
@@ -63,6 +63,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			Contact.findByName('Bob') in Group.findByName('Test').members
 	}
 	
+	//this is broken due to the selectmenu jquery being called in the ajax
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
 			to PageContactShow

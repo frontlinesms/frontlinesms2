@@ -5,8 +5,6 @@
 			<title>${pageTitle}</title>
 		</g:if>
 		<meta name="layout" content="contacts"/>
-		<g:javascript src="contact/show-groups.js"></g:javascript>
-		<g:javascript src="contact/show-fields.js"></g:javascript>
 		<script type="text/javascript">
 			$(function() {
 				$('input[name="name"]').focus();

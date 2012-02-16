@@ -13,10 +13,7 @@ class ContactEditSpec extends ContactBaseSpec {
 	
 	def 'selected contact details can be edited and saved'() {
 		when:
-			go "contact/show/${Contact.findByName('Alice').id}"
-		then:
-			at PageContactShowAlice
-		when:
+			to PageContactShowAlice
 			def changingContact = Contact.findByName('Alice')
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
@@ -55,66 +52,23 @@ class ContactEditSpec extends ContactBaseSpec {
 			$('#groups-submenu .selected').text() == 'Excellent'
 	}
 	
-	def "should remove secondary mobile address when delete icon is clicked"() {
+	def "should remove address when delete icon is clicked"() {
 		when:
 			to PageContactShowBob
-			$('div.basic-info:nth-child(4) a', class: 'remove-field').click()
 		then:
-			at PageContactShowBob
-			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
-			!$('div.basic-info:nth-child(4) a', class: 'send-message').displayed
+			$('#remove-primaryMobile').displayed
+		when:
+			$('#remove-primaryMobile').click()
+		then:
+			!$('#remove-primaryMobile').displayed
+			!$('.basic-info .send-message').displayed
 		when:		
 			$('#update-single').click()
 		then:
 			at PageContactShowBob
-			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
-			!$('div.basic-info:nth-child(4) a', class: 'send-message').displayed
+			!$('.basic-info #remove-primaryMobile').displayed
+			!$('.basic-info .send-message').displayed
 			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '')
-		when: 
-			to PageContactShowBob
-		then:
-			!$('div.basic-info:nth-child(4) a', class: 'remove-field').displayed
-	}
-	
-	def "should remove email data when delete icon is clicked"() {
-		when:
-			to PageContactShowBob
-			$('div.basic-info:nth-child(5) a', class: 'remove-field').click()
-		then:
-			at PageContactShowBob
-			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
-			!$('div.basic-info:nth-child(5) a', class: 'send-message').displayed
-		when:
-			$("#single-contact #update-single").click()
-		then:
-			at PageContactShowBob
-			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
-			!$('div.basic-info:nth-child(5) a', class: 'send-message').displayed
-			assertFieldDetailsCorrect('email', 'Email', '')
-		when: 
-			to PageContactShowBob
-		then:
-			!$('div.basic-info:nth-child(5) a', class: 'remove-field').displayed
-	}
-	
-	def "should remove primary mobile address when delete icon is clicked"() {
-		when:
-			to PageContactShowBob
-			$('div.basic-info:nth-child(3) a', class: 'remove-field').click()
-		then:
-			at PageContactShowBob
-			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
-			!$('div.basic-info:nth-child(3) a', class: 'send-message').displayed
-		when:
-			$("#single-contact #update-single").click()
-		then:
-			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
-			!$('div.basic-info:nth-child(3) a', class: 'send-message').displayed
-			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '')
-		when: 
-			to PageContactShowBob
-		then:
-			!$('div.basic-info:nth-child(3) a', class: 'remove-field').displayed
 	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
@@ -141,11 +95,10 @@ class ContactEditSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to PageContactShowBob
 			$("#paging .nextLink").click()
 			$("#paging .currentStep").jquery.show();
 		then:
-			at PageContactShowBob
 			$("#paging .currentStep").text() == "2"
 		when:
 			frmDetails.name = 'Kate'

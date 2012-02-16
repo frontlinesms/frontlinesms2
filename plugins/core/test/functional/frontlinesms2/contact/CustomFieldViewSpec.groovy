@@ -42,13 +42,12 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	def 'clicking an existing custom field in dropdown adds it to list with blank value'() {
 		when:
 			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
+			to PageContactShowBob
 		then:
-			at PageContactShowBob
 			$("#custom-field-list").children().children('label')*.text() == ['town']
 			waitFor { fieldSelecter.displayed }
 		when:
-			fieldSelecter.value('lake]').click()
+			fieldSelecter.value('lake').click()
 		then:
 			$("#custom-field-list").find('label')*.text().sort() == ['lake', 'town']
 			fieldSelecter.children()*.text() == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
