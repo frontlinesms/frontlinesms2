@@ -95,13 +95,10 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 				$('#connections .selected .test').isEmpty()
 			when:
 				waitFor{ $("#connections .selected .route").displayed }
-				$("#connections .selected .route").click()
+				$("#createRoute a").click()
 			then:
-				$('#connections .selected .test').@href == "/core/connection/createTest/${testConnection.id}"
-			cleanup:
-				deleteTestConnections()
-				
-		}
+				$('#connections .selected .test').@href == "/connection/createTest/${testConnection.id}"
+	}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
 		given:

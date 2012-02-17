@@ -16,7 +16,7 @@
 					
 					<g:if test="${c == connectionInstance}">
 						<g:if test="${c.status == 'Not connected'}">
-							<div>
+							<div id="createRoute">
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}" >Create route</g:link>
 							</div>
 							<div>
