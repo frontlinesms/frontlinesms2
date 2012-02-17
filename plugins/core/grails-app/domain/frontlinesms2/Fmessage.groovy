@@ -170,7 +170,7 @@ class Fmessage {
 					}
 				}
 				if(search.status) {
-					if(search.status == 'inbound') eq('inbound', true)
+					if(search.status.toLowerCase() == 'inbound') eq('inbound', true)
 					else eq('inbound', false)
 				}
 				if(search.owners) {
