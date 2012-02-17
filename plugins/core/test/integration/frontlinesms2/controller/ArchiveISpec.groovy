@@ -43,7 +43,7 @@ class ArchiveISpec extends IntegrationSpec {
 			pollController.params.id = poll.id
 			pollController.unarchive()
 		then:
-			!poll.refresh().archived
+			!poll.archived
 			pollController.response.redirectedUrl == "/archive/poll?viewingArchive=true"
 	}
 	

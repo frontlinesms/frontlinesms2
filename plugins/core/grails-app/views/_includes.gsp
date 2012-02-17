@@ -1,12 +1,13 @@
 <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 <g:javascript library="jquery" plugin="jquery"/>
 <jqui:resources theme="medium" plugin="randomtextosolvebug"/>
-<script type="text/javascript">
+<g:javascript>
 	url_root = "${request.contextPath}/";
 	refresh_rate = ${params.rRate ?: 30000}
-</script>
-<g:javascript src="jquery.ui.selectmenu.js"/>
+	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
+</g:javascript>
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
+	<g:javascript src="jquery.ui.selectmenu.js"/>
 	<g:javascript>
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
@@ -14,6 +15,12 @@
 		});
 	</g:javascript>
 </g:if>
+<g:else>
+	<g:javascript>
+		// declare our own, non-functioning select menu
+		$.fn.selectmenu = function() {}
+	</g:javascript>
+</g:else>
 
 <g:javascript src="application.js"/>
 <g:javascript src="mediumPopup.js"/>

@@ -63,7 +63,6 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			Contact.findByName('Bob') in Group.findByName('Test').members
 	}
 	
-	//this is broken due to the selectmenu jquery being called in the ajax
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
 			to PageContactShow
@@ -73,10 +72,9 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			contactSelect[0].click()
 		then:
-			waitFor { multiGroupSelect.displayed }
-			multiGroupSelect.find('option').size() > 1
+			waitFor { multiGroupSelect.find('option').size() > 1 }
 		when:
-			multiGroupSelect.value("${Group.findByName('Others').id}")
+			multiGroupSelect.find(text:'Others').click()
 			updateAll.click()
 		then:
 			waitFor {Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice'])}

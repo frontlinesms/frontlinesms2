@@ -25,8 +25,7 @@ class Activity extends MessageOwner {
 	
 	def unarchive() {
 		this.archived = false
-		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
-		messagesToArchive.each { it?.archived = false }
+		Fmessage.owned(this, false, true)?.list()*.each { it?.archived = false }
 	}
 	
 	def getLiveMessageCount() {

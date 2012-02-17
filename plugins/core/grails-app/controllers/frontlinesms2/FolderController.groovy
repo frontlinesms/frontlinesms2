@@ -27,21 +27,26 @@ class FolderController {
 	def archive = {
 		withFolder { folder ->
 			folder.archive()
-			folder.save(flush:true, failOnError:true)
-		
-			flash.message = "Folder was archived successfully!"
-			redirect(controller: "message", action: "inbox")
+			
+			if(folder.save()) {
+				flash.message = "Folder was archived successfully!"
+				redirect(controller: "message", action: "inbox")
+			} else {
+				// TODO give error and redirect
+			}
 		}
 	}
 	
 	def unarchive = {
 		withFolder { folder ->
 			folder.unarchive()
-			folder.save()
+			if(folder.save()) {
+				flash.message = "Folder was unarchived successfully!"
+				redirect(controller: "archive", action: "folderList", params:[viewingArchive: true])
+			} else {
+				// TODO show error and redirect somewhere sensible
+			}
 		}
-
-		flash.message = "Folder was unarchived successfully!"
-		redirect(controller: "archive", action: "folderList", params:[viewingArchive: true])
 	}
 	
 	def confirmDelete = {
