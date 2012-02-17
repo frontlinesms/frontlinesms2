@@ -48,7 +48,7 @@ class ExportController {
 				messageInstanceList = Fmessage.trash().list()
 				break
 			case 'activity':
-				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false)
+				messageInstanceList = Activity.get(params.ownerId).getActivityMessages(params.starred?:false).list()
 				break
 			case 'folder':
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false).list()
