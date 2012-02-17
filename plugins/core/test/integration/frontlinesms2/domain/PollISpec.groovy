@@ -168,12 +168,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", inbound: true, date: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
 	}
 
-	@spock.lang.IgnoreRest
 	def 'Adding a message will propogate it to the Unknown response'() {
 		given:
 			Poll p = setUpPollAndResponses()
-println "p: $p"
-println "p.messages: $p.messages"
 			Fmessage m = new Fmessage(date:new Date(), inbound:true, src:"a-unit-test!").save(flush:true, failOnError:true)
 			p.refresh()
 			m.refresh()

@@ -14,11 +14,11 @@ class ContactDeleteSpec extends ContactBaseSpec {
 			createTestContacts()
 		when:
 			to PageContactShow
-			deleteSingleButton.click()
+			deleteSingleButton.jquery.trigger("click")
 		then:
 			waitFor { confirmDeleteButton.displayed }
 		when:
-			confirmDeleteButton.click()
+			confirmDeleteButton.jquery.trigger("click")
 		then:
 			waitFor { flashMessage.displayed }
 			!Contact.findByName('Alice')
@@ -37,11 +37,11 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		then:
 			waitFor { deleteAllButton.displayed }
 		when:
-			deleteAllButton.click()
+			deleteAllButton.jquery.trigger("click")
 		then:
 			waitFor { confirmDeleteButton.displayed }
 		when:
-			confirmDeleteButton.click()
+			confirmDeleteButton.jquery.trigger("click")
 		then:
 			waitFor { flashMessage.displayed }
 			Contact.count() == 0

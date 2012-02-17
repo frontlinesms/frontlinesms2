@@ -77,7 +77,7 @@ class ContactController {
 				def version = params.version.toLong()
 				if (contactInstance.version > version) {
 					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
-					render(view: "show", model: [contactInstance: contactInstance])
+					render(view: "show", model: [contactInstance: contactInstance, offset:params.offset, max:params.max])
 					return
 				}
 			}
@@ -85,7 +85,7 @@ class ContactController {
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
 			if(params.groupId) redirect(controller: 'group', action: 'show', id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset: params.offset])
-			else redirect(action:'show', params:[contactId: contactInstance.id])
+			else redirect(action:'show', params:[contactId: contactInstance.id, offset:params.offset], max:params.max)
 		}
 	}
 	
