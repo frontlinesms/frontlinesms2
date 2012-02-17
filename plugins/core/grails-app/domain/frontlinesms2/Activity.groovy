@@ -14,7 +14,7 @@ class Activity extends MessageOwner {
 	}
 	
 	def getActivityMessages(getOnlyStarred=false, getSent=true) {
-		messages?.findAll { (!getOnlyStarred||it.starred) && (it.inbound||getSent) }
+		Fmessage.owned(this, getOnlyStarred, getSent)
 	}
 	
 	def archive() {
