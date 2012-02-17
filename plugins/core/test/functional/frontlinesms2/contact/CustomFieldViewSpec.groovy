@@ -38,7 +38,6 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			$("#custom-field-list").children().children('label')*.text() == ['town']
 	}
 
-	@spock.lang.IgnoreRest
 	def 'clicking an existing custom field in dropdown adds it to list with blank value'() {
 		when:
 			def bob = Contact.findByName("Bob")

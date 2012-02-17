@@ -57,6 +57,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShowBob
 		then:
 			$('#remove-primaryMobile').displayed
+			$("#primaryMobile").siblings('a').displayed
 		when:
 			$('#remove-primaryMobile').click()
 		then:
@@ -65,10 +66,8 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:		
 			$('#update-single').click()
 		then:
-			at PageContactShowBob
-			!$('.basic-info #remove-primaryMobile').displayed
-			!$('.basic-info .send-message').displayed
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '')
+			!$("#primaryMobile").siblings('a').displayed
+			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+232345675')
 	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {

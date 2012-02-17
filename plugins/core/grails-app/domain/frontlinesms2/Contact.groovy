@@ -53,10 +53,7 @@ class Contact {
 					variables << secondaryMobile
 				}
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
-				Dispatch.findAllByDst(primaryMobile).each {
-					it.message.displayName = "To: " + name
-					it.message.contactExists = true
-				}
+				updateDispatchInfo()
 			}
 		}
 	}
@@ -83,10 +80,7 @@ class Contact {
 				}
 				println "Variables: $variables; clauses: $clauses"
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
-				Dispatch.findAllByDst(primaryMobile).each {
-					it.message.displayName = "To: " + name
-					it.message.contactExists = true
-				}
+				updateDispatchInfo()
 			}
 		}
 		println "beforeUpdate() : EXIT"
@@ -110,13 +104,19 @@ class Contact {
 					variables << secondaryMobile
 				}
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
-				Dispatch.findAllByDst(primaryMobile).each {
-					it.message.displayName = "To: " + name
-					it.message.contactExists = true
-				}
+				updateDispatchInfo()
 			}
 		}
 		println "afterUpdate() : EXIT"
+	}
+	
+	private def updateDispatchInfo() {
+		if(primaryMobile) {
+			Dispatch.findAllByDst(primaryMobile).each {
+				it.message.displayName = "To: " + name
+				it.message.contactExists = true
+			}
+		}
 	}
 	
 	def getGroups() {
@@ -181,10 +181,7 @@ class Contact {
 		if(primaryMobile) {
 			Fmessage.withNewSession { session ->
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
-				Dispatch.findAllByDst(primaryMobile).each {
-					it.message.displayName = "To: " + primaryMobile
-					it.message.contactExists = false
-				}
+				updateDispatchInfo()
 			}
 		}
 	}
