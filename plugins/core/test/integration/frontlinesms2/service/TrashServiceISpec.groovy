@@ -31,7 +31,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			p.save(failOnError:true, flush:true)
 			assert Poll.count() == 1
 			p.refresh()
-			assert p.activityMessages*.id == [message]*.id
+			assert p.activityMessages.list()*.id == [message]*.id
 		when:
 			trashService.emptyTrash()
 		then:

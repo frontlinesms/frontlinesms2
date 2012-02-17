@@ -3,26 +3,27 @@ package frontlinesms2.domain
 import frontlinesms2.*
 
 class PollISpec extends grails.plugin.spock.IntegrationSpec {
+
 	def 'Deleted messages do not show up as responses'() {
 		when:
 			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
-			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
-			PollResponse.findByValue('Manchester').addToMessages(message1).save(failOnError: true)
-			PollResponse.findByValue('Barcelona').addToMessages(message2).save(failOnError: true)
+			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			PollResponse.findByValue('Manchester').addToMessages(message1)
+			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		then:
-			p.getPollMessages().count() == 2
+			p.getActivityMessages().count() == 2
 		when:
 			message1.isDeleted = true
 			message1.save(flush:true, failOnError:true)
 		then:
-			p.getPollMessages().count() == 1
+			p.getActivityMessages().count() == 1
 	}
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
 		given:
-			def p = Poll.createPoll(title: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
+			def p = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
 		when:
 			def ukId = PollResponse.findByValue('Unknown').id
 			def mjId = PollResponse.findByValue('Michael-Jackson').id
@@ -55,7 +56,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "creating a new poll also creates a poll response with value 'Unknown'"() {
 		when:
-			def p = Poll.createPoll(title: 'This is a poll', choiceA: 'one', choiceB:'two')
+			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'one', choiceB:'two')
 		then:
 			p.responses.size() == 3
 	}
@@ -64,7 +65,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle('question').getPollMessages()
+			def results = Poll.findByName('question').getActivityMessages()
 		then:
 			results.list(sort:'date', order:'desc')*.src == ["src2", "src3", "src1"]
 			results.list().every {it.archived == false}
@@ -74,7 +75,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").getPollMessages(['starred':true])
+			def results = Poll.findByName("question").getActivityMessages(true)
 		then:
 			results.list()*.src == ["src3"]
 			results.list().every {it.archived == false}
@@ -84,7 +85,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").getPollMessages().list(max:1, offset:0)
+			def results = Poll.findByName("question").getActivityMessages().list(max:1, offset:0)
 		then:
 			results*.src == ["src2"]
 	}
@@ -93,16 +94,16 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			setUpPollResponseAndItsMessages()
 		when:
-			def results = Poll.findByTitle("question").getPollMessages().count()
+			def results = Poll.findByName("question").getActivityMessages().count()
 		then:
 			results == 3
 	}
 	
-	def "title uniqueness should be case-insensitive"() {
+	def "name uniqueness should be case-insensitive"() {
 		given:
 			setUpPollResponseAndItsMessages()
 		when:
-			def poll = new Poll(title: 'Question')
+			def poll = new Poll(name: 'Question')
 			poll.addToResponses(new PollResponse(value: "response 1"))
 			poll.addToResponses(new PollResponse(value: "response 2"))
 		then:
@@ -125,27 +126,27 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "Poll keyword should be unique, ignoring case, among unarchived polls"() {
 		given:
-			def p1 = Poll.createPoll(keyword:'something', title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+			def p1 = Poll.createPoll(keyword:'something', name:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
 		when:
-			def p2 = Poll.createPoll(keyword:'someTHING', title:'p2', choiceA:'yes', choiceB:'no')
+			def p2 = new Poll(keyword:'someTHING', name:'p2', choiceA:'yes', choiceB:'no')
 		then:
 			!p2.validate()
 	}
 
 	def "Poll keyword should not be unique between archived polls"() {
 		given:
-			def p1 = Poll.createPoll(keyword:'something', archived:true, title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+			def p1 = Poll.createPoll(keyword:'something', archived:true, name:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
 		when:
-			def p2 = Poll.createPoll(keyword:'someTHING', archived:true, title:'p2', choiceA:'yes', choiceB:'no')
+			def p2 = Poll.createPoll(keyword:'someTHING', archived:true, name:'p2', choiceA:'yes', choiceB:'no')
 		then:
 			p2.validate()
 	}
 
 	def "Poll keyword in unarchived poll may be the same as that in an archived poll"() {
 		given:
-			def p1 = Poll.createPoll(keyword:'something', archived:true, title:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
+			def p1 = Poll.createPoll(keyword:'something', archived:true, name:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
 		when:
-			def p2 = Poll.createPoll(keyword:'someTHING', archived:false, title:'p2', choiceA:'yes', choiceB:'no')
+			def p2 = Poll.createPoll(keyword:'someTHING', archived:false, name:'p2', choiceA:'yes', choiceB:'no')
 		then:
 			p2.validate()
 	}
@@ -162,10 +163,13 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	private def setUpPollResponseAndItsMessages() {
 		def poll = setUpPollAndResponses()
-
-		PollResponse.findByValue("response 1").addToMessages(new Fmessage(src: "src1", inbound: true, date: new Date() - 10)).save(flush: true, failOnError:true)
-		PollResponse.findByValue("response 2").addToMessages(new Fmessage(src: "src2", inbound: true, date: new Date() - 2)).save(flush: true, failOnError:true)
-		PollResponse.findByValue("response 3").addToMessages(new Fmessage(src: "src3", inbound: true, date: new Date() - 5, starred: true)).save(flush: true, failOnError:true)
+		def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
+		def m2 = new Fmessage(src: "src2", inbound: true, date: new Date() - 2)
+		def m3 = new Fmessage(src: "src3", inbound: true, date: new Date() - 5, starred: true)
+		PollResponse.findByValue("response 1").addToMessages(m1)
+		PollResponse.findByValue("response 2").addToMessages(m2)
+		PollResponse.findByValue("response 3").addToMessages(m3)
+		poll.save(flush:true, failOnError:true)
 	}
 
 	def 'Adding a message will propogate it to the Unknown response'() {
