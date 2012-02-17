@@ -47,7 +47,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			waitFor { multipleMessagesThing.displayed }
 			$("#btn_delete_all").jquery.trigger('click')
 		then:
-			waitFor{ flashMessage.text()?.contains("deleted") }
+			waitFor{ flashMessage.text().contains("deleted") }
 	}
 	
 	def "'Delete' button appears for individual messages and works"() {
