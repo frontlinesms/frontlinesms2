@@ -4,6 +4,11 @@ import grails.util.GrailsConfig
 
 class ArchiveController extends MessageController {
 	def beforeInterceptor = {
+		params.sort = params.sort ?: 'date'
+		params.order = params.order ?: 'desc'
+		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.offset  = params.offset ?: 0
+		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.viewingArchive = true
 	}
 	 

@@ -118,7 +118,7 @@ class MessageController {
 	def announcement = { redirect(action: 'activity', params: params) }
 	def activity = {
 		def activityInstance = Activity.get(params.ownerId)
-		def messageInstanceList = activityInstance.getActivityMessages(params.starred)
+		def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
 		def sentMessageCount = 0
 		def sentDispatchCount = 0
 		Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
