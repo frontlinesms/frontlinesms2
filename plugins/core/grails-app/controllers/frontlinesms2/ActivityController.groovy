@@ -22,7 +22,7 @@ class ActivityController {
 	def update = {
 		withActivity { activity ->
 			activity.properties = params
-			activity.save()
+			activity.save() // TODO check if save is successful
 		}
 		redirect(controller: "message", action: "activity", params: [ownerId: params.id])
 	}
@@ -31,7 +31,7 @@ class ActivityController {
 		withActivity { activity ->
 			activity.archive()
 			activity.save(flush:true, failOnError:true)
-		}
+		} // TODO don't flush; check if save is successful
 		flash.message = "Activity archived successfully!"
 		redirect(controller: "message", action: "inbox")
 	}
@@ -40,7 +40,7 @@ class ActivityController {
 		withActivity { activity ->
 			activity.unarchive()
 			activity.save()
-		}
+		} // TODO check if save is successful!
 		flash.message = "Activity unarchived successfully!"
 		redirect(controller: "archive", action: "activityList",  params:[viewingArchive: true])
 	}

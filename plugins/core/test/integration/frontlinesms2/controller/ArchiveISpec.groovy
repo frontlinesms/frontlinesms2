@@ -13,40 +13,6 @@ class ArchiveISpec extends IntegrationSpec {
 		archiveController = new ArchiveController()
 	}
 	
-	def "can archive a folder"() {
-		given:
-			def folder = new Folder(name: 'rain').save(failOnError:true)
-			assert !folder.archived
-		when:
-			folderController.params.id = folder.id
-			folderController.archive()
-		then:
-			folder.archived
-	}
-	
-	def "can unarchive a folder"() {
-		given:
-			def folder = new Folder(name:'rain', archived:true).save(failOnError:true, flush:true)
-			assert folder.archived
-		when:
-			folderController.params.id = folder.id
-			folderController.unarchive()
-		then:
-			!folder.refresh().archived
-	}
-	
-	def "can unarchive a poll"() {
-		given:
-			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other', archived:true).save(failOnError:true, flush:true)
-			assert poll.archived
-		when:
-			pollController.params.id = poll.id
-			pollController.unarchive()
-		then:
-			!poll.archived
-			pollController.response.redirectedUrl == "/archive/poll?viewingArchive=true"
-	}
-	
 	def "deleted folders do not appear in the archive section"() {
 		given:
 			def folder = new Folder(name: 'rain', archived:true).save(failOnError:true, flush:true)
