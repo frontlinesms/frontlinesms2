@@ -18,7 +18,7 @@
 					keys="${['export', 'delete']}"
 					noSelection="${['': 'More actions...']}"/>
 		</li>
-		<g:if test="${!params.viewingArchive}">
+		<g:if test="${params.controller!='archive'}">
 			<li>
 				<g:link class="btn" controller="$messageSection" action="archive" id="${ownerInstance?.id}">Archive ${messageSection}</g:link>
 			</li>

@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>Poll</title>
-		<meta name="layout" content="messages" />
+		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript src="/graph/raphael-min.js"/>

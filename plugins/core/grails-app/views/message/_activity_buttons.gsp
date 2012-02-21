@@ -4,7 +4,7 @@
 			<div id="quick-message">Quick message</div>
 		</g:remoteLink>
 	</li>
-	<g:if test="${!params.viewingArchive}">
+	<g:if test="${params.controller!='archive'}">
 		<li><g:link class="poll-btn btn" controller="${ownerInstance?.type}" action="archive" id="${ownerInstance?.id}">Archive ${ownerInstance?.type}</g:link></li>
 	</g:if>
 	<g:else>

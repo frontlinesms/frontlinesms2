@@ -24,7 +24,7 @@
 		<div id="main" class="main">
     			<g:render template="../archive/menu"/>
 				<div id="content" class="content">
-					<g:render template="../archive/header"/>
+					<g:render template="../message/header"/>
 					<div class="content-body">
 						<g:if test="${(messageSection == 'activity') && !viewingMessages}">
 							<g:render template="archived_activity_list"/>

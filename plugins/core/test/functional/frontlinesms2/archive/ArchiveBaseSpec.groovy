@@ -24,5 +24,12 @@ class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 			it.save(failOnError:true, flush:true)
 		}
 	}
+	
+	def createTestMessages2() {
+		[new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, archived:true, inbound:true),
+			new Fmessage(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3, archived:true, inbound:true)].each() {
+			it.save(failOnError:true, flush:true)
+		}
+	}
 }
 

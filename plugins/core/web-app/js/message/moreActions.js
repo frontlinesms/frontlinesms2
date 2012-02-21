@@ -36,12 +36,18 @@ function deleteAction() {
 }
 
 function exportAction() {
+	var viewingArchive;
+	if(url.indexOf("/archive/") >= 0)
+		viewingArchive = true;
+	else
+		viewingArchive = false;
+		
 	$.ajax({
 		type:'GET',
 		url: url_root + 'export/messageWizard',
 		data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
-				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: $("#viewingArchive").val()},
+				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
 		success: function(data) {
 			launchSmallPopup('Export', data, 'Export');
 			updateExportInfo();

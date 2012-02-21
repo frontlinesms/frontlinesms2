@@ -6,10 +6,10 @@ function checkForNonDigits() {
 	$('#letter-error').remove();
 	
 	var field = $(".numberField").filter(function() {
-        return this.value.match(/[a-zA-Z]/);
+        return this.value.match(/[^\+?\d+]/);
     });
 	field.addClass('error');
-	field.parent(".basic-info").append("<span id='letter-error' class='error-message'>You have added a letter to this field, upon saving all letters will be removed.</span>");
+	field.parent(".basic-info").append("<span id='letter-error' class='error-message'>You have added a non-number to this field, upon saving all letters will be removed.</span>");
 }
 
 function checkForDuplicates() {

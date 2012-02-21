@@ -3,6 +3,7 @@
 <jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 <g:javascript>
 	url_root = "${request.contextPath}/";
+	url = "${request.forwardURI}/";
 	refresh_rate = ${params.rRate ?: 30000}
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 </g:javascript>
@@ -27,3 +28,4 @@
 <g:javascript src="smallPopup.js"/>
 <g:javascript src="pagination.js"/>
 <g:render template="/css"/>
+

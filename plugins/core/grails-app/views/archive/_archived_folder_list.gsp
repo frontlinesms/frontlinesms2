@@ -13,17 +13,17 @@
 					<g:each in="${folderInstanceList}" var="f">
 						<tr class="folder-list-item">
 							<td class="folder-name-cell">
-								<g:link controller="archive" action="folder" id="ownerId" params="[ownerId: f.id, viewingArchive: true, viewingMessages: true]">
+								<g:link controller="archive" action="folder" id="ownerId" params="[ownerId: f.id,  viewingMessages: true]">
 									${f.name}
 								</g:link>
 							</td>
 							<td class="folder-date-cell">
-								<g:link controller="archive" action="folder" id="ownerId" params="[ownerId: f.id, viewingArchive: true, viewingMessages: true]">
+								<g:link controller="archive" action="folder" id="ownerId" params="[ownerId: f.id,  viewingMessages: true]">
 									<g:formatDate date="${f.dateCreated}"/>
 								</g:link>
 							</td>
 							<td class="folder-message-count-cell">
-								<g:link controller="archive" action="folder" id="ownerId" params="[ownerId: f.id, viewingArchive: true, viewingMessages: true]">
+								<g:link controller="archive" action="folder" id="ownerId" params="[ownerId: f.id,  viewingMessages: true]">
 									${f.liveMessageCount}
 								</g:link>
 							</td>

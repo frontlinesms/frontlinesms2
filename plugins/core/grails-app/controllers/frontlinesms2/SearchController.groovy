@@ -13,12 +13,11 @@ class SearchController extends MessageController {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.sort = params.sort ?: 'date'
-		true
+		return true
 	}
 	
-	def index = { redirect(action:'no_search', params: params) }
-	
 	def no_search = {
+	println params
 		[groupInstanceList : Group.findAll(),
 				folderInstanceList: Folder.findAll(),
 				activityInstanceList: Activity.findAll(),
@@ -27,6 +26,7 @@ class SearchController extends MessageController {
 	}
 
 	def result = {
+	println params
 		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
 			searchInstance.owners = activity ? [activity] : null
