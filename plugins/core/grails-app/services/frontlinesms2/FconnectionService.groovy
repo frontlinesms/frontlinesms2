@@ -1,7 +1,9 @@
 package frontlinesms2
 
+import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import org.smslib.NotConnectedException
 
 class FconnectionService {
 	def deviceDetectionService
@@ -15,6 +17,10 @@ class FconnectionService {
 			if(c instanceof SmslibFconnection) {
 				incoming = 'seda:raw-smslib'
 				routes << from("seda:out-${c.id}")
+						.onException(NotConnectedException)
+								.handled(true)
+								.beanRef('fconnectionService', "handleDisconnection")
+								.end()
 						.beanRef('smslibTranslationService', 'toCmessage')
 						.to(c.camelProducerAddress)
 						.routeId("out-${c.id}")
@@ -36,7 +42,12 @@ class FconnectionService {
 			println "In comes from: $incoming"
 			if(incoming && c.camelConsumerAddress) {
 				println "from(${c.camelConsumerAddress}).to($incoming).routeId(in-${c.id})"
-				routes << from(c.camelConsumerAddress).to(incoming).routeId("in-${c.id}")
+				routes << from(c.camelConsumerAddress)
+						.onException(NotConnectedException)
+								.handled(true)
+								.beanRef('fconnectionService', "handleDisconnection")
+								.end()
+						.to(incoming).routeId("in-${c.id}")
 			} else {
 				println "not creating incoming route: from(${c.camelConsumerAddress}).to($incoming).routeId(in-${c.id})"
 			}
@@ -55,13 +66,41 @@ class FconnectionService {
 	}
 	
 	def destroyRoutes(Fconnection c) {
-		["in-$c.id", "out-$c.id"].each {
-			camelContext.removeRoute(it)	
+		destroyRoutes(c.id as long)
+	}
+	
+	def destroyRoutes(long id) {
+		println "fconnectionService.destroyRoutes : ENTRY"
+		println "fconnectionService.destroyRoutes : id=$id"
+		["in-$id", "out-$id"].each {
+			println "fconnectionService.destroyRoutes : route-id=$it"
+			camelContext.removeRoute(it)
 			camelContext.stopRoute(it)
 		}
+		println "fconnectionService.destroyRoutes : EXIT"
 	}
 	
 	def getRouteStatus(Fconnection c) {
 		(camelContext.getRoute("in-${c.id}") || camelContext.getRoute("out-${c.id}")) ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED 
+	}
+	
+	def handleDisconnection(Exchange ex) {
+		try {
+			println "fconnectionService.handleDisconnection(ex) : ENTRY"
+			def caughtException = ex.getProperty(Exchange.EXCEPTION_CAUGHT)
+			println "Exchange: $ex"
+			println "ex.fromRouteId: $ex.fromRouteId"
+			println "ex.fromEndpoint: $ex.fromEndpoint"
+			println "ex.exception: $ex.exception"
+			println "EXCEPTION_CAUGHT: ${caughtException}"
+			println "fconnectionService.handleDisconnection(ex) : EXIT"
+			
+			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
+			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(\d+)/)[0][1]
+			println "Looking to stop route: $routeId"
+			destroyRoutes(routeId as long)
+		} catch(Exception e) {
+			e.printStackTrace()
+		}
 	}
 }
