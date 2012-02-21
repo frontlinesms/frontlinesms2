@@ -97,7 +97,19 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 				waitFor{ $("#connections .selected .route").displayed }
 				$("#createRoute a").click()
 			then:
-				$('#connections .selected .test').@href == "/connection/createTest/${testConnection.id}"
+				waitFor(15) { $('#notifications').text().contains("Created route")}
+				waitFor() {	$('#connections .selected').find("a.test").@href == "/connection/createTest/${testConnection.id}"}
+	}
+
+	def 'clicking "createRoute" should display a flash message when an exception occurs on a route'() {
+			given:
+				def testConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+			when:
+				to ConnectionPage
+				waitFor{ $("#connections .selected .route").displayed }
+				$("#createRoute a").click()
+			then:
+				waitFor { $('#notifications').text().contains("Failed")}
 	}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {

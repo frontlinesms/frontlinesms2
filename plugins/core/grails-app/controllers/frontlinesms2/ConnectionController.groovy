@@ -68,9 +68,14 @@ class ConnectionController {
 	def createRoute = {
 		withFconnection { connection ->
 			println "creating route for fconnection $connection"
-			fconnectionService.createRoutes(connection)
-			flash.message = "Created route from ${connection.camelConsumerAddress} and to ${connection.camelProducerAddress}"
-			redirect(controller:'settings', action:'connections', id:connection.id)
+			def link = "<br/><a href='${createLink(controller:'settings', action:'connections', id:connection.id)}'>View</a>"
+			try {
+				fconnectionService.createRoutes(connection)
+				createSystemNotification("Created route from ${connection.camelConsumerAddress} and to ${connection.camelProducerAddress} $link")
+			} catch(Exception e) {
+				createSystemNotification(e.message + link)
+			}
+			render ""
 		}
 	}
   
@@ -104,6 +109,11 @@ class ConnectionController {
 		}
 	}
 	
+	private def createSystemNotification(String text) {
+		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
+	}
 	private def withFconnection(Closure c) {
 		println "Fetching connection with id $params.id"
 		def connection = Fconnection.get(params.id.toLong())

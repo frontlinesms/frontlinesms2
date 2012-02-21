@@ -2,7 +2,7 @@ package frontlinesms2.controller
 
 import frontlinesms2.*
 
-class NewConnectionISpec extends grails.plugin.spock.IntegrationSpec {
+class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def controller1
 	def controller2
@@ -91,5 +91,32 @@ class NewConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 			smslibConnection.port == 'COM1'
 			smslibConnection.baud == 9600
 			smslibConnection.pin == "1234"
+	}
+	
+	def "createRoute should create a system notification when a exception occurs"() {
+		setup:
+			def smslibConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+			SystemNotification.findAll()*.delete(flush:true)
+		when:
+			controller1.params.id = smslibConnection.id		
+			controller1.createRoute()
+		then:
+			SystemNotification.count() == 1
+	}
+	
+	def "createRoute should not recreate an already existing notification when the same exception occurs"() {
+		setup:
+			def smslibConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+			SystemNotification.findAll()*.delete(flush:true)
+		when:
+			controller1.params.id = smslibConnection.id		
+			controller1.createRoute()
+		then:
+			SystemNotification.count() == 1
+		when:
+			controller2.params.id = smslibConnection.id		
+			controller2.createRoute()
+		then:
+			SystemNotification.count() == 1
 	}
 }
