@@ -5,6 +5,6 @@ class SystemNotification {
 	boolean read
 	
 	static constraints = {
-		text(blank:false, nullable:false, unique: true, maxSize:255)
+		text(blank:false, nullable:false, unique: true)
 	}
 }

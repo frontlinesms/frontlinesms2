@@ -88,6 +88,7 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 			given:
 				createTestSMSConnection()
+				new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
 				def testConnection = Fconnection.findByName('MTN Dongle')
 			when:
 				to ConnectionPage
