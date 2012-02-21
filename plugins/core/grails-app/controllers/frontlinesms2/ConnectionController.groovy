@@ -58,7 +58,7 @@ class ConnectionController {
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}"
-			redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
+			forward(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 		} else {
 			params.flashMessage = "fail!  ${fconnectionInstance.errors}"
 			redirect(controller:'settings', action: "connections", params: params)
