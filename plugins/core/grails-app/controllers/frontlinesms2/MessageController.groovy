@@ -192,7 +192,7 @@ class MessageController {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		def listSize = messageIdList.size();
 		messageIdList.each { id ->
-			withFmessage id, {messageInstance ->
+			withFmessage id, { messageInstance ->
 				if(!messageInstance.messageOwner) {
 					messageInstance.archived = true
 					messageInstance.save()
