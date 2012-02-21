@@ -40,6 +40,8 @@ function upSingleCheckedDetails(messageId) {
 	var new_url;
 	if(url.indexOf("show") >= 0)
 		new_url = url.replace(/\d+\/$/, messageId);
+	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") >= 0))
+		new_url = url + 'result/show/' + messageId;
 	else
 		new_url = url + 'show/' + messageId;
 
@@ -57,8 +59,11 @@ function downSingleCheckedDetails(messageId) {
 	var new_url;
 	if(url.indexOf("show") >= 0)
 		new_url = url.replace(/\d+\/$/, messageId);
+	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") == 0))
+		new_url = url + 'result/show/' + messageId;
 	else
 		new_url = url + 'show/' + messageId;
+		
 
 	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
 		$('#multiple-messages').replaceWith($(data).find('#single-message'));
@@ -89,6 +94,8 @@ function updateMultipleCheckedDetails(messageId) {
 	var new_url;
 	if(url.indexOf("show") >= 0)
 		new_url = url.replace(/\d+\/$/, messageId);
+	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") == 0))
+		new_url = url + 'result/show/' + messageId;
 	else
 		new_url = url + 'show/' + messageId;
 	

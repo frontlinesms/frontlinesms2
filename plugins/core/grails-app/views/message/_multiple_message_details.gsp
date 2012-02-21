@@ -38,7 +38,7 @@
 				<g:render template="../message/other_actions"/>
 			</g:if>
 			<g:else>
-				<g:render template="/message/other_actions" plugin="core"/>
+				<g:render template="../message/other_actions" plugin="core"/>
 			</g:else>
 		</g:form>
 	</div>

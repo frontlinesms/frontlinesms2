@@ -27,12 +27,7 @@
 			<g:render template="/tabs"/>
 		</div>
 		<div id="main">
-			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-				<g:render template="../message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
-			</g:if>
-			<g:else>
-				<g:render template="/message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
-			</g:else>
+			<g:render template="../message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 			<div id="content">
 				<g:render template="../message/header"/>
 				<g:render template="../message/message_list"/>

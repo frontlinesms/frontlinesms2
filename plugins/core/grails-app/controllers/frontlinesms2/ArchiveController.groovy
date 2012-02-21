@@ -9,33 +9,32 @@ class ArchiveController extends MessageController {
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
 		params.starred = params.starred ? params.starred.toBoolean() : false
-		params.viewingArchive = true
+		return true
 	}
 	 
 	def index = {
 		params.sort = 'date'
-		def messageSection = params.messageSection ?: 'inbox'
+		def action = params.messageSection ?: 'inbox'
 		println "index: $params"
-		redirect(action:messageSection, params:params)
+		redirect(action:action, params:params)
 	}
 	
 	def activityList = {
 		def activityInstanceList = Activity.findAllByArchivedAndDeleted(true, false)
-		render view:'standard', model:[activityInstanceList: activityInstanceList,
+		render view:'../message/standard', model:[activityInstanceList: activityInstanceList,
 											activityInstanceTotal: activityInstanceList.size(),
 											messageSection: "activity"]
 	}
 	
 	def folderList = {
 		def folderInstanceList = Folder.findAllByArchivedAndDeleted(true, false)
-		render view:'standard', model:[folderInstanceList: folderInstanceList,
+		render view:'../message/standard', model:[folderInstanceList: folderInstanceList,
 											itemInstanceTotal: folderInstanceList.size(),
 											messageSection: "folder"]
 	}
 	
 	def getShowModel(messageInstanceList) {
 		def model = super.getShowModel(messageInstanceList)
-		model << [viewingArchive: true]
 		return model
 	}
 }

@@ -28,3 +28,4 @@
 <g:javascript src="smallPopup.js"/>
 <g:javascript src="pagination.js"/>
 <g:render template="/css"/>
+

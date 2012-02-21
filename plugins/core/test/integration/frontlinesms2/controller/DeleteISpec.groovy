@@ -43,13 +43,13 @@ class DeleteISpec extends IntegrationSpec {
 			messageController.beforeInterceptor()
 			def model1 = messageController.getShowModel()
 		then:
-			model1.polls == [p]
+			model1.activityInstanceList == [p]
 		when:
 			pollController.params.id = p.id
 			pollController.delete()
 			def model2 = messageController.getShowModel()
 		then:
-			!model2.polls
+			!model2.activityInstanceList
 	}
 	
 	def "deleted folders are not included in the folderInstanceList"() {

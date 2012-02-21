@@ -9,6 +9,10 @@ class CoreUrlMappings {
 			action = 'show'
 		}
 		
+		"/search/no_search/$messageId"(controller:'search', action:'no_search') {}
+		"/search/result/show/"(controller:'search', action:'result') {}
+		"/search/result/show/$messageId"(controller:'search', action:'result') {}
+		
 		"/message/inbox/show/$messageId"(controller:'message', action:'inbox') {}
 		"/message/sent/show/$messageId"(controller:'message', action:'sent') {}
 		"/message/pending/show/$messageId"(controller:'message', action: 'pending') {}
@@ -42,8 +46,6 @@ class CoreUrlMappings {
 		"/archive/folder"(controller:'archive', action:'folderList') {}
 		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
 		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
-		
-		"/search/result/$messageId"(controller:'search', action:'result') {}
 		
 		"/$controller/$action?/$id?"{
 			constraints {

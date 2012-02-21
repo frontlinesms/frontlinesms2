@@ -5,23 +5,21 @@ import grails.converters.*
 import java.lang.*
 
 class MessageController {
-	
-	static allowedMethods = [save: "POST", update: "POST",
-			delete: "POST", deleteAll: "POST",
-			archive: "POST", archiveAll: "POST"]
+	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]
 
 	def messageSendService
 	def fmessageInfoService
 	def trashService
+	boolean viewingArchive = params.controller=='archive' ? true : false
 
 	def bobInterceptor = {
 		params.sort = params.sort ?: 'date'
 		params.order = params.order ?: 'desc'
-		params.viewingArchive = params.viewingArchive ? params.viewingArchive.toBoolean() : false
 		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.failed = params.failed ? params.failed.toBoolean() : false
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
+		return true
 	}
 	def beforeInterceptor = bobInterceptor
 	
@@ -56,25 +54,24 @@ class MessageController {
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
-				activityInstanceList: Activity.findAllByArchivedAndDeleted(params.viewingArchive, false),
-				folderInstanceList: Folder.findAllByArchivedAndDeleted(params.viewingArchive, false),
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages(),
-				failedDispatchCount: (messageInstance && messageInstance.hasFailed) ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0,
-				viewingArchvive: params.viewingArchive]
+				failedDispatchCount: (messageInstance && messageInstance.hasFailed) ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.inbox(params.starred, params.viewingArchive)
-		render view:'standard',
+		def messageInstanceList = Fmessage.inbox(params.starred, viewingArchive)
+		render view:'../message/standard',
 					model:[messageInstanceList: messageInstanceList.list(params),
 							messageSection: 'inbox',
 							messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
-		def messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive)
-		render view:'standard', model:[messageSection: 'sent',
+		def messageInstanceList = Fmessage.sent(params.starred, viewingArchive)
+		render view:'../message/standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
@@ -130,7 +127,7 @@ class MessageController {
 					messageSection: 'activity',
 					messageInstanceTotal: messageInstanceList?.count(),
 					ownerInstance: activityInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null,
+					viewingMessages: viewingArchive ? params.viewingMessages : null,
 					pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
 					sentMessageCount: sentMessageCount,
 					sentDispatchCount: sentDispatchCount] << getShowModel()
@@ -144,7 +141,7 @@ class MessageController {
 					messageSection: 'folder',
 					messageInstanceTotal: messageInstanceList.count(),
 					ownerInstance: folderInstance,
-					viewingMessages: params.viewingArchive ? params.viewingMessages : null] << getShowModel()
+					viewingMessages: viewingArchive ? params.viewingMessages : null] << getShowModel()
 	}
 
 	def send = {
@@ -185,7 +182,7 @@ class MessageController {
 		if(params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
-			redirect(action: params.messageSection, params: [ownerId: params.ownerId, viewingArchive: params.viewingArchive, starred: params.starred, failed: params.failed])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed])
 	}
 	
 	def archive = {
