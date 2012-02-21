@@ -39,7 +39,7 @@ function refreshList() {
 			mostRecentOldMessage = $(this).find("#message-created-date").val();
 	});
 	
-	$.get(url_root + 'message/' + section, { messageId: messageId, ownerId: ownerId, viewingArchive: false, sort: sortField, order: sortOrder}, function(data) {
+	$.get(url_root + 'message/' + section, { messageId: messageId, ownerId: ownerId, sort: sortField, order: sortOrder}, function(data) {
 		$('#messageTotal').replaceWith($(data).find('#messageTotal'));
 		$("#new-message-notification").slideUp(500);
 		$("#new-message-notification").remove();

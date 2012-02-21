@@ -1,6 +1,6 @@
 <html>
     <head>
-        <meta name="layout" content="messages" />
+        <meta name="layout" content="message" />
         <title>${pageTitle?:params.action.capitalize()}</title>
     </head>
     <body>

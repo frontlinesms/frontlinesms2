@@ -43,7 +43,6 @@
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
-			<g:hiddenField name="viewingArchive" value="${viewingArchive}"></g:hiddenField>
 			<div  id="message-detail-content"><p>No message selected</p></div>
 		</div>
 	</g:else>

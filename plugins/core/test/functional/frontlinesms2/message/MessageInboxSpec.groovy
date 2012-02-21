@@ -73,11 +73,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}?viewingArchive="
+			$('#messages .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}?viewingArchive="
+			$('#messages .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {

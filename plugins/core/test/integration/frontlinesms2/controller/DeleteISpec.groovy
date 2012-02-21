@@ -34,20 +34,20 @@ class DeleteISpec extends IntegrationSpec {
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
 			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def messageController = new MessageController()
 			def pollController = new PollController()
 			PollResponse.findByValue('Manchester').addToMessages(message1)
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
-			pollController.params.viewingArchive = false
-			def model1 = pollController.index()
+			messageController.beforeInterceptor()
+			def model1 = messageController.getShowModel()
 		then:
 			model1.polls == [p]
 		when:
 			pollController.params.id = p.id
 			pollController.delete()
-			pollController.params.viewingArchive = false
-			def model2 = pollController.index()
+			def model2 = messageController.getShowModel()
 		then:
 			!model2.polls
 	}

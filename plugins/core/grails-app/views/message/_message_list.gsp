@@ -53,17 +53,17 @@
 									<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 								</td>
 								<td class="message-preview-sender message-sender-cell">
-										<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
+										<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 											${m.displayName}
 										</g:link>
 								</td>
 								<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
-									<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id, viewingArchive:viewingArchive]}">
+									<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
 										${m.displayText?.truncate(50)}
 									</g:link>
 								</td>
 								<td class="message-date-cell">
-									<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id, viewingArchive:viewingArchive]}">
+									<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
 										<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}" />
 									</g:link>
 								</td>

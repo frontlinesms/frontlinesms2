@@ -37,11 +37,11 @@ function countCheckedMessages() {
 
 function upSingleCheckedDetails(messageId) {
 	var searchId = $('input:hidden[name=searchId]').val() || '';
-	
+	var new_url;
 	if(url.indexOf("show") >= 0)
-		var new_url = url.replace(/\d+\/$/, messageId);
+		new_url = url.replace(/\d+\/$/, messageId);
 	else
-		var new_url = url + 'show/' + messageId;
+		new_url = url + 'show/' + messageId;
 
 	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
 		$('#single-message').replaceWith($(data).find('#single-message'));
@@ -54,11 +54,11 @@ function upSingleCheckedDetails(messageId) {
 
 function downSingleCheckedDetails(messageId) {
 	var searchId = $('input:hidden[name=searchId]').val() || '';
-	
+	var new_url;
 	if(url.indexOf("show") >= 0)
-		var new_url = url.replace(/\d+\/$/, messageId);
+		new_url = url.replace(/\d+\/$/, messageId);
 	else
-		var new_url = url + 'show/' + messageId;
+		new_url = url + 'show/' + messageId;
 
 	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
 		$('#multiple-messages').replaceWith($(data).find('#single-message'));
@@ -86,11 +86,11 @@ function removeFromChecked(messageId) {
 
 function updateMultipleCheckedDetails(messageId) {
 	var searchId = $('input:hidden[name=searchId]').val();
-	
+	var new_url;
 	if(url.indexOf("show") >= 0)
-		var new_url = url.replace(/\d+\/$/, messageId);
+		new_url = url.replace(/\d+\/$/, messageId);
 	else
-		var new_url = url + 'show/' + messageId;
+		new_url = url + 'show/' + messageId;
 	
 	$.get(new_url, { messageId: messageId, checkedMessageList: $("#checkedMessageList").val(), searchId: searchId}, function(data) {
 		$('#single-message').replaceWith($(data).find('#multiple-messages'));

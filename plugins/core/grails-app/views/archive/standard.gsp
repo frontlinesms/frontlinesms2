@@ -1,7 +1,7 @@
 <html>
     <head>
-        <meta name="layout" content="archive" />
-        <title>${params.action.capitalize()}</title>
+        <meta name="layout" content="message" />
+        <title>${pageTitle?:params.action.capitalize()}</title>
     </head>
     <body>
     </body>
