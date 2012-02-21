@@ -24,11 +24,11 @@
 		<li><a href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:form action="${action}" id='${fconnectionInstance?.id}'>
+	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id]" action="${action}" id='${fconnectionInstance?.id}' onSuccess="refreshSystemNotifications()">
 		<g:render template="type"/>
 		<g:render template="details"/>
 		<g:render template="confirm"/>
-	</g:form>
+	</g:formRemote>
 </div>
 <g:javascript>
 function initializePopup() {

@@ -13,6 +13,10 @@ def isSet(String var) {
 	return System.properties."frontlinesms2.build.$var"? true: false
 }
 
+def isWindows() {
+	System.properties.'os.name'.toLowerCase().contains('windows')
+}
+
 target(main: 'Build installers for various platforms.') {
 	envCheck()
 	if(isSet('skipWar')) {
@@ -25,7 +29,7 @@ target(main: 'Build installers for various platforms.') {
 	delete(dir:'install/webapp')
 	unzip(src:"target/${appName}-${appVersion}.war", dest:'install/webapp')
 	
-	exec(dir:'install', executable:'mvn', args) {
+	exec(dir:'install', executable:isWindows()? 'mvn.bat': 'mvn', args) {
 		arg value:"-Dbuild.version=$appVersion"
 		arg value:'clean'
 		arg value:'package'

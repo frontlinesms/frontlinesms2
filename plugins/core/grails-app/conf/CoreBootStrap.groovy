@@ -153,6 +153,7 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
 
+		new SmslibFconnection(name:"COM96 mock which breaks on receive", port:'COM96', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"COM97 mock with bad port", port:'COM98', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"COM98 mock which cannot send", port:'COM98', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"COM99 mock with incoming, and can send", port:'COM99', baud:9600).save(failOnError:true)
@@ -284,6 +285,7 @@ class CoreBootStrap {
 
 	private def initialiseMockSerial() {
 		MockModemUtils.initialiseMockSerial([
+				COM96:new CommPortIdentifier("COM96", MockModemUtils.createMockPortHandler_disconnectOnReceive()),
 				COM97:new CommPortIdentifier("COM97", MockModemUtils.createMockPortHandler_badPort()),
 				COM98:new CommPortIdentifier("COM98", MockModemUtils.createMockPortHandler_sendFails()),
 				COM99:new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler_withMessages())])
@@ -315,6 +317,16 @@ class CoreBootStrap {
 				!(v == null || v.length()==0 || v.equalsIgnoreCase('false'))
 			}
 		}
+
+		def oldMethod = nonEmptyMc.getMetaMethod("setInputValue", [Object] as Class[])
+		nonEmptyMc.setInputValue = { value ->
+			if(input.tagName == 'selected') {
+				throw new RuntimeException("OMG youre playing with selecters!")
+			} else {
+				oldMethod.invoke(value)
+			}
+		}
+
 		emptyMc.initialize()
 		geb.navigator.EmptyNavigator.metaClass = emptyMc
 		nonEmptyMc.initialize()

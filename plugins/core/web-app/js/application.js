@@ -63,4 +63,3 @@ $.fn.renderDefaultText = function() {
 		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
 		});
 };
-
