@@ -25,10 +25,23 @@ class SettingsController {
 	
 	def show_connections = {
 		withFconnection {
-			[connectionInstance: it] << [settingsSection:'connections',
-												connectionInstanceList: Fconnection.list(params),
+			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 												fconnectionInstanceTotal: Fconnection.list(params)]
 		}
+	}
+	
+	def logs = {
+		println "settings params are: ${params}"
+		def logEntryList
+		if(params.timePeriod && params.timePeriod != 'forever') {
+			def timePeriod = new Date() - params.timePeriod.toInteger()
+    		logEntryList = LogEntry.findAllByDateGreaterThanEquals(timePeriod)
+    	} else {
+    		logEntryList = LogEntry.findAll()
+    	}
+    	println logEntryList
+    	[logEntryList: logEntryList,
+    		logEntryTotal: logEntryList.size()]
 	}
 	
 	private def withFconnection(Closure c) {
