@@ -97,7 +97,7 @@
 	function validateAddressEntry() {
 		var address = $('#address').val();
 		var containsLetters = jQuery.grep(address, function(a) {
-			return a.match(/[a-zA-Z]/) != null;
+			return a.match(/[^\+?\d+]/) != null;
 		}).join('');
 		$("#address").removeClass('error');
 		$("#manual-address").find('#address-error').remove();
