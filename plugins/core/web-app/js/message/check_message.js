@@ -36,22 +36,16 @@ function countCheckedMessages() {
 }
 
 function upSingleCheckedDetails(messageId) {
-	var messageSection = $('input:hidden[name=messageSection]').val();
 	var searchId = $('input:hidden[name=searchId]').val() || '';
-	var ownerId = $('input:hidden[name=ownerId]').val();
-	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
-	if (messageSection == 'result') {
-		var url = 'search/result';
-	} else if(viewingArchive == "true" && ownerId){
-		var url = 'archive/' + messageSection + '/' + ownerId + '/show/' + messageId;
-	} else if(viewingArchive == "true") {
-		var url = 'archive/' + messageSection;
-	} else if (messageSection == 'radioShow') {
-		var url = 'message/radioShow/' + ownerId;
-	} else {
-		var url = 'message/' + messageSection;
-	}
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, searchId: searchId, viewingArchive: Boolean(viewingArchive)}, function(data) {
+	var new_url;
+	if(url.indexOf("show") >= 0)
+		new_url = url.replace(/\d+\/$/, messageId);
+	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") >= 0))
+		new_url = url + 'result/show/' + messageId;
+	else
+		new_url = url + 'show/' + messageId;
+
+	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
 		$('#single-message').replaceWith($(data).find('#single-message'));
 		$("#message-detail .dropdown").selectmenu();
 	});
@@ -61,23 +55,17 @@ function upSingleCheckedDetails(messageId) {
 }
 
 function downSingleCheckedDetails(messageId) {
-	var messageSection = $('input:hidden[name=messageSection]').val();
-	var ownerId = $('input:hidden[name=ownerId]').val();
 	var searchId = $('input:hidden[name=searchId]').val() || '';
-	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
-	if (messageSection == 'result') {
-		var url = 'search/result';
-	} else if(viewingArchive == "true" && ownerId){
-		var url = 'archive/' + messageSection + '/' + ownerId + '/show/' + messageId;
-	} else if(viewingArchive == "true") {
-		var url = 'archive/' + messageSection;
-	} else if(messageSection == "radioShow") {
-		var url = "message/" +messageSection + '/' + ownerId + '/show/' + messageId;
-	} else {
-		var url = 'message/' + messageSection;
-	}
-	
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, viewingArchive: viewingArchive, searchId: searchId}, function(data) {
+	var new_url;
+	if(url.indexOf("show") >= 0)
+		new_url = url.replace(/\d+\/$/, messageId);
+	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") == 0))
+		new_url = url + 'result/show/' + messageId;
+	else
+		new_url = url + 'show/' + messageId;
+		
+
+	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
 		$('#multiple-messages').replaceWith($(data).find('#single-message'));
 		$("#message-detail .dropdown").selectmenu();
 	});
@@ -102,22 +90,16 @@ function removeFromChecked(messageId) {
 }
 
 function updateMultipleCheckedDetails(messageId) {
-	var messageSection = $('input:hidden[name=messageSection]').val();
-	var ownerId = $('input:hidden[name=ownerId]').val();
 	var searchId = $('input:hidden[name=searchId]').val();
-	var viewingArchive = $('input:hidden[name=viewingArchive]').val() || false;
-	if (messageSection == 'result') {
-		var url = 'search/result';
-	} else if(viewingArchive == "true" && ownerId){
-		var url = 'archive/' + messageSection + '/' + ownerId + '/show/' + messageId;
-	} else if(viewingArchive == "true") {
-		var url = 'archive/' + messageSection;
-	} else if(messageSection == "radioShow") {
-		var url = "message/" +messageSection + '/' + ownerId + '/show/' + messageId;
-	} else {
-		var url = 'message/' + messageSection;
-	}
-	$.get(url_root + url, { messageId: messageId, ownerId: ownerId, checkedMessageList: $("#checkedMessageList").val(), viewingArchive: viewingArchive, searchId: searchId}, function(data) {
+	var new_url;
+	if(url.indexOf("show") >= 0)
+		new_url = url.replace(/\d+\/$/, messageId);
+	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") == 0))
+		new_url = url + 'result/show/' + messageId;
+	else
+		new_url = url + 'show/' + messageId;
+	
+	$.get(new_url, { messageId: messageId, checkedMessageList: $("#checkedMessageList").val(), searchId: searchId}, function(data) {
 		$('#single-message').replaceWith($(data).find('#multiple-messages'));
 		$('#multiple-messages').replaceWith($(data).find('#multiple-messages'));
 		$("#message-detail .dropdown").selectmenu();

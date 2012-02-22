@@ -5,7 +5,7 @@
 	};
 </script>
 <div id="message-detail-buttons">
-	<g:form controller="${params.controller}" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, checkedMessageList: checkedMessageList, viewingArchive: viewingArchive, searchId: search?.id]">
+	<g:form controller="${params.controller}" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, checkedMessageList: checkedMessageList, searchId: search?.id]">
 		<g:if test="${messageSection != 'trash'}">
 		 	<div id="msg-response-dropdown" class="msg-btn">
 		 		<g:if test="${messageSection == 'sent'}">

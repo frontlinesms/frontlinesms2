@@ -42,7 +42,7 @@ class FolderController {
 			folder.unarchive()
 			if(folder.save()) {
 				flash.message = "Folder was unarchived successfully!"
-				redirect(controller: "archive", action: "folderList", params:[viewingArchive: true])
+				redirect(controller: "archive", action: "folderList")
 			} else {
 				// TODO show error and redirect somewhere sensible
 			}

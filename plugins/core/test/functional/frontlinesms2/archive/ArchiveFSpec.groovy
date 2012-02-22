@@ -53,8 +53,10 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other').save(failOnError:true, flush:true)
 			def messages = createTestMessages2()
-			poll.addToMessages(messages[0]).save(failOnError:true, flush:true)
-			poll.addToMessages(messages[1]).save(failOnError:true, flush:true)
+			println messages
+			poll.addToMessages(messages[0])
+			poll.addToMessages(messages[1])
+			poll.save(failOnError:true, flush:true)
 			poll.archive()
 			poll.save(failOnError:true, flush:true)
 		when:
@@ -62,10 +64,5 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			$(".message-select")[0].click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }
-	}
-	
-	private def createTestMessages2() {
-		[new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, archived:true, inbound:true).save(failOnError:true, flush:true),
-			new Fmessage(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3, archived:true, inbound:true).save(failOnError:true, flush:true)]
 	}
 }

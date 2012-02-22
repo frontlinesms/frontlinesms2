@@ -42,7 +42,7 @@ class ActivityController {
 			activity.save()
 		} // TODO check if save is successful!
 		flash.message = "Activity unarchived successfully!"
-		redirect(controller: "archive", action: "activityList",  params:[viewingArchive: true])
+		redirect(controller: "archive", action: "activityList")
 	}
 	
 	def confirmDelete = {

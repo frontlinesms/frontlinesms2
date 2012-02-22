@@ -1,17 +1,19 @@
 <div class="section-header ${messageSection}" id="radio-inbox">
 	<g:hiddenField name="starred" value="${params.starred}" />
-	<g:hiddenField name="viewingArchive" value="${params.viewingArchive}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
-	<g:if test="${params.viewingArchive && params.viewingArchive == false}">
-		<g:link controller="archive" action="folder"> &lt;Back </g:link>
-	</g:if>
 	<g:if test="${messageSection == 'activity' && ownerInstance?.type == 'poll'}">
 		<div class="activity-title">
+			<g:if test="${params.controller=='archive'}">
+				<g:link controller="archive" action="${params.action}List"> &lt;Back </g:link>
+			</g:if>
 			<g:render template="../message/poll_header"/>
 		</div>
 	</g:if>
 	<g:elseif test="${messageSection == 'activity' && ownerInstance?.type == 'announcement'}">
 		<div class="activity-title">
+			<g:if test="${params.controller=='archive'}">
+				<g:link controller="archive" action="${params.action}List"> &lt;Back </g:link>
+			</g:if>
 			<h3 id="announcement-title">${ownerInstance?.name} ${ownerInstance?.type}</h3>
 			<g:render template="../message/activity_buttons"/>
 			<div id="activity-details">

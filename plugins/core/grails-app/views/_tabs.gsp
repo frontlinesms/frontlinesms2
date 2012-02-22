@@ -23,7 +23,7 @@
         </li>
     
         <li>
-            <g:link class="tab-link ${params.controller=='search'?'current':''}" url="${[controller:'search']}" id="tab-search">Search</g:link>
+            <g:link class="tab-link ${params.controller=='search'?'current':''}" url="${[controller:'search', action:'no_search']}" id="tab-search">Search</g:link>
         </li>
     </ul>
     <div id="tabbar"></div>
