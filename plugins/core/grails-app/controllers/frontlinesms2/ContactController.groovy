@@ -156,7 +156,8 @@ class ContactController {
 	}
 	
 	def checkForDuplicates = {
-		if (Contact.findByPrimaryMobile(params.number))
+		def foundContact = Contact.findByPrimaryMobile(params.number)
+		if (foundContact && (foundContact.id.toString() != params.contactId))
 			render(text: "There is already a contact with that number!")
 		else
 			render ""

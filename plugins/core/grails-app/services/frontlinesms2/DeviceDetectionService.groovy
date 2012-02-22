@@ -21,11 +21,16 @@ class DeviceDetectionService {
 	
 	def stopFor(String port) {
 		println "DeviceDetectionService.stopFor($port)..."
+		def detectorThread
 		detector.detectors.each {
 			println "Checking $it.portIdentifier.name..."
 			if(it.portIdentifier.name == port) {
-				it.interrupt()
+				detectorThread = it
 			} else println "not the right port."
+		}
+		if(detectorThread) {
+			detectorThread.interrupt()
+			detectorThread.join()
 		}
 	}
 }

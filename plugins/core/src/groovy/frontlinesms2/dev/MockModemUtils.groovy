@@ -15,6 +15,12 @@ class MockModemUtils {
 			MockSerial.setIdentifier(name, cpi)
 		}
 	}
+	
+	static SerialPortHandler createMockPortHandler_rejectPin() {
+		return new GroovyHayesPortHandler(new GroovyHayesState([error: "ERROR: 1",
+				responses: ["AT+CPIN?", "+CPIN: SIM PIN", ~/AT\+CPIN="\d+"/, "+CME ERROR: SIM PIN INCORRECT"]
+						+ standardResponses]))
+	}
 
 	static SerialPortHandler createMockPortHandler_badPort() {
 		new GroovyHayesPortHandler(new GroovyHayesState([error: 'ERROR: 123',

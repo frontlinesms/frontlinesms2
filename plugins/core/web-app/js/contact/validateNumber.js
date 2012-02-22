@@ -30,10 +30,9 @@ function checkForDuplicates() {
 		$(".error-message").remove();
 	}
 	$('#duplicate-error').remove();
-	
 	$.ajax({
 		type:'GET',
-		data: {number: truncatedNumber},
+		data: {number: truncatedNumber, contactId: $("#contactId").val()},
 		url: url_root + 'contact/checkForDuplicates',
 		success: function(data, textStatus){
 			if(data && data != '') {
