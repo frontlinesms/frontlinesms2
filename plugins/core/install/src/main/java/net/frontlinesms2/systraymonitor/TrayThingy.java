@@ -31,6 +31,12 @@ public class TrayThingy implements Listener {
 		t.addActionListener(createActionListener());
 		d(m.getServer());
 	}
+	
+//> ACCESSORS
+	public TrayIcon getTrayIcon() {
+		if(t == null) init();
+		return t;
+	}
 
 //> LifeCycle.Listener METHODS
 	private void updateStatus(String name) {
@@ -46,7 +52,7 @@ public class TrayThingy implements Listener {
 		d(event);
 		cause.printStackTrace();
 	}
-	public void lifeCycleStarted(LifeCycle event) { d(event); }
+	public void lifeCycleStarted(LifeCycle event) { d(event); launchBrowser(); }
 	public void lifeCycleStarting(LifeCycle event) { d(event); }
 	public void lifeCycleStopped(LifeCycle event) { d(event); }
 	public void lifeCycleStopping(LifeCycle event) { d(event); }
@@ -69,7 +75,8 @@ public class TrayThingy implements Listener {
 		start.setEnabled(!e.isRunning());
 		stop.setEnabled(e.isRunning() && !e.isStarting() && !e.isStopping());
 	}
-
+	
+//> MENU BUILDING
 	private PopupMenu createPopupMenu() {
 		PopupMenu popup = new PopupMenu();
 			
@@ -79,7 +86,7 @@ public class TrayThingy implements Listener {
 			}});
 
 		popup.add(open = new ClickMenuItem("Open FrontlineSMS") {
-			void click() { openWebBrowser(m.getUrl()); }});
+			void click() { launchBrowser(); }});
 	
 		popup.add(start = new ClickMenuItem("Start service") {
 			void click() throws Exception { m.start(); }});
@@ -96,14 +103,13 @@ public class TrayThingy implements Listener {
 	private ActionListener createActionListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				openWebBrowser(m.getUrl());
+				launchBrowser();
 			}
 		};
 	}
-
-	public TrayIcon getTrayIcon() {
-		if(t == null) init();
-		return t;
+	
+	private void launchBrowser() {
+		openWebBrowser(m.getUrl());
 	}
 }
 
