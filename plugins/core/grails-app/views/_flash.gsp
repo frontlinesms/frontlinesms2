@@ -1,5 +1,8 @@
 <g:if test="${flash.message}">
-	<div class="flash message">${flash.message}<a class="hide-flash">x</a></div>
+	<div class="flash message">
+		${flash.message}
+		<a class="hide-flash">x</a>
+	</div>
 </g:if>
 
 <g:hasErrors bean="${contactInstance}">
@@ -31,7 +34,7 @@
 <g:javascript>
 	$(function() {
 		$('.hide-flash').live("click", function() {
-			$(this).parent(".flash").slideUp(500);
+			$(this).parent("div").slideUp(500);
 			return true;
 		});
 	});

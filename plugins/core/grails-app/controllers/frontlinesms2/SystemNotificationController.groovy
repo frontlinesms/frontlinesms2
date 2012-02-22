@@ -16,8 +16,8 @@ class SystemNotificationController {
 		def systemNotificationInstanceList = SystemNotification.findAllByRead(false)
 		def notifications = systemNotificationInstanceList.collect {
 			[
-				"markRead":" ${remoteLink(controller:'systemNotification', action:'markRead', id:it.id){'mark read'}}",
-				"text":it.text
+				markRead:" ${remoteLink(controller:'systemNotification', action:'markRead', id:it.id){'x'}}",
+				text:it.text
 			]
 		}
 		render notifications as JSON
