@@ -92,6 +92,7 @@ class FconnectionService {
 		(camelContext.getRoute("in-${c.id}") || camelContext.getRoute("out-${c.id}")) ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED 
 	}
 	
+	// TODO rename 'handleNotConnectedException'
 	def handleDisconnection(Exchange ex) {
 		try {
 			println "fconnectionService.handleDisconnection(ex) : ENTRY"
