@@ -31,7 +31,7 @@ plugin.xml
 temp/
 *~
 test/functional/frontlinesms2/InProgressSpec.groovy
-test.log
+*.log
 out/
 
 # SASS temp and generated files

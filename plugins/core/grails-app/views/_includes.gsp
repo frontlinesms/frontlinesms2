@@ -1,4 +1,4 @@
-<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
+<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms2.plugin')}" type="image/x-icon" />
 <g:javascript library="jquery" plugin="jquery"/>
 <jqui:resources theme="medium" plugin="randomtextosolvebug"/>
 <g:javascript>
