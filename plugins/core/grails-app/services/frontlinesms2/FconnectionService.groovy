@@ -62,7 +62,20 @@ class FconnectionService {
 			deviceDetectionService.stopFor(c.port)
 		}
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
-		camelContext.addRouteDefinitions(routes)
+		println "creating route for fconnection $c"
+		def link = "<br/><a href='/settings/connections/$c.id'>View</a>"
+		try {
+			camelContext.addRouteDefinitions(routes)
+			createSystemNotification("Created route from ${connection.camelConsumerAddress} and to ${connection.camelProducerAddress} $link")
+		} catch(Exception e) {
+			createSystemNotification(e.message + link)
+		}
+	}
+	
+	private def createSystemNotification(String text) {
+		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
 	}
 	
 	def destroyRoutes(Fconnection c) {
