@@ -68,6 +68,7 @@ class FconnectionService {
 			camelContext.addRouteDefinitions(routes)
 			createSystemNotification("Created route from ${connection.camelConsumerAddress} and to ${connection.camelProducerAddress} $link")
 		} catch(Exception e) {
+			log.warn("Error creating routes to fconnection with id $c?.id", e)
 			createSystemNotification(e.message + link)
 		}
 	}
