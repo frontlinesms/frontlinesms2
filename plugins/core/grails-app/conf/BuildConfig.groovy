@@ -67,7 +67,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:camel-smslib:0.0.3-SNAPSHOT'
 		compile 'org.apache.camel:camel-mail:2.5.0'
 		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.1'
+		compile 'net.frontlinesms.core:at-modem-detector:0.2-SNAPSHOT'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
 	}
