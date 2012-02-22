@@ -3,8 +3,11 @@
 	<ul class="main-list" id="settings-menu">
 		<li class="section">
 			<ul class='sublist'>
-	       		<li class="${(settingsSection=='connections')? 'selected':''}">
+	       		<li class="${params.action=='connections' ? 'selected' : ''}">
 	       			<g:link url="${[controller:'settings', action:'connections']}">Phones & connections</g:link>
+	       		</li>
+	       		<li class="${params.action=='logs' ? 'selected' : ''}">
+	       			<g:link url="${[controller:'settings', action:'logs']}">System Log</g:link>
 	       		</li>
 	       	</ul>
 		</li>

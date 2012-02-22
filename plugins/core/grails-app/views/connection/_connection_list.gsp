@@ -1,6 +1,6 @@
 <div id='connections'>
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div id='connections'>You have no connections configured.</div>
+		<div>You have no connections configured.</div>
 	</g:if>
 	<g:else>
 		<ul>

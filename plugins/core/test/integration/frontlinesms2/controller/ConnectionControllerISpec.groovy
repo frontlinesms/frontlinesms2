@@ -6,6 +6,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def controller1
 	def controller2
+	def fconnectionService
 	
 	def setup() {
 		controller1 = new ConnectionController()
@@ -92,4 +93,5 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			smslibConnection.baud == 9600
 			smslibConnection.pin == "1234"
 	}
+	
 }
