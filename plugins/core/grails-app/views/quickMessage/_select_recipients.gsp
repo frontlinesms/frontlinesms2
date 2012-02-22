@@ -103,7 +103,7 @@
 		$("#manual-address").find('#address-error').remove();
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
-			$("#manual-address").append("<div id='address-error' class='error-message'>Phone number cannot contain non-numbers</div>");
+			$("#manual-address").append("<div id='address-error' class='error-message'>You have added a non-number to this field, upon saving all non-numbers will be removed.</div>");
 			return false;
 		} else {
 			return true;
