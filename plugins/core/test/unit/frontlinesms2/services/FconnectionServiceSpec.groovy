@@ -44,6 +44,7 @@ class FconnectionServiceSpec extends UnitSpec {
 		given:
 			final String PORT = 'COM77'
 			DeviceDetectionService detector = Mock()
+			mockDomain(SystemNotification)
 			service.deviceDetectionService = detector
 			Fconnection f = new SmslibFconnection(port:PORT)
 		when:
@@ -56,6 +57,7 @@ class FconnectionServiceSpec extends UnitSpec {
 		given:
 			DeviceDetectionService detector = Mock()
 			service.deviceDetectionService = detector
+			mockDomain(SystemNotification)
 			Fconnection f = Mock()
 			f.getCamelProducerAddress() >> 'nothing'
 		when:
