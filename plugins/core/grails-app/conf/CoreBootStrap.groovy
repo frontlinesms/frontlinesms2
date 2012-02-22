@@ -148,15 +148,20 @@ class CoreBootStrap {
 	private def dev_initFconnections() {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
-
+	}
+	
+	private def dev_initRealSmslibFconnections() {
 		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
-
-		new SmslibFconnection(name:"COM96 mock which breaks on receive", port:'COM96', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"COM97 mock with bad port", port:'COM98', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"COM98 mock which cannot send", port:'COM98', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"COM99 mock with incoming, and can send", port:'COM99', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)		
+	}
+	
+	private def dev_initMockSmslibFconnections() {
+		new SmslibFconnection(name:"MOCK95: rejects all pins", pin:'1234', port:'MOCK95', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"MOCK96: breaks on receive", port:'MOCK96', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"MOCK97: bad port", port:'MOCK98', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"MOCK98: cannot send", port:'MOCK98', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)		
 	}
 	
 	private def dev_initPolls() {
@@ -248,6 +253,8 @@ class CoreBootStrap {
 	}
 	
 	private def initialiseRealSerial() {
+		dev_initRealSmslibFconnections()
+		
 		def jniPath = grailsApplication.parentContext.getResource("jni").file.absolutePath
 		println "JNI Path: $jniPath"
 		
@@ -284,11 +291,14 @@ class CoreBootStrap {
 	}
 
 	private def initialiseMockSerial() {
+		dev_initMockSmslibFconnections()
+		
 		MockModemUtils.initialiseMockSerial([
-				COM96:new CommPortIdentifier("COM96", MockModemUtils.createMockPortHandler_disconnectOnReceive()),
-				COM97:new CommPortIdentifier("COM97", MockModemUtils.createMockPortHandler_badPort()),
-				COM98:new CommPortIdentifier("COM98", MockModemUtils.createMockPortHandler_sendFails()),
-				COM99:new CommPortIdentifier("COM99", MockModemUtils.createMockPortHandler_withMessages())])
+				MOCK95:new CommPortIdentifier("MOCK95", MockModemUtils.createMockPortHandler_rejectPin()),
+				MOCK96:new CommPortIdentifier("MOCK96", MockModemUtils.createMockPortHandler_disconnectOnReceive()),
+				MOCK97:new CommPortIdentifier("MOCK97", MockModemUtils.createMockPortHandler_badPort()),
+				MOCK98:new CommPortIdentifier("MOCK98", MockModemUtils.createMockPortHandler_sendFails()),
+				MOCK99:new CommPortIdentifier("MOCK99", MockModemUtils.createMockPortHandler_withMessages())])
 	}
 	
 	private def test_initGeb(def servletContext) {

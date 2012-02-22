@@ -73,9 +73,17 @@ class FconnectionService {
 		println "fconnectionService.destroyRoutes : ENTRY"
 		println "fconnectionService.destroyRoutes : id=$id"
 		["in-$id", "out-$id"].each {
-			println "fconnectionService.destroyRoutes : route-id=$it"
-			camelContext.removeRoute(it)
-			camelContext.stopRoute(it)
+			try {
+				println "fconnectionService.destroyRoutes : route-id=$it"
+				println "fconnectionService.destroyRoutes : stopping route $it..."
+				camelContext.stopRoute(it)
+				println "fconnectionService.destroyRoutes : $it stopped.  removing..."
+				camelContext.removeRoute(it)
+				println "fconnectionService.destroyRoutes : $it removed."
+			} catch(Exception ex) {
+				println "fconnectionService.destroyRoutes : Exception thrown while destroying $it: $ex"
+				ex.printStackTrace()
+			}
 		}
 		println "fconnectionService.destroyRoutes : EXIT"
 	}
@@ -84,6 +92,7 @@ class FconnectionService {
 		(camelContext.getRoute("in-${c.id}") || camelContext.getRoute("out-${c.id}")) ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED 
 	}
 	
+	// TODO rename 'handleNotConnectedException'
 	def handleDisconnection(Exchange ex) {
 		try {
 			println "fconnectionService.handleDisconnection(ex) : ENTRY"
@@ -98,7 +107,7 @@ class FconnectionService {
 			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
 			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(\d+)/)[0][1]
 			println "Looking to stop route: $routeId"
-			destroyRoutes(routeId as long)
+			RouteDestroyJob.triggerNow([routeId:routeId as long])
 		} catch(Exception e) {
 			e.printStackTrace()
 		}
