@@ -9,7 +9,9 @@
 				var notificationIds = ""
 				var indx = "notification-".length
 				$("#notifications").find('div:visible').each(function() {
-					notificationIds += $(this).attr("id").substring(indx) + ","
+					if($(this).attr("id")) {
+						notificationIds += $(this).attr("id").substring(indx) + ","					
+					}
 				});
 				
 				$.getJSON("${createLink(controller:'systemNotification', action:'list')}", {notificationIdList:notificationIds}, function(data) {
@@ -25,7 +27,8 @@
 							$(div).appendTo("#notifications");
 							if(notification.text.indexOf("Created") != -1) {
 								shouldRefresh = true
-								}
+							}
+							removeFlashMessage()
 						});
 		
 						if(shouldRefresh) {
@@ -41,6 +44,17 @@
 				$.get(link, function(data) {
 					$('#connections').replaceWith($(data).find('#connections'));
 				});
+			}
+			
+			function showFlashMessage(message) {
+				jQuery('<div/>', {
+					class:"flash message",
+					html: message
+				}).appendTo('#notifications');
+			}
+			
+			function removeFlashMessage() {
+				$('#notifications div').remove('.flash')
 			}
 			
 		</g:javascript>

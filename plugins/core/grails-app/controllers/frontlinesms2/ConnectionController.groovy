@@ -67,7 +67,7 @@ class ConnectionController {
 	
 	def createRoute = {
 		CreateRouteJob.triggerNow([connectionId:params.id])
-		render ""
+		render "Connecting..."
 	}
   
 	def destroyRoute = {

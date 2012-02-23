@@ -14,7 +14,7 @@ class SystemNotificationController {
 	
 	def list = {
 		def systemNotificationInstanceList
-		def notificationIdList = params.notificationIdList.tokenize(",")?.collect{ it.toLong()}
+		def notificationIdList = (params.notificationIdList.tokenize(",")?.collect{ it.toLong()}) as Set
 		if(notificationIdList) {
 			systemNotificationInstanceList = SystemNotification.findAllByReadAndIdNotInList(false, notificationIdList)
 		} else {

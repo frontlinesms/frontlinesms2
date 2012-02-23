@@ -24,7 +24,7 @@
 		<li><a href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id]" action="${action}" id='${fconnectionInstance?.id}' onSuccess="refreshSystemNotifications()">
+	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id]" action="${action}" id='${fconnectionInstance?.id}' onSuccess="refreshSystemNotifications(); showFlashMessage(data)">
 		<g:render template="type"/>
 		<g:render template="details"/>
 		<g:render template="confirm"/>
