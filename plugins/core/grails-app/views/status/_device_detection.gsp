@@ -9,6 +9,7 @@
 				<tr>
 					<td>Port</td>
 					<td>Description</td>
+					<td>Locked?</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -16,6 +17,7 @@
 					<tr>
 						<td>${d.port}</td>
 						<td>${d.description}</td>
+						<td>${d.lockType}</td>
 					</tr>
 				</g:each>
 			</tbody>

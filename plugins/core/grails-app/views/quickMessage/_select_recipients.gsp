@@ -103,7 +103,7 @@
 		$("#manual-address").find('#address-error').remove();
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
-			$("#manual-address").append("<div id='address-error' class='error-message'>Phone number cannot contain letters</div>");
+			$("#manual-address").append("<div id='address-error' class='error-message'>You have added a non-number to this field, upon saving all non-numbers will be removed.</div>");
 			return false;
 		} else {
 			return true;
@@ -114,17 +114,17 @@
 		var address = $('#address').val();
 		if(address == '') {
 			return true;
-		} else if(validateAddressEntry()) {
-			var sanitizedAddress = jQuery.grep(address, function(a) {
-				return a.match(/[0-9]/) != null;
-			}).join('');
-			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress
-			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val()
+		} else {
+			var sanitizedAddress = address.replace(/\D/g, '');
+			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress;
+			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 			if(checkbox !== address) {
 				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + sanitizedAddress + ">" + sanitizedAddress + "</input></li>")
 				updateCount();
 			}
 			$('#address').val("")
+			$("#address").removeClass('error');
+			$("#manual-address").find('#address-error').remove();
 			return true;
 		}
 		return false;

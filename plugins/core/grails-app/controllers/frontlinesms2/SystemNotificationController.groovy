@@ -22,7 +22,7 @@ class SystemNotificationController {
 		}
 		def notifications = systemNotificationInstanceList?.collect {
 			[
-				markRead:" ${remoteLink(controller:'systemNotification', action:'markRead', id:it.id){'mark read'}}",
+				markRead:" ${remoteLink(controller:'systemNotification', action:'markRead', id:it.id){'x'}}",
 				text:it.text,
 				id:it.id
 			]

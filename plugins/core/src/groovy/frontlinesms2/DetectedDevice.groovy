@@ -6,9 +6,13 @@ class DetectedDevice {
 	String port
 	String description
 	DetectionStatus status
+	String lockType
 	
 	static DetectedDevice create(ATDeviceDetector d) {
-		new DetectedDevice(port:d.portName, description:getDescription(d), status:getStatus(d))
+		new DetectedDevice(port:d.portName,
+			description:getDescription(d),
+			status:getStatus(d),
+			lockType:d.lockType)
 	}
 
 	static def getDescription(ATDeviceDetector d) {
