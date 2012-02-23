@@ -13,14 +13,23 @@ class SystemNotificationController {
 	}
 	
 	def list = {
-		def systemNotificationInstanceList = SystemNotification.findAllByRead(false)
-		def notifications = systemNotificationInstanceList.collect {
+		def systemNotificationInstanceList
+		def notificationIdList = params.notificationIdList.tokenize(",")?.collect{ it.toLong()}
+		if(notificationIdList) {
+			systemNotificationInstanceList = SystemNotification.findAllByReadAndIdNotInList(false, notificationIdList)
+		} else {
+			systemNotificationInstanceList = SystemNotification.findAllByRead(false)
+		}
+		def notifications = systemNotificationInstanceList?.collect {
 			[
-				"markRead":" ${remoteLink(controller:'systemNotification', action:'markRead', id:it.id){'mark read'}}",
-				"text":it.text
+				markRead:" ${remoteLink(controller:'systemNotification', action:'markRead', id:it.id){'mark read'}}",
+				text:it.text,
+				id:it.id
 			]
 		}
 		render notifications as JSON
+		
+		
 	}
 	
 	private def withNotification(Closure c) {
