@@ -63,13 +63,12 @@ class FconnectionService {
 		}
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		println "creating route for fconnection $c"
-		def link = "<br/><a href='/settings/connections/$c.id'>View</a>"
 		try {
 			camelContext.addRouteDefinitions(routes)
-			createSystemNotification("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress} $link")
+			createSystemNotification("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 		} catch(Exception e) {
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
-			createSystemNotification(e.message + link)
+			createSystemNotification(e.message)
 		}
 	}
 	

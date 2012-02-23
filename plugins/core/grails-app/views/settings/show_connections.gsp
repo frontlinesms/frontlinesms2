@@ -16,8 +16,13 @@
 					var shouldRefresh = false
 					if(data != null) {
 						$.each(data, function(key, notification) {
-							var systemNotification = "<div class='system-notification' id='notification-'" + notification.id +">" + notification.text + notification.markRead + "</div>";
-							$("#notifications").append(systemNotification);
+							var div = jQuery('<div/>', {
+								id: "notification-" + notification.id,
+								html: notification.text
+							});
+							var link = $(notification.link).addClass("hide-flash");
+							$(div).append(link);
+							$(div).appendTo("#notifications");
 							if(notification.text.indexOf("Created") != -1) {
 								shouldRefresh = true
 								}
