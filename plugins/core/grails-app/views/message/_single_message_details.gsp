@@ -12,7 +12,7 @@
 				<g:else>
 					${messageInstance.displayName}
 				</g:else>
-				<g:if test="${messageInstance.hasFailed && messageInstance.failedCount == 1}"> (failed)</g:if>
+				<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (failed)</g:if>
 				<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} failed)</g:elseif> 
 				<g:if test="${!messageInstance.contactExists}">
 					<g:link controller="contact" action="createContact" params="[primaryMobile: ((messageSection == 'sent' || messageSection == 'pending') && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"><img id="add-contact" src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
