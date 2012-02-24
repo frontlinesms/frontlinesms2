@@ -12,7 +12,7 @@ class SettingsControllerSpec extends ControllerSpec {
 			mockDomain(LogEntry, [entry1, entry2])
 		when:
 			mockParams.timePeriod = 'forever'
-			def model = controller.list()
+			def model = controller.logs()
 		then:
 			model.logEntryList.containsAll(entry1, entry2)
 	}
@@ -29,32 +29,32 @@ class SettingsControllerSpec extends ControllerSpec {
 			mockDomain(LogEntry, [entry1, entry2, entry3, entry4, entry5, entry6])
 		when:
 			mockParams.timePeriod = "1"
-			def model = controller.list()
+			def model = controller.logs()
 		then:
 			model.logEntryList == [entry1]
 		when:
 			mockParams.timePeriod = "3"
-			model = controller.list()
+			model = controller.logs()
 		then:
 			model.logEntryList == [entry1, entry2]
 		when:
 			mockParams.timePeriod = "7"
-			model = controller.list()
+			model = controller.logs()
 		then:
 			model.logEntryList == [entry1, entry2, entry3]
 		when:
 			mockParams.timePeriod = "14"
-			model = controller.list()
+			model = controller.logs()
 		then:
 			model.logEntryList == [entry1, entry2, entry3, entry4]
 		when:
 			mockParams.timePeriod = "28"
-			model = controller.list()
+			model = controller.logs()
 		then:
 			model.logEntryList == [entry1, entry2, entry3, entry4, entry5]
 		when:
 			mockParams.timePeriod = "forever"
-			model = controller.list()
+			model = controller.logs()
 		then:
 			model.logEntryList == [entry1, entry2, entry3, entry4, entry5, entry6]
 		
