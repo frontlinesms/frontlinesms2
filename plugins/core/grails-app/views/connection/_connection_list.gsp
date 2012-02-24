@@ -17,7 +17,7 @@
 					<g:if test="${c == connectionInstance}">
 						<g:if test="${c.status == 'Not connected'}">
 							<div id="createRoute">
-								<g:remoteLink controller="connection" action="createRoute" class="btn route" id="${c.id}" onSuccess="refreshSystemNotifications(); showFlashMessage(data)">Create route</g:remoteLink>
+								<g:remoteLink controller="connection" action="createRoute" class="btn route" id="${c.id}" onSuccess="refreshSystemNotifications(); showConnectingNotification(data)">Create route</g:remoteLink>
 							</div>
 							<div>
 								<g:remoteLink controller="connection" action="connection_wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');">Edit Connection</g:remoteLink>

@@ -44,7 +44,7 @@ class StatusController {
 		params.groupInstance = params.groupId ? Group.get(params.groupId) : null
 		params.messageStatus = params.messageStatus?.tokenize(",")*.trim()
 		def messageStats = Fmessage.getMessageStats(params) // TODO consider changing the output of this method to match the data we actually want
-		[messageStats: [xdata: messageStats.keySet()*.toString(),
+		[messageStats: [xdata: messageStats.keySet().collect{"'${it}'"},
 							sent: messageStats.values()*.sent,
 							received: messageStats.values()*.received]]
 	}
