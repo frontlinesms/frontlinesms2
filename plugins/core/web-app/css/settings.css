@@ -62,10 +62,34 @@
 	display:none;
 }
 
+#log-filters {
+	margin: 0 30px;
+	padding: 5px 17px;
+	height: 30px;
+	border-bottom: 1px solid #9e9e9e;
+}
 #log-filters select{
-	display: inline;
+	float: left;
+	width: 300px;
+}
+#log-filters span{
+	float: left;
+	min-width: 210px;
 }
 #log-list {
 	display: block;
 	width: 100%;
+	padding: 0 30px;
+}
+#log-list table, #log-list tr, #log-list tbody{
+	display: block;
+	width: 100%;
+}
+#log-list td{
+	float: left;
+	width: 50%;
+}
+#log-list .entry-date{
+	float: right;
+	min-width: 300px;
 }
