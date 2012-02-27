@@ -69,7 +69,7 @@ class FconnectionService {
 			LogEntry.log("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 		} catch(Exception e) {
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
-			LogEntry.log("Error creating routes to fconnection with id $c?.id")
+			LogEntry.log("Error creating routes to fconnection with name ${c?.name ?:c?.id}")
 			createSystemNotification(e.message)
 		}
 	}
