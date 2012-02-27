@@ -44,6 +44,7 @@ class FconnectionServiceSpec extends UnitSpec {
 		given:
 			final String PORT = 'COM77'
 			DeviceDetectionService detector = Mock()
+			mockDomain(LogEntry)
 			mockDomain(SystemNotification)
 			service.deviceDetectionService = detector
 			Fconnection f = new SmslibFconnection(port:PORT)
@@ -56,6 +57,7 @@ class FconnectionServiceSpec extends UnitSpec {
 	def 'creating a non-smslib route should not affect the device detector'() {
 		given:
 			DeviceDetectionService detector = Mock()
+			mockDomain(LogEntry)
 			service.deviceDetectionService = detector
 			mockDomain(SystemNotification)
 			Fconnection f = Mock()
