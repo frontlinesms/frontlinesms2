@@ -8,7 +8,7 @@ class DeviceDetectionService {
 	def detector = new AllModemsDetector()
 
 	def detect() {
-		detector.detect()
+		detector.freshen()
 	}
 	
 	def reset() {
