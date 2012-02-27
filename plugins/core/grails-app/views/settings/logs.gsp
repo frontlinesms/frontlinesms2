@@ -18,28 +18,26 @@
 			</g:if>
 			<g:else>
 				<div id="log-filters">
-					Show logs for
+					<span>Show logs for</span>
 					<select class="dropdown" name="timePeriod" onChange="filterLogEntries(this.value)">
-						<option value="forever">For all time</option>
-						<option value="1">For last 24 hours</option>
-						<option value="3">For last 3 days</option>
-						<option value="7">For last 7 days</option>
-						<option value="14">For last 14 days</option>
-						<option value="28">For last 28 days</option>
+						<option value="forever">all time</option>
+						<option value="1">last 24 hours</option>
+						<option value="3">last 3 days</option>
+						<option value="7">last 7 days</option>
+						<option value="14">last 14 days</option>
+						<option value="28">last 28 days</option>
 					</select>
 				</div>
 				<br/>
 				<div id="log-list">
-					<ul>
+					<table>
 						<g:each in="${logEntryList}" var="l">
-							<li class="logEntry">
-								<div>
-									<span>${l.content}</span>
-									<span>${l.date}</span>
-								</div>
-							</li>
+							<tr class="logEntry">
+								<td>${l.content}</td>
+								<td>${l.date}</td>
+							</tr>
 						</g:each>
-					</ul>
+					</table>
 				</div>
 			</g:else>
 		</div>

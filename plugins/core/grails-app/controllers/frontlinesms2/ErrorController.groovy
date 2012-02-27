@@ -11,7 +11,7 @@ class ErrorController {
 		createZipFile(response.outputStream)
 		def formatedDate = dateToString(new Date())
 		response.setContentType("application/octet-stream")
-		response.setHeader("Content-disposition", "filename=frontlinesms2-log-${formatedDate}")
+		response.setHeader("Content-disposition", "filename=frontlinesms2-log-${formatedDate}.zip")
 		new File("${System.properties.'user.home'}/.frontlinesms2/").zip()
 		response.outputStream.flush()
 	}
