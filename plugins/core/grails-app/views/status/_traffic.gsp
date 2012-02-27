@@ -14,7 +14,7 @@ $(function() {
 		var padding = {left: 40, top: 20, bottom: 20, right: 55 };
 		var textStyle = {"font-weight": "bold", "font-size": 12};
 		var c = r.plotStackedBarGraph(holder, data, xdata, dataCaption, {colors : ["#D4D5D6", "#949494"], textStyle: textStyle, 
-		padding : padding});
+		padding : padding, ystep:5});
 		var sent =  data1.sum(), received = data2.sum(), total = data.pack().sum();
 		var sentPercent = "", receivedPercent = "";
 		if(total > 0) {

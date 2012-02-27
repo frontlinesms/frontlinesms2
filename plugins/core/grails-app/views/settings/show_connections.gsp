@@ -28,7 +28,7 @@
 							if(notification.text.indexOf("Created") != -1) {
 								shouldRefresh = true
 							}
-							removeFlashMessage()
+							removeConnectingNotification()
 						});
 		
 						if(shouldRefresh) {
@@ -46,15 +46,19 @@
 				});
 			}
 			
-			function showFlashMessage(message) {
+			function showConnectingNotification(message) {
 				jQuery('<div/>', {
 					class:"flash message",
 					html: message
 				}).appendTo('#notifications');
+				$("#createRoute a").text(message)
+				$("#createRoute a").attr("disabled", "disabled")
 			}
 			
-			function removeFlashMessage() {
+			function removeConnectingNotification() {
 				$('#notifications div').remove('.flash')
+				$("#createRoute a:visible").text("CreateRoute")
+				$("#createRoute a").attr("disabled", "")
 			}
 			
 		</g:javascript>

@@ -46,7 +46,7 @@ Raphael.fn.plotStackedBarGraph = function(holder, data, xdata, caption, opts) {
 		colors: opts.colors || ["#D4D5D6", "#949494"]
 	});
 	var packedData = data.pack();
-	var yaxis = self.g.axis(padding.left, axisPosition, axisPosition - padding.top, 0, packedData.max(), packedData.max(), 1, null, "-", 0);
+	var yaxis = self.g.axis(padding.left, axisPosition, axisPosition - padding.top, 0, packedData.max(), opts.ystep, 1, null, "-", 0);
 	var i = xdata.length;
 	var displayX = parseInt(i/14);
 	var xcordinates = [];
@@ -68,7 +68,9 @@ Raphael.fn.plotStackedBarGraph = function(holder, data, xdata, caption, opts) {
 			y.push(this.bars[i].y);
 			res.push(caption[i] + " " + this.bars[i].value || "0");
 		}
+		
 		res.push("on " + xcordinates[this.bars[0].x]);
+		console.log(this.bars[0].x)
 		this.flag = self.g.popup(this.bars[0].x, Math.min.apply(Math, y), res.join("\r\n"), 3).insertBefore(this);
 	},
 	function() {
