@@ -3,31 +3,11 @@
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
 		<g:layoutHead/>
-		<g:render template="/css"/>
-		<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico')}" type="image/x-icon"/>
-		<g:javascript library="jquery" plugin="jquery"/>
-		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
-		<script type="text/javascript">
-			url_root = "${request.contextPath}/";
-			refresh_rate = ${params.rRate ?: 30000}
-		</script>
-		<g:javascript src="jquery.ui.selectmenu.js" plugin="core"/>
-		<g:javascript src="application.js" plugin="core"/>
-		<g:javascript src="mediumPopup.js" plugin="core"/>
-		<g:javascript src="smallPopup.js" plugin="core"/>
-		<g:javascript src="pagination.js" plugin="core"/>
-		<g:javascript src="/message/check_message.js" plugin="core"/>
-		<g:javascript src="/message/arrow_navigation.js" plugin="core"/>
-		<g:javascript src="/message/star_message.js" plugin="core"/>
-		<g:javascript src="/message/categorize_dropdown.js" plugin="core"/>
-		<g:javascript src="/message/move_dropdown.js" plugin="core"/>
-		<g:javascript src="/message/moreActions.js" plugin="core"/>
-		<g:javascript src="/message/check_for_new_messages.js" plugin="core"/>
-		<g:javascript src="on_air.js"/>
+		<g:render template="/includes"/>
 		<g:javascript>
-		$(function() {  
-		   disablePaginationControls();
-		});
+			$(function() {  
+			   disablePaginationControls();
+			});
 		</g:javascript>
 	</head>
 	<body id="messages-tab">
@@ -48,5 +28,6 @@
 			    <g:render template="/message/footer" plugin="core"/>
 			</div>
 		</div>
+		<r:layoutResources/>
 	</body>
 </html>
