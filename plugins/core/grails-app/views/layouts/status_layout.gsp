@@ -19,5 +19,6 @@
 				<g:layoutBody />
 			</div>
 		</div>
+		<r:layoutResources/>
 	</body>
 </html>

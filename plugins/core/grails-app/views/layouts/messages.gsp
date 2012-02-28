@@ -4,13 +4,7 @@
 		<title><g:layoutTitle default="Messages"/></title>
 		<g:layoutHead/>
 		<g:render template="/includes"/>
-		<g:javascript src="/message/check_message.js"/>
-		<g:javascript src="/message/arrow_navigation.js"/>
-		<g:javascript src="/message/star_message.js" />
-		<g:javascript src="/message/categorize_dropdown.js"/>
-		<g:javascript src="/message/move_dropdown.js"/>
-		<g:javascript src="/message/moreActions.js"/>
-		<g:javascript src="/message/check_for_new_messages.js" />
+		<r:require module="messages"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();
@@ -35,5 +29,6 @@
 			    <g:render template="../message/footer"/>
 			</div>
 		</div>
+		<r:layoutResources/>
 	</body>
 </html>
