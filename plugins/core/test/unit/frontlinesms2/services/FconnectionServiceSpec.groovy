@@ -54,7 +54,7 @@ class FconnectionServiceSpec extends UnitSpec {
 			1 * detector.stopFor(PORT)
 	}
 	
-	def 'creating a non-smslib rout should not affect the device detector'() {
+	def 'creating a non-smslib route should not affect the device detector'() {
 		given:
 			DeviceDetectionService detector = Mock()
 			mockDomain(LogEntry)
@@ -67,15 +67,14 @@ class FconnectionServiceSpec extends UnitSpec {
 		then:
 			0 * detector.stopFor(_)
 	}
-//FIXME:Build fix
-// FIXME ADD A PROPER COMMENT WHEN COMMENTING OUT CODE LIKE THIS
-/*	def 'Created routes have ids derived from supplied Fconnection id'() {
+
+	def 'Created routes have ids derived from supplied Fconnection id'() {
 		given:
 			def connected = new Fconnection(id:1)
 		when:
 			service.createRoutes(connected)
 		then:
 			1 * context.addRouteDefinitions({it*.id == ['in-1', 'out-1']})
-	}*/
+	}
 }
 

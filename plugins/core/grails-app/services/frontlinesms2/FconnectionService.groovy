@@ -4,6 +4,8 @@ import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import org.smslib.NotConnectedException
+import serial.SerialClassFactory
+import serial.CommPortIdentifier
 
 class FconnectionService {
 	def deviceDetectionService
@@ -60,6 +62,12 @@ class FconnectionService {
 	def createRoutes(Fconnection c) {
 		if(c instanceof SmslibFconnection) {
 			deviceDetectionService.stopFor(c.port)
+			// work-around for CORE-736 - NoSuchPortException can be thrown
+			// for RXTX when a port has not previously been listed with
+			// getPortIdentifiers()
+			if(SerialClassFactory.instance.serialPackageName == SerialClassFactory.PACKAGE_RXTX) {
+				CommPortIdentifier.getPortIdentifiers()
+			}
 		}
 		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		println "creating route for fconnection $c"
@@ -68,6 +76,7 @@ class FconnectionService {
 			createSystemNotification("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 			LogEntry.log("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 		} catch(Exception e) {
+			e.printStackTrace()
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
 			LogEntry.log("Error creating routes to fconnection with name ${c?.name ?:c?.id}")
 			createSystemNotification(e.message)
