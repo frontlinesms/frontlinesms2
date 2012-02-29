@@ -14,6 +14,7 @@ import frontlinesms2.dev.MockModemUtils
 
 class CoreBootStrap {
 	def grailsApplication
+	def deviceDetectionService
 	
 	def init = { servletContext ->
 		initialiseSerial()
@@ -39,6 +40,11 @@ class CoreBootStrap {
 				dev_initFolders()
 				dev_initAnnouncements()
 				dev_initLogEntries()
+				deviceDetectionService.detect()
+				break
+				
+			case Environment.PRODUCTION:
+				deviceDetectionService.detect()
 				break
 		}
 	}

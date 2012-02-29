@@ -51,14 +51,14 @@
 					class:"flash message",
 					html: message
 				}).appendTo('#notifications');
-				$("#createRoute a").text(message)
-				$("#createRoute a").attr("disabled", "disabled")
+				$("#createRoute a").text(message);
+				$("#createRoute a").attr("disabled", "disabled");
 			}
 			
 			function removeConnectingNotification() {
-				$('#notifications div').remove('.flash')
-				$("#createRoute a:visible").text("CreateRoute")
-				$("#createRoute a").attr("disabled", "")
+				$('#notifications div').remove('.flash');
+				$("#createRoute a:visible").text("CreateRoute");
+				$("#createRoute a").attr("disabled", "");
 			}
 			
 		</g:javascript>
