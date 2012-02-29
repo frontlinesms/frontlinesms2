@@ -3,8 +3,8 @@
 	<head>
 		<title><g:layoutTitle default="Search"/></title>
 		<g:layoutHead />
-		<g:render template="/includes"/>
 		<r:require module="search"/>
+		<g:render template="/includes"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();

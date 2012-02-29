@@ -4,18 +4,20 @@
 		<g:hiddenField id="message-id" name="message-id" value="${messageInstance.id}"/>
 		<div id='message-info'>
 			<p id="message-detail-sender">
-				<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-					<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup('Recipients', data, 'Done', cancel);">
+				<span>
+					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
+						<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup('Recipients', data, 'Done', cancel);">
+							${messageInstance.displayName}
+						</g:remoteLink>
+					</g:if>
+					<g:else>
 						${messageInstance.displayName}
-					</g:remoteLink>
-				</g:if>
-				<g:else>
-					${messageInstance.displayName}
-				</g:else>
-				<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (failed)</g:if>
-				<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} failed)</g:elseif> 
+					</g:else>
+					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (failed)</g:if>
+					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} failed)</g:elseif>
+				</span> 
 				<g:if test="${!messageInstance.contactExists}">
-					<g:link controller="contact" action="createContact" params="[primaryMobile: ((messageSection == 'sent' || messageSection == 'pending') && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"><img id="add-contact" src='${resource(dir: 'images/icons', file: 'add.png')}'/></g:link>
+					<g:link id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
 				</g:if>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>

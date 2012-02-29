@@ -2,6 +2,12 @@
     border-top: 3px solid #d8aec6;
 }
 
+#logo {
+	background-image: url('../images/logo.png');
+	background-repeat: no-repeat;
+	background-position: left;
+}
+
 .selected{	
     background-color: #D8E8EF;
 }

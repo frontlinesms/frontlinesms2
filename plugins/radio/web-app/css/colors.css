@@ -2,6 +2,12 @@
     border-top: 3px solid #C79CDD;
 }
 
+#logo {
+	background-image: url('../images/logo_radio.png');
+	background-repeat: no-repeat;
+	background-position: left;
+}
+
 .selected{	
     background-color: rgba(194, 219, 191, 0.65);
 }
@@ -11,7 +17,7 @@
 }
 #secondary-nav a:hover{
     background-color:#e0e0e0;
-    border-top: 3px solid #C79CDD;
+    border-top: 3px solid #693F80;
 }
 
 #notifications div{

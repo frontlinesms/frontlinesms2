@@ -3,6 +3,7 @@
 	<head>
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead />
+		<r:require module="status"/>
 		<g:render template="/includes"/>
 	</head>
 	<body id="status-tab">

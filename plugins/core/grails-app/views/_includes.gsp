@@ -1,7 +1,4 @@
 <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms2.plugin')}" type="image/x-icon" />
-<r:require module="jquery"/>
-<r:require module="jquery-ui"/>
-<r:require module="common"/>
 <r:layoutResources/>
 <g:javascript>
 	url_root = "${request.contextPath}/";

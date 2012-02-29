@@ -1,9 +1,4 @@
 @import url("colors.css");
-@import url("buttons.css");
-@import url("contacts.css");
-@import url("settings.css");
-@import url("status.css");
-@import url("header.css");
 
 html {
 	height: 100%;
@@ -84,9 +79,6 @@ a {
 
 /*Main*/
 #logo {
-       background-image: url('../images/logo.png');
-       background-repeat: no-repeat;
-       background-position: left;
        height: 40px;
        width: 36px;
 }
@@ -717,7 +709,19 @@ animation: newMessage 2s;
     padding: 17px;
 }
 
-#message-detail-sender, #message-detail-date{
+#message-detail-sender{
+	display: inline-block;
+	margin: 0;
+	min-width: 130px;
+}
+#message-detail-sender a {
+	float: right;
+	background-image: url('../images/icons/add.png');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+}
+ #message-detail-date{
 	margin: 0;
 }
 #message-detail-owner{

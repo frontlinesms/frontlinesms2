@@ -3,8 +3,8 @@
 	<head>
 		<title><g:layoutTitle default="Archive"/></title>
 		<g:layoutHead />
-		<g:render template="/includes"/>
 		<r:require module="archive"/>
+		<g:render template="/includes"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();

@@ -2,8 +2,8 @@
 <html>
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
-		<g:render template="/includes"/>
 		<r:require module="contacts"/>
+		<g:render template="/includes"/>
 		<g:layoutHead />
 	</head>
 	<body id="contacts-tab">

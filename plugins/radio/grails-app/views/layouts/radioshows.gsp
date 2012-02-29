@@ -3,7 +3,8 @@
 	<head>
 		<title><g:layoutTitle default="Messages"/></title>
 		<g:layoutHead/>
-		<g:render template="/includes"/>
+		<r:require module="radio"/>
+		<g:render template="/includes" plugin="core"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();
