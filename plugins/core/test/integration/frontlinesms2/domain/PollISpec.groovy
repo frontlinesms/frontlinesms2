@@ -151,6 +151,35 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p2.validate()
 	}
 	
+	def "can edit responses for a poll with multiple responses"() {
+		when:
+			def poll = Poll.createPoll([choiceA: "one", choiceB: "two", name:"title"])
+		then:
+			poll.responses*.value.containsAll(['one', 'two'])
+		when:
+			Poll.editPoll(poll.id, [choiceC: "three", choiceD:"four"])
+			poll.refresh()
+		then:
+			println "${poll.responses*.key}"
+			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
+		when:
+			def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
+			PollResponse.findByValue("one").addToMessages(m1)
+			poll.save(flush:true)
+		then:
+			poll.liveMessageCount == 1
+		when:
+			Poll.editPoll(poll.id, [choiceA: "five"])
+		then:
+			poll.liveMessageCount == 1
+			!PollResponse.findByValue("one")
+			poll.responses.find {
+				if(it.value == "Unknown") {
+					it.messages.size() == 1
+				}
+			}
+	}
+	
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
 		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))

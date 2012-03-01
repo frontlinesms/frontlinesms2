@@ -88,6 +88,24 @@ class Poll extends Activity {
 		poll.save(flush: true, failOnError: true)
 	}
 	
+	static Poll editPoll(id, attrs) {
+		def poll = Poll.get(id)
+		poll.properties = attrs
+		def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
+		choices.each { k,v -> 
+			if(poll.responses*.key.contains(k)) {
+				def response  = PollResponse.findByKey(k)
+				response.messages.each { message ->
+					poll.responses.find { it.value == 'Unknown' }.messages.add(message)
+				}
+				poll.removeFromResponses(response)
+				response.delete()
+			}
+			if(v) poll.addToResponses(new PollResponse(value: v, key:k))
+		}
+		poll.save(flush: true) ?: poll
+	}
+		
 	def getType() {
 		return 'poll'
 	}

@@ -118,4 +118,38 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.groupList == [ "English numbers": [] ]
 				
 	}
+	
+	def "edit action modifies the properties of an existing poll"() {
+		setup:
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			controller.params.id = poll.id
+			controller.params.choiceC = "Arnold Vandam"
+		when:
+			controller.edit()
+			poll.refresh()
+		then:
+			poll.responses*.value.containsAll(["Arnold Vandam", "Michael-Jackson", "Chuck-Norris"])
+		when:
+			controller.params.id = poll.id
+			controller.params.question = "Who is worse?"
+			controller.edit()
+			poll.refresh()
+		then:
+			poll.question == "Who is worse?"
+		when:
+			controller.params.id = poll.id
+			controller.params.autoReplyText = "Thank you for replying to this awesome poll"
+			controller.edit()
+			poll.refresh()
+		then:
+			poll.autoReplyText == "Thank you for replying to this awesome poll"
+		when:
+			controller.params.id = poll.id
+			controller.params.keyword = "bad"
+			controller.params.enableKeyword = true
+			def model = controller.edit()
+			poll.refresh()
+		then:
+			poll.keyword.equalsIgnoreCase("bad")
+	}
 }
