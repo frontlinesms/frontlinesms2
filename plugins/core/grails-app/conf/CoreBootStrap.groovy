@@ -40,7 +40,7 @@ class CoreBootStrap {
 				dev_initFolders()
 				dev_initAnnouncements()
 				dev_initLogEntries()
-				deviceDetectionService.detect()
+				//deviceDetectionService.detect()
 				break
 				
 			case Environment.PRODUCTION:

@@ -603,6 +603,19 @@ a {
 	margin-top: 5px;
 }
 
+.sorted.asc {
+	background-image: url('../images/buttons/down_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
+}
+.sorted.desc {
+	background-image: url('../images/buttons/up_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
+}
+
 #new-message-notification a{
 	display: block;
 	cursor: pointer;
