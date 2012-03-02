@@ -3,6 +3,7 @@
 	<head>
 		<title><g:layoutTitle default="Settings"/></title>
 		<g:layoutHead />
+		<r:require module="settings"/>
 		<g:render template="/includes"/>
 	</head>
 	<body id="settings-tab">
@@ -23,5 +24,6 @@
 				<g:layoutBody />
 			</div>
 		</div>
+		<r:layoutResources/>
 	</body>
 </html>

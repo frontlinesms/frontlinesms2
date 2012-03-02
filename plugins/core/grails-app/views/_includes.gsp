@@ -1,6 +1,5 @@
 <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms2.plugin')}" type="image/x-icon" />
-<g:javascript library="jquery" plugin="jquery"/>
-<jqui:resources theme="medium" plugin="randomtextosolvebug"/>
+<r:layoutResources/>
 <g:javascript>
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
@@ -8,7 +7,6 @@
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 </g:javascript>
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
-	<g:javascript src="jquery.ui.selectmenu.js"/>
 	<g:javascript>
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
@@ -22,10 +20,3 @@
 		$.fn.selectmenu = function() {}
 	</g:javascript>
 </g:else>
-
-<g:javascript src="application.js"/>
-<g:javascript src="mediumPopup.js"/>
-<g:javascript src="smallPopup.js"/>
-<g:javascript src="pagination.js"/>
-<g:render template="/css"/>
-
