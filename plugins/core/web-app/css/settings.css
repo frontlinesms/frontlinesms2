@@ -18,7 +18,23 @@
     width: 83%;
     padding: 90px 0 45px 0;
 }
-
+#import{
+	display: block;
+	width: 100%;
+	padding: 0 30px;
+}
+.importinfo{
+	font-size: 12;
+	padding: 3px;
+}
+#general{
+	position: absolute;
+	margin-top: 50px;
+	z-index: 1;
+	overflow: hidden;
+	width: 83%;
+	padding: 90px 0 45px 0;
+}
 #connections ul{
 	padding: 0;
 }
