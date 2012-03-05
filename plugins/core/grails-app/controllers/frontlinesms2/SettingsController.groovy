@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 
 class SettingsController {
 	def index = {
-		redirect(action:'connections')
+		redirect(action:'general')
 	}
 	
 	def connections = {
@@ -42,6 +42,10 @@ class SettingsController {
     	println logEntryList
     	[logEntryList: logEntryList,
     		logEntryTotal: logEntryList.size()]
+	}
+	
+	def general = {
+	
 	}
 	
 	private def withFconnection(Closure c) {

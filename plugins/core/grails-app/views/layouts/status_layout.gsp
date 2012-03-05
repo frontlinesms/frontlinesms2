@@ -3,6 +3,7 @@
 	<head>
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead />
+		<r:require module="status"/>
 		<g:render template="/includes"/>
 	</head>
 	<body id="status-tab">
@@ -19,5 +20,6 @@
 				<g:layoutBody />
 			</div>
 		</div>
+		<r:layoutResources/>
 	</body>
 </html>

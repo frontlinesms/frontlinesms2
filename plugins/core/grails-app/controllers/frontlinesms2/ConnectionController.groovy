@@ -33,7 +33,7 @@ class ConnectionController {
 				flash.message = LogEntry.log("${message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
 				redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 			} else {
-				flash.message = LogEntry.log("fail!  ${fconnectionInstance.errors}")
+				flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
 				redirect(controller:'settings', action: "connections", params: params)
 			}
 		}
@@ -48,7 +48,7 @@ class ConnectionController {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
 			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
-			flash.message = LogEntry.log("fail!  ${fconnectionInstance.errors}")
+			flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
 			redirect(controller:'settings', action: "connections", params: params)
 		}
 	}
@@ -57,10 +57,10 @@ class ConnectionController {
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save(flush: true)) {
-			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
+			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
 			forward(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 		} else {
-			params.flashMessage = LogEntry.log("fail!  ${fconnectionInstance.errors}")
+			params.flashMessage = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
 			redirect(controller:'settings', action: "connections", params: params)
 		}
 	}
@@ -74,7 +74,7 @@ class ConnectionController {
 		withFconnection { c ->
 			println "Destroying connection: $c"
 			fconnectionService.destroyRoutes(c)
-			flash.message = LogEntry.log("Destroy route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
+			flash.message = LogEntry.log("${message(code: 'connection.route.destroyed', args: [c.camelConsumerAddress, c.camelProducerAddress])}")
 			redirect(controller:'settings', action:'connections', id:c.id)
 		}
 	}
@@ -94,7 +94,7 @@ class ConnectionController {
 			def message = messageSendService.getMessagesToSend(params)
 			println "passing arguments ${message.class}, ${connection.class}"
 			messageSendService.send(message, connection)
-			flash.message = LogEntry.log("Test message successfully sent to ${params.addresses} using ${connection.name}")
+			flash.message = LogEntry.log("${message(code: 'connection.test.sent', args:[params.addresses, connection.name])}")
 			redirect (controller:'settings', action:'show_connections', id:params.id)
 		}
 	}

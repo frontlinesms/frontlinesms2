@@ -1,9 +1,3 @@
-@import url("buttons.css");
-@import url("contacts.css");
-@import url("settings.css");
-@import url("status.css");
-@import url("header.css");
-
 html {
 	height: 100%;
 	width: 100%;
@@ -83,9 +77,6 @@ a {
 
 /*Main*/
 #logo {
-       background-image: url('../images/logo.png');
-       background-repeat: no-repeat;
-       background-position: left;
        height: 40px;
        width: 36px;
 }
@@ -137,28 +128,7 @@ a {
     padding: 5px 0;
     margin: 0;
 }
-#sidebar .sublist li:hover{
-    background-color: #e5eff3;
-}
-#sidebar .sublist li:active{
-    background-color: #D8E8EF;
-}
-#sidebar .sublist li.create:hover{
-    background-color: white;
-}
-#sidebar .sublist a:hover{
-    background-color: #e5eff3;
-}
-#sidebar .sublist a:active{
-    background-color: #D8E8EF;
-}
-#sidebar .sublist a.create:hover{
-    background-color: white;
-}
 
-#sidebar .sublist li.active-section{
-    background-color: #D8E8EF;
-}
 .list-title{
     background-repeat: no-repeat;
 }
@@ -281,12 +251,11 @@ a {
     min-height: 200px;
     height: 200px;
     padding: 0 17px;
-    background-color: #D8E8EF;
 }
 
 .section-header .message-title h3, .section-header .activity-title h3, .section-header h3{
     text-transform: uppercase;
-    padding:12px 0;
+    padding:10px 0;
     padding-left: 28px;
     margin: 0;
     background-repeat: no-repeat;
@@ -345,8 +314,6 @@ a {
 .section-header .activity-title td{
 	padding: 0 25px;
 	font-size: 11px;
-}
-.section-header .activity-title #activity-details #poll-sent{
 }
 .section-header .activity-title #activity-details #poll-sent{
 	font-size: 10px;
@@ -509,7 +476,6 @@ a {
 #new-message-notification {
 	text-align: center;
 	min-height: 21px;
-	background-color: rgba(192, 50, 131, 0.3);
 	z-index: 100;
 }
 
@@ -637,17 +603,17 @@ a {
 	margin-top: 5px;
 }
 
-@keyframes newMessage {
-	from {background: rgba(192, 50, 131, 0.3);}
-	to {background: white;}
+.sorted.asc {
+	background-image: url('../images/buttons/down_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
 }
-@-moz-keyframes newMessage /* Firefox */ {
-	from {background: rgba(192, 50, 131, 0.3);}
-	to {background: white;}
-}
-@-webkit-keyframes newMessage /* Safari and Chrome */ {
-	from {background: rgba(192, 50, 131, 0.3);}
-	to {background: white;}
+.sorted.desc {
+	background-image: url('../images/buttons/up_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
 }
 
 #new-message-notification a{
@@ -691,12 +657,7 @@ animation: newMessage 2s;
     text-decoration: inherit;
     color: inherit;
 }
-#message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
-    background-color: #e5eff3;
-}
-#message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
-    background-color: #D8E8EF;
-}
+
 #message-list .folderOwner {
 	background-image: url('../images/icons/folders.png');
     background-repeat: no-repeat;
@@ -721,12 +682,7 @@ animation: newMessage 2s;
 .message-preview-star a.starred{
     background-image: url('../images/icons/star_on.png');
 }
-#message-list tbody tr:hover {
-    background-color: #e5eff3;
-}
-#message-list tbody tr:active {
-    background-color: #D8E8EF;
-}
+
 #message-list a, #folder-list a, #activity-list a{
     display: block;
 }
@@ -738,7 +694,6 @@ animation: newMessage 2s;
 	right: 0;
 	width: 350px;
     float:right;
-    background-color: #D8E8EF;
     overflow: auto;
 }
 #single-message, #multiple-messages{
@@ -765,7 +720,19 @@ animation: newMessage 2s;
     padding: 17px;
 }
 
-#message-detail-sender, #message-detail-date{
+#message-detail-sender{
+	display: inline-block;
+	margin: 0;
+	min-width: 130px;
+}
+#message-detail-sender a {
+	float: right;
+	background-image: url('../images/icons/add.png');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+}
+ #message-detail-date{
 	margin: 0;
 }
 #message-detail-owner{
@@ -866,12 +833,7 @@ animation: newMessage 2s;
 	min-width: 80px;
 	width: 6.2%
 }
-#dropdown_options:hover{
-	background-color: #e5eff3;
-	cursor: pointer;
-}
-#dropdown_options:active{
-	background-color: #D8E8EF;
+#dropdown_options:hover, #dropdown_options:active{
 	cursor: pointer;
 }
 #btn_forward{
@@ -889,10 +851,8 @@ animation: newMessage 2s;
     bottom: 0;
     width: 100%;
     height:100%;
-    background-color: #D8E8EF;
 }
 #pollGraph{
-	background-color: #D8E8EF;
     position: fixed;
     bottom: 0;
     width: 85%;

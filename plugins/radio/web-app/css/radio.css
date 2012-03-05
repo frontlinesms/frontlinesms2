@@ -1,88 +1,37 @@
-#logo {
-       background-image: url('../images/logo_radio.png');
+#on-air {
+	color: #DFDFDF;
+}
+#on-air.onAirIsActive, .onAirIsActive {
+	color: #9433C7;
 }
 
-.onAirIsActive {
-       color: #C03283
+.message-list-separator {
+	background-color: #DFDFDF;
+	font-weight: bold;
+}
+.message-list-separator:hover {
+	background-color: #DFDFDF;
+}
+.message-list-separator td{
+	padding: 0 25px;
+	height: 28px;
 }
 
-#new-message-notification {
-	background-color: rgba(192, 50, 131, 0.3);
+#radio-actions, #radio-actions li {
+	display: inline;
+	text-transform: none;
+	font-weight: normal;
+	font-size: normal;
 }
-.tall-header #new-message-notification {
-	background-color: rgba(192, 50, 131, 0.3);
-}
-
-#message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
-    background-color: #E0F0DE;
-}
-
-#message-list .message-preview:hover {
-    background-color: #E0F0DE;
-   	padding: 0;
-    margin: 0;
+#radio-actions .btn {
+	padding: 2px 10px 0 10px;
+	height: 23px;
 }
 
-#message-detail{
-    position: fixed;
-    float:right;
-    right: 0;
-    width: 25%;
-    max-width: 35%;
-    min-width: 196px;
-    height: 96%;
-    margin: 0;
-    top: 154px;
-    background-color: #E0F0DE;
+#sidebar .sublist #radio-show-polls li {
+	padding-left: 17px;
 }
-
-#dropdown_options:hover{
+.secondarySelected {
 	background-color: #E0F0DE;
-	cursor: pointer;
-}
-#dropdown_options:active{
-	background-color: #D8E8EF;
-	cursor: pointer;
 }
 
-#poll-details{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height:100%;
-    background-color: #E0F0DE;
-}
-
-#pollGraph{
-	background-color: #E0F0DE;
-    position: fixed;
-    bottom: 0;
-    width: 85%;
-    height:60%;
-    padding-bottom: 43px;
-}
-
-#sidebar .sublist li:hover{
-    background-color: #e5eff3;
-}
-#sidebar .sublist li.create:hover{
-    background-color: white;
-}
-#sidebar .sublist a:hover{
-    background-color: #e5eff3;
-}
-#sidebar .sublist a.create:hover{
-    background-color: white;
-}
-
-#sidebar .sublist li.active-section{
-    background-color:#E0F0DE;
-}
-
-.section-header .activity-title{
-    margin: 0;
-    min-height: 200px;
-    height: 200px;
-    padding: 0 17px;
-    background-color: #E0F0DE;
-}
