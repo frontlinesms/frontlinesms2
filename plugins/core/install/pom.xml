@@ -14,6 +14,14 @@
 		<build.name>FrontlineSMS2.${build.version}</build.name>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>frontlinesms.repo</id>
+			<name>FrontlineSMS Maven repository</name>
+			<url>http://dev.frontlinesms.com/m2repo</url>
+		</repository>
+	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>googlecode-maven-install4j</id>
@@ -28,8 +36,8 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<descriptors>
-						<!-- Windows build for install4j -->
-						<descriptor>src/assemble/windows-install4j.xml</descriptor>
+						<!-- common build for install4j -->
+						<descriptor>src/assemble/install4j.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>
@@ -184,6 +192,12 @@
 			<groupId>org.eclipse.jetty.aggregate</groupId>
 			<artifactId>jetty-webapp</artifactId>
 			<version>${jetty.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.install4j</groupId>
+			<artifactId>i4jruntime</artifactId>
+			<version>5</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -52,7 +52,7 @@ public class TrayThingy implements Listener {
 		d(event);
 		cause.printStackTrace();
 	}
-	public void lifeCycleStarted(LifeCycle event) { d(event); launchBrowser(); }
+	public void lifeCycleStarted(LifeCycle event) { d(event); launchBrowser(); removeSplashScreen();  }
 	public void lifeCycleStarting(LifeCycle event) { d(event); }
 	public void lifeCycleStopped(LifeCycle event) { d(event); }
 	public void lifeCycleStopping(LifeCycle event) { d(event); }
@@ -110,6 +110,14 @@ public class TrayThingy implements Listener {
 	
 	private void launchBrowser() {
 		openWebBrowser(m.getUrl());
+	}
+
+	private void removeSplashScreen() {
+		try {
+			com.install4j.api.launcher.SplashScreen.hide();
+		} catch(com.install4j.api.launcher.SplashScreen.ConnectionException ex) {
+			// No idea what to do here - presumably there's now a zombie splash screen
+		}
 	}
 }
 
