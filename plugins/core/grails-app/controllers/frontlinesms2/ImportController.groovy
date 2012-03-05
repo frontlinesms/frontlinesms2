@@ -36,66 +36,73 @@ class ImportController {
 		uploadedCSVFile = uploadCSVFile()
 
 		if ( uploadedCSVFile != "" ) {
-			new File(uploadedCSVFile).eachCsvLine { tokens ->
-				def y = 0
-				def contactName = ""
-				def mobileNo = ""
-				def otherPhoneNo = ""
-				def email = ""
-				def notes = ""
-				def groups = ""
+			new File(uploadedCSVFile).eachLine { //csvLine ->
+				
+				def contactProperties = [:]
 				def customField = [:]
-				def importedGroup = []
-			
+				def importedGroup = ""
+				def csvLine = it.split(",")
+
 				if ( x!=0 ) {
-					tokens.each {							
-						if ( headerList[y].trim()!="Name" && headerList[y].trim()!="Mobile Number" && headerList[y].trim()!="Other Mobile Number" && headerList[y].trim()!="E-mail Address" && headerList[y].trim()!="Notes" && headerList[y].trim()!="Group(s)") {
-							customField.put(headerList[y].trim(), tokens[y].trim())
+					def y = 0
+					csvLine.each {	
+						if ( headerList[y].trim()!='"Name"' && headerList[y].trim()!='"Mobile Number"' && headerList[y].trim()!='"Other Mobile Number"' && headerList[y].trim()!='"E-mail Address"' && headerList[y].trim()!='"Notes"' && headerList[y].trim()!='"Group(s)"' ) {
+							customField.put(headerList[y].trim().replace('"',""), csvLine[y].trim().replace('"',""))
 						} else {
-							if (headerList[y].trim()=="Group(s)") {
-								def nestedgrp = tokens[y].trim()
-								def spliednestedgrp =  nestedgrp.split("/")
-								spliednestedgrp.each { if (it!="") importedGroup.add(it) }					
+							if (headerList[y]=='"Group(s)"' ) {
+								importedGroup = csvLine[y].trim().replace('"',"")					
 							} else {
-								if ( headerList[y].trim()=="Name" ) {
-									contactName = tokens[y].trim()
-								} else if ( headerList[y].trim()=="Mobile Number" ) {
-									mobileNo = tokens[y].trim()
-								} else if ( headerList[y].trim()=="Other Mobile Number" ) {
-									otherPhoneNo = tokens[y].trim()
-								} else if ( headerList[y].trim()=="E-mail Address" ) {
-									email = tokens[y].trim()
-								} else if ( headerList[y].trim()=="Notes" ) {
-									notes = tokens[y].trim()
+								if ( headerList[y]=='"Name"' ) {
+									contactProperties.name = csvLine[y].trim().replace('"',"")
+								} else if ( headerList[y]=='"Mobile Number"' ) {
+									contactProperties.primaryMobile = csvLine[y].trim().replace('"',"")
+								} else if ( headerList[y]=='"Other Mobile Number"' ) {
+									contactProperties.secondaryMobile = csvLine[y].trim().replace('"',"")
+								} else if ( headerList[y]=='"E-mail Address"' ) {
+									def email = csvLine[y].trim().replace('"',"")
+									if(email != '""') contactProperties.email = email
+								} else if ( headerList[y]=='"Notes"' ) {
+									contactProperties.notes = csvLine[y].trim().replace('"',"")
 								} 
 							}
 						}
 						y++
-						if (y==tokens.length) {
-							def contact = new Contact(name: contactName, primaryMobile: mobileNo, secondaryMobile: otherPhoneNo, email: email, notes: notes)
-							if (contact.save()) {
+						
+						if (y==csvLine.length) {
+							def contact = new Contact(contactProperties)
+							if (contact.save(failOnError: true)) {
 								savedCount++ 
 								customField.eachWithIndex {
 									new CustomField(name: it.key, value: customField.get(it.key), contact: contact).save()
 								}
-								def longGroup = ""
-								importedGroup.each {
-									def flsmsGroup = Group.findByName(it)
-									if ( longGroup == "" ) { longGroup=it } else { longGroup=longGroup+ "-" +it }
-									
-									if ( flsmsGroup!=null ) { contact.addToGroups(flsmsGroup)
-									} else {
-										createGroup(it)
-										contact.addToGroups(Group.findByName(it))
-									}
-									
-									if (longGroup!=it && longGroup!="") {
-										def flsmsGroupLong = Group.findByName(longGroup)
-										if (flsmsGroupLong!=null) {
-											contact.addToGroups(flsmsGroupLong)
-										} else {
-											createGroup(longGroup)
-											contact.addToGroups(Group.findByName(longGroup))
+								def contactGroups = importedGroup.split("\\\\")
+								def nestedGroup = []
+								contactGroups.each {
+									if ( !it.equals("") ) nestedGroup.add(it)
+								}
+								def singleImportedGroup = []
+								nestedGroup.each {
+									singleImportedGroup = it.split("/")
+									def longGroup = ""
+									singleImportedGroup.each {
+										if ( !it.equals("") ) {
+											def flsmsGroup = Group.findByName(it)
+											if ( longGroup == "" ) { longGroup=it } else { longGroup=longGroup+ "-" +it }
+											
+											if ( flsmsGroup!=null ) { contact.addToGroups(flsmsGroup)
+											} else {
+												createGroup(it)
+												contact.addToGroups(Group.findByName(it))
+											}
+											if ( !longGroup.equals(it) && !longGroup.equals("") ) {
+												def flsmsGroupLong = Group.findByName(longGroup)
+												if (flsmsGroupLong!=null) {
+													contact.addToGroups(flsmsGroupLong)
+												} else {
+													createGroup(longGroup)
+													contact.addToGroups(Group.findByName(longGroup))
+												}
+											}
 										}
 									}
 								}
@@ -105,8 +112,8 @@ class ImportController {
 						}
 					}
 				} else {
-					headerList = tokens
-				}		
+					headerList = csvLine
+				}	
 				x++
 			}
 			userDir.deleteDir()
