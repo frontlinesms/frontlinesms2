@@ -5,6 +5,8 @@ class SmslibFconnection extends Fconnection {
 
 	String port
 	int baud
+	String serial
+	String imsi
 	String pin
 	boolean allMessages = true
 
