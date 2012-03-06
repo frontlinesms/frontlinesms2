@@ -59,44 +59,38 @@ function updateConfirmationMessage() {
 		var type = $("#type-list").find("input[checked=checked]").val();		
 	</g:else>
 	
+	function setConfirmation(fieldName) {
+		var val = $('#' + type + '-form #' + fieldName).val();
+		$("#confirm-" + fieldName).text(val);
+	}
+	function setSecretConfirmation(fieldName) {
+		var val = $('#' + type + '-form #' + fieldName).val();
+		val = val&&val.length? '****': 'None';
+		$("#confirm-" + fieldName).text(val);
+	}
+	$("#confirm-type").text(type);
+
 	if(type == 'smslib') {
 		$("#email-confirm").hide();
 		$("#smslib-confirm").show();
-		var name = $('#' + type + '-form #name').val();
-		var port = $('#' + type + '-form #port').val();
-		var baud = $('#' + type + '-form #baud').val();
-		$("#confirm-name").text(name);
-		$("#confirm-type").text('smslib');
-		$("#confirm-port").text(port);
-		$("#confirm-baud").text(baud);
-		if ($('#' + type + '-form #pin').val())
-			$("#confirm-pin").text('****');
-		else
-			$("#confirm-pin").text('None');
 		
+		setConfirmation('name');
+		setConfirmation('port');
+		setConfirmation('baud');
+		setConfirmation('imsi');
+		setConfirmation('serial');
+		setSecretConfirmation('pin');
 	} else if (type == 'email') {
 		$("#smslib-confirm").hide();
 		$("#email-confirm").show();
+		
 		var name = $('#' + type + '-form #email-name').val();
-		var receiveProtocol = $('#' + type + '-form #receiveProtocol').val();
-		var serverName = $('#' + type + '-form #serverName').val();
-		var serverPort = $('#' + type + '-form #serverPort').val();
-		var username = $('#' + type + '-form #username').val();
 		$("#confirm-name").text(name);
-		$("#confirm-type").text('email');
-		$("#confirm-protocol").text(receiveProtocol);
-		$("#confirm-server-name").text(serverName);
-		$("#confirm-server-port").text(serverPort);
-		$("#confirm-username").text(username);
-		if ($('#' + type + '-form #password').val() && $('#' + type + '-form #password').val() != '') {
-			var passwordLength = $('#' + type + '-form #password').val().length;
-			var passwordAsterics = '*';
-			var i = 1;
-			for(i = 1; i < passwordLength; i++)
-				passwordAsterics += '*';
-			$("#confirm-password").text(passwordAsterics);
-		} else
-			$("#confirm-password").text('None');
+		setConfirmation('receiveProtocol');
+		setConfirmation('serverName');
+		setConfirmation('serverPort');
+		setConfirmation('username');
+		setSecretConfirmation('password');
 	}
 }
 </g:javascript>

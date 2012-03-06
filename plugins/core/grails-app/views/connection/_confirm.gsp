@@ -23,19 +23,27 @@
 			<td class="bold">Pin:</td>
 			<td id="confirm-pin"></td>
 		</tr>
+		<tr>
+			<td class="bold">SIM IMSI:</td>
+			<td id="confirm-imsi"></td>
+		</tr>
+		<tr>
+			<td class="bold">Device Serial #:</td>
+			<td id="confirm-serial"></td>
+		</tr>
 	</table>
 	<table id="email-confirm">
 		<tr>
 			<td class="bold">Protocol:</td>
-			<td id="confirm-protocol"></td>
+			<td id="confirm-receiveProtocol"></td>
 		</tr>
 		<tr>
 			<td class="bold">Server Name</td>
-			<td id="confirm-server-name"></td>
+			<td id="confirm-serverName"></td>
 		</tr>
 		<tr>
 			<td class="bold">Server Port:</td>
-			<td id="confirm-server-port"></td>
+			<td id="confirm-serverPort"></td>
 		</tr>
 		<tr>
 			<td class="bold">Username:</td>

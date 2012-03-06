@@ -21,6 +21,16 @@
 				<label for="pin">PIN</label>
 				<g:passwordField name="pin" value="${fconnectionInstance?.pin}" />
 			</div>
+		
+			<div class="field">
+				<label for="imsi">SIM IMSI</label>
+				<g:textField name="imsi" value="${fconnectionInstance?.imsi}" />
+			</div>
+			
+			<div class="field">
+				<label for="serial">Device Serial #</label>
+				<g:textField name="serial" value="${fconnectionInstance?.serial}" />
+			</div>
 		</div>
 	</g:if>
 	<g:if test="${fconnectionInstance instanceof frontlinesms2.EmailFconnection || action == 'save'}">
