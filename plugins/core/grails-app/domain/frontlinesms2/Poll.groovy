@@ -95,15 +95,26 @@ class Poll extends Activity {
 		choices.each { k,v -> 
 			if(poll.responses*.key.contains(k)) {
 				def response  = PollResponse.findByKey(k)
-				response.messages.each { message ->
-					poll.responses.find { it.value == 'Unknown' }.messages.add(message)
+				if(response.value != v) {
+					poll.deleteResponse(response)
+					poll.addToResponses(new PollResponse(value: v, key:k))
 				}
-				poll.removeFromResponses(response)
-				response.delete()
+			} else {
+				if(v?.trim()) poll.addToResponses(new PollResponse(value: v, key:k))	
 			}
-			if(v) poll.addToResponses(new PollResponse(value: v, key:k))
+			
 		}
+		
 		poll.save(flush: true) ?: poll
+	}
+	
+	Poll deleteResponse(PollResponse response) {
+		response.messages.findAll { message ->
+			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+		}
+		this.removeFromResponses(response)
+		response.delete()
+		this
 	}
 		
 	def getType() {

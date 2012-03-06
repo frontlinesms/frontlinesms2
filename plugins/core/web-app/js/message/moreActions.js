@@ -4,6 +4,8 @@ $(document).ready(function() {
 			deleteAction();
 		else if($(this).find('option:selected').val() == 'rename')
 			renameAction();
+		else if($(this).find('option:selected').val() == 'edit')
+			editAction();
 		else if($(this).find('option:selected').val() == 'export')
 			exportAction();
 		else if($(this).find('option:selected').val() == 'radioShow')
@@ -21,6 +23,18 @@ function renameAction() {
 		data: {ownerId: $("#ownerId").val()},
 		success: function(data) {
 			launchSmallPopup('Rename ' + messageSection, data, 'Rename');
+	}})
+}
+
+function editAction() {
+	var messageSection = $("#messageSection").val();
+	var title = 'Edit ' + messageSection;
+	$.ajax({
+		type:'GET',
+		url: url_root + messageSection + '/edit',
+		data: {id: $("#ownerId").val()},
+		success: function(data) {
+			launchMediumWizard(title, data, "Edit");
 	}})
 }
 

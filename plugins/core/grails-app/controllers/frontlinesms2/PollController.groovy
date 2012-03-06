@@ -16,7 +16,7 @@ class PollController extends ActivityController {
 			pollInstance.save()
 			flash.message = "Poll has been saved"
 		}
-		[ownerId: pollInstance.id]
+		[ownerId: pollInstance.id, action:"saved"]
 	}
 	
 	def sendReply = {
@@ -44,9 +44,9 @@ class PollController extends ActivityController {
 			pollInstance.save()
 			flash.message = "Poll has been updated and message(s) has been queued to send"
 		} else {
-			pollInstance.save()
+			pollInstance.save(failOnError:true)
 			flash.message = "Poll has been updated"
 		}
-		[ownerId: pollInstance.id]
+		render view:"../poll/save", model:[ownerId: pollInstance.id, action:"updated"]
 	}
 }

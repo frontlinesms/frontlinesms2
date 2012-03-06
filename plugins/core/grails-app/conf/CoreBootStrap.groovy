@@ -172,7 +172,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initPolls() {
-		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
+		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
 				Poll.createPoll(name: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")].each() {
 			it.save(failOnError:true, flush:true)
 		}

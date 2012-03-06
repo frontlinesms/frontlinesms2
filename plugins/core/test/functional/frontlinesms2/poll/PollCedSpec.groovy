@@ -410,6 +410,49 @@ class PollCedSpec extends PollBaseSpec {
 			!Poll.findAll()
 	}
 	
+	def "user can edit an existing poll"() {
+		setup:
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		when:
+			to PageMessageInbox
+			$("a", text: "Who is badder? poll").click()
+		then:
+			waitFor { title == "Poll" }
+		when:
+			$(".more-actions").value("edit").click()
+		then:
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			at PagePollEdit
+			pollForm.question == 'question'
+			pollForm.'poll-type' == "multiple"
+		when:
+			pollForm.question = "Who is worse?"
+			pollForm."dontSendMessage" = false
+			next.click()
+		then:
+			waitFor { responseListTab.displayed }
+			pollForm.choiceA == "Michael-Jackson"
+			pollForm.choiceB == "Chuck-Norris"
+		when:
+			pollForm.choiceC = "Bruce Vandam"
+			next.click()
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			goToTab(6)
+			pollForm.address = '1234567890'
+			addManualAddress.click()
+		then:
+			waitFor { $('.manual').displayed }
+		when:
+			goToTab(7)
+			pollForm.name == 'Who is badder?'
+			done.click()
+			poll = Poll.findByName('Who is badder?')
+		then:
+			waitFor(10) { Poll.findByName("Who is badder?").refresh().responses*.value.containsAll(["Michael-Jackson", "Chuck-Norris", "Bruce Vandam"]) }		
+	}
+	
 	def deletePoll() {
 		def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
@@ -426,7 +469,7 @@ class PollCedSpec extends PollBaseSpec {
 		waitFor { createActivityDialog.displayed }
 		$("input", class: "poll").click()
 		$("#submit").click()
-		waitFor { at PagePollCreate }
+		waitFor(10) { at PagePollCreate }
 		pollForm.'poll-type' = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage

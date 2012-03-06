@@ -13,28 +13,31 @@
 		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
 	</ol>
 
-	<g:render template="new_poll_form"/>
+	<g:render template="/poll/new_poll_form"/>
 </div>
 
 <g:javascript>
 	function initializePopup() {
+		<g:if test="activityInstanceToEdit">
+			$("#autoReplyText").trigger("keyup");
+		</g:if>
 		
-		disableTab(1);
 		highlightPollResponses();
-
+		
 		/* Poll type tab */
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
-				if ($("input[name='poll-type']:checked").val() == "standard")
-					$('#tabs').tabs("disable", 1);
-				else
-					$('#tabs').tabs("enable", 1);
+				if ($("input[name='poll-type']:checked").val() == "standard") {
+					disableTab(1);
+				}
+				else {
+					enableTab(1);
+				}
 				var isValid = !isElementEmpty($("#question"));
 				if(!isValid)
 					$("#question").addClass('error');
 				return isValid;
-
 			}
 		});
 
@@ -110,6 +113,7 @@
 			if(enabled) $('#poll-keyword').removeAttr("disabled");
 			else $('#poll-keyword').attr("disabled", "disabled");
 		});
+		tabValidates($("#tabs-1"));
 	}
 
 	function updateConfirmationMessage() {
@@ -146,9 +150,9 @@
 	}
 
 	function highlightPollResponses() {
-		$(".choices").each(function() {
-			if(this.id != "choiceA" && this.id != "choiceB")
-				$(this).attr('disabled', 'disabled');
+		console.log("called")
+		$(".choices").each(function(index) {
+				
 			var changeHandler = function() {
 				if(this.id != "choiceA" && this.id != "choiceE") {
 					var nextLabel = $(this).parent().next().find('label');
