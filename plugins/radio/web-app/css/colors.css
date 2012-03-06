@@ -1,0 +1,101 @@
+#header{
+    border-top: 3px solid #C79CDD;
+}
+
+#logo {
+	background-image: url('../images/logo_radio.png');
+	background-repeat: no-repeat;
+	background-position: left;
+}
+
+.selected{	
+    background-color: rgba(194, 219, 191, 0.65);
+}
+
+#secondary-nav a{
+    border-top: 3px solid #C79CDD;
+}
+#secondary-nav a:hover{
+    background-color:#e0e0e0;
+    border-top: 3px solid #693F80;
+}
+
+#notifications div{
+	background-color: rgba(199, 156, 221, 0.6);
+}
+
+#sidebar .sublist li:hover{
+    background-color: #E0F0DE;
+}
+#sidebar .sublist li:active{
+    background-color: #C2DBBF;
+}
+#sidebar .sublist li.create:hover{
+    background-color: white;
+}
+#sidebar .sublist a:hover{
+    background-color: #E0F0DE;
+}
+#sidebar .sublist a:active{
+    background-color: #C2DBBF;
+}
+#sidebar .sublist a.create:hover{
+    background-color: white;
+}
+
+#inbox-indicator{
+	background-color: #693F80;
+}
+
+@keyframes newMessage {
+	from {background: rgba(199, 156, 221, 0.6);}
+	to {background: white;}
+}
+@-moz-keyframes newMessage /* Firefox */ {
+	from {background: rgba(199, 156, 221, 0.6);}
+	to {background: white;}
+}
+@-webkit-keyframes newMessage /* Safari and Chrome */ {
+	from {background: rgba(199, 156, 221, 0.6);}
+	to {background: white;}
+}
+#new-message-notification {
+	background-color: rgba(199, 156, 221, 0.6);
+}
+
+.section-header .activity-title{
+    background-color: rgba(194, 219, 191, 0.65);
+}
+
+#message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
+    background-color: #E0F0DE;
+}
+#message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
+    background-color: #D8E8EF;
+}
+
+#message-detail{
+    background-color: rgba(194, 219, 191, 0.65);
+}
+
+#poll-details{
+    background-color: rgba(194, 219, 191, 0.65);
+}
+#pollGraph{
+	background-color: #E0F0DE;
+}
+
+#contact-editor{
+    background-color: #E0F0DE;
+}
+
+#contact-list li:hover{
+    background-color: #E0F0DE;
+}
+
+#dropdown_options:hover{
+	background-color: #E0F0DE;
+}
+#dropdown_options:active{
+	background-color: #C2DBBF;
+}

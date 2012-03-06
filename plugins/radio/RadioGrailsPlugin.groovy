@@ -5,9 +5,9 @@ class RadioGrailsPlugin {
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "1.3.7 > *"
     // the other plugins this plugin depends on
-    def dependsOn = ["core":"0.1 > *"]
+    def dependsOn = ["core":"0.1-SNAPSHOT"]
     // resources that are excluded from plugin packaging
-    def pluginExcludes = ["grails-app/views/error.gsp"]
+    // def pluginExcludes = ["grails-app/views/error.gsp"]
 
     // TODO Fill in these fields
     def author = "FrontlineSMS team"

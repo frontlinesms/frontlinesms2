@@ -1,11 +1,11 @@
 package frontlinesms2
 
-import net.frontlinesms.messaging.AllModemsDetector
+import net.frontlinesms.messaging.*
 
-class DeviceDetectionService {
+class DeviceDetectionService implements ATDeviceDetectorListener {
 	static transactional = true
 	
-	def detector = new AllModemsDetector()
+	def detector = new AllModemsDetector(listener: this)
 
 	def detect() {
 		detector.refresh()
@@ -32,5 +32,11 @@ class DeviceDetectionService {
 			detectorThread.interrupt()
 			detectorThread.join()
 		}
+	}
+	
+	void handleDetectionCompleted(ATDeviceDetector detector) {
+		println "#################################################"
+		println "deviceDetectionService.handleDetectionCompleted()"
+		println "#################################################"
 	}
 }
