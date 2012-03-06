@@ -12,7 +12,9 @@ class SmslibFconnection extends Fconnection {
 
 	static constraints = {
 		port(nullable: false, blank: false)
+		imsi(nullable: true)
 		pin(nullable: true)
+		serial(nullable: true)
 	}
 
 	String type() { 'Phone/Modem' }
