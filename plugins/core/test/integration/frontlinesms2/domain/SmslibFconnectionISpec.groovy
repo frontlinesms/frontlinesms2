@@ -8,7 +8,8 @@ class SmslibFconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def "find for detector should be #match in some complex situation"() {
 		given:
-			def c = SmslibFconnection.build(port:port, imsi:savedImsi, serial:savedSerial).save(failOnError:true)
+			def c = new SmslibFconnection(name: 'test', port:port, imsi:savedImsi,
+					serial:savedSerial).save(failOnError:true)
 		expect:
 			(findForDetector(port, detectedImsi, detectedSerial)?.id == c.id) == match
 		where:
