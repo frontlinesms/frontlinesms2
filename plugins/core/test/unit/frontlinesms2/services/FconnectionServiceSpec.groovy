@@ -11,6 +11,8 @@ class FconnectionServiceSpec extends UnitSpec {
 
 	def setup() {
 		mockLogging(FconnectionService)
+		mockDomain(LogEntry)
+		mockDomain(SystemNotification)
 		service = new FconnectionService()
 		context = Mock(CamelContext)
 		service.camelContext = context
@@ -44,8 +46,6 @@ class FconnectionServiceSpec extends UnitSpec {
 		given:
 			final String PORT = 'COM77'
 			DeviceDetectionService detector = Mock()
-			mockDomain(LogEntry)
-			mockDomain(SystemNotification)
 			service.deviceDetectionService = detector
 			Fconnection f = new SmslibFconnection(port:PORT)
 		when:
@@ -57,9 +57,7 @@ class FconnectionServiceSpec extends UnitSpec {
 	def 'creating a non-smslib route should not affect the device detector'() {
 		given:
 			DeviceDetectionService detector = Mock()
-			mockDomain(LogEntry)
 			service.deviceDetectionService = detector
-			mockDomain(SystemNotification)
 			Fconnection f = Mock()
 			f.getCamelProducerAddress() >> 'nothing'
 		when:
@@ -70,11 +68,17 @@ class FconnectionServiceSpec extends UnitSpec {
 
 	def 'Created routes have ids derived from supplied Fconnection id'() {
 		given:
-			def connected = new Fconnection(id:1)
+			def c = Mock(Fconnection)
+			c.id >> 1
+			c.camelConsumerAddress >> 'seda:camelConsumerAddress'
+			c.camelProducerAddress >> 'seda:camelProducerAddress'
 		when:
-			service.createRoutes(connected)
+			service.createRoutes(c)
 		then:
-			1 * context.addRouteDefinitions({it*.id == ['in-1', 'out-1']})
+			1 * context.addRouteDefinitions({
+				println "###Add route definitions called: $it"
+				println "### ids:${it*.id}"
+				it*.id.sort() == ['in-1', 'out-1']})
 	}
 }
 
