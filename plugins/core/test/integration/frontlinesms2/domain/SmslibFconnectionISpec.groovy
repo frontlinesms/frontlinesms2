@@ -10,7 +10,7 @@ class SmslibFconnectionISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def c = SmslibFconnection.build(port:port, imsi:savedImsi, serial:savedSerial).save(failOnError:true)
 		expect:
-			(findForDetector(port, detectedImsi, detectedSerial) == c) == match
+			(findForDetector(port, detectedImsi, detectedSerial)?.id == c.id) == match
 		where:
 			match | port       | savedImsi  |detectedImsi| savedSerial |detectedSerial
 			true  |'/dev/tty01'| null       |'0000000000'| null        |'11111111111'
