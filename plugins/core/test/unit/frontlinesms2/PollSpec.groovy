@@ -76,4 +76,52 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			p.keyword == null
 	}
+	
+	def "poll with auto-reply can be edited"() {
+		setup:
+			mockDomain(Poll)
+		when:
+			def poll = Poll.createPoll([name:"title", autoReplyText:"thanks for participaping", choiceA:"one", choiceB:"two"])
+		then:
+			poll.save()
+		when:
+			poll = Poll.editPoll(poll.id, [autoReplyText:"thanks for participating"])
+		then:
+			poll
+		when:
+			poll = Poll.editPoll(poll.id, [autoReplyText:null])
+		then:
+			poll
+		when:
+			poll = Poll.editPoll(poll.id, [autoReplyText:""])
+		then:
+			poll
+	}
+	
+	def "can edit poll keyword if no other poll with that keyword exists"() {
+		given:
+			mockDomain(Poll)
+			Poll poll1 = Poll.createPoll([name:"poll1", autoReplyText:"thanks for participaping", choiceA:"one", choiceB:"two", keyword:"test"])
+			def returnedPoll
+		when:
+			def poll2 = Poll.createPoll([name:"poll2",choiceA:"one", choiceB:"two", keyword:"testing"])
+		then:
+			poll2
+		when:
+			returnedPoll = Poll.editPoll(poll2.id, [keyword:"test"])
+		then:
+			returnedPoll.hasErrors()
+		when:
+			returnedPoll = Poll.editPoll(poll2.id, [keyword:"TEST"])
+		then:
+			returnedPoll.hasErrors()
+		when:
+			returnedPoll = Poll.editPoll(poll2.id, [keyword:"TesT"])
+		then:
+			returnedPoll.hasErrors()
+		when:
+			returnedPoll = Poll.editPoll(poll2.id, [keyword:"anotherkey"])
+		then:
+			!returnedPoll.hasErrors()
+	}
 }

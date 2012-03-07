@@ -3,8 +3,13 @@
 	<p class="info">When an incoming message is identified as a poll response, send a
 		message to the person who sent the response.
 	</p>
-	<g:checkBox name="enableAutoReply" />Send an automatic reply to poll responses
-	<g:textArea name="autoReplyText" rows="5" cols="40" disabled='disabled'/>
+	<g:checkBox name="enableAutoReply" checked="${activityInstanceToEdit?.autoReplyText as boolean}"/>Send an automatic reply to poll responses
+	<g:if test="${activityInstanceToEdit?.autoReplyText as boolean}">
+		<g:textArea name="autoReplyText" rows="5" cols="40" value="${activityInstanceToEdit?.autoReplyText ?:''}"/>
+	</g:if>
+	<g:else>
+		<g:textArea name="autoReplyText" rows="5" cols="40" disabled="true" value="${activityInstanceToEdit?.autoReplyText ?:''}"/>
+	</g:else>
 	<span class="hide character-count" id="reply-count">Characters remaining 160 (1 SMS message)</span> 
 </div>
 
@@ -20,6 +25,7 @@
 			$("#autoReplyText").removeClass('error');
 			$(".error-panel").hide();
 		}
-	})
+	});
+	
 	$("#autoReplyText").live("keyup", updateCount);
 </g:javascript>

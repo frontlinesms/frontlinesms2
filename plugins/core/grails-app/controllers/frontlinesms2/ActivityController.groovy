@@ -16,7 +16,18 @@ class ActivityController {
 			groupList:groupList]
 	}
 	
+	def edit = {
+		withActivity { activityInstance ->
+			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
+			def activityType = activityInstance.type
+			render view:"../$activityType/create", model:[contactList: Contact.list(),
+				groupList:groupList,
+				activityInstanceToEdit: activityInstance]
+		}
+	}
+	
 	def rename = {
+		
 	}
 	
 	def update = {
