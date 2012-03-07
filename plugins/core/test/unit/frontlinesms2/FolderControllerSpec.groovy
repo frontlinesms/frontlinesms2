@@ -7,6 +7,7 @@ class FolderControllerSpec extends ControllerSpec {
 	def setup() {
 		mockDomain(Folder)
 		mockDomain(Fmessage)
+		registerMetaClass(Fmessage)
 		Fmessage.metaClass.static.owned = { Folder f, Boolean b, Boolean c ->
 			Fmessage
 		}
