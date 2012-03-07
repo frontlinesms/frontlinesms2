@@ -13,7 +13,20 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 		println "# serial: $detector.serial"
 		def c = SmslibFconnection.findForDetector(detector).list()
 		println "# Found for detector: $c"
-		if(c) fconnectionService.createRoutes(c.get(0))
+		if(c) {
+			c = c.get(0)
+			def dirty
+			if(!c.serial) {
+				c.setSerial(detector.serial)
+				dirty = true
+			}
+			if(!c.imsi) {
+				c.setImsi(detector.imsi)
+				dirty = true
+			}
+			if(dirty) c.save()
+			fconnectionService.createRoutes(c)
+		}
 		println "#####################################################"
 	}
 }
