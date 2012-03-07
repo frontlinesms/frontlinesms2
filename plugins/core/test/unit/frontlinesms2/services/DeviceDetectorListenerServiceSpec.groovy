@@ -10,6 +10,7 @@ class DeviceDetectorListenerServiceSpec extends UnitSpec {
 	def fconnectionService
 	
 	def setup() {
+		registerMetaClass(SmslibFconnection)
 		service = new DeviceDetectorListenerService()
 		fconnectionService = Mock(FconnectionService)
 		service.fconnectionService = fconnectionService
