@@ -310,7 +310,9 @@ class CoreBootStrap {
 	}
 
 	private def initialiseMockSerial() {
-		dev_initMockSmslibFconnections()
+		if(Environment.current == Environment.DEVELOPMENT) {
+			dev_initMockSmslibFconnections()
+		}
 		
 		MockModemUtils.initialiseMockSerial([
 				MOCK95:new CommPortIdentifier("MOCK95", MockModemUtils.createMockPortHandler_rejectPin()),
