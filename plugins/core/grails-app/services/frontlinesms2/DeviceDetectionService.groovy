@@ -1,11 +1,20 @@
 package frontlinesms2
 
+import grails.util.Environment
 import net.frontlinesms.messaging.*
 
-class DeviceDetectionService implements ATDeviceDetectorListener {
+class DeviceDetectionService {
 	static transactional = true
+
+	def grailsApplication
+	def detector
 	
-	def detector = new AllModemsDetector(listener: this)
+	def init() {
+		def deviceDetectorListenerService = grailsApplication.mainContext.deviceDetectorListenerService
+		detector = new AllModemsDetector(listener: deviceDetectorListenerService)
+		
+		if(Environment.current != Environment.TEST) detect()
+	}
 
 	def detect() {
 		detector.refresh()
@@ -32,11 +41,5 @@ class DeviceDetectionService implements ATDeviceDetectorListener {
 			detectorThread.interrupt()
 			detectorThread.join()
 		}
-	}
-	
-	void handleDetectionCompleted(ATDeviceDetector detector) {
-		println "#################################################"
-		println "deviceDetectionService.handleDetectionCompleted()"
-		println "#################################################"
 	}
 }

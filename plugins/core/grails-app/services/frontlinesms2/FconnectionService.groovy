@@ -6,10 +6,11 @@ import org.apache.camel.model.RouteDefinition
 import org.smslib.NotConnectedException
 import serial.SerialClassFactory
 import serial.CommPortIdentifier
+import net.frontlinesms.messaging.*
 
 class FconnectionService {
-	def deviceDetectionService
 	def camelContext
+	def deviceDetectionService
 	def camelRouteBuilder = new RouteBuilder() {
 		@Override
 		void configure() {}
