@@ -70,41 +70,45 @@ class ImportController {
 						
 						if (y==csvLine.length) {
 							def contact = new Contact(contactProperties)
-							if (contact.save(failOnError: true)) {
-								savedCount++ 
-								customField.eachWithIndex {
-									new CustomField(name: it.key, value: customField.get(it.key), contact: contact).save()
-								}
-								def contactGroups = importedGroup.split("\\\\")
-								def nestedGroup = []
-								contactGroups.each {
-									if ( !it.equals("") ) nestedGroup.add(it)
-								}
-								def singleImportedGroup = []
-								nestedGroup.each {
-									singleImportedGroup = it.split("/")
-									def longGroup = ""
-									singleImportedGroup.each {
-										if ( !it.equals("") ) {
-											def flsmsGroup = Group.findByName(it)
-											if ( longGroup == "" ) { longGroup=it } else { longGroup=longGroup+ "-" +it }
-											
-											if ( flsmsGroup!=null ) { contact.addToGroups(flsmsGroup)
-											} else {
-												createGroup(it)
-												contact.addToGroups(Group.findByName(it))
-											}
-											if ( !longGroup.equals(it) && !longGroup.equals("") ) {
-												def flsmsGroupLong = Group.findByName(longGroup)
-												if (flsmsGroupLong!=null) {
-													contact.addToGroups(flsmsGroupLong)
+							if (Contact.findByPrimaryMobile(contact.primaryMobile)==null) {
+								if (contact.save(failOnError: true)) {
+									savedCount++ 
+									customField.eachWithIndex {
+										new CustomField(name: it.key, value: customField.get(it.key), contact: contact).save()
+									}
+									def contactGroups = importedGroup.split("\\\\")
+									def nestedGroup = []
+									contactGroups.each {
+										if ( !it.equals("") ) nestedGroup.add(it)
+									}
+									def singleImportedGroup = []
+									nestedGroup.each {
+										singleImportedGroup = it.split("/")
+										def longGroup = ""
+										singleImportedGroup.each {
+											if ( !it.equals("") ) {
+												def flsmsGroup = Group.findByName(it)
+												if ( longGroup == "" ) { longGroup=it } else { longGroup=longGroup+ "-" +it }
+												
+												if ( flsmsGroup!=null ) { contact.addToGroups(flsmsGroup)
 												} else {
-													createGroup(longGroup)
-													contact.addToGroups(Group.findByName(longGroup))
+													createGroup(it)
+													contact.addToGroups(Group.findByName(it))
+												}
+												if ( !longGroup.equals(it) && !longGroup.equals("") ) {
+													def flsmsGroupLong = Group.findByName(longGroup)
+													if (flsmsGroupLong!=null) {
+														contact.addToGroups(flsmsGroupLong)
+													} else {
+														createGroup(longGroup)
+														contact.addToGroups(Group.findByName(longGroup))
+													}
 												}
 											}
 										}
 									}
+								} else {
+									failedCount ++
 								}
 							} else {
 								failedCount ++
