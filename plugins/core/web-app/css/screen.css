@@ -4,8 +4,8 @@ html {
 	overflow-x: hidden;
 }
 
-body{
-    font-family: Arial;
+body {
+    font-family: Helvetica,Arial,sans-serif;
     font-size: .75em;
     color: #333333;
     margin: 0;
@@ -19,13 +19,14 @@ ul, ol {
 a {
 	text-decoration: none;
 	color: black;
+	cursor: pointer;
 }
 
 .unread {
 	font-weight: bolder;
 }
 
-.error{
+.error {
 	border: 2px solid #ff9600;
 }
 .error-message{
