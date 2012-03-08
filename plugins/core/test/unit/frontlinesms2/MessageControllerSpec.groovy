@@ -8,12 +8,13 @@ class MessageControllerSpec extends ControllerSpec {
 	def setup() {
 		controller.metaClass.message = { Map args -> args.code }
 		controller.metaClass.getPaginationCount = { -> 10 }
-			
 		mockDomain Contact
 		mockDomain Fmessage
-		registerMetaClass(Fmessage)
-		registerMetaClass(Contact)
-		Contact.metaClass.'static'.withNewSession = {closure -> closure.call()}
+		registerMetaClass Fmessage
+		registerMetaClass Activity
+		registerMetaClass Trash
+		registerMetaClass Contact
+		Contact.metaClass.static.withNewSession = {closure -> closure.call()}
 		mockParams.messageText = "text"
 		mockParams.max = 10
 		mockParams.offset = 0

@@ -6,10 +6,11 @@ import org.apache.camel.model.RouteDefinition
 import org.smslib.NotConnectedException
 import serial.SerialClassFactory
 import serial.CommPortIdentifier
+import net.frontlinesms.messaging.*
 
 class FconnectionService {
-	def deviceDetectionService
 	def camelContext
+	def deviceDetectionService
 	def camelRouteBuilder = new RouteBuilder() {
 		@Override
 		void configure() {}
@@ -33,7 +34,8 @@ class FconnectionService {
 							.to(c.camelProducerAddress)
 							.routeId("out-${c.id}")
 				}
-			} else if(grails.util.Environment.current == grails.util.Environment.TEST && c instanceof Fconnection) {
+			} else if(grails.util.Environment.current == grails.util.Environment.TEST
+					&& c instanceof Fconnection) {
 				incoming = 'stream:out'
 				routes << from('seda:nowhere')
 						.to(c.camelProducerAddress)
@@ -65,7 +67,7 @@ class FconnectionService {
 			// work-around for CORE-736 - NoSuchPortException can be thrown
 			// for RXTX when a port has not previously been listed with
 			// getPortIdentifiers()
-			if(SerialClassFactory.instance.serialPackageName == SerialClassFactory.PACKAGE_RXTX) {
+			if(SerialClassFactory.instance?.serialPackageName == SerialClassFactory.PACKAGE_RXTX) {
 				CommPortIdentifier.getPortIdentifiers()
 			}
 		}

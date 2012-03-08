@@ -12,6 +12,6 @@ class SettingsFSpec extends SettingsBaseSpec {
 			to PageContactShow
 			def btnGotoSettings = $('#secondary-nav a:first-child')
 		then:
-			btnGotoSettings.text() == 'Settings & Plugins'
+			btnGotoSettings.text() == 'Settings'
 	}
 }

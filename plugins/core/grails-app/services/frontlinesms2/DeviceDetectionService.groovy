@@ -1,11 +1,20 @@
 package frontlinesms2
 
-import net.frontlinesms.messaging.AllModemsDetector
+import grails.util.Environment
+import net.frontlinesms.messaging.*
 
 class DeviceDetectionService {
 	static transactional = true
+
+	def grailsApplication
+	def detector
 	
-	def detector = new AllModemsDetector()
+	def init() {
+		def deviceDetectorListenerService = grailsApplication.mainContext.deviceDetectorListenerService
+		detector = new AllModemsDetector(listener: deviceDetectorListenerService)
+		
+		if(Environment.current != Environment.TEST) detect()
+	}
 
 	def detect() {
 		detector.refresh()

@@ -30,7 +30,7 @@ class DeviceDetectionServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			deviceDetectionService.detect()
 		then:
-			1 * detector.detect()
+			1 * detector.refresh()
 	}
 	
 	def 'getDetected() should return an empty list if there are no ports detected or being searched'() {

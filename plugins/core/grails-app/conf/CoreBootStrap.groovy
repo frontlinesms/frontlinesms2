@@ -13,8 +13,9 @@ import net.frontlinesms.test.serial.hayes.*
 import frontlinesms2.dev.MockModemUtils
 
 class CoreBootStrap {
+	def applicationContext
 	def grailsApplication
-	//def deviceDetectionService
+	def deviceDetectionService
 	
 	def init = { servletContext ->
 		initialiseSerial()
@@ -40,13 +41,12 @@ class CoreBootStrap {
 				dev_initFolders()
 				dev_initAnnouncements()
 				dev_initLogEntries()
-				//deviceDetectionService.detect()
-				//break
+				break
 				
-			//case Environment.PRODUCTION:
-			//	deviceDetectionService.detect()
+			case Environment.PRODUCTION:
 				break
 		}
+		deviceDetectionService.init()
 	}
 
 	def destroy = {
@@ -172,7 +172,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initPolls() {
-		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
+		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
 				Poll.createPoll(name: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")].each() {
 			it.save(failOnError:true, flush:true)
 		}
@@ -310,7 +310,9 @@ class CoreBootStrap {
 	}
 
 	private def initialiseMockSerial() {
-		dev_initMockSmslibFconnections()
+		if(Environment.current == Environment.DEVELOPMENT) {
+			dev_initMockSmslibFconnections()
+		}
 		
 		MockModemUtils.initialiseMockSerial([
 				MOCK95:new CommPortIdentifier("MOCK95", MockModemUtils.createMockPortHandler_rejectPin()),

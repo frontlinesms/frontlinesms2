@@ -14,6 +14,7 @@ class ContactControllerSpec extends ControllerSpec {
 			def group2 = new Group(name: "group2")
 			mockDomain(Group, [group1, group2])
 			def groupCriteria = [list: {Closure c-> [group1]}]
+			registerMetaClass(Group)
 			Group.metaClass.static.createCriteria = {groupCriteria}
 			mockDomain GroupMembership, [new GroupMembership(group: Group.findByName('group1'), contact: alice),
 					new GroupMembership(group: Group.findByName('group1'), contact: bob) ,

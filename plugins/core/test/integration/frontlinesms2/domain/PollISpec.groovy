@@ -151,6 +151,74 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p2.validate()
 	}
 	
+	def "can edit responses for a poll with multiple responses"() {
+		when:
+			def poll = Poll.createPoll([choiceA: "one", choiceB: "two", name:"title"])
+		then:
+			poll.responses*.value.containsAll(['one', 'two'])
+		when:
+			Poll.editPoll(poll.id, [choiceC: "three", choiceD:"four"])
+			poll = Poll.get(poll.id)
+		then:
+			println "${poll.responses*.key}"
+			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
+		when:
+			def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
+			PollResponse.findByValue("one").addToMessages(m1)
+			poll.save(flush:true)
+		then:
+			poll.liveMessageCount == 1
+		when:
+			Poll.editPoll(poll.id, [choiceA: "five"])
+		then:
+			poll.liveMessageCount == 1
+			!PollResponse.findByValue("one")
+			poll.responses.find {
+				if(it.value == "Unknown") {
+					it.messages.size() == 1
+				}
+			}
+	}
+	
+	def "adding responses to a poll with multiple responses does not affect categorized messages"() {
+		when:
+			def poll = Poll.createPoll([choiceA: "one", choiceB: "two", name:"title"])
+			def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
+			def m2 = new Fmessage(src: "src2", inbound: true, date: new Date() - 10)
+			def m3 = new Fmessage(src: "src3", inbound: true, date: new Date() - 10)
+			PollResponse.findByValue("one").addToMessages(m1)
+			PollResponse.findByValue("one").addToMessages(m2)
+			PollResponse.findByValue("two").addToMessages(m3)
+			poll.save(flush:true)
+			poll.refresh()
+		then:
+			poll.responses*.liveMessageCount == [2, 1, 0]
+		when:
+			Poll.editPoll(poll.id, [choiceC: "three", choiceD:"four"])
+			poll = Poll.get(poll.id)
+		then:
+			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
+			poll.responses*.liveMessageCount == [2, 1, 0, 0, 0]
+		when:
+			m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
+			PollResponse.findByValue("one").addToMessages(m1)
+			PollResponse.findByValue("three").addToMessages(new Fmessage(src: "src4", inbound: true, date: new Date() - 10))
+			poll.save(flush:true)
+			poll.refresh()
+		then:
+			poll.responses*.liveMessageCount == [3, 1, 0, 1, 0]
+		when:
+			Poll.editPoll(poll.id, [choiceA: "five"])
+			poll.refresh()
+		then:
+			!PollResponse.findByValue("one")
+			println "poll responses ${poll.responses*.value}"
+			poll.responses*.findAll {
+				if(it.key == 'Unknown') it.liveMessageCount == 3
+				if(it.key == 'choiceA') it.liveMessageCount == 0
+			}
+	}
+	
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
 		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))

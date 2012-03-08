@@ -16,7 +16,7 @@ class PollController extends ActivityController {
 			pollInstance.save()
 			flash.message = "Poll has been saved"
 		}
-		[ownerId: pollInstance.id]
+		[ownerId: pollInstance.id, action:"saved"]
 	}
 	
 	def sendReply = {
@@ -31,5 +31,22 @@ class PollController extends ActivityController {
 			poll.save()
 		}
 		render ''
+	}
+	
+	def edit = {
+		if(!params.enableKeyword) params.keyword = null
+		def pollInstance = Poll.editPoll(params.id.toLong(), params)
+		pollInstance.sentMessageText = params.messageText
+		if(!params.dontSendMessage) {
+			def message = messageSendService.getMessagesToSend(params)
+			pollInstance.addToMessages(message)
+			messageSendService.send(message)
+			pollInstance.save()
+			flash.message = "Poll has been updated and message(s) has been queued to send"
+		} else {
+			pollInstance.save(failOnError:true)
+			flash.message = "Poll has been updated"
+		}
+		render view:"../poll/save", model:[ownerId: pollInstance.id, action:"updated"]
 	}
 }

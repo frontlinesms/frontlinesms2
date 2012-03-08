@@ -25,6 +25,8 @@ class PollControllerSpec extends ControllerSpec {
 	
 	def "can unarchive a poll"() {
 		given:
+			registerMetaClass PollController
+			registerMetaClass Fmessage
 			mockDomain(Poll)
 			mockDomain(Fmessage)
 			Fmessage.metaClass.static.owned = { Poll p, Boolean b, Boolean c ->

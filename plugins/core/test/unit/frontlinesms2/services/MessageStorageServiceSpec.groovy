@@ -5,15 +5,14 @@ import grails.plugin.spock.*
 import org.apache.camel.impl.DefaultExchange
 import org.apache.camel.Exchange
 import org.apache.camel.CamelContext
-import frontlinesms2.MessageStorageService
-import frontlinesms2.Fmessage
+import frontlinesms2.*
 
 class MessageStorageServiceSpec extends UnitSpec {
-	@Shared
 	MessageStorageService s
 
-	def setupSpec() {
+	def setup() {
 		s = new MessageStorageService()
+		registerMetaClass(Fmessage)
 		Fmessage.metaClass.static.withSession = { Closure c -> }
 	}
 

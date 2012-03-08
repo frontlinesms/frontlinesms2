@@ -1,6 +1,10 @@
 package frontlinesms2
 
 class StatusControllerSpec extends grails.plugin.spock.ControllerSpec {
+	def setup() {
+		registerMetaClass(Fconnection)
+	}
+	
 	def 'traffic light should show red when there are no routes'() {
 		setup:
 			mockRouteStati([])
