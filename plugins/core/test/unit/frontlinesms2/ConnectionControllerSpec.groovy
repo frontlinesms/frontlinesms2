@@ -6,6 +6,7 @@ class ConnectionControllerSpec extends ControllerSpec {
 	def "test that createRoute actually calls FconnectionService"() {
 		setup:
 			registerMetaClass(CreateRouteJob)
+			ConnectionController.metaClass.message {LinkedHashMap map-> map}
 			def routesTriggered = []
 			CreateRouteJob.metaClass.static.triggerNow = { LinkedHashMap map -> routesTriggered << map.connectionId }
 			mockDomain(Fconnection, [new Fconnection(), new Fconnection()])
