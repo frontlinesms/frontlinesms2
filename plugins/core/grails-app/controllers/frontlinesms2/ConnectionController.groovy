@@ -67,7 +67,8 @@ class ConnectionController {
 	
 	def createRoute = {
 		CreateRouteJob.triggerNow([connectionId:params.id])
-		render "Connecting..."
+		flash.message = "${message(code: 'connection.route.connecting')}"
+		redirect(controller:'settings', action:'connections', id:params.id)
 	}
   
 	def destroyRoute = {

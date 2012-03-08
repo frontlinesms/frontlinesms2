@@ -11,7 +11,11 @@
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
+		        <g:if test="${params.controller == 'settings' && params.action == 'connections'}">
+		        	updateCreateRouteLabel();
+		        </g:if>
 		});
+		
 	</g:javascript>
 </g:if>
 <g:else>
