@@ -24,6 +24,10 @@
 			<td id="confirm-pin"></td>
 		</tr>
 		<tr>
+			<td class="bold">SMSC Number:</td>
+			<td id="confirm-smsc"></td>
+		</tr>
+		<tr>
 			<td class="bold">SIM IMSI:</td>
 			<td id="confirm-imsi"></td>
 		</tr>
