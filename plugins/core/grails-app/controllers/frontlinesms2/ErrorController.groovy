@@ -17,9 +17,7 @@ class ErrorController {
 	}
 	
 	def createException = {
-		def formatedDate = dateToString(new Date())
-		createZipFile("${System.properties.'user.home'}/.frontlinesms2/frontlinesms2-log-${formatedDate}")
-		new File("${System.properties.'user.home'}/.frontlinesms2/").zip()
+		throw new RuntimeException("This exception was generated at the user's request.", new RuntimeException("And here is a nested exception ;-)"))
 	}
 	
 	private def createZipFile(output) {
