@@ -76,6 +76,7 @@ function updateConfirmationMessage() {
 		setConfirmation('name');
 		setConfirmation('port');
 		setConfirmation('baud');
+		setConfirmation('smsc');
 		setConfirmation('imsi');
 		setConfirmation('serial');
 		setSecretConfirmation('pin');

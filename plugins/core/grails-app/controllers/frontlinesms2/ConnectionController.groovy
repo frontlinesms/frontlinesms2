@@ -29,7 +29,7 @@ class ConnectionController {
 		withFconnection { fconnectionInstance ->
 			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 			fconnectionInstance.properties = params
-			if(fconnectionInstance.save(flush:true)) {
+			if(fconnectionInstance.save()) {
 				flash.message = LogEntry.log("${message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
 				redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 			} else {
@@ -44,7 +44,7 @@ class ConnectionController {
 		if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 		fconnectionInstance.properties = params
 
-		if (fconnectionInstance.save(flush: true)) {
+		if (fconnectionInstance.save()) {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
 			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
 		} else {
@@ -56,7 +56,7 @@ class ConnectionController {
 	def saveSmslib = {
 		def fconnectionInstance = new SmslibFconnection()
 		fconnectionInstance.properties = params
-		if (fconnectionInstance.save(flush: true)) {
+		if (fconnectionInstance.save()) {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
 			forward(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 		} else {

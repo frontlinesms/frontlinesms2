@@ -17,8 +17,8 @@
 	<a id="toggle-extra-options">
 		<img id="plus" src='${resource(dir:'images/icons', file:'toggle_plus.png')}' />
 		<img id="minus" src='${resource(dir:'images/icons', file:'toggle_minus.png')}' />
+		${message(code:'default.search.moreoption.label', default:'More options') }
 	</a>
-	${message(code:'default.search.moreoption.label', default:'More options') }
 </h3>
 <ul class="sub-list" id="extra-options-list">
 	<li class='field'>

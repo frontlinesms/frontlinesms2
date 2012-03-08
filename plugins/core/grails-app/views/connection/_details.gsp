@@ -23,6 +23,11 @@
 			</div>
 		
 			<div class="field">
+				<label for="smsc">SMSC Number</label>
+				<g:textField name="smsc" value="${fconnectionInstance?.smsc}" />
+			</div>
+		
+			<div class="field">
 				<label for="imsi">SIM IMSI</label>
 				<g:textField name="imsi" value="${fconnectionInstance?.imsi}" />
 			</div>
