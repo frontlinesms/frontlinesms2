@@ -11,7 +11,6 @@
 .ui-tabs .ui-tabs-hide { display: none !important; }
 
 .ui-tabs {
-	height: 388px;
 	overflow: hide;
 }
 
@@ -24,12 +23,13 @@
 
 .ui-tabs-nav {
 	float: left;
-	width: 135px;
-	max-height: 354px;
+	min-width: 135px;
+	width: 20%;	
+	min-height: 368px;
 	height: 100%;
 	padding: 17px 17px 17px 0;
 	border-right: 1px solid #9E9E9E;
-	overflow: hide;
+	overflow: auto;
 }
 
 .ui-tabs-nav li.ui-tabs-selected {
