@@ -13,7 +13,7 @@ class SystemNotificationController {
 	}
 	
 	def list = {
-		render template:"../system_notifications"		
+		render template:"/system_notifications", plugin:"core"	
 	}
 	
 	private def withNotification(Closure c) {
