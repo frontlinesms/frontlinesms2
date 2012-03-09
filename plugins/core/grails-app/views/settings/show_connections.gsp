@@ -10,7 +10,7 @@
 				var previousNotificationCount = $("#notifications").find("div:visible").length
 				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
 					var newNotificationCount = $(data).find("a").length
-					if(newNotificationCount > previousNotificationCount || newNotificationCount < previousNotificationCount) {
+					if(newNotificationCount > 0) {
 						$("#notifications").empty().append(data);
 						if($(data).text().indexOf("Created") != -1) {
 							reloadConnectionList()
