@@ -9,7 +9,7 @@ class ConnectionPage extends geb.Page {
 		true
 	}
 	static content = {
-		btnNewConnection { $('#btnNewConnection') }
+		btnNewConnection { $('#create-connection-btn').find('a') }
 		lstConnections { $('#connections') }
 		selectedConnection(required:false) { lstConnections.find(".selected") }
 		btnCreateRoute(required:false) {  lstConnections.find('.buttons a').first() }

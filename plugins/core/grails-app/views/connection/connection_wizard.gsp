@@ -23,12 +23,11 @@
 		<li><a href="#tabs-2">Enter details</a></li>
 		<li><a href="#tabs-3">Confirm</a></li>
 	</ol>
-
-	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id]" action="${action}" id='${fconnectionInstance?.id}' onSuccess="refreshSystemNotifications(); showConnectingNotification(data)">
+	<g:form name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id]" action="${action}" id='${fconnectionInstance?.id}' >
 		<g:render template="type"/>
 		<g:render template="details"/>
 		<g:render template="confirm"/>
-	</g:formRemote>
+	</g:form>
 </div>
 <g:javascript>
 function initializePopup() {

@@ -50,14 +50,16 @@ function chooseActivity() {
 	return;
 }
  
-function launchMediumWizard(title, html, btnFinishedText) {
+function launchMediumWizard(title, html, btnFinishedText, width, height) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup()
 	$("#modalBox").dialog({
 		modal: true,
 		title: title,
-		width: 675,
-		height: 500,
+		minWidth: 675,
+		minHeight: 500,
+		width: width,
+		height: height,
 		buttons: [
 			{ text:"Cancel", click: cancel, id:"cancel" },
 			{ text:"Back", id:"disabledBack", disabled: true },

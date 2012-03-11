@@ -32,7 +32,9 @@
 					<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
 						<g:actionSubmit id="unarchive-msg" class="msg-btn" value="Unarchive all" action="unarchive"/>
 					</g:elseif>
-					<g:actionSubmit class="msg-btn" value="Delete all" id="btn_delete_all" action="delete"/>
+					<g:if test="${messageSection != 'pending'}">
+						<g:actionSubmit class="msg-btn" value="Delete all" id="btn_delete_all" action="delete"/>
+					</g:if>
 			</g:elseif>
 			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
 				<g:render template="../message/other_actions"/>

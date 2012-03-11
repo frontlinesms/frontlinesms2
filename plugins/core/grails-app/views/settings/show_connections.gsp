@@ -5,35 +5,17 @@
 		<title>Settings > Connections > ${connectionInstance?.name}</title>
 		<g:javascript>
 			setInterval(refreshSystemNotifications, 10000);
+			
 			function refreshSystemNotifications() {
-				var notificationIds = ""
-				var indx = "notification-".length
-				$("#notifications").find('div:visible').each(function() {
-					if($(this).attr("id")) {
-						notificationIds += $(this).attr("id").substring(indx) + ","					
-					}
-				});
-				
-				$.getJSON("${createLink(controller:'systemNotification', action:'list')}", {notificationIdList:notificationIds}, function(data) {
-					var shouldRefresh = false
-					if(data != null) {
-						$.each(data, function(key, notification) {
-							var div = jQuery('<div/>', {
-								id: "notification-" + notification.id,
-								html: notification.text
-							});
-							var link = $(notification.link).addClass("hide-flash");
-							$(div).append(link);
-							$(div).appendTo("#notifications");
-							if(notification.text.indexOf("Created") != -1) {
-								shouldRefresh = true
-							}
-							removeConnectingNotification()
-						});
-		
-						if(shouldRefresh) {
+				var previousNotificationCount = $("#notifications").find("div:visible").length
+				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
+					var newNotificationCount = $(data).find("a").length
+					if(newNotificationCount > 0) {
+						$("#notifications").empty().append(data);
+						if($(data).text().indexOf("Created") != -1) {
 							reloadConnectionList()
-						}
+		                }
+		                removeConnectingNotification()
 					}
 					
 				});
@@ -46,21 +28,21 @@
 				});
 			}
 			
-			function showConnectingNotification(message) {
-				jQuery('<div/>', {
-					class:"flash message",
-					html: message
-				}).appendTo('#notifications');
-				$("#createRoute a").text(message);
-				$("#createRoute a").attr("disabled", "disabled");
-			}
-			
 			function removeConnectingNotification() {
 				$('#notifications div').remove('.flash');
-				$("#createRoute a:visible").text("CreateRoute");
-				$("#createRoute a").attr("disabled", "");
+				updateCreateRouteLabel();
 			}
 			
+			function updateCreateRouteLabel() {
+				if($('#notifications div.flash:contains("${message(code: 'connection.route.connecting')}")').text().indexOf("${message(code: 'connection.route.connecting')}") != -1) {
+					$("#createRoute a").text("${message(code: 'connection.route.connecting')}");
+					$("#createRoute a").attr("disabled", "disabled");
+				} else {
+					$("#createRoute a").text("Create route");
+					$("#createRoute a").attr("disabled", "");
+				}
+			}
+
 		</g:javascript>
 	</head>
 	<body>

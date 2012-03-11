@@ -103,16 +103,31 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 //				waitFor() {	$('#connections .selected').find("a.test").@href == "/connection/createTest/${testConnection.id}"}
 //	}
 
-//	def 'clicking "createRoute" should display a flash message when an exception occurs on a route'() {
-//			given:
-//				def testConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
-//			when:
-//				to ConnectionPage
-//				waitFor{ $("#connections .selected .route").displayed }
-//				$("#createRoute a").click()
-//			then:
-//				waitFor { $('#notifications').text().contains("Failed")}
-//	}
+	def 'creating a new fconnection causes a refresh of the connections list'(){
+		given:
+			createTestConnection()
+		when:
+			to ConnectionPage
+			btnNewConnection.click()
+		then:
+			waitFor { at ConnectionDialog}
+		when:
+			connectionForm.connectionType = "smslib"
+			nextPageButton.click()
+			connectionForm.name = "name"
+			connectionForm.port = "COM2"
+			connectionForm.baud = "9600"
+			nextPageButton.click()
+		then:
+			confirmName.text() == "name"
+			confirmPort.text() == "COM2"
+			confirmType.text() == "smslib"
+		when:
+			doneButton.click()
+		then:
+			waitFor {selectedConnection.text().contains('name')}
+			lstConnections.find('li')*.text().size() == 2
+	}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
 		given:
@@ -141,4 +156,19 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 		true
 	}
 	
+}
+
+class ConnectionDialog extends ConnectionPage {
+	static at = {
+		$("#ui-dialog-title-modalBox").text().toLowerCase().contains('connection')
+	}
+	
+	static content = {
+		connectionForm { $('#connectionForm')}
+		doneButton { $("#submit") }
+		nextPageButton { $("#nextPage") }
+		confirmName { $("#confirm-name")}
+		confirmType { $("#confirm-type")}
+		confirmPort { $("#confirm-port")}
+	}
 }
