@@ -31,7 +31,9 @@
 			<g:elseif test="${!messageInstance.messageOwner && messageInstance.archived}">
 				<g:actionSubmit id="unarchive-msg" class="msg-btn" value="Unarchive" action="unarchive"/>
 			</g:elseif>
-			<g:actionSubmit id="delete-msg" class="msg-btn" value="Delete" action="delete"/>
+			<g:if test="${messageSection != 'pending'}">
+				<g:actionSubmit id="delete-msg" class="msg-btn" value="Delete" action="delete"/>
+			</g:if>
 		</g:if>
 		<g:elseif test="${ownerInstance}">
 			<g:remoteLink class="msg-btn btn" controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" >Restore</g:remoteLink>

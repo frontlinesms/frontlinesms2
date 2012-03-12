@@ -95,7 +95,7 @@ class ConnectionController {
 			def message = messageSendService.getMessagesToSend(params)
 			println "passing arguments ${message.class}, ${connection.class}"
 			messageSendService.send(message, connection)
-			flash.message = LogEntry.log("${message(code: 'connection.test.sent', args:[params.addresses, connection.name])}")
+			flash.message = LogEntry.log("Test message sent!")
 			redirect (controller:'settings', action:'show_connections', id:params.id)
 		}
 	}
