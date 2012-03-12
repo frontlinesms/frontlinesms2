@@ -32,14 +32,16 @@ class DeviceDetectionService {
 		println "DeviceDetectionService.stopFor($port)..."
 		def detectorThread
 		detector.detectors.each {
-			println "Checking $it.portIdentifier.name..."
-			if(it.portIdentifier.name == port) {
+			println "Checking $it.portName..."
+			if(it.portName == port) {
 				detectorThread = it
 			} else println "not the right port."
 		}
-		if(detectorThread) {
+		if(detectorThread && detectorThread!=Thread.currentThread()) {
 			detectorThread.interrupt()
-			detectorThread.join()
+			try { detectorThread.join() } catch(InterruptedException _) {
+				// we called interrupt
+			}
 		}
 	}
 }
