@@ -1,7 +1,6 @@
 html {
 	height: 100%;
 	width: 100%;
-	overflow-x: hidden;
 }
 
 body {
@@ -120,7 +119,6 @@ a {
     padding: 4px 0 0 0;
 }
 
-
 #sidebar .sublist{
     margin: 10px 0;
 }
@@ -225,20 +223,65 @@ a {
 }
 
 #content{
+	position: fixed;
+	top: 83px;
+	left: 17%;
+	bottom: 0;
+	right: 0;
     padding: 0;
     margin: 0;
     background-color: #fff;
     float: right;
-    width: 83%;
-    height: 93%;
+}
+
+#messages-tab .section-header #inbox-title{
+    background-image: url('../images/icons/inbox.png');
+}
+#messages-tab .section-header #sent-title{
+    background-image: url('../images/icons/sent.png');
+}
+#messages-tab .section-header #pending-title{
+    background-image: url('../images/icons/pending.png');
+}
+#messages-tab .section-header #trash-title{
+    background-image: url('../images/icons/trash.png');
+}
+#messages-tab .section-header #poll-title, #messages-tab .section-header #announcement-title{
+    background-image: url('../images/icons/activities.png');
+}
+#messages-tab .section-header #folder-title{
+    background-image: url('../images/icons/folders.png');
+}
+#messages-tab .section-header #show-title{
+    background-image: url('../images/icons/shows.png');
+}
+
+#archive-tab .section-header #inbox-title{
+    background-image: url('../images/icons/inboxarchive.png');
+}
+#archive-tab .section-header #sent-title{
+    background-image: url('../images/icons/sentarchive.png');
+}
+#archive-tab .section-header #activity-title{
+    background-image: url('../images/icons/activitiesarchive.png');
+}
+#archive-tab .section-header #folder-title{
+    background-image: url('../images/icons/foldersarchive.png');
+}
+
+#contacts-tab .section-header #all-contacts-title{
+    background-image: url('../images/icons/contacts.png');
+}
+#contacts-tab .section-header #group-title{
+    background-image: url('../images/icons/groups.png');
+}
+#contacts-tab .section-header #smart-group-title{
+    background-image: url('../images/icons/smartgroups.png');
 }
 
 .section-header {
-    position: fixed;
     z-index: 10;
-    width: 83%;
     background-color: #fff;
-    top: 83px;
 }
 .section-header .message-title, .section-header #archive-title, .section-header #contact-title{
     padding: 0;
@@ -290,8 +333,9 @@ a {
 	float: right;
 }
 .section-header .activity-title #poll-graph-btn{
-	position: fixed;
-	top: 250px;
+	position: absolute;
+	z-index: 10;
+	top: 170px;
 	right: 27px;
 	padding-left: 25px;
 	cursor: pointer;
@@ -305,11 +349,10 @@ a {
 	background-repeat: no-repeat;
 }
 .section-header .activity-title #activity-details{
-	position: fixed;
-	top: 140px;
-	left: 19%;
+	position: absolute;
+	top: 50px;
+	left: 27px;
 	height: 125px;
-	max-width: 70%;
 	z-index: 10;
 }
 .section-header .activity-title td{
@@ -320,56 +363,279 @@ a {
 	font-size: 10px;
 }
 
-#messages-tab .section-header #inbox-title{
-    background-image: url('../images/icons/inbox.png');
-}
-#messages-tab .section-header #sent-title{
-    background-image: url('../images/icons/sent.png');
-}
-#messages-tab .section-header #pending-title{
-    background-image: url('../images/icons/pending.png');
-}
-#messages-tab .section-header #trash-title{
-    background-image: url('../images/icons/trash.png');
-}
-#messages-tab .section-header #poll-title, #messages-tab .section-header #announcement-title{
-    background-image: url('../images/icons/activities.png');
-}
-#messages-tab .section-header #folder-title{
-    background-image: url('../images/icons/folders.png');
-}
-#messages-tab .section-header #show-title{
-    background-image: url('../images/icons/shows.png');
-}
-
-#archive-tab .section-header #inbox-title{
-    background-image: url('../images/icons/inboxarchive.png');
-}
-#archive-tab .section-header #sent-title{
-    background-image: url('../images/icons/sentarchive.png');
-}
-#archive-tab .section-header #activity-title{
-    background-image: url('../images/icons/activitiesarchive.png');
-}
-#archive-tab .section-header #folder-title{
-    background-image: url('../images/icons/foldersarchive.png');
-}
-
-#contacts-tab .section-header #all-contacts-title{
-    background-image: url('../images/icons/contacts.png');
-}
-#contacts-tab .section-header #group-title{
-    background-image: url('../images/icons/groups.png');
-}
-#contacts-tab .section-header #smart-group-title{
-    background-image: url('../images/icons/smartgroups.png');
-}
-
 #quick-message{
 	display:inline-block;
 	background-image: url('../images/icons/quickmessage.png');
 	background-repeat: no-repeat;
 	padding-left: 25px;
+}
+
+#new-message-notification {
+	text-align: center;
+	min-height: 21px;
+	z-index: 100;
+}
+
+#messages.tall-header{
+    display: block;
+	height: 123px;
+    padding: 0;
+    margin: 0;
+}
+#message-list, #folder-list, #activity-list {
+	position: absolute;
+    top: 43px;
+    bottom: 43px;
+    left: 0;
+    right: 25%;
+    float:left;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+}
+.tall-header #message-list {
+	position: absolute;
+    top: 200px;
+    bottom: 43px;
+    left: 0;
+    right: 25%;
+    float:left;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+}
+#message-list table {
+	display: block;
+}
+#message-list table tr {
+	display: block;
+}
+
+#message-list thead, #folder-list thead, #activity-list thead {
+	position: fixed;
+	right: 0;
+	left: 17%;
+	top: 126px;
+ 	background-image: url("../images/menubar.png");
+    background-repeat: repeat-x;
+    z-index: 10;
+    padding: 0 21% 0 0;
+    margin: 0;
+    border: 0;
+}
+.tall-header #message-list thead{
+    top: 283px;
+}
+#message-list td a{
+	min-height: 20px;
+	padding: 4px 0;
+}
+#message-list tbody, #folder-list tbody, #activity-list tbody{
+	position: absolute;
+	top: 26px;
+	width: 100%;
+    overflow: auto;
+}
+
+#message-list tr, #folder-list tr, #activity-list tr{
+    min-height: 28px;
+    text-align: left;
+}
+#message-list .message-select-cell, #folder-list .folder-message-count-cell, #activity-list .activity-message-count-cell{
+	min-width: 30px;
+	padding-left: 17px;
+}
+#message-list .message-star-cell{
+	min-width: 15px;
+	padding-right: 10px;
+}
+#message-list .message-sender-cell, #activity-list .activity-type-cell{
+	min-width: 200px;
+	padding-right: 10px;
+}
+#message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
+	min-width: 350px;
+	width: 100%;
+	padding-right: 17px;
+}
+#message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
+	min-width: 250px;
+	padding: 0 40px;
+}
+
+#message-list .message-select-cell input[type='checkbox']{
+	margin-top: 5px;
+}
+
+.sorted.asc {
+	background-image: url('../images/buttons/down_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
+}
+.sorted.desc {
+	background-image: url('../images/buttons/up_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
+}
+
+#new-message-notification a{
+	display: block;
+	cursor: pointer;
+}
+.message-added-to-list {
+animation: newMessage 2s;
+-moz-animation: newMessage 2s; /* Firefox */
+-webkit-animation: newMessage 2s; /* Safari and Chrome */
+}
+.tall-header #no-messages{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 350px;
+	left: 40%;
+}
+#no-messages{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 200px;
+	left: 40%;
+}
+#messages #no-search-description{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 400px;
+	left: 35%;
+}
+#messages #no-messages-search{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 400px;
+	left: 27%;
+}
+#message-list .message-preview td a, #message-list th a{
+    text-decoration: inherit;
+    color: inherit;
+}
+
+#message-list .folderOwner {
+	background-image: url('../images/icons/folders.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#message-list .activityOwner {
+	background-image: url('../images/icons/activities.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+.message-preview-star a{
+    display: inline-block;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    background-image: url('../images/icons/star.png');
+    background-repeat: no-repeat;
+}
+.message-preview-star a:hover{
+    background-image: url('../images/icons/star_on.png');
+}
+.message-preview-star a.starred{
+    background-image: url('../images/icons/star_on.png');
+}
+
+#message-list a, #folder-list a, #activity-list a{
+    display: block;
+}
+
+#message-detail{
+    position: absolute;
+    top: 43px;
+    bottom: 43px;
+    right: 0;
+	width: 25%;
+    float:right;
+    overflow: auto;
+    padding-top: 25px;
+}
+.tall-header #message-detail{
+    position: absolute;
+    top: 200px;
+    bottom: 43px;
+    right: 0;
+	width: 25%;
+    float:right;
+    overflow: auto;
+    padding-top: 25px;
+}
+#single-message, #multiple-messages{
+	padding: 17px 17px;
+}
+
+#message-detail .extra-msg-btn{
+	width:69%;
+	margin: 17px 2%;
+}
+
+#message-detail-content{
+    background-color: #fff;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 0;
+    border: 1px solid #b5c6cd;
+    margin: 17px 0;
+}
+
+#message-detail-content p{
+	margin: 0;
+    padding: 17px;
+}
+
+#message-detail-sender{
+	display: inline-block;
+	margin: 0;
+	min-width: 130px;
+}
+#message-detail-sender a {
+	float: right;
+	background-image: url('../images/icons/add.png');
+	background-repeat: no-repeat;
+	width: 16px;
+	height: 16px;
+}
+ #message-detail-date{
+	margin: 0;
+}
+#message-detail-owner{
+	background-repeat: no-repeat;
+	margin: 0;
+	padding-left: 25px;
+}
+#message-detail-owner.poll, #message-detail-owner.announcement {
+	background-image: url('../images/icons/activities.png');
+}
+#message-detail-owner.folder {
+	background-image: url('../images/icons/folders.png');
+}
+
+#reply-all{
+	width: 25%;
+	margin: 0 2%;
+}
+#message-detail-buttons{
+    margin: 17px 0;
+    padding: 0;
+}
+#message-detail-buttons .msg-btn{
+	width:40%;
+	margin: 10px 10px;
+}
+#message-detail-buttons a.msg-btn{
+	padding: 4px 0 0 0;
 }
 
 .footer{
@@ -474,375 +740,6 @@ a {
     background-repeat: no-repeat;
 }
 
-#new-message-notification {
-	text-align: center;
-	min-height: 21px;
-	z-index: 100;
-}
-
-#messages, #folders, #activities{
-	position: fixed;
-	top: 128px;
-	left: 17%;
-	right: 0;
-	bottom: 43px;
-    padding: 0;
-    margin: 0;
-    background-image: url("../images/menubar.png");
-    background-position: 0 2px;
-    background-repeat: repeat-x;
-    display: block;
-    overflow: auto;
-}
-
-#messages.tall-header{
-	position: fixed;
-	top: 281px;
-	left: 17%;
-	right: 0;
-	bottom: 43px;
-    padding: 0;
-    margin: 0;
-    background-image: url("../images/menubar.png");
-    background-position: 0 2px;
-    background-repeat: repeat-x;
-    display: block;
-    overflow: auto;
-}
-
-#message-list {
-	position: absolute;
-	left: 0;
-	right: 350px;
-	top: 0;
-	bottom: 0;
-    float:left;
-    padding: 0;
-    margin: 0;
-}
-#message-list table tr {
-	display: block;
-}
-#folder-list, #activity-list{
-    float:left;
-    margin: 0;
-    width: 100%;
-    height: 100%;
-}
-
-#message-list thead {
-	position: fixed;
-	top: 132px;
-	right: 350px;
-	left: 17%;
-    z-index: 10;
-    padding: 0;
-    border: 0;
-}
-#folder-list thead, #activity-list thead {
-	position: fixed;
-	top: 132px;
-	right: 0;
-	left: 17%;
-    z-index: 10;
-    padding-left: 17px;
-    border: 0;
-}
-.tall-header #message-list thead{
-    top: 285px;
-}
-#message-list td a{
-	min-height: 20px;
-	padding: 4px 0;
-}
-#message-list tbody{
-	position: absolute;
-	top: 28px;
-	bottom: 0;
-	left: 0;
-	right: 0;
-    z-index: 1;
-    overflow: auto;
-}
-#folder-list tbody, #activity-list tbody{
-	position: absolute;
-	top: 28px;
-	bottom: 0;
-	left: 0;
-	right: 0;
-    z-index: 1;
-    overflow: auto;
-}
-
-#message-list tr, #folder-list tr, #activity-list tr{
-    min-height: 28px;
-    text-align: left;
-}
-#message-list .message-select-cell, #folder-list .folder-message-count-cell, #activity-list .activity-message-count-cell{
-	min-width: 30px;
-	padding-left: 17px;
-}
-#message-list .message-star-cell{
-	min-width: 15px;
-	padding-right: 10px;
-}
-#message-list .message-sender-cell, #activity-list .activity-type-cell{
-	min-width: 200px;
-	padding-right: 10px;
-}
-#message-list .message-text-cell, #folder-list .folder-name-cell, #activity-list .activity-name-cell{
-	min-width: 150px;
-	width: 100%;
-	padding-right: 17px;
-}
-#message-list .message-date-cell, #folder-list .folder-date-cell, #activity-list .activity-date-cell{
-	min-width: 250px;
-	padding: 0 40px;
-}
-
-#message-list .message-select-cell input[type='checkbox']{
-	margin-top: 5px;
-}
-
-.sorted.asc {
-	background-image: url('../images/buttons/down_arrow.png');
-    background-repeat: no-repeat;
-    background-position: left;
-    padding-left: 25px;
-}
-.sorted.desc {
-	background-image: url('../images/buttons/up_arrow.png');
-    background-repeat: no-repeat;
-    background-position: left;
-    padding-left: 25px;
-}
-
-#new-message-notification a{
-	display: block;
-	cursor: pointer;
-}
-.message-added-to-list {
-animation: newMessage 2s;
--moz-animation: newMessage 2s; /* Firefox */
--webkit-animation: newMessage 2s; /* Safari and Chrome */
-}
-.tall-header #no-messages{
-	position: fixed;
-	height: 10%;
-	min-height: 50px;
-	top: 350px;
-	left: 40%;
-}
-#no-messages{
-	position: fixed;
-	height: 10%;
-	min-height: 50px;
-	top: 200px;
-	left: 40%;
-}
-#messages #no-search-description{
-	position: fixed;
-	height: 10%;
-	min-height: 50px;
-	top: 400px;
-	left: 35%;
-}
-#messages #no-messages-search{
-	position: fixed;
-	height: 10%;
-	min-height: 50px;
-	top: 400px;
-	left: 27%;
-}
-#message-list .message-preview td a, #message-list th a{
-    text-decoration: inherit;
-    color: inherit;
-}
-
-#message-list .folderOwner {
-	background-image: url('../images/icons/folders.png');
-    background-repeat: no-repeat;
-    background-position: right;
-}
-#message-list .activityOwner {
-	background-image: url('../images/icons/activities.png');
-    background-repeat: no-repeat;
-    background-position: right;
-}
-.message-preview-star a{
-    display: inline-block;
-    padding: 0;
-    width: 16px;
-    height: 16px;
-    background-image: url('../images/icons/star.png');
-    background-repeat: no-repeat;
-}
-.message-preview-star a:hover{
-    background-image: url('../images/icons/star_on.png');
-}
-.message-preview-star a.starred{
-    background-image: url('../images/icons/star_on.png');
-}
-
-#message-list a, #folder-list a, #activity-list a{
-    display: block;
-}
-
-#message-detail{
-	position: absolute;
-	top: 28px;
-	bottom: 0;
-	right: 0;
-	width: 350px;
-    float:right;
-    overflow: auto;
-}
-#single-message, #multiple-messages{
-	padding: 17px 17px;
-}
-
-#message-detail .extra-msg-btn{
-	width:69%;
-	margin: 17px 2%;
-}
-
-#message-detail-content{
-    background-color: #fff;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    padding: 0;
-    border: 1px solid #b5c6cd;
-    margin: 17px 0;
-}
-
-#message-detail-content p{
-	margin: 0;
-    padding: 17px;
-}
-
-#message-detail-sender{
-	display: inline-block;
-	margin: 0;
-	min-width: 130px;
-}
-#message-detail-sender a {
-	float: right;
-	background-image: url('../images/icons/add.png');
-	background-repeat: no-repeat;
-	width: 16px;
-	height: 16px;
-}
- #message-detail-date{
-	margin: 0;
-}
-#message-detail-owner{
-	background-repeat: no-repeat;
-	margin: 0;
-	padding-left: 25px;
-}
-#message-detail-owner.poll, #message-detail-owner.announcement {
-	background-image: url('../images/icons/activities.png');
-}
-#message-detail-owner.folder {
-	background-image: url('../images/icons/folders.png');
-}
-
-#reply-all{
-	width: 25%;
-	margin: 0 2%;
-}
-#message-detail-buttons{
-    margin: 17px 0;
-    padding: 0;
-}
-#message-detail-buttons .msg-btn{
-	width:26%;
-	margin: 0 2%;
-}
-
-#msg-response-dropdown{
-	float: left;
-    position: relative;
-    min-height:25px;
-	min-width: 110px;
-}
-#btn_reply{
-	float:left;
-    border: none;
-    background-image: url('../images/buttons/button_default_2.png');
-    background-repeat: repeat-x;
-    border-left: 1px solid #6b6b6b;
-    border-radius: 2px;
-    padding: 4px 0 0 0;
-    height:21px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    color: #000;
-    background-color: none;
-    min-width:80px;
-}
-#btn_reply:hover{
-	 background-image: url('../images/buttons/button_hover_part.png');
-}
-#btn_reply:active{
-	 background-image: url('../images/buttons/button_pressed_part.png');
-}
-#btn_dropdown{
-	float: left;
-	margin-right:2%;
-    border: none;
-    background-image: url('../images/buttons/dropdown_default_arrow.png');
-    background-repeat: no-repeat;
-   	border-left: 1px solid #9e9e9e;
-    height:25px;
-    cursor: pointer;
-    text-decoration: none;
-    color: #000;
-    background-color: none;
-    min-width: 25px;
-}
-#btn_dropdown:hover{
-    background-image: url('../images/buttons/dropdown_hover_arrow.png');
-}
-#btn_dropdown:active{
-    background-image: url('../images/buttons/dropdown_pressed_arrow.png');
-}
-#dropdown_options{
-	position: absolute;
-	float:left;
-	background-color: white;
-	border: 1px solid #6b6b6b;
-	text-align: center;
-	height: 25px;
-	z-index: 100;
-	min-width: 80px;
-	width: 6.2%;
-}
-.tall-header #dropdown_options{
-	position: fixed;
-	top:469px;
-	left:76.5%;
-	float:left;
-	background-color: white;
-	border: 1px solid #6b6b6b;
-	text-align: center;
-	height: 25px;
-	box-shadow: 1px 0 1px #9e9e9e;
-	z-index: 100;
-	min-width: 80px;
-	width: 6.2%
-}
-#dropdown_options:hover, #dropdown_options:active{
-	cursor: pointer;
-}
-#btn_forward{
-	float:left;
-	display:block;
-	width:100%;
-	padding: 3px 0;
-}
 
 
 /* Polls */

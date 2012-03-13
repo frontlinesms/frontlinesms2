@@ -7,24 +7,19 @@
 <div id="message-detail-buttons">
 	<g:form controller="${params.controller}" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, checkedMessageList: checkedMessageList, searchId: search?.id]">
 		<g:if test="${messageSection != 'trash'}">
-		 	<div id="msg-response-dropdown" class="msg-btn">
-		 		<g:if test="${messageSection == 'sent'}">
-					<g:link elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
-				</g:if>
-				<g:elseif test="${messageSection == 'pending' && messageInstance.hasFailed}">
-					<g:link elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Retry</g:link>
-				</g:elseif>
-				<g:elseif test="${messageSection == 'pending'}">
-					<g:link elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
-				</g:elseif>
-				<g:else>
-					<a id="btn_reply" onclick="messageResponseClick('Reply')">Reply</a>
-				</g:else>
-				<a id='btn_dropdown' href="#" onclick="toggleDropdown();"></a>
-			</div>
-			<div id="dropdown_options" style='display: none'>
-				<a class='dropdown-item' id="btn_forward" onclick="messageResponseClick('Forward')">Forward</a>
-			</div>
+	 		<g:if test="${messageSection == 'sent'}">
+				<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
+			</g:if>
+			<g:elseif test="${messageSection == 'pending' && messageInstance.hasFailed}">
+				<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Retry</g:link>
+			</g:elseif>
+			<g:elseif test="${messageSection == 'pending'}">
+				<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
+			</g:elseif>
+			<g:else>
+				<a class="msg-btn btn" onclick="messageResponseClick('Reply')">Reply</a>
+			</g:else>
+			<a class="msg-btn btn" onclick="messageResponseClick('Forward')">Forward</a>
 			<g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
 				<g:actionSubmit id="archive-msg" class="msg-btn" value="Archive" action="archive"/>
 			</g:if>
