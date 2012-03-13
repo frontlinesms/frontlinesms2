@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class KeywordProcessorService {
-	private static final ALPHABET = "abcdefghijklmnopqrstuvwxyz"
+	private static final ALPHABET = ('a'..'z').join()
 	def messageSendService
 	
 	def process(Fmessage message) {
