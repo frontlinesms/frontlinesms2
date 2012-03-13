@@ -95,7 +95,7 @@
 		</div>
 	</div>
 	<div id='group-add' class="basic-info">
-		<select class="dropdown" id="group-dropdown" name="group-dropdown">
+		<select id="group-dropdown" name="group-dropdown">
 			<option class="not-group">Add to group...</option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 				<option value="${g.id}">${g.name}</option>

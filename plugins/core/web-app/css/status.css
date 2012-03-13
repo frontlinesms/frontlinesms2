@@ -149,7 +149,7 @@
 }
 
 #traffic-status #time-filter #start-date, #traffic-status #time-filter #end-date{
-    background-image: url('assets/icons/png/calendar.png');
+    background-image: url('../images/icons/calendar.png');
     background-repeat: no-repeat;
     background-position: right top;
     padding-right: 30px;
@@ -203,10 +203,10 @@
 }
 
 .connection-status-overview h4.okay{
-    background-image: url('assets/icons/png/status_green.png');
+    background-image: url('../images/icons/status_green.png');
 }
 .connection-status-overview h4.attention{
-    background-image: url('assets/icons/png/status_orange.png');
+    background-image: url('../images/icons/status_orange.png');
 }
 .connection-status-detail{
     padding-top: 8px;
@@ -227,5 +227,5 @@
 }
 
 .connection-status-detail span.network-strength-indicator.full{
-    background-image: url('assets/icons/png/signal_four.png');
+    background-image: url('../images/icons/signal_four.png');
 }
