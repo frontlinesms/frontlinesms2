@@ -12,7 +12,7 @@ class PageContactShow extends geb.Page {
 		groupSubmenu(required:false) { $('#groups-submenu') }
 		groupList(required:false) { $("#group-list")}
 		contactSelect(required:false) { $(".contact-select") }	
-		multiGroupSelect(required:false) { $('#multi-group-add') }
+		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
 		updateAll(required:false) { $("#update-all") }
 		flashMessage(required:false) { $('div.flash') }
 
