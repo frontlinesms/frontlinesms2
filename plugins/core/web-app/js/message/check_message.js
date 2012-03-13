@@ -36,39 +36,14 @@ function countCheckedMessages() {
 }
 
 function upSingleCheckedDetails(messageId) {
-	var searchId = $('input:hidden[name=searchId]').val() || '';
-	var new_url;
-	if(url.indexOf("show") >= 0)
-		new_url = url.replace(/\d+\/$/, messageId);
-	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") >= 0))
-		new_url = url + 'result/show/' + messageId;
-	else
-		new_url = url + 'show/' + messageId;
-
-	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
-		$('#single-message').replaceWith($(data).find('#single-message'));
-		$("#message-detail .dropdown").selectmenu();
-	});
+	updateMessageDetails(messageId, false);
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
 	messageList.val(newList);
 }
 
 function downSingleCheckedDetails(messageId) {
-	var searchId = $('input:hidden[name=searchId]').val() || '';
-	var new_url;
-	if(url.indexOf("show") >= 0)
-		new_url = url.replace(/\d+\/$/, messageId);
-	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") == 0))
-		new_url = url + 'result/show/' + messageId;
-	else
-		new_url = url + 'show/' + messageId;
-		
-
-	$.get(new_url, { messageId: messageId, searchId: searchId}, function(data) {
-		$('#multiple-messages').replaceWith($(data).find('#single-message'));
-		$("#message-detail .dropdown").selectmenu();
-	});
+	updateMessageDetails(messageId, false);
 	var messageList = $('input:hidden[name=checkedMessageList]');
 	var newList = ',' + messageId + ',';
 	messageList.val(newList);
@@ -90,18 +65,38 @@ function removeFromChecked(messageId) {
 }
 
 function updateMultipleCheckedDetails(messageId) {
+	updateMessageDetails(messageId, true);
+}
+
+function updateMessageDetails(messageId, hasMultipleSelected) {
 	var searchId = $('input:hidden[name=searchId]').val();
 	var new_url;
+	
 	if(url.indexOf("show") >= 0)
 		new_url = url.replace(/\d+\/$/, messageId);
-	else if(url.indexOf("search") >= 0 && !(url.indexOf("result") == 0))
-		new_url = url + 'result/show/' + messageId;
 	else
-		new_url = url + 'show/' + messageId;
+		new_url = url_root + controller + '/' + action;
 	
-	$.get(new_url, { messageId: messageId, checkedMessageList: $("#checkedMessageList").val(), searchId: searchId}, function(data) {
-		$('#single-message').replaceWith($(data).find('#multiple-messages'));
-		$('#multiple-messages').replaceWith($(data).find('#multiple-messages'));
+	console.log("url is " + new_url);
+	
+	var params = { messageId: messageId, searchId: searchId}
+	if($("#ownerId").val()) {
+		console.log("Val exists: " + $("#ownerId").val());
+		params.ownerId = $("#ownerId").val();
+	}
+	if(hasMultipleSelected) {
+		params.checkedMessageList = $("#checkedMessageList").val()
+	}
+	$.get(new_url, params, function(data) {
+		if(hasMultipleSelected === true) {
+			$('#single-message').replaceWith($(data).find('#multiple-messages'));
+			$('#multiple-messages').replaceWith($(data).find('#multiple-messages'));
+		}
+		if($('#multiple-messages').is(":visible") && !hasMultipleSelected) {
+			$('#multiple-messages').replaceWith($(data).find('#single-message'));
+		} else {
+			$('#single-message').replaceWith($(data).find('#single-message'));
+		}
 		$("#message-detail .dropdown").selectmenu();
 	});
 }
