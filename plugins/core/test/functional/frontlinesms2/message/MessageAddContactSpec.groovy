@@ -21,7 +21,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			def message = Fmessage.findBySrc('+254778899')
 		when:
 			go "message/inbox/show/${message.id}"
-			$('#add-contact').click()
+			$('#message-detail-sender a').click()
 		then:
 			waitFor(10) {$('title').text() == 'Contacts'}
 			$('#details').primaryMobile == "+254778899"

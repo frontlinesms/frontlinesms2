@@ -6,10 +6,10 @@
 	display: block;
 	background-color: white;
 	border:1px solid #6b6b6b;
-	min-width: 200px;
+	min-width: 180px;
 }
 .ui-selectmenu-menu-dropdown{
-	min-width:200px;
+	min-width:180px;
 }
 
 .ui-selectmenu-menu li a{
@@ -40,7 +40,7 @@
 	text-decoration: none;
 	overflow: hidden;
 	height: 25px;
-	min-width: 200px;
+	min-width: 180px;
 	width: 50%;
 }
 
@@ -74,7 +74,7 @@
 }
 #message-detail .ui-icon-triangle-1-s{
 	position:relative;
-	left: 190px;
+	left: 160px;
 	top: -15px;
 }
 .activity-btn .ui-icon-triangle-1-s, .poll-btn .ui-icon-triangle-1-s, .trash .ui-icon-triangle-1-s, #contact-header .ui-icon-triangle-1-s{

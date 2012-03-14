@@ -142,7 +142,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox"
 		then:
-			$("#no-messages").text() == "No messages"
+			$("#no-messages").text() == "No messages here!"
 		    !$("a", text:"starred").displayed
 	}
 
@@ -152,8 +152,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
 			go "message/inbox/show/$message.id"
-			waitFor{$("#btn_dropdown").displayed}
-			$("#btn_dropdown").click()
 			waitFor{$("#btn_forward").displayed}
 			$("#btn_forward").click()
 			waitFor {$('div#tabs-1').displayed}
@@ -191,7 +189,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			waitFor {$('#tabs-1').displayed}
 		when:
 			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			waitFor { $('#tabs-3').displayed }
 		then:
 			$("#tabs-3").displayed
 	}

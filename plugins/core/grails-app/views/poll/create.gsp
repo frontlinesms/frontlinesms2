@@ -150,7 +150,6 @@
 	}
 
 	function highlightPollResponses() {
-		console.log("called")
 		$(".choices").each(function(index) {
 				
 			var changeHandler = function() {

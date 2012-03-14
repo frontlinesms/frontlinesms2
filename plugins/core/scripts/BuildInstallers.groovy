@@ -20,8 +20,13 @@ def isWindows() {
 target(main: 'Build installers for various platforms.') {
 	envCheck()
 	if(isSet('skipWar')) {
-		println "Skipping WAR build..."
-		depends(clean)
+		if(grailsSettings.grailsEnv == 'production') {
+			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
+			depends(clean, war)
+		} else {
+			println "Skipping WAR build..."
+			depends(clean)
+		}
 	} else depends(clean, war)
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
