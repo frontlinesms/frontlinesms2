@@ -22,6 +22,13 @@
 
 <script>
 	function initializePopup() {
+		$("#tabs-1").contentWidget({
+			validate: function() {
+				updateCount();
+				return true;
+			}
+		});
+		
 		$("#tabs-2").contentWidget({
 			validate: function() {
 				addAddressHandler();

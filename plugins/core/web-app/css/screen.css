@@ -564,10 +564,6 @@ animation: newMessage 2s;
 	background-image: url('../images/icons/folders.png');
 }
 
-#reply-all{
-	width: 25%;
-	margin: 0 2%;
-}
 #message-detail-buttons{
     margin: 17px 0;
     padding: 0;

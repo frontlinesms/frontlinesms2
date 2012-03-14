@@ -17,9 +17,9 @@
 				<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}">Resend</g:link>
 			</g:elseif>
 			<g:else>
-				<a class="msg-btn btn" onclick="messageResponseClick('Reply')">Reply</a>
+				<a id="btn_reply" class="msg-btn btn" onclick="messageResponseClick('Reply')">Reply</a>
 			</g:else>
-			<a class="msg-btn btn" onclick="messageResponseClick('Forward')">Forward</a>
+			<a id="btn_forward"class="msg-btn btn" onclick="messageResponseClick('Forward')">Forward</a>
 			<g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
 				<g:actionSubmit id="archive-msg" class="msg-btn" value="Archive" action="archive"/>
 			</g:if>
