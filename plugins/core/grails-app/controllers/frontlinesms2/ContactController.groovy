@@ -152,7 +152,7 @@ class ContactController {
 	}
 	
 	def search = {
-		render template: 'search_results', model: contactSearchService.contactList(params)
+		render template: 'search_results', model: contactSearchService.contactList(params), plugin:"core"
 	}
 	
 	def checkForDuplicates = {
