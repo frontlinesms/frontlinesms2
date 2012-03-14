@@ -2,7 +2,7 @@ import frontlinesms2.radio.*
 import frontlinesms2.Poll
 class RadioFilters {
 	def filters = {
-		justMessage(controller:'message', action:'*') {
+		justMessage(action:'*') {
 			after = { model ->
 				if(model) {
 					model << [radioShowInstanceList: listRadioShows(), radioShowPollInstanceList: RadioShow.getAllRadioPolls()]
@@ -10,7 +10,7 @@ class RadioFilters {
 			}
 		}
 		
-		justSearch(controller:'search', action:'*') {
+		justSearch(action:'*') {
 			after = { model ->
 				if(model) {
 					model << [radioShowInstanceList: listRadioShows()]
@@ -18,14 +18,26 @@ class RadioFilters {
 			}
 		}
 		
-		justPoll(controller:'poll', action:'save') {
+		justStatus(action:'show') {
+			after = { model ->
+				if(model) {
+					model << [radioShowInstanceList: listRadioShows()]
+					}
+			}
+		}
+		
+		justPoll(action:'save') {
 			after = { model ->
 				if(params.radioShowId) {
-					def showInstance = RadioShow.get(params.radioShowId)
-					def poll = Poll.get(model.ownerId)
-					showInstance.addToPolls(poll)
-					showInstance.save(flush:true, failOnError:true)
-					println "${poll.name} has been added to ${showInstance.name}"
+					addPollToRadioShow(model, params.radioShowId)
+				}
+			}
+		}
+		
+		justPoll(action:'edit') {
+			after = { model ->
+				if(params.radioShowId) {
+					addPollToRadioShow(model, params.radioShowId)
 				}
 			}
 		}
@@ -33,5 +45,25 @@ class RadioFilters {
 	
 	def listRadioShows() {
 		RadioShow.findAll()
+	}
+	
+	private def addPollToRadioShow(model, id) {
+		def showInstance = RadioShow.get(id)
+		def pollInstance = Poll.get(model.ownerId)
+		if(showInstance) {
+			removePollFromRadioShow(pollInstance)
+			showInstance.addToPolls(pollInstance)
+		}
+		showInstance.save(flush:true, failOnError:true)
+		println "${pollInstance.name} has been added to ${showInstance.name}"
+	}
+	
+	private void removePollFromRadioShow(pollInstance) {
+		RadioShow.findAll().collect { showInstance ->
+			if(pollInstance in showInstance.polls) {
+				showInstance.removeFromPolls(pollInstance)
+				showInstance.save()
+			}
+		}
 	}
 }

@@ -98,7 +98,7 @@ class RadioShowController extends MessageController {
 	}
 	
 	private void removePollFromRadioShow(Poll poll) {
-		def showInstance = RadioShow.findAll().collect { showInstance ->
+		RadioShow.findAll().collect { showInstance ->
 			if(poll in showInstance.polls) {
 				showInstance.removeFromPolls(poll)
 				showInstance.save()
