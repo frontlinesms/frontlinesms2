@@ -133,22 +133,28 @@ a {
 }
 #messages-tab #messages-list-title{
     background-image: url('../images/icons/messages.png');
+    background-position: 0 -2px;
 }
 #messages-tab .activities-list-title{
     background-image: url('../images/icons/activities.png');
+    background-position: 0 -2px;
 }
 #messages-tab #folders-list-title{
     background-image: url('../images/icons/folders.png');
+    background-position: 0 -2px;
 }
 #messages-tab #shows-list-title{
     background-image: url('../images/icons/shows.png');
+    background-position: 0 -2px;
 }
 
 #contacts-tab  #contacts-list-title{
     background-image: url('../images/icons/contacts.png');
+    background-position: 0 -2px;
 }
 #contacts-tab #groups-list-title{
     background-image: url('../images/icons/groups.png');
+    background-position: 0 -2px;
 }
 #contacts-tab  #smart-groups-list-title{
     background-image: url('../images/icons/smartgroups.png');
@@ -171,55 +177,6 @@ a {
 }
 #archive-tab .sublist #folder{
     background-image: url('../images/icons/foldersarchive.png');
-}
-
-#sidebar #search-menu{
-	margin-left: 17px;
-	padding:0;
-}
-#sidebar #search-menu li h3{
-	margin: 25px 0 0 0;
-	padding:0;
-}
-#sidebar #search-menu .buttons, #sidebar #search-menu #extra-options-list{
-	margin-right: 17px;
-	padding:0;
-}
-#sidebar #search-menu .btn.create{
-	width:100%;
-	height:25px;
-	padding: 2px 0;
-	margin: 17px 0;
-}
-#sidebar #search-menu #extra-options-list{
-	padding: 0 0 17px 23px;
-	margin-bottom: 17px;
-}
-#sidebar #search-menu #extra-options-list li{
-	padding-top: 5px;
-}
-#sidebar #search-menu .extra-option input{
-	margin: 5px 0 0 17px;
-}
-#sidebar #search-menu #more-options{
-	margin-bottom: 17px;
-}
-#sidebar #search-menu #search-btn{
-	border-top: 1px solid #9e9e9e;
-	padding-top: 17px;
-	marign-top: 17px;
-}
-#sidebar #search-menu #clear{
-	float: right;
-}
-#sidebar #search-menu .field{
-	padding-left: 0;
-}
-#sidebar #search-menu #non-dates .field select, #sidebar #search-menu .field input[type=text]{
-	width: 90%;
-}
-#sidebar #search-menu .dropdown{
-	margin: 10px 30px 10px 0;
 }
 
 #content{
@@ -284,8 +241,6 @@ a {
     background-color: #fff;
 }
 .section-header .message-title, .section-header #archive-title, .section-header #contact-title{
-    padding: 0;
-    position: relative;
     margin: 0;
     min-height: 43px;
     padding: 0 17px;
@@ -299,7 +254,7 @@ a {
 
 .section-header .message-title h3, .section-header .activity-title h3, .section-header h3{
     text-transform: uppercase;
-    padding:10px 0;
+    padding:12px 0;
     padding-left: 28px;
     margin: 0;
     background-repeat: no-repeat;
@@ -334,7 +289,6 @@ a {
 }
 .section-header .activity-title #poll-graph-btn{
 	position: absolute;
-	z-index: 10;
 	top: 170px;
 	right: 27px;
 	padding-left: 25px;
@@ -418,10 +372,10 @@ a {
 	top: 126px;
  	background-image: url("../images/menubar.png");
     background-repeat: repeat-x;
-    z-index: 10;
     padding: 0 21% 0 0;
     margin: 0;
     border: 0;
+    z-index: 1;
 }
 .tall-header #message-list thead{
     top: 283px;
@@ -497,26 +451,20 @@ animation: newMessage 2s;
 	left: 40%;
 }
 #no-messages{
-	position: fixed;
 	height: 10%;
 	min-height: 50px;
-	top: 200px;
-	left: 40%;
+	width: 340px;
+	margin-right: auto;
+	margin-left: auto;
 }
 #messages #no-search-description{
-	position: fixed;
 	height: 10%;
 	min-height: 50px;
-	top: 400px;
-	left: 35%;
+	width: 500px;
+	margin-right: auto;
+	margin-left: auto;
 }
-#messages #no-messages-search{
-	position: fixed;
-	height: 10%;
-	min-height: 50px;
-	top: 400px;
-	left: 27%;
-}
+
 #message-list .message-preview td a, #message-list th a{
     text-decoration: inherit;
     color: inherit;
@@ -573,11 +521,6 @@ animation: newMessage 2s;
 }
 #single-message, #multiple-messages{
 	padding: 17px 17px;
-}
-
-#message-detail .extra-msg-btn{
-	width:69%;
-	margin: 17px 2%;
 }
 
 #message-detail-content{
@@ -637,6 +580,14 @@ animation: newMessage 2s;
 #message-detail-buttons a.msg-btn{
 	padding: 4px 0 0 0;
 }
+#message-detail-buttons input[type=submit].msg-btn{
+	padding: 0 1px;
+}
+
+#message-detail .extra-msg-btn{
+	width: 50%;
+	margin: 10px ;
+}
 
 .footer{
     width: 100%;
@@ -671,9 +622,8 @@ animation: newMessage 2s;
 	margin: 0 17px 0 10px;
 }
 #messages-tab .footer #paging, #search-tab .footer #paging, #status-tab .footer #paging, #archive-tab .footer #paging{
-	float:right;
-	position: relative;
-	right:43%;
+	position: absolute;
+	right:25%;
 }
 .footer #message-toggler{
     padding: 4px;
@@ -741,21 +691,17 @@ animation: newMessage 2s;
 }
 
 
-
 /* Polls */
 
 #poll-details{
-    position: fixed;
+    position: absolute;
     bottom: 0;
+    top: 200px;
     width: 100%;
-    height:100%;
 }
 #pollGraph{
-    position: fixed;
-    bottom: 0;
-    width: 85%;
-    height:60%;
-    padding-bottom: 43px;
+    width: 100%;
+    height:100%;
 }
 
 #poll-details h3{

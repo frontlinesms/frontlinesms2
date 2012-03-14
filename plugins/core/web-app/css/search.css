@@ -1,0 +1,49 @@
+#sidebar #search-menu{
+	margin-left: 17px;
+	padding:0;
+}
+#sidebar #search-menu li h3{
+	margin: 25px 0 0 0;
+	padding:0;
+}
+#sidebar #search-menu .buttons, #sidebar #search-menu #extra-options-list{
+	margin-right: 17px;
+	padding:0;
+}
+#sidebar #search-menu .btn.create{
+	width:100%;
+	height:25px;
+	padding: 2px 0;
+	margin: 17px 0;
+}
+#sidebar #search-menu #extra-options-list{
+	padding: 0 0 17px 23px;
+	margin-bottom: 17px;
+}
+#sidebar #search-menu #extra-options-list li{
+	padding-top: 5px;
+}
+#sidebar #search-menu .extra-option input{
+	margin: 5px 0 0 17px;
+}
+#sidebar #search-menu #more-options{
+	margin-bottom: 17px;
+}
+#sidebar #search-menu #search-btn{
+	border-top: 1px solid #9e9e9e;
+	padding-top: 17px;
+	marign-top: 17px;
+}
+#sidebar #search-menu #clear{
+	float: right;
+}
+#sidebar #search-menu .field{
+	padding-left: 0;
+}
+#sidebar #search-menu #non-dates .field select, #sidebar #search-menu .field input[type=text]{
+	width: 90%;
+}
+#sidebar #search-menu .dropdown{
+	margin: 10px 30px 10px 0;
+}
+

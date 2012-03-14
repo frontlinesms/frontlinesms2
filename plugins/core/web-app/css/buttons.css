@@ -15,6 +15,7 @@ button, input[type=submit], a.btn{
     background-color: none;
     min-width:80px;
     font-size: 100%;
+    overflow: hidden;
 }
 
 button:hover, input[type=submit]:hover, a.btn:hover{
