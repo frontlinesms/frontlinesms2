@@ -4,12 +4,6 @@ grails.project.test.reports.dir = "target/test-reports"
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.dependency.resolution = {
-	// Everything with a version that ends with -SNAPSHOT is changing
-//		chainResolver.changingPattern = '.*-SNAPSHOT'  // This causes all snapshot dependencies to be looked for in remote repos
-	if(Boolean.parseBoolean(System.properties['snapshots'])) {
-		chainResolver.changingPattern = '.*-SNAPSHOT'  // This causes all snapshot dependencies to be looked for in remote repos
-	}
-	
 	// inherit Grails' default dependencies
 	inherits("global") {
 		// uncomment to disable ehcache
@@ -32,18 +26,8 @@ grails.project.dependency.resolution = {
 		
 		grailsPlugins()
 		grailsCentral()
-
-		if(Boolean.parseBoolean(System.properties['snapshots'])) {
-			// from https://github.com/alkemist/grails-snapshot-dependencies-fix
-			// Register the new JAR
-			def classLoader = getClass().classLoader
-			classLoader.addURL(new File(baseFile, "lib/grails-snapshot-dependencies-fix-0.1.jar").toURL())
-			// Get a hold of the class for the new resolver
-			def snapshotResolverClass = classLoader.loadClass("grails.resolver.SnapshotAwareM2Resolver")
-			// Define a new resolver that is snapshot aware
-			resolver(snapshotResolverClass.newInstance(name: "spock-snapshots", root: "http://m2repo.spockframework.org/snapshots"))
-		}
 	}
+	
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
@@ -64,10 +48,10 @@ grails.project.dependency.resolution = {
 		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.3-SNAPSHOT'
+		compile 'net.frontlinesms.core:camel-smslib:0.0.3'
 		compile 'org.apache.camel:camel-mail:2.5.0'
 		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.2-SNAPSHOT'
+		compile 'net.frontlinesms.core:at-modem-detector:0.2'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
 	}

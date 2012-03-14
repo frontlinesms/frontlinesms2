@@ -74,8 +74,10 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { multiGroupSelect.find('option').size() > 1 }
 		when:
-			multiGroupSelect.find(text:'Others').click()
-			updateAll.click()
+			def otherGroupId = Group.findByName('Others').id
+			multiGroupSelect.jquery.val(otherGroupId)
+			multiGroupSelect.jquery.trigger('change')
+			updateAll.click()	
 		then:
 			waitFor {Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice'])}
 	}

@@ -15,8 +15,6 @@ public class TrayThingy implements Listener {
 	private TrayIcon t;
 	private PopupMenu popup;
 	private MenuItem open;
-	private MenuItem start;
-	private MenuItem stop;
 
 //> INITIALISATION
 	public TrayThingy(Monitor m) {
@@ -72,8 +70,6 @@ public class TrayThingy implements Listener {
 		else o("Not sure what to set the icon to in this state.");
 
 		open.setEnabled(e.isRunning() && !e.isStarting() && !e.isStopping());
-		start.setEnabled(!e.isRunning());
-		stop.setEnabled(e.isRunning() && !e.isStarting() && !e.isStopping());
 	}
 	
 //> MENU BUILDING
@@ -87,14 +83,6 @@ public class TrayThingy implements Listener {
 
 		popup.add(open = new ClickMenuItem("Open FrontlineSMS") {
 			void click() { launchBrowser(); }});
-
-/* Removed the following as currently they can lead to PermGen errors.
-   Probably not worth re-adding unless they are very popular.
-		popup.add(start = new ClickMenuItem("Start service") {
-			void click() throws Exception { m.start(); }});
-
-		popup.add(stop = new ClickMenuItem("Stop service") {
-			void click() throws Exception { m.stop(); }});*/
 
 		popup.add(new ClickMenuItem("Shutdown FrontlineSMS") {
 			void click() { System.exit(0); }});
