@@ -9,7 +9,6 @@ class RadioShow extends MessageOwner {
 	Date dateCreated
 	List polls
 	static hasMany = [polls: Poll]
-	String type = 'Radio Show'
 	
 	static constraints = {
 		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
@@ -50,5 +49,9 @@ class RadioShow extends MessageOwner {
 	static def getAllRadioPolls() {
 		def radioPollsInstanceList = RadioShow.findAll()*.polls
 		radioPollsInstanceList.flatten()
+	}
+	
+	def getType() {
+		"Radio Show"
 	}
 }

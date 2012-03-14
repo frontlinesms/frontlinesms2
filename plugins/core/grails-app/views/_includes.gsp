@@ -3,6 +3,8 @@
 <g:javascript>
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
+	controller = "${params?.controller}"
+	action = "${params?.action}"
 	refresh_rate = ${params.rRate ?: 30000}
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 </g:javascript>
