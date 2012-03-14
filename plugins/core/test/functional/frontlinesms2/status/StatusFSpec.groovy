@@ -18,6 +18,31 @@ class StatusFSpec extends StatusBaseSpec {
 			$('#trafficGraph svg')
 	}
 	
+	def "can filter across activities and folders"() {
+		setup:
+			createTestTrafficGraphData()
+			def activityList = ['This is a poll poll', 'test announcement', 'test folder']
+		when:
+			to PageStatus
+		then:
+			activityList.each {activityFilter*.text().contains(it)}
+		when:
+			activityFilter.value(Folder.findByName("test").id)
+			submitButton.click()
+		then:
+			activityFilter.value() == "${Folder.findByName('test').id}"
+		when:
+			activityFilter.value(Activity.findByName("test").id)
+			submitButton.click()
+		then:
+			activityFilter.value() == "${Activity.findByName('test').id}"
+		when:
+			activityFilter.value(Activity.findByName("This is a poll").id)
+			submitButton.click()
+		then:
+			activityFilter.value() == "${Activity.findByName('This is a poll').id}"
+	}
+	
 	def "Does not display connections when there are no connections available"() {
 		when:
 			to PageStatus

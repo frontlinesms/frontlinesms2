@@ -9,7 +9,7 @@
 			<g:select class="dropdown" name="activityId" from="${activityInstanceList + folderInstanceList}"
 					  value="${search?.activityId}"
 					  optionKey="${{it.id}}"
-					  optionValue="${{it.name}}"
+					  optionValue="${{it.name + ' ' + it.type}}"
 					  noSelection="${['':'Show all activities/folders']}"/>
 		</li>
 	</ul>
