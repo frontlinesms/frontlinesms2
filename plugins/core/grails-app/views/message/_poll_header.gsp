@@ -1,6 +1,6 @@
 <h3 id="poll-title">${ownerInstance?.name} poll</h3>
 <g:render template="../message/activity_buttons"/>
-<div id="activity-details">
+<div id="activity-details" class='section-details'>
 	<table>
 		<tr>
 			<td>

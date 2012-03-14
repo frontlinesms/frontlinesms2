@@ -1,5 +1,5 @@
 <div class="section-header ${messageSection}" id="search-actions">
-	<div class="activity-title">
+	<div class="${params.action == 'no_search' ? 'message-title' : 'activity-title'}">
 		<h3>Search</h3>
 		<ul class="section-header-buttons button-list">
 			<g:if test="${search}">

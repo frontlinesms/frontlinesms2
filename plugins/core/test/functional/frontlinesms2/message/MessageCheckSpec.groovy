@@ -59,6 +59,27 @@ class MessageCheckSpec extends MessageBaseSpec {
 			waitFor { $("div#tabs-1").displayed }
 	}
 	
+	def "the count of messages being sent is updated even in 'Reply all'"() {
+		given:
+			createInboxTestMessages()
+			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+		when:
+			to PageMessageInbox
+			messagesSelect[1].click()
+			messagesSelect[2].click()
+		then:
+			waitFor { $('#multiple-messages a')[0].displayed }
+		when:
+			$('#multiple-messages a')[0].click()
+		then:
+			waitFor { $("div#tabs-1").displayed }
+		when:
+			$('#nextPage').click()
+		then:
+			$('#messages-count').text() == '2'
+	}
+	
 	def "Should show the correct contact count when replying to multiple checked messages"() {
 		given:
 			[new Fmessage(src:'Alice', text:'hi Alice'),
@@ -106,7 +127,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			$('#confirm-recipients-count').text() == "2 contacts selected"
 	}
 
-	def "'Forward' button still works when all messages are unchecked"() {
+	def "'Forward' button works even when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
 		when: 
@@ -120,10 +141,6 @@ class MessageCheckSpec extends MessageBaseSpec {
 			waitFor { $('#message-detail #message-detail-sender').text() == "Alice" }
 		when:
 			$('a', text:'Alice').click()
-			$('#btn_dropdown').click()
-		then:
-			waitFor { $('#btn_forward').displayed }
-		when:
 			$('#btn_forward').click()
 		then:
 			waitFor { $('div#tabs-1').displayed }

@@ -48,6 +48,7 @@ modules = {
 
 	search {
 		dependsOn "jquery, jquery-ui, common"
+		resource url: [plugin:'core', dir:'css', file:"search.css"]
 		resource url: [plugin:'core', dir:'js', file:"search/moreOptions.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/check_message.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/arrow_navigation.js"]
