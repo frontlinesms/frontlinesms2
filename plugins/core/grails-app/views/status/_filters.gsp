@@ -1,4 +1,4 @@
-<g:if test="${groupInstanceList || pollInstanceList}">
+<g:if test="${groupInstanceList || activityInstanceList || folderInstanceList}">
 	<ul id="type-filters" class="sub-menu">
 		<li>
 			<g:select class="dropdown" name="groupId" from="${groupInstanceList}" value="${search?.group?.id}"
@@ -6,9 +6,9 @@
 					  noSelection="${['':'Show all groups']}"/>
 		</li>
 		<li>
-			<g:select class="dropdown" name="activityId" from="${pollInstanceList + folderInstanceList}"
+			<g:select class="dropdown" name="activityId" from="${activityInstanceList + folderInstanceList}"
 					  value="${search?.activityId}"
-					  optionKey="${{(it instanceof frontlinesms2.Poll?'poll':'folder') + '-' + it.id}}"
+					  optionKey="${{it.id}}"
 					  optionValue="${{it.name}}"
 					  noSelection="${['':'Show all activities/folders']}"/>
 		</li>
