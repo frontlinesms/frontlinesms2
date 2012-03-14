@@ -219,6 +219,23 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			}
 	}
 	
+	def "Archiving a poll archives messages associated with the poll"(){
+		given:
+			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
+			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
+			poll.addToMessages(message1)
+			poll.addToMessages(message2)
+			poll.save(flush:true, failOnError:true)
+		when:
+			poll.archive()
+			poll.refresh()
+		then:
+			poll.liveMessageCount == 2
+			poll.archived
+			poll.activityMessages.list().findAll {it.archived == true}
+	}
+	
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
 		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))

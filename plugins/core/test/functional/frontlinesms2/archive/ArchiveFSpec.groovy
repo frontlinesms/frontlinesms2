@@ -52,15 +52,17 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {
 		given:
 			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other').save(failOnError:true, flush:true)
-			def messages = createTestMessages2()
+			def messages = [new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, inbound:true), new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, inbound:true)] 
 			println messages
 			poll.addToMessages(messages[0])
 			poll.addToMessages(messages[1])
 			poll.save(failOnError:true, flush:true)
 			poll.archive()
-			poll.save(failOnError:true, flush:true)
+			poll.save(flush:true)
+			poll.refresh()
+			assert poll.activityMessages.list().findAll {it.archived == true}
 		when:
-			go "archive/poll/${poll.id}"
+			go "archive/activity?ownerId=$poll.id&messageSection=activity&viewingMessages=true&messageId=${messages[0].id}"
 			$(".message-select")[0].click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }

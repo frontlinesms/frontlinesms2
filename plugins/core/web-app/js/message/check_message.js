@@ -77,15 +77,16 @@ function updateMessageDetails(messageId, hasMultipleSelected) {
 	else
 		new_url = url_root + controller + '/' + action;
 	
-	console.log("url is " + new_url);
-	
 	var params = { messageId: messageId, searchId: searchId}
 	if($("#ownerId").val()) {
-		console.log("Val exists: " + $("#ownerId").val());
 		params.ownerId = $("#ownerId").val();
 	}
 	if(hasMultipleSelected) {
 		params.checkedMessageList = $("#checkedMessageList").val()
+	}
+	
+	if(controller === "archive") {
+		params.viewingMessages = true
 	}
 	$.get(new_url, params, function(data) {
 		if(hasMultipleSelected === true) {
