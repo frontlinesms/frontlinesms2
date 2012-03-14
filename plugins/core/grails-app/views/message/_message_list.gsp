@@ -8,7 +8,7 @@
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
-<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder') ? '' : 'tall-header'}">
+<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
 	<div id="message-list">
 		<table cellspacing="0">
 			<thead>

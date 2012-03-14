@@ -305,12 +305,11 @@ a {
 .section-header .activity-title #activity-details{
 	position: absolute;
 	top: 50px;
-	left: 27px;
+	left: 50px;
 	height: 125px;
 	z-index: 10;
 }
 .section-header .activity-title td{
-	padding: 0 25px;
 	font-size: 11px;
 }
 .section-header .activity-title #activity-details #poll-sent{
