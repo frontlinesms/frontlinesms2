@@ -1,12 +1,14 @@
 package frontlinesms2
 
 import org.apache.camel.Exchange
+import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import org.smslib.NotConnectedException
 import serial.SerialClassFactory
 import serial.CommPortIdentifier
 import net.frontlinesms.messaging.*
+import frontlinesms2.camel.clickatell.*
 
 class FconnectionService {
 	def camelContext
@@ -34,6 +36,19 @@ class FconnectionService {
 							.to(c.camelProducerAddress)
 							.routeId("out-${c.id}")
 				}
+			} else if(c instanceof ClickatellFconnection) {
+				routes << from("seda:out-${c.id}")
+						.process(new ClickatellPreProcessor())
+						.setHeader(Exchange.HTTP_URI,
+								simple(c.camelProducerAddress + '/sendmsg?' + 
+										'api_id=${header.clickatell.apiId}&' +
+										'user=${header.clickatell.username}&' + 
+										'password=${header.clickatell.password}&' + 
+										'to=${header.clickatell.dst}&' +
+										'text=${body}'))
+						.to(c.camelProducerAddress)
+						.process(new ClickatellPostProcessor())
+						.routeId("out-${c.id}")
 			} else if(grails.util.Environment.current == grails.util.Environment.TEST
 					&& c instanceof Fconnection) {
 				incoming = 'stream:out'

@@ -11,7 +11,7 @@ class SmslibFconnection extends Fconnection {
 	int baud
 	String serial
 	String imsi
-	String pin
+	String pin // FIXME maybe encode this rather than storing plaintext(?)
 	String smsc
 	boolean allMessages = true
 
@@ -44,7 +44,7 @@ class SmslibFconnection extends Fconnection {
 		}
 	}
 
-	String type() { 'Phone/Modem' }
+	String getType() { 'Phone/Modem' }
 	
 	String getCamelConsumerAddress() {
 		camelAddress()
