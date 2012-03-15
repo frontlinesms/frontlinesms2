@@ -75,7 +75,7 @@ class ConnectionController {
 		withFconnection { c ->
 			println "Destroying connection: $c"
 			fconnectionService.destroyRoutes(c)
-			flash.message = LogEntry.log("${message(code: 'connection.route.destroyed', args: [c.camelConsumerAddress, c.camelProducerAddress])}")
+			flash.message = "${message(code: 'connection.route.disconnecting')}"
 			redirect(controller:'settings', action:'connections', id:c.id)
 		}
 	}
