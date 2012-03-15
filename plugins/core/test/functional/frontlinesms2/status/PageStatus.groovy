@@ -13,5 +13,9 @@ class PageStatus extends geb.Page {
 		detectedDevicesSection { $('div#device-detection') }
 		noDevicesDetectedNotification(required:false) { detectedDevicesSection.find('p') }
 		detectedDevicesTable(required:false) { detectedDevicesSection.find('table') }
+		trafficForm { $("#trafficForm")}
+		typeFilters(required:false) { $("#type-filters")}
+		activityFilter(required:false) { typeFilters.find("#activityId")}
+		submitButton { $("#update-chart")}
 	}
 }

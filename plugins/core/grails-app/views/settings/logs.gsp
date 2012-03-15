@@ -18,7 +18,7 @@
 			</g:if>
 			<g:else>
 				<div id="log-filters">
-					<span>Show logs for</span>
+					<span id="show-log-text">Show logs for</span>
 					<span>
 						<select class="dropdown" name="timePeriod" onChange="filterLogEntries(this.value)">
 							<option value="forever">all time</option>

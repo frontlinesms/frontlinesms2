@@ -16,7 +16,7 @@
 			</g:if>
 			<h3 id="announcement-title">${ownerInstance?.name} ${ownerInstance?.type}</h3>
 			<g:render template="../message/activity_buttons"/>
-			<div id="activity-details">
+			<div id="activity-details" class='section-details'>
 				<g:formatDate date="${ownerInstance?.dateCreated}" /><span id="announcement-sent">   (${sentMessageCount} messages sent)</span>
 				<p>${ownerInstance.sentMessageText}</p>
 			</div>

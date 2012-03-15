@@ -6,11 +6,8 @@
 	border-bottom: 1px solid #9e9e9e;
 }
 #contact-list{
-	position: fixed;
     float:left;
     margin: 0;
-    top: 129px;
-    bottom: 43px;
     padding: 10px;
     width: 250px;
     overflow: auto;
@@ -38,14 +35,14 @@
 }
 
 #contact-editor{
-	position: fixed;
+	position: absolute;
+	right: 0;
+	left: 250px;
+	bottom: 43px;
+	top: 44px;
     float: right;
-    margin: 0 0 0 251px;
-    top: 129px;
-    bottom: 43px;
-    right: 0;
-    left: 17%;
     background-color: #D8E8EF;
+    z-index: 0;
 }
 #contact-editor form{
 	 overflow: auto;
