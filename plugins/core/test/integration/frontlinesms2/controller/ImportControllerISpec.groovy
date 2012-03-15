@@ -24,33 +24,19 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 '''
 			controller.request.metaClass.getFile = { String originalFileName ->
 				println "getFile() : name:$originalFileName"
-				assert originalFileName == 'importedcsvfile'
+				assert originalFileName == 'importCsvFile'
 				[
 					empty:false,
 					originalFilename:'mockedFile.csv',
-					transferTo: { File f ->
-						f << csvFileContent
-					}
+					inputStream: new ByteArrayInputStream(csvFileContent.getBytes("UTF-8"))
 				]
 			}
 		when:
 			// file is uploaded
-			controller.importedContacts()
+			controller.importContacts()
 		then:
 			// check that contacts and groups were created
 			Contact.list()*.name.sort() == ['Alice Sihoho', 'Amira Cheserem', 'anyango Gitu']
 			Group.list()*.name.sort() == ['ToDo', 'ToDo-Work', 'ToDo-Work-jobo', 'Work', 'isIt', 'jobo']
 	}
-	
-	
-	/*
-    def "all imported messages are added to messages from v1 folder"() {
-		setup:
-			controller.params.importedcsv = 
-		when:
-			def result = controller.importedMessages()
-		then:
-			result.importedMessageList.size() == 3
-	}*/
-
 }

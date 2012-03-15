@@ -11,10 +11,10 @@
 				<p class="description">
 					Import data from a previous backup
 				</p>
-				<g:uploadForm name="importform" controller="import" action="importedContacts" method="post">
-					<p class="importinfo">To import contacts from version 1, please export them in English</p>
-					<label for="importedcsvfile">select a data file to import</label>
-					<input type="file" id="importedcsvfile" name="importedcsvfile" onchange="this.form.submit();"/>
+				<g:uploadForm name="importForm" controller="import" action="importContacts" method="post">
+					<p class="importInfo">To import contacts from version 1, please export them in English</p>
+					<label for="importCsvFile">select a data file to import</label>
+					<input type="file" id="importCsvFile" name="importCsvFile" onchange="this.form.submit();"/>
 				</g:uploadForm>
 			</div>
 		</div>
