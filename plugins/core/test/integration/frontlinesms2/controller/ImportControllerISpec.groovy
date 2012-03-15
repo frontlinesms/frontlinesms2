@@ -22,6 +22,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 "Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
 "anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
 '''
+			// FIXME are there any problems with modifying getFile like this?
 			controller.request.metaClass.getFile = { String originalFileName ->
 				println "getFile() : name:$originalFileName"
 				assert originalFileName == 'importCsvFile'
