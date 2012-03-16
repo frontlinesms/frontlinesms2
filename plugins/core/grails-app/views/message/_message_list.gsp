@@ -8,7 +8,7 @@
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
-<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder') ? '' : 'tall-header'}">
+<div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
 	<div id="message-list">
 		<table cellspacing="0">
 			<thead>
@@ -73,20 +73,16 @@
 					</g:if>
 					<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
 						<tr id="no-search-description">
-							<td></td>
-							<td></td>
-							<td><h1>Start new search on the left</h1></td>
-							<td></td>
-							<td></td>
+							<td colspan="5">
+								<h1>Start new search on the left</h1>
+							</td>
 						</tr>
 					</g:elseif>
 					<g:else>
 						<tr id="no-messages">
-							<td></td>
-							<td></td>
-							<td>No messages</td>
-							<td></td>
-							<td></td>
+							<td colspan="5">
+								<h1>No messages here!</h1>
+							</td>
 						</tr>
 					</g:else>
 			</tbody>

@@ -4,6 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.poll.PageMessagePollFootballTeamsBob
 
 class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
+
 	def 'message actions menu is displayed for all individual messages'() {
 		given:
 			createTestPolls()

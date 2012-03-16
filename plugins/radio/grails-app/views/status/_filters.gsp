@@ -1,4 +1,4 @@
-<g:if test="${groupInstanceList || activityInstanceList || folderInstanceList}">
+<g:if test="${groupInstanceList || activityInstanceList || folderInstanceList || radioShowInstanceList}">
 	<ul id="type-filters" class="sub-menu">
 		<li>
 			<g:select class="dropdown" name="groupId" from="${groupInstanceList}" value="${search?.group?.id}"
@@ -6,11 +6,11 @@
 					  noSelection="${['':'Show all groups']}"/>
 		</li>
 		<li>
-			<g:select class="dropdown" name="activityId" from="${activityInstanceList + folderInstanceList}"
+			<g:select class="dropdown" name="activityId" from="${activityInstanceList + folderInstanceList + radioShowInstanceList}"
 					  value="${search?.activityId}"
 					  optionKey="${{it.id}}"
 					  optionValue="${{it.name + ' ' + it.type}}"
-					  noSelection="${['':'Show all activities/folders']}"/>
+					  noSelection="${['':'Show all activities/folders/shows']}"/>
 		</li>
 	</ul>
 </g:if>

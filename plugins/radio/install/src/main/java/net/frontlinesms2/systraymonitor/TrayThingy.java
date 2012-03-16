@@ -15,8 +15,6 @@ public class TrayThingy implements Listener {
 	private TrayIcon t;
 	private PopupMenu popup;
 	private MenuItem open;
-	private MenuItem start;
-	private MenuItem stop;
 
 //> INITIALISATION
 	public TrayThingy(Monitor m) {
@@ -30,6 +28,12 @@ public class TrayThingy implements Listener {
 		t.setImageAutoSize(true);
 		t.addActionListener(createActionListener());
 		d(m.getServer());
+	}
+	
+//> ACCESSORS
+	public TrayIcon getTrayIcon() {
+		if(t == null) init();
+		return t;
 	}
 
 //> LifeCycle.Listener METHODS
@@ -46,7 +50,7 @@ public class TrayThingy implements Listener {
 		d(event);
 		cause.printStackTrace();
 	}
-	public void lifeCycleStarted(LifeCycle event) { d(event); }
+	public void lifeCycleStarted(LifeCycle event) { d(event); launchBrowser(); removeSplashScreen();  }
 	public void lifeCycleStarting(LifeCycle event) { d(event); }
 	public void lifeCycleStopped(LifeCycle event) { d(event); }
 	public void lifeCycleStopping(LifeCycle event) { d(event); }
@@ -66,10 +70,9 @@ public class TrayThingy implements Listener {
 		else o("Not sure what to set the icon to in this state.");
 
 		open.setEnabled(e.isRunning() && !e.isStarting() && !e.isStopping());
-		start.setEnabled(!e.isRunning());
-		stop.setEnabled(e.isRunning() && !e.isStarting() && !e.isStopping());
 	}
-
+	
+//> MENU BUILDING
 	private PopupMenu createPopupMenu() {
 		PopupMenu popup = new PopupMenu();
 			
@@ -79,15 +82,9 @@ public class TrayThingy implements Listener {
 			}});
 
 		popup.add(open = new ClickMenuItem("Open FrontlineSMS") {
-			void click() { openWebBrowser(m.getUrl()); }});
-	
-		popup.add(start = new ClickMenuItem("Start service") {
-			void click() throws Exception { m.start(); }});
+			void click() { launchBrowser(); }});
 
-		popup.add(stop = new ClickMenuItem("Stop service") {
-			void click() throws Exception { m.stop(); }});
-
-		popup.add(new ClickMenuItem("Exit JVM") {
+		popup.add(new ClickMenuItem("Shutdown FrontlineSMS") {
 			void click() { System.exit(0); }});
 
 		return popup;
@@ -96,14 +93,21 @@ public class TrayThingy implements Listener {
 	private ActionListener createActionListener() {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				openWebBrowser(m.getUrl());
+				launchBrowser();
 			}
 		};
 	}
+	
+	private void launchBrowser() {
+		openWebBrowser(m.getUrl());
+	}
 
-	public TrayIcon getTrayIcon() {
-		if(t == null) init();
-		return t;
+	private void removeSplashScreen() {
+		try {
+			com.install4j.api.launcher.SplashScreen.hide();
+		} catch(com.install4j.api.launcher.SplashScreen.ConnectionException ex) {
+			// No idea what to do here - presumably there's now a zombie splash screen
+		}
 	}
 }
 

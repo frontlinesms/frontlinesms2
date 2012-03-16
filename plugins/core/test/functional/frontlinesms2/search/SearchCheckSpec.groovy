@@ -74,10 +74,6 @@ class SearchCheckSpec extends SearchBaseSpec {
 			waitFor { $('#message-detail #message-detail-sender').text() == "Barnabus" }
 		when:
 			$('a', text:'Barnabus').click()	
-			$('#btn_dropdown').click()
-		then:
-			waitFor { $('#btn_forward').displayed }
-		when:
 			$('#btn_forward').click()
 		then:
 			waitFor { $('textArea', name:'messageText').text() == "i like chicken" }

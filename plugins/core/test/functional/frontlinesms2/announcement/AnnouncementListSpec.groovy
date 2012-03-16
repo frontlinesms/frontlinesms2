@@ -90,16 +90,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
-			def btnDropdown = $("#btn_dropdown")
-		then:
-			waitFor{ btnDropdown.displayed }
-		when:
-			btnDropdown.click()
-			def btnForward = $("#btn_forward")
-		then:
-			waitFor{ btnForward.displayed }
-		when:
-			btnForward.click()
+			$("#btn_forward").click()
 		then:
 			waitFor { $('div#tabs-1').displayed }
 			$('textArea', name:'messageText').text() == "I will be late"

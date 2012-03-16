@@ -136,7 +136,7 @@ class Contact {
 		GroupMembership.create(this, g, flush)
 	}
 
-	def removeFromGroup(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
+	def removeFromGroup(Group g, flush=false) {
 		removeFromGroups(g, flush)
 	}
 
