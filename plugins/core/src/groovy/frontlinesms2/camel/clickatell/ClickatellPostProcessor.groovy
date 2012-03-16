@@ -1,5 +1,6 @@
 package frontlinesms2.camel.clickatell
 
+import frontlinesms2.*
 import org.apache.camel.*
 
 class ClickatellPostProcessor implements Processor {
