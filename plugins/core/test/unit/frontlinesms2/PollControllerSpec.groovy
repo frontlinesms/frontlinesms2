@@ -5,7 +5,7 @@ import grails.plugin.spock.*
 
 class PollControllerSpec extends ControllerSpec {
 
-	def "test create"() {
+	def "create action should provide groups and contacts for recipients list"() {
 		setup:
 			def alice = new Contact(name: "Alice", primaryMobile: "12345")
 			def bob = new Contact(name: "Bob", primaryMobile: "54321")

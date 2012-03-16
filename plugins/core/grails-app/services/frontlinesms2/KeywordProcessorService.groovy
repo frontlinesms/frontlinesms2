@@ -6,7 +6,6 @@ class KeywordProcessorService {
 	
 	def process(Fmessage message) {
 		processPollResponse(message)
-			// || processOtherStuff()
 	}
 	
 	def processPollResponse(Fmessage message) {

@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class Poll extends Activity {
-	String keyword
+	Keyword keyword
 	String autoReplyText
 	String question
 	List responses
@@ -9,29 +9,14 @@ class Poll extends Activity {
 	static hasMany = [responses: PollResponse]
 	
 	static constraints = {
-		name(blank: false, nullable: false, maxSize: 255, validator: { name, me ->
-			def matching = Poll.findByNameIlike(name)
-			matching==null || matching==me
-		})
+		name(blank: false, nullable: false, maxSize: 255, unique: true)
 		responses(validator: { val, obj ->
 			val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoReplyText(nullable:true, blank:false)
 		question(nullable:true)
-		keyword(nullable:true, validator: { keyword, me ->
-			if(!keyword) return true
-			else {
-				if(keyword.find(/\s/)) return false
-				else {
-					if(me.archived) return true
-					else {
-						def matching = Poll.findByArchivedAndKeyword(false, keyword.toUpperCase())
-						return matching == null || matching.id == me.id
-					}
-				}
-			}
-		})
+		keyword(nullable:true)
 	}
 	
 	Poll addToMessages(Fmessage message) {
@@ -55,13 +40,6 @@ class Poll extends Activity {
 		this
 	}
 	
-	def beforeSave = {
-		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
-	}
-	
-	def beforeUpdate = beforeSave
-	def beforeInsert = beforeSave
-
 	def getResponseStats() {
 		def totalMessageCount = getActivityMessages().count()
 		responses.sort {it.key?.toLowerCase()}.collect {
