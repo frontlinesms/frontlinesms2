@@ -9,6 +9,7 @@ import serial.CommPortIdentifier
 import net.frontlinesms.messaging.*
 
 class FconnectionService {
+	def messageSource
 	def camelContext
 	def deviceDetectionService
 	def camelRouteBuilder = new RouteBuilder() {
@@ -75,13 +76,13 @@ class FconnectionService {
 		println "creating route for fconnection $c"
 		try {
 			camelContext.addRouteDefinitions(routes)
-			createSystemNotification("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
+			createSystemNotification("${messageSource.getMessage('connection.route.successNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
 			LogEntry.log("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 		} catch(Exception e) {
 			e.printStackTrace()
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
 			LogEntry.log("Error creating routes to fconnection with name ${c?.name ?:c?.id}")
-			createSystemNotification(e.message)
+			createSystemNotification("${messageSource.getMessage('connection.route.failNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
 		}
 	}
 	
@@ -93,6 +94,7 @@ class FconnectionService {
 	
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
+		createSystemNotification("${messageSource.getMessage('connection.route.destroyNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
 	}
 	
 	def destroyRoutes(long id) {
