@@ -8,6 +8,7 @@ import frontlinesms2.*
 class FconnectionServiceSpec extends UnitSpec {
 	def service
 	def context
+	def messageSource
 
 	def setup() {
 		mockLogging(FconnectionService)
@@ -16,6 +17,9 @@ class FconnectionServiceSpec extends UnitSpec {
 		service = new FconnectionService()
 		context = Mock(CamelContext)
 		service.camelContext = context
+		messageSource = new Object()
+		messageSource.metaClass.getMessage = {subject, params, locale ->"$subject"}
+		service.messageSource = messageSource
 	}
 
 	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {

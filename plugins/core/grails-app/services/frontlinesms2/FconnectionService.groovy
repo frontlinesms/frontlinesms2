@@ -1,17 +1,24 @@
 package frontlinesms2
 
 import org.apache.camel.Exchange
+import org.apache.camel.Processor
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import org.smslib.NotConnectedException
 import serial.SerialClassFactory
 import serial.CommPortIdentifier
 import net.frontlinesms.messaging.*
+import frontlinesms2.camel.clickatell.*
 
 class FconnectionService {
 	def messageSource
 	def camelContext
 	def deviceDetectionService
+	
+	// In the future, strongly consider moving creation of routes into
+	// Fconnection implementations as it will clean this up a lot and allow for
+	// use of pluggable Fconnections.  Should also make unit testing of route
+	// creation very clean.
 	def camelRouteBuilder = new RouteBuilder() {
 		@Override
 		void configure() {}
@@ -35,6 +42,19 @@ class FconnectionService {
 							.to(c.camelProducerAddress)
 							.routeId("out-${c.id}")
 				}
+			} else if(c instanceof ClickatellFconnection) {
+				routes << from("seda:out-${c.id}")
+						.process(new ClickatellPreProcessor())
+						.setHeader(Exchange.HTTP_URI,
+								simple(c.camelProducerAddress + '/sendmsg?' + 
+										'api_id=${header.clickatell.apiId}&' +
+										'user=${header.clickatell.username}&' + 
+										'password=${header.clickatell.password}&' + 
+										'to=${header.clickatell.dst}&' +
+										'text=${body}'))
+						.to(c.camelProducerAddress)
+						.process(new ClickatellPostProcessor())
+						.routeId("out-${c.id}")
 			} else if(grails.util.Environment.current == grails.util.Environment.TEST
 					&& c instanceof Fconnection) {
 				incoming = 'stream:out'
@@ -72,10 +92,9 @@ class FconnectionService {
 				CommPortIdentifier.getPortIdentifiers()
 			}
 		}
-		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		println "creating route for fconnection $c"
 		try {
-			camelContext.addRouteDefinitions(routes)
+			camelContext.addRouteDefinitions(camelRouteBuilder.getRouteDefinitions(c))
 			createSystemNotification("${messageSource.getMessage('connection.route.successNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
 			LogEntry.log("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 		} catch(Exception e) {

@@ -155,6 +155,7 @@ class CoreBootStrap {
 	private def dev_initFconnections() {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
+		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {

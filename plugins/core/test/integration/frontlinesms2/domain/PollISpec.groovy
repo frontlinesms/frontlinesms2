@@ -232,7 +232,6 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.refresh()
 		then:
 			poll.liveMessageCount == 2
-			poll.archived
 			poll.activityMessages.list().findAll {it.archived == true}
 	}
 	

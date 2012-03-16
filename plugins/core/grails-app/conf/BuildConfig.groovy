@@ -32,7 +32,8 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// TEST
-		test 'org.apache.camel:camel-test:2.5.0'
+		def camelVersion = '2.5.0'
+		test "org.apache.camel:camel-test:$camelVersion"
 		test 'org.mockito:mockito-all:1.8.5'
 		def seleniumVersion = "2.18.0"
 		def gebVersion = "0.6.1"
@@ -42,14 +43,13 @@ grails.project.dependency.resolution = {
 		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test "org.spockframework:spock-core:$spockVersion"
 
-		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile ('net.frontlinesms.test:hayescommandset-test:0.0.4') {
-			changing = true
-		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
+		// TODO This should be included in compile for TEST and DEV scopes, and excluded for PRODUCTION
+		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
 
 		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.3'
-		compile 'org.apache.camel:camel-mail:2.5.0'
+		compile "org.apache.camel:camel-mail:$camelVersion"
+		compile "org.apache.camel:camel-http:$camelVersion"
 		compile 'net.frontlinesms.core:serial:1.0.1'
 		compile 'net.frontlinesms.core:at-modem-detector:0.2'
 		runtime 'org.rxtx:rxtx:2.1.7'
