@@ -7,7 +7,7 @@ import org.apache.camel.Header
 class DispatchRouterService {
 	def camelContext
 
-	int counter = 0
+	int counter = -1
 
 	/**
 	 * Slip should return the list of ______ to forward to, or <code>null</code> if
