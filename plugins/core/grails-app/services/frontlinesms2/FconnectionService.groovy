@@ -13,6 +13,11 @@ import frontlinesms2.camel.clickatell.*
 class FconnectionService {
 	def camelContext
 	def deviceDetectionService
+	
+	// In the future, strongly consider moving creation of routes into
+	// Fconnection implementations as it will clean this up a lot and allow for
+	// use of pluggable Fconnections.  Should also make unit testing of route
+	// creation very clean.
 	def camelRouteBuilder = new RouteBuilder() {
 		@Override
 		void configure() {}
@@ -86,10 +91,9 @@ class FconnectionService {
 				CommPortIdentifier.getPortIdentifiers()
 			}
 		}
-		def routes = camelRouteBuilder.getRouteDefinitions(c)
 		println "creating route for fconnection $c"
 		try {
-			camelContext.addRouteDefinitions(routes)
+			camelContext.addRouteDefinitions(camelRouteBuilder.getRouteDefinitions(c))
 			createSystemNotification("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 			LogEntry.log("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
 		} catch(Exception e) {
