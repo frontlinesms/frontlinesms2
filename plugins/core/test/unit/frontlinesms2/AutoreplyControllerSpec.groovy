@@ -9,8 +9,10 @@ class AutoreplyControllerSpec extends ControllerSpec {
 		given:
 			mockDomain(Autoreply)
 		when:
-			mockParams.id = poll.id
-			controller.unarchive()
+			mockParams.name = "Color"
+			mockParams.keyword = "color"
+			mockParams.messageText = "ahhhhhhhhh"
+			controller.save()
 		then:
 			!poll.archived
 			controller.redirectArgs == [controller:'archive', action:'activityList']
