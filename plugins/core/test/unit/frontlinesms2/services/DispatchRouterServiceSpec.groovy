@@ -67,7 +67,7 @@ class DispatchRouterServiceSpec extends UnitSpec {
 		when:
 			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
 		then:
-			routedTo == [1, 2, 3, 1, 2].collect { "out-$it" }
+			routedTo == [1, 2, 3, 1, 2].collect { "seda:out-$it" }
 	}
 	
 	private def mockExchange() {
@@ -84,4 +84,3 @@ class DispatchRouterServiceSpec extends UnitSpec {
 		service.camelContext = c
 	}
 }
-
