@@ -33,7 +33,7 @@ class DispatchRouterService {
 				def connectionId = filteredRouteList[++counter % filteredRouteList.size].id
 				println "DispatchRouterService.slip() : Sending with connection: $connectionId"
 				println "DispatchRouterService.slip() : Setting header 'fconnection' to $connectionId"
-				exchange.out.headers.fconnection = connectionId
+				exchange.out.headers.fconnection = connectionId.substring('out-'.size())
 				def routeName = "seda:$connectionId"
 				println "DispatchRouterService.slip() : Routing to $routeName"
 				return routeName
