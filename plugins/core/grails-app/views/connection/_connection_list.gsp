@@ -9,7 +9,7 @@
 					<g:link action="connections" id="${c.id}">
 						<div class="connection-header">
 							<h2>'${c.name}'</h2>
-							<p class="connection-type">(${c.type()})</p>
+							<p class="connection-type">(${c.type})</p>
 							<i class="connection-status">${c.status}</i>
 						</div>
 					</g:link>
@@ -28,9 +28,9 @@
 								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup('Test message', data, 'Send');">
 									Send test message
 								</g:remoteLink>
-                <g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">
-                  Destroy route
-                </g:link>
+								<g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">
+									Destroy route
+								</g:link>
 							</div>
 						</g:else>
 					</g:if>

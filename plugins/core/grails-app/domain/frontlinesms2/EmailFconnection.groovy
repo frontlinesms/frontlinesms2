@@ -7,7 +7,7 @@ class EmailFconnection extends Fconnection {
 	String username
 	String password
 
-	String type() { 'Email' }
+	String getType() { 'Email' }
 
 	String getCamelConsumerAddress() {
 		String serverPortParam = serverPort ? ":${serverPort}" : ""
