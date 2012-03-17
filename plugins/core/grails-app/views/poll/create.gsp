@@ -13,12 +13,12 @@
 		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
 	</ol>
 
-	<g:render template="/poll/new_poll_form"/>
+	<g:render template="/poll/new_poll_form" plugin="core"/>
 </div>
 
 <g:javascript>
 	function initializePopup() {
-		<g:if test="activityInstanceToEdit">
+		<g:if test="${activityInstanceToEdit}">
 			$("#autoReplyText").trigger("keyup");
 		</g:if>
 		
