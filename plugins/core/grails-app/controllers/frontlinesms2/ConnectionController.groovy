@@ -39,22 +39,11 @@ class ConnectionController {
 		}
 	}
 	
-	def saveEmail = {
-		def fconnectionInstance = new EmailFconnection()
-		if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
-		fconnectionInstance.properties = params
-
-		if (fconnectionInstance.save()) {
-			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
-			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
-		} else {
-			flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
-			redirect(controller:'settings', action: "connections", params: params)
-		}
-	}
-
-	def saveSmslib = {
-		def fconnectionInstance = new SmslibFconnection()
+	def saveEmail = { save(EmailFconnection) }
+	def saveSmslib = { save(SmslibFconnection) }
+	private def save(Class<Fconnection> clazz) {
+		def fconnectionInstance = clazz.newInstance()
+		println "Creating fconnection: $fconnectionInstance"
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save()) {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
