@@ -4,7 +4,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 class ErrorController {
-	static final def DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd")
+	static final def DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd")
 
 	def zip_to_download = {
 		def formatedDate = DATE_FORMAT.format(new Date())
