@@ -26,11 +26,11 @@ class DispatchRouterService {
 			return "seda:out-$target"
 		} else {
 			println "DispatchRouterService.slip() : Routes available: ${camelContext.routes*.id}"
-			def connectionId = getDispatchConnectionId()
-			if(connectionId) {
-				println "DispatchRouterService.slip() : Sending with connection: $connectionId"
-				println "DispatchRouterService.slip() : Setting header 'fconnection' to $connectionId"
-				def fconnectionId = (connectionId =~ /.*-(\d+)$/)[0][1]
+			def routeId = getDispatchRouteId()
+			if(routeId) {
+				println "DispatchRouterService.slip() : Sending with route: $routeId"
+				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]
+				println "DispatchRouterService.slip() : Setting header 'fconnection' to $fconnectionId"
 				exchange.out.headers.fconnection = fconnectionId
 				def routeName = "seda:out-$fconnectionId"
 				println "DispatchRouterService.slip() : Routing to $routeName"
@@ -42,7 +42,7 @@ class DispatchRouterService {
 		}
 	}
 	
-	def getDispatchConnectionId() {
+	def getDispatchRouteId() {
 		def allOutRoutes = filter(camelContext.routes, { it.id.startsWith('out-') })
 		if(allOutRoutes.size > 0) {
 			// check for internet routes and prioritise them over modems

@@ -136,24 +136,20 @@ class FconnectionService {
 	}
 	
 	def getRouteStatus(Fconnection c) {
-		(camelContext.getRoute("in-${c.id}") || camelContext.getRoute("out-${c.id}")) ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED 
+		return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED
 	}
 	
 	// TODO rename 'handleNotConnectedException'
 	def handleDisconnection(Exchange ex) {
 		try {
-			println "fconnectionService.handleDisconnection(ex) : ENTRY"
+			println "fconnectionService.handleDisconnection() : ENTRY"
 			def caughtException = ex.getProperty(Exchange.EXCEPTION_CAUGHT)
-			println "Exchange: $ex"
-			println "ex.fromRouteId: $ex.fromRouteId"
-			println "ex.fromEndpoint: $ex.fromEndpoint"
-			println "ex.exception: $ex.exception"
-			println "EXCEPTION_CAUGHT: ${caughtException}"
-			println "fconnectionService.handleDisconnection(ex) : EXIT"
+			println "FconnectionService.handleDisconnection() : ex.fromRouteId: $ex.fromRouteId"
+			println "FconnectionService.handleDisconnection() : EXCEPTION_CAUGHT: $caughtException"
 			
 			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
 			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(\d+)/)[0][1]
-			println "Looking to stop route: $routeId"
+			println "FconnectionService.handleDisconnection() : Looking to stop route: $routeId"
 			RouteDestroyJob.triggerNow([routeId:routeId as long])
 		} catch(Exception e) {
 			e.printStackTrace()

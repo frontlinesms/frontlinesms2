@@ -8,7 +8,7 @@ class ClickatellFconnection extends Fconnection {
 	static passwords = ['password']
 	
 	String getCamelProducerAddress() {
-		"http://localhost:8081/mock-clickatell/http"
+		"http://api.clickatell.com/http"
 	}
 	
 	String getCamelConsumerAddress() {

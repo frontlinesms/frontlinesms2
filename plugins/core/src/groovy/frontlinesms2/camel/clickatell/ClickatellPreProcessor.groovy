@@ -15,7 +15,10 @@ class ClickatellPreProcessor implements Processor {
 		def d = x.in.body
 		x.out.headers['frontlinesms.dispatch.id'] = d.id
 		x.out.body = urlEncode(d.message.text)
-		set x, 'dst', d.dst
+		
+		def destination = d.dst
+		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)
+		set x, 'dst', destination
 		
 		// Add auth details to header
 		log "Calculating connection ID..."

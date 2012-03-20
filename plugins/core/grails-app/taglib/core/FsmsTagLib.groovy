@@ -3,8 +3,6 @@ package core
 class FsmsTagLib {
 	static namespace = 'fsms'
 	
-	def g
-	
 	def confirmTable = { att ->
 		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm">'
 		def fields = att.remove('fields').tokenize(',')

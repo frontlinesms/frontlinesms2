@@ -43,13 +43,13 @@ class ClickatellPreProcessorSpec extends UnitSpec {
 			x.out.headers.'frontlinesms.dispatch.id' == '45678'
 	}
 	
-	def 'message destination should be set and URL-encoded in header'() {
+	def 'message destination should be set and stripped of leading plus'() {
 		given:
 			def x = mockExchange("simple")
 		when:
 			p.process(x)
 		then:
-			x.out.headers.'clickatell.dst' == '%2B1234567890'
+			x.out.headers.'clickatell.dst' == '1234567890'
 	}
 	
 	def 'clickatell auth details should be set in header'() {
