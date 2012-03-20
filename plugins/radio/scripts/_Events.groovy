@@ -31,6 +31,7 @@ boolean inFunctionalTestPhase = false
 
 eventTestPhaseStart = { name ->
 	inFunctionalTestPhase = (name == 'functional')
+	junitReportStyleDir = "test/conf"
 }
 
 eventTestStart = { name ->

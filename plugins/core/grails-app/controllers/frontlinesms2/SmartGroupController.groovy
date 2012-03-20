@@ -13,36 +13,19 @@ class SmartGroupController {
 	
 	def save = {
 		println "controller save smartgroup"
-		def smartGroupInstance = new SmartGroup()
-		smartGroupInstance.name = params.smartgroupname
-		addSmartGroupRules(smartGroupInstance)
-		
-		if(smartGroupInstance.save()) {
-			println "smargtgroup successfully saved"
-			flash.message = "Created new smart group: '$params.smartgroupname'"
-			redirect controller:'contact', action:'show'
-		} else {
-			println "smargroup save failed. Errors were $smartGroupInstance.errors"
-			flash.error = "Smart group save failed. Errors were $smartGroupInstance.errors"
-			render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
-		}
-	}
-	
-	def update = {
 		withSmartGroup { smartGroupInstance ->
-			if(params.smartgroupname)
-				smartGroupInstance.name = params.smartgroupname
+			smartGroupInstance.name = params.smartgroupname
 			if((getRuleText().flatten() - null)) {
 				addSmartGroupRules(smartGroupInstance)
 			}
-			if(smartGroupInstance.validate()) {
-				smartGroupInstance.save(failOnError: true, flush: true)
-				flash.message = "Smart Group updated successfully"
+			if(smartGroupInstance.save()) {
+				println "smartgroup successfully saved"
+				flash.message = "Smart group '$params.smartgroupname' saved"
 				redirect(controller: "contact", action: "show", params:[smartGroupId : smartGroupInstance.id])
-			}
-			else {
-				flash.message = "Smart Group not saved successfully"
-				redirect(controller:"contact")
+			} else {
+				println "smargroup save failed. Errors were $smartGroupInstance.errors"
+				flash.error = "Smart group save failed. Errors were $smartGroupInstance.errors"
+				render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
 			}
 		}
 	}
@@ -95,7 +78,9 @@ class SmartGroupController {
 	}
 	
 	private def withSmartGroup(Closure c) {
-		def sg = SmartGroup.get(params.id)
+		def sg
+		if(params?.id) sg = SmartGroup.get(params.id)
+		else sg = new SmartGroup()
 		if(sg) {
 			c.call(sg)
 		}
