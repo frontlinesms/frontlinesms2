@@ -43,7 +43,6 @@ class SmartGroupController {
 	def edit = {
 		def smartGroupInstance = SmartGroup.get(params.id)
 		def smartGroupProperties = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
-		println "smartGroupProperties are $smartGroupProperties"
 		def currentRules = [:]
 		
 		for(def prop in smartGroupProperties) {
@@ -72,12 +71,14 @@ class SmartGroupController {
 	
 	private def getRuleText() {
 		def t = params['rule-text']
-		t instanceof List? t: [t]
+		println "t is $t"
+		t instanceof String[] ? t: [t]
 	}
 	
 	private def getRuleField(i) {
 		def f = params['rule-field']
-		if(f instanceof List) return f[i]
+		println "f is $f"
+		if(f instanceof String[]) return f[i]
 		else {
 			assert i == 0
 			return f
@@ -85,6 +86,7 @@ class SmartGroupController {
 	}
 	
 	private def addSmartGroupRules(smartGroupInstance) {
+		smartGroupInstance.customFields?.clear()
 		getRuleText()?.eachWithIndex { ruleText, i ->
 			def ruleField = getRuleField(i)
 			if(ruleField.startsWith(CUSTOM_FIELD_ID_PREFIX)) {
@@ -92,6 +94,8 @@ class SmartGroupController {
 				smartGroupInstance.addToCustomFields(new CustomField(name:ruleField, value:ruleText))
 			} else {
 				assert ruleField in ['contactName', 'mobile', 'email', 'notes'] // prevent injection - these should match the sanctioned fields user can set
+				println "Rule field is $ruleField"
+				println "Rule text is $ruleText"
 				smartGroupInstance."$ruleField" = ruleText
 			}
 		}

@@ -141,59 +141,57 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def customFieldA = new CustomField(name:"location", value:"ken").save(flush:true)
 			def customFieldB = new CustomField(name:"city", value:"nai").save(flush:true)
 			
-			def englishContacts = new SmartGroup(name:'English contacts', customFields:[customFieldA]).save(flush:true, failOnError:true)
+			def smartGroup = new SmartGroup(name:'English contacts', customFields:[customFieldA]).save(flush:true, failOnError:true)
 			def testContact1 = createContact('Alfred', '+4423456789')
 			def testContact2 = createContact('Charles', '+442987654')
+			def testContact3 = createContact('Bernadette', '+3323+4456789')
+			
 			testContact1.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
-			testContact1.addToCustomFields(new CustomField(name:"city", value:"Dar es Salaam"))
+			testContact1.addToCustomFields(new CustomField(name:"city", value:"Kisumu"))
 			testContact2.addToCustomFields(new CustomField(name:"city", value:"Nairobi"))
+			testContact3.addToCustomFields(new CustomField(name:"location", value:"Kenturky"))
 			
 			testContact1.save(flush:true)
 			testContact2.save(flush:true)
-			def testContact3 = createContact('Bernadette', '+3323+4456789')
-			testContact3.addToCustomFields(new CustomField(name:"location", value:"Kenturky"))
 			testContact3.save(flush:true)
 		expect:
-			englishContacts.members*.name == ["Alfred", "Bernadette"]
+			smartGroup.members*.name == ["Alfred", "Bernadette"]
 		when:
-			controller.params.smartgroupname = 'English contacts'
-			controller.params.id = "${englishContacts.id}"
+			controller.params.id = "${smartGroup.id}"
 			controller.params.'rule-text' = "nai"
 			controller.params.'rule-field' = "${CUSTOM_FIELD_ID_PREFIX + customFieldB.name}"
 			controller.save()
 		then:
-			englishContacts.members*.name.sort() == ['Charles']
+			smartGroup.members*.name.sort() == ['Charles']
 	}
-	
+
 	def "can remove the customfield rules of a smart group"() {
 		given:
-			def customFieldA = new CustomField(name:"location", value:"ken").save(flush:true)
+			def customFieldA = new CustomField(name:"location", value:"Ken").save(flush:true)
 			def customFieldB = new CustomField(name:"city", value:"nai").save(flush:true)
 			
-			def englishContacts = new SmartGroup(name:'English contacts', customFields:[customFieldA, customFieldB]).save(flush:true, failOnError:true)
+			def smartGroup = new SmartGroup(name:'English contacts', customFields:[customFieldA, customFieldB]).save(flush:true, failOnError:true)
 			def testContact1 = createContact('Alfred', '+4423456789')
 			def testContact2 = createContact('Charles', '+442987654')
-			def testContact3 = createContact('Bernadette', '+3323+4456789')
 			
 			testContact1.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
-			testContact1.addToCustomFields(new CustomField(name:"city", value:"Dar es Salaam"))
-			testContact2.addToCustomFields(new CustomField(name:"city", value:"Nairobi"))
+			testContact1.addToCustomFields(new CustomField(name:"city", value:"Kisumu"))
+			
 			testContact2.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
-			testContact3.addToCustomFields(new CustomField(name:"location", value:"Kenturky"))
+			testContact2.addToCustomFields(new CustomField(name:"city", value:"Nairobi"))
 			
 			testContact1.save(flush:true)
 			testContact2.save(flush:true)
-			testContact3.save(flush:true)
 		expect:
-			englishContacts.members*.name == ["Charles"]
+			smartGroup.members*.name == ["Charles"]
 		when:
-			controller.params.smartgroupname = 'English contacts'
-			controller.params.id = "${englishContacts.id}"
-			controller.params.'rule-text' = "ken"
+			controller.params.id = "${smartGroup.id}"
 			controller.params.'rule-field' = "${CUSTOM_FIELD_ID_PREFIX + customFieldA.name}"
+			controller.params.'rule-text' = "ken"
 			controller.save()
 		then:
-			englishContacts.members*.name.sort() == ['Alfred','Charles', 'Bernadette']
+			SmartGroup.get(smartGroup.id).customFields.size() == 1
+			smartGroup.members*.name.sort() == ['Alfred', 'Charles']
 	}
 	
 	def 'calling DELETE should permanently remove a smart group and not its contacts'() {
@@ -212,47 +210,21 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			!SmartGroup.list()
 			Contact.list()*.name.containsAll(["Alfred","Charles"])
 	}
-		
+	
 	def 'calling SAVE with multiple rules defined will create a smart group with the set rules'() {
 		given:
 			controller.params.smartgroupname = 'Londons'
-			controller.params.'rule-field' = ['custom:Town']
-			controller.params.'rule-text' = ['London']
-			controller.params.'rule-field' = ['custom:Food']
-			controller.params.'rule-text' = ['Zucchini']
+			controller.params.'rule-field' = ['custom:Town', 'custom:Food', 'mobile'] as String[]
+			controller.params.'rule-text' = ['London', 'Zucchini', '+789']
 		when:
 			controller.save()
 			def sg = SmartGroup.findByName('Londons')
 		then:
 			sg
-			def field = sg.customFields.each{ println it.name + "-" + it.value}
 			sg.customFields.size() == 2
-			
+			sg.mobile == '+789'			
 	}
-	
-	@spock.lang.IgnoreRest
-	def 'user can remove custom field rules within a smart group'(){
-	 	given:
-			controller.params.smartgroupname = 'Londons'
-			controller.params.'rule-field' = ['custom:Town']
-			controller.params.'rule-text' = ['London']
-		when:
-			controller.save()
-		then:
-			SmartGroup.findByName('Londons').customFields.findAll { it.name == "Town" && it.value == "London"}
-			SmartGroup.findByName('Londons').customFields.each{println it.name + "-" + it.value }
-		when:
-			controller.params.smartgroupname = 'Londons'
-			controller.params.'rule-field' = ['custom:Food']
-			controller.params.'rule-text' = ['Zucchini']
-			controller.update()
-		then:
-			SmartGroup.findByName('Londons').customFields.size() == 1
-			SmartGroup.findByName('Londons').customFields.each{println it.name + "-" + it.value }
-			SmartGroup.findByName('Londons').customFields.findAll { it.name == "Food" && it.value == "Zucchini"}
-			
-	}
-	
+		
 	private def createContact(String name, String mobile, String secondaryMobile=null) {
 		new Contact(name:name, primaryMobile:mobile, secondaryMobile:secondaryMobile).save(flush:true, failOnError:true)
 	}

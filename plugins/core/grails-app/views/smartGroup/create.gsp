@@ -10,7 +10,7 @@
 		<table id="smartGroup-table">
 			<tbody>
 				<g:if test="${smartGroupInstance.id}">
-					<g:each in="${currentRules.keySet()}" var="field">
+					<g:each in="${currentRules.keySet()}" var="field" status="i">
 						<tr class="prop smart-group-criteria">
 							<td>
 								<g:select name="rule-field"
@@ -33,7 +33,7 @@
 								<g:textField name="rule-text" class="rule-text" value='${currentRules."$field"}'/>
 							</td>
 							<td>
-								<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+								<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 							</td>
 						</tr>
 						<div></div>
@@ -87,9 +87,7 @@
 		}
 	}
 		
-	function initializePopup() {
-		
-	}
+	function initializePopup() {}
 
 	function validateSmartGroup() {
 		var valid = true;
