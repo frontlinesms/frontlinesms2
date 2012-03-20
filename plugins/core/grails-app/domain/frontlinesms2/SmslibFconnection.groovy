@@ -3,6 +3,8 @@ package frontlinesms2
 import net.frontlinesms.messaging.ATDeviceDetector
 
 class SmslibFconnection extends Fconnection {
+	static passwords = ['pin']
+	
 	private def camelAddress = {
 		"smslib:$port?debugMode=true&baud=$baud&pin=$pin&allMessages=$allMessages&smscNumber=$smsc"
 	}
@@ -43,8 +45,6 @@ class SmslibFconnection extends Fconnection {
 			}
 		}
 	}
-
-	String getType() { 'Phone/Modem' }
 	
 	String getCamelConsumerAddress() {
 		camelAddress()

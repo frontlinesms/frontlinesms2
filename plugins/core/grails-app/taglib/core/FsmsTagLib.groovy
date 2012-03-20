@@ -24,32 +24,30 @@ class FsmsTagLib {
 	def inputs = { att ->
 		def fields = att.fields
 		att.remove('fields')
+		println "FsmsTagLib.input() : fields=$fields"
 		fields.tokenize(',').each {
 			out << input(att + [field:it.trim()])
 		}
 	}
 	
 	def input = { att ->
-		def key = att.field
-		def val = att.instance?."$key"
+		def groovyKey = att.field
+		def htmlKey = (att.fieldPrefix?:'') + att.field
+		def val = att.instance?."$groovyKey"
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
-		println "Attributes: $att"
-		println "InstanceClass: $instanceClass"
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
-		att += [name:key, value:val]
+		att += [name:htmlKey, value:val]
 		
 		out << '<div class="field">'
-		out << '	<label for="' + key + '">'
-		out << '		' + getFieldLabel(instanceClass, key)
+		out << '	<label for="' + htmlKey + '">'
+		out << '		' + getFieldLabel(instanceClass, groovyKey)
 		out << '	</label>'
-		if(att.password || instanceClass.passwords?.contains(field)) {
+		
+		if(att.password || instanceClass.passwords?.contains(groovyKey)) {
 			out << g.passwordField(att)
-		} else if(instanceClass.metaClass.hasProperty(null, key)?.type.enum) {
-			println "input() : isEnum() : key: $key"
-			println "input() : isEnum() : type: ${instanceClass.metaClass.hasProperty(null, key)?.type}"
-			println "input() : isEnum() : values: ${instanceClass.metaClass.hasProperty(null, key)?.type.values()}"
-			out << g.select(att + [from:instanceClass.metaClass.hasProperty(null, key).type.values(),
+		} else if(instanceClass.metaClass.hasProperty(null, groovyKey)?.type.enum) {
+			out << g.select(att + [from:instanceClass.metaClass.hasProperty(null, groovyKey).type.values(),
 						noSelection:[null:'- Select -']])
 		} else out << g.textField(att)
 		out << '</div>'

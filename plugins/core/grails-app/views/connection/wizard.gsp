@@ -45,7 +45,7 @@ function isFieldSet(fieldName) {
 }
 
 function getFieldVal(fieldName) {
-	var val = $('#' + fconnectionType + '-form input[name="' + fieldName + '"]').val();
+	var val = $('input[name="' + fconnectionType + fieldName + '"]').val();
 	return val;
 }
 

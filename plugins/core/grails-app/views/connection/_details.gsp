@@ -4,6 +4,7 @@
 		<div id="smslib-form">
 			<h2>${g.message(code:'smslibfconnection.label')}</h2>
 			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${SmslibFconnection}"
+					fieldPrefix="smslib"
 					fields="name, port, baud, pin, smsc, imsi, serial"/>
 		</div>
 	</g:if>
@@ -11,6 +12,7 @@
 		<div id="email-form">
 			<h2>${g.message(code:'emailfconnection.label')}</h2>
 			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${EmailFconnection}"
+					fieldPrefix="email"
 					fields="name, receiveProtocol, serverName, serverPort, username, password"/>
 		</div>
 	</g:if>
@@ -18,6 +20,7 @@
 		<div id="clickatell-form">
 			<h2>${g.message(code:'clickatellfconnection.label')}</h2>
 			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${ClickatellFconnection}"
+					fieldPrefix="clickatell"
 					fields="name, apiId, username, password"/>
 		</div>
 	</g:if>

@@ -2,6 +2,9 @@ package frontlinesms2
 
 class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
+			email:EmailFconnection,
+			clickatell:ClickatellFconnection]
 
 	def fconnectionService
 	def messageSendService
@@ -10,7 +13,7 @@ class ConnectionController {
 		redirect(action:'create_new')
 	}
 
-	def connection_wizard = {
+	def wizard = {
 		def action = "save"
 		def fconnectionInstance
 		if(params.id) {
@@ -22,13 +25,12 @@ class ConnectionController {
 	
 	def save = {
 		println "ConnectionController.save() : params=$params"
-		def typeMapping = [smslib:SmslibFconnection,
-				email:EmailFconnection,
-				clickatell:ClickatellFconnection]
-		save(typeMapping[params.connectionType])
+		remapFormParams()
+		save(CONNECTION_TYPE_MAP[params.connectionType])
 	}
 	
 	def update = {
+		remapFormParams()
 		withFconnection { fconnectionInstance ->
 			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 			fconnectionInstance.properties = params
@@ -40,6 +42,22 @@ class ConnectionController {
 				redirect(controller:'settings', action: "connections", params: params)
 			}
 		}
+	}
+	
+	private def remapFormParams() {
+		println "remapFormParams() : ENTRY : params=$params"
+		def cType = params.connectionType
+		if(!(cType in CONNECTION_TYPE_MAP)) {
+			throw new RuntimeException("Unknown connection type: " + cType)
+		}
+		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException
+		params.each { k, v ->
+			if(k.startsWith(cType)) {
+				newParams[k.substring(cType.size())] = v
+			}
+		}
+		params << newParams
+		println "remapFormParams() : EXIT : params=$params"
 	}
 	
 	private def save(Class<Fconnection> clazz) {

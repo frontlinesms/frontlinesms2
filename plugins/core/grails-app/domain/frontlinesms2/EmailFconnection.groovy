@@ -12,8 +12,6 @@ class EmailFconnection extends Fconnection {
 		serverPort(nullable: true)
 	}
 
-	String getType() { 'Email' }
-
 	String getCamelConsumerAddress() {
 		String serverPortParam = serverPort ? ":${serverPort}" : ""
 		"${receiveProtocol}://${serverName}${serverPortParam}?debugMode=true&consumer.delay=15000&username=${username}&password=${password}"

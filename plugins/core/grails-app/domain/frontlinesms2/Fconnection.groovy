@@ -6,18 +6,10 @@ import grails.util.Environment
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
 	def fconnectionService
-	static transients = ['status', 'camelConsumerAddress', 'camelProducerAddress', 'type']
+	static transients = ['status', 'camelConsumerAddress', 'camelProducerAddress']
 	static passwords = []
 	
 	String name
-	
-	String getType() {
-		// TODO I would expect messages.properties to handle conversion from
-		// class to String
-		if (Environment.current == Environment.TEST) {
-			'unsubclassed-fconnection'
-		} else throw new IllegalStateException()
-	}
 	
 	String getCamelConsumerAddress() {
 		if (Environment.current == Environment.TEST) {
