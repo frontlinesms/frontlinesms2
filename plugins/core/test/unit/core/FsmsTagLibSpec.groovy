@@ -4,6 +4,10 @@ import spock.lang.*
 import grails.plugin.spock.*
 
 class FsmsTagLibSpec extends TagLibSpec {
+	def setup() {
+		// TODO mock messages
+	}
+	
 	def "input should create div containing label and textfield"() {
 		expect:
 			input([field:'stringfield',

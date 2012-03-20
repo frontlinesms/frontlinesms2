@@ -7,7 +7,7 @@ import frontlinesms2.dev.MockModemUtils
 import serial.mock.MockSerial
 import serial.mock.CommPortIdentifier
 
-class ConnectionFSpec extends ConnectionBaseSpec {
+class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def cleanup() {
 		SmslibFconnection.findAll()*.delete(flush:true)
 		EmailFconnection.findAll()*.delete(flush:true)
