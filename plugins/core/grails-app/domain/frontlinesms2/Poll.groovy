@@ -1,12 +1,20 @@
 package frontlinesms2
 
 class Poll extends Activity {
-	Keyword keyword
-	String autoReplyText
+	static hasOne = [keyword: Keyword]
+	String autoreplyText
 	String question
 	List responses
 
 	static hasMany = [responses: PollResponse]
+	
+	static mapping = {
+        keyword cascade: 'all'
+    }
+			
+	def getType() {
+		return 'poll'
+	}
 	
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255, unique: true)
@@ -14,7 +22,7 @@ class Poll extends Activity {
 			val?.size() >= 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
-		autoReplyText(nullable:true, blank:false)
+		autoreplyText(nullable:true, blank:false)
 		question(nullable:true)
 		keyword(nullable:true)
 	}
@@ -51,51 +59,33 @@ class Poll extends Activity {
 		}
 	}
 	
-	static Poll createPoll(attrs) {
-		def poll = new Poll(attrs)
-		if(attrs['poll-type'] == 'standard') {
-			poll.addToResponses(new PollResponse(value:'Yes', key:'A'))
-			poll.addToResponses(new PollResponse(value:'No', key:'B'))
+	def editResponses(attrs) {
+		if(attrs.pollType == 'standard' && !this.responses) {
+			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
+			this.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {
 			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
 			choices.each { k,v -> 
-				if(v) poll.addToResponses(new PollResponse(value: v, key:k))
+				if(this.responses*.key.contains(k)) {
+					def response = PollResponse.findByKey(k)
+					if(response.value != v) {
+						this.deleteResponse(response)
+						this.addToResponses(new PollResponse(value: v, key:k))
+					}
+				} else
+					if(v?.trim()) this.addToResponses(new PollResponse(value: v, key:k))	
 			}
 		}
-		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
-		poll.save(flush: true, failOnError: true)
+		if(!this.responses*.value.contains('Unknown'))
+			this.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
 	}
 	
-	static Poll editPoll(id, attrs) {
-		def poll = Poll.get(id)
-		poll.properties = attrs
-		def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
-		choices.each { k,v -> 
-			if(poll.responses*.key.contains(k)) {
-				def response  = PollResponse.findByKey(k)
-				if(response.value != v) {
-					poll.deleteResponse(response)
-					poll.addToResponses(new PollResponse(value: v, key:k))
-				}
-			} else {
-				if(v?.trim()) poll.addToResponses(new PollResponse(value: v, key:k))	
-			}
-			
-		}
-		
-		poll.save(flush: true) ?: poll
-	}
-	
-	Poll deleteResponse(PollResponse response) {
+	def deleteResponse(PollResponse response) {
 		response.messages.findAll { message ->
 			this.responses.find { it.value == 'Unknown' }.messages.add(message)
 		}
 		this.removeFromResponses(response)
 		response.delete()
 		this
-	}
-		
-	def getType() {
-		return 'poll'
 	}
 }

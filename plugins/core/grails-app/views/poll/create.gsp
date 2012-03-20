@@ -19,7 +19,7 @@
 <g:javascript>
 	function initializePopup() {
 		<g:if test="activityInstanceToEdit">
-			$("#autoReplyText").trigger("keyup");
+			$("#autoreplyText").trigger("keyup");
 		</g:if>
 		
 		highlightPollResponses();
@@ -28,7 +28,7 @@
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
-				if ($("input[name='poll-type']:checked").val() == "standard") {
+				if ($("input[name='pollType']:checked").val() == "standard") {
 					disableTab(1);
 				}
 				else {
@@ -46,7 +46,7 @@
 			validate: function() {
 				$('#choiceA').removeClass('error');
 				$('#choiceB').removeClass('error');
-				var isValid =  $("input[name='poll-type']:checked").val() == "standard" || validatePollResponses();
+				var isValid =  $("input[name='pollType']:checked").val() == "standard" || validatePollResponses();
 				if(!isValid) {
 					if(isElementEmpty($('#choiceA'))) $('#choiceA').addClass('error');
 					if(isElementEmpty($('#choiceB'))) $('#choiceB').addClass('error');
@@ -118,7 +118,7 @@
 
 	function updateConfirmationMessage() {
 		updateMessageDetails();
-		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
+		$("#auto-reply-read-only-text").html($("#autoreplyText").val().trim() ? $("#autoreplyText").val() : "None")
 		// update auto-sort
 		var autoSort = $("input[name='enableKeyword']:checked").val();
 		var autoSortMessages = $('#auto-sort-confirm p');

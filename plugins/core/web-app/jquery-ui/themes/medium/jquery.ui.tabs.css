@@ -88,11 +88,11 @@
 	width: 200px;
 }
 
-.ui-tabs-panel #poll-type {
+.ui-tabs-panel #responseType {
 	padding-bottom: 25px;
 }
 
-.ui-tabs-panel #poll-type li {
+.ui-tabs-panel #responseType li {
 	height: 30px;
 }
 

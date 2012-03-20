@@ -9,15 +9,15 @@ class Keyword {
 			if(val.find(/\s/)) return false
 			else {
 				if(me.activity.archived) return true
-				else {
-					def matching = Activity.findByArchivedAndKeyword(false, me)
-					return matching == null || matching.id == me.activity.id
-				}
+				def found = Keyword.findAllByValue(val)
+				if(!found || found==[me]) return true
+				else if (found.any { it != me && !it.activity.archived }) return false
+				return true
 			}
 		})
 		activity(nullable: false)
 	}
-	
+    
 	def beforeSave = {
 		value = value?.trim()?.toUpperCase()
 	}

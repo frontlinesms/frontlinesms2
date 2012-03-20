@@ -27,7 +27,6 @@ class ActivityController {
 	}
 	
 	def rename = {
-		
 	}
 	
 	def update = {

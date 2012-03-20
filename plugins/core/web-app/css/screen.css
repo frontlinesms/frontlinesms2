@@ -283,7 +283,7 @@ a {
 	display: inline;
 	float: right;
 }
-.section-header .button-list .poll-btn, .section-header .button-list .activity-btn{
+.section-header .button-list .activity-btn{
 	width: 216px;
 	float: right;
 }

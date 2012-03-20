@@ -172,11 +172,19 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initPolls() {
-		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
-				Poll.createPoll(name: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")].each() {
-			it.save(failOnError:true, flush:true)
-		}
-
+		def keyword = new Keyword(value: 'Football')
+		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
+		poll1.addToResponses(new PollResponse(key: 'A', value: 'manchester'))
+		poll1.addToResponses(new PollResponse(key: 'B', value: 'barcelona'))
+		poll1.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+		
+		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
+		poll2.addToResponses(new PollResponse(key: 'A', value: 'pantene'))
+		poll2.addToResponses(new PollResponse(key: 'B', value: 'oriele'))
+		poll2.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+		
+		poll1.save(flush: true)
+		poll2.save(flush: true)
 		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
 		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
 		PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
@@ -187,6 +195,8 @@ class CoreBootStrap {
 			msg.save(failOnError: true);
 			barcelonaResponse.addToMessages(msg);
 		}
+		poll1.save(flush: true)
+		poll2.save(flush: true)
 	}
 	
 	private def dev_initFolders() {

@@ -18,18 +18,4 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 		then:
 			a.validate()
 	}
-	
-	def "Auto-reply can be edited"() {
-		setup:
-			mockDomain(Autoreply)
-		when:
-			def autoreply = Autoreply(name:"title", sentMessageText:"thanks for participaping", keyword:"WHAT")
-		then:
-			autoreply.save()
-		when:
-			autoreply = Autoreply.editAutoReply(autoreply.id, [sentMessageText:"thanks again for participating"])
-		then:
-			autoreply
-	}
-	
 }

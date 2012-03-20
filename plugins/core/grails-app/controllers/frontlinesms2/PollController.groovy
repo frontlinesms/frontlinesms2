@@ -3,28 +3,34 @@ package frontlinesms2
 class PollController extends ActivityController {
 
 	def save = {
-		if(!params.enableKeyword) params.keyword = null
-		def pollInstance = Poll.createPoll(params)
-		pollInstance.sentMessageText = params.messageText
-		if(!params.dontSendMessage) {
-			def message = messageSendService.getMessagesToSend(params)
-			pollInstance.addToMessages(message)
-			messageSendService.send(message)
-			pollInstance.save()
-			flash.message = "Poll has been saved and message(s) has been queued to send"
-		} else {
-			pollInstance.save()
-			flash.message = "Poll has been saved"
+		withPoll { poll ->
+			poll.name = params.name
+			poll.autoreplyText = params.autoreplyText
+			poll.question = params.question
+			poll.sentMessageText = params.messageText
+			if(params.enableKeyword && params.keyword) poll.keyword = new Keyword(value: params.keyword)
+			poll.editResponses(params)
+			poll.save(flush: true, failOnError: true)
+			if(!params.dontSendMessage) {
+				def message = messageSendService.getMessagesToSend(params)
+				poll.addToMessages(message)
+				messageSendService.send(message)
+				poll.save()
+				flash.message = "Poll has been saved and message(s) has been queued to send"
+			} else {
+				poll.save()
+				flash.message = "Poll has been saved"
+			}
+			[ownerId: poll.id]
 		}
-		[ownerId: pollInstance.id, action:"saved"]
 	}
 	
 	def sendReply = {
 		def poll = Poll.get(params.pollId)
 		def incomingMessage = Fmessage.get(params.messageId)
-		if(poll.autoReplyText) {
+		if(poll.autoreplyText) {
 			params.addresses = incomingMessage.src
-			params.messageText = poll.autoReplyText
+			params.messageText = poll.autoreplyText
 			def outgoingMessage = messageSendService.getMessagesToSend(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
@@ -32,21 +38,9 @@ class PollController extends ActivityController {
 		}
 		render ''
 	}
-	
-	def edit = {
-		if(!params.enableKeyword) params.keyword = null
-		def pollInstance = Poll.editPoll(params.id.toLong(), params)
-		pollInstance.sentMessageText = params.messageText
-		if(!params.dontSendMessage) {
-			def message = messageSendService.getMessagesToSend(params)
-			pollInstance.addToMessages(message)
-			messageSendService.send(message)
-			pollInstance.save()
-			flash.message = "Poll has been updated and message(s) has been queued to send"
-		} else {
-			pollInstance.save(failOnError:true)
-			flash.message = "Poll has been updated"
-		}
-		render view:"../poll/save", model:[ownerId: pollInstance.id, action:"updated"]
+		
+	private def withPoll(Closure c) {
+		def pollInstance = Poll.get(params.ownerId) ?: new Poll()
+		if (pollInstance) c pollInstance
 	}
 }
