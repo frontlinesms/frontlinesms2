@@ -3,6 +3,7 @@ package frontlinesms2
 class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	private static final def STANDARD_FIELD_NAMES = ['Phone number', 'Contact name', 'email', 'notes']
 	private static final def STANDARD_FIELD_IDS = ['mobile', 'contactName', 'email', 'notes']
+	private static final String CUSTOM_FIELD_ID_PREFIX = 'custom:'
 	
 	def controller
 	
@@ -82,14 +83,14 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.id = smartGroup.id
 			controller.params.smartgroupname = "renamed smart group"
 		when:
-			controller.update()
+			controller.save()
 			def updatedGroup = SmartGroup.get(smartGroup.id)
 		then:
 			updatedGroup.name == "renamed smart group"
 			controller.response.redirectedUrl == "/contact/show?smartGroupId=${smartGroup.id}"
 	}
 	
-	def 'EDIT updates existing smart group mobile rules'() {
+	def 'can update existing smartgroup mobile rules'() {
 		given:
 			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+33').save(flush:true, failOnError:true)
 			createContact('Alfred', '+4423456789')
@@ -103,12 +104,12 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.id = "${englishContacts.id}"
 			controller.params.'rule-text' = "+44"
 			controller.params.'rule-field' = "mobile"
-			controller.update()
+			controller.save()
 		then:
 			englishContacts.members*.name.sort() == ['Alfred', 'Charles', 'Edgar de Gaulle']
 	}
 	
-	def 'EDIT updates only the smart group mobile rule when a smartgroup contains other rules'() {
+	def 'can update only the smart group mobile rule when a smartgroup contains other rules'() {
 		given:
 			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+33', notes:'test').save(flush:true, failOnError:true)
 			def testContact1 = createContact('Alfred', '+4423456789')
@@ -129,9 +130,70 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.id = "${englishContacts.id}"
 			controller.params.'rule-text' = "+442"
 			controller.params.'rule-field' = "mobile"
-			controller.update()
+			controller.save()
 		then:
+			SmartGroup.get(englishContacts.id).name == "Londons"
 			englishContacts.members*.name.sort() == ['Alfred', 'Charles']
+	}
+	
+	def "can update the customfield rules of a smart group"() {
+		given:
+			def customFieldA = new CustomField(name:"location", value:"ken").save(flush:true)
+			def customFieldB = new CustomField(name:"city", value:"nai").save(flush:true)
+			
+			def englishContacts = new SmartGroup(name:'English contacts', customFields:[customFieldA]).save(flush:true, failOnError:true)
+			def testContact1 = createContact('Alfred', '+4423456789')
+			def testContact2 = createContact('Charles', '+442987654')
+			testContact1.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
+			testContact1.addToCustomFields(new CustomField(name:"city", value:"Dar es Salaam"))
+			testContact2.addToCustomFields(new CustomField(name:"city", value:"Nairobi"))
+			
+			testContact1.save(flush:true)
+			testContact2.save(flush:true)
+			def testContact3 = createContact('Bernadette', '+3323+4456789')
+			testContact3.addToCustomFields(new CustomField(name:"location", value:"Kenturky"))
+			testContact3.save(flush:true)
+		expect:
+			englishContacts.members*.name == ["Alfred", "Bernadette"]
+		when:
+			controller.params.smartgroupname = 'English contacts'
+			controller.params.id = "${englishContacts.id}"
+			controller.params.'rule-text' = "nai"
+			controller.params.'rule-field' = "${CUSTOM_FIELD_ID_PREFIX + customFieldB.name}"
+			controller.save()
+		then:
+			englishContacts.members*.name.sort() == ['Charles']
+	}
+	
+	def "can remove the customfield rules of a smart group"() {
+		given:
+			def customFieldA = new CustomField(name:"location", value:"ken").save(flush:true)
+			def customFieldB = new CustomField(name:"city", value:"nai").save(flush:true)
+			
+			def englishContacts = new SmartGroup(name:'English contacts', customFields:[customFieldA, customFieldB]).save(flush:true, failOnError:true)
+			def testContact1 = createContact('Alfred', '+4423456789')
+			def testContact2 = createContact('Charles', '+442987654')
+			def testContact3 = createContact('Bernadette', '+3323+4456789')
+			
+			testContact1.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
+			testContact1.addToCustomFields(new CustomField(name:"city", value:"Dar es Salaam"))
+			testContact2.addToCustomFields(new CustomField(name:"city", value:"Nairobi"))
+			testContact2.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
+			testContact3.addToCustomFields(new CustomField(name:"location", value:"Kenturky"))
+			
+			testContact1.save(flush:true)
+			testContact2.save(flush:true)
+			testContact3.save(flush:true)
+		expect:
+			englishContacts.members*.name == ["Charles"]
+		when:
+			controller.params.smartgroupname = 'English contacts'
+			controller.params.id = "${englishContacts.id}"
+			controller.params.'rule-text' = "ken"
+			controller.params.'rule-field' = "${CUSTOM_FIELD_ID_PREFIX + customFieldA.name}"
+			controller.save()
+		then:
+			englishContacts.members*.name.sort() == ['Alfred','Charles', 'Bernadette']
 	}
 	
 	def 'calling DELETE should permanently remove a smart group and not its contacts'() {
