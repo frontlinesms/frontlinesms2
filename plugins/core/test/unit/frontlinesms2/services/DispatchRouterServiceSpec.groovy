@@ -70,6 +70,15 @@ class DispatchRouterServiceSpec extends UnitSpec {
 			routedTo == [1, 2, 3, 1, 2].collect { "seda:out-$it" }
 	}
 	
+	def 'slip should prioritise internet services over modems'() {
+		given:
+			mockRoutes(1:'internet', 2:'modem', 3:'internet', 4:'modem')
+		when:
+			def routedTo = (1..5).collect { service.slip(mockExchange(), null, null) }
+		then:
+			routedTo == [1, 3, 1, 3, 1].collect { "seda:out-$it" }
+	}
+	
 	private def mockExchange() {
 		def x = Mock(Exchange)
 		def out = Mock(Message)
@@ -81,6 +90,12 @@ class DispatchRouterServiceSpec extends UnitSpec {
 	private def mockRoutes(int...ids) {
 		CamelContext c = Mock()
 		c.routes >> ids.collect { [[id:"in-$it"], [id:"out-$it"]] }.flatten()
+		service.camelContext = c
+	}
+	
+	private def mockRoutes(Map idsAndPrefixes) {
+		CamelContext c = Mock()
+		c.routes >> idsAndPrefixes.collect { k, v -> [[id:"in-$k"], [id:"out-$v-$k"]] }.flatten()
 		service.camelContext = c
 	}
 }

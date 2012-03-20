@@ -34,7 +34,7 @@ class FconnectionService {
 								.end()
 						.beanRef('smslibTranslationService', 'toCmessage')
 						.to(c.camelProducerAddress)
-						.routeId("out-${c.id}")
+						.routeId("out-modem-${c.id}")
 			} else if(c instanceof EmailFconnection) {
 				incoming = 'seda:raw-email'
 				if(c.camelProducerAddress) {
@@ -54,7 +54,7 @@ class FconnectionService {
 										'text=${body}'))
 						.to(c.camelProducerAddress)
 						.process(new ClickatellPostProcessor())
-						.routeId("out-${c.id}")
+						.routeId("out-internet-${c.id}")
 			} else if(grails.util.Environment.current == grails.util.Environment.TEST
 					&& c instanceof Fconnection) {
 				incoming = 'stream:out'

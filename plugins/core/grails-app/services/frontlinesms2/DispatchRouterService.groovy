@@ -26,21 +26,33 @@ class DispatchRouterService {
 			return "seda:out-$target"
 		} else {
 			println "DispatchRouterService.slip() : Routes available: ${camelContext.routes*.id}"
-			def filteredRouteList = filter(camelContext.routes, { it.id.startsWith('out-') })
-			if(filteredRouteList.size > 0) {
-				println "DispatchRouterService.slip() : Routes available: ${filteredRouteList*.id}"
-				println "DispatchRouterService.slip() : Counter has counted up to $counter"
-				def connectionId = filteredRouteList[++counter % filteredRouteList.size].id
+			def connectionId = getDispatchConnectionId()
+			if(connectionId) {
 				println "DispatchRouterService.slip() : Sending with connection: $connectionId"
 				println "DispatchRouterService.slip() : Setting header 'fconnection' to $connectionId"
-				exchange.out.headers.fconnection = connectionId.substring('out-'.size())
-				def routeName = "seda:$connectionId"
+				def fconnectionId = (connectionId =~ /.*-(\d+)$/)[0][1]
+				exchange.out.headers.fconnection = fconnectionId
+				def routeName = "seda:out-$fconnectionId"
 				println "DispatchRouterService.slip() : Routing to $routeName"
 				return routeName
 			} else {
 				// TODO may want to queue for retry here, after incrementing retry-count header
 				throw new RuntimeException("No outbound route available for dispatch.")
 			}
+		}
+	}
+	
+	def getDispatchConnectionId() {
+		def allOutRoutes = filter(camelContext.routes, { it.id.startsWith('out-') })
+		if(allOutRoutes.size > 0) {
+			// check for internet routes and prioritise them over modems
+			def filteredRouteList = filter(allOutRoutes) { it.id.contains('-internet-') }
+			if(!filteredRouteList) filteredRouteList = filter(allOutRoutes) { it.id.contains('-modem-') }
+			if(!filteredRouteList) filteredRouteList = allOutRoutes
+			
+			println "DispatchRouterService.getDispatchConnectionId() : Routes available: ${filteredRouteList*.id}"
+			println "DispatchRouterService.getDispatchConnectionId() : Counter has counted up to $counter"
+			return filteredRouteList[++counter % filteredRouteList.size]?.id
 		}
 	}
 
