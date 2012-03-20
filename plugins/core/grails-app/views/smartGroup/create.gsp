@@ -9,27 +9,53 @@
 		</div>
 		<table id="smartGroup-table">
 			<tbody>
-				<tr class="prop smart-group-criteria">
-					<td>
-						<g:select name="rule-field"
-								from="${fieldNames}"
-								keys="${fieldIds}"
-								onchange="smartGroupCriteriaChanged(this)"/>
-					</td>
-					<td class="rule-match-text">
-						<span class="contains hide">contains</span>
-						<span class="starts">starts with</span>
-					</td>
-					<td>
-						<g:textField name="rule-text" class="rule-text"/>
-					</td>
-					<td>
-						<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-					</td>
-				</tr>
+				<g:if test="${smartGroupInstance.id}">
+					<g:each in="${currentRules.keySet()}" var="field">
+						<tr class="prop smart-group-criteria">
+							<td>
+								<g:select name="rule-field"
+										value="${field}"
+										from="${fieldNames}"
+										keys="${fieldIds}"
+										onchange="smartGroupCriteriaChanged(this)"/>
+							</td>
+							<td class="rule-match-text">
+								<span class="contains hide">contains</span>
+								<span class="starts">starts with</span>
+							</td>
+							<td>
+								<g:textField name="rule-text" class="rule-text" value='${currentRules."$field"}'/>
+							</td>
+							<td>
+								<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+							</td>
+						</tr>
+					</g:each>
+				</g:if>
+				<g:else>
+					<tr class="prop smart-group-criteria">
+						<td>
+							<g:select name="rule-field"
+									from="${fieldNames}"
+									keys="${fieldIds}"
+									onchange="smartGroupCriteriaChanged(this)"/>
+						</td>
+						<td class="rule-match-text">
+							<span class="contains hide">contains</span>
+							<span class="starts">starts with</span>
+						</td>
+						<td>
+							<g:textField name="rule-text" class="rule-text"/>
+						</td>
+						<td>
+							<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+						</td>
+					</tr>
+				</g:else>
+				
 			</tbody>
 		</table>
-		<a class="button" onclick="addNewRule()">Add another rule</a>
+		<a class="button" onclick="addNewRule()">Add another rule</a></br>
 	</g:form>
 </div>
 
@@ -54,7 +80,9 @@
 		}
 	}
 		
-	function initializePopup() {}
+	function initializePopup() {
+		
+	}
 
 	function validateSmartGroup() {
 		var valid = true;
@@ -104,7 +132,9 @@
 		template.find('.button.remove-rule').show();
 		var newRow = template.clone();
 		newRow.removeAttr("id");
+		newRow.find('input.rule-text').val("");
 		newRow.find('.button.remove-rule').show();
 		$('form[name="smart-group-details"] tbody').append(newRow);
 	}
+	
 </script>

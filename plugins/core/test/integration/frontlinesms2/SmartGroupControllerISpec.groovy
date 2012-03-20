@@ -105,6 +105,22 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			!SmartGroup.list()
 			Contact.list()*.name.containsAll(["Alfred","Charles"])
 	}
+	@spock.lang.IgnoreRest
+	def 'calling SAVE with multiple rules defined will create a smart group with the set rules'() {
+		given:
+			controller.params.smartgroupname = 'Londons'
+			controller.params.'rule-field' = ['custom:Town']
+			controller.params.'rule-text' = ['London']
+			controller.params.'rule-field' = ['custom:Food']
+			controller.params.'rule-text' = ['Zucchini']
+		when:
+			controller.save()
+			def g = SmartGroup.findByName('Londons')
+		then:
+			g
+			g.customFields.size() == 2
+			
+	}
 	
 	private def createContact(String name, String mobile, String secondaryMobile=null) {
 		new Contact(name:name, primaryMobile:mobile, secondaryMobile:secondaryMobile).save(flush:true, failOnError:true)

@@ -40,6 +40,28 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 			$('#contact-header h3').text().equalsIgnoreCase('English Contacts (2)')
 			at PageEnglishSmartGroupShow
 	}
+	
+	@spock.lang.IgnoreRest
+	def 'user can edit an existing smartGroup'(){
+		setup:
+			def englishContacts = new SmartGroup(name:'English Contacts', mobile:'+254').save(flush:true, failOnError:true)
+		when:
+			to PageContactShow
+			getMenuLink('English Contacts').click()
+		then:
+			at PageEnglishSmartGroupShow
+		when:
+			$(".more-actions").value("edit").click()
+		then:
+			at SmartGroupEditDialog
+			smartGroupNameField.value(smartGroupNameField.value() == englishContacts.name)
+		when:
+			setRuleValue(0, '+44')
+			finishButton.click()
+			englishContacts.refresh()
+		then:
+			englishContacts.mobile == "+44"			
+	}
 }
 
 class PageEnglishSmartGroupShow extends geb.Page {

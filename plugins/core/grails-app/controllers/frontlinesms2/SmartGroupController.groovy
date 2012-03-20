@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
+
 class SmartGroupController {
 	private static final String CUSTOM_FIELD_ID_PREFIX = 'custom:'
 	
@@ -27,11 +29,11 @@ class SmartGroupController {
 		}
 		
 		if(smartGroupInstance.save()) {
-			println "smargtgroup successfully saved"
+			println "smartgroup successfully saved"
 			flash.message = "Created new smart group: '$params.smartgroupname'"
 			redirect controller:'contact', action:'show'
 		} else {
-			println "smargroup save failed. Errors were $smartGroupInstance.errors"
+			println "smartgroup save failed. Errors were $smartGroupInstance.errors"
 			flash.error = "Smart group save failed. Errors were $smartGroupInstance.errors"
 			render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
 		}
@@ -60,7 +62,25 @@ class SmartGroupController {
 	def rename = {
 		render view: "../group/rename", model: [groupName: SmartGroup.get(params.groupId)?.name]
 	}
-
+	
+	def edit = {
+		def smartGroupInstance = SmartGroup.get(params.id)
+		def smartGroupProperties = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
+		println "smartGroupProperties are $smartGroupProperties"
+		def currentRules = [:]
+		
+		for(def prop in smartGroupProperties) {
+			if(smartGroupInstance."$prop") 
+				currentRules."$prop" = smartGroupInstance."$prop"
+		}
+		def customFieldNames = CustomField.allUniquelyNamed
+		
+		render view: "../smartGroup/create", model: [smartGroupInstance:smartGroupInstance,
+				currentRules:currentRules,
+				fieldNames:['Phone number', 'Contact name', 'email', 'notes']+customFieldNames,
+				fieldIds:['mobile', 'contactName', 'email', 'notes']+customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
+	}
+	
 	def confirmDelete = {
 		render view: "../group/confirmDelete", model: [groupName: SmartGroup.get(params.groupId)?.name]
 	}
