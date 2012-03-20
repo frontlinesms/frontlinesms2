@@ -150,7 +150,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			!SmartGroup.list()
 			Contact.list()*.name.containsAll(["Alfred","Charles"])
 	}
-	@spock.lang.IgnoreRest
+		
 	def 'calling SAVE with multiple rules defined will create a smart group with the set rules'() {
 		given:
 			controller.params.smartgroupname = 'Londons'
@@ -160,10 +160,34 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.'rule-text' = ['Zucchini']
 		when:
 			controller.save()
-			def g = SmartGroup.findByName('Londons')
+			def sg = SmartGroup.findByName('Londons')
 		then:
-			g
-			g.customFields.size() == 2
+			sg
+			def field = sg.customFields.each{ println it.name + "-" + it.value}
+			sg.customFields.size() == 2
+			
+	}
+	
+	@spock.lang.IgnoreRest
+	def 'user can remove custom field rules within a smart group'(){
+	 	given:
+			controller.params.smartgroupname = 'Londons'
+			controller.params.'rule-field' = ['custom:Town']
+			controller.params.'rule-text' = ['London']
+		when:
+			controller.save()
+		then:
+			SmartGroup.findByName('Londons').customFields.findAll { it.name == "Town" && it.value == "London"}
+			SmartGroup.findByName('Londons').customFields.each{println it.name + "-" + it.value }
+		when:
+			controller.params.smartgroupname = 'Londons'
+			controller.params.'rule-field' = ['custom:Food']
+			controller.params.'rule-text' = ['Zucchini']
+			controller.update()
+		then:
+			SmartGroup.findByName('Londons').customFields.size() == 1
+			SmartGroup.findByName('Londons').customFields.each{println it.name + "-" + it.value }
+			SmartGroup.findByName('Londons').customFields.findAll { it.name == "Food" && it.value == "Zucchini"}
 			
 	}
 	

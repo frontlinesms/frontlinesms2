@@ -20,8 +20,14 @@
 										onchange="smartGroupCriteriaChanged(this)"/>
 							</td>
 							<td class="rule-match-text">
-								<span class="contains hide">contains</span>
-								<span class="starts">starts with</span>
+								<g:if test = "${field == 'mobile'}">
+									<span class="contains hide">contains</span>
+									<span class="starts">starts with</span>
+								</g:if>
+								<g:else>
+									<span class="contains">contains</span>
+									<span class="starts hide">starts with</span>
+								</g:else>
 							</td>
 							<td>
 								<g:textField name="rule-text" class="rule-text" value='${currentRules."$field"}'/>
@@ -30,6 +36,7 @@
 								<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
 							</td>
 						</tr>
+						<div></div>
 					</g:each>
 				</g:if>
 				<g:else>
