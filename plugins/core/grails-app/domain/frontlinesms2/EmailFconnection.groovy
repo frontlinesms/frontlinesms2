@@ -6,6 +6,11 @@ class EmailFconnection extends Fconnection {
 	Integer serverPort
 	String username
 	String password
+	
+	static passwords = ['password']
+	static constraints = {
+		serverPort(nullable: true)
+	}
 
 	String getType() { 'Email' }
 
@@ -16,9 +21,5 @@ class EmailFconnection extends Fconnection {
 
 	String getCamelProducerAddress() {
 		null
-	}
-	
-	static constraints = {
-		serverPort(nullable: true)
 	}
 }

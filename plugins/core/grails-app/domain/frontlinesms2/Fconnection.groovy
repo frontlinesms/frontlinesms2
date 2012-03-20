@@ -7,6 +7,7 @@ import grails.util.Environment
 class Fconnection {
 	def fconnectionService
 	static transients = ['status', 'camelConsumerAddress', 'camelProducerAddress', 'type']
+	static passwords = []
 	
 	String name
 	

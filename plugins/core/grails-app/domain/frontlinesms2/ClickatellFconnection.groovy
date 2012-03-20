@@ -5,6 +5,8 @@ class ClickatellFconnection extends Fconnection {
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
 	
+	static passwords = ['password']
+	
 	String getType() { 'Clickatell' }
 	
 	String getCamelProducerAddress() {

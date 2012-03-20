@@ -21,8 +21,11 @@ class ConnectionController {
 	}
 	
 	def save = {
-		if(params.connectionType == 'email') saveEmail()
-		else if(params.connectionType == 'smslib') saveSmslib()
+		println "ConnectionController.save() : params=$params"
+		def typeMapping = [smslib:SmslibFconnection,
+				email:EmailFconnection,
+				clickatell:ClickatellFconnection]
+		save(typeMapping[params.connectionType])
 	}
 	
 	def update = {
@@ -39,8 +42,6 @@ class ConnectionController {
 		}
 	}
 	
-	def saveEmail = { save(EmailFconnection) }
-	def saveSmslib = { save(SmslibFconnection) }
 	private def save(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		println "Creating fconnection: $fconnectionInstance"
