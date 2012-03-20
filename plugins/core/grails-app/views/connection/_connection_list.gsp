@@ -9,7 +9,7 @@
 					<g:link action="connections" id="${c.id}">
 						<div class="connection-header">
 							<h2>'${c.name}'</h2>
-							<p class="connection-type">(${c.type})</p>
+							<p class="connection-type">(<g:message code="${c.getClass().simpleName.toLowerCase()}.label"/>)</p>
 							<i class="connection-status">${c.status}</i>
 						</div>
 					</g:link>

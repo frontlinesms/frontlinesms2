@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 
 class ErrorController {
 
-    def zip_to_download = {
+    def zip_to_download = { // FIXME this should be renamed something sensible
 		createZipFile(response.outputStream)
 		def formatedDate = dateToString(new Date())
 		response.setContentType("application/octet-stream")
@@ -21,6 +21,7 @@ class ErrorController {
 	}
 	
 	private def createZipFile(output) {
+		// FIXME this metaclass modification should be done in BootStrap if it is required
 		File.metaClass.zip = {
 			def result = new ZipOutputStream(output)
 			result.withStream {zipOutStream->
@@ -41,12 +42,12 @@ class ErrorController {
 		}
 	}
 	
-	private String dateToString(Date date) {
+	private String dateToString(Date date) { // TODO this should be inlined
 		DateFormat formatedDate = createDateFormat()
 		return formatedDate.format(date)
 	}
 
 	private DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy-MM-dd", request.locale)
+		return new SimpleDateFormat("yyyy-MM-dd", request.locale) // TODO this should be a constant, and not localised
 	}
 }

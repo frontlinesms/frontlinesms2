@@ -1,8 +1,19 @@
 package frontlinesms2.connection
 
 import frontlinesms2.*
+import frontlinesms2.*
+import frontlinesms2.dev.MockModemUtils
+
+import serial.mock.MockSerial
+import serial.mock.CommPortIdentifier
 
 class ConnectionFSpec extends ConnectionBaseSpec {
+	def cleanup() {
+		SmslibFconnection.findAll()*.delete(flush:true)
+		EmailFconnection.findAll()*.delete(flush:true)
+		Fconnection.findAll()*.delete(flush:true)
+	}
+	
 	def 'When there are no connections, this is explained to the user'() {
 		when:
 			to ConnectionPage
@@ -13,59 +24,43 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 	
 	def 'There is a Not Connected label shown for inactive connection'() {
 		when:
-			createTestConnection()
+			createTestEmailConnection()
 			to ConnectionPage
 		then:
-			$('.connection-status')[0].text() == "Not connected"
+			txtStatus == "Not connected"
 	}
 	
 	def 'should show "create route" button for inactive connection '() {
 		when:
-			createTestConnection()
+			createTestEmailConnection()
 			to ConnectionPage
 		then:
-			$('.route')[0].text() == "Create route"
+			btnCreateRoute.displayed
 	}
-//FIXME: Build Fix	
-/*	def 'There is a Connected label shown for working connection'() {
+	
+	def 'There is a Connected label shown for working connection'() {
 		when:
-			createTestConnection()
+			createTestSmsConnection()
 			to ConnectionPage
 		then:
-			$('div.status').text() == "Not connected"
+			txtStatus == "Not connected"
 		when:
-			$(".buttons a").click()
+			btnCreateRoute.click()
 		then:
-			$('div.status').text() == "Connected"
-		cleanup:
-			deleteTestConnections()
-	}*/
+			waitFor { txtStatus == "Connected" }
+	}
 	
 	def 'The first connection in the connection list page is selected'() {
 		when: 
-			createTestConnection()
+			createTestEmailConnection()
 			to ConnectionPage
 		then:
 			$('#connections .selected').size() == 1
 	}
 	
-	def createTestConnections() {
-		[new SmslibFconnection(name:'MTN Dongle', port:'COM99'),
-				new EmailFconnection(name:'Miriam\'s Clickatell account', receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
-						serverPort:993, username:'mr.testy@zoho.com', password:'mister')].each() {
-			it.save(flush:true, failOnError: true)
-		}
-	}
-
-	def deleteTestConnections() {
-		SmslibFconnection.findAll().each() { it?.delete(flush: true) }
-		EmailFconnection.findAll().each() { it?.delete(flush: true) }
-		Fconnection.findAll().each() { it?.delete(flush: true) }
-	}
-	
 	def 'clicking on a connection shows us more details'() {
 		given:
-			createTestSMSConnection()
+			createTestSmsConnection()
 			to ConnectionPage
 		when:
 			lstConnections.find('h2').click()
@@ -85,59 +80,57 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n1") }
 	}
 	
-//FIXME Tests fail due to the Quartz job scheduler
-//	def 'Send test message button for particular connection appears when that connection is selected and started'() {
-//			given:
-//				createTestSMSConnection()
-//				new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
-//				def testConnection = Fconnection.findByName('MTN Dongle')
-//			when:
-//				to ConnectionPage
-//			then:
-//				$('#connections .selected .test').isEmpty()
-//			when:
-//				waitFor{ $("#connections .selected .route").displayed }
-//				$("#createRoute a").click()
-//			then:
-//				waitFor(15) { $('#notifications').text().contains("Created route")}
-//				waitFor() {	$('#connections .selected').find("a.test").@href == "/connection/createTest/${testConnection.id}"}
-//	}
+	def 'Send test message button for particular connection appears when that connection is selected and started'() {
+		given:
+			def testConnection = createTestSmsConnection()
+			new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+		when:
+			to ConnectionPage
+		then:
+			$('#connections .selected .test').isEmpty()
+		when:
+			waitFor{ $("#connections .selected .route").displayed }
+			btnCreateRoute.click()
+		then:
+			waitFor { btnTestRoute.@href == "/connection/createTest/${testConnection.id}" }
+			$('#notifications').text().contains("Created route")
+	}
 
 	def 'creating a new fconnection causes a refresh of the connections list'(){
 		given:
-			createTestConnection()
+			createTestEmailConnection()
 		when:
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor { at ConnectionDialog}
+			waitFor { at ConnectionDialog }
 		when:
 			connectionForm.connectionType = "smslib"
 			nextPageButton.click()
-			connectionForm.name = "name"
-			connectionForm.port = "COM2"
-			connectionForm.baud = "9600"
+			connectionForm.smslibname = "name"
+			connectionForm.smslibport = "COM2"
+			connectionForm.smslibbaud = "9600"
 			nextPageButton.click()
 		then:
 			confirmName.text() == "name"
 			confirmPort.text() == "COM2"
-			confirmType.text() == "smslib"
+			confirmType.text() == "Phone/Modem"
 		when:
 			doneButton.click()
 		then:
-			waitFor {selectedConnection.text().contains('name')}
-			lstConnections.find('li')*.text().size() == 2
+			waitFor { selectedConnection.text().contains('name') }
+			println "TEXT: ${lstConnections.find('li')*.text()}"
+			lstConnections.find('li').size() == 2
 	}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
 		given:
-			createTestConnection()
+			def email = createTestEmailConnection()
 		when:
-			def testyEmail = EmailFconnection.findByName('test email connection')
-			go "connection/createTest/${testyEmail.id}"
+			go "connection/createTest/${email.id}"
 		then:
 			assertFieldDetailsCorrect('addresses', 'Number', '')
-			assertFieldDetailsCorrect('messageText', 'Message', "Congratulations from FrontlineSMS \\o/ you have successfully configured ${testyEmail.name} to send SMS \\o/")
+			assertFieldDetailsCorrect('messageText', 'Message', "Congratulations from FrontlineSMS \\o/ you have successfully configured ${email.name} to send SMS \\o/")
 	}
 
 	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
@@ -155,7 +148,28 @@ class ConnectionFSpec extends ConnectionBaseSpec {
 		assert input.@value  == expectedValue
 		true
 	}
+
+	def createTestConnections() {
+		createTestEmailConnection()
+		createTestSmsConnection()
+	}
 	
+	def createTestEmailConnection() {
+		def c = new EmailFconnection(name:'test email connection',
+				receiveProtocol:EmailReceiveProtocol.IMAPS,
+				serverName:'imap.zoho.com', serverPort:993,
+				username:'mr.testy@zoho.com', password:'mter')
+		c.save(failOnError:true, flush:true)
+		return c
+	}
+	
+	def createTestSmsConnection() {
+		def c = new SmslibFconnection(name:'MTN Dongle', port:'COM99')
+		c.save(failOnError:true, flush:true)
+		MockModemUtils.initialiseMockSerial([
+				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler_sendFails())])
+		return c
+	}
 }
 
 class ConnectionDialog extends ConnectionPage {

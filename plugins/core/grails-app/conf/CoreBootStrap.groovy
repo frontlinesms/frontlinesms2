@@ -1,16 +1,21 @@
-import grails.util.Environment
-import frontlinesms2.*
-import org.mockito.Mockito
 import java.lang.reflect.Field
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.zip.ZipOutputStream
+import java.util.zip.ZipEntry
+
+import grails.util.Environment
+
+import frontlinesms2.*
+import frontlinesms2.dev.MockModemUtils
+import net.frontlinesms.test.serial.hayes.*
+
 import serial.SerialClassFactory
 import serial.mock.MockSerial
 import serial.mock.SerialPortHandler
 import serial.mock.CommPortIdentifier
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import net.frontlinesms.test.serial.hayes.*
-import frontlinesms2.dev.MockModemUtils
+
+import org.mockito.Mockito
 
 class CoreBootStrap {
 	def applicationContext
@@ -21,6 +26,7 @@ class CoreBootStrap {
 		initialiseSerial()
 		addTruncateMethodToStrings()
 		addRoundingMethodsToDates()
+		addZipMethodToFile()
 		createWelcomeNote()
 		
 		switch(Environment.current) {
@@ -55,6 +61,26 @@ class CoreBootStrap {
 	private def createWelcomeNote() {
 		if(!SystemNotification.count()) {
 			new SystemNotification(text:'Welcome to FrontlineSMS.  I hope you enjoy your stay!').save(failOnError:true)
+		}
+	}
+	
+	private def addZipMethodToFile() {
+		File.metaClass.zip = { output ->
+			new ZipOutputStream(output).withStream { zipOutStream ->
+				delegate.eachFileRecurse { f ->
+					if(!f.isDirectory()) {
+						zipOutStream.putNextEntry(new ZipEntry(f.path))
+						new FileInputStream(f).withStream { inStream ->
+							def buffer = new byte[1024]
+							def count
+							while((count = inStream.read(buffer, 0, 1024)) != -1) {
+								zipOutStream.write(buffer, 0, count)
+							}
+						}
+						zipOutStream.closeEntry()
+					}
+				}
+			}
 		}
 	}
 	

@@ -14,19 +14,18 @@ class ConnectionController {
 	}
 
 	def wizard = {
-		def action = "save"
-		def fconnectionInstance
 		if(params.id) {
-			fconnectionInstance = Fconnection.get(params.id)
-			action = "update"
+			withFconnection {
+				return [action:'update', fconnectionInstance:it]
+			}
+		} else {
+			return [action:'save']
 		}
-		[action: action, fconnectionInstance: fconnectionInstance]
 	}
 	
 	def save = {
-		println "ConnectionController.save() : params=$params"
 		remapFormParams()
-		save(CONNECTION_TYPE_MAP[params.connectionType])
+		doSave(CONNECTION_TYPE_MAP[params.connectionType])
 	}
 	
 	def update = {
@@ -45,7 +44,6 @@ class ConnectionController {
 	}
 	
 	private def remapFormParams() {
-		println "remapFormParams() : ENTRY : params=$params"
 		def cType = params.connectionType
 		if(!(cType in CONNECTION_TYPE_MAP)) {
 			throw new RuntimeException("Unknown connection type: " + cType)
@@ -57,19 +55,17 @@ class ConnectionController {
 			}
 		}
 		params << newParams
-		println "remapFormParams() : EXIT : params=$params"
 	}
 	
-	private def save(Class<Fconnection> clazz) {
+	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
-		println "Creating fconnection: $fconnectionInstance"
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save()) {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
-			forward(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
+			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
 		} else {
 			params.flashMessage = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
-			redirect(controller:'settings', action: "connections", params: params)
+			redirect(controller:'settings', action:"connections", params:params)
 		}
 	}
 	
@@ -81,7 +77,6 @@ class ConnectionController {
   
 	def destroyRoute = {
 		withFconnection { c ->
-			println "Destroying connection: $c"
 			fconnectionService.destroyRoutes(c)
 			flash.message = "${message(code: 'connection.route.disconnecting')}"
 			redirect(controller:'settings', action:'connections', id:c.id)
@@ -101,7 +96,6 @@ class ConnectionController {
 	def sendTest = {
 		withFconnection { connection ->
 			def message = messageSendService.getMessagesToSend(params)
-			println "passing arguments ${message.class}, ${connection.class}"
 			messageSendService.send(message, connection)
 			flash.message = LogEntry.log("Test message sent!")
 			redirect (controller:'settings', action:'show_connections', id:params.id)
@@ -109,9 +103,7 @@ class ConnectionController {
 	}
 	
 	private def withFconnection(Closure c) {
-		println "Fetching connection with id $params.id"
 		def connection = Fconnection.get(params.id.toLong())
-		println "Connection: $connection"
 		if(connection) {
 			c connection
 		} else {

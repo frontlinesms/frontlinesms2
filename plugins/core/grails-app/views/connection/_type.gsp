@@ -7,7 +7,7 @@
 				<g:radio class="${type}" name="connectionType"
 						value="${type}" onclick="setConnectionType('${type}')"
 						checked="${type=='smslib'}"/>
-				${it.newInstance().type}
+				<g:message code="${it.simpleName.toLowerCase()}.label"/>
 			</li>
 		</g:each>
 	</ul>
