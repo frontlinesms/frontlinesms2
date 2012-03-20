@@ -84,6 +84,24 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 			getMembers(s) == ['Wov']
 	}
 	
+	def "can edit a smartgroup's properties'"() {
+		given:
+			createContact(name:'Wov', shoe:'flip flop', hat:'stetson')
+		when:
+			def s = createSmartGroup(name:'English numbers', mobile:'+44')
+		then:
+			getMembers(s) == ['Alice Apple', 'Bob Burnquist', 'Charlie Charlesworth', 'Darren Devonshire']
+		when:
+			s.name = "Cloggers"
+			s.mobile = "+254"
+			s.save(flush:true)
+			s.refresh()
+		then:
+			s.name == "Cloggers"
+			s.mobile == "+254"
+			getMembers(s) == ['Grace Githeri', 'Horace Ugali', 'Ndungu Ndengu', 'Tricky Tusker']
+	}
+	
 	private def getMembers(SmartGroup s) {
 		s.members*.name.sort()
 	}

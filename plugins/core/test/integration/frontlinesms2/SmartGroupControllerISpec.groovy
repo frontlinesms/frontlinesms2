@@ -80,13 +80,58 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def smartGroup = new SmartGroup(name:'Smart Group', mobile:'+44').save(flush:true, failOnError:true)
 			controller.params.id = smartGroup.id
-			controller.params.name = "renamed smart group"
+			controller.params.smartgroupname = "renamed smart group"
 		when:
 			controller.update()
 			def updatedGroup = SmartGroup.get(smartGroup.id)
 		then:
 			updatedGroup.name == "renamed smart group"
 			controller.response.redirectedUrl == "/contact/show?smartGroupId=${smartGroup.id}"
+	}
+	
+	def 'EDIT updates existing smart group mobile rules'() {
+		given:
+			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+33').save(flush:true, failOnError:true)
+			createContact('Alfred', '+4423456789')
+			createContact('Bernadette', '+3323+4456789')
+			createContact('Charles', '+440987654')
+			createContact('Dupont', '+33098765432')
+			createContact('Edgar de Gaulle', '+33098764677', '+44662848484')
+			assert englishContacts.members*.name == ["Bernadette", "Dupont", "Edgar de Gaulle"]
+		when:
+			controller.params.smartgroupname = 'Londons'
+			controller.params.id = "${englishContacts.id}"
+			controller.params.'rule-text' = "+44"
+			controller.params.'rule-field' = "mobile"
+			controller.update()
+		then:
+			englishContacts.members*.name.sort() == ['Alfred', 'Charles', 'Edgar de Gaulle']
+	}
+	
+	def 'EDIT updates only the smart group mobile rule when a smartgroup contains other rules'() {
+		given:
+			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+33', notes:'test').save(flush:true, failOnError:true)
+			def testContact1 = createContact('Alfred', '+4423456789')
+			def testContact2 = createContact('Charles', '+442987654')
+			testContact1.notes = "testing one two twa"
+			testContact2.notes = "this is a test"
+			testContact1.save(flush:true)
+			testContact2.save(flush:true)
+			def testContact3 = createContact('Bernadette', '+3323+4456789')
+			testContact3.notes = "this is a test"
+			testContact3.save(flush:true)
+			createContact('Dupont', '+33098765432')
+			createContact('Edgar de Gaulle', '+33098764677', '+44262848484')
+			assert englishContacts.members*.name == ["Bernadette"]
+			
+		when:
+			controller.params.smartgroupname = 'Londons'
+			controller.params.id = "${englishContacts.id}"
+			controller.params.'rule-text' = "+442"
+			controller.params.'rule-field' = "mobile"
+			controller.update()
+		then:
+			englishContacts.members*.name.sort() == ['Alfred', 'Charles']
 	}
 	
 	def 'calling DELETE should permanently remove a smart group and not its contacts'() {
@@ -99,7 +144,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			members*.name == ['Alfred', 'Charles'] 
 		when:
-			controller.params.id = englishContacts.id
+			controller.params.id = "${englishContacts.id}"
 			controller.delete()
 		then:
 			!SmartGroup.list()

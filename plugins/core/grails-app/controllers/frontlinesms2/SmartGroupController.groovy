@@ -17,16 +17,7 @@ class SmartGroupController {
 		println "controller save smartgroup"
 		def smartGroupInstance = new SmartGroup()
 		smartGroupInstance.name = params.smartgroupname
-		getRuleText().eachWithIndex { ruleText, i ->
-			def ruleField = getRuleField(i)
-			if(ruleField.startsWith(CUSTOM_FIELD_ID_PREFIX)) {
-				ruleField = ruleField.replaceFirst(CUSTOM_FIELD_ID_PREFIX, '')
-				smartGroupInstance.addToCustomFields(new CustomField(name:ruleField, value:ruleText))
-			} else {
-				assert ruleField in ['contactName', 'mobile', 'email', 'notes'] // prevent injection - these should match the sanctioned fields user can set
-				smartGroupInstance."$ruleField" = ruleText
-			}
-		}
+		addSmartGroupRules(smartGroupInstance)
 		
 		if(smartGroupInstance.save()) {
 			println "smartgroup successfully saved"
@@ -40,18 +31,21 @@ class SmartGroupController {
 	}
 	
 	def update = {
-		def smartGroup = SmartGroup.get(params.id)
-		smartGroup.properties = params
-		if(smartGroup.validate()){
-			smartGroup.save(failOnError: true, flush: true)
-			flash['message'] = "Smart Group updated successfully"
-		}
-		else
-			flash['message'] = "Smart Group not saved successfully"
-		if (params.name){
-			redirect(controller: "contact", action: "show", params:[smartGroupId : params.id])
-		} else {
-			redirect(controller:"contact")
+		withSmartGroup { smartGroupInstance ->
+			if(params.smartgroupname)
+				smartGroupInstance.name = params.smartgroupname
+			if((getRuleText().flatten() - null)) {
+				addSmartGroupRules(smartGroupInstance)
+			}
+			if(smartGroupInstance.validate()) {
+				smartGroupInstance.save(failOnError: true, flush: true)
+				flash.message = "Smart Group updated successfully"
+				redirect(controller: "contact", action: "show", params:[smartGroupId : smartGroupInstance.id])
+			}
+			else {
+				flash.message = "Smart Group not saved successfully"
+				redirect(controller:"contact")
+			}
 		}
 	}
 	
@@ -105,5 +99,26 @@ class SmartGroupController {
 			assert i == 0
 			return f
 		}
+	}
+	
+	private def addSmartGroupRules(smartGroupInstance) {
+		getRuleText()?.eachWithIndex { ruleText, i ->
+			def ruleField = getRuleField(i)
+			if(ruleField.startsWith(CUSTOM_FIELD_ID_PREFIX)) {
+				ruleField = ruleField.replaceFirst(CUSTOM_FIELD_ID_PREFIX, '')
+				smartGroupInstance.addToCustomFields(new CustomField(name:ruleField, value:ruleText))
+			} else {
+				assert ruleField in ['contactName', 'mobile', 'email', 'notes'] // prevent injection - these should match the sanctioned fields user can set
+				smartGroupInstance."$ruleField" = ruleText
+			}
+		}
+	}
+	
+	private def withSmartGroup(Closure c) {
+		def sg = SmartGroup.get(params.id)
+		if(sg) {
+			c.call(sg)
+		}
+		else render(text: "Could not find smartgroup with id ${params.id}")
 	}
 }
