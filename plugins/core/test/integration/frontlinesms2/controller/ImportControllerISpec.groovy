@@ -61,6 +61,6 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			// check that messages and folders were created
 			Fmessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2']
-			Folder.list()*.name.sort() == ['messages from v1']
+			Folder.list().name == ['messages from v1']
 	}
 }
