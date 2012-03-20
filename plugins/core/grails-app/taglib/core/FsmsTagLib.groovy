@@ -3,6 +3,8 @@ package core
 class FsmsTagLib {
 	static namespace = 'fsms'
 	
+	def g
+	
 	def confirmTable = { att ->
 		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm">'
 		def fields = att.remove('fields').tokenize(',')
@@ -44,7 +46,7 @@ class FsmsTagLib {
 		out << '		' + getFieldLabel(instanceClass, groovyKey)
 		out << '	</label>'
 		
-		if(att.password || instanceClass.passwords?.contains(groovyKey)) {
+		if(att.password || isPassword(instanceClass, groovyKey)) {
 			out << g.passwordField(att)
 		} else if(instanceClass.metaClass.hasProperty(null, groovyKey)?.type.enum) {
 			out << g.select(att + [from:instanceClass.metaClass.hasProperty(null, groovyKey).type.values(),
@@ -55,5 +57,10 @@ class FsmsTagLib {
 	
 	private def getFieldLabel(clazz, fieldName) {
 		g.message(code:"${clazz.simpleName.toLowerCase()}.${fieldName}.label")
+	}
+	
+	private def isPassword(instanceClass, groovyKey) {
+		return instanceClass.metaClass.hasProperty(null, 'passwords') &&
+				groovyKey in instanceClass.passwords
 	}
 }

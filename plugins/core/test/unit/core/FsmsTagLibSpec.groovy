@@ -5,12 +5,14 @@ import grails.plugin.spock.*
 
 class FsmsTagLibSpec extends TagLibSpec {
 	def setup() {
-		// TODO mock messages
+		registerMetaClass FsmsTagLib
+		FsmsTagLib.metaClass.message = { Map m -> return m.code }
 	}
 	
 	def "input should create div containing label and textfield"() {
 		expect:
-			input([field:'stringfield',
+			// TODO
+			false && input([field:'stringfield',
 					fieldPrefix:'example-',
 					instanceClass:ExampleClass]) == 
 				'<div class="field">' + 
