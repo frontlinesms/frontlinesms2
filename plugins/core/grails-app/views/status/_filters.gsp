@@ -1,12 +1,13 @@
 <g:if test="${groupInstanceList || activityInstanceList || folderInstanceList}">
 	<ul id="type-filters" class="sub-menu">
 		<li>
-			<g:select class="dropdown" name="groupId" from="${groupInstanceList}" value="${search?.group?.id}"
+			<g:select class="dropdown" name="groupId" onchange="submit();" from="${groupInstanceList}" value="${search?.group?.id}"
 					  optionKey="id" optionValue="name"
 					  noSelection="${['':'Show all groups']}"/>
 		</li>
+				
 		<li>
-			<g:select class="dropdown" name="activityId" from="${activityInstanceList + folderInstanceList}"
+			<g:select class="dropdown" name="activityId" onchange="submit();" from="${activityInstanceList + folderInstanceList}"
 					  value="${search?.activityId}"
 					  optionKey="${{it.id}}"
 					  optionValue="${{it.name + ' ' + it.type}}"

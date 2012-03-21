@@ -209,7 +209,7 @@ class Fmessage {
 				eq('inbound', true)
 				eq('isDeleted', false)
 				between("date", startDate, endDate)
-				if(groupInstance) 'in'('src', groupInstance.addresses)
+				if(groupInstance) 'in'('src', groupInstance?.addresses ?: "")
 				if(messageOwner) 'in'('messageOwner', messageOwner)
 			}
 		}
