@@ -2,6 +2,10 @@ package frontlinesms2
 
 import net.frontlinesms.messaging.ATDeviceDetector
 
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.RouteDefinition
+import org.smslib.NotConnectedException
+
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
 	
@@ -46,11 +50,26 @@ class SmslibFconnection extends Fconnection {
 		}
 	}
 	
-	String getCamelConsumerAddress() {
-		camelAddress()
-	}
-	
-	String getCamelProducerAddress() {
-		camelAddress()
+	List<RouteDefinition> getRouteDefinitions() {
+		return new RouteBuilder() {
+			@Override void configure() {}
+			List getRouteDefinitions() {
+				return [from("seda:out-${SmslibFconnection.this.id}")
+							.onException(NotConnectedException)
+									.handled(true)
+									.beanRef('fconnectionService', 'handleDisconnection')
+									.end()
+							.beanRef('smslibTranslationService', 'toCmessage')
+							.to(camelAddress())
+							.routeId("out-modem-${SmslibFconnection.this.id}"),
+					from(camelAddress())
+							.onException(NotConnectedException)
+									.handled(true)
+									.beanRef('fconnectionService', 'handleDisconnection')
+									.end()
+							.to('seda:raw-smslib')
+							.routeId("in-${SmslibFconnection.this.id}")]
+			}
+		}.routeDefinitions
 	}
 }

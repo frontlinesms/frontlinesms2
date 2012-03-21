@@ -1,5 +1,8 @@
 package frontlinesms2
 
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.RouteDefinition
+
 class EmailFconnection extends Fconnection {
 	EmailReceiveProtocol receiveProtocol
 	String serverName
@@ -12,12 +15,19 @@ class EmailFconnection extends Fconnection {
 		serverPort(nullable: true)
 	}
 
-	String getCamelConsumerAddress() {
+	private String getCamelConsumerAddress() {
 		String serverPortParam = serverPort ? ":${serverPort}" : ""
 		"${receiveProtocol}://${serverName}${serverPortParam}?debugMode=true&consumer.delay=15000&username=${username}&password=${password}"
 	}
-
-	String getCamelProducerAddress() {
-		null
+	
+	List<RouteDefinition> getRouteDefinitions() {
+		return new RouteBuilder() {
+			@Override void configure() {}
+			List getRouteDefinitions() {
+				return [from('seda:email-messages-to-send')
+						.to(this.camelProducerAddress)
+						.routeId("out-${EmailFconnection.this.id}")]
+			}
+		}.routeDefinitions
 	}
 }
