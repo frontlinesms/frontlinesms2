@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import java.util.Date
-
 class Dispatch {
 	static belongsTo = [message: Fmessage]
 	String dst

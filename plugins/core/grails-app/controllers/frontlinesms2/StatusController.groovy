@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import frontlinesms2.RouteStatus
-
 class StatusController {
 	def deviceDetectionService
 	

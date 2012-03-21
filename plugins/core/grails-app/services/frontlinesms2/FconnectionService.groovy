@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import org.apache.camel.Exchange
-import org.apache.camel.Processor
 import serial.SerialClassFactory
 import serial.CommPortIdentifier
 import net.frontlinesms.messaging.*

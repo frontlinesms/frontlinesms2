@@ -25,7 +25,7 @@ class EmailFconnection extends Fconnection {
 			@Override void configure() {}
 			List getRouteDefinitions() {
 				return [from('seda:email-messages-to-send')
-						.to(this.camelProducerAddress)
+						.to(EmailFconnection.this.camelProducerAddress)
 						.routeId("out-${EmailFconnection.this.id}")]
 			}
 		}.routeDefinitions

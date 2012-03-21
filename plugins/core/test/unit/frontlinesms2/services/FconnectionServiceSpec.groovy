@@ -101,10 +101,7 @@ class FconnectionServiceSpec extends UnitSpec {
 		when:
 			service.createRoutes(c)
 		then:
-			1 * context.addRouteDefinitions({
-				println "###Add route definitions called: $it"
-				println "### ids:${it*.id}"
-				it*.id.sort() == ['in-1', 'out-1']})
+			1 * context.addRouteDefinitions { it*.id.sort() == ['in-1', 'out-1'] }
 	}
 	
 	@Unroll

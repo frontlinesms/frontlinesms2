@@ -7,7 +7,6 @@ import org.smslib.COutgoingMessage
 
 class SmslibTranslationService {
 	void toFmessage(Exchange exchange) {
-		def i = exchange.in
 		CIncomingMessage bod = exchange.in.body
 		
 		// Ignore CStatusReportMessages

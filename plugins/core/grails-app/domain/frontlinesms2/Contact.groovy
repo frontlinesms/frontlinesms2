@@ -171,12 +171,6 @@ class Contact {
 		secondaryMobile = s
 	}
 	
-	private def getOldContactNumber() {
-		Contact.withNewSession {session ->
-			Contact.get(id).refresh().primaryMobile // FIXME why not use this.loadedState?
-		}
-	}
-	
 	private def removeFmessageDisplayName() {
 		if(primaryMobile) {
 			Fmessage.withNewSession { session ->

@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import java.util.Date
-
 class Folder extends MessageOwner {
 	static transients = ['liveMessageCount']
 	String name
