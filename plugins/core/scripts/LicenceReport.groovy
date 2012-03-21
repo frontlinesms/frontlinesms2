@@ -71,14 +71,15 @@ target(licenceReport:"Produces a report for the current Grails application") {
 			report "Licence report for $grailsAppName-$it:"
 			report "	Dependency licences"
 			report "		count	| licence"
-			reportHandler.licenceCount.each { licence, count ->
-				report "		$count 	| $licence"
+			reportHandler.licenceCount.sort{-it.value}.each { licence, count ->
+				report "		$count 	| ${licence?:'UNKNOWN'}"
 			}
-			report "	Licence unknown:"
+			report "	Licence unknown (${reportHandler.unlicensed.size()}):"
 			reportHandler.unlicensed.each { report "		$it" }
 			reportWriter.close()
 		} finally { writer.close() }
 	}
+	println "licenceDb: ${licenceDb.sort()}"
 }
 
 /**
@@ -139,7 +140,9 @@ class DependencyReportXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 				module.licenceUrl = a.getValue('url')
 				module.licenceSource = 'ivy'
 				break
-			case 'revision': module.revision=LicenceUtils.sanitiseVersionNumber(a.getValue('name')); break
+			case 'revision':
+				module.revision = LicenceUtils.sanitiseVersionNumber(a.getValue('name'))
+				break
 			case 'artifact':
 				if(!module.licenceName && licenceDb) {
 					def dbEntry = licenceDb."$module.org"."$module.name"."$module.revision"
@@ -153,7 +156,7 @@ class DependencyReportXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 						unlicensed << module
 					}
 				}
-				++licenceCount[module.licenceName]
+				++licenceCount[module.licenceName?.toLowerCase()]
 
 				if(writer) writer.writeNext(module.values() as String[])
 				else {
@@ -163,6 +166,8 @@ class DependencyReportXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 					println "	version: $module.revision"
 					println "	licence: $module.licenceName"
 				}
+				// discard the module to avoid leakage across different elements
+				module = module.clone()
 				break;
 		}
 	}
