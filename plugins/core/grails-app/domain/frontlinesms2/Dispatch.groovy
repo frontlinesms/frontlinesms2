@@ -67,7 +67,7 @@ class Dispatch {
 			and {
 				eq('isDeleted', false)
 				between("dateSent", startDate, endDate)
-				if(groupInstance) 'in'('dst', groupInstance.addresses)
+				if(groupInstance) 'in'('dst', groupInstance?.addresses ?: "")
 				message {
 					if(messageOwner) 'in'('messageOwner', messageOwner)
 				}

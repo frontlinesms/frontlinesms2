@@ -6,6 +6,7 @@ class StatusController {
 	def deviceDetectionService
 	
 	def index = {
+	    
 		redirect action: "show", params:params
 	}
 
