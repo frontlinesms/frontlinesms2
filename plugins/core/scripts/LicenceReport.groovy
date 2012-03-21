@@ -46,29 +46,37 @@ target(licenceReport:"Produces a report for the current Grails application") {
 	}
 //	println "licenceDb: $licenceDb"
 
-	def reportDirectory = "$projectTargetDir/dependency-report"
+	def dependencyReportDirectory = "$projectTargetDir/dependency-report"
+	def licenceReportDirectory = "$projectTargetDir/licence-report"
+	ant.delete(dir:licenceReportDirectory, failonerror:false)
+	ant.mkdir(dir:licenceReportDirectory)
+
 	def reader = SAXParserFactory.newInstance().newSAXParser().XMLReader
 	def conf = args.trim() ?: 'build, compile, provided, runtime, test'
 	conf.split(',')*.trim().each {
 		println "Generating licence report for: '$it'"
 
-		def outputReportFile = new File(reportDirectory, "licences-${it}.csv")
+		def outputReportFile = new File(licenceReportDirectory, "licences-${it}.csv")
 		def writer = outputReportFile.newWriter()
 		try {
 			def reportHandler = new DependencyReportXmlHandler(writer)
 			reportHandler.licenceDb = licenceDb
 			reader.contentHandler = reportHandler
 
-			def f = new File(reportDirectory, "org.grails.internal-$grailsAppName-${it}.xml")
+			def f = new File(dependencyReportDirectory, "org.grails.internal-$grailsAppName-${it}.xml")
 			reader.parse(new InputSource(f.newInputStream()))
 
-			println "Licence report for $it:"
-			println "		count	| licence"
+			def reportWriter = new File(licenceReportDirectory, "licence-report-${it}.txt").newWriter()
+			def report = { reportWriter << "$it\n" }
+			report "Licence report for $grailsAppName-$it:"
+			report "	Dependency licences"
+			report "		count	| licence"
 			reportHandler.licenceCount.each { licence, count ->
-				println "		$count | $licence"
+				report "		$count 	| $licence"
 			}
-			println "	Unlicensed:"
-			reportHandler.unlicensed.each { println it }
+			report "	Licence unknown:"
+			reportHandler.unlicensed.each { report "		$it" }
+			reportWriter.close()
 		} finally { writer.close() }
 	}
 }
@@ -135,7 +143,7 @@ class DependencyReportXmlHandler extends org.xml.sax.helpers.DefaultHandler {
 			case 'artifact':
 				if(!module.licenceName && licenceDb) {
 					def dbEntry = licenceDb."$module.org"."$module.name"."$module.revision"
-					println "Found $dbEntry when looking for licence for $module.name ($module.revision) in ${licenceDb[module.org]}"
+//					println "Found $dbEntry when looking for licence for $module.name ($module.revision) in ${licenceDb[module.org]}"
 					def dbName = dbEntry.name
 					if(dbName) {
 						module.licenceName = dbName
