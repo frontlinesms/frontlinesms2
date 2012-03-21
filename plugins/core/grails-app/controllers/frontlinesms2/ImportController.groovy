@@ -2,8 +2,18 @@ package frontlinesms2
 import java.io.File;
 import java.io.InputStream;
 import java.io.Reader;
+import java.text.DateFormat;
+import java.util.Date;
+import java.text.SimpleDateFormat
 
 class ImportController {
+	private static final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+	def importData = {
+		if (params.data == 'contacts') importContacts()
+		else importMessages()
+	}
+	
 	def importContacts = {
 		def savedCount = 0
 		def failedCount = 0
@@ -34,7 +44,7 @@ class ImportController {
 					if(groups) groups.each { c.addToGroup(it) }
 					++savedCount
 				} catch(Exception ex) {
-					ex.printStackTrace() // TODO replace this with logging
+					log.info "Encountered saving contact ", ex
 					++failedCount
 				}
 			}
@@ -43,6 +53,63 @@ class ImportController {
 		} else throw new RuntimeException("File upload has failed for some reason.")
 	}
 	
+	def importMessages = {
+		def savedCount = 0
+		def failedCount = 0
+		def uploadedCSVFile = request.getFile('importCsvFile')
+		if(uploadedCSVFile) {
+			def headers
+			def standardFields = ['Message Content':'text', 'Sender Number':'src']
+			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'¬']).eachLine { tokens ->
+				if(!headers) headers = tokens 
+				else try {
+					Fmessage fm = new Fmessage()
+					def dispatchStatus
+					headers.eachWithIndex { key, i ->
+						def value = tokens[i]
+						if (key in standardFields) {
+							fm[standardFields[key]] = value
+						} else if (key == 'Message Date') {
+							fm.date = MESSAGE_DATE.parse(value)
+						} else if (key == 'Recipient Number') {
+							fm.addToDispatches(new Dispatch(dst:value))
+						} else if(key == 'Message Type') {
+							fm.inbound = (value == 'Received')
+						} else if(key == 'Message Status') {
+							if(value in ['Failed', 'Pending', 'Outbox']) {
+								fm.hasFailed = true
+								dispatchStatus = DispatchStatus.FAILED
+							} else if(value == 'Pending') {
+								fm.hasPending = true
+								dispatchStatus = DispatchStatus.PENDING
+							} else if(value == 'Sent'){
+								fm.hasSent = true
+								dispatchStatus = DispatchStatus.SENT
+							}
+						}
+					}
+					if (fm.inbound) fm.dispatches = []
+					else fm.dispatches.findAll{
+						it.status = dispatchStatus
+						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
+					}
+					fm.save(failOnError:true)
+					++savedCount
+					getMessageFolder("messages from v1").addToMessages(fm)
+				} catch(Exception ex) {
+					log.info "Encountered saving message ", ex
+					++failedCount
+				}
+			}
+			flash.message = "$savedCount messages were imported; $failedCount failed" 
+			redirect controller: "settings", action: 'general'
+		}
+	}
+	
+	def getMessageFolder(name) {
+		Folder.findByName(name)?: new Folder(name: name).save(failOnError:true)
+	}
+
 	def getGroupNames(csvValue) {
 		println "getGroupNames() : csvValue=$csvValue"
 		Set csvGroups = []

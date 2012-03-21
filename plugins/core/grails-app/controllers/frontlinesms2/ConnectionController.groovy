@@ -2,6 +2,9 @@ package frontlinesms2
 
 class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
+			email:EmailFconnection,
+			clickatell:ClickatellFconnection]
 
 	def fconnectionService
 	def messageSendService
@@ -10,22 +13,23 @@ class ConnectionController {
 		redirect(action:'create_new')
 	}
 
-	def connection_wizard = {
-		def action = "save"
-		def fconnectionInstance
+	def wizard = {
 		if(params.id) {
-			fconnectionInstance = Fconnection.get(params.id)
-			action = "update"
+			withFconnection {
+				return [action:'update', fconnectionInstance:it]
+			}
+		} else {
+			return [action:'save']
 		}
-		[action: action, fconnectionInstance: fconnectionInstance]
 	}
 	
 	def save = {
-		if(params.connectionType == 'email') saveEmail()
-		else if(params.connectionType == 'smslib') saveSmslib()
+		remapFormParams()
+		doSave(CONNECTION_TYPE_MAP[params.connectionType])
 	}
 	
 	def update = {
+		remapFormParams()
 		withFconnection { fconnectionInstance ->
 			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 			fconnectionInstance.properties = params
@@ -39,29 +43,29 @@ class ConnectionController {
 		}
 	}
 	
-	def saveEmail = {
-		def fconnectionInstance = new EmailFconnection()
-		if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
-		fconnectionInstance.properties = params
-
-		if (fconnectionInstance.save()) {
-			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
-			redirect(controller:'settings', action: "show_connections", id: fconnectionInstance.id)
-		} else {
-			flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
-			redirect(controller:'settings', action: "connections", params: params)
+	private def remapFormParams() {
+		def cType = params.connectionType
+		if(!(cType in CONNECTION_TYPE_MAP)) {
+			throw new RuntimeException("Unknown connection type: " + cType)
 		}
+		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException
+		params.each { k, v ->
+			if(k.startsWith(cType)) {
+				newParams[k.substring(cType.size())] = v
+			}
+		}
+		params << newParams
 	}
-
-	def saveSmslib = {
-		def fconnectionInstance = new SmslibFconnection()
+	
+	private def doSave(Class<Fconnection> clazz) {
+		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save()) {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
-			forward(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
+			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
 		} else {
 			params.flashMessage = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
-			redirect(controller:'settings', action: "connections", params: params)
+			redirect(controller:'settings', action:"connections", params:params)
 		}
 	}
 	
@@ -73,7 +77,6 @@ class ConnectionController {
   
 	def destroyRoute = {
 		withFconnection { c ->
-			println "Destroying connection: $c"
 			fconnectionService.destroyRoutes(c)
 			flash.message = "${message(code: 'connection.route.disconnecting')}"
 			redirect(controller:'settings', action:'connections', id:c.id)
@@ -93,7 +96,6 @@ class ConnectionController {
 	def sendTest = {
 		withFconnection { connection ->
 			def message = messageSendService.getMessagesToSend(params)
-			println "passing arguments ${message.class}, ${connection.class}"
 			messageSendService.send(message, connection)
 			flash.message = LogEntry.log("Test message sent!")
 			redirect (controller:'settings', action:'show_connections', id:params.id)
@@ -101,14 +103,12 @@ class ConnectionController {
 	}
 	
 	private def withFconnection(Closure c) {
-		println "Fetching connection with id $params.id"
-		def connection = Fconnection.get(params.id.toLong())
-		println "Connection: $connection"
+		def connection = Fconnection.get(params.id)
 		if(connection) {
 			c connection
 		} else {
 			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
-			redirect action:'list'
+			redirect controller:'settings', action:'connections'
 		}
 	}
 }

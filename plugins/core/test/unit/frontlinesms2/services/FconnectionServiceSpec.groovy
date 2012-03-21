@@ -1,9 +1,11 @@
 package frontlinesms2.services
 
 import spock.lang.*
+import frontlinesms2.*
 import grails.plugin.spock.*
+
 import org.apache.camel.CamelContext
-import frontlinesms2.*	
+import org.apache.camel.Exchange
 
 class FconnectionServiceSpec extends UnitSpec {
 	def service
@@ -24,6 +26,7 @@ class FconnectionServiceSpec extends UnitSpec {
 
 	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {
 		given:
+			context.routes >> []
 			def notConnected = Mock(Fconnection)
 		when:
 			def status = service.getRouteStatus(notConnected)
@@ -36,14 +39,33 @@ class FconnectionServiceSpec extends UnitSpec {
 			def connected = new Fconnection(id:1)
 			def notConnected = new Fconnection(id:2)
 			def alsoConnected = new Fconnection(id:3)
-			context.getRoute("in-1") >> Mock(org.apache.camel.Route)
-			context.getRoute("out-3") >> Mock(org.apache.camel.Route)
+			context.routes >> ["in-1", "out-3"].collect { [id:it] }
 		when:
 			true
 		then:
 			service.getRouteStatus(connected) == RouteStatus.CONNECTED
 			service.getRouteStatus(notConnected) == RouteStatus.NOT_CONNECTED
 			service.getRouteStatus(alsoConnected) == RouteStatus.CONNECTED
+	}
+	
+	@Unroll
+	def 'test route statuses'() {
+		given:
+			context.routes >> routeNames.collect { [id:it] }
+			def c = new Fconnection(id:id)
+		expect:
+			service.getRouteStatus(c) == expectedStatus
+		where:
+			id | routeNames | expectedStatus
+			1 | [] | RouteStatus.NOT_CONNECTED
+			1 | ['in-2', 'out-3'] | RouteStatus.NOT_CONNECTED
+			1 | ['in-1'] | RouteStatus.CONNECTED
+			1 | ['out-1'] | RouteStatus.CONNECTED
+			1 | ['in-1', 'out-1'] | RouteStatus.CONNECTED
+			1 | ['in-1', 'out-internet-1'] | RouteStatus.CONNECTED
+			1 | ['in-1', 'out-modem-1'] | RouteStatus.CONNECTED
+			1 | ['out-internet-1'] | RouteStatus.CONNECTED
+			1 | ['out-modem-1'] | RouteStatus.CONNECTED
 	}
 
 	def 'creating a SMSLib route should stop detection on the corresponding port'() {
@@ -84,5 +106,22 @@ class FconnectionServiceSpec extends UnitSpec {
 				println "### ids:${it*.id}"
 				it*.id.sort() == ['in-1', 'out-1']})
 	}
+	
+	@Unroll
+	def 'handleDisconnection should trigger shutdown of related Fconnection'() {
+		given:
+			registerMetaClass RouteDestroyJob
+			RouteDestroyJob.metaClass.static.triggerNow = { Map args ->
+				assert args.routeId == connectionId
+			}
+			Exchange exchange = Mock()
+			exchange.fromRouteId >> routeId
+		expect:
+			!service.handleDisconnection(exchange) // real test is in the assert above
+		where:
+			routeId | connectionId
+			"out-1" | 1
+			"out-internet-2" | 2
+			"out-modem-3" | 6
+	}
 }
-

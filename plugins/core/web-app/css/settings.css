@@ -55,9 +55,6 @@
 #create-connection-btn{
 	padding: 17px;
 }
-#email-form{
-	display:none;
-}
 
 #logEntries{
     z-index: 1;

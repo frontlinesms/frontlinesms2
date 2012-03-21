@@ -3,32 +3,28 @@ package frontlinesms2.controller
 import frontlinesms2.*
 
 class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
-	
-	def controller1
-	def controller2
+	def controller
 	def fconnectionService
 	
 	def setup() {
-		controller1 = new ConnectionController()
-		controller2 = new ConnectionController()
+		controller = new ConnectionController()
 	}
 
 	def "can save new email connection"() {
 		setup:
-			EmailReceiveProtocol receiveProtocol
-			controller1.params.connectionType = 'email'
-			controller1.params.name = 'test email connection'
-			controller1.params.receiveProtocol = 'imap'
-			controller1.params.serverName = 'mail.example.com'
-			controller1.params.serverPort = '1234'
-			controller1.params.username = 'greg'
-			controller1.params.password = 'pastie'
+			controller.params.connectionType = 'email'
+			controller.params.name = 'test email connection'
+			controller.params.receiveProtocol = 'IMAP'
+			controller.params.serverName = 'mail.example.com'
+			controller.params.serverPort = '1234'
+			controller.params.username = 'greg'
+			controller.params.password = 'pastie'
 		when:
-			controller1.save()
-			def conn = EmailFconnection.findByPassword("pastie")
+			controller.save()
+			def conn = EmailFconnection.findByPassword('pastie')
 		then:
 			conn
-			conn.receiveProtocol.toString() == 'imap'
+			conn.receiveProtocol == EmailReceiveProtocol.IMAP
 			conn.serverName == 'mail.example.com'
 			conn.serverPort == 1234
 			conn.username == 'greg'
@@ -37,12 +33,12 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can save new smslib connection"() {
 		setup:
-			controller2.params.connectionType = 'smslib'
-			controller2.params.name = 'test smslib connection'
-			controller2.params.port = 'COM1'
-			controller2.params.baud = 9600
+			controller.params.connectionType = 'smslib'
+			controller.params.name = 'test smslib connection'
+			controller.params.port = 'COM1'
+			controller.params.baud = 9600
 		when:
-			controller2.save()
+			controller.save()
 			def conn2 = SmslibFconnection.findByPort("COM1")
 		then:
 			conn2
@@ -52,25 +48,26 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can edit email connection"() {
 		setup:
-			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.valueOf("imap".toUpperCase()), name:"test connection",
+			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection",
 					 serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
 
-			controller1.params.id = emailConnection.id
-			controller1.params.receiveProtocol = 'imap'
-			controller1.params.connectionType = 'email'
-			controller1.params.name = 'test email connection'
-			controller1.params.serverName = 'mail.example.com'
-			controller1.params.serverPort = '1234'
-			controller1.params.username = 'greg'
-			controller1.params.password = 'pastie'
+			controller.params.id = emailConnection.id
+			controller.params.receiveProtocol = 'POP3'
+			controller.params.connectionType = 'email'
+			controller.params.name = 'new name'
+			controller.params.serverName = 'mail.example.com'
+			controller.params.serverPort = '5678'
+			controller.params.username = 'greg'
+			controller.params.password = 'pastie'
 		when:
-			controller1.update()
+			controller.update()
 			emailConnection.refresh()
 		then:
 			!emailConnection.hasErrors()
-			emailConnection.receiveProtocol.toString() == 'imap'
+			emailConnection.name == 'new name'
+			emailConnection.receiveProtocol == EmailReceiveProtocol.POP3
 			emailConnection.serverName == 'mail.example.com'
-			emailConnection.serverPort == 1234
+			emailConnection.serverPort == 5678
 			emailConnection.username == 'greg'
 			emailConnection.password =='pastie'
 	}
@@ -78,14 +75,14 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "can edit sms connection"() {
 		setup:
 			def smslibConnection = new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
-			controller1.params.id = smslibConnection.id
-			controller2.params.connectionType = 'smslib'
-			controller2.params.name = 'test smslib connection'
-			controller2.params.port = 'COM1'
-			controller2.params.baud = 9600
-			controller2.params.pin = "1234"
+			controller.params.id = smslibConnection.id
+			controller.params.connectionType = 'smslib'
+			controller.params.name = 'test smslib connection'
+			controller.params.port = 'COM1'
+			controller.params.baud = 9600
+			controller.params.pin = "1234"
 		when:
-			controller2.update()
+			controller.update()
 			smslibConnection.refresh()
 		then:
 			!smslibConnection.hasErrors()
