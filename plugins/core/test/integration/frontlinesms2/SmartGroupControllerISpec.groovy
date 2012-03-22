@@ -62,8 +62,8 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'calling SAVE with a customfield rule defined will create a SmartGroup which owns a CustomField'() {
 		given:
 			controller.params.smartgroupname = 'Londons'
-			controller.params.'rule-field' = ['custom:Town']
-			controller.params.'rule-text' = ['London']
+			controller.params.'rule-field' = 'custom:Town'
+			controller.params.'rule-text' = 'London'
 		when:
 			controller.save()
 			def g = SmartGroup.findByName('Londons')
@@ -109,7 +109,27 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			englishContacts.members*.name.sort() == ['Alfred', 'Charles', 'Edgar de Gaulle']
 	}
 	
-	def 'can update only the smart group mobile rule when a smartgroup contains other rules'() {
+	def 'can remove existing smartgroup mobile rules'() {
+		given:
+			def smartGroup = new SmartGroup(name:'English contacts', mobile:'+33').save(flush:true, failOnError:true)
+			createContact('Alfred', '+4423456789')
+			createContact('Bernadette', '+3323+4456789')
+			def charles = createContact('Charles', '+440987654')
+			charles.notes = "I am super awesome"
+			charles.save(flush:true)
+			assert smartGroup.members*.name == ["Bernadette"]
+		when:
+			controller.params.smartgroupname = 'Londons'
+			controller.params.id = "${smartGroup.id}"
+			controller.params.'rule-text' = "awesome"
+			controller.params.'rule-field' = "notes"
+			controller.save()
+		then:
+			!smartGroup.mobile
+			smartGroup.members*.name == ['Charles']
+	}
+	
+	def 'can update a single smart group rule when a smartgroup contains other rules'() {
 		given:
 			def englishContacts = new SmartGroup(name:'English contacts', mobile:'+33', notes:'test').save(flush:true, failOnError:true)
 			def testContact1 = createContact('Alfred', '+4423456789')
@@ -128,10 +148,11 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.smartgroupname = 'Londons'
 			controller.params.id = "${englishContacts.id}"
-			controller.params.'rule-text' = "+442"
-			controller.params.'rule-field' = "mobile"
+			controller.params.'rule-text' = ["+442", "test"] as String[]
+			controller.params.'rule-field' = ["mobile", "notes"] as String[]
 			controller.save()
 		then:
+			SmartGroup.count() == 1
 			SmartGroup.get(englishContacts.id).name == "Londons"
 			englishContacts.members*.name.sort() == ['Alfred', 'Charles']
 	}
@@ -158,10 +179,13 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			smartGroup.members*.name == ["Alfred", "Bernadette"]
 		when:
 			controller.params.id = "${smartGroup.id}"
+			controller.params.smartgroupname = "${smartGroup.name}"
 			controller.params.'rule-text' = "nai"
 			controller.params.'rule-field' = "${CUSTOM_FIELD_ID_PREFIX + customFieldB.name}"
 			controller.save()
+			smartGroup.refresh()
 		then:
+			SmartGroup.count() == 1
 			smartGroup.members*.name.sort() == ['Charles']
 	}
 
@@ -185,11 +209,14 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		expect:
 			smartGroup.members*.name == ["Charles"]
 		when:
+			controller.params.smartgroupname = "${smartGroup.name}"
 			controller.params.id = "${smartGroup.id}"
 			controller.params.'rule-field' = "${CUSTOM_FIELD_ID_PREFIX + customFieldA.name}"
 			controller.params.'rule-text' = "ken"
 			controller.save()
+			smartGroup.refresh()
 		then:
+			SmartGroup.count() == 1
 			SmartGroup.get(smartGroup.id).customFields.size() == 1
 			smartGroup.members*.name.sort() == ['Alfred', 'Charles']
 	}
@@ -215,14 +242,14 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			controller.params.smartgroupname = 'Londons'
 			controller.params.'rule-field' = ['custom:Town', 'custom:Food', 'mobile'] as String[]
-			controller.params.'rule-text' = ['London', 'Zucchini', '+789']
+			controller.params.'rule-text' = ['London', 'Zucchini', '+789'] as String[]
 		when:
 			controller.save()
-			def sg = SmartGroup.findByName('Londons')
+			def smartGroup = SmartGroup.findByName('Londons')
 		then:
-			sg
-			sg.customFields.size() == 2
-			sg.mobile == '+789'			
+			smartGroup
+			smartGroup.customFields.size() == 2
+			smartGroup.mobile == '+789'			
 	}
 		
 	private def createContact(String name, String mobile, String secondaryMobile=null) {

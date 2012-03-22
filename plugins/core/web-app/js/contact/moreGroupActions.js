@@ -23,7 +23,7 @@ var groupActions = {
 			url: url_root + getContactSection() + '/edit',
 			data: {id: $("#groupId").val()},
 			success: function(data) {
-				launchMediumPopup('Edit group', data, 'Edit');
+				launchMediumPopup('Edit group', data, 'Edit', submit);
 		}})
 	},
 	

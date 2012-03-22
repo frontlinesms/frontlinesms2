@@ -16,6 +16,10 @@ class SmartGroup {
 	
 	static hasMany = [customFields: CustomField]
 	
+	static mapping = {
+		customFields cascade: "all-delete-orphan"
+	}
+	
 	static constraints = {
 		contactName(nullable:true, validator:atLeastOneSearchParamValidator)
 		mobile(nullable:true, validator:atLeastOneSearchParamValidator)
@@ -108,4 +112,5 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 		}
 		addressList
 	}
+	
 }

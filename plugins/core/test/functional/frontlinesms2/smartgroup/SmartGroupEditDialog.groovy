@@ -4,6 +4,6 @@ import frontlinesms2.*
 
 class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	static at = { 
-		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('Edit smart group')
+		$("#ui-dialog-title-modalBox").text()?.equalsIgnoreCase('Edit Group')
 	}
 }

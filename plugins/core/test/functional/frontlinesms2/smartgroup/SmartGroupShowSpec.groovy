@@ -41,7 +41,6 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 			at PageEnglishSmartGroupShow
 	}
 	
-	@spock.lang.IgnoreRest
 	def 'user can edit an existing smartGroup'(){
 		setup:
 			def englishContacts = new SmartGroup(name:'English Contacts', mobile:'+254').save(flush:true, failOnError:true)
@@ -51,16 +50,17 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		then:
 			at PageEnglishSmartGroupShow
 		when:
-			$(".more-actions").value("edit").click()
+			$("#group-actions").value("edit").jquery.trigger("click")
 		then:
-			at SmartGroupEditDialog
+			waitFor { at SmartGroupEditDialog}
 			smartGroupNameField.value(smartGroupNameField.value() == englishContacts.name)
 		when:
-			setRuleValue(0, '+44')
-			finishButton.click()
+			setRuleValue(0, "+44")
+			editButton.click()
 			englishContacts.refresh()
 		then:
-			englishContacts.mobile == "+44"			
+			SmartGroup.count() == 1
+			waitFor {englishContacts.mobile == "+44"}
 	}
 }
 

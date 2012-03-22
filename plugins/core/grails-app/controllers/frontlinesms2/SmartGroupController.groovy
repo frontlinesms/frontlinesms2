@@ -18,14 +18,15 @@ class SmartGroupController {
 		withSmartGroup { smartGroupInstance ->
 			smartGroupInstance.name = params.smartgroupname
 			if((getRuleText().flatten() - null)) {
+				if(params.id) removeSmartGroupRules(smartGroupInstance)
 				addSmartGroupRules(smartGroupInstance)
 			}
 			if(smartGroupInstance.save()) {
 				println "smartgroup successfully saved"
-				flash.message = "Smart group '$params.smartgroupname' saved"
+				flash.message = "Smart group '$smartGroupInstance.name' saved"
 				redirect(controller: "contact", action: "show", params:[smartGroupId : smartGroupInstance.id])
 			} else {
-				println "smargroup save failed. Errors were $smartGroupInstance.errors"
+				println "smartgroup save failed. Errors were $smartGroupInstance.errors"
 				flash.error = "Smart group save failed. Errors were $smartGroupInstance.errors"
 				render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
 			}
@@ -37,15 +38,15 @@ class SmartGroupController {
 	}
 	
 	def rename = {
-		render view: "../group/rename", model: [groupName: SmartGroup.get(params.groupId)?.name]
+		render view: "../smartGroup/rename", model: [groupName: SmartGroup.get(params.groupId)?.name]
 	}
 	
 	def edit = {
 		def smartGroupInstance = SmartGroup.get(params.id)
-		def smartGroupProperties = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
+		def smartGroupRuleFields = getSmartGroupRuleFields()
 		def currentRules = [:]
 		
-		for(def prop in smartGroupProperties) {
+		for(def prop in smartGroupRuleFields) {
 			if(smartGroupInstance."$prop") 
 				currentRules."$prop" = smartGroupInstance."$prop"
 		}
@@ -71,13 +72,12 @@ class SmartGroupController {
 	
 	private def getRuleText() {
 		def t = params['rule-text']
-		println "t is $t"
 		t instanceof String[] ? t: [t]
 	}
 	
 	private def getRuleField(i) {
 		def f = params['rule-field']
-		println "f is $f"
+		println "field $f"
 		if(f instanceof String[]) return f[i]
 		else {
 			assert i == 0
@@ -86,7 +86,6 @@ class SmartGroupController {
 	}
 	
 	private def addSmartGroupRules(smartGroupInstance) {
-		smartGroupInstance.customFields?.clear()
 		getRuleText()?.eachWithIndex { ruleText, i ->
 			def ruleField = getRuleField(i)
 			if(ruleField.startsWith(CUSTOM_FIELD_ID_PREFIX)) {
@@ -94,16 +93,31 @@ class SmartGroupController {
 				smartGroupInstance.addToCustomFields(new CustomField(name:ruleField, value:ruleText))
 			} else {
 				assert ruleField in ['contactName', 'mobile', 'email', 'notes'] // prevent injection - these should match the sanctioned fields user can set
-				println "Rule field is $ruleField"
-				println "Rule text is $ruleText"
 				smartGroupInstance."$ruleField" = ruleText
 			}
 		}
 	}
 	
+	private def removeSmartGroupRules(smartGroupInstance) {
+		def smartGroupRuleFields = getSmartGroupRuleFields()
+		def fieldsToNullify = smartGroupRuleFields - params['rule-field']
+		for(def field in fieldsToNullify) {
+			if(field == "customFields") {
+				smartGroupInstance.customFields?.clear()
+			} else
+				smartGroupInstance."$field" = null
+		}
+	}
+	
+	
+	private def getSmartGroupRuleFields() {
+		def smartGroupRuleFields = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
+		smartGroupRuleFields
+	}
+	
 	private def withSmartGroup(Closure c) {
 		def sg
-		if(params?.id) sg = SmartGroup.get(params.id)
+		if(params.id) sg = SmartGroup.get(params.id)
 		else sg = new SmartGroup()
 		if(sg) {
 			c.call(sg)
