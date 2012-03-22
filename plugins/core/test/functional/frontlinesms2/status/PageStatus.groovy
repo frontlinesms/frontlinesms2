@@ -16,6 +16,5 @@ class PageStatus extends geb.Page {
 		trafficForm { $("#trafficForm")}
 		typeFilters(required:false) { $("#type-filters")}
 		activityFilter(required:false) { typeFilters.find("#activityId")}
-		submitButton { $("#update-chart")}
 	}
 }
