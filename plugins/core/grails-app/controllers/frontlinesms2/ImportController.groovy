@@ -1,9 +1,6 @@
 package frontlinesms2
-import java.io.File;
-import java.io.InputStream;
-import java.io.Reader;
+
 import java.text.DateFormat;
-import java.util.Date;
 import java.text.SimpleDateFormat
 
 class ImportController {
@@ -23,7 +20,7 @@ class ImportController {
 			def headers
 			def standardFields = ['Name':'name', 'Mobile Number':'primaryMobile',
 					'E-mail Address':'email', 'Notes':'notes']
-			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'¬']).eachLine { tokens ->
+			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'ï¿½']).eachLine { tokens ->
 				if(!headers) headers = tokens
 				else try {
 					Contact c = new Contact()
@@ -60,7 +57,7 @@ class ImportController {
 		if(uploadedCSVFile) {
 			def headers
 			def standardFields = ['Message Content':'text', 'Sender Number':'src']
-			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'¬']).eachLine { tokens ->
+			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'ï¿½']).eachLine { tokens ->
 				if(!headers) headers = tokens 
 				else try {
 					Fmessage fm = new Fmessage()

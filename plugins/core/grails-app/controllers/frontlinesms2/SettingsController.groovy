@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import groovy.lang.Closure;
-
 class SettingsController {
 	def index = {
 		redirect(action:'general')

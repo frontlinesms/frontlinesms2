@@ -1,12 +1,10 @@
 package frontlinesms2
 
-import groovy.lang.Closure;
-
 class ActivityController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	def messageSendService
 
-    def index = {
+	def index = {
 		redirect(action:'create')
 	}
 	
@@ -26,9 +24,7 @@ class ActivityController {
 		}
 	}
 	
-	def rename = {
-		
-	}
+	def rename = {}
 	
 	def update = {
 		withActivity { activity ->
@@ -86,8 +82,7 @@ class ActivityController {
 		redirect(controller: "message", action: "trash")
 	}
 	
-	def create_new_activity = {
-	}
+	def create_new_activity = {}
 	
 	private def withActivity(Closure c) {
 		def activityInstance = Activity.get(params.id)

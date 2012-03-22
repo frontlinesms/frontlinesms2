@@ -1,8 +1,5 @@
 package frontlinesms2
 
-import java.util.HashMap;
-import java.util.List;
-
 class SmartGroup {
 //> SMART GROUP PROPERTIES
 	/** the name of this smart group itself.  This is mandatory. */

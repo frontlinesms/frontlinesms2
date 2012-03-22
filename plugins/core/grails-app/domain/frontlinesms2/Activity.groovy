@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import java.util.Date
-
 class Activity extends MessageOwner {
 	String name
 	String sentMessageText

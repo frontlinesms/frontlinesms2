@@ -92,19 +92,14 @@ class FconnectionServiceSpec extends UnitSpec {
 			0 * detector.stopFor(_)
 	}
 
-	def 'Created routes have ids derived from supplied Fconnection id'() {
+	def 'Routes supplied by the Fconnection are added to the camel context'() {
 		given:
 			def c = Mock(Fconnection)
-			c.id >> 1
-			c.camelConsumerAddress >> 'seda:camelConsumerAddress'
-			c.camelProducerAddress >> 'seda:camelProducerAddress'
+			c.routeDefinitions >> [[id:'in-mock'], [id:'out-mock']]
 		when:
 			service.createRoutes(c)
 		then:
-			1 * context.addRouteDefinitions({
-				println "###Add route definitions called: $it"
-				println "### ids:${it*.id}"
-				it*.id.sort() == ['in-1', 'out-1']})
+			1 * context.addRouteDefinitions { it*.id.sort() == ['in-mock', 'out-mock'] }
 	}
 	
 	@Unroll

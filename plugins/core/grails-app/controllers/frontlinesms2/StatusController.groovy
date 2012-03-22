@@ -1,11 +1,10 @@
 package frontlinesms2
 
-import frontlinesms2.RouteStatus
-
 class StatusController {
 	def deviceDetectionService
 	
 	def index = {
+	    
 		redirect action: "show", params:params
 	}
 
