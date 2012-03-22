@@ -19,6 +19,7 @@ class SmartGroupCreateDialog extends frontlinesms2.contact.PageContactShow {
 		backButton { $('button', text:'Back') }
 		cancelButton { $('button', text:'Cancel') }
 		finishButton { $('button', text:'Create') }
+		editButton { $('button', text:'Edit')}
 		
 		errorMessages(required:false) { $('.error-panel') }
 		flashMessage(required:false) { $('div.flash') }
