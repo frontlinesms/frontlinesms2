@@ -17,7 +17,7 @@ class ClickatellFconnection extends Fconnection {
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
 			@Override void configure() {}
-			List getRouteDefinitions(Fconnection c) {
+			List getRouteDefinitions() {
 				return [from("seda:out-${ClickatellFconnection.this.id}")
 						.process(new ClickatellPreProcessor())
 						.setHeader(Exchange.HTTP_URI,
