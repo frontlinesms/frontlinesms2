@@ -79,7 +79,7 @@ target(licenceReport:"Produces a report for the current Grails application") {
 			reportWriter.close()
 		} finally { writer.close() }
 	}
-	println "licenceDb: ${licenceDb.sort()}"
+//	println "licenceDb: ${licenceDb.sort()}"
 }
 
 /**

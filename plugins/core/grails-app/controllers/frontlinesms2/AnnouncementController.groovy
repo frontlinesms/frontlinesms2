@@ -1,9 +1,6 @@
 package frontlinesms2
 
-import groovy.lang.Closure;
-
 class AnnouncementController extends ActivityController {
-	
 	def index = { redirect(action: 'save') }
 	def save = {
 		def announcementInstance = new Announcement()

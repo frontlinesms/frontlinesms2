@@ -1,9 +1,5 @@
 package frontlinesms2
 
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date;
-
 import grails.util.GrailsConfig
 
 
@@ -105,12 +101,6 @@ class SearchController extends MessageController {
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null
-	}
-	
-	private def withFmessage(Closure c) {
-		def m = Fmessage.get(params.messageId)
-		if(m) c.call(m)
-		else render(text: "Could not find message with id $params.messageId") // TODO handle error state properly
 	}
 	
 	private def withSearch(Closure c) {

@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup']}" method='post'">
+	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup', id:smartGroupInstance?.id]}" method="post">
 		<div class="error-panel hide"><div id="error-icon"></div>Please fill in all the required fields.  You may only specify one rule per field.</div>
 		<p class="info">To create a Smart group, select the criteria you need to be matched for contacts for this group</p>
 		<div class="smartgroupname">
@@ -9,27 +9,84 @@
 		</div>
 		<table id="smartGroup-table">
 			<tbody>
-				<tr class="prop smart-group-criteria">
-					<td>
-						<g:select name="rule-field"
-								from="${fieldNames}"
-								keys="${fieldIds}"
-								onchange="smartGroupCriteriaChanged(this)"/>
-					</td>
-					<td class="rule-match-text">
-						<span class="contains hide">contains</span>
-						<span class="starts">starts with</span>
-					</td>
-					<td>
-						<g:textField name="rule-text" class="rule-text"/>
-					</td>
-					<td>
-						<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-					</td>
-				</tr>
+				<g:if test="${smartGroupInstance.id}">
+					<g:each in="${currentRules.keySet()}" var="field" status="i">
+						<g:if test="${field == 'customFields'}">
+							<g:each in="${currentRules.customFields}" var="customField">
+								<tr class="prop smart-group-criteria">
+									<td>
+										<g:select name="rule-field"
+												value="${'custom:' + customField.name}"
+												from="${fieldNames}"
+												keys="${fieldIds}"
+												onchange="smartGroupCriteriaChanged(this)"/>
+									</td>
+									<td class="rule-match-text">
+										<span class="contains">contains</span>
+										<span class="starts hide">starts with</span>
+									</td>
+									<td>
+										<g:textField name="rule-text" class="rule-text" value='${customField.value}'/>
+									</td>
+									<td>
+										<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+									</td>
+								</tr>
+							</g:each>
+						</g:if>
+						<g:else>
+							<tr class="prop smart-group-criteria">
+								<td>
+									<g:select name="rule-field"
+											value="${field}"
+											from="${fieldNames}"
+											keys="${fieldIds}"
+											onchange="smartGroupCriteriaChanged(this)"/>
+								</td>
+								<td class="rule-match-text">
+									<g:if test = "${field == 'mobile'}">
+										<span class="contains hide">contains</span>
+										<span class="starts">starts with</span>
+									</g:if>
+									<g:else>
+										<span class="contains">contains</span>
+										<span class="starts hide">starts with</span>
+									</g:else>
+								</td>
+								<td>
+									<g:textField name="rule-text" class="rule-text" value='${currentRules."$field"}'/>
+								</td>
+								<td>
+									<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+								</td>
+							</tr>
+						</g:else>
+					</g:each>
+				</g:if>
+				<g:else>
+					<tr class="prop smart-group-criteria">
+						<td>
+							<g:select name="rule-field"
+									from="${fieldNames}"
+									keys="${fieldIds}"
+									onchange="smartGroupCriteriaChanged(this)"/>
+						</td>
+						<td class="rule-match-text">
+							<span class="contains hide">contains</span>
+							<span class="starts">starts with</span>
+						</td>
+						<td>
+							<g:textField name="rule-text" class="rule-text"/>
+						</td>
+						<td>
+							<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+						</td>
+					</tr>
+				</g:else>
+				
 			</tbody>
 		</table>
-		<a class="button" onclick="addNewRule()">Add another rule</a>
+		<a class="button" onclick="addNewRule()">Add another rule</a></br>
 	</g:form>
 </div>
 
@@ -104,7 +161,9 @@
 		template.find('.button.remove-rule').show();
 		var newRow = template.clone();
 		newRow.removeAttr("id");
+		newRow.find('input.rule-text').val("");
 		newRow.find('.button.remove-rule').show();
 		$('form[name="smart-group-details"] tbody').append(newRow);
 	}
+	
 </script>

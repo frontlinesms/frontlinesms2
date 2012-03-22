@@ -1,9 +1,7 @@
 package frontlinesms2
 
 import groovy.time.*
-import java.util.Date
 import org.hibernate.FlushMode
-
 
 class Fmessage {
 	static belongsTo = [messageOwner:MessageOwner]
@@ -276,15 +274,6 @@ class Fmessage {
 		}
 		int current = answer.get(mappedKey)
 		answer.put(mappedKey, current + 1)
-	}
-
-	private static def Map<Object, Integer> countBy(Iterator self, Closure closure) {
-		Map<Object, Integer> answer = new LinkedHashMap<Object, Integer>()
-		while (self.hasNext()) {
-			Object value = closure.call(self.next())
-			countAnswer(answer, value)
-		}
-		answer
 	}
 	
 	private def updateFmessageDisplayName() {

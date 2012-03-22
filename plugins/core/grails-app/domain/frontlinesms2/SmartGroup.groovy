@@ -1,8 +1,5 @@
 package frontlinesms2
 
-import java.util.HashMap;
-import java.util.List;
-
 class SmartGroup {
 //> SMART GROUP PROPERTIES
 	/** the name of this smart group itself.  This is mandatory. */
@@ -15,6 +12,10 @@ class SmartGroup {
 	String notes
 	
 	static hasMany = [customFields: CustomField]
+	
+	static mapping = {
+		customFields cascade: "all-delete-orphan"
+	}
 	
 	static constraints = {
 		contactName(nullable:true, validator:atLeastOneSearchParamValidator)
@@ -108,4 +109,5 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 		}
 		addressList
 	}
+	
 }
