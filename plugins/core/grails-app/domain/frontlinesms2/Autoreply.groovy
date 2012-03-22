@@ -2,10 +2,11 @@ package frontlinesms2
 
 class Autoreply extends Activity {
 	static hasOne =[keyword: Keyword]
+	String autoreplyText
 	
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255, unique: true)
-		sentMessageText(nullable:false, blank:false)
+		autoreplyText(nullable:false, blank:false)
 		keyword(nullable:false, unique: true)
 	}
 	

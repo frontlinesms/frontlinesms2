@@ -174,13 +174,13 @@ class CoreBootStrap {
 	private def dev_initPolls() {
 		def keyword = new Keyword(value: 'Football')
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
-		poll1.addToResponses(new PollResponse(key: 'A', value: 'manchester'))
-		poll1.addToResponses(new PollResponse(key: 'B', value: 'barcelona'))
+		poll1.addToResponses(new PollResponse(key: 'choiceA', value: 'manchester'))
+		poll1.addToResponses(new PollResponse(key: 'choiceB', value: 'barcelona'))
 		poll1.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
 		
 		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
-		poll2.addToResponses(new PollResponse(key: 'A', value: 'pantene'))
-		poll2.addToResponses(new PollResponse(key: 'B', value: 'oriele'))
+		poll2.addToResponses(new PollResponse(key: 'choiceA', value: 'pantene'))
+		poll2.addToResponses(new PollResponse(key: 'choiceB', value: 'oriele'))
 		poll2.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
 		
 		poll1.save(flush: true)

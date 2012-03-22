@@ -22,8 +22,8 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def k1 = new Keyword(value:'lock')
 			def k2 = new Keyword(value:'lock')
-			def activity1 = new Autoreply(name:'whatever1', sentMessageText: '1', archived: false, keyword: k1).save(flush:true, failOnError:true)
-			def activity2 = new Autoreply(name:'whatever2', sentMessageText: '2', archived: false, keyword: k2).save(flush: true)
+			def activity1 = new Autoreply(name:'whatever1', autoreplyText: '1', archived: false, keyword: k1).save(flush:true, failOnError:true)
+			def activity2 = new Autoreply(name:'whatever2', autoreplyText: '2', archived: false, keyword: k2).save(flush: true)
 		then:
 			println Keyword.getAll()
 			!k1.validate()

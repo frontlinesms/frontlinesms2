@@ -126,9 +126,9 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def createFilterTestData() {
-		[new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', date:new Date()),
-			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', date:new Date()),
-			new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', date:new Date())].each {
+		[new Fmessage(src:'Bob', text:'I like manchester', date:new Date()),
+			new Fmessage(src:'Bob', text:'I like manchester', date:new Date()),
+			new Fmessage(src:'Bob', text:'I like manchester', date:new Date())].each {
 				it.inbound = true
 				it.save(flush:true, failOnError:true)
 			}
@@ -138,7 +138,9 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def sentMessage2 = new Fmessage(text:"sent message 2", inbound:false, date:new Date()-2, hasSent:true).addToDispatches(dis2).save(failOnError:true, flush:true)
 		def message1 = new Fmessage(src:'Bob', inbound:true, text:'hi Bob', date:new Date(), starred: true).save(flush: true, failOnError:true)
 		def message2 = new Fmessage(src:'Jim', inbound:true, text:'hi Bob', date:new Date()).save(flush: true, failOnError:true)
-		def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+		def p = new Poll(name: 'This is a poll')
+		p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+		p.save(failOnError:true, flush:true)
 		PollResponse.findByValue('Manchester').addToMessages(message1)
 		PollResponse.findByValue('Barcelona').addToMessages(message2)
 		p.save(flush:true, failOnError:true)

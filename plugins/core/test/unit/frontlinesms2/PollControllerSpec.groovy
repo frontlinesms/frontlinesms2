@@ -33,7 +33,9 @@ class PollControllerSpec extends ControllerSpec {
 				Fmessage
 			}
 			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(mockParams.id)) }
-			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other', archived:true).save()
+			def poll = new Poll(name:'thingy', archived:true)
+			poll.editResponses(choiceA:'One', choiceB:'Other')
+			poll.save()
 			assert poll.archived
 		when:
 			mockParams.id = poll.id

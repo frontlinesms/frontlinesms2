@@ -5,58 +5,66 @@ class KeywordProcessorService {
 	def messageSendService
 	
 	def process(Fmessage message) {
-		processPollResponse(message)
+		processForKeyword(message)
 	}
 	
-	def processPollResponse(Fmessage message) {
-		def pollResponse = getPollResponse(message.text)
-		if(pollResponse != null) {
-			processPollResponse(pollResponse, message)
-			return true
-		} else return false
+	def processForKeyword(Fmessage message) {
+		def words = message.text.split()
+		if(words.size() == 0 || (words.size() == 1 && words[0].length() < 2)) {
+			return null
+		} else if(words.size() == 1) {
+			def word = words[0]
+			def keyword = Keyword.findByValue(word)
+			if(keyword)
+				processForAutoReply(keyword, message)
+			else {
+				keyword = Keyword.findByValue(word[0..-2])
+				def option = word[-1]
+				processForPoll(keyword, option, message)
+			}
+		} else {
+			def keyword = Keyword.findByValue(words[0])
+			if(keyword && keyword.activity instanceof Poll)
+				processForPoll(keyword, words[1], message)
+			else if(keyword)
+				processForAutoreply(keyword, message)
+		}
 	}
 	
-	def processPollResponse(PollResponse response, Fmessage message) {
+	def processForAutoreply(Keyword keyword, Fmessage message) {
+		def autoreply = keyword?.activity
+		def params = [:]
+		params.addresses = message.src
+		params.messageText = autoreply.autoreplyText
+		def outgoingMessage = messageSendService.getMessagesToSend(params)
+		autoreply.addToMessages(outgoingMessage)
+		messageSendService.send(outgoingMessage)
+		autoreply.save()
+		println "Autoreply message sent to ${message.src}"
+	}
+	
+	def processForPoll(Keyword keyword, String option, Fmessage message) {
+		def response = getPollResponse(keyword, option)
 		response.addToMessages(message)
 		response.save(failOnError: true)
-		def poll = response.poll
-		if(poll.autoReplyText) {
+		def poll = keyword.activity
+		if(poll.autoreplyText) {
 			def params = [:]
 			params.addresses = message.src
-			params.messageText = poll.autoReplyText
+			params.messageText = poll.autoreplyText
 			def outgoingMessage = messageSendService.getMessagesToSend(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
 			poll.save()
 			println "Autoreply message sent to ${message.src}"
 		}
-		return true
-	}
-
-	PollResponse getPollResponse(String messageText) {
-		def words = messageText.split()
-		if(words.size() == 0 || (words.size() == 1 && words[0].length() < 2)) {
-			return null
-		} else if(words.size() == 1) {
-			def word = words[0]
-			def keyword = word[0..-2]
-			def option = word[-1]
-			return getPollResponse(keyword, option)
-		} else {
-			def keyword = words[0]
-			def option = words[1]
-			def pollResponse = getPollResponse(keyword, option)
-			if(pollResponse) return pollResponse
-			else return getPollResponse(keyword) // TODO should do this in a single select
-		}
 	}
 	
-	PollResponse getPollResponse(String keyword, String option) {
-		if(option.size() != 1 || keyword.size() < 1) {
+	PollResponse getPollResponse(Keyword keyword, String option) {
+		if(option.size() != 1 || !keyword || !(keyword.activity instanceof Poll))
 			return null
-		} else {
-			return Poll.findByKeywordIlike(keyword)?.responses?.getAt(getPollResponseIndex(option))
-		}
+		else
+			return keyword.activity.responses?.getAt(getPollResponseIndex(option))
 	}
 	
 	int getPollResponseIndex(String option) {

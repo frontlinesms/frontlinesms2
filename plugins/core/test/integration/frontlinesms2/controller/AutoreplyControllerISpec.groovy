@@ -12,27 +12,28 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.params.name = "Color"
 			controller.params.keyword = "color"
-			controller.params.autoReplyText = "ahhhhhhhhh"
+			controller.params.autoreplyText = "ahhhhhhhhh"
 			controller.save()
 			def autoreply = Autoreply.findByName("Color")
 			def keyword = Keyword.findByValue("COLOR")
 		then:
+			println Keyword.list()
 			keyword != null
 			autoreply != null
 			autoreply.keyword == keyword
-			autoreply.sentMessageText == "ahhhhhhhhh"
+			autoreply.autoreplyText == "ahhhhhhhhh"
 	}
 	
 	def "can edit an Autoreply"() {
 		when:
 			def keyword = new Keyword(value:"color")
-			def autoreply = new Autoreply(name: "Color", keyword: keyword, sentMessageText:"ahhhhhhhhh")
+			def autoreply = new Autoreply(name: "Color", keyword: keyword, autoreplyText:"ahhhhhhhhh")
 			autoreply.save(flush: true, failOnError: true)
 			controller.params.ownerId = autoreply.id
 			controller.params.name = "ColorZ"
 			controller.params.keyword = "colorz"
-			controller.params.autoReplyText = "blue, i mean green"
-			controller.edit()
+			controller.params.autoreplyText = "blue, i mean green"
+			controller.save()
 			autoreply.refresh()
 			keyword.refresh()
 		then:
@@ -43,6 +44,6 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			keyword.value == "COLORZ"
 			autoreply.name == "ColorZ"
 			autoreply.keyword == keyword
-			autoreply.sentMessageText == "blue, i mean green"
+			autoreply.autoreplyText == "blue, i mean green"
 	}
 }

@@ -9,7 +9,9 @@ class DeleteISpec extends IntegrationSpec {
 		given:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
-			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			p.save(failOnError:true, flush:true)
 			def messageController = new MessageController()
 			def pollController = new PollController()
 			def r1 = PollResponse.findByValue('Manchester').addToMessages(message1)
@@ -33,7 +35,9 @@ class DeleteISpec extends IntegrationSpec {
 		given:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
-			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			p.save(failOnError:true, flush:true)
 			def messageController = new MessageController()
 			def pollController = new PollController()
 			PollResponse.findByValue('Manchester').addToMessages(message1)
@@ -108,7 +112,9 @@ class DeleteISpec extends IntegrationSpec {
 			
 			def m3 = new Fmessage(src: '1235', text:"not in folder", isDeleted: true, date: new Date(), inbound: true).save(flush:true, failOnError:true)
 			deleteMessage(m3)
-			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			p.save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1)
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			deletePoll(p)

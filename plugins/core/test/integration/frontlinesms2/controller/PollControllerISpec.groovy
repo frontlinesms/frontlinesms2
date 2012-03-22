@@ -14,13 +14,13 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceA = "yes"
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
-			controller.params.autoReplyText = "automatic reply text"
+			controller.params.autoreplyText = "automatic reply text"
 		when:
 			controller.save()
 			def poll = Poll.findByName("poll")
 		then:
 			poll
-			poll.autoReplyText == "automatic reply text"
+			poll.autoreplyText == "automatic reply text"
 			(poll.responses*.value).containsAll(['yes', 'no', 'maybe'])
 	}
 
@@ -30,7 +30,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceA = "yes"
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
-			controller.params.autoReplyText = "automatic reply text"
+			controller.params.autoreplyText = "automatic reply text"
 			controller.params.enableKeyword = true
 			controller.params.keyword = "hello"
 		when:
@@ -58,7 +58,11 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can archive a poll"() {
 		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.save(failOnError:true, flush:true)
 		when:
 			assert Poll.findAllByArchived(false) == [poll]
 			poll.archived = true;
@@ -67,25 +71,31 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Poll.findAllByArchived(false) == []
 	}
 
-	def  "should update a given poll object"() {
+	def  "can edit a given poll object"() {
 		setup:
-			Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			def poll = Poll.findByName("Who is badder?")
-			controller.params.id = poll.id
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.save(failOnError:true, flush:true)
+			controller.params.ownerId = poll.id
 			controller.params.name = "renamed poll name"
 		when:
-			controller.update()
+			controller.save()
 			def updatedPoll = Poll.get(poll.id)
 		then:
-			controller.response.redirectedUrl == "/message/activity/${poll.id}"
 			updatedPoll.name == "renamed poll name"
 			updatedPoll.question == "question"
-			updatedPoll.autoReplyText == "Thanks"
+			updatedPoll.autoreplyText == "Thanks"
 	}
 	
 	def "can delete a poll to send it to the trash"() {
 		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.save(failOnError:true, flush:true)
 		when:
 			assert Poll.findAllByDeleted(false) == [poll]
 			controller.params.id  = poll.id
@@ -97,7 +107,10 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can restore a poll to move out of the trash"() {
 		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
 			poll.deleted = true
 			poll.save(failOnError:true, flush:true)
 		when:
@@ -121,36 +134,40 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "edit action modifies the properties of an existing poll"() {
 		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
-			controller.params.id = poll.id
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.save(failOnError:true, flush:true)
+			controller.params.ownerId = poll.id
 			controller.params.choiceC = "Arnold Vandam"
 		when:
-			controller.edit()
+			controller.save()
 			poll = Poll.get(poll.id)
 		then:
 			poll.responses*.value.containsAll(["Arnold Vandam", "Michael-Jackson", "Chuck-Norris"])
 		when:
-			controller.params.id = poll.id
+			controller.params.ownerId = poll.id
 			controller.params.question = "Who is worse?"
-			controller.edit()
+			controller.save()
 			poll = Poll.get(poll.id)
 		then:
 			poll.question == "Who is worse?"
 		when:
-			controller.params.id = poll.id
-			controller.params.autoReplyText = "Thank you for replying to this awesome poll"
-			controller.edit()
+			controller.params.ownerId = poll.id
+			controller.params.autoreplyText = "Thank you for replying to this awesome poll"
+			controller.save()
 			poll = Poll.get(poll.id)
 		then:
-			poll.autoReplyText == "Thank you for replying to this awesome poll"
+			poll.autoreplyText == "Thank you for replying to this awesome poll"
 		when:
-			controller.params.id = poll.id
+			controller.params.ownerId = poll.id
 			controller.params.keyword = "bad"
 			controller.params.enableKeyword = true
-			def model = controller.edit()
+			def model = controller.save()
 			poll = Poll.get(poll.id)
 		then:
-			poll.keyword.equalsIgnoreCase("bad")
+			poll.keyword.value.equalsIgnoreCase("bad")
 	}
 	
 }

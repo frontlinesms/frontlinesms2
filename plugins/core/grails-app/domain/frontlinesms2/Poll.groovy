@@ -19,7 +19,7 @@ class Poll extends Activity {
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255, unique: true)
 		responses(validator: { val, obj ->
-			val?.size() >= 2 &&
+			val?.size() > 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
 		autoreplyText(nullable:true, blank:false)
@@ -61,12 +61,13 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'standard' && !this.responses) {
+			alert(this.responses);
 			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
 			this.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {
 			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
 			choices.each { k,v -> 
-				if(this.responses*.key.contains(k)) {
+				if(this.responses*.key?.contains(k)) {
 					def response = PollResponse.findByKey(k)
 					if(response.value != v) {
 						this.deleteResponse(response)

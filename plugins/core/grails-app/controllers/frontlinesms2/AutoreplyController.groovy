@@ -3,25 +3,17 @@ package frontlinesms2
 class AutoreplyController extends ActivityController {
 
 	def save = {
-		def keyword = new Keyword(value: params.keyword)
-		def autoreplyInstance = new Autoreply(name: params.name, sentMessageText: params.autoreplyText, keyword: keyword)
-		autoreplyInstance.save(failOnError: true)
-		flash.message = "Autoreply has been saved!"
-		[ownerId: autoreplyInstance.id]
+		withAutoreply { autoreply ->
+			autoreply.keyword ? autoreply.keyword.value = params.keyword : (autoreply['keyword'] = new Keyword(value: params.keyword))
+			autoreply.name = params.name ?: autoreply.name
+			autoreply.autoreplyText = params.autoreplyText ?: autoreply.autoreplyText
+			autoreply.save(flush: true, failOnError: true)
+			flash.message = "Autoreply has been saved!"
+			[ownerId: autoreply.id]
+		}
 	}
 	
-	def sendReply = {
-	
-	}
-	
-	def edit = {
-		def autoreplyInstance = Autoreply.get(params.ownerId)
-		def keyword = autoreplyInstance.keyword
-		keyword.value = params.keyword
-		autoreplyInstance.name = params.name
-		autoreplyInstance.sentMessageText = params.autoreplyText
-		autoreplyInstance.save(failOnError: true)
-		flash.message = "Autoreply edits have been saved!"
-		[ownerId: autoreplyInstance.id]
+	private def withAutoreply(Closure c) {
+		Autoreply.get(params.ownerId) ?: new Autoreply()
 	}
 }

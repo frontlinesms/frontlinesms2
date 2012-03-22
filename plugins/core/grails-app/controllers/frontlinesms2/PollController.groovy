@@ -4,11 +4,12 @@ class PollController extends ActivityController {
 
 	def save = {
 		withPoll { poll ->
-			poll.name = params.name
-			poll.autoreplyText = params.autoreplyText
-			poll.question = params.question
-			poll.sentMessageText = params.messageText
-			if(params.enableKeyword && params.keyword) poll.keyword = new Keyword(value: params.keyword)
+			poll.name = params.name ?: poll.name
+			poll.autoreplyText = params.autoreplyText ?: poll.autoreplyText
+			poll.question = params.question ?: poll.question
+			poll.sentMessageText = params.messageText ?: poll.sentMessageText
+			if(params.enableKeyword && params.keyword)
+				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword))
 			poll.editResponses(params)
 			poll.save(flush: true, failOnError: true)
 			if(!params.dontSendMessage) {

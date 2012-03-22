@@ -2,7 +2,7 @@ package frontlinesms2
 
 class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 
-	def "AutoReplies must have outgoing message text and a keyword"() {
+	def "AutoReplies must have a name, outgoing message text and a keyword"() {
 		given:
 			mockDomain(Autoreply)
 		when:
@@ -10,7 +10,7 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 		then:
 			!a.validate()
 		when:
-			a.sentMessageText = "You sent me a message, why?"
+			a.autoreplyText = "You sent me a message, why?"
 		then:
 			!a.validate()
 		when:
