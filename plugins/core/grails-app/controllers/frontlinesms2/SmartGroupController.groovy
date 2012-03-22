@@ -21,7 +21,7 @@ class SmartGroupController {
 				if(params.id) removeSmartGroupRules(smartGroupInstance)
 				addSmartGroupRules(smartGroupInstance)
 			}
-			if(smartGroupInstance.save()) {
+			if(smartGroupInstance.save(flush:true)) {
 				println "smartgroup successfully saved"
 				flash.message = "Smart group '$smartGroupInstance.name' saved"
 				redirect(controller: "contact", action: "show", params:[smartGroupId : smartGroupInstance.id])
@@ -103,6 +103,7 @@ class SmartGroupController {
 		def fieldsToNullify = smartGroupRuleFields - params['rule-field']
 		for(def field in fieldsToNullify) {
 			if(field == "customFields") {
+				smartGroupInstance.customFields.each {it.smartGroup = null}
 				smartGroupInstance.customFields?.clear()
 			} else
 				smartGroupInstance."$field" = null
