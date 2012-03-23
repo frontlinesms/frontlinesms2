@@ -1,8 +1,6 @@
 import java.lang.reflect.Field
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.zip.ZipOutputStream
-import java.util.zip.ZipEntry
 
 import grails.util.Environment
 
@@ -26,9 +24,10 @@ class CoreBootStrap {
 	
 	def init = { servletContext ->
 		initialiseSerial()
-		addTruncateMethodToStrings()
-		addRoundingMethodsToDates()
-		addZipMethodToFile()
+		MetaClassModifiers.addFilterMethodToList()
+		MetaClassModifiers.addTruncateMethodToStrings()
+		MetaClassModifiers.addRoundingMethodsToDates()
+		MetaClassModifiers.addZipMethodToFile()
 		createWelcomeNote()
 		
 		switch(Environment.current) {
@@ -66,50 +65,6 @@ class CoreBootStrap {
 		}
 	}
 	
-	private def addZipMethodToFile() {
-		File.metaClass.zip = { output ->
-			new ZipOutputStream(output).withStream { zipOutStream ->
-				delegate.eachFileRecurse { f ->
-					if(!f.isDirectory()) {
-						zipOutStream.putNextEntry(new ZipEntry(f.path))
-						new FileInputStream(f).withStream { inStream ->
-							def buffer = new byte[1024]
-							def count
-							while((count = inStream.read(buffer, 0, 1024)) != -1) {
-								zipOutStream.write(buffer, 0, count)
-							}
-						}
-						zipOutStream.closeEntry()
-					}
-				}
-			}
-		}
-	}
-	
-	private def addTruncateMethodToStrings() {
-		String.metaClass.truncate = { max=16 ->
-		    delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
-		}
-	}
-	
-	private def addRoundingMethodsToDates() {
-		def setTime = { Date d, int h, int m, int s ->
-			def calc = Calendar.getInstance()
-			calc.setTime(d)
-			calc.set(Calendar.HOUR_OF_DAY, h)
-			calc.set(Calendar.MINUTE, m)
-			calc.set(Calendar.SECOND, s)
-			calc.getTime()
-		}
-		
-		Date.metaClass.getStartOfDay = {
-			setTime(delegate, 0, 0, 0)
-		}
-
-		Date.metaClass.getEndOfDay = {
-			setTime(delegate, 23, 59, 59)
-		}
-	}
 
 	/** Initialise SmartGroup domain objects for development and demos. */
 	private def dev_initContacts() {

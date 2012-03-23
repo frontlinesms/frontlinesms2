@@ -33,6 +33,7 @@ temp/
 test/functional/frontlinesms2/InProgressSpec.groovy
 *.log
 out/
+*.swp
 
 # SASS temp and generated files
 .sass-cache/

@@ -119,4 +119,27 @@ class FconnectionServiceSpec extends UnitSpec {
 			"out-internet-2" | 2
 			"out-modem-3" | 6
 	}
+
+	@Unroll
+	def 'destroyRoutes should stop and remove all relevant routes'() {
+		given:
+			registerMetaClass List
+			MetaClassModifiers.addFilterMethodToList()
+
+			context.routes >> (relatedRoutes + unrelatedRoutes).collect { [id:it] }
+		when:
+			service.destroyRoutes(1)
+		then:
+			relatedRoutes.size() * context.stopRoute(_)
+			relatedRoutes.size() * context.removeRoute(_)
+		where:
+			relatedRoutes | unrelatedRoutes
+			['in-1'] | []
+			['out-1'] | []
+			['in-1', 'out-1'] | []
+			['in-1', 'out-1'] | ['in-2', 'out-3']
+			['out-modem-1'] | ['in-2', 'out-modem-3']
+			['out-internet-1'] | ['in-2', 'out-modem-3']
+			['out-internet-1'] | ['in-2', 'out-internet-3']
+	}
 }

@@ -43,25 +43,17 @@ class DispatchRouterService {
 	}
 	
 	def getDispatchRouteId() {
-		def allOutRoutes = filter(camelContext.routes, { it.id.startsWith('out-') })
+		def allOutRoutes = camelContext.routes.filter { it.id.startsWith('out-') }
 		if(allOutRoutes.size > 0) {
 			// check for internet routes and prioritise them over modems
-			def filteredRouteList = filter(allOutRoutes) { it.id.contains('-internet-') }
-			if(!filteredRouteList) filteredRouteList = filter(allOutRoutes) { it.id.contains('-modem-') }
+			def filteredRouteList = allOutRoutes.filter { it.id.contains('-internet-') }
+			if(!filteredRouteList) filteredRouteList = allOutRoutes.filter { it.id.contains('-modem-') }
 			if(!filteredRouteList) filteredRouteList = allOutRoutes
 			
 			println "DispatchRouterService.getDispatchConnectionId() : Routes available: ${filteredRouteList*.id}"
 			println "DispatchRouterService.getDispatchConnectionId() : Counter has counted up to $counter"
 			return filteredRouteList[++counter % filteredRouteList.size]?.id
 		}
-	}
-
-	def filter(List l, Closure c) {
-		def r = []
-		l.each {
-			if(c(it)) r << it
-		}
-		r
 	}
 
 	def handleCompleted(Exchange x) {

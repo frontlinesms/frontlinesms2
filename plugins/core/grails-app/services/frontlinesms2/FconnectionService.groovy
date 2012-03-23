@@ -22,9 +22,10 @@ class FconnectionService {
 		}
 		println "creating route for fconnection $c"
 		try {
-			camelContext.addRouteDefinitions(c.routeDefinitions)
+			def routes = c.routeDefinitions
+			camelContext.addRouteDefinitions(routes)
 			createSystemNotification("${messageSource.getMessage('connection.route.successNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
-			LogEntry.log("Created route from ${c.camelConsumerAddress} and to ${c.camelProducerAddress}")
+			LogEntry.log("Created routes: ${routes*.id}")
 		} catch(Exception e) {
 			e.printStackTrace()
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
@@ -47,13 +48,13 @@ class FconnectionService {
 	def destroyRoutes(long id) {
 		println "fconnectionService.destroyRoutes : ENTRY"
 		println "fconnectionService.destroyRoutes : id=$id"
-		["in-$id", "out-$id"].each {
+		camelContext.routes.filter { it.id ==~ /.*-$id$/ }.each {
 			try {
 				println "fconnectionService.destroyRoutes : route-id=$it"
 				println "fconnectionService.destroyRoutes : stopping route $it..."
-				camelContext.stopRoute(it)
+				camelContext.stopRoute(it.id)
 				println "fconnectionService.destroyRoutes : $it stopped.  removing..."
-				camelContext.removeRoute(it)
+				camelContext.removeRoute(it.id)
 				println "fconnectionService.destroyRoutes : $it removed."
 			} catch(Exception ex) {
 				println "fconnectionService.destroyRoutes : Exception thrown while destroying $it: $ex"
