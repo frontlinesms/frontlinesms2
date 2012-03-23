@@ -1,13 +1,13 @@
 <g:if test="${groupInstanceList || activityInstanceList || folderInstanceList}">
 	<ul id="type-filters" class="sub-menu">
 		<li>
-			<g:select class="dropdown" name="groupId" onchange="submit();" from="${groupInstanceList}" value="${search?.group?.id}"
+			<g:select class="dropdown" name="groupId" onChange="submit()" from="${groupInstanceList}" value="${search?.group?.id}"
 					  optionKey="id" optionValue="name"
 					  noSelection="${['':'Show all groups']}"/>
 		</li>
 				
 		<li>
-			<g:select class="dropdown" name="activityId" onchange="submit();" from="${activityInstanceList + folderInstanceList}"
+			<g:select class="dropdown" name="activityId" onChange="submit()" from="${activityInstanceList + folderInstanceList}"
 					  value="${search?.activityId}"
 					  optionKey="${{it.id}}"
 					  optionValue="${{it.name + ' ' + it.type}}"
@@ -18,9 +18,7 @@
 <ul id="time-filters">
 	<li>
 		<g:radio name="rangeOption" value="two-weeks" checked="${params.rangeOption == 'two-weeks'}" />
-		<g:select class="dropdown" id="pre-defined-range-options" name='pre-defined-range-options'
-		    noSelection="${['null':'Show last two weeks']}" >
-		</g:select>
+		<label>Show last two weeks</label>
 	</li>
 	<li>
 		<g:radio name="rangeOption" value="between-dates" checked="${params.rangeOption == 'between-dates'}"/>

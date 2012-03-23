@@ -18,6 +18,10 @@
 					$('#device-detection').replaceWith($(data));
 				});
 			}
+			
+			$("#time-filters").delegate("select", "change", function(){
+				$('input[name="rangeOption"]').prop('checked', true);
+			});
 		</g:javascript>
 	</body>
 </html>
