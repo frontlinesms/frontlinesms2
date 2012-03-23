@@ -16,12 +16,9 @@
 	border: 5px solid rgba(0,0,0,0.4);
 	border-radius: 4px;
 	background-color: white;
-	font-family: Arial,Georgia,Helvetica,sans-serif;
-	font-size: .75em;
 }
 
 .ui-dialog h2{
-	font-size: 1.2em;
 	margin: 0;
 	padding:0;
 }

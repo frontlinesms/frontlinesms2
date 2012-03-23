@@ -542,12 +542,11 @@ animation: newMessage 2s;
 	margin: 0;
 	min-width: 130px;
 }
-#message-detail-sender a {
-	float: right;
+#message-detail-sender #add-contact {
 	background-image: url('../images/icons/add.png');
 	background-repeat: no-repeat;
-	width: 16px;
-	height: 16px;
+	padding-left: 16px;
+	margin-left: 4px;
 }
  #message-detail-date{
 	margin: 0;
