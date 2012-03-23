@@ -84,7 +84,7 @@ class ContactController {
 			contactInstance.properties = params
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
-			if(params.groupId) redirect(controller: 'group', action: 'show', id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset: params.offset])
+			if(params.groupId) redirect(controller: params.contactsSection, action: 'show', id: params.groupId, params:[contactId: contactInstance.id, sort:params.sort, offset: params.offset])
 			else redirect(action:'show', params:[contactId: contactInstance.id, offset:params.offset], max:params.max)
 		}
 	}
