@@ -1,8 +1,6 @@
 import java.lang.reflect.Field
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.zip.ZipOutputStream
-import java.util.zip.ZipEntry
 
 import grails.util.Environment
 
@@ -21,12 +19,15 @@ class CoreBootStrap {
 	def applicationContext
 	def grailsApplication
 	def deviceDetectionService
+
+	def dev = Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
 		initialiseSerial()
-		addTruncateMethodToStrings()
-		addRoundingMethodsToDates()
-		addZipMethodToFile()
+		MetaClassModifiers.addFilterMethodToList()
+		MetaClassModifiers.addTruncateMethodToStrings()
+		MetaClassModifiers.addRoundingMethodsToDates()
+		MetaClassModifiers.addZipMethodToFile()
 		createWelcomeNote()
 		
 		switch(Environment.current) {
@@ -64,53 +65,10 @@ class CoreBootStrap {
 		}
 	}
 	
-	private def addZipMethodToFile() {
-		File.metaClass.zip = { output ->
-			new ZipOutputStream(output).withStream { zipOutStream ->
-				delegate.eachFileRecurse { f ->
-					if(!f.isDirectory()) {
-						zipOutStream.putNextEntry(new ZipEntry(f.path))
-						new FileInputStream(f).withStream { inStream ->
-							def buffer = new byte[1024]
-							def count
-							while((count = inStream.read(buffer, 0, 1024)) != -1) {
-								zipOutStream.write(buffer, 0, count)
-							}
-						}
-						zipOutStream.closeEntry()
-					}
-				}
-			}
-		}
-	}
-	
-	private def addTruncateMethodToStrings() {
-		String.metaClass.truncate = { max=16 ->
-		    delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
-		}
-	}
-	
-	private def addRoundingMethodsToDates() {
-		def setTime = { Date d, int h, int m, int s ->
-			def calc = Calendar.getInstance()
-			calc.setTime(d)
-			calc.set(Calendar.HOUR_OF_DAY, h)
-			calc.set(Calendar.MINUTE, m)
-			calc.set(Calendar.SECOND, s)
-			calc.getTime()
-		}
-		
-		Date.metaClass.getStartOfDay = {
-			setTime(delegate, 0, 0, 0)
-		}
-
-		Date.metaClass.getEndOfDay = {
-			setTime(delegate, 23, 59, 59)
-		}
-	}
 
 	/** Initialise SmartGroup domain objects for development and demos. */
 	private def dev_initContacts() {
+		if(!dev) return
 		def alice = createContact("Alice", "+123456789")
 		def friends = Group.findByName('Friends')
 		def notCats = Group.findByName('Not Cats')
@@ -132,15 +90,18 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initSmartGroups() {
+		if(!dev) return
 		new SmartGroup(name:'Kenyans', mobile:'+254').save(failOnError:true)
 		new SmartGroup(name:'Test Contacts', contactName:'test-').save(failOnError:true)
 	}
 	
 	private def dev_initGroups() {
+		if(!dev) return
 		['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 	}
 	
 	private def dev_initFmessages() {
+		if(!dev) return
 		new Fmessage(src:'+123987123',
 				text:'A really long message which should be beautifully truncated so we can all see what happens in the UI when truncation is required.',
 				inbound:true,
@@ -179,18 +140,22 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initFconnections() {
+		if(!dev) return
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
+		if(!dev) return
 		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"USB0", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)		
+		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
+		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 	}
 	
 	private def dev_initMockSmslibFconnections() {
+		if(!dev) return
 		new SmslibFconnection(name:"MOCK95: rejects all pins", pin:'1234', port:'MOCK95', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK96: breaks on receive", port:'MOCK96', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK97: bad port", port:'MOCK98', baud:9600).save(failOnError:true)
@@ -199,6 +164,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initPolls() {
+		if(!dev) return
 		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
 				Poll.createPoll(name: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")].each() {
 			it.save(failOnError:true, flush:true)
@@ -217,6 +183,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initFolders() {
+		if(!dev) return
 		['Work', 'Projects'].each {
 			new Folder(name:it).save(failOnError:true, flush:true)
 		}
@@ -238,6 +205,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initAnnouncements() {
+		if(!dev) return
 		[new Fmessage(src:'Roy', text:'I will be late'),
 			new Fmessage(src:'Marie', text:'Meeting at 10 am'),
 			new Fmessage(src:'Mike', text:'Project has started')].each() {
@@ -264,6 +232,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initLogEntries() {
+		if(!dev) return
 		def now = new Date()
 		[new LogEntry(date: now, content: "entry1"),
 				new LogEntry(date: now-2, content: "entry2"),
@@ -337,9 +306,7 @@ class CoreBootStrap {
 	}
 
 	private def initialiseMockSerial() {
-		if(Environment.current == Environment.DEVELOPMENT) {
-			dev_initMockSmslibFconnections()
-		}
+		dev_initMockSmslibFconnections()
 		
 		MockModemUtils.initialiseMockSerial([
 				MOCK95:new CommPortIdentifier("MOCK95", MockModemUtils.createMockPortHandler_rejectPin()),

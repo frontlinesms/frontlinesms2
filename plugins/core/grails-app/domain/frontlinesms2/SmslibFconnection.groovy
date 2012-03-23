@@ -10,7 +10,10 @@ class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
 	
 	private def camelAddress = {
-		"smslib:$port?debugMode=true&baud=$baud&pin=$pin&allMessages=$allMessages&smscNumber=$smsc"
+		def optional = { name, val ->
+			return val? "&$name=$val": ''
+		}
+		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages${optional('smscNumber', smsc)}"
 	}
 
 	String port
