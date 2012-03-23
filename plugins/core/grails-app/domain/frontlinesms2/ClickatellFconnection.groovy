@@ -2,6 +2,7 @@ package frontlinesms2
 
 import frontlinesms2.camel.clickatell.*
 
+import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 
