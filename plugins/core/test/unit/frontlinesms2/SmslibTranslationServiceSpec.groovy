@@ -3,6 +3,7 @@ package frontlinesms2
 import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.Exchange
+import org.apache.camel.Message
 import org.smslib.CStatusReportMessage
 
 class SmslibTranslationServiceSpec extends UnitSpec {
@@ -23,6 +24,23 @@ class SmslibTranslationServiceSpec extends UnitSpec {
 			t.toFmessage(statusReportExchange)
 		then:
 			0 * statusReportExchange.out
+	}
+
+	def 'toCmessage should not choke if message content is null'() {
+		given:
+			Fmessage m = Mock() // implicitly has dst and text set to null
+			m.date >> new Date()
+			Dispatch d = Mock()
+			d.message >> m
+			Message camelMessage = Mock()
+			camelMessage.body >> d
+			Exchange x = Mock()
+			x.in >> camelMessage
+			x.out >> Mock(Message)
+		when:
+			t.toCmessage(x)
+		then:
+			true
 	}
 }
 
