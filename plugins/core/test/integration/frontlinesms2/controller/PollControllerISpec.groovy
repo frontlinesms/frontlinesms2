@@ -36,7 +36,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.save()
 		then:
-			Poll.findByName("test-poll-1")?.keyword == 'HELLO'
+			Poll.findByName("test-poll-1")?.keyword.value == 'HELLO'
 	}
 
 	def "saving new poll with keyword disabled does should not save the keyword"() {
@@ -164,7 +164,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = poll.id
 			controller.params.keyword = "bad"
 			controller.params.enableKeyword = true
-			def model = controller.save()
+			controller.save()
 			poll = Poll.get(poll.id)
 		then:
 			poll.keyword.value.equalsIgnoreCase("bad")

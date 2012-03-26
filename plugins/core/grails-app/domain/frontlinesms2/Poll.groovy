@@ -61,7 +61,6 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'standard' && !this.responses) {
-			alert(this.responses);
 			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
 			this.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {

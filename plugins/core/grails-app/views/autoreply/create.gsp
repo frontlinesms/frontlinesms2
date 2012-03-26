@@ -8,7 +8,7 @@
 		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:formRemote name="create_autoreply" url="${[action:'save', controller:'autoreply']}" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'Ok', summaryRedirect)">
+	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'Ok', summaryRedirect)">
 		<g:render template="../autoreply/keyword"/>
 		<g:render template="../autoreply/message"/>
 		<g:render template="../autoreply/confirm"/>
@@ -16,6 +16,7 @@
 </div>
 <g:javascript>
 	function initializePopup() {
+		$("#autoreplyText").trigger("keyup");
 		
 		$("#tabs-1").contentWidget({
 			validate: function() {

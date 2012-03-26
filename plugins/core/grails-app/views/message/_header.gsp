@@ -16,8 +16,11 @@
 					<g:formatDate date="${ownerInstance?.dateCreated}" />
 					<g:if test="${ownerInstance?.type == 'announcement'}">
 						<span id="announcement-sent">   (${sentMessageCount} messages sent)</span>
+						<p>${ownerInstance.sentMessageText}</p>
 					</g:if>
-					<p>${ownerInstance.sentMessageText}</p>
+					<g:else>
+						<p>${ownerInstance.autoreplyText}</p>
+					</g:else>
 				</g:else>
 			</div>
 		</div>
