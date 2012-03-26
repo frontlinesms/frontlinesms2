@@ -19,6 +19,7 @@
 	height: 100%;
 	overflow: hide;
 	padding: 17px;
+	width: 70%;
 }
 
 .ui-tabs-nav {
@@ -79,9 +80,14 @@
 	display: block;
 }
 
-.ui-tabs-panel #label {
+.ui-tabs-panel #manual-address {
+	margin-bottom: 10px;
+}
+.ui-tabs-panel #manual-label {
 	padding-right: 10px;
-	float: left;
+}
+.ui-tabs-panel #manual-address .btn{
+	display: inline;
 }
 
 .ui-tabs-panel #address {
@@ -114,12 +120,8 @@
 	padding: 10px 0;
 }
 
-.ui-tabs-panel #manual-address {
-	height: 10%;
-	overflow: hide;
-}
 .ui-tabs-panel #recipients-list {
-	height: 75%;
+	height: 330px;
 	overflow: auto;
 	margin: 0;
 	box-shadow: 0px 3px 10px -5px #888888 inset, 0px -3px 10px -5px #888888 inset;

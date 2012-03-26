@@ -1,7 +1,7 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label id="label" class="bold" for="address">Add phone number: </label>
+		<label id="manual-label" class="bold" for="address">Add phone number: </label>
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
 		<g:link url="#" class="btn add-address" onclick="addAddressHandler();">Add</g:link>
 	</div>

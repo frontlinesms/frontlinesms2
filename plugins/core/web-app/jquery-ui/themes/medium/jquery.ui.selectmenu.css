@@ -6,10 +6,10 @@
 	display: block;
 	background-color: white;
 	border:1px solid #6b6b6b;
-	min-width: 180px;
+	min-width: 150px;
 }
 .ui-selectmenu-menu-dropdown{
-	min-width:180px;
+	min-width:150px;
 }
 
 .ui-selectmenu-menu li a{
@@ -40,7 +40,7 @@
 	text-decoration: none;
 	overflow: hidden;
 	height: 25px;
-	min-width: 180px;
+	min-width: 150px;
 	width: 50%;
 }
 

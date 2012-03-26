@@ -45,7 +45,7 @@
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
-			<div  id="message-detail-content"><p>No message selected</p></div>
+			<div  id="message-detail-content"><p id="no-message">No message selected</p></div>
 		</div>
 	</g:else>
 </div>
