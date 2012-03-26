@@ -304,10 +304,10 @@ a {
 	z-index: 10;
 }
 .section-header .activity-title td{
-	font-size: 11px;
+	font-size: .75em;
 }
 .section-header .activity-title #activity-details #poll-sent{
-	font-size: 10px;
+	font-size: .75em;
 }
 
 #quick-message{
