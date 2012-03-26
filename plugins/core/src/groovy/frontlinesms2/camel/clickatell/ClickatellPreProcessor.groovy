@@ -9,9 +9,6 @@ class ClickatellPreProcessor implements Processor {
 		log 'ENTRY'
 		
 		// URL-encode body
-		println "x: $x"
-		println "x.in: $x.in"
-		println "x.in.body: $x.in.body"
 		def d = x.in.body
 		x.out.headers['frontlinesms.dispatch.id'] = d.id
 		x.out.body = urlEncode(d.message.text)

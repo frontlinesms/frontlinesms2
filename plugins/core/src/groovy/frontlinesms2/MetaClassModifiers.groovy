@@ -3,6 +3,8 @@ package frontlinesms2
 import java.util.zip.ZipOutputStream
 import java.util.zip.ZipEntry
 
+import org.apache.camel.Exchange
+
 class MetaClassModifiers {
 	static def addZipMethodToFile() {
 		File.metaClass.zip = { output ->
@@ -56,6 +58,16 @@ class MetaClassModifiers {
 
 		Date.metaClass.getEndOfDay = {
 			setTime(delegate, 23, 59, 59)
+		}
+	}
+	
+	static def addCamelMethods() {
+		Exchange.metaClass.getFconnectionId = {
+			def routeId = delegate.unitOfWork?.routeContext?.route?.id
+			final def ID_REGEX = /.*-(\d+)$/
+			if(routeId && routeId==~ID_REGEX) {
+				return (routeId =~ ID_REGEX)[0][1]
+			}
 		}
 	}
 }
