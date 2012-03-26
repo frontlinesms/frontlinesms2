@@ -13,16 +13,16 @@
 					if(newNotificationCount > 0) {
 						$("#notifications").empty().append(data);
 						if($(data).text().indexOf("Created") != -1) {
-							reloadConnectionList()
+							reloadConnectionList();
 		                }
-		                removeConnectingNotification()
+		                removeConnectingNotification();
 					}
 					
 				});
 			}
 
 			function reloadConnectionList() {
-				var link = "${createLink(controller:'settings', action:'connections', id:params.id)}"
+				var link = "${createLink(controller:'settings', action:'connections', id:params.id)}";
 				$.get(link, function(data) {
 					$('#connections').replaceWith($(data).find('#connections'));
 				});

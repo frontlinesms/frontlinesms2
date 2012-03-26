@@ -45,11 +45,5 @@ grails.project.dependency.resolution = {
 		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.2'
-		compile 'org.apache.camel:camel-mail:2.5.0'
-		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.1'
-		runtime 'org.rxtx:rxtx:2.1.7'
-		runtime 'javax.comm:comm:2.0.3'
 	}
 }

@@ -22,7 +22,7 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def result = controller.downloadMessageReport()
 		then:
-			result['messageInstanceList'].size() == 2
+			result.messageInstanceList.size() == 2
 	}
 
 	def "can export messages from a folder"() {
@@ -78,9 +78,6 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	def createTestFolders() {
-		//FIXME: Need to remove.Test fails without this line.
-		Folder.list()
-
 		def workFolder = new Folder(name: 'Work')
 		workFolder.addToMessages(new Fmessage(src: "Bob", inbound: true, date: new Date()))
 		workFolder.addToMessages(new Fmessage(src: "Alice", inbound: true, date: new Date()))

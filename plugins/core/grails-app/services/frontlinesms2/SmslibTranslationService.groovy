@@ -7,7 +7,6 @@ import org.smslib.COutgoingMessage
 
 class SmslibTranslationService {
 	void toFmessage(Exchange exchange) {
-		def i = exchange.in
 		CIncomingMessage bod = exchange.in.body
 		
 		// Ignore CStatusReportMessages
@@ -26,8 +25,9 @@ class SmslibTranslationService {
 	void toCmessage(Exchange exchange) {
 		Dispatch d = exchange.in.body
 		Fmessage m = d.message
-		def address = d.dst
-		def c = new COutgoingMessage(address, m.text)
+		String address = d.dst
+		String messageText = m.text?: ''
+		def c = new COutgoingMessage(address, messageText)
 		c.originator = m.src
 		c.date = m.date.time
 		

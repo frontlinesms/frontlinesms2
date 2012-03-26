@@ -17,7 +17,7 @@
 					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} failed)</g:elseif>
 				</span> 
 				<g:if test="${!messageInstance.contactExists}">
-					<g:link id="add-contact" controller="contact" action="createContact" params="[primaryMobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
+					<g:link elementId="add-contact" controller="contact" action="createContact" params="[primaryMobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
 				</g:if>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
@@ -45,7 +45,7 @@
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
-			<div  id="message-detail-content"><p>No message selected</p></div>
+			<div  id="message-detail-content"><p id="no-message">No message selected</p></div>
 		</div>
 	</g:else>
 </div>

@@ -2,33 +2,39 @@ package frontlinesms2
 
 import grails.util.Environment
 
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.model.RouteDefinition
+
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
 	def fconnectionService
-	static transients = ['status', 'camelConsumerAddress', 'camelProducerAddress']
+	static transients = ['status', 'routeDefinitions']
 	
 	String name
 	
-	String type() {
-		if (Environment.current == Environment.TEST) {
-			'unsubclassed-fconnection'
-		} else throw new IllegalStateException()
-	}
-	
-	String getCamelConsumerAddress() {
-		if (Environment.current == Environment.TEST) {
-			'bad:fconnection?subclassed=false'
-		} else throw new IllegalStateException()
-	}
-	
-	String getCamelProducerAddress() {
-		if (Environment.current == Environment.TEST) {
-			'bad:fconnection?subclassed=false'
-		} else throw new IllegalStateException()
-	}
-	
 	String getStatus() {
 		fconnectionService.getRouteStatus(this)
+	}
+	
+	List<RouteDefinition> getRouteDefinitions() {
+		if(Environment.current != Environment.TEST) {
+			throw new IllegalStateException("Do not know how to create routes for Fconnection of class: ${this.class}")
+		}
+		return new RouteBuilder() {
+			@Override void configure() {}
+			List getRouteDefinitions() {
+				return [
+					from('seda:nowhere')
+							.to('bad:fconnection?subclassed=false')
+							.routeId("out-${Fconnection.this.id}"),
+					from('bad:fconnection?subclassed=false')
+							.onException(NotConnectedException)
+									.handled(true)
+									.beanRef('fconnectionService', "handleDisconnection")
+									.end()
+							.to('stream:out').routeId("in-${Fconnection.this.id}")]
+			}
+		}.routeDefinitions
 	}
 }

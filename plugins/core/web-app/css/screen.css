@@ -37,11 +37,6 @@ a {
 	padding: 2px 20px;
 }
 
-#address-error{
-	position: relative;
-	left: 150px;
-}
-
 .send-failed{
 	background-image: url('../images/icons/error_on.png');
 	background-repeat: no-repeat;
@@ -116,7 +111,7 @@ a {
 }
 #sidebar .sublist a.create{
     display: block;
-    padding: 4px 0 0 0;
+    padding: 4px 0;
 }
 
 #sidebar .sublist{
@@ -133,28 +128,28 @@ a {
 }
 #messages-tab #messages-list-title{
     background-image: url('../images/icons/messages.png');
-    background-position: 0 -2px;
+    background-position: center left;
 }
 #messages-tab .activities-list-title{
     background-image: url('../images/icons/activities.png');
-    background-position: 0 -2px;
+    background-position: center left;
 }
 #messages-tab #folders-list-title{
     background-image: url('../images/icons/folders.png');
-    background-position: 0 -2px;
+    background-position: center left;
 }
 #messages-tab #shows-list-title{
     background-image: url('../images/icons/shows.png');
-    background-position: 0 -2px;
+    background-position: center left;
 }
 
 #contacts-tab  #contacts-list-title{
     background-image: url('../images/icons/contacts.png');
-    background-position: 0 -2px;
+    background-position: center left;
 }
 #contacts-tab #groups-list-title{
     background-image: url('../images/icons/groups.png');
-    background-position: 0 -2px;
+    background-position: center left;
 }
 #contacts-tab  #smart-groups-list-title{
     background-image: url('../images/icons/smartgroups.png');
@@ -258,7 +253,7 @@ a {
     padding-left: 28px;
     margin: 0;
     background-repeat: no-repeat;
-    background-position: 6px 10px;
+    background-position: center left;
     float:left;
 }
 
@@ -269,13 +264,13 @@ a {
 	padding: 10px 0px 10px 10px;
 }
 .section-header .activity-title .button-list{
-	width:250px;
+	width:150px;
 }
 .section-header .activity-title .button-list li{
 	padding: 10px 0;
 	text-align: right;
 	height:25px;
-	width: 250px;
+	width: 150px;
 }
 .section-header .message-title .button-list li, .section-header #archive-title .button-list li, #contact-header .button-list li{
 	padding: 0 10px;
@@ -286,6 +281,7 @@ a {
 .section-header .button-list .activity-btn{
 	width: 216px;
 	float: right;
+	display: block;
 }
 .section-header .activity-title #poll-graph-btn{
 	position: absolute;
@@ -310,10 +306,10 @@ a {
 	z-index: 10;
 }
 .section-header .activity-title td{
-	font-size: 11px;
+	font-size: .75em;
 }
 .section-header .activity-title #activity-details #poll-sent{
-	font-size: 10px;
+	font-size: .75em;
 }
 
 #quick-message{
@@ -359,6 +355,8 @@ a {
 }
 #message-list table {
 	display: block;
+	padding-top: 26px;
+	width: 100%;
 }
 #message-list table tr {
 	display: block;
@@ -384,10 +382,8 @@ a {
 	padding: 4px 0;
 }
 #message-list tbody, #folder-list tbody, #activity-list tbody{
-	position: absolute;
-	top: 26px;
 	width: 100%;
-    overflow: auto;
+    height: 100%;
 }
 
 #message-list tr, #folder-list tr, #activity-list tr{
@@ -486,6 +482,7 @@ animation: newMessage 2s;
     height: 16px;
     background-image: url('../images/icons/star.png');
     background-repeat: no-repeat;
+    background-position: center left;
 }
 .message-preview-star a:hover{
     background-image: url('../images/icons/star_on.png');
@@ -536,18 +533,20 @@ animation: newMessage 2s;
 	margin: 0;
     padding: 17px;
 }
+#message-detail-content #no-message{
+	text-align: center;
+}
 
 #message-detail-sender{
 	display: inline-block;
 	margin: 0;
 	min-width: 130px;
 }
-#message-detail-sender a {
-	float: right;
+#message-detail-sender #add-contact {
 	background-image: url('../images/icons/add.png');
 	background-repeat: no-repeat;
-	width: 16px;
-	height: 16px;
+	padding-left: 16px;
+	margin-left: 4px;
 }
  #message-detail-date{
 	margin: 0;
@@ -565,18 +564,17 @@ animation: newMessage 2s;
 }
 
 #message-detail-buttons{
-    margin: 17px 0;
+    margin: 17px 0 0 0;
     padding: 0;
 }
 #message-detail-buttons .msg-btn{
-	width:40%;
+	width:42%;
 	margin: 10px 10px;
+	padding: 4px 0;
 }
-#message-detail-buttons a.msg-btn{
-	padding: 4px 0 0 0;
-}
-#message-detail-buttons input[type=submit].msg-btn{
-	padding: 0 1px;
+#message-detail-buttons form{
+    margin: 0;
+    padding: 0;
 }
 
 #message-detail .extra-msg-btn{
@@ -690,9 +688,12 @@ animation: newMessage 2s;
 
 #poll-details{
     position: absolute;
-    bottom: 0;
     top: 200px;
+    bottom: 0;
     width: 100%;
+    padding-bottom: 43px;
+    min-height: 300px;
+    overflow: auto;
 }
 #pollGraph{
     width: 100%;

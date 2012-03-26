@@ -16,12 +16,9 @@
 	border: 5px solid rgba(0,0,0,0.4);
 	border-radius: 4px;
 	background-color: white;
-	font-family: Arial,Georgia,Helvetica,sans-serif;
-	font-size: .75em;
 }
 
 .ui-dialog h2{
-	font-size: 1.2em;
 	margin: 0;
 	padding:0;
 }
@@ -61,14 +58,19 @@
 	overflow: hide;
 }
 
-.ui-dialog .ui-dialog-buttonpane {
-	text-align: right;
-	border-top: 1px solid #9E9E9E;
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+	clear: both;
+	width: 100%;
 	height: 43px;
+	border-top: 1px solid #9E9E9E;
+	text-align: right;
 	background: white;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
-.ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
+.ui-dialog .ui-dialog-buttonpane button {
+	margin: .5em .4em .5em 0;
+	cursor: pointer;
+	padding: 4px;
+}
 
 
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
@@ -81,7 +83,7 @@
 
 .ui-dialog-content form, .ui-dialog-content .content {
 	padding: 17px;
-	overflow: auto;
+	float: left;
 }
 
 .ui-dialog .activity-choice {
@@ -144,9 +146,4 @@
 
 .ui-dialog .field-enabled{
 	font-weight: bolder;
-}
-
-.ui-dialog #group-recipients, .ui-dialog #contact-recipients, .ui-dialog #address-recipients {
-	padding: 10px;
-	border: 1px solid #DFDFDF;
 }

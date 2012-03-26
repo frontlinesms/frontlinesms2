@@ -17,6 +17,16 @@ var groupActions = {
 		}})
 	},
 	
+	"edit": function() {
+		$.ajax({
+			type:'GET',
+			url: url_root + getContactSection() + '/edit',
+			data: {id: $("#groupId").val()},
+			success: function(data) {
+				launchMediumPopup('Edit group', data, 'Edit', submit);
+		}})
+	},
+	
 	"delete": function() {
 		$.ajax({
 			type:'GET',

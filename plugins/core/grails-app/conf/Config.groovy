@@ -1,3 +1,5 @@
+import org.apache.log4j.RollingFileAppender
+
 // locations to search for config files that get merged into the main config
 // config files can either be Java properties files or ConfigSlurper scripts
 
@@ -76,16 +78,17 @@ environments {
 
 // log4j configuration
 log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
 	environments {
 		production {
-			appender new org.apache.log4j.DailyRollingFileAppender(name:"myLogger1", datePattern:"'.'yyyy-MM-dd", layout:pattern(conversionPattern:'%d %-5p [%c{2}] %m%n'), file:"${System.properties.'user.home'}/.frontlinesms2/standard.log");
-			appender new org.apache.log4j.DailyRollingFileAppender(name:"myLogger1-Stacktrace", datePattern:"'.'yyyy-MM-dd", layout:pattern(conversionPattern:'%d %-5p [%c{2}] %m%n'), file:"${System.properties.'user.home'}/.frontlinesms2/stacktrace.log");
+			def conf = "${System.properties.'user.home'}/.frontlinesms2"
+			def datePattern = "'.'yyyy-MM-dd"
+			def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
+			appender new RollingFileAppender(name:"prod",
+					datePattern:datePattern, layout:layout, file:"$conf/standard.log",
+					threshold:org.apache.log4j.Level.INFO);
+			appender new RollingFileAppender(name:"prod-stacktrace",
+					datePattern:datePattern, layout:layout, file:"$conf/stacktrace.log",
+					threshold:org.apache.log4j.Level.ERROR);
 		}
 	}
 
@@ -103,6 +106,5 @@ log4j = {
 
     warn   'org.mortbay.log'
 
-    info  'serial',
-           'org.apache.camel'
+    info  'serial', 'org.apache.camel', 'org.smslib'
 }

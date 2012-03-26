@@ -2,7 +2,6 @@ package frontlinesms2
 
 import grails.util.GrailsConfig
 import grails.converters.*
-import java.lang.*
 
 class MessageController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]

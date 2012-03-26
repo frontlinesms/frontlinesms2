@@ -84,6 +84,51 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 			getMembers(s) == ['Wov']
 	}
 	
+	def "can edit a smartgroup's properties'"() {
+		given:
+			createContact(name:'Wov', shoe:'flip flop', hat:'stetson')
+		when:
+			def s = createSmartGroup(name:'English numbers', mobile:'+44')
+		then:
+			getMembers(s) == ['Alice Apple', 'Bob Burnquist', 'Charlie Charlesworth', 'Darren Devonshire']
+		when:
+			s.name = "Cloggers"
+			s.mobile = "+254"
+			s.save(flush:true)
+			s.refresh()
+		then:
+			s.name == "Cloggers"
+			s.mobile == "+254"
+			getMembers(s) == ['Grace Githeri', 'Horace Ugali', 'Ndungu Ndengu', 'Tricky Tusker']
+	}
+	
+	def "smartGroup members should be updated when the custom field value is updated"() {
+		given:
+			def customFieldA = new CustomField(name:"location", value:"ken").save(flush:true)
+			
+			def smartGroup = new SmartGroup(name:'English contacts', customFields:[customFieldA]).save(flush:true, failOnError:true)
+			def testContact1 = createContact(name:'Alfred', primaryMobile:'+4423456789')
+			def testContact2 = createContact(name:'Charles', primaryMobile:'+442987654')
+			def testContact3 = createContact(name:'Bernadette', primaryMobile:'+3323+4456789')
+			
+			testContact1.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
+			testContact1.addToCustomFields(new CustomField(name:"city", value:"Dar es Salaam"))
+			testContact2.addToCustomFields(new CustomField(name:"city", value:"Nairobi"))
+			testContact3.addToCustomFields(new CustomField(name:"location", value:"Kenturky"))
+			
+			testContact1.save(flush:true)
+			testContact2.save(flush:true)
+			testContact3.save(flush:true)
+		expect:
+			smartGroup.members*.name == ["Alfred", "Bernadette"]
+		when:
+			smartGroup.removeFromCustomFields(customFieldA)	
+			smartGroup.addToCustomFields(new CustomField(name:"location", value:"kenya"))
+			smartGroup.save(flush:true)
+		then:
+			smartGroup.members*.name.sort() == ['Alfred']
+	}
+	
 	private def getMembers(SmartGroup s) {
 		s.members*.name.sort()
 	}

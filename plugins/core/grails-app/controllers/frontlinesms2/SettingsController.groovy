@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import groovy.lang.Closure;
-
 class SettingsController {
 	def index = {
 		redirect(action:'general')
@@ -16,8 +14,8 @@ class SettingsController {
 		def fconnectionInstanceTotal = Fconnection.count()
 		if(params.id){
 			render(view:'show_connections', model:show_connections() << [connectionInstanceList: fconnectionInstanceList,
-				connectionInstance: connectionInstance,
-				fconnectionInstanceTotal: fconnectionInstanceTotal])
+					connectionInstance: connectionInstance,
+					fconnectionInstanceTotal: fconnectionInstanceTotal])
 		} else {
 			render(view:'show_connections', model: [fconnectionInstanceTotal: 0])
 		}
@@ -26,27 +24,23 @@ class SettingsController {
 	def show_connections = {
 		withFconnection {
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
-												fconnectionInstanceTotal: Fconnection.list(params)]
+					fconnectionInstanceTotal: Fconnection.list(params)]
 		}
 	}
 	
 	def logs = {
-		println "settings params are: ${params}"
 		def logEntryList
 		if(params.timePeriod && params.timePeriod != 'forever') {
 			def timePeriod = new Date() - params.timePeriod.toInteger()
-    		logEntryList = LogEntry.findAllByDateGreaterThanEquals(timePeriod)
-    	} else {
-    		logEntryList = LogEntry.findAll()
-    	}
-    	println logEntryList
-    	[logEntryList: logEntryList,
-    		logEntryTotal: logEntryList.size()]
+			logEntryList = LogEntry.findAllByDateGreaterThanEquals(timePeriod)
+		} else {
+			logEntryList = LogEntry.findAll()
+		}
+		[logEntryList: logEntryList,
+				logEntryTotal: logEntryList.size()]
 	}
 	
-	def general = {
-	
-	}
+	def general = {}
 	
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)

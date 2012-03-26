@@ -136,7 +136,7 @@ class Contact {
 		GroupMembership.create(this, g, flush)
 	}
 
-	def removeFromGroup(Group g, flush=false) { // FIXME why is this method name plural when only one group is added?
+	def removeFromGroup(Group g, flush=false) {
 		removeFromGroups(g, flush)
 	}
 
@@ -169,12 +169,6 @@ class Contact {
 		def s = secondaryMobile?.replaceAll(/\D/, '')
 		if(secondaryMobile && secondaryMobile[0] == '+') s = '+' + s
 		secondaryMobile = s
-	}
-	
-	private def getOldContactNumber() {
-		Contact.withNewSession {session ->
-			Contact.get(id).refresh().primaryMobile // FIXME why not use this.loadedState?
-		}
 	}
 	
 	private def removeFmessageDisplayName() {

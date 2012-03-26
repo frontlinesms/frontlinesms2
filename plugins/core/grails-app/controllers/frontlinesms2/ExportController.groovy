@@ -1,13 +1,7 @@
 package frontlinesms2
 
 import java.text.DateFormat;
-import java.util.Collection;
-import java.util.Date;
 import java.text.SimpleDateFormat
-
-import org.apache.jasper.compiler.Node.ParamsAction;
-
-import grails.util.GrailsConfig
 
 class ExportController {
 	def exportService

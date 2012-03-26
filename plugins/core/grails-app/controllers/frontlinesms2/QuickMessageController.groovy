@@ -1,7 +1,5 @@
 package frontlinesms2
 
-import grails.converters.JSON
-
 class QuickMessageController {
 	def create = {
 		if( params.recipients?.contains(',')) {
@@ -15,12 +13,12 @@ class QuickMessageController {
 		def configureTabs = params.configureTabs ? configTabs(params.configureTabs): ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: contacts,
-			configureTabs: configureTabs,
-			groupList:groupList,
-			recipients:recipients,
-			recipientName: recipientName,
-			messageText: params.messageText ? params.messageText : [],
-			nonExistingRecipients:recipients - contacts*.getPrimaryMobile() - contacts*.getSecondaryMobile() - contacts*.getEmail()]
+				configureTabs: configureTabs,
+				groupList:groupList,
+				recipients:recipients,
+				recipientName: recipientName,
+				messageText: params.messageText ? params.messageText : [],
+				nonExistingRecipients:recipients - contacts*.getPrimaryMobile() - contacts*.getSecondaryMobile() - contacts*.getEmail()]
 	}
 
 	private def configTabs(configTabs) {
