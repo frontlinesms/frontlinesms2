@@ -19,7 +19,7 @@ class ClickatellPreProcessor implements Processor {
 		
 		// Add auth details to header
 		log "Calculating connection ID..."
-		def connectionId = x.in.headers.fconnection
+		def connectionId = x.fconnectionId
 		log "connectionId=$connectionId"
 		def connection = ClickatellFconnection.get(connectionId)
 		log "connection=$connection"

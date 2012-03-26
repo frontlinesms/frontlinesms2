@@ -17,7 +17,7 @@ class EmailFconnection extends Fconnection {
 	
 	List<RouteDefinition> getRouteDefinitions() {
 		String serverPortParam = serverPort ? ":${serverPort}" : ""
-		final String camelProducerAddress = "${receiveProtocol.toLowerCase()}://${serverName}${serverPortParam}?debugMode=true&consumer.delay=15000&username=${username}&password=${password}"
+		final String camelProducerAddress = "${receiveProtocol.name().toLowerCase()}://${serverName}${serverPortParam}?debugMode=true&consumer.delay=15000&username=${username}&password=${password}"
 		
 		return new RouteBuilder() {
 			@Override void configure() {}
