@@ -19,6 +19,7 @@ class CoreBootStrap {
 	def applicationContext
 	def grailsApplication
 	def deviceDetectionService
+	def camelContext
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
@@ -28,6 +29,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
+		MetaClassModifiers.addCamelMethods()
 		createWelcomeNote()
 		
 		switch(Environment.current) {
@@ -39,6 +41,7 @@ class CoreBootStrap {
 				//DB Viewer
 				//org.hsqldb.util.DatabaseManager.main()
 				// do custom init for dev here
+				camelContext.tracing = true
 				dev_initSmartGroups()
 				dev_initGroups()
 				dev_initContacts()
