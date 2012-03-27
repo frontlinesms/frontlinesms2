@@ -33,7 +33,7 @@ class MessageController {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
 			render messageCount as JSON
 		} else if(section == 'activity') {
-			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages().count()]]
+			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages()?.count()]]
 			render messageCount as JSON
 		} else if(section == 'folder') {
 			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages()?.count()]]
@@ -112,6 +112,7 @@ class MessageController {
 
 	def poll = { redirect(action: 'activity', params: params) }
 	def announcement = { redirect(action: 'activity', params: params) }
+	def autoreply = { redirect(action: 'activity', params: params) }
 	def activity = {
 		def activityInstance = Activity.get(params.ownerId)
 		def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
@@ -237,8 +238,8 @@ class MessageController {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save()
-					if(activity instanceof frontlinesms2.Poll && activity.autoReplyText)
-						redirect(controller: 'poll', action: 'sendReply', params: [pollId: activity.id, messageId: messageInstance.id])
+					if(activity && activity.autoreplyText)
+						redirect(controller: "activty instanceof frontlinesms2.Poll ? 'poll' : 'autoreply'", action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id])
 				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {

@@ -3,28 +3,43 @@ package frontlinesms2
 class PollController extends ActivityController {
 
 	def save = {
-		if(!params.enableKeyword) params.keyword = null
-		def pollInstance = Poll.createPoll(params)
-		pollInstance.sentMessageText = params.messageText
+		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
+		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
+		def poll
+		if(Poll.get(params.ownerId)) {
+			poll = Poll.get(params.ownerId)
+			if(params.enableKeyword && params.keyword)
+				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword))
+		} else if(params.enableKeyword && params.keyword) {
+			poll = new Poll(keyword: new Keyword(value: params.keyword))
+		} else {
+			poll = new Poll()
+		}
+		poll.name = params.name ?: poll.name
+		poll.autoreplyText = params.autoreplyText ?: poll.autoreplyText
+		poll.question = params.question ?: poll.question
+		poll.sentMessageText = params.messageText ?: poll.sentMessageText
+		poll.editResponses(params)
+		poll.save(flush: true, failOnError: true)
 		if(!params.dontSendMessage) {
 			def message = messageSendService.getMessagesToSend(params)
-			pollInstance.addToMessages(message)
+			poll.addToMessages(message)
 			messageSendService.send(message)
-			pollInstance.save()
+			poll.save()
 			flash.message = "Poll has been saved and message(s) has been queued to send"
 		} else {
-			pollInstance.save()
+			poll.save()
 			flash.message = "Poll has been saved"
 		}
-		[ownerId: pollInstance.id, action:"saved"]
+		[ownerId: poll.id]
 	}
 	
 	def sendReply = {
-		def poll = Poll.get(params.pollId)
+		def poll = Poll.get(params.ownerId)
 		def incomingMessage = Fmessage.get(params.messageId)
-		if(poll.autoReplyText) {
+		if(poll.autoreplyText) {
 			params.addresses = incomingMessage.src
-			params.messageText = poll.autoReplyText
+			params.messageText = poll.autoreplyText
 			def outgoingMessage = messageSendService.getMessagesToSend(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
@@ -32,21 +47,9 @@ class PollController extends ActivityController {
 		}
 		render ''
 	}
-	
-	def edit = {
-		if(!params.enableKeyword) params.keyword = null
-		def pollInstance = Poll.editPoll(params.id.toLong(), params)
-		pollInstance.sentMessageText = params.messageText
-		if(!params.dontSendMessage) {
-			def message = messageSendService.getMessagesToSend(params)
-			pollInstance.addToMessages(message)
-			messageSendService.send(message)
-			pollInstance.save()
-			flash.message = "Poll has been updated and message(s) has been queued to send"
-		} else {
-			pollInstance.save(failOnError:true)
-			flash.message = "Poll has been updated"
-		}
-		render view:"../poll/save", model:[ownerId: pollInstance.id, action:"updated"]
+		
+	private def withPoll(Closure c) {
+		def pollInstance = Poll.get(params.ownerId) ?: new Poll()
+		if (pollInstance) c pollInstance
 	}
 }

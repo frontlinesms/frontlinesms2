@@ -13,19 +13,10 @@ class CascadePollSaveISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'saving a poll cascades to saving poll responses'() {
 		when:
 			def p = new Poll(name:'Football Teams', responses:[new PollResponse(value:'manchester'),
-						new PollResponse(value:'barcelona')]).save(failOnError:true, flush:true)
+						new PollResponse(value:'barcelona'), new PollResponse(value:'Unknown')]).save(failOnError:true, flush:true)
 		then:
 			p.name == 'Football Teams'
-			p.responses.size() == 2
-		when:
-			p.refresh()
-		then:
-			p.name == 'Football Teams'
-			p.responses.size() == 2
-		when:
-			p = Poll.get(p.id)
-		then:
-			p.name == 'Football Teams'
-			p.responses.size() == 2
+			p.responses.size() == 3
+			PollResponse.findByValue('manchester')
 	}
 }

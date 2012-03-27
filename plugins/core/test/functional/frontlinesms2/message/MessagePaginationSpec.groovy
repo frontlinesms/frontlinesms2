@@ -150,7 +150,8 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		def poll = new Poll(name:'poll')
 		def yes = new PollResponse(value: "Yes")
 		def no = new PollResponse(value: "No")
-		poll.addToResponses(yes).addToResponses(no)
+		def unknown = new PollResponse(value: "Unknown")
+		poll.addToResponses(yes).addToResponses(no).addToResponses(unknown)
 		poll.save(flush:true, failOnError:true)
 		(1..25).each { i ->
 			yes.addToMessages(new Fmessage(src: "src${i}", text: "yes ${i}", inbound: true, date: new Date()))

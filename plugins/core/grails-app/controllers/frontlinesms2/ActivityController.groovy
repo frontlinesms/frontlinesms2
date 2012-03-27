@@ -11,7 +11,7 @@ class ActivityController {
 	def create = {
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: Contact.list(),
-			groupList:groupList]
+				groupList:groupList]
 	}
 	
 	def edit = {

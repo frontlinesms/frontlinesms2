@@ -10,10 +10,10 @@
 		</g:radioGroup>
 	</ul>
 	<g:if test="${activityInstanceToEdit?.keyword}">
-		<g:textField name="keyword" id="poll-keyword" value="${activityInstanceToEdit?.keyword}"/>
+		<g:textField name="keyword" id="poll-keyword" value="${activityInstanceToEdit?.keyword?.value}"/>
 	</g:if>
 	<g:else>
-		<g:textField name="keyword" id="poll-keyword" disabled="true" value="${activityInstanceToEdit?.keyword}"/>
+		<g:textField name="keyword" id="poll-keyword" disabled="true" value="${activityInstanceToEdit?.keyword?.value}"/>
 	</g:else>
 	
 </div>

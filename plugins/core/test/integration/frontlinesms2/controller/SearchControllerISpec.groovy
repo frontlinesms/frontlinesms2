@@ -48,9 +48,11 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def poll = new Poll(name:'Miauow Mix')
 		def chickenResponse = new PollResponse(value:'chicken', poll:poll)
 		def liverResponse = new PollResponse(value:'liver', poll:poll)
+		def unknownResponse = new PollResponse(value:'unknown', poll:poll)
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
+		poll.addToResponses(unknownResponse)
 		poll.addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse).save(failOnError:true)
 	}

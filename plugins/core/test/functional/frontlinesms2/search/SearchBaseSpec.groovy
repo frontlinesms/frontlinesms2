@@ -30,8 +30,9 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestPollsAndFolders() {
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'Unknown')
 		new Fmessage(src:'Joe', text:'eat more cow', messageOwner:'chickenResponse', date: new Date(), inbound: true)
-		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
 		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
 		
 	}
@@ -61,9 +62,11 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'Unknown')
 		def poll = new Poll(name:'Miauow Mix')
 		poll.addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse)
+		poll.addToResponses(unknownResponse)
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
 		
@@ -82,9 +85,10 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'Unknown')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
 	}
 	
 	static createTestContacts() {

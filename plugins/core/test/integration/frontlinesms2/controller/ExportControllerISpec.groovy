@@ -12,7 +12,9 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can export messages from a poll"() {
 		given:
-			Poll.createPoll(name: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona').save(flush: true)
+			def p = new Poll(name: 'Football Teams')
+			p.editResponses(choiceA: 'manchester', choiceB:'barcelona')
+			p.save(flush: true)
 			[PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Bob')),
 					PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('Alice'))]*.save(failOnError:true, flush:true)
 			controller.params.messageSection = "poll"

@@ -1,16 +1,16 @@
 <div id="tabs-1">
 	<div class="section">
-		<div id="poll-type">
+		<div id="responseType">
 			<h2 class="bold">Select the kind of poll to create:</h2>
 			<ul>
 				<g:if test="${activityInstanceToEdit}">
 					<g:set var="standard" value="${activityInstanceToEdit?.responses*.key.contains('A')}"/>
-					<li><g:radio name="poll-type" value="standard" checked="${standard}" disabled="${!standard}" />Question with a 'Yes' or 'No' answer</li>
-					<li><g:radio name="poll-type" value="multiple" checked="${!standard}" disabled="${standard}"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
+					<li><g:radio name="pollType" value="standard" checked="${standard}" disabled="${!standard}" />Question with a 'Yes' or 'No' answer</li>
+					<li><g:radio name="pollType" value="multiple" checked="${!standard}" disabled="${standard}"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
 				</g:if>
 				<g:else>
-					<li><g:radio name="poll-type" value="standard" checked='checked'/>Question with a 'Yes' or 'No' answer</li>
-					<li><g:radio name="poll-type" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
+					<li><g:radio name="pollType" value="standard" checked='checked'/>Question with a 'Yes' or 'No' answer</li>
+					<li><g:radio name="pollType" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
 				</g:else>
 			</ul>
 		</div>
@@ -34,8 +34,8 @@
 		}
 	});
 
-	$("input[name='poll-type']").live("change", function() {
-		if ($("input[name='poll-type']:checked").val() == "standard") {
+	$("input[name='pollType']").live("change", function() {
+		if ($("input[name='pollType']:checked").val() == "standard") {
 			disableTab(1);
 		} else {
 			enableTab(1);
