@@ -5,7 +5,7 @@
 			<g:link class="cancel btn" disabled="disabled">Cancel</g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit id="save-new" class="btn" action="saveContact" value="Save"/>
+			<g:actionSubmit class="btn" id="save-new" action="saveContact" value="Save"/>
 			<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
 		</g:else>
 		
@@ -95,7 +95,7 @@
 		</div>
 	</div>
 	<div id='group-add' class="basic-info">
-		<select id="group-dropdown" name="group-dropdown">
+		<select class= "dropdown" id="group-dropdown" name="group-dropdown">
 			<option class="not-group">Add to group...</option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 				<option value="${g.id}">${g.name}</option>

@@ -108,17 +108,18 @@
 }
 
 .ui-dialog .info {
-	padding: 20px 0 20px 20px;
+	padding: 0 0 20px 20px;
 	line-height: 200%;
 }
 
 .ui-dialog .smartgroupname {
+	margin-left: 6px;
 	padding-top: 17px;
 	padding-bottom: 30px;
 }
 
 .ui-dialog #smartgroupname-field {
-	width: 400px;
+	width: 484px;
 	margin-left: 10px;
 }
 

@@ -68,7 +68,7 @@
 }
 #log-filters select{
 	float: left;
-	width: 300px;
+	width: 250px;
 }
 #log-filters .show-log-text{
 	float: left;
@@ -78,6 +78,7 @@
 #log-filters span{
 	float: left;
 	min-width: 210px;
+	font-size:14;
 }
 #log-list {
 	display: block;
@@ -91,6 +92,7 @@
 #log-list td{
 	float: left;
 	width: 50%;
+	font-size:14;
 }
 #log-list .entry-date{
 	float: right;

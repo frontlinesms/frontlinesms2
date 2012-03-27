@@ -35,5 +35,5 @@
 	</div>
 </g:if>
 <g:else>
-	No archived folders
+	<p>&nbsp No archived folders</p>
 </g:else>

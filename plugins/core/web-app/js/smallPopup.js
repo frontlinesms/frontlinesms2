@@ -3,7 +3,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 	if (doneAction == null) { doneAction = defaultDoneAction }
 	$("#modalBox").dialog({
 			modal: true,
-			width: 285,
+			width: 315,
 			maxHeight: 300,
 			title: title,
 			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
