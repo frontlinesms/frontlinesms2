@@ -239,7 +239,7 @@ class MessageController {
 					activity.addToMessages(messageInstance)
 					activity.save()
 					if(activity && activity.autoreplyText)
-						redirect(controller: 'poll', action: 'sendReply', params: [pollId: activity.id, messageId: messageInstance.id])
+						redirect(controller: "activty instanceof frontlinesms2.Poll ? 'poll' : 'autoreply'", action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id])
 				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {

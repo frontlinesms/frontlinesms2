@@ -20,7 +20,7 @@ class ArchiveISpec extends IntegrationSpec {
 			poll.save(failOnError:true, flush:true)
 			assert poll.archived
 		when:
-			def model = archiveController.activityList()
+			def model = archiveController.activityList().model
 		then:
 			model.activityInstanceList == [poll]
 		when:

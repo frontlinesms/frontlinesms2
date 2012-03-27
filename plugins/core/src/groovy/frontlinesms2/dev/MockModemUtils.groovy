@@ -5,6 +5,7 @@ import serial.mock.*
 import net.frontlinesms.test.serial.hayes.*
 
 import org.smslib.NotConnectedException
+import org.smslib.util.*
 
 class MockModemUtils {
 	static void initialiseMockSerial(Map portIdentifiers) {
@@ -37,6 +38,27 @@ class MockModemUtils {
 		return new GroovyHayesPortHandler(new GroovyHayesState([error: "ERROR: 1",
 				responses: responses]))
 	}
+	
+	static SerialPortHandler createMockPortHandler_withTextMessages(List text) {
+		def messages = [:]
+		text.eachWithIndex { it, i ->
+			messages[i] = createPdu(it)
+		}
+		return createMockPortHandler(true, messages)
+	}
+	
+	private static String createPdu(String messageText, String from="1234", Date date=new Date(),
+			String smscNumber='5555555') {
+// TODO implement following in SMS Lib
+//		def pdu = SmsDeliverPdu.create(smscNumber, messageText, from, date)
+//		HexUtils.encode(pdu.toBinary())
+
+		def septets = GsmAlphabet.stringToBytes(messageText)
+		def septetCount = septets.size()
+		def encodedSeptets = GsmAlphabet.septetStream2octetStream(septets, 0)
+		'07915892000000F0040B915274204365F7000070402132522423' + HexUtils.encode([septetCount] as byte[]) + HexUtils.encode(encodedSeptets)
+	}
+	
 	
 	static SerialPortHandler createMockPortHandler_withMessages() {
 		createMockPortHandler(true, [2: '07915892000000F0040B915892214365F70000701010221555232441D03CDD86B3CB2072B9FD06BDCDA069730AA297F17450BB3C9F87CF69F7D905',

@@ -9,22 +9,23 @@ class KeywordProcessorService {
 	}
 	
 	def processForKeyword(Fmessage message) {
-		def words = message.text.split()
+		def words = message.text.toUpperCase().split()
 		if(words.size() == 0 || (words.size() == 1 && words[0].length() < 2)) {
 			return null
 		} else if(words.size() == 1) {
 			def word = words[0]
 			def keyword = Keyword.findByValue(word)
-			if(keyword)
-				processForAutoReply(keyword, message)
-			else {
+			if(keyword && keyword.activity instanceof frontlinesms2.Autoreply) {
+				println "processing..."
+				processForAutoreply(keyword, message)
+			} else {
 				keyword = Keyword.findByValue(word[0..-2])
 				def option = word[-1]
 				processForPoll(keyword, option, message)
 			}
 		} else {
 			def keyword = Keyword.findByValue(words[0])
-			if(keyword && keyword.activity instanceof Poll)
+			if(keyword && keyword.activity instanceof Poll && words[1].length() == 1)
 				processForPoll(keyword, words[1], message)
 			else if(keyword)
 				processForAutoreply(keyword, message)
@@ -36,6 +37,7 @@ class KeywordProcessorService {
 		def params = [:]
 		params.addresses = message.src
 		params.messageText = autoreply.autoreplyText
+		autoreply.addToMessages(message)
 		def outgoingMessage = messageSendService.getMessagesToSend(params)
 		autoreply.addToMessages(outgoingMessage)
 		messageSendService.send(outgoingMessage)

@@ -29,7 +29,7 @@ class KeywordProcessorServiceISpec extends IntegrationSpec {
 		when:
 			keywordProcessorService.processForAutoreply(keyword, m)
 		then:
-			a.messages?.size() == 1
+			a.messages?.size() == 2
 	}
 	
 	def "processForPoll() should associate Fmessage with PollResponse"() {

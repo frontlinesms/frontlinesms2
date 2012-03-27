@@ -21,6 +21,18 @@ class AutoreplyController extends ActivityController {
 		[ownerId: autoreply.id]
 	}
 	
+	def sendReply = {
+		def autoreply = Autoreply.get(params.ownerId)
+		def incomingMessage = Fmessage.get(params.messageId)
+		params.addresses = incomingMessage.src
+		params.messageText = autoreply.autoreplyText
+		def outgoingMessage = messageSendService.getMessagesToSend(params)
+		autoreply.addToMessages(outgoingMessage)
+		messageSendService.send(outgoingMessage)
+		autoreply.save()
+		render ''
+	}
+	
 	private def withAutoreply(Closure c) {
 		Autoreply.get(params.ownerId) ?: new Autoreply()
 	}

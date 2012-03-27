@@ -45,6 +45,7 @@ class CoreBootStrap {
 				dev_initFconnections()
 				dev_initFmessages()
 				dev_initPolls()
+				dev_initAutoreplies()
 				dev_initFolders()
 				dev_initAnnouncements()
 				dev_initLogEntries()
@@ -160,7 +161,8 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"MOCK96: breaks on receive", port:'MOCK96', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK97: bad port", port:'MOCK98', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK98: cannot send", port:'MOCK98', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)		
+		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"MOCK100: incoming messages for autoreplies", port:'MOCK100', baud:9600).save(failOnError:true)	
 	}
 	
 	private def dev_initPolls() {
@@ -190,6 +192,14 @@ class CoreBootStrap {
 		}
 		poll1.save(flush: true)
 		poll2.save(flush: true)
+	}
+	
+	private def dev_initAutoreplies() {
+		if(!dev) return
+		def k1 = new Keyword(value: "color")
+		def k2 = new Keyword(value: "autoreply")
+		new Autoreply(name:"toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
+		new Autoreply(name:"color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFolders() {
@@ -323,7 +333,12 @@ class CoreBootStrap {
 				MOCK96:new CommPortIdentifier("MOCK96", MockModemUtils.createMockPortHandler_disconnectOnReceive()),
 				MOCK97:new CommPortIdentifier("MOCK97", MockModemUtils.createMockPortHandler_badPort()),
 				MOCK98:new CommPortIdentifier("MOCK98", MockModemUtils.createMockPortHandler_sendFails()),
-				MOCK99:new CommPortIdentifier("MOCK99", MockModemUtils.createMockPortHandler_withMessages())])
+				MOCK99:new CommPortIdentifier("MOCK99", MockModemUtils.createMockPortHandler_withMessages()),
+				MOCK100:new CommPortIdentifier("MOCK100", MockModemUtils.createMockPortHandler_withTextMessages(dev_initMockPortMessages()))])
+	}
+	
+	private def dev_initMockPortMessages() {
+		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z"];
 	}
 	
 	private def test_initGeb(def servletContext) {
