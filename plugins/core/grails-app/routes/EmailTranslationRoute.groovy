@@ -3,6 +3,6 @@ class EmailTranslationRoute {
 		from('seda:raw-email')
 				.beanRef('emailTranslationService', 'process')
 				.to('seda:incoming-fmessages-to-store')
-				.id('email-translation')
+				.routeId('email-translation')
 	}
 }

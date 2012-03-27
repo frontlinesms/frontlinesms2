@@ -89,7 +89,12 @@
 }
 #search-menu .ui-icon-triangle-1-s{
 	position:relative;
-	left: 205px;
+	left: 155px;
+	top: -15px;
+}
+#log-filters .ui-icon-triangle-1-s{
+	position:relative;
+	left: 15px;
 	top: -15px;
 }
 #traffic-status .ui-icon-triangle-1-s{

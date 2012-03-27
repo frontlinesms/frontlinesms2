@@ -9,9 +9,6 @@ class ClickatellPreProcessor implements Processor {
 		log 'ENTRY'
 		
 		// URL-encode body
-		println "x: $x"
-		println "x.in: $x.in"
-		println "x.in.body: $x.in.body"
 		def d = x.in.body
 		x.out.headers['frontlinesms.dispatch.id'] = d.id
 		x.out.body = urlEncode(d.message.text)
@@ -22,7 +19,7 @@ class ClickatellPreProcessor implements Processor {
 		
 		// Add auth details to header
 		log "Calculating connection ID..."
-		def connectionId = x.in.headers.fconnection
+		def connectionId = x.fconnectionId
 		log "connectionId=$connectionId"
 		def connection = ClickatellFconnection.get(connectionId)
 		log "connection=$connection"

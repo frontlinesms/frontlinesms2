@@ -32,8 +32,11 @@ grails.project.dependency.resolution = {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
 		// TEST
-		def camelVersion = '2.5.0'
-		test "org.apache.camel:camel-test:$camelVersion"
+		def camel = { 
+			def camelVersion = '2.5.0'
+			"org.apache.camel:camel-$it:$camelVersion"
+		}
+		test camel('test')
 		test 'org.mockito:mockito-all:1.8.5'
 		def seleniumVersion = "2.18.0"
 		def gebVersion = "0.6.1"
@@ -48,8 +51,8 @@ grails.project.dependency.resolution = {
 
 		// COMPILE
 		compile 'net.frontlinesms.core:camel-smslib:0.0.3'
-		compile "org.apache.camel:camel-mail:$camelVersion"
-		compile "org.apache.camel:camel-http:$camelVersion"
+		['mail', 'http'].each { compile camel(it) }
+
 		compile 'net.frontlinesms.core:serial:1.0.1'
 		compile 'net.frontlinesms.core:at-modem-detector:0.2'
 		runtime 'org.rxtx:rxtx:2.1.7'

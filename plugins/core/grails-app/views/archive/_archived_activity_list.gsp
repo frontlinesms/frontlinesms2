@@ -41,5 +41,5 @@
 </div>
 </g:if>
 <g:else>
-	No archived activities
+	<p>&nbsp No archived activities</p>
 </g:else>

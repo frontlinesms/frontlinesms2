@@ -14,26 +14,26 @@ class DispatchRouterService {
 	 * we've done with it.
 	 */
 	def slip(Exchange exchange, @Header(Exchange.SLIP_ENDPOINT) String previous, @Header('fconnection') String target) {
-		println "DispatchRouterService.slip() : Routing exchange $exchange with previous endpoint $previous and target fconnection $target"
+		def log = { println "DispatchRouterService.slip() : $it" }
+		log "ENTRY"
+		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $target"
+		log "x.in.headers=$exchange.in.headers"
+		
 		if(previous) {
 			// We only want to pass this message to a single endpoint, so if there
 			// is a previous one set, we should exit the slip.
-			println "DispatchRouterService.slip() : Exchange has previous endpoint from this slip.  Returning null."
+			log "Exchange has previous endpoint from this slip.  Returning null."
 			return null
 		} else if(target) {
-			println "DispatchRouterService.slip() : Target is set, so forwarding exchange to fconnection $target"
-			println "DispatchRouterService.slip() : Exchange properties: $exchange.properties"
+			log "Target is set, so forwarding exchange to fconnection $target"
 			return "seda:out-$target"
 		} else {
-			println "DispatchRouterService.slip() : Routes available: ${camelContext.routes*.id}"
 			def routeId = getDispatchRouteId()
 			if(routeId) {
-				println "DispatchRouterService.slip() : Sending with route: $routeId"
+				log "Sending with route: $routeId"
 				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]
-				println "DispatchRouterService.slip() : Setting header 'fconnection' to $fconnectionId"
-				exchange.out.headers.fconnection = fconnectionId
 				def routeName = "seda:out-$fconnectionId"
-				println "DispatchRouterService.slip() : Routing to $routeName"
+				log "Routing to $routeName"
 				return routeName
 			} else {
 				// TODO may want to queue for retry here, after incrementing retry-count header

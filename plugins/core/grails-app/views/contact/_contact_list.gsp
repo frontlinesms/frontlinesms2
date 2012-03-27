@@ -27,6 +27,6 @@
 	</g:if>
 	<g:else>
 		<div id="contact-list">
-			No contacts here!
+			 <p>&nbsp No contacts here!</p>
 		</div>
 	</g:else>
