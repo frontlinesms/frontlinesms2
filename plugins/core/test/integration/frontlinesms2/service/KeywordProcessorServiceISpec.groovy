@@ -6,7 +6,6 @@ import grails.plugin.spock.*
 
 class KeywordProcessorServiceISpec extends IntegrationSpec {
 	def keywordProcessorService
-//	def service = new KeywordProcessorService()
 	
 	def "processForAutoreply() should send reply text"() {
 		given:
