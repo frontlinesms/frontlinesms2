@@ -51,16 +51,6 @@ class DispatchRouterServiceSpec extends UnitSpec {
 			id << [1, 10, 100]
 	}
 	
-	def 'slip should set fconnection header on routing if not previously set'() {
-		given:
-			mockRoutes(1)
-			def x = mockExchange()
-		when:
-			service.slip(x, null, null) == "seda:out-1"
-		then:
-			x.out.headers.fconnection == '1'
-	}
-	
 	def 'slip should assign messages to routes using round robin'() {
 		given:
 			mockRoutes(1, 2, 3)

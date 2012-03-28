@@ -5,7 +5,7 @@ import grails.plugin.spock.ControllerSpec
 class QuickMessageControllerSpec extends ControllerSpec {
 
 	def setup() {
-		def jim = new Contact(name:"jim", primaryMobile:"12345")
+		def jim = new Contact(name:"jim", mobile:"12345")
 		def mohave = new Group(name:"Mojave")
 		mockDomain GroupMembership, [new GroupMembership(group: mohave, contact: jim)]
 		mockDomain Contact, [jim]
@@ -22,7 +22,7 @@ class QuickMessageControllerSpec extends ControllerSpec {
 		then:
 			def jim = Contact.findByName('jim')
 			result['contactList'] == [jim]
-			result['groupList'] == ["Mojave":[jim.primaryMobile]]
+			result['groupList'] == ["Mojave":[jim.mobile]]
 			result['recipients'] ==  address
 			result['nonExistingRecipients'] ==  address
 	}

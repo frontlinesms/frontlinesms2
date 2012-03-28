@@ -156,7 +156,7 @@ class ContactController {
 	}
 	
 	def checkForDuplicates = {
-		def foundContact = Contact.findByPrimaryMobile(params.number)
+		def foundContact = Contact.findByMobile(params.number)
 		if (foundContact && (foundContact.id.toString() != params.contactId))
 			render(text: "There is already a contact with that number!")
 		else
@@ -172,9 +172,9 @@ class ContactController {
 	}
 	
 	private def attemptSave(contactInstance) {
-		def existingContact = params.primaryMobile ? Contact.findByPrimaryMobileLike(params.primaryMobile) : null
+		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
 		if(existingContact && existingContact != contactInstance) {
-			flash.message = "There is already a contact with that primary mobile, you cannot create another!  <a href='/frontlinesms2/contact/show/" + Contact.findByPrimaryMobileLike(params.primaryMobile)?.id + "'>View duplicate</g:link>"
+			flash.message = "There is already a contact with that mobile, you cannot create another!  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>View duplicate</g:link>"
 			return false
 		}
 		if(contactInstance.save(flush:true)) {

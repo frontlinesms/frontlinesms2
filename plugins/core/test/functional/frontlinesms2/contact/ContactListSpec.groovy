@@ -43,10 +43,10 @@ class ContactListSpec extends ContactBaseSpec {
 	
 	def 'should be able to search contacts'() {
 		given:
-			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
-			def samJones = new Contact(name: 'SAm Jones', primaryMobile: "1234567892").save(failOnError: true)
-			def samTina = new Contact(name: 'SaM Tina', primaryMobile: "1234567893").save(failOnError: true)
-			def bob = new Contact(name: 'bob', primaryMobile: "99999").save(failOnError: true)
+			def samAnderson = new Contact(name: 'Sam Anderson', mobile: "1234567891").save(failOnError: true)
+			def samJones = new Contact(name: 'SAm Jones', mobile: "1234567892").save(failOnError: true)
+			def samTina = new Contact(name: 'SaM Tina', mobile: "1234567893").save(failOnError: true)
+			def bob = new Contact(name: 'bob', mobile: "99999").save(failOnError: true)
 		when:
 			to PageContactShow
 			$("#contact-search").jquery.trigger('focus')
@@ -58,12 +58,12 @@ class ContactListSpec extends ContactBaseSpec {
 	def 'should be able to search contacts within a group'() {
 		given:
 			def fpGroup = new Group(name: "Friends").save(failOnError: true, flush: true)
-			def samAnderson = new Contact(name: 'Sam Anderson', primaryMobile: "1234567891").save(failOnError: true)
-			def samJones = new Contact(name: 'SAm Jones', primaryMobile: "1234567892").save(failOnError: true)
-			def samTina = new Contact(name: 'SaM Tina', primaryMobile: "1234567893").save(failOnError: true)
+			def samAnderson = new Contact(name: 'Sam Anderson', mobile: "1234567891").save(failOnError: true)
+			def samJones = new Contact(name: 'SAm Jones', mobile: "1234567892").save(failOnError: true)
+			def samTina = new Contact(name: 'SaM Tina', mobile: "1234567893").save(failOnError: true)
 			samAnderson.addToGroups(fpGroup, true)
 			samJones.addToGroups(fpGroup,true)
-			def bob = new Contact(name: 'Bob', primaryMobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
+			def bob = new Contact(name: 'Bob', mobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
 		when:
 			go "group/show/${fpGroup.id}"
 			$("#contact-search").jquery.trigger('focus')

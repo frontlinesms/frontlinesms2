@@ -99,7 +99,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
 			def message = new Fmessage(src:'+254778899', text:'test', inbound:true, date: new Date()).save(failOnError:true)
-			def contact = new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			def contact = new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
 			def rowContents = $('#messages tbody tr .message-preview-sender a')*.text()
@@ -110,7 +110,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
 			go "message/inbox/show/$message.id"
@@ -213,7 +213,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
 		given:
-			new Contact(name: "Tom", primaryMobile: "+254999999").save(failOnError:true)
+			new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
@@ -226,7 +226,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			waitFor { $('#tabs-3 ').displayed }
 		then:
 			$("#tabs-3").displayed
-			$("#recipient").text() == "${Contact.findByPrimaryMobile(message.src).name}"
+			$("#recipient").text() == "${Contact.findByMobile(message.src).name}"
 	}
 
 	//FIXME

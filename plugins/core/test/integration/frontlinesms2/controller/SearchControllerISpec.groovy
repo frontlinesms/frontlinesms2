@@ -14,9 +14,9 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def setup() {
 		controller = new SearchController()
-		firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
-		secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
-		thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
+		firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true)
+		secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true)
+		thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true)
 		group = new Group(name:'test').save(failOnError:true)
 		new Group(name:'nobody').save(failOnError:true, flush:true )
 		

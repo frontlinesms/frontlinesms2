@@ -38,9 +38,9 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createTestContactsAndCustomFieldsAndMessages(){
-		def firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
-		def secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
-		def thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
+		def firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true)
+		def secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true)
+		def thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true)
 		
 		[new CustomField(name:'town', value:'Paris', contact: firstContact),
 			new CustomField(name:'like', value:'cake', contact: secondContact),
@@ -92,8 +92,8 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createTestContacts() {
-		[new Contact(name: 'Alice', primaryMobile: '+254778899'),
-			new Contact(name: 'Bob', primaryMobile: '+254987654')].each() { it.save(failOnError:true) }
+		[new Contact(name: 'Alice', mobile: '+254778899'),
+			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(failOnError:true) }
 	}
 	
 }

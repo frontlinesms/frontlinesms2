@@ -7,8 +7,8 @@ class PollControllerSpec extends ControllerSpec {
 
 	def "create action should provide groups and contacts for recipients list"() {
 		setup:
-			def alice = new Contact(name: "Alice", primaryMobile: "12345")
-			def bob = new Contact(name: "Bob", primaryMobile: "54321")
+			def alice = new Contact(name: "Alice", mobile: "12345")
+			def bob = new Contact(name: "Bob", mobile: "54321")
 			mockDomain(Contact, [alice, bob])
 			mockDomain(Group, [new Group(name: "group1"), new Group(name: "group2")])
 			mockDomain SmartGroup, []
