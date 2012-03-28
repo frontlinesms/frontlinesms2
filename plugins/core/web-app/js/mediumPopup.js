@@ -1,24 +1,3 @@
-function messageResponseClick(messageType) {
-	$("#dropdown_options").hide();
-	var configureTabs= "";
-	var me = $(this);
-	if (messageType == 'Reply') {
-		configureTabs = "tabs-1, tabs-3, tabs-4"
-		var src = $("#message-src").val();
-	} else if(messageType == 'Forward') {
-		var text = $("#single-message #message-detail-content p").text();
-	}
-	var messageSection = $('input:hidden[name=messageSection]').val();
-	
-	$.ajax({
-		type:'POST',
-		data: {recipients: src, messageText: text, configureTabs: configureTabs},
-		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send"); }
-	});
-	$("#reply-dropdown").val("na");
-}
-
 function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#modalBox").dialog(
@@ -35,21 +14,6 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 	initializePopup();
 }
 
-function chooseActivity() {
-	var activity = $("#activity-list input[checked=checked]").val();
-	var activityUrl = activity + '/create';
-	var title = 'New ' + activity;
-	
-	$(this).dialog('close');
-	$.ajax({
-		type:'GET',
-		dataType: "html",
-		url: url_root + activityUrl,
-		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); }
-	});
-	return;
-}
- 
 function launchMediumWizard(title, html, btnFinishedText, width, height) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup()
@@ -234,3 +198,37 @@ $.widget("ui.contentWidget", {
 
     options: {validate: function() {return true;} }
 });
+			
+function chooseActivity() {
+	var activity = $("#new-activity-choices input[checked=checked]").val();
+	var activityUrl = activity + '/create';
+	var title = 'New ' + activity;
+
+	$(this).dialog('close');
+	$.ajax({
+		type:'GET',
+		dataType: "html",
+		url: url_root + activityUrl,
+		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); }
+	});
+	return;
+}
+
+function messageResponseClick(messageType) {
+	var configureTabs= "";
+	var me = $(this);
+	if (messageType == 'Reply') {
+		configureTabs = "tabs-1, tabs-3, tabs-4"
+		var src = $("#message-src").val();
+	} else if(messageType == 'Forward') {
+		var text = $("#single-message #message-detail-content p").text();
+	}
+	var messageSection = $('input:hidden[name=messageSection]').val();
+	
+	$.ajax({
+		type:'POST',
+		data: {recipients: src, messageText: text, configureTabs: configureTabs},
+		url: url_root + 'quickMessage/create',
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send"); }
+	});
+}

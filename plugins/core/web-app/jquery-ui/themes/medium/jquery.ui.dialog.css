@@ -107,9 +107,13 @@
 	display: inline;
 }
 
+.ui-dialog .summary {
+	margin: 17px;
+}
+
 .ui-dialog .info {
-	padding: 0 0 20px 20px;
-	line-height: 200%;
+	padding: 0 0 20px 0;
+	line-height: 150%;
 }
 
 .ui-dialog .smartgroupname {
@@ -135,16 +139,17 @@
 	width: 250px;
 }
 
-.ui-dialog #poll-question label{
-	position: relative;
-	top: -95px;
-}
-
 .ui-dialog #poll-question textarea{
-	width: 50%;
+	display: block;
+	width: 100%;
 	min-height: 100px;
 }
 
 .ui-dialog .field-enabled{
 	font-weight: bolder;
+}
+
+#new-activity-choices {
+	padding: 0;
+	margin: 0;
 }

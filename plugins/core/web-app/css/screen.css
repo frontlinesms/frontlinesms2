@@ -280,7 +280,7 @@ a {
 	float: right;
 }
 .section-header .button-list .activity-btn{
-	width: 216px;
+	min-width: 150px;
 	float: right;
 	display: block;
 }
