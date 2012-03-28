@@ -41,7 +41,6 @@
 	overflow: hidden;
 	height: 25px;
 	min-width: 150px;
-	width: 50%;
 }
 
 .ui-selectmenu-status {
@@ -52,8 +51,9 @@
 	border-right: 1px solid #6b6b6b;
 	border-radius: 2px;
 	height: 21px;
-	padding: 5px 26px 0 10px;
+	padding: 5px 10px 0 10px;
 	text-align: left;
+	max-width: 160px;
 }
 .ui-selectmenu-status:hover{
 	background-image: url("../../../images/buttons/button_hover_part.png");
@@ -74,7 +74,7 @@
 }
 #message-detail .ui-icon-triangle-1-s{
 	position:relative;
-	left: 160px;
+	left: 130px;
 	top: -15px;
 }
 .activity-btn .ui-icon-triangle-1-s, .poll-btn .ui-icon-triangle-1-s, .trash .ui-icon-triangle-1-s, #contact-header .ui-icon-triangle-1-s{

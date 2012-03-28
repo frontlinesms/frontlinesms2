@@ -114,6 +114,7 @@
 .ui-dialog .info {
 	padding: 0 0 20px 0;
 	line-height: 150%;
+	margin: 0;
 }
 
 .ui-dialog .smartgroupname {

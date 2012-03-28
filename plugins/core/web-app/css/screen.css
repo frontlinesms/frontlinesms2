@@ -449,16 +449,18 @@ animation: newMessage 2s;
 #no-messages{
 	height: 10%;
 	min-height: 50px;
-	width: 340px;
+	width: 200px;
 	margin-right: auto;
 	margin-left: auto;
+	padding: 10px;
 }
 #messages #no-search-description{
 	height: 10%;
 	min-height: 50px;
-	width: 500px;
+	width: 300px;
 	margin-right: auto;
 	margin-left: auto;
+	padding: 10px;
 }
 
 #message-list .message-preview td a, #message-list th a{
