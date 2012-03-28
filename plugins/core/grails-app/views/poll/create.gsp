@@ -13,7 +13,7 @@
 		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
 	</ol>
 
-	<g:render template="/poll/new_poll_form" plugin="core"/>
+	<g:render template="../poll/new_poll_form" plugin="core"/>
 </div>
 
 <g:javascript>

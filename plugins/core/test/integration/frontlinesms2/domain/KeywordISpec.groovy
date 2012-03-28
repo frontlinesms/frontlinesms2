@@ -2,20 +2,23 @@ package frontlinesms2.domain
 
 import frontlinesms2.*
 
+import spock.lang.*
+
 class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
+	private static final def SIMPLE_ACTIVITY = new Activity(name:'whatever')
+	
+	@Unroll
 	def "Keyword must have a value and an Activity"() {
-		when:
-			def k = new Keyword()
-		then:
-			!k.validate()
-		when:
-			k.activity = new Activity(name:'whatever')
-		then:
-			!k.validate()
-		when:
-			k.value = "test"
-		then:
-			k.validate()
+		given:
+			def k = new Keyword(value:word, activity:activity)
+		expect:
+			k.validate() == valid
+		where:
+			word | activity | valid
+			null | null | false
+			null | SIMPLE_ACTIVITY | false
+			'test' | null | false
+			'test' | SIMPLE_ACTIVITY | true
 	}
 	
 	def "keyword ust be unique unless its activity is archived"() {
@@ -25,7 +28,6 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 			def activity1 = new Autoreply(name:'whatever1', autoreplyText: '1', archived: false, keyword: k1).save(flush:true, failOnError:true)
 			def activity2 = new Autoreply(name:'whatever2', autoreplyText: '2', archived: false, keyword: k2).save(flush: true)
 		then:
-			println Keyword.getAll()
 			!k1.validate()
 			!k2.validate()
 		when:

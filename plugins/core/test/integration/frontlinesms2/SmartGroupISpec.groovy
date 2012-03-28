@@ -21,7 +21,7 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 		(kenyan + english).each {
 			def notes = it[2] ?: ''
 			def email = it[3] ?: ''
-			new Contact(name:it[0], primaryMobile:it[1], notes:notes, email:email).save(failOnError:true, flush:true)
+			new Contact(name:it[0], mobile:it[1], notes:notes, email:email).save(failOnError:true, flush:true)
 		}
 	}
 	
@@ -107,9 +107,9 @@ class SmartGroupISpec extends grails.plugin.spock.IntegrationSpec {
 			def customFieldA = new CustomField(name:"location", value:"ken").save(flush:true)
 			
 			def smartGroup = new SmartGroup(name:'English contacts', customFields:[customFieldA]).save(flush:true, failOnError:true)
-			def testContact1 = createContact(name:'Alfred', primaryMobile:'+4423456789')
-			def testContact2 = createContact(name:'Charles', primaryMobile:'+442987654')
-			def testContact3 = createContact(name:'Bernadette', primaryMobile:'+3323+4456789')
+			def testContact1 = createContact(name:'Alfred', mobile:'+4423456789')
+			def testContact2 = createContact(name:'Charles', mobile:'+442987654')
+			def testContact3 = createContact(name:'Bernadette', mobile:'+3323+4456789')
 			
 			testContact1.addToCustomFields(new CustomField(name:"location", value:"Kenya"))
 			testContact1.addToCustomFields(new CustomField(name:"city", value:"Dar es Salaam"))

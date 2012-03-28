@@ -20,19 +20,11 @@
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
 	<div class="basic-info">
-		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
-		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
-		<g:if test="${contactInstance?.primaryMobile?.trim()}">
-			<a class="remove-field" id="remove-primaryMobile"></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">&nbsp;
-			</g:remoteLink>
-		</g:if>
-	</div>
-	<div class="basic-info">
-		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
-		<g:textField class="numberField" name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
-		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
+		<label for="mobile"><g:message code="contact.mobile.label" default="Mobile"/></label>
+		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
+		<g:if test="${contactInstance?.mobile?.trim()}">
+			<a class="remove-field" id="remove-mobile"></a>
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
 			</g:remoteLink>
 		</g:if>
 	</div>

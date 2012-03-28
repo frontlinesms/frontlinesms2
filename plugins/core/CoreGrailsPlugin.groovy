@@ -1,5 +1,5 @@
 class CoreGrailsPlugin {
-    def version = "0.a5-SNAPSHOT"
+    def version = "0.a6-SNAPSHOT"
     def grailsVersion = "1.3.7 > *"
     def dependsOn = ["csv":"0.3.1","jquery":"1.6.1.1","routing":"1.1.2-frontlinesms"]
     def pluginExcludes = ["grails-app/views/error.gsp"]
