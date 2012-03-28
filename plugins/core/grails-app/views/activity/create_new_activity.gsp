@@ -31,6 +31,10 @@
 					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span class="activity-choice">Poll</span>
 					<div class="activity-description">Send a question and analyze the responses</div>
 				</li>
+				<li class="activity-list-item">
+					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')" /><span class="activity-choice">Autoreply</span>
+					<div class="activity-description">Automatically respond to incoming messages</div>
+				</li>
 			</ul>
 		</form>
 	</body>

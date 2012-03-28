@@ -59,7 +59,7 @@ function exportAction() {
 	$.ajax({
 		type:'GET',
 		url: url_root + 'export/messageWizard',
-		data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(), activityId: $("#activityId").val(),
+		data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(),
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
 				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
 		success: function(data) {

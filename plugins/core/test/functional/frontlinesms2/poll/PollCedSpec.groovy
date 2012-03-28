@@ -102,9 +102,9 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			pollForm.autoReplyText().disabled
+			pollForm.autoreplyText().disabled
 		when:
-			pollForm.enableAutoReply = true
+			pollForm.enableAutoreply = true
 			next.click()
 		then:
 			autoReplyTab.displayed
@@ -175,26 +175,26 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { autoReplyTab.displayed }
-			pollForm.autoReplyText().disabled
+			pollForm.autoreplyText().disabled
 		when:
-			pollForm.enableAutoReply = true
+			pollForm.enableAutoreply = true
 		then:
-			waitFor { !pollForm.autoReplyText().disabled }
+			waitFor { !pollForm.autoreplyText().disabled }
 		when:
 			
-			pollForm.autoReplyText = "Thanks for participating..."
+			pollForm.autoreplyText = "Thanks for participating..."
 		then:
 			waitFor {
 				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
-				pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
+				pollForm.autoreplyText().jquery.val() == "Thanks for participating..."
 			}
 		when:
-			pollForm.enableAutoReply = false
+			pollForm.enableAutoreply = false
 		then:	
-			waitFor { pollForm.autoReplyText().disabled }
-			pollForm.autoReplyText().jquery.val() == "Thanks for participating..."
+			waitFor { pollForm.autoreplyText().disabled }
+			pollForm.autoreplyText().jquery.val() == "Thanks for participating..."
 		when:
-			pollForm.enableAutoReply = true
+			pollForm.enableAutoreply = true
 			next.click()
 		then:
 			waitFor { editMessageTab.displayed }
@@ -228,6 +228,7 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { Poll.findByName("Coffee Poll") }
 	}
 
+	@spock.lang.IgnoreRest
 	def "can enter instructions for the poll and allow user to edit message"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
@@ -329,7 +330,10 @@ class PollCedSpec extends PollBaseSpec {
 	
 	def "can launch export popup"() {
 		when:
-			Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.save(failOnError:true, flush:true)
 			go 'message/inbox'
 		then:
 			at PageMessageInbox
@@ -345,7 +349,10 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "can rename a poll"() {
 		given:
-			Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
 			$("a", text: "Who is badder? poll").click()
@@ -412,7 +419,10 @@ class PollCedSpec extends PollBaseSpec {
 	
 	def "user can edit an existing poll"() {
 		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'choiceA', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'choiceB', value: 'Chuck-Norris')
+			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
 			$("a", text: "Who is badder? poll").click()
@@ -424,7 +434,7 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { $("#ui-dialog-title-modalBox").displayed }
 			at PagePollEdit
 			pollForm.question == 'question'
-			pollForm.'poll-type' == "multiple"
+			pollForm.pollType == "multiple"
 		when:
 			pollForm.question = "Who is worse?"
 			pollForm."dontSendMessage" = false
@@ -454,7 +464,11 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def deletePoll() {
-		def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question", autoReplyText: "Thanks").save(failOnError:true, flush:true)
+		def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+		poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+		poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+		poll.addToResponses(key: 'Unknown', value: 'Unknown')
+		poll.save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
 		$(".button-list #more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
@@ -470,7 +484,7 @@ class PollCedSpec extends PollBaseSpec {
 		$("input", class: "poll").click()
 		$("#submit").click()
 		waitFor(10) { at PagePollCreate }
-		pollForm.'poll-type' = pollType
+		pollForm.pollType = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage
 		next.click()
