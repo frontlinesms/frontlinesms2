@@ -9,7 +9,7 @@ class ContactSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Contact)
 		expect:
-			new Contact(name:name, primaryMobile:mobile).validate() == valid
+			new Contact(name:name, mobile:mobile).validate() == valid
 		where:
 			name | mobile | valid
 			null | null | false
@@ -40,7 +40,7 @@ class ContactSpec extends UnitSpec {
 		given:
 			mockForConstraintsTests(Contact)
 		expect:
-			new Contact(email:email, name:'alice', primaryMobile:'123').validate() == valid
+			new Contact(email:email, name:'alice', mobile:'123').validate() == valid
 		where:
 			email | valid
 			null | true
@@ -53,9 +53,9 @@ class ContactSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Contact)
 		when:
-			def noNameContact = new Contact(name:'', primaryMobile:'9876543')
+			def noNameContact = new Contact(name:'', mobile:'9876543')
 			def namedContact = new Contact(name:'a')
-			def noInfoContact = new Contact(name:'', primaryMobile:'')
+			def noInfoContact = new Contact(name:'', mobile:'')
 		then:
 			noNameContact.validate()
 			namedContact.validate()

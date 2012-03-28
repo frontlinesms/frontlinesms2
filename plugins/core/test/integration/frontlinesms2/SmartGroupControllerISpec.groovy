@@ -251,6 +251,6 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 		
 	private def createContact(String name, String mobile) {
-		new Contact(name:name, primaryMobile:mobile).save(flush:true, failOnError:true)
+		new Contact(name:name, mobile:mobile).save(flush:true, failOnError:true)
 	}
 }

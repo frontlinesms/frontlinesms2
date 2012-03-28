@@ -145,7 +145,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	// TODO please rename this test to something more intelligible, or add comments to explain what it tests
 	def "should update contact when optional fields are removed" () {
 		given: 
-			def tom = new Contact(name:'Tom', primaryMobile:'09876543', email:'tom@tom.com').save(failOnError:true, flush:true)
+			def tom = new Contact(name:'Tom', mobile:'09876543', email:'tom@tom.com').save(failOnError:true, flush:true)
 		when:
 			controller.params.contactId = tom.id
 			controller.params.groupsToAdd = ","
@@ -161,8 +161,8 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "checkForDuplicates returns any contact whose number ends with the string of numbers it is given"() {
 		when:
-			def alice = new Contact(name: "Alice", primaryMobile: "12345").save(flush: true)
-			def bob = new Contact(name: "Bob", primaryMobile: "54321").save(flush: true)
+			def alice = new Contact(name: "Alice", mobile: "12345").save(flush: true)
+			def bob = new Contact(name: "Bob", mobile: "54321").save(flush: true)
 			controller.params.number = '5678'
 			controller.checkForDuplicates()
 		then:
@@ -176,7 +176,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "getMessageStats returns the correct number of messages for a given contact"() {
 		setup:
-			def contact =new Contact(name:'Bob', primaryMobile:"1234567").save(failOnError:true, flush:true)
+			def contact =new Contact(name:'Bob', mobile:"1234567").save(failOnError:true, flush:true)
 			new Fmessage(src: '1234567', read:true, date: new Date(), inbound:true).save(failOnError: true, flush:true)
 		when:
 			controller.params.id = contact.id

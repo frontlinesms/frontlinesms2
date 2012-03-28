@@ -20,11 +20,11 @@
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
 	<div class="basic-info">
-		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
-		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
-		<g:if test="${contactInstance?.primaryMobile?.trim()}">
-			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
+		<label for="mobile"><g:message code="contact.mobile.label" default="Mobile"/></label>
+		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
+		<g:if test="${contactInstance?.mobile?.trim()}">
+			<a class="remove-field" id="remove-mobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
 				<img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>

@@ -76,7 +76,7 @@ class Dispatch {
 		messageCount { contact ->
 			and {
 				eq('isDeleted', false)
-				if(contact.primaryMobile) 'in'('dst', contact.primaryMobile)
+				if(contact.mobile) 'in'('dst', contact.mobile)
 			}
 		}
 	}

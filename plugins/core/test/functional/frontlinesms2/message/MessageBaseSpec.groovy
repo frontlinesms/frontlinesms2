@@ -54,12 +54,12 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createTestContacts() {	
-		[new Contact(name: 'Alice', primaryMobile: '+254778899'),
-			new Contact(name: 'Bob', primaryMobile: '+254987654')].each() { it.save(flush:true, failOnError:true) }
+		[new Contact(name: 'Alice', mobile: '+254778899'),
+			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(flush:true, failOnError:true) }
 	}
 	
 	static createTestData() {
-		[new Contact(name: 'Bob', primaryMobile: '+254987654')].each() {it.save(flush:true, failOnError:true)}
+		[new Contact(name: 'Bob', mobile: '+254987654')].each() {it.save(flush:true, failOnError:true)}
 		
 		[new Fmessage(src:'Bob',text:'hi Bob'),
 				new Fmessage(src:'Alice', text:'hi Alice'),

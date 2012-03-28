@@ -84,7 +84,7 @@ class CoreBootStrap {
 		createContact("Kate", "+198730948")
 
 		(1..101).each {
-			new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
+			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
 		}
 		
 		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
@@ -272,7 +272,7 @@ class CoreBootStrap {
 	}
 
 	private def createContact(String n, String a) {
-		def c = new Contact(name: n, primaryMobile: a)
+		def c = new Contact(name: n, mobile: a)
 		c.save(failOnError: true)
 	}
 	

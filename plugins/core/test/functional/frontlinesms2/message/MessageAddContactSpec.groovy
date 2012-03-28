@@ -12,7 +12,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${contactlessMessage.id}"
 		then:
-			!Contact.findByPrimaryMobile(contactlessMessage.src)
+			!Contact.findByMobile(contactlessMessage.src)
 	}
 	
 	def 'add contact button is displayed and redirects to create contacts page with number field prepopulated'() {
@@ -24,6 +24,6 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			$('#message-detail-sender a').click()
 		then:
 			waitFor(10) {$('title').text() == 'Contacts'}
-			$('#details').primaryMobile == "+254778899"
+			$('#details').mobile == "+254778899"
 	}
 }

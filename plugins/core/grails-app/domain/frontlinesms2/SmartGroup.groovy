@@ -57,7 +57,7 @@ class SmartGroup {
 		}
 		
 		if(mobile) {
-			w << "c.primaryMobile LIKE :mobile"
+			w << "c.mobile LIKE :mobile"
 			p.mobile = "$mobile%"
 		}
 		
@@ -100,6 +100,6 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 	}
 	
 	def getAddresses() {
-		(getMembers()*.primaryMobile) - [null, '']
+		(getMembers()*.mobile) - [null, '']
 	}
 }

@@ -143,27 +143,27 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			lucy.addToGroups(haskell)
 			
 			(TEST_DATE-6..TEST_DATE+5).each { date ->
-				new Fmessage(date:date, src:jessy.primaryMobile, inbound:true,
+				new Fmessage(date:date, src:jessy.mobile, inbound:true,
 								text:"A message received on $date")
 						.save(failOnError:true, flush:true)
 				new Fmessage(date:date, src:'1234567890', hasSent:true,
 								text:"A message sent on $date")
 						// this dispatch should be counted because Jessy is in the target group
-						.addToDispatches(new Dispatch(dst:jessy.primaryMobile, status:DispatchStatus.SENT, dateSent:date))
+						.addToDispatches(new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
 						.save(failOnError:true, flush:true)
 			}
 			
 			3.times {
-				new Fmessage(date:TEST_DATE-1, src:jessy.primaryMobile, inbound:true, text: "Message {it}")
+				new Fmessage(date:TEST_DATE-1, src:jessy.mobile, inbound:true, text: "Message {it}")
 						.save(failOnError:true, flush:true)
 			}
 			
 			5.times {
 				new Fmessage(date:TEST_DATE, src:'0000000', hasSent:true, text:"Message {it}")
 						// this dispatch should be counted because Jessy is in the target group
-						.addToDispatches(new Dispatch(dst:jessy.primaryMobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
+						.addToDispatches(new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
 						// this dispatch should be ignored because Lucy is not in the target group
-						.addToDispatches(new Dispatch(dst:lucy.primaryMobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
+						.addToDispatches(new Dispatch(dst:lucy.mobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
 						.save(failOnError:true, flush:true)
 			}
 
@@ -179,7 +179,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "new messages displayName are automatically given the matching contacts name"() {
 		setup:
-			new Contact(name:"Alice", primaryMobile:"1234")
+			new Contact(name:"Alice", mobile:"1234")
 					.save(failOnError:true, flush:true)
 		when:
 			def messageFromPrimaryNumber = new Fmessage(src:"1234", inbound:true, date:TEST_DATE)
@@ -211,7 +211,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.displayName == '1'
 			!message.contactExists
 		when:
-			new Contact(name:"Alice", primaryMobile:'1').save(failOnError:true, flush:true)
+			new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
 			message.refresh()
 		then:
 			message.displayName == "Alice"
@@ -220,13 +220,13 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
-			def alice = new Contact(name:"Alice", primaryMobile:'1').save(failOnError:true, flush:true)
+			def alice = new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'1', inbound:true, date:TEST_DATE).save(failOnError:true, flush:true)
 		then:
 			message.displayName == 'Alice'
 			message.contactExists
 		when:
-			alice.primaryMobile = '3'
+			alice.mobile = '3'
 			alice.save(failOnError:true, flush:true)
 			message.refresh()
 		then:
@@ -305,7 +305,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	def createContact(String n, String a) {
-		def c = new Contact(name: n, primaryMobile: a)
+		def c = new Contact(name: n, mobile: a)
 		c.save(failOnError: true)
 	}
 

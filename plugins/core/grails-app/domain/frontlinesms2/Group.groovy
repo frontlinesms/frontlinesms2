@@ -26,7 +26,7 @@ class Group {
 	}
 	
 	def getAddresses() {
-		(getMembers()*.primaryMobile) - [null, '']
+		(getMembers()*.mobile) - [null, '']
 	}
 
 	static HashMap<String, List<String>> getGroupDetails() {

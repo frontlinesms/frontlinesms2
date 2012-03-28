@@ -2,7 +2,7 @@ package frontlinesms2
 
 class Contact {
 	String name
-	String primaryMobile
+	String mobile
 	String email
 	String notes
 
@@ -10,9 +10,9 @@ class Contact {
 	
 	static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
-			val || obj.primaryMobile
+			val || obj.mobile
 		})
-		primaryMobile(unique: true, nullable: true, validator: { val, obj ->
+		mobile(unique: true, nullable: true, validator: { val, obj ->
 			val || obj.name
 		})
 		email(unique:false, nullable:true, email:true)
@@ -36,16 +36,16 @@ class Contact {
 	}
 	
 	def afterInsert = {
-		if(primaryMobile) {
+		if(mobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
 				updateDispatchInfo()
 			}
 		}
 	}
 	
 	def beforeUpdate = {
-		final def oldMobile = isDirty('primaryMobile')? getPersistentValue('primaryMobile'): null
+		final def oldMobile = isDirty('mobile')? getPersistentValue('mobile'): null
 		if(oldMobile) {
 			Fmessage.withNewSession { session ->
 				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE m.src=?", [false, oldMobile])
@@ -55,13 +55,13 @@ class Contact {
 	}
 
 	def afterUpdate = {
-		println "afterUpdate() : ENTRY : primaryMobile=$primaryMobile"
-		println "afterUpdate() : primaryMobile.dirty=${isDirty('primaryMobile')}"
-		if(primaryMobile) {
+		println "afterUpdate() : ENTRY : mobile=$mobile"
+		println "afterUpdate() : mobile.dirty=${isDirty('mobile')}"
+		if(mobile) {
 			println "afterUpdate() : creating new session..."
 			Fmessage.withNewSession { session ->
 				println "afterUpdate() : inside new session..."
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, primaryMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
 				updateDispatchInfo()
 			}
 		}
@@ -69,8 +69,8 @@ class Contact {
 	}
 	
 	private def updateDispatchInfo() {
-		if(primaryMobile) {
-			Dispatch.findAllByDst(primaryMobile).each {
+		if(mobile) {
+			Dispatch.findAllByDst(mobile).each {
 				it.message.displayName = "To: " + name
 				it.message.contactExists = true
 			}
@@ -107,23 +107,23 @@ class Contact {
 	}
 
 	def getInboundMessagesCount() {
-		primaryMobile ? Fmessage.countBySrcAndIsDeleted(primaryMobile, false) : 0
+		mobile ? Fmessage.countBySrcAndIsDeleted(mobile, false) : 0
 	}
 
 	def getOutboundMessagesCount() {
-		primaryMobile? Dispatch.messageCount(this).count(): 0
+		mobile? Dispatch.messageCount(this).count(): 0
 	}
 	
 	def stripNumberFields() {
-		def n = primaryMobile?.replaceAll(/\D/, '')
-		if(primaryMobile && primaryMobile[0] == '+') n = '+' + n
-		primaryMobile = n
+		def n = mobile?.replaceAll(/\D/, '')
+		if(mobile && mobile[0] == '+') n = '+' + n
+		mobile = n
 	}
 	
 	private def removeFmessageDisplayName() {
-		if(primaryMobile) {
+		if(mobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [mobile, false, mobile])
 				updateDispatchInfo()
 			}
 		}

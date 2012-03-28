@@ -18,6 +18,10 @@
 						<g:set var="contactLinkParams" value="[smartGroupId:contactsSection.id]"/>
 					</g:elseif>
 					<g:else><g:set var="contactLinkParams" value="[:]"/></g:else>
+					<g:link class="displayName-${c.id} contact-name" action="show" params="${contactLinkParams + [contactId:c.id, sort:params.sort, offset:params.offset]}">
+						${c.name?:c.mobile?:'[No Name]'}
+					</g:link>
+
 				</li>
 			</g:each>
 		</ul>

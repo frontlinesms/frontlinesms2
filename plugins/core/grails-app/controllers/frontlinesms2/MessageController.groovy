@@ -158,7 +158,7 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				messageInstance.dispatches.each { 
 					if(it.status == DispatchStatus.FAILED) { 
-						dst << Contact.findByPrimaryMobile(it.dst)?.name ?: it.dst
+						dst << Contact.findByMobile(it.dst)?.name ?: it.dst
 					}
 				}
 				messageSendService.retry(messageInstance)
@@ -296,7 +296,7 @@ class MessageController {
 				}
 			}
 			message.dispatches.each {
-				Contact c = Contact.findByPrimaryMobile(it.dst)
+				Contact c = Contact.findByMobile(it.dst)
 				if(c) {
 					contactList += "${c.name} (${it.status})"
 					addressList -= it

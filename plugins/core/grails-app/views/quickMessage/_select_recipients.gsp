@@ -22,8 +22,8 @@
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact">
 				<li class="contact">
-					<input type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
-					${contact.name ?: contact.primaryMobile}
+					<input type="checkbox" name="addresses" value="${contact.mobile}" <g:if test="${recipients.contains(contact.mobile)}">checked</g:if>>
+					${contact.name ?: contact.mobile}
 				</li>
 				<li class="contact">
 					<g:if test="${recipients.contains(contact.email)}">
