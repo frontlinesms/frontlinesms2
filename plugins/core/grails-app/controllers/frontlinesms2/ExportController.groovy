@@ -97,8 +97,8 @@ class ExportController {
 	private def generateContactReport(contactInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "name", "primaryMobile", "secondaryMobile", "email", "notes"]
-		Map labels = ["id":"DatabaseID", "name":"Name", "primaryMobile":"Primary Mobile", "secondaryMobile":"Secondary Mobile", "email":"Email", "notes":"Notes"]
+		List fields = ["id", "name", "primaryMobile", "email", "notes"]
+		Map labels = ["id":"DatabaseID", "name":"Name", "primaryMobile":"Primary Mobile", "email":"Email", "notes":"Notes"]
 		Map parameters = [title: "FrontlineSMS Contact Export"]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try{

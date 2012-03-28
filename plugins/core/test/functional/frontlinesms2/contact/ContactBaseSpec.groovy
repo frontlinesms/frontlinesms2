@@ -6,7 +6,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestContacts() {
 		new Contact(name: 'Alice', primaryMobile: '2541234567', notes: 'notes').save(failOnError:true, flush: true)
-		new Contact(name: 'Bob', primaryMobile: '+254987654', secondaryMobile: "+232345675", email: "bob@bob.com").save(failOnError:true, flush: true)
+		new Contact(name: 'Bob', primaryMobile: '+254987654', email: "bob@bob.com").save(failOnError:true, flush: true)
 	}
 	
 	static createTestMessages() {

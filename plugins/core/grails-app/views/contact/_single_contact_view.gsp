@@ -29,16 +29,6 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-	<div class="basic-info">
-		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
-		<g:textField class="numberField" name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
-		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
-			<a class="remove-field" id="remove-secondaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
-				<img src='${resource(dir:'images/icons',file:'send.png')}' />
-			</g:remoteLink>
-		</g:if>
-	</div>
    	<div class="basic-info">
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>

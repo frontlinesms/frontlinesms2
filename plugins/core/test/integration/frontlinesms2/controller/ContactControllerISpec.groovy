@@ -142,20 +142,21 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.nonSharedGroupInstanceList == [g]
 	}
 	
+	// TODO please rename this test to something more intelligible, or add comments to explain what it tests
 	def "should update contact when optional fields are removed" () {
 		given: 
-			def tom = new Contact(name: 'Tom', primaryMobile: '09876543', secondaryMobile:'23456789', email: 'tom@tom.com').save(failOnError: true, flush: true)
+			def tom = new Contact(name:'Tom', primaryMobile:'09876543', email:'tom@tom.com').save(failOnError:true, flush:true)
 		when:
 			controller.params.contactId = tom.id
 			controller.params.groupsToAdd = ","
 			controller.params.groupsToRemove = ","
 			controller.params.fieldsToAdd = ","
 			controller.params.fieldsToRemove = ","
-			tom.secondaryMobile = null
+			tom.email = null
 			controller.update()	
 			tom.refresh()		
 		then:
-			tom.secondaryMobile == null
+			tom.email == null
 	}
 	
 	def "checkForDuplicates returns any contact whose number ends with the string of numbers it is given"() {

@@ -41,7 +41,7 @@ class ContactISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			String georgesAddress = "1234567890"
 			String georgeAddress2 = "0987654151"
-			Contact contact = new Contact(name: "George", primaryMobile: georgesAddress, secondaryMobile: georgeAddress2).save(flush:true)
+			Contact contact = new Contact(name:"George", primaryMobile:georgesAddress).save(flush:true)
 			[new Fmessage(src: georgesAddress, isDeleted: false, inbound: true, date: new Date()),
 					new Fmessage(src: georgesAddress, isDeleted: true, inbound: true, date: new Date()),
 					new Fmessage(src: georgesAddress, isDeleted: false, inbound: true, date: new Date()),

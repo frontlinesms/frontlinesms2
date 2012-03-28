@@ -19,19 +19,18 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			createContact('Bernadette', '+3323+4456789')
 			createContact('Charles', '+440987654')
 			createContact('Dupont', '+33098765432')
-			createContact('Edgar de Gaulle', '+33098764677', '+44662848484')
 		when:
 			controller.params.smartGroupId = englishContacts.id
 			def model = controller.show()
 		then:
-			model.contactInstanceList*.name == ['Alfred', 'Charles', 'Edgar de Gaulle']
-			model.contactInstanceTotal == 3
+			model.contactInstanceList*.name == ['Alfred', 'Charles']
+			model.contactInstanceTotal == 2
 		when:
 			controller.params.searchString = 'ED'
 			model = controller.show()
 		then:
-			model.contactInstanceList*.name == ['Alfred', 'Edgar de Gaulle']
-			model.contactInstanceTotal == 2
+			model.contactInstanceList*.name == ['Alfred']
+			model.contactInstanceTotal == 1
 	}
 	
 	def 'CREATE returns a smartgroup instance'() {
@@ -97,8 +96,8 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			createContact('Bernadette', '+3323+4456789')
 			createContact('Charles', '+440987654')
 			createContact('Dupont', '+33098765432')
-			createContact('Edgar de Gaulle', '+33098764677', '+44662848484')
-			assert englishContacts.members*.name == ["Bernadette", "Dupont", "Edgar de Gaulle"]
+			createContact('Edgar de Gaulle', '+33098764677')
+			assert englishContacts.members*.name == ["Bernadette", "Dupont", 'Edgar de Gaulle']
 		when:
 			controller.params.smartgroupname = 'Londons'
 			controller.params.id = "${englishContacts.id}"
@@ -106,7 +105,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.'rule-field' = "mobile"
 			controller.save()
 		then:
-			englishContacts.members*.name.sort() == ['Alfred', 'Charles', 'Edgar de Gaulle']
+			englishContacts.members*.name.sort() == ['Alfred', 'Charles']
 	}
 	
 	def 'can remove existing smartgroup mobile rules'() {
@@ -142,9 +141,8 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			testContact3.notes = "this is a test"
 			testContact3.save(flush:true)
 			createContact('Dupont', '+33098765432')
-			createContact('Edgar de Gaulle', '+33098764677', '+44262848484')
+			createContact('Edgar de Gaulle', '+33098764677')
 			assert englishContacts.members*.name == ["Bernadette"]
-			
 		when:
 			controller.params.smartgroupname = 'Londons'
 			controller.params.id = "${englishContacts.id}"
@@ -252,7 +250,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			smartGroup.mobile == '+789'			
 	}
 		
-	private def createContact(String name, String mobile, String secondaryMobile=null) {
-		new Contact(name:name, primaryMobile:mobile, secondaryMobile:secondaryMobile).save(flush:true, failOnError:true)
+	private def createContact(String name, String mobile) {
+		new Contact(name:name, primaryMobile:mobile).save(flush:true, failOnError:true)
 	}
 }

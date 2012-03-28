@@ -10,12 +10,12 @@
 			<g:each in="${groupList}" var="entry">
 				<li class="group">
 					<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", ${entry.value as JSON})'>
-					${entry.key}(${entry.value.size()}) <br/>
+					${entry.key}(${entry.value.size()})
 				</li>
 			</g:each>
 			<g:each in="${nonExistingRecipients}" var="address">
 				<li>
-					<input type="checkbox" name="addresses" value="${address}" checked>${address} <br/>
+					<input type="checkbox" name="addresses" value="${address}" checked>${address}
 				</li>
 			</g:each>
 		</ul>
@@ -23,18 +23,12 @@
 			<g:each in="${contactList}" var="contact">
 				<li class="contact">
 					<input type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
-					${contact.name ?: contact.primaryMobile} <g:if test="${recipients.contains(contact.secondaryMobile) || recipients.contains(contact.email)}">(Primary)</g:if><br/>
-				</li>
-				<li class="contact">
-					<g:if test="${recipients.contains(contact.secondaryMobile)}">
-						<input type="checkbox" name="addresses" value="${contact.secondaryMobile}" checked>
-						${contact.name ?: contact.secondaryMobile} (Secondary)<br/>
-					</g:if>
+					${contact.name ?: contact.primaryMobile}
 				</li>
 				<li class="contact">
 					<g:if test="${recipients.contains(contact.email)}">
 						<input type="checkbox" name="addresses" value="${contact.email}" checked>
-						${contact.name ?: contact.email} (Email)<br/>
+						${contact.name ?: contact.email} (Email)
 					</g:if>
 				</li>
 			</g:each>

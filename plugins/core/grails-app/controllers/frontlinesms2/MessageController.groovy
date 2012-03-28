@@ -158,7 +158,7 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				messageInstance.dispatches.each { 
 					if(it.status == DispatchStatus.FAILED) { 
-						dst << Contact.findByPrimaryMobile(it.dst)?.name ?: Contact.findBySecondaryMobile(it.dst)?.name ?: it.dst
+						dst << Contact.findByPrimaryMobile(it.dst)?.name ?: it.dst
 					}
 				}
 				messageSendService.retry(messageInstance)
@@ -296,9 +296,9 @@ class MessageController {
 				}
 			}
 			message.dispatches.each {
-				if(Contact.findByPrimaryMobile(it.dst) || Contact.findBySecondaryMobile(it.dst)) {
-					contactList += Contact.findByPrimaryMobile(it.dst) ? "${Contact.findByPrimaryMobile(it.dst).name} (${it.status})" : null
-					contactList += Contact.findBySecondaryMobile(it.dst) ? "${Contact.findBySecondaryMobile(it.dst).name} (${it.status})" : null
+				Contact c = Contact.findByPrimaryMobile(it.dst)
+				if(c) {
+					contactList += "${c.name} (${it.status})"
 					addressList -= it
 				}
 			}

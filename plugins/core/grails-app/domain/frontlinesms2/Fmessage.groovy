@@ -280,8 +280,7 @@ class Fmessage {
 		Contact c
 		if(inbound) {
 			if(src &&
-					(c = Contact.findByPrimaryMobile(src)?:
-							Contact.findBySecondaryMobile(src))) {
+					(c = Contact.findByPrimaryMobile(src))) {
 				displayName = c.name
 				contactExists = true
 			} else {
@@ -291,8 +290,7 @@ class Fmessage {
 		} else {
 			if(dispatches?.size() == 1) {
 				def dst = dispatches.dst[0]
-				if((c = Contact.findByPrimaryMobile(dst)) ||
-						(c = Contact.findBySecondaryMobile(dst))) {
+				if((c = Contact.findByPrimaryMobile(dst))) {
 					displayName = "To: " + c.name
 					contactExists = true
 				} else {

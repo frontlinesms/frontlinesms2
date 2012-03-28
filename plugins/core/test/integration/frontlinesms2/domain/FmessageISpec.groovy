@@ -179,24 +179,17 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "new messages displayName are automatically given the matching contacts name"() {
 		setup:
-			new Contact(name:"Alice", primaryMobile:"1234", secondaryMobile:"4321")
+			new Contact(name:"Alice", primaryMobile:"1234")
 					.save(failOnError:true, flush:true)
 		when:
 			def messageFromPrimaryNumber = new Fmessage(src:"1234", inbound:true, date:TEST_DATE)
 					.save(failOnError:true, flush:true)
-			def messageFromSecondaryNumber = new Fmessage(src:"4321", inbound:true, date:TEST_DATE)
-					.save(failOnError:true, flush:true)
 			def outBoundMessageToPrimaryNo = new Fmessage(hasSent:true, date: TEST_DATE, text:"")
 					.addToDispatches(new Dispatch(dst:"1234", status:DispatchStatus.SENT, dateSent:TEST_DATE))
 					.save(failOnError:true, flush:true)
-			def outBoundMessageToSecondayNo = new Fmessage(hasSent:true, date: TEST_DATE, text:"")
-					.addToDispatches(new Dispatch(dst:"4321", status:DispatchStatus.SENT, dateSent:TEST_DATE))
-					.save(failOnError:true, flush:true)
 		then:
-			[messageFromPrimaryNumber,
-					messageFromSecondaryNumber]*.displayName.every {it == "Alice" }
-			[outBoundMessageToPrimaryNo,
-					outBoundMessageToSecondayNo]*.displayName.every {it == "To: Alice" }
+			[messageFromPrimaryNumber]*.displayName.every {it == "Alice" }
+			[outBoundMessageToPrimaryNo]*.displayName.every {it == "To: Alice" }
 	}
 	
 	def "cannot archive a message that has an owner" () {
@@ -218,7 +211,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			message.displayName == '1'
 			!message.contactExists
 		when:
-			new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			new Contact(name:"Alice", primaryMobile:'1').save(failOnError:true, flush:true)
 			message.refresh()
 		then:
 			message.displayName == "Alice"
@@ -227,7 +220,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
-			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
+			def alice = new Contact(name:"Alice", primaryMobile:'1').save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'1', inbound:true, date:TEST_DATE).save(failOnError:true, flush:true)
 		then:
 			message.displayName == 'Alice'
@@ -239,53 +232,6 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			message.displayName == '1'
 			!message.contactExists
-	}
-	
-	def "when a new contact is created, all messages with that contacts secondary number should be updated"() {
-		when:
-			def message = new Fmessage(src:'2', inbound:true, date:TEST_DATE).save(flush: true, failOnError:true)
-		then:
-			message.displayName == '2'
-			!message.contactExists
-		when:
-			new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
-			message.refresh()
-		then:
-			message.displayName == "Alice"
-			message.contactExists
-	}
-	
-	def "when a contact is updated, all messages with that contacts secondary number should be updated"() {
-		when:
-			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'2', inbound:true, date:TEST_DATE).save(failOnError:true, flush:true)
-		then:
-			message.displayName == 'Alice'
-			message.contactExists
-		when:
-			alice.secondaryMobile = '3'
-			alice.save(failOnError:true, flush:true)
-			message.refresh()
-		then:
-			message.displayName == '2'
-			!message.contactExists
-	}
-	
-	def "when a contact is updated and primary number is moved to secondary number messages from that number should still appear from that contact"() {
-		when:
-			def alice = new Contact(name:"Alice", primaryMobile:'1', secondaryMobile:'2').save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'1', inbound:true, date:TEST_DATE).save(failOnError:true, flush:true)
-		then:
-			message.displayName == 'Alice'
-			message.contactExists
-		when:
-			alice.primaryMobile = '3'
-			alice.secondaryMobile = '1'
-			alice.save(failOnError:true, flush:true)
-			message.refresh()
-		then:
-			message.displayName == 'Alice'
-			message.contactExists
 	}
 	
 	def "can archive message when it has no message owner" () {

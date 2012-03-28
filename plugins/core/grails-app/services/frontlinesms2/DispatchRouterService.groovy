@@ -17,7 +17,8 @@ class DispatchRouterService {
 		def log = { println "DispatchRouterService.slip() : $it" }
 		log "ENTRY"
 		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $target"
-		log "x.in.headers=$exchange.in.headers"
+		log "x.in=$exchange?.in"
+		log "x.in.headers=$exchange?.in?.headers"
 		
 		if(previous) {
 			// We only want to pass this message to a single endpoint, so if there

@@ -77,7 +77,6 @@ class Dispatch {
 			and {
 				eq('isDeleted', false)
 				if(contact.primaryMobile) 'in'('dst', contact.primaryMobile)
-				if(contact.secondaryMobile) 'in'('dst', contact.secondaryMobile)
 			}
 		}
 	}

@@ -17,13 +17,11 @@ class ContactEditSpec extends ContactBaseSpec {
 			def changingContact = Contact.findByName('Alice')
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
-			frmDetails.secondaryMobile = '+2542334567'
 			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
 			changingContact.refresh()
 			println Contact.findAll()*.name
 			changingContact.name == 'Kate'
@@ -39,7 +37,6 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShowGroupContactAlice
 			frmDetails.name = 'Kate'
 			frmDetails.primaryMobile = '+2541234567'
-			frmDetails.secondaryMobile = '+2542334567'
 			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
@@ -48,7 +45,6 @@ class ContactEditSpec extends ContactBaseSpec {
 			Contact.findByName('Kate') != null
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
 			$('#groups-submenu .selected').text() == 'Excellent'
 	}
 	
@@ -63,11 +59,6 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			!$('#remove-primaryMobile').displayed
 			!$('.basic-info .send-message').displayed
-		when:		
-			$('#update-single').click()
-		then:
-			!$("#primaryMobile").siblings('a').displayed
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+232345675')
 	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
