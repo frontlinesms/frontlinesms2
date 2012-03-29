@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.Fconnection" %>
 <g:javascript library="jquery" plugin="jquery"/>
 <jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
 <g:javascript>
@@ -15,9 +15,9 @@
 		fconnectionType = connectionType;
 		$("#type-list input[checked=checked]").attr('checked', '');
 		$("#type-list ." + connectionType).attr('checked', 'checked');
-		$("#smslib-form").css('display', 'none');
-		$("#email-form").css('display', 'none');
-		$("#clickatell-form").css('display', 'none');
+		<g:each in="${Fconnection.implementations*.shortName}">
+			$("#${it}-form").css('display', 'none');
+		</g:each>
 		$("#" + connectionType + "-form").css('display', 'inline');
 	}
 </g:javascript>
@@ -92,50 +92,43 @@ function initializePopup() {
 						&& isFieldSet('apiId')
 						&& isFieldSet('username')
 						&& isFieldSet('password');
+			} else if(checked == 'intellisms') {
+				return isFieldSet('name')
+						&& isFieldSet('username')
+						&& isFieldSet('password');
 			}
 		}
 	});
 }
 
 function getFconnectionTypeAsHumanReadable() {
-	if(fconnectionType == 'smslib') return "${g.message(code:'smslibfconnection.label')}"
-	if(fconnectionType == 'clickatell') return "${g.message(code:'clickatellfconnection.label')}"
-	if(fconnectionType == 'email') return "${g.message(code:'emailfconnection.label')}"
+	<g:each in="${Fconnection.implementations}">
+		if(fconnectionType == '${it.shortName}') return "<g:message code="${it.simpleName.toLowerCase()}.label"/>"
+	</g:each>
 }
 
 function updateConfirmationMessage() {
 	setConfirmVal('type', getFconnectionTypeAsHumanReadable());
 	setConfirmation('name');
-
-	if(fconnectionType == 'smslib') {
-		$("#email-confirm").hide();
-		$("#clickatell-confirm").hide();
-		$("#smslib-confirm").show();
-		
-		setConfirmation('port');
-		setConfirmation('baud');
-		setConfirmation('smsc');
-		setConfirmation('imsi');
-		setConfirmation('serial');
-		setSecretConfirmation('pin');
-	} else if (fconnectionType == 'email') {
-		$("#smslib-confirm").hide();
-		$("#clickatell-confirm").hide();
-		$("#email-confirm").show();
-		
-		setConfirmation('receiveProtocol');
-		setConfirmation('serverName');
-		setConfirmation('serverPort');
-		setConfirmation('username');
-		setSecretConfirmation('password');
-	} else if (fconnectionType == 'clickatell') {
-		$("#smslib-confirm").hide();
-		$("#email-confirm").hide();
-		$("#clickatell-confirm").show();
-		
-		setConfirmation('apiId');
-		setConfirmation('username');
-		setSecretConfirmation('password');
-	}
+	
+	var fconnection = {}
+	//hide all the others
+	<g:set var="connectionTypeList" value="${Fconnection.implementations*.shortName}"/>
+	<g:each in="${Fconnection.implementations}">
+		fconnection.${it.shortName} = {
+			show: function() {
+				<g:each in="${connectionTypeList - it.shortName}">
+					$("#${it}-confirm").hide();
+				</g:each>
+				<g:each in="${it.configFields}" var="f">
+					setConfirmation('${f}');
+				</g:each>
+				$("#${it.shortName}-confirm").show();
+			}
+		}
+	</g:each>
+	
+	fconnection[fconnectionType].show()
+	
 }
 </g:javascript>

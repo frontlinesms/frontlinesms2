@@ -10,6 +10,7 @@ import org.apache.camel.model.RouteDefinition
 class Fconnection {
 	def fconnectionService
 	static transients = ['status', 'routeDefinitions']
+	static String getShortName() { 'base' }
 	
 	String name
 	
@@ -36,5 +37,12 @@ class Fconnection {
 							.to('stream:out').routeId("in-${Fconnection.this.id}")]
 			}
 		}.routeDefinitions
+	}
+	
+	static def getImplementations() {
+		[SmslibFconnection,
+				EmailFconnection,
+				ClickatellFconnection,
+				IntelliSMSFconnection]
 	}
 }

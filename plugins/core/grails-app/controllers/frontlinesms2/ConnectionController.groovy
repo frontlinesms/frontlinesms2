@@ -4,7 +4,8 @@ class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
 			email:EmailFconnection,
-			clickatell:ClickatellFconnection]
+			clickatell:ClickatellFconnection,
+			intellisms:IntelliSMSFconnection]
 
 	def fconnectionService
 	def messageSendService

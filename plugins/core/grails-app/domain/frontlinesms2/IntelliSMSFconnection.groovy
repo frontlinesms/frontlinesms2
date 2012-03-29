@@ -8,11 +8,12 @@ import org.apache.camel.model.RouteDefinition
 
 class IntelliSMSFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
+	static configFields = ['name', 'username', 'password']
+	static passwords = ['password']
+	static String getShortName() { 'intellisms' }
 	
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
-
-	static passwords = ['password']
 
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {

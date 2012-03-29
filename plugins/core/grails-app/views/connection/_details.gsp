@@ -1,27 +1,9 @@
 <%@ page import="frontlinesms2.*" %>
 <div id="tabs-2">
-	<g:if test="${!fconnectionInstance || fconnectionInstance instanceof frontlinesms2.SmslibFconnection}">
-		<div id="smslib-form">
-			<h2>${g.message(code:'smslibfconnection.label')}</h2>
-			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${SmslibFconnection}"
-					fieldPrefix="smslib"
-					fields="name, port, baud, pin, smsc, imsi, serial"/>
+	<g:each in="${Fconnection.implementations}">
+		<div id="${it.shortName}-form">
+			<h2><g:message code="${it.simpleName.toLowerCase()}.label"/></h2>
+			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${it}"/>
 		</div>
-	</g:if>
-	<g:if test="${!fconnectionInstance || fconnectionInstance instanceof frontlinesms2.EmailFconnection}">
-		<div id="email-form">
-			<h2>${g.message(code:'emailfconnection.label')}</h2>
-			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${EmailFconnection}"
-					fieldPrefix="email"
-					fields="name, receiveProtocol, serverName, serverPort, username, password"/>
-		</div>
-	</g:if>
-	<g:if test="${!fconnectionInstance || fconnectionInstance instanceof frontlinesms2.ClickatellFconnection}">
-		<div id="clickatell-form">
-			<h2>${g.message(code:'clickatellfconnection.label')}</h2>
-			<fsms:inputs instance="${fconnectionInstance}" instanceClass="${ClickatellFconnection}"
-					fieldPrefix="clickatell"
-					fields="name, apiId, username, password"/>
-		</div>
-	</g:if>
+	</g:each>
 </div>
