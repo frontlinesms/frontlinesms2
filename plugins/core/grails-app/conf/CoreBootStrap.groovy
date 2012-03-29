@@ -19,6 +19,7 @@ class CoreBootStrap {
 	def applicationContext
 	def grailsApplication
 	def deviceDetectionService
+	def failPendingMessagesService
 	def camelContext
 
 	def dev = Environment.current == Environment.DEVELOPMENT
@@ -58,6 +59,7 @@ class CoreBootStrap {
 				break
 		}
 		deviceDetectionService.init()
+		failPendingMessagesService.init()
 	}
 
 	def destroy = {
