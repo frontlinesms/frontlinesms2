@@ -13,11 +13,14 @@
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
-		        <g:if test="${params.controller == 'settings' && params.action == 'connections'}">
-		        	updateCreateRouteLabel();
-		        </g:if>
 		});
 		
+		setInterval(refreshSystemNotifications, 10000);
+		function refreshSystemNotifications() {
+			$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
+					$("#notifications").empty().append(data);
+			});
+		}
 	</g:javascript>
 </g:if>
 <g:else>

@@ -13,7 +13,7 @@ import org.apache.log4j.RollingFileAppender
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }
 
-grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
+grails.project.groupId = "frontlinesms2" // change this to alter the default package name and Maven publishing destination
 grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
@@ -48,6 +48,9 @@ grails.views.javascript.library = "jquery"
 
 // pagination
 grails.views.pagination.max = 50
+
+// request parameters to mask when logging exceptions
+grails.exceptionresolver.params.exclude = ['password']
 
 // Set to false to use the new Grails 1.2 JSONBuilder in the render method
 grails.json.legacy.builder = false

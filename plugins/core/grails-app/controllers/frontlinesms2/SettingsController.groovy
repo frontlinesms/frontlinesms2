@@ -6,10 +6,11 @@ class SettingsController {
 	}
 	
 	def connections = {
+		println "params are $params"
 		def fconnectionInstanceList = Fconnection.list(params)
 		if(!params.id) {
 			params.id = Fconnection.list(params)[0]?.id
-		}		
+		}
 		def connectionInstance = Fconnection.get(params.id)
 		def fconnectionInstanceTotal = Fconnection.count()
 		if(params.id){
