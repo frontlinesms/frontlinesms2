@@ -161,6 +161,9 @@ a.tab-link:active{
     margin: 0;
     padding: 0;
 }
+#secondary-nav .selected {
+   background-color: transparent;
+}
 
 #secondary-nav a{
     display: inline-block;
@@ -170,8 +173,4 @@ a.tab-link:active{
 #secondary-nav li{
     margin: 0;
     padding: 0;
-    background-color: #e2e2e2;
-}
-#secondary-nav a:hover{
-    background-color:#e0e0e0;
 }

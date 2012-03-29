@@ -7,5 +7,6 @@ class DispatchRoute {
 				
 		from('seda:dispatches')
 				.dynamicRouter(bean('dispatchRouterService', 'slip'))
+				.routeId('dispatch-route')
 	}
 }

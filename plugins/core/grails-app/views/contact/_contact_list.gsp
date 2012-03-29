@@ -19,14 +19,15 @@
 					</g:elseif>
 					<g:else><g:set var="contactLinkParams" value="[:]"/></g:else>
 					<g:link class="displayName-${c.id} contact-name" action="show" params="${contactLinkParams + [contactId:c.id, sort:params.sort, offset:params.offset]}">
-						${c.name?:c.primaryMobile?:c.secondaryMobile?:'[No Name]'}
+						${c.name?:c.mobile?:'[No Name]'}
 					</g:link>
+
 				</li>
 			</g:each>
 		</ul>
 	</g:if>
 	<g:else>
 		<div id="contact-list">
-			No contacts here!
+			 <p>&nbsp No contacts here!</p>
 		</div>
 	</g:else>

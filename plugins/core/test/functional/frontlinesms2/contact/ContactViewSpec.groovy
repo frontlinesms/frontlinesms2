@@ -36,9 +36,9 @@ class ContactViewSpec extends ContactBaseSpec {
 			anchor.@href.contains("/contact/show/$alice.id")
 	}
 
-	def 'contact with no name can be clicked and edited because his primaryMobile is displayed'() {
+	def 'contact with no name can be clicked and edited because his mobile is displayed'() {
 		when:
-			def empty = new Contact(name:'', primaryMobile:"+987654321")
+			def empty = new Contact(name:'', mobile:"+987654321")
 			empty.save(failOnError:true, flush:true)
 			go "contact/show/${empty.id}"
 		then:

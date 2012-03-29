@@ -30,16 +30,17 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestPollsAndFolders() {
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'Unknown')
 		new Fmessage(src:'Joe', text:'eat more cow', messageOwner:'chickenResponse', date: new Date(), inbound: true)
-		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
 		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
 		
 	}
 	
 	static createTestContactsAndCustomFieldsAndMessages(){
-		def firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
-		def secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
-		def thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
+		def firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true)
+		def secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true)
+		def thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true)
 		
 		[new CustomField(name:'town', value:'Paris', contact: firstContact),
 			new CustomField(name:'like', value:'cake', contact: secondContact),
@@ -61,9 +62,11 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'Unknown')
 		def poll = new Poll(name:'Miauow Mix')
 		poll.addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse)
+		poll.addToResponses(unknownResponse)
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
 		
@@ -82,14 +85,15 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'Unknown')
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse]).save(failOnError:true, flush:true)
+		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
 	}
 	
 	static createTestContacts() {
-		[new Contact(name: 'Alice', primaryMobile: '+254778899'),
-			new Contact(name: 'Bob', primaryMobile: '+254987654')].each() { it.save(failOnError:true) }
+		[new Contact(name: 'Alice', mobile: '+254778899'),
+			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(failOnError:true) }
 	}
 	
 }

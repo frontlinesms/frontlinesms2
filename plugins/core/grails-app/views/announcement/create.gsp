@@ -9,7 +9,7 @@
 		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'Ok', summaryRedirect)">
+	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'OK', summaryRedirect)">
 		<g:render template="message"/>
 		<div id="tabs-2">
 			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,
@@ -68,7 +68,7 @@
 			$("#confirm-recepients-count").removeClass("hide")
 			$("#no-recepients").addClass("hide")
 		}
-		$("#confirm-message-text").html('<pre>' + sendMessage  + '</pre>');
+		$("#confirm-message-text").html('<p>' + sendMessage  + '</p>');
 	}
 		
 	function summaryRedirect() {

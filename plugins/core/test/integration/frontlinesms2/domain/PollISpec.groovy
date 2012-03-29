@@ -8,7 +8,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
-			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'Manchester', choiceB:'Barcelona').save(failOnError:true, flush:true)
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			p.save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1)
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
@@ -23,7 +25,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Response stats are calculated correctly, even when messages are deleted'() {
 		given:
-			def p = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
+			def p = new Poll(name: 'Who is badder?')
+			p.editResponses(choiceA:'Michael-Jackson', choiceB:'Chuck-Norris')
+			p.save(failOnError:true, flush:true)
 		when:
 			def ukId = PollResponse.findByValue('Unknown').id
 			def mjId = PollResponse.findByValue('Michael-Jackson').id
@@ -56,7 +60,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "creating a new poll also creates a poll response with value 'Unknown'"() {
 		when:
-			def p = Poll.createPoll(name: 'This is a poll', choiceA: 'one', choiceB:'two')
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'one', choiceB:'two')
+			p.save(flush: true)
 		then:
 			p.responses.size() == 3
 	}
@@ -99,90 +105,11 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			results == 3
 	}
 	
-	def "name uniqueness should be case-insensitive"() {
-		given:
-			setUpPollResponseAndItsMessages()
-		when:
-			def poll = new Poll(name: 'Question')
-			poll.addToResponses(new PollResponse(value: "response 1"))
-			poll.addToResponses(new PollResponse(value: "response 2"))
-		then:
-			!poll.validate()
-	}
-
-	def "keyword should always be saved as uppercase"() {
-		when:
-			def p1 = setUpPollAndResponses()
-			p1.keyword = 'tofu'
-			p1.save(failOnError:true, flush:true)
-		then:
-			p1.keyword == 'TOFU'
-		when:
-			p1.keyword = 'tOFu'
-			p1.save(failOnError:true, flush:true) // this is actually an UPDATE rather than a save
-		then:
-			p1.keyword == 'TOFU'
-	}
-
-	def "Poll keyword should be unique, ignoring case, among unarchived polls"() {
-		given:
-			def p1 = Poll.createPoll(keyword:'something', name:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
-		when:
-			def p2 = new Poll(keyword:'someTHING', name:'p2', choiceA:'yes', choiceB:'no')
-		then:
-			!p2.validate()
-	}
-
-	def "Poll keyword should not be unique between archived polls"() {
-		given:
-			def p1 = Poll.createPoll(keyword:'something', archived:true, name:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
-		when:
-			def p2 = Poll.createPoll(keyword:'someTHING', archived:true, name:'p2', choiceA:'yes', choiceB:'no')
-		then:
-			p2.validate()
-	}
-
-	def "Poll keyword in unarchived poll may be the same as that in an archived poll"() {
-		given:
-			def p1 = Poll.createPoll(keyword:'something', archived:true, name:'p1', choiceA:'yes', choiceB:'no').save(failOnError:true, flush:true)
-		when:
-			def p2 = Poll.createPoll(keyword:'someTHING', archived:false, name:'p2', choiceA:'yes', choiceB:'no')
-		then:
-			p2.validate()
-	}
-	
-	def "can edit responses for a poll with multiple responses"() {
-		when:
-			def poll = Poll.createPoll([choiceA: "one", choiceB: "two", name:"title"])
-		then:
-			poll.responses*.value.containsAll(['one', 'two'])
-		when:
-			Poll.editPoll(poll.id, [choiceC: "three", choiceD:"four"])
-			poll = Poll.get(poll.id)
-		then:
-			println "${poll.responses*.key}"
-			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
-		when:
-			def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
-			PollResponse.findByValue("one").addToMessages(m1)
-			poll.save(flush:true)
-		then:
-			poll.liveMessageCount == 1
-		when:
-			Poll.editPoll(poll.id, [choiceA: "five"])
-		then:
-			poll.liveMessageCount == 1
-			!PollResponse.findByValue("one")
-			poll.responses.find {
-				if(it.value == "Unknown") {
-					it.messages.size() == 1
-				}
-			}
-	}
-	
 	def "adding responses to a poll with multiple responses does not affect categorized messages"() {
 		when:
-			def poll = Poll.createPoll([choiceA: "one", choiceB: "two", name:"title"])
+			def poll = new Poll(name:"title")
+			poll.editResponses(choiceA: "one", choiceB: "two")
+			poll.save(flush: true)
 			def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
 			def m2 = new Fmessage(src: "src2", inbound: true, date: new Date() - 10)
 			def m3 = new Fmessage(src: "src3", inbound: true, date: new Date() - 10)
@@ -194,7 +121,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			poll.responses*.liveMessageCount == [2, 1, 0]
 		when:
-			Poll.editPoll(poll.id, [choiceC: "three", choiceD:"four"])
+			poll.editResponses(choiceC: "three", choiceD:"four")
 			poll = Poll.get(poll.id)
 		then:
 			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
@@ -204,11 +131,11 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			PollResponse.findByValue("one").addToMessages(m1)
 			PollResponse.findByValue("three").addToMessages(new Fmessage(src: "src4", inbound: true, date: new Date() - 10))
 			poll.save(flush:true)
-			poll.refresh()
 		then:
 			poll.responses*.liveMessageCount == [3, 1, 0, 1, 0]
 		when:
-			Poll.editPoll(poll.id, [choiceA: "five"])
+			poll.editResponses(choiceA: "five")
+			poll.save(flush:true)
 			poll.refresh()
 		then:
 			!PollResponse.findByValue("one")
@@ -221,7 +148,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "Archiving a poll archives messages associated with the poll"(){
 		given:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris').save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?')
+			poll.editResponses(choiceA:'Michael-Jackson', choiceB:'Chuck-Norris')
+			poll.save(failOnError:true, flush:true)
 			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			poll.addToMessages(message1)
@@ -237,10 +166,10 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
-		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
-		poll.addToResponses(new PollResponse(value: "response 1"))
-		poll.addToResponses(new PollResponse(value: "response 2"))
-		poll.addToResponses(new PollResponse(value: "response 3"))
+		poll.addToResponses(PollResponse.createUnknown())
+		poll.addToResponses(new PollResponse(value:"response 1"))
+		poll.addToResponses(new PollResponse(value:"response 2"))
+		poll.addToResponses(new PollResponse(value:"response 3"))
 		poll.save(flush: true, failOnError:true)
 		return poll
 	}
@@ -264,7 +193,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			m.refresh()
 			p.responses*.refresh()
 			println "p.responses: $p.responses"
-						println "p.responses.messages: $p.responses.messages"
+			println "p.responses.messages: $p.responses.messages"
 		when:
 			println "p.responses*.value: ${p.responses*.value}"
 			println "p.responses.find { it.value == 'Unknown' }: ${p.responses.find { it.value == 'Unknown' }}"

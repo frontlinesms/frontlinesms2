@@ -1,12 +1,12 @@
 #sidebar #search-menu{
-	margin-left: 17px;
+	margin-left: 20px;
 	padding:0;
 }
 #sidebar #search-menu li h3{
-	margin: 25px 0 0 0;
+	margin: 10px 0 0 0;
 	padding:0;
 }
-#sidebar #search-menu .buttons, #sidebar #search-menu #extra-options-list{
+#sidebar #search-menu .buttons{
 	margin-right: 17px;
 	padding:0;
 }
@@ -16,15 +16,28 @@
 	padding: 2px 0;
 	margin: 17px 0;
 }
+#sidebar #search-menu .btn.clear{
+	width:100%;
+	height:25px;
+	padding: 2px 0;
+	margin: 17px 0;
+}
 #sidebar #search-menu #extra-options-list{
 	padding: 0 0 17px 23px;
-	margin-bottom: 17px;
 }
+
 #sidebar #search-menu #extra-options-list li{
 	padding-top: 5px;
 }
 #sidebar #search-menu .extra-option input{
-	margin: 5px 0 0 17px;
+	margin: 5px 0 0 0;
+	width:76%;
+}
+#sidebar #search-menu .extra-option .remove-field{
+	background-image: url('../images/icons/remove.png');
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 16px;
 }
 #sidebar #search-menu #more-options{
 	margin-bottom: 17px;
@@ -38,9 +51,10 @@
 	float: right;
 }
 #sidebar #search-menu .field{
-	padding-left: 0;
+	padding: 0;
 }
 #sidebar #search-menu #non-dates .field select, #sidebar #search-menu .field input[type=text]{
+	margin-top: 5px;
 	width: 90%;
 }
 #sidebar #search-menu .dropdown{

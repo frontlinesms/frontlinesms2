@@ -58,14 +58,19 @@
 	overflow: hide;
 }
 
-.ui-dialog .ui-dialog-buttonpane {
-	text-align: right;
-	border-top: 1px solid #9E9E9E;
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+	clear: both;
+	width: 100%;
 	height: 43px;
+	border-top: 1px solid #9E9E9E;
+	text-align: right;
 	background: white;
 }
-.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
-.ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
+.ui-dialog .ui-dialog-buttonpane button {
+	margin: .5em .4em .5em 0;
+	cursor: pointer;
+	padding: 4px;
+}
 
 
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
@@ -78,7 +83,7 @@
 
 .ui-dialog-content form, .ui-dialog-content .content {
 	padding: 17px;
-	overflow: auto;
+	float: left;
 }
 
 .ui-dialog .activity-choice {
@@ -102,18 +107,24 @@
 	display: inline;
 }
 
+.ui-dialog .summary {
+	margin: 17px;
+}
+
 .ui-dialog .info {
-	padding: 20px 0 20px 20px;
-	line-height: 200%;
+	padding: 0 0 20px 0;
+	line-height: 150%;
+	margin: 0;
 }
 
 .ui-dialog .smartgroupname {
+	margin-left: 6px;
 	padding-top: 17px;
 	padding-bottom: 30px;
 }
 
 .ui-dialog #smartgroupname-field {
-	width: 400px;
+	width: 484px;
 	margin-left: 10px;
 }
 
@@ -129,13 +140,9 @@
 	width: 250px;
 }
 
-.ui-dialog #poll-question label{
-	position: relative;
-	top: -95px;
-}
-
 .ui-dialog #poll-question textarea{
-	width: 50%;
+	display: block;
+	width: 100%;
 	min-height: 100px;
 }
 
@@ -143,7 +150,7 @@
 	font-weight: bolder;
 }
 
-.ui-dialog #group-recipients, .ui-dialog #contact-recipients, .ui-dialog #address-recipients {
-	padding: 10px;
-	border: 1px solid #DFDFDF;
+#new-activity-choices {
+	padding: 0;
+	margin: 0;
 }

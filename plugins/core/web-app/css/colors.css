@@ -18,6 +18,9 @@
 #secondary-nav a:hover{
 	border-top: 3px solid #ca2d92;
 }
+#secondary-nav .selected a{
+   border-top: 3px solid #ca2d92;
+}
 
 #notifications div{
 	background-color: rgba(192, 50, 131, 0.4);

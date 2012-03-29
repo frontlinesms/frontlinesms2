@@ -1,13 +1,13 @@
 button, input[type=submit], a.btn{
-    display: inline-block;
+    display: inline-table;
     border: none;
     background-image: url('../images/buttons/button_default_2.png');
     background-repeat: repeat-x;
+    background-size: contain;
     border-left: 1px solid #6b6b6b;
     border-right: 1px solid #6b6b6b;
     border-radius: 2px;
-    padding: 2px 10px;
-    height:25px;
+    padding: 4px 10px;
     cursor: pointer;
     text-decoration: none;
     text-align: center;
@@ -15,17 +15,11 @@ button, input[type=submit], a.btn{
     background-color: none;
     min-width:80px;
     font-size: 100%;
-    overflow: hidden;
 }
 
 button:hover, input[type=submit]:hover, a.btn:hover{
     background-image: url('../images/buttons/button_hover_part.png');
     background-repeat: repeat-x;
-}
-
-a.btn, a.btn:hover{
-	height:21px;
-	padding: 4px 10px 0 10px;
 }
 
 button:active, input[type=submit]:active, a.btn:active{

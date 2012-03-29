@@ -1,3 +1,4 @@
+import org.apache.log4j.ConsoleAppender
 import org.apache.log4j.RollingFileAppender
 
 // locations to search for config files that get merged into the main config
@@ -90,6 +91,10 @@ log4j = {
 					datePattern:datePattern, layout:layout, file:"$conf/stacktrace.log",
 					threshold:org.apache.log4j.Level.ERROR);
 		}
+		development {
+			appender new ConsoleAppender(name:'console-logger')
+			trace 'console-logger'
+		}
 	}
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
@@ -106,5 +111,7 @@ log4j = {
 
     warn   'org.mortbay.log'
 
-    info  'serial', 'org.apache.camel', 'org.smslib'
+    info  'serial', 'org.smslib'
+
+	debug 'org.apache.camel'
 }

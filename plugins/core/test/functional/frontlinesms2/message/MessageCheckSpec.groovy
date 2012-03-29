@@ -45,8 +45,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
-			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -62,8 +62,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "the count of messages being sent is updated even in 'Reply all'"() {
 		given:
 			createInboxTestMessages()
-			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -87,7 +87,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 					it.inbound = true
 					it.save(failOnError:true)
 				}
-			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -108,8 +108,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "Should show the contact's name when replying to multiple messages from the same contact"() {
 		given:
 			createInboxTestMessages()
-			new Contact(name: 'Alice', primaryMobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', primaryMobile: '+254778899').save(failOnError:true)
+			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
+			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()

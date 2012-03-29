@@ -5,9 +5,23 @@ import frontlinesms2.*
 class PollBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestPolls() {
-		[Poll.createPoll(name: 'Football Teams', choiceA: 'manchester', choiceB:'barcelona'),
-				Poll.createPoll(name: 'Shampoo Brands', choiceA: 'pantene', choiceB: 'oriele'),
-				Poll.createPoll(name: 'Rugby Brands', choiceA: 'newzealand', choiceB: 'britain')]*.save(failOnError:true, flush:true)
+		def poll1 = new Poll(name: 'Football Teams')
+		poll1.addToResponses(new PollResponse(key: 'A', value: 'manchester'))
+		poll1.addToResponses(new PollResponse(key: 'B', value: 'barcelona'))
+		poll1.addToResponses(PollResponse.createUnknown())
+		poll1.save(failOnError:true, flush:true)
+
+		def poll2 = new Poll(name: 'Shampoo Brands')
+		poll2.addToResponses(new PollResponse(key: 'A', value: 'pantene'))
+		poll2.addToResponses(new PollResponse(key: 'B', value: 'oriele'))
+		poll2.addToResponses(PollResponse.createUnknown())
+		poll2.save(failOnError:true, flush:true)
+		
+		def poll3 = new Poll(name: 'Rugby Brands')
+		poll3.addToResponses(new PollResponse(key: 'A', value: 'newzealand'))
+		poll3.addToResponses(new PollResponse(key: 'B', value: 'britain'))
+		poll3.addToResponses(PollResponse.createUnknown())
+		poll3.save(failOnError:true, flush:true)
 	}
 
 	static createTestMessages() {

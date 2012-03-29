@@ -6,6 +6,9 @@
 	border-bottom: 1px solid #9e9e9e;
 }
 #contact-list{
+	position: absolute;
+	bottom: 43px;
+	top: 44px;
     float:left;
     margin: 0;
     padding: 10px;
@@ -22,8 +25,13 @@
 }
 #contact-list li:hover{
     background-color: #e5eff3;
-    
 }
+#contact-list p{
+	text-align: center;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
 .contact-select{
 	float: left;
 	margin: 3px 17px;
@@ -52,10 +60,6 @@
 	height: 100%;
     overflow: auto;
 }
-#contact-editor #update-single{
-	height: 25px;
-	width: 110px;
-}
 
 #contact-editor .basic-info{
     margin: 17px;
@@ -72,9 +76,7 @@
     border: none;
     width: 250px;
     padding: 5px;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
+    
 }
 #contact-editor input[type=text].error{
 	border: 2px solid #ff9600;
@@ -105,6 +107,20 @@
     float: right;
     text-align: right;
     padding: 17px;
+}
+
+#contact-editor .remove-field, #contact-editor .remove-group {
+	background-image: url('../images/icons/remove.png');
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 16px;
+}
+
+#contact-editor .send-message {
+	background-image: url('../images/icons/send.png');
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 16px;
 }
 
 #message-stats{

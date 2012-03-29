@@ -5,10 +5,10 @@ import grails.plugin.spock.*
 
 class PollControllerSpec extends ControllerSpec {
 
-	def "test create"() {
+	def "create action should provide groups and contacts for recipients list"() {
 		setup:
-			def alice = new Contact(name: "Alice", primaryMobile: "12345")
-			def bob = new Contact(name: "Bob", primaryMobile: "54321")
+			def alice = new Contact(name: "Alice", mobile: "12345")
+			def bob = new Contact(name: "Bob", mobile: "54321")
 			mockDomain(Contact, [alice, bob])
 			mockDomain(Group, [new Group(name: "group1"), new Group(name: "group2")])
 			mockDomain SmartGroup, []
@@ -33,7 +33,9 @@ class PollControllerSpec extends ControllerSpec {
 				Fmessage
 			}
 			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(mockParams.id)) }
-			def poll = Poll.createPoll(name:'thingy', choiceA:'One', choiceB:'Other', archived:true).save()
+			def poll = new Poll(name:'thingy', archived:true)
+			poll.editResponses(choiceA:'One', choiceB:'Other')
+			poll.save()
 			assert poll.archived
 		when:
 			mockParams.id = poll.id

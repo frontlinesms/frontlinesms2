@@ -14,8 +14,10 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			def r = new PollResponse(value:'known unknown')
 			def r2 = new PollResponse(value:'unknown unknown')
+			def unknown = new PollResponse(value:'Unknown')
 			def poll = new Poll(name: 'Who is badder?')
 			poll.addToResponses(r2)
+			poll.addToResponses(unknown)
 			poll.addToResponses(r).save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob'))
@@ -61,7 +63,9 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should move a poll message to inbox section"() {
 		setup:
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA: 'known unknown', choiceB: 'unknown unknowns').save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?')
+			poll.editResponses(choiceA: 'known unknown', choiceB: 'unknown unknowns')
+			poll.save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
 			PollResponse.findByValue('known unknown').addToMessages(message)
 			poll.save(failOnError: true)

@@ -13,7 +13,7 @@
 		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
 	</ol>
 
-	<g:render template="/poll/new_poll_form" plugin="core"/>
+	<g:render template="../poll/new_poll_form" plugin="core"/>
 </div>
 
 <g:javascript>
@@ -28,7 +28,7 @@
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
-				if ($("input[name='poll-type']:checked").val() == "standard") {
+				if ($("input[name='pollType']:checked").val() == "standard") {
 					disableTab(1);
 				}
 				else {
@@ -46,7 +46,7 @@
 			validate: function() {
 				$('#choiceA').removeClass('error');
 				$('#choiceB').removeClass('error');
-				var isValid =  $("input[name='poll-type']:checked").val() == "standard" || validatePollResponses();
+				var isValid =  $("input[name='pollType']:checked").val() == "standard" || validatePollResponses();
 				if(!isValid) {
 					if(isElementEmpty($('#choiceA'))) $('#choiceA').addClass('error');
 					if(isElementEmpty($('#choiceB'))) $('#choiceB').addClass('error');
@@ -118,7 +118,7 @@
 
 	function updateConfirmationMessage() {
 		updateMessageDetails();
-		$("#auto-reply-read-only-text").html($("#autoReplyText").val().trim() ? $("#autoReplyText").val() : "None")
+		$("#auto-reply-read-only-text").html($("#autoreplyText").val().trim() ? $("#autoreplyText").val() : "None")
 		// update auto-sort
 		var autoSort = $("input[name='enableKeyword']:checked").val();
 		var autoSortMessages = $('#auto-sort-confirm p');
@@ -146,7 +146,7 @@
 			$("#confirm-recipients-count #sending-messages").show()
 			$("#no-recipients").hide()
 		}
-		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
+		$("#poll-message").html('<p>' + sendMessage  + '</p>');
 	}
 
 	function highlightPollResponses() {

@@ -22,12 +22,11 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			def message = new Fmessage(src:'123456', date:new Date(), inbound:true, isDeleted:false)
 			message.save(failOnError:true, flush:true)
-			def response1 = new PollResponse(value:"FC Manchester United")
-			def response2 = new PollResponse(value:"FC United of Manchester")
-			def p = new Poll(name:'Who is the best football team in the world?', keyword:"football", deleted:true)
-			p.addToResponses(response1)
-			p.addToResponses(response2)
-			response2.addToMessages(message)
+			def keyword = new Keyword(value: "football")
+			def p = new Poll(name:'Who is the best football team in the world?', keyword: keyword, deleted:true)
+			p.editResponses(choiceA: "FC Manchester United", choiceB: "FC United of Manchester")
+			p.save(failOnError:true, flush:true)
+			PollResponse.findByValue("FC United of Manchester").addToMessages(message)
 			p.save(failOnError:true, flush:true)
 			assert Poll.count() == 1
 			p.refresh()
@@ -44,7 +43,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def "should permanently delete a folder and its messages when trashed"() {
 		given:
 			def message = new Fmessage(src: '1234567', date: new Date(), inbound: true).save(failOnError:true, flush:true)
-			def folder = new Folder(name:"test", deleted:true)
+			def folder = new Folder(name:"test", deleted:true).save(failOnError:true, flush:true)
 			folder.addToMessages(message)
 			folder.save(failOnError:true, flush:true)
 			assert Fmessage.count() == 1

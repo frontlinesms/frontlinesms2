@@ -1,6 +1,6 @@
 <div id="tabs-5">
 	<h2 class="bold">Edit message to be sent to recipients</h2>
-	<p class="info">The following message will be sent to the recipients of the poll. This message can be edited before sending.</p>
+	<p class="info">The following message will be sent to the recipients of the poll.</p>
 	<g:textArea name="messageText" rows="5" cols="40" />
 	<span id="send-message-stats" class="character-count">Characters remaining 160 (1 SMS message)</span>
 </div>
@@ -21,7 +21,7 @@
 			var replyText = '';
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
-				if($("input[name='poll-type']:checked").val() == "standard") {
+				if($("input[name='pollType']:checked").val() == "standard") {
 					replyText = 'Reply' + ' "' + keywordText + ' A" for Yes, "' + keywordText + ' B" for No.';
 				} else {
 					replyText = 'Reply';
@@ -31,7 +31,7 @@
 					});
 					replyText = replyText + '.';
 				}
-			} else if ($("input[name='poll-type']:checked").val() == "standard") {
+			} else if ($("input[name='pollType']:checked").val() == "standard") {
 				replyText = "Please answer 'Yes' or 'No'";
 			} else {
 				replyText = 'Please answer ';

@@ -19,6 +19,7 @@ class CoreBootStrap {
 	def applicationContext
 	def grailsApplication
 	def deviceDetectionService
+	def camelContext
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
@@ -28,6 +29,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
+		MetaClassModifiers.addCamelMethods()
 		createWelcomeNote()
 		
 		switch(Environment.current) {
@@ -39,12 +41,14 @@ class CoreBootStrap {
 				//DB Viewer
 				//org.hsqldb.util.DatabaseManager.main()
 				// do custom init for dev here
+				camelContext.tracing = true
 				dev_initSmartGroups()
 				dev_initGroups()
 				dev_initContacts()
 				dev_initFconnections()
 				dev_initFmessages()
 				dev_initPolls()
+				dev_initAutoreplies()
 				dev_initFolders()
 				dev_initAnnouncements()
 				dev_initLogEntries()
@@ -80,7 +84,7 @@ class CoreBootStrap {
 		createContact("Kate", "+198730948")
 
 		(1..101).each {
-			new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
+			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
 		}
 		
 		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
@@ -160,16 +164,25 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"MOCK96: breaks on receive", port:'MOCK96', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK97: bad port", port:'MOCK98', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK98: cannot send", port:'MOCK98', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)		
+		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"MOCK100: incoming messages for autoreplies", port:'MOCK100', baud:9600).save(failOnError:true)	
 	}
 	
 	private def dev_initPolls() {
 		if(!dev) return
-		[Poll.createPoll(name: 'Football Teams', keyword:'football', choiceA: 'manchester', choiceB:'barcelona', message:'who will win?', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoReplyText:"Thank you for participating in the football poll"),
-				Poll.createPoll(name: 'Shampoo Brands', choiceA: 'pantene', choiceB:'oriele', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")].each() {
-			it.save(failOnError:true, flush:true)
-		}
-
+		def keyword = new Keyword(value: 'Football')
+		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
+		poll1.addToResponses(new PollResponse(key: 'choiceA', value: 'manchester'))
+		poll1.addToResponses(new PollResponse(key: 'choiceB', value: 'barcelona'))
+		poll1.addToResponses(PollResponse.createUnknown())
+		
+		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
+		poll2.addToResponses(new PollResponse(key: 'choiceA', value: 'pantene'))
+		poll2.addToResponses(new PollResponse(key: 'choiceB', value: 'oriele'))
+		poll2.addToResponses(PollResponse.createUnknown())
+		
+		poll1.save(flush: true)
+		poll2.save(flush: true)
 		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
 		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
 		PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
@@ -180,6 +193,16 @@ class CoreBootStrap {
 			msg.save(failOnError: true);
 			barcelonaResponse.addToMessages(msg);
 		}
+		poll1.save(flush: true)
+		poll2.save(flush: true)
+	}
+	
+	private def dev_initAutoreplies() {
+		if(!dev) return
+		def k1 = new Keyword(value: "color")
+		def k2 = new Keyword(value: "autoreply")
+		new Autoreply(name:"toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
+		new Autoreply(name:"color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFolders() {
@@ -249,7 +272,7 @@ class CoreBootStrap {
 	}
 
 	private def createContact(String n, String a) {
-		def c = new Contact(name: n, primaryMobile: a)
+		def c = new Contact(name: n, mobile: a)
 		c.save(failOnError: true)
 	}
 	
@@ -313,7 +336,12 @@ class CoreBootStrap {
 				MOCK96:new CommPortIdentifier("MOCK96", MockModemUtils.createMockPortHandler_disconnectOnReceive()),
 				MOCK97:new CommPortIdentifier("MOCK97", MockModemUtils.createMockPortHandler_badPort()),
 				MOCK98:new CommPortIdentifier("MOCK98", MockModemUtils.createMockPortHandler_sendFails()),
-				MOCK99:new CommPortIdentifier("MOCK99", MockModemUtils.createMockPortHandler_withMessages())])
+				MOCK99:new CommPortIdentifier("MOCK99", MockModemUtils.createMockPortHandler_withMessages()),
+				MOCK100:new CommPortIdentifier("MOCK100", MockModemUtils.createMockPortHandler_withTextMessages(dev_initMockPortMessages()))])
+	}
+	
+	private def dev_initMockPortMessages() {
+		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z"];
 	}
 	
 	private def test_initGeb(def servletContext) {

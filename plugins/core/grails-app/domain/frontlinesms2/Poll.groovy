@@ -1,38 +1,43 @@
 package frontlinesms2
 
 class Poll extends Activity {
-	String keyword
-	String autoReplyText
+//> CONSTANTS
+	private static final String ALPHABET = ('A'..'Z').join()
+	static final String KEY_UNKNOWN = 'unknown'
+
+//> SERVICES
+	def messageSendService
+
+//> PROPERTIES
+	static hasOne = [keyword: Keyword]
+	String autoreplyText
 	String question
 	List responses
-
 	static hasMany = [responses: PollResponse]
+
+//> SETTINGS
+	static transients = ['unknown']
 	
+	static mapping = {
+		keyword cascade: 'all'
+	}
+			
 	static constraints = {
-		name(blank: false, nullable: false, maxSize: 255, validator: { name, me ->
-			def matching = Poll.findByNameIlike(name)
-			matching==null || matching==me
-		})
+		name(blank: false, nullable: false, maxSize: 255, unique: true)
 		responses(validator: { val, obj ->
-			val?.size() >= 2 &&
+			val?.size() > 2 &&
 					(val*.value as Set)?.size() == val?.size()
 		})
-		autoReplyText(nullable:true, blank:false)
+		autoreplyText(nullable:true, blank:false)
 		question(nullable:true)
-		keyword(nullable:true, validator: { keyword, me ->
-			if(!keyword) return true
-			else {
-				if(keyword.find(/\s/)) return false
-				else {
-					if(me.archived) return true
-					else {
-						def matching = Poll.findByArchivedAndKeyword(false, keyword.toUpperCase())
-						return matching == null || matching.id == me.id
-					}
-				}
-			}
-		})
+		keyword(nullable:true)
 	}
+
+//> ACCESSORS
+	def getType() { 'poll' } // FIXME this should not be necessary - use class and i18n with messages.properties
+	def getUnknown() {
+		println "KEYS: ${responses.collect { it.key }}"
+		responses.find { it.key == KEY_UNKNOWN } }
 	
 	Poll addToMessages(Fmessage message) {
 		message.messageOwner = this
@@ -40,7 +45,7 @@ class Poll extends Activity {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
-			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+			this.unknown.messages.add(message)
 		}
 		this
 	}
@@ -55,13 +60,6 @@ class Poll extends Activity {
 		this
 	}
 	
-	def beforeSave = {
-		keyword = (!keyword?.trim())? null: keyword.toUpperCase()
-	}
-	
-	def beforeUpdate = beforeSave
-	def beforeInsert = beforeSave
-
 	def getResponseStats() {
 		def totalMessageCount = getActivityMessages().count()
 		responses.sort {it.key?.toLowerCase()}.collect {
@@ -73,51 +71,66 @@ class Poll extends Activity {
 		}
 	}
 	
-	static Poll createPoll(attrs) {
-		def poll = new Poll(attrs)
-		if(attrs['poll-type'] == 'standard') {
-			poll.addToResponses(new PollResponse(value:'Yes', key:'A'))
-			poll.addToResponses(new PollResponse(value:'No', key:'B'))
+	def editResponses(attrs) {
+		if(attrs.pollType == 'standard' && !this.responses) {
+			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
+			this.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {
 			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
 			choices.each { k,v -> 
-				if(v) poll.addToResponses(new PollResponse(value: v, key:k))
+				if(this.responses*.key?.contains(k)) {
+					def response = PollResponse.findByKey(k)
+					if(response.value != v) {
+						this.deleteResponse(response)
+						this.addToResponses(new PollResponse(value: v, key:k))
+					}
+				} else
+					if(v?.trim()) this.addToResponses(new PollResponse(value: v, key:k))	
 			}
 		}
-		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
-		poll.save(flush: true, failOnError: true)
+		if(!this.unknown)
+			this.addToResponses(PollResponse.createUnknown())
 	}
 	
-	static Poll editPoll(id, attrs) {
-		def poll = Poll.get(id)
-		poll.properties = attrs
-		def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
-		choices.each { k,v -> 
-			if(poll.responses*.key.contains(k)) {
-				def response  = PollResponse.findByKey(k)
-				if(response.value != v) {
-					poll.deleteResponse(response)
-					poll.addToResponses(new PollResponse(value: v, key:k))
-				}
-			} else {
-				if(v?.trim()) poll.addToResponses(new PollResponse(value: v, key:k))	
-			}
-			
-		}
-		
-		poll.save(flush: true) ?: poll
-	}
-	
-	Poll deleteResponse(PollResponse response) {
+	def deleteResponse(PollResponse response) {
 		response.messages.findAll { message ->
-			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+			this.unknown.messages.add(message)
 		}
 		this.removeFromResponses(response)
 		response.delete()
 		this
 	}
-		
-	def getType() {
-		return 'poll'
+
+	def processKeyword(Fmessage message, boolean exactMatch) {
+		def response = getPollResponse(message, exactMatch)
+		println "processKeyword() got response: $response.key"
+		response.addToMessages(message)
+		response.save(failOnError: true)
+		def poll = this
+		if(poll.autoreplyText) {
+			def params = [:]
+			params.addresses = message.src
+			params.messageText = poll.autoreplyText
+			def outgoingMessage = messageSendService.getMessagesToSend(params)
+			poll.addToMessages(outgoingMessage)
+			messageSendService.send(outgoingMessage)
+			poll.save()
+			println "Autoreply message sent to ${message.src}"
+		}
+	}
+	
+//> PRIVATE HELPERS
+	private PollResponse getPollResponse(Fmessage message, boolean exactMatch) {
+		def option
+		def words = message.text.trim().toUpperCase().split(/\s/)
+		if(exactMatch) {
+			if(words.size() < 2) return this.unknown
+			option = words[1]
+			if(option.size() > 1) return this.unknown
+		} else {
+			option = words[0][-1]
+		}
+		return responses.find { it.key == option }?: this.unknown
 	}
 }
+

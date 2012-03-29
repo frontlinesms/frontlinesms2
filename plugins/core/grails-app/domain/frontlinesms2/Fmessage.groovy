@@ -182,7 +182,7 @@ class Fmessage {
 					le("date", search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
-					def matchingContactsNumbers = CustomField.getAllContactsWithCustomField(search.customFields).primaryMobile ?: [""] //otherwise hibernate fails to search 'in' empty list
+					def matchingContactsNumbers = CustomField.getAllContactsWithCustomField(search.customFields).mobile ?: [""] //otherwise hibernate fails to search 'in' empty list
 					or {
 						'in'("src", matchingContactsNumbers)
 						dispatches {
@@ -280,8 +280,7 @@ class Fmessage {
 		Contact c
 		if(inbound) {
 			if(src &&
-					(c = Contact.findByPrimaryMobile(src)?:
-							Contact.findBySecondaryMobile(src))) {
+					(c = Contact.findByMobile(src))) {
 				displayName = c.name
 				contactExists = true
 			} else {
@@ -291,8 +290,7 @@ class Fmessage {
 		} else {
 			if(dispatches?.size() == 1) {
 				def dst = dispatches.dst[0]
-				if((c = Contact.findByPrimaryMobile(dst)) ||
-						(c = Contact.findBySecondaryMobile(dst))) {
+				if((c = Contact.findByMobile(dst))) {
 					displayName = "To: " + c.name
 					contactExists = true
 				} else {
