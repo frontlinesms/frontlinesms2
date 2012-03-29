@@ -7,7 +7,7 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			def p = new Poll(name:'new')
 			def r = new PollResponse(value:'yes')
-			p.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
+			p.addToResponses(PollResponse.createUnknown())
 			p.addToResponses(new PollResponse(value: 'No', key: 'No'))
 			p.addToResponses(r)
 			p.save(flush:true, failOnError:true)
