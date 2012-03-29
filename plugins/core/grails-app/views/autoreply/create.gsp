@@ -8,7 +8,7 @@
 		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
 	</ol>
 
-	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'Ok', summaryRedirect)">
+	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply ${activityInstanceToEdit ? 'updated': 'created'}!', data, 'OK', summaryRedirect)">
 		<g:render template="../autoreply/keyword"/>
 		<g:render template="../autoreply/message"/>
 		<g:render template="../autoreply/confirm"/>
@@ -47,8 +47,8 @@
 		var keyword = $('#keyword').val();
 		var autoreplyText = $('#autoreplyText').val();
 
-		$("#keyword-confirm").html('<pre>' + keyword  + '</pre>');
-		$("#autoreply-confirm").html('<pre>' + autoreplyText  + '</pre>');
+		$("#keyword-confirm").html('<p>' + keyword  + '</p>');
+		$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 	}
 		
 	function summaryRedirect() {

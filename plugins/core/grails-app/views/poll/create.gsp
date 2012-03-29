@@ -146,7 +146,7 @@
 			$("#confirm-recipients-count #sending-messages").show()
 			$("#no-recipients").hide()
 		}
-		$("#poll-message").html('<pre>' + sendMessage  + '</pre>');
+		$("#poll-message").html('<p>' + sendMessage  + '</p>');
 	}
 
 	function highlightPollResponses() {

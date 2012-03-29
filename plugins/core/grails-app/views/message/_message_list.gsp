@@ -74,14 +74,14 @@
 					<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
 						<tr id="no-search-description">
 							<td colspan="5">
-								<h1>Start new search on the left</h1>
+								<h3>Start new search on the left</h3>
 							</td>
 						</tr>
 					</g:elseif>
 					<g:else>
 						<tr id="no-messages">
 							<td colspan="5">
-								<h1>No messages here!</h1>
+								<h3>No messages here!</h3>
 							</td>
 						</tr>
 					</g:else>
