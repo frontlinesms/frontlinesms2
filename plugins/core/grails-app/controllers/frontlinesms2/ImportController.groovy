@@ -9,7 +9,7 @@ class ImportController {
 	private static final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	
 	def exportService
-	def failedContactsFile = new File ("failedContacts.txt")
+	def failedContactsFile = new File("failedContacts.txt")
 	
 	def importData = {
 		if (params.data == 'contacts') importContacts()
@@ -18,7 +18,6 @@ class ImportController {
 	
 	def importContacts = {
 		def savedCount = 0
-		def failedCount = 0
 		def uploadedCSVFile = request.getFile('importCsvFile')
 		
 		if(uploadedCSVFile) {
@@ -48,18 +47,21 @@ class ImportController {
 					++savedCount
 				} catch(Exception ex) {
 					log.info "Encountered saving contact ", ex
-					++failedCount
 					failedLines << tokens
 				}		
 			}
 
-			def writer
-			try {
-				writer = new CSVWriter(new OutputStreamWriter(failedContactsFile.newOutputStream(), 'UTF-8'))
-				writer.writeNext(headers)
-				failedLines.each { writer.writeNext(it) }
-			} finally { try { writer.close() } catch(Exception ex) {} }
-			flash.message = "$savedCount contacts were imported; $failedCount failed" 
+			if(failedLines) {
+				def writer
+				try {
+					writer = new CSVWriter(new OutputStreamWriter(failedContactsFile.newOutputStream(), 'UTF-8'))
+					writer.writeNext(headers)
+					failedLines.each { writer.writeNext(it) }
+				} finally { try { writer.close() } catch(Exception ex) {} }
+			}
+			
+			flash.message = "$savedCount contacts were imported; ${failedLines.size()} failed${failedLines? (': ' + g.link(action:'exportFailedContacts', absolute:'true', 'details')): ''}" 
+			
 			redirect controller: "settings", action: 'general'
 		} else throw new RuntimeException("File upload has failed for some reason.")
 	}
@@ -68,6 +70,7 @@ class ImportController {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
 		failedContactsFile.eachLine {response.outputStream  << "$it\n"}
 		response.outputStream.flush()
+		failedContactsFile.deleteOnExit()
 	}
 	
 	def importMessages = {
