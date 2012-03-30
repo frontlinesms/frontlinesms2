@@ -1,9 +1,9 @@
 class DispatchRoute {
 	def configure = {
 		onCompletion().onCompleteOnly()
-						.beanRef('dispatchRouterService', 'handleCompleted')
+				.beanRef('dispatchRouterService', 'handleCompleted')
 		onCompletion().onFailureOnly()
-						.beanRef('dispatchRouterService', 'handleFailed')
+				.beanRef('dispatchRouterService', 'handleFailed')
 				
 		from('seda:dispatches')
 				.dynamicRouter(bean('dispatchRouterService', 'slip'))
