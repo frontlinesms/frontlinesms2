@@ -23,7 +23,7 @@ class ImportController {
 		if(uploadedCSVFile) {
 			def headers
 			def failedLines = []
-			def standardFields = ['Name':'name', 'Mobile Number':'primaryMobile',
+			def standardFields = ['Name':'name', 'Mobile Number':'mobile',
 					'E-mail Address':'email', 'Notes':'notes']
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
 				if(!headers) headers = tokens
