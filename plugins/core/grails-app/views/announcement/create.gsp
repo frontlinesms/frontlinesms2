@@ -2,11 +2,11 @@
 <g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="announcement.create.prompt" /></div>
 	<ol>
-		<li><a class="tabs-1" href="#tabs-1">Enter message</a></li>
-		<li><a class="tabs-2" href="#tabs-2">Select recipients</a></li>
-		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
+		<li><a class="tabs-1" href="#tabs-1"><g:message code="announcement.create.menu.message" /></a></li>
+		<li><a class="tabs-2" href="#tabs-2"><g:message code="announcement.create.menu.recipients" /></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.create.menu.confirm" /></a></li>
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'OK', summaryRedirect)">

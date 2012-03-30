@@ -23,16 +23,16 @@
 		<form>
 			<ul id="new-activity-choices">
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')" /><span class="activity-choice">Announcement</span>
-					<div class="activity-description">Send an announcement message and organize the responses</div>
+					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')" /><span class="activity-choice"><g:message code="activity.announcement.name" /></span>
+					<div class="activity-description"><g:message code="activity.announcement.description" /></div>
 				</li>
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span class="activity-choice">Poll</span>
-					<div class="activity-description">Send a question and analyze the responses</div>
+					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span class="activity-choice"><g:message code="activity.poll.name" /></span>
+					<div class="activity-description"><g:message code="activity.poll.description" /></div>
 				</li>
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')" /><span class="activity-choice">Autoreply</span>
-					<div class="activity-description">Automatically respond to incoming messages</div>
+					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')" /><span class="activity-choice"><g:message code="activity.autoreply.name" /></span>
+					<div class="activity-description"><g:message code="activity.autoreply.description" /></div>
 				</li>
 			</ul>
 		</form>
