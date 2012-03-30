@@ -19,3 +19,4 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 			a.validate()
 	}
 }
+

@@ -3,6 +3,7 @@
 	<head>
 		<meta name="layout" content="settings"/>
 		<title>Settings > General</title>
+		<export:resource />
 	</head>
 	<body>
 		<div id="general">
@@ -21,6 +22,8 @@
 					<label for="importCsvFile">select a data file to import</label>
 					<input type="file" id="importCsvFile" name="importCsvFile" onchange="this.form.submit();"/>
 				</g:uploadForm>
+				<h3>Export failed contacts below</h3>
+				<export:formats formats="['csv']" controller="import" action="exportFailedContacts" />
 			</div>
 		</div>
 	</body>

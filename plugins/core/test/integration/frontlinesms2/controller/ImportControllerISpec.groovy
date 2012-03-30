@@ -37,6 +37,37 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Group.list()*.name.sort() == ['ToDo', 'ToDo-Work', 'ToDo-Work-jobo', 'Work', 'isIt', 'jobo']
 	}
 	
+	def 'Uploading a contacts CSV file with failed contacts should create failed contacts in a file'() {
+		given:
+			// mock the file
+			def csvFileContent = '''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+"Alice Sihoho254728749000","","","true","","/ToDo/Work"
+"Amira Cheserem","+254715840801","","","true","","/ToDo/Work"
+"anyango Gitu","+254727689908","","","true","","/isIt\\/ToDo/Work/jobo"
+'''
+			// FIXME are there any problems with modifying getFile like this?
+			controller.request.metaClass.getFile = { String originalFileName ->
+				println "getFile() : name:$originalFileName"
+				assert originalFileName == 'importCsvFile'
+				[
+					empty:false,
+					originalFilename:'mockedFile.csv',
+					inputStream: new ByteArrayInputStream(csvFileContent.getBytes("UTF-8"))
+				]
+			}
+			controller.importContacts()
+		when:
+			// failed contacts file is downloaded
+			controller.exportFailedContacts()
+		then:
+			// check that headers are correctly set
+			controller.response.headers."Content-disposition".value == "attachment; filename=failedContacts.csv"
+			// check that body is correcty set
+			controller.response.contentAsString == '''"Name","Mobile Number","Other Mobile Number","E-mail Address","Current Status","Notes","Group(s)"
+"Alice Sihoho254728749000","","","true","","/ToDo/Work"
+'''
+	}
+	
 	def 'Uploading a messages CSV file should create new messages and folder in the database'() {
 		given:
 			// mock the file
