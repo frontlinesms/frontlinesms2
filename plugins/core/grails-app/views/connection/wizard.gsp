@@ -45,7 +45,7 @@ function isFieldSet(fieldName) {
 }
 
 function getFieldVal(fieldName) {
-	var val = $('input[name="' + fconnectionType + fieldName + '"]').val();
+	var val = $('#' + fconnectionType + fieldName).val();
 	return val;
 }
 
@@ -77,27 +77,28 @@ function initializePopup() {
 	$("#tabs-2").contentWidget({
 		validate: function() {
 			var checked = $("#type-list").find("input[checked=checked]").val();
-			if(checked == 'smslib') {
-				return isFieldSet('name')
-						&& isFieldSet('port');
-			} else if(checked == 'email') {
-				return isFieldSet('name')
-						&& ($("#receiveProtocol").val() != 'null')
-						&& isFieldSet('serverName')
-						&& isFieldSet('serverPort')
-						&& isFieldSet('username')
-						&& isFieldSet('password');
-			} else if(checked == 'clickatell') {
-				return isFieldSet('name')
-						&& isFieldSet('apiId')
-						&& isFieldSet('username')
-						&& isFieldSet('password');
-			} else if(checked == 'intellisms') {
-				return isFieldSet('name')
-						&& isFieldSet('username')
-						&& isFieldSet('password');
+			var nullConstraintValidator = {};
+			<g:each in="${Fconnection.implementations}">
+				nullConstraintValidator.${it.shortName} = {
+					isValid: function() {
+						var fields = [];
+						<g:each in="${it.configFields}" var="f">
+							<g:if test='${!it.constraints."$f".nullable}'>
+								fields.push("${f}");
+							</g:if>
+						</g:each>
+						var valid = false;
+						$.each (fields, function(index, value){
+							valid = isFieldSet(value)
+							console.log("is valid " + value + "? " + valid)
+							return valid
+						});
+						return valid
+						}
+					}
+				</g:each>
+				return nullConstraintValidator[checked].isValid()	
 			}
-		}
 	});
 }
 
@@ -121,7 +122,13 @@ function updateConfirmationMessage() {
 					$("#${it}-confirm").hide();
 				</g:each>
 				<g:each in="${it.configFields}" var="f">
-					setConfirmation('${f}');
+					<g:if test="${f == it.passwords[0]}">
+						setSecretConfirmation('${f}');
+					</g:if>
+					<g:else>
+						setConfirmation('${f}');
+					</g:else>
+					
 				</g:each>
 				$("#${it.shortName}-confirm").show();
 			}

@@ -123,7 +123,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			lstConnections.find('li').size() == 2
 	}
 	
-	@spock.lang.IgnoreRest
 	def 'can setup a new IntelliSMS account'() {
 		when:
 			to ConnectionPage
