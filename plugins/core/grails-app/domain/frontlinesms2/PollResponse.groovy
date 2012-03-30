@@ -36,4 +36,9 @@ class PollResponse {
 		}
 		m
 	}
+
+//> FACTORY METHODS
+	static PollResponse createUnknown() {
+		new PollResponse(value:'Unknown', key:Poll.KEY_UNKNOWN)
+	}
 }

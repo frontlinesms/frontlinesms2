@@ -5,9 +5,9 @@ class CustomFieldISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should return only the list of name that match all the custom field"(){ 
 		when:
-			def firstContact = new Contact(name:'Alex', primaryMobile:'+254987654').save(failOnError:true)
-			def secondContact = new Contact(name:'Mark', primaryMobile:'+254333222').save(failOnError:true)
-			def thirdContact = new Contact(name:"Toto", primaryMobile:'+666666666').save(failOnError:true)
+			def firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true)
+			def secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true)
+			def thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true)
 	
 			[new CustomField(name:'city', value:'Paris', contact: firstContact),
 					new CustomField(name:'city', value:'Paris', contact: secondContact),

@@ -93,7 +93,7 @@ log4j = {
 		}
 		development {
 			appender new ConsoleAppender(name:'console-logger')
-			trace 'console-logger'
+			info 'console-logger'
 		}
 	}
 

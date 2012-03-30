@@ -68,7 +68,7 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 	
 	def createTestMessages() {
 		9.times {
-			new Contact(name:"Contact ${it}", primaryMobile:"123456789${it}").save(failOnError:true)
+			new Contact(name:"Contact ${it}", mobile:"123456789${it}").save(failOnError:true)
 		}
 		Fmessage inboxMessage = new Fmessage(inbound:true, deleted:false, text:'An inbox message', src:'1234567891', dateCreated:new Date()-10).save(flush:true)
 		Fmessage anotherInboxMessage = new Fmessage(inbound:true,deleted:false, text:'Another inbox message', src:'1234567892', dateCreated:new Date()-20).save(flush:true)

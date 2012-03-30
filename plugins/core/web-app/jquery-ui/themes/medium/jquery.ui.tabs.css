@@ -15,11 +15,11 @@
 }
 
 .ui-tabs form{
-	max-height: 354px;
-	height: 100%;
-	overflow: hide;
+	height: 354px;
 	padding: 17px;
-	width: 70%;
+	width: 485px;
+	overflow: auto;
+	margin: 0;
 }
 
 .ui-tabs-nav {

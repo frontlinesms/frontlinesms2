@@ -5,8 +5,8 @@ import frontlinesms2.*
 class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestContacts() {
-		new Contact(name: 'Alice', primaryMobile: '2541234567', notes: 'notes').save(failOnError:true, flush: true)
-		new Contact(name: 'Bob', primaryMobile: '+254987654', secondaryMobile: "+232345675", email: "bob@bob.com").save(failOnError:true, flush: true)
+		new Contact(name: 'Alice', mobile: '2541234567', notes: 'notes').save(failOnError:true, flush: true)
+		new Contact(name: 'Bob', mobile: '+254987654', email: "bob@bob.com").save(failOnError:true, flush: true)
 	}
 	
 	static createTestMessages() {
@@ -52,7 +52,7 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	def createManyContacts() {
 		(11..90).each {
-			new Contact(name: "Contact${it}", primaryMobile: "987654321${it}", notes: 'notes').save(failOnError:true)
+			new Contact(name: "Contact${it}", mobile: "987654321${it}", notes: 'notes').save(failOnError:true)
 		}
 	}
 	

@@ -7,8 +7,8 @@ class ContactControllerSpec extends ControllerSpec {
 	
 	def "should render model containing shared and unshared groups"() {
 		setup:
-			def alice = new Contact(name: "Alice", primaryMobile: "12345")
-			def bob = new Contact(name: "Bob", primaryMobile: "54321")
+			def alice = new Contact(name: "Alice", mobile: "12345")
+			def bob = new Contact(name: "Bob", mobile: "54321")
 			mockDomain(Contact, [alice, bob])
 			def group1 = new Group(name: "group1")
 			def group2 = new Group(name: "group2")

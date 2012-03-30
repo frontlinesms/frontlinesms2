@@ -20,22 +20,11 @@
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
 	<div class="basic-info">
-		<label for="primaryMobile"><g:message code="contact.primaryMobile.label" default="Mobile (Primary)"/></label>
-		<g:textField class="numberField" name="primaryMobile" id="primaryMobile" value="${contactInstance?.primaryMobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
-		<g:if test="${contactInstance?.primaryMobile?.trim()}">
-			<a class="remove-field" id="remove-primaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.primaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
-				<img src='${resource(dir:'images/icons',file:'send.png')}' />
-			</g:remoteLink>
-		</g:if>
-	</div>
-	<div class="basic-info">
-		<label for="secondaryMobile"><g:message code="contact.secondaryMobile.label" default="Other Mobile"/></label>
-		<g:textField class="numberField" name="secondaryMobile" id="secondaryMobile" value="${contactInstance?.secondaryMobile?.trim()}" onkeyup="checkForNonDigits();" />
-		<g:if test="${contactInstance?.secondaryMobile?.trim()}">
-			<a class="remove-field" id="remove-secondaryMobile"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.secondaryMobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
-				<img src='${resource(dir:'images/icons',file:'send.png')}' />
+		<label for="mobile"><g:message code="contact.mobile.label" default="Mobile"/></label>
+		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
+		<g:if test="${contactInstance?.mobile?.trim()}">
+			<a class="remove-field" id="remove-mobile"></a>
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">&nbsp;
 			</g:remoteLink>
 		</g:if>
 	</div>
@@ -43,9 +32,8 @@
 		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
 		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">
-			<a class="remove-field" id="remove-email"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+			<a class="remove-field" id="remove-email"></a>
 			<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
-				 <img src='${resource(dir:'images/icons',file:'send.png')}' />
 			</g:remoteLink>
 		</g:if>
 	</div>
@@ -55,7 +43,7 @@
 				  <li class="${f == fieldInstance ? 'selected' : ''}">
 					  <label for="custom-field-${f.name}">${f.name}</label>
 					  <input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
-					  <a class="remove-field" id="remove-field-${f.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+					  <a class="remove-field" id="remove-field-${f.id}"></a>
 				  </li>
 			  </g:each>
 		</ul>
@@ -85,7 +73,7 @@
 			<ol id='group-list'>
 				<g:each in="${contactGroupInstanceList}" status="i" var="g">
 					<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
-						<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+						<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"></a>
 					</li>
 				</g:each>
 				<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">

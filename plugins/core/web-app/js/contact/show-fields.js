@@ -35,7 +35,7 @@ function addCustomField(name) {
 	var fieldId = Math.floor(Math.random()*100001)
 	var fieldListItem = $('<li><label for="' + fieldId + '">' + name + '</label>');
 	var textFieldItem = $('<input type="text" name="' + name + '" value="" />');
-	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '"><img src="' + url_root + 'images/icons/remove.png" /></a></li>');
+	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '"></a></li>');
 	
 	fieldListItem.append(textFieldItem);
 	fieldListItem.append(deleteButton);

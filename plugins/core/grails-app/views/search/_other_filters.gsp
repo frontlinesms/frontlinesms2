@@ -2,13 +2,13 @@
 	<li class='extra-option' id='contactString-list-item'>
 		<h3 class="list-title">Contact name:</h3>
 		<g:textField name="contactString" value="${search?.contactString}"/>
-		<a onclick="removeValue('contactString'); toggleExtraSearchOption('contactString');"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+		<a  class="remove-field" onclick="removeValue('contactString'); toggleExtraSearchOption('contactString');"></a>
 	</li>
 	<g:each in="${customFieldList}" status="i" var="c" >
 		<li class='extra-option' id="${c}-list-item">
 			<h3 class="list-title">${c}:</h3>
 			<g:textField name="${c}" value="${(search && search.customFields) ? search?.customFields[c] : ''}"/>
-			<a onclick='removeValue("${c}"); toggleExtraSearchOption("${c}");'><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+			<a class="remove-field" onclick='removeValue("${c}"); toggleExtraSearchOption("${c}");'></a>
 		</li>
 	</g:each>
 </ul>

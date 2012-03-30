@@ -24,15 +24,20 @@
 }
 #sidebar #search-menu #extra-options-list{
 	padding: 0 0 17px 23px;
-	margin-bottom: 17px;
 }
 
 #sidebar #search-menu #extra-options-list li{
 	padding-top: 5px;
 }
 #sidebar #search-menu .extra-option input{
-	margin: 5px 0 0 17px;
+	margin: 5px 0 0 0;
 	width:76%;
+}
+#sidebar #search-menu .extra-option .remove-field{
+	background-image: url('../images/icons/remove.png');
+	background-repeat: no-repeat;
+	background-position: center left;
+	padding-left: 16px;
 }
 #sidebar #search-menu #more-options{
 	margin-bottom: 17px;
@@ -46,7 +51,7 @@
 	float: right;
 }
 #sidebar #search-menu .field{
-	padding-left: 0;
+	padding: 0;
 }
 #sidebar #search-menu #non-dates .field select, #sidebar #search-menu .field input[type=text]{
 	margin-top: 5px;

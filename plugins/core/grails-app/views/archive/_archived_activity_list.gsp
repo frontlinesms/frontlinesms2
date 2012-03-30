@@ -4,10 +4,10 @@
 		<table cellspacing="0">
 			<thead>
 				<tr>
-					<th class="activity-name-cell">Name</th>
-					<th class="activity-type-cell">Type</th>
-					<th class="activity-date-cell">Date</th>
-					<th class="activity-message-count-cell">Messages</th>
+					<th class="activity-name-cell"><g:message code="archive.name" /></th>
+					<th class="activity-type-cell"><g:message code="archive.type" /></th>
+					<th class="activity-date-cell"><g:message code="archive.date" /></th>
+					<th class="activity-message-count-cell"><g:message code="archive.messages" /></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -41,5 +41,5 @@
 </div>
 </g:if>
 <g:else>
-	<p>&nbsp No archived activities</p>
+	<p><g:message code="archive.activity-list.no-archived-activity" /></p>
 </g:else>
