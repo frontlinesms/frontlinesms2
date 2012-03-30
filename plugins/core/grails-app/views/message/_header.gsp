@@ -7,10 +7,10 @@
 				<g:link controller="archive" action="${params.action}List"> &lt;Back </g:link>
 			</g:if>
 			<h3 id="activity-title">${ownerInstance?.name} ${ownerInstance?.type}</h3>
-			<g:render template="../message/activity_buttons"/>
+			<g:render template="../message/activity_buttons" plugin="core"/>
 			<div id="activity-details" class='section-details'>
 				<g:if test="${ownerInstance?.type == 'poll'}">
-					<g:render template="../message/poll_header"/>
+					<g:render template="../message/poll_header" plugin="core"/>
 				</g:if>
 				<g:else>
 					<g:formatDate date="${ownerInstance?.dateCreated}" />
@@ -28,13 +28,13 @@
 	<g:elseif test="${messageSection == 'folder'}">
 		<div class="message-title">
 			<h3 id="folder-title">${ownerInstance?.name} ${messageSection}</h3>
-			<g:render template="../message/section_action_buttons"/>
+			<g:render template="../message/section_action_buttons" plugin="core"/>
 		</div>
 	</g:elseif>
 	<g:else>
 		<div class="message-title">
 			<h3 id="${messageSection}-title">${messageSection}</h3>
-			<g:render template="../message/section_action_buttons"/>
+			<g:render template="../message/section_action_buttons" plugin="core"/>
 		</div>
 	</g:else>
 </div>

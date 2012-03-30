@@ -12,7 +12,7 @@
 		</script>
 	</head>
     <body>
-		<g:render template="contact_list"/>
+		<g:render template="contact_list" plugin="core"/>
     	<div id="contact-editor">
     		<g:form name="details">
 	    		<g:hiddenField name="version" value="${contactInstance?.version}"/>
@@ -28,8 +28,8 @@
 				<g:if test="${contactInstance}">
 					<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 				</g:if>
-	    		<g:render template="single_contact_view"/>
-				<g:render template="multiple_contact_view"/>
+	    		<g:render template="single_contact_view" plugin="core"/>
+				<g:render template="multiple_contact_view" plugin="core"/>
 			</g:form>
 		</div>
     </body>

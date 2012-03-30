@@ -41,7 +41,7 @@
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p></div>
 		</div>
-		<g:render template="../message/message_actions"></g:render>
+		<g:render template="../message/message_actions" plugin="core"></g:render>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>

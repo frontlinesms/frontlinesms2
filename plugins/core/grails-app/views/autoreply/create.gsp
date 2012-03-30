@@ -9,9 +9,9 @@
 	</ol>
 
 	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'Ok', summaryRedirect)">
-		<g:render template="../autoreply/keyword"/>
-		<g:render template="../autoreply/message"/>
-		<g:render template="../autoreply/confirm"/>
+		<g:render template="../autoreply/keyword" plugin="core"/>
+		<g:render template="../autoreply/message" plugin="core"/>
+		<g:render template="../autoreply/confirm" plugin="core"/>
 	</g:formRemote>
 </div>
 <g:javascript>

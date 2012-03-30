@@ -10,14 +10,14 @@
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'Ok', summaryRedirect)">
-		<g:render template="message"/>
+		<g:render template="message" plugin="core"/>
 		<div id="tabs-2">
-			<g:render template="../quickMessage/select_recipients" model= "['contactList' : contactList,
+			<g:render template="../quickMessage/select_recipients" plugin="core" model= "['contactList' : contactList,
 			                                                                'groupList': groupList,
 			                                                                'nonExistingRecipients': [],
 			                                                                'recipients': []]"/>
 		</div>
-		<g:render template="confirm"/>
+		<g:render template="confirm" plugin="core"/>
 	</g:formRemote>
 </div>
 <g:javascript>

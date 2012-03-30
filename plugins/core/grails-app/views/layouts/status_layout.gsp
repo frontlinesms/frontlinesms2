@@ -4,16 +4,16 @@
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead />
 		<r:require module="status"/>
-		<g:render template="/includes"/>
+		<g:render template="/includes" plugin="core"/>
 	</head>
 	<body id="status-tab">
 		<div id="header">
 			<div id="notifications">
-				<g:render template="/system_notifications"/>
-				<g:render template="/flash"/>
+				<g:render template="/system_notifications" plugin="core"/>
+				<g:render template="/flash" plugin="core"/>
 			</div>
-			<g:render template="/system_menu"/>
-			<g:render template="/tabs"/>
+			<g:render template="/system_menu" plugin="core"/>
+			<g:render template="/tabs" plugin="core"/>
 		</div>
 		<div id="main">
 			<div class="content">

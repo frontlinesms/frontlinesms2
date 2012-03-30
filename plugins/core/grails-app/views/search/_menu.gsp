@@ -10,8 +10,8 @@
 				</ul>
 			</li>
 			<li class='section' id="search-filters">
-				<g:render template="basic_filters"/>
-				<g:render template="other_filters"/>
+				<g:render template="basic_filters" plugin="core"/>
+				<g:render template="other_filters" plugin="core"/>
 			</li>
 			<li class='section buttons' id="search-btn" >
 				<ul class='sub-list'>

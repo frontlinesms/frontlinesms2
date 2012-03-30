@@ -4,7 +4,7 @@
 		<title><g:layoutTitle default="Search"/></title>
 		<g:layoutHead />
 		<r:require module="search"/>
-		<g:render template="/includes"/>
+		<g:render template="/includes" plugin="core"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();
@@ -14,19 +14,19 @@
 	<body id="search-tab">
 		<div id="header">
 			<div id="notifications">
-				<g:render template="/system_notifications"/>
-				<g:render template="/flash"/>
+				<g:render template="/system_notifications" plugin="core"/>
+				<g:render template="/flash" plugin="core"/>
 			</div>
-			<g:render template="/system_menu"/>
-			<g:render template="/tabs"/>
+			<g:render template="/system_menu" plugin="core"/>
+			<g:render template="/tabs" plugin="core"/>
 		</div>
         <div id="main">
-			<g:render template="menu"/>
+			<g:render template="menu" plugin="core"/>
 			<div id="content">
-				<g:render template="/search/header" />
-				<g:render template="/message/message_list"/>
+				<g:render template="/search/header" plugin="core"/>
+				<g:render template="/message/message_list" plugin="core"/>
 				<g:layoutBody />
-				<g:render template="../message/footer" />
+				<g:render template="../message/footer" plugin="core"/>
 			</div>
 		</div>
 		<r:layoutResources/>

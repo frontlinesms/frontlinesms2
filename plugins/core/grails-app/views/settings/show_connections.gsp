@@ -46,6 +46,6 @@
 		</g:javascript>
 	</head>
 	<body>
-		<g:render template="/connection/connection_list"/>
+		<g:render template="/connection/connection_list" plugin="core"/>
 	</body>
 </html>

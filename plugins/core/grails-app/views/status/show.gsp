@@ -4,11 +4,11 @@
 		<meta name="layout" content="status_layout" />
 	</head>
 	<body>
-		<g:render template="traffic" />
+		<g:render template="traffic" plugin="core"/>
 		<div id="right-column">
-			<g:render template="connection_list" />
+			<g:render template="connection_list" plugin="core"/>
 			<h3 id="detection-title">Detected devices</h3>
-			<g:render template="device_detection"/>
+			<g:render template="device_detection" plugin="core"/>
 		</div>
 		<g:javascript>
 			setInterval(refreshDevices, 10000);

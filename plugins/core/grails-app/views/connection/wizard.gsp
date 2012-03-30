@@ -33,9 +33,9 @@
 		<li><a href="#tabs-3">Confirm</a></li>
 	</ol>
 	<g:form name="connectionForm" action="${action}" id='${fconnectionInstance?.id}'>
-		<g:render template="type"/>
-		<g:render template="details"/>
-		<g:render template="confirm"/>
+		<g:render template="type" plugin="core"/>
+		<g:render template="details" plugin="core"/>
+		<g:render template="confirm" plugin="core"/>
 	</g:form>
 </div>
 <g:javascript>
