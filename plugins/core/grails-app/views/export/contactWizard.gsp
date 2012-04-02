@@ -3,11 +3,11 @@
 	<g:form name="export-form" controller="export" action="downloadContactReport">
 		<g:hiddenField name="contactsSection" value="${contactsSection}" />
 		<g:hiddenField name="groupId" value="${groupId}" />
-		<p class="info">To export contacts from FrontlineSMS, choose the type of export and the information to be included in the exported data.</p>
+		<p class="info"><g:message code="export.contact.info" /></p>
 			<div>
-				<h2>Select an output format:</h2>
-				<input type="radio" name="format" value="csv" checked="checked" /> CSV format for use in spreadsheet<br />
-				<input type="radio" name="format" value="pdf" /> PDF format for printing
+				<h2><g:message code="export.selectformat" /></h2>
+				<input type="radio" name="format" value="csv" checked="checked" /> <g:message code="export.csv.format" /><br />
+				<input type="radio" name="format" value="pdf" /> <g:message code="export.pdf.format" />
 			</div>
 	</g:form>
 </div>

@@ -35,5 +35,5 @@
 	</div>
 </g:if>
 <g:else>
-	<p><g:message code="archive.activity.list" /></p>
+	<p><g:message code="archive.folder.list" /></p>
 </g:else>
