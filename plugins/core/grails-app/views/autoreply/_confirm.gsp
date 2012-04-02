@@ -4,14 +4,14 @@
 		<g:textField name="name" class="name-field" value="${activityInstanceToEdit?.name}" />
 	</div>
 	<div>
-		<h2 class="bold"><g:message code="common.confirm.details" /></h2>
+		<h2 class="bold"><g:message code="autoreply.confirm.details.label" /></h2>
 		<table>
 			<tr>
-				<td class="bold"><g:message code="autoreply.confirm.keyword" /></td>
+				<td class="bold"><g:message code="autoreply.confirm.keyword.label" /></td>
 				<td id="keyword-confirm" />
 			</tr>
 			<tr>
-				<td class="bold"><g:message code="common.confirm.message" /></td>
+				<td class="bold"><g:message code="autoreply.confirm.message.label" /></td>
 				<td id="autoreply-confirm"/>
 			</tr>
 		</table>
