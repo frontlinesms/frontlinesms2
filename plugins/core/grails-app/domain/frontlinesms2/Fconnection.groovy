@@ -13,7 +13,7 @@ class Fconnection {
 	
 	String name
 	
-	String getStatus() {
+	def getStatus() {
 		fconnectionService.getRouteStatus(this)
 	}
 	

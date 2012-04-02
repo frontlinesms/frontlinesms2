@@ -1,6 +1,6 @@
 <g:if test="${activityInstanceTotal > 0}">
 <div id="activities">
-	<div id="activity-list">
+	<div id="activity-list" class="message-list">
 		<table cellspacing="0">
 			<thead>
 				<tr>
