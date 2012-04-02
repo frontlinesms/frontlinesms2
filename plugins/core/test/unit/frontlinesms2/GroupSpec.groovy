@@ -57,17 +57,19 @@ class GroupSpec extends UnitSpec {
 
 	def "should list all the group names with a count of number of people in the group"() {
 		setup:
+			registerMetaClass Collection
+			MetaClassModifiers.addMethodsToCollection()
 			def sahara = new Group(name: "sahara")
 			def thar = new Group(name: "thar")
 			mockDomain(Group, [sahara, thar])
 			mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(name: "Bob", mobile: "address1")), new GroupMembership(group: sahara, contact: new Contact(name: "Jim", mobile: "address2")),
-				new GroupMembership(group: thar, contact: new Contact(name: "Kate", mobile: "address3"))]
+			new GroupMembership(group: thar, contact: new Contact(name: "Kate", mobile: "address3"))]
 			
 		when:
 			def result = Group.getGroupDetails()
 		then:
-			result.sahara == ["address1", "address2"]
-			result.thar == ["address3"]
+			result."group-$sahara.id" == ["address1", "address2"]
+			result."group-$thar.id" == ["address3"]
 	}
 }
 
