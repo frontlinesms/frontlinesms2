@@ -4,7 +4,6 @@ class MessageSendService {
 	static transactional = false
 	
 	def send(Fmessage m, Fconnection c=null) {
-		assert m instanceof Fmessage
 		def headers = [:]
 		if(c) headers.fconnection = c.id
 		m.save()
@@ -13,13 +12,10 @@ class MessageSendService {
 		}
 	}
 	
-	def retry(Fmessage m, Fconnection c=null) {
-		assert m instanceof Fmessage
-		def headers = [:]
-		if(c) headers.fconnection = c.id
+	def retry(Fmessage m) {
 		m.dispatches.each { dispatch ->
 			if(dispatch.status == DispatchStatus.FAILED) {
-				sendMessageAndHeaders('seda:dispatches', dispatch, headers)
+				sendMessage('seda:dispatches', dispatch)
 			}
 		}
 	}
