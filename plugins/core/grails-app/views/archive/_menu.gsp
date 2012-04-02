@@ -14,12 +14,12 @@
 						</g:link>
 					</li>
 					<li class="${(messageSection == 'activity') ? 'selected':''}" >
-						<g:link controller="archive" action='activityList' elementId="activity" class="archive-section-list">
+						<g:link controller="archive" action='activityList' params="[viewingMessages: false]" elementId="activity" class="archive-section-list">
 							Activity archive
 						</g:link>
 					</li>
 					<li class="${(messageSection == 'folder')? 'selected':''}" >
-						<g:link controller="archive" action='folderList' elementId="folder" class="archive-section-list">
+						<g:link controller="archive" action='folderList' params="[viewingMessages: false]" elementId="folder" class="archive-section-list">
 							Folder archive
 						</g:link>
 					</li>

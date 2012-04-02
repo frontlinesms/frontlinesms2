@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.RouteStatus" %>
 <div id='connections'>
 	<g:if test="${fconnectionInstanceTotal==0}">
 		<div>You have no connections configured.</div>
@@ -15,7 +16,7 @@
 					</g:link>
 					
 					<g:if test="${c == connectionInstance}">
-						<g:if test="${c.status == 'Not connected'}">
+						<g:if test="${c.status == RouteStatus.NOT_CONNECTED}">
 							<div id="createRoute">
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}">Create route</g:link>
 							</div>

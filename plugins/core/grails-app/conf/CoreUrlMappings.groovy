@@ -35,17 +35,13 @@ class CoreUrlMappings {
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}
 		
-		"/archive/poll"(controller:'archive', action:'activityList') {}
-		"/archive/poll/$ownerId"(controller:'archive', action:'activityList') {}
-		"/archive/poll/$ownerId/show/$messageId"(controller:'archive', action:'activityList') {}
-		
-		"/archive/announcement"(controller:'archive', action:'activityList') {}
-		"/archive/announcement/$ownerId"(controller:'archive', action:'announcement') {}
-		"/archive/announcement/$ownerId/show/$messageId"(controller:'archive', action:'announcement') {}
+		"/archive/activity"(controller:'archive', action:'activityList') {}
+		"/archive/activity/$ownerId"(controller:'archive', action:'activity') {}
+		"/archive/activity/$ownerId/show/$messageId"(controller:'archive', action:'activity') {}
 		
 		"/archive/folder"(controller:'archive', action:'folderList') {}
-		"/archive/folder/$ownerId"(controller:'archive', action:'folderList') {}
-		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folderList') {}
+		"/archive/folder/$ownerId"(controller:'archive', action:'folder') {}
+		"/archive/folder/$ownerId/show/$messageId"(controller:'archive', action:'folder') {}
 		
 		"/$controller/$action?/$id?"{
 			constraints {
