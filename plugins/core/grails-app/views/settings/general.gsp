@@ -3,6 +3,7 @@
 	<head>
 		<meta name="layout" content="settings"/>
 		<title>Settings > General</title>
+		<export:resource />
 	</head>
 	<body>
 		<div id="general">
