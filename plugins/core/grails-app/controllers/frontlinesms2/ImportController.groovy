@@ -60,7 +60,7 @@ class ImportController {
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
 			
-			flash.message = "$savedCount contacts were imported; ${failedLines.size()} failed${failedLines? (': ' + g.link(action:'exportFailedContacts', absolute:'true', 'details')): ''}" 
+			flash.message = "$savedCount contacts were imported; ${failedLines.size()} failed${failedLines? ('. ' + g.link(action:'exportFailedContacts', absolute:'true', 'Create CSV of failed contacts')): ''}" 
 			
 			redirect controller: "settings", action: 'general'
 		} else throw new RuntimeException("File upload has failed for some reason.")
