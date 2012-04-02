@@ -128,7 +128,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def model = controller.create()
 		then:
-			model.groupList == [ "English numbers": [] ]
+			model.groupList["smartgroup-$s.id"] == []
 				
 	}
 	
