@@ -23,10 +23,9 @@
 		<div id="main">
 			<g:render template="../message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 			<div id="content">
-				<g:render template="../message/header"/>
 				<g:render template="../message/message_list"/>
 				<g:layoutBody/>
-			    <g:render template="../message/footer"/>
+			    <g:render template="../message/message_details" />
 			</div>
 		</div>
 		<r:layoutResources/>

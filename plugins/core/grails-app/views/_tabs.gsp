@@ -1,6 +1,5 @@
 <%@ page import="frontlinesms2.Fconnection" %>
-<div id="primary-nav" class="standard-nav">
-    <ul id='tab-list'>
+<ul id="tab-nav">
         <li>
             <g:link class="tab-link ${params.controller == 'message' ? 'current' : ''}" url="${[controller:'message']}"	id="message-tab-link">
                 Messages <span id="inbox-indicator" class="indicator">${frontlinesms2.Fmessage.countUnreadMessages()}</span>
@@ -27,5 +26,3 @@
         </li>
     </ul>
     <div id="tabbar"></div>
-</div>
-

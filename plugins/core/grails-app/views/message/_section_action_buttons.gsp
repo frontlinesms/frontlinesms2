@@ -1,4 +1,7 @@
-<ul class="section-header-buttons button-list">
+<ul class="header-buttons">
+ 	<li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
+			<div id="quick-message">Quick message</div>
+	</g:remoteLink></li>
 	<g:if test="${messageSection == 'trash' && messageInstanceTotal != 0}">
 		<li class="trash">
 			<select class="dropdown" id="trash-actions" onchange="launchEmptyTrashConfirmation();">
@@ -29,7 +32,4 @@
 			</li>
 		</g:else>
 	</g:if>
-       <li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
-			<div id="quick-message">Quick message</div>
-		</g:remoteLink></li>
 </ul>

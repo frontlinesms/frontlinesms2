@@ -15,6 +15,7 @@ modules = {
 	
 	messages {
 		dependsOn "jquery, jquery-ui, common"
+		resource url: [plugin:'core', dir:'css', file:"messages.css"]
 		resource url: [plugin:'core', dir:'js', file:"message/check_message.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/arrow_navigation.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/star_message.js"]
