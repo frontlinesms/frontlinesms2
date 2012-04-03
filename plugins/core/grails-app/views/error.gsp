@@ -39,12 +39,18 @@ Code Snippet:
 				Otherwise please send us an email at
 				<a href="mailto:support@frontlinesms.com?subject=Error%20Report-%20${exception.message}&body=${content}">support@frontlinesms.com</a>
 				and include your logs by
-				<g:link class="btn" controller="error" action="zip_to_download">downloading them</g:link>
+				<g:link class="btn" controller="error" action="logs">downloading them</g:link>
+				and attaching the resulting zip file.
+
+				To provide more information, please include your logs and database by
+				<g:link class="btn" controller="error" action="logsAndDatabase">downloading them</g:link>
 				and attaching the resulting zip file.
 			</p>
 			<p>Thank you for your help! \o/</p>
 			<p>
-				<g:link class="btn" controller="error" action="zip_to_download">Download logs</g:link>
+				Download 
+				<g:link class="btn" controller="error" action="logs">logs</g:link> or 
+				<g:link class="btn" controller="error" action="logsAndDatabase">logs and database</g:link>
 			</p>
 			<form action="mailto:support@frontlinesms.com?subject=Error%20Report-%20${exception.message}" method="post" enctype="text/plain">
 				<textarea name="body">${content}</textarea><br/>
