@@ -150,6 +150,7 @@ class CoreBootStrap {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
+		new IntelliSmsFconnection(name:"IntelliSmsFconnection Mock connection", username:"johnmark", password:"pass_word").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
@@ -169,6 +170,8 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"MOCK99: incoming messages, and can send", port:'MOCK99', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK100: incoming messages for autoreplies", port:'MOCK100', baud:9600).save(failOnError:true)	
 	}
+	
+	
 	
 	private def dev_initPolls() {
 		if(!dev) return

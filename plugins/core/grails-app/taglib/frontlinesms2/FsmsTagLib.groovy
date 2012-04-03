@@ -1,15 +1,24 @@
-package core
+package frontlinesms2
 
 class FsmsTagLib {
 	static namespace = 'fsms'
 	
 	def confirmTable = { att ->
 		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm">'
-		def fields = att.remove('fields').tokenize(',')
-		fields.each {
+		out << confirmTypeRow(att)
+		getFields(att).each {
 			out << confirmTableRow(att + [field:it.trim()])
 		}
 		out << '</table>'
+	}
+	
+	def confirmTypeRow = {att ->
+		out << '<tr>'
+		out << '	<td class="bold">'
+		out << g.message(code:"${att.instanceClass.simpleName.toLowerCase()}.type.label")
+		out << '  </td>'
+		out << '	<td id="confirm-type"></td>'
+		out << '</tr>'
 	}
 	
 	def confirmTableRow = { att ->
@@ -22,17 +31,16 @@ class FsmsTagLib {
 	}
 	
 	def inputs = { att ->
-		def fields = att.fields
-		att.remove('fields')
+		def fields = getFields(att)
 		println "FsmsTagLib.input() : fields=$fields"
-		fields.tokenize(',').each {
-			out << input(att + [field:it.trim()])
+		fields.each {
+			out << input(att + [field:it])
 		}
 	}
 	
 	def input = { att ->
 		def groovyKey = att.field
-		def htmlKey = (att.fieldPrefix?:'') + att.field
+		def htmlKey = (att.fieldPrefix?:att.instanceClass?att.instanceClass.shortName:'') + att.field
 		def val = att.instance?."$groovyKey"
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
 		
@@ -51,6 +59,13 @@ class FsmsTagLib {
 						noSelection:[null:'- Select -']])
 		} else out << g.textField(att)
 		out << '</div>'
+	}
+	
+	private def getFields(att) {
+		def fields = att.remove('fields')
+		if(!fields) fields = att.instanceClass?.configFields
+		if(fields instanceof String) fields = fields.tokenize(',')*.trim()
+		return fields
 	}
 	
 	private def getFieldLabel(clazz, fieldName) {
