@@ -91,4 +91,20 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			smslibConnection.pin == "1234"
 	}
 	
+	def "can save a new IntelliSmsFconnection"() {
+		setup:
+			controller.params.name = "Test IntelliSmsFconnection"
+			controller.params.connectionType = 'intellisms'
+			controller.params.username = "test"
+			controller.params.password = "test"
+		when:
+			controller.save()
+			def conn = IntelliSmsFconnection.findByName("Test IntelliSmsFconnection")
+		then:
+			conn
+			conn.name == "Test IntelliSmsFconnection"
+			conn.username == "test"
+			conn.password == "test"
+	}
+	
 }

@@ -123,6 +123,29 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			lstConnections.find('li').size() == 2
 	}
 	
+	def 'can setup a new IntelliSMS account'() {
+		when:
+			to ConnectionPage
+			btnNewConnection.click()
+		then:
+			waitFor { at ConnectionDialog }
+		when:
+			connectionForm.connectionType = "intellisms"
+			nextPageButton.click()
+			connectionForm.intellismsname = "New IntelliSMS Connection"
+			connectionForm.intellismsusername = "test"
+			connectionForm.intellismspassword = "1234"
+			nextPageButton.click()
+		then:
+			confirmIntelliSmsConnectionName.text() == "New IntelliSMS Connection"
+			confirmIntelliSmsUserName.text() == "test"
+			confirmIntelliSmsType.text() == "IntelliSMS Account"
+		when:
+			doneButton.click()
+		then:
+			waitFor { selectedConnection.text().contains('New IntelliSMS Connection') }
+	}
+	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
 		given:
 			def email = createTestEmailConnection()
@@ -184,5 +207,8 @@ class ConnectionDialog extends ConnectionPage {
 		confirmName { $("#confirm-name")}
 		confirmType { $("#confirm-type")}
 		confirmPort { $("#confirm-port")}
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
 	}
 }

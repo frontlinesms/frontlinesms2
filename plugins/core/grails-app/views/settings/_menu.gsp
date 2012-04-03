@@ -6,8 +6,8 @@
 				<li class="${params.action=='general' ? 'selected' : ''}">
 	       			<g:link url="${[controller:'settings', action:'general']}">General</g:link>
 	       		</li>
-	       		<li class="${params.action=='connections' ? 'selected' : ''}">
-	       			<g:link url="${[controller:'settings', action:'connections']}">Phones & connections</g:link>
+	       		<li class="${params.controller=='connection' ? 'selected' : ''}">
+	       			<g:link url="${[controller:'connection', action:'list']}">Phones & connections</g:link>
 	       		</li>
 	       		<li class="${params.action=='logs' ? 'selected' : ''}">
 	       			<g:link url="${[controller:'settings', action:'logs']}">System Log</g:link>
