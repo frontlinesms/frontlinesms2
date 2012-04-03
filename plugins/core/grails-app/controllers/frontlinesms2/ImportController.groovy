@@ -3,9 +3,14 @@ package frontlinesms2
 import java.text.DateFormat;
 import java.text.SimpleDateFormat
 
+import au.com.bytecode.opencsv.CSVWriter
+
 class ImportController {
 	private static final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-
+	
+	def exportService
+	def failedContactsFile = new File("failedContacts.txt")
+	
 	def importData = {
 		if (params.data == 'contacts') importContacts()
 		else importMessages()
@@ -13,11 +18,11 @@ class ImportController {
 	
 	def importContacts = {
 		def savedCount = 0
-		def failedCount = 0
 		def uploadedCSVFile = request.getFile('importCsvFile')
 		
 		if(uploadedCSVFile) {
 			def headers
+			def failedLines = []
 			def standardFields = ['Name':'name', 'Mobile Number':'mobile',
 					'E-mail Address':'email', 'Notes':'notes']
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
@@ -42,12 +47,30 @@ class ImportController {
 					++savedCount
 				} catch(Exception ex) {
 					log.info "Encountered saving contact ", ex
-					++failedCount
-				}
+					failedLines << tokens
+				}		
 			}
-			flash.message = "$savedCount contacts were imported; $failedCount failed" 
+
+			if(failedLines) {
+				def writer
+				try {
+					writer = new CSVWriter(new OutputStreamWriter(failedContactsFile.newOutputStream(), 'UTF-8'))
+					writer.writeNext(headers)
+					failedLines.each { writer.writeNext(it) }
+				} finally { try { writer.close() } catch(Exception ex) {} }
+			}
+			
+			flash.message = "$savedCount contacts were imported; ${failedLines.size()} failed${failedLines? ('. ' + g.link(action:'exportFailedContacts', absolute:'true', 'Create CSV of failed contacts')): ''}" 
+			
 			redirect controller: "settings", action: 'general'
 		} else throw new RuntimeException("File upload has failed for some reason.")
+	}
+
+	def exportFailedContacts = { 
+		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
+		failedContactsFile.eachLine {response.outputStream  << "$it\n"}
+		response.outputStream.flush()
+		failedContactsFile.deleteOnExit()
 	}
 	
 	def importMessages = {

@@ -23,7 +23,12 @@
 		<div id="main" class="main">
 			<g:render template="../archive/menu"/>
 			<div id="content" class="content">
-				<g:render template="../message/header"/>
+				<g:if test="${viewingMessages}">
+					<g:render template="../message/header"/>
+				</g:if>
+				<g:else>
+					<g:render template="header"/>
+				</g:else>
 				<div class="content-body">
 					<g:if test="${(messageSection == 'activity') && !viewingMessages}">
 						<g:render template="archived_activity_list"/>

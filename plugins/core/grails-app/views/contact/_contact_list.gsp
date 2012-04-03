@@ -4,7 +4,7 @@
 			<g:if test="${!contactInstance ? false : !contactInstance.id}">
 				<li class="selected" id="newContact">
 					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select' />
-					<a disabled="disabled" class="contact-name" href="">[New Contact]</a>
+					<a disabled="disabled" class="contact-name" href=""><g:message code="contact.list.new.contact.select" /></a>
 				</li>
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">
@@ -28,6 +28,6 @@
 	</g:if>
 	<g:else>
 		<div id="contact-list">
-			 <p>&nbsp No contacts here!</p>
+			 <p>&nbsp<g:message code="contact.list.no.contact" /></p>
 		</div>
 	</g:else>

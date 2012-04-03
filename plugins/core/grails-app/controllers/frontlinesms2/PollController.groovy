@@ -22,7 +22,7 @@ class PollController extends ActivityController {
 		poll.editResponses(params)
 		poll.save(flush: true, failOnError: true)
 		if(!params.dontSendMessage) {
-			def message = messageSendService.getMessagesToSend(params)
+			def message = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(message)
 			messageSendService.send(message)
 			poll.save()
@@ -40,7 +40,7 @@ class PollController extends ActivityController {
 		if(poll.autoreplyText) {
 			params.addresses = incomingMessage.src
 			params.messageText = poll.autoreplyText
-			def outgoingMessage = messageSendService.getMessagesToSend(params)
+			def outgoingMessage = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
 			poll.save()

@@ -4,7 +4,6 @@ class MessageSendService {
 	static transactional = false
 	
 	def send(Fmessage m, Fconnection c=null) {
-		assert m instanceof Fmessage
 		def headers = [:]
 		if(c) headers.fconnection = c.id
 		m.save()
@@ -13,33 +12,42 @@ class MessageSendService {
 		}
 	}
 	
-	def retry(Fmessage m, Fconnection c=null) {
-		assert m instanceof Fmessage
-		def headers = [:]
-		if(c) headers.fconnection = c.id
+	def retry(Fmessage m) {
 		m.dispatches.each { dispatch ->
 			if(dispatch.status == DispatchStatus.FAILED) {
-				sendMessageAndHeaders('seda:dispatches', dispatch, headers)
+				sendMessage('seda:dispatches', dispatch)
 			}
 		}
 	}
 	
-	def getMessagesToSend(params) {
-		//TODO: Need to add source from app setting
-		def message = new Fmessage(src: 'src', date: new Date(), text: params.messageText, inbound: false, hasPending: true)
-		def dispatches = []
+	def createOutgoingMessage(params) {
+		def message = new Fmessage(date: new Date(), text: params.messageText, inbound: false, hasPending: true)
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
-		addresses += groups.collect {
-			println it
-			Group.findByName(it) ? Group.findByName(it).getAddresses() : SmartGroup.findByName(it).getAddresses()
-		}.flatten()
-		addresses.unique().each { address ->
-			dispatches << new Dispatch(dst: address, status: DispatchStatus.PENDING)
-		}
+		addresses += getAddressesForGroups(groups)
+
+		def dispatches = generateDispatches(addresses)
 		dispatches.each {
 			message.addToDispatches(it)
 		}
 		return message
+	}
+
+	def getAddressesForGroups(List groups) {
+		groups.collect {
+			def g
+			if(it.startsWith('group-')) {
+				g = Group.get(it.substring(6))
+			} else if(it.startsWith('smartgroup-')) {
+				g = SmartGroup.get(it.substring(11))
+			}
+			g?.addresses
+		}.flatten()
+	}
+
+	def generateDispatches(List addresses) {
+		(addresses.unique() - null).collect {
+			new Dispatch(dst:it, status:DispatchStatus.PENDING)
+		}
 	}
 }

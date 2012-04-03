@@ -37,8 +37,8 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 		}
 	}
 
-	abstract String getTestRouteFrom();
-	abstract String getTestRouteTo();
+	String getTestRouteFrom() {}
+	String getTestRouteTo() {}
 
 	ProducerTemplate createProducerTemplate() {
 		new DefaultProducerTemplate(camelContext,

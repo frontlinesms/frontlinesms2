@@ -6,7 +6,7 @@ class AnnouncementController extends ActivityController {
 		def announcementInstance = new Announcement()
 		announcementInstance.name = params.name
 		announcementInstance.sentMessageText = params.messageText
-		def message = messageSendService.getMessagesToSend(params)
+		def message = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(message)
 		announcementInstance.addToMessages(message)
 		announcementInstance.save()

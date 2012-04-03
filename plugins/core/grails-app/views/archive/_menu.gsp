@@ -5,22 +5,22 @@
 			<ul class='sublist' id="archive-submenu">
 					<li class="${(messageSection == 'inbox')? 'selected':''}" >
 						<g:link controller="archive" action="inbox" elementId="inbox" class="archive-section-list" onSuccess="loadAllData(data)">
-							Inbox archive
+							<g:message code="archive.inbox" />
 						</g:link>
 					</li>
 					<li class="${(messageSection == 'sent')? 'selected':''}" >
 						<g:link controller="archive" action="sent" elementId="sent" class="archive-section-list" onSuccess="loadAllData(data)">
-							Sent archive
+							<g:message code="archive.sent" />
 						</g:link>
 					</li>
 					<li class="${(messageSection == 'activity') ? 'selected':''}" >
 						<g:link controller="archive" action='activityList' elementId="activity" class="archive-section-list">
-							Activity archive
+							<g:message code="archive.activity" />
 						</g:link>
 					</li>
 					<li class="${(messageSection == 'folder')? 'selected':''}" >
 						<g:link controller="archive" action='folderList' elementId="folder" class="archive-section-list">
-							Folder archive
+							<g:message code="archive.folder" />
 						</g:link>
 					</li>
 			</ul>

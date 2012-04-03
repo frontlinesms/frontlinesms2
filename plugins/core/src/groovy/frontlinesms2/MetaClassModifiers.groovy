@@ -7,10 +7,10 @@ import org.apache.camel.Exchange
 
 class MetaClassModifiers {
 	static def addZipMethodToFile() {
-		File.metaClass.zip = { output ->
+		File.metaClass.zip = { output, filter=null ->
 			new ZipOutputStream(output).withStream { zipOutStream ->
 				delegate.eachFileRecurse { f ->
-					if(!f.isDirectory()) {
+					if(!f.isDirectory() && (!filter || filter.call(f))) {
 						zipOutStream.putNextEntry(new ZipEntry(f.path))
 						new FileInputStream(f).withStream { inStream ->
 							def buffer = new byte[1024]
@@ -32,13 +32,21 @@ class MetaClassModifiers {
 		}
 	}
 
-	static def addFilterMethodToList() {
-		List.metaClass.filter = { Closure c ->
+	static def addMethodsToCollection() {
+		Collection.metaClass.filter = { Closure c ->
 			def r = []
 			delegate.each {
 				if(c(it)) r << it
 			}
 			r
+		}
+		Collection.metaClass.collectEntries = { Closure c ->
+			def m = [:]
+			delegate.each {
+				def temp = c(it)
+				m[temp[0]] = temp[1]
+			}
+			m
 		}
 	}
 	

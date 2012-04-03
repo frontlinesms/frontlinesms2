@@ -19,13 +19,14 @@ class CoreBootStrap {
 	def applicationContext
 	def grailsApplication
 	def deviceDetectionService
+	def failPendingMessagesService
 	def camelContext
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
 		initialiseSerial()
-		MetaClassModifiers.addFilterMethodToList()
+		MetaClassModifiers.addMethodsToCollection()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
@@ -58,6 +59,7 @@ class CoreBootStrap {
 				break
 		}
 		deviceDetectionService.init()
+		failPendingMessagesService.init()
 	}
 
 	def destroy = {
@@ -174,12 +176,12 @@ class CoreBootStrap {
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
 		poll1.addToResponses(new PollResponse(key: 'choiceA', value: 'manchester'))
 		poll1.addToResponses(new PollResponse(key: 'choiceB', value: 'barcelona'))
-		poll1.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+		poll1.addToResponses(PollResponse.createUnknown())
 		
 		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
 		poll2.addToResponses(new PollResponse(key: 'choiceA', value: 'pantene'))
 		poll2.addToResponses(new PollResponse(key: 'choiceB', value: 'oriele'))
-		poll2.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+		poll2.addToResponses(PollResponse.createUnknown())
 		
 		poll1.save(flush: true)
 		poll2.save(flush: true)

@@ -1,17 +1,17 @@
 <div class="single-contact">
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="btn" id="update-single" action="update" value="Save" disabled="disabled"/>
-			<g:link class="cancel btn" disabled="disabled">Cancel</g:link>
+			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'contact.button.save')}" disabled="disabled"/>
+			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.button.cancel" /></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="btn" id="save-new" action="saveContact" value="Save"/>
-			<g:link class="cancel btn" action="index" default="Cancel">Cancel</g:link>
+			<g:actionSubmit class="btn" id="save-new" action="saveContact" value="${g.message(code:'contact.button.save')}"/>
+			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="contact.button.cancel" /></g:link>
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
 			<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
-				Delete
+				<g:message code="contact.button.deleteall" />
 			</a>
 		</g:if>
 	</div>
@@ -24,7 +24,7 @@
 		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
 		<g:if test="${contactInstance?.mobile?.trim()}">
 			<a class="remove-field" id="remove-mobile"></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">&nbsp;
 			</g:remoteLink>
 		</g:if>
 	</div>
@@ -48,27 +48,28 @@
 			  </g:each>
 		</ul>
 	</div>
+
 	<div id='info-add' class="basic-info">
 		<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
-			<option class="not-field" value="na">Add more information...</option>
-			<option class="predefined-field" value="Street address">Street address</option>
-			<option class="predefined-field" value="City">City</option>
-			<option class="predefined-field" value="Postcode">Postcode</option>
-			<option class="predefined-field" value="State">State</option>
+			<option class="not-field" value="na"><g:message code="contact.customfield.option.addmoreinformation" /></option>
+			<option class="predefined-field" value="Street address"><g:message code="contact.customfield.option.streetaddress" /></option>
+			<option class="predefined-field" value="City"><g:message code="contact.customfield.option.city" /></option>
+			<option class="predefined-field" value="Postcode"><g:message code="contact.customfield.option.postcode" /></option>
+			<option class="predefined-field" value="State"><g:message code="contact.customfield.option.state" /></option>
 			<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
 				<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
 					<option value="${f}">${f}</option>
 				</g:if>
 			</g:each>
-			<option class="create-custom-field" value='add-new'>Create new...</option>
+			<option class="create-custom-field" value='add-new'><g:message code="contact.customfield.option.createnew" /></option>
 		</select>
 	</div>
 	<div id='note-area' class="basic-info">
-		<label for="notes">Notes</label>
+		<label for="notes"><g:message code="contact.notes.label" /></label>
 		<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
 	</div>
 	<div id="group-section" class="basic-info">
-		<label for="groups">Groups</label>
+		<label for="groups"><g:message code="contact.groups.label" /></label>
 		<div>
 			<ol id='group-list'>
 				<g:each in="${contactGroupInstanceList}" status="i" var="g">
@@ -77,28 +78,28 @@
 					</li>
 				</g:each>
 				<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
-					<p>Not part of any Groups</p>
+					<p><g:message code="contact.notinanygroup.label" /></p>
 				</li>
 			</ol>
 		</div>
 	</div>
 	<div id='group-add' class="basic-info">
-		<select class= "dropdown" id="group-dropdown" name="group-dropdown">
-			<option class="not-group">Add to group...</option>
+		<select id="group-dropdown" name="group-dropdown">
+			<option class="not-group"><g:message code="contact.select.addtogroup" /></option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 				<option value="${g.id}">${g.name}</option>
 			</g:each>
 		</select>
 	</div>
 	<div id='message-stats'>
-		<label for="messages">Messages</label>
+		<label for="messages"><g:message code="contact.messages.label" /></label>
 		<div id="message-count">
-			<p id="num-sent">${contactInstance?.outboundMessagesCount} messages sent</p>
-			<p id="num-recieved">${contactInstance?.inboundMessagesCount} messages received</p>
+			<p id="num-sent">${contactInstance?.outboundMessagesCount} <g:message code="contact.sent.messages.label" /></</p>
+			<p id="num-recieved">${contactInstance?.inboundMessagesCount} <g:message code="contact.received.messages.label" /></</p>
 		</div>
 		<div id="contact-msg-search">
 			<g:link class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
-				<span id="search-image">Search for messages</span>
+				<span id="search-image"><g:message code="contact.search.messages.button" /></span>
 			</g:link>
 		</div>
 	</div>

@@ -9,7 +9,7 @@
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
 <div id="messages" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
-	<div id="message-list">
+	<div id="message-list" class="message-list">
 		<table cellspacing="0">
 			<thead>
 				<tr id="message-sorter">
@@ -74,14 +74,14 @@
 					<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
 						<tr id="no-search-description">
 							<td colspan="5">
-								<h3>Start new search on the left</h3>
+								<h3><g:message code="message.list.searchdescription" /></h3>
 							</td>
 						</tr>
 					</g:elseif>
 					<g:else>
 						<tr id="no-messages">
 							<td colspan="5">
-								<h3>No messages here!</h3>
+								<h3><g:message code="message.list.nomessages" /></h3>
 							</td>
 						</tr>
 					</g:else>

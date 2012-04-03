@@ -1,21 +1,27 @@
 package frontlinesms2
 
 class Poll extends Activity {
+//> CONSTANTS
+	private static final String ALPHABET = ('A'..'Z').join()
+	static final String KEY_UNKNOWN = 'unknown'
+
+//> SERVICES
+	def messageSendService
+
+//> PROPERTIES
 	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	String question
 	List responses
-
 	static hasMany = [responses: PollResponse]
+
+//> SETTINGS
+	static transients = ['unknown']
 	
 	static mapping = {
-        keyword cascade: 'all'
-    }
-			
-	def getType() {
-		return 'poll'
+		keyword cascade: 'all'
 	}
-	
+			
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255, unique: true)
 		responses(validator: { val, obj ->
@@ -26,6 +32,12 @@ class Poll extends Activity {
 		question(nullable:true)
 		keyword(nullable:true)
 	}
+
+//> ACCESSORS
+	def getType() { 'poll' } // FIXME this should not be necessary - use class and i18n with messages.properties
+	def getUnknown() {
+		println "KEYS: ${responses.collect { it.key }}"
+		responses.find { it.key == KEY_UNKNOWN } }
 	
 	Poll addToMessages(Fmessage message) {
 		message.messageOwner = this
@@ -33,7 +45,7 @@ class Poll extends Activity {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
-			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+			this.unknown.messages.add(message)
 		}
 		this
 	}
@@ -76,16 +88,49 @@ class Poll extends Activity {
 					if(v?.trim()) this.addToResponses(new PollResponse(value: v, key:k))	
 			}
 		}
-		if(!this.responses*.value.contains('Unknown'))
-			this.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
+		if(!this.unknown)
+			this.addToResponses(PollResponse.createUnknown())
 	}
 	
 	def deleteResponse(PollResponse response) {
 		response.messages.findAll { message ->
-			this.responses.find { it.value == 'Unknown' }.messages.add(message)
+			this.unknown.messages.add(message)
 		}
 		this.removeFromResponses(response)
 		response.delete()
 		this
 	}
+
+	def processKeyword(Fmessage message, boolean exactMatch) {
+		def response = getPollResponse(message, exactMatch)
+		println "processKeyword() got response: $response.key"
+		response.addToMessages(message)
+		response.save(failOnError: true)
+		def poll = this
+		if(poll.autoreplyText) {
+			def params = [:]
+			params.addresses = message.src
+			params.messageText = poll.autoreplyText
+			def outgoingMessage = messageSendService.createOutgoingMessage(params)
+			poll.addToMessages(outgoingMessage)
+			messageSendService.send(outgoingMessage)
+			poll.save()
+			println "Autoreply message sent to ${message.src}"
+		}
+	}
+	
+//> PRIVATE HELPERS
+	private PollResponse getPollResponse(Fmessage message, boolean exactMatch) {
+		def option
+		def words = message.text.trim().toUpperCase().split(/\s/)
+		if(exactMatch) {
+			if(words.size() < 2) return this.unknown
+			option = words[1]
+			if(option.size() > 1) return this.unknown
+		} else {
+			option = words[0][-1]
+		}
+		return responses.find { it.key == option }?: this.unknown
+	}
 }
+

@@ -19,6 +19,8 @@ def isWindows() {
 
 target(main: 'Build installers for various platforms.') {
 	envCheck()
+	if(grailsSettings.grailsEnv != 'production')
+		input('Press Return to continue building...')
 	if(isSet('skipWar')) {
 		if(grailsSettings.grailsEnv == 'production') {
 			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
@@ -31,8 +33,9 @@ target(main: 'Build installers for various platforms.') {
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
 	println "Building $appName, v$appVersion"
-	delete(dir:'install/webapp')
-	unzip(src:"target/${appName}-${appVersion}.war", dest:'install/webapp')
+	def webappTempDir = 'install/target/webapp'
+	delete(dir:webappTempDir)
+	unzip(src:"target/${appName}-${appVersion}.war", dest:webappTempDir)
 	
 	exec(dir:'install', executable:isWindows()? 'mvn.bat': 'mvn', args) {
 		arg value:"-Dbuild.version=$appVersion"

@@ -166,10 +166,10 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	private def setUpPollAndResponses() {		
 		def poll = new Poll(name: 'question')
-		poll.addToResponses(new PollResponse(value: 'Unknown', key: 'Unknown'))
-		poll.addToResponses(new PollResponse(value: "response 1"))
-		poll.addToResponses(new PollResponse(value: "response 2"))
-		poll.addToResponses(new PollResponse(value: "response 3"))
+		poll.addToResponses(PollResponse.createUnknown())
+		poll.addToResponses(new PollResponse(value:"response 1"))
+		poll.addToResponses(new PollResponse(value:"response 2"))
+		poll.addToResponses(new PollResponse(value:"response 3"))
 		poll.save(flush: true, failOnError:true)
 		return poll
 	}
@@ -193,7 +193,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			m.refresh()
 			p.responses*.refresh()
 			println "p.responses: $p.responses"
-						println "p.responses.messages: $p.responses.messages"
+			println "p.responses.messages: $p.responses.messages"
 		when:
 			println "p.responses*.value: ${p.responses*.value}"
 			println "p.responses.find { it.value == 'Unknown' }: ${p.responses.find { it.value == 'Unknown' }}"

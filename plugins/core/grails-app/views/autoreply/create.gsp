@@ -1,11 +1,11 @@
 <g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="autoreply.create.prompt" /></div>
 	<ol>
-		<li><a class="tabs-1" href="#tabs-1">Enter keyword</a></li>
-		<li><a class="tabs-2" href="#tabs-2">Enter message</a></li>
-		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
+		<li><a class="tabs-1" href="#tabs-1"><g:message code="autoreply.create.menu.keyword.label" /></a></li>
+		<li><a class="tabs-2" href="#tabs-2"><g:message code="autoreply.create.menu.message.label" /></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.create.menu.confirm.label" /></a></li>
 	</ol>
 
 	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply ${activityInstanceToEdit ? 'updated': 'created'}!', data, 'OK', summaryRedirect)">
