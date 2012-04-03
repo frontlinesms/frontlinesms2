@@ -32,8 +32,5 @@ class AutoreplyController extends ActivityController {
 		autoreply.save()
 		render ''
 	}
-	
-	private def withAutoreply(Closure c) {
-		Autoreply.get(params.ownerId) ?: new Autoreply()
-	}
 }
+
