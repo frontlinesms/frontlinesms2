@@ -3,9 +3,9 @@ package frontlinesms2.camel.intellisms
 import frontlinesms2.*
 import org.apache.camel.*
 
-class IntelliSMSPostProcessor implements Processor {
+class IntelliSmsPostProcessor implements Processor {
 	public void process(Exchange exchange) throws Exception {
-		def log = { println "IntelliSMSPostProcessor.process() : $it" }
+		def log = { println "IntelliSmsPostProcessor.process() : $it" }
 		log 'ENTRY'
 		log "in.body:" + exchange.in.body
 		byte[] bytes = exchange.in.getBody(byte[].class);
@@ -16,8 +16,8 @@ class IntelliSMSPostProcessor implements Processor {
 		if(text ==~ "ID:.*") log "message sent successfully"
 		else {
 			def m = (text =~ /ERR:\s*(.*)/)
-			if(m.matches()) throw new RuntimeException("IntelliSMS gateway error: ${m[0][1]} (${m[0][2]})")
-			else throw new RuntimeException("Unexpected response from IntelliSMS gateway: $text")
+			if(m.matches()) throw new RuntimeException("IntelliSms gateway error: ${m[0][1]} (${m[0][2]})")
+			else throw new RuntimeException("Unexpected response from IntelliSms gateway: $text")
 		}
 		log 'EXIT'
 	}

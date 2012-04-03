@@ -6,7 +6,7 @@
 		<ul>
 			<g:each in="${connectionInstanceList}" status="i" var="c">
 				<li class="connection ${c == connectionInstance ? 'selected' : ''}">
-					<g:link action="connections" id="${c.id}">
+					<g:link action="show" id="${c.id}">
 						<div class="connection-header">
 							<h2>'${c.name}'</h2>
 							<p class="connection-type">(<g:message code="${c.getClass().simpleName.toLowerCase()}.label"/>)</p>

@@ -16,7 +16,7 @@
 			<g:render template="/tabs"/>
 		</div>
         <div id="main">
-			<g:render template="menu"/>
+			<g:render template="/settings/menu"/>
 			<div id="content">
 				<div class="section-header">
 					<h3>Settings</h3>

@@ -137,9 +137,9 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionForm.intellismspassword = "1234"
 			nextPageButton.click()
 		then:
-			confirmIntelliSMSConnectionName.text() == "New IntelliSMS Connection"
-			confirmIntelliSMSUserName.text() == "test"
-			confirmIntelliSMSType.text() == "IntelliSMS Account"
+			confirmIntelliSmsConnectionName.text() == "New IntelliSMS Connection"
+			confirmIntelliSmsUserName.text() == "test"
+			confirmIntelliSmsType.text() == "IntelliSMS Account"
 		when:
 			doneButton.click()
 		then:
@@ -207,8 +207,8 @@ class ConnectionDialog extends ConnectionPage {
 		confirmName { $("#confirm-name")}
 		confirmType { $("#confirm-type")}
 		confirmPort { $("#confirm-port")}
-		confirmIntelliSMSConnectionName { $("#intellisms-confirm #confirm-name")}
-		confirmIntelliSMSUserName { $("#intellisms-confirm #confirm-username")}
-		confirmIntelliSMSType { $("#intellisms-confirm #confirm-type")}
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
 	}
 }

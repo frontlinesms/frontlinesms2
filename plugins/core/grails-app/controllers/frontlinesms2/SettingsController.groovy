@@ -5,30 +5,6 @@ class SettingsController {
 		redirect(action:'general')
 	}
 	
-	def connections = {
-		println "params are $params"
-		def fconnectionInstanceList = Fconnection.list(params)
-		if(!params.id) {
-			params.id = Fconnection.list(params)[0]?.id
-		}
-		def connectionInstance = Fconnection.get(params.id)
-		def fconnectionInstanceTotal = Fconnection.count()
-		if(params.id){
-			render(view:'show_connections', model:show_connections() << [connectionInstanceList: fconnectionInstanceList,
-					connectionInstance: connectionInstance,
-					fconnectionInstanceTotal: fconnectionInstanceTotal])
-		} else {
-			render(view:'show_connections', model: [fconnectionInstanceTotal: 0])
-		}
-	}
-	
-	def show_connections = {
-		withFconnection {
-			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
-					fconnectionInstanceTotal: Fconnection.list(params)]
-		}
-	}
-	
 	def logs = {
 		def logEntryList
 		if(params.timePeriod && params.timePeriod != 'forever') {

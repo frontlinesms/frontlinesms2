@@ -12,6 +12,14 @@ class Fconnection {
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 	
+	static def implementations = [SmslibFconnection,
+			EmailFconnection,
+			ClickatellFconnection,
+			IntelliSmsFconnection]
+	static getNonnullableConfigFields = { clazz ->
+		clazz.configFields.filter { field -> !clazz.constraints[field].nullable }
+	}
+	
 	String name
 	
 	String getStatus() {
@@ -37,12 +45,5 @@ class Fconnection {
 							.to('stream:out').routeId("in-${Fconnection.this.id}")]
 			}
 		}.routeDefinitions
-	}
-	
-	static def getImplementations() {
-		[SmslibFconnection,
-				EmailFconnection,
-				ClickatellFconnection,
-				IntelliSMSFconnection]
 	}
 }

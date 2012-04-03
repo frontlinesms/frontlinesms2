@@ -3,9 +3,9 @@ package frontlinesms2.camel.intellisms
 import frontlinesms2.*
 import org.apache.camel.*
 
-class IntelliSMSPreProcessor implements Processor {
+class IntelliSmsPreProcessor implements Processor {
 	public void process(Exchange x) throws Exception {
-		def log = { println "IntelliSMSPreProcessor.process() : $it" }
+		def log = { println "IntelliSmsPreProcessor.process() : $it" }
 		log 'ENTRY'
 		
 		// URL-encode body
@@ -21,7 +21,7 @@ class IntelliSMSPreProcessor implements Processor {
 		log "Calculating connection ID..."
 		def connectionId = x.fconnectionId
 		log "connectionId=$connectionId"
-		def connection = IntelliSMSFconnection.get(connectionId)
+		def connection = IntelliSmsFconnection.get(connectionId)
 		log "connection=$connection"
 		['username', 'password'].each { set x, it, connection."$it" }
 
