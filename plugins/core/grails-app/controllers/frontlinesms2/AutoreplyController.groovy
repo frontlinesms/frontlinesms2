@@ -26,7 +26,7 @@ class AutoreplyController extends ActivityController {
 		def incomingMessage = Fmessage.get(params.messageId)
 		params.addresses = incomingMessage.src
 		params.messageText = autoreply.autoreplyText
-		def outgoingMessage = messageSendService.getMessagesToSend(params)
+		def outgoingMessage = messageSendService.createOutgoingMessage(params)
 		autoreply.addToMessages(outgoingMessage)
 		messageSendService.send(outgoingMessage)
 		autoreply.save()

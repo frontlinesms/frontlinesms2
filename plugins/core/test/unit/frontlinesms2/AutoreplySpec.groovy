@@ -45,7 +45,7 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 			autoreply.messageSendService = sendService
 
 			def replyMessage = mockFmessage("woteva")
-			sendService.getMessagesToSend({ params ->
+			sendService.createOutgoingMessage({ params ->
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 

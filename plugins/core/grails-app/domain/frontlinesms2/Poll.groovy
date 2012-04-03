@@ -111,7 +111,7 @@ class Poll extends Activity {
 			def params = [:]
 			params.addresses = message.src
 			params.messageText = poll.autoreplyText
-			def outgoingMessage = messageSendService.getMessagesToSend(params)
+			def outgoingMessage = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
 			poll.save()
