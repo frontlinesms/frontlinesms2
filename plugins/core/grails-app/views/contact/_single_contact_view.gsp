@@ -1,17 +1,17 @@
 <div class="single-contact">
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'contact.button.save')}" disabled="disabled"/>
-			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.button.cancel" /></g:link>
+			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'contact.save')}" disabled="disabled"/>
+			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel" /></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="btn" id="save-new" action="saveContact" value="${g.message(code:'contact.button.save')}"/>
-			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="contact.button.cancel" /></g:link>
+			<g:actionSubmit class="btn" id="save-new" action="saveContact" value="${g.message(code:'contact.save')}"/>
+			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="contact.cancel" /></g:link>
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
 			<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
-				<g:message code="contact.button.deleteall" />
+				<g:message code="contact.delete" />
 			</a>
 		</g:if>
 	</div>
@@ -51,11 +51,11 @@
 
 	<div id='info-add' class="basic-info">
 		<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
-			<option class="not-field" value="na"><g:message code="contact.customfield.option.addmoreinformation" /></option>
-			<option class="predefined-field" value="Street address"><g:message code="contact.customfield.option.streetaddress" /></option>
-			<option class="predefined-field" value="City"><g:message code="contact.customfield.option.city" /></option>
-			<option class="predefined-field" value="Postcode"><g:message code="contact.customfield.option.postcode" /></option>
-			<option class="predefined-field" value="State"><g:message code="contact.customfield.option.state" /></option>
+			<option class="not-field" value="na"><g:message code="contact.customfield.addmoreinformation" /></option>
+			<option class="predefined-field" value="Street address"><g:message code="contact.customfield.streetaddress" /></option>
+			<option class="predefined-field" value="City"><g:message code="contact.customfield.city" /></option>
+			<option class="predefined-field" value="Postcode"><g:message code="contact.customfield.postcode" /></option>
+			<option class="predefined-field" value="State"><g:message code="contact.customfield.state" /></option>
 			<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
 				<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
 					<option value="${f}">${f}</option>
@@ -85,7 +85,7 @@
 	</div>
 	<div id='group-add' class="basic-info">
 		<select id="group-dropdown" name="group-dropdown">
-			<option class="not-group"><g:message code="contact.select.addtogroup" /></option>
+			<option class="not-group"><g:message code="contact.add.to.group" /></option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 				<option value="${g.id}">${g.name}</option>
 			</g:each>
@@ -94,12 +94,12 @@
 	<div id='message-stats'>
 		<label for="messages"><g:message code="contact.messages.label" /></label>
 		<div id="message-count">
-			<p id="num-sent">${contactInstance?.outboundMessagesCount} <g:message code="contact.sent.messages.label" /></</p>
-			<p id="num-recieved">${contactInstance?.inboundMessagesCount} <g:message code="contact.received.messages.label" /></</p>
+			<p id="num-sent">${contactInstance?.outboundMessagesCount} <g:message code="contact.sent.messages" /></</p>
+			<p id="num-recieved">${contactInstance?.inboundMessagesCount} <g:message code="contact.received.messages" /></</p>
 		</div>
 		<div id="contact-msg-search">
 			<g:link class="btn" controller='search' action='result' params="[contactString: contactInstance?.name]" >
-				<span id="search-image"><g:message code="contact.search.messages.button" /></span>
+				<span id="search-image"><g:message code="contact.search.messages" /></span>
 			</g:link>
 		</div>
 	</div>
