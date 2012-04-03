@@ -19,7 +19,7 @@
 			<g:render template="menu"/>
 			<div id="content">
 				<div class="section-header">
-					<h3>Settings</h3>
+					<h3><g:message code="layout.settings.header" /></h3>
 				</div>
 				<g:layoutBody />
 			</div>
