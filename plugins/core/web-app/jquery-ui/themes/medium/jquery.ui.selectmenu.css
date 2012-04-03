@@ -19,12 +19,6 @@
 	text-decoration:none;
 	padding: 4px 10px 0px 10px;
 }
-.ui-selectmenu-menu li a:hover {
-	background-color: #E5EFF3;
-}
-.ui-selectmenu-menu li a:active {
-	background-color: #D8E8EF;
-}
 
 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; }
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
