@@ -15,37 +15,39 @@ class QuickMessageControllerSpec extends ControllerSpec {
 
 	def 'create returns the contact, group list'() {
 		setup:
+			def jim = Contact.findByName('jim')
+			def mohave = Group.findByName('Mojave')
 			def address= ["9544426444"]
-			mockParams.recipients =  address
+			mockParams.recipients = address
 		when:
 			def result = controller.create()
+			println "result.groupList: ${result.groupList['group-32']*.class}"
 		then:
-			def jim = Contact.findByName('jim')
 			result['contactList'] == [jim]
-			result['groupList'] == ["Mojave":[jim.mobile]]
-			result['recipients'] ==  address
-			result['nonExistingRecipients'] ==  address
+			result['recipients'] == address
+			result['nonExistingRecipients'] == address
+			result['groupList']["group-$mohave.id"] == [jim.mobile]
 	}
 
 	def 'create returns the contact, group list even if address comes as a string'() {
 		setup:
 			def address= "9544426444"
-			mockParams.recipients =  address
+			mockParams.recipients = address
 		when:
 			def result = controller.create()
 		then:
-			result['recipients'] ==  [address]
-			result['nonExistingRecipients'] ==  [address]
+			result['recipients'] == [address]
+			result['nonExistingRecipients'] == [address]
 	}
 
 	def "should identify existing contacts and non existing recipients"() {
 		setup:
 			def address = ["12345"]
-			mockParams.recipients =  address
+			mockParams.recipients = address
 		when:
 			def result = controller.create()
 		then:
-			result['recipients'] ==  address
+			result['recipients'] == address
 			result['nonExistingRecipients'] ==  []
 			result['configureTabs'] ==  ['tabs-1', 'tabs-2', 'tabs-3', 'tabs-4']
 	}

@@ -32,13 +32,21 @@ class MetaClassModifiers {
 		}
 	}
 
-	static def addFilterMethodToList() {
-		List.metaClass.filter = { Closure c ->
+	static def addMethodsToCollection() {
+		Collection.metaClass.filter = { Closure c ->
 			def r = []
 			delegate.each {
 				if(c(it)) r << it
 			}
 			r
+		}
+		Collection.metaClass.collectEntries = { Closure c ->
+			def m = [:]
+			delegate.each {
+				def temp = c(it)
+				m[temp[0]] = temp[1]
+			}
+			m
 		}
 	}
 	

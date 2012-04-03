@@ -26,7 +26,7 @@ class CoreBootStrap {
 	
 	def init = { servletContext ->
 		initialiseSerial()
-		MetaClassModifiers.addFilterMethodToList()
+		MetaClassModifiers.addMethodsToCollection()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()

@@ -80,7 +80,7 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 			poll.autoreplyText = "some reply text"
 
 			def replyMessage = mockFmessage("woteva")
-			sendService.getMessagesToSend({ params ->
+			sendService.createOutgoingMessage({ params ->
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 
