@@ -24,13 +24,13 @@
 <g:javascript src="application.js"/>
 <g:javascript src="mediumPopup.js"/>
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.wizard.prompt" /></div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt" /></div>
 	<ol>
 		<g:if test="${!fconnectionInstance}">
-			<li><a href="#tabs-1"><g:message code="connection.wizard.type" /></a></li>
+			<li><a href="#tabs-1"><g:message code="connection.type" /></a></li>
 		</g:if>
-		<li><a href="#tabs-2"><g:message code="connection.wizard.details" /></a></li>
-		<li><a href="#tabs-3"><g:message code="connection.wizard.confirm" /></a></li>
+		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
+		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
 	<g:form name="connectionForm" action="${action}" id='${fconnectionInstance?.id}'>
 		<g:render template="type"/>
