@@ -20,7 +20,7 @@
 		
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if (isElementEmpty("#tabs-1 #keyword")) {
+				if ((isElementEmpty("#tabs-1 #keyword"))&&(!(isGroupChecked("noKeyword")))) {
 					$("#tabs-1 #keyword").addClass("error");
 					return false;
 				}
@@ -44,11 +44,19 @@
 	}
 	
 	function updateConfirmationMessage() {
-		var keyword = $('#keyword').val();
-		var autoreplyText = $('#autoreplyText').val();
+		if(!(isGroupChecked("noKeyword"))){
+			var keyword = $('#keyword').val();
+			var autoreplyText = $('#autoreplyText').val();
 
-		$("#keyword-confirm").html('<p>' + keyword  + '</p>');
-		$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+			$("#keyword-confirm").html('<p>' + keyword  + '</p>');
+			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+		}
+		else{
+			var autoreplyText = $('#autoreplyText').val();
+			$("#keyword-confirm").html('<p>' + "No keyword specified! A response will be sent to everyone that texts into the system"  + '</p>');
+			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+		}
+		
 	}
 		
 	function summaryRedirect() {

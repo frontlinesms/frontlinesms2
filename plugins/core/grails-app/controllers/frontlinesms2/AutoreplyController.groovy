@@ -12,7 +12,7 @@ class AutoreplyController extends ActivityController {
 			autoreply.name = params.name ?: autoreply.name
 			autoreply.autoreplyText = params.autoreplyText ?: autoreply.autoreplyText
 			autoreply.save(flush: true, failOnError: true)
-		} else {
+		}else{
 			def keyword = new Keyword(value: params.keyword)
 			autoreply = new Autoreply(name: params.name, autoreplyText: params.autoreplyText, keyword: keyword)
 			autoreply.save(flush: true, failOnError: true)

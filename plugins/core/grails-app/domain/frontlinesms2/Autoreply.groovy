@@ -5,11 +5,13 @@ class Autoreply extends Activity {
 
 	static hasOne =[keyword: Keyword]
 	String autoreplyText
+	boolean noKeyword
 	
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255, unique: true)
 		autoreplyText(nullable:false, blank:false)
 		keyword(nullable:false, unique: true)
+		noKeyword()
 	}
 	
 	static mapping = {
