@@ -20,11 +20,10 @@ class ConnectionController {
 		if(!params.id) {
 			params.id = Fconnection.list(params)[0]?.id
 		}
-		def connectionInstance = Fconnection.get(params.id)
+		
 		def fconnectionInstanceTotal = Fconnection.count()
 		if(params.id) {
 			render(view:'show', model:show() << [connectionInstanceList:fconnectionInstanceList,
-					connectionInstance:connectionInstance,
 					fconnectionInstanceTotal:fconnectionInstanceTotal])
 		} else {
 			render(view:'show', model:[fconnectionInstanceTotal: 0])
@@ -33,6 +32,9 @@ class ConnectionController {
 	
 	def show = {
 		withFconnection {
+			if(params.createRoute) {
+				it.metaClass.getStatus = {"${message(code: 'connection.route.connecting')}"}
+			}
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 					fconnectionInstanceTotal: Fconnection.list(params)]
 		}
@@ -84,8 +86,8 @@ class ConnectionController {
 	
 	def createRoute = {
 		CreateRouteJob.triggerNow([connectionId:params.id])
-		flash.message = "${message(code: 'connection.route.connecting')}"
-		redirect(action:'list', id:params.id)
+		params.createRoute = true
+		redirect(action:'list', params:params)
 	}
   
 	def destroyRoute = {
@@ -127,8 +129,8 @@ class ConnectionController {
 		}
 	}
 	
-	private def withFconnection(Closure c) {
-		def connection = Fconnection.get(params.id)
+	private def withFconnection(id = params?.id, Closure c) {
+		def connection = Fconnection.get(id)
 		if(connection) {
 			c connection
 		} else {
