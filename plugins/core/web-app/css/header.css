@@ -79,7 +79,7 @@ a.tab-link{
     height: 22px;
     max-height: 21px;
     padding: 0;
-    padding-top: 5px;
+    padding-top: 7px;
     background-repeat: no-repeat;
     text-align: center;
     text-transform: uppercase;
@@ -104,7 +104,7 @@ a.tab-link:active{
 #status-tab-link{
     padding-right: 20px;
     background-size: cover;
-    width: 95px;
+    width: 100px;
 }
 
 .indicator{
@@ -141,13 +141,10 @@ a.tab-link:active{
 }
 #system-nav{
     position: absolute;
-    right: 0;
+    right: 17px;
     top: -3px;
     margin: 0;
     padding: 0;
-}
-#system-nav .selected {
-   background-color: transparent;
 }
 
 #system-nav a{
@@ -158,4 +155,9 @@ a.tab-link:active{
 #system-nav li{
     margin: 0;
     padding: 0;
+    border-top: 3px solid #D5AFC6;
+}
+#system-nav .selected, #system-nav li:hover, #system-nav li:active {
+   background-color: #E0E0E0;
+   border-top: 3px solid #C03283;
 }

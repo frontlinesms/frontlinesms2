@@ -23,10 +23,13 @@
         <div id="main">
 			<g:render template="menu"/>
 			<div id="content">
-				<g:render template="/search/header" />
-				<g:render template="/message/message_list"/>
-				<g:layoutBody />
-				<g:render template="../message/footer" />
+				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
+					<g:render template="/search/header" />
+					<g:render template="/message/message_list"/>
+					<g:layoutBody />
+					<g:render template="../message/footer" />
+				</div>
+				<g:render template="../message/message_details" />
 			</div>
 		</div>
 		<r:layoutResources/>

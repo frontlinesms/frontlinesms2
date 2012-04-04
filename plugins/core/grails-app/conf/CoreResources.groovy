@@ -26,9 +26,7 @@ modules = {
 	}
 	
 	archive {
-		dependsOn "jquery, jquery-ui, common"
-		resource url: [plugin:'core', dir:'js', file:"message/check_message.js"]
-		resource url: [plugin:'core', dir:'js', file:"message/star_message.js"]
+		dependsOn "jquery, jquery-ui, common, messages"
 	}
 	
 	contacts {
@@ -48,14 +46,9 @@ modules = {
 	}
 
 	search {
-		dependsOn "jquery, jquery-ui, common"
+		dependsOn "jquery, jquery-ui, common, messages"
 		resource url: [plugin:'core', dir:'css', file:"search.css"]
 		resource url: [plugin:'core', dir:'js', file:"search/moreOptions.js"]
-		resource url: [plugin:'core', dir:'js', file:"message/check_message.js"]
-		resource url: [plugin:'core', dir:'js', file:"message/arrow_navigation.js"]
-		resource url: [plugin:'core', dir:'js', file:"message/move_dropdown.js"]
-		resource url: [plugin:'core', dir:'js', file:"message/star_message.js"]
-		resource url: [plugin:'core', dir:'js', file:"message/moreActions.js"]
 	}
 	
 	settings {

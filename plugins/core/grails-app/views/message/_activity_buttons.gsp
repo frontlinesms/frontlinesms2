@@ -1,4 +1,4 @@
-<ul class="button-list">
+<ul class="header-buttons">
 	<li>
 		<g:remoteLink class="section-action-button activity-btn btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
 			<div id="quick-message">Quick message</div>
@@ -11,7 +11,8 @@
 		<li><g:link class="activity-btn btn" controller="${ownerInstance?.type}" action="unarchive" id="${ownerInstance?.id}">Unarchive ${ownerInstance?.type}</g:link></li>
 	</g:else>
 	<li><g:render template="/message/activity_more_actions" plugin="${grailsApplication.config.frontlinesms2.plugin}"/></li>
+	<g:if test="${ownerInstance.type == 'poll'}">
+		<li><a id='poll-graph-btn' class='show-arrow'>Show poll details</a></li>
+	</g:if>
 </ul>
-<g:if test="${ownerInstance.type == 'poll'}">
-	<a id='poll-graph-btn' class='show-arrow'>Show poll details</a>
-</g:if>
+

@@ -109,9 +109,7 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 
-    warn   'org.mortbay.log'
+	warn 'serial', 'org.smslib'
 
-    info  'serial', 'org.smslib'
-
-	debug 'org.apache.camel'
+	warn 'org.apache.camel'
 }
