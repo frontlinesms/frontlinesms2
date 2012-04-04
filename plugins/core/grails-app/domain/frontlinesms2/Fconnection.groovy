@@ -10,6 +10,15 @@ import org.apache.camel.model.RouteDefinition
 class Fconnection {
 	def fconnectionService
 	static transients = ['status', 'routeDefinitions']
+	static String getShortName() { 'base' }
+	
+	static def implementations = [SmslibFconnection,
+			EmailFconnection,
+			ClickatellFconnection,
+			IntelliSmsFconnection]
+	static getNonnullableConfigFields = { clazz ->
+		clazz.configFields.filter { field -> !clazz.constraints[field].nullable }
+	}
 	
 	String name
 	

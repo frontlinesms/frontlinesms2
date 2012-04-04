@@ -100,3 +100,14 @@
 #dropdown_options:active{
 	background-color: #D8E8EF;
 }
+
+.ui-dialog .ui-dialog-titlebar { 
+	border-top: 3px solid #D8AEC6;
+}
+
+.ui-selectmenu-menu li a:hover {
+	background-color: #E5EFF3;
+}
+.ui-selectmenu-menu li a:active {
+	background-color: #D8E8EF;
+}

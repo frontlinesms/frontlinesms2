@@ -2,24 +2,24 @@
 <div id="sidebar">
 	<ul class="main-list"> 
 		<li>
-			<h3 id="messages-list-title" class="list-title">MESSAGES</h3>
+			<h3 id="messages-list-title" class="list-title"><g:message code="menu.messages.header" /></h3>
 			<ul class='sublist' id="messages-submenu">
 				<li class="${(messageSection=='inbox')? 'selected':''}">
-					<g:link action="inbox">Inbox</g:link>
+					<g:link action="inbox"><g:message code="menu.messages.link.inbox" /></g:link>
 				</li>
 				<li class="${(messageSection=='sent')? 'selected':''}">
-					<g:link action="sent">Sent</g:link>
+					<g:link action="sent"><g:message code="menu.messages.link.sent" /></g:link>
 				</li>
 				<li class="${(messageSection=='pending')? 'selected':''}">
-					<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}">Pending</g:link>
+					<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}"><g:message code="menu.messages.link.pending" /></g:link>
 				</li>
 				<li class="${(messageSection=='trash')? 'selected':''}">
-					<g:link action="trash">Trash</g:link>
+					<g:link action="trash"><g:message code="menu.messages.link.trash" /></g:link>
 				</li>
 			</ul>
 		</li>
 		<li>
-			<h3 class="list-title activities-list-title">Activities</h3>
+			<h3 class="list-title activities-list-title"><g:message code="menu.activities.header" /></h3>
 			<ul class='sublist' id="activities-submenu">
 				<g:each in="${activityInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">
@@ -27,12 +27,12 @@
 					</li>
 				</g:each>
 				<li id="create-activity" class="create">
-					<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" >Create new activity</g:remoteLink>
+					<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" ><g:message code="menu.activities.createnew.button" /></g:remoteLink>
 				</li>
 			</ul>
 		</li>
 		<li>
-			<h3 id="folders-list-title" class="list-title">Folders</h3>
+			<h3 id="folders-list-title" class="list-title"><g:message code="menu.folder.header" /></h3>
 		 	<ul class='sublist' id='folders-submenu' >
 				<g:each in="${folderInstanceList}" status="i" var="f">
 					<li class="${f == ownerInstance ? 'selected' : ''}">
@@ -41,7 +41,7 @@
 				</g:each>
 				<li id="create-folder" class="create">
 					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup('Folder', data, 'Create');">
-						Create new folder
+						<g:message code="menu.folder.createnew.button" />
 					</g:remoteLink>
 				</li>
 			</ul>

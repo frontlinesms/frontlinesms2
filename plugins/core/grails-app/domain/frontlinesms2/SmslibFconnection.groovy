@@ -8,6 +8,8 @@ import org.smslib.NotConnectedException
 
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
+	static configFields = ['name', 'port', 'baud', 'pin', 'smsc', 'imsi', 'serial']
+	static String getShortName() { 'smslib' }
 	
 	private def camelAddress = {
 		def optional = { name, val ->

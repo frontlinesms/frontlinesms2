@@ -8,7 +8,7 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 		given:
 			createTestConnections()
 		when:
-			go 'settings/connections'
+			go 'connection/list'
 		then:
 			at PageSettingsConnection
 			btnNewConnection.text() == "Add new connection"
@@ -19,7 +19,7 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 		given:
 			createTestConnections()
 		when:
-			go 'settings/connections'
+			go 'connection/list'
 		then:
 			at PageSettingsConnection
 			connectionNames*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
