@@ -10,10 +10,10 @@ class ClickatellPreProcessorSpec extends UnitSpec {
 	ClickatellPreProcessor p
 	
 	def setup() {
-		mockDomain ClickatellFconnection, [[apiId:'11111', username:'bob', password:'secret'] as ClickatellFconnection]
+		mockDomain Fconnection, [[apiId:'11111', username:'bob', password:'secret'] as ClickatellFconnection]
 		
 		registerMetaClass Exchange
-		Exchange.metaClass.getFconnectionId = { ClickatellFconnection.list()[-1].id }
+		Exchange.metaClass.getFconnectionId = { Fconnection.list()[-1].id }
 		
 		p = new ClickatellPreProcessor()
 	}
