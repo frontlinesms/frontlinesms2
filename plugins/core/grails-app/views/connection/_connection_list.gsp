@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.RouteStatus" %>
 <div id='connections'>
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div><g:message code="connection.list.noconnection /></div>
+		<div><g:message code="connection.list.none" /></div>
 	</g:if>
 	<g:else>
 		<ul>
@@ -18,7 +18,7 @@
 					<g:if test="${c == connectionInstance}">
 						<g:if test="${c.status == RouteStatus.NOT_CONNECTED}">
 							<div id="createRoute">
-								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.list.route.create" /></g:link>
+								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create" /></g:link>
 							</div>
 							<div>
 								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');"><g:message code="connection.edit" /></g:remoteLink>
