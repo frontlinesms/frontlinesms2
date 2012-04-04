@@ -18,17 +18,20 @@ class GroovyHayesState {
 	}
 	
 	def getResponse(String request) {
-		for(int i=0; i<responses.size; i+=2) {
-			def mapRequest = responses[i]
-			if((mapRequest instanceof String && mapRequest==request) ||
-					mapRequest instanceof Pattern && mapRequest.matcher(request).matches()) {
-				//def response = responses[i+1]
-				//println "For request $request, returning: $response"
-				return responses[i+1]
+		println "GroovyHayesState.getResponse() : request=$request"
+		try {
+			for(int i=0; i<responses.size; i+=2) {
+				def mapRequest = responses[i]
+				if((mapRequest instanceof String && mapRequest==request) ||
+						mapRequest instanceof Pattern && mapRequest.matcher(request).matches()) {
+					def response = responses[i+1]
+					println "GroovyHayesState.getResponse() : For request $request, returning: ${response.toString()}"
+					return responses[i+1]
+				}
 			}
-		}
-		println "For request $request, returning: $error"
-		error
+		} catch(Exception ex) { ex.printStackTrace() }
+		println "GroovyHayesState.getResponse() : For request $request, returning: $error"
+		return error
 	}
 	
 	def propertyMissing(String name) {

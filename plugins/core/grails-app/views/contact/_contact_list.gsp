@@ -28,6 +28,6 @@
 	</g:if>
 	<g:else>
 		<div id="contact-list">
-			 <p>&nbsp<g:message code="contact.list.no.contact" /></p>
+			 <p><g:message code="contact.list.no.contact"/></p>
 		</div>
 	</g:else>
