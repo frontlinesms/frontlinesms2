@@ -8,7 +8,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new AutoreplyController()
 	}
 
-	def "can save an Autoreply"() {
+	def "can create an Autoreply with a keyword"() {
 		when:
 			controller.params.name = "Color"
 			controller.params.keyword = "color"
@@ -22,6 +22,18 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			autoreply != null
 			autoreply.keyword == keyword
 			autoreply.autoreplyText == "ahhhhhhhhh"
+	}
+	
+	def "can create an Autoreply will blank keyword value"() {
+		when:
+			controller.params.name = "Thanks"
+			controller.params.keyword = ""
+			controller.params.autoreplyText = "Thank you for the text"
+			controller.save()
+		then:
+			def autoreply = Autoreply.findByName("Thanks")
+			autoreply.autoreplyText == "Thank you for the text"
+			autoreply.keyword.value == ''
 	}
 	
 	def "can edit an Autoreply"() {
