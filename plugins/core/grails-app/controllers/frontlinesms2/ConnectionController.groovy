@@ -4,13 +4,38 @@ class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
 			email:EmailFconnection,
-			clickatell:ClickatellFconnection]
+			clickatell:ClickatellFconnection,
+			intellisms:IntelliSmsFconnection]
 
 	def fconnectionService
 	def messageSendService
 
 	def index = {
 		redirect(action:'create_new')
+	}
+	
+	def list = {
+		println "params are $params"
+		def fconnectionInstanceList = Fconnection.list(params)
+		if(!params.id) {
+			params.id = Fconnection.list(params)[0]?.id
+		}
+		def connectionInstance = Fconnection.get(params.id)
+		def fconnectionInstanceTotal = Fconnection.count()
+		if(params.id) {
+			render(view:'show', model:show() << [connectionInstanceList:fconnectionInstanceList,
+					connectionInstance:connectionInstance,
+					fconnectionInstanceTotal:fconnectionInstanceTotal])
+		} else {
+			render(view:'show', model:[fconnectionInstanceTotal: 0])
+		}
+	}
+	
+	def show = {
+		withFconnection {
+			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
+					fconnectionInstanceTotal: Fconnection.list(params)]
+		}
 	}
 
 	def wizard = {
@@ -57,29 +82,17 @@ class ConnectionController {
 		params << newParams
 	}
 	
-	private def doSave(Class<Fconnection> clazz) {
-		def fconnectionInstance = clazz.newInstance()
-		fconnectionInstance.properties = params
-		if (fconnectionInstance.save()) {
-			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
-			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
-		} else {
-			params.flashMessage = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
-			redirect(controller:'settings', action:"connections", params:params)
-		}
-	}
-	
 	def createRoute = {
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		flash.message = "${message(code: 'connection.route.connecting')}"
-		redirect(controller:'settings', action:'connections', id:params.id)
+		redirect(action:'list', id:params.id)
 	}
   
 	def destroyRoute = {
 		withFconnection { c ->
 			fconnectionService.destroyRoutes(c)
 			flash.message = "${message(code: 'connection.route.disconnecting')}"
-			redirect(controller:'settings', action:'connections', id:c.id)
+			redirect(action:'list', id:c.id)
 		}
 	}
 
@@ -99,6 +112,18 @@ class ConnectionController {
 			messageSendService.send(message, connection)
 			flash.message = LogEntry.log("Test message sent!")
 			redirect (controller:'settings', action:'show_connections', id:params.id)
+		}
+	}
+	
+	private def doSave(Class<Fconnection> clazz) {
+		def fconnectionInstance = clazz.newInstance()
+		fconnectionInstance.properties = params
+		if (fconnectionInstance.save()) {
+			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
+			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
+		} else {
+			params.flashMessage = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
+			redirect(controller:'settings', action:"connections", params:params)
 		}
 	}
 	

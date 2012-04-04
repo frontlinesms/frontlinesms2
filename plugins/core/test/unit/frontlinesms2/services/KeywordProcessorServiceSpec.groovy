@@ -26,16 +26,21 @@ class KeywordProcessorServiceSpec extends UnitSpec {
 			1 * activity.processKeyword(m, exactMatch)
 			0 * _.processKeyword(_, _)
 		where:
-			keywordValues | messageText | matchedKeyword | exactMatch
-			['A', 'B'] | 'a very nice day' | 'A' | true
-			['A', 'B'] | 'a\nvery nice day' | 'A' | true
-			['A', 'B'] | 'by jove' | 'B' | false
-			['A'] | '\r\n    A' | 'A' | true
-			['A', 'AB'] | 'ab' | 'AB' | true
-			['A', 'AB'] | 'ac' | 'A' | false
-			['LONG', 'LONGER'] | 'long time no see' | 'LONG' | true
-			['LONG', 'LONGER'] | 'longo bongo' | 'LONG' | false
-			['LONG', 'LONGER'] | 'longer time no see' | 'LONGER' | true
+			keywordValues      | messageText          | matchedKeyword | exactMatch
+			['']               | ''                   | ''             | true
+			['']               | '   '                | ''             | true
+			['']               | 'whatever'           | ''             | false
+			['']               | 'two words'          | ''             | false
+			['A', 'B']         | 'a very nice day'    | 'A'            | true
+			['A', 'B']         | 'a\nvery nice day'   | 'A'            | true
+			['A', 'B']         | 'by jove'            | 'B'            | false
+			['A']              | '\r\n    A'          | 'A'            | true
+			['', 'A']          | '\r\n    B'          | ''             | false
+			['A', 'AB']        | 'ab'                 | 'AB'           | true
+			['A', 'AB']        | 'ac'                 | 'A'            | false
+			['LONG', 'LONGER'] | 'long time no see'   | 'LONG'         | true
+			['LONG', 'LONGER'] | 'longo bongo'        | 'LONG'         | false
+			['LONG', 'LONGER'] | 'longer time no see' | 'LONGER'       | true
 	}
 
 	@Unroll
@@ -48,14 +53,14 @@ class KeywordProcessorServiceSpec extends UnitSpec {
 		then:
 			0 * _.processKeyword(_, _)
 		where:
-			keywordValues | messageText | matchedKeyword
-			[] | '' | null
-			[] | 'word' | null
-			[] | 'many words' | null
-			['a', 'b'] | 'word' | null
-			['a', 'b'] | 'many words' | null
-			['a', 'b'] | 'averyniceday' | null
-			['a', 'b'] | 'but why' | null
+			keywordValues | messageText
+			[]            | ''
+			[]            | 'word'
+			[]            | 'many words'
+			['a', 'b']    | 'word'
+			['a', 'b']    | 'many words'
+			['a', 'b']    | 'averyniceday'
+			['a', 'b']    | 'but why'
 	}
 
 	def mockKeywords(words, processKeyword=null) {
