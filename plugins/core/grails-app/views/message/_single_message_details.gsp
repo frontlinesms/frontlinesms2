@@ -35,17 +35,17 @@
 			<g:render template="/message/other_actions" plugin="core"/>
 		</g:else>
 	</g:if>
-	<g:elseif test="${messageSection == 'trash' && ownerInstance}">
+	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
 			<p id="message-detail-sender">${ownerInstance.name} ${ownerInstance.type}</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
-			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? "1 message" : ownerInstance.getLiveMessageCount() + " messages"}</p></div>
+			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + " messages"}</p></div>
 		</div>
 		<g:render template="../message/message_actions"></g:render>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
-			<div  id="message-detail-content"><p id="no-message">No message selected</p></div>
+			<div  id="message-detail-content"><p id="no-message"><g:message code="fmessage.selected.none" /></p></div>
 		</div>
 	</g:else>
 </div>
