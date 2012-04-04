@@ -21,7 +21,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			$('#update-single').click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('mobile', 'Mobile (Primary)', '+2541234567')
+			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			changingContact.refresh()
 			println Contact.findAll()*.name
 			changingContact.name == 'Kate'
@@ -44,7 +44,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			Contact.findByName('Kate') != null
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('mobile', 'Mobile (Primary)', '+2541234567')
+			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			$('#groups-submenu .selected').text() == 'Excellent'
 	}
 	
