@@ -4,7 +4,9 @@
 	<g:if test="${messageSection == 'activity'}">
 		<div class="activity-title">
 			<g:if test="${params.controller == 'archive'}">
-				<g:link controller="archive" action="${params.action}List"> &lt;<g:message code="header.archive.link" /> </g:link>
+				<g:link controller="archive" action="${params.action}List"> 
+					<g:message code="fmessage.archive.back" />
+				</g:link>
 			</g:if>
 			<h3 id="activity-title">${ownerInstance?.name} ${ownerInstance?.type}</h3>
 			<g:if test="${ownerInstance}">
@@ -17,7 +19,7 @@
 				<g:else>
 					<g:formatDate date="${ownerInstance?.dateCreated}" /> 
 					<g:if test="${ownerInstance?.type == 'announcement'}">
-						<span id="announcement-sent">   <g:message code="header.announcement.sentmessage" args="${ [sentMessageCount] }" /></span>
+						<span id="announcement-sent">   <g:message code="fmessage.activity.sentmessage" args="${ [sentMessageCount] }" /></span>
 						<p>${ownerInstance.sentMessageText}</p>
 					</g:if>
 					<g:else>
