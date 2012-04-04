@@ -17,20 +17,20 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 			word   | activity        | valid
 			null   | null            | false
 			null   | SIMPLE_ACTIVITY | false
-			'test' | null            | false
-			'test' | SIMPLE_ACTIVITY | true
+			'TEST' | null            | false
+			'TEST' | SIMPLE_ACTIVITY | true
 	}
 	
 	@Unroll
 	def "keyword must be unique unless its activity is archived"() {
 		given:
-			def k1 = new Keyword(value:'lock')
+			def k1 = new Keyword(value:keyword)
 		when:
 			new Autoreply(name:'whatever1', autoreplyText:'1', archived:k1archived, keyword:k1).save(flush:true)
 		then:
 			k1.validate()
 		when:
-			def k2 = new Keyword(value:'lock')
+			def k2 = new Keyword(value:keyword)
 			new Autoreply(name:'whatever2', autoreplyText:'2', archived:false, keyword:k2).save(flush:true)
 		then:
 			k2.validate() == k2valid
@@ -38,8 +38,8 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 			keyword | k1archived | k2valid
 			''      | false      | false
 			''      | true       | true
-			'lock'  | false      | false
-			'lock'  | true       | true
+			'LOCK'  | false      | false
+			'LOCK'  | true       | true
 	}
 }
 
