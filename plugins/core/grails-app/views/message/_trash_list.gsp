@@ -13,7 +13,7 @@
 			</td>
 			<td class="message-preview-sender message-sender-cell">
 				<g:link class="displayName-${m.linkId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:if test="${!m.link.inbound}"><span>To:</span></g:if>${m.identifier}
+					<g:if test="${!m.link.inbound}"><span><g:message code="fmessage.to.label" /></span></g:if>${m.identifier}
 				</g:link>
 			</td>
 			<td class="message-text-cell">
@@ -41,10 +41,10 @@
 				<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
 					${m.identifier}
 				</g:link>
-			</td>
+			</td>  fmessage.count.many
 			<td class="message-text-cell">
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					${m.message == "1" ? "1 message" : m.message + " messages"}
+					${m.message == "1" ? g.message(code:'fmessage.count') : g.message(code:'fmessage.count', params:[m.message])}
 				</g:link>
 			</td>
 			<td class="message-date-cell">

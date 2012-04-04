@@ -17,7 +17,7 @@
 				{
 					var xdata = $.map(${pollResponse}, function(a) {return a.value;});
 					var data =  $.map(${pollResponse}, function(a) {return a.count;});
-					var responseCountTag= "<span class='response-count'>${messageInstanceTotal} responses total</span>"
+					var responseCountTag= "<span class='response-count'><g:message code="fmessage.responses.total" args="${ [messageInstanceTotal] }" /></span>"
 					$("#poll-details").toggle();
 					var holder = "pollGraph";
 					$("#"+holder).width($("#pollGraph").width);
