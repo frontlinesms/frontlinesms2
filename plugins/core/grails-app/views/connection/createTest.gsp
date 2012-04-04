@@ -10,7 +10,7 @@
 			<div class="field">
 				<label for="messageText"><g:message code="connection.createtest.message.label" /></label>
 																		
-				<g:textArea name="messageText" id="messageText" value="${g.message(code:'connection.createtest.message.text', args:[connectionInstance.name])}"/>
+				<g:textArea name="messageText" id="messageText" value="${g.message(code:'connection.test.message', args:[connectionInstance.name])}"/>
 
 			</div>
 		</div>

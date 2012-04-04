@@ -10,10 +10,10 @@ class IntelliSmsPreProcessorSpec extends UnitSpec {
 	IntelliSmsPreProcessor p
 	
 	def setup() {
-		mockDomain IntelliSmsFconnection, [[username:'bob', password:'secret'] as IntelliSmsFconnection]
+		mockDomain Fconnection, [[username:'bob', password:'secret'] as IntelliSmsFconnection]
 		
 		registerMetaClass Exchange
-		Exchange.metaClass.getFconnectionId = { IntelliSmsFconnection.list()[-1].id }
+		Exchange.metaClass.getFconnectionId = { Fconnection.list()[-1].id }
 		
 		p = new IntelliSmsPreProcessor()
 	}
@@ -90,3 +90,4 @@ class IntelliSmsPreProcessorSpec extends UnitSpec {
 		return x
 	}
 }
+

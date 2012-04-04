@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import spock.lang.*
+
 class KeywordSpec extends grails.plugin.spock.UnitSpec {
 
 	def "beforeSave should convert keyword to upper case"() {
@@ -11,13 +13,23 @@ class KeywordSpec extends grails.plugin.spock.UnitSpec {
 			k.value == 'SHOEHORN'
 	}
 	
-	def "Keyword may not contain whitespace"() {
+	@Unroll
+	def 'Keyword value constraints test'() {
 		given:
-			mockForConstraintsTests(Keyword)
+			mockForConstraintsTests Keyword
+			registerMetaClass Keyword
+			Keyword.metaClass.static.findAllByValue = { v -> [] }
 		when:
-			def k = new Keyword(value:'with space')
+			def k = new Keyword(value:keyword, activity:Mock(Activity))
 		then:
-			!k.validate()
-			k.errors.value
+			k.validate() == valid
+		where:
+			valid | keyword
+			false | null
+			true  | ''
+			false | 'lowercase'
+			true  | 'UPPERCASE'
+			false | 'WITH SPACE'
 	}
 }
+

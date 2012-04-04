@@ -35,9 +35,11 @@ class KeywordISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			k2.validate() == k2valid
 		where:
-			k1archived | k2valid
-			false      | false
-			true       | true
+			keyword | k1archived | k2valid
+			''      | false      | false
+			''      | true       | true
+			'lock'  | false      | false
+			'lock'  | true       | true
 	}
 }
 

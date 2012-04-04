@@ -21,16 +21,16 @@
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.list.route.create" /></g:link>
 							</div>
 							<div>
-								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');"><g:message code="connection.list.connection.edit" /></g:remoteLink>
+								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');"><g:message code="connection.edit" /></g:remoteLink>
 							</div>
 						</g:if>
 						<g:elseif test="${c.status == RouteStatus.CONNECTED}">
 							<div>
 								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup('Test message', data, 'Send');">
-									<g:message code="connection.list.message.send.test" />
+									<g:message code="connection.send.test.message" />
 								</g:remoteLink>
 								<g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">
-									<g:message code="connection.list.route.destroy" />
+									<g:message code="connection.route.destroy" />
 								</g:link>
 							</div>
 						</g:elseif>
@@ -41,7 +41,7 @@
 	</g:else>
 	<div id="create-connection-btn">
 		<g:remoteLink class="btn" controller='connection' action="wizard" onSuccess="launchMediumWizard('New connection', data, 'Create');">
-			<g:message code="connection.list.connection.add" />
+			<g:message code="connection.add" />
 		</g:remoteLink>
 	</div>
 </div>
