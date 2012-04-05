@@ -34,9 +34,10 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			sleep 5000
 		then:
 			def poll = Poll.findByName('What do you think of goo?')
-			def message = Fmessage.findAll()?.getAt(0)
-			message.text == 'Good morning'
-			message.messageOwner == poll
+			def messages = Fmessage.findAll()
+			messages.size() == 1
+			message[0].text == 'Good morning'
+			message[0].messageOwner == poll
 		cleanup:	
 			// stop route
 			if(connection) fconnectionService.destroyRoutes(connection)

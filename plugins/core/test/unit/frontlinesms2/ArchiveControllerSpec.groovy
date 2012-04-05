@@ -6,6 +6,7 @@ import groovy.lang.MetaClass;
 class ArchiveControllerSpec extends ControllerSpec {
 	def setup() {
 		mockDomain(Folder)
+		mockDomain(Poll)
 		mockDomain(Fmessage)
 		registerMetaClass(Fmessage)
 		Fmessage.metaClass.static.owned = { Folder f, Boolean b, Boolean c ->
@@ -28,6 +29,25 @@ class ArchiveControllerSpec extends ControllerSpec {
 			model = controller.modelAndView.model
 		then:
 			!model.folderInstanceList
+	}
+	
+	def "deleted polls do not appear in the archive section"() {
+		given:
+			def poll = new Poll(name: 'thingy', archived: true)
+			poll.editResponses(choiceA: 'One', choiceB: 'Other')
+			poll.save()
+			assert poll.archived
+		when:
+			archiveController.activityList()
+			def model = controller.renderArgs.model
+		then:
+			model.activityInstanceList == [poll]
+		when:
+			poll.deleted = true
+			archiveController.activityList()
+			model = controller.renderArgs.model
+		then:
+			!model.activityInstanceList
 	}
 }
 
