@@ -1,5 +1,13 @@
 <div id="tabs-1">
 	<h2 class="bold"><g:message code="autoreply.keyword.title" /></h2>
 	<g:textField name="keyword" id="keyword" value="${activityInstanceToEdit?.keyword?.value}"/>
-	<h2 class="bold">Do not use keyword: <g:checkBox name="noKeyword" value="" checked="false"/></h2>
+	<p>Do not use keyword (All incoming messages will receive this autoreply) <g:checkBox name="blankKeyword" checked="false"/></p>
+	
 </div>
+<g:javascript>
+	$(document).ready(function(){
+	$('#blankKeyword').live("change", function(){
+		(this.checked) ? $("#keyword").attr('disabled','disabled') : $("#keyword").attr('disabled',false);
+		});
+	});
+</g:javascript>
