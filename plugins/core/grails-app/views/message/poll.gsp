@@ -13,8 +13,7 @@
 			var loaded = false;
 			var show = true;
 			$("#poll-graph-btn").click(function() {
-				if(!loaded)
-				{
+				if (!loaded) {
 					var xdata = $.map(${pollResponse}, function(a) {return a.value;});
 					var data =  $.map(${pollResponse}, function(a) {return a.count;});
 					var responseCountTag= "<span class='response-count'><g:message code="fmessage.responses.total" args="${ [messageInstanceTotal] }" /></span>"

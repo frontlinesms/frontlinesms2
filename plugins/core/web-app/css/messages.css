@@ -1,0 +1,277 @@
+#message-list {
+	float: left;
+	width: 75%;
+	height: 100%;
+}
+
+#message-list-header h3.inbox{
+    background-image: url('../images/icons/inbox.png');
+}
+#message-list-header h3.sent{
+    background-image: url('../images/icons/sent.png');
+}
+#message-list-header h3.pending{
+    background-image: url('../images/icons/pending.png');
+}
+#message-list-header h3.trash{
+    background-image: url('../images/icons/trash.png');
+}
+#message-list-header h3.activity {
+    background-image: url('../images/icons/activities.png');
+}
+#message-list-header h3.folder{
+    background-image: url('../images/icons/folders.png');
+}
+#message-list-header h3.show {
+    background-image: url('../images/icons/shows.png');
+}
+#message-list-header h3.search {
+    background-image: url('../images/icons/search.png');
+}
+
+#message-list-header.activity .header-buttons{
+	padding: 0;
+}
+#message-list-header.activity li {
+	display: block;
+	width: 150px;
+	margin: 10px 0;
+}
+#message-list-header.activity li a{
+	display: block;
+}
+#quick-message {
+	padding-left: 25px;
+	background-image: url('../images/icons/quickmessage.png');
+	background-repeat: no-repeat;
+}
+
+#message-list #overflow {
+	position: absolute;
+	top: 43px;
+	bottom: 43px;
+	overflow: auto;
+	width: 75%;
+}
+
+#message-list table.main-table {
+	width: 100%;
+}
+#message-list table tr{
+	width: 100%;
+	height: 26px;
+}
+#message-list table tr#message-sorter{
+	text-align: left;
+	font-weight: bold;
+	background-image: url('../images/menubar.png');
+}
+#message-list table td.message-select-cell{
+	padding-left: 17px;
+	width: 30px;
+}
+#message-list table td.message-star-cell{
+	padding-left: 5px;
+	width: 30px;
+}
+#message-list table td.message-sender-cell, #message-list table th.message-sender-cell{
+	padding: 6px 5px;
+	max-width: 150px;
+}
+#message-list table td.message-text-cell, #message-list table th.message-sender-cell{
+	min-width: 300px;
+}
+
+.sorted.asc {
+	background-image: url('../images/buttons/down_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
+}
+.sorted.desc {
+	background-image: url('../images/buttons/up_arrow.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    padding-left: 25px;
+}
+
+#new-message-notification a{
+	display: block;
+	cursor: pointer;
+}
+.message-added-to-list {
+animation: newMessage 2s;
+-moz-animation: newMessage 2s; /* Firefox */
+-webkit-animation: newMessage 2s; /* Safari and Chrome */
+}
+.tall-header #no-messages{
+	position: fixed;
+	height: 10%;
+	min-height: 50px;
+	top: 350px;
+	left: 40%;
+}
+#no-messages{
+	height: 10%;
+	min-height: 50px;
+	width: 200px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+}
+#messages #no-search-description{
+	height: 10%;
+	min-height: 50px;
+	width: 300px;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+}
+
+#message-list .folderOwner {
+	background-image: url('../images/icons/folders.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#message-list .activityOwner {
+	background-image: url('../images/icons/activities.png');
+    background-repeat: no-repeat;
+    background-position: right;
+}
+.message-star-cell a{
+    display: inline-block;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    background-image: url('../images/icons/star.png');
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+.message-star-cell a:hover{
+    background-image: url('../images/icons/star_on.png');
+}
+.message-star-cell a.starred{
+    background-image: url('../images/icons/star_on.png');
+}
+
+#message-list table a, #folder-list table a, #activity-list table a{
+    display: block;
+}
+
+#message-list .footer{
+	right: 25%;
+    width: 75%;
+    float: left;
+    height: 23px;
+    padding: 10px 0;
+    border-top: 1px solid #9e9e9e;
+    background-color: #f0f0f0;
+    z-index: 2;
+}
+#message-list .footer #message-toggler {
+    float: left;
+    margin-left: 17px;
+}
+#message-list .footer form {
+	margin: 0 17px 0 10px;
+}
+#message-list .footer #message-toggler{
+    padding: 4px;
+    text-decoration: none;
+    font-size: 95%;
+}
+
+#message-list .footer #message-toggler a{
+    color: inherit;
+    padding: 0 10px;
+    text-decoration: none;
+}
+#message-list .footer #paging {
+	float: right;
+	margin-right: 17px;
+}
+
+#message-detail{
+	width: 24.9%;
+	height: 100%;
+    float:right;
+    overflow: auto;
+    border-left: 1px solid #9e9e9e;
+}
+.tall-header #message-detail{
+    position: absolute;
+    top: 200px;
+    bottom: 43px;
+    right: 0;
+	width: 25%;
+    float:right;
+    overflow: auto;
+    padding-top: 25px;
+}
+#single-message, #multiple-messages{
+	padding: 17px 17px;
+}
+
+#message-detail-content{
+    background-color: #fff;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 0;
+    border: 1px solid #b5c6cd;
+    margin: 17px 0;
+}
+
+#message-detail-content p{
+	margin: 0;
+    padding: 17px;
+}
+#message-detail-content #no-message{
+	text-align: center;
+}
+
+#message-detail-sender{
+	display: inline-block;
+	margin: 0;
+	min-width: 130px;
+}
+#message-detail-sender #add-contact {
+	background-image: url('../images/icons/add.png');
+	background-repeat: no-repeat;
+	padding-left: 16px;
+	margin-left: 4px;
+}
+ #message-detail-date{
+	margin: 0;
+}
+#message-detail-owner{
+	background-repeat: no-repeat;
+	margin: 0;
+	padding-left: 25px;
+}
+#message-detail-owner.poll, #message-detail-owner.announcement {
+	background-image: url('../images/icons/activities.png');
+}
+#message-detail-owner.folder {
+	background-image: url('../images/icons/folders.png');
+}
+
+#message-detail-buttons{
+    margin: 17px 0 0 0;
+    padding: 0;
+}
+#message-detail-buttons .msg-btn{
+	width:42%;
+	margin: 10px 10px;
+	padding: 4px 0;
+}
+#message-detail-buttons form{
+    margin: 0;
+    padding: 0;
+}
+
+#message-detail .extra-msg-btn{
+	width: 50%;
+	margin: 10px ;
+}
+
