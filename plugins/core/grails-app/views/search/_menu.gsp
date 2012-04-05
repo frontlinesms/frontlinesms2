@@ -2,7 +2,7 @@
 	<ul class="main-list" id='search-menu'>
 		<g:form name="search-details">
 			<li>
-				<h3 id="search-string" class="list-title">Keyword or phrase:</h3>
+				<h3 id="search-string" class="list-title"><g:message code="search.keyword.label" /></h3>
 				<ul class='sub-list'>
 					<li class='field'>
 						<g:textField name="searchString" id="searchString" value="${search?.searchString}"/>

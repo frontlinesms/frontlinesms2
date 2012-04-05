@@ -19,6 +19,7 @@
 			<g:render template="menu"/>
 			<div id="content">
 				<g:render template="header"/>
+				<g:render template="contact_list"/>
 				<g:layoutBody />
 				<g:render template="footer"/>
 			</div>

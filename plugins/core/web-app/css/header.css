@@ -1,5 +1,7 @@
 #header{
-    position: fixed;
+	position: fixed;
+	top: 0;
+	left: 0;
     padding: 0;
     margin: 0;
     background-image: url("../images/background.png");
@@ -12,8 +14,8 @@
 }
 
 #logo{
-    margin-left: 17px;
-    margin-top: 10px;
+	position: absolute;
+    margin: 10px 0 0 5%;
 }
 
 #notifications{
@@ -47,22 +49,10 @@
 	text-decoration: underline;
 }
 
-
-.standard-nav{
-    list-style: none;
-    padding: 0;
-}
-
-.standard-nav li{
-    position: relative;
+#system-nav li, #tab-nav li{
     display: inline-block;
     padding: 0;
     margin: 0;
-}
-
-.standard-nav a {
-    text-decoration: none;
-    color: #333;
 }
 
 #tabbar{
@@ -75,15 +65,10 @@
     background-image: url('../images/tabbar.png');
     z-index: 5;
 }
-#primary-nav{
-    margin: 0;
-    width: 100%;
-    height: 50px;
-}
-#primary-nav #tab-list{
-	position: fixed;
-	left:70px;
-	top: 35px;
+#tab-nav{
+    height: 26px;
+    margin: 44px 0 0 17%;
+    padding: 0;
 }
 a.tab-link{
 	position: relative;
@@ -94,7 +79,7 @@ a.tab-link{
     height: 22px;
     max-height: 21px;
     padding: 0;
-    padding-top: 5px;
+    padding-top: 7px;
     background-repeat: no-repeat;
     text-align: center;
     text-transform: uppercase;
@@ -119,7 +104,7 @@ a.tab-link:active{
 #status-tab-link{
     padding-right: 20px;
     background-size: cover;
-    width: 95px;
+    width: 100px;
 }
 
 .indicator{
@@ -154,23 +139,25 @@ a.tab-link:active{
 #status-indicator.orange{
     background-image: url('../images/icons/status_orange.png');
 }
-#secondary-nav{
+#system-nav{
     position: absolute;
-    right: 0;
+    right: 17px;
     top: -3px;
     margin: 0;
     padding: 0;
 }
-#secondary-nav .selected {
-   background-color: transparent;
-}
 
-#secondary-nav a{
+#system-nav a{
     display: inline-block;
     padding: 6px;
     margin: 0;
 }
-#secondary-nav li{
+#system-nav li{
     margin: 0;
     padding: 0;
+    border-top: 3px solid #D5AFC6;
+}
+#system-nav .selected, #system-nav li:hover, #system-nav li:active {
+   background-color: #E0E0E0;
+   border-top: 3px solid #C03283;
 }

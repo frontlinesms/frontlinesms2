@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div id="logo"></div>
-<ul id="secondary-nav" class="standard-nav">
+<ul id="system-nav">
 	<li class="${params.controller=='settings'?'selected':''}">
 		<g:link controller="settings">
 			Settings

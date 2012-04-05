@@ -2,7 +2,7 @@
     position: relative;
     border-top: 1px solid #333;
 }
-#contact-header{
+.section-header{
 	border-bottom: 1px solid #9e9e9e;
 }
 #contact-list{

@@ -1,9 +1,9 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label id="manual-label" class="bold" for="address">Add phone number: </label>
+		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /> </label>
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
-		<g:link url="#" class="btn add-address" onclick="addAddressHandler();">Add</g:link>
+		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add" /></g:link>
 	</div>
 	<div id="recipients-list">
 		<ul id="groups">
@@ -34,7 +34,7 @@
 			</g:each>
 		</ul>
 	</div>
-	<div id="recipients-selected"><span id="recipient-count">0</span> recipients selected</div>
+	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients" /></div>
 </div>
 
 <script>
@@ -124,7 +124,3 @@
 		return false;
 	}
 </script>
-
-
-
-
