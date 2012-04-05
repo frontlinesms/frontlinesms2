@@ -103,15 +103,8 @@ class Poll extends Activity {
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def response = getPollResponse(message, exactMatch)
-		println "processKeyword() got response: $response.id|$response.key"
 		response.addToMessages(message)
-		println "processKeyword() : response.messages = $response.messages"
 		response.save()
-		println "processKeyword() : message added to response"
-		println "processKeyword() : response.messages = $response.messages"
-//		response.refresh()
-		println "processKeyword() : response.messages = $response.messages"
-		println "processKeyword() : PollResponse.get(5).messages = ${PollResponse.get(5).messages}"
 		def poll = this
 		if(poll.autoreplyText) {
 			def params = [:]
@@ -121,9 +114,7 @@ class Poll extends Activity {
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
 			poll.save()
-			println "Autoreply message sent to ${message.src}"
 		}
-		println "processKeyword() : PollResponse.get(5).messages = ${PollResponse.get(5).messages}"
 	}
 	
 //> PRIVATE HELPERS
