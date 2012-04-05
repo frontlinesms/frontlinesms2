@@ -76,20 +76,20 @@ class Poll extends Activity {
 			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
 			this.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {
-			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
-			choices.each { k,v -> 
+			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
+			choices.each { k, v ->
 				if(this.responses*.key?.contains(k)) {
 					def response = PollResponse.findByKey(k)
 					if(response.value != v) {
 						this.deleteResponse(response)
-						this.addToResponses(new PollResponse(value: v, key:k))
+						this.addToResponses(new PollResponse(value:v, key:k))
 					}
-				} else
-					if(v?.trim()) this.addToResponses(new PollResponse(value: v, key:k))	
+				} else if(v?.trim()) this.addToResponses(new PollResponse(value:v, key:k))
 			}
 		}
-		if(!this.unknown)
+		if(!this.unknown) {
 			this.addToResponses(PollResponse.createUnknown())
+		}
 	}
 	
 	def deleteResponse(PollResponse response) {
@@ -103,9 +103,15 @@ class Poll extends Activity {
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def response = getPollResponse(message, exactMatch)
-		println "processKeyword() got response: $response.key"
+		println "processKeyword() got response: $response.id|$response.key"
 		response.addToMessages(message)
-		response.save(failOnError: true)
+		println "processKeyword() : response.messages = $response.messages"
+		response.save()
+		println "processKeyword() : message added to response"
+		println "processKeyword() : response.messages = $response.messages"
+//		response.refresh()
+		println "processKeyword() : response.messages = $response.messages"
+		println "processKeyword() : PollResponse.get(5).messages = ${PollResponse.get(5).messages}"
 		def poll = this
 		if(poll.autoreplyText) {
 			def params = [:]
@@ -117,6 +123,7 @@ class Poll extends Activity {
 			poll.save()
 			println "Autoreply message sent to ${message.src}"
 		}
+		println "processKeyword() : PollResponse.get(5).messages = ${PollResponse.get(5).messages}"
 	}
 	
 //> PRIVATE HELPERS
