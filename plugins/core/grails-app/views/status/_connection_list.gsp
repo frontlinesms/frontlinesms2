@@ -1,8 +1,8 @@
 <%@ page import="frontlinesms2.Contact" %>
-<h3 id="connection-title">Connections</h3>
+<h3 id="connection-title"><g:message code="status.connection.header" /></h3>
 <div id="connection-status">
 	<g:if test="${connectionInstanceTotal == 0}">
-		<div id='connections'>You have no connections configured.</div>
+		<div id='connections'><g:message code="status.connection.none" /></div>
 	</g:if>
 	<g:else>
 		<table id='stored-connections'>

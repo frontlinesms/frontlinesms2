@@ -1,8 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all the required fields.  You may only specify one rule per field.</div>
+	<div class="error-panel hide">
+	<div id="error-icon"></div>
+		<g:message code="smartgroup.validation.prompt" />
+	</div>
 	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup', id:smartGroupInstance?.id]}" method="post">
-		<p class="info">To create a Smart group, select the criteria you need to be matched for contacts for this group</p>
+		<p class="info">
+			<g:message code="smartgroup.info" />
+		</p>
 		<div class="smartgroupname">
 			<label class="bold inline" for="smartgroupname"><g:message code="smartgroup.name.label" default="Name" />:</label>
 			<g:textField id="smartgroupname-field" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}" name="smartgroupname" value="${smartGroupInstance?.name}" />
@@ -22,8 +27,8 @@
 												onchange="smartGroupCriteriaChanged(this)"/>
 									</td>
 									<td class="rule-match-text">
-										<span class="contains">contains</span>
-										<span class="starts hide">starts with</span>
+										<span class="contains"><g:message code="smartgroup.contains.label" /></span>
+										<span class="starts hide"><g:message code="smartgroup.startswith.label" /></span>
 									</td>
 									<td>
 										<g:textField name="rule-text" class="rule-text" value='${customField.value}'/>
@@ -45,12 +50,12 @@
 								</td>
 								<td class="rule-match-text">
 									<g:if test = "${field == 'mobile'}">
-										<span class="contains hide">contains</span>
-										<span class="starts">starts with</span>
+										<span class="contains hide"><g:message code="smartgroup.contains.label" /></span>
+										<span class="starts"><g:message code="smartgroup.startswith.label" /></span>
 									</g:if>
 									<g:else>
-										<span class="contains">contains</span>
-										<span class="starts hide">starts with</span>
+										<span class="contains"><g:message code="smartgroup.contains.label" /></span>
+										<span class="starts hide"><g:message code="smartgroup.startswith.label" /></span>
 									</g:else>
 								</td>
 								<td>
@@ -72,8 +77,8 @@
 									onchange="smartGroupCriteriaChanged(this)"/>
 						</td>
 						<td class="rule-match-text">
-							<span class="contains hide">contains</span>
-							<span class="starts">starts with</span>
+							<span class="contains hide"><g:message code="smartgroup.contains.label" /></span>
+							<span class="starts"><g:message code="smartgroup.startswith.label" /></span>
 						</td>
 						<td>
 							<g:textField name="rule-text" class="rule-text"/>
@@ -86,7 +91,9 @@
 				
 			</tbody>
 		</table>
-		<a class="button" onclick="addNewRule()">Add another rule</a></br>
+		<a class="button" onclick="addNewRule()">
+			<g:message code="smartgroup.add.anotherrule" />
+		</a></br>
 	</g:form>
 </div>
 

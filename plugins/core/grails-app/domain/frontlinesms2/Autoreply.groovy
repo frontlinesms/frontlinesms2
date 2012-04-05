@@ -6,8 +6,8 @@ class Autoreply extends Activity {
 	String autoreplyText
 	
 	static constraints = {
-		name(blank: false, nullable: false, maxSize: 255, unique: true)
-		autoreplyText(nullable:false, blank:false)
+		name(blank:false, maxSize:255, unique:true)
+		autoreplyText(blank:false)
 	}
 	
 	static mapping = {
