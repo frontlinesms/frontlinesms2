@@ -2,15 +2,15 @@
 <g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="poll.validation.prompt" /></div>
 	<ol>
-		<li><a class="tabs-1" href="#tabs-1">Enter Question</a></li>
-		<li><a class="tabs-2" href="#tabs-2">Response list</a></li>
-		<li><a class="tabs-3" href="#tabs-3">Automatic sorting</a></li>
-		<li><a class="tabs-4" href="#tabs-4">Automatic reply</a></li>
-		<li><a class="tabs-5" href="#tabs-5">Edit Message</a></li>
-		<li><a class="tabs-6" href="#tabs-6">Select recipients</a></li>
-		<li><a class="tabs-7" href="#tabs-7">Confirm</a></li>
+		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question" /></a></li>
+		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response" /></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.sort" /></a></li>
+		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.reply" /></a></li>
+		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.edit.message" /></a></li>
+		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.recipients" /></a></li>
+		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.confirm" /></a></li>
 	</ol>
 
 	<g:render template="../poll/new_poll_form" plugin="core"/>
