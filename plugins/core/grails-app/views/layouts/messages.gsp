@@ -23,10 +23,13 @@
 		<div id="main">
 			<g:render template="../message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 			<div id="content">
-				<g:render template="../message/header"/>
-				<g:render template="../message/message_list"/>
-				<g:layoutBody/>
-			    <g:render template="../message/footer"/>
+				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
+					<g:render template="../message/header"/>
+					<g:render template="../message/message_list"/>
+					<g:layoutBody/>
+					<g:render template="../message/footer"/>
+				</div>
+			    <g:render template="../message/message_details" />
 			</div>
 		</div>
 		<r:layoutResources/>
