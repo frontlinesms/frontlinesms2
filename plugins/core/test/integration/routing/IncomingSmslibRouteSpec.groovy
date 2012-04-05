@@ -36,8 +36,8 @@ class IncomingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = Poll.findByName('What do you think of goo?')
 			def messages = Fmessage.findAll()
 			messages.size() == 1
-			message[0].text == 'Good morning'
-			message[0].messageOwner == poll
+			messages[0].text == 'Good morning'
+			messages[0].messageOwner == poll
 		cleanup:	
 			// stop route
 			if(connection) fconnectionService.destroyRoutes(connection)
