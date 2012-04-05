@@ -20,7 +20,7 @@
 		
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if ((isElementEmpty("#tabs-1 #keyword"))&&(!(isGroupChecked("noKeyword")))) {
+				if ((isElementEmpty("#tabs-1 #keyword"))&&(!(isGroupChecked("blankKeyword")))) {
 					$("#tabs-1 #keyword").addClass("error");
 					return false;
 				}
@@ -44,7 +44,7 @@
 	}
 	
 	function updateConfirmationMessage() {
-		if(!(isGroupChecked("noKeyword"))){
+		if(!(isGroupChecked("blankKeyword"))){
 			var keyword = $('#keyword').val();
 			var autoreplyText = $('#autoreplyText').val();
 
@@ -53,7 +53,7 @@
 		}
 		else{
 			var autoreplyText = $('#autoreplyText').val();
-			$("#keyword-confirm").html('<p>' + "No keyword specified! A response will be sent to everyone that texts into the system"  + '</p>');
+			$("#keyword-confirm").html('<p>' + "Blank keyword. A response will be sent to all incoming messages"  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
 		
