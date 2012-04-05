@@ -9,12 +9,10 @@ class PollResponse {
 	static transients = ['liveMessageCount']
 	
 	static constraints = {
-		value(blank: false, nullable: false, maxSize: 255)
-		key(nullable: true)
-		poll(nullable: false)
-		messages(nullable: true, validator: { val, obj ->
-			
-		})
+		value(blank:false, nullable:false, maxSize:255)
+		key(nullable:true)
+		poll(nullable:false)
+		messages(nullable:true)
 	}
 	
 	void addToMessages(Fmessage message) {
