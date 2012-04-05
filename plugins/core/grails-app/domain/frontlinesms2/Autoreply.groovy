@@ -2,14 +2,12 @@ package frontlinesms2
 
 class Autoreply extends Activity {
 	def messageSendService
-
-	static hasOne =[keyword: Keyword]
+	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	
 	static constraints = {
 		name(blank: false, nullable: false, maxSize: 255, unique: true)
 		autoreplyText(nullable:false, blank:false)
-		keyword(nullable:false, unique: true)
 	}
 	
 	static mapping = {
@@ -21,7 +19,7 @@ class Autoreply extends Activity {
 	}
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
-		if(!exactMatch) return
+		if(!exactMatch && keyword.value) return
 		def autoreply = this
 		def params = [:]
 		params.addresses = message.src

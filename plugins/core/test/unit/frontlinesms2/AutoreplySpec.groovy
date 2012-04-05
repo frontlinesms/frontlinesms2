@@ -22,9 +22,10 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 			'test' | 'something' | true       | true
 	}
 
-	def 'processKeyword should not generate an autoreply for non-exact keyword match'() {
+	def 'processKeyword should not generate an autoreply for non-exact keyword match if keyword is not blank'() {
 		given:
 			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
+			autoreply.keyword = mockKeyword('KEYWORD')
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -36,10 +37,32 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 			0 * sendService._
 	}
 
+	def 'processKeyword should generate an autoreply for blank keyword if non-exact match'() {
+		given:
+			mockDomain Autoreply
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
+			autoreply.keyword = mockKeyword('')
+
+			def sendService = Mock(MessageSendService)
+			autoreply.messageSendService = sendService
+
+			def replyMessage = mockFmessage("woteva")
+			sendService.createOutgoingMessage({ params ->
+				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
+			}) >> replyMessage
+
+			def inMessage = mockFmessage("message text", TEST_NUMBER)
+		when:
+			autoreply.processKeyword(inMessage, false)
+		then:
+			1 * sendService.send(replyMessage)
+	}
+
 	def 'processKeyword should generate an autoreply'() {
 		given:
 			mockDomain Autoreply
 			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
+			autoreply.keyword = mockKeyword('KEYWORD')
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -54,6 +77,12 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 			autoreply.processKeyword(inMessage, true)
 		then:
 			1 * sendService.send(replyMessage)
+	}
+
+	private def mockKeyword(String value) {
+		def k = Mock(Keyword)
+		k.value >> value
+		return k
 	}
 
 	private def mockFmessage(String messageText, String src=null) {
