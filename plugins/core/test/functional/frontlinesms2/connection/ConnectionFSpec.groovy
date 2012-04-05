@@ -139,7 +139,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			confirmIntelliSmsConnectionName.text() == "New IntelliSMS Connection"
 			confirmIntelliSmsUserName.text() == "test"
-			confirmIntelliSmsType.text() == "IntelliSMS Account"
+			confirmIntelliSmsType.text() == "IntelliSms Account"
 		when:
 			doneButton.click()
 		then:

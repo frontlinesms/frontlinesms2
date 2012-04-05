@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.RouteStatus" %>
 <div id='connections'>
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div><g:message code="connection.list.noconnection /></div>
+		<div><g:message code="connection.list.none" /></div>
 	</g:if>
 	<g:else>
 		<ul>
@@ -18,13 +18,13 @@
 					<g:if test="${c == connectionInstance}">
 						<g:if test="${c.status == RouteStatus.NOT_CONNECTED}">
 							<div id="createRoute">
-								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.list.route.create" /></g:link>
+								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create" /></g:link>
 							</div>
 							<div>
 								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');"><g:message code="connection.edit" /></g:remoteLink>
 							</div>
 						</g:if>
-						<g:else>
+						<g:elseif test="${c.status == RouteStatus.CONNECTED}">
 							<div>
 								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup('Test message', data, 'Send');">
 									<g:message code="connection.send.test.message" />
@@ -33,7 +33,7 @@
 									<g:message code="connection.route.destroy" />
 								</g:link>
 							</div>
-						</g:else>
+						</g:elseif>
 					</g:if>
 				</li>
 			</g:each>

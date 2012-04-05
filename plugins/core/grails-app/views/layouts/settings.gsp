@@ -5,6 +5,18 @@
 		<g:layoutHead />
 		<r:require module="settings"/>
 		<g:render template="/includes"/>
+		<g:javascript>
+			$(function() {
+				<g:if test="${params.createRoute && params.controller == 'connection'}">
+					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
+					function refreshConnectionStatus() {
+						$.get("${createLink(controller:'connection', action:'list', id:params?.id)}", function(data) {
+								$("#connections").replaceWith($(data).find('#connections'));
+						});
+					}
+				</g:if>
+			});
+		</g:javascript>
 	</head>
 	<body id="settings-tab">
 		<div id="header">
