@@ -8,16 +8,17 @@ class AutoreplyController extends ActivityController {
 		def autoreply
 		if(Autoreply.get(params.ownerId)) {
 			autoreply = Autoreply.get(params.ownerId)
-			autoreply.keyword ? autoreply.keyword.value = params.keyword : (autoreply.keyword = new Keyword(value: params.keyword))
+			
+			def keywordValue = params.blankKeyword? '': params.keyword
+			autoreply.keyword.value = keywordValue
+			
 			autoreply.name = params.name ?: autoreply.name
 			autoreply.autoreplyText = params.autoreplyText ?: autoreply.autoreplyText
-			autoreply.save(flush: true, failOnError: true)
 		} else {
-			def keyword = new Keyword(value: params.keyword)
-			def nokeyword = new Keyword(value: "")
-			autoreply = params?.blankKeyword ? new Autoreply(name: params.name, autoreplyText: params.autoreplyText, keyword: nokeyword) : new Autoreply(name: params.name, autoreplyText: params.autoreplyText, keyword: keyword)
-			autoreply.save(flush: true, failOnError: true)
+			def keyword = new Keyword(value:params.blankKeyword? '': params.keyword)
+			autoreply = new Autoreply(name:params.name, autoreplyText:params.autoreplyText, keyword:keyword)
 		}
+		autoreply.save(flush: true, failOnError: true)
 		flash.message = "Autoreply has been saved!"
 		[ownerId: autoreply.id]
 	}
