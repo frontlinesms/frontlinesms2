@@ -1,7 +1,6 @@
 package frontlinesms2
 
 class PollController extends ActivityController {
-
 	def save = {
 		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
 		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html

@@ -4,8 +4,7 @@ class KeywordProcessorService {
 	def process(Fmessage message) {
 		def words = message.text?.trim().toUpperCase().split(/\s/)
 		def directMatch = Keyword.findByValue(words[0])
-		println words[0].size()
-		if(directMatch){
+		if(directMatch) {
 			directMatch.activity?.processKeyword(message, true)
 		} else {
 			def indirectMatch
