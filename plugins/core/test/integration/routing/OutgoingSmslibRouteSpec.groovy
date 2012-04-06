@@ -29,7 +29,9 @@ class OutgoingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			// check appropriate params have been passed to the mocked modem
 			waitFor { sentMessages == ['0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C'] }
 		cleanup:
-			Fmessage.findAll()*.delete(flush:true)
+			Fmessage.withNewSession {
+				Fmessage.findAll()*.delete()
+			}
 	}
 
 	private Fmessage createOutgoing(String dst, String text) {
