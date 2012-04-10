@@ -76,20 +76,20 @@ class Poll extends Activity {
 			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
 			this.addToResponses(new PollResponse(value:'No', key:'B'))
 		} else {
-			def choices = attrs.findAll{ it ==~ /choice[A-E]=.*/}
-			choices.each { k,v -> 
+			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
+			choices.each { k, v ->
 				if(this.responses*.key?.contains(k)) {
 					def response = PollResponse.findByKey(k)
 					if(response.value != v) {
 						this.deleteResponse(response)
-						this.addToResponses(new PollResponse(value: v, key:k))
+						this.addToResponses(new PollResponse(value:v, key:k))
 					}
-				} else
-					if(v?.trim()) this.addToResponses(new PollResponse(value: v, key:k))	
+				} else if(v?.trim()) this.addToResponses(new PollResponse(value:v, key:k))
 			}
 		}
-		if(!this.unknown)
+		if(!this.unknown) {
 			this.addToResponses(PollResponse.createUnknown())
+		}
 	}
 	
 	def deleteResponse(PollResponse response) {
@@ -103,9 +103,8 @@ class Poll extends Activity {
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def response = getPollResponse(message, exactMatch)
-		println "processKeyword() got response: $response.key"
 		response.addToMessages(message)
-		response.save(failOnError: true)
+		response.save()
 		def poll = this
 		if(poll.autoreplyText) {
 			def params = [:]
@@ -115,7 +114,6 @@ class Poll extends Activity {
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
 			poll.save()
-			println "Autoreply message sent to ${message.src}"
 		}
 	}
 	

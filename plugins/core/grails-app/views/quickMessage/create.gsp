@@ -1,7 +1,7 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <g:javascript src="characterSMS-count.js"/>
 <div id="tabs">
-	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="quickmessage.validation.prompt" /></div>
 	<ul>
 		<g:each in="['tabs-1' : 'Enter message', 'tabs-2' : 'Select recipients',
 						'tabs-3' : 'Confirm']" var='entry'>

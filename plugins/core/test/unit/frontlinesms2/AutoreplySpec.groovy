@@ -1,8 +1,10 @@
 package frontlinesms2
+import spock.lang.*
 
 class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 	private static final String TEST_NUMBER = "+2345678"
-
+	
+	@Unroll
 	def "Test constraints"() {
 		given:
 			mockForConstraintsTests(Autoreply)

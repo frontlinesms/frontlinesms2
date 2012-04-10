@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="settings" />
-		<title>Settings > System Logs</title>
+		<title>Settings ><g:message code="settings.logs.header" /></title>
 		<g:javascript>
 			function filterLogEntries(timePeriod) {
 				$.get(url_root + 'settings/logs', {timePeriod: timePeriod}, function(data) {
@@ -14,19 +14,19 @@
 	<body>
 		<div id='logEntries'>
 			<g:if test="${logEntryTotal==0}">
-				<div>You have no logs.</div>
+				<div><g:message code="logs.none" /></div>
 			</g:if>
 			<g:else>
 				<div id="log-filters">
-					<span id="show-log-text">Show logs for</span>
+					<span id="show-log-text"><g:message code="logs.filter.label" /></span>
 					<span>
 						<select class="dropdown" name="timePeriod" onChange="filterLogEntries(this.value)">
-							<option value="forever">all time</option>
-							<option value="1">last 24 hours</option>
-							<option value="3">last 3 days</option>
-							<option value="7">last 7 days</option>
-							<option value="14">last 14 days</option>
-							<option value="28">last 28 days</option>
+							<option value="forever"><g:message code="logs.filter.anytime" /></option>
+							<option value="1"><g:message code="logs.filter.1day" /></option>
+							<option value="3"><g:message code="logs.filter.3days" /></option>
+							<option value="7"><g:message code="logs.filter.7days" /></option>
+							<option value="14"><g:message code="logs.filter.14days" /></option>
+							<option value="28"><g:message code="logs.filter.28days" /></option>
 						</select>
 					</span>
 				</div>

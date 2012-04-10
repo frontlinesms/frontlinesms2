@@ -7,7 +7,7 @@
 		<g:render template="traffic" />
 		<div id="right-column">
 			<g:render template="connection_list" />
-			<h3 id="detection-title">Detected devices</h3>
+			<h3 id="detection-title"><g:message code="status.devises.header" /></h3>
 			<g:render template="device_detection"/>
 		</div>
 		<g:javascript>

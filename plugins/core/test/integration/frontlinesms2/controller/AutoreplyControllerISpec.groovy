@@ -2,60 +2,63 @@ package frontlinesms2.controller
 
 import frontlinesms2.*
 
+import spock.lang.*
+
 class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
+	
 	def setup() {
 		controller = new AutoreplyController()
 	}
-
-	def "can create an Autoreply with a keyword"() {
-		when:
-			controller.params.name = "Color"
-			controller.params.keyword = "COLOR"
-			controller.params.autoreplyText = "ahhhhhhhhh"
-			controller.save()
-			def autoreply = Autoreply.findByName("Color")
-			def keyword = Keyword.findByValue("COLOR")
-		then:
-			println Keyword.list()
-			keyword != null
-			autoreply != null
-			autoreply.keyword == keyword
-			autoreply.autoreplyText == "ahhhhhhhhh"
-	}
 	
-	def "can create an Autoreply will blank keyword value"() {
+	@Unroll
+	def 'can create an Autoreply'() {
+		given:
+			controller.params.name = name
+			controller.params.keyword = keyword
+			controller.params.autoreplyText = autoreplyText
 		when:
-			controller.params.name = "Thanks"
-			controller.params.keyword = ""
-			controller.params.autoreplyText = "Thank you for the text"
 			controller.save()
 		then:
-			def autoreply = Autoreply.findByName("Thanks")
-			autoreply.autoreplyText == "Thank you for the text"
-			autoreply.keyword.value == ''
+			def autoreply = Autoreply.findByName(name)
+			autoreply.autoreplyText == autoreplyText
+			autoreply.keyword.value == keyword
+		where:
+			name     | keyword | autoreplyText
+			"Color"  | 'COLOR' | "ahhhhhhhhh"
+			"Thanks" | ''      | "Thank you for the text"
 	}
 	
+	@Unroll
 	def "can edit an Autoreply"() {
+		given: 'an autoreply exists'
+			def k = new Keyword(value:initialKeyword)
+			def a = new Autoreply(name:"Color", keyword:k, autoreplyText:"ahhhhhhhhh")
+			a.save(flush:true, failOnError:true)
+			
+		and: 'controller params are setup'
+			controller.params.ownerId = a.id
+			controller.params.name = name
+			controller.params.keyword = finalKeyword
+			controller.params.autoreplyText = autoreplyText
+			
 		when:
-			def keyword = new Keyword(value:"COLOR")
-			def autoreply = new Autoreply(name: "Color", keyword: keyword, autoreplyText:"ahhhhhhhhh")
-			autoreply.save(flush: true, failOnError: true)
-			controller.params.ownerId = autoreply.id
-			controller.params.name = "ColorZ"
-			controller.params.keyword = "COLORZ"
-			controller.params.autoreplyText = "blue, i mean green"
-			controller.save()
-			autoreply.refresh()
-			keyword.refresh()
-		then:
-			keyword != null
-			autoreply != null
-			Keyword.findByValue("color") == null
+			def model = controller.save()
+			
+		then: 'the auto reply has been updated'
+			def autoreply = Autoreply.get(model.ownerId)
+			autoreply.name == name
+			autoreply.keyword.value == finalKeyword
+			autoreply.autoreplyText == autoreplyText
+		
+		and: 'the old auto reply and keyword have been deleted'
+			Keyword.findByValue(initialKeyword) == null
 			Autoreply.findByName("Color") == null
-			keyword.value == "COLORZ"
-			autoreply.name == "ColorZ"
-			autoreply.keyword == keyword
-			autoreply.autoreplyText == "blue, i mean green"
-	}
+			
+		where:
+			name      | initialKeyword | finalKeyword | autoreplyText
+			"ColorZ"  | "COLOR"        | "COLORZ"     | "blue, i mean green"
+			"Blank"   | "COLOR"        | ""           | "blue, i mean green"
+			"ColorZ"  | ""             | "COLORZ"     | "blue, i mean green"
+	}  
 }

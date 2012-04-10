@@ -1,8 +1,8 @@
 <div id="tabs-5">
-	<h2 class="bold">Edit message to be sent to recipients</h2>
-	<p class="info">The following message will be sent to the recipients of the poll.</p>
+	<h2 class="bold"><g:message code="poll.message.edit" /></h2>
+	<p class="info"><g:message code="poll.message.prompt" /></p>
 	<g:textArea name="messageText" rows="5" cols="40" />
-	<span id="send-message-stats" class="character-count">Characters remaining 160 (1 SMS message)</span>
+	<span id="send-message-stats" class="character-count"><g:message code="poll.message.count" /></span>
 </div>
 <g:javascript>
 	var autoUpdate = true;
@@ -22,6 +22,8 @@
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
 				if($("input[name='pollType']:checked").val() == "standard") {
+				     
+					//<g:message code="poll.reply.text" args="[keywordText, keywordText]" />
 					replyText = 'Reply' + ' "' + keywordText + ' A" for Yes, "' + keywordText + ' B" for No.';
 				} else {
 					replyText = 'Reply';
