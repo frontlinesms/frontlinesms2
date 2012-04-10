@@ -41,7 +41,7 @@
 				<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
 					${m.identifier}
 				</g:link>
-			</td>  fmessage.count.many
+			</td>
 			<td class="message-text-cell">
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
 					${m.message == "1" ? g.message(code:'fmessage.count') : g.message(code:'fmessage.count', params:[m.message])}
