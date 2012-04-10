@@ -15,7 +15,6 @@ class ConnectionController {
 	}
 	
 	def list = {
-		println "params are $params"
 		def fconnectionInstanceList = Fconnection.list(params)
 		if(!params.id) {
 			params.id = Fconnection.list(params)[0]?.id
@@ -114,7 +113,7 @@ class ConnectionController {
 			def message = messageSendService.createOutgoingMessage(params)
 			messageSendService.send(message, connection)
 			flash.message = LogEntry.log("Test message sent!")
-			redirect (controller:'settings', action:'show_connections', id:params.id)
+			redirect (action:'list', id:params.id)
 		}
 	}
 	
@@ -136,7 +135,7 @@ class ConnectionController {
 			c connection
 		} else {
 			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
-			redirect controller:'settings', action:'connections'
+			redirect controller:'connection', action:'list'
 		}
 	}
 }

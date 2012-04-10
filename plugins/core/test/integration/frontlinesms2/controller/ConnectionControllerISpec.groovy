@@ -107,4 +107,15 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			conn.password == "test"
 	}
 	
+	def "sendTest redirects to the SHOW action"() {
+		setup:
+			def conn = new Fconnection(name:"test")
+			conn.save(flush:true)
+		when:
+			controller.params.id = conn.id
+			controller.sendTest()
+		then:
+			controller.response.redirectedUrl == "/connection/list/$conn.id"
+	} 
+	
 }
