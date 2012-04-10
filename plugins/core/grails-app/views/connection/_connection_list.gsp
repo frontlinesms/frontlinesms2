@@ -11,7 +11,7 @@
 						<div class="connection-header">
 							<h2>'${c.name}'</h2>
 							<p class="connection-type">(<g:message code="${c.getClass().simpleName.toLowerCase()}.label"/>)</p>
-							<i class="connection-status">${c.status}</i>
+							<p class="connection-status"><g:message code="${c.status.i18n}"/></p>
 						</div>
 					</g:link>
 					

@@ -2,10 +2,11 @@ package frontlinesms2
 
 enum RouteStatus {
 	NOT_CONNECTED,
+	CONNECTING,
 	CONNECTED
-	
-	String toString() {
-		super.toString().toLowerCase().capitalize().replaceAll("_"," ")
-	}
+
+	String getI18n() {
+		getClass().simpleName.toLowerCase() + "." + name().toLowerCase()
+	}	
 }
 
