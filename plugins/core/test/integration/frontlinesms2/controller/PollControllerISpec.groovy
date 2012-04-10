@@ -32,7 +32,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceC = "maybe"
 			controller.params.autoreplyText = "automatic reply text"
 			controller.params.enableKeyword = true
-			controller.params.keyword = "hello"
+			controller.params.keyword = "HELLO"
 		when:
 			controller.save()
 		then:

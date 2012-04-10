@@ -206,6 +206,7 @@ class CoreBootStrap {
 		if(!dev) return
 		def k1 = new Keyword(value: "COLOR")
 		def k2 = new Keyword(value: "AUTOREPLY")
+
 		new Autoreply(name:"toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
 		new Autoreply(name:"color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
 	}
@@ -346,7 +347,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initMockPortMessages() {
-		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z"];
+		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z", ""];
 	}
 	
 	private def test_initGeb(def servletContext) {
