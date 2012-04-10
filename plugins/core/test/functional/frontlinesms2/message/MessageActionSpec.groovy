@@ -42,7 +42,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			$("a", text: "Inbox").click()
 			waitFor {title == "Inbox"}
 		then:
-			$("tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 	}
 	
 	def "can categorize poll messages using dropdown"() {

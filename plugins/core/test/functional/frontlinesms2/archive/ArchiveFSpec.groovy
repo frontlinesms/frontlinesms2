@@ -25,12 +25,12 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 		then:
-			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane', 'Max'])
+			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
 		when:
 			def btnDelete = $("#delete-msg")
 			btnDelete.click()
 		then:
-			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane'])
+			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane'])
 	}
 	
 	def '"Archive All" button does not appear in archive section'() {

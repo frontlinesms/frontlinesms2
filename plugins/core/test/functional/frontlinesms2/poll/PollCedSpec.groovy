@@ -228,7 +228,6 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { Poll.findByName("Coffee Poll") }
 	}
 
-	@spock.lang.IgnoreRest
 	def "can enter instructions for the poll and allow user to edit message"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
@@ -280,7 +279,7 @@ class PollCedSpec extends PollBaseSpec {
 			pollForm.name = "Coffee Poll"
 			done.click()
 		then:
-			waitFor { Poll.findByName("Coffee Poll") }
+			waitFor {Poll.findByName("Coffee Poll") }
 	}
 	
 // Ajax calls make passing this test incredibly difficult
@@ -333,6 +332,7 @@ class PollCedSpec extends PollBaseSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
 			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
 			poll.save(failOnError:true, flush:true)
 			go 'message/inbox'
 		then:
@@ -352,6 +352,7 @@ class PollCedSpec extends PollBaseSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
 			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
 			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
@@ -383,8 +384,8 @@ class PollCedSpec extends PollBaseSpec {
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
 			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
 		then:
 			rowContents[2] == 'Who is badder?'
 			rowContents[3] == '0 messages'
@@ -422,6 +423,7 @@ class PollCedSpec extends PollBaseSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'choiceA', value: 'Michael-Jackson')
 			poll.addToResponses(key: 'choiceB', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
 			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox

@@ -12,19 +12,9 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageAnnouncementNewOffice
-			def announcementMessageSources = $('#message-list tbody tr .message-preview-sender a')*.text()
+			def announcementMessageSources = messageSender.find('a')*.text()
 		then:
-			announcementMessageSources == ['Jane', 'Max']
-	}
-
-	def 'no message is selected when a announcement is first loaded'() {
-		given:
-			createTestAnnouncements()
-			createTestMessages()
-		when:
-			go "message/announcement/${Announcement.findByName('New Office').id}"
-		then:
-			$('#message-detail #message-detail-content').text() == "No message selected"
+			announcementMessageSources.containsAll(['Jane', 'Max'])
 	}
 
 	def "message's Announcement details are shown in list"() {
@@ -33,7 +23,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageAnnouncementNewOffice
-			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
+			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
@@ -71,17 +61,17 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
-			$("#messages tbody tr").size() == 2
+			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
 		then:
-			waitFor { $("#messages tbody tr").size() == 1 }
-			$("#messages tbody tr")[0].find(".message-preview-sender").text() == 'Max'
+			waitFor { $("#message-list tr").size() == 2 }
+			$("#message-list tr")[1].find(".message-sender-cell").text() == 'Max'
 		when:
 			$('a', text:'All').click()
 		then:
-			waitFor { $("#messages tbody tr").size() == 2 }
-			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane', 'Max'])
+			waitFor { $("#message-list tr").size() == 3 }
+			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
 	}
 	
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -132,14 +122,14 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 			def announcement = Announcement.findByName("New Office")
 			to PageMessageAnnouncementNewOffice
-			$(".button-list #more-actions").value("delete")
+			$(".header-buttons #more-actions").value("Delete")
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
 			$("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete activity")
 		when:
 			$("#done").click()
 		then:
 			waitFor { $("#sidebar .selected").text() == "Inbox" }
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 			!$("a", text: "New Office announcement")
 	}
 }
