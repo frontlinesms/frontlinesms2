@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Poll</title>
+        <title><g:message code="poll.header" /></title>
 		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript library="jquery" plugin="jquery"/>

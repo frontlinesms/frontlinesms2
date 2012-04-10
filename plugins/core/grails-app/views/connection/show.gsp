@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="settings" />
-		<title>Settings > Connections > ${connectionInstance?.name}</title>
+		<title><g:message code="connection.header" /> ${connectionInstance?.name}</title>
 	</head>
 	<body>
 		<g:render template="/connection/connection_list"/>

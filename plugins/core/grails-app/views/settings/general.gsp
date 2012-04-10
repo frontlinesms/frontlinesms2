@@ -14,7 +14,7 @@
 				</p>
 				<g:uploadForm name="importForm" controller="import" action="importData" method="post">
 					<div>
-						<h3>Select type of data to import:</h3>
+						<h3><g:message code="import.prompt.type" /></h3>
 						<input type="radio" name="data" value="contacts" checked="checked" />
 						<g:message code="import.contacts" /><br />
 						<input type="radio" name="data" value="messages" /><g:message code="import.messages" />
