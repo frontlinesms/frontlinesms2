@@ -12,7 +12,7 @@
 						${c.name}
 					</td>
 					<td class="value">             
-						<div>${c.status}</div>
+						<g:message code="${c.status.i18n}"/>
 					</td>
 				</tr>
 			</g:each>

@@ -33,7 +33,7 @@ class ConnectionController {
 	def show = {
 		withFconnection {
 			if(params.createRoute) {
-				it.metaClass.getStatus = {"${message(code: 'connection.route.connecting')}"}
+				it.metaClass.getStatus = { RouteStatus.CONNECTING }
 			}
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 					fconnectionInstanceTotal: Fconnection.list(params)]

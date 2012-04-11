@@ -1,5 +1,7 @@
 package routing
 
+import static routing.RoutingSpecUtils.*
+
 import frontlinesms2.*
 import frontlinesms2.dev.MockModemUtils
 
@@ -30,22 +32,11 @@ class OutgoingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			waitFor { sentMessages == ['0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C'] }
 		cleanup:
 			Fmessage.withNewSession {
-				Fmessage.findAll()*.delete()
+				Fmessage.findAll().each {
+					it.refresh()
+					it.delete()
+				}
 			}
-	}
-
-	private Fmessage createOutgoing(String dst, String text) {
-		Fmessage m = new Fmessage(text:text, inbound:false, hasPending:true)
-		m.addToDispatches(new Dispatch(dst:dst, status:DispatchStatus.PENDING))
-		return m
-	}
-
-	private def waitFor(Closure c, pause=200, totalWait=5000) {
-		for(long end = System.currentTimeMillis() + totalWait; System.currentTimeMillis() < end;) {
-			if(c.call()) return true
-			else sleep(pause)
-		}
-		return false
 	}
 }
 
