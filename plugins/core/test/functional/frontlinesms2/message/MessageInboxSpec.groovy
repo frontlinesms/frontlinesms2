@@ -13,9 +13,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def messageSources = $('#messages tbody tr .message-preview-sender a')*.text()
+			def messageSources = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			messageSources == ['Alice', 'Bob']
+			messageSources.containsAll(['Alice', 'Bob'])
 	}
 
 	def 'message details are shown in row'() {
@@ -23,7 +23,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
+			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'hi Bob'
@@ -73,11 +73,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${aliceMessage.id}"
 		then:
-			$('#messages .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
+			$('#message-list .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
 		when:
 			go "message/inbox/show/${bobMessage.id}"
 		then:
-			$('#messages .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}"
+			$('#message-list .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -102,9 +102,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def contact = new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
-			def rowContents = $('#messages tbody tr .message-preview-sender a')*.text()
+			def rowContents = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			rowContents == ['June']
+			rowContents.contains('June')
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
@@ -125,17 +125,17 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			go "message/inbox/show/${Fmessage.list()[0].id}"
 		then:
-			$("#messages tbody tr").size() == 2
+			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
-			waitFor {$("#messages tbody tr").size() == 1}
+			waitFor {$("#message-list tr").size() == 2}
 		then:
-			$("#messages tbody tr .message-preview-sender a")[0].text() == 'Alice'
+			$("#message-list tr .message-sender-cell a")[1].text() == 'Alice'
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#messages tbody tr").size() == 2}
+			waitFor {$("#message-list tr").size() == 3}
 		then:
-			$("#messages tbody tr .message-preview-sender a")*.text().containsAll(['Alice', 'Bob'])
+			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Alice', 'Bob'])
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
@@ -174,9 +174,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def formatedDate = dateToString(message.date)
 		then:
 			waitFor { checkedMessageCount == 1 }
-			$('#message-detail #message-detail-sender').text() == message.src
-			$('#message-detail #message-detail-date').text() == formatedDate
-			$('#message-detail #message-detail-content').text() == message.text
+			waitFor { $('#single-message').displayed }
+			$('#single-message #message-detail #message-detail-sender').text() == message.src
+			$('#single-message #message-detail #message-detail-date').text() == formatedDate
+			$('#single-message #message-detail #message-detail-content').text() == message.text
 	}
 
 	def "should skip recipients tab if a message is replied"() {

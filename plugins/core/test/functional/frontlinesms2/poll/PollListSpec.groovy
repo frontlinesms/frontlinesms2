@@ -9,9 +9,9 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessagePollFootballTeamsBob
-			def pollMessageSources = $('#messages tbody tr .message-preview-sender a')*.text()
+			def pollMessageSources = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			pollMessageSources == ['Alice', 'Bob']
+			pollMessageSources.conatinsAll(['Alice', 'Bob'])
 	}
 
 	def "message's poll details are shown in list"() {
@@ -20,7 +20,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessagePollFootballTeamsBob
-			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
+			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
@@ -33,7 +33,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessagePollFootballTeamsBob
-			def pollTitle = $(".activity-title h3").text()
+			def pollTitle = $("h3.activity").text()
 			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
 			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
 			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
@@ -65,17 +65,17 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePollFootballTeamsBob
 		then:
-			$("#messages tbody tr").size() == 2
+			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
-			waitFor {$("#messages tbody tr").size() == 1}
+			waitFor { $("#message-list tr").size() == 2 }
 		then:
-			$("#messages tbody tr")[0].find(".message-preview-sender").text() == 'Bob'
+			$("#message-list tr")[0].find(".message-sender-cell").text() == 'Bob'
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#messages tbody tr").size() == 2}
+			waitFor {$("#message-list tr").size() == 3}
 		then:
-			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Bob', 'Alice'])
+			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Bob', 'Alice'])
 	}
 
 	def "should only display message details when one message is checked"() {
@@ -106,11 +106,11 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePollFootballTeamsBob
 		then:
-			waitFor { $("#messages").displayed}
+			waitFor { $("#message-list").displayed}
 		when:
 			$("#poll-graph-btn").click()
 		then:
-			waitFor {!$("#messages").displayed}
+			waitFor {!$("#message-list").displayed}
 			$(".response-count").text() == "2 responses total"
 		when:
 			$("#poll-graph-btn").click()

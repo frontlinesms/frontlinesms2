@@ -111,9 +111,9 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 				$("a", text:contains("Pending")).hasClass("send-failed")
 			}
 		then:
-			waitFor{ $('.message-title h3').text().equalsIgnoreCase("Pending") }
+			waitFor{ $('h3.pending').text().equalsIgnoreCase("Pending") }
 			$("a", text:contains("Pending")).hasClass("send-failed")
-			$("#message-list tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 	}
 
 	def "should select members belonging to the selected group"() {

@@ -13,5 +13,6 @@ class PageMessageAnnouncementNewOffice extends geb.Page {
 		btnReplyMultiple { $('#multiple-messages a')[0] }
 		btnDropdown { $("#btn_dropdown") }
 		btnForward { $("#btn_forward") }
+		messageSender { $('#message-list tr .message-sender-cell') }
 	}
 }

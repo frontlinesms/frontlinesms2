@@ -10,12 +10,12 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/inbox"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#message-list tr").size() == 51
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 
 	}
 
@@ -25,13 +25,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/pending"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#message-list tr").size() == 51
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 			$(".nextLink").hasClass("disabled")
 
 	}
@@ -42,13 +42,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/trash"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#message-list tr").size() == 51
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 			$(".nextLink").hasClass("disabled")
 	}
 
@@ -58,13 +58,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/sent"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#message-list tr").size() == 51
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 			$(".nextLink").hasClass("disabled")
 	}
 
@@ -75,13 +75,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/folder/${folderId}"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#message-list tr").size() == 51
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#message-list tr").size() == 2
 			$(".nextLink").hasClass("disabled")
 	}
 
@@ -92,13 +92,13 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		when:
 			go "message/poll/${pollId}"
 		then:
-			$("#messages tbody tr").size() == 50
+			$("#message-list .main-table tr").size() == 51
 			$(".prevLink").hasClass("disabled")
 		when:
 			$(".nextLink").click()
 			waitFor {!$(".prevLink").hasClass("disabled")}
 		then:
-			$("#messages tbody tr").size() == 1
+			$("#message-list .main-table tr").size() == 2
 			$(".nextLink").hasClass("disabled")
 	}
 
