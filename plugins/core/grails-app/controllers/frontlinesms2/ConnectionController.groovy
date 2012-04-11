@@ -33,7 +33,7 @@ class ConnectionController {
 	def show = {
 		withFconnection {
 			if(params.createRoute) {
-				it.metaClass.getStatus = {"${message(code: 'connection.route.connecting')}"}
+				it.metaClass.getStatus = { RouteStatus.CONNECTING }
 			}
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 					fconnectionInstanceTotal: Fconnection.list(params)]
@@ -113,7 +113,7 @@ class ConnectionController {
 			def message = messageSendService.createOutgoingMessage(params)
 			messageSendService.send(message, connection)
 			flash.message = LogEntry.log("Test message sent!")
-			redirect (controller:'settings', action:'show_connections', id:params.id)
+			redirect (action:'list', id:params.id)
 		}
 	}
 	
