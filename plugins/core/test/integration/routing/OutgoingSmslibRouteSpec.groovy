@@ -30,7 +30,10 @@ class OutgoingSmslibRouteSpec extends grails.plugin.spock.IntegrationSpec {
 			waitFor { sentMessages == ['0011000C914487092143650000FF0CF4F29C0E6A97E7F3F0B90C'] }
 		cleanup:
 			Fmessage.withNewSession {
-				Fmessage.findAll()*.delete()
+				Fmessage.findAll().each {
+					it.refresh()
+					it.delete()
+				}
 			}
 	}
 
