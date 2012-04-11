@@ -14,10 +14,10 @@ class FsmsTagLib {
 	
 	def confirmTypeRow = {att ->
 		out << '<tr>'
-		out << '	<td class="bold">'
+		out << '<td class="bold">'
 		out << g.message(code:"${att.instanceClass.simpleName.toLowerCase()}.type.label")
-		out << '  </td>'
-		out << '	<td id="confirm-type"></td>'
+		out << '</td>'
+		out << '<td id="confirm-type"></td>'
 		out << '</tr>'
 	}
 	
