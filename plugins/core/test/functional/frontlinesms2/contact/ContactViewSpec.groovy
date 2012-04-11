@@ -63,7 +63,7 @@ class ContactViewSpec extends ContactBaseSpec {
 			to PageContactShowAlice
 			$(".contact-select")[1].click()
 		then:
-			waitFor { $("h3.contact").text().equalsIgnoreCase("Bob") }
+			waitFor { $("h3#all-contacts-title").text().equalsIgnoreCase("Bob") }
 			assertFieldDetailsCorrect('name', 'Name', 'Bob')
 	}
 
