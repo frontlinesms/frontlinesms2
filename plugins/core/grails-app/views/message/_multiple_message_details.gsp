@@ -8,8 +8,9 @@
 					<p>
 						<g:if test="${ownerInstance.getLiveMessageCount() == 1}">
 							<g:message code="fmessage.count.single"/>
-						</g:if><g:else>
-							<g:message code="fmessage.count.many" args="${ownerInstance.liveMessageCount}"/>
+						</g:if>
+					 	<g:else>
+							<g:message code="fmessage.many" args="${[ownerInstance.liveMessageCount]}"/>
 						</g:else>
 					</p>
 				</div>

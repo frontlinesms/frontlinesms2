@@ -119,7 +119,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			$("a", text: "Inbox").click()
 		then:	
 			waitFor { title == "Inbox" }
-			$("tbody tr").size() == 3
+			$("#message-list .main-table tr").size() == 4
 	}
 	
 	private def setMoveActionsValue(value) {

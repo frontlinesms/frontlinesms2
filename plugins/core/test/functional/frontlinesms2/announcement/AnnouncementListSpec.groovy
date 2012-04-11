@@ -122,14 +122,13 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 			def announcement = Announcement.findByName("New Office")
 			to PageMessageAnnouncementNewOffice
-			$(".header-buttons #more-actions").value("Delete")
+			$(".header-buttons #more-actions").value("delete")
 		then:
-			$("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete activity")
+			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete activity") }
 		when:
 			$("#done").click()
 		then:
 			waitFor { $("#sidebar .selected").text() == "Inbox" }
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
 			!$("a", text: "New Office announcement")
 	}
 }

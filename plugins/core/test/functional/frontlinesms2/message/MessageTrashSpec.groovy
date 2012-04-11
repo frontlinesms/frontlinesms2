@@ -13,15 +13,15 @@ class MessageTrashSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageMessageTrash
 		then:
-			$("#messages tbody tr").size() == 2
+			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
-			waitFor {$("#messages tbody tr").size() == 1}
+			waitFor {$("#message-list tr").size() == 2}
 		then:
 			getColumnText('message-list', 3) == ['src1']
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#messages tbody tr").size() == 2}
+			waitFor {$("#message-list tr").size() == 3}
 		then:
 			getColumnText('message-list', 2).containsAll(['src1', 'src2'])
 	}

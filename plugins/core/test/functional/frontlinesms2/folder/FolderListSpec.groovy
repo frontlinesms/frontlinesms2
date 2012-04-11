@@ -80,7 +80,7 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			$('a', text:'All').click()
 		then:
-			waitFor { $("#message-list tr").size() == 2 }
+			waitFor { $("#message-list tr").size() == 3 }
 			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Jane', 'Max'])
 	}
 	
@@ -145,8 +145,9 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
-			def rowContents = $('#message-list tr:nth-child(0) td')*.text()
+			def rowContents = $('#message-list tr:nth-child(1) td')*.text()
 		then:
+			println rowContents
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
 			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)

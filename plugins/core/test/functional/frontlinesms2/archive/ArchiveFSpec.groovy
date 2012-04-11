@@ -64,8 +64,8 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.refresh()
 			assert poll.activityMessages.list().findAll {it.archived == true}
 		when:
-			go "archive/activity?ownerId=$poll.id&messageSection=activity&viewingMessages=true&messageId=${messages[0].id}"
-			$(".message-select")[0].click()
+			go "archive/activity/ownerId=$poll.id/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
+			$(".message-select-cell")[0].click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }
 	}
