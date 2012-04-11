@@ -29,7 +29,7 @@ class MockModemUtils {
 	}
 
 	static SerialPortHandler createMockPortHandler_sendFails() {
-		return createMockPortHandler(false, [:])
+		return createMockPortHandler(false)
 	}
 	
 	static SerialPortHandler createMockPortHandler_disconnectOnReceive() {
