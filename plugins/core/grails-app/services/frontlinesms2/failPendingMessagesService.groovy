@@ -8,7 +8,7 @@ class failPendingMessagesService {
 				it.status = DispatchStatus.FAILED
 				it.save()
 			}
-			new SystemNotification(text:"${pendingDispatchList.size()} pending messages have been failed. Go to pending messages section to view.").save(failOnError:true)
+			new SystemNotification(text:"${pendingDispatchList.size()} pending message(s) failed. Go to pending messages section to view.").save(failOnError:true)
 		}
 		
 	}
