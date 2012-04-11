@@ -2,6 +2,14 @@ package frontlinesms2
 
 class FsmsTagLib {
 	static namespace = 'fsms'
+
+	def i18n = { att ->
+		out << '<script type="text/javascript">'
+		att.keys.tokenize(',')*.trim().each {
+			out << "	i18nStrings['$it'] = '${g.message(code:it)}';\n"
+		}
+		out << '</script>'
+	}
 	
 	def confirmTable = { att ->
 		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm">'
