@@ -1,38 +1,39 @@
+<%@ page import="frontlinesms2.RouteStatus" %>
 <div id='connections'>
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div>You have no connections configured.</div>
+		<div><g:message code="connection.list.none" /></div>
 	</g:if>
 	<g:else>
 		<ul>
 			<g:each in="${connectionInstanceList}" status="i" var="c">
 				<li class="connection ${c == connectionInstance ? 'selected' : ''}">
-					<g:link action="connections" id="${c.id}">
+					<g:link action="show" id="${c.id}">
 						<div class="connection-header">
 							<h2>'${c.name}'</h2>
 							<p class="connection-type">(<g:message code="${c.getClass().simpleName.toLowerCase()}.label"/>)</p>
-							<i class="connection-status">${c.status}</i>
+							<p class="connection-status"><g:message code="${c.status.i18n}"/></p>
 						</div>
 					</g:link>
 					
 					<g:if test="${c == connectionInstance}">
-						<g:if test="${c.status == 'Not connected'}">
+						<g:if test="${c.status == RouteStatus.NOT_CONNECTED}">
 							<div id="createRoute">
-								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}">Create route</g:link>
+								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create" /></g:link>
 							</div>
 							<div>
-								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');">Edit Connection</g:remoteLink>
+								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard('Edit connection', data, 'Done');"><g:message code="connection.edit" /></g:remoteLink>
 							</div>
 						</g:if>
-						<g:else>
+						<g:elseif test="${c.status == RouteStatus.CONNECTED}">
 							<div>
 								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup('Test message', data, 'Send');">
-									Send test message
+									<g:message code="connection.send.test.message" />
 								</g:remoteLink>
 								<g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">
-									Destroy route
+									<g:message code="connection.route.destroy" />
 								</g:link>
 							</div>
-						</g:else>
+						</g:elseif>
 					</g:if>
 				</li>
 			</g:each>
@@ -40,7 +41,7 @@
 	</g:else>
 	<div id="create-connection-btn">
 		<g:remoteLink class="btn" controller='connection' action="wizard" onSuccess="launchMediumWizard('New connection', data, 'Create');">
-			Add new connection
+			<g:message code="connection.add" />
 		</g:remoteLink>
 	</div>
 </div>

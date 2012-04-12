@@ -32,7 +32,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceC = "maybe"
 			controller.params.autoreplyText = "automatic reply text"
 			controller.params.enableKeyword = true
-			controller.params.keyword = "hello"
+			controller.params.keyword = "HELLO"
 		when:
 			controller.save()
 		then:
@@ -61,7 +61,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
 			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
 			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
 		when:
 			assert Poll.findAllByArchived(false) == [poll]
@@ -76,7 +76,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
 			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
 			controller.params.ownerId = poll.id
 			controller.params.name = "renamed poll name"
@@ -94,7 +94,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
 			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
 			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
 		when:
 			assert Poll.findAllByDeleted(false) == [poll]
@@ -110,7 +110,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
 			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
 			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.deleted = true
 			poll.save(failOnError:true, flush:true)
 		when:
@@ -128,7 +128,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def model = controller.create()
 		then:
-			model.groupList == [ "English numbers": [] ]
+			model.groupList["smartgroup-$s.id"] == []
 				
 	}
 	
@@ -137,7 +137,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
 			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
-			poll.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
 			controller.params.ownerId = poll.id
 			controller.params.choiceC = "Arnold Vandam"

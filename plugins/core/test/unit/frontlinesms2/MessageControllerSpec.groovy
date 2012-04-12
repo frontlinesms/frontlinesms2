@@ -23,10 +23,10 @@ class MessageControllerSpec extends ControllerSpec {
 		def sahara = new Group(name: "Sahara")
 		def thar = new Group(name: "Thar")
 		mockDomain Group, [sahara, thar]
-		mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "12345")),
-				new GroupMembership(group: sahara, contact: new Contact(primaryMobile: "56484")),
-				new GroupMembership(group: thar, contact: new Contact(primaryMobile: "12121")),
-				new GroupMembership(group: thar, contact: new Contact(primaryMobile: "22222"))]
+		mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(mobile: "12345")),
+				new GroupMembership(group: sahara, contact: new Contact(mobile: "56484")),
+				new GroupMembership(group: thar, contact: new Contact(mobile: "12121")),
+				new GroupMembership(group: thar, contact: new Contact(mobile: "22222"))]
 
 		mockMessageSendService = Mock()
 		controller.messageSendService = mockMessageSendService

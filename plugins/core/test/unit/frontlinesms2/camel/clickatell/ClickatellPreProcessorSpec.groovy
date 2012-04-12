@@ -8,11 +8,13 @@ import org.apache.camel.Message
 
 class ClickatellPreProcessorSpec extends UnitSpec {
 	ClickatellPreProcessor p
-	def fconnectionId
 	
 	def setup() {
 		mockDomain Fconnection, [[apiId:'11111', username:'bob', password:'secret'] as ClickatellFconnection]
-		fconnectionId = Fconnection.list()[0].id
+		
+		registerMetaClass Exchange
+		Exchange.metaClass.getFconnectionId = { Fconnection.list()[-1].id }
+		
 		p = new ClickatellPreProcessor()
 	}
 	
@@ -74,9 +76,6 @@ class ClickatellPreProcessorSpec extends UnitSpec {
 			],
 			dst:'+1234567890',
 			toString:{"mock body (Dispatch)"}
-		]
-		m.headers >> [
-			fconnection:fconnectionId
 		]
 		return m
 	}

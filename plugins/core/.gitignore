@@ -19,6 +19,7 @@ target-eclipse/
 
 # vi temporary files
 *.swp
+*.swo
 
 # Grails-generated files
 stacktrace.log

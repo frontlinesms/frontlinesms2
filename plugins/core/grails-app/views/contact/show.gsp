@@ -12,7 +12,6 @@
 		</script>
 	</head>
     <body>
-		<g:render template="contact_list" plugin="core"/>
     	<div id="contact-editor">
     		<g:form name="details">
 	    		<g:hiddenField name="version" value="${contactInstance?.version}"/>

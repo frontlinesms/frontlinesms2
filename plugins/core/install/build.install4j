@@ -52,8 +52,11 @@
       </java>
       <includedFiles />
       <unextractableFiles />
-      <vmOptionsFile mode="template" overwriteMode="0" fileMode="644">
-        <content />
+      <vmOptionsFile mode="content" overwriteMode="1" fileMode="644">
+        <content>-Xms384m
+-Xmx384m
+-XX:PermSize=96m
+-XX:MaxPermSize=96m</content>
       </vmOptionsFile>
       <customScript mode="1" file="">
         <content />

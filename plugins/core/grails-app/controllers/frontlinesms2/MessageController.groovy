@@ -145,7 +145,7 @@ class MessageController {
 	}
 
 	def send = {
-		def message = messageSendService.getMessagesToSend(params)
+		def message = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(message)
 		flash.message = "Message has been queued to send to " + message.dispatches*.dst?.join(", ")
 		render(text: flash.message)
@@ -158,7 +158,7 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				messageInstance.dispatches.each { 
 					if(it.status == DispatchStatus.FAILED) { 
-						dst << Contact.findByPrimaryMobile(it.dst)?.name ?: Contact.findBySecondaryMobile(it.dst)?.name ?: it.dst
+						dst << Contact.findByMobile(it.dst)?.name ?: it.dst
 					}
 				}
 				messageSendService.retry(messageInstance)
@@ -296,9 +296,9 @@ class MessageController {
 				}
 			}
 			message.dispatches.each {
-				if(Contact.findByPrimaryMobile(it.dst) || Contact.findBySecondaryMobile(it.dst)) {
-					contactList += Contact.findByPrimaryMobile(it.dst) ? "${Contact.findByPrimaryMobile(it.dst).name} (${it.status})" : null
-					contactList += Contact.findBySecondaryMobile(it.dst) ? "${Contact.findBySecondaryMobile(it.dst).name} (${it.status})" : null
+				Contact c = Contact.findByMobile(it.dst)
+				if(c) {
+					contactList += "${c.name} (${it.status})"
 					addressList -= it
 				}
 			}

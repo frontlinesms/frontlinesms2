@@ -1,14 +1,14 @@
 <g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div>Please fill in all required fields</div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="autoreply.validation.prompt" /></div>
 	<ol>
-		<li><a class="tabs-1" href="#tabs-1">Enter keyword</a></li>
-		<li><a class="tabs-2" href="#tabs-2">Enter message</a></li>
-		<li><a class="tabs-3" href="#tabs-3">Confirm</a></li>
+		<li><a class="tabs-1" href="#tabs-1"><g:message code="autoreply.enter.keyword" /></a></li>
+		<li><a class="tabs-2" href="#tabs-2"><g:message code="autoreply.create.message" /></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm" /></a></li>
 	</ol>
 
-	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'Ok', summaryRedirect)">
+	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'OK', summaryRedirect)">
 		<g:render template="../autoreply/keyword" plugin="core"/>
 		<g:render template="../autoreply/message" plugin="core"/>
 		<g:render template="../autoreply/confirm" plugin="core"/>
@@ -20,7 +20,7 @@
 		
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if (isElementEmpty("#tabs-1 #keyword")) {
+				if ((isElementEmpty("#tabs-1 #keyword"))&&(!(isGroupChecked("blankKeyword")))) {
 					$("#tabs-1 #keyword").addClass("error");
 					return false;
 				}
@@ -44,11 +44,19 @@
 	}
 	
 	function updateConfirmationMessage() {
-		var keyword = $('#keyword').val();
-		var autoreplyText = $('#autoreplyText').val();
+		if(!(isGroupChecked("blankKeyword"))){
+			var keyword = $('#keyword').val();
+			var autoreplyText = $('#autoreplyText').val();
 
-		$("#keyword-confirm").html('<pre>' + keyword  + '</pre>');
-		$("#autoreply-confirm").html('<pre>' + autoreplyText  + '</pre>');
+			$("#keyword-confirm").html('<p>' + keyword  + '</p>');
+			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+		}
+		else{
+			var autoreplyText = $('#autoreplyText').val();
+			$("#keyword-confirm").html('<p>' + "Blank keyword. A response will be sent to all incoming messages"  + '</p>');
+			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+		}
+		
 	}
 		
 	function summaryRedirect() {

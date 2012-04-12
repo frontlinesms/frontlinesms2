@@ -1,24 +1,27 @@
-<div class="section-header ${messageSection}" id="search-actions">
-	<div class="${params.action == 'no_search' ? 'message-title' : 'activity-title'}">
-		<h3>Search</h3>
-		<ul class="section-header-buttons button-list">
-			<g:if test="${search}">
-	 			<li id="export-btn">
-		  			<g:remoteLink class="btn" controller="export" action="messageWizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
-						Export results
-					</g:remoteLink>
-				</li>
-			</g:if>
-			<g:else>
-				<li id="export-btn">
-		  			<a class="btn" disabled="disabled">
-						Export results
-					</a>
-				</li>
-			</g:else>
-		</ul>
-		<g:if test="${searchDescription}">
-			<p id="activity-details">${searchDescription}</p>
-	 	</g:if>
-	</div>
+<div class="section-header ${messageSection}" id="message-list-header">
+	<h3 class="search ${params.action == 'no_search' ? 'message' : 'activity'}">
+		<g:message code="search.header" />
+	</h3>
+	<ul class="header-buttons">
+	 	<li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">
+			<div id="quick-message"><g:message code="search.quickmessage" /></div>
+		</g:remoteLink></li>
+		<g:if test="${search}">
+ 			<li id="export-btn">
+	  			<g:remoteLink class="btn" controller="export" action="messageWizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup('Export Results (${messageInstanceTotal} messages)', data, 'Export');">
+					<g:message code="search.export" />
+				</g:remoteLink>
+			</li>
+		</g:if>
+		<g:else>
+			<li id="export-btn">
+	  			<a class="btn" disabled="disabled">
+					<g:message code="search.export" />
+				</a>
+			</li>
+		</g:else>
+	</ul>
+	<g:if test="${searchDescription}">
+		<p id="activity-details">${searchDescription}</p>
+ 	</g:if>
 </div>

@@ -1,8 +1,8 @@
 <div id="tabs-3">
-	<h2 class="bold">Sort messages automatically using a Keyword (optional)</h2>
-	<p class="info">If people send in poll responses using a Keyword, FrontlineSMS can automatically sort the messages on your system.</p>
+	<h2 class="bold"><g:message code="poll.sort.header" /></h2>
+	<p class="info"><g:message code="poll.sort.description" /></p>
 	<ul class="radios">
-		<g:radioGroup name="enableKeyword" values="[false, true]" value="${(activityInstanceToEdit?.keyword?.value as boolean) ?: false}" labels="['Do not sort messages automatically', 'Sort messages automatically that have the following Keyword:']">
+		<g:radioGroup name="enableKeyword" values="[false, true]" value="${(activityInstanceToEdit?.keyword?.value as boolean) ?: false}" labels="[g.message(code:'poll.no.automatic.sort'), g.message(code:'poll.sort.automatically')]">
 			<li>
 				${it.radio}${it.label}
 			</li>

@@ -1,46 +1,40 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label id="manual-label" class="bold" for="address">Add phone number: </label>
+		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /> </label>
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
-		<g:link url="#" class="btn add-address" onclick="addAddressHandler();">Add</g:link>
+		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add" /></g:link>
 	</div>
 	<div id="recipients-list">
 		<ul id="groups">
 			<g:each in="${groupList}" var="entry">
 				<li class="group">
 					<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", ${entry.value as JSON})'>
-					${entry.key}(${entry.value.size()}) <br/>
+					${entry.key}(${entry.value.size()})
 				</li>
 			</g:each>
 			<g:each in="${nonExistingRecipients}" var="address">
 				<li>
-					<input type="checkbox" name="addresses" value="${address}" checked>${address} <br/>
+					<input type="checkbox" name="addresses" value="${address}" checked>${address}
 				</li>
 			</g:each>
 		</ul>
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact">
 				<li class="contact">
-					<input type="checkbox" name="addresses" value="${contact.primaryMobile}" <g:if test="${recipients.contains(contact.primaryMobile)}">checked</g:if>>
-					${contact.name ?: contact.primaryMobile} <g:if test="${recipients.contains(contact.secondaryMobile) || recipients.contains(contact.email)}">(Primary)</g:if><br/>
-				</li>
-				<li class="contact">
-					<g:if test="${recipients.contains(contact.secondaryMobile)}">
-						<input type="checkbox" name="addresses" value="${contact.secondaryMobile}" checked>
-						${contact.name ?: contact.secondaryMobile} (Secondary)<br/>
-					</g:if>
+					<input type="checkbox" name="addresses" value="${contact.mobile}" <g:if test="${recipients.contains(contact.mobile)}">checked</g:if>>
+					${contact.name ?: contact.mobile}
 				</li>
 				<li class="contact">
 					<g:if test="${recipients.contains(contact.email)}">
 						<input type="checkbox" name="addresses" value="${contact.email}" checked>
-						${contact.name ?: contact.email} (Email)<br/>
+						${contact.name ?: contact.email} (Email)
 					</g:if>
 				</li>
 			</g:each>
 		</ul>
 	</div>
-	<div id="recipients-selected"><span id="recipient-count">0</span> recipients selected</div>
+	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients" /></div>
 </div>
 
 <script>
@@ -130,7 +124,3 @@
 		return false;
 	}
 </script>
-
-
-
-

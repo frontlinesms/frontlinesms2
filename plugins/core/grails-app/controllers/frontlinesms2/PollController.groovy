@@ -1,7 +1,6 @@
 package frontlinesms2
 
 class PollController extends ActivityController {
-
 	def save = {
 		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
 		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
@@ -22,7 +21,7 @@ class PollController extends ActivityController {
 		poll.editResponses(params)
 		poll.save(flush: true, failOnError: true)
 		if(!params.dontSendMessage) {
-			def message = messageSendService.getMessagesToSend(params)
+			def message = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(message)
 			messageSendService.send(message)
 			poll.save()
@@ -40,7 +39,7 @@ class PollController extends ActivityController {
 		if(poll.autoreplyText) {
 			params.addresses = incomingMessage.src
 			params.messageText = poll.autoreplyText
-			def outgoingMessage = messageSendService.getMessagesToSend(params)
+			def outgoingMessage = messageSendService.createOutgoingMessage(params)
 			poll.addToMessages(outgoingMessage)
 			messageSendService.send(outgoingMessage)
 			poll.save()

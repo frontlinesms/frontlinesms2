@@ -91,4 +91,30 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			smslibConnection.pin == "1234"
 	}
 	
+	def "can save a new IntelliSmsFconnection"() {
+		setup:
+			controller.params.name = "Test IntelliSmsFconnection"
+			controller.params.connectionType = 'intellisms'
+			controller.params.username = "test"
+			controller.params.password = "test"
+		when:
+			controller.save()
+			def conn = IntelliSmsFconnection.findByName("Test IntelliSmsFconnection")
+		then:
+			conn
+			conn.name == "Test IntelliSmsFconnection"
+			conn.username == "test"
+			conn.password == "test"
+	}
+
+	def "sendTest redirects to the show LIST action"() {
+		setup:
+			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection", serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
+		when:
+			controller.params.id = emailConnection.id
+			controller.sendTest()
+		then:
+			controller.response.redirectedUrl == "/connection/list/$emailConnection.id"			
+	}
+	
 }

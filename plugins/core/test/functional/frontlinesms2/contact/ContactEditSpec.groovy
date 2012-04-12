@@ -16,14 +16,12 @@ class ContactEditSpec extends ContactBaseSpec {
 			to PageContactShowAlice
 			def changingContact = Contact.findByName('Alice')
 			frmDetails.name = 'Kate'
-			frmDetails.primaryMobile = '+2541234567'
-			frmDetails.secondaryMobile = '+2542334567'
+			frmDetails.mobile = '+2541234567'
 			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
+			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			changingContact.refresh()
 			println Contact.findAll()*.name
 			changingContact.name == 'Kate'
@@ -38,8 +36,7 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:
 			to PageContactShowGroupContactAlice
 			frmDetails.name = 'Kate'
-			frmDetails.primaryMobile = '+2541234567'
-			frmDetails.secondaryMobile = '+2542334567'
+			frmDetails.mobile = '+2541234567'
 			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
@@ -47,8 +44,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			Contact.findByName('Kate') != null
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
-			assertFieldDetailsCorrect('primaryMobile', 'Mobile (Primary)', '+2541234567')
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+2542334567')
+			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			$('#groups-submenu .selected').text() == 'Excellent'
 	}
 	
@@ -56,18 +52,13 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:
 			to PageContactShowBob
 		then:
-			$('#remove-primaryMobile').displayed
-			$("#primaryMobile").siblings('a').displayed
+			$('#remove-mobile').displayed
+			$("#mobile").siblings('a').displayed
 		when:
-			$('#remove-primaryMobile').click()
+			$('#remove-mobile').click()
 		then:
-			!$('#remove-primaryMobile').displayed
+			!$('#remove-mobile').displayed
 			!$('.basic-info .send-message').displayed
-		when:		
-			$('#update-single').click()
-		then:
-			!$("#primaryMobile").siblings('a').displayed
-			assertFieldDetailsCorrect('secondaryMobile', 'Other Mobile', '+232345675')
 	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {

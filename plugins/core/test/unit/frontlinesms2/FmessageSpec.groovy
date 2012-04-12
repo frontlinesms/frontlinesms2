@@ -58,7 +58,7 @@ class FmessageSpec extends UnitSpec {
 			t.validate()
 	}
 	
-	def "Fmessages with a status must have a least 1 Dispatch"() {
+	def "Fmessages with a status must have at least 1 Dispatch"() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:

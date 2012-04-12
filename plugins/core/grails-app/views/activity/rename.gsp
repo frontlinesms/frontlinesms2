@@ -7,7 +7,7 @@
 				<tbody>
 					<tr class="prop">
 						<td valign="top" class="name">
-							<label class="bold inline" for="title">Name:</label>
+							<label class="bold inline" for="title"><g:message code="activity.name" /></label>
 						</td>
 						<td valign="top" class="value">
 							<g:textField name="name" />

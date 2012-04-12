@@ -11,8 +11,8 @@
 			}
 			
 			function setChecked(activityType) {
-				$("#activity-list input[checked=checked]").attr('checked', '');
-				$("#activity-list ." + activityType).attr('checked', 'checked');
+				$("#new-activity-choices input[checked=checked]").attr('checked', '');
+				$("#new-activity-choices ." + activityType).attr('checked', 'checked');
 				$("#submit").removeAttr('disabled');
 			}
 		</script>
@@ -21,19 +21,18 @@
 	</head>
 	<body>
 		<form>
-			<h2 class="bold">Create new activity:</h2>
-			<ul id="activity-list">
+			<ul id="new-activity-choices">
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')" /><span class="activity-choice">Announcement</span>
-					<div class="activity-description">Send an announcement message and organize the responses</div>
+					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')" /><span class="activity-choice"><g:message code="announcement.label" /></span>
+					<div class="activity-description"><g:message code="announcement.description" /></div>
 				</li>
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span class="activity-choice">Poll</span>
-					<div class="activity-description">Send a question and analyze the responses</div>
+					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')" /><span class="activity-choice"><g:message code="poll.label" /></span>
+					<div class="activity-description"><g:message code="poll.description" /></div>
 				</li>
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')" /><span class="activity-choice">Autoreply</span>
-					<div class="activity-description">Automatically respond to incoming messages</div>
+					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')" /><span class="activity-choice"><g:message code="autoreply.label" /></span>
+					<div class="activity-description"><g:message code="autoreply.description" /></div>
 				</li>
 			</ul>
 		</form>

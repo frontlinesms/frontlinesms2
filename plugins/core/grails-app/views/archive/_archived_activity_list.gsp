@@ -1,13 +1,13 @@
 <g:if test="${activityInstanceTotal > 0}">
 <div id="activities">
-	<div id="activity-list">
+	<div id="activity-list" class="message-list">
 		<table cellspacing="0">
 			<thead>
 				<tr>
-					<th class="activity-name-cell">Name</th>
-					<th class="activity-type-cell">Type</th>
-					<th class="activity-date-cell">Date</th>
-					<th class="activity-message-count-cell">Messages</th>
+					<th class="activity-name-cell"><g:message code="archive.activity.name" /></th>
+					<th class="activity-type-cell"><g:message code="archive.activity.type" /></th>
+					<th class="activity-date-cell"><g:message code="archive.activity.date /></th>
+					<th class="activity-message-count-cell"><g:message code="archive.activity.messages" /></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -41,5 +41,5 @@
 </div>
 </g:if>
 <g:else>
-	<p>&nbsp No archived activities</p>
+	<p><g:message code="archive.activity.list.none" /></p>
 </g:else>

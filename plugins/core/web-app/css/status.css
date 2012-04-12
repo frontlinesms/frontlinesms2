@@ -162,13 +162,13 @@
 	width: 300px;
 	padding: 0 30px 20px 30px;
 	background-image: url('../images/icons/status_green.png');
-    background-repeat: no-repeat;
-    background-position: left middle;
+	background-repeat: no-repeat;
+	background-position: left middle;
 }
-#connection-status #stored-connections .not{
+#connection-status #stored-connections .NOT_CONNECTED {
 	background-image: url('../images/icons/status_red.png');
 	background-repeat: no-repeat;
-    background-position: left middle;
+	background-position: left middle;
 }
 
 #status-tab #update-status{

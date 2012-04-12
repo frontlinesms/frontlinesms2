@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="search" />
-        <title>Results</title>
+        <title><g:message code="search.result.header" /></title>
     </head>
     <body>
     </body>

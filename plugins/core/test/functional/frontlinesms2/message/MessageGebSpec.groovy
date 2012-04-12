@@ -49,8 +49,8 @@ class MessageGebSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createTestContacts() {	
-		[new Contact(name: 'Alice', primaryMobile: '+254778899'),
-			new Contact(name: 'Bob', primaryMobile: '+254987654')].each() { it.save(failOnError:true) }
+		[new Contact(name: 'Alice', mobile: '+254778899'),
+			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(failOnError:true) }
 	}
 }
 

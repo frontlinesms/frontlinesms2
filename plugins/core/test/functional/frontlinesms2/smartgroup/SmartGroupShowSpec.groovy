@@ -21,7 +21,7 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		given:
 			def c = 0
 			['Algernon', 'Bertie'].each {
-				new Contact(name:it, primaryMobile:"+44789012345${++c}").save(failOnError:true, flush:true)
+				new Contact(name:it, mobile:"+44789012345${++c}").save(failOnError:true, flush:true)
 			}
 		when:
 			launchCreateDialog()

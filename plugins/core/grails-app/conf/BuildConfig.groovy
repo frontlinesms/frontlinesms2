@@ -8,6 +8,7 @@ grails.project.dependency.resolution = {
 	inherits("global") {
 		// uncomment to disable ehcache
 		// excludes 'ehcache'
+		excludes 'xml-apis'
 	}
 	log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 	repositories {
@@ -43,6 +44,7 @@ grails.project.dependency.resolution = {
 		def spockVersion = "0.5-groovy-1.7"
 		test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
 		test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+		test "org.seleniumhq.selenium:selenium-htmlunit-driver:$seleniumVersion"
 		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test "org.spockframework:spock-core:$spockVersion"
 
@@ -50,7 +52,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.3'
+		compile 'net.frontlinesms.core:camel-smslib:0.0.4-SNAPSHOT'
 		['mail', 'http'].each { compile camel(it) }
 
 		compile 'net.frontlinesms.core:serial:1.0.1'

@@ -30,4 +30,6 @@ class Activity extends MessageOwner {
 		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
 		m ? m.size() : 0
 	}
+
+	def processKeyword(Fmessage message, boolean exactMatch) {}
 }

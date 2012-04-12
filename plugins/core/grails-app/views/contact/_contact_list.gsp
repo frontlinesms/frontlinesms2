@@ -4,7 +4,7 @@
 			<g:if test="${!contactInstance ? false : !contactInstance.id}">
 				<li class="selected" id="newContact">
 					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select' />
-					<a disabled="disabled" class="contact-name" href="">[New Contact]</a>
+					<a disabled="disabled" class="contact-name" href=""><g:message code="contact.new" /></a>
 				</li>
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">
@@ -19,14 +19,15 @@
 					</g:elseif>
 					<g:else><g:set var="contactLinkParams" value="[:]"/></g:else>
 					<g:link class="displayName-${c.id} contact-name" action="show" params="${contactLinkParams + [contactId:c.id, sort:params.sort, offset:params.offset]}">
-						${c.name?:c.primaryMobile?:c.secondaryMobile?:'[No Name]'}
+						${c.name?:c.mobile?:'[No Name]'}
 					</g:link>
+
 				</li>
 			</g:each>
 		</ul>
 	</g:if>
 	<g:else>
 		<div id="contact-list">
-			 <p>&nbsp No contacts here!</p>
+			 <p><g:message code="contact.list.no.contact"/></p>
 		</div>
 	</g:else>

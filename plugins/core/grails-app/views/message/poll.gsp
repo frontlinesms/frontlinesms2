@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Poll</title>
+        <title><g:message code="poll.header" /></title>
 		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}" />
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript library="jquery" plugin="jquery"/>
@@ -13,11 +13,10 @@
 			var loaded = false;
 			var show = true;
 			$("#poll-graph-btn").click(function() {
-				if(!loaded)
-				{
+				if (!loaded) {
 					var xdata = $.map(${pollResponse}, function(a) {return a.value;});
 					var data =  $.map(${pollResponse}, function(a) {return a.count;});
-					var responseCountTag= "<span class='response-count'>${messageInstanceTotal} responses total</span>"
+					var responseCountTag= "<span class='response-count'><g:message code="fmessage.responses.total" args="${ [messageInstanceTotal] }" /></span>"
 					$("#poll-details").toggle();
 					var holder = "pollGraph";
 					$("#"+holder).width($("#pollGraph").width);

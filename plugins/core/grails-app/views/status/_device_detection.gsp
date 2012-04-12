@@ -1,15 +1,15 @@
 <div id="device-detection">
-	<g:link class="btn" action="detectDevices">Detect Modems</g:link>
+	<g:link class="btn" action="detectDevices"><g:message code="status.detect.modems" /></g:link>
 	<g:if test="${detectedDevices.size() == 0}">
-		<p>No devices have been detected yet.</p>
+		<p><g:message code="status.modems.none" /></p>
 	</g:if>
 	<g:else>
 		<table id="detected-devices">
 			<thead>
 				<tr>
-					<td>Port</td>
-					<td>Description</td>
-					<td>Locked?</td>
+					<td><g:message code="modem.port" /></td>
+					<td><g:message code="modem.description" /></td>
+					<td><g:message code="modem.locked" /></td>
 				</tr>
 			</thead>
 			<tbody>

@@ -18,6 +18,9 @@
 #secondary-nav a:hover{
 	border-top: 3px solid #ca2d92;
 }
+#secondary-nav .selected a{
+   border-top: 3px solid #ca2d92;
+}
 
 #notifications div{
 	background-color: rgba(192, 50, 131, 0.4);
@@ -76,6 +79,9 @@
     background-color: #D8E8EF;
 }
 
+.tall-header #message-list-header {
+    background-color: #D8E8EF;
+}
 #poll-details{
     background-color: #D8E8EF;
 }
@@ -95,5 +101,16 @@
 	background-color: #e5eff3;
 }
 #dropdown_options:active{
+	background-color: #D8E8EF;
+}
+
+.ui-dialog .ui-dialog-titlebar { 
+	border-top: 3px solid #D8AEC6;
+}
+
+.ui-selectmenu-menu li a:hover {
+	background-color: #E5EFF3;
+}
+.ui-selectmenu-menu li a:active {
 	background-color: #D8E8EF;
 }

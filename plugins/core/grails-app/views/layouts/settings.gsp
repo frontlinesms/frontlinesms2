@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<title><g:layoutTitle default="Settings"/></title>
-		<g:layoutHead />
 		<r:require module="settings"/>
 		<g:render template="/includes" plugin="core"/>
+		<g:layoutHead />
 	</head>
 	<body id="settings-tab">
 		<div id="header">
@@ -16,10 +16,10 @@
 			<g:render template="/tabs" plugin="core"/>
 		</div>
         <div id="main">
-			<g:render template="menu" plugin="core"/>
+			<g:render template="/settings/menu" plugin="core"/>
 			<div id="content">
 				<div class="section-header">
-					<h3>Settings</h3>
+					<h3 class="settings"><g:message code="layout.settings.header" /></h3>
 				</div>
 				<g:layoutBody />
 			</div>

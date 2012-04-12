@@ -1,13 +1,13 @@
 <table>
 	<tr>
-		<td>
+		<td id="poll-details-cell">
 			<g:formatDate date="${ownerInstance?.dateCreated}" />
-			<span id="poll-sent">   (${sentDispatchCount} messages sent)</span>
+			<span id="poll-sent">   (${g.message(code:'poll.messages.sent', args:[sentDispatchCount])})</span>
 			<p>${ownerInstance?.sentMessageText}</p>
-			<p>${ownerInstance.autoreplyText ? "Auto Response Enabled" : ""}</p>
+			<p>${ownerInstance.autoreplyText ? g.message(code:'poll.response.enabled') : ""}</p>
 		</td>
-		<td>
-			<table id="poll-stats">
+		<td id="poll-stats">
+			<table>
 				<tbody>
 					<g:each in="${ownerInstance.responses}" var="r">
 						<tr>

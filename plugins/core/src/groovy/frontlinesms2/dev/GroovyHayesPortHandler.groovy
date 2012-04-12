@@ -15,19 +15,22 @@ class GroovyHayesPortHandler extends BaseHayesPortHandler {
 	
 	@Override
 	protected String getResponseText(String request) {
-		println "Getting response for $request"
+		println "GroovyHayesPortHandler.getResponseText() : Getting response for $request"
 		def response = currentState.getResponse(request)
-		if(response instanceof String) {
-			println "Got response as String"
-			return response
-		} else if(response instanceof GroovyHayesResponse) {
-			currentState = response.nextState
-			return response.text
-		} else if(response instanceof Closure) {
-			println "Calling closure with ($this, $request) as arguments"
-			return response.call(this, request)
-		} else if(response instanceof Exception) {
-			throw response;
+		while(true) {
+			if(response instanceof String) {
+				println "GroovyHayesPortHandler.getResponseText() : Got response as String ($response)"
+				return response
+			} else if(response instanceof GroovyHayesResponse) {
+				println "GroovyHayesPortHandler.getResponseText() : Got response as HayesState ($response.text -> $response.nextState)"
+				println "GroovyHayesPortHandler.getResponseText() : Next state responses: $response.nextState.responses"
+				currentState = response.nextState
+				return response.text
+			} else if(response instanceof Exception) {
+				throw response;
+			} else if(response instanceof Closure) {
+				response = response.call(this, request)
+			} else throw new RuntimeException("Unrecognised Hayes response: $response")
 		}
 	}
 }

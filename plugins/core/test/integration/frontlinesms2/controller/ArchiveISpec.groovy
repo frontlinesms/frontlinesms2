@@ -12,22 +12,5 @@ class ArchiveISpec extends IntegrationSpec {
 		folderController = new FolderController()
 		archiveController = new ArchiveController()
 	}
-	
-	def "deleted polls do not appear in the archive section"() {
-		given:
-			def poll = new Poll(name: 'thingy', archived: true)
-			poll.editResponses(choiceA: 'One', choiceB: 'Other')
-			poll.save(failOnError:true, flush:true)
-			assert poll.archived
-		when:
-			def model = archiveController.activityList().model
-		then:
-			model.activityInstanceList == [poll]
-		when:
-			poll.deleted = true
-			model = archiveController.activityList()
-		then:
-			!model.activityInstanceList
-	}
 }
 

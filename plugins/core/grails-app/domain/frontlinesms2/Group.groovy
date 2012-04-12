@@ -26,24 +26,15 @@ class Group {
 	}
 	
 	def getAddresses() {
-		def addressList = []
-		getMembers()*.primaryMobile.each {  
-			if(it)	addressList << it
-		}
-		getMembers()*.secondaryMobile.each {
-			if(it)	addressList << it
-		}
-		addressList
+		(getMembers()*.mobile) - [null, '']
 	}
 
 	static HashMap<String, List<String>> getGroupDetails() {
-		def resultMap= [:]
-		Group.list().each {resultMap[it.name] = it.getAddresses()}
-		resultMap
+		Group.list().collectEntries { ["group-$it.id", it.addresses] }
 	}
 
 	static Set<Contact> findAllWithoutMember(Contact c) {
-		// FIXME do this with a single select/join??
+		// FIXME do this with a single select/join... and do it in GroupMembership??
 		def allGroups = Group.findAll();
 		def cGroups = c.groups
 		def without = allGroups
@@ -58,5 +49,5 @@ class Group {
 		}
 		without as Set
 	}
-	
 }
+

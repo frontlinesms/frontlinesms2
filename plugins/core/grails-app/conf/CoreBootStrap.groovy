@@ -19,13 +19,14 @@ class CoreBootStrap {
 	def applicationContext
 	def grailsApplication
 	def deviceDetectionService
+	def failPendingMessagesService
 	def camelContext
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
 		initialiseSerial()
-		MetaClassModifiers.addFilterMethodToList()
+		MetaClassModifiers.addMethodsToCollection()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
@@ -58,6 +59,7 @@ class CoreBootStrap {
 				break
 		}
 		deviceDetectionService.init()
+		failPendingMessagesService.init()
 	}
 
 	def destroy = {
@@ -84,7 +86,7 @@ class CoreBootStrap {
 		createContact("Kate", "+198730948")
 
 		(1..101).each {
-			new Contact(name:"test-${it}", primaryMobile:"number-${it}").save(failOnError:true)
+			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
 		}
 		
 		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
@@ -148,6 +150,7 @@ class CoreBootStrap {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
+		new IntelliSmsFconnection(name:"IntelliSms Mock connection", username:"johnmark", password:"pass_word").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
@@ -168,21 +171,23 @@ class CoreBootStrap {
 		new SmslibFconnection(name:"MOCK100: incoming messages for autoreplies", port:'MOCK100', baud:9600).save(failOnError:true)	
 	}
 	
+	
+	
 	private def dev_initPolls() {
 		if(!dev) return
-		def keyword = new Keyword(value: 'Football')
+		def keyword = new Keyword(value: 'FOOTBALL')
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
 		poll1.addToResponses(new PollResponse(key: 'choiceA', value: 'manchester'))
 		poll1.addToResponses(new PollResponse(key: 'choiceB', value: 'barcelona'))
-		poll1.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+		poll1.addToResponses(PollResponse.createUnknown())
 		
 		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
 		poll2.addToResponses(new PollResponse(key: 'choiceA', value: 'pantene'))
 		poll2.addToResponses(new PollResponse(key: 'choiceB', value: 'oriele'))
-		poll2.addToResponses(new PollResponse(key: 'Unknown', value: 'Unknown'))
+		poll2.addToResponses(PollResponse.createUnknown())
 		
-		poll1.save(flush: true)
-		poll2.save(flush: true)
+		poll1.save(failOnError:true, flush:true)
+		poll2.save(failOnError:true, flush: true)
 		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+198765432'))
 		PollResponse.findByValue('manchester').addToMessages(Fmessage.findBySrc('+123456789'))
 		PollResponse.findByValue('pantene').addToMessages(Fmessage.findBySrc('Joe'))
@@ -199,8 +204,9 @@ class CoreBootStrap {
 	
 	private def dev_initAutoreplies() {
 		if(!dev) return
-		def k1 = new Keyword(value: "color")
-		def k2 = new Keyword(value: "autoreply")
+		def k1 = new Keyword(value: "COLOR")
+		def k2 = new Keyword(value: "AUTOREPLY")
+
 		new Autoreply(name:"toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
 		new Autoreply(name:"color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
 	}
@@ -272,7 +278,7 @@ class CoreBootStrap {
 	}
 
 	private def createContact(String n, String a) {
-		def c = new Contact(name: n, primaryMobile: a)
+		def c = new Contact(name: n, mobile: a)
 		c.save(failOnError: true)
 	}
 	
@@ -341,7 +347,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initMockPortMessages() {
-		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z"];
+		return ["AUTOREPLY", "autorely", "auToreply", "colorz", "color z", ""];
 	}
 	
 	private def test_initGeb(def servletContext) {

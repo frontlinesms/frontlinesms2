@@ -50,14 +50,14 @@ class FconnectionService {
 		println "fconnectionService.destroyRoutes : id=$id"
 		camelContext.routes.filter { it.id ==~ /.*-$id$/ }.each {
 			try {
-				println "fconnectionService.destroyRoutes : route-id=$it"
-				println "fconnectionService.destroyRoutes : stopping route $it..."
+				println "fconnectionService.destroyRoutes : route-id=$it.id"
+				println "fconnectionService.destroyRoutes : stopping route $it.id..."
 				camelContext.stopRoute(it.id)
-				println "fconnectionService.destroyRoutes : $it stopped.  removing..."
+				println "fconnectionService.destroyRoutes : $it.id stopped.  removing..."
 				camelContext.removeRoute(it.id)
-				println "fconnectionService.destroyRoutes : $it removed."
+				println "fconnectionService.destroyRoutes : $it.id removed."
 			} catch(Exception ex) {
-				println "fconnectionService.destroyRoutes : Exception thrown while destroying $it: $ex"
+				println "fconnectionService.destroyRoutes : Exception thrown while destroying $it.id: $ex"
 				ex.printStackTrace()
 			}
 		}

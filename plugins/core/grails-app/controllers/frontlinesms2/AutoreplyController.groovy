@@ -8,15 +8,17 @@ class AutoreplyController extends ActivityController {
 		def autoreply
 		if(Autoreply.get(params.ownerId)) {
 			autoreply = Autoreply.get(params.ownerId)
-			autoreply.keyword ? autoreply.keyword.value = params.keyword : (autoreply['keyword'] = new Keyword(value: params.keyword))
+			
+			def keywordValue = params.blankKeyword? '': params.keyword
+			autoreply.keyword.value = keywordValue
+			
 			autoreply.name = params.name ?: autoreply.name
 			autoreply.autoreplyText = params.autoreplyText ?: autoreply.autoreplyText
-			autoreply.save(flush: true, failOnError: true)
 		} else {
-			def keyword = new Keyword(value: params.keyword)
-			autoreply = new Autoreply(name: params.name, autoreplyText: params.autoreplyText, keyword: keyword)
-			autoreply.save(flush: true, failOnError: true)
+			def keyword = new Keyword(value:params.blankKeyword? '': params.keyword)
+			autoreply = new Autoreply(name:params.name, autoreplyText:params.autoreplyText, keyword:keyword)
 		}
+		autoreply.save(flush: true, failOnError: true)
 		flash.message = "Autoreply has been saved!"
 		[ownerId: autoreply.id]
 	}
@@ -26,14 +28,11 @@ class AutoreplyController extends ActivityController {
 		def incomingMessage = Fmessage.get(params.messageId)
 		params.addresses = incomingMessage.src
 		params.messageText = autoreply.autoreplyText
-		def outgoingMessage = messageSendService.getMessagesToSend(params)
+		def outgoingMessage = messageSendService.createOutgoingMessage(params)
 		autoreply.addToMessages(outgoingMessage)
 		messageSendService.send(outgoingMessage)
 		autoreply.save()
 		render ''
 	}
-	
-	private def withAutoreply(Closure c) {
-		Autoreply.get(params.ownerId) ?: new Autoreply()
-	}
 }
+

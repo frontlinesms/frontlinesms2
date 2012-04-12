@@ -29,7 +29,7 @@ class MockModemUtils {
 	}
 
 	static SerialPortHandler createMockPortHandler_sendFails() {
-		return createMockPortHandler(false, [:])
+		return createMockPortHandler(false)
 	}
 	
 	static SerialPortHandler createMockPortHandler_disconnectOnReceive() {
@@ -73,14 +73,14 @@ class MockModemUtils {
 						13:'07915892000000F0040B915274204365F70000704021325224230A6679982E0EB3D9203A'])
 	}
 	
-	static SerialPortHandler createMockPortHandler(boolean canSend, Map messages) {
-		def state_initial = new GroovyHayesState([error: "ERROR: 1",
+	static SerialPortHandler createMockPortHandler(boolean canSend, Map receiveMessages=[:], List sentMessages=[]) {
+		def state_initial = new GroovyHayesState(error: "ERROR: 1",
 				responses: standardResponses + 
 						[~/AT\+CMGL=\d/, { handler, request ->
 							println "Hello I have been called.  What am I going to do?"
 							println "I ahve been given this object: $handler"
 							def s = ""
-							handler.messages.each { k, v ->
+							handler.receiveMessages.each { k, v ->
 								s += "+CMGL: $k,1,,${v.size()>>1}\r\n$v\r\n"
 							}
 							println "Created CMGL response: $s"
@@ -89,16 +89,21 @@ class MockModemUtils {
 						~/AT\+CMGD=\d+/, { handler, request ->
 							def messageId = (request =~ /\d+/)[0]
 							println "deleting message: $messageId"
-							handler.messages.remove(Integer.parseInt(messageId))
-							println "Message are now: ${handler.messages}"
+							handler.receiveMessages.remove(Integer.parseInt(messageId))
+							println "Message are now: ${handler.receiveMessages}"
 							"OK"
 						}],
 				// these are returned by ~/AT\+CMGL=\d/
-				messages: messages])
+				receiveMessages:receiveMessages)
 
 		if(canSend) {
-			def state_waitingForPdu = new GroovyHayesState([error:new GroovyHayesResponse("ERROR: 2", state_initial),
-					responses:[~/.+/, new GroovyHayesResponse('+CMGS: 0\rOK', state_initial)]])
+			def state_waitingForPdu = new GroovyHayesState(error:new GroovyHayesResponse("ERROR: 2", state_initial),
+					responses:[~/.+/, { handler, request ->
+						handler.sentMessages << request
+						println "Added sent message [handler=$handler,request=$request]; sentMessages now $handler.sentMessages"
+						new GroovyHayesResponse('+CMGS: 0\rOK', state_initial)
+					}],
+					sentMessages:sentMessages)
 			state_initial.setResponse(~/AT\+CMGS=\d+/, new GroovyHayesResponse("OK", state_waitingForPdu))
 		}
 
@@ -126,3 +131,4 @@ class MockModemUtils {
 				'AT+CPMS="SM"', "OK"]
 	}
 }
+

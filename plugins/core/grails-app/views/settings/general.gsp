@@ -2,23 +2,25 @@
 <html>
 	<head>
 		<meta name="layout" content="settings"/>
-		<title>Settings > General</title>
+		<title><g:message code="settings.general.header" /></title>
+		<export:resource />
 	</head>
 	<body>
 		<div id="general">
 			<div id="import">
-				<h2>Import</h2>
+				<h2><g:message code="import.label" /></h2>
 				<p class="description">
-					Import data from a previous backup
+					<g:message code="import.backup.label" />
 				</p>
 				<g:uploadForm name="importForm" controller="import" action="importData" method="post">
 					<div>
-						<h3>Select type of data to import:</h3>
-						<input type="radio" name="data" value="contacts" checked="checked" /> Contact details<br />
-						<input type="radio" name="data" value="messages" /> Message details
+						<h3><g:message code="import.prompt.type" /></h3>
+						<input type="radio" name="data" value="contacts" checked="checked" />
+						<g:message code="import.contacts" /><br />
+						<input type="radio" name="data" value="messages" /><g:message code="import.messages" />
 					</div>
-					<p class="importInfo">To import data from version 1, please export them in English</p>
-					<label for="importCsvFile">select a data file to import</label>
+					<p class="importInfo"><g:message code="import.version1.info" /></p>
+					<label for="importCsvFile"><g:message code="import.prompt" /></label>
 					<input type="file" id="importCsvFile" name="importCsvFile" onchange="this.form.submit();"/>
 				</g:uploadForm>
 			</div>

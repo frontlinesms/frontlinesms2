@@ -13,7 +13,7 @@ function checkForNonDigits() {
 }
 
 function checkForDuplicates() {
-	var inputNumber = $("#primaryMobile").val();
+	var inputNumber = $("#mobile").val();
 	var truncatedNumber = inputNumber;
 	
 	// For use when we chack partial numbers (ie duplicates with vs without country codes)
@@ -36,8 +36,8 @@ function checkForDuplicates() {
 		url: url_root + 'contact/checkForDuplicates',
 		success: function(data, textStatus){
 			if(data && data != '') {
-				$("#primaryMobile").addClass('error');
-				$("#primaryMobile").parent(".basic-info").append("<span id='duplicate-error' class='error-message'>" + data + "</span>");
+				$("#mobile").addClass('error');
+				$("#mobile").parent(".basic-info").append("<span id='duplicate-error' class='error-message'>" + data + "</span>");
 			}
 		}
 	});
