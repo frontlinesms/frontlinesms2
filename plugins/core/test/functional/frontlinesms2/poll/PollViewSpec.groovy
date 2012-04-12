@@ -30,7 +30,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
-			$('#messages tbody a', text: "Bob").displayed
+			$('#message-list tr a', text: "Bob").displayed
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -56,11 +56,11 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
 		then:
-			$('#messages .selected a')[3].@href == "/message/activity/$poll.id/show/$aliceMessage.id"
+			$('#message-list .selected a')[3].@href == "/message/activity/$poll.id/show/$aliceMessage.id"
 		when:
 			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
 		then:
-			$('#messages .selected a', text: "Bob").displayed
+			$('#message-list .selected a', text: "Bob").displayed
 	}
 	
 	def 'activities should also list message counts'() {

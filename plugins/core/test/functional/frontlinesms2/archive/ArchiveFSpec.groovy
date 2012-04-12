@@ -25,12 +25,12 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 		then:
-			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane', 'Max'])
+			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
 		when:
 			def btnDelete = $("#delete-msg")
 			btnDelete.click()
 		then:
-			$("#messages tbody tr").collect {it.find(".message-preview-sender").text()}.containsAll(['Jane'])
+			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane'])
 	}
 	
 	def '"Archive All" button does not appear in archive section'() {
@@ -64,8 +64,8 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.refresh()
 			assert poll.activityMessages.list().findAll {it.archived == true}
 		when:
-			go "archive/activity?ownerId=$poll.id&messageSection=activity&viewingMessages=true&messageId=${messages[0].id}"
-			$(".message-select")[0].click()
+			go "archive/activity/ownerId=$poll.id/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
+			$(".message-select-cell")[0].click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }
 	}

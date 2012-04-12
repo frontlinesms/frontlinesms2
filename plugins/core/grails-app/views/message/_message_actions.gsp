@@ -32,7 +32,9 @@
 			</g:if>
 		</g:if>
 		<g:elseif test="${ownerInstance}">
-			<g:remoteLink class="msg-btn btn" controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" ><g:message code="message.action.button.restore" /></g:remoteLink>
+			<g:remoteLink class="msg-btn btn" controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}" action="restore" params="[id: ownerInstance?.id]" onSuccess="function() { window.location = location}" >
+				<g:message code="fmessage.restore" />
+			</g:remoteLink>
 		</g:elseif>
 	</g:form>
 </div>

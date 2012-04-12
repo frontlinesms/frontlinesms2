@@ -63,7 +63,7 @@ class ContactViewSpec extends ContactBaseSpec {
 			to PageContactShowAlice
 			$(".contact-select")[1].click()
 		then:
-			waitFor { $("#contact-title h3").text().equalsIgnoreCase("Bob") }
+			waitFor { $("h3#all-contacts-title").text().equalsIgnoreCase("Bob") }
 			assertFieldDetailsCorrect('name', 'Name', 'Bob')
 	}
 
@@ -127,7 +127,7 @@ class ContactViewSpec extends ContactBaseSpec {
 			$("#message-stats a").click()
 		then:
 			at PageSearchResult
-			messageList.each { assert it.find(".message-sender-cell").text() == 'Alice' }
+			messageList.find(".message-sender-cell")*.text().contains('Alice')
 	}
 
 	def assertContactSelected(String name) {

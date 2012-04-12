@@ -33,11 +33,11 @@
 			<td class="message-select-cell">
 				<g:checkBox disabled="true" name="message-select"/>
 			</td>
-			<td class="message-preview-star message-star-cell" >
+			<td class="message-star-cell" >
 				<div id="star-${m.id}" class="unstarred">
 				</div>
 			</td>
-			<td class="message-preview-sender message-sender-cell">
+			<td class="message-sender-cell">
 				<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
 					${m.identifier}
 				</g:link>
