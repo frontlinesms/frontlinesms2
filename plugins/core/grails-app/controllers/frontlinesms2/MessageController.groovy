@@ -115,33 +115,43 @@ class MessageController {
 	def autoreply = { redirect(action: 'activity', params: params) }
 	def activity = {
 		def activityInstance = Activity.get(params.ownerId)
-		def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
-		def sentMessageCount = 0
-		def sentDispatchCount = 0
-		Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
-			sentDispatchCount += it.dispatches.size()
-			sentMessageCount++
+		if (activityInstance) {
+			def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
+			def sentMessageCount = 0
+			def sentDispatchCount = 0
+			Fmessage.findAllByMessageOwnerAndInbound(activityInstance, false).each {
+				sentDispatchCount += it.dispatches.size()
+				sentMessageCount++
+			}
+			render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
+				model:[messageInstanceList: messageInstanceList?.list(params),
+						messageSection: 'activity',
+						messageInstanceTotal: messageInstanceList?.count(),
+						ownerInstance: activityInstance,
+						viewingMessages: viewingArchive ? params.viewingMessages : null,
+						pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
+						sentMessageCount: sentMessageCount,
+						sentDispatchCount: sentDispatchCount] << getShowModel()
+		} else {
+			flash.message = "Activity could not be found"
+			redirect(action: 'inbox')
 		}
-		render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
-			model:[messageInstanceList: messageInstanceList?.list(params),
-					messageSection: 'activity',
-					messageInstanceTotal: messageInstanceList?.count(),
-					ownerInstance: activityInstance,
-					viewingMessages: viewingArchive ? params.viewingMessages : null,
-					pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
-					sentMessageCount: sentMessageCount,
-					sentDispatchCount: sentDispatchCount] << getShowModel()
 	}
 	
 	def folder = {
 		def folderInstance = Folder.get(params.ownerId)
-		def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
-		if(params.flashMessage) { flash.message = params.flashMessage }
-		render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
-					messageSection: 'folder',
-					messageInstanceTotal: messageInstanceList.count(),
-					ownerInstance: folderInstance,
-					viewingMessages: viewingArchive ? params.viewingMessages : null] << getShowModel()
+		if (folderInstance) {
+			def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
+			if (params.flashMessage) { flash.message = params.flashMessage }
+			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
+						messageSection: 'folder',
+						messageInstanceTotal: messageInstanceList.count(),
+						ownerInstance: folderInstance,
+						viewingMessages: viewingArchive ? params.viewingMessages : null] << getShowModel()
+		} else {
+			flash.message = "Folder could not be found"
+			redirect(action: 'inbox')
+		}
 	}
 
 	def send = {
