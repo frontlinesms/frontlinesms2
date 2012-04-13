@@ -5,7 +5,7 @@ class Announcement extends Activity {
 		messages(nullable:false)
 	}
 	
-	def getType() {
+	static def getType() {
 		return 'announcement'
 	}
 }

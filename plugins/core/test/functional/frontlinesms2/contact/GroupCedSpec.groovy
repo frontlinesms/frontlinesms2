@@ -34,7 +34,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			$('#done').click()
 		then:
 			waitFor{ $('a', text:'Renamed Group') }
-			$('#contact-header h3').text().equalsIgnoreCase('Renamed Group (2)')
+			$('#group-title').text().equalsIgnoreCase('Renamed Group (2)')
 	}
 	
 	def 'More action dropdown has option to delete the group and opens a confirmation popup'(){

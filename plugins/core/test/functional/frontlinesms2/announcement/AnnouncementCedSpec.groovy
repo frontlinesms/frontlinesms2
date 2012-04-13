@@ -9,7 +9,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			go "message"
 			$("a", text:"Create new activity").click()
 		then:
-			waitFor { $("#activity-list").displayed }
+			waitFor { $("#new-activity-choices").displayed }
 		when:
 			$("input", class: "announcement").click()
 			$("#submit").click()
@@ -22,7 +22,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			go "message"
 			$("a", text:"Create new activity").click()
 		then:
-			waitFor { $("#activity-list").displayed }
+			waitFor { $("#new-activity-choices").displayed }
 		when:
 			$("input", class: "announcement").click()
 			$("#submit").click()

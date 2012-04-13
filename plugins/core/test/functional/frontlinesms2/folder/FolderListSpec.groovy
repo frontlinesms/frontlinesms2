@@ -12,9 +12,9 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageFolderWork
-			def folderMessageSources = $('#messages tbody tr .message-preview-sender a')*.text()
+			def folderMessageSources = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			folderMessageSources == ['Jane', 'Max']
+			folderMessageSources.containsAll(['Jane', 'Max'])
 	}
 
 	def 'no message is selected when a folder is first loaded'() {
@@ -33,7 +33,7 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestMessages()
 		when:
 			at PageMessageFolderWork
-			def rowContents = $('#messages tbody tr:nth-child(2) td')*.text()
+			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
@@ -71,17 +71,17 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
 		then:
-			$("#messages tbody tr").size() == 2
+			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
 		then:
-			waitFor { $("#messages tbody tr").size() == 1 }
-			$("#messages tbody tr .message-preview-sender a")[0].text() == 'Max'
+			waitFor { $("#message-list tr").size() == 2 }
+			$("#message-list .message-sender-cell a")[1].text() == 'Max'
 		when:
 			$('a', text:'All').click()
 		then:
-			waitFor { $("#messages tbody tr").size() == 2 }
-			$("#messages tbody tr .message-preview-sender a")*.text().containsAll(['Jane', 'Max'])
+			waitFor { $("#message-list tr").size() == 3 }
+			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Jane', 'Max'])
 	}
 	
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -145,8 +145,9 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
+			def rowContents = $('#message-list tr:nth-child(1) td')*.text()
 		then:
+			println rowContents
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
 			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
@@ -175,7 +176,7 @@ class FolderListSpec extends FolderBaseSpec {
 		createTestMessages()
 		def folderId = Folder.findByName("Work").id
 		go "message/folder/${folderId}"
-		$(".button-list #more-actions").value("delete")
+		$(".header-buttons #more-actions").value("delete")
 		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete folder")
 		$("#done").click()
