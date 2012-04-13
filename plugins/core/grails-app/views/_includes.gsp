@@ -7,6 +7,15 @@
 	action = "${params?.action}"
 	refresh_rate = ${params.rRate ?: 30000}
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
+
+	var i18nStrings = {};
+	function i18n(key) {
+		var translated = i18nStrings[key];
+		for(i=arguments.length-1; i>0; --i) {
+			translated = translated.replace("{"+(i-1)+"}", arguments[i]);
+		}
+		return translated;
+	}
 </g:javascript>
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
 	<g:javascript>

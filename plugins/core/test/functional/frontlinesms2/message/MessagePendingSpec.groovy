@@ -36,16 +36,16 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			go "message/pending"
 		then:
 			at PageMessagePending
-			$("#messages tbody tr").size() == 2
+			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Failed').click()
 		then:	
-			waitFor { $("#messages tbody tr").size() == 1 }
+			waitFor { $("#message-list tr").size() == 2 }
 			getColumnText('message-list', 3) == ['To: dst2']
 		when:
 			$('a', text:'All').click()
 		then:	
-			waitFor { $("#messages tbody tr").size() == 2 }
+			waitFor { $("#message-list tr").size() == 3 }
 			getColumnText('message-list', 3).containsAll(['To: dst1', 'To: dst2'])
 	}
 
