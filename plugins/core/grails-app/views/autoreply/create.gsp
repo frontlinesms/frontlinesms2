@@ -8,10 +8,10 @@
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm" /></a></li>
 	</ol>
 
-	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply ${activityInstanceToEdit ? 'updated': 'created'}!', data, 'OK', summaryRedirect)">
-		<g:render template="../autoreply/keyword"/>
-		<g:render template="../autoreply/message"/>
-		<g:render template="../autoreply/confirm"/>
+	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'OK', summaryRedirect)">
+		<g:render template="../autoreply/keyword" plugin="core"/>
+		<g:render template="../autoreply/message" plugin="core"/>
+		<g:render template="../autoreply/confirm" plugin="core"/>
 	</g:formRemote>
 </div>
 <g:javascript>

@@ -82,37 +82,4 @@ environments {
 
 // log4j configuration
 log4j = {
-	environments {
-		production {
-			def conf = "${System.properties.'user.home'}/.frontlinesms2"
-			def datePattern = "'.'yyyy-MM-dd"
-			def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
-			appender new RollingFileAppender(name:"prod",
-					datePattern:datePattern, layout:layout, file:"$conf/standard.log",
-					threshold:org.apache.log4j.Level.INFO);
-			appender new RollingFileAppender(name:"prod-stacktrace",
-					datePattern:datePattern, layout:layout, file:"$conf/stacktrace.log",
-					threshold:org.apache.log4j.Level.ERROR);
-		}
-		development {
-			appender new ConsoleAppender(name:'console-logger')
-			info 'console-logger'
-		}
-	}
-
-    error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
-           'org.codehaus.groovy.grails.web.pages', //  GSP
-           'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-           'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-           'org.codehaus.groovy.grails.web.mapping', // URL mapping
-           'org.codehaus.groovy.grails.commons', // core / classloading
-           'org.codehaus.groovy.grails.plugins', // plugins
-           'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-           'org.springframework',
-           'org.hibernate',
-           'net.sf.ehcache.hibernate'
-
-	warn 'serial', 'org.smslib'
-
-	warn 'org.apache.camel'
 }

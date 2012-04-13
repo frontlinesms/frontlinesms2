@@ -12,11 +12,11 @@
 	</ul>
 
 	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="addFlashMessage(data)">
-		<g:render template="message"/>
+		<g:render template="message" plugin="core"/>
 		<div id="tabs-2" class="${configureTabs.contains("tabs-2") ? "" : "hide"}">
-			<g:render template="select_recipients"/>
+			<g:render template="select_recipients" plugin="core"/>
 		</div>
-		<g:render template="confirm"/>
+		<g:render template="confirm" plugin="core"/>
 	</g:formRemote>
 </div>
 

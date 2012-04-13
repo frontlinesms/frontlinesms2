@@ -9,11 +9,11 @@
 		</g:if>
 		<h3 class="activity">${ownerInstance?.name} ${ownerInstance?.type}</h3>
 		<g:if test="${ownerInstance}">
-			<g:render template="../message/activity_buttons"/>
+			<g:render template="../message/activity_buttons" plugin="core"/>
 		</g:if>
 		<div id="activity-details" class='section-details'>
 			<g:if test="${ownerInstance?.type == 'poll'}">
-				<g:render template="../message/poll_header"/>
+				<g:render template="../message/poll_header" plugin="core"/>
 			</g:if>
 			<g:else>
 				<g:formatDate date="${ownerInstance?.dateCreated}" />
@@ -29,10 +29,10 @@
 	</g:if>
 	<g:elseif test="${messageSection == 'folder'}">
 		<h3 class="folder">${ownerInstance?.name} ${messageSection}</h3>
-		<g:render template="../message/section_action_buttons"/>
+		<g:render template="../message/section_action_buttons" plugin="core"/>
 	</g:elseif>
 	<g:else>
 		<h3 class="${messageSection}">${messageSection}</h3>
-		<g:render template="../message/section_action_buttons"/>
+		<g:render template="../message/section_action_buttons" plugin="core"/>
 	</g:else>
 </div>

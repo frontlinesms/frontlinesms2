@@ -25,7 +25,7 @@
       <dirEntry mountPoint="25" file="${compiler:assembly.dir}" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
-      <dirEntry mountPoint="23" file="webapp" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
+      <dirEntry mountPoint="23" file="src/webapp" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes="" dirMode="755" overrideDirMode="false">
         <exclude />
       </dirEntry>
     </entries>
@@ -52,8 +52,11 @@
       </java>
       <includedFiles />
       <unextractableFiles />
-      <vmOptionsFile mode="template" overwriteMode="0" fileMode="644">
-        <content />
+      <vmOptionsFile mode="content" overwriteMode="1" fileMode="644">
+        <content>-Xms384m
+-Xmx384m
+-XX:PermSize=96m
+-XX:MaxPermSize=96m</content>
       </vmOptionsFile>
       <customScript mode="1" file="">
         <content />
