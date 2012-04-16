@@ -114,7 +114,7 @@ class MessageController {
 	def announcement = { redirect(action: 'activity', params: params) }
 	def autoreply = { redirect(action: 'activity', params: params) }
 	def activity = {
-		def activityInstance = Activity.get(params.ownerId)
+		def activityInstance = Activity.get(params.ownerId.toLong())
 		if (activityInstance) {
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
 			def sentMessageCount = 0

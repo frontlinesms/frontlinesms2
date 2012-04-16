@@ -198,21 +198,6 @@ $.widget("ui.contentWidget", {
 
     options: {validate: function() {return true;} }
 });
-			
-function chooseActivity() {
-	var activity = $("#new-activity-choices input[checked=checked]").val();
-	var activityUrl = activity + '/create';
-	var title = 'New ' + activity;
-
-	$(this).dialog('close');
-	$.ajax({
-		type:'GET',
-		dataType: "html",
-		url: url_root + activityUrl,
-		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); }
-	});
-	return;
-}
 
 function messageResponseClick(messageType) {
 	var configureTabs= "";

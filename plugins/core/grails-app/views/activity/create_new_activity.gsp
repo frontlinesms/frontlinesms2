@@ -18,6 +18,7 @@
 		</script>
 		<g:javascript src="application.js"/>
 		<g:javascript src="mediumPopup.js"/>
+		<g:javascript src="activity/popups.js"/>
 	</head>
 	<body>
 		<form>

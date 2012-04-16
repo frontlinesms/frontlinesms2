@@ -22,7 +22,8 @@ class AutoreplyController extends ActivityController {
 			flash.message = "Autoreply has been saved!"
 			[ownerId: autoreply.id]
 		} else {
-			flash.message = "Autoreply could not be saved! /o\\"
+			flash.message = "Autoreply could not be saved!"
+			render(text: flash.message)
 		}
 	}
 	

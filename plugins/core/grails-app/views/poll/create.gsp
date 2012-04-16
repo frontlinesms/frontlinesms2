@@ -174,10 +174,4 @@
 	function validatePollResponses() {
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
 	}
-	
-	function summaryRedirect() {
-		var ownerId = $(".summary #ownerId").val();
-		$(this).dialog('close');
-		window.location.replace(url_root + "message/activity/" + ownerId);
-	}
 </g:javascript>

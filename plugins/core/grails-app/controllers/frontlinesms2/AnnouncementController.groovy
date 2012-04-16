@@ -9,9 +9,13 @@ class AnnouncementController extends ActivityController {
 		def message = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(message)
 		announcementInstance.addToMessages(message)
-		announcementInstance.save()
-		flash.message = "Announcement has been saved and message(s) have been queued to send"
-		[ownerId: announcementInstance.id]
+		if (announcementInstance.save()) {
+			flash.message = "Announcement has been saved and message(s) have been queued to send"
+			[ownerId: announcementInstance.id]
+		} else {
+			flash.message = "Announcement could not be saved!"
+			render(text: flash.message)
+		}
 	}
 
 	private def withAnnouncement(Closure c) {
