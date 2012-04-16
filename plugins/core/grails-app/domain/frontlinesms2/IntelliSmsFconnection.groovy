@@ -8,17 +8,16 @@ import org.apache.camel.model.RouteDefinition
 
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
-//	static configFields = [send: ['name', 'username', 'password'], 
-//							receive: ['name', 'receiveProtocol', 'serverName', 'serverPort', 'username', 'password']]
-	static configFields = ['name', 'username', 'password']
-	boolean send
-	boolean receive
+	static configFields = [send: ['name', 'username', 'password'], 
+						receive: ['name', 'receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
 	static passwords = ['password', 'emailPassword']
+	static boolFields = ["send", "receive"]
 	static String getShortName() { 'intellisms' }
 	
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
-	
+	boolean send
+	boolean receive
 	
 	//Http forwarding configuration
 	EmailReceiveProtocol receiveProtocol

@@ -23,19 +23,33 @@ class FsmsTagLib {
 	
 	def confirmTableRow = { att ->
 		out << '<tr>'
-		out << '	<td class="bold">'
+		out << '<td class="bold">'
 		out << getFieldLabel(att.instanceClass, att.field)
-		out << '  </td>'
-		out << '	<td id="confirm-' + att.field + '"></td>'
+		out << '</td>'
+		out << '<td id="confirm-' + att.field + '"></td>'
 		out << '</tr>'
 	}
 	
 	def inputs = { att ->
+		println "att is $att"
+		//TODO modify the creation of fields so that it responds appropriately to fields stored in maps
 		def fields = getFields(att)
-		println "FsmsTagLib.input() : fields=$fields"
-		fields.each {
-			out << input(att + [field:it])
+		if(fields instanceof Map) {
+			def keys = fields.keySet()
+			println "the keys are $keys"
+			keys.each { key ->
+				out << input(att + [field:key])
+				fields[key].each {
+					println "processing fields[$key][$it] "
+					out << input(att + [field:it])
+				}
+			}
+		} else {
+			fields.each {
+				out << input(att + [field:it])
+			}
 		}
+		
 	}
 	
 	def input = { att ->
@@ -48,16 +62,19 @@ class FsmsTagLib {
 		att += [name:htmlKey, value:val]
 		
 		out << '<div class="field">'
-		out << '	<label for="' + htmlKey + '">'
-		out << '		' + getFieldLabel(instanceClass, groovyKey)
-		out << '	</label>'
+		out << '<label for="' + htmlKey + '">'
+		out << '' + getFieldLabel(instanceClass, groovyKey)
+		out << '</label>'
 		
 		if(att.password || isPassword(instanceClass, groovyKey)) {
 			out << g.passwordField(att)
 		} else if(instanceClass.metaClass.hasProperty(null, groovyKey)?.type.enum) {
 			out << g.select(att + [from:instanceClass.metaClass.hasProperty(null, groovyKey).type.values(),
 						noSelection:[null:'- Select -']])
+		} else if(isBooleanField(instanceClass, groovyKey)) {
+			out << g.checkBox(att)
 		} else out << g.textField(att)
+		
 		out << '</div>'
 	}
 	
@@ -75,5 +92,10 @@ class FsmsTagLib {
 	private def isPassword(instanceClass, groovyKey) {
 		return instanceClass.metaClass.hasProperty(null, 'passwords') &&
 				groovyKey in instanceClass.passwords
+	}
+	
+	private def isBooleanField(instanceClass, groovyKey) {
+		return instanceClass.metaClass.hasProperty(null, 'boolFields') &&
+				groovyKey in instanceClass.boolFields
 	}
 }
