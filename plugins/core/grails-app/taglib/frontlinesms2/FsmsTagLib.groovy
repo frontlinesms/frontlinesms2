@@ -6,8 +6,17 @@ class FsmsTagLib {
 	def confirmTable = { att ->
 		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm">'
 		out << confirmTypeRow(att)
-		getFields(att).each {
-			out << confirmTableRow(att + [field:it.trim()])
+		def fields = getFields(att)
+		if(fields instanceof Map) {
+			def keys = fields.keySet()
+			keys.each { key ->
+				out << confirmTableRow(att + [field:key])
+				fields[key].each {
+					out << confirmTableRow(att + [field:it.trim()])
+				}
+			}
+		} else {
+			fields.each { out << confirmTableRow(att + [field:it.trim()]) }
 		}
 		out << '</table>'
 	}
@@ -40,8 +49,7 @@ class FsmsTagLib {
 			keys.each { key ->
 				out << input(att + [field:key])
 				fields[key].each {
-					println "processing fields[$key][$it] "
-					out << input(att + [field:it])
+					if(it) out << input(att + [field:it, disabled:"disabled"])
 				}
 			}
 		} else {

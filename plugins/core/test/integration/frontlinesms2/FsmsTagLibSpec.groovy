@@ -100,6 +100,24 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			output.contains('<input type="password" field="emailPassword" name="intellismsemailPassword" value="****" id="intellismsemailPassword" />')
 	}
 	
+	def "confirmTable generates all the details of an intellismsFconnection"() {
+		setup:
+			def clazz = new IntelliSmsFconnection(name:"Test", send:true, username:"test_acc", password:"test")
+		when:
+			params = [clazz:clazz]
+			template = '<fsms:confirmTable instanceClass="${clazz.class}" instance="${clazz}" />'
+		then:
+			output.contains('<tr><td class="bold">Send Configurations</td><td id="confirm-send"></td></tr>')
+			output.contains('<tr><td class="bold">Name</td><td id="confirm-name"></td></tr>')
+			output.contains('<tr><td class="bold">Username</td><td id="confirm-username"></td></tr>')
+			output.contains('<tr><td class="bold">Password</td><td id="confirm-password"></td></tr>')
+			output.contains('<td class="bold">Receive Configurations</td>')
+			output.contains('<tr><td class="bold">Server Name</td><td id="confirm-serverName"></td></tr>')
+			output.contains('<tr><td class="bold">Server Port</td><td id="confirm-serverPort"></td></tr>')
+			output.contains('<tr><td class="bold">Username</td><td id="confirm-username"></td></tr>')
+			output.contains('<tr><td class="bold">Password</td><td id="confirm-password"></td></tr>')
+	}
+	
 }
 
 class TestFconnection {

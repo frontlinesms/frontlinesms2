@@ -8,8 +8,9 @@ import org.apache.camel.model.RouteDefinition
 
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
-	static configFields = [send: ['name', 'username', 'password'], 
-						receive: ['name', 'receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
+	static configFields = [ name:[],
+				send: ['username', 'password'], 
+				receive: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
 	static passwords = ['password', 'emailPassword']
 	static boolFields = ["send", "receive"]
 	static String getShortName() { 'intellisms' }

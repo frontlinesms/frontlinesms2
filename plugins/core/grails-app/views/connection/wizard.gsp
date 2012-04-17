@@ -53,15 +53,18 @@ var fconnection = {
 	humanReadableName: function() {
 		return fconnection[fconnection.getType()].humanReadableName;
 	},
+
 	<g:each in="${Fconnection.implementations}">
 	${it.shortName}: {
 		requiredFields: ["${Fconnection.getNonnullableConfigFields(it).join('", "')}"],
 		humanReadableName: "<g:message code="${it.simpleName.toLowerCase()}.label"/>",
+		<g:if test="${}">
 		show: function() {
 			<g:each in="${(Fconnection.implementations - it)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
-			<g:each in="${it.configFields}" var="f">
+			<g:set var="configFields" value="${it.configFields instanceof Map ? it.configFields.values().flatten() : it.configFields}" />
+			<g:each in="${configFields}" var="f">
 				<g:if test="${f in it.passwords}">setSecretConfirmation('${f}');</g:if>
 				<g:else>setConfirmation('${f}');</g:else>
 			</g:each>
@@ -73,6 +76,7 @@ var fconnection = {
 			
 function isFieldSet(fieldName) {
 	var val = getFieldVal(fieldName);
+	console.log("isFieldSet: " + fieldName + val)
 	return val!=null && val.length>0;
 }
 
@@ -82,7 +86,10 @@ function getFieldVal(fieldName) {
 }
 
 function setConfirmVal(fieldName, val) {
-	$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(val);
+	if($('#' + fconnection.getType() + fieldName).is(":disabled") == false) {
+		console.log(fieldName + "is enabled");
+		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(val);
+	}
 }
 
 function setConfirmation(fieldName) {
@@ -92,6 +99,19 @@ function setConfirmation(fieldName) {
 function setSecretConfirmation(fieldName) {
 	val = isFieldSet(fieldName)? '****': 'None';
 	setConfirmVal(fieldName, val);
+}
+
+function attachCheckBoxListener() {
+	$("input[type='checkbox']").bind("change", function(){
+		var key = $(this).attr("field");
+		console.log("the key is: " + key);
+		toggleFields(key);
+	});
+}
+
+//TODO figure about the best way of figuring out the fields to enable and disable
+function toggleFields(key) {
+	
 }
 
 function initializePopup() {

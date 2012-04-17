@@ -17,7 +17,9 @@ class Fconnection {
 			ClickatellFconnection,
 			IntelliSmsFconnection]
 	static getNonnullableConfigFields = { clazz ->
-		clazz.configFields.filter { field -> !clazz.constraints[field].nullable }
+		if(clazz.configFields instanceof Map) {
+			clazz.configFields.values().flatten().filter { field -> !clazz.constraints[field].nullable }
+		} else	clazz.configFields.filter { field -> !clazz.constraints[field].nullable }
 	}
 	
 	String name
