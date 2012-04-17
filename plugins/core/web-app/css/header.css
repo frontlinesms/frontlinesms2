@@ -2,20 +2,20 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-    padding: 0;
-    margin: 0;
-    background-image: url("../images/background.png");
-    background-repeat: no-repeat;
-    background-color: #e2e2e2;
-    height: 80px;
-    max-height: 80px;
-    width: 100%;
-    z-index: 11;
+	padding: 0;
+	margin: 0;
+	background-image: url("../images/background.png");
+	background-repeat: no-repeat;
+	background-color: #e2e2e2;
+	height: 80px;
+	max-height: 80px;
+	width: 100%;
+	z-index: 11;
 }
 
 #logo{
 	position: absolute;
-    margin: 10px 0 0 5%;
+	margin: 10px 0 0 5%;
 }
 
 #notifications{
@@ -50,74 +50,74 @@
 }
 
 #system-nav li, #tab-nav li{
-    display: inline-block;
-    padding: 0;
-    margin: 0;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
 }
 
 #tabbar{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 11px;
-    padding: 0;
-    margin: 0;
-    background-image: url('../images/tabbar.png');
-    z-index: 5;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 11px;
+	padding: 0;
+	margin: 0;
+	background-image: url('../images/tabbar.png');
+	z-index: 5;
 }
 #tab-nav{
-    height: 26px;
-    margin: 44px 0 0 17%;
-    padding: 0;
+	height: 26px;
+	margin: 44px 0 0 17%;
+	padding: 0;
 }
 a.tab-link{
 	position: relative;
-    display: inline-block;
-    margin: 0;
-    background-image: url('../images/buttons/tab.png');
-    width: 110px;
-    height: 22px;
-    max-height: 21px;
-    padding: 0;
-    padding-top: 7px;
-    background-repeat: no-repeat;
-    text-align: center;
-    text-transform: uppercase;
-    z-index: 1;
+	display: inline-block;
+	margin: 0;
+	background-image: url('../images/buttons/tab.png');
+	width: 110px;
+	height: 22px;
+	max-height: 21px;
+	padding: 0;
+	padding-top: 7px;
+	background-repeat: no-repeat;
+	text-align: center;
+	text-transform: uppercase;
+	z-index: 1;
 }
 a.tab-link.current{
-    background-image: url('../images/buttons/tab_active.png');
-    z-index: 10;
+	background-image: url('../images/buttons/tab_active.png');
+	z-index: 10;
 }
 a.tab-link:hover{
-    background-image: url('../images/buttons/tab_hover.png');
+	background-image: url('../images/buttons/tab_hover.png');
 }
 a.tab-link:active{
-    background-image: url('../images/buttons/tab_pressed.png');
+   	background-image: url('../images/buttons/tab_pressed.png');
 }
 #message-tab-link{
-    display: inline-block;
-    background-size: cover;
-    width: 120px;
-    padding-right: 35px;
+	display: inline-block;
+	background-size: cover;
+	width: 120px;
+	padding-right: 35px;
 }
 #status-tab-link{
-    padding-right: 20px;
-    background-size: cover;
-    width: 100px;
+	padding-right: 20px;
+	background-size: cover;
+	width: 100px;
 }
 
 .indicator{
-    background-repeat: no-repeat;
-    display: inline-block;
-    padding: 2px;
-    margin: 4px 7px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #fff;
-    font-weight: bolder;
-    text-align:center;
+	background-repeat: no-repeat;
+	display: inline-block;
+	padding: 2px;
+	margin: 4px 7px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	color: #fff;
+	font-weight: bolder;
+	text-align:center;
 }
 #inbox-indicator{
 	border-radius: 10px;
@@ -130,34 +130,34 @@ a.tab-link:active{
 	padding:0;
 	width:25px;
 	height:25px;
-    background-image: url('../images/icons/status_red.png');
-    background-position: 0 -2px;
+	background-image: url('../images/icons/status_red.png');
+	background-position: 0 -2px;
 }
 #status-indicator.green{
-    background-image: url('../images/icons/status_green.png');
+   	background-image: url('../images/icons/status_green.png');
 }
 #status-indicator.orange{
-    background-image: url('../images/icons/status_orange.png');
+   	background-image: url('../images/icons/status_orange.png');
 }
 #system-nav{
-    position: absolute;
-    right: 17px;
-    top: -3px;
-    margin: 0;
-    padding: 0;
+	position: absolute;
+	right: 17px;
+	top: -3px;
+	margin: 0;
+	padding: 0;
 }
 
 #system-nav a{
-    display: inline-block;
-    padding: 6px;
-    margin: 0;
+	display: inline-block;
+	padding: 6px;
+	margin: 0;
 }
 #system-nav li{
-    margin: 0;
-    padding: 0;
-    border-top: 3px solid #D5AFC6;
+	margin: 0;
+	padding: 0;
+	border-top: 3px solid #D5AFC6;
 }
 #system-nav .selected, #system-nav li:hover, #system-nav li:active {
-   background-color: #E0E0E0;
-   border-top: 3px solid #C03283;
+	background-color: #E0E0E0;
+	border-top: 3px solid #C03283;
 }

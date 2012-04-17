@@ -17,6 +17,7 @@
 		return translated;
 	}
 </g:javascript>
+
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
 	<g:javascript>
 		$(function() {

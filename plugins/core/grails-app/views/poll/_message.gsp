@@ -34,6 +34,7 @@
 					replyText = replyText + '.';
 				}
 			} else if ($("input[name='pollType']:checked").val() == "standard") {
+				//alert(i18n["poll.reply.text2"]);
 				replyText = "Please answer 'Yes' or 'No'";
 			} else {
 				replyText = 'Please answer ';
