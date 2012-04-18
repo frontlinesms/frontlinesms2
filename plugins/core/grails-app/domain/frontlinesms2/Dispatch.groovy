@@ -28,20 +28,6 @@ class Dispatch {
 		})
 	}
 	
-	def afterUpdate = {
-		Fmessage.withNewSession { session ->
-				println "Dispatch.afterUpdate() : inside new session..."
-				def variables = [true, false, message.id]
-				if(status == DispatchStatus.FAILED) {
-					Fmessage.executeUpdate("UPDATE Fmessage m SET m.hasFailed=?,m.hasPending=? WHERE m.id=?" , variables)
-				}
-				if(status == DispatchStatus.SENT) {
-					Fmessage.executeUpdate("UPDATE Fmessage m SET m.hasSent=?,m.hasPending=? WHERE m.id=?" , variables)
-				}
-			}
-		println "Dispatch.afterUpdate() : EXIT"
-	}
-	
 	static namedQueries = {
 		forSentStats { params ->
 			def groupInstance = params.groupInstance

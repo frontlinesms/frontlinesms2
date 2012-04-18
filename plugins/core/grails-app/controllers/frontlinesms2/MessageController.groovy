@@ -56,7 +56,7 @@ class MessageController {
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageCount: Fmessage.countAllMessages(params),
-				hasFailedMessages: Dispatch.countByStatusAndDeleted(DispatchStatus.FAILED, false),
+				hasFailedMessages: Fmessage.hasFailedMessages(),
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 

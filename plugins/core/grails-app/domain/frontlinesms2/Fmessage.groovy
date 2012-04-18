@@ -71,7 +71,7 @@ class Fmessage {
 			and {
 				eq("isDeleted", false)
 				eq("archived", archived)
-				projections { dispatches { eq(status, SENT) } }
+				projections { dispatches { eq('status', DispatchStatus.SENT) } }
 				if(getOnlyStarred)
 					eq("starred", true)
 			}
@@ -81,13 +81,13 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				if(getOnlyFailed) {
-					projections { dispatches { eq(status, FAILED) } }
+					projections { dispatches { eq('status', DispatchStatus.FAILED) } }
 				} else {
 					projections {
 						dispatches {
 							or {
-								eq(status, PENDING)
-								eq(status, FAILED)
+								eq('status', DispatchStatus.PENDING)
+								eq('status', DispatchStatus.FAILED)
 							}
 						}
 					}
@@ -185,9 +185,9 @@ class Fmessage {
 		}
 	}
 
-	def getHasSent() { areAnyDispatches(SENT) }
-	def getHasFailed() { areAnyDispatches(FAILED) }
-	def getHasPending() { areAnyDispatches(PENDING) }
+	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
+	def getHasFailed() { areAnyDispatches(DispatchStatus.FAILED) }
+	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
 	}
@@ -202,6 +202,10 @@ class Fmessage {
 		}
 
 		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
+	}
+
+	static def hasFailedMessages() {
+		return pending(true).count() > 0
 	}
 	
 	static def countUnreadMessages() {

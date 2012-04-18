@@ -133,23 +133,17 @@ class CoreBootStrap {
 		(1..101).each {
 			new Fmessage(src:'+198765432', text:"text-${it}", date: new Date() - it, inbound:true).save(failOnError:true)
 		}
-		
-		def d1 = new Dispatch(dst:'+123456789', status: DispatchStatus.FAILED)
-		def d5 = new Dispatch(dst:'+254114533', status: DispatchStatus.SENT, dateSent: new Date())
-		def d2 = new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: new Date())
-		def d3 = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
-		def d4 = new Dispatch(dst:'+254115533', status: DispatchStatus.PENDING)
 
 		def m1 = new Fmessage(src: '+3245678', date: new Date(), text: "time over?")
 		def m2 = new Fmessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
 		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
 		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "sample sms")
 		
-		m1.addToDispatches(d1)
-		m1.addToDispatches(d5).save(failOnError: true)
-		m2.addToDispatches(d2).save(failOnError: true)
-		m3.addToDispatches(d3).save(failOnError: true)
-		m4.addToDispatches(d4).save(failOnError: true)
+		m1.addToDispatches(dst:'+123456789', status:DispatchStatus.FAILED)
+		m1.addToDispatches(dst:'+254114533', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
+		m2.addToDispatches(dst:'+254114433', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
+		m3.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
+		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
 	}
 	
 	private def dev_initFconnections() {
@@ -184,13 +178,13 @@ class CoreBootStrap {
 		if(!dev) return
 		def keyword = new Keyword(value: 'FOOTBALL')
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
-		poll1.addToResponses(new PollResponse(key: 'choiceA', value: 'manchester'))
-		poll1.addToResponses(new PollResponse(key: 'choiceB', value: 'barcelona'))
+		poll1.addToResponses(key:'choiceA', value:'manchester')
+		poll1.addToResponses(key:'choiceB', value:'barcelona')
 		poll1.addToResponses(PollResponse.createUnknown())
 		
 		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
-		poll2.addToResponses(new PollResponse(key: 'choiceA', value: 'pantene'))
-		poll2.addToResponses(new PollResponse(key: 'choiceB', value: 'oriele'))
+		poll2.addToResponses(key: 'choiceA', value: 'pantene')
+		poll2.addToResponses(key: 'choiceB', value: 'oriele')
 		poll2.addToResponses(PollResponse.createUnknown())
 		
 		poll1.save(failOnError:true, flush:true)
@@ -249,14 +243,12 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def dispatch1 = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
-		def dispatch2 = new Dispatch(dst:'+254116633', status: DispatchStatus.SENT, dateSent: new Date())
-		def a1 = new Announcement(name: 'Free cars!')
-		def a2 = new Announcement(name: 'Office Party')
-		def sent1 = new Fmessage(src: 'me', inbound: false, hasPending: true, date: new Date(), text:"Everyone who recieves this message will also recieve a free Subaru")
-		def sent2 = new Fmessage(src: 'me', inbound: false, hasPending: true, date: new Date(), text:"Office Party on Friday!")
-		sent1.addToDispatches(dispatch1).save(failOnError:true, flush:true)
-		sent2.addToDispatches(dispatch2).save(failOnError:true, flush:true)
+		def a1 = new Announcement(name:'Free cars!')
+		def a2 = new Announcement(name:'Office Party')
+		def sent1 = new Fmessage(src:'me', inbound:false, text:"Everyone who recieves this message will also recieve a free Subaru")
+		def sent2 = new Fmessage(src:'me', inbound:false, text:"Office Party on Friday!")
+		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT).save(failOnError:true, flush:true)
+		sent2.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT).save(failOnError:true, flush:true)
 		a1.addToMessages(sent1).save(failOnError:true, flush:true)
 		a2.addToMessages(sent2).save(failOnError:true, flush:true)
 		
