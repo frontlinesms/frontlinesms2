@@ -43,7 +43,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
 		then:
 			messageCounts['inbox'] == 2
-			messageCounts['sent'] == 3
+			messageCounts['sent'] == 4
 			messageCounts['pending'] == 2
 			messageCounts['deleted'] == 1
 	}
@@ -287,8 +287,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def setUpMessages() {
-		Fmessage.build()
-		Fmessage.build()
+		Fmessage.build(text:"An inbox message")
+		Fmessage.build(text:"Another inbox message")
 		buildWithDispatches(dispatch())
 		buildWithDispatches(dispatch(), dispatch())
 		buildOutgoing(deleted:true, dispatches:dispatch())
