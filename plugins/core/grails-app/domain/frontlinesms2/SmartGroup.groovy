@@ -94,7 +94,7 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 	}
 	
 	static HashMap<String, List<String>> getGroupDetails() {
-		SmartGroup.list().collectEntries { ["$it.name", it.addresses] }
+		SmartGroup.list().collectEntries { ["smartgroup-$it.id", it.addresses] }
 	}
 	
 	def getAddresses() {
