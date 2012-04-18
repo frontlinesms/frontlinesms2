@@ -2,7 +2,7 @@ package frontlinesms2.service
 
 import frontlinesms2.*
 
-class failPendingMessagesServiceISpec extends grails.plugin.spock.IntegrationSpec {
+class FailPendingMessagesServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	def failPendingMessagesService
 	
 	def "init should fail all pending dispatches"() {

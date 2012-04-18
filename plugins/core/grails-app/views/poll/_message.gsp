@@ -22,8 +22,6 @@
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
 				if($("input[name='pollType']:checked").val() == "standard") {
-				     
-					//<g:message code="poll.reply.text" args="[keywordText, keywordText]" />
 					replyText = 'Reply' + ' "' + keywordText + ' A" for Yes, "' + keywordText + ' B" for No.';
 				} else {
 					replyText = 'Reply';
@@ -34,7 +32,6 @@
 					replyText = replyText + '.';
 				}
 			} else if ($("input[name='pollType']:checked").val() == "standard") {
-				//alert(i18n["poll.reply.text2"]);
 				replyText = "Please answer 'Yes' or 'No'";
 			} else {
 				replyText = 'Please answer ';

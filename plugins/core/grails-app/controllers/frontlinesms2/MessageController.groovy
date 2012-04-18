@@ -56,8 +56,8 @@ class MessageController {
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageCount: Fmessage.countAllMessages(params),
-				hasFailedMessages: Fmessage.hasFailedMessages(),
-				failedDispatchCount: (messageInstance && messageInstance.hasFailed) ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
+				hasFailedMessages: Dispatch.countByStatusAndDeleted(DispatchStatus.FAILED, false),
+				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	def inbox = {

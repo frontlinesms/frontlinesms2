@@ -42,7 +42,14 @@ class CoreBootStrap {
 				//DB Viewer
 				//org.hsqldb.util.DatabaseManager.main()
 				// do custom init for dev here
-				camelContext.tracing = true
+
+				// Uncomment the following line to enable tracing in Camel.
+				// N.B. this BREAKS AUTODISCONNECT OF FAILED ROUTES in camel
+				// 2.5.0 (which we are currently using), but has been fixed
+				// by camel 2.9.0 so this can be permanently enabled once we
+				// upgrade our Camel dependencies.
+				//camelContext.tracing = true
+
 				dev_initSmartGroups()
 				dev_initGroups()
 				dev_initContacts()

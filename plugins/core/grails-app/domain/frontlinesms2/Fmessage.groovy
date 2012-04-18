@@ -5,6 +5,7 @@ import org.hibernate.FlushMode
 
 class Fmessage {
 	static belongsTo = [messageOwner:MessageOwner]
+	static transients = ['hasSent', 'hasPending', 'hasFailed']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
@@ -20,9 +21,6 @@ class Fmessage {
 	boolean isDeleted
 	
 	boolean inbound
-	boolean hasSent
-	boolean hasPending
-	boolean hasFailed
 	int failedCount
 	static hasMany = [dispatches:Dispatch]
 
@@ -30,48 +28,22 @@ class Fmessage {
 	
 	static constraints = {
 		messageOwner(nullable:true)
-		date(nullable:false)
 		src(nullable:true, validator: { val, obj ->
-				if(!val)
-					!obj.inbound
+				val || !obj.inbound
 		})
 		text(nullable:true)
 		displayName(nullable:true)
 		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
-				if(val) {
-					obj.messageOwner == null || obj.messageOwner.archived
-				} else {
-					obj.messageOwner == null ||  !obj.messageOwner.archived
-				}
+				obj.messageOwner == null || obj.messageOwner.archived == val
 		})
-		inbound(nullable: true, validator: { val, obj ->
-				if(val) {
-					obj.hasSent == null || obj.hasSent == false
-					obj.hasPending == null || obj.hasPending == false
-					obj.hasFailed == null || obj.hasFailed == false
-					obj.dispatches == null || obj.dispatches.size() == 0
-				} else {
-					obj.dispatches != null && obj.dispatches?.size() >= 1
-				}
+		inbound(nullable:true, validator: { val, obj ->
+				val ^ (obj.dispatches? true: false)
 		})
-		hasSent(nullable: true, validator: { val, obj ->
-			if(val)
-				!obj.inbound
-		})
-		hasPending(nullable: true, validator: { val, obj ->
-			if(val)
-				!obj.inbound
-		})
-		hasFailed(nullable: true, validator: { val, obj ->
-			if(val)
-				!obj.inbound
-		})
-		dispatches(nullable: true)
+		dispatches(nullable:true)
 	}
 
 	def beforeInsert = {
-		updateFmessageStatuses()
 		withSession { session -> 
 			FlushMode flushMode = session.flushMode 
 			session.flushMode = FlushMode.MANUAL 
@@ -82,10 +54,6 @@ class Fmessage {
 			}
 		}
 		if(!this.inbound) this.read = true
-	}
-	
-	def beforeUpdate = {
-		updateFmessageStatuses()
 	}
 	
 	static namedQueries = {
@@ -103,7 +71,7 @@ class Fmessage {
 			and {
 				eq("isDeleted", false)
 				eq("archived", archived)
-				eq("hasSent", true)
+				projections { dispatches { eq(status, SENT) } }
 				if(getOnlyStarred)
 					eq("starred", true)
 			}
@@ -113,11 +81,15 @@ class Fmessage {
 				eq("isDeleted", false)
 				eq("archived", false)
 				if(getOnlyFailed) {
-					eq("hasFailed", true)
+					projections { dispatches { eq(status, FAILED) } }
 				} else {
-					or {
-						eq("hasPending", true)	
-						eq("hasFailed", true)
+					projections {
+						dispatches {
+							or {
+								eq(status, PENDING)
+								eq(status, FAILED)
+							}
+						}
 					}
 				}
 			}
@@ -213,6 +185,13 @@ class Fmessage {
 		}
 	}
 
+	def getHasSent() { areAnyDispatches(SENT) }
+	def getHasFailed() { areAnyDispatches(FAILED) }
+	def getHasPending() { areAnyDispatches(PENDING) }
+	private def areAnyDispatches(status) {
+		dispatches?.any { it.status == status }
+	}
+
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
@@ -237,10 +216,6 @@ class Fmessage {
 		[inbox: inboxCount, sent: sentCount, pending: pendingCount, deleted: deletedCount]
 	}
 
-	static def hasFailedMessages() {
-		return Fmessage.countByHasFailedAndIsDeleted(true, false) > 0
-	}
-	
 	// TODO should this be in a service?
 	static def getMessageStats(params) {
 		def asKey = { date -> date.format('dd/MM') }
@@ -301,14 +276,6 @@ class Fmessage {
 				displayName = "To: " + dispatches?.size() + " recipients"
 				contactExists = true
 			}
-		}
-	}
-	
-	def updateFmessageStatuses() {
-		if(!inbound) {
-			hasFailed = dispatches.any { it.status == DispatchStatus.FAILED }
-			hasPending = dispatches.any { it.status == DispatchStatus.PENDING }
-			hasSent = dispatches.any { it.status == DispatchStatus.SENT }
 		}
 	}
 	
