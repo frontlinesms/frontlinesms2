@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class failPendingMessagesService {
+class FailPendingMessagesService {
 	def init() {
 		def pendingDispatchList = Dispatch.findAllByStatus(DispatchStatus.PENDING)
 		if (pendingDispatchList) {
