@@ -28,14 +28,6 @@ class Dispatch {
 		})
 	}
 	
-	def beforeInsert = {
-		updateMessageStatus()
-	}
-	
-	def beforeUpdate = {
-		updateMessageStatus()
-	}
-	
 	def afterUpdate = {
 		Fmessage.withNewSession { session ->
 				println "Dispatch.afterUpdate() : inside new session..."
@@ -48,10 +40,6 @@ class Dispatch {
 				}
 			}
 		println "Dispatch.afterUpdate() : EXIT"
-	}
-	
-	def updateMessageStatus() {
-		message.updateFmessageStatuses()
 	}
 	
 	static namedQueries = {
