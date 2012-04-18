@@ -4,6 +4,7 @@
 		<title><g:layoutTitle default="Messages"/></title>
 		<g:layoutHead/>
 		<r:require module="messages"/>
+		<r:require module="newMessagesCount"/>
 		<g:render template="/includes" plugin="core"/>
 		<g:javascript>
 			$(function() {  

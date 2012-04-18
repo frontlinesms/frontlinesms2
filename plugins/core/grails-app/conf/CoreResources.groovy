@@ -23,6 +23,10 @@ modules = {
 		resource url: [plugin:'core', dir:'js', file:"message/categorize_dropdown.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/move_dropdown.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/moreActions.js"]
+	}
+	
+	newMessagesCount {
+		dependsOn "jquery"
 		resource url: [plugin:'core', dir:'js', file:"message/check_for_new_messages.js"]
 	}
 	
