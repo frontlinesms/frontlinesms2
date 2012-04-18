@@ -28,7 +28,7 @@
 				<li class="contact">
 					<g:if test="${recipients.contains(contact.email)}">
 						<input type="checkbox" name="addresses" value="${contact.email}" checked>
-						${contact.name ?: contact.email} (Email)
+						${contact.name ?: contact.email} (<g:message code="contact.email.label" />)
 					</g:if>
 				</li>
 			</g:each>
@@ -97,7 +97,7 @@
 		$("#manual-address").find('#address-error').remove();
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
-			$("#manual-address").append("<div id='address-error' class='error-message'>You have added a non-number to this field, upon saving all non-numbers will be removed.</div>");
+			$("#manual-address").append("<div id='address-error' class='error-message'><g:message code='quickmessage.number.error' /></div>");
 			return false;
 		} else {
 			return true;

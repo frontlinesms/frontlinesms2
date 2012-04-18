@@ -22,24 +22,21 @@
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
 				if($("input[name='pollType']:checked").val() == "standard") {
-				     
-					//<g:message code="poll.reply.text" args="[keywordText, keywordText]" />
-					replyText = 'Reply' + ' "' + keywordText + ' A" for Yes, "' + keywordText + ' B" for No.';
+					replyText = i18n("poll.reply.text", keywordText, keywordText);
 				} else {
 					replyText = 'Reply';
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = replyText + ' "' + keywordText + ' ' + this.name.substring(6,7) + '" for ' + this.value;
+						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, this.name.substring(6,7), this.value);
 					});
 					replyText = replyText + '.';
 				}
 			} else if ($("input[name='pollType']:checked").val() == "standard") {
-				//alert(i18n["poll.reply.text2"]);
-				replyText = "Please answer 'Yes' or 'No'";
+				replyText = i18n("poll.reply.text2");
 			} else {
 				replyText = 'Please answer ';
 				$(".choices").each(function() {
-					if (replyText!='Please answer ' && this.value) replyText += ' or ';
+					if (replyText!='Please answer ' && this.value) replyText += i18n("poll.reply.text3");
 					if (this.value) replyText += "'" + this.value + "'";
 				});
 			} 
