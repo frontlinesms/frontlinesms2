@@ -9,7 +9,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(src: '21345', read: null, date: new Date(), inbound: true)
+			Fmessage message = new Fmessage(src: '21345', read: null, inbound: true)
 		then:
 			message.read != null || !message.validate()
 	}
@@ -28,63 +28,38 @@ class FmessageSpec extends UnitSpec {
 			message.starred == false
 	}
 
-	def "Fmessage cannot be inbound and have a status"() {
+	def "Fmessage must have a src if inbound"() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			def m = new Fmessage(src: 'src', hasSent: null, hasPending: null, hasFailed: false,  date: new Date(), inbound: true)
-		then:
-			m.validate()
-		when:
-			m.hasFailed = true
-		then:
-			!m.validate()
-	}
-	
-	def "Fmessage must have a date, and a src if inbound"() {
-		setup:
-			mockForConstraintsTests(Fmessage)
-		when:
-			def m = new Fmessage(inbound: true)
+			def m = new Fmessage(inbound:true)
 		then:
 			!m.validate()
 		when:
-			def f = new Fmessage(inbound: true, date: new Date())
-		then:
-			!f.validate()
-		when:
-			def t = new Fmessage(src: 'src', inbound: true, date: new Date())
+			def t = new Fmessage(src: 'src', inbound: true)
 		then:
 			t.validate()
 	}
-	
-	def "Fmessages with a status must have at least 1 Dispatch"() {
-		setup:
+
+	@Unroll
+	def "outbound message must have one or more dispatches"() {
+		given:
 			mockForConstraintsTests(Fmessage)
-		when:
-			Fmessage message = new Fmessage(date: new Date(), hasFailed: true)
-		then:
-			!message.validate()
-		when:
-			Fmessage message2 = new Fmessage(date: new Date(), hasFailed: true, dispatches: [new Dispatch()])
-		then:
-			message2.validate()
-	}
-	
-	def "Fmessages can have multiple dispatches"() {
-		setup:
-			mockForConstraintsTests(Fmessage)
-		when:
-			Fmessage message = new Fmessage(date: new Date(), hasFailed: true, dispatches: [new Dispatch(), new Dispatch()])
-		then:
-			message.validate()
+		expect:
+			new Fmessage(dispatches:dispatches).validate() == valid
+		where:
+			valid | dispatches
+			false | []
+			false | null
+			true  | [new Dispatch()]
+			true  | [new Dispatch(), new Dispatch()]
 	}
 	
 	def "inbound Fmessages cannot have dispatches"() {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			Fmessage message = new Fmessage(src: '23456', date: new Date(), inbound: true, dispatches: [new Dispatch()])
+			Fmessage message = new Fmessage(src: '23456', inbound: true, dispatches: [new Dispatch()])
 		then:
 			!message.validate()
 	}
@@ -93,7 +68,7 @@ class FmessageSpec extends UnitSpec {
 		setup:
 			mockForConstraintsTests(Fmessage)
 		when:
-			def message = new Fmessage(src: 'src', date: new Date(), inbound: true, messageOwner: new Folder(archived: false))
+			def message = new Fmessage(src: 'src', inbound: true, messageOwner: new Folder(archived: false))
 		then:
 			message.validate()
 	}

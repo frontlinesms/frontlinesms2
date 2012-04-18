@@ -7,57 +7,29 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			
 	def 'If any of a Fmessages dispatches has failed its status is HASFAILED'() {
 		when:
-			def dispatch1 = new Dispatch(dst: '123456', status: DispatchStatus.FAILED)
-			def dispatch2 = new Dispatch(dst: '123456', status: DispatchStatus.PENDING)
-			def dispatch3 = new Dispatch(dst: '123456', status: DispatchStatus.SENT, dateSent: new Date())
-			def message = new Fmessage(date:TEST_DATE)
-			message.addToDispatches(dispatch1)
-			message.addToDispatches(dispatch2)
-			message.addToDispatches(dispatch3)
-			message.save(failOnError: true)
-			message.refresh()
+			def message = buildWithDispatches(failedDispatch(), pendingDispatch(), sentDispatch())
 		then:
-			message.hasFailed == true
+			message.hasFailed
 	}
 	
 	def 'If any of a Fmessages dispatches are pending, but none have failed its status is HASPENDING'() {
 		when:
-			def dispatch1 = new Dispatch(dst: '123456', status: DispatchStatus.PENDING)
-			def dispatch2 = new Dispatch(dst: '123456', status: DispatchStatus.PENDING)
-			def dispatch3 = new Dispatch(dst: '123456', status: DispatchStatus.SENT, dateSent: TEST_DATE)
-			def message = new Fmessage(date:TEST_DATE)
-			message.addToDispatches(dispatch1)
-			message.addToDispatches(dispatch2)
-			message.addToDispatches(dispatch3)
-			message.save(failOnError: true)
-			message.refresh()
+			def message = buildWithDispatches(pendingDispatch(), pendingDispatch(), sentDispatch())
 		then:
-			message.hasPending == true
+			message.hasPending
 	}
 	
 	def 'If all of a Fmessages dispatches have sent is status is HASSENT'() {
 		when:
-			def dispatch1 = new Dispatch(dst: '123456', status: DispatchStatus.SENT, dateSent: TEST_DATE)
-			def dispatch2 = new Dispatch(dst: '123456', status: DispatchStatus.SENT, dateSent: TEST_DATE)
-			def dispatch3 = new Dispatch(dst: '123456', status: DispatchStatus.SENT, dateSent: TEST_DATE)
-			def message = new Fmessage(date:TEST_DATE)
-			message.addToDispatches(dispatch1)
-			message.addToDispatches(dispatch2)
-			message.addToDispatches(dispatch3)
-			message.save(failOnError: true)
-			message.refresh()
+			def message = buildWithDispatches(sentDispatch(), sentDispatch(), sentDispatch())
 		then:
 			message.hasSent
 	}
 	
 	def 'get deleted messages gets all messages with deleted flag'() {
 		setup:
-				(1..3).each {
-				    new Fmessage(isDeleted:true,src:"+123456789", date: TEST_DATE, inbound:true).save(flush:true, failOnError:true)
-				}
-				(1..2).each {
-					new Fmessage(isDeleted:false,src:"+987654321", date: TEST_DATE, inbound:true).save(flush:true, failOnError:true)
-				}
+			3.times { Fmessage.build(isDeleted:true).save(flush:true, failOnError:true) }
+			2.times { Fmessage.build().save(flush:true, failOnError:true) }
 		when:
 			def deletedMessages = Fmessage.deleted(false)
 		then:
@@ -71,16 +43,16 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def messageCounts = Fmessage.countAllMessages(['archived':false, 'starred': false])
 		then:
 			messageCounts['inbox'] == 2
-			messageCounts['sent'] == 3
+			messageCounts['sent'] == 4
 			messageCounts['pending'] == 2
 			messageCounts['deleted'] == 1
 	}
 	
 	def "countUnreadMessages returns unread messages count"() {
 		setup:
-			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'A read message', read:true, date: TEST_DATE).save(flush:true)
-			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'An unread message', read:false, date: TEST_DATE).save(flush:true)
-			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'An unread message', read:false, archived: true, date: TEST_DATE).save(flush:true)
+			Fmessage.build(read:true).save(flush:true, failOnError:true)
+			Fmessage.build().save(flush:true, failOnError:true)
+			Fmessage.build(archived:true).save(flush:true, failOnError:true)
 		when:
 			def unreadMessageCount = Fmessage.countUnreadMessages()
 		then:
@@ -116,7 +88,6 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			allInboundMessages*.every { it.inbound }
 			allSentMessages*.every { !it.inbound }
 			allMessages.size() == 7
-
 	}
 	
 	def "searching for a group with no members does not throw an error"() {
@@ -143,28 +114,24 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			lucy.addToGroups(haskell)
 			
 			(TEST_DATE-6..TEST_DATE+5).each { date ->
-				new Fmessage(date:date, src:jessy.mobile, inbound:true,
-								text:"A message received on $date")
+				Fmessage.build(date:date, src:jessy.mobile)
 						.save(failOnError:true, flush:true)
-				new Fmessage(date:date, src:'1234567890', hasSent:true,
-								text:"A message sent on $date")
+				buildWithDispatches( 
 						// this dispatch should be counted because Jessy is in the target group
-						.addToDispatches(new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
-						.save(failOnError:true, flush:true)
+						new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
 			}
 			
 			3.times {
-				new Fmessage(date:TEST_DATE-1, src:jessy.mobile, inbound:true, text: "Message {it}")
+				Fmessage.build(date:TEST_DATE-1, src:jessy.mobile)
 						.save(failOnError:true, flush:true)
 			}
 			
 			5.times {
-				new Fmessage(date:TEST_DATE, src:'0000000', hasSent:true, text:"Message {it}")
+				buildWithDispatches(
 						// this dispatch should be counted because Jessy is in the target group
-						.addToDispatches(new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
+						new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:TEST_DATE),
 						// this dispatch should be ignored because Lucy is not in the target group
-						.addToDispatches(new Dispatch(dst:lucy.mobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
-						.save(failOnError:true, flush:true)
+						new Dispatch(dst:lucy.mobile, status:DispatchStatus.SENT, dateSent:TEST_DATE))
 			}
 
 		when:
@@ -182,20 +149,18 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			new Contact(name:"Alice", mobile:"1234")
 					.save(failOnError:true, flush:true)
 		when:
-			def messageFromPrimaryNumber = new Fmessage(src:"1234", inbound:true, date:TEST_DATE)
-					.save(failOnError:true, flush:true)
-			def outBoundMessageToPrimaryNo = new Fmessage(hasSent:true, date: TEST_DATE, text:"")
-					.addToDispatches(new Dispatch(dst:"1234", status:DispatchStatus.SENT, dateSent:TEST_DATE))
-					.save(failOnError:true, flush:true)
+			def messageFromAlice = Fmessage.build(src:'1234')
+			def outBoundMessageToAlice = buildWithDispatches(
+					new Dispatch(dst:'1234', status:DispatchStatus.SENT, dateSent:TEST_DATE))
 		then:
-			[messageFromPrimaryNumber]*.displayName.every {it == "Alice" }
-			[outBoundMessageToPrimaryNo]*.displayName.every {it == "To: Alice" }
+			[messageFromAlice]*.displayName.every { it == "Alice" }
+			[outBoundMessageToAlice]*.displayName.every { it == "To: Alice" }
 	}
 	
-	def "cannot archive a message that has an owner" () {
+	def "cannot archive a message that has an owner without also archiving the owner" () {
 		setup:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(src:'+123456789', text:'hello', date: TEST_DATE, inbound: true).save(failOnError:true)
+			def m = Fmessage.build().save(failOnError:true)
 			f.addToMessages(m)
 			f.save()
 		when:
@@ -204,9 +169,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			!m.validate()
 	}
 	
-	def "when a new contact is created, all messages with that contacts primary number should be updated"() {
+	def "when a new contact is created, all messages with that contacts mobile number should be updated"() {
 		when:
-			def message = new Fmessage(src:'1', inbound:true, date:TEST_DATE).save(flush: true, failOnError:true)
+			def message = Fmessage.build(src:'1').save(flush:true, failOnError:true)
 		then:
 			message.displayName == '1'
 			!message.contactExists
@@ -221,7 +186,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
 			def alice = new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'1', inbound:true, date:TEST_DATE).save(failOnError:true, flush:true)
+			def message = Fmessage.build(src:'1').save(failOnError:true, flush:true)
 		then:
 			message.displayName == 'Alice'
 			message.contactExists
@@ -236,7 +201,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can archive message when it has no message owner" () {
 		setup:
-			def m = new Fmessage(src:'+123456789', text:'hello', date: TEST_DATE, inbound: true).save(failOnError:true)
+			def m = Fmessage.build()
 		when:
 			m.archived = true
 		then:
@@ -249,7 +214,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage archived = createMessage(archived:true)
 			addMessages archivedOwner, archived
 			
-			MessageOwner unarchivedOwner = getTestFolder(name:'test-archived')
+			MessageOwner unarchivedOwner = getTestFolder(name:'test-unarchived')
 			Fmessage notArchived = createMessage(archived:false)
 			addMessages unarchivedOwner, notArchived
 		then:
@@ -276,7 +241,6 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			addMessages owner, sent, received
 		then:
 			Fmessage.owned(owner, false, true).list() == [sent, received]
-			println "Not sent: " + Fmessage.owned(owner, false, false).list()*.inbound
 			Fmessage.owned(owner, false, false).list() == [received]
 	}
 	
@@ -291,8 +255,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				archived:params.archived?:false,
 				starred:params.starred?:false,
 				inbound:params.inbound!=null?params.inbound:true)
-		if(params.inbound != null && !params.inbound) m.addToDispatches(new Dispatch(
-				dst:'1234567890', status:DispatchStatus.SENT, dateSent:new Date()))
+		if(params.inbound != null && !params.inbound) {
+			m.addToDispatches(dst:'1234567890', status:DispatchStatus.SENT, dateSent:new Date())
+		}
 		m.save(failOnError:true, flush:true)
 	}
 	
@@ -301,7 +266,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def createGroup(String n) {
-		new Group(name: n).save(failOnError: true)
+		new Group(name:n).save(failOnError:true)
 	}
 
 	def createContact(String n, String a) {
@@ -309,17 +274,31 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		c.save(failOnError: true)
 	}
 
-	private def setUpMessages() {
-			def dispatch = new Dispatch(dst:'+254114433', status: DispatchStatus.SENT, dateSent: TEST_DATE)
-			def pendingDispatch = new Dispatch(dst:'+254114433', status: DispatchStatus.PENDING)
-			def failedDispatch = new Dispatch(dst:'+254114433', status: DispatchStatus.FAILED)
-			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'An inbox message', date: TEST_DATE).save(flush:true, failOnError:true)
-			new Fmessage(src: '1234', inbound:true, isDeleted:false, text:'Another inbox message', date: TEST_DATE).save(flush:true, failOnError:true)
-			new Fmessage(src: '1234', hasSent:true, isDeleted:false, text:'A sent message', date: TEST_DATE).addToDispatches(dispatch).save(flush:true, failOnError:true)
-			new Fmessage(hasSent: true, isDeleted:false, text:'Another sent message', date: TEST_DATE).addToDispatches(dispatch).addToDispatches(dispatch).save(flush:true, failOnError:true)
-			new Fmessage(hasSent: true, isDeleted:true, text:'Deleted sent message', date: TEST_DATE).addToDispatches(dispatch).save(flush:true, failOnError:true)
-			new Fmessage(hasSent: true, isDeleted:false, text:'This msg will not show up in inbox view', date: TEST_DATE).addToDispatches(dispatch).save(flush:true, failOnError:true)
-			new Fmessage(hasFailed: true, isDeleted:false, text:'A sent failed message', date: TEST_DATE).addToDispatches(failedDispatch ).save(flush:true, failOnError:true)
-			new Fmessage(hasPending: true, isDeleted:false, text:'A pending message', date: TEST_DATE).addToDispatches(pendingDispatch).save(flush:true, failOnError:true)
+	private Fmessage buildWithDispatches(Dispatch... dispatches) {
+		def m = Fmessage.buildWithoutSave(inbound:false)
+		dispatches.each { m.addToDispatches(it) }
+		m.save(failOnError:true, flush:true)
 	}
+
+	private Fmessage buildOutgoing(params) {
+		def m = buildWithDispatches(params.dispatches)
+		if(params.containsKey('deleted')) m.isDeleted = params.deleted
+		return m
+	}
+
+	private def setUpMessages() {
+		Fmessage.build(text:"An inbox message")
+		Fmessage.build(text:"Another inbox message")
+		buildWithDispatches(dispatch())
+		buildWithDispatches(dispatch(), dispatch())
+		buildOutgoing(deleted:true, dispatches:dispatch())
+		buildWithDispatches(dispatch())
+		buildWithDispatches(failedDispatch())
+		buildWithDispatches(pendingDispatch())
+	}
+
+	private def dispatch() { sentDispatch() }
+	private def sentDispatch() { new Dispatch(dst:'1234', status:DispatchStatus.SENT, dateSent:TEST_DATE) }
+	private def pendingDispatch() { new Dispatch(dst:'1234', status:DispatchStatus.PENDING) }
+	private def failedDispatch() { new Dispatch(dst:'1234', status:DispatchStatus.FAILED) }
 }

@@ -124,8 +124,8 @@ class ConnectionController {
 			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
 			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
 		} else {
-			params.flashMessage = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
-			redirect(controller:'settings', action:"connections", params:params)
+			flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
+			redirect(controller:'connection', action:"list")
 		}
 	}
 	

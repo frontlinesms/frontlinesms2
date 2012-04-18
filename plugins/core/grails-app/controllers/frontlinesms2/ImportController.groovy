@@ -80,6 +80,9 @@ class ImportController {
 		if(uploadedCSVFile) {
 			def headers
 			def standardFields = ['Message Content':'text', 'Sender Number':'src']
+			def dispatchStatuses = ['Failed':DispatchStatus.FAILED,
+					'Pending':DispatchStatus.PENDING,
+					'Outbox':DispatchStatus.SENT]
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
 				if(!headers) headers = tokens 
 				else try {
@@ -96,16 +99,7 @@ class ImportController {
 						} else if(key == 'Message Type') {
 							fm.inbound = (value == 'Received')
 						} else if(key == 'Message Status') {
-							if(value in ['Failed', 'Pending', 'Outbox']) {
-								fm.hasFailed = true
-								dispatchStatus = DispatchStatus.FAILED
-							} else if(value == 'Pending') {
-								fm.hasPending = true
-								dispatchStatus = DispatchStatus.PENDING
-							} else if(value == 'Sent'){
-								fm.hasSent = true
-								dispatchStatus = DispatchStatus.SENT
-							}
+							dispatchStatus = dispatchStatuses[value]
 						}
 					}
 					if (fm.inbound) fm.dispatches = []

@@ -5,12 +5,11 @@ class Keyword {
 	static belongsTo = [activity: Activity]
 	
 	static constraints = {
-		value(blank:true, nullable:false, maxSize:255, validator: { val, me ->
-			
+		value(blank:true, maxSize:255, validator: { val, me ->
 			if(val.find(/\s/)) return false
+			if(val != val.toUpperCase()) return false
 			if(me.activity?.archived) return true
-			def found = Keyword.findAllByValue(val.toUpperCase())
-			println "Found: $found"
+			def found = Keyword.findAllByValue(val)
 			if(!found || found==[me]) return true
 			else if (found.any { it != me && !it.activity?.archived }) return false
 			else return true
