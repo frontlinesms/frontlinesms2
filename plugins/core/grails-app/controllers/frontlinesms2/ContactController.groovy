@@ -19,15 +19,14 @@ class ContactController {
 		redirect action: "show", params:params
 	}
 	
-	def show = { contactInstance ->
+	def show = {
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
-		if (!contactInstance)
-			contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		def contactFieldInstanceList = contactInstance?.customFields ?: []
 		[pageTitle: getPageTitle(),

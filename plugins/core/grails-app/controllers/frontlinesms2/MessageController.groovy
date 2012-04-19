@@ -9,7 +9,7 @@ class MessageController {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
-	boolean isViewingArchive = { params.controller=='archive' ? true : false }
+	boolean isViewingArchive() { params.controller=='archive' ? true : false }
 
 	def bobInterceptor = {
 		params.sort = params.sort ?: 'date'
@@ -42,7 +42,7 @@ class MessageController {
 			render ""
 	}
 	
-	def getShowModel(messageInstanceList) {
+	private def getShowModel(messageInstanceList) {
 		def messageInstance = (params.messageId) ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -53,15 +53,15 @@ class MessageController {
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
 				checkedMessageList: selectedMessageList,
-				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
-				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(this.viewingArchive, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(this.viewingArchive, false),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages(),
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.inbox(params.starred, viewingArchive)
+		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
 					model:[messageInstanceList: messageInstanceList.list(params),
 							messageSection: 'inbox',
@@ -69,7 +69,7 @@ class MessageController {
 	}
 
 	def sent = {
-		def messageInstanceList = Fmessage.sent(params.starred, viewingArchive)
+		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
 		render view:'../message/standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
@@ -101,7 +101,7 @@ class MessageController {
 		if(params.starred) {
 			messageInstanceList = Fmessage.deleted(params.starred)
 		} else {
-			trashInstanceList =  Trash.list(params)
+			trashInstanceList = Trash.list(params)
 		}
 		render view:'standard', model:[trashInstanceList:trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
@@ -128,7 +128,7 @@ class MessageController {
 						messageSection: 'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
 						ownerInstance: activityInstance,
-						viewingMessages: viewingArchive ? params.viewingMessages : null,
+						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
 						pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
 						sentMessageCount: sentMessageCount,
 						sentDispatchCount: sentDispatchCount] << getShowModel()
@@ -147,7 +147,7 @@ class MessageController {
 						messageSection: 'folder',
 						messageInstanceTotal: messageInstanceList.count(),
 						ownerInstance: folderInstance,
-						viewingMessages: viewingArchive ? params.viewingMessages : null] << getShowModel()
+						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
 		} else {
 			flash.message = "Folder could not be found"
 			redirect(action: 'inbox')
