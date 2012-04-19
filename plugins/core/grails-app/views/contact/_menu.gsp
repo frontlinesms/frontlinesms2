@@ -38,7 +38,7 @@
 					</li>
 				</g:each>
 				<li class='create' id="create-smart-group">
-					<g:remoteLink class="create btn" controller="smartGroup" action="create" onSuccess="launchMediumPopup('Create smart group', data, 'Create', createSmartGroup);">
+					<g:remoteLink class="create btn" controller="smartGroup" action="create" onSuccess="launchMediumPopup(i18n('popup.smartgroup.create'), data, 'Create', createSmartGroup);">
 						<g:message code="contact.create.smartgroup" />
 					</g:remoteLink>
 				</li>

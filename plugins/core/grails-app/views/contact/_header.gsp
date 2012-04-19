@@ -26,7 +26,7 @@
 			</li>
 		</ul>
 	</g:if>
-	<g:else>${g.message(code:'contact.new')}
+	<g:else>
 		<h3 id="all-contacts-title">${contactInstance?.name ?: contactInstance?.mobile ?: g.message(code:'contact.new')}</h3>
 		<ul class="header-buttons">
 			<li>

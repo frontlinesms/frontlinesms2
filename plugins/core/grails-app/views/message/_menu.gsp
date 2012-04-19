@@ -27,7 +27,7 @@
 					</li>
 				</g:each>
 				<li id="create-activity" class="create">
-					<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup('Create New Activity : Select type', data, 'Next', chooseActivity);" ><g:message code="activities.create" /></g:remoteLink>
+					<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onSuccess="launchMediumPopup(i18n('popup.activity.create'), data, 'Next', chooseActivity);" ><g:message code="activities.create" /></g:remoteLink>
 				</li>
 			</ul>
 		</li>

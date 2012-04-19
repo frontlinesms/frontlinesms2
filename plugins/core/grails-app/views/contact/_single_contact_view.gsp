@@ -10,7 +10,7 @@
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
-			<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
+			<a id="btn_delete" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
 				<g:message code="contact.delete" />
 			</a>
 		</g:if>
