@@ -23,7 +23,7 @@
 					</li>
 				</g:each>
 				<li class='create' id="create-group">
-					<g:remoteLink class="btn create" controller="group" action="create" onSuccess="launchSmallPopup(<g:message code='smallpopup.group.title' />, data, 'Create');">
+					<g:remoteLink class="btn create" controller="group" action="create" onSuccess="launchSmallPopup(i18n('smallpopup.group.title'), data, 'Create');">
 						<g:message code="contact.create.group" />
 					</g:remoteLink>
 				</li>
