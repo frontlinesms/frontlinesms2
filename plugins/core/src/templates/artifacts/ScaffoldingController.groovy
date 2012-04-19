@@ -1,6 +1,3 @@
 @artifact.package@class @artifact.name@ {
-
-    def serviceMethod() {
-
-    }
+    static scaffold = true
 }
