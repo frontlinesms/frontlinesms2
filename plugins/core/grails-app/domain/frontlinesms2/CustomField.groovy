@@ -4,10 +4,14 @@ class CustomField {
 	String name
 	String value
 	static belongsTo = [contact:Contact, smartGroup:SmartGroup]
+
+	static mapping = {
+		sort id:'asc'
+	}
 	
 	static constraints = {
-		name(unique: false, nullable: false, blank: false, maxSize: 255)
-		value(unique: false, nullable: true, blank: true, maxSize: 255)
+		name(blank:false, maxSize:255)
+		value(maxSize:255)
 		contact(nullable:true)
 		smartGroup(nullable:true)
 	}
@@ -15,12 +19,13 @@ class CustomField {
 	static def getAllUniquelyNamed() {
 		CustomField.createCriteria().list {
 			projections {
-				distinct('name')
+				distinct 'name'
 			}
 		}
 	}
 	
 	static def getAllContactsWithCustomField(customFields) {
+		// TODO should be able to replace this with criteria and projections
 		def matchingString = ''
 		customFields.each { name, value -> 
 			// FIXME this query should use named variables instead of inserting values directly into the HQL

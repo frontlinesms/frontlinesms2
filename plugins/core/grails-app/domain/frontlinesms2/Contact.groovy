@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class Contact {
+//> PROPERTIES
 	String name
 	String mobile
 	String email
@@ -21,11 +22,12 @@ class Contact {
 	}
 
 	static mapping = {
-		sort: 'name'
+		sort name:'asc'
 		customFields cascade: 'all'
 		customFields sort: 'name','value'
 	}
 
+//> EVENT METHODS
 	def beforeInsert = {
 		stripNumberFields()
 	}
@@ -77,6 +79,7 @@ class Contact {
 		}
 	}
 	
+//> ACCESSORS
 	def getGroups() {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
 	}
@@ -120,6 +123,7 @@ class Contact {
 		mobile = n
 	}
 	
+//> HELPER METHODS
 	private def removeFmessageDisplayName() {
 		if(mobile) {
 			Fmessage.withNewSession { session ->

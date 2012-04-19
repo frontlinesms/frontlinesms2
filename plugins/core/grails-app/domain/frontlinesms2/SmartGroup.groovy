@@ -82,7 +82,7 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 		}
 		
 		def where = w.join(' AND ')
-		return [where:"FROM Contact AS c WHERE $where", params:p]
+		return [where:"FROM Contact AS c WHERE $where ORDER BY name ASC", params:p]
 	}
 
 	static def getMembersByNameIlike(id, String searchString, Map pageParams) {
