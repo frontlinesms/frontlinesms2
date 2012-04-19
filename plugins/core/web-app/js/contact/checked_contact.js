@@ -51,7 +51,7 @@ function loadSingleContact(contactId) {
 }
 
 function loadMultipleContacts(count) {
-	$('#contact-count').html("<p> " + count + " contacts selected</p>");
+	$('#contact-count').html("<p> " + count + i18n("contact.selected.many") +" </p>");
 	
 	if($('div.multiple-contact').is(':hidden')) {
 		$('.multiple-contact').show();

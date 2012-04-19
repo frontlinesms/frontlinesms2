@@ -5,6 +5,7 @@
 		<g:layoutHead />
 		<r:require module="archive"/>
 		<g:render template="/includes" plugin="core"/>
+		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, smallpopup.empty.trash.prompt"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();

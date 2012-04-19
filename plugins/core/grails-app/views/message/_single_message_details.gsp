@@ -6,7 +6,7 @@
 			<p id="message-detail-sender">
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-						<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup('Recipients', data, 'Done', cancel);">
+						<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup(<g:message code='smallpopup.recipients.title' />, data, 'Done', cancel);">
 							${messageInstance.displayName}
 						</g:remoteLink>
 					</g:if>

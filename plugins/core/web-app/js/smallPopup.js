@@ -6,7 +6,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 			width: 315,
 			maxHeight: 300,
 			title: title,
-			buttons: [{ text:"Cancel", click: cancel, id:"cancel" },
+			buttons: [{ text:i18n("smallpopup.cancel"), click: cancel, id:"cancel" },
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
 			close: function() { $(this).remove(); }
 	});
@@ -16,11 +16,11 @@ function launchConfirmationPopup(title) {
 	var contactList = $("#checkedContactList");
 	if (contactList.val() == ',') {
 		var contactIdList = $("#contactId").val();
-		var message = "Delete " + $('#name').val() + "?";
+		var message = i18n("smallpopup.delete.prompt", $('#name').val());
 	} else {
 		var contactIdList = contactList.val();
 		var count = contactList.val().split(",").length - 2;
-		var message = "Delete " + count + " contacts?"
+		var message = i18n("smallpopup.delete.many.prompt", count)
 	}
 	
 	$.ajax({
@@ -36,7 +36,7 @@ function launchEmptyTrashConfirmation() {
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/confirmEmptyTrash',
-		success: function(data, textStatus){ launchSmallPopup('Empty Trash?', data, "Ok"); }
+		success: function(data, textStatus){ launchSmallPopup(i18n("smallpopup.empty.trash.prompt"), data, "Ok"); }
 	});
 }
 
