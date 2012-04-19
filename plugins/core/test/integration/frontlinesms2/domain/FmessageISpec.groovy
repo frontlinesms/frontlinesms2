@@ -28,8 +28,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'get deleted messages gets all messages with deleted flag'() {
 		setup:
-			3.times { Fmessage.build(isDeleted:true).save(flush:true, failOnError:true) }
-			2.times { Fmessage.build().save(flush:true, failOnError:true) }
+			3.times { Fmessage.build(isDeleted:true) }
+			2.times { Fmessage.build() }
 		when:
 			def deletedMessages = Fmessage.deleted(false)
 		then:
@@ -50,9 +50,9 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "countUnreadMessages returns unread messages count"() {
 		setup:
-			Fmessage.build(read:true).save(flush:true, failOnError:true)
-			Fmessage.build().save(flush:true, failOnError:true)
-			Fmessage.build(archived:true).save(flush:true, failOnError:true)
+			Fmessage.build(read:true)
+			Fmessage.build()
+			Fmessage.build(archived:true)
 		when:
 			def unreadMessageCount = Fmessage.countUnreadMessages()
 		then:
@@ -115,16 +115,12 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			
 			(TEST_DATE-6..TEST_DATE+5).each { date ->
 				Fmessage.build(date:date, src:jessy.mobile)
-						.save(failOnError:true, flush:true)
 				buildWithDispatches( 
 						// this dispatch should be counted because Jessy is in the target group
 						new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
 			}
 			
-			3.times {
-				Fmessage.build(date:TEST_DATE-1, src:jessy.mobile)
-						.save(failOnError:true, flush:true)
-			}
+			3.times { Fmessage.build(date:TEST_DATE-1, src:jessy.mobile) }
 			
 			5.times {
 				buildWithDispatches(
@@ -160,7 +156,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def "cannot archive a message that has an owner without also archiving the owner" () {
 		setup:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = Fmessage.build().save(failOnError:true)
+			def m = Fmessage.build()
 			f.addToMessages(m)
 			f.save()
 		when:
@@ -171,7 +167,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "when a new contact is created, all messages with that contacts mobile number should be updated"() {
 		when:
-			def message = Fmessage.build(src:'1').save(flush:true, failOnError:true)
+			def message = Fmessage.build(src:'1')
 		then:
 			message.displayName == '1'
 			!message.contactExists
@@ -186,7 +182,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
 			def alice = new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
-			def message = Fmessage.build(src:'1').save(failOnError:true, flush:true)
+			def message = Fmessage.build(src:'1')
 		then:
 			message.displayName == 'Alice'
 			message.contactExists
@@ -283,6 +279,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	private Fmessage buildOutgoing(params) {
 		def m = buildWithDispatches(params.dispatches)
 		if(params.containsKey('deleted')) m.isDeleted = params.deleted
+		if(params.text) m.text = params.text
 		return m
 	}
 
@@ -292,7 +289,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		buildWithDispatches(dispatch())
 		buildWithDispatches(dispatch(), dispatch())
 		buildOutgoing(deleted:true, dispatches:dispatch())
-		buildWithDispatches(dispatch())
+		buildOutgoing(text:'This msg will not show up in inbox view', dispatches:dispatch())
 		buildWithDispatches(failedDispatch())
 		buildWithDispatches(pendingDispatch())
 	}

@@ -9,8 +9,8 @@
 		<ul id="groups">
 			<g:each in="${groupList}" var="entry">
 				<li class="group">
-					<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", ${entry.value as JSON})'>
-					${entry.key}(${entry.value.size()})
+					<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", "${entry.value.name}", ${entry.value.addresses as JSON})'>
+					${entry.value.name}(${entry.value.addresses.size()})
 				</li>
 			</g:each>
 			<g:each in="${nonExistingRecipients}" var="address">
@@ -39,10 +39,10 @@
 
 <script>
 	var groupAndMembers = {}
-	function selectMembers(groupName, allContacts) {
-		groupAndMembers[groupName] = allContacts
+	function selectMembers(groupIdString, groupName, allContacts) {
+		groupAndMembers[groupIdString] = allContacts
 		$.each(allContacts, function(index, contact) {
-			setValueForCheckBox(contact, isCheckboxSelected(groupName));
+			setValueForCheckBox(contact, isCheckboxSelected(groupIdString));
 		});
 		
 		$.each(getSelectedGroupElements('groups'), function(index, groupInputElement) {
