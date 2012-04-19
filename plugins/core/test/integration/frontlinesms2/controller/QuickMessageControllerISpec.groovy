@@ -27,8 +27,6 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 		when:
 			def model = controller.create()
 		then:
-			model.groupList["smartgroup-$s.id"] == [name:"English numbers", addresses:[]]
-			model.groupList["smartgroup-$s.id"].name == s.name
-			model.groupList["smartgroup-$s.id"].addresses == []			
+			model.groupList["smartgroup-$s.id"] == [name:"English numbers", addresses:[]]			
 	}
 }
