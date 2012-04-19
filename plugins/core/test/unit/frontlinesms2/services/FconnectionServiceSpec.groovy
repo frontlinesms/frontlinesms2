@@ -56,16 +56,16 @@ class FconnectionServiceSpec extends UnitSpec {
 		expect:
 			service.getRouteStatus(c) == expectedStatus
 		where:
-			id | routeNames                 | expectedStatus
-			1  | []                         | RouteStatus.NOT_CONNECTED
-			1  | ['in-2', 'out-3']          | RouteStatus.NOT_CONNECTED
-			1  | ['in-1']                   | RouteStatus.CONNECTED
-			1  | ['out-1']                  | RouteStatus.CONNECTED
-			1  | ['in-1', 'out-1']          | RouteStatus.CONNECTED
-			1  | ['in-1', 'out-internet-1'] | RouteStatus.CONNECTED
-			1  | ['in-1', 'out-modem-1']    | RouteStatus.CONNECTED
-			1  | ['out-internet-1']         | RouteStatus.CONNECTED
-			1  | ['out-modem-1']            | RouteStatus.CONNECTED
+			id | routeNames | expectedStatus
+			1 | [] | RouteStatus.NOT_CONNECTED
+			1 | ['in-2', 'out-3'] | RouteStatus.NOT_CONNECTED
+			1 | ['in-1'] | RouteStatus.CONNECTED
+			1 | ['out-1'] | RouteStatus.CONNECTED
+			1 | ['in-1', 'out-1'] | RouteStatus.CONNECTED
+			1 | ['in-1', 'out-internet-1'] | RouteStatus.CONNECTED
+			1 | ['in-1', 'out-modem-1'] | RouteStatus.CONNECTED
+			1 | ['out-internet-1'] | RouteStatus.CONNECTED
+			1 | ['out-modem-1'] | RouteStatus.CONNECTED
 	}
 
 	def 'creating a SMSLib route should stop detection on the corresponding port'() {
@@ -114,18 +114,15 @@ class FconnectionServiceSpec extends UnitSpec {
 		expect:
 			!service.handleDisconnection(exchange) // real test is in the assert above
 		where:
-			routeId          | connectionId
-			"out-1"          | 1
+			routeId | connectionId
+			"out-1" | 1
 			"out-internet-2" | 2
-			"out-modem-3"    | 6
+			"out-modem-3" | 6
 	}
 
 	@Unroll
 	def 'destroyRoutes should stop and remove all relevant routes'() {
 		given:
-			registerMetaClass List
-			MetaClassModifiers.addMethodsToCollection()
-
 			context.routes >> (relatedRoutes + unrelatedRoutes).collect { [id:it] }
 		when:
 			service.destroyRoutes(1)
@@ -133,14 +130,13 @@ class FconnectionServiceSpec extends UnitSpec {
 			relatedRoutes.size() * context.stopRoute(_)
 			relatedRoutes.size() * context.removeRoute(_)
 		where:
-			relatedRoutes      | unrelatedRoutes
-			['in-1']           | []
-			['out-1']          | []
-			['in-1', 'out-1']  | []
-			['in-1', 'out-1']  | ['in-2', 'out-3']
-			['out-modem-1']    | ['in-2', 'out-modem-3']
+			relatedRoutes | unrelatedRoutes
+			['in-1'] | []
+			['out-1'] | []
+			['in-1', 'out-1'] | []
+			['in-1', 'out-1'] | ['in-2', 'out-3']
+			['out-modem-1'] | ['in-2', 'out-modem-3']
 			['out-internet-1'] | ['in-2', 'out-modem-3']
 			['out-internet-1'] | ['in-2', 'out-internet-3']
 	}
 }
-

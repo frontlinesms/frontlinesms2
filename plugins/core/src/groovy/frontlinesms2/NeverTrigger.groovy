@@ -5,7 +5,7 @@ import org.quartz.*
 // Quartz trigger which should never trigger.
 // This is to allow for self-trigger-only jobs - couldn't
 // figure out how to do this in the Quartz plugin.
-class NeverTrigger extends Trigger {
+class NeverTrigger /*extends Trigger*/ {
 	private static final Date START_OF_TIME = new Date(0L)
 	private static final Date END_OF_TIME = new Date(Long.MAX_VALUE)
 	

@@ -9,7 +9,7 @@ class MessageController {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
-	boolean viewingArchive = params.controller=='archive' ? true : false
+	boolean isViewingArchive = { params.controller=='archive' ? true : false }
 
 	def bobInterceptor = {
 		params.sort = params.sort ?: 'date'

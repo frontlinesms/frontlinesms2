@@ -1,13 +1,15 @@
 package frontlinesms2
+
+import grails.test.mixin.*
 import spock.lang.*
 
-class AutoreplySpec extends grails.plugin.spock.UnitSpec {
+@TestFor(Autoreply)
+@Mock([MessageOwner, Activity, Keyword])
+class AutoreplySpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	
 	@Unroll
 	def "Test constraints"() {
-		given:
-			mockForConstraintsTests(Autoreply)
 		when:
 			def keyword = addKeyword? new Keyword(): null
 			def autoreply = new Autoreply(name:name, autoreplyText:replyText, keyword:keyword)

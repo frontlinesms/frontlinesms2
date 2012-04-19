@@ -7,24 +7,31 @@ grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.dependency.resolution = {
+    def gebVersion = '0.6.3'
+
     // inherit Grails' default dependencies
     inherits("global") {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
-        grailsPlugins()
+
         grailsHome()
+        grailsPlugins()
+
+        mavenLocal()
+
         grailsCentral()
+
+	mavenRepo 'http://dev.frontlinesms.com/m2repo/'
         mavenCentral()
 
         // uncomment these to enable remote dependency resolution from public Maven repositories
         //mavenCentral()
-        //mavenLocal()
         //mavenRepo "http://snapshots.repository.codehaus.org"
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -34,6 +41,28 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
+	def seleniumVersion = '2.18.0'
+	def camel = {
+		def camelVersion = "2.9.0"
+		"org.apache.camel:camel-$it:$camelVersion"
+	}
+
+	// TEST
+	test camel('test')
+	test "org.codehaus.geb:geb-spock:$gebVersion"
+	test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+	test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+
+	// TODO this should be included in compile for TEST and DEV scopes, and excluded for PRODUCTION
+	compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
+
+	// COMPILE
+	compile 'net.frontlinesms.core:camel-smslib:0.0.4-SNAPSHOT'
+	['mail', 'http'].each { compile camel(it) }
+	compile 'net.frontlinesms.core:serial:1.0.1'
+	compile 'net.frontlinesms.core:at-modem-detector:0.2'
+	runtime 'org.rxtx:rxtx:2.1.7'
+	runtime 'javax.comm:comm:2.0.3'
     }
 
     plugins {
@@ -50,7 +79,8 @@ grails.project.dependency.resolution = {
 	test ":code-coverage:1.2.5"
 	test ":codenarc:0.16.1"
 	test ":spock:0.6"
-	test ":geb:0.6.3"
+	test ":geb:$gebVersion"
+
 	test ":build-test-data:2.0.2"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
