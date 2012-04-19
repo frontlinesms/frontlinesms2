@@ -8,7 +8,6 @@
 	refresh_rate = ${params.rRate ?: 30000}
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 
-	var i18nStrings = {};
 	function i18n(key) {
 		var translated = i18nStrings[key];
 		for(i=arguments.length-1; i>0; --i) {

@@ -5,8 +5,11 @@ class FsmsTagLib {
 
 	def i18n = { att ->
 		out << '<script type="text/javascript">'
+		out << "	var i18nStrings = {};\n"
 		att.keys.tokenize(',')*.trim().each {
-			out << "	i18nStrings['$it'] = '${g.message(code:it)}';\n"
+			def propVal = g.message(code:it)
+			propVal = propVal.replaceAll("\\'", "\\\\'")
+			out << "	i18nStrings['$it'] = '${propVal}';\n"
 		}
 		out << '</script>'
 	}

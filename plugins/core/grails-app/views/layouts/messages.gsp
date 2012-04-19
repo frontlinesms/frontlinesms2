@@ -6,6 +6,7 @@
 		<r:require module="messages"/>
 		<r:require module="newMessagesCount"/>
 		<g:render template="/includes" plugin="core"/>
+		<fsms:i18n keys="poll.reply.text, poll.reply.text1, poll.reply.text2, poll.reply.text3, autoreply.blank.keyword, poll.send.messages.none, autoreply.text.none"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();

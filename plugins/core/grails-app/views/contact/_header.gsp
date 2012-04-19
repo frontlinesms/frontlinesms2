@@ -26,8 +26,8 @@
 			</li>
 		</ul>
 	</g:if>
-	<g:else>
-		<h3 id="all-contacts-title">${contactInstance?.name ?: contactInstance?.mobile ?: 'New Contact'}</h3>
+	<g:else>${g.message(code:'contact.new')}
+		<h3 id="all-contacts-title">${contactInstance?.name ?: contactInstance?.mobile ?: g.message(code:'contact.new')}</h3>
 		<ul class="header-buttons">
 			<li>
 				<g:remoteLink class="btn" controller="export" action="contactWizard" onSuccess="launchSmallPopup('Export', data, 'Export')"><g:message code="contact.export" /></g:remoteLink>
