@@ -8,7 +8,6 @@ import spock.lang.*
 class ConnectionControllerSpec extends Specification {
 	def "test that createRoute actually calls FconnectionService"() {
 		setup:
-			ConnectionController.metaClass.message { LinkedHashMap map-> map }
 			def routesTriggered = []
 			CreateRouteJob.metaClass.static.triggerNow = { LinkedHashMap map -> routesTriggered << map.connectionId }
 			[new Fconnection(), new Fconnection()]*.save()
