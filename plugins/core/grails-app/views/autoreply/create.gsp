@@ -52,7 +52,7 @@
 		}
 		else{
 			var autoreplyText = $('#autoreplyText').val();
-			$("#keyword-confirm").html('<p>' + "Blank keyword. A response will be sent to all incoming messages"  + '</p>');
+			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
 		
