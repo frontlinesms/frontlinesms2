@@ -13,17 +13,17 @@ var groupActions = {
 			url: url_root + getContactSection() +'/rename',
 			data: {groupId: $("#groupId").val()},
 			success: function(data){
-				launchSmallPopup('Rename group', data, 'Rename');
+				launchSmallPopup(i18n("smallpopup.group.rename.title"), data, 'Rename');
 		}})
 	},
-	
+
 	"edit": function() {
 		$.ajax({
 			type:'GET',
 			url: url_root + getContactSection() + '/edit',
 			data: {id: $("#groupId").val()},
 			success: function(data) {
-				launchMediumPopup('Edit group', data, 'Edit', submit);
+				launchMediumPopup(i18n("smallpopup.group.edit.title"), data, 'Edit', submit);
 		}})
 	},
 	
@@ -33,7 +33,7 @@ var groupActions = {
 			url: url_root + getContactSection() + '/confirmDelete',
 			data: {groupId: $("#groupId").val()},
 			success: function(data){
-				launchSmallPopup('Delete group', data, 'Ok');
+				launchSmallPopup(i18n("smallpopup.group.delete.title"), data, 'Ok');
 		}})
 	}
 }

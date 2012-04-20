@@ -3,9 +3,9 @@
 <g:javascript>
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
-	controller = "${params?.controller}"
-	action = "${params?.action}"
-	refresh_rate = ${params.rRate ?: 30000}
+	controller = "${params?.controller}";
+	action = "${params?.action}";
+	refresh_rate = ${params.rRate ?: 30000};
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 
 	var i18nStrings = {};
@@ -17,6 +17,7 @@
 		return translated;
 	}
 </g:javascript>
+
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
 	<g:javascript>
 		$(function() {

@@ -30,7 +30,7 @@ class Group {
 	}
 
 	static HashMap<String, List<String>> getGroupDetails() {
-		Group.list().collectEntries { ["group-$it.id", it.addresses] }
+		Group.list().collectEntries { ["group-$it.id", [name:it.name,addresses:it.addresses]] }
 	}
 
 	static Set<Contact> findAllWithoutMember(Contact c) {

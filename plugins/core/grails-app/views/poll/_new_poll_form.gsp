@@ -1,4 +1,4 @@
-<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="launchMediumPopup('Poll ${activityInstanceToEdit ? 'updated': 'created'}!', data, 'OK', summaryRedirect)">
+<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, 'Poll')">
 	<g:render template="../poll/question" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 	<g:render template="../poll/responses" plugin="core"/>
 	<g:render template="../poll/sorting" plugin="core"/>

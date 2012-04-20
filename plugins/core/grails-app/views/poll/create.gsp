@@ -118,7 +118,7 @@
 
 	function updateConfirmationMessage() {
 		updateMessageDetails();
-		$("#auto-reply-read-only-text").html($("#autoreplyText").val().trim() ? $("#autoreplyText").val() : "None")
+		$("#auto-reply-read-only-text").html($("#autoreplyText").val().trim() ? $("#autoreplyText").val() : i18n("autoreply.text.none"))
 		// update auto-sort
 		var autoSort = $("input[name='enableKeyword']:checked").val();
 		var autoSortMessages = $('#auto-sort-confirm p');
@@ -135,7 +135,7 @@
 	
 	function updateMessageDetails() {
 		var sendMessage
-		isGroupChecked("dontSendMessage") ?	sendMessage = "No messages will be sent" : sendMessage = $('#messageText').val();
+		isGroupChecked("dontSendMessage") ?	sendMessage = i18n("poll.send.messages.none") : sendMessage = $('#messageText').val();
 
 		var contactNo = $("#contacts-count").text()
 		
@@ -173,11 +173,5 @@
 
 	function validatePollResponses() {
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
-	}
-	
-	function summaryRedirect() {
-		var ownerId = $(".summary #ownerId").val();
-		$(this).dialog('close');
-		window.location.replace(url_root + "message/activity/" + ownerId);
 	}
 </g:javascript>

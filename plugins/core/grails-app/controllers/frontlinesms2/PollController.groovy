@@ -19,18 +19,26 @@ class PollController extends ActivityController {
 		poll.question = params.question ?: poll.question
 		poll.sentMessageText = params.messageText ?: poll.sentMessageText
 		poll.editResponses(params)
-		poll.save(flush: true, failOnError: true)
-		if(!params.dontSendMessage) {
-			def message = messageSendService.createOutgoingMessage(params)
-			poll.addToMessages(message)
-			messageSendService.send(message)
-			poll.save()
-			flash.message = "Poll has been saved and message(s) has been queued to send"
+		if (poll.save(flush: true)) {
+			if(!params.dontSendMessage) {
+				def message = messageSendService.createOutgoingMessage(params)
+				poll.addToMessages(message)
+				messageSendService.send(message)
+			}
+			if (poll.save()) {
+				if (!params.dontSendMessage)
+					flash.message = "Poll has been saved and message(s) has been queued to send"
+				else
+					flash.message = "Poll has been saved"
+				[ownerId: poll.id]
+			} else {
+				flash.message = "Poll could not be saved!"
+				render(text: flash.message)
+			}
 		} else {
-			poll.save()
-			flash.message = "Poll has been saved"
+			flash.message = "Poll could not be saved!"
+			render(text: flash.message)
 		}
-		[ownerId: poll.id]
 	}
 	
 	def sendReply = {

@@ -31,6 +31,8 @@ class CoreUrlMappings {
 		"/folder/save"(controller:'folder', action:'save')
 		"/announcement/create"(controller:'announcement', action: 'create')
 		"/announcement/save"(controller:'announcement', action: 'save')
+		"/autoreply/create"(controller:'autoreply', action: 'create')
+		"/autoreply/save"(controller:'autoreply', action: 'save')
 		
 		"/archive/inbox/show/$messageId"(controller:'archive', action:'inbox') {}
 		"/archive/sent/show/$messageId"(controller:'archive', action:'sent') {}

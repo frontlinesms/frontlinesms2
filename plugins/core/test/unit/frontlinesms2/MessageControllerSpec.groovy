@@ -2,10 +2,13 @@ package frontlinesms2
 
 import grails.plugin.spock.*
 
+import static frontlinesms2.DispatchStatus.*
+
 class MessageControllerSpec extends ControllerSpec {
 	MessageSendService mockMessageSendService
 
 	def setup() {
+		registerMetaClass MessageController
 		controller.metaClass.message = { Map args -> args.code }
 		controller.metaClass.getPaginationCount = { -> 10 }
 		mockDomain Contact
@@ -35,28 +38,28 @@ class MessageControllerSpec extends ControllerSpec {
 	def "should resend multiple failed message"() {
 		setup:
 			mockDomain(Fmessage,
-					[new Fmessage(id: 1L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)]),
-				new Fmessage(id: 2L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)]),
-				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch(dst:"234", status: DispatchStatus.FAILED)])])
+					[new Fmessage(id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
+				new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
+				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])])
 			mockParams.checkedMessageList = (", 1, 2,")
 		when:
 			controller.retry()
 		then:
-			1 * mockMessageSendService.retry {it.id == 1L}
-			1 * mockMessageSendService.retry {it.id == 2L}
+			1 * mockMessageSendService.retry { it.id == 1L }
+			1 * mockMessageSendService.retry { it.id == 2L }
 	}
 
 	def "should resend a single failed message"() {
 		setup:
 			mockDomain(Fmessage,
-					[new Fmessage(id: 1L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()]),
-				new Fmessage(id: 2L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()]),
-				new Fmessage(id: 3L, date: new Date(), inbound: false, hasFailed: true, dispatches: [new Dispatch()])])
+					[new Fmessage(id:1L, inbound:false, dispatches:[new Dispatch()]),
+				new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch()]),
+				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch()])])
 			mockParams.messageId = "1"
 		when:
 			controller.retry()
 		then:
-			1 * mockMessageSendService.retry {it.id == 1L}
+			1 * mockMessageSendService.retry { it.id == 1L }
 	}
 	
 	def 'emptyTrash should call trashService_emptyTrash'() {

@@ -7,7 +7,7 @@ class Activity extends MessageOwner {
 	static transients = ['liveMessageCount']
 
 	static constraints = {
-		name(blank: false, nullable: false)
+		name(blank: false, nullable: false, unique: true)
 		sentMessageText(nullable:true)
 	}
 	

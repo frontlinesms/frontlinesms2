@@ -26,7 +26,7 @@ class QuickMessageControllerSpec extends ControllerSpec {
 			result['contactList'] == [jim]
 			result['recipients'] == address
 			result['nonExistingRecipients'] == address
-			result['groupList']["group-$mohave.id"] == [jim.mobile]
+			result['groupList']["group-$mohave.id"] == [name:mohave.name ,addresses:[jim.mobile]]
 	}
 
 	def 'create returns the contact, group list even if address comes as a string'() {

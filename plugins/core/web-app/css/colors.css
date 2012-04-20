@@ -1,5 +1,5 @@
 #header{
-    border-top: 3px solid #d8aec6;
+   	border-top: 3px solid #d8aec6;
 }
 
 #logo {
@@ -9,39 +9,39 @@
 }
 
 .selected{	
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 
 #secondary-nav a{
-    border-top: 3px solid #d8aec6;
+   	border-top: 3px solid #d8aec6;
 }
 #secondary-nav a:hover{
 	border-top: 3px solid #ca2d92;
 }
 #secondary-nav .selected a{
-   border-top: 3px solid #ca2d92;
+  	border-top: 3px solid #ca2d92;
 }
 
 #notifications div{
 	background-color: rgba(192, 50, 131, 0.4);
 }
 #sidebar .sublist li:hover{
-    background-color: #e5eff3;
+   	background-color: #e5eff3;
 }
 #sidebar .sublist li:active{
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 #sidebar .sublist li.create:hover{
-    background-color: white;
+  	 background-color: white;
 }
 #sidebar .sublist a:hover{
-    background-color: #e5eff3;
+   	background-color: #e5eff3;
 }
 #sidebar .sublist a:active{
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 #sidebar .sublist a.create:hover{
-    background-color: white;
+   	background-color: white;
 }
 
 #inbox-indicator{
@@ -65,36 +65,36 @@
 }
 
 .section-header .activity-title{
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 
 #message-list .message-preview:hover, #folder-list .folder-list-item:hover, #activity-list .activity-list-item:hover{
-    background-color: #e5eff3;
+   	background-color: #e5eff3;
 }
 #message-list .message-preview:active, #folder-list .folder-list-item:active, #activity-list .activity-list-item:active{
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 
 #message-detail{
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 
 .tall-header #message-list-header {
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 #poll-details{
-    background-color: #D8E8EF;
+   	background-color: #D8E8EF;
 }
 #pollGraph{
 	background-color: #D8E8EF;
 }
 
 #contact-editor{
-    background-color: #D8E8EF;
+  	background-color: #D8E8EF;
 }
 
 #contact-list li:hover{
-    background-color: #E0F0DE;
+   	background-color: #E0F0DE;
 }
 
 #dropdown_options:hover{

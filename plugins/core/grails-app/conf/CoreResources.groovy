@@ -7,6 +7,7 @@ modules = {
 		resource url: [plugin:'core', dir:'css', file:"buttons.css"]
 		resource url: [plugin:'core', dir:'css', file:"header.css"]
 		resource url: [plugin:'core', dir:'css', file:"print.css"]
+		resource url: [plugin:'core', dir:'js', file:"activity/popups.js"]
 		resource url: [plugin:'core', dir:'js', file:"mediumPopup.js"]
 		resource url: [plugin:'core', dir:'js', file:"smallPopup.js"]
 		resource url: [plugin:'core', dir:'js', file:"pagination.js"]
@@ -22,6 +23,10 @@ modules = {
 		resource url: [plugin:'core', dir:'js', file:"message/categorize_dropdown.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/move_dropdown.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/moreActions.js"]
+	}
+	
+	newMessagesCount {
+		dependsOn "jquery"
 		resource url: [plugin:'core', dir:'js', file:"message/check_for_new_messages.js"]
 	}
 	

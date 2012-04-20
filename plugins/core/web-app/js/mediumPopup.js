@@ -6,7 +6,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 			width: 675,
 			height: 500,
 			title: title,
-			buttons: [{ text:"Cancel", click: cancel, id:"cancel" }, { text:"Back", disabled: "true"},
+			buttons: [{ text:i18n("popup.cancel"), click: cancel, id:"cancel" }, { text:i18n("popup.back"), disabled: "true"},
 			          		{ text:btnFinishedText,  click: submitAction, id:"submit" }],
 			close: function() { $(this).remove(); }
 		}
@@ -25,10 +25,10 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 		width: width,
 		height: height,
 		buttons: [
-			{ text:"Cancel", click: cancel, id:"cancel" },
-			{ text:"Back", id:"disabledBack", disabled: true },
-			{ text:"Back", click: prevButton, id:"prevPage" },
-			{ text:"Next",  click: nextButton, id:"nextPage" },
+			{ text:i18n("wizard.cancel"), click: cancel, id:"cancel" },
+			{ text:i18n("wizard.back"), id:"disabledBack", disabled: true },
+			{ text:i18n("wizard.back"), click: prevButton, id:"prevPage" },
+			{ text:i18n("wizard.next"),  click: nextButton, id:"nextPage" },
 			{ text:btnFinishedText,  click: submit, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
@@ -198,21 +198,6 @@ $.widget("ui.contentWidget", {
 
     options: {validate: function() {return true;} }
 });
-			
-function chooseActivity() {
-	var activity = $("#new-activity-choices input[checked=checked]").val();
-	var activityUrl = activity + '/create';
-	var title = 'New ' + activity;
-
-	$(this).dialog('close');
-	$.ajax({
-		type:'GET',
-		dataType: "html",
-		url: url_root + activityUrl,
-		success: function(data, textStatus){ launchMediumWizard(title, data, "Create"); }
-	});
-	return;
-}
 
 function messageResponseClick(messageType) {
 	var configureTabs= "";

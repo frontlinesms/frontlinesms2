@@ -1,5 +1,5 @@
 <g:javascript src="characterSMS-count.js"/>
-
+<g:javascript src="activity/popups.js"/>
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="autoreply.validation.prompt" /></div>
 	<ol>
@@ -7,8 +7,7 @@
 		<li><a class="tabs-2" href="#tabs-2"><g:message code="autoreply.create.message" /></a></li>
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm" /></a></li>
 	</ol>
-
-	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="launchMediumPopup('Autoreply created!', data, 'OK', summaryRedirect)">
+	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="checkForSuccessfulSave(data, 'Autoreply')">
 		<g:render template="../autoreply/keyword" plugin="core"/>
 		<g:render template="../autoreply/message" plugin="core"/>
 		<g:render template="../autoreply/confirm" plugin="core"/>
@@ -53,15 +52,9 @@
 		}
 		else{
 			var autoreplyText = $('#autoreplyText').val();
-			$("#keyword-confirm").html('<p>' + "Blank keyword. A response will be sent to all incoming messages"  + '</p>');
+			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
 		
-	}
-		
-	function summaryRedirect() {
-		var ownerId = $(".summary #ownerId").val();
-		$(this).dialog('close');
-		window.location.replace(url_root + "message/autoreply/" + ownerId);
 	}
 </g:javascript>

@@ -20,8 +20,8 @@ class PollControllerSpec extends ControllerSpec {
 			def resultMap = controller.create()
 		then:
 			resultMap['contactList']*.name == ["Alice", "Bob"]
-			resultMap['groupList']["group-$group1.id"].sort() == ["12345", "54321"]
-			resultMap['groupList']["group-$group2.id"] == ["54321"]
+			resultMap['groupList']["group-$group1.id"].sort() == [name:"group1",addresses:["12345", "54321"]]
+			resultMap['groupList']["group-$group2.id"] == [name:"group2",addresses:["54321"]]
 	}
 	
 	def "can unarchive a poll"() {

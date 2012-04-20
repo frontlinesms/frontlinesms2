@@ -9,7 +9,7 @@
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.confirm" /></a></li>
 	</ol>
 
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="launchMediumPopup('Announcement created!', data, 'OK', summaryRedirect)">
+	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, 'Announcement')">
 		<g:render template="message" plugin="core"/>
 		<div id="tabs-2">
 			<g:render template="../quickMessage/select_recipients" plugin="core" model= "['contactList' : contactList,
@@ -69,11 +69,5 @@
 			$("#no-recepients").addClass("hide")
 		}
 		$("#confirm-message-text").html('<p>' + sendMessage  + '</p>');
-	}
-		
-	function summaryRedirect() {
-		var ownerId = $(".summary #ownerId").val();
-		$(this).dialog('close');
-		window.location.replace(url_root + "message/announcement/" + ownerId);
 	}
 </g:javascript>
