@@ -29,7 +29,7 @@ class MessageController {
 		redirect(action:'inbox', params:params)
 	}
 	
-	def getNewMessageCount = {
+	def newMessageCount = {
 		def section = params.messageSection
 		if(!params.ownerId && section != 'trash') {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
