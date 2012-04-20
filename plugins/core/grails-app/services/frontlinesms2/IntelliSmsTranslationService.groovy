@@ -5,7 +5,7 @@ import org.apache.camel.Exchange
 
 class IntelliSmsTranslationService implements Processor {
 	static final String INTELLISMS_MESSAGING_ADDR = '@messaging.intellisoftware.co.uk'
-
+	static final String INTERNATIONAL_SYMBOL = '+'
 	static transactional = false
 
 	void process(Exchange exchange) {
@@ -14,20 +14,22 @@ class IntelliSmsTranslationService implements Processor {
 		println("in: ${i}")
 		if(isValidMessageSource(i.getHeader('From'))) {
 			Fmessage message = new Fmessage(inbound:true)
-			message.src = i.getHeader('From')
-			println("src: ${message.src}")
 			def emailBody = i.body
 			def emailSubject = i.getHeader('Subject')
-			println("emailBody: ${emailBody}")
-			println("emailSubject: ${emailSubject}")
+			def emailDate = i.getHeader('Date')
+			message.src = INTERNATIONAL_SYMBOL + emailSubject.split(" ")[2]
+			println("src: ${message.src}")
+			println "emailBody: $emailBody"
+			println "emailSubject: $emailSubject"
+			println "emailDate: $emailDate"
 			message.text = emailSubject
+			message.date = Date.parse("EEE, dd MMM yyyy hh:mm:ss Z",emailDate)
 			
+			println "message sent on ${message.date}"
 			if(emailBody != null) {
 				message.text = emailBody
-				assert exchange.out != null
-				exchange.out.body = message
 			}
-		
+			exchange.out.body = message
 		}
 		
 	}

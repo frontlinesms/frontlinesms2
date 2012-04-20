@@ -75,7 +75,8 @@ class IntelliSmsFconnection extends Fconnection {
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
-							.to('intelliSmsTranslationService')
+							.beanRef('intelliSmsTranslationService', 'process')
+							.to('seda:incoming-fmessages-to-store')
 							.routeId("in-${IntelliSmsFconnection.this.id}")]
 				}
 				else if(getReceive()) {
@@ -84,7 +85,8 @@ class IntelliSmsFconnection extends Fconnection {
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
-							.to('intelliSmsTranslationService')
+							.beanRef('intelliSmsTranslationService', 'process')
+							.to('seda:incoming-fmessages-to-store')
 							.routeId("in-${IntelliSmsFconnection.this.id}")]
 				}
 				else {

@@ -85,8 +85,8 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			def configFields = clazz.configFields
 		then:
 			configFields.each {k,v -> if(v) output.contains("<div id=\"$k-subsection\">")}
-			clazz.configFields.send.every { output.contains "field=\"$it\" class=\"$k-subsection-member\""}
-			clazz.configFields.receive.every { output.contains "field=\"$it\" class=\"$k-subsection-member\""}
+			clazz.configFields.send.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
+			clazz.configFields.receive.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
 	}
 	
 	def "confirmTable generates all the details of a CrazyFconnection"() {
@@ -122,11 +122,10 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:inputs instanceClass="${clazz.class}" instance="${clazz}" />'
 			def configFields = clazz.configFields
-			println "$output"
 		then:
 			configFields.each {k,v -> if(v) output.contains("<div id=\"$k-subsection\">")}
-			clazz.configFields.send.every { output.contains "field=\"$it\" class=\"$k-subsection-member\""}
-			clazz.configFields.receive.every { output.contains "field=\"$it\" class=\"$k-subsection-member\""}
+			clazz.configFields.mobicash.each {k,v -> output.contains "field=\"$k\" class=\"$k-subsection-member\""}
+			clazz.configFields.mobicash.bank.each { output.contains "field=\"$it\" class=\"$it-subsection-member\""}
 	}
 	
 }
