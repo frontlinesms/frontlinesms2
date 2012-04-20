@@ -1,3 +1,16 @@
+(function($) {
+	$.fn.disableField = function(){
+	    return this.each(function(){
+	        this.disabled = true;
+	    });
+	};
+	$.fn.enableField = function(){
+	    return this.each(function(){
+	        this.disabled = false;
+	    });
+	};
+})(jQuery);
+
 $(function() {
 	setInterval(refreshMessageCount, 30000);
 	setInterval(refreshStatusIndicator, 30000);
