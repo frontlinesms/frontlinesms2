@@ -31,6 +31,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
+		MetaClassModifiers.addMapMethods()
 		createWelcomeNote()
 		
 		switch(Environment.current) {
@@ -151,7 +152,7 @@ class CoreBootStrap {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
-		new IntelliSmsFconnection(name:"IntelliSms Mock connection", username:"johnmark", password:"pass_word").save(failOnError:true)
+		new IntelliSmsFconnection(name:"IntelliSms Mock connection", send:true, username:"johnmark", password:"pass_word").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
