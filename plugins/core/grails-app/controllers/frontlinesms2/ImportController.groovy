@@ -69,7 +69,7 @@ class ImportController {
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
 		failedContactsFile.eachLine {response.outputStream  << "$it\n"}
 		response.outputStream.flush()
-		failedContactsFile.deleteOnExit()
+		failedContactsFile.delete()
 	}
 	
 	def importMessages = {
