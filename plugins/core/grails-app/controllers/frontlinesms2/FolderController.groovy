@@ -74,10 +74,13 @@ class FolderController {
 		redirect(controller: "message", action: "trash")
 	}
 
+//"${message(code: 'default.deleted.message', args: [message(code: 'group.label', default: 'Group'), ''])}"
+
+
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)
 		if (folderInstance) c folderInstance
-		else render(text: "${message(code: 'folder.exist.not' args:[params.id])}") // TODO handle error state properly
+		else render(text: "${message(code: 'folder.exist.not', args: [params.id])}") // TODO handle error state properly
 	}
 }
 
