@@ -1,9 +1,21 @@
 #help {
+	height: 100%;
+}
+
+#help #file {
+	overflow: auto;
 	padding: 17px;
 }
 
-#help-index ul {
-	padding: 5px 17px;
+#help .section {
+	font-weight: bold;
+	padding-left: 17px;
+}
+#help .sub-section {
+	padding-left: 34px;
+}
+#help li {
+	padding-left: 51px;
 }
 
 	

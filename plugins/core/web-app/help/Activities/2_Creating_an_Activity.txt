@@ -1,0 +1,17 @@
+# Creating an Activity
+
+_There are several different types of Activity available to you in FrontlineSMS. Each is designed to help you use FrontlineSMS in new, streamlined ways and realise unique possibilities. Activities help you manage the way messages enter the system and the way they leave the system. For example, Announcements allow you to collect all the responses to a particular message in one folder - making them useful to create lists of attendees. Polls allow you to analyse reponses to a particular question through a graphical representation of the results. You will find more detailed information on the help page of the activity you want to use._
+
+### [Creating a New Activity][1]
+
+1.  Click on the "Messages" tab if you are not already viewing it.
+2.  Under the heading "Activity" click the button "Create New Activity".
+3.  A new window will appear asking you to choose the kind of activity you want to create. Choose the type you wish to create and click next.
+
+There are currently two kinds of activities:
+[Polls][2]
+[Activities][3]
+
+[1]: IndexCreateNewActivity
+[2]: gotoCreatePoll
+[3]: gotoCreateActivity

@@ -6,8 +6,8 @@
 			Settings
 		</g:link>
 	</li>
-	<li class="nav ${params.controller=='help'?'selected':''}">
-		<g:remoteLink controller="help" onSuccess="launchMediumWizard('Help', data, 'Done', '95%')">
+	<li class="nav ${params.controller=='help' ? 'selected' : ''}">
+		<g:remoteLink controller="help" onSuccess="launchMediumWizard('Help', data, 'Done', '95%', 800)">
 			Help
 		</g:remoteLink>
 	</li>

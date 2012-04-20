@@ -1,0 +1,38 @@
+# Using the Trash Folder
+
+_The [trash][1] folder contains all the messages you have deleted. The messages are stored here where they can be restored or deleted permanently._
+
+### [Moving a Deleted Message][2]
+
+To move a message from the Trash into the [inbox][3], an [activity][4] or a [folder][5]:
+
+1.  Select the message, or messages you want to move using the check boxes.
+2.  In the [message details][10] on the right of the screen, use the 'Move Message To' dropdown menu to select where to move the messages to.
+
+The selected messages will be moved to your chosen destination.
+
+### [Emptying the trash][6]
+
+To empty the [trash folder][1] of all messages:
+
+__NOTE:__ This will _permanently_ delete all messages in the [trash folder][1]
+
+1.  From the 'Trash Actions..' dropdown menu, select "Empty Trash".
+
+All messages in the [trash folder][1] will be permanently deleted.
+
+### Related Actions
+[Archiving messages][7]
+[Moving Messages][8]
+[Unarchiving Messages][9]
+
+[1]: trashdef
+[2]: movedeletedmessage
+[3]: inbox
+[4]: activity
+[5]: folder
+[6]: emptytrash
+[7]: archivemessage
+[8]: movemessage
+[9]: unarchivemessage
+[10]: messagedetails

@@ -1,0 +1,68 @@
+# Sorting, Selecting Multiple Messages, Starring and Navigating
+
+_When viewing a message list anywhere in the program, you will be able to select multiple messages and mark them as important by starring them so that they can be easily spotted. You can also choose to only show the starred messages to quickly switch between the messages you have marked as important and all your messages, allowing you to get to important messages easily. You can also sort messages by [Contact/Number][1], [Message content][2] and [date][3]. The easy navigation options make it simple to manage large amounts of messages._
+
+SCREENSHOT
+
+### [Navigating Pages][16]
+
+1.  When viewing any message list _(this can be in [Inbox][4], [Sent][5], [Pending][6], [Trash][7], [Activities][8], [Folders][9], [Archives][10] and [Search][11])_, at the bottom right of the list two opposing arrows will allow you to navigate back and forth between pages if you have more than one page of messages.
+
+_**Note:** If you do not have more than one page of messages, these arrows will be greyed out. They will become available once you have more than one page of messages._
+
+### [Selecting Multiple Messages][13]
+
+1.  When viewing any message list _(this can be in [Inbox][4], [Sent][5], [Pending][6], [Trash][7], [Activities][8], [Folders][9], [Archives][10] and [Search][11])_ there will a small square check box next to each message and also in the column header, where you will find headings like "Contacts", "Message" and "Date".
+2.  To select more than one message, check the check boxes for the messages you want to select.  
+To select __all__ messages on the page check the check box in the column heading.  
+
+_**Note:** Multiple selections cannot span multiple pages. The maximum amount of messages that can be selected at one time are the messages displayed on that page. Once you change the page of messages you are viewing (if you have more than one page) your selection will be lost._
+
+### [Starring Messages][14]
+
+1.  When viewing any message list _(this can be in [Inbox][4], [Sent][5], [Pending][6], [Trash][7], [Activities][8], [Folders][9], [Archives][10] and [Search][11])_ there will be the outline of a star next to each message. 
+2.  Click on a star next to a message will mark that message as 'starred'. You will be able to [filter][15] your message list to show only starred messages - allowing you to easily view all starred messages.
+
+_**Note:** Unlike [multiple select][13], a message's status as starred persists even once you have navigated away from the page._
+
+## [Sorting][12]
+
+### [How to Sort by Contact or Number][1]
+
+1.  When viewing any message list _(this can be in [Inbox][4], [Sent][5], [Pending][6], [Trash][7], [Activities][8], [Folders][9], [Archives][10] and [Search][11])_ clicking on the heading "Contact" will allow you to sort messages.
+2.  Clicking on "Contacts" __once__ will sort messages in an ascending alphanumeric order by contact information. This is signified by a small upwards pointing arrow next to the heading title "Contact". This means that numbers (unsaved contacts) will be displayed first in the order 0-9, followed by named contacts in the order a-z.
+3.  Clicking on "Contacts" __twice__ will sort the messages in descending alphanumeric order by contact information. This is signified by a small downwards pointing arrow next to the heading title "Contact". This means that saved contacts will be displayed first in the order z-a, followed by numbers (unsaved contacts) in the order 9-0.
+4.  Clicking on "Contacts" a __third__ time will revert to the original order of the messages - the order in which they were received.
+
+### [How to Sort by Message Content][2]
+
+1.  When viewing any message list _(this can be in [Inbox][4], [Sent][5], [Pending][6], [Trash][7], [Activities][8], [Folders][9], [Archives][10] and [Search][11])_  clicking on the heading "Message" will allow you to sort messages.
+2.  Clicking on "Messages" __once__ will sort messages in an ascending alphanumeric order by message content. This is signified by a small upwards pointing arrow next to the heading title "Message". This means that messages beginning with numbers will be displayed first in the order 0-9, followed by messages beginning with letters in the order a-z.
+3.  Clicking on "Messages" __twice__ will sort the messages in descending alphanumeric order by message content. This is signified by a small downwards pointing arrow next to the heading title "Message". This means that messages with letters will be displayed first in the order z-a, followed by messages beginning with numbers, in the order 9-0.
+4.  Clicking on "Messages" a __third__ time will revert to the original order of the messages - the order in which they were received.
+
+### [How to Sort by Date][3]
+
+1.  When viewing any message list _(this can be in [Inbox][4], [Sent][5], [Pending][6], [Trash][7], [Activities][8], [Folders][9], [Archives][10] and [Search][11])_  clicking on the heading "Date" will allow you to sort messages.
+2.  Clicking on "Date" __once__ will sort messages in an ascending chronological order by the date they were sent. This is signified by a small upwards pointing arrow next to the heading title "Date". This means that newer messages are displayed first, and older ones further down, with the oldest message being displayed last.
+3.  Clicking on "Date" __twice__ will sort the messages in descending chronological order by the date they were sent. This is signified by a small downwards pointing arrow next to the heading title "Date". This means that the oldest message will be displayed first, and newer ones further down, with the newest message being displayed last.
+4.  Clicking on "Messages" a __third__ time will revert to the original order of the messages - the order in which they were received.
+
+{need to add something about differentiating in trash}
+
+[1]: howdoisortbycontact
+[2]: howdoisortbymessagecontent
+[3]: howdoisortbydate
+[4]: gotoinbox
+[5]: gotosent
+[6]: gotopending
+[7]: gototrash
+[8]: gotoactivities
+[9]: gotofolders
+[10]: gotoarchive
+[11]: gotosearch
+[12]: sorting
+[13]: SelectingMultipleMessages
+[14]: starringmessages
+[15]: filter
+[16]: navigating
