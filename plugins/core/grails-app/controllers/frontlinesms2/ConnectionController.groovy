@@ -26,6 +26,7 @@ class ConnectionController {
 			render(view:'show', model:show() << [connectionInstanceList:fconnectionInstanceList,
 					fconnectionInstanceTotal:fconnectionInstanceTotal])
 		} else {
+			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
 			render(view:'show', model:[fconnectionInstanceTotal: 0])
 		}
 	}
@@ -135,7 +136,7 @@ class ConnectionController {
 			c connection
 		} else {
 			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
-			redirect controller:'settings', action:'connections'
+			redirect(controller:'connection', action:'list')
 		}
 	}
 }
