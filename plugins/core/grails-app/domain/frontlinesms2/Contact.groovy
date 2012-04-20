@@ -122,6 +122,17 @@ class Contact {
 		if(mobile && mobile[0] == '+') n = '+' + n
 		mobile = n
 	}
+
+	static namedQueries = {
+		findAllWithCustomFields { fields ->
+			fields.each { field ->
+				customFields {
+					eq('name', field.key)
+					ilike('value', "%$field.value%")
+				}
+			}
+		}
+	}
 	
 //> HELPER METHODS
 	private def removeFmessageDisplayName() {

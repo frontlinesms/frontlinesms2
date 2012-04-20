@@ -23,17 +23,4 @@ class CustomField {
 			}
 		}
 	}
-	
-	static def getAllContactsWithCustomField(customFields) {
-		// TODO should be able to replace this with criteria and projections
-		def matchingString = ''
-		customFields.each { name, value -> 
-			// FIXME this query should use named variables instead of inserting values directly into the HQL
-			def conditionString = "WHERE name='$name' AND LOWER(value) LIKE LOWER('%$value%')"
-			matchingString = matchingString ? "$matchingString AND cf.contact IN (SELECT DISTINCT cf2.contact FROM CustomField cf2 JOIN cf2.contact $conditionString)":
-		 	conditionString
-		}	
-		// FIXME this query should use named variables instead of inserting values directly into the HQL
-		CustomField.executeQuery("SELECT DISTINCT cf.contact FROM CustomField cf JOIN cf.contact $matchingString")
-	}
 }

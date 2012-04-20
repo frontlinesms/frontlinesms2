@@ -154,7 +154,8 @@ class Fmessage {
 					le("date", search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
-					def matchingContactsNumbers = CustomField.getAllContactsWithCustomField(search.customFields).mobile ?: [""] //otherwise hibernate fails to search 'in' empty list
+					// provide empty list otherwise hibernate fails to search 'in' empty list
+					def matchingContactsNumbers = Contact.findAllWithCustomFields(customFields).list()*.mobile?: ['']
 					or {
 						'in'("src", matchingContactsNumbers)
 						dispatches {
