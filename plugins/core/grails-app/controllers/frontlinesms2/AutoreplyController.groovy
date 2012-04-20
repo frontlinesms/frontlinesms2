@@ -9,13 +9,13 @@ class AutoreplyController extends ActivityController {
 		if(Autoreply.get(params.ownerId)) {
 			autoreply = Autoreply.get(params.ownerId)
 			
-			def keywordValue = params.blankKeyword ? '' : params.keyword
+			def keywordValue = params.blankKeyword ? '' : params.keyword.toUpperCase()
 			autoreply.keyword.value = keywordValue
 			
 			autoreply.name = params.name ?: autoreply.name
 			autoreply.autoreplyText = params.autoreplyText ?: autoreply.autoreplyText
 		} else {
-			def keyword = new Keyword(value: params.blankKeyword ? '' : params.keyword)
+			def keyword = new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
 			autoreply = new Autoreply(name: params.name, autoreplyText :params.autoreplyText, keyword: keyword)
 		}
 		if (autoreply.save(flush: true)) {
