@@ -50,7 +50,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'CREATE returns a list of field names including custom field names'() {
 		given:
-			['Favourite Food', 'AIM name'].each { new CustomField(name:it).save(flush:true, failOnError:true) }
+			['AIM name', 'Favourite Food'].each { CustomField.build(name:it) }
 		when:
 			def model = controller.create()
 		then:

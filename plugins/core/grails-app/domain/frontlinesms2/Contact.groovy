@@ -125,10 +125,12 @@ class Contact {
 
 	static namedQueries = {
 		findAllWithCustomFields { fields ->
-			fields.each { field ->
-				customFields {
-					eq('name', field.key)
-					ilike('value', "%$field.value%")
+			customFields {
+				fields.each { field ->
+					or {
+						eq('name', field.key)
+						ilike('value', "%$field.value%")
+					}
 				}
 			}
 		}

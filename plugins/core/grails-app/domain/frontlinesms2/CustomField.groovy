@@ -21,6 +21,7 @@ class CustomField {
 			projections {
 				distinct 'name'
 			}
+			order 'name', 'asc'
 		}
 	}
 }
