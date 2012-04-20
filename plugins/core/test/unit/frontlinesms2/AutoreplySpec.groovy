@@ -28,7 +28,8 @@ class AutoreplySpec extends Specification {
 
 	def 'processKeyword should not generate an autoreply for non-exact keyword match if keyword is not blank'() {
 		given:
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
+			def k = mockKeyword('asdf')
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text', keyword:k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -42,7 +43,8 @@ class AutoreplySpec extends Specification {
 
 	def 'processKeyword should generate an autoreply for blank keyword if non-exact match'() {
 		given:
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
+			def k = mockKeyword('')
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text', keyword:k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -79,9 +81,7 @@ class AutoreplySpec extends Specification {
 	}
 
 	private def mockKeyword(String value) {
-		def k = Mock(Keyword)
-		k.value >> value
-		return k
+		new Keyword(value:value)
 	}
 
 	private def mockFmessage(String messageText, String src=null) {
