@@ -19,14 +19,14 @@ class AutoreplyController extends ActivityController {
 			autoreply = new Autoreply(name: params.name, autoreplyText :params.autoreplyText, keyword: keyword)
 		}
 		if (autoreply.save(flush: true)) {
-			flash.message = "Autoreply has been saved!"
+			flash.message = "${message(code: 'autoreply.saved')}"
 			[ownerId: autoreply.id]
 		} else {
-			flash.message = "Autoreply could not be saved!"
+			flash.message = "${message(code: 'autoreply.not.saved')}"
 			render(text: flash.message)
 		}
 	}
-	
+
 	def sendReply = {
 		def autoreply = Autoreply.get(params.ownerId)
 		def incomingMessage = Fmessage.get(params.messageId)
