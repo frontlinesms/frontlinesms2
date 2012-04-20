@@ -15,7 +15,6 @@ class ConnectionController {
 	}
 	
 	def list = {
-		println "params are $params"
 		def fconnectionInstanceList = Fconnection.list(params)
 		if(!params.id) {
 			params.id = Fconnection.list(params)[0]?.id
@@ -88,6 +87,7 @@ class ConnectionController {
 	def createRoute = {
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
+		flash.message = "${message(code: 'connection.route.connecting')}"
 		redirect(action:'list', params:params)
 	}
   

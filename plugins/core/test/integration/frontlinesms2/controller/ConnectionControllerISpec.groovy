@@ -48,8 +48,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "can edit email connection"() {
 		setup:
-			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection",
-					 serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
+			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection", serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)
 
 			controller.params.id = emailConnection.id
 			controller.params.receiveProtocol = 'POP3'
@@ -116,5 +115,16 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			controller.response.redirectedUrl == "/connection/list/$emailConnection.id"			
 	}
+	
+	def "sendTest redirects to the SHOW action"() {
+		setup:
+			def conn = new Fconnection(name:"test")
+			conn.save(flush:true)
+		when:
+			controller.params.id = conn.id
+			controller.sendTest()
+		then:
+			controller.response.redirectedUrl == "/connection/list/$conn.id"
+	} 
 	
 }
