@@ -145,12 +145,12 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		PollResponse.findByValue('Barcelona').addToMessages(message2)
 		p.save(flush:true, failOnError:true)
 		
-		def f = new Folder(name:'test').save(failOnError:true)
+		def f = new Folder(name:'test-folder').save(failOnError:true)
 		def m = new Fmessage(date: new Date(), inbound: true, src: 'src').save(failOnError:true)
 		f.addToMessages(m).save(flush:true)
 		
 		def announcementMessage = new Fmessage(text:"Test announcement", hasSent:true, inbound:false, date:new Date()).addToDispatches(new Dispatch(dst: '12345', status: DispatchStatus.SENT, dateSent:new Date())).save(flush:true, failOnError:true)
-		def a = new Announcement(name:'test', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
+		def a = new Announcement(name:'test-announcement', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
 		a.addToMessages(announcementMessage)
 		a.addToMessages(new Fmessage(date: new Date(), src: 'src', inbound: true))
 		a.save(flush:true, failOnError:true)

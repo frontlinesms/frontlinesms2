@@ -222,17 +222,18 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def createPollTestData() {
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', date: new Date(), inbound:true)
 		def chickenResponse = new PollResponse(value:'chicken')
 		def unknownResponse = new PollResponse(value:'unknown')
 		def liverResponse = new PollResponse(value:'liver')
 		def poll = new Poll(name:'Miauow Mix').addToResponses(chickenResponse)
 		poll.addToResponses(liverResponse)
 		poll.addToResponses(unknownResponse)
+		poll.save(flush:true, failOnError: true)
+
+		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
+		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', date: new Date(), inbound:true)
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		poll.save(flush:true, failOnError: true)
 	}
 
 	private def setUpFolderMessages() {

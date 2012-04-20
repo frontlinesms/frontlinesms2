@@ -78,12 +78,9 @@ class Poll extends Activity {
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
 			choices.each { k, v ->
-				if(this.responses*.key?.contains(k)) {
-					def response = PollResponse.findByKey(k)
-					if(response.value != v) {
-						this.deleteResponse(response)
-						this.addToResponses(new PollResponse(value:v, key:k))
-					}
+				def found = responses.find { it.key == k }
+				if(found) {
+					found.value = v
 				} else if(v?.trim()) this.addToResponses(new PollResponse(value:v, key:k))
 			}
 		}

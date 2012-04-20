@@ -226,7 +226,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			addMessages owner, starred, notStarred
 		then:
 			Fmessage.owned(owner, true).list() == [starred]
-			Fmessage.owned(owner, false).list() == [starred, notStarred]
+			Fmessage.owned(owner, false).list() == [notStarred, starred]
 	}
 	
 	def "Fmessage_owned should get sent-and-received vs sent-only"() {
@@ -236,7 +236,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage received = createMessage(inbound:true)
 			addMessages owner, sent, received
 		then:
-			Fmessage.owned(owner, false, true).list() == [sent, received]
+			Fmessage.owned(owner, false, true).list() == [received, sent]
 			Fmessage.owned(owner, false, false).list() == [received]
 	}
 	

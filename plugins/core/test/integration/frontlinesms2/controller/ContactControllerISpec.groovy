@@ -66,7 +66,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.index()
 		then:
-			controller.response.redirectedUrl == '/contact/show?contactId=' // FIXME should not need the contactId param specified here
+			controller.response.redirectedUrl == '/contact/show'
 	}
 
 	def "adding and removing a contact from the same group triggers error"() {

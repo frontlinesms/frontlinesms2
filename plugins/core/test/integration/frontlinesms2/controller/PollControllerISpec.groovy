@@ -161,14 +161,13 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			poll.autoreplyText == "Thank you for replying to this awesome poll"
 		when:
-			poll.save(flush: true)
 			controller.params.ownerId = poll.id
-			controller.params.keyword = "bad"
+			controller.params.keyword = 'bad'
 			controller.params.enableKeyword = true
 			controller.save()
 			poll = Poll.get(poll.id)
 		then:
-			poll.keyword.value.equalsIgnoreCase("bad")
+			poll.keyword.value == 'bad'
 	}
 	
 }
