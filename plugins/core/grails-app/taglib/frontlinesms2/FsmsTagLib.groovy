@@ -8,13 +8,7 @@ class FsmsTagLib {
 		out << confirmTypeRow(att)
 		def fields = getFields(att)
 		if(fields instanceof Map) {
-			def keys = fields.keySet()
-			keys.each { key ->
-				out << confirmTableRow(att + [field:key])
-				fields[key].each {
-					out << confirmTableRow(att + [field:it.trim()])
-				}
-			}
+			generateConfirmSection(att, fields)
 		} else {
 			fields.each { out << confirmTableRow(att + [field:it.trim()]) }
 		}
@@ -23,7 +17,7 @@ class FsmsTagLib {
 	
 	def confirmTypeRow = {att ->
 		out << '<tr>'
-		out << '<td class="bold">'
+		out << '<td class="field-label">'
 		out << g.message(code:"${att.instanceClass.simpleName.toLowerCase()}.type.label")
 		out << '</td>'
 		out << '<td id="confirm-type"></td>'
@@ -32,7 +26,7 @@ class FsmsTagLib {
 	
 	def confirmTableRow = { att ->
 		out << '<tr>'
-		out << '<td class="bold">'
+		out << '<td class="field-label">'
 		out << getFieldLabel(att.instanceClass, att.field)
 		out << '</td>'
 		out << '<td id="confirm-' + att.field + '"></td>'
@@ -41,17 +35,10 @@ class FsmsTagLib {
 	
 	def inputs = { att ->
 		println "att is $att"
-		//TODO modify the creation of fields so that it responds appropriately to fields stored in maps
 		def fields = getFields(att)
 		if(fields instanceof Map) {
-			def keys = fields.keySet()
-			println "the keys are $keys"
-			keys.each { key ->
-				out << input(att + [field:key])
-				fields[key].each {
-					if(it) out << input(att + [field:it, disabled:"disabled"])
-				}
-			}
+			generateSection(att, fields)
+			
 		} else {
 			fields.each {
 				out << input(att + [field:it])
@@ -74,7 +61,7 @@ class FsmsTagLib {
 		out << '' + getFieldLabel(instanceClass, groovyKey)
 		out << '</label>'
 		
-		if(att.password || isPassword(instanceClass, groovyKey)) {
+		if(att.password || isPassword(instanceClass, groovyKey)) {	
 			out << g.passwordField(att)
 		} else if(instanceClass.metaClass.hasProperty(null, groovyKey)?.type.enum) {
 			out << g.select(att + [from:instanceClass.metaClass.hasProperty(null, groovyKey).type.values(),
@@ -103,7 +90,60 @@ class FsmsTagLib {
 	}
 	
 	private def isBooleanField(instanceClass, groovyKey) {
-		return instanceClass.metaClass.hasProperty(null, 'boolFields') &&
-				groovyKey in instanceClass.boolFields
+		return instanceClass.metaClass.hasProperty(null, groovyKey).type in [Boolean, boolean]
+	}
+	
+	private def generateSection(att, fields) {
+		def keys = fields.keySet()
+		keys.each { key ->
+			if(fields[key]) {
+				out << "<div id=\"$key-subsection\">"
+				out << "<fieldset>"
+				out << "<legend>"
+				out << input(att + [field:key])
+				out << "</legend>"
+				
+				//handle subsections within a subsection
+				if(fields[key] instanceof LinkedHashMap) {
+					generateSection(att, fields[key])
+				} else {
+					fields[key].each {field ->
+						if(field instanceof String) {
+							 out << input(att + [field:field] + [class:"$key-subsection-member"])
+						}
+					}
+				}
+				out << "</fieldset>"
+				out << "</div>"
+			} else {
+				out << input(att + [field:key])
+			}
+			
+		}
+	}
+	
+	private def generateConfirmSection(att, fields) {
+		def keys = fields.keySet()
+		keys.each { key ->
+			if(fields[key]) {
+				out << "<div class=\"confirm-$key-subsection\">"
+				out << confirmTableRow(att + [field:key])
+				
+				//handle subsections within a subsection
+				if(fields[key] instanceof LinkedHashMap) {
+					generateConfirmSection(att, fields[key])
+				} else {
+					fields[key].each {field ->
+						if(field instanceof String) {
+							 out << confirmTableRow(att + [field:field] + [class:"subsection-member"])
+						}
+					}
+				}
+				out << "</div>"
+			} else {
+				out << confirmTableRow(att + [field:key])
+			}
+			
+		}
 	}
 }

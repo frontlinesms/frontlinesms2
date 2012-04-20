@@ -31,6 +31,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
+		MetaClassModifiers.addMapMethods()
 		createWelcomeNote()
 		
 		switch(Environment.current) {

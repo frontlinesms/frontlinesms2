@@ -5,14 +5,14 @@ import frontlinesms2.camel.intellisms.*
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import org.smslib.NotConnectedException
 
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
-	static configFields = [ name:[],
+	static configFields = [name:null,
 				send: ['username', 'password'], 
 				receive: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
 	static passwords = ['password', 'emailPassword']
-	static boolFields = ["send", "receive"]
 	static String getShortName() { 'intellisms' }
 	
 	String username
