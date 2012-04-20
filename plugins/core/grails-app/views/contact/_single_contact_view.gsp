@@ -10,7 +10,7 @@
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
-			<a id="btn_delete" onclick="launchConfirmationPopup('Delete');" class="btn">
+			<a id="btn_delete" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
 				<g:message code="contact.delete" />
 			</a>
 		</g:if>
@@ -24,7 +24,7 @@
 		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" />
 		<g:if test="${contactInstance?.mobile?.trim()}">
 			<a class="remove-field" id="remove-mobile"></a>
-			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard('Send Message', data, 'Send', true);">&nbsp;
+			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, 'Send', true);">&nbsp;
 			</g:remoteLink>
 		</g:if>
 	</div>

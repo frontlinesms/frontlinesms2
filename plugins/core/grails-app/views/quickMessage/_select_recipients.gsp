@@ -97,7 +97,7 @@
 		$("#manual-address").find('#address-error').remove();
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
-			$("#manual-address").append("<div id='address-error' class='error-message'><g:message code='quickmessage.number.error' /></div>");
+			$("#manual-address").append("<div id='address-error' class='error-message'><g:message code='fmessage.number.error' /></div>");
 			return false;
 		} else {
 			return true;
