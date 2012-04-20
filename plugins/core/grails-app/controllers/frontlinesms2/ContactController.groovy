@@ -4,17 +4,22 @@ import grails.util.GrailsConfig
 import grails.converters.JSON
 
 class ContactController {
+//> STATIC PROPERTIES
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	def messageSource
+
+//> SERVICES
+	def grailsApplication
 	def contactSearchService
 
+//> INTERCEPTORS
 	def beforeInterceptor = {
-		params.max = params.max?: GrailsConfig.config.grails.views.pagination.max
+		params.max = params.max?: grailsApplication.config.grails.views.pagination.max
 		params.sort = params.sort ?: 'name'
 		params.offset = params.offset ?: 0
 		true
 	}
 
+//> ACTIONS
 	def index = {
 		redirect action: "show", params:params
 	}
@@ -169,7 +174,8 @@ class ContactController {
 			render messageStats as JSON
 		}
 	}
-	
+
+//> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
 		if(existingContact && existingContact != contactInstance) {

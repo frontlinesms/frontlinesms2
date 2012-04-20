@@ -4,24 +4,27 @@ import grails.util.GrailsConfig
 import grails.converters.*
 
 class MessageController {
+//> CONSTANTS
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]
 
+//> SERVICES
 	def messageSendService
 	def fmessageInfoService
 	def trashService
-	boolean isViewingArchive() { params.controller=='archive' ? true : false }
 
+//> INTERCEPTORS
 	def bobInterceptor = {
 		params.sort = params.sort ?: 'date'
 		params.order = params.order ?: 'desc'
 		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.failed = params.failed ? params.failed.toBoolean() : false
-		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.max = params.max?: grailsApplication.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
 		return true
 	}
 	def beforeInterceptor = bobInterceptor
 	
+//> ACTIONS
 	def index = {
 		params.sort = 'date'
 		redirect(action:'inbox', params:params)
@@ -40,24 +43,6 @@ class MessageController {
 			render messageCount as JSON
 		} else
 			render ""
-	}
-	
-	private def getShowModel(messageInstanceList) {
-		def messageInstance = (params.messageId) ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
-		if (messageInstance && !messageInstance.read) {
-			messageInstance.read = true
-			messageInstance.save()
-		}
-		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
-		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
-		[messageInstance: messageInstance,
-				checkedMessageCount: checkedMessageCount,
-				checkedMessageList: selectedMessageList,
-				activityInstanceList: Activity.findAllByArchivedAndDeleted(this.viewingArchive, false),
-				folderInstanceList: Folder.findAllByArchivedAndDeleted(this.viewingArchive, false),
-				messageCount: Fmessage.countAllMessages(params),
-				hasFailedMessages: Fmessage.hasFailedMessages(),
-				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	def inbox = {
@@ -345,10 +330,32 @@ class MessageController {
 		}
 		
 	}
-	
+
+//> PRIVATE HELPERS
+	boolean isViewingArchive() { params.controller=='archive' }
+
 	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId.toLong())
 			if(m) c.call(m)
 			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
 	}
+	
+	private def getShowModel(messageInstanceList) {
+		def messageInstance = (params.messageId) ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
+		if (messageInstance && !messageInstance.read) {
+			messageInstance.read = true
+			messageInstance.save()
+		}
+		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
+		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
+		[messageInstance: messageInstance,
+				checkedMessageCount: checkedMessageCount,
+				checkedMessageList: selectedMessageList,
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(this.viewingArchive, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(this.viewingArchive, false),
+				messageCount: Fmessage.countAllMessages(params),
+				hasFailedMessages: Fmessage.hasFailedMessages(),
+				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
+	}
 }
+
