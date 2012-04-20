@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import grails.util.GrailsConfig
 import grails.converters.JSON
 
 class ContactController {

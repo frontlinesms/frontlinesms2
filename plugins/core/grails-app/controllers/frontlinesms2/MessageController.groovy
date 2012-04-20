@@ -1,6 +1,5 @@
 package frontlinesms2
 
-import grails.util.GrailsConfig
 import grails.converters.*
 
 class MessageController {
@@ -48,9 +47,9 @@ class MessageController {
 	def inbox = {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
-					model:[messageInstanceList: messageInstanceList.list(params),
-							messageSection: 'inbox',
-							messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				model:[messageInstanceList: messageInstanceList.list(params),
+						messageSection: 'inbox',
+						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
