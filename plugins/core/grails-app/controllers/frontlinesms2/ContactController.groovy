@@ -155,7 +155,7 @@ class ContactController {
 	}
 	
 	def search = {
-		render template: 'search_results', model: contactSearchService.contactList(params), plugin:"core"
+		render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	def checkForDuplicates = {
 		def foundContact = Contact.findByMobile(params.number)
