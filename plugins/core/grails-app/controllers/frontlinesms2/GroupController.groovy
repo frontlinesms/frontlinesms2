@@ -6,16 +6,16 @@ class GroupController {
 	def list = {
 		['groups' : Group.list()]
 	}
-	
+
 	def update = {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
 		if(group.save(flush: true)) {
-			flash.message = "Group updated successfully"
+			flash.message = "${message(code: 'group.updated.successfully')}"
 			redirect(controller: "contact", action: "show", params:[groupId : params.id])
 		}
 		else {
-			flash.message = "Group not saved successfully"
+			flash.message = "${message(code: 'group.not.saved.successfully')}"
 			redirect(controller: "contact", action: "show", params:params)
 		}
 	}
@@ -36,7 +36,7 @@ class GroupController {
 		if (!groupInstance.hasErrors() && groupInstance.save(flush: true)) {
 			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Group'), groupInstance.name])}"
 		} else {
-			flash.message = "error"
+			flash.message = "${message(code: 'group.save.error')}"
 		}
 		redirect(controller: "contact", params:[flashMessage: flash.message])
 	}
@@ -52,7 +52,7 @@ class GroupController {
 		if (Group.get(params.id)?.delete(flush: true))
 			flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'group.label', default: 'Group'), ''])}"
 		else
-			flash.message = "unable to delete group"
+			flash.message = "${message(code: 'group.deletable.false')}"
 		redirect(controller: "contact")
 	}
 }

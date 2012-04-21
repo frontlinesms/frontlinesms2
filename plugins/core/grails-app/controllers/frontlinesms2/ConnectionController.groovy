@@ -26,6 +26,7 @@ class ConnectionController {
 			render(view:'show', model:show() << [connectionInstanceList:fconnectionInstanceList,
 					fconnectionInstanceTotal:fconnectionInstanceTotal])
 		} else {
+			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
 			render(view:'show', model:[fconnectionInstanceTotal: 0])
 		}
 	}
@@ -73,7 +74,7 @@ class ConnectionController {
 	private def remapFormParams() {
 		def cType = params.connectionType
 		if(!(cType in CONNECTION_TYPE_MAP)) {
-			throw new RuntimeException("Unknown connection type: " + cType)
+			throw new RuntimeException("${message(code: 'fconnection.unknown.type')}" + cType)
 		}
 		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException
 		params.each { k, v ->
@@ -110,10 +111,10 @@ class ConnectionController {
 	
 	def sendTest = {
 		withFconnection { connection ->
-			def message = messageSendService.createOutgoingMessage(params)
-			messageSendService.send(message, connection)
-			flash.message = LogEntry.log("Test message sent!")
-			redirect (action:'list', id:params.id)
+			def m = messageSendService.createOutgoingMessage(params)
+			messageSendService.send(m, connection)
+			flash.message = LogEntry.log(message(code:'fconnection.test.message.sent'))
+			redirect action:'list', id:params.id
 		}
 	}
 	
@@ -135,7 +136,7 @@ class ConnectionController {
 			c connection
 		} else {
 			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
-			redirect controller:'settings', action:'connections'
+			redirect(controller:'connection', action:'list')
 		}
 	}
 }

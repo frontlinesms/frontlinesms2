@@ -9,7 +9,7 @@ function checkForNonDigits() {
         return this.value.match(/[^\+?\d+]/);
     });
 	field.addClass('error');
-	field.parent(".basic-info").append("<span id='letter-error' class='error-message'>You have added a non-number to this field, upon saving all non-numbers will be removed.</span>");
+	field.parent(".basic-info").append("<span id='letter-error' class='error-message'><g:message code='fmessage.number.error' /></span>");
 }
 
 function checkForDuplicates() {

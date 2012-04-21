@@ -12,24 +12,24 @@ class FolderController {
 		folderInstance.properties = params
 		[folderInstance: folderInstance]
 	}
-	
+
 	def save = {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush: true)) {
-			flash.message = "${message(code: 'default.created.message', args: [message(code: 'folder.label', default: 'Folder'), folderInstance.name])}"
+			flash.message = "${message(code: 'default.created.message', args: [message(code: message(code: 'folder.label'), default: 'Folder'), folderInstance.name])}"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		} else {
 			flash.message = "error"
 			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
 		}
 	}
-	
+
 	def archive = {
 		withFolder { folder ->
 			folder.archive()
 			
 			if(folder.save()) {
-				flash.message = "Folder was archived successfully!"
+				flash.message = "${message(code: 'folder.archived.successfully')}"
 				redirect(controller: "message", action: "inbox")
 			} else {
 				// TODO give error and redirect
@@ -41,14 +41,14 @@ class FolderController {
 		withFolder { folder ->
 			folder.unarchive()
 			if(folder.save()) {
-				flash.message = "Folder was unarchived successfully!"
+				flash.message = "${message(code: 'folder.unarchived.successfully')}"
 				redirect(controller: "archive", action: "folderList")
 			} else {
 				// TODO show error and redirect somewhere sensible
 			}
 		}
 	}
-	
+
 	def confirmDelete = {
 		def folderInstance = Folder.get(params.id)
 		render view: "../activity/confirmDelete", model: [ownerInstance: folderInstance]
@@ -60,7 +60,7 @@ class FolderController {
 			new Trash(identifier:folder.name, message:"${folder.liveMessageCount}", objectType:folder.class.name, linkId:folder.id).save(failOnError: true, flush: true)
 			folder.save(failOnError: true, flush: true)
 		}
-		flash.message = "Folder has been trashed!"
+		flash.message = "${message(code: 'folder.trashed')}"
 		redirect(controller:"message", action:"inbox")
 	}
 	
@@ -70,14 +70,17 @@ class FolderController {
 			folder.save(failOnError: true, flush: true)
 			Trash.findByLinkId(folder.id)?.delete()
 		}
-		flash.message = "Folder has been restored!"
+		flash.message = "${message(code: 'folder.restored')}"
 		redirect(controller: "message", action: "trash")
 	}
+
+//"${message(code: 'default.deleted.message', args: [message(code: 'group.label', default: 'Group'), ''])}"
+
 
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)
 		if (folderInstance) c folderInstance
-		else render(text: "Could not find folder with id ${params.id}") // TODO handle error state properly
+		else render(text: "${message(code: 'folder.exist.not', args: [params.id])}") // TODO handle error state properly
 	}
 }
 
