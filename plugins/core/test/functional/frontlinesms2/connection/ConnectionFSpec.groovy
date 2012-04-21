@@ -8,12 +8,6 @@ import serial.mock.MockSerial
 import serial.mock.CommPortIdentifier
 
 class ConnectionFSpec extends grails.plugin.geb.GebSpec {
-	def cleanup() {
-		SmslibFconnection.findAll()*.delete(flush:true)
-		EmailFconnection.findAll()*.delete(flush:true)
-		Fconnection.findAll()*.delete(flush:true)
-	}
-	
 	def 'When there are no connections, this is explained to the user'() {
 		when:
 			to ConnectionPage
@@ -71,7 +65,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def "should update message count when in Settings section"() {
 		when:
 			to ConnectionPage
-			def message = new Fmessage(src:'+254999999', text: "message count", inbound:true, date: new Date()).save(flush: true, failOnError:true)
+			def message = Fmessage.build()
 		then:
 			$("#message-tab-link").text().equalsIgnoreCase("Messages\n0")
 		when:
@@ -83,7 +77,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 		given:
 			def testConnection = createTestSmsConnection()
-			new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:"11200")
 		when:
 			to ConnectionPage
 		then:
@@ -178,20 +172,16 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def createTestEmailConnection() {
-		def c = new EmailFconnection(name:'test email connection',
+		EmailFconnection.build(name:'test email connection',
 				receiveProtocol:EmailReceiveProtocol.IMAPS,
 				serverName:'imap.zoho.com', serverPort:993,
 				username:'mr.testy@zoho.com', password:'mter')
-		c.save(failOnError:true, flush:true)
-		return c
 	}
 	
 	def createTestSmsConnection() {
-		def c = new SmslibFconnection(name:'MTN Dongle', port:'COM99')
-		c.save(failOnError:true, flush:true)
 		MockModemUtils.initialiseMockSerial([
 				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler_sendFails())])
-		return c
+		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
 	}
 }
 
