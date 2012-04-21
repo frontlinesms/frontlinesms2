@@ -3,6 +3,8 @@ package frontlinesms2.folder
 import frontlinesms2.*
 import java.text.SimpleDateFormat
 
+import spock.lang.*
+
 class FolderListSpec extends FolderBaseSpec {
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	

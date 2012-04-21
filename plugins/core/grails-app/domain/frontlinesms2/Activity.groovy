@@ -1,13 +1,13 @@
 package frontlinesms2
 
-class Activity extends MessageOwner {
+abstract class Activity extends MessageOwner {
 	String name
 	String sentMessageText
 	Date dateCreated
 	static transients = ['liveMessageCount']
 
 	static constraints = {
-		name(blank: false, nullable: false, unique: true)
+		name(blank:false, nullable:false, unique:true)
 		sentMessageText(nullable:true)
 	}
 	

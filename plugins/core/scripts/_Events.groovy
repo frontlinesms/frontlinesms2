@@ -36,13 +36,9 @@ eventTestPhaseStart = { name ->
 
 eventTestStart = { name ->
 	if (inFunctionalTestPhase) {
-		def sql = Sql.newInstance("jdbc:hsqldb:mem:testDb", "sa",
-				"", "org.hsqldb.jdbcDriver")
+		def sql = Sql.newInstance('jdbc:h2:mem:testDb', 'sa', '', 'org.h2.Driver')
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
-		sql.eachRow("SELECT * FROM  INFORMATION_SCHEMA.SYSTEM_TABLES where TABLE_SCHEM = 'PUBLIC'") { row ->
-			sql.execute "DELETE FROM " + row.TABLE_NAME
-		}
-
+		sql.eachRow("SHOW TABLES") { table -> sql.execute('DELETE FROM ' + table.TABLE_NAME) } 
 		sql.execute "SET REFERENTIAL_INTEGRITY TRUE"
 	}
 
