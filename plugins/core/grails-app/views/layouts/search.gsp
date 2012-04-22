@@ -6,11 +6,12 @@
 		<r:require module="search"/>
 		<g:render template="/includes" plugin="core"/>
 		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title"/>
-		<g:javascript>
+		<r:script>
 			$(function() {  
 			   disablePaginationControls();
 			});
-		</g:javascript>
+		</r:script>
+		<r:layoutResources/>
 	</head>
 	<body id="search-tab">
 		<div id="header">

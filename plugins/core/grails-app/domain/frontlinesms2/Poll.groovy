@@ -23,7 +23,7 @@ class Poll extends Activity {
 	}
 			
 	static constraints = {
-		name(blank: false, nullable: false, maxSize: 255, unique: true)
+		name(blank:false, maxSize:255, unique:true)
 		responses(validator: { val, obj ->
 			val?.size() > 2 &&
 					(val*.value as Set)?.size() == val?.size()

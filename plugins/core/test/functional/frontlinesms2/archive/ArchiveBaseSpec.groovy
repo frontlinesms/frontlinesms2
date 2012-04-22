@@ -4,19 +4,15 @@ import frontlinesms2.*
 
 class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 	def createTestFolders() {
-		['Work', 'Projects'].each() {
-			new Folder(name:it).save(failOnError:true, flush:true)
-		}
+		['Work', 'Projects'].each() { Folder.build(name:it) }
 	}
 
 	def createTestMessages() {
-		[new Fmessage(src:'Max', dst:'+254987654', text:'I will be late', dateReceived: new Date() - 4, starred: true),
-				new Fmessage(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived: new Date() - 3),
-				new Fmessage(src:'Patrick', dst:'+254112233', text:'Project has started', dateReceived: new Date() - 2),
-				new Fmessage(src:'Zeuss', dst:'+234234', text:'Sewage blocked', dateReceived: new Date() - 1)].each() {
-			it.inbound = true
-			it.save(failOnError:true, flush:true)
-		}
+		Fmessage.build(src:'Max', dst:'+254987654', text:'I will be late', dateReceived:new Date()-4, starred:true)
+		Fmessage.build(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived:new Date()-3)
+		Fmessage.build(src:'Patrick', dst:'+254112233', text:'Project has started', dateReceived:new Date()-2)
+		Fmessage.build(src:'Zeuss', dst:'+234234', text:'Sewage blocked', dateReceived: new Date()-1)
+
 		[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
 				Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
 				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
@@ -26,10 +22,8 @@ class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def createTestMessages2() {
-		[new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, archived:true, inbound:true),
-			new Fmessage(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3, archived:true, inbound:true)].each() {
-			it.save(failOnError:true, flush:true)
-		}
+		Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4, archived:true)
+		Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:TEST_DATE-3, archived:true)
 	}
 }
 

@@ -14,81 +14,66 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	static createInboxTestMessages() {
-		[new Fmessage(src:'Bob', text:'hi Bob', date: new Date() - 2),
-				new Fmessage(src:'Alice', text:'hi Alice', date: new Date() - 1, starred: true)].each() {
-					it.inbound = true
-					it.save(flush:true, failOnError:true)
-				}
+		Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
+		Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
 
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', date: new Date(), inbound: true)
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'Unknown')
+		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
+		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
+
 		def poll = new Poll(name:'Miauow Mix')
-		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse)
-		poll.addToResponses(unknownResponse)
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
+		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
+			PollResponse r = new PollResponse(value:value)
+			if(m) r.addToMessages(m)
+			poll.addToResponses(r)
+		}
 		poll.save(flush:true, failOnError:true)
 	}
 	
 	static createSearchTestMessages() {
-		[new Fmessage(src:'Alex', text:'meeting at 11.00'),
-				new Fmessage(src:'Bob', text:'hi Bob'),
-				new Fmessage(src:'Michael', text:'Can we get meet in 5 minutes')].each() {
-					it.inbound = true
-					it.date = new Date()
-					it.save(failOnError:true, flush:true)
-				}
+		Fmessage.build(src:'Alex', text:'meeting at 11.00')
+		Fmessage.build(src:'Bob', text:'hi Bob')
+		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
 
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', date: new Date(), inbound:true)
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'Unknown')
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(title:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
+		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
+		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
+
+		def poll = new Poll(name:'Miauow Mix')
+		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
+			PollResponse r = new PollResponse(value:value)
+			if(m) r.addToMessages(m)
+			poll.addToResponses(r)
+		}
+		poll.save(flush:true, failOnError:true)
 	}
 	
-	static createTestContacts() {	
-		[new Contact(name: 'Alice', mobile: '+254778899'),
-			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(flush:true, failOnError:true) }
+	static createTestContacts() {
+		Contact.build(name:'Alice', mobile:'+254778899')
+		Contact.build(name:'Bob', mobile:'+254987654')
 	}
 	
 	static createTestData() {
-		[new Contact(name: 'Bob', mobile: '+254987654')].each() {it.save(flush:true, failOnError:true)}
+		Contact.build(name:'Bob', mobile:'+254987654')
 		
-		[new Fmessage(src:'Bob',text:'hi Bob'),
-				new Fmessage(src:'Alice', text:'hi Alice'),
-				new Fmessage(src:'+254778899', text:'test')].each() {
-					it.inbound = true
-					it.save(flush:true, failOnError:true)
-				}
-		[new Fmessage(src:'Mary', text:'hi Mary'),
-				new Fmessage(src:'+254445566', text:'test')].each() {
-					it.inbound = true
-					it.save(flush:true, failOnError:true)
-				}
+		Fmessage.build(src:'Bob',text:'hi Bob')
+		Fmessage.build(src:'Alice', text:'hi Alice')
+		Fmessage.build(src:'+254778899', text:'test')
+		Fmessage.build(src:'Mary', text:'hi Mary')
+		Fmessage.build(src:'+254445566', text:'test')
 		
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'Unknown')
-		def poll = new Poll(name:'Miauow Mix')
-		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse)
-		poll.addToResponses(unknownResponse)
-		poll.save(flush:true, failOnError:true)
-		chickenResponse.addToMessages(chickenMessage)
-		liverResponse.addToMessages(liverMessage)
+		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
+		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
 
-		def message1 = new Fmessage(src:'Cheney', text:'i hate chicken', inbound:true, date: new Date())
-		def message2 = new Fmessage(src:'Bush', text:'i hate liver', inbound:true, date: new Date())
-		def fools = new Folder(name:'Fools').save(flush:true, failOnError:true)
+		def poll = new Poll(name:'Miauow Mix')
+		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
+			PollResponse r = new PollResponse(value:value)
+			if(m) r.addToMessages(m)
+			poll.addToResponses(r)
+		}
+		poll.save(flush:true, failOnError:true)
+
+		def message1 = Fmessage.build(src:'Cheney', text:'i hate chicken')
+		def message2 = Fmessage.build(src:'Bush', text:'i hate liver')
+		def fools = Folder.build(name:'Fools')
 		fools.addToMessages(message1)
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)

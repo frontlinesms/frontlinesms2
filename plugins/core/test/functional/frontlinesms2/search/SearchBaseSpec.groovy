@@ -5,96 +5,84 @@ import frontlinesms2.*
 class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestMessages() {
-		[new Fmessage(src:'Bob', text:'hi Bob'),
-				new Fmessage(src:'Alice', text:'hi Alice'),
-				new Fmessage(src:'+254778899', text:'test')].each() {
-					it.inbound = true
-					it.date = new Date()
-					it.save(failOnError:true)
-				}
+		Fmessage.build(src:'Bob', text:'hi Bob')
+		Fmessage.build(src:'Alice', text:'hi Alice')
+		Fmessage.build(src:'+254778899', text:'test')
 	}
 	
 	static createTestGroups() {
-		new Group(name: 'Listeners').save(flush: true)
-		new Group(name: 'Friends').save(flush: true)
+		Group.build(name:'Listeners')
+		Group.build(name:'Friends')
 	}
 	
 	static createTestMessages2() {
-		[new Fmessage(src:'Doe', text:'meeting at 11.00', date: new Date()-1),
-				new Fmessage(src:'Alex', text:'hi alex', date: new Date()-1)].each() {
-			it.inbound = true
-			it.save(failOnError:true)
-		}
+		Fmessage.build(src:'Doe', text:'meeting at 11.00', date:new Date()-1)
+		Fmessage.build(src:'Alex', text:'hi alex', date:new Date()-1)
 	}
 	
 	static createTestPollsAndFolders() {
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		def unknownResponse = new PollResponse(value:'Unknown')
-		new Fmessage(src:'Joe', text:'eat more cow', messageOwner:'chickenResponse', date: new Date(), inbound: true)
-		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
-		Folder f = new Folder(name: "Work").save(failOnError:true, flush:true)
-		
+
+		Poll p = new Poll(name:'Miauow Mix')
+		[chickenResponse, liverResponse, unknownResponse].each { p.addToResponses(it) }
+		chickenResponse.addToMessages(Fmessage.build(src:'Joe', text:'eat more cow'))
+		p.save(failOnError:true, flush:true)
+
+		Folder.build(name:"Work")
 	}
 	
-	static createTestContactsAndCustomFieldsAndMessages(){
-		def firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true)
-		def secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true)
-		def thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true)
+	static createTestContactsAndCustomFieldsAndMessages() {
+		Contact.build(name:'Alex', mobile:'+254987654')
+				.addToCustomFields(name:'town', value:'Paris')
+		Contact.build(name:'Mark', mobile:'+254333222')
+				.addToCustomFields(name:'like', value:'cake')
+				.addToCustomFields(name:'ik', value:'car')
+		Contact.build(name:"Toto", mobile:'+666666666')
+				.addToCustomFields(name:'like', value:'ake')
 		
-		[new CustomField(name:'town', value:'Paris', contact: firstContact),
-			new CustomField(name:'like', value:'cake', contact: secondContact),
-			new CustomField(name:'ik', value:'car', contact: secondContact),
-			new CustomField(name:'like', value:'ake', contact: thirdContact),
-			new Fmessage(src:'+666666666', text:'finaly i stay in bed', inbound:true, date: new Date())].each {
-		it.save(failOnError:true)
-		}
+		Fmessage.build(src:'+666666666', text:'finaly i stay in bed')
 	}
 	
 	static createInboxTestMessages() {
-		[new Fmessage(src:'Bob', text:'hi Bob', date: new Date() - 2),
-				new Fmessage(src:'Alice', text:'hi Alice', date: new Date() - 1, starred: true)].each() {
-					it.inbound = true
-					it.save(failOnError:true)
-				}
+		Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-2)
+		Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
 
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
-		def chickenResponse = new PollResponse(value:'chicken')
-		def liverResponse = new PollResponse(value:'liver')
-		def unknownResponse = new PollResponse(value:'Unknown')
+		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
+		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
+
 		def poll = new Poll(name:'Miauow Mix')
-		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse)
-		poll.addToResponses(unknownResponse)
-		liverResponse.addToMessages(liverMessage)
-		chickenResponse.addToMessages(chickenMessage)
-		
-		poll.save(failOnError:true, flush:true)
+		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
+			PollResponse r = new PollResponse(value:value)
+			poll.addToResponses(r)
+			if(m) r.addToMessages(m)
+		}
+		poll.save(flush:true, failOnError:true)
 	}
 	
 	static createSearchTestMessages() {
-		[new Fmessage(src:'Alex', text:'meeting at 11.00', date: new Date()-1),
-			new Fmessage(src:'Bob', text:'hi Bob', date: new Date()-1),
-				new Fmessage(src:'Michael', text:'Can we get meet in 5 minutes', date: new Date())].each() {
-					it.inbound = true
-					it.save(failOnError:true)
-				}
+		Fmessage.build(src:'Alex', text:'meeting at 11.00', date:new Date()-1)
+		Fmessage.build(src:'Bob', text:'hi Bob', date:new Date()-1)
+		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes')
 
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: new Date())
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound: true, date: new Date())
+		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
+		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
 		def chickenResponse = new PollResponse(value:'chicken')
 		def liverResponse = new PollResponse(value:'liver')
 		def unknownResponse = new PollResponse(value:'Unknown')
+
+		Poll p = new Poll(name:'Miauow Mix')
+		[chickenResponse, liverResponse, unknownResponse].each { p.addToResponses(it) }
+		p.save(failOnError:true, flush:true)
+
 		liverResponse.addToMessages(liverMessage)
 		chickenResponse.addToMessages(chickenMessage)
-		Poll p = new Poll(name:'Miauow Mix', responses:[chickenResponse, liverResponse, unknownResponse]).save(failOnError:true, flush:true)
 	}
 	
 	static createTestContacts() {
-		[new Contact(name: 'Alice', mobile: '+254778899'),
-			new Contact(name: 'Bob', mobile: '+254987654')].each() { it.save(failOnError:true) }
+		Contact.build(name:'Alice', mobile:'+254778899')
+		Contact.build(name:'Bob', mobile:'+254987654')
 	}
-	
 }
 

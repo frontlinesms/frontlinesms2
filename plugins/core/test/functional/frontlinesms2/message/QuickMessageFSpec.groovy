@@ -215,7 +215,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "should not deselect group when a non-member contact is unchecked"() {
 		setup:
 			createData()
-			def contact = new Contact(name:"Test", mobile:"876543212").save(flush:true)
+			def contact = Contact.build(name:"Test", mobile:"876543212")
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
@@ -234,10 +234,10 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	private def createData() {
-		def group = new Group(name: "group1").save(flush: true)
-		def group2 = new Group(name: "group2").save(flush: true)
-		def alice = new Contact(name: "alice", mobile: "12345678").save(flush: true)
-		def bob = new Contact(name: "bob", mobile: "567812445").save(flush: true)
+		def group = Group.build(name:"group1")
+		def group2 = Group.build(name:"group2")
+		def alice = Contact.build(name:"alice", mobile:"12345678")
+		def bob = Contact.build(name:"bob", mobile:"567812445")
 		group.addToMembers(alice)
 		group2.addToMembers(alice)
 		group.addToMembers(bob)

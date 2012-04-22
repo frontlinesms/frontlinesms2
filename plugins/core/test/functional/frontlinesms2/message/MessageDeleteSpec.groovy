@@ -23,7 +23,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
-			def message = new Fmessage(text:"to delete", inbound:true, src:"src").save(failOnError:true)
+			def message = Fmessage.build()
 			deleteMessage(message)
 			go "message/trash"
 			assert Fmessage.findAllByIsDeleted(true).size == 1
@@ -66,21 +66,15 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def deleteMessage(Fmessage message) {
 		message.isDeleted = true
 		message.save(flush:true)
-		new Trash(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
+		Trash.build(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id)
 	}
 	
 	static createTestData() {
-		[new Fmessage(src:'Bob', text:'hi Bob'),
-				new Fmessage(src:'Alice', text:'hi Alice'),
-				new Fmessage(src:'+254778899', text:'test')].each() {
-					it.inbound = true
-					it.save(flush:true, failOnError:true)
-				}
-		[new Fmessage(src:'Mary', text:'hi Mary'),
-				new Fmessage(src:'+254445566', text:'test')].each() {
-				    it.inbound = true
-					it.save(flush:true, failOnError:true)
-				}
+		Fmessage.build(src:'Bob', text:'hi Bob')
+		Fmessage.build(src:'Alice', text:'hi Alice')
+		Fmessage.build(src:'+254778899', text:'test')
+		Fmessage.build(src:'Mary', text:'hi Mary')
+		Fmessage.build(src:'+254445566', text:'test')
 	}
 }
 

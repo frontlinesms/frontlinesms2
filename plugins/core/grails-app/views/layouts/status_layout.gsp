@@ -6,6 +6,7 @@
 		<r:require module="status"/>
 		<g:render template="/includes" plugin="core"/>
 		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title"/>
+		<r:layoutResources/>
 	</head>
 	<body id="status-tab">
 		<div id="header">

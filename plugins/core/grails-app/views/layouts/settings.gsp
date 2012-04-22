@@ -5,7 +5,8 @@
 		<r:require module="settings"/>
 		<g:render template="/includes" plugin="core"/>
 		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title"/>
-		<g:layoutHead />
+		<g:layoutHead/>
+		<r:layoutResources/>
 	</head>
 	<body id="settings-tab">
 		<div id="header">

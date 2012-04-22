@@ -104,7 +104,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	private def setupInboxMessages() {
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", text: "inbox ${i}", date: new Date() - i, inbound:true).save(flush: true)
+			Fmessage.build(src:"src${i}", text:"inbox ${i}", date: new Date()-i)
 		}
 	}
 
@@ -112,7 +112,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	private def setupSentMessages() {
 		def d = new Dispatch(dst:"345678", status: DispatchStatus.SENT, dateSent:new Date())	
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", text: "sent ${i}", hasSent:true, inbound:false, date: new Date()).addToDispatches(d).save(flush: true, failOnError:true)
+			new Fmessage(src:"src${i}", text:"sent ${i}").addToDispatches(d).save(flush:true, failOnError:true)
 		}
 	}
 
@@ -120,29 +120,29 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	private def setupPendingMessages() {
 		def d = new Dispatch(dst:"345678", status: DispatchStatus.PENDING)
 		(1..51).each { i ->
-			new Fmessage(src: "src${i}", text: "pending ${i}", inbound:false, hasPending:true, date: new Date()).addToDispatches(d).save(flush: true, failOnError:true)
+			new Fmessage(src:"src${i}", text:"pending ${i}").addToDispatches(d).save(flush:true, failOnError:true)
 		}
 	}
 
 
 	private def setupDeletedMessages() {
 		(1..51).each { i ->
-			deleteMessage(new Fmessage(src: "src${i}", text: "deleted ${i}", inbound: true, date: new Date()).save(flush: true))
+			deleteMessage(Fmessage.build(src:"src${i}", text:"deleted ${i}"))
 		}
 	}
 
 	def deleteMessage(Fmessage message) {
 		message.isDeleted = true
 		message.save(flush:true)
-		new Trash(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
+		Trash.build(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id)
 	}
 
 	private def setupFolderAndItsMessages() {
-		def folder = new Folder(name:'folder').save(failOnError:true, flush:true)
+		def folder = Folder.build(name:'folder')
 		(1..51).each { i ->
-			folder.addToMessages(new Fmessage(src: "src${i}", text: "folder ${i}", inbound: true, date: new Date()))
+			folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
 		}
-		folder.save(flush: true)
+		folder.save(flush:true)
 	}
 
 
@@ -154,10 +154,10 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		poll.addToResponses(yes).addToResponses(no).addToResponses(unknown)
 		poll.save(flush:true, failOnError:true)
 		(1..25).each { i ->
-			yes.addToMessages(new Fmessage(src: "src${i}", text: "yes ${i}", inbound: true, date: new Date()))
+			yes.addToMessages(Fmessage.build(src:"src${i}", text:"yes ${i}"))
 		}
 		(1..26).each { i ->
-			no.addToMessages(new Fmessage(src: "src${i}", text: "no ${i}", inbound: true, date: new Date()))
+			no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
 		}
 		poll.save(flush: true)
 	}
