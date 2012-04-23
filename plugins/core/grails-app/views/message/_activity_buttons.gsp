@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.*" %>
 <ul class="header-buttons">
 	<li>
 		<g:remoteLink class="section-action-button activity-btn btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard('Quick Message', data, 'Send', true);" id="quick_message">

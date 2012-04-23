@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.*" %>
 <div class="section-header ${messageSection}" id="message-list-header">
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
