@@ -25,7 +25,7 @@ class ConnectionController {
 			render(view:'show', model:show() << [connectionInstanceList:fconnectionInstanceList,
 					fconnectionInstanceTotal:fconnectionInstanceTotal])
 		} else {
-			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
+			flash.message = LogEntry.log(message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id]))
 			render(view:'show', model:[fconnectionInstanceTotal: 0])
 		}
 	}
@@ -61,10 +61,10 @@ class ConnectionController {
 			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 			fconnectionInstance.properties = params
 			if(fconnectionInstance.save()) {
-				flash.message = LogEntry.log("${message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id])}")
+				flash.message = LogEntry.log(message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id]))
 				redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 			} else {
-				flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
+				flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 				redirect(controller:'settings', action: "connections", params: params)
 			}
 		}
@@ -73,7 +73,7 @@ class ConnectionController {
 	private def remapFormParams() {
 		def cType = params.connectionType
 		if(!(cType in CONNECTION_TYPE_MAP)) {
-			throw new RuntimeException("${message(code: 'fconnection.unknown.type')}" + cType)
+			throw new RuntimeException(message(code: 'fconnection.unknown.type') + cType)
 		}
 		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException
 		params.each { k, v ->
@@ -87,7 +87,7 @@ class ConnectionController {
 	def createRoute = {
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
-		flash.message = "${message(code: 'connection.route.connecting')}"
+		flash.message = message(code: 'connection.route.connecting')
 		redirect(action:'list', params:params)
 	}
   
@@ -113,7 +113,7 @@ class ConnectionController {
 		withFconnection { connection ->
 			def message = messageSendService.createOutgoingMessage(params)
 			messageSendService.send(message, connection)
-			flash.message = LogEntry.log("${message(code: 'fconnection.test.message.sent')}")
+			flash.message = LogEntry.log(message(code: 'fconnection.test.message.sent'))
 			redirect (action:'list', id:params.id)
 		}
 	}
@@ -122,10 +122,10 @@ class ConnectionController {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save()) {
-			flash.message = LogEntry.log("${message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id])}")
+			flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
 			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
 		} else {
-			flash.message = LogEntry.log("${message(code: 'connection.creation.failed', args:[fconnectionInstance.errors])}")
+			flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
 			redirect(controller:'connection', action:"list")
 		}
 	}
@@ -135,7 +135,7 @@ class ConnectionController {
 		if(connection) {
 			c connection
 		} else {
-			flash.message = LogEntry.log("${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}")
+			flash.message = LogEntry.log(message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id]))
 			redirect(controller:'connection', action:'list')
 		}
 	}

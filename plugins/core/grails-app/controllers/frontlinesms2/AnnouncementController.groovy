@@ -21,6 +21,6 @@ class AnnouncementController extends ActivityController {
 	private def withAnnouncement(Closure c) {
 		def announcementInstance = Announcement.get(params.id)
 		if (announcementInstance) c announcementInstance
-		else render(text: "${message(code: 'announcement.id.exist.not', args: [message(code: params.id), ''])}") // TODO handle error state properly
+		else render(text: message(code: 'announcement.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
 	}
 }

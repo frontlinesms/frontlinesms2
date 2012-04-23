@@ -107,7 +107,6 @@ class SmartGroupController {
 		}
 	}
 	
-	
 	private def getSmartGroupRuleFields() {
 		def smartGroupRuleFields = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
 		smartGroupRuleFields
