@@ -5,6 +5,7 @@ class FsmsTagLib {
 
 	def i18n = { att ->
 		out << '<script type="text/javascript">'
+		out << 'var i18nStrings = {};\n' // FIXME remove this when layoutResources is working as expected
 		att.keys.tokenize(',')*.trim().each {
 			def propVal = g.message(code:it)
 			propVal = propVal.replaceAll("\\'", "\\\\'")
