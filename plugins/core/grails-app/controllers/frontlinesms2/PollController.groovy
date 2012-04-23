@@ -8,9 +8,9 @@ class PollController extends ActivityController {
 		if(Poll.get(params.ownerId)) {
 			poll = Poll.get(params.ownerId)
 			if(params.enableKeyword && params.keyword)
-				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword))
+				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword.toUpperCase()))
 		} else if(params.enableKeyword && params.keyword) {
-			poll = new Poll(keyword: new Keyword(value: params.keyword))
+			poll = new Poll(keyword: new Keyword(value: params.keyword.toUpperCase()))
 		} else {
 			poll = new Poll()
 		}
