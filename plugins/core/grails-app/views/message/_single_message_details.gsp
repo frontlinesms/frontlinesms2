@@ -22,7 +22,11 @@
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${messageInstance.date}"/></p>
 			<g:if test="${messageInstance.messageOwner}">
-				<p id="message-detail-owner" class="${messageInstance.messageOwner.type}"><g:link action="${messageInstance.messageOwner.type}" params="[ownerId: messageInstance.messageOwner.id]">${messageInstance.messageOwner.name} (${messageInstance.messageOwner.type})</g:link></p>
+				<p id="message-detail-owner" class="${messageInstance.messageOwner.shortName}">
+					<g:link action="${messageInstance.messageOwner.shortName}" params="[ownerId: messageInstance.messageOwner.id]">
+						<g:message code="${messageInstance.messageOwner.shortName}.title" args="${[messageInstance.messageOwner.name]}"/>
+					</g:link>
+				</p>
 			</g:if>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>

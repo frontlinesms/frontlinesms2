@@ -4,6 +4,7 @@ class Poll extends Activity {
 //> CONSTANTS
 	private static final String ALPHABET = ('A'..'Z').join()
 	static final String KEY_UNKNOWN = 'unknown'
+	static String getShortName() { 'poll' }
 
 //> SERVICES
 	def messageSendService
@@ -34,7 +35,6 @@ class Poll extends Activity {
 	}
 
 //> ACCESSORS
-	def getType() { 'poll' } // FIXME this should not be necessary - use class and i18n with messages.properties
 	def getUnknown() {
 		println "KEYS: ${responses.collect { it.key }}"
 		responses.find { it.key == KEY_UNKNOWN } }
