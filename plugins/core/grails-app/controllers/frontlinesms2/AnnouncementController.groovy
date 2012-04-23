@@ -6,15 +6,14 @@ class AnnouncementController extends ActivityController {
 		def announcementInstance = new Announcement()
 		announcementInstance.name = params.name
 		announcementInstance.sentMessageText = params.messageText
-		def message = messageSendService.createOutgoingMessage(params)
-		messageSendService.send(message)
-		announcementInstance.addToMessages(message)
+		def fmessage = messageSendService.createOutgoingMessage(params)
+		messageSendService.send(fmessage)
+		announcementInstance.addToMessages(fmessage)
 		if (announcementInstance.save()) {
-
-			flash.message = "${message(code: 'announcement.saved')}"
+			flash.message = message(code: 'announcement.saved')
 			[ownerId: announcementInstance.id]
 		} else {
-			flash.message = "${message(code: 'announcement.not.saved')}"
+			flash.message = message(code: 'announcement.not.saved')
 			render(text: flash.message)
 		}
 	}
