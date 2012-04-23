@@ -1,0 +1,104 @@
+# Moving, Deleting, Replying and Forwarding
+
+_Moving, Deleting, Replying and Forwarding are actions which can be used on any kind of message in the system. Their application is the same wherever you find the option to perform one of the actions. So, replying to a message from your [inbox][1] is performed in the same way as replying to a message in an [archive][2] or [activity][3]. The same can be applied to the other actions. On this page you will find detailed help on how to perform these actions._
+
+---
+
+### [Replying][4]
+
+You can reply to a message, or to the sender's of multiple messages by selecting them and then clicking the [reply][4] or [reply all][5] button.
+
+1.  [Select][11] the message you would like to reply to. If you select more than one message, then the reply will be sent to all the different sender's that you have selected.
+2.  Click "Reply" if you have selected one message, or "Reply All" if you have selected more than one.
+3.  A window will appear asking you to enter the message you would like to send in reply.
+4.  Once you have written your message, click Next.
+5.  The confirmation window will appear informing you of the contact (if the number is saved to a contact), or the number the message will be sent to, and how many messages will be sent. 
+6.  Click "Send" to send your reply/replies.
+
+Message in the [Sent][6] folder **_cannot_** be replied to. All other messages can!
+
+---
+
+### [Deleting][7]
+
+#### [Deleting Messages][8]
+
+You can delete a message, or multiple messages, by selecting them and then clicking the [delete][9] or [delete all][10] button:
+
+SCREENSHOT
+
+1.  [Select][11] the message or messages you would like to delete.
+2.  Click "delete" if you have selected one message, or "delete all" if you have selected more than one.
+3.  Your message(s) will be deleted
+
+**_Note**: Deleted messages can be found in the [trash][12] for a short period of time after they have been deleted
+
+#### [Deleting Activities and Folders][13]
+
+You can delete [activities][3] and [folders][14] in the same way you can delete messages.
+
+SCREENSHOT
+
+1.  When you are viewing the [activity][3] or [folder][14] you want to delete, find the "More Actions..." drop down menu.
+SCREENSHOT
+2.  From here choose "Delete [type of activity]" (e.g "Delete Poll" if you are deleting a poll) or "Delete Folder" if you are deleting a folder.
+3.  A window will appear asking you if you want to confirm the deletion.
+4.  Click "Delete".
+
+The activity _and all messages within it_ will be moved to the [trash][12].  
+
+---
+
+### [Moving][15]
+
+You can move messages into [activities][3] and [folders][14]. The [move][15] action can be found where there is a "Move message to..." dropdown
+
+SCREENSHOT
+
+1.  [Select][10] the message or messages that you would like to move.
+2.  In the "Move Message to..." drop down menu, select where you would like to move the message(s) to.
+
+*__Note:__ Messages in the [inbox][1] can be moved to active [folders][14] and [activities][3].   
+Messages in an [activity][3] or [folder][14] can only be moved to the [inbox][1] or other [activities][3] and [folders][14].*
+
+3.  The selected message(s) will be moved to the chosen place.
+
+---
+
+### [Forwarding][16]
+
+You can forward a message on from almost anywhere in the software. Only messages stored in [pending][17] or the [trash][12] cannot be forwarded. When you have selected more than one message you cannot use the forward action - it can only be performed on single messages.
+
+SCREENSHOT
+
+1.  [Select][11] the message you would like to forward.
+2.  Click on the small arrow next to the "Reply" button. If the message is in the [Sent][6] folder, then the small arrow will appear next to the "Resend" button. The "Forward" action will appear. Click on it to continue.
+3.  A window will appear with the selected message already in the message text area. Click Next.
+4.  At this screen you can add the recipient phone number or phone numbers that you want to forward to. You can also send to contacts and groups that you have created previously.
+5.  The confirmation window will appear with a summary containing the message to be sent, how many recipients it will be sent to and how many messages will be sent in total.  
+6.  Click "Send" to forward the message.
+
+---
+
+### Related Actions
+[Exporting][18]
+[Selecting Multiple Messages][11]
+
+[1]: gotoInboxOverview
+[2]: gotoArchiveOverview
+[3]: gotoActivityOverview
+[4]: Reply
+[5]: ReplyAll
+[6]: gotoSentfolder
+[7]: Deleting
+[8]: DeletingMessages
+[9]: Delete
+[10]: Deleteall
+[11]: gotoSelectingMessages
+[12]: gotoTrash
+[13]: deletingactivitiesandfolders
+[14]: gotoFolderOverview
+[15]: moving
+[16]: Forwarding
+[17]: gotoPending
+[18]: exporting

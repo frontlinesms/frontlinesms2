@@ -6,8 +6,8 @@
 			<g:message code="common.settings" />
 		</g:link>
 	</li>
-	<li class="nav ${params.controller=='help'?'selected':''}">
-		<g:remoteLink controller="help" onSuccess="launchMediumPopup(i18n('popup.help.title'), data, 'Done', cancel)">
+	<li class="nav ${params.controller=='help' ? 'selected' : ''}">
+		<g:remoteLink controller="help" onSuccess="launchMediumWizard(i18n('popup.help.title'), data, 'Done', '95%', 800)">
 			<g:message code="commont.help" />
 		</g:remoteLink>
 	</li>
