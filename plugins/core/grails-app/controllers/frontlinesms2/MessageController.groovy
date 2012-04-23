@@ -123,13 +123,13 @@ class MessageController {
 				sentDispatchCount += it.dispatches.size()
 				sentMessageCount++
 			}
-			render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
+			render view:"../message/${activityInstance instanceof Poll ? 'poll' : 'standard'}",
 				model:[messageInstanceList: messageInstanceList?.list(params),
 						messageSection: 'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
 						ownerInstance: activityInstance,
 						viewingMessages: viewingArchive ? params.viewingMessages : null,
-						pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
+						pollResponse: activityInstance instanceof Poll ? activityInstance.responseStats as JSON : null,
 						sentMessageCount: sentMessageCount,
 						sentDispatchCount: sentDispatchCount] << getShowModel()
 		} else {

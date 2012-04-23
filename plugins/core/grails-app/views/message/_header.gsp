@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.*" %>
 <div class="section-header ${messageSection}" id="message-list-header">
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
@@ -7,17 +8,17 @@
 				<g:message code="fmessage.archive.back" />
 			</g:link>
 		</g:if>
-		<h3 class="activity">${ownerInstance?.name} ${ownerInstance?.type}</h3>
+		<h3 class="activity">${ownerInstance?.name} ${ownerInstance?.shortName}</h3>
 		<g:if test="${ownerInstance}">
 			<g:render template="../message/activity_buttons" plugin="core"/>
 		</g:if>
 		<div id="activity-details" class='section-details'>
-			<g:if test="${ownerInstance?.type == 'poll'}">
+			<g:if test="${ownerInstance instanceof Poll}">
 				<g:render template="../message/poll_header" plugin="core"/>
 			</g:if>
 			<g:else>
 				<g:formatDate date="${ownerInstance?.dateCreated}" />
-				<g:if test="${ownerInstance?.type == 'announcement'}">
+				<g:if test="${ownerInstance instanceof Announcement}">
 					<span id="announcement-sent"><g:message code="fmessage.activity.sentmessage" args="${ [sentMessageCount] }" /></span>
 					<p>${ownerInstance.sentMessageText}</p>
 				</g:if>

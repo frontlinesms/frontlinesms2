@@ -111,8 +111,8 @@ class ConnectionController {
 	
 	def sendTest = {
 		withFconnection { connection ->
-			def message = messageSendService.createOutgoingMessage(params)
-			messageSendService.send(message, connection)
+			def testmessage = messageSendService.createOutgoingMessage(params)
+			messageSendService.send(testmessage, connection)
 			flash.message = LogEntry.log(message(code: 'fconnection.test.message.sent'))
 			redirect (action:'list', id:params.id)
 		}
