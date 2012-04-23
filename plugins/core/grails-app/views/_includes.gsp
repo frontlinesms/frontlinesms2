@@ -1,4 +1,5 @@
 <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms2.plugin')}" type="image/x-icon" />
+
 <r:script>
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
@@ -7,7 +8,7 @@
 	refresh_rate = ${params.rRate ?: 30000};
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 
-//	var i18nStrings = {}; // FIXME reinstate this when layoutResources calls are fixed
+	var i18nStrings = {};
 	function i18n(key) {
 		var translated = i18nStrings[key];
 		for(i=arguments.length-1; i>0; --i) {
@@ -38,3 +39,4 @@
 		$.fn.selectmenu = function() {}
 	</r:script>
 </g:else>
+
