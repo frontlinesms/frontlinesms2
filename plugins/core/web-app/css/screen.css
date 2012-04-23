@@ -6,11 +6,11 @@ html {
 }
 
 body {
-    font-family: Helvetica,Arial,sans-serif;
-    font-size: .75em;
-    color: #333333;
-    margin: 0;
-    padding: 0;
+	font-family: Helvetica,Arial,sans-serif;
+	font-size: .75em;
+	color: #333333;
+	margin: 0;
+	padding: 0;
 }
 
 ul, ol {
@@ -83,87 +83,87 @@ h3 {
 
 /*Main*/
 #logo {
-       height: 40px;
-       width: 36px;
+      	height: 40px;
+      	width: 36px;
 }
 
 #main{
-    padding: 0;
-    margin: 0;
-    min-height: 100%;
+	padding: 0;
+	margin: 0;
+	min-height: 100%;
 }
 
 #sidebar{
-    position: fixed;
-    top: 83px;
-    bottom: 0;
-    float: left;
-    width: 17%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-right: 1px solid #9e9e9e;
-    z-index: 50;
+	position: fixed;
+	top: 83px;
+	bottom: 0;
+	float: left;
+	width: 17%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	border-right: 1px solid #9e9e9e;
+	z-index: 50;
 }
 
 #sidebar ul{
-    padding: 0;
-    margin: 0;
-    list-style: none;
+	padding: 0;
+	margin: 0;
+	list-style: none;
 }
 #sidebar .main-list li h3{
-    text-transform: uppercase;
-    margin: 17px 17px 0 15px;
-    padding-left: 25px;
+	text-transform: uppercase;
+	margin: 17px 17px 0 15px;
+	padding-left: 25px;
 }
 
 #sidebar .sublist a{
-    display: block;
-    padding: 0 17px 0 40px;
+	display: block;
+	padding: 0 17px 0 40px;
 }
 #sidebar .sublist a.create{
-    display: block;
-    padding: 6px 0;
+	display: block;
+	padding: 6px 0;
 }
 
 #sidebar .sublist{
-    margin: 10px 0;
+   	margin: 10px 0;
 }
 
 #sidebar .sublist li{
-    padding: 5px 0;
-    margin: 0;
+	padding: 5px 0;
+	margin: 0;
 }
 
 .list-title{
-    background-repeat: no-repeat;
+   	background-repeat: no-repeat;
 }
 #messages-tab #messages-list-title{
-    background-image: url('../images/icons/messages.png');
-    background-position: center left;
+	background-image: url('../images/icons/messages.png');
+	background-position: center left;
 }
 #messages-tab .activities-list-title{
-    background-image: url('../images/icons/activities.png');
-    background-position: center left;
+	background-image: url('../images/icons/activities.png');
+	background-position: center left;
 }
 #messages-tab #folders-list-title{
-    background-image: url('../images/icons/folders.png');
-    background-position: center left;
+	background-image: url('../images/icons/folders.png');
+	background-position: center left;
 }
 #messages-tab #shows-list-title{
-    background-image: url('../images/icons/shows.png');
-    background-position: center left;
+	background-image: url('../images/icons/shows.png');
+	background-position: center left;
 }
 
 #contacts-tab  #contacts-list-title{
-    background-image: url('../images/icons/contacts.png');
-    background-position: center left;
+	background-image: url('../images/icons/contacts.png');
+	background-position: center left;
 }
 #contacts-tab #groups-list-title{
-    background-image: url('../images/icons/groups.png');
-    background-position: center left;
+	background-image: url('../images/icons/groups.png');
+	background-position: center left;
 }
 #contacts-tab  #smart-groups-list-title{
-    background-image: url('../images/icons/smartgroups.png');
+   	background-image: url('../images/icons/smartgroups.png');
 }
 
 #archive-tab .sublist .archive-section-list{
@@ -173,16 +173,16 @@ h3 {
 	padding: 4px 25px 0 25px;
 }
 #archive-tab .sublist #inbox{
-    background-image: url('../images/icons/inboxarchive.png');
+   	background-image: url('../images/icons/inboxarchive.png');
 }
 #archive-tab .sublist #sent{
-    background-image: url('../images/icons/sentarchive.png');
+   	background-image: url('../images/icons/sentarchive.png');
 }
 #archive-tab .sublist #activity{
-    background-image: url('../images/icons/activitiesarchive.png');
+   	background-image: url('../images/icons/activitiesarchive.png');
 }
 #archive-tab .sublist #folder{
-    background-image: url('../images/icons/foldersarchive.png');
+   	background-image: url('../images/icons/foldersarchive.png');
 }
 
 #content{
@@ -191,33 +191,33 @@ h3 {
 	left: 17%;
 	bottom: 0;
 	right: 0;
-    padding: 0;
-    margin: 0;
-    background-color: #fff;
-    float: right;
+	padding: 0;
+	margin: 0;
+	background-color: #fff;
+	float: right;
 }
 
 #archive-tab .section-header #inbox-title{
-    background-image: url('../images/icons/inboxarchive.png');
+   	background-image: url('../images/icons/inboxarchive.png');
 }
 #archive-tab .section-header #sent-title{
-    background-image: url('../images/icons/sentarchive.png');
+   	background-image: url('../images/icons/sentarchive.png');
 }
 #archive-tab .section-header #activity-title{
-    background-image: url('../images/icons/activitiesarchive.png');
+   	background-image: url('../images/icons/activitiesarchive.png');
 }
 #archive-tab .section-header #folder-title{
-    background-image: url('../images/icons/foldersarchive.png');
+   	background-image: url('../images/icons/foldersarchive.png');
 }
 
 #contacts-tab .section-header #all-contacts-title{
-    background-image: url('../images/icons/contacts.png');
+   	background-image: url('../images/icons/contacts.png');
 }
 #contacts-tab .section-header #group-title{
-    background-image: url('../images/icons/groups.png');
+   	background-image: url('../images/icons/groups.png');
 }
 #contacts-tab .section-header #smart-group-title{
-    background-image: url('../images/icons/smartgroups.png');
+   	background-image: url('../images/icons/smartgroups.png');
 }
 
 .section-header {
@@ -245,35 +245,35 @@ h3 {
 	position: absolute;
 	bottom: 0;
 	left: 0;
-    width: 100%;
-    float: left;
-    height: 23px;
-    padding: 10px 0;
-    border-top: 1px solid #9e9e9e;
-    background-color: #f0f0f0;
-    z-index: 2;
+	width: 100%;
+	float: left;
+	height: 23px;
+	padding: 10px 0;
+	border-top: 1px solid #9e9e9e;
+	background-color: #f0f0f0;
+	z-index: 2;
 }
 
 .footer input[type=text]{
-    display: block;
-    width: 170px;
-    height: 25px;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    border: 1px solid #9e9e9e;
-    padding: 3px;
-    background-image: url('../images/icons/search.png');
-    background-repeat: no-repeat;
-    background-position: right;
+	display: block;
+	width: 170px;
+	height: 25px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border: 1px solid #9e9e9e;
+	padding: 3px;
+	background-image: url('../images/icons/search.png');
+	background-repeat: no-repeat;
+	background-position: right;
 }
 .footer form{
-    float: left;
+	float: left;
 	margin: 0 17px 0 10px;
 }
 
 .footer #paging .step, .footer #paging .currentStep {
-    display: none;
+   	display: none;
 }
 
 .footer #paging .prevLink, .footer #paging .nextLink{
@@ -283,46 +283,45 @@ h3 {
 }
 
 .footer #paging a.prevLink{
-    background-image: url('../images/buttons/paginationleft_default.png');
-    background-repeat: no-repeat;
-    margin-right: 0;
-    
+	background-image: url('../images/buttons/paginationleft_default.png');
+	background-repeat: no-repeat;
+	margin-right: 0;
 }
 
 .footer #paging a.prevLink:hover{
-    background-image: url('../images/buttons/paginationleft_hover.png');
-    background-repeat: no-repeat;
+	background-image: url('../images/buttons/paginationleft_hover.png');
+	background-repeat: no-repeat;
 }
 
 .footer #paging a.prevLink:active{
-    background-image: url('../images/buttons/paginationleft_pressed.png');
-    background-repeat: no-repeat;
+	background-image: url('../images/buttons/paginationleft_pressed.png');
+	background-repeat: no-repeat;
 }
 
 .footer #paging a.prevLink.disabled{
-    background-image: url('../images/buttons/paginationleft_disabled.png');
-    background-repeat: no-repeat;
+	background-image: url('../images/buttons/paginationleft_disabled.png');
+	background-repeat: no-repeat;
 }
 
 .footer #paging a.nextLink{
-    background-image: url('../images/buttons/paginationright_default.png');
-    background-repeat: no-repeat;
-    margin-left: 0;
+	background-image: url('../images/buttons/paginationright_default.png');
+	background-repeat: no-repeat;
+	margin-left: 0;
 }
 
 .footer #paging a.nextLink:hover{
-    background-image: url('../images/buttons/paginationright_hover.png');
-    background-repeat: no-repeat;
+	background-image: url('../images/buttons/paginationright_hover.png');
+	background-repeat: no-repeat;
 }
 
 .footer #paging a.nextLink:active{
-    background-image: url('../images/buttons/paginationright_pressed.png');
-    background-repeat: no-repeat;
+	background-image: url('../images/buttons/paginationright_pressed.png');
+	background-repeat: no-repeat;
 }
 
 .footer #paging a.nextLink.disabled{
-    background-image: url('../images/buttons/paginationright_disabled.png');
-    background-repeat: no-repeat;
+	background-image: url('../images/buttons/paginationright_disabled.png');
+	background-repeat: no-repeat;
 }
 
 
@@ -385,11 +384,11 @@ h3 {
 
 #pollGraph{
 	width: 100%;
-    position: absolute;
+	position: absolute;
 	top: 0;
 	bottom: 0;
 }
 
 #poll-details h3{
-    background-image: url('../images/icons/activities.png');
+   	background-image: url('../images/icons/activities.png');
 }

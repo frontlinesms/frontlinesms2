@@ -4,7 +4,9 @@
 		<title><g:layoutTitle default="Messages"/></title>
 		<g:layoutHead/>
 		<r:require module="messages"/>
+		<r:require module="newMessagesCount"/>
 		<g:render template="/includes" plugin="core"/>
+		<fsms:i18n keys="poll.reply.text, poll.reply.text1, poll.reply.text2, poll.reply.text3, autoreply.blank.keyword, poll.send.messages.none, autoreply.text.none, wizard.title.new, popup.title.saved, group.join.reply.message, group.leave.reply.message, fmessage.new.info, wizard.fmessage.edit.title, smallpopup.fmessage.delete.title, smallpopup.fmessage.export.title, popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, smallpopup.empty.trash.prompt, popup.activity.create, popup.help.title, smallpopup.folder.title, wizard.quickmessage.title, smallpopup.fmessage.rename.title"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();

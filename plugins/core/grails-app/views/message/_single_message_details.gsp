@@ -6,15 +6,15 @@
 			<p id="message-detail-sender">
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-						<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup('Recipients', data, 'Done', cancel);">
+						<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup(i18n('smallpopup.recipients.title'), data, 'Done', cancel);">
 							${messageInstance.displayName}
 						</g:remoteLink>
 					</g:if>
 					<g:else>
 						${messageInstance.displayName}
 					</g:else>
-					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (failed)</g:if>
-					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} failed)</g:elseif>
+					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed" />)</g:if>
+					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed" />)</g:elseif>
 				</span> 
 				<g:if test="${!messageInstance.contactExists}">
 					<g:link elementId="add-contact" controller="contact" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
@@ -39,7 +39,7 @@
 		<div id='message-info'>
 			<p id="message-detail-sender">${ownerInstance.name} ${ownerInstance.type}</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
-			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + " messages"}</p></div>
+			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + g.message(code:'fmessage.many')}</p></div>
 		</div>
 		<g:render template="../message/message_actions" plugin="core"></g:render>
 	</g:elseif>

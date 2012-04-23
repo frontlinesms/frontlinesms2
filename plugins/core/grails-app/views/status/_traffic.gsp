@@ -22,10 +22,11 @@ $(function() {
 			receivedPercent = " (" + Math.round(received * 100 / total) + "%) ";
 		} 
 		var summary = r.text(r.width/2, r.height- padding.bottom, 
-			"Sent: " + sent +  sentPercent +
-			"Received: " + receivedPercent +
-			"Total: " +  total)
+			i18n("traffic.sent")+": " + sent +  sentPercent +
+			i18n("traffic.received")+": " + receivedPercent +
+			i18n("traffic.total")+": " +  total)
 			.attr(textStyle);
+
 	});
 </g:javascript>
 <h3 id="traffic-title"><g:message code="traffic.header" /></h3>

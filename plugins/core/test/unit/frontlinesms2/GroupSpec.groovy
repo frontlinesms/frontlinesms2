@@ -68,8 +68,8 @@ class GroupSpec extends UnitSpec {
 		when:
 			def result = Group.getGroupDetails()
 		then:
-			result."group-$sahara.id" == ["address1", "address2"]
-			result."group-$thar.id" == ["address3"]
+			result."group-$sahara.id" == [name:"sahara",addresses:["address1", "address2"]]
+			result."group-$thar.id" == [name:"thar",addresses: ["address3"]]
 	}
 }
 

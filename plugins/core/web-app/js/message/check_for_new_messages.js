@@ -16,7 +16,7 @@ function checkForNew() {
 
 		if(newTotal > currentTotal) {
 			var newMessageCount = newTotal - currentTotal;
-			var notificationContents = "<a id='refreshMessageList'>You have " + newMessageCount + " new messages. Click to view</a>"
+			var notificationContents = "<a id='refreshMessageList'>" + i18n("fmessage.new.info", newMessageCount) + "</a>"
 			if(!$("#new-message-notification").html())
 				$('#message-list table tbody').prepend('<div id="new-message-notification">' + notificationContents + '</div>');
 			else {

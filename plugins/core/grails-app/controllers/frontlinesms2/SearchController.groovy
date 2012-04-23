@@ -63,11 +63,11 @@ class SearchController extends MessageController {
 	}
 		
 	private def getSearchDescription(search) {
-		String searchDescriptor = "Searching"
+		String searchDescriptor = message(code: 'searchdescriptor.searching')
 		if(search.searchString) {
 			searchDescriptor += ' "'+search.searchString+'"'
 		} else {
-			searchDescriptor += ' all messages'
+			searchDescriptor += message(code: 'searchdescriptor.all.messages')
 		}
 		 
 		if(search.group) searchDescriptor += ", "+search.group.name
@@ -76,7 +76,7 @@ class SearchController extends MessageController {
 			String ownerDescription = activity.name
 			searchDescriptor += ", "+ownerDescription
 		}
-		searchDescriptor += search.inArchive? ", including archived messages":", without archived messages" 
+		searchDescriptor += search.inArchive? message(code: 'searchdescriptor.archived.messages'):message(code: 'searchdescriptor.exclude.archived.messages') 
 		if(search.contactString) searchDescriptor += ", "+search.contactString
 		if (search.customFields.find{it.value}) {
 			search.customFields.find{it.value}.each{
@@ -84,14 +84,14 @@ class SearchController extends MessageController {
 			}
 		}
 		if(search.status) {
-			searchDescriptor += ", only " + search.status
+			searchDescriptor += message(code: 'searchdescriptor.only') + search.status
 		}
 		if(search.startDate && search.endDate){
-			searchDescriptor += ", between " + search.startDate + " and " + search.endDate
+			searchDescriptor += message(code: 'searchdescriptor.between') + search.startDate + message(code: 'searchdescriptor.and') + search.endDate
 		} else if (search.startDate) {
-			searchDescriptor += ", from " + search.startDate
+			searchDescriptor += message(code: 'searchdescriptor.from') + search.startDate
 		} else if (search.endDate) {
-			searchDescriptor += ", until " + search.endDate
+			searchDescriptor += message(code: 'searchdescriptor.until') + search.endDate
 		}
 		return searchDescriptor
 	}

@@ -39,7 +39,7 @@ class ActivityController {
 			activity.archive()
 			activity.save(flush:true, failOnError:true)
 		} // TODO don't flush; check if save is successful
-		flash.message = "Activity archived successfully!"
+		flash.message = message(code: 'activity.archived.successfully')
 		redirect(controller: "message", action: "inbox")
 	}
 	
@@ -48,7 +48,7 @@ class ActivityController {
 			activity.unarchive()
 			activity.save()
 		} // TODO check if save is successful!
-		flash.message = "Activity unarchived successfully!"
+		flash.message = message(code: 'activity.unarchived.successfully')
 		redirect(controller: "archive", action: "activityList")
 	}
 	
@@ -68,7 +68,7 @@ class ActivityController {
 			new Trash(identifier:activity.name, message:"${activity.liveMessageCount}", objectType:activity.class.name, linkId:activity.id).save(failOnError: true, flush: true)
 			activity.save(failOnError: true, flush: true)
 		}
-		flash.message = "Activity has been trashed!"
+		flash.message = message(code: 'activity.trashed')
 		redirect(controller:"message", action:"inbox")
 	}
 	
@@ -78,7 +78,7 @@ class ActivityController {
 			Trash.findByLinkId(activity.id)?.delete()
 			activity.save(failOnError: true, flush: true)
 		}
-		flash.message = "Activity has been restored!"
+		flash.message = message(code: 'activity.restored')
 		redirect(controller: "message", action: "trash")
 	}
 	
@@ -87,6 +87,6 @@ class ActivityController {
 	private def withActivity(Closure c) {
 		def activityInstance = Activity.get(params.id)
 		if (activityInstance) c activityInstance
-		else render(text: "Could not find activity with id ${params.id}") // TODO handle error state properly
+		else render(text: message(code: 'activity.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
 	}
 }

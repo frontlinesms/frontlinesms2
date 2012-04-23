@@ -22,13 +22,13 @@ function renameAction() {
 		url: url_root + messageSection + '/rename',
 		data: {ownerId: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup('Rename ' + messageSection, data, 'Rename');
+			launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, 'Rename');
 	}})
 }
 
 function editAction() {
 	var messageSection = $("#messageSection").val();
-	var title = 'Edit ' + messageSection;
+	var title = i18n("wizard.fmessage.edit.title", messageSection);
 	$.ajax({
 		type:'GET',
 		url: url_root + messageSection + '/edit',
@@ -45,7 +45,7 @@ function deleteAction() {
 		url: url_root + messageSection + '/confirmDelete',
 		data: {id: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup('Delete ' + messageSection, data, 'Delete');
+			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, 'Delete');
 	}})
 }
 
@@ -63,7 +63,7 @@ function exportAction() {
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
 				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
 		success: function(data) {
-			launchSmallPopup('Export', data, 'Export');
+			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, 'Export');
 			updateExportInfo();
 	}})
 }

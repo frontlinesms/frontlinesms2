@@ -78,5 +78,42 @@ class MetaClassModifiers {
 			}
 		}
 	}
+	
+	static def addMapMethods() {
+		LinkedHashMap.metaClass.getAllKeys = {
+		   def c
+		   c = { map ->
+			   def values = []
+				map.each { k, v ->
+				    if(v instanceof Map) {
+				        values << k
+				       values << c(v)
+				    } else {
+				        values << k
+				    }
+				}
+				return values.flatten()
+		   }
+		   c(delegate)
+		}
+		
+		LinkedHashMap.metaClass.getAllValues = {
+		   def c
+		   c = { map ->
+			   def values = []
+				map.each { k, v ->
+				    if(v instanceof Map) {
+				       values << c(v)
+				    } else {
+				        values << v
+				    }
+				}
+				return values.flatten() - null
+		   }
+		   c(delegate)
+		}
+		
+	}
+	
 }
 

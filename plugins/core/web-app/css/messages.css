@@ -5,28 +5,28 @@
 }
 
 #message-list-header h3.inbox{
-    background-image: url('../images/icons/inbox.png');
-}
+   	background-image: url('../images/icons/inbox.png');
+}	
 #message-list-header h3.sent{
-    background-image: url('../images/icons/sent.png');
+   	background-image: url('../images/icons/sent.png');
 }
 #message-list-header h3.pending{
-    background-image: url('../images/icons/pending.png');
+   	background-image: url('../images/icons/pending.png');
 }
 #message-list-header h3.trash{
-    background-image: url('../images/icons/trash.png');
+   	background-image: url('../images/icons/trash.png');
 }
 #message-list-header h3.activity {
-    background-image: url('../images/icons/activities.png');
+   	background-image: url('../images/icons/activities.png');
 }
 #message-list-header h3.folder{
-    background-image: url('../images/icons/folders.png');
+   	background-image: url('../images/icons/folders.png');
 }
 #message-list-header h3.show {
-    background-image: url('../images/icons/shows.png');
+   	background-image: url('../images/icons/shows.png');
 }
 #message-list-header h3.search {
-    background-image: url('../images/icons/search.png');
+   	background-image: url('../images/icons/search.png');
 }
 
 #message-list-header.activity .header-buttons{
@@ -84,15 +84,16 @@
 
 .sorted.asc {
 	background-image: url('../images/buttons/down_arrow.png');
-    background-repeat: no-repeat;
-    background-position: left;
-    padding-left: 25px;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-left: 25px;
 }
+
 .sorted.desc {
 	background-image: url('../images/buttons/up_arrow.png');
-    background-repeat: no-repeat;
-    background-position: left;
-    padding-left: 25px;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-left: 25px;
 }
 
 #new-message-notification a{
@@ -100,9 +101,9 @@
 	cursor: pointer;
 }
 .message-added-to-list {
-animation: newMessage 2s;
--moz-animation: newMessage 2s; /* Firefox */
--webkit-animation: newMessage 2s; /* Safari and Chrome */
+	animation: newMessage 2s;
+	-moz-animation: newMessage 2s; /* Firefox */
+	-webkit-animation: newMessage 2s; /* Safari and Chrome */
 }
 .tall-header #no-messages{
 	position: fixed;
@@ -130,61 +131,61 @@ animation: newMessage 2s;
 
 #message-list .folderOwner {
 	background-image: url('../images/icons/folders.png');
-    background-repeat: no-repeat;
-    background-position: right;
+	background-repeat: no-repeat;
+	background-position: right;
 }
 #message-list .activityOwner {
 	background-image: url('../images/icons/activities.png');
-    background-repeat: no-repeat;
-    background-position: right;
+	background-repeat: no-repeat;
+	background-position: right;
 }
 .message-star-cell a{
-    display: inline-block;
-    padding: 0;
-    width: 16px;
-    height: 16px;
-    background-image: url('../images/icons/star.png');
-    background-repeat: no-repeat;
-    background-position: center left;
+	display: inline-block;
+	padding: 0;
+	width: 16px;
+	height: 16px;
+	background-image: url('../images/icons/star.png');
+	background-repeat: no-repeat;
+	background-position: center left;
 }
 .message-star-cell a:hover{
-    background-image: url('../images/icons/star_on.png');
+   	background-image: url('../images/icons/star_on.png');
 }
 .message-star-cell a.starred{
-    background-image: url('../images/icons/star_on.png');
+  	background-image: url('../images/icons/star_on.png');
 }
 
 #message-list table a, #folder-list table a, #activity-list table a{
-    display: block;
+	display: block;
 }
 
 #message-list .footer{
 	right: 25%;
-    width: 75%;
-    float: left;
-    height: 23px;
-    padding: 10px 0;
-    border-top: 1px solid #9e9e9e;
-    background-color: #f0f0f0;
-    z-index: 2;
+	width: 75%;
+	float: left;
+	height: 23px;
+	padding: 10px 0;
+	border-top: 1px solid #9e9e9e;
+	background-color: #f0f0f0;
+	z-index: 2;
 }
 #message-list .footer #message-toggler {
-    float: left;
-    margin-left: 17px;
+	float: left;
+	margin-left: 17px;
 }
 #message-list .footer form {
 	margin: 0 17px 0 10px;
 }
 #message-list .footer #message-toggler{
-    padding: 4px;
-    text-decoration: none;
-    font-size: 95%;
+	padding: 4px;
+	text-decoration: none;
+	font-size: 95%;
 }
 
 #message-list .footer #message-toggler a{
-    color: inherit;
-    padding: 0 10px;
-    text-decoration: none;
+	color: inherit;
+	padding: 0 10px;
+	text-decoration: none;
 }
 #message-list .footer #paging {
 	float: right;
@@ -194,37 +195,37 @@ animation: newMessage 2s;
 #message-detail{
 	width: 24.9%;
 	height: 100%;
-    float:right;
-    overflow: auto;
-    border-left: 1px solid #9e9e9e;
+	float:right;
+	overflow: auto;
+	border-left: 1px solid #9e9e9e;
 }
 .tall-header #message-detail{
-    position: absolute;
-    top: 200px;
-    bottom: 43px;
-    right: 0;
+	position: absolute;
+	top: 200px;
+	bottom: 43px;
+	right: 0;
 	width: 25%;
-    float:right;
-    overflow: auto;
-    padding-top: 25px;
+	float:right;
+	overflow: auto;
+	padding-top: 25px;
 }
 #single-message, #multiple-messages{
 	padding: 17px 17px;
 }
 
 #message-detail-content{
-    background-color: #fff;
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-    padding: 0;
-    border: 1px solid #b5c6cd;
-    margin: 17px 0;
+	background-color: #fff;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	padding: 0;
+	border: 1px solid #b5c6cd;
+	margin: 17px 0;
 }
 
 #message-detail-content p{
 	margin: 0;
-    padding: 17px;
+	padding: 17px;
 }
 #message-detail-content #no-message{
 	text-align: center;
@@ -257,8 +258,8 @@ animation: newMessage 2s;
 }
 
 #message-detail-buttons{
-    margin: 17px 0 0 0;
-    padding: 0;
+	margin: 17px 0 0 0;
+	padding: 0;
 }
 #message-detail-buttons .msg-btn{
 	width:42%;
@@ -266,8 +267,8 @@ animation: newMessage 2s;
 	padding: 4px 0;
 }
 #message-detail-buttons form{
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 #message-detail .extra-msg-btn{

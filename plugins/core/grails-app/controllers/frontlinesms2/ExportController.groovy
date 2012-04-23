@@ -78,18 +78,18 @@ class ExportController {
 			contactInstanceList = SmartGroup.get(params.groupId).getMembers()
 		generateContactReport(contactInstanceList)
 	}
-	
+
 	private def generateMessageReport(messageInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
 		List fields = ["id", "src", "dst", "text", "date"]
-		Map labels = ["id":"DatabaseID", "src":"Source", "dst":"Destination", "text":"Text", "date":"Date Created"]
-		Map parameters = [title: "FrontlineSMS Message Export"]
+		Map labels = ["id":message(code: 'export.database.id'), "src":message(code: 'export.message.source'), "dst":message(code: 'export.message.destination'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
+		Map parameters = [title: message(code: 'export.message.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try{
 			exportService.export(params.format, response.outputStream, messageInstanceList, fields, labels, [:], parameters)
 		} catch(Exception e){
-			render(text: "Error creating report")
+			render(text: message(code: 'report.creation.error'))
 		}
 		[messageInstanceList: messageInstanceList]
 	}
@@ -98,13 +98,13 @@ class ExportController {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
 		List fields = ["id", "name", "mobile", "email", "notes"]
-		Map labels = ["id":"DatabaseID", "name":"Name", "mobile":"Mobile", "email":"Email", "notes":"Notes"]
-		Map parameters = [title: "FrontlineSMS Contact Export"]
+		Map labels = ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes')]
+		Map parameters = [title: message(code: 'export.contact.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try{
 			exportService.export(params.format, response.outputStream, contactInstanceList, fields, labels, [:],parameters)
 		} catch(Exception e){
-			render(text: "Error creating report")
+			render(text: message(code: 'report.creation.error'))
 		}
 		[contactInstanceList: contactInstanceList]
 	}
@@ -112,27 +112,27 @@ class ExportController {
 	private def getActivityDescription() {
 		if(params.ownerId){
 			def messageOwner = MessageOwner.findById(params.ownerId)
-			String name = "${messageOwner.name} ${messageOwner.type} (${params.messageTotal} messages)"
+			String name = message(code: 'export.messages.name1', args: [messageOwner.name, messageOwner.type, params.messageTotal])
 		} else {
-			String name = "${params.messageSection} (${params.messageTotal} messages)"
+			String name = message(code: 'export.messages.name2', args: [params.messageSection, params.messageTotal])
 		}
 	}
-	
+
 	private def getGroupDescription() {
 		if(params.groupId){
 			String name
 			 switch(params.contactsSection) {
 				case 'group':
 					def group = Group.findById(params.groupId)
-					name = "${group.name} group (${group.getMembers().count()} contacts)"
+					name = message(code: 'export.contacts.name1', args: [group.name, group.getMembers().count()])
 					break
 				case 'smartGroup':
 					def smartGroup = SmartGroup.findById(params.groupId)
-					name = "${smartGroup.name} smart group (${smartGroup.getMembers().count()} contacts)"
+					name = message(code: 'export.contacts.name2', args: [smartGroup.name, smartGroup.getMembers().count()])
 					break
 			}
 		} else {
-			String name = "All contacts (${params.contactTotal} contacts)"
+			String name = message(code: 'export.contacts.name3', args: [params.contactTotal])
 		}
 	}
 
