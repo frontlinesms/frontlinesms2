@@ -1,0 +1,49 @@
+# Sending a Message #
+
+_[Quick Message][1] will allow you to easily send a message to either a single recipient or a number of recipients. It can be accessed from any page under the [messages][2] tab. So whether you are looking at an activity or a folder, or even the trash, you will be able to send a [quick message][1] with ease. You can also send a message when you are viewing contact information. Both methods of sending a message will be explained here_
+
+### [Quick Message][1]
+The quick message walk through can be started by clicking on the [Quick Message][1] button that you will find in the top right of every page under the [Messages][2] tab.
+
+Picture
+
+To send a [quick message][1], click on this icon to get started:  <IconPicture>
+  
+1.  The following screen will appear. You can enter the message you want to send here.  
+If the input area is too small, you can resize it by click the <resizeicon> in the bottom right hand corner and dragging it to the size you want.  
+When you have finished entering your message, click next.
+
+2.  The following screen will allow you to choose who to send the message to:
+
+There are a few ways to choose recipients for your message.  
+You can enter the number manually at the top and click 'add'. This will add the number to the recipient list and allow you to enter another number if you want to send the message to multiple people.  
+The numbers are automatically selected as you add them.  
+  
+If the recipients are already part of your [contacts][3] then simply find and select them in the list (1). You can select as many contacts as you would like to send the message to. Bear in mind that the more contacts you add to the recipient list, the greater the number of SMS that will be sent out.  
+  
+Any [groups][4] you may have created will also be available here, including [smart groups][5]. You can select more than one [group][4], and you can use a combination of all 3 methods to choose recipients.   
+  
+So you could manually add a contact, select a group and a pre-existing contact as recipients for your message.  
+  
+Alternatively, you could simple 'Select All Contacts' to send a message to all your contacts.
+Or, 'Select All Groups' to send a message to all your groups.
+
+NOTE: Selecting this option may result in a very large number of text messages being sent. This could result in a very large charge from your cellular provider.
+
+3.  You will then be presented with a summary of your quick message, such as how many texts will be sent out and to how many recipients.  
+If this is okay, clicking send will complete the action.
+
+### [Message From Contact Screen][6]
+
+On the contact screen, clicking on the (arrow) icon will allow you to send a message or an e-mail to that number or address.
+
+A screen will appear asking you to enter the message you want to send.  
+You wont be able to send the message to multiple recipients, using this feature.  
+  
+Once you have entered your message, clicking 'next' will take you to a confirmation screen where you can check the details of your message.  
+
+Clicking 'send' will complete the action.
+
+### Related Actions
+[Creating a Poll][7]  
+[Viewing Pending Messages][8]  

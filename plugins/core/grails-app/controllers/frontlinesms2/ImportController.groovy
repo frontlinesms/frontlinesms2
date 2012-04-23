@@ -36,7 +36,6 @@ class ImportController {
 							c."${standardFields[key]}" = value
 						} else if(key == 'Group(s)') {
 							def groupNames = getGroupNames(value)
-							println "Group names: $groupNames"
 							groups = getGroups(groupNames)
 						} else {
 							new CustomField(name:key, value:value, contact:c)
@@ -46,7 +45,7 @@ class ImportController {
 					if(groups) groups.each { c.addToGroup(it) }
 					++savedCount
 				} catch(Exception ex) {
-					log.info "Encountered saving contact ", ex
+					log.info message(code: 'import.contact.save.error'), ex
 					failedLines << tokens
 				}		
 			}
@@ -60,17 +59,17 @@ class ImportController {
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
 			
-			flash.message = "$savedCount contacts were imported; ${failedLines.size()} failed${failedLines? ('. ' + g.link(action:'exportFailedContacts', absolute:'true', 'Create CSV of failed contacts')): ''}" 
+			flash.message = "${message(code: 'import.info.contact', args: [savedCount, failedLines.size()])} ${failedLines? ('. ' + g.link(action:'exportFailedContacts', absolute:'true', message(code: 'import.create.failed.contacts.csv'))): ''}" 
 			
 			redirect controller: "settings", action: 'general'
-		} else throw new RuntimeException("File upload has failed for some reason.")
+		} else throw new RuntimeException(message(code: 'import.file.upload.failed'))
 	}
 
 	def exportFailedContacts = { 
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
 		failedContactsFile.eachLine {response.outputStream  << "$it\n"}
 		response.outputStream.flush()
-		failedContactsFile.deleteOnExit()
+		failedContactsFile.delete()
 	}
 	
 	def importMessages = {
@@ -111,11 +110,11 @@ class ImportController {
 					++savedCount
 					getMessageFolder("messages from v1").addToMessages(fm)
 				} catch(Exception ex) {
-					log.info "Encountered saving message ", ex
+					log.info message(code: 'import.message.save.error'), ex
 					++failedCount
 				}
 			}
-			flash.message = "$savedCount messages were imported; $failedCount failed" 
+			flash.message = message(code: 'import.info.message', args: [savedCount, failedCount ])
 			redirect controller: "settings", action: 'general'
 		}
 	}

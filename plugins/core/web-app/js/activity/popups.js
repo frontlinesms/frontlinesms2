@@ -1,7 +1,7 @@
 function chooseActivity() {
 	var activity = $("#new-activity-choices input[checked=checked]").val();
 	var activityUrl = activity + '/create';
-	var title = 'New ' + activity;
+	var title = i18n("wizard.title.new") + activity;
 	$(this).dialog('close');
 	$.ajax({
 		type:'GET',
@@ -14,7 +14,7 @@ function chooseActivity() {
 	
 function checkForSuccessfulSave(html, type) {
 	if ($(html).find("#ownerId").val())
-		launchMediumPopup(type + ' saved!', html, 'OK', summaryRedirect);
+		launchMediumPopup(type + i18n("popup.title.saved"), html, 'OK', summaryRedirect);
 	else
 		addFailedFlashMessage(html);
 }

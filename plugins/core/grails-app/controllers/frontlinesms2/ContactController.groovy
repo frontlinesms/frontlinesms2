@@ -76,7 +76,7 @@ class ContactController {
 			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
 				def version = params.version.toLong()
 				if (contactInstance.version > version) {
-					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "Another user has updated this Contact while you were editing")
+					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "contact.edited.by.another.user")
 					render(view: "show", model: [contactInstance: contactInstance, offset:params.offset, max:params.max])
 					return
 				}
@@ -121,7 +121,7 @@ class ContactController {
 				Contact.get(contactInstance.id).delete()
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
+		flash.message = message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])
 		redirect(action: "show")		
 	}
 
@@ -154,11 +154,10 @@ class ContactController {
 	def search = {
 		render template: 'search_results', model: contactSearchService.contactList(params), plugin:"core"
 	}
-	
 	def checkForDuplicates = {
 		def foundContact = Contact.findByMobile(params.number)
 		if (foundContact && (foundContact.id.toString() != params.contactId))
-			render(text: "There is already a contact with that number!")
+			render(text: message(code: 'contact.exists.prompt'))
 		else
 			render ""
 	}
@@ -170,15 +169,15 @@ class ContactController {
 			render messageStats as JSON
 		}
 	}
-	
+
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
 		if(existingContact && existingContact != contactInstance) {
-			flash.message = "There is already a contact with that mobile, you cannot create another!  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>View duplicate</g:link>"
+			flash.message = "${message(code: 'contact.exists.warn')}  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>${message(code: 'contact.view.duplicate')}</g:link>"
 			return false
 		}
 		if(contactInstance.save(flush:true)) {
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
+			flash.message = message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
@@ -196,7 +195,7 @@ class ContactController {
 		if(contactInstance) {
 			c.call(contactInstance)
 		} else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])
 			c.call(new Contact())
 		}
 	}
@@ -228,7 +227,7 @@ class ContactController {
 		
 		// Check for errors in groupsToAdd and groupsToRemove
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
-			contactInstance.errors.reject('Cannot add and remove from the same group!')
+			contactInstance.errors.reject(message(code: 'contact.addtogroup.error'))
 			return false
 		}
 		

@@ -3,12 +3,12 @@
 <ul id="system-nav">
 	<li class="${params.controller=='settings'?'selected':''}">
 		<g:link controller="settings">
-			Settings
+			<g:message code="common.settings" />
 		</g:link>
 	</li>
-	<li class="nav ${params.controller=='help'?'selected':''}">
-		<g:remoteLink controller="help" onSuccess="launchMediumPopup('Help', data, 'Done', cancel)">
-			Help
+	<li class="nav ${params.controller=='help' ? 'selected' : ''}">
+		<g:remoteLink controller="help" onSuccess="launchMediumWizard(i18n('popup.help.title'), data, 'Done', '95%', 800)">
+			<g:message code="commont.help" />
 		</g:remoteLink>
 	</li>
 </ul>

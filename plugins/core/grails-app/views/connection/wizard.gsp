@@ -23,6 +23,7 @@
 </div>
 
 <g:javascript>
+
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
@@ -35,6 +36,13 @@ var fconnection = {
 			$("#${it}-form").css('display', 'none');
 		</g:each>
 		$("#" + connectionType + "-form").css('display', 'inline');
+		fconnection.init();
+	},
+	init: function() {
+		var keys = fconnection[fconnection.getType()].configFieldsKeys
+		$.each(keys, function(index, value) {
+			fconnection.toggleSubFields(value);
+		});
 	},
 	show: function() {
 		setConfirmVal('type', fconnection.humanReadableName());
@@ -42,26 +50,48 @@ var fconnection = {
 		fconnection[fconnection.getType()].show();
 	},
 	isValid: function() {
-		var fields = fconnection[fconnection.getType()].requiredFields
 		var valid = false;
-		$.each(fields, function(index, value) {
-			valid = isFieldSet(value);
-			return valid;
-		});
+		var keys = fconnection[fconnection.getType()].configFieldsKeys
+		if(keys.length > 1) {
+			valid = validateSections(keys)
+			if(!valid) return valid;
+			$.each(keys, function(index, value) {
+				valid = isFieldValid(value);
+				return valid;
+			});
+		} else {
+			var fields = fconnection[fconnection.getType()].requiredFields
+			$.each(fields, function(index, value) {
+				valid = isFieldValid(value);
+				return valid;
+			});
+		}
 		return valid;
 	},
 	humanReadableName: function() {
 		return fconnection[fconnection.getType()].humanReadableName;
 	},
+	toggleSubFields: function(key) {
+		if(isSubsection(key)) {
+			if(!getFieldVal(key))
+				disableSubsectionFields(key);
+			if(getFieldVal(key))
+				enableSubsectionFields(key);
+				
+		}	
+	},
+
 	<g:each in="${Fconnection.implementations}">
 	${it.shortName}: {
 		requiredFields: ["${Fconnection.getNonnullableConfigFields(it).join('", "')}"],
+		configFieldsKeys: ["${it.configFields instanceof Map ? it.configFields.getAllKeys()?.join('", "'):''}"],
 		humanReadableName: "<g:message code="${it.simpleName.toLowerCase()}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - it)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
-			<g:each in="${it.configFields}" var="f">
+			<g:set var="configFields" value="${it.configFields instanceof Map? (it.configFields.getAllValues()) : it.configFields}" />
+			<g:each in="${configFields}" var="f">
 				<g:if test="${f in it.passwords}">setSecretConfirmation('${f}');</g:if>
 				<g:else>setConfirmation('${f}');</g:else>
 			</g:each>
@@ -73,16 +103,78 @@ var fconnection = {
 			
 function isFieldSet(fieldName) {
 	var val = getFieldVal(fieldName);
-	return val!=null && val.length>0;
+	if(isInstanceOf(val, 'Boolean')) {
+		if(val && isSubsection(fieldName)) {
+			return validateSubsectionFields(fieldName);
+		}
+	} else {
+		return val!=null && val.length>0;
+	}
+}
+
+function isFieldValid(field) {
+	return isFieldSet(field);
+}
+
+function isInstanceOf(obj, clazz){
+  return (obj instanceof eval("("+clazz+")")) || (typeof obj == clazz.toLowerCase());
+}
+
+function validateSubsectionFields(field) {
+	var valid = false;
+	var subSectionFields = $('.' + field + '-subsection-member');
+	var requiredFields = fconnection[fconnection.getType()].requiredFields
+	$.each(subSectionFields, function(index, value) {
+		var field = $(value).attr("field");
+		if(requiredFields.indexOf(field) > -1) {
+			valid = isFieldSet(field);
+			return valid;
+		}
+	});
+	return valid;
+}
+
+function validateSections(keys) {
+	var valid = false;
+	$.each(keys, function(index, value) {
+		if(isSubsection(value)) {
+			valid = getFieldVal(value);
+			if(valid) return false;
+		}
+	});
+	return valid;
+}
+function isSubsection(fieldName) {
+	return $('#' + fieldName + '-subsection').length > 0;
+}
+
+function disableSubsectionFields(field) {
+	var subSectionFields = $('.' + field + '-subsection-member');
+	$.each(subSectionFields, function(index, value){
+		$(value).disableField();
+	});
+}
+
+function enableSubsectionFields(field) {
+	var subSectionFields = $('.' + field + '-subsection-member');
+	$.each(subSectionFields, function(index, value){
+		$(value).enableField();
+	});
 }
 
 function getFieldVal(fieldName) {
-	var val = $('#' + fconnection.getType() + fieldName).val();
+	if($('#' + fconnection.getType() + fieldName).attr("type") === "checkbox") {
+		var val = $('#' + fconnection.getType() + fieldName).prop("checked");
+	} else {
+		var val = $('#' + fconnection.getType() + fieldName).val();
+	}
 	return val;
 }
 
 function setConfirmVal(fieldName, val) {
-	$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(val);
+	if(!$('#' + fconnection.getType() + fieldName).is(":disabled")) {
+		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(val);
+	}
 }
 
 function setConfirmation(fieldName) {
@@ -94,11 +186,18 @@ function setSecretConfirmation(fieldName) {
 	setConfirmVal(fieldName, val);
 }
 
+function attachCheckBoxListener() {
+	$("input[type='checkbox']").bind("change", function(){
+		var key = $(this).attr("field");
+		fconnection.toggleSubFields(key);
+	});
+}
+
 function initializePopup() {
 	fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
 	
 	$("#tabs").bind("tabsshow", fconnection.show);
-
+	attachCheckBoxListener();
 	$("#tabs-2").contentWidget({
 		validate: fconnection.isValid
 	});
