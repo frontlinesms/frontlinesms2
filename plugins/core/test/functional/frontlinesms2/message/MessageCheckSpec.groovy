@@ -45,8 +45,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			Contact.build(name:'Alice', mobile:'Alice')
+			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -62,8 +62,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "the count of messages being sent is updated even in 'Reply all'"() {
 		given:
 			createInboxTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			Contact.build(name:'Alice', mobile:'Alice')
+			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -82,12 +82,9 @@ class MessageCheckSpec extends MessageBaseSpec {
 	
 	def "Should show the correct contact count when replying to multiple checked messages"() {
 		given:
-			[new Fmessage(src:'Alice', text:'hi Alice'),
-				new Fmessage(src:'Alice', text:'test')].each() {
-					it.inbound = true
-					it.save(failOnError:true)
-				}
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
+			Fmessage.build(src:'Alice', text:'hi Alice')
+			Fmessage.build(src:'Alice', text:'test')
+			Contact.build(name:'Alice', mobile:'Alice')
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -108,8 +105,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "Should show the contact's name when replying to multiple messages from the same contact"() {
 		given:
 			createInboxTestMessages()
-			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			Contact.build(name:'Alice', mobile:'Alice')
+			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
 			messagesSelect[1].click()
@@ -166,7 +163,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 	def "select all should update the total message count when messages are checked"() {
 		given:
 			createInboxTestMessages()
-			new Fmessage(src: "src", dst: "dst", inbound:true).save(flush: true)
+			Fmessage.build()
 		when:
 			to PageMessageInbox
 			messagesSelect[0].click()

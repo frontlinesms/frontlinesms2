@@ -8,10 +8,10 @@ class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def createTestMessages() {
-		Fmessage.build(src:'Max', dst:'+254987654', text:'I will be late', dateReceived:new Date()-4, starred:true)
-		Fmessage.build(src:'Jane', dst:'+2541234567', text:'Meeting at 10 am', dateReceived:new Date()-3)
-		Fmessage.build(src:'Patrick', dst:'+254112233', text:'Project has started', dateReceived:new Date()-2)
-		Fmessage.build(src:'Zeuss', dst:'+234234', text:'Sewage blocked', dateReceived: new Date()-1)
+		Fmessage.build(src:'Max', text:'I will be late', dateReceived:new Date()-4, starred:true)
+		Fmessage.build(src:'Jane', text:'Meeting at 10 am', dateReceived:new Date()-3)
+		Fmessage.build(src:'Patrick', text:'Project has started', dateReceived:new Date()-2)
+		Fmessage.build(src:'Zeuss', text:'Sewage blocked', dateReceived: new Date()-1)
 
 		[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
 				Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),

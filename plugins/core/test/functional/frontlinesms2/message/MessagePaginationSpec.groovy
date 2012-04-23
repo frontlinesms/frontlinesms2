@@ -142,7 +142,6 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		(1..51).each { i ->
 			folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
 		}
-		folder.save(flush:true)
 	}
 
 
@@ -159,11 +158,6 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		(1..26).each { i ->
 			no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
 		}
-		poll.save(flush: true)
 	}
-
-
 }
-
-
 

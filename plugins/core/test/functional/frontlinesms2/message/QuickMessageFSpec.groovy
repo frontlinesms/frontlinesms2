@@ -242,8 +242,6 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		group2.addToMembers(alice)
 		group.addToMembers(bob)
 		group2.addToMembers(bob)
-		group.save(flush: true)
-		group2.save(flush: true)
 	}
 	
 	def launchQuickMessageDialog() {

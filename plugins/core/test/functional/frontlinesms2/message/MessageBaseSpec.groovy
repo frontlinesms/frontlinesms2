@@ -5,12 +5,9 @@ import frontlinesms2.*
 class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	static createTestMessages() {
-		[new Fmessage(src:'Bob', text:'hi Bob', date: new Date()),
-				new Fmessage(src:'Alice', text:'hi Alice', date: new Date()),
-				new Fmessage(src:'+254778899', text:'test', date: new Date())].each() {
-					it.inbound = true
-					it.save(flush:true, failOnError:true)
-				}
+		Fmessage.build(src:'Bob', text:'hi Bob')
+		Fmessage.build(src:'Alice', text:'hi Alice')
+		Fmessage.build(src:'+254778899', text:'test')
 	}
 	
 	static createInboxTestMessages() {
@@ -23,8 +20,8 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		def poll = new Poll(name:'Miauow Mix')
 		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
 			PollResponse r = new PollResponse(value:value)
-			if(m) r.addToMessages(m)
 			poll.addToResponses(r)
+			if(m) r.addToMessages(m)
 		}
 		poll.save(flush:true, failOnError:true)
 	}
@@ -40,8 +37,8 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		def poll = new Poll(name:'Miauow Mix')
 		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
 			PollResponse r = new PollResponse(value:value)
-			if(m) r.addToMessages(m)
 			poll.addToResponses(r)
+			if(m) r.addToMessages(m)
 		}
 		poll.save(flush:true, failOnError:true)
 	}
@@ -66,8 +63,8 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		def poll = new Poll(name:'Miauow Mix')
 		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->
 			PollResponse r = new PollResponse(value:value)
-			if(m) r.addToMessages(m)
 			poll.addToResponses(r)
+			if(m) r.addToMessages(m)
 		}
 		poll.save(flush:true, failOnError:true)
 
@@ -78,6 +75,5 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		fools.addToMessages(message2)
 		fools.save(failOnError:true, flush:true)
 	}
-	
 }
 
