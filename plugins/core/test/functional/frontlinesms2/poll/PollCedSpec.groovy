@@ -462,7 +462,7 @@ class PollCedSpec extends PollBaseSpec {
 			done.click()
 			poll = Poll.findByName('Who is badder?')
 		then:
-			waitFor(10) { Poll.findByName("Who is badder?").refresh().responses*.value.containsAll(["Michael-Jackson", "Chuck-Norris", "Bruce Vandam"]) }		
+			waitFor { Poll.findByName("Who is badder?").refresh().responses*.value.containsAll(["Michael-Jackson", "Chuck-Norris", "Bruce Vandam"]) }		
 	}
 	
 	def deletePoll() {
