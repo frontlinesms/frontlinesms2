@@ -67,11 +67,11 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			def message = Fmessage.build()
 		then:
-			$("#message-tab-link").text().equalsIgnoreCase("Messages\n0")
+			$("#message-tab-link").text()?.equalsIgnoreCase("Messages\n0")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n1") }
+			waitFor { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n1") }
 	}
 	
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {

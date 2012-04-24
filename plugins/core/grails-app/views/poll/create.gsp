@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<g:javascript src="characterSMS-count.js"/>
 
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="poll.validation.prompt" /></div>
@@ -16,7 +15,7 @@
 	<g:render template="../poll/new_poll_form" plugin="core"/>
 </div>
 
-<g:javascript>
+<r:script>
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit}">
 			$("#autoReplyText").trigger("keyup");
@@ -174,4 +173,4 @@
 	function validatePollResponses() {
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
 	}
-</g:javascript>
+</r:script>

@@ -104,7 +104,7 @@
 		</div>
 	</div>
 </div>
-<g:javascript>
+<r:script>
 	$(document).ready(function(){
 	$('#group-dropdown').live("change", function(){
 			$('select').selectmenu();
@@ -125,4 +125,4 @@
 	$(function() {
 		setInterval(refreshMessageStats, 15000);
 	});
-</g:javascript>
+</r:script>

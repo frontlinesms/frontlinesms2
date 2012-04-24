@@ -1,28 +1,29 @@
 modules = {
 	common {
 		dependsOn "jquery, jquery-ui"
-		resource url: [dir:'js', file:"application.js"], disposition: "head"
+		resource url: [dir:'js', file:"application.js"], disposition: 'head'
 		resource url: "/css/colors.css"
 		resource url: [dir:'css', file:"screen.css"]
 		resource url: [dir:'css', file:"buttons.css"]
 		resource url: [dir:'css', file:"header.css"]
 		resource url: [dir:'css', file:"print.css"]
-		resource url: [dir:'js', file:"activity/popups.js"]
-		resource url: [dir:'js', file:"mediumPopup.js"]
-		resource url: [dir:'js', file:"smallPopup.js"]
-		resource url: [dir:'js', file:"pagination.js"]
-		resource url: [dir:'js', file:"jquery.ui.selectmenu.js"]
+		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
+		resource url: [dir:'js', file:"mediumPopup.js"], disposition: 'head'
+		resource url: [dir:'js', file:"smallPopup.js"], disposition: 'head'
+		resource url: [dir:'js', file:"pagination.js"], disposition: 'head'
+		resource url: [dir:'js', file:"jquery.ui.selectmenu.js"], disposition: 'head'
+		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
 	}
 	
 	messages {
 		dependsOn "jquery, jquery-ui, common"
 		resource url: [dir:'css', file:"messages.css"]
-		resource url: [dir:'js', file:"message/check_message.js"]
-		resource url: [dir:'js', file:"message/arrow_navigation.js"]
-		resource url: [dir:'js', file:"message/star_message.js"]
-		resource url: [dir:'js', file:"message/categorize_dropdown.js"]
-		resource url: [dir:'js', file:"message/move_dropdown.js"]
-		resource url: [dir:'js', file:"message/moreActions.js"]
+		resource url: [dir:'js', file:"message/check_message.js"], disposition: 'head'
+		resource url: [dir:'js', file:"message/arrow_navigation.js"], disposition: 'head'
+		resource url: [dir:'js', file:"message/star_message.js"], disposition: 'head'
+		resource url: [dir:'js', file:"message/categorize_dropdown.js"], disposition: 'head'
+		resource url: [dir:'js', file:"message/move_dropdown.js"], disposition: 'head'
+		resource url: [dir:'js', file:"message/moreActions.js"], disposition: 'head'
 	}
 	
 	newMessagesCount {
@@ -45,9 +46,17 @@ modules = {
 		resource url: [dir:'js', file:"contact/show-groups.js"]
 		resource url: [dir:'js', file:"contact/show-fields.js"]
 	}
+
 	status {
 		dependsOn "jquery, jquery-ui, common"
 		resource url: [dir:'css', file:"status.css"]
+	}
+
+	graph {
+		resource url: [dir:'js', file:'/graph/raphael-min.js']
+		resource url: [dir:'js', file:'/graph/g.raphael-min.js']
+		resource url: [dir:'js', file:'/graph/g.bar-min.js']
+		resource url: [dir:'js', file:'/graph/graph.js']
 	}
 
 	search {

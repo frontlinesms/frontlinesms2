@@ -2,14 +2,14 @@
 <div id="sidebar">
 	<ul class="main-list" id="contacts-menu">
 		<li>
-			<h3 id="contacts-list-title" class="list-title"><g:message code="contact.header" /></h3>
+			<h3 id="contacts-list-title" class="list-title"><g:message code="contact.header"/></h3>
 			<ul class='sublist' id="contacts-submenu">
 				<li class="${contactsSection ? '' : 'selected'}">
-					<g:link action="show"><g:message code="contact.all.contacts" /></g:link>
+					<g:link action="show"><g:message code="contact.all.contacts"/></g:link>
 				</li>
 				<li class='create' id="create-contact">
-					<g:link class="create btn contact" controller="contact" action="createContact" >
-						<g:message code="contact.create" />
+					<g:link class="create btn contact" controller="contact" action="createContact">
+						<g:message code="contact.create"/>
 					</g:link>
 				</li>
 			</ul>
@@ -30,7 +30,7 @@
 			</ul>
 		</li>
 		<li class="section">
-			<h3 id="smart-groups-list-title" class="list-title"><g:message code="contact.smartgroup.header" /></h3>
+			<h3 id="smart-groups-list-title" class="list-title"><g:message code="contact.smartgroup.header"/></h3>
 			<ul class="sublist" id="smart-groups-submenu">
 				<g:each in="${smartGroupInstanceList}" var="g">
 					<li class="${contactsSection instanceof frontlinesms2.SmartGroup && contactsSection.id==g.id ? 'selected' : ''}">

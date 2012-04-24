@@ -31,11 +31,11 @@
 		<a class="hide-flash">x</a>
 	</div>
 </g:hasErrors>
-<g:javascript>
+<r:script>
 	$(function() {
 		$('.hide-flash').live("click", function() {
 			$(this).parent("div").slideUp(500);
 			return true;
 		});
 	});
-</g:javascript>
+</r:script>

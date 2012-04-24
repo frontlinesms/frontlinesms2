@@ -1,14 +1,9 @@
 <html>
-    <head>
-        <title><g:message code="poll.header" /></title>
+	<head>
+		<title><g:message code="poll.header" /></title>
 		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}" />
-		<g:javascript library="jquery" plugin="jquery"/>
-		<g:javascript library="jquery" plugin="jquery"/>
-		<g:javascript src="/graph/raphael-min.js"/>
-		<g:javascript src="/graph/g.raphael-min.js"/>
-		<g:javascript src="/graph/g.bar-min.js"/>
-		<g:javascript src="/graph/graph.js"/>
-		<g:javascript>
+		<r:require module="graph"/>
+		<r:script>
 		$(function() {
 			var loaded = false;
 			var show = true;
@@ -38,8 +33,8 @@
 				$(".footer").toggle();
 			});
 		});
-		</g:javascript>
-		<g:javascript>
+		</r:script>
+		<r:script>
 		$(function() {
 			var pollDisplay = $("#poll-graph-btn");
 			pollDisplay.click(function() {
@@ -54,7 +49,7 @@
 				}
 			});
 		});
-		</g:javascript>	
+		</r:script>	
 	</head>
 	<body>
 		<div id="poll-details" style="display:none">

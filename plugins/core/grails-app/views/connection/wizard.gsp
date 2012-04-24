@@ -1,11 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.Fconnection" %>
-<g:javascript library="jquery" plugin="jquery"/>
-<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
-<g:javascript>
+<meta name="layout" content="popup"/>
+<r:script>
 	url_root = "${request.contextPath}/";
-</g:javascript>
-<g:javascript src="application.js"/>
-<g:javascript src="mediumPopup.js"/>
+</r:script>
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt" /></div>
 	<ol>
@@ -22,7 +19,7 @@
 	</g:form>
 </div>
 
-<g:javascript>
+<r:script>
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
@@ -103,4 +100,4 @@ function initializePopup() {
 		validate: fconnection.isValid
 	});
 }
-</g:javascript>
+</r:script>

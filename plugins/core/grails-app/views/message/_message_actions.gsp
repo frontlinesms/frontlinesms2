@@ -1,9 +1,9 @@
-<script>
+<r:script>
 	function toggleDropdown() {
 		$("#dropdown_options").toggle()
 		return false;
 	};
-</script>
+</r:script>
 
 <div id="message-detail-buttons">
 	<g:form controller="${params.controller}" params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, checkedMessageList: checkedMessageList, searchId: search?.id]">

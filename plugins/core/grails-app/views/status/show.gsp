@@ -11,7 +11,7 @@
 			<g:render template="device_detection" plugin="core"/>
 			
 		</div>
-		<g:javascript>
+		<r:script>
 			setInterval(refreshDevices, 10000);
 			
 			function refreshDevices() {
@@ -23,6 +23,6 @@
 			$("#time-filters").delegate("select", "change", function(){
 				$('input[name="rangeOption"]').prop('checked', true);
 			});
-		</g:javascript>
+		</r:script>
 	</body>
 </html>

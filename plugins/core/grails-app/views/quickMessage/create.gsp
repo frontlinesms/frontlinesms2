@@ -1,5 +1,5 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
-<g:javascript src="characterSMS-count.js"/>
+<meta name="layout" content="popup"/>
 <div id="tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="quickmessage.validation.prompt" /></div>
 	<ul>
@@ -20,7 +20,7 @@
 	</g:formRemote>
 </div>
 
-<script>
+<r:script>
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
@@ -41,4 +41,4 @@
 		$("#notifications .flash").remove();
 		$("#notifications").prepend("<div class='flash message'>" + data + "<a class='hide-flash'>x</a></div>");
 	}
-</script>
+</r:script>

@@ -4,11 +4,10 @@ class FsmsTagLib {
 	static namespace = 'fsms'
 
 	def i18n = { att ->
-		att.keys.tokenize(',')*.trim().each {
-			def propVal = g.message(code:it)
-			propVal = propVal.replaceAll("\\'", "\\\\'")
+		att.keys.tokenize(',')*.trim().each { key ->
+			def val = g.message(code:key).replaceAll("\\'", "\\\\'")
 			r.script {
-				out << "	i18nStrings['$it'] = '${propVal}';\n"
+				out << "	i18nStrings['$key'] = '${val}';\n"
 			}
 		}
 	}

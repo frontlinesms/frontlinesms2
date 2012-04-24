@@ -1,5 +1,3 @@
-<g:javascript src="characterSMS-count.js"/>
-<g:javascript src="activity/popups.js"/>
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="autoreply.validation.prompt" /></div>
 	<ol>
@@ -13,7 +11,7 @@
 		<g:render template="../autoreply/confirm" plugin="core"/>
 	</g:formRemote>
 </div>
-<g:javascript>
+<r:script>
 	function initializePopup() {
 		$("#autoreplyText").trigger("keyup");
 		
@@ -57,4 +55,4 @@
 		}
 		
 	}
-</g:javascript>
+</r:script>

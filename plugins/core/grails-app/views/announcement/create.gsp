@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<g:javascript src="characterSMS-count.js"/>
-
+<meta name="layout" content="popup"/>
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="announcement.validation.prompt" /></div>
 	<ol>
@@ -20,7 +19,7 @@
 		<g:render template="confirm" plugin="core"/>
 	</g:formRemote>
 </div>
-<g:javascript>
+<r:script>
 	function initializePopup() {
 		
 		$("#tabs-1").contentWidget({
@@ -70,4 +69,5 @@
 		}
 		$("#confirm-message-text").html('<p>' + sendMessage  + '</p>');
 	}
-</g:javascript>
+</r:script>
+

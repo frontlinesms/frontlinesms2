@@ -37,7 +37,7 @@
 	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients" /></div>
 </div>
 
-<script>
+<r:script>
 	var groupAndMembers = {}
 	function selectMembers(groupIdString, groupName, allContacts) {
 		groupAndMembers[groupIdString] = allContacts
@@ -123,4 +123,4 @@
 		}
 		return false;
 	}
-</script>
+</r:script>

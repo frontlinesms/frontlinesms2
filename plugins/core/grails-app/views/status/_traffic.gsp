@@ -1,8 +1,5 @@
-<g:javascript src="/graph/raphael-min.js"/>
-<g:javascript src="/graph/g.raphael-min.js"/>
-<g:javascript src="/graph/g.bar-min.js"/>
-<g:javascript src="/graph/graph.js"/>
-<g:javascript>
+<r:require module="graph"/>
+<r:script>
 $(function() {
 		var data1 = ${messageStats["sent"]};
 		var data2 = ${messageStats["received"]};
@@ -28,7 +25,7 @@ $(function() {
 			.attr(textStyle);
 
 	});
-</g:javascript>
+</r:script>
 <h3 id="traffic-title"><g:message code="traffic.header" /></h3>
 <div id="traffic-status">
 	<div id="trafficGraph"></div>

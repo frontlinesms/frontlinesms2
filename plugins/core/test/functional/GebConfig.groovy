@@ -1,6 +1,10 @@
+waiting {
+	timeout = 2
+	retryInterval = 0.2
+}
+
 driver = {
 	def driver = new org.openqa.selenium.firefox.FirefoxDriver()
-//	def driver = new org.openqa.selenium.htmlunit.HtmlUnitDriver()
 	if(driver.class.simpleName == 'FirefoxDriver') {
 		def width = 1366
 		def height = 768
@@ -12,3 +16,4 @@ driver = {
 	}
 	return driver
 }
+

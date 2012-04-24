@@ -25,13 +25,13 @@ class CoreBootStrap {
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
+		println "BootStrap.init() : Env=${Environment.current}"
 		initialiseSerial()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		createWelcomeNote()
-		
 		switch(Environment.current) {
 			case Environment.TEST:
 				test_initGeb(servletContext)
@@ -355,12 +355,14 @@ class CoreBootStrap {
 		def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
 		
 		final String contextPath = servletContext.contextPath
-		final String baseUrl = grailsApplication.config.grails.serverURL
+		// FIXME in grails 2, serverURL appears to be not set, so hard-coding it here
+		//final String baseUrl = grailsApplication.config.grails.serverURL
+		final String baseUrl = 'http://localhost:8080/core'
 		nonEmptyMc.'get@href' = {
 			def val = getAttribute('href')
 			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())
 			// check for baseUrl second, as it includes the context path
-			if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
+			else if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
 			return val
 		}
 		

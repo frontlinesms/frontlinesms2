@@ -3,13 +3,13 @@
 	<head>
 		<meta name="layout" content="settings" />
 		<title>Settings ><g:message code="settings.logs.header" /></title>
-		<g:javascript>
+		<r:script>
 			function filterLogEntries(timePeriod) {
 				$.get(url_root + 'settings/logs', {timePeriod: timePeriod}, function(data) {
 					$('#log-list').replaceWith($(data).find('#log-list'));
 				});
 			}
-		</g:javascript>
+		</r:script>
 	</head>
 	<body>
 		<div id='logEntries'>
