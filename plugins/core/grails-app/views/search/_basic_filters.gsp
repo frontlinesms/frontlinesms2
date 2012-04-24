@@ -4,7 +4,7 @@
 		<li class='field'>
 			<g:select class="dropdown" name="groupId" from="${groupInstanceList}" value="${search?.group?.id}"
 					  optionKey="id" optionValue="name"
-					  noSelection="${['': g.message(code:'search.filder.group')]}"/>
+					  noSelection="${['': g.message(code:'search.filter.group')]}"/>
 		</li>
 		<g:render template="../search/activity_list" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 		<li class='field'>
