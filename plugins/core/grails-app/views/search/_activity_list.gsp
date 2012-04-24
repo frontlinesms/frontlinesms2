@@ -3,5 +3,5 @@
 			  value="${search?.activityId}"
 			  optionKey="${{(it instanceof frontlinesms2.Activity ? 'activity' : 'folder') + '-' + it.id}}"
 			  optionValue="${{it.name}}"
-			  noSelection="${['':'Select activity / folder']}"/>
+			  noSelection="${['':g.message(code:'search.filter.activities')]}"/>
 </li>
