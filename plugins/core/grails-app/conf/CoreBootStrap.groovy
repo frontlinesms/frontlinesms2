@@ -75,7 +75,7 @@ class CoreBootStrap {
 	
 	private def createWelcomeNote() {
 		if(!SystemNotification.count()) {
-			new SystemNotification(text:message(code: 'frotnlinesms.welcome')).save(failOnError:true)
+			new SystemNotification(text: 'Welcome to FrontlineSMS.  I hope you enjoy your stay!').save(failOnError:true)
 		}
 	}
 	
