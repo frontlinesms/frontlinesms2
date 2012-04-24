@@ -14,7 +14,7 @@ class FsmsTagLib {
 	}
 	
 	def confirmTable = { att ->
-		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm">'
+		out << '<table id="' + (att.instanceClass.simpleName.toLowerCase() - 'fconnection') + '-confirm" class="connection-confirm-table">'
 		out << confirmTypeRow(att)
 		def fields = getFields(att)
 		if(fields instanceof Map) {
