@@ -8,16 +8,15 @@ class ArchiveBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def createTestMessages() {
-		Fmessage.build(src:'Max', text:'I will be late', date:new Date()-4, starred:true)
-		Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:new Date()-3)
-		Fmessage.build(src:'Patrick', text:'Project has started', date:new Date()-2)
-		Fmessage.build(src:'Zeuss', text:'Sewage blocked', date:new Date()-1)
+		def max = Fmessage.build(src:'Max', text:'I will be late', date:new Date()-4, starred:true)
+		def jane = Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:new Date()-3)
+		def patrick = Fmessage.build(src:'Patrick', text:'Project has started', date:new Date()-2)
+		def zeuss = Fmessage.build(src:'Zeuss', text:'Sewage blocked', date:new Date()-1)
 
-		[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
-				Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
-				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
-				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
-			it.save(failOnError:true, flush:true)
+		[Work:[max, jane], Projects:[zeuss, patrick]].each { folderName, messages ->
+			Folder f = Folder.findByName(folderName)
+			messages.each { f.addToMessages(it) }
+			f.save(failOnError:true, flush:true)
 		}
 	}
 	

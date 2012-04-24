@@ -7,7 +7,7 @@ class CustomFieldCedSpec extends grails.plugin.geb.GebSpec {
 	
 	def "selecting add custom field from dropdown opens the popup"() {
 		when:
-			Contact bob = new Contact(name:'Bob').save(failOnError: true, flush: true)
+			Contact bob = Contact.build(name:'Bob')
 			go "contact/show/${bob.id}"
 		then:
 			at PageContactShowBob
@@ -20,7 +20,7 @@ class CustomFieldCedSpec extends grails.plugin.geb.GebSpec {
 
 	def "should add the manually entered custom fields to the list "() {
 		when:
-			Contact bob = new Contact(name:'Bob').save(failOnError: true, flush: true)
+			Contact bob = Contact.build(name:'Bob')
 			go "contact/show/${bob.id}"
 		then:
 			at PageContactShowBob

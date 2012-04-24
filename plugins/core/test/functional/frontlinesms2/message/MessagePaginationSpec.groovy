@@ -104,23 +104,25 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
 	private def setupInboxMessages() {
 		(1..51).each { i ->
-			Fmessage.build(src:"src${i}", text:"inbox ${i}", date: new Date()-i)
+			Fmessage.build(src:"src${i}", text:"inbox ${i}", date:new Date()-i)
 		}
 	}
 
 
 	private def setupSentMessages() {
-		def d = new Dispatch(dst:"345678", status: DispatchStatus.SENT, dateSent:new Date())	
 		(1..51).each { i ->
-			new Fmessage(src:"src${i}", text:"sent ${i}").addToDispatches(d).save(flush:true, failOnError:true)
+			new Fmessage(src:"src${i}", text:"sent ${i}")
+					.addToDispatches(dst:"345678", status:DispatchStatus.SENT, dateSent:new Date())
+					.save(flush:true, failOnError:true)
 		}
 	}
 
 
 	private def setupPendingMessages() {
-		def d = new Dispatch(dst:"345678", status: DispatchStatus.PENDING)
 		(1..51).each { i ->
-			new Fmessage(src:"src${i}", text:"pending ${i}").addToDispatches(d).save(flush:true, failOnError:true)
+			new Fmessage(src:"src${i}", text:"pending ${i}")
+					.addToDispatches(dst:"345678", status: DispatchStatus.PENDING)
+					.save(flush:true, failOnError:true)
 		}
 	}
 
@@ -142,22 +144,26 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		(1..51).each { i ->
 			folder.addToMessages(Fmessage.build(src:"src${i}", text:"folder ${i}"))
 		}
+		folder.save(failOnError:true, flush:true)
 	}
 
 
 	private def setupPollAndItsMessages() {
+		def yes = new PollResponse(value:"Yes")
+		def no = new PollResponse(value:"No")
+		def unknown = new PollResponse(value:"Unknown")
 		def poll = new Poll(name:'poll')
-		def yes = new PollResponse(value: "Yes")
-		def no = new PollResponse(value: "No")
-		def unknown = new PollResponse(value: "Unknown")
-		poll.addToResponses(yes).addToResponses(no).addToResponses(unknown)
-		poll.save(flush:true, failOnError:true)
+				.addToResponses(yes)
+				.addToResponses(no)
+				.addToResponses(unknown)
+				.save(flush:true, failOnError:true)
 		(1..25).each { i ->
 			yes.addToMessages(Fmessage.build(src:"src${i}", text:"yes ${i}"))
 		}
 		(1..26).each { i ->
 			no.addToMessages(Fmessage.build(src:"src${i}", text:"no ${i}"))
 		}
+		poll.save(flush:true, failOnError:true)
 	}
 }
 

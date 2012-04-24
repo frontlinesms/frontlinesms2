@@ -16,9 +16,11 @@ class AnnouncementBaseSpec extends grails.plugin.geb.GebSpec {
 
 		def newOffice = Announcement.findByName('New Office')
 		['Max', 'Jane'].each { newOffice.addToMessages(Fmessage.findBySrc(it)) }
+		newOffice.save(failOnError:true, flush:true)
 
 		def officeParty = Announcement.findByName('Office Party')
 		['Zeuss', 'Patrick'].each { officeParty.addToMessages(Fmessage.findBySrc(it)) }
+		officeParty.save(failOnError:true, flush:true)
 	}
 }
 

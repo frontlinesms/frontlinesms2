@@ -36,11 +36,14 @@ class SearchBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestContactsAndCustomFieldsAndMessages() {
 		Contact.build(name:'Alex', mobile:'+254987654')
 				.addToCustomFields(name:'town', value:'Paris')
+				.save(failOnError:true, flush:true)
 		Contact.build(name:'Mark', mobile:'+254333222')
 				.addToCustomFields(name:'like', value:'cake')
 				.addToCustomFields(name:'ik', value:'car')
+				.save(failOnError:true, flush:true)
 		Contact.build(name:"Toto", mobile:'+666666666')
 				.addToCustomFields(name:'like', value:'ake')
+				.save(failOnError:true, flush:true)
 		
 		Fmessage.build(src:'+666666666', text:'finaly i stay in bed')
 	}

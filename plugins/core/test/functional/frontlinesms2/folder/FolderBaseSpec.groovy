@@ -16,12 +16,14 @@ class FolderBaseSpec extends grails.plugin.geb.GebSpec {
 				Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:new Date()-3)].each {
 			workFolder.addToMessages(it)
 		}
+		workFolder.save(failOnError:true, flush:true)
 
 		def projectsFolder = Folder.findByName('Projects')
 		[Fmessage.build(src:'Patrick', text:'Project has started', date:new Date()-2),
 				Fmessage.build(src:'Zeuss', text:'Sewage blocked', date:new Date()-1)].each {
 			projectsFolder.addToMessages(it)
 		}
+		projectsFolder.save(failOnError:true, flush:true)
 	}
 }
 

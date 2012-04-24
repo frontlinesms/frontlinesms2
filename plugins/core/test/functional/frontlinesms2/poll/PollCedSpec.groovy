@@ -485,7 +485,7 @@ class PollCedSpec extends PollBaseSpec {
 		waitFor { createActivityDialog.displayed }
 		$("input", class: "poll").click()
 		$("#submit").click()
-		waitFor(10) { at PagePollCreate }
+		waitFor { at PagePollCreate }
 		pollForm.pollType = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage
