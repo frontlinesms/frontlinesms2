@@ -1,5 +1,6 @@
+<%@ page import="frontlinesms2.*" %>
 <div id='other-actions' class="actions buttons">
-	<g:if test="${messageSection == 'activity' && ownerInstance?.type == 'poll'}">
+	<g:if test="${messageSection == 'activity' && ownerInstance instanceof Poll}">
 		<div id="poll-actions">
 			<div>
 				<g:hiddenField name="owner-id" value="${ownerInstance.id}" />

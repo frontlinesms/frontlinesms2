@@ -1,0 +1,30 @@
+# Archiving Activities and Folders
+
+_[Archiving activities][1] removes [activities][2] from the [messages tab][3] and stops new messages being automatically sorted into the [activity][2]. [Archiving folders][1] moves the folder and all the messages within it from the [messages tab][3] and into the [folder archive][4]; this can be particularly useful for reducing the amount of clutter you have on your [messages tab][3] if you have a lot of activities and folders you don't use much anymore. When an [activity][2] has been archived, all the information about that activity is still available. You can still view the graph of poll data, if the activity is a poll, and a summary of all the activity details. The format for the activity remains the same across the [messages tab][3] and [archive tab][5]. You are also able to still [export][6], [rename][7] and [delete][8] activities from the [activity archive][9]_
+
+### [Archiving an Activity][15]
+
+To [archive][1] an [activity][2], follow these steps:
+
+1.  Select the activity you want to [archive][1].
+2.  Click on the "Archive [type of activity]" button.
+3.  Your activity will have been archived!    
+
+When you archive an activity which uses a keyword, such as [Polls][10], the keyword can not be used again in the creation of a new [poll][10]. If the [activity][2] is deleted, that keyword is then available for use when creating new activities.  
+
+To view your archived activities, navigate to the [archive tab][5] and then click on [activity archive][9] where you will find a list of your archived activities.
+
+### [Archiving a Folder][16]
+
+Archiving a [folder][11] is very similar to archiving an [activity][2].
+
+1.  Select the [folder][11] you want to [archive][1].
+2.  Click on the "Archive Folder" button.
+3.  Your folder will have been archived!
+
+To view your archived folder, navigate to the [archive tab][5] and then click on [folder archive][12] where you will find a list of your archived folders.
+
+### Related Actions
+[Unarchiving Messages][13]
+[Creating a Poll][10]
+[Creating an Announcement][14]

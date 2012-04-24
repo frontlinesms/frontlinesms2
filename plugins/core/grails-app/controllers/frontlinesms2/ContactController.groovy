@@ -124,7 +124,7 @@ class ContactController {
 				Contact.get(contactInstance.id).delete()
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])}"
+		flash.message = message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])
 		redirect(action: "show")		
 	}
 
@@ -160,7 +160,7 @@ class ContactController {
 	def checkForDuplicates = {
 		def foundContact = Contact.findByMobile(params.number)
 		if (foundContact && (foundContact.id.toString() != params.contactId))
-			render(text: "${message(code: 'contact.exists.prompt')}")
+			render(text: message(code: 'contact.exists.prompt'))
 		else
 			render ""
 	}
@@ -181,7 +181,7 @@ class ContactController {
 			return false
 		}
 		if(contactInstance.save(flush:true)) {
-			flash.message = "${message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])}"
+			flash.message = message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
@@ -199,7 +199,7 @@ class ContactController {
 		if(contactInstance) {
 			c.call(contactInstance)
 		} else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])}"
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])
 			c.call(new Contact())
 		}
 	}
@@ -231,7 +231,7 @@ class ContactController {
 		
 		// Check for errors in groupsToAdd and groupsToRemove
 		if(!groupsToAdd.disjoint(groupsToRemove)) {
-			contactInstance.errors.reject("${message(code: 'contact.addtogroup.error')}")
+			contactInstance.errors.reject(message(code: 'contact.addtogroup.error'))
 			return false
 		}
 		

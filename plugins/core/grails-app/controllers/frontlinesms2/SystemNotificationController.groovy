@@ -8,7 +8,7 @@ class SystemNotificationController {
 		withNotification {
 			it.read = true
 			it.save(failOnError:true)
-			render text:'OK'
+			render text: message(code: 'system.notification.ok')
 		}
 	}
 	
@@ -21,7 +21,7 @@ class SystemNotificationController {
 		if(s) {
 			c.call(s)
 		} else {
-			render text:'FAIL'
+			render text: message(code: 'system.notification.fail')
 		}
 	}
 }

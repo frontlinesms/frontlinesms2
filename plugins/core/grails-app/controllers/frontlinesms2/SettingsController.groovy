@@ -24,7 +24,7 @@ class SettingsController {
 		if(connection) {
 			c connection
 		} else {
-			flash.message = "${message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])}"
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id])
 			render(view:'show_connections', model: [fconnectionInstanceTotal: 0])
 		}
 	}

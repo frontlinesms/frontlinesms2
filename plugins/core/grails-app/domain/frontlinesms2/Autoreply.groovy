@@ -1,7 +1,10 @@
 package frontlinesms2
 
 class Autoreply extends Activity {
-	def messageSendService
+//> CONSTANTS
+	static String getShortName() { 'autoreply' }
+
+//> PROPERTIES
 	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	
@@ -13,11 +16,11 @@ class Autoreply extends Activity {
 	static mapping = {
 		keyword cascade: 'all'
 	}
-	
-	def getType() {
-		return 'autoreply'
-	}
 
+//> SERVICES
+	def messageSendService
+
+//> PROCESS METHODS
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		if(!exactMatch && keyword.value) return
 		def params = [:]

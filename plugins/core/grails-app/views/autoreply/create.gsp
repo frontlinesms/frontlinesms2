@@ -42,7 +42,7 @@
 	
 	function updateConfirmationMessage() {
 		if(!(isGroupChecked("blankKeyword"))){
-			var keyword = $('#keyword').val();
+			var keyword = $('#keyword').val().toUpperCase();
 			var autoreplyText = $('#autoreplyText').val();
 
 			$("#keyword-confirm").html('<p>' + keyword  + '</p>');

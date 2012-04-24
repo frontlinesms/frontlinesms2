@@ -45,7 +45,7 @@ class ImportController {
 					if(groups) groups.each { c.addToGroup(it) }
 					++savedCount
 				} catch(Exception ex) {
-					log.info "${message(code: 'import.contact.save.error')}", ex
+					log.info message(code: 'import.contact.save.error'), ex
 					failedLines << tokens
 				}		
 			}
@@ -62,7 +62,7 @@ class ImportController {
 			flash.message = "${message(code: 'import.info.contact', args: [savedCount, failedLines.size()])} ${failedLines? ('. ' + g.link(action:'exportFailedContacts', absolute:'true', message(code: 'import.create.failed.contacts.csv'))): ''}" 
 			
 			redirect controller: "settings", action: 'general'
-		} else throw new RuntimeException("${message(code: 'import.file.upload.failed')}")
+		} else throw new RuntimeException(message(code: 'import.file.upload.failed'))
 	}
 
 	def exportFailedContacts = { 

@@ -14,7 +14,6 @@ class SmartGroupController {
 	}
 	
 	def save = {
-		println "controller save smartgroup"
 		withSmartGroup { smartGroupInstance ->
 			smartGroupInstance.name = params.smartgroupname
 			if((getRuleText().flatten() - null)) {
@@ -22,13 +21,11 @@ class SmartGroupController {
 				addSmartGroupRules(smartGroupInstance)
 			}
 			if(smartGroupInstance.save(flush:true)) {
-				println "smartgroup successfully saved"
-				flash.message = "Smart group '$smartGroupInstance.name' saved"
+				flash.message =  message(code: 'flash.smartgroup.saved', args: [smartGroupInstance.name])
 				redirect(controller: "contact", action: "show", params:[smartGroupId : smartGroupInstance.id])
 			} else {
-				println "smartgroup save failed. Errors were $smartGroupInstance.errors"
-				flash.error = "Smart group save failed. Errors were $smartGroupInstance.errors"
-				render text: "Failed to save smart group<br/><br/>with params $params<br/><br/>errors: $smartGroupInstance.errors"
+				flash.error =  message(code: 'flash.smartgroup.save.failed', args: [smartGroupInstance.errors])
+				render text: message(code: 'smartgroup.save.failed', args: ['<br/><br/>', params, '<br/><br/>', smartGroupInstance.errors])           	
 			}
 		}
 	}
@@ -51,10 +48,10 @@ class SmartGroupController {
 				currentRules."$prop" = smartGroupInstance."$prop"
 		}
 		def customFieldNames = CustomField.allUniquelyNamed
-		
+
 		render view: "../smartGroup/create", model: [smartGroupInstance:smartGroupInstance,
 				currentRules:currentRules,
-				fieldNames:['Phone number', 'Contact name', 'email', 'notes']+customFieldNames,
+				fieldNames:[message(code: 'contact.phonenumber.label') , message(code: 'contact.name.label'), message(code: 'contact.email.label'), message(code: 'contact.notes.label')]+customFieldNames,
 				fieldIds:['mobile', 'contactName', 'email', 'notes']+customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
 	}
 	
@@ -66,7 +63,7 @@ class SmartGroupController {
 		if (SmartGroup.get(params.id)?.delete(flush: true))
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		else
-			flash.message = "Unable to delete smartgroup"
+			flash.message =  message(code: 'flash.smartgroup.delete.unable')
 		redirect(controller: "contact")
 	}
 	
@@ -110,7 +107,6 @@ class SmartGroupController {
 		}
 	}
 	
-	
 	private def getSmartGroupRuleFields() {
 		def smartGroupRuleFields = (new DefaultGrailsDomainClass(SmartGroup.class)).persistentProperties*.name - "name"
 		smartGroupRuleFields
@@ -121,8 +117,8 @@ class SmartGroupController {
 		if(params.id) sg = SmartGroup.get(params.id)
 		else sg = new SmartGroup()
 		if(sg) {
-			c.call(sg)
+			c.call(sg)  smartgroup.id.exist.not
 		}
-		else render(text: "Could not find smartgroup with id ${params.id}")
+		else render(text: message(code: 'flash.smartgroup.delete.unable', args: [params.id]))
 	}
 }

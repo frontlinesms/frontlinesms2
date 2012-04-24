@@ -107,17 +107,17 @@ class MessageController {
 				sentDispatchCount += it.dispatches.size()
 				sentMessageCount++
 			}
-			render view:"../message/${activityInstance.type == 'poll' ? 'poll' : 'standard'}",
+			render view:"../message/${activityInstance instanceof Poll ? 'poll' : 'standard'}",
 				model:[messageInstanceList: messageInstanceList?.list(params),
 						messageSection: 'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
 						ownerInstance: activityInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
-						pollResponse: activityInstance?.type == 'poll' ? activityInstance.responseStats as JSON : null,
+						pollResponse: activityInstance instanceof Poll ? activityInstance.responseStats as JSON : null,
 						sentMessageCount: sentMessageCount,
 						sentDispatchCount: sentDispatchCount] << getShowModel()
 		} else {
-			flash.message = "Activity could not be found"
+			flash.message = message(code: 'flash.message.activity.found.not')
 			redirect(action: 'inbox')
 		}
 	}
@@ -133,7 +133,7 @@ class MessageController {
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
 		} else {
-			flash.message = "Folder could not be found"
+			flash.message = message(code: 'flash.message.folder.found.not')
 			redirect(action: 'inbox')
 		}
 	}
@@ -141,7 +141,7 @@ class MessageController {
 	def send = {
 		def message = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(message)
-		flash.message = "Message has been queued to send to " + message.dispatches*.dst?.join(", ")
+		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [message.dispatches*.dst?.join(", ")])
 		render(text: flash.message)
 	}
 	
@@ -159,10 +159,9 @@ class MessageController {
 			}
 		}
 		
-		flash.message = "Message has been queued to send to " + dst.flatten().join(", ")
+		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [dst.flatten().join(", ")])
 		redirect (controller: "message", action: 'pending')
 	}
-
 	def delete = {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
@@ -172,7 +171,7 @@ class MessageController {
 				messageInstance.save()
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
+		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
 		if(params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
@@ -192,7 +191,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
+		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		} else {
@@ -213,7 +212,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + ' message(s)'])}"
+		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
 		if(params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		else
@@ -246,7 +245,7 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + ' message(s)'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
 		render ""
 	}
 
@@ -260,7 +259,7 @@ class MessageController {
 				responseInstance.poll.save()
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), 'message(s)'])}"
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), message(code: 'flash.message.fmessage')])}"
 		render ""
 	}
 
@@ -316,16 +315,16 @@ class MessageController {
 	def getUnreadMessageCount = {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
-	
+
 	def getSendMessageCount = {	
 		def messageInfo
-		def message = params.message ?: ''
-		if(message)	{ 
-			messageInfo = fmessageInfoService.getMessageInfos(message)
-			def messageCount = messageInfo.partCount > 1 ? "${messageInfo.partCount} SMS messages": "1 SMS message"
-			render text: "Characters remaining ${messageInfo.remaining} ($messageCount)", contentType:'text/plain'
+		def fmessage = params.message ?: ''
+		if(fmessage)	{ 
+			messageInfo = fmessageInfoService.getMessageInfos(fmessage)
+			def messageCount = messageInfo.partCount > 1 ? message(code: 'flash.message.fmessages.many', args: [messageInfo.partCount]): message(code: 'flash.message.fmessages.many.one')
+			render text: message(code: 'fmessage.remaining.characters.text', args: [messageInfo.remaining, messageCount]), contentType:'text/plain'
 		} else {
-			render text: "Characters remaining 160 (1 SMS message)", contentType:'text/plain'
+			render text: message(code: 'fmessage.remaining.characters.text.all'), contentType:'text/plain'
 		}
 		
 	}
@@ -336,7 +335,7 @@ class MessageController {
 	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId.toLong())
 			if(m) c.call(m)
-			else render(text: "Could not find message with id ${params.messageId}") // TODO handle error state properly
+			else render(text: message(code: 'fmessage.exist.not', args: [params.messageId])) // TODO handle error state properly
 	}
 	
 	private def getShowModel(messageInstanceList) {

@@ -8,9 +8,9 @@ class PollController extends ActivityController {
 		if(Poll.get(params.ownerId)) {
 			poll = Poll.get(params.ownerId)
 			if(params.enableKeyword && params.keyword)
-				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword))
+				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword.toUpperCase()))
 		} else if(params.enableKeyword && params.keyword) {
-			poll = new Poll(keyword: new Keyword(value: params.keyword))
+			poll = new Poll(keyword: new Keyword(value: params.keyword.toUpperCase()))
 		} else {
 			poll = new Poll()
 		}
@@ -27,20 +27,20 @@ class PollController extends ActivityController {
 			}
 			if (poll.save()) {
 				if (!params.dontSendMessage)
-					flash.message = "Poll has been saved and message(s) has been queued to send"
+					flash.message = message(code: 'flash.message.poll.queued')
 				else
-					flash.message = "Poll has been saved"
+					flash.message = message(code: 'flash.message.poll.saved')
 				[ownerId: poll.id]
 			} else {
-				flash.message = "Poll could not be saved!"
+				flash.message = message(code: 'flash.message.poll.not.saved')
 				render text:flash.message
 			}
 		} else {
-			flash.message = "Poll could not be saved!"
+			flash.message = message(code: 'flash.message.poll.not.saved')
 			render(text: flash.message)
 		}
 	}
-	
+
 	def sendReply = {
 		def poll = Poll.get(params.ownerId)
 		def incomingMessage = Fmessage.get(params.messageId)
