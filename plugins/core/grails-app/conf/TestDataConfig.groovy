@@ -5,6 +5,10 @@ testDataConfig {
 		'frontlinesms2.Fmessage' {
 			inbound = true
 			src = '+254701234567'
+			text = 'build-test-data made me'
+		}
+		'frontlinesms2.Announcement' {
+			messages = []
 		}
 	}
 }
