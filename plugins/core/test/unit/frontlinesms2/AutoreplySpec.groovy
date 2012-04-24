@@ -4,7 +4,7 @@ import grails.test.mixin.*
 import spock.lang.*
 
 @TestFor(Autoreply)
-@Mock([MessageOwner, Activity, Keyword])
+@Mock([Keyword])
 class AutoreplySpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	

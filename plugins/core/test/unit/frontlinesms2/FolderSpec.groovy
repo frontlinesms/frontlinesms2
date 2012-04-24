@@ -1,12 +1,12 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class FolderSpec extends UnitSpec {
+@TestFor(Folder)
+@Mock(Fmessage)
+class FolderSpec extends Specification {
 	def 'A folder may have none, one or many messages stored in it'() {
-		given:
-			mockDomain(MessageOwner)
 		when:
 			def f = new Folder(name:'test')
 		then:

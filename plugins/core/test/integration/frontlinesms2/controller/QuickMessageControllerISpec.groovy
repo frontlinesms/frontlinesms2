@@ -13,8 +13,8 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 	
 	def "contact list returned should be sorted alphabetically"() {
 		given:
-			def contact2 = new Contact(name:'Charlie').save(failOnError:true, flush:true)
-			def contact3 = new Contact(name:'Alice').save(failOnError:true, flush:true)
+			def contact2 = Contact.build(name:'Charlie')
+			def contact3 = Contact.build(name:'Alice')
 		when:
 			def model = controller.create()
 		then:
@@ -23,11 +23,11 @@ class QuickMessageControllerISpec extends IntegrationSpec {
 	
 	def "list of smart groups should be included in the group list"() {
 		given:
-			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
+			def s = SmartGroup.build(name:'English numbers', mobile:'+44')
 		when:
 			def model = controller.create()
 		then:
-			model.groupList."smartgroup-$s.id".name == "English numbers"
-			model.groupList."smartgroup-$s.id".addresses == []			
+			model.groupList.get("smartgroup-$s.id")?.name == "English numbers"
+			model.groupList.get("smartgroup-$s.id")?.addresses == []			
 	}
 }

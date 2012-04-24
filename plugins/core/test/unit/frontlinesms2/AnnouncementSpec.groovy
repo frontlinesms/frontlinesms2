@@ -2,9 +2,11 @@ package frontlinesms2
 
 import grails.test.mixin.*
 import spock.lang.*
+import grails.buildtestdata.mixin.Build
 
 @TestFor(Announcement)
-@Mock([MessageOwner, Fmessage])
+@Mock([Fmessage])
+@Build(Fmessage)
 class AnnouncementSpec extends Specification {
 	def "Announcement must have a name and a sent message"() {
 		when:
@@ -16,7 +18,7 @@ class AnnouncementSpec extends Specification {
 		then:
 			!a.validate()
 		when:
-			a.addToMessages(new Fmessage(date: new Date(), inbound: true, src:'12345'))
+			a.addToMessages(Fmessage.build())
 		then:
 			a.validate()
 	}

@@ -7,7 +7,7 @@ import grails.buildtestdata.mixin.Build
 import static frontlinesms2.DispatchStatus.*
 
 @TestFor(MessageController)
-@Mock([Activity, Contact, Fmessage, Group, GroupMembership, Poll, Trash])
+@Mock([Contact, Fmessage, Group, GroupMembership, Poll, Trash])
 @Build([Poll, Fmessage])
 class MessageControllerSpec extends Specification {
 	MessageSendService mockMessageSendService

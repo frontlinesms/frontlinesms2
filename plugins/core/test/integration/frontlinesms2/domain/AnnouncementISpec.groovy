@@ -67,8 +67,8 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def model = controller.create()
 		then:
-			model.groupList."smartgroup-$s.id".name == 'English numbers'
-			model.groupList."smartgroup-$s.id".addresses == []
+			model.groupList.get("smartgroup-$s.id")?.name == 'English numbers'
+			model.groupList.get("smartgroup-$s.id")?.addresses == []
 	}
 }
 
