@@ -155,9 +155,9 @@ class MessageController {
 	}
 
 	def send = {
-		def message = messageSendService.createOutgoingMessage(params)
-		messageSendService.send(message)
-		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [message.dispatches*.dst?.join(", ")])
+		def fmessage = messageSendService.createOutgoingMessage(params)
+		messageSendService.send(fmessage)
+		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [fmessage.dispatches*.dst?.join(", ")])
 		render(text: flash.message)
 	}
 	

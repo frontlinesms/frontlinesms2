@@ -21,6 +21,7 @@ class CoreBootStrap {
 	def deviceDetectionService
 	def failPendingMessagesService
 	def camelContext
+	def messageSource
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
@@ -33,7 +34,6 @@ class CoreBootStrap {
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
 		createWelcomeNote()
-		
 		switch(Environment.current) {
 			case Environment.TEST:
 				test_initGeb(servletContext)
@@ -64,6 +64,7 @@ class CoreBootStrap {
 				break
 				
 			case Environment.PRODUCTION:
+				createWelcomeNote()
 				break
 		}
 		deviceDetectionService.init()
@@ -75,11 +76,10 @@ class CoreBootStrap {
 	
 	private def createWelcomeNote() {
 		if(!SystemNotification.count()) {
-			new SystemNotification(text: 'Welcome to FrontlineSMS.  I hope you enjoy your stay!').save(failOnError:true)
+			new SystemNotification(text: messageSource.getMessage('frontlinesms.welcome', null, Locale.getDefault())).save(failOnError:true)
 		}
 	}
 	
-
 	/** Initialise SmartGroup domain objects for development and demos. */
 	private def dev_initContacts() {
 		if(!dev) return
