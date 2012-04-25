@@ -2,7 +2,7 @@
 	<g:hiddenField name="starred" value="${params.starred}" />
 	<g:hiddenField name="failed" value="${params.failed}" />
 	<g:if test="${messageSection == 'activity'}">
-		<h3 id="message-title"><g:message code="archive.activity" /></h3>
+		<h3 id="activity-title"><g:message code="archive.activity" /></h3>
 	</g:if>
 	<g:elseif test="${messageSection == 'folder'}">
 		<h3 id="folder-title"><g:message code="archive.folder" /></h3>

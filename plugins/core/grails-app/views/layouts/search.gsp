@@ -5,7 +5,7 @@
 		<g:layoutHead />
 		<r:require module="search"/>
 		<g:render template="/includes" plugin="core"/>
-		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label"/>
+		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send"/>
 		<r:script>
 			$(function() {  
 			   disablePaginationControls();

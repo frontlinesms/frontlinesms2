@@ -27,7 +27,7 @@ function launchConfirmationPopup(title) {
 		type:'POST',
 		data: {checkedContactList: contactIdList, message: message},
 		url: url_root + 'contact/confirmDelete',
-		success: function(data, textStatus){ launchSmallPopup(title, data, "Ok"); }
+		success: function(data, textStatus){ launchSmallPopup(title, data, i18n('smallpopup.ok')); }
 	});
 }
 
@@ -36,7 +36,7 @@ function launchEmptyTrashConfirmation() {
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/confirmEmptyTrash',
-		success: function(data, textStatus){ launchSmallPopup(i18n("smallpopup.empty.trash.prompt"), data, "Ok"); }
+		success: function(data, textStatus){ launchSmallPopup(i18n("smallpopup.empty.trash.prompt"), data, i18n('smallpopup.ok')); }
 	});
 }
 

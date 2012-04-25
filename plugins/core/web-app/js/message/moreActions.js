@@ -22,7 +22,7 @@ function renameAction() {
 		url: url_root + messageSection + '/rename',
 		data: {ownerId: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, 'Rename');
+			launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("smallpopup.rename"));
 	}})
 }
 
@@ -34,7 +34,7 @@ function editAction() {
 		url: url_root + messageSection + '/edit',
 		data: {id: $("#ownerId").val()},
 		success: function(data) {
-			launchMediumWizard(title, data, "Edit");
+			launchMediumWizard(title, data, i18n('wizard.ok'));
 	}})
 }
 
@@ -45,7 +45,7 @@ function deleteAction() {
 		url: url_root + messageSection + '/confirmDelete',
 		data: {id: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, 'Delete');
+			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, i18n("smallpopup.delete"));
 	}})
 }
 
@@ -63,7 +63,7 @@ function exportAction() {
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
 				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, 'Export');
+			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("smallpopup.export"));
 			updateExportInfo();
 	}})
 }

@@ -13,7 +13,7 @@
 		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.confirm" /></a></li>
 	</ul>
 
-	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, 'Poll')">
+	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
 		<g:render template="../poll/question" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 		<g:render template="../poll/responses" plugin="core"/>
 		<g:render template="../poll/sorting" plugin="core"/>

@@ -5,7 +5,7 @@ import frontlinesms2.camel.intellisms.*
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
-import org.smslib.NotConnectedException
+import frontlinesms2.camel.exception.FatalConnectionException
 
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
@@ -60,6 +60,10 @@ class IntelliSmsFconnection extends Fconnection {
 			List getRouteDefinitions() {
 				if(getSend() && getReceive()) {
 					return [from("seda:out-${IntelliSmsFconnection.this.id}")
+							.onException(FatalConnectionException)
+									.handled(true)
+									.beanRef('fconnectionService', 'handleDisconnection')
+									.end()
 							.process(new IntelliSmsPreProcessor())
 							.setHeader(Exchange.HTTP_URI,
 									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
@@ -71,26 +75,22 @@ class IntelliSmsFconnection extends Fconnection {
 							.process(new IntelliSmsPostProcessor())
 							.routeId("out-internet-${IntelliSmsFconnection.this.id}"),
 						from(camelProducerAddress())
-							.onException(NotConnectedException)
-									.handled(true)
-									.beanRef('fconnectionService', 'handleDisconnection')
-									.end()
 							.beanRef('intelliSmsTranslationService', 'process')
 							.to('seda:incoming-fmessages-to-store')
 							.routeId("in-${IntelliSmsFconnection.this.id}")]
 				}
 				else if(getReceive()) {
 					return [from(camelProducerAddress())
-							.onException(NotConnectedException)
-									.handled(true)
-									.beanRef('fconnectionService', 'handleDisconnection')
-									.end()
 							.beanRef('intelliSmsTranslationService', 'process')
 							.to('seda:incoming-fmessages-to-store')
 							.routeId("in-${IntelliSmsFconnection.this.id}")]
 				}
 				else {
 					return [from("seda:out-${IntelliSmsFconnection.this.id}")
+							.onException(FatalConnectionException)
+									.handled(true)
+									.beanRef('fconnectionService', 'handleDisconnection')
+									.end()
 							.process(new IntelliSmsPreProcessor())
 							.setHeader(Exchange.HTTP_URI,
 									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
