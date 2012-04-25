@@ -48,7 +48,7 @@ class ExportController {
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false).list()
 				break
 			case 'radioShow':
-				messageInstanceList = MessageOwner.get(params.ownerId).getMessages()
+				messageInstanceList = MessageOwner.get(params.ownerId).getShowMessages().list()
 				break
 			case 'result':
 				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
