@@ -48,7 +48,13 @@ h3 {
 	padding: 2px 20px;
 }
 
-.send-failed{
+.pending-send-failed div{
+	background-image: url('../images/icons/error_on.png');
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+tr.send-failed td:nth-child(6) {
 	background-image: url('../images/icons/error_on.png');
 	background-repeat: no-repeat;
 	background-position: right center;
@@ -328,7 +334,6 @@ h3 {
 /* Activities */
 
 .tall-header #message-list-header {
-	height: 150px;
 	padding: 0 17px;
 }
 

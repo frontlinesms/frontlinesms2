@@ -50,7 +50,7 @@
 			<ul class='sublist' id="activities-submenu">
 				<g:each in="${activityInstanceList - radioShowPollInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">
-						<g:link controller="message" action="activity" params="[ownerId: a.id]">${a.name} (${a.type})</g:link>
+						<g:link controller="message" action="activity" params="[ownerId: a.id]">${a.name} (${a.shortName})</g:link>
 					</li>
 				</g:each>
 				<li id="create-activity" class="create">

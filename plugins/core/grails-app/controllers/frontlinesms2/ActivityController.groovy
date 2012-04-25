@@ -17,7 +17,7 @@ class ActivityController {
 	def edit = {
 		withActivity { activityInstance ->
 			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
-			def activityType = activityInstance.type
+			def activityType = activityInstance.shortName
 			render view:"../$activityType/create", model:[contactList: Contact.list(),
 				groupList:groupList,
 				activityInstanceToEdit: activityInstance]

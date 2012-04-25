@@ -48,7 +48,7 @@ class ExportController {
 				messageInstanceList = Folder.get(params.ownerId).getFolderMessages(params.starred?:false).list()
 				break
 			case 'radioShow':
-				messageInstanceList = MessageOwner.get(params.ownerId).getMessages()
+				messageInstanceList = MessageOwner.get(params.ownerId).getShowMessages().list()
 				break
 			case 'result':
 				messageInstanceList = Fmessage.search(Search.get(params.searchId)).list()
@@ -112,7 +112,7 @@ class ExportController {
 	private def getActivityDescription() {
 		if(params.ownerId){
 			def messageOwner = MessageOwner.findById(params.ownerId)
-			String name = message(code: 'export.messages.name1', args: [messageOwner.name, messageOwner.type, params.messageTotal])
+			String name = message(code: 'export.messages.name1', args: [messageOwner.name, messageOwner.shortName, params.messageTotal])
 		} else {
 			String name = message(code: 'export.messages.name2', args: [params.messageSection, params.messageTotal])
 		}

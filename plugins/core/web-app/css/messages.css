@@ -96,6 +96,12 @@
 	padding-left: 25px;
 }
 
+#new-message-notification div{
+	position: absolute;
+	padding: 5px;
+	height: 16px;
+	width:100%;
+}
 #new-message-notification a{
 	display: block;
 	cursor: pointer;

@@ -58,7 +58,6 @@ class ConnectionController {
 	def update = {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
-			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 			fconnectionInstance.properties = params
 			if(fconnectionInstance.save()) {
 				flash.message = LogEntry.log(message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id]))
