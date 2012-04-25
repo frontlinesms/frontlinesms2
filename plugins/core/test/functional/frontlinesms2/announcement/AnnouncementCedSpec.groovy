@@ -11,10 +11,10 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 		then:
 			waitFor { $("#new-activity-choices").displayed }
 		when:
-			$("input", class: "announcement").click()
+			$("input.announcement").click()
 			$("#submit").click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("New announcement") }
+			waitFor(5) { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("New announcement") }
 	}
 	
 	def "can create a new Announcement" () {
@@ -24,7 +24,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 		then:
 			waitFor { $("#new-activity-choices").displayed }
 		when:
-			$("input", class: "announcement").click()
+			$("input.announcement").click()
 			$("#submit").click()
 		then:
 			waitFor { at AnnouncementDialog }
@@ -43,7 +43,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			addName.value("newbie")
 			doneButton.click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Announcement created!") }
+			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Announcement saved!") }
 			Announcement.findByName("newbie").sentMessageText == "announcing this new announcement!"
 	}
 

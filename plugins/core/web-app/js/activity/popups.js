@@ -14,7 +14,7 @@ function chooseActivity() {
 	
 function checkForSuccessfulSave(html, type) {
 	if ($(html).find("#ownerId").val())
-		launchMediumPopup(type + i18n("popup.title.saved"), html, 'OK', summaryRedirect);
+		launchMediumPopup(type + " " + i18n("popup.title.saved"), html, 'OK', summaryRedirect);
 	else
 		addFailedFlashMessage(html);
 }
