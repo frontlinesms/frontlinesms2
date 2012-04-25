@@ -106,18 +106,22 @@ class FconnectionServiceSpec extends UnitSpec {
 	def 'handleDisconnection should trigger shutdown of related Fconnection'() {
 		given:
 			registerMetaClass RouteDestroyJob
+			int jobRouteId
 			RouteDestroyJob.metaClass.static.triggerNow = { Map args ->
-				assert args.routeId == connectionId
+				jobRouteId = args.routeId
 			}
 			Exchange exchange = Mock()
 			exchange.fromRouteId >> routeId
-		expect:
-			!service.handleDisconnection(exchange) // real test is in the assert above
+		when:
+			service.handleDisconnection(exchange)
+		then:
+			jobRouteId == connectionId
 		where:
 			routeId          | connectionId
 			"out-1"          | 1
 			"out-internet-2" | 2
-			"out-modem-3"    | 6
+			"out-modem-3"    | 3
+			"in-4"           | 4
 	}
 
 	@Unroll

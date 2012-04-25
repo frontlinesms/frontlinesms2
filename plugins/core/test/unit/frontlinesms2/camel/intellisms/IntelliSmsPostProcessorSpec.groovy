@@ -4,7 +4,7 @@ import spock.lang.*
 import grails.plugin.spock.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
-import frontlinesms2.camel.exception.FatalConnectionException
+import frontlinesms2.camel.exception.AuthenticationException
 
 class IntelliSmsPostProcessorSpec extends UnitSpec {
 	IntelliSmsPostProcessor p = new IntelliSmsPostProcessor()
@@ -15,17 +15,17 @@ class IntelliSmsPostProcessorSpec extends UnitSpec {
 		when:
 			p.process(x)
 		then:
-			notThrown(FatalConnectionException)
+			notThrown(Exception)
 	}
 	
 	@Unroll
-	def 'Error responses should trigger FatalConnectionException'() {
+	def 'Error responses should trigger AuthenticationException'() {
 		given:
 			def x = mockExchange(responseText)
 		when:
 			p.process(x)
 		then:
-			thrown(FatalConnectionException)
+			thrown(AuthenticationException)
 		where:
 			responseText << ["ERR:LOGIN_INVALID"]
 	}
