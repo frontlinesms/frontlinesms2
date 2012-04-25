@@ -33,7 +33,6 @@ class CoreBootStrap {
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
-		createWelcomeNote()
 		switch(Environment.current) {
 			case Environment.TEST:
 				test_initGeb(servletContext)
