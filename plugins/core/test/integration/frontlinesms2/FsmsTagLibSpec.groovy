@@ -15,16 +15,6 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			output.contains '<tr><td class="field-label">Type</td><td id="confirm-type"></td></tr>'
 	}
 	
-	def "confirmTable returns a table of values"() {
-		setup:
-			def clazz = new TestFconnection()
-		when:
-			params = [clazz:clazz]
-			template = '<fsms:confirmTable instanceClass="${clazz}"/>'
-		then:
-			output == '<table id="smslib-confirm"><tr><td class="field-label">Type</td><td id="confirm-type"></td></tr><tr><td class="field-label">Name</td><td id="confirm-name"></td></tr></table>'
-	}
-	
 	def "INPUTS should generate input fields for all configFields"() {
 		setup:
 			def clazz = new SmslibFconnection()

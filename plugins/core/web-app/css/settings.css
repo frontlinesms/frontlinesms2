@@ -52,6 +52,20 @@
 	display: inline;
 	float:right;
 }
+
+.connection-confirm-table{
+	margin-top:30px;
+}
+
+.connection-confirm-table td:first-child{
+	font-weight:bold;
+	margin-left:0px;
+}
+
+.connection-confirm-table td{
+	margin-left:5px;
+}
+
 #create-connection-btn{
 	padding: 17px;
 }

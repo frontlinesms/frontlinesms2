@@ -42,7 +42,7 @@
 					</li>
 				</g:each>
 				<li id="create-folder" class="create">
-					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup(i18n('smallpopup.folder.title'), data, 'Create');">
+					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('smallpopup.create'));">
 						<g:message code="folder.create" />
 					</g:remoteLink>
 				</li>
