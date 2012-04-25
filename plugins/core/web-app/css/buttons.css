@@ -32,6 +32,7 @@ button[disabled=disabled], input[type=submit][disabled=disabled], a.btn[disabled
 	color: #9E9E9E;
 	pointer-events: none;
 	cursor: default;
+	background-repeat: repeat-x;
 }
 button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.btn[disabled=disabled]:hover{
 	background-image: url('../images/buttons/button_disabled_part.png');
