@@ -94,6 +94,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			controller.params.name = "Test IntelliSmsFconnection"
 			controller.params.connectionType = 'intellisms'
+			controller.params.send = 'true'
 			controller.params.username = "test"
 			controller.params.password = "test"
 		when:
@@ -125,6 +126,34 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.sendTest()
 		then:
 			controller.response.redirectedUrl == "/connection/list/$conn.id"
-	} 
+	}
+	
+	def "can edit an existing IntelliSmsFconnection"() {
+		setup:
+			def intellismsConn = new IntelliSmsFconnection(send:true, name:"Test IntelliSmsFconnection", username:"test", password:"****").save(flush:true)
+			controller.params.connectionType = 'intellisms'
+			controller.params.id = intellismsConn.id
+			controller.params._intellismssend = ''
+			controller.params.receive = 'true'
+			controller.params.receiveProtocol = "POP3"
+			controller.params.serverName = 'pop3.gmail.com'
+			controller.params.serverPort = '465'
+			controller.params.emailUserName = 'test'
+			controller.params.emailPassword = 'bla'
+		when:
+			controller.update()
+			def conn = IntelliSmsFconnection.findByName("Test IntelliSmsFconnection")
+		then:
+			conn
+			!conn.send
+			conn.username == "test"
+			conn.password == "****"
+			conn.receive
+			conn.receiveProtocol == EmailReceiveProtocol.POP3
+			conn.serverName == "pop3.gmail.com"
+			conn.serverPort == 465
+			conn.emailUserName == "test"
+			conn.emailPassword == "bla"
+	}
 	
 }

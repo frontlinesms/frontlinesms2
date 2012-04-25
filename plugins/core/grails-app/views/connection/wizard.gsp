@@ -90,6 +90,12 @@ var fconnection = {
 			<g:each in="${(Fconnection.implementations - it)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
+			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys
+			if(configFieldsKeys.length > 1) {
+				$.each(configFieldsKeys, function(index, value) {
+					setConfirmation(value);
+				});
+			}
 			<g:set var="configFields" value="${it.configFields instanceof Map? (it.configFields.getAllValues()) : it.configFields}" />
 			<g:each in="${configFields}" var="f">
 				<g:if test="${f in it.passwords}">setSecretConfirmation('${f}');</g:if>
@@ -163,7 +169,7 @@ function enableSubsectionFields(field) {
 }
 
 function getFieldVal(fieldName) {
-	if($('#' + fconnection.getType() + fieldName).attr("type") === "checkbox") {
+	if($('#' + fconnection.getType() + fieldName).attr("type") == "checkbox") {
 		var val = $('#' + fconnection.getType() + fieldName).prop("checked");
 	} else {
 		var val = $('#' + fconnection.getType() + fieldName).val();
@@ -172,8 +178,16 @@ function getFieldVal(fieldName) {
 }
 
 function setConfirmVal(fieldName, val) {
-	if(!$('#' + fconnection.getType() + fieldName).is(":disabled")) {
+	var isCheckbox = $('#' + fconnection.getType() + fieldName).attr("type") == "checkbox";
+	
+	if(isCheckbox == true) {
+		var text = (val == true) ? "Yes": "No";
+		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(text);
+	} else if($('#' + fconnection.getType() + fieldName).is(":disabled") === false) {
+		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).parent().removeClass("hide");
 		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).text(val);
+	} else {
+		$("#" + fconnection.getType() + "-confirm #confirm-" + fieldName).parent().addClass("hide");
 	}
 }
 
