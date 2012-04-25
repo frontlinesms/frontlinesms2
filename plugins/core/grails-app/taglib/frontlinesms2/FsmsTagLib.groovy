@@ -65,7 +65,6 @@ class FsmsTagLib {
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
 		att += [name:htmlKey, value:val]
-		
 		out << '<div class="field">'
 		out << '<label for="' + htmlKey + '">'
 		out << '' + getFieldLabel(instanceClass, groovyKey)

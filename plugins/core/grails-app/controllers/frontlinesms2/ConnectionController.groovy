@@ -79,6 +79,11 @@ class ConnectionController {
 		params.each { k, v ->
 			if(k.startsWith(cType)) {
 				newParams[k.substring(cType.size())] = v
+			} else if(k.startsWith("_" + cType)) {
+				def key = k.substring(("_" + cType).size())
+				if(!params[key] && !newParams[key]) {
+					newParams[key] = v as boolean
+				}
 			}
 		}
 		params << newParams
