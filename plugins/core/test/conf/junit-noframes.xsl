@@ -22,7 +22,7 @@
    limitations under the License.
  -->
 
-<xsl:param name="TITLE">Unit Test Results.</xsl:param>
+<xsl:param name="TITLE">Grails Test Results.</xsl:param>
 
 <!--
 
@@ -47,7 +47,8 @@
       table.details tr th{
         font-weight: bold;
         text-align:left;
-        background:#a6caf0;
+        background:#C03283;
+	color:white;
       }
       table.details tr td{
         background:#eeeee0;

@@ -32,7 +32,7 @@
 
 -->
 <xsl:param name="output.dir" select="'.'"/>
-<xsl:param name="TITLE">Unit Test Results.</xsl:param>
+<xsl:param name="TITLE">Grails Test Results.</xsl:param>
 
 
 <xsl:template match="testsuites">
