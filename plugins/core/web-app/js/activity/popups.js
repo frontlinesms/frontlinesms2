@@ -7,14 +7,14 @@ function chooseActivity() {
 		type:'GET',
 		dataType: "html",
 		url: url_root + activityUrl,
-		success: function(data, textStatus) { launchMediumWizard(title, data, "Create", 675, 500); }
+		success: function(data, textStatus) { launchMediumWizard(title, data, i18n('wizard.create'), 675, 500); }
 	});
 	return;
 }
 	
 function checkForSuccessfulSave(html, type) {
 	if ($(html).find("#ownerId").val())
-		launchMediumPopup(type + i18n("popup.title.saved"), html, 'OK', summaryRedirect);
+		launchMediumPopup(i18n("popup.title.saved", type), html, i18n('popup.ok'), summaryRedirect);
 	else
 		addFailedFlashMessage(html);
 }

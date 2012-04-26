@@ -12,7 +12,7 @@ function addFieldClickAction() {
 		$.ajax({
 			type:'POST',
 			url: url_root + 'contact/newCustomField',
-			success: function(data, textStatus) { launchSmallPopup(i18n("smallpopup.customfield.create.title"), data, "Ok", clickDone); }
+			success: function(data, textStatus) { launchSmallPopup(i18n("smallpopup.customfield.create.title"), data, i18n('smallpopup.ok'), clickDone); }
 		});
 	} else {
 		var fieldName = me.text();

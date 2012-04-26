@@ -30,6 +30,8 @@ class IntelliSmsTranslationService implements Processor {
 				message.text = emailBody
 			}
 			exchange.out.body = message
+		} else {
+			exchange.setProperty(Exchange.ROUTE_STOP, Boolean.TRUE);
 		}
 		
 	}

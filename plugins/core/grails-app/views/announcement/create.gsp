@@ -9,7 +9,7 @@
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.confirm" /></a></li>
 	</ol>
 
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, 'Announcement')">
+	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
 		<g:render template="message" plugin="core"/>
 		<div id="tabs-2">
 			<g:render template="../quickMessage/select_recipients" plugin="core" model= "['contactList' : contactList,

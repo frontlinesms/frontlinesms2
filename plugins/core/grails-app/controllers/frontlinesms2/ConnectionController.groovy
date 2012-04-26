@@ -58,7 +58,6 @@ class ConnectionController {
 	def update = {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
-			if(params.receiveProtocol) params.receiveProtocol = EmailReceiveProtocol.valueOf(params.receiveProtocol.toUpperCase())
 			fconnectionInstance.properties = params
 			if(fconnectionInstance.save()) {
 				flash.message = LogEntry.log(message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id]))
@@ -79,6 +78,11 @@ class ConnectionController {
 		params.each { k, v ->
 			if(k.startsWith(cType)) {
 				newParams[k.substring(cType.size())] = v
+			} else if(k.startsWith("_" + cType)) {
+				def key = k.substring(("_" + cType).size())
+				if(!params[key] && !newParams[key]) {
+					newParams[key] = v as boolean
+				}
 			}
 		}
 		params << newParams

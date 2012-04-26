@@ -11,7 +11,7 @@
 					<g:link action="sent"><g:message code="fmessage.sent" /></g:link>
 				</li>
 				<li class="${(messageSection=='pending')? 'selected':''}">
-					<g:link action="pending" class="${hasFailedMessages ? 'send-failed' : ''}"><g:message code="fmessage.pending" /></g:link>
+					<g:link action="pending" class="${hasFailedMessages ? 'pending-send-failed' : ''}"><g:message code="fmessage.pending" /><div id="error-icon" /></g:link>
 				</li>
 				<li class="${(messageSection=='trash')? 'selected':''}">
 					<g:link action="trash"><g:message code="fmessage.trash" /></g:link>
@@ -42,7 +42,7 @@
 					</li>
 				</g:each>
 				<li id="create-folder" class="create">
-					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup(i18n('smallpopup.folder.title'), data, 'Create');">
+					<g:remoteLink class="btn create" controller="folder" action="create" onSuccess="launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('smallpopup.create'));">
 						<g:message code="folder.create" />
 					</g:remoteLink>
 				</li>
