@@ -67,8 +67,8 @@ class GroupSpec extends Specification {
 		when:
 			def result = Group.groupDetails
 		then:
-			result."group-$sahara.id" == [name:"sahara",addresses:["address1", "address2"]]
-			result."group-$thar.id" == [name:"thar",addresses: ["address3"]]
+			result.get("group-$sahara.id") == [name:"sahara",addresses:["address1", "address2"]]
+			result.get("group-$thar.id") == [name:"thar",addresses: ["address3"]]
 	}
 }
 
