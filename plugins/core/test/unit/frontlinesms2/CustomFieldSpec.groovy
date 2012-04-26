@@ -15,7 +15,7 @@ class CustomFieldSpec extends Specification {
 		then:
 			val == valid
 		where:
-			name  | value       | valid
+			name  | value       | valid	
 			null  | null        | false
 			null  | "testdata"  | false
 			""    | "testdata"  | false
