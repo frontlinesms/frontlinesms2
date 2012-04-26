@@ -68,7 +68,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			to PageContactShow
 			contactSelect[1].click()
 		then:
-			waitFor { $('input', name:'name').value() == 'Bob' }
+			waitFor { $('input#name').value() == 'Bob' }
 		when:
 			contactSelect[0].click()
 		then:
@@ -95,7 +95,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			to PageContactShow
 			contactSelect[1].click()
 		then:
-			waitFor { $('input', name:'name').value() == 'Bob' }
+			waitFor { $('input#name').value() == 'Bob' }
 		when:
 			contactSelect[0].click()
 		then:

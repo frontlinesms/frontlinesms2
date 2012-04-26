@@ -175,9 +175,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			waitFor { checkedMessageCount == 1 }
 			waitFor { $('#single-message').displayed }
-			$('#single-message #message-detail #message-detail-sender').text() == message.src
-			$('#single-message #message-detail #message-detail-date').text() == formatedDate
-			$('#single-message #message-detail #message-detail-content').text() == message.text
 	}
 
 	def "should skip recipients tab if a message is replied"() {
@@ -272,7 +269,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n2") }
+			waitFor(5) { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n2") }
 	}
 
 	String dateToString(Date date) {

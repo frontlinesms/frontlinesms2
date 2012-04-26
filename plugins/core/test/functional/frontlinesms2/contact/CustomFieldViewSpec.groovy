@@ -9,7 +9,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		createTestContacts()
 		createTestCustomFields()
 	}
-
+	
 	def "'add new custom field' is shown in dropdown and redirects to create page"() {
 		when:
 			def bob = Contact.findByName("Bob")
@@ -55,30 +55,32 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	def 'clicking X next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {
 		when:
 			def bob = Contact.findByName("Bob")
-			bob.addToCustomFields(CustomField.findByName('lake')).save(failOnError: true, flush: true)
-			def bobsDatabaseFields = bob.getCustomFields()
-			def bobsFields = bobsDatabaseFields
-			go "contact/show/${bob.id}"
+			bob.addToCustomFields(name:'lake', value: 'Erie').save(failOnError: true, flush: true)
+			def originalFields = bob.customFields
+			to PageContactShowBob
 			def lstFields = $("#custom-field-list")
 			assert lstFields.children().children('label').size() == 2
 			lstFields.find('a').first().click()
-			bobsFields = bob.getCustomFields()
 			def lstUpdatedFields = $("#custom-field-list")
 		then:
 			lstUpdatedFields.children().children('label').size() == 1
 			lstUpdatedFields.children().children('label').text() == 'town'
-			bobsFields == bobsDatabaseFields
+			bob.refresh().customFields == originalFields
 	}
 
+	@spock.lang.IgnoreRest
 	def 'clicking X next to custom field in list then saving removes it from  database'() {
 		when:
-			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
+			to PageContactShowBob
 			def lstFields = $("#custom-field-list")
 			lstFields.find('a').first().click()
 			$("#contact-editor #update-single").click()
 		then:
-			bob.getCustomFields() == null
+			sleep 30000
+			
+			waitFor { 
+				println Contact.findByName("Bob").customFields?.name
+			!Contact.findByName("Bob").customFields }
 	}
 
 	def 'clicking save actually adds field to contact in database iff value is filled in'() {
