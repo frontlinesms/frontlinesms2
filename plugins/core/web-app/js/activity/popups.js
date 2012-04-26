@@ -7,7 +7,7 @@ function chooseActivity() {
 		type:'GET',
 		dataType: "html",
 		url: url_root + activityUrl,
-		success: function(data, textStatus) { launchMediumWizard(title, data, "Create", 675, 500); }
+		success: function(data, textStatus) { launchMediumWizard(title, data, i18n('wizard.create'), 675, 500); }
 	});
 	return;
 }

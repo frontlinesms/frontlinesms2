@@ -8,7 +8,7 @@
 		</g:remoteLink></li>
 		<g:if test="${search}">
  			<li id="export-btn">
-	  			<g:remoteLink class="btn" controller="export" action="messageWizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup(i18n('smallpopup.messages.export.title', '${[checkedMessageCount]}'), data, i18n('smallpopup.export'));"> 
+	  			<g:remoteLink class="btn" controller="export" action="messageWizard" params='[messageSection: "${messageSection}", searchId: "${search?.id}"]' onSuccess="launchSmallPopup(i18n('smallpopup.messages.export.title', '${checkedMessageCount}'), data, i18n('smallpopup.export'));"> 
 				<g:message code="search.export" />
 				</g:remoteLink>
 			</li>
