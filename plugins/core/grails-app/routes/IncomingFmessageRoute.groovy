@@ -1,5 +1,7 @@
-class IncomingFmessageRoute {
-	def configure = {
+import org.apache.camel.builder.RouteBuilder
+
+class IncomingFmessageRoute extends RouteBuilder {
+	void configure() {
 		from('seda:incoming-fmessages-to-store').
 				beanRef('messageStorageService', 'process').
 				recipientList(bean('incomingMessageRouterService', 'route')).
