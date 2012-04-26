@@ -1,5 +1,7 @@
-class DispatchRoute {
-	def configure = {
+import org.apache.camel.builder.RouteBuilder
+
+class DispatchRoute extends RouteBuilder {
+	void configure() {
 		onCompletion().onCompleteOnly()
 				.beanRef('dispatchRouterService', 'handleCompleted')
 		onCompletion().onFailureOnly()

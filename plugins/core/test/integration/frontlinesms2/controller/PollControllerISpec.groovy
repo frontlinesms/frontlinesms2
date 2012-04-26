@@ -188,7 +188,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 			poll = Poll.get(poll.id)
 		then:
-			poll.keyword.value == 'bad'
+			poll.keyword.value == 'BAD'
 	}
 	
 }

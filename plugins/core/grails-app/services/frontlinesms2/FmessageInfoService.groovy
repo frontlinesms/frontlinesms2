@@ -5,13 +5,13 @@ import org.smslib.util.GsmAlphabet
 // TODO please rename as SmsInfoService
 class FmessageInfoService {
 	/** Maximum number of characters that can be fit into a single 7-bit GSM SMS message. TODO this value should probably be fetched from {@link TpduUtils}. */
-	static final int SMS_LENGTH_LIMIT = 160 
+	private static final int SMS_LENGTH_LIMIT = 160 
 	/** Maximum number of characters that can be fit in one part of a multipart 7-bit GSM SMS message.  TODO this number is incorrect, I suspect.  The value should probably be fetched from {@link TpduUtils}. */
-	static final int SMS_MULTIPART_LENGTH_LIMIT = 135 
+	private static final int SMS_MULTIPART_LENGTH_LIMIT = 135 
 	/** Maximum number of characters that can be fit into a single UCS-2 SMS message. TODO this value should probably be fetched from {@link TpduUtils}. */
-	static final int SMS_LENGTH_LIMIT_UCS2 = 70 
+	private static final int SMS_LENGTH_LIMIT_UCS2 = 70 
 	/** Maximum number of characters that can be fit in one part of a multipart UCS-2 SMS message.  TODO this number is incorrect, I suspect.  The value should probably be fetched from {@link TpduUtils}. */
-	static final int SMS_MULTIPART_LENGTH_LIMIT_UCS2 = 60 
+	private static final int SMS_MULTIPART_LENGTH_LIMIT_UCS2 = 60 
 	
 	def getMessageInfos(String text) {
 		int charCount = text.size()
@@ -49,3 +49,4 @@ class FmessageInfoService {
 		[charCount:charCount, partCount:partCount, remaining:remaining]
 	}
 }
+
