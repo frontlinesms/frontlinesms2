@@ -17,10 +17,10 @@ class PollControllerSpec extends Specification {
 				new GroupMembership(group:group1, contact:bob),
 				new GroupMembership(group:group2, contact:bob)]*.save()
 		when:
-                        def model = controller.create()
-                then:
-                        model.contactList*.name == ["Alice", "Bob"]
-                        model.groupList.get("group-$group1.id") == [name:"group1", addresses:["12345", "54321"]]
+			def model = controller.create()
+		then:
+			model.contactList*.name == ["Alice", "Bob"]
+			model.groupList.get("group-$group1.id") == [name:"group1", addresses:["12345", "54321"]]
 			model.groupList.get("group-$group2.id") == [name:"group2", addresses:["54321"]]
 	}
 	
