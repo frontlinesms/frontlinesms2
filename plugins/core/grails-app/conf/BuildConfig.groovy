@@ -44,7 +44,7 @@ grails.project.dependency.resolution = {
 		// runtime 'mysql:mysql-connector-java:5.1.16'
 		def seleniumVersion = '2.18.0'
 		def camel = {
-			def camelVersion = "2.9.0"
+			def camelVersion = "2.9.2"
 			"org.apache.camel:camel-$it:$camelVersion"
 		}
 
@@ -58,7 +58,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
 
 		// COMPILE
-		compile 'net.frontlinesms.core:camel-smslib:0.0.4-SNAPSHOT'
+		compile 'net.frontlinesms.core:camel-smslib:0.0.5-SNAPSHOT'
 		['mail', 'http'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
 		compile 'net.frontlinesms.core:at-modem-detector:0.2'
