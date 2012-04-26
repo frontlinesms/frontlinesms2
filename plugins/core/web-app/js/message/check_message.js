@@ -5,7 +5,6 @@ $(document).ready(function() {
 function messageChecked(messageId) {
 	var count = countCheckedMessages();
 	var checkedMessageRow = $('#message-list tr#message-' + messageId);
-	
 	if(checkedMessageRow.find('input[type=checkbox]').attr('checked')) {
 		if(count == 1) {
 			$('#message-list tr.selected').removeClass('selected');
@@ -17,6 +16,7 @@ function messageChecked(messageId) {
 	} else {
 		if(count != 0) {
 			checkedMessageRow.removeClass('selected');
+			count = setCheckAllBox(count);
 			if (count == 1) {
 				var newMessageRowId = $('#message-list tr.selected').attr('id');
 				var newMessageId = newMessageRowId.substring('message-'.length);

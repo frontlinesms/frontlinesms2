@@ -15,7 +15,9 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'Alice', text:'hi Alice', date:new Date()-1, starred:true)
 
 		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
+		println "Chicken message : $chickenMessage"
 		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
+		println "Liver message : $liverMessage"
 
 		def poll = new Poll(name:'Miauow Mix')
 		[chicken:chickenMessage, liver:liverMessage, Unknown:null].each { value, m ->

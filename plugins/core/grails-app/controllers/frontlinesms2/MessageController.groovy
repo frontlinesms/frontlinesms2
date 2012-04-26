@@ -98,7 +98,7 @@ class MessageController {
 	def announcement = { redirect(action: 'activity', params: params) }
 	def autoreply = { redirect(action: 'activity', params: params) }
 	def activity = {
-		def activityInstance = Activity.get(params.ownerId.toLong())
+		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
 			def sentMessageCount = 0
@@ -162,6 +162,7 @@ class MessageController {
 		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [dst.flatten().join(", ")])
 		redirect (controller: "message", action: 'pending')
 	}
+	
 	def delete = {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
@@ -172,7 +173,7 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
-		if(params.messageSection == 'result')
+		if (params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
 			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed])

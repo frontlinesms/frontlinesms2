@@ -17,7 +17,7 @@ abstract class Activity extends MessageOwner {
 	
 	def archive() {
 		this.archived = true
-		messages*.archived = true
+		Fmessage.owned(this, false, true)?.list()*.each { it?.archived = true }
 	}
 	
 	def unarchive() {

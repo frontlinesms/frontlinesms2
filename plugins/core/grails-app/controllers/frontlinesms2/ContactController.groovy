@@ -263,8 +263,9 @@ class ContactController {
 		}
 		fieldsToRemove.each() { id ->
 			def toRemove = CustomField.get(id)
+			contactInstance.removeFromCustomFields(toRemove)
 			if(toRemove)
-				toRemove.delete(failOnError: true, flush:true)
+				toRemove.delete()
 		}
 		return contactInstance
 	}

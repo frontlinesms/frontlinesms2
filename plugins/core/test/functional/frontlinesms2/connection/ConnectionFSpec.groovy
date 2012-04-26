@@ -62,22 +62,10 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			$('title').text() == "Settings > Connections > MTN Dongle"
 	}
 	
-	def "should update message count when in Settings section"() {
-		when:
-			to ConnectionPage
-			def message = Fmessage.build()
-		then:
-			$("#message-tab-link").text()?.equalsIgnoreCase("Messages\n0")
-		when:
-			js.refreshMessageCount()
-		then:
-			waitFor { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n1") }
-	}
-	
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 		given:
 			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:"11200")
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to ConnectionPage
 		then:
@@ -97,7 +85,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor { at ConnectionDialog }
+			waitFor(5) { at ConnectionDialog }
 		when:
 			connectionForm.connectionType = "smslib"
 			nextPageButton.click()
@@ -122,7 +110,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor { at ConnectionDialog }
+			waitFor(5) { at ConnectionDialog }
 		when:
 			connectionForm.connectionType = "intellisms"
 			nextPageButton.click()

@@ -2,17 +2,8 @@ package frontlinesms2
 
 class ArchiveController extends MessageController {
 //> SERVICES
-	def grailsApplication
 
 //> INTERCEPTORS
-	def beforeInterceptor = {
-		params.sort = params.sort ?: 'date'
-		params.order = params.order ?: 'desc'
-		params.max = params.max ?: grailsApplication.config.grails.views.pagination.max
-		params.offset  = params.offset ?: 0
-		params.starred = params.starred ? params.starred.toBoolean() : false
-		return true
-	}
 	 
 //> ACTIONS
 	def index = {

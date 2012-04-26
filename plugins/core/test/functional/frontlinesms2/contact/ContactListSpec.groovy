@@ -52,9 +52,7 @@ class ContactListSpec extends ContactBaseSpec {
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			waitFor {
-println $('#contact-list li').children('a')*.text()
- $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones','SaM Tina'] }
+			waitFor { $('#contact-list li a')*.text() == ['Sam Anderson', 'SAm Jones', 'SaM Tina'] }
 	}
 	
 	def 'should be able to search contacts within a group'() {

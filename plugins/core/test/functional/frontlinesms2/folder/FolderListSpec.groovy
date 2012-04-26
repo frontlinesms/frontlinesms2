@@ -63,7 +63,7 @@ class FolderListSpec extends FolderBaseSpec {
 			go "message/folder/${folder.id}/show/${message.id}"
 			$("#btn_reply").click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor(5) { $('div#tabs-1').displayed }
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
@@ -147,7 +147,7 @@ class FolderListSpec extends FolderBaseSpec {
 			def folderId = deleteFolder()
 		when:
 			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
-			def rowContents = $('#message-list tr:nth-child(1) td')*.text()
+			def rowContents = $('#message-list tr:nth-child(2) td')*.text()
 		then:
 			println rowContents
 			rowContents[2] == 'Work'
