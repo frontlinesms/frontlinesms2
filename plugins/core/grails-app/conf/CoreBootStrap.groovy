@@ -53,7 +53,7 @@ class CoreBootStrap {
 				dev_initSmartGroups()
 				dev_initGroups()
 				dev_initContacts()
-				dev_initFconnections()
+				//dev_initFconnections()
 				dev_initFmessages()
 				dev_initPolls()
 				dev_initAutoreplies()
@@ -156,10 +156,10 @@ class CoreBootStrap {
 	
 	private def dev_initRealSmslibFconnections() {
 		if(!dev) return
-		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
-		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
-		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
+//		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+//		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+//		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
+//		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 	}
 	
 	private def dev_initMockSmslibFconnections() {

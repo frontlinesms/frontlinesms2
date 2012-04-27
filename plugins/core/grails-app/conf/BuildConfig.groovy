@@ -64,14 +64,16 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:at-modem-detector:0.2'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
+		
 	}
 
 	plugins {
 		runtime ":hibernate:$grailsVersion"
+		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'
 		runtime ":resources:1.1.6"
-
+		
 		runtime ":export:1.1"
 		runtime ":markdown:1.0.0.RC1"
 		runtime ":routing:1.2.0"

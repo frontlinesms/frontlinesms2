@@ -13,7 +13,7 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            //dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:h2:mem:devDb;MVCC=TRUE"
         }
     }
@@ -25,7 +25,7 @@ environments {
     }
     production {
         dataSource {
-            dbCreate = "update"
+           //dbCreate = "update" should be disabled for the data migration plugin to work
             url = "jdbc:h2:prodDb;MVCC=TRUE"
             pooled = true
             properties {
