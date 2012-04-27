@@ -14,7 +14,7 @@ class ContactDeleteSpec extends ContactBaseSpec {
 			createTestContacts()
 		when:
 			to PageContactShow
-			deleteSingleButton.jquery.trigger("click")
+			deleteSingleButton.click()
 		then:
 			waitFor { confirmDeleteButton.displayed }
 		when:
@@ -31,17 +31,17 @@ class ContactDeleteSpec extends ContactBaseSpec {
 			to PageContactShowAlice
 			contactSelect[1].click()
 		then:
-			waitFor { $('input', name:'name').value() == 'Bob' }
+			waitFor { $('input#name').value() == 'Bob' }
 		when:
 			contactSelect[0].click()
 		then:
 			waitFor { deleteAllButton.displayed }
 		when:
-			deleteAllButton.jquery.trigger("click")
+			deleteAllButton.click()
 		then:
 			waitFor { confirmDeleteButton.displayed }
 		when:
-			confirmDeleteButton.jquery.trigger("click")
+			confirmDeleteButton.click()
 		then:
 			waitFor { flashMessage.displayed }
 			Contact.count() == 0

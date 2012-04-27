@@ -29,7 +29,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearch
 		then:
-			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group','Listeners', 'Friends']
+			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
 			searchFrm.find('select', name:'activityId').children('option')*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
@@ -40,7 +40,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().contains('Searching all messages, including archived messages')
+			searchDescription.text().containsAll('Searching all messages, including archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -73,7 +73,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchFrm.inArchive = null
 			searchBtn.click()
 		then:
-			searchFrm.inArchive == null
+			searchFrm.inArchive == 'off'
 	}
 	
 	def "'Export Results' link is disabled when search is null "() {

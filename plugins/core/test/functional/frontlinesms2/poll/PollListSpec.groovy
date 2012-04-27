@@ -3,15 +3,15 @@ package frontlinesms2.poll
 import frontlinesms2.*
 
 class PollListSpec extends PollBaseSpec {
-	def 'poll message list is displayed'() {
+	def "poll message list is displayed"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
 			to PageMessagePollFootballTeamsBob
-			def pollMessageSources = $('#message-list tr .message-sender-cell a')*.text()
+			def pollMessageSources = $('#message-list .message-sender-cell a')*.text()
 		then:
-			pollMessageSources.conatinsAll(['Alice', 'Bob'])
+			pollMessageSources.containsAll('Alice', 'Bob')
 	}
 
 	def "message's poll details are shown in list"() {
@@ -20,7 +20,7 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessagePollFootballTeamsBob
-			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
+			def rowContents = $('#message-list .main-table tr:nth-child(3) td')*.text()
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
@@ -65,17 +65,17 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePollFootballTeamsBob
 		then:
-			$("#message-list tr").size() == 3
+			$("#message-list .main-table tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
-			waitFor { $("#message-list tr").size() == 2 }
+			waitFor { $("#message-list .main-table tr").size() == 2 }
 		then:
-			$("#message-list tr")[0].find(".message-sender-cell").text() == 'Bob'
+			$("#message-list .main-table tr")[1].find(".message-sender-cell").text() == 'Bob'
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#message-list tr").size() == 3}
+			waitFor {$("#message-list .main-table tr").size() == 3}
 		then:
-			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Bob', 'Alice'])
+			$("#message-list .main-table tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Bob', 'Alice'])
 	}
 
 	def "should only display message details when one message is checked"() {
@@ -134,17 +134,17 @@ class PollListSpec extends PollBaseSpec {
 			createTestMessages()
 			to PageMessagePollFootballTeamsAlice
 		then:
-			visibleMessageTotal == 2
+			visibleMessageTotal == 3
 		when:
 			sleep 11000
 		then:
-			visibleMessageTotal == 2
+			visibleMessageTotal == 3
 			!newMessageNotification.displayed
 		when:
 			createMoreTestMessages()
 			sleep 5000
 		then:
-			visibleMessageTotal == 2
+			visibleMessageTotal == 3
 			!newMessageNotification.displayed
 		when:
 			sleep 7000

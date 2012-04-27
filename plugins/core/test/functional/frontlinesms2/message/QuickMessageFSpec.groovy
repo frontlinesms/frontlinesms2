@@ -107,7 +107,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("a", text:contains("Pending")).click()
 		then:
-			waitFor { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
+			waitFor(5) { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
 		then:
 			waitFor{ $('h3.pending').text().equalsIgnoreCase("Pending") }
 			$("a", text:contains("Pending")).hasClass("pending-send-failed")
@@ -206,6 +206,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message)" }
 		when:
 			$("#messageText") << "h"
+			$("#messageText").jquery.trigger('keyup')
 		then:
 			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}

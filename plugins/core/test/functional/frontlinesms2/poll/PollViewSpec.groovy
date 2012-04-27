@@ -16,9 +16,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			go 'message'
 		then:
-			$('#activities-submenu li')[0].text().contains('Football Teams') // TODO: find/implement array contains
-			$('#activities-submenu li')[1].text().contains('Shampoo Brands')
-			$('#activities-submenu li')[2].text().contains('Rugby Brands')
+			$('#activities-submenu li')*.text().containsAll('Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll')
 	}
 	
 	def 'message from bob is first in the list, and links to the show page'() {
@@ -62,16 +60,4 @@ class PollViewSpec extends PollBaseSpec {
 		then:
 			$('#message-list .selected a', text: "Bob").displayed
 	}
-	
-	def 'activities should also list message counts'() {
-		given:
-			createTestPolls()
-			createTestMessages()
-		when:
-//			to PageMessagePollFootballTeamsBob
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
-		then:
-			$('#activities-submenu li')[0..2]*.text() == ['Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll']
-	}
-	
 }

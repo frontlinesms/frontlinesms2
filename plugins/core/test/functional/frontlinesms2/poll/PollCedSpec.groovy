@@ -93,28 +93,6 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { responseListTab.displayed }
 	}
 
-	def "should remain in the same tab when auto-reply text is empty"() {
-		when:
-			launchPollPopup()
-		then:
-			waitFor { autoSortTab.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { autoReplyTab.displayed }
-			pollForm.autoreplyText().disabled
-		when:
-			pollForm.enableAutoreply = true
-			next.click()
-		then:
-			autoReplyTab.displayed
-		when:
-			selectRecipientsTabLink.click()
-		then:
-			waitFor { errorMessage.displayed }
-			autoReplyTab.displayed
-	}
-
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
 		when:
 			launchPollPopup('multiple', 'question')
@@ -218,7 +196,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-message").text() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A " for Never, "COFFEE B " for Once a day, "COFFEE C " for Twice a day.'
 			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
@@ -258,7 +236,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { editMessageTab.displayed }
-			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A " for Never, "COFFEE B " for Once a day, "COFFEE C " for Twice a day.'
 		when:
 			$("#messageText").value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
 			next.click()
@@ -342,9 +320,9 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { title == "Poll" }
 		when:
-			$(".button-list #more-actions").value("export").click()
+			$(".more-actions").value("export").click()
 		then:	
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor(5) { $("#ui-dialog-title-modalBox").displayed }
 	}
 
 	def "can rename a poll"() {
@@ -384,8 +362,8 @@ class PollCedSpec extends PollBaseSpec {
 		setup:
 			def poll = deletePoll()
 		when:
-			def rowContents = $('#messages tbody tr:nth-child(1) td')*.text()
 			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Who is badder?'
 			rowContents[3] == '0 messages'
@@ -458,11 +436,12 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { $('.manual').displayed }
 		when:
 			goToTab(7)
-			pollForm.name == 'Who is badder?'
-			done.click()
-			poll = Poll.findByName('Who is badder?')
 		then:
-			waitFor { Poll.findByName("Who is badder?").refresh().responses*.value.containsAll(["Michael-Jackson", "Chuck-Norris", "Bruce Vandam"]) }		
+			pollForm.name == 'Who is badder?'
+		when:
+			done.click()
+		then:
+			waitFor(5) { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
 	}
 	
 	def deletePoll() {
@@ -472,8 +451,8 @@ class PollCedSpec extends PollBaseSpec {
 		poll.addToResponses(key: 'Unknown', value: 'Unknown')
 		poll.save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
-		$(".button-list #more-actions").value("delete")
-		waitFor { $("#ui-dialog-title-modalBox").displayed }
+		$(".more-actions").value("delete")
+		waitFor(5) { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete poll")
 		$("#done").click()
 		poll
@@ -485,7 +464,7 @@ class PollCedSpec extends PollBaseSpec {
 		waitFor { createActivityDialog.displayed }
 		$("input", class: "poll").click()
 		$("#submit").click()
-		waitFor { at PagePollCreate }
+		waitFor(10) { at PagePollCreate }
 		pollForm.pollType = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage

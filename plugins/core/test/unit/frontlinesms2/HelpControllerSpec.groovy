@@ -3,6 +3,7 @@ package frontlinesms2
 import spock.lang.*
 import grails.plugin.spock.*
 
+@TestFor(HelpController)
 class HelpControllerSpec extends ControllerSpec {
 	
 	def 'If a help file with the given name exists its text will be rendered'() {
@@ -12,8 +13,9 @@ class HelpControllerSpec extends ControllerSpec {
 			def helpFile = new File('testHelp.txt')
 			def helpFileContent = "This is test content for the help"
 			helpFile.text = helpFileContent
+			params.helpSection = 'testHelp'
 		when:
-			def controllerResponse = controller.getSection('testHelp')
+			def controllerResponse = controller.getSection()
 		then:
 			renderArgs.text == helpFileContent
 		cleanup:
