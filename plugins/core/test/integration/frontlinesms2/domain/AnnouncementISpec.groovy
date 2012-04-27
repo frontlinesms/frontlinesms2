@@ -32,12 +32,14 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 			a.addToMessages(m)
 			a.save(failOnError:true)
 		then:
-			a.archived == false
+			!a.archived
 		when:
 			a.archive()
+			println "a.archived:$a.archived"
+			a.messages.each { println("...it.archived:$it.archived") }
 			a.save(failOnError:true, flush: true)
 		then:
-			a.archived == true
+			a.archived
 	}
 	
 	def "When an announcement is archived all of its messages are archived"() {
@@ -51,14 +53,14 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 			a.save()
 		then:
 			m.messageOwner == a
-			a.archived == false
-			m.archived == false
+			!a.archived
+			!m.archived
 		when:
 			a.archive()
-			a.save(failOnError:true, flush: true)
+			a.save()
 		then:
-			a.archived == true
-			m.archived == true
+			a.archived
+			m.archived
 	}
 	
 	def "list of smart groups should be included in the group list"() {

@@ -127,30 +127,8 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def s = new SmartGroup(name:'English numbers', mobile:'+44').save(flush:true)
 		when:
 			def model = controller.create()
-			println "class: " + model.groupList.getClass()
-			model.groupList.keySet().each {
-				println "KEY: $it (${it.getClass()})"
-				println it == "smartgroup-$s.id"
-			}
-			println model.groupList."smartgroup-$s.id"
-			println model.groupList["smartgroup-$s.id"]
-			println model.groupList.get("smartgroup-$s.id")
-			println model.groupList."smartgroup-${s.id}"
-			println model.groupList["smartgroup-${s.id}"]
-			println model.groupList.get("smartgroup-${s.id}")
-			println model.groupList."smartgroup-1"
-			println model.groupList["smartgroup-1"]
-			println model.groupList.get("smartgroup-1")
-			println model.groupList.'smartgroup-1'
-			println model.groupList['smartgroup-1']
-			println model.groupList.get('smartgroup-1')
-			println model.groupList.('smartgroup-' + s.id)
-			println model.groupList['smartgroup-' + s.id]
-			println model.groupList.get('smartgroup-' + s.id)
 		then:
-			model.groupList["smartgroup-$s.id"]== "smartgroup-$s.id" + '...'
-			model.groupList."smartgroup-$s.id".name == 'English numbers'
-			model.groupList."smartgroup-$s.id".addresses == []
+			model.groupList.get("smartgroup-$s.id") == [name:'English numbers', addresses:[]]
 	}
 	
 	def "edit action modifies the properties of an existing poll"() {
