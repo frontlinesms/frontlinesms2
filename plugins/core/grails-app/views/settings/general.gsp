@@ -7,6 +7,13 @@
 	</head>
 	<body>
 		<div id="general">
+			<div id="language">
+				<h2><g:message code="language.label" /></h2>
+				<p><g:message code="language.prompt"/></p>
+				<select class="dropdown" id="language-dropdown" name="language-dropdown">
+					
+				</select>
+			</div>
 			<div id="import">
 				<h2><g:message code="import.label" /></h2>
 				<p class="description">
