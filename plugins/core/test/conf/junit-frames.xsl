@@ -176,7 +176,8 @@ table tr td, table tr th {
 table.details tr th{
     font-weight: bold;
     text-align:left;
-    background:#a6caf0;
+    background:#C03283;
+    color:white;
 }
 table.details tr td{
     background:#eeeee0;
