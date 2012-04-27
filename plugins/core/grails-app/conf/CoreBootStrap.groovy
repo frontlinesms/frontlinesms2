@@ -32,7 +32,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
-		createWelcomeNote()
+		//createWelcomeNote()
 		
 		switch(Environment.current) {
 			case Environment.TEST:
