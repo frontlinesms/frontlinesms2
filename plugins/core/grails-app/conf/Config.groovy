@@ -88,10 +88,10 @@ log4j = {
 			def datePattern = "'.'yyyy-MM-dd"
 			def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
 			appender new RollingFileAppender(name:"prod",
-					datePattern:datePattern, layout:layout, file:"$conf/standard.log",
+					layout:layout, file:"$conf/standard.log",
 					threshold:org.apache.log4j.Level.INFO);
 			appender new RollingFileAppender(name:"prod-stacktrace",
-					datePattern:datePattern, layout:layout, file:"$conf/stacktrace.log",
+					layout:layout, file:"$conf/stacktrace.log",
 					threshold:org.apache.log4j.Level.ERROR);
 		}
 		development {
