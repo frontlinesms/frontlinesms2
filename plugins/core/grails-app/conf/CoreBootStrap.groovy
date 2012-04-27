@@ -53,7 +53,7 @@ class CoreBootStrap {
 				dev_initSmartGroups()
 				dev_initGroups()
 				dev_initContacts()
-				//dev_initFconnections()
+				dev_initFconnections()
 				dev_initFmessages()
 				dev_initPolls()
 				dev_initAutoreplies()
@@ -151,15 +151,15 @@ class CoreBootStrap {
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
-		new IntelliSmsFconnection(name:"IntelliSms Mock connection", send:true, username:"johnmark", password:"pass_word").save(failOnError:true)
+		new IntelliSmsFconnection(name:"IntelliSms Mock connection", send:true, username:"johnmark", sendPassword:"pass_word").save(failOnError:true)
 	}
 	
 	private def dev_initRealSmslibFconnections() {
 		if(!dev) return
-//		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
-//		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
-//		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
-//		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
+		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
+		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
+		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
+		new SmslibFconnection(name:"Alex's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'5602').save(failOnError:true)
 	}
 	
 	private def dev_initMockSmslibFconnections() {

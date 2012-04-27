@@ -17,6 +17,10 @@ class ClickatellFconnection extends Fconnection {
 	
 	static passwords = ['password']
 	
+	static mapping = {
+		password column:'clickatell_password'
+	}
+	
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
 			@Override void configure() {}

@@ -10,13 +10,13 @@ import frontlinesms2.camel.exception.FatalConnectionException
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
 	static configFields = [name:null,
-				send: ['username', 'password'], 
+				send: ['username', 'sendPassword'], 
 				receive: ['receiveProtocol', 'serverName', 'serverPort', 'emailUserName', 'emailPassword']]
-	static passwords = ['password', 'emailPassword']
+	static passwords = ['sendPassword', 'emailPassword']
 	static String getShortName() { 'intellisms' }
 	
 	String username
-	String password // FIXME maybe encode this rather than storing plaintext
+	String sendPassword // FIXME maybe encode this rather than storing plaintext
 	boolean send
 	boolean receive
 	
@@ -30,7 +30,7 @@ class IntelliSmsFconnection extends Fconnection {
 	static constraints = {
 		send(validator: { val, obj ->
 			if(val) {
-				return obj.username && obj.password
+				return obj.username && obj.sendPassword
 			}
 			else return obj.receive
 		})
@@ -39,7 +39,7 @@ class IntelliSmsFconnection extends Fconnection {
 				 else return obj.send
 		})
 		username(nullable:true, blank:false)
-		password(nullable:true, blank:false)
+		sendPassword(nullable:true, blank:false)
 		receiveProtocol(nullable:true, blank:false)
 		serverName(nullable:true, blank:false)
 		serverPort(nullable:true, blank:false)
@@ -68,7 +68,7 @@ class IntelliSmsFconnection extends Fconnection {
 							.setHeader(Exchange.HTTP_URI,
 									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
 											'username=${header.intellisms.username}&' + 
-											'password=${header.intellisms.password}&' + 
+											'password=${header.intellisms.sendPassword}&' + 
 											'to=${header.intellisms.dst}&' +
 											'text=${body}'))
 							.to(INTELLISMS_URL)
@@ -95,7 +95,7 @@ class IntelliSmsFconnection extends Fconnection {
 							.setHeader(Exchange.HTTP_URI,
 									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
 											'username=${header.intellisms.username}&' + 
-											'password=${header.intellisms.password}&' + 
+											'password=${header.intellisms.sendPassword}&' + 
 											'to=${header.intellisms.dst}&' +
 											'text=${body}'))
 							.to(INTELLISMS_URL)

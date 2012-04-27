@@ -22,6 +22,10 @@ class Fconnection {
 		} else	clazz.configFields.findAll { field -> !clazz.constraints[field].nullable }
 	}
 	
+	static mapping = {
+        tablePerHierarchy false
+    }
+	
 	String name
 	
 	def getStatus() {
