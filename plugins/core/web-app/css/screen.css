@@ -48,10 +48,14 @@ h3 {
 	padding: 2px 20px;
 }
 
-.pending-send-failed div{
+.pending-send-failed #error-icon {
 	background-image: url('../images/icons/error_on.png');
 	background-repeat: no-repeat;
 	background-position: center;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	padding: 0 5px;
 }
 
 tr.send-failed td:nth-child(6) {

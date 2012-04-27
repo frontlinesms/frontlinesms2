@@ -106,13 +106,11 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $(".flash").displayed }
 		when:
 			$("a", text:contains("Pending")).click()
-			waitFor{ 
-				$("a", text:contains("Pending")).click()
-				$("a", text:contains("Pending")).hasClass("send-failed")
-			}
+		then:
+			waitFor { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
 		then:
 			waitFor{ $('h3.pending').text().equalsIgnoreCase("Pending") }
-			$("a", text:contains("Pending")).hasClass("send-failed")
+			$("a", text:contains("Pending")).hasClass("pending-send-failed")
 			$("#message-list tr").size() == 2
 	}
 
@@ -123,9 +121,9 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
 		then:
-			$("input[name=groups]").displayed
+			$("input#groups")[0].displayed
 		when:
-			$("input[name=groups]").value("group1")
+			$("input#groups")[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "2" }
 	}
@@ -137,13 +135,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
 		then:
-			$("input[name=groups]").displayed
+			$("input#groups")[0].displayed
 		when:
-			$("input[name=groups]").value("group1")
+			$("input#groups")[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "2" }
 		when:
-			$("input[value=group1]").click()
+			$("input#groups")[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "0" }
 	}
@@ -168,15 +166,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input[value='group1']").click()
-			$("input[value='group2']").click()
+			$("input#groups")[0].click()
+			$("input#groups")[1].click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
 			$("input[value='12345678']").click()
 		then:
-			!$("input[value='group1']").checked
-			!$("input[value='group2']").checked
+			!$("input#groups")[0].checked
+			!$("input#groups")[1].checked
 			$("#recipient-count").text() == "1"
 	}
 
@@ -186,15 +184,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input[value='group1']").click()
-			$("input[value='group2']").click()
+			$("input#groups")[0].click()
+			$("input#groups")[1].click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
-			$("input[value='group1']").click()
+			$("input#groups")[0].click()
 		then:
-			!$("input[value='group1']").checked
-			$("input[value='group2']").checked
+			!$("input#groups")[0].checked
+			$("input#groups")[1].checked
 			$("#recipient-count").text() == "2"
 
 	}
@@ -207,7 +205,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message)" }
 		when:
-			$("#messageText").value("h")
+			$("#messageText") << "h"
 		then:
 			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}
@@ -219,17 +217,17 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input[value='group1']").click()
+			$("input#groups")[0].click()
 		then:
-			$("input[value='group1']").checked
+			$("input#groups")[0].checked
 		when:
 			$("input[value='876543212']").click()
 		then:
-			$("input[value='group1']").checked
+			$("input#groups")[0].checked
 		when:
 			$("input[value='876543212']").click()
 		then:
-			$("input[value='group1']").checked
+			$("input#groups")[0].checked
 
 	}
 	
