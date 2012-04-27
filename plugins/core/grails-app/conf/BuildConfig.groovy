@@ -7,7 +7,7 @@ grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.dependency.resolution = {
-	def gebVersion = '0.6.3'
+	def gebVersion = '0.7.0'
 
 	// inherit Grails' default dependencies
 	inherits("global") {
