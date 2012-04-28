@@ -1,10 +1,56 @@
-#help {
-	height: 100%;
+html {
+    	height: 100%;
 }
+
+body {
+   	height: 100%;
+}
+
+#contentDiv {
+    	min-height: 100%;
+}
+
+/*.ui-dialog .ui-widget .ui-widget-content .ui-corner-all .ui-draggable .ui-resizable {
+	height: 100%;
+}*/
 
 #help #file {
 	overflow: auto;
 	padding: 17px;
+}
+
+#file h1 {
+    	font-size: 16px;
+    	font-weight: bold;
+	padding: 0 0 7px;
+}
+
+#help {
+	left: 0; 
+	width: 100%; 
+	height: 100%; 
+	overflow: auto;
+}
+
+#file h2 {
+    	font-size: 15px;
+    	font-weight: bold;
+	padding: 12px 0 6px;
+}
+
+#file h3 {
+    	font-size: 14px;
+    	font-weight: bold;
+	padding: 12px 0 6px;
+}
+
+#file p a:hover {
+	color: blue;
+	text-decoration:underline;
+}
+
+#file p a {
+	color: blue;
 }
 
 #help .section {
