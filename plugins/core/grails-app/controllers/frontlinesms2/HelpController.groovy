@@ -6,14 +6,19 @@ class HelpController {
 	def main = { }
 	
 	def getSection = {
-		def markdownFile = new File("web-app/help/" + params.helpSection + ".txt")
-		println markdownFile.absolutePath
-		def helpText
-		if (markdownFile.canRead()) {
-			helpText = markdownFile.getText()
-		} else {
-			helpText = "This help file is not yet available, sorry."
-		}
-		render text:helpText.markdownToHtml()	
+		if(params.helpSection == null){
+			def helpText = "This help file is not yet available, sorry."
+			render text:helpText.markdownToHtml()
+		}else{
+			def markdownFile = new File(params.helpSection + ".txt")
+			def helpText
+			if (markdownFile.canRead()) {
+				helpText = markdownFile.text
+			} 
+			else {
+				helpText = "This help file is not yet available, sorry."
+			}
+			render text:helpText.markdownToHtml()		
+			}
 	}
 }

@@ -12,8 +12,9 @@ class HelpControllerSpec extends ControllerSpec {
 			def helpFile = new File('testHelp.txt')
 			def helpFileContent = "This is test content for the help"
 			helpFile.text = helpFileContent
+			controller.params.helpSection = "testHelp"
 		when:
-			def controllerResponse = controller.getSection('testHelp')
+			controller.getSection()
 		then:
 			renderArgs.text == helpFileContent
 		cleanup:
@@ -26,7 +27,7 @@ class HelpControllerSpec extends ControllerSpec {
 			String.metaClass.markdownToHtml = { delegate }
 			def helpFileContent = "This is test content for the help"
 		when:
-			def controllerResponse = controller.getSection('testHelp2')
+			controller.getSection()
 		then:
 			renderArgs.text != helpFileContent
 			renderArgs.text == "This help file is not yet available, sorry."
