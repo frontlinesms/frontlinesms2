@@ -7,6 +7,13 @@
 	</head>
 	<body>
 		<div id="general">
+			<div id="language">
+				<h2><g:message code="language.label" /></h2>
+				<p><g:message code="language.prompt"/></p>
+				<select class="dropdown" id="language-dropdown" name="language-dropdown">
+					
+				</select>
+			</div>
 			<div id="import">
 				<h2><g:message code="import.label" /></h2>
 				<p class="description">
@@ -14,14 +21,14 @@
 				</p>
 				<g:uploadForm name="importForm" controller="import" action="importData" method="post">
 					<div>
-						<h3><g:message code="import.prompt.type" /></h3>
+						<h3 class="importinfo"><g:message code="import.prompt.type" /></h3>
 						<input type="radio" name="data" value="contacts" checked="checked" />
 						<g:message code="import.contacts" /><br />
 						<input type="radio" name="data" value="messages" /><g:message code="import.messages" />
 					</div>
-					<p class="importInfo"><g:message code="import.version1.info" /></p>
-					<label for="importCsvFile"><g:message code="import.prompt" /></label>
+					<p class="importinfo"><g:message code="import.version1.info" /></p>
 					<input type="file" id="importCsvFile" name="importCsvFile" onchange="this.form.submit();"/>
+					<label for="importCsvFile" class="importinfoselect"><g:message code="import.prompt" /></label>
 				</g:uploadForm>
 			</div>
 		</div>

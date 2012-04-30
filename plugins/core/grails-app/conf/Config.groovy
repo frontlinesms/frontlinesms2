@@ -81,6 +81,24 @@ log4j = {
     //}
 
     warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
+	environments {
+		production {
+			def conf = "${System.properties.'user.home'}/.frontlinesms2"
+			def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
+			appender new RollingFileAppender(name:"prod",
+					layout:layout, file:"$conf/standard.log",
+					threshold:org.apache.log4j.Level.INFO);
+			appender new RollingFileAppender(name:"prod-stacktrace",
+					layout:layout, file:"$conf/stacktrace.log",
+					threshold:org.apache.log4j.Level.ERROR);
+		}
+		development {
+			appender new ConsoleAppender(name:'console-logger')
+			info 'console-logger'
+		}
+	}
+
+    warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP
            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
@@ -92,3 +110,4 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+

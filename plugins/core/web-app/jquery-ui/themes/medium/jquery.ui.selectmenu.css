@@ -81,6 +81,12 @@
 	left: 165px;
 	top: -15px;
 }
+
+#group-actions-button .ui-icon-triangle-1-s{
+	position:relative;
+	left: 135px;
+	top: -15px;
+}
 #search-menu .ui-icon-triangle-1-s{
 	position:relative;
 	left: 155px;
@@ -94,5 +100,10 @@
 #traffic-status .ui-icon-triangle-1-s{
 	position:relative;
 	left: 165px;
+	top: -15px;
+}
+#general .ui-icon-triangle-1-s{
+	position:relative;
+	left: 130px;
 	top: -15px;
 }

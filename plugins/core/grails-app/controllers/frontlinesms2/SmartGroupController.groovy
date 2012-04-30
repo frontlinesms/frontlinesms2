@@ -119,6 +119,6 @@ class SmartGroupController {
 		if(sg) {
 			c.call(sg)
 		}
-		else render(text: message(code: 'flash.smartgroup.delete.unable', args: [params.id]))
+		else render(text: message(code: 'smartgroup.id.exist.not', args: [params.id]))
 	}
 }
