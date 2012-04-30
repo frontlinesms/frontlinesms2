@@ -12,7 +12,7 @@
 			<g:each in="${sharedGroupInstanceList}" status="i" var="g">
 				<li id="${g.name}" class="${g == groupInstance ? 'selected' : ''}">
 					<span>${g.name}</span>
-					<a class="remove-group" id="remove-group-${g.id}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+					<a class="remove-group" id="remove-group-${g.id}"></a>
 				</li>
 			</g:each>
 		</ul>

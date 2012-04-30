@@ -214,6 +214,6 @@ function messageResponseClick(messageType) {
 		type:'POST',
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, "Send"); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('wizard.send')); }
 	});
 }
