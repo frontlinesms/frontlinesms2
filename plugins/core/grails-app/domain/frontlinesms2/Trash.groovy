@@ -1,18 +1,27 @@
 package frontlinesms2
 
+import frontlinesms2.Fmessage
+
 class Trash {
 	Date dateCreated
-	Long linkId // TODO rename this objectId
-	String objectType // TODO this could be a Class instead of String.  If keeping as class name, call it that
-	String message // TODO rename this something like displayDetail
-	String identifier // TODO rename this displayName as that is what it is
-	
-	def getLink() { getClass().classLoader.loadClass(objectType).get(linkId) } // if this has to be done this way, use Class.forName()
+	Long objectId
+	Class objectClass // TODO this could be a Class instead of String.  If keeping as class name, call it that
+	String displayDetail
+	String displayName
 	
 	static constraints = {
-		message(nullable: true)
-		identifier(nullable: true)
+		displayDetail(nullable: true)
+		displayName(nullable: true)
 	}
+	
+	def getObject() { objectClass.get(objectId) } // if this has to be done this way, use Class.forName()
 
 	// TODO would be nice to have a factory method here where database objects can be passed in
+	static trashObject(object) {
+		if (object instanceof frontlinesms2.Fmessage) {
+		
+		} else if (object instanceof frontlinesms2.Activity) {
+		
+		}
+	}
 }

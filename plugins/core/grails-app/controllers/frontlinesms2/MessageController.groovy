@@ -67,16 +67,16 @@ class MessageController {
 	}
 	
 	def trash = {
-		def trashInstance
+		def trashedObject
 		def trashInstanceList
 		def messageInstanceList
 		params.sort = (params.sort && params.sort != 'date') ?: "dateCreated"
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectType == "frontlinesms2.Fmessage") {
-					params.messageId = obj.linkId
+				if(obj.objectClass == frontlinesms2.Fmessage) {
+					params.messageId = obj.objectId
 				} else {
-					trashInstance = obj.link
+					trashedObject = obj.object
 				}
 			}
 			setTrashInstance(Trash.findById(params.id))
@@ -91,7 +91,7 @@ class MessageController {
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashInstance] << getShowModel()
+					ownerInstance: trashedObject] << getShowModel()
 	}
 
 	def poll = { redirect(action: 'activity', params: params) }
@@ -168,7 +168,7 @@ class MessageController {
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.isDeleted = true
-				new Trash(identifier:messageInstance.displayName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save()
+				new Trash(displayName:messageInstance.displayName, displayDetail:messageInstance.text, objectClass:messageInstance.class, objectId:messageInstance.id).save()
 				messageInstance.save()
 			}
 		}

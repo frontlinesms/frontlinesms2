@@ -8,7 +8,7 @@
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
-<div id="overflow" class="${params.action != 'no_search' ? messageSection : ''}">
+<div id="overflow" class="${params.action != 'no_search' ? messageSection : ''} main-list">
 	<table class="main-table" cellspacing="0">
 		<tr id="message-sorter">
 			<td class="message-select-cell">

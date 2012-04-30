@@ -65,7 +65,7 @@ class ActivityController {
 				it.isDeleted = true
 				it.save(flush: true)
 			}
-			new Trash(identifier:activity.name, message:"${activity.liveMessageCount}", objectType:activity.class.name, linkId:activity.id).save(failOnError: true, flush: true)
+			new Trash(displayName:activity.name, displayDetail:"${activity.liveMessageCount}", objectClass: activity.class, objectId: activity.id).save(failOnError: true, flush: true)
 			activity.save(failOnError: true, flush: true)
 		}
 		flash.message = message(code: 'activity.trashed')

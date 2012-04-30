@@ -1,24 +1,25 @@
+<%@ page import="frontlinesms2.*" %>
 <g:each in="${trashInstanceList}" status="i" var="m">
-	<g:if test="${m.objectType == 'frontlinesms2.Fmessage'}">
-		<tr class="${m.link == messageInstance ? 'selected' : ''} ${m.link.read ? 'read' : 'unread'}" id="message-${m.link.id}">
+	<g:if test="${m.objectClass == frontlinesms2.Fmessage}">
+		<tr class="${m.object == messageInstance ? 'selected' : ''} ${m.object.read ? 'read' : 'unread'}" id="message-${m.object.id}">
 			<td class="message-select-cell">
-				<g:checkBox class="message-select" name="message-select" id="message-select-${m.link.id}" checked="${params.checkedId == m.link.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.link.id});" />
-				<g:hiddenField name="src-${m.link.id}" value="${m.link.src}"/>
+				<g:checkBox class="message-select" name="message-select" id="message-select-${m.object.id}" checked="${params.checkedId == m.object.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.object.id});" />
+				<g:hiddenField name="src-${m.object.id}" value="${m.object.src}"/>
 			</td>
 			<td class="message-preview-star message-star-cell" >
-				<g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.link.id}"]' onSuccess="setStarStatus('star-${m.link.id}',data)">
-					<div id="star-${m.link.id}" class="${m.link.starred? 'starred':'unstarred'}">
+				<g:remoteLink controller="message" action="changeStarStatus" params='[messageId: "${m.object.id}"]' onSuccess="setStarStatus('star-${m.object.id}',data)">
+					<div id="star-${m.object.id}" class="${m.object.starred? 'starred':'unstarred'}">
 					</div>
 				</g:remoteLink>
 			</td>
 			<td class="message-preview-sender message-sender-cell">
-				<g:link class="displayName-${m.linkId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					<g:if test="${!m.link.inbound}"><span><g:message code="fmessage.to.label" /></span></g:if>${m.identifier}
+				<g:link class="displayName-${m.objectId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
+					<g:if test="${!m.object.inbound}"><span><g:message code="fmessage.to.label" /></span></g:if>${m.displayName}
 				</g:link>
 			</td>
 			<td class="message-text-cell">
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					${m.message?.size() < 60 ? m.message : m.message?.substring(0,60) + "..."}
+					${m.displayDetail?.size() < 60 ? m.displayDetail : m.displayDetail?.substring(0,60) + "..."}
 				</g:link>
 			</td>
 			<td class="message-date-cell">
@@ -29,7 +30,7 @@
 		</tr>
 	</g:if>
 	<g:else>
-		<tr class="${m.link == ownerInstance ? 'selected' : ''}" id="activity-${m.id}">
+		<tr class="${m.object == ownerInstance ? 'selected' : ''}" id="activity-${m.id}">
 			<td class="message-select-cell">
 				<g:checkBox disabled="true" name="message-select"/>
 			</td>
@@ -39,12 +40,12 @@
 			</td>
 			<td class="message-sender-cell">
 				<g:link class="displayName-${m.id}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					${m.identifier}
+					${m.displayName}
 				</g:link>
 			</td>
 			<td class="message-text-cell">
 				<g:link action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: m.id]}">
-					${m.link.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : m.link.getLiveMessageCount() + " " + g.message(code:'fmessage.many')}
+					${m.object.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : m.object.getLiveMessageCount() + " " + g.message(code:'fmessage.many')}
 				</g:link>
 			</td>
 			<td class="message-date-cell">

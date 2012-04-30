@@ -210,8 +210,8 @@ class CoreBootStrap {
 		def k1 = new Keyword(value: "COLOR")
 		def k2 = new Keyword(value: "AUTOREPLY")
 
-		new Autoreply(name:"toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
-		new Autoreply(name:"color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
+		new Autoreply(name:"Toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
+		new Autoreply(name:"Color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFolders() {

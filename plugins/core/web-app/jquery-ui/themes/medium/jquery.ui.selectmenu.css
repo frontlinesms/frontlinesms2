@@ -71,6 +71,9 @@
 	left: 130px;
 	top: -15px;
 }
+.tall-header .ui-selectmenu {
+	max-width: 150px;
+}
 .activity-btn .ui-icon-triangle-1-s, .poll-btn .ui-icon-triangle-1-s, .trash .ui-icon-triangle-1-s, #contact-header .ui-icon-triangle-1-s{
 	position:relative;
 	left: 135px;

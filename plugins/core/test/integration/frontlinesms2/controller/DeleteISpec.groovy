@@ -130,19 +130,19 @@ class DeleteISpec extends IntegrationSpec {
 	def deleteMessage(Fmessage message) {
 		message.isDeleted = true
 		message.save()
-		new Trash(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id).save(failOnError: true, flush: true)
+		new Trash(displayName:message.displayName, displayDetail:message.text, objectClass:message.class.name, objectId:message.id).save(failOnError: true, flush: true)
 	}
 	
 	def deleteFolder(Folder folder) {
 		folder.deleted = true
 		folder.save()
-		new Trash(identifier:folder.name, message:"${folder.liveMessageCount}", objectType:folder.class.name, linkId:folder.id).save(failOnError: true, flush: true)
+		new Trash(displayName:folder.name, displayDetail:"${folder.liveMessageCount}", objectClass:folder.class.name, objectId:folder.id).save(failOnError: true, flush: true)
 	}
 	
 	def deletePoll(Poll poll){
 		poll.deleted = true
 		poll.save()
-		new Trash(identifier:poll.name, message:"${poll.liveMessageCount}", objectType:poll.class.name, linkId:poll.id).save(failOnError: true, flush: true)
+		new Trash(displayName:poll.name, displayDetail:"${poll.liveMessageCount}", objectClass:poll.class.name, objectId:poll.id).save(failOnError: true, flush: true)
 	}
 }
 

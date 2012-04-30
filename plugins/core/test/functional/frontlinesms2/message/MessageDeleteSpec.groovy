@@ -66,7 +66,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def deleteMessage(Fmessage message) {
 		message.isDeleted = true
 		message.save(flush:true)
-		Trash.build(identifier:message.displayName, message:message.text, objectType:message.class.name, linkId:message.id)
+		Trash.build(displayName:message.displayName, displayDetail:message.text, objectClass:message.class.name, objectId:message.id)
 	}
 	
 	static createTestData() {
