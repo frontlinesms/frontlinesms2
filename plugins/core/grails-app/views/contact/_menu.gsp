@@ -11,7 +11,7 @@
 					<g:link class="create btn contact" controller="contact" action="createContact" >
 						<g:message code="contact.create" />
 					</g:link>
-				</li>w
+				</li>
 			</ul>
 		</li>
 		<li>
