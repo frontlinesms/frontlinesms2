@@ -7,6 +7,14 @@
 	</head>
 	<body>
 		<div id="general">
+			<div id="language">
+				<h2><g:message code="language.label" /></h2>
+				<p><g:message code="language.prompt"/></p>
+				<g:form  action="selectLocale" method="post" >
+					<g:select class="dropdown" name="language" from="${languageList}" value="${languageList.key}" optionKey="key" optionValue="value"/>
+					<input type="submit" value="Apply" class="button">
+				</g:form>
+			</div>
 			<div id="import">
 				<h2><g:message code="import.label" /></h2>
 				<p class="description">

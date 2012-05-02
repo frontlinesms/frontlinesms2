@@ -8,14 +8,14 @@ import org.smslib.NotConnectedException
 
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
-	static configFields = ['name', 'port', 'baud', 'pin', 'smsc', 'imsi', 'serial']
+	static configFields = ['name', 'port', 'baud', 'pin', 'imsi', 'serial']
 	static String getShortName() { 'smslib' }
 	
 	private def camelAddress = {
 		def optional = { name, val ->
 			return val? "&$name=$val": ''
 		}
-		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages${optional('smscNumber', smsc)}"
+		"smslib:$port?debugMode=true&baud=$baud${optional('pin', pin)}&allMessages=$allMessages"
 	}
 
 	String port
@@ -23,7 +23,6 @@ class SmslibFconnection extends Fconnection {
 	String serial
 	String imsi
 	String pin // FIXME maybe encode this rather than storing plaintext(?)
-	String smsc
 	boolean allMessages = true
 
 	static constraints = {
@@ -31,7 +30,6 @@ class SmslibFconnection extends Fconnection {
 		imsi(nullable: true)
 		pin(nullable: true)
 		serial(nullable: true)
-		smsc(nullable: true)
 	}
 	
 	static namedQueries = {

@@ -1,6 +1,11 @@
 package frontlinesms2
 
+import org.springframework.web.servlet.LocaleResolver
+import org.springframework.web.servlet.support.RequestContextUtils
+import org.springframework.util.StringUtils
+
 class SettingsController {
+	def i18nUtilService
 	def index = {
 		redirect(action:'general')
 	}
@@ -17,8 +22,17 @@ class SettingsController {
 				logEntryTotal: logEntryList.size()]
 	}
 	
-	def general = {}
-	
+	def general = {
+		[languageList : i18nUtilService.allTranslations]
+	}
+
+	def selectLocale = {
+		Locale locale = StringUtils.parseLocaleString(params.language)
+        LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request)
+        localeResolver.setLocale(request, response, locale)
+        redirect view:'general'
+	}
+
 	private def withFconnection(Closure c) {
 		def connection = Fconnection.get(params.id)
 		if(connection) {

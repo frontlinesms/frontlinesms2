@@ -117,8 +117,8 @@ class SmartGroupController {
 		if(params.id) sg = SmartGroup.get(params.id)
 		else sg = new SmartGroup()
 		if(sg) {
-			c.call(sg)  smartgroup.id.exist.not
+			c.call(sg)
 		}
-		else render(text: message(code: 'flash.smartgroup.delete.unable', args: [params.id]))
+		else render(text: message(code: 'smartgroup.id.exist.not', args: [params.id]))
 	}
 }
