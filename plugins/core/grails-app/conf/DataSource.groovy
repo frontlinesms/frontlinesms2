@@ -26,7 +26,7 @@ environments {
     production {
         dataSource {
            //dbCreate = "update" should be disabled for the data migration plugin to work
-            url = "jdbc:h2:prodDb;MVCC=TRUE"
+            url = "jdbc:h2:file:${System.properties.'user.home'}/.frontlinesms2/prodDb;MVCC=TRUE"
             pooled = true
             properties {
                maxActive = -1
