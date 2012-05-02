@@ -8,7 +8,6 @@ import org.smslib.NotConnectedException
 
 class SmslibFconnection extends Fconnection {
 	static passwords = ['pin']
-	//static configFields = ['name', 'port', 'baud', 'pin', 'smsc', 'imsi', 'serial']
 	static configFields = ['name', 'port', 'baud', 'pin', 'imsi', 'serial']
 	static String getShortName() { 'smslib' }
 	
@@ -24,7 +23,6 @@ class SmslibFconnection extends Fconnection {
 	String serial
 	String imsi
 	String pin // FIXME maybe encode this rather than storing plaintext(?)
-	//String smsc
 	boolean allMessages = true
 
 	static constraints = {
@@ -32,7 +30,6 @@ class SmslibFconnection extends Fconnection {
 		imsi(nullable: true)
 		pin(nullable: true)
 		serial(nullable: true)
-		//smsc(nullable: true)
 	}
 	
 	static namedQueries = {

@@ -11,6 +11,7 @@
 		$('#help em').parents('li').addClass('sub-section');
 		
 		$("#help #index li a").click(goToSection);
+		$("#help #file").delegate("a", "click", goToSection);
 	}
 	
 	function goToSection() {
