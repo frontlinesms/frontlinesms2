@@ -2,7 +2,7 @@
 	<div id="action-buttons" class="buttons">
 			<g:actionSubmit class="btn" id="update-all" action="updateMultipleContacts" value="${g.message(code:'contact.save.many')}" disabled="disabled"/>
 			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel" /></g:link>
-			<a class="btn" id="btn_delete_all" onclick="launchConfirmationPopup('Delete all');">
+			<a class="btn" id="btn_delete_all" onclick="launchConfirmationPopup(i18n('contact.delete.many'));">
 				<g:message code="contact.delete.many" />
 			</a>
 	</div>
@@ -18,7 +18,7 @@
 		</ul>
 		<div id='multi-group-add'>
 			<g:select class="dropdown" name="multi-group-dropdown"
-					noSelection="['_':${g.message(code:"contact.add.to.group")}]"
+					noSelection="['_':g.message(code:'contact.add.to.group')]"
 					from="${nonSharedGroupInstanceList}"
 					optionKey="id"
 					optionValue="name"/>
