@@ -8,9 +8,6 @@ import au.com.bytecode.opencsv.CSVWriter
 class ImportController {
 	private static final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	
-	def exportService
-	def failedContactsFile = new File("failedContacts.txt")
-	
 	def importData = {
 		if (params.data == 'contacts') importContacts()
 		else importMessages()
@@ -59,17 +56,21 @@ class ImportController {
 				} finally { try { writer.close() } catch(Exception ex) {} }
 			}
 			
-			flash.message = "${message(code: 'import.info.contact', args: [savedCount, failedLines.size()])} ${failedLines? ('. ' + g.link(action:'exportFailedContacts', absolute:'true', message(code: 'import.create.failed.contacts.csv'))): ''}" 
+			flash.message = g.message(code:'import.contact.complete',
+							args:[savedCount, failedLines.size()])
+			if(failedLines) flash.message += '\n' + g.link(action:'failedContacts',
+							absolute:'true',
+							params:[jobId:params.jobId],
+					g.message(code:'import.contact.failed.download'))
 			
-			redirect controller: "settings", action: 'general'
-		} else throw new RuntimeException(message(code: 'import.file.upload.failed'))
+			redirect controller:'settings', action:'general'
+		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 
-	def exportFailedContacts = { 
+	def failedContacts = { 
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
-		failedContactsFile.eachLine {response.outputStream  << "$it\n"}
+		failedContactsFile.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
-		failedContactsFile.delete()
 	}
 	
 	def importMessages = {
@@ -114,16 +115,16 @@ class ImportController {
 					++failedCount
 				}
 			}
-			flash.message = message(code: 'import.info.message', args: [savedCount, failedCount ])
-			redirect controller: "settings", action: 'general'
+			flash.message = message(code: 'import.message.complete', args:[savedCount, failedCount])
+			redirect controller:'settings', action:'general'
 		}
 	}
 	
-	def getMessageFolder(name) {
-		Folder.findByName(name)?: new Folder(name: name).save(failOnError:true)
+	private def getMessageFolder(name) {
+		Folder.findByName(name)?: new Folder(name:name).save(failOnError:true)
 	}
 
-	def getGroupNames(csvValue) {
+	private def getGroupNames(csvValue) {
 		println "getGroupNames() : csvValue=$csvValue"
 		Set csvGroups = []
 		csvValue.split("\\\\").each { gName ->
@@ -138,10 +139,17 @@ class ImportController {
 		return csvGroups - ''
 	}
 	
-	def getGroups(groupNames) {
+	private def getGroups(groupNames) {
 		println "ImportController.getGroups() : $groupNames"
 		groupNames.collect { name ->
 			Group.findByName(name)?: new Group(name:name).save(failOnError:true)
 		}
+	}
+
+	private def getFailedContactsFile() {
+		if(!params.jobId || params.jobId!=UUID.fromString(params.jobId).toString()) params.jobId = UUID.randomUUID().toString()
+		def f = new File(System.properties['user.home'], "import_contacts_${params.jobId}.csv")
+		f.deleteOnExit()
+		return f
 	}
 }
