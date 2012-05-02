@@ -14,6 +14,7 @@
 		</g:javascript>
 	</head>
 	<body id="messages-tab">
+		<div id="thinking"/>
 		<div id="header">
 			<div id="notifications">
 				<g:render template="/system_notifications" plugin="core"/>
