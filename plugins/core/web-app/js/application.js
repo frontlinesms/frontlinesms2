@@ -76,3 +76,11 @@ $.fn.renderDefaultText = function() {
 		$(this).toggleClass('default-text-input', $(this).val() === this.defaultValue);
 		});
 };
+
+function showThinking() {
+	$('#thinking').fadeIn();
+}
+
+function hideThinking() {
+	$('#thinking').fadeOut();
+}

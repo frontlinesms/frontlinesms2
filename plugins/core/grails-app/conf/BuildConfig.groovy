@@ -39,7 +39,7 @@ grails.project.dependency.resolution = {
 		}
 		test camel('test')
 		test 'org.mockito:mockito-all:1.8.5'
-		def seleniumVersion = "2.18.0"
+		def seleniumVersion = "2.21.0"
 		def gebVersion = "0.6.1"
 		def spockVersion = "0.5-groovy-1.7"
 		test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
