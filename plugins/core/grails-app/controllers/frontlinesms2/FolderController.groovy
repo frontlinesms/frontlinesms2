@@ -56,9 +56,7 @@ class FolderController {
 	
 	def delete = {
 		withFolder { folder ->
-			folder.deleted = true
-			new Trash(displayName:folder.name, displayDetail:"${folder.liveMessageCount}", objectClass:folder.class, objectId:folder.id).save(failOnError: true, flush: true)
-			folder.save(failOnError: true, flush: true)
+			TrashService.sendToTrash(folder)
 		}
 		flash.message = message(code: 'folder.trashed')
 		redirect(controller:"message", action:"inbox")

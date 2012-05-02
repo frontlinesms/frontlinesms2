@@ -60,13 +60,7 @@ class ActivityController {
 	
 	def delete = {
 		withActivity { activity ->
-			activity.deleted = true
-			activity.messages.each {
-				it.isDeleted = true
-				it.save(flush: true)
-			}
-			new Trash(displayName:activity.name, displayDetail:"${activity.liveMessageCount}", objectClass: activity.class, objectId: activity.id).save(failOnError: true, flush: true)
-			activity.save(failOnError: true, flush: true)
+			TrashService.sendToTrash(activity)
 		}
 		flash.message = message(code: 'activity.trashed')
 		redirect(controller:"message", action:"inbox")

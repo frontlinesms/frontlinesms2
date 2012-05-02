@@ -81,13 +81,12 @@ class MessageController {
 			}
 			setTrashInstance(Trash.findById(params.id))
 		}
-		
 		if(params.starred) {
 			messageInstanceList = Fmessage.deleted(params.starred)
 		} else {
 			trashInstanceList = Trash.list(params)
 		}
-		render view:'standard', model:[trashInstanceList:trashInstanceList,
+		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
@@ -167,9 +166,7 @@ class MessageController {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.isDeleted = true
-				new Trash(displayName:messageInstance.displayName, displayDetail:messageInstance.text, objectClass:messageInstance.class, objectId:messageInstance.id).save()
-				messageInstance.save()
+				TrashService.sendToTrash(messageInstance)
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"

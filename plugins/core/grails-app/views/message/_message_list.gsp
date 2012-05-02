@@ -15,22 +15,12 @@
 				<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/>
 			</td>
 			<td class="message-star-cell"></td>
-			<g:if test="${messageSection == 'trash'}">
-				<g:sortableColumn class="message-sender-cell" property="identifier" title="${message(code: 'fmessage.displayName.label', default: 'Name')}"
-						params="${params}" id='source-header' />
-				<g:sortableColumn class="message-text-cell" property="message" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-						params="${params}" id="message-header" />
-				<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-						params="${params}" id="timestamp-header" defaultOrder="desc" />
-			</g:if>
-			<g:else>
-				<g:sortableColumn class="message-sender-cell" property="displayName" title="${message(code: 'fmessage.displayName.label', default: 'Name')}"
-						params="${params}" id='source-header' />
-				<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-						params="${params}" id="message-header" />
-				<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-						params="${params}" id="timestamp-header" defaultOrder="desc" />
-			</g:else>
+			<g:sortableColumn class="message-sender-cell" property="displayName" title="${message(code: 'fmessage.displayName.label', default: 'Name')}"
+					params="${params}" id='source-header' />
+			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+					params="${params}" id="message-header" />
+			<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+					params="${params}" id="timestamp-header" defaultOrder="desc" />
 		</tr>
 		<g:if test="${messageInstanceTotal > 0}">
 			<g:if test="${messageSection == 'trash' && !params.starred}">
