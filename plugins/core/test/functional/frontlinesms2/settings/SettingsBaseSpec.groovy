@@ -11,5 +11,4 @@ class SettingsBaseSpec extends grails.plugin.geb.GebSpec {
 			it.save(flush:true, failOnError: true)
 		}
 	}
-	
 }
