@@ -12,7 +12,7 @@
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
 		<f:render template="message"/>
 		<div id="tabs-2">
-			<f:render template="../quickMessage/select_recipients"  model= "['contactList' : contactList,
+			<f:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
 			                                                                'groupList': groupList,
 			                                                                'nonExistingRecipients': [],
 			                                                                'recipients': []]"/>

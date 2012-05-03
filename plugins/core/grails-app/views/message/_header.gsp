@@ -10,11 +10,11 @@
 		</g:if>
 		<h3 class="activity">${ownerInstance?.name} ${ownerInstance?.shortName}</h3>
 		<g:if test="${ownerInstance}">
-			<f:render template="../message/activity_buttons"/>
+			<f:render template="/message/activity_buttons"/>
 		</g:if>
 		<div id="activity-details" class='section-details'>
 			<g:if test="${ownerInstance instanceof Poll}">
-				<f:render template="../message/poll_header"/>
+				<f:render template="/message/poll_header"/>
 			</g:if>
 			<g:else>
 				<g:formatDate date="${ownerInstance?.dateCreated}"/>
@@ -30,10 +30,10 @@
 	</g:if>
 	<g:elseif test="${messageSection == 'folder'}">
 		<h3 class="folder">${ownerInstance?.name} ${messageSection}</h3>
-		<f:render template="../message/section_action_buttons"/>
+		<f:render template="/message/section_action_buttons"/>
 	</g:elseif>
 	<g:else>
 		<h3 class="${messageSection}">${messageSection}</h3>
-		<f:render template="../message/section_action_buttons"/>
+		<f:render template="/message/section_action_buttons"/>
 	</g:else>
 </div>

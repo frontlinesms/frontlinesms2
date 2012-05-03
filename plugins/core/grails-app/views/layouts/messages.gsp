@@ -27,12 +27,12 @@
 			<f:render template="/message/menu"/>
 			<div id="content">
 				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
-					<f:render template="../message/header"/>
-					<f:render template="../message/message_list"/>
+					<f:render template="/message/header"/>
+					<f:render template="/message/message_list"/>
 					<g:layoutBody/>
-					<f:render template="../message/footer"/>
+					<f:render template="/message/footer"/>
 				</div>
-			    <f:render template="../message/message_details"/>
+			    <f:render template="/message/message_details"/>
 			</div>
 		</div>
 		<r:layoutResources/>

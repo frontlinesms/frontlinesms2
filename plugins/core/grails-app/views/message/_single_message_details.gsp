@@ -30,14 +30,8 @@
 			</g:if>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
-		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-			<f:render template="../message/message_actions"/>
-			<f:render template="../message/other_actions"/>
-		</g:if>
-		<g:else>
-			<f:render template="/message/message_actions"/>
-			<f:render template="/message/other_actions"/>
-		</g:else>
+		<f:render template="/message/message_actions"/>
+		<f:render template="/message/other_actions"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
@@ -45,7 +39,7 @@
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + g.message(code:'fmessage.many')}</p></div>
 		</div>
-		<f:render template="../message/message_actions" ></f:render>
+		<f:render template="/message/message_actions" ></f:render>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>

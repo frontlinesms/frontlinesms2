@@ -59,12 +59,7 @@
 						<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
 					</g:if>
 			</g:elseif>
-			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-				<f:render template="../message/other_actions"/>
-			</g:if>
-			<g:else>
-				<f:render template="/message/other_actions"/>
-			</g:else>
+			<f:render template="/message/other_actions"/>
 		</g:form>
 	</div>
 </div>

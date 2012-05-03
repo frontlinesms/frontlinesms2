@@ -28,9 +28,9 @@
 					<f:render template="/search/header"/>
 					<f:render template="/message/message_list"/>
 					<g:layoutBody/>
-					<f:render template="../message/footer"/>
+					<f:render template="/message/footer"/>
 				</div>
-				<f:render template="../message/message_details"/>
+				<f:render template="/message/message_details"/>
 			</div>
 		</div>
 		<r:layoutResources/>

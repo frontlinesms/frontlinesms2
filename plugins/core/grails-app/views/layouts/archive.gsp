@@ -22,11 +22,11 @@
 			<f:render template="/tabs"/>
         </div>
 		<div id="main" class="main">
-			<f:render template="../archive/menu"/>
+			<f:render template="/archive/menu"/>
 			<div id="content">
 				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
 					<g:if test="${viewingMessages}">
-						<f:render template="../message/header"/>
+						<f:render template="/message/header"/>
 					</g:if>
 					<g:else>
 						<f:render template="header"/>
@@ -38,12 +38,12 @@
 						<f:render template="archived_folder_list"/>
 					</g:elseif>
 					<g:else>
-						<f:render template="../message/message_list"/>
+						<f:render template="/message/message_list"/>
 					</g:else>
 					<g:layoutBody/>
-					<f:render template="../message/footer"/>
+					<f:render template="/message/footer"/>
 				</div>
-				<f:render template="../message/message_details" />
+				<f:render template="/message/message_details" />
 			</div>
 		</div>
 		<r:layoutResources/>
