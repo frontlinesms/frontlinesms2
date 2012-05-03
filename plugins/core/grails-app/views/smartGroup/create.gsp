@@ -2,15 +2,15 @@
 <div>
 	<div class="error-panel hide">
 	<div id="error-icon"></div>
-		<g:message code="smartgroup.validation.prompt" />
+		<g:message code="smartgroup.validation.prompt"/>
 	</div>
 	<g:form name="smart-group-details" url="${[action:'save', controller:'smartGroup', id:smartGroupInstance?.id]}" method="post">
 		<p class="info">
-			<g:message code="smartgroup.info" />
+			<g:message code="smartgroup.info"/>
 		</p>
 		<div class="smartgroupname">
-			<label class="bold inline" for="smartgroupname"><g:message code="smartgroup.name.label" default="Name" />:</label>
-			<g:textField id="smartgroupname-field" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}" name="smartgroupname" value="${smartGroupInstance?.name}" />
+			<label class="bold inline" for="smartgroupname"><g:message code="smartgroup.name.label" default="Name"/>:</label>
+			<g:textField id="smartgroupname-field" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}" name="smartgroupname" value="${smartGroupInstance?.name}"/>
 		</div>
 		<table id="smartGroup-table">
 			<tbody>
@@ -27,14 +27,14 @@
 												onchange="smartGroupCriteriaChanged(this)"/>
 									</td>
 									<td class="rule-match-text">
-										<span class="contains"><g:message code="smartgroup.contains.label" /></span>
-										<span class="starts hide"><g:message code="smartgroup.startswith.label" /></span>
+										<span class="contains"><g:message code="smartgroup.contains.label"/></span>
+										<span class="starts hide"><g:message code="smartgroup.startswith.label"/></span>
 									</td>
 									<td>
 										<g:textField name="rule-text" class="rule-text" value='${customField.value}'/>
 									</td>
 									<td>
-										<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+										<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}'/></a>
 									</td>
 								</tr>
 							</g:each>
@@ -50,19 +50,19 @@
 								</td>
 								<td class="rule-match-text">
 									<g:if test = "${field == 'mobile'}">
-										<span class="contains hide"><g:message code="smartgroup.contains.label" /></span>
-										<span class="starts"><g:message code="smartgroup.startswith.label" /></span>
+										<span class="contains hide"><g:message code="smartgroup.contains.label"/></span>
+										<span class="starts"><g:message code="smartgroup.startswith.label"/></span>
 									</g:if>
 									<g:else>
-										<span class="contains"><g:message code="smartgroup.contains.label" /></span>
-										<span class="starts hide"><g:message code="smartgroup.startswith.label" /></span>
+										<span class="contains"><g:message code="smartgroup.contains.label"/></span>
+										<span class="starts hide"><g:message code="smartgroup.startswith.label"/></span>
 									</g:else>
 								</td>
 								<td>
 									<g:textField name="rule-text" class="rule-text" value='${currentRules."$field"}'/>
 								</td>
 								<td>
-									<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+									<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}'/></a>
 								</td>
 							</tr>
 						</g:else>
@@ -77,14 +77,14 @@
 									onchange="smartGroupCriteriaChanged(this)"/>
 						</td>
 						<td class="rule-match-text">
-							<span class="contains hide"><g:message code="smartgroup.contains.label" /></span>
-							<span class="starts"><g:message code="smartgroup.startswith.label" /></span>
+							<span class="contains hide"><g:message code="smartgroup.contains.label"/></span>
+							<span class="starts"><g:message code="smartgroup.startswith.label"/></span>
 						</td>
 						<td>
 							<g:textField name="rule-text" class="rule-text"/>
 						</td>
 						<td>
-							<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}' /></a>
+							<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}'/></a>
 						</td>
 					</tr>
 				</g:else>
@@ -92,7 +92,7 @@
 			</tbody>
 		</table>
 		<a class="button" onclick="addNewRule()">
-			<g:message code="smartgroup.add.anotherrule" />
+			<g:message code="smartgroup.add.anotherrule"/>
 		</a></br>
 	</g:form>
 </div>

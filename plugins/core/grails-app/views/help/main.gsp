@@ -1,6 +1,6 @@
 <div id="help">
 	<div id="index">
-		<g:render template="index" plugin="core" />
+		<f:render template="index" />
 	</div>
 	<div id="file">
 	</div>

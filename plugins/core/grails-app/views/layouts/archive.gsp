@@ -2,9 +2,9 @@
 <html>
 	<head>
 		<title><g:layoutTitle default="Archive"/></title>
-		<g:layoutHead />
+		<g:layoutHead/>
 		<r:require module="archive"/>
-		<g:render template="/includes" plugin="core"/>
+		<f:render template="/includes"/>
 		<fsms:i18n keys="wizard.back, wizard.next, smallpopup.cancel, smallpopup.empty.trash.prompt, fmessage.new.info, wizard.fmessage.edit.title, smallpopup.fmessage.delete.title, smallpopup.fmessage.export.title, popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, smallpopup.empty.trash.prompt, popup.activity.create, popup.help.title, smallpopup.folder.title, wizard.quickmessage.title, smallpopup.fmessage.rename.title, popup.done"/>
 		<g:javascript>
 			$(function() {  
@@ -15,35 +15,35 @@
 	<body id="archive-tab">
 		<div id="header">
 			<div id="notifications">
-				<g:render template="/system_notifications" plugin="core"/>
-				<g:render template="/flash" plugin="core"/>
+				<f:render template="/system_notifications"/>
+				<f:render template="/flash"/>
 			</div>
-			<g:render template="/system_menu" plugin="core"/>
-			<g:render template="/tabs" plugin="core"/>
+			<f:render template="/system_menu"/>
+			<f:render template="/tabs"/>
         </div>
 		<div id="main" class="main">
-			<g:render template="../archive/menu" plugin="core"/>
+			<f:render template="../archive/menu"/>
 			<div id="content">
 				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
 					<g:if test="${viewingMessages}">
-						<g:render template="../message/header" plugin="core"/>
+						<f:render template="../message/header"/>
 					</g:if>
 					<g:else>
-						<g:render template="header" plugin="core"/>
+						<f:render template="header"/>
 					</g:else>
 					<g:if test="${(messageSection == 'activity') && !viewingMessages}">
-						<g:render template="archived_activity_list" plugin="core"/>
+						<f:render template="archived_activity_list"/>
 					</g:if>
 					<g:elseif test="${messageSection == 'folder' && !viewingMessages}">
-						<g:render template="archived_folder_list" plugin="core"/>
+						<f:render template="archived_folder_list"/>
 					</g:elseif>
 					<g:else>
-						<g:render template="../message/message_list" plugin="core"/>
+						<f:render template="../message/message_list"/>
 					</g:else>
-					<g:layoutBody />
-					<g:render template="../message/footer" plugin="core"/>
+					<g:layoutBody/>
+					<f:render template="../message/footer"/>
 				</div>
-				<g:render template="../message/message_details" plugin="core" />
+				<f:render template="../message/message_details" />
 			</div>
 		</div>
 		<r:layoutResources/>

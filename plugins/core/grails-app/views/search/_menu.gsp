@@ -2,7 +2,7 @@
 	<ul class="main-list" id='search-menu'>
 		<g:form name="search-details">
 			<li>
-				<h3 id="search-string" class="list-title"><g:message code="search.keyword.label" /></h3>
+				<h3 id="search-string" class="list-title"><g:message code="search.keyword.label"/></h3>
 				<ul class='sub-list'>
 					<li class='field'>
 						<g:textField name="searchString" id="searchString" value="${search?.searchString}"/>
@@ -10,13 +10,13 @@
 				</ul>
 			</li>
 			<li class='section' id="search-filters">
-				<g:render template="basic_filters" plugin="core"/>
-				<g:render template="other_filters" plugin="core"/>
+				<f:render template="basic_filters"/>
+				<f:render template="other_filters"/>
 			</li>
 			<li class='section buttons' id="search-btn" >
 				<ul class='sub-list'>
 					<li>
-						<g:actionSubmit class="btn create" controller="search" action="result" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}" />
+						<g:actionSubmit class="btn create" controller="search" action="result" name="result" value="${message(code: 'default.button.search.label', default: 'Search')}"/>
 					</li>
 					<li>
 						<g:link id="clear" action="no_search">${message(code:'search.clear', default:'Clear search')}</g:link>

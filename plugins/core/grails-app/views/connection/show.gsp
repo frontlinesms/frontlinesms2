@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<meta name="layout" content="settings" />
-		<title><g:message code="connection.header" /> ${connectionInstance?.name}</title>
+		<meta name="layout" content="settings"/>
+		<title><g:message code="connection.header"/> ${connectionInstance?.name}</title>
 		<g:if test="${params.createRoute}">
 			<g:javascript>
 				$(function() {
@@ -17,6 +17,6 @@
 		</g:if>
 	</head>
 	<body>
-		<g:render template="/connection/connection_list"/>
+		<f:render template="/connection/connection_list"/>
 	</body>
 </html>
