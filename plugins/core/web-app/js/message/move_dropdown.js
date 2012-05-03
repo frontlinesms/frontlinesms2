@@ -10,13 +10,13 @@ function moveAction() {
 	if(me.hasClass('na')) return;
 	var section = me.attr("class");
 
-	if(countCheckedMessages() > 1) {
+	if(getCheckedMessageCount() > 1) {
 		var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
 	} else {
 		var messagesToMove = $("#message-id").val();
 	}
 	
-	if(messageSection == 'result' && !(countCheckedMessages() > 1)) {
+	if(messageSection == 'result' && !(getCheckedMessageCount() > 1)) {
 		var location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
 		var location = url_root + "search/" + messageSection + '?searchId=' + searchId;

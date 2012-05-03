@@ -41,6 +41,15 @@ class MessageController {
 		} else
 			render ""
 	}
+
+	def show = {
+		def model = [messageInstance: Fmessage.get(params.id),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
+				messageSection: 'TODO',
+				ownerSection:'TODO']
+		render view:'/message/_single_message_details', model:model
+	}
 	
 	def getShowModel(messageInstanceList) {
 		def messageInstance = (params.messageId) ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
