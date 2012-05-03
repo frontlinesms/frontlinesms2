@@ -1,6 +1,7 @@
 package frontlinesms2.connection
 
-import frontlinesms2.*
+import spock.lang.*
+
 import frontlinesms2.*
 import frontlinesms2.dev.MockModemUtils
 
@@ -41,7 +42,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			btnCreateRoute.click()
 		then:
-			waitFor { txtStatus == "Connected" }
+			waitFor(10) { txtStatus == "Connected" }
 	}
 	
 	def 'The first connection in the connection list page is selected'() {
@@ -71,11 +72,11 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			$('#connections .selected .test').isEmpty()
 		when:
-			waitFor{ $("#connections .selected .route").displayed }
+			waitFor{ $("#connections .selected .route") }
 			btnCreateRoute.click()
 		then:
-			waitFor { btnTestRoute.@href == "/connection/createTest/${testConnection.id}" }
-			$('#notifications').text().contains("Created route")
+			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
+			$('#notifications').text()?.contains("Created route")
 	}
 
 	def 'creating a new fconnection causes a refresh of the connections list'(){
@@ -114,6 +115,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			connectionForm.connectionType = "intellisms"
 			nextPageButton.click()
+			connectionForm.intellismssend = true
 			connectionForm.intellismsname = "New IntelliSMS Connection"
 			connectionForm.intellismsusername = "test"
 			connectionForm.intellismspassword = "1234"
@@ -168,14 +170,14 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	
 	def createTestSmsConnection() {
 		MockModemUtils.initialiseMockSerial([
-				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler_sendFails())])
+				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
 		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
 	}
 }
 
 class ConnectionDialog extends ConnectionPage {
 	static at = {
-		$("#ui-dialog-title-modalBox").text().toLowerCase().contains('connection')
+		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('connection')
 	}
 	
 	static content = {

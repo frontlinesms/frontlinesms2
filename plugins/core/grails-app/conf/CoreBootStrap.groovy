@@ -22,6 +22,7 @@ class CoreBootStrap {
 	def failPendingMessagesService
 	def camelContext
 	def messageSource
+	def quartzScheduler
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
@@ -35,6 +36,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addMapMethods()
 		switch(Environment.current) {
 			case Environment.TEST:
+				quartzScheduler.start()
 				test_initGeb(servletContext)
 				break
 				

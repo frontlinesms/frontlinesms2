@@ -25,11 +25,13 @@ target-eclipse/
 .redcar
 
 # Grails-generated files
-stacktrace.log
 CodeNarcReport.html
 cobertura.ser
 .idea/
 plugin.xml
+
+# Log files 
+*.log
 
 # Temp files and directories
 temp/
