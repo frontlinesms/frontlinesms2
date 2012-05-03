@@ -69,7 +69,7 @@ class ActivityController {
 	def restore = {
 		withActivity { activity ->
 			activity.deleted = false
-			Trash.findByLinkId(activity.id)?.delete()
+			Trash.findByObjectId(activity.id)?.delete()
 			activity.save(failOnError: true, flush: true)
 		}
 		flash.message = message(code: 'activity.restored')

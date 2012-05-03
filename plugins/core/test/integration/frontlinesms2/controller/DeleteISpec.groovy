@@ -93,7 +93,7 @@ class DeleteISpec extends IntegrationSpec {
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model.collect {it.link} == [f]
+			model.collect {it.object} == [f]
 	}
 	
 	def "polls, folders and messages appear in the trash section"() {
@@ -124,7 +124,7 @@ class DeleteISpec extends IntegrationSpec {
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model.collect {it.link} == [p, m3, f]
+			model.collect {it.object} == [p, m3, f]
 		}
 	
 	def deleteMessage(Fmessage message) {

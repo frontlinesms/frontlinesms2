@@ -223,8 +223,8 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				if (messageInstance.isDeleted == true)
 					messageInstance.isDeleted = false
-				if(Trash.findByLinkId(messageInstance.id))
-					Trash.findByLinkId(messageInstance.id).delete(flush:true)
+				if(Trash.findByObjectId(messageInstance.id))
+					Trash.findByObjectId(messageInstance.id).delete(flush:true)
 				if (params.messageSection == 'activity') {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)

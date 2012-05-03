@@ -66,7 +66,7 @@ class FolderController {
 		withFolder { folder ->
 			folder.deleted = false
 			folder.save(failOnError: true, flush: true)
-			Trash.findByLinkId(folder.id)?.delete()
+			Trash.findByObjectId(folder.id)?.delete()
 		}
 		flash.message = message(code: 'folder.restored')
 		redirect(controller: "message", action: "trash")

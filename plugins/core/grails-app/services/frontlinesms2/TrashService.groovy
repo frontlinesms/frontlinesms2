@@ -1,13 +1,15 @@
 package frontlinesms2
 
 class TrashService {
-    def emptyTrash() {
+	def messageSource
+	
+    	def emptyTrash() {
 		Fmessage.findAllByIsDeleted(true)*.delete()
 		MessageOwner.findAllByDeleted(true)*.delete()
 		Trash.findAll()*.delete()
-    }
+    	}
     
-    static sendToTrash(object) {
+    	def sendToTrash(object) {
 		if (object instanceof frontlinesms2.Fmessage) {
 			object.isDeleted = true
 			new Trash(displayName: object.displayName, displayText: object.text, objectClass: object.class, objectId: object.id).save()
@@ -18,7 +20,7 @@ class TrashService {
 				it.isDeleted = true
 				it.save()
 			}
-			def detail = "x messages" //message(code: 'fmessage.count.many', args: [object.messages.size()])
+			def detail = messageSource.getMessage('fmessage.count.many', object.messages.size(), Locale.getDefault())
 			new Trash(displayName: object.name, displayText: detail, objectClass: object.class, objectId: object.id).save()
 			object.save(failOnError: true, flush: true)
 		}

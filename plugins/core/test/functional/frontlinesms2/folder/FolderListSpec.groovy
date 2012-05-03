@@ -152,9 +152,9 @@ class FolderListSpec extends FolderBaseSpec {
 			println rowContents
 			rowContents[2] == 'Work'
 			rowContents[3] == '2 messages'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-sender').text() == 'Work folder'
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-content').text() == "${Folder.findById(folderId).getLiveMessageCount()} messages"
 	}
 	
