@@ -5,7 +5,7 @@ class HelpController {
 	
 	def main = { }
 	
-	def getSection = {
+	def section = {
 		if(params.helpSection == null){
 			def helpText = "This help file is not yet available, sorry."
 			render text:helpText.markdownToHtml()

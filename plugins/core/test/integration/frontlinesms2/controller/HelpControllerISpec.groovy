@@ -16,7 +16,7 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def helpFileContent = "This is test content for the help"
 			helpFile.text = helpFileContent
 		when:
-			def controllerResponse = controller.getSection('testHelp.txt')
+			def controllerResponse = controller.section('testHelp.txt')
 		then:
 			controllerResponse == helpFileContent
 	}
