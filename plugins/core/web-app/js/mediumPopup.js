@@ -40,6 +40,22 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 	initializePopup();
 }
 
+function launchHelpWizard(html) {
+	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	$("#messageText").keyup()
+	$("#modalBox").dialog({
+		modal: true,
+		title: i18n("popup.help.title"),
+		width: '95%',
+		height: screen.height*0.8,
+		buttons: [
+			{ text:i18n("popup.ok"),  click: submit, id:"submit" }
+		],
+		close: function() { $(this).remove(); }
+	});
+	initializePopup();
+}
+
 function submit() {
 	$("#submit").attr('disabled', 'disabled');
 	if(tabValidates(getCurrentTab())) {

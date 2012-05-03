@@ -22,6 +22,10 @@
 	width: 100%;
 }
 
+#help #index li:hover {
+	background-color: #e5eff3;
+}
+
 #file h1 {
     	font-size: 16px;
     	font-weight: bold;
