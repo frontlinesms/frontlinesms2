@@ -92,7 +92,6 @@ var fconnection = {
 					setConfirmation(value);
 				});
 			}
-			${imp} : ${imp.class.name}
 			<g:set var="configFields" value="${imp.configFields instanceof Map? (imp.configFields.allValues): imp.configFields}"/>
 			<g:each in="${configFields}" var="f">
 				<g:if test="${f in imp.passwords}">setSecretConfirmation('${f}');</g:if>
