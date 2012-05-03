@@ -362,22 +362,22 @@ class PollCedSpec extends PollBaseSpec {
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+			go "message/trash/show/${Trash.findByObjectId(poll.id).id}"
 			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Who is badder?'
-			rowContents[3] == '0 messages'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+			rowContents[3] == '0 message(s)'
+			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
 	}
 	
 	def "selected poll and its details are displayed"() {
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(poll.id).id}"
+			go "message/trash/show/${Trash.findByObjectId(poll.id).id}"
 		then:
 			$('#message-detail-sender').text() == "${poll.name} poll"
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(poll.id).dateCreated)
+			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
 			$('#message-detail-content').text() == "${poll.getLiveMessageCount()} messages"
 	}
 	

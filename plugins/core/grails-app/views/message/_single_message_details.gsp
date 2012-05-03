@@ -28,16 +28,13 @@
 					</g:link>
 				</p>
 			</g:if>
-			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
+			<div id="message-detail-content"><p>
+				<!-- TODO convert linebreaks in message to new paragraphs (?)  -->
+				${messageInstance.text}
+			</p></div>
 		</div>
-		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-			<g:render template="../message/message_actions" />
-			<g:render template="../message/other_actions"/>
-		</g:if>
-		<g:else>
-			<g:render template="/message/message_actions" plugin="core"/>
-			<g:render template="/message/other_actions" plugin="core"/>
-		</g:else>
+		<g:render template="../message/message_actions" plugin="core"/>
+		<g:render template="../message/other_actions" plugin="core"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
@@ -45,7 +42,7 @@
 				<g:message code="${ownerInstance.shortName}.title" args="${[ownerInstance.name]}"/>
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
-			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + " " + g.message(code:'fmessage.many')}</p></div>
+			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
 		<g:render template="../message/message_actions" plugin="core"></g:render>
 	</g:elseif>

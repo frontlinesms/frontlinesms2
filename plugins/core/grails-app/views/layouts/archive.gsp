@@ -26,7 +26,7 @@
 		<div id="main" class="main">
 			<g:render template="../archive/menu" plugin="core"/>
 			<div id="content">
-				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
+				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') || !viewingMessages ? '' : 'tall-header'}">
 					<g:if test="${viewingMessages}">
 						<g:render template="../message/header" plugin="core"/>
 					</g:if>

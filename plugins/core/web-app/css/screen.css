@@ -234,6 +234,9 @@ tr.send-failed td:nth-child(6) {
 	height: 43px;
 	padding: 0 17px;
 }
+.tall-header .section-header {
+	height: 153px;
+}
 .section-header h3 {
 	float: left;
 	font-size: 110%;

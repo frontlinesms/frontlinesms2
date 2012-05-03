@@ -54,31 +54,31 @@
 	width: 75%;
 }
 
-#message-list table.main-table {
+.main-list table.main-table {
 	width: 100%;
 }
-#message-list table tr{
+.main-list table tr{
 	width: 100%;
 	height: 26px;
 }
-#message-list table tr#message-sorter{
+.main-list tr#message-sorter, .main-list thead tr {
 	text-align: left;
 	font-weight: bold;
 	background-image: url('../images/menubar.png');
 }
-#message-list table td.message-select-cell{
+.main-list table td.message-select-cell{
 	padding-left: 17px;
 	width: 30px;
 }
-#message-list table td.message-star-cell{
+.main-list table td.message-star-cell{
 	padding-left: 5px;
 	width: 30px;
 }
-#message-list table td.message-sender-cell, #message-list table th.message-sender-cell{
+.main-list table td.message-sender-cell, #message-list table th.message-sender-cell{
 	padding: 6px 5px;
 	max-width: 150px;
 }
-#message-list table td.message-text-cell, #message-list table th.message-sender-cell{
+.main-list table td.message-text-cell, #message-list table th.message-sender-cell{
 	min-width: 300px;
 }
 

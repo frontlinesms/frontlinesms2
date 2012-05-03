@@ -146,15 +146,15 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			def folderId = deleteFolder()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
+			go "message/trash/show/${Trash.findByObjectId(folderId).id}"
 			def rowContents = $('#message-list tr:nth-child(2) td')*.text()
 		then:
 			println rowContents
 			rowContents[2] == 'Work'
-			rowContents[3] == '2 messages'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			rowContents[3] == '2 message(s)'
+			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-sender').text() == 'Work folder'
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-content').text() == "${Folder.findById(folderId).getLiveMessageCount()} messages"
 	}
 	

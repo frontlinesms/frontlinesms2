@@ -1,7 +1,7 @@
 <g:if test="${activityInstanceTotal > 0}">
 <div id="activities">
-	<div id="activity-list" class="message-list">
-		<table cellspacing="0">
+	<div id="activity-list" class="main-list">
+		<table class="main-table" cellspacing="0">
 			<thead>
 				<tr>
 					<th class="activity-name-cell"><g:message code="archive.activity.name"/></th>

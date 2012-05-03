@@ -67,31 +67,30 @@ class MessageController {
 	}
 	
 	def trash = {
-		def trashInstance
+		def trashedObject
 		def trashInstanceList
 		def messageInstanceList
 		params.sort = (params.sort && params.sort != 'date') ?: "dateCreated"
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectType == "frontlinesms2.Fmessage") {
-					params.messageId = obj.linkId
+				if(obj.objectClass == frontlinesms2.Fmessage) {
+					params.messageId = obj.objectId
 				} else {
-					trashInstance = obj.link
+					trashedObject = obj.object
 				}
 			}
 			setTrashInstance(Trash.findById(params.id))
 		}
-		
 		if(params.starred) {
 			messageInstanceList = Fmessage.deleted(params.starred)
 		} else {
 			trashInstanceList = Trash.list(params)
 		}
-		render view:'standard', model:[trashInstanceList:trashInstanceList,
+		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashInstance] << getShowModel()
+					ownerInstance: trashedObject] << getShowModel()
 	}
 
 	def poll = { redirect(action: 'activity', params: params) }
@@ -167,9 +166,7 @@ class MessageController {
 		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
-				messageInstance.isDeleted = true
-				new Trash(identifier:messageInstance.displayName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save()
-				messageInstance.save()
+				TrashService.sendToTrash(messageInstance)
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
@@ -226,8 +223,8 @@ class MessageController {
 			withFmessage id, {messageInstance ->
 				if (messageInstance.isDeleted == true)
 					messageInstance.isDeleted = false
-				if(Trash.findByLinkId(messageInstance.id))
-					Trash.findByLinkId(messageInstance.id).delete(flush:true)
+				if(Trash.findByObjectId(messageInstance.id))
+					Trash.findByObjectId(messageInstance.id).delete(flush:true)
 				if (params.messageSection == 'activity') {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
