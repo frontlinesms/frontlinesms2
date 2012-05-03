@@ -100,6 +100,11 @@ log4j = {
 		}
 	}
 
+  root {
+    info 'prod-stacktrace', 'console-logger'
+    error 'prod'
+  }
+
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
            'org.codehaus.groovy.grails.web.pages', //  GSP
            'org.codehaus.groovy.grails.web.sitemesh', //  layouts
