@@ -77,13 +77,13 @@ var fconnection = {
 		}	
 	},
 
-	<g:each in="${Fconnection.implementations}">
-	${it.shortName}: {
-		requiredFields: ["${Fconnection.getNonnullableConfigFields(it).join('", "')}"],
-		configFieldsKeys: ["${it.configFields instanceof Map ? it.configFields.getAllKeys()?.join('", "'):''}"],
-		humanReadableName: "<g:message code="${it.simpleName.toLowerCase()}.label"/>",
+	<g:each in="${Fconnection.implementations}" var="imp">
+	${imp.shortName}: {
+		requiredFields: ["${Fconnection.getNonnullableConfigFields(imp).join('", "')}"],
+		configFieldsKeys: ["${imp.configFields instanceof Map? imp.configFields.allKeys?.join('", "'): ''}"],
+		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
 		show: function() {
-			<g:each in="${(Fconnection.implementations - it)*.shortName}">
+			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
 			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys
@@ -92,12 +92,13 @@ var fconnection = {
 					setConfirmation(value);
 				});
 			}
-			<g:set var="configFields" value="${it.configFields instanceof Map? (it.configFields.getAllValues()) : it.configFields}" />
+			${imp} : ${imp.class.name}
+			<g:set var="configFields" value="${imp.configFields instanceof Map? (imp.configFields.allValues): imp.configFields}"/>
 			<g:each in="${configFields}" var="f">
-				<g:if test="${f in it.passwords}">setSecretConfirmation('${f}');</g:if>
+				<g:if test="${f in imp.passwords}">setSecretConfirmation('${f}');</g:if>
 				<g:else>setConfirmation('${f}');</g:else>
 			</g:each>
-			$("#${it.shortName}-confirm").show();
+			$("#${imp.shortName}-confirm").show();
 		}
 	},
 	</g:each>
