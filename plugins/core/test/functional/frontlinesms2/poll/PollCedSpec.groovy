@@ -366,7 +366,7 @@ class PollCedSpec extends PollBaseSpec {
 			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
 		then:
 			rowContents[2] == 'Who is badder?'
-			rowContents[3] == '0 messages'
+			rowContents[3] == '0 message(s)'
 			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
 	}
 	
