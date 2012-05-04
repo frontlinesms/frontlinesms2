@@ -3,8 +3,8 @@
 		<ul id="contact-list">
 			<g:if test="${!contactInstance ? false : !contactInstance.id}">
 				<li class="selected" id="newContact">
-					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select' />
-					<a disabled="disabled" class="contact-name" href=""><g:message code="contact.new" /></a>
+					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select'/>
+					<a disabled="disabled" class="contact-name" href=""><g:message code="contact.new"/></a>
 				</li>
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">

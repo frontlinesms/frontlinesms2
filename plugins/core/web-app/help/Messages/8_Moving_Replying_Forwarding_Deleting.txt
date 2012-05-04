@@ -25,7 +25,7 @@ Message in the [Sent][6] folder **_cannot_** be replied to. All other messages c
 
 You can delete a message, or multiple messages, by selecting them and then clicking the [delete][9] or [delete all][10] button:
 
-SCREENSHOT
+![alt text][19]
 
 1.  [Select][11] the message or messages you would like to delete.
 2.  Click "delete" if you have selected one message, or "delete all" if you have selected more than one.
@@ -37,10 +37,10 @@ SCREENSHOT
 
 You can delete [activities][3] and [folders][14] in the same way you can delete messages.
 
-SCREENSHOT
+![alt text][20]
 
 1.  When you are viewing the [activity][3] or [folder][14] you want to delete, find the "More Actions..." drop down menu.
-SCREENSHOT
+![alt text][21]
 2.  From here choose "Delete [type of activity]" (e.g "Delete Poll" if you are deleting a poll) or "Delete Folder" if you are deleting a folder.
 3.  A window will appear asking you if you want to confirm the deletion.
 4.  Click "Delete".
@@ -53,7 +53,7 @@ The activity _and all messages within it_ will be moved to the [trash][12].
 
 You can move messages into [activities][3] and [folders][14]. The [move][15] action can be found where there is a "Move message to..." dropdown
 
-SCREENSHOT
+![alt text][22]
 
 1.  [Select][10] the message or messages that you would like to move.
 2.  In the "Move Message to..." drop down menu, select where you would like to move the message(s) to.
@@ -69,7 +69,7 @@ Messages in an [activity][3] or [folder][14] can only be moved to the [inbox][1]
 
 You can forward a message on from almost anywhere in the software. Only messages stored in [pending][17] or the [trash][12] cannot be forwarded. When you have selected more than one message you cannot use the forward action - it can only be performed on single messages.
 
-SCREENSHOT
+![alt text][23]
 
 1.  [Select][11] the message you would like to forward.
 2.  Click on the small arrow next to the "Reply" button. If the message is in the [Sent][6] folder, then the small arrow will appear next to the "Resend" button. The "Forward" action will appear. Click on it to continue.
@@ -102,3 +102,8 @@ SCREENSHOT
 [16]: Forwarding
 [17]: gotoPending
 [18]: exporting
+[19]: ../images/help/xx.jpg "selecting and deleting messages"
+[20]: ../images/help/xx.jpg "selecting and deleting activities"
+[21]: ../images/help/xx.jpg "selecting delete from the more actions menu for Activities and Folders"
+[22]: ../images/help/xx.jpg "moving messages in activities or folders"
+[23]: ../images/help/xx.jpg "forwarding messages"

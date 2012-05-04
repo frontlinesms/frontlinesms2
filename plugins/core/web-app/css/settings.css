@@ -9,7 +9,6 @@
 } 
 #language {
 	width:100%;
-	height:90px;
 	margin:20px 0 10px 0;
 	padding: 0 30px;
 	border-bottom: 1px solid #9e9e9e;
@@ -26,7 +25,6 @@
 
 #import{
 	display: block;
-	height:160px;
 	width: 100%;
 	padding: 0 30px;
 	margin:10px 0 10px 0;
@@ -130,4 +128,13 @@
 #log-list .entry-date{
 	float: right;
 	min-width: 300px;
+}
+.langsection{
+	width:160px;
+}
+#language h2, #language p, #language input[type="submit"]{
+	margin: 5px 0 10px 0;
+}
+#import h2, #import p, #import input[type="file"]{
+	margin: 5px 0 10px 0;
 }

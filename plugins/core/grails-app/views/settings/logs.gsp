@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<meta name="layout" content="settings" />
-		<title>Settings ><g:message code="settings.logs.header" /></title>
+		<meta name="layout" content="settings"/>
+		<title>Settings ><g:message code="settings.logs.header"/></title>
 		<g:javascript>
 			function filterLogEntries(timePeriod) {
 				$.get(url_root + 'settings/logs', {timePeriod: timePeriod}, function(data) {
@@ -14,7 +14,7 @@
 	<body>
 		<div id='logEntries'>
 			<g:if test="${logEntryTotal==0}">
-				<div><g:message code="logs.none" /></div>
+				<div><g:message code="logs.none"/></div>
 			</g:if>
 			<g:else>
 				<div id="log-filters">

@@ -14,13 +14,13 @@ You can export messages from anywhere in the software.
 1.  When you are viewing the list of messages that you wish to export, click on the "Export" button. This is found in different places depending on where you are:
 
 [Inbox][2], [Sent][3], [Pending][4], [Inbox Archive][5], [Sent Archive][6]: There is a button in the header called "Export". This will export all messages in the respective folder
-SCREENSHOT
+![alt text][19]
 
 [Activities][7] and [Folders][8]: Export can be found in the "More Actions..." drop down. This will export all messages in the activity/folder
-SCREENSHOT
+![alt text][20]
 
 [Search][9]: The export button can be found in the header
-SCREENSHOT
+![alt text][21]
 
 2.  A new window will appear prompting you to choose which format you would like to export to, and how many messages are being exported.
 
@@ -38,7 +38,7 @@ PDF stands for Portable Document Format. This type of file can be opened by PDF 
 You can export the entire database of your [contacts][12], a particular [group][13] of contacts or the contacts in a [smart group][14]
 
 1.  When viewing "All Contacts" in the [Contacts][12] tab, the export button can be found in the contact header:
-SCREENSHOT
+![alt text][22]
 
 2.  Clicking on "Export" will cause a new window to appear prompting you to choose which [format][10] you would like to export to.
 3.  After selecting a format for your contacts, click "Export".
@@ -49,7 +49,7 @@ SCREENSHOT
 #### [Exporting a Group of Contacts][15]
 
 1.  Navigate to the [group][13] you wish to export in the contacts tab. The export button can be found in the group header:
-SCREENSHOT
+![alt text][23]
 
 2.  Clicking on "Export" will cause a new window to appear prompting you to choose which [format][10] you would like to export to.
 3.  After selecting a format for your contacts, click "Export".
@@ -60,7 +60,7 @@ SCREENSHOT
 #### [Exporting a Smart Group of Contacts][16]
 
 1.  Navigate to the [smart group][12] you wish to export in the contacts tab. The export button can be found in the group header:
-SCREENSHOT
+![alt text][24]
 
 2.  Clicking on "Export" will cause a new window to appear prompting you to choose which [format][10] you would like to export to.
 3.  After selecting a format for your contacts, click "Export".
@@ -90,3 +90,9 @@ SCREENSHOT
 [16]: ExportingSmartGroup
 [17]: gotoMovingReplyingDeletingForwarding
 [18]: gotoArchive
+[19]: ../images/help/xx.jpg "message header export button"
+[20]: ../images/help/xx.jpg "exporting activities from the More Actions drop down"
+[21]: ../images/help/xx.jpg "search header export button"
+[22]: ../images/help/xx.jpg "contacts header export button"
+[23]: ../images/help/xx.jpg "contacts group header export button"
+[24]: ../images/help/xx.jpg "smart groups header export button"

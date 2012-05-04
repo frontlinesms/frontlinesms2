@@ -8,7 +8,7 @@ _The Folder archive contains all Folders that have been archived. The layout and
 
 ### [Folder List View][1]
 
-(Screenshot)
+![alt text][10]
 
 The Folder List View displays the list of all archived Folders. Each row corresponds to a single folder and contains information about  the date it was archived and how many messages have been archived within the folder.  
   
@@ -39,3 +39,4 @@ Clicking on a single folder will take you to that folders detail view which rese
 [7]: gotoArchivingActivitiesandFolders
 [8]: gotoArchivingMessages
 [9]: gotoMovingMessagestoFolder
+[10]: ../images/help/xx.jpg "folder list view"
