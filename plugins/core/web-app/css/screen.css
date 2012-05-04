@@ -252,6 +252,7 @@ tr.send-failed td:nth-child(6) {
 }
 .section-header li {
 	display: inline-block;
+	vertical-align:bottom;
 }
 
 .footer{
