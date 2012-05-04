@@ -32,7 +32,7 @@
 					<g:layoutBody/>
 					<fsms:render template="/message/footer"/>
 				</div>
-			    <fsms:render template="/message/message_details"/>
+				<fsms:render template="/message/message_details"/>
 			</div>
 		</div>
 		<r:layoutResources/>
