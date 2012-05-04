@@ -2,15 +2,17 @@ $(document).ready(function() {
 	$('#message-detail #multiple-messages').hide();
 });
 
+// TODO rename to messageCheckChanged()
 function messageChecked(messageId) {
-	var count = countCheckedMessages();
-	var checkedMessageRow = $('#message-list tr#message-' + messageId);
+	var count = getCheckedMessageCount();
+	var checkedMessageRow = getMessageRow(messageId);
+
 	if(checkedMessageRow.find('input[type=checkbox]').attr('checked')) {
 		if(count == 1) {
 			$('#message-list tr.selected').removeClass('selected');
-			upSingleCheckedDetails(messageId);
+			updateSingleCheckedDetails(messageId, checkedMessageRow);
 		} else {
-			addToChecked(messageId);
+			updateMultipleCheckedDetails();
 		}
 		checkedMessageRow.addClass('selected');
 	} else {
@@ -20,86 +22,51 @@ function messageChecked(messageId) {
 			if (count == 1) {
 				var newMessageRowId = $('#message-list tr.selected').attr('id');
 				var newMessageId = newMessageRowId.substring('message-'.length);
-				downSingleCheckedDetails(newMessageId);
+				updateSingleCheckedDetails(newMessageId, getMessageRow(newMessageId));
 			} else {
-				removeFromChecked(messageId);
+				updateMultipleCheckedDetails();
 			}
-		} else {
-			$('input:hidden[name=checkedMessageList]').val(',');
 		}
 	}
-	count = setCheckAllBox(count);
+	updateCheckAllBox(count);
 }
 
-function countCheckedMessages() {
-    return $('#message-list tr :checked').size();
+function getMessageRow(messageId) {
+	return $('#message-list tr#message-' + messageId);
 }
 
-function upSingleCheckedDetails(messageId) {
-	updateMessageDetails(messageId, false);
-	var messageList = $('input:hidden[name=checkedMessageList]');
-	var newList = ',' + messageId + ',';
-	messageList.val(newList);
-}
-
-function downSingleCheckedDetails(messageId) {
-	updateMessageDetails(messageId, false);
-	var messageList = $('input:hidden[name=checkedMessageList]');
-	var newList = ',' + messageId + ',';
-	messageList.val(newList);
-}
-
-function addToChecked(messageId) {
-	var messageList = $('input:hidden[name=checkedMessageList]');
-	var oldList = messageList.val();
-	var newList = oldList + messageId + ',';
-	messageList.val(newList);
-	updateMultipleCheckedDetails(messageId);
-}
-
-function removeFromChecked(messageId) {
-	var messageList = $('input:hidden[name=checkedMessageList]');
-	var newList = jQuery.grep(messageList.val().split(","), function(element, index) {return element != messageId}).join(",");
-	messageList.val(newList);
-	updateMultipleCheckedDetails(messageId);
-}
-
-function updateMultipleCheckedDetails(messageId) {
-	updateMessageDetails(messageId, true);
-}
-
-function updateMessageDetails(messageId, hasMultipleSelected) {
-	var searchId = $('input:hidden[name=searchId]').val();
-	var new_url;
-	
-	if(url.indexOf("show") >= 0)
-		new_url = url.replace(/\d+\/$/, messageId);
-	else
-		new_url = url_root + controller + '/' + action;
-	
-	var params = { messageId: messageId, searchId: searchId}
-	if($("#ownerId").val()) {
-		params.ownerId = $("#ownerId").val();
-	}
-	if(hasMultipleSelected) {
-		params.checkedMessageList = $("#checkedMessageList").val()
-	}
-	
-	if(controller === "archive") {
-		params.viewingMessages = true
-	}
-	$.get(new_url, params, function(data) {
-		if(hasMultipleSelected === true) {
-			$('#single-message').replaceWith($(data).find('#multiple-messages'));
-			$('#multiple-messages').replaceWith($(data).find('#multiple-messages'));
-		}
-		if($('#multiple-messages').is(":visible") && !hasMultipleSelected) {
-			$('#multiple-messages').replaceWith($(data).find('#single-message'));
-		} else {
-			$('#single-message').replaceWith($(data).find('#single-message'));
-		}
-		$("#message-detail .dropdown").selectmenu();
+function getCheckedMessageList() {
+	var list=",";
+	$('#message-list .message-select-checkbox:checked').each(function() {
+		list += $(this).attr('id').substring('message-select-'.length) + ",";
 	});
+	return list;
+}
+
+function getCheckedMessageCount() {
+    return $('#message-list .message-select-checkbox:checked').size();
+}
+
+function updateSingleCheckedDetails(messageId, row) {
+	row.removeClass("unread");
+	row.addClass("read");
+
+	var params = { messageSection:$('input:hidden[name=messageSection]').val() };
+	$.get(url_root + "message/show/" + messageId, params, function(data) {
+		$('#multiple-messages').hide();
+		var newPane = $(data);
+		newPane.find('.dropdown').selectmenu();
+		$('#single-message').replaceWith(newPane);
+	});
+}
+
+function updateMultipleCheckedDetails() {
+	// hide single message view
+	$('#single-message').hide();
+	// show multi message view
+	$("#multiple-messages").show();
+	// update counter display
+	$('#checked-message-count').text(i18n("fmessage.selected.many", getCheckedMessageCount()));
 }
 
 function checkAll() {
@@ -108,16 +75,10 @@ function checkAll() {
 		$('#message-list .message-preview :checkbox').each(function(index) {
 			this.checked = true;
 		});
-		$('input:hidden[name=checkedMessageList]').val(",")
 		$('#message-list tr.message-preview').each(function(index) {
 			$(this).addClass('selected');
-			messageId = $(this).attr('id').substring('message-'.length);
-			var messageList = $('input:hidden[name=checkedMessageList]');
-			var oldList = messageList.val();
-			var newList = oldList + messageId + ',';
-			messageList.val(newList);
 		});
-		if(countCheckedMessages() != 1) updateMultipleCheckedDetails(messageId);
+		if(getCheckedMessageCount() != 1) updateMultipleCheckedDetails(messageId);
 	} else {
 		$('#message-list tr.message-preview :checkbox').each(function(index, element) {
 			this.checked = false;
@@ -125,21 +86,18 @@ function checkAll() {
 		$('#message-list tr.message-preview').each(function(index) {
 			$(this).removeClass('selected');
 		});
-		var selectFirst = $('#message-list tr.message-preview').first();
-		selectFirst.addClass('selected');
-		var messageId = selectFirst.attr('id').substring('message-'.length);
-		if(countCheckedMessages() == downSingleCheckedDetails(messageId));
-		$('input:hidden[name=checkedMessageList]').val(',');
+		var originalSingleMessageDisplay = $('#message-list tr.initial-selection');
+		if(originalSingleMessageDisplay) originalSingleMessageDisplay.addClass('selected');
+		$('#multiple-messages').hide();
+		$('#single-message').show();
 	}
 }
 
-function setCheckAllBox(count) {
-	//Check whether all messages are checked
-	if(count == $('#message-list tr.message-preview :checkbox').size() && !$('#message-list :checkbox')[0].checked){
+function updateCheckAllBox(count) {
+	// Check whether all messages are checked
+	if(count == $('#message-list tr.message-preview :checkbox').size() && !$('#message-list :checkbox')[0].checked) {
 		$('#message-list :checkbox')[0].checked = true;
-	} else if($('#message-list :checkbox')[0].checked){
+	} else if($('#message-list :checkbox')[0].checked) {
 		$('#message-list :checkbox')[0].checked = false;
-		count--;
 	}
-	return count;
 }

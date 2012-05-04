@@ -44,6 +44,17 @@ class MessageController {
 			render ""
 	}
 
+	def show = {
+		def messageInstance = Fmessage.get(params.id)
+		messageInstance.read = true
+		messageInstance.save()
+		def model = [messageInstance: messageInstance,
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
+				messageSection: params.messageSection]
+		render view:'/message/_single_message_details', model:model
+	}
+
 	def inbox = {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
@@ -146,7 +157,7 @@ class MessageController {
 	
 	def retry = {
 		def dst = []
-		def failedMessageIdList = params.checkedMessageList?.tokenize(',') ?: [params.messageId]
+		def failedMessageIdList = getCheckedMessageList()
 		failedMessageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				messageInstance.dispatches.each { 
@@ -163,9 +174,9 @@ class MessageController {
 	}
 	
 	def delete = {
-		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
+		def messageIdList = getCheckedMessageList()
 		messageIdList.each { id ->
-			withFmessage id, {messageInstance ->
+			withFmessage id, { messageInstance ->
 				TrashService.sendToTrash(messageInstance)
 			}
 		}
@@ -177,8 +188,8 @@ class MessageController {
 	}
 	
 	def archive = {
-		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
-		def listSize = messageIdList.size();
+		def messageIdList = getCheckedMessageList()
+		def listSize = messageIdList.size()
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
 				if(!messageInstance.messageOwner) {
@@ -198,13 +209,13 @@ class MessageController {
 	}
 	
 	def unarchive = {
-		def messageIdList = params.checkedMessageList ? params.checkedMessageList.tokenize(',') : [params.messageId]
-		def listSize = messageIdList.size();
+		def messageIdList = getCheckedMessageList()
+		def listSize = messageIdList.size()
 		messageIdList.each { id ->
 			withFmessage id, {messageInstance ->
 				if(!messageInstance.messageOwner) {
 					messageInstance.archived = false
-					messageInstance.save(failOnError: true, flush: true)
+					messageInstance.save(failOnError: true)
 				} else {
 					listSize--
 				}
@@ -220,17 +231,19 @@ class MessageController {
 	def move = {
 		def messageIdList = params.messageId.tokenize(',')
 		messageIdList.each { id ->
-			withFmessage id, {messageInstance ->
-				if (messageInstance.isDeleted == true)
-					messageInstance.isDeleted = false
-				if(Trash.findByObjectId(messageInstance.id))
-					Trash.findByObjectId(messageInstance.id).delete(flush:true)
+			withFmessage id, { messageInstance ->
+				messageInstance.isDeleted = false
+				Trash.findByLinkId(messageInstance.id)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
-					activity.save()
+					activity.save(failOnError:true)
+					/* FIXME the following is broken for multiple messages, and it's not clear what
+					 * it's trying to do.  If this is meant to be triggering an action on the Activity
+					 * then it definitely shouldn't be doing it via another controller
 					if(activity && activity.autoreplyText)
-						redirect(controller: "activty instanceof frontlinesms2.Poll ? 'poll' : 'autoreply'", action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id])
+						redirect(controller: activity instanceof frontlinesms2.Poll ? 'poll' : 'autoreply',
+								action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id]) */
 				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
@@ -243,6 +256,8 @@ class MessageController {
 				}
 			}
 		}
+
+		// FIXME this flash message is concatenated in a stupid way
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
 		render ""
 	}
@@ -264,7 +279,7 @@ class MessageController {
 	def changeStarStatus = {
 		withFmessage { messageInstance ->
 			messageInstance.starred =! messageInstance.starred
-			messageInstance.save(failOnError: true, flush: true)
+			messageInstance.save(failOnError: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
             params.remove('messageId')
 			render(text: messageInstance.starred ? "starred" : "unstarred")
@@ -335,23 +350,24 @@ class MessageController {
 			if(m) c.call(m)
 			else render(text: message(code: 'fmessage.exist.not', args: [params.messageId])) // TODO handle error state properly
 	}
-	
+	}
 	private def getShowModel(messageInstanceList) {
-		def messageInstance = (params.messageId) ? Fmessage.get(params.messageId) : messageInstanceList ? messageInstanceList[0]:null
-		if (messageInstance && !messageInstance.read) {
-			messageInstance.read = true
-			messageInstance.save()
-		}
-		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
-		def selectedMessageList = params.checkedMessageList?: ',' + messageInstance?.id + ','
+		def messageInstance = params.messageId? Fmessage.get(params.messageId):
+				messageInstanceList? messageInstanceList[0]: null
+		def checkedMessageCount = getCheckedMessageList().size()
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
-				checkedMessageList: selectedMessageList,
-				activityInstanceList: Activity.findAllByArchivedAndDeleted(this.viewingArchive, false),
-				folderInstanceList: Folder.findAllByArchivedAndDeleted(this.viewingArchive, false),
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageCount: Fmessage.countAllMessages(params),
 				hasFailedMessages: Fmessage.hasFailedMessages(),
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
+	}
+
+	private def getCheckedMessageList() {
+		def checked = params['message-select']?: [params.messageId]
+		if(checked instanceof String) checked = [checked]
+		return checked
 	}
 }
 

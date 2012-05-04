@@ -11,7 +11,7 @@ var groupActions = {
 		$.ajax({
 			type:'GET',
 			url: url_root + getContactSection() +'/rename',
-			data: {groupId: $("#groupId").val()},
+			data: {groupId: $("#groupId").val(), groupName: $("#group-title").text().substring(0, $("#group-title").text().length-4)},
 			success: function(data){
 				launchSmallPopup(i18n("smallpopup.group.rename.title"), data, i18n("smallpopup.rename"));
 		}})

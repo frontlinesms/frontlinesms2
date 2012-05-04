@@ -47,7 +47,6 @@
 	height: 21px;
 	padding: 5px 10px 0 10px;
 	text-align: left;
-	max-width: 160px;
 }
 .ui-selectmenu-status:hover{
 	background-image: url("../../../images/buttons/button_hover_part.png");
@@ -59,6 +58,7 @@
 .ui-icon-triangle-1-s{
 	margin: 0;
 	display:inline-block;
+	float: right;
 	border-top-color: black;
 	border-right-color: rgba(0,0,0,0);
 	border-bottom-color: black;
@@ -107,6 +107,6 @@
 }
 #language .ui-icon-triangle-1-s{
 	position:relative;
-	left: 160px;
 	top: -15px;
+	margin-right: 16px;
 }
