@@ -1,7 +1,7 @@
 <html>
     <head>
-        <title><g:message code="poll.header" /></title>
-		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}" />
+        <title><g:message code="poll.header"/></title>
+		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}"/>
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript library="jquery" plugin="jquery"/>
 		<g:javascript src="/graph/raphael-min.js"/>
@@ -16,7 +16,7 @@
 				if (!loaded) {
 					var xdata = $.map(${pollResponse}, function(a) {return a.value;});
 					var data =  $.map(${pollResponse}, function(a) {return a.count;});
-					var responseCountTag= "<span class='response-count'><g:message code="fmessage.responses.total" args="${ [messageInstanceTotal] }" /></span>"
+					var responseCountTag= "<span class='response-count'><g:message code="fmessage.responses.total" args="${ [messageInstanceTotal] }"/></span>"
 					$("#poll-details").toggle();
 					var holder = "pollGraph";
 					$("#"+holder).width($("#pollGraph").width);

@@ -17,8 +17,14 @@ class IntelliSmsPostProcessor implements Processor {
 		if(text ==~ "ID:.*") log "message sent successfully"
 		else {
 			def m = (text =~ /ERR:\s*(.*)/)
-			if(m.matches()) throw new FatalConnectionException("IntelliSMS gateway error: ${m[0][1]} (${m[0][2]})")
-			else throw new RuntimeException("Unexpected response from IntelliSMS gateway: $text")
+			if(m.matches()) {
+				switch (m[0][1]) {
+					case "LOGIN_INVALID":
+						throw new AuthenticationException("IntelliSMS gateway error: $text")
+					default:
+						throw new RuntimeException("IntelliSMS gateway error: $text") 
+				}
+			} else throw new RuntimeException("Unexpected response from IntelliSMS gateway: $text")
 		}
 		log 'EXIT'
 	}

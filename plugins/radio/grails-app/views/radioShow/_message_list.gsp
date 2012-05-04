@@ -79,5 +79,4 @@
 			</tbody>
 		</table>
 	</div>
-	<g:render template="/message/message_details" plugin="core"/>
 </div>

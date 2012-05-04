@@ -1,9 +1,9 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /> </label>
+		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label"/> </label>
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
-		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add" /></g:link>
+		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add"/></g:link>
 	</div>
 	<div id="recipients-list">
 		<ul id="groups">
@@ -28,13 +28,13 @@
 				<li class="contact">
 					<g:if test="${recipients.contains(contact.email)}">
 						<input type="checkbox" name="addresses" value="${contact.email}" checked>
-						${contact.name ?: contact.email} (<g:message code="contact.email.label" />)
+						${contact.name ?: contact.email} (<g:message code="contact.email.label"/>)
 					</g:if>
 				</li>
 			</g:each>
 		</ul>
 	</div>
-	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients" /></div>
+	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients"/></div>
 </div>
 
 <script>
@@ -97,7 +97,7 @@
 		$("#manual-address").find('#address-error').remove();
 		if(containsLetters != '' && containsLetters != null) {
 			$("#address").addClass('error');
-			$("#manual-address").append("<div id='address-error' class='error-message'><g:message code='fmessage.number.error' /></div>");
+			$("#manual-address").append("<div id='address-error' class='error-message'><g:message code='fmessage.number.error'/></div>");
 			return false;
 		} else {
 			return true;

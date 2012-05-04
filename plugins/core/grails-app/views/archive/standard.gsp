@@ -1,6 +1,6 @@
 <html>
     <head>
-        <meta name="layout" content="archive" />
+        <meta name="layout" content="archive"/>
         <title>${pageTitle?:params.action.capitalize()}</title>
     </head>
     <body>

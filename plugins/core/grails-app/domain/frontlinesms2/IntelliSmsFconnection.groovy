@@ -5,7 +5,7 @@ import frontlinesms2.camel.intellisms.*
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
-import frontlinesms2.camel.exception.FatalConnectionException
+import frontlinesms2.camel.exception.*
 
 class IntelliSmsFconnection extends Fconnection {
 	private static final String INTELLISMS_URL = 'http://www.intellisoftware.co.uk/smsgateway'
@@ -60,7 +60,7 @@ class IntelliSmsFconnection extends Fconnection {
 			List getRouteDefinitions() {
 				if(getSend() && getReceive()) {
 					return [from("seda:out-${IntelliSmsFconnection.this.id}")
-							.onException(FatalConnectionException)
+							.onException(AuthenticationException)
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
@@ -87,7 +87,7 @@ class IntelliSmsFconnection extends Fconnection {
 				}
 				else {
 					return [from("seda:out-${IntelliSmsFconnection.this.id}")
-							.onException(FatalConnectionException)
+							.onException(AuthenticationException)
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
