@@ -1,5 +1,4 @@
 <g:hiddenField name="sortField" value="${params.sort}"/>
-<g:hiddenField name="checkedMessageList" value=","/>
 <g:hiddenField name="messageSection" value="${messageSection}"/>
 <g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 <g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
@@ -38,11 +37,11 @@
 			</g:if>
 			<g:else>
 				<g:each in="${messageInstanceList}" status="i" var="m">
-					<tr class="message-preview ${m == messageInstance ? 'selected' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
-						<g:hiddenField name="message-created-date" value="${m.date}"/>
+					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
+						<g:hiddenField name="message-created-date" value="${m.date} disabled="true"/>
 						<td colspan="1" class="message-select-cell">
 							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});"/>
-							<g:hiddenField name="src-${m.id}" value="${m.src}"/>
+							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>
 						</td>
 
 						<td class="message-star-cell" id="star-${m.id}" >

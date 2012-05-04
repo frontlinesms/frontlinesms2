@@ -6,13 +6,14 @@ abstract class PageMessage extends geb.Page {
 		selectedMenuItem { $('#messages-menu .selected') }
 		messagesList { $('#messages-submenu') }
 		messagesSelect { $(".message-select") }
+		messagesSelectAll { messagesSelect[0] }
 		flashMessage(required:false) { $("div.flash") }
 		multipleMessagesThing(required:false) { $('#multiple-messages') }
 		deleteAllButton(required:false) { $("#btn_delete_all") }
 		checkedMessageCount {
 			def t = $("#checked-message-count").text()
 			println "content is '$t'"
-			if(t != "") {
+			if(t) {
 				println "t is defined as $t"
 				return (t - ' messages selected') as Integer
 			} else {

@@ -4,6 +4,9 @@
 		<style>
 			body { margin-left:auto; margin-right:auto; width:600px; font-family:sans-serif; }
 			textarea { width:100%; height:6em; }
+			<g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
+			textarea { width:100%; height:100%; }
+			</g:if>
 			a,a:link,a:visited,a:active { color:blue; }
 		</style>
 	</head>

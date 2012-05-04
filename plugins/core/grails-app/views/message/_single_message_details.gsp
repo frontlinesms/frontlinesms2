@@ -39,7 +39,7 @@
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + g.message(code:'fmessage.many')}</p></div>
 		</div>
-		<fsms:render template="/message/message_actions" ></fsms:render>
+		<fsms:render template="/message/message_actions"/>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
