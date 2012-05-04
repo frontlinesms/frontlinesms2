@@ -2,6 +2,8 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 
+import spock.lang.*
+
 class MessageCheckSpec extends MessageBaseSpec {
 	
 	def "header checkbox is checked when all the messages are checked"() {
@@ -21,8 +23,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messagesSelectAll.click()
 		then:
 			waitFor { checkedMessageCount == 2 }
 	}
@@ -131,12 +132,13 @@ class MessageCheckSpec extends MessageBaseSpec {
 		given:
 			createInboxTestMessages()
 		when: 
-			to PageMessageInbox
-			messagesSelect[0].click()
+			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
+			at PageMessageInbox
+			messagesSelectAll.click()
 		then:
 			waitFor { checkedMessageCount == 2 }
 		when:
-			messagesSelect[0].click()
+			messagesSelectAll.click()
 		then: 
 			waitFor { $('#message-detail #message-detail-sender').text() == "Alice" }
 		when:

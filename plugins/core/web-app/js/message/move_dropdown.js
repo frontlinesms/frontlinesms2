@@ -2,20 +2,24 @@ function moveAction() {
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var searchId = $("input:hidden[name=searchId]").val();
-	
-	var me = $('#move-actions option:selected');
 
-	var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
-	
-	if(me.hasClass('na')) return;
-	var section = me.attr("class");
-
+	var messagesToMove;
+	var moveTarget;
 	if(getCheckedMessageCount() > 1) {
-		var messagesToMove = $('input:hidden[name=checkedMessageList]').val();
+		// TODO should calculate selected IDs here rather than getting from hidden field.  Use
+		// something like $('#message-list tr :checked');
+		messagesToMove = getCheckedMessageList();
+		moveTarget = $('#multiple-messages select#move-actions option:selected');
 	} else {
-		var messagesToMove = $("#message-id").val();
+		messagesToMove = $("#message-id").val();
+		alert("Moving single message: " + messagesToMove);
+		moveTarget = $('#single-message select#move-actions option:selected');
 	}
-	
+
+	var moveTargetType = moveTarget.attr("class");
+	if(moveTargetType == 'na') { alert("No valid target selected"); return; }
+	var moveTargetId = moveTarget.val();
+
 	if(messageSection == 'result' && !(getCheckedMessageCount() > 1)) {
 		var location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
@@ -25,10 +29,13 @@ function moveAction() {
 	} else{
 		var location = url_root + "message/" + messageSection;
 	}
+
+	// TODO no point in doing an AJAX call if we're going to move to a new page anyway - just
+	// submit the form with HTTP POST like normal.
 	$.ajax({
 		type:'POST',
 		url: url_root + 'message/move',
-		data: {messageSection: section, messageId: messagesToMove, ownerId: me.val()},
+		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
 		success: function(data) { window.location = location; }
 	});
 }

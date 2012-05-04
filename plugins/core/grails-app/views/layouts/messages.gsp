@@ -6,7 +6,7 @@
 		<r:require module="messages"/>
 		<r:require module="newMessagesCount"/>
 		<g:render template="/includes" plugin="core"/>
-		<fsms:i18n keys="poll.label, autoreply.label, announcement.label, poll.reply.text, poll.reply.text1, poll.reply.text2, poll.reply.text3, autoreply.blank.keyword, poll.send.messages.none, autoreply.text.none, wizard.title.new, popup.title.saved, group.join.reply.message, group.leave.reply.message, fmessage.new.info, wizard.fmessage.edit.title, smallpopup.fmessage.delete.title, smallpopup.fmessage.export.title, popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, smallpopup.empty.trash.prompt, popup.activity.create, popup.help.title, smallpopup.folder.title, wizard.quickmessage.title, smallpopup.fmessage.rename.title,  popup.next, fmessage.export, popup.done, popup.edit, popup.ok, smallpopup.ok, smallpopup.rename, smallpopup.delete, smallpopup.export, wizard.ok, wizard.create, smallpopup.done, smallpopup.create, smallpopup.send, wizard.send"/>
+		<fsms:i18n keys="poll.label, autoreply.label, announcement.label, poll.reply.text, poll.reply.text1, poll.reply.text2, poll.reply.text3, autoreply.blank.keyword, poll.send.messages.none, autoreply.text.none, wizard.title.new, popup.title.saved, group.join.reply.message, group.leave.reply.message, fmessage.new.info, fmessage.selected.many, wizard.fmessage.edit.title, smallpopup.fmessage.delete.title, smallpopup.fmessage.export.title, popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, smallpopup.empty.trash.prompt, popup.activity.create, popup.help.title, smallpopup.folder.title, wizard.quickmessage.title, smallpopup.fmessage.rename.title,  popup.next, fmessage.export, popup.done, popup.edit, popup.ok, smallpopup.ok, smallpopup.rename, smallpopup.delete, smallpopup.export, wizard.ok, wizard.create, smallpopup.done, smallpopup.create, smallpopup.send, wizard.send"/>
 		<g:javascript>
 			$(function() {  
 			   disablePaginationControls();
@@ -26,13 +26,16 @@
 		<div id="main">
 			<g:render template="../message/menu" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
 			<div id="content">
-				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
-					<g:render template="../message/header" plugin="core"/>
-					<g:render template="../message/message_list" plugin="core"/>
-					<g:layoutBody/>
-					<g:render template="../message/footer" plugin="core"/>
-				</div>
-			    <g:render template="../message/message_details" plugin="core"/>
+				<g:form controller="${params.controller}"
+						params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
+					<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
+						<g:render template="../message/header" plugin="core"/>
+						<g:render template="../message/message_list" plugin="core"/>
+						<g:layoutBody/>
+						<g:render template="../message/footer" plugin="core"/>
+					</div>
+				    <g:render template="../message/message_details" plugin="core"/>
+				</g:form>
 			</div>
 		</div>
 		<r:layoutResources/>
