@@ -138,3 +138,7 @@
 #import h2, #import p, #import input[type="file"]{
 	margin: 5px 0 10px 0;
 }
+#show-log-text{
+    float: left;
+    margin: 5px 25px 0 0;
+}
