@@ -17,6 +17,6 @@
 		</g:if>
 	</head>
 	<body>
-		<f:render template="/connection/connection_list"/>
+		<fsms:render template="/connection/connection_list"/>
 	</body>
 </html>

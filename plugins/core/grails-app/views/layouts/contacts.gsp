@@ -3,7 +3,7 @@
 	<head>
 		<title><g:layoutTitle default="Contacts"/></title>
 		<r:require module="contacts"/>
-		<f:render template="/includes"/>
+		<fsms:render template="/includes"/>
 		<g:layoutHead/>
 		<fsms:i18n keys="contact.selected.many, smallpopup.group.rename.title, smallpopup.group.edit.title, smallpopup.group.delete.title, smallpopup.customfield.create.title, group.join.reply.message, group.leave.reply.message, popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, smallpopup.delete.prompt, smallpopup.delete.many.prompt, smallpopup.contact.delete.title, smallpopup.contact.export.title, popup.smartgroup.create, popup.help.title, smallpopup.group.title, popup.create, popup.done, popup.edit, popup.ok, smallpopup.ok, smallpopup.rename, wizard.ok, wizard.create, smallpopup.create, smallpopup.export, smallpopup.send, wizard.send, contact.delete.many, wizard.send"/>
 	</head>
@@ -11,19 +11,19 @@
 		<div id="thinking"></div>
 		<div id="header">
 			<div id="notifications">
-				<f:render template="/system_notifications"/>
-				<f:render template="/flash"/>
+				<fsms:render template="/system_notifications"/>
+				<fsms:render template="/flash"/>
 			</div>
-			<f:render template="/system_menu"/>
-			<f:render template="/tabs"/>
+			<fsms:render template="/system_menu"/>
+			<fsms:render template="/tabs"/>
 		</div>
 		<div id="main">
-			<f:render template="menu"/>
+			<fsms:render template="menu"/>
 			<div id="content">
-				<f:render template="header"/>
-				<f:render template="contact_list"/>
+				<fsms:render template="header"/>
+				<fsms:render template="contact_list"/>
 				<g:layoutBody/>
-				<f:render template="footer"/>
+				<fsms:render template="footer"/>
 			</div>
 		</div>
 		<r:layoutResources/>

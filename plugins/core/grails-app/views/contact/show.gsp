@@ -27,8 +27,8 @@
 				<g:if test="${contactInstance}">
 					<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
 				</g:if>
-	    		<f:render template="single_contact_view"/>
-				<f:render template="multiple_contact_view"/>
+	    		<fsms:render template="single_contact_view"/>
+				<fsms:render template="multiple_contact_view"/>
 			</g:form>
 		</div>
     </body>

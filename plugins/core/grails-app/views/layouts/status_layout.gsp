@@ -4,17 +4,17 @@
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead/>
 		<r:require module="status"/>
-		<f:render template="/includes"/>
+		<fsms:render template="/includes"/>
 		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done"/>
 	</head>
 	<body id="status-tab">
 		<div id="header">
 			<div id="notifications">
-				<f:render template="/system_notifications"/>
-				<f:render template="/flash"/>
+				<fsms:render template="/system_notifications"/>
+				<fsms:render template="/flash"/>
 			</div>
-			<f:render template="/system_menu"/>
-			<f:render template="/tabs"/>
+			<fsms:render template="/system_menu"/>
+			<fsms:render template="/tabs"/>
 		</div>
 		<div id="main">
 			<div class="content">

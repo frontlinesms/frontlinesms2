@@ -7,27 +7,27 @@
 
 <g:hasErrors bean="${contactInstance}">
 	<div class="flash errors">
-		<f:renderErrors bean="${contactInstance}" as="list"/>
+		<fsms:renderErrors bean="${contactInstance}" as="list"/>
 		<a class="hide-flash">x</a>
 	</div>
 </g:hasErrors>
 
 <g:hasErrors bean="${groupInstance}">
 	<div class="flash errors">
-		<f:renderErrors bean="${groupInstance}" as="list"/>
+		<fsms:renderErrors bean="${groupInstance}" as="list"/>
 		<a class="hide-flash">x</a>
 	</div>
 </g:hasErrors>
 
 <g:hasErrors bean="${pollInstance}">
 	<div class="flash errors">
-		<f:renderErrors bean="${pollInstance}" as="list"/>
+		<fsms:renderErrors bean="${pollInstance}" as="list"/>
 		<a class="hide-flash">x</a>
 	</div>
 </g:hasErrors>
 <g:hasErrors bean="${folderInstance}">
 	<div class="flash errors">
-		<f:renderErrors bean="${folderInstance}" as="list"/>
+		<fsms:renderErrors bean="${folderInstance}" as="list"/>
 		<a class="hide-flash">x</a>
 	</div>
 </g:hasErrors>

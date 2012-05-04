@@ -3,6 +3,10 @@ package frontlinesms2
 class FsmsTagLib {
 	static namespace = 'fsms'
 
+	def render = { att ->
+		out << g.render(att)
+	}
+
 	def i18n = { att ->
 		out << '<script type="text/javascript">'
 		att.keys.tokenize(',')*.trim().each {
@@ -25,7 +29,7 @@ class FsmsTagLib {
 		out << '</table>'
 	}
 	
-	def confirmTypeRow = {att ->
+	def confirmTypeRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
 		out << g.message(code:"${att.instanceClass.simpleName.toLowerCase()}.type.label")

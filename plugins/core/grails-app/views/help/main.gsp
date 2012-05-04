@@ -1,6 +1,6 @@
 <div id="help">
 	<div id="index">
-		<f:render template="index" />
+		<fsms:render template="index" />
 	</div>
 	<div id="file">
 	</div>

@@ -59,7 +59,7 @@
 						<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
 					</g:if>
 			</g:elseif>
-			<f:render template="/message/other_actions"/>
+			<fsms:render template="/message/other_actions"/>
 		</g:form>
 	</div>
 </div>

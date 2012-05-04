@@ -14,18 +14,18 @@
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<f:render template="/poll/question"/>
-		<f:render template="/poll/responses"/>
-		<f:render template="/poll/sorting"/>
-		<f:render template="/poll/replies"/>
-		<f:render template="/poll/message"/>
+		<fsms:render template="/poll/question"/>
+		<fsms:render template="/poll/responses"/>
+		<fsms:render template="/poll/sorting"/>
+		<fsms:render template="/poll/replies"/>
+		<fsms:render template="/poll/message"/>
 		<div id="tabs-6">
-			<f:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
+			<fsms:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
 				                                                           'groupList': groupList,
 				                                                           'nonExistingRecipients': [],
 				                                                           'recipients': []]"/>
 		</div>
-		<f:render template="/poll/confirm"/>
+		<fsms:render template="/poll/confirm"/>
 	</g:formRemote>
 </div>
 

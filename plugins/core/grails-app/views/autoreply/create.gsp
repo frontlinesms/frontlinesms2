@@ -8,9 +8,9 @@
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm"/></a></li>
 	</ol>
 	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))">
-		<f:render template="/autoreply/keyword"/>
-		<f:render template="/autoreply/message"/>
-		<f:render template="/autoreply/confirm"/>
+		<fsms:render template="/autoreply/keyword"/>
+		<fsms:render template="/autoreply/message"/>
+		<fsms:render template="/autoreply/confirm"/>
 	</g:formRemote>
 </div>
 <g:javascript>

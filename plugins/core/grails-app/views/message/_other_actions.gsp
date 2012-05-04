@@ -14,5 +14,5 @@
 			</div>
 		</div>
 	</g:if>
-	<f:render template="/message/move_message"/>
+	<fsms:render template="/message/move_message"/>
 </div>

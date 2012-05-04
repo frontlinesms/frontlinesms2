@@ -4,11 +4,11 @@
 		<meta name="layout" content="status_layout"/>
 	</head>
 	<body>
-		<f:render template="traffic"/>
+		<fsms:render template="traffic"/>
 		<div id="right-column">
-			<f:render template="connection_list"/>
+			<fsms:render template="connection_list"/>
 			<h3 id="detection-title"><g:message code="status.devises.header"/></h3>
-			<f:render template="device_detection"/>
+			<fsms:render template="device_detection"/>
 			
 		</div>
 		<g:javascript>

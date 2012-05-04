@@ -6,7 +6,7 @@
 					  optionKey="id" optionValue="name"
 					  noSelection="${['': g.message(code:'search.filter.group')]}"/>
 		</li>
-		<f:render template="/search/activity_list"/>
+		<fsms:render template="/search/activity_list"/>
 		<li class='field'>
 		<g:select class="dropdown" name="messageStatus" from="${[g.message(code:'search.filter.messages.all'), g.message(code:'search.filter.inbox'), g.message(code:'search.filter.sent')]}"
 				value="${search?.status}"
