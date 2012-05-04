@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title><g:layoutTitle default="Status"/></title>
-		<g:layoutHead />
+		<g:layoutHead/>
 		<r:require module="status"/>
 		<g:render template="/includes" plugin="core"/>
 		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done"/>
@@ -19,7 +19,7 @@
 		</div>
 		<div id="main">
 			<div class="content">
-				<g:layoutBody />
+				<g:layoutBody/>
 			</div>
 		</div>
 		<r:layoutResources/>

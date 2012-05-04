@@ -1,5 +1,5 @@
 <div id="tabs-2" class="poll-responses-tab">
-	<label class="bold" for='poll-choices'><g:message code="poll.responses.prompt" /></label>
+	<label class="bold" for='poll-choices'><g:message code="poll.responses.prompt"/></label>
 	<ul id='poll-choices'>
 		<g:each in="${['A','B','C','D','E']}" var="option" status="i">
 			<li>

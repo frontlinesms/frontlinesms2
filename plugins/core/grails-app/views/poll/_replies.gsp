@@ -1,17 +1,17 @@
 <div id="tabs-4" class="poll-response-reply">
-	<h2 class="bold"><g:message code="poll.replies.header" /></h2>
+	<h2 class="bold"><g:message code="poll.replies.header"/></h2>
 	<p class="info">
-		<g:message code="poll.replies.description" />
+		<g:message code="poll.replies.description"/>
 	</p>
 	<g:checkBox name="enableAutoreply" checked="${activityInstanceToEdit?.autoreplyText as boolean}"/>
-		<g:message code="poll.autoreply.send" />
+		<g:message code="poll.autoreply.send"/>
 	<g:if test="${activityInstanceToEdit?.autoreplyText as boolean}">
 		<g:textArea name="autoreplyText" rows="5" cols="40" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
 	</g:if>
 	<g:else>
 		<g:textArea name="autoreplyText" rows="5" cols="40" disabled="true" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
 	</g:else>
-	<span class="hide character-count" id="reply-count"><g:message code="poll.message.count" /></span> 
+	<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
 </div>
 
 <r:script>

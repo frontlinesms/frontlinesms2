@@ -1,11 +1,11 @@
 <%@ page import="frontlinesms2.*" %>
 <div class="section-header ${messageSection}" id="message-list-header">
-	<g:hiddenField name="starred" value="${params.starred}" />
-	<g:hiddenField name="failed" value="${params.failed}" />
+	<g:hiddenField name="starred" value="${params.starred}"/>
+	<g:hiddenField name="failed" value="${params.failed}"/>
 	<g:if test="${messageSection == 'activity'}">
 		<g:if test="${params.controller == 'archive' && viewingMessages}">
 			<g:link controller="archive" action="${params.action}List"> 
-				<g:message code="fmessage.archive.back" />
+				<g:message code="fmessage.archive.back"/>
 			</g:link>
 		</g:if>
 		<h3 class="activity">${ownerInstance?.name} ${ownerInstance?.shortName}</h3>
@@ -17,9 +17,9 @@
 				<g:render template="../message/poll_header" plugin="core"/>
 			</g:if>
 			<g:else>
-				<g:formatDate date="${ownerInstance?.dateCreated}" />
+				<g:formatDate date="${ownerInstance?.dateCreated}"/>
 				<g:if test="${ownerInstance instanceof Announcement}">
-					<span id="announcement-sent"><g:message code="fmessage.activity.sentmessage" args="${ [sentMessageCount] }" /></span>
+					<span id="announcement-sent"><g:message code="fmessage.activity.sentmessage" args="${ [sentMessageCount] }"/></span>
 					<p>${ownerInstance.sentMessageText}</p>
 				</g:if>
 				<g:else>

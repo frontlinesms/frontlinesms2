@@ -1,5 +1,5 @@
 <g:if test="${groupInstanceList || pollInstanceList}">
-	<h3 class="list-title"><g:message code="search.filter.label" /></h3>
+	<h3 class="list-title"><g:message code="search.filter.label"/></h3>
 	<ul class="sub-list" id="non-dates">
 		<li class='field'>
 			<g:select class="dropdown" name="groupId" from="${groupInstanceList}" value="${search?.group?.id}"
@@ -13,7 +13,7 @@
 				keys="${['', 'inbound', 'outbound']}"/>
 		</li>
 		<li class='field'>
-			<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" /><g:message code="search.filter.archive" />
+			<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}"/><g:message code="search.filter.archive"/>
 		</li>
 	</ul>
 </g:if>

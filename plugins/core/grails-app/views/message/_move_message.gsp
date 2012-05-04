@@ -1,8 +1,8 @@
 <div id='move-message'>
 	<select class="dropdown extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction()">
-		<option value="na" class="na"><g:message code="fmessage.move.to.header" /></option>
+		<option value="na" class="na"><g:message code="fmessage.move.to.header"/></option>
 		<g:if test="${!(messageSection in ['inbox', 'sent', 'pending'])}">
-			<option class="inbox" value="inbox"><g:message code="fmessage.move.to.inbox" /></option>
+			<option class="inbox" value="inbox"><g:message code="fmessage.move.to.inbox"/></option>
 		</g:if>
 		<g:each in="${activityInstanceList}" status="i" var="a">
 			<g:if test="${a != ownerInstance}">

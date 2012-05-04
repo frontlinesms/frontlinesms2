@@ -1,8 +1,8 @@
 <div id="tabs-5">
-	<h2 class="bold"><g:message code="poll.message.edit" /></h2>
-	<p class="info"><g:message code="poll.message.prompt" /></p>
-	<g:textArea name="messageText" rows="5" cols="40" />
-	<span id="send-message-stats" class="character-count"><g:message code="poll.message.count" /></span>
+	<h2 class="bold"><g:message code="poll.message.edit"/></h2>
+	<p class="info"><g:message code="poll.message.prompt"/></p>
+	<g:textArea name="messageText" rows="5" cols="40"/>
+	<span id="send-message-stats" class="character-count"><g:message code="poll.message.count"/></span>
 </div>
 <r:script>
 	var autoUpdate = true;

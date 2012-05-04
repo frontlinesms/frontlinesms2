@@ -1,6 +1,6 @@
 <div id="help">
 	<div id="index" class="vertical-tabs ui-tabs-nav">
-		<g:render template="index" plugin="core" />
+		<g:render template="index" plugin="core"/>
 	</div>
 	<div id="file">
 	</div>

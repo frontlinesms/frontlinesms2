@@ -29,10 +29,10 @@
 						<g:elseif test="${c.status == RouteStatus.CONNECTED}">
 							<div>
 								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup(i18n('smallpopup.test.message.title'), data, i18n('smallpopup.send'))">
-									<g:message code="connection.send.test.message" />
+									<g:message code="connection.send.test.message"/>
 								</g:remoteLink>
 								<g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">
-									<g:message code="connection.route.destroy" />
+									<g:message code="connection.route.destroy"/>
 								</g:link>
 							</div>
 						</g:elseif>

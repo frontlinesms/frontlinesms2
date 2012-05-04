@@ -26,7 +26,7 @@ $(function() {
 
 	});
 </r:script>
-<h3 id="traffic-title"><g:message code="traffic.header" /></h3>
+<h3 id="traffic-title"><g:message code="traffic.header"/></h3>
 <div id="traffic-status">
 	<div id="trafficGraph"></div>
 	<g:form action="show" method="post" name="trafficForm">

@@ -2,15 +2,15 @@
 <meta name="layout" content="popup"/>
 
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="poll.validation.prompt" /></div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="poll.validation.prompt"/></div>
 	<ul>
-		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question" /></a></li>
-		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response" /></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.sort" /></a></li>
-		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.reply" /></a></li>
-		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.edit.message" /></a></li>
-		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.recipients" /></a></li>
-		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.confirm" /></a></li>
+		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question"/></a></li>
+		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response"/></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.sort"/></a></li>
+		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.reply"/></a></li>
+		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.edit.message"/></a></li>
+		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.recipients"/></a></li>
+		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.confirm"/></a></li>
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">

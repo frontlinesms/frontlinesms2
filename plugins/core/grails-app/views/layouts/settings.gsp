@@ -5,7 +5,7 @@
 		<r:require module="settings"/>
 		<g:render template="/includes" plugin="core"/>
 		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send"/>
-		<g:layoutHead />
+		<g:layoutHead/>
 		<r:layoutResources/>
 	</head>
 	<body id="settings-tab">
@@ -21,9 +21,9 @@
 			<g:render template="/settings/menu" plugin="core"/>
 			<div id="content">
 				<div class="section-header">
-					<h3 class="settings"><g:message code="layout.settings.header" /></h3>
+					<h3 class="settings"><g:message code="layout.settings.header"/></h3>
 				</div>
-				<g:layoutBody />
+				<g:layoutBody/>
 			</div>
 		</div>
 		<r:layoutResources/>

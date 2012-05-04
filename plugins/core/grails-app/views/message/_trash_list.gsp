@@ -8,7 +8,7 @@
 		<tr class="${t.object == ownerInstance ? 'selected' : ''}" id="activity-${t.id}">
 	</g:else>
 		<td class="message-select-cell">
-			<g:checkBox disabled="${t.objectClass == frontlinesms2.Fmessage ? 'false' : 'true'}" class="message-select" name="message-select" id="message-select-${t.object.id}" checked="${params.checkedId == t.object.id+'' ? 'true': 'false'}" value="${t.id}" onclick="messageChecked(${t.object.id});" />
+			<g:checkBox disabled="${t.objectClass == frontlinesms2.Fmessage ? 'false' : 'true'}" class="message-select" name="message-select" id="message-select-${t.object.id}" checked="${params.checkedId == t.object.id+'' ? 'true': 'false'}" value="${t.id}" onclick="messageChecked(${t.object.id});"/>
 		</td>
 		<td class="message-star-cell" id="star-${t.objectId}">
 			<g:if test="${t.objectClass == frontlinesms2.Fmessage}">
@@ -16,13 +16,13 @@
 				</g:remoteLink>
 			</g:if>
 			<g:else>
-				<div id="star-${t.id}" class="unstarred" />
+				<div id="star-${t.id}" class="unstarred"/>
 			</g:else>
 		</td>
 		<td class="message-sender-cell">
 			<g:link class="displayName-${t.objectId}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: t.id]}">
 				<g:if test="${t.objectClass == frontlinesms2.Fmessage && !t.object.inbound}">
-					<span><g:message code="fmessage.to.label" /></span>
+					<span><g:message code="fmessage.to.label"/></span>
 				</g:if>
 				${t.displayName}
 			</g:link>
@@ -34,7 +34,7 @@
 		</td>
 		<td class="message-date-cell">
 			<g:link  action="${messageSection}" params="${params.findAll({it.key != 'checkedId'}) + [id: t.id]}">
-				<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${t.dateCreated}" />
+				<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${t.dateCreated}"/>
 			</g:link>
 		</td>
 	</tr>

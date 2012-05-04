@@ -15,7 +15,7 @@
 			</ul>
 		</li>
 		<li>
-			<h3 id="groups-list-title" class="list-title"><g:message code="contact.groups.header" /></h3>
+			<h3 id="groups-list-title" class="list-title"><g:message code="contact.groups.header"/></h3>
 			<ul class='sublist' id="groups-submenu">
 				<g:each in="${groupInstanceList}" var="g">
 					<li class="${contactsSection instanceof frontlinesms2.Group && contactsSection.id==g.id ? 'selected' : ''}">
@@ -24,7 +24,7 @@
 				</g:each>
 				<li class='create' id="create-group">
 					<g:remoteLink class="btn create" controller="group" action="create" onSuccess="launchSmallPopup(i18n('smallpopup.group.title'), data, i18n('smallpopup.create'));">
-						<g:message code="contact.create.group" />
+						<g:message code="contact.create.group"/>
 					</g:remoteLink>
 				</li>
 			</ul>
@@ -39,7 +39,7 @@
 				</g:each>
 				<li class='create' id="create-smart-group">
 					<g:remoteLink class="create btn" controller="smartGroup" action="create" onSuccess="launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('popup.create')), createSmartGroup);">
-						<g:message code="contact.create.smartgroup" />
+						<g:message code="contact.create.smartgroup"/>
 					</g:remoteLink>
 				</li>
 			</ul>

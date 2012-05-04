@@ -7,7 +7,7 @@
 					<th class="activity-name-cell"><g:message code="archive.activity.name"/></th>
 					<th class="activity-type-cell"><g:message code="archive.activity.type"/></th>
 					<th class="activity-date-cell"><g:message code="archive.activity.date"/></th>
-					<th class="activity-message-count-cell"><g:message code="archive.activity.messages" /></th>
+					<th class="activity-message-count-cell"><g:message code="archive.activity.messages"/></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -41,5 +41,5 @@
 </div>
 </g:if>
 <g:else>
-	<p><g:message code="archive.activity.list.none" /></p>
+	<p><g:message code="archive.activity.list.none"/></p>
 </g:else>

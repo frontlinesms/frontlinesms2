@@ -4,9 +4,9 @@
 			<table class="main-table" cellspacing=0>
 				<thead>
 					<tr>
-						<th class="folder-name-cell"><g:message code="archive.folder.name" /></</th>
-						<th class="folder-date-cell"><g:message code="archive.folder.date" /></</th>
-						<th class="folder-message-count-cell"><g:message code="archive.folder.messages" /></th>
+						<th class="folder-name-cell"><g:message code="archive.folder.name"/></</th>
+						<th class="folder-date-cell"><g:message code="archive.folder.date"/></</th>
+						<th class="folder-message-count-cell"><g:message code="archive.folder.messages"/></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -35,5 +35,5 @@
 	</div>
 </g:if>
 <g:else>
-	<p><g:message code="archive.folder.none" /></p>
+	<p><g:message code="archive.folder.none"/></p>
 </g:else>

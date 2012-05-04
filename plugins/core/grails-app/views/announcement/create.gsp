@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="popup"/>
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="announcement.validation.prompt" /></div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="announcement.validation.prompt"/></div>
 	<ol>
-		<li><a class="tabs-1" href="#tabs-1"><g:message code="announcement.create.message" /></a></li>
-		<li><a class="tabs-2" href="#tabs-2"><g:message code="announcement.select.recipients" /></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.confirm" /></a></li>
+		<li><a class="tabs-1" href="#tabs-1"><g:message code="announcement.create.message"/></a></li>
+		<li><a class="tabs-2" href="#tabs-2"><g:message code="announcement.select.recipients"/></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.confirm"/></a></li>
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">

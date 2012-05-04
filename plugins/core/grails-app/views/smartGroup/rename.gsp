@@ -7,10 +7,10 @@
 				<tbody>
 					<tr class="prop">
 						<td valign="top" class="name">
-							<label class="bold inline" for="name"><g:message code="smartgroup.name.label" /></label>
+							<label class="bold inline" for="name"><g:message code="smartgroup.name.label"/></label>
 						</td>
 						<td valign="top" class="value">
-							<g:textField name="smartgroupname" />
+							<g:textField name="smartgroupname"/>
 						</td>
 					</tr>
 				</tbody>
