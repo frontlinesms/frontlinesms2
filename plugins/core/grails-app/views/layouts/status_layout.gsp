@@ -4,8 +4,13 @@
 		<title><g:layoutTitle default="Status"/></title>
 		<g:layoutHead/>
 		<r:require module="status"/>
-		<fsms:render template="/includes"/>
-		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done"/>
+
+		<g:render template="/includes" plugin="core"/>
+		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done, popup.ok"/>
+
+
+
+
 	</head>
 	<body id="status-tab">
 		<div id="header">

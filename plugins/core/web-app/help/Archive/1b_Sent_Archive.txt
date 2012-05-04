@@ -10,7 +10,7 @@ _The Sent archive will contain messages that have been archived from the Folder.
 
 The Sent archive contains all messages that have been archived from the [Sent Folder][2]. 
 
-(Screenshot)
+![alt text][17]
 
 #### [Sent Archive header][3]
 
@@ -47,4 +47,4 @@ When a message is selected, the full text will be displayed here along with the 
 [14]: gotoArchivingActivitiedFolder
 [15]: gotoArchivingMessages
 [16]: gotoUnarchivingMessageActivitiesFolders
-
+[17]: ../images/help/xx.jpg "sent archive"

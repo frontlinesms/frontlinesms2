@@ -44,6 +44,11 @@
 	padding-left: 25px;
 	background-image: url('../images/icons/quickmessage.png');
 	background-repeat: no-repeat;
+	background-position: 3% 50%;
+	padding-bottom: 1px;
+	padding-top: 0.5px;
+	margin-bottom: -0.9px;
+	margin-top: -0.2px;
 }
 
 #message-list #overflow {
@@ -111,28 +116,20 @@
 	-moz-animation: newMessage 2s; /* Firefox */
 	-webkit-animation: newMessage 2s; /* Safari and Chrome */
 }
-.tall-header #no-messages{
-	position: fixed;
-	height: 10%;
-	min-height: 50px;
-	top: 350px;
-	left: 40%;
+.main-table #no-messages {
+    height: 10%;
+    left: 40%;
+    min-height: 50px;
+    padding-top: 10%;
+    position: fixed;
 }
-#no-messages{
-	height: 10%;
-	min-height: 50px;
-	width: 200px;
-	margin-right: auto;
-	margin-left: auto;
-	padding: 10px;
+#no-messages h3{
+	margin-left:17px;
+	margin-top:3px;
 }
-#messages #no-search-description{
-	height: 10%;
-	min-height: 50px;
-	width: 300px;
-	margin-right: auto;
-	margin-left: auto;
-	padding: 10px;
+#no-search-description h3{
+	margin-left:17px;
+	margin-top:3px;
 }
 
 #message-list .folderOwner {
@@ -248,7 +245,7 @@
 	padding-left: 16px;
 	margin-left: 4px;
 }
- #message-detail-date{
+#message-detail-date{
 	margin: 0;
 }
 #message-detail-owner{

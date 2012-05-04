@@ -6,7 +6,7 @@ _FrontlineSMS allows you to quickly search your entire message database so that 
 
 Navigate to the [Search][5] tab in the top header and you will see a screen as follows:
 
-/screenshot/
+![alt text][12]
 
 On the left hand side (a) you will find the area where you input your search criteria and can set the search parameters. In the messages list (b) you will see the area which will display your search results.
 
@@ -105,3 +105,4 @@ In this example search, we  will be searching for received messages with the key
 [9]: exportinghelp
 [10]: searchwithincontact
 [11]: saveloadsearch
+[12]: ../images/help/xx.jpg "search header"

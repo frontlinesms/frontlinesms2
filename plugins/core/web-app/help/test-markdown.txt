@@ -42,3 +42,4 @@ When multiple messages are selected, a summary of how many messages have been se
 [Getting around the Archive Tab][27]
 [Getting around the Search Tab][28]
 [Getting around the Status Tab][29]
+[30] ../images/help/xx.jpg "message tab"

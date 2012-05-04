@@ -47,6 +47,9 @@
 	padding-top: 17px;
 	marign-top: 17px;
 }
+#search-btn .sub-list a, #extra-options-list a {
+	text-decoration: underline;
+}
 #sidebar #search-menu #clear{
 	float: right;
 }
