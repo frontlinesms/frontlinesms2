@@ -34,7 +34,7 @@
 		</tr>
 		<g:if test="${messageInstanceTotal > 0}">
 			<g:if test="${messageSection == 'trash' && !params.starred}">
-				<g:render template="../message/trash_list" plugin="core"/>
+				<g:render template="/message/trash_list" plugin="core"/>
 			</g:if>
 			<g:else>
 				<g:each in="${messageInstanceList}" status="i" var="m">
