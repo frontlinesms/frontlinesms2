@@ -23,7 +23,8 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelectAll.click()
+			messagesSelect[1].click()
+			messagesSelect[2].click()
 		then:
 			waitFor { checkedMessageCount == 2 }
 	}

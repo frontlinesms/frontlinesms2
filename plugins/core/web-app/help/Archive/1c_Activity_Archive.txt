@@ -8,7 +8,7 @@ _The Activity archive contains all Activities that have been archived. The layou
 
 ### [Activity List View][2]
 
-(Screenshot)
+![alt text][11]
 
 The Activity List View displays the list of all archived activities. Each row corresponds to a single activity and contains information about the what type of Activity is archived, the date it was archived and how many messages have been archived within the activity.  
   
@@ -39,3 +39,4 @@ Clicking on a single activity will take you to that activities detail view which
 [8] gotoArchivingActivitiesFolder
 [9] gotoArchivingMessages
 [10] gotoUnarchivingMessagesActivitiesFolders
+[11]: ../images/help/xx.jpg "sent archive"

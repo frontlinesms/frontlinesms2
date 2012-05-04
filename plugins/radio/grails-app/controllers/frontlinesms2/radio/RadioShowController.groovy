@@ -22,8 +22,7 @@ class RadioShowController extends MessageController {
 		if (showInstance.validate()) {
 			showInstance.save()
 			flash.message = "Radio show created"
-		}
-		else {
+		} else {
 			flash.message = "Name is not valid"
 		}
 		redirect(controller: 'message', action: "inbox")

@@ -9,15 +9,22 @@
 } 
 #language {
 	width:100%;
-	height:90px;
 	margin:20px 0 10px 0;
 	padding: 0 30px;
 	border-bottom: 1px solid #9e9e9e;
 }
+#choose-language {
+	float:left;
+	width: 200px;
+	height: 30px;
+	padding:10px;
+}
+#choose-language .button{
+	margin:10px;
+}
 
 #import{
 	display: block;
-	height:160px;
 	width: 100%;
 	padding: 0 30px;
 	margin:10px 0 10px 0;
@@ -98,20 +105,12 @@
 	height: 30px;
 	border-bottom: 1px solid #9e9e9e;
 }
-#log-filters select{
-	float: left;
-	width: 250px;
-}
 #log-filters .show-log-text{
 	float: left;
 	min-width: 210px;
 	padding: 10px 0;
 }
-#log-filters span{
-	float: left;
-	min-width: 210px;
-	font-size:14;
-}
+
 #log-list {
 	display: block;
 	width: 100%;
@@ -129,4 +128,13 @@
 #log-list .entry-date{
 	float: right;
 	min-width: 300px;
+}
+.langsection{
+	width:160px;
+}
+#language h2, #language p, #language input[type="submit"]{
+	margin: 5px 0 10px 0;
+}
+#import h2, #import p, #import input[type="file"]{
+	margin: 5px 0 10px 0;
 }

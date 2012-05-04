@@ -11,7 +11,7 @@ _A [poll][1] is a type of activity which allows you to see a [graphical represen
 
 After clicking next, you will be prompted to select a question type and enter a question:
 
-[screenshot]
+![alt text][12]
 
 **Question Type:** 
 Yes or No: Select this if your question has a Yes or No answer. For example, the question "Do you like the colour Red?", could have a Yes or No Answer.
@@ -26,7 +26,7 @@ If you simply want to collect responses and not send out a question then check t
 ### Response List   
 If you selected the "Multiple Choice Question" then the next screen you see will allow you to specify the possible responses to the question. You can enter a maximum of 5 and a must enter a minimum of 2.
 
-[screenshot]
+![alt text][13]
 
 Boxes A-C will be immediately available to you to edit. If you need more than 3 responses, when you input something into box C, box D will automatically become active. If you then need more, entering text into box D will activate box E.
 
@@ -35,7 +35,7 @@ Once you have entered all your choices, click next to set up [Automatic Sorting]
 ### Automatic Sorting  
 You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
 
-[Screenshot]
+![alt text][14]
   
 _Note: Keywords are **unique.** Once a keyword has been set, it cannot be used in a new activity even if the original activity has been archived. To re-use a keyword you have to delete the activity that keyword is associated with.
 
@@ -47,7 +47,7 @@ Click 'next' to set an [Automatic Reply][5].
 At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a [keyword][2] with your poll. Without a [keyword][2] the system cannot recognise which messages to automatically reply to.  
 The automatic reply option will be unavailable until you create a [keyword][2] for your poll.
 
-[Screenshot]
+![alt text][15]
 
 To enable an [Automatic Reply][5], check the "Send an automatic reply to poll responses" box and enter your message in the message.  
 This message will be sent out to everyone who sends a message with the [keyword][2] you set up in the previous step.
@@ -55,7 +55,7 @@ This message will be sent out to everyone who sends a message with the [keyword]
 ### Edit Message
 This screen will provide you with an opportunity to view the message that will be sent out. If you want, you can also edit the message to add any other text.  
 
-[Screenshot]
+![alt text][16]
 
 The message will be compiled from the options you have selected in previous steps.
 
@@ -76,7 +76,7 @@ Once you are happy with the message, please click 'Next'.
 ### Select Recipients
 On this screen you will be able to either add the numbers of the people you want to send the poll to, or select them from your contacts list. 
 
-[Screenshot]
+![alt text][17]
 
 If you add a number manually it will be added to the list and automatically selected. This number will only remain in the system for as long as it needs to send the message and will not be added to your contacts.  
 Selecting groups and contacts is easy, simply select the contacts or groups you want to send the [poll][1].
@@ -84,7 +84,7 @@ Selecting groups and contacts is easy, simply select the contacts or groups you 
 ### Summary Screen
 On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
 
-[Screen shot]
+![alt text][18]
 
 You will also be able to name your [poll][1] so that it is easily recognisable.
 
@@ -93,7 +93,7 @@ Clicking next will create the [poll[1].
 ### Confirmation
 Once successfully created, you will see a confirmation screen like this one:
 
-[screenshot]
+![alt text][19]
 
 If you do not, and your poll is not visible under 'Activities' in the [Message Functions][6] on the left then please go to the [troubleshooting][7] section.
 
@@ -102,3 +102,11 @@ If you do not, and your poll is not visible under 'Activities' in the [Message F
 [Creating a Subscription][9]
 [Creating a group][10]
 [Creating a smart group][11]
+[12]: ../images/help/xx.jpg "adding poll question"
+[13]: ../images/help/xx.jpg "adding poll multiple response"
+[14]: ../images/help/xx.jpg "poll automatic sorting"
+[15]: ../images/help/xx.jpg "poll automatic reply"
+[16]: ../images/help/xx.jpg "edit poll message"
+[17]: ../images/help/xx.jpg "adding poll recipients"
+[18]: ../images/help/xx.jpgs "poll summary Screen"
+[19]: ../images/help/xx.jpgs "poll confirmation"

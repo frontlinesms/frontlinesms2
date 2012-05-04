@@ -1,6 +1,6 @@
 <ul class="sub-list" id="added-options">
 	<li class='extra-option' id='contactString-list-item'>
-		<h3 class="list-title"><g:message code="search.contact.name.label" /></h3>
+		<h3 class="list-title"><g:message code="search.contact.name.label"/></h3>
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a  class="remove-field" onclick="removeValue('contactString'); toggleExtraSearchOption('contactString');"></a>
 	</li>
@@ -15,15 +15,15 @@
 
 <h3 class="list-title" id="more-options">
 	<a id="toggle-extra-options">
-		<img id="plus" src='${resource(dir:'images/icons', file:'toggle_plus.png')}' />
-		<img id="minus" src='${resource(dir:'images/icons', file:'toggle_minus.png')}' />
+		<img id="plus" src='${resource(dir:'images/icons', file:'toggle_plus.png')}'/>
+		<img id="minus" src='${resource(dir:'images/icons', file:'toggle_minus.png')}'/>
 		${message(code:'default.search.moreoption.label', default:'More options') }
 	</a>
 </h3>
 <ul class="sub-list" id="extra-options-list">
 	<li class='field'>
 		<a class="extra-option-link" id="contactString-add" onclick="toggleExtraSearchOption('contactString')">
-			<g:message code="search.contact.name" />
+			<g:message code="search.contact.name"/>
 		</a>
 	</li>
 	<g:each in="${customFieldList}" status="i" var="f" >

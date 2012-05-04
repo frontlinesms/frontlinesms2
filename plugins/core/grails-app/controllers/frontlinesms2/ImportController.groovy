@@ -59,7 +59,6 @@ class ImportController {
 			flash.message = g.message(code:'import.contact.complete',
 							args:[savedCount, failedLines.size()])
 			if(failedLines) flash.message += '\n' + g.link(action:'failedContacts',
-							absolute:'true',
 							params:[jobId:params.jobId],
 					g.message(code:'import.contact.failed.download'))
 			

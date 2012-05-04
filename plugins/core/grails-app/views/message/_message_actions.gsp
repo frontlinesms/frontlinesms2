@@ -7,10 +7,10 @@
 <div id="message-detail-buttons">
 	<g:if test="${messageSection != 'trash'}">
  		<g:if test="${messageSection == 'sent'}">
-			<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.resend" /></g:link>
+			<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.resend"/></g:link>
 		</g:if>
 		<g:elseif test="${messageSection == 'pending' && messageInstance.hasFailed}">
-			<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.retry" /></g:link>
+			<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.retry"/></g:link>
 		</g:elseif>
 		<g:elseif test="${messageSection == 'pending'}">
 			<g:link class="msg-btn btn" elementId="btn_reply" action="retry" params="${[messageId: messageInstance.id]}"><g:message code="fmessage.resend" /></g:link>

@@ -5,11 +5,11 @@ _A Folder is a container for you to store messages away from your [Inbox][1] or 
 ### [Creating a Folder][3]
 
 1.  Navigate to the [messages tab][1] if you are not already viewing it.
-(Screenshot)
+![alt text][6]
 2.  On the navigation bar to the left, under the 'Folders' heading, click "Create New Folder".
-(Screenshot)
+![alt text][7]
 3.  A dialog box will appear asking you to enter a name for the new folder. Click "Create" when you are done.
-(Screenshot)
+![alt text][8]
 
 Your folder will be created and accessible from the navigation bar.
 
@@ -22,4 +22,6 @@ Your folder will be created and accessible from the navigation bar.
 [3]: CreatingaFolder
 [4]: gotoArchivingFolder
 [5]: gotoCreatingActivity
-
+[6]: ../images/help/xx.jpg "navigate to the messages tab"
+[7]: ../images/help/xx.jpg "click on Create New Folder button"
+[8]: ../images/help/xx.jpg "on the dialog click on create button when you're done"

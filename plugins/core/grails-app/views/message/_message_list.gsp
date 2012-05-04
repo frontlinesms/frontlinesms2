@@ -16,24 +16,24 @@
 			<td class="message-star-cell"></td>
 			<g:if test="${messageSection == 'trash'}">
 				<g:sortableColumn class="message-sender-cell" property="identifier" title="${message(code: 'fmessage.displayName.label', default: 'Name')}"
-						params="${params}" id='source-header' />
+						params="${params}" id='source-header'/>
 				<g:sortableColumn class="message-text-cell" property="message" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-						params="${params}" id="message-header" />
+						params="${params}" id="message-header"/>
 				<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-						params="${params}" id="timestamp-header" defaultOrder="desc" />
+						params="${params}" id="timestamp-header" defaultOrder="desc"/>
 			</g:if>
 			<g:else>
 				<g:sortableColumn class="message-sender-cell" property="displayName" title="${message(code: 'fmessage.displayName.label', default: 'Name')}"
-						params="${params}" id='source-header' />
+						params="${params}" id='source-header'/>
 				<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
-						params="${params}" id="message-header" />
+						params="${params}" id="message-header"/>
 				<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
-						params="${params}" id="timestamp-header" defaultOrder="desc" />
+						params="${params}" id="timestamp-header" defaultOrder="desc"/>
 			</g:else>
 		</tr>
 		<g:if test="${messageInstanceTotal > 0}">
 			<g:if test="${messageSection == 'trash' && !params.starred}">
-				<g:render template="../message/trash_list" plugin="core"/>
+				<fsms:render template="/message/trash_list"/>
 			</g:if>
 			<g:else>
 				<g:each in="${messageInstanceList}" status="i" var="m">
@@ -59,7 +59,7 @@
 						</td>
 						<td class="message-date-cell">
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}" />
+								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
 							</g:link>
 						</td>
 					</tr>
@@ -69,14 +69,14 @@
 		<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
 			<tr id="no-search-description">
 				<td colspan="5">
-					<h3><g:message code="fmessage.search.description" /></h3>
+					<h3><g:message code="fmessage.search.description"/></h3>
 				</td>
 			</tr>
 		</g:elseif>
 		<g:else>
 			<tr id="no-messages">
 				<td colspan="5">
-					<h3><g:message code="fmessage.messages.none" /></h3>
+					<h3><g:message code="fmessage.messages.none"/></h3>
 				</td>
 			</tr>
 		</g:else>

@@ -4,7 +4,7 @@ _When viewing a message list anywhere in the program, you can search within that
 
 ### [How to Search in your Message List][2]
 
-[Screenshot]
+![alt text][6]
 
 1.  At the bottom of the message list you will find the above search box.
 2.  Enter what you wish to search for and press the enter key. All available data of the messages will be searched. This includes contact data, the message content and the date.
@@ -14,7 +14,7 @@ _When viewing a message list anywhere in the program, you can search within that
 
 ### [How to Filter Messages to Show Only Starred Messages][3]
 
-[Screenshot]
+![alt text][7]
 
 1.  At the bottom of the message list you will see the above option to show All or [Starred][1].
 2.  Clicking on [starred][1] will cause only starred messages to appear in the message list.
@@ -32,3 +32,5 @@ Related Actions:
 [3]: howtoshowstarredmessages
 [4]: howtosearchtab
 [5]: howtoselectmultiplemessages
+[6]: ../images/help/xx.jpg "searching in the message list"
+[7]: ../images/help/xx.jpg "filtering starred messages"

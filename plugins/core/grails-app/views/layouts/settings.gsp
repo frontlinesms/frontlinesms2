@@ -3,26 +3,26 @@
 	<head>
 		<title><g:layoutTitle default="Settings"/></title>
 		<r:require module="settings"/>
-		<g:render template="/includes" plugin="core"/>
-		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send"/>
-		<g:layoutHead />
+		<fsms:render template="/includes"/>
+		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send, popup.ok"/>
+		<g:layoutHead/>
 	</head>
 	<body id="settings-tab">
 		<div id="header">
 			<div id="notifications">
-				<g:render template="/system_notifications" plugin="core"/>
-				<g:render template="/flash" plugin="core"/>
+				<fsms:render template="/system_notifications"/>
+				<fsms:render template="/flash"/>
 			</div>
-			<g:render template="/system_menu" plugin="core"/>
-			<g:render template="/tabs" plugin="core"/>
+			<fsms:render template="/system_menu"/>
+			<fsms:render template="/tabs"/>
 		</div>
         <div id="main">
-			<g:render template="/settings/menu" plugin="core"/>
+			<fsms:render template="/settings/menu"/>
 			<div id="content">
 				<div class="section-header">
-					<h3 class="settings"><g:message code="layout.settings.header" /></h3>
+					<h3 class="settings"><g:message code="layout.settings.header"/></h3>
 				</div>
-				<g:layoutBody />
+				<g:layoutBody/>
 			</div>
 		</div>
 		<r:layoutResources/>

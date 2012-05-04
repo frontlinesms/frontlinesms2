@@ -7,18 +7,18 @@
 <g:javascript src="application.js"/>
 <g:javascript src="mediumPopup.js"/>
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt" /></div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt"/></div>
 	<ol>
 		<g:if test="${!fconnectionInstance}">
-			<li><a href="#tabs-1"><g:message code="connection.type" /></a></li>
+			<li><a href="#tabs-1"><g:message code="connection.type"/></a></li>
 		</g:if>
-		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
-		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
+		<li><a href="#tabs-2"><g:message code="connection.details"/></a></li>
+		<li><a href="#tabs-3"><g:message code="connection.confirm"/></a></li>
 	</ol>
 	<g:form name="connectionForm" action="${action}" id='${fconnectionInstance?.id}'>
-		<g:render template="type" plugin="core"/>
-		<g:render template="details" plugin="core"/>
-		<g:render template="confirm" plugin="core"/>
+		<fsms:render template="type"/>
+		<fsms:render template="details"/>
+		<fsms:render template="confirm"/>
 	</g:form>
 </div>
 
@@ -96,7 +96,7 @@ var fconnection = {
 					setConfirmation(value);
 				});
 			}
-			<g:set var="configFields" value="${it.configFields instanceof Map? (it.configFields.getAllValues()) : it.configFields}" />
+			<g:set var="configFields" value="${it.configFields instanceof Map? (it.configFields.getAllValues()) : it.configFields}"/>
 			<g:each in="${configFields}" var="f">
 				<g:if test="${f in it.passwords}">setSecretConfirmation('${f}');</g:if>
 				<g:else>setConfirmation('${f}');</g:else>
