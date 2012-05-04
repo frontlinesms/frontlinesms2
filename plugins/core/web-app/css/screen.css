@@ -150,6 +150,8 @@ tr.send-failed td:nth-child(6) {
 #messages-tab .activities-list-title{
 	background-image: url('../images/icons/activities.png');
 	background-position: center left;
+	padding-bottom: 5px;
+	padding-top: 1px;
 }
 #messages-tab #folders-list-title{
 	background-image: url('../images/icons/folders.png');
@@ -163,13 +165,18 @@ tr.send-failed td:nth-child(6) {
 #contacts-tab  #contacts-list-title{
 	background-image: url('../images/icons/contacts.png');
 	background-position: center left;
+	padding-top: 1px;
+	padding-bottom: 3px;
 }
 #contacts-tab #groups-list-title{
 	background-image: url('../images/icons/groups.png');
 	background-position: center left;
+	padding-bottom: 1px;
+	padding-top: 1px;
 }
 #contacts-tab  #smart-groups-list-title{
    	background-image: url('../images/icons/smartgroups.png');
+	padding-bottom: 5px;
 }
 
 #archive-tab .sublist .archive-section-list{
