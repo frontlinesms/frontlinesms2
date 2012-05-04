@@ -10,7 +10,7 @@
 							<label class="bold inline" for="name"><g:message code="group.name.label" default="Name" /></label>
 						</td>
 						<td valign="top" class="value">
-							<g:textField name="name" />
+							<g:textField name="name" value="${params.groupName}"/>
 						</td>
 					</tr>
 				</tbody>

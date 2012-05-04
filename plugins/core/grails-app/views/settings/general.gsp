@@ -10,8 +10,10 @@
 			<div id="language">
 				<h2><g:message code="language.label" /></h2>
 				<p><g:message code="language.prompt"/></p>
-				<g:form  action="selectLocale" method="post" >
-					<g:select class="dropdown" name="language" from="${languageList}" value="${languageList.key}" optionKey="key" optionValue="value"/>
+				<g:form action="selectLocale" method="post" >
+					<div id="choose-language">
+						<g:select class="dropdown" name="language" from="${languageList}" value="${languageList.key}" optionKey="key" optionValue="value"/>
+					</div>
 					<input type="submit" value="Apply" class="button">
 				</g:form>
 			</div>

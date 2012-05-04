@@ -18,17 +18,15 @@
 			</g:if>
 			<g:else>
 				<div id="log-filters">
-					<span id="show-log-text"><g:message code="logs.filter.label" /></span>
-					<span>
-						<select class="dropdown" name="timePeriod" onChange="filterLogEntries(this.value)">
-							<option value="forever"><g:message code="logs.filter.anytime" /></option>
-							<option value="1"><g:message code="logs.filter.1day" /></option>
-							<option value="3"><g:message code="logs.filter.3days" /></option>
-							<option value="7"><g:message code="logs.filter.7days" /></option>
-							<option value="14"><g:message code="logs.filter.14days" /></option>
-							<option value="28"><g:message code="logs.filter.28days" /></option>
-						</select>
-					</span>
+					<label for="timePeriod" id="show-log-text"><g:message code="logs.filter.label" /></span>
+					<select class="dropdown" name="timePeriod" onChange="filterLogEntries(this.value)">
+						<option value="forever"><g:message code="logs.filter.anytime" /></option>
+						<option value="1"><g:message code="logs.filter.1day" /></option>
+						<option value="3"><g:message code="logs.filter.3days" /></option>
+						<option value="7"><g:message code="logs.filter.7days" /></option>
+						<option value="14"><g:message code="logs.filter.14days" /></option>
+						<option value="28"><g:message code="logs.filter.28days" /></option>
+					</select>
 				</div>
 				<br/>
 				<div id="log-list">
