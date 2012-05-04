@@ -19,5 +19,7 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def controllerResponse = controller.getSection('testHelp.txt')
 		then:
 			controllerResponse == helpFileContent
+		cleanup:
+			helpFile.delete()
 	}
 }
