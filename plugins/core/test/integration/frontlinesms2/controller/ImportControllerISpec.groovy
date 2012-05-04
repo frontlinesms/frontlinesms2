@@ -37,7 +37,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.importContacts()
 		when:
 			// failed contacts file is downloaded
-			controller.exportFailedContacts()
+			controller.failedContacts()
 		then:
 			// check that headers are correctly set
 			controller.response.getHeader('Content-disposition') == 'attachment; filename=failedContacts.csv'

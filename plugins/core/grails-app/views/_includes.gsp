@@ -1,5 +1,5 @@
-<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms2.plugin')}" type="image/x-icon"/>
-
+<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms.plugin')}" type="image/x-icon"/>
+<r:layoutResources/>
 <r:script>
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";

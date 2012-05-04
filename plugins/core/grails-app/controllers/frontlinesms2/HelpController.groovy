@@ -6,12 +6,12 @@ class HelpController {
 	def main = { }
 	
 	def section = {
-		if(params.helpSection == null){
-			def helpText = "This help file is not yet available, sorry."
+		def helpText
+		if(!params.helpSection) {
+			helpText = "This help file is not yet available, sorry."
 			render text:helpText.markdownToHtml()
-		}else{
-			def markdownFile = new File(params.helpSection + ".txt")
-			def helpText
+		} else {
+			def markdownFile = new File("web-app/help/" + params.helpSection + ".txt")
 			if (markdownFile.canRead()) {
 				helpText = markdownFile.text
 			} 
@@ -19,6 +19,6 @@ class HelpController {
 				helpText = "This help file is not yet available, sorry."
 			}
 			render text:helpText.markdownToHtml()		
-			}
+		}
 	}
 }

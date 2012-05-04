@@ -43,7 +43,10 @@
 				</g:remoteLink>
 			</g:elseif>	
 			<g:elseif test="${messageSection != 'trash'}">
-					<g:remoteLink class="msg-btn btn" elementId="reply-all" controller="quickMessage" action="create" params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, configureTabs: 'tabs-1,tabs-3,tabs-4']" onSuccess="launchMediumWizard(i18n('wizard.messages.replyall.title'), data, 'Send', true);">
+					<g:remoteLink class="msg-btn btn" elementId="reply-all"
+							controller="quickMessage" action="create"
+							params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, configureTabs: 'tabs-1,tabs-3,tabs-4']"
+							onSuccess="launchMediumWizard(i18n(wizard.messages.replyall.title'), data, i18n('wizard.send'), true);">
 						<g:message code="fmessage.reply.many"/>
 					</g:remoteLink>
 					<g:if test="${(messageSection != 'activity' && messageSection != 'folder') && params.controller !='archive'}">
@@ -56,12 +59,7 @@
 						<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
 					</g:if>
 			</g:elseif>
-			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-				<fsms:render template="/message/other_actions"/>
-			</g:if>
-			<g:else>
-				<fsms:render template="/message/other_actions"/>
-			</g:else>
+			<fsms:render template="/message/other_actions"/>
 		</g:form>
 	</div>
 </div>

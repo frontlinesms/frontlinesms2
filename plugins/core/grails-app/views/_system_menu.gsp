@@ -12,6 +12,3 @@
 		</g:remoteLink>
 	</li>
 </ul>
-<r:script>
-	function initializePopup() {}
-</r:script>

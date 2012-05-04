@@ -14,13 +14,13 @@
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<fsms:render template="/poll/question" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
+		<fsms:render template="/poll/question"/>
 		<fsms:render template="/poll/responses"/>
 		<fsms:render template="/poll/sorting"/>
 		<fsms:render template="/poll/replies"/>
 		<fsms:render template="/poll/message"/>
 		<div id="tabs-6">
-			<fsms:render template="/quickMessage/select_recipients"  model= "['contactList' : contactList,
+			<fsms:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
 				                                                           'groupList': groupList,
 				                                                           'nonExistingRecipients': [],
 				                                                           'recipients': []]"/>

@@ -93,46 +93,6 @@ var fconnection = {
 				});
 			}
 			<g:set var="configFields" value="${imp.configFields instanceof Map? (imp.configFields.allValues): imp.configFields}"/>
-			<g:each in="${configFields}" var="f">
-				<g:if test="${f in imp.passwords}">setSecretConfirmation('${f}');</g:if>
-				<g:else>setConfirmation('${f}');</g:else>
-			</g:each>
-			$("#${imp.shortName}-confirm").show();
-		}
-	},
-	</g:each>
-};
-			
-function isFieldSet(fieldName) {
-	var val = getFieldVal(fieldName);
-	if(isInstanceOf(val, 'Boolean')) {
-		if(val && isSubsection(fieldName)) {
-			return validateSubsectionFields(fieldName);
-		}
-	} else {
-		return val!=null && val.length>0;
-	}
-}
-
-function isFieldValid(field) {
-	return isFieldSet(field);
-}
-
-function isInstanceOf(obj, clazz){
-  return (obj instanceof eval("("+clazz+")")) || (typeof obj == clazz.toLowerCase());
-}
-
-function validateSubsectionFields(field) {
-	var valid = false;
-	var subSectionFields = $('.' + field + '-subsection-member');
-	var requiredFields = fconnection[fconnection.getType()].requiredFields
-	$.each(subSectionFields, function(index, value) {
-		var field = $(value).attr("field");
-		if(requiredFields.indexOf(field) > -1) {
-			valid = isFieldSet(field);
-			return valid;
-		}
-	});
 	return valid;
 }
 

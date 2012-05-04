@@ -1,35 +1,58 @@
-html {
-    	height: 100%;
+#help {
+	left: 0; 
+	width: 100%; 
+	overflow: auto;
 }
-
-body {
-   	height: 100%;
-}
-
-#contentDiv {
-    	min-height: 100%;
-}
-
-/*.ui-dialog .ui-widget .ui-widget-content .ui-corner-all .ui-draggable .ui-resizable {
-	height: 100%;
-}*/
 
 #help #file {
+	height: 93%;
+	min-height: 368px;
 	overflow: auto;
 	padding: 17px;
+}
+
+#help #index {
+	float: left;
+	height: 93%;
+	min-height: 368px;
+	min-width: 135px;
+	overflow: scroll;
+	padding: 17px 0 17px 0;
+	width: 20%;
+}
+
+#help #index li {
+	padding-left: 51px;
+}
+
+#help #index ul {
+	width: 100%;
+}
+
+#help #index li a{
+	display: block;
+	padding-bottom: 7px;
+	padding-top: 5px;
+	width: 100%;
+}
+
+#help #index li:hover {
+	background-color: #E5EFF3;
+}
+
+#help #index .section {
+	font-weight: bold;
+	padding-left: 17px;
+}
+
+#help #index .sub-section {
+	padding-left: 34px;
 }
 
 #file h1 {
     	font-size: 16px;
     	font-weight: bold;
 	padding: 0 0 7px;
-}
-
-#help {
-	left: 0; 
-	width: 100%; 
-	height: 100%; 
-	overflow: auto;
 }
 
 #file h2 {
@@ -52,16 +75,3 @@ body {
 #file p a {
 	color: blue;
 }
-
-#help .section {
-	font-weight: bold;
-	padding-left: 17px;
-}
-#help .sub-section {
-	padding-left: 34px;
-}
-#help li {
-	padding-left: 51px;
-}
-
-	

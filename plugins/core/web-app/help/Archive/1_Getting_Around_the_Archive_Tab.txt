@@ -6,7 +6,7 @@ _You can view all your archived messages, activities and folders from the archiv
 
 ---
 
-(Screenshot)
+![alt text][8]
 
 ---
 
@@ -31,3 +31,4 @@ More information about the specific layout of each archive can be found on these
 [5]: gotoArchivingActivitiesandFolders
 [6]: gotoArchivingMessages
 [7]: gotoUnarchiving
+[8]: ../images/help/xx.jpg "getting around the archive tab"

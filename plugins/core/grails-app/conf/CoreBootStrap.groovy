@@ -329,7 +329,11 @@ class CoreBootStrap {
 			}
 		}.call()
 
-		def osArch = System.properties['os.arch']
+		/* Check whether architecture is 32- or 64-bit
+		 * For OSX, we check the processor hardware. For other OSs, we use the os.arch jvm system property.
+		 * Note that os.arch actually returns the JVM architecture, not the hardware arch.
+		*/
+		def osArch = os=='mac'?Runtime.runtime.exec('uname -m').text:System.properties['os.arch']
 		def architecture = osArch=='amd64'?'amd64': osArch.contains('64')? 'x86_64': 'i686'
 		
 		log.info "Adding $jniPath/$os/$architecture to library paths..."

@@ -5,7 +5,7 @@
 		<g:layoutHead/>
 		<r:require module="status"/>
 		<fsms:render template="/includes"/>
-		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done"/>
+		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done, popup.ok"/>
 		<r:layoutResources/>
 	</head>
 	<body id="status-tab">

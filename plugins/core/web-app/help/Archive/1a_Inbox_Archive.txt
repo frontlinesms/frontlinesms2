@@ -6,13 +6,13 @@ _The inbox archive will contain messages that have been archived from the inbox 
 
 ---
 
-(Screenshot)
+![alt text][17]
 
 ### [Inbox Archive][1]
 
 The Inbox archive contains all messages that have been archived from the [inbox][2]. 
 
-(Screenshot)
+![alt text][18]
 
 #### [Inbox Archive Header][3]
 
@@ -49,3 +49,5 @@ When a message is selected, the full text will be displayed here along with the 
 [14]: gotoArchivingActivitiesFolder
 [15]: gotoArchivingMessages
 [16]: gotoUnarchivingMessagesActivitiesFolders
+[17]: ../images/help/xx.jpg "inbox archive"
+[18]: ../images/help/xx.jpg "inbox archive header"

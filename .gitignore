@@ -49,3 +49,9 @@ standalone.*
 
 snapshots.list
 
+# git merge temp files
+*.orig
+*.BACKUP.*
+*.REMOTE.*
+*.LOCAL.*
+*.BASE.*
