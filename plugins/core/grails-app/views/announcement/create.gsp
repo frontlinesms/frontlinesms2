@@ -9,14 +9,14 @@
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
-		<g:render template="message" plugin="core"/>
+		<fsms:render template="message"/>
 		<div id="tabs-2">
-			<g:render template="../quickMessage/select_recipients" plugin="core" model= "['contactList' : contactList,
+			<fsms:render template="/quickMessage/select_recipients"  model= "['contactList' : contactList,
 			                                                                'groupList': groupList,
 			                                                                'nonExistingRecipients': [],
 			                                                                'recipients': []]"/>
 		</div>
-		<g:render template="confirm" plugin="core"/>
+		<fsms:render template="confirm"/>
 	</g:formRemote>
 </div>
 <r:script>

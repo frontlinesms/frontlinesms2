@@ -14,18 +14,18 @@
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<g:render template="../poll/question" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
-		<g:render template="../poll/responses" plugin="core"/>
-		<g:render template="../poll/sorting" plugin="core"/>
-		<g:render template="../poll/replies" plugin="core"/>
-		<g:render template="../poll/message" plugin="core"/>
+		<fsms:render template="/poll/question" plugin="${grailsApplication.config.frontlinesms2.plugin}"/>
+		<fsms:render template="/poll/responses"/>
+		<fsms:render template="/poll/sorting"/>
+		<fsms:render template="/poll/replies"/>
+		<fsms:render template="/poll/message"/>
 		<div id="tabs-6">
-			<g:render template="../quickMessage/select_recipients" plugin="core" model= "['contactList' : contactList,
+			<fsms:render template="/quickMessage/select_recipients"  model= "['contactList' : contactList,
 				                                                           'groupList': groupList,
 				                                                           'nonExistingRecipients': [],
 				                                                           'recipients': []]"/>
 		</div>
-		<g:render template="../poll/confirm" plugin="core"/>
+		<fsms:render template="/poll/confirm"/>
 	</g:formRemote>
 </div>
 

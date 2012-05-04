@@ -3,13 +3,18 @@ package frontlinesms2
 class FsmsTagLib {
 	static namespace = 'fsms'
 
+	def render = { att ->
+		out << g.render(att)
+	}
+
 	def i18n = { att ->
-		att.keys.tokenize(',')*.trim().each { key ->
-			def val = g.message(code:key).replaceAll("\\'", "\\\\'")
-			r.script {
-				out << "	i18nStrings['$key'] = '${val}';\n"
-			}
+		out << '<script type="text/javascript">'
+		att.keys.tokenize(',')*.trim().each {
+			def propVal = g.message(code:it)
+			propVal = propVal.replaceAll("\\'", "\\\\'")
+			out << "	i18nStrings['$it'] = '${propVal}';\n"
 		}
+		out << '</script>'
 	}
 	
 	def confirmTable = { att ->
@@ -24,7 +29,7 @@ class FsmsTagLib {
 		out << '</table>'
 	}
 	
-	def confirmTypeRow = {att ->
+	def confirmTypeRow = { att ->
 		out << '<tr>'
 		out << '<td class="field-label">'
 		out << g.message(code:"${att.instanceClass.simpleName.toLowerCase()}.type.label")

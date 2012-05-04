@@ -30,7 +30,7 @@ $(function() {
 <div id="traffic-status">
 	<div id="trafficGraph"></div>
 	<g:form action="show" method="post" name="trafficForm">
-		<g:render template="../status/filters" plugin="core"/>
+		<fsms:render template="/status/filters"/>
 		<g:actionSubmit id="update-chart" value="${g.message(code:'traffic.update.chart')}" action="show"/>
 	</g:form>
 </div>

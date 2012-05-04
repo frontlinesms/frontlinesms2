@@ -13,9 +13,9 @@
 		<li><a href="#tabs-3"><g:message code="connection.confirm"/></a></li>
 	</ol>
 	<g:form name="connectionForm" action="${action}" id='${fconnectionInstance?.id}'>
-		<g:render template="type" plugin="core"/>
-		<g:render template="details" plugin="core"/>
-		<g:render template="confirm" plugin="core"/>
+		<fsms:render template="type"/>
+		<fsms:render template="details"/>
+		<fsms:render template="confirm"/>
 	</g:form>
 </div>
 

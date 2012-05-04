@@ -57,10 +57,10 @@
 					</g:if>
 			</g:elseif>
 			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-				<g:render template="../message/other_actions"/>
+				<fsms:render template="/message/other_actions"/>
 			</g:if>
 			<g:else>
-				<g:render template="/message/other_actions" plugin="core"/>
+				<fsms:render template="/message/other_actions"/>
 			</g:else>
 		</g:form>
 	</div>

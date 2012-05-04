@@ -33,8 +33,8 @@
 				${messageInstance.text}
 			</p></div>
 		</div>
-		<g:render template="../message/message_actions" plugin="core"/>
-		<g:render template="../message/other_actions" plugin="core"/>
+		<fsms:render template="/message/message_actions"/>
+		<fsms:render template="/message/other_actions"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
@@ -44,7 +44,7 @@
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
-		<g:render template="../message/message_actions" plugin="core"></g:render>
+		<fsms:render template="/message/message_actions" ></fsms:render>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>

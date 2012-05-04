@@ -10,8 +10,8 @@
 				</ul>
 			</li>
 			<li class='section' id="search-filters">
-				<g:render template="basic_filters" plugin="core"/>
-				<g:render template="other_filters" plugin="core"/>
+				<fsms:render template="basic_filters"/>
+				<fsms:render template="other_filters"/>
 			</li>
 			<li class='section buttons' id="search-btn" >
 				<ul class='sub-list'>
