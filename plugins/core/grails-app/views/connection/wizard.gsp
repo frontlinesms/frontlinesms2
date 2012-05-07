@@ -15,11 +15,11 @@
 		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
 		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
-	<g:form name="connectionForm" action="${action}" id='${fconnectionInstance?.id}'>
+	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
 		<g:render template="type" plugin="core"/>
 		<g:render template="details" plugin="core"/>
 		<g:render template="confirm" plugin="core"/>
-	</g:form>
+	</g:formRemote>
 </div>
 
 <g:javascript>
@@ -150,6 +150,7 @@ function validateSections(keys) {
 	});
 	return valid;
 }
+
 function isSubsection(fieldName) {
 	return $('#' + fieldName + '-subsection').length > 0;
 }
@@ -215,5 +216,16 @@ function initializePopup() {
 	$("#tabs-2").contentWidget({
 		validate: fconnection.isValid
 	});
+}
+
+function handleSaveResponse(response) {
+	if(response.ok) {
+		window.location = response.redirectUrl;
+	} else {
+		var errors = $(".error-panel");
+		errors.text(response.text);
+		errors.show();
+		$("#submit").removeAttr('disabled');
+	}
 }
 </g:javascript>

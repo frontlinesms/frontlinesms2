@@ -13,4 +13,13 @@ class SmslibFconnectionSpec extends UnitSpec {
 			!smsLibConnection1.validate()
 			!smsLibConnection2.validate()
 	}
+
+	def "should contain errors when invalid baud rate is provided"() {
+		given:
+			mockDomain(SmslibFconnection)
+		when:
+			def conn = new SmslibFconnection(name:"testConnection", baud:"invalid", port:"/dev/ttyUSB0")
+		then:
+			conn.errors.hasFieldErrors("baud")
+	}
 }
