@@ -29,11 +29,9 @@ class PollControllerSpec extends ControllerSpec {
 			registerMetaClass PollController
 			registerMetaClass Fmessage
 			mockDomain(Poll)
-			mockDomain(Fmessage)
-			Fmessage.metaClass.static.owned = { Poll p, Boolean b, Boolean c ->
-				Fmessage
-			}
 			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(mockParams.id)) }
+			Fmessage.metaClass.static.owned = {Poll p, boolean starred, boolean sent -> return null}
+			PollController.metaClass.message = {LinkedHashMap m -> return m}
 			def poll = new Poll(name:'thingy', archived:true)
 			poll.editResponses(choiceA:'One', choiceB:'Other')
 			poll.save()
@@ -45,5 +43,5 @@ class PollControllerSpec extends ControllerSpec {
 			!poll.archived
 			controller.redirectArgs == [controller:'archive', action:'activityList']
 	}
+	
 }
-

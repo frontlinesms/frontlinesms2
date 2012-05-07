@@ -32,11 +32,11 @@ class PollController extends ActivityController {
 					flash.message = message(code: 'flash.message.poll.saved')
 				[ownerId: poll.id]
 			} else {
-				flash.message = message(code: 'flash.message.poll.not.saved')
+				flash.message = poll.errors.allErrors.collect {message(code:"poll.name.unique.error", args: it.arguments.flatten())}.join("\n")
 				render(text: flash.message)
 			}
 		} else {
-			flash.message = message(code: 'flash.message.poll.not.saved')
+			flash.message = poll.errors.allErrors.collect {message(code:"poll.name.unique.error", args: it.arguments.flatten())}.join("\n")
 			render(text: flash.message)
 		}
 	}

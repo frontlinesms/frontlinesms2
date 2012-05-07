@@ -458,13 +458,36 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { $('.manual').displayed }
 		when:
 			goToTab(7)
-			pollForm.name == 'Who is badder?'
+			pollForm.name = 'Who is badder?'
 			done.click()
 			poll = Poll.findByName('Who is badder?')
 		then:
 			waitFor(10) { Poll.findByName("Who is badder?").refresh().responses*.value.containsAll(["Michael-Jackson", "Chuck-Norris", "Bruce Vandam"]) }		
 	}
 	
+	@spock.lang.IgnoreRest
+	def "should display errors when poll validation fails"() {
+		given:
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
+			poll.save(failOnError:true, flush:true)
+			assert Poll.count() == 1
+		when:
+			launchPollPopup('standard', 'question', false)
+		then:
+			waitFor { autoSortTab.displayed }
+		when:
+			goToTab(7)
+			pollForm.name = 'Who is badder?'
+			done.click()
+		then:
+			assert Poll.count() == 1
+			waitFor { errorMessage.displayed }
+			at PagePollCreate
+	}
+
 	def deletePoll() {
 		def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 		poll.addToResponses(key: 'A', value: 'Michael-Jackson')
@@ -478,7 +501,7 @@ class PollCedSpec extends PollBaseSpec {
 		$("#done").click()
 		poll
 	}
-	
+
 	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
 		to PageMessageInbox
 		createActivityButton.click()
