@@ -1,9 +1,9 @@
 package frontlinesms2
 
 class Contact {
-//> PROPERTIES
 	String name
-	String mobile
+	String primaryMobile
+	String secondaryMobile
 	String email
 	String notes
 
@@ -11,10 +11,13 @@ class Contact {
 	
 	static constraints = {
 		name(blank: true, maxSize: 255, validator: { val, obj ->
-			val || obj.mobile
+			val || obj.primaryMobile
 		})
-		mobile(unique: true, nullable: true, validator: { val, obj ->
+		primaryMobile(unique: true, nullable: true, validator: { val, obj ->
 			val || obj.name
+		})
+		secondaryMobile(unique: false, nullable: true, validator: { val, obj ->
+			!(val && val==obj.primaryMobile)
 		})
 		email(unique:false, nullable:true, email:true)
 		notes(nullable:true, maxSize:1024)
@@ -22,12 +25,11 @@ class Contact {
 	}
 
 	static mapping = {
-		sort name:'asc'
+		sort: 'name'
 		customFields cascade: 'all'
 		customFields sort: 'name','value'
 	}
 
-//> EVENT METHODS
 	def beforeInsert = {
 		stripNumberFields()
 	}
@@ -38,32 +40,70 @@ class Contact {
 	}
 	
 	def afterInsert = {
-		if(mobile) {
+		if(primaryMobile || secondaryMobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
+				def clauses = []
+				def variables = [name, true]
+				if(primaryMobile) {
+					clauses << 'm.src=?'
+					variables << primaryMobile
+				}
+				if(secondaryMobile) {
+					clauses << 'm.src=?'
+					variables << secondaryMobile
+				}
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
 				updateDispatchInfo()
 			}
 		}
 	}
 	
 	def beforeUpdate = {
-		final def oldMobile = isDirty('mobile')? getPersistentValue('mobile'): null
-		if(oldMobile) {
+		final def old1 = isDirty('primaryMobile')? getPersistentValue('primaryMobile'): null
+		final def old2 = isDirty('secondaryMobile')? getPersistentValue('secondaryMobile'): null
+		if(old1 || old2) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE m.src=?", [false, oldMobile])
+		println "beforeUpdate() : primaryMobile.dirty=${isDirty('primaryMobile')}; secondaryMobile.dirty=${isDirty('secondaryMobile')}"
+		println "beforeUpdate() : getPersistentValue('primaryMobile'):${getPersistentValue('primaryMobile')}"
+		println "beforeUpdate() : getPersistentValue('secondaryMobile'):${getPersistentValue('secondaryMobile')}"
+				def clauses = []
+				def variables = [false]
+				if(old1) {
+					println "appending primaryMobile to varialbes"
+					clauses << 'm.src=?'
+					variables << old1
+				}
+				if(old2) {
+					println "appending secondaryMobile to varialbes"
+					clauses << 'm.src=?'
+					variables << old2
+				}
+				println "Variables: $variables; clauses: $clauses"
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
 				updateDispatchInfo()
 			}
 		}
+		println "beforeUpdate() : EXIT"
 	}
 
 	def afterUpdate = {
-		println "afterUpdate() : ENTRY : mobile=$mobile"
-		println "afterUpdate() : mobile.dirty=${isDirty('mobile')}"
-		if(mobile) {
+		println "afterUpdate() : ENTRY (primaryMobile=$primaryMobile; secondaryMobile=$secondaryMobile)"
+		println "afterUpdate() : primaryMobile.dirty=${isDirty('primaryMobile')}; secondaryMobile.dirty=${isDirty('secondaryMobile')}"
+		if(primaryMobile || secondaryMobile) {
 			println "afterUpdate() : creating new session..."
 			Fmessage.withNewSession { session ->
 				println "afterUpdate() : inside new session..."
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
+				def clauses = []
+				def variables = [name, true]
+				if(primaryMobile) {
+					clauses << 'm.src=?'
+					variables << primaryMobile
+				}
+				if(secondaryMobile) {
+					clauses << 'm.src=?'
+					variables << secondaryMobile
+				}
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE " + clauses.join(' OR '), variables)
 				updateDispatchInfo()
 			}
 		}
@@ -71,15 +111,14 @@ class Contact {
 	}
 	
 	private def updateDispatchInfo() {
-		if(mobile) {
-			Dispatch.findAllByDst(mobile).each {
+		if(primaryMobile) {
+			Dispatch.findAllByDst(primaryMobile).each {
 				it.message.displayName = "To: " + name
 				it.message.contactExists = true
 			}
 		}
 	}
 	
-//> ACCESSORS
 	def getGroups() {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
 	}
@@ -110,37 +149,35 @@ class Contact {
 	}
 
 	def getInboundMessagesCount() {
-		mobile ? Fmessage.countBySrcAndIsDeleted(mobile, false) : 0
+		def primary = primaryMobile ? Fmessage.countBySrcAndIsDeleted(primaryMobile, false) : 0
+		def secondary = secondaryMobile ? Fmessage.countBySrcAndIsDeleted(secondaryMobile, false) : 0
+		primary + secondary
 	}
 
 	def getOutboundMessagesCount() {
-		mobile? Dispatch.messageCount(this).count(): 0
+		def count = 0
+		if(primaryMobile || secondaryMobile) {
+			count = Dispatch.messageCount(this).count()
+		}
+		count
 	}
 	
 	def stripNumberFields() {
-		def n = mobile?.replaceAll(/\D/, '')
-		if(mobile && mobile[0] == '+') n = '+' + n
-		mobile = n
-	}
-
-	static namedQueries = {
-		findAllWithCustomFields { fields ->
-			fields.each { field ->
-				customFields {
-					eq('name', field.key)
-					ilike('value', "%$field.value%")
-				}
-			}
-		}
+		def n = primaryMobile?.replaceAll(/\D/, '')
+		if(primaryMobile && primaryMobile[0] == '+') n = '+' + n
+		primaryMobile = n
+		def s = secondaryMobile?.replaceAll(/\D/, '')
+		if(secondaryMobile && secondaryMobile[0] == '+') s = '+' + s
+		secondaryMobile = s
 	}
 	
-//> HELPER METHODS
 	private def removeFmessageDisplayName() {
-		if(mobile) {
+		if(primaryMobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [mobile, false, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [primaryMobile, false, primaryMobile])
 				updateDispatchInfo()
 			}
 		}
 	}
+		
 }

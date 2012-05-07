@@ -28,6 +28,32 @@ class Dispatch {
 		})
 	}
 	
+	def beforeInsert = {
+		updateMessageStatus()
+	}
+	
+	def beforeUpdate = {
+		updateMessageStatus()
+	}
+	
+	def afterUpdate = {
+		Fmessage.withNewSession { session ->
+				println "Dispatch.afterUpdate() : inside new session..."
+				def variables = [true, false, message.id]
+				if(status == DispatchStatus.FAILED) {
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.hasFailed=?,m.hasPending=? WHERE m.id=?" , variables)
+				}
+				if(status == DispatchStatus.SENT) {
+					Fmessage.executeUpdate("UPDATE Fmessage m SET m.hasSent=?,m.hasPending=? WHERE m.id=?" , variables)
+				}
+			}
+		println "Dispatch.afterUpdate() : EXIT"
+	}
+	
+	def updateMessageStatus() {
+		message.updateFmessageStatuses()
+	}
+	
 	static namedQueries = {
 		forSentStats { params ->
 			def groupInstance = params.groupInstance
@@ -50,7 +76,8 @@ class Dispatch {
 		messageCount { contact ->
 			and {
 				eq('isDeleted', false)
-				if(contact.mobile) 'in'('dst', contact.mobile)
+				if(contact.primaryMobile) 'in'('dst', contact.primaryMobile)
+				if(contact.secondaryMobile) 'in'('dst', contact.secondaryMobile)
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <div id="custom-field-popup">
-	<div class="error-panel hide"><g:message code="customfield.validation.prompt" /></div>
-	<label for="name"><g:message code="customfield.name.label" /></label>
+	<div class="error-panel hide">Please fill in a name</div>
+	<label for="name">Name</label>
 	<g:textField id="custom-field-name" name="custom-field-name" value="" />
 </div>
