@@ -348,6 +348,10 @@ tr.send-failed td:nth-child(6) {
 
 /* Activities */
 
+.activity-list-item span {
+	cursor: pointer;
+}
+
 .tall-header #message-list-header {
 	padding: 0 17px;
 }

@@ -21,7 +21,6 @@ class Fmessage {
 	boolean isDeleted
 	
 	boolean inbound
-	int failedCount
 	static hasMany = [dispatches:Dispatch]
 
 	static mapping = { sort date:'desc' }
