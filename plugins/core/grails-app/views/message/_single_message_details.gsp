@@ -13,8 +13,8 @@
 					<g:else>
 						${messageInstance.displayName}
 					</g:else>
-					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed" />)</g:if>
-					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed" />)</g:elseif>
+					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
+					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
 				</span> 
 				<g:if test="${!messageInstance.contactExists}">
 					<g:link elementId="add-contact" controller="contact" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
@@ -30,14 +30,8 @@
 			</g:if>
 			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
 		</div>
-		<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-			<g:render template="../message/message_actions" />
-			<g:render template="../message/other_actions"/>
-		</g:if>
-		<g:else>
-			<g:render template="/message/message_actions" plugin="core"/>
-			<g:render template="/message/other_actions" plugin="core"/>
-		</g:else>
+		<fsms:render template="/message/message_actions"/>
+		<fsms:render template="/message/other_actions"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
@@ -45,11 +39,11 @@
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + g.message(code:'fmessage.many')}</p></div>
 		</div>
-		<g:render template="../message/message_actions" plugin="core"></g:render>
+		<fsms:render template="/message/message_actions"/>
 	</g:elseif>
 	<g:else>
 		<div id='message-info'>
-			<div  id="message-detail-content"><p id="no-message"><g:message code="fmessage.selected.none" /></p></div>
+			<div  id="message-detail-content"><p id="no-message"><g:message code="fmessage.selected.none"/></p></div>
 		</div>
 	</g:else>
 </div>

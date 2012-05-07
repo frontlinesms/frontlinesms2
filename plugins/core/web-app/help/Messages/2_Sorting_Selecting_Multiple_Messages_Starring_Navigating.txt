@@ -2,7 +2,7 @@
 
 _When viewing a message list anywhere in the program, you will be able to select multiple messages and mark them as important by starring them so that they can be easily spotted. You can also choose to only show the starred messages to quickly switch between the messages you have marked as important and all your messages, allowing you to get to important messages easily. You can also sort messages by [Contact/Number][1], [Message content][2] and [date][3]. The easy navigation options make it simple to manage large amounts of messages._
 
-SCREENSHOT
+![alt text][17]
 
 ### [Navigating Pages][16]
 
@@ -66,3 +66,4 @@ _**Note:** Unlike [multiple select][13], a message's status as starred persists 
 [14]: starringmessages
 [15]: filter
 [16]: navigating
+[17]: ../images/help/xx.jpg "navigating large amounts of messages"

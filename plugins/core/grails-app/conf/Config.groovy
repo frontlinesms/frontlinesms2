@@ -101,7 +101,7 @@ log4j = {
 	}
 
   root {
-    info 'prod-stacktrace', 'console-logger'
+    info 'prod-stacktrace'
     error 'prod'
   }
 

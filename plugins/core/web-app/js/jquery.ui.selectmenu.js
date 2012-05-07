@@ -333,6 +333,7 @@ $.widget("ui.selectmenu", {
 						return false;
 					})
 					.bind("click.selectmenu", function() {
+						$(this).parent("ul").find("li:first").show();
 						return false;
 					})
 					.bind('mouseover.selectmenu focus.selectmenu', function(e) {
@@ -382,6 +383,7 @@ $.widget("ui.selectmenu", {
 						}
 					}
 				}
+				if (i == 0) thisLi.hide();
 			}
 		} else {
 			$('<li role="presentation"><a href="#nogo" tabindex="-1" role="option"></a></li>').appendTo(this.list);

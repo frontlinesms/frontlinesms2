@@ -25,46 +25,36 @@
 		</g:else>
 	</div>
 	<div id="message-detail-buttons">
-		<g:form name="message-action" controller="${params.controller}" method="POST"
-				params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
-			<g:hiddenField name="checkedMessageList" value="${params.checkedMessageList}"/>
-
-			<g:if test="${messageSection == 'pending'}">
-				<g:actionSubmit class="msg-btn btn" id="retry-failed" action="retry"
-						params="${[type: 'multiple_failed']}" value="${g.message(code:'fmessage.retry.many')}"/>
-				<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
-			</g:if>
-			<g:elseif test="${messageSection == 'trash' && ownerInstance}">
-				<g:remoteLink class="msg-btn btn"
-						controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}"
-						action="restore" params="[id: ownerInstance?.id]"
-						onSuccess="function() { window.location = location }" >
-					<g:message code="fmessage.restore.many"/>
+		<g:if test="${messageSection == 'pending'}">
+			<g:actionSubmit class="msg-btn btn" id="retry-failed" action="retry"
+					params="${[type: 'multiple_failed']}" value="${g.message(code:'fmessage.retry.many')}"/>
+			<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
+		</g:if>
+		<g:elseif test="${messageSection == 'trash' && ownerInstance}">
+			<g:remoteLink class="msg-btn btn"
+					controller="${(ownerInstance instanceof frontlinesms2.Folder) ? 'folder' : 'poll'}"
+					action="restore" params="[id: ownerInstance?.id]"
+					onSuccess="function() { window.location = location }" >
+				<g:message code="fmessage.restore.many"/>
+			</g:remoteLink>
+		</g:elseif>
+		<g:elseif test="${messageSection != 'trash'}">
+				<g:remoteLink class="msg-btn btn" elementId="reply-all"
+						controller="quickMessage" action="create"
+						params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, configureTabs: 'tabs-1,tabs-3,tabs-4']"
+						onSuccess="launchMediumWizard(i18n(wizard.messages.replyall.title'), data, 'Send', true);">
+					<g:message code="fmessage.reply.many"/>
 				</g:remoteLink>
-			</g:elseif>	
-			<g:elseif test="${messageSection != 'trash'}">
-					<g:remoteLink class="msg-btn btn" elementId="reply-all"
-							controller="quickMessage" action="create"
-							params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, configureTabs: 'tabs-1,tabs-3,tabs-4']"
-							onSuccess="launchMediumWizard(i18n(wizard.messages.replyall.title'), data, i18n('wizard.send'), true);">
-						<g:message code="fmessage.reply.many"/>
-					</g:remoteLink>
-					<g:if test="${(messageSection != 'activity' && messageSection != 'folder') && params.controller !='archive'}">
-						<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
-					</g:if>
-					<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
-						<g:actionSubmit id="unarchive-msg" class="msg-btn" value="${g.message(code:'fmessage.unarchive.many')}" action="unarchive"/>
-					</g:elseif>
-					<g:if test="${messageSection != 'pending'}">
-						<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
-					</g:if>
-			</g:elseif>
-			<g:if test="${grailsApplication.config.frontlinesms.plugin == 'core'}">
-				<g:render template="../message/other_actions"/>
-			</g:if>
-			<g:else>
-				<g:render template="/message/other_actions" plugin="core"/>
-			</g:else>
-		</g:form>
+				<g:if test="${(messageSection != 'activity' && messageSection != 'folder') && params.controller !='archive'}">
+					<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
+				</g:if>
+				<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
+					<g:actionSubmit id="unarchive-msg" class="msg-btn" value="${g.message(code:'fmessage.unarchive.many')}" action="unarchive"/>
+				</g:elseif>
+				<g:if test="${messageSection != 'pending'}">
+					<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
+				</g:if>
+		</g:elseif>
+		<fsms:render template="/message/other_actions"/>
 	</div>
 </div>

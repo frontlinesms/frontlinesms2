@@ -1,3 +1,9 @@
+#help {
+	left: 0; 
+	width: 100%; 
+	overflow: auto;
+}
+
 #help #file {
 	height: 93%;
 	min-height: 368px;
@@ -15,6 +21,14 @@
 	width: 20%;
 }
 
+#help #index li {
+	padding-left: 51px;
+}
+
+#help #index ul {
+	width: 100%;
+}
+
 #help #index li a{
 	display: block;
 	padding-bottom: 7px;
@@ -23,19 +37,22 @@
 }
 
 #help #index li:hover {
-	background-color: #e5eff3;
+	background-color: #E5EFF3;
+}
+
+#help #index .section {
+	font-weight: bold;
+	padding-left: 17px;
+}
+
+#help #index .sub-section {
+	padding-left: 34px;
 }
 
 #file h1 {
     	font-size: 16px;
     	font-weight: bold;
 	padding: 0 0 7px;
-}
-
-#help {
-	left: 0; 
-	width: 100%; 
-	overflow: auto;
 }
 
 #file h2 {
@@ -57,21 +74,4 @@
 
 #file p a {
 	color: blue;
-}
-
-#help #index .section {
-	font-weight: bold;
-	padding-left: 17px;
-}
-
-#help #index .sub-section {
-	padding-left: 34px;
-}
-
-#help #index li {
-	padding-left: 51px;
-}
-
-#help #index ul {
-	width: 100%;
 }
