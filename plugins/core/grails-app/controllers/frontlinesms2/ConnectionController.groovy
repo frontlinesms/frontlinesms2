@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class ConnectionController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
@@ -126,14 +128,28 @@ class ConnectionController {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
 		if (fconnectionInstance.save()) {
-			flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
-			forward(controller:'connection', action:"createRoute", id:fconnectionInstance.id)
+			withFormat {
+				html {
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
+					forward(action:"createRoute", id:fconnectionInstance.id)
+				}
+				json {
+					render([ok:true, redirectUrl:createLink(action:'createRoute', id:fconnectionInstance.id)] as JSON)
+				}
+			}
 		} else {
-			flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
-			redirect(controller:'connection', action:"list")
+			withFormat {
+				html {
+					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
+					redirect(controller:'connection', action:"list")
+				}
+				json {
+					render([ok:false, text:fconnectionInstance.errors.toString()] as JSON)
+				}
+			}
 		}
 	}
-	
+
 	private def withFconnection(id = params?.id, Closure c) {
 		def connection = Fconnection.get(id)
 		if(connection) {

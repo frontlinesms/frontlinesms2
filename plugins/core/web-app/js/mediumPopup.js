@@ -15,6 +15,10 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height) {
+	launchMediumWizard(title, html, btnFinishedText, width, height, true);
+}
+
+function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup()
 	$("#modalBox").dialog({
@@ -26,10 +30,10 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 		height: height,
 		buttons: [
 			{ text:i18n("wizard.cancel"), click: cancel, id:"cancel" },
-			{ text:i18n("wizard.back"), id:"disabledBack", disabled: true },
-			{ text:i18n("wizard.back"), click: prevButton, id:"prevPage" },
-			{ text:i18n("wizard.next"),  click: nextButton, id:"nextPage" },
-			{ text:btnFinishedText,  click: submit, id:"submit" }
+			{ text:i18n("wizard.back"), id:"disabledBack", disabled:true },
+			{ text:i18n("wizard.back"), click:prevButton, id:"prevPage" },
+			{ text:i18n("wizard.next"), click:nextButton, id:"nextPage" },
+			{ text:btnFinishedText, click:closeOnSubmit? submit: submitWithoutClose, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
@@ -49,11 +53,21 @@ function launchHelpWizard(html) {
 		width: '95%',
 		height: screen.height*0.8,
 		buttons: [
-			{ text:i18n("popup.ok"),  click: submit, id:"submit" }
+			{ text:i18n("popup.ok"), click:submit, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
 	initializePopup();
+}
+
+function submitWithoutClose() {
+	$("#submit").attr('disabled', 'disabled');
+	if(tabValidates(getCurrentTab())) {
+		$(this).find("form").submit();
+	} else {
+		$("#submit").removeAttr('disabled');
+		$('.error-panel').show();
+	}
 }
 
 function submit() {

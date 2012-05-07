@@ -8,6 +8,7 @@
 		<g:layoutHead/>
 	</head>
 	<body id="settings-tab">
+		<div id="thinking"></div>
 		<div id="header">
 			<div id="notifications">
 				<fsms:render template="/system_notifications"/>
