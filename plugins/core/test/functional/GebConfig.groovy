@@ -5,7 +5,7 @@ driver = {
 	org.openqa.selenium.remote.DesiredCapabilities capabillities = org.openqa.selenium.remote.DesiredCapabilities.firefox();
         capabillities.setCapability("version", "5");
         capabillities.setCapability("platform", Platform.XP);
-        capabillities.setCapability("name", "Testing Selenium 2 with Java on Sauce");
+        capabillities.setCapability("name", "FrontlineSMS2 Functional test cases");
 	def driver = new org.openqa.selenium.remote.RemoteWebDriver(
            new URL("http://sitati:6561dd21-0371-4e43-b1c9-4d86dc824061@ondemand.saucelabs.com:80/wd/hub"),
            capabillities);
