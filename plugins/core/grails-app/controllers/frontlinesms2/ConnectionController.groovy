@@ -61,13 +61,27 @@ class ConnectionController {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
 			fconnectionInstance.properties = params
-			if(fconnectionInstance.save()) {
-				flash.message = LogEntry.log(message(code: 'default.updated.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), fconnectionInstance.id]))
-				redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
-			} else {
-				flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
-				redirect(controller:'settings', action: "connections", params: params)
+			if (fconnectionInstance.save()) {
+			withFormat {
+				html {
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
+					redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
+				}
+				json {
+					render([ok:true, redirectUrl:createLink(action:'createRoute', id:fconnectionInstance.id)] as JSON)
+				}
 			}
+		} else {
+			withFormat {
+				html {
+					flash.message = LogEntry.log(message(code: 'connection.creation.failed', args:[fconnectionInstance.errors]))
+					redirect(controller:'connection', action:"list")
+				}
+				json {
+					render([ok:false, text:fconnectionInstance.errors.toString()] as JSON)
+				}
+			}
+		}
 		}
 	}
 	
