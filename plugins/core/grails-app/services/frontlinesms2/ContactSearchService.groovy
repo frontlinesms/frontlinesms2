@@ -18,7 +18,7 @@ class ContactSearchService {
 			                params.offset)
 		} else if(params.smartGroupId) {
 			SmartGroup.getMembersByNameIlike(asLong(params.smartGroupId), searchString, [max:params.max, offset:params.offset])
-		} else Contact.findAllByPrimaryMobileIlike(searchString, params)
+		} else Contact.findAllByNameIlike(searchString, params)
 	}
 	
 	private def countContacts(params) {
@@ -27,8 +27,8 @@ class ContactSearchService {
 		if(params.groupId) {
 			GroupMembership.countSearchForContacts(asLong(params.groupId), searchString)
 		} else if(params.smartGroupId) {
-			SmartGroup.countMembersByPrimaryMobileIlike(asLong(params.smartGroupId), searchString)
-		} else Contact.countByPrimaryMobileIlike(searchString)
+			SmartGroup.countMembersByNameIlike(asLong(params.smartGroupId), searchString)
+		} else Contact.countByNameIlike(searchString)
 	}
 	
 	private def getSearchString(params) {
