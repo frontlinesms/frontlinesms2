@@ -13,7 +13,7 @@ driver = {
 	if(driver.class.simpleName == 'FirefoxDriver') {
 		def width = 1366
 		def height = 768
-		driver.navigate().to('http://localhost')
+		driver.navigate().to('http://myapp.test')
 		driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height))
 	} else if(driver.class.simpleName == 'HtmlUnitDriver') {
 		driver.javascriptEnabled = true
