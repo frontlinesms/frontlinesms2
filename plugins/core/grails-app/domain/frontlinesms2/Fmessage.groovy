@@ -166,6 +166,7 @@ class Fmessage {
 					eq('archived', false)
 				}
 				eq('isDeleted', false)
+				order('date', 'desc')
 			}
 		}
 		
