@@ -24,15 +24,15 @@
 		<form>
 			<ul id="new-activity-choices">
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')"/><span class="activity-choice"><g:message code="announcement.label"/></span>
+					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')"/><span class="activity-choice" onclick="setChecked('announcement')"><g:message code="announcement.label" /></span>
 					<div class="activity-description"><g:message code="announcement.description"/></div>
 				</li>
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')"/><span class="activity-choice"><g:message code="poll.label"/></span>
+					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')"/><span class="activity-choice" onclick="setChecked('poll')"><g:message code="poll.label"/></span>
 					<div class="activity-description"><g:message code="poll.description"/></div>
 				</li>
 				<li class="activity-list-item">
-					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')"/><span class="activity-choice"><g:message code="autoreply.label"/></span>
+					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')"/><span class="activity-choice" onclick="setChecked('autoreply')"><g:message code="autoreply.label"/></span>
 					<div class="activity-description"><g:message code="autoreply.description"/></div>
 				</li>
 			</ul>
