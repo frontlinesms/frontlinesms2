@@ -350,7 +350,7 @@ class MessageController {
 			if(m) c.call(m)
 			else render(text: message(code: 'fmessage.exist.not', args: [params.messageId])) // TODO handle error state properly
 	}
-	}
+
 	private def getShowModel(messageInstanceList) {
 		def messageInstance = params.messageId? Fmessage.get(params.messageId):
 				messageInstanceList? messageInstanceList[0]: null
