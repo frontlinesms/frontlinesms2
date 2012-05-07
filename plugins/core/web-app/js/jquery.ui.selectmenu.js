@@ -333,7 +333,7 @@ $.widget("ui.selectmenu", {
 						return false;
 					})
 					.bind("click.selectmenu", function() {
-						$(this).parent("ul").find("li").show();
+						$(this).parent("ul").find("li:first").show();
 						return false;
 					})
 					.bind('mouseover.selectmenu focus.selectmenu', function(e) {
