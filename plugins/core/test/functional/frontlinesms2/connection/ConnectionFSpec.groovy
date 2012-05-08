@@ -105,6 +105,28 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			println "TEXT: ${lstConnections.find('li')*.text()}"
 			lstConnections.find('li').size() == 2
 	}
+
+	def 'dialog should not close after confirmation screen unless save is successful'(){
+		given:
+			to ConnectionPage
+			btnNewConnection.click()
+			waitFor { at ConnectionDialog }
+			connectionForm.connectionType = "smslib"
+			nextPageButton.click()
+			connectionForm.smslibname = "name"
+			connectionForm.smslibport = "port"
+			connectionForm.smslibbaud = "wrongBaud"
+			nextPageButton.click()
+		when:
+			doneButton.click()
+		then:
+			waitFor{ $('.error-panel').displayed }
+			$('.error-panel').text() == 'baud must be a valid number'
+			at ConnectionDialog
+			confirmName.text() == "name"
+			confirmPort.text() == "port"
+			confirmType.text() == "Phone/Modem"
+	}
 	
 	def 'can setup a new IntelliSMS account'() {
 		when:
@@ -192,3 +214,4 @@ class ConnectionDialog extends ConnectionPage {
 		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
 	}
 }
+

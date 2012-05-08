@@ -42,7 +42,7 @@
 		</ul>
 	</g:else>
 	<div id="create-connection-btn">
-		<g:remoteLink class="btn" controller='connection' action="wizard" onSuccess="launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'))">
+		<g:remoteLink class="btn" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), false)">
 			<g:message code="connection.add"/>
 		</g:remoteLink>
 	</div>

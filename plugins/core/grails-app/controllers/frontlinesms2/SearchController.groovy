@@ -82,22 +82,19 @@ class SearchController extends MessageController {
 		search.customFields?.findAll { it.value }?.each { f ->
 			searchDescriptor += ", $f.key=$f.value"
 		}
-		if(search.status) {
-			searchDescriptor += message(code:'searchdescriptor.only') + search.status
+		if(search.status) { 
+			searchDescriptor += message(code:'searchdescriptor.only', args:[search.status])
 		}
 		if(search.startDate && search.endDate){
-			searchDescriptor += message(code:'searchdescriptor.between') +
-					search.startDate +
-					message(code:'searchdescriptor.and') +
-					search.endDate
-		} else if (search.startDate) {
-			searchDescriptor += message(code:'searchdescriptor.from') + search.startDate
-		} else if (search.endDate) {
-			searchDescriptor += message(code: 'searchdescriptor.until') + search.endDate
+			searchDescriptor += message(code:'searchdescriptor.between', args:[search.startDate, search.endDate])
+		} else if(search.startDate) {
+			searchDescriptor += message(code:'searchdescriptor.from', args:[search.startDate])
+		} else if(search.endDate) {
+			searchDescriptor += message(code:'searchdescriptor.until', args:[search.endDate])
 		}
 		return searchDescriptor
 	}
-	
+
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
@@ -128,3 +125,4 @@ class SearchController extends MessageController {
 		c.call(search)
 	}
 }
+
