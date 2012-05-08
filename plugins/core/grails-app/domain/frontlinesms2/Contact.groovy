@@ -40,7 +40,7 @@ class Contact {
 	def afterInsert = {
 		if(mobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [name, mobile])
 				updateDispatchInfo()
 			}
 		}
@@ -50,7 +50,7 @@ class Contact {
 		final def oldMobile = isDirty('mobile')? getPersistentValue('mobile'): null
 		if(oldMobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE m.src=?", [false, oldMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src WHERE m.src=?", [oldMobile])
 				updateDispatchInfo()
 			}
 		}
@@ -63,7 +63,7 @@ class Contact {
 			println "afterUpdate() : creating new session..."
 			Fmessage.withNewSession { session ->
 				println "afterUpdate() : inside new session..."
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [name, mobile])
 				updateDispatchInfo()
 			}
 		}
@@ -74,7 +74,6 @@ class Contact {
 		if(mobile) {
 			Dispatch.findAllByDst(mobile).each {
 				it.message.displayName = "To: " + name
-				it.message.contactExists = true
 			}
 		}
 	}
@@ -138,7 +137,7 @@ class Contact {
 	private def removeFmessageDisplayName() {
 		if(mobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [mobile, false, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [mobile, mobile])
 				updateDispatchInfo()
 			}
 		}
