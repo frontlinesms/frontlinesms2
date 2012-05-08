@@ -1,12 +1,14 @@
 driver = {
-	def mode=System.properties['functionalTestMode']
-	if (mode=="remote") {
+	def useSauceLabs=Boolean.parseBoolean(System.properties['useSauceLabs']?:'false')
+	if (useSauceLabs) {
+		def sauceUser=System.properties['saucelabs.username']
+		def saucePass=System.properties['saucelabs.passkey']
 		org.openqa.selenium.remote.DesiredCapabilities capabillities = org.openqa.selenium.remote.DesiredCapabilities.firefox();
 	        capabillities.setCapability("version", "5");
 	        capabillities.setCapability("platform", Platform.XP);
 	        capabillities.setCapability("name", "FrontlineSMS2 Functional test cases");
 		def driver = new org.openqa.selenium.remote.RemoteWebDriver(
-	           new URL("http://sitati:6561dd21-0371-4e43-b1c9-4d86dc824061@ondemand.saucelabs.com:80/wd/hub"),
+	           new URL("http://${sauceUser}:${saucePass}@ondemand.saucelabs.com:80/wd/hub"),
 	           capabillities);
 	        driver.manage().timeouts().implicitlyWait(30, java.util.concurrent.TimeUnit.SECONDS);
 	}
