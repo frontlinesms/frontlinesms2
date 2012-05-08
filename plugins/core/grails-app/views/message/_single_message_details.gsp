@@ -16,7 +16,7 @@
 					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
 					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
 				</span> 
-				<g:if test="${!messageInstance.contactExists}">
+				<g:if test="${messageInstance.displayName ==~ /^\+?\d+$/}">
 					<g:link elementId="add-contact" controller="contact" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
 				</g:if>
 			</p>

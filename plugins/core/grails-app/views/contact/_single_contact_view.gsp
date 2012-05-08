@@ -16,9 +16,9 @@
 		</g:if>
 	</div>
 	<script>
-	$(document).ready(function() {
-	    $("a", "#action-buttons" ).button();
-	  });
+		$(function() {
+			$("a", "#action-buttons" ).button();
+		});
 	</script>
 	<div class="basic-info">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
