@@ -21,6 +21,10 @@ class Fconnection {
 		if(fields instanceof Map) fields = fields.allValues
 		return fields.findAll { field -> !clazz.constraints[field].nullable }
 	}
+
+	static mapping = {
+		tablePerHierarchy false
+	}
 	
 	String name
 	
