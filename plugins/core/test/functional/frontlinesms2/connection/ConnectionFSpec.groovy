@@ -122,7 +122,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			println "TEXT: ${lstConnections.find('li')*.text()}"
 			lstConnections.find('li').size() == 2
 	}
-	@spock.lang.IgnoreRest
+
 	def 'dialog should not close after confirmation screen unless save is successful'(){
 		given:
 			to ConnectionPage
@@ -138,7 +138,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			doneButton.click()
 		then:
 			waitFor{ $('.error-panel').displayed }
-			$('.error-panel').text() == 'Invalid baud rate specified.'
+			$('.error-panel').text() == 'baud must be a valid number'
 			at ConnectionDialog
 			confirmName.text() == "name"
 			confirmPort.text() == "port"
