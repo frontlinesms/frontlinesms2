@@ -1,5 +1,6 @@
 driver = {
 	def useSauceLabs=Boolean.parseBoolean(System.properties['useSauceLabs']?:'false')
+	def driver
 	if (useSauceLabs) {
 		def sauceUser=System.properties['saucelabs.username']
 		def saucePass=System.properties['saucelabs.passkey']
@@ -7,14 +8,13 @@ driver = {
 	        capabillities.setCapability("version", "5");
 	        capabillities.setCapability("platform", Platform.XP);
 	        capabillities.setCapability("name", "FrontlineSMS2 Functional test cases");
-		def driver = new org.openqa.selenium.remote.RemoteWebDriver(
+		driver = new org.openqa.selenium.remote.RemoteWebDriver(
 	           new URL("http://${sauceUser}:${saucePass}@ondemand.saucelabs.com:80/wd/hub"),
 	           capabillities);
 	        driver.manage().timeouts().implicitlyWait(30, java.util.concurrent.TimeUnit.SECONDS);
 	}
 	else {
-		// defaults to locally-run FirefoxDriver
-	    def driver = new org.openqa.selenium.firefox.FirefoxDriver()	
+	    driver = new org.openqa.selenium.firefox.FirefoxDriver()	
 	}
 	if(driver.class.simpleName == 'FirefoxDriver') {
 		def width = 1366
