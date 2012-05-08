@@ -6,6 +6,10 @@ abstract class Activity extends MessageOwner {
 	Date dateCreated
 	static transients = ['liveMessageCount']
 
+	static mapping = {
+		tablePerHierarchy false
+	}
+
 	static constraints = {
 		name(blank:false, nullable:false, unique:true)
 		sentMessageText(nullable:true)
