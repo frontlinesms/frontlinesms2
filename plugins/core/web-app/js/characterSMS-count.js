@@ -6,7 +6,7 @@ function updateCount() {
 		//prevent addition of new content to message
 		$(this).val(value.substring(0, 3000));
 	} else {
-		$.get(url_root + 'message/getSendMessageCount', {message: value}, function(data) {
+		$.get(url_root + 'message/sendMessageCount', {message: value}, function(data) {
 			messageStats.html(data);
 		});
 	}

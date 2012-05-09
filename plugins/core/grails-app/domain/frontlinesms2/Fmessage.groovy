@@ -164,7 +164,7 @@ class Fmessage {
 					eq('archived', false)
 				}
 				eq('isDeleted', false)
-				order('date', 'desc')
+				// order('date', 'desc') removed due to http://jira.grails.org/browse/GRAILS-8162; please reinstate when possible
 			}
 		}
 		

@@ -2,9 +2,7 @@ package frontlinesms2
 
 import grails.util.GrailsConfig
 
-
 class SearchController extends MessageController {
-	
 	def beforeInterceptor = {
 		params.offset  = params.offset ?: 0
 		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
@@ -12,9 +10,9 @@ class SearchController extends MessageController {
 		return true
 	}
 	
-	def index = { redirect(action:'result', params:params) }
+	def index() { redirect(action:'result', params:params) }
 	
-	def no_search = {
+	def no_search() {
 		[groupInstanceList:Group.findAll(),
 				folderInstanceList:Folder.findAll(),
 				activityInstanceList:Activity.findAll(),
@@ -53,7 +51,7 @@ class SearchController extends MessageController {
 			}
 	}
 
-	def show = {
+	def show() {
 		def messageInstance = params.messageId ? Fmessage.get(params.messageId.toLong()) : null
 		if (messageInstance && !messageInstance.read) {
 			messageInstance.read = true
@@ -116,7 +114,6 @@ class SearchController extends MessageController {
 			params.startDate = search.startDate
 			params.endDate = search.endDate
 			search.customFields.each() { customFieldName, val ->
-				println customFieldName
 				params[customFieldName] = val
 			}
 		} else {
