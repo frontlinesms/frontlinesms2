@@ -23,6 +23,21 @@ class ContactController {
 		redirect action: "show", params:params
 	}
 	
+	def updateContactPane = {
+		def contactInstance = Contact.get(params.id)
+		def model = [contactInstance: contactInstance,
+				contactGroupInstanceList: contactInstance?.groups ?: [],
+				contactFieldInstanceList: contactInstance?.customFields ?: [],
+				contactGroupInstanceTotal: contactInstance?.groups?.size() ?: 0,
+				nonContactGroupInstanceList: contactInstance ? Group.findAllWithoutMember(contactInstance) : null,
+				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
+				fieldInstanceList: CustomField.findAll(),
+				groupInstanceList: Group.findAll(),
+				groupInstanceTotal: Group.count(),
+				smartGroupInstanceList: SmartGroup.list()]
+		render view:'/contact/_single_contact_view', model:model
+	}
+	
 	def show = {
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
@@ -33,8 +48,7 @@ class ContactController {
 		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		def contactFieldInstanceList = contactInstance?.customFields ?: []
-		[pageTitle: getPageTitle(),
-				contactInstance: contactInstance,
+		[contactInstance: contactInstance,
 				checkedContactList: ',',
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
@@ -76,14 +90,6 @@ class ContactController {
 	
 	def update = {
 		withContact { contactInstance ->
-			if (params.version) { // TODO create withVersionCheck closure for use in all Controllers
-				def version = params.version.toLong()
-				if (contactInstance.version > version) {
-					contactInstance.errors.rejectValue("version", "default.optimistic.locking.failure", [message(code: 'contact.label', default: 'Contact')] as Object[], "contact.edited.by.another.user")
-					render(view: "show", model: [contactInstance: contactInstance, offset:params.offset, max:params.max])
-					return
-				}
-			}
 			contactInstance.properties = params
 			parseContactFields(contactInstance)
 			attemptSave(contactInstance)
@@ -93,8 +99,8 @@ class ContactController {
 	}
 	
 	def updateMultipleContacts = {
-		if(params.checkedContactList) {
-			def contactIds = params.checkedContactList.tokenize(',').unique()
+		if (params['contact-select']) {
+			def contactIds = params['contact-select']
 			contactIds.each { id ->
 				withContact id, { contactInstance ->
 					parseContactFields(contactInstance)
@@ -136,27 +142,10 @@ class ContactController {
 				contactInstance: contactInstance]
 	}
 
-	def multipleContactGroupList = {
-		if(!params.checkedContactList) {
-			return []
-		}
-		def contactIds = params.checkedContactList.tokenize(',').unique()
-		def sharedGroupInstanceList = []
-		def groupInstanceList = []
-		contactIds.each { id ->
-			withContact id, { contactInstance ->
-				groupInstanceList << contactInstance.getGroups()
-			}
-		}
-		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
-		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
-		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
-			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
-	}
-	
 	def search = {
 		render template:'search_results', model:contactSearchService.contactList(params)
 	}
+	
 	def checkForDuplicates = {
 		def foundContact = Contact.findByMobile(params.number)
 		if (foundContact && (foundContact.id.toString() != params.contactId))
@@ -176,22 +165,16 @@ class ContactController {
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
-		if(existingContact && existingContact != contactInstance) {
-			flash.message = "${message(code: 'contact.exists.warn')}  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>${message(code: 'contact.view.duplicate')}</g:link>"
-			return false
-		}
-		if(contactInstance.save(flush:true)) {
+		if (contactInstance.save(flush:true)) {
 			flash.message = message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
+		} else if (existingContact && existingContact != contactInstance) {
+			flash.message = "${message(code: 'contact.exists.warn')}  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>${message(code: 'contact.view.duplicate')}</g:link>"
+			return false
 		}
 		return false
-	}
-	
-	private def getPageTitle() {
-		if(params.smartGroupId) SmartGroup.get(params.smartGroupId)?.name
-		else null
 	}
 	
 	private def withContact(contactId = params.contactId, Closure c) {
@@ -199,9 +182,24 @@ class ContactController {
 		if(contactInstance) {
 			c.call(contactInstance)
 		} else {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])
+			// flash.message = message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])
 			c.call(new Contact())
 		}
+	}
+	
+	def multipleContactGroupList = {
+		def contactIds = params.checkedContactList.tokenize(',').unique()
+		def sharedGroupInstanceList = []
+		def groupInstanceList = []
+		contactIds.each { id ->
+			withContact id, { contactInstance ->
+				groupInstanceList << contactInstance.getGroups()
+			}
+		}
+		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
+		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
+		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
+			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
 	}
 	
 	private def getSharedGroupList(Collection groupList) {

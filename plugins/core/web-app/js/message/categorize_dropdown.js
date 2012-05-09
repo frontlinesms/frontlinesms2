@@ -4,7 +4,7 @@ function categorizeClickAction() {
 	var ownerId = $("#owner-id").val();
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	if(getCheckedMessageCount() > 1) {
-		var messagesToChange = getCheckedMessageList();
+		var messagesToChange = getCheckedList('message');
 		var successUrl = "message/" + messageSection + "/" + ownerId;
 	} else {
 		var messagesToChange = $("#message-id").val();

@@ -1,4 +1,11 @@
-<div class="single-contact">
+<div id="single-contact" class="single-contact">
+	<g:if test="${contactInstance}">
+		<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
+	</g:if>
+	<g:hiddenField name="groupsToAdd" value=","/>
+	<g:hiddenField name="groupsToRemove" value=","/>
+	<g:hiddenField name="fieldsToAdd" value=","/>
+	<g:hiddenField name="fieldsToRemove" value=","/>
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.id}">
 			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'contact.save')}" disabled="disabled"/>
@@ -88,7 +95,7 @@
 		</div>
 	</div>
 	<div id='group-add' class="basic-info">
-		<select class="dropdown" id="group-dropdown" name="group-dropdown">
+		<select id="group-dropdown" name="group-dropdown">
 			<option class="not-group"><g:message code="contact.add.to.group"/></option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 				<option value="${g.id}">${g.name}</option>

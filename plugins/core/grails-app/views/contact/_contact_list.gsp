@@ -9,8 +9,8 @@
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">
 				<li class="${c.id == contactInstance?.id ? 'selected' : ''}" id="contact-${c.id}">
-					<g:checkBox name="contact-select" class="contact-select" id="contact-select-${c.id}"
-							checked="${params.checkedId == c.id + '' ? 'true': 'false'}" value="${c.id}" onclick="contactChecked(${c.id});"/>
+					<g:checkBox name="contact-select" class="contact-select contact-select-checkbox" id="contact-select-${c.id}"
+							checked="${params.checkedId == c.id + '' ? 'true': 'false'}" value="${c.id}" onclick="itemCheckChanged('contact', ${c.id})"/>
 					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 						<g:set var="contactLinkParams" value="[groupId:contactsSection.id]"/>
 					</g:if>

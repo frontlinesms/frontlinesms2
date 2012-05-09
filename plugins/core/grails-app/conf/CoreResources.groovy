@@ -6,6 +6,7 @@ modules = {
 		resource url: [dir:'css', file:"screen.css"]
 		resource url: [dir:'css', file:"buttons.css"]
 		resource url: [dir:'css', file:"header.css"]
+		resource url: [dir:'css', file:"help.css"]
 		resource url: [dir:'css', file:"print.css"]
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
 		resource url: [dir:'js', file:"mediumPopup.js"], disposition: 'head'
@@ -13,12 +14,12 @@ modules = {
 		resource url: [dir:'js', file:"pagination.js"], disposition: 'head'
 		resource url: [dir:'js', file:"jquery.ui.selectmenu.js"], disposition: 'head'
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
+		resource url: [dir:'js', file:'check_li.js'], disposition: 'head'
 	}
 	
 	messages {
 		dependsOn "jquery, jquery-ui, common"
 		resource url: [dir:'css', file:"messages.css"]
-		resource url: [dir:'js', file:"message/check_message.js"], disposition: 'head'
 		resource url: [dir:'js', file:"message/arrow_navigation.js"], disposition: 'head'
 		resource url: [dir:'js', file:"message/star_message.js"], disposition: 'head'
 		resource url: [dir:'js', file:"message/categorize_dropdown.js"], disposition: 'head'
@@ -40,7 +41,6 @@ modules = {
 		resource url: [dir:'css', file:"contacts.css"]
 		resource url: [dir:'js', file:"contact/validateNumber.js"]
 		resource url: [dir:'js', file:"contact/buttonStates.js"]
-		resource url: [dir:'js', file:"contact/checked_contact.js"]
 		resource url: [dir:'js', file:"contact/moreGroupActions.js"]
 		resource url: [dir:'js', file:"contact/search_within_list.js"]
 		resource url: [dir:'js', file:"contact/show-groups.js"]
