@@ -144,18 +144,18 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'move action should work for activities'() {
 		given:
 			def poll = new Poll(name:'whatever')
+					.addToResponses(PollResponse.createUnknown())
 					.addToResponses(key:'A', value:'a')
 					.addToResponses(key:'B', value:'b')
-					.addToResponses(key:'C', value:'c')
 					.save(failOnError:true, flush:true)
 			def message = Fmessage.build()
 		when:
-			params.messageId = message.id
-			params.ownerId = poll.id
-			params.messageSection = 'activity'
+			controller.params.messageId = message.id
+			controller.params.ownerId = poll.id
+			controller.params.messageSection = 'activity'
 			controller.move()
 		then:
-			poll.messages == [message]
+			poll.refresh().messages == [message]
 	}
 	
 	Date createDate(String dateAsString) {

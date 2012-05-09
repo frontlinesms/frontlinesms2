@@ -95,6 +95,7 @@ class MessageController {
 		if(params.starred) {
 			messageInstanceList = Fmessage.deleted(params.starred)
 		} else {
+			if(params.sort == 'date') params.sort = 'dateCreated'
 			trashInstanceList = Trash.list(params)
 		}
 		render view:'standard', model:[trashInstanceList: trashInstanceList,
