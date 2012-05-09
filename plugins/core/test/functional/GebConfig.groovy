@@ -1,3 +1,8 @@
+waiting {
+	timeout = 2
+	retryInterval = 0.2
+}
+
 driver = {
 	def useSauceLabs=Boolean.parseBoolean(System.properties['useSauceLabs']?:'false')
 	def driver
