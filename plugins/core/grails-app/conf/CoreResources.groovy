@@ -7,6 +7,7 @@ modules = {
 		resource url: [dir:'css', file:"buttons.css"]
 		resource url: [dir:'css', file:"header.css"]
 		resource url: [dir:'css', file:"print.css"]
+		resource url: [dir:'css', file:"help.css"]
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
 		resource url: [dir:'js', file:"mediumPopup.js"], disposition: 'head'
 		resource url: [dir:'js', file:"smallPopup.js"], disposition: 'head'
