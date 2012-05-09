@@ -19,6 +19,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
+	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit )
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup()
 	$("#modalBox").dialog({
@@ -33,7 +34,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 			{ text:i18n("wizard.back"), id:"disabledBack", disabled:true },
 			{ text:i18n("wizard.back"), click:prevButton, id:"prevPage" },
 			{ text:i18n("wizard.next"), click:nextButton, id:"nextPage" },
-			{ text:btnFinishedText, click:closeOnSubmit? submit: submitWithoutClose, id:"submit" }
+			{ text:btnFinishedText, click:closeWhenDone? submit: submitWithoutClose, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
