@@ -125,20 +125,37 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.get(id).starred == false
 	}
 	
-	def 'calling "getSendMessageCount" returns the number of messages to be sent'() {
+	def 'calling "sendMessageCount" returns the number of messages to be sent'() {
 		when:
 			controller.params.message = "!@:%^&*(){" * 30
-			controller.getSendMessageCount()
+			controller.sendMessageCount()
 		then:
 			controller.response.contentAsString == "Characters remaining 105 (3 SMS messages)"
 	}
 	
-	def 'calling "getSendMessageCount" returns the number of characters remaining'() {
+	def 'calling "sendMessageCount" returns the number of characters remaining'() {
 		when:
 			controller.params.message = "abc123"
-			controller.getSendMessageCount()
+			controller.sendMessageCount()
 		then:
 			controller.response.contentAsString == "Characters remaining 154 (1 SMS message)"
+	}
+
+	def 'move action should work for activities'() {
+		given:
+			def poll = new Poll(name:'whatever')
+					.addToResponses(key:'A', value:'a')
+					.addToResponses(key:'B', value:'b')
+					.addToResponses(key:'C', value:'c')
+					.save(failOnError:true, flush:true)
+			def message = Fmessage.build()
+		when:
+			params.messageId = message.id
+			params.ownerId = poll.id
+			params.messageSection = 'activity'
+			controller.move()
+		then:
+			poll.messages == [message]
 	}
 	
 	Date createDate(String dateAsString) {

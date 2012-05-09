@@ -38,7 +38,7 @@ class MessageControllerSpec extends Specification {
 			[new Fmessage(id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
 				new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
 				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save()
-			params.checkedMessageList = (", 1, 2,")
+			params['message-select'] = [1, 2]
 		when:
 			controller.retry()
 		then:
@@ -65,20 +65,5 @@ class MessageControllerSpec extends Specification {
 			controller.emptyTrash()
 		then:
 			1 * controller.trashService.emptyTrash()
-	}
-	
-	def 'move action should work for activities'() {
-		given:
-			def messageId = 7
-			def pollId = 9
-			Poll poll = Mock()
-			Fmessage message = Mock()
-		when:
-			params.messageId = ',' + messageId + ','
-			params.ownerId = pollId
-			params.messageSection = 'activity'
-			controller.move()
-		then:
-			1 * poll.addToMessages(message)
 	}
 }

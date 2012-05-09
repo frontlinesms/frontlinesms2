@@ -159,7 +159,7 @@ class MessageController {
 		def dst = []
 		def failedMessageIdList = getCheckedMessageList()
 		failedMessageIdList.each { id ->
-			withFmessage id, {messageInstance ->
+			withFmessage id, { messageInstance ->
 				messageInstance.dispatches.each { 
 					if(it.status == DispatchStatus.FAILED) { 
 						dst << Contact.findByMobile(it.dst)?.name ?: it.dst
@@ -169,8 +169,8 @@ class MessageController {
 			}
 		}
 		
-		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [dst.flatten().join(", ")])
-		redirect (controller: "message", action: 'pending')
+		flash.message = message(code:'flash.message.fmessage.in.queue', args:[dst.join(", ")])
+		redirect controller:'message', action:'pending'
 	}
 	
 	def delete = {
@@ -229,11 +229,11 @@ class MessageController {
 	}
 
 	def move = {
-		def messageIdList = params.messageId.tokenize(',')
+		def messageIdList = getCheckedMessageList()
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
 				messageInstance.isDeleted = false
-				Trash.findByLinkId(messageInstance.id)?.delete(failOnError:true)
+				Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
 				if (params.messageSection == 'activity') {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
@@ -263,9 +263,8 @@ class MessageController {
 	}
 
 	def changeResponse = {
-		def messageIdList = params.messageIdList?.tokenize(',') ?: [params.messageId]
 		def responseInstance = PollResponse.get(params.responseId)
-		messageIdList.each { id ->
+		getCheckedMessageList().each { id ->
 			withFmessage id, { messageInstance ->
 				responseInstance.poll.removeFromMessages(messageInstance)
 				responseInstance.addToMessages(messageInstance)
@@ -346,7 +345,7 @@ class MessageController {
 	boolean isViewingArchive() { params.controller=='archive' }
 
 	private def withFmessage(messageId = params.messageId, Closure c) {
-			def m = Fmessage.get(messageId.toLong())
+			def m = Fmessage.get(messageId)
 			if(m) c.call(m)
 			else render(text: message(code: 'fmessage.exist.not', args: [params.messageId])) // TODO handle error state properly
 	}
