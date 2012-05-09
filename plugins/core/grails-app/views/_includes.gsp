@@ -1,5 +1,5 @@
 <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms.plugin')}" type="image/x-icon"/>
-<r:script>
+<r:script disposition="head">
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
 	controller = "${params?.controller}";
@@ -18,18 +18,18 @@
 </r:script>
 
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
-	<r:script>
+	<r:script disposition="head">
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
-		});
 		
-		setInterval(refreshSystemNotifications, 10000);
-		function refreshSystemNotifications() {
-			$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
-					$("#notifications").empty().append(data);
-			});
-		}
+			setInterval(refreshSystemNotifications, 10000);
+			function refreshSystemNotifications() {
+				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
+						$("#notifications").empty().append(data);
+				});
+			}
+		});
 	</r:script>
 </g:if>
 <g:else>

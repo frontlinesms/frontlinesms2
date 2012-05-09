@@ -8,13 +8,13 @@ class FsmsTagLib {
 	}
 
 	def i18n = { att ->
-		out << '<script type="text/javascript">'
-		att.keys.tokenize(',')*.trim().each {
-			def propVal = g.message(code:it)
-			propVal = propVal.replaceAll("\\'", "\\\\'")
-			out << "	i18nStrings['$it'] = '${propVal}';\n"
+		r.script(disposition:'head') {
+			att.keys.tokenize(',')*.trim().each {
+				def propVal = g.message(code:it)
+				propVal = propVal.replaceAll("\\'", "\\\\'")
+				out << "\ti18nStrings['$it'] = '${propVal}';\n"
+			}
 		}
-		out << '</script>'
 	}
 	
 	def confirmTable = { att ->
