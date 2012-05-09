@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<meta name="layout" content="popup"/>
 <div>
 	<div class="error-panel hide">
 	<div id="error-icon"></div>
@@ -97,7 +98,7 @@
 	</g:form>
 </div>
 
-<script>
+<r:script>
 	function removeRule(_removeAnchor) {
 		var row = $(_removeAnchor).closest('.smart-group-criteria').remove();
 		var rows = $('.smart-group-criteria');
@@ -173,4 +174,4 @@
 		$('form[name="smart-group-details"] tbody').append(newRow);
 	}
 	
-</script>
+</r:script>

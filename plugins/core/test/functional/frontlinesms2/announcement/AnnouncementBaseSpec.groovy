@@ -3,25 +3,24 @@ package frontlinesms2.announcement
 import frontlinesms2.*
 
 class AnnouncementBaseSpec extends grails.plugin.geb.GebSpec {
-	
 	def createTestAnnouncements() {
-		new Announcement(messages:[], name:'New Office', sentMessageText:"We are opening a new office in Kitali next week!").save(failOnError:true, flush:true)
-		new Announcement(messages:[], name:'Office Party', sentMessageText:"Office Party on Friday!").save(failOnError:true, flush:true)
+		Announcement.build(name:'New Office', sentMessageText:"We are opening a new office in Kitali next week!")
+		Announcement.build(name:'Office Party', sentMessageText:"Office Party on Friday!")
 	}
 
 	def createTestMessages() {
-		[new Fmessage(src:'Max', text:'I will be late', date: new Date() - 4, starred: true),
-				new Fmessage(src:'Jane', text:'Meeting at 10 am', date: new Date() - 3),
-				new Fmessage(src:'Patrick', text:'Project has started', date: new Date() - 2),
-				new Fmessage(src:'Zeuss', text:'Sewage blocked', date: new Date() - 1)].each() {
-			it.inbound = true
-			it.save(failOnError:true, flush:true)
-		}
-		[Announcement.findByName('New Office').addToMessages(Fmessage.findBySrc('Max')),
-				Announcement.findByName('New Office').addToMessages(Fmessage.findBySrc('Jane')),
-				Announcement.findByName('Office Party').addToMessages(Fmessage.findBySrc('Zeuss')),
-				Announcement.findByName('Office Party').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
-			it.save(failOnError:true, flush:true)
-		}
+		Fmessage.build(src:'Max', text:'I will be late', date:new Date()-4, starred:true)
+		Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:new Date()-3)
+		Fmessage.build(src:'Patrick', text:'Project has started', date:new Date()-2)
+		Fmessage.build(src:'Zeuss', text:'Sewage blocked', date:new Date()-1)
+
+		def newOffice = Announcement.findByName('New Office')
+		['Max', 'Jane'].each { newOffice.addToMessages(Fmessage.findBySrc(it)) }
+		newOffice.save(failOnError:true, flush:true)
+
+		def officeParty = Announcement.findByName('Office Party')
+		['Zeuss', 'Patrick'].each { officeParty.addToMessages(Fmessage.findBySrc(it)) }
+		officeParty.save(failOnError:true, flush:true)
 	}
 }
+

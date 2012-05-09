@@ -1,13 +1,17 @@
 package frontlinesms2
 
-class Activity extends MessageOwner {
+abstract class Activity extends MessageOwner {
 	String name
 	String sentMessageText
 	Date dateCreated
 	static transients = ['liveMessageCount']
 
+	static mapping = {
+		tablePerHierarchy false
+	}
+
 	static constraints = {
-		name(blank: false, nullable: false, unique: true)
+		name(blank:false, nullable:false, unique:true)
 		sentMessageText(nullable:true)
 	}
 	
@@ -17,12 +21,13 @@ class Activity extends MessageOwner {
 	
 	def archive() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(this, false, true)?.list()
-		messagesToArchive.each { it?.archived = true }
+		messages.each { it.archived = true }
+		Fmessage.owned(this, false, true)?.list()*.each { it?.archived = true }
 	}
 	
 	def unarchive() {
 		this.archived = false
+		messages.each { it.archived = false }
 		Fmessage.owned(this, false, true)?.list()*.each { it?.archived = false }
 	}
 	

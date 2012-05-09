@@ -1,9 +1,10 @@
-<script>
+<r:script>
 	function toggleDropdown() {
 		$("#dropdown_options").toggle()
 		return false;
 	};
-</script>
+</r:script>
+
 <div id="message-detail-buttons">
 	<g:if test="${messageSection != 'trash'}">
  		<g:if test="${messageSection == 'sent'}">

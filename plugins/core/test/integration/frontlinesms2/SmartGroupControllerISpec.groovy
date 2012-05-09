@@ -23,7 +23,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.smartGroupId = englishContacts.id
 			def model = controller.show()
 		then:
-			model.contactInstanceList*.name == ['Alfred', 'Charles']
+			model.contactInstanceList*.name.sort() == ['Alfred', 'Charles']
 			model.contactInstanceTotal == 2
 		when:
 			controller.params.searchString = 'ED'
@@ -50,7 +50,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'CREATE returns a list of field names including custom field names'() {
 		given:
-			['Favourite Food', 'AIM name'].each { new CustomField(name:it).save(flush:true, failOnError:true) }
+			['AIM name', 'Favourite Food'].each { CustomField.build(name:it) }
 		when:
 			def model = controller.create()
 		then:
@@ -97,7 +97,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			createContact('Charles', '+440987654')
 			createContact('Dupont', '+33098765432')
 			createContact('Edgar de Gaulle', '+33098764677')
-			assert englishContacts.members*.name == ["Bernadette", "Dupont", 'Edgar de Gaulle']
+			assert englishContacts.members*.name.sort() == ["Bernadette", "Dupont", 'Edgar de Gaulle']
 		when:
 			controller.params.smartgroupname = 'Londons'
 			controller.params.id = "${englishContacts.id}"
@@ -227,7 +227,7 @@ class SmartGroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def members = englishContacts.members
 		then:
-			members*.name == ['Alfred', 'Charles'] 
+			members*.name.sort() == ['Alfred', 'Charles'] 
 		when:
 			controller.params.id = "${englishContacts.id}"
 			controller.delete()

@@ -4,7 +4,7 @@
 	<g:textArea name="messageText" rows="5" cols="40"/>
 	<span id="send-message-stats" class="character-count"><g:message code="poll.message.count"/></span>
 </div>
-<g:javascript>
+<r:script>
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateCount);
 	
@@ -53,4 +53,4 @@
 	function autoUpdateOn() {
 		autoUpdate = true;
 	}
-</g:javascript>
+</r:script>

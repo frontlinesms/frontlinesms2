@@ -1,16 +1,18 @@
 package frontlinesms2
 
+import frontlinesms2.Fmessage
+
 class Trash {
 	Date dateCreated
-	Long linkId
-	String objectType
-	String message
-	String identifier
-	
-	def getLink() { getClass().classLoader.loadClass(objectType).get(linkId) }
+	Long objectId
+	Class objectClass
+	String displayName
+	String displayText
 	
 	static constraints = {
-		message(nullable: true)
-		identifier(nullable: true)
+		displayName(nullable: true)
+		displayText(nullable: true)
 	}
+	
+	def getObject() { objectClass.get(objectId) }
 }

@@ -219,7 +219,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 	
 	def 'rules should include custom fields'() {
 		given:
-			['Town', 'Height'].each { new CustomField(name:it).save(failOnError:true, flush:true) }
+			['Town', 'Height'].each { CustomField.build(name:it) }
 		when:
 			launchCreateDialog('Field Dwellers')
 		then:
@@ -228,7 +228,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 	
 	def 'setting a custom field rule should persist to the smartgroup instance'() {
 		given:
-			['Town'].each { new CustomField(name:it).save(failOnError:true, flush:true) }
+			['Town'].each { CustomField.build(name:it) }
 		when:
 			launchCreateDialog('Field Dwellers')
 			ruleField[0].value('Town')

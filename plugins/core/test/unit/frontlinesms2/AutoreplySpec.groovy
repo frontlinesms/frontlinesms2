@@ -1,13 +1,15 @@
 package frontlinesms2
+
+import grails.test.mixin.*
 import spock.lang.*
 
-class AutoreplySpec extends grails.plugin.spock.UnitSpec {
+@TestFor(Autoreply)
+@Mock([Keyword])
+class AutoreplySpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	
 	@Unroll
 	def "Test constraints"() {
-		given:
-			mockForConstraintsTests(Autoreply)
 		when:
 			def keyword = addKeyword? new Keyword(): null
 			def autoreply = new Autoreply(name:name, autoreplyText:replyText, keyword:keyword)
@@ -26,8 +28,8 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 
 	def 'processKeyword should not generate an autoreply for non-exact keyword match if keyword is not blank'() {
 		given:
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
-			autoreply.keyword = mockKeyword('KEYWORD')
+			def k = mockKeyword('asdf')
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text', keyword:k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -41,9 +43,8 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 
 	def 'processKeyword should generate an autoreply for blank keyword if non-exact match'() {
 		given:
-			mockDomain Autoreply
-			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
-			autoreply.keyword = mockKeyword('')
+			def k = mockKeyword('')
+			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text', keyword:k)
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -62,9 +63,7 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 
 	def 'processKeyword should generate an autoreply'() {
 		given:
-			mockDomain Autoreply
 			def autoreply = new Autoreply(name:'whatever', autoreplyText:'some reply text')
-			autoreply.keyword = mockKeyword('KEYWORD')
 
 			def sendService = Mock(MessageSendService)
 			autoreply.messageSendService = sendService
@@ -82,9 +81,7 @@ class AutoreplySpec extends grails.plugin.spock.UnitSpec {
 	}
 
 	private def mockKeyword(String value) {
-		def k = Mock(Keyword)
-		k.value >> value
-		return k
+		new Keyword(value:value)
 	}
 
 	private def mockFmessage(String messageText, String src=null) {

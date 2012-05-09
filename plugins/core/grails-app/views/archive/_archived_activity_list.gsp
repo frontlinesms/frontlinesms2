@@ -1,12 +1,12 @@
 <g:if test="${activityInstanceTotal > 0}">
 <div id="activities">
-	<div id="activity-list" class="message-list">
-		<table cellspacing="0">
+	<div id="activity-list" class="main-list">
+		<table class="main-table" cellspacing="0">
 			<thead>
 				<tr>
 					<th class="activity-name-cell"><g:message code="archive.activity.name"/></th>
 					<th class="activity-type-cell"><g:message code="archive.activity.type"/></th>
-					<th class="activity-date-cell"><g:message code="archive.activity.date/></th>
+					<th class="activity-date-cell"><g:message code="archive.activity.date"/></th>
 					<th class="activity-message-count-cell"><g:message code="archive.activity.messages"/></th>
 				</tr>
 			</thead>

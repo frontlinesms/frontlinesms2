@@ -1,9 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class GroupSpec extends UnitSpec {
+@TestFor(Group)
+@Mock([Contact, GroupMembership])
+class GroupSpec extends Specification {
 	def "group may have a name"() {
 		when:
 			Group g = new Group()
@@ -17,7 +19,6 @@ class GroupSpec extends UnitSpec {
 		when:
 			def noNameGroup = new Group()
 			def namedGroup = new Group(name:'People')
-			mockForConstraintsTests(Group, [noNameGroup, namedGroup])
 		then:
 			!noNameGroup.validate()
 			namedGroup.validate()
@@ -25,20 +26,17 @@ class GroupSpec extends UnitSpec {
 
 	def "group must have unique name"() {
 		when:
-			def name1Group = new Group(name:'Same')
+			def name1Group = new Group(name:'Same').save()
 			def name2Group = new Group(name:'Same')
-			mockForConstraintsTests(Group, [name1Group, name2Group])
 		then:
-			!name1Group.validate()
+			name1Group.validate()
 			!name2Group.validate()
 	}
 
 	def "group name must be less than 255 characters"() {
 		when:
 			def longNameGroup = new Group(name:'0123456789abcdef'*16)
-			mockForConstraintsTests(Group, [longNameGroup])
 		then:
-			assert longNameGroup.name.length() > 255
 			!longNameGroup.validate()
 	}
 
@@ -49,7 +47,7 @@ class GroupSpec extends UnitSpec {
 			mockDomain GroupMembership, [new GroupMembership(group: group, contact: new Contact(mobile: "12345")),
 				new GroupMembership(group: group, contact: new Contact(mobile: "56484"))]
 		when:
-			def result = group.getAddresses()
+			def result = group.addresses
 		then:
 			result.containsAll(["12345", "56484"])
 
@@ -57,19 +55,20 @@ class GroupSpec extends UnitSpec {
 
 	def "should list all the group names with a count of number of people in the group"() {
 		setup:
-			registerMetaClass Collection
-			MetaClassModifiers.addMethodsToCollection()
-			def sahara = new Group(name: "sahara")
-			def thar = new Group(name: "thar")
-			mockDomain(Group, [sahara, thar])
-			mockDomain GroupMembership, [new GroupMembership(group: sahara, contact: new Contact(name: "Bob", mobile: "address1")), new GroupMembership(group: sahara, contact: new Contact(name: "Jim", mobile: "address2")),
-			new GroupMembership(group: thar, contact: new Contact(name: "Kate", mobile: "address3"))]
+			def sahara = new Group(name: "sahara").save()
+			def thar = new Group(name: "thar").save()
+			[['Bob', 'address1'], ['Jim', 'address2']].each {
+				Contact c = new Contact(name:it[0], mobile:it[1]).save()
+				GroupMembership.create(c, sahara)
+			}
+			Contact kate = new Contact(name: "Kate", mobile: "address3")
+			GroupMembership.create(kate, thar)
 			
 		when:
-			def result = Group.getGroupDetails()
+			def result = Group.groupDetails
 		then:
-			result."group-$sahara.id" == [name:"sahara",addresses:["address1", "address2"]]
-			result."group-$thar.id" == [name:"thar",addresses: ["address3"]]
+			result.get("group-$sahara.id") == [name:"sahara",addresses:["address1", "address2"]]
+			result.get("group-$thar.id") == [name:"thar",addresses: ["address3"]]
 	}
 }
 

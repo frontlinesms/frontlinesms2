@@ -6,24 +6,24 @@ class FolderBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	def createTestFolders() {
 		['Work', 'Projects'].each() {
-			new Folder(name:it).save(failOnError:true, flush:true)
+			Folder.build(name:it)
 		}
 	}
 
 	def createTestMessages() {
-		[new Fmessage(src:'Max', text:'I will be late', date: new Date() - 4, starred: true),
-				new Fmessage(src:'Jane', text:'Meeting at 10 am', date: new Date() - 3),
-				new Fmessage(src:'Patrick', text:'Project has started', date: new Date() - 2),
-				new Fmessage(src:'Zeuss', text:'Sewage blocked', date: new Date() - 1)].each() {
-			it.inbound = true
-			it.save(failOnError:true, flush:true)
+		def workFolder = Folder.findByName('Work')
+		[Fmessage.build(src:'Max', text:'I will be late', date:new Date()-4, starred:true),
+				Fmessage.build(src:'Jane', text:'Meeting at 10 am', date:new Date()-3)].each {
+			workFolder.addToMessages(it)
 		}
-		[Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Max')),
-				Folder.findByName('Work').addToMessages(Fmessage.findBySrc('Jane')),
-				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Zeuss')),
-				Folder.findByName('Projects').addToMessages(Fmessage.findBySrc('Patrick'))].each() {
-			it.save(failOnError:true, flush:true)
+		workFolder.save(failOnError:true, flush:true)
+
+		def projectsFolder = Folder.findByName('Projects')
+		[Fmessage.build(src:'Patrick', text:'Project has started', date:new Date()-2),
+				Fmessage.build(src:'Zeuss', text:'Sewage blocked', date:new Date()-1)].each {
+			projectsFolder.addToMessages(it)
 		}
+		projectsFolder.save(failOnError:true, flush:true)
 	}
 }
 

@@ -10,7 +10,7 @@ class SmartGroupController {
 		def customFieldNames = CustomField.allUniquelyNamed
 		[smartGroupInstance:smartGroupInstance,
 				fieldNames:['Phone number', 'Contact name', 'email', 'notes']+customFieldNames,
-				fieldIds:['mobile', 'contactName', 'email', 'notes']+customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
+				fieldIds:['mobile', 'contactName', 'email', 'notes'] + customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
 	}
 	
 	def save = {

@@ -140,19 +140,20 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!PollResponse.findByValue("one")
 			println "poll responses ${poll.responses*.value}"
-			poll.responses*.findAll {
-				if(it.key == 'Unknown') it.liveMessageCount == 3
-				if(it.key == 'choiceA') it.liveMessageCount == 0
+			poll.responses*.every {
+				(it.key=='Unknown' && it.liveMessageCount == 3) ||
+						(it.key == 'choiceA' && it.liveMessageCount == 0)
 			}
 	}
 	
-	def "Archiving a poll archives messages associated with the poll"(){
+	def "Archiving a poll archives messages associated with the poll"() {
 		given:
 			def poll = new Poll(name: 'Who is badder?')
 			poll.editResponses(choiceA:'Michael-Jackson', choiceB:'Chuck-Norris')
 			poll.save(failOnError:true, flush:true)
-			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
+
+			def message1 = Fmessage.build(src:'Bob', text:'I like manchester')
+			def message2 = Fmessage.build(src:'Alice', text:'go barcelona')
 			poll.addToMessages(message1)
 			poll.addToMessages(message2)
 			poll.save(flush:true, failOnError:true)
@@ -161,7 +162,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.refresh()
 		then:
 			poll.liveMessageCount == 2
-			poll.activityMessages.list().findAll {it.archived == true}
+			poll.activityMessages.list().every { it.archived }
 	}
 	
 	private def setUpPollAndResponses() {		

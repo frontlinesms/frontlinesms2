@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<meta name="layout" content="popup"/>
 <div>
 	<g:form name="export-form" controller="export" action="downloadContactReport">
 		<g:hiddenField name="contactsSection" value="${contactsSection}"/>
@@ -11,8 +12,8 @@
 			</div>
 	</g:form>
 </div>
-<script>
-function updateExportInfo() {
-	$(".ui-dialog-title").html("Export Contacts: ${reportName}");
-}
-</script>
+<r:script>
+	function updateExportInfo() {
+		$(".ui-dialog-title").html("Export Contacts: ${reportName}");
+	}
+</r:script>

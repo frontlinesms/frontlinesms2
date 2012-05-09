@@ -9,7 +9,7 @@ class GroupViewSpec extends GroupBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			groupSubmenu.children()*.text() == ['Listeners', 'Friends', 'Create new group']
+			groupSubmenu.children()*.text() == ['Friends', 'Listeners', 'Create new group']
 	}
 
 	def 'Group menu item is highlighted when viewing corresponding group'() {

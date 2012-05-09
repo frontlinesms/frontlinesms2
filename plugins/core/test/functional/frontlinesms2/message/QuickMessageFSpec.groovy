@@ -106,13 +106,11 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			waitFor { $(".flash").displayed }
 		when:
 			$("a", text:contains("Pending")).click()
-			waitFor{ 
-				$("a", text:contains("Pending")).click()
-				$("a", text:contains("Pending")).hasClass("send-failed")
-			}
+		then:
+			waitFor(5) { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
 		then:
 			waitFor{ $('h3.pending').text().equalsIgnoreCase("Pending") }
-			$("a", text:contains("Pending")).hasClass("send-failed")
+			$("a", text:contains("Pending")).hasClass("pending-send-failed")
 			$("#message-list tr").size() == 2
 	}
 
@@ -123,9 +121,9 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
 		then:
-			$("input[name=groups]").displayed
+			$("input#groups")[0].displayed
 		when:
-			$("input[name=groups]").value("group1")
+			$("input#groups")[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "2" }
 	}
@@ -137,13 +135,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
 		then:
-			$("input[name=groups]").displayed
+			$("input#groups")[0].displayed
 		when:
-			$("input[name=groups]").value("group1")
+			$("input#groups")[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "2" }
 		when:
-			$("input[value=group1]").click()
+			$("input#groups")[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "0" }
 	}
@@ -168,15 +166,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input[value='group1']").click()
-			$("input[value='group2']").click()
+			$("input#groups")[0].click()
+			$("input#groups")[1].click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
 			$("input[value='12345678']").click()
 		then:
-			!$("input[value='group1']").checked
-			!$("input[value='group2']").checked
+			!$("input#groups")[0].checked
+			!$("input#groups")[1].checked
 			$("#recipient-count").text() == "1"
 	}
 
@@ -186,15 +184,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input[value='group1']").click()
-			$("input[value='group2']").click()
+			$("input#groups")[0].click()
+			$("input#groups")[1].click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
-			$("input[value='group1']").click()
+			$("input#groups")[0].click()
 		then:
-			!$("input[value='group1']").checked
-			$("input[value='group2']").checked
+			!$("input#groups")[0].checked
+			$("input#groups")[1].checked
 			$("#recipient-count").text() == "2"
 
 	}
@@ -207,7 +205,8 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message)" }
 		when:
-			$("#messageText").value("h")
+			$("#messageText") << "h"
+			$("#messageText").jquery.trigger('keyup')
 		then:
 			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
 	}
@@ -215,35 +214,33 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def "should not deselect group when a non-member contact is unchecked"() {
 		setup:
 			createData()
-			def contact = new Contact(name:"Test", mobile:"876543212").save(flush:true)
+			def contact = Contact.build(name:"Test", mobile:"876543212")
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input[value='group1']").click()
+			$("input#groups")[0].click()
 		then:
-			$("input[value='group1']").checked
+			$("input#groups")[0].checked
 		when:
 			$("input[value='876543212']").click()
 		then:
-			$("input[value='group1']").checked
+			$("input#groups")[0].checked
 		when:
 			$("input[value='876543212']").click()
 		then:
-			$("input[value='group1']").checked
+			$("input#groups")[0].checked
 
 	}
 	
 	private def createData() {
-		def group = new Group(name: "group1").save(flush: true)
-		def group2 = new Group(name: "group2").save(flush: true)
-		def alice = new Contact(name: "alice", mobile: "12345678").save(flush: true)
-		def bob = new Contact(name: "bob", mobile: "567812445").save(flush: true)
+		def group = Group.build(name:"group1")
+		def group2 = Group.build(name:"group2")
+		def alice = Contact.build(name:"alice", mobile:"12345678")
+		def bob = Contact.build(name:"bob", mobile:"567812445")
 		group.addToMembers(alice)
 		group2.addToMembers(alice)
 		group.addToMembers(bob)
 		group2.addToMembers(bob)
-		group.save(flush: true)
-		group2.save(flush: true)
 	}
 	
 	def launchQuickMessageDialog() {

@@ -1,7 +1,7 @@
 <g:if test="${folderInstanceList.size() > 0}">
 	<div id="folders">
-		<div id="folder-list" class="message-list">
-			<table cellspacing=0>
+		<div id="folder-list" class="main-list">
+			<table class="main-table" cellspacing=0>
 				<thead>
 					<tr>
 						<th class="folder-name-cell"><g:message code="archive.folder.name"/></</th>

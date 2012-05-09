@@ -3,6 +3,6 @@
 	<g:textArea name="messageText" value="${messageText}" rows="5" cols="40"/>
 	<span id="send-message-stats" class="character-count"><g:message code="announcement.message.count"/></span>
 </div>
-<g:javascript>
+<r:script>
 	$("#messageText").live("keyup", updateCount);
-</g:javascript>
+</r:script>

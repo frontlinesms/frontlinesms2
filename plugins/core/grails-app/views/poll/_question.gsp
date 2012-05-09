@@ -33,7 +33,7 @@
 		<g:checkBox name="dontSendMessage" value="no-message" checked='false'/><g:message code="poll.message.none"/>
 	</div>
 </div>
-<g:javascript>
+<r:script>
 	$("input[name='dontSendMessage']").live("change", function() {
 		if(isGroupChecked("dontSendMessage")) {
 			disableTab(4);
@@ -55,4 +55,4 @@
 		autoUpdate = true;
 		updateConfirmationMessage();
 	});
-</g:javascript>
+</r:script>

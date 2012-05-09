@@ -48,7 +48,7 @@ class FconnectionService {
 	def destroyRoutes(long id) {
 		println "fconnectionService.destroyRoutes : ENTRY"
 		println "fconnectionService.destroyRoutes : id=$id"
-		camelContext.routes.filter { it.id ==~ /.*-$id$/ }.each {
+		camelContext.routes.findAll { it.id ==~ /.*-$id$/ }.each {
 			try {
 				println "fconnectionService.destroyRoutes : route-id=$it.id"
 				println "fconnectionService.destroyRoutes : stopping route $it.id..."

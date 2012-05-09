@@ -1,33 +1,35 @@
 package frontlinesms2
 
-import grails.util.GrailsConfig
 import grails.converters.*
 
 class MessageController {
+//> CONSTANTS
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST", archive: "POST"]
 
+//> SERVICES
 	def messageSendService
 	def fmessageInfoService
 	def trashService
-	boolean viewingArchive = params.controller=='archive' ? true : false
 
+//> INTERCEPTORS
 	def bobInterceptor = {
 		params.sort = params.sort ?: 'date'
 		params.order = params.order ?: 'desc'
 		params.starred = params.starred ? params.starred.toBoolean() : false
 		params.failed = params.failed ? params.failed.toBoolean() : false
-		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
+		params.max = params.max?: grailsApplication.config.grails.views.pagination.max
 		params.offset  = params.offset ?: 0
 		return true
 	}
 	def beforeInterceptor = bobInterceptor
 	
+//> ACTIONS
 	def index = {
 		params.sort = 'date'
 		redirect(action:'inbox', params:params)
 	}
 	
-	def getNewMessageCount = {
+	def newMessageCount = {
 		def section = params.messageSection
 		if(!params.ownerId && section != 'trash') {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
@@ -52,34 +54,17 @@ class MessageController {
 				messageSection: params.messageSection]
 		render view:'/message/_single_message_details', model:model
 	}
-	
-	def getShowModel(messageInstanceList) {
-		def messageInstance = params.messageId? Fmessage.get(params.messageId):
-				messageInstanceList? messageInstanceList[0]: null
-		if (messageInstance && !messageInstance.read) {
-			messageInstance.read = true
-			messageInstance.save()
-		}
-		def checkedMessageCount = getCheckedMessageList().size()
-		[messageInstance: messageInstance,
-				checkedMessageCount: checkedMessageCount,
-				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
-				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
-				messageCount: Fmessage.countAllMessages(params),
-				hasFailedMessages: Fmessage.hasFailedMessages(),
-				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
-	}
 
 	def inbox = {
-		def messageInstanceList = Fmessage.inbox(params.starred, viewingArchive)
+		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
-					model:[messageInstanceList: messageInstanceList.list(params),
-							messageSection: 'inbox',
-							messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				model:[messageInstanceList: messageInstanceList.list(params),
+						messageSection: 'inbox',
+						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
-		def messageInstanceList = Fmessage.sent(params.starred, viewingArchive)
+		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
 		render view:'../message/standard', model:[messageSection: 'sent',
 				messageInstanceList: messageInstanceList.list(params),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
@@ -93,38 +78,37 @@ class MessageController {
 	}
 	
 	def trash = {
-		def trashInstance
+		def trashedObject
 		def trashInstanceList
 		def messageInstanceList
-		params.sort = (params.sort && params.sort != 'date') ?: "dateCreated"
+		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectType == "frontlinesms2.Fmessage") {
-					params.messageId = obj.linkId
+				if(obj.objectClass == frontlinesms2.Fmessage) {
+					params.messageId = obj.objectId
 				} else {
-					trashInstance = obj.link
+					trashedObject = obj.object
 				}
 			}
 			setTrashInstance(Trash.findById(params.id))
 		}
-		
 		if(params.starred) {
 			messageInstanceList = Fmessage.deleted(params.starred)
 		} else {
-			trashInstanceList =  Trash.list(params)
+			trashInstanceList = Trash.list(params)
 		}
-		render view:'standard', model:[trashInstanceList:trashInstanceList,
+		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
 					messageSection: 'trash',
 					messageInstanceTotal: Trash.count(),
-					ownerInstance: trashInstance] << getShowModel()
+					ownerInstance: trashedObject] << getShowModel()
 	}
 
 	def poll = { redirect(action: 'activity', params: params) }
 	def announcement = { redirect(action: 'activity', params: params) }
 	def autoreply = { redirect(action: 'activity', params: params) }
 	def activity = {
-		def activityInstance = Activity.get(params.ownerId.toLong())
+		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
 			def sentMessageCount = 0
@@ -138,7 +122,7 @@ class MessageController {
 						messageSection: 'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
 						ownerInstance: activityInstance,
-						viewingMessages: viewingArchive ? params.viewingMessages : null,
+						viewingMessages: this.viewingArchive ? params.viewingMessages : null,
 						pollResponse: activityInstance instanceof Poll ? activityInstance.responseStats as JSON : null,
 						sentMessageCount: sentMessageCount,
 						sentDispatchCount: sentDispatchCount] << getShowModel()
@@ -157,7 +141,7 @@ class MessageController {
 						messageSection: 'folder',
 						messageInstanceTotal: messageInstanceList.count(),
 						ownerInstance: folderInstance,
-						viewingMessages: viewingArchive ? params.viewingMessages : null] << getShowModel()
+						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
 		} else {
 			flash.message = message(code: 'flash.message.folder.found.not')
 			redirect(action: 'inbox')
@@ -188,17 +172,16 @@ class MessageController {
 		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [dst.flatten().join(", ")])
 		redirect (controller: "message", action: 'pending')
 	}
+	
 	def delete = {
 		def messageIdList = getCheckedMessageList()
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
-				messageInstance.isDeleted = true
-				new Trash(identifier:messageInstance.displayName, message:messageInstance.text, objectType:messageInstance.class.name, linkId:messageInstance.id).save()
-				messageInstance.save(failOnError:true)
+				TrashService.sendToTrash(messageInstance)
 			}
 		}
 		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
-		if(params.messageSection == 'result')
+		if (params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
 			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed])
@@ -358,11 +341,27 @@ class MessageController {
 		}
 		
 	}
-	
+
+//> PRIVATE HELPERS
+	boolean isViewingArchive() { params.controller=='archive' }
+
 	private def withFmessage(messageId = params.messageId, Closure c) {
 			def m = Fmessage.get(messageId.toLong())
 			if(m) c.call(m)
 			else render(text: message(code: 'fmessage.exist.not', args: [params.messageId])) // TODO handle error state properly
+	}
+
+	private def getShowModel(messageInstanceList) {
+		def messageInstance = params.messageId? Fmessage.get(params.messageId):
+				messageInstanceList? messageInstanceList[0]: null
+		def checkedMessageCount = getCheckedMessageList().size()
+		[messageInstance: messageInstance,
+				checkedMessageCount: checkedMessageCount,
+				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
+				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
+				messageCount: Fmessage.countAllMessages(params),
+				hasFailedMessages: Fmessage.hasFailedMessages(),
+				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
 	private def getCheckedMessageList() {
@@ -371,3 +370,4 @@ class MessageController {
 		return checked
 	}
 }
+

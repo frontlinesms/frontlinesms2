@@ -1,63 +1,48 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
+import org.codehaus.groovy.grails.orm.hibernate.cfg.*
 
-class SettingsControllerSpec extends ControllerSpec {
+@TestFor(SettingsController)
+@Mock(LogEntry)
+class SettingsControllerSpec extends Specification {
+	def TEST_DATE = new Date()
 	
 	def "can view the list of all log entries"() {
 		given:
-			def entry1 = new LogEntry(date: new Date(), content: "12345")
-			def entry2 = new LogEntry(date: new Date()-10, content: "message sent")
-			mockDomain(LogEntry, [entry1, entry2])
+			def entries = createLogEntries("12345":0, "message sent":10)
 		when:
-			mockParams.timePeriod = 'forever'
+			params.timePeriod = 'forever'
 			def model = controller.logs()
 		then:
-			model.logEntryList.containsAll(entry1, entry2)
+			model.logEntryList == entries
 	}
-	
+
+	@Unroll
 	def "can filter list of log entries by time"() {
 		given:
-			def now = new Date()
-			def entry1 = new LogEntry(date: now, content: "entry1")
-			def entry2 = new LogEntry(date: now-2, content: "entry2")
-			def entry3 = new LogEntry(date: now-6, content: "entry3")
-			def entry4 = new LogEntry(date: now-13, content: "entry4")
-			def entry5 = new LogEntry(date: now-27, content: "entry5")
-			def entry6 = new LogEntry(date: now-100, content: "entry6")
-			mockDomain(LogEntry, [entry1, entry2, entry3, entry4, entry5, entry6])
+			def entries = createLogEntries(entry1:0, entry2:2, entry3:6,
+					entry4:13, entry5:27, entry66:100)
 		when:
-			mockParams.timePeriod = "1"
+			params.timePeriod = timePeriod
 			def model = controller.logs()
 		then:
-			model.logEntryList == [entry1]
-		when:
-			mockParams.timePeriod = "3"
-			model = controller.logs()
-		then:
-			model.logEntryList == [entry1, entry2]
-		when:
-			mockParams.timePeriod = "7"
-			model = controller.logs()
-		then:
-			model.logEntryList == [entry1, entry2, entry3]
-		when:
-			mockParams.timePeriod = "14"
-			model = controller.logs()
-		then:
-			model.logEntryList == [entry1, entry2, entry3, entry4]
-		when:
-			mockParams.timePeriod = "28"
-			model = controller.logs()
-		then:
-			model.logEntryList == [entry1, entry2, entry3, entry4, entry5]
-		when:
-			mockParams.timePeriod = "forever"
-			model = controller.logs()
-		then:
-			model.logEntryList == [entry1, entry2, entry3, entry4, entry5, entry6]
-		
+			model.logEntryList == entries[0..(entryCount-1)]
+		where:
+			timePeriod | entryCount
+			'1'        | 1
+			'3'        | 2
+			'7'        | 3
+			'14'       | 4
+			'28'       | 5
+			'forever'  | 6
+	}
+
+	private def createLogEntries(entries) {
+		entries.collect { content, dateOffset ->
+			new LogEntry(content:content, date:TEST_DATE-dateOffset).save(failOnError:true)
+		}
 	}
 }
 

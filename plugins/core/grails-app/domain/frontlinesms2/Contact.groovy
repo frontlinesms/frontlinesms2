@@ -1,6 +1,7 @@
 package frontlinesms2
 
 class Contact {
+//> PROPERTIES
 	String name
 	String mobile
 	String email
@@ -21,11 +22,12 @@ class Contact {
 	}
 
 	static mapping = {
-		sort: 'name'
+		sort name:'asc'
 		customFields cascade: 'all'
 		customFields sort: 'name','value'
 	}
 
+//> EVENT METHODS
 	def beforeInsert = {
 		stripNumberFields()
 	}
@@ -38,7 +40,7 @@ class Contact {
 	def afterInsert = {
 		if(mobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [name, mobile])
 				updateDispatchInfo()
 			}
 		}
@@ -48,7 +50,7 @@ class Contact {
 		final def oldMobile = isDirty('mobile')? getPersistentValue('mobile'): null
 		if(oldMobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src,m.contactExists=? WHERE m.src=?", [false, oldMobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src WHERE m.src=?", [oldMobile])
 				updateDispatchInfo()
 			}
 		}
@@ -61,7 +63,7 @@ class Contact {
 			println "afterUpdate() : creating new session..."
 			Fmessage.withNewSession { session ->
 				println "afterUpdate() : inside new session..."
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?,m.contactExists=? WHERE m.src=?", [name, true, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [name, mobile])
 				updateDispatchInfo()
 			}
 		}
@@ -72,11 +74,11 @@ class Contact {
 		if(mobile) {
 			Dispatch.findAllByDst(mobile).each {
 				it.message.displayName = "To: " + name
-				it.message.contactExists = true
 			}
 		}
 	}
 	
+//> ACCESSORS
 	def getGroups() {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
 	}
@@ -119,11 +121,23 @@ class Contact {
 		if(mobile && mobile[0] == '+') n = '+' + n
 		mobile = n
 	}
+
+	static namedQueries = {
+		findAllWithCustomFields { fields ->
+			fields.each { field ->
+				customFields {
+					eq('name', field.key)
+					ilike('value', "%$field.value%")
+				}
+			}
+		}
+	}
 	
+//> HELPER METHODS
 	private def removeFmessageDisplayName() {
 		if(mobile) {
 			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=?, m.contactExists=? WHERE m.src=?", [mobile, false, mobile])
+				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [mobile, mobile])
 				updateDispatchInfo()
 			}
 		}

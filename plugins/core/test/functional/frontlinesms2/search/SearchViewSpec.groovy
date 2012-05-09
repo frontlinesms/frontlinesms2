@@ -12,9 +12,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "clicking on the search button links to the result show page"() {
 		setup:
-			new Fmessage(src:"src", text:"sent", inbound:true, date:new Date()-1).save(flush: true)
-			new Fmessage(src:"src", text:"send_pending", inbound:true, date:new Date()-1).save(flush: true)
-			new Fmessage(src:"src", text:"send_failed", inbound:true, date:new Date()-1).save(flush: true)
+			Fmessage.build(text:"sent", date:new Date()-1)
+			Fmessage.build(text:"send_pending", date:new Date()-1)
+			Fmessage.build(text:"send_failed", date:new Date()-1)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -29,7 +29,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearch
 		then:
-			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group','Listeners', 'Friends']
+			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
 			searchFrm.find('select', name:'activityId').children('option')*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
 	}
 	
@@ -40,7 +40,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().contains('Searching all messages, including archived messages')
+			searchDescription.text().containsAll('Searching all messages, including archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -73,7 +73,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchFrm.inArchive = null
 			searchBtn.click()
 		then:
-			searchFrm.inArchive == null
+			searchFrm.inArchive == 'off'
 	}
 	
 	def "'Export Results' link is disabled when search is null "() {
@@ -97,19 +97,20 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			def d1 = new Dispatch(dst: '123', status: DispatchStatus.SENT, dateSent: new Date())
-			def d2 = new Dispatch(dst: '123', status: DispatchStatus.PENDING)
-			def d3 = new Dispatch(dst: '123', status: DispatchStatus.FAILED)
-			def m1 = new Fmessage(src: "src", text:"sent", hasSent:true, date: new Date()-1)
-			m1.addToDispatches(d1)
-			m1.save(flush: true)
-			def m2 = new Fmessage(src: "src", text:"send_pending", hasPending:true, date: new Date()-1)
-			m2.addToDispatches(d2)
-			m2.save(flush: true)
-			def m3 = new Fmessage(src: "src", text:"send_failed", hasFailed:true, date: new Date()-1)
-			m3.addToDispatches(d3)
-			m3.save(flush: true)
-			new Fmessage(src: "src", text:"send_failed", inbound:true, date: new Date()-1).save(flush: true)
+			
+			def m1 = new Fmessage(src:"src", text:"sent", date:new Date()-1)
+			m1.addToDispatches(dst:'123', status: DispatchStatus.SENT, dateSent:new Date())
+			m1.save(failOnError:true, flush:true)
+
+			def m2 = new Fmessage(src: "src", text:"send_pending", date:new Date()-1)
+			m2.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+			m2.save(failOnError:true, flush:true)
+
+			def m3 = new Fmessage(src: "src", text:"send_failed", date:new Date()-1)
+			m3.addToDispatches(dst:'123', status:DispatchStatus.FAILED)
+			m3.save(failOnError:true, flush:true)
+
+			Fmessage.build(text:"received", date:new Date()-1)
 			
 			to PageSearch
 			searchFrm.messageStatus = "outbound"
@@ -136,9 +137,9 @@ class SearchViewSpec extends SearchBaseSpec {
 	
 	def "should return to the same search results when message is deleted" () {
 		setup:
-			new Fmessage(src: "src", text:"sent", date: new Date(), inbound:true).save(flush: true)
-			new Fmessage(src: "src", text:"send_pending", date: new Date()-1, inbound:true).save(flush: true)
-			new Fmessage(src: "src3", text:"send_failed", date: new Date()-2, inbound:true).save(flush: true)
+			Fmessage.build(src:"src", text:"received1")
+			Fmessage.build(src:"src", text:"received2", date:new Date()-1)
+			Fmessage.build(src:"src3", text:"send_failed", date:new Date()-2)
 		when:
 			to PageSearch
 			searchBtn.present()
@@ -150,11 +151,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#delete-msg").click()
 		then:
 			at PageSearchResult
-			$("#message-list tr .message-text-cell a")*.text().containsAll(["hi alex", "sent", "send_pending", "meeting at 11.00"])
+			$("#message-list tr .message-text-cell a")*.text().containsAll(["hi alex", "received1", "received2", "meeting at 11.00"])
 			$('.flash').displayed
 	}
 	
-	def "should have the start date not set, then as the user set one the result page should contain his start date"(){
+	def "should have the start date not set, then as the user set one the result page should contain his start date"() {
 		when:
 			def date = new Date()
 			to PageSearch
@@ -199,7 +200,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#message-detail-content").text() == 'hi alex'
 	}
 	
-	def "should expand the more option and select a contactName then the link to add contactName is hidden"(){
+	def "should expand the more option and select a contactName then the link to add contactName is hidden"() {
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to PageSearch
@@ -217,7 +218,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			!contactNameLink.displayed
 	}
 
-	def "Can select a customField in More options"(){
+	def "Can select a customField in More options"() {
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
 			to PageSearch
@@ -280,13 +281,13 @@ class SearchViewSpec extends SearchBaseSpec {
 	def "should update message count when in search tab"() {
 		when:
 			to PageSearch
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
+			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			$("#message-tab-link").text().equalsIgnoreCase("Messages\n2")
+			$("#message-tab-link").text()?.equalsIgnoreCase("Messages\n2")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n3") }
+			waitFor { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n3") }
 	}
 	
 }

@@ -70,68 +70,65 @@
 	margin: 44px 0 0 17%;
 	padding: 0;
 }
-a.tab-link{
-	position: relative;
-	display: inline-block;
-	margin: 0;
+#tab-nav li.tab{
 	background-image: url('../images/buttons/tab.png');
-	width: 110px;
-	height: 22px;
-	max-height: 21px;
-	padding: 0;
-	padding-top: 7px;
 	background-repeat: no-repeat;
-	text-align: center;
-	text-transform: uppercase;
+	background-size: 100%;
+	min-width: 110px;
 	z-index: 1;
 }
-a.tab-link.current{
+#tab-nav li.tab.current{
 	background-image: url('../images/buttons/tab_active.png');
 	z-index: 10;
 }
-a.tab-link:hover{
+#tab-nav li.tab:hover{
 	background-image: url('../images/buttons/tab_hover.png');
 }
-a.tab-link:active{
+#tab-nav li.tab:active{
    	background-image: url('../images/buttons/tab_pressed.png');
 }
-#message-tab-link{
-	display: inline-block;
-	background-size: cover;
-	width: 120px;
-	padding-right: 35px;
-}
-#status-tab-link{
-	padding-right: 20px;
-	background-size: cover;
-	width: 100px;
+a.tab-link{
+	display: block;
+	margin: 0;
+	height: 21px;
+	padding: 0;
+	padding-top: 7px;
+	text-align: center;
+	text-transform: uppercase;
 }
 
-.indicator{
-	background-repeat: no-repeat;
-	display: inline-block;
+#message-tab {
+	width: 150px;
+}
+#status-tab{
+	width: 120px;
+}
+#message-tab a.tab-link, #status-tab a.tab-link {
+	text-align: left;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+#status-tab a.tab-link {
+	padding-right: 10px;
+}
+#inbox-indicator {
+	border-radius: 10px;
 	padding: 2px;
-	margin: 4px 7px;
-	position: absolute;
-	right: 0;
-	top: 0;
-	color: #fff;
+	font-size: .85em;
+	color: white;
+	float:right;
+	position: relative;
+	top: -2px;
 	font-weight: bolder;
 	text-align:center;
 }
-#inbox-indicator{
-	border-radius: 10px;
-	padding: 2px;
-	margin-right: 20px;
-	font-size: .65em;
-}
 #status-indicator{
-	margin:0 15px;
-	padding:0;
-	width:25px;
-	height:25px;
+	padding: 15px 15px 15px 15px;
 	background-image: url('../images/icons/status_red.png');
-	background-position: 0 -2px;
+	background-repeat: no-repeat;
+	float:right;
+	position: relative;
+	top: -8px;
 }
 #status-indicator.green{
    	background-image: url('../images/icons/status_green.png');
@@ -139,6 +136,7 @@ a.tab-link:active{
 #status-indicator.orange{
    	background-image: url('../images/icons/status_orange.png');
 }
+
 #system-nav{
 	position: absolute;
 	right: 17px;

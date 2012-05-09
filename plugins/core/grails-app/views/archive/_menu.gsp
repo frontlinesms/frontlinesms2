@@ -28,7 +28,7 @@
 	</ul>        
 </div>                                                                                                                    
 
-<script>
+<r:script>
 	$("#archive-menu li a").bind("click", function(event) {
 		var source = $(this)
 		var allLinks = $("#archive-menu li a")
@@ -42,4 +42,4 @@
 	function loadAllData(data) {
 		$("#content").html(data)
 	}
-</script>
+</r:script>

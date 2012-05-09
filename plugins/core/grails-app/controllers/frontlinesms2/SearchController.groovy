@@ -12,18 +12,18 @@ class SearchController extends MessageController {
 		return true
 	}
 	
-	def index = { redirect(action:'result', params:params)}
+	def index = { redirect(action:'result', params:params) }
 	
 	def no_search = {
-		[groupInstanceList : Group.findAll(),
-				folderInstanceList: Folder.findAll(),
-				activityInstanceList: Activity.findAll(),
-				messageSection: 'result',
-				customFieldList : CustomField.getAllUniquelyNamed()]
+		[groupInstanceList:Group.findAll(),
+				folderInstanceList:Folder.findAll(),
+				activityInstanceList:Activity.findAll(),
+				messageSection:'result',
+				customFieldList:CustomField.getAllUniquelyNamed()]
 	}
 
-	def result = {
-		def search = withSearch { searchInstance ->
+	def result() {
+		withSearch { searchInstance ->
 			def activity =  getActivityInstance()
 			searchInstance.owners = activity ? [activity] : null
 			searchInstance.searchString = params.searchString ?: ""
@@ -35,23 +35,22 @@ class SearchController extends MessageController {
 			searchInstance.startDate = params.startDate ?: null
 			searchInstance.endDate = params.endDate ?: null
 			searchInstance.customFields = [:]
-			CustomField.getAllUniquelyNamed().each() { customFieldName ->
+			CustomField.getAllUniquelyNamed().each { customFieldName ->
 				if(params[customFieldName])
 					searchInstance.customFields[customFieldName] = params[customFieldName]
 			}
-			searchInstance.save(failOnError: true, flush: true)
-		}
-		
-		def rawSearchResults = Fmessage.search(search)
-		def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
-		def searchDescription = getSearchDescription(search)
-		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 
-		[searchDescription: searchDescription,
-				search: search,
-				checkedMessageCount: checkedMessageCount,
-				messageInstanceList: searchResults,
-				messageInstanceTotal: rawSearchResults.count()] << show() << no_search()
+			def rawSearchResults = Fmessage.search(searchInstance)
+			def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
+			def searchDescription = getSearchDescription(searchInstance)
+			def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
+
+			[searchDescription: searchDescription,
+					search: searchInstance,
+					checkedMessageCount: checkedMessageCount,
+					messageInstanceList: searchResults,
+					messageInstanceTotal: rawSearchResults.count()] << show() << no_search()
+			}
 	}
 
 	def show = {
@@ -66,41 +65,40 @@ class SearchController extends MessageController {
 	private def getSearchDescription(search) {
 		String searchDescriptor = message(code: 'searchdescriptor.searching')
 		if(search.searchString) {
-			searchDescriptor += ' "'+search.searchString+'"'
+			searchDescriptor += " \"$search.searchString\""
 		} else {
-			searchDescriptor += message(code: 'searchdescriptor.all.messages')
+			searchDescriptor += message(code:'searchdescriptor.all.messages')
 		}
 		 
-		if(search.group) searchDescriptor += ", "+search.group.name
+		if(search.group) searchDescriptor += ", $search.group.name"
 		if(search.owners) {
 			def activity = getActivityInstance()
 			String ownerDescription = activity.name
-			searchDescriptor += ", "+ownerDescription
+			searchDescriptor += ", $ownerDescription"
 		}
-		searchDescriptor += search.inArchive? message(code: 'searchdescriptor.archived.messages'):message(code: 'searchdescriptor.exclude.archived.messages') 
-		if(search.contactString) searchDescriptor += ", "+search.contactString
-		if (search.customFields.find{it.value}) {
-			search.customFields.find{it.value}.each{
-				searchDescriptor += ", "+it.key+"="+it.value
-			}
+		searchDescriptor += message(code:
+				search.inArchive? 'searchdescriptor.archived.messages': 'searchdescriptor.exclude.archived.messages')
+		if(search.contactString) searchDescriptor += ", $search.contactString"
+		search.customFields?.findAll { it.value }?.each { f ->
+			searchDescriptor += ", $f.key=$f.value"
 		}
-		if(search.status) {
-			searchDescriptor += message(code: 'searchdescriptor.only') + search.status
+		if(search.status) { 
+			searchDescriptor += message(code:'searchdescriptor.only', args:[search.status])
 		}
 		if(search.startDate && search.endDate){
-			searchDescriptor += message(code: 'searchdescriptor.between') + search.startDate + message(code: 'searchdescriptor.and') + search.endDate
-		} else if (search.startDate) {
-			searchDescriptor += message(code: 'searchdescriptor.from') + search.startDate
-		} else if (search.endDate) {
-			searchDescriptor += message(code: 'searchdescriptor.until') + search.endDate
+			searchDescriptor += message(code:'searchdescriptor.between', args:[search.startDate, search.endDate])
+		} else if(search.startDate) {
+			searchDescriptor += message(code:'searchdescriptor.from', args:[search.startDate])
+		} else if(search.endDate) {
+			searchDescriptor += message(code:'searchdescriptor.until', args:[search.endDate])
 		}
 		return searchDescriptor
 	}
-	
+
 	private def getActivityInstance() {
 		if(params.activityId) {
 			def stringParts = params.activityId.tokenize('-')
-			def activityType = stringParts[0] == 'activity'? Activity : MessageOwner
+			def activityType = stringParts[0] == 'activity'? Activity: MessageOwner
 			def activityId = stringParts[1]
 			activityType.findById(activityId)
 		} else return null
@@ -121,11 +119,10 @@ class SearchController extends MessageController {
 				println customFieldName
 				params[customFieldName] = val
 			}
-		}
-		else {
+		} else {
 			search = new Search(name: 'TempSearchObject')
 		}
 		c.call(search)
-		search
 	}
 }
+

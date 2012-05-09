@@ -54,7 +54,8 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			def poll = new Poll(name:'thingy')
 			poll.editResponses(choiceA:'One', choiceB:'Other')
 			poll.save(failOnError:true, flush:true)
-			def messages = [new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, inbound:true), new Fmessage(src:'Max', text:'I will be late', date:TEST_DATE-4, inbound:true)] 
+			def messages = [Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4),
+					Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4)] 
 			println messages
 			poll.addToMessages(messages[0])
 			poll.addToMessages(messages[1])
@@ -62,10 +63,10 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.archive()
 			poll.save(flush:true)
 			poll.refresh()
-			assert poll.activityMessages.list().findAll {it.archived == true}
+			assert poll.activityMessages.list().every { it.archived }
 		when:
-			go "archive/activity/ownerId=$poll.id/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
-			$(".message-select-cell")[0].click()
+			go "archive/activity/${poll.id}/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
+			$(".message-select-cell #message-select-all").click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }
 	}

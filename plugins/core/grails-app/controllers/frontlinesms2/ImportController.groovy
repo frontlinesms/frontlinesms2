@@ -79,10 +79,12 @@ class ImportController {
 		if(uploadedCSVFile) {
 			def headers
 			def standardFields = ['Message Content':'text', 'Sender Number':'src']
-			def dispatchStatuses = ['Failed':DispatchStatus.FAILED,
-					'Pending':DispatchStatus.PENDING,
-					'Outbox':DispatchStatus.SENT]
+			def dispatchStatuses = [Failed:DispatchStatus.FAILED,
+					Pending:DispatchStatus.PENDING,
+					Outbox:DispatchStatus.SENT,
+					Sent:DispatchStatus.SENT]
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
+				println "Processing: $tokens"
 				if(!headers) headers = tokens 
 				else try {
 					Fmessage fm = new Fmessage()
@@ -110,7 +112,7 @@ class ImportController {
 					++savedCount
 					getMessageFolder("messages from v1").addToMessages(fm)
 				} catch(Exception ex) {
-					log.info message(code: 'import.message.save.error'), ex
+					log.info message(code:'import.message.save.error'), ex
 					++failedCount
 				}
 			}

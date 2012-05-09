@@ -27,33 +27,40 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "A announcement can be archived"() {
 		when:
-			def a = new Announcement(name:'test', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
+			def m = Fmessage.build()
+			def a = new Announcement(name:'test')
+			a.addToMessages(m)
+			a.save(failOnError:true)
 		then:
-			a.archived == false
+			!a.archived
 		when:
 			a.archive()
+			println "a.archived:$a.archived"
+			a.messages.each { println("...it.archived:$it.archived") }
 			a.save(failOnError:true, flush: true)
 		then:
-			a.archived == true
+			a.archived
 	}
 	
 	def "When an announcement is archived all of its messages are archived"() {
 		setup:
-			def a = new Announcement(name:'test1x', messages: [new Fmessage(date: new Date(), src: 'src', inbound: true)]).save(failOnError:true)
-			def m = new Fmessage(date: new Date(), src: 'src', inbound: true)
+			def a = new Announcement(name:'test1x')
+			a.addToMessages(Fmessage.build())
+			a.save(failOnError:true)
+			def m = Fmessage.build()
 		when:
 			a.addToMessages(m)
 			a.save()
 		then:
 			m.messageOwner == a
-			a.archived == false
-			m.archived == false
+			!a.archived
+			!m.archived
 		when:
 			a.archive()
-			a.save(failOnError:true, flush: true)
+			a.save()
 		then:
-			a.archived == true
-			m.archived == true
+			a.archived
+			m.archived
 	}
 	
 	def "list of smart groups should be included in the group list"() {
@@ -62,8 +69,8 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def model = controller.create()
 		then:
-			model.groupList."smartgroup-$s.id" == []
-				
+			model.groupList.get("smartgroup-$s.id")?.name == 'English numbers'
+			model.groupList.get("smartgroup-$s.id")?.addresses == []
 	}
 }
 

@@ -3,11 +3,11 @@
 	<head>
 		<title>${contactsSection ? contactsSection.name : 'Contacts'}</title>
 		<meta name="layout" content="contacts"/>
-		<script type="text/javascript">
+		<r:script>
 			$(function() {
 				$('input[name="name"]').focus();
 			});
-		</script>
+		</r:script>
 	</head>
 	<body>
 		<div id="contact-editor">

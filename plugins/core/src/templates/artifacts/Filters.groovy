@@ -3,15 +3,14 @@
     def filters = {
         all(controller:'*', action:'*') {
             before = {
-                
+
             }
-            after = {
-                
+            after = { Map model ->
+
             }
-            afterView = {
-                
+            afterView = { Exception e ->
+
             }
         }
     }
-    
 }

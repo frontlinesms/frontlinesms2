@@ -14,7 +14,7 @@
 	<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
 </div>
 
-<g:javascript>
+<r:script>
 	$("#enableAutoreply").live("change", function() {
 		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
 		if(isGroupChecked('enableAutoreply')) {
@@ -29,4 +29,4 @@
 	});
 	
 	$("#autoreplyText").live("keyup", updateCount);
-</g:javascript>
+</r:script>

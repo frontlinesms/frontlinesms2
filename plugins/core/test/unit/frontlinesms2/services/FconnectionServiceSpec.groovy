@@ -36,9 +36,9 @@ class FconnectionServiceSpec extends UnitSpec {
 	
 	def 'Connected Fconnection gives a status of CONNECTED'() {
 		given:
-			def connected = new Fconnection(id:1)
-			def notConnected = new Fconnection(id:2)
-			def alsoConnected = new Fconnection(id:3)
+			def connected = mockFconnection(1)
+			def notConnected = mockFconnection(2)
+			def alsoConnected = mockFconnection(3)
 			context.routes >> ["in-1", "out-3"].collect { [id:it] }
 		when:
 			true
@@ -52,7 +52,7 @@ class FconnectionServiceSpec extends UnitSpec {
 	def 'test route statuses'() {
 		given:
 			context.routes >> routeNames.collect { [id:it] }
-			def c = new Fconnection(id:id)
+			def c = mockFconnection(id)
 		expect:
 			service.getRouteStatus(c) == expectedStatus
 		where:
@@ -117,8 +117,8 @@ class FconnectionServiceSpec extends UnitSpec {
 		then:
 			jobRouteId == connectionId
 		where:
-			routeId          | connectionId
-			"out-1"          | 1
+			routeId | connectionId
+			"out-1" | 1
 			"out-internet-2" | 2
 			"out-modem-3"    | 3
 			"in-4"           | 4
@@ -127,9 +127,6 @@ class FconnectionServiceSpec extends UnitSpec {
 	@Unroll
 	def 'destroyRoutes should stop and remove all relevant routes'() {
 		given:
-			registerMetaClass List
-			MetaClassModifiers.addMethodsToCollection()
-
 			context.routes >> (relatedRoutes + unrelatedRoutes).collect { [id:it] }
 		when:
 			service.destroyRoutes(1)
@@ -137,14 +134,19 @@ class FconnectionServiceSpec extends UnitSpec {
 			relatedRoutes.size() * context.stopRoute(_)
 			relatedRoutes.size() * context.removeRoute(_)
 		where:
-			relatedRoutes      | unrelatedRoutes
-			['in-1']           | []
-			['out-1']          | []
-			['in-1', 'out-1']  | []
-			['in-1', 'out-1']  | ['in-2', 'out-3']
-			['out-modem-1']    | ['in-2', 'out-modem-3']
+			relatedRoutes | unrelatedRoutes
+			['in-1'] | []
+			['out-1'] | []
+			['in-1', 'out-1'] | []
+			['in-1', 'out-1'] | ['in-2', 'out-3']
+			['out-modem-1'] | ['in-2', 'out-modem-3']
 			['out-internet-1'] | ['in-2', 'out-modem-3']
 			['out-internet-1'] | ['in-2', 'out-internet-3']
 	}
-}
 
+	private def mockFconnection(int id) {
+		Fconnection c = Mock()
+		c.id >> id
+		return c
+	}
+}

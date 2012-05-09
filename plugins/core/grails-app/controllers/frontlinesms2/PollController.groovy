@@ -33,7 +33,7 @@ class PollController extends ActivityController {
 				[ownerId: poll.id]
 			} else {
 				flash.message = message(code: 'flash.message.poll.not.saved')
-				render(text: flash.message)
+				render text:flash.message
 			}
 		} else {
 			flash.message = message(code: 'flash.message.poll.not.saved')

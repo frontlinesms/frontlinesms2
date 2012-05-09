@@ -3,7 +3,7 @@
 	<g:textArea name="messageText" value="${messageText}" rows="5" cols="40"/>
 	<span id="send-message-stats" class="character-count"><g:message code="quickmessage.message.count"/></span> 
 </div>
-<g:javascript>
+<r:script>
 	$("#messageText").live("keyup", updateCount);
 	$("#messageText").live("blur", function() {
 		var value = $(this).val();
@@ -13,4 +13,4 @@
 			$("#confirm-message-text").html("none");
 		}
 	})
-</g:javascript>
+</r:script>

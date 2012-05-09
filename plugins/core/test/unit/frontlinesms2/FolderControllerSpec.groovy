@@ -1,24 +1,17 @@
 package frontlinesms2
 
-import grails.plugin.spock.ControllerSpec
-import groovy.lang.MetaClass;
-
-class FolderControllerSpec extends ControllerSpec {
-	def setup() {
-		mockDomain(Folder)
-		mockDomain(Fmessage)
-		registerMetaClass(Fmessage)
-		Fmessage.metaClass.static.owned = { Folder f, Boolean b, Boolean c ->
-			Fmessage
-		}
-	}
-
+import grails.test.mixin.*
+import spock.lang.*
+ 
+@TestFor(FolderController)
+@Mock([Folder, Fmessage])
+class FolderControllerSpec extends Specification {
 	def "can archive a folder"() {
 		given:
 			def folder = new Folder(name: 'rain').save(failOnError:true)
 			assert !folder.archived
 		when:
-			mockParams.id = folder.id
+			params.id = folder.id
 			controller.archive()
 		then:
 			folder.archived
@@ -29,7 +22,7 @@ class FolderControllerSpec extends ControllerSpec {
 			def folder = new Folder(name:'rain', archived:true).save()
 			assert folder.archived
 		when:
-			mockParams.id = folder.id
+			params.id = folder.id
 			controller.unarchive()
 		then:
 			!folder.archived

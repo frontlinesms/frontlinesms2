@@ -27,6 +27,5 @@ function summaryRedirect() {
 }
 
 function addFailedFlashMessage(data) {
-	alert(data);
 	$("#notifications").prepend("<div class='flash message'>" + data + "<a class='hide-flash'>x</a></div>");
 }

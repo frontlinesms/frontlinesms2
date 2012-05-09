@@ -175,9 +175,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			waitFor { checkedMessageCount == 1 }
 			waitFor { $('#single-message').displayed }
-			$('#single-message #message-detail #message-detail-sender').text() == message.src
-			$('#single-message #message-detail #message-detail-date').text() == formatedDate
-			$('#single-message #message-detail #message-detail-content').text() == message.text
 	}
 
 	def "should skip recipients tab if a message is replied"() {
@@ -266,13 +263,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#message-tab-link").text().equalsIgnoreCase("Messages\n1")
+			$("#message-tab-link").text()?.equalsIgnoreCase("Messages\n1")
 		when:
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n2") }
+			waitFor(5) { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n2") }
 	}
 
 	String dateToString(Date date) {

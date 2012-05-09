@@ -17,18 +17,18 @@ class FolderCedSpec extends FolderBaseSpec {
 			when:
 				go 'message'
 			then:
-				$('#folders-submenu li')[0].text().contains('Work')
-				$('#folders-submenu li')[1].text().contains('Project')
+				$('#folders-submenu li')*.text().containsAll('Work', 'Projects')
 	}
 
-// FIXME
-//	def 'Errors are displayed when folder fails to save'() {
-//			when:
-//				to PageFolderCreate
-//				def btnSave = $('input', name:'save')
-////				def errorMessages(required:false) { $('.flash.errors') }
-//				btnSave.click()
-//			then:
-//				errorMessages.present
-//	}
+	def 'Errors are displayed when folder fails to save'() {
+			when:
+				go 'message'
+				$('#create-folder a').click()
+			then:
+				waitFor { $("div.ui-dialog").displayed }
+			when:
+				$('#done').click()
+			then:
+				waitFor { $('.flash.message').displayed }
+	}
 }

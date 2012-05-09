@@ -4,18 +4,14 @@
 		<title><g:layoutTitle default="Search"/></title>
 		<g:layoutHead/>
 		<r:require module="search"/>
-
-		<g:render template="/includes" plugin="core"/>
-		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send, smallpopup.messages.export.title, wizard.quickmessage.title, smallpopup.export, popup.ok"/>
-
-
-
-
-		<g:javascript>
+		<fsms:render template="/includes"/>
+		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send, smallpopup.messages.export.title, wizard.quickmessage.title, smallpopup.export, popup.ok, fmessage.selected.many"/>
+		<r:script>
 			$(function() {  
 			   disablePaginationControls();
 			});
-		</g:javascript>
+		</r:script>
+		<r:layoutResources/>
 	</head>
 	<body id="search-tab">
 		<div id="header">
@@ -41,3 +37,4 @@
 		<r:layoutResources/>
 	</body>
 </html>
+

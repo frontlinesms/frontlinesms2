@@ -22,12 +22,13 @@ class CoreBootStrap {
 	def failPendingMessagesService
 	def camelContext
 	def messageSource
+	def quartzScheduler
 
 	def dev = Environment.current == Environment.DEVELOPMENT
 	
 	def init = { servletContext ->
+		println "BootStrap.init() : Env=${Environment.current}"
 		initialiseSerial()
-		MetaClassModifiers.addMethodsToCollection()
 		MetaClassModifiers.addTruncateMethodToStrings()
 		MetaClassModifiers.addRoundingMethodsToDates()
 		MetaClassModifiers.addZipMethodToFile()
@@ -35,6 +36,7 @@ class CoreBootStrap {
 		MetaClassModifiers.addMapMethods()
 		switch(Environment.current) {
 			case Environment.TEST:
+				quartzScheduler.start()
 				test_initGeb(servletContext)
 				break
 				
@@ -210,8 +212,8 @@ class CoreBootStrap {
 		def k1 = new Keyword(value: "COLOR")
 		def k2 = new Keyword(value: "AUTOREPLY")
 
-		new Autoreply(name:"toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
-		new Autoreply(name:"color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
+		new Autoreply(name:"Toothpaste", keyword: k2, autoreplyText: "Thanks for the input").save(failOnError:true, flush:true)
+		new Autoreply(name:"Color", keyword: k1, autoreplyText: "ahhhhhhhhh").save(failOnError:true, flush:true)
 	}
 	
 	private def dev_initFolders() {
@@ -264,14 +266,12 @@ class CoreBootStrap {
 	private def dev_initLogEntries() {
 		if(!dev) return
 		def now = new Date()
-		[new LogEntry(date: now, content: "entry1"),
-				new LogEntry(date: now-2, content: "entry2"),
-				new LogEntry(date: now-6, content: "entry3"),
-				new LogEntry(date: now-13, content: "entry4"),
-				new LogEntry(date: now-27, content: "entry5"),
-				new LogEntry(date: now-100, content: "entry6")].each() {
-			it.save(failOnError:true, flush:true)
-		}
+		[new LogEntry(date:now, content: "entry1"),
+				new LogEntry(date:now-2, content: "entry2"),
+				new LogEntry(date:now-6, content: "entry3"),
+				new LogEntry(date:now-13, content: "entry4"),
+				new LogEntry(date:now-27, content: "entry5"),
+				new LogEntry(date:now-100, content: "entry6")]*.save(failOnError:true, flush:true)
 	}
 
 	private def createGroup(String n) {
@@ -362,12 +362,14 @@ class CoreBootStrap {
 		def nonEmptyMc = new geb.navigator.AttributeAccessingMetaClass(new ExpandoMetaClass(geb.navigator.NonEmptyNavigator))
 		
 		final String contextPath = servletContext.contextPath
-		final String baseUrl = grailsApplication.config.grails.serverURL
+		// FIXME in grails 2, serverURL appears to be not set, so hard-coding it here
+		//final String baseUrl = grailsApplication.config.grails.serverURL
+		final String baseUrl = 'http://localhost:8080/core'
 		nonEmptyMc.'get@href' = {
 			def val = getAttribute('href')
 			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())
 			// check for baseUrl second, as it includes the context path
-			if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
+			else if(val.startsWith(baseUrl)) val = val.substring(baseUrl.size())
 			return val
 		}
 		

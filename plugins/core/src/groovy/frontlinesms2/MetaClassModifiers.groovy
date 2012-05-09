@@ -32,24 +32,6 @@ class MetaClassModifiers {
 		}
 	}
 
-	static def addMethodsToCollection() {
-		Collection.metaClass.filter = { Closure c ->
-			def r = []
-			delegate.each {
-				if(c(it)) r << it
-			}
-			r
-		}
-		Collection.metaClass.collectEntries = { Closure c ->
-			def m = [:]
-			delegate.each {
-				def temp = c(it)
-				m[temp[0]] = temp[1]
-			}
-			m
-		}
-	}
-	
 	static def addRoundingMethodsToDates() {
 		def setTime = { Date d, int h, int m, int s ->
 			def calc = Calendar.getInstance()

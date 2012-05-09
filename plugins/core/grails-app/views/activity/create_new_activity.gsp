@@ -1,9 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 	<head>
-		<g:javascript library="jquery" plugin="jquery"/>
+		<r:script library="jquery" plugin="jquery"/>
 		<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
-		<script type="text/javascript">
+		<r:script>
 			url_root = "${request.contextPath}/";
 			
 			function initializePopup() {
@@ -15,10 +15,8 @@
 				$("#new-activity-choices ." + activityType).attr('checked', 'checked');
 				$("#submit").removeAttr('disabled');
 			}
-		</script>
-		<g:javascript src="application.js"/>
-		<g:javascript src="mediumPopup.js"/>
-		<g:javascript src="activity/popups.js"/>
+		</r:script>
+		<r:layoutResources/>
 	</head>
 	<body>
 		<form>
@@ -37,5 +35,6 @@
 				</li>
 			</ul>
 		</form>
+		<r:layoutResources/>
 	</body>
 </html>

@@ -6,10 +6,10 @@
 		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add"/></g:link>
 	</div>
 	<div id="recipients-list">
-		<ul id="groups">
+		<ul>
 			<g:each in="${groupList}" var="entry">
 				<li class="group">
-					<input type="checkbox" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", "${entry.value.name}", ${entry.value.addresses as JSON})'>
+					<input type="checkbox" id="groups" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", "${entry.value.name}", ${entry.value.addresses as JSON})'>
 					${entry.value.name}(${entry.value.addresses.size()})
 				</li>
 			</g:each>
@@ -37,7 +37,7 @@
 	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients"/></div>
 </div>
 
-<script>
+<r:script>
 	var groupAndMembers = {}
 	function selectMembers(groupIdString, groupName, allContacts) {
 		groupAndMembers[groupIdString] = allContacts
@@ -123,4 +123,4 @@
 		}
 		return false;
 	}
-</script>
+</r:script>

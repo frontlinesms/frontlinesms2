@@ -45,7 +45,7 @@ class ConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			conn2.port == 'COM1'
 			conn2.baud == 9600
 	}
-	
+
 	def "can edit email connection"() {
 		setup:
 			def emailConnection = new EmailFconnection(receiveProtocol:EmailReceiveProtocol.IMAP, name:"test connection", serverName:"imap.gmail.com", serverPort:"1234", username:"geof", password:"3123").save(flush:true, failOnError:true)

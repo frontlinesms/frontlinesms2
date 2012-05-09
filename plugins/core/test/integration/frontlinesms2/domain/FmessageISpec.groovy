@@ -2,6 +2,8 @@ package frontlinesms2.domain
 
 import frontlinesms2.*
 
+import spock.lang.*
+
 class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	final Date TEST_DATE = new Date()
 			
@@ -100,6 +102,27 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!searchMessages
 			searchMessagesCount == 0
+	}
+
+	def "searching for a partial name of a contact will match messages he has sent and received"() {
+		given:
+			def messages = [:]
+			[robert:'123', bernie:'456', iane:'789'].each { contactName, mobile ->
+				Contact.build(name:contactName, mobile:mobile)
+				def sent = new Fmessage(text:'')
+						.addToDispatches(dst:mobile, status:DispatchStatus.PENDING)
+						.save(failOnError:true)
+				def received = Fmessage.build(src:mobile)
+				messages[contactName] = [received, sent]
+			}
+		expect:
+			Fmessage.search([contactString:'ROB']).list() == messages.robert
+		and:
+			Fmessage.search([contactString:'bER']).list() == messages.bernie + messages.robert
+		and:
+			Fmessage.search([contactString:'i']).list() == messages.iane + messages.bernie
+		and:
+			Fmessage.search([contactString:'e']).list() == messages.iane + messages.bernie + messages.robert
 	}
 
 	def "getMessageStats should return message traffic information for the filter criteria"() {
@@ -226,7 +249,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			addMessages owner, starred, notStarred
 		then:
 			Fmessage.owned(owner, true).list() == [starred]
-			Fmessage.owned(owner, false).list() == [starred, notStarred]
+			Fmessage.owned(owner, false).list() == [notStarred, starred]
 	}
 	
 	def "Fmessage_owned should get sent-and-received vs sent-only"() {
@@ -236,7 +259,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage received = createMessage(inbound:true)
 			addMessages owner, sent, received
 		then:
-			Fmessage.owned(owner, false, true).list() == [sent, received]
+			Fmessage.owned(owner, false, true).list() == [received, sent]
 			Fmessage.owned(owner, false, false).list() == [received]
 	}
 	

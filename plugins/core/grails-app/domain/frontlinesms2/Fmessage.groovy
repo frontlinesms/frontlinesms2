@@ -13,7 +13,6 @@ class Fmessage {
 	String src
 	String text
 	String displayName
-	boolean contactExists
 	
 	boolean read
 	boolean starred
@@ -21,7 +20,6 @@ class Fmessage {
 	boolean isDeleted
 	
 	boolean inbound
-	int failedCount
 	static hasMany = [dispatches:Dispatch]
 
 	static mapping = { sort date:'desc' }
@@ -33,7 +31,6 @@ class Fmessage {
 		})
 		text(nullable:true)
 		displayName(nullable:true)
-		contactExists(nullable:true)
 		archived(nullable:true, validator: { val, obj ->
 				obj.messageOwner == null || obj.messageOwner.archived == val
 		})
@@ -154,7 +151,8 @@ class Fmessage {
 					le("date", search.endDate)
 				}
 				if(search.customFields.any { it.value }) {
-					def matchingContactsNumbers = CustomField.getAllContactsWithCustomField(search.customFields).mobile ?: [""] //otherwise hibernate fails to search 'in' empty list
+					// provide empty list otherwise hibernate fails to search 'in' empty list
+					def matchingContactsNumbers = Contact.findAllWithCustomFields(search.customFields).list()*.mobile?: ['']
 					or {
 						'in'("src", matchingContactsNumbers)
 						dispatches {
@@ -166,6 +164,7 @@ class Fmessage {
 					eq('archived', false)
 				}
 				eq('isDeleted', false)
+				order('date', 'desc')
 			}
 		}
 		
@@ -261,24 +260,19 @@ class Fmessage {
 			if(src &&
 					(c = Contact.findByMobile(src))) {
 				displayName = c.name
-				contactExists = true
 			} else {
 				displayName = src
-				contactExists = false
 			}
 		} else {
 			if(dispatches?.size() == 1) {
 				def dst = dispatches.dst[0]
 				if((c = Contact.findByMobile(dst))) {
 					displayName = "To: " + c.name
-					contactExists = true
 				} else {
 					displayName = "To: " + dst
-					contactExists = false
 				}
 			} else if(dispatches?.size() > 1) {
 				displayName = "To: " + dispatches?.size() + " recipients"
-				contactExists = true
 			}
 		}
 	}

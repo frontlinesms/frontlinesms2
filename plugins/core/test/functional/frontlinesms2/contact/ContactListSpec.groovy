@@ -43,33 +43,37 @@ class ContactListSpec extends ContactBaseSpec {
 	
 	def 'should be able to search contacts'() {
 		given:
-			def samAnderson = new Contact(name: 'Sam Anderson', mobile: "1234567891").save(failOnError: true)
-			def samJones = new Contact(name: 'SAm Jones', mobile: "1234567892").save(failOnError: true)
-			def samTina = new Contact(name: 'SaM Tina', mobile: "1234567893").save(failOnError: true)
-			def bob = new Contact(name: 'bob', mobile: "99999").save(failOnError: true)
+			def samAnderson = Contact.build(name:'Sam Anderson')
+			def samJones = Contact.build(name:'SAm Jones')
+			def samTina = Contact.build(name:'SaM Tina')
+			def bob = Contact.build(name:'bob')
 		when:
 			to PageContactShow
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones','SaM Tina'] }
+			waitFor { $('#contact-list li a')*.text() == ['Sam Anderson', 'SAm Jones', 'SaM Tina'] }
 	}
 	
 	def 'should be able to search contacts within a group'() {
 		given:
-			def fpGroup = new Group(name: "Friends").save(failOnError: true, flush: true)
-			def samAnderson = new Contact(name: 'Sam Anderson', mobile: "1234567891").save(failOnError: true)
-			def samJones = new Contact(name: 'SAm Jones', mobile: "1234567892").save(failOnError: true)
-			def samTina = new Contact(name: 'SaM Tina', mobile: "1234567893").save(failOnError: true)
+			def fpGroup = Group.build(name:"Friends")
+			def samAnderson = Contact.build(name:'Sam Anderson')
+			def samJones = Contact.build(name:'SAm Jones')
+			def samTina = Contact.build(name:'SaM Tina')
+			def bob = Contact.build(name:'Bob')
+
 			samAnderson.addToGroups(fpGroup, true)
-			samJones.addToGroups(fpGroup,true)
-			def bob = new Contact(name: 'Bob', mobile: "1234567894").save(failOnError: true).addToGroups(fpGroup,true)
+			samJones.addToGroups(fpGroup, true)
+			bob.addToGroups(fpGroup, true)
 		when:
 			go "group/show/${fpGroup.id}"
 			$("#contact-search").jquery.trigger('focus')
 			$("#contact-search") << "Sam"
 		then:
-			waitFor { $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
+			waitFor {
+println $('#contact-list li').children('a')*.text()
+ $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
 	def "should remain on the same page when a contact is selected"() {

@@ -22,6 +22,11 @@
 			</a>
 		</g:if>
 	</div>
+	<script>
+		$(function() {
+			$("a", "#action-buttons" ).button();
+		});
+	</script>
 	<div class="basic-info">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
@@ -55,7 +60,6 @@
 			  </g:each>
 		</ul>
 	</div>
-
 	<div id='info-add' class="basic-info">
 		<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na"><g:message code="contact.customfield.addmoreinformation"/></option>
@@ -111,7 +115,13 @@
 		</div>
 	</div>
 </div>
-<g:javascript>
+<r:script>
+	$(document).ready(function(){
+	$('#group-dropdown').live("change", function(){
+			$('select').selectmenu();
+		});
+	});
+
 	function refreshMessageStats(data) {
 		var url = 'contact/getMessageStats'
 		var numSent = $('#num-sent')
@@ -126,4 +136,4 @@
 	$(function() {
 		setInterval(refreshMessageStats, 15000);
 	});
-</g:javascript>
+</r:script>

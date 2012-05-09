@@ -1,6 +1,5 @@
 <link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms.plugin')}" type="image/x-icon"/>
-<r:layoutResources/>
-<g:javascript>
+<r:script>
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
 	controller = "${params?.controller}";
@@ -16,10 +15,10 @@
 		}
 		return translated;
 	}
-</g:javascript>
+</r:script>
 
 <g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
-	<g:javascript>
+	<r:script>
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
@@ -31,11 +30,12 @@
 					$("#notifications").empty().append(data);
 			});
 		}
-	</g:javascript>
+	</r:script>
 </g:if>
 <g:else>
-	<g:javascript>
+	<r:script>
 		// declare our own, non-functioning select menu
 		$.fn.selectmenu = function() {}
-	</g:javascript>
+	</r:script>
 </g:else>
+

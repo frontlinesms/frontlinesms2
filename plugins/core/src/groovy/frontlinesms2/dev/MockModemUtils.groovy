@@ -73,7 +73,7 @@ class MockModemUtils {
 						13:'07915892000000F0040B915274204365F70000704021325224230A6679982E0EB3D9203A'])
 	}
 	
-	static SerialPortHandler createMockPortHandler(boolean canSend, Map receiveMessages=[:], List sentMessages=[]) {
+	static SerialPortHandler createMockPortHandler(boolean canSend=true, Map receiveMessages=[:], List sentMessages=[]) {
 		def state_initial = new GroovyHayesState(error: "ERROR: 1",
 				responses: standardResponses + 
 						[~/AT\+CMGL=\d/, { handler, request ->

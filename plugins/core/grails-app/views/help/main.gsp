@@ -1,6 +1,6 @@
 <div id="help">
-	<div id="index">
-		<fsms:render template="index" />
+	<div id="index" class="vertical-tabs ui-tabs-nav">
+		<fsms:render template="index"/>
 	</div>
 	<div id="file">
 	</div>

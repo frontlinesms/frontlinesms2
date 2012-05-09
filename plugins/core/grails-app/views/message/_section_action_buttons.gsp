@@ -1,5 +1,5 @@
 <ul class="header-buttons">
-	<li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true);" id="quick_message">
+	<li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)" id="quick_message">
 			<div id="quick-message"><g:message code="fmessage.quickmessage"/></div>
 	</g:remoteLink></li>
 	<g:if test="${!(messageSection in ['trash', 'folder', 'activity'])}">

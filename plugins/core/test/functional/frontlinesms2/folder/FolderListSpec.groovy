@@ -3,6 +3,8 @@ package frontlinesms2.folder
 import frontlinesms2.*
 import java.text.SimpleDateFormat
 
+import spock.lang.*
+
 class FolderListSpec extends FolderBaseSpec {
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
@@ -61,7 +63,7 @@ class FolderListSpec extends FolderBaseSpec {
 			go "message/folder/${folder.id}/show/${message.id}"
 			$("#btn_reply").click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor(5) { $('div#tabs-1').displayed }
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
@@ -144,15 +146,15 @@ class FolderListSpec extends FolderBaseSpec {
 		setup:
 			def folderId = deleteFolder()
 		when:
-			go "message/trash/show/${Trash.findByLinkId(folderId).id}"
-			def rowContents = $('#message-list tr:nth-child(1) td')*.text()
+			go "message/trash/show/${Trash.findByObjectId(folderId).id}"
+			def rowContents = $('#message-list tr:nth-child(2) td')*.text()
 		then:
 			println rowContents
 			rowContents[2] == 'Work'
-			rowContents[3] == '2 messages'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			rowContents[3] == '2 message(s)'
+			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-sender').text() == 'Work folder'
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByLinkId(folderId).dateCreated)
+			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-content').text() == "${Folder.findById(folderId).getLiveMessageCount()} messages"
 	}
 	

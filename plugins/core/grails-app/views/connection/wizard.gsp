@@ -1,11 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.Fconnection" %>
-<g:javascript library="jquery" plugin="jquery"/>
-<jqui:resources theme="medium" plugin="randomtexttosolvebug"/>
-<g:javascript>
+<meta name="layout" content="popup"/>
+<r:script>
 	url_root = "${request.contextPath}/";
-</g:javascript>
-<g:javascript src="application.js"/>
-<g:javascript src="mediumPopup.js"/>
+</r:script>
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt"/></div>
 	<ol>
@@ -15,15 +12,14 @@
 		<li><a href="#tabs-2"><g:message code="connection.details"/></a></li>
 		<li><a href="#tabs-3"><g:message code="connection.confirm"/></a></li>
 	</ol>
-	<g:form name="connectionForm" action="${action}" id='${fconnectionInstance?.id}'>
-		<fsms:render template="type"/>
-		<fsms:render template="details"/>
-		<fsms:render template="confirm"/>
-	</g:form>
+	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
+		<g:render template="type" plugin="core"/>
+		<g:render template="details" plugin="core"/>
+		<g:render template="confirm" plugin="core"/>
+	</g:formRemote>
 </div>
 
-<g:javascript>
-
+<r:script>
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
@@ -81,13 +77,13 @@ var fconnection = {
 		}	
 	},
 
-	<g:each in="${Fconnection.implementations}">
-	${it.shortName}: {
-		requiredFields: ["${Fconnection.getNonnullableConfigFields(it).join('", "')}"],
-		configFieldsKeys: ["${it.configFields instanceof Map ? it.configFields.getAllKeys()?.join('", "'):''}"],
-		humanReadableName: "<g:message code="${it.simpleName.toLowerCase()}.label"/>",
+	<g:each in="${Fconnection.implementations}" var="imp">
+	${imp.shortName}: {
+		requiredFields: ["${Fconnection.getNonnullableConfigFields(imp).join('", "')}"],
+		configFieldsKeys: ["${imp.configFields instanceof Map? imp.configFields.allKeys?.join('", "'): ''}"],
+		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
 		show: function() {
-			<g:each in="${(Fconnection.implementations - it)*.shortName}">
+			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
 			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys
@@ -96,47 +92,7 @@ var fconnection = {
 					setConfirmation(value);
 				});
 			}
-			<g:set var="configFields" value="${it.configFields instanceof Map? (it.configFields.getAllValues()) : it.configFields}"/>
-			<g:each in="${configFields}" var="f">
-				<g:if test="${f in it.passwords}">setSecretConfirmation('${f}');</g:if>
-				<g:else>setConfirmation('${f}');</g:else>
-			</g:each>
-			$("#${it.shortName}-confirm").show();
-		}
-	},
-	</g:each>
-};
-			
-function isFieldSet(fieldName) {
-	var val = getFieldVal(fieldName);
-	if(isInstanceOf(val, 'Boolean')) {
-		if(val && isSubsection(fieldName)) {
-			return validateSubsectionFields(fieldName);
-		}
-	} else {
-		return val!=null && val.length>0;
-	}
-}
-
-function isFieldValid(field) {
-	return isFieldSet(field);
-}
-
-function isInstanceOf(obj, clazz){
-  return (obj instanceof eval("("+clazz+")")) || (typeof obj == clazz.toLowerCase());
-}
-
-function validateSubsectionFields(field) {
-	var valid = false;
-	var subSectionFields = $('.' + field + '-subsection-member');
-	var requiredFields = fconnection[fconnection.getType()].requiredFields
-	$.each(subSectionFields, function(index, value) {
-		var field = $(value).attr("field");
-		if(requiredFields.indexOf(field) > -1) {
-			valid = isFieldSet(field);
-			return valid;
-		}
-	});
+			<g:set var="configFields" value="${imp.configFields instanceof Map? (imp.configFields.allValues): imp.configFields}"/>
 	return valid;
 }
 
@@ -150,6 +106,7 @@ function validateSections(keys) {
 	});
 	return valid;
 }
+
 function isSubsection(fieldName) {
 	return $('#' + fieldName + '-subsection').length > 0;
 }
@@ -216,4 +173,16 @@ function initializePopup() {
 		validate: fconnection.isValid
 	});
 }
-</g:javascript>
+
+function handleSaveResponse(response) {
+	if(response.ok) {
+		window.location = response.redirectUrl;
+	} else {
+		var errors = $(".error-panel");
+		errors.text(response.text);
+		errors.show();
+		$("#submit").removeAttr('disabled');
+	}
+}
+</r:script>
+

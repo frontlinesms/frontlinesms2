@@ -10,7 +10,7 @@ class SettingsController {
 		redirect(action:'general')
 	}
 	
-	def logs = {
+	def logs() {
 		def logEntryList
 		if(params.timePeriod && params.timePeriod != 'forever') {
 			def timePeriod = new Date() - params.timePeriod.toInteger()
@@ -18,8 +18,8 @@ class SettingsController {
 		} else {
 			logEntryList = LogEntry.findAll()
 		}
-		[logEntryList: logEntryList,
-				logEntryTotal: logEntryList.size()]
+		[logEntryList:logEntryList,
+				logEntryTotal:logEntryList.size()]
 	}
 	
 	def general = {
@@ -28,9 +28,9 @@ class SettingsController {
 
 	def selectLocale = {
 		Locale locale = StringUtils.parseLocaleString(params.language)
-        LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request)
-        localeResolver.setLocale(request, response, locale)
-        redirect view:'general'
+		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request)
+		localeResolver.setLocale(request, response, locale)
+		redirect view:'general'
 	}
 
 	private def withFconnection(Closure c) {

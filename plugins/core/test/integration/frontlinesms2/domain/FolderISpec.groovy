@@ -33,8 +33,8 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "When a folder is archived all of its messages are archived"() {
 		setup:
-			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(date: new Date(), inbound: true, src: 'src')
+			def f = Folder.build(name:'test')
+			def m = Fmessage.build()
 		when:
 			f.addToMessages(m)
 			f.save()
@@ -44,7 +44,6 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 			m.archived == false
 		when:
 			f.archive()
-			f.save(failOnError:true, flush: true)
 		then:
 			f.archived == true
 			m.archived == true

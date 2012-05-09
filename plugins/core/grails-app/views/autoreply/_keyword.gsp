@@ -3,10 +3,10 @@
 	<g:textField name="keyword" id="keyword" value="${activityInstanceToEdit?.keyword?.value}"/>
 	<p><g:message code="autoreply.all.messages"/> <g:checkBox name="blankKeyword" checked="false"/></p>
 </div>
-<g:javascript>
+<r:script>
 	$(document).ready(function(){
 	$('#blankKeyword').live("change", function(){
 		(this.checked) ? $("#keyword").attr('disabled','disabled') : $("#keyword").attr('disabled',false);
 		});
 	});
-</g:javascript>
+</r:script>

@@ -16,7 +16,7 @@
 					<g:if test="${messageInstance.hasFailed && failedDispatchCount == 1}"> (<g:message code="fmessage.failed"/>)</g:if>
 					<g:elseif test="${messageInstance.hasFailed && failedDispatchCount}"> (${failedDispatchCount} <g:message code="fmessage.failed"/>)</g:elseif>
 				</span> 
-				<g:if test="${!messageInstance.contactExists}">
+				<g:if test="${messageInstance.displayName ==~ /^\+?\d+$/}">
 					<g:link elementId="add-contact" controller="contact" action="createContact" params="[mobile: (!messageInstance.inbound && messageInstance.dispatches.size() == 1) ? messageInstance.dispatches.dst : messageInstance.src]"></g:link>
 				</g:if>
 			</p>
@@ -28,16 +28,21 @@
 					</g:link>
 				</p>
 			</g:if>
-			<div id="message-detail-content"><p><!-- TODO convert linebreaks in message to new paragraphs (?)  -->${messageInstance.text}</p></div>
+			<div id="message-detail-content"><p>
+				<!-- TODO convert linebreaks in message to new paragraphs (?)  -->
+				${messageInstance.text}
+			</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>
 		<fsms:render template="/message/other_actions"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>
-			<p id="message-detail-sender">${ownerInstance.name} ${ownerInstance.type}</p>
+			<p id="message-detail-sender">
+				<g:message code="${ownerInstance.shortName}.title" args="${[ownerInstance.name]}"/>
+			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
-			<div id="message-detail-content"><p>${ownerInstance.getLiveMessageCount() == 1 ? g.message(code:'fmessage.count') : ownerInstance.getLiveMessageCount() + g.message(code:'fmessage.many')}</p></div>
+			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>
 	</g:elseif>

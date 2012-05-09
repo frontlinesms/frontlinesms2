@@ -83,7 +83,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.activityId = "activity-${Poll.findByName('Miauow Mix').id}"
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('Barnabus')]
+			model.messageInstanceList*.src == ['Barnabus']
 	}
 
 // FIXME	
@@ -98,7 +98,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.activityId = "folder-${folder.id}"
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254111222')]
+			model.messageInstanceList*.src == ['+254111222']
 	}
 	
 	def "search for inbound messages only"() {
@@ -139,7 +139,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('test').id
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
+			model.messageInstanceList*.src == ['+254333222']
 			controller.params.groupId == Group.findByName('test').id
 	}
 	
@@ -160,7 +160,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupId = Group.findByName('test').id
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254333222')]
+			model.messageInstanceList*.src == ['+254333222']
 	}
 	
 	def "message searches can be restricted to individual contacts"() {
@@ -170,7 +170,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.searchString = "work"
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254987654')]
+			model.messageInstanceList*.src == ['+254987654']
 	}
 	
 	def "can include archived messages in search (or not)"() {
@@ -179,14 +179,14 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.inArchive = true
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254111222'), Fmessage.findBySrc('+254987654')]
+			model.messageInstanceList*.src == ['+254111222', '+254987654']
 			
 		when:
 			controller.params.searchString = "work"
 			controller.params.inArchive = false
 			model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('+254111222')]
+			model.messageInstanceList*.src == ['+254111222']
 	}
 	
 	def "deleted messages do not appear in search results"() {
@@ -197,7 +197,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.findBySrc("+254333222").save(flush: true)
 			def model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('Minime')]
+			model.messageInstanceList*.src == ['Minime']
 	}
 
 	def "messageInstanceTotal should give a total count of all the messages available"() {
@@ -280,7 +280,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.endDate = TEST_DATE-5
 			model = controller.result()
 		then:
-			model.messageInstanceList == [Fmessage.findBySrc('Bob'), Fmessage.findBySrc('Michael')]
+			model.messageInstanceList*.src == ['Bob', 'Michael']
 		when:
 			controller.params.startDate = TEST_DATE-14
 			controller.params.endDate = TEST_DATE

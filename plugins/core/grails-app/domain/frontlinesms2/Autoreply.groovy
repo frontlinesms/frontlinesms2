@@ -23,15 +23,14 @@ class Autoreply extends Activity {
 //> PROCESS METHODS
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		if(!exactMatch && keyword.value) return
-		def autoreply = this
 		def params = [:]
 		params.addresses = message.src
-		params.messageText = autoreply.autoreplyText
-		autoreply.addToMessages(message)
+		params.messageText = autoreplyText
+		addToMessages(message)
 		def outgoingMessage = messageSendService.createOutgoingMessage(params)
-		autoreply.addToMessages(outgoingMessage)
+		addToMessages(outgoingMessage)
 		messageSendService.send(outgoingMessage)
-		autoreply.save()
+		save()
 		println "Autoreply message sent to ${message.src}"
 	}
 }

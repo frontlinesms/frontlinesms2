@@ -6,14 +6,14 @@ class AnnouncementController extends ActivityController {
 		def announcementInstance = new Announcement()
 		announcementInstance.name = params.name
 		announcementInstance.sentMessageText = params.messageText
-		def fmessage = messageSendService.createOutgoingMessage(params)
-		messageSendService.send(fmessage)
-		announcementInstance.addToMessages(fmessage)
+		def m = messageSendService.createOutgoingMessage(params)
+		messageSendService.send(m)
+		announcementInstance.addToMessages(m)
 		if (announcementInstance.save()) {
-			flash.message = message(code: 'announcement.saved')
+			flash.message = message(code:'announcement.saved')
 			[ownerId: announcementInstance.id]
 		} else {
-			flash.message = message(code: 'announcement.not.saved')
+			flash.message = message(code:'announcement.not.saved')
 			render(text: flash.message)
 		}
 	}
@@ -21,6 +21,6 @@ class AnnouncementController extends ActivityController {
 	private def withAnnouncement(Closure c) {
 		def announcementInstance = Announcement.get(params.id)
 		if (announcementInstance) c announcementInstance
-		else render(text: message(code: 'announcement.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
+		else render(text: message(code:'announcement.id.exist.not', args:[message(code:params.id), ''])) // TODO handle error state properly
 	}
 }

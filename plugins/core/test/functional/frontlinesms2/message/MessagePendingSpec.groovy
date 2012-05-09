@@ -10,13 +10,10 @@ import frontlinesms2.*
 @Mixin(frontlinesms2.utils.GebUtil)
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		def pendingDispatch = new Dispatch(dst:"dst1", status:DispatchStatus.PENDING)
-		def failedDispatch = new Dispatch(dst:"dst2", status:DispatchStatus.FAILED)
-		def sentDispatch = new Dispatch(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date())
-		new Fmessage(src: "src1", hasFailed:true, inbound:false, starred: true, date: new Date()).addToDispatches(failedDispatch).save(flush: true)
-		new Fmessage(src: "src2", hasPending:true, inbound:false, date: new Date()).addToDispatches(pendingDispatch).save(flush: true)
-		new Fmessage(src: "src", inbound:false, hasSent:true, date: new Date()).addToDispatches(sentDispatch).save(flush: true)
-		new Fmessage(src: "src", inbound:true, date: new Date()).save(flush: true)
+		new Fmessage(src:"src1", inbound:false, starred:true).addToDispatches(dst:"dst2", status:DispatchStatus.FAILED).save(failOnError:true, flush:true)
+		new Fmessage(src:"src2", inbound:false).addToDispatches(dst:"dst1", status:DispatchStatus.PENDING).save(failOnError:true, flush:true)
+		new Fmessage(src:"src", inbound:false).addToDispatches(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+		Fmessage.build(src:"src")
 	}
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
@@ -97,3 +94,4 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			waitFor{ $(".flash").displayed }
 	}
 }
+

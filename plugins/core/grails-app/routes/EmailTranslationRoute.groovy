@@ -1,5 +1,7 @@
+import org.apache.camel.builder.RouteBuilder
+
 class EmailTranslationRoute {
-	def configure = {
+	void configure() {
 		from('seda:raw-email')
 				.beanRef('emailTranslationService', 'process')
 				.to('seda:incoming-fmessages-to-store')

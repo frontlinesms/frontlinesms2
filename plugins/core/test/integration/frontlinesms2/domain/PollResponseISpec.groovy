@@ -11,7 +11,7 @@ class PollResponseISpec extends grails.plugin.spock.IntegrationSpec {
 			p.addToResponses(new PollResponse(value: 'No', key: 'No'))
 			p.addToResponses(r)
 			p.save(flush:true, failOnError:true)
-			def m = new Fmessage(inbound:true)
+			def m = Fmessage.build()
 		when:
 			r.addToMessages(m)
 			p.save(failOnError:true, flush:true)

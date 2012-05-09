@@ -9,7 +9,7 @@ function checkForNew() {
 	var currentTotal = $("#messageTotal").val();
 	var newTotal = $("#messageTotal").val();
 	
-	$.getJSON(url_root + 'message/getNewMessageCount', {messageSection: section, ownerId: ownerId}, function(data) {
+	$.getJSON(url_root + 'message/newMessageCount', {messageSection: section, ownerId: ownerId}, function(data) {
 		$.each(data, function(key, val) {
 		    newTotal = val;
 		});

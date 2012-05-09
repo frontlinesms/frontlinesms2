@@ -1,6 +1,7 @@
 package frontlinesms2.connection
 
-import frontlinesms2.*
+import spock.lang.*
+
 import frontlinesms2.*
 import frontlinesms2.dev.MockModemUtils
 
@@ -8,12 +9,6 @@ import serial.mock.MockSerial
 import serial.mock.CommPortIdentifier
 
 class ConnectionFSpec extends grails.plugin.geb.GebSpec {
-	def cleanup() {
-		SmslibFconnection.findAll()*.delete(flush:true)
-		EmailFconnection.findAll()*.delete(flush:true)
-		Fconnection.findAll()*.delete(flush:true)
-	}
-	
 	def 'When there are no connections, this is explained to the user'() {
 		when:
 			to ConnectionPage
@@ -47,7 +42,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			btnCreateRoute.click()
 		then:
-			waitFor { txtStatus == "Connected" }
+			waitFor(10) { txtStatus == "Connected" }
 	}
 	
 	def 'The first connection in the connection list page is selected'() {
@@ -68,32 +63,20 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			$('title').text() == "Settings > Connections > MTN Dongle"
 	}
 	
-	def "should update message count when in Settings section"() {
-		when:
-			to ConnectionPage
-			def message = new Fmessage(src:'+254999999', text: "message count", inbound:true, date: new Date()).save(flush: true, failOnError:true)
-		then:
-			$("#message-tab-link").text().equalsIgnoreCase("Messages\n0")
-		when:
-			js.refreshMessageCount()
-		then:
-			waitFor { $("#message-tab-link").text().equalsIgnoreCase("Messages\n1") }
-	}
-	
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 		given:
 			def testConnection = createTestSmsConnection()
-			new SmslibFconnection(name:"test modem", port:"COM2", baud:"11200").save(flush:true, failOnError:true)
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to ConnectionPage
 		then:
 			$('#connections .selected .test').isEmpty()
 		when:
-			waitFor{ $("#connections .selected .route").displayed }
+			waitFor{ $("#connections .selected .route") }
 			btnCreateRoute.click()
 		then:
-			waitFor { btnTestRoute.@href == "/connection/createTest/${testConnection.id}" }
-			$('#notifications').text().contains("Created route")
+			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
+			$('#notifications').text()?.contains("Created route")
 	}
 
 	def 'creating a new fconnection causes a refresh of the connections list'(){
@@ -103,7 +86,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor { at ConnectionDialog }
+			waitFor(5) { at ConnectionDialog }
 		when:
 			connectionForm.connectionType = "smslib"
 			nextPageButton.click()
@@ -122,16 +105,39 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			println "TEXT: ${lstConnections.find('li')*.text()}"
 			lstConnections.find('li').size() == 2
 	}
+
+	def 'dialog should not close after confirmation screen unless save is successful'(){
+		given:
+			to ConnectionPage
+			btnNewConnection.click()
+			waitFor { at ConnectionDialog }
+			connectionForm.connectionType = "smslib"
+			nextPageButton.click()
+			connectionForm.smslibname = "name"
+			connectionForm.smslibport = "port"
+			connectionForm.smslibbaud = "wrongBaud"
+			nextPageButton.click()
+		when:
+			doneButton.click()
+		then:
+			waitFor{ $('.error-panel').displayed }
+			$('.error-panel').text() == 'baud must be a valid number'
+			at ConnectionDialog
+			confirmName.text() == "name"
+			confirmPort.text() == "port"
+			confirmType.text() == "Phone/Modem"
+	}
 	
 	def 'can setup a new IntelliSMS account'() {
 		when:
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor { at ConnectionDialog }
+			waitFor(5) { at ConnectionDialog }
 		when:
 			connectionForm.connectionType = "intellisms"
 			nextPageButton.click()
+			connectionForm.intellismssend = true
 			connectionForm.intellismsname = "New IntelliSMS Connection"
 			connectionForm.intellismsusername = "test"
 			connectionForm.intellismspassword = "1234"
@@ -178,26 +184,22 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	}
 	
 	def createTestEmailConnection() {
-		def c = new EmailFconnection(name:'test email connection',
+		EmailFconnection.build(name:'test email connection',
 				receiveProtocol:EmailReceiveProtocol.IMAPS,
 				serverName:'imap.zoho.com', serverPort:993,
 				username:'mr.testy@zoho.com', password:'mter')
-		c.save(failOnError:true, flush:true)
-		return c
 	}
 	
 	def createTestSmsConnection() {
-		def c = new SmslibFconnection(name:'MTN Dongle', port:'COM99')
-		c.save(failOnError:true, flush:true)
 		MockModemUtils.initialiseMockSerial([
-				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler_sendFails())])
-		return c
+				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
+		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
 	}
 }
 
 class ConnectionDialog extends ConnectionPage {
 	static at = {
-		$("#ui-dialog-title-modalBox").text().toLowerCase().contains('connection')
+		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('connection')
 	}
 	
 	static content = {
@@ -212,3 +214,4 @@ class ConnectionDialog extends ConnectionPage {
 		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
 	}
 }
+

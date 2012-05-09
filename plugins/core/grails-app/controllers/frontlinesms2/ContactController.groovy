@@ -1,20 +1,24 @@
 package frontlinesms2
 
-import grails.util.GrailsConfig
 import grails.converters.JSON
 
 class ContactController {
+//> STATIC PROPERTIES
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-	def messageSource
+
+//> SERVICES
+	def grailsApplication
 	def contactSearchService
 
+//> INTERCEPTORS
 	def beforeInterceptor = {
-		params.max = params.max?: GrailsConfig.config.grails.views.pagination.max
+		params.max = params.max?: grailsApplication.config.grails.views.pagination.max
 		params.sort = params.sort ?: 'name'
 		params.offset = params.offset ?: 0
 		true
 	}
 
+//> ACTIONS
 	def index = {
 		redirect action: "show", params:params
 	}
@@ -34,15 +38,14 @@ class ContactController {
 		render view:'/contact/_single_contact_view', model:model
 	}
 	
-	def show = { contactInstance ->
+	def show = {
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
 		def contactList = contactSearchService.contactList(params)
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
-		if (!contactInstance)
-			contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
 		def contactGroupInstanceList = contactInstance?.groups ?: []
 		def contactFieldInstanceList = contactInstance?.customFields ?: []
 		[contactInstance: contactInstance,
@@ -140,7 +143,7 @@ class ContactController {
 	}
 
 	def search = {
-		render template: 'search_results', model: contactSearchService.contactList(params), plugin:"core"
+		render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	
 	def checkForDuplicates = {
@@ -159,6 +162,7 @@ class ContactController {
 		}
 	}
 
+//> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
 		if (contactInstance.save(flush:true)) {
@@ -257,8 +261,9 @@ class ContactController {
 		}
 		fieldsToRemove.each() { id ->
 			def toRemove = CustomField.get(id)
+			contactInstance.removeFromCustomFields(toRemove)
 			if(toRemove)
-				toRemove.delete(failOnError: true, flush:true)
+				toRemove.delete()
 		}
 		return contactInstance
 	}

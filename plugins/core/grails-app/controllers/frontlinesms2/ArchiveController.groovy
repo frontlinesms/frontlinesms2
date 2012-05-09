@@ -1,17 +1,11 @@
 package frontlinesms2
 
-import grails.util.GrailsConfig
-
 class ArchiveController extends MessageController {
-	def beforeInterceptor = {
-		params.sort = params.sort ?: 'date'
-		params.order = params.order ?: 'desc'
-		params.max = params.max ?: GrailsConfig.config.grails.views.pagination.max
-		params.offset  = params.offset ?: 0
-		params.starred = params.starred ? params.starred.toBoolean() : false
-		return true
-	}
+//> SERVICES
+
+//> INTERCEPTORS
 	 
+//> ACTIONS
 	def index = {
 		params.sort = 'date'
 		def action = params.messageSection ?: 'inbox'
@@ -33,7 +27,8 @@ class ArchiveController extends MessageController {
 				messageSection: "folder"]
 	}
 	
-	def getShowModel(messageInstanceList) {
+//> PRIVATE HELPERS
+	private def getShowModel(messageInstanceList) {
 		def model = super.getShowModel(messageInstanceList)
 		return model
 	}

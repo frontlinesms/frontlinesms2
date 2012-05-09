@@ -22,7 +22,7 @@ class SettingsPhonesAndConnectionsFSpec extends SettingsBaseSpec {
 			go 'connection/list'
 		then:
 			at PageSettingsConnection
-			connectionNames*.text() == ["'MTN Dongle'", "'Miriam's Clickatell account'"]
+			connectionNames*.text() == ["'Miriam's Clickatell account'", "'MTN Dongle'"]
 	}
 }
 
