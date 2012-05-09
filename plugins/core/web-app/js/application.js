@@ -18,7 +18,7 @@ $(function() {
 });
 
 function refreshMessageCount() {
-	$.get(url_root + 'message/getUnreadMessageCount', function(data) {
+	$.get(url_root + 'message/unreadMessageCount', function(data) {
 		$('#inbox-indicator').html(data);
 	});
 }

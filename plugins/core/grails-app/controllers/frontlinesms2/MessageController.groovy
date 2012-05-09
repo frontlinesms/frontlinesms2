@@ -325,11 +325,11 @@ class MessageController {
 		redirect(action: 'inbox')
 	}
 	
-	def getUnreadMessageCount = {
+	def unreadMessageCount = {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
-	def getSendMessageCount = {	
+	def sendMessageCount = {	
 		def messageInfo
 		def fmessage = params.message ?: ''
 		if(fmessage)	{ 
