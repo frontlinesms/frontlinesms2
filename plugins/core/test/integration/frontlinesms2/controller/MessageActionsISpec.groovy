@@ -12,24 +12,22 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "message can be moved to a different poll response"() {
 		setup:
-			def r = new PollResponse(value:'known unknown')
 			def r2 = new PollResponse(value:'unknown unknown')
-			def unknown = new PollResponse(value:'Unknown')
 			def poll = new Poll(name: 'Who is badder?')
 					.addToResponses(r2)
-					.addToResponses(unknown)
-					.addToResponses(r)
+					.addToResponses(PollResponse.createUnknown())
+					.addToResponses(value:'known unknown')
 					.save(failOnError:true, flush:true)
 			def message = Fmessage.build(src:'Bob', text:'I like manchester')
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob'))
 			poll.save(failOnError:true, flush:true)
 		when:
-			controller.params.messageIdList = message.id
+			controller.params.messageId = message.id
 			controller.params.responseId = r2.id
 			controller.params.ownerId = poll.id
 			controller.changeResponse()
 		then:
-			r2.refresh().messages.contains(message)
+			PollResponse.get(r2.id).messages.contains(message)
 	}
 	
 	def "message can be moved to a folder"() {

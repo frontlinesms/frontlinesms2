@@ -229,7 +229,7 @@ class MessageController {
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
 
-	def move = {
+	def move() {
 		def messageIdList = getCheckedMessageList()
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
@@ -263,7 +263,7 @@ class MessageController {
 		render ""
 	}
 
-	def changeResponse = {
+	def changeResponse() {
 		def responseInstance = PollResponse.get(params.responseId)
 		getCheckedMessageList().each { id ->
 			withFmessage id, { messageInstance ->
@@ -276,7 +276,7 @@ class MessageController {
 		render ""
 	}
 
-	def changeStarStatus = {
+	def changeStarStatus() {
 		withFmessage { messageInstance ->
 			messageInstance.starred =! messageInstance.starred
 			messageInstance.save(failOnError: true)
