@@ -11,7 +11,7 @@
 	<table class="main-table" cellspacing="0">
 		<tr id="message-sorter">
 			<td class="message-select-cell">
-				<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll()"/>
+				<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll('message')"/>
 			</td>
 			<td class="message-star-cell"></td>
 			<g:if test="${messageSection == 'trash'}">
@@ -40,7 +40,7 @@
 					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
 						<g:hiddenField name="message-created-date" value="${m.date} disabled="true"/>
 						<td colspan="1" class="message-select-cell">
-							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="messageChecked(${m.id});"/>
+							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="itemCheckChanged('message', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>
 						</td>
 

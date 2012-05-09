@@ -8,7 +8,7 @@ function moveAction() {
 	if(getCheckedMessageCount() > 1) {
 		// TODO should calculate selected IDs here rather than getting from hidden field.  Use
 		// something like $('#message-list tr :checked');
-		messagesToMove = getCheckedMessageList();
+		messagesToMove = getCheckedList('message');
 		moveTarget = $('#multiple-messages select#move-actions option:selected');
 	} else {
 		messagesToMove = $("#message-id").val();

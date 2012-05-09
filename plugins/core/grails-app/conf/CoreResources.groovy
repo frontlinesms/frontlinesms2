@@ -9,6 +9,7 @@ modules = {
 		resource url: [plugin:'core', dir:'css', file:"help.css"]
 		resource url: [plugin:'core', dir:'css', file:"print.css"]
 		resource url: [plugin:'core', dir:'js', file:"activity/popups.js"]
+		resource url: [plugin:'core', dir:'js', file:"check_li.js"]
 		resource url: [plugin:'core', dir:'js', file:"mediumPopup.js"]
 		resource url: [plugin:'core', dir:'js', file:"smallPopup.js"]
 		resource url: [plugin:'core', dir:'js', file:"pagination.js"]
@@ -18,7 +19,6 @@ modules = {
 	messages {
 		dependsOn "jquery, jquery-ui, common"
 		resource url: [plugin:'core', dir:'css', file:"messages.css"]
-		resource url: [plugin:'core', dir:'js', file:"message/check_message.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/arrow_navigation.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/star_message.js"]
 		resource url: [plugin:'core', dir:'js', file:"message/categorize_dropdown.js"]
@@ -40,7 +40,6 @@ modules = {
 		resource url: [plugin:'core', dir:'css', file:"contacts.css"]
 		resource url: [plugin:'core', dir:'js', file:"contact/validateNumber.js"]
 		resource url: [plugin:'core', dir:'js', file:"contact/buttonStates.js"]
-		resource url: [plugin:'core', dir:'js', file:"contact/checked_contact.js"]
 		resource url: [plugin:'core', dir:'js', file:"contact/moreGroupActions.js"]
 		resource url: [plugin:'core', dir:'js', file:"contact/search_within_list.js"]
 		resource url: [plugin:'core', dir:'js', file:"contact/show-groups.js"]
