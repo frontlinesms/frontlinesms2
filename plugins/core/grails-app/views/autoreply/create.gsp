@@ -7,7 +7,7 @@
 		<li><a class="tabs-2" href="#tabs-2"><g:message code="autoreply.create.message"/></a></li>
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm"/></a></li>
 	</ol>
-	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null]]" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))">
+	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))">
 		<fsms:render template="/autoreply/keyword"/>
 		<fsms:render template="/autoreply/message"/>
 		<fsms:render template="/autoreply/confirm"/>

@@ -13,7 +13,7 @@
 		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.confirm"/></a></li>
 	</ul>
 
-	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null]]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
+	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
 		<fsms:render template="/poll/question"/>
 		<fsms:render template="/poll/responses"/>
 		<fsms:render template="/poll/sorting"/>

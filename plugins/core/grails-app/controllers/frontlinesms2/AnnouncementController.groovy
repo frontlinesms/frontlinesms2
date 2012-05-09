@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class AnnouncementController extends ActivityController {
 	def index = { redirect(action: 'save') }
 	def save = {
@@ -11,10 +13,24 @@ class AnnouncementController extends ActivityController {
 		announcementInstance.addToMessages(fmessage)
 		if (announcementInstance.save()) {
 			flash.message = message(code: 'announcement.saved')
-			[ownerId: announcementInstance.id]
+			println "announcementInstance saved"
+			withFormat {
+				json {
+					render([ok:true, ownerId: announcementInstance.id, page:createLink(action:'save')] as JSON)
+				}
+
+				html {
+					[ownerId: announcementInstance.id]
+				}
+			}
+
 		} else {
-			flash.message = message(code: 'announcement.not.saved')
-			render(text: flash.message)
+			def errors = announcementInstance.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
+			withFormat {
+				json {
+					render([ok:false, text:errors] as JSON)
+				}
+			}
 		}
 	}
 

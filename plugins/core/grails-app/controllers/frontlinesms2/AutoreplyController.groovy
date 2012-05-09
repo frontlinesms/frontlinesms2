@@ -1,5 +1,6 @@
 package frontlinesms2
 
+import grails.converters.JSON
 class AutoreplyController extends ActivityController {
 
 	def save = {
@@ -20,10 +21,22 @@ class AutoreplyController extends ActivityController {
 		}
 		if (autoreply.save(flush: true)) {
 			flash.message = message(code: 'autoreply.saved')
-			[ownerId: autoreply.id]
+			withFormat {
+				json {
+					render([ok:true, ownerId: autoreply.id, page:createLink(action:'save')] as JSON)
+				}
+
+				html {
+					[ownerId: autoreply.id]
+				}
+			}
 		} else {
-			flash.message = message(code: 'autoreply.not.saved')
-			render(text: flash.message)
+			def errors = autoreply.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
+			withFormat {
+				json {
+					render([ok:false, text:errors] as JSON)
+				}
+			}
 		}
 	}
 
