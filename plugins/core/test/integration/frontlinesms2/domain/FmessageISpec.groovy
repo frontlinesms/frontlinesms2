@@ -193,13 +193,11 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = Fmessage.build(src:'1')
 		then:
 			message.displayName == '1'
-			!message.contactExists
 		when:
 			new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
 			message.refresh()
 		then:
 			message.displayName == "Alice"
-			message.contactExists
 	}
 
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
@@ -208,14 +206,12 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def message = Fmessage.build(src:'1')
 		then:
 			message.displayName == 'Alice'
-			message.contactExists
 		when:
 			alice.mobile = '3'
 			alice.save(failOnError:true, flush:true)
 			message.refresh()
 		then:
 			message.displayName == '1'
-			!message.contactExists
 	}
 	
 	def "can archive message when it has no message owner" () {

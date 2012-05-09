@@ -39,12 +39,7 @@
 			</g:remoteLink>
 		</g:elseif>
 		<g:elseif test="${messageSection != 'trash'}">
-				<g:remoteLink class="msg-btn btn" elementId="reply-all"
-						controller="quickMessage" action="create"
-						params="[messageSection: messageSection, recipients: params.checkedMessageList, ownerId: ownerInstance?.id, configureTabs: 'tabs-1,tabs-3,tabs-4']"
-						onSuccess="launchMediumWizard(i18n(wizard.messages.replyall.title'), data, 'Send', true);">
-					<g:message code="fmessage.reply.many"/>
-				</g:remoteLink>
+				<a id="btn_reply_all" class="msg-btn btn" onclick="messageResponseClick('Reply')"><g:message code="fmessage.reply.many" /></a>
 				<g:if test="${(messageSection != 'activity' && messageSection != 'folder') && params.controller !='archive'}">
 					<g:actionSubmit class="msg-btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
 				</g:if>
