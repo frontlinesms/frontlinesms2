@@ -116,13 +116,14 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			Fmessage.search([contactString:'ROB']).list() == messages.robert
+			//These should be ordered, but there is a problem with H2 database and ordering in search was removed
+			Fmessage.search([contactString:'ROB']).list().containsAll(messages.robert)
 		and:
-			Fmessage.search([contactString:'bER']).list() == messages.bernie + messages.robert
+			Fmessage.search([contactString:'bER']).list().containsAll(messages.bernie + messages.robert)
 		and:
-			Fmessage.search([contactString:'i']).list() == messages.iane + messages.bernie
+			Fmessage.search([contactString:'i']).list().containsAll(messages.iane + messages.bernie)
 		and:
-			Fmessage.search([contactString:'e']).list() == messages.iane + messages.bernie + messages.robert
+			Fmessage.search([contactString:'e']).list().containsAll(messages.iane + messages.bernie + messages.robert)
 	}
 
 	def "getMessageStats should return message traffic information for the filter criteria"() {
@@ -138,11 +139,10 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			
 			(TEST_DATE-6..TEST_DATE+5).each { date ->
 				Fmessage.build(date:date, src:jessy.mobile)
-				buildWithDispatches( 
-						// this dispatch should be counted because Jessy is in the target group
-						new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
+				buildWithDispatches(
+					// this dispatch should be counted because Jessy is in the target group
+					new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
 			}
-			
 			3.times { Fmessage.build(date:TEST_DATE-1, src:jessy.mobile) }
 			
 			5.times {
@@ -245,7 +245,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			addMessages owner, starred, notStarred
 		then:
 			Fmessage.owned(owner, true).list() == [starred]
-			Fmessage.owned(owner, false).list() == [notStarred, starred]
+			Fmessage.owned(owner, false).list().containsAll([notStarred, starred])
 	}
 	
 	def "Fmessage_owned should get sent-and-received vs sent-only"() {
@@ -255,7 +255,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage received = createMessage(inbound:true)
 			addMessages owner, sent, received
 		then:
-			Fmessage.owned(owner, false, true).list() == [received, sent]
+			Fmessage.owned(owner, false, true).list().containsAll([received, sent])
 			Fmessage.owned(owner, false, false).list() == [received]
 	}
 	

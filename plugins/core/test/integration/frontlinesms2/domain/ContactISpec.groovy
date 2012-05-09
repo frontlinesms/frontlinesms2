@@ -84,4 +84,35 @@ class ContactISpec extends grails.plugin.spock.IntegrationSpec {
 			[city:'Paris', like:'ca', dob:'06']            | ['Chaz']
 			[city:'Paris', like:'ca', dob:'06', car:'yes'] | []
 	}
+
+	@Unroll
+	def 'customfield matching davids new version'() { 
+		setup:
+			[
+				Adam:  [city:'Paris'],
+				Bernie:[city:'Paris', like:'ca' ],
+				Chaz:  [city:'Paris', like:'cake', dob:'12/06/79'],
+				Dave:  [              like:'ake'],
+			].collect { name, fields ->
+				def c = Contact.build(name:name)
+				fields.each { n, v -> c.addToCustomFields(name:n, value:v) }
+				c.save(failOnError:true)
+			}
+		when:
+			def matches = []
+			fields.each { k, v -> matches << CustomField.findAllByNameAndValue(k, v)*.contact }
+		then:
+			matches*.name == contacts
+		where:
+			fields                                         | contacts
+			[:]                                            | ['Adam', 'Bernie', 'Chaz', 'Dave']
+			[cloak:'none']                                 | []
+			[city:'Paris']                                 | ['Adam', 'Bernie', 'Chaz']
+			[city:'paris']                                 | ['Adam', 'Bernie', 'Chaz']
+			[like:'ca']                                    | ['Bernie', 'Chaz']
+			[like:'ake']                                   | ['Chaz', 'Dave']
+			[city:'Paris', like:'ca']                      | ['Bernie', 'Chaz']
+			[city:'Paris', like:'ca', dob:'06']            | ['Chaz']
+			[city:'Paris', like:'ca', dob:'06', car:'yes'] | []
+	}
 }

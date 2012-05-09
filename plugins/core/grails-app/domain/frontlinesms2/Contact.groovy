@@ -126,8 +126,10 @@ class Contact {
 		findAllWithCustomFields { fields ->
 			fields.each { field ->
 				customFields {
-					eq('name', field.key)
-					ilike('value', "%$field.value%")
+					and {
+						eq('name', field.key)
+						ilike('value', "%$field.value%")
+					}
 				}
 			}
 		}
