@@ -46,7 +46,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 
 function launchHelpWizard(html) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#messageText").keyup()
+	$("#messageText").keyup();
 	$("#modalBox").dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
