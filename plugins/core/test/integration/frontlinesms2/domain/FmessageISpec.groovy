@@ -85,7 +85,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def allInboundMessages = Fmessage.search(search).list()
 			def allSentMessages = Fmessage.search(search2).list()
-			def allMessages = Fmessage.search(search3).list()
+			def allMessages = Fmessage.search(search3).listDistinct()
 		then:
 			allInboundMessages*.every { it.inbound }
 			allSentMessages*.every { !it.inbound }

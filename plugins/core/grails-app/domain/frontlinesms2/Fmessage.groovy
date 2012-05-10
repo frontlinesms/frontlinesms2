@@ -151,7 +151,7 @@ class Fmessage {
 			}
 			if(search.customFields.any { it.value }) {
 				// provide empty list otherwise hibernate fails to search 'in' empty list
-				def matchingContactsNumbers = Contact.findAllWithCustomFields(search.customFields).list()*.mobile?: ['']
+				def matchingContactsNumbers = Contact.findByCustomFields(search.customFields)*.mobile?: ['']
 				or {
 					'in'("src", matchingContactsNumbers)
 					'in'('disp.dst', matchingContactsNumbers)
