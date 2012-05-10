@@ -34,6 +34,7 @@ class SmartGroup {
 	
 	def getMembersByName(String searchString, Map pageParams) {
 		def query = getMembersByNameQuery(searchString)
+		query.where += " ORDER BY c.name ASC"
 		Contact.findAll(query.where, query.params)
 	}
 	
