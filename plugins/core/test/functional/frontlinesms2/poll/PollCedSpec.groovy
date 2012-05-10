@@ -465,7 +465,6 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor(10) { Poll.findByName("Who is badder?").refresh().responses*.value.containsAll(["Michael-Jackson", "Chuck-Norris", "Bruce Vandam"]) }		
 	}
 	
-	@spock.lang.IgnoreRest
 	def "should display errors when poll validation fails"() {
 		given:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
