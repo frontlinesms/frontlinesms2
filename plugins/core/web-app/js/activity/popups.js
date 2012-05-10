@@ -13,19 +13,34 @@ function chooseActivity() {
 	return;
 }
 	
-function checkForSuccessfulSave(html, type) {
-	if ($(html).find("#ownerId").val())
-		launchMediumPopup(i18n("popup.title.saved", type), html, i18n('popup.ok'), summaryRedirect);
-	else
-		addFailedFlashMessage(html);
+function checkForSuccessfulSave(response, type) {
+	$("#submit").removeAttr('disabled');
+	if (response.ok) {
+		$("#tabs").load(response.page + ".gsp", function() {
+			$(".summary #ownerId").val(response.ownerId);
+		});
+		var messageDialog = $("#modalBox")
+		messageDialog.dialog(
+			{
+				modal: true,
+				title: i18n("popup.title.saved", type),
+				buttons: [{ text:i18n("popup.cancel"), click: cancel, id:"cancel" }, { text:i18n("popup.back"), disabled: "true"},
+				          		{ text:i18n('popup.ok'),  click: summaryRedirect, id:"submit" }],
+				close: function() { $(this).remove(); }
+			}
+		);
+		messageDialog.css("height", "389px");
+		
+	} else {
+		var errors = $(".error-panel");
+		errors.text(response.text);
+		errors.show();
+		$("#submit").removeAttr('disabled');
+	}
 }
 	
-function summaryRedirect() {
+function summaryRedirect(ownerId) {
 	var ownerId = $(".summary #ownerId").val();
 	$(this).dialog('close');
 	window.location.replace(url_root + "message/activity/" + ownerId);
-}
-
-function addFailedFlashMessage(data) {
-	$("#notifications").prepend("<div class='flash message'>" + data + "<a class='hide-flash'>x</a></div>");
 }

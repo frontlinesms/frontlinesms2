@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class PollController extends ActivityController {
 	def save = {
 		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
@@ -30,14 +32,33 @@ class PollController extends ActivityController {
 					flash.message = message(code: 'flash.message.poll.queued')
 				else
 					flash.message = message(code: 'flash.message.poll.saved')
-				[ownerId: poll.id]
+
+				withFormat {
+					json {
+						render([ok:true, ownerId: poll.id, page:createLink(action:'save')] as JSON)
+					}
+
+					html {
+						[ownerId:poll.id]
+					}
+				}
+				
 			} else {
-				flash.message = message(code: 'flash.message.poll.not.saved')
-				render text:flash.message
+				def errors = poll.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
+				withFormat {
+					json {
+						render([ok:false, text:errors] as JSON)
+					}
+				}
+				
 			}
 		} else {
-			flash.message = message(code: 'flash.message.poll.not.saved')
-			render(text: flash.message)
+			def errors = poll.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
+			withFormat {
+				json {
+					render([ok:false, text:errors] as JSON)
+				}
+			}
 		}
 	}
 
