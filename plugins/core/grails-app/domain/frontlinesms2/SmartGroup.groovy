@@ -34,6 +34,7 @@ class SmartGroup {
 	
 	def getMembersByName(String searchString, Map pageParams) {
 		def query = getMembersByNameQuery(searchString)
+		query.where += " ORDER BY c.name ASC"
 		Contact.findAll(query.where, query.params)
 	}
 	
@@ -94,7 +95,7 @@ cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name
 	}
 	
 	static HashMap<String, List<String>> getGroupDetails() {
-		SmartGroup.list().collectEntries { ["smartgroup-$it.id", [name:it.name,addresses:it.addresses]] }
+		SmartGroup.list().collectEntries { ["smartgroup-$it.id".toString(), [name:it.name,addresses:it.addresses]] }
 	}
 	
 	def getAddresses() {

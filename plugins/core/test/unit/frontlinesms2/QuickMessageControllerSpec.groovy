@@ -11,6 +11,9 @@ class QuickMessageControllerSpec extends Specification {
 		def jim = new Contact(name:"jim", mobile:"12345").save()
 		def mohave = new Group(name:"Mojave").save()
 		GroupMembership.create(jim, mohave)
+		Group.metaClass.getMembers = {
+			GroupMembership.findAllByGroup(delegate)*.contact.unique().sort { it.name }
+		}
 	}
 
 	def 'create returns the contact, group list'() {
@@ -26,7 +29,7 @@ class QuickMessageControllerSpec extends Specification {
 			result.contactList == [jim]
 			result.recipients == address
 			result.nonExistingRecipients == address
-			result.groupList.get("group-$mohave.id") == [name:mohave.name ,addresses:[jim.mobile]]
+			result.groupList["group-$mohave.id"] == [name:mohave.name ,addresses:[jim.mobile]]
 	}
 
 	def 'create returns the contact, group list even if address comes as a string'() {

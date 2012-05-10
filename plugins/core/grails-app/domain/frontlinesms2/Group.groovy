@@ -18,7 +18,8 @@ class Group {
 	}
 
 	def getMembers() {
-		GroupMembership.findAllByGroup(this)*.contact.sort{it.name}
+		// TODO shouldn't have to filter the GroupMemberships manually here
+		Contact.findAll("FROM Contact c, GroupMembership m WHERE m.group=? AND m.contact=c ORDER BY c.name", [this]).collect{ it[0] }
 	}
 
 	def addToMembers(Contact c) {
@@ -30,7 +31,7 @@ class Group {
 	}
 
 	static HashMap<String, List<String>> getGroupDetails() {
-		Group.list().collectEntries { ["group-$it.id", [name:it.name,addresses:it.addresses]] }
+		Group.list().collectEntries { ["group-$it.id".toString(), [name:it.name,addresses:it.addresses]] }
 	}
 
 	static Set<Contact> findAllWithoutMember(Contact c) {

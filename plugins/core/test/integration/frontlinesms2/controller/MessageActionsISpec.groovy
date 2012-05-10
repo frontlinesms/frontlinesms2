@@ -12,23 +12,22 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "message can be moved to a different poll response"() {
 		setup:
-			def r = new PollResponse(value:'known unknown')
 			def r2 = new PollResponse(value:'unknown unknown')
-			def unknown = new PollResponse(value:'Unknown')
 			def poll = new Poll(name: 'Who is badder?')
-			poll.addToResponses(r2)
-			poll.addToResponses(unknown)
-			poll.addToResponses(r).save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
+					.addToResponses(r2)
+					.addToResponses(PollResponse.createUnknown())
+					.addToResponses(value:'known unknown')
+					.save(failOnError:true, flush:true)
+			def message = Fmessage.build(src:'Bob', text:'I like manchester')
 			PollResponse.findByValue('known unknown').addToMessages(Fmessage.findBySrc('Bob'))
-			poll.save(failOnError: true)
+			poll.save(failOnError:true, flush:true)
 		when:
-			controller.params.messageIdList = ',' + message.id + ','
+			controller.params.messageId = message.id
 			controller.params.responseId = r2.id
 			controller.params.ownerId = poll.id
 			controller.changeResponse()
 		then:
-			r2.messages.contains(message)
+			PollResponse.get(r2.id).messages.contains(message)
 	}
 	
 	def "message can be moved to a folder"() {
@@ -36,7 +35,7 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
 			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true, flush:true)
 		when:
-			controller.params.messageId = ',' + message.id + ','
+			controller.params.messageId = message.id
 			controller.params.ownerId = folder.id
 			controller.params.messageSection = 'folder'
 			controller.move()
@@ -53,7 +52,7 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			folder.save(failOnError:true, flush:true)
 		when:
 			assert message.messageOwner
-			controller.params.messageId = ',' + message.id + ','
+			controller.params.messageId = message.id
 			controller.params.messageSection = 'inbox'
 			controller.move()
 		then:
@@ -71,7 +70,7 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.save(failOnError: true)
 		when:
 			assert message.messageOwner
-			controller.params.messageId = ',' + message.id + ','
+			controller.params.messageId = message.id
 			controller.params.messageSection = 'inbox'
 			controller.move()
 		then:

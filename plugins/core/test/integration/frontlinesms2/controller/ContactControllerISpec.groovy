@@ -52,12 +52,12 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def contact1 = new Contact(name: "Test 1").save(failOnError: true)
 			def contact2 = new Contact(name: "Test 2").save(failOnError: true)
 		when:
-			controller.params.checkedContactList = "[${contact1.id}, ${contact2.id}]"
+			controller.params['contact-select'] = [contact1.id, contact2.id]
 			controller.params.groupsToAdd = ",${g.id},"
 			controller.params.groupsToRemove = ","
 			controller.updateMultipleContacts()
 		then:
-			g.getMembers() == [contact1, contact2]
+			g.members == [contact1, contact2]
 	}
 
 	def 'when showing all contacts, the first contact in the list is selected if none is specified'() {

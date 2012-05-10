@@ -116,14 +116,13 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			//These should be ordered, but there is a problem with H2 database and ordering in search was removed
-			Fmessage.search([contactString:'ROB']).list().containsAll(messages.robert)
+			Fmessage.search([contactString:'ROB']).list(sort:'date', order:'desc') == messages.robert
 		and:
-			Fmessage.search([contactString:'bER']).list().containsAll(messages.bernie + messages.robert)
+			Fmessage.search([contactString:'bER']).list(sort:'date', order:'desc') == messages.bernie + messages.robert
 		and:
-			Fmessage.search([contactString:'i']).list().containsAll(messages.iane + messages.bernie)
+			Fmessage.search([contactString:'i']).list(sort:'date', order:'desc') == messages.iane + messages.bernie
 		and:
-			Fmessage.search([contactString:'e']).list().containsAll(messages.iane + messages.bernie + messages.robert)
+			Fmessage.search([contactString:'e']).list(sort:'date', order:'desc') == messages.iane + messages.bernie + messages.robert
 	}
 
 	def "getMessageStats should return message traffic information for the filter criteria"() {
@@ -240,23 +239,23 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def "Fmessage_owned should get starred-and-non-starred vs only-starred"() {
 		when:
 			MessageOwner owner = testFolder
-			Fmessage starred = createMessage(starred:true)
+			Fmessage starred = createMessage(starred:true, dateDelta:1)
 			Fmessage notStarred = createMessage(starred:false)
 			addMessages owner, starred, notStarred
 		then:
-			Fmessage.owned(owner, true).list() == [starred]
-			Fmessage.owned(owner, false).list().containsAll([notStarred, starred])
+			Fmessage.owned(owner, true).list(sort:'date', order:'desc') == [starred]
+			Fmessage.owned(owner, false).list(sort:'date', order:'desc') == [notStarred, starred]
 	}
 	
 	def "Fmessage_owned should get sent-and-received vs sent-only"() {
 		when:
 			MessageOwner owner = testFolder
-			Fmessage sent = createMessage(inbound:false)
+			Fmessage sent = createMessage(inbound:false, dateDelta:1)
 			Fmessage received = createMessage(inbound:true)
 			addMessages owner, sent, received
 		then:
-			Fmessage.owned(owner, false, true).list().containsAll([received, sent])
-			Fmessage.owned(owner, false, false).list() == [received]
+			Fmessage.owned(owner, false, true).list(sort:'date', order:'desc') == [received, sent]
+			Fmessage.owned(owner, false, false).list(sort:'date', order:'desc') == [received]
 	}
 	
 	private Folder getTestFolder(params=[]) {
@@ -265,14 +264,16 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	private Fmessage createMessage(params) {
-		def m = new Fmessage(
-				src: '1-POTATO',
+		def date = TEST_DATE - (params.dateDelta?:0)
+		def m = new Fmessage(src:'1-POTATO',
 				archived:params.archived?:false,
 				starred:params.starred?:false,
-				inbound:params.inbound!=null?params.inbound:true)
+				inbound:params.inbound!=null?params.inbound:true,
+				date:date)
 		if(params.inbound != null && !params.inbound) {
-			m.addToDispatches(dst:'1234567890', status:DispatchStatus.SENT, dateSent:new Date())
+			m.addToDispatches(dst:'1234567890', status:DispatchStatus.SENT, dateSent:date)
 		}
+		println "Created with date $date"
 		m.save(failOnError:true, flush:true)
 	}
 	

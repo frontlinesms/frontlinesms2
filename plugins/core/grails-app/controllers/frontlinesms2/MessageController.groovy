@@ -59,21 +59,21 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
-						messageSection: 'inbox',
+						messageSection: message(code: 'fmessage.inbox'),
 						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
-		render view:'../message/standard', model:[messageSection: 'sent',
+		render view:'../message/standard', model:[messageSection: message(code: 'fmessage.sent'),
 				messageInstanceList: messageInstanceList.list(params),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
-	}
+	} 
 
 	def pending = {
 		def messageInstanceList = Fmessage.pending(params.failed)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
-				messageSection: 'pending',
+				messageSection: message(code: 'fmessage.pending'),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 	
@@ -100,7 +100,7 @@ class MessageController {
 		}
 		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
-					messageSection: 'trash',
+					messageSection: message(code: 'fmessage.trash'),
 					messageInstanceTotal: Trash.count(),
 					ownerInstance: trashedObject] << getShowModel()
 	}
@@ -139,7 +139,7 @@ class MessageController {
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
 			if (params.flashMessage) { flash.message = params.flashMessage }
 			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
-						messageSection: 'folder',
+						messageSection: message(code: 'folder.label'),
 						messageInstanceTotal: messageInstanceList.count(),
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
@@ -229,7 +229,7 @@ class MessageController {
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
 
-	def move = {
+	def move() {
 		def messageIdList = getCheckedMessageList()
 		messageIdList.each { id ->
 			withFmessage id, { messageInstance ->
@@ -263,7 +263,7 @@ class MessageController {
 		render ""
 	}
 
-	def changeResponse = {
+	def changeResponse() {
 		def responseInstance = PollResponse.get(params.responseId)
 		getCheckedMessageList().each { id ->
 			withFmessage id, { messageInstance ->
@@ -276,7 +276,7 @@ class MessageController {
 		render ""
 	}
 
-	def changeStarStatus = {
+	def changeStarStatus() {
 		withFmessage { messageInstance ->
 			messageInstance.starred =! messageInstance.starred
 			messageInstance.save(failOnError: true)

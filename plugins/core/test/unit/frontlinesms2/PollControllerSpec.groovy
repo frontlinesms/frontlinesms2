@@ -6,6 +6,12 @@ import grails.test.mixin.*
 @TestFor(PollController)
 @Mock([Contact, Fmessage, Group, GroupMembership, Poll, SmartGroup])
 class PollControllerSpec extends Specification {
+	def setup() {
+		Group.metaClass.getMembers = {
+			GroupMembership.findAllByGroup(delegate)*.contact.unique().sort { it.name }
+		}
+	}
+
 	def "create action should provide groups and contacts for recipients list"() {
 		setup:
 			def alice = new Contact(name: "Alice", mobile: "12345")
@@ -20,8 +26,8 @@ class PollControllerSpec extends Specification {
 			def model = controller.create()
 		then:
 			model.contactList*.name == ["Alice", "Bob"]
-			model.groupList.get("group-$group1.id") == [name:"group1", addresses:["12345", "54321"]]
-			model.groupList.get("group-$group2.id") == [name:"group2", addresses:["54321"]]
+			model.groupList["group-$group1.id"] == [name:"group1", addresses:["12345", "54321"]]
+			model.groupList["group-$group2.id"] == [name:"group2", addresses:["54321"]]
 	}
 	
 	def "can unarchive a poll"() {
@@ -38,5 +44,5 @@ class PollControllerSpec extends Specification {
 			!poll.archived
 			controller.response.redirectUrl == '/archive/activityList'
 	}
+	
 }
-

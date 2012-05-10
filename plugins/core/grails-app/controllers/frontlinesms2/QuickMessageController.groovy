@@ -4,7 +4,17 @@ class QuickMessageController {
 	def create = {
 		if( params.recipients?.contains(',')) {
 			def recipientList = []
-			params.recipients.tokenize(',').each { recipientList << Fmessage.findById(it).src }
+			params.recipients.tokenize(',').each {
+				def msg = Fmessage.findById(it)
+				if (msg.inbound)
+				{
+					recipientList << msg.src
+				}
+				else
+				{
+					msg.dispatches.each{ recipientList << it.dst }
+				}
+			}
 			params.recipients = recipientList.unique()
 		}
 		def recipients = params.recipients ? [params.recipients].flatten() : []

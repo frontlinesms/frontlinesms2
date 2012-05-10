@@ -10,7 +10,7 @@
 			<g:select class="dropdown" name="activityId" onChange="submit()" from="${activityInstanceList + folderInstanceList}"
 					  value="${search?.activityId}"
 					  optionKey="${{it.id}}"
-					  optionValue="${g.message(code:"${it.shortName}.title", args:[it.name])}"
+					  optionValue="${{g.message(code:it.shortName + '.title', args:[it.name])}}"
 					  noSelection="${['':g.message(code:'traffic.all.folders.activities')]}"/>
 		</li>
 	</ul>

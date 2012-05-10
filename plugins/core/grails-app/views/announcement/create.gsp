@@ -8,7 +8,7 @@
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.confirm"/></a></li>
 	</ol>
 
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement']}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
+	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement', params:[format:'json']]}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
 		<fsms:render template="message"/>
 		<div id="tabs-2">
 			<fsms:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
