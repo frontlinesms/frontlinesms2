@@ -1,25 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" import="frontlinesms2.Fconnection" %>
 <meta name="layout" content="popup"/>
-<r:script>
-	url_root = "${request.contextPath}/";
-</r:script>
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt"/></div>
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="connection.validation.prompt" /></div>
 	<ol>
 		<g:if test="${!fconnectionInstance}">
-			<li><a href="#tabs-1"><g:message code="connection.type"/></a></li>
+			<li><a href="#tabs-1"><g:message code="connection.type" /></a></li>
 		</g:if>
-		<li><a href="#tabs-2"><g:message code="connection.details"/></a></li>
-		<li><a href="#tabs-3"><g:message code="connection.confirm"/></a></li>
+		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
+		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
 	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
-		<fsms:render template="type"/>
-		<fsms:render template="details"/>
-		<fsms:render template="confirm"/>
+		<fsms:render template="type" />
+		<fsms:render template="details" plugin="core"/>
+		<fsms:render template="confirm" plugin="core"/>
 	</g:formRemote>
 </div>
 
 <r:script>
+
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
@@ -80,11 +78,11 @@ var fconnection = {
 	<g:each in="${Fconnection.implementations}" var="imp">
 	${imp.shortName}: {
 		requiredFields: ["${Fconnection.getNonnullableConfigFields(imp).join('", "')}"],
-		configFieldsKeys: ["${imp.configFields instanceof Map? imp.configFields.allKeys?.join('", "'): ''}"],
+		configFieldsKeys: ["${imp.configFields instanceof Map ? imp.configFields.getAllKeys()?.join('", "'):''}"],
 		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
-				$("#${it}-confirm").hide();
+				$("#${imp}-confirm").hide();
 			</g:each>
 			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys
 			if(configFieldsKeys.length > 1) {
@@ -92,7 +90,47 @@ var fconnection = {
 					setConfirmation(value);
 				});
 			}
-			<g:set var="configFields" value="${imp.configFields instanceof Map? (imp.configFields.allValues): imp.configFields}"/>
+			<g:set var="configFields" value="${imp.configFields instanceof Map? (imp.configFields.getAllValues()) : imp.configFields}" />
+			<g:each in="${configFields}" var="f">
+				<g:if test="${f in imp.passwords}">setSecretConfirmation('${f}');</g:if>
+				<g:else>setConfirmation('${f}');</g:else>
+			</g:each>
+			$("#${imp.shortName}-confirm").show();
+		}
+	},
+	</g:each>
+};
+			
+function isFieldSet(fieldName) {
+	var val = getFieldVal(fieldName);
+	if(isInstanceOf(val, 'Boolean')) {
+		if(val && isSubsection(fieldName)) {
+			return validateSubsectionFields(fieldName);
+		}
+	} else {
+		return val!=null && val.length>0;
+	}
+}
+
+function isFieldValid(field) {
+	return isFieldSet(field);
+}
+
+function isInstanceOf(obj, clazz){
+  return (obj instanceof eval("("+clazz+")")) || (typeof obj == clazz.toLowerCase());
+}
+
+function validateSubsectionFields(field) {
+	var valid = false;
+	var subSectionFields = $('.' + field + '-subsection-member');
+	var requiredFields = fconnection[fconnection.getType()].requiredFields
+	$.each(subSectionFields, function(index, value) {
+		var field = $(value).attr("field");
+		if(requiredFields.indexOf(field) > -1) {
+			valid = isFieldSet(field);
+			return valid;
+		}
+	});
 	return valid;
 }
 
@@ -185,4 +223,3 @@ function handleSaveResponse(response) {
 	}
 }
 </r:script>
-
