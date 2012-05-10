@@ -11,11 +11,11 @@ class HelpController {
 			helpText = "This help file is not yet available, sorry."
 			render text:helpText.markdownToHtml()
 		} else {
+			// FIXME this is open to injection attacks
 			def markdownFile = new File("web-app/help/" + params.helpSection + ".txt")
 			if (markdownFile.canRead()) {
 				helpText = markdownFile.text
-			} 
-			else {
+			} else {
 				helpText = "This help file is not yet available, sorry."
 			}
 			render text:helpText.markdownToHtml()		
