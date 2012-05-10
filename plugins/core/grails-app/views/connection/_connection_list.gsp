@@ -21,7 +21,7 @@
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create"/></g:link>
 							</div>
 							<div>
-								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard(i18n('connection.edit'), data, i18n('popup.done'))">
+								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard(i18n('connection.edit'), data, i18n('popup.done'), 675, 500, false)">
 									<g:message code="connection.edit"/>
 								</g:remoteLink>
 							</div>
@@ -42,12 +42,8 @@
 		</ul>
 	</g:else>
 	<div id="create-connection-btn">
-		<g:remoteLink class="btn" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), false)">
-<<<<<<< HEAD
-			<g:message code="connection.add"/>
-=======
+		<g:remoteLink class="btn" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
 			<g:message code="connection.add" />
->>>>>>> CORE-858
 		</g:remoteLink>
 	</div>
 </div>
