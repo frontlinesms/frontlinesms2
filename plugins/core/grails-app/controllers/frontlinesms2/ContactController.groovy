@@ -99,16 +99,13 @@ class ContactController {
 	}
 	
 	def updateMultipleContacts = {
-		if (params['contact-select']) {
-			def contactIds = params['contact-select']
-			contactIds.each { id ->
-				withContact id, { contactInstance ->
-					parseContactFields(contactInstance)
-					attemptSave(contactInstance)
-				}
+		params['contact-select']?.each { id ->
+			withContact id, { contactInstance ->
+				parseContactFields(contactInstance)
+				attemptSave(contactInstance)
 			}
-			render(view:'show', model: show())
 		}
+		render(view:'show', model: show())
 	}
 	
 	def confirmDelete = {

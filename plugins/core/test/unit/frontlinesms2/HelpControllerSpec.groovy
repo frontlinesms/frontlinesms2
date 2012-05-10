@@ -10,16 +10,16 @@ class HelpControllerSpec extends Specification {
 	
 	def 'If a help file with the given name exists its text will be rendered'() {
 		given:
-			def helpFile = new File('testHelp.txt')
 			def helpFileContent = "This is test content for the help"
-			helpFile.text = helpFileContent
+			File.metaClass.constructor = { String name ->
+				if(name != 'web-app/help/testHelp.txt') throw new RuntimeException("unexpected filename: $name")
+				return [text:helpFileContent, canRead:{ true }]
+			}
 			params.helpSection = 'testHelp'
 		when:
 			controller.section()
 		then:
 			response.text == 'markdown:' + helpFileContent
-		cleanup:
-			helpFile.delete()
 	}
 	
 	def 'If a help file with the given name does not exist error text will be rendered'() {

@@ -6,6 +6,12 @@ import grails.test.mixin.*
 @TestFor(Group)
 @Mock([Contact, GroupMembership])
 class GroupSpec extends Specification {
+	def setup() {
+		Group.metaClass.getMembers = {
+			GroupMembership.findAllByGroup(delegate)*.contact.unique().sort { it.name }
+		}
+	}
+
 	def "group may have a name"() {
 		when:
 			Group g = new Group()
@@ -67,8 +73,8 @@ class GroupSpec extends Specification {
 		when:
 			def result = Group.groupDetails
 		then:
-			result.get("group-$sahara.id") == [name:"sahara",addresses:["address1", "address2"]]
-			result.get("group-$thar.id") == [name:"thar",addresses: ["address3"]]
+			result["group-$sahara.id"] == [name:"sahara",addresses:["address1", "address2"]]
+			result["group-$thar.id"] == [name:"thar",addresses: ["address3"]]
 	}
 }
 
