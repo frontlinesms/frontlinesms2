@@ -2,6 +2,7 @@ package frontlinesms2
 
 import groovy.time.*
 import org.hibernate.FlushMode
+import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
 	static belongsTo = [messageOwner:MessageOwner]
@@ -119,53 +120,48 @@ class Fmessage {
 			}
 		}
 
-		search { search -> 
-			and {
-				if(search.searchString) {
-					ilike("text", "%${search.searchString}%")
-				}
-				if(search.contactString) {
-					ilike("displayName", "%${search.contactString}%")
-				} 
-				if(search.group) {
-					def groupMembersNumbers = search.group.getAddresses() ?: [''] //otherwise hibernate fail to search 'in' empty list
-					or {
-						'in'("src", groupMembersNumbers)
-						dispatches {
-							'in'("dst", groupMembersNumbers)
-						}
-					}
-				}
-				if(search.status) {
-					if(search.status.toLowerCase() == 'inbound') eq('inbound', true)
-					else eq('inbound', false)
-				}
-				if(search.owners) {
-					'in'("messageOwner", search.owners)
-				}
-				if(search.startDate && search.endDate) {
-					between("date", search.startDate, search.endDate)
-				} else if (search.startDate) {	
-					ge("date", search.startDate)
-				} else if (search.endDate) {
-					le("date", search.endDate)
-				}
-				if(search.customFields.any { it.value }) {
-					// provide empty list otherwise hibernate fails to search 'in' empty list
-					def matchingContactsNumbers = Contact.findAllWithCustomFields(search.customFields).list()*.mobile?: ['']
-					or {
-						'in'("src", matchingContactsNumbers)
-						dispatches {
-							'in'("dst", matchingContactsNumbers)
-						}
-					}
-				}
-				if(!search.inArchive) {
-					eq('archived', false)
-				}
-				eq('isDeleted', false)
-				// order('date', 'desc') removed due to http://jira.grails.org/browse/GRAILS-8162; please reinstate when possible
+		search { search ->
+			createAlias('dispatches', 'disp', CriteriaSpecification.LEFT_JOIN)
+			if(search.searchString) {
+				ilike("text", "%${search.searchString}%")
 			}
+			if(search.contactString) {
+				ilike("displayName", "%${search.contactString}%")
+			} 
+			if(search.group) {
+				def groupMembersNumbers = search.group.addresses ?: [''] //otherwise hibernate fail to search 'in' empty list
+				or {
+					'in'("src", groupMembersNumbers)
+					'in'('disp.dst', groupMembersNumbers)
+				}
+			}
+			if(search.status) {
+				if(search.status.toLowerCase() == 'inbound') eq('inbound', true)
+				else eq('inbound', false)
+			}
+			if(search.owners) {
+				'in'("messageOwner", search.owners)
+			}
+			if(search.startDate && search.endDate) {
+				between("date", search.startDate, search.endDate)
+			} else if (search.startDate) {	
+				ge("date", search.startDate)
+			} else if (search.endDate) {
+				le("date", search.endDate)
+			}
+			if(search.customFields.any { it.value }) {
+				// provide empty list otherwise hibernate fails to search 'in' empty list
+				def matchingContactsNumbers = Contact.findAllWithCustomFields(search.customFields).list()*.mobile?: ['']
+				or {
+					'in'("src", matchingContactsNumbers)
+					'in'('disp.dst', matchingContactsNumbers)
+				}
+			}
+			if(!search.inArchive) {
+				eq('archived', false)
+			}
+			eq('isDeleted', false)
+			// order('date', 'desc') removed due to http://jira.grails.org/browse/GRAILS-8162; please reinstate when possible
 		}
 		
 		forReceivedStats { params ->
