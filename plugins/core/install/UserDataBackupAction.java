@@ -1,17 +1,23 @@
 import com.install4j.api.actions.*;
 import com.install4j.api.context.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import org.apache.commons.io.FileUtils;
 
 public class UserDataBackupAction extends AbstractInstallAction {
+	/*
+	 * Please note that this requires the  Install4j runtime jar to compile. This is located in
+	 * <install4j 5 directory>/resource/i4jruntime.jar
+	*/
 	private static final String dateFormat = "yyyy-MM-dd-HH-mm";
 	private static final long backupExpiryDuration = 600000l;//7776000000l; // 90 days in miliseconds
-	private static String backupDirNameFormat = ".frontlinesms2-backup.";
+	private static final String backupDirNameFormat = ".frontlinesms2-backup.";
 	private File fsms2Home;
 	private File userHome;
 	public UserDataBackupAction (){
@@ -90,15 +96,32 @@ public class UserDataBackupAction extends AbstractInstallAction {
 		}
 	}
 
-	private void copyFile(File src, File dst) {
-		try{
-			FileUtils.copyFile(src, dst);
-			log("copied " + src.getPath());
-		}
-		catch(IOException e){
-			log("failed to copy " + src.getPath() + ". Stacktrace follows...");
-			e.printStackTrace();
-		}
+	private void copyFile(File sourceFile, File destFile) {
+			try
+			{
+			    if(!destFile.exists()) {
+			        destFile.createNewFile();
+			    }
+			    FileChannel source = null;
+			    FileChannel destination = null;
+			    try {
+			        source = new FileInputStream(sourceFile).getChannel();
+			        destination = new FileOutputStream(destFile).getChannel();
+			        destination.transferFrom(source, 0, source.size());
+			    }
+			    finally {
+			        if(source != null) {
+			            source.close();
+			        }
+			        if(destination != null) {
+			            destination.close();
+			        }
+			    }
+			}
+			catch(IOException e)
+			{
+				log("failed to copy file");
+			}
 	}
 
 	private void log(String x) {
