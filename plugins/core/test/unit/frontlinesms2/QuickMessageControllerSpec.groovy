@@ -11,6 +11,9 @@ class QuickMessageControllerSpec extends Specification {
 		def jim = new Contact(name:"jim", mobile:"12345").save()
 		def mohave = new Group(name:"Mojave").save()
 		GroupMembership.create(jim, mohave)
+		Group.metaClass.getMembers = {
+			GroupMembership.findAllByGroup(delegate)*.contact.unique().sort { it.name }
+		}
 	}
 
 	def 'create returns the contact, group list'() {

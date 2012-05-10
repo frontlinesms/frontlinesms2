@@ -6,6 +6,12 @@ import grails.test.mixin.*
 @TestFor(Group)
 @Mock([Contact, GroupMembership])
 class GroupSpec extends Specification {
+	def setup() {
+		Group.metaClass.getMembers = {
+			GroupMembership.findAllByGroup(delegate)*.contact.unique().sort { it.name }
+		}
+	}
+
 	def "group may have a name"() {
 		when:
 			Group g = new Group()

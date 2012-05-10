@@ -6,6 +6,12 @@ import grails.test.mixin.*
 @TestFor(PollController)
 @Mock([Contact, Fmessage, Group, GroupMembership, Poll, SmartGroup])
 class PollControllerSpec extends Specification {
+	def setup() {
+		Group.metaClass.getMembers = {
+			GroupMembership.findAllByGroup(delegate)*.contact.unique().sort { it.name }
+		}
+	}
+
 	def "create action should provide groups and contacts for recipients list"() {
 		setup:
 			def alice = new Contact(name: "Alice", mobile: "12345")
@@ -26,12 +32,7 @@ class PollControllerSpec extends Specification {
 	
 	def "can unarchive a poll"() {
 		given:
-			registerMetaClass PollController
-			registerMetaClass Fmessage
-			mockDomain(Poll)
-			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(mockParams.id)) }
-			Fmessage.metaClass.static.owned = {Poll p, boolean starred, boolean sent -> return null}
-			PollController.metaClass.message = {LinkedHashMap m -> return m}
+			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(params.id)) }
 			def poll = new Poll(name:'thingy', archived:true)
 			poll.editResponses(choiceA:'One', choiceB:'Other')
 			poll.save()
