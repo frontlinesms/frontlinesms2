@@ -122,15 +122,27 @@ class Contact {
 		mobile = n
 	}
 
-	static namedQueries = {
-		findAllWithCustomFields { fields ->
+	
+	static findByCustomFields(fields) {
+		def matches = []
+		if (fields == [:])
+			matches = Contact.getAll()
+		else
 			fields.each { field ->
-				customFields {
-					and {
-						eq('name', field.key)
-						ilike('value', "%$field.value%")
-					}
-				}
+				def list = Contact.byCustomFieldNameandValue(field).list()
+				if (matches == [])
+					list.each { matches << it}
+				else
+					matches.retainAll(list)
+			}
+		return matches
+	}
+	
+	static namedQueries = {
+		byCustomFieldNameandValue { field ->
+			customFields {
+				eq 'name', field.key
+				ilike 'value', "%${field.value}%"
 			}
 		}
 	}
