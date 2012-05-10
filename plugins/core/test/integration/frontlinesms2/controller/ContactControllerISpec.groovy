@@ -52,7 +52,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def contact1 = new Contact(name: "Test 1").save(failOnError: true)
 			def contact2 = new Contact(name: "Test 2").save(failOnError: true)
 		when:
-			controller.params.checkedContactList = "${contact1.id}, ${contact2.id}"
+			controller.params['contact-select'] = [contact1.id, contact2.id]
 			controller.params.groupsToAdd = ",${g.id},"
 			controller.params.groupsToRemove = ","
 			controller.updateMultipleContacts()
