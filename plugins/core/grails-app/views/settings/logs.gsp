@@ -27,6 +27,10 @@
 						<option value="14"><g:message code="logs.filter.14days" /></option>
 						<option value="28"><g:message code="logs.filter.28days" /></option>
 					</select>
+					<label><g:message code="logs.download.label"/></label>
+					<g:remoteLink class="btn" controller="settings" action="logsWizard" id="downloadLogs" onSuccess="launchSmallPopup(i18n('logs.download.title'), data, i18n('logs.download.continue'))">
+						<g:message code="logs.download.buttontext"/>
+					</g:remoteLink>
 				</div>
 				<br/>
 				<div id="log-list">

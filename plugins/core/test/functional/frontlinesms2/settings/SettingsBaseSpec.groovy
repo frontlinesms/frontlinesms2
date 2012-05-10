@@ -12,4 +12,8 @@ class SettingsBaseSpec extends grails.plugin.geb.GebSpec {
 				username:'mr.testy@zoho.com',
 				password:'mister')
 	}
+
+	def createTestLogs() {
+		new LogEntry(date:new Date(), content: "Log entry one").save()
+	}
 }
