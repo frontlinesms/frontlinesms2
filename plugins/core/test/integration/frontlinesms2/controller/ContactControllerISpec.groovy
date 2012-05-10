@@ -57,7 +57,7 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.groupsToRemove = ","
 			controller.updateMultipleContacts()
 		then:
-			g.getMembers() == [contact1, contact2]
+			g.members == [contact1, contact2]
 	}
 
 	def 'when showing all contacts, the first contact in the list is selected if none is specified'() {

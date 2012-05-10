@@ -13,9 +13,9 @@
 		<li><a href="#tabs-3"><g:message code="connection.confirm"/></a></li>
 	</ol>
 	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
-		<g:render template="type" plugin="core"/>
-		<g:render template="details" plugin="core"/>
-		<g:render template="confirm" plugin="core"/>
+		<fsms:render template="type"/>
+		<fsms:render template="details"/>
+		<fsms:render template="confirm"/>
 	</g:formRemote>
 </div>
 

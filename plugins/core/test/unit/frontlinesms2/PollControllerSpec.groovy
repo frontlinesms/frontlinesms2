@@ -20,13 +20,18 @@ class PollControllerSpec extends Specification {
 			def model = controller.create()
 		then:
 			model.contactList*.name == ["Alice", "Bob"]
-			model.groupList.get("group-$group1.id") == [name:"group1", addresses:["12345", "54321"]]
-			model.groupList.get("group-$group2.id") == [name:"group2", addresses:["54321"]]
+			model.groupList["group-$group1.id"] == [name:"group1", addresses:["12345", "54321"]]
+			model.groupList["group-$group2.id"] == [name:"group2", addresses:["54321"]]
 	}
 	
 	def "can unarchive a poll"() {
 		given:
-			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(params.id)) }
+			registerMetaClass PollController
+			registerMetaClass Fmessage
+			mockDomain(Poll)
+			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(mockParams.id)) }
+			Fmessage.metaClass.static.owned = {Poll p, boolean starred, boolean sent -> return null}
+			PollController.metaClass.message = {LinkedHashMap m -> return m}
 			def poll = new Poll(name:'thingy', archived:true)
 			poll.editResponses(choiceA:'One', choiceB:'Other')
 			poll.save()
@@ -38,5 +43,5 @@ class PollControllerSpec extends Specification {
 			!poll.archived
 			controller.response.redirectUrl == '/archive/activityList'
 	}
+	
 }
-
