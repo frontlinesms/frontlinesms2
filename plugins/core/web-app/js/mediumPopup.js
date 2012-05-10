@@ -19,6 +19,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
+	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit )
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup()
 	$("#modalBox").dialog({
@@ -33,7 +34,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 			{ text:i18n("wizard.back"), id:"disabledBack", disabled:true },
 			{ text:i18n("wizard.back"), click:prevButton, id:"prevPage" },
 			{ text:i18n("wizard.next"), click:nextButton, id:"nextPage" },
-			{ text:btnFinishedText, click:closeOnSubmit? submit: submitWithoutClose, id:"submit" }
+			{ text:btnFinishedText, click:closeWhenDone? submit: submitWithoutClose, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
@@ -46,7 +47,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 
 function launchHelpWizard(html) {
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#messageText").keyup()
+	$("#messageText").keyup();
 	$("#modalBox").dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
@@ -232,9 +233,16 @@ $.widget("ui.contentWidget", {
 function messageResponseClick(messageType) {
 	var configureTabs= "";
 	var me = $(this);
+	var src;
 	if (messageType == 'Reply') {
 		configureTabs = "tabs-1, tabs-3, tabs-4"
-		var src = $("#message-src").val();
+		var checkedMessageCount = getCheckedItemCount("message")
+		if(checkedMessageCount > 0) {
+			src = getCheckedList("message");
+		}
+		else{
+			src = $("#message-src").val();
+		}
 	} else if(messageType == 'Forward') {
 		var text = $("#single-message #message-detail-content p").text();
 	}
@@ -247,3 +255,5 @@ function messageResponseClick(messageType) {
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('wizard.send')); }
 	});
 }
+
+
