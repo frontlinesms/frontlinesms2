@@ -215,7 +215,7 @@
                     <object class="UserDataBackupAction" />
                   </java>
                 </serializedBean>
-                <condition />
+                <condition>context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
               </action>
               <action name="" id="91" customizedId="" beanClass="com.install4j.runtime.beans.actions.UninstallPreviousAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="false" failureStrategy="1" errorMessage="">
                 <serializedBean>

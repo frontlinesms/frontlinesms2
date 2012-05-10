@@ -16,7 +16,7 @@ public class UserDataBackupAction extends AbstractInstallAction {
 	 * <install4j 5 directory>/resource/i4jruntime.jar
 	*/
 	private static final String dateFormat = "yyyy-MM-dd-HH-mm";
-	private static final long backupExpiryDuration = 600000l;//7776000000l; // 90 days in miliseconds
+	private static final long backupExpiryDuration = 7776000000l; // 90 days in miliseconds
 	private static final String backupDirNameFormat = ".frontlinesms2-backup.";
 	private File fsms2Home;
 	private File userHome;
