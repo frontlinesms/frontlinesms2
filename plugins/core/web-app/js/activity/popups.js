@@ -8,7 +8,7 @@ function chooseActivity() {
 		dataType: "html",
 		url: url_root + activityUrl,
 		beforeSend: function(){ showThinking(); },
-		success: function(data, textStatus) { hideThinking(); launchMediumWizard(title, data, i18n('wizard.create'), 675, 500); }
+		success: function(data, textStatus) { hideThinking(); launchMediumWizard(title, data, i18n('wizard.create'), 675, 500, false); }
 	});
 	return;
 }
