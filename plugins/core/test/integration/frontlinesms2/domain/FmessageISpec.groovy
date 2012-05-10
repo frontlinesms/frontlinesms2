@@ -138,11 +138,10 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			
 			(TEST_DATE-6..TEST_DATE+5).each { date ->
 				Fmessage.build(date:date, src:jessy.mobile)
-				buildWithDispatches( 
-						// this dispatch should be counted because Jessy is in the target group
-						new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
+				buildWithDispatches(
+					// this dispatch should be counted because Jessy is in the target group
+					new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
 			}
-			
 			3.times { Fmessage.build(date:TEST_DATE-1, src:jessy.mobile) }
 			
 			5.times {
