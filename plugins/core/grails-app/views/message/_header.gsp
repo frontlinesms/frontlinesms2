@@ -8,7 +8,17 @@
 				<g:message code="fmessage.archive.back"/>
 			</g:link>
 		</g:if>
-		<h3 class="activity">${ownerInstance?.name} ${ownerInstance?.shortName}</h3>
+		
+		<g:if test="${ownerInstance instanceof Poll}">
+			<h3 class="activity"><g:message code="poll.title"  args="${ [ownerInstance?.name] }"/></h3>
+		</g:if>
+		<g:if test="${ownerInstance instanceof Announcement}">
+			<h3 class="activity"><g:message code="announcement.title"  args="${ [ownerInstance?.name] }"/></h3>
+		</g:if>
+		<g:if test="${ownerInstance instanceof Autoreply}">
+			<h3 class="activity"><g:message code="autoreply.title"  args="${ [ownerInstance?.name] }"/></h3>
+		</g:if>
+
 		<g:if test="${ownerInstance}">
 			<fsms:render template="/message/activity_buttons"/>
 		</g:if>
@@ -28,8 +38,8 @@
 			</g:else>
 		</div>
 	</g:if>
-	<g:elseif test="${messageSection == 'folder'}">
-		<h3 class="folder">${ownerInstance?.name} ${messageSection}</h3>
+	<g:elseif test="${messageSection == message(code: 'folder.label')}">
+		<h3 class="folder">${message(code: 'message.folder.header', args:[ownerInstance?.name])}</h3>
 		<fsms:render template="/message/section_action_buttons"/>
 	</g:elseif>
 	<g:else>

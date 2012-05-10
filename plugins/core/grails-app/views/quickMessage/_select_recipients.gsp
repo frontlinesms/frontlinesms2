@@ -73,7 +73,7 @@
 		checkBox.change()
 	}
 
-	function updateCount() {
+	function updateMessageCount() {
 		var addressCount = getSelectedGroupElements("addresses").size();
 		$.each(["#recipient-count", "#contacts-count"],
 			function(index, id) {

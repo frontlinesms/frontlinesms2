@@ -43,7 +43,11 @@
 	</g:else>
 	<div id="create-connection-btn">
 		<g:remoteLink class="btn" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), false)">
+<<<<<<< HEAD
 			<g:message code="connection.add"/>
+=======
+			<g:message code="connection.add" />
+>>>>>>> CORE-858
 		</g:remoteLink>
 	</div>
 </div>

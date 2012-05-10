@@ -4,16 +4,16 @@
 		<ul class="header-buttons">
 			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 				<li>
-					<g:select class="dropdown" name="group-actions" from="${['Rename group', 'Delete group']}"
+					<g:select class="dropdown" name="group-actions" from="${[message(code: 'group.rename'), message(code: 'group.delete')]}"
 							keys="${['rename', 'delete']}"
-							noSelection="${['': 'More actions...']}"/>
+							noSelection="${['': g.message(code:'group.moreactions')]}"/>
 				</li>
 			</g:if>
 			<g:else>
 				<li>
-					<g:select class="dropdown" name="group-actions" from="${['Rename group', 'Edit group', 'Delete group']}"
+					<g:select class="dropdown" name="group-actions" from="${[message(code: 'group.rename'), message(code: 'group.edit'), message(code: 'group.delete')]}"
 							keys="${['rename', 'edit', 'delete']}"
-							noSelection="${['': 'More actions...']}"/>
+							noSelection="${['': g.message(code:'group.moreactions')]}"/>
 				</li>
 			</g:else>
 			<li>
