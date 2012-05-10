@@ -3,6 +3,7 @@ package frontlinesms2.domain
 import frontlinesms2.*
 
 class FolderISpec extends grails.plugin.spock.IntegrationSpec {
+
 	def controller
 	def setup() {
 		controller = new FolderController()
@@ -34,7 +35,7 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 	def "When a folder is archived all of its messages are archived"() {
 		setup:
 			def f = Folder.build(name:'test')
-			def m = Fmessage.build()
+			def m = Fmessage.build(inbound: true)
 		when:
 			f.addToMessages(m)
 			f.save()
@@ -44,6 +45,7 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 			m.archived == false
 		when:
 			f.archive()
+			m.refresh()
 		then:
 			f.archived == true
 			m.archived == true

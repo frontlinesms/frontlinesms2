@@ -26,8 +26,10 @@ class Folder extends MessageOwner {
 //> ACTION METHODS
 	def archive() {
 		this.archived = true
-		def messagesToArchive = Fmessage.owned(this, false, true)?.list()
-		messagesToArchive.each { it?.archived = true }
+		this.messages.each {
+			it.archived = true
+			it.save(flush: true)
+		}
 	}
 	
 	def unarchive() {
