@@ -1,7 +1,6 @@
 package frontlinesms2
 
 abstract class Activity extends MessageOwner {
-	String name
 	String sentMessageText
 	Date dateCreated
 	static transients = ['liveMessageCount']
