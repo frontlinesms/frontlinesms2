@@ -121,9 +121,9 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
 		then:
-			$("input#groups")[0].displayed
+			groupCheckbox[0].displayed
 		when:
-			$("input#groups")[0].click()
+			groupCheckbox[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "2" }
 	}
@@ -135,13 +135,13 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
 		then:
-			$("input#groups")[0].displayed
+			groupCheckbox[0].displayed
 		when:
-			$("input#groups")[0].click()
+			groupCheckbox[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "2" }
 		when:
-			$("input#groups")[0].click()
+			groupCheckbox[0].click()
 		then:
 			waitFor { $("#recipient-count").text() == "0" }
 	}
@@ -166,15 +166,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input#groups")[0].click()
-			$("input#groups")[1].click()
+			groupCheckbox[0].click()
+			groupCheckbox[1].click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
 			$("input[value='12345678']").click()
 		then:
-			!$("input#groups")[0].checked
-			!$("input#groups")[1].checked
+			!groupCheckbox[0].checked
+			!groupCheckbox[1].checked
 			$("#recipient-count").text() == "1"
 	}
 
@@ -184,15 +184,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input#groups")[0].click()
-			$("input#groups")[1].click()
+			groupCheckbox[0].click()
+			groupCheckbox[1].click()
 		then:
 			$("#recipient-count").text() == "2"
 		when:
-			$("input#groups")[0].click()
+			groupCheckbox[0].click()
 		then:
-			!$("input#groups")[0].checked
-			$("input#groups")[1].checked
+			!groupCheckbox[0].checked
+			groupCheckbox[1].checked
 			$("#recipient-count").text() == "2"
 
 	}
@@ -218,17 +218,17 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 			toSelectRecipientsTab()
-			$("input#groups")[0].click()
+			groupCheckbox[0].click()
 		then:
-			$("input#groups")[0].checked
+			groupCheckbox[0].checked
 		when:
 			$("input[value='876543212']").click()
 		then:
-			$("input#groups")[0].checked
+			groupCheckbox[0].checked
 		when:
 			$("input[value='876543212']").click()
 		then:
-			$("input#groups")[0].checked
+			groupCheckbox[0].checked
 
 	}
 	
@@ -246,7 +246,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def launchQuickMessageDialog() {
 		to PageMessageInbox
 		$("a", text:"Quick message").click()
-		waitFor { at QuickMessageDialog }
+		waitFor(5) { at QuickMessageDialog }
 	}
 	
 	def toSelectRecipientsTab() {
@@ -276,6 +276,8 @@ class QuickMessageDialog extends geb.Page {
 		nextPageButton { $("#nextPage") }
 		characterCount { $("#send-message-stats")}
 		messagesCount { $("#messages-count")}
+
+		groupCheckbox { $('input', type:'checkbox', name:'groups') }
 	}
 }
 

@@ -35,10 +35,10 @@ class MessageController {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
 			render messageCount as JSON
 		} else if(section == 'activity') {
-			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages()?.count()]]
+			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.activityMessages?.count()]]
 			render messageCount as JSON
 		} else if(section == 'folder') {
-			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages()?.count()]]
+			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.folderMessages?.count()]]
 			render messageCount as JSON
 		} else
 			render ""
@@ -72,7 +72,7 @@ class MessageController {
 
 	def pending = {
 		def messageInstanceList = Fmessage.pending(params.failed)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
+		render view:'standard', model:[messageInstanceList: messageInstanceList.listDistinct(params),
 				messageSection:'pending',
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
@@ -330,17 +330,8 @@ class MessageController {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
-	def sendMessageCount = {	
-		def messageInfo
-		def fmessage = params.message ?: ''
-		if(fmessage)	{ 
-			messageInfo = fmessageInfoService.getMessageInfos(fmessage)
-			def messageCount = messageInfo.partCount > 1 ? message(code: 'flash.message.fmessages.many', args: [messageInfo.partCount]): message(code: 'flash.message.fmessages.many.one')
-			render text: message(code: 'fmessage.remaining.characters.text', args: [messageInfo.remaining, messageCount]), contentType:'text/plain'
-		} else {
-			render text: message(code: 'fmessage.remaining.characters.text.all'), contentType:'text/plain'
-		}
-		
+	def sendMessageCount = {
+		render fmessageInfoService.getMessageInfos(params.message) as JSON
 	}
 
 //> PRIVATE HELPERS

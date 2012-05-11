@@ -28,5 +28,5 @@
 		}
 	});
 	
-	$("#autoreplyText").live("keyup", updateCount);
+	$("#autoreplyText").live("keyup", updateSmsCharacterCount);
 </r:script>
