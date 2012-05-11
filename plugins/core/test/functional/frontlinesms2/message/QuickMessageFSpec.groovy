@@ -88,7 +88,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("li.manual").find("input", name:"addresses")[0].click()
 		then:
-			$("#recipient-count").text() == "1"
+			waitFor { $("#recipient-count").text() == "1" }
 	}
 	
 	def "should send the message to the selected recipients"() {
@@ -203,12 +203,12 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message)" }
+			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message(s))" }
 		when:
 			$("#messageText") << "h"
 			$("#messageText").jquery.trigger('keyup')
 		then:
-			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message)" }
+			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message(s))" }
 	}
 	
 	def "should not deselect group when a non-member contact is unchecked"() {
