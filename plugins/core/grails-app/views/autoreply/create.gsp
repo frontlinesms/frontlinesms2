@@ -1,3 +1,4 @@
+<meta name="layout" content="popup"/>
 <div id="tabs" class="vertical-tabs">
 	<div class="error-panel hide"><div id="error-icon"></div><g:message code="autoreply.validation.prompt"/></div>
 	<ol>

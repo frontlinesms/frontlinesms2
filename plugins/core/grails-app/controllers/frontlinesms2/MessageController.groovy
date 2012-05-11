@@ -59,13 +59,13 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
-						messageSection: message(code: 'fmessage.inbox'),
+						messageSection:'inbox',
 						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
-		render view:'../message/standard', model:[messageSection: message(code: 'fmessage.sent'),
+		render view:'../message/standard', model:[messageSection:'sent',
 				messageInstanceList: messageInstanceList.list(params),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	} 
@@ -73,7 +73,7 @@ class MessageController {
 	def pending = {
 		def messageInstanceList = Fmessage.pending(params.failed)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
-				messageSection: message(code: 'fmessage.pending'),
+				messageSection:'pending',
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 	
@@ -100,7 +100,7 @@ class MessageController {
 		}
 		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
-					messageSection: message(code: 'fmessage.trash'),
+					messageSection:'trash',
 					messageInstanceTotal: Trash.count(),
 					ownerInstance: trashedObject] << getShowModel()
 	}
@@ -139,7 +139,7 @@ class MessageController {
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
 			if (params.flashMessage) { flash.message = params.flashMessage }
 			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
-						messageSection: message(code: 'folder.label'),
+						messageSection:'folder',
 						messageInstanceTotal: messageInstanceList.count(),
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
@@ -245,7 +245,7 @@ class MessageController {
 					if(activity && activity.autoreplyText)
 						redirect(controller: activity instanceof frontlinesms2.Poll ? 'poll' : 'autoreply',
 								action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id]) */
-				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
+				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') { // FIXME remove radioShow from here
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {

@@ -65,7 +65,7 @@ class SearchController extends MessageController {
 		if(search.searchString) {
 			searchDescriptor += " \"$search.searchString\""
 		} else {
-			searchDescriptor += message(code:'searchdescriptor.all.messages')
+			searchDescriptor += (" " + message(code:'searchdescriptor.all.messages'))
 		}
 		 
 		if(search.group) searchDescriptor += ", $search.group.name"
