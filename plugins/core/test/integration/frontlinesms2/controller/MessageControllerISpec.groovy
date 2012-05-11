@@ -83,7 +83,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
 			assert Fmessage.get(id).read == false
 		when:
-			controller.params.messageId = id
+			controller.params.id = id
 			controller.params.messageSection = 'inbox'
 			controller.inbox()
 		then:

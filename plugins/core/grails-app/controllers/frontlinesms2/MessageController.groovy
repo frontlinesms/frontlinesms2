@@ -365,7 +365,7 @@ class MessageController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['message-select']?: [params.messageId]
+		def checked = params['message-select'] ?: [params.messageId]
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}
