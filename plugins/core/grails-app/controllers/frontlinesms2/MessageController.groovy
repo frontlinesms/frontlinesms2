@@ -352,8 +352,10 @@ class MessageController {
 	}
 
 	private def getShowModel(messageInstanceList) {
-		def messageInstance = params.messageId? Fmessage.get(params.messageId):
-				messageInstanceList? messageInstanceList[0]: null
+		def messageInstance = params.messageId? Fmessage.get(params.messageId): null
+		messageInstance?.read = true
+		messageInstance?.save()
+
 		def checkedMessageCount = getCheckedMessageList().size()
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
