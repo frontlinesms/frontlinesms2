@@ -23,7 +23,7 @@
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				updateCount();
+				// updateCount(); // seems to be breaking because $(this) is evaluating wrong inside the method
 				return true;
 			}
 		});
