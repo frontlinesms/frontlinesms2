@@ -45,7 +45,7 @@ class MessageController {
 	}
 
 	def show = {
-		def messageInstance = Fmessage.get(params.id)
+		def messageInstance = Fmessage.get(params.messageId)
 		messageInstance.read = true
 		messageInstance.save()
 		def model = [messageInstance: messageInstance,
@@ -239,13 +239,15 @@ class MessageController {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save(failOnError:true)
-					/* FIXME the following is broken for multiple messages, and it's not clear what
-					 * it's trying to do.  If this is meant to be triggering an action on the Activity
-					 * then it definitely shouldn't be doing it via another controller
-					if(activity && activity.autoreplyText)
-						redirect(controller: activity instanceof frontlinesms2.Poll ? 'poll' : 'autoreply',
-								action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id]) */
-				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') { // FIXME remove radioShow from here
+					if(activity && activity.autoreplyText) {
+						params.addresses = messageInstance.src
+						params.messageText = activity.autoreplyText
+						def outgoingMessage = messageSendService.createOutgoingMessage(params)
+						activity.addToMessages(outgoingMessage)
+						messageSendService.send(outgoingMessage)
+						activity.save()
+					}
+				} else if (params.ownerId) {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
@@ -257,7 +259,6 @@ class MessageController {
 				}
 			}
 		}
-
 		// FIXME this flash message is concatenated in a stupid way
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
 		render ""
@@ -343,8 +344,10 @@ class MessageController {
 	}
 
 	private def getShowModel(messageInstanceList) {
-		def messageInstance = params.messageId? Fmessage.get(params.messageId):
-				messageInstanceList? messageInstanceList[0]: null
+		def messageInstance = params.messageId? Fmessage.get(params.messageId): null
+		messageInstance?.read = true
+		messageInstance?.save()
+
 		def checkedMessageCount = getCheckedMessageList().size()
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,

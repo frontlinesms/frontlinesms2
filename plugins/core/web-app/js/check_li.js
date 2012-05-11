@@ -67,6 +67,9 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 			document.getElementById('new-field-dropdown-button').style.width="250px"; //fix width for custom field dropdown
 			applyJavascript();
 		}
+		if (itemTypeString == 'message') {
+			refreshMessageCount();
+		}
 	});
 }
 
