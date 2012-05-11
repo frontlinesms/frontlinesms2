@@ -10,6 +10,7 @@
 	var i18nStrings = {};
 	function i18n(key) {
 		var translated = i18nStrings[key];
+		if(typeof(translated) == 'undefined') return key;
 		for(i=arguments.length-1; i>0; --i) {
 			translated = translated.replace("{"+(i-1)+"}", arguments[i]);
 		}

@@ -9,20 +9,21 @@
 		<ul>
 			<g:each in="${groupList}" var="entry">
 				<li class="group">
-					<input type="checkbox" id="groups" name="groups" value="${entry.key}" onclick='selectMembers("${entry.key}", "${entry.value.name}", ${entry.value.addresses as JSON})'>
+					<g:checkBox name="groups" value="${entry.key}" onclick="selectMembers('${entry.key}', '${entry.value.name}', ${entry.value.addresses as JSON})" checked="${false}"/>
 					${entry.value.name}(${entry.value.addresses.size()})
 				</li>
 			</g:each>
 			<g:each in="${nonExistingRecipients}" var="address">
 				<li>
-					<input type="checkbox" name="addresses" value="${address}" checked>${address}
+					<g:checkBox name="addresses" value="${address}" checked="${true}"/>
+					${address}
 				</li>
 			</g:each>
 		</ul>
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact">
 				<li class="contact">
-					<input type="checkbox" name="addresses" value="${contact.mobile}" <g:if test="${recipients.contains(contact.mobile)}">checked</g:if>>
+					<g:checkBox name="addresses" value="${contact.mobile}" checked="${recipients.contains(contact.mobile)}"/>
 					${contact.name ?: contact.mobile}
 				</li>
 				<li class="contact">
@@ -37,7 +38,7 @@
 	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients"/></div>
 </div>
 
-<r:script>
+<r:script disposition="head">
 	var groupAndMembers = {}
 	function selectMembers(groupIdString, groupName, allContacts) {
 		groupAndMembers[groupIdString] = allContacts
@@ -48,14 +49,14 @@
 		$.each(getSelectedGroupElements('groups'), function(index, groupInputElement) {
 			if(groupInputElement.value != groupName) {
 				$.each(groupAndMembers[groupInputElement.value], function(index, member) {
-					setValueForCheckBox(member, true)
+					setValueForCheckBox(member, true);
 				});
 			}
 		});
-		updateCount()
+		updateMessageCount();
 	}
 
-	$(".contact input[type='checkbox']").live('click', function() {
+	$(".contact input[type='checkbox']").bind('click', function() {
 		if (!($(this).is(":checked"))) {
 			var contactNumber = this.value
 			$.each(groupAndMembers, function(key, value) {
@@ -64,13 +65,13 @@
 					findInputWithValue(key).attr('checked', false);
 			});
 		}
-		updateCount()
+		updateMessageCount();
 	});
 
 	function setValueForCheckBox(value, checked) {
 		var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
 		checkBox.attr('checked', checked);
-		checkBox.change()
+		checkBox.change();
 	}
 
 	function updateMessageCount() {
@@ -81,11 +82,11 @@
 			}
 		);
 		
-		var messageStats = $("#send-message-stats").text()
+		var messageStats = $("#send-message-stats").text();
 		noOfMessages = messageStats.substring(messageStats.indexOf("(")+1, messageStats.indexOf(" S"));
-		noOfMessages = noOfMessages == 0 ? 1 : noOfMessages
-		messageCount = addressCount * parseInt(noOfMessages)
-		$("#messages-count").html(messageCount)
+		noOfMessages = noOfMessages == 0 ? 1 : noOfMessages;
+		messageCount = addressCount * parseInt(noOfMessages);
+		$("#messages-count").html(messageCount);
 	}
 
 	function validateAddressEntry() {
@@ -114,9 +115,9 @@
 			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 			if(checkbox !== address) {
 				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + sanitizedAddress + ">" + sanitizedAddress + "</input></li>")
-				updateCount();
+				updateMessageCount();
 			}
-			$('#address').val("")
+			$('#address').val("");
 			$("#address").removeClass('error');
 			$("#manual-address").find('#address-error').remove();
 			return true;

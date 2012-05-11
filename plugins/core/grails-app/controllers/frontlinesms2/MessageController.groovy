@@ -329,17 +329,8 @@ class MessageController {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
-	def sendMessageCount = {	
-		def messageInfo
-		def fmessage = params.message ?: ''
-		if(fmessage)	{ 
-			messageInfo = fmessageInfoService.getMessageInfos(fmessage)
-			def messageCount = messageInfo.partCount > 1 ? message(code: 'flash.message.fmessages.many', args: [messageInfo.partCount]): message(code: 'flash.message.fmessages.many.one')
-			render text: message(code: 'fmessage.remaining.characters.text', args: [messageInfo.remaining, messageCount]), contentType:'text/plain'
-		} else {
-			render text: message(code: 'fmessage.remaining.characters.text.all'), contentType:'text/plain'
-		}
-		
+	def sendMessageCount = {
+		render fmessageInfoService.getMessageInfos(params.message) as JSON
 	}
 
 //> PRIVATE HELPERS
