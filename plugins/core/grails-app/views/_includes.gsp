@@ -16,10 +16,12 @@
 		}
 		return translated;
 	}
-</r:script>
 
-<g:if test="${!grails.util.GrailsUtil.environment.equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_TEST)}">
-	<r:script disposition="head">
+	<g:if env="test">
+		// declare our own, non-functioning select menu
+		$.fn.selectmenu = function() {}
+	</g:if>
+	<g:else>
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
@@ -31,12 +33,6 @@
 				});
 			}
 		});
-	</r:script>
-</g:if>
-<g:else>
-	<r:script>
-		// declare our own, non-functioning select menu
-		$.fn.selectmenu = function() {}
-	</r:script>
-</g:else>
+	</g:else>
+</r:script>
 
