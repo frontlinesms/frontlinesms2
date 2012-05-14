@@ -35,8 +35,9 @@
 </g:if>
 <g:else>
 	<r:script>
-		// declare our own, non-functioning select menu
+		// declare our own, non-functioning select menu and button
 		$.fn.selectmenu = function() {}
+		$.fn.button = function() {}
 	</r:script>
 </g:else>
 

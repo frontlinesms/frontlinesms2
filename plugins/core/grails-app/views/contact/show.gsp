@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.Contact" %>
 <html>
 	<head>
-		<title>${contactsSection ? contactsSection.name : 'Contacts'}</title>
+		<title>${contactsSection ? Contacts >> contactsSection.name : 'Contacts'}</title>
 		<meta name="layout" content="contacts"/>
 		<r:script>
 			$(function() {

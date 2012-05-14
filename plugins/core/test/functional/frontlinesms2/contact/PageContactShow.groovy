@@ -5,7 +5,7 @@ import frontlinesms2.*
 class PageContactShow extends geb.Page {
 	static getUrl() { 'contact/show' }
 	static at = {
-		title.endsWith('Contacts')
+		title.contains('Contacts')
 	}
 	static content = {
 		selectedMenuItem { $('#contacts-menu .selected') }
