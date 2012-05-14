@@ -17,7 +17,7 @@
 }
 #secondary-nav a:hover{
 	border-top: 3px solid #ca2d92;
-}
+}`
 #secondary-nav .selected a{
   	border-top: 3px solid #ca2d92;
 }
