@@ -164,7 +164,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			Fmessage.search([contactString:contactString]).list() == contactNames.inject([]) { m, c -> m += messages[c] }
+			Fmessage.search([contactString:contactString]).list(sort:'date', order:'desc') == contactNames.inject([]) { m, c -> m += messages[c] }
 		where:
 			contactString | contactNames
 			'ROB'         | ['robert']
@@ -219,8 +219,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def outBoundMessageToAlice = buildWithDispatches(
 					new Dispatch(dst:'1234', status:DispatchStatus.SENT, dateSent:TEST_DATE))
 		then:
-			[messageFromAlice]*.displayName.every { it == "Alice" }
-			[outBoundMessageToAlice]*.displayName.every { it == "To: Alice" }
+			messageFromAlice.refresh().displayName == 'Alice'
+			outBoundMessageToAlice.displayName == 'Alice'
 	}
 	
 	def "cannot archive a message that has an owner without also archiving the owner" () {

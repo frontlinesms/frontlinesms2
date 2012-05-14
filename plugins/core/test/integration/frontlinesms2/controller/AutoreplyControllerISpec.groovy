@@ -16,7 +16,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			controller.params.name = name
 			controller.params.keyword = keyword
-			controller.params.autoreplyText = autoreplyText
+			controller.params.messageText = autoreplyText
 		when:
 			controller.save()
 		then:
@@ -40,7 +40,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.ownerId = a.id
 			controller.params.name = name
 			controller.params.keyword = finalKeyword
-			controller.params.autoreplyText = autoreplyText
+			controller.params.messageText = autoreplyText
 			controller.params.format = "html"
 			
 		when:

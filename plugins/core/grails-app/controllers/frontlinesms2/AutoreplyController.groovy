@@ -14,28 +14,21 @@ class AutoreplyController extends ActivityController {
 			autoreply.keyword.value = keywordValue
 			
 			autoreply.name = params.name ?: autoreply.name
-			autoreply.autoreplyText = params.messageText ?: autoreply.messageText
+			autoreply.autoreplyText = params.messageText ?: autoreply.autoreplyText
 		} else {
 			def keyword = new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
-			autoreply = new Autoreply(name: params.name, autoreplyText :params.messageText, keyword: keyword)
+			autoreply = new Autoreply(name: params.name, autoreplyText:params.messageText, keyword: keyword)
 		}
-		if (autoreply.save(flush: true)) {
-			flash.message = message(code: 'autoreply.saved')
+		if(autoreply.save()) {
+			flash.message = message(code:'autoreply.saved')
 			withFormat {
-				json {
-					render([ok:true, ownerId: autoreply.id] as JSON)
-				}
-
-				html {
-					[ownerId: autoreply.id]
-				}
+				json { render([ok:true, ownerId:autoreply.id] as JSON) }
+				html { [ownerId:autoreply.id] }
 			}
 		} else {
 			def errors = autoreply.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
 			withFormat {
-				json {
-					render([ok:false, text:errors] as JSON)
-				}
+				json { render([ok:false, text:errors] as JSON) }
 			}
 		}
 	}
