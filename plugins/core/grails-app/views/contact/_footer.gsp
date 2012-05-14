@@ -8,6 +8,7 @@
 		</g:else>
 	</form>
 	<div id="paging">
+		<g:hiddenField name="offset" value="${params.offset}" />
 		<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 			<g:set var="parameters" value="${[searchString: params.searchString, groupId: contactsSection.id]}"/>
 		</g:if>

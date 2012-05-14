@@ -14,10 +14,10 @@ class AutoreplyController extends ActivityController {
 			autoreply.keyword.value = keywordValue
 			
 			autoreply.name = params.name ?: autoreply.name
-			autoreply.autoreplyText = params.autoreplyText ?: autoreply.autoreplyText
+			autoreply.autoreplyText = params.messageText ?: autoreply.messageText
 		} else {
 			def keyword = new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
-			autoreply = new Autoreply(name: params.name, autoreplyText :params.autoreplyText, keyword: keyword)
+			autoreply = new Autoreply(name: params.name, autoreplyText :params.messageText, keyword: keyword)
 		}
 		if (autoreply.save(flush: true)) {
 			flash.message = message(code: 'autoreply.saved')

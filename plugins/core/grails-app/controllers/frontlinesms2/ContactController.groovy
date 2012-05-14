@@ -116,8 +116,9 @@ class ContactController {
 				contactInstanceList << contactInstance
 			}
 		}
+		println "conbtact List: $contactInstanceList"
 		[contactInstanceList: contactInstanceList,
-				contactInstanceTotal: contactInstanceList.count()]
+				contactInstanceTotal: contactInstanceList.size()]
 	}
 	
 	def delete = {
@@ -162,12 +163,13 @@ class ContactController {
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
-		if (contactInstance.save(flush:true)) {
+		if (contactInstance.save()) {
 			flash.message = message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
 		} else if (existingContact && existingContact != contactInstance) {
+			// TODO generate link with g:link
 			flash.message = "${message(code: 'contact.exists.warn')}  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>${message(code: 'contact.view.duplicate')}</g:link>"
 			return false
 		}
