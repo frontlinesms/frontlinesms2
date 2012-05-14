@@ -13,7 +13,8 @@ class Fmessage {
 	
 	String src
 	String text
-	String contactName
+	String inboundContactName
+	String outboundContactName
 	
 	boolean read
 	boolean starred
@@ -25,7 +26,8 @@ class Fmessage {
 
 	static mapping = {
 		sort date:'desc'
-		contactName formula:'SELECT c.name FROM Contact c WHERE c.mobile=src'
+		inboundContactName formula:'SELECT c.name FROM Contact c WHERE c.mobile=src'
+		outboundContactName formula:'SELECT MAX(c.name) FROM Contact c, Dispatch d WHERE c.mobile=d.dst AND d.message_id=id'
 	}
 	
 	static constraints = {
@@ -34,7 +36,8 @@ class Fmessage {
 				val || !obj.inbound
 		})
 		text nullable:true
-		contactName nullable:true
+		inboundContactName nullable:true
+		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
 				obj.messageOwner == null || obj.messageOwner.archived == val
 		})
@@ -179,8 +182,9 @@ class Fmessage {
 	}
 
 	def getDisplayName() {
-		if(inbound) contactName
-		else dispatches.size()
+		if(inbound) inboundContactName
+		else if(dispatches.size() == 1) outboundContactName
+		else dispatches.size() // TODO this should be i18n'd I think...
 	}
 
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
