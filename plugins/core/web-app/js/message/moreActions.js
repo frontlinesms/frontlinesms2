@@ -34,7 +34,7 @@ function editAction() {
 		url: url_root + messageSection + '/edit',
 		data: {id: $("#ownerId").val()},
 		success: function(data) {
-			launchMediumWizard(title, data, i18n('wizard.ok'));
+			launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false);
 	}})
 }
 

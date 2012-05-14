@@ -6,6 +6,8 @@ function initializePopup() {
 	
 	$("#help #index li a").click(goToSection);
 	$("#help #file").delegate("a", "click", goToSection);
+	$('div#index a:first').click();
+
 }
 
 function goToSection() {
@@ -20,7 +22,7 @@ function goToSection() {
 }
 </r:script>
 <div id="help">
-	<div id="index" class="vertical-tabs ui-tabs-nav">
+	<div id="index">
 		<fsms:render template="index"/>
 	</div>
 	<div id="file">

@@ -22,12 +22,13 @@
 			<fsms:render template="/message/compose"/>
 		</div>
 		<div id="tabs-6">
-			<fsms:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
+			<fsms:render template="/message/select_recipients" model= "['contactList' : contactList,
 				                                                           'groupList': groupList,
 				                                                           'nonExistingRecipients': [],
 				                                                           'recipients': []]"/>
 		</div>
 		<fsms:render template="/poll/confirm"/>
+		<fsms:render template="/poll/save"/>
 	</g:formRemote>
 </div>
 
@@ -83,7 +84,7 @@
 	}
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit}">
-			$("#autoReplyText").trigger("keyup");
+			$("#messageText").trigger("keyup");
 		</g:if>
 		
 		highlightPollResponses();
