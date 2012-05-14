@@ -26,6 +26,7 @@
 				                                                           'recipients': []]"/>
 		</div>
 		<fsms:render template="/poll/confirm"/>
+		<fsms:render template="/poll/save"/>
 	</g:formRemote>
 </div>
 
