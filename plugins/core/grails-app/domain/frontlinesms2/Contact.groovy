@@ -34,50 +34,8 @@ class Contact {
 	
 	def beforeDelete = {
 		GroupMembership.deleteFor(this)
-		removeFmessageDisplayName()
-	}
-	
-	def afterInsert = {
-		if(mobile) {
-			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [name, mobile])
-				updateDispatchInfo()
-			}
-		}
-	}
-	
-	def beforeUpdate = {
-		final def oldMobile = isDirty('mobile')? getPersistentValue('mobile'): null
-		if(oldMobile) {
-			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=m.src WHERE m.src=?", [oldMobile])
-				updateDispatchInfo()
-			}
-		}
 	}
 
-	def afterUpdate = {
-		println "afterUpdate() : ENTRY : mobile=$mobile"
-		println "afterUpdate() : mobile.dirty=${isDirty('mobile')}"
-		if(mobile) {
-			println "afterUpdate() : creating new session..."
-			Fmessage.withNewSession { session ->
-				println "afterUpdate() : inside new session..."
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [name, mobile])
-				updateDispatchInfo()
-			}
-		}
-		println "afterUpdate() : EXIT"
-	}
-	
-	private def updateDispatchInfo() {
-		if(mobile) {
-			Dispatch.findAllByDst(mobile).each {
-				it.message.displayName = "To: " + name
-			}
-		}
-	}
-	
 //> ACCESSORS
 	def getGroups() {
 		GroupMembership.findAllByContact(this)*.group.sort{it.name}
@@ -146,14 +104,5 @@ class Contact {
 			}
 		}
 	}
-	
-//> HELPER METHODS
-	private def removeFmessageDisplayName() {
-		if(mobile) {
-			Fmessage.withNewSession { session ->
-				Fmessage.executeUpdate("UPDATE Fmessage m SET m.displayName=? WHERE m.src=?", [mobile, mobile])
-				updateDispatchInfo()
-			}
-		}
-	}
 }
+
