@@ -8,14 +8,16 @@
 	</ol>
 	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))">
 		<fsms:render template="/autoreply/keyword"/>
-		<fsms:render template="/autoreply/message"/>
+		<div id="tabs-2">
+			<fsms:render template="/message/compose"/>
+		</div>
 		<fsms:render template="/autoreply/confirm"/>
 		<fsms:render template="/autoreply/save"/>
 	</g:formRemote>
 </div>
 <r:script>
 	function initializePopup() {
-		$("#autoreplyText").trigger("keyup");
+		$("#messageText").trigger("keyup");
 		
 		$("#tabs-1").contentWidget({
 			validate: function() {
@@ -29,8 +31,8 @@
 		
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				if (isElementEmpty("#tabs-2 #autoreplyText")) {
-					$("#tabs-2 #autoreplyText").addClass("error");
+				if (isElementEmpty("#tabs-2 #messageText")) {
+					$("#tabs-2 #messageText").addClass("error");
 					return false;
 				}
 				return true;
@@ -45,13 +47,13 @@
 	function updateConfirmationMessage() {
 		if(!(isGroupChecked("blankKeyword"))){
 			var keyword = $('#keyword').val().toUpperCase();
-			var autoreplyText = $('#autoreplyText').val();
+			var autoreplyText = $('#messageText').val();
 
 			$("#keyword-confirm").html('<p>' + keyword  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
 		else{
-			var autoreplyText = $('#autoreplyText').val();
+			var autoreplyText = $('#messageText').val();
 			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
