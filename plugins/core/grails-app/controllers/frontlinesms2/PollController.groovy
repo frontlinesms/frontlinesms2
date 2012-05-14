@@ -35,7 +35,7 @@ class PollController extends ActivityController {
 
 				withFormat {
 					json {
-						render([ok:true, ownerId: poll.id, page:createLink(action:'save')] as JSON)
+						render([ok:true, ownerId: poll.id] as JSON)
 					}
 
 					html {

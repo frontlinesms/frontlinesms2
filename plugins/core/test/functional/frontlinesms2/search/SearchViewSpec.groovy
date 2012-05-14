@@ -30,7 +30,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 		then:
 			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
-			searchFrm.find('select', name:'activityId').children('option')*.text() == ['Select activity / folder', "Miauow Mix", 'Work']
+			searchFrm.find('select', name:'activityId').children('option')*.text() == ['Select activity/folder', "Miauow Mix", 'Work']
 	}
 	
 	def "search description is shown in header"() {
@@ -40,7 +40,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			waitFor {searchDescription}
-			searchDescription.text().containsAll('Searching all messages, including archived messages')
+			searchDescription.text().contains('Searching all messages, including archived messages')
 	}
 	
 	def "search string is still shown on form submit and consequent page reload"() {
@@ -68,12 +68,12 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearch
 		then:
-			searchFrm.inArchive == 'on'
+			searchFrm.inArchive
 		when:
-			searchFrm.inArchive = null
+			searchFrm.inArchive = false
 			searchBtn.click()
 		then:
-			searchFrm.inArchive == 'off'
+			!searchFrm.inArchive
 	}
 	
 	def "'Export Results' link is disabled when search is null "() {
@@ -283,11 +283,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			$("#message-tab-link").text()?.equalsIgnoreCase("Messages\n2")
+			$("#message-tab a").text()?.equalsIgnoreCase("Messages\n2")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n3") }
+			waitFor { $("#message-tab a").text()?.equalsIgnoreCase("Messages\n3") }
 	}
 	
 }

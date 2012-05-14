@@ -16,9 +16,10 @@ function chooseActivity() {
 function checkForSuccessfulSave(response, type) {
 	$("#submit").removeAttr('disabled');
 	if (response.ok) {
-		$("#tabs").load(response.page + ".gsp", function() {
-			$(".summary #ownerId").val(response.ownerId);
-		});
+		$("div.confirm").hide();
+		$(".ui-tabs-nav").hide();
+		$("div.summary").show();
+		$(".summary #activityId").val(response.ownerId);
 		var messageDialog = $("#modalBox")
 		messageDialog.dialog(
 			{
@@ -39,8 +40,8 @@ function checkForSuccessfulSave(response, type) {
 	}
 }
 	
-function summaryRedirect(ownerId) {
-	var ownerId = $(".summary #ownerId").val();
+function summaryRedirect(activityId) {
+	var activityId = $(".summary #activityId").val();
 	$(this).dialog('close');
-	window.location.replace(url_root + "message/activity/" + ownerId);
+	window.location.replace(url_root + "message/activity/" + activityId	);
 }
