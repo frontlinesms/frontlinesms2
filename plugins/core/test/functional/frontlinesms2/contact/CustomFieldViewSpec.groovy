@@ -68,7 +68,6 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			bob.refresh().customFields == originalFields
 	}
 
-	@spock.lang.IgnoreRest
 	def 'clicking X next to custom field in list then saving removes it from  database'() {
 		when:
 			to PageContactShowBob
