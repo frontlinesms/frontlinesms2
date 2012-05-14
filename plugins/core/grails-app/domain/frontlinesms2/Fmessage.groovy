@@ -133,6 +133,10 @@ class Fmessage {
 					'in'('disp.dst', groupMembersNumbers)
 				}
 			}
+			if(search.status) {
+				if(search.status.toLowerCase() == 'inbound') eq('inbound', true)
+				else eq('inbound', false)
+			}
 			if(search.owners) {
 				'in'("messageOwner", search.owners)
 			}

@@ -6,6 +6,12 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
+environments {
+	test {
+		grails.server.port.http=8081
+	}
+}
+
 grails.project.dependency.resolution = {
 	def gebVersion = '0.7.0'
 

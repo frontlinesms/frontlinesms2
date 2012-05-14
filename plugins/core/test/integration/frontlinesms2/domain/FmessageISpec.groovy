@@ -164,7 +164,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			Fmessage.search([contactString:contactString]).list()*.inbound == contactNames.inject([]) { m, c -> m += messages[c] }
+			Fmessage.search([contactString:contactString]).list() == contactNames.inject([]) { m, c -> m += messages[c] }
 		where:
 			contactString | contactNames
 			'ROB'         | ['robert']
