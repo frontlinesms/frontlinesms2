@@ -39,7 +39,7 @@ class FolderListSpec extends FolderBaseSpec {
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'selected folder is highlighted'() {
@@ -155,7 +155,7 @@ class FolderListSpec extends FolderBaseSpec {
 			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 			$('#message-detail-sender').text() == 'Work folder'
 			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
-			$('#message-detail-content').text() == "${Folder.findById(folderId).getLiveMessageCount()} messages"
+			$('#message-detail-content').text() == "${Folder.findById(folderId).messages.size()} messages"
 	}
 	
 	def "clicking on empty trash permanently deletes a folder"() {

@@ -12,6 +12,7 @@
 			</g:else>
 		</div>
 		<div id="paging">
+			<g:hiddenField name="offset" value="${params.offset}" />
 			<g:paginate next="Next" prev="Back"
 				max="${grailsApplication.config.grails.views.pagination.max}"
 				action="${messageSection}" total="${messageInstanceTotal ?: itemInstanceTotal}" params="${params.findAll({it.key != 'messageId'})}"/>

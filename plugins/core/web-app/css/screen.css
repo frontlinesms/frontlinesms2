@@ -276,7 +276,8 @@ tr.send-failed td:nth-child(6) {
 }
 
 .footer input[type=text]{
-	display: block;
+	display: inline;
+	float:left;
 	width: 170px;
 	height: 25px;
 	border-radius: 2px;
@@ -284,6 +285,7 @@ tr.send-failed td:nth-child(6) {
 	-webkit-border-radius: 2px;
 	border: 1px solid #9e9e9e;
 	padding: 3px;
+	margin: 0 17px;
 	background-image: url('../images/icons/search.png');
 	background-repeat: no-repeat;
 	background-position: right;
@@ -291,6 +293,9 @@ tr.send-failed td:nth-child(6) {
 .footer form{
 	float: left;
 	margin: 0 17px 0 10px;
+}
+.footer #paging{
+	display: inline;
 }
 
 .footer #paging .step, .footer #paging .currentStep {
