@@ -5,14 +5,13 @@ function moveAction() {
 
 	var messagesToMove;
 	var moveTarget;
-	if(getCheckedMessageCount() > 1) {
+	if(getCheckedItemCount('message') > 1) {
 		// TODO should calculate selected IDs here rather than getting from hidden field.  Use
 		// something like $('#message-list tr :checked');
 		messagesToMove = getCheckedList('message');
 		moveTarget = $('#multiple-messages select#move-actions option:selected');
 	} else {
 		messagesToMove = $("#message-id").val();
-		alert("Moving single message: " + messagesToMove);
 		moveTarget = $('#single-message select#move-actions option:selected');
 	}
 
@@ -20,7 +19,7 @@ function moveAction() {
 	if(moveTargetType == 'na') { alert("No valid target selected"); return; }
 	var moveTargetId = moveTarget.val();
 
-	if(messageSection == 'result' && !(getCheckedMessageCount() > 1)) {
+	if(messageSection == 'result' && !(getCheckedItemCount('message') > 1)) {
 		var location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
 		var location = url_root + "search/" + messageSection + '?searchId=' + searchId;

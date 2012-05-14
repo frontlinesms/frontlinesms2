@@ -6,7 +6,6 @@ class Folder extends MessageOwner {
 
 //> PROPERTIES
 	static transients = ['liveMessageCount']
-	String name
 	Date dateCreated
 	
 	static constraints = {

@@ -1,6 +1,7 @@
 package frontlinesms2.controller
 
 import frontlinesms2.*
+import spock.lang.*
 
 class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -64,63 +65,27 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageStats.received == [1, 0]
 	}
 	
+	@Unroll
 	def "show action should return a list of filtered messages for the traffic graph"() {
 		setup:
 			createFilterTestData()
 			def pollAndAnnouncement = [Activity.findByName('test-announcement'), Poll.findByName('This is a poll')]
-			def announcementId = Activity.findByName('test-announcement').id
-			def folderId = Folder.findByName('test-folder').id
 			def testFolders = [Folder.findByName('test-folder')]
-			def pollId = Poll.findByName('This is a poll').id
-			controller.params.rangeOption = "between-dates"
-			controller.params.startDate = new Date() - 2
-			controller.params.endDate = new Date()
-		when:"general search"
+			controller.params << davidsParams
+			controller.params.activityId = MessageOwner.findByName(ownerName)?.id
+		when:
 			def model = controller.show()
 		then:
-			model.messageStats.sent == [2, 0, 1]
-			model.messageStats.received == [0 , 0, 8]
 			model.activityInstanceList.containsAll(pollAndAnnouncement)
 			model.folderInstanceList == testFolders
-		when:"search within announcement messages"
-			controller.params.rangeOption = "between-dates"
-			controller.params.startDate = new Date() - 2
-			controller.params.endDate = new Date()
-			def announcement = Activity.findByName('test')
-			controller.params.activityId = announcementId
-			model = controller.show()
-		then:
-			model.messageStats.sent == [0, 0, 1]
-			model.messageStats.received == [0 , 0, 1]
-			model.activityId == "$announcement.id"
-			model.activityInstanceList.containsAll(pollAndAnnouncement)
-			model.folderInstanceList == testFolders
-		when:"search within folder messages"
-			controller.params.rangeOption = "between-dates"
-			controller.params.startDate = new Date() - 2
-			controller.params.endDate = new Date()
-			def folder = Folder.findByName('test')
-			controller.params.activityId = folderId
-			model = controller.show()
-		then:
-			model.messageStats.sent == [0, 0, 0]
-			model.messageStats.received == [0 , 0, 1]
-			model.activityId == "$folder.id"
-			model.activityInstanceList.containsAll(pollAndAnnouncement)
-			model.folderInstanceList == testFolders
-		when:"search within poll messages"
-			controller.params.rangeOption = "between-dates"
-			controller.params.startDate = new Date() - 2
-			controller.params.endDate = new Date()
-			def poll = Poll.findByName('This is a poll')
-			controller.params.activityId = pollId
-			model = controller.show()
-		then:
-			model.messageStats.sent == [0, 0, 0]
-			model.messageStats.received == [0 , 0, 2]
-			model.activityId == pollId
-			model.activityInstanceList.containsAll(pollAndAnnouncement)
-			model.folderInstanceList == testFolders
+			model.messageStats.sent == sent
+			model.messageStats.received == received
+		where:
+			davidsParams																| ownerName				| sent 		| received
+			[rangeOption:"between-dates", startDate:new Date()-2, endDate:new Date()]	| ''					| [2, 0, 1]	| [0 , 0, 8]
+			[rangeOption:"between-dates", startDate:new Date()-2, endDate:new Date()]	| 'test-announcement'	| [0, 0, 1]	| [0 , 0, 2]
+			[rangeOption:"between-dates", startDate:new Date()-2, endDate:new Date()] 	| 'test-folder'			| [0, 0, 0]	| [0 , 0, 1]
+			[rangeOption:"between-dates", startDate:new Date()-2, endDate:new Date()]	| 'This is a poll'		| [0, 0, 0]	| [0 , 0, 2]
 	}
 	
 	def createDate(int year, int month, int date, int hour=0, int minute=0, int second=0) {
