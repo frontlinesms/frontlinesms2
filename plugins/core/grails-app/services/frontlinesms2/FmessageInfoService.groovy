@@ -19,7 +19,7 @@ class FmessageInfoService {
 		int remaining
 		if(charCount == 0) {
 			// empty message
-			partCount = 0
+			partCount = 1
 			remaining = SMS_LENGTH_LIMIT
 		} else if(GsmAlphabet.areAllCharactersValidGSM(text)) {
 			// 7-bit

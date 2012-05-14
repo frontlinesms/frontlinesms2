@@ -130,7 +130,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.message = "!@:%^&*(){" * 30
 			controller.sendMessageCount()
 		then:
-			controller.response.contentAsString == "Characters remaining 105 (3 SMS messages)"
+			controller.response.contentAsString == '{"charCount":300,"partCount":3,"remaining":105}'
 	}
 	
 	def 'calling "sendMessageCount" returns the number of characters remaining'() {
@@ -138,7 +138,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.message = "abc123"
 			controller.sendMessageCount()
 		then:
-			controller.response.contentAsString == "Characters remaining 154 (1 SMS message)"
+			controller.response.contentAsString == '{"charCount":6,"partCount":1,"remaining":154}'
 	}
 
 	def 'move action should work for activities'() {
