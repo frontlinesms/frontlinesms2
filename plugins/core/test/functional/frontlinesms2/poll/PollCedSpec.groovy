@@ -196,7 +196,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { confirmationTab.displayed }
-			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A " for Never, "COFFEE B " for Once a day, "COFFEE C " for Twice a day.'
+			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
 			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
 		when:
@@ -236,7 +236,7 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { editMessageTab.displayed }
-			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A " for Never, "COFFEE B " for Once a day, "COFFEE C " for Twice a day.'
+			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 		when:
 			$("#messageText").value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
 			next.click()
@@ -411,7 +411,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$(".more-actions").value("edit").click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor(10) { $("#ui-dialog-title-modalBox").displayed }
 			at PagePollEdit
 			pollForm.question == 'question'
 			pollForm.pollType == "multiple"
@@ -439,7 +439,7 @@ class PollCedSpec extends PollBaseSpec {
 			pollForm.name = 'Who is badder?'
 			done.click()
 		then:
-			waitFor(5) { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
+			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
 	}
 	
 	def "should display errors when poll validation fails"() {
