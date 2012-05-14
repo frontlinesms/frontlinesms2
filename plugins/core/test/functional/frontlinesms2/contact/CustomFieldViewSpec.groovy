@@ -76,11 +76,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			lstFields.find('a').first().click()
 			$("#contact-editor #update-single").click()
 		then:
-			sleep 30000
-			
-			waitFor { 
-				println Contact.findByName("Bob").customFields?.name
-			!Contact.findByName("Bob").customFields }
+			waitFor { !CustomField.findByContact(Contact.findByName("Bob")) }
 	}
 
 	def 'clicking save actually adds field to contact in database iff value is filled in'() {
