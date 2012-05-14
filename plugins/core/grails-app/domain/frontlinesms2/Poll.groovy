@@ -125,7 +125,7 @@ class Poll extends Activity {
 		} else {
 			option = words[0][-1]
 		}
-		return responses.find { it.key == option }?: this.unknown
+		return responses.find { it.key.contains(option) }?: this.unknown
 	}
 }
 
