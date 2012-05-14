@@ -435,7 +435,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { $('.manual').displayed }
 		when:
-			goToTab(7)
+			next.click()
 			pollForm.name = 'Who is badder?'
 			done.click()
 		then:
