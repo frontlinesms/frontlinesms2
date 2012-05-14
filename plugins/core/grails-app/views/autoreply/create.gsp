@@ -10,6 +10,7 @@
 		<fsms:render template="/autoreply/keyword"/>
 		<fsms:render template="/autoreply/message"/>
 		<fsms:render template="/autoreply/confirm"/>
+		<fsms:render template="/autoreply/save"/>
 	</g:formRemote>
 </div>
 <r:script>

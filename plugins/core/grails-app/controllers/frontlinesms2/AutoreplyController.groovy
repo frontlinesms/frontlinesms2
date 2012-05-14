@@ -23,7 +23,7 @@ class AutoreplyController extends ActivityController {
 			flash.message = message(code: 'autoreply.saved')
 			withFormat {
 				json {
-					render([ok:true, ownerId: autoreply.id, page:createLink(action:'save')] as JSON)
+					render([ok:true, ownerId: autoreply.id] as JSON)
 				}
 
 				html {
