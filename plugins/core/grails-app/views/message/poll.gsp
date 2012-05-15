@@ -38,12 +38,12 @@
 		$(function() {
 			var pollDisplay = $("#poll-graph-btn");
 			pollDisplay.click(function() {
-				if (pollDisplay.html() == "Hide poll details") {
-					pollDisplay.html("Show poll details");
+				if (pollDisplay.html() == i18n("fmessage.hidepolldetails")) {
+					pollDisplay.html(i18n("fmessage.showpolldetails"));
 					pollDisplay.addClass("show-arrow");
 					pollDisplay.removeClass("hide-arrow");
 				} else {
-					pollDisplay.html("Hide poll details");
+					pollDisplay.html(i18n("fmessage.hidepolldetails"));
 					pollDisplay.addClass("hide-arrow");
 					pollDisplay.removeClass("show-arrow");
 				}

@@ -26,6 +26,7 @@
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
+			$("input[type='submit'], a.btn, button").button();
 		
 			setInterval(refreshSystemNotifications, 10000);
 			function refreshSystemNotifications() {
