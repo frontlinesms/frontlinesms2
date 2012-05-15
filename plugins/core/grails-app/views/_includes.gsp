@@ -35,7 +35,7 @@
 				if(original.hasClass("fsms-button-replaced")) return;
 				original.addClass("fsms-button-replaced");
 				var buttonText = original.val();
-				var classes = original.attr("class") + ' btn';
+				var classes = original.attr("class");
 
 				// create the new control
 				var newController = $('<a class="' + classes + '">' + buttonText + '</a>');
