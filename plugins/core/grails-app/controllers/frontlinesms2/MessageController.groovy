@@ -360,7 +360,9 @@ class MessageController {
 
 	private def getCheckedMessageList() {
 		println "getCheckedMessageList() : params=$params"
-		def checked = params['message-select'] ?: params.messageId ? params.messageId.tokenize(',') : []
+		def checked = params['message-select'] ?:
+				(params.messageId instanceof Number)? [params.messageId]:
+				(params.messageId instanceof String)? params.messageId.tokenize(',') : []
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}
