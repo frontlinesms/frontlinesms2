@@ -91,7 +91,6 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 			1 * sendService.send(replyMessage)
 	}
 	
-	@IgnoreRest
 	def 'edit responses should create responses which do no exist'() {
 		given:
 			def poll = new Poll()
