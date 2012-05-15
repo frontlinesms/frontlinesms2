@@ -31,7 +31,8 @@
 				smallpopup.export, wizard.ok, wizard.create,
 				smallpopup.done, smallpopup.create,
 				smallpopup.send, wizard.send, popup.ok,
-				message.character.count"/>
+				message.character.count, fmessage.showpolldetails,
+				fmessage.hidepolldetails"/>
 		<r:script>
 			$(function() {  
 			   disablePaginationControls();
@@ -54,7 +55,7 @@
 			<div id="content">
 				<g:form controller="${params.controller}"
 						params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
-					<div id="message-list" class="${(messageSection in [message(code: 'fmessage.inbox'), message(code: 'fmessage.sent'), message(code: 'fmessage.pending'), message(code: 'fmessage.trash'), message(code: 'folder.label'), 'no_search'])? '': 'tall-header'}">
+					<div id="message-list" class="${(messageSection in ['inbox', 'sent', 'pending', 'trash', 'folder', 'no_search'])? '': 'tall-header'}">
 						<fsms:render template="/message/header"/>
 						<fsms:render template="/message/message_list"/>
 						<g:layoutBody/>
