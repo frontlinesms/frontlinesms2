@@ -93,6 +93,9 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			to PageMessageAnnouncementNewOffice
 			messagesSelect[1].click()
+		then:
+			waitFor { $("#message-detail-sender").text().contains("Jane") }
+		when:
 			messagesSelect[2].click()
 		then:
 			waitFor { $("#checked-message-count").text() == "2 messages selected" }

@@ -28,7 +28,6 @@ function moveAction() {
 	} else{
 		var location = url_root + "message/" + messageSection;
 	}
-
 	// TODO no point in doing an AJAX call if we're going to move to a new page anyway - just
 	// submit the form with HTTP POST like normal.
 	$.ajax({

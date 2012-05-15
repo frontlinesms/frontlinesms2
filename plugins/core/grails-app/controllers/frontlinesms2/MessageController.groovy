@@ -239,7 +239,7 @@ class MessageController {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save(failOnError:true)
-					if(activity && activity.autoreplyText) {
+					if(activity && activity.metaClass.hasProperty(null, 'autoreplyText')) {
 						params.addresses = messageInstance.src
 						params.messageText = activity.autoreplyText
 						def outgoingMessage = messageSendService.createOutgoingMessage(params)
@@ -247,7 +247,7 @@ class MessageController {
 						messageSendService.send(outgoingMessage)
 						activity.save()
 					}
-				} else if (params.ownerId) {
+				} else if (params.ownerId && params.ownerId != 'inbox') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
@@ -359,7 +359,8 @@ class MessageController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['message-select'] ?: [params.messageId]
+		println "getCheckedMessageList() : params=$params"
+		def checked = params['message-select'] ?: params.messageId ? params.messageId.tokenize(',') : []
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}

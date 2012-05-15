@@ -24,7 +24,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
 			def inboxActions = $('#move-actions').children()*.value()
 		then:
-			inboxActions[1] == "${Poll.findByName("Football Teams").id}"
+			inboxActions.size() >= 5
 			inboxActions.every {it != "inbox"}
 	}
 
