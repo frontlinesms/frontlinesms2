@@ -421,3 +421,7 @@ tr.send-failed td:nth-child(6) {
 #poll-details h3{
    	background-image: url('../images/icons/activities.png');
 }
+
+#custom-list ul li {
+		padding: 4px 0 7px 0;
+}

@@ -1,13 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class FmessageSpec extends UnitSpec {
-	
+@TestFor(Fmessage)
+class FmessageSpec extends Specification {
 	def 'READ flag cannot be null'() {
-		setup:
-			mockForConstraintsTests(Fmessage)
 		when:
 			Fmessage message = new Fmessage(src: '21345', read: null, inbound: true)
 		then:
@@ -29,8 +27,6 @@ class FmessageSpec extends UnitSpec {
 	}
 
 	def "Fmessage must have a src if inbound"() {
-		setup:
-			mockForConstraintsTests(Fmessage)
 		when:
 			def m = new Fmessage(inbound:true)
 		then:
@@ -43,8 +39,6 @@ class FmessageSpec extends UnitSpec {
 
 	@Unroll
 	def "outbound message must have one or more dispatches"() {
-		given:
-			mockForConstraintsTests(Fmessage)
 		expect:
 			new Fmessage(dispatches:dispatches).validate() == valid
 		where:
@@ -56,8 +50,6 @@ class FmessageSpec extends UnitSpec {
 	}
 	
 	def "inbound Fmessages cannot have dispatches"() {
-		setup:
-			mockForConstraintsTests(Fmessage)
 		when:
 			Fmessage message = new Fmessage(src: '23456', inbound: true, dispatches: [new Dispatch()])
 		then:
@@ -65,8 +57,6 @@ class FmessageSpec extends UnitSpec {
 	}
 	
 	def 'message can have an activity'() {
-		setup:
-			mockForConstraintsTests(Fmessage)
 		when:
 			def message = new Fmessage(src: 'src', inbound: true, messageOwner: new Folder(archived: false))
 		then:

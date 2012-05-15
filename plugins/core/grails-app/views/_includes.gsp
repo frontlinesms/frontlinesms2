@@ -20,13 +20,36 @@
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {}
-		$.fn.button = function() {}
 	</g:if>
 	<g:else>
+		var fsmsButton = {
+			trigger: function() {
+				// Trigger clicking of the button when the anchor is clicked.
+				$(this).prev().click();
+			},
+			apply: function(original) {
+				// replace a button with an anchor
+				// find the original text
+				var original = $(original);
+				var buttonText = original.val();
+				var classes = original.attr("class") + ' btn';
+
+				// create the new control
+				var newController = $('<a class="' + classes + '">' + buttonText + '</a>');
+				newController.click(fsmsButton.trigger);
+
+				// add the new control next to original
+				original.after(newController);
+
+				// hide the current control
+				original.hide();
+			}
+		}
+
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
-			$("input[type='submit'], a.btn, button").button();
+			$("input[type='submit']").each(function(i) { fsmsButton.apply(this); });
 		
 			setInterval(refreshSystemNotifications, 10000);
 			function refreshSystemNotifications() {

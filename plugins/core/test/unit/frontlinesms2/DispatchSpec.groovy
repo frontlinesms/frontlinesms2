@@ -1,12 +1,12 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class DispatchSpec extends UnitSpec {
+@TestFor(Dispatch)
+@Mock(Fmessage)
+class DispatchSpec extends Specification {
 	def "Dispatch must have a dst, a message, and a status"() {
-		setup:
-			mockForConstraintsTests(Dispatch)
 		when:
 			Dispatch dis = new Dispatch()
 		then:
@@ -26,9 +26,6 @@ class DispatchSpec extends UnitSpec {
 	}
 	
 	def "dispatch only has a dateSent if the status is SENT"() {
-		setup:
-			mockForConstraintsTests(Dispatch)
-			mockForConstraintsTests(Fmessage)
 		when:
 			def now = new Date()
 			Dispatch dis = new Dispatch(dst: '12345', message: new Fmessage(), status: DispatchStatus.FAILED, dateSent: now)

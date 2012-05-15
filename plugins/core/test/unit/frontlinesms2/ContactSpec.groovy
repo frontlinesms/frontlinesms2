@@ -1,57 +1,49 @@
 package frontlinesms2
 
-import grails.plugin.spock.*
 import spock.lang.*
+import grails.test.mixin.*
 
-class ContactSpec extends UnitSpec {
+@TestFor(Contact)
+class ContactSpec extends Specification {
 	@Unroll
 	def "test contact name and mobile validation"() {
-		setup:
-			mockForConstraintsTests(Contact)
 		expect:
 			new Contact(name:name, mobile:mobile).validate() == valid
 		where:
-			name | mobile | valid
-			null | null | false
-			null | '123' | false
-			'' | '123' | true
-			'a' | null | true
-			'a' | '123' | true
-			'a'*256 | '123' | false
-			
+			name    | mobile | valid
+			null    | null   | false
+			null    | '123'  | false
+			''      | '123'  | true
+			'a'     | null   | true
+			'a'     | '123'  | true
+			'a'*256 | '123'  | false
 	}
 	
 	@Unroll
 	def "test notes constraints"() {
-		given:
-			mockForConstraintsTests(Contact)
 		expect:
 			new Contact(notes:notes, name:"Tim").validate() == valid
 		where:
-			notes | valid
-			null | true
-			'' | true
+			notes      | valid
+			null       | true
+			''         | true
 			'a' * 1024 | true
 			'a' * 1025 | false
 	}
 	
 	@Unroll
 	def "test email address constraints"() {
-		given:
-			mockForConstraintsTests(Contact)
 		expect:
 			new Contact(email:email, name:'alice', mobile:'123').validate() == valid
 		where:
-			email | valid
-			null | true
-			'yaya' | false
-			'yaya@' | false
+			email              | valid
+			null               | true
+			'yaya'             | false
+			'yaya@'            | false
 			'yaya@example.com' | true
 	}
 
 	def "blank names are allowed so long as there is a number"() {
-		setup:
-			mockForConstraintsTests(Contact)
 		when:
 			def noNameContact = new Contact(name:'', mobile:'9876543')
 			def namedContact = new Contact(name:'a')
@@ -63,8 +55,6 @@ class ContactSpec extends UnitSpec {
 	}
 
 	def "duplicate names are allowed"(){
-		setup:
-			mockDomain(Contact)
 		when:
 			def Contact contact1 = new Contact(name:'John')
 			def Contact contact2 = new Contact(name:'John')
@@ -74,8 +64,6 @@ class ContactSpec extends UnitSpec {
 	}
 
 	def 'contact may have a custom field'() {
-		setup:
-			mockDomain(Contact)
 		when:
 			Contact c = new Contact(name: 'Eve')
 			c.addToCustomFields(new CustomField())
@@ -84,8 +72,6 @@ class ContactSpec extends UnitSpec {
 	}
 
 	def 'contact may have multiple custom fields'() {
-		setup:
-			mockDomain(Contact)
 		when:
 			Contact c = new Contact(name: 'Eve')
 			c.addToCustomFields(new CustomField())

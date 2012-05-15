@@ -98,33 +98,21 @@ class ContactController {
 	}
 	
 	def updateMultipleContacts = {
-		params['contact-select']?.each { id ->
-			withContact id, { contactInstance ->
-				parseContactFields(contactInstance)
-				attemptSave(contactInstance)
-			}
+		getCheckedContacts().each { c ->
+			parseContactFields(c)
+			attemptSave(c)
 		}
 		render(view:'show', model: show())
 	}
 	
 	def confirmDelete = {
-		def contactInstanceList = []
-		getCheckedContactIds().each { id ->
-			withContact id, { contactInstance ->
-				contactInstanceList << contactInstance
-			}
-		}
-		println "conbtact List: $contactInstanceList"
-		[contactInstanceList: contactInstanceList,
-				contactInstanceTotal: contactInstanceList.size()]
+		def contactInstanceList = getCheckedContacts()
+		[contactInstanceList:contactInstanceList,
+				contactInstanceTotal:contactInstanceList.size()]
 	}
 	
 	def delete = {
-		getCheckedContactIds().each { id ->
-			withContact id, { contactInstance ->
-				Contact.get(contactInstance.id).delete()
-			}
-		}
+		getCheckedContacts()*.delete()
 		flash.message = message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])
 		redirect(action: "show")		
 	}
@@ -185,34 +173,33 @@ class ContactController {
 	
 	def multipleContactGroupList = {
 		def groupInstanceList = []
-		getCheckedContactIds().each { id ->
-			withContact id, { contactInstance ->
-				groupInstanceList << contactInstance.getGroups()
-			}
+		getCheckedContacts().each { c ->
+			groupInstanceList << c.groups
 		}
 		def sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
 		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
 		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
-			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
+				nonSharedGroupInstanceList: nonSharedGroupInstanceList])
+	}
+
+	private def getCheckedContacts() {
+		Contact.getAll(getCheckedContactIds())
 	}
 
 	private def getCheckedContactIds() {
-		params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
+		params['contact-select']?: params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 	}
 	
 	private def getSharedGroupList(Collection groupList) {
 		def groupIds = groupList*.id
-		def sharedGroupIds = groupIds?.inject(groupIds[0]){ acc, current -> acc.intersect(current)}
-		sharedGroupIds ? Group.createCriteria().list {
-			'in' ("id", sharedGroupIds)
-		} : []
+		def sharedGroupIds = groupIds?.inject(groupIds[0]){ acc, current -> acc.intersect(current) }
+		Group.getAll(sharedGroupIds)
 	}
 	
 	private def getNonSharedGroupList(Collection groupList1, Collection groupList2) {
-		def groupIdList1 = groupList1.collect {it.id}
-		def groupIdList2 = groupList2.collect {it.id}
-		def nonSharedGroupList = (groupIdList1 - groupIdList2).collect { Group.findById(it) } ?: []
-		nonSharedGroupList
+		def groupIdList1 = groupList1*.id
+		def groupIdList2 = groupList2*.id
+		return Group.getAll(groupIdList1 - groupIdList2)
 	}
 
 	private def parseContactFields(Contact contactInstance) {
