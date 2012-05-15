@@ -1,13 +1,13 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
-import java.text.DateFormat;
-import java.util.Date;
-import java.text.SimpleDateFormat
+import grails.test.mixin.*
+
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
-class ImportControllerSpec extends ControllerSpec {
+@TestFor(ImportController)
+@Mock([Group])
+class ImportControllerSpec extends Specification {
 	@Unroll
 	def 'getGroupNames should parse v1 CSV groups into v2 groups'() {
 		expect:
@@ -28,7 +28,6 @@ class ImportControllerSpec extends ControllerSpec {
 	@Unroll
 	def 'getGroups should return all existing groups and create non-existing ones'() {
 		setup:
-			mockDomain(Group)
 			existingGroupNames.each { new Group(name:it).save(failOnError:true) }
 			def createdGroups = controller.getGroups(groupNames)
 		expect:
