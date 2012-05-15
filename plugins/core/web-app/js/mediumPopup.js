@@ -19,9 +19,9 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
-	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit )
+	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit );
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#messageText").keyup()
+	$("#messageText").keyup();
 	$("#modalBox").dialog({
 		modal: true,
 		title: title,
@@ -179,12 +179,12 @@ function getTabLength() {
 
 function getButtonToTabMappings() {
 	return {
-			"cancel" : range(0, getTabLength()),
+			"cancel": range(0, getTabLength()),
 			"prevPage": range(1, getTabLength()),
 			"nextPage": range(0, getTabLength() - 1),
 			"submit": [getTabLength()],
 			"disabledBack": [0]
-		}
+	};
 }
 
 function getCurrentTab() {
@@ -198,13 +198,13 @@ function getCurrentTabDom() {
 
 function getCurrentTabIndex() {
 	var tabWidget = $('#tabs').tabs();
-	var current = tabWidget.tabs('option', 'selected')
+	var current = tabWidget.tabs('option', 'selected');
 	return current;
 }
 
 function initializeTabContentWidgets() {
 	for(i=0; i <= getTabLength(); i++) {
-		$("#tabs-" + (i + 1)).contentWidget()
+		$("#tabs-" + (i + 1)).contentWidget();
 	}
 }
 
@@ -235,8 +235,8 @@ function messageResponseClick(messageType) {
 	var me = $(this);
 	var src;
 	if (messageType == 'Reply') {
-		configureTabs = "tabs-1, tabs-3, tabs-4"
-		var checkedMessageCount = getCheckedItemCount("message")
+		configureTabs = "tabs-1, tabs-3, tabs-4";
+		var checkedMessageCount = getCheckedItemCount("message");
 		if(checkedMessageCount > 0) {
 			src = getCheckedList("message");
 		}
@@ -255,5 +255,4 @@ function messageResponseClick(messageType) {
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('wizard.send')); }
 	});
 }
-
 

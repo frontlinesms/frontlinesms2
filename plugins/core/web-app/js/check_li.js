@@ -3,6 +3,16 @@ $(document).ready(function() {
 	$('#contact-editor #multiple-contacts').hide();
 });
 
+function showMultipleDetailsPanel(itemTypeString) {
+	// hide single message view
+	$('#single-'+itemTypeString).hide();
+
+	// show multi message view
+	var multipleDetails = $("#multiple-"+itemTypeString+'s');
+	multipleDetails.show();
+	multipleDetails.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
+}
+
 function itemCheckChanged(itemTypeString, itemId) {
 	var count = getCheckedItemCount(itemTypeString);
 	var checkedRow = getRow(itemTypeString, itemId);
@@ -60,8 +70,10 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 	}
 	$.get(url_root + itemTypeString + action + itemId, params, function(data) {
 		$('#multiple-'+itemTypeString+'s').hide();
+
 		var newPane = $(data);
 		newPane.find('.dropdown').selectmenu();
+		newPane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
 		$('#single-'+itemTypeString).replaceWith(newPane);
 		if (itemTypeString == 'contact') {
 			document.getElementById('new-field-dropdown-button').style.width="250px"; //fix width for custom field dropdown
@@ -74,11 +86,8 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 }
 
 function updateMultipleCheckedDetails(itemTypeString) {
-	// hide single message view
-	$('#single-'+itemTypeString).hide();
-	// show multi message view
-	$("#multiple-"+itemTypeString+'s').show();
-		if (itemTypeString == 'contact') {
+	showMultipleDetailsPanel(itemTypeString);
+	if (itemTypeString == 'contact') {
 		$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 			$('#multiple-'+itemTypeString+'s').replaceWith($(data));
 			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
