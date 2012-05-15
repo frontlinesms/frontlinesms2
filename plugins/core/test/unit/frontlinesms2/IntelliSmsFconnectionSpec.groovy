@@ -63,5 +63,16 @@ class IntelliSmsFconnectionSpec extends UnitSpec {
 		then:
 			intellismsConn.save()
 	}
-	
+
+	def "getNonnullableConfigFields should return a list of nonnullable fields"() {
+		setup:
+			MetaClassModifiers.addMapMethods()
+			mockForConstraintsTests(IntelliSmsFconnection)
+		when:
+			def configFields = IntelliSmsFconnection.configFields
+			def conn = Fconnection.getNonnullableConfigFields(IntelliSmsFconnection)
+		then:
+			conn instanceof List
+	}
+		
 }

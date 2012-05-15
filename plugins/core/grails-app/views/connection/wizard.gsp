@@ -21,19 +21,18 @@
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
-		<g:else>return $("#type-list").find("input[checked=checked]").val();</g:else>
+		<g:else>return $("#type-list").find("input[name=connectionType]").val();</g:else>
 	},
 	setType: function(connectionType) {
-		$("#type-list input[checked=checked]").attr('checked', '');
-		$("#type-list ." + connectionType).attr('checked', 'checked');
+		$("#type-list").find("input[name=connectionType]").val(connectionType);
 		<g:each in="${Fconnection.implementations*.shortName}">
-			$("#${it}-form").css('display', 'none');
+			$("#${it}-form").addClass('hide');
 		</g:each>
 		$("#" + connectionType + "-form").css('display', 'inline');
 		fconnection.init();
 	},
 	init: function() {
-		var keys = fconnection[fconnection.getType()].configFieldsKeys
+		var keys = fconnection[fconnection.getType()].configFieldsKeys;
 		$.each(keys, function(index, value) {
 			fconnection.toggleSubFields(value);
 		});
@@ -82,7 +81,7 @@ var fconnection = {
 		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
-				$("#${imp}-confirm").hide();
+				$("#${it}-confirm").hide();
 			</g:each>
 			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys
 			if(configFieldsKeys.length > 1) {
@@ -204,7 +203,7 @@ function attachCheckBoxListener() {
 
 function initializePopup() {
 	fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
-	
+	fconnection.init();
 	$("#tabs").bind("tabsshow", fconnection.show);
 	attachCheckBoxListener();
 	$("#tabs-2").contentWidget({
