@@ -23,5 +23,18 @@ class MagicWandService {
 	    ret
 	}
 
+	private getReplacement(expression, dispatch) {
+	    expression == "\${contact_name}" ? "TestPerson" : "+254321"
+	}
+
+	private String replaceExpressions(dispatch) {
+	    def messageBody = dispatch.message.text
+	    regex = /[$][{]*[a-z_]*[}]/
+	    matches = messageBody.findAll(regex)
+	    matches.each {
+	        messageBody = messageBody.replaceFirst(regex, getReplacement(it))
+	    }
+	    return messageBody
+	}
 
 }
