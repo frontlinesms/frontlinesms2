@@ -90,6 +90,18 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 		then:
 			1 * sendService.send(replyMessage)
 	}
+	
+	@IgnoreRest
+	def 'edit responses should create responses which do no exist'() {
+		given:
+			def poll = new Poll()
+			def params = [choiceA:'eh', choiceB:'bee',
+					choiceC:'sea', choiceD:'dee']
+		when:
+			poll.editResponses(params)
+		then:
+			poll.responses*.key == ['A', 'B', 'C', 'D', Poll.KEY_UNKNOWN]
+	}
 
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
