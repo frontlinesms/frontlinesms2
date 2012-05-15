@@ -21,13 +21,13 @@
 		</g:else>
 		<a id="btn_forward" class="msg-btn btn" onclick="messageResponseClick('Forward')"><g:message code="fmessage.forward" /></a>
 		<g:if test="${!messageInstance.messageOwner && !messageInstance.archived}">
-			<g:actionSubmit id="archive-msg" class="msg-btn" value="${g.message(code:'fmessage.archive')}" action="archive"/>
+			<g:actionSubmit id="archive-msg" class="msg-btn btn" value="${g.message(code:'fmessage.archive')}" action="archive"/>
 		</g:if>
 		<g:elseif test="${!messageInstance.messageOwner && messageInstance.archived}">
-			<g:actionSubmit id="unarchive-msg" class="msg-btn" value="${g.message(code:'fmessage.unarchive')}" action="unarchive"/>
+			<g:actionSubmit id="unarchive-msg" class="msg-btn btn" value="${g.message(code:'fmessage.unarchive')}" action="unarchive"/>
 		</g:elseif>
 		<g:if test="${messageSection != 'pending'}">
-			<g:actionSubmit id="delete-msg" class="msg-btn" value="${g.message(code:'fmessage.delete')}" action="delete"/>
+			<g:actionSubmit id="delete-msg" class="msg-btn btn" value="${g.message(code:'fmessage.delete')}" action="delete"/>
 		</g:if>
 	</g:if>
 	<g:elseif test="${ownerInstance}">
