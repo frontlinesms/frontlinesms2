@@ -1,31 +1,26 @@
 package frontlinesms2.services
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
+
 import org.apache.camel.Exchange
 
 import org.apache.camel.component.mail.MailEndpoint
 import frontlinesms2.EmailTranslationService
 import frontlinesms2.Fmessage
 
-class EmailTranslationServiceSpec extends UnitSpec {
-	@Shared
-	def t
-
-	def setupSpec() {
-		t = new EmailTranslationService()
-	}
-
+@TestFor(EmailTranslationService)
+class EmailTranslationServiceSpec extends Specification {
 	def "it's a Processor"() {
 		expect:
-			t instanceof org.apache.camel.Processor
+			service instanceof org.apache.camel.Processor
 	}
 
 	def "converted message is an Fmessage"() {
 		given:
 			def testExchange = createTestExchange()
 		when:
-			t.process(testExchange)
+			service.process(testExchange)
 		then:
 			assert testExchange.out.body instanceof Fmessage
 	}
@@ -34,7 +29,7 @@ class EmailTranslationServiceSpec extends UnitSpec {
 		given:
 			def testExchange = createTestExchange()
 		when:
-			t.process(testExchange)
+			service.process(testExchange)
 		then:
 			assert testExchange.out.body.src == "email:test@example.com"
 	}
@@ -43,7 +38,7 @@ class EmailTranslationServiceSpec extends UnitSpec {
 		given:
 			def testExchange = createTestExchange([body:"Here's the test email body converted into a textual message."])
 		when:
-			t.process(testExchange)
+			service.process(testExchange)
 		then:
 			assert testExchange.out.body.text == "Here's the test email body converted into a textual message."
 	}
@@ -52,7 +47,7 @@ class EmailTranslationServiceSpec extends UnitSpec {
 		given:
 			def testExchange = createTestExchange([subject:'Hello'])
 		when:
-			t.process(testExchange)
+			service.process(testExchange)
 		then:
 			assert testExchange.out.body.text == 'Hello'
 	}
@@ -61,7 +56,7 @@ class EmailTranslationServiceSpec extends UnitSpec {
 		given:
 			def testExchange = createTestExchange([subject:'Hello', body:"Here's the test email body converted into a textual message."])
 		when:
-			t.process(testExchange)
+			service.process(testExchange)
 		then:
 			assert testExchange.out.body.text == """Hello
 =====

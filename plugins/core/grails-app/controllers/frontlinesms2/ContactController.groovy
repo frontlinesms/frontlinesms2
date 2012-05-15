@@ -82,10 +82,9 @@ class ContactController {
 		contactInstance.properties = params
 		if(attemptSave(contactInstance)) {
 			parseContactFields(contactInstance)
-			if(attemptSave(contactInstance))
-				redirect(action:'show', params:[contactId:contactInstance.id])
+			attemptSave(contactInstance)
 		}
-		redirect(action:'show')
+		redirect(action:'show', params:[contactId:contactInstance.id])
 	}
 	
 	def update = {

@@ -1,16 +1,13 @@
 package frontlinesms2
 
 import spock.lang.*
+import grails.test.mixin.*
 
-class StatusControllerSpec extends grails.plugin.spock.ControllerSpec {
-	def setup() {
-		registerMetaClass(Fconnection)
-	}
-
+@TestFor(StatusController)
+class StatusControllerSpec extends Specification {
 	@Unroll
 	def 'test traffic lights'() {
 		setup:
-			registerMetaClass Fconnection
 			Fconnection.metaClass.static.list = {
 				statuses.collect { [status:it] }
 			}

@@ -1,19 +1,17 @@
 package frontlinesms2.services
 
 import frontlinesms2.*
+
 import spock.lang.*
-import grails.plugin.spock.UnitSpec
+import grails.test.mixin.*
+
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
-class DispatchRouterServiceSpec extends UnitSpec {
-	def service
-	
-	def setup() {
-		service = new DispatchRouterService()
-	}
-	
+@TestFor(DispatchRouterService)
+@Mock([Dispatch, Fmessage])
+class DispatchRouterServiceSpec extends Specification {
 	def "should update the dispatch when no route is found"() {
 		setup:
 			def exchange = Mock(Exchange)
@@ -22,7 +20,7 @@ class DispatchRouterServiceSpec extends UnitSpec {
 
 			def camelMessage = Mock(org.apache.camel.Message)
 			exchange.getIn() >> camelMessage
-			camelMessage.getBody() >> mockDomain(Dispatch, [new Dispatch(dst: "dst", message: new Fmessage())])
+			camelMessage.getBody() >> new Dispatch(dst:"dst", message:new Fmessage())
 
 			service.camelContext = camelContext
 		when:
