@@ -1,26 +1,24 @@
 package frontlinesms2.services
 
 import spock.lang.*
+import grails.test.mixin.*
+
 import frontlinesms2.*
-import grails.plugin.spock.*
 
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 
-class FconnectionServiceSpec extends UnitSpec {
-	def service
+@TestFor(FconnectionService)
+@Mock([LogEntry, Dispatch, Fmessage, SystemNotification])
+class FconnectionServiceSpec extends Specification {
 	def context
 	def messageSource
 
 	def setup() {
-		mockLogging(FconnectionService)
-		mockDomain(LogEntry)
-		mockDomain(SystemNotification)
-		service = new FconnectionService()
 		context = Mock(CamelContext)
 		service.camelContext = context
 		messageSource = new Object()
-		messageSource.metaClass.getMessage = {subject, params, locale ->"$subject"}
+		messageSource.metaClass.getMessage = { subject, params, locale -> "$subject" }
 		service.messageSource = messageSource
 	}
 
@@ -105,7 +103,6 @@ class FconnectionServiceSpec extends UnitSpec {
 	@Unroll
 	def 'handleDisconnection should trigger shutdown of related Fconnection'() {
 		given:
-			registerMetaClass RouteDestroyJob
 			int jobRouteId
 			RouteDestroyJob.metaClass.static.triggerNow = { Map args ->
 				jobRouteId = args.routeId

@@ -27,7 +27,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'hi Bob'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'message to alice is first in the list, and links to the show page'() {

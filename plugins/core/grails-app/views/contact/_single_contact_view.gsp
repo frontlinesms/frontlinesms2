@@ -12,7 +12,7 @@
 			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel"/></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="btn" id="save-new" action="saveContact" value="${g.message(code:'contact.save')}"/>
+			<g:actionSubmit class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" id="save-new" action="saveContact" value="${g.message(code:'contact.save')}"/>
 			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="contact.cancel"/></g:link>
 		</g:else>
 		
@@ -22,11 +22,6 @@
 			</a>
 		</g:if>
 	</div>
-	<script>
-		$(function() {
-			$("a", "#action-buttons" ).button();
-		});
-	</script>
 	<div class="basic-info">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>

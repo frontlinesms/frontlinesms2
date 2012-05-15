@@ -1,15 +1,19 @@
 package frontlinesms2.services
 
 import frontlinesms2.*
-import org.apache.camel.*
 
-class IncomingMessageRouterServiceSpec extends grails.plugin.spock.UnitSpec {
-	def service
+import spock.lang.*
+import grails.test.mixin.*
+
+import org.apache.camel.CamelContext
+import org.apache.camel.Endpoint
+import org.apache.camel.Route
+
+@TestFor(IncomingMessageRouterService)
+class IncomingMessageRouterServiceSpec extends Specification {
 	def camelContext
 	
 	def setup() {
-		mockLogging(IncomingMessageRouterService)
-		service = new IncomingMessageRouterService()
 		camelContext = Mock(CamelContext)
 		service.camelContext = camelContext
 	}

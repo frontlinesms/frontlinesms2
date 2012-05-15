@@ -1,13 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class PollResponseSpec extends UnitSpec {
-
+@TestFor(PollResponse)
+class PollResponseSpec extends Specification {
 	def 'PollResponse must have a response value and a poll'() {
-		given:
-			mockForConstraintsTests(PollResponse)
 		when:
 			def noResponse = new PollResponse()
 		then:
@@ -20,8 +18,6 @@ class PollResponseSpec extends UnitSpec {
 	}
 
 	def 'PollResponse may have none, one or many messages associated with it'() {
-		given:
-			mockDomain(PollResponse)
 		when:
 			def r = new PollResponse(value:'yes', poll: new Poll())
 		then:

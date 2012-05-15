@@ -182,13 +182,13 @@ class CoreBootStrap {
 		if(!dev) return
 		def keyword = new Keyword(value: 'FOOTBALL')
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
-		poll1.addToResponses(key:'choiceA', value:'manchester')
-		poll1.addToResponses(key:'choiceB', value:'barcelona')
+		poll1.addToResponses(key:'A', value:'manchester')
+		poll1.addToResponses(key:'B', value:'barcelona')
 		poll1.addToResponses(PollResponse.createUnknown())
 		
 		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
-		poll2.addToResponses(key: 'choiceA', value: 'pantene')
-		poll2.addToResponses(key: 'choiceB', value: 'oriele')
+		poll2.addToResponses(key: 'A', value: 'pantene')
+		poll2.addToResponses(key: 'B', value: 'oriele')
 		poll2.addToResponses(PollResponse.createUnknown())
 		
 		poll1.save(failOnError:true, flush:true)
@@ -364,7 +364,8 @@ class CoreBootStrap {
 		final String contextPath = servletContext.contextPath
 		// FIXME in grails 2, serverURL appears to be not set, so hard-coding it here
 		//final String baseUrl = grailsApplication.config.grails.serverURL
-		final String baseUrl = 'http://localhost:8080/core'
+		final String serverPort = grailsApplication.config.grails.serverPort?:System.properties['server.port']?: '8080'
+		final String baseUrl = "http://localhost:${serverPort}/core"
 		nonEmptyMc.'get@href' = {
 			def val = getAttribute('href')
 			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())

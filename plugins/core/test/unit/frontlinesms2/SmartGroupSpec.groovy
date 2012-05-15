@@ -1,24 +1,20 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class SmartGroupSpec extends UnitSpec {
+@TestFor(SmartGroup)
+class SmartGroupSpec extends Specification {
+	@Unroll
 	def 'a SmartGroup must have a name and at least one search parameter'() {
-		given:
-			mockForConstraintsTests(SmartGroup)
-		when:
-			def noName = new SmartGroup()
-			def withName = new SmartGroup(name:'people who like people')
-			def withNameAndContactName = new SmartGroup(name:'people who like people', contactName:'bob')
-		then:
-			!noName.validate()
-			noName.errors.name
-		and:	
-			!withName.validate()
-			!withName.errors.name
-		and:
-			withNameAndContactName.validate()
+		expect:
+			new SmartGroup(name:name, contactName:contactName).validate() == valid
+		where:
+			valid | name                     | contactName
+			false | null                     | null
+			false | 'people who like people' | null
+			false | null                     | 'bob'
+			true  | 'people who like people' | 'bob'
 	}
 }
 

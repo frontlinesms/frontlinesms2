@@ -52,7 +52,7 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 	if (itemTypeString == 'message') {
 		row.removeClass("unread");
 		row.addClass("read");
-		params = { messageSection:$('input:hidden[name=messageSection]').val() };
+		params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId };
 		action = '/show/';
 	} else {
 		params = { contactsSection:$('input:hidden[name=contactsSection]').val() };

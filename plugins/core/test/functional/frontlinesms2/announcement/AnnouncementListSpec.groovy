@@ -27,7 +27,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'selected announcement is highlighted'() {
@@ -93,6 +93,9 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		when:
 			to PageMessageAnnouncementNewOffice
 			messagesSelect[1].click()
+		then:
+			waitFor { $("#message-detail-sender").text().contains("Jane") }
+		when:
 			messagesSelect[2].click()
 		then:
 			waitFor { $("#checked-message-count").text() == "2 messages selected" }

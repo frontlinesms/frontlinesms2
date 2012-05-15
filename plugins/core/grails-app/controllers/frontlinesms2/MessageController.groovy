@@ -185,7 +185,7 @@ class MessageController {
 		if (params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId])
 	}
 	
 	def archive = {
@@ -205,7 +205,7 @@ class MessageController {
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		} else {
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId, searchId: params.searchId])
 		}
 	}
 	
@@ -223,7 +223,7 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
-		if(params.messageSection == 'result')
+		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
@@ -239,7 +239,7 @@ class MessageController {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save(failOnError:true)
-					if(activity && activity.autoreplyText) {
+					if(activity && activity.metaClass.hasProperty(null, 'autoreplyText')) {
 						params.addresses = messageInstance.src
 						params.messageText = activity.autoreplyText
 						def outgoingMessage = messageSendService.createOutgoingMessage(params)
@@ -247,7 +247,7 @@ class MessageController {
 						messageSendService.send(outgoingMessage)
 						activity.save()
 					}
-				} else if (params.ownerId) {
+				} else if (params.ownerId && params.ownerId != 'inbox') {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
@@ -359,7 +359,8 @@ class MessageController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['message-select'] ?: [params.messageId]
+		println "getCheckedMessageList() : params=$params"
+		def checked = params['message-select'] ?: params.messageId ? params.messageId.tokenize(',') : []
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}

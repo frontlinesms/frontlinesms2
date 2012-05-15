@@ -1,18 +1,14 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
+
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 import org.smslib.CStatusReportMessage
 
-class SmslibTranslationServiceSpec extends UnitSpec {
-	def t
-	
-	def setup() {
-		t = new SmslibTranslationService()
-	}
-	
+@TestFor(SmslibTranslationService)
+class SmslibTranslationServiceSpec extends Specification {
 	def "check delivery reports and other status updates are ignored"() {
 		given:
 			def statusReportExchange = Mock(Exchange)
@@ -21,7 +17,7 @@ class SmslibTranslationServiceSpec extends UnitSpec {
 			camelMessage.getBody() >> Mock(CStatusReportMessage)
 			statusReportExchange.getOut() >> Mock(org.apache.camel.Message)
 		when:
-			t.toFmessage(statusReportExchange)
+			service.toFmessage(statusReportExchange)
 		then:
 			0 * statusReportExchange.out
 	}
@@ -38,7 +34,7 @@ class SmslibTranslationServiceSpec extends UnitSpec {
 			x.in >> camelMessage
 			x.out >> Mock(Message)
 		when:
-			t.toCmessage(x)
+			service.toCmessage(x)
 		then:
 			true
 	}

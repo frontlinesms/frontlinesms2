@@ -1,9 +1,10 @@
 package frontlinesms2
 
 import spock.lang.*
+import grails.test.mixin.*
 
-class KeywordSpec extends grails.plugin.spock.UnitSpec {
-
+@TestFor(Keyword)
+class KeywordSpec extends Specification {
 	def "beforeSave should convert keyword to upper case"() {
 		given:
 			Keyword k = new Keyword(value:'shoehorn')
@@ -16,8 +17,6 @@ class KeywordSpec extends grails.plugin.spock.UnitSpec {
 	@Unroll
 	def 'Keyword value constraints test'() {
 		given:
-			mockForConstraintsTests Keyword
-			registerMetaClass Keyword
 			Keyword.metaClass.static.findAllByValue = { v -> [] }
 		when:
 			def k = new Keyword(value:keyword, activity:Mock(Activity))

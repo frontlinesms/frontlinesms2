@@ -1,11 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class ErrorControllerSpec extends ControllerSpec {
+@TestFor(ErrorController)
+class ErrorControllerSpec extends Specification {
 	def setup() {
-		registerMetaClass File
 		File.metaClass.zip = { output, filter=null -> }
 	}
 

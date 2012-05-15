@@ -1,12 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class EmailFconnectionSpec extends UnitSpec {
+@TestFor(EmailFconnection)
+class EmailFconnectionSpec extends Specification {
 	def 'serverPort is nullable'() {
-		setup:
-			mockForConstraintsTests(EmailFconnection)
 		when:
 			def serverPort = createEmailFconnectionWithServerPort(1234)
 		then:
@@ -22,5 +21,5 @@ class EmailFconnectionSpec extends UnitSpec {
 				serverName:'example.com', serverPort:serverPort, username:'user',
 				password:'secret')
 	}
-		
 }
+

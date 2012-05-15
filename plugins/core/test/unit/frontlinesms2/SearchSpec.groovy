@@ -1,12 +1,11 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class SearchSpec extends UnitSpec {
+@TestFor(Search)
+class SearchSpec extends Specification {
 	def 'check that name cannot be null'() {
-		setup:
-			mockForConstraintsTests(Search)
 		when:
 			Search search = new Search(name: null)
 		then:
@@ -14,8 +13,6 @@ class SearchSpec extends UnitSpec {
 	}
 	
 	def 'check that name cannot be blank'() {
-		setup:
-			mockForConstraintsTests(Search)
 		when:
 			Search search = new Search(name: "")
 		then:
@@ -23,13 +20,10 @@ class SearchSpec extends UnitSpec {
 	}
 	
 	def 'check that searchString cannot be null'() {
-		setup:
-			mockForConstraintsTests(Search)
 		when:
 			Search search = new Search(searchString: null)
 		then:
 			search.searchString != null || !search.validate()
 	}
-	
 }
 

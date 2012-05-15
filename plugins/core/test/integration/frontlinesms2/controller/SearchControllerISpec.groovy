@@ -1,7 +1,7 @@
 package frontlinesms2.controller
 
-import java.text.SimpleDateFormat
 import frontlinesms2.*
+import spock.lang.*
 
 class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	final Date TEST_DATE = new Date()
@@ -14,9 +14,9 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def setup() {
 		controller = new SearchController()
-		firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true)
-		secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true)
-		thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true)
+		firstContact = new Contact(name:'Alex', mobile:'+254987654').save(failOnError:true, flush:true)
+		secondContact = new Contact(name:'Mark', mobile:'+254333222').save(failOnError:true, flush:true)
+		thirdContact = new Contact(name:"Toto", mobile:'+666666666').save(failOnError:true, flush:true)
 		group = new Group(name:'test').save(failOnError:true)
 		new Group(name:'nobody').save(failOnError:true, flush:true )
 		
@@ -24,37 +24,45 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		def futureDate = new Date()
 		futureDate.hours = futureDate.hours + 1
 		
-		[new Fmessage(src:'+254987654', text:'work at 11.00', archived: true, date: TEST_DATE),
-				new Fmessage(src:'+254987654', text:'finaly i stay in bed', date: TEST_DATE),
-				new Fmessage(src:'+254111222', date: futureDate, text:'work is awesome'),
-				new Fmessage(src:'Bob', date: TEST_DATE-5, text:'hi Bob'),
-				new Fmessage(src:'Michael', date: TEST_DATE-7, text:'Can we get meet in 5 minutes'),
-				new Fmessage(src:'+666666666', text:'finally i stay in bed', date: TEST_DATE)].each() {
-			it.inbound = true
-			it.save(failOnError:true)
-		}
+		Fmessage.build(src:'+254987654', text:'work at 11.00', archived:true, date:TEST_DATE)
+				.save(failOnError:true, flush:true)
+		Fmessage.build(src:'+254987654', text:'finaly i stay in bed', date:TEST_DATE)
+				.save(failOnError:true, flush:true)
+		Fmessage.build(src:'+254111222', text:'work is awesome', date:futureDate)
+				.save(failOnError:true, flush:true)
+		Fmessage.build(src:'Bob', text:'hi Bob', date:TEST_DATE-5)
+				.save(failOnError:true, flush:true)
+		Fmessage.build(src:'Michael', text:'Can we get meet in 5 minutes', date:TEST_DATE-7)
+				.save(failOnError:true, flush:true)
+		Fmessage.build(src:'+666666666', text:'finally i stay in bed', date:TEST_DATE)
+				.save(failOnError:true, flush:true)
 				
 		[new CustomField(name:'city', value:'Paris', contact: firstContact),
 				new CustomField(name:'like', value:'cake', contact: secondContact),
 				new CustomField(name:'ik', value:'car', contact: secondContact),
 				new CustomField(name:'like', value:'ake', contact: thirdContact),
 				new CustomField(name:'dob', value:'12/06/79', contact: secondContact)].each {
-			it.save(failOnError:true)
+			it.save(failOnError:true, flush:true)
 		}
 
-		def chickenMessage = new Fmessage(src:'Barnabus', text:'i like chicken', inbound:true, date: TEST_DATE).save(failOnError:true)
-		def liverMessage = new Fmessage(src:'Minime', text:'i like liver', inbound:true, date: TEST_DATE).save(failOnError:true)
-		def liverMessage2 = new Fmessage(src:'+254333222', text:'liver for lunch?', inbound:true, date: TEST_DATE).save(failOnError:true)
+		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken', date:TEST_DATE)
+				.save(failOnError:true, flush:true)
+		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver', date:TEST_DATE)
+				.save(failOnError:true, flush:true)
+		def liverMessage2 = Fmessage.build(src:'+254333222', text:'liver for lunch?', date:TEST_DATE)
+				.save(failOnError:true, flush:true)
+		def chickenResponse = new PollResponse(value:'chicken')
+		def liverResponse = new PollResponse(value:'liver')
+		def unknownResponse = new PollResponse(value:'unknown')
 		def poll = new Poll(name:'Miauow Mix')
-		def chickenResponse = new PollResponse(value:'chicken', poll:poll)
-		def liverResponse = new PollResponse(value:'liver', poll:poll)
-		def unknownResponse = new PollResponse(value:'unknown', poll:poll)
+				.addToResponses(unknownResponse)
+				.addToResponses(chickenResponse)
+				.addToResponses(liverResponse)
+				.save(failOnError:true, flush:true)
 		liverResponse.addToMessages(liverMessage)
 		liverResponse.addToMessages(liverMessage2)
 		chickenResponse.addToMessages(chickenMessage)
-		poll.addToResponses(unknownResponse)
-		poll.addToResponses(chickenResponse)
-		poll.addToResponses(liverResponse).save(failOnError:true)
+		poll.save(failOnError:true, flush:true)
 	}
 	
 	private def makeGroupMember() {
@@ -111,21 +119,14 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceList.every { it.inbound }
 	}
 
-	def "search for sent messages only"() {
+	def "search for outgoing messages only"() {
 		setup:
-			def d1 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
-			def d2 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
-			def d3 = new Dispatch(dst:'123456', status: DispatchStatus.PENDING)
-			def m1 = new Fmessage(src:"src", hasPending:true, date: TEST_DATE)
-			def m2 = new Fmessage(src:"src", hasSent:true, date: TEST_DATE)
-			def m3 = new Fmessage(src:"src", hasFailed:true, date: TEST_DATE)
-			m1.addToDispatches(d1).save(flush: true, failOnError: true)
-			m2.addToDispatches(d2).save(flush: true, failOnError: true)
-			m3.addToDispatches(d3).save(flush: true, failOnError: true)
+			3.times { new Fmessage(src:'src', date:TEST_DATE)
+					.addToDispatches(dst:'123456', status:DispatchStatus.PENDING)
+					.save(flush:true, failOnError:true) }
 		when:
-			controller.params.messageStatus = "SENT, PENDING, FAILED"
+			controller.params.messageStatus = 'SENT, PENDING, FAILED'
 			def model = controller.result()
-			println model.messageInstanceList.collect { [hasSent:it.hasSent, inbound:it.inbound, hasPending:it.hasPending, hasFailed:it.hasFailed] }
 		then:
 			model.messageInstanceList.size() == 3
 			model.messageInstanceList.every { !it.inbound }
@@ -253,78 +254,37 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			model.messageInstanceTotal == 7
 	}
 	
+	@Unroll
 	def "only return message within the specific time range"() {
 		when:
-			controller.params.startDate = TEST_DATE-4
-			controller.params.endDate = TEST_DATE
+			controller.params.startDate = TEST_DATE - startDelta
+			controller.params.endDate = TEST_DATE - endDelta
+			controller.params.inArchive = archived
 			def model = controller.result()
 		then:
-			println "list dates: ${model.messageInstanceList.date}"
-			println "list messages text: ${model.messageInstanceList.text}"
-			println "test date: ${TEST_DATE-5}"
-			model.messageInstanceTotal == 5  // does not include archived message
-		when:
-			controller.params.startDate = TEST_DATE
-			controller.params.endDate = TEST_DATE
-			model = controller.result()
-		then:
-			model.messageInstanceTotal == 5
-		when:
-			controller.params.startDate = TEST_DATE-6
-			controller.params.endDate = TEST_DATE-3
-			model = controller.result()
-		then:
-			model.messageInstanceTotal == 1
-		when:
-			controller.params.startDate = TEST_DATE-7
-			controller.params.endDate = TEST_DATE-5
-			model = controller.result()
-		then:
-			model.messageInstanceList*.src == ['Bob', 'Michael']
-		when:
-			controller.params.startDate = TEST_DATE-14
-			controller.params.endDate = TEST_DATE
-			controller.params.inArchive = true
-			model = controller.result()
-		then:
-			model.messageInstanceTotal == 8
+			model.messageInstanceTotal == messageTotal
+		where:
+			archived | startDelta | endDelta | messageTotal
+			null     | 4          | 0        | 5
+			null     | 0          | 0        | 5
+			null     | 6          | 3        | 1
+			null     | 7          | 5        | 2+0
+			true     | 14         | 0        | 8
 	}
 	
-	// TODO this needs a proper cleanup
+	@Unroll
 	def "only return message with custom fields"() {
 		when:
-			controller.params.city = 'Paris'
-			controller.params.inArchive = true
+			params.each { k, v -> controller.params[k] = v }
 			def model = controller.result()
 		then:
-			model.messageInstanceList == Fmessage.findAllByDisplayNameLike('Alex')
-			model.messageInstanceTotal == 2
-		when:
-			controller.params.city = ''
-			controller.params.like = 'ak'
-		    model = controller.result()
-		then:
-			//println(model.messageInstanceList.toString()+" "+model.messageInstanceList.src+" => "+model.messageInstanceList.dst)
-			//println("toto message: "+Fmessage.findByDst('+666666666').contactName)
-			//model.messageInstanceList == Fmessage.findAllByDst('+666666666')+ Fmessage.findAllBySrc('+254333222')
-			model.messageInstanceTotal == 2
-		when:
-			controller.params.city = ''
-			controller.params.like = ''
-			controller.params.dob = '7'
-			model = controller.result()
-		then:
-			model.messageInstanceTotal == 1
-		when:
-			controller.params.dob = ''
-			controller.params.city = 'sometingthatdoesntexit'
-			model = controller.result()
-		then:
-			model.messageInstanceTotal == 0
-		when:
-			controller.params.city = ''
-			model = controller.result()
-		then:
-			model.messageInstanceTotal == 9
+			model.messageInstanceTotal == messageTotal
+		where:
+			messageTotal | params
+			2            | [city:'Paris', inArchive:true]
+			2            | [like:'ak', inArchive:true]
+			1            | [dob:'7', inArchive:true]
+			0            | [city:'somethingthatdoesntexist', inArchive:true]
+			9            | [inArchive:true]
 	}
 }

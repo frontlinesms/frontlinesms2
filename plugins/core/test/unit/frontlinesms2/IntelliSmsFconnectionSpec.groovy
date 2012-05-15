@@ -1,14 +1,13 @@
 package frontlinesms2
 
-import grails.plugin.spock.UnitSpec
+import spock.lang.*
+import grails.test.mixin.*
 
-class IntelliSmsFconnectionSpec extends UnitSpec {
+@TestFor(IntelliSmsFconnection)
+class IntelliSmsFconnectionSpec extends Specification {
 	def 'creating a sendOnly IntelliSmsFconnection validates'() {
-		setup:
-			mockDomain(IntelliSmsFconnection)
-			def intellismsConn
 		when:"send property not set"
-			intellismsConn = new IntelliSmsFconnection(name:"test", username:"test", password:"****")
+			def intellismsConn = new IntelliSmsFconnection(name:"test", username:"test", password:"****")
 		then:
 			!intellismsConn.validate()
 		when:"username and password not set"
@@ -23,11 +22,8 @@ class IntelliSmsFconnectionSpec extends UnitSpec {
 	}
 	
 	def 'creating a receiveOnly IntelliSmsFconnection validates'() {
-		setup:
-			mockDomain(IntelliSmsFconnection)
-			def intellismsConn
 		when:"receive property not set"
-			intellismsConn = new IntelliSmsFconnection(name:"test", serverName:"imap.gmail.com", serverPort:"993", emailUserName:"test",emailPassword:"****", receiveProtocol:EmailReceiveProtocol.IMAP)
+			def intellismsConn = new IntelliSmsFconnection(name:"test", serverName:"imap.gmail.com", serverPort:"993", emailUserName:"test",emailPassword:"****", receiveProtocol:EmailReceiveProtocol.IMAP)
 		then:
 			!intellismsConn.validate()
 		when:"email fields not set"
@@ -42,11 +38,8 @@ class IntelliSmsFconnectionSpec extends UnitSpec {
 	}
 	
 	def 'creating a send and receive IntelliSmsFconnection validates'() {
-		setup:
-			mockDomain(IntelliSmsFconnection)
-			def intellismsConn
 		when:"receive property not set"
-			intellismsConn = new IntelliSmsFconnection(receive: true, send:true) 
+			def intellismsConn = new IntelliSmsFconnection(receive: true, send:true) 
 		then:
 			!intellismsConn.validate()
 		when:"email fields not set"

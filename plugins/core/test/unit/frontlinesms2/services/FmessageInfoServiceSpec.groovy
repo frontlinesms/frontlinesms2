@@ -1,11 +1,12 @@
 package frontlinesms2.services
 
 import frontlinesms2.*
-import grails.plugin.spock.*
+
 import spock.lang.*
+import grails.test.mixin.*
 
 @TestFor(FmessageInfoService)
-class FmessageInfoServiceSpec extends UnitSpec {
+class FmessageInfoServiceSpec extends Specification {
 	@Unroll
 	def "should calculate the total number of characters and messages being sent"() {
 		
