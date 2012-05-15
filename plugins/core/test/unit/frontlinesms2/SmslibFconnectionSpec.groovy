@@ -1,11 +1,11 @@
 package frontlinesms2
 
-import grails.plugin.spock.UnitSpec
+import grails.plugin.mixin.*
+import spock.lang.*
 
-class SmslibFconnectionSpec extends UnitSpec {
+@TestFor(SmslibFconnection)
+class SmslibFconnectionSpec extends Specification {
 	def 'port should not be nullable or blank'() {
-		setup:
-			mockForConstraintsTests(SmslibFconnection)
 		when:
 			def smsLibConnection1 = new SmslibFconnection(port: null)
 			def smsLibConnection2 = new SmslibFconnection(port: '')
@@ -15,8 +15,6 @@ class SmslibFconnectionSpec extends UnitSpec {
 	}
 
 	def "should contain errors when invalid baud rate is provided"() {
-		given:
-			mockDomain(SmslibFconnection)
 		when:
 			def conn = new SmslibFconnection(name:"testConnection", baud:"invalid", port:"/dev/ttyUSB0")
 		then:

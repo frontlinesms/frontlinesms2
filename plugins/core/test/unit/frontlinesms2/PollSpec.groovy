@@ -1,14 +1,18 @@
 package frontlinesms2
 
 import spock.lang.*
+import grails.test.mixin.*
 
-class PollSpec extends grails.plugin.spock.UnitSpec {
+import grails.buildtestdata.mixin.Build
+
+@TestFor(Poll)
+@Build(Fmessage)
+class PollSpec extends Specification {
 	/** some responses that should pass validation */
 	def OK_RESPONSES = [new PollResponse(value: "one"), new PollResponse(value: "two")]
 	private static final String TEST_NUMBER = "+2345678"
 	
 	def setup() {
-		registerMetaClass Poll
 		Poll.metaClass.static.withCriteria = { null } // this allows validation of 'title' field to pass
 		Poll.metaClass.static.findByTitleIlike = { null }
 	}
@@ -16,7 +20,6 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 	@Unroll
 	def 'poll must have at least three responses'() {
 		given:
-			mockForConstraintsTests Poll
 			def p = new Poll(name:'test poll')
 			p.responses = []
 			responseCount.times { p.responses << new PollResponse(value:"r-$it", key:"$it") }
@@ -31,8 +34,6 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 	}
 
 	def "poll auto-reply cannot be blank"() {
-		setup:
-			mockDomain(Poll)
 		when:
 			def poll = new Poll(title:"title", autoReplyText:" ", responses:OK_RESPONSES)
 		then:
@@ -45,7 +46,7 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 			def pollAndResponses = createPoll(validResponseCount)
 			def poll = pollAndResponses.poll
 			def responses = pollAndResponses.responses
-			def m = mockFmessage(messageText)
+			def m = Fmessage.build(text:messageText)
 		when:
 			poll.processKeyword(m, exactMatch)
 		then:
@@ -73,18 +74,17 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 
 	def 'processKeyword should send autoreply if one is present'() {
 		given:
-			mockDomain Poll
 			def poll = createPoll(3).poll
 			def sendService = Mock(MessageSendService)
 			poll.messageSendService = sendService
 			poll.autoreplyText = "some reply text"
 
-			def replyMessage = mockFmessage("woteva")
+			def replyMessage = Fmessage.build(text:"woteva")
 			sendService.createOutgoingMessage({ params ->
 				params.addresses==TEST_NUMBER && params.messageText=='some reply text'
 			}) >> replyMessage
 
-			def inMessage = mockFmessage("message text", TEST_NUMBER)
+			def inMessage = Fmessage.build(text:"message text", src:TEST_NUMBER)
 		when:
 			poll.processKeyword(inMessage, true)
 		then:
@@ -104,29 +104,15 @@ class PollSpec extends grails.plugin.spock.UnitSpec {
 
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
-		def responses = [unknown:mockResponse(Poll.KEY_UNKNOWN, Poll.KEY_UNKNOWN)]
+		def responses = [unknown:new PollResponse(Poll.KEY_UNKNOWN, Poll.KEY_UNKNOWN)]
 		p.responses = [responses.unknown]
 		for(i in 0..<validResponseCount) {
 			def key = ('A'..'C')[i]
-			def r = mockResponse("mock-response-$i", key)
+			def r = new PollResponse("mock-response-$i", key)
 			responses[key] = r
 			p.responses << r
 		}
 		return [poll:p, responses:responses]
-	}
-
-	private def mockResponse(String text, String key=null) {
-		PollResponse r = Mock()
-		r.value >> text
-		r.key >> key
-		return r
-	}
-
-	private def mockFmessage(String messageText, String src=null) {
-		Fmessage m = Mock()
-		m.text >> messageText
-		m.src >> src
-		return m
 	}
 }
 

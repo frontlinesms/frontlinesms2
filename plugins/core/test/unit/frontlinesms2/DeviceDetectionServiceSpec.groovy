@@ -1,12 +1,12 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.tesst.mixin.*
+
 import net.frontlinesms.messaging.ATDeviceDetector
 
-class DeviceDetectionServiceSpec extends UnitSpec {
-	def service = new DeviceDetectionService()
-	
+@TestFor(DeviceDetectionService)
+class DeviceDetectionServiceSpec extends Specification {
 	def "stopFor should not interrupt detection of unrelated ports"() {
 		given:
 			def d = mockDetectors("COM2", "COM3")
@@ -31,7 +31,6 @@ class DeviceDetectionServiceSpec extends UnitSpec {
 	def "stopFor should not interrupt detector if detector called stopFor"() {
 		given:
 			def d = mockDetectors('COM1')[0]
-			registerMetaClass Thread
 			Thread.metaClass.static.currentThread = { d }
 		when:
 			service.stopFor("COM1")

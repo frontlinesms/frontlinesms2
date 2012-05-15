@@ -2,18 +2,14 @@ package frontlinesms2.services
 
 import frontlinesms2.*
 import spock.lang.*
-import grails.plugin.spock.UnitSpec
+import grails.test.mixin.*
+
 import org.apache.camel.CamelContext
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
-class KeywordProcessorServiceSpec extends UnitSpec {
-	def service
-	
-	def setup() {
-		service = new KeywordProcessorService()
-	}
-
+@TestFor(KeywordProcessorService)
+class KeywordProcessorServiceSpec extends Specification {
 	@Unroll
 	def "activity_process should be called for matching keywords"() {
 		given:
@@ -81,7 +77,6 @@ class KeywordProcessorServiceSpec extends UnitSpec {
 		println "Finished creating keywords: ${keywords*.value}"
 		keywords.each { println it.value }
 		
-		registerMetaClass Keyword
 		Keyword.metaClass.static.findByValue = { value ->
 			println "Trying to match keyword $value against ${keywords*.value}"
 			keywords.each { println it.value }
@@ -97,3 +92,4 @@ class KeywordProcessorServiceSpec extends UnitSpec {
 		return m
 	}
 }
+
