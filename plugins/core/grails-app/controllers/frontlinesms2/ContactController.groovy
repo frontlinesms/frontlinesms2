@@ -112,9 +112,8 @@ class ContactController {
 	}
 	
 	def confirmDelete = {
-		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 		def contactInstanceList = []
-		contactIds.each { id ->
+		getCheckedContactIds().each { id ->
 			withContact id, { contactInstance ->
 				contactInstanceList << contactInstance
 			}
@@ -125,8 +124,7 @@ class ContactController {
 	}
 	
 	def delete = {
-		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
-		contactIds.each { id ->
+		getCheckedContactIds().each { id ->
 			withContact id, { contactInstance ->
 				Contact.get(contactInstance.id).delete()
 			}
@@ -190,18 +188,20 @@ class ContactController {
 	}
 	
 	def multipleContactGroupList = {
-		def contactIds = params.checkedContactList.tokenize(',').unique()
-		def sharedGroupInstanceList = []
 		def groupInstanceList = []
-		contactIds.each { id ->
+		getCheckedContactIds().each { id ->
 			withContact id, { contactInstance ->
 				groupInstanceList << contactInstance.getGroups()
 			}
 		}
-		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
+		def sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
 		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
 		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
 			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
+	}
+
+	private def getCheckedContactIds() {
+		params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 	}
 	
 	private def getSharedGroupList(Collection groupList) {
