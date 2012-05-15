@@ -182,8 +182,8 @@ class Fmessage {
 	}
 
 	def getDisplayName() {
-		if(inbound) inboundContactName
-		else if(dispatches.size() == 1) outboundContactName
+		if(inbound) inboundContactName?: src
+		else if(dispatches.size() == 1) outboundContactName?: (dispatches as List)[0].dst
 		else dispatches.size() // TODO this should be i18n'd I think...
 	}
 

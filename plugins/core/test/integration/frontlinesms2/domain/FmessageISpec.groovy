@@ -15,11 +15,11 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			m.refresh().displayName == 'bob'
 	}
 
-	def 'display name should be null for incoming message if no matching contact'() {
+	def 'display name should be src for incoming message if no matching contact'() {
 		given:
 			Fmessage m = Fmessage.build(src:'123')
 		expect:
-			m.refresh().displayName == null
+			m.refresh().displayName == '123'
 	}
 
 	def 'display for outgoing message should be taken from Contact with matching mobile if only one recipient'() {
@@ -32,13 +32,13 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			m.refresh().displayName == 'bob'
 	}
 
-	def 'outgoing display name should be 1 if only one recipient but no matching contact'() {
+	def 'outgoing display name should be dst if only one recipient but no matching contact'() {
 		given:
 			Fmessage m = new Fmessage()
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		expect:
-			m.refresh().displayName == null
+			m.refresh().displayName == '123'
 	}
 
 	def 'if multiple recipients display name should be the count of dispatches whether contacts exist or not'() {
@@ -237,26 +237,26 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "when a new contact is created, all messages with that contacts mobile number should be updated"() {
 		when:
-			def message = Fmessage.build(src:'1')
+			def message = Fmessage.build(src:'111')
 		then:
-			!message.displayName
+			message.displayName == '111'
 		when:
-			new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
+			new Contact(name:"Alice", mobile:'111').save(failOnError:true, flush:true)
 		then:
 			message.refresh().displayName == "Alice"
 	}
 
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
-			def alice = new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
-			def message = Fmessage.build(src:'1')
+			def alice = new Contact(name:"Alice", mobile:'222').save(failOnError:true, flush:true)
+			def message = Fmessage.build(src:'222')
 		then:
 			message.refresh().displayName == 'Alice'
 		when:
 			alice.mobile = '3'
 			alice.save(failOnError:true, flush:true)
 		then:
-			!message.refresh().displayName
+			message.refresh().displayName == '222'
 	}
 	
 	def "can archive message when it has no message owner" () {

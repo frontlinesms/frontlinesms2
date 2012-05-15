@@ -91,6 +91,7 @@ grails.project.dependency.resolution = {
 		test ":geb:$gebVersion"
 
 		test ":build-test-data:2.0.2"
+		test ':remote-control:1.2'
 
 		// Uncomment these (or add new ones) to enable additional resources capabilities
 		//runtime ":zipped-resources:1.0"
