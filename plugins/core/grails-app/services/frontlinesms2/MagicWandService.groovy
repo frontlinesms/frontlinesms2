@@ -32,7 +32,7 @@ class MagicWandService {
 	    regex = /[$][{]*[a-z_]*[}]/
 	    matches = messageBody.findAll(regex)
 	    matches.each {
-	        messageBody = messageBody.replaceFirst(regex, getReplacement(it))
+	        messageBody = messageBody.replaceFirst(regex, getReplacement(it, dispatch))
 	    }
 	    return messageBody
 	}
