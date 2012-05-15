@@ -1,5 +1,5 @@
 waiting {
-	timeout = 3
+	timeout = 5
 	retryInterval = 0.2
 }
 
