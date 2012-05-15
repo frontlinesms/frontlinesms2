@@ -1,24 +1,21 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
+import grails.test.mixin.*
 
-class LogEntrySpec extends UnitSpec {
+class LogEntrySpec extends Specification {
+	private static final Date TEST_DATE = new Date()
+
+	@Unroll
 	def "a log entry must have a date and text"() {
-		setup:
-			mockForConstraintsTests(LogEntry)
-		when:
-			LogEntry l = new LogEntry()
-		then:
-			!l.validate()
-		when:
-			l.date = new Date()
-		then:
-			!l.validate()
-		when:
-			l.content = "This log entry now has content"
-		then:
-			l.validate()
+		expect:
+			new LogEntry(date:date, content:content).validate() == valid
+		where:
+			valid | date      | content
+			false | null      | null
+			false | TEST_DATE | null
+			false | null      | "This log entry now has content"
+			true  | TEST_DATE | "This log entry now has content"
 	}
 }
 

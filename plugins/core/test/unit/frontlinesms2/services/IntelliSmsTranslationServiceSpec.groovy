@@ -1,21 +1,15 @@
 package frontlinesms2.services
 
-import grails.plugin.spock.*
+import spock.lang.*
+import grails.test.mixin.*
+
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 import org.apache.camel.component.mail.MailEndpoint
-import frontlinesms2.IntelliSmsTranslationService
-import frontlinesms2.Fmessage
-import java.util.Date
+import frontlinesms2.*
 
-class IntelliSmsTranslationServiceSpec extends UnitSpec {
-
-	def service
-
-	def setup() {
-		service = new IntelliSmsTranslationService()
-	}
-	
+@TestFor(IntelliSmsTranslationService)
+class IntelliSmsTranslationServiceSpec extends Specification {
 	def "incoming intellisms email message is translated into Fmessage"() {
 		given:
 			def testDate = "Fri, 20 Apr 2012 14:27:14 +0100"
