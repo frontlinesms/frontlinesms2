@@ -16,7 +16,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			controller.params.name = name
 			controller.params.keyword = keyword
-			controller.params.autoreplyText = autoreplyText
+			controller.params.messageText = autoreplyText
 		when:
 			controller.save()
 		then:
@@ -34,13 +34,13 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given: 'an autoreply exists'
 			def k = new Keyword(value:initialKeyword)
 			def a = new Autoreply(name:"Color", keyword:k, autoreplyText:"ahhhhhhhhh")
-			a.save(flush:true, failOnError:true)
+					.save(flush:true, failOnError:true)
 			
 		and: 'controller params are setup'
 			controller.params.ownerId = a.id
 			controller.params.name = name
 			controller.params.keyword = finalKeyword
-			controller.params.autoreplyText = autoreplyText
+			controller.params.messageText = autoreplyText
 			controller.params.format = "html"
 			
 		when:
@@ -63,3 +63,4 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			"ColorZ"  | ""             | "COLORZ"     | "blue, i mean green"
 	}  
 }
+

@@ -78,6 +78,7 @@ class Poll extends Activity {
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
 			choices.each { k, v ->
+				k = k.substring('choice'.size())
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v

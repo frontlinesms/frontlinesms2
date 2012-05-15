@@ -364,7 +364,8 @@ class CoreBootStrap {
 		final String contextPath = servletContext.contextPath
 		// FIXME in grails 2, serverURL appears to be not set, so hard-coding it here
 		//final String baseUrl = grailsApplication.config.grails.serverURL
-		final String baseUrl = 'http://localhost:8080/core'
+		final String serverPort = grailsApplication.config.grails.serverPort?:System.properties['server.port']?: '8080'
+		final String baseUrl = "http://localhost:${serverPort}/core"
 		nonEmptyMc.'get@href' = {
 			def val = getAttribute('href')
 			if(val.startsWith(contextPath)) val = val.substring(contextPath.size())

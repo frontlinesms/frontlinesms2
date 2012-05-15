@@ -10,9 +10,15 @@ import frontlinesms2.*
 @Mixin(frontlinesms2.utils.GebUtil)
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src:"src1", inbound:false, starred:true).addToDispatches(dst:"dst2", status:DispatchStatus.FAILED).save(failOnError:true, flush:true)
-		new Fmessage(src:"src2", inbound:false).addToDispatches(dst:"dst1", status:DispatchStatus.PENDING).save(failOnError:true, flush:true)
-		new Fmessage(src:"src", inbound:false).addToDispatches(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+		new Fmessage(src:"src1", starred:true)
+				.addToDispatches(dst:"dst2", status:DispatchStatus.FAILED)
+				.save(failOnError:true, flush:true)
+		new Fmessage(src:"src2")
+				.addToDispatches(dst:"dst1", status:DispatchStatus.PENDING)
+				.save(failOnError:true, flush:true)
+		new Fmessage(src:"src")
+				.addToDispatches(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date())
+				.save(failOnError:true, flush:true)
 		Fmessage.build(src:"src")
 	}
 	
@@ -38,7 +44,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'Failed').click()
 		then:	
 			waitFor { $("#message-list tr").size() == 2 }
-			getColumnText('message-list', 3) == ['To: dst2']
+			getColumnText('message-list', 3) == ['dst2']
 		when:
 			$('a', text:'All').click()
 		then:	

@@ -65,7 +65,7 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 }
 
 class PageEnglishSmartGroupShow extends geb.Page {
-	static at = { title == 'English Contacts' }
+	static at = { title.contains('English Contacts') }
 	
 	static content = {
 		contactLink { $('#contact-list a') }

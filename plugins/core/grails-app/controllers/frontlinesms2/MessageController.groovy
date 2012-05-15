@@ -185,7 +185,7 @@ class MessageController {
 		if (params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId])
 	}
 	
 	def archive = {
@@ -205,7 +205,7 @@ class MessageController {
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		} else {
-			redirect(controller: 'message', action: params.messageSection, params: [ownerId: params.ownerId])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId, searchId: params.searchId])
 		}
 	}
 	
@@ -223,7 +223,7 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
-		if(params.messageSection == 'result')
+		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])

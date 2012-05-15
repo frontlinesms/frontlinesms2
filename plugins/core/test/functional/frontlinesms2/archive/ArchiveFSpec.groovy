@@ -4,8 +4,6 @@ import frontlinesms2.*
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class ArchiveFSpec extends ArchiveBaseSpec {
-	final Date TEST_DATE = new Date()
-	
 	def 'archived folder list is displayed'() {
 		given:
 			createTestFolders()
@@ -13,7 +11,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		when:
 			def folder = Folder.findByName('Work')
 			folder.archive()
-			folder.save(flush: true, failOnError: true)
+			folder.save(flush:true, failOnError:true)
 			to PageArchiveFolder
 		then:
 			folderNames*.text() == ["Work"]
@@ -25,12 +23,12 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		when:
 			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
 		then:
-			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
+			$("#message-list td.message-sender-cell")*.text().sort() == ['Jane', 'Max']
 		when:
 			def btnDelete = $("#delete-msg")
 			btnDelete.click()
 		then:
-			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane'])
+			$("#message-list td.message-sender-cell")*.text() == ['Jane']
 	}
 	
 	def '"Archive All" button does not appear in archive section'() {

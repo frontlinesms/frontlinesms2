@@ -8,7 +8,7 @@ class PageSettings extends geb.Page {
 		title.contains('Settings')
 	}
 	static content = {
-		btnApplyLanguage { $('input', value:'Apply') }
+		btnApplyLanguage { $('.langsection input.button') }
 		languageList { $('select', name:'language') }
 		phonesMenuItem(required: false) { $("#settings-menu").children()[0] }
 	}

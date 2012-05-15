@@ -6,14 +6,15 @@ import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed']
+	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
 	
 	String src
 	String text
-	String displayName
+	String inboundContactName
+	String outboundContactName
 	
 	boolean read
 	boolean starred
@@ -23,34 +24,30 @@ class Fmessage {
 	boolean inbound
 	static hasMany = [dispatches:Dispatch]
 
-	static mapping = { sort date:'desc' }
+	static mapping = {
+		sort date:'desc'
+		inboundContactName formula:'SELECT c.name FROM Contact c WHERE c.mobile=src'
+		outboundContactName formula:'SELECT MAX(c.name) FROM Contact c, Dispatch d WHERE c.mobile=d.dst AND d.message_id=id'
+	}
 	
 	static constraints = {
-		messageOwner(nullable:true)
+		messageOwner nullable:true
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text(nullable:true)
-		displayName(nullable:true)
+		text nullable:true
+		inboundContactName nullable:true
+		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
 				obj.messageOwner == null || obj.messageOwner.archived == val
 		})
 		inbound(nullable:true, validator: { val, obj ->
 				val ^ (obj.dispatches? true: false)
 		})
-		dispatches(nullable:true)
+		dispatches nullable:true
 	}
 
 	def beforeInsert = {
-		withSession { session -> 
-			FlushMode flushMode = session.flushMode 
-			session.flushMode = FlushMode.MANUAL 
-			try { 
-				updateFmessageDisplayName()
-			} finally {
-				session.flushMode = flushMode
-			}
-		}
 		if(!this.inbound) this.read = true
 	}
 	
@@ -126,12 +123,16 @@ class Fmessage {
 				ilike("text", "%${search.searchString}%")
 			}
 			if(search.contactString) {
-				ilike("displayName", "%${search.contactString}%")
+				def contactNumbers = Contact.findAllByNameIlike("%${search.contactString}%")*.mobile ?: ['']
+				or {
+					'in'('src', contactNumbers)
+					'in'('disp.dst', contactNumbers)
+				}
 			} 
 			if(search.group) {
-				def groupMembersNumbers = search.group.addresses ?: [''] //otherwise hibernate fail to search 'in' empty list
+				def groupMembersNumbers = search.group.addresses?: [''] //otherwise hibernate fail to search 'in' empty list
 				or {
-					'in'("src", groupMembersNumbers)
+					'in'('src', groupMembersNumbers)
 					'in'('disp.dst', groupMembersNumbers)
 				}
 			}
@@ -180,6 +181,12 @@ class Fmessage {
 		}
 	}
 
+	def getDisplayName() {
+		if(inbound) inboundContactName?: src
+		else if(dispatches.size() == 1) outboundContactName?: (dispatches as List)[0].dst
+		else dispatches.size() // TODO this should be i18n'd I think...
+	}
+
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
 	def getHasFailed() { areAnyDispatches(DispatchStatus.FAILED) }
 	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
@@ -187,6 +194,7 @@ class Fmessage {
 		dispatches?.any { it.status == status }
 	}
 
+	// FIXME document what this is, and remove references to PollResponse
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
@@ -250,29 +258,6 @@ class Fmessage {
 		answer.put(mappedKey, current + 1)
 	}
 	
-	private def updateFmessageDisplayName() {
-		Contact c
-		if(inbound) {
-			if(src &&
-					(c = Contact.findByMobile(src))) {
-				displayName = c.name
-			} else {
-				displayName = src
-			}
-		} else {
-			if(dispatches?.size() == 1) {
-				def dst = dispatches.dst[0]
-				if((c = Contact.findByMobile(dst))) {
-					displayName = "To: " + c.name
-				} else {
-					displayName = "To: " + dst
-				}
-			} else if(dispatches?.size() > 1) {
-				displayName = "To: " + dispatches?.size() + " recipients"
-			}
-		}
-	}
-	
 	def updateDispatches() {
 		if(isDeleted) {
 			dispatches.each {
@@ -281,3 +266,4 @@ class Fmessage {
 		}
 	}
 }
+
