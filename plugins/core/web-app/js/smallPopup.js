@@ -13,13 +13,13 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 }
 
 function launchConfirmationPopup(title) {
-	var contactList = $("#checkedContactList");
-	if (contactList.val() == ',') {
+	var contactList = getCheckedList('contact');
+	if (contactList == ',') {
 		var contactIdList = $("#contactId").val();
 		var message = i18n("smallpopup.delete.prompt", $('#name').val());
 	} else {
-		var contactIdList = contactList.val();
-		var count = contactList.val().split(",").length - 2;
+		var contactIdList = contactList;
+		var count = contactList.split(",").length - 2;
 		var message = i18n("smallpopup.delete.many.prompt", count)
 	}
 	

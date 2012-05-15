@@ -27,14 +27,13 @@ eventDefaultStart = {
 }
 
 
-boolean inFunctionalTestPhase = false
-
-eventTestPhaseStart = { name ->
-	inFunctionalTestPhase = (name == 'functional')
+boolean inFunctionalTestPhase
+eventTestPhaseStart = { phaseName ->
+	inFunctionalTestPhase = (phaseName == 'functional')
 	junitReportStyleDir = "test/conf"
 }
 
-eventTestStart = { name ->
+eventTestStart = { testName ->
 	if (inFunctionalTestPhase) {
 		def sql = Sql.newInstance('jdbc:h2:mem:testDb', 'sa', '', 'org.h2.Driver')
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
@@ -43,3 +42,15 @@ eventTestStart = { name ->
 	}
 
 }
+
+eventTestPhaseEnd = { phaseName ->
+	if (phaseName == 'functional') {
+		def report = new File('target/test-reports/html/screenshots.html')
+		new File('target/test-reports/geb').eachFileRecurse { f ->
+			if(!f.name.endsWith('.png')) return
+			report.append '<img height="120" src="..' +
+			f.path.substring('target/test-reports'.size()) + '"/>\n'
+		}
+	}
+}
+

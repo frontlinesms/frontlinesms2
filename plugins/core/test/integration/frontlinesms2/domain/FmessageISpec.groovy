@@ -6,7 +6,54 @@ import spock.lang.*
 
 class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	final Date TEST_DATE = new Date()
-			
+
+	def 'display name should be taken from Contact with matching mobile for incoming message'() {
+		given:
+			Contact.build(name:'bob', mobile:'123')
+			Fmessage m = Fmessage.build(src:'123')
+		expect:
+			m.refresh().displayName == 'bob'
+	}
+
+	def 'display name should be src for incoming message if no matching contact'() {
+		given:
+			Fmessage m = Fmessage.build(src:'123')
+		expect:
+			m.refresh().displayName == '123'
+	}
+
+	def 'display for outgoing message should be taken from Contact with matching mobile if only one recipient'() {
+		given:
+			Contact.build(name:'bob', mobile:'123')
+			Fmessage m = new Fmessage()
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+					.save(failOnError:true)
+		expect:
+			m.refresh().displayName == 'bob'
+	}
+
+	def 'outgoing display name should be dst if only one recipient but no matching contact'() {
+		given:
+			Fmessage m = new Fmessage()
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+					.save(failOnError:true)
+		expect:
+			m.refresh().displayName == '123'
+	}
+
+	def 'if multiple recipients display name should be the count of dispatches whether contacts exist or not'() {
+		given:
+			Contact.build(name:'adam', mobile:'123')
+			Contact.build(name:'bob', mobile:'456')
+			Fmessage m = new Fmessage()
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+					.addToDispatches(dst:'456', status:DispatchStatus.PENDING)
+					.addToDispatches(dst:'789', status:DispatchStatus.PENDING)
+					.save(failOnError:true)
+		expect:
+			m.refresh().displayName == 3
+	}
+
 	def 'If any of a Fmessages dispatches has failed its status is HASFAILED'() {
 		when:
 			def message = buildWithDispatches(failedDispatch(), pendingDispatch(), sentDispatch())
@@ -85,7 +132,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def allInboundMessages = Fmessage.search(search).list()
 			def allSentMessages = Fmessage.search(search2).list()
-			def allMessages = Fmessage.search(search3).list()
+			def allMessages = Fmessage.search(search3).listDistinct()
 		then:
 			allInboundMessages*.every { it.inbound }
 			allSentMessages*.every { !it.inbound }
@@ -104,6 +151,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			searchMessagesCount == 0
 	}
 
+	@Unroll
 	def "searching for a partial name of a contact will match messages he has sent and received"() {
 		given:
 			def messages = [:]
@@ -111,18 +159,18 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 				Contact.build(name:contactName, mobile:mobile)
 				def sent = new Fmessage(text:'')
 						.addToDispatches(dst:mobile, status:DispatchStatus.PENDING)
-						.save(failOnError:true)
-				def received = Fmessage.build(src:mobile)
+						.save(failOnError:true, flush:true)
+				def received = Fmessage.build(src:mobile).save(failOnError:true, flush:true)
 				messages[contactName] = [received, sent]
 			}
 		expect:
-			Fmessage.search([contactString:'ROB']).list(sort:'date', order:'desc') == messages.robert
-		and:
-			Fmessage.search([contactString:'bER']).list(sort:'date', order:'desc') == messages.bernie + messages.robert
-		and:
-			Fmessage.search([contactString:'i']).list(sort:'date', order:'desc') == messages.iane + messages.bernie
-		and:
-			Fmessage.search([contactString:'e']).list(sort:'date', order:'desc') == messages.iane + messages.bernie + messages.robert
+			Fmessage.search([contactString:contactString]).list(sort:'date', order:'desc') == contactNames.inject([]) { m, c -> m += messages[c] }
+		where:
+			contactString | contactNames
+			'ROB'         | ['robert']
+			'bER'         | ['bernie', 'robert']
+			'i'           | ['iane', 'bernie']
+			'e'           | ['iane', 'bernie', 'robert']
 	}
 
 	def "getMessageStats should return message traffic information for the filter criteria"() {
@@ -138,11 +186,10 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			
 			(TEST_DATE-6..TEST_DATE+5).each { date ->
 				Fmessage.build(date:date, src:jessy.mobile)
-				buildWithDispatches( 
-						// this dispatch should be counted because Jessy is in the target group
-						new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
+				buildWithDispatches(
+					// this dispatch should be counted because Jessy is in the target group
+					new Dispatch(dst:jessy.mobile, status:DispatchStatus.SENT, dateSent:date))
 			}
-			
 			3.times { Fmessage.build(date:TEST_DATE-1, src:jessy.mobile) }
 			
 			5.times {
@@ -172,8 +219,8 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			def outBoundMessageToAlice = buildWithDispatches(
 					new Dispatch(dst:'1234', status:DispatchStatus.SENT, dateSent:TEST_DATE))
 		then:
-			[messageFromAlice]*.displayName.every { it == "Alice" }
-			[outBoundMessageToAlice]*.displayName.every { it == "To: Alice" }
+			messageFromAlice.refresh().displayName == 'Alice'
+			outBoundMessageToAlice.refresh().displayName == 'Alice'
 	}
 	
 	def "cannot archive a message that has an owner without also archiving the owner" () {
@@ -190,28 +237,26 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "when a new contact is created, all messages with that contacts mobile number should be updated"() {
 		when:
-			def message = Fmessage.build(src:'1')
+			def message = Fmessage.build(src:'111')
 		then:
-			message.displayName == '1'
+			message.displayName == '111'
 		when:
-			new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
-			message.refresh()
+			new Contact(name:"Alice", mobile:'111').save(failOnError:true, flush:true)
 		then:
-			message.displayName == "Alice"
+			message.refresh().displayName == "Alice"
 	}
 
 	def "when a contact is updated, all messages with that contacts primary number should be updated"() {
 		when:
-			def alice = new Contact(name:"Alice", mobile:'1').save(failOnError:true, flush:true)
-			def message = Fmessage.build(src:'1')
+			def alice = new Contact(name:"Alice", mobile:'222').save(failOnError:true, flush:true)
+			def message = Fmessage.build(src:'222')
 		then:
-			message.displayName == 'Alice'
+			message.refresh().displayName == 'Alice'
 		when:
 			alice.mobile = '3'
 			alice.save(failOnError:true, flush:true)
-			message.refresh()
 		then:
-			message.displayName == '1'
+			message.refresh().displayName == '222'
 	}
 	
 	def "can archive message when it has no message owner" () {
@@ -320,3 +365,4 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	private def pendingDispatch() { new Dispatch(dst:'1234', status:DispatchStatus.PENDING) }
 	private def failedDispatch() { new Dispatch(dst:'1234', status:DispatchStatus.FAILED) }
 }
+

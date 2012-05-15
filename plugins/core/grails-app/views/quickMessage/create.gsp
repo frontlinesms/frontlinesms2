@@ -11,19 +11,31 @@
 	</ul>
 
 	<g:formRemote name="send-quick-message" url="${[action:'send', controller:'message']}" method="post" onSuccess="addFlashMessage(data)">
-		<fsms:render template="message"/>
+		
+		<div id="tabs-1" class="${configureTabs.contains('tabs-1') ? '' : 'hide'}">
+			<fsms:render template="/message/compose"/>
+		</div>
 		<div id="tabs-2" class="${configureTabs.contains("tabs-2") ? "" : "hide"}">
-			<fsms:render template="select_recipients"/>
+			<fsms:render template="/message/select_recipients"/>
 		</div>
 		<fsms:render template="confirm"/>
 	</g:formRemote>
 </div>
 
 <r:script>
+	$("#messageText").live("blur", function() {
+		var value = $(this).val();
+		if(value) {
+			$("#confirm-message-text").html(value);
+		} else {
+			$("#confirm-message-text").html("none"); // FIXME i18n
+		}
+	});
+
 	function initializePopup() {
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				updateCount();
+				updateMessageCount();
 				return true;
 			}
 		});

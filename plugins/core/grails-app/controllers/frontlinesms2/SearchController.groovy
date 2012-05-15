@@ -20,8 +20,8 @@ class SearchController extends MessageController {
 				customFieldList:CustomField.getAllUniquelyNamed()]
 	}
 
-	def result() {
-		withSearch { searchInstance ->
+	def result = {
+		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
 			searchInstance.owners = activity ? [activity] : null
 			searchInstance.searchString = params.searchString ?: ""
@@ -37,18 +37,19 @@ class SearchController extends MessageController {
 				if(params[customFieldName])
 					searchInstance.customFields[customFieldName] = params[customFieldName]
 			}
+			searchInstance.save(failOnError: true, flush: true)
+		}
 
-			def rawSearchResults = Fmessage.search(searchInstance)
-			def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
-			def searchDescription = getSearchDescription(searchInstance)
-			def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
+		def rawSearchResults = Fmessage.search(search)
+		def searchResults = rawSearchResults.list(sort:"date", order:"desc", max: params.max, offset: params.offset)
+		def searchDescription = getSearchDescription(search)
+		def checkedMessageCount = params.checkedMessageList?.tokenize(',')?.size()
 
-			[searchDescription: searchDescription,
-					search: searchInstance,
-					checkedMessageCount: checkedMessageCount,
-					messageInstanceList: searchResults,
-					messageInstanceTotal: rawSearchResults.count()] << show() << no_search()
-			}
+		[searchDescription: searchDescription,
+				search: search,
+				checkedMessageCount: checkedMessageCount,
+				messageInstanceList: searchResults,
+				messageInstanceTotal: rawSearchResults.count()] << show() << no_search()
 	}
 
 	def show() {
@@ -65,7 +66,7 @@ class SearchController extends MessageController {
 		if(search.searchString) {
 			searchDescriptor += " \"$search.searchString\""
 		} else {
-			searchDescriptor += message(code:'searchdescriptor.all.messages')
+			searchDescriptor += (" " + message(code:'searchdescriptor.all.messages'))
 		}
 		 
 		if(search.group) searchDescriptor += ", $search.group.name"

@@ -24,7 +24,7 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			rowContents[2] == 'Bob'
 			rowContents[3] == 'manchester ("I like manchester")'
-			rowContents[4] ==~ /[0-9]{2} [A-Z][a-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
@@ -110,12 +110,12 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			$("#poll-graph-btn").click()
 		then:
-			waitFor {!$("#message-list").displayed}
+			waitFor {$("#poll-details").displayed}
 			$(".response-count").text() == "2 responses total"
 		when:
 			$("#poll-graph-btn").click()
 		then:
-			waitFor { $('#messages').displayed }
+			waitFor { !$('#poll-details').displayed }
 	}
 	
 	def 'no message is selected when a poll is first loaded'() {

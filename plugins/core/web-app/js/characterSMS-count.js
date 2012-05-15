@@ -1,13 +1,12 @@
-function updateCount() {
-	var value = $(this).val();
-	var wordCount = value.length
-	var messageStats = $(this).siblings("span.character-count")
-	if(wordCount > 3000) {
+function updateSmsCharacterCount() {
+	var messageText = $(this).val();
+	var messageStats = $(this).siblings("span.character-count");
+	if(messageText.length > 3000) {
 		//prevent addition of new content to message
-		$(this).val(value.substring(0, 3000));
+		$(this).val(messageText.substring(0, 3000));
 	} else {
-		$.get(url_root + 'message/sendMessageCount', {message: value}, function(data) {
-			messageStats.html(data);
+		$.get(url_root + 'message/sendMessageCount', { message:messageText }, function(data) {
+			messageStats.text(i18n('message.character.count', data['remaining'], data['partCount']));
 		});
 	}
 }

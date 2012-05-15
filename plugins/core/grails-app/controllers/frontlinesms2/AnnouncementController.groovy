@@ -15,7 +15,7 @@ class AnnouncementController extends ActivityController {
 			flash.message = message(code: 'announcement.saved')
 			withFormat {
 				json {
-					render([ok:true, ownerId: announcementInstance.id, page:createLink(action:'save')] as JSON)
+					render([ok:true, ownerId: announcementInstance.id] as JSON)
 				}
 
 				html {

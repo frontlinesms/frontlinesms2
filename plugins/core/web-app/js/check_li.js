@@ -52,7 +52,7 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 	if (itemTypeString == 'message') {
 		row.removeClass("unread");
 		row.addClass("read");
-		params = { messageSection:$('input:hidden[name=messageSection]').val() };
+		params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId };
 		action = '/show/';
 	} else {
 		params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
@@ -66,6 +66,9 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 		if (itemTypeString == 'contact') {
 			document.getElementById('new-field-dropdown-button').style.width="250px"; //fix width for custom field dropdown
 			applyJavascript();
+		}
+		if (itemTypeString == 'message') {
+			refreshMessageCount();
 		}
 	});
 }

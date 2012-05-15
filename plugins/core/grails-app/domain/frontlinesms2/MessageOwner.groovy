@@ -1,6 +1,7 @@
 package frontlinesms2
 
 abstract class MessageOwner {
+	String name
 	static hasMany = [messages: Fmessage]
 	boolean archived
 	boolean deleted

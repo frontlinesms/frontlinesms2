@@ -35,17 +35,17 @@ class MessageController {
 			def messageCount = [totalMessages:[Fmessage."$section"().count()]]
 			render messageCount as JSON
 		} else if(section == 'activity') {
-			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages()?.count()]]
+			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.activityMessages?.count()]]
 			render messageCount as JSON
 		} else if(section == 'folder') {
-			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages()?.count()]]
+			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.folderMessages?.count()]]
 			render messageCount as JSON
 		} else
 			render ""
 	}
 
 	def show = {
-		def messageInstance = Fmessage.get(params.id)
+		def messageInstance = Fmessage.get(params.messageId)
 		messageInstance.read = true
 		messageInstance.save()
 		def model = [messageInstance: messageInstance,
@@ -59,21 +59,21 @@ class MessageController {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
-						messageSection: message(code: 'fmessage.inbox'),
+						messageSection:'inbox',
 						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
-		render view:'../message/standard', model:[messageSection: message(code: 'fmessage.sent'),
+		render view:'../message/standard', model:[messageSection:'sent',
 				messageInstanceList: messageInstanceList.list(params),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	} 
 
 	def pending = {
 		def messageInstanceList = Fmessage.pending(params.failed)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.list(params),
-				messageSection: message(code: 'fmessage.pending'),
+		render view:'standard', model:[messageInstanceList: messageInstanceList.listDistinct(params),
+				messageSection:'pending',
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 	
@@ -100,7 +100,7 @@ class MessageController {
 		}
 		render view:'standard', model:[trashInstanceList: trashInstanceList,
 					messageInstanceList: messageInstanceList?.list(params),
-					messageSection: message(code: 'fmessage.trash'),
+					messageSection:'trash',
 					messageInstanceTotal: Trash.count(),
 					ownerInstance: trashedObject] << getShowModel()
 	}
@@ -139,7 +139,7 @@ class MessageController {
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
 			if (params.flashMessage) { flash.message = params.flashMessage }
 			render view:'../message/standard', model:[messageInstanceList: messageInstanceList.list(params),
-						messageSection: message(code: 'folder.label'),
+						messageSection:'folder',
 						messageInstanceTotal: messageInstanceList.count(),
 						ownerInstance: folderInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null] << getShowModel()
@@ -185,7 +185,7 @@ class MessageController {
 		if (params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		else
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId])
 	}
 	
 	def archive = {
@@ -205,7 +205,7 @@ class MessageController {
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		} else {
-			redirect(controller: 'message', action: params.messageSection, params: [ownerId: params.ownerId])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId, searchId: params.searchId])
 		}
 	}
 	
@@ -223,7 +223,7 @@ class MessageController {
 			}
 		}
 		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
-		if(params.messageSection == 'result')
+		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
@@ -239,13 +239,15 @@ class MessageController {
 					def activity = Activity.get(params.ownerId)
 					activity.addToMessages(messageInstance)
 					activity.save(failOnError:true)
-					/* FIXME the following is broken for multiple messages, and it's not clear what
-					 * it's trying to do.  If this is meant to be triggering an action on the Activity
-					 * then it definitely shouldn't be doing it via another controller
-					if(activity && activity.autoreplyText)
-						redirect(controller: activity instanceof frontlinesms2.Poll ? 'poll' : 'autoreply',
-								action: 'sendReply', params: [ownerId: activity.id, messageId: messageInstance.id]) */
-				} else if (params.messageSection == 'folder' || params.messageSection == 'radioShow') {
+					if(activity && activity.autoreplyText) {
+						params.addresses = messageInstance.src
+						params.messageText = activity.autoreplyText
+						def outgoingMessage = messageSendService.createOutgoingMessage(params)
+						activity.addToMessages(outgoingMessage)
+						messageSendService.send(outgoingMessage)
+						activity.save()
+					}
+				} else if (params.ownerId) {
 					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 				} else {
 					messageInstance.with {
@@ -257,7 +259,6 @@ class MessageController {
 				}
 			}
 		}
-
 		// FIXME this flash message is concatenated in a stupid way
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
 		render ""
@@ -329,17 +330,8 @@ class MessageController {
 		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
-	def sendMessageCount = {	
-		def messageInfo
-		def fmessage = params.message ?: ''
-		if(fmessage)	{ 
-			messageInfo = fmessageInfoService.getMessageInfos(fmessage)
-			def messageCount = messageInfo.partCount > 1 ? message(code: 'flash.message.fmessages.many', args: [messageInfo.partCount]): message(code: 'flash.message.fmessages.many.one')
-			render text: message(code: 'fmessage.remaining.characters.text', args: [messageInfo.remaining, messageCount]), contentType:'text/plain'
-		} else {
-			render text: message(code: 'fmessage.remaining.characters.text.all'), contentType:'text/plain'
-		}
-		
+	def sendMessageCount = {
+		render fmessageInfoService.getMessageInfos(params.message) as JSON
 	}
 
 //> PRIVATE HELPERS
@@ -352,8 +344,10 @@ class MessageController {
 	}
 
 	private def getShowModel(messageInstanceList) {
-		def messageInstance = params.messageId? Fmessage.get(params.messageId):
-				messageInstanceList? messageInstanceList[0]: null
+		def messageInstance = params.messageId? Fmessage.get(params.messageId): null
+		messageInstance?.read = true
+		messageInstance?.save()
+
 		def checkedMessageCount = getCheckedMessageList().size()
 		[messageInstance: messageInstance,
 				checkedMessageCount: checkedMessageCount,
@@ -365,7 +359,7 @@ class MessageController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['message-select']?: [params.messageId]
+		def checked = params['message-select'] ?: [params.messageId]
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}

@@ -18,21 +18,73 @@
 		<fsms:render template="/poll/responses"/>
 		<fsms:render template="/poll/sorting"/>
 		<fsms:render template="/poll/replies"/>
-		<fsms:render template="/poll/message"/>
+		<div id="tabs-5">
+			<fsms:render template="/message/compose"/>
+		</div>
 		<div id="tabs-6">
-			<fsms:render template="/quickMessage/select_recipients" model= "['contactList' : contactList,
+			<fsms:render template="/message/select_recipients" model= "['contactList' : contactList,
 				                                                           'groupList': groupList,
 				                                                           'nonExistingRecipients': [],
 				                                                           'recipients': []]"/>
 		</div>
 		<fsms:render template="/poll/confirm"/>
+		<fsms:render template="/poll/save"/>
 	</g:formRemote>
 </div>
 
 <r:script>
+	var autoUpdate = true;
+	$("#messageText").live("keyup", updateSmsCharacterCount);
+	
+	function updateSendMessage() {
+		// TODO check why these are being bound every time - surely could just bind when the page is loaded.
+		$("#messageText").live("keypress", autoUpdateOff);
+		$(".choices").live("keypress", autoUpdateOn);
+		$("#question").live("keypress", autoUpdateOn);
+		
+		if(autoUpdate) {
+			var questionText = $("#question").val();
+			if (questionText.substring(questionText.length - 1) != '?') questionText = questionText + '?';
+			questionText = questionText + '\n';
+			var keywordText = '';
+			var replyText = '';
+			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
+				keywordText = $("#poll-keyword").val().toUpperCase();
+				if($("input[name='pollType']:checked").val() == "standard") {
+					replyText = i18n("poll.reply.text", keywordText, keywordText);
+				} else {
+					replyText = 'Reply'; // FIXME i18n
+					$(".choices").each(function() {
+						if (replyText != 'Reply' && this.value) replyText = replyText + ','; // FIXME i18n
+						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, this.name.substring(6,7), this.value);
+					});
+					replyText = replyText + '.';
+				}
+			} else if ($("input[name='pollType']:checked").val() == "standard") {
+				replyText = i18n("poll.reply.text2");
+			} else {
+				replyText = 'Please answer '; // FIXME i18n
+				$(".choices").each(function() {
+					if (replyText!='Please answer ' && this.value) replyText += i18n("poll.reply.text3");
+					if (this.value) replyText += "'" + this.value + "'";
+				});
+			} 
+			var sendMessage = questionText + replyText;
+			$("#messageText").val(sendMessage);
+			$("#messageText").keyup();
+		}
+	}
+	
+	function autoUpdateOff() {
+		autoUpdate = false;
+	}
+	
+	function autoUpdateOn() {
+		autoUpdate = true;
+	}
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit}">
-			$("#autoReplyText").trigger("keyup");
+			$("#messageText").trigger("keyup");
 		</g:if>
 		
 		highlightPollResponses();

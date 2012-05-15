@@ -25,6 +25,8 @@
         <div id="main">
 			<fsms:render template="menu"/>
 			<div id="content">
+				<g:form controller="${params.controller}"
+						params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
 				<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
 					<fsms:render template="/search/header"/>
 					<fsms:render template="/message/message_list"/>
@@ -32,6 +34,7 @@
 					<fsms:render template="/message/footer"/>
 				</div>
 				<fsms:render template="/message/message_details"/>
+			</g:form>
 			</div>
 		</div>
 		<r:layoutResources/>

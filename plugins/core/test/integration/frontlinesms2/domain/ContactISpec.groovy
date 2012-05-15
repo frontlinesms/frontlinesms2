@@ -69,7 +69,7 @@ class ContactISpec extends grails.plugin.spock.IntegrationSpec {
 				c.save(failOnError:true)
 			}
 		when:
-			def matches = Contact.findAllWithCustomFields(fields).list()
+			def matches = Contact.findByCustomFields(fields)
 		then:
 			matches*.name == contacts
 		where:

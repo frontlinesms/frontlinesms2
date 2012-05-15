@@ -82,10 +82,9 @@ class ContactController {
 		contactInstance.properties = params
 		if(attemptSave(contactInstance)) {
 			parseContactFields(contactInstance)
-			if(attemptSave(contactInstance))
-				redirect(action:'show', params:[contactId:contactInstance.id])
+			attemptSave(contactInstance)
 		}
-		redirect(action:'show')
+		redirect(action:'show', params:[contactId:contactInstance.id])
 	}
 	
 	def update = {
@@ -109,20 +108,19 @@ class ContactController {
 	}
 	
 	def confirmDelete = {
-		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 		def contactInstanceList = []
-		contactIds.each { id ->
+		getCheckedContactIds().each { id ->
 			withContact id, { contactInstance ->
 				contactInstanceList << contactInstance
 			}
 		}
+		println "conbtact List: $contactInstanceList"
 		[contactInstanceList: contactInstanceList,
-				contactInstanceTotal: contactInstanceList.count()]
+				contactInstanceTotal: contactInstanceList.size()]
 	}
 	
 	def delete = {
-		def contactIds = params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
-		contactIds.each { id ->
+		getCheckedContactIds().each { id ->
 			withContact id, { contactInstance ->
 				Contact.get(contactInstance.id).delete()
 			}
@@ -162,12 +160,13 @@ class ContactController {
 //> PRIVATE HELPER METHODS
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
-		if (contactInstance.save(flush:true)) {
+		if (contactInstance.save()) {
 			flash.message = message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
 		} else if (existingContact && existingContact != contactInstance) {
+			// TODO generate link with g:link
 			flash.message = "${message(code: 'contact.exists.warn')}  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>${message(code: 'contact.view.duplicate')}</g:link>"
 			return false
 		}
@@ -185,18 +184,20 @@ class ContactController {
 	}
 	
 	def multipleContactGroupList = {
-		def contactIds = params.checkedContactList.tokenize(',').unique()
-		def sharedGroupInstanceList = []
 		def groupInstanceList = []
-		contactIds.each { id ->
+		getCheckedContactIds().each { id ->
 			withContact id, { contactInstance ->
 				groupInstanceList << contactInstance.getGroups()
 			}
 		}
-		sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
+		def sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
 		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
 		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
 			nonSharedGroupInstanceList: nonSharedGroupInstanceList])
+	}
+
+	private def getCheckedContactIds() {
+		params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
 	}
 	
 	private def getSharedGroupList(Collection groupList) {
