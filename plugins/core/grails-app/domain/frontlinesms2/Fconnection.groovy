@@ -18,8 +18,8 @@ class Fconnection {
 			IntelliSmsFconnection]
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
-		if(fields instanceof Map) fields = fields.allValues
-		return fields.findAll { field -> !clazz.constraints[field].nullable }
+		if(fields instanceof Map) return fields.getAllValues()?.findAll { field -> !clazz.constraints[field].blank }
+		else return fields.findAll { field -> !clazz.constraints[field].nullable }
 	}
 
 	static mapping = {

@@ -13,7 +13,7 @@ class ConnectionPage extends geb.Page {
 		lstConnections(wait:true) { $('#connections') }
 		selectedConnection(required:false) { lstConnections.find(".selected") }
 		btnCreateRoute(wait:true) {  $("a", text:'Create route') }
-		btnTestRoute(wait:10) {  $('#connections .selected a.test') }
+		btnTestRoute(required:false) {  $('#connections .selected a.test') }
 		txtStatus { $('.connection-status').text() }
 		connectionErrors { $('.errors').text()}
 	}

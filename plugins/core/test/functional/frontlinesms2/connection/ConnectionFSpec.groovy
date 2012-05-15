@@ -33,16 +33,21 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			btnCreateRoute.displayed
 	}
 	
-	def 'There is a Connected label shown for working connection'() {
+	def 'Send test message button for particular connection appears when that connection is selected and started'() {
+		given:
+			def testConnection = createTestSmsConnection()
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
-			createTestSmsConnection()
 			to ConnectionPage
 		then:
-			txtStatus == "Not connected"
+			$('#connections .selected .test').isEmpty()
 		when:
+			waitFor{ $("#connections .selected .route") }
 			btnCreateRoute.click()
 		then:
 			waitFor(10) { txtStatus == "Connected" }
+			waitFor(5) {$('#connections .selected .test').@text.trim() == "Send test message"}
+			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
 	}
 	
 	def 'The first connection in the connection list page is selected'() {
@@ -63,21 +68,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			$('title').text() == "Settings > Connections > MTN Dongle"
 	}
 	
-	def 'Send test message button for particular connection appears when that connection is selected and started'() {
-		given:
-			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
-		when:
-			to ConnectionPage
-		then:
-			$('#connections .selected .test').isEmpty()
-		when:
-			waitFor{ $("#connections .selected .route") }
-			btnCreateRoute.click()
-		then:
-			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
-			$('#notifications').text()?.contains("Created route")
-	}
 
 	def 'creating a new fconnection causes a refresh of the connections list'(){
 		given:
@@ -88,7 +78,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor(5) { at ConnectionDialog }
 		when:
-			connectionForm.connectionType = "smslib"
 			nextPageButton.click()
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "COM2"
@@ -111,7 +100,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 			waitFor { at ConnectionDialog }
-			connectionForm.connectionType = "smslib"
 			nextPageButton.click()
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "port"
@@ -135,7 +123,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor(5) { at ConnectionDialog }
 		when:
-			connectionForm.connectionType = "intellisms"
+			$("#connectionType").value("intellisms").jquery.trigger("click")
+
 			nextPageButton.click()
 			connectionForm.intellismssend = true
 			connectionForm.intellismsname = "New IntelliSMS Connection"
