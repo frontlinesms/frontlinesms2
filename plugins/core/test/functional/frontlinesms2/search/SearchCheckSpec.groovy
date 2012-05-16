@@ -65,6 +65,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageSearchResultHi
+			messagesSelect[1].click()
 			messagesSelect[0].click()
 		then:
 			waitFor { checkedMessageCount == 3 }

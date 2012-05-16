@@ -75,7 +75,7 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId="
+			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId=&flashMessage=default.archived.message"
 	}
 
 	def "archiving a message IN SEARCH should redirect to the calling action without a messageId"() {
@@ -86,6 +86,6 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/search/result?searchId=1"
+			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived.message"
 	}
 }

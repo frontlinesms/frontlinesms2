@@ -12,7 +12,7 @@
 			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel"/></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="ui-button ui-button-text-only ui-widget ui-state-default ui-corner-all" id="save-new" action="saveContact" value="${g.message(code:'contact.save')}"/>
+			<g:actionSubmit class="btn" action="saveContact" value="${g.message(code:'contact.save')}"/>
 			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="contact.cancel"/></g:link>
 		</g:else>
 		

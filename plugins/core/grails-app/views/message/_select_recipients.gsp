@@ -6,7 +6,7 @@
 		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add"/></g:link>
 	</div>
 	<div id="recipients-list">
-		<ul>
+		<ul id="groups">
 			<g:each in="${groupList}" var="entry" status='i'>
 				<li class="group">
 					<g:checkBox id="groups-${i}" name="groups" value="${entry.key}" onclick="selectMembers('${entry.key}', '${entry.value.name}', ${entry.value.addresses as JSON})" checked="${false}"/>
@@ -23,7 +23,7 @@
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact" status="i">
 				<li class="contact">
-					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" checked="${recipients.contains(contact.mobile)}"/>
+					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" onclick="setContact('${contact.mobile}')" checked="${recipients.contains(contact.mobile)}"/>
 					<label for="addresses-${i}">${contact.name ?: contact.mobile}</label>
 				</li>
 				<li class="contact">
@@ -56,17 +56,16 @@
 		updateMessageCount();
 	}
 
-	$(".contact input[type='checkbox']").bind('click', function() {
+	function setContact(contactNumber) {
 		if (!($(this).is(":checked"))) {
-			var contactNumber = this.value
 			$.each(groupAndMembers, function(key, value) {
-				var partOfGroup = jQuery.inArray(contactNumber, groupAndMembers[key]) > -1 ? true : false 
+				var partOfGroup = $.inArray(contactNumber, groupAndMembers[key]) > -1 ? true : false;
 				if (partOfGroup)
 					findInputWithValue(key).attr('checked', false);
 			});
 		}
 		updateMessageCount();
-	});
+	}
 
 	function setValueForCheckBox(value, checked) {
 		var checkBox = $('#contacts input[value=' + "'" + value + "'" + ']');
@@ -114,7 +113,7 @@
 			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress;
 			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 			if(checkbox !== address) {
-				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' checked='true' name='addresses' value=" + sanitizedAddress + ">" + sanitizedAddress + "</input></li>")
+				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' onclick='setContact(" + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
 				updateMessageCount();
 			}
 			$('#address').val("");
