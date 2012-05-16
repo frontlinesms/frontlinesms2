@@ -178,7 +178,7 @@ class ContactController {
 	}
 
 	private def getCheckedContacts() {
-		Contact.getAll(getCheckedContactIds())
+		Contact.getAll(getCheckedContactIds().flatten())
 	}
 
 	private def getCheckedContactIds() {
