@@ -31,6 +31,6 @@ $(function() {
 	<div id="trafficGraph"></div>
 	<g:form action="show" method="post" name="trafficForm">
 		<fsms:render template="/status/filters"/>
-		<g:actionSubmit id="update-chart" value="${g.message(code:'traffic.update.chart')}" action="show"/>
+		<g:actionSubmit class="btn" id="update-chart" value="${g.message(code:'traffic.update.chart')}" action="show"/>
 	</g:form>
 </div>
