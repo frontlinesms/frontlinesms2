@@ -2,6 +2,7 @@ package frontlinesms2
 
 class MagicWandService {
 	static transactional = true	
+	static regex = /[$][{]*[a-z_]*[}]/
 	def fields = [
 	    'contact_name' : ['quickCompose', 'reply', 'reply_all'],
 	    'contact_number' : ['quickCompose', 'poll', 'auto_forward'],
@@ -24,17 +25,20 @@ class MagicWandService {
 	}
 
 	private getReplacement(expression, dispatch) {
-	    expression == "\${contact_name}" ? "TestPerson" : "+254321"
+		if (expression == "\${contact_name}")
+			return Contact.findByMobileLike(dispatch.dst)?: dispatch.dst
+		if (expression == "\${contact_number}")
+			return dispatch.dst
+		return ""
 	}
 
-	private String replaceExpressions(dispatch) {
+	String replaceExpressions(Dispatch dispatch) {
 	    def messageBody = dispatch.message.text
-	    regex = /[$][{]*[a-z_]*[}]/
 	    matches = messageBody.findAll(regex)
 	    matches.each {
 	        messageBody = messageBody.replaceFirst(regex, getReplacement(it, dispatch))
 	    }
-	    return messageBody
+	    messageBody
 	}
 
 }
