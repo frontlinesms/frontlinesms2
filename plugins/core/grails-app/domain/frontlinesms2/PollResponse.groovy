@@ -17,7 +17,7 @@ class PollResponse {
 	
 	void addToMessages(Fmessage message) {
 		if(message.inbound) {
-			this.poll.responses.each {
+			this.poll.responses?.each {
 				it.removeFromMessages(message)
 			}
 			this.messages.add(message)

@@ -46,7 +46,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			btnCreateRoute.click()
 		then:
 			waitFor(10) { txtStatus == "Connected" }
-			waitFor(5) {$('#connections .selected .test').@text.trim() == "Send test message"}
+			waitFor { btnTestRoute }.@text.trim() == "Send test message"
 			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
 	}
 	

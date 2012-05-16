@@ -244,7 +244,7 @@ function messageResponseClick(messageType) {
 			src = $("#message-src").val();
 		}
 	} else if(messageType == 'Forward') {
-		var text = $("#single-message #message-detail-content p").text();
+		var text = $("#single-message #message-detail-content p").text().trim();
 	}
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	

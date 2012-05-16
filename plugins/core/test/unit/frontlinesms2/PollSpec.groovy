@@ -6,6 +6,7 @@ import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
 
 @TestFor(Poll)
+@Mock(PollResponse)
 @Build(Fmessage)
 class PollSpec extends Specification {
 	/** some responses that should pass validation */
@@ -13,8 +14,11 @@ class PollSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	
 	def setup() {
-		Poll.metaClass.static.withCriteria = { null } // this allows validation of 'title' field to pass
-		Poll.metaClass.static.findByTitleIlike = { null }
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
+		PollResponse.metaClass.removeFromMessages = { m ->
+			delegate.messages.remove(m)
+			m.messageOwner = null
+		}
 	}
 
 	@Unroll
@@ -50,7 +54,7 @@ class PollSpec extends Specification {
 		when:
 			poll.processKeyword(m, exactMatch)
 		then:
-			1 * responses[response].addToMessages(_)
+			responses[response].messages == [m]
 			!poll.messages?.contains(m)
 		where:
 			messageText            | exactMatch | validResponseCount | response
@@ -105,7 +109,7 @@ class PollSpec extends Specification {
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
 		def responses = [unknown:PollResponse.createUnknown()]
-		p.responses = [responses.unknown]
+		p.addToResponses(responses.unknown)
 		for(i in 0..<validResponseCount) {
 			def key = ('A'..'C')[i]
 			def r = new PollResponse(key:key, value:"mock-response-$i")

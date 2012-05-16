@@ -5,7 +5,7 @@
 		<g:layoutHead/>
 		<r:require module="search"/>
 		<fsms:render template="/includes"/>
-		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send, smallpopup.messages.export.title, wizard.quickmessage.title, smallpopup.export, popup.ok, fmessage.selected.many"/>
+		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send, smallpopup.messages.export.title, wizard.quickmessage.title, smallpopup.export, popup.ok, many.selected, message.character.count"/>
 		<r:script>
 			$(function() {  
 			   disablePaginationControls();
