@@ -8,6 +8,15 @@ import spock.lang.*
 class AutoreplySpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	
+	def setup() {
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
+		Autoreply.metaClass.addToMessages = { m ->
+			if(delegate.messages) delegate.messages << m
+			else delegate.messages = [m]
+			return delegate
+		}
+	}
+
 	@Unroll
 	def "Test constraints"() {
 		when:

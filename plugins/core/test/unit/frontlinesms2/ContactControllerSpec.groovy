@@ -6,6 +6,14 @@ import grails.plugin.spock.*
 @TestFor(ContactController)
 @Mock([Contact, Group, GroupMembership])
 class ContactControllerSpec extends Specification {
+	def setup() {
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
+		Contact.metaClass.static.getAll = { ids ->
+			return Contact.findAll().find { it.id in ids } }
+		Group.metaClass.static.getAll = { ids ->
+			return Group.findAll().find { it.id in ids } }
+	}
+
 	def "should render model containing shared and unshared groups"() {
 		setup:
 			def alice = new Contact(name:"Alice", mobile:"12345").save()

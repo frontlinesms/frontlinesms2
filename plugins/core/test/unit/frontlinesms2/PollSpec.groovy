@@ -14,8 +14,7 @@ class PollSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	
 	def setup() {
-		Poll.metaClass.static.withCriteria = { null } // this allows validation of 'title' field to pass
-		Poll.metaClass.static.findByTitleIlike = { null }
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
 		PollResponse.metaClass.removeFromMessages = { m ->
 			delegate.messages.remove(m)
 			m.messageOwner = null

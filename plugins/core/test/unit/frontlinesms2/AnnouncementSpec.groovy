@@ -8,6 +8,15 @@ import grails.buildtestdata.mixin.Build
 @Mock([Fmessage])
 @Build(Fmessage)
 class AnnouncementSpec extends Specification {
+	def setup() {
+		// Not sure why this is necessary with Test Mixins, but it seems to be:
+		Announcement.metaClass.addToMessages = { m ->
+			if(!delegate.messages) delegate.messages = [m]
+			else delegate.messages.add(m)
+			return delegate
+		}
+	}
+
 	def "Announcement must have a name and a sent message"() {
 		when:
 			def a = new Announcement()
@@ -22,20 +31,21 @@ class AnnouncementSpec extends Specification {
 		then:
 			a.validate()
 	}
-/* this test breaks something in spock	
+/* this test breaks something in spock	*/
 	def "Announcement can have one or many messages"() {
 		when:
-			def a = new Announcement(name:'test announcement', messages: [new Fmessage(date: new Date(), inbound: true, src:'12345')])
+			def a = new Announcement(name:'test announcement')
+					.addToMessages(Fmessage.build())
 		then:
 			a.validate()
 		when:
-			a.addToMessages(new Fmessage(date: new Date(), inbound: true, src:'12345'))
+			a.addToMessages(Fmessage.build())
 		then:
 			a.validate()
 		when:
-			a.addToMessages(new Fmessage(date: new Date(), inbound: true, src:'12345'))
+			a.addToMessages(Fmessage.build())
 		then:
 			a.validate()
-	} */
+	} /**/
 }
 
