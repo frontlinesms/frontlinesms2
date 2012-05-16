@@ -57,6 +57,8 @@ class MessageController {
 
 	def inbox = {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
+		// check for flash message in parameters if there is none in flash.message
+		flash.message = flash.message?:params.flashMessage
 		render view:'../message/standard',
 				model:[messageInstanceList: messageInstanceList.list(params),
 						messageSection:'inbox',
@@ -181,11 +183,11 @@ class MessageController {
 				TrashService.sendToTrash(messageInstance)
 			}
 		}
-		flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
+		params.flashMessage = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
 		if (params.messageSection == 'result')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
 		else
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId, flashMessage: params.flashMessage])
 	}
 	
 	def archive = {
@@ -201,11 +203,11 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
+		params.flashMessage = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
 		if(params.messageSection == 'result') {
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId, flashMessage: params.flashMessage])
 		} else {
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId, searchId: params.searchId])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId, searchId: params.searchId, flashMessage: params.flashMessage])
 		}
 	}
 	
@@ -222,11 +224,11 @@ class MessageController {
 				}
 			}
 		}
-		flash.message = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
+		params.flashMessage = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
 		if(params.controller == 'search')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId, flashMessage:params.flashMessage])
 		else
-			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
+			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId, flashMessage:params.flashMessage])
 	}
 
 	def move() {
