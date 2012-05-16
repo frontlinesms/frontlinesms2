@@ -44,7 +44,7 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			$('a', text:'Failed').click()
 		then:	
 			waitFor { $("#message-list tr").size() == 2 }
-			getColumnText('message-list', 3) == ['dst2']
+			getColumnText('message-list', 3) == ['To: dst2']
 		when:
 			$('a', text:'All').click()
 		then:	

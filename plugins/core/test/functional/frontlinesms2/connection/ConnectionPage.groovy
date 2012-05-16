@@ -15,6 +15,6 @@ class ConnectionPage extends geb.Page {
 		btnCreateRoute(wait:true) {  $("a", text:'Create route') }
 		btnTestRoute(required:false) {  $('#connections .selected a.test') }
 		txtStatus { $('.connection-status').text() }
-		connectionErrors { $('.errors').text()}
+		connectionErrors { $('.errors').text() }
 	}
 }

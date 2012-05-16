@@ -29,7 +29,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		expect:
-			m.refresh().displayName == 'bob'
+			m.refresh().displayName == 'To: bob'
 	}
 
 	def 'outgoing display name should be dst if only one recipient but no matching contact'() {
@@ -38,7 +38,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		expect:
-			m.refresh().displayName == '123'
+			m.refresh().displayName == 'To: 123'
 	}
 
 	def 'if multiple recipients display name should be the count of dispatches whether contacts exist or not'() {
@@ -51,7 +51,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 					.addToDispatches(dst:'789', status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		expect:
-			m.refresh().displayName == 3
+			m.refresh().displayName == 'To 3 recipients'
 	}
 
 	def 'If any of a Fmessages dispatches has failed its status is HASFAILED'() {
@@ -220,7 +220,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 					new Dispatch(dst:'1234', status:DispatchStatus.SENT, dateSent:TEST_DATE))
 		then:
 			messageFromAlice.refresh().displayName == 'Alice'
-			outBoundMessageToAlice.refresh().displayName == 'Alice'
+			outBoundMessageToAlice.refresh().displayName == 'To: Alice'
 	}
 	
 	def "cannot archive a message that has an owner without also archiving the owner" () {

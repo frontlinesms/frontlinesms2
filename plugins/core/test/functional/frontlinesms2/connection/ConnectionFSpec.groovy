@@ -68,7 +68,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			$('title').text() == "Settings > Connections > MTN Dongle"
 	}
 	
-
 	def 'creating a new fconnection causes a refresh of the connections list'(){
 		given:
 			createTestEmailConnection()
@@ -76,7 +75,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor(5) { at ConnectionDialog }
+			waitFor(15) { at ConnectionDialog }
 		when:
 			nextPageButton.click()
 			connectionForm.smslibname = "name"

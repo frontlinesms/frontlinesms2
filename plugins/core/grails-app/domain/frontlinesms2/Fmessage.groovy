@@ -5,6 +5,8 @@ import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
+	def messageSource
+
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
 	
@@ -183,8 +185,8 @@ class Fmessage {
 
 	def getDisplayName() {
 		if(inbound) inboundContactName?: src
-		else if(dispatches.size() == 1) outboundContactName?: (dispatches as List)[0].dst
-		else dispatches.size() // TODO this should be i18n'd I think...
+		else if(dispatches.size() == 1) messageSource.getMessage('fmessage.to', [outboundContactName?: (dispatches as List)[0].dst] as Object[], null)
+		else messageSource.getMessage('fmessage.to.multiple', [dispatches.size()] as Object[], null)
 	}
 
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
