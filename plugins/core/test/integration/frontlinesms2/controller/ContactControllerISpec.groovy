@@ -188,3 +188,4 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			stats.outboundMessagesCount == 0
 	}
 }
+

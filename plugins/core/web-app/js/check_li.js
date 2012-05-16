@@ -77,7 +77,7 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 		$('#single-'+itemTypeString).replaceWith(newPane);
 		if (itemTypeString == 'contact') {
 			document.getElementById('new-field-dropdown-button').style.width="250px"; //fix width for custom field dropdown
-			applyJavascript();
+			applyContactPaneJavascriptEnhancements(newPane);
 		}
 		if (itemTypeString == 'message') {
 			refreshMessageCount();
@@ -89,9 +89,10 @@ function updateMultipleCheckedDetails(itemTypeString) {
 	showMultipleDetailsPanel(itemTypeString);
 	if (itemTypeString == 'contact') {
 		$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
-			$('#multiple-'+itemTypeString+'s').replaceWith($(data));
+			var pane = $(data);
+			$('#multiple-'+itemTypeString+'s').replaceWith(pane);
 			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
-			applyJavascript();
+			applyContactPaneJavascriptEnhancements(pane);
 		});
 	} else {	
 		// update counter display
@@ -99,11 +100,12 @@ function updateMultipleCheckedDetails(itemTypeString) {
 	}
 }
 
-function applyJavascript() {
-	$("#group-list li a.remove-group").click(removeGroupClickAction);
-	$("#group-dropdown").change(addGroupClickAction);
-	$("#multi-group-dropdown").change(addGroupClickAction);
-	$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
+function applyContactPaneJavascriptEnhancements(pane) {-
+	pane.find("#group-list li a.remove-group").click(removeGroupClickAction);
+	pane.find("#group-dropdown").change(addGroupClickAction);
+	pane.find("#multi-group-dropdown").change(addGroupClickAction);
+	pane.find("#multi-group-list li a.remove-group").click(removeGroupClickAction);
+	pane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
 }
 
 function checkAll(itemTypeString) {
