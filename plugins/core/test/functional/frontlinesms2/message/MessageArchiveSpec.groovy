@@ -18,7 +18,6 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			$("a", text:"hi Bob").click()
 			waitFor { $("#message-detail-content p").text() == "hi Bob" }
 			archiveBtn.click()
-			waitFor { $(".flash").text().contains("archived") }
 			to PageArchive
 		then:
 	        $("a", text:"hi Bob").displayed
@@ -42,7 +41,6 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			$("a", text:"hi Mary").click()
 			waitFor { $("#message-detail-content p").text() == "hi Mary" }
 			archiveBtn.click()
-			waitFor { $(".flash").text().contains("archived") }
 			to PageArchive
 			$("#sent").click()
 		then:
