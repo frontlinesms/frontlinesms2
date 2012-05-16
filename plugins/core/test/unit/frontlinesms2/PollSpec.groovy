@@ -104,13 +104,13 @@ class PollSpec extends Specification {
 
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
-		def responses = [unknown:new PollResponse(Poll.KEY_UNKNOWN, Poll.KEY_UNKNOWN)]
+		def responses = [unknown:PollResponse.createUnknown()]
 		p.responses = [responses.unknown]
 		for(i in 0..<validResponseCount) {
 			def key = ('A'..'C')[i]
-			def r = new PollResponse("mock-response-$i", key)
+			def r = new PollResponse(key:key, value:"mock-response-$i")
 			responses[key] = r
-			p.responses << r
+			p.addToResponses(r)
 		}
 		return [poll:p, responses:responses]
 	}
