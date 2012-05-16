@@ -178,11 +178,14 @@ class ContactController {
 	}
 
 	private def getCheckedContacts() {
-		Contact.getAll(getCheckedContactIds().flatten())
+		Contact.getAll(getCheckedContactIds())
 	}
 
 	private def getCheckedContactIds() {
-		params['contact-select']?: params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
+		def ids = params['contact-select']?:
+				params.checkedContactList? params.checkedContactList.tokenize(',').unique():
+				[params.contactId]
+		return ids.flatten().unique()
 	}
 
 	private def parseContactFields(Contact contactInstance) {
