@@ -172,14 +172,9 @@ class ContactController {
 	}
 	
 	def multipleContactGroupList = {
-		def groupInstanceList = []
-		getCheckedContacts().each { c ->
-			groupInstanceList << c.groups
-		}
-		def sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
-		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
-		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList: sharedGroupInstanceList,
-				nonSharedGroupInstanceList: nonSharedGroupInstanceList])
+		def groups = Group.getGroupLists(getCheckedContactIds())
+		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList:groups.shared,
+				nonSharedGroupInstanceList:groups.nonShared])
 	}
 
 	private def getCheckedContacts() {
@@ -188,18 +183,6 @@ class ContactController {
 
 	private def getCheckedContactIds() {
 		params['contact-select']?: params.checkedContactList ? params.checkedContactList.tokenize(',').unique() : [params.contactId]
-	}
-	
-	private def getSharedGroupList(Collection groupList) {
-		def groupIds = groupList*.id
-		def sharedGroupIds = groupIds?.inject(groupIds[0]){ acc, current -> acc.intersect(current) }
-		Group.getAll(sharedGroupIds)
-	}
-	
-	private def getNonSharedGroupList(Collection groupList1, Collection groupList2) {
-		def groupIdList1 = groupList1*.id
-		def groupIdList2 = groupList2*.id
-		return Group.getAll(groupIdList1 - groupIdList2)
 	}
 
 	private def parseContactFields(Contact contactInstance) {

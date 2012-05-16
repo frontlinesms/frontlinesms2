@@ -30,6 +30,33 @@ class Group {
 		(getMembers()*.mobile) - [null, '']
 	}
 
+	static def getGroupLists(def contactIds) {
+		// TODO rewrite this as a beautiful HQL query or criteria
+		def getSharedGroupList = { Collection groupList ->
+			def groupIds = groupList*.id
+			def sharedGroupIds = groupIds?.inject(groupIds[0]){ acc, current -> acc.intersect(current) }
+			Group.getAll(sharedGroupIds)
+		}
+
+		def getNonSharedGroupList = { Collection groupList1, Collection groupList2 ->
+			def groupIdList1 = groupList1*.id
+			def groupIdList2 = groupList2*.id
+			return Group.getAll(groupIdList1 - groupIdList2)
+		}
+
+		def groupInstanceList = []
+		Contact.getAll(contactIds).each { c ->
+			println "Contact: $c.name"
+			println "His groups: ${c.groups*.id}"
+			groupInstanceList << c.groups
+		}
+		println "groupInstanceList: $groupInstanceList"
+		def sharedGroupInstanceList = getSharedGroupList(groupInstanceList)
+		def nonSharedGroupInstanceList = getNonSharedGroupList(Group.findAll(), sharedGroupInstanceList)
+
+		return [shared:sharedGroupInstanceList, nonShared:nonSharedGroupInstanceList]
+	}
+
 	static HashMap<String, List<String>> getGroupDetails() {
 		Group.list().collectEntries { ["group-$it.id".toString(), [name:it.name,addresses:it.addresses]] }
 	}
