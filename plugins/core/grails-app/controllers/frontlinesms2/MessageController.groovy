@@ -46,6 +46,7 @@ class MessageController {
 
 	def show = {
 		def messageInstance = Fmessage.get(params.messageId)
+		println "message.show(): action is $params?.action"
 		messageInstance.read = true
 		messageInstance.save()
 		def model = [messageInstance: messageInstance,
@@ -203,9 +204,9 @@ class MessageController {
 		}
 		flash.message = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
 		if(params.messageSection == 'result') {
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId])
+			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId])
 		} else {
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, messageId: params.messageId, searchId: params.searchId])
+			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId])
 		}
 	}
 	
