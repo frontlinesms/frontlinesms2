@@ -5,6 +5,7 @@ import grails.test.mixin.*
 
 import org.apache.camel.Exchange
 import org.apache.camel.CamelContext
+import org.apache.camel.Message
 import org.apache.camel.impl.DefaultExchange
 
 import frontlinesms2.*
@@ -12,10 +13,6 @@ import frontlinesms2.*
 @TestFor(MessageStorageService)
 @Mock(Fmessage)
 class MessageStorageServiceSpec extends Specification {
-	def setup() {
-		Fmessage.metaClass.static.withSession = { Closure c -> }
-	}
-
 	def "it's a processor"() {
 		expect:
 			service instanceof org.apache.camel.Processor
@@ -25,17 +22,17 @@ class MessageStorageServiceSpec extends Specification {
 		given:
 			def m = new Fmessage(src:"12345", inbound:true, date:new Date())
 		when:
-			serviceprocess(createTestExchange(m))
+			service.process(createTestExchange(m))
 		then:
 			Fmessage.findAll() == [m]
 	}
 
 	def createTestExchange(def fmessage) {
 		CamelContext context = Mock(CamelContext)
-		Exchange exchange = new DefaultExchange(context)
-		org.apache.camel.Message message = exchange.in
-		message.setBody(fmessage);
-		return exchange;
+		def exchange = new DefaultExchange(context)
+		def message = exchange.in
+		message.setBody(fmessage)
+		return exchange
 	}
 }
 
