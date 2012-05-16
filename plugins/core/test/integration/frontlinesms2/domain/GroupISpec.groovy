@@ -27,4 +27,19 @@ class GroupISpec extends grails.plugin.spock.IntegrationSpec {
 			assert results == [samAnderson, samJones, samTina]
 			assert resultsCount == 3
 	}
+
+	def "should be able to get list of shared and non-shared groups"() {
+		setup:
+			def alice = Contact.build()
+			def bob = Contact.build()
+			def group1 = Group.build()
+			def group2 = Group.build()
+			alice.addToGroup(group1)
+			bob.addToGroup(group1)
+			bob.addToGroup(group2)
+			def contactIds = [alice.id, bob.id]
+		expect:
+			Group.getGroupLists(contactIds) == [shared:[group1], nonShared:[group2]]
+	}
 }
+
