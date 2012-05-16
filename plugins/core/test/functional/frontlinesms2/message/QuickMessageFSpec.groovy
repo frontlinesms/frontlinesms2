@@ -87,8 +87,9 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			$("#recipient-count").text() == "2"
 		when:
 			$("li.manual").find("input", name:"addresses")[0].click()
+			$("nextPage").click()
 		then:
-			waitFor { $("#recipient-count").text() == "1" }
+			waitFor { $("#recipient-count").text() == "1"	 }
 	}
 	
 	def "should send the message to the selected recipients"() {

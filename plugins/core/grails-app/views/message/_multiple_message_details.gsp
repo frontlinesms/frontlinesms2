@@ -44,7 +44,7 @@
 					<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
 				</g:if>
 				<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
-					<g:actionSubmit id="unarchive-msg btn" class="msg-btn" value="${g.message(code:'fmessage.unarchive.many')}" action="unarchive"/>
+					<g:actionSubmit id="unarchive-msg btn" class="msg-btn btn" value="${g.message(code:'fmessage.unarchive.many')}" action="unarchive"/>
 				</g:elseif>
 				<g:if test="${messageSection != 'pending'}">
 					<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>

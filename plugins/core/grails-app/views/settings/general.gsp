@@ -13,7 +13,7 @@
 				<g:form action="selectLocale" method="post" >
 					<div class="langsection">
 						<g:select class="dropdown" name="language" from="${languageList}" value="${languageList.key}" optionKey="key" optionValue="value"/>
-						<input type="submit" value="${message(code: 'default.button.apply.label', default: 'Apply')}" class="button">
+						<input type="submit" value="${message(code: 'default.button.apply.label', default: 'Apply')}" class="button btn">
 					</div>
 				</g:form>
 			</div>

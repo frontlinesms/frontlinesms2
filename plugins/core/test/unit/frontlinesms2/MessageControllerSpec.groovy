@@ -66,4 +66,26 @@ class MessageControllerSpec extends Specification {
 		then:
 			1 * controller.trashService.emptyTrash()
 	}
+
+	def "archiving a message should redirect to the calling action without a messageId"() {
+		given:
+			params.controller = "message"
+			params.messageSection = "inbox"
+			params.messageId = "1"
+		when:
+			controller.archive()
+		then:
+			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId=&flashMessage=default.archived.message"
+	}
+
+	def "archiving a message IN SEARCH should redirect to the calling action without a messageId"() {
+		given:
+			params.controller = "message"
+			params.messageSection = "result"
+			params.searchId = "1"
+		when:
+			controller.archive()
+		then:
+			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived.message"
+	}
 }
