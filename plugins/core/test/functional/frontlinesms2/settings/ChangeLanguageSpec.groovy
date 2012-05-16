@@ -9,8 +9,7 @@ class ChangeLanguageSpec extends SettingsBaseSpec {
 		when:
 			to PageSettings
 		then:
-			println languageList.children('option')
-			languageList.children()*.text() == ['English', 'Kiswahili']
+			languageList.children()*.text() == ['Kiswahili', 'English']
 	}
 
 	def 'Can change language of the application'() {
