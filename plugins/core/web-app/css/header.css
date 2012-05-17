@@ -15,7 +15,9 @@
 
 #logo{
 	position: absolute;
-	margin: 10px 0 0 5%;
+	margin: 5px 0 0 7%;
+	height: 60px;
+    width: 200px;
 }
 
 #notifications{
