@@ -102,15 +102,15 @@ a.tab-link{
 #message-tab {
 	width: 150px;
 }
-#status-tab{
+#status-tab-button{
 	width: 120px;
 }
-#message-tab a.tab-link, #status-tab a.tab-link {
+#message-tab a.tab-link, #status-tab-button a.tab-link {
 	text-align: left;
 	padding-left: 20px;
 	padding-right: 20px;
 }
-#status-tab a.tab-link {
+#status-tab-button a.tab-link {
 	padding-right: 10px;
 }
 #inbox-indicator {

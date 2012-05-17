@@ -15,7 +15,7 @@
             <g:link class="tab-link" url="${[controller:'contact']}" id="tab-contacts"><g:message code="tabs.contacts"/></g:link>
         </li>
     
-        <li id="status-tab" class="tab ${params.controller == 'status' ? 'current' : ''}">
+        <li id="status-tab-button" class="tab ${params.controller == 'status' ? 'current' : ''}">
             <g:link class="tab-link" url="${[controller:'status']}" id="status-tab-link">
                 <g:message code="tabs.status"/>
                 <span id="status-indicator" class="indicator"></span>
