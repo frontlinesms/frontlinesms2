@@ -5,11 +5,11 @@ import frontlinesms2.*
 import spock.lang.*
 
 class ChangeLanguageSpec extends SettingsBaseSpec {
-	def 'language list should be available on the settings page'() {
+	def 'language list should be available on the settings page and should be sorted alphabetically'() {
 		when:
 			to PageSettings
 		then:
-			languageList.children()*.text() == ['Kiswahili', 'English']
+			languageList.children()*.text() == ['English', 'Kiswahili']
 	}
 
 	def 'Can change language of the application'() {

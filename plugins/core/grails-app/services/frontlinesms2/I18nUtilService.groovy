@@ -3,20 +3,20 @@ package frontlinesms2
 class I18nUtilService {
 	def getAllTranslations() {
 		def allTranslations = [:]
-		new  File('grails-app/i18n').eachFileMatch groovy.io.FileType.FILES, ~/messages[_\w\w]*\.properties$/, { file ->
-		def filename = file.name
-		def locale = getLocaleKey(filename)
-		def language = getLanguageName(filename)
-		allTranslations[locale] = language
+		new  File('grails-app/i18n').eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
+			def filename = file.name
+			def locale = getLocaleKey(filename)
+			def language = getLanguageName(filename)
+			allTranslations[locale] = language
 		}
-		allTranslations
-    }
+		return allTranslations.sort { it.value }
+	}
 
-    def getLocaleKey(filename) {
+	def getLocaleKey(filename) {
 		filename - 'properties' - 'messages' - '_' - '.'
 	}
 
-    def getLanguageName(filename) {
+	def getLanguageName(filename) {
 		def f = new File('grails-app/i18n', filename)
 		if(f.exists()) {
 			def lang
@@ -28,5 +28,6 @@ class I18nUtilService {
 			} } catch(EOFException _) {}
 			return lang
 		}
-    }
+	}
 }
+

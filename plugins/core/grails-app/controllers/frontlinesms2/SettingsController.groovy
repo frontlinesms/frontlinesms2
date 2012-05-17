@@ -23,7 +23,7 @@ class SettingsController {
 	}
 	
 	def general = {
-		[languageList : i18nUtilService.allTranslations]
+		[languageList:i18nUtilService.allTranslations]
 	}
 
 	def selectLocale = {
@@ -43,3 +43,4 @@ class SettingsController {
 		}
 	}
 }
+
