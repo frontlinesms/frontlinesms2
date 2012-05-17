@@ -6,6 +6,7 @@
 	background-image: url('../images/logo.png');
 	background-repeat: no-repeat;
 	background-position: left;
+	background-size: contain;
 }
 
 .selected{	
