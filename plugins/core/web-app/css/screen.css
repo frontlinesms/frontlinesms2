@@ -92,10 +92,6 @@ tr.send-failed td:nth-child(6) {
 }
 
 /*Main*/
-#logo {
-      	height: 40px;
-      	width: 36px;
-}
 
 #main{
 	padding: 0;
