@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.converters.*
+import org.quartz.impl.triggers.SimpleTriggerImpl
 
 class MessageController {
 //> CONSTANTS
@@ -228,11 +229,7 @@ class MessageController {
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
-	
-	private def getCheckedMessages() {
-		return Fmessage.getAll(getCheckedMessageList())
-	}
-	
+
 	def move() {
 		def messagesToSend = []
 		def activity = Activity.get(params.ownerId)
@@ -241,16 +238,14 @@ class MessageController {
 			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
 				activity.addToMessages(messageInstance)
-				
 				if(activity.metaClass.hasProperty(null, 'autoreplyText')) {
 					params.addresses = messageInstance.src
 					params.messageText = activity.autoreplyText
 					def outgoingMessage = messageSendService.createOutgoingMessage(params)			
 					messagesToSend << outgoingMessage
 					activity.addToMessages(outgoingMessage)
-					//println "messageSendService():outgoingMessage is $outgoingMessage.dispatches"
 				}
-				activity.save()
+				activity.save(flush:true)
 			} else if (params.ownerId && params.ownerId != 'inbox') {
 				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 			} else {
@@ -262,12 +257,12 @@ class MessageController {
 				}
 			}
 		}
-		Fmessage.withNewSession{ session ->
-			messagesToSend.each { m ->
-				messageSendService.send(m)
-			}
+
+		if(messagesToSend) {
+			def sendTime = new Date()
+			MessageSendJob.schedule(sendTime, [ids:messagesToSend*.id])
 		}
-		
+
 		// FIXME this flash message is codncatenated in a stupid way
 		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), getCheckedMessageList().size() + message(code: 'flash.message.fmessage')])}"
 		render ""
@@ -367,8 +362,14 @@ class MessageController {
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
+	private def getCheckedMessages() {
+		return Fmessage.getAll(getCheckedMessageList())
+	}
+
 	private def getCheckedMessageList() {
-		def checked = params['message-select'] ?: [params.messageId]
+		def checked = params['message-select'] ?:
+				(params.messageId instanceof Number)? [params.messageId]:
+				(params.messageId instanceof String)? params.messageId.tokenize(',') : []
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}
