@@ -228,39 +228,48 @@ class MessageController {
 		else
 			redirect(controller: 'archive', action: params.messageSection, params: [ownerId: params.ownerId])
 	}
-
+	
+	private def getCheckedMessages() {
+		return Fmessage.getAll(getCheckedMessageList())
+	}
+	
 	def move() {
-		def messageIdList = getCheckedMessageList()
-		messageIdList.each { id ->
-			withFmessage id, { messageInstance ->
-				messageInstance.isDeleted = false
-				Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
-				if (params.messageSection == 'activity') {
-					def activity = Activity.get(params.ownerId)
-					activity.addToMessages(messageInstance)
-					activity.save(failOnError:true)
-					if(activity && activity.autoreplyText) {
-						params.addresses = messageInstance.src
-						params.messageText = activity.autoreplyText
-						def outgoingMessage = messageSendService.createOutgoingMessage(params)
-						activity.addToMessages(outgoingMessage)
-						messageSendService.send(outgoingMessage)
-						activity.save()
-					}
-				} else if (params.ownerId) {
-					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
-				} else {
-					messageInstance.with {
-						messageOwner?.removeFromMessages(messageInstance)
-						messageOwner = null
-						messageOwner?.save()
-						save()
-					}
+		def messagesToSend = []
+		def activity = Activity.get(params.ownerId)
+		getCheckedMessages().each { messageInstance ->
+			messageInstance.isDeleted = false
+			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
+			if (params.messageSection == 'activity') {
+				activity.addToMessages(messageInstance)
+				
+				if(activity.metaClass.hasProperty(null, 'autoreplyText')) {
+					params.addresses = messageInstance.src
+					params.messageText = activity.autoreplyText
+					def outgoingMessage = messageSendService.createOutgoingMessage(params)			
+					messagesToSend << outgoingMessage
+					activity.addToMessages(outgoingMessage)
+					//println "messageSendService():outgoingMessage is $outgoingMessage.dispatches"
+				}
+				activity.save()
+			} else if (params.ownerId && params.ownerId != 'inbox') {
+				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
+			} else {
+				messageInstance.with {
+					messageOwner?.removeFromMessages(messageInstance)
+					messageOwner = null
+					messageOwner?.save()
+					save()
 				}
 			}
 		}
-		// FIXME this flash message is concatenated in a stupid way
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
+		Fmessage.withNewSession{ session ->
+			messagesToSend.each { m ->
+				messageSendService.send(m)
+			}
+		}
+		
+		// FIXME this flash message is codncatenated in a stupid way
+		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), getCheckedMessageList().size() + message(code: 'flash.message.fmessage')])}"
 		render ""
 	}
 
