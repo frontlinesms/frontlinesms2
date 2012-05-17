@@ -41,7 +41,7 @@ class AutoreplyControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = name
 			controller.params.keyword = finalKeyword
 			controller.params.messageText = autoreplyText
-			controller.params.format = "html"
+			controller.response.format = 'html'
 			
 		when:
 			def model = controller.save()
