@@ -76,9 +76,9 @@ public class TrayThingy implements Listener {
 	private PopupMenu createPopupMenu() {
 		PopupMenu popup = new PopupMenu();
 			
-		popup.add(new ClickMenuItem("About FrontlineSMS2 alpha XXX") {
+		popup.add(new ClickMenuItem("About FrontlineSMS2 beta") {
 			void click() {
-				JOptionPane.showMessageDialog(null, "FrontlineSMS alpha - thanks for helping us test :-)");
+				JOptionPane.showMessageDialog(null, "FrontlineSMS beta - thanks for helping us test :-)");
 			}});
 
 		popup.add(open = new ClickMenuItem("Open FrontlineSMS") {

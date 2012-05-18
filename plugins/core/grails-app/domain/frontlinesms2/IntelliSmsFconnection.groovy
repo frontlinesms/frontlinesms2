@@ -27,6 +27,10 @@ class IntelliSmsFconnection extends Fconnection {
 	String emailUserName
 	String emailPassword
 
+	static mapping = {
+		password column: 'send_password'
+	}
+
 	static constraints = {
 		send(validator: { val, obj ->
 			if(val) {
