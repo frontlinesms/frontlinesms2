@@ -10,10 +10,12 @@ function categorizeClickAction() {
 		var messagesToChange = $("#message-id").val();
 		var successUrl = "message/" + messageSection + "/" + ownerId + "/show/" + messagesToChange;
 	}
+
+	// TODO replace pointless AJAX with normal <form/>
 	$.ajax({
 		type:'POST',
-		url: url_root + 'message/changeResponse',
-		data: {responseId: responseId, messageIdList: messagesToChange, ownerId: ownerId},
+		url: url_root + 'message/changeResponse', // TODO move this to the poll controller
+		data: {responseId: responseId, messageId: messagesToChange, ownerId: ownerId},
 		success: function(data) { window.location = url_root + successUrl; }
 	});
 }

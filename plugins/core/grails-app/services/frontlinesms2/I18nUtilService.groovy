@@ -1,9 +1,11 @@
 package frontlinesms2
 
 class I18nUtilService {
+	def servletContext
+
 	def getAllTranslations() {
 		def allTranslations = [:]
-		new  File('grails-app/i18n').eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
+		new  File(getRootDirectory()).eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
 			def filename = file.name
 			def locale = getLocaleKey(filename)
 			def language = getLanguageName(filename)
@@ -17,7 +19,7 @@ class I18nUtilService {
 	}
 
 	def getLanguageName(filename) {
-		def f = new File('grails-app/i18n', filename)
+		def f = new File(getRootDirectory(), filename)
 		if(f.exists()) {
 			def lang
 			try { f.eachLine { line ->
@@ -28,6 +30,10 @@ class I18nUtilService {
 			} } catch(EOFException _) {}
 			return lang
 		}
+	}
+
+	private String getRootDirectory() {
+		def fileURL = new File('web-app/WEB-INF/grails-app/i18n').path
 	}
 }
 

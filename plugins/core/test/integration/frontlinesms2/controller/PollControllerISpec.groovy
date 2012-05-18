@@ -6,6 +6,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
 	def setup() {
 		controller = new PollController()
+		controller.params.addresses = '123'
 	}
 
 	def "can save new poll"() {

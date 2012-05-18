@@ -36,10 +36,11 @@ class Poll extends Activity {
 
 //> ACCESSORS
 	def getUnknown() {
-		println "KEYS: ${responses.collect { it.key }}"
 		responses.find { it.key == KEY_UNKNOWN } }
 	
 	Poll addToMessages(Fmessage message) {
+		if(!messages) messages = []
+		messages << message
 		message.messageOwner = this
 		if(message.inbound) {
 			this.responses.each {
@@ -51,12 +52,13 @@ class Poll extends Activity {
 	}
 	
 	Poll removeFromMessages(Fmessage message) {
-		this.messages?.remove(this) // FIXME surely this should say remove(message)?!?!?!
+		this.messages?.remove(message)
 		if(message.inbound) {
 			this.responses.each {
 				it.removeFromMessages(message)
 			}
 		}
+		message.messageOwner = null
 		this
 	}
 	
@@ -73,8 +75,8 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'standard' && !this.responses) {
-			this.addToResponses(new PollResponse(value:'Yes', key:'A'))
-			this.addToResponses(new PollResponse(value:'No', key:'B'))
+			this.addToResponses(value:'Yes', key:'A')
+			this.addToResponses(value:'No', key:'B')
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
 			choices.each { k, v ->
@@ -82,7 +84,7 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-				} else if(v?.trim()) this.addToResponses(new PollResponse(value:v, key:k))
+				} else if(v?.trim()) this.addToResponses(value:v, key:k)
 			}
 		}
 		if(!this.unknown) {
