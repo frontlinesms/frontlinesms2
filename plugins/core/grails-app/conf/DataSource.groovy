@@ -13,7 +13,6 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:h2:mem:devDb;MVCC=TRUE"
         }
     }
@@ -26,7 +25,6 @@ environments {
     }
     production {
         dataSource {
-            dbCreate = "update"
             url = "jdbc:h2:${System.properties.'user.home'}/.frontlinesms2/prodDb;MVCC=TRUE"
             pooled = true
             properties {

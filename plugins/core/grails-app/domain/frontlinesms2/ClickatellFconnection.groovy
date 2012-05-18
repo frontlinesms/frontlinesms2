@@ -16,6 +16,10 @@ class ClickatellFconnection extends Fconnection {
 	String password // FIXME maybe encode this rather than storing plaintext
 	
 	static passwords = ['password']
+
+	static mapping = {
+		password column: 'clickatell_password'
+	}
 	
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
