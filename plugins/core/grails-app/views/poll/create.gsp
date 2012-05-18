@@ -53,9 +53,9 @@
 				if($("input[name='pollType']:checked").val() == "standard") {
 					replyText = i18n("poll.reply.text", keywordText, keywordText);
 				} else {
-					replyText = 'Reply'; // FIXME i18n
+					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
-						if (replyText != 'Reply' && this.value) replyText = replyText + ','; // FIXME i18n
+						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
 						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, this.name.substring(6,7), this.value);
 					});
 					replyText = replyText + '.';
@@ -63,9 +63,9 @@
 			} else if ($("input[name='pollType']:checked").val() == "standard") {
 				replyText = i18n("poll.reply.text2");
 			} else {
-				replyText = 'Please answer '; // FIXME i18n
+				replyText = i18n("poll.reply.text6")+ ' ';
 				$(".choices").each(function() {
-					if (replyText!='Please answer ' && this.value) replyText += i18n("poll.reply.text3");
+					if (replyText!=i18n("poll.reply.text6")+ ' ' && this.value) replyText += ' ' + i18n("poll.reply.text3");
 					if (this.value) replyText += "'" + this.value + "'";
 				});
 			} 

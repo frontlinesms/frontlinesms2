@@ -32,7 +32,8 @@
 				smallpopup.done, smallpopup.create,
 				smallpopup.send, wizard.send, popup.ok,
 				message.character.count, fmessage.showpolldetails,
-				fmessage.hidepolldetails"/>
+				fmessage.hidepolldetails, poll.reply.text5,
+				poll.reply.text6"/>
 		<r:script>
 			$(function() {  
 			   disablePaginationControls();
