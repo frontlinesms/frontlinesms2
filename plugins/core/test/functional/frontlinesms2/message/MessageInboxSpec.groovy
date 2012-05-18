@@ -227,6 +227,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			$("#recipient").text() == "${Contact.findByMobile(message.src).name}"
 	}
 
+	// FIXME FOR THE BELOW FIXME.  IF YOU WILL INSIST ON COMMENTING OUT STUFF LIKE THIS, PLEASE EXPLAIN WHAT IS BROKEN
 	//FIXME
 //	def "should skip recipients tab for reply-all option"() {
 //		given:
@@ -258,18 +259,18 @@ class MessageInboxSpec extends MessageBaseSpec {
 			$("#messages-submenu .selected").text().contains('Inbox')
 	}
 	
-	def "should update message count when new message is received"() {
+	def "should update message count on tab when new message is received"() {
 		given:
 			createInboxTestMessages()
 		when:
 			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
 		then:
-			$("#message-tab-link").text()?.equalsIgnoreCase("Messages\n1")
+			$('#inbox-indicator').text() == '1'
 		when:
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
+			Fmessage.build().save(flush: true, failOnError:true)
 			js.refreshMessageCount()
 		then:
-			waitFor(5) { $("#message-tab-link").text()?.equalsIgnoreCase("Messages\n2") }
+			waitFor(5) { $('#inbox-indicator').text() == '2' }
 	}
 
 	String dateToString(Date date) {

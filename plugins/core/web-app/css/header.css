@@ -1,4 +1,4 @@
-#header{
+#header {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -13,14 +13,14 @@
 	z-index: 11;
 }
 
-#logo{
+#logo {
 	position: absolute;
-	margin: 5px 0 0 7%;
-	height: 60px;
-    width: 200px;
+	margin: 10px 0 0 5%;
+	height: 40px;
+	width: 36px;
 }
 
-#notifications{
+#notifications {
 	width: 50%;
 	position: absolute;
 	top: 0px;
@@ -31,33 +31,33 @@
 	font-weight: bolder;
 	font-size: 115%;
 }
-#notifications div{
+#notifications div {
 	min-height: 21px;
 	padding: 2px 0;
 	border-radius: 2px;
 	box-shadow: 1px 1px 2px grey, -1px 0 2px grey;
 }
-#notifications a{
+#notifications a {
 	text-decoration: underline;
 }
-#notifications .hide-flash{
+#notifications .hide-flash {
 	float: right;
 	text-decoration: none;
 	font-weight: normal;
 	padding-right: 8px;
 	cursor: pointer;
 }
-#notifications .hide-flash:hover{
+#notifications .hide-flash:hover {
 	text-decoration: underline;
 }
 
-#system-nav li, #tab-nav li{
+#system-nav li, #tab-nav li {
 	display: inline-block;
 	padding: 0;
 	margin: 0;
 }
 
-#tabbar{
+#tabbar {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
@@ -67,26 +67,26 @@
 	background-image: url('../images/tabbar.png');
 	z-index: 5;
 }
-#tab-nav{
+#tab-nav {
 	height: 26px;
 	margin: 44px 0 0 17%;
 	padding: 0;
 }
-#tab-nav li.tab{
+#tab-nav li.tab {
 	background-image: url('../images/buttons/tab.png');
 	background-repeat: no-repeat;
 	background-size: 100%;
 	min-width: 110px;
 	z-index: 1;
 }
-#tab-nav li.tab.current{
+#tab-nav li.tab.current {
 	background-image: url('../images/buttons/tab_active.png');
 	z-index: 10;
 }
-#tab-nav li.tab:hover{
+#tab-nav li.tab:hover {
 	background-image: url('../images/buttons/tab_hover.png');
 }
-#tab-nav li.tab:active{
+#tab-nav li.tab:active {
    	background-image: url('../images/buttons/tab_pressed.png');
 }
 a.tab-link{
@@ -102,7 +102,7 @@ a.tab-link{
 #message-tab {
 	width: 150px;
 }
-#status-tab-button{
+#status-tab-button {
 	width: 120px;
 }
 #message-tab a.tab-link, #status-tab-button a.tab-link {
@@ -124,7 +124,7 @@ a.tab-link{
 	font-weight: bolder;
 	text-align:center;
 }
-#status-indicator{
+#status-indicator {
 	padding: 15px 15px 15px 15px;
 	background-image: url('../images/icons/status_red.png');
 	background-repeat: no-repeat;
@@ -132,14 +132,14 @@ a.tab-link{
 	position: relative;
 	top: -8px;
 }
-#status-indicator.green{
+#status-indicator.green {
    	background-image: url('../images/icons/status_green.png');
 }
-#status-indicator.orange{
+#status-indicator.orange {
    	background-image: url('../images/icons/status_orange.png');
 }
 
-#system-nav{
+#system-nav {
 	position: absolute;
 	right: 17px;
 	top: -3px;
@@ -147,12 +147,12 @@ a.tab-link{
 	padding: 0;
 }
 
-#system-nav a{
+#system-nav a {
 	display: inline-block;
 	padding: 6px;
 	margin: 0;
 }
-#system-nav li{
+#system-nav li {
 	margin: 0;
 	padding: 0;
 	border-top: 3px solid #D5AFC6;
@@ -162,7 +162,7 @@ a.tab-link{
 	border-top: 3px solid #C03283;
 }
 
-#thinking{
+#thinking {
 	width:100%;
 	height:100%;
 	background-color:transparent;
@@ -173,3 +173,4 @@ a.tab-link{
 	background-position: center;
 	background-repeat: no-repeat;
 }
+

@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import grails.converters.*
+import org.quartz.impl.triggers.SimpleTriggerImpl
 
 class MessageController {
 //> CONSTANTS
@@ -184,7 +185,8 @@ class MessageController {
 				TrashService.sendToTrash(messageInstance)
 			}
 		}
-		params.flashMessage = "${message(code: 'default.deleted.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
+		// FIXME fix i18n concatenation; fix label flash.message.fmessage
+		params.flashMessage = message(code:'default.deleted.message', args:[message(code:'message.label'), messageIdList.size() + message(code:'flash.message.fmessage')])
 		if (params.messageSection == 'result')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
 		else
@@ -204,7 +206,8 @@ class MessageController {
 				}
 			}
 		}
-		params.flashMessage = "${message(code: 'default.archived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
+		// FIXME fix i18n concatenation; fix label flash.message.fmessage
+		params.flashMessage = message(code:'default.archived.message', args:[message(code:'message.label'), listSize + message(code: 'flash.message.fmessage')])
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
 		} else {
@@ -225,7 +228,8 @@ class MessageController {
 				}
 			}
 		}
-		params.flashMessage = "${message(code: 'default.unarchived.message', args: [message(code: 'message.label', default: ''), listSize + message(code: 'flash.message.fmessage')])}"
+		// FIXME fix i18n concatenation; fix label flash.message.fmessage
+		params.flashMessage = message(code:'default.unarchived.message', args:[message(code:'message.label'), listSize + message(code: 'flash.message.fmessage')])
 		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId, flashMessage:params.flashMessage])
 		else
@@ -233,38 +237,47 @@ class MessageController {
 	}
 
 	def move() {
-		def messageIdList = getCheckedMessageList()
-		messageIdList.each { id ->
-			withFmessage id, { messageInstance ->
-				messageInstance.isDeleted = false
-				Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
-				if (params.messageSection == 'activity') {
-					def activity = Activity.get(params.ownerId)
-					activity.addToMessages(messageInstance)
-					activity.save(failOnError:true)
-					if(activity && activity.metaClass.hasProperty(null, 'autoreplyText')) {
-						params.addresses = messageInstance.src
-						params.messageText = activity.autoreplyText
-						def outgoingMessage = messageSendService.createOutgoingMessage(params)
-						activity.addToMessages(outgoingMessage)
-						messageSendService.send(outgoingMessage)
-						activity.save()
-					}
-				} else if (params.ownerId && params.ownerId != 'inbox') {
-					MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
-				} else {
-					messageInstance.with {
-						messageOwner?.removeFromMessages(messageInstance)
-						messageOwner = null
-						messageOwner?.save()
-						save()
-					}
+		def messagesToSend = []
+		def activity = Activity.get(params.ownerId)
+		def messageList = getCheckedMessages()
+		messageList.each { messageInstance ->
+			messageInstance.isDeleted = false
+			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
+			if (params.messageSection == 'activity') {
+				// FIXME add explicit remove from old owner (if it exists) to handle e.g. poll responses
+				//messageInstance.messageOwner?.removeFromMessages(messageInstance).save()
+				activity.addToMessages(messageInstance)
+				if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
+					params.addresses = messageInstance.src
+					params.messageText = activity.autoreplyText
+					def outgoingMessage = messageSendService.createOutgoingMessage(params)
+					outgoingMessage.save()
+					messagesToSend << outgoingMessage
+					activity.addToMessages(outgoingMessage)
+				}
+				activity.save(flush:true)
+			} else if (params.ownerId && params.ownerId != 'inbox') {
+				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
+			} else {
+				messageInstance.with {
+					messageOwner?.removeFromMessages(messageInstance)
+					messageOwner = null
+					messageOwner?.save()
+					save()
 				}
 			}
 		}
+		if(messagesToSend) {
+			def sendTime = new Date()
+			use(groovy.time.TimeCategory) {
+				sendTime += 3000
+			}
+			MessageSendJob.schedule(sendTime, [ids:messagesToSend*.id])
+		}
+
 		// FIXME this flash message is concatenated in a stupid way
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: ''), messageIdList.size() + message(code: 'flash.message.fmessage')])}"
-		render ""
+		flash.message = message(code:'default.updated.message', args:[message(code:'message.label'), messageList.size() + message(code:'flash.message.fmessage')]) // FIXME what is 'flash.message.fmessage'?  please rename to something whose meaning can be inferred
+		render 'OK'
 	}
 
 	def changeResponse() {
@@ -276,8 +289,8 @@ class MessageController {
 				responseInstance.poll.save()
 			}
 		}
-		flash.message = "${message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), message(code: 'flash.message.fmessage')])}"
-		render ""
+		flash.message = message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), message(code: 'flash.message.fmessage')])
+		render 'OK'
 	}
 
 	def changeStarStatus() {
@@ -361,8 +374,11 @@ class MessageController {
 				failedDispatchCount: messageInstance?.hasFailed ? Dispatch.findAllByMessageAndStatus(messageInstance, DispatchStatus.FAILED).size() : 0]
 	}
 
+	private def getCheckedMessages() {
+		return Fmessage.getAll(getCheckedMessageList())
+	}
+
 	private def getCheckedMessageList() {
-		println "getCheckedMessageList() : params=$params"
 		def checked = params['message-select'] ?:
 				(params.messageId instanceof Number)? [params.messageId]:
 				(params.messageId instanceof String)? params.messageId.tokenize(',') : []
