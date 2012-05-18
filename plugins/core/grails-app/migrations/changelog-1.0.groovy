@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-1") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-1") {
 		createTable(tableName: "activity") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "activityPK")
@@ -14,7 +14,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-2") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-2") {
 		createTable(tableName: "announcement") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "announcementPK")
@@ -22,7 +22,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-3") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-3") {
 		createTable(tableName: "autoreply") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "autoreplyPK")
@@ -32,7 +32,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-4") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-4") {
 		createTable(tableName: "clickatell_fconnection") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "clickatell_fcPK")
@@ -46,7 +46,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-5") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-5") {
 		createTable(tableName: "contact") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "contactPK")
@@ -70,7 +70,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-6") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-6") {
 		createTable(tableName: "custom_field") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "custom_fieldPK")
@@ -94,7 +94,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-7") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-7") {
 		createTable(tableName: "dispatch") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "dispatchPK")
@@ -124,7 +124,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-8") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-8") {
 		createTable(tableName: "email_fconnection") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "email_fconnecPK")
@@ -142,7 +142,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-9") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-9") {
 		createTable(tableName: "fconnection") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "fconnectionPK")
@@ -158,7 +158,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-10") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-10") {
 		createTable(tableName: "fmessage") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "fmessagePK")
@@ -204,7 +204,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-11") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-11") {
 		createTable(tableName: "folder") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "folderPK")
@@ -216,7 +216,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-12") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-12") {
 		createTable(tableName: "group_member") {
 			column(name: "group_id", type: "bigint") {
 				constraints(nullable: "false")
@@ -228,7 +228,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-13") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-13") {
 		createTable(tableName: "grup") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "grupPK")
@@ -244,7 +244,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-14") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-14") {
 		createTable(tableName: "intelli_sms_fconnection") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "intelli_sms_fPK")
@@ -270,7 +270,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-15") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-15") {
 		createTable(tableName: "keyword") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "keywordPK")
@@ -290,7 +290,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-16") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-16") {
 		createTable(tableName: "log_entry") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "log_entryPK")
@@ -310,7 +310,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-17") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-17") {
 		createTable(tableName: "message_owner") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "message_ownerPK")
@@ -334,7 +334,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-18") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-18") {
 		createTable(tableName: "poll") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "pollPK")
@@ -346,7 +346,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-19") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-19") {
 		createTable(tableName: "poll_response") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "poll_responsePK")
@@ -370,7 +370,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-20") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-20") {
 		createTable(tableName: "poll_response_fmessage") {
 			column(name: "poll_response_messages_id", type: "bigint")
 
@@ -380,7 +380,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-21") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-21") {
 		createTable(tableName: "search") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "searchPK")
@@ -416,7 +416,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-22") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-22") {
 		createTable(tableName: "search_custom_fields") {
 			column(name: "custom_fields", type: "bigint")
 
@@ -428,7 +428,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-23") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-23") {
 		createTable(tableName: "smart_group") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "smart_groupPK")
@@ -452,7 +452,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-24") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-24") {
 		createTable(tableName: "smslib_fconnection") {
 			column(name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "smslib_fconnePK")
@@ -478,7 +478,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-25") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-25") {
 		createTable(tableName: "system_notification") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "system_notifiPK")
@@ -498,7 +498,7 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-26") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-26") {
 		createTable(tableName: "trash") {
 			column(autoIncrement: "true", name: "id", type: "bigint") {
 				constraints(nullable: "false", primaryKey: "true", primaryKeyName: "trashPK")
@@ -526,65 +526,65 @@ databaseChangeLog = {
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-27") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-27") {
 		addPrimaryKey(columnNames: "group_id, contact_id", constraintName: "group_memberPK", tableName: "group_member")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-28") {
-		createIndex(indexName: "mobile_unique_1337327496323", tableName: "contact", unique: "true") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-28") {
+		createIndex(indexName: "mobile_unique_1337355799957", tableName: "contact", unique: "true") {
 			column(name: "mobile")
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-29") {
-		createIndex(indexName: "name_unique_1337327496388", tableName: "grup", unique: "true") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-29") {
+		createIndex(indexName: "name_unique_1337355799988", tableName: "grup", unique: "true") {
 			column(name: "name")
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-30") {
-		createIndex(indexName: "text_unique_1337327496412", tableName: "system_notification", unique: "true") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-30") {
+		createIndex(indexName: "text_unique_1337355800008", tableName: "system_notification", unique: "true") {
 			column(name: "text")
 		}
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-31") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-31") {
 		addForeignKeyConstraint(baseColumnNames: "contact_id", baseTableName: "custom_field", constraintName: "FK2ACD76AC6256D8C2", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "contact", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-32") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-32") {
 		addForeignKeyConstraint(baseColumnNames: "smart_group_id", baseTableName: "custom_field", constraintName: "FK2ACD76AC3BEF92BF", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "smart_group", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-33") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-33") {
 		addForeignKeyConstraint(baseColumnNames: "message_id", baseTableName: "dispatch", constraintName: "FK10F9447A3FBE872C", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "fmessage", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-34") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-34") {
 		addForeignKeyConstraint(baseColumnNames: "message_owner_id", baseTableName: "fmessage", constraintName: "FK9CA2E0E13742043", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "message_owner", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-35") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-35") {
 		addForeignKeyConstraint(baseColumnNames: "contact_id", baseTableName: "group_member", constraintName: "FKE926145A6256D8C2", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "contact", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-36") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-36") {
 		addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "group_member", constraintName: "FKE926145A9083EA62", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "grup", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-37") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-37") {
 		addForeignKeyConstraint(baseColumnNames: "activity_id", baseTableName: "keyword", constraintName: "FKCF751DE96E816952", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "activity", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-38") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-38") {
 		addForeignKeyConstraint(baseColumnNames: "poll_id", baseTableName: "poll_response", constraintName: "FK7FECF4C1FC80A752", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "poll", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-39") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-39") {
 		addForeignKeyConstraint(baseColumnNames: "fmessage_id", baseTableName: "poll_response_fmessage", constraintName: "FK76CBE69F92DDC012", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "fmessage", referencesUniqueColumn: "false")
 	}
 
-	changeSet(author: "geoffrey (generated)", id: "1337327496462-40") {
+	changeSet(author: "geoffrey (generated)", id: "1337355800059-40") {
 		addForeignKeyConstraint(baseColumnNames: "group_id", baseTableName: "search", constraintName: "FKC9FA65A89083EA62", deferrable: "false", initiallyDeferred: "false", referencedColumnNames: "id", referencedTableName: "grup", referencesUniqueColumn: "false")
 	}
 }
