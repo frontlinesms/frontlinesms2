@@ -208,5 +208,62 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.responses.find { it.value == 'Unknown' }.messages*.id == [m.id]
 			p.messages*.id == [m.id]
 	}
-}
 
+	// TODO move this test to MessageControllerISpec
+	def "Message should not remain in old PollResponse after moving it to another activity"(){
+		given:
+			def m = Fmessage.build(inbound:true)
+			def responseA = new PollResponse(key:'A', value:'TessstA')
+			def previousOwner = new Poll(name:'This is a poll', question:'What is your name?')
+					.addToResponses(responseA)
+					.addToResponses(key:'B' , value:'TessstB')
+					.addToResponses(PollResponse.createUnknown())
+					.addToMessages(m)
+			responseA.addToMessages(m)
+			previousOwner.save(flush:true, failOnError:true)
+
+			assert responseA.refresh().messages.contains(m)
+
+			def Keyword k = new Keyword(value:'ASDF')
+			def newOwner = Autoreply.build(keyword:k)
+			
+			// TODO move this test to MessageController
+			def controller = new MessageController()
+			controller.params.messageId = m.id
+			controller.params.ownerId = newOwner.id
+			controller.params.messageSection = 'activity'
+		when:
+			controller.move()
+		then:
+			previousOwner.refresh()
+			!responseA.refresh().messages.contains(m)
+	}
+
+	// TODO move this test to MessageControllerISpec	
+	def "Message should not remain in old PollResponse after moving it to inbox"(){
+		given:
+			def m = Fmessage.build(inbound:true)
+			def responseA = new PollResponse(key:'A', value:'TessstA')
+			def previousOwner = new Poll(name:'This is a poll', question:'What is your name?')
+					.addToResponses(responseA)
+					.addToResponses(key:'B' , value:'TessstB')
+					.addToResponses(PollResponse.createUnknown())
+					.addToMessages(m)
+			responseA.addToMessages(m)
+			previousOwner.save(flush:true, failOnError:true)
+
+			assert responseA.refresh().messages.contains(m)
+			
+			// TODO move this test to MessageController
+			def controller = new MessageController()
+			controller.params.messageId = m.id
+			controller.params.ownerId = 'inbox'
+			controller.params.messageSection = 'inbox'
+		when:
+			controller.move()
+		then:
+			!previousOwner.messages.contains(m)
+			!responseA.messages.contains(m)
+			!m.messageOwner
+	}
+}

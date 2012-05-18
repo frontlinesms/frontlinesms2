@@ -3,7 +3,7 @@ package frontlinesms2
 class I18nUtilService {
 	def getAllTranslations() {
 		def allTranslations = [:]
-		new  File('grails-app/i18n').eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
+		new  File('webapp/i18n').eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
 			def filename = file.name
 			def locale = getLocaleKey(filename)
 			def language = getLanguageName(filename)
