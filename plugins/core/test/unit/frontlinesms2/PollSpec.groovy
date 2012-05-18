@@ -106,6 +106,17 @@ class PollSpec extends Specification {
 			poll.responses*.key == ['A', 'B', 'C', 'D', Poll.KEY_UNKNOWN]
 	}
 
+	def 'removing a message from a poll should remove it from poll.messages'() {
+		given:
+			Fmessage m = new Fmessage()
+			Poll p = new Poll()
+					.addToMessages(m)
+		when:
+			p.removeFromMessages(m)
+		then:
+			!p.messages
+	}
+
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
 		def responses = [unknown:PollResponse.createUnknown()]

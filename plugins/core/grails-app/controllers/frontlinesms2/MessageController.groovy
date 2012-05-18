@@ -47,7 +47,6 @@ class MessageController {
 
 	def show = {
 		def messageInstance = Fmessage.get(params.messageId)
-		println "message.show(): action is $params?.action"
 		messageInstance.read = true
 		messageInstance.save()
 		def model = [messageInstance: messageInstance,
@@ -238,14 +237,14 @@ class MessageController {
 
 	def move() {
 		def messagesToSend = []
-		def activity = Activity.get(params.ownerId)
+		def activity = params.messageSection == 'activity'? Activity.get(params.ownerId): null
 		def messageList = getCheckedMessages()
 		messageList.each { messageInstance ->
 			messageInstance.isDeleted = false
 			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
-				// FIXME add explicit remove from old owner (if it exists) to handle e.g. poll responses
-				//messageInstance.messageOwner?.removeFromMessages(messageInstance).save()
+				def activityAfterRemove = messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
+				
 				activity.addToMessages(messageInstance)
 				if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
 					params.addresses = messageInstance.src
@@ -260,19 +259,15 @@ class MessageController {
 				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
 			} else {
 				messageInstance.with {
-					messageOwner?.removeFromMessages(messageInstance)
-					messageOwner = null
-					messageOwner?.save()
-					save()
+					if(messageOwner) {
+						messageOwner.removeFromMessages(messageInstance).save()
+						save()
+					}
 				}
 			}
 		}
 		if(messagesToSend) {
-			def sendTime = new Date()
-			use(groovy.time.TimeCategory) {
-				sendTime += 3000
-			}
-			MessageSendJob.schedule(sendTime, [ids:messagesToSend*.id])
+			MessageSendJob.defer(messagesToSend)
 		}
 
 		// FIXME this flash message is concatenated in a stupid way
@@ -282,13 +277,10 @@ class MessageController {
 
 	def changeResponse() {
 		def responseInstance = PollResponse.get(params.responseId)
-		getCheckedMessageList().each { id ->
-			withFmessage id, { messageInstance ->
-				responseInstance.poll.removeFromMessages(messageInstance)
-				responseInstance.addToMessages(messageInstance)
-				responseInstance.poll.save()
-			}
+		getCheckedMessages().each { messageInstance ->
+			responseInstance.addToMessages(messageInstance)
 		}
+		responseInstance.poll.save()
 		flash.message = message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), message(code: 'flash.message.fmessage')])
 		render 'OK'
 	}
@@ -381,7 +373,7 @@ class MessageController {
 	private def getCheckedMessageList() {
 		def checked = params['message-select'] ?:
 				(params.messageId instanceof Number)? [params.messageId]:
-				(params.messageId instanceof String)? params.messageId.tokenize(',') : []
+				(params.messageId instanceof String)? params.messageId.tokenize(',') : []// FIXME in time, messageId should only ever be a single ID instead of current option of comma-separated list of IDs
 		if(checked instanceof String) checked = [checked]
 		return checked
 	}

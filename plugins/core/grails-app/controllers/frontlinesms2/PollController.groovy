@@ -12,7 +12,8 @@ class PollController extends ActivityController {
 			if(params.enableKeyword && params.keyword)
 				poll.keyword ? poll.keyword.value = params.keyword : (poll.keyword = new Keyword(value: params.keyword.toUpperCase()))
 		} else if(params.enableKeyword && params.keyword) {
-			poll = new Poll(keyword: new Keyword(value: params.keyword.toUpperCase()))
+			poll = new Poll()
+			poll.keyword = new Keyword(value: params.keyword.toUpperCase())
 		} else {
 			poll = new Poll()
 		}
@@ -21,11 +22,11 @@ class PollController extends ActivityController {
 		poll.question = params.question ?: poll.question
 		poll.sentMessageText = params.messageText ?: poll.sentMessageText
 		poll.editResponses(params)
-		if (poll.save(flush: true)) {
+		if (poll.save(flush:true)) {
 			if(!params.dontSendMessage) {
 				def message = messageSendService.createOutgoingMessage(params)
 				poll.addToMessages(message)
-				messageSendService.send(message)
+				MessageSendJob.defer(message)
 			}
 			if (poll.save()) {
 				if (!params.dontSendMessage)
