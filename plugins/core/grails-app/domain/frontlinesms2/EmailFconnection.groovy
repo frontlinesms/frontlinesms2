@@ -18,6 +18,10 @@ class EmailFconnection extends Fconnection {
 		serverPort(nullable: true)
 	}
 	
+	static mapping = {
+		password column:'email_password'
+	}
+
 	List<RouteDefinition> getRouteDefinitions() {
 		String serverPortParam = serverPort ? ":${serverPort}" : ""
 		final String camelProducerAddress = "${receiveProtocol.name().toLowerCase()}://${serverName}${serverPortParam}?debugMode=true&consumer.delay=15000&username=${username}&password=${password}"

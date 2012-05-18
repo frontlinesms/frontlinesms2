@@ -244,11 +244,14 @@ class MessageController {
 			messageInstance.isDeleted = false
 			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
+				// FIXME add explicit remove from old owner (if it exists) to handle e.g. poll responses
+				//messageInstance.messageOwner?.removeFromMessages(messageInstance).save()
 				activity.addToMessages(messageInstance)
-				if(activity.metaClass.hasProperty(null, 'autoreplyText')) {
+				if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
 					params.addresses = messageInstance.src
 					params.messageText = activity.autoreplyText
-					def outgoingMessage = messageSendService.createOutgoingMessage(params)			
+					def outgoingMessage = messageSendService.createOutgoingMessage(params)
+					outgoingMessage.save()
 					messagesToSend << outgoingMessage
 					activity.addToMessages(outgoingMessage)
 				}
@@ -264,7 +267,6 @@ class MessageController {
 				}
 			}
 		}
-
 		if(messagesToSend) {
 			def sendTime = new Date()
 			use(groovy.time.TimeCategory) {
