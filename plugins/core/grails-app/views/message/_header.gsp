@@ -38,12 +38,12 @@
 			</g:else>
 		</div>
 	</g:if>
-	<g:elseif test="${messageSection == message(code: 'folder.label')}">
+	<g:elseif test="${messageSection == 'folder'}">
 		<h3 class="folder">${message(code: 'message.folder.header', args:[ownerInstance?.name])}</h3>
 		<fsms:render template="/message/section_action_buttons"/>
 	</g:elseif>
 	<g:else>
-		<h3 class="${messageSection}">${messageSection}</h3>
+		<h3 class="${messageSection}">${message(code:'fmessage.'+messageSection)}</h3>
 		<fsms:render template="/message/section_action_buttons"/>
 	</g:else>
 </div>
