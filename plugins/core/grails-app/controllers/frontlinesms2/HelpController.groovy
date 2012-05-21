@@ -12,7 +12,7 @@ class HelpController {
 			render text:helpText.markdownToHtml()
 		} else {
 			// FIXME this is open to injection attacks
-			def markdownFile = new File("web-app/help/" + params.helpSection + ".txt")
+			def markdownFile = new File("webapp/help/" + params.helpSection + ".txt")
 			if (markdownFile.canRead()) {
 				helpText = markdownFile.text
 			} else {
