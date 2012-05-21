@@ -243,8 +243,7 @@ class MessageController {
 			messageInstance.isDeleted = false
 			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
-				def activityAfterRemove = messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
-				
+				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
 				activity.addToMessages(messageInstance)
 				if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
 					params.addresses = messageInstance.src
@@ -269,7 +268,6 @@ class MessageController {
 		if(messagesToSend) {
 			MessageSendJob.defer(messagesToSend)
 		}
-
 		// FIXME this flash message is concatenated in a stupid way
 		flash.message = message(code:'default.updated.message', args:[message(code:'message.label'), messageList.size() + message(code:'flash.message.fmessage')]) // FIXME what is 'flash.message.fmessage'?  please rename to something whose meaning can be inferred
 		render 'OK'

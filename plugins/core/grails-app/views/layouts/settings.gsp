@@ -4,7 +4,7 @@
 		<title><g:layoutTitle default="Settings"/></title>
 		<r:require module="settings"/>
 		<fsms:render template="/includes"/>
-		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send, popup.ok"/>
+		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send, popup.ok,logs.download.continue,logs.download.title"/>
 		<r:layoutResources/>
 	</head>
 	<body id="settings-tab">

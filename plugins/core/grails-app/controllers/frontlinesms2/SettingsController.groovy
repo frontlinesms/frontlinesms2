@@ -22,6 +22,10 @@ class SettingsController {
 				logEntryTotal:logEntryList.size()]
 	}
 	
+	def logsWizard() {
+		return [action: 'logs']
+	}
+
 	def general = {
 		[languageList:i18nUtilService.allTranslations]
 	}
