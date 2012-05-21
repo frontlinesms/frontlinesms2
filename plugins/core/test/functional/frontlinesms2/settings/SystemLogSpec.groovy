@@ -16,7 +16,7 @@ class SystemLogSpec extends SettingsBaseSpec {
 		when:
 			userSupportLink.click()
 		then:
-			$("title").text().contains("FrontlineSMS")
+			userSupportLink.@href == 'http://community.frontlinesms.com/'
 	}
 
 }
