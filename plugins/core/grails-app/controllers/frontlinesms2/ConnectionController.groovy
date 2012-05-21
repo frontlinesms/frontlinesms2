@@ -56,6 +56,14 @@ class ConnectionController {
 		remapFormParams()
 		doSave(CONNECTION_TYPE_MAP[params.connectionType])
 	}
+
+	def delete() {
+		def connection = Fconnection.get(params.id)
+		println "Connection status is " + connection.status
+		if(connection.status == RouteStatus.NOT_CONNECTED) {
+			connection.delete()
+		} else throw new RuntimeException()
+	}
 	
 	def update = {
 		remapFormParams()
