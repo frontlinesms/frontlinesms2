@@ -92,7 +92,7 @@ class FsmsTagLib {
 		def target = att.target
 		def fields = expressionProcessorService.findByView(currentView)
 		out << '<div id="magic-wand">'
-		out << '<select class="dropdown extra-msg-btn" name="magicwand" id="magicwand" onchange="insertDynamicField(\'123\', \'magicwand\')" aria-disabled="false">'
+		out << '<select class="dropdown extra-msg-btn" name="magicwand" id="magicwand" onchange="insertDynamicField(\'messageText\', \'magicwand\')" aria-disabled="false">'
 		out << '<option id="magicwand-na" value="na" class="na">I am a magic wand!!!</option>'
 		fields.each {
 			out << '<option class="folder" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
