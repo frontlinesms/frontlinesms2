@@ -12,14 +12,13 @@ import org.apache.camel.Exchange
 @Mock([LogEntry, Dispatch, Fmessage, SystemNotification])
 class FconnectionServiceSpec extends Specification {
 	def context
-	def messageSource
 
 	def setup() {
 		context = Mock(CamelContext)
 		service.camelContext = context
-		messageSource = new Object()
-		messageSource.metaClass.getMessage = { subject, params, locale -> "$subject" }
-		service.messageSource = messageSource
+		def i18nUtilService = Mock(I18nUtilService)
+		i18nUtilService.getMessage(_) >> { args -> args.code[0] }
+		service.i18nUtilService = i18nUtilService
 	}
 
 	def 'Unconnected Fconnection gives a status of NOT_CONNECTED'() {
