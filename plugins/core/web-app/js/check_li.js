@@ -116,7 +116,12 @@ function checkAll(itemTypeString) {
 		$('#' + itemTypeString + '-list .' + itemTypeString + '-preview').each(function(index) {
 			$(this).addClass('selected');
 		});
-		if(getCheckedItemCount(itemTypeString) != 1) updateMultipleCheckedDetails(itemTypeString);
+		var checkedItemCount = getCheckedItemCount(itemTypeString);
+		if(checkedItemCount == 1) {
+			var tableRow = $("tr.message-preview:nth-child(2)");
+			var id = tableRow.attr("id").substring(itemTypeString.length + 1);
+			updateSingleCheckedDetails(itemTypeString, id, tableRow);
+		} else updateMultipleCheckedDetails(itemTypeString);
 	} else {
 		$('#' + itemTypeString + '-list .' + itemTypeString + '-preview :checkbox').each(function(index, element) {
 			this.checked = false;
@@ -139,3 +144,4 @@ function updateCheckAllBox(count) {
 		$('#message-list :checkbox')[0].checked = false;
 	}
 }
+
