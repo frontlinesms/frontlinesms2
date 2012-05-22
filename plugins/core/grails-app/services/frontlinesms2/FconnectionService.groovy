@@ -11,6 +11,7 @@ class FconnectionService {
 	def deviceDetectionService
 	
 	def createRoutes(Fconnection c) {
+		println "FconnectionService.createRoutes() :: ENTRY :: $c"
 		if(c instanceof SmslibFconnection) {
 			deviceDetectionService.stopFor(c.port)
 			// work-around for CORE-736 - NoSuchPortException can be thrown
@@ -24,25 +25,20 @@ class FconnectionService {
 		try {
 			def routes = c.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
-			createSystemNotification("${messageSource.getMessage('connection.route.successNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
+			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
 			LogEntry.log("Created routes: ${routes*.id}")
 		} catch(Exception e) {
 			e.printStackTrace()
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
-			LogEntry.log("Error creating routes to fconnection with name ${c?.name ?:c?.id}")
-			createSystemNotification("${messageSource.getMessage('connection.route.failNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
+			LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
+			createSystemNotification('connection.route.failNotification', [c?.name?: c?.id])
 		}
-	}
-	
-	private def createSystemNotification(String text) {
-		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
-		notification.read = false
-		notification.save(failOnError:true, flush:true)
+		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}
 	
 	def destroyRoutes(Fconnection c) {
 		destroyRoutes(c.id as long)
-		createSystemNotification("${messageSource.getMessage('connection.route.destroyNotification',[c?.name ?:c?.id] as Object[], Locale.setDefault(new Locale("en","US")))}")
+		createSystemNotification('connection.route.destroyNotification', [c?.name?: c?.id])
 	}
 	
 	def destroyRoutes(long id) {
@@ -75,7 +71,7 @@ class FconnectionService {
 			def caughtException = ex.getProperty(Exchange.EXCEPTION_CAUGHT)
 			println "FconnectionService.handleDisconnection() : ex.fromRouteId: $ex.fromRouteId"
 			println "FconnectionService.handleDisconnection() : EXCEPTION_CAUGHT: $caughtException"
-			
+
 			log.warn("Caught exception for route: $ex.fromRouteId", caughtException)
 			def routeId = (ex.fromRouteId =~ /(?:(?:in)|(?:out))-(?:[a-z]+-)?(\d+)/)[0][1]
 			println "FconnectionService.handleDisconnection() : Looking to stop route: $routeId"
@@ -84,4 +80,13 @@ class FconnectionService {
 			e.printStackTrace()
 		}
 	}
+
+	private def createSystemNotification(code, args) {
+		// maybe we need Locale.setDefault(new Locale("en","US"))
+		def text = messageSource.getMessage(code, args as Object[], null)
+		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
+		notification.read = false
+		notification.save(failOnError:true, flush:true)
+	}
 }
+
