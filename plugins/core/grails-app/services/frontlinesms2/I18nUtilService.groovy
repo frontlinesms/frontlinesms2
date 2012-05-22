@@ -2,6 +2,7 @@ package frontlinesms2
 
 class I18nUtilService {
 	def servletContext
+	def messageSource
 
 	def getAllTranslations() {
 		def allTranslations = [:]
