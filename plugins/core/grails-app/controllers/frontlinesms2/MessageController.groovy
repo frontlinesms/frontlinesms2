@@ -177,19 +177,24 @@ class MessageController {
 		redirect controller:'message', action:'pending'
 	}
 	
-	def delete = {
-		def messageIdList = getCheckedMessageList()
-		messageIdList.each { id ->
-			withFmessage id, { messageInstance ->
-				TrashService.sendToTrash(messageInstance)
-			}
+	def delete() {
+		def messages = getCheckedMessages()
+		messages.each { m ->
+			TrashService.sendToTrash(m)
 		}
 		// FIXME fix i18n concatenation; fix label flash.message.fmessage
-		params.flashMessage = message(code:'default.deleted.message', args:[message(code:'message.label'), messageIdList.size() + message(code:'flash.message.fmessage')])
-		if (params.messageSection == 'result')
-			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
-		else
-			redirect(controller: params.controller, action: params.messageSection, params: [ownerId: params.ownerId, starred: params.starred, failed: params.failed, searchId: params.searchId, flashMessage: params.flashMessage])
+		params.flashMessage = message(code:'default.deleted.message', args:
+				[message(code:'message.label'), messages.size() + message(code:'flash.message.fmessage')])
+		if (params.messageSection == 'result') {
+			redirect(controller:'search', action:'result', params:
+					[searchId:params.searchId, flashMessage:params.flashMessage])
+		} else {
+			println "Forwarding to action: $params.messageSection"
+			redirect(controller:params.controller, action:params.messageSection, params:
+					[ownerId:params.ownerId, starred:params.starred,
+							failed:params.failed, searchId:params.searchId,
+							flashMessage:params.flashMessage])
+		}
 	}
 	
 	def archive = {
@@ -369,10 +374,10 @@ class MessageController {
 	}
 
 	private def getCheckedMessageList() {
-		def checked = params['message-select'] ?:
-				(params.messageId instanceof Number)? [params.messageId]:
-				(params.messageId instanceof String)? params.messageId.tokenize(',') : []// FIXME in time, messageId should only ever be a single ID instead of current option of comma-separated list of IDs
-		if(checked instanceof String) checked = [checked]
+		def checked = params['message-select']?: params.messageId?: []
+		if(checked instanceof String) checked = checked.split(/\D+/) - ''
+		if(checked instanceof Number) checked = [checked]
+		if(checked.class.isArray()) checked = checked as List
 		return checked
 	}
 }
