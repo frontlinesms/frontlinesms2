@@ -39,7 +39,7 @@ class I18nUtilService {
 	}
 
 	private String getRootDirectory() {
-		def fileURL = new File('webapp/WEB-INF/grails-app/i18n').path
+		def fileURL = new File('web-app/WEB-INF/grails-app/i18n').path
 	}
 }
 
