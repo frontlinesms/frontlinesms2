@@ -114,8 +114,8 @@ class FconnectionServiceSpec extends Specification {
 		then:
 			jobRouteId == connectionId
 		where:
-			routeId | connectionId
-			"out-1" | 1
+			routeId          | connectionId
+			"out-1"          | 1
 			"out-internet-2" | 2
 			"out-modem-3"    | 3
 			"in-4"           | 4
@@ -131,12 +131,12 @@ class FconnectionServiceSpec extends Specification {
 			relatedRoutes.size() * context.stopRoute(_)
 			relatedRoutes.size() * context.removeRoute(_)
 		where:
-			relatedRoutes | unrelatedRoutes
-			['in-1'] | []
-			['out-1'] | []
-			['in-1', 'out-1'] | []
-			['in-1', 'out-1'] | ['in-2', 'out-3']
-			['out-modem-1'] | ['in-2', 'out-modem-3']
+			relatedRoutes      | unrelatedRoutes
+			['in-1']           | []
+			['out-1']          | []
+			['in-1', 'out-1']  | []
+			['in-1', 'out-1']  | ['in-2', 'out-3']
+			['out-modem-1']    | ['in-2', 'out-modem-3']
 			['out-internet-1'] | ['in-2', 'out-modem-3']
 			['out-internet-1'] | ['in-2', 'out-internet-3']
 	}

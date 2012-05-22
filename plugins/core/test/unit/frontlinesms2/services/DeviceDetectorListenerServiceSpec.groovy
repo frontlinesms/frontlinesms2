@@ -1,31 +1,102 @@
 package frontlinesms2.services
 
-import frontlinesms2.*
-import net.frontlinesms.messaging.*
-import grails.plugin.spock.UnitSpec
 import spock.lang.*
 
-class DeviceDetectorListenerServiceSpec extends UnitSpec {
-	def service
+import frontlinesms2.*
+import frontlinesms2.dev.MockModemUtils
+import net.frontlinesms.messaging.*
+import serial.CommPortIdentifier
+import serial.mock.MockSerial
+
+@TestFor(DeviceDetectorListenerService)
+@Mock(SmslibFconnection)
+class DeviceDetectorListenerServiceSpec extends Specification {
 	def fconnectionService
+	def i18nUtilService
 	
 	def setup() {
-		registerMetaClass(SmslibFconnection)
-		service = new DeviceDetectorListenerService()
+		MockSerial.init()
+
+		assert !fconnectionService
 		fconnectionService = Mock(FconnectionService)
+		i18nUtilService = Mock(I18nUtilService)
+		i18nUtilService.getMessage(_) >> { Map args -> args.code }
+
 		service.fconnectionService = fconnectionService
+		service.i18nUtilService = i18nUtilService
 	}
-	
-	def 'handleDetected should do nothing if there are no corresponding configured connections'() {
+
+	def 'handleDetected should create a new fconnection for newly detected devices'() {
 		given:
-			mockFconnections([])
-			def d = Mock(ATDeviceDetector)
+			def port = "PORT1"
+			def serial = '12345'
+			def imsi = '56789'
+			def d = mockDetector(port:port, serial:serial, imsi:imsi)
+		when:
+			service.handleDetectionCompleted(d)
+		then:
+			1 * fconnectionService.createRoutes(_)
+			SmslibFconnection.count() == 1
+			SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
+	}
+
+	def 'handleDetected should not create a new fconnection if route with serial+IMSI combination already created'() {
+		given:
+			def port = "PORT1"
+			def serial = '12345'
+			def imsi = '56789'
+			new SmslibFconnection(name:'Already configured', port:'/dev/different',
+							serial:serial, imsi:imsi).save()
+					.metaClass.getStatus = { -> RouteStatus.CONNECTED }
+			assert SmslibFconnection.count() == 1
+			def d = mockDetector(port:port, serial:serial, imsi:imsi)
 		when:
 			service.handleDetectionCompleted(d)
 		then:
 			0 * fconnectionService.createRoutes(_)
+			SmslibFconnection.count() == 1
+			!SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
 	}
-	
+
+	def 'handleDetected should not create a new fconnection if fconnection is configured with same serial+IMSI and port is visible'() {
+		given:
+			def port = "PORT1"
+			def otherPort = '/dev/different'
+			def serial = '12345'
+			def imsi = '56789'
+			new SmslibFconnection(name:'Already configured', port:'/dev/different',
+							serial:serial, imsi:imsi).save()
+					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
+			MockModemUtils.initialiseMockSerial("$otherPort":mockPortIdentifier(otherPort))
+			assert SmslibFconnection.count() == 1
+			def d = mockDetector(port:port, serial:serial, imsi:imsi)
+		when:
+			service.handleDetectionCompleted(d)
+		then:
+			0 * fconnectionService.createRoutes(_)
+			SmslibFconnection.count() == 1
+			!SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
+	}
+
+	def 'handleDetected should create a new fconnection if fconnection is configured with same serial+IMSI and port is not visible'() {
+		given:
+			def port = "PORT1"
+			def serial = '12345'
+			def imsi = '56789'
+			new SmslibFconnection(name:'Already configured', port:'/dev/different',
+							serial:serial, imsi:imsi).save()
+					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
+			MockModemUtils.initialiseMockSerial([:])
+			assert SmslibFconnection.count() == 1
+			def d = mockDetector(port:port, serial:serial, imsi:imsi)
+		when:
+			service.handleDetectionCompleted(d)
+		then:
+			1 * fconnectionService.createRoutes(_)
+			SmslibFconnection.count() == 2
+			SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
+	}
+
 	def 'handleDetected should create routes for corresponding configured connections'() {
 		given:
 			def c = mockFconnection()
@@ -74,4 +145,17 @@ class DeviceDetectorListenerServiceSpec extends UnitSpec {
 			]
 		}
 	}
+
+	private def mockDetector(args) {
+		def d = Mock(ATDeviceDetector)
+		d.portName >> args.port
+		d.serial >> args.serial
+		d.imsi >> args.imsi
+		return d
+	}
+
+	private def mockPortIdentifier(portName) {
+		new serial.mock.CommPortIdentifier(portName, null)
+	}
 }
+

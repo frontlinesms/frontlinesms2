@@ -32,6 +32,11 @@ class I18nUtilService {
 		}
 	}
 
+	def getMessage(args) {
+		// maybe we need Locale.setDefault(new Locale("en","US"))
+		def text = messageSource.getMessage(args.code, args.args as Object[], null)
+	}
+
 	private String getRootDirectory() {
 		def fileURL = new File('webapp/WEB-INF/grails-app/i18n').path
 	}

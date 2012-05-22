@@ -6,9 +6,9 @@ import serial.CommPortIdentifier
 import net.frontlinesms.messaging.*
 
 class FconnectionService {
-	def messageSource
 	def camelContext
 	def deviceDetectionService
+	def i18nUtilService
 	
 	def createRoutes(Fconnection c) {
 		println "FconnectionService.createRoutes() :: ENTRY :: $c"
@@ -82,8 +82,7 @@ class FconnectionService {
 	}
 
 	private def createSystemNotification(code, args) {
-		// maybe we need Locale.setDefault(new Locale("en","US"))
-		def text = messageSource.getMessage(code, args as Object[], null)
+		def text = i18nUtilService.getMessage(code:code, args:args)
 		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
 		notification.read = false
 		notification.save(failOnError:true, flush:true)

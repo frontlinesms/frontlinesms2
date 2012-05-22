@@ -1,10 +1,12 @@
 package frontlinesms2
 
 import net.frontlinesms.messaging.*
+import serial.CommPortIdentifier
+import serial.NoSuchPortException
 
 class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 	def fconnectionService
-	def messageSource
+	def i18nUtilService
 	
 	void handleDetectionCompleted(ATDeviceDetector detector) {
 		println "#####################################################"
@@ -31,18 +33,25 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 			}
 			if(dirty) c.save()
 		} else {
-			def name = message(code:'connection.name.autoconfigured', args:[
-					detector.manufacturer, detector.model, detector.portName])
-			c = new SmslibFconnection(name:name, port:detector.portName, baud:detector.maxBaudRate,
-							serial:detector.serial, imsi:detector.imsi)
-					.save(flush:true, failOnError:true)
-			println "# Created new detector: $c"
+			def matchingModemAndSim = SmslibFconnection.findAllBySerialAndImsi(detector.serial, detector.imsi)
+			if(!matchingModemAndSim.any { it.status == RouteStatus.CONNECTED || isPortVisible(it.port) }) {
+				def name = i18nUtilService.getMessage(code:'connection.name.autoconfigured', args:[
+						detector.manufacturer, detector.model, detector.portName])
+				c = new SmslibFconnection(name:name, port:detector.portName, baud:detector.maxBaudRate,
+								serial:detector.serial, imsi:detector.imsi)
+						.save(flush:true, failOnError:true)
+				println "# Created new detector: $c"
+			} else println "There was a created route already on this device."
 		}
-		fconnectionService.createRoutes(c)
+		if(c) fconnectionService.createRoutes(c)
 	}
 
-	private def message(args) {
-		return messageSource.getMessage(args.code, args.args as Object[], null)
+	private boolean isPortVisible(String portName) {
+		try {
+			return CommPortIdentifier.getPortIdentifier(portName) != null
+		} catch(NoSuchPortException ex) {
+			return false
+		}
 	}
 }
 
