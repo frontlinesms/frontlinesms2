@@ -104,7 +104,7 @@ class ImportController {
 						}
 					}
 					if (fm.inbound) fm.dispatches = []
-					else fm.dispatches.findAll{
+					else fm.dispatches.each {
 						it.status = dispatchStatus
 						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
 					}

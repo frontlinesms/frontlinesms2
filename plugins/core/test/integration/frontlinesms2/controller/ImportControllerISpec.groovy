@@ -62,6 +62,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			// check that messages and folders were created
 			Fmessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2']
 			Folder.list().name == ['messages from v1']
+			Fmessage.list()*.messageOwner.name.every { it == 'messages from v1' }
 	}
 
 	def mockFileUpload(filename, fileContent) {
