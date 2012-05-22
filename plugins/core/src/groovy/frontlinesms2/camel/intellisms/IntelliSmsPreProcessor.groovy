@@ -11,7 +11,7 @@ class IntelliSmsPreProcessor implements Processor {
 		// URL-encode body
 		def d = x.in.body
 		x.out.headers['frontlinesms.dispatch.id'] = d.id
-		x.out.body = urlEncode(d.message.text)
+		x.out.body = urlEncode(d.text)
 		
 		def destination = d.dst
 		if(destination && destination.charAt(0)=='+') destination = destination.substring(1)

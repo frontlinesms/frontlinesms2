@@ -26,7 +26,7 @@ class SmslibTranslationService {
 		Dispatch d = exchange.in.body
 		Fmessage m = d.message
 		String address = d.dst
-		String messageText = m.text?: ''
+		String messageText = d.text?: ''
 		def c = new COutgoingMessage(address, messageText)
 		c.originator = m.src
 		c.date = m.date.time
