@@ -64,7 +64,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			def otherPort = '/dev/different'
 			def serial = '12345'
 			def imsi = '56789'
-			new SmslibFconnection(name:'Already configured', port:'/dev/different',
+			new SmslibFconnection(name:'Already configured', port:otherPort,
 							serial:serial, imsi:imsi).save()
 					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
 			MockModemUtils.initialiseMockSerial("$otherPort":mockPortIdentifier(otherPort))
@@ -81,9 +81,10 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 	def 'handleDetected should create a new fconnection if fconnection is configured with same serial+IMSI and port is not visible'() {
 		given:
 			def port = "PORT1"
+			def otherPort = '/dev/different'
 			def serial = '12345'
 			def imsi = '56789'
-			new SmslibFconnection(name:'Already configured', port:'/dev/different',
+			new SmslibFconnection(name:'Already configured', port:otherPort,
 							serial:serial, imsi:imsi).save()
 					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
 			MockModemUtils.initialiseMockSerial([:])
