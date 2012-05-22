@@ -3,7 +3,7 @@ package frontlinesms2
 import grails.converters.JSON
 
 class ConnectionController {
-	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+	static allowedMethods = [save: "POST", update: "POST", delete:'GET']
 	private static final def CONNECTION_TYPE_MAP = [smslib:SmslibFconnection,
 			email:EmailFconnection,
 			clickatell:ClickatellFconnection,
@@ -18,18 +18,13 @@ class ConnectionController {
 	
 	def list = {
 		def fconnectionInstanceList = Fconnection.list(params)
-		if(!params.id) {
-			params.id = Fconnection.list(params)[0]?.id
-		}
-		
 		def fconnectionInstanceTotal = Fconnection.count()
-		if(params.id) {
-			render(view:'show', model:show() << [connectionInstanceList:fconnectionInstanceList,
-					fconnectionInstanceTotal:fconnectionInstanceTotal])
-		} else {
-			flash.message = LogEntry.log(message(code: 'default.not.found.message', args: [message(code: 'fconnection.label', default: 'Fconnection'), params.id]))
-			render(view:'show', model:[fconnectionInstanceTotal: 0])
-		}
+
+		def model = [connectionInstanceList:fconnectionInstanceList,
+				fconnectionInstanceTotal:fconnectionInstanceTotal]
+		if(!params.id) params.id = fconnectionInstanceList[0]?.id
+		if(params.id) model << show()
+		render view:'show', model:model
 	}
 	
 	def show = {
@@ -59,9 +54,12 @@ class ConnectionController {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
+		println "Fconnection: $params.id = $connection"
 		println "Connection status is " + connection.status
 		if(connection.status == RouteStatus.NOT_CONNECTED) {
 			connection.delete()
+			flash.message = message code:'connection.deleted', args:[connection.name]
+			redirect action:'list'
 		} else throw new RuntimeException()
 	}
 	

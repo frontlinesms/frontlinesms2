@@ -13,8 +13,10 @@ class ConnectionPage extends geb.Page {
 		lstConnections(wait:true) { $('#connections') }
 		selectedConnection(required:false) { lstConnections.find(".selected") }
 		btnCreateRoute(wait:true) {  $("a", text:'Create route') }
+		btnDelete(required:false) { $('.btn', text:'Delete Connection') }
 		btnTestRoute(required:false) {  $('#connections .selected a.test') }
 		txtStatus { $('.connection-status').text() }
 		connectionErrors { $('.errors').text() }
+		flashMessage { $('div.flash') }
 	}
 }

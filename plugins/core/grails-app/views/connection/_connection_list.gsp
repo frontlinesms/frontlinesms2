@@ -25,6 +25,11 @@
 									<g:message code="connection.edit"/>
 								</g:remoteLink>
 							</div>
+							<div>
+								<g:link controller="connection" action="delete" class="btn route" id="${c.id}">
+									<g:message code="connection.delete"/>
+								</g:link>
+							</div>
 						</g:if>
 						<g:elseif test="${c.status == RouteStatus.CONNECTED}">
 							<div>

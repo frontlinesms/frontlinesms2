@@ -24,6 +24,14 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			txtStatus == "Not connected"
 	}
+
+	def 'there is a DELETE button shown for inactive connection'() {
+		when:
+			createTestEmailConnection()
+			to ConnectionPage
+		then:
+			btnDelete.displayed
+	}
 	
 	def 'should show "create route" button for inactive connection '() {
 		when:
@@ -32,7 +40,18 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			btnCreateRoute.displayed
 	}
-	
+
+	def 'DELETE button should remove selected fconnection from the list'() {
+		given:
+			createTestEmailConnection()
+			to ConnectionPage
+		when:
+			btnDelete.click()
+		then:
+			flashMessage.text().contains("Connection test email connection was deleted.")
+			lstConnections.text().contains('You have no connections configured.')
+	}
+
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {
 		given:
 			def testConnection = createTestSmsConnection()
@@ -48,6 +67,18 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			waitFor(10) { txtStatus == "Connected" }
 			waitFor { btnTestRoute }.@text.trim() == "Send test message"
 			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
+	}
+
+	def 'delete button is not displayed for a connected Fconnection'() {
+		given:
+			def testConnection = createTestSmsConnection()
+			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
+		when:
+			to ConnectionPage
+			btnCreateRoute.click()
+		then:
+			waitFor(10) { txtStatus == "Connected" }
+			!btnDelete.displayed
 	}
 	
 	def 'The first connection in the connection list page is selected'() {
