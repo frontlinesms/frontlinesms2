@@ -5,6 +5,7 @@ class Dispatch {
 	String dst
 	DispatchStatus status
 	Date dateSent
+	def expressionProcessorService
 	
 	boolean isDeleted
 	
@@ -26,6 +27,10 @@ class Dispatch {
 				if(val)
 					obj.message.isDeleted
 		})
+	}
+
+	String getText() {
+		return expressionProcessorService.process(this)
 	}
 	
 	static namedQueries = {

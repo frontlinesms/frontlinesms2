@@ -74,6 +74,7 @@ class ClickatellPreProcessorSpec extends UnitSpec {
 				text:messageText,
 				toString:{"mock Fmessage"}
 			],
+			text:messageText,
 			dst:'+1234567890',
 			toString:{"mock body (Dispatch)"}
 		]

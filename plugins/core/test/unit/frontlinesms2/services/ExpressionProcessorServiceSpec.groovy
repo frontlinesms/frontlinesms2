@@ -14,7 +14,7 @@ class ExpressionProcessorServiceSpec extends Specification {
 	where:
 		messageText 											| expectedExpressions
 		'test message'                                          | []
-		'please call us on ${contact_number}'                | ['${contact_number}']
+		'please call us on ${contact_number}'                	| ['${contact_number}']
 		'sender name ${contact_name}, number ${contact_number}' | ['${contact_name}', '${contact_number}']
 	}
 }

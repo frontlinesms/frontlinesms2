@@ -11,7 +11,7 @@ class IntelliSmsPreProcessorSpec extends UnitSpec {
 	
 	def setup() {
 		mockDomain Fconnection, [[username:'bob', password:'secret'] as IntelliSmsFconnection]
-		
+		mockDomain Dispatch
 		registerMetaClass Exchange
 		Exchange.metaClass.getFconnectionId = { Fconnection.list()[-1].id }
 		
@@ -73,6 +73,7 @@ class IntelliSmsPreProcessorSpec extends UnitSpec {
 				text:messageText,
 				toString:{"mock Fmessage"}
 			],
+			text:messageText,
 			dst:'+1234567890',
 			toString:{"mock body (Dispatch)"}
 		]

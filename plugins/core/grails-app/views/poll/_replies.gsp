@@ -7,6 +7,7 @@
 		<g:message code="poll.autoreply.send"/>
 	<g:if test="${activityInstanceToEdit?.autoreplyText as boolean}">
 		<g:textArea name="autoreplyText" rows="5" cols="40" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
+		<fsms:magicWand view="activity-autoreply" target="autoreplyText"/>
 	</g:if>
 	<g:else>
 		<g:textArea name="autoreplyText" rows="5" cols="40" disabled="true" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>

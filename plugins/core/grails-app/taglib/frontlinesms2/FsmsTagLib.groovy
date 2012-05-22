@@ -2,7 +2,7 @@ package frontlinesms2
 
 class FsmsTagLib {
 	static namespace = 'fsms'
-	def magicWandService
+	def expressionProcessorService
 
 	def render = { att ->
 		out << g.render(att)
@@ -90,12 +90,12 @@ class FsmsTagLib {
 	def magicWand = { att ->
 		def currentView = att.view
 		def target = att.target
-		def fields = magicWandService.findByView(currentView)
+		def fields = expressionProcessorService.findByView(currentView)
 		out << '<div id="magic-wand">'
-		out << '<select class="dropdown extra-msg-btn" name="magicwand" id="magicwand" onchange="insertDynamicField(\'123\', \'magicwand\')" aria-disabled="false">'
-		out << '<option id="magicwand-na" value="na" class="na">I am a magic wand!!!</option>'
+		out << '<select class="dropdown" name="magicwand" id="magicwand" onchange="insertDynamicField(\'messageText\', \'magicwand\')" aria-disabled="false">'
+		out << '<option value="na" id="magic-wand-na" class="not-field">I am a magic wand!!!</option>'
 		fields.each {
-			out << '<option class="folder" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
+			out << '<option class="predefined-field" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
 		}
 		out << '</select>'
 		out << '</div>'

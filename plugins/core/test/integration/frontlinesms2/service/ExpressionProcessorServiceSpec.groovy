@@ -1,19 +1,20 @@
-package frontlinesms2.services
+package frontlinesms2.service
 
 import frontlinesms2.*
 import spock.lang.*
-import grails.test.mixin.*
+import grails.plugin.spock.*
 
-@TestFor(ExpressionProcessorService)
-class ExpressionProcessorServiceSpec extends Specification {	
+class ExpressionProcessorServiceSpec extends grails.plugin.spock.IntegrationSpec {	
+	def expressionProcessorService
+
 	@Unroll
 	def 'process should return message content with no expressions in it'() {
 		setup:
 			def contact =new Contact(name:'Gedi', mobile:"10983").save(failOnError:true, flush:true)
 			def m = new Fmessage(src: '10983', inbound: false, archived: false, hasSent: false, date: new Date())
 			m.text = messageText
-			Dispatch dis = new Dispatch(dst: '12345', message: m, status: DispatchStatus.FAILED, dateSent: now)
-			def processedMessageText = service.process(dis)
+			Dispatch dis = new Dispatch(dst: '10983', message: m, status: DispatchStatus.FAILED, dateSent: new Date())
+			def processedMessageText = expressionProcessorService.process(dis)
 		expect:
 			processedMessageText == expectedMessageText
 		where:
