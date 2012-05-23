@@ -20,7 +20,7 @@
 	padding: 4px 10px 0px 10px;
 }
 
-.ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; }
+.ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor: default; color:#777777;}
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a,
 .ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left: 20px; position: relative; margin-left: 5px; }
 

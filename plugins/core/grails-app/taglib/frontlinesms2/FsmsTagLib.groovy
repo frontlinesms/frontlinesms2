@@ -88,12 +88,12 @@ class FsmsTagLib {
 	}
 
 	def magicWand = { att ->
-		def currentView = att.view
+		def controller = att.controller
 		def target = att.target
-		def fields = expressionProcessorService.findByView(currentView)
+		def fields = expressionProcessorService.findByController(controller)
 		out << '<div id="magic-wand">'
-		out << '<select class="dropdown" name="magicwand" id="magicwand" onchange="insertDynamicField(\'messageText\', \'magicwand\')" aria-disabled="false">'
-		out << '<option value="na" id="magic-wand-na" class="not-field">I am a magic wand!!!</option>'
+		out << '<select class="dropdown" name="magicwand" id="magicwand" onchange="insertDynamicField(\'messageText\', \'magicwand\')">'
+		out << '<option value="na" id="magic-wand-na" class="not-field ">Substitutions available for '+controller+'</option>'
 		fields.each {
 			out << '<option class="predefined-field" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
 		}

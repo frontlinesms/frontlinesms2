@@ -22,6 +22,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit );
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup();
+	$(".dropdown").selectmenu();
 	$("#modalBox").dialog({
 		modal: true,
 		title: title,

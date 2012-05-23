@@ -3,7 +3,6 @@ function insertDynamicField(inputArea, magicWand) {
 	var field = magicWandElement.options[magicWandElement.selectedIndex].value
 	insertAtCaret(inputArea, '${' + field + '}')
     document.getElementById('magic-wand-na').selected = 1
-	
 }
 
 function insertAtCaret(areaId,text) {
