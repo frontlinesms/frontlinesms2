@@ -23,7 +23,7 @@ public class Monitor {
 
 		WebAppContext app = new WebAppContext();
 		app.setContextPath("/");
-		app.setWar(new File("webapp").getAbsolutePath());
+		app.setWar(new File("web-app").getAbsolutePath());
 		server.setHandler(app);
 	}
 

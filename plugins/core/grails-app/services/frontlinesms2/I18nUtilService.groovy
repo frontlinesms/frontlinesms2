@@ -2,6 +2,7 @@ package frontlinesms2
 
 class I18nUtilService {
 	def servletContext
+	def messageSource
 
 	def getAllTranslations() {
 		def allTranslations = [:]
@@ -32,8 +33,13 @@ class I18nUtilService {
 		}
 	}
 
+	def getMessage(args) {
+		// maybe we need Locale.setDefault(new Locale("en","US"))
+		def text = messageSource.getMessage(args.code, args.args as Object[], null)
+	}
+
 	private String getRootDirectory() {
-		def fileURL = new File('webapp/WEB-INF/grails-app/i18n').path
+		def fileURL = new File('web-app/WEB-INF/grails-app/i18n').path
 	}
 }
 

@@ -10,7 +10,7 @@ import org.smslib.util.*
 class MockModemUtils {
 	static void initialiseMockSerial(Map portIdentifiers) {
 		// Set up modem simulation
-		MockSerial.init();
+		MockSerial.reset();
 		MockSerial.setMultipleOwnershipAllowed(true);
 		portIdentifiers.each { name, cpi ->
 			MockSerial.setIdentifier(name, cpi)

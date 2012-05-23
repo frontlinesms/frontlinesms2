@@ -67,7 +67,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:camel-smslib:0.0.5-SNAPSHOT'
 		['mail', 'http'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.2'
+		compile 'net.frontlinesms.core:at-modem-detector:0.3'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
 	}
@@ -83,7 +83,7 @@ grails.project.dependency.resolution = {
 		runtime ":markdown:1.0.0.RC1"
 		runtime ":routing:1.2.0"
 		runtime ":csv:0.3.1"
-		runtime ":quartz2:0.2.2.1-frontlinesms"
+		runtime ":quartz2:0.2.3"
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.16.1"

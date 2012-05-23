@@ -33,7 +33,7 @@ target(main: 'Build installers for various platforms.') {
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
 	println "Building $appName, v$appVersion"
-	def webappTempDir = 'install/src/webapp'
+	def webappTempDir = 'install/src/web-app'
 	delete(dir:webappTempDir)
 	unzip(src:"target/${appName}-${appVersion}.war", dest:webappTempDir)
 	
