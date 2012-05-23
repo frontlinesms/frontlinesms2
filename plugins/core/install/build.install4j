@@ -1796,11 +1796,6 @@ if(succeeded){
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
-                      <void property="labelIconFile">
-                        <object class="com.install4j.api.beans.ExternalFile">
-                          <string>../../../../../../Desktop/logo.png</string>
-                        </object>
-                      </void>
                       <void property="labelText">
                         <string>FrontlineSMS</string>
                       </void>
