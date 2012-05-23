@@ -7,6 +7,7 @@ driver = {
 	def useSauceLabs=Boolean.parseBoolean(System.properties['useSauceLabs']?:'false')
 	def driver
 	if (useSauceLabs) {
+		baseUrl = 'http://myapp.test/core/'
 		def sauceUser=System.properties['saucelabs.username']
 		def saucePass=System.properties['saucelabs.passkey']
 		org.openqa.selenium.remote.DesiredCapabilities capabillities = org.openqa.selenium.remote.DesiredCapabilities.firefox();
