@@ -1,36 +1,13 @@
-waiting {
-	timeout = 2
-	retryInterval = 0.2
-}
-
-driver = {
-	def useSauceLabs=Boolean.parseBoolean(System.properties['useSauceLabs']?:'false')
-	def driver
-	if (useSauceLabs) {
-		baseUrl = 'http://myapp.test:80/core/'
-		def sauceUser=System.properties['saucelabs.username']
-		def saucePass=System.properties['saucelabs.passkey']
-		org.openqa.selenium.remote.DesiredCapabilities capabillities = org.openqa.selenium.remote.DesiredCapabilities.firefox();
-	        capabillities.setCapability("version", "5");
-	        capabillities.setCapability("platform", Platform.XP);
-	        capabillities.setCapability("name", "FrontlineSMS2 Functional test cases");
-	        capabillities.setCapability("selenium-version", "2.21.0")
-		driver = new org.openqa.selenium.remote.RemoteWebDriver(
-	           new URL("http://${sauceUser}:${saucePass}@ondemand.saucelabs.com:80/wd/hub"),
-	           capabillities);
-	        driver.manage().timeouts().implicitlyWait(30, java.util.concurrent.TimeUnit.SECONDS);
-	}
-	else {
-	    driver = new org.openqa.selenium.firefox.FirefoxDriver()	
-	}
-	if(!useSauceLabs) {
-		def width = 1366
-		def height = 768
-		driver.navigate().to('http://localhost')
-		driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height))
-	} else if(driver.class.simpleName == 'HtmlUnitDriver') {
-		driver.javascriptEnabled = true
-		driver.@webClient.throwExceptionOnScriptError = false
-	}
-	return driver
-}
+    sauce {
+        baseUrl = 'http://myapp.test/core/'
+        String username = System.getenv("SAUCE_ONDEMAND_USERNAME");
+        String apiKey = System.getenv("SAUCE_ONDEMAND_ACCESS_KEY");
+        if(username == null || apiKey == null){
+            System.err.println("Sauce OnDemand credentials not set.");
+        }
+        DesiredCapabilities capabillities = DesiredCapabilities.chrome();
+        capabillities.setCapability("name", "core");
+        capabillities.setCapability("platform", Platform.LINUX);
+        capabillities.setCapability("selenium-version", "2.21.0");
+        driver = { new RemoteWebDriver(new URL("http://${username}:${apiKey}@ondemand.saucelabs.com:80/wd/hub"), capabillities) }
+    }
