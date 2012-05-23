@@ -351,7 +351,7 @@ We are able to provide FrontlineSMS software and technical support for free beca
                         <boolean>true</boolean>
                       </void>
                       <void property="labelText">
-                        <string>Name</string>
+                        <string>Name*</string>
                       </void>
                       <void property="variableName">
                         <string>var_name</string>
@@ -370,7 +370,7 @@ We are able to provide FrontlineSMS software and technical support for free beca
                         <boolean>true</boolean>
                       </void>
                       <void property="labelText">
-                        <string>Organization Name</string>
+                        <string>Organization Name*</string>
                       </void>
                       <void property="variableName">
                         <string>var_organization_name</string>
@@ -397,7 +397,7 @@ We are able to provide FrontlineSMS software and technical support for free beca
                             <string>Conservation</string>
                           </void>
                           <void index="2">
-                            <string>Commercial [added]</string>
+                            <string>Commercial</string>
                           </void>
                           <void index="3">
                             <string>Education</string>
@@ -412,7 +412,7 @@ We are able to provide FrontlineSMS software and technical support for free beca
                             <string>Gender</string>
                           </void>
                           <void index="7">
-                            <string>Governance [used instead of Political]</string>
+                            <string>Governance</string>
                           </void>
                           <void index="8">
                             <string>Health</string>
@@ -1061,6 +1061,9 @@ We are able to provide FrontlineSMS software and technical support for free beca
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
                       <void property="labelText">
                         <string>City / region</string>
                       </void>
@@ -1077,8 +1080,11 @@ We are able to provide FrontlineSMS software and technical support for free beca
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
                       <void property="labelText">
-                        <string>Website address</string>
+                        <string>Website address*</string>
                       </void>
                       <void property="variableName">
                         <string>var_website_address</string>
@@ -1093,6 +1099,9 @@ We are able to provide FrontlineSMS software and technical support for free beca
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
                       <void property="labelText">
                         <string>Operating System</string>
                       </void>
@@ -1244,6 +1253,9 @@ We are able to provide FrontlineSMS software and technical support for free beca
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
                       <void property="labelText">
                         <string>Telephone / Skype</string>
                       </void>
@@ -1501,6 +1513,222 @@ To edit the information before submitting click BACK.To Cancel click CANCEL.</st
             <preActivation />
             <postActivation>import java.util.HashMap;
 
+String [] prof = {"Agriculture"
+,"Conservation"
+,"Commercial"
+,"Education"
+,"Elections"
+,"Emergency response"
+,"Gender"
+,"Governance"
+,"Health"
+,"Human rights"
+,"Humanitarian Assistance"
+,"Legal services"
+,"Media"
+,"Mobile finance"
+,"Radio"
+,"Other"};
+
+
+String [] countries = {"Afghanistan"
+,"Albania"
+,"Algeria"
+,"Andorra"
+,"Angola"
+,"Antigua &amp; Deps"
+,"Argentina"
+,"Armenia"
+,"Australia"
+,"Austria"
+,"Azerbaijan"
+,"Bahamas"
+,"Bahrain"
+,"Bangladesh"
+,"Barbados"
+,"Belarus"
+,"Belgium"
+,"Belize"
+,"Benin"
+,"Bhutan"
+,"Bolivia"
+,"Bosnia Herzegovina"
+,"Botswana"
+,"Brazil"
+,"Brunei"
+,"Bulgaria"
+,"Burkina"
+,"Burundi"
+,"Cambodia"
+,"Cameroon"
+,"Canada"
+,"Cape Verde"
+,"Central African Rep"
+,"Chad"
+,"Chile"
+,"China"
+,"Colombia"
+,"Comoros"
+,"Congo"
+,"Congo {Democratic Rep}"
+,"Costa Rica"
+,"Croatia"
+,"Cuba"
+,"Cyprus"
+,"Czech Republic"
+,"Denmark"
+,"Djibouti"
+,"Dominica"
+,"Dominican Republic"
+,"East Timor"
+,"Ecuador"
+,"Egypt"
+,"El Salvador"
+,"Equatorial Guinea"
+,"Eritrea"
+,"Estonia"
+,"Ethiopia"
+,"Fiji"
+,"Finland"
+,"France"
+,"Gabon"
+,"Gambia"
+,"Georgia"
+,"Germany"
+,"Ghana"
+,"Greece"
+,"Grenada"
+,"Guatemala"
+,"Guinea"
+,"Guinea-Bissau"
+,"Guyana"
+,"Haiti"
+,"Honduras"
+,"Hungary"
+,"Iceland"
+,"India"
+,"Indonesia"
+,"Iran"
+,"Iraq"
+,"Ireland {Republic}"
+,"Israel"
+,"Italy"
+,"Ivory Coast"
+,"Jamaica"
+,"Japan"
+,"Jordan"
+,"Kazakhstan"
+,"Kenya"
+,"Kiribati"
+,"Korea North"
+,"Korea South"
+,"Kosovo"
+,"Kuwait"
+,"Kyrgyzstan"
+,"Laos"
+,"Latvia"
+,"Lebanon"
+,"Lesotho"
+,"Liberia"
+,"Libya"
+,"Liechtenstein"
+,"Lithuania"
+,"Luxembourg"
+,"Macedonia"
+,"Madagascar"
+,"Malawi"
+,"Malaysia"
+,"Maldives"
+,"Mali"
+,"Malta"
+,"Marshall Islands"
+,"Mauritania"
+,"Mauritius"
+,"Mexico"
+,"Micronesia"
+,"Moldova"
+,"Monaco"
+,"Mongolia"
+,"Montenegro"
+,"Morocco"
+,"Mozambique"
+,"Myanmar, {Burma}"
+,"Namibia"
+,"Nauru"
+,"Nepal"
+,"Netherlands"
+,"New Zealand"
+,"Nicaragua"
+,"Niger"
+,"Nigeria"
+,"Norway"
+,"Oman"
+,"Pakistan"
+,"Palau"
+,"Panama"
+,"Papua New Guinea"
+,"Paraguay"
+,"Peru"
+,"Philippines"
+,"Poland"
+,"Portugal"
+,"Qatar"
+,"Romania"
+,"Russian Federation"
+,"Rwanda"
+,"St Kitts &amp; Nevis"
+,"St Lucia"
+,"Saint Vincent &amp; the Grenadines"
+,"Samoa"
+,"San Marino"
+,"Sao Tome &amp; Principe"
+,"Saudi Arabia"
+,"Senegal"
+,"Serbia"
+,"Seychelles"
+,"Sierra Leone"
+,"Singapore"
+,"Slovakia"
+,"Slovenia"
+,"Solomon Islands"
+,"Somalia"
+,"South Africa"
+,"South Sudan"
+,"Spain"
+,"Sri Lanka"
+,"Sudan"
+,"Suriname"
+,"Swaziland"
+,"Sweden"
+,"Switzerland"
+,"Syria"
+,"Taiwan"
+,"Tajikistan"
+,"Tanzania"
+,"Thailand"
+,"Togo"
+,"Tonga"
+,"Trinidad &amp; Tobago"
+,"Tunisia"
+,"Turkey"
+,"Turkmenistan"
+,"Tuvalu"
+,"Uganda"
+,"Ukraine"
+,"United Arab Emirates"
+,"United Kingdom"
+,"United States"
+,"Uruguay"
+,"Uzbekistan"
+,"Vanuatu"
+,"Vatican City"
+,"Venezuela"
+,"Vietnam"
+,"Yemen"
+,"Zambia"
+,"Zimbabwe"};
+
+
 Integer var_category_of_work = (Integer)context.getVariable("var_category_of_work");
 String var_city_region = (String)context.getVariable("var_city_region");
 Integer var_country = (Integer)context.getVariable("var_country");
@@ -1519,9 +1747,9 @@ String var_website_address = (String)context.getVariable("var_website_address");
 
 Map data = new HashMap();
 
-data.put("var_category_of_work",""+var_category_of_work);
+data.put("var_category_of_work",""+prof[var_category_of_work]);
 data.put("var_city_region",var_city_region);
-data.put("var_country",""+var_country);
+data.put("var_country",""+countries[var_country]);
 data.put("var_feature_in_user_map",""+var_feature_in_user_map);
 data.put("var_findout_more_about_research",""+var_findout_more_about_research);
 data.put("var_get_frontlinesms_newsletter",""+var_get_frontlinesms_newsletter);
@@ -1605,6 +1833,222 @@ if(succeeded){
                           <void property="value">
                             <string>import java.util.HashMap;
 
+String [] prof = {"Agriculture"
+,"Conservation"
+,"Commercial"
+,"Education"
+,"Elections"
+,"Emergency response"
+,"Gender"
+,"Governance"
+,"Health"
+,"Human rights"
+,"Humanitarian Assistance"
+,"Legal services"
+,"Media"
+,"Mobile finance"
+,"Radio"
+,"Other"};
+
+
+String [] countries = {"Afghanistan"
+,"Albania"
+,"Algeria"
+,"Andorra"
+,"Angola"
+,"Antigua &amp; Deps"
+,"Argentina"
+,"Armenia"
+,"Australia"
+,"Austria"
+,"Azerbaijan"
+,"Bahamas"
+,"Bahrain"
+,"Bangladesh"
+,"Barbados"
+,"Belarus"
+,"Belgium"
+,"Belize"
+,"Benin"
+,"Bhutan"
+,"Bolivia"
+,"Bosnia Herzegovina"
+,"Botswana"
+,"Brazil"
+,"Brunei"
+,"Bulgaria"
+,"Burkina"
+,"Burundi"
+,"Cambodia"
+,"Cameroon"
+,"Canada"
+,"Cape Verde"
+,"Central African Rep"
+,"Chad"
+,"Chile"
+,"China"
+,"Colombia"
+,"Comoros"
+,"Congo"
+,"Congo {Democratic Rep}"
+,"Costa Rica"
+,"Croatia"
+,"Cuba"
+,"Cyprus"
+,"Czech Republic"
+,"Denmark"
+,"Djibouti"
+,"Dominica"
+,"Dominican Republic"
+,"East Timor"
+,"Ecuador"
+,"Egypt"
+,"El Salvador"
+,"Equatorial Guinea"
+,"Eritrea"
+,"Estonia"
+,"Ethiopia"
+,"Fiji"
+,"Finland"
+,"France"
+,"Gabon"
+,"Gambia"
+,"Georgia"
+,"Germany"
+,"Ghana"
+,"Greece"
+,"Grenada"
+,"Guatemala"
+,"Guinea"
+,"Guinea-Bissau"
+,"Guyana"
+,"Haiti"
+,"Honduras"
+,"Hungary"
+,"Iceland"
+,"India"
+,"Indonesia"
+,"Iran"
+,"Iraq"
+,"Ireland {Republic}"
+,"Israel"
+,"Italy"
+,"Ivory Coast"
+,"Jamaica"
+,"Japan"
+,"Jordan"
+,"Kazakhstan"
+,"Kenya"
+,"Kiribati"
+,"Korea North"
+,"Korea South"
+,"Kosovo"
+,"Kuwait"
+,"Kyrgyzstan"
+,"Laos"
+,"Latvia"
+,"Lebanon"
+,"Lesotho"
+,"Liberia"
+,"Libya"
+,"Liechtenstein"
+,"Lithuania"
+,"Luxembourg"
+,"Macedonia"
+,"Madagascar"
+,"Malawi"
+,"Malaysia"
+,"Maldives"
+,"Mali"
+,"Malta"
+,"Marshall Islands"
+,"Mauritania"
+,"Mauritius"
+,"Mexico"
+,"Micronesia"
+,"Moldova"
+,"Monaco"
+,"Mongolia"
+,"Montenegro"
+,"Morocco"
+,"Mozambique"
+,"Myanmar, {Burma}"
+,"Namibia"
+,"Nauru"
+,"Nepal"
+,"Netherlands"
+,"New Zealand"
+,"Nicaragua"
+,"Niger"
+,"Nigeria"
+,"Norway"
+,"Oman"
+,"Pakistan"
+,"Palau"
+,"Panama"
+,"Papua New Guinea"
+,"Paraguay"
+,"Peru"
+,"Philippines"
+,"Poland"
+,"Portugal"
+,"Qatar"
+,"Romania"
+,"Russian Federation"
+,"Rwanda"
+,"St Kitts &amp; Nevis"
+,"St Lucia"
+,"Saint Vincent &amp; the Grenadines"
+,"Samoa"
+,"San Marino"
+,"Sao Tome &amp; Principe"
+,"Saudi Arabia"
+,"Senegal"
+,"Serbia"
+,"Seychelles"
+,"Sierra Leone"
+,"Singapore"
+,"Slovakia"
+,"Slovenia"
+,"Solomon Islands"
+,"Somalia"
+,"South Africa"
+,"South Sudan"
+,"Spain"
+,"Sri Lanka"
+,"Sudan"
+,"Suriname"
+,"Swaziland"
+,"Sweden"
+,"Switzerland"
+,"Syria"
+,"Taiwan"
+,"Tajikistan"
+,"Tanzania"
+,"Thailand"
+,"Togo"
+,"Tonga"
+,"Trinidad &amp; Tobago"
+,"Tunisia"
+,"Turkey"
+,"Turkmenistan"
+,"Tuvalu"
+,"Uganda"
+,"Ukraine"
+,"United Arab Emirates"
+,"United Kingdom"
+,"United States"
+,"Uruguay"
+,"Uzbekistan"
+,"Vanuatu"
+,"Vatican City"
+,"Venezuela"
+,"Vietnam"
+,"Yemen"
+,"Zambia"
+,"Zimbabwe"};
+
+
 Integer var_category_of_work = (Integer)context.getVariable("var_category_of_work");
 String var_city_region = (String)context.getVariable("var_city_region");
 Integer var_country = (Integer)context.getVariable("var_country");
@@ -1623,9 +2067,9 @@ String var_website_address = (String)context.getVariable("var_website_address");
 
 Map data = new HashMap();
 
-data.put("var_category_of_work",""+var_category_of_work);
+data.put("var_category_of_work",""+prof[var_category_of_work]);
 data.put("var_city_region",var_city_region);
-data.put("var_country",""+var_country);
+data.put("var_country",""+countries[var_country]);
 data.put("var_feature_in_user_map",""+var_feature_in_user_map);
 data.put("var_findout_more_about_research",""+var_findout_more_about_research);
 data.put("var_get_frontlinesms_newsletter",""+var_get_frontlinesms_newsletter);
@@ -1643,15 +2087,15 @@ Testsend ts = new Testsend();
 boolean succeeded = ts.submitData(data);
 
 if(succeeded){
-    formEnvironment.getFormComponentById("199").setVisible(true);
-    formEnvironment.getFormComponentById("200").setVisible(true);
-    formEnvironment.getFormComponentById("201").setVisible(false);
-    formEnvironment.getFormComponentById("202").setVisible(false);
+    formEnvironment.getFormComponentById("68").setVisible(true);
+    formEnvironment.getFormComponentById("69").setVisible(true);
+    formEnvironment.getFormComponentById("123").setVisible(false);
+    formEnvironment.getFormComponentById("124").setVisible(false);
 }else{
-    formEnvironment.getFormComponentById("201").setVisible(true);
-    formEnvironment.getFormComponentById("202").setVisible(true);
-    formEnvironment.getFormComponentById("199").setVisible(false);
-    formEnvironment.getFormComponentById("200").setVisible(false);
+    formEnvironment.getFormComponentById("123").setVisible(true);
+    formEnvironment.getFormComponentById("124").setVisible(true);
+    formEnvironment.getFormComponentById("68").setVisible(false);
+    formEnvironment.getFormComponentById("69").setVisible(false);
 }</string>
                           </void>
                         </object>
