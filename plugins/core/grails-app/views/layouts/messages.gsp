@@ -55,8 +55,9 @@
 			<fsms:render template="/message/menu"/>
 			<div id="content">
 				<g:form controller="${params.controller}"
-						params="[ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
+						params="[messageId: messageInstance?.id, searchId: search?.id]">
 					<g:hiddenField name="messageSection" value="${messageSection}"/>
+					<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 					<div id="message-list" class="${(messageSection in ['inbox', 'sent', 'pending', 'trash', 'folder', 'no_search'])? '': 'tall-header'}">
 						<fsms:render template="/message/header"/>
 						<fsms:render template="/message/message_list"/>
