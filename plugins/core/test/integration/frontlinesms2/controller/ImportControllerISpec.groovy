@@ -65,10 +65,6 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.list()*.messageOwner.name.every { it == 'messages from v1' }
 	}
 
-	def mockFileUpload(filename, fileContent) {
-		controller.request.addFile(new GrailsMockMultipartFile(filename, fileContent.getBytes("UTF-8")))
-	}
-
 	def 'Uploading a message with a very long content field results in the message content being...'() {
 		given:
 			mockFileUpload('importCsvFile', '''"Message Type","Message Status","Message Date","Message Content","Sender Number","Recipient Number"
@@ -76,11 +72,24 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 "Received","Received","2012-02-24 17:22:59","short message","254705693656","254704593656"
 ''')
 		when:
-			// file is uploaded
 			controller.importMessages()
 		then:
-			// check that messages and folders were created
 			Fmessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..478] + '…']
+	}
+
+	def 'Uploading a CSV with a BOM should not cause issues'() {
+		given:
+			mockFileUpload('importCsvFile', '''"\uFEFFMessage Type","Message Status","Message Date","Message Content","Sender Number","Recipient Number"
+"Received","Received","2012-02-16 16:42:24","+123456789","Safaricom","254704593656"
+''')
+		when:
+			controller.importMessages()
+		then:
+			Fmessage.list()*.inbound == [true]
+	}
+
+	def mockFileUpload(filename, fileContent) {
+		controller.request.addFile(new GrailsMockMultipartFile(filename, fileContent.getBytes("UTF-8")))
 	}
 }
 

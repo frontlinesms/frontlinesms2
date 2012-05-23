@@ -92,7 +92,13 @@ class ImportController {
 					Sent:DispatchStatus.SENT]
 			uploadedCSVFile.inputStream.toCsvReader([escapeChar:'�']).eachLine { tokens ->
 				println "Processing: $tokens"
-				if(!headers) headers = tokens 
+				if(!headers) {
+					headers = tokens
+					// strip BOM from first value
+					if(headers[0] && headers[0][0] == '\uFEFF') {
+						headers[0] = headers[0].substring(1)
+					}
+				}
 				else try {
 					Fmessage fm = new Fmessage()
 					def dispatchStatus
@@ -112,10 +118,12 @@ class ImportController {
 					}
 					if (fm.inbound) fm.dispatches = []
 					else fm.dispatches.each {
-						it.status = dispatchStatus
+						it.status = dispatchStatus?: DispatchStatus.FAILED
 						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
 					}
-					fm.save(failOnError:true)
+					Fmessage.withNewSession {
+						fm.save(failOnError:true)
+					}
 					++savedCount
 					getMessageFolder("messages from v1").addToMessages(fm)
 				} catch(Exception ex) {
