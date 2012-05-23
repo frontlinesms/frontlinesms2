@@ -13,6 +13,7 @@ driver = {
 	        capabillities.setCapability("version", "5");
 	        capabillities.setCapability("platform", Platform.XP);
 	        capabillities.setCapability("name", "FrontlineSMS2 Functional test cases");
+	        capabillities.setCapability("selenium-version", "2.21.0")
 		driver = new org.openqa.selenium.remote.RemoteWebDriver(
 	           new URL("http://${sauceUser}:${saucePass}@ondemand.saucelabs.com:80/wd/hub"),
 	           capabillities);
