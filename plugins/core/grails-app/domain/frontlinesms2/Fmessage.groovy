@@ -197,7 +197,7 @@ class Fmessage {
 	}
 
 	public void setText(String text) {
-		if(text.size() > 480) text = text[0..478] + '…'
+		if(text?.size() > 480) text = text[0..478] + '…'
 		this.text = text
 	}
 
