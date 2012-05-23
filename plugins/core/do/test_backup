@@ -1,0 +1,9 @@
+#!/bin/bash
+mkdir tmp
+echo "Removing old test reports backup..."
+rm -rf tmp/test-reports
+echo "Backing up latest test reports..."
+cp -r target/test-reports tmp
+echo "Launching browser to view test reports..."
+firefox tmp/test-reports/html/index.html || open tmp/test-reports/html/index.html
+
