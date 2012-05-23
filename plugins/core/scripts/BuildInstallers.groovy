@@ -37,7 +37,7 @@ target(main: 'Build installers for various platforms.') {
 	delete(dir:webappTempDir)
 	unzip(src:"target/${appName}-${appVersion}.war", dest:webappTempDir)
 	
-	exec(dir:'install', executable:isWindows()? 'mvn.bat': 'mvn', args) {
+	exec(dir:'install', output:'maven.log', executable:isWindows()? 'mvn.bat': 'mvn', args) {
 		arg value:"-Dbuild.version=$appVersion"
 		arg value:'clean'
 		arg value:'package'
