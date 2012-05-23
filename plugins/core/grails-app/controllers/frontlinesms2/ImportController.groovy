@@ -27,6 +27,7 @@ class ImportController {
 				else try {
 					Contact c = new Contact()
 					def groups
+					def customFields = []
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
 						if(key in standardFields) {
@@ -35,11 +36,17 @@ class ImportController {
 							def groupNames = getGroupNames(value)
 							groups = getGroups(groupNames)
 						} else {
-							new CustomField(name:key, value:value, contact:c)
+							customFields << new CustomField(name:key, value:value)
 						}
 					}
-					c.save(failOnError:true)
-					if(groups) groups.each { c.addToGroup(it) }
+					// TODO not sure why this has to be done in a new session, but grails
+					// can't cope with failed saves if we don't do this
+					Contact.withNewSession {
+						c.save(failOnError:true)
+						if(groups) groups.each { c.addToGroup(it) }
+						if(customFields) customFields.each { c.addToCustomFields(it) }
+						c.save()
+					}
 					++savedCount
 				} catch(Exception ex) {
 					log.info message(code: 'import.contact.save.error'), ex
