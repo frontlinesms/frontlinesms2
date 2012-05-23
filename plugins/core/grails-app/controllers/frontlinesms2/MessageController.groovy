@@ -182,9 +182,8 @@ class MessageController {
 		messages.each { m ->
 			TrashService.sendToTrash(m)
 		}
-		// FIXME fix i18n concatenation; fix label flash.message.fmessage
 		params.flashMessage = message(code:'default.deleted.message', args:
-				[message(code:'message.label'), messages.size() + message(code:'flash.message.fmessage')])
+				[message(code:'flash.message.fmessage', args:[messages.size()])])
 		if (params.messageSection == 'result') {
 			redirect(controller:'search', action:'result', params:
 					[searchId:params.searchId, flashMessage:params.flashMessage])
@@ -210,8 +209,7 @@ class MessageController {
 				}
 			}
 		}
-		// FIXME fix i18n concatenation; fix label flash.message.fmessage
-		params.flashMessage = message(code:'default.archived.message', args:[message(code:'message.label'), listSize + message(code: 'flash.message.fmessage')])
+		params.flashMessage = message(code:'default.archived.message', args:[message(code: 'flash.message.fmessage', args: [listSize])])
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
 		} else {
@@ -232,8 +230,7 @@ class MessageController {
 				}
 			}
 		}
-		// FIXME fix i18n concatenation; fix label flash.message.fmessage
-		params.flashMessage = message(code:'default.unarchived.message', args:[message(code:'message.label'), listSize + message(code: 'flash.message.fmessage')])
+		params.flashMessage = message(code:'default.unarchived.message', args:[message(code: 'flash.message.fmessage', args:[listSize])])
 		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId, flashMessage:params.flashMessage])
 		else
@@ -273,8 +270,7 @@ class MessageController {
 		if(messagesToSend) {
 			MessageSendJob.defer(messagesToSend)
 		}
-		// FIXME this flash message is concatenated in a stupid way
-		flash.message = message(code:'default.updated.message', args:[message(code:'message.label'), messageList.size() + message(code:'flash.message.fmessage')]) // FIXME what is 'flash.message.fmessage'?  please rename to something whose meaning can be inferred
+		flash.message = message(code:'default.updated.message', args:[message(code:'flash.message.fmessage', args:[messageList.size()])])
 		render 'OK'
 	}
 
