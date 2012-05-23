@@ -68,5 +68,19 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def mockFileUpload(filename, fileContent) {
 		controller.request.addFile(new GrailsMockMultipartFile(filename, fileContent.getBytes("UTF-8")))
 	}
+
+	def 'Uploading a message with a very long content field results in the message content being...'() {
+		given:
+			mockFileUpload('importCsvFile', '''"Message Type","Message Status","Message Date","Message Content","Sender Number","Recipient Number"
+"Received","Received","2012-02-16 16:42:24","''' + ('0123456789ABCDEF' * 256)  + '''","Safaricom","254704593656"
+"Received","Received","2012-02-24 17:22:59","short message","254705693656","254704593656"
+''')
+		when:
+			// file is uploaded
+			controller.importMessages()
+		then:
+			// check that messages and folders were created
+			Fmessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..478] + '…']
+	}
 }
 

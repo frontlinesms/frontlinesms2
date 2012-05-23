@@ -37,7 +37,7 @@ class Fmessage {
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text nullable:true
+		text nullable:true, maxSize:480
 		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
@@ -194,6 +194,11 @@ class Fmessage {
 	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
+	}
+
+	public void setText(String text) {
+		if(text.size() > 480) text = text[0..478] + '…'
+		this.text = text
 	}
 
 	// FIXME document what this is, and remove references to PollResponse
