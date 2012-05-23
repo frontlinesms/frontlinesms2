@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Performing mvn install on related projects."
 echo "Updating projects: $@"
 
 for project in $@; do
