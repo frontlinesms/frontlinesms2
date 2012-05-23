@@ -26,7 +26,7 @@
 			<fsms:render template="menu"/>
 			<div id="content">
 				<g:form controller="${params.controller}"
-						params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
+						params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
 					<!-- Remove this hidden field when search moves are made a bit more sensible -->
 					<g:hiddenField name="searchId" value="${search?.id}"/>
 					<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">

@@ -1,5 +1,4 @@
 <g:hiddenField name="sortField" value="${params.sort}"/>
-<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 <g:hiddenField name="messageTotal" value="${messageInstanceTotal}"/>
 <g:if test="${messageSection == 'search'}">
   	<g:hiddenField name="activityId" value="${params.activityId}"/>
