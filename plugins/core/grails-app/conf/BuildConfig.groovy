@@ -83,7 +83,7 @@ grails.project.dependency.resolution = {
 		runtime ":markdown:1.0.0.RC1"
 		runtime ":routing:1.2.0"
 		runtime ":csv:0.3.1"
-		runtime ":quartz2:0.2.2.1-frontlinesms"
+		runtime ":quartz2:0.2.3"
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.16.1"
