@@ -17,10 +17,13 @@ def isWindows() {
 	System.properties.'os.name'.toLowerCase().contains('windows')
 }
 
+def mvn() {
+	return isWindows()? 'mvn.bat': 'mvn'
+}
+
 target(main: 'Build installers for various platforms.') {
 	envCheck()
 	if(grailsSettings.grailsEnv != 'production')
-		input('Press Return to continue building...')
 	if(isSet('skipWar')) {
 		if(grailsSettings.grailsEnv == 'production') {
 			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
@@ -36,8 +39,17 @@ target(main: 'Build installers for various platforms.') {
 	def webappTempDir = 'install/src/web-app'
 	delete(dir:webappTempDir)
 	unzip(src:"target/${appName}-${appVersion}.war", dest:webappTempDir)
+
+	// Build instal4j custom code JAR
+	exec(dir:'install', output:'install4j-custom-classes.maven.log', executable:mvn(), args) {
+		arg value:'-f'
+		arg value:'install4j-custom-classes.pom.xml'
+		arg value:'clean'
+		arg value:'package'
+	}
 	
-	exec(dir:'install', output:'maven.log', executable:isWindows()? 'mvn.bat': 'mvn', args) {
+	// Build installers
+	exec(dir:'install', output:'install4j.maven.log', executable:mvn(), args) {
 		arg value:"-Dbuild.version=$appVersion"
 		arg value:'clean'
 		arg value:'package'

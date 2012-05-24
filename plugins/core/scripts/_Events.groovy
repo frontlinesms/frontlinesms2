@@ -55,7 +55,6 @@ eventTestPhaseEnd = { phaseName ->
 }
 
 eventPackagingEnd = {
-	println "copied i18n files to grails-app"
 	def folderMap = [
 		"grails-app/i18n":"web-app/WEB-INF/grails-app/i18n"
 	]
@@ -64,6 +63,5 @@ eventPackagingEnd = {
 			fileset(dir:oldLocation)
 		}	
 	}
-	
 }
 

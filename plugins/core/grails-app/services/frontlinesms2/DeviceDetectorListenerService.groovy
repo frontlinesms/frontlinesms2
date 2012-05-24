@@ -9,41 +9,47 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 	def i18nUtilService
 	
 	void handleDetectionCompleted(ATDeviceDetector detector) {
+		def log = { println "# $it" }
 		println "#####################################################"
-		println "# deviceDetectionService.handleDetectionCompleted() #"
-		println "# port: $detector.portName"
-		println "# manufacturer: $detector.manufacturer"
-		println "# model: $detector.model"
-		println "# imsi: $detector.imsi"
-		println "# serial: $detector.serial"
-		println "# SMS send supported: $detector.smsSendSupported"
-		println "# SMS receive supported: $detector.smsReceiveSupported"
-		def c = SmslibFconnection.findForDetector(detector).list()
-		println "# Found for detector: $c"
-		if(c) {
-			c = c.get(0)
-			def dirty
-			if(!c.serial) {
-				c.setSerial(detector.serial)
-				dirty = true
-			}
-			if(!c.imsi) {
-				c.setImsi(detector.imsi)
-				dirty = true
-			}
-			if(dirty) c.save()
+		log "deviceDetectionService.handleDetectionCompleted()"
+		log "port: $detector.portName"
+		log "manufacturer: $detector.manufacturer"
+		log "model: $detector.model"
+		log "imsi: $detector.imsi"
+		log "serial: $detector.serial"
+		log "SMS send supported: $detector.smsSendSupported"
+		log "SMS receive supported: $detector.smsReceiveSupported"
+
+		def matchingModemAndSim = SmslibFconnection.findAllBySerialAndImsi(detector.serial, detector.imsi)
+		if(matchingModemAndSim.any { it.status == RouteStatus.CONNECTED || isPortVisible(it.port) }) {
+			log "There was a created route already on this device."
+			return
+		}
+
+		def connectionToStart
+		def exactMatch = matchingModemAndSim.find { it.port == detector.portName }
+		if(exactMatch) {
+			connectionToStart = exactMatch
 		} else {
-			def matchingModemAndSim = SmslibFconnection.findAllBySerialAndImsi(detector.serial, detector.imsi)
-			if(!matchingModemAndSim.any { it.status == RouteStatus.CONNECTED || isPortVisible(it.port) }) {
+			def c = SmslibFconnection.findForDetector(detector).list()
+			if(c) {
+				log "Found for detector: $c"
+				c = c[0]
+				def dirty = !(c.serial && c.imsi)
+				if(!c.serial) c.setSerial(detector.serial)
+				if(!c.imsi) c.setImsi(detector.imsi)
+				if(dirty) c.save()
+				connectionToStart = c
+			} else {
 				def name = i18nUtilService.getMessage(code:'connection.name.autoconfigured', args:[
 						detector.manufacturer, detector.model, detector.portName])
-				c = new SmslibFconnection(name:name, port:detector.portName, baud:detector.maxBaudRate,
+				connectionToStart = new SmslibFconnection(name:name, port:detector.portName, baud:detector.maxBaudRate,
 								serial:detector.serial, imsi:detector.imsi)
 						.save(flush:true, failOnError:true)
-				println "# Created new detector: $c"
-			} else println "There was a created route already on this device."
+				log "Created new detector: $name"
+			}
 		}
-		if(c) fconnectionService.createRoutes(c)
+		if(connectionToStart) fconnectionService.createRoutes(connectionToStart)
 	}
 
 	private boolean isPortVisible(String portName) {
