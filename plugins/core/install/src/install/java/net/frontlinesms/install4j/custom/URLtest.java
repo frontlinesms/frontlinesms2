@@ -1,3 +1,5 @@
+package net.frontlinesms.install4j.custom;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
