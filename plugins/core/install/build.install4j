@@ -1243,6 +1243,14 @@ return t.test(text);</string>
                       <void property="checkIfEmpty">
                         <boolean>true</boolean>
                       </void>
+                      <void property="inputVerifier">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>URLtest t = new URLtest();
+return t.testEmail(text);</string>
+                          </void>
+                        </object>
+                      </void>
                       <void property="labelText">
                         <string>Email</string>
                       </void>
