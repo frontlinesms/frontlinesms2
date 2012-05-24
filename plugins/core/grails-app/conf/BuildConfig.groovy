@@ -86,7 +86,7 @@ grails.project.dependency.resolution = {
 		runtime ":quartz2:0.2.3"
 
 		test ":code-coverage:1.2.5"
-		test ":codenarc:0.16.1"
+		test ":codenarc:0.17"
 		test ":spock:0.6"
 		test ":geb:$gebVersion"
 
