@@ -1,8 +1,18 @@
 function insertDynamicField(inputArea, magicWand) {
-	var magicWandElement = document.getElementById(magicWand)
-	var field = magicWandElement.options[magicWandElement.selectedIndex].value
-	insertAtCaret(inputArea, '${' + field + '}')
-    document.getElementById('magic-wand-na').selected = 1
+	var list = $("#" + magicWand);
+	var varName = list.val();
+	insertAtCaret(inputArea, "${" + varName + "}");
+	resetSelectMenu(list);
+}
+
+/**
+ * Reset a jquery "selectmenu" to display the original selected item.
+ * @arg list jquery selecter for the <option/> element
+ */
+function resetSelectMenu(list) {
+	list.selectmenu("destroy");
+	list[0].selectedIndex = 0; //.attr("selectedIndex", 1); //selectmenu("destroy");
+	list.selectmenu();
 }
 
 function insertAtCaret(areaId,text) {
