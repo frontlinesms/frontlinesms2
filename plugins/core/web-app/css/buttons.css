@@ -38,3 +38,16 @@ button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.
 	background-image: url('../images/buttons/button_disabled_part.png');
 	color: #9E9E9E;
 }
+
+.magicwand-button {
+	display: block;
+	width: 16px;
+	height: 18px;
+	background-image: url('../images/icons/magic_wand.png');
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+.magicwand-container {
+	float: left;
+}
+
