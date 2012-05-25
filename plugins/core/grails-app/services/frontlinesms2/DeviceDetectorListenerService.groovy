@@ -8,19 +8,33 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 	def fconnectionService
 	def i18nUtilService
 	
-	void handleDetectionCompleted(ATDeviceDetector detector) {
+	/**
+	 * Handles completion of detection of a device on a database port.
+	 * This method is synchronised as concurrent calls can result in multiple
+	 * connections to the same device.
+	 */
+	synchronized void handleDetectionCompleted(ATDeviceDetector detector) {
 		def log = { println "# $it" }
 		println "#####################################################"
 		log "deviceDetectionService.handleDetectionCompleted()"
-		log "port: $detector.portName"
-		log "manufacturer: $detector.manufacturer"
-		log "model: $detector.model"
-		log "imsi: $detector.imsi"
-		log "serial: $detector.serial"
+		log "port: [$detector.portName]"
+		log "manufacturer: [$detector.manufacturer]"
+		log "model: [$detector.model]"
+		log "imsi: [$detector.imsi]"
+		log "serial: [$detector.serial]"
 		log "SMS send supported: $detector.smsSendSupported"
 		log "SMS receive supported: $detector.smsReceiveSupported"
 
+		log "Available connections in database:"
+		SmslibFconnection.findAll().each { c ->
+			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
+		}
+
 		def matchingModemAndSim = SmslibFconnection.findAllBySerialAndImsi(detector.serial, detector.imsi)
+		println "Matching modem and SIM in database:"
+		matchingModemAndSim.each { c ->
+			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
+		}
 		if(matchingModemAndSim.any { it.status == RouteStatus.CONNECTED || isPortVisible(it.port) }) {
 			log "There was a created route already on this device."
 			return
@@ -49,7 +63,15 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 				log "Created new detector: $name"
 			}
 		}
-		if(connectionToStart) fconnectionService.createRoutes(connectionToStart)
+		if(connectionToStart) {
+			log "Starting connection $connectionToStart with imsi=$connectionToStart.imsi;serial=$connectionToStart.serial"
+			fconnectionService.createRoutes(connectionToStart)
+		}
+
+		log "After connection, smslibfconnections:"
+		SmslibFconnection.withNewSession { SmslibFconnection.findAll().each { c ->
+			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
+		} }
 	}
 
 	private boolean isPortVisible(String portName) {
