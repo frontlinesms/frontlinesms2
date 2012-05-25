@@ -6,6 +6,7 @@ class Contact {
 	String mobile
 	String email
 	String notes
+	static String getShortName() { 'contact' }
 
 	static hasMany = [customFields: CustomField]
 	

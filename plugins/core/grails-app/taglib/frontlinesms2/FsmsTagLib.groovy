@@ -62,17 +62,25 @@ class FsmsTagLib {
 		
 	}
 	
-	def input = { att ->
+	def input = {	 att, body ->
 		def groovyKey = att.field
-		def htmlKey = (att.fieldPrefix?:att.instanceClass?att.instanceClass.shortName:'') + att.field
-		def val = att.instance?."$groovyKey"
+		// TODO remove references to att.instanceClass and make sure that all forms in app
+		// have an instance supplied - whether it is retrieved from the database or created
+		// specially for the view
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
+		def htmlKey = (att.fieldPrefix?:instanceClass?instanceClass.shortName:'') + att.field
+		def val = att.instance?."$groovyKey"
+
+		if(isRequired(instanceClass, att.field) && !isBooleanField(instanceClass, att.field)) {
+			att.class = "required"
+		}
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
 		att += [name:htmlKey, value:val]
 		out << '<div class="field">'
 		out << '<label for="' + htmlKey + '">'
 		out << '' + getFieldLabel(instanceClass, groovyKey)
+		if(isRequired(instanceClass, att.field) && !isBooleanField(instanceClass, att.field)) out << '<span class="required-indicator">*</span>'
 		out << '</label>'
 		
 		if(att.password || isPassword(instanceClass, groovyKey)) {	
@@ -83,7 +91,8 @@ class FsmsTagLib {
 		} else if(isBooleanField(instanceClass, groovyKey)) {
 			out << g.checkBox(att)
 		} else out << g.textField(att)
-		
+		out << body()
+		out << '<div style="clear:both" class="clearfix"></div>'
 		out << '</div>'
 	}
 
@@ -174,5 +183,9 @@ class FsmsTagLib {
 			}
 			
 		}
+	}
+
+	private def isRequired(instanceClass, field) {
+		!instanceClass.constraints[field].nullable
 	}
 }
