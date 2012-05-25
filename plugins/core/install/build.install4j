@@ -1066,9 +1066,6 @@ We are able to provide FrontlineSMS software and technical support for free beca
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                      <void property="checkIfEmpty">
-                        <boolean>true</boolean>
-                      </void>
                       <void property="labelText">
                         <string>City / region</string>
                       </void>
@@ -1085,43 +1082,26 @@ We are able to provide FrontlineSMS software and technical support for free beca
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                      <void property="checkIfEmpty">
-                        <boolean>true</boolean>
-                      </void>
                       <void property="inputVerifier">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
                             <string>import net.frontlinesms.install4j.custom.URLtest;
 
-URLtest t = new URLtest();
-return t.test(text);</string>
+if(text.equals("")){
+    return true;
+}else{
+    URLtest t = new URLtest();
+    return t.test(text);
+}
+</string>
                           </void>
                         </object>
                       </void>
                       <void property="labelText">
-                        <string>Website address*</string>
+                        <string>Website address</string>
                       </void>
                       <void property="variableName">
                         <string>var_website_address</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="" id="175" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                      <void property="checkIfEmpty">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="labelText">
-                        <string>Operating System</string>
-                      </void>
-                      <void property="variableName">
-                        <string>var_operating_system</string>
                       </void>
                     </object>
                   </java>
@@ -1133,9 +1113,6 @@ return t.test(text);</string>
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextAreaComponent">
-                      <void property="checkIfEmpty">
-                        <boolean>true</boolean>
-                      </void>
                       <void property="labelText">
                         <string>How do you plan to use FrontlineSMS</string>
                       </void>
@@ -1225,25 +1202,6 @@ return t.test(text);</string>
                 </serializedBean>
                 <initScript />
                 <visibilityScript />
-              </formComponent>
-              <formComponent name="name" id="181" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                      <void property="checkIfEmpty">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="labelText">
-                        <string>Name</string>
-                      </void>
-                      <void property="variableName">
-                        <string>var_share_name</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript>return false;</visibilityScript>
               </formComponent>
               <formComponent name="" id="182" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
@@ -1422,54 +1380,6 @@ To edit the information before submitting click BACK.To Cancel click CANCEL.</st
                 <initScript />
                 <visibilityScript />
               </formComponent>
-              <formComponent name="category of work" id="192" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
-                      <void property="labelText">
-                        <string>Category of Work</string>
-                      </void>
-                      <void property="valueLabelText">
-                        <string>${installer:var_category_of_work}</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="country" id="193" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
-                      <void property="labelText">
-                        <string>Country</string>
-                      </void>
-                      <void property="valueLabelText">
-                        <string>${installer:var_country}</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="city  or region" id="194" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
-                      <void property="labelText">
-                        <string>City or Region</string>
-                      </void>
-                      <void property="valueLabelText">
-                        <string>${installer:var_city_region}</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
               <formComponent name="website" id="195" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -1486,15 +1396,15 @@ To edit the information before submitting click BACK.To Cancel click CANCEL.</st
                 <initScript />
                 <visibilityScript />
               </formComponent>
-              <formComponent name="operating system" id="196" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+              <formComponent name="city  or region" id="194" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
                       <void property="labelText">
-                        <string>Operating System</string>
+                        <string>City or Region</string>
                       </void>
                       <void property="valueLabelText">
-                        <string>${installer:var_operating_system}</string>
+                        <string>${installer:var_city_region}</string>
                       </void>
                     </object>
                   </java>
@@ -1747,6 +1657,22 @@ f.send(formEnvironment,context);</string>
       <excludedComponents />
       <includedDownloadableComponents />
     </macos>
+    <unixInstaller name="Unix Installer" id="239" customizedId="" mediaFileName="" installDir="frontlinesms2-beta" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
+      <excludedLaunchers />
+      <excludedBeans />
+      <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
+      <exclude />
+      <variables />
+      <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
+        <commentFiles />
+        <customAttributes />
+      </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
+      <installerScript mode="1" file="">
+        <content />
+      </installerScript>
+    </unixInstaller>
   </mediaSets>
   <buildIds buildAll="true" />
   <buildOptions verbose="false" faster="false" debug="false" />
