@@ -1,4 +1,8 @@
-<link rel="shortcut icon" href="${resource(dir:'images',file:'favicon.ico',plugin:'grailsApplication.config.frontlinesms.plugin')}" type="image/x-icon"/>
+<link rel="shortcut icon" href="${resource(dir:'images', file:'favicon.ico')}" type="image/x-icon"/>
+<!--[if IE]>
+	<link href="${resource(dir:'css', file:'ie.css')}" media="screen, projection" rel="stylesheet" type="text/css" />
+<![endif]-->
+
 <r:script disposition="head">
 	url_root = "${request.contextPath}/";
 	url = "${request.forwardURI}/";
