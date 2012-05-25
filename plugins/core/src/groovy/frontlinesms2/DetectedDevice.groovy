@@ -7,12 +7,16 @@ class DetectedDevice {
 	String description
 	DetectionStatus status
 	String lockType
+	boolean smsSendSupported
+	boolean smsReceiveSupported
 	
 	static DetectedDevice create(ATDeviceDetector d) {
 		new DetectedDevice(port:d.portName,
 			description:getDescription(d),
 			status:getStatus(d),
-			lockType:d.lockType)
+			lockType:d.lockType,
+			smsSendSupported:d.smsSendSupported,
+			smsReceiveSupported:d.smsReceiveSupported)
 	}
 
 	static def getDescription(ATDeviceDetector d) {
@@ -28,3 +32,4 @@ class DetectedDevice {
 		else DetectionStatus.RED
 	}
 }
+

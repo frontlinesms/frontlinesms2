@@ -40,6 +40,20 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
 	}
 
+	def 'handleDetected should not create a new fconnection for newly detected device which does not support send or receive'() {
+		given:
+			def port = "PORT1"
+			def serial = '12345'
+			def imsi = '56789'
+			def d = mockDetector(port:port, serial:serial, imsi:imsi, smsSendSupported:false, smsReceiveSupported:false)
+		when:
+			service.handleDetectionCompleted(d)
+		then:
+			0 * fconnectionService.createRoutes(_)
+			SmslibFconnection.count() == 0
+			!SmslibFconnection.findByPortAndSerialAndImsi(port, serial, imsi)
+	}
+
 	def 'handleDetected should not create a new fconnection if route with serial+IMSI combination already created'() {
 		given:
 			def port = "PORT1"
@@ -141,7 +155,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 	def 'handleDetected should create routes for corresponding configured connections'() {
 		given:
 			def c = mockFconnection()
-			def d = Mock(ATDeviceDetector)
+			def d = mockDetector()
 		when:
 			service.handleDetectionCompleted(d)
 		then:
@@ -152,9 +166,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 	def 'handleDetected should update IMSI and serial settings of connection if required'() {
 		given:
 			def c = mockFconnection(serial:initialSerial, imsi:initialImsi)
-			def d = Mock(ATDeviceDetector)
-			d.imsi >> detectedImsi
-			d.serial >> detectedSerial
+			def d = mockDetector(imsi:detectedImsi, serial:detectedSerial)
 		when:
 			service.handleDetectionCompleted(d)
 		then:
@@ -187,11 +199,13 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 		}
 	}
 
-	private def mockDetector(args) {
+	private def mockDetector(args=[:]) {
 		def d = Mock(ATDeviceDetector)
 		d.portName >> args.port
 		d.serial >> args.serial
 		d.imsi >> args.imsi
+		d.smsSendSupported >> (args.containsKey('smsSendSupported')? args.smsSendSupported: true)
+		d.smsReceiveSupported >> (args.containsKey('smsReceiveSupported')? args.smsReceiveSupported: true)
 		return d
 	}
 

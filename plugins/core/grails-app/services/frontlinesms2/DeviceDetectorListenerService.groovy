@@ -25,6 +25,11 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 		log "SMS send supported: $detector.smsSendSupported"
 		log "SMS receive supported: $detector.smsReceiveSupported"
 
+		if(!(detector.smsSendSupported || detector.smsReceiveSupported)) {
+			log "No point connecting if no SMS functionality is supported."
+			return
+		}
+
 		log "Available connections in database:"
 		SmslibFconnection.findAll().each { c ->
 			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
