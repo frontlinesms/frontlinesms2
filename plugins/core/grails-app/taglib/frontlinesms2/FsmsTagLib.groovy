@@ -70,10 +70,6 @@ class FsmsTagLib {
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
 		def htmlKey = (att.fieldPrefix?:instanceClass?instanceClass.shortName:'') + att.field
 		def val = att.instance?."$groovyKey"
-
-		if(isRequired(instanceClass, att.field) && !isBooleanField(instanceClass, att.field)) {
-			att.class = "required"
-		}
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
 		att += [name:htmlKey, value:val]
@@ -83,6 +79,7 @@ class FsmsTagLib {
 		if(isRequired(instanceClass, att.field) && !isBooleanField(instanceClass, att.field)) out << '<span class="required-indicator">*</span>'
 		out << '</label>'
 		
+		att.class = addValidationCss(instanceClass, att.field)
 		if(att.password || isPassword(instanceClass, groovyKey)) {	
 			out << g.passwordField(att)
 		} else if(instanceClass.metaClass.hasProperty(null, groovyKey)?.type.enum) {
@@ -187,5 +184,21 @@ class FsmsTagLib {
 
 	private def isRequired(instanceClass, field) {
 		!instanceClass.constraints[field].nullable
+	}
+
+	private def isInteger(instanceClass, groovyKey) {
+		return instanceClass.metaClass.hasProperty(null, groovyKey).type in [Integer, int]
+	}
+
+	private def addValidationCss(instanceClass, field) {
+		def cssClasses = ""
+		if(isRequired(instanceClass, field) && !isBooleanField(instanceClass, field)) {
+			cssClasses += " required "
+		}
+
+		if(isInteger(instanceClass, field)) {
+			cssClasses += " digits "
+		}
+		cssClasses
 	}
 }
