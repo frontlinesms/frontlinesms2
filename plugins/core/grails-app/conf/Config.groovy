@@ -124,3 +124,9 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+
+// Added by the JQuery Validation plugin:
+jqueryValidation.packed = true
+jqueryValidation.cdn = false  // false or "microsoft"
+jqueryValidation.additionalMethods = false
+
