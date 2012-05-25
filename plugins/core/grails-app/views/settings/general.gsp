@@ -22,6 +22,7 @@
 						</ul>
 					</div>
 				</g:form>
+				<div class="clearfix"></div>
 			</div>
 			<div id="import">
 				<h2><g:message code="import.label"/></h2>

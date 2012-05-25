@@ -12,23 +12,14 @@
 	padding-top:20px;
 	padding-bottom:20px;
 }
-#language {
-	width:100%;
-	margin:20px 0 10px 0;
-	padding: 0 30px;
-	border-bottom: 1px solid #9e9e9e;
-}
 #choose-language {
 	float:left;
 	width: 200px;
 	height: 30px;
 	padding:10px;
 }
-#choose-language .button{
-	margin:10px;
-}
 
-#import{
+#import, #language {
 	display: block;
 	width: 100%;
 	padding: 0 30px;
@@ -96,7 +87,7 @@
 	margin-left:5px;
 }
 
-#create-connection-btn{
+#create-connection-btn {
 	padding: 17px;
 }
 
@@ -110,7 +101,7 @@
 	height: 30px;
 	border-bottom: 1px solid #9e9e9e;
 }
-#log-filters .show-log-text{
+#log-filters .show-log-text {
 	float: left;
 	min-width: 210px;
 	padding: 10px 0;
@@ -121,7 +112,7 @@
 	width: 100%;
 	padding: 0 30px;
 }
-#log-list table, #log-list tr, #log-list tbody{
+#log-list table, #log-list tr, #log-list tbody {
 	display: block;
 	width: 100%;
 }
@@ -134,25 +125,32 @@
 	float: right;
 	min-width: 300px;
 }
-.langsection{
-	width:380px;
+
+.langsection {
+	width: 380px;
 }
-.lang-buttons{
-	height:60px;
+
+.lang-buttons li {
+	width: 140px;
+	margin-right: 15px;
+	display: inline;
+	float: left;
 }
-.lang-buttons li{
-	width:140px;
-	margin-right:15px;
-	display:inline;
-	float:left;
-}
-#language h2, #language p, #language input[type="submit"]{
+
+#language h2, #language p, #language input[type="submit"] {
 	margin: 5px 0 10px 0;
 }
-#import h2, #import p, #import input[type="file"]{
+
+#language .clearfix {
+	clear: both;
+}
+
+#import h2, #import p, #import input[type="file"] {
 	margin: 5px 0 10px 0;
 }
+
 #show-log-text{
-    float: left;
-    margin: 5px 25px 0 0;
+	float: left;
+	margin: 5px 25px 0 0;
 }
+
