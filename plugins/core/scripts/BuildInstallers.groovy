@@ -10,7 +10,11 @@ def envCheck = {
 }
 
 def isSet(String var) {
-	return System.properties."frontlinesms2.build.$var"? true: false
+	return getValue(var)? true: false
+}
+
+def getValue(String var) {
+	return System.properties."frontlinesms2.build.$var"
 }
 
 def isWindows() {
@@ -23,7 +27,9 @@ def mvn() {
 
 target(main: 'Build installers for various platforms.') {
 	envCheck()
-	if(grailsSettings.grailsEnv != 'production')
+	if(grailsSettings.grailsEnv != 'production') {
+		input('Press Return to continue building...')
+	}
 	if(isSet('skipWar')) {
 		if(grailsSettings.grailsEnv == 'production') {
 			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
@@ -33,6 +39,13 @@ target(main: 'Build installers for various platforms.') {
 			depends(clean)
 		}
 	} else depends(clean, war)
+	if(!isWindows()) if(isSet('compress')? getValue('compress'): grailsSettings.grailsEnv == 'production') {
+		println 'Forcing compression of installers...'
+		exec executable:'do/enable_installer_compression'
+	} else {
+		println 'Disabling compression of installers...'
+		exec executable:'do/disable_installer_compression'
+	}
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
 	println "Building $appName, v$appVersion"

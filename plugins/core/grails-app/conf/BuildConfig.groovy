@@ -67,13 +67,14 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:camel-smslib:0.0.5-SNAPSHOT'
 		['mail', 'http'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.4'
+		compile 'net.frontlinesms.core:at-modem-detector:0.5'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
 	}
 
 	plugins {
 		runtime ":hibernate:$grailsVersion"
+		runtime ":jquery-validation:1.7.3"
 		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'

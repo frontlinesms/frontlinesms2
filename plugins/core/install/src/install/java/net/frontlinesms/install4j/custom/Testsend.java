@@ -8,7 +8,11 @@ import java.util.Iterator;
 
 public class Testsend {
 	public boolean submitData(Map<String, String> data){
+		CompleteRegistration completeReg = new CompleteRegistration();
+		String uuid="";
 		try{
+			uuid = completeReg.generateUUID();
+			data.put("UUID", uuid);
 			URL siteUrl = new URL("http://register.frontlinesms.com/process.php");
 			HttpURLConnection conn = (HttpURLConnection) siteUrl.openConnection();
 			conn.setRequestMethod("POST");
@@ -37,8 +41,10 @@ public class Testsend {
 				System.out.println(line);
 			}
 			in.close();
+			completeReg.createRegistrationPropertiesFile(uuid, true);
 			return true;
 		}catch(Exception e){
+			completeReg.createRegistrationPropertiesFile(uuid, true);
 			return false;
 		}
 	}
