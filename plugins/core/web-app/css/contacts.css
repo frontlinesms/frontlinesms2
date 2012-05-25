@@ -64,6 +64,11 @@
 	height: 100%;
 	overflow: auto;
 }
+
+#contact-editor .basic-info{
+	margin: 17px;
+	padding: 0;
+}
 #contact-editor ul{ padding: 0; }
 #contact-editor label{
 	margin: 0 17px;
@@ -79,7 +84,6 @@
 }
 #contact-editor input[type=text].error{
 	border: 2px solid #ff9600;
-	float: left;
 }
 
 #contact-editor select, #contact-editor #group-list, #contact-editor #message-count{

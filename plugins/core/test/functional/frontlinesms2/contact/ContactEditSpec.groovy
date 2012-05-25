@@ -15,19 +15,18 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:
 			to PageContactShowAlice
 			def changingContact = Contact.findByName('Alice')
-			frmDetails.contactname = 'Kate'
-			frmDetails.contactmobile = '+2541234567'
-			frmDetails.contactemail = 'gaga@gmail.com'
+			frmDetails.name = 'Kate'
+			frmDetails.mobile = '+2541234567'
+			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
-			assertFieldDetailsCorrect('contactname', 'Name', 'Kate')
-			assertFieldDetailsCorrect('contactmobile', 'Mobile', '+2541234567')
+			assertFieldDetailsCorrect('name', 'Name', 'Kate')
+			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			changingContact.refresh()
 			println Contact.findAll()*.name
 			changingContact.name == 'Kate'
 	}
 
-	@spock.lang.IgnoreRest
 	def "Updating a contact within a group keeps the view inside the group"() {
 		given:
 			def alice = Contact.findByName('Alice')
@@ -36,16 +35,16 @@ class ContactEditSpec extends ContactBaseSpec {
 			alice.save(flush: true)
 		when:
 			to PageContactShowGroupContactAlice
-			frmDetails.contactname = 'Kate'
-			frmDetails.contactmobile = '+2541234567'
-			frmDetails.contactemail = 'gaga@gmail.com'
+			frmDetails.name = 'Kate'
+			frmDetails.mobile = '+2541234567'
+			frmDetails.email = 'gaga@gmail.com'
 			$('#update-single').click()
 		then:
 			at PageContactShowGroupContactAlice
-			assertFieldDetailsCorrect('contactname', 'Name', 'Kate')
+			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			Contact.findByName('Kate') != null
-			assertFieldDetailsCorrect('contactname', 'Name', 'Kate')
-			assertFieldDetailsCorrect('contactmobile', 'Mobile', '+2541234567')
+			assertFieldDetailsCorrect('name', 'Name', 'Kate')
+			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			$('#groups-submenu .selected').text() == 'Excellent'
 	}
 	
@@ -53,12 +52,12 @@ class ContactEditSpec extends ContactBaseSpec {
 		when:
 			to PageContactShowBob
 		then:
-			$('#remove-contactmobile').displayed
-			$("#contactmobile").siblings('a').displayed
+			$('#remove-mobile').displayed
+			$("#mobile").siblings('a').displayed
 		when:
-			$('#remove-contactmobile').click()
+			$('#remove-mobile').click()
 		then:
-			!$('#remove-contactmobile').displayed
+			!$('#remove-mobile').displayed
 			!$('.basic-info .send-message').displayed
 	}
 	
@@ -76,7 +75,7 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			at PageContactShowBob
 		when:
-			frmDetails.contactemail = 'bob@gmail.com'
+			frmDetails.email = 'bob@gmail.com'
 		then:
 			!btnSave.disabled
 			!btnCancel.disabled
@@ -92,7 +91,7 @@ class ContactEditSpec extends ContactBaseSpec {
 		then:
 			$("#paging .currentStep").text() == "2"
 		when:
-			frmDetails.contactname = 'Kate'
+			frmDetails.name = 'Kate'
 			btnSave.click()
 			$("#paging .currentStep").jquery.show();
 		then:

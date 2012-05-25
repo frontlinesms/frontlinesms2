@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	$("#custom-field-list li a.remove-field").click(removeFieldClickAction);
 	$("#new-field-dropdown").change(addFieldClickAction);
-	$("div a.remove-field").click(clearField);
+	$("div.basic-info a.remove-field").click(clearField);
 });
 
 function addFieldClickAction() {
