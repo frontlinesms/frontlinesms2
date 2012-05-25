@@ -1,0 +1,2 @@
+sed -i s/pack200Compression=\"true\"/pack200Compression=\"false\"/g install/build.install4j
+sed -i s/lzmaCompression=\"true\"/lzmaCompression=\"false\"/g install/build.install4j
