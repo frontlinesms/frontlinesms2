@@ -31,18 +31,20 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 		}
 
 		def matchingModemAndSim = SmslibFconnection.findAllBySerialAndImsi(detector.serial, detector.imsi)
-		println "Matching modem and SIM in database:"
+		log "Matching modem and SIM in database:"
 		matchingModemAndSim.each { c ->
 			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
 		}
-		if(matchingModemAndSim.any { it.status == RouteStatus.CONNECTED || isPortVisible(it.port) }) {
+		if(matchingModemAndSim.any { it.status == RouteStatus.CONNECTED ||
+				(it.port != detector.portName && isPortVisible(it.port)) }) {
 			log "There was a created route already on this device."
 			return
 		}
 
 		def connectionToStart
 		def exactMatch = matchingModemAndSim.find { it.port == detector.portName }
-		if(exactMatch) {
+		if(exactMatch && exactMatch.status != RouteStatus.CONNECTED) {
+			log "Found exact match: $exactMatch"
 			connectionToStart = exactMatch
 		} else {
 			def c = SmslibFconnection.findForDetector(detector).list()
