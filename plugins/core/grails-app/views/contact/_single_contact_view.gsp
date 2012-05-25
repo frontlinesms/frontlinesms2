@@ -1,3 +1,4 @@
+<jqval:resources/>
 <div id="single-contact" class="single-contact">
 	<g:if test="${contactInstance}">
 		<g:hiddenField name="contactId" value="${contactInstance?.id}"/>
@@ -22,29 +23,21 @@
 			</a>
 		</g:if>
 	</div>
-	<div class="basic-info">
-		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
-		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
-	</div>
-	<div class="basic-info">
-		<label for="mobile"><g:message code="contact.mobile.label" default="Mobile"/></label>
-		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();"/>
+
+	<fsms:input instance="${contactInstance}" field="name"/>
+	<fsms:input instance="${contactInstance}" field="mobile">
 		<g:if test="${contactInstance?.mobile?.trim()}">
-			<a class="remove-field" id="remove-mobile"></a>
+			<a class="remove-field" id="remove-contactmobile"/>
 			<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">&nbsp;
 			</g:remoteLink>
 		</g:if>
-	</div>
-   	<div class="basic-info">
-		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
-		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
+	</fsms:input>
+	<fsms:input instance="${contactInstance}" field="email" class="email">
 		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">
-			<a class="remove-field" id="remove-email"></a>
-			<g:remoteLink controller="quickMessage" action="create" params="[recipients:  contactInstance?.email]" onSuccess="loadContents(data);" class="quick_message">
-			</g:remoteLink>
+			<a class="remove-field" id="remove-contactemail"></a>
 		</g:if>
-	</div>
-	<div id='custom-list' class="basic-info">
+	</fsms:input>
+	<div id='custom-list' class="field">
 		<ul id="custom-field-list">
 			  <g:each in="${contactFieldInstanceList}" status="i" var="f">
 				  <li class="${f == fieldInstance ? 'selected' : ''}">
@@ -55,7 +48,7 @@
 			  </g:each>
 		</ul>
 	</div>
-	<div id='info-add' class="basic-info">
+	<div id='info-add' class="field">
 		<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na"><g:message code="contact.customfield.addmoreinformation"/></option>
 			<option class="predefined-field" value="Street address"><g:message code="contact.customfield.streetaddress"/></option>
@@ -70,11 +63,11 @@
 			<option class="create-custom-field" value='add-new'><g:message code="contact.customfield.option.createnew"/></option>
 		</select>
 	</div>
-	<div id='note-area' class="basic-info">
+	<div id='note-area' class="field">
 		<label for="notes"><g:message code="contact.notes.label"/></label>
 		<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
 	</div>
-	<div id="group-section" class="basic-info">
+	<div id="group-section" class="field">
 		<label for="groups"><g:message code="contact.groups.label"/></label>
 		<div>
 			<ol id='group-list'>
@@ -89,7 +82,7 @@
 			</ol>
 		</div>
 	</div>
-	<div id='group-add' class="basic-info">
+	<div id='group-add' class="field">
 		<select id="group-dropdown" name="group-dropdown">
 			<option class="not-group"><g:message code="contact.add.to.group"/></option>
 			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
@@ -112,23 +105,37 @@
 </div>
 <r:script>
 	$(document).ready(function(){
-	$('#group-dropdown').live("change", function(){
-			$('select').selectmenu();
-		});
-	});
-
-	function refreshMessageStats(data) {
-		var url = 'contact/getMessageStats'
-		var numSent = $('#num-sent')
-		var numRecieved = $('#num-recieved')
-		$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
-			numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount))
-			numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount))
-		});
-		
-	}
-	
-	$(function() {
+		$('#group-dropdown').live("change", function(){
+				$('select').selectmenu();
+			});
 		setInterval(refreshMessageStats, 15000);
+		function refreshMessageStats(data) {
+			var url = 'contact/getMessageStats'
+			var numSent = $('#num-sent')
+			var numRecieved = $('#num-recieved')
+			$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
+				numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount))
+				numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount))
+			});
+			
+		}
+
+		$("#details").validate({
+			rules: {
+				contactmobile: {
+					remote: {
+						url: "${createLink(controller:'contact', action:'checkForDuplicates')}",
+						data: {contactId:"${contactInstance?.id}"}
+					}
+				}
+			},
+			messages: {
+				contactmobile: {
+					remote: "${message(code: 'contact.exists.prompt')}"
+				}
+			}
+		});
 	});
+		
+
 </r:script>

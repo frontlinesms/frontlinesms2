@@ -41,7 +41,6 @@ modules = {
 	contacts {
 		dependsOn "jquery, jquery-ui, common"
 		resource url: [dir:'css', file:"contacts.css"]
-		resource url: [dir:'js', file:"contact/validateNumber.js"]
 		resource url: [dir:'js', file:"contact/buttonStates.js"]
 		resource url: [dir:'js', file:"contact/moreGroupActions.js"]
 		resource url: [dir:'js', file:"contact/search_within_list.js"]
@@ -77,5 +76,6 @@ modules = {
 			resource id: 'theme', url: [dir:'jquery-ui', file:"themes/medium/jquery-ui-1.8.11.custom.css"]
 		}
 	}
+
 }
 

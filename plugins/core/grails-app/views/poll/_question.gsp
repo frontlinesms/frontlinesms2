@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.Poll" %>
 <div id="tabs-1">
 	<div class="section">
 		<div id="responseType">
@@ -27,8 +28,11 @@
 			</ul>
 		</div>
 		<div id="poll-question" >
-			<label class="bold" for='question'><g:message code="poll.question.prompt"/></label>
-			<g:textArea name="question" value="${activityInstanceToEdit?.question}"/>
+			<label class="bold" for='question'>
+				<g:message code="poll.question.prompt"/>
+				<span class="required-indicator"> *</span>
+			</label>
+			<g:textArea name="question" value="${activityInstanceToEdit?.question}" class="required"/>
 		</div>
 		<g:checkBox name="dontSendMessage" value="no-message" checked='false'/><g:message code="poll.message.none"/>
 	</div>
