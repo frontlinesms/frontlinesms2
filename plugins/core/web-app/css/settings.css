@@ -7,6 +7,11 @@
    	height: 90%;
    	overflow: auto;
 } 
+#no-connection{
+	text-align:center;
+	padding-top:20px;
+	padding-bottom:20px;
+}
 #language {
 	width:100%;
 	margin:20px 0 10px 0;
@@ -130,7 +135,16 @@
 	min-width: 300px;
 }
 .langsection{
-	width:160px;
+	width:380px;
+}
+.lang-buttons{
+	height:60px;
+}
+.lang-buttons li{
+	width:140px;
+	margin-right:15px;
+	display:inline;
+	float:left;
 }
 #language h2, #language p, #language input[type="submit"]{
 	margin: 5px 0 10px 0;

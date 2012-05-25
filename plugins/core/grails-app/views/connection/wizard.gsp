@@ -26,7 +26,7 @@ var fconnection = {
 	setType: function(connectionType) {
 		$("#type-list").find("input[name=connectionType]").val(connectionType);
 		<g:each in="${Fconnection.implementations*.shortName}">
-			$("#${it}-form").addClass('hide');
+			$("#${it}-form").hide();
 		</g:each>
 		$("#" + connectionType + "-form").css('display', 'inline');
 		fconnection.init();
@@ -202,6 +202,7 @@ function attachCheckBoxListener() {
 }
 
 function initializePopup() {
+	$("#connectionForm").validate();
 	fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
 	fconnection.init();
 	$("#tabs").bind("tabsshow", fconnection.show);

@@ -32,7 +32,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="name" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains '<input type="text" field="name" name="smslibname" value="" id="smslibname" />'
+			output.contains '<input type="text" field="name" class="required" name="smslibname" value="" id="smslibname" />'
 	}
 	
 	def "INPUT creates a password input for a string field"() {
@@ -52,7 +52,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="receiveProtocol" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains '<select name="emailreceiveProtocol" field="receiveProtocol" id="emailreceiveProtocol" >'
+			output.contains '<select name="emailreceiveProtocol" field="receiveProtocol" class="required" id="emailreceiveProtocol" >'
 			output.contains '</select>'
 	}
 	
@@ -135,8 +135,15 @@ class CrazyFconnection {
 						handphone:['network', 'emailReceiveProtocol']]]
 	static typeFields = ["mobicash", "bank", "handphone"]
 	static String getShortName() { 'crazy' }
+	static constraints = [
+		squid:[
+			blank:false,
+			nullable:false
+		]
+	].withDefault { [nullable:false, blank:true]}
+	
 	boolean squid
-	String simpleName = "smslibfconnection"
+	String simpleName = "crazyfconnection"
 	String name
 	String bank
 	String handphone
