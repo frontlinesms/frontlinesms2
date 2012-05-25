@@ -32,7 +32,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="name" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains '<input type="text" field="name" class="required" name="smslibname" value="" id="smslibname" />'
+			output.contains 'input type="text" field="name"'
 	}
 	
 	def "INPUT creates a password input for a string field"() {
@@ -42,7 +42,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="pin" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains '<input type="password" field="pin" name="smslibpin" value="" id="smslibpin" />'
+			output.contains 'input type="password"'
 	}
 	
 	def "INPUT creates a select dropdown for an enum object"() {
@@ -52,7 +52,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="receiveProtocol" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains '<select name="emailreceiveProtocol" field="receiveProtocol" class="required" id="emailreceiveProtocol" >'
+			output.contains 'select name="emailreceiveProtocol" field="receiveProtocol"'
 			output.contains '</select>'
 	}
 	
@@ -63,7 +63,7 @@ class FsmsTagLibSpec extends GroovyPagesSpec {
 			params = [clazz:clazz]
 			template = '<fsms:input field="send" instanceClass="${clazz.class}" instance="${clazz}" />'
 		then:
-			output.contains('<input type="checkbox" name="intellismssend" field="send" id="intellismssend"  />')
+			output.contains 'input type="checkbox" name="intellismssend"'
 	}
 	
 	def "INPUTS generates subsections for a field Map"() {
