@@ -301,7 +301,14 @@
             </serializedBean>
             <condition />
             <validation />
-            <preActivation />
+            <preActivation>import net.frontlinesms.install4j.custom.CheckRegistration;
+
+CheckRegistration c = new CheckRegistration();
+if(c.isRegistered()){
+    context.gotoScreen(context.getScreenById("12"));
+}
+return;
+</preActivation>
             <postActivation />
             <actions />
             <formComponents>
@@ -1084,7 +1091,9 @@ We are able to provide FrontlineSMS software and technical support for free beca
                       <void property="inputVerifier">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>URLtest t = new URLtest();
+                            <string>import net.frontlinesms.install4j.custom.URLtest;
+
+URLtest t = new URLtest();
 return t.test(text);</string>
                           </void>
                         </object>
@@ -1246,7 +1255,9 @@ return t.test(text);</string>
                       <void property="inputVerifier">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>URLtest t = new URLtest();
+                            <string>import net.frontlinesms.install4j.custom.URLtest;
+
+URLtest t = new URLtest();
 return t.testEmail(text);</string>
                           </void>
                         </object>
