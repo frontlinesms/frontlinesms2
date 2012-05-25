@@ -23,6 +23,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
 	$("#messageText").keyup();
 	$(".dropdown").selectmenu();
+	magicwand.init($("#magicwand-select"));
 	$("#modalBox").dialog({
 		modal: true,
 		title: title,

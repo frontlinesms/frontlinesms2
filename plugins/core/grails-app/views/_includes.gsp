@@ -53,11 +53,12 @@
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
 			$("input[type='submit']").each(function() { fsmsButton.apply(this); });
-		
+
 			setInterval(refreshSystemNotifications, 10000);
 			function refreshSystemNotifications() {
 				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
-						$("#notifications").empty().append(data);
+						$(".system-notification").remove();
+						$("#notifications").append(data);
 				});
 			}
 		});

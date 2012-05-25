@@ -63,6 +63,5 @@ eventPackagingEnd = {
 			fileset(dir:oldLocation)
 		}	
 	}
-	
 }
 

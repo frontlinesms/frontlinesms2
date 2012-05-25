@@ -1,3 +1,5 @@
+package net.frontlinesms.install4j.custom;
+
 import com.install4j.api.actions.*;
 import com.install4j.api.context.*;
 import java.io.File;

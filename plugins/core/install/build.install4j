@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0.10" transformSequenceNumber="3">
+<install4j version="5.0.11" transformSequenceNumber="3">
   <directoryPresets config="." />
   <application name="FrontlineSMS2 Beta" distributionSourceDir="" applicationId="9038-1538-7100-7772" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="frontlinesms2-beta" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:project.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
@@ -68,8 +68,7 @@
   </launchers>
   <installerGui installerType="1" addOnAppId="" suggestPreviousLocations="true" autoUpdateDescriptorUrl="" useAutoUpdateBaseUrl="false" autoUpdateBaseUrl="">
     <customCode>
-      <file location="./UserDataBackupAction.class" />
-      <file location="./UserDataBackupAction$1.class" />
+      <scanDirectory location="./target-custom-classes" />
     </customCode>
     <autoUpdate useMinUpdatableVersion="false" minUpdatableVersion="" useMaxUpdatableVersion="false" maxUpdatableVersion="">
       <commentFiles />
@@ -236,10 +235,10 @@
             <preActivation />
             <postActivation />
             <actions>
-              <action name="" id="128" customizedId="" beanClass="UserDataBackupAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="4" errorMessage="Failed to back up data from previous installation.">
+              <action name="" id="128" customizedId="" beanClass="net.frontlinesms.install4j.custom.UserDataBackupAction" enabled="true" commentSet="false" comment="" rollbackBarrier="false" multiExec="true" failureStrategy="4" errorMessage="Failed to back up data from previous installation.">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
-                    <object class="UserDataBackupAction" />
+                    <object class="net.frontlinesms.install4j.custom.UserDataBackupAction" />
                   </java>
                 </serializedBean>
                 <condition>context.getBooleanVariable("sys.confirmedUpdateInstallation")</condition>
@@ -286,6 +285,1316 @@
               </action>
             </actions>
             <formComponents />
+          </screen>
+          <screen name="Register Intro" id="166" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>....</string>
+                  </void>
+                  <void property="title">
+                    <string>Register with FrontlineSMS</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="167" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>Register your use of FrontlineSMS!
+
+We are able to provide FrontlineSMS software and technical support for free because we have been able to show how the software and our help makes a difference, and report this to other users and to the donors who support our work. Collecting information on who is downloading and using our software enables us to more effectively track our impact over time. This has been crucial to our operations, helping us to continue providing free software and free user support to you. Therefore, we would really appreciate you taking the time to fill out the below information to register your use of FrontlineSMS.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="Tell us about yourself" id="168" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>Tell us about yourself</string>
+                  </void>
+                  <void property="title">
+                    <string>About you and your organization</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="169" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>Name*</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_name</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="170" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>Organization Name*</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_organization_name</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="171" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.DropdownListComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.DropdownListComponent">
+                      <void property="labelText">
+                        <string>Category of your work</string>
+                      </void>
+                      <void property="listEntries">
+                        <array class="java.lang.String" length="16">
+                          <void index="0">
+                            <string>Agriculture</string>
+                          </void>
+                          <void index="1">
+                            <string>Conservation</string>
+                          </void>
+                          <void index="2">
+                            <string>Commercial</string>
+                          </void>
+                          <void index="3">
+                            <string>Education</string>
+                          </void>
+                          <void index="4">
+                            <string>Elections</string>
+                          </void>
+                          <void index="5">
+                            <string>Emergency response</string>
+                          </void>
+                          <void index="6">
+                            <string>Gender</string>
+                          </void>
+                          <void index="7">
+                            <string>Governance</string>
+                          </void>
+                          <void index="8">
+                            <string>Health</string>
+                          </void>
+                          <void index="9">
+                            <string>Human rights</string>
+                          </void>
+                          <void index="10">
+                            <string>Humanitarian Assistance</string>
+                          </void>
+                          <void index="11">
+                            <string>Legal services</string>
+                          </void>
+                          <void index="12">
+                            <string>Media</string>
+                          </void>
+                          <void index="13">
+                            <string>Mobile finance</string>
+                          </void>
+                          <void index="14">
+                            <string>Radio</string>
+                          </void>
+                          <void index="15">
+                            <string>Other</string>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="variableName">
+                        <string>var_category_of_work</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="172" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.DropdownListComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.DropdownListComponent">
+                      <void property="labelText">
+                        <string>Country</string>
+                      </void>
+                      <void property="listEntries">
+                        <array class="java.lang.String" length="196">
+                          <void index="0">
+                            <string>Afghanistan</string>
+                          </void>
+                          <void index="1">
+                            <string>Albania</string>
+                          </void>
+                          <void index="2">
+                            <string>Algeria</string>
+                          </void>
+                          <void index="3">
+                            <string>Andorra</string>
+                          </void>
+                          <void index="4">
+                            <string>Angola</string>
+                          </void>
+                          <void index="5">
+                            <string>Antigua &amp; Deps</string>
+                          </void>
+                          <void index="6">
+                            <string>Argentina</string>
+                          </void>
+                          <void index="7">
+                            <string>Armenia</string>
+                          </void>
+                          <void index="8">
+                            <string>Australia</string>
+                          </void>
+                          <void index="9">
+                            <string>Austria</string>
+                          </void>
+                          <void index="10">
+                            <string>Azerbaijan</string>
+                          </void>
+                          <void index="11">
+                            <string>Bahamas</string>
+                          </void>
+                          <void index="12">
+                            <string>Bahrain</string>
+                          </void>
+                          <void index="13">
+                            <string>Bangladesh</string>
+                          </void>
+                          <void index="14">
+                            <string>Barbados</string>
+                          </void>
+                          <void index="15">
+                            <string>Belarus</string>
+                          </void>
+                          <void index="16">
+                            <string>Belgium</string>
+                          </void>
+                          <void index="17">
+                            <string>Belize</string>
+                          </void>
+                          <void index="18">
+                            <string>Benin</string>
+                          </void>
+                          <void index="19">
+                            <string>Bhutan</string>
+                          </void>
+                          <void index="20">
+                            <string>Bolivia</string>
+                          </void>
+                          <void index="21">
+                            <string>Bosnia Herzegovina</string>
+                          </void>
+                          <void index="22">
+                            <string>Botswana</string>
+                          </void>
+                          <void index="23">
+                            <string>Brazil</string>
+                          </void>
+                          <void index="24">
+                            <string>Brunei</string>
+                          </void>
+                          <void index="25">
+                            <string>Bulgaria</string>
+                          </void>
+                          <void index="26">
+                            <string>Burkina</string>
+                          </void>
+                          <void index="27">
+                            <string>Burundi</string>
+                          </void>
+                          <void index="28">
+                            <string>Cambodia</string>
+                          </void>
+                          <void index="29">
+                            <string>Cameroon</string>
+                          </void>
+                          <void index="30">
+                            <string>Canada</string>
+                          </void>
+                          <void index="31">
+                            <string>Cape Verde</string>
+                          </void>
+                          <void index="32">
+                            <string>Central African Rep</string>
+                          </void>
+                          <void index="33">
+                            <string>Chad</string>
+                          </void>
+                          <void index="34">
+                            <string>Chile</string>
+                          </void>
+                          <void index="35">
+                            <string>China</string>
+                          </void>
+                          <void index="36">
+                            <string>Colombia</string>
+                          </void>
+                          <void index="37">
+                            <string>Comoros</string>
+                          </void>
+                          <void index="38">
+                            <string>Congo</string>
+                          </void>
+                          <void index="39">
+                            <string>Congo {Democratic Rep}</string>
+                          </void>
+                          <void index="40">
+                            <string>Costa Rica</string>
+                          </void>
+                          <void index="41">
+                            <string>Croatia</string>
+                          </void>
+                          <void index="42">
+                            <string>Cuba</string>
+                          </void>
+                          <void index="43">
+                            <string>Cyprus</string>
+                          </void>
+                          <void index="44">
+                            <string>Czech Republic</string>
+                          </void>
+                          <void index="45">
+                            <string>Denmark</string>
+                          </void>
+                          <void index="46">
+                            <string>Djibouti</string>
+                          </void>
+                          <void index="47">
+                            <string>Dominica</string>
+                          </void>
+                          <void index="48">
+                            <string>Dominican Republic</string>
+                          </void>
+                          <void index="49">
+                            <string>East Timor</string>
+                          </void>
+                          <void index="50">
+                            <string>Ecuador</string>
+                          </void>
+                          <void index="51">
+                            <string>Egypt</string>
+                          </void>
+                          <void index="52">
+                            <string>El Salvador</string>
+                          </void>
+                          <void index="53">
+                            <string>Equatorial Guinea</string>
+                          </void>
+                          <void index="54">
+                            <string>Eritrea</string>
+                          </void>
+                          <void index="55">
+                            <string>Estonia</string>
+                          </void>
+                          <void index="56">
+                            <string>Ethiopia</string>
+                          </void>
+                          <void index="57">
+                            <string>Fiji</string>
+                          </void>
+                          <void index="58">
+                            <string>Finland</string>
+                          </void>
+                          <void index="59">
+                            <string>France</string>
+                          </void>
+                          <void index="60">
+                            <string>Gabon</string>
+                          </void>
+                          <void index="61">
+                            <string>Gambia</string>
+                          </void>
+                          <void index="62">
+                            <string>Georgia</string>
+                          </void>
+                          <void index="63">
+                            <string>Germany</string>
+                          </void>
+                          <void index="64">
+                            <string>Ghana</string>
+                          </void>
+                          <void index="65">
+                            <string>Greece</string>
+                          </void>
+                          <void index="66">
+                            <string>Grenada</string>
+                          </void>
+                          <void index="67">
+                            <string>Guatemala</string>
+                          </void>
+                          <void index="68">
+                            <string>Guinea</string>
+                          </void>
+                          <void index="69">
+                            <string>Guinea-Bissau</string>
+                          </void>
+                          <void index="70">
+                            <string>Guyana</string>
+                          </void>
+                          <void index="71">
+                            <string>Haiti</string>
+                          </void>
+                          <void index="72">
+                            <string>Honduras</string>
+                          </void>
+                          <void index="73">
+                            <string>Hungary</string>
+                          </void>
+                          <void index="74">
+                            <string>Iceland</string>
+                          </void>
+                          <void index="75">
+                            <string>India</string>
+                          </void>
+                          <void index="76">
+                            <string>Indonesia</string>
+                          </void>
+                          <void index="77">
+                            <string>Iran</string>
+                          </void>
+                          <void index="78">
+                            <string>Iraq</string>
+                          </void>
+                          <void index="79">
+                            <string>Ireland {Republic}</string>
+                          </void>
+                          <void index="80">
+                            <string>Israel</string>
+                          </void>
+                          <void index="81">
+                            <string>Italy</string>
+                          </void>
+                          <void index="82">
+                            <string>Ivory Coast</string>
+                          </void>
+                          <void index="83">
+                            <string>Jamaica</string>
+                          </void>
+                          <void index="84">
+                            <string>Japan</string>
+                          </void>
+                          <void index="85">
+                            <string>Jordan</string>
+                          </void>
+                          <void index="86">
+                            <string>Kazakhstan</string>
+                          </void>
+                          <void index="87">
+                            <string>Kenya</string>
+                          </void>
+                          <void index="88">
+                            <string>Kiribati</string>
+                          </void>
+                          <void index="89">
+                            <string>Korea North</string>
+                          </void>
+                          <void index="90">
+                            <string>Korea South</string>
+                          </void>
+                          <void index="91">
+                            <string>Kosovo</string>
+                          </void>
+                          <void index="92">
+                            <string>Kuwait</string>
+                          </void>
+                          <void index="93">
+                            <string>Kyrgyzstan</string>
+                          </void>
+                          <void index="94">
+                            <string>Laos</string>
+                          </void>
+                          <void index="95">
+                            <string>Latvia</string>
+                          </void>
+                          <void index="96">
+                            <string>Lebanon</string>
+                          </void>
+                          <void index="97">
+                            <string>Lesotho</string>
+                          </void>
+                          <void index="98">
+                            <string>Liberia</string>
+                          </void>
+                          <void index="99">
+                            <string>Libya</string>
+                          </void>
+                          <void index="100">
+                            <string>Liechtenstein</string>
+                          </void>
+                          <void index="101">
+                            <string>Lithuania</string>
+                          </void>
+                          <void index="102">
+                            <string>Luxembourg</string>
+                          </void>
+                          <void index="103">
+                            <string>Macedonia</string>
+                          </void>
+                          <void index="104">
+                            <string>Madagascar</string>
+                          </void>
+                          <void index="105">
+                            <string>Malawi</string>
+                          </void>
+                          <void index="106">
+                            <string>Malaysia</string>
+                          </void>
+                          <void index="107">
+                            <string>Maldives</string>
+                          </void>
+                          <void index="108">
+                            <string>Mali</string>
+                          </void>
+                          <void index="109">
+                            <string>Malta</string>
+                          </void>
+                          <void index="110">
+                            <string>Marshall Islands</string>
+                          </void>
+                          <void index="111">
+                            <string>Mauritania</string>
+                          </void>
+                          <void index="112">
+                            <string>Mauritius</string>
+                          </void>
+                          <void index="113">
+                            <string>Mexico</string>
+                          </void>
+                          <void index="114">
+                            <string>Micronesia</string>
+                          </void>
+                          <void index="115">
+                            <string>Moldova</string>
+                          </void>
+                          <void index="116">
+                            <string>Monaco</string>
+                          </void>
+                          <void index="117">
+                            <string>Mongolia</string>
+                          </void>
+                          <void index="118">
+                            <string>Montenegro</string>
+                          </void>
+                          <void index="119">
+                            <string>Morocco</string>
+                          </void>
+                          <void index="120">
+                            <string>Mozambique</string>
+                          </void>
+                          <void index="121">
+                            <string>Myanmar, {Burma}</string>
+                          </void>
+                          <void index="122">
+                            <string>Namibia</string>
+                          </void>
+                          <void index="123">
+                            <string>Nauru</string>
+                          </void>
+                          <void index="124">
+                            <string>Nepal</string>
+                          </void>
+                          <void index="125">
+                            <string>Netherlands</string>
+                          </void>
+                          <void index="126">
+                            <string>New Zealand</string>
+                          </void>
+                          <void index="127">
+                            <string>Nicaragua</string>
+                          </void>
+                          <void index="128">
+                            <string>Niger</string>
+                          </void>
+                          <void index="129">
+                            <string>Nigeria</string>
+                          </void>
+                          <void index="130">
+                            <string>Norway</string>
+                          </void>
+                          <void index="131">
+                            <string>Oman</string>
+                          </void>
+                          <void index="132">
+                            <string>Pakistan</string>
+                          </void>
+                          <void index="133">
+                            <string>Palau</string>
+                          </void>
+                          <void index="134">
+                            <string>Panama</string>
+                          </void>
+                          <void index="135">
+                            <string>Papua New Guinea</string>
+                          </void>
+                          <void index="136">
+                            <string>Paraguay</string>
+                          </void>
+                          <void index="137">
+                            <string>Peru</string>
+                          </void>
+                          <void index="138">
+                            <string>Philippines</string>
+                          </void>
+                          <void index="139">
+                            <string>Poland</string>
+                          </void>
+                          <void index="140">
+                            <string>Portugal</string>
+                          </void>
+                          <void index="141">
+                            <string>Qatar</string>
+                          </void>
+                          <void index="142">
+                            <string>Romania</string>
+                          </void>
+                          <void index="143">
+                            <string>Russian Federation</string>
+                          </void>
+                          <void index="144">
+                            <string>Rwanda</string>
+                          </void>
+                          <void index="145">
+                            <string>St Kitts &amp; Nevis</string>
+                          </void>
+                          <void index="146">
+                            <string>St Lucia</string>
+                          </void>
+                          <void index="147">
+                            <string>Saint Vincent &amp; the Grenadines</string>
+                          </void>
+                          <void index="148">
+                            <string>Samoa</string>
+                          </void>
+                          <void index="149">
+                            <string>San Marino</string>
+                          </void>
+                          <void index="150">
+                            <string>Sao Tome &amp; Principe</string>
+                          </void>
+                          <void index="151">
+                            <string>Saudi Arabia</string>
+                          </void>
+                          <void index="152">
+                            <string>Senegal</string>
+                          </void>
+                          <void index="153">
+                            <string>Serbia</string>
+                          </void>
+                          <void index="154">
+                            <string>Seychelles</string>
+                          </void>
+                          <void index="155">
+                            <string>Sierra Leone</string>
+                          </void>
+                          <void index="156">
+                            <string>Singapore</string>
+                          </void>
+                          <void index="157">
+                            <string>Slovakia</string>
+                          </void>
+                          <void index="158">
+                            <string>Slovenia</string>
+                          </void>
+                          <void index="159">
+                            <string>Solomon Islands</string>
+                          </void>
+                          <void index="160">
+                            <string>Somalia</string>
+                          </void>
+                          <void index="161">
+                            <string>South Africa</string>
+                          </void>
+                          <void index="162">
+                            <string>South Sudan</string>
+                          </void>
+                          <void index="163">
+                            <string>Spain</string>
+                          </void>
+                          <void index="164">
+                            <string>Sri Lanka</string>
+                          </void>
+                          <void index="165">
+                            <string>Sudan</string>
+                          </void>
+                          <void index="166">
+                            <string>Suriname</string>
+                          </void>
+                          <void index="167">
+                            <string>Swaziland</string>
+                          </void>
+                          <void index="168">
+                            <string>Sweden</string>
+                          </void>
+                          <void index="169">
+                            <string>Switzerland</string>
+                          </void>
+                          <void index="170">
+                            <string>Syria</string>
+                          </void>
+                          <void index="171">
+                            <string>Taiwan</string>
+                          </void>
+                          <void index="172">
+                            <string>Tajikistan</string>
+                          </void>
+                          <void index="173">
+                            <string>Tanzania</string>
+                          </void>
+                          <void index="174">
+                            <string>Thailand</string>
+                          </void>
+                          <void index="175">
+                            <string>Togo</string>
+                          </void>
+                          <void index="176">
+                            <string>Tonga</string>
+                          </void>
+                          <void index="177">
+                            <string>Trinidad &amp; Tobago</string>
+                          </void>
+                          <void index="178">
+                            <string>Tunisia</string>
+                          </void>
+                          <void index="179">
+                            <string>Turkey</string>
+                          </void>
+                          <void index="180">
+                            <string>Turkmenistan</string>
+                          </void>
+                          <void index="181">
+                            <string>Tuvalu</string>
+                          </void>
+                          <void index="182">
+                            <string>Uganda</string>
+                          </void>
+                          <void index="183">
+                            <string>Ukraine</string>
+                          </void>
+                          <void index="184">
+                            <string>United Arab Emirates</string>
+                          </void>
+                          <void index="185">
+                            <string>United Kingdom</string>
+                          </void>
+                          <void index="186">
+                            <string>United States</string>
+                          </void>
+                          <void index="187">
+                            <string>Uruguay</string>
+                          </void>
+                          <void index="188">
+                            <string>Uzbekistan</string>
+                          </void>
+                          <void index="189">
+                            <string>Vanuatu</string>
+                          </void>
+                          <void index="190">
+                            <string>Vatican City</string>
+                          </void>
+                          <void index="191">
+                            <string>Venezuela</string>
+                          </void>
+                          <void index="192">
+                            <string>Vietnam</string>
+                          </void>
+                          <void index="193">
+                            <string>Yemen</string>
+                          </void>
+                          <void index="194">
+                            <string>Zambia</string>
+                          </void>
+                          <void index="195">
+                            <string>Zimbabwe</string>
+                          </void>
+                        </array>
+                      </void>
+                      <void property="variableName">
+                        <string>var_country</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="173" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>City / region</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_city_region</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="174" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="inputVerifier">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>URLtest t = new URLtest();
+return t.test(text);</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="labelText">
+                        <string>Website address*</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_website_address</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="175" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>Operating System</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_operating_system</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="176" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextAreaComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextAreaComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>How do you plan to use FrontlineSMS</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_use</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="Staying in Touch" id="177" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>.....</string>
+                  </void>
+                  <void property="title">
+                    <string>Staying in Touch</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="" id="178" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>Many users share monthly usage data with the FrontlineSMS team, which does not include message content or sender/recipient details, but tells us how many messages you are sending and receiving through FrontlineSMS and how large your contact database is. This information will be confidentially stored by the FrontlineSMS team, and won’t be released publicly without your permission.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="179" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I am happy to share this data with FrontlineSMS</string>
+                      </void>
+                      <void property="selectionScript">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>if(selected){
+    formEnvironment.getFormComponentById("181").setVisible(true);
+    formEnvironment.getFormComponentById("182").setVisible(true);
+    formEnvironment.getFormComponentById("183").setVisible(true);
+}else{
+    formEnvironment.getFormComponentById("181").setVisible(false);
+    formEnvironment.getFormComponentById("182").setVisible(false);
+    formEnvironment.getFormComponentById("183").setVisible(false);
+}</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_your_data</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="180" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>We have worked with many of our users to create jointly-branded case studies and guest blog posts about their work, as well as featuring them in guides and presentations. If you are happy to be contacted by the FrontlineSMS team to explore these opportunities, connect you with other local users or simply find out how you are doing with the software, please fill out your contact information below. </string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="name" id="181" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>Name</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_name</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript>return false;</visibilityScript>
+              </formComponent>
+              <formComponent name="" id="182" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="inputVerifier">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>URLtest t = new URLtest();
+return t.testEmail(text);</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="labelText">
+                        <string>Email</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_email</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript>return false;</visibilityScript>
+              </formComponent>
+              <formComponent name="" id="183" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="checkIfEmpty">
+                        <boolean>true</boolean>
+                      </void>
+                      <void property="labelText">
+                        <string>Telephone / Skype</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_telephone_skype</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript>return false;</visibilityScript>
+              </formComponent>
+              <formComponent name="" id="184" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I would like to be featured in the user map</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_feature_in_user_map</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="185" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I would like to receive regular FrontlineSMS news via newsletter?</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_get_frontlinesms_newsletter</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="186" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>As part of our efforts to monitor impact we are looking for research participants who are interested in getting analytical data on their use of FrontlineSMS, in return for sharing information on the use of FrontlineSMS in their project and the difference it is making.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="187" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I am interested in finding out more about this research</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_findout_more_about_research</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="confirm details" id="188" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>....</string>
+                  </void>
+                  <void property="title">
+                    <string>Review information before submission</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents>
+              <formComponent name="extra info" id="189" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>Please see below summary of the information you have entered in the registration form.
+Are you happy to submit this information to the FrontlineSMS team? If so please click NEXT.
+To edit the information before submitting click BACK.To Cancel click CANCEL.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="name" id="190" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>Name</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_name}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="organizations name" id="191" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>Organization's Name</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_organization_name}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="category of work" id="192" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>Category of Work</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_category_of_work}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="country" id="193" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>Country</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_country}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="city  or region" id="194" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>City or Region</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_city_region}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="website" id="195" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>Website</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_website_address}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="operating system" id="196" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>Operating System</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_operating_system}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="how to use frontline sms" id="197" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.KeyValuePairComponent">
+                      <void property="labelText">
+                        <string>How do you plan to use frontlines sms</string>
+                      </void>
+                      <void property="valueLabelText">
+                        <string>${installer:var_use}</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+            </formComponents>
+          </screen>
+          <screen name="thank you" id="198" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.FormScreen">
+                  <void property="subTitle">
+                    <string>.....</string>
+                  </void>
+                  <void property="title">
+                    <string>Thankyou</string>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation>import net.frontlinesms.install4j.custom.FrontlineRegistration;
+
+FrontlineRegistration f = new FrontlineRegistration();
+f.send(formEnvironment,context);</postActivation>
+            <actions />
+            <formComponents>
+              <formComponent name="" id="199" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>Thanks for registering your use of FrontlineSMS!</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="200" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
+                      <void property="labelText">
+                        <string>FrontlineSMS</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="201" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>Sorry we could not contact FrontlineSMS so as to complete the registration.
+</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript>return false;</visibilityScript>
+              </formComponent>
+              <formComponent name="" id="202" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.ButtonComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.ButtonComponent">
+                      <void property="actionScript">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>import net.frontlinesms.install4j.custom.FrontlineRegistration;
+
+FrontlineRegistration f = new FrontlineRegistration();
+f.send(formEnvironment,context);</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="buttonText">
+                        <string>Try Again</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript>return false;</visibilityScript>
+              </formComponent>
+            </formComponents>
           </screen>
           <screen name="" id="12" customizedId="" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="true" wizardIndexChangeType="unchanged" wizardIndexKey="">
             <serializedBean>
