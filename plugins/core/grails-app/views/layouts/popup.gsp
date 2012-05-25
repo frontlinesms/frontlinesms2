@@ -3,6 +3,7 @@
 	<head>
 		<g:layoutHead/>
 		<r:layoutResources/>
+		<jqval:resources/>
 	</head>
 	<body>
 		<g:layoutBody/>
