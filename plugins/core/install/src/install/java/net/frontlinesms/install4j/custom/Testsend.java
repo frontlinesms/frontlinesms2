@@ -9,9 +9,9 @@ import java.util.Iterator;
 public class Testsend {
 	public boolean submitData(Map<String, String> data){
 		CompleteRegistration completeReg = new CompleteRegistration();
-		String uuid;
+		String uuid="";
 		try{
-			uuid = completeReg.generateUUID()
+			uuid = completeReg.generateUUID();
 			data.put("UUID", uuid);
 			URL siteUrl = new URL("http://register.frontlinesms.com/process.php");
 			HttpURLConnection conn = (HttpURLConnection) siteUrl.openConnection();
