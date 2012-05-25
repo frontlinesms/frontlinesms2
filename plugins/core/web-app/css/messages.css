@@ -4,22 +4,22 @@
 	height: 100%;
 }
 
-#message-list-header h3.inbox{
+#message-list-header h3.inbox {
    	background-image: url('../images/icons/inbox.png');
 }	
-#message-list-header h3.sent{
+#message-list-header h3.sent {
    	background-image: url('../images/icons/sent.png');
 }
-#message-list-header h3.pending{
+#message-list-header h3.pending {
    	background-image: url('../images/icons/pending.png');
 }
-#message-list-header h3.trash{
+#message-list-header h3.trash {
    	background-image: url('../images/icons/trash.png');
 }
 #message-list-header h3.activity {
    	background-image: url('../images/icons/activities.png');
 }
-#message-list-header h3.folder{
+#message-list-header h3.folder {
    	background-image: url('../images/icons/folders.png');
 }
 #message-list-header h3.show {
@@ -29,7 +29,7 @@
    	background-image: url('../images/icons/search.png');
 }
 
-#message-list-header.activity .header-buttons{
+#message-list-header.activity .header-buttons {
 	padding: 0;
 }
 #message-list-header.activity li {
@@ -37,7 +37,7 @@
 	width: 150px;
 	margin: 10px 0;
 }
-#message-list-header.activity li a{
+#message-list-header.activity li a {
 	display: block;
 }
 #quick-message {
@@ -62,7 +62,7 @@
 .main-list table.main-table {
 	width: 100%;
 }
-.main-list table tr{
+.main-list table tr {
 	width: 100%;
 	height: 26px;
 }
@@ -71,19 +71,19 @@
 	font-weight: bold;
 	background-image: url('../images/menubar.png');
 }
-.main-list table td.message-select-cell{
+.main-list table td.message-select-cell {
 	padding-left: 17px;
 	width: 30px;
 }
-.main-list table td.message-star-cell{
+.main-list table td.message-star-cell {
 	padding-left: 5px;
 	width: 30px;
 }
-.main-list table td.message-sender-cell, #message-list table th.message-sender-cell{
+.main-list table td.message-sender-cell, #message-list table th.message-sender-cell {
 	padding: 6px 5px;
 	max-width: 150px;
 }
-.main-list table td.message-text-cell, #message-list table th.message-sender-cell{
+.main-list table td.message-text-cell, #message-list table th.message-sender-cell {
 	min-width: 300px;
 }
 
@@ -101,13 +101,13 @@
 	padding-left: 25px;
 }
 
-#new-message-notification div{
+#new-message-notification div {
 	position: absolute;
 	padding: 5px;
 	height: 16px;
 	width:100%;
 }
-#new-message-notification a{
+#new-message-notification a {
 	display: block;
 	cursor: pointer;
 }
@@ -123,11 +123,11 @@
     padding-top: 10%;
     position: fixed;
 }
-#no-messages h3{
+#no-messages h3 {
 	margin-left:17px;
 	margin-top:3px;
 }
-#no-search-description h3{
+#no-search-description h3 {
 	margin-left:17px;
 	margin-top:3px;
 }
@@ -142,7 +142,7 @@
 	background-repeat: no-repeat;
 	background-position: right;
 }
-.message-star-cell a{
+.message-star-cell a {
 	display: inline-block;
 	padding: 0;
 	width: 16px;
@@ -151,18 +151,18 @@
 	background-repeat: no-repeat;
 	background-position: center left;
 }
-.message-star-cell a:hover{
+.message-star-cell a:hover {
    	background-image: url('../images/icons/star_on.png');
 }
-.message-star-cell a.starred{
+.message-star-cell a.starred {
   	background-image: url('../images/icons/star_on.png');
 }
 
-#message-list table a, #folder-list table a, #activity-list table a{
+#message-list table a, #folder-list table a, #activity-list table a {
 	display: block;
 }
 
-#message-list .footer{
+#message-list .footer {
 	right: 25%;
 	width: 75%;
 	float: left;
@@ -179,13 +179,13 @@
 #message-list .footer form {
 	margin: 0 17px 0 10px;
 }
-#message-list .footer #message-toggler{
+#message-list .footer #message-toggler {
 	padding: 4px;
 	text-decoration: none;
 	font-size: 95%;
 }
 
-#message-list .footer #message-toggler a{
+#message-list .footer #message-toggler a {
 	color: inherit;
 	padding: 0 10px;
 	text-decoration: none;
@@ -195,14 +195,14 @@
 	margin-right: 17px;
 }
 
-#message-detail{
+#message-detail {
 	width: 24.9%;
 	height: 100%;
 	float:right;
 	overflow: auto;
 	border-left: 1px solid #9e9e9e;
 }
-.tall-header #message-detail{
+.tall-header #message-detail {
 	position: absolute;
 	top: 200px;
 	bottom: 43px;
@@ -212,11 +212,11 @@
 	overflow: auto;
 	padding-top: 25px;
 }
-#single-message, #multiple-messages{
+#single-message, #multiple-messages {
 	padding: 17px 17px;
 }
 
-#message-detail-content{
+#message-detail-content {
 	background-color: #fff;
 	border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -226,15 +226,15 @@
 	margin: 17px 0;
 }
 
-#message-detail-content p{
+#message-detail-content p {
 	margin: 0;
 	padding: 17px;
 }
-#message-detail-content #no-message{
+#message-detail-content #no-message {
 	text-align: center;
 }
 
-#message-detail-sender{
+#message-detail-sender {
 	display: inline-block;
 	margin: 0;
 	min-width: 130px;
@@ -245,10 +245,10 @@
 	padding-left: 16px;
 	margin-left: 4px;
 }
-#message-detail-date{
+#message-detail-date {
 	margin: 0;
 }
-#message-detail-owner{
+#message-detail-owner {
 	background-repeat: no-repeat;
 	margin: 0;
 	padding-left: 25px;
@@ -260,22 +260,22 @@
 	background-image: url('../images/icons/folders.png');
 }
 
-#message-detail-buttons{
+#message-detail-buttons {
 	margin: 17px 0 0 0;
 	padding: 0;
 }
-#message-detail-buttons .msg-btn{
+#message-detail-buttons .msg-btn {
 	width:42%;
 	margin: 10px 10px;
 	padding: 4px 0;
 }
-#message-detail-buttons form{
+#message-detail-buttons form {
 	margin: 0;
 	padding: 0;
 }
 
-#message-detail .extra-msg-btn{
+#message-detail .extra-msg-btn {
 	width: 50%;
-	margin: 10px ;
+	margin: 10px;
 }
 
