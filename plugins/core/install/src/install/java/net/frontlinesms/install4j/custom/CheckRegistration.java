@@ -7,8 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.install4j.api.context.InstallerContext;
-
 public class CheckRegistration {
 	private File userHome;
 	private File regProp;
@@ -17,7 +15,7 @@ public class CheckRegistration {
 	String registrationStatus;
 
 	public boolean isRegistered() throws IOException {
-		// check for file and read it
+		boolean b;
 		userHome = new File(System.getProperty("user.home"));
 		regProp = new File(userHome.getAbsolutePath()
 				+ "/.frontlinesms2/registration.properties");
@@ -30,22 +28,18 @@ public class CheckRegistration {
 				line = in.readLine();
 				uuid = getValue(line);
 			}
-			if (registrationStatus == "true") {
-				return true;
+			if (registrationStatus.trim().equals("true")) {
+				b = true;
+			}else{
+				b = false;
 			}
+		}else{
+			b = false;
 		}
-		return false;
-	}
-	
-	public void showRegistrationForm(InstallerContext context) throws IOException {
-		if(isRegistered()){context.gotoScreen(context.getScreenById("12"));}
+		return b;
 	}
 	
 	public String getValue(String tmp) {
 		return tmp.split("=")[1];
-	}
-
-	public static void main(String args[]) throws IOException {
-		new CheckRegistration().isRegistered();
 	}
 }

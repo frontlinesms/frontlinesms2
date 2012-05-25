@@ -304,7 +304,11 @@
             <preActivation>import net.frontlinesms.install4j.custom.CheckRegistration;
 
 CheckRegistration c = new CheckRegistration();
-c.showRegistrationForm(context);</preActivation>
+if(c.isRegistered()){
+    context.gotoScreen(context.getScreenById("12"));
+}
+return;
+</preActivation>
             <postActivation />
             <actions />
             <formComponents>
