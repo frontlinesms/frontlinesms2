@@ -8,38 +8,52 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class CheckRegistration {
-	private File userHome;
-	private File regProp;
-	BufferedReader in;
-	String uuid;
-	String registrationStatus;
-
 	public boolean isRegistered() throws IOException {
-		boolean b;
-		userHome = new File(System.getProperty("user.home"));
-		regProp = new File(userHome.getAbsolutePath()
-				+ "/.frontlinesms2/registration.properties");
-		if (regProp.exists()) {
-			in = new BufferedReader(new InputStreamReader(new FileInputStream(
-					regProp)));
-			String line;
-			while ((line = in.readLine()) != null) {
-				registrationStatus = getValue(line);
-				line = in.readLine();
-				uuid = getValue(line);
-			}
-			if (registrationStatus.trim().equals("true")) {
-				b = true;
-			}else{
-				b = false;
-			}
-		}else{
-			b = false;
+		File regPropFile = Util.getRegistrationPropertiesFile();
+		if (regPropFile.exists()) {
+			return extractIsRegistered(regPropFile);
+		} else {
+			return false;
 		}
-		return b;
+	}
+
+	private static String getKey(String line) {
+		return line.split("=")[0];
 	}
 	
-	public String getValue(String tmp) {
-		return tmp.split("=")[1];
+	private static String getValue(String line) {
+		String[] parts = line.split("=");
+		return parts.length>1? parts[1]: null;
+	}
+
+	private static boolean extractIsRegistered(File regPropFile) throws IOException {
+		FileInputStream fis = null;
+		InputStreamReader isr = null;
+		BufferedReader in = null;
+		try {
+			fis = new FileInputStream(regPropFile);
+			isr = new InputStreamReader(fis, "UTF-8");
+			in = new BufferedReader(isr);
+			return extractIsRegistered(in);
+		} finally {
+			// Close all streams safely
+			try { fis.close(); } catch(Exception _) { /* ignore */ }
+			try { isr.close(); } catch(Exception _) { /* ignore */ }
+			try { in.close(); } catch(Exception _) { /* ignore */ }
+		}
+	}
+
+	// TODO unit test this method
+	static boolean extractIsRegistered(BufferedReader in) throws IOException {
+		// TODO separate this into separate file and unit test
+		String registrationStatus = null;
+		String line;
+		while (registrationStatus == null && (line = in.readLine()) != null) {
+			if(getKey(line).equals("register")) {
+				registrationStatus = getValue(line);
+			}
+		}
+		return registrationStatus != null && registrationStatus.trim().equals("true");
 	}
 }
+

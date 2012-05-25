@@ -12,11 +12,9 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
+import static net.frontlinesms.install4j.custom.Util.*;
+
 public class UserDataBackupAction extends AbstractInstallAction {
-	/*
-	 * Please note that this requires the  Install4j runtime jar to compile. This is located in
-	 * <install4j 5 directory>/resource/i4jruntime.jar
-	*/
 	private static final String dateFormat = "yyyy-MM-dd-HH-mm";
 	private static final long backupExpiryDuration = 7776000000l; // 90 days in miliseconds
 	private static final String backupDirNameFormat = ".frontlinesms2-backup.";
@@ -126,13 +124,10 @@ public class UserDataBackupAction extends AbstractInstallAction {
 			}
 	}
 
-	private void log(String x) {
-		System.out.println("\t: "+x);
-	}
-
 	public static void main(String [] args) {
 		// For testing
 		UserDataBackupAction action = new UserDataBackupAction();
 		action.install(null);
 	}
 }
+
