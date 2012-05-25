@@ -7,14 +7,13 @@ import com.install4j.api.context.InstallerContext;
 import com.install4j.api.formcomponents.FormEnvironment;
 
 public class FrontlineRegistration {
-	public void send(FormEnvironment formEnvironment,InstallerContext context) {
-		String[] prof = { "Agriculture", "Conservation", "Commercial",
+		public String[] prof = { "Agriculture", "Conservation", "Commercial",
 				"Education", "Elections", "Emergency response", "Gender",
 				"Governance", "Health", "Human rights",
 				"Humanitarian Assistance", "Legal services", "Media",
 				"Mobile finance", "Radio", "Other" };
 
-		String[] countries = { "Afghanistan", "Albania", "Algeria", "Andorra",
+		public String[] countries = { "Afghanistan", "Albania", "Algeria", "Andorra",
 				"Angola", "Antigua & Deps", "Argentina", "Armenia",
 				"Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain",
 				"Bangladesh", "Barbados", "Belarus", "Belgium", "Belize",
@@ -58,6 +57,8 @@ public class FrontlineRegistration {
 				"Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen",
 				"Zambia", "Zimbabwe" };
 
+	public void send(FormEnvironment formEnvironment,InstallerContext context) {
+		
 		Integer var_category_of_work = (Integer) context
 				.getVariable("var_category_of_work");
 		String var_city_region = (String) context
@@ -70,13 +71,11 @@ public class FrontlineRegistration {
 		boolean var_get_frontlinesms_newsletter = context
 				.getBooleanVariable("var_get_frontlinesms_newsletter");
 		String var_name = (String) context.getVariable("var_name");
-		String var_operating_system = (String) context
-				.getVariable("var_operating_system");
+		String var_operating_system = System.getProperty("os.name");
 		String var_organization_name = (String) context
 				.getVariable("var_organization_name");
 		String var_share_email = (String) context
 				.getVariable("var_share_email");
-		String var_share_name = (String) context.getVariable("var_share_name");
 		String var_share_telephone_skype = (String) context
 				.getVariable("var_share_telephone_skype");
 		boolean var_share_your_data = context
@@ -99,7 +98,6 @@ public class FrontlineRegistration {
 		data.put("var_operating_system", var_operating_system);
 		data.put("var_organization_name", var_organization_name);
 		data.put("var_share_email", var_share_email);
-		data.put("var_share_name", var_share_name);
 		data.put("var_share_telephone_skype", var_share_telephone_skype);
 		data.put("var_share_your_data", "" + var_share_your_data);
 		data.put("var_use", var_use);

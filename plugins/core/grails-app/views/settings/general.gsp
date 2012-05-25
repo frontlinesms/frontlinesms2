@@ -12,10 +12,17 @@
 				<p><g:message code="language.prompt"/></p>
 				<g:form action="selectLocale" method="post" >
 					<div class="langsection">
-						<g:select class="dropdown" name="language" from="${languageList}" value="${languageList.key}" optionKey="key" optionValue="value"/>
-						<input type="submit" value="${message(code: 'default.button.apply.label', default: 'Apply')}" class="button btn">
+						<ul class="lang-buttons">
+							<li>
+								<g:select class="dropdown" name="language" from="${languageList}" value="${languageList.key}" optionKey="key" optionValue="value"/><br/><br/><br/>
+							</li>
+							<li>
+								<input type="submit" value="${message(code: 'default.button.apply.label', default: 'Apply')}" class="button btn">
+							</li>
+						</ul>
 					</div>
 				</g:form>
+				<div class="clearfix"></div>
 			</div>
 			<div id="import">
 				<h2><g:message code="import.label"/></h2>

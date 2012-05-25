@@ -1,2 +1,3 @@
 This directory contains bask scripts to do various annoying tasks at dev time.
 
+The working directory is assumed to be the project root (i.e. ../ from do/).

@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.RouteStatus" %>
 <div id='connections'>
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div><g:message code="connection.list.none"/></div>
+		<div id="no-connection"><g:message code="connection.list.none"/></div>
 	</g:if>
 	<g:else>
 		<ul>
