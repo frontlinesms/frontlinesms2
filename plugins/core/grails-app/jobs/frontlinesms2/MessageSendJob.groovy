@@ -17,12 +17,13 @@ class MessageSendJob {
 	}
 
 	/** Send a message or messages in 30 seconds time */
-	static defer(messages) {
+	static defer(List messages) {
 		def sendTime = new Date()
 		use(groovy.time.TimeCategory) {
 			sendTime += 30000
 		}
-		MessageSendJob.schedule(sendTime, [ids:messages*.id])
+		def args = [ids:messages*.id]
+		MessageSendJob.schedule(sendTime, args)
 	}
 }
 

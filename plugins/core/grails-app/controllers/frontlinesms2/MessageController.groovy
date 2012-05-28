@@ -182,7 +182,7 @@ class MessageController {
 		messages.each { m ->
 			TrashService.sendToTrash(m)
 		}
-		params.flashMessage = message(code:'default.deleted.message', args:
+		params.flashMessage = message(code:'default.trashed.message', args:
 				[message(code:'flash.message.fmessage', args:[messages.size()])])
 		if (params.messageSection == 'result') {
 			redirect(controller:'search', action:'result', params:
