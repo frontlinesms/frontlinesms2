@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 public class CheckRegistration {
 	public boolean isRegistered() throws IOException {
-		File regPropFile = Util.getRegistrationPropertiesFile();
+		File regPropFile = Futil.getRegistrationPropertiesFile();
 		if (regPropFile.exists()) {
 			return extractIsRegistered(regPropFile);
 		} else {

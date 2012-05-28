@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Iterator;
 
-import static net.frontlinesms.install4j.custom.Util.*;
+import static net.frontlinesms.install4j.custom.Futil.*;
 
 public class Testsend {
 	public boolean submitData(Map<String, String> data) {
@@ -30,7 +30,7 @@ public class Testsend {
 	}
 
 	private HttpURLConnection initConnection() throws IOException {
-		URL siteUrl = new URL(Util.PROCESSING_URL);
+		URL siteUrl = new URL(Futil.PROCESSING_URL);
 		HttpURLConnection conn = (HttpURLConnection) siteUrl.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setDoOutput(true);
