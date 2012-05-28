@@ -31,6 +31,7 @@ public class Futil {
 //> PACKAGE UTILITY METHODS
 	static File getRegistrationPropertiesFile() {
 		File frontlinesms2Directory = new File(System.getProperty("user.home"), ".frontlinesms2");
+		if(!frontlinesms2Directory.exists()) frontlinesms2Directory.mkdirs();
 		return new File(frontlinesms2Directory, "registration.properties");
 	}
 
