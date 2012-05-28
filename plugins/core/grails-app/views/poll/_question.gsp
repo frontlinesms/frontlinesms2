@@ -5,7 +5,7 @@
 			<h2 class="bold"><g:message code="poll.type.prompt"/></h2>
 			<ul>
 				<g:if test="${activityInstanceToEdit}">
-					<g:set var="isStandard" value="${activityInstanceToEdit?.isStandard}"/>
+					<g:set var="isStandard" value="${activityInstanceToEdit?.standard}"/>
 					<li>
 						<g:radio name="pollType" value="standard" checked="${isStandard}" disabled="${!isStandard}"/>
 						<g:message code="poll.question.yes.no"/>
