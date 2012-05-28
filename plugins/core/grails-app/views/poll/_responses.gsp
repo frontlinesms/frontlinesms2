@@ -5,7 +5,7 @@
 			<li>
 				<g:if test="${activityInstanceToEdit?.id}">
 					<label for='choice${option}' class="${option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">${option}</label>
-					<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == 'choice' + option}%>
+					<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == option}%>
 					<g:if test="${(option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)))}">
 						<g:textField class='choices' name="choice${option}" value="${pollResponse?.value}"/>
 					</g:if>
