@@ -232,6 +232,32 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			groupCheckbox[0].checked
 
 	}
+
+	def "magic wand should be available and clicking should display menu"() {
+		setup:
+			createData()
+		when:
+			launchQuickMessageDialog()
+		then:
+			waitFor { $("#magicwand-select").displayed }
+	}
+
+	def "using contact name magic wand option should insert substitution variable"() {
+		setup:
+			createData()
+		when:
+			launchQuickMessageDialog()
+		then:
+			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message(s))" }
+		when:
+			$("#messageText") << "Hello, "
+			$("#messageText").jquery.trigger('keyup')
+		then:
+			$("#magicwand-select").jquery.val('contact_name')
+			$("#magicwand-select").jquery.trigger('change')
+		then:
+			waitFor { $('#messageText').value() == ("Hello, \${contact_name}") }
+	}
 	
 	private def createData() {
 		def group = Group.build(name:"group1")
