@@ -5,11 +5,8 @@ function getGroupId(){
 
 function updateContacts(data) {
 	var replacement = $(data);
-	$("#contact-list").html(replacement.filter('#contact-list').html());
-	$(".footer #paging").html(replacement.filter('.footer #paging').html());
-	if($("#contact-search").val()=="") {
-		$("#paging").append('<a href="#" class="nextLink enabled"></a>');
-	}
+	$("#contact-list").replaceWith(replacement.filter('#contact-list'));
+	$("#paging").replaceWith(replacement.find('#paging'));
 	disablePaginationControls();
 }
 
