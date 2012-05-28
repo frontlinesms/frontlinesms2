@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="5.0.11" transformSequenceNumber="3">
   <directoryPresets config="." />
-  <application name="FrontlineSMS2 Beta" distributionSourceDir="" applicationId="9038-1538-7100-7772" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="frontlinesms2-beta" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:project.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="FrontlineSMS2 Beta" distributionSourceDir="" applicationId="9038-1538-7100-7772" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="frontlinesms2-beta" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:project.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -301,14 +301,16 @@
             </serializedBean>
             <condition />
             <validation />
-            <preActivation>import net.frontlinesms.install4j.custom.CheckRegistration;
+            <preActivation>context.gotoScreen(context.getScreenById("12"));
+/*TODO fine tune registration process so for now installation skips to finish screen
+import net.frontlinesms.install4j.custom.CheckRegistration;
 
 CheckRegistration c = new CheckRegistration();
 if(c.isRegistered()){
     context.gotoScreen(context.getScreenById("12"));
 }
 return;
-</preActivation>
+*/</preActivation>
             <postActivation />
             <actions />
             <formComponents>
@@ -1453,19 +1455,6 @@ f.send(formEnvironment,context);</postActivation>
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
                         <string>Thanks for registering your use of FrontlineSMS!</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="" id="200" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.LabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
-                      <void property="labelText">
-                        <string>FrontlineSMS</string>
                       </void>
                     </object>
                   </java>
