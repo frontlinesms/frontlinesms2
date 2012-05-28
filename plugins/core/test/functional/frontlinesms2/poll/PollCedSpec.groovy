@@ -260,26 +260,6 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor {Poll.findByName("Coffee Poll") }
 	}
 	
-// Ajax calls make passing this test incredibly difficult
-//	def "should show the right number of messages to be sent to selected recipients"() {
-//		when:
-//			def longQuestion = 'who' * 54
-//			launchPollPopup('standard', longQuestion)
-//		then:
-//			waitFor { autoSortTab.displayed }
-//		when:
-//			goToTab(6)
-//			pollForm.address = '1234567890'
-//			addManualAddress.click()
-//		then:
-//			waitFor { $('.manual').displayed }
-//		when:
-//			next.click()
-//		then:
-//			waitFor { confirmationTab.displayed }
-//			$("#confirm-recepients-count").text() == "1 contacts selected (2 messages will be sent)"
-//	}
-	
 	def "should update confirm screen when user decides not to send messages"() {
 		when:
 			launchPollPopup('standard', "Will you send messages to this poll")
@@ -322,7 +302,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$(".more-actions").value("export").click()
 		then:	
-			waitFor(5) { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { $("#ui-dialog-title-modalBox").displayed }
 	}
 
 	def "can rename a poll"() {
@@ -411,7 +391,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			$(".more-actions").value("edit").click()
 		then:
-			waitFor(10) { $("#ui-dialog-title-modalBox").displayed }
+			waitFor('slow') { $("#ui-dialog-title-modalBox").displayed }
 			at PagePollEdit
 			pollForm.question == 'question'
 			pollForm.pollType == "multiple"
@@ -472,7 +452,7 @@ class PollCedSpec extends PollBaseSpec {
 		poll.save(failOnError:true, flush:true)
 		go "message/poll/${poll.id}"
 		$(".more-actions").value("delete")
-		waitFor(5) { $("#ui-dialog-title-modalBox").displayed }
+		waitFor { $("#ui-dialog-title-modalBox").displayed }
 		$("#title").value("Delete poll")
 		$("#done").click()
 		poll
@@ -484,7 +464,7 @@ class PollCedSpec extends PollBaseSpec {
 		waitFor { createActivityDialog.displayed }
 		$("input", class: "poll").click()
 		$("#submit").click()
-		waitFor(10) { at PagePollCreate }
+		waitFor('slow') { at PagePollCreate }
 		pollForm.pollType = pollType
 		if(question) pollForm.question = question
 		pollForm."dontSendMessage" = !enableMessage

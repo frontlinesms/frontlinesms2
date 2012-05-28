@@ -128,12 +128,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 			$("#message-list tr").size() == 3
 		when:
 			$('a', text:'Starred').click()
-			waitFor {$("#message-list tr").size() == 2}
+			waitFor { $("#message-list tr").size() == 2 }
 		then:
 			$("#message-list tr .message-sender-cell a")[1].text() == 'Alice'
 		when:
 			$('a', text:'All').click()
-			waitFor {$("#message-list tr").size() == 3}
+			waitFor { $("#message-list tr").size() == 3 }
 		then:
 			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Alice', 'Bob'])
 	}
@@ -152,9 +152,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
 			go "message/inbox/show/$message.id"
-			waitFor{$("#btn_forward").displayed}
+			waitFor{ $("#btn_forward").displayed }
 			$("#btn_forward").click()
-			waitFor {$('div#tabs-1').displayed}
+			waitFor { $('div#tabs-1').displayed }
 		then:
 			$('textArea', name:'messageText').text() == "test"
 	}
@@ -184,7 +184,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
 		then:
 			$("#btn_reply").click()
-			waitFor {$('#tabs-1').displayed}
+			waitFor { $('#tabs-1').displayed }
 		when:
 			$("#nextPage").jquery.trigger('click')
 			waitFor { $('#tabs-3').displayed }
@@ -200,7 +200,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${message.id}"
 		then:
 			$("#btn_reply").click()
-			waitFor {$('#tabs-1').displayed}
+			waitFor { $('#tabs-1').displayed }
 		when:
 			$("#nextPage").jquery.trigger('click')
 			waitFor { $('#tabs-3 ').displayed }
@@ -218,7 +218,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			go "message/inbox/show/${message.id}"
 		then:
 			$("#btn_reply").click()
-			waitFor {$('#tabs-1').displayed}
+			waitFor { $('#tabs-1').displayed }
 		when:
 			$("#nextPage").jquery.trigger('click')
 			waitFor { $('#tabs-3 ').displayed }
@@ -270,7 +270,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			Fmessage.build().save(flush: true, failOnError:true)
 			js.refreshMessageCount()
 		then:
-			waitFor(5) { $('#inbox-indicator').text() == '2' }
+			waitFor { $('#inbox-indicator').text() == '2' }
 	}
 
 	String dateToString(Date date) {
