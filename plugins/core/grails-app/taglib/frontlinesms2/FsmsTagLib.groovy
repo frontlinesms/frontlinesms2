@@ -78,8 +78,9 @@ class FsmsTagLib {
 		out << '' + getFieldLabel(instanceClass, groovyKey)
 		if(isRequired(instanceClass, att.field) && !isBooleanField(instanceClass, att.field)) out << '<span class="required-indicator">*</span>'
 		out << '</label>'
+		if(att.class) att.class += addValidationCss(instanceClass, att.field)
+		else att.class = addValidationCss(instanceClass, att.field)
 		
-		att.class = addValidationCss(instanceClass, att.field)
 		if(att.password || isPassword(instanceClass, groovyKey)) {	
 			out << g.passwordField(att)
 		} else if(instanceClass.metaClass.hasProperty(null, groovyKey)?.type.enum) {
