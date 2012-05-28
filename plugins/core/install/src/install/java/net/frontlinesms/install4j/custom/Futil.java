@@ -71,7 +71,6 @@ public class Futil {
 
 	// TODO unit test this method
 	static void createRegistrationPropertiesFile(BufferedWriter out, String uuid, boolean registered) throws IOException {
-		System.out.println("Trying to write");
 		out.write("registered=" + registered + '\n');
 		out.write("uuid=" + uuid + '\n');
 		out.flush();

@@ -49,7 +49,7 @@ public class CheckRegistration {
 		String registrationStatus = null;
 		String line;
 		while (registrationStatus == null && (line = in.readLine()) != null) {
-			if(getKey(line).equals("register")) {
+			if(getKey(line).equals("registered")) {
 				registrationStatus = getValue(line);
 			}
 		}
