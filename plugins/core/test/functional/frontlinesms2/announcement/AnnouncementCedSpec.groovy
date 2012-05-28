@@ -14,7 +14,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			$("input.announcement").click()
 			$("#submit").click()
 		then:
-			waitFor(5) { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("New announcement") }
+			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("New announcement") }
 	}
 	
 	def "can create a new Announcement" () {

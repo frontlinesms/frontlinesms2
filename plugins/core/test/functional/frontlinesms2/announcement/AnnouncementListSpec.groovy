@@ -112,7 +112,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor(5) { $('#multiple-messages a').displayed }
+			waitFor { $('#multiple-messages a').displayed }
 		when:
 			btnReplyMultiple.click()
 		then:

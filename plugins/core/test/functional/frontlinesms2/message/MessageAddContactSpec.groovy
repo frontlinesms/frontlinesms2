@@ -23,7 +23,7 @@ class MessageAddContactSpec extends MessageBaseSpec {
 			go "message/inbox/show/${message.id}"
 			$('#message-detail-sender a').click()
 		then:
-			waitFor(10) {$('title').text() == 'Contacts'}
+			waitFor('slow') {$('title').text() == 'Contacts'}
 			$('#details').mobile == "+254778899"
 	}
 }

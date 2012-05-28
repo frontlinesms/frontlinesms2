@@ -1085,15 +1085,11 @@ We are able to provide FrontlineSMS software and technical support for free beca
                       <void property="inputVerifier">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>import net.frontlinesms.install4j.custom.URLtest;
+                            <string>import net.frontlinesms.install4j.custom.*;
 
-if(text.equals("")){
-    return true;
-}else{
-    URLtest t = new URLtest();
-    return t.test(text);
-}
-</string>
+boolean valid = text.length() == 0 || Futil.validateUrl(text);
+if(!valid) Futil.showAlert("Invalid Web Address \nTry e.g. www.google.com");
+return valid;</string>
                           </void>
                         </object>
                       </void>
@@ -1170,11 +1166,9 @@ if(text.equals("")){
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
                             <string>if(selected){
-    formEnvironment.getFormComponentById("181").setVisible(true);
     formEnvironment.getFormComponentById("182").setVisible(true);
     formEnvironment.getFormComponentById("183").setVisible(true);
 }else{
-    formEnvironment.getFormComponentById("181").setVisible(false);
     formEnvironment.getFormComponentById("182").setVisible(false);
     formEnvironment.getFormComponentById("183").setVisible(false);
 }</string>
@@ -1213,10 +1207,11 @@ if(text.equals("")){
                       <void property="inputVerifier">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string>import net.frontlinesms.install4j.custom.URLtest;
+                            <string>import net.frontlinesms.install4j.custom.*;
 
-URLtest t = new URLtest();
-return t.testEmail(text);</string>
+boolean valid = text.length() == 0 || Futil.validateEmailAddress(text);
+if(!valid) Futil.showAlert("Invalid Email Address \n Try name@home.com");
+return valid;</string>
                           </void>
                         </object>
                       </void>

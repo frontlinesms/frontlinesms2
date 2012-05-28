@@ -102,10 +102,10 @@ public class FrontlineRegistration {
 		Testsend ts = new Testsend();
 		boolean succeeded = ts.submitData(data);
 
-		setVisible(formEnvironment, 68, succeeded);
-		setVisible(formEnvironment, 69, succeeded);
-		setVisible(formEnvironment, 123, !succeeded);
-		setVisible(formEnvironment, 124, !succeeded);
+		setVisible(formEnvironment, 199, succeeded);
+		setVisible(formEnvironment, 200, succeeded);
+		setVisible(formEnvironment, 201, !succeeded);
+		setVisible(formEnvironment, 202, !succeeded);
 	}
 
 	private void copyStrings(InstallerContext from, Map to, String... keys) {

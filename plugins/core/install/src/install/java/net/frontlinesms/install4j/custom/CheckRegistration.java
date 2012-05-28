@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 public class CheckRegistration {
 	public boolean isRegistered() throws IOException {
-		File regPropFile = Util.getRegistrationPropertiesFile();
+		File regPropFile = Futil.getRegistrationPropertiesFile();
 		if (regPropFile.exists()) {
 			return extractIsRegistered(regPropFile);
 		} else {
@@ -49,7 +49,7 @@ public class CheckRegistration {
 		String registrationStatus = null;
 		String line;
 		while (registrationStatus == null && (line = in.readLine()) != null) {
-			if(getKey(line).equals("register")) {
+			if(getKey(line).equals("registered")) {
 				registrationStatus = getValue(line);
 			}
 		}

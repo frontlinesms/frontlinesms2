@@ -58,7 +58,7 @@ class MessageCheckSpec extends MessageBaseSpec {
 		when:
 			$('#multiple-messages a')[0].click()
 		then:
-			waitFor(5) { $("div#tabs-1").displayed }
+			waitFor { $("div#tabs-1").displayed }
 	}
 	
 	def "the count of messages being sent is updated even in 'Reply all'"() {

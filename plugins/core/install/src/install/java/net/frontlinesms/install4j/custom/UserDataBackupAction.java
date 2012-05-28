@@ -12,7 +12,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 
-import static net.frontlinesms.install4j.custom.Util.*;
+import static net.frontlinesms.install4j.custom.Futil.*;
 
 public class UserDataBackupAction extends AbstractInstallAction {
 	private static final String dateFormat = "yyyy-MM-dd-HH-mm";

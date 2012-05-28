@@ -108,9 +108,9 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			$("a", text:contains("Pending")).click()
 		then:
-			waitFor(5) { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
+			waitFor { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
 		then:
-			waitFor{ $('h3.pending').text().equalsIgnoreCase("Pending") }
+			waitFor { $('h3.pending').text().equalsIgnoreCase("Pending") }
 			$("a", text:contains("Pending")).hasClass("pending-send-failed")
 			$("#message-list tr").size() == 2
 	}
@@ -247,7 +247,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def launchQuickMessageDialog() {
 		to PageMessageInbox
 		$("a", text:"Quick message").click()
-		waitFor(5) { at QuickMessageDialog }
+		waitFor { at QuickMessageDialog }
 	}
 	
 	def toSelectRecipientsTab() {

@@ -64,7 +64,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			waitFor{ $("#connections .selected .route") }
 			btnCreateRoute.click()
 		then:
-			waitFor(10) { txtStatus == "Connected" }
+			waitFor('slow') { txtStatus == "Connected" }
 			waitFor { btnTestRoute }.@text.trim() == "Send test message"
 			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
 	}
@@ -77,7 +77,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnCreateRoute.click()
 		then:
-			waitFor(10) { txtStatus == "Connected" }
+			waitFor('slow') { txtStatus == "Connected" }
 			!btnDelete.displayed
 	}
 	
@@ -106,7 +106,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor(15) { at ConnectionDialog }
+			waitFor('very slow') { at ConnectionDialog }
 		when:
 			nextPageButton.click()
 			connectionForm.smslibname = "name"
@@ -151,7 +151,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 		then:
-			waitFor(5) { at ConnectionDialog }
+			waitFor { at ConnectionDialog }
 		when:
 			$("#connectionType").value("intellisms").jquery.trigger("click")
 
