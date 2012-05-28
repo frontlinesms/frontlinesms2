@@ -1,6 +1,18 @@
+def jenkins = Boolean.parseBoolean(System.properties.jenkins)
+
 waiting {
-	timeout = 5
+	timeout = jenkins? 10: 5
 	retryInterval = 0.2
+	presets {
+		slow {
+			timeout = jenkins? 20: 10
+			retryInterval = 1
+		}
+		'very slow' {
+			timeout = jenkins? 30: 15
+			retryInterval = 1
+		}
+	}
 }
 
 driver = {

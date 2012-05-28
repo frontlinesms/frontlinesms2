@@ -63,7 +63,7 @@ class FolderListSpec extends FolderBaseSpec {
 			go "message/folder/${folder.id}/show/${message.id}"
 			$("#btn_reply").click()
 		then:
-			waitFor(5) { $('div#tabs-1').displayed }
+			waitFor { $('div#tabs-1').displayed }
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
