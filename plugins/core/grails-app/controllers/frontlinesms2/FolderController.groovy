@@ -17,10 +17,10 @@ class FolderController {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush: true)) {
 			flash.message = message(code: 'default.created.message', args: [message(code: message(code: 'folder.label'), default: 'Folder'), folderInstance.name])
-			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
+			redirect(controller: "message", action: 'folder', id:folderInstance.id)
 		} else {
 			flash.message = "error"
-			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message])
+			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message,])
 		}
 	}
 
