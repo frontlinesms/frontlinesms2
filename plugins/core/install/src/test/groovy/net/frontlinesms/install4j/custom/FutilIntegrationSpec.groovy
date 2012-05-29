@@ -34,6 +34,18 @@ class FutilIntegrationSpec extends Specification {
 			getRegistrationFile().text
 	}
 
+	def "isRegistered writes correct value to file"(){
+		when:
+			Futil.setRegistered(writtenValue)
+		then:
+			getRegistrationFile().text.contains("registered="+readValue)
+		where:
+			writtenValue|	readValue
+			"true"		|	"true"
+			"false"		|	"false"
+			"23234"		|	"23234"
+	}
+
 	private def getFrontlinesmsSettingsDirectory() {
 		new File(System.properties['user.home'], '.frontlinesms2')
 	}
