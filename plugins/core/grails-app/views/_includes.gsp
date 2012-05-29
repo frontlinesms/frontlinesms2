@@ -21,6 +21,8 @@
 		return translated;
 	}
 
+	var systemNotification = new SystemNotification();
+
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
@@ -51,50 +53,6 @@
 				// hide the current control
 				original.hide();
 			}
-		};
-
-		var systemNotification = {
-			_getId: function(e) {
-				return e.attr("id").substring(13);
-			},
-			_create: function(id, text) {
-				var elementId = "notification-" + id;
-				return '<div class="system-notification" id="' + elementId + '">'
-						+ text
-						+ '<a onclick="systemNotification.hide(' + id + ')" class="hider">x</a></div>';
-			},
-			hide: function(id) {
-				// mark as read with AJAX
-				var link = url_root + 'systemNotification/markRead/' + id;
-				$.get(link);
-				// hide notification
-				$("#notification-" + id).slideUp(500);
-			},
-			refresh: function() {
-				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
-					// remove any notifications no longer in the list
-					var found = [];
-					$(".system-notification").each(function(i, e) {
-						e = $(e);
-						var notificationId = systemNotification._getId(e);
-						if(!data[notificationId]) {
-							// remove dead notification
-							e.slideUp(500);
-						} else {
-							// prevent the notification being re-added
-							data[notificationId] = null;
-						}
-					});
-
-					// add any new notifications to the bottom of the list
-					for(key in data) {
-						var value = data[key];
-						if(value) {
-							$("#notifications").append(systemNotification._create(key, value));
-						}
-					}
-				});
-			},
 		};
 
 		$(function() {
