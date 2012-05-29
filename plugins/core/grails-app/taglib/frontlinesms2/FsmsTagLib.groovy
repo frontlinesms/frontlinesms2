@@ -108,6 +108,14 @@ class FsmsTagLib {
 		out << '</select>'
 		out << '</div>'
 	}
+
+	def trafficLightStatus = { att ->
+		out << '<span id="status-indicator" class="indicator '
+		def connections = Fconnection.list()
+		def color = (connections && connections.status.any {(it == RouteStatus.CONNECTED)}) ? 'green' : 'red'
+		out << color
+		out << '"></span>'
+	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
