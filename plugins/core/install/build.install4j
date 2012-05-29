@@ -301,17 +301,18 @@
             </serializedBean>
             <condition />
             <validation />
-            <preActivation>context.gotoScreen(context.getScreenById("12"));
-/*TODO fine tune registration process so for now installation skips to finish screen
-import net.frontlinesms.install4j.custom.CheckRegistration;
+            <preActivation>import net.frontlinesms.install4j.custom.CheckRegistration;
 
 CheckRegistration c = new CheckRegistration();
 if(c.isRegistered()){
     context.gotoScreen(context.getScreenById("12"));
 }
 return;
-*/</preActivation>
-            <postActivation />
+</preActivation>
+            <postActivation>WizardContext c = context.getWizardContext();
+c.setNextButtonText("Register with FrontlineSMS");
+c.setCancelButtonVisible(false);
+</postActivation>
             <actions />
             <formComponents>
               <formComponent name="" id="167" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -319,9 +320,36 @@ return;
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
-                        <string>Register your use of FrontlineSMS!
+                        <string>&lt;html&gt;
+&lt;b&gt;Register your use of FrontlineSMS!&lt;/b&gt;
+&lt;br&gt;
+We are able to provide FrontlineSMS software and technical support for free because we have been able to show how the software and our help makes a difference, and report this to other users and to the donors who support our work. Collecting information on who is downloading and using our software enables us to more effectively track our impact over time. This has been crucial to our operations, helping us to continue providing free software and free user support to you. Therefore, we would really appreciate you taking the time to fill out the below information to register your use of FrontlineSMS.
+&lt;br&gt;
+&lt;/html&gt;</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="240" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.ButtonComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.ButtonComponent">
+                      <void property="actionScript">
+                        <object class="com.install4j.api.beans.ScriptProperty">
+                          <void property="value">
+                            <string>import net.frontlinesms.install4j.custom.Futil;
 
-We are able to provide FrontlineSMS software and technical support for free because we have been able to show how the software and our help makes a difference, and report this to other users and to the donors who support our work. Collecting information on who is downloading and using our software enables us to more effectively track our impact over time. This has been crucial to our operations, helping us to continue providing free software and free user support to you. Therefore, we would really appreciate you taking the time to fill out the below information to register your use of FrontlineSMS.</string>
+Futil.createRegistrationPropertiesFile("00000",false);
+
+context.gotoScreen(context.getScreenById("12"));</string>
+                          </void>
+                        </object>
+                      </void>
+                      <void property="buttonText">
+                        <string>Skip Registration</string>
                       </void>
                     </object>
                   </java>
@@ -347,7 +375,8 @@ We are able to provide FrontlineSMS software and technical support for free beca
             <condition />
             <validation />
             <preActivation />
-            <postActivation />
+            <postActivation>WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);</postActivation>
             <actions />
             <formComponents>
               <formComponent name="" id="169" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -1141,7 +1170,16 @@ return valid;</string>
             <condition />
             <validation />
             <preActivation />
-            <postActivation />
+            <postActivation>if (context.getBooleanVariable("var_share_your_data") == true){
+    formEnvironment.getFormComponentById("182").setVisible(true);
+    formEnvironment.getFormComponentById("183").setVisible(true);
+}else{
+    formEnvironment.getFormComponentById("182").setVisible(false);
+    formEnvironment.getFormComponentById("183").setVisible(false);
+}
+
+WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);</postActivation>
             <actions />
             <formComponents>
               <formComponent name="" id="178" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -1149,7 +1187,22 @@ return valid;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
-                        <string>Many users share monthly usage data with the FrontlineSMS team, which does not include message content or sender/recipient details, but tells us how many messages you are sending and receiving through FrontlineSMS and how large your contact database is. This information will be confidentially stored by the FrontlineSMS team, and won’t be released publicly without your permission.</string>
+                        <string>&lt;html&gt;
+Many users share monthly usage data with the FrontlineSMS team, which does not include message content or sender/recipient details, but tells us how many messages you are sending and receiving through FrontlineSMS and how large your contact database is.&lt;b&gt; This information will be confidentially stored by the FrontlineSMS team, and won’t be released publicly without your permission.&lt;/b&gt;
+&lt;/html&gt;</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="180" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
+                      <void property="labelHtml">
+                        <string>We have worked with many of our users to create jointly-branded case studies and guest blog posts about their work, as well as featuring them in guides and presentations. If you are happy to be contacted by the FrontlineSMS team to explore these opportunities, connect you with other local users or simply find out how you are doing with the software, please fill out your contact information below. </string>
                       </void>
                     </object>
                   </java>
@@ -1179,19 +1232,6 @@ return valid;</string>
                       </void>
                       <void property="variableName">
                         <string>var_share_your_data</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="" id="180" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
-                      <void property="labelHtml">
-                        <string>We have worked with many of our users to create jointly-branded case studies and guest blog posts about their work, as well as featuring them in guides and presentations. If you are happy to be contacted by the FrontlineSMS team to explore these opportunities, connect you with other local users or simply find out how you are doing with the software, please fill out your contact information below. </string>
                       </void>
                     </object>
                   </java>
@@ -1327,7 +1367,8 @@ return valid;</string>
             <condition />
             <validation />
             <preActivation />
-            <postActivation />
+            <postActivation>WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);</postActivation>
             <actions />
             <formComponents>
               <formComponent name="extra info" id="189" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -1435,7 +1476,7 @@ To edit the information before submitting click BACK.To Cancel click CANCEL.</st
                     <string>.....</string>
                   </void>
                   <void property="title">
-                    <string>Thankyou</string>
+                    <string>Thank You</string>
                   </void>
                 </object>
               </java>
@@ -1444,9 +1485,13 @@ To edit the information before submitting click BACK.To Cancel click CANCEL.</st
             <validation />
             <preActivation />
             <postActivation>import net.frontlinesms.install4j.custom.FrontlineRegistration;
+WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);
 
 FrontlineRegistration f = new FrontlineRegistration();
-f.send(formEnvironment,context);</postActivation>
+f.send(formEnvironment,context);
+
+</postActivation>
             <actions />
             <formComponents>
               <formComponent name="" id="199" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -1454,7 +1499,9 @@ f.send(formEnvironment,context);</postActivation>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
-                        <string>Thanks for registering your use of FrontlineSMS!</string>
+                        <string>&lt;html&gt;
+Thank you for registering your use of &lt;b&gt;FrontlineSMS!&lt;/b&gt;
+&lt;/html&gt;</string>
                       </void>
                     </object>
                   </java>

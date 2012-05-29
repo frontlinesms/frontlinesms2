@@ -6,6 +6,9 @@ import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class Futil {
 //> CONSTANTS
@@ -14,12 +17,10 @@ public class Futil {
 	private static final String EMAIL_REGEX = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$";
 
 //> PUBLIC UTILITY METHODS
-	// TODO unit test
 	public static boolean validateUrl(String url) {
 		return url.matches(URL_REGEX);
 	}
 
-	// TODO unit test
 	public static boolean validateEmailAddress(String email) {
 		return email.matches(EMAIL_REGEX);
 	}
@@ -43,7 +44,11 @@ public class Futil {
 		System.out.println("\t: "+s);
 	}
 
-	static void createRegistrationPropertiesFile(String uuid, boolean registered) {
+	public static void createRegistrationPropertiesFile(String uuid, boolean registered ){
+		createRegistrationPropertiesFile(uuid, registered , null);
+	}
+
+	static void createRegistrationPropertiesFile(String uuid, boolean registered , Map<String, String> data) {
 		File regPropFile = Futil.getRegistrationPropertiesFile();
 		try {
 			if(!regPropFile.exists()) {
@@ -57,7 +62,7 @@ public class Futil {
 				fos = new FileOutputStream(regPropFile);
 				osw = new OutputStreamWriter(fos, "UTF-8");
 				out = new BufferedWriter(osw);
-				createRegistrationPropertiesFile(out, uuid, registered);
+				createRegistrationPropertiesFile(out, uuid, registered ,data);
 			} finally {
 				// Close all streams safely
 				try { fos.close(); } catch(Exception _) { /* ignore */ }
@@ -70,9 +75,13 @@ public class Futil {
 	}
 
 	// TODO unit test this method
-	static void createRegistrationPropertiesFile(BufferedWriter out, String uuid, boolean registered) throws IOException {
+	static void createRegistrationPropertiesFile(BufferedWriter out, String uuid, boolean registered , Map<String, String> data) throws IOException {
 		out.write("registered=" + registered + '\n');
-		out.write("uuid=" + uuid + '\n');
+		if (data != null){
+			for(Entry<String, String> e: data.entrySet()) {
+				out.write(e.getKey()+"=" + e.getValue() + '\n');
+			}
+		}
 		out.flush();
 	}
 
