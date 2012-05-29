@@ -14,7 +14,7 @@ class PollCedSpec extends PollBaseSpec {
 	
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
-			launchPollPopup('standard', null)
+			launchPollPopup('yesNo', null)
 		then:
 			errorMessage.displayed
 		when:
@@ -58,7 +58,7 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
-			launchPollPopup('standard', 'question', false)
+			launchPollPopup('yesNo', 'question', false)
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
@@ -107,7 +107,7 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "should not proceed when the poll is not named"() {
 		when:
-			launchPollPopup('standard', 'question', false)
+			launchPollPopup('yesNo', 'question', false)
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
@@ -262,7 +262,7 @@ class PollCedSpec extends PollBaseSpec {
 	
 	def "should update confirm screen when user decides not to send messages"() {
 		when:
-			launchPollPopup('standard', "Will you send messages to this poll")
+			launchPollPopup('yesNo', "Will you send messages to this poll")
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
@@ -431,7 +431,7 @@ class PollCedSpec extends PollBaseSpec {
 			poll.save(failOnError:true, flush:true)
 			assert Poll.count() == 1
 		when:
-			launchPollPopup('standard', 'question', false)
+			launchPollPopup('yesNo', 'question', false)
 		then:
 			waitFor { autoSortTab.displayed }
 		when:
@@ -458,7 +458,7 @@ class PollCedSpec extends PollBaseSpec {
 		poll
 	}
 
-	def launchPollPopup(pollType='standard', question='question', enableMessage=true) {
+	def launchPollPopup(pollType='yesNo', question='question', enableMessage=true) {
 		to PageMessageInbox
 		createActivityButton.click()
 		waitFor { createActivityDialog.displayed }
