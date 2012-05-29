@@ -28,6 +28,7 @@ function refreshStatusIndicator() {
 		$('#status-indicator').removeClass('green');
 		$('#status-indicator').removeClass('red');
 		$('#status-indicator').addClass(data);
+		$('#status-indicator').show();
 	});
 }
 
