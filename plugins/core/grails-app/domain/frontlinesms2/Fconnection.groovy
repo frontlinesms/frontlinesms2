@@ -13,7 +13,6 @@ class Fconnection {
 	static String getShortName() { 'base' }
 	
 	static def implementations = [SmslibFconnection,
-			EmailFconnection,
 			ClickatellFconnection,
 			IntelliSmsFconnection]
 	static getNonnullableConfigFields = { clazz ->
