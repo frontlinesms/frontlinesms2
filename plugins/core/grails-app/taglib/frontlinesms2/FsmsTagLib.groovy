@@ -62,13 +62,13 @@ class FsmsTagLib {
 		
 	}
 	
-	def input = {	 att, body ->
+	def input = { att, body ->
 		def groovyKey = att.field
 		// TODO remove references to att.instanceClass and make sure that all forms in app
 		// have an instance supplied - whether it is retrieved from the database or created
 		// specially for the view
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
-		def htmlKey = (att.fieldPrefix?:instanceClass?instanceClass.shortName:'') + att.field
+		def htmlKey = (att.fieldPrefix!=null? att.fieldPrefix: instanceClass?instanceClass.shortName:'') + att.field
 		def val = att.instance?."$groovyKey"
 		
 		['instance', 'instanceClass'].each { att.remove(it) }

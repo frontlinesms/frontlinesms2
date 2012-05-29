@@ -298,18 +298,19 @@ class MessageController {
 		def groupList = []
 		def contactList = []
 		def addressList = []
-		def finalAddressList = []
 		
-		def message = Fmessage.get(params.messageId) ?: null
+		def message = Fmessage.get(params.messageId)
 		if(message) {
 			addressList = message.dispatches
+			// FIXME this is very dangerous
 			Group.getAll().each {
-				def groupAddressList = it.getAddresses()
-				if (groupAddressList != [] && addressList.dst.containsAll(groupAddressList)) {
+				def groupAddressList = it.addresses
+				if (groupAddressList && addressList.dst.containsAll(groupAddressList)) {
 					groupList += it
 				}
 			}
 			message.dispatches.each {
+				// should probably get all of these in a single SQL query
 				Contact c = Contact.findByMobile(it.dst)
 				if(c) {
 					contactList += "${c.name} (${it.status})"
@@ -317,24 +318,24 @@ class MessageController {
 				}
 			}
 		}
-		addressList.each {
-			finalAddressList += "${it.dst} (${it.status})"
+		def finalAddressList = addressList.collect {
+			"${it.dst} (${it.status})"
 		}
 		contactList = contactList - null
-		[groupList: groupList,
-			contactList: contactList,
-			addressList: finalAddressList]
+		[groupList:groupList,
+				contactList:contactList,
+				addressList:finalAddressList]
 	}
 
-	def confirmEmptyTrash = { }
+	def confirmEmptyTrash = {}
 	
 	def emptyTrash = {
 		trashService.emptyTrash()
-		redirect(action: 'inbox')
+		redirect action:'inbox'
 	}
 	
 	def unreadMessageCount = {
-		render text: Fmessage.countUnreadMessages(), contentType:'text/plain'
+		render text:Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
 	def sendMessageCount = {

@@ -279,3 +279,10 @@
 	margin: 10px;
 }
 
+#recipient-lists {
+	overflow: scroll;
+}
+
+.recipient-list li {
+	margin: 10px;
+}
