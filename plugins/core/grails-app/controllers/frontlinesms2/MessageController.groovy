@@ -69,7 +69,7 @@ class MessageController {
 	def sent = {
 		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
 		render view:'../message/standard', model:[messageSection:'sent',
-				messageInstanceList: messageInstanceList.list(params),
+				messageInstanceList: messageInstanceList.list(params).unique(),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	} 
 
