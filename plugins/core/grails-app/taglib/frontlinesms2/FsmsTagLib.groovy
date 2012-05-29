@@ -98,10 +98,13 @@ class FsmsTagLib {
 		def controller = att.controller
 		def target = att.target
 		def fields = expressionProcessorService.findByController(controller)
+		target = target?: "messageText"
+
+		//autoreplyText messageText
 		out << '<div class="magicwand-container">'
 		// TODO change this to use g.select if appropriate
-		out << '<select id="magicwand-select" onchange="magicwand.wave()">'
-		out << '<option value="na" id="magic-wand-na" class="not-field">Select option</option>'
+		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
+		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'
 		fields.each {
 			out << '<option class="predefined-field" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
 		}

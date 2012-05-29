@@ -1,11 +1,10 @@
 var magicwand = {
-	wave: function() {
-		var list = $("#magicwand-select");
+	wave: function(select, target) {
+		var list = $('select[id^="'+select+'"]');
 		var varName = list.val();
-		insertAtCaret('messageText', "${" + varName + "}");
+		insertAtCaret(target, "${" + varName + "}");
 		magicwand.reset(list);
 	},
-
 	/**
 	 * Reset a jquery "selectmenu" to display the original selected item.
 	 * @arg list jquery selecter for the <option/> element
