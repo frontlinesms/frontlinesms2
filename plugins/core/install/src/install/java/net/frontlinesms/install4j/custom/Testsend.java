@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Iterator;
 
+import com.install4j.api.context.InstallerContext;
+
 import static net.frontlinesms.install4j.custom.Futil.*;
 
 public class Testsend {
@@ -21,10 +23,10 @@ public class Testsend {
 			writeRequestBody(out, data);
 
 			readResponse(conn);
-			createRegistrationPropertiesFile(uuid, true);
+			createRegistrationPropertiesFile(uuid, true, data);
 			return true;
 		} catch(Exception e) {
-			createRegistrationPropertiesFile(uuid, false);
+			createRegistrationPropertiesFile(uuid, false, data);
 			return false;
 		}
 	}

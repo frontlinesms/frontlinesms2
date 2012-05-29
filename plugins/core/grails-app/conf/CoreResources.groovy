@@ -60,6 +60,13 @@ modules = {
 		resource url: [dir:'js', file:'/graph/g.raphael-min.js']
 		resource url: [dir:'js', file:'/graph/g.bar-min.js']
 		resource url: [dir:'js', file:'/graph/graph.js']
+		resource url: [dir:'js', file:'/graph/jquery.jqplot.min.js']
+		resource url: [dir:'js', file:'/graph/jqplot.barRenderer.min.js']
+		resource url: [dir:'js', file:'/graph/jqplot.categoryAxisRenderer.min.js']
+		resource url: [dir:'js', file:'/graph/jqplot.pointLabels.min.js']
+		resource url: [dir:'js', file:'/graph/jqplot.highlighter.min.js']
+		resource url: [dir:'js', file:'/graph/jqplot.enhancedLegendRenderer.min.js']
+		resource url: [dir:'css', file:"jquery.jqplot.min.css"]
 	}
 
 	search {
