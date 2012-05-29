@@ -7,22 +7,63 @@ $(function() {
 		var data = [data1, data2];
 		var dataCaption = ["Sent", "Received"];
 		var holder = "trafficGraph";
-		var r = Raphael(holder);
-		var padding = {left: 40, top: 20, bottom: 20, right: 55 };
-		var textStyle = {"font-weight": "bold", "font-size": 12};
-		var c = r.plotStackedBarGraph(holder, data, xdata, dataCaption, {colors : ["#D4D5D6", "#949494"], textStyle: textStyle, 
-		padding : padding, ystep:5});
 		var sent =  data1.sum(), received = data2.sum(), total = data.pack().sum();
 		var sentPercent = "", receivedPercent = "";
 		if(total > 0) {
 			sentPercent = " (" + Math.round(sent * 100 / total) + "%) ";
 			receivedPercent = " (" + Math.round(received * 100 / total) + "%) ";
-		} 
-		var summary = r.text(r.width/2, r.height- padding.bottom, 
-			i18n("traffic.sent")+": " + sent +  sentPercent +
-			i18n("traffic.received")+": " + receivedPercent +
-			i18n("traffic.total")+": " +  total)
-			.attr(textStyle);
+		}
+
+		var formatString = '<table class="jqplot-highlighter">'
+		formatString += '<tr><td>%s</td><td>&nbsp;messages</td></tr>'
+		formatString += '</table>'
+		plot3 = $.jqplot(holder, data, {
+			    stackSeries: true,
+			    captureRightClick: true,
+			    seriesDefaults:{
+			      renderer:$.jqplot.BarRenderer,
+			      rendererOptions: {
+			          // Put a 15 pixel margin between bars.
+			          barMargin: 15,
+			          // Highlight bars when mouse button pressed.
+			          // Disables default highlighting on mouse over.
+			          highlightMouseDown: true   
+			      },
+			      pointLabels: {show: false}
+			    },
+			    series:[
+						{label:i18n("traffic.sent") + ':' + sent + sentPercent},
+						{label:i18n("traffic.received") + ':' + received + receivedPercent}
+					],
+			    axes: {
+			      xaxis: {
+			          renderer: $.jqplot.CategoryAxisRenderer,
+			          ticks: xdata
+			      },
+			      yaxis: {
+			        // Don't pad out the bottom of the data range.  By default,
+			        // axes scaled as if data extended 10% above and below the
+			        // actual range to prevent data points right on grid boundaries.
+			        // Don't want to do that here.
+			        padMin: 0
+			      }
+			    },
+			    highlighter: {
+			    	show:true,
+			    	showTooltip: true,
+			    	tooltipLocation: 'n',
+			    	tooltipAxes: 'y',
+			    	yvalues: 1,
+			    	formatString: formatString
+				},
+			    legend: {
+					renderer: $.jqplot.EnhancedLegendRenderer,
+					show: true,
+					location: 'nw',
+					placement: 'inside'
+			    }     
+			  });
+		
 
 	});
 </r:script>
