@@ -256,7 +256,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			$("#magicwand-select").jquery.val('contact_name')
 			$("#magicwand-select").jquery.trigger('change')
 		then:
-			waitFor { $('#messageText').value() == ("Hello, \${contact_name}") }
+			waitFor { $('#messageText').jquery.val() == "Hello, \${contact_name}" }
 	}
 	
 	private def createData() {
