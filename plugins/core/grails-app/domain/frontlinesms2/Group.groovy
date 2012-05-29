@@ -3,6 +3,8 @@ package frontlinesms2
 class Group {
 	String name
 
+	static def shortName = 'group'
+
 	static constraints = {
 		name(unique: true, nullable: false, blank: false, maxSize: 255)
 	}
