@@ -4,12 +4,18 @@ $(function() {
 });
 
 function checkForNew() {
-	var section = $("#messageSection").val();
-	var ownerId = $('input:hidden[name=ownerId]').val();
+	var params = {};
+	params.messageSection = $("#messageSection").val();
+	params.ownerId = $('input:hidden[name=ownerId]').val();
+	params.starred = $('input:hidden[name=starred]').val();
+	params.failed = $('input:hidden[name=failed]').val();
+
+
 	var currentTotal = $("#messageTotal").val();
 	var newTotal = $("#messageTotal").val();
 	
-	$.getJSON(url_root + 'message/newMessageCount', {messageSection: section, ownerId: ownerId}, function(data) {
+	$.getJSON(url_root + 'message/newMessageCount', params, function(data) {
+		if(data == null) return;
 		$.each(data, function(key, val) {
 		    newTotal = val;
 		});
