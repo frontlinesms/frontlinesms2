@@ -6,9 +6,12 @@ import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Properties;
 
 public class Futil {
 //> CONSTANTS
@@ -42,6 +45,20 @@ public class Futil {
 
 	static void log(String s) {
 		System.out.println("\t: "+s);
+	}
+
+	public static void setRegistered(String value){
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileInputStream(getRegistrationPropertiesFile()));
+		} catch (IOException e) {
+		}
+
+		try {
+			properties.setProperty("registered",value);
+			properties.store(new FileOutputStream(getRegistrationPropertiesFile()), null);
+		} catch (IOException e) {
+		}
 	}
 
 	public static void createRegistrationPropertiesFile(String uuid, boolean registered ){
