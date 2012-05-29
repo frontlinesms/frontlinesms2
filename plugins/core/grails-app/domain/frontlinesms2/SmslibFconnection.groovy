@@ -26,7 +26,7 @@ class SmslibFconnection extends Fconnection {
 	boolean allMessages = true
 
 	static constraints = {
-		port(nullable: false, blank: false)
+		port blank:false
 		imsi(nullable: true)
 		pin(nullable: true)
 		serial(nullable: true)

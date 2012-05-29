@@ -197,7 +197,7 @@
 
 #message-detail {
 	width: 24.9%;
-	height: 100%;
+	height: 9000px;
 	float:right;
 	overflow: auto;
 	border-left: 1px solid #9e9e9e;
@@ -279,3 +279,10 @@
 	margin: 10px;
 }
 
+#recipient-lists {
+	overflow: scroll;
+}
+
+.recipient-list li {
+	margin: 10px;
+}
