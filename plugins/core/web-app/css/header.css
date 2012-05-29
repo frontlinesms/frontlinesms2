@@ -40,14 +40,14 @@
 #notifications a {
 	text-decoration: underline;
 }
-#notifications .hide-flash {
+#notifications .hider {
 	float: right;
 	text-decoration: none;
 	font-weight: normal;
 	padding-right: 8px;
 	cursor: pointer;
 }
-#notifications .hide-flash:hover {
+#notifications .hider:hover {
 	text-decoration: underline;
 }
 

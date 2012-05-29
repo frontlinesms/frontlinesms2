@@ -56,8 +56,8 @@ public class FrontlineRegistration {
 			"United Kingdom", "United States", "Uruguay", "Uzbekistan",
 			"Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen",
 			"Zambia", "Zimbabwe" };
-
-	public void send(FormEnvironment formEnvironment, InstallerContext context) {
+	
+	public Map getRegistrationData(InstallerContext context){
 		// TODO refactor this like the string stuff below!
 		Integer var_category_of_work = (Integer) context
 				.getVariable("var_category_of_work");
@@ -99,8 +99,12 @@ public class FrontlineRegistration {
 		data.put("var_share_telephone_skype", var_share_telephone_skype);
 		data.put("var_share_your_data", "" + var_share_your_data);
 
+		return data;
+	}
+
+	public void send(FormEnvironment formEnvironment, InstallerContext context) {
 		Testsend ts = new Testsend();
-		boolean succeeded = ts.submitData(data);
+		boolean succeeded = ts.submitData(getRegistrationData(context));
 
 		setVisible(formEnvironment, 199, succeeded);
 		setVisible(formEnvironment, 200, succeeded);
@@ -116,7 +120,7 @@ public class FrontlineRegistration {
 
 	private void copyString(InstallerContext from, Map to, String key) {
 		String value = (String) from.getVariable(key);
-		to.put(key, value);
+		to.put(key, value.replace("\n", " "));
 	}
 
 	private void setVisible(FormEnvironment formEnvironment, int id, boolean visible) {

@@ -21,6 +21,8 @@
 		return translated;
 	}
 
+	var systemNotification = new SystemNotification();
+
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
@@ -58,13 +60,8 @@
 		        $(".dropdown").selectmenu();
 			$("input[type='submit']").each(function() { fsmsButton.apply(this); });
 
-			setInterval(refreshSystemNotifications, 10000);
-			function refreshSystemNotifications() {
-				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
-						$(".system-notification").remove();
-						$("#notifications").append(data);
-				});
-			}
+			// Enable system notification refresh
+			setInterval(systemNotification.refresh, 10000);
 		});
 	</g:else>
 </r:script>

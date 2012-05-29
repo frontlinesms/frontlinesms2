@@ -18,7 +18,7 @@
         <li id="status-tab-button" class="tab ${params.controller == 'status' ? 'current' : ''}">
             <g:link class="tab-link" url="${[controller:'status']}" id="status-tab-link">
                 <g:message code="tabs.status"/>
-                <span id="status-indicator" class="indicator"></span>
+                <fsms:trafficLightStatus/>
             </g:link>
         </li>
     
