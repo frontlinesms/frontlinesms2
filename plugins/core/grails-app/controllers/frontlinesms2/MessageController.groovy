@@ -155,7 +155,7 @@ class MessageController {
 	def send = {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
-		flash.message = message(code: 'flash.message.fmessage.in.queue', args: [fmessage.dispatches*.dst?.join(", ")])
+		fmessage.dispatches*.dst?.size() == 1 ? (flash.message = message(code:'flash.message.fmessage.in.queue', args:[fmessage.dispatches*.dst?.join(", ")])) : (flash.message = message(code:'flash.message.fmessage.in.queue.many', args:[fmessage.dispatches*.dst?.size()]))
 		render(text: flash.message)
 	}
 	
@@ -173,7 +173,7 @@ class MessageController {
 			}
 		}
 		
-		flash.message = message(code:'flash.message.fmessage.in.queue', args:[dst.join(", ")])
+		dst.size() == 1 ? (flash.message = message(code:'flash.message.fmessage.in.queue', args:[dst.join(", ")])) : (flash.message = message(code:'flash.message.fmessage.in.queue.many', args:[dst.size()]))
 		redirect controller:'message', action:'pending'
 	}
 	
