@@ -13,7 +13,9 @@ class SystemNotificationController {
 	}
 	
 	def list = {
-		render template:'/system_notifications'
+		def notifications = SystemNotification.findAllByRead(false)
+		def data = notifications.collectEntries { [it.id, it.text] }
+		render data as JSON
 	}
 	
 	private def withNotification(Closure c) {

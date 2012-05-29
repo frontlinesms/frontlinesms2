@@ -50,6 +50,6 @@
 
 	function addFlashMessage(data) {
 		$("#notifications .flash").remove();
-		$("#notifications").prepend("<div class='flash message'>" + data + "<a class='hide-flash'>x</a></div>");
+		$("#notifications").prepend("<div class='flash message'>" + data + "<a class='hider hide-flash'>x</a></div>");
 	}
 </r:script>

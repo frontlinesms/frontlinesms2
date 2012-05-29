@@ -53,18 +53,57 @@
 			}
 		};
 
+		var systemNotification = {
+			_getId: function(e) {
+				return e.attr("id").substring(13);
+			},
+			_create: function(id, text) {
+				var elementId = "notification-" + id;
+				return '<div class="system-notification" id="' + elementId + '">'
+						+ text
+						+ '<a onclick="systemNotification.hide(' + id + ')" class="hider">x</a></div>';
+			},
+			hide: function(id) {
+				// mark as read with AJAX
+				var link = url_root + 'systemNotification/markRead/' + id;
+				$.get(link);
+				// hide notification
+				$("#notification-" + id).slideUp(500);
+			},
+			refresh: function() {
+				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
+					// remove any notifications no longer in the list
+					var found = [];
+					$(".system-notification").each(function(i, e) {
+						e = $(e);
+						var notificationId = systemNotification._getId(e);
+						if(!data[notificationId]) {
+							// remove dead notification
+							e.slideUp(500);
+						} else {
+							// prevent the notification being re-added
+							data[notificationId] = null;
+						}
+					});
+
+					// add any new notifications to the bottom of the list
+					for(key in data) {
+						var value = data[key];
+						if(value) {
+							$("#notifications").append(systemNotification._create(key, value));
+						}
+					}
+				});
+			},
+		};
+
 		$(function() {
 		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 		        $(".dropdown").selectmenu();
 			$("input[type='submit']").each(function() { fsmsButton.apply(this); });
 
-			setInterval(refreshSystemNotifications, 10000);
-			function refreshSystemNotifications() {
-				$.get("${createLink(controller:'systemNotification', action:'list')}", function(data) {
-						$(".system-notification").remove();
-						$("#notifications").append(data);
-				});
-			}
+			// Enable system notification refresh
+			setInterval(systemNotification.refresh, 10000);
 		});
 	</g:else>
 </r:script>

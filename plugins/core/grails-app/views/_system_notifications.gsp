@@ -1,8 +1,6 @@
 <g:each in="${frontlinesms2.SystemNotification.findAllByRead(false)}">
 	<div class="system-notification" id="notification-${it.id}">
 		${it.text}
-		<g:remoteLink controller="systemNotification"
-				action="markRead" id="${it.id}"
-				class="hide-flash">x</g:remoteLink>
+		<a onclick="systemNotification.hide(${it.id})" class="hider">x</a>
 	</div>
 </g:each>
