@@ -156,7 +156,9 @@ class MessageController {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
 		if(fmessage.dispatches.size() == 1) {
-			flash.message = message code:'fmessage.queued', args:[fmessage.dispatches[0].displayName]
+			def mobile = (fmessage.dispatches as List)[0].dst
+			def displayName = Contact.findByMobile(mobile)?.name?: mobile
+			flash.message = message code:'fmessage.queued', args:[displayName]
 		} else {
 			flash.message = message code:'fmessage.queued.multiple', args:[fmessage.dispatches.size()]
 		}
