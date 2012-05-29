@@ -1293,7 +1293,7 @@ return valid;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>I would like to be featured in the user map</string>
+                        <string>I would like to be featured in the user map.</string>
                       </void>
                       <void property="variableName">
                         <string>var_feature_in_user_map</string>
@@ -1309,7 +1309,7 @@ return valid;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>I would like to receive regular FrontlineSMS news via newsletter?</string>
+                        <string>I would like to receive regular FrontlineSMS news via newsletter.</string>
                       </void>
                       <void property="variableName">
                         <string>var_get_frontlinesms_newsletter</string>
@@ -1338,7 +1338,7 @@ return valid;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>I am interested in finding out more about this research</string>
+                        <string>I am interested in finding out more about this research.</string>
                       </void>
                       <void property="variableName">
                         <string>var_findout_more_about_research</string>
