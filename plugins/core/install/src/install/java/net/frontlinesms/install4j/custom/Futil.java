@@ -7,7 +7,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -36,7 +36,15 @@ public class Futil {
 	static File getRegistrationPropertiesFile() {
 		File frontlinesms2Directory = new File(System.getProperty("user.home"), ".frontlinesms2");
 		if(!frontlinesms2Directory.exists()) frontlinesms2Directory.mkdirs();
-		return new File(frontlinesms2Directory, "registration.properties");
+		File regPropFile = new File(frontlinesms2Directory, "registration.properties");
+		try{
+			if(!regPropFile.exists()) {
+					regPropFile.createNewFile();
+				}
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		return regPropFile;
 	}
 
 	static String generateUUID() {
@@ -49,15 +57,13 @@ public class Futil {
 
 	public static void setRegistered(String value){
 		Properties properties = new Properties();
+		File regPropFile = Futil.getRegistrationPropertiesFile();
 		try {
-			properties.load(new FileInputStream(getRegistrationPropertiesFile()));
-		} catch (IOException e) {
-		}
-
-		try {
+			properties.load(new InputStreamReader(new FileInputStream(regPropFile), "UTF-8"));
 			properties.setProperty("registered",value);
-			properties.store(new FileOutputStream(getRegistrationPropertiesFile()), null);
+			properties.store(new OutputStreamWriter(new FileOutputStream(regPropFile), "UTF-8"),null);
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -67,41 +73,23 @@ public class Futil {
 
 	static void createRegistrationPropertiesFile(String uuid, boolean registered , Map<String, String> data) {
 		File regPropFile = Futil.getRegistrationPropertiesFile();
+		String status = "";
+		status = registered ? "true":"false";
 		try {
-			if(!regPropFile.exists()) {
-				regPropFile.createNewFile();
+			Properties properties = new Properties();
+			properties.load(new InputStreamReader(new FileInputStream(regPropFile), "UTF-8"));
+			properties.setProperty("registered",status);
+			if (data != null){
+				for(Entry<String, String> e: data.entrySet()) {
+					properties.setProperty(e.getKey(),e.getValue());
+				}
 			}
+			properties.store(new OutputStreamWriter(new FileOutputStream(regPropFile), "UTF-8"),null);
 
-			FileOutputStream fos = null;
-			OutputStreamWriter osw = null;
-			BufferedWriter out = null;
-			try {
-				fos = new FileOutputStream(regPropFile);
-				osw = new OutputStreamWriter(fos, "UTF-8");
-				out = new BufferedWriter(osw);
-				createRegistrationPropertiesFile(out, uuid, registered ,data);
-			} finally {
-				// Close all streams safely
-				try { fos.close(); } catch(Exception _) { /* ignore */ }
-				try { osw.close(); } catch(Exception _) { /* ignore */ }
-				try { out.close(); } catch(Exception _) { /* ignore */ }
-			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-
-	// TODO unit test this method
-	static void createRegistrationPropertiesFile(BufferedWriter out, String uuid, boolean registered , Map<String, String> data) throws IOException {
-		out.write("registered=" + registered + '\n');
-		if (data != null){
-			for(Entry<String, String> e: data.entrySet()) {
-				out.write(e.getKey()+"=" + e.getValue() + '\n');
-			}
-		}
-		out.flush();
-	}
-
 //> PRIVATE UTILITY METHODS
 }
 

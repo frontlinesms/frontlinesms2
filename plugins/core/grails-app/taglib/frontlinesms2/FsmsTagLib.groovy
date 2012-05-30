@@ -100,7 +100,6 @@ class FsmsTagLib {
 		def fields = expressionProcessorService.findByController(controller)
 		target = target?: "messageText"
 
-		//autoreplyText messageText
 		out << '<div class="magicwand-container">'
 		// TODO change this to use g.select if appropriate
 		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
