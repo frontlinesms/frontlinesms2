@@ -18,9 +18,9 @@ var magicwand = {
 	init: function(list) {
 		list.selectmenu();
 		var status = list.parent().find(".ui-selectmenu-status");
-		status.addClass("magicwand-button");
-		status.removeClass("ui-selectmenu-status");
 		status.text('');
+		status.prepend('<span class="magicwand-icon"/>');
+		status.attr('title', 'MAGIC WANNNNNDD!!')
 		status.siblings(".ui-selectmenu-icon").remove();
 		var statusParent = status.parent();
 		statusParent.removeClass("ui-selectmenu");

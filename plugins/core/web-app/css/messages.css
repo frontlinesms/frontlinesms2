@@ -286,3 +286,17 @@
 .recipient-list li {
 	margin: 10px;
 }
+
+.compose-controls-wrap {
+	width:375px;
+}
+.compose-controls-left {
+	display:inline-block;
+	float:left;
+	width:70%;
+}
+.compose-controls-right {
+	display:inline-block;
+	float:right;
+	width:30%;
+}
