@@ -8,10 +8,10 @@ class Keyword {
 		value(blank:true, maxSize:255, validator: { val, me ->
 			if(val.find(/\s/)) return false
 			if(val != val.toUpperCase()) return false
-			if(me.activity?.archived) return true
+			if(me.activity?.deleted || me.activity?.archived) return true
 			def found = Keyword.findAllByValue(val)
 			if(!found || found==[me]) return true
-			else if (found.any { it != me && !it.activity?.archived }) return false
+			else if (found.any { it != me && !it.activity?.archived && !it.activity?.deleted }) return false
 			else return true
 		})
 		activity(nullable: false)
