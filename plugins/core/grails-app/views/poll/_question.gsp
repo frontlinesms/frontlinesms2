@@ -5,19 +5,19 @@
 			<h2 class="bold"><g:message code="poll.type.prompt"/></h2>
 			<ul>
 				<g:if test="${activityInstanceToEdit}">
-					<g:set var="isStandard" value="${activityInstanceToEdit?.standard}"/>
+					<g:set var="isYesNo" value="${activityInstanceToEdit?.yesNo}"/>
 					<li>
-						<g:radio name="pollType" value="standard" checked="${isStandard}" disabled="${!isStandard}"/>
+						<g:radio name="pollType" value="yesNo" checked="${isYesNo}" disabled="${!isYesNo}"/>
 						<g:message code="poll.question.yes.no"/>
 					</li>
 					<li>
-						<g:radio name="pollType" value="multiple" checked="${!isStandard}" disabled="${isStandard}"/>
+						<g:radio name="pollType" value="multiple" checked="${!isYesNo}" disabled="${isYesNo}"/>
 						<g:message code="poll.question.multiple"/>
 					</li>
 				</g:if>
 				<g:else>
 					<li>
-						<g:radio name="pollType" value="standard" checked='checked'/>
+						<g:radio name="pollType" value="yesNo" checked='checked'/>
 						<g:message code="poll.question.yes.no"/>
 					</li>
 					<li>
@@ -51,7 +51,7 @@
 	});
 
 	$("input[name='pollType']").live("change", function() {
-		if ($("input[name='pollType']:checked").val() == "standard") {
+		if ($("input[name='pollType']:checked").val() == "yesNo") {
 			disableTab(1);
 		} else {
 			enableTab(1);

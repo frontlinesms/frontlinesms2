@@ -342,7 +342,7 @@ We are able to provide FrontlineSMS software and technical support for free beca
                           <void property="value">
                             <string>import net.frontlinesms.install4j.custom.Futil;
 
-Futil.createRegistrationPropertiesFile("00000",false);
+Futil.setRegistered("false");
 
 context.gotoScreen(context.getScreenById("12"));</string>
                           </void>
