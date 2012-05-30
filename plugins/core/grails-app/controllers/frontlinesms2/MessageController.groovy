@@ -162,6 +162,7 @@ class MessageController {
 		} else {
 			flash.message = message code:'fmessage.queued.multiple', args:[fmessage.dispatches.size()]
 		}
+
 		render(text: flash.message)
 	}
 	
@@ -171,7 +172,13 @@ class MessageController {
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
 		}
-		flash.message = message(code:'fmessage.retry.success', args:[dispatchCount])
+		if(dispatchCount == 1) { 
+			def mobile = (messages.getAt(0)?.dispatches as List)[0].dst
+			def displayName = Contact.findByMobile(mobile)?.name?: mobile
+			flash.message = message(code:'fmessage.retry.success', args:[displayName])
+		} else {
+			flash.message = message(code:'fmessage.retry.success.multiple', args:[dispatchCount])
+		}		
 		redirect controller:'message', action:'pending'
 	}
 	

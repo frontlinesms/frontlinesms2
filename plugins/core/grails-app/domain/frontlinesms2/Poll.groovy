@@ -13,7 +13,7 @@ class Poll extends Activity {
 	static hasOne = [keyword: Keyword]
 	String autoreplyText
 	String question
-	boolean standard
+	boolean yesNo
 	List responses
 	static hasMany = [responses: PollResponse]
 
@@ -75,10 +75,10 @@ class Poll extends Activity {
 	}
 	
 	def editResponses(attrs) {
-		if(attrs.pollType == 'standard' && !this.responses) {
+		if(attrs.pollType == 'yesNo' && !this.responses) {
 			this.addToResponses(value:'Yes', key:'A')
 			this.addToResponses(value:'No', key:'B')
-			this.standard = true
+			this.yesNo = true
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
 			choices.each { k, v ->

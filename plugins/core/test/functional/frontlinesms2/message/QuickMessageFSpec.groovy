@@ -239,7 +239,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { $("#magicwand-select").displayed }
+			waitFor { $("#magicwand-selectmessageText").displayed }
 	}
 
 	def "using contact name magic wand option should insert substitution variable"() {
@@ -253,8 +253,8 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			$("#messageText") << "Hello, "
 			$("#messageText").jquery.trigger('keyup')
 		then:
-			$("#magicwand-select").jquery.val('contact_name')
-			$("#magicwand-select").jquery.trigger('change')
+			$("#magicwand-selectmessageText").jquery.val('contact_name')
+			$("#magicwand-selectmessageText").jquery.trigger('change')
 		then:
 			waitFor { $('#messageText').jquery.val() == 'Hello, ${contact_name}' }
 	}

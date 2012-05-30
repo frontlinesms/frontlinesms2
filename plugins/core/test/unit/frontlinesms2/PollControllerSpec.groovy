@@ -65,7 +65,7 @@ class PollControllerSpec extends Specification {
 			controller.messageSendService = sendService
 			params.name = "Test"
 			params.question = "Are we having fun?"
-			params.pollType = "standard"
+			params.pollType = "yesNo"
 			params.messageText = "thanks for participating in this poll"
 			params.addresses = "07257723729"
 		when:

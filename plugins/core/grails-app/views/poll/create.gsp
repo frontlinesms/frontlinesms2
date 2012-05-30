@@ -50,7 +50,7 @@
 			var replyText = '';
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
-				if($("input[name='pollType']:checked").val() == "standard") {
+				if($("input[name='pollType']:checked").val() == "yesNo") {
 					replyText = i18n("poll.reply.text", keywordText, keywordText);
 				} else {
 					replyText = i18n("poll.reply.text5");
@@ -60,7 +60,7 @@
 					});
 					replyText = replyText + '.';
 				}
-			} else if ($("input[name='pollType']:checked").val() == "standard") {
+			} else if ($("input[name='pollType']:checked").val() == "yesNo") {
 				replyText = i18n("poll.reply.text2");
 			} else {
 				replyText = i18n("poll.reply.text6")+ ' ';
@@ -93,7 +93,7 @@
 		$("#tabs-1").contentWidget({
 			validate: function() {
 				$("#question").removeClass('error');
-				if ($("input[name='pollType']:checked").val() == "standard") {
+				if ($("input[name='pollType']:checked").val() == "yesNo") {
 					disableTab(1);
 				}
 				else {
@@ -111,7 +111,7 @@
 			validate: function() {
 				$('#choiceA').removeClass('error');
 				$('#choiceB').removeClass('error');
-				var isValid =  $("input[name='pollType']:checked").val() == "standard" || validatePollResponses();
+				var isValid =  $("input[name='pollType']:checked").val() == "yesNo" || validatePollResponses();
 				if(!isValid) {
 					if(isElementEmpty($('#choiceA'))) $('#choiceA').addClass('error');
 					if(isElementEmpty($('#choiceB'))) $('#choiceB').addClass('error');

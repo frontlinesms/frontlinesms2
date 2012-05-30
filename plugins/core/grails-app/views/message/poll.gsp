@@ -5,9 +5,9 @@
 		<r:require module="graph"/>
 		<r:script>
 		$(function() {
+			$("#poll-graph-btn").live("click", function(){
 			var loaded = false;
 			var show = true;
-			$("#poll-graph-btn").click(function() {
 				if (!loaded) {
 					var xdata = $.map(${pollResponse}, function(a) {return a.value;});
 					var data =  $.map(${pollResponse}, function(a) {return a.count;});
@@ -33,11 +33,10 @@
 				$(".footer").toggle();
 			});
 		});
-		</r:script>
-		<r:script>
+
 		$(function() {
 			var pollDisplay = $("#poll-graph-btn");
-			pollDisplay.click(function() {
+			pollDisplay.live("click", function() {
 				if (pollDisplay.html() == i18n("fmessage.hidepolldetails")) {
 					pollDisplay.html(i18n("fmessage.showpolldetails"));
 					pollDisplay.addClass("show-arrow");
