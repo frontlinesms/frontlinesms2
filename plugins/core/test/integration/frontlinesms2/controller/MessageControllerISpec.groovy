@@ -5,6 +5,7 @@ import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import frontlinesms2.*
+import grails.converters.JSON
 
 class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -159,13 +160,25 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			// FIXME this next should work but doesn't. 
 			//poll.messages == [message]
 	}
-	
-	Date createDate(String dateAsString) {
-		DateFormat format = createDateFormat();
-		return format.parse(dateAsString)
-	}
 
-	DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy/MM/dd")
+	def 'listRecipients should return a JSON list of contact displayNames and message statuses'() {
+		given:
+			new Contact(mobile:'456', name:'bertrand').save()
+			new Contact(mobile:'123', name:'andrea').save()
+			def m = new Fmessage()
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+					.addToDispatches(dst:'456', status:DispatchStatus.SENT, dateSent:new Date())
+					.addToDispatches(dst:'789', status:DispatchStatus.FAILED)
+					.save(failOnError:true)
+			controller.params.messageId = m.id
+		when:
+			controller.listRecipients()
+		then:
+			JSON.parse(controller.response.contentAsString) == [[display:'789', status:'FAILED'], [display:'andrea', status:'PENDING'], [display:'bertrand', status:'SENT']]
+	}
+	
+	private Date createDate(String dateAsString) {
+		new SimpleDateFormat("yyyy/MM/dd").parse(dateAsString)
 	}
 }
+

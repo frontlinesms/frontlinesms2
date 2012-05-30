@@ -118,7 +118,7 @@
 	});
 
 	function refreshMessageStats(data) {
-		var url = 'contact/getMessageStats'
+		var url = 'contact/messageStats'
 		var numSent = $('#num-sent')
 		var numRecieved = $('#num-recieved')
 		$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
