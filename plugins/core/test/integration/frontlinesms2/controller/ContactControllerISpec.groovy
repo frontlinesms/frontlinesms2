@@ -159,13 +159,13 @@ class ContactControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			tom.email == null
 	}
 	
-	def "getMessageStats returns the correct number of messages for a given contact"() {
+	def "messageStats returns the correct number of messages for a given contact"() {
 		setup:
-			def contact =new Contact(name:'Bob', mobile:"1234567").save(failOnError:true, flush:true)
-			new Fmessage(src: '1234567', read:true, date: new Date(), inbound:true).save(failOnError: true, flush:true)
+			def contact = Contact.build(mobile:"1234567")
+			Fmessage.build(src:'1234567')
 		when:
 			controller.params.id = contact.id
-			controller.getMessageStats()
+			controller.messageStats()
 			def response = controller.response.contentAsString
 			def stats = JSON.parse(response)
 		then:

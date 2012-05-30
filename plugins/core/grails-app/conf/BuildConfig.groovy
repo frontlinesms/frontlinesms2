@@ -103,3 +103,8 @@ grails.project.dependency.resolution = {
 	}
 }
 
+codenarc {
+	reportName = 'target/test-reports/CodeNarcReport.xml'
+	reportType = 'xml'
+}
+

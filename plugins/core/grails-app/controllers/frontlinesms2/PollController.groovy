@@ -49,6 +49,7 @@ println "Creating outgoingMessage"
 				}
 				
 			} else {
+
 				def errors = poll.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
 				withFormat {
 					json {

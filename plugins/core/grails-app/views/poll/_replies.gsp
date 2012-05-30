@@ -11,8 +11,14 @@
 	<g:else>
 		<g:textArea name="autoreplyText" rows="5" cols="40" disabled="true" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
 	</g:else>
-	<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
-	<fsms:magicWand target="autoreplyText" controller="${controllerName}"/>
+	<div class="compose-controls-wrap">
+		<div class="compose-controls-left">
+			<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
+		</div>
+		<div class="compose-controls-right">
+			<fsms:magicWand target="autoreplyText" controller="${controllerName}"/>
+		</div>
+	</div>
 </div>
 
 <r:script>
