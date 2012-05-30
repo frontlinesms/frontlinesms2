@@ -55,7 +55,6 @@
 
 <r:script>
 function showRecipientList(list) {
-	alert("Showing list: " + list);
 	var html = '<ul class="recipient-list">';
 	for(r in list) { r=list[r]; html += "<li>" + r.display + " (" + r.status + ")</li>"; }
 	html += '</ul>';

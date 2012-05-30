@@ -5,47 +5,60 @@
 		<r:require module="graph"/>
 		<r:script>
 		$(function() {
-			$("#poll-graph-btn").live("click", function(){
 			var loaded = false;
-			var show = true;
+			$("#poll-graph-btn").on("click", function(){
+				
+				var show = true;
+				var pollGraphBtn = $("#poll-graph-btn");
+				if (pollGraphBtn.html() == i18n("fmessage.hidepolldetails")) {
+					pollGraphBtn.html(i18n("fmessage.showpolldetails"));
+					pollGraphBtn.addClass("show-arrow");
+					pollGraphBtn.removeClass("hide-arrow");
+				} else {
+					pollGraphBtn.html(i18n("fmessage.hidepolldetails"));
+					pollGraphBtn.addClass("hide-arrow");
+					pollGraphBtn.removeClass("show-arrow");
+				}
 				if (!loaded) {
 					var xdata = $.map(${pollResponse}, function(a) {return a.value;});
-					var data =  $.map(${pollResponse}, function(a) {return a.count;});
-					var responseCountTag= "<span class='response-count'><g:message code="fmessage.responses.total" args="${ [messageInstanceTotal] }"/></span>"
+					var data =  $.map(${pollResponse}, function(a) {return a.percent;});
 					$("#poll-details").toggle();
 					var holder = "pollGraph";
-					$("#"+holder).width($("#pollGraph").width);
-					$("#"+holder).height($("#pollGraph").height);
-					$("#poll-details").prepend(responseCountTag);
-					var r = Raphael(holder);
-					r.plotBarGraph(holder, data, xdata, { // TODO find an alternative to putting this style info here - should be set via CSS class
-						colors: ["#949494", "#F2202B", "#40B857"],
-						textStyle: {
-							"font-weight": "bold",
-							"font-size": 12
-						}
-					});
+					var colors = ["#40B857", "#F2202B", "#ff9600"];
 					loaded = true;
+					plot3 = $.jqplot(holder, [data], {
+							seriesColors: colors,
+						    captureRightClick: true,
+						    seriesDefaults:{
+						      renderer:$.jqplot.BarRenderer,
+						      rendererOptions: {
+						          barMargin: 15,
+						          varyBarColor : true,
+						          highlightMouseDown: true   
+						      },
+						      pointLabels: {show: true}
+						    },
+						    axes: {
+						      xaxis: {
+						          renderer: $.jqplot.CategoryAxisRenderer,
+						          ticks: xdata,
+						      },
+						      yaxis:{
+									ticks:[0, 100],
+									tickOptions:{formatString:'%d\%'}
+								}
+
+						    },
+						    grid: {
+						    	background: 'transparent'
+							},
+					  });
 				}
-				else
-					$("#poll-details").toggle();
+				else{
+						$("#poll-details").toggle();
+				}
 				$('#messages').toggle();
 				$(".footer").toggle();
-			});
-		});
-
-		$(function() {
-			var pollDisplay = $("#poll-graph-btn");
-			pollDisplay.live("click", function() {
-				if (pollDisplay.html() == i18n("fmessage.hidepolldetails")) {
-					pollDisplay.html(i18n("fmessage.showpolldetails"));
-					pollDisplay.addClass("show-arrow");
-					pollDisplay.removeClass("hide-arrow");
-				} else {
-					pollDisplay.html(i18n("fmessage.hidepolldetails"));
-					pollDisplay.addClass("hide-arrow");
-					pollDisplay.removeClass("show-arrow");
-				}
 			});
 		});
 		</r:script>	
