@@ -5,7 +5,7 @@
 		<r:require module="graph"/>
 		<r:script>
 		$(function() {
-			$("#poll-graph-btn").live("click", function(){
+			$("#poll-graph-btn").on("click", function(){
 			var loaded = false;
 			var show = true;
 				if (!loaded) {
@@ -17,24 +17,64 @@
 					$("#"+holder).width($("#pollGraph").width);
 					$("#"+holder).height($("#pollGraph").height);
 					$("#poll-details").prepend(responseCountTag);
-					var r = Raphael(holder);
-					r.plotBarGraph(holder, data, xdata, { // TODO find an alternative to putting this style info here - should be set via CSS class
-						colors: ["#949494", "#F2202B", "#40B857"],
-						textStyle: {
-							"font-weight": "bold",
-							"font-size": 12
-						}
-					});
-					loaded = true;
+					var formatString = '<table class="jqplot-highlighter">'
+					formatString += '<tr><td>%s</td><td>&nbsp;messages</td></tr>'
+					formatString += '</table>'
+					var colors = ["#F2202B", "#40B857"];
+					plot3 = $.jqplot(holder, [data], {
+							seriesColors: colors,
+						    captureRightClick: true,
+						    seriesDefaults:{
+						      renderer:$.jqplot.BarRenderer,
+						      rendererOptions: {
+						          // Put a 15 pixel margin between bars.
+						          barMargin: 15,
+						          // Highlight bars when mouse button pressed.
+						          // Disables default highlighting on mouse over.
+						          highlightMouseDown: true   
+						      },
+						      pointLabels: {show: false}
+						    },
+						    axes: {
+						      xaxis: {
+						          renderer: $.jqplot.CategoryAxisRenderer,
+						          ticks: xdata
+						      },
+						      yaxis: {
+						        padMin: 0
+						      }
+						    },
+						    legend: {
+								show: true,
+								location: 'nw',
+								placement: 'inside'
+						    },
+						    grid: {
+						    	background: 'transparent'
+							},
+							highlighter: {
+						    	show:true,
+						    	showTooltip: true,
+						    	tooltipLocation: 'n',
+						    	tooltipAxes: 'y',
+						    	yvalues: 1,
+						    	formatString: formatString
+							},
+							legend: {
+								renderer: $.jqplot.EnhancedLegendRenderer,
+								show: true,
+								location: 'nw',
+								placement: 'inside'
+						    }  
+					  });
 				}
-				else
-					$("#poll-details").toggle();
+				else{
+						$("#poll-details").toggle();
+				}
 				$('#messages').toggle();
 				$(".footer").toggle();
 			});
-		});
-
-		$(function() {
+			/*
 			var pollDisplay = $("#poll-graph-btn");
 			pollDisplay.live("click", function() {
 				if (pollDisplay.html() == i18n("fmessage.hidepolldetails")) {
@@ -46,7 +86,7 @@
 					pollDisplay.addClass("hide-arrow");
 					pollDisplay.removeClass("show-arrow");
 				}
-			});
+			}); */
 		});
 		</r:script>	
 	</head>

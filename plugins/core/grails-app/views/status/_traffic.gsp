@@ -23,10 +23,7 @@ $(function() {
 			    seriesDefaults:{
 			      renderer:$.jqplot.BarRenderer,
 			      rendererOptions: {
-			          // Put a 15 pixel margin between bars.
 			          barMargin: 15,
-			          // Highlight bars when mouse button pressed.
-			          // Disables default highlighting on mouse over.
 			          highlightMouseDown: true   
 			      },
 			      pointLabels: {show: false}
@@ -41,10 +38,6 @@ $(function() {
 			          ticks: xdata
 			      },
 			      yaxis: {
-			        // Don't pad out the bottom of the data range.  By default,
-			        // axes scaled as if data extended 10% above and below the
-			        // actual range to prevent data points right on grid boundaries.
-			        // Don't want to do that here.
 			        padMin: 0
 			      }
 			    },
