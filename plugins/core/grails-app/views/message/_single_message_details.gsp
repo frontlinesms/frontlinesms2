@@ -6,7 +6,7 @@
 			<p id="message-detail-sender">
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
-						<g:remoteLink controller="message" action="showRecipients" params="[messageId: messageInstance.id]" onSuccess="launchSmallPopup(i18n('smallpopup.recipients.title'), data, i18n('smallpopup.done'), cancel);">
+						<g:remoteLink controller="message" action="listRecipients" params="[messageId: messageInstance.id]" onSuccess="showRecipientList(data)">
 							${messageInstance.displayName}
 						</g:remoteLink>
 					</g:if>
@@ -52,3 +52,13 @@
 		</div>
 	</g:else>
 </div>
+
+<r:script>
+function showRecipientList(list) {
+	alert("Showing list: " + list);
+	var html = '<ul class="recipient-list">';
+	for(r in list) { r=list[r]; html += "<li>" + r.display + " (" + r.status + ")</li>"; }
+	html += '</ul>';
+	launchSmallPopup(i18n('smallpopup.recipients.title'), html, i18n('smallpopup.done'), cancel);
+}
+</r:script>

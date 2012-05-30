@@ -5,6 +5,7 @@ import grails.plugin.spock.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import frontlinesms2.*
+import grails.converters.JSON
 
 class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -43,10 +44,8 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.send()
 			def flashMessage = controller.flash.message 
 		then:
-			 flashMessage.contains("Message has been queued to send to")
-			 addresses.each {
-				 flashMessage.contains(it)
-			 }
+			assert Fmessage.count() == 1
+			(Fmessage.getAll() as List)[0].dispatches*.dst.sort() == addresses.sort()
 	}
 
 	def "should display flash message on successful message sending"() {
@@ -58,18 +57,15 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.send()
 			def flashMessage = controller.flash.message 
 		then:
-			 flashMessage.contains("Message has been queued to send to")
-			 addresses.each {
-				 flashMessage.contains(it)
-			 }
+			 flashMessage.contains("Message has been queued to send to 3 recipients")
 	}
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/20")).save(failOnError: true)
-			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/24")).save(failOnError: true)
-			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/23")).save(failOnError: true)
-			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/21")).save(failOnError: true)
+			def message1 = Fmessage.build(date:createDate("2011/01/20"))
+			def message2 = Fmessage.build(date:createDate("2011/01/24"))
+			def message3 = Fmessage.build(date:createDate("2011/01/23"))
+			def message4 = Fmessage.build(date:createDate("2011/01/21"))
 		when:
 			def messageInstanceList = Fmessage.inbox(false, false)
 		then:
@@ -80,7 +76,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
-			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
+			def id = Fmessage.build().id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -92,7 +88,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action leads to read message staying read'() {
 		setup:
-			def id = new Fmessage(src: '1234567', read:true, date: new Date(), inbound:true).save(failOnError: true).id
+			def id = Fmessage.build(read:true).id
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
@@ -103,7 +99,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
-			def id = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
+			def id = Fmessage.build().id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -115,8 +111,8 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling "starMessage" action leads to starred message becoming unstarred'() {
 		setup:
-			def id = new Fmessage(src:'1234567', read:true, starred:true, date: new Date(), inbound: true).save(failOnError: true).id
-			assert Fmessage.get(id).read
+			def id = Fmessage.build(starred:true).id
+			assert Fmessage.get(id).starred
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
@@ -159,13 +155,25 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			// FIXME this next should work but doesn't. 
 			//poll.messages == [message]
 	}
-	
-	Date createDate(String dateAsString) {
-		DateFormat format = createDateFormat();
-		return format.parse(dateAsString)
-	}
 
-	DateFormat createDateFormat() {
-		return new SimpleDateFormat("yyyy/MM/dd")
+	def 'listRecipients should return a JSON list of contact displayNames and message statuses'() {
+		given:
+			new Contact(mobile:'456', name:'bertrand').save()
+			new Contact(mobile:'123', name:'andrea').save()
+			def m = new Fmessage()
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+					.addToDispatches(dst:'456', status:DispatchStatus.SENT, dateSent:new Date())
+					.addToDispatches(dst:'789', status:DispatchStatus.FAILED)
+					.save(failOnError:true)
+			controller.params.messageId = m.id
+		when:
+			controller.listRecipients()
+		then:
+			JSON.parse(controller.response.contentAsString) == [[display:'789', status:'FAILED'], [display:'andrea', status:'PENDING'], [display:'bertrand', status:'SENT']]
+	}
+	
+	private Date createDate(String dateAsString) {
+		new SimpleDateFormat("yyyy/MM/dd").parse(dateAsString)
 	}
 }
+
