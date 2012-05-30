@@ -94,6 +94,12 @@ class FsmsTagLib {
 		out << '</div>'
 	}
 
+	def checkBox = { att -> out << checkbox(att) }
+	def checkbox = { att ->
+		if(att.remove('disabled') in [true, 'disabled']) att.disabled = 'disabled'
+		out << g.checkBox(att)
+	}
+
 	def magicWand = { att ->
 		def controller = att.controller
 		def target = att.target

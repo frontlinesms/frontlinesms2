@@ -9,7 +9,7 @@
 	<table class="main-table" cellspacing="0">
 		<tr id="message-sorter">
 			<td class="message-select-cell">
-				<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll('message')"/>
+				<fsms:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll('message')" disabled="${messageSection == 'trash'}"/>
 			</td>
 			<td class="message-star-cell"></td>
 			<g:sortableColumn class="message-sender-cell" property="inboundContactName" title="${message(code:'fmessage.displayName.label')}" params="${params}" id='source-header'/>
