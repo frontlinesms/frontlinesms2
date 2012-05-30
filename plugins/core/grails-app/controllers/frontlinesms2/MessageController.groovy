@@ -172,8 +172,6 @@ class MessageController {
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
 		}		
-		dst.size() == 1 ? (flash.message = message(code:'fmessage.queued', args:[dst.join(", ")])) : (flash.message = message(code:'fmessage.queued.multiple', args:[dst.size()]))
-
 		flash.message = message(code:'fmessage.retry.success', args:[dispatchCount])
 		redirect controller:'message', action:'pending'
 	}
