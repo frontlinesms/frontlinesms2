@@ -171,8 +171,14 @@ class MessageController {
 		def dispatchCount = 0
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
+		}
+		if(dispatchCount == 1) { 
+			def mobile = (messages.getAt(0)?.dispatches as List)[0].dst
+			def displayName = Contact.findByMobile(mobile)?.name?: mobile
+			flash.message = message(code:'fmessage.retry.success', args:[displayName])
+		} else {
+			flash.message = message(code:'fmessage.retry.success.multiple', args:[dispatchCount])
 		}		
-		flash.message = message(code:'fmessage.retry.success', args:[dispatchCount])
 		redirect controller:'message', action:'pending'
 	}
 	
