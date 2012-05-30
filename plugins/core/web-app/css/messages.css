@@ -279,8 +279,8 @@
 	margin: 10px;
 }
 
-#recipient-lists {
-	overflow: scroll;
+.recipient-list {
+	padding: 10px 0;
 }
 
 .recipient-list li {

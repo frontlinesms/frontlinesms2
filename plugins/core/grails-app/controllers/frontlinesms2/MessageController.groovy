@@ -25,12 +25,12 @@ class MessageController {
 	def beforeInterceptor = bobInterceptor
 	
 //> ACTIONS
-	def index = {
+	def index() {
 		params.sort = 'date'
 		redirect(action:'inbox', params:params)
 	}
 	
-	def newMessageCount = {
+	def newMessageCount() {
 		def section = params.messageSection
 		if(!params.ownerId && section != 'trash') {
 			def messageCount = [totalMessages:[Fmessage."$section"(params.starred).count()]]
@@ -45,7 +45,7 @@ class MessageController {
 			render ""
 	}
 
-	def show = {
+	def show() {
 		def messageInstance = Fmessage.get(params.messageId)
 		messageInstance.read = true
 		messageInstance.save()
@@ -56,7 +56,7 @@ class MessageController {
 		render view:'/message/_single_message_details', model:model
 	}
 
-	def inbox = {
+	def inbox() {
 		def messageInstanceList = Fmessage.inbox(params.starred, this.viewingArchive)
 		// check for flash message in parameters if there is none in flash.message
 		flash.message = flash.message?:params.flashMessage
@@ -66,21 +66,21 @@ class MessageController {
 						messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 
-	def sent = {
+	def sent() {
 		def messageInstanceList = Fmessage.sent(params.starred, this.viewingArchive)
 		render view:'../message/standard', model:[messageSection:'sent',
 				messageInstanceList: messageInstanceList.list(params).unique(),
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	} 
 
-	def pending = {
+	def pending() {
 		def messageInstanceList = Fmessage.pending(params.failed)
 		render view:'standard', model:[messageInstanceList: messageInstanceList.listDistinct(params),
 				messageSection:'pending',
 				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
 	}
 	
-	def trash = {
+	def trash() {
 		def trashedObject
 		def trashInstanceList
 		def messageInstanceList
@@ -108,10 +108,10 @@ class MessageController {
 					ownerInstance: trashedObject] << getShowModel()
 	}
 
-	def poll = { redirect(action: 'activity', params: params) }
-	def announcement = { redirect(action: 'activity', params: params) }
-	def autoreply = { redirect(action: 'activity', params: params) }
-	def activity = {
+	def poll() { redirect(action: 'activity', params: params) }
+	def announcement() { redirect(action: 'activity', params: params) }
+	def autoreply() { redirect(action: 'activity', params: params) }
+	def activity() {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {
 			def messageInstanceList = activityInstance.getActivityMessages(params.starred, true)
@@ -136,7 +136,7 @@ class MessageController {
 		}
 	}
 	
-	def folder = {
+	def folder() {
 		def folderInstance = Folder.get(params.ownerId)
 		if (folderInstance) {
 			def messageInstanceList = folderInstance?.getFolderMessages(params.starred)
@@ -152,7 +152,7 @@ class MessageController {
 		}
 	}
 
-	def send = {
+	def send() {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
 		if(fmessage.dispatches.size() == 1) {
@@ -162,16 +162,23 @@ class MessageController {
 		} else {
 			flash.message = message code:'fmessage.queued.multiple', args:[fmessage.dispatches.size()]
 		}
+
 		render(text: flash.message)
 	}
 	
-	def retry = {
+	def retry() {
 		def messages = getCheckedMessages()
 		def dispatchCount = 0
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
 		}
-		flash.message = message(code:'fmessage.retry.success', args:[dispatchCount])
+		if(dispatchCount == 1) { 
+			def mobile = (messages.getAt(0)?.dispatches as List)[0].dst
+			def displayName = Contact.findByMobile(mobile)?.name?: mobile
+			flash.message = message(code:'fmessage.retry.success', args:[displayName])
+		} else {
+			flash.message = message(code:'fmessage.retry.success.multiple', args:[dispatchCount])
+		}		
 		redirect controller:'message', action:'pending'
 	}
 	
@@ -194,7 +201,7 @@ class MessageController {
 		}
 	}
 	
-	def archive = {
+	def archive() {
 		def messageIdList = getCheckedMessageList()
 		def listSize = messageIdList.size()
 		messageIdList.each { id ->
@@ -215,7 +222,7 @@ class MessageController {
 		}
 	}
 	
-	def unarchive = {
+	def unarchive() {
 		def messageIdList = getCheckedMessageList()
 		def listSize = messageIdList.size()
 		messageIdList.each { id ->
@@ -292,51 +299,30 @@ class MessageController {
 		}
 	}
 	
-	def showRecipients = {
-		def groupList = []
-		def contactList = []
-		def addressList = []
-		
+	def listRecipients() {
 		def message = Fmessage.get(params.messageId)
-		if(message) {
-			addressList = message.dispatches
-			// FIXME this is very dangerous
-			Group.getAll().each {
-				def groupAddressList = it.addresses
-				if (groupAddressList && addressList.dst.containsAll(groupAddressList)) {
-					groupList += it
-				}
-			}
-			message.dispatches.each {
-				// should probably get all of these in a single SQL query
-				Contact c = Contact.findByMobile(it.dst)
-				if(c) {
-					contactList += "${c.name} (${it.status})"
-					addressList -= it
-				}
-			}
+		if(!message) {
+			render text:'ERROR'
+			return
 		}
-		def finalAddressList = addressList.collect {
-			"${it.dst} (${it.status})"
-		}
-		contactList = contactList - null
-		[groupList:groupList,
-				contactList:contactList,
-				addressList:finalAddressList]
+		render message.dispatches.collect {
+			String display = Contact.findByMobile(it.dst)?.name?: it.dst
+			[display:display, status:it.status.toString()]
+		}.sort { it.display } as JSON
 	}
 
-	def confirmEmptyTrash = {}
+	def confirmEmptyTrash() {}
 	
-	def emptyTrash = {
+	def emptyTrash() {
 		trashService.emptyTrash()
 		redirect action:'inbox'
 	}
 	
-	def unreadMessageCount = {
+	def unreadMessageCount() {
 		render text:Fmessage.countUnreadMessages(), contentType:'text/plain'
 	}
 
-	def sendMessageCount = {
+	def sendMessageCount() {
 		render fmessageInfoService.getMessageInfos(params.message) as JSON
 	}
 
