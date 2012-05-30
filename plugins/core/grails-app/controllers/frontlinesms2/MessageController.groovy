@@ -155,25 +155,26 @@ class MessageController {
 	def send = {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
-		fmessage.dispatches*.dst?.size() == 1 ? (flash.message = message(code:'flash.message.fmessage.in.queue', args:[fmessage.dispatches*.dst?.join(", ")])) : (flash.message = message(code:'flash.message.fmessage.in.queue.many', args:[fmessage.dispatches*.dst?.size()]))
+		if(fmessage.dispatches.size() == 1) {
+			def mobile = (fmessage.dispatches as List)[0].dst
+			def displayName = Contact.findByMobile(mobile)?.name?: mobile
+			flash.message = message code:'fmessage.queued', args:[displayName]
+		} else {
+			flash.message = message code:'fmessage.queued.multiple', args:[fmessage.dispatches.size()]
+		}
+
 		render(text: flash.message)
 	}
 	
 	def retry = {
-		def dst = []
-		def failedMessageIdList = getCheckedMessageList()
-		failedMessageIdList.each { id ->
-			withFmessage id, { messageInstance ->
-				messageInstance.dispatches.each { 
-					if(it.status == DispatchStatus.FAILED) { 
-						dst << Contact.findByMobile(it.dst)?.name ?: it.dst
-					}
-				}
-				messageSendService.retry(messageInstance)
-			}
-		}
-		
-		dst.size() == 1 ? (flash.message = message(code:'flash.message.fmessage.in.queue', args:[dst.join(", ")])) : (flash.message = message(code:'flash.message.fmessage.in.queue.many', args:[dst.size()]))
+		def messages = getCheckedMessages()
+		def dispatchCount = 0
+		messages.each { m ->
+			dispatchCount += messageSendService.retry(m)
+		}		
+		dst.size() == 1 ? (flash.message = message(code:'fmessage.queued', args:[dst.join(", ")])) : (flash.message = message(code:'fmessage.queued.multiple', args:[dst.size()]))
+
+		flash.message = message(code:'fmessage.retry.success', args:[dispatchCount])
 		redirect controller:'message', action:'pending'
 	}
 	
