@@ -44,10 +44,8 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.send()
 			def flashMessage = controller.flash.message 
 		then:
-			 flashMessage.contains("Message has been queued to send to")
-			 addresses.each {
-				 flashMessage.contains(it)
-			 }
+			assert Fmessage.count() == 1
+			(Fmessage.getAll() as List)[0].dispatches*.dst.sort() == addresses.sort()
 	}
 
 	def "should display flash message on successful message sending"() {
@@ -59,18 +57,15 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.send()
 			def flashMessage = controller.flash.message 
 		then:
-			 flashMessage.contains("Message has been queued to send to")
-			 addresses.each {
-				 flashMessage.contains(it)
-			 }
+			 flashMessage.contains("Message has been queued to send to 3 recipients")
 	}
 
 	def 'Messages are sorted by date' () {
 		setup:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/20")).save(failOnError: true)
-			def message2 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/24")).save(failOnError: true)
-			def message3 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/23")).save(failOnError: true)
-			def message4 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date:createDate("2011/01/21")).save(failOnError: true)
+			def message1 = Fmessage.build(date:createDate("2011/01/20"))
+			def message2 = Fmessage.build(date:createDate("2011/01/24"))
+			def message3 = Fmessage.build(date:createDate("2011/01/23"))
+			def message4 = Fmessage.build(date:createDate("2011/01/21"))
 		when:
 			def messageInstanceList = Fmessage.inbox(false, false)
 		then:
@@ -81,7 +76,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action in inbox leads to unread message becoming read'() {
 		setup:
-			def id = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
+			def id = Fmessage.build().id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -93,7 +88,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling SHOW action leads to read message staying read'() {
 		setup:
-			def id = new Fmessage(src: '1234567', read:true, date: new Date(), inbound:true).save(failOnError: true).id
+			def id = Fmessage.build(read:true).id
 			assert Fmessage.get(id).read
 		when:
 			controller.params.messageSection = 'inbox'
@@ -104,7 +99,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def 'calling "starMessage" action leads to unstarred message becoming starred'() {
 		setup:
-			def id = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError: true).id
+			def id = Fmessage.build().id
 			assert Fmessage.get(id).read == false
 		when:
 			controller.params.messageId = id
@@ -116,8 +111,8 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'calling "starMessage" action leads to starred message becoming unstarred'() {
 		setup:
-			def id = new Fmessage(src:'1234567', read:true, starred:true, date: new Date(), inbound: true).save(failOnError: true).id
-			assert Fmessage.get(id).read
+			def id = Fmessage.build(starred:true).id
+			assert Fmessage.get(id).starred
 		when:
 			controller.params.messageId = id
 			controller.params.messageSection = 'inbox'
