@@ -248,7 +248,7 @@ class MessageController {
 		def messageList = getCheckedMessages()
 		messageList.each { messageInstance ->
 			messageInstance.isDeleted = false
-			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
+			Trash.findByObject(messageInstance)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
 				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
 				activity.addToMessages(messageInstance)

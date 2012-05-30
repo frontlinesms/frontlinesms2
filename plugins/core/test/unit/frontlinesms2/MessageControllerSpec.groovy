@@ -29,6 +29,9 @@ class MessageControllerSpec extends Specification {
 				new GroupMembership(group: thar, contact: new Contact(mobile: "12121")),
 				new GroupMembership(group: thar, contact: new Contact(mobile: "22222"))]*.save()
 
+		Fmessage.metaClass.static.getAll = { List ids ->
+			Fmessage.findAll().findAll { it.id in ids } }
+
 		mockMessageSendService = Mock()
 		controller.messageSendService = mockMessageSendService
 	}

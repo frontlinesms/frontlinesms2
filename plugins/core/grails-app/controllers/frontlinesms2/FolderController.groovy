@@ -15,25 +15,24 @@ class FolderController {
 
 	def save = {
 		def folderInstance = new Folder(params)
-		if (folderInstance.save(flush: true)) {
-			flash.message = message(code: 'default.created.message', args: [message(code: message(code: 'folder.label'), default: 'Folder'), folderInstance.name])
-			redirect(controller: "message", action: 'folder', id:folderInstance.id)
+		if (folderInstance.save(flush:true)) {
+			flash.message = defaultMessage 'created'
+			redirect controller:"message", action:'folder', id:folderInstance.id
 		} else {
 			flash.message = "error"
-			redirect(controller: "message", action:'inbox', params:[flashMessage: flash.message,])
+			redirect controller:"message", action:'inbox', params:[flashMessage:flash.message]
 		}
 	}
 
 	def archive = {
 		withFolder { folder ->
 			folder.archive()
-			
 			if(folder.save()) {
-				flash.message = message(code: 'folder.archived.successfully')
-				redirect(controller: "message", action: "inbox")
+				flash.message = defaultMessage 'archived'
 			} else {
-				// TODO give error and redirect
+				flash.message = defaultMessage 'archive.failed'
 			}
+			redirect controller:"message", action:"inbox"
 		}
 	}
 	
@@ -41,11 +40,11 @@ class FolderController {
 		withFolder { folder ->
 			folder.unarchive()
 			if(folder.save()) {
-				flash.message = message(code: 'folder.unarchived.successfully')
-				redirect(controller: "archive", action: "folderList")
+				flash.message = defaultMessage 'unarchived'
 			} else {
-				// TODO show error and redirect somewhere sensible
+				flash.message = defaultMessage 'unarchive.failed'
 			}
+			redirect controller:"archive", action:"folderList"
 		}
 	}
 
@@ -57,28 +56,31 @@ class FolderController {
 	def delete = {
 		withFolder { folder ->
 			TrashService.sendToTrash(folder)
+			flash.message = defaultMessage 'trashed'
+			redirect controller:"message", action:"inbox"
 		}
-		flash.message = message(code: 'folder.trashed')
-		redirect(controller:"message", action:"inbox")
 	}
 	
 	def restore = {
 		withFolder { folder ->
 			folder.deleted = false
-			folder.save(failOnError: true, flush: true)
-			Trash.findByObjectId(folder.id)?.delete()
+			folder.save(failOnError:true, flush:true)
+			Trash.findByObject(folder)?.delete()
+			flash.message = defaultMessage 'restored'
+			redirect controller:"message", action:"trash"
 		}
-		flash.message = message(code: 'folder.restored')
-		redirect(controller: "message", action: "trash")
 	}
-
-//"${message(code: 'default.deleted.message', args: [message(code: 'group.label', default: 'Group'), ''])}"
-
 
 	private def withFolder(Closure c) {
 		def folderInstance = Folder.get(params.id)
 		if (folderInstance) c folderInstance
-		else render(text: message(code: 'folder.exist.not', args: [params.id])) // TODO handle error state properly
+		else render text:defaultMessage('notfound', params.id)
+	}
+
+	private def defaultMessage(String code, Object... args) {
+		def activityName = message code:'folder.label'
+		return message(code:'default.' + code,
+				args:[folderName] + args)
 	}
 }
 
