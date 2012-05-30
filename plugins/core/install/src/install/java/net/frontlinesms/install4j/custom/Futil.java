@@ -80,7 +80,6 @@ public class Futil {
 			properties.load(new InputStreamReader(new FileInputStream(regPropFile), "UTF-8"));
 			properties.setProperty("registered",status);
 			if (data != null){
-				addSystemPropertiesToRegistrationData(data);
 				for(Entry<String, String> e: data.entrySet()) {
 					properties.setProperty(e.getKey(),e.getValue());
 				}
@@ -91,34 +90,6 @@ public class Futil {
 			e.printStackTrace();
 		}
 	}
-
-	static Map addSystemPropertiesToRegistrationData(Map<String, String> data){
-		data.put("java.home",getSysProp("java.home"));
-		data.put("java.vendor",getSysProp("java.vendor"));
-		data.put("java.vendor.url",getSysProp("java.vendor.url"));
-		data.put("java.version",getSysProp("java.version"));
-		data.put("java.vm.version",getSysProp("java.vm.version"));
-		data.put("java.runtime.version",getSysProp("java.runtime.version"));
-		data.put("java.specification.version",getSysProp("java.specification.version"));
-		data.put("os.arch",getSysProp("os.arch"));
-		data.put("os.name",getSysProp("os.name"));
-		data.put("os.version",getSysProp("os.version"));
-		data.put("user.dir",getSysProp("user.dir"));
-		data.put("user.home",getSysProp("user.home"));
-		data.put("user.name",getSysProp("user.name"));
-		data.put("user.language",getSysProp("user.language"));
-		data.put("user.country",getSysProp("user.country"));
-		try{
-			data.put("host.name",java.net.InetAddress.getLocalHost().getHostName());
-		}catch(java.net.UnknownHostException e){
-			e.printStackTrace();
-		}
-		return data;
-		}
-		
 //> PRIVATE UTILITY METHODS
-	static String getSysProp(String prop){
-		return System.getProperty(prop);
-	}
 }
 
