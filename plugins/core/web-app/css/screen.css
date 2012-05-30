@@ -400,9 +400,6 @@ tr.send-failed td:nth-child(6) {
 	background-image: url('../images/icons/toggle_minus.png');
 }
 
-#poll-details-cell {
-	line-height: 1.5em;
-}
 #poll-stats {
 	padding-left: 25px;
 }
@@ -422,7 +419,8 @@ tr.send-failed td:nth-child(6) {
 	width: 100%;
 	position: absolute;
 	top: 0;
-	bottom: 0;
+	bottom: 10px;
+	font-weight:bold;
 }
 
 #poll-details h3{

@@ -63,7 +63,7 @@ modules = {
 		resource url: [dir:'js', file:'/graph/jqplot.pointLabels.min.js']
 		resource url: [dir:'js', file:'/graph/jqplot.highlighter.min.js']
 		resource url: [dir:'js', file:'/graph/jqplot.enhancedLegendRenderer.min.js']
-		resource url: [dir:'css', file:"jquery.jqplot.min.css"]
+		resource url: [dir:'css', file:"jquery.jqplot.css"]
 	}
 
 	search {
