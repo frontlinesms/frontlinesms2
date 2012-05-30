@@ -77,7 +77,7 @@ class FolderController {
 		else render text:defaultMessage('notfound', params.id)
 	}
 
-	private def defaultMessage(String code, Object... args) {
+	private def defaultMessage(String code, Object... args=[]) {
 		def activityName = message code:'folder.label'
 		return message(code:'default.' + code,
 				args:[folderName] + args)

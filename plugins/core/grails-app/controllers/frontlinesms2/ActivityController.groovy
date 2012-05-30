@@ -97,7 +97,7 @@ class ActivityController {
 		else render(text: message(code:'activity.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
 	}
 
-	private def defaultMessage(String code, Object... args) {
+	private def defaultMessage(String code, Object... args=[]) {
 		def activityName = message code:'activity.label'
 		return message(code:'default.' + code,
 				args:[activityName] + args)
