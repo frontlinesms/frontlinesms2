@@ -99,7 +99,35 @@ public class FrontlineRegistration {
 		data.put("var_share_telephone_skype", var_share_telephone_skype);
 		data.put("var_share_your_data", "" + var_share_your_data);
 
+		return addSystemPropertiesToRegistrationData(data);
+	}
+
+	private Map addSystemPropertiesToRegistrationData(Map<String, String> data){
+		data.put("javahome",getSysProp("java.home"));
+		data.put("javavendor",getSysProp("java.vendor"));
+		data.put("javavendorurl",getSysProp("java.vendor.url"));
+		data.put("javaversion",getSysProp("java.version"));
+		data.put("javavmversion",getSysProp("java.vm.version"));
+		data.put("javaruntimeversion",getSysProp("java.runtime.version"));
+		data.put("javaspecificationversion",getSysProp("java.specification.version"));
+		data.put("osarch",getSysProp("os.arch"));
+		data.put("osname",getSysProp("os.name"));
+		data.put("osversion",getSysProp("os.version"));
+		data.put("userdir",getSysProp("user.dir"));
+		data.put("userhome",getSysProp("user.home"));
+		data.put("username",getSysProp("user.name"));
+		data.put("userlanguage",getSysProp("user.language"));
+		data.put("usercountry",getSysProp("user.country"));
+		try{
+			data.put("hostname",java.net.InetAddress.getLocalHost().getHostName());
+		}catch(java.net.UnknownHostException e){
+			e.printStackTrace();
+		}
 		return data;
+		}
+
+	private String getSysProp(String prop){
+			return System.getProperty(prop);
 	}
 
 	public void send(FormEnvironment formEnvironment, InstallerContext context) {
