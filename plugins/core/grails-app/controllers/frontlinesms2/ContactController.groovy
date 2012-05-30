@@ -19,11 +19,11 @@ class ContactController {
 	}
 
 //> ACTIONS
-	def index = {
+	def index() {
 		redirect action: "show", params:params
 	}
 	
-	def updateContactPane = {
+	def updateContactPane() {
 		def contactInstance = Contact.get(params.id)
 		def model = [contactInstance: contactInstance,
 				contactGroupInstanceList: contactInstance?.groups ?: [],
@@ -38,7 +38,7 @@ class ContactController {
 		render view:'/contact/_single_contact_view', model:model
 	}
 	
-	def show = {
+	def show() {
 		if(params.flashMessage) {
 			flash.message = params.flashMessage
 		}
@@ -64,7 +64,7 @@ class ContactController {
 				smartGroupInstanceList: SmartGroup.list()]
 	}
 	
-	def createContact = {
+	def createContact() {
 		render view:'show', model: [contactInstance: new Contact(params),
 				contactFieldInstanceList: [],
 				contactGroupInstanceList: [],
@@ -77,7 +77,7 @@ class ContactController {
 				smartGroupInstanceList: SmartGroup.list()] << contactSearchService.contactList(params)
 	}
 
-	def saveContact = {
+	def saveContact() {
 		def contactInstance = Contact.get(params.contactId) ?: new Contact()
 		contactInstance.properties = params
 		if(attemptSave(contactInstance)) {
@@ -87,7 +87,7 @@ class ContactController {
 		redirect(action:'show', params:[contactId:contactInstance.id])
 	}
 	
-	def update = {
+	def update() {
 		withContact { contactInstance ->
 			contactInstance.properties = params
 			parseContactFields(contactInstance)
@@ -97,7 +97,7 @@ class ContactController {
 		}
 	}
 	
-	def updateMultipleContacts = {
+	def updateMultipleContacts() {
 		getCheckedContacts().each { c ->
 			parseContactFields(c)
 			attemptSave(c)
@@ -105,19 +105,19 @@ class ContactController {
 		render(view:'show', model: show())
 	}
 	
-	def confirmDelete = {
+	def confirmDelete() {
 		def contactInstanceList = getCheckedContacts()
 		[contactInstanceList:contactInstanceList,
 				contactInstanceTotal:contactInstanceList.size()]
 	}
 	
-	def delete = {
+	def delete() {
 		getCheckedContacts()*.delete()
 		flash.message = message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])
 		redirect(action: "show")		
 	}
 
-	def newCustomField = {
+	def newCustomField() {
 		def contactInstance = params.contactId
 		def customFieldInstance = new CustomField()
 		customFieldInstance.properties = params
@@ -125,7 +125,7 @@ class ContactController {
 				contactInstance: contactInstance]
 	}
 
-	def search = {
+	def search() {
 		render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	
@@ -140,7 +140,7 @@ class ContactController {
 				render "false"
 	}
 	
-	def getMessageStats = {
+	def messageStats() {
 		def contactInstance = Contact.get(params.id)
 		if(contactInstance) {
 			def messageStats = [inboundMessagesCount: contactInstance.inboundMessagesCount, outboundMessagesCount: contactInstance.outboundMessagesCount]
@@ -163,6 +163,12 @@ class ContactController {
 		}
 		return false
 	}
+
+	def multipleContactGroupList() {
+		def groups = Group.getGroupLists(getCheckedContactIds())
+		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList:groups.shared,
+				nonSharedGroupInstanceList:groups.nonShared])
+	}
 	
 	private def withContact(contactId = params.contactId, Closure c) {
 		def contactInstance = Contact.get(contactId)
@@ -172,12 +178,6 @@ class ContactController {
 			// flash.message = message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])
 			c.call(new Contact())
 		}
-	}
-	
-	def multipleContactGroupList = {
-		def groups = Group.getGroupLists(getCheckedContactIds())
-		render(view: "_multiple_contact_view", model: [sharedGroupInstanceList:groups.shared,
-				nonSharedGroupInstanceList:groups.nonShared])
 	}
 
 	private def getCheckedContacts() {
