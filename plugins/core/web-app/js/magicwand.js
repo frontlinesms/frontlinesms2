@@ -1,6 +1,6 @@
 var magicwand = {
 	wave: function(select, target) {
-		var list = $('select[id^="'+select+'"]');
+		var list = $('#' + select);
 		var varName = list.val();
 		insertAtCaret(target, "${" + varName + "}");
 		magicwand.reset(list);

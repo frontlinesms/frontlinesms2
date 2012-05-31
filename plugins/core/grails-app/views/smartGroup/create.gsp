@@ -173,5 +173,5 @@
 		newRow.find('.button.remove-rule').show();
 		$('form[name="smart-group-details"] tbody').append(newRow);
 	}
-	
 </r:script>
+
