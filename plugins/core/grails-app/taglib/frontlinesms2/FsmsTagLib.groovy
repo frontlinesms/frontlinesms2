@@ -71,11 +71,9 @@ class FsmsTagLib {
 	}
 	
 	def inputs = { att ->
-		println "att is $att"
 		def fields = getFields(att)
 		if(fields instanceof Map) {
 			generateSection(att, fields)
-			
 		} else {
 			fields.each {
 				out << input(att + [field:it])
@@ -95,11 +93,13 @@ class FsmsTagLib {
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
 		att += [name:htmlKey, value:val]
-		out << '<div class="field">'
+		if(att.table) out << '<tr><td class="label">'
+		else out << '<div class="field">'
 		out << '<label for="' + htmlKey + '">'
 		out << '' + getFieldLabel(instanceClass, groovyKey)
 		if(isRequired(instanceClass, att.field) && !isBooleanField(instanceClass, att.field)) out << '<span class="required-indicator">*</span>'
 		out << '</label>'
+		if(att.table) out << '</td><td>'
 		if(att.class) att.class += addValidationCss(instanceClass, att.field)
 		else att.class = addValidationCss(instanceClass, att.field)
 		
@@ -112,8 +112,12 @@ class FsmsTagLib {
 			out << g.checkBox(att)
 		} else out << g.textField(att)
 		out << body()
-		out << '<div style="clear:both" class="clearfix"></div>'
-		out << '</div>'
+		if(att.table) {
+			out << '</td></tr>'
+		} else {
+			out << '<div style="clear:both" class="clearfix"></div>'
+			out << '</div>'
+		}
 	}
 
 	def checkBox = { att -> out << checkbox(att) }

@@ -430,3 +430,12 @@ tr.send-failed td:nth-child(6) {
 #custom-list ul li {
 		padding: 4px 0 7px 0;
 }
+
+#modalBox table {
+	margin: 10px;
+	width: 100%;
+}
+#modalBox {
+	min-height: 0 !important;
+}
+
