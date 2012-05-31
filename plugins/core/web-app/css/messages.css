@@ -87,6 +87,10 @@
 	min-width: 300px;
 }
 
+.main-list table td {
+	vertical-align: middle;
+}
+
 .sorted.asc {
 	background-image: url('../images/buttons/down_arrow.png');
 	background-repeat: no-repeat;
