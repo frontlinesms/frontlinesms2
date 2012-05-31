@@ -9,7 +9,7 @@ class Folder extends MessageOwner {
 	Date dateCreated
 	
 	static constraints = {
-		name(blank:false, nullable:false, maxSize:255)
+		name(blank:false, nullable:false, maxSize:255, unique:true)
 	}
 
 //> ACCESSORS

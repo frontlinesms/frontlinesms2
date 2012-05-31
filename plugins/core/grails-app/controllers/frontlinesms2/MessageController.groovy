@@ -155,14 +155,7 @@ class MessageController {
 	def send() {
 		def fmessage = messageSendService.createOutgoingMessage(params)
 		messageSendService.send(fmessage)
-		if(fmessage.dispatches.size() == 1) {
-			def mobile = (fmessage.dispatches as List)[0].dst
-			def displayName = Contact.findByMobile(mobile)?.name?: mobile
-			flash.message = message code:'fmessage.queued', args:[displayName]
-		} else {
-			flash.message = message code:'fmessage.queued.multiple', args:[fmessage.dispatches.size()]
-		}
-
+		flash.message = dispatchMessage 'queued', fmessage
 		render(text: flash.message)
 	}
 	
@@ -172,23 +165,16 @@ class MessageController {
 		messages.each { m ->
 			dispatchCount += messageSendService.retry(m)
 		}
-		if(dispatchCount == 1) { 
-			def mobile = (messages.getAt(0)?.dispatches as List)[0].dst
-			def displayName = Contact.findByMobile(mobile)?.name?: mobile
-			flash.message = message(code:'fmessage.retry.success', args:[displayName])
-		} else {
-			flash.message = message(code:'fmessage.retry.success.multiple', args:[dispatchCount])
-		}		
+		flash.message = message code:'fmessage.retry.success.multiple', args:[dispatchCount]
 		redirect controller:'message', action:'pending'
 	}
 	
 	def delete() {
 		def messages = getCheckedMessages()
 		messages.each { m ->
-			TrashService.sendToTrash(m)
+			trashService.sendToTrash(m)
 		}
-		params.flashMessage = message(code:'default.trashed.message', args:
-				[message(code:'flash.message.fmessage', args:[messages.size()])])
+		params.flashMessage = dynamicMessage 'trashed', messages
 		if (params.messageSection == 'result') {
 			redirect(controller:'search', action:'result', params:
 					[searchId:params.searchId, flashMessage:params.flashMessage])
@@ -202,19 +188,14 @@ class MessageController {
 	}
 	
 	def archive() {
-		def messageIdList = getCheckedMessageList()
-		def listSize = messageIdList.size()
-		messageIdList.each { id ->
-			withFmessage id, { messageInstance ->
-				if(!messageInstance.messageOwner) {
-					messageInstance.archived = true
-					messageInstance.save()
-				} else {
-					listSize--
-				}
+		def messages = getCheckedMessages()
+		messages.each { messageInstance ->
+			if(!messageInstance.messageOwner) {
+				messageInstance.archived = true
+				messageInstance.save()
 			}
 		}
-		params.flashMessage = message(code:'default.archived.message', args:[message(code: 'flash.message.fmessage', args: [listSize])])
+		params.flashMessage = dynamicMessage 'archived', messages
 		if(params.messageSection == 'result') {
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, flashMessage: params.flashMessage])
 		} else {
@@ -223,19 +204,14 @@ class MessageController {
 	}
 	
 	def unarchive() {
-		def messageIdList = getCheckedMessageList()
-		def listSize = messageIdList.size()
-		messageIdList.each { id ->
-			withFmessage id, {messageInstance ->
-				if(!messageInstance.messageOwner) {
-					messageInstance.archived = false
-					messageInstance.save(failOnError: true)
-				} else {
-					listSize--
-				}
+		def messages = getCheckedMessages()
+		messages.each { messageInstance ->
+			if(!messageInstance.messageOwner) {
+				messageInstance.archived = false
+				messageInstance.save(failOnError: true)
 			}
 		}
-		params.flashMessage = message(code:'default.unarchived.message', args:[message(code: 'flash.message.fmessage', args:[listSize])])
+		params.flashMessage = dynamicMessage 'unarchived', messages
 		if(params.controller == 'search')
 			redirect(controller: 'search', action: 'result', params: [searchId: params.searchId, messageId: params.messageId, flashMessage:params.flashMessage])
 		else
@@ -248,7 +224,7 @@ class MessageController {
 		def messageList = getCheckedMessages()
 		messageList.each { messageInstance ->
 			messageInstance.isDeleted = false
-			Trash.findByObjectId(messageInstance.id)?.delete(failOnError:true)
+			Trash.findByObject(messageInstance)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
 				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
 				activity.addToMessages(messageInstance)
@@ -275,17 +251,18 @@ class MessageController {
 		if(messagesToSend) {
 			MessageSendJob.defer(messagesToSend)
 		}
-		flash.message = message(code:'default.updated.message', args:[message(code:'flash.message.fmessage', args:[messageList.size()])])
+		flash.message = dynamicMessage 'updated', messageList
 		render 'OK'
 	}
 
 	def changeResponse() {
 		def responseInstance = PollResponse.get(params.responseId)
-		getCheckedMessages().each { messageInstance ->
+		def checkedMessages = getCheckedMessages()
+		checkedMessages.each { messageInstance ->
 			responseInstance.addToMessages(messageInstance)
 		}
 		responseInstance.poll.save()
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'message.label', default: 'Fmessage'), message(code: 'flash.message.fmessage')])
+		flash.message = dynamicMessage 'updated', checkedMessages
 		render 'OK'
 	}
 
@@ -294,7 +271,7 @@ class MessageController {
 			messageInstance.starred =! messageInstance.starred
 			messageInstance.save(failOnError: true)
 			Fmessage.get(params.messageId).messageOwner?.refresh()
-            params.remove('messageId')
+			params.remove('messageId')
 			render(text: messageInstance.starred ? "starred" : "unstarred")
 		}
 	}
@@ -330,9 +307,9 @@ class MessageController {
 	boolean isViewingArchive() { params.controller=='archive' }
 
 	private def withFmessage(messageId = params.messageId, Closure c) {
-			def m = Fmessage.get(messageId)
-			if(m) c.call(m)
-			else render(text: message(code: 'fmessage.exist.not', args: [params.messageId])) // TODO handle error state properly
+		def m = Fmessage.get(messageId)
+		if(m) c.call(m)
+		else render(text:defaultMessage('notfound', messageId))
 	}
 
 	private def getShowModel(messageInstanceList) {
@@ -351,7 +328,7 @@ class MessageController {
 	}
 
 	private def getCheckedMessages() {
-		return Fmessage.getAll(getCheckedMessageList())
+		return Fmessage.getAll(getCheckedMessageList()) - null
 	}
 
 	private def getCheckedMessageList() {
@@ -360,6 +337,36 @@ class MessageController {
 		if(checked instanceof Number) checked = [checked]
 		if(checked.class.isArray()) checked = checked as List
 		return checked
+	}
+
+	private def dispatchMessage(String code, Fmessage m) {
+		def args
+		code = 'fmessage.' + code
+		if(m.dispatches.size() == 1) {
+			args = [m.displayName]
+		} else {
+			code += '.multiple'
+			args = [m.dispatches.size()]
+		}
+		return message(code:code, args:args)
+	}
+
+	private def dynamicMessage(String code, def list) {
+		def count = list.size()
+		if(count == 1) defaultMessage code
+		else pluralMessage code, count
+	}
+
+	private def defaultMessage(String code, Object... args=[]) {
+		def messageName = message code:'fmessage.label'
+		return message(code:'default.' + code,
+				args:[messageName] + args)
+	}
+
+	private def pluralMessage(String code, count, Object... args=[]) {
+		def messageName = message code:'fmessage.label.multiple', args:[count]
+		return message(code:'default.' + code + '.multiple',
+				args:[messageName] + args)
 	}
 }
 

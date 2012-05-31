@@ -13,9 +13,6 @@ class SystemLogSpec extends SettingsBaseSpec {
 			btnExportLogs.click()
 		then:
 			waitFor { at SendLogsDialog }
-		when:
-			userSupportLink.click()
-		then:
 			userSupportLink.@href == 'http://community.frontlinesms.com/'
 	}
 

@@ -5,6 +5,21 @@ import frontlinesms2.*
 import grails.plugin.spock.*
 
 class DeleteISpec extends IntegrationSpec {
+	def trashService
+	def pollController
+	def folderController
+	def messageController
+
+	def setup() {
+		pollController = new PollController()
+		pollController.trashService = trashService
+
+		folderController = new FolderController()
+
+		messageController = new MessageController()
+		messageController.trashService = trashService
+	}
+
 	def "deleted polls are not included in the pollInstanceList"() {
 		given:
 			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
@@ -12,8 +27,6 @@ class DeleteISpec extends IntegrationSpec {
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
-			def messageController = new MessageController()
-			def pollController = new PollController()
 			def r1 = PollResponse.findByValue('Manchester').addToMessages(message1)
 			def r2 = PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
@@ -38,8 +51,6 @@ class DeleteISpec extends IntegrationSpec {
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
-			def messageController = new MessageController()
-			def pollController = new PollController()
 			PollResponse.findByValue('Manchester').addToMessages(message1)
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
@@ -60,8 +71,6 @@ class DeleteISpec extends IntegrationSpec {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(src: '123456', date: new Date(), inbound: true)
-			def messageController = new MessageController()
-			def folderController = new FolderController()
 			f.addToMessages(m)
 			f.save(flush:true, failOnError:true)
 		when:
@@ -83,17 +92,16 @@ class DeleteISpec extends IntegrationSpec {
 			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
 			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
-			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
-			deleteFolder(f)
+			delete(f)
 			f.save(flush:true, failOnError:true)
 		when:
 			messageController.beforeInterceptor()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model.collect {it.object} == [f]
+			model*.object == [f]
 	}
 	
 	def "polls, folders and messages appear in the trash section"() {
@@ -101,48 +109,45 @@ class DeleteISpec extends IntegrationSpec {
 			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
 			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
-			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
-			deleteFolder(f)
+			delete(f)
 			f.save(flush:true, failOnError:true)
 			
 			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
 			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			
 			def m3 = new Fmessage(src: '1235', text:"not in folder", isDeleted: true, date: new Date(), inbound: true).save(flush:true, failOnError:true)
-			deleteMessage(m3)
+			delete(m3)
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
 			PollResponse.findByValue('Manchester').addToMessages(message1)
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
-			deletePoll(p)
+			delete(p)
 			p.save(flush:true, failOnError:true)
 		when:
 			messageController.beforeInterceptor()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model.collect {it.object} == [p, m3, f]
-		}
-	
-	def deleteMessage(Fmessage message) {
-		message.isDeleted = true
-		message.save()
-		new Trash(displayName:message.displayName, displayDetail:message.text, objectClass:message.class.name, objectId:message.id).save(failOnError: true, flush: true)
+			model*.object == [p, m3, f]
 	}
 	
-	def deleteFolder(Folder folder) {
-		folder.deleted = true
-		folder.save()
-		new Trash(displayName:folder.name, displayDetail:"${folder.liveMessageCount}", objectClass:folder.class.name, objectId:folder.id).save(failOnError: true, flush: true)
+	private def delete(def o) {
+		trashService.sendToTrash(o)
 	}
-	
-	def deletePoll(Poll poll){
-		poll.deleted = true
-		poll.save()
-		new Trash(displayName:poll.name, displayDetail:"${poll.liveMessageCount}", objectClass:poll.class.name, objectId:poll.id).save(failOnError: true, flush: true)
+
+	private def createPollController() {
+		def pc = new PollController()
+		pc.trashService = trashService
+		return pc
+	}
+
+	private def createFolderController() {
+		def fc = new FolderController()
+		fc.trashService = trashService
+		return fc
 	}
 }
 

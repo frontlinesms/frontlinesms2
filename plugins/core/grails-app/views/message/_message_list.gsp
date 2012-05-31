@@ -8,14 +8,14 @@
 <div id="overflow" class="${params.action != 'no_search' ? messageSection : ''} main-list">
 	<table class="main-table" cellspacing="0">
 		<tr id="message-sorter">
-			<td class="message-select-cell">
-				<g:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll('message')"/>
-			</td>
-			<td class="message-star-cell"></td>
-			<g:sortableColumn class="message-sender-cell" property="inboundContactName" title="${message(code: 'fmessage.displayName.label', default: 'Name')}" params="${params}" id='source-header'/>
-			<g:sortableColumn class="message-text-cell" property="text" title="${message(code: 'fmessage.text.label', default: 'Message')}" 
+			<th class="message-select-cell">
+				<fsms:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll('message')" disabled="${messageSection == 'trash'}"/>
+			</th>
+			<th class="message-star-cell"></th>
+			<g:sortableColumn class="message-sender-cell" property="inboundContactName" title="${message(code:'fmessage.displayName.label')}" params="${params}" id='source-header'/>
+			<g:sortableColumn class="message-text-cell" property="text" title="${message(code:'fmessage.text.label')}"
 					params="${params}" id="message-header"/>
-			<g:sortableColumn class="message-date-cell" property="date" title="${message(code: 'fmessage.date.label', default: 'Date')}"
+			<g:sortableColumn class="message-date-cell" property="date" title="${message(code:'fmessage.date.label')}"
 					params="${params}" id="timestamp-header" defaultOrder="desc"/>
 		</tr>
 		<g:if test="${messageInstanceTotal > 0}">
@@ -36,7 +36,7 @@
 						</td>
 						<td class="message-sender-cell">
 								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-									${m.displayName}
+									<fsms:unbroken>${m.displayName}</fsms:unbroken>
 								</g:link>
 						</td>
 						<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
@@ -46,7 +46,9 @@
 						</td>
 						<td class="message-date-cell">
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
+								<fsms:unbroken>
+									<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
+								</fsms:unbroken>
 							</g:link>
 						</td>
 					</tr>

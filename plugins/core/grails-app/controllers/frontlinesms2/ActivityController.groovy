@@ -2,10 +2,12 @@ package frontlinesms2
 
 class ActivityController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
 	def messageSendService
+	def trashService
 
 	def index = {
-		redirect(action:'create')
+		redirect action:'create'
 	}
 	
 	def create = {
@@ -29,51 +31,64 @@ class ActivityController {
 	def update = {
 		withActivity { activity ->
 			activity.properties = params
-			activity.save() // TODO check if save is successful
+			if(activity.save()) {
+				flash.message = defaultMessage 'updated'
+			} else {
+				flash.message = defaultMessage 'update.fail', activity.id
+			}
+			redirect controller:"message", action:"activity", params:[ownerId: params.id]
 		}
-		redirect(controller: "message", action: "activity", params: [ownerId: params.id])
 	}
 	
 	def archive = {
 		withActivity { activity ->
 			activity.archive()
-			activity.save(flush:true, failOnError:true)
-		} // TODO don't flush; check if save is successful
-		flash.message = message(code: 'activity.archived.successfully')
-		redirect(controller: "message", action: "inbox")
+			if(activity.save(flush:true)) {
+				flash.message = defaultMessage 'archived'
+			} else {
+				flash.message = defaultMessage 'archive.failed', activity.id
+			}
+			redirect controller:"message", action:"inbox"
+		}
 	}
 	
 	def unarchive = {
 		withActivity { activity ->
 			activity.unarchive()
-			activity.save()
-		} // TODO check if save is successful!
-		flash.message = message(code: 'activity.unarchived.successfully')
-		redirect(controller: "archive", action: "activityList")
+			if(activity.save()) {
+				flash.message = defaultMessage 'unarchived'
+			} else {
+				flash.message = defaultMessage 'unarchive.failed', activity.id
+			}
+			redirect controller:"archive", action:"activityList"
+		}
 	}
 	
 	def confirmDelete = {
 		def activityInstance = Activity.get(params.id)
-		model: [ownerName: activityInstance.name,
-					ownerInstance: activityInstance]
+		model:[ownerName:activityInstance.name,
+				ownerInstance:activityInstance]
 	}
 	
 	def delete = {
 		withActivity { activity ->
-			TrashService.sendToTrash(activity)
+			trashService.sendToTrash(activity)
+			flash.message = defaultMessage 'trashed'
+			redirect controller:"message", action:"inbox"
 		}
-		flash.message = message(code: 'activity.trashed')
-		redirect(controller:"message", action:"inbox")
 	}
 	
 	def restore = {
 		withActivity { activity ->
 			activity.deleted = false
-			Trash.findByObjectId(activity.id)?.delete()
-			activity.save(failOnError: true, flush: true)
+			Trash.findByObject(activity)?.delete()
+			if(activity.save()) {
+				flash.message = defaultMessage 'restored'
+			} else {
+				flash.message = defaultMessage 'restore.failed', activity.id
+			}
+			redirect controller:"message", action:"trash"
 		}
-		flash.message = message(code: 'activity.restored')
-		redirect(controller: "message", action: "trash")
 	}
 	
 	def create_new_activity = {}
@@ -81,6 +96,13 @@ class ActivityController {
 	private def withActivity(Closure c) {
 		def activityInstance = Activity.get(params.id)
 		if (activityInstance) c activityInstance
-		else render(text: message(code: 'activity.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
+		else render(text: message(code:'activity.id.exist.not', args: [message(code: params.id), ''])) // TODO handle error state properly
+	}
+
+	private def defaultMessage(String code, args=[]) {
+		def activityName = message code:'activity.label'
+		return message(code:'default.' + code,
+				args:[activityName] + args)
 	}
 }
+

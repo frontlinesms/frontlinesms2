@@ -4,8 +4,11 @@ import frontlinesms2.*
 
 class FolderControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
+	def trashService
+
 	def setup() {
 		controller = new FolderController()
+		controller.trashService = trashService
 	}
 	
 	def "can delete a folder to send it to the trash"() {

@@ -36,7 +36,7 @@
 	min-height: 16px;
 }
 
-.ui-dialog .ui-dialog-titlebar { 
+.ui-dialog .ui-dialog-titlebar {
 	position: relative;
 	padding-top: 17px;
 	padding-bottom: 17px;
@@ -44,7 +44,8 @@
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-title {
-	padding: 17px;
+	display: block;
+	padding: 0 17px;
 	text-transform: uppercase;
 	vertical-align: middle;
 }

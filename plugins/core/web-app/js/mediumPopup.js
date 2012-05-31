@@ -20,11 +20,11 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 
 function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
 	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit );
-	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	var modalBox = $("<div id='modalBox'><div>");
+	modalBox.html(html).appendTo(document.body);
 	$("#messageText").keyup();
-	$(".dropdown").selectmenu();
-	magicwand.init($('select[id^="magicwand-select"]'));
-	$("#modalBox").dialog({
+	magicwand.init(modalBox.find('select[id^="magicwand-select"]'));
+	modalBox.dialog({
 		modal: true,
 		title: title,
 		minWidth: 675,

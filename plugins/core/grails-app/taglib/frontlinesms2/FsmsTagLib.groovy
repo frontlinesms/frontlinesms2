@@ -4,6 +4,28 @@ class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
 
+	def radioGroup = { att ->
+		def values = att.values.tokenize(',')*.trim()
+		def labels = att.labels.tokenize(',')*.trim()
+		values.eachWithIndex { value, i ->
+			def label = labels[i]
+			def id = att.name + '-' + i
+			def itemAttributes = att + [value:value, checked:att.checked==value, id:id]
+			out << '<div class="field">'
+			out << g.radio(itemAttributes)
+			out << '<label for="' + id + '">'
+			out << g.message(code:label)
+			out << '</label>'
+			out << '<div style="clear:both" class="clearfix"></div>'
+			out << '</div>'
+		}
+	}
+
+	def unbroken = { att, body ->
+		if(att.value) out << att.value.replaceAll(' ', '&nbsp;')
+		if(body) out << body().replaceAll(' ', '&nbsp;')
+	}
+
 	def render = { att ->
 		out << g.render(att)
 	}
@@ -92,6 +114,12 @@ class FsmsTagLib {
 		out << body()
 		out << '<div style="clear:both" class="clearfix"></div>'
 		out << '</div>'
+	}
+
+	def checkBox = { att -> out << checkbox(att) }
+	def checkbox = { att ->
+		if(att.remove('disabled') in [true, 'disabled']) att.disabled = 'disabled'
+		out << g.checkBox(att)
 	}
 
 	def magicWand = { att ->

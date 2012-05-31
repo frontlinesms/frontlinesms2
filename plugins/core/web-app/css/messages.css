@@ -71,20 +71,21 @@
 	font-weight: bold;
 	background-image: url('../images/menubar.png');
 }
-.main-list table td.message-select-cell {
-	padding-left: 17px;
-	width: 30px;
+
+.main-list td, .main-list th {
+	padding: 0 3px;
 }
-.main-list table td.message-star-cell {
-	padding-left: 5px;
-	width: 30px;
+
+.main-list td, .main-list th {
+	vertical-align: middle;
+	width: 0;
 }
-.main-list table td.message-sender-cell, #message-list table th.message-sender-cell {
-	padding: 6px 5px;
-	max-width: 150px;
+.main-list .message-text-cell {
+	width: 100%;
+	padding-right: 21px;
 }
-.main-list table td.message-text-cell, #message-list table th.message-sender-cell {
-	min-width: 300px;
+.main-list .message-date-cell {
+	padding-right: 21px;
 }
 
 .sorted.asc {
