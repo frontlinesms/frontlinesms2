@@ -21,7 +21,7 @@ class FolderController {
 			flash.message = defaultMessage 'created'
 			redirect controller:"message", action:'folder', id:folderInstance.id
 		} else {
-			flash.message = "error"
+			flash.message = "folder.create.failed"
 			redirect controller:"message", action:'inbox', params:[flashMessage:flash.message]
 		}
 	}
