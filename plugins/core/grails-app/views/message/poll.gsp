@@ -6,7 +6,7 @@
 		<r:script>
 		$(function() {
 			
-			$("#poll-graph-btn").on("click", function(){
+			$("#poll-graph-btn").live("click", function(){
 				if(!pollGraph.loaded) {
 					pollGraph.hideMessages();
 					pollGraph.showGraph();
