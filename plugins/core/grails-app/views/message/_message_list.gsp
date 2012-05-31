@@ -8,10 +8,10 @@
 <div id="overflow" class="${params.action != 'no_search' ? messageSection : ''} main-list">
 	<table class="main-table" cellspacing="0">
 		<tr id="message-sorter">
-			<td class="message-select-cell">
+			<th class="message-select-cell">
 				<fsms:checkBox name="message-select" class="message-select" id="message-select-all" value="0" checked="false" onclick="checkAll('message')" disabled="${messageSection == 'trash'}"/>
-			</td>
-			<td class="message-star-cell"></td>
+			</th>
+			<th class="message-star-cell"></th>
 			<g:sortableColumn class="message-sender-cell" property="inboundContactName" title="${message(code:'fmessage.displayName.label')}" params="${params}" id='source-header'/>
 			<g:sortableColumn class="message-text-cell" property="text" title="${message(code:'fmessage.text.label')}"
 					params="${params}" id="message-header"/>
@@ -36,7 +36,7 @@
 						</td>
 						<td class="message-sender-cell">
 								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-									${m.displayName}
+									<fsms:unbroken>${m.displayName}</fsms:unbroken>
 								</g:link>
 						</td>
 						<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
@@ -46,7 +46,9 @@
 						</td>
 						<td class="message-date-cell">
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
+								<fsms:unbroken>
+									<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
+								</fsms:unbroken>
 							</g:link>
 						</td>
 					</tr>

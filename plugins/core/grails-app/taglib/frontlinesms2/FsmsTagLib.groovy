@@ -4,6 +4,11 @@ class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
 
+	def unbroken = { att, body ->
+		if(att.value) out << att.value.replaceAll(' ', '&nbsp;')
+		if(body) out << body().replaceAll(' ', '&nbsp;')
+	}
+
 	def render = { att ->
 		out << g.render(att)
 	}
