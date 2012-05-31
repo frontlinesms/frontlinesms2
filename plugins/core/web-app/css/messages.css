@@ -82,6 +82,7 @@
 }
 .main-list .message-text-cell {
 	width: auto;
+	padding-right: 21px;
 }
 .main-list .message-date-cell {
 	padding-right: 21px;
