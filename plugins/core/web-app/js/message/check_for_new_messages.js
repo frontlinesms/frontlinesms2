@@ -11,7 +11,7 @@ function checkForNew() {
 	params.failed = $('input:hidden[name=failed]').val();
 
 
-	var currentTotal = $("#messageTotal").val();
+	var currentTotal = parseInt($("#messageTotal").val());
 	var newTotal = $("#messageTotal").val();
 	
 	$.getJSON(url_root + 'message/newMessageCount', params, function(data) {

@@ -117,29 +117,6 @@
 	margin: 0;
 }
 
-.ui-dialog .smartgroupname {
-	margin-left: 6px;
-	padding-top: 17px;
-	padding-bottom: 30px;
-}
-
-.ui-dialog #smartgroupname-field {
-	width: 484px;
-	margin-left: 10px;
-}
-
-.ui-dialog #smartGroup-table tr {
-	height: 50px;
-}
-
-.ui-dialog #smartGroup-table td {
-	width: 200px;
-}
-
-.ui-dialog #smartGroup-table td input {
-	width: 250px;
-}
-
 .ui-dialog #poll-question textarea{
 	display: block;
 	width: 100%;
