@@ -15,6 +15,33 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 			m.refresh().displayName == 'bob'
 	}
 
+	def 'display name should be calculated for unsaved incoming messages'() {
+		given:
+			Contact.build(name:'bob', mobile:'123')
+			Fmessage m = Fmessage.buildWithoutSave(src:'123')
+		expect:
+			m.displayName == 'bob'
+	}
+
+	def 'display name should be calculated for unsaved outgoing message to single contact'() {
+		given:
+			Contact.build(name:'bob', mobile:'123')
+			Fmessage m = new Fmessage(src:'123', text:'')
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+		expect:
+			m.displayName == 'bob'
+	}
+
+	def 'display name should be calculated for unsaved outgoing message to multiple contacts'() {
+		given:
+			Contact.build(name:'bob', mobile:'123')
+			Fmessage m = new Fmessage(src:'123', text:'')
+					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
+					.addToDispatches(dst:'456', status:DispatchStatus.PENDING)
+		expect:
+			m.displayName == '2 recipients'
+	}
+
 	def 'display name should be src for incoming message if no matching contact'() {
 		given:
 			Fmessage m = Fmessage.build(src:'123')

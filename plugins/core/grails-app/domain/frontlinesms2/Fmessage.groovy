@@ -184,9 +184,15 @@ class Fmessage {
 	}
 
 	def getDisplayName() {
-		if(inbound) inboundContactName?: src
-		else if(dispatches.size() == 1) messageSource.getMessage('fmessage.to', [outboundContactName?: (dispatches as List)[0].dst] as Object[], null)
-		else messageSource.getMessage('fmessage.to.multiple', [dispatches.size()] as Object[], null)
+		if(inbound) {
+			if(inboundContactName) return inboundContactName
+			else if(id) return src
+			else return Contact.findByMobile(src)?.name?: src
+		} else if(dispatches.size() == 1) {
+			messageSource.getMessage('fmessage.to', [outboundContactName?: (dispatches as List)[0].dst] as Object[], null)
+		} else {
+			messageSource.getMessage('fmessage.to.multiple', [dispatches.size()] as Object[], null)
+		}
 	}
 
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
