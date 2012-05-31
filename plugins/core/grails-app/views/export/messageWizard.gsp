@@ -10,11 +10,7 @@
 		<g:hiddenField name="failed" value="${failed}"/>
 
 		<p class="info"><g:message code="export.message.info"/></p>
-		<div>
-			<h2><g:message code="export.selectformat"/></h2>
-			<input type="radio" name="format" value="csv" checked="checked"/><g:message code="export.csv"/>
-			<input type="radio" name="format" value="pdf"/><g:message code="export.pdf"/>
-		</div>
+		<fsms:radioGroup name="format" values="csv, pdf" labels="export.csv, export.pdf" checked="csv"/>
 	</g:form>
 </div>
 <r:script>
