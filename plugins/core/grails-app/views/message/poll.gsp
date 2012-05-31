@@ -40,11 +40,10 @@
 						$.each(pollGraph.stats.id, function(index, value){
 							$("#response-"+ value).find("td.count").html(pollGraph.stats.count[index]);
 							$("#response-"+ value).find("td.percent").html(pollGraph.stats.data[index] + "%");
-						});	
+						});
+						pollGraph.showGraph();
 					});
-
-					pollGraph.showGraph();
-											
+				
 				},
 				hideMessages: function() {
 					pollGraph.loaded = true;
@@ -72,7 +71,7 @@
 						var stats = pollGraph.getStats();
 						$("#pollGraph").empty();
 						var holder = "pollGraph";
-						var colors = ["#40B857", "#F2202B", "#ff9600"];
+						var colors = ["#40B857", "#F2202B", "#ff9600", "#D5AFC6", "#9E9E9E","#DFDFDF,"];
 						pollGraph.refresh = false;
 						plot3 = $.jqplot(holder, [stats.data], {
 								seriesColors: colors,
@@ -96,23 +95,15 @@
 										tickOptions:{formatString:'%d\%'}
 									}
 
-							    },
-							    grid: {
-							    	background: 'transparent'
-								},
+							    }
 						  });
 					}					
 				},
 			};
 
-			//FIXME should disable the interval instead of clearing it
-			var refreshIntervalId = setInterval(triggerPollGraphRefresh, 5000);
+			setInterval(triggerPollGraphRefresh, 5000);
 			function triggerPollGraphRefresh() {
-				if(pollGraph.loaded) {
-					pollGraph.setStats();
-				} else {
-					clearInterval(refreshIntervalId);
-				}
+				pollGraph.setStats();
 			}
 			
 		});
