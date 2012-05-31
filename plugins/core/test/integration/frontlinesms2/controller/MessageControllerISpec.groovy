@@ -9,9 +9,11 @@ import grails.converters.JSON
 
 class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
+	def trashService
 
 	def setup() {
 		controller = new MessageController()
+		controller.trashService = trashService
 		controller.beforeInterceptor.call()
 
 		controller.params.messageText = "text"

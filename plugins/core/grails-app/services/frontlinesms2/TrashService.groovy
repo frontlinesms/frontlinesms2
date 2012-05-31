@@ -1,14 +1,13 @@
 package frontlinesms2
 
 class TrashService {
-
     	def emptyTrash() {
 		Fmessage.findAllByIsDeleted(true)*.delete()
 		MessageOwner.findAllByDeleted(true)*.delete()
 		Trash.findAll()*.delete()
     	}
     
-    	static sendToTrash(object) {
+	def sendToTrash(object) {
 		if (object instanceof frontlinesms2.Fmessage) {
 			object.isDeleted = true
 			new Trash(displayName:object.displayName,
@@ -31,3 +30,4 @@ class TrashService {
 		}
 	}
 }
+

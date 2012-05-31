@@ -2,7 +2,9 @@ package frontlinesms2
 
 class ActivityController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
 	def messageSendService
+	def trashService
 
 	def index = {
 		redirect action:'create'
@@ -56,7 +58,7 @@ class ActivityController {
 			if(activity.save()) {
 				flash.message = defaultMessage 'unarchived'
 			} else {
-				flash.message = defaultMessage 'unarchuve.failed', activity.id
+				flash.message = defaultMessage 'unarchive.failed', activity.id
 			}
 			redirect controller:"archive", action:"activityList"
 		}
@@ -70,7 +72,7 @@ class ActivityController {
 	
 	def delete = {
 		withActivity { activity ->
-			TrashService.sendToTrash(activity)
+			trashService.sendToTrash(activity)
 			flash.message = defaultMessage 'trashed'
 			redirect controller:"message", action:"inbox"
 		}

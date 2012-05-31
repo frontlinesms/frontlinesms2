@@ -2,6 +2,8 @@ package frontlinesms2
 
 class FolderController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+	def trashService
 	
 	def index = {
 		 redirect(action: "create", params: params)
@@ -55,7 +57,7 @@ class FolderController {
 	
 	def delete = {
 		withFolder { folder ->
-			TrashService.sendToTrash(folder)
+			trashService.sendToTrash(folder)
 			flash.message = defaultMessage 'trashed'
 			redirect controller:"message", action:"inbox"
 		}
@@ -78,7 +80,7 @@ class FolderController {
 	}
 
 	private def defaultMessage(String code, Object... args=[]) {
-		def activityName = message code:'folder.label'
+		def folderName = message code:'folder.label'
 		return message(code:'default.' + code,
 				args:[folderName] + args)
 	}

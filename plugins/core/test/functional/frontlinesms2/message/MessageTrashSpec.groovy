@@ -4,13 +4,13 @@ import frontlinesms2.*
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class MessageTrashSpec extends grails.plugin.geb.GebSpec {
+	def trashService
+
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
 			Fmessage.build(src:"src1", starred:true, isDeleted:true)
 			Fmessage.build(src:"src2", isDeleted:true)
-			Fmessage.findAll().each{
-				new Trash(displayName:it.displayName, displayText:it.text, objectClass:it.class, objectId:it.id)
-						.save(failOnError:true, flush:true) }
+			Fmessage.findAll().each { trashService.sendToTrash(it) }
 		when:
 			to PageMessageTrash
 		then:

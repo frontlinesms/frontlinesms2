@@ -3,6 +3,7 @@ package frontlinesms2.message
 import frontlinesms2.*
 
 class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
+	def trashService
 	
 	def setup() {
 		createTestData()
@@ -64,7 +65,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	def deleteMessage(Fmessage message) {
-		TrashService.sendToTrash(message)
+		trashService.sendToTrash(message)
 	}
 	
 	static createTestData() {

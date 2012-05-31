@@ -6,6 +6,19 @@ import grails.plugin.spock.*
 
 class DeleteISpec extends IntegrationSpec {
 	def trashService
+	def pollController
+	def folderController
+	def messageController
+
+	def setup() {
+		pollController = new PollController()
+		pollController.trashService = trashService
+
+		folderController = new FolderController()
+
+		messageController = new MessageController()
+		messageController.trashService = trashService
+	}
 
 	def "deleted polls are not included in the pollInstanceList"() {
 		given:
@@ -14,8 +27,6 @@ class DeleteISpec extends IntegrationSpec {
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
-			def messageController = new MessageController()
-			def pollController = new PollController()
 			def r1 = PollResponse.findByValue('Manchester').addToMessages(message1)
 			def r2 = PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
@@ -40,8 +51,6 @@ class DeleteISpec extends IntegrationSpec {
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
-			def messageController = new MessageController()
-			def pollController = new PollController()
 			PollResponse.findByValue('Manchester').addToMessages(message1)
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
@@ -62,8 +71,6 @@ class DeleteISpec extends IntegrationSpec {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(src: '123456', date: new Date(), inbound: true)
-			def messageController = new MessageController()
-			def folderController = new FolderController()
 			f.addToMessages(m)
 			f.save(flush:true, failOnError:true)
 		when:
@@ -85,7 +92,6 @@ class DeleteISpec extends IntegrationSpec {
 			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
 			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
-			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
 			delete(f)
@@ -103,7 +109,6 @@ class DeleteISpec extends IntegrationSpec {
 			def f = new Folder(name:'test').save(failOnError:true)
 			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
 			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
-			def messageController = new MessageController()
 			f.addToMessages(m)
 			f.addToMessages(m2)
 			delete(f)
@@ -127,10 +132,22 @@ class DeleteISpec extends IntegrationSpec {
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
 			model*.object == [p, m3, f]
-		}
+	}
 	
-	def delete(def o) {
+	private def delete(def o) {
 		trashService.sendToTrash(o)
+	}
+
+	private def createPollController() {
+		def pc = new PollController()
+		pc.trashService = trashService
+		return pc
+	}
+
+	private def createFolderController() {
+		def fc = new FolderController()
+		fc.trashService = trashService
+		return fc
 	}
 }
 

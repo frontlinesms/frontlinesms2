@@ -4,8 +4,11 @@ import frontlinesms2.*
 
 class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
+	def trashService
+
 	def setup() {
 		controller = new PollController()
+		controller.trashService = trashService
 		controller.params.addresses = '123'
 	}
 
