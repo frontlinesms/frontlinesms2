@@ -1,6 +1,7 @@
 function launchMediumPopup(title, html, btnFinishedText, submitAction) {
-	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#modalBox").dialog(
+	var modalBox = $("<div id='modalBox'><div>");
+	modalBox.html(html).appendTo(document.body);
+	modalBox.dialog(
 		{
 			modal: true,
 			width: 675,
@@ -11,7 +12,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 			close: function() { $(this).remove(); }
 		}
 	);
-	initializePopup();
+	initializePopup(modalBox);
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height) {

@@ -9,90 +9,36 @@
 		<p class="info">
 			<g:message code="smartgroup.info"/>
 		</p>
-		<div class="smartgroupname">
-			<label class="bold inline" for="smartgroupname"><g:message code="smartgroup.name.label" default="Name"/>:</label>
-			<g:textField id="smartgroupname-field" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}" name="smartgroupname" value="${smartGroupInstance?.name}"/>
-		</div>
 		<table id="smartGroup-table">
 			<tbody>
+				<tr class="name">
+					<td class="label">
+						<label class="bold inline" for="smartgroupname"><g:message code="smartgroup.name.label" default="Name"/></label>
+					</td>
+					<td></td>
+					<td>
+						<g:textField id="smartgroupname-field" class="value ${hasErrors(bean: smartGroupInstance, field: 'smartgroupname', 'errors')}" name="smartgroupname" value="${smartGroupInstance?.name}"/>
+					</td>
+				</tr>
 				<g:if test="${smartGroupInstance.id}">
 					<g:each in="${currentRules.keySet()}" var="field" status="i">
+						<g:set var="isFirst" value="i==0"/>
 						<g:if test="${field == 'customFields'}">
 							<g:each in="${currentRules.customFields}" var="customField">
-								<tr class="prop smart-group-criteria">
-									<td>
-										<g:select name="rule-field"
-												value="${'custom:' + customField.name}"
-												from="${fieldNames}"
-												keys="${fieldIds}"
-												onchange="smartGroupCriteriaChanged(this)"/>
-									</td>
-									<td class="rule-match-text">
-										<span class="contains"><g:message code="smartgroup.contains.label"/></span>
-										<span class="starts hide"><g:message code="smartgroup.startswith.label"/></span>
-									</td>
-									<td>
-										<g:textField name="rule-text" class="rule-text" value='${customField.value}'/>
-									</td>
-									<td>
-										<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}'/></a>
-									</td>
-								</tr>
+								<g:render template="rule" model="[key:customField.name, value:customField.value, isFirst:isFirst]"/>
 							</g:each>
 						</g:if>
 						<g:else>
-							<tr class="prop smart-group-criteria">
-								<td>
-									<g:select name="rule-field"
-											value="${field}"
-											from="${fieldNames}"
-											keys="${fieldIds}"
-											onchange="smartGroupCriteriaChanged(this)"/>
-								</td>
-								<td class="rule-match-text">
-									<g:if test = "${field == 'mobile'}">
-										<span class="contains hide"><g:message code="smartgroup.contains.label"/></span>
-										<span class="starts"><g:message code="smartgroup.startswith.label"/></span>
-									</g:if>
-									<g:else>
-										<span class="contains"><g:message code="smartgroup.contains.label"/></span>
-										<span class="starts hide"><g:message code="smartgroup.startswith.label"/></span>
-									</g:else>
-								</td>
-								<td>
-									<g:textField name="rule-text" class="rule-text" value='${currentRules."$field"}'/>
-								</td>
-								<td>
-									<a onclick="removeRule(this)" class="button remove-rule ${i>=0 ?'':'hide'}"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}'/></a>
-								</td>
-							</tr>
+							<g:render template="rule" model="[key:field, value:currentRules[field], isFirst:isFirst]"/>
 						</g:else>
 					</g:each>
 				</g:if>
 				<g:else>
-					<tr class="prop smart-group-criteria">
-						<td>
-							<g:select name="rule-field"
-									from="${fieldNames}"
-									keys="${fieldIds}"
-									onchange="smartGroupCriteriaChanged(this)"/>
-						</td>
-						<td class="rule-match-text">
-							<span class="contains hide"><g:message code="smartgroup.contains.label"/></span>
-							<span class="starts"><g:message code="smartgroup.startswith.label"/></span>
-						</td>
-						<td>
-							<g:textField name="rule-text" class="rule-text"/>
-						</td>
-						<td>
-							<a onclick="removeRule(this)" class="button remove-rule hide"><img class='remove' src='${resource(dir:'images/icons',file:'remove.png')}'/></a>
-						</td>
-					</tr>
+					<g:render template="rule" model="[isFirst:true, key:'mobile']"/>
 				</g:else>
-				
 			</tbody>
 		</table>
-		<a class="button" onclick="addNewRule()">
+		<a class="btn" onclick="addNewRule()">
 			<g:message code="smartgroup.add.anotherrule"/>
 		</a></br>
 	</g:form>
@@ -119,7 +65,9 @@
 		}
 	}
 		
-	function initializePopup() {}
+	function initializePopup(dialog) {
+		dialog.find("select").selectmenu();
+	}
 
 	function validateSmartGroup() {
 		var valid = true;
@@ -166,11 +114,15 @@
 	
 	function addNewRule() {
 		var template = $('.smart-group-criteria').first();
+		var templateSelect = template.find("select");
+		templateSelect.selectmenu("destroy");
 		template.find('.button.remove-rule').show();
 		var newRow = template.clone();
+		templateSelect.selectmenu();
 		newRow.removeAttr("id");
 		newRow.find('input.rule-text').val("");
 		newRow.find('.button.remove-rule').show();
+		newRow.find('select').selectmenu();
 		$('form[name="smart-group-details"] tbody').append(newRow);
 	}
 </r:script>

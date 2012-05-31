@@ -177,3 +177,15 @@
 #contact-editor #multiple-contact-info{
 	margin-left: 251px;
 }
+
+#smartGroup-table {
+	margin: 20px 0;
+}
+#smartGroup .name .label {
+	text-align: right;
+}
+#smartGroup-table td {
+	vertical-align: middle;
+	padding: 5px;
+}
+
