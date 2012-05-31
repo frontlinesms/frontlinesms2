@@ -10,7 +10,7 @@
 			<table>
 				<tbody>
 					<g:each in="${ownerInstance.responses}" var="r">
-						<tr>
+						<tr id="response-${r.id}">
 							<td class='answers'>
 								${r.value}
 							</td>
