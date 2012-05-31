@@ -33,13 +33,13 @@ class MessageController {
 	def newMessageCount() {
 		def section = params.messageSection
 		if(!params.ownerId && section != 'trash') {
-			def messageCount = [totalMessages:[Fmessage."$section"(params.starred).count()]]
+			def messageCount = [totalMessages:Fmessage."$section"(params.starred).count()]
 			render messageCount as JSON
 		} else if(section == 'activity') {
-			def messageCount = [totalMessages:[Activity.get(params.ownerId)?.getActivityMessages(params.starred)?.count()]]
+			def messageCount = [totalMessages:Activity.get(params.ownerId)?.getActivityMessages(params.starred)?.count()]
 			render messageCount as JSON
 		} else if(section == 'folder') {
-			def messageCount = [totalMessages:[Folder.get(params.ownerId)?.getFolderMessages(params.starred)?.count()]]
+			def messageCount = [totalMessages:Folder.get(params.ownerId)?.getFolderMessages(params.starred)?.count()]
 			render messageCount as JSON
 		} else
 			render ""
