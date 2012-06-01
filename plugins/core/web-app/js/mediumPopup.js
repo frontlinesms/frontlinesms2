@@ -42,7 +42,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 		close: function() { $(this).remove(); }
 	});
 	makeTabsUnfocusable();
-	validateTabSelections();
+	validateTabSelections(modalBox);
 	changeButtons(getButtonToTabMappings(),  getCurrentTabDom());
 	initializeTabContentWidgets();
 	initializePopup();
@@ -120,8 +120,8 @@ function cancel() {
 	$(this).dialog('close');
 }
 
-function validateTabSelections() {
-	$('#tabs').tabs({select: function(event, ui) {
+function validateTabSelections(dialog) {
+	dialog.find('#tabs').tabs({select: function(event, ui) {
 		if(ui.index > getCurrentTabIndex()) {
 			validateAllPreviousTabs(ui.index);
 			var thisTabValidates = tabValidates(getCurrentTab());
