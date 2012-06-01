@@ -1,0 +1,20 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}table{border-collapse:collapse;border-spacing:0}
+html { height:100%; width:100%; }
+body {
+	font-family: Helvetica,Arial,sans-serif;
+	font-size: 1.25em;
+	color: #333333; }
+ul, ol { list-style: none; }
+
+#content { height:100%; }
+
+#head { position:absolute;top:0;height:80px;left:0;right:0;overflow:hidden;background-color:#0C6; }
+
+#menu, #list, #detail { position:absolute;overflow:auto;top:80px;bottom:0; }
+
+#menu { left:0;right:83%;background-color:#0C5; }
+#list { left:17%;right:21%;background-color:#0C4; }
+#list table { }
+#list-head { position:fixed;top:80px;left:17%;right:21%;background-color:#C06; }
+#list-foot { position:fixed;bottom:0;left:17%;right:21%;background-color:#C05; }
+#detail { left:79%;right:0;background-color:#0c3; }
