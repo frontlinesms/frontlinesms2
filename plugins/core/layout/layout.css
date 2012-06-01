@@ -9,6 +9,8 @@ ul, ol { list-style: none; }
 #content { height:100%; }
 
 #head { position:absolute;top:0;height:80px;left:0;right:0;overflow:hidden;background-color:#0C6; }
+#tabs { position:absolute;left:17%;bottom:0; }
+#tabs li { display:inline; }
 
 #body-menu, #list, #detail { position:absolute;overflow:auto;top:80px;bottom:0; }
 
@@ -18,3 +20,6 @@ ul, ol { list-style: none; }
 #body.messages #list-head { position:fixed;top:80px;left:17%;right:21%;background-color:#C06; }
 #body.messages #list-foot { position:fixed;bottom:0;left:17%;right:21%;background-color:#C05; }
 #body.messages #detail { left:79%;right:0;background-color:#0c3; }
+
+#system-menu { position:absolute;right:0;top:0; }
+#system-menu li { display:inline; }
