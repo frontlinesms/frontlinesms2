@@ -1,6 +1,7 @@
 function launchMediumPopup(title, html, btnFinishedText, submitAction) {
-	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
-	$("#modalBox").dialog(
+	var modalBox = $("<div id='modalBox'><div>");
+	modalBox.html(html).appendTo(document.body);
+	modalBox.dialog(
 		{
 			modal: true,
 			width: 675,
@@ -11,7 +12,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 			close: function() { $(this).remove(); }
 		}
 	);
-	initializePopup();
+	initializePopup(modalBox);
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height) {
@@ -41,7 +42,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 		close: function() { $(this).remove(); }
 	});
 	makeTabsUnfocusable();
-	validateTabSelections();
+	validateTabSelections(modalBox);
 	changeButtons(getButtonToTabMappings(),  getCurrentTabDom());
 	initializeTabContentWidgets();
 	initializePopup();
@@ -119,8 +120,8 @@ function cancel() {
 	$(this).dialog('close');
 }
 
-function validateTabSelections() {
-	$('#tabs').tabs({select: function(event, ui) {
+function validateTabSelections(dialog) {
+	dialog.find('#tabs').tabs({select: function(event, ui) {
 		if(ui.index > getCurrentTabIndex()) {
 			validateAllPreviousTabs(ui.index);
 			var thisTabValidates = tabValidates(getCurrentTab());
