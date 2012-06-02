@@ -20,7 +20,13 @@ ul, ol { list-style: none; }
 #body.messages #list-foot { background-color:#C05; }
 #body.messages #detail { left:79%;right:0;background-color:#0c3; }
 
-#body.settings #content-container { left:17%;right:0; }
+#body.contacts #list-container { left:17%;right:62%;background-color:#C60; }
+#body.contacts #list-container > * { width:100%; }
+#body.contacts #list-head { background-color:#C50; }
+#body.contacts #list-foot { background-color:#C40; }
+#body.contacts #detail { left:38%;right:0;background-color:#c20; }
+
+#body.settings #content-container { left:17%;right:0;background-color:#f06; }
 
 #system-menu { position:absolute;right:0;top:0; }
 #system-menu li { display:inline; }
