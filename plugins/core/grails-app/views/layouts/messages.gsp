@@ -37,38 +37,42 @@
 				poll.reply.text6, smallpopup.recipients.title, magicwand.title, folder.create.failed"/>
 		<r:script>
 			$(function() {  
-			   disablePaginationControls();
+				disablePaginationControls();
+				$(window).resize(new Resizer('#list-container', '#list-head', '#list-foot'));
 			});
 		</r:script>
 		<r:layoutResources/>
 	</head>
-	<body id="messages-tab">
-		<div id="thinking"></div>
-		<div id="header">
-			<div id="notifications">
-				<fsms:render template="/system_notifications"/>
-				<fsms:render template="/flash"/>
-			</div>
-			<fsms:render template="/system_menu"/>
+	<body>
+		<div id="head">
 			<fsms:render template="/tabs"/>
 		</div>
-		<div id="main">
+		<div id="body" class="messages">
 			<fsms:render template="/message/menu"/>
-			<div id="content">
-				<g:form controller="${params.controller}"
-						params="[messageId: messageInstance?.id, searchId: search?.id]">
-					<g:hiddenField name="messageSection" value="${messageSection}"/>
-					<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-					<div id="message-list" class="${(messageSection in ['inbox', 'sent', 'pending', 'trash', 'folder', 'no_search'])? '': 'tall-header'}">
+			<g:form controller="${params.controller}"
+					params="[messageId: messageInstance?.id, searchId: search?.id]">
+				<g:hiddenField name="messageSection" value="${messageSection}"/>
+				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
+				<div id="list-container">
+					<div id="list-head">
 						<fsms:render template="/message/header"/>
-						<fsms:render template="/message/message_list"/>
-						<g:layoutBody/>
+					</div>
+					<fsms:render template="/message/message_list"/>
+					<div id="list-foot">
 						<fsms:render template="/message/footer"/>
 					</div>
+				</div>
+				<div id="detail">
 					<fsms:render template="/message/message_details"/>
-				</g:form>
-			</div>
+				</div>
+			</g:form>
 		</div>
+		<div id="notifications">
+			<fsms:render template="/system_notifications"/>
+			<fsms:render template="/flash"/>
+		</div>
+		<fsms:render template="/system_menu"/>
+		<div id="thinking"></div>
 		<r:layoutResources/>
 	</body>
 </html>

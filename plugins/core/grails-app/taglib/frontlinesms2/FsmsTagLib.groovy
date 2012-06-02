@@ -4,6 +4,21 @@ class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
 
+	def tab = { att, body ->
+		def con = att.controller
+		out << '<li class="' + con
+		if(con == params.controller) out << ' current'
+		out << '">'
+
+		out << g.link(controller:con) {
+			out << g.message(code:"tab.$con")
+		}
+
+		body()
+
+		out << '</li>'
+	}
+
 	def radioGroup = { att ->
 		def values = att.values.tokenize(',')*.trim()
 		def labels = att.labels.tokenize(',')*.trim()

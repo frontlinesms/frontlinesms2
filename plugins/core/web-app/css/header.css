@@ -73,21 +73,10 @@
 	padding: 0;
 }
 #tab-nav li.tab {
-	background-image: url('../images/buttons/tab.png');
 	background-repeat: no-repeat;
 	background-size: 100%;
 	min-width: 110px;
 	z-index: 1;
-}
-#tab-nav li.tab.current {
-	background-image: url('../images/buttons/tab_active.png');
-	z-index: 10;
-}
-#tab-nav li.tab:hover {
-	background-image: url('../images/buttons/tab_hover.png');
-}
-#tab-nav li.tab:active {
-   	background-image: url('../images/buttons/tab_pressed.png');
 }
 a.tab-link{
 	display: block;
