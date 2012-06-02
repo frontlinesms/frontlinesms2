@@ -1,28 +1,39 @@
-var Resizer = function(listId, listHeaderId, listFooterId) {
-	var main_header_height = $("#head").height(),
-		list_header = $("#" + listHeaderId),
-		list_footer = $("#" + listFooterId),
-		list = $("#" + listId),
-		list_left = list.css("left"),
-		list_right = list.css("right"),
-		do_resize = function() {
-			list.css('top', list_header.height() + main_header_height);
-			list.css('bottom', list_footer.height());
+var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_selecter) {
+	// for speed, could:
+	// * cache jQuery objects _fixed_headers and _fixed_footers
+	// * set width and position CSS only on first init
+	var
+		_main_header_height = $("#head").height(), // this height is fixed
+		_fixed_headers = $(fixed_header_selecter),
+		_fixed_footers = $(fixed_footer_selecter),
+		_container = $(container_selecter);
+		_resize = function() {
+			var _header_offset = _main_header_height;
+			var _container_left = _container.css("left");   // FF gives these values in px instead of % so
+			var _container_right = _container.css("right"); // we have to recalculate every resize
+			_fixed_headers.each(function(i, element) {
+				element = $(element);
+				element.css("position", "fixed");
+				element.css("top", _header_offset);
+				element.css("left", _container_left);
+				element.css("right", _container_right);
+				element.css("width", "auto");
+				_header_offset += element.height();
+			});
+
+			var _footer_offset = 0;
+			_fixed_footers.each(function(i, element) {
+				element = $(element);
+				element.css("position", "fixed");
+				element.css("bottom", _footer_offset);
+				element.css("left", _container_left);
+				element.css("right", _container_right);
+				_footer_offset += element.height();
+			});
+			_container.css('top', _header_offset);
+			_container.css('bottom', _footer_offset);
 		};
-
-	// initialise
-	list_header.css("position", "fixed");
-	list_header.css("top", main_header_height);
-	list_header.css("left", list_left);
-	list_header.css("right", list_right);
-
-	list_footer.css("position", "fixed");
-	list_footer.css("bottom", 0);
-	list_footer.css("left", list_left);
-	list_footer.css("right", list_right);
-
-	do_resize();
-
-	return do_resize;
+	_resize();
+	return _resize;
 };
 
