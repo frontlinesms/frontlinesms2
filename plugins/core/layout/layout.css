@@ -11,11 +11,11 @@ ul, ol { list-style: none; }
 #tabs { position:absolute;left:17%;bottom:0; }
 #tabs li { display:inline; }
 
-#body-menu, #list, #detail { position:absolute;overflow:auto;top:80px;bottom:0; }
+#body-menu, #list-container, #detail { position:absolute;overflow:auto;top:80px;bottom:0; }
 
 #body-menu { left:0;right:83%;background-color:#0C5; }
-#body.messages #list { left:17%;right:21%;background-color:#0C4; }
-#body.messages #list > * { width:100%; }
+#body.messages #list-container { left:17%;right:21%;background-color:#0C4; }
+#body.messages #list-container > * { width:100%; }
 #body.messages #list-head { background-color:#C06; }
 #body.messages #list-foot { background-color:#C05; }
 #body.messages #detail { left:79%;right:0;background-color:#0c3; }

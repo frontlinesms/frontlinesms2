@@ -1,7 +1,9 @@
 var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_selecter) {
-	// for speed, could:
-	// * cache jQuery objects _fixed_headers and _fixed_footers
-	// * set width and position CSS only on first init
+	// TODO
+	// * for speed, could:
+	//   - cache jQuery objects _fixed_headers and _fixed_footers
+	//   - set width and position CSS only on first init
+	// * does not currently behave well for table headings as column widths break for the header when it is removed from normal flow
 	var
 		_main_header_height = $("#head").height(), // this height is fixed
 		_fixed_headers = $(fixed_header_selecter),

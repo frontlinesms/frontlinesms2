@@ -9,7 +9,7 @@
 		<script>
 			if(window.location.href.indexOf("nojs") == -1) {
 				$(function() {
-					$(window).resize(new Resizer('#list', '#list-head,thead', '#list-foot'));
+					$(window).resize(new Resizer('#list-container', '#list-head', '#list-foot'));
 				});
 			}
 		</script>
@@ -40,11 +40,11 @@
 						<li>Menu Item 2</li>
 					</ul>
 				</div>
-				<div id="list">
+				<div id="list-container">
 					<div id="list-head">
 						I am the list header and I want to resize when the window gets bigger and smaller.  Is that actually possible?  Certainly we don't have it working right now...
 					</div>
-					<table>
+					<table id="list">
 						<thead>
 							<tr>
 								<th>Column1</th><th>Column2</th>
