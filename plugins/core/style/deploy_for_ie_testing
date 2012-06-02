@@ -1,0 +1,3 @@
+rm -rf ~/Desktop/virtualbox-share/style
+mkdir ~/Desktop/virtualbox-share/style
+cp -r ../style ~/Desktop/virtualbox-share/style

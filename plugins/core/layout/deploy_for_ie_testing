@@ -1,2 +1,0 @@
-rm -rf ~/Desktop/virtualbox-share
-cp -r ../layout ~/Desktop/virtualbox-share
