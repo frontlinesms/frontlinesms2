@@ -1,15 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
         <head>
                 <title>Layout :: LONG MENU</title>
+		<link href="reset.css" type="text/css" rel="stylesheet"/>
 		<link href="layout.css" type="text/css" rel="stylesheet"/>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="jquery-1.7.1.min.js"></script>
 		<script src="resizer.js"></script>
 		<script>
-			$(function() {
-				var resizer = new Resizer('list', 'list-head', 'list-foot');
-				resizer.go();
-				$(window).resize(resizer.go);
-			});
+			if(window.location.href.indexOf("nojs") == -1) {
+				$(function() {
+					$(window).resize(new Resizer('list', 'list-head', 'list-foot'));
+				});
+			}
 		</script>
         </head>
         <body>
@@ -20,6 +22,16 @@
 				<a href="messages2.html">LONG MENU</a>
 				<a href="messages3.html">LONG LIST</a>
 				<a href="messages4.html">LONG CONTENT</a>
+
+				<div id="tabs">
+					<ul>
+						<li><a href="#">Messages</a></li>
+						<li><a href="#">Messages</a></li>
+						<li><a href="#">Messages</a></li>
+						<li><a href="#">Messages</a></li>
+						<li><a href="#">Messages</a></li>
+					</ul>
+				</div>
 			</div>
 			<div id="body" class="messages">
 				<div id="body-menu">
@@ -66,9 +78,16 @@
 						I am the list header and I want to resize when the window gets bigger and smaller.  Is that actually possible?  Certainly we don't have it working right now...
 					</div>
 					<table>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
+						<thead>
+							<tr>
+								<th>Column1</th><th>Column2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+						</tbody>
 					</table>
 					<div id="list-foot">
 						I am the list footer
@@ -80,6 +99,12 @@
 				<div class="clearfix"></div>
                         </div>
                 </div>
+		<div id="system-menu">
+			<ul>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Help</a></li>
+			</ul>
+		</div>
         </body> 
 </html> 
 

@@ -1,15 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
         <head>
                 <title>Layout :: LONG CONTENT</title>
+		<link href="reset.css" type="text/css" rel="stylesheet"/>
 		<link href="layout.css" type="text/css" rel="stylesheet"/>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="jquery-1.7.1.min.js"></script>
 		<script src="resizer.js"></script>
 		<script>
-			$(function() {
-				var resizer = new Resizer('list', 'list-head', 'list-foot');
-				resizer.go();
-				$(window).resize(resizer.go);
-			});
+			if(window.location.href.indexOf("nojs") == -1) {
+				$(function() {
+					$(window).resize(new Resizer('list', 'list-head', 'list-foot'));
+				});
+			}
 		</script>
         </head>
         <body>
@@ -67,6 +69,8 @@
 						<li>Menu Item X</li>
 						<li>Menu Item X</li>
 						<li>Menu Item X</li>
+						<li>Menu Item X</li>
+						<li>Menu Item X</li>
 					</ul>
 				</div>
 				<div id="list">
@@ -74,99 +78,109 @@
 						I am the list header and I want to resize when the window gets bigger and smaller.  Is that actually possible?  Certainly we don't have it working right now...
 					</div>
 					<table>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
-						<tr>
-							<td>cell 1</td><td>cell 2</td>
-						</tr>
+						<thead>
+							<tr>
+								<th>Column1</th><th>Column2</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+							<tr>
+								<td>cell 1</td><td>cell 2</td>
+							</tr>
+						</tbody>
 					</table>
 					<div id="list-foot">
 						I am the list footer
