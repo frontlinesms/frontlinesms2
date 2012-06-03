@@ -1,0 +1,10 @@
+#body.messages #body-menu { background-color:white; }
+li h3 { text-transform:uppercase; font-weight:bold;
+	padding:5px 0 5px 25px; margin:12px 17px 5px 15px;
+	background-position:left center; background-repeat:no-repeat; }
+li.messages h3 { background-image:url("../images/icons/message.png"); }
+li.activities h3 { background-image:url("../images/icons/activity.png"); }
+li.folders h3 { background-image:url("../images/icons/folder.png"); }
+#body-menu a { display:block; padding:5px 17px 5px 40px; }
+#body-menu .selected a { background-color:#d8e8ef; }
+#body-menu a:hover { background-color:#e5eff3; }

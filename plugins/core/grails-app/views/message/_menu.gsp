@@ -35,7 +35,7 @@
 				</li>
 			</ul>
 		</li>
-		<li>
+		<li class="folders">
 			<h3><g:message code="folder.header"/></h3>
 		 	<ul class="submenu">
 				<g:each in="${folderInstanceList}" status="i" var="f">
