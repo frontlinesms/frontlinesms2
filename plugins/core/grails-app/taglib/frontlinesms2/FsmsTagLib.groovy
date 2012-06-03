@@ -8,11 +8,11 @@ class FsmsTagLib {
 		def con = att.controller
 		out << '<li class="' + con
 		if(con == params.controller) out << ' current'
-		out << '">'
-
+		out << '"><span class="title">'
 		out << g.link(controller:con) {
 			out << g.message(code:"tab.$con")
 		}
+		out << '</span>'
 
 		body()
 

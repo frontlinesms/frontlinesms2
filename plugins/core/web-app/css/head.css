@@ -7,18 +7,17 @@
 	background-image:url("../images/tabbar.png"); background-repeat:repeat-x; background-position:bottom left; }
 #tabs a { display:block; text-align:center; text-transform:uppercase; line-height:26px; }
 #tabs li { background-image:url("../images/tab/standard.png"); background-repeat:no-repeat;
-	width:110px; height:26px; position:relative; bottom:-3px; }
+	width:110px; height:26px; position:relative; }
 #tabs li.current, #tabs li.current:hover, #tabs li.current:active { background-image:url("../images/tab/standard_current.png");
-	z-index:10; position:relative; bottom:-2px;padding-bottom:1px; height:30px; }
-#tabs li.current a { line-height:30px; }
+	z-index:10; position:relative; bottom:-1px;padding-bottom:1px; }
 #tabs li:hover { background-image:url("../images/tab/standard_hover.png"); }
 #tabs li:active { background-image:url("../images/tab/standard_pressed.png"); }
-#tabs li.message { background-image:url("../images/tab/message.png"); width:125px; }
+#tabs li.message { background-image:url("../images/tab/message.png"); width:150px; }
 #tabs li.message.current, #tabs li.message.current:hover, #tabs li.message.current:active {
 	background-image:url("../images/tab/message_current.png"); }
 #tabs li.message:hover { background-image:url("../images/tab/message_hover.png"); }
 #tabs li.message:active { background-image:url("../images/tab/message_pressed.png"); }
-#tabs li.status { background-image:url("../images/tab/status.png"); }
+#tabs li.status { background-image:url("../images/tab/status.png"); width:120px; }
 #tabs li.status.current, #tabs li.status.current:hover, #tabs li.status.current:active {
 	background-image:url("../images/tab/status_current.png"); }
 #tabs li.status:hover { background-image:url("../images/tab/status_hover.png"); }
