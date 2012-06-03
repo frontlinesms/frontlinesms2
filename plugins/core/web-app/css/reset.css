@@ -19,11 +19,17 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
 	text-align: left;
 }
+
+html {
+	font-size: 12px;
+	font-family: Helvetica,Arial,sans-serif;
+	color: #333;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
