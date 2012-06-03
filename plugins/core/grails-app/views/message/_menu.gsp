@@ -5,16 +5,16 @@
 			<h3><g:message code="fmessage.header"/></h3>
 			<ul class="submenu">
 				<li class="${(messageSection=='inbox')? 'selected':''}">
-					<g:link action="inbox"><g:message code="fmessage.inbox"/></g:link>
+					<g:link action="inbox"><g:message code="fmessage.section.inbox"/></g:link>
 				</li>
 				<li class="${(messageSection=='sent')? 'selected':''}">
-					<g:link action="sent"><g:message code="fmessage.sent"/></g:link>
+					<g:link action="sent"><g:message code="fmessage.section.sent"/></g:link>
 				</li>
 				<li class="${(messageSection=='pending')? 'selected':''}">
-					<g:link action="pending" class="${hasFailedMessages ? 'pending-send-failed' : ''}"><g:message code="fmessage.pending"/><span id="error-icon"/></g:link>
+					<g:link action="pending" class="${hasFailedMessages ? 'pending-send-failed' : ''}"><g:message code="fmessage.section.pending"/><span id="error-icon"/></g:link>
 				</li>
 				<li class="${(messageSection=='trash')? 'selected':''}">
-					<g:link action="trash"><g:message code="fmessage.trash"/></g:link>
+					<g:link action="trash"><g:message code="fmessage.section.trash"/></g:link>
 				</li>
 			</ul>
 		</li>
