@@ -1,0 +1,6 @@
+td a, th a { display:block; }
+th.sortable a { background-repeat:no-repeat; background-position:center left; }
+th.sortable.asc a, th.sortable.desc a { padding-left:25px; }
+th.sortable.asc a { background-image:url("../images/buttons/down_arrow.png"); }
+th.sortable.desc a { background-image:url("../images/buttons/up_arrow.png"); }
+

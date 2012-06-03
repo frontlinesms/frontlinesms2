@@ -17,3 +17,14 @@ li.folders h3 { background-image:url("../images/icons/folder.png"); }
 #body.messages #list-head h1.pending { background-image:url("../images/icons/pending.png"); }
 #body.messages #list-head h1.trash { background-image:url("../images/icons/trash.png"); }
 #body.messages #list-head ul { position:absolute; top:0; right:17px; }
+
+#body.messages #list { background-color:white; }
+#body.messages #list thead tr { height:26px; font-weight:bold;
+	background-image:url("../images/menubar.png"); background-repeat:repeat-x; background-position:top left; }
+#body.messages #list tr > * { width:0; padding:0 3px; vertical-align:middle; }
+#body.messages #list tr > .content { width:100%; }
+#body.messages #list .unread { font-weight:bold; }
+#body.messages #list a.starred { background-image:url("../images/icons/star.png"); }
+#body.messages #list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
+#body.messages #list a.starred, #body.messages #list a.unstarred { width:16px; height:16px; }
+
