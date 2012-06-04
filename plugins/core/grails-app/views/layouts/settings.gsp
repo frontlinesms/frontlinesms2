@@ -12,10 +12,7 @@
 		<fsms:render template="/head"/>
 		<div id="body" class="settings">
 			<fsms:render template="/settings/menu"/>
-			<div id="content">
-				<div class="section-header">
-					<h3 class="settings"><g:message code="layout.settings.header"/></h3>
-				</div>
+			<div id="content-container">
 				<g:layoutBody/>
 			</div>
 		</div>
