@@ -16,6 +16,7 @@
 #body.messages #list-head ul.buttons li { display:inline-block; }
 
 #body.messages #list-head .activity ul.info { padding-bottom:15px; }
+#body.messages #list-head .activity.folder ul.info { padding-bottom:0; }
 #body.messages #list-head .activity ul.info li { display:block; padding:5px 10px; }
 #body.messages #list-head .activity .header-buttons { text-align:right; }
 #body.messages #list-head .activity .header-buttons > * { margin:2px 0; }

@@ -2,7 +2,7 @@
 #body-menu a { display:block; padding:5px 17px 5px 40px; }
 #body-menu .selected a { background-color:#d8e8ef; }
 #body-menu a:hover { background-color:#e5eff3; }
-#body-menu a.btn { padding:5px 0; margin:0 17px 0 40px; }
+#body-menu a.btn { padding:5px 0; margin:0 40px 0 40px; }
 #body-menu li.create { padding:5px 0; }
 #body-menu li h3 { text-transform:uppercase; font-weight:bold;
 	padding:5px 0 5px 25px; margin:12px 17px 5px 15px;
