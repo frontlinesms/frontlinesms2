@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title><g:layoutTitle default="Archive"/></title>
+		<title>Archive >> <g:layoutTitle/></title>
 		<g:layoutHead/>
 		<r:require module="archive"/>
 		<fsms:render template="/includes"/>

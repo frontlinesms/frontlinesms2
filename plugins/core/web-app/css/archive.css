@@ -5,3 +5,4 @@
 #body-menu .activity a, #list-head h1.activity-archive { background-image:url("../images/archive/activity.png"); }
 #body-menu .folder a, #list-head h1.folder-archive { background-image:url("../images/archive/folder.png"); }
 
+#body.messages #list.archive th.name { width:100%; }
