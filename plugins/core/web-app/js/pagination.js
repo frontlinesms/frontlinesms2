@@ -1,3 +1,4 @@
+/** TODO this should be moved into a taglib */
 function disablePaginationControls() {
 	if($(".prevLink").size() == 0) {
 		$("#paging").prepend('<a href="#" class="prevLink disabled"></a>');
@@ -11,3 +12,4 @@ function disablePaginationControls() {
 	}
 	$(".disabled").click(function(e) {e.preventDefault()});
 }
+
