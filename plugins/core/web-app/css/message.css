@@ -11,9 +11,14 @@
 #body.messages #list-head h1.sent { background-image:url("../images/icons/sent.png"); }
 #body.messages #list-head h1.pending { background-image:url("../images/icons/pending.png"); }
 #body.messages #list-head h1.trash { background-image:url("../images/icons/trash.png"); }
-#body.messages #list-head h1.activity { background-image:url("../images/icons/activity.png"); }
+#body.messages #list-head .activity h1 { background-image:url("../images/icons/activity.png"); }
 #body.messages #list-head ul.buttons { text-align:right; }
 #body.messages #list-head ul.buttons li { display:inline-block; }
+
+#body.messages #list-head .activity ul.info { padding-bottom:5px; }
+#body.messages #list-head .activity ul.info li { display:block; padding:5px 10px; }
+#body.messages #list-head .activity .header-buttons { text-align:right; }
+#body.messages #list-head .activity .header-buttons > * { margin:2px 0; }
 
 #body.messages #list tr > * { width:0; }
 #body.messages #list tr > .content { width:100%; }
