@@ -2,18 +2,20 @@
 <g:hiddenField name="starred" value="${params.starred}"/>
 <g:hiddenField name="failed" value="${params.failed}"/>
 
-<g:if test="${ownerInstance}">
-	<h1 class="${ownerInstance.shortName}">
-		<g:message code="fmessage.section.${ownerInstance.shortName}" args="${[ownerInstance.name]}"/>
-	</h1>
-	<fsms:render template="/activity/${ownerInstance.shortName}/list_head"/>
-</g:if>
-<g:else>
-	<h1 class="${messageSection}">
-		<g:message code="fmessage.section.${messageSection}"/>
-	</h1>
-	<fsms:render template="/message/section_action_buttons"/>
-</g:else>
+<div class="content">
+	<g:if test="${ownerInstance}">
+		<h1 class="${ownerInstance.shortName}">
+			<g:message code="fmessage.section.${ownerInstance.shortName}" args="${[ownerInstance.name]}"/>
+		</h1>
+		<fsms:render template="/activity/${ownerInstance.shortName}/list_head"/>
+	</g:if>
+	<g:else>
+		<h1 class="${messageSection}">
+			<g:message code="fmessage.section.${messageSection}"/>
+		</h1>
+		<fsms:render template="/message/section_action_buttons"/>
+	</g:else>
+</div>
 
 <g:if test="${false}">
 	The following is kept for quick reference when recreating... shortly ;¬)
