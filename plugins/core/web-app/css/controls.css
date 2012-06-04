@@ -7,7 +7,6 @@
 #body-menu li h3 { text-transform:uppercase; font-weight:bold;
 	padding:5px 0 5px 25px; margin:12px 17px 5px 15px;
 	background-position:left center; background-repeat:no-repeat; }
-#body-menu li a { background-position:left center; background-repeat:no-repeat; }
 
 thead tr { height:26px; font-weight:bold;
 	background-image:url("../images/menubar.png"); background-repeat:repeat-x; background-position:center left; }

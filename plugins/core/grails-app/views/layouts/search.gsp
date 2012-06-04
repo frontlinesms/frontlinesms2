@@ -14,33 +14,31 @@
 		</r:script>
 		<r:layoutResources/>
 	</head>
-	<body id="search-tab">
-		<div id="header">
-			<div id="notifications">
-				<fsms:render template="/system_notifications"/>
-				<fsms:render template="/flash"/>
-			</div>
-			<fsms:render template="/system_menu"/>
+	<body>
+		<div id="head">
 			<fsms:render template="/tabs"/>
 		</div>
-        <div id="main">
+		<div id="body" class="messages">
 			<fsms:render template="menu"/>
-			<div id="content">
-				<g:form controller="${params.controller}"
-						params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
-					<!-- Remove this hidden field when search moves are made a bit more sensible -->
-					<g:hiddenField name="searchId" value="${search?.id}"/>
-					<div id="message-list" class="${(messageSection == 'inbox' || messageSection == 'sent' || messageSection == 'pending' || messageSection == 'trash' || messageSection == 'radioShow' || messageSection == 'folder' || params.action == 'no_search') ? '' : 'tall-header'}">
+			<g:form controller="${params.controller}"
+					params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
+				<g:hiddenField name="searchId" value="${search?.id}"/>
+				<div id="list-container">
+					<div id="list-head">
 						<fsms:render template="/search/header"/>
-						<fsms:render template="/message/message_list"/>
-						<g:layoutBody/>
+					</div>
+					<fsms:render template="/message/message_list"/>
+					<div id="list-foot">
 						<fsms:render template="/message/footer"/>
 					</div>
+				</div>
+				<div id="detail">
 					<fsms:render template="/message/message_details"/>
-				</g:form>
+				</div>
+			</g:form>
 			</div>
 		</div>
-		<r:layoutResources/>
+		<fsms:render template="/system"/>
 	</body>
 </html>
 
