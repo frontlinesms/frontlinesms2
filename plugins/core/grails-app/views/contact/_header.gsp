@@ -1,6 +1,6 @@
-<div class="section-header">
+<div class="content ${contactsSection?.shortName?:'all'}">
 	<g:if test="${contactsSection instanceof frontlinesms2.Group || contactsSection instanceof frontlinesms2.SmartGroup}">
-		<h3 class="${contactsSection.shortName} title">${contactsSection.name} (${contactInstanceTotal})</h3>
+		<h1>${contactsSection.name} (${contactInstanceTotal})</h1>
 		<div class="header-buttons">
 			<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 				<g:select class="dropdown" name="group-actions" from="${[message(code: 'group.rename'), message(code: 'group.delete')]}"
@@ -16,9 +16,10 @@
 		</div>
 	</g:if>
 	<g:else>
-		<h3 id="all-contacts title"><g:message code="contact.all.contacts"/></h3>
+		<h1><g:message code="contact.all.contacts"/></h1>
 		<div class="header-buttons">
 			<g:remoteLink class="btn" controller="export" action="contactWizard" onSuccess="launchSmallPopup(i18n('smallpopup.contact.export.title'), data, i18n('smallpopup.export'))"><g:message code="contact.export"/></g:remoteLink>
 		</div>
 	</g:else>
 </div>
+
