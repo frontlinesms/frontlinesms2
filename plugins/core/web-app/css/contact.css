@@ -17,3 +17,8 @@
 #body.contacts #list li.selected { background-color:#d8e8ef; }
 #body.contacts #list li > * { display:table-cell; vertical-align:middle; }
 #body.contacts #list li a { padding:7px; width:100%; }
+
+#body.contacts #detail { padding:17px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
+#body.contacts #detail #single-contact input, #body.contacts #detail #single-contact textarea { border:none; }
+#body.contacts #detail #single-contact .buttons { position:absolute; top:17px; right:17px; }
+#body.contacts #detail #multiple-contacts { display:none; }

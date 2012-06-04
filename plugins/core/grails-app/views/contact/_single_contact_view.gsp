@@ -22,11 +22,11 @@
 			</a>
 		</g:if>
 	</div>
-	<div class="basic-info">
+	<div class="input basic-info">
 		<label for="name"><g:message code="contact.name.label" default="Name"/></label>
 		<g:textField name="name" id="name" value="${contactInstance?.name}"/>
 	</div>
-	<div class="basic-info">
+	<div class="input basic-info">
 		<label for="mobile"><g:message code="contact.mobile.label" default="Mobile"/></label>
 		<g:textField class="numberField" name="mobile" id="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();"/>
 		<g:if test="${contactInstance?.mobile?.trim()}">
@@ -35,8 +35,8 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-   	<div class="basic-info">
-		<label for="email"><g:message code="contact.email.label" default="Email"/></label>
+	<div class="input basic-info">
+		<label for="email"><g:message code="contact.email.label"/></label>
 		<g:textField name="email" id="email" value="${contactInstance?.email?.trim()}"/>
 		<g:if test="${contactInstance?.email?.trim() && contactInstance?.validate(['email', contactInstance?.email])}">
 			<a class="remove-field" id="remove-email"></a>
@@ -44,18 +44,14 @@
 			</g:remoteLink>
 		</g:if>
 	</div>
-	<div id='custom-list' class="basic-info">
-		<ul id="custom-field-list">
-			  <g:each in="${contactFieldInstanceList}" status="i" var="f">
-				  <li class="${f == fieldInstance ? 'selected' : ''}">
-					  <label for="custom-field-${f.name}">${f.name}</label>
-					  <input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
-					  <a class="remove-field" id="remove-field-${f.id}"></a>
-				  </li>
-			  </g:each>
-		</ul>
-	</div>
-	<div id='info-add' class="basic-info">
+	<g:each in="${contactFieldInstanceList}" status="i" var="f">
+		<div class="input ${f==fieldInstance? 'selected': ''}">
+			<label for="custom-field-${f.name}">${f.name}</label>
+			<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
+			<a class="remove-field" id="remove-field-${f.id}"></a>
+		</div>
+	</g:each>
+	<div id="info-add" class="button-container">
 		<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
 			<option class="not-field" value="na"><g:message code="contact.customfield.addmoreinformation"/></option>
 			<option class="predefined-field" value="Street address"><g:message code="contact.customfield.streetaddress"/></option>
@@ -70,11 +66,11 @@
 			<option class="create-custom-field" value='add-new'><g:message code="contact.customfield.option.createnew"/></option>
 		</select>
 	</div>
-	<div id='note-area' class="basic-info">
+	<div id='note-area' class="input basic-info">
 		<label for="notes"><g:message code="contact.notes.label"/></label>
 		<g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/>
 	</div>
-	<div id="group-section" class="basic-info">
+	<div id="group-section" class="input basic-info">
 		<label for="groups"><g:message code="contact.groups.label"/></label>
 		<div>
 			<ol id='group-list'>
@@ -87,15 +83,13 @@
 					<p><g:message code="contact.notinanygroup.label"/></p>
 				</li>
 			</ol>
+			<select id="group-dropdown" name="group-dropdown">
+				<option class="not-group"><g:message code="contact.add.to.group"/></option>
+				<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
+					<option value="${g.id}">${g.name}</option>
+				</g:each>
+			</select>
 		</div>
-	</div>
-	<div id='group-add' class="basic-info">
-		<select id="group-dropdown" name="group-dropdown">
-			<option class="not-group"><g:message code="contact.add.to.group"/></option>
-			<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
-				<option value="${g.id}">${g.name}</option>
-			</g:each>
-		</select>
 	</div>
 	<div id='message-stats'>
 		<label for="messages"><g:message code="contact.messages.label"/></label>
@@ -111,24 +105,21 @@
 	</div>
 </div>
 <r:script>
-	$(document).ready(function(){
-	$('#group-dropdown').live("change", function(){
-			$('select').selectmenu();
-		});
+function refreshMessageStats(data) {
+	var url = 'contact/messageStats';
+	var numSent = $('#num-sent');
+	var numRecieved = $('#num-recieved');
+	$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
+		numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount));
+		numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount));
 	});
+}
 
-	function refreshMessageStats(data) {
-		var url = 'contact/messageStats'
-		var numSent = $('#num-sent')
-		var numRecieved = $('#num-recieved')
-		$.getJSON(url_root + url, {id: "${contactInstance?.id}"},function(data) {
-			numSent.text(numSent.text().replace(/\d{1,}/, data.outboundMessagesCount))
-			numRecieved.text(numRecieved.text().replace(/\d{1,}/, data.inboundMessagesCount))
-		});
-		
-	}
-	
-	$(function() {
-		setInterval(refreshMessageStats, 15000);
+$(function() {
+	$('#group-dropdown').live("change", function() {
+		$('select').selectmenu();
 	});
+	setInterval(refreshMessageStats, 15000);
+});
 </r:script>
+
