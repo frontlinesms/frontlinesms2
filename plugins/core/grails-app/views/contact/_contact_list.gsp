@@ -27,7 +27,7 @@
 		</ul>
 	</g:if>
 	<g:else>
-		<div id="contact-list">
+		<div id="list">
 			 <p class="no-content"><g:message code="contact.list.no.contact"/></p>
 		</div>
 	</g:else>

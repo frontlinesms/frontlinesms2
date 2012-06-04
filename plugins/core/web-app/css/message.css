@@ -17,7 +17,7 @@
 
 #body.messages #list tr > * { width:0; }
 #body.messages #list tr > .content { width:100%; }
-#body.messages #list tr > .no-content { width:100%; font-weight:bold; font-size:180%; text-align:center; padding:17px; }
+#body.messages #list tr > .no-content { width:100%; }
 #body.messages #list .unread { font-weight:bold; }
 #body.messages #list a.starred { background-image:url("../images/icons/star.png"); }
 #body.messages #list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
