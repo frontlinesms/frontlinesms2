@@ -12,24 +12,24 @@
 			<g:each in="${activityInstanceList}" var="a">
 				<tr>
 					<td>
-						<g:link controller="archive" action="${a instanceof frontlinesms2.Announcement ? announcement : poll}" params="[messageSection: 'activity', ownerId: a.id, viewingMessages: true]">
+						<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
 							${a.name}
 						</g:link>
 					</td>
 					<td>
-						<g:link controller="archive" action="${a instanceof frontlinesms2.Announcement ? announcement : poll}" params="[messageSection: 'activity', ownerId: a.id, viewingMessages: true]">
-							${a instanceof frontlinesms2.Announcement ? 'Announcement' : 'Poll'}
+						<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+							<g:message code="${a.shortName}.label"/>
 						</g:link>
 					</td>
 					<td>
-						<g:link controller="archive" action="${a instanceof frontlinesms2.Announcement ? announcement : poll}" params="[messageSection: 'activity', ownerId: a.id, viewingMessages: true]">
+						<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
 							<fsms:unbroken>
 								<g:formatDate date="${a.dateCreated}"/>
 							</fsms:unbroken>
 						</g:link>
 					</td>
 					<td>
-						<g:link controller="archive" action="${a instanceof frontlinesms2.Announcement ? announcement : poll}" params="[messageSection: 'activity', ownerId: a.id, viewingMessages: true]">
+						<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
 							${a.liveMessageCount}
 						</g:link>
 					</td>
