@@ -1,7 +1,7 @@
 button, input[type=submit], a.btn{
 	display: inline-table;
 	border: none;
-	background-image: url('../images/buttons/button_default_2.png');
+	background-image: url('../images/button/standard.png');
 	background-repeat: repeat-x;
 	background-size: contain;
 	border-left: 1px solid #6b6b6b;
@@ -18,24 +18,24 @@ button, input[type=submit], a.btn{
 }
 
 button:hover, input[type=submit]:hover, a.btn:hover{
-	background-image: url('../images/buttons/button_hover_part.png');
+	background-image: url('../images/button/hover.png');
 	background-repeat: repeat-x;
 }
 
 button:active, input[type=submit]:active, a.btn:active{
-	background-image: url('../images/buttons/button_pressed_part.png');
+	background-image: url('../images/button/active.png');
 	background-repeat: repeat-x;
 }
 
 button[disabled=disabled], input[type=submit][disabled=disabled], a.btn[disabled=disabled]{
-	background-image: url('../images/buttons/button_disabled_part.png');
+	background-image: url('../images/button/disabled.png');
 	color: #9E9E9E;
 	pointer-events: none;
 	cursor: default;
 	background-repeat: repeat-x;
 }
 button[disabled=disabled]:hover, input[type=submit][disabled=disabled]:hover, a.btn[disabled=disabled]:hover{
-	background-image: url('../images/buttons/button_disabled_part.png');
+	background-image: url('../images/button/disabled.png');
 	color: #9E9E9E;
 }
 
