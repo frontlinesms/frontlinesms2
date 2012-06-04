@@ -1,6 +1,9 @@
 package frontlinesms2
 
 class SmartGroup {
+//> STATIC PROPERTIES
+	static final String shortName = 'smartgroup'
+
 //> SMART GROUP PROPERTIES
 	/** the name of this smart group itself.  This is mandatory. */
 	String name

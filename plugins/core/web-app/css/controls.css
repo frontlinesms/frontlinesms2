@@ -32,3 +32,16 @@ a.nextLink.disabled { background-image:url("../images/pagination/right_disabled.
 	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; padding:6px 10px;
 	color:black; cursor:pointer; text-align:center; }
 
+#body #list-container { border-left:1px solid #9e9e9e; background-color:white; }
+
+#body #list-head h1 { background-position:center left; background-repeat:no-repeat; padding:14px; padding-left:25px;
+	text-transform:uppercase; font-weight:bold; }
+
+#body #list { background-color:white; }
+#body #list .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
+
+#body #list-foot { background-color:#f0f0f0; border-top:solid #9e9e9e 1px; padding:10px 17px; font-size:95%; }
+#body #list-foot .controls { display:table; width:100%; }
+#body #list-foot .controls > * { display:table-cell; vertical-align:middle; }
+#body #list-foot .controls div#paging { text-align:right; font-size:0; }
+

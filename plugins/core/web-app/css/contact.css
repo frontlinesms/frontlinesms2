@@ -1,3 +1,19 @@
 #body-menu li.contacts h3 { background-image:url("../images/icons/contacts.png"); }
 #body-menu li.groups h3 { background-image:url("../images/icons/groups.png"); }
 #body-menu li.smartgroups h3 { background-image:url("../images/icons/smartgroups.png"); }
+
+#body.contacts #list-container > * { width:auto }
+#body.contacts #list-head { background-color:white; border-bottom:1px solid #9e9e9e; padding:0 17px; }
+#body.contacts #list-head .content { display:table; width:100%; padding-bottom:17px; }
+#body.contacts #list-head .content.all { display:table; width:100%; padding-bottom:0; }
+#body.contacts #list-head .content.all > * { display:table-cell; }
+#body.contacts #list-head .header-buttons { text-align:right; }
+#body.contacts #list-head .all h1 { background-image:url("../images/icons/contacts.png"); }
+#body.contacts #list-head .group h1 { background-image:url("../images/icons/groups.png"); }
+#body.contacts #list-head .smartgroup h1 { background-image:url("../images/icons/smartgroups.png"); }
+
+#body.contacts #list li { padding:0 17px; display:table; }
+#body.contacts #list li:hover { background-color:#e5eff3; }
+#body.contacts #list li.selected { background-color:#d8e8ef; }
+#body.contacts #list li > * { display:table-cell; vertical-align:middle; }
+#body.contacts #list li a { padding:7px; width:100%; }

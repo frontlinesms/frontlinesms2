@@ -74,8 +74,9 @@ class ExportController {
 			contactInstanceList = Contact.getAll()
 		else if(params.contactsSection == 'group')
 			contactInstanceList = Group.get(params.groupId).getMembers()
-		else if(params.contactsSection == 'smartGroup')
+		else if(params.contactsSection == 'smartgroup')
 			contactInstanceList = SmartGroup.get(params.groupId).getMembers()
+		else throw new RuntimeException("Unrecognised section: $params.contactsSection")
 		generateContactReport(contactInstanceList)
 	}
 

@@ -1,16 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 	<g:if test="${contactInstanceTotal > 0}">
-		<ul id="contact-list">
-			<g:if test="${!contactInstance ? false : !contactInstance.id}">
+		<ul id="list">
+			<g:if test="${contactInstance && !contactInstance.id}">
 				<li class="selected" id="newContact">
 					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select'/>
-					<a disabled="disabled" class="contact-name" href=""><g:message code="contact.new"/></a>
+					<a disabled="disabled" class="contact-name" href="#"><g:message code="contact.new"/></a>
 				</li>
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">
-				<li class="${c.id == contactInstance?.id ? 'selected' : ''}" id="contact-${c.id}">
+				<li class="${c.id==contactInstance?.id? 'selected': ''}" id="contact-${c.id}">
 					<g:checkBox name="contact-select" class="contact-select contact-select-checkbox" id="contact-select-${c.id}"
-							checked="${params.checkedId == c.id + '' ? 'true': 'false'}" value="${c.id}" onclick="itemCheckChanged('contact', ${c.id})"/>
+							checked="${params.checkedId==c.id}" value="${c.id}" onclick="itemCheckChanged('contact', ${c.id})"/>
 					<g:if test="${contactsSection instanceof frontlinesms2.Group}">
 						<g:set var="contactLinkParams" value="[groupId:contactsSection.id]"/>
 					</g:if>
@@ -27,7 +27,7 @@
 		</ul>
 	</g:if>
 	<g:else>
-		<div id="contact-list">
-			 <p><g:message code="contact.list.no.contact"/></p>
+		<div id="list">
+			 <p class="no-content"><g:message code="contact.list.no.contact"/></p>
 		</div>
 	</g:else>

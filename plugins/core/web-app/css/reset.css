@@ -24,7 +24,7 @@ time, mark, audio, video {
 	text-align: left;
 }
 
-html {
+html,input,textarea {
 	font-size: 12px;
 	font-family: Helvetica,Arial,sans-serif;
 	color: #333;
