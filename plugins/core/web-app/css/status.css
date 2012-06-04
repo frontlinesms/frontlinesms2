@@ -1,9 +1,9 @@
-#status-tab #main{
+#body.status #main{
 	background-color: #eee;
 	padding: 17px;
 	height: 96%;
 }
-#status-tab #traffic-status{
+#body.status #traffic-status{
 	float:left;
 	position:fixed;
 	top: 142px;
@@ -17,7 +17,7 @@
 	overflow-x: hide;
 	overflow-y: auto;
 }
-#status-tab #right-column{
+#body.status #right-column{
 	position:fixed;
 	right:0;
 	top: 83px;
@@ -28,7 +28,7 @@
 	overflow-x: hide;
 	overflow-y: auto;
 }
-#status-tab #connection-status{
+#body.status #connection-status{
 	min-height: 200px;
 	background: white;
 	margin: 0 25px 25px 25px;
@@ -37,7 +37,7 @@
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
-#status-tab #device-detection{
+#body.status #device-detection{
 	min-height: 100px;
 	background: white;
 	margin: 0 25px;
@@ -46,35 +46,35 @@
 	-webkit-border-radius: 4px;
 	padding: 17px
 }
-#status-tab #device-detection a{
+#body.status #device-detection a{
 	float: right;
 }
 
-#status-tab h3{
+#body.status h3{
 	padding: 17px;
 	background: #eee;
 	margin: 0 25px;
 	text-transform: uppercase;
 }
-#status-tab #traffic-title{
+#body.status #traffic-title{
 	float:left;
 	position:fixed;
 	top: 83px;
 	width: 45%;
 }
 	
-#status-tab #traffic-status #trafficGraph{
+#body.status #traffic-status #trafficGraph{
 	min-height: 200px;
 	height:50%;
 	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
-#status-tab #traffic-status form{
+#body.status #traffic-status form{
 	height:40%;
 }
 
-#status-tab #traffic-status .export-button{
+#body.status #traffic-status .export-button{
 	float: right;
 }
 
@@ -171,7 +171,7 @@
 	background-position: left middle;
 }
 
-#status-tab #update-status{
+#body.status #update-status{
 	height: 200px;
 	margin: 26px;
 }

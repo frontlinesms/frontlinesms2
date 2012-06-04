@@ -9,7 +9,8 @@
 		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send, smallpopup.messages.export.title, wizard.quickmessage.title, smallpopup.export, popup.ok, many.selected, message.character.count"/>
 		<r:script>
 			$(function() {  
-			   disablePaginationControls();
+				disablePaginationControls();
+				$(window).resize(new Resizer('#list-container', '#list-head', '#list-foot'));
 			});
 		</r:script>
 		<r:layoutResources/>
@@ -36,7 +37,6 @@
 					<fsms:render template="/message/message_details"/>
 				</div>
 			</g:form>
-			</div>
 		</div>
 		<fsms:render template="/system"/>
 	</body>

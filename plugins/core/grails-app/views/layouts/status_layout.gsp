@@ -9,20 +9,16 @@
 		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done, popup.ok"/>
 		<r:layoutResources/>
 	</head>
-	<body id="status-tab">
-		<div id="header">
-			<div id="notifications">
-				<fsms:render template="/system_notifications"/>
-				<fsms:render template="/flash"/>
-			</div>
-			<fsms:render template="/system_menu"/>
+	<body id="content">
+		<div id="head">
 			<fsms:render template="/tabs"/>
 		</div>
-		<div id="main">
-			<div class="content">
+		<div id="body" class="status">
+			<div id="content">
 				<g:layoutBody/>
 			</div>
 		</div>
-		<r:layoutResources/>
+		<fsms:render template="/system"/>
 	</body>
 </html>
+
