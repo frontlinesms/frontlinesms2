@@ -33,6 +33,7 @@ class FsmsTagLib {
 		}
 	}
 
+	/** FIXME use of this taglib should be replaced with CSS white-space:nowrap; */
 	def unbroken = { att, body ->
 		if(att.value) out << att.value.replaceAll(' ', '&nbsp;')
 		if(body) out << body().replaceAll(' ', '&nbsp;')
