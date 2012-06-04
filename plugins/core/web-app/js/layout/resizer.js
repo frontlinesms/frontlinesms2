@@ -8,9 +8,7 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 		_main_header_height = $("#head").outerHeight(), // this height is fixed
 		_getBorders = function(element) {
 			return {
-				top:{ width:element.css("border-top-width"), style:element.css("border-top-style"), color:element.css("border-top-color") },
 				right:{ width:element.css("border-right-width"), style:element.css("border-right-style"), color:element.css("border-right-color") },
-				bottom:{ width:element.css("border-bottom-width"), style:element.css("border-bottom-style"), color:element.css("border-bottom-color") },
 				left:{ width:element.css("border-left-width"), style:element.css("border-left-style"), color:element.css("border-left-color") }};
 		},
 		_setBorders = function(element, borders) {

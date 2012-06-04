@@ -4,10 +4,11 @@
 
 <div class="content">
 	<g:if test="${ownerInstance}">
-		<h1 class="${ownerInstance.shortName}">
+		<h1 class="activity ${ownerInstance.shortName}">
 			<g:message code="fmessage.section.${ownerInstance.shortName}" args="${[ownerInstance.name]}"/>
 		</h1>
 		<fsms:render template="/activity/${ownerInstance.shortName}/list_head"/>
+		<fsms:render template="/message/activity_buttons"/>
 	</g:if>
 	<g:else>
 		<h1 class="${messageSection}">
