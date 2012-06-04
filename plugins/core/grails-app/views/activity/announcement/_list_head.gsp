@@ -8,8 +8,10 @@
 	<li>
 		<g:message code="fmessage.activity.sentmessage" args="${ [sentMessageCount] }"/>
 	</li>
-	<li>
-		${ownerInstance.sentMessageText}
-	</li>
+	<g:if test="${ownerInstance.sentMessageText}">
+		<li>
+			${ownerInstance.sentMessageText}
+		</li>
+	</g:if>
 </ul>
 
