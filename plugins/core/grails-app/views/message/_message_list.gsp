@@ -65,9 +65,9 @@
 			</tr>
 		</g:elseif>
 		<g:else>
-			<tr id="no-messages">
-				<td colspan="5">
-					<h3><g:message code="fmessage.messages.none"/></h3>
+			<tr>
+				<td colspan="5" class="no-content">
+					<g:message code="fmessage.messages.none"/>
 				</td>
 			</tr>
 		</g:else>

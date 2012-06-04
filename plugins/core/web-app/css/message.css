@@ -1,32 +1,27 @@
-#body.messages #body-menu { background-color:white; }
-li h3 { text-transform:uppercase; font-weight:bold;
-	padding:5px 0 5px 25px; margin:12px 17px 5px 15px;
-	background-position:left center; background-repeat:no-repeat; }
-li.messages h3 { background-image:url("../images/icons/message.png"); }
-li.activities h3 { background-image:url("../images/icons/activity.png"); }
-li.folders h3 { background-image:url("../images/icons/folder.png"); }
-#body-menu a { display:block; padding:5px 17px 5px 40px; }
-#body-menu .selected a { background-color:#d8e8ef; }
-#body-menu a:hover { background-color:#e5eff3; }
-#body-menu a.btn { padding:5px 0; margin:0 17px 0 40px; }
+#body-menu li.messages h3 { background-image:url("../images/icons/message.png"); }
+#body-menu li.activities h3 { background-image:url("../images/icons/activity.png"); }
+#body-menu li.folders h3 { background-image:url("../images/icons/folder.png"); }
 
-#body.messages #list-container > * { border-left:solid #9e9e9e 1px; }
+#body.messages #list-container { border-left:1px solid #9e9e9e; background-color:white; }
+#body.messages #list-container > * { width:auto; }
 
 #body.messages #list-head { padding:0 17px; background-color:white; }
 #body.messages #list-head div.content { display:table; width:100%; }
-#body.messages #list-head div.content > * { display:table-cell; }
+#body.messages #list-head div.content > * { display:table-cell; vertical-align:middle; }
 #body.messages #list-head h1 { background-position:center left; background-repeat:no-repeat; padding:14px; padding-left:25px;
 	text-transform:uppercase; font-weight:bold; }
 #body.messages #list-head h1.inbox { background-image:url("../images/icons/inbox.png"); }
 #body.messages #list-head h1.sent { background-image:url("../images/icons/sent.png"); }
 #body.messages #list-head h1.pending { background-image:url("../images/icons/pending.png"); }
 #body.messages #list-head h1.trash { background-image:url("../images/icons/trash.png"); }
+#body.messages #list-head h1.activity { background-image:url("../images/icons/activity.png"); }
 #body.messages #list-head ul.buttons { text-align:right; }
 #body.messages #list-head ul.buttons li { display:inline-block; }
 
 #body.messages #list { background-color:white; }
 #body.messages #list tr > * { width:0; }
 #body.messages #list tr > .content { width:100%; }
+#body.messages #list tr > .no-content { width:100%; font-weight:bold; font-size:180%; text-align:center; padding:17px; }
 #body.messages #list .unread { font-weight:bold; }
 #body.messages #list a.starred { background-image:url("../images/icons/star.png"); }
 #body.messages #list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
@@ -37,3 +32,10 @@ li.folders h3 { background-image:url("../images/icons/folder.png"); }
 #body.messages #list-foot .controls > * { display:table-cell; vertical-align:middle; }
 #body.messages #list-foot .controls div#paging { text-align:right; font-size:0; }
 #body.messages #list-foot .controls div#message-toggler a { padding:0 10px; }
+
+#body.messages #detail { background-color:#d8e8ef; border-left:solid #9e9e9e 1px; padding:17px; }
+#body.messages #detail #message-detail-content { background-color:white; border:1px solid #B5C6CD; margin:17px 0; }
+#body.messages #detail #message-detail-content p { padding:17px; }
+#body.messages #detail #message-detail-content #no-message { text-align:center; }
+#body.messages #detail #message-detail-buttons { text-align:center; }
+#body.messages #detail #message-detail-buttons > * { width:35%;margin-bottom:10px; }

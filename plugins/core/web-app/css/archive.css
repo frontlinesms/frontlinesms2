@@ -1,0 +1,7 @@
+#body-menu.archive { padding:10px 0; }
+#body-menu.archive a { padding: 10px 17px 10px 60px; background-position:35px center; }
+#body-menu .inbox a { background-image:url("../images/archive/inbox.png"); }
+#body-menu .sent a { background-image:url("../images/archive/sent.png"); }
+#body-menu .activity a { background-image:url("../images/archive/activity.png"); }
+#body-menu .folder a { background-image:url("../images/archive/folder.png"); }
+
