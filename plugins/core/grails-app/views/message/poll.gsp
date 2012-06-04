@@ -103,7 +103,9 @@
 
 			setInterval(triggerPollGraphRefresh, 5000);
 			function triggerPollGraphRefresh() {
-				pollGraph.setStats();
+				if(pollGraph.loaded){
+					pollGraph.setStats();
+				}
 			}
 			
 		});
