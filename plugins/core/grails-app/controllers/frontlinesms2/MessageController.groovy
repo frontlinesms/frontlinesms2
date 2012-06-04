@@ -121,7 +121,7 @@ class MessageController {
 				sentDispatchCount += it.dispatches.size()
 				sentMessageCount++
 			}
-			render view:"../message/${activityInstance instanceof Poll ? 'poll' : 'standard'}",
+			render view:"/activity/${activityInstance.shortName}/show",
 				model:[messageInstanceList: messageInstanceList?.list(params),
 						messageSection: 'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
