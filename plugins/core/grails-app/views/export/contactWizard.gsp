@@ -5,11 +5,11 @@
 		<g:hiddenField name="contactsSection" value="${contactsSection}"/>
 		<g:hiddenField name="groupId" value="${groupId}"/>
 		<p class="info"><g:message code="export.contact.info"/></p>
-			<div>
-				<h2><g:message code="export.selectformat"/></h2>
-				<input type="radio" name="format" value="csv" checked="checked"/> <g:message code="export.csv"/><br/>
-				<input type="radio" name="format" value="pdf"/> <g:message code="export.pdf"/>
-			</div>
+		<div>
+			<h2><g:message code="export.selectformat"/></h2>
+			<input type="radio" name="format" value="csv" checked="checked"/><g:message code="export.csv"/><br/>
+			<input type="radio" name="format" value="pdf"/> <g:message code="export.pdf"/>
+		</div>
 	</g:form>
 </div>
 <r:script>
