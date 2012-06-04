@@ -16,9 +16,7 @@
 		<r:layoutResources/>
 	</head>
 	<body>
-		<div id="head">
-			<fsms:render template="/tabs"/>
-		</div>
+		<fsms:render template="/head"/>
 		<div id="body" class="messages">
 			<fsms:render template="/archive/menu"/>
 			<g:form controller="${params.controller}"

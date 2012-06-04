@@ -8,17 +8,9 @@
 		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send, popup.ok,logs.download.continue,logs.download.title"/>
 		<r:layoutResources/>
 	</head>
-	<body id="settings-tab">
-		<div id="thinking"></div>
-		<div id="header">
-			<div id="notifications">
-				<fsms:render template="/system_notifications"/>
-				<fsms:render template="/flash"/>
-			</div>
-			<fsms:render template="/system_menu"/>
-			<fsms:render template="/tabs"/>
-		</div>
-        <div id="main">
+	<body>
+		<fsms:render template="/head"/>
+		<div id="body" class="settings">
 			<fsms:render template="/settings/menu"/>
 			<div id="content">
 				<div class="section-header">
@@ -27,6 +19,6 @@
 				<g:layoutBody/>
 			</div>
 		</div>
-		<r:layoutResources/>
+		<fsms:render template="/system"/>
 	</body>
 </html>
