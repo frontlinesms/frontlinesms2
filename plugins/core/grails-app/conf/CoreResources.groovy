@@ -9,6 +9,8 @@ modules = {
 		resource url: [dir:'css', file:'archive.css']
 		resource url: [dir:'js/layout', file:'resizer.js'], disposition: 'head'
 
+		resource url: [dir:'css', file:'status.css']
+
 		resource url: [dir:'js', file:"application.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'

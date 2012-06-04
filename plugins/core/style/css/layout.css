@@ -11,7 +11,9 @@ ul, ol { list-style: none; }
 #tabs { position:absolute;left:17%;bottom:0; }
 #tabs li { display:inline; }
 
-#body-menu, #content-container, #list-container, #detail { position:absolute;overflow:auto;top:80px;bottom:0; }
+#body, #body-menu, #content-container, #list-container, #detail { position:absolute;overflow:auto;top:80px;bottom:0; }
+
+#body { left:0;right:0; }
 
 #body-menu { left:0;right:83%;background-color:#0C5; }
 #body.messages #list-container { left:17%;right:21%;background-color:#0C4; }
