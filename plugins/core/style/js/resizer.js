@@ -20,7 +20,7 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 				element.css("left", _container_left);
 				element.css("right", _container_right);
 				element.css("width", "auto");
-				_header_offset += element.height();
+				_header_offset += element.outerHeight();
 			});
 
 			var _footer_offset = 0;
@@ -30,7 +30,7 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 				element.css("bottom", _footer_offset);
 				element.css("left", _container_left);
 				element.css("right", _container_right);
-				_footer_offset += element.height();
+				_footer_offset += element.outerHeight();
 			});
 			_container.css('top', _header_offset);
 			_container.css('bottom', _footer_offset);

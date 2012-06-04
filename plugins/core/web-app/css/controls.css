@@ -7,3 +7,12 @@ th.sortable.asc a, th.sortable.desc a { padding-left:25px; }
 th.sortable.asc a { background-image:url("../images/buttons/down_arrow.png"); }
 th.sortable.desc a { background-image:url("../images/buttons/up_arrow.png"); }
 
+a.prevLink, a.nextLink { display:inline-block; width:25px; height:25px; background-position:center left; background-repeat:no-repeat; }
+a.prevLink { background-image:url("../images/pagination/left.png"); }
+a.prevLink:hover { background-image:url("../images/pagination/left_hover.png"); }
+a.prevLink:active { background-image:url("../images/pagination/left_active.png"); }
+a.prevLink.disabled { background-image:url("../images/pagination/left_disabled.png"); }
+a.nextLink { background-image:url("../images/pagination/right.png"); }
+a.nextLink:hover { background-image:url("../images/pagination/right_hover.png"); }
+a.nextLink:active { background-image:url("../images/pagination/right_active.png"); }
+a.nextLink.disabled { background-image:url("../images/pagination/right_disabled.png"); }

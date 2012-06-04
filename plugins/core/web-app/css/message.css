@@ -28,3 +28,8 @@ li.folders h3 { background-image:url("../images/icons/folder.png"); }
 #body.messages #list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
 #body.messages #list a.starred, #body.messages #list a.unstarred { width:16px; height:16px; }
 
+#body.messages #list-foot { background-color:#f0f0f0; border-top:solid #9e9e9e 1px; padding:10px 17px; font-size:95%; }
+#body.messages #list-foot .controls { display:table; width:100%; }
+#body.messages #list-foot .controls > * { display:table-cell; vertical-align:middle; }
+#body.messages #list-foot .controls div#paging { text-align:right; font-size:0; }
+#body.messages #list-foot .controls div#message-toggler a { padding:0 10px; }
