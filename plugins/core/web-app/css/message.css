@@ -15,7 +15,6 @@
 #body.messages #list-head ul.buttons { text-align:right; }
 #body.messages #list-head ul.buttons li { display:inline-block; }
 
-#body.messages #list { background-color:white; }
 #body.messages #list tr > * { width:0; }
 #body.messages #list tr > .content { width:100%; }
 #body.messages #list tr > .no-content { width:100%; font-weight:bold; font-size:180%; text-align:center; padding:17px; }
