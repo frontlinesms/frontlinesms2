@@ -10,9 +10,7 @@
 		<r:layoutResources/>
 	</head>
 	<body id="content">
-		<div id="head">
-			<fsms:render template="/tabs"/>
-		</div>
+		<fsms:render template="/head"/>
 		<div id="body" class="status">
 			<div id="content">
 				<g:layoutBody/>

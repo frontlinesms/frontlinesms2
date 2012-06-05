@@ -1,11 +1,10 @@
 <html>
 	<head>
-		<title><g:message code="poll.header"/></title>
+		<title><g:message code="poll.title" args="${[ownerInstance.name]}"/></title>
 		<meta name="layout" content="${params.controller=='message' ? 'messages' : 'archive'}"/>
 		<r:require module="graph"/>
 		<r:script>
 		$(function() {
-			
 			$("#poll-graph-btn").live("click", function(){
 				if(!pollGraph.loaded) {
 					pollGraph.hideMessages();

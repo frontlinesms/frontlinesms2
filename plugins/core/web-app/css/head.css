@@ -3,25 +3,25 @@
 	background-color:#e2e2e2;
 	height:77px; border-top:3px solid #D8AEC6; }
 
-#tabs { padding:0 0 11px 17%; width:100%;
+#main-nav { padding:0 0 11px 17%; width:100%;
 	background-image:url("../images/tabbar.png"); background-repeat:repeat-x; background-position:bottom left; }
-#tabs a { display:block; text-align:center; text-transform:uppercase; line-height:26px; }
-#tabs li { background-image:url("../images/tab/standard.png"); background-repeat:no-repeat;
-	width:110px; height:26px; position:relative; bottom:-1px; }
-#tabs li.current, #tabs li.current:hover, #tabs li.current:active { background-image:url("../images/tab/standard_current.png");
-	z-index:10; padding-bottom:1px; }
-#tabs li:hover { background-image:url("../images/tab/standard_hover.png"); }
-#tabs li:active { background-image:url("../images/tab/standard_pressed.png"); }
-#tabs li.message { background-image:url("../images/tab/message.png"); width:150px; }
-#tabs li.message.current, #tabs li.message.current:hover, #tabs li.message.current:active {
+#main-nav a { display:block; text-align:center; text-transform:uppercase; line-height:26px; }
+#main-nav li { background-image:url("../images/tab/standard.png"); background-repeat:no-repeat;
+	width:110px; height:26px; }
+#main-nav li.current, #main-nav li.current:hover, #main-nav li.current:active { background-image:url("../images/tab/standard_current.png");
+	z-index:10; padding-top:1px; position:relative; bottom:-1px; }
+#main-nav li:hover { background-image:url("../images/tab/standard_hover.png"); }
+#main-nav li:active { background-image:url("../images/tab/standard_pressed.png"); }
+#main-nav li.message { background-image:url("../images/tab/message.png"); width:150px; }
+#main-nav li.message.current, #main-nav li.message.current:hover, #main-nav li.message.current:active {
 	background-image:url("../images/tab/message_current.png"); }
-#tabs li.message:hover { background-image:url("../images/tab/message_hover.png"); }
-#tabs li.message:active { background-image:url("../images/tab/message_pressed.png"); }
-#tabs li.status { background-image:url("../images/tab/status.png"); width:120px; }
-#tabs li.status.current, #tabs li.status.current:hover, #tabs li.status.current:active {
+#main-nav li.message:hover { background-image:url("../images/tab/message_hover.png"); }
+#main-nav li.message:active { background-image:url("../images/tab/message_pressed.png"); }
+#main-nav li.status { background-image:url("../images/tab/status.png"); width:120px; }
+#main-nav li.status.current, #main-nav li.status.current:hover, #main-nav li.status.current:active {
 	background-image:url("../images/tab/status_current.png"); }
-#tabs li.status:hover { background-image:url("../images/tab/status_hover.png"); }
-#tabs li.status:active { background-image:url("../images/tab/status_pressed.png"); }
+#main-nav li.status:hover { background-image:url("../images/tab/status_hover.png"); }
+#main-nav li.status:active { background-image:url("../images/tab/status_pressed.png"); }
 
 #system-menu { right:17px; }
 #system-menu li a { display:block; border-top:3px solid #D5AFC6; padding:6px; }

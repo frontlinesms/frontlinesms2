@@ -8,6 +8,7 @@ modules = {
 		resource url: [dir:'css', file:'message.css']
 		resource url: [dir:'css', file:'contact.css']
 		resource url: [dir:'css', file:'archive.css']
+		resource url: [dir:'css', file:'settings.css']
 		resource url: [dir:'js/layout', file:'resizer.js'], disposition: 'head'
 
 		resource url: [dir:'css', file:'status.css']
