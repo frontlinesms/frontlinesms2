@@ -8,9 +8,10 @@ class PageContactShow extends geb.Page {
 		title.contains('Contacts')
 	}
 	static content = {
-		selectedMenuItem { $('#contacts-menu .selected') }
-		groupSubmenu(required:false) { $('#groups-submenu') }
-		groupList(required:false) { $("#group-list")}
+		bodyMenu { ${'#body-menu') }
+		selectedMenuItem { bodyMenu.find('.selected') }
+		groupSubmenu(required:false) { bodyMenu.find('.groups .submenu') }
+		groupList(required:false) { $("#group-list") }
 		contactSelect(required:false) { $(".contact-select") }	
 		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
 		updateAll(required:false) { $("#update-all") }
