@@ -18,7 +18,7 @@ function itemCheckChanged(itemTypeString, itemId) {
 	var checkedRow = getRow(itemTypeString, itemId);
 	if(checkedRow.find('input[type=checkbox]').attr('checked')) {
 		if(count == 1) {
-			$('#' + itemTypeString + '-list .selected').removeClass('selected');
+			$('#main-list .selected').removeClass('selected');
 			updateSingleCheckedDetails(itemTypeString, itemId, checkedRow);
 		} else {
 			updateMultipleCheckedDetails(itemTypeString);
@@ -28,7 +28,7 @@ function itemCheckChanged(itemTypeString, itemId) {
 		if(count != 0) {
 			checkedRow.removeClass('selected');
 			if (count == 1) {
-				var newRowId = $('#' + itemTypeString + '-list .selected').attr('id');
+				var newRowId = $('#main-list .selected').attr('id');
 				var newId = newRowId.substring(itemTypeString.length + 1);
 				updateSingleCheckedDetails(itemTypeString, newId, getRow(itemTypeString, newRowId));
 			} else {
@@ -42,19 +42,19 @@ function itemCheckChanged(itemTypeString, itemId) {
 }
 
 function getRow(itemTypeString, rowId) {
-	return $('#' + itemTypeString +'-list #' + itemTypeString + '-' + rowId);
+	return $('#main-list #' + itemTypeString + '-' + rowId);
 }
 
 function getCheckedList(itemTypeString) {
 	var list=",";
-	$('#' + itemTypeString + '-list .' + itemTypeString + '-select-checkbox:checked').each(function() {
+	$('#main-list .' + itemTypeString + '-select-checkbox:checked').each(function() {
 		list += $(this).attr('id').substring(itemTypeString.length + '-select-'.length) + ",";
 	});
 	return list;
 }
 
 function getCheckedItemCount(itemTypeString) {
-    return $('#' + itemTypeString + '-list .' + itemTypeString + '-select-checkbox:checked').size();
+    return $('#main-list .' + itemTypeString + '-select-checkbox:checked').size();
 }
 
 function updateSingleCheckedDetails(itemTypeString, itemId, row) {
@@ -90,6 +90,7 @@ function updateMultipleCheckedDetails(itemTypeString) {
 	if (itemTypeString == 'contact') {
 		$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 			var pane = $(data);
+			pane.show(); // Pane is initially display:hidden in GSP
 			$('#multiple-'+itemTypeString+'s').replaceWith(pane);
 			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
 			applyContactPaneJavascriptEnhancements(pane);
@@ -109,11 +110,11 @@ function applyContactPaneJavascriptEnhancements(pane) {-
 }
 
 function checkAll(itemTypeString) {
-	if($('#' + itemTypeString + '-list :checkbox')[0].checked){
-		$('#' + itemTypeString + '-list .' + itemTypeString + '-preview :checkbox').each(function(index) {
+	if($('#main-list :checkbox')[0].checked){
+		$('#main-list .' + itemTypeString + '-preview :checkbox').each(function(index) {
 			this.checked = true;
 		});
-		$('#' + itemTypeString + '-list .' + itemTypeString + '-preview').each(function(index) {
+		$('#main-list .' + itemTypeString + '-preview').each(function(index) {
 			$(this).addClass('selected');
 		});
 		var checkedItemCount = getCheckedItemCount(itemTypeString);
@@ -123,13 +124,13 @@ function checkAll(itemTypeString) {
 			updateSingleCheckedDetails(itemTypeString, id, tableRow);
 		} else updateMultipleCheckedDetails(itemTypeString);
 	} else {
-		$('#' + itemTypeString + '-list .' + itemTypeString + '-preview :checkbox').each(function(index, element) {
+		$('#main-list .' + itemTypeString + '-preview :checkbox').each(function(index, element) {
 			this.checked = false;
 		});
-		$('#' + itemTypeString + '-list .' + itemTypeString + '-preview').each(function(index) {
+		$('#main-list .' + itemTypeString + '-preview').each(function(index) {
 			$(this).removeClass('selected');
 		});
-		var originalSingleItemDisplay = $('#' + itemTypeString + '-list .initial-selection');
+		var originalSingleItemDisplay = $('#main-list .initial-selection');
 		if(originalSingleItemDisplay) originalSingleItemDisplay.addClass('selected');
 		$('#multiple-' + itemTypeString + 's').hide();
 		$('#single-' + itemTypeString).show();
@@ -138,10 +139,10 @@ function checkAll(itemTypeString) {
 
 function updateCheckAllBox(count) {
 	// Check whether all messages are checked
-	if(count == $('#message-list tr.message-preview :checkbox').size() && !$('#message-list :checkbox')[0].checked) {
-		$('#message-list :checkbox')[0].checked = true;
-	} else if($('#message-list :checkbox')[0].checked) {
-		$('#message-list :checkbox')[0].checked = false;
+	if(count == $('#main-list tr.message-preview :checkbox').size() && !$('#message-list :checkbox')[0].checked) {
+		$('#main-list :checkbox')[0].checked = true;
+	} else if($('#main-list :checkbox')[0].checked) {
+		$('#main-list :checkbox')[0].checked = false;
 	}
 }
 
