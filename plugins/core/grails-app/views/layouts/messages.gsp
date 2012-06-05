@@ -38,7 +38,7 @@
 		<r:script>
 			$(function() {  
 				disablePaginationControls();
-				$(window).resize(new Resizer('#list-container', '#list-head', '#list-foot'));
+				$(window).resize(new Resizer('#main-list-container', '#main-list-head', '#main-list-foot'));
 			});
 		</r:script>
 		<r:layoutResources/>
@@ -51,12 +51,12 @@
 					params="[messageId: messageInstance?.id, searchId: search?.id]">
 				<g:hiddenField name="messageSection" value="${messageSection}"/>
 				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-				<div id="list-container">
-					<div id="list-head">
+				<div id="main-list-container">
+					<div id="main-list-head">
 						<fsms:render template="/message/header"/>
 					</div>
 					<fsms:render template="/message/message_list"/>
-					<div id="list-foot">
+					<div id="main-list-foot">
 						<fsms:render template="/message/footer"/>
 					</div>
 				</div>

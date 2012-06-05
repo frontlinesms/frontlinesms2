@@ -10,7 +10,7 @@
 		<r:script>
 			$(function() {  
 				disablePaginationControls();
-				$(window).resize(new Resizer('#list-container', '#list-head', '#list-foot'));
+				$(window).resize(new Resizer('#main-list-container', '#main-list-head', '#main-list-foot'));
 			});
 		</r:script>
 		<r:layoutResources/>
@@ -21,8 +21,8 @@
 			<fsms:render template="/archive/menu"/>
 			<g:form controller="${params.controller}"
 					params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
-				<div id="list-container">
-					<div id="list-head">
+				<div id="main-list-container">
+					<div id="main-list-head">
 						<g:if test="${viewingMessages}">
 							<fsms:render template="/message/header"/>
 						</g:if>
@@ -39,7 +39,7 @@
 					<g:else>
 						<fsms:render template="/message/message_list"/>
 					</g:else>
-					<div id="list-foot">
+					<div id="main-list-foot">
 						<fsms:render template="/message/footer"/>
 					</div>
 				</div>

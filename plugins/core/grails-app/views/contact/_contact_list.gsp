@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 	<g:if test="${contactInstanceTotal > 0}">
-		<ul id="list">
+		<ul id="main-list">
 			<g:if test="${contactInstance && !contactInstance.id}">
 				<li class="selected" id="newContact">
 					<g:checkBox disabled="disabled" class="contact-select" name='new-contact-select'/>
@@ -27,7 +27,7 @@
 		</ul>
 	</g:if>
 	<g:else>
-		<div id="list">
+		<div id="main-list">
 			 <p class="no-content"><g:message code="contact.list.no.contact"/></p>
 		</div>
 	</g:else>

@@ -10,7 +10,7 @@
 		<r:script>
 			$(function() {
 				disablePaginationControls();
-				$(window).resize(new Resizer('#list-container', '#list-head', '#list-foot'));
+				$(window).resize(new Resizer('#main-list-container', '#main-list-head', '#main-list-foot'));
 			});
 		</r:script>
 		<r:layoutResources/>
@@ -21,12 +21,12 @@
 			<div id="body-menu">
 				<fsms:render template="menu"/>
 			</div>
-			<div id="list-container">
-				<div id="list-head">
+			<div id="main-list-container">
+				<div id="main-list-head">
 					<fsms:render template="header"/>
 				</div>
 				<fsms:render template="contact_list"/>
-				<div id="list-foot">
+				<div id="main-list-foot">
 					<fsms:render template="footer"/>
 				</div>
 			</div>

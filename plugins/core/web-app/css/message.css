@@ -2,39 +2,39 @@
 #body-menu li.activities h3 { background-image:url("../images/icons/activity.png"); }
 #body-menu li.folders h3 { background-image:url("../images/icons/folder.png"); }
 
-#body.messages #list-container > * { width:auto; }
+#body.messages #main-list-container > * { width:auto; }
 
-#body.messages #list-head { padding:0 17px; background-color:white; }
-#body.messages #list-head div.content { display:table; width:100%; }
-#body.messages #list-head div.content > * { display:table-cell; vertical-align:middle; }
-#body.messages #list-head h1.inbox { background-image:url("../images/icons/inbox.png"); }
-#body.messages #list-head h1.sent { background-image:url("../images/icons/sent.png"); }
-#body.messages #list-head h1.pending { background-image:url("../images/icons/pending.png"); }
-#body.messages #list-head h1.trash { background-image:url("../images/icons/trash.png"); }
-#body.messages #list-head .activity h1 { background-image:url("../images/icons/activity.png"); }
-#body.messages #list-head ul.buttons { text-align:right; }
-#body.messages #list-head ul.buttons li { display:inline-block; }
+#body.messages #main-list-head { padding:0 17px; background-color:white; }
+#body.messages #main-list-head div.content { display:table; width:100%; }
+#body.messages #main-list-head div.content > * { display:table-cell; vertical-align:middle; }
+#body.messages #main-list-head h1.inbox { background-image:url("../images/icons/inbox.png"); }
+#body.messages #main-list-head h1.sent { background-image:url("../images/icons/sent.png"); }
+#body.messages #main-list-head h1.pending { background-image:url("../images/icons/pending.png"); }
+#body.messages #main-list-head h1.trash { background-image:url("../images/icons/trash.png"); }
+#body.messages #main-list-head .activity h1 { background-image:url("../images/icons/activity.png"); }
+#body.messages #main-list-head ul.buttons { text-align:right; }
+#body.messages #main-list-head ul.buttons li { display:inline-block; }
 
-#body.messages #list-head .activity ul.info { padding-bottom:15px; }
-#body.messages #list-head .activity.folder ul.info { padding-bottom:0; }
-#body.messages #list-head .activity ul.info li { display:block; padding:5px 10px; }
-#body.messages #list-head .activity .header-buttons { text-align:right; }
-#body.messages #list-head .activity .header-buttons > * { margin:2px 0; }
+#body.messages #main-list-head .activity ul.info { padding-bottom:15px; }
+#body.messages #main-list-head .activity.folder ul.info { padding-bottom:0; }
+#body.messages #main-list-head .activity ul.info li { display:block; padding:5px 10px; }
+#body.messages #main-list-head .activity .header-buttons { text-align:right; }
+#body.messages #main-list-head .activity .header-buttons > * { margin:2px 0; }
 
-#body.messages #list tr > * { width:0; }
-#body.messages #list tr > .content { width:100%; }
-#body.messages #list tr > .no-content { width:100%; }
-#body.messages #list .unread { font-weight:bold; }
-#body.messages #list a.starred { background-image:url("../images/icons/star.png"); }
-#body.messages #list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
-#body.messages #list a.starred, #body.messages #list a.unstarred { width:16px; height:16px; }
-#body.messages #list tr td:last-child { padding-right:23px;}
-#body.messages #list tr.send-failed td:last-child { background-image:url('../images/icons/error_on.png');
+#body.messages #main-list tr > * { width:0; }
+#body.messages #main-list tr > .content { width:100%; }
+#body.messages #main-list tr > .no-content { width:100%; }
+#body.messages #main-list .unread { font-weight:bold; }
+#body.messages #main-list a.starred { background-image:url("../images/icons/star.png"); }
+#body.messages #main-list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
+#body.messages #main-list a.starred, #body.messages #main-list a.unstarred { width:16px; height:16px; }
+#body.messages #main-list tr td:last-child { padding-right:23px;}
+#body.messages #main-list tr.send-failed td:last-child { background-image:url('../images/icons/error_on.png');
 	background-repeat:no-repeat; background-position:98% center; }
 #body.messages #list tr.selected { background-color:#d8e8ef; }
 #body.messages #list tr:hover { background-color:#e5eff3; }
 
-#body.messages #list-foot .controls div#message-toggler a { padding:0 10px; }
+#body.messages #main-list-foot .controls div#message-toggler a { padding:0 10px; }
 
 #body.messages #detail { background-color:#d8e8ef; border-left:solid #9e9e9e 1px; padding:17px; }
 #body.messages #detail #message-detail-content { background-color:white; border:1px solid #B5C6CD; margin:17px 0; }
