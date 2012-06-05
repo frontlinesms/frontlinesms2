@@ -26,9 +26,9 @@
 #system-menu { right:17px; }
 #system-menu li a { display:block; border-top:3px solid #D5AFC6; padding:6px; }
 #system-menu li.selected a, #system-menu li a:hover, #system-menu li a:active { background-color:#E0E0E0; border-top:3px solid #C03283; }
-#inbox-indicator { border-radius:10px; background-color:#C03283; color:white; font-weight:bold; padding:2px; margin-left:3px; font-size:90%;}
-#status-indicator {padding:8px; background-repeat:no-repeat; background-position:center center; margin-left:3px; }
-#status-indicator.red {background-image:url('../images/icons/status_red.png'); }
-#status-indicator.green {background-image:url('../images/icons/status_green.png'); }
-#status-indicator.orange {background-image:url('../images/icons/status_orange.png'); }
+#inbox-indicator { border-radius:10px; background-color:#C03283; color:white; font-weight:bold; padding:2px; margin-left:3px; font-size:90%; }
+#status-indicator { padding:8px; background-repeat:no-repeat; background-position:center center; margin-left:3px; }
+#status-indicator.red { background-image:url('../images/icons/status_red.png'); }
+#status-indicator.green { background-image:url('../images/icons/status_green.png'); }
+#status-indicator.orange { background-image:url('../images/icons/status_orange.png'); }
 

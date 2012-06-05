@@ -6,8 +6,8 @@ html { height:100%; width:100%; }
 #main-nav { position:absolute; bottom:0; }
 #main-nav li { display:inline-block; }
 
-#body-menu, #content-container, #list-container, #detail { position:absolute; overflow:auto; top:80px; bottom:0; }
-#body-menu, #detail, #content-container, #list-container { top:80px; }
+#body-menu, #body-content-container, #list-container, #detail { position:absolute; overflow:auto; top:80px; bottom:0; }
+#body-menu, #detail, #body-content-container, #list-container { top:80px; }
 
 #body-menu { left:0; right:83%; background-color:#0C5; }
 #body.messages #list-container { left:17%; right:21%; }
@@ -18,7 +18,9 @@ html { height:100%; width:100%; }
 #body.contacts #list-container > * { width:100%; }
 #body.contacts #detail { left:38%; right:0; background-color:#c20; }
 
-#body.settings #content-container { left:17%; right:0; background-color:#f06; }
+#body.settings #body-content-container { left:17%; right:0; background-color:#f06; }
+#body.settings #body-content-container > * { width:100%; }
+#body.settings #body-content-head { background-color:#f04; }
 
 #system-menu { position:absolute; right:0; top:0; }
 #system-menu li { display:inline-block; }

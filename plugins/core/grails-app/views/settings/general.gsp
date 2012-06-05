@@ -6,7 +6,10 @@
 		<export:resource/>
 	</head>
 	<body>
-		<div id="general">
+		<div id="body-content-head">
+			<h1><g:message code="layout.settings.header"/></h1>
+		</div>
+		<div id="body-content">
 			<div id="language">
 				<h2><g:message code="language.label"/></h2>
 				<p><g:message code="language.prompt"/></p>
