@@ -44,23 +44,19 @@ class PollController extends ActivityController {
 						[ownerId:poll.id]
 					}
 				}
-				
 			} else {
-
-				def errors = poll.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
-				withFormat {
-					json {
-						render([ok:false, text:errors] as JSON)
-					}
-				}
-				
+				renderJsonErrors(poll)
 			}
 		} else {
-			def errors = poll.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
-			withFormat {
-				json {
-					render([ok:false, text:errors] as JSON)
-				}
+			renderJsonErrors(poll)
+		}
+	}
+
+	private def renderJsonErrors(poll) {
+		def errorMessages = poll.errors.allErrors.collect { message(error:it) }.join("\n")
+		withFormat {
+			json {
+				render([ok:false, text:errorMessages] as JSON)
 			}
 		}
 	}

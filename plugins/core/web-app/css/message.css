@@ -31,8 +31,8 @@
 #body.messages #main-list tr td:last-child { padding-right:23px;}
 #body.messages #main-list tr.send-failed td:last-child { background-image:url('../images/icons/error_on.png');
 	background-repeat:no-repeat; background-position:98% center; }
-#body.messages #list tr.selected { background-color:#d8e8ef; }
-#body.messages #list tr:hover { background-color:#e5eff3; }
+#body.messages #main-list tr.selected { background-color:#d8e8ef; }
+#body.messages #main-list tr:hover { background-color:#e5eff3; }
 
 #body.messages #main-list-foot .controls div#message-toggler a { padding:0 10px; }
 
