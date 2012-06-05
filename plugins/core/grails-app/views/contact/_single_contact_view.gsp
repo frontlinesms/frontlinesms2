@@ -101,16 +101,18 @@
 			</a>
 		</g:if>
 	</div>
-	<div id="message-stats">
-		<h2><g:message code="contact.messages.label"/></h2>
-		<ul>
-			<li class="sent"><g:message code="contact.sent.messages" args="${[contactInstance?.outboundMessagesCount]}"/></li>
-			<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
-		</ul>
-		<g:link class="btn search" controller='search' action='result' params="[contactString: contactInstance?.name]">
-			<g:message code="contact.search.messages"/>
-		</g:link>
-	</div>
+	<g:if test="${contactInstance && contactInstance.id}">
+		<div id="message-stats">
+			<h2><g:message code="contact.messages.label"/></h2>
+			<ul>
+				<li class="sent"><g:message code="contact.sent.messages" args="${[contactInstance?.outboundMessagesCount]}"/></li>
+				<li class="received"><g:message code="contact.received.messages" args="${[contactInstance?.inboundMessagesCount]}"/></li>
+			</ul>
+			<g:link class="btn search" controller='search' action='result' params="[contactString: contactInstance?.name]">
+				<g:message code="contact.search.messages"/>
+			</g:link>
+		</div>
+	</g:if>
 </div>
 <r:script>
 function refreshMessageStats(data) {
