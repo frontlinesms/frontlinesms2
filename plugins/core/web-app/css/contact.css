@@ -19,7 +19,6 @@
 #body.contacts #main-list li a { padding:7px; width:100%; }
 
 #body.contacts #detail { padding:37px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
-#body.contacts #detail #multiple-contacts { display:none; }
 
 #body.contacts table input[type="text"], #body.contacts table textarea, #body.contacts td:nth-child(1) { padding:5px; }
 #body.contacts td:nth-child(1) { padding-right:20px; }
