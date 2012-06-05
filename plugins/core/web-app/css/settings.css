@@ -3,6 +3,7 @@
 #body.settings #body-content-container > * { width:auto; }
 
 #body.settings #body-content-head { padding:0 17px; background-color:white; border-bottom:solid #9e9e9e 1px; }
+#body.settings #body-content-head.logs { border-bottom:none; }
 #body.settings #body-content-head div.content { display:table; width:100%; }
 #body.settings #body-content-head div.content > * { display:table-cell; vertical-align:middle; }
 #body.settings #body-content-head ul.buttons { text-align:right; }
@@ -30,3 +31,8 @@
 #body-content.connections .connection-header > * { display:table-cell; white-space:nowrap; padding:17px; }
 #body-content.connections .connection-header > .connection-type { width:100%; }
 #body-content.connections .controls { padding:17px; }
+
+#body-content.logs th.content { width:100%; }
+#body-content.logs .date { white-space:nowrap; }
+#body-content.logs tr:nth-child(2n) td { background-color:#eff2f9; }
+#body-content.logs tr:hover td { background-color:#e5eff3; }
