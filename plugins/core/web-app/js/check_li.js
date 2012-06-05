@@ -90,6 +90,7 @@ function updateMultipleCheckedDetails(itemTypeString) {
 	if (itemTypeString == 'contact') {
 		$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 			var pane = $(data);
+			pane.show(); // Pane is initially display:hidden in GSP
 			$('#multiple-'+itemTypeString+'s').replaceWith(pane);
 			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
 			applyContactPaneJavascriptEnhancements(pane);

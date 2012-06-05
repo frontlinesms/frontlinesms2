@@ -1,4 +1,4 @@
-<div id="multiple-contacts" class="multiple-contact">
+<div id="multiple-contacts" class="multiple-contact" style="display:none">
 	<div id="action-buttons" class="buttons">
 			<g:actionSubmit class="btn" id="update-all" action="updateMultipleContacts" value="${g.message(code:'contact.save.many')}" disabled="disabled" />
 			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel"/></g:link>
