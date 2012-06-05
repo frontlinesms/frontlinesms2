@@ -53,3 +53,5 @@ a.nextLink.disabled { background-image:url("../images/pagination/right_disabled.
 #notifications .hider:hover { text-decoration:underline; }
 
 input[type=text], input[type=password], textarea { padding:3px; border:1px solid #bbb; border-radius:2px; }
+input[type="text"].search{ background-image:url('../images/icons/search.png');
+	background-repeat:no-repeat; background-position:right; }
