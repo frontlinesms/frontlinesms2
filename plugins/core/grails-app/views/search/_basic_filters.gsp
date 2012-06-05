@@ -19,9 +19,6 @@
 </g:if>
 <div class="input">
 	<label for="startDate endDate"><g:message code="search.betweendates.label"/></label>
-	<g:datePicker class='datepicker' name="startDate" value="${search?.startDate ?: 'none'}" noSelection="['none':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
-	<input type="hidden" class="datepicker"/>
-     	<g:datePicker class='datepicker' name="endDate" value="${search?.endDate ?: 'none'}" noSelection="['none':'']" precision="day" years="${2000..1901+(new Date()).year}"/>
-	<input type="hidden" class="datepicker"/>
+	<fsms:dateRangePicker startDate="${search?.startDate}" endDate="${search?.endDate}"/>
 </div>
 

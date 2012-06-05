@@ -163,6 +163,22 @@ class FsmsTagLib {
 		out << color
 		out << '"></span>'
 	}
+
+	def dateRangePicker = { att ->
+		out << datePicker(att + [name:"startDate", value:att.startDate])
+		out << datePicker(att + [name:"endDate", value:att.endDate])
+	}
+
+	def datePicker = { att ->
+		def dateFormat = "MM/dd/yyyy" // FIXME get this from the current locale so the user understands it
+		def name = att.name
+		def clazz = att.remove('class')
+		att.value = att.value?.format(dateFormat)
+		out << '<div class="$clazz if set">'
+		out << g.textField(att)
+		out << "<input type='hidden' class='datepicker ${att.disabled ? 'disabled': ''}' name='$name-datepicker'/>"
+		out << '</div>'
+	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
