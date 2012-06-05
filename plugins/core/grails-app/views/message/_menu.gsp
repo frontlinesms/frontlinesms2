@@ -11,7 +11,7 @@
 					<g:link action="sent"><g:message code="fmessage.section.sent"/></g:link>
 				</li>
 				<li class="${(messageSection=='pending')? 'selected':''}">
-					<g:link action="pending" class="${hasFailedMessages ? 'pending-send-failed' : ''}"><g:message code="fmessage.section.pending"/><span id="error-icon"/></g:link>
+					<g:link action="pending" class="${hasFailedMessages ? 'failures' : ''}"><g:message code="fmessage.section.pending"/></g:link>
 				</li>
 				<li class="${(messageSection=='trash')? 'selected':''}">
 					<g:link action="trash"><g:message code="fmessage.section.trash"/></g:link>

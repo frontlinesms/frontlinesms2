@@ -37,3 +37,6 @@
 #body.messages #detail #message-detail-content #no-message { text-align:center; }
 #body.messages #detail #message-detail-buttons { text-align:center; }
 #body.messages #detail #message-detail-buttons > * { width:35%; margin-bottom:10px; }
+
+#body.messages #body-menu a.failures { background-image:url('../images/icons/error_on.png');
+	background-repeat:no-repeat; background-position:17px center; }
