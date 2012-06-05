@@ -18,7 +18,18 @@
 #body.contacts #list li > * { display:table-cell; vertical-align:middle; }
 #body.contacts #list li a { padding:7px; width:100%; }
 
-#body.contacts #detail { padding:17px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
-#body.contacts #detail #single-contact input, #body.contacts #detail #single-contact textarea { border:none; }
-#body.contacts #detail #single-contact .buttons { position:absolute; top:17px; right:17px; }
+#body.contacts #detail { padding:37px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
 #body.contacts #detail #multiple-contacts { display:none; }
+
+#body.contacts table input[type="text"], #body.contacts table textarea, #body.contacts td:nth-child(1) { padding:5px; }
+#body.contacts td:nth-child(1) { padding-right:20px; }
+
+#body.contacts #detail #single-contact .buttons { margin:17px; }
+
+#body.contacts #detail #single-contact #message-stats { position:absolute; top:17px; right:17px; }
+#body.contacts #detail #single-contact #message-stats h2 { font-weight:bold; }
+#body.contacts #detail #single-contact #message-stats ul { margin:10px 0; }
+#body.contacts #detail #single-contact #message-stats ul li { padding:5px 0 5px 25px;
+	background-position:left center; background-repeat:no-repeat; }
+#body.contacts #detail #single-contact #message-stats ul li.sent { background-image:url("../images/message/sent.png"); }
+#body.contacts #detail #single-contact #message-stats ul li.received { background-image:url("../images/message/received.png"); }
