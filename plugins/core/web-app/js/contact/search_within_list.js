@@ -5,7 +5,7 @@ function getGroupId(){
 
 function updateContacts(data) {
 	var replacement = $(data);
-	$("#list").replaceWith(replacement.filter('#list'));
+	$("#main-list").replaceWith(replacement.filter('#main-list'));
 	$("#paging").replaceWith(replacement.find('#paging'));
 	disablePaginationControls();
 }

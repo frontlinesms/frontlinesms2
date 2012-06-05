@@ -5,7 +5,7 @@
   	<g:hiddenField name="groupId" value="${params.groupId}"/>
   	<g:hiddenField name="searchString" value="${params.searchString}"/>
 </g:if>
-<table id="list">
+<table id="main-list">
 	<thead>
 		<tr>
 			<th>
