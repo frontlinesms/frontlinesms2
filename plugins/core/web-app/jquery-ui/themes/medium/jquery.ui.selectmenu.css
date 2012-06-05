@@ -1,5 +1,4 @@
-/* Selectmenu
-----------------------------------*/
+.ui-selectmenu-wrapper { display:inline-block; }
 .ui-selectmenu-menu { padding:0; margin:0; position:absolute; top: 0; display: none; z-index: 1005; } /* z-index: 1005 to make selectmenu work with dialog */
 .ui-selectmenu-menu  ul { padding:0; margin:0; list-style:none; position:relative; overflow:auto; overflow-y:auto ; overflow-x:hidden; } 
 .ui-selectmenu-open { display:block; background-color:white; border:1px solid #6b6b6b; }
@@ -8,8 +7,5 @@
 .ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor:default; color:#777777; }
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a, .ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left:20px; position:relative; margin-left:5px; }
 
-/* for optgroups */
-.ui-selectmenu-menu .ui-selectmenu-group ul { margin:0; padding:0; }
-
-.ui-selectmenu-status { display:block; vertical-align:middle; overflow: hidden;
+.ui-selectmenu-status { display:inline-block; vertical-align:middle; overflow: hidden;
 background-position:95% center; background-image:url("../../../images/buttons/down_arrow.png"); background-repeat:no-repeat; }
