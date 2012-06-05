@@ -6,22 +6,22 @@ html { height:100%; width:100%; }
 #tabs { position:absolute; left:17%; bottom:0; }
 #tabs li { display:inline-block; }
 
-#body-menu, #body-content-container, #list-container, #detail { position:absolute; overflow:auto; top:0; bottom:0; }
-#body-menu, #detail, #body-content-container, #list-container { top:80px; }
+#body-menu, #body-content-container, #main-list-container, #detail { position:absolute; overflow:auto; top:0; bottom:0; }
+#body-menu, #detail, #body-content-container, #main-list-container { top:80px; }
 
 #body { left:0; right:0; }
 
 #body-menu { left:0;right:83%; background-color:#0C5; }
-#body.messages #list-container { left:17%; right:21%; background-color:#0C4; }
-#body.messages #list-container > * { width:100%; }
-#body.messages #list-head { background-color:#C06; }
-#body.messages #list-foot { background-color:#C05; }
+#body.messages #main-list-container { left:17%; right:21%; background-color:#0C4; }
+#body.messages #main-list-container > * { width:100%; }
+#body.messages #main-list-head { background-color:#C06; }
+#body.messages #main-list-foot { background-color:#C05; }
 #body.messages #detail { left:79%; right:0; background-color:#0c3; }
 
-#body.contacts #list-container { left:17%; right:62%; background-color:#C60; }
-#body.contacts #list-container > * { width:100%; }
-#body.contacts #list-head { background-color:#C50; }
-#body.contacts #list-foot { background-color:#C40; }
+#body.contacts #main-list-container { left:17%; right:62%; background-color:#C60; }
+#body.contacts #main-list-container > * { width:100%; }
+#body.contacts #main-list-head { background-color:#C50; }
+#body.contacts #main-list-foot { background-color:#C40; }
 #body.contacts #detail { left:38%; right:0; background-color:#c20; }
 
 #body.settings #body-content-container { left:17%; right:0; background-color:#f06; }
