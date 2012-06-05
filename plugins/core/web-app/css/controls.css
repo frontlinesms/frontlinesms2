@@ -64,3 +64,7 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 .magicwand-icon { background-image:url('../images/icons/magic_wand.png'); background-repeat:no-repeat; background-position:top left;
 	display:block; width:16px; height:18px; }
 
+#thinking { display:none; z-index:99;
+	position:absolute; top:0; bottom:0; left:0; right:0; background-color:transparent; opacity:0.5;
+	background-image:url('../images/icons/ajax-loader.gif'); background-position:center; background-repeat:no-repeat; }
+
