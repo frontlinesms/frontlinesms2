@@ -1,5 +1,5 @@
 <div id='move-message'>
-	<select class="dropdown extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction()">
+	<select class="dropdown extra-msg-btn" name="move-actions" id="move-actions" onchange="moveAction(); selectmenuTools.snapback('move-actions')">
 		<option value="na" class="na"><g:message code="fmessage.move.to.header"/></option>
 		<g:if test="${!(messageSection in ['inbox', 'sent', 'pending'])}">
 			<option class="inbox" value="inbox"><g:message code="fmessage.move.to.inbox"/></option>
