@@ -57,17 +57,20 @@
 				</g:each>
 			</g:else>
 		</g:if>
-		<g:elseif test="${(messageSection == 'result') && (searchDescription != 'null')}">
-			<tr id="no-search-description">
-				<td colspan="5">
-					<h3><g:message code="fmessage.search.description"/></h3>
-				</td>
-			</tr>
-		</g:elseif>
 		<g:else>
 			<tr>
 				<td colspan="5" class="no-content">
-					<g:message code="fmessage.messages.none"/>
+					<g:if test="${messageSection=='result'}">
+						<g:if test="${searchDescription}">
+							<g:message code="fmessage.search.none"/>
+						</g:if>
+						<g:else>
+							<g:message code="fmessage.search.description"/>
+						</g:else>
+					</g:if>
+					<g:else>
+						<g:message code="fmessage.messages.none"/>
+					</g:else>
 				</td>
 			</tr>
 		</g:else>
