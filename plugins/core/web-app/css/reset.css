@@ -24,10 +24,12 @@ time, mark, audio, video, input, textarea {
 	text-align: left;
 }
 
-html,input,textarea {
+html,input,textarea,button {
 	font-size: 12px;
 	font-family: Helvetica,Arial,sans-serif;
 	color: #333;
+	border:none;
+	background:transparent;
 }
 
 /* HTML5 display-role reset for older browsers */

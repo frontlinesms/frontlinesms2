@@ -26,7 +26,7 @@
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
-		var fsmsButton = { apply: function(original) {} };
+		var fsmsButton = { apply:function(){}, findAndApply:function(){} };
 	</g:if>
 	<g:else>
 		var fsmsButton = {
@@ -52,6 +52,12 @@
 
 				// hide the current control
 				original.hide();
+			},
+			findAndApply: function(selecter, parent) {
+				var found;
+				if(parent) found = parent.find(selecter);
+				else found = $(selecter);
+				found.each(function() { fsmsButton.apply(this); });
 			}
 		};
 

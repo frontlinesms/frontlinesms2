@@ -29,7 +29,7 @@ a.nextLink:hover { background-image:url("../images/pagination/right_hover.png");
 a.nextLink:active { background-image:url("../images/pagination/right_active.png"); }
 a.nextLink.disabled { background-image:url("../images/pagination/right_disabled.png"); }
 
-.btn, .ui-selectmenu { display:inline-block;
+.btn, .ui-selectmenu, button, input[type="submit"] { display:inline-block;
 	background-repeat:repeat-x; background-image:url("../images/button/standard.png"); background-size:contain;
 	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; padding:6px 10px;
 	color:black; cursor:pointer; text-align:center; }
