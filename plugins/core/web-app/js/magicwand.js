@@ -22,8 +22,11 @@ var magicwand = {
 		status.prepend('<span class="magicwand-icon"/>');
 		status.attr('title', i18n("magicwand.title"))
 		status.siblings(".ui-selectmenu-icon").remove();
+		status.removeClass("ui-selectmenu-status");
+		status.addClass("btn");
 		var statusParent = status.parent();
 		statusParent.removeClass("ui-selectmenu");
+		statusParent.css("display", "block");
 	}
 };
 

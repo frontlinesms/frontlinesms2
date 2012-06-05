@@ -56,9 +56,9 @@
 		};
 
 		$(function() {
-		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
+			// make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 			// TODO reintroduce dropdown when the CSS is fixed
-		        //$(".dropdown").selectmenu();
+			$(".dropdown").selectmenu();
 			$("input[type='submit']").each(function() { fsmsButton.apply(this); });
 
 			// Enable system notification refresh
