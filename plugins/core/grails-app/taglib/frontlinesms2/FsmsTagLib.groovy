@@ -174,7 +174,9 @@ class FsmsTagLib {
 		def name = att.name
 		def clazz = att.remove('class')
 		att.value = att.value?.format(dateFormat)
-		out << '<div class="$clazz if set">'
+		out << '<div'
+		if(clazz) out << " class=\"$clazz\""
+		out << '>'
 		out << g.textField(att)
 		out << "<input type='hidden' class='datepicker ${att.disabled ? 'disabled': ''}' name='$name-datepicker'/>"
 		out << '</div>'
