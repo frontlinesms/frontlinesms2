@@ -56,6 +56,7 @@ modules = {
 
 	status {
 		dependsOn "jquery, jquery-ui, common"
+		resource url: [dir:'js', file:"datepicker.js"]
 	}
 
 	graph {
@@ -71,6 +72,7 @@ modules = {
 
 	search {
 		dependsOn "jquery, jquery-ui, common, messages"
+		resource url: [dir:'js', file:"datepicker.js"]
 		resource url: [dir:'js', file:"search/moreOptions.js"]
 	}
 	
