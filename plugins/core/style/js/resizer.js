@@ -3,7 +3,10 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 	// * for speed, could:
 	//   - cache jQuery objects _fixed_headers and _fixed_footers
 	//   - set width and position CSS only on first init
-	// * does not currently behave well for table headings as column widths break for the header when it is removed from normal flow
+	// * does not currently behave well for table headings as column
+	//     widths break for the header when it is removed from normal
+	//     flow.  Maybe we can copy the column widths before removal
+	//     and re-apply afterwards.
 	var
 		_main_header_height = $("#head").outerHeight(), // this height is fixed
 		_fixed_headers = $(fixed_header_selecter),
@@ -13,6 +16,7 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 			var _header_offset = _main_header_height;
 			var _container_left = _container.css("left");   // FF gives these values in px instead of % so
 			var _container_right = _container.css("right"); // we have to recalculate every resize
+			
 			_fixed_headers.each(function(i, element) {
 				element = $(element);
 				element.css("position", "fixed");

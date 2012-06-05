@@ -6,13 +6,18 @@
 		<r:require module="settings"/>
 		<fsms:render template="/includes"/>
 		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, connection.edit, connection.add, smallpopup.test.message.title, popup.done, wizard.create, smallpopup.send, popup.ok,logs.download.continue,logs.download.title"/>
+		<r:script>
+			$(function() {
+				$(window).resize(new Resizer("#body-content-container", "#body-content-head"));
+			});
+		</r:script>
 		<r:layoutResources/>
 	</head>
 	<body>
 		<fsms:render template="/head"/>
 		<div id="body" class="settings">
 			<fsms:render template="/settings/menu"/>
-			<div id="content-container">
+			<div id="body-content-container">
 				<g:layoutBody/>
 			</div>
 		</div>
