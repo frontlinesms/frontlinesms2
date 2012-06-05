@@ -8,8 +8,8 @@
 			<fsms:render template="basic_filters"/>
 			<fsms:render template="other_filters"/>
 		</div>
-		<g:actionSubmit class="btn" controller="search" action="result" value="${message(code:'default.button.search.label')}"/>
-		<g:link id="clear" action="no_search" class="btn"><g:message code="search.clear"/></g:link>
+		<g:actionSubmit class="btn search" controller="search" action="result" value="${message(code:'default.button.search.label')}"/>
+		<g:link action="no_search" class="btn clear"><g:message code="search.clear"/></g:link>
 	</g:form>
 </div>
 

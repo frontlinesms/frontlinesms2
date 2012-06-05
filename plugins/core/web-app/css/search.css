@@ -1,1 +1,12 @@
-#body.messages #list-head h1.search { background-image:url("../images/icons/search.png"); }
+#body.messages #main-list-head h1.search { background-image:url("../images/icons/search.png"); }
+
+#body-menu.search { padding:17px; }
+#body-menu.search form > * { margin-bottom:15px; }
+#body-menu.search .section > * { margin-top:10px; margin-bottom:10px; }
+#body-menu.search .ui-selectmenu-wrapper a { padding:0; }
+#body-menu.search input[name="searchString"] { margin-top:5px; }
+#body-menu.search label,#body-menu.search h3 { font-weight:bold; text-transform:uppercase; }
+
+#body-menu.search a.search { margin:10px 0; }
+#body-menu.search a.clear { border:none; background:transparent; text-align:left; padding-left:0; margin-left:0; }
+#body-menu.search #more-options a { padding-left:0; margin-left:0; }
