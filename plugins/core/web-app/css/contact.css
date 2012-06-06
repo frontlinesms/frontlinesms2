@@ -38,5 +38,5 @@
 #body.contacts #detail #multiple-contacts #multi-group-list { margin:10px 0; }
 #body.contacts #detail #multiple-contacts #multi-group-dropdown { margin:0 0 20px 0; }
 
-.remove-group { background-image: url('../images/icons/remove.png'); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; margin-left: 3px; }
+.remove-command { background-image: url('../images/icons/remove.png'); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; margin-left: 3px; }
 .send-message { background-image: url('../images/icons/send.png'); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; margin-left: 3px; }
