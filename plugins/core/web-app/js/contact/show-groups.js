@@ -44,6 +44,7 @@ function removeGroupClickAction() {
 		noGroup.show();
 	}
 	removeGroupId(groupId);
+	selectmenuTools.refresh(groupDropdown.attr('id'));
 	// removeIdFromGroupHiddenField(groupId);
 	enableSaveAndCancel()
 }

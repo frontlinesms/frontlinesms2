@@ -37,8 +37,8 @@ class StatusController {
 
 	private def getMessageStats() {
 		def activityInstance = MessageOwner.get(params.activityId)
-		params.startDate = params.rangeOption == "between-dates" ? new Date(params.startDate) : new Date() - 14
-		params.endDate = params.rangeOption == "between-dates" ? new Date(params.endDate) : new Date()
+		params.startDate = params.rangeOption == "between-dates" ? params.startDate : new Date() - 14
+		params.endDate = params.rangeOption == "between-dates" ? params.endDate : new Date()
 		params.messageOwner = activityInstance
 		params.groupInstance = params.groupId ? Group.get(params.groupId) : null
 		params.messageStatus = params.messageStatus?.tokenize(",")*.trim()

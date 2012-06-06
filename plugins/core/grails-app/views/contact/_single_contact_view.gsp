@@ -62,7 +62,7 @@
 				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
 						<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
-							<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"></a>
+							<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"><g:message code="contact.remove.from.group"/></a>
 						</li>
 					</g:each>
 					<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">

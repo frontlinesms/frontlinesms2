@@ -106,10 +106,10 @@ function updateMultipleCheckedDetails(itemTypeString) {
 function applyContactPaneJavascriptEnhancements(pane) {-
 	pane.find("#group-list li a.remove-group").click(removeGroupClickAction);
 	pane.find("#group-dropdown").change(addGroupClickAction);
-	pane.find("#group-dropdown").change(selectmenuTools.snapback);
+	pane.find("#group-dropdown").change(function() { selectmenuTools.removeSelected('group-dropdown') });
 	pane.find("#multi-group-dropdown").selectmenu();
 	pane.find("#multi-group-dropdown").change(addGroupClickAction);
-	pane.find("#multi-group-dropdown").change(selectmenuTools.snapback);
+	pane.find("#multi-group-dropdown").change(function() { selectmenuTools.snapback('multi-group-dropdown') });
 	pane.find("#multi-group-list li a.remove-group").click(removeGroupClickAction);
 	pane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
 }
