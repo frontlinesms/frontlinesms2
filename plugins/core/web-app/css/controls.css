@@ -13,6 +13,8 @@
 thead tr { height:26px; font-weight:bold;
 	background-image:url("../images/menubar.png"); background-repeat:repeat-x; background-position:center left; }
 tr > * { padding:3px; vertical-align:middle; }
+tr > :first-child { padding-left:8px; }
+tr > :last-child { padding-right:8px; }
 td a, th a { display:block; }
 th.sortable a { background-repeat:no-repeat; background-position:center left; }
 th.sortable.asc a, th.sortable.desc a { padding-left:15px; }

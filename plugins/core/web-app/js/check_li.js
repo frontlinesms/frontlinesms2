@@ -11,6 +11,8 @@ function showMultipleDetailsPanel(itemTypeString) {
 	var multipleDetails = $("#multiple-"+itemTypeString+'s');
 	multipleDetails.show();
 	multipleDetails.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
+	multipleDetails.find(".dropdown").selectmenu("destroy");
+	multipleDetails.find(".dropdown").selectmenu();
 }
 
 function itemCheckChanged(itemTypeString, itemId) {

@@ -32,3 +32,8 @@
 	background-position:left center; background-repeat:no-repeat; }
 #body.contacts #detail #single-contact #message-stats ul li.sent { background-image:url("../images/message/sent.png"); }
 #body.contacts #detail #single-contact #message-stats ul li.received { background-image:url("../images/message/received.png"); }
+
+#body.contacts #detail #multiple-contacts { display:inline-block; }
+#body.contacts #detail #multiple-contacts h2 { background-color:white; border:1px solid #B5C6CD; margin:17px 0; padding:17px; text-align:center; }
+#body.contacts #detail #multiple-contacts #multi-group-list { margin:10px 0; }
+#body.contacts #detail #multiple-contacts #multi-group-dropdown { margin:0 0 20px 0; }

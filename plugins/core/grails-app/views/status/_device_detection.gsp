@@ -4,9 +4,9 @@
 	<table id="detected-devices">
 		<thead>
 			<tr>
-				<td><g:message code="modem.port"/></td>
-				<td class="description"><g:message code="modem.description"/></td>
-				<td><g:message code="modem.locked"/></td>
+				<th><g:message code="modem.port"/></th>
+				<th class="description"><g:message code="modem.description"/></th>
+				<th><g:message code="modem.locked"/></th>
 			</tr>
 		</thead>
 		<tbody>
