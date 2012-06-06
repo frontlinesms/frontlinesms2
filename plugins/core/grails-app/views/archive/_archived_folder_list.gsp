@@ -1,4 +1,4 @@
-<table id="list" class="archive">
+<table id="main-list" class="archive">
 	<thead>
 		<tr>
 			<th class="name"><g:message code="archive.folder.name"/></th>
