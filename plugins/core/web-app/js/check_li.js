@@ -10,7 +10,7 @@ function showMultipleDetailsPanel(itemTypeString) {
 	// show multi message view
 	var multipleDetails = $("#multiple-"+itemTypeString+'s');
 	multipleDetails.show();
-	multipleDetails.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
+	fsmsButton.findAndApply("input[type='submit']", multipleDetails);
 	multipleDetails.find(".dropdown").selectmenu("destroy");
 	multipleDetails.find(".dropdown").selectmenu();
 }
@@ -74,7 +74,7 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 		$('#multiple-'+itemTypeString+'s').hide();
 
 		var newPane = $(data);
-		newPane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
+		fsmsButton.findAndApply("input[type='submit']", newPane);
 		$('#single-'+itemTypeString).replaceWith(newPane);
 		newPane.find('.dropdown').selectmenu();
 		if (itemTypeString == 'contact') {

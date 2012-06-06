@@ -57,10 +57,10 @@
 					</div>
 					<fsms:render template="/message/message_list"/>
 					<div id="main-list-foot">
-						<g:layoutBody/>
 						<fsms:render template="/message/footer"/>
 					</div>
 				</div>
+				<g:layoutBody/>
 				<div id="detail">
 					<fsms:render template="/message/message_details"/>
 				</div>
