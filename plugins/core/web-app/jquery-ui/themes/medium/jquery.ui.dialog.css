@@ -47,20 +47,10 @@
 	text-align: right;
 	background: white;
 }
-.ui-dialog .ui-dialog-buttonpane button {
-	margin: .5em .4em .5em 0;
-	cursor: pointer;
-	padding: 4px;
-}
-
-
-.ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-dialog .ui-dialog-buttonpane button { margin:.5em .4em .5em 0; }
+.ui-dialog .ui-resizable-se { width:14px; height:14px; right:3px; bottom:3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
-
-.ui-widget-overlay {
-	background-color: #000000;
-	opacity: .5;
-}
+.ui-widget-overlay { background-color:#000000; opacity:.5; }
 
 .ui-dialog-content form, .ui-dialog-content .content {
 	padding: 17px;

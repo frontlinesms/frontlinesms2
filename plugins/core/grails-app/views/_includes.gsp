@@ -29,38 +29,6 @@
 		var fsmsButton = { apply:function(){}, findAndApply:function(){} };
 	</g:if>
 	<g:else>
-		var fsmsButton = {
-			trigger: function() {
-				// Trigger clicking of the button when the anchor is clicked.
-				$(this).prev().click();
-			},
-			apply: function(original) {
-				// replace a button with an anchor
-				// find the original text
-				original = $(original);
-				if(original.hasClass("fsms-button-replaced")) return;
-				original.addClass("fsms-button-replaced");
-				var buttonText = original.val();
-				var classes = original.attr("class");
-
-				// create the new control
-				var newController = $('<a class="' + classes + '">' + buttonText + '</a>');
-				newController.click(fsmsButton.trigger);
-
-				// add the new control next to original
-				original.after(newController);
-
-				// hide the current control
-				original.hide();
-			},
-			findAndApply: function(selecter, parent) {
-				var found;
-				if(parent) found = parent.find(selecter);
-				else found = $(selecter);
-				found.each(function() { fsmsButton.apply(this); });
-			}
-		};
-
 		$(function() {
 			// make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 			// TODO reintroduce dropdown when the CSS is fixed

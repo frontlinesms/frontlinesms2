@@ -31,6 +31,8 @@ html,input,textarea,button {
 	border:none;
 	background:transparent;
 }
+/* Remove magic button padding in Firefox */
+button::-moz-focus-inner { border:0;padding:0;margin:0; }
 
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
