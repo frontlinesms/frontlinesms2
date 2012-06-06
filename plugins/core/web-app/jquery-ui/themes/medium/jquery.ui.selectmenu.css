@@ -4,7 +4,6 @@
 .ui-selectmenu-open { display:block; background-color:white; border:1px solid #6b6b6b; }
 
 .ui-selectmenu-menu li a { display:block; min-height:21px; padding:4px 10px 0px 10px; }
-.ui-selectmenu-menu li.ui-state-disabled a, .ui-state-disabled { cursor:default; color:#777777; }
 .ui-selectmenu-menu li.ui-selectmenu-hasIcon a, .ui-selectmenu-hasIcon .ui-selectmenu-status { padding-left:20px; position:relative; margin-left:5px; }
 
 .ui-selectmenu-status { display:inline-block; vertical-align:middle; overflow: hidden;

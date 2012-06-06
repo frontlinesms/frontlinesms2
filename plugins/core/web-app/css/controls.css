@@ -37,6 +37,9 @@ input,textarea { background:white; }
 	background-repeat:repeat-x; background-image:url("../images/button/standard.png"); background-size:contain;
 	border-left:solid #6b6b6b 1px; border-right:solid #6b6b6b 1px; padding:6px 10px;
 	color:black; cursor:pointer; text-align:center; }
+.btn:hover, .ui-selectmenu:hover, button:hover, input[type="submit"]:hover { background-image:url("../images/button/hover.png"); }
+.btn:active, .ui-selectmenu:active, button:active, input[type="submit"]:active { background-image:url("../images/button/active.png"); }
+button:disabled, .ui-button-disabled, input[type="submit"]:disabled  { background-image:url("../images/button/disabled.png"); cursor:default; color:#777777; }
 .ui-selectmenu { display:block; text-align:left; padding:0; }
 .ui-selectmenu-status { width:100%; padding:6px 0; text-indent:10px; }
 .ui-selectmenu-menu-dropdown li:hover { background-color:#e5eff3; }

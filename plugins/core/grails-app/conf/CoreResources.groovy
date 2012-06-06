@@ -16,6 +16,7 @@ modules = {
 
 		resource url: [dir:'js', file:"application.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
+		resource url: [dir:'js', file:'button.js'], disposition: 'head'
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
 		resource url: [dir:'js', file:'check_li.js'], disposition: 'head'
 		resource url: [dir:'js', file:"jquery.ui.selectmenu.js"], disposition: 'head'
