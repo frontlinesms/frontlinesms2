@@ -18,22 +18,11 @@
 	background-color: white;
 }
 
-.ui-dialog h2{
-	margin: 0;
-	padding:0;
-}
-
-.ui-dialog textarea {
-	max-width: 300px;
-	max-height: 300px;
-}
-
 .ui-dialog .error-panel{
 	background-color: #ffefd8;
 	border-bottom: 1px solid #9E9E9E;
 	padding: 3px 30px;
 	text-align: center;
-	min-height: 16px;
 }
 
 .ui-dialog .ui-dialog-titlebar {
@@ -43,21 +32,13 @@
 	border-bottom: 1px solid #9E9E9E;
 }
 
-.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
-	display: block;
-	padding: 0 17px;
-	text-transform: uppercase;
-	vertical-align: middle;
-}
+.ui-dialog .ui-dialog-titlebar .ui-dialog-title { display:block; padding:0 17px; text-transform:uppercase; font-weight:bold;
+	vertical-align: middle; }
 
-.ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog .ui-dialog-titlebar-close { position:absolute; right:.3em; top:50%; width:19px; margin:-10px 0 0 0; padding:1px; height:18px; }
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
-.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
-
-.ui-dialog .ui-dialog-content {
-	overflow: hide;
-}
-
+.ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding:0; }
+.ui-dialog .ui-dialog-content { overflow: hide; }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
 	clear: both;
 	width: 100%;
