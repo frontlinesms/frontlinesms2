@@ -59,7 +59,7 @@
 		<tr id="group-section" class="input basic-info">
 			<td><label for="groups"><g:message code="contact.groups.label"/></label></td>
 			<td>
-				<ol id="group-list">
+				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
 						<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
 							<span>${g.name}</span><a class="remove-group" id="remove-group-${g.id}"></a>
@@ -68,7 +68,7 @@
 					<li id="no-groups" style="${contactGroupInstanceList?'display: none':''}">
 						<p><g:message code="contact.notinanygroup.label"/></p>
 					</li>
-				</ol>
+				</ul>
 			</td>
 			<td></td>
 		</tr>
