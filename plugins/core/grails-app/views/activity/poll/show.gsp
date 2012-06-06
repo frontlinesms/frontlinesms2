@@ -52,7 +52,7 @@
 					pollGraphBtn.removeClass("show-arrow");
 					$("#poll-details").toggle();
 					$('#main-list').toggle();
-					$(".footer").toggle();
+					$("#main-list-foot").toggle();
 				},
 				showMessages: function() {
 					var pollGraphBtn = $("#poll-graph-btn");
@@ -61,7 +61,7 @@
 					pollGraphBtn.addClass("show-arrow");
 					pollGraphBtn.removeClass("hide-arrow");
 					$('#main-list').toggle();
-					$(".footer").toggle();
+					$("#main-list-foot").toggle();
 					pollGraph.loaded = false;
 				},
 				showGraph: function() {
