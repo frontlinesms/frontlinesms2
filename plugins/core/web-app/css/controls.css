@@ -2,8 +2,9 @@
 
 #body-menu { background-color:white; }
 #body-menu a { display:block; padding:5px 17px 5px 40px; }
-#body-menu .selected a { background-color:#d8e8ef; }
-#body-menu a:hover { background-color:#e5eff3; }
+.ui-tabs-nav a { display:block; padding:5px 17px; }
+#body-menu .selected a, .ui-tabs-nav .ui-tabs-selected a { background-color:#d8e8ef; }
+#body-menu a:hover, .ui-tabs-nav a:hover { background-color:#e5eff3; }
 #body-menu a.btn { padding:5px 0; margin:0 40px 0 40px; }
 #body-menu li.create { padding:5px 0; }
 #body-menu li h3 { text-transform:uppercase; font-weight:bold;
