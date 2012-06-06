@@ -8,7 +8,7 @@ var FsmsButton = function() {
 			// replace a button with an anchor
 			// find the original text
 			original = $(original);
-			if(original.hasClass("fsms-button-replaced")) { alert("Already replaced :)"); return; }
+			if(original.hasClass("fsms-button-replaced")) return;
 			original.addClass("fsms-button-replaced");
 			var buttonText = original.val() || original.text();
 			// create the new control
