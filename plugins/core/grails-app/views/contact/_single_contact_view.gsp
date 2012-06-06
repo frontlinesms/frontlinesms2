@@ -75,7 +75,7 @@
 		<tr>
 			<td></td>
 			<td>
-				<select id="group-dropdown" name="group-dropdown">
+				<select id="group-dropdown" name="group-dropdown" class="dropdown">
 					<option class="not-group"><g:message code="contact.add.to.group"/></option>
 					<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 						<option value="${g.id}">${g.name}</option>
