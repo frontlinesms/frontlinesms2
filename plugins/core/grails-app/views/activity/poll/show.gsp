@@ -51,7 +51,7 @@
 					pollGraphBtn.addClass("hide-arrow");
 					pollGraphBtn.removeClass("show-arrow");
 					$("#poll-details").toggle();
-					$('#messages').toggle();
+					$('#main-list').toggle();
 					$(".footer").toggle();
 				},
 				showMessages: function() {
@@ -60,7 +60,7 @@
 					pollGraphBtn.html(i18n("fmessage.showpolldetails"));
 					pollGraphBtn.addClass("show-arrow");
 					pollGraphBtn.removeClass("hide-arrow");
-					$('#messages').toggle();
+					$('#main-list').toggle();
 					$(".footer").toggle();
 					pollGraph.loaded = false;
 				},
@@ -97,7 +97,7 @@
 							    }
 						  });
 					}					
-				},
+				}
 			};
 
 			setInterval(triggerPollGraphRefresh, 5000);
