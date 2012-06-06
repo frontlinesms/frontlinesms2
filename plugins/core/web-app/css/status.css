@@ -70,12 +70,8 @@
 }
 
 #traffic-status input[type=submit]{
-	display:block;
 	float: right;
 	margin: 43px 17px 17px 17px;
-}
-#traffic-status input[type=submit]:hover{
-	height:25px;
 }
 #traffic-status .dropdown{
 	margin: 10px 20%;

@@ -33,7 +33,8 @@
 			// make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 			// TODO reintroduce dropdown when the CSS is fixed
 			$(".dropdown").selectmenu();
-			$("input[type='submit']").each(function() { fsmsButton.apply(this); });
+			var fsmsButton = new FsmsButton();
+			fsmsButton.findAndApply("input[type='submit']");
 
 			// Enable system notification refresh
 			setInterval(systemNotification.refresh, 10000);
