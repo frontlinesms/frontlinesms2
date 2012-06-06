@@ -18,6 +18,7 @@
 		</ul>
 		<div id='multi-group-add'>
 			<g:select name="multi-group-dropdown"
+					class="dropdown"
 					noSelection="['_':g.message(code:'contact.add.to.group')]"
 					from="${nonSharedGroupInstanceList}"
 					optionKey="id"
