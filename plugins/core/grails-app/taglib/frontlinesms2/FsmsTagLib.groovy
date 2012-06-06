@@ -170,15 +170,16 @@ class FsmsTagLib {
 	}
 
 	def datePicker = { att ->
-		def dateFormat = "MM/dd/yyyy" // FIXME get this from the current locale so the user understands it
 		def name = att.name
 		def clazz = att.remove('class')
-		att.value = att.value?.format(dateFormat)
+		att.value = att.value ?: 'none'
+		att.precision = "day"
+		att.noSelection = ['none':'']
 		out << '<div'
 		if(clazz) out << " class=\"$clazz\""
 		out << '>'
-		out << g.textField(att)
-		out << "<input type='hidden' class='datepicker ${att.disabled ? 'disabled': ''}' name='$name-datepicker'/>"
+		out << g.datePicker(att)
+		out << "<input type='hidden' class='datepicker' name='$name-datepicker'/>"
 		out << '</div>'
 	}
 	
