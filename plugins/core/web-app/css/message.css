@@ -43,6 +43,7 @@
 #body.messages #detail #message-detail-buttons { text-align:center; }
 #body.messages #detail #message-detail-buttons > * { width:35%; margin-bottom:10px; }
 
-#body.messages #body-menu a.failures { background-image:url('../images/icons/error_on.png');
+#body.messages #body-menu a.failures { background-image:url("../images/icons/error_on.png");
 	background-repeat:no-repeat; background-position:17px center; }
 
+#message-detail-sender .add { background-image: url("../images/icons/add.png"); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; }
