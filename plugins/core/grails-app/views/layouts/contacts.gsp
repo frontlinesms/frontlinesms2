@@ -21,20 +21,20 @@
 			<div id="body-menu">
 				<fsms:render template="menu"/>
 			</div>
-			<div id="main-list-container">
-				<div id="main-list-head">
-					<fsms:render template="header"/>
+			<g:form>
+				<div id="main-list-container">
+					<div id="main-list-head">
+						<fsms:render template="header"/>
+					</div>
+					<fsms:render template="contact_list"/>
+					<div id="main-list-foot">
+						<fsms:render template="footer"/>
+					</div>
 				</div>
-				<fsms:render template="contact_list"/>
-				<div id="main-list-foot">
-					<fsms:render template="footer"/>
+				<div id="detail">
+						<g:layoutBody/>
 				</div>
-			</div>
-			<div id="detail">
-				<g:form>
-					<g:layoutBody/>
-				</g:form>
-			</div>
+			</g:form>
 		</div>
 		<fsms:render template="/system"/>
 	</body>
