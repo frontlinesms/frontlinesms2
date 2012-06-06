@@ -1,8 +1,6 @@
 <%@ page import="frontlinesms2.*" %>
 <div class="header-buttons">
-	<g:remoteLink class="section-action-button activity-btn btn" controller="quickMessage" action="create" onSuccess="launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true);" id="quick_message">
-		<div id="quick-message"><g:message code="fmessage.quickmessage"/></div>
-	</g:remoteLink>
+	<fsms:quickMessage class="section-action-button activity-btn btn"/>
 	<g:if test="${params.controller!='archive'}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:if>
