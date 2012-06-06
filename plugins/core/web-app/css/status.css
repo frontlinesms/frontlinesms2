@@ -11,7 +11,7 @@
 #body.status #device-detection a { float:right; display:inline-block; margin:17px; }
 #body.status #device-detection table { clear:both; }
 #body.status #device-detection table td { width:0; }
-#body.status #device-detection table td.description { width:100%; }
+#body.status #device-detection table .description { width:100%; }
 #body.status .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
 
 #body.status #traffic-status #trafficGraph{

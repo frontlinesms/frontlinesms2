@@ -72,9 +72,9 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 		$('#multiple-'+itemTypeString+'s').hide();
 
 		var newPane = $(data);
-		newPane.find('.dropdown').selectmenu();
 		newPane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
 		$('#single-'+itemTypeString).replaceWith(newPane);
+		newPane.find('.dropdown').selectmenu();
 		if (itemTypeString == 'contact') {
 			document.getElementById('new-field-dropdown-button').style.width="250px"; //fix width for custom field dropdown
 			applyContactPaneJavascriptEnhancements(newPane);
@@ -104,7 +104,10 @@ function updateMultipleCheckedDetails(itemTypeString) {
 function applyContactPaneJavascriptEnhancements(pane) {-
 	pane.find("#group-list li a.remove-group").click(removeGroupClickAction);
 	pane.find("#group-dropdown").change(addGroupClickAction);
+	pane.find("#group-dropdown").change(selectmenuTools.snapback);
+	pane.find("#multi-group-dropdown").selectmenu();
 	pane.find("#multi-group-dropdown").change(addGroupClickAction);
+	pane.find("#multi-group-dropdown").change(selectmenuTools.snapback);
 	pane.find("#multi-group-list li a.remove-group").click(removeGroupClickAction);
 	pane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
 }
