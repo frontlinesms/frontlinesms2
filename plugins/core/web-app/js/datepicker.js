@@ -4,8 +4,11 @@ $(function(){
 		buttonImageOnly: true,
 		showOn: 'both',
 		onSelect: function (dateText, inst) {
-			$($(this).prev('input').val(dateText));
-			$($(this).prev('input').trigger("change"));
+			var date = new Date(dateText)
+			$($(this).parent().children('select').get(0)).val(date.getDate());
+			$($(this).parent().children('select').get(1)).val(date.getMonth()+1);
+			$($(this).parent().children('select').get(2)).val(date.getFullYear());
+			$($(this).parent().children('select').trigger("change"));
 		}
 	});	
 });

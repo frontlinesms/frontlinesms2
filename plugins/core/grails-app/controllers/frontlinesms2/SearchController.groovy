@@ -30,8 +30,8 @@ class SearchController extends MessageController {
 			searchInstance.status = params.messageStatus ?: null
 			searchInstance.activityId = params.activityId ?: null
 			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = new Date(params.startDate) ?: null
-			searchInstance.endDate = new Date(params.endDate) ?: null
+			searchInstance.startDate = params.startDate ?: null
+			searchInstance.endDate = params.endDate ?: null
 			searchInstance.customFields = [:]
 			CustomField.getAllUniquelyNamed().each { customFieldName ->
 				if(params[customFieldName])
