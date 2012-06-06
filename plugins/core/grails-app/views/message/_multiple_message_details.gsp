@@ -50,6 +50,6 @@
 					<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
 				</g:if>
 		</g:elseif>
-		<fsms:render template="/message/other_actions"/>
 	</div>
+		<fsms:render template="/message/other_actions"/>
 </div>

@@ -40,9 +40,9 @@
 #body.messages #detail #message-detail-content { background-color:white; border:1px solid #B5C6CD; margin:17px 0; }
 #body.messages #detail #message-detail-content p { padding:17px; }
 #body.messages #detail #message-detail-content #no-message { text-align:center; }
-#body.messages #detail #message-detail-buttons, #body.messages #detail #other-actions { text-align:center; }
+#body.messages #detail #message-detail-buttons, #body.messages #detail .other-actions { text-align:center; }
 #body.messages #detail #message-detail-buttons > * { width:35%; margin-bottom:10px; }
-#body.messages #detail #other-actions > * { margin-bottom:10px; }
+#body.messages #detail .other-actions > * { margin-bottom:10px; }
 
 #body.messages #body-menu a.failures { background-image:url("../images/icons/error_on.png");
 	background-repeat:no-repeat; background-position:17px center; }

@@ -3,6 +3,11 @@ var selectmenuTools = {
 		$('#'+selectId).selectmenu();
 	},
 
+	refresh: function(selectId){
+		$('#'+selectId).selectmenu("destroy");
+		$('#'+selectId).selectmenu();
+	},
+
 	snapback: function(selectId){
 		$('#'+selectId).selectmenu("destroy");
 		$('#'+selectId)[0].selectedIndex = 0;
@@ -12,5 +17,5 @@ var selectmenuTools = {
 	removeSelected: function(selectId){
 		$('#'+selectId).find("[value='"+$('#'+selectId).val()+"']").remove();
 		selectmenuTools.snapback(selectId);
-	}
+	},
 }
