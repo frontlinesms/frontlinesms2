@@ -1,23 +1,16 @@
 <%@ page import="frontlinesms2.*" %>
-<div id="tabs-1">
-	<g:if test="${fconnectionInstance == null}">
-		<ul id="type-list">
+<g:if test="${!fconnectionInstance}">
+	<div class="input">
+		<label for="pollType">XXX Select the type of thing</label>
+		<ul class="select">
 			<g:each in="${Fconnection.implementations}" status="i" var="it">
 				<li>
-					<g:set var="type" value="${it.shortName}"/>
-					<g:radio class="${type}" name="connectionType"
-							value="${type}" onclick="fconnection.setType('${type}')"
-							checked="${i == 0}"/>
-					<g:message code="${it.simpleName.toLowerCase()}.label"/>
+					<label for="connectionType"><g:message code="${it.simpleName.toLowerCase()}.label"/></label>
+					<g:radio name="connectionType" checked="${i == 0}"
+							value="${it.shortName}" onclick="fconnection.setType('${it.shortName}')"/>
 				</li>
 			</g:each>
 		</ul>
-	</g:if>
-	<g:else>
-		<g:set var="type" value="${fconnectionInstance.class.shortName}"/>
-		<g:radio class="${type} hide" name="connectionType"
-							value="${type}"
-							checked="${fconnectionInstance as boolean}"/>
-	</g:else>
-</div>
+	</div>
+</g:if>
 

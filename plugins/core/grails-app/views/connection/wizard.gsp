@@ -10,9 +10,7 @@
 		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
 	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
-		<fsms:render template="type" />
-		<fsms:render template="details" plugin="core"/>
-		<fsms:render template="confirm" plugin="core"/>
+		<fsms:wizardTabs templates="type, details, confirm"/>
 	</g:formRemote>
 </div>
 
@@ -21,10 +19,10 @@
 var fconnection = {
 	getType: function() {
 		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
-		<g:else>return $("#type-list").find("input[name=connectionType]").val();</g:else>
+		<g:else>return $("input[name=connectionType]").val();</g:else>
 	},
 	setType: function(connectionType) {
-		$("#type-list").find("input[name=connectionType]").val(connectionType);
+		$("input[name=connectionType]").val(connectionType);
 		<g:each in="${Fconnection.implementations*.shortName}">
 			$("#${it}-form").hide();
 		</g:each>

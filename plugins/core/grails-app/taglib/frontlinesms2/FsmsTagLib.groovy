@@ -92,6 +92,7 @@ class FsmsTagLib {
 	}
 	
 	def inputs = { att ->
+		if(att.table) out << '<table>'
 		def fields = getFields(att)
 		if(fields instanceof Map) {
 			generateSection(att, fields)
@@ -100,7 +101,7 @@ class FsmsTagLib {
 				out << input(att + [field:it])
 			}
 		}
-		
+		if(att.table) out << '</table>'
 	}
 	
 	def input = { att, body ->
