@@ -17,7 +17,7 @@ function addGroupClickAction() {
 	var groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list')
 	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 
-	var groupListItem = $('<li class="" id="' + groupName + '"><span>' + groupName + '</span>');
+	var groupListItem = $('<li class="" groupName="' + groupName + '"><span>' + groupName + '</span>');
 	var deleteButton = $('<a class="remove-command" id="remove-group-' + groupId + '"></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
