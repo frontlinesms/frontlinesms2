@@ -54,35 +54,8 @@
 
 .ui-dialog-content form, .ui-dialog-content .content { padding: 17px; }
 
-.ui-dialog .activity-choice {
-	color: grey;
-	padding: 0 5px;
-}
-
-.ui-dialog .activity-list-item {
-	padding: 10px 0;
-}
-
-.ui-dialog .activity-description {
-	padding: 10px 25px;
-}
-
-.ui-dialog .bold {
-	font-weight: bold;
-}
-
-.ui-dialog .inline {
-	display: inline;
-}
-
 .ui-dialog .summary {
 	margin: 17px;
-}
-
-.ui-dialog .info {
-	padding: 0 0 20px 0;
-	line-height: 150%;
-	margin: 0;
 }
 
 .ui-dialog #poll-question textarea{
@@ -95,7 +68,3 @@
 	font-weight: bolder;
 }
 
-#new-activity-choices {
-	padding: 0;
-	margin: 0;
-}

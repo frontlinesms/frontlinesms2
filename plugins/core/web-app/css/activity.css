@@ -1,0 +1,5 @@
+#modalBox.ui-dialog-content div.input.select label { margin:20px 25px 20px 25px; position:relative; display:block; cursor:pointer; padding:10px; }
+#modalBox.ui-dialog-content div.input.select label:hover, #modalBox.ui-dialog-content div.input.select label:hover > * { background-color:#e5eff3; }
+#modalBox.ui-dialog-content div.input.select label input[type="radio"] { position:absolute; top:10px; left:10px; }
+#modalBox.ui-dialog-content div.input.select label h3 { margin-left:25px; margin-bottom:10px; font-weight:bold; }
+#modalBox.ui-dialog-content div.input.select label .info { margin-left:25px; }
