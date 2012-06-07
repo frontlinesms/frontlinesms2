@@ -238,9 +238,11 @@ class MessageController {
 					messagesToSend << outgoingMessage
 					activity.addToMessages(outgoingMessage)
 				}
-				activity.save(flush:true)
+				activity.save()
 			} else if (params.ownerId && params.ownerId != 'inbox') {
+				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
 				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
+				messageInstance.save()
 			} else {
 				messageInstance.with {
 					if(messageOwner) {

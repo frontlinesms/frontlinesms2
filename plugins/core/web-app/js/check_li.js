@@ -77,7 +77,6 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 		$('#single-'+itemTypeString).replaceWith(newPane);
 		newPane.find('.dropdown').selectmenu();
 		if (itemTypeString == 'contact') {
-			document.getElementById('new-field-dropdown-button').style.width="250px"; //fix width for custom field dropdown
 			applyContactPaneJavascriptEnhancements(newPane);
 		}
 		if (itemTypeString == 'message') {
@@ -102,15 +101,12 @@ function updateMultipleCheckedDetails(itemTypeString) {
 	}
 }
 
-function applyContactPaneJavascriptEnhancements(pane) {-
-	pane.find("#group-list li a.remove-command").click(removeGroupClickAction);
-	pane.find("#group-dropdown").change(addGroupClickAction);
-	pane.find("#group-dropdown").change(function() { selectmenuTools.removeSelected('group-dropdown') });
-	pane.find("#multi-group-dropdown").selectmenu();
-	pane.find("#multi-group-dropdown").change(addGroupClickAction);
-	pane.find("#multi-group-dropdown").change(function() { selectmenuTools.snapback('multi-group-dropdown') });
-	pane.find("#multi-group-list li a.remove-command").click(removeGroupClickAction);
-	pane.find("input[type='submit']").each(function() { fsmsButton.apply(this); });
+function applyContactPaneJavascriptEnhancements(pane) {
+	initContactPaneGroups();
+	initContactPaneFields();
+	$("div.single-contact").keyup(function(event) {
+		enableSaveAndCancel();
+	});
 }
 
 function checkAll(itemTypeString) {

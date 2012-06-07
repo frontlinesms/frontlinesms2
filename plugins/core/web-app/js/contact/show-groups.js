@@ -1,9 +1,13 @@
 $(document).ready(function() {
+	initContactPaneGroups();
+});
+
+function initContactPaneGroups() {
 	$("#group-list li a.remove-command").click(removeGroupClickAction);
 	$("#group-dropdown").change(addGroupClickAction);
 	$("#multi-group-dropdown").change(addGroupClickAction);
 	$("#multi-group-list li a.remove-command").click(removeGroupClickAction);
-});
+}
 
 function addGroupClickAction() {
 	var me = $(this).find('option:selected');
