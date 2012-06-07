@@ -1,6 +1,9 @@
 
 #tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
 #tabs div.input label, #tabs div.ui-tabs-panel div.confirm h2 { position:relative; left:-25px; font-size:110%; margin-bottom:15px; font-weight:bold; }
+#tabs div.input.optional { position:relative; }
+#tabs div.input.optional label { left:0; }
+#tabs div.input.optional input[type="checkbox"] { position:absolute; top:0; left:-25px; }
 #tabs div.input > * { display:block; }
 #tabs div.input textarea { width:98%; }
 #tabs div.input .controls { display:table; margin-top:10px; }

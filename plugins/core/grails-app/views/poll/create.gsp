@@ -14,7 +14,9 @@
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<fsms:render template="/poll/question"/>
+		<div id="tabs-1">
+			<fsms:render template="/poll/question"/>
+		</div>
 		<fsms:render template="/poll/responses"/>
 		<fsms:render template="/poll/sorting"/>
 		<fsms:render template="/poll/replies"/>
