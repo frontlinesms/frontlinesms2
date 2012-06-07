@@ -1,42 +1,29 @@
 <%@ page import="frontlinesms2.Poll" %>
-<div id="tabs-1">
-	<div class="section">
-		<div id="responseType">
-			<h2 class="bold"><g:message code="poll.type.prompt"/></h2>
-			<ul>
-				<g:if test="${activityInstanceToEdit}">
-					<g:set var="isYesNo" value="${activityInstanceToEdit?.yesNo}"/>
-					<li>
-						<g:radio name="pollType" value="yesNo" checked="${isYesNo}" disabled="${!isYesNo}"/>
-						<g:message code="poll.question.yes.no"/>
-					</li>
-					<li>
-						<g:radio name="pollType" value="multiple" checked="${!isYesNo}" disabled="${isYesNo}"/>
-						<g:message code="poll.question.multiple"/>
-					</li>
-				</g:if>
-				<g:else>
-					<li>
-						<g:radio name="pollType" value="yesNo" checked='checked'/>
-						<g:message code="poll.question.yes.no"/>
-					</li>
-					<li>
-						<g:radio name="pollType" value="multiple"/>
-						<g:message code="poll.question.multiple"/>
-					</li>
-				</g:else>
-			</ul>
-		</div>
-		<div id="poll-question" >
-			<label class="bold" for='question'>
-				<g:message code="poll.question.prompt"/>
-				<span class="required-indicator"> *</span>
-			</label>
-			<g:textArea name="question" value="${activityInstanceToEdit?.question}" class="required"/>
-		</div>
-		<g:checkBox name="dontSendMessage" value="no-message" checked='false'/><g:message code="poll.message.none"/>
-	</div>
+<div class="input">
+	<label for="pollType"><g:message code="poll.type.prompt"/></label>
+	<ul class="select">
+		<g:set var="isYesNo" value="${activityInstanceToEdit?.yesNo}"/>
+		<li>
+			<label for="pollType"><g:message code="poll.question.yes.no"/></label>
+			<g:radio name="pollType" value="yesNo" checked="${!activityInstanceToEdit || isYesNo}" disabled="${activityInstanceToEdit && !isYesNo}"/>
+		</li>
+		<li>
+			<label for="pollType"><g:message code="poll.question.multiple"/></label>
+			<g:radio name="pollType" value="multiple" checked="${activityInstanceToEdit && !isYesNo}" disabled="${activityInstanceToEdit && isYesNo}"/>
+		</li>
+	</ul>
 </div>
+<div class="input required">
+	<label for="question">
+		<g:message code="poll.question.prompt"/>
+	</label>
+	<g:textArea name="question" value="${activityInstanceToEdit?.question}" class="required"/>
+</div>
+<div class="input optional">
+	<label for="dontSendMessage"><g:message code="poll.message.none"/></label>
+	<g:checkBox name="dontSendMessage" value="no-message" checked='false'/>
+</div>
+
 <r:script>
 	$("input[name='dontSendMessage']").live("change", function() {
 		if(isGroupChecked("dontSendMessage")) {

@@ -23,11 +23,11 @@
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact" status="i">
 				<li class="contact">
-					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" onclick="setContact('${contact.mobile}')" checked="${recipients.contains(contact.mobile)}"/>
+					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" onclick="setContact('${contact.mobile}')" checked="${recipients?.contains(contact.mobile)}"/>
 					<label for="addresses-${i}">${contact.name ?: contact.mobile}</label>
 				</li>
 				<li class="contact">
-					<g:if test="${recipients.contains(contact.email)}">
+					<g:if test="${recipients?.contains(contact.email)}">
 						<input type="checkbox" name="addresses" value="${contact.email}" checked>
 						${contact.name ?: contact.email} (<g:message code="contact.email.label"/>)
 					</g:if>
