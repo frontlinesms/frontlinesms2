@@ -9,7 +9,7 @@
 		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
 		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
-	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
+	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json', connectionType:fconnectionInstance?.shortName]]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
 		<fsms:wizardTabs templates="type, details, confirm"/>
 	</g:formRemote>
 </div>
@@ -18,7 +18,7 @@
 
 var fconnection = {
 	getType: function() {
-		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
+		<g:if test="${fconnectionInstance}">return "${fconnectionInstance?.shortName}";</g:if>
 		<g:else>return $("input[name=connectionType]").val();</g:else>
 	},
 	setType: function(connectionType) {
@@ -201,7 +201,10 @@ function attachCheckBoxListener() {
 
 function initializePopup() {
 	$("#connectionForm").validate();
-	fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+	<g:if test="${!fconnectionInstance}">
+		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+	</g:if>
+	
 	fconnection.init();
 	$("#tabs").bind("tabsshow", fconnection.show);
 	attachCheckBoxListener();
