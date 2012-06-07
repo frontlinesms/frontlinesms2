@@ -12,7 +12,7 @@
 					function refreshConnectionStatus() {
 						$.get("${createLink(controller:'connection', action:'list', id:params?.id)}", function(data) {
 							var newSystemNotificationCount = $("div.system-notification").length
-							if (cnt < 3 && oldSystemNotificationCount == newSystemNotificationCount) {
+							if (cnt < 2 && oldSystemNotificationCount == newSystemNotificationCount) {
 								cnt = cnt + 1;
 								$(".connections").replaceWith($(data).find('.connections'));	
 							} else {

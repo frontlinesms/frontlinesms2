@@ -18,7 +18,7 @@
 
 var fconnection = {
 	getType: function() {
-		<g:if test="${fconnectionInstance}">return "${fconnectionInstance.getClass().shortName}";</g:if>
+		<g:if test="${fconnectionInstance}">return "${fconnectionInstance?.shortName}";</g:if>
 		<g:else>return $("input[name=connectionType]").val();</g:else>
 	},
 	setType: function(connectionType) {
@@ -201,7 +201,10 @@ function attachCheckBoxListener() {
 
 function initializePopup() {
 	$("#connectionForm").validate();
-	fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+	<g:if test="${!fconnectionInstance}">
+		fconnection.setType("${fconnectionInstance?fconnectionInstance.getClass().shortName: 'smslib'}");
+	</g:if>
+	
 	fconnection.init();
 	$("#tabs").bind("tabsshow", fconnection.show);
 	attachCheckBoxListener();
