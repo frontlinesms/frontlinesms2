@@ -243,11 +243,9 @@ class ContactController {
 		//also save any existing fields that have changed
 		def existingFields = CustomField.findAllByContact(contactInstance)
 		existingFields.each() { existingField ->
-			println('processing '+existingField.name)
 			def newValue = params."$existingField.name"
 			if (newValue && (existingField.value != newValue))
 			{
-				println('saving '+existingField.name)
 				existingField.value = newValue
 				existingField.save()
 			}
