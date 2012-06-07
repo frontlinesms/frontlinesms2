@@ -77,8 +77,8 @@ Your Auto-reply will appear under the Activities sub-heading.
 [6]: gotoCreating_a_Poll
 [7]: gotoCreating_a_group
 [8]: gotoCreating_a_Smart_Group
-[9]: activities/poll1.jpg
-[10]: activities/autoreply1
-[11]: activities/autoreply2
-[12]: activities/autoreply3
-[13]: activities/autoreply4
+[9]: ../images/help/poll1.jpg
+[10]: ../images/help/autoreply1
+[11]: ../images/help/autoreply2
+[12]: ../images/help/autoreply3
+[13]: ../images/help/autoreply4

@@ -80,9 +80,9 @@ Your Announcement will appear under the activities sub-heading.
 [6]: gotoGetting_around_activities
 [7]: gotoCreating_a_poll
 [8]: gotoCreating_a_group
-[9]: activities/poll1.jpg
-[10]: activities/announcement1.jpg
-[11]: activities/announcement2.jpg
-[12]: activities/announcement3.jpg
-[13]: activities/announcement4.jpg
+[9]: ../images/helpactivities/poll1.jpg
+[10]: ../images/help/announcement1.jpg
+[11]: ../images/help/announcement2.jpg
+[12]: ../images/help/announcement3.jpg
+[13]: ../images/help/announcement4.jpg
 

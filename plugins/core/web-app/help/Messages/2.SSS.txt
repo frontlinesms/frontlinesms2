@@ -79,4 +79,4 @@ _**Note:** Unlike [multiple select][10], a message's status as starred persists 
 [16]: gotoFiltering_messages
 [17]: gotoQuickMessage
 [18]: gotoMRFD
-[19]: Messages\sss.jpg
+[19]: ../images/help/sss.jpg

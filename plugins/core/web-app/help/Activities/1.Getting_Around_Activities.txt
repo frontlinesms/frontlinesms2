@@ -61,5 +61,5 @@ You can [reply][15], [move][15], [forward][15] and [delete][15] messages from he
 [14]: MessageDetails
 [15]: gotoMRFD
 [16]: gotoGetting_Around_the_messages_tab
-[17]: activities/activityoverview.jpg
-[18]: activities/pollchart.jpg
+[17]: ../images/help/activityoverview.jpg
+[18]: ../images/help/pollchart.jpg

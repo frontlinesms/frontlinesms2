@@ -23,4 +23,4 @@ There are 3 sections in the settings area. Please select one to see more informa
 [3]: gotoManaging_connections
 [4]: Navigatingthesettingsmenu
 [5]: gotoSystemLogs
-[6]: settings/settingsmenu.jpg
+[6]: ../images/help/settingsmenu.jpg

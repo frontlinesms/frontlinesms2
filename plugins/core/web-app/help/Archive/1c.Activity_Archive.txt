@@ -40,5 +40,5 @@ Clicking on a single activity will take you to that activities detail view which
 [7]: gotoGetting_around_activities
 [8]: gotoArchiving_Activities_Folders
 [9]: gotoArchivingMessages
-[10]: archive/activityarchive.jpg
-[11]: archive/activityarchivedetail.jpg
+[10]: ../images/help/activityarchive.jpg
+[11]: ../images/help/activityarchivedetail.jpg

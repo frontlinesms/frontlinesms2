@@ -83,7 +83,7 @@ SCREENSHOT
 [16]: ExportingSmartGroup
 [17]: gotoMRFD
 [18]: gotoArchiving_Messages
-[19]: messages\ExportMessageTab.jpg
-[20]: messages\ExportActivity.jpg
-[21]: messages\ExportSearchtab.jpg
-[22]: messages\ExportDialog.jpg
+[19]: ../images/help/ExportMessageTab.jpg
+[20]: ../images/help/ExportActivity.jpg
+[21]: ../images/help/ExportSearchtab.jpg
+[22]: ../images/help/ExportDialog.jpg

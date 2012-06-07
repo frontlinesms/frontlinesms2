@@ -34,4 +34,4 @@ To specify your own date range:
 ---
 
 [1]: CustomisingtheTrafficGraph
-[2]: status/usingtrafficgraph.jpg
+[2]: ../images/help/usingtrafficgraph.jpg

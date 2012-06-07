@@ -34,4 +34,4 @@ The results of your search will then be displayed in the message list (2).
 [3]: ABasicSearch
 [4]: gotoExport
 [5]: gotoSearching_through_Contacts
-[6]: search/basicsearch.jpg
+[6]: ../images/help/basicsearch.jpg

@@ -32,5 +32,5 @@ Your messages will be exported to the desired format.
 [3]: gotoCreating_a_poll
 [4]: gotoCreate_an_announcement
 [5]: gotoManually_Categorise
-[6]: activities/exportactivity.jpg
-[7]: messages/exportdialog.jpg
+[6]: ../images/help/exportactivity.jpg
+[7]: ../images/help/exportdialog.jpg

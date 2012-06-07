@@ -50,4 +50,4 @@ The selected messages will be moved to your chosen destination.
 [7]: gotoArchiving_Messages
 [8]: gotoGetting_around_folders
 [9]: gotoUnarchive
-[10]: Messages\sent.jpg
+[10]: ../images/help/sent.jpg

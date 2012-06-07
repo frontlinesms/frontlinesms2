@@ -31,5 +31,5 @@ Your Activity will be Renamed.
 [3]: gotoCreating_a_poll
 [4]: gotoCreate_an_announcement
 [5]: gotoManually_Categorise
-[6]: activities/renamepoll.jpg
-[7]: activities/renamepolldialog.jpg
+[6]: ../images/help/renamepoll.jpg
+[7]: ../images/help/renamepolldialog.jpg

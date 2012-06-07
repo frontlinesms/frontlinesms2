@@ -40,5 +40,5 @@ Clicking on a single folder will take you to that folders detail view which rese
 [6]: gotoGetting_around_folders
 [7]: gotoArchiving_Activities_Folders
 [8]: gotoArchivingMessages
-[9]: archive/folderarchive.jpg
-[10]: archive/folderarchivedetail.jpg
+[9]: ../images/help/folderarchive.jpg
+[10]: ../images/help/folderarchivedetail.jpg

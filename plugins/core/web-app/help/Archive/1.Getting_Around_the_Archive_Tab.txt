@@ -47,4 +47,4 @@ You can [reply][9], [move][9], [forward][9], [delete][9] and [unarchive][12] mes
 [10]: gotoArchiving_Activities_Folders
 [11]: gotoArchiving_Messages
 [12]: gotoUnarchive
-[13]: archive\archiveoverview.jpg
+[13]: ../images/help/archiveoverview.jpg

@@ -49,4 +49,4 @@ The search header (3) displays the parameters of the search that was last carrie
 [4]: gotoQuickMessage
 [5]: gotoExporting
 [6]: gotoCreating_a_search
-[7]: search/searchoverview.jpg
+[7]: ../images/help/searchoverview.jpg

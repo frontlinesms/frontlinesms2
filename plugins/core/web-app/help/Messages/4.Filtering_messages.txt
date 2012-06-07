@@ -28,4 +28,4 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 [3]: howtoshowstarredmessages
 [4]: gotoGetting_around_the_Search_tab
 [5]: gotoMRFD
-[6]: Messages\filteringmessages.jpg
+[6]: ../images/help/filteringmessages.jpg

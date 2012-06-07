@@ -81,4 +81,4 @@ When multiple messages are selected, a summary of how many messages have been se
 [17]: MessageList
 [18]: gotoSSS
 [19]: MessageDetails
-[20]: Messages\MessageTabOverview.jpg
+[20]: ../images/help/MessageTabOverview.jpg

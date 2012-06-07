@@ -104,9 +104,9 @@ The message will be queued to be sent.
 [11]: Moving
 [12]: Forwarding
 [13]: gotoExporting
-[14]: messages\mrfdreply.jpg
-[15]: messages\MRFDMultiple.jpg
-[16]: messages\mrfdreply.jpg
-[17]: messages\MRFDMultiple.jpg
-[18]: messages\mrfdreply.jpg
-[19]: messages\mrfdreply.jpg
+[14]: ../images/help/mrfdreply.jpg
+[15]: ../images/help/MRFDMultiple.jpg
+[16]: ../images/help/mrfdreply.jpg
+[17]: ../images/help/MRFDMultiple.jpg
+[18]: ../images/help/mrfdreply.jpg
+[19]: ../images/help/mrfdreply.jpg

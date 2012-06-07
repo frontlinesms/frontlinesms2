@@ -33,5 +33,5 @@ Your new group should appear under 'Groups'.
 [5]: gotoCreating_a_Smart_Group
 [6]: gotoExporting
 [7]: gotoAdd_remove_a_custom_field
-[8]: contacts\creategroup.jpg
-[9]: contacts\creategroupdialog.jpg
+[8]: ../images/help/creategroup.jpg
+[9]: ../images/help/creategroupdialog.jpg

@@ -24,4 +24,4 @@ FrontlineSMS will change to the language you have specified.
 [1]: gotoChanging_Languages
 [2]: gotoRestoring_a_backup
 [3]: gotoManaging_connections
-[4]: settings/settingslanguage.jpg
+[4]: ../images/help/settingslanguage.jpg

@@ -30,5 +30,5 @@ Your folder will be created and will be displayed underneath the "Folders" sub h
 [4]: gotoArchiving_Activities_Folders
 [5]: gotoCreating_an_activity
 [6]: gotoMRFD
-[7]: folders\folderoverview.jpg
-[8]: folders\folderdialog.jpg
+[7]: ../images/help/folderoverview.jpg
+[8]: ../images/help/folderdialog.jpg
