@@ -3,6 +3,7 @@
 #tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
 #tabs div.input > label, #tabs div.ui-tabs-panel h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
 #tabs div.input > label, #tabs div.ui-tabs-panel div.confirm h2 { position:relative; left:-25px; }
+#tabs div.ui-tabs-panel div.confirm h2 { margin-bottom:10px; }
 
 #tabs div.input > * { display:block; }
 #tabs div.input textarea { width:98%; }
@@ -23,3 +24,6 @@
 #tabs div.input .controls > :first-child { width:100%; }
 #tabs div.input .controls .magicwand-container a { text-align:right; }
 
+#tabs div.confirm td { padding:5px; }
+#tabs div.confirm td:first-child { padding-left:0; font-weight:bold; }
+#tabs div.confirm td:last-child { padding-right:0; }
