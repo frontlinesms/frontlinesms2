@@ -89,7 +89,7 @@ class MessageController {
 		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectClass == frontlinesms2.Fmessage) {
+				if(obj.objectClass == "frontlinesms2.Fmessage") {
 					params.messageId = obj.objectId
 				} else {
 					trashedObject = obj.object

@@ -139,7 +139,7 @@ class CoreBootStrap {
 		def m1 = new Fmessage(src: '+3245678', date: new Date(), text: "time over?")
 		def m2 = new Fmessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
 		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
-		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "sample sms")
+		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "Some cool characters: कञॠ, and more: á é í ó ú ü ñ ¿ ¡ ºª")
 		
 		m1.addToDispatches(dst:'+123456789', status:DispatchStatus.FAILED)
 		m1.addToDispatches(dst:'+254114533', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
