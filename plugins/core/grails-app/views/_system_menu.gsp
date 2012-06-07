@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<div id="logo"></div>
-<ul id="system-nav">
+<ul id="system-menu">
 	<li class="${params.controller=='settings'?'selected':''}">
 		<g:link controller="settings">
 			<g:message code="common.settings"/>
@@ -11,5 +10,5 @@
 			<g:message code="commont.help"/>
 		</g:remoteLink>
 	</li>
-
 </ul>
+

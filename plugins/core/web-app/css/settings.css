@@ -1,156 +1,38 @@
-#settings-tab .section-header{
-	height: 43px;
-	border-bottom: 1px solid #9e9e9e;
-}
-#connections{
-   	width: 100%;
-   	height: 90%;
-   	overflow: auto;
-} 
-#no-connection{
-	text-align:center;
-	padding-top:20px;
-	padding-bottom:20px;
-}
-#choose-language {
-	float:left;
-	width: 200px;
-	height: 30px;
-	padding:10px;
-}
+#body.settings #body-menu { padding:10px 0; }
 
-#import, #language {
-	display: block;
-	width: 100%;
-	padding: 0 30px;
-	margin:10px 0 10px 0;
-	border-bottom: 1px solid #9e9e9e;
-}
-.importinfo{
-	font-size: 12;
-	padding: 3px;
-	margin-bottom: 5px;
-}
-.importinfoselect{
-	font-size: 12;
-	font-style: italic;
-	padding: 3px;
-}
-#connections ul{
-	padding: 0;
-	margin: 0;
-}
+#body.settings #body-content-container > * { width:auto; }
 
-#connections ul .selected{
-	height: 120px;
-}
-.connection{
-	border-bottom: 1px solid #9e9e9e;
-}
-.connection .btn{
-	float: right;
-	margin: 17px;
-}
+#body.settings #body-content-head { padding:0 17px; background-color:white; border-bottom:solid #9e9e9e 1px; }
+#body.settings #body-content-head.logs { border-bottom:none; }
+#body.settings #body-content-head div.content { display:table; width:100%; }
+#body.settings #body-content-head div.content > * { display:table-cell; vertical-align:middle; }
+#body.settings #body-content-head ul.buttons { text-align:right; }
+#body.settings #body-content-head ul.buttons li { display:inline-block; }
 
-.connection-header{
-	height: 1.5em;
-	padding: 17px 17px 17px 25px;
-	margin-left: 17px;
-	background-image: url('../images/icons/toggle_plus.png');
-	background-repeat: no-repeat;
-	background-position: left center;
-}
-#connections .selected .connection-header{
-	background-image: url('../images/icons/toggle_minus.png');
-}
-.connection-header h2, .connection-header a, .connection-header p{
-	display:inline;
-}
-.connection-header .connection-type{
-	padding: 0 17px;
-}
-.connection-status{
-	display: inline;
-	float:right;
-}
+#body.settings #body-content > div { border-bottom:1px solid #9e9e9e; padding:10px 30px; }
+#body.settings #body-content h2 { font-weight:bold; font-size:115%; }
+#body.settings #body-content > div > * { margin:5px 0 10px 0; }
+#body.settings #body-content #language form > * { display:inline-block; }
+#body.settings #body-content #import label[for='data'] { font-weight:bold; padding:3px; margin-bottom:5px; }
+#body.settings #body-content #import .radio-choice { margin:5px; }
+#body.settings #body-content #import input[type='file'] { margin-top:10px; }
+#body.settings #body-content #import label[for='importCsvFile'] { font-style:italic; }
 
-.connection-confirm-table{
-	margin-top:30px;
-}
+#body.settings #body-content-container { background-color:white; border-left:1px solid #9e9e9e; }
+#body-content.connections .connection { display:table; width:100%; border-bottom:1px solid #9e9e9e; }
+#body-content.connections .connection h2 { font-weight:bold;
+	background-image:url("../images/icons/toggle_plus.png"); background-position:17px center;
+	background-repeat:no-repeat; padding-left:38px; }
+#body-content.connections .connection.selected h2 { background-image:none; }
+#body-content.connections .connection.selected .controls { padding:0 17px 17px 17px; text-align:right; }
+#body-content.connections .connection .connection-status { font-style:italic; }
+#body-content.connections .connection.selected { background-color:#d8e8ef; }
+#body-content.connections .connection-header { display:table-row; }
+#body-content.connections .connection-header > * { display:table-cell; white-space:nowrap; padding:17px; }
+#body-content.connections .connection-header > .connection-type { width:100%; }
+#body-content.connections .controls { padding:17px; }
 
-.connection-confirm-table td:first-child{
-	font-weight:bold;
-	margin-left:0px;
-}
-
-.connection-confirm-table td{
-	margin-left:5px;
-}
-
-#create-connection-btn {
-	padding: 17px;
-}
-
-#logEntries{
-	z-index: 1;
-	display: block;
-}
-#log-filters {
-	margin: 0 30px;
-	padding: 5px 17px;
-	height: 30px;
-	border-bottom: 1px solid #9e9e9e;
-}
-#log-filters .show-log-text {
-	float: left;
-	min-width: 210px;
-	padding: 10px 0;
-}
-
-#log-list {
-	display: block;
-	width: 100%;
-	padding: 0 30px;
-}
-#log-list table, #log-list tr, #log-list tbody {
-	display: block;
-	width: 100%;
-}
-#log-list td{
-	float: left;
-	width: 50%;
-	font-size:14;
-}
-#log-list .entry-date{
-	float: right;
-	min-width: 300px;
-}
-
-.langsection {
-	width: 380px;
-}
-
-.lang-buttons li {
-	width: 140px;
-	margin-right: 15px;
-	display: inline;
-	float: left;
-}
-
-#language h2, #language p, #language input[type="submit"] {
-	margin: 5px 0 10px 0;
-}
-
-#language .clearfix {
-	clear: both;
-}
-
-#import h2, #import p, #import input[type="file"] {
-	margin: 5px 0 10px 0;
-}
-
-#show-log-text{
-	float: left;
-	margin: 5px 25px 0 0;
-}
-
+#body-content.logs th.content { width:100%; }
+#body-content.logs .date { white-space:nowrap; }
+#body-content.logs tr:nth-child(2n) td { background-color:#eff2f9; }
+#body-content.logs tr:hover td { background-color:#e5eff3; }

@@ -7,12 +7,11 @@
 		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm"/></a></li>
 	</ol>
 	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))">
-		<fsms:render template="/autoreply/keyword"/>
-		<div id="tabs-2">
-			<fsms:render template="/message/compose"/>
-		</div>
-		<fsms:render template="/autoreply/confirm"/>
-		<fsms:render template="/autoreply/save"/>
+		<fsms:wizardTabs templates="
+				/autoreply/keyword,
+				/message/compose,
+				/autoreply/confirm,
+				/autoreply/save"/>
 	</g:formRemote>
 </div>
 <r:script>

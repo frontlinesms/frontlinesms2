@@ -7,7 +7,6 @@
 		<fsms:render template="traffic"/>
 		<div id="right-column">
 			<fsms:render template="connection_list"/>
-			<h3 id="detection-title"><g:message code="status.devises.header"/></h3>
 			<fsms:render template="device_detection"/>
 			
 		</div>

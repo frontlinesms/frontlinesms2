@@ -9,32 +9,25 @@
 			function initializePopup() {
 				$("#submit").attr('disabled', 'disabled');
 			}
-			
-			function setChecked(activityType) {
-				$("#new-activity-choices input[checked=checked]").attr('checked', '');
-				$("#new-activity-choices ." + activityType).attr('checked', 'checked');
-				$("#submit").removeAttr('disabled');
+
+			function setActivityTypeSelected() {
+				var submit = $("#submit");
+				submit.removeAttr('disabled');
+				submit.click();
 			}
 		</r:script>
 		<r:layoutResources/>
 	</head>
 	<body>
-		<form>
-			<ul id="new-activity-choices">
-				<li class="activity-list-item">
-					<input type="radio" name="activity" value="announcement" class="announcement" onclick="setChecked('announcement')"/><span class="activity-choice" onclick="setChecked('announcement')"><g:message code="announcement.label" /></span>
-					<div class="activity-description"><g:message code="announcement.description"/></div>
-				</li>
-				<li class="activity-list-item">
-					<input type="radio" name="activity" value="poll" class="poll" onclick="setChecked('poll')"/><span class="activity-choice" onclick="setChecked('poll')"><g:message code="poll.label"/></span>
-					<div class="activity-description"><g:message code="poll.description"/></div>
-				</li>
-				<li class="activity-list-item">
-					<input type="radio" name="activity" value="autoreply" class="autoreply" onclick="setChecked('autoreply')"/><span class="activity-choice" onclick="setChecked('autoreply')"><g:message code="autoreply.label"/></span>
-					<div class="activity-description"><g:message code="autoreply.description"/></div>
-				</li>
-			</ul>
-		</form>
+		<div class="input select">
+			<g:each var="activityType" in="${['announcement', 'autoreply', 'poll']}">
+				<label>
+					<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>
+					<h3><g:message code="${activityType}.label"/></h3>
+					<div class="info"><g:message code="${activityType}.description"/></div>
+				</label>
+			</g:each>
+		</div>
 		<r:layoutResources/>
 	</body>
 </html>

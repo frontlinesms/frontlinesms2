@@ -1,4 +1,4 @@
-<div class="footer message">
+<div class="controls">
 	<g:if test="${messageSection}">
 		<div id="message-toggler">
 			<g:message code="fmessage.footer.show"/>:

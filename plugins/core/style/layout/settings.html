@@ -7,8 +7,11 @@
 		<script src="../js/jquery-1.7.1.min.js"></script>
 		<script src="../js/resizer.js"></script>
 		<script>
-			if(window.location.href.indexOf("nojs") == -1) {
-			}
+			$(function() {
+				if(window.location.href.indexOf("nojs") == -1) {
+					$(window).resize(new Resizer("#body-content-container", "#body-content-head"));
+				}
+			});
 		</script>
         </head>
         <body>
@@ -65,39 +68,44 @@
 						<li>Menu Item X</li>
 					</ul>
 				</div>
-				<div id="content-container">
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
-					<p>Here is some settings content</p>
+				<div id="body-content-container">
+					<div id="body-content-head" class="hello">
+						<h1>Here is the title of the content</h1>
+					</div>
+					<div id="body-content">
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+						<p>Here is some settings content</p>
+					</div>
 				</div>
                         </div>
                 </div>

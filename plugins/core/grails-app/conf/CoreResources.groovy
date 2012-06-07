@@ -1,16 +1,24 @@
 modules = {
 	common {
 		dependsOn "jquery, jquery-ui"
-		resource url: [dir:'css', file:"colors.css"]
-		resource url: [dir:'css', file:"screen.css"]
-		resource url: [dir:'css', file:"buttons.css"]
-		resource url: [dir:'css', file:"header.css"]
-		resource url: [dir:'css', file:"help.css"]
-		resource url: [dir:'css', file:"print.css"]
-		resource url: [dir:'css', file:"help.css"]
+		resource url: [dir:'css', file:'reset.css']
+		resource url: [dir:'css', file:'layout.css']
+		resource url: [dir:'css', file:'head.css']
+		resource url: [dir:'css', file:'controls.css']
+		resource url: [dir:'css', file:'message.css']
+		resource url: [dir:'css', file:'contact.css']
+		resource url: [dir:'css', file:'archive.css']
+		resource url: [dir:'css', file:'activity.css']
+		resource url: [dir:'css', file:'search.css']
+		resource url: [dir:'css', file:'settings.css']
+		resource url: [dir:'css', file:'wizard.css']
+		resource url: [dir:'js/layout', file:'resizer.js'], disposition: 'head'
+
+		resource url: [dir:'css', file:'status.css']
 
 		resource url: [dir:'js', file:"application.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
+		resource url: [dir:'js', file:'button.js'], disposition: 'head'
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
 		resource url: [dir:'js', file:'check_li.js'], disposition: 'head'
 		resource url: [dir:'js', file:"jquery.ui.selectmenu.js"], disposition: 'head'
@@ -19,11 +27,11 @@ modules = {
 		resource url: [dir:'js', file:"smallPopup.js"], disposition: 'head'
 		resource url: [dir:'js', file:"system_notification.js"], disposition: 'head'
 		resource url: [dir:'js', file:'magicwand.js'], disposition: 'head'
+		resource url: [dir:'js', file:'selectmenuTools.js'], disposition: 'head'
 	}
 	
 	messages {
 		dependsOn "jquery, jquery-ui, common"
-		resource url: [dir:'css', file:"messages.css"]
 		resource url: [dir:'js', file:"message/arrow_navigation.js"], disposition: 'head'
 		resource url: [dir:'js', file:"message/star_message.js"], disposition: 'head'
 		resource url: [dir:'js', file:"message/categorize_dropdown.js"], disposition: 'head'
@@ -42,7 +50,6 @@ modules = {
 	
 	contacts {
 		dependsOn "jquery, jquery-ui, common"
-		resource url: [dir:'css', file:"contacts.css"]
 		resource url: [dir:'js', file:"contact/buttonStates.js"]
 		resource url: [dir:'js', file:"contact/moreGroupActions.js"]
 		resource url: [dir:'js', file:"contact/search_within_list.js"]
@@ -52,7 +59,7 @@ modules = {
 
 	status {
 		dependsOn "jquery, jquery-ui, common"
-		resource url: [dir:'css', file:"status.css"]
+		resource url: [dir:'js', file:"datepicker.js"]
 	}
 
 	graph {
@@ -68,13 +75,12 @@ modules = {
 
 	search {
 		dependsOn "jquery, jquery-ui, common, messages"
-		resource url: [dir:'css', file:"search.css"]
+		resource url: [dir:'js', file:"datepicker.js"]
 		resource url: [dir:'js', file:"search/moreOptions.js"]
 	}
 	
 	settings {
 		dependsOn "jquery, jquery-ui, common"
-		resource url: [dir:'css', file:"settings.css"]
 	}
 	
 	overrides {

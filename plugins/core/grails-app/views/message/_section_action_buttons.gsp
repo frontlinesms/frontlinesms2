@@ -1,7 +1,5 @@
-<ul class="header-buttons">
-	<li><g:remoteLink class="section-action-button btn" controller="quickMessage" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)" id="quick_message">
-			<div id="quick-message"><g:message code="fmessage.quickmessage"/></div>
-	</g:remoteLink></li>
+<ul class="buttons">
+	<li><fsms:quickMessage class="section-action-button btn"/></li>
 	<g:if test="${!(messageSection in ['trash', 'folder', 'activity'])}">
 		<li><g:link elementId="export" url="#" class="btn">
 			<g:message code="fmessage.export"/>

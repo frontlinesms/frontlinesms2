@@ -1,80 +1,31 @@
-#status-tab #main{
-	background-color: #eee;
-	padding: 17px;
-	height: 96%;
-}
-#status-tab #traffic-status{
-	float:left;
-	position:fixed;
-	top: 142px;
-	bottom: 50px;
-	width: 47%;
-	background: white;
-	margin: 0 25px;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	overflow-x: hide;
-	overflow-y: auto;
-}
-#status-tab #right-column{
-	position:fixed;
-	right:0;
-	top: 83px;
-	bottom: 17px;
-	width: 47%;
-	float: right;
-	margin: 0 25px;
-	overflow-x: hide;
-	overflow-y: auto;
-}
-#status-tab #connection-status{
-	min-height: 200px;
-	background: white;
-	margin: 0 25px 25px 25px;
-	border-radius: 4px;
-	padding: 17px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-}
-#status-tab #device-detection{
-	min-height: 100px;
-	background: white;
-	margin: 0 25px;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	padding: 17px
-}
-#status-tab #device-detection a{
-	float: right;
-}
+#body.status #content { background-color:#eee; position:fixed; top:80px; bottom:0; left:0; right:0; }
+#body.status h3 { padding:17px 25px; text-transform:uppercase; font-weight:bold; border-bottom:1px solid #eee; }
+#body.status #traffic-status{ position:fixed; top:83px; width:47%; background:white; margin:0 25px;
+	border-radius:8px; -moz-border-radius:8px; -webkit-border-radius:8px; overflow-x:hide; overflow-y:auto; }
+#body.status #right-column{ position:fixed; right:0; top:83px; bottom:17px; width:47%; float:right; margin:0 25px;
+	overflow-x:hide; overflow-y:auto; }
+#body.status #connection-status, #body.status #device-detection { background:white; margin: 0 25px 25px 25px;
+	border-radius:8px; -moz-border-radius:8px; -webkit-border-radius: 8px; }
+#body.status #device-detection { padding-bottom: 17px; }
+#body.status #device-detection h3 { float:left; display:inline-block; border:none; }
+#body.status #device-detection a { float:right; display:inline-block; margin:17px; }
+#body.status #device-detection table { clear:both; }
+#body.status #device-detection table td { width:0; }
+#body.status #device-detection table .description { width:100%; }
+#body.status .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
 
-#status-tab h3{
-	padding: 17px;
-	background: #eee;
-	margin: 0 25px;
-	text-transform: uppercase;
-}
-#status-tab #traffic-title{
-	float:left;
-	position:fixed;
-	top: 83px;
-	width: 45%;
-}
-	
-#status-tab #traffic-status #trafficGraph{
+#body.status #traffic-status #trafficGraph{
 	min-height: 200px;
 	height:50%;
 	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 }
-#status-tab #traffic-status form{
+#body.status #traffic-status form{
 	height:40%;
 }
 
-#status-tab #traffic-status .export-button{
+#body.status #traffic-status .export-button{
 	float: right;
 }
 
@@ -119,12 +70,8 @@
 }
 
 #traffic-status input[type=submit]{
-	display:block;
 	float: right;
 	margin: 43px 17px 17px 17px;
-}
-#traffic-status input[type=submit]:hover{
-	height:25px;
 }
 #traffic-status .dropdown{
 	margin: 10px 20%;
@@ -158,20 +105,12 @@
 #connection-status #stored-connections tr{
 	height: 50px;
 }
-#connection-status #stored-connections .name{
-	width: 300px;
-	padding: 0 30px 20px 30px;
-	background-image: url('../images/icons/status_green.png');
-	background-repeat: no-repeat;
-	background-position: left middle;
-}
-#connection-status #stored-connections .NOT_CONNECTED {
-	background-image: url('../images/icons/status_red.png');
-	background-repeat: no-repeat;
-	background-position: left middle;
-}
+#connection-status #stored-connections .name { width:100%; padding-left:47px;
+	background-image:url('../images/icons/status_green.png'); background-repeat:no-repeat; background-position:17px center; }
+#connection-status #stored-connections .name.NOT_CONNECTED { background-image: url('../images/icons/status_red.png'); }
+#connection-status #stored-connections .value { white-space:nowrap; padding-right:17px; }
 
-#status-tab #update-status{
+#body.status #update-status{
 	height: 200px;
 	margin: 26px;
 }
@@ -218,14 +157,3 @@
    	display: block;
 }
 
-.connection-status-detail span.network-strength-indicator{
-	position:absolute;
-	top: 20px;
-	right: 10px;
-	width: 20px;
-	height: 20px;
-}
-
-.connection-status-detail span.network-strength-indicator.full{
-   	background-image: url('../images/icons/signal_four.png');
-}

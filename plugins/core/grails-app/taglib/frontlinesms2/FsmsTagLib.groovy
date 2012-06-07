@@ -4,6 +4,26 @@ class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
 
+	def wizardTabs = { att ->
+		att.templates.split(",")*.trim().eachWithIndex { template, i ->
+			out << "<div id=\"tabs-${i+1}\">"
+			out << render([template:template])
+			out << "</div>"
+		}
+	}
+
+	def tab = { att, body ->
+		def con = att.controller
+		out << '<li class="' + con
+		if(con == params.controller) out << ' current'
+		out << '">'
+		out << g.link(controller:con) {
+			out << g.message(code:"tab.$con")
+			out << body()
+		}
+		out << '</li>'
+	}
+
 	def radioGroup = { att ->
 		def values = att.values.tokenize(',')*.trim()
 		def labels = att.labels.tokenize(',')*.trim()
@@ -21,6 +41,7 @@ class FsmsTagLib {
 		}
 	}
 
+	/** FIXME use of this taglib should be replaced with CSS white-space:nowrap; */
 	def unbroken = { att, body ->
 		if(att.value) out << att.value.replaceAll(' ', '&nbsp;')
 		if(body) out << body().replaceAll(' ', '&nbsp;')
@@ -71,6 +92,7 @@ class FsmsTagLib {
 	}
 	
 	def inputs = { att ->
+		if(att.table) out << '<table>'
 		def fields = getFields(att)
 		if(fields instanceof Map) {
 			generateSection(att, fields)
@@ -79,7 +101,7 @@ class FsmsTagLib {
 				out << input(att + [field:it])
 			}
 		}
-		
+		if(att.table) out << '</table>'
 	}
 	
 	def input = { att, body ->
@@ -137,7 +159,9 @@ class FsmsTagLib {
 		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
 		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'
 		fields.each {
-			out << '<option class="predefined-field" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
+			out << '<option class="predefined-field" value="'+it+'">'
+			out << g.message(code:"dynamicfield.${it}.label")
+			out << '</option>'
 		}
 		out << '</select>'
 		out << '</div>'
@@ -149,6 +173,35 @@ class FsmsTagLib {
 		def color = (connections && connections.status.any {(it == RouteStatus.CONNECTED)}) ? 'green' : 'red'
 		out << color
 		out << '"></span>'
+	}
+
+	def dateRangePicker = { att ->
+		out << datePicker(att + [name:"startDate", value:att.startDate])
+		out << datePicker(att + [name:"endDate", value:att.endDate])
+	}
+
+	def datePicker = { att ->
+		def name = att.name
+		def clazz = att.remove('class')
+		att.value = att.value ?: 'none'
+		att.precision = "day"
+		att.noSelection = ['none':'']
+		out << '<div'
+		if(clazz) out << " class=\"$clazz\""
+		out << '>'
+		out << g.datePicker(att)
+		out << "<input type='hidden' class='datepicker' name='$name-datepicker'/>"
+		out << '</div>'
+	}
+
+	def quickMessage = { att ->
+		att.controller = "quickMessage"
+		att.action = "create"
+		att.id = "quick_message"
+		att.onLoading = "showThinking();"
+		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)"
+		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
+		out << g.remoteLink(att, body)
 	}
 	
 	private def getFields(att) {

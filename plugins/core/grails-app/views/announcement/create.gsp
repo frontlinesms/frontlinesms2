@@ -9,17 +9,11 @@
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement', params:[format:'json']]}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
-		<div id="tabs-1">
-			<fsms:render template="/message/compose"/>
-		</div>
-		<div id="tabs-2">
-			<fsms:render template="/message/select_recipients" model= "['contactList' : contactList,
-			                                                                'groupList': groupList,
-			                                                                'nonExistingRecipients': [],
-			                                                                'recipients': []]"/>
-		</div>
-		<fsms:render template="confirm"/>
-		<fsms:render template="save"/>
+		<fsms:wizardTabs templates="
+				/message/compose,
+				/message/select_recipients,
+				/announcement/confirm,
+				/announcement/save"/>
 	</g:formRemote>
 </div>
 <r:script>

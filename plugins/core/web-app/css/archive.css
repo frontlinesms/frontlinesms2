@@ -1,0 +1,8 @@
+#body-menu.archive { padding:10px 0; }
+#body-menu.archive a { padding: 10px 17px 10px 60px; background-repeat:no-repeat; background-position:35px center; }
+#body-menu .inbox a, #main-list-head h1.inbox-archive { background-image:url("../images/archive/inbox.png"); }
+#body-menu .sent a, #main-list-head h1.sent-archive { background-image:url("../images/archive/sent.png"); }
+#body-menu .activity a, #main-list-head h1.activity-archive { background-image:url("../images/archive/activity.png"); }
+#body-menu .folder a, #main-list-head h1.folder-archive { background-image:url("../images/archive/folder.png"); }
+
+#body.messages #main-list.archive th.name { width:100%; }

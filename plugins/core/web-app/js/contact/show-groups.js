@@ -1,9 +1,13 @@
 $(document).ready(function() {
-	$("#group-list li a.remove-group").click(removeGroupClickAction);
+	initContactPaneGroups();
+});
+
+function initContactPaneGroups() {
+	$("#group-list li a.remove-command").click(removeGroupClickAction);
 	$("#group-dropdown").change(addGroupClickAction);
 	$("#multi-group-dropdown").change(addGroupClickAction);
-	$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
-});
+	$("#multi-group-list li a.remove-command").click(removeGroupClickAction);
+}
 
 function addGroupClickAction() {
 	var me = $(this).find('option:selected');
@@ -13,8 +17,8 @@ function addGroupClickAction() {
 	var groupList = $('.single-contact').is(':visible') ? $('#group-list') : $('#multi-group-list')
 	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 
-	var groupListItem = $('<li class="" id="' + groupName + '"><span>' + groupName + '</span>');
-	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '"></a></li>');
+	var groupListItem = $('<li class="" groupName="' + groupName + '"><span>' + groupName + '</span>');
+	var deleteButton = $('<a class="remove-command" id="remove-group-' + groupId + '"></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
 	
@@ -44,6 +48,7 @@ function removeGroupClickAction() {
 		noGroup.show();
 	}
 	removeGroupId(groupId);
+	selectmenuTools.refresh(groupDropdown);
 	// removeIdFromGroupHiddenField(groupId);
 	enableSaveAndCancel()
 }

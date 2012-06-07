@@ -1,8 +1,12 @@
-$(document).ready(function() {
-	$("#custom-field-list li a.remove-field").click(removeFieldClickAction);
-	$("#new-field-dropdown").change(addFieldClickAction);
-	$("div.basic-info a.remove-field").click(clearField);
+$(function() {
+	initContactPaneFields();
 });
+
+function initContactPaneFields() {
+	$("a.remove-command.custom-field").click(removeFieldClickAction);
+	$("#new-field-dropdown").change(addFieldClickAction);
+	$("a.remove-command.not-custom-field").click(clearField);
+}
 
 function addFieldClickAction() {
 	var me = $(this).find('option:selected');
@@ -18,7 +22,10 @@ function addFieldClickAction() {
 		var fieldName = me.text();
 		var fieldValue = "";
 		addCustomField(fieldName);
+		me.remove();
 	}
+	selectmenuTools.refresh($('#new-field-dropdown'));
+	enableSaveAndCancel();
 }
 
 function clickDone() {
@@ -33,32 +40,40 @@ function clickDone() {
 
 function addCustomField(name) {
 	var fieldId = Math.floor(Math.random()*100001)
-	var fieldListItem = $('<li><label for="' + fieldId + '">' + name + '</label>');
-	var textFieldItem = $('<input type="text" name="' + name + '" value="" />');
-	var deleteButton = $('<a class="remove-field" id="remove-field-' + fieldId + '"></a></li>');
-	
+	var fieldListItem = $('<tr><td><label class="why" for="' + fieldId + '">' + name + '</label></td></tr>');
+	var textFieldItem = $('<td><input type="text" name="' + name + '" value="" /></td>');
+	var deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '"></a>');
+	var deleteButtonTd = $('<td></td>');
+
+	deleteButtonTd.append(deleteButton);
 	fieldListItem.append(textFieldItem);
-	fieldListItem.append(deleteButton);
+	fieldListItem.append(deleteButtonTd);
 	deleteButton.click(removeFieldClickAction);
 
-	$('#custom-field-list').append(fieldListItem);
+	$('#info-add').parent().before(fieldListItem);
 	$('input[name="' + name + '"]').focus();
 	addField(name);
 }
 
 function removeFieldClickAction() {
 	var fieldId = $(this).attr('id').substring('remove-field-'.length);
-	var parent = $(this).parent();
-	parent.remove();
-
-	removeFieldId(fieldId);
+	var fieldElement = $(this).parent().parent();
+	var isUnsaved = $(this).hasClass('unsaved-field');
+	var fieldName = fieldElement.find('input').attr('name');
+	fieldElement.remove();
+	$("#new-field-dropdown option[value='na']").after('<option value="'+fieldName+'">'+fieldName+'</option>');
+	selectmenuTools.refresh($('#new-field-dropdown'));
+	removeFieldId(fieldId, fieldName, isUnsaved);
+	enableSaveAndCancel();
 }
 
-function removeFieldId(id) {
-	// remove from the ADD list
-	removeFieldIdFromList(id, 'fieldsToAdd');
-	// add to the REMOVE list
-	addFieldIdToList(id, 'fieldsToRemove');
+function removeFieldId(id, name, isUnsaved) {
+	if(isUnsaved)
+		// remove from the ADD list
+		removeFieldIdFromList(name, 'fieldsToAdd');
+	else
+		// add to the REMOVE list
+		addFieldIdToList(id, 'fieldsToRemove');
 }
 function addField(id) {
 	// remove from the REMOVE list

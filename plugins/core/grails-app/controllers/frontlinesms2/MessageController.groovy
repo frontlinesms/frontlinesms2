@@ -47,9 +47,11 @@ class MessageController {
 
 	def show() {
 		def messageInstance = Fmessage.get(params.messageId)
+		def activityInstance = Activity.get(params?.ownerId)
 		messageInstance.read = true
 		messageInstance.save()
 		def model = [messageInstance: messageInstance,
+				ownerInstance:activityInstance,
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageSection: params.messageSection]
@@ -121,7 +123,7 @@ class MessageController {
 				sentDispatchCount += it.dispatches.size()
 				sentMessageCount++
 			}
-			render view:"../message/${activityInstance instanceof Poll ? 'poll' : 'standard'}",
+			render view:"/activity/${activityInstance.shortName}/show",
 				model:[messageInstanceList: messageInstanceList?.list(params),
 						messageSection: 'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
@@ -236,9 +238,11 @@ class MessageController {
 					messagesToSend << outgoingMessage
 					activity.addToMessages(outgoingMessage)
 				}
-				activity.save(flush:true)
+				activity.save()
 			} else if (params.ownerId && params.ownerId != 'inbox') {
+				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
 				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
+				messageInstance.save()
 			} else {
 				messageInstance.with {
 					if(messageOwner) {

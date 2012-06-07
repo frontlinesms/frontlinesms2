@@ -2,6 +2,7 @@ package frontlinesms2
 
 class Folder extends MessageOwner {
 //> CONSTANTS
+	static boolean editable = false
 	static String getShortName() { 'folder' }
 
 //> PROPERTIES

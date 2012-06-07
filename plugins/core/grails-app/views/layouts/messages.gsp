@@ -37,38 +37,36 @@
 				poll.reply.text6, smallpopup.recipients.title, magicwand.title, folder.create.failed"/>
 		<r:script>
 			$(function() {  
-			   disablePaginationControls();
+				disablePaginationControls();
+				$(window).resize(new Resizer('#main-list-container', '#main-list-head', '#main-list-foot'));
 			});
 		</r:script>
 		<r:layoutResources/>
 	</head>
-	<body id="messages-tab">
-		<div id="thinking"></div>
-		<div id="header">
-			<div id="notifications">
-				<fsms:render template="/system_notifications"/>
-				<fsms:render template="/flash"/>
-			</div>
-			<fsms:render template="/system_menu"/>
-			<fsms:render template="/tabs"/>
-		</div>
-		<div id="main">
+	<body>
+		<fsms:render template="/head"/>
+		<div id="body" class="messages">
 			<fsms:render template="/message/menu"/>
-			<div id="content">
-				<g:form controller="${params.controller}"
-						params="[messageId: messageInstance?.id, searchId: search?.id]">
-					<g:hiddenField name="messageSection" value="${messageSection}"/>
-					<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
-					<div id="message-list" class="${(messageSection in ['inbox', 'sent', 'pending', 'trash', 'folder', 'no_search'])? '': 'tall-header'}">
+			<g:form controller="${params.controller}"
+					params="[messageId: messageInstance?.id, searchId: search?.id]">
+				<g:hiddenField name="messageSection" value="${messageSection}"/>
+				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
+				<div id="main-list-container">
+					<div id="main-list-head">
 						<fsms:render template="/message/header"/>
-						<fsms:render template="/message/message_list"/>
-						<g:layoutBody/>
+					</div>
+					<fsms:render template="/message/message_list"/>
+					<div id="main-list-foot">
 						<fsms:render template="/message/footer"/>
 					</div>
+				</div>
+				<g:layoutBody/>
+				<div id="detail">
 					<fsms:render template="/message/message_details"/>
-				</g:form>
-			</div>
+				</div>
+			</g:form>
 		</div>
-		<r:layoutResources/>
+		<fsms:render template="/system"/>
 	</body>
 </html>
+

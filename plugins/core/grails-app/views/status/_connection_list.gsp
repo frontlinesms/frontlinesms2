@@ -1,6 +1,6 @@
 <%@ page import="frontlinesms2.Contact" %>
-<h3 id="connection-title"><g:message code="status.connection.header"/></h3>
 <div id="connection-status">
+	<h3 id="connection-title"><g:message code="status.connection.header"/></h3>
 	<g:if test="${connectionInstanceTotal == 0}">
 		<div id='connections'><g:message code="status.connection.none"/></div>
 	</g:if>

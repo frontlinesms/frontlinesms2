@@ -10,7 +10,7 @@ class SearchController extends MessageController {
 		return true
 	}
 	
-	def index() { redirect(action:'result', params:params) }
+	def index() { redirect(action:'no_search', params:params) }
 	
 	def no_search() {
 		[groupInstanceList:Group.findAll(),

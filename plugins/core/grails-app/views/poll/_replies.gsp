@@ -1,23 +1,16 @@
-<div id="tabs-4" class="poll-response-reply">
-	<h2 class="bold"><g:message code="poll.replies.header"/></h2>
-	<p class="info">
-		<g:message code="poll.replies.description"/>
-	</p>
-	<g:checkBox name="enableAutoreply" checked="${activityInstanceToEdit?.autoreplyText as boolean}"/>
+<h2><g:message code="poll.replies.header"/></h2>
+<div class="info">
+	<p><g:message code="poll.replies.description"/></p>
+</div>
+<div class="input optional">
+	<label for="enableAutoreply">
 		<g:message code="poll.autoreply.send"/>
-	<g:if test="${activityInstanceToEdit?.autoreplyText as boolean}">
-		<g:textArea name="autoreplyText" rows="5" cols="40" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
-	</g:if>
-	<g:else>
-		<g:textArea name="autoreplyText" rows="5" cols="40" disabled="true" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
-	</g:else>
-	<div class="compose-controls-wrap">
-		<div class="compose-controls-left">
-			<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
-		</div>
-		<div class="compose-controls-right">
-			<fsms:magicWand target="autoreplyText" controller="${controllerName}"/>
-		</div>
+	</label>
+	<g:checkBox name="enableAutoreply" checked="${activityInstanceToEdit?.autoreplyText as boolean}"/>
+	<g:textArea name="autoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit? activityInstanceToEdit.autoreplyText as boolean: true}" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
+	<div class="controls">
+		<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
+		<fsms:magicWand target="autoreplyText" controller="${controllerName}"/>
 	</div>
 </div>
 

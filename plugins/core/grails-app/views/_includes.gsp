@@ -26,39 +26,15 @@
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
-		var fsmsButton = { apply: function(original) {} };
+		var fsmsButton = { apply:function(){}, findAndApply:function(){} };
 	</g:if>
 	<g:else>
-		var fsmsButton = {
-			trigger: function() {
-				// Trigger clicking of the button when the anchor is clicked.
-				$(this).prev().click();
-			},
-			apply: function(original) {
-				// replace a button with an anchor
-				// find the original text
-				original = $(original);
-				if(original.hasClass("fsms-button-replaced")) return;
-				original.addClass("fsms-button-replaced");
-				var buttonText = original.val();
-				var classes = original.attr("class");
-
-				// create the new control
-				var newController = $('<a class="' + classes + '">' + buttonText + '</a>');
-				newController.click(fsmsButton.trigger);
-
-				// add the new control next to original
-				original.after(newController);
-
-				// hide the current control
-				original.hide();
-			}
-		};
-
+		var fsmsButton = new FsmsButton();
 		$(function() {
-		        // make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
-		        $(".dropdown").selectmenu();
-			$("input[type='submit']").each(function() { fsmsButton.apply(this); });
+			// make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
+			// TODO reintroduce dropdown when the CSS is fixed
+			$(".dropdown").selectmenu();
+			fsmsButton.findAndApply("input[type='submit']");
 
 			// Enable system notification refresh
 			setInterval(systemNotification.refresh, 10000);

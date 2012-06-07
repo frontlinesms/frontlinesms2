@@ -122,8 +122,8 @@
 		newRow.removeAttr("id");
 		newRow.find('input.rule-text').val("");
 		newRow.find('.button.remove-rule').show();
-		newRow.find('select').selectmenu();
 		$('form[name="smart-group-details"] tbody').append(newRow);
+		newRow.find('select').selectmenu();
 	}
 </r:script>
 

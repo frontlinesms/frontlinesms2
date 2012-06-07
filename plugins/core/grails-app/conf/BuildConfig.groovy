@@ -59,6 +59,7 @@ grails.project.dependency.resolution = {
 		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
 		test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+		test "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
 
 		// TODO this should be included in compile for TEST and DEV scopes, and excluded for PRODUCTION
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'

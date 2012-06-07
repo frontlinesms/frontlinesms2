@@ -23,12 +23,18 @@ public class Main {
 	}
 
 	private void init() throws Exception {
+		o("Reading properties file...");
+		FProperties properties = new FProperties("launcher.properties");
+		o("Properties file read.");
+		int port = properties.getInt("server.port", 8080);
+		o("Read server port: " + port);
+
 		o("Creating monitor...");
 		m = new Monitor();
 		o("monitor created.");
 
 		o("Initialising monitor...");
-		m.setPort(8080);
+		m.setPort(port);
 		m.init();
 		o("Monitor initialised.");
 

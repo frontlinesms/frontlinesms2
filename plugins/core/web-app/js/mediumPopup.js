@@ -1,17 +1,20 @@
-function launchMediumPopup(title, html, btnFinishedText, submitAction) {
+function createModalBox(html) {
 	var modalBox = $("<div id='modalBox'><div>");
 	modalBox.html(html).appendTo(document.body);
-	modalBox.dialog(
-		{
+	return modalBox;
+}
+
+function launchMediumPopup(title, html, btnFinishedText, submitAction) {
+	var modalBox = createModalBox(html);
+	modalBox.dialog({
 			modal: true,
 			width: 675,
 			height: 500,
 			title: title,
-			buttons: [{ text:i18n("popup.cancel"), click: cancel, id:"cancel" }, { text:i18n("popup.back"), disabled: "true"},
-			          		{ text:btnFinishedText,  click: submitAction, id:"submit" }],
+			buttons: [{ text:i18n("popup.cancel"), click:cancel, id:"cancel" }, { text:i18n("popup.back"), disabled:"true" },
+					{ text:btnFinishedText, click:submitAction, id:"submit" }],
 			close: function() { $(this).remove(); }
-		}
-	);
+	});
 	initializePopup(modalBox);
 }
 
@@ -21,8 +24,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height) {
 
 function launchMediumWizard(title, html, btnFinishedText, width, height, closeOnSubmit) {
 	closeWhenDone = (typeof closeOnSubmit == 'undefined' ? true : closeOnSubmit );
-	var modalBox = $("<div id='modalBox'><div>");
-	modalBox.html(html).appendTo(document.body);
+	var modalBox = createModalBox(html);
 	$("#messageText").keyup();
 	magicwand.init(modalBox.find('select[id^="magicwand-select"]'));
 	modalBox.dialog({
@@ -49,9 +51,9 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 }
 
 function launchHelpWizard(html) {
-	$("<div id='modalBox'><div>").html(html).appendTo(document.body);
+	var modalBox = createModalBox(html);
 	$("#messageText").keyup();
-	$("#modalBox").dialog({
+	modalBox.dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
 		width: '95%',

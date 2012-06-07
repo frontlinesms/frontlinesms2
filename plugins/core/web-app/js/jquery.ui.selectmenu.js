@@ -31,7 +31,7 @@ $.widget("ui.selectmenu", {
 		icons: null,
 		format: null,
 		bgImage: function() {},
-		wrapperElement: "<div />"
+		wrapperElement: "<div class='ui-selectmenu-wrapper'/>"
 	},
 
 	_create: function() {
