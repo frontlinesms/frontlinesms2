@@ -158,7 +158,9 @@ class FsmsTagLib {
 		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
 		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'
 		fields.each {
-			out << '<option class="predefined-field" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
+			out << '<option class="predefined-field" value="'+it+'">'
+			out << g.message(code:"dynamicfield.${it}.label")
+			out << '</option>'
 		}
 		out << '</select>'
 		out << '</div>'
