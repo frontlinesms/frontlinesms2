@@ -19,7 +19,7 @@ var selectmenuTools = {
 
 	removeSelected: function(menu) {
 		menu = $(menu);
-		menu.find("[value='"+$('#'+selectId).val()+"']").remove();
+		menu.find("[value='"+menu.val()+"']").remove();
 		selectmenuTools.snapback(menu);
 	},
 }

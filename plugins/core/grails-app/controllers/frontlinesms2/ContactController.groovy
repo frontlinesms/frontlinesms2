@@ -25,12 +25,23 @@ class ContactController {
 	
 	def updateContactPane() {
 		def contactInstance = Contact.get(params.id)
+		def usedFields = contactInstance?.customFields ?: []
+		def usedFieldNames = []
+		usedFields.each() { field ->
+			usedFieldNames.add(field.name)
+		}
+		def allFields = CustomField.getAllUniquelyNamed()
+		def unusedFields = []
+		allFields.each() {
+			if(!usedFieldNames.contains(it))
+				unusedFields.add(it)
+		}
 		def model = [contactInstance: contactInstance,
 				contactGroupInstanceList: contactInstance?.groups ?: [],
-				contactFieldInstanceList: contactInstance?.customFields ?: [],
+				contactFieldInstanceList: usedFields,
 				contactGroupInstanceTotal: contactInstance?.groups?.size() ?: 0,
 				nonContactGroupInstanceList: contactInstance ? Group.findAllWithoutMember(contactInstance) : null,
-				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
+				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
 				groupInstanceTotal: Group.count(),
@@ -46,18 +57,28 @@ class ContactController {
 		def contactInstanceList = contactList.contactInstanceList
 		def contactInstanceTotal = contactList.contactInstanceTotal
 		def contactInstance = (params.contactId ? Contact.get(params.contactId) : (contactInstanceList[0] ?: null))
+		def usedFields = contactInstance?.customFields ?: []
+		def usedFieldNames = []
+		usedFields.each() { field ->
+			usedFieldNames.add(field.name)
+		}
+		def allFields = CustomField.getAllUniquelyNamed()
+		def unusedFields = []
+		allFields.each() {
+			if(!usedFieldNames.contains(it))
+				unusedFields.add(it)
+		}
 		def contactGroupInstanceList = contactInstance?.groups ?: []
-		def contactFieldInstanceList = contactInstance?.customFields ?: []
 		[contactInstance: contactInstance,
 				checkedContactList: ',',
 				contactInstanceList: contactInstanceList,
 				contactInstanceTotal: contactInstanceTotal,
 				contactsSection: contactList.contactsSection,
-				contactFieldInstanceList: contactFieldInstanceList,
+				contactFieldInstanceList: usedFields,
 				contactGroupInstanceList: contactGroupInstanceList,
 				contactGroupInstanceTotal: contactGroupInstanceList.size(),
 				nonContactGroupInstanceList: contactInstance ? Group.findAllWithoutMember(contactInstance) : null,
-				uniqueFieldInstanceList: CustomField.getAllUniquelyNamed(),
+				uniqueFieldInstanceList: unusedFields,
 				fieldInstanceList: CustomField.findAll(),
 				groupInstanceList: Group.findAll(),
 				groupInstanceTotal: Group.count(),
@@ -239,6 +260,18 @@ class ContactController {
 			if(toRemove)
 				toRemove.delete()
 		}
+
+		//also save any existing fields that have changed
+		def existingFields = CustomField.findAllByContact(contactInstance)
+		existingFields.each() { existingField ->
+			def newValue = params."$existingField.name"
+			if (newValue && (existingField.value != newValue))
+			{
+				existingField.value = newValue
+				existingField.save()
+			}
+		}
+
 		return contactInstance
 	}
 }

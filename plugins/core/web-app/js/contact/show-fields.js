@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(function() {
 	$("a.remove-command.custom-field").click(removeFieldClickAction);
 	$("#new-field-dropdown").change(addFieldClickAction);
 	$("a.remove-command.not-custom-field").click(clearField);
@@ -18,7 +18,9 @@ function addFieldClickAction() {
 		var fieldName = me.text();
 		var fieldValue = "";
 		addCustomField(fieldName);
+		me.remove();
 	}
+	selectmenuTools.refresh($('#new-field-dropdown'));
 	enableSaveAndCancel();
 }
 
@@ -53,12 +55,10 @@ function removeFieldClickAction() {
 	var fieldId = $(this).attr('id').substring('remove-field-'.length);
 	var fieldElement = $(this).parent().parent();
 	var isUnsaved = $(this).hasClass('unsaved-field');
-	var fieldName = "";
-	if(isUnsaved)
-	{
-		fieldName = fieldElement.find('input').attr('name');
-	}
+	var fieldName = fieldElement.find('input').attr('name');
 	fieldElement.remove();
+	$("#new-field-dropdown option[value='na']").after('<option value="'+fieldName+'">'+fieldName+'</option>');
+	selectmenuTools.refresh($('#new-field-dropdown'));
 	removeFieldId(fieldId, fieldName, isUnsaved);
 	enableSaveAndCancel();
 }
