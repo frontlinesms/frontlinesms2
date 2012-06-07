@@ -6,23 +6,10 @@ class ExpressionProcessorService {
 	// key is the expression name, and value is the controllers it is applicable to
 	def fields = [
 		'contact_name' : ['quickMessage', 'announcement', 'poll', 'autoreply'],
-		'contact_number' : ['quickMessage', 'announcement', 'poll', 'autoreply'],
-		'message_content' : [],
-		'keyword' : []]
+		'contact_number' : ['quickMessage', 'announcement', 'poll', 'autoreply']]
 
 	def findByController(controllerName) {
-		def ret = [:]
-		fields.each {
-			def active = false
-			it.value.each { i ->
-				if (i == controllerName)
-				{
-					active = true
-				}
-			}
-			ret.put(it.key, active)
-		}
-		ret
+		fields.findAll { controllerName in it.value }.keySet()
 	}
 
 	String replaceExpressions(Dispatch dispatch) {
