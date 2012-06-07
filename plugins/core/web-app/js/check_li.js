@@ -64,7 +64,7 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 	if (itemTypeString == 'message') {
 		row.removeClass("unread");
 		row.addClass("read");
-		params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId };
+		params = { messageSection:$('input:hidden[name=messageSection]').val(), messageId: itemId, ownerId: $('input:hidden[name=ownerId]').val()};
 		action = '/show/';
 	} else {
 		params = { contactsSection:$('input:hidden[name=contactsSection]').val() };
@@ -72,7 +72,6 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 	}
 	$.get(url_root + itemTypeString + action + itemId, params, function(data) {
 		$('#multiple-'+itemTypeString+'s').hide();
-
 		var newPane = $(data);
 		fsmsButton.findAndApply("input[type='submit']", newPane);
 		$('#single-'+itemTypeString).replaceWith(newPane);
