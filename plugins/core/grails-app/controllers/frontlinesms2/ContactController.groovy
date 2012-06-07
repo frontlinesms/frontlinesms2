@@ -207,11 +207,11 @@ class ContactController {
 			return false
 		}
 		
-		groupsToAdd.each() { id ->
-			contactInstance.addToGroups(Group.get(id))
-		}
 		groupsToRemove.each() { id ->
 			contactInstance.removeFromGroups(Group.get(id))
+		}
+		groupsToAdd.each() { id ->
+			contactInstance.addToGroups(Group.get(id))
 		}
 		return contactInstance
 	}
