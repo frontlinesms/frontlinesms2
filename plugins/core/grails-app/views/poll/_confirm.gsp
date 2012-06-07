@@ -21,14 +21,12 @@
 			<td id="auto-reply-read-only-text"><g:message code="poll.autoreply.none"/></div>
 		</tr>
 		<tr>
-			<td><g:message code="poll.recipients.label"/></td>
-			<td id="confirm-recipients-count">
-				<span id="sending-messages">
-					<span id="contacts-count">0</span> <g:message code="poll.recipients.count"/>
-					(<span id="messages-count">0</span> <g:message code="poll.messages.count"/>)
-				</span>
-				<span id="no-recipients"><g:message code="poll.recipients.none"/></span>
-			</td>
+			<td><g:message code="quickmessage.recipient.label"/></td>
+			<td id="confirm-recipients-count"><span id="contacts-count">0</span> <g:message code="quickmessage.recipients.count"/></td>
+		</tr>
+		<tr>
+			<td><g:message code="quickmessage.count.label"/></td>
+			<td id="confirm-messages-count"><span id="messages-count"></span> <g:message code="quickmessage.messages.count"/></td>
 		</tr>
 	</table>
 </div>

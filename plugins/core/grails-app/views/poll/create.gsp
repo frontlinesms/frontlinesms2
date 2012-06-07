@@ -88,11 +88,10 @@
 				$("#question").removeClass('error');
 				if ($("input[name='pollType']:checked").val() == "yesNo") {
 					disableTab(1);
-				}
-				else {
+				} else {
 					enableTab(1);
 				}
-				var isValid = !isElementEmpty($("#question"));
+				var isValid = $("input[name='dontSendMessage']").is(':checked') || !isElementEmpty($("#question"));
 				if(!isValid)
 					$("#question").addClass('error');
 				return isValid;
