@@ -1,0 +1,52 @@
+# Getting Around The Search Tab
+
+---
+
+_The Search Tab is home to a powerful, advanced and highly customisable search feature. You can use it to do a quick, simple search across all your messages to find what you are looking for or you can create an advanced and detailed search across a specific group, activity and date range. This page will describe all the main elements of the search tab._
+
+---
+
+![Search Overview][7]
+
+### [Search Paramters][1]
+
+In the search parameter area (1) you will find all the settings to configure your search. Each parameter will be explained below.
+
+**Keyword or Phrase**: The word or phrase that you want to search for.
+
+_Limit Search To_
+**Select Group**: Allows you to select a group, whose sent and received messages will be searched.
+**Select Activity/Folder**: Allows you to select an activity or folder to search through.
+**All Sent and Received**: Allows you to select between searching all sent and received messages/Only Received messages/Only Sent Messages.
+**Include Archive**: This check box allows you to specify whether or not archived messages will be searched.
+
+_Between Dates_
+These drop downs allow you to specify a date range to search between. They are in the format Day/Month/Year. You can use the calendar icon (2) to select the dates on a calendar, which automatically fills out the drop boxes for you.
+
+_More Options_
+Clicking on the '+' will display all the custom fields that you have created for your contacts and allow you to use them as search criteria. Clicking on an entry in the "More Options" area will cause a new search parameter to be created above. The text you wish to search that parameter for can then be entered.
+
+**Search**: Clicking this button will perform the search.  
+**Clear Search**: Clicking this button will clear the search parameters and any search results which may be displayed.
+
+### [Message List and Message Details][2]
+
+The message list and Message details area functions like any other message list in FrontlineSMS. You are able to star, sort, select multiple messages and perform actions on selected messages.
+
+### [Search Header][3]
+
+The search header (3) displays the parameters of the search that was last carried out. It also contains buttons for [quick message][4] and [export results][5].
+
+---
+
+### Related Actions
+[Creating a Search][6]  
+[Exporting Your Search Results][5]  
+
+[1]: SearchParameters
+[2]: MessageLightandMessageDetails
+[3]: SearchHeader
+[4]: gotoQuickMessage
+[5]: gotoExporting
+[6]: gotoCreating_a_search
+[7]: search/searchoverview.jpg

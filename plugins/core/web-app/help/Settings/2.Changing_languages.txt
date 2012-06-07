@@ -1,0 +1,27 @@
+# Changing Languages
+
+---
+
+_The default language of FrontlineSMS is English, but this can be changed to a large number of other languages if you would like to use these instead. This page will describe how to change the language of the text in FrontlineSMS._
+
+---
+![Changing the Language][4]
+
+### [Changing Language][1]
+
+1.  Navigate to the Settings menu (1).
+2.  In the section entitled "Language" (2), select the language you wish to change FrontlineSMS to using the drop box menu.
+3.  Select "Apply".
+
+FrontlineSMS will change to the language you have specified.
+
+---
+
+### Related Actions
+[Importing Contacts and Messages][2]  
+[Configuring Detected Devices][3]  
+
+[1]: gotoChanging_Languages
+[2]: gotoRestoring_a_backup
+[3]: gotoManaging_connections
+[4]: settings/settingslanguage.jpg

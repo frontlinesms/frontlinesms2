@@ -1,0 +1,29 @@
+# Importing Messages and Contacts
+
+---
+
+_You can import messages and contacts from a previous installation of FrontlineSMS Version 2 or even from FrontlineSMS 1. This page will describe how to import contacts and messages from a file._
+
+---
+
+![Import][4]
+
+### [Restoring from a backup][1]
+
+1.  Navigate to the Settings menu.(1)
+2.  In the section entitled "Import" (2), select the type of data you will be importing. Please select the correct type otherwise the import will fail.
+3.  Click on "Choose File" and navigate to the .CSV file that you wish to import and select it.
+4.  FrontlineSMS will begin importing your messages or contacts. If you have a large number of contacts or messages, this process could take a few minutes so please be patient.
+
+If the import was unsuccessful, or some contacts or messages failed to import, a notification will appear with a summary of the process. You will also be able to download a .CSV file containing the failed messages or contacts so that you can correct them and re-attempt import easily.
+
+---
+
+### Related Actions
+[Changing languages][2]  
+[Configuring Detected Devices][3]  
+
+[1]: RestoringFromABackUp
+[2]: gotoChanging_Languages
+[3]: gotoManaging_connections
+[4]: settings/settingsimport.jpg

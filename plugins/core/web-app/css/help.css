@@ -5,7 +5,7 @@
 }
 
 #help #file {
-	height: 93%;
+	height: 480px;
 	min-height: 368px;
 	overflow: auto;
 	padding: 17px;
@@ -13,7 +13,7 @@
 
 #help #index {
 	float: left;
-	height: 93%;
+	height: 480px;
 	min-height: 368px;
 	min-width: 135px;
 	overflow: scroll;

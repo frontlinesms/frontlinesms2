@@ -1,0 +1,35 @@
+# Renaming an Activity
+
+---
+
+_You are able to rename any activity in a few simple steps._
+
+---
+
+![Renaming an Activity][6]
+
+### [Renaming an Activity][1]
+
+1. Select the Activity you want to rename.
+2. In the Activity Header (1) click the drop down box called "More Actions..."
+3. From this menu choose "Rename [Activity Type]". E.g "Rename Poll"
+4. In the new window which appears, enter a new name for the activity and click Rename.
+![Rename Dialog][7]
+
+Your Activity will be Renamed.
+
+---
+
+### Related Actions
+[Exporting an Activity][2]  
+[Creating a Poll][3]  
+[Creating an Announcement][4]  
+[Manually Categorising a Response][5]  
+
+[1]: RenamingActivity
+[2]: gotoExporting_an_activity
+[3]: gotoCreating_a_poll
+[4]: gotoCreate_an_announcement
+[5]: gotoManually_Categorise
+[6]: activities/renamepoll.jpg
+[7]: activities/renamepolldialog.jpg

@@ -1,0 +1,84 @@
+# Creating an AutoReply #
+
+---
+
+_An auto reply is a type of activity which allows you to set up FrontlineSMS to automatically send replies to messages a they are received. AutoReplies can be set up to work globally, on all messages that are received, or they can be set up to be triggered by messages containing [keywords][1]. Received messages that trigger an auto reply based on keyword will be moved into the autoreply activity along with a copy of the autoreply that was sent. A global autoreply will copy incoming messages from the [inbox][2] to the autoreply activity, ensuring that the original message isn't lost. Auto-replies would be useful when you may be away or unavailable for some time and need to inform everyone messaging you that you will be away, like an Out of Office reply in your e-mail. It would also be especially effective at disseminating information based on content of the message received. For example, it could be set up to provide medical information for illnesses or symptoms as they are sent in._
+
+---
+
+### [How to Create an AutoReply][3]
+
+1.  From the [messages tab][2] click on 'Create New Activity'.
+2.  A new window will appear and you will be presented with a number of options. Choose "AutoReply" and click next.
+![Select Activity][9]
+
+**_Enter Keyword_**  
+
+![Keyword][10]
+
+In this step you can choose to enter a [keyword][1] to trigger the autoreply. If you would like to set up an auto reply that will be triggered by a [keyword][1] then enter unique keyword here.  
+Messages that trigger the autoreply will be moved into the activity's folder along with a copy of the autoreply.
+
+**Global autoreply**
+
+To set up a global autoreply please check the box next to "Do not use keyword".  
+All messages that are received after the autoreply is created will be copied into the activity's folder. The [inbox][2] will still contain all your received messages.
+
+**_Note:** A global autoreply will reply to **ALL** received messages. If you receive a large volume of messages in daily use, a global autoreply could result in substantial costs on top of your typical usage._  
+
+When you have finished setting up a keyword, or have chosen a global autoreply, click next.
+
+---
+
+**_Enter Message_**  
+
+![Enter Message][11]
+
+On this screen you will be able to enter the message you would like to use as the autoreply.
+
+You can also add expressions to the message to add a more personal touch. For more information, please click [here][4]
+
+---
+
+**_Summary Screen_**  
+
+On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+
+![Summary][12]
+
+You will also be able to name your autoreply so that it is easily recognisable.
+
+Clicking next will create the [activity][5].
+
+---
+
+**_Confirmation_**  
+
+Once successfully created, you will see a confirmation screen like this one:
+
+![Confirmation][13]
+
+Clicking OK will take you back to the [Messages Tab][2]
+
+Your Auto-reply will appear under the Activities sub-heading.
+
+---
+
+### Related Actions
+[Creating a Poll][6]  
+[Creating a Group][7]  
+[Creating a Smart Group][8]  
+
+[1]: ToolTip
+[2]: gotoGetting_around_messages
+[3]: HowToCreateAnAutoreply
+[4]: gotoUsingExpressions
+[5]: gotoGetting_around_activities
+[6]: gotoCreating_a_Poll
+[7]: gotoCreating_a_group
+[8]: gotoCreating_a_Smart_Group
+[9]: activities/poll1.jpg
+[10]: activities/autoreply1
+[11]: activities/autoreply2
+[12]: activities/autoreply3
+[13]: activities/autoreply4

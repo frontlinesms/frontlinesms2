@@ -1,0 +1,44 @@
+# Getting Around Folders
+
+---
+
+_You can access Folders from the messages tab. A folder is a way for you to organise and store your messages away from the inbox and activities. It is simple and easy to set up and functions as simple container for messages. Messages can be manually moved to a folder from any message list, including in the [Search tab][1]._
+
+---
+
+![Folder Overview][12]
+
+### [Folder Header][2]
+
+(1) The name of the Folder and options for [Quick Message][3], [Archive Folder][4] and "More Options..." are available in the header.
+
+"More options..." includes the options to [Export][5] or [Delete Folder][10].
+
+### [Message List][6]
+
+The message list (2) functions like any other message list in FrontlineSMS. You are able to [star, sort and multiple select messages.][7]
+
+### [Message Details][8]
+
+The message detail area (3) contains the full text of the selected message and sender details, or information about how many messages have been selected. 
+
+You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
+
+---
+
+### Related Actions
+[Getting Around the Inbox][10]  
+[Creating a Folder][11]  
+
+[1]: gotoGetting_around_the_search_tab
+[2]: FolderHeader
+[3]: gotoQuickMessage
+[4]: gotoArchiving_Activities_Folders
+[5]: gotoExporting
+[6]: FolderMessageList
+[7]: gotoSSS
+[8]: MessageDetails
+[9]: gotoMRFD
+[10]: gotoGetting_around_the_inbox
+[11]: gotoCreating_a_folder
+[12]: folders\folderoverview.jpg
