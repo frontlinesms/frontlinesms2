@@ -1,5 +1,5 @@
-function categorizeClickAction() {
-	var me = $('#categorise_dropdown option:selected').val();
+function categorizeClickAction(me) {
+	me = $(me).val()
 	var responseId = me.substring(4, me.length);
 	var ownerId = $("#owner-id").val();
 	var messageSection = $('input:hidden[name=messageSection]').val();
