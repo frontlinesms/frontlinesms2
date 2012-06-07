@@ -2,7 +2,6 @@ function moveAction() {
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var searchId = $("input:hidden[name=searchId]").val();
-
 	var messagesToMove;
 	var moveTarget;
 	if(getCheckedItemCount('message') > 1) {

@@ -77,4 +77,25 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			!message.messageOwner
 			message.inbound
 	}
+
+	def "should move a poll message to folder section"() {
+		setup:
+			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
+			def poll = new Poll(name: 'Who is badder?')
+			poll.editResponses(choiceA: 'known unknown', choiceB: 'unknown unknowns')
+			poll.save(failOnError:true, flush:true)
+			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
+			PollResponse.findByValue('known unknown').addToMessages(message)
+			poll.save(failOnError: true)
+		when:
+			assert message.messageOwner == poll
+			assert PollResponse.findByValue('known unknown').messages == [message]
+			controller.params.messageId = message.id
+			controller.params.ownerId = folder.id
+			controller.params.messageSection = 'folder'
+			controller.move()
+		then:
+			PollResponse.findByValue('known unknown').messages == []
+			message.refresh().messageOwner == folder
+	}
 }
