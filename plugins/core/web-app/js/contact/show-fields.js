@@ -1,8 +1,12 @@
 $(function() {
+	initContactPaneFields();
+});
+
+function initContactPaneFields() {
 	$("a.remove-command.custom-field").click(removeFieldClickAction);
 	$("#new-field-dropdown").change(addFieldClickAction);
 	$("a.remove-command.not-custom-field").click(clearField);
-});
+}
 
 function addFieldClickAction() {
 	var me = $(this).find('option:selected');
