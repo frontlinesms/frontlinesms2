@@ -16,7 +16,7 @@ function chooseActivity() {
 function checkForSuccessfulSave(response, type) {
 	$("#submit").removeAttr('disabled');
 	if (response.ok) {
-		$("div.confirm").hide();
+		$("div.confirm").parent().hide();
 		$(".ui-tabs-nav").hide();
 		$("div.summary").show();
 		$(".summary #activityId").val(response.ownerId);

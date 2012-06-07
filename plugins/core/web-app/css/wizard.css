@@ -1,8 +1,8 @@
 #tabs div.info { padding-left:25px; background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
 #tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
-#tabs div.input > label, #tabs div.ui-tabs-panel h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
-#tabs div.input > label, #tabs div.ui-tabs-panel div.confirm h2 { position:relative; left:-25px; }
+#tabs div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }
+#tabs div.input > label, #tabs div.confirm h2 { position:relative; left:-25px; }
 #tabs div.ui-tabs-panel div.confirm h2 { margin-bottom:10px; }
 
 #tabs div.input > * { display:block; }
