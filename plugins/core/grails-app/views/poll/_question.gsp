@@ -1,15 +1,15 @@
 <%@ page import="frontlinesms2.Poll" %>
 <div class="input">
 	<label for="pollType"><g:message code="poll.type.prompt"/></label>
-	<ul>
+	<ul class="select">
 		<g:set var="isYesNo" value="${activityInstanceToEdit?.yesNo}"/>
 		<li>
+			<label for="pollType"><g:message code="poll.question.yes.no"/></label>
 			<g:radio name="pollType" value="yesNo" checked="${!activityInstanceToEdit || isYesNo}" disabled="${activityInstanceToEdit && !isYesNo}"/>
-			<g:message code="poll.question.yes.no"/>
 		</li>
 		<li>
+			<label for="pollType"><g:message code="poll.question.multiple"/></label>
 			<g:radio name="pollType" value="multiple" checked="${activityInstanceToEdit && !isYesNo}" disabled="${activityInstanceToEdit && isYesNo}"/>
-			<g:message code="poll.question.multiple"/>
 		</li>
 	</ul>
 </div>
