@@ -9,7 +9,11 @@
 	</ol>
 
 	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement', params:[format:'json']]}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
-		<fsms:wizardTabs templates="/message/compose, /message/select_recipients, confirm, save"/>
+		<fsms:wizardTabs templates="
+				/message/compose,
+				/message/select_recipients,
+				/announcement/confirm,
+				/announcement/save"/>
 	</g:formRemote>
 </div>
 <r:script>

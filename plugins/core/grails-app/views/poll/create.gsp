@@ -14,14 +14,15 @@
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<fsms:wizardTabs templates="question,
-				responses,
-				sorting,
-				replies,
+		<fsms:wizardTabs templates="
+				/poll/question,
+				/poll/responses,
+				/poll/sorting,
+				/poll/replies,
 				/message/compose,
 				/message/select_recipients,
-				confirm,
-				save"/>
+				/poll/confirm,
+				/poll/save"/>
 	</g:formRemote>
 </div>
 
