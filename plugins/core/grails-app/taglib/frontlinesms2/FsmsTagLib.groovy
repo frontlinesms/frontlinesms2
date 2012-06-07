@@ -4,6 +4,14 @@ class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
 
+	def wizardTabs = { att ->
+		att.templates.split(",")*.trim().eachWithIndex { template, i ->
+			out << "<div id=\"tabs-${i+1}\">"
+			out << render([template:template])
+			out << "</div>"
+		}
+	}
+
 	def tab = { att, body ->
 		def con = att.controller
 		out << '<li class="' + con
