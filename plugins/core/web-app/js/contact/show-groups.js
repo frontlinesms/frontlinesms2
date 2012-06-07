@@ -1,8 +1,8 @@
 $(document).ready(function() {
-	$("#group-list li a.remove-group").click(removeGroupClickAction);
+	$("#group-list li a.remove-command").click(removeGroupClickAction);
 	$("#group-dropdown").change(addGroupClickAction);
 	$("#multi-group-dropdown").change(addGroupClickAction);
-	$("#multi-group-list li a.remove-group").click(removeGroupClickAction);
+	$("#multi-group-list li a.remove-command").click(removeGroupClickAction);
 });
 
 function addGroupClickAction() {
@@ -14,7 +14,7 @@ function addGroupClickAction() {
 	var noGroup = $('.single-contact').is(':visible') ? $('#no-groups') : $('#multi-no-groups')
 
 	var groupListItem = $('<li class="" id="' + groupName + '"><span>' + groupName + '</span>');
-	var deleteButton = $('<a class="remove-group" id="remove-group-' + groupId + '"></a></li>');
+	var deleteButton = $('<a class="remove-command" id="remove-group-' + groupId + '"></a></li>');
 	deleteButton.click(removeGroupClickAction);
 	groupListItem.append(deleteButton);
 	
@@ -44,7 +44,7 @@ function removeGroupClickAction() {
 		noGroup.show();
 	}
 	removeGroupId(groupId);
-	selectmenuTools.refresh(groupDropdown.attr('id'));
+	selectmenuTools.refresh(groupDropdown);
 	// removeIdFromGroupHiddenField(groupId);
 	enableSaveAndCancel()
 }

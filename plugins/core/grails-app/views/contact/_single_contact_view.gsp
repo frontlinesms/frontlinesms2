@@ -15,7 +15,7 @@
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td><g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();"/></td>
 			<td><g:if test="${contactInstance?.mobile?.trim()}">
-				<a class="remove-command" id="remove-mobile"><g:message code="contact.remove.mobile"/></a>
+				<a class="remove-command not-custom-field" id="remove-mobile"><g:message code="contact.remove.mobile"/></a>
 				<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">&nbsp;
 				</g:remoteLink>
 			</g:if></td>
@@ -23,13 +23,13 @@
 		<tr>
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td><g:textField name="email" value="${contactInstance?.email?.trim()}"/></td>
-			<td><a class="remove-command" id="remove-email"></a></td>
+			<td><a class="remove-command not-custom-field" id="remove-email"></a></td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
 			<tr class="input ${f==fieldInstance? 'selected': ''}">
 				<td><label for="custom-field-${f.name}">${f.name}</label></td>
 				<td><input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/></td>
-				<td><a class="remove-command" id="remove-field-${f.id}"></a></td>
+				<td><a class="remove-command custom-field" id="remove-field-${f.id}"></a></td>
 			</tr>
 		</g:each>
 		<tr>

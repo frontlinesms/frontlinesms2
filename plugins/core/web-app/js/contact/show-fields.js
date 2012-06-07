@@ -1,7 +1,7 @@
 $(document).ready(function() {
-	$("#custom-field-list li a.remove-field").click(removeFieldClickAction);
+	$("a.remove-command.custom-field").click(removeFieldClickAction);
 	$("#new-field-dropdown").change(addFieldClickAction);
-	$("div.basic-info a.remove-field").click(clearField);
+	$("a.remove-command.not-custom-field").click(clearField);
 });
 
 function addFieldClickAction() {
@@ -19,6 +19,7 @@ function addFieldClickAction() {
 		var fieldValue = "";
 		addCustomField(fieldName);
 	}
+	enableSaveAndCancel();
 }
 
 function clickDone() {
@@ -35,10 +36,12 @@ function addCustomField(name) {
 	var fieldId = Math.floor(Math.random()*100001)
 	var fieldListItem = $('<tr><td><label class="why" for="' + fieldId + '">' + name + '</label></td></tr>');
 	var textFieldItem = $('<td><input type="text" name="' + name + '" value="" /></td>');
-	var deleteButton = $('<td><a class="remove-field" id="remove-field-' + fieldId + '"></a></li></td>');
-	
+	var deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '"></a>');
+	var deleteButtonTd = $('<td></td>');
+
+	deleteButtonTd.append(deleteButton);
 	fieldListItem.append(textFieldItem);
-	fieldListItem.append(deleteButton);
+	fieldListItem.append(deleteButtonTd);
 	deleteButton.click(removeFieldClickAction);
 
 	$('#info-add').parent().before(fieldListItem);
@@ -48,17 +51,25 @@ function addCustomField(name) {
 
 function removeFieldClickAction() {
 	var fieldId = $(this).attr('id').substring('remove-field-'.length);
-	var parent = $(this).parent();
-	parent.remove();
-
-	removeFieldId(fieldId);
+	var fieldElement = $(this).parent().parent();
+	var isUnsaved = $(this).hasClass('unsaved-field');
+	var fieldName = "";
+	if(isUnsaved)
+	{
+		fieldName = fieldElement.find('input').attr('name');
+	}
+	fieldElement.remove();
+	removeFieldId(fieldId, fieldName, isUnsaved);
+	enableSaveAndCancel();
 }
 
-function removeFieldId(id) {
-	// remove from the ADD list
-	removeFieldIdFromList(id, 'fieldsToAdd');
-	// add to the REMOVE list
-	addFieldIdToList(id, 'fieldsToRemove');
+function removeFieldId(id, name, isUnsaved) {
+	if(isUnsaved)
+		// remove from the ADD list
+		removeFieldIdFromList(name, 'fieldsToAdd');
+	else
+		// add to the REMOVE list
+		addFieldIdToList(id, 'fieldsToRemove');
 }
 function addField(id) {
 	// remove from the REMOVE list
