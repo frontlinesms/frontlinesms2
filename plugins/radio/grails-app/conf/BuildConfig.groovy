@@ -29,22 +29,6 @@ grails.project.dependency.resolution = {
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-		// TEST
-		test 'org.apache.camel:camel-test:2.5.0'
-		test 'org.mockito:mockito-all:1.8.5'
-		def seleniumVersion = "2.18.0"
-		def gebVersion = "0.6.1"
-		def spockVersion = "0.5-groovy-1.7"
-		test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
-		test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
-		test "org.codehaus.geb:geb-spock:$gebVersion"
-		test "org.spockframework:spock-core:$spockVersion"
-
-		// SHOULD BE AVAILABLE ONLY IN DEV SCOPE
-		compile ('net.frontlinesms.test:hayescommandset-test:0.0.4') {
-			changing = true
-		} // doesn't seem to cause problems if it's here, but should really only be included for dev scope
-
 		// COMPILE
 	}
 }
