@@ -61,7 +61,7 @@
 			<td>
 				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
-						<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
+						<li class="${g == groupInstance ? 'selected' : ''}" groupName="${g.name}">
 							<span>${g.name}</span><a class="remove-command" id="remove-group-${g.id}"><g:message code="contact.remove.from.group"/></a>
 						</li>
 					</g:each>
