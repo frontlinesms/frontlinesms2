@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	$('#message-detail #multiple-messages').hide();
-	$('#contact-editor #multiple-contacts').hide();
+	$('#multiple-messages').hide();
+	$('#multiple-contacts').hide();
 });
 
 function showMultipleDetailsPanel(itemTypeString) {
@@ -123,7 +123,7 @@ function checkAll(itemTypeString) {
 		});
 		var checkedItemCount = getCheckedItemCount(itemTypeString);
 		if(checkedItemCount == 1) {
-			var tableRow = $("tr.message-preview:nth-child(2)");
+			var tableRow = $("#main-list tbody tr:first-child");
 			var id = tableRow.attr("id").substring(itemTypeString.length + 1);
 			updateSingleCheckedDetails(itemTypeString, id, tableRow);
 		} else updateMultipleCheckedDetails(itemTypeString);
@@ -143,7 +143,7 @@ function checkAll(itemTypeString) {
 
 function updateCheckAllBox(count) {
 	// Check whether all messages are checked
-	if(count == $('#main-list tr.message-preview :checkbox').size() && !$('#message-list :checkbox')[0].checked) {
+	if(count == $('#main-list tbody tr :checkbox').size() && !$('#main-list :checkbox')[0].checked) {
 		$('#main-list :checkbox')[0].checked = true;
 	} else if($('#main-list :checkbox')[0].checked) {
 		$('#main-list :checkbox')[0].checked = false;
