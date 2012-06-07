@@ -72,22 +72,42 @@ public class Futil {
 	}
 
 	static void createRegistrationPropertiesFile(String uuid, boolean registered , Map<String, String> data) {
-		File regPropFile = Futil.getRegistrationPropertiesFile();
-		String status = "";
-		status = registered ? "true":"false";
-		try {
-			Properties properties = new Properties();
-			properties.load(new InputStreamReader(new FileInputStream(regPropFile), "UTF-8"));
-			properties.setProperty("registered",status);
-			if (data != null){
-				for(Entry<String, String> e: data.entrySet()) {
-					properties.setProperty(e.getKey(),e.getValue());
-				}
-			}
-			properties.store(new OutputStreamWriter(new FileOutputStream(regPropFile), "UTF-8"),null);
+		Properties properties = new Properties();
 
-		} catch(IOException e) {
-			e.printStackTrace();
+		File regPropFile = Futil.getRegistrationPropertiesFile();
+		FileInputStream fis = null;
+		InputStreamReader isr = null;
+		try {
+			fis = new FileInputStream(regPropFile);
+			isr = new InputStreamReader(fis, "UTF-8");
+			properties.load(isr);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(isr != null) try { isr.close(); } catch(Exception _) { /* ignore */ }
+			if(fis != null) try { fis.close(); } catch(Exception _) { /* ignore */ }
+		}
+
+		String status = Boolean.toString(registered);
+		properties.setProperty("registered", status);
+
+		if (data != null) {
+			for(Entry<String, String> e: data.entrySet()) {
+				properties.setProperty(e.getKey(),e.getValue());
+			}
+		}
+
+		FileOutputStream fos = null;
+		OutputStreamWriter osw = null;
+		try {
+			fos = new FileOutputStream(regPropFile);
+			osw = new OutputStreamWriter(fos, "UTF-8");
+			properties.store(osw, null);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if(osw != null) try { osw.close(); } catch(Exception _) { /* ignore */ }
+			if(fos != null) try { fos.close(); } catch(Exception _) { /* ignore */ }
 		}
 	}
 //> PRIVATE UTILITY METHODS

@@ -52,7 +52,7 @@ public class Monitor {
 	}
 
 	public String getUrl() {
-		return "http://localhost:8080";
+		return "http://localhost:" + port;
 	}
 }
 
