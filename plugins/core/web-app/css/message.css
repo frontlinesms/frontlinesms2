@@ -49,3 +49,5 @@
 #body #pollGraph {position: fixed; height: auto; left: 17%; right: 23%; bottom: 0pt; top: 235px; }
 
 #message-detail-sender .add { background-image: url("../images/icons/add.png"); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; }
+
+span.quick-message { padding: 6px 5px 6px 25px; background-image: url('../images/icons/quickmessage.png'); background-repeat: no-repeat; background-position: 0px center; }

@@ -7,20 +7,10 @@
  *
  * http://docs.jquery.com/UI/Tabs#theming
  */
-.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor:pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
 .ui-tabs .ui-tabs-hide { display: none !important; }
-
-.ui-tabs {
-	overflow: hide;
-}
-
-.ui-tabs form{
-	height: 354px;
-	padding: 17px;
-	width: 485px;
-	overflow: auto;
-	margin: 0;
-}
+.ui-tabs { overflow:hide; }
+.ui-tabs form { float:none; height:354px; width:485px; padding:17px; overflow:auto; margin:0; }
 
 .ui-tabs-nav {
 	float: left;
@@ -37,29 +27,6 @@
 	color: #DFDFDF;
 }
 
-.ui-tabs-panel h2 {
-	font-weight: bold;
-	padding-bottom: 10px;	
-}
-
-.ui-tabs-panel tr {
-	height: 40px;	
-}
-
-.ui-tabs-panel td {
-	min-width: 100px;
-	display: inline;
-}
-
-.ui-tabs-panel textarea {
-	margin: 10px 10px 10px 30px;
-}
-
-.ui-tabs-panel #send-message-stats {
-	margin-left: 30px;
-	display: block;
-}
-
 .ui-tabs-panel #manual-address {
 	margin-bottom: 10px;
 }
@@ -72,32 +39,6 @@
 
 .ui-tabs-panel #address {
 	width: 200px;
-}
-
-.ui-tabs-panel #responseType {
-	padding-bottom: 25px;
-}
-
-.ui-tabs-panel #responseType li {
-	height: 30px;
-}
-
-.ui-tabs-panel #reply-count {
-	display: block;
-}
-
-.ui-tabs-panel .radios {
-	padding: 20px 0 20px 5px;
-	line-height: 200%;
-}
-
-.ui-tabs-panel #poll-keyword {
-	width: 350px;
-	margin-left: 60px;
-}
-
-.ui-tabs-panel #poll-choices li {
-	padding: 10px 0;
 }
 
 .ui-tabs-panel #recipients-list {
@@ -124,11 +65,3 @@
 	border-bottom: 1px solid #9E9E9E;
 }
 
-.ui-tabs-panel .name-field {
-	margin-left: 30px;
-	width: 350px;
-}
-
-.ui-tabs-panel .create-name {
-	padding-bottom: 20px;
-}
