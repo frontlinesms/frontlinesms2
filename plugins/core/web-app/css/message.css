@@ -34,6 +34,7 @@
 	background-repeat:no-repeat; background-position:98% center; }
 #body.messages #main-list tr.selected { background-color:#d8e8ef; }
 #body.messages #main-list tr:hover { background-color:#e5eff3; }
+#body.messages #main-list #new-message-notification { background-color: rgba(192, 50, 131, 0.3); cursor: pointer; }
 
 #body.messages #main-list-foot .controls div#message-toggler a { padding:0 10px; }
 

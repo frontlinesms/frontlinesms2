@@ -10,7 +10,7 @@
 		<g:each in="${ownerInstance.responses}" var="r">
 			<tr id="response-${r.id}">
 				<td class="value">${r.value}</td>
-				<td>${r.liveMessageCount}</td>
+				<td class="count">${r.liveMessageCount}</td>
 				<td class="percent">
 					<g:formatNumber number="${ownerInstance.liveMessageCount - sentMessageCount != 0 ? r.liveMessageCount/(ownerInstance.liveMessageCount - sentMessageCount) : 0}" type="percent" maxFractionDigits="2"/>
 				</td>

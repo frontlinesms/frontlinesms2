@@ -10,7 +10,7 @@ function goToSection() {
 	var menuItem = $(this);
 	var section = menuItem.attr("href");
 	$("#modalBox.help #help-index li.selected").removeClass("selected");
-	menuItem.parent("li").addClass("selected");
+	menuItem.parent().addClass("selected");
 	$("#help-content").load(url_root + "help/section", { helpSection:section });
 	return false;
 }
