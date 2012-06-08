@@ -1,0 +1,45 @@
+# Creating a Smart Group
+
+---
+
+_This page will describe how to create a Smart Group and how each rule works. Smart Group's are a new feature which allow you to create dynamic groups that update themselves automatically as criteria that you set are fulfilled. Smart groups work especially well with custom fields. For example, you cant create a Smart Group that contains contacts which have, for example, Nairobi as their hometown. Every time the custom field called hometown is added to a contact and "Nairobi" is entered into the field, the contact will automatically be added to that particular smart group._
+
+---
+
+![Creating a Smart group][8]
+
+### [Creating a Smart Group][1]
+
+1.  When viewing the [Contacts tab][2], click on the button 'Create new smart group' (1).
+2.  A window will appear asking you to specify the [rules][3] for your smart group:
+![Smart Group Dialog][9]
+3.  The drop down menu allows you to select a field for which to set a rule. Select a field that wish to set criteria for.
+4.  Next to the drop box there is an empty text field in which you can enter the text that the smart group will look for when figuring out who should go into the group. For example, if you set the field to "Contact Name" and the text "ro", the smart group will add all contacts whose names start with "ro". 
+5.  If you want to add another rule, then click "add another rule", otherwise go to step 7.
+6.  Repeat step 4 to add another rule. Rules will work in conjunction with each other, so a contact will only be added to the group if it fulfills ALL rules.
+7.  Enter a name for your smart group.
+8.  Click "Create".
+
+Your new smart group will appear in the [Contacts tab][2] under "Smart Groups". It will work immediately and, therefore, any contacts which already fulfill the smart group rules will be present in the group if you click on it now.
+
+Otherwise, contacts will be added automatically if and when they fulfill the rules of the smart group.
+
+_**Note:** When using custom fields in smart group rules, contacts must also have the custom field in their contact record to be considered against the smart groups' rules._
+
+---
+
+### Related Actions  
+[Adding/Removing a Contact from a Group][4]  
+[Exporting Contacts][5]  
+[Removing/Adding a Custom Field to a Contact][6]   
+[Creating a Group][7]  
+
+[1]: CreatingSmartGroup
+[2]: gotoCgetting_around_the_contacts_tab
+[3]: RulesToolTip
+[4]: gotoAdd_Remove_Contact_to_from_a_group
+[5]: gotoExporting
+[6]: gotoAdd_Remove_a_Custom_Field
+[7]: gotoCreating_a_Group
+[8]: ../images/help/create_smartgroup.jpg
+[9]: ../images/help/smartgroup_dialog.jpg

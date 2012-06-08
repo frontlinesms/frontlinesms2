@@ -9,11 +9,7 @@
 		<li><a href="#tabs-2"><g:message code="connection.details" /></a></li>
 		<li><a href="#tabs-3"><g:message code="connection.confirm" /></a></li>
 	</ol>
-	
 	<g:formRemote name="connectionForm" url="[controller:'connection', action:action, id:fconnectionInstance?.id, params:[format:'json']]" method="post" onLoading="showThinking()" onSuccess="hideThinking(); handleSaveResponse(data)">
-		<g:if test="${fconnectionInstance?.id}">
-			<g:hiddenField name="connectionType" value="${fconnectionInstance?.shortName}"/>
-		</g:if>
 		<fsms:wizardTabs templates="type, details, confirm"/>
 	</g:formRemote>
 </div>
