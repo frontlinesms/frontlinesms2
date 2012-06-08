@@ -8,7 +8,7 @@
 #modalBox.help #help-index > ul { line-height:200%; }
 #modalBox.help #help-index > ul ul { margin:10px 0; }
 #modalBox.help #help-index li a { display:block; }
-#modalBox.help #help-index li.selected a { background-color:#d8e8ef; }
+#modalBox.help #help-index li.selected > a { background-color:#d8e8ef; }
 #modalBox.help #help-index li a:hover { background-color:#e5eff3; }
 
 #modalBox.help #help-index > ul > li { text-indent:17px; }
@@ -17,3 +17,20 @@
 #modalBox.help #help-index li li a { text-indent:-17px; padding-left:44px; padding-right:17px; }
 #modalBox.help #help-index li li li a { text-indent:-17px; padding-left:54px; padding-right:17px; }
 
+
+#modalBox.help #help-content { padding:17px; line-height:140%; }
+#modalBox.help #help-content h1 { font-weight:bold; font-size:150%; margin:0 0 17px 0; }
+#modalBox.help #help-content h2 { font-weight:bold; font-size:130%; margin:17px 0 12px 0; }
+#modalBox.help #help-content h3 { font-weight:bold; font-size:110%; margin:12px 0 6px 0;}
+
+#modalBox.help #help-content a { color:#339; }
+#modalBox.help #help-content a:hover { color:black; }
+
+#modalBox.help #help-content img { display:block; width:66%; margin:17px 0 17px 17%; }
+
+#modalBox.help #help-content p { margin:6px 0; }
+#modalBox.help #help-content p:nth-child(2) { font-style:italic; }
+
+#modalBox.help #help-content ul, #modalBox.help #help-content ol { margin:6px 0; }
+#modalBox.help #help-content li { padding-left:1.5em; text-indent:-1em; }
+#modalBox.help #help-content li:before { content:"\00BB \0020" }
