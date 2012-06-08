@@ -11,7 +11,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 			width: 675,
 			height: 500,
 			title: title,
-			buttons: [{ text:i18n("popup.cancel"), click:cancel, id:"cancel" }, { text:i18n("popup.back"), disabled:"true" },
+			buttons: [{ text:i18n("action.cancel"), click:cancel, id:"cancel" }, { text:i18n("action.back"), disabled:"true" },
 					{ text:btnFinishedText, click:submitAction, id:"submit" }],
 			close: function() { $(this).remove(); }
 	});
@@ -52,17 +52,20 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 
 function launchHelpWizard(html) {
 	var modalBox = createModalBox(html);
+	modalBox.addClass("help");
 	$("#messageText").keyup();
-	modalBox.dialog({
+	var height = window.innerHeight;
+	var dialog = modalBox.dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
-		width: '95%',
-		height: screen.height*0.8,
+		width: "95%",
+		height: height,
 		buttons: [
-			{ text:i18n("popup.ok"), click:submit, id:"submit" }
+			{ text:i18n("action.close"), click:submit, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
+	$(".ui-dialog").addClass("help");
 	initializePopup();
 }
 
