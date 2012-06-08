@@ -54,7 +54,7 @@ eventTestPhaseEnd = { phaseName ->
 	}
 }
 
-eventPackagingEnd = {
+eventCompileEnd = {
 	// Copy i18n properties files to web-app so they are available for i18nService in dev mode
 	def folderMap = [
 		"grails-app/i18n":"web-app/WEB-INF/grails-app/i18n"
