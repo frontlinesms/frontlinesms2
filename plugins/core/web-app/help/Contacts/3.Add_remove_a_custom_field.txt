@@ -55,4 +55,4 @@ _**Note:** This will **not** remove the custom field from the "Add more informat
 [8]: gotoExporting
 [9]: gotoCreating_a_Smart_Group
 [10]: gotoCreating_a_group
-[11]: ../images/help/addmoreinfo.jpg
+[11]: ../images/help/add_more_info.jpg

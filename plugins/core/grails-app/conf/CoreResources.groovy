@@ -13,9 +13,13 @@ modules = {
 		resource url: [dir:'css', file:'settings.css']
 		resource url: [dir:'css', file:'status.css']
 		resource url: [dir:'css', file:'wizard.css']
+
+
 		resource url: [dir:'js/layout', file:'resizer.js'], disposition: 'head'
+		resource url: [dir:'css', file:'status.css']
 
 		resource url: [dir:'css', file:'help.css']
+
 
 		resource url: [dir:'js', file:"application.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'

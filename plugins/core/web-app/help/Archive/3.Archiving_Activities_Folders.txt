@@ -51,4 +51,4 @@ To view your archived folder, navigate to the [archive tab][4] and then click on
 [12]: gotoGetting_around_folders
 [13]: gotoUnarchive
 [14]: gotoCreating_an_announcement
-[15]: ../images/help/ArchiveActivity.jpg
+[15]: ../images/help/archive_activity.jpg

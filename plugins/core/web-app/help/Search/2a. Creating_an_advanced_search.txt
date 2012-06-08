@@ -97,4 +97,4 @@ In this example search, we  will be searching for received messages with the key
 [6]: gotoAdd_remove_a_custom_field
 [7]: gotoSearching_through_contacts
 [8]: ExampleSearch
-[9]: ../images/help/advancedsearch.jpg
+[9]: ../images/help/advanced_search.jpg

@@ -25,8 +25,10 @@ function checkForSuccessfulSave(response, type) {
 			{
 				modal: true,
 				title: i18n("popup.title.saved", type),
-				buttons: [{ text:i18n("popup.cancel"), click: cancel, id:"cancel" }, { text:i18n("popup.back"), disabled: "true"},
-				          		{ text:i18n('popup.ok'),  click: summaryRedirect, id:"submit" }],
+				buttons: [
+					{ text:i18n("action.cancel"), click: cancel, id:"cancel" },
+					{ text:i18n("action.back"), disabled: "true"},
+					{ text:i18n('action.ok'),  click: summaryRedirect, id:"submit" }],
 				close: function() { $(this).remove(); }
 			}
 		);

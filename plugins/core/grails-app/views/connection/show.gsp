@@ -13,11 +13,11 @@
 						$.get("${createLink(controller:'connection', action:'list', id:params?.id)}", function(data) {
 							var newSystemNotificationCount = $("div.system-notification").length;
 							if (count < 2 && oldSystemNotificationCount == newSystemNotificationCount) {
-								count++;
-								$(".connections").replaceWith($(data).find('.connections'));	
+								count++;	
 							} else {
 								clearInterval(connectionTimer);
 								$("div.flash").hide();
+								$(".connections").replaceWith($(data).find('.connections'));
 							}	
 						});
 					}

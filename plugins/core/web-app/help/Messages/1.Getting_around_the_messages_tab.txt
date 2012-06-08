@@ -62,23 +62,23 @@ When multiple messages are selected, a summary of how many messages have been se
 [Getting around the Search Tab][11]  
 [Getting around the Status Tab][10]  
 
-[1]: gotoSent
-[2]: gotoGetting_around_activities
-[3]: gotoGetting_around_folders
-[4]: gotoCreating_an_activity
-[5]: gotoCreating_a_folder
-[6]: gotoMRFD
-[7]: gotoGetting_around_the_Archive_tab
+[1]: Messages/5.Sent
+[2]: Activities/1.getting_around_activities
+[3]: Folders/1.getting_around_folders
+[4]: Activities/2.Creating_an_activity
+[5]: Folders/2.creating_a_folder
+[6]: Messages/8.MRFD
+[7]: Archive/1.Getting_Around_the_Archive_Tab
 [8]: NavigationTab
-[9]: gotoGetting_around_the_Contacts_tab
-[10]: gotoGetting_Around_the_status_tab
-[11]: gotoGetting_around_the_search_tab
-[12]: gotoGetting_around_the_settings_menu
+[9]: Contacts/Getting_Around_the_contacts_tab
+[10]: Status/Getting_around_the_status_tab
+[11]: Search/Getting_around_the_Search_tab
+[12]: Settings/Getting_around_the_settings_menu
 [13]: NavigationPane
-[14]: gotoGetting_around_the_messages_tab
+[14]: Messages/Getting_around_the_messages_tab
 [15]: gotoPending
 [16]: gotoTrash
 [17]: MessageList
 [18]: gotoSSS
 [19]: MessageDetails
-[20]: ../images/help/MessageTabOverview.jpg
+[20]: ../images/help/message_tab_overview.jpg

@@ -34,4 +34,4 @@ You can [export][5] these messages using the "Export" button. More details can b
 [7]: gotoExporting-contacts
 [8]: gotoCreating_a_Smart_Group
 [9]: gotoCreating_a_group
-[10]: ../images/help/viewsentreceivedmessages.jpg
+[10]: ../images/help/view_sent_received_messages.jpg

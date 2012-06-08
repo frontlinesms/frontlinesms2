@@ -32,4 +32,4 @@ This search filter works by matching the contents of the 'Name' field of your co
 [5]: gotoExporting
 [6]: gotoCreating_a_Smart_Group
 [7]: gotoCreating_a_group
-[8]: ../images/help/contactsearch.jpg
+[8]: ../images/help/contact_search.jpg
