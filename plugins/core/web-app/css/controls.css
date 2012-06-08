@@ -19,8 +19,8 @@ tr > :last-child { padding-right:8px; }
 td a, th a { display:block; }
 th.sortable a { background-repeat:no-repeat; background-position:center left; }
 th.sortable.asc a, th.sortable.desc a { padding-left:15px; }
-th.sortable.asc a { background-image:url("../images/buttons/down_arrow.png"); }
-th.sortable.desc a { background-image:url("../images/buttons/up_arrow.png"); }
+th.sortable.asc a { background-image:url("../images/icons/down_arrow.png"); }
+th.sortable.desc a { background-image:url("../images/icons/up_arrow.png"); }
 
 a.prevLink, a.nextLink { display:inline-block; width:25px; height:25px; background-position:center left; background-repeat:no-repeat; }
 a.prevLink { background-image:url("../images/pagination/left.png"); }
