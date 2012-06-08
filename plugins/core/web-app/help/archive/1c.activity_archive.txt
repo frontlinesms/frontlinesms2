@@ -31,14 +31,14 @@ Clicking on a single activity will take you to that activities detail view which
 [Archiving Messages][9]  
 [Unarchiving Messages, Activities and Folders][3]  
 
-[1]: gotoGetting_around_the_inbox
-[2]: ActivityListView
-[3]: gotoUnarchive
-[4]: gotoMRFD
-[5]: gotoExporting
-[6]: ActivityDetailView
-[7]: gotoGetting_around_activities
-[8]: gotoArchiving_Activities_Folders
-[9]: gotoArchivingMessages
+[1]: archive/1.getting_around_the_archive_tab
+[2]: archive/1c.activity_archive
+[3]: archive/4.unarchive
+[4]: messages/8.mrfd
+[5]: messages/9.exporting
+[6]: archive/1c.activity_archive
+[7]: archive/1.getting_around_the_archive_tab
+[8]: archive/3.archiving_activities_folders
+[9]: archive/2.archiving_messages
 [10]: ../images/help/activity_archive.jpg
 [11]: ../images/help/activity_archive_detail.jpg
