@@ -37,18 +37,18 @@ To view your archived folder, navigate to the [archive tab][4] and then click on
 [Creating a Poll][10]  
 [Creating an Announcement][14]  
 
-[1]: gotoGetting_around_activities
-[2]: gotoGetting_around_the_messages_tab
-[3]: gotoFolderArchive
-[4]: gotoGetting_around_the_archive_tab
-[5]: gotoExporting
-[6]: gotoRenaming_an_Activity
-[7]: gotoMRFD
-[8]: gotoActivityArchive
+[1]: activities/1.getting_around_activities
+[2]: messages/1.getting_around_the_messages_tab
+[3]: archive/1b.folder_archive
+[4]: archive/getting_around_the_archive_tab
+[5]: messages/9.exporting
+[6]: activities/6.renaming_an_activity
+[7]: messages/8.mrfd
+[8]: activities/1c.activity_archive
 [9]: ArchivingAnActivity
-[10]: gotoCreating_a_poll
-[11]: ArchivingAFolder
-[12]: gotoGetting_around_folders
-[13]: gotoUnarchive
-[14]: gotoCreating_an_announcement
+[10]: activities/3.creating_a_poll
+[11]: archive/3.archiving_activities_folders
+[12]: folders/1.getting_around_folders
+[13]: archive/4.unarchive
+[14]: activities/4.creating_an_announcement
 [15]: ../images/help/archive_activity.jpg

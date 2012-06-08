@@ -27,16 +27,16 @@ Messages archived from [sent messages][10] will be found in the [sent archive][1
 [Archiving Activities and Folders][8]  
 [Unarchiving Messages, Activities and Folders][12]  
 
-[1]: gotoGetting_around_the_archive_tab
-[2]: gotoinboxarchive
-[3]: gotoMRFD
-[4]: ActivityAMessage
-[5]: gotoSSS
-[6]: gotoGetting_around_Activities
-[7]: gotoGetting_around_folders
-[8]: gotoArchiving_activities_folders
-[9]: gotoGetting_around_the_inbox_archive
-[10]: gotoSent
-[11]: gotoSentArchive
-[12]: gotoUnarchive
+[1]: archive/1.getting_around_the_archive_tab
+[2]: archive/1a.inbox_archive
+[3]: messages/8.mrfd
+[4]: archive/2.archiving_messages
+[5]: messages/2.sss
+[6]: activities/1.getting_around_activities
+[7]: folders/1.getting_around_folders
+[8]: archive/3.archiving_activities_folders
+[9]: archive/1a.inbox_archive
+[10]: messages/5.sent
+[11]: archive/1b.sent_archive
+[12]: archive/4.unarchive
 [13]: ../images/help/mrfd_reply.jpg

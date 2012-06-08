@@ -55,19 +55,19 @@ Your folder will now appear in the [messages][1] tab.
 [Sending a Message][14]  
 [Forwarding messages][15]  
 
-[1]: gotoGetting_around_the_messages_tab
-[2]: UnarchivingMessage
-[3]: gotoInboxArchive
-[4]: gotoGetting_around_the_archive_tab
-[5]: UnarchivingaSentMessage
-[6]: gotoSentArchive
-[7]: gotoSent
-[8]: UnarchivinganActivity
-[9]: gotoActivityArchive
-[10]: UnarchivingaFolder
-[11]: gotoFolderArchive
-[12]: gotoCreating_a_folder
-[13]: gotoCreating_an_activity
-[14]: gotoQuickMessage
-[15]: gotoMRFD
+[1]: messages/1.getting_around_the_messages_tab
+[2]: archive/2.archiving_messages
+[3]: archive/1a.inbox_archive
+[4]: archive/1.getting_around_the_archive_tab
+[5]: archive/1b.sent_archive
+[6]: archive/1b.sent_archive
+[7]: messages/5.sent
+[8]: archive/4.unarchive
+[9]: archive/1c.activity_archive
+[10]: archive/4.unarchive
+[11]: archive/1d.folder_archive
+[12]: folders/2.creating_a_folder
+[13]: activities/2.creating_an_activity
+[14]: messages/3.quick_message
+[15]: messages/8.mrfd
 [16]: ../images/help/unarchive_message.jpg

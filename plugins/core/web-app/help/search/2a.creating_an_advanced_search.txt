@@ -89,12 +89,12 @@ In this example search, we  will be searching for received messages with the key
 [Exporting Search Results][1]  
 [Search within contact][7]  
 
-[1]: gotoExporting
-[2]: AdvancedSearch
-[3]: gotoGetting_around_the_archive_tab
-[4]: BetweenDates
-[5]: MoreSearchOptions
-[6]: gotoAdd_remove_a_custom_field
-[7]: gotoSearching_through_contacts
-[8]: ExampleSearch
+[1]: search/1.getting_around_the_search_tab
+[2]: search/2a.creating_an_advanced_search
+[3]: archive/1.getting_around_the_archive_tab
+[4]: search/1.getting_around_the_search_tab
+[5]: search/2.creating_a_search
+[6]: search/1.getting_around_the_search_tab
+[7]: contacts/8.searching_through_contacts
+[8]: search/1.getting_around_the_search_tab
 [9]: ../images/help/advanced_search.jpg

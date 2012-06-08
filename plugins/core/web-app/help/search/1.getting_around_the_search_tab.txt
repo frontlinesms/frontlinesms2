@@ -43,10 +43,10 @@ The search header (3) displays the parameters of the search that was last carrie
 [Creating a Search][6]  
 [Exporting Your Search Results][5]  
 
-[1]: SearchParameters
-[2]: MessageLightandMessageDetails
-[3]: SearchHeader
-[4]: gotoQuickMessage
-[5]: gotoExporting
-[6]: gotoCreating_a_search
+[1]: messages/1.getting_around_the_messages_tab
+[2]: messages/1.getting_around_the_messages_tab
+[3]: search/1.getting_around_the_search_tab
+[4]: messages/3.quick_message
+[5]: search/1.getting_around_the_search_tab
+[6]: search/2.creating_a_search
 [7]: ../images/help/search_overview.jpg

@@ -33,12 +33,12 @@ Clicking on a single folder will take you to that folders detail view which rese
 [Moving Messages into a Folder][3]  
 
 [1]: FolderListView
-[2]: gotoUnarchive
-[3]: gotoMRFD
-[4]: gotoExporting
-[5]: FolderDetailView
-[6]: gotoGetting_around_folders
-[7]: gotoArchiving_Activities_Folders
-[8]: gotoArchivingMessages
+[2]: archive/4.unarchive
+[3]: messages/8.mrfd
+[4]: messages/9.exporting
+[5]: folders/2.creating_a_folder
+[6]: folders/1.getting_around_folders
+[7]: archive/3.archiving_activities_folders
+[8]: archive/2.archiving_messages
 [9]: ../images/help/folder_archive.jpg
 [10]: ../images/help/folder_archive_detail.jpg
