@@ -1,5 +1,5 @@
 <div id="added-options">
-	<div class="input extra-option">
+	<div class="input extra-option" id="contactString-list-item">
 		<label for="contactString"><g:message code="search.contact.name.label"/></label>
 		<g:textField name="contactString" value="${search?.contactString}"/>
 		<a class="remove-field" onclick="removeValue('contactString'); toggleExtraSearchOption('contactString');"></a>
