@@ -1,0 +1,37 @@
+# Creating a Group
+
+---
+
+_With groups you can organise your contacts to make the sending and receiving of messages easier to manage. You are able to edit the group by [adding and removing contacts][1] once it has been created. Groups can be helpful when you have a large number of a certain type of contact. For example, you may have number of contacts that are farmers. You can add all these contacts to a group, which will make viewing and sending messages from this group much simpler, as groups are easily selectable when [choosing recipients][2]._
+
+---
+
+![Creating a Group][8]
+
+### [Creating a Group][3]
+
+1.  When viewing the [Contacts tab][4], click on the button 'Create new group' (1).
+2.  A small window will appear asking you to enter a name for the group.
+![Create Group Dialog Box][9]
+3.  Enter a name for your group and click 'Create'.
+
+Your new group should appear under 'Groups'.
+
+---
+
+### Related Actions  
+[Adding Contacts to a Group][1]  
+[Removing Contacts from a Group][1]  
+[Creating a Smart Group][5]  
+[Exporting Contacts][6]  
+[Removing/Adding a Custom Field to a Contact][7]   
+
+[1]: gotoAdd_Remove_Contact_to_from_a_group
+[2]: gotoQuickMessage
+[3]: CreatingGroup
+[4]: gotogetting_Around_the_contacts_tab
+[5]: gotoCreating_a_Smart_Group
+[6]: gotoExporting
+[7]: gotoAdd_remove_a_custom_field
+[8]: ../images/help/create_group.jpg
+[9]: ../images/help/create_group_dialog.jpg
