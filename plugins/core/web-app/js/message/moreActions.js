@@ -22,7 +22,7 @@ function renameAction() {
 		url: url_root + messageSection + '/rename',
 		data: {ownerId: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("smallpopup.rename"));
+			launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"));
 	}})
 }
 
@@ -45,7 +45,7 @@ function deleteAction() {
 		url: url_root + messageSection + '/confirmDelete',
 		data: {id: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, i18n("smallpopup.delete"));
+			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, i18n("action.delete"));
 	}})
 }
 
@@ -63,7 +63,7 @@ function exportAction() {
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
 				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("smallpopup.export"));
+			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
 			updateExportInfo();
 	}})
 }

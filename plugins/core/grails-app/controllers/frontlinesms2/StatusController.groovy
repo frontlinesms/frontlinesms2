@@ -54,8 +54,8 @@ class StatusController {
 			[groupInstance: groupInstance,
 					activityId: params.activityId,
 					groupInstanceList : Group.findAll(),
-					activityInstanceList: Activity.findAll(),
-					folderInstanceList: Folder.findAll(),
+					activityInstanceList: Activity.findAllByDeleted(false),
+					folderInstanceList: Folder.findAllByDeleted(false),
 					search: new Search(group:groupInstance,	activityId: params.activityId)]
 	}
 	
