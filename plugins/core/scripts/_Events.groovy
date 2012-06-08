@@ -55,6 +55,7 @@ eventTestPhaseEnd = { phaseName ->
 }
 
 eventPackagingEnd = {
+	// Copy i18n properties files to web-app so they are available for i18nService in dev mode
 	def folderMap = [
 		"grails-app/i18n":"web-app/WEB-INF/grails-app/i18n"
 	]
@@ -63,5 +64,22 @@ eventPackagingEnd = {
 			fileset(dir:oldLocation)
 		}	
 	}
+
+	// Rewrite the message properties files as JSON so they are available in Javascript in the app
+	new File('web-app/i18n').mkdir()
+	new File('grails-app/i18n/').listFiles().each { f ->
+		def builder = new groovy.json.JsonBuilder()
+		def props = new Properties()
+		f.withInputStream { stream -> props.load(stream); }
+
+		def m = [:]
+		props.each { k, v -> m[k] = v }
+		builder(m)
+
+		jsFilename = f.name - '.properties' + '.js'
+		new File("web-app/i18n/$jsFilename").text = 'var i18nStrings = ' + builder.toString()
+	}
+
+
 }
 
