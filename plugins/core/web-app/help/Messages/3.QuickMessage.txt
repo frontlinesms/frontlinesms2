@@ -78,4 +78,4 @@ Clicking 'send' will complete the action.
 [9]: gotoCreating_a_poll
 [10]: gotoPending
 [11]: gotoCreating_an_Announcement
-[12]: ../images/help/QuickMessage.jpg
+[12]: ../images/help/quick_message.jpg

@@ -55,4 +55,4 @@ If you attach a device while FrontlineSMS is running, you may need to press the 
 [10]: gotoUsing_the_traffic_graph
 [11]: gotoUsing_the_traffic_graph
 [12]: gotoUsing_the_traffic_graph
-[13]: ../images/help/statusoverview.jpg
+[13]: ../images/help/status_overview.jpg

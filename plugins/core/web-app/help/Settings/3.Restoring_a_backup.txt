@@ -26,4 +26,4 @@ If the import was unsuccessful, or some contacts or messages failed to import, a
 [1]: RestoringFromABackUp
 [2]: gotoChanging_Languages
 [3]: gotoManaging_connections
-[4]: ../images/help/settingsimport.jpg
+[4]: ../images/help/settings_import.jpg
