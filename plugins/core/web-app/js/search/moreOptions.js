@@ -1,5 +1,4 @@
 $(function() {	
-	
 	$(".extra-option").each(function() {
 		if (!$(this).children("input").val())
 			$(this).hide();
@@ -24,3 +23,4 @@ function toggleExtraSearchOption(option) {
 function removeValue(element) {
 	$(".extra-option#" + element + "-list-item").find("input").val('');
 }
+
