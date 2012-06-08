@@ -4,3 +4,16 @@
 #modalBox.help #help-index { left:0; right:80%; }
 #modalBox.help #help-content { left:20%; right:0; }
 
+#modalBox.help #help-index { padding:17px 0; }
+#modalBox.help #help-index > ul { line-height:200%; }
+#modalBox.help #help-index > ul ul { margin:10px 0; }
+#modalBox.help #help-index li a { display:block; }
+#modalBox.help #help-index li.selected a { background-color:#d8e8ef; }
+#modalBox.help #help-index li a:hover { background-color:#e5eff3; }
+
+#modalBox.help #help-index > ul > li { text-indent:17px; }
+#modalBox.help #help-index li a { text-indent:-17px; padding-left:34px; padding-right:17px; }
+#modalBox.help #help-index > ul > li > ul > li { text-indent:28px; }
+#modalBox.help #help-index li li a { text-indent:-17px; padding-left:44px; padding-right:17px; }
+#modalBox.help #help-index li li li a { text-indent:-17px; padding-left:54px; padding-right:17px; }
+
