@@ -321,9 +321,10 @@ c.setCancelButtonVisible(false);
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
                         <string>&lt;html&gt;
-&lt;b&gt;Register your use of FrontlineSMS!&lt;/b&gt;
+&lt;b&gt;Please register your use of FrontlineSMS in a few quick steps.&lt;/b&gt;
 &lt;br&gt;
-We are able to provide FrontlineSMS software and technical support for free because we have been able to show how the software and our help makes a difference, and report this to other users and to the donors who support our work. Collecting information on who is downloading and using our software enables us to more effectively track our impact over time. This has been crucial to our operations, helping us to continue providing free software and free user support to you. Therefore, we would really appreciate you taking the time to fill out the below information to register your use of FrontlineSMS.
+&lt;br&gt;
+Knowing more about you, and why you are downloading FrontlineSMS helps us to track our impact over time and communicate this to those who support us - allowing us to continue to provide free software and user support. Therefore, we’d really appreciate you taking the time to fill out the below information to register your use of FrontlineSMS.
 &lt;br&gt;
 &lt;/html&gt;</string>
                       </void>
@@ -1140,8 +1141,14 @@ return valid;</string>
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.TextAreaComponent">
+                      <void property="helpText">
+                        <string>&lt;html&gt;
+Please tell us as much as you can about your work&lt;br&gt;
+this helps us to understand how FrontlineSMS is being used.
+&lt;/html&gt;</string>
+                      </void>
                       <void property="labelText">
-                        <string>How do you plan to use FrontlineSMS</string>
+                        <string>How do you plan to use FrontlineSMS ?</string>
                       </void>
                       <void property="variableName">
                         <string>var_use</string>
@@ -1170,15 +1177,7 @@ return valid;</string>
             <condition />
             <validation />
             <preActivation />
-            <postActivation>if (context.getBooleanVariable("var_share_your_data") == true){
-    formEnvironment.getFormComponentById("182").setVisible(true);
-    formEnvironment.getFormComponentById("183").setVisible(true);
-}else{
-    formEnvironment.getFormComponentById("182").setVisible(false);
-    formEnvironment.getFormComponentById("183").setVisible(false);
-}
-
-WizardContext c = context.getWizardContext();
+            <postActivation>WizardContext c = context.getWizardContext();
 c.setCancelButtonVisible(false);</postActivation>
             <actions />
             <formComponents>
@@ -1187,39 +1186,33 @@ c.setCancelButtonVisible(false);</postActivation>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>I am happy to share my contact information with FrontlineSMS.</string>
+                        <string>I am happy to share data about how I use the software with the FrontlineSMS team.</string>
                       </void>
                       <void property="helpText">
                         <string>&lt;html&gt;
-Many users share monthly usage data with&lt;br&gt;
-the FrontlineSMS team, which does not include&lt;br&gt;
-message content or sender/recipient details,&lt;br&gt;
-but tells us how many messages you are sending&lt;br&gt;
-and receiving through FrontlineSMS and how large&lt;br&gt;
-your contact database is.&lt;b&gt; This information will be&lt;/b&gt;&lt;br&gt;
-&lt;b&gt;confidentially stored by the FrontlineSMS team,&lt;br&gt;
-and won’t be released publicly without your permission.&lt;/b&gt;&lt;br&gt;
-&lt;br&gt;
-We have worked with many of our users to create&lt;br&gt; 
-jointly-branded case studies and guest blog posts&lt;br&gt;
-about their work, as well as featuring them in &lt;br&gt;
-guides and presentations. If you are happy to be&lt;br&gt;
-contacted by the FrontlineSMS team to explore&lt;br&gt;
-these opportunities, connect you with other &lt;br&gt;
-local users or simply find out how you are doing&lt;br&gt; 
-with the software, please fill out your contact &lt;br&gt;
-information below.&lt;br&gt;
+Sharing information about how you use&lt;br&gt;
+FrontlineSMS helps us understand how &lt;br&gt;
+many people the software is reaching&lt;br&gt;
+- another important measure of our work.&lt;br&gt;
+We do not collect message content or &lt;br&gt;
+sender / recipient details, only how &lt;br&gt;
+many messages you are sending and &lt;br&gt;
+receiving through FrontlineSMS and &lt;br&gt;
+how large your contact database is. &lt;br&gt;
+The data will be confidentially stored &lt;br&gt;
+by the FrontineSMS team, and won’t be &lt;br&gt;
+released publicly without your permission.&lt;br&gt; 
 &lt;/html&gt;</string>
                       </void>
                       <void property="selectionScript">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
                             <string>if(selected){
-    formEnvironment.getFormComponentById("182").setVisible(true);
-    formEnvironment.getFormComponentById("183").setVisible(true);
+    formEnvironment.getFormComponentById("182").setEnabled(true);
+    formEnvironment.getFormComponentById("183").setEnabled(true);
 }else{
-    formEnvironment.getFormComponentById("182").setVisible(false);
-    formEnvironment.getFormComponentById("183").setVisible(false);
+    formEnvironment.getFormComponentById("182").setEnabled(false);
+    formEnvironment.getFormComponentById("183").setEnabled(false);
 }</string>
                           </void>
                         </object>
@@ -1260,8 +1253,12 @@ return valid;</string>
                     </object>
                   </java>
                 </serializedBean>
-                <initScript />
-                <visibilityScript>return false;</visibilityScript>
+                <initScript>if (context.getBooleanVariable("var_share_your_data") == true){
+    component.setEnabled(true);
+}else{
+    component.setEnabled(false);
+}</initScript>
+                <visibilityScript />
               </formComponent>
               <formComponent name="" id="183" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
@@ -1279,15 +1276,19 @@ return valid;</string>
                     </object>
                   </java>
                 </serializedBean>
-                <initScript />
-                <visibilityScript>return false;</visibilityScript>
+                <initScript>if (context.getBooleanVariable("var_share_your_data") == true){
+    component.setEnabled(true);
+}else{
+    component.setEnabled(false);
+}</initScript>
+                <visibilityScript />
               </formComponent>
               <formComponent name="" id="184" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>I would like to be featured in the user map.</string>
+                        <string>I am happy to share details of my use of FrontlineSMS with the wider community, e.g. through a user map</string>
                       </void>
                       <void property="variableName">
                         <string>var_feature_in_user_map</string>
@@ -1319,20 +1320,55 @@ return valid;</string>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>I am interested in finding out more about FrontlineSMS research.</string>
+                        <string>I am happy for you to contact me about documenting, learning from and writing about my project.</string>
                       </void>
                       <void property="helpText">
                         <string>&lt;html&gt;
-As part of our efforts to monitor impact we &lt;br&gt;
-are looking for research participants who &lt;br&gt;
-are interested in getting analytical data&lt;br&gt;
-on their use of FrontlineSMS, in return for&lt;br&gt;
-sharing information on the use of FrontlineSMS&lt;br&gt;
-in their project and the difference it is making.&lt;br&gt;
+This allows us to identify users&lt;br&gt;
+who we can profile in guest blog&lt;br&gt;
+posts, case studies, and newspaper articles. 
+&lt;br&gt;&lt;br&gt;
+Sharing your contact details with &lt;br&gt;
+us can help others learn from your&lt;br&gt;
+experiences, spread the word about&lt;br&gt;
+your work, and raise the profile &lt;br&gt;
+of your organization, connect you &lt;br&gt;
+with other local users or simply &lt;br&gt;
+find out how you are doing with &lt;br&gt;
+the software, please tick this &lt;br&gt;
+box and fill out your contact &lt;br&gt;
+information in the registration form.&lt;br&gt;
 &lt;/html&gt;</string>
                       </void>
                       <void property="variableName">
                         <string>var_findout_more_about_research</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="301" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I am interested in finding out more about how I can monitor the impact FrontlineSMS has on my work.</string>
+                      </void>
+                      <void property="helpText">
+                        <string>&lt;html&gt;
+As part of our efforts to monitor&lt;br&gt;
+impact we are looking for research&lt;br&gt;
+participants who are interested &lt;br&gt;
+in getting analytical data on their&lt;br&gt;
+use of FrontlineSMS, in return for&lt;br&gt;
+sharing information on the use of&lt;br&gt;
+FrontlineSMS in their project.&lt;br&gt;
+&lt;/html&gt;</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_monitor_impact</string>
                       </void>
                     </object>
                   </java>
