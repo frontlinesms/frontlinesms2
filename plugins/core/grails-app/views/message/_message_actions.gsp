@@ -19,13 +19,13 @@
 
 		<a id="btn_forward" class="msg-btn btn" onclick="messageResponseClick('Forward')"><g:message code="fmessage.forward" /></a>
 
-		<g:if test="${!messageInstance.messageOwner}">
+		<g:if test="${!messageInstance.messageOwner && messageSection != 'pending'}">
 			<g:if test="${!messageInstance.archived}">
 				<g:actionSubmit id="archive-msg" class="msg-btn btn" value="${g.message(code:'fmessage.archive')}" action="archive"/>
 			</g:if>
-			<g:else>
+			<g:elseif test="${messageSection != 'pending'}"> 
 				<g:actionSubmit id="unarchive-msg" class="msg-btn btn" value="${g.message(code:'fmessage.unarchive')}" action="unarchive"/>
-			</g:else>
+			</g:elseif>
 		</g:if>
 
 		<g:if test="${messageSection != 'pending'}">
