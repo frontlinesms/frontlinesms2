@@ -32,4 +32,4 @@ Your message/s will be updated with new categories and the poll statistics will 
 [3]: gotoRenaming_an_activity
 [4]: gotoCreating_an_announcement
 [5]: gotoExporting_an_activity
-[6]: ../images/help/manualresponse.jpg
+[6]: ../images/help/manual_response.jpg
