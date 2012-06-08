@@ -23,7 +23,7 @@ If the import was unsuccessful, or some contacts or messages failed to import, a
 [Changing languages][2]  
 [Configuring Detected Devices][3]  
 
-[1]: RestoringFromABackUp
-[2]: gotoChanging_Languages
-[3]: gotoManaging_connections
+[1]: settings/1.restoring_a_backup
+[2]: settings/2.changing_languages
+[3]: settings/1.restoring_a_backup
 [4]: ../images/help/settings_import.jpg

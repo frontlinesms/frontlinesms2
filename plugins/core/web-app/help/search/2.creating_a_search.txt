@@ -29,9 +29,9 @@ The results of your search will then be displayed in the message list (2).
 [Exporting Search Results][4]  
 [Search within contact][5]   
 
-[1]: gotoExporting
-[2]: PerformingASearch
-[3]: ABasicSearch
-[4]: gotoExport
-[5]: gotoSearching_through_Contacts
+[1]: search/1.getting_around_the_search_tab
+[2]: search/1.getting_around_the_search_tab
+[3]: search/1.getting_around_the_search_tab
+[4]: search/1.getting_around_the_search_tab
+[5]: search/2.creating_a_search
 [6]: ../images/help/basic_search.jpg

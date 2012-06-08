@@ -43,16 +43,16 @@ If you attach a device while FrontlineSMS is running, you may need to press the 
 [Creating a new connection][5]  
 [Deleting a Connection][4]  
 
-[1]: StatusTrafficLight
-[2]: Connections
-[3]: gotoEditing_a_Connection
-[4]: gotoEditing_a_Connection
-[5]: gotoCreating_a_Connection
-[6]: Getting_around_connections
-[7]: DetectedDevices
-[8]: TrafficGraph
-[9]: gotoUsing_the_traffic_graph
-[10]: gotoUsing_the_traffic_graph
-[11]: gotoUsing_the_traffic_graph
-[12]: gotoUsing_the_traffic_graph
+[1]: status/1.getting_around_the_status_tab
+[2]: status/1.getting_around_the_status_tab
+[3]: status/1.getting_around_the_status_tab
+[4]: status/1.getting_around_the_status_tab
+[5]: status/1.getting_around_the_status_tab
+[6]: status/1.getting_around_the_status_tab
+[7]: status/1.getting_around_the_status_tab
+[8]: status/1.getting_around_the_status_tab
+[9]: status/1.getting_around_the_status_tab
+[10]: status/1.getting_around_the_status_tab
+[11]: status/1.getting_around_the_status_tab
+[12]: status/1.getting_around_the_status_tab
 [13]: ../images/help/status_overview.jpg

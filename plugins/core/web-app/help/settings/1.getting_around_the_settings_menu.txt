@@ -18,9 +18,9 @@ There are 3 sections in the settings area. Please select one to see more informa
 
 ---
 
-[1]: gotoChanging_Languages
-[2]: gotoRestoring_a_backup
-[3]: gotoManaging_connections
-[4]: Navigatingthesettingsmenu
-[5]: gotoSystemLogs
+[1]: settings/1.changing_languages
+[2]: settings/3.restoring_a_backup
+[3]: settings/1.changing_languages
+[4]: settings/1.changing_languages
+[5]: settings/1.changing_languages
 [6]: ../images/help/settings_menu.jpg
