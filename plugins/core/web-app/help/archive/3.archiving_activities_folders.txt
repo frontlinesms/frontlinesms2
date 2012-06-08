@@ -47,8 +47,8 @@ To view your archived folder, navigate to the [archive tab][4] and then click on
 [8]: activities/1c.activity_archive
 [9]: ArchivingAnActivity
 [10]: activities/3.creating_a_poll
-[11]: ArchivingAFolder
-[12]: gotoGetting_around_folders
-[13]: gotoUnarchive
-[14]: gotoCreating_an_announcement
+[11]: archive/3.archiving_activities_folders
+[12]: folders/1.getting_around_folders
+[13]: archive/4.unarchive
+[14]: activities/4.creating_an_announcement
 [15]: ../images/help/archive_activity.jpg
