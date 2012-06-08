@@ -15,10 +15,27 @@ class FolderController {
 		[folderInstance: folderInstance]
 	}
 
+	def rename = {
+		def folderInstance = Folder.get(params.ownerId)
+		render view:"../folder/rename", model:[folderName: folderInstance.name, folderInstance: folderInstance, ownerId:params.ownerId]
+	}
+
 	def save = {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush:true)) {
 			flash.message = defaultMessage 'created'
+			redirect controller:"message", action:'folder', id:folderInstance.id
+		} else {
+			flash.message = defaultMessage 'create.failed'
+			redirect controller:"message", action:'inbox', params:[flashMessage:flash.message]
+		}
+	}
+
+	def update = {
+		def folderInstance = Folder.get(params.id)
+		folderInstance.name = params.name
+		if (folderInstance.save(flush:true)) {
+			flash.message = message(code: 'folder.renamed')
 			redirect controller:"message", action:'folder', id:folderInstance.id
 		} else {
 			flash.message = defaultMessage 'create.failed'

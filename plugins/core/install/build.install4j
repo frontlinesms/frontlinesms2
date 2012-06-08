@@ -1405,7 +1405,7 @@ c.setCancelButtonVisible(false);</postActivation>
                       <void property="labelHtml">
                         <string>Please see below summary of the information you have entered in the registration form.
 Are you happy to submit this information to the FrontlineSMS team? If so please click NEXT.
-To edit the information before submitting click BACK.To Cancel click CANCEL.</string>
+To edit the information before submitting click BACK.</string>
                       </void>
                     </object>
                   </java>
