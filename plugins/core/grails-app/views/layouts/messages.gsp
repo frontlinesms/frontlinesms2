@@ -34,7 +34,7 @@
 				smallpopup.send, wizard.send, popup.ok,
 				message.character.count, fmessage.showpolldetails,
 				fmessage.hidepolldetails, poll.reply.text5,
-				poll.reply.text6, smallpopup.recipients.title, magicwand.title, folder.create.failed"/>
+				poll.reply.text6, smallpopup.recipients.title, magicwand.title, folder.create.failed, quickmessage.count.label"/>
 		<r:script>
 			$(function() {  
 				disablePaginationControls();
