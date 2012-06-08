@@ -39,4 +39,4 @@ Messages archived from [sent messages][10] will be found in the [sent archive][1
 [10]: gotoSent
 [11]: gotoSentArchive
 [12]: gotoUnarchive
-[13]: ../images/help/MfrdReply.jpg
+[13]: ../images/help/mfrd_reply.jpg

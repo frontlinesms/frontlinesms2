@@ -52,4 +52,4 @@ The [search filter][10] allows you to quickly search through the displayed conta
 [8]: gotoAdd_Remove_contact_to_from_a_group
 [9]: ContactFooter
 [10]: gotoSearching_through_contacts
-[11]: ../images/help/contactsoverview.jpg
+[11]: ../images/help/contacts_overview.jpg

@@ -99,6 +99,6 @@ __Group List View__
 [8]: gotoExporting
 [9]: gotoAdd_remove_a_custom_field
 [10]: gotoCreate_a_group
-[11]: ../images/help/addtogroup.jpg
-[12]: ../images/help/multipleaddtogroup.jpg
-[13]: ../images/help/removesinglecontact.jpg
+[11]: ../images/help/add_to_group.jpg
+[12]: ../images/help/multipleadd_to_group.jpg
+[13]: ../images/help/remove_single_contact.jpg

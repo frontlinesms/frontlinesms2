@@ -70,4 +70,4 @@ Your folder will now appear in the [messages][1] tab.
 [13]: gotoCreating_an_activity
 [14]: gotoQuickMessage
 [15]: gotoMRFD
-[16]: ../images/help/unarchivemessage.jpg
+[16]: ../images/help/unarchive_message.jpg
