@@ -57,7 +57,7 @@ class FsmsTagLib {
 		def locale = RequestContextUtils.getLocale(request)
 		// Always include English in case their locale is not available.  The most accurate
 		// translation available will take precedence when the JS files are loaded
-		out << '<script type="text/javascript" src="/i18n/messages.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages.js"></script>'
 		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}" + '.js"></script>'
 		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}" + '.js"></script>'
 		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}_${locale.variant}" + '.js"></script>'
