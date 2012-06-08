@@ -1,0 +1,26 @@
+# Getting Around the Settings Menu
+
+---
+
+_The settings menu is where you can [configure the language][1] that FrontlineSMS runs in, [restore a backup][2] and [configure the connections to your detected devices][3]. You can get to the settings menu by clicking on "Settings" in the top right of your screen, next to "Help"._
+
+---
+
+![Settings Menu][6]
+
+### [Navigating the Settings Menu][4]
+
+There are 3 sections in the settings area. Please select one to see more information on it.
+
+**[General][1]**: (1) Settings for Language and Restoring from a Backup can be found here.
+**[Phones and Connections][3]**: Settings for connections and devices can be found here.
+**[System][5]**: You can view the system logs from here and choose to export them.
+
+---
+
+[1]: gotoChanging_Languages
+[2]: gotoRestoring_a_backup
+[3]: gotoManaging_connections
+[4]: Navigatingthesettingsmenu
+[5]: gotoSystemLogs
+[6]: ../images/help/settings_menu.jpg
