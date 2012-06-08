@@ -27,16 +27,16 @@ When a message is selected (2), the full text will be displayed here along with 
 [Archiving Messages][12]  
 [Unarchiving Messages, Activities and Folders][10]  
 
-[1]: InboxArchive
-[2]: gotoGetting_around_the_inbox
-[3]: InboxArchiveHeader
-[4]: gotoQuickMessage
-[5]: gotoExporting
-[6]: InboxArchiveMessageList
-[7]: gotoSSS
-[8]: InboxArchiveMessageDetails
-[9]: gotoMRFD
-[10]: gotoUnarchive
-[11]: gotoArchiving_Activities_Folders
-[12]: gotoArchiving_Messages
+[1]: archive/1a.inbox_archive
+[2]: archive/getting_around_the_archive_tab
+[3]: archive/1a.inbox_archive
+[4]: messages/3.quick_message
+[5]: messages/9.exporting
+[6]: archive/1a.inbox_archive
+[7]: messages/2.sss
+[8]: archive/1a.inbox_archive
+[9]: messages/8.mrfd
+[10]: archive/4.unarchive
+[11]: archive/3.archiving_activities_folders
+[12]: archive/2.archiving_messages
 [13]: ../images/help/inbox_archive.jpg
