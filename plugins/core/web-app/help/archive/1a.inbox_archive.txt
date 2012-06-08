@@ -1,0 +1,42 @@
+# Inbox Archive
+
+---
+
+_The inbox archive will contain messages that have been archived from the inbox and pending messages. The layout and features of the Inbox archive will be explained in this help page._
+
+---
+
+![Inbox Archive][13]
+
+### [Inbox Archive][1]
+
+The Inbox archive contains all messages that have been archived from the [inbox][2]. 
+
+#### [Inbox Archive Message List][6]
+
+The Message list (1) here functions like any other message list elsewhere in the program. Multiples messages can be selected, starred or filtered. To learn more about how to do this, click [here][7]
+
+#### [Inbox Archive Message Details][8]
+
+When a message is selected (2), the full text will be displayed here along with the ability to [reply][9], [forward][9], [unarchive][10], [delete][9] and [move][9].
+
+---
+
+### Related Actions  
+[Archiving Activities and Folders][11]  
+[Archiving Messages][12]  
+[Unarchiving Messages, Activities and Folders][10]  
+
+[1]: InboxArchive
+[2]: gotoGetting_around_the_inbox
+[3]: InboxArchiveHeader
+[4]: gotoQuickMessage
+[5]: gotoExporting
+[6]: InboxArchiveMessageList
+[7]: gotoSSS
+[8]: InboxArchiveMessageDetails
+[9]: gotoMRFD
+[10]: gotoUnarchive
+[11]: gotoArchiving_Activities_Folders
+[12]: gotoArchiving_Messages
+[13]: ../images/help/inbox_archive.jpg
