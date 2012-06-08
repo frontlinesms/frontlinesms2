@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import org.springframework.web.servlet.support.RequestContextUtils
+
 class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
@@ -51,14 +53,14 @@ class FsmsTagLib {
 		out << g.render(att)
 	}
 
-	def i18n = { att ->
-		r.script(disposition:'head') {
-			att.keys.tokenize(',')*.trim().each {
-				def propVal = g.message(code:it)
-				propVal = propVal.replaceAll("\\'", "\\\\'")
-				out << "\ti18nStrings['$it'] = '${propVal}';\n"
-			}
-		}
+	def i18nBundle = {
+		def locale = RequestContextUtils.getLocale(request)
+		// Always include English in case their locale is not available.  The most accurate
+		// translation available will take precedence when the JS files are loaded
+		out << '<script type="text/javascript" src="/i18n/messages.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}" + '.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}" + '.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}_${locale.variant}" + '.js"></script>'
 	}
 	
 	def confirmTable = { att ->

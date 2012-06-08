@@ -125,11 +125,11 @@ class ExportController {
 			 switch(params.contactsSection) {
 				case 'group':
 					def group = Group.findById(params.groupId)
-					name = message(code: 'export.contacts.name1', args: [group.name, group.getMembers().count()])
+					name = message(code: 'export.contacts.name1', args: [group.name, group.getMembers().size()])
 					break
 				case 'smartGroup':
 					def smartGroup = SmartGroup.findById(params.groupId)
-					name = message(code: 'export.contacts.name2', args: [smartGroup.name, smartGroup.getMembers().count()])
+					name = message(code: 'export.contacts.name2', args: [smartGroup.name, smartGroup.getMembers().size()])
 					break
 			}
 		} else {
