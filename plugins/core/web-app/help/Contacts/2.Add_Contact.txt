@@ -85,4 +85,4 @@ If you change your mind about altering a contact's details and you want to leave
 [10]: gotoMessages_Sent_or_Received_by_Contact
 [11]: technicaltips
 [12]: technicaltips
-[13]: ../images/help/addcontact.jpg
+[13]: ../images/help/add_contact.jpg

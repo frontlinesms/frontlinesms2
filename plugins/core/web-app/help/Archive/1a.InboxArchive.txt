@@ -39,4 +39,4 @@ When a message is selected (2), the full text will be displayed here along with 
 [10]: gotoUnarchive
 [11]: gotoArchiving_Activities_Folders
 [12]: gotoArchiving_Messages
-[13]: ../images/help/inboxarchive.jpg
+[13]: ../images/help/inbox_archive.jpg

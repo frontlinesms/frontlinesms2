@@ -39,5 +39,5 @@ When a message is selected, the full text will be displayed here (2) along with 
 [10]: gotoUnarchive
 [11]: gotoArchiving_Activities_Folders
 [12]: gotoArchiving_Messages
-[13]: ../images/help/sentarchive.jpg
+[13]: ../images/help/sent_archive.jpg
 
