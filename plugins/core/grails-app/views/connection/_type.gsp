@@ -13,4 +13,7 @@
 		</ul>
 	</div>
 </g:if>
+<g:else>
+	<g:hiddenField name="connectionType" value="${fconnectionInstance?.shortName}"/>
+</g:else>
 
