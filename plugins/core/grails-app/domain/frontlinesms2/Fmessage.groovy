@@ -207,7 +207,8 @@ class Fmessage {
 		this.text = text
 	}
 
-	// FIXME document what this is, and remove references to PollResponse
+	// FIXME document what this is, and remove references to PollResponse.  Anyway this poll display
+	// only makes sense within a poll - e.g. in a search result this is a bit dumb.
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
