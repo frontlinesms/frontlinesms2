@@ -3,7 +3,7 @@
 <g:hiddenField name="failed" value="${params.failed}"/>
 
 <div class="content ${ownerInstance? ownerInstance.shortName + ' activity': messageSection}">
-	<g:if test="${ownerInstance}">
+	<g:if test="${ownerInstance && messageSection != 'trash'}">
 		<fsms:render template="/activity/${ownerInstance.shortName}/list_head"/>
 		<fsms:render template="/message/activity_buttons"/>
 	</g:if>

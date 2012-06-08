@@ -35,10 +35,10 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 		width: width,
 		height: height,
 		buttons: [
-			{ text:i18n("wizard.cancel"), click: cancel, id:"cancel" },
-			{ text:i18n("wizard.back"), id:"disabledBack", disabled:true },
-			{ text:i18n("wizard.back"), click:prevButton, id:"prevPage" },
-			{ text:i18n("wizard.next"), click:nextButton, id:"nextPage" },
+			{ text:i18n("action.cancel"), click: cancel, id:"cancel" },
+			{ text:i18n("action.back"), id:"disabledBack", disabled:true },
+			{ text:i18n("action.back"), click:prevButton, id:"prevPage" },
+			{ text:i18n("action.next"), click:nextButton, id:"nextPage" },
 			{ text:btnFinishedText, click:closeWhenDone? submit: submitWithoutClose, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
@@ -260,7 +260,7 @@ function messageResponseClick(messageType) {
 		type:'POST',
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('wizard.send')); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
 	});
 }
 

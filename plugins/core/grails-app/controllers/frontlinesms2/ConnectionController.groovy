@@ -54,8 +54,6 @@ class ConnectionController {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		println "Fconnection: $params.id = $connection"
-		println "Connection status is " + connection.status
 		if(connection.status == RouteStatus.NOT_CONNECTED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
@@ -71,7 +69,7 @@ class ConnectionController {
 			if (fconnectionInstance.save()) {
 			withFormat {
 				html {
-					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name', default: 'Fconnection'), fconnectionInstance.id]))
+					flash.message = LogEntry.log(message(code: 'default.created.message', args: [message(code: 'fconnection.name'), fconnectionInstance.id]))
 					redirect(controller:'connection', action: "createRoute", id: fconnectionInstance.id)
 				}
 				json {
@@ -95,7 +93,7 @@ class ConnectionController {
 	private def remapFormParams() {
 		def cType = params.connectionType
 		if(!(cType in CONNECTION_TYPE_MAP)) {
-			throw new RuntimeException(message(code: 'fconnection.unknown.type') + cType)
+			throw new RuntimeException("Unknown connection type: " + cType)
 		}
 		def newParams = [:] // TODO remove this - without currently throw ConcurrentModificationException
 		params.each { k, v ->
@@ -182,3 +180,4 @@ class ConnectionController {
 		}
 	}
 }
+

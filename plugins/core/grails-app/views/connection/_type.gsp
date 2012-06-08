@@ -1,7 +1,7 @@
 <%@ page import="frontlinesms2.*" %>
 <g:if test="${!fconnectionInstance}">
 	<div class="input">
-		<label for="pollType">XXX Select the type of thing</label>
+		<label for="pollType"><g:message code="connection.select"/></label>
 		<ul class="select">
 			<g:each in="${Fconnection.implementations}" status="i" var="it">
 				<li>
@@ -13,4 +13,7 @@
 		</ul>
 	</div>
 </g:if>
+<g:else>
+	<g:hiddenField name="connectionType" value="${fconnectionInstance?.shortName}"/>
+</g:else>
 
