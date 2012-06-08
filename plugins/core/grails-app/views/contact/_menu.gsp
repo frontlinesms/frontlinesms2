@@ -23,7 +23,7 @@
 				</li>
 			</g:each>
 			<li class="create">
-				<g:remoteLink class="btn create" controller="group" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchSmallPopup(i18n('smallpopup.group.title'), data, i18n('smallpopup.create'))">
+				<g:remoteLink class="btn create" controller="group" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchSmallPopup(i18n('smallpopup.group.title'), data, i18n('action.create'))">
 					<g:message code="contact.create.group"/>
 				</g:remoteLink>
 			</li>
@@ -38,7 +38,7 @@
 				</li>
 			</g:each>
 			<li class="create">
-				<g:remoteLink class="create btn" controller="smartGroup" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('popup.create')), createSmartGroup)">
+				<g:remoteLink class="create btn" controller="smartGroup" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumPopup(i18n('popup.smartgroup.create'), data, (i18n('action.create')), createSmartGroup)">
 					<g:message code="contact.create.smartgroup"/>
 				</g:remoteLink>
 			</li>

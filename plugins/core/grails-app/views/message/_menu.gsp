@@ -29,7 +29,7 @@
 					</li>
 				</g:each>
 				<li class="create">
-					<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumPopup(i18n('popup.activity.create'), data, (i18n('popup.next')), chooseActivity);">
+					<g:remoteLink class="btn create" controller="activity" action="create_new_activity" id="create-new-activity" onLoading="showThinking();" onSuccess="hideThinking(); launchMediumPopup(i18n('popup.activity.create'), data, (i18n('action.next')), chooseActivity);">
 						<g:message code="activities.create"/>
 					</g:remoteLink>
 				</li>

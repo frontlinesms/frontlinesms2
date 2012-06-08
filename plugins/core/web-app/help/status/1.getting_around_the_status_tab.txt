@@ -1,0 +1,58 @@
+# Getting Around the Status Tab 
+
+---
+
+_The Status Tab allows you to manage and view all devices that are detected by FrontlineSMS and view which connected devices are currently active. The traffic light on the status tab itself indicates the status of the FrontlineSMS System. You can also view detailed traffic information ._
+
+---
+
+![Status Overview][13]
+
+### [Status Traffic Light][1]
+
+The status light (1) in the tab can take on three different colours to indicate the state of the system.
+
+(greenlight icon): System is working correctly. All connections are active. Messages are being sent and received.
+(amberlight icon): One or more connections are experiencing problems and may not be working correctly. Messages may not be being sent or received correctly.
+(redlight icon): System is not working. No connections are active. Messages cannot be sent or received.
+
+### [Connections][2]
+
+The connections area (2) displays a list of all connections currently saved in FrontlineSMS. Their status is indicated using the same scheme outlined above. To [edit][3], [delete][4] [create a connection][5] please see the [connections][6] help page.
+
+Connections indicated with a (greenlight icon) have been connected to successfully and are available for you to use.
+Connections indicated with a (amberlight icon) have been connected to but may be experiencing problems. Sending or receiving of messages may not be functioning on this connection.
+Connections indicated with a (redlight icon) have been unsuccessful and no connection has been made.
+
+### [Detected Devices][7]
+
+This area (3) displays all the devices which have been detected by FrontlineSMS as connected to your computer.
+
+When FrontlineSMS is opened, it scans your computer for connected devices. These devices are then displayed here. If a device is detected by FrontlineSMS it will attempt to automatically create a connection for it.
+
+If you attach a device while FrontlineSMS is running, you may need to press the "Detect Modems" button in order to re-scan your computer. Once a device is detected, FrontlineSMS will proceed to automatically create a connection for it.
+
+### [Traffic Graph][8]
+
+[The Traffic graph][9] (4) displays a visual representation of all recorded incoming and outgoing traffic. this [graph can be customised][10] to tailor the traffic information to your needs. To find out how to do this, please click [here][11]
+
+---
+
+### Related Actions
+[Using the traffic graph][12]  
+[Creating a new connection][5]  
+[Deleting a Connection][4]  
+
+[1]: StatusTrafficLight
+[2]: Connections
+[3]: gotoEditing_a_Connection
+[4]: gotoEditing_a_Connection
+[5]: gotoCreating_a_Connection
+[6]: Getting_around_connections
+[7]: DetectedDevices
+[8]: TrafficGraph
+[9]: gotoUsing_the_traffic_graph
+[10]: gotoUsing_the_traffic_graph
+[11]: gotoUsing_the_traffic_graph
+[12]: gotoUsing_the_traffic_graph
+[13]: ../images/help/status_overview.jpg
