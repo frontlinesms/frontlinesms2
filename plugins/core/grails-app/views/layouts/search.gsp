@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title><g:layoutTitle default="Search"/></title>
+		<title><g:layoutTitle default="${g.message(code:'tab.search')}"/></title>
 		<g:layoutHead/>
 		<r:require module="search"/>
 		<fsms:render template="/includes"/>
