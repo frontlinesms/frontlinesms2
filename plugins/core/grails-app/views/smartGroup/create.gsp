@@ -49,7 +49,7 @@
 		var row = $(_removeAnchor).closest('.smart-group-criteria').remove();
 		var rows = $('.smart-group-criteria');
 		
-		if(rows.length == 1) rows.find('.remove-rule').hide();
+		if(rows.length == 1) rows.find('.remove-command').hide();
 	}
 
 	function smartGroupCriteriaChanged(_select) {
@@ -116,12 +116,12 @@
 		var template = $('.smart-group-criteria').first();
 		var templateSelect = template.find("select");
 		templateSelect.selectmenu("destroy");
-		template.find('.button.remove-rule').show();
+		template.find('.remove-command').show();
 		var newRow = template.clone();
 		templateSelect.selectmenu();
 		newRow.removeAttr("id");
 		newRow.find('input.rule-text').val("");
-		newRow.find('.button.remove-rule').show();
+		newRow.find('.remove-command').show();
 		$('form[name="smart-group-details"] tbody').append(newRow);
 		newRow.find('select').selectmenu();
 	}
