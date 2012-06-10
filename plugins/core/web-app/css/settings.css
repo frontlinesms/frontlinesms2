@@ -31,6 +31,7 @@
 #body-content.connections .connection-header > * { display:table-cell; white-space:nowrap; padding:17px; }
 #body-content.connections .connection-header > .connection-type { width:100%; }
 #body-content.connections .controls { padding:17px; }
+#body-content.connections p.no-content { border-bottom:1px solid #9e9e9e; }
 
 #body-content.logs th.content { width:100%; }
 #body-content.logs .date { white-space:nowrap; }

@@ -13,7 +13,7 @@
 </div>
 <div id="body-content" class="connections">
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div id="no-connection"><g:message code="connection.list.none"/></div>
+		<p class="no-content"><g:message code="connection.list.none"/></p>
 	</g:if>
 	<g:else>
 		<ul>

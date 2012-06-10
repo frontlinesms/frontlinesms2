@@ -51,7 +51,7 @@ button:disabled, .ui-button-disabled, input[type="submit"]:disabled  { backgroun
 	text-transform:uppercase; font-weight:bold; }
 
 #body #main-list { background-color:white; }
-#body #main-list .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
+#body #main-list .no-content, #body-content .no-content { font-weight:bold; font-size:180%; text-align:center; padding:17px; }
 
 #body #main-list-foot { background-color:#f0f0f0; border-top:solid #9e9e9e 1px; padding:10px 17px; font-size:95%; }
 #body #main-list-foot .controls { display:table; width:100%; }
