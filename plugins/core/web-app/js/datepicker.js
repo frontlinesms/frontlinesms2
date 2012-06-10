@@ -1,6 +1,6 @@
 $(function(){
 	$(".datepicker").datepicker({
-		buttonImage: url_root + "/images/icons/calendar.png",
+		buttonImage: url_root + "images/icons/calendar.png",
 		buttonImageOnly: true,
 		showOn: 'both',
 		onSelect: function (dateText, inst) {
