@@ -2,7 +2,7 @@
 <div id="connection-status">
 	<h3 id="connection-title"><g:message code="status.connection.header"/></h3>
 	<g:if test="${connectionInstanceTotal == 0}">
-		<div id='connections'><g:message code="status.connection.none"/></div>
+		<p class="no-content"><g:message code="status.connection.none"/></p>
 	</g:if>
 	<g:else>
 		<table id='stored-connections'>
