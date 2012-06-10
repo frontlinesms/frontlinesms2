@@ -36,17 +36,15 @@
 			<td></td>
 			<td id="info-add" class="button-container">
 				<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
-					<option class="not-field" value="na"><g:message code="contact.customfield.addmoreinformation"/></option>
-					<option class="predefined-field" value="Street address"><g:message code="contact.customfield.streetaddress"/></option>
-					<option class="predefined-field" value="City"><g:message code="contact.customfield.city"/></option>
-					<option class="predefined-field" value="Postcode"><g:message code="contact.customfield.postcode"/></option>
-					<option class="predefined-field" value="State"><g:message code="contact.customfield.state"/></option>
+					<option class="not-field" value="na">
+						<g:message code="contact.customfield.addmoreinformation"/>
+					</option>
 					<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
-						<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
-							<option value="${f}">${f}</option>
-						</g:if>
+						<option value="${f}">${f}</option>
 					</g:each>
-					<option class="create-custom-field" value='add-new'><g:message code="contact.customfield.option.createnew"/></option>
+					<option class="create-custom-field" value='add-new'>
+						<g:message code="contact.customfield.option.createnew"/>
+					</option>
 				</select>
 			</td>
 			<td></td>
