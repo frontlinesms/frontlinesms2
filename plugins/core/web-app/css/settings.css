@@ -27,6 +27,7 @@
 #body-content.connections .connection.selected .controls { padding:0 17px 17px 17px; text-align:right; }
 #body-content.connections .connection .connection-status { font-style:italic; }
 #body-content.connections .connection.selected { background-color:#d8e8ef; }
+#body-content.connections .connection:hover { background-color:#e5eff3; }
 #body-content.connections .connection-header { display:table-row; }
 #body-content.connections .connection-header > * { display:table-cell; white-space:nowrap; padding:17px; }
 #body-content.connections .connection-header > .connection-type { width:100%; }
