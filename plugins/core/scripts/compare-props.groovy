@@ -1,4 +1,12 @@
-//check for valid arg
+/* Script to compare grails internationalisation property files (or any property files in general)
+ * and automatically update an incomplete file with missing keys from the master file (with TODOs).
+ *
+ * Future enhancements:
+ * - preserve order of entries from master file when copying to slave file (and rearrange existing slave props)
+ * - copy comments from master to slave, preserving existing comments in slave
+ * - TODOs break fields that take args, may want to reconsider placing them at beginning of line
+ * - use some mechanism (grep?) to identify redundant entries in master file (potentially in another script)
+*/
 if(args.size() < 2)
 {
 	println("compares i18n file to master message.properties")
