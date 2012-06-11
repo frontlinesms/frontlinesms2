@@ -1,6 +1,6 @@
 # Creating an Activity
 
-_There are several different types of Activity available to you in FrontlineSMS. Each is designed to help you use FrontlineSMS in new, streamlined ways and realise unique possibilities. Activities help you manage the way messages enter the system and the way they leave the system. For example, Announcements allow you to collect all the responses to a particular message in one folder - making them useful to create lists of attendees. Polls allow you to analyse reponses to a particular question through a graphical representation of the results. You will find more detailed information on the help page of the activity you want to use._
+There are several different types of Activity available to you in FrontlineSMS. Each is designed to help you use FrontlineSMS in new, streamlined ways and realise unique possibilities. Activities help you manage the way messages enter the system and the way they leave the system. For example, Announcements allow you to collect all the responses to a particular message in one folder - making them useful to create lists of attendees. Polls allow you to analyse reponses to a particular question through a graphical representation of the results. You will find more detailed information on the help page of the activity you want to use.
 
 ![Creating an activity][5]
 

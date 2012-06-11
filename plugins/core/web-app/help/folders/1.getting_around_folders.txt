@@ -1,6 +1,6 @@
 # Getting Around Folders
 
-_You can access Folders from the messages tab. A folder is a way for you to organise and store your messages away from the inbox and activities. It is simple and easy to set up and functions as simple container for messages. Messages can be manually moved to a folder from any message list, including in the [Search tab][1]._
+You can access Folders from the messages tab. A folder is a way for you to organise and store your messages away from the inbox and activities. It is simple and easy to set up and functions as simple container for messages. Messages can be manually moved to a folder from any message list, including in the [Search tab][1].
 
 ![Folder Overview][12]
 

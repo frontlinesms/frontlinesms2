@@ -1,6 +1,6 @@
 # Exporting an Activity
 
-_You are able to export all the messages in an activity to either .CSV or .PDF format for viewing outside of FrontlineSMS or for use in another program._
+You are able to export all the messages in an activity to either .CSV or .PDF format for viewing outside of FrontlineSMS or for use in another program.
 
 ![Exporting a Activity][6]
 

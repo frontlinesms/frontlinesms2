@@ -1,6 +1,6 @@
 # Getting Around Contacts
 
-_The contacts tab is where you can view and manage your saved contacts and [create groups][1] and [smart groups][2]. This page will show you around the screen you are presented with when you first navigate to the contacts tab._
+The contacts tab is where you can view and manage your saved contacts and [create groups][1] and [smart groups][2]. This page will show you around the screen you are presented with when you first navigate to the contacts tab.
 
 ![Contacts Overview][11]
 

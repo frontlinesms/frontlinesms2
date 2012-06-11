@@ -1,6 +1,6 @@
 # Managing Groups
 
-_This page will describe to you how you can add and remove contacts from groups so that you can manage them effectively._
+This page will describe to you how you can add and remove contacts from groups so that you can manage them effectively.
 
 ### [Adding a Single Contact to a Group][1]
 

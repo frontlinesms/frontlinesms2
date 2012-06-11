@@ -1,6 +1,6 @@
 # Archiving Messages
 
-_archiving allows you to remove messages from triggering keywords and other events in the system, such as Automatic Replies, without deleting the message completely. It can also be used to move old messages from the main inbox to an archive where they are stored. An archived message can be found in the [inbox archive][2] under the [archive tab][1]. While viewing the [inbox archive][2], certain actions can be performed on messages. You can [Reply][3] to and [Forward][3] archived messages. You can also [Delete][3] them permanently when you don't need them anymore_
+archiving allows you to remove messages from triggering keywords and other events in the system, such as Automatic Replies, without deleting the message completely. It can also be used to move old messages from the main inbox to an archive where they are stored. An archived message can be found in the [inbox archive][2] under the [archive tab][1]. While viewing the [inbox archive][2], certain actions can be performed on messages. You can [Reply][3] to and [Forward][3] archived messages. You can also [Delete][3] them permanently when you don't need them anymore
 
 ![Archive button][13]
 

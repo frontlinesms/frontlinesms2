@@ -1,6 +1,6 @@
 # Manually Categorising a Message
 
-_A Poll will attempt to automatically categorise incoming responses according to the message content. This allows FrontlineSMS to show you the results of polls in easy to read tables and visually represented as graphs. Sometimes however, it can be difficult for the system to recognise responses and may not be able to automatically categorise them. In these cases, it is possible to manually categorise a message, or multiple messages under the correct response._
+A Poll will attempt to automatically categorise incoming responses according to the message content. This allows FrontlineSMS to show you the results of polls in easy to read tables and visually represented as graphs. Sometimes however, it can be difficult for the system to recognise responses and may not be able to automatically categorise them. In these cases, it is possible to manually categorise a message, or multiple messages under the correct response.
 
 ![Manually Categorise a Response][6]
 

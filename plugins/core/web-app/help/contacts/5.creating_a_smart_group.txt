@@ -1,6 +1,6 @@
 # Creating a Smart Group
 
-_This page will describe how to create a Smart Group and how each rule works. Smart Group's are a new feature which allow you to create dynamic groups that update themselves automatically as criteria that you set are fulfilled. Smart groups work especially well with custom fields. For example, you cant create a Smart Group that contains contacts which have, for example, Nairobi as their hometown. Every time the custom field called hometown is added to a contact and "Nairobi" is entered into the field, the contact will automatically be added to that particular smart group._
+This page will describe how to create a Smart Group and how each rule works. Smart Group's are a new feature which allow you to create dynamic groups that update themselves automatically as criteria that you set are fulfilled. Smart groups work especially well with custom fields. For example, you cant create a Smart Group that contains contacts which have, for example, Nairobi as their hometown. Every time the custom field called hometown is added to a contact and "Nairobi" is entered into the field, the contact will automatically be added to that particular smart group.
 
 ![Creating a Smart group][8]
 
