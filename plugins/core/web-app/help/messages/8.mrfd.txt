@@ -37,7 +37,7 @@ You can delete a message, or multiple messages, by selecting them and then click
 
 You can delete [activities][3] and [folders][10] in the same way you can delete messages.
 
-SCREENSHOT
+![Deleting][20]
 
 1.  When you are viewing the [activity][3] or [folder][10] you want to delete, find the "More Actions..." drop down menu.  
 2.  From here choose "Delete [type of activity]" (e.g "Delete Poll" if you are deleting a poll) or "Delete Folder" if you are deleting a folder.
@@ -98,3 +98,4 @@ The message will be queued to be sent.
 [17]: ../images/help/mrfd_multiple.jpg
 [18]: ../images/help/mrfd_reply.jpg
 [19]: ../images/help/mrfd_reply.jpg
+[20]: ../images/help/activity_delete.jpg
