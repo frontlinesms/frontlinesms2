@@ -26,7 +26,7 @@ This search filter works by matching the contents of the 'Name' field of your co
 [Creating a Group][7]  
 
 [1]: contacts/8.searching_through_contacts
-[2]: gotogetting_around_the_contacts_tab
+[2]: contacts/1.getting_around_the_contacts_tab
 [3]: contacts/8.searching_through_contacts
 [4]: contacts/6.add_remove_contact_to_from_a_group
 [5]: gotoExporting
