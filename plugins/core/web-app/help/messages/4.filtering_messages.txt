@@ -23,9 +23,9 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 [How to Use the Search Tab][3]  
 [How to Select Multiple Messages][4]  
 
-[1]: gotoSSS
+[1]: messages/2.sss
 [2]: HowToFilterMessagesToShowOnlyTheStarredItems
 [3]: howtoshowstarredmessages
-[4]: gotoGetting_around_the_Search_tab
-[5]: gotoMRFD
+[4]: search/1.getting_around_the_search_tab
+[5]: messages/8.mrfd
 [6]: ../images/help/filtering_messages.jpg
