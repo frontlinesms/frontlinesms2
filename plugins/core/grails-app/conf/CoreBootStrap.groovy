@@ -17,9 +17,11 @@ import org.mockito.Mockito
 
 class CoreBootStrap {
 	def applicationContext
+	def appSettingsService
 	def grailsApplication
 	def deviceDetectionService
 	def failPendingMessagesService
+	def localeResolver
 	def camelContext
 	def messageSource
 	def quartzScheduler
@@ -34,6 +36,9 @@ class CoreBootStrap {
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
+
+		initAppSettings()
+
 		switch(Environment.current) {
 			case Environment.TEST:
 				quartzScheduler.start()
@@ -73,6 +78,16 @@ class CoreBootStrap {
 	}
 
 	def destroy = {
+	}
+
+	private def initAppSettings() {
+		appSettingsService.init()
+		def language = appSettingsService.get('language')
+		if(language) {
+			def defaultLocale = new Locale(language)
+			java.util.Locale.setDefault(defaultLocale)
+			localeResolver.setDefaultLocale(defaultLocale)
+		}
 	}
 	
 	private def createWelcomeNote() {

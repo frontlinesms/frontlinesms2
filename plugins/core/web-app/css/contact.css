@@ -43,3 +43,6 @@
 .remove-command:hover { background-image:url('../images/icons/remove_hover.png'); }
 .send-message { background-image:url('../images/icons/send.png'); background-repeat:no-repeat;
 	display:inline-block; height:14px; text-indent:-999999px; width:14px; margin-left:3px; }
+
+#modalBox #smartGroup-table { margin:20px; }
+

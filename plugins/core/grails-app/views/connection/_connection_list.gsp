@@ -13,7 +13,7 @@
 </div>
 <div id="body-content" class="connections">
 	<g:if test="${fconnectionInstanceTotal==0}">
-		<div id="no-connection"><g:message code="connection.list.none"/></div>
+		<p class="no-content"><g:message code="connection.list.none"/></p>
 	</g:if>
 	<g:else>
 		<ul>
@@ -39,7 +39,7 @@
 								</g:link>
 							</g:if>
 							<g:elseif test="${c.status == RouteStatus.CONNECTED}">
-								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup(i18n('smallpopup.test.message.title'), data, i18n('smallpopup.send'))">
+								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup(i18n('smallpopup.test.message.title'), data, i18n('action.send'))">
 										<g:message code="connection.send.test.message"/>
 								</g:remoteLink>
 								<g:link controller="connection" action="destroyRoute" class="btn" id="${c.id}">

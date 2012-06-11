@@ -1,4 +1,4 @@
-.ui-dialog.help .ui-dialog-buttonset { position:absolute; top:0; right:0; width:auto; }
+.ui-dialog.help .ui-dialog-buttonset { position:absolute; top:0; right:0; width:auto; border:none; }
 #modalBox.help { position:relative; }
 #modalBox.help #help-index, #modalBox.help #help-content { position:absolute; top:0; bottom:0; overflow:auto; }
 #modalBox.help #help-index { left:0; right:80%; }

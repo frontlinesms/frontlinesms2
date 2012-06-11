@@ -11,7 +11,14 @@ function goToSection() {
 	var section = menuItem.attr("href");
 	$("#modalBox.help #help-index li.selected").removeClass("selected");
 	menuItem.parent().addClass("selected");
-	$("#help-content").load(url_root + "help/section", { helpSection:section });
+	$("#help-content").load(url_root + "help/section", { helpSection:section }, function() {
+		// This is a workaround for the image URL bug when viewing help from second+
+		// action URLs TODO long-term solution is to fix help generation/iframe it
+		$("#help-content img").each(function(i, e) {
+			e = $(e);
+			e.attr("src", url_root + "help/" + e.attr("src"));
+		});
+	});
 	return false;
 }
 </r:script>
