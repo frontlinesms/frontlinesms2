@@ -5,6 +5,9 @@ import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
+
+	static int maxMessageSize = 1600
+
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
 	
@@ -36,7 +39,7 @@ class Fmessage {
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text nullable:true, maxSize:1600
+		text nullable:true, maxSize:maxMessageSize
 		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
@@ -202,7 +205,7 @@ class Fmessage {
 	}
 
 	public void setText(String text) {
-		if(text?.size() > 480) text = text[0..478] + '…'
+		if(text?.size() > maxMessageSize) text = text[0..(maxMessageSize - 2)] + '…'
 		this.text = text
 	}
 
