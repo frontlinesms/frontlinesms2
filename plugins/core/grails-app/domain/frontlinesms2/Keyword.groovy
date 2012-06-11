@@ -3,6 +3,10 @@ package frontlinesms2
 class Keyword {
 	String value
 	static belongsTo = [activity: Activity]
+
+	static mapping = {
+		version false
+	}
 	
 	static constraints = {
 		value(blank:true, maxSize:255, validator: { val, me ->

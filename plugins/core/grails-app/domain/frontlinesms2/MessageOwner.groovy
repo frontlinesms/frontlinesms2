@@ -9,5 +9,6 @@ abstract class MessageOwner {
 	static mapping = {
 		messages sort: 'date'
 		tablePerHierarchy false
+		version false
 	}
 }

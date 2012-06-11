@@ -15,6 +15,7 @@ class Autoreply extends Activity {
 	
 	static mapping = {
 		keyword cascade: 'all'
+		version false
 	}
 
 //> SERVICES
