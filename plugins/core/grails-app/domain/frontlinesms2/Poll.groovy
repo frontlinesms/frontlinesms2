@@ -71,7 +71,7 @@ class Poll extends Activity {
 			[id: it.id,
 					value: it.value,
 					count: messageCount,
-					percent: totalMessageCount ? messageCount * 100 / totalMessageCount as Integer : 0]
+					percent: totalMessageCount ? new BigDecimal(messageCount * 100 / totalMessageCount).setScale(2,BigDecimal.ROUND_HALF_UP) : 0]
 		}
 	}
 	

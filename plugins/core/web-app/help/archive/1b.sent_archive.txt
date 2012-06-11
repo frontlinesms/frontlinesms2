@@ -1,10 +1,6 @@
 # Sent Archive
 
----
-
 _The Sent archive will contain messages that have been archived from the Folder. The layout and features of the Inbox archive will be explained in this help page._
-
----
 
 ![Sent Archive][13]
 
@@ -19,8 +15,6 @@ The Message list (1) here functions like any other message list elsewhere in the
 #### [Sent Archive Message Details][8]
 
 When a message is selected, the full text will be displayed here (2) along with the ability to [reply][9], [forward][9], [unarchive][10], [delete][9] and [move][9].
-
----
 
 ### Related Actions  
 [Archiving Activities and Folders][11]  

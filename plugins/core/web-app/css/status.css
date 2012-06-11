@@ -41,7 +41,7 @@
 #traffic-status #type-filters{
 	width: 40%;
 	margin: 17px 17px;
-	height: 200px;
+	height: 130px;
 }
 #traffic-status #type-filters li{
 	margin: 10px 0;
@@ -102,6 +102,15 @@
 	background-repeat: no-repeat;
 	background-position: right top;
 	padding-right: 30px;
+}
+#filter-buttons{
+	clear:both;
+	text-align:center;
+	padding:10px 0;
+}
+
+#filter-buttons a{
+	margin:0 5px;
 }
 
 #connection-status #stored-connections tr{

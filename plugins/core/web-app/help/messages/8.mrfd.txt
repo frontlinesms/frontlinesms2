@@ -1,10 +1,6 @@
 # Moving, Deleting, Replying and Forwarding
 
----
-
 _Moving, Deleting, Replying and Forwarding are actions which can be used on any kind of message in the system. Their application is the same wherever you find the option to perform one of the actions. So, replying to a message from your [inbox][1] is performed in the same way as replying to a message in an [archive][2] or [activity][3]. The same can be applied to the other actions. On this page you will find detailed help on how to perform these actions._
-
----
 
 ![Message Details For A Single Contact][14]
 
@@ -21,8 +17,6 @@ You can reply to a message, or to the senders of multiple messages by selecting 
 6.  Click "Send" to send your reply/replies.
 
 **_Note:** Messages in the [Sent][6] folder **_cannot_** be replied to. All other messages can!_
-
----
 
 ### [Deleting][7]
 
@@ -43,7 +37,7 @@ You can delete a message, or multiple messages, by selecting them and then click
 
 You can delete [activities][3] and [folders][10] in the same way you can delete messages.
 
-SCREENSHOT
+![Deleting][20]
 
 1.  When you are viewing the [activity][3] or [folder][10] you want to delete, find the "More Actions..." drop down menu.  
 2.  From here choose "Delete [type of activity]" (e.g "Delete Poll" if you are deleting a poll) or "Delete Folder" if you are deleting a folder.
@@ -51,8 +45,6 @@ SCREENSHOT
 4.  Click "Delete".
 
 The activity _and all messages within it_ will be moved to the [trash][8].  
-
----
 
 ### [Moving][11]
 
@@ -66,8 +58,6 @@ You can move messages into [activities][3] and [folders][10]. The Move action ca
 Messages in an [activity][3] or [folder][10] can only be moved to the [inbox][1] or other [activities][3] and other [folders][10].*
 
 3.  The selected message(s) will be moved to the chosen place.
-
----
 
 ### [Forwarding][12]
 
@@ -84,8 +74,6 @@ You can forward a message on from almost anywhere in the software. Only messages
 6.  Click "Send" to forward the message.
 
 The message will be queued to be sent.
-
----
 
 ### Related Actions
 [Exporting Messages][13]  
@@ -110,3 +98,4 @@ The message will be queued to be sent.
 [17]: ../images/help/mrfd_multiple.jpg
 [18]: ../images/help/mrfd_reply.jpg
 [19]: ../images/help/mrfd_reply.jpg
+[20]: ../images/help/activity_delete.jpg

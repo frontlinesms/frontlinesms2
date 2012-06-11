@@ -1,10 +1,6 @@
 # Using the Traffic Graph 
 
----
-
 _The traffic graph is a visualisation of all the recorded incoming and outgoing traffic. You can view the volume of messages you are sending and receiving by quickly glancing at this graph. You can also tailor this graph to show only the traffic information that you need. For example, you can view the traffic information between certain dates or for a particular group or activity. This page describes how to customise the traffic graph to suit your needs._
-
----
 
 ![Using the Traffic graph][2]
 
@@ -30,8 +26,6 @@ To specify your own date range:
 2.  Using the drop down menus, select the Date, Month and Year to act as the beginning of your date range. The "From" date.
 3.  The lower drop down menus represent the end of your date range, or the "To" date. This is automatically set to today's date. To change this, set the drop down menus to the Date, Month and Year you would like.
 4.  Click "Update Chart"
-
----
 
 [1]: CustomisingtheTrafficGraph
 [2]: ../images/help/using_traffic_graph.jpg

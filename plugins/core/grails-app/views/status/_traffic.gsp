@@ -67,6 +67,11 @@ $(function() {
 	<div id="trafficGraph" class="ui-widget-content ui-resizable"></div>
 	<g:form action="show" method="post" name="trafficForm">
 		<fsms:render template="/status/filters"/>
-		<g:actionSubmit class="btn" id="update-chart" value="${g.message(code:'traffic.update.chart')}" action="show"/>
+		<div id="filter-buttons">
+			<g:actionSubmit class="btn" id="update-chart" value="${g.message(code:'traffic.update.chart')}" action="show"/>
+			<g:link name="filter-reset" controller="status" action="index">
+				<g:message code="traffic.filter.reset"/>
+			</g:link>
+		</div>
 	</g:form>
 </div>
