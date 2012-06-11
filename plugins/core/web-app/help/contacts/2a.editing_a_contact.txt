@@ -32,14 +32,14 @@ To delete multiple contacts, select the contacts you wish to delete and select "
 [Creating a Smart Group][9]  
 
 [1]: EditingAContact
-[2]: gotoGetting_Around_Contacts
-[3]: gotoGetting_Around_Contacts[5]
-[4]: gotoSearching_through_contacts
-[5]: gotoGetting_around_contacts[10]
-[6]: gotoGetting_around_contacts[6]
-[7]: gotoAdd_contact
-[8]: gotoCreating_a_group
-[9]: gotoCreating_a_smart_group
-[10]: DeletingaContact
+[2]: contacts/1.getting_around_the_contacts_tab
+[3]: contacts/1.getting_around_the_contacts_tab
+[4]: contacts/8.searching_through_contacts
+[5]: contacts/1.getting_around_the_contacts_tab
+[6]: contacts/1.getting_around_the_contacts_tab
+[7]: contacts/2.add_contact
+[8]: contacts/4.creating_a_group
+[9]: contacts/5.creating_a_smart_group
+[10]: contacts/2a.editing_a_contact
 [11]: ../images/help/delete_contact.jpg
 [12]: ../images/help/delete_multiple_contact.jpg
