@@ -41,13 +41,13 @@ The selected messages will be moved to your chosen destination.
 [Archiving messages][7]  
 [Unarchiving Messages][9]  
 
-[1]: gotoMRFD
+[1]: messages/8.mrfd
 [2]: ForwardingASentMessage
-[3]: gotoGetting_around_the_messages_tab[19]
-[4]: ArchivingMessagesFromTheSentFolder
+[3]: messages/1.getting_around_the_messages_tab
+[4]: archive/1b.sent_archive
 [5]: MovingMessagesFromTheSentFolder
-[6]: gotoGetting_around_activities
-[7]: gotoArchiving_Messages
-[8]: gotoGetting_around_folders
-[9]: gotoUnarchive
+[6]: activities/1.getting_around_activities
+[7]: archive/2.archiving_messages
+[8]: folders/1.getting_around_folders
+[9]: archive/4.unarchive
 [10]: ../images/help/sent.jpg

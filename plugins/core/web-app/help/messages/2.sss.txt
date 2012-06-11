@@ -62,14 +62,14 @@ _**Note:** Unlike [multiple select][10], a message's status as starred persists 
 [Moving, Replying, Forwarding and Deleting][18]  
 
 [1]: NavigatingPages
-[2]: gotoGetting_around_the_messages_tab
-[3]: gotoSent
-[4]: gotoPending
-[5]: gotoTrash
-[6]: gotogetting_around_the_activities_tab
-[7]: gotogetting_around_the_folders_tab
-[8]: gotogetting_around_the_archive_tab
-[9]: gotogetting_Around_the_search_tab
+[2]: messages/1.getting_around_the_messages_tab
+[3]: messages/5.sent
+[4]: messages/7.pending
+[5]: messages/6.trash
+[6]: activities/1.getting_around_activities
+[7]: folders/1.getting_around_folders
+[8]: archive/1.getting_around_the_archive_tab
+[9]: search/1.getting_around_the_search_tab
 [10]: SelectingMultipleMessages
 [11]: StarringMessages
 [12]: sorting
@@ -77,6 +77,6 @@ _**Note:** Unlike [multiple select][10], a message's status as starred persists 
 [14]: HowToSortByMessageContent
 [15]: HowToSortByDate
 [16]: gotoFiltering_messages
-[17]: gotoQuickMessage
-[18]: gotoMRFD
+[17]: messages/3.quick_message
+[18]: messages/8.mrfd
 [19]: ../images/help/sss.jpg
