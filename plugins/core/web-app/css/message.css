@@ -49,7 +49,7 @@
 
 #body.messages #body-menu a.failures { background-image:url("../images/icons/error_on.png");
 	background-repeat:no-repeat; background-position:17px center; }
-#body #pollGraph {position: fixed; height: auto; left: 17%; right: 23%; bottom: 0pt; top: 235px; }
+#body #pollGraph {position: fixed; height: auto; left: 17%; right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }
 
 #message-detail-sender .add { background-image: url("../images/icons/add.png"); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; }
 
