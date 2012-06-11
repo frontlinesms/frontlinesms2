@@ -1,10 +1,6 @@
 # Getting Around the Archive Tab
 
----
-
 _You can view all your archived messages, activities and folders from the archive tab. Their are four locations where archived messages, folders and activities are stored. The inbox archive will contain messages that have been archived from the inbox and pending messages. The Activity Archive contains a list of all activities that have been archived. The folder archive contains a list of folders that have been archived. You can navigate to any of these folders by clicking on them._
-
----
 
 ![Archive Overview][13]
 
@@ -27,8 +23,6 @@ The message list (2) functions like any other message list in FrontlineSMS. You 
 The message detail area (3) contains the full text of the selected message and sender details, or information about how many messages have been selected. 
 
 You can [reply][9], [move][9], [forward][9], [delete][9] and [unarchive][12] messages from here.
-
----
 
 ### Related Actions  
 [Archiving Activities and Folders][10]  

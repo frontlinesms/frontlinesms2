@@ -8,6 +8,8 @@ databaseChangeLog = {
 				'poll_response'].each { table ->
 			dropColumn(tableName:table, columnName:'version')
 		}
+
+		modifyDataType(tableName:'fmessage', columnName:'text', newDataType:'varchar(1600)')
 	}
 }
 

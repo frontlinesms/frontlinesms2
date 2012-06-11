@@ -1,10 +1,6 @@
 # Creating a Group
 
----
-
 _With groups you can organise your contacts to make the sending and receiving of messages easier to manage. You are able to edit the group by [adding and removing contacts][1] once it has been created. Groups can be helpful when you have a large number of a certain type of contact. For example, you may have number of contacts that are farmers. You can add all these contacts to a group, which will make viewing and sending messages from this group much simpler, as groups are easily selectable when [choosing recipients][2]._
-
----
 
 ![Creating a Group][8]
 
@@ -16,8 +12,6 @@ _With groups you can organise your contacts to make the sending and receiving of
 3.  Enter a name for your group and click 'Create'.
 
 Your new group should appear under 'Groups'.
-
----
 
 ### Related Actions  
 [Adding Contacts to a Group][1]  

@@ -1,10 +1,6 @@
 # Editing a Contact
 
----
-
 _On this page you will find out how to modify an existing contact._
-
----
 
 ### [Editing a contact][1]
 
@@ -23,8 +19,6 @@ To delete a contact navigate to the contact record and select "Delete".
 
 To delete multiple contacts, select the contacts you wish to delete and select "Delete All".
 ![Deleting Multiple Contacts][12]
-
----
 
 ### Related Actions
 [Adding a New contact][7]  

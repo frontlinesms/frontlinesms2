@@ -48,8 +48,6 @@ When a single message is selected, the message details will display the full tex
 
 When multiple messages are selected, a summary of how many messages have been selected will be shown in place of the message text. You can also choose to [reply][6], [delete][6], [archive][7], and [move][6] the messages. 
 
----
-
 ### See Also
 [Getting around the Contacts Tab][9]  
 [Getting around the Archive Tab][7]  

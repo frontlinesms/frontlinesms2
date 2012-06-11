@@ -1,10 +1,6 @@
 # Archiving Activities and Folders
 
----
-
 _Archiving Activities removes [activities][1] from the [messages tab][2] and stops new messages being automatically sorted into the [activity][1]. Archiving folders moves the folder and all the messages within it from the [messages tab][2] and into the [folder archive][3]; this can be particularly useful for reducing the amount of clutter you have on your [messages tab][2] if you have a lot of activities and folders you don't use much anymore. When an [activity][1] has been archived, all the information about that activity is still available. You can still view the graph of poll data, if the activity is a poll, and a summary of all the activity details. The format for the activity remains the same across the [messages tab][2] and [archive tab][4]. You are also able to still [export][5], [rename][6] and [delete][7] activities from the [activity archive][8]_
-
----
 
 ![Archiving an Activity][15]
 
@@ -29,8 +25,6 @@ Archiving a folder is very similar to archiving an [activity][1].
 3.  Your folder will have been archived!
 
 To view your archived folder, navigate to the [archive tab][4] and then click on [folder archive][3] where you will find a list of your archived folders.
-
----
 
 ### Related Actions
 [Unarchiving Messages][13]  

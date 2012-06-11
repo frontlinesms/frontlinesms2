@@ -38,7 +38,7 @@ class Fmessage {
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text nullable:true, maxSize:480
+		text nullable:true, maxSize:1600
 		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
