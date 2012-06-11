@@ -1,0 +1,1 @@
+sudo rm /var/lock/LCK..ttyUSB*

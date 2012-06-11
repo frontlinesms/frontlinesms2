@@ -13,7 +13,7 @@
 			<g:if test="${search}">
 				<g:remoteLink class="btn" controller="export" action="messageWizard"
 						params="[messageSection:messageSection, searchId:search.id]"
-						onSuccess="launchSmallPopup(i18n('smallpopup.messages.export.title', '${checkedMessageCount}'), data, i18n('action.export'));">
+						onSuccess="launchSmallPopup(i18n('smallpopup.messages.export.title', '${messageInstanceTotal}'), data, i18n('action.export'));">
 					<g:message code="search.export"/>
 				</g:remoteLink>
 			</g:if>
