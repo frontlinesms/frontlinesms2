@@ -4,7 +4,7 @@ _Before you can start using FrontlineSMS Version 2, you will have to connect and
 
 ![Phones and Connection][7]
 
-### [Adding an Clickatell Account][1]
+### Adding an Clickatell Account
 
 Please have your Clickatell account details to hand. You will need your Clickatell username, password and API ID. Once you have these, continue with the below instruction
 

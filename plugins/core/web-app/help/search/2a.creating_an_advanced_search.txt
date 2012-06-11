@@ -4,7 +4,7 @@ The Search Tab is home to a powerful, advanced and highly customisable search fe
 
 ![Advanced Search][9]
 
-### [Advanced Search][2]
+### Advanced Search
 
 You can modify a range of parameters to specify a detailed and narrow search. You might do this if you are getting too many search results and want to reduce the number of messages found by the search.   
   

@@ -4,7 +4,7 @@ archiving allows you to remove messages from triggering keywords and other event
 
 ![Archive button][13]
 
-### [Archiving a Message][4]
+### Archiving a Message
 
 To archive a message, or messages, follow these steps:
 

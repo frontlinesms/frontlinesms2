@@ -4,7 +4,7 @@ The settings menu is where you can [configure the language][1] that FrontlineSMS
 
 ![Settings Menu][6]
 
-### [Navigating the Settings Menu][4]
+### Navigating the Settings Menu
 
 There are 3 sections in the settings area. Please select one to see more information on it.
 

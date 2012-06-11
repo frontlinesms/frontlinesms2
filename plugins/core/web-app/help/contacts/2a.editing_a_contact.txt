@@ -2,7 +2,7 @@
 
 On this page you will find out how to modify an existing contact.
 
-### [Editing a contact][1]
+### Editing a contact
 
 To modify the information saved under a contact, you have to navigate to the selected contact in the [contacts tab][2], make the changes and then save the changes to the contact.
 
@@ -12,7 +12,7 @@ To modify the information saved under a contact, you have to navigate to the sel
 4. Once you have made the changes BE SURE TO CLICK SAVE. If you do not click Save, your changes will be lost.  
 If you decide you don't want to keep the changes you have made, click "Cancel" and your contact will be returned to its most recently saved state.
 
-### [Deleting a Contact][10]
+### Deleting a Contact
 
 To delete a contact navigate to the contact record and select "Delete".
 ![Delete Contact][11]

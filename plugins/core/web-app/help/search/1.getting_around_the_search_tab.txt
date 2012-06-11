@@ -4,7 +4,7 @@ The Search Tab is home to a powerful, advanced and highly customisable search fe
 
 ![Search Overview][7]
 
-### [Search Paramters][1]
+### Search Paramters
 
 In the search parameter area (1) you will find all the settings to configure your search. Each parameter will be explained below.
 
@@ -25,11 +25,11 @@ Clicking on the '+' will display all the custom fields that you have created for
 **Search**: Clicking this button will perform the search.  
 **Clear Search**: Clicking this button will clear the search parameters and any search results which may be displayed.
 
-### [Message List and Message Details][2]
+### Message List and Message Details
 
 The message list and Message details area functions like any other message list in FrontlineSMS. You are able to star, sort, select multiple messages and perform actions on selected messages.
 
-### [Search Header][3]
+### Search Header
 
 The search header (3) displays the parameters of the search that was last carried out. It also contains buttons for [quick message][4] and [export results][5].
 

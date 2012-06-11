@@ -2,7 +2,7 @@
 
 The Folder archive contains all Folders that have been archived. The layout and features of the Folder archive will be explained in this help page. There are two levels of detail that can be viewed. The first level is shown by default and displays a list of all Folders that have been archived. The second level of detail displays all the individual messages stored in the Folder in a message list.
 
-### [Folder List View][1]
+### Folder List View
 
 ![List View][9]
 
@@ -12,7 +12,7 @@ As with Message Lists, multiple or single folders can be selected in the folder 
 
 Clicking on a single folder will take you to that folder's detail view which is described below.
 
-### [Folder Detail View][5]
+### Folder Detail View
 
 ![Detail View][10]
 

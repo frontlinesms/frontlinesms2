@@ -4,7 +4,7 @@ _If you have [created a connection to a device][1], you can edit these connectio
 
 ![Phones and Connection][8]
 
-### [Editing a Connection][2]
+### Editing a Connection
 
 This is a necessary step if FrontlineSMS automatically creates a connection for a device/modem with a PIN lock. As connection will fail, you will have to edit the automatically created connection and add a PIN number.
 
@@ -22,7 +22,7 @@ Your modified setting will be applied and you will be notified when a successful
 
 ---
 
-### [Deleting a Connection][4]
+### Deleting a Connection
 
 1. Navigate to the [settings menu][3] and click on "Phones and Connections". (1)
 2. Once here, you will see a list of all your connections. Click on the connection you wish to edit to see an expanded view of that connection. 

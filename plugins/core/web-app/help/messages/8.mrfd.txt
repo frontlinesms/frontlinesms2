@@ -4,7 +4,7 @@ Moving, Deleting, Replying and Forwarding are actions which can be used on any k
 
 ![Message Details For A Single Contact][14]
 
-### [Replying][4]
+### Replying
 
 You can reply to a message, or to the senders of multiple messages by selecting them and then clicking the "Reply" or "Reply all" button.
 
@@ -18,7 +18,7 @@ You can reply to a message, or to the senders of multiple messages by selecting 
 
 **_Note:** Messages in the [Sent][6] folder **_cannot_** be replied to. All other messages can!_
 
-### [Deleting][7]
+### Deleting
 
 **_[Deleting Messages][7]_**
 
@@ -46,7 +46,7 @@ You can delete [activities][3] and [folders][10] in the same way you can delete 
 
 The activity _and all messages within it_ will be moved to the [trash][8].  
 
-### [Moving][11]
+### Moving
 
 You can move messages into [activities][3] and [folders][10]. The Move action can be found where there is a "Move message to..." dropdown
 
@@ -59,7 +59,7 @@ Messages in an [activity][3] or [folder][10] can only be moved to the [inbox][1]
 
 3.  The selected message(s) will be moved to the chosen place.
 
-### [Forwarding][12]
+### Forwarding
 
 You can forward a message on from almost anywhere in the software. Only messages stored in [pending][13] or the [trash][8] **cannot** be forwarded. When you have selected more than one message you cannot use the forward action - it can only be performed on single messages.
 

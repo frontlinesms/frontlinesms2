@@ -4,7 +4,7 @@ _Before you can start using FrontlineSMS Version 2, you will have to connect and
 
 ![Phones and Connection][7]
 
-### [Adding an IntelliSMS Account][1]
+### Adding an IntelliSMS Account
 
 Please have your IntelliSMS account details to hand. If you will only be using the account to send messages then you need to have your IntelliSMS Username and Password. If you will be using it only to receive messages, or send and receive messages then you will need the protocol information of the connection, the server name and server port and your Username and Password. Once you have this information to hand then follow the instructions below.
 

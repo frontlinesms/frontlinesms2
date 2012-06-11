@@ -2,7 +2,7 @@
 
 _Before you can start using FrontlineSMS Version 2, you will have to connect and configure a device to use. You can manually add a device or modem if the automatic detection fails or if you have specific setting you want to use for your device. This page will describe how to add a device connection manually._
 
-### [Device Detection][1]
+### Device Detection
 
 Before FrontlineSMS Version 2 can connect to your device, it needs to know that the device is connected so it can gather all the information it requires to connect to it. We call this [device detection][2]. 
 
@@ -21,7 +21,7 @@ Once the device driver's have been installed and the device is detected by your 
 
 ---
 
-### [Adding a Connection][4]
+### Adding a Connection
 
 ![Add New Connection][11]
 

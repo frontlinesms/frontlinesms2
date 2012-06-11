@@ -4,15 +4,15 @@ The messages tab is shown by default whenever you start FrontlineSMS. From here 
 
 ![Message Tab Overiew][20]
 
-### [Navigation tab][8]
+### Navigation tab
 
 This bar (1) will allow you access the various parts of the software: [Archive][7], [Contacts][9], [Status][10], [Search][11] and [Settings and Plugins][12].
 
-### [Navigation Pane][13] 
+### Navigation Pane
 
 From this area (2) you can navigate across the various folders and activities.
     
-- __[Inbox][14]:__ 
+- __Inbox:__ 
 Clicking here will show you all your incoming messages that are not affiliated with an [activity][2] or [folder][3].
 - __[Sent][1]:__
 Clicking here will show you all the messages which have been successfully sent from FrontlineSMS. 
@@ -26,7 +26,7 @@ __[Activities][2] and [Folders][3]:__
 - From here you can [create new activities][4] and navigate to existing ones which will be listed here.
 - You can also [create new folders][5] and navigate to existing ones that are listed here.
 
-### [Message List][17]
+### Message List
 
 This area will display all the messages contained within your selected folder.  
  
@@ -40,7 +40,7 @@ You can also highlight important messages by [starring][18] them.
 
 To see more on how to use the message list please go [here][18].
 
-### [Message Details][19]
+### Message Details
 
 When a message or multiple messages are selected in the message list, the message details will display further information about the message or messages.
 

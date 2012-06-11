@@ -4,7 +4,7 @@ The traffic graph is a visualisation of all the recorded incoming and outgoing t
 
 ![Using the Traffic graph][2]
 
-### [Customising the Traffic graph][1]
+### Customising the Traffic graph
 
 There are various ways in which you can customise the traffic graph. All the variables outlined below can be used in conjunction with each other. So you could set up the graph so that it shows only traffic information from a group for a particular activity, in a specified date range.
 

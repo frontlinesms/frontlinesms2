@@ -4,7 +4,7 @@ This page will describe how to add and remove a custom field from a contact's re
 
 ![Adding More information to your contact][11]
 
-### [Adding a Custom Field][3]
+### Adding a Custom Field
 
 1.  Navigate to the [Contacts tab][4] and select a contact you wish to add a custom field to.
 2.  Click the drop down box called "Add more information" (1). A list will appear of preset custom fields that you can use to add more information to your contact.
@@ -22,7 +22,7 @@ Your custom field will now appear in the contact record. To add more custom fiel
 
 _**Note:** Once you have created a new custom field, it will be available to add to any contact, new or existing, via the "Add more information" dropdown list._
 
-### [Removing a Custom Field][6]
+### Removing a Custom Field
 
 1.  Navigate to the contact record from which you want to remove a custom field.
 2.  Next to the custom field you wish to remove there will be a 'x' icon.

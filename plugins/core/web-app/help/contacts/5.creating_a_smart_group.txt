@@ -4,7 +4,7 @@ This page will describe how to create a Smart Group and how each rule works. Sma
 
 ![Creating a Smart group][8]
 
-### [Creating a Smart Group][1]
+### Creating a Smart Group
 
 1.  When viewing the [Contacts tab][2], click on the button 'Create new smart group' (1).
 2.  A window will appear asking you to specify the [rules][3] for your smart group:

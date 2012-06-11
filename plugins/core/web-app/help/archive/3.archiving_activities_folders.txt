@@ -4,7 +4,7 @@ Archiving Activities removes [activities][1] from the [messages tab][2] and stop
 
 ![Archiving an Activity][15]
 
-### [Archiving an Activity][9]
+### Archiving an Activity
 
 To archive an [activity][1], follow these steps:
 
@@ -16,7 +16,7 @@ When you archive an activity which uses a keyword, such as a [Poll activity][10]
 
 To view your archived activities, navigate to the [archive tab][4] and then click on [activity archive][8]. You will find a list of your archived activities.
 
-### [Archiving a Folder][11]
+### Archiving a Folder
 
 Archiving a folder is very similar to archiving an [activity][1].
 

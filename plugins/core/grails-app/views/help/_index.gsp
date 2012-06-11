@@ -1,15 +1,16 @@
 <markdown:renderHtml>
 * [Messages][2]
-	* Overview
-		* [How do I get around the Messages screen?][3]
+	<!--* Overview
+		* [How do I get around the Messages screen?][3]-->
 	* The Basics
 		* [How do I select more than one message?][5]
 		* [How do I send a message?][6]
-		* [How do I reply to a message?][7]
-		* [How do I delete a message?][8]
+		* [How to move, delete, reply and forward messages][7]
+		<!-- [How do I reply to a message?][7]
+		 [How do I delete a message?][8]-->
 		* [How do I archive a message?][9]
-		* [How do I move a message?][10]
-		* [How do I forward a message?][11] 
+		<!-- [How do I move a message?][10]
+		 [How do I forward a message?][11] -->
 		* [How do I see messages that I have sent?][12]
 		* [How do I see messages that I have deleted?][13]
 		* [How do I see messages that have had a problem whilst sending?][14]
@@ -85,12 +86,12 @@
 		* [How do I export Search results?][80]
 * Status
 	* [What is the Status Tab?][82]
-	* [What does the coloured circle on the status tab mean?][83]
-	* [How do I check if my attached device has been detected?][84]
-	* [How do I check if my attached device has been successfuly connected?][85]
-	* [How do I check the status of my connections?][86]
+	<!--[What does the coloured circle on the status tab mean?][83]
+	[How do I check if my attached device has been detected?][84]
+	[How do I check if my attached device has been successfuly connected?][85]
+	[How do I check the status of my connections?][86]-->
 	* [How do I see how many messages I have sent or received?][87]
-	* [How do I use the Traffic graph?][88]
+	<!-- [How do I use the Traffic graph?][88]-->
 * Settings
 	* Overview
 		* [How do I change the Language?][91]

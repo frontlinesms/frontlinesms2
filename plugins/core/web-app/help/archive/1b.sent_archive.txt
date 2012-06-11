@@ -4,15 +4,15 @@ The Sent archive will contain messages that have been archived from the Folder. 
 
 ![Sent Archive][13]
 
-### [Sent Archive][1]
+### Sent Archive
 
 The Sent archive contains all messages that have been archived from the [Sent Folder][2]. 
 
-#### [Sent Archive Message List][6]
+#### Sent Archive Message List
 
 The Message list (1) here functions like any other message list elsewhere in the program. Multiples messages can be selected, starred or filtered. To learn more about how to do this, click [here][7]
 
-#### [Sent Archive Message Details][8]
+#### Sent Archive Message Details
 
 When a message is selected, the full text will be displayed here (2) along with the ability to [reply][9], [forward][9], [unarchive][10], [delete][9] and [move][9].
 

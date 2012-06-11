@@ -2,7 +2,7 @@
 
 This page will describe how to search through your contact database. The contact search feature is available from the contacts tab, so you do not have to navigate away and can edit contacts in your search results straight away, providing a more integrated and streamlined workflow.
 
-### [Searching Through Your Contact List][1]
+### Searching Through Your Contact List
 
 ![Contact Search][8]
 

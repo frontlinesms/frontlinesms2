@@ -4,7 +4,7 @@ Quick Message will allow you to easily send a message to either a single recipie
 
 ![Quick Message Icon][12]
 
-### [Quick Message][3]
+### Quick Message
 
 The quick message [walk through][4] can be started by clicking on the "Quick Message" (1) button that you will find in the top right of every page under the [Messages tab][1] and [search tab][2]
 

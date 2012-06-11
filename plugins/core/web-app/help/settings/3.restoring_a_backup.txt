@@ -4,7 +4,7 @@ You can import messages and contacts from a previous installation of FrontlineSM
 
 ![Import][4]
 
-### [Restoring from a backup][1]
+### Restoring from a backup
 
 1.  Navigate to the Settings menu.(1)
 2.  In the section entitled "Import" (2), select the type of data you will be importing. Please select the correct type otherwise the import will fail.

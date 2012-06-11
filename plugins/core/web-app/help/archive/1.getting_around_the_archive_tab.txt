@@ -4,7 +4,7 @@ You can view all your archived messages, activities and folders from the archive
 
 ![Archive Overview][13]
 
-### [Navigation Pane][1]
+### Navigation Pane
 
 From this area (1) you can access the available archives.
 More information about the specific layout of each archive can be found on these pages:
@@ -14,11 +14,11 @@ More information about the specific layout of each archive can be found on these
 [Activity Archive][4]  
 [Folder Archive][5]  
 
-### [Message List][6]
+### Message List
 
 The message list (2) functions like any other message list in FrontlineSMS. You are able to [star, sort and multiple select messages.][7]
 
-### [Message Details][8]
+### Message Details
 
 The message detail area (3) contains the full text of the selected message and sender details, or information about how many messages have been selected. 
 

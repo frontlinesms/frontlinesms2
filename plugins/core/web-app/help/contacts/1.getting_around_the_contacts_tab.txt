@@ -4,19 +4,19 @@ The contacts tab is where you can view and manage your saved contacts and [creat
 
 ![Contacts Overview][11]
 
-### [Contact Navigation][3]
+### Contact Navigation
 
 From this area (1) you can  view all your saved contacts and [add a new contact][4].
 
 Also listed here are all the [groups][1] and [smart groups][2] that you have created. You can create [new groups][1] and [smart groups] [2] by clicking on "Create new group" or "Create new smart group".
 
-### [Contact List][5]
+### Contact List
 
 The contact list (2) will display all the contacts in a selected group, smart group, or the whole database if "All Contacts" is selected above.
 
 Multiple contacts can be selected using the check boxes next to their names.
 
-### [Contact Details][6]
+### Contact Details
 
 The contact details (3) are contains all the information associated with the selected contact. This information may contain any telephone numbers, e-mail addresses, group association and custom information you may have added. You can [edit a contact][7] by selecting an existing contact and modifying the details in this area
 
@@ -24,7 +24,7 @@ You can [delete][7] contacts from here as well.
 
 If you have multiple contacts selected, actions to perform on the selected contacts will appear here. You can [delete][7] all the selected contacts or [manage their group associations][8].
 
-### [Contact Footer][9]
+### Contact Footer
 
 The footer contains the page navigation (4) and [search filter][11] (5) for your contact list. When the number of contacts in your database cannot be displayed on one page, the page navigation buttons will become available and allow you to move across multiple pages of contacts.
 

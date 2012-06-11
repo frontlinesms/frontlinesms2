@@ -4,7 +4,7 @@ With groups you can organise your contacts to make the sending and receiving of 
 
 ![Creating a Group][8]
 
-### [Creating a Group][3]
+### Creating a Group
 
 1.  When viewing the [Contacts tab][4], click on the button 'Create new group' (1).
 2.  A small window will appear asking you to enter a name for the group.

@@ -2,7 +2,7 @@
 
 _Before you can start using FrontlineSMS Version 2, you will have to connect and configure a device to use. This is done mostly automatically by FrontlineSMS so you don't have to worry about it. If you are having trouble setting up a device or want to follow the recommended method then this page will explain how to connect and configure a device in FrontlineSMS. The detection process differs if you have already attached your device to your computer before running FrontlineSMS and when you attach a device while FrontlineSMS is running._
 
-### [Making Sure Your Device is Detected][1]
+### Making Sure Your Device is Detected
 
 Before FrontlineSMS Version 2 can connect to your device, it needs to know that the device is connected so it can gather all the information it requires to connect to it. We call this [device detection][2]. 
 
@@ -22,7 +22,7 @@ For newer Windows machines this should happen when you attach your device to you
 
 This will also be indicated by a green light on the [status tab][2]. The connection will also appear in the [connections][2] area of the [status tab][2].
 
-### [Attaching a Device While FrontlineSMS Version 2 is Running][5]
+### Attaching a Device While FrontlineSMS Version 2 is Running
 
 If you start FrontlineSMS Version 2 and then attach a device to your computer you will have to prompt FrontlineSMS to scan your system so that it can begin the automatic device setup process. This method is not recommended unless your device has previously been attached to this computer and has device driver's installed.
 

@@ -4,11 +4,11 @@ The trash folder contains all the messages you have deleted. The messages are st
 
 (Screenshot)
 
-### [Moving a Deleted Message][1]
+### Moving a Deleted Message
 
 Please see [here][2]
 
-### [Emptying the trash][3]
+### Emptying the trash
 
 To empty the trash folder of all messages:
 
