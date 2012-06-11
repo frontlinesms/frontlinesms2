@@ -89,16 +89,16 @@ __Group List View__
 [Removing/Adding a Custom Field to a Contact][9]   
 [Creating a Group][10]  
 
-[1]: AddingASingleContactToAGroup
-[2]: gotoCreate_a_group
-[3]: AddingMultipleCOntactstoAGroup
-[4]: gotogetting_around_the_contacts_tab
-[5]: RemoveAContactFromAGroup
-[6]: RemovingMultipleCOntactsFromAGroup
-[7]: gotoCreate_a_smart_group
+[1]: contacts/6.add_remove_contact_to_from_a_group
+[2]: contacts/4.creating_a_group
+[3]: contacts/6.add_remove_contact_to_from_a_group
+[4]: contacts/1.getting_around_the_contacts_tab
+[5]: contacts/6.add_remove_contact_to_from_a_group
+[6]: contacts/6.add_remove_contact_to_from_a_group
+[7]: contacts/5.creating_a_smart_group
 [8]: gotoExporting
-[9]: gotoAdd_remove_a_custom_field
-[10]: gotoCreate_a_group
+[9]: contacts/3.add_remove_a_custom_field
+[10]: contacts/4.creating_a_group
 [11]: ../images/help/add_to_group.jpg
 [12]: ../images/help/multipleadd_to_group.jpg
 [13]: ../images/help/remove_single_contact.jpg

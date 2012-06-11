@@ -42,14 +42,14 @@ The [search filter][10] allows you to quickly search through the displayed conta
 [Creating a Smart Group][2]  
 [Editing a contact][7]  
 
-[1]: gotoCreate_a_group
-[2]: gotoCreate_a_smart_group
-[3]: ContactNavigation
-[4]: gotoAdd_a_new_contact
-[5]: ContactList
-[6]: ContactDetails
-[7]: gotoEditing_a_Contact
-[8]: gotoAdd_Remove_contact_to_from_a_group
-[9]: ContactFooter
-[10]: gotoSearching_through_contacts
+[1]: contacts/4.creating_a_group
+[2]: contacts/5.creating_a_smart_group
+[3]: contacts/1.getting_around_the_contacts_tab
+[4]: contacts/2.add_contact
+[5]: contacts/1.getting_around_the_contacts_tab
+[6]: contacts/1.getting_around_the_contacts_tab
+[7]: contacts/2a.editing_a_contact
+[8]: contacts/6.add_remove_contact_to_from_a_group
+[9]: contacts/1.getting_around_the_contacts_tab
+[10]: contacts/8.searching_through_contacts
 [11]: ../images/help/contacts_overview.jpg
