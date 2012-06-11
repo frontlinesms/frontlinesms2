@@ -1,10 +1,10 @@
 # Viewing Messages Sent or Received by a Contact
 
-_This page will describe how to view all the messages that have been sent and received by a particular contact. This can be useful when you quickly want to see the messages that have been received from and sent to a particular contact._
+This page will describe how to view all the messages that have been sent and received by a particular contact. This can be useful when you quickly want to see the messages that have been received from and sent to a particular contact.
 
 ![Viewing Sent and Received Messages by a Contact][10]
 
-### [Viewing Messages Sent or Received by a Contact][1]
+### Viewing Messages Sent or Received by a Contact
 
 1.  Navigate to the [Contacts tab][2] and select the contact whose sent/received messages you want to see.
 2.  On the right of the contact record there is a summary of how many messages have been sent to or received from that contact. Click on "Search for Messages" below this (1).

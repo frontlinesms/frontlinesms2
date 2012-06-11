@@ -1,8 +1,8 @@
 # Managing Groups
 
-_This page will describe to you how you can add and remove contacts from groups so that you can manage them effectively._
+This page will describe to you how you can add and remove contacts from groups so that you can manage them effectively.
 
-### [Adding a Single Contact to a Group][1]
+### Adding a Single Contact to a Group
 
 ![Add to Group][11]
 
@@ -14,7 +14,7 @@ _This page will describe to you how you can add and remove contacts from groups 
 4.  The group name will now appear next to the "groups" sub-heading.
 5.  Click "Save" to confirm the changes. *__Note:__ You __must__ perform this step. If you do not click "Save" the contact will not be added to the group.*
 
-### [Adding Multiple Contacts to a Group][3]
+### Adding Multiple Contacts to a Group
 
 ![Multiple Add to Group][12]
 
@@ -51,7 +51,7 @@ __Group List View__
 4.  Click "Save" to confirm the changes. *__Note:__ You __must__ perform this step. If you do not click "Save" the contact will not be removed from the group.*
 5.  The group name will disappear, and the contact will no longer be in that group.
 
-### [Removing Multiple Contacts from a Group][6]
+### Removing Multiple Contacts from a Group
 
 *__Note:__ If you navigate to another page of contacts your current selection will be lost. If the contacts you want to add span multiple pages then please repeat steps 2-5 for each page of contacts you want to remove.*
 

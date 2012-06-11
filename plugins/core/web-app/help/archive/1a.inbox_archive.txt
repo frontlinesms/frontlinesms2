@@ -4,15 +4,15 @@ _The inbox archive will contain messages that have been archived from the inbox 
 
 ![Inbox Archive][13]
 
-### [Inbox Archive][1]
+### Inbox Archive
 
 The Inbox archive contains all messages that have been archived from the [inbox][2]. 
 
-#### [Inbox Archive Message List][6]
+#### Inbox Archive Message List
 
 The Message list (1) here functions like any other message list elsewhere in the program. Multiples messages can be selected, starred or filtered. To learn more about how to do this, click [here][7]
 
-#### [Inbox Archive Message Details][8]
+#### Inbox Archive Message Details
 
 When a message is selected (2), the full text will be displayed here along with the ability to [reply][9], [forward][9], [unarchive][10], [delete][9] and [move][9].
 

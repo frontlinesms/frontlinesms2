@@ -1,8 +1,8 @@
 # Filtering Message Lists
 
-_When viewing a message list anywhere in the program, you can search within that list, across the From, Message and Date columns. If you are looking for messages from a particular contact, you can enter their name or number into the box at the foot of the list, and the list will be filtered to show the results. Further, you can filter your message list to show all messages or only those that have been [starred][1]._
+When viewing a message list anywhere in the program, you can search within that list, across the From, Message and Date columns. If you are looking for messages from a particular contact, you can enter their name or number into the box at the foot of the list, and the list will be filtered to show the results. Further, you can filter your message list to show all messages or only those that have been [starred][1].
 
-### [How to Filter Messages to Show Only Starred Items][2]
+### How to Filter Messages to Show Only Starred Items
 
 ![Filtering Messages][6]
 

@@ -1,6 +1,6 @@
 # Getting Around the Status Tab 
 
-_The Status Tab allows you to manage and view all devices that are detected by FrontlineSMS and view which connected devices are currently active. The traffic light on the status tab itself indicates the status of the FrontlineSMS System. You can also view detailed traffic information ._
+The Status Tab allows you to manage and view all devices that are detected by FrontlineSMS and view which connected devices are currently active. The traffic light on the status tab itself indicates the status of the FrontlineSMS System. You can also view detailed traffic information .
 
 ![Status Overview][13]
 
@@ -20,7 +20,7 @@ Connections indicated with a (greenlight icon) have been connected to successful
 Connections indicated with a (amberlight icon) have been connected to but may be experiencing problems. Sending or receiving of messages may not be functioning on this connection.
 Connections indicated with a (redlight icon) have been unsuccessful and no connection has been made.
 
-### [Detected Devices][7]
+### Detected Devices
 
 This area (3) displays all the devices which have been detected by FrontlineSMS as connected to your computer.
 
@@ -28,7 +28,7 @@ When FrontlineSMS is opened, it scans your computer for connected devices. These
 
 If you attach a device while FrontlineSMS is running, you may need to press the "Detect Modems" button in order to re-scan your computer. Once a device is detected, FrontlineSMS will proceed to automatically create a connection for it.
 
-### [Traffic Graph][8]
+### Traffic Graph
 
 [The Traffic graph][9] (4) displays a visual representation of all recorded incoming and outgoing traffic. this [graph can be customised][10] to tailor the traffic information to your needs. To find out how to do this, please click [here][11]
 

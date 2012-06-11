@@ -1,15 +1,16 @@
 <markdown:renderHtml>
 * [Messages][2]
-	* Overview
-		* [How do I get around the Messages screen?][3]
+	<!--* Overview
+		* [How do I get around the Messages screen?][3]-->
 	* The Basics
 		* [How do I select more than one message?][5]
 		* [How do I send a message?][6]
-		* [How do I reply to a message?][7]
-		* [How do I delete a message?][8]
+		* [How to move, delete, reply and forward messages][7]
+		<!-- [How do I reply to a message?][7]
+		 [How do I delete a message?][8]-->
 		* [How do I archive a message?][9]
-		* [How do I move a message?][10]
-		* [How do I forward a message?][11] 
+		<!-- [How do I move a message?][10]
+		 [How do I forward a message?][11] -->
 		* [How do I see messages that I have sent?][12]
 		* [How do I see messages that I have deleted?][13]
 		* [How do I see messages that have had a problem whilst sending?][14]
@@ -85,17 +86,22 @@
 		* [How do I export Search results?][80]
 * Status
 	* [What is the Status Tab?][82]
-	* [What does the coloured circle on the status tab mean?][83]
-	* [How do I check if my attached device has been detected?][84]
-	* [How do I check if my attached device has been successfuly connected?][85]
-	* [How do I check the status of my connections?][86]
+	<!--[What does the coloured circle on the status tab mean?][83]
+	[How do I check if my attached device has been detected?][84]
+	[How do I check if my attached device has been successfuly connected?][85]
+	[How do I check the status of my connections?][86]-->
 	* [How do I see how many messages I have sent or received?][87]
-	* [How do I use the Traffic graph?][88]
+	<!-- [How do I use the Traffic graph?][88]-->
 * Settings
 	* Overview
 		* [How do I change the Language?][91]
 		* [How do I import Contacts?][92]
 		* [How do I import Messages?][93]
+		* [How do I use my modem/phone with FrontlineSMS?][94]
+		* [How do I set up an IntelliSMS account?][95]
+		* [How do I set up a Clickatell account?][96]
+		* [How do I edit/delete a Connection?][97]
+		* [How do I get FrontlineSMS to detect my device?][98]
 
 [1]: MessagesTop
 [2]: messages/1.getting_around_the_messages_tab
@@ -189,4 +195,9 @@
 [91]: settings/2.changing_languages
 [92]: settings/3.restoring_a_backup
 [93]: settings/3.restoring_a_backup
+[94]: settings/4.setting_up_a_device
+[95]: settings/4a.intellisms
+[96]: settings/4b.clickatell
+[97]: settings/6.edit_delete_connection
+[98]: settings/5.manually_adding_device
 </markdown:renderHtml>
