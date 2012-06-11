@@ -91,19 +91,19 @@ The message will be queued to be sent.
 [Exporting Messages][13]  
 [Selecting Multiple Messages][5]  
 
-[1]: gotoGetting_around_the_messages_tab
-[2]: gotoGetting_around_the_Archive_tab
-[3]: gotoGetting_around_activities
+[1]: messages/1.getting_around_the_messages_tab
+[2]: activities/1.getting_around_activities
+[3]: activities/1.getting_around_activities
 [4]: Replying
-[5]: gotoSSS
-[6]: gotoSent
+[5]: activities/2.sss
+[6]: activities/5.sent
 [7]: DeletingMessages
-[8]: gotoTrash
+[8]: activities/6.trash
 [9]: DeletingActivitiesAndFolders
-[10]: gotoGetting_around_folders
+[10]: folders/1.getting_around_folders
 [11]: Moving
 [12]: Forwarding
-[13]: gotoExporting
+[13]: messages/9.exporting
 [14]: ../images/help/mrfd_reply.jpg
 [15]: ../images/help/mrfd_multiple.jpg
 [16]: ../images/help/mrfd_reply.jpg
