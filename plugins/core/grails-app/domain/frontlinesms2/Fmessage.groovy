@@ -5,8 +5,6 @@ import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
-	def messageSource
-
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
 	
@@ -190,9 +188,9 @@ class Fmessage {
 			else if(id) return src
 			else return Contact.findByMobile(src)?.name?: src
 		} else if(dispatches.size() == 1) {
-			messageSource.getMessage('fmessage.to', [outboundContactName?: (dispatches as List)[0].dst] as Object[], null)
+			return [outboundContactName?: (dispatches as List)[0].dst]
 		} else {
-			messageSource.getMessage('fmessage.to.multiple', [dispatches.size()] as Object[], null)
+			return [dispatches.size()]
 		}
 	}
 
