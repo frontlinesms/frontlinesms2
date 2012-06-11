@@ -1,10 +1,6 @@
 # Sending a Message
 
----
-
 _Quick Message will allow you to easily send a message to either a single recipient or a number of recipients. It can be accessed from any page under the [messages tab][1]and the [search tab][2]. So whether you are looking at an activity or a folder, or even the trash, you will be able to send a quick message with ease. You can also send a message when you are viewing contact information. Both methods of sending a message will be explained here_
-
----
 
 ![Quick Message Icon][12]
 
@@ -44,8 +40,6 @@ Or, 'Select All Groups' to send a message to all your groups.
 
 If this is okay, clicking send will complete the action.
 
----
-
 ### [Sending a Message from the Contact Screen][8]
 
 (screenshot)
@@ -59,8 +53,6 @@ A screen will appear asking you to enter the message you want to send.
 Once you have entered your message, clicking 'next' will take you to a confirmation screen where you can check the details of your message.  
 
 Clicking 'send' will complete the action.
-
----
 
 ### Related Actions
 [Creating a Poll][9]  

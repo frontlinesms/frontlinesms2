@@ -1,10 +1,6 @@
 # Sorting, Selecting Multiple Messages, Starring and Navigating
 
----
-
 _When viewing a message list anywhere in the program, you will be able to select multiple messages and mark them as important by starring them so that they can be easily spotted. You can also choose to only show the starred messages to quickly switch between the messages you have marked as important and all your messages, allowing you to get to important messages easily. You can also sort messages by **Contact/Number**, **Message content** and **date**. The easy navigation options make it simple to manage large amounts of messages._
-
----
 
 ![Sorting, Starring and Navigating][19]
 
@@ -29,7 +25,7 @@ _**Note:** Multiple selections cannot span multiple pages. The maximum amount of
 
 _**Note:** Unlike [multiple select][10], a message's status as starred persists even once you have navigated away from the page._
 
----
+
 
 ### [Sorting][12]
 
@@ -54,7 +50,7 @@ _**Note:** Unlike [multiple select][10], a message's status as starred persists 
 3.  Clicking on "Date" __twice__ will sort the messages in descending chronological order by the date they were sent. This is signified by a small downwards pointing arrow next to the heading title "Date". This means that the oldest message will be displayed first, and newer ones further down, with the newest message being displayed last.
 4.  Clicking on "Messages" a __third__ time will revert to the original order of the messages - the order in which they were received.
 
----
+
 
 ### Related Actions
 [Searching and Filtering Messages][16]  
