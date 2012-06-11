@@ -1,10 +1,6 @@
 # Getting Around Activities
 
----
-
 _You can access activities from the messages tab. When you click on an activity for the first time, you will notice that it has a slightly different layout in comparison to the [message inbox][1]. This is because an activity performs a specialised function such as [Polling][2], [Announcements][3] or an [Auto Reply][5]. More detailed information about each kind of activity can be found on the respective activities help page. The unique interface for an activity has been designed so that all the information can be accessed and managed easier._
-
----
 
 ![activity overciew][17]
 

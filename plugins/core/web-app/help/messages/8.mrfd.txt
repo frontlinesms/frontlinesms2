@@ -1,10 +1,6 @@
 # Moving, Deleting, Replying and Forwarding
 
----
-
 _Moving, Deleting, Replying and Forwarding are actions which can be used on any kind of message in the system. Their application is the same wherever you find the option to perform one of the actions. So, replying to a message from your [inbox][1] is performed in the same way as replying to a message in an [archive][2] or [activity][3]. The same can be applied to the other actions. On this page you will find detailed help on how to perform these actions._
-
----
 
 ![Message Details For A Single Contact][14]
 
@@ -21,8 +17,6 @@ You can reply to a message, or to the senders of multiple messages by selecting 
 6.  Click "Send" to send your reply/replies.
 
 **_Note:** Messages in the [Sent][6] folder **_cannot_** be replied to. All other messages can!_
-
----
 
 ### [Deleting][7]
 
@@ -52,8 +46,6 @@ SCREENSHOT
 
 The activity _and all messages within it_ will be moved to the [trash][8].  
 
----
-
 ### [Moving][11]
 
 You can move messages into [activities][3] and [folders][10]. The Move action can be found where there is a "Move message to..." dropdown
@@ -66,8 +58,6 @@ You can move messages into [activities][3] and [folders][10]. The Move action ca
 Messages in an [activity][3] or [folder][10] can only be moved to the [inbox][1] or other [activities][3] and other [folders][10].*
 
 3.  The selected message(s) will be moved to the chosen place.
-
----
 
 ### [Forwarding][12]
 
@@ -85,25 +75,23 @@ You can forward a message on from almost anywhere in the software. Only messages
 
 The message will be queued to be sent.
 
----
-
 ### Related Actions
 [Exporting Messages][13]  
 [Selecting Multiple Messages][5]  
 
-[1]: gotoGetting_around_the_messages_tab
-[2]: gotoGetting_around_the_Archive_tab
-[3]: gotoGetting_around_activities
+[1]: messages/1.getting_around_the_messages_tab
+[2]: activities/1.getting_around_activities
+[3]: activities/1.getting_around_activities
 [4]: Replying
-[5]: gotoSSS
-[6]: gotoSent
+[5]: activities/2.sss
+[6]: activities/5.sent
 [7]: DeletingMessages
-[8]: gotoTrash
+[8]: activities/6.trash
 [9]: DeletingActivitiesAndFolders
-[10]: gotoGetting_around_folders
+[10]: folders/1.getting_around_folders
 [11]: Moving
 [12]: Forwarding
-[13]: gotoExporting
+[13]: messages/9.exporting
 [14]: ../images/help/mrfd_reply.jpg
 [15]: ../images/help/mrfd_multiple.jpg
 [16]: ../images/help/mrfd_reply.jpg

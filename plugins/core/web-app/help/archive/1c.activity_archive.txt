@@ -1,10 +1,6 @@
 # Activity Archive
 
----
-
-_The Activity archive contains all Activities that have been archived. The layout and features of the Activity archive will be explained in this help page. There are two levels of detail that can be viewed. The first level is shown by default and displays a list of all Activities that have been archived. The second level of details displays specific information similar to how an activity is displayed when it is active on the [messages tab][1]_
-
---- 
+_The Activity archive contains all Activities that have been archived. The layout and features of the Activity archive will be explained in this help page. There are two levels of detail that can be viewed. The first level is shown by default and displays a list of all Activities that have been archived. The second level of details displays specific information similar to how an activity is displayed when it is active on the [messages tab][1]_ 
 
 ![Activity Archive - list View][10]
 
@@ -16,15 +12,11 @@ As with Message Lists, multiple or single activities can be selected in the acti
 
 Clicking on a single activity will take you to that activities detail view which is described below.
 
----
-
 ### [Activity Detail View][6]
 
 ![Detail View][11]
 
 Clicking on a single activity will take you to that activities detail view which resembles the standard view for displaying activities as found for activities in the messages tab. Click [here][7] to go to the Getting around Activities for a full explanation of this screen.
-
----
 
 ### Related Actions  
 [Archiving Activities and Folders][8]  

@@ -24,7 +24,7 @@ function checkForNew() {
 			var newMessageCount = newTotal - currentTotal;
 			var notificationContents = "<a id='refreshMessageList'>" + i18n("fmessage.new.info", newMessageCount) + "</a>"
 			if(!$("#main-list #new-message-notification").html())
-				$('#main-list tbody tr:first').before('<tr id="new-message-notification"><td /><td /><td /><td><div>' + notificationContents + '</div></td><td /></tr>');
+				$('#main-list tbody tr:first').before('<tr id="new-message-notification"><td colspan="5">' + notificationContents + '</td></tr>');
 			else {
 				$("#new-message-notification a").replaceWith(notificationContents);
 				$("#new-message-notification a").show();

@@ -1,10 +1,6 @@
 # Creating an Announcement #
 
----
-
 _An announcement is a type of activity which allows you to send messages to multiple groups or contacts and then keep track of responses. You can send personalized messages or updates to anyone in your list, saving you time. This feature is useful in campaigning, managing remote teams of field staff or sending short news bulletins._
-
----
 
 ### [How to Create an Announcement][2]
 
@@ -19,8 +15,6 @@ You can enter the message you want to send here.
 
 If the input area is too small, you can resize it by click the <resizeicon> in the bottom right hand corner and dragging it to the size you want.  
 When you have finished entering your message, click next.
-
----
 
 **_Select Recipients_**  
 On this screen you will be able to select who to send the announcement to.
@@ -43,8 +37,6 @@ Or, 'Select All Groups' to send a message to all your groups.
 
 _**NOTE:** Selecting this option may result in a very large number of text messages being sent. This could result in a very large charge from your cellular provider._
 
----
-
 **_Summary Screen_**
 On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
 
@@ -54,8 +46,6 @@ You will also be able to name your [activity][6] so that it is easily recognisab
 
 Clicking next will create the [activity][6].
 
----
-
 **_Confirmation_**
 Once successfully created, you will see a confirmation screen like this one:
 
@@ -64,8 +54,6 @@ Once successfully created, you will see a confirmation screen like this one:
 Clicking OK will take you back to the [Messages Tab][3]
 
 Your Announcement will appear under the activities sub-heading.
-
----
 
 ### Related Actions
 [Creating a Poll][7]  

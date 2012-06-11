@@ -1,10 +1,6 @@
 # Getting Around the Status Tab 
 
----
-
 _The Status Tab allows you to manage and view all devices that are detected by FrontlineSMS and view which connected devices are currently active. The traffic light on the status tab itself indicates the status of the FrontlineSMS System. You can also view detailed traffic information ._
-
----
 
 ![Status Overview][13]
 
@@ -35,8 +31,6 @@ If you attach a device while FrontlineSMS is running, you may need to press the 
 ### [Traffic Graph][8]
 
 [The Traffic graph][9] (4) displays a visual representation of all recorded incoming and outgoing traffic. this [graph can be customised][10] to tailor the traffic information to your needs. To find out how to do this, please click [here][11]
-
----
 
 ### Related Actions
 [Using the traffic graph][12]  

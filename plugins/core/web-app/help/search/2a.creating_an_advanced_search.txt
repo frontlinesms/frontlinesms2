@@ -1,10 +1,6 @@
 # Creating an Advanced Search
 
----
-
 _The Search Tab is home to a powerful, advanced and highly customisable search feature. You can use it to do a quick, simple search across all your messages to find what you are looking for or you can create an advanced and detailed search across a specific group, activity and date range. You can then perform standard actions on the messages which match your search criteria directly from within the search window, making it easy to work with the results. You can also [export][1] your search results in either .csv or .pdf format if you need to use them in another program. This page will provide a detailed walk through to using the search tab._
-
----
 
 ![Advanced Search][9]
 
@@ -35,8 +31,6 @@ Click on the arrow to see a drop down of options which you can select.
 
 Include Archive: If this box is checked then [archived messages][3] will be included in the search. If it isn't checked then archived messages will not be included.
 
----
-
 **_[Between Dates][4]_**  
 This section allows you to specify either a range of dates, or a start/end date for the search.
   
@@ -52,8 +46,6 @@ An end date, is a date beyond which the search will not be conducted. Any messag
 
 To set an end date, simply set a date in the lower dropboxes (10) __or__ you can use the calendar icon to select the dates on a calendar, which automatically fills out the drop boxes for you. 
 
----
-
 **_[More Search Options][5]_**  
 Clicking on "More Options" will present you with a list of extra parameters which can be used to narrow your search. For example, if you wish to search for all the texts corresponding to a particular contact, then choosing 'Contact Name' will create a field for you to enter the name of the contact you want to search for. Other parameters shown here include any [custom fields][6] you have created for your contacts.    
   
@@ -62,8 +54,6 @@ For example, if you created a field called 'Town' for some contacts, then you ca
 Multiple parameters can be used simultaneously. You could add 'Contact Name' and 'Town' and any number of other custom fields.  
   
 **To remove a parameter, simply click the 'x' next to the field.**
-
----
 
 ### [Example Search][8]
 Here is an example of how you might set up an advanced search which uses all of the parameters.   
@@ -82,8 +72,6 @@ In this example search, we  will be searching for received messages with the key
 5.  Clicking the 'More Search Options' will open a list of custom fields. Clicking on 'Town' would activate that field and create a text box for data entry.  
 6.  In the newly created 'Town' parameter, we would enter 'Kisumu'.  
 7.  With all the parameters set all that is left is to click "Search"  to view the results!
-
----
 
 ### Related Actions
 [Exporting Search Results][1]  

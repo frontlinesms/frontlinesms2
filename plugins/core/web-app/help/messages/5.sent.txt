@@ -1,10 +1,6 @@
 # Using the Sent Folder
 
----
-
 _The sent folder contains all the messages you have successfully sent. The messages stored here can be [forwarded][1], [archived][7] and [moved][1]. Forwarding allows you re-send a message you have already sent to more people without having to type out message again. You can also edit the message before you forward it on. This can be useful if you have forgotten to send the message to some people, or need to tailor an existing message to a certain group of people._
-
----
 
 ![Sent][10]
 
@@ -35,19 +31,17 @@ To move a message from the Sent Folder into the [inbox][3], an [activity][6] or 
 
 The selected messages will be moved to your chosen destination.
 
----
-
 ### Related Actions
 [Archiving messages][7]  
 [Unarchiving Messages][9]  
 
-[1]: gotoMRFD
+[1]: messages/8.mrfd
 [2]: ForwardingASentMessage
-[3]: gotoGetting_around_the_messages_tab[19]
-[4]: ArchivingMessagesFromTheSentFolder
+[3]: messages/1.getting_around_the_messages_tab
+[4]: archive/1b.sent_archive
 [5]: MovingMessagesFromTheSentFolder
-[6]: gotoGetting_around_activities
-[7]: gotoArchiving_Messages
-[8]: gotoGetting_around_folders
-[9]: gotoUnarchive
+[6]: activities/1.getting_around_activities
+[7]: archive/2.archiving_messages
+[8]: folders/1.getting_around_folders
+[9]: archive/4.unarchive
 [10]: ../images/help/sent.jpg

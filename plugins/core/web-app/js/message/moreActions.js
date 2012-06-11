@@ -10,6 +10,7 @@ $(document).ready(function() {
 			exportAction();
 		else if($(this).find('option:selected').val() == 'radioShow')
 			radioShowAction();
+		selectmenuTools.snapback($('#more-actions'));
 	});
 	
 	$("#export").click(exportAction);
