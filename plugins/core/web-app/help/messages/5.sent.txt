@@ -1,6 +1,6 @@
 # Using the Sent Folder
 
-_The sent folder contains all the messages you have successfully sent. The messages stored here can be [forwarded][1], [archived][7] and [moved][1]. Forwarding allows you re-send a message you have already sent to more people without having to type out message again. You can also edit the message before you forward it on. This can be useful if you have forgotten to send the message to some people, or need to tailor an existing message to a certain group of people._
+The sent folder contains all the messages you have successfully sent. The messages stored here can be [forwarded][1], [archived][7] and [moved][1]. Forwarding allows you re-send a message you have already sent to more people without having to type out message again. You can also edit the message before you forward it on. This can be useful if you have forgotten to send the message to some people, or need to tailor an existing message to a certain group of people.
 
 ![Sent][10]
 

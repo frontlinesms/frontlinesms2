@@ -1,6 +1,6 @@
 # Editing a Contact
 
-_On this page you will find out how to modify an existing contact._
+On this page you will find out how to modify an existing contact.
 
 ### [Editing a contact][1]
 

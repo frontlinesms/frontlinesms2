@@ -1,6 +1,6 @@
 # Creating a Folder
 
-_A Folder is a container for you to store messages away from your [Inbox][1] or [Activities][2]. It is accessible from the [Messages Tab][1] making it quick and easy to access messages in Folders. You could use a folder to store messages from your [inbox][1] that you need to refer to quickly without having to go through all your messages. This help page will explain the steps required for creating a new folder._
+A Folder is a container for you to store messages away from your [Inbox][1] or [Activities][2]. It is accessible from the [Messages Tab][1] making it quick and easy to access messages in Folders. You could use a folder to store messages from your [inbox][1] that you need to refer to quickly without having to go through all your messages. This help page will explain the steps required for creating a new folder.
 
 ![Creating A Folder][7]
 

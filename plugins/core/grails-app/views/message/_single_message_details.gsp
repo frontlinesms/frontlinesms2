@@ -7,7 +7,7 @@
 				<span>
 					<g:if test="${!messageInstance.inbound && messageInstance.dispatches.size() > 1}">
 						<g:remoteLink controller="message" action="listRecipients" params="[messageId: messageInstance.id]" onSuccess="showRecipientList(data)">
-							${messageInstance.displayName}
+							<g:message code="fmessage.to.multiple" args="${messageInstance.displayName}" />
 						</g:remoteLink>
 					</g:if>
 					<g:else>

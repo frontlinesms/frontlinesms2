@@ -1,6 +1,6 @@
 # Importing Messages and Contacts
 
-_You can import messages and contacts from a previous installation of FrontlineSMS Version 2 or even from FrontlineSMS 1. This page will describe how to import contacts and messages from a file._
+You can import messages and contacts from a previous installation of FrontlineSMS Version 2 or even from FrontlineSMS 1. This page will describe how to import contacts and messages from a file.
 
 ![Import][4]
 

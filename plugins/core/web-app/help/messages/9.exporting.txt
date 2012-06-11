@@ -1,6 +1,6 @@
 # Exporting
 
-_Exporting lets you to extract messages from FrontlineSMS Version 2 and format them for use in other programs like Microsoft Excel. Export can also be used to create a backup of the selected messages so that you have a copy of them, should any of your hardware malfunction. You can also export contacts for similar purposes._
+Exporting lets you to extract messages from FrontlineSMS Version 2 and format them for use in other programs like Microsoft Excel. Export can also be used to create a backup of the selected messages so that you have a copy of them, should any of your hardware malfunction. You can also export contacts for similar purposes.
 
 ### [Exporting Messages][1]
 

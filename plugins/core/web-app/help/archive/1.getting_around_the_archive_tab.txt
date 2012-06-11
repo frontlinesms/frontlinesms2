@@ -1,6 +1,6 @@
 # Getting Around the Archive Tab
 
-_You can view all your archived messages, activities and folders from the archive tab. Their are four locations where archived messages, folders and activities are stored. The inbox archive will contain messages that have been archived from the inbox and pending messages. The Activity Archive contains a list of all activities that have been archived. The folder archive contains a list of folders that have been archived. You can navigate to any of these folders by clicking on them._
+You can view all your archived messages, activities and folders from the archive tab. Their are four locations where archived messages, folders and activities are stored. The inbox archive will contain messages that have been archived from the inbox and pending messages. The Activity Archive contains a list of all activities that have been archived. The folder archive contains a list of folders that have been archived. You can navigate to any of these folders by clicking on them.
 
 ![Archive Overview][13]
 
