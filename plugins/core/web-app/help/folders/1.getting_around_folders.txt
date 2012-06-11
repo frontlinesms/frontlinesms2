@@ -30,15 +30,15 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [Getting Around the Inbox][10]  
 [Creating a Folder][11]  
 
-[1]: gotoGetting_around_the_search_tab
-[2]: FolderHeader
-[3]: gotoQuickMessage
-[4]: gotoArchiving_Activities_Folders
+[1]: search/1.getting_around_the_search_tab
+[2]: folders/1.getting_around_folders
+[3]: messages/3.quick_messages
+[4]: archive/3.archiving_activities_folders
 [5]: gotoExporting
-[6]: FolderMessageList
-[7]: gotoSSS
-[8]: MessageDetails
-[9]: gotoMRFD
-[10]: gotoGetting_around_the_inbox
-[11]: gotoCreating_a_folder
+[6]: folders/1.getting_around_folders
+[7]: messages/2.sss
+[8]: messages/1.getting_around_the_messages_tab
+[9]: messages/8.mrfd
+[10]: messages/1.getting_around_the_messages_tab
+[11]: folders/2.creating_a_folder
 [12]: ../images/help/folder_overview.jpg
