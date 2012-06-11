@@ -31,7 +31,7 @@
 						<div class="controls">
 							<g:if test="${c.status == RouteStatus.NOT_CONNECTED}">
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create"/></g:link>
-								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard(i18n('connection.edit'), data, i18n('popup.done'), 675, 500, false)">
+								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
 										<g:message code="connection.edit"/>
 									</g:remoteLink>
 								<g:link controller="connection" action="delete" class="btn route" id="${c.id}">
