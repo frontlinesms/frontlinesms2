@@ -1,6 +1,6 @@
 # Creating an Announcement #
 
-_An announcement is a type of activity which allows you to send messages to multiple groups or contacts and then keep track of responses. You can send personalized messages or updates to anyone in your list, saving you time. This feature is useful in campaigning, managing remote teams of field staff or sending short news bulletins._
+An announcement is a type of activity which allows you to send messages to multiple groups or contacts and then keep track of responses. You can send personalized messages or updates to anyone in your list, saving you time. This feature is useful in campaigning, managing remote teams of field staff or sending short news bulletins.
 
 ### [How to Create an Announcement][2]
 

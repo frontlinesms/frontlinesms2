@@ -1,0 +1,48 @@
+# Setting up an IntelliSMS Account
+
+_Before you can start using FrontlineSMS Version 2, you will have to connect and configure a device to use. You are able to configure and IntelliSMS account for sending and/or receiving messages through FrontlineSMS. This page will describe how to do this._
+
+![Phones and Connection][7]
+
+### [Adding an IntelliSMS Account][1]
+
+Please have your IntelliSMS account details to hand. If you will only be using the account to send messages then you need to have your IntelliSMS Username and Password. If you will be using it only to receive messages, or send and receive messages then you will need the protocol information of the connection, the server name and server port and your Username and Password. Once you have this information to hand then follow the instructions below.
+
+1.  Navigate to the [settings menu][2] and click on "Phones and Connections" (1).
+2.  On this page you will find any existing connections that you have, and will be able to add new ones. Click on "Add New Connection". The following screen will appear asking you to select the type of connection you would like to create:
+
+![Add New Connection][8]
+  
+3.  Select "IntelliSMS Account" and click "Next"
+4.  On this screen, please enter the required information. 
+
+![IntelliSMS Screen][9]
+ 
+If you wish to use this account for sending only then check the "Use for sending" check box and enter your IntelliSMS Username and Password.
+If you wish to use this account for receiving as well/only then check the "Use for receiving" check box and enter the details below.
+Once you have completed this, please click "Next".
+5.  You will be presented with a confirmation screen like below, summarising your settings. If this is correct, click "Create". If there is a problem, please click "Back" and enter the correct information.
+
+![IntelliSMS Confirm][10]
+
+Your connection will be created and you will be notified when a successful connection has been made. 
+
+If the connection fails then you may have entered information incorrectly. To make sure this isn't the case, please [edit the connection][3] and check the information that you entered. If this information is correct, then you may be able to find more support in the [community forum][4]
+
+---
+
+### Related Actions
+[Manually Setting Up A Connection][5]  
+[Editing a Connection][3]  
+[Setting up a Connection to a Clickatell Account][6]
+
+[1]: adding_an_intellisms_account
+[2]: settings/1.getting_around_the_settings_menu
+[3]: settings/6.edit_delete_connection
+[4]: http://frontlinesms.ning.com/
+[5]: settings/5.manually_adding_device
+[6]: settings/4b.clickatell
+[7]: ../images/help/settings_connections.jpg
+[8]: ../images/help/add_new_connection.jpg
+[9]: ../images/help/intellisms.jpg
+[10]: ../images/help/intellisms_confirm.jpg

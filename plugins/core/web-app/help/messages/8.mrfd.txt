@@ -1,6 +1,6 @@
 # Moving, Deleting, Replying and Forwarding
 
-_Moving, Deleting, Replying and Forwarding are actions which can be used on any kind of message in the system. Their application is the same wherever you find the option to perform one of the actions. So, replying to a message from your [inbox][1] is performed in the same way as replying to a message in an [archive][2] or [activity][3]. The same can be applied to the other actions. On this page you will find detailed help on how to perform these actions._
+Moving, Deleting, Replying and Forwarding are actions which can be used on any kind of message in the system. Their application is the same wherever you find the option to perform one of the actions. So, replying to a message from your [inbox][1] is performed in the same way as replying to a message in an [archive][2] or [activity][3]. The same can be applied to the other actions. On this page you will find detailed help on how to perform these actions.
 
 ![Message Details For A Single Contact][14]
 

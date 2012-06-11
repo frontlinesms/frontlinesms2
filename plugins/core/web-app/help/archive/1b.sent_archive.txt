@@ -1,6 +1,6 @@
 # Sent Archive
 
-_The Sent archive will contain messages that have been archived from the Folder. The layout and features of the Inbox archive will be explained in this help page._
+The Sent archive will contain messages that have been archived from the Folder. The layout and features of the Inbox archive will be explained in this help page.
 
 ![Sent Archive][13]
 

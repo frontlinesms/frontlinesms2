@@ -1,6 +1,6 @@
 # Using the Traffic Graph 
 
-_The traffic graph is a visualisation of all the recorded incoming and outgoing traffic. You can view the volume of messages you are sending and receiving by quickly glancing at this graph. You can also tailor this graph to show only the traffic information that you need. For example, you can view the traffic information between certain dates or for a particular group or activity. This page describes how to customise the traffic graph to suit your needs._
+The traffic graph is a visualisation of all the recorded incoming and outgoing traffic. You can view the volume of messages you are sending and receiving by quickly glancing at this graph. You can also tailor this graph to show only the traffic information that you need. For example, you can view the traffic information between certain dates or for a particular group or activity. This page describes how to customise the traffic graph to suit your needs.
 
 ![Using the Traffic graph][2]
 

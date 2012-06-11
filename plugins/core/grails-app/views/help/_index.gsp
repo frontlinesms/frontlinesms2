@@ -96,6 +96,11 @@
 		* [How do I change the Language?][91]
 		* [How do I import Contacts?][92]
 		* [How do I import Messages?][93]
+		* [How do I use my modem/phone with FrontlineSMS?][94]
+		* [How do I set up an IntelliSMS account?][95]
+		* [How do I set up a Clickatell account?][96]
+		* [How do I edit/delete a Connection?][97]
+		* [How do I get FrontlineSMS to detect my device?][98]
 
 [1]: MessagesTop
 [2]: messages/1.getting_around_the_messages_tab
@@ -189,4 +194,9 @@
 [91]: settings/2.changing_languages
 [92]: settings/3.restoring_a_backup
 [93]: settings/3.restoring_a_backup
+[94]: settings/4.setting_up_a_device
+[95]: settings/4a.intellisms
+[96]: settings/4b.clickatell
+[97]: settings/6.edit_delete_connection
+[98]: settings/5.manually_adding_device
 </markdown:renderHtml>

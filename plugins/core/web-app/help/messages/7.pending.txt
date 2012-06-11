@@ -1,6 +1,6 @@
 # Using the Pending Folder
 
-_The pending folder contains the queue of messages that are waiting to be sent out by FrontlineSMS. From this folder, you can view those messages which have failed to send and attempt to resend them. Messages that have been successfully sent will be automatically moved from the pending folder to the [sent folder][1]. You can also [move][2], [archive][3], [export][4] and [delete][2] messages in the pending folder._
+The pending folder contains the queue of messages that are waiting to be sent out by FrontlineSMS. From this folder, you can view those messages which have failed to send and attempt to resend them. Messages that have been successfully sent will be automatically moved from the pending folder to the [sent folder][1]. You can also [move][2], [archive][3], [export][4] and [delete][2] messages in the pending folder.
 
 ![Pending][12]
 

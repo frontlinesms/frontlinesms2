@@ -1,6 +1,6 @@
 # Getting Around the Messages Tab
 
-_The messages tab is shown by default whenever you start FrontlineSMS. From here you can easily see all your incoming messages, [sent messages][1], [activities][2], and [folders][3]. You can also create [new activities][4] and [new folders][5] from this tab. You can also view the content of individual messages and manage your messages with actions like [delete][6], [reply][6], [archive][7] and [move][6]._
+The messages tab is shown by default whenever you start FrontlineSMS. From here you can easily see all your incoming messages, [sent messages][1], [activities][2], and [folders][3]. You can also create [new activities][4] and [new folders][5] from this tab. You can also view the content of individual messages and manage your messages with actions like [delete][6], [reply][6], [archive][7] and [move][6].
 
 ![Message Tab Overiew][20]
 
@@ -74,4 +74,3 @@ When multiple messages are selected, a summary of how many messages have been se
 [18]: messages/2.sss
 [19]: messages/1.getting_around_the_messages_tab
 [20]: ../images/help/message_tab_overview.jpg
-

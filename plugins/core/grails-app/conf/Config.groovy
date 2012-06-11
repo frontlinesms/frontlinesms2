@@ -80,7 +80,12 @@ environments {
 }
 
 // log4j configuration
+// first check for external config
+
+grails.config.locations = []
+grails.config.locations << "file:${System.properties.'user.home'}/.frontlinesms2/log4j.groovy"
 log4j = {
+  print "using standard logging config"
     // Example of changing the log pattern for the default console
     // appender:
     //

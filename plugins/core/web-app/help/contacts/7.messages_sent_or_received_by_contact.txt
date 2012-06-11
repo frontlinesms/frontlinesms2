@@ -1,6 +1,6 @@
 # Viewing Messages Sent or Received by a Contact
 
-_This page will describe how to view all the messages that have been sent and received by a particular contact. This can be useful when you quickly want to see the messages that have been received from and sent to a particular contact._
+This page will describe how to view all the messages that have been sent and received by a particular contact. This can be useful when you quickly want to see the messages that have been received from and sent to a particular contact.
 
 ![Viewing Sent and Received Messages by a Contact][10]
 

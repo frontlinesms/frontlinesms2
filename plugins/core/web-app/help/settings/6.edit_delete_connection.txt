@@ -1,0 +1,58 @@
+# Editing and Deleting an Existing Connection
+
+_If you have [created a connection to a device][1], you can edit these connections to make changes to the settings you used. This can be helpful if the parameters you entered during the initial configuration do not work, or that you want to change the setting for a device without creating a new connection._
+
+![Phones and Connection][8]
+
+### [Editing a Connection][2]
+
+This is a necessary step if FrontlineSMS automatically creates a connection for a device/modem with a PIN lock. As connection will fail, you will have to edit the automatically created connection and add a PIN number.
+
+1. Navigate to the [settings menu][3] and click on "Phones and Connections". (1)
+2. Once here, you will see a list of all your connections. Click on the connection you wish to edit to see an expanded view of that connection. Then click "Edit Connection" (2).  
+
+![Edit Connection][9]
+
+3. A window will appear containing the settings of the device or modem and the values that you entered initially. Enter/change the values as you required and click "Next".
+4. You will be presented with a confirmation screen like below, summarising your settings. If this is correct, click "Create". If there is a problem, please click "Back" and enter the correct information.
+
+![Confirmation][10]
+
+Your modified setting will be applied and you will be notified when a successful connection has been made. 
+
+---
+
+### [Deleting a Connection][4]
+
+1. Navigate to the [settings menu][3] and click on "Phones and Connections". (1)
+2. Once here, you will see a list of all your connections. Click on the connection you wish to edit to see an expanded view of that connection. 
+3. If the connection you wish to delete ir currently connected and active, you will need to click "Destroy Route" (3) first.
+
+![Destroy Route][11]
+
+4. Then click "Delete Connection" (4).  
+
+![Delete Connection][12]
+
+The connection will be deleted. If this was your active connection then you will no longer be able to send or receive messages unless you add an active connection. Managing connections is an upcoming feature, so at the moment only **one* connection can be active at a time.
+
+---
+
+### Related Actions
+[Automatically Setting Up a Connection][1]  
+[Setting up a Connection to a Clickatell Account][5]
+[Setting up a Connection to an IntelliSMS Account][6]
+[Manually Setting up a Connection][7]
+
+[1]: settings/4.setting_up_a_device
+[2]: editing_a_connection
+[3]: settings/1.getting_around_the_settings_menu
+[4]: Deletingaconnection
+[5]: settings/4b.clickatell
+[6]: settings/4a.intellisms
+[7]: settings/5.manually_adding_device
+[8]: ../images/help/settings_connections.jpg
+[9]: ../images/help/edit_connection.jpg
+[10]: ../images/help/phone_modem_confirm.jpg
+[11]: ../images/help/destroy_route.jpg
+[12]: ../images/help/delete_connection.jpg

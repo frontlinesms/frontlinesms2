@@ -1,6 +1,6 @@
 # Creating a Contact
 
-_Creating Contacts allows you to save contact details in FrontlineSMS. You can use these details to easily identify those you are interacting with, [send messages][1], add recipients to [activities][2] and create [smart groups][3]. There are two ways to add a contact to the FrontlineSMS system: the first is to add a contact in the [Contacts][4] tab which you can access from the top header. The second way is to click on the (plus icon here) icon that you will find next to numbers that are not currently in the FrontlineSMS system. Clicking on the (plus icon) icon will lead you to the [Contact][4] tab, and the process to add a contact is the same as described here. By using the second method the telephone number will be already filled in for you._
+Creating Contacts allows you to save contact details in FrontlineSMS. You can use these details to easily identify those you are interacting with, [send messages][1], add recipients to [activities][2] and create [smart groups][3]. There are two ways to add a contact to the FrontlineSMS system: the first is to add a contact in the [Contacts][4] tab which you can access from the top header. The second way is to click on the (plus icon here) icon that you will find next to numbers that are not currently in the FrontlineSMS system. Clicking on the (plus icon) icon will lead you to the [Contact][4] tab, and the process to add a contact is the same as described here. By using the second method the telephone number will be already filled in for you.
 
 ![Adding a COntact][13]
 

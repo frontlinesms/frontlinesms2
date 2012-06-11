@@ -1,6 +1,6 @@
 # Renaming an Activity
 
-_You are able to rename any activity in a few simple steps._
+You are able to rename any activity in a few simple steps.
 
 ![Renaming an Activity][6]
 

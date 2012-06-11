@@ -1,6 +1,6 @@
 # Adding/Removing a Custom Field
 
-_This page will describe how to add and remove a custom field from a contact's record. A custom field allows you to specify personalised information for each contact, allowing you to build on the default fields. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favourite colour is. This information can be used in [smart groups][1] or when performing a [search][2]._
+This page will describe how to add and remove a custom field from a contact's record. A custom field allows you to specify personalised information for each contact, allowing you to build on the default fields. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favourite colour is. This information can be used in [smart groups][1] or when performing a [search][2].
 
 ![Adding More information to your contact][11]
 

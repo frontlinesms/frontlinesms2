@@ -1,6 +1,6 @@
 # Getting Around The Search Tab
 
-_The Search Tab is home to a powerful, advanced and highly customisable search feature. You can use it to do a quick, simple search across all your messages to find what you are looking for or you can create an advanced and detailed search across a specific group, activity and date range. This page will describe all the main elements of the search tab._
+The Search Tab is home to a powerful, advanced and highly customisable search feature. You can use it to do a quick, simple search across all your messages to find what you are looking for or you can create an advanced and detailed search across a specific group, activity and date range. This page will describe all the main elements of the search tab.
 
 ![Search Overview][7]
 
