@@ -1,6 +1,6 @@
 # Using the Trash Folder
 
-_The trash folder contains all the messages you have deleted. The messages are stored here where they can be restored or deleted permanently._
+The trash folder contains all the messages you have deleted. The messages are stored here where they can be restored or deleted permanently.
 
 (Screenshot)
 

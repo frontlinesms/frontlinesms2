@@ -1,6 +1,6 @@
 # Unarchiving Messages, Sent Messages, Activities and Folders
 
-_Unarchiving allows you to place archived messages, activities and/or folders back into the [messages tab][1]. Messages can then be sorted into activities, and activities become live; any triggers associated with them such as auto-replies, will work again. This feature is useful if you need to re-use an old activity, or if you need an activity to be live for only a certain period after which you don't want it to be active._
+Unarchiving allows you to place archived messages, activities and/or folders back into the [messages tab][1]. Messages can then be sorted into activities, and activities become live; any triggers associated with them such as auto-replies, will work again. This feature is useful if you need to re-use an old activity, or if you need an activity to be live for only a certain period after which you don't want it to be active.
 ![Unarchiving a Message][16]
 
 ### [Unarchiving a Message][2]

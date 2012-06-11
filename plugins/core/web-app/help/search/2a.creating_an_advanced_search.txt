@@ -1,6 +1,6 @@
 # Creating an Advanced Search
 
-_The Search Tab is home to a powerful, advanced and highly customisable search feature. You can use it to do a quick, simple search across all your messages to find what you are looking for or you can create an advanced and detailed search across a specific group, activity and date range. You can then perform standard actions on the messages which match your search criteria directly from within the search window, making it easy to work with the results. You can also [export][1] your search results in either .csv or .pdf format if you need to use them in another program. This page will provide a detailed walk through to using the search tab._
+The Search Tab is home to a powerful, advanced and highly customisable search feature. You can use it to do a quick, simple search across all your messages to find what you are looking for or you can create an advanced and detailed search across a specific group, activity and date range. You can then perform standard actions on the messages which match your search criteria directly from within the search window, making it easy to work with the results. You can also [export][1] your search results in either .csv or .pdf format if you need to use them in another program. This page will provide a detailed walk through to using the search tab.
 
 ![Advanced Search][9]
 
