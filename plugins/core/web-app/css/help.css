@@ -26,7 +26,7 @@
 #modalBox.help #help-content a { color:#339; }
 #modalBox.help #help-content a:hover { color:black; }
 
-#modalBox.help #help-content img { display:block; width:66%; margin:17px 0 17px 17%; }
+#modalBox.help #help-content img { display:block; max-width:66%; margin:17px 0 17px 17%; }
 
 #modalBox.help #help-content p { margin:6px 0; }
 #modalBox.help #help-content p:nth-child(2) { font-style:italic; }
