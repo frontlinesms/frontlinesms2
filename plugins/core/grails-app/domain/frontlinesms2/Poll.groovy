@@ -22,6 +22,7 @@ class Poll extends Activity {
 	
 	static mapping = {
 		keyword cascade: 'all'
+		version false
 	}
 			
 	static constraints = {

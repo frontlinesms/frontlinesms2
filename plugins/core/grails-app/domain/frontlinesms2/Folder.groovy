@@ -8,6 +8,10 @@ class Folder extends MessageOwner {
 //> PROPERTIES
 	static transients = ['liveMessageCount']
 	Date dateCreated
+
+	static mapping = {
+		version false
+	}
 	
 	static constraints = {
 		name(blank:false, nullable:false, maxSize:255, unique:true)

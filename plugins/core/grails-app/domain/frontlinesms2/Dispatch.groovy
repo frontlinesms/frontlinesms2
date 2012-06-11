@@ -8,6 +8,10 @@ class Dispatch {
 	def expressionProcessorService
 	
 	boolean isDeleted
+
+	static mapping = {
+		version false
+	}
 	
 	static constraints = {
 		dst(nullable:false)

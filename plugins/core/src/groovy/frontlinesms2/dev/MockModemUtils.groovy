@@ -112,6 +112,7 @@ class MockModemUtils {
 	
 	private static def getStandardResponses() {
 		["AT", "OK",
+				"AT+CSMS?", "SMS: 1,1,1,1\r\rOK",
 				"AT+CMEE=1", "OK",
 				"AT+STSF=1", "OK",
 				"AT+CPIN?", "+CPIN: READY",
