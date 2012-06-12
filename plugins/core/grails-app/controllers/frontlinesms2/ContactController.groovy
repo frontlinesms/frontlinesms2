@@ -134,7 +134,7 @@ class ContactController {
 	
 	def delete() {
 		getCheckedContacts()*.delete()
-		flash.message = message(code: 'default.deleted.message', args: [message(code: 'contact.label', default: 'Contact'), ''])
+		flash.message = message(code:'default.deleted', args:[message(code:'contact.label')])
 		redirect(action: "show")		
 	}
 
@@ -173,7 +173,7 @@ class ContactController {
 	private def attemptSave(contactInstance) {
 		def existingContact = params.mobile ? Contact.findByMobileLike(params.mobile) : null
 		if (contactInstance.save()) {
-			flash.message = message(code: 'default.updated.message', args: [message(code: 'contact.label', default: 'Contact'), contactInstance.name])
+			flash.message = message(code:'default.updated', args:[message(code:'contact.label'), contactInstance.name])
 			def redirectParams = [contactId: contactInstance.id]
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
@@ -196,7 +196,6 @@ class ContactController {
 		if(contactInstance) {
 			c.call(contactInstance)
 		} else {
-			// flash.message = message(code: 'default.not.found.message', args: [message(code: 'contact.label', default: 'Contact'), params.id])
 			c.call(new Contact())
 		}
 	}
