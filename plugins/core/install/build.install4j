@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="5.0.11" transformSequenceNumber="3">
   <directoryPresets config="." />
-  <application name="FrontlineSMS2 Beta" distributionSourceDir="" applicationId="9038-1538-7100-7772" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="true" pack200Compression="true" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="frontlinesms2-beta" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:project.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="FrontlineSMS2 Beta" distributionSourceDir="" applicationId="9038-1538-7100-7772" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="frontlinesms2-beta" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:project.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -1137,6 +1137,38 @@ return valid;</string>
                 <initScript />
                 <visibilityScript />
               </formComponent>
+              <formComponent name="" id="413" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="labelText">
+                        <string>Email</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_email</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="414" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
+                      <void property="labelText">
+                        <string>Telephone/Skype</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_telephone_skype</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
             </formComponents>
           </screen>
           <screen name="How I plan to use frontlinesms" id="349" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
@@ -1207,6 +1239,51 @@ c.setCancelButtonVisible(false);</postActivation>
                 <initScript />
                 <visibilityScript />
               </formComponent>
+              <formComponent name="" id="415" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>I am happy for the system to send back limited technical </string>
+                      </void>
+                      <void property="helpText">
+                        <string>&lt;html&gt;
+Sharing information about how you use&lt;br&gt;
+FrontlineSMS helps us understand how &lt;br&gt;
+many people the software is reaching&lt;br&gt;
+- another important measure of our work.&lt;br&gt;
+We do not collect message content or &lt;br&gt;
+sender / recipient details, only how &lt;br&gt;
+many messages you are sending and &lt;br&gt;
+receiving through FrontlineSMS and &lt;br&gt;
+how large your contact database is. &lt;br&gt;
+The data will be confidentially stored &lt;br&gt;
+by the FrontineSMS team, and won’t be &lt;br&gt;
+released publicly without your permission.&lt;br&gt; 
+&lt;/html&gt;</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_share_limited_technical_info</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="416" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                      <void property="labelText">
+                        <string>information about my use of the software to the FrontlineSMS team.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
             </formComponents>
           </screen>
           <screen name="Staying in Touch" id="177" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
@@ -1235,7 +1312,7 @@ c.setCancelButtonVisible(false);</postActivation>
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
                         <string>&lt;html&gt;
-I am happy to share my contact information with the FrontlineSMS so that they can contact me about
+The FrontlineSMS team can contact me about 
 &lt;/html&gt;</string>
                       </void>
                     </object>
@@ -1272,7 +1349,8 @@ information in the registration form.&lt;br&gt;
                       <void property="selectionScript">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string />
+                            <string>WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);</string>
                           </void>
                         </object>
                       </void>
@@ -1306,7 +1384,8 @@ FrontlineSMS in their project.&lt;br&gt;
                       <void property="selectionScript">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string />
+                            <string>WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);</string>
                           </void>
                         </object>
                       </void>
@@ -1324,12 +1403,13 @@ FrontlineSMS in their project.&lt;br&gt;
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
-                        <string>partnerships, funding opportunities and testing new version of </string>
+                        <string>partnerships, funding opportunities and testing new </string>
                       </void>
                       <void property="selectionScript">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
-                            <string />
+                            <string>WizardContext c = context.getWizardContext();
+c.setCancelButtonVisible(false);</string>
                           </void>
                         </object>
                       </void>
@@ -1347,69 +1427,7 @@ FrontlineSMS in their project.&lt;br&gt;
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
                       <void property="labelText">
-                        <string>the software.</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="" id="182" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                      <void property="checkIfEmpty">
-                        <boolean>true</boolean>
-                      </void>
-                      <void property="helpText">
-                        <string>&lt;html&gt;
-Sharing information about how you use&lt;br&gt;
-FrontlineSMS helps us understand how &lt;br&gt;
-many people the software is reaching&lt;br&gt;
-- another important measure of our work.&lt;br&gt;
-We do not collect message content or &lt;br&gt;
-sender / recipient details, only how &lt;br&gt;
-many messages you are sending and &lt;br&gt;
-receiving through FrontlineSMS and &lt;br&gt;
-how large your contact database is. &lt;br&gt;
-The data will be confidentially stored &lt;br&gt;
-by the FrontineSMS team, and won’t be &lt;br&gt;
-released publicly without your permission.&lt;br&gt; 
-&lt;/html&gt;</string>
-                      </void>
-                      <void property="inputVerifier">
-                        <object class="com.install4j.api.beans.ScriptProperty">
-                          <void property="value">
-                            <string>import net.frontlinesms.install4j.custom.*;
-
-boolean valid = text.length() == 0 || Futil.validateEmailAddress(text);
-if(!valid) Futil.showAlert("Invalid Email Address \n Try name@home.com");
-return valid;</string>
-                          </void>
-                        </object>
-                      </void>
-                      <void property="labelText">
-                        <string>Email</string>
-                      </void>
-                      <void property="variableName">
-                        <string>var_share_email</string>
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-              <formComponent name="" id="183" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.TextfieldComponent">
-                      <void property="labelText">
-                        <string>Telephone / Skype</string>
-                      </void>
-                      <void property="variableName">
-                        <string>var_share_telephone_skype</string>
+                        <string>version of the software.</string>
                       </void>
                     </object>
                   </java>
