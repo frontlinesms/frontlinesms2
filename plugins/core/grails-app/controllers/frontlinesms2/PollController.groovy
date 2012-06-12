@@ -18,7 +18,7 @@ class PollController extends ActivityController {
 			poll = new Poll()
 		}
 		poll.name = params.name ?: poll.name
-		poll.autoreplyText = params.autoreplyText ?: poll.autoreplyText
+		poll.autoreplyText = params.enableAutoreply? (params.autoreplyText ?: poll.autoreplyText): null
 		poll.question = params.question ?: poll.question
 		poll.sentMessageText = params.messageText ?: poll.sentMessageText
 		poll.editResponses(params)
