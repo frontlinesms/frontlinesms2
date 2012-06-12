@@ -37,7 +37,7 @@ _**Note:** This will **not** remove the custom field from the "Add more informat
 [Creating a Smart Group][9]   
 [Creating a Group][10]  
 
-[1]: contacts/5.create_a_smart_group
+[1]: contacts/5.creating_a_smart_group
 [2]: search/1.getting_around_the_search_tab
 [3]: contacts/3.add_remove_a_custom_field
 [4]: contacts/1.getting_around_the_contacts_tab

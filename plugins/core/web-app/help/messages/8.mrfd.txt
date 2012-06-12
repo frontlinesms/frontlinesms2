@@ -83,10 +83,10 @@ The message will be queued to be sent.
 [2]: activities/1.getting_around_activities
 [3]: activities/1.getting_around_activities
 [4]: Replying
-[5]: activities/2.sss
-[6]: activities/5.sent
+[5]: messages/2.sss
+[6]: messages/5.sent
 [7]: DeletingMessages
-[8]: activities/6.trash
+[8]: messages/6.trash
 [9]: DeletingActivitiesAndFolders
 [10]: folders/1.getting_around_folders
 [11]: Moving

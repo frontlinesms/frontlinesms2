@@ -90,5 +90,5 @@ __Group List View__
 [9]: contacts/3.add_remove_a_custom_field
 [10]: contacts/4.creating_a_group
 [11]: ../images/help/add_to_group.jpg
-[12]: ../images/help/multipleadd_to_group.jpg
+[12]: ../images/help/multiple_add_to_group.jpg
 [13]: ../images/help/remove_single_contact.jpg

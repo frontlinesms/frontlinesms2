@@ -48,7 +48,6 @@ If you are having trouble getting a connection set up then please click [here][3
 [Setting up a Connection to an IntelliSMS Account][7]
 [Setting up a Connection to a Clickatell Account][8]
 
-[1]: making_sure_your_device_is_detected
 [2]: status/1.getting_around_the_status_tab
 [3]: settings/5.manually_adding_device
 [5]: attaching_a_device_while_frontlinesms_is_running

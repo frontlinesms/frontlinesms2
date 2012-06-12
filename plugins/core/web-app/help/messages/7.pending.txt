@@ -39,7 +39,7 @@ Please see [here][2]
 [3]: archive/2.archiving_messages
 [4]: messages/9.exporting
 [5]: RetryingToSendAFailedMessageOrMessages
-[6]: messages/getting_around_the_messages_tab
+[6]: messages/1.getting_around_the_messages_tab
 [7]: Re-sendingFailedMessagesInAnActivity
 [8]: activities/2.creating_an_activity
 [9]: ArchivingMessagesFromthePendingFolder

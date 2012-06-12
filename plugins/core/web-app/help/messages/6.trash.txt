@@ -24,7 +24,7 @@ All messages in the trash folder will be permanently deleted.
 [Unarchiving Messages][5]  
 
 [1]: MovingADeletedMessage
-[2]: messages/8.mrfd[15]
+[2]: messages/8.mrfd
 [3]: EmptyingTheTrash
 [4]: archive/2.archiving_messages
 [5]: archive/4.unarchive
