@@ -21,22 +21,22 @@ _**Note:** Multiple selections cannot span multiple pages. The maximum amount of
 ### Starring Messages
 
 1.  When viewing any message list _(this can be in [Inbox][2], [Sent][3], [Pending][4], [Trash][5], [Activities][6], [Folders][7], [Archives][8] and [Search][9])_ there will be the outline of a star (3) next to each message. 
-2.  Click on this outline next to mark that message as 'starred'. You will be able to [filter][12] your message list to show only starred messages - allowing you to easily view all starred messages.
+2.  Click on this outline next to mark that message as 'starred'. You will be able to filter your message list to show only starred messages - allowing you to easily view all starred messages.
 
-_**Note:** Unlike [multiple select][10], a message's status as starred persists even once you have navigated away from the page._
+_**Note:** Unlike multiple select, a message's status as starred persists even once you have navigated away from the page._
 
 
 
 ### Sorting
 
-**_[How to Sort by Contact or Number][13]_**
+How to Sort by Contact or Number
 
 1.  When viewing any message list _(this can be in [Inbox][2], [Sent][3], [Pending][4], [Trash][5], [Activities][6], [Folders][7], [Archives][8] and [Search][9])_ clicking on the heading "Contact" will allow you to sort messages.
 2.  Clicking on "Contacts" __once__ will sort messages in an ascending alphanumeric order by contact information. This is signified by a small upwards pointing arrow next to the heading title "Contact". This means that numbers (unsaved contacts) will be displayed first in the order 0-9, followed by named contacts in the order a-z.
 3.  Clicking on "Contacts" __twice__ will sort the messages in descending alphanumeric order by contact information. This is signified by a small downwards pointing arrow next to the heading title "Contact". This means that saved contacts will be displayed first in the order z-a, followed by numbers (unsaved contacts) in the order 9-0.
 4.  Clicking on "Contacts" a __third__ time will revert to the original order of the messages - the order in which they were received.
 
-**_[How to Sort by Message Content][14]_**
+How to Sort by Message Content
 
 1.  When viewing any message list _(this can be in [Inbox][2], [Sent][3], [Pending][4], [Trash][5], [Activities][6], [Folders][7], [Archives][8] and [Search][9])_  clicking on the heading "Message" will allow you to sort messages.
 2.  Clicking on "Messages" __once__ will sort messages in an ascending alphanumeric order by message content. This is signified by a small upwards pointing arrow next to the heading title "Message". This means that messages beginning with numbers will be displayed first in the order 0-9, followed by messages beginning with letters in the order a-z.
@@ -52,8 +52,7 @@ _**Note:** Unlike [multiple select][10], a message's status as starred persists 
 
 
 
-### Related Actions
-[Searching and Filtering Messages][16]  
+### Related Actions 
 [Sending a Quick Message][17]  
 [Moving, Replying, Forwarding and Deleting][18]  
 

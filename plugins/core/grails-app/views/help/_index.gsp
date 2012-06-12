@@ -57,7 +57,6 @@
 			* [Can I reply and forward Archived messages?][53]
 			* [How do I restore archived messages?][54]
 * Contacts
-	* Overview
 	* Basics
 		* [How do I create a Contact?][58]
 		* [How do I delete a Contact/s?][59]
@@ -71,19 +70,11 @@
 		* [How do I add/remove a contact to/from a group?][67]
 		* [How do I add/remove more than one contact to/from a group?][68]
 * Search
-	* Overview
-
 	* Basic
 		* [How do I perform a simple search?][72]
 
 	* Advanced
 		* [How do I perform a much more detailed search?][74]
-		* [How do I limit my search to a particular Group/Activity/Folder?][75]
-		* [How do I limit my search to either sent or received messages or both?][76]
-		* [How do I include the archive within my search?][77]
-		* [How do I Search between/up to/from certain dates?][78]
-		* [How do I Search in custom field?][79]
-		* [How do I export Search results?][80]
 * Status
 	* [What is the Status Tab?][82]
 	<!--[What does the coloured circle on the status tab mean?][83]
