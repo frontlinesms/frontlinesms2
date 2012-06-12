@@ -50,7 +50,6 @@ If you are having trouble getting a connection set up then please click [here][3
 
 [2]: status/1.getting_around_the_status_tab
 [3]: settings/5.manually_adding_device
-[5]: attaching_a_device_while_frontlinesms_is_running
 [6]: settings/6.edit_delete_connection
 [7]: settings/4a.intellisms
 [8]: settings/4b.clickatell
