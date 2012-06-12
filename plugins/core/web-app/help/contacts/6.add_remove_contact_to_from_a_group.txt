@@ -86,7 +86,6 @@ __Group List View__
 [5]: contacts/6.add_remove_contact_to_from_a_group
 [6]: contacts/6.add_remove_contact_to_from_a_group
 [7]: contacts/5.creating_a_smart_group
-[8]: gotoExporting
 [9]: contacts/3.add_remove_a_custom_field
 [10]: contacts/4.creating_a_group
 [11]: ../images/help/add_to_group.jpg

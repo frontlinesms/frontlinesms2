@@ -28,7 +28,6 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [2]: folders/1.getting_around_folders
 [3]: messages/3.quick_messages
 [4]: archive/3.archiving_activities_folders
-[5]: gotoExporting
 [6]: folders/1.getting_around_folders
 [7]: messages/2.sss
 [8]: messages/1.getting_around_the_messages_tab
