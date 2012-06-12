@@ -1,4 +1,5 @@
-#tabs div.info { padding-left:25px; background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
+#tabs div.info { padding-left:25px; margin:15px 0;
+	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
 #tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
 #tabs div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }

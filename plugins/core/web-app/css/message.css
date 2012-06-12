@@ -54,3 +54,5 @@
 #message-detail-sender .add { background-image: url("../images/icons/add.png"); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; }
 
 span.quick-message { padding: 6px 5px 6px 25px; background-image: url('../images/icons/quickmessage.png'); background-repeat: no-repeat; background-position: 0px center; }
+
+#modalBox .recipient-list { padding:17px; }
