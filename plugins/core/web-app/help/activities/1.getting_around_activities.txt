@@ -44,7 +44,6 @@ You can [reply][15], [move][15], [forward][15] and [delete][15] messages from he
 [1]: messages/1.getting_around_the_messages_tab
 [2]: activities/3.creating_a_poll
 [3]: activities/4.creating_an_announcement
-[4]: ActivityHeader
 [5]: activities/5.creating_an_auto-reply
 [6]: messages/3.quick_message
 [7]: archive/1c.activity_archive
@@ -52,9 +51,7 @@ You can [reply][15], [move][15], [forward][15] and [delete][15] messages from he
 [9]: activities/6.renaming_an_activity
 [10]: messages/8.mrfd
 [11]: activities/3.creating_a_poll
-[12]: MessageList
 [13]: activities/3a.manually_categorising
-[14]: MessageDetails
 [15]: messages/8.mrfd
 [16]: messages/1.getting_around_the_messages_tab
 [17]: ../images/help/activity_overview.jpg

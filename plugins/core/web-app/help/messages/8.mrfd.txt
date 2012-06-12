@@ -82,15 +82,10 @@ The message will be queued to be sent.
 [1]: messages/1.getting_around_the_messages_tab
 [2]: activities/1.getting_around_activities
 [3]: activities/1.getting_around_activities
-[4]: Replying
 [5]: messages/2.sss
 [6]: messages/5.sent
-[7]: DeletingMessages
 [8]: messages/6.trash
-[9]: DeletingActivitiesAndFolders
 [10]: folders/1.getting_around_folders
-[11]: Moving
-[12]: Forwarding
 [13]: messages/9.exporting
 [14]: ../images/help/mrfd_reply.jpg
 [15]: ../images/help/mrfd_multiple.jpg

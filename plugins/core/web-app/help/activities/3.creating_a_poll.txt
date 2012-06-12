@@ -106,7 +106,6 @@ Your poll will be displayed under the "Activities" sub heading in the [messages 
 [Creating a smart group][6]  
 
 [1]: activities/3.creating_a_poll
-[2]: KeywordToolTip
 [3]: activities/5.creating_an_auto-reply
 [4]: activities/4.creating_an_announcement
 [5]: contacts/4.creating_a_group

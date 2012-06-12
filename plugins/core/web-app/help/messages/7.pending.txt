@@ -38,11 +38,7 @@ Please see [here][2]
 [2]: messages/8.mrfd
 [3]: archive/2.archiving_messages
 [4]: messages/9.exporting
-[5]: RetryingToSendAFailedMessageOrMessages
 [6]: messages/1.getting_around_the_messages_tab
-[7]: Re-sendingFailedMessagesInAnActivity
 [8]: activities/2.creating_an_activity
-[9]: ArchivingMessagesFromthePendingFolder
-[10]: MovingMessagesFromTheSentFolder
 [11]: archive/4.unarchive
 [12]: ../images/help/pending.jpg
