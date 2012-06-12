@@ -4,7 +4,7 @@ A Poll will attempt to automatically categorise incoming responses according to 
 
 ![Manually Categorise a Response][6]
 
-### [Manually Categorising a Message/Messages][1]
+### Manually Categorising a Message/Messages
 
 1. Select the Activity you want to export.
 2. From the message list, select the message or messages you wish to categorise using the checkboxes. 

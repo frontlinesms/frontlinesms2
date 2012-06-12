@@ -7,7 +7,7 @@ This page will describe how to create a Smart Group and how each rule works. Sma
 ### Creating a Smart Group
 
 1.  When viewing the [Contacts tab][2], click on the button 'Create new smart group' (1).
-2.  A window will appear asking you to specify the [rules][3] for your smart group:
+2.  A window will appear asking you to specify the rules for your smart group:
 ![Smart Group Dialog][9]
 3.  The drop down menu allows you to select a field for which to set a rule. Select a field that wish to set criteria for.
 4.  Next to the drop box there is an empty text field in which you can enter the text that the smart group will look for when figuring out who should go into the group. For example, if you set the field to "Contact Name" and the text "ro", the smart group will add all contacts whose names start with "ro". 
@@ -31,6 +31,7 @@ _**Note:** When using custom fields in smart group rules, contacts must also hav
 [1]: contacts/5.creating_a_smart_group
 [2]: contacts/1.getting_around_the_contacts_tab
 [4]: contacts/6.add_remove_contact_to_from_a_group
+[5]: messages/9.exporting
 [6]: contacts/3.add_remove_a_custom_field
 [7]: contacts/4.creating_a_group
 [8]: ../images/help/create_smartgroup.jpg

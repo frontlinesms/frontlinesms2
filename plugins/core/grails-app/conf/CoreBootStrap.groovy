@@ -161,6 +161,29 @@ class CoreBootStrap {
 		m2.addToDispatches(dst:'+254114433', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m3.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
+
+		def m5 = new Fmessage(src:'Jinja', date:new Date(), text:'Look at all my friends!')
+		for(i in 1..100) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true)
+		for(i in 101..200) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.FAILED).save(failOnError:true)
+		for(i in 201..300) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.PENDING).save(failOnError:true)
+
+		for(i in 1..100) {
+			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date())
+					.save(failOnError:true)
+		}
+
+		for(i in 101..200) {
+			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.PENDING)
+					.save(failOnError:true)
+		}
+
+		for(i in 201..300) {
+			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.FAILED)
+					.save(failOnError:true)
+		}
 	}
 	
 	private def dev_initFconnections() {

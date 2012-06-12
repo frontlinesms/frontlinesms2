@@ -40,7 +40,7 @@ Or, 'Select All Groups' to send a message to all your groups.
 
 If this is okay, clicking send will complete the action.
 
-### [Sending a Message from the Contact Screen][8]
+### Sending a Message from the Contact Screen
 
 (screenshot)
 

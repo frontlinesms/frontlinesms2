@@ -1,4 +1,10 @@
-#tabs div.info { padding-left:25px; background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
+#modalBox #export-form > * { margin:0 0 15px 0; }
+#modalBox #export-form > a { display:block; text-align:center; }
+#modalBox #export-form > :last-child { margin:0; }
+#modalBox #export-form input[type="radio"] { margin:5px; }
+
+#tabs div.info { padding-left:25px; margin:15px 0;
+	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
 #tabs div.input, #tabs div.ui-tabs-panel div.confirm { margin:0 25px 25px 25px; }
 #tabs div.input > label, #tabs h2 { font-size:110%; margin-bottom:15px; font-weight:bold; }

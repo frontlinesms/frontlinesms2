@@ -12,7 +12,7 @@ To use one of these, click on the one you require and a field will be created fo
 3.  To add a field of your choosing select the "Create New" option in the list.
 4.  A window will appear allowing you to enter a name for the new field.  
 (screenshot)
->*__[Technical Tips!][5]__
+>__Technical Tips!__
 >The name of a custom field can only be 255 characters long. Similarly, once created, custom fields have a 255 character limit.*
 
 5.  Click "Ok" to confirm.
