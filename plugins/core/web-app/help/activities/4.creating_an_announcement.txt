@@ -68,7 +68,7 @@ Your Announcement will appear under the activities sub-heading.
 [6]: activities/1.getting_around_activities
 [7]: activities/3.creating_a_poll
 [8]: contacts/4.creating_a_group
-[9]: ../images/helpactivities/poll1.jpg
+[9]: ../images/help/poll1.jpg
 [10]: ../images/help/announcement1.jpg
 [11]: ../images/help/announcement2.jpg
 [12]: ../images/help/announcement3.jpg

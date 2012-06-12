@@ -57,16 +57,14 @@ Your Auto-reply will appear under the Activities sub-heading.
 [Creating a Group][7]  
 [Creating a Smart Group][8]  
 
-[1]: ToolTip
 [2]: messages/1.getting_around_the_messages_tab
 [3]: activities/5.creating_an_auto-reply
-[4]: gotoUsingExpressions
-[5]: activites/getting_around_activities
+[5]: activities/1.getting_around_activities
 [6]: activities/3.creating_a_poll
 [7]: contacts/4.creating_a_group
 [8]: contacts/5.creating_a_smart_group
 [9]: ../images/help/poll1.jpg
-[10]: ../images/help/autoreply1
-[11]: ../images/help/autoreply2
-[12]: ../images/help/autoreply3
-[13]: ../images/help/autoreply4
+[10]: ../images/help/autoreply1.jpg
+[11]: ../images/help/autoreply2.jpg
+[12]: ../images/help/autoreply3.jpg
+[13]: ../images/help/autoreply4.jpg

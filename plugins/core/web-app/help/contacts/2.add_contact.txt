@@ -77,6 +77,4 @@ If you change your mind about altering a contact's details and you want to leave
 [8]: activities/4.creating_an_announcement
 [9]: contacts/6.add_remove_contact_to_from_a_group
 [10]: contacts/7.messages_sent_or_received_by_contact
-[11]: technicaltips
-[12]: technicaltips
 [13]: ../images/help/add_contact.jpg

@@ -1,16 +1,10 @@
 <markdown:renderHtml>
 * [Messages][2]
-	<!--* Overview
-		* [How do I get around the Messages screen?][3]-->
 	* The Basics
 		* [How do I select more than one message?][5]
 		* [How do I send a message?][6]
 		* [How to move, delete, reply and forward messages][7]
-		<!-- [How do I reply to a message?][7]
-		 [How do I delete a message?][8]-->
 		* [How do I archive a message?][9]
-		<!-- [How do I move a message?][10]
-		 [How do I forward a message?][11] -->
 		* [How do I see messages that I have sent?][12]
 		* [How do I see messages that I have deleted?][13]
 		* [How do I see messages that have had a problem whilst sending?][14]
@@ -57,7 +51,6 @@
 			* [Can I reply and forward Archived messages?][53]
 			* [How do I restore archived messages?][54]
 * Contacts
-	* Overview
 	* Basics
 		* [How do I create a Contact?][58]
 		* [How do I delete a Contact/s?][59]
@@ -71,27 +64,14 @@
 		* [How do I add/remove a contact to/from a group?][67]
 		* [How do I add/remove more than one contact to/from a group?][68]
 * Search
-	* Overview
-
 	* Basic
 		* [How do I perform a simple search?][72]
 
 	* Advanced
 		* [How do I perform a much more detailed search?][74]
-		* [How do I limit my search to a particular Group/Activity/Folder?][75]
-		* [How do I limit my search to either sent or received messages or both?][76]
-		* [How do I include the archive within my search?][77]
-		* [How do I Search between/up to/from certain dates?][78]
-		* [How do I Search in custom field?][79]
-		* [How do I export Search results?][80]
 * Status
 	* [What is the Status Tab?][82]
-	<!--[What does the coloured circle on the status tab mean?][83]
-	[How do I check if my attached device has been detected?][84]
-	[How do I check if my attached device has been successfuly connected?][85]
-	[How do I check the status of my connections?][86]-->
 	* [How do I see how many messages I have sent or received?][87]
-	<!-- [How do I use the Traffic graph?][88]-->
 * Settings
 	* Overview
 		* [How do I change the Language?][91]
@@ -103,10 +83,8 @@
 		* [How do I edit/delete a Connection?][97]
 		* [How do I get FrontlineSMS to detect my device?][98]
 
-[1]: MessagesTop
 [2]: messages/1.getting_around_the_messages_tab
 [3]: messages/1.getting_around_the_messages_tab
-[4]: MessagesBasics
 [5]: messages/2.sss
 [6]: messages/3.quick_message
 [7]: messages/8.mrfd
@@ -117,7 +95,6 @@
 [12]: messages/5.sent
 [13]: messages/6.trash
 [14]: messages/7.pending
-[15]: ManagingMessages
 [16]: messages/2.sss
 [17]: messages/2.sss
 [18]: messages/4.filtering_messages
@@ -126,7 +103,6 @@
 [22]: activities/1.getting_around_activities
 [23]: activities/2.creating_an_activity
 [24]: activities/1.getting_around_activities
-[25]: ActivitiesBasic 
 [26]: activities/3.creating_a_poll
 [27]: activities/3.creating_a_poll
 [28]: activities/3.creating_a_poll
@@ -134,47 +110,36 @@
 [30]: activities/3a.manually_categorising
 [31]: activities/4.creating_an_announcement
 [32]: activities/5.creating_an_auto-reply
-[33]: ActivitiesManaging
 [34]: archive/3.archiving_activities_folders
 [35]: messages/9.exporting
 [36]: activities/6.renaming_an_activity
 [37]: messages/7.pending
-[38]: FoldersTop
 [39]: folders/1.getting_around_folders
 [40]: folders/2.creating_a_folder
 [41]: messages/8.mrfd
-[42]: ArchiveTop
 [43]: archive/1.getting_around_the_archive_tab
 [44]: archive/1.getting_around_the_archive_tab
 [45]: archive/1a.inbox_archive
 [46]: archive/1b.sent_archive
 [47]: archive/1c.activity_archive
 [48]: archive/1d.folder_archive
-[49]: ArchiveBasics
 [50]: archive/2.archiving_messages
 [51]: archive/3.archiving_activities_folders
 [52]: archive/3.archiving_activities_folders
 [53]: messages/8.mrfd
 [54]: archive/4.unarchive
-[55]: ContactsTop
 [56]: contacts/1.getting_around_the_contacts_tab
-[57]: ContactBasics
 [58]: contacts/2.add_contact
 [59]: contacts/2a.editing_a_contact
 [60]: contacts/4.creating_a_group
-[61]: ContactsManaging
 [62]: contacts/7.messages_sent_or_received_by_contact
 [63]: messages/9.exporting
 [64]: contacts/8.searching_through_contacts
-[65]: ContactsAdvanced
 [66]: contacts/3.add_remove_a_custom_field
 [67]: contacts/6.add_remove_contact_to_from_a_group
 [68]: contacts/6.add_remove_contact_to_from_a_group
-[69]: SearchTop
 [70]: search/1.getting_around_the_search_tab
-[71]: SearchBasic
 [72]: search/2.creating_a_search
-[73]: ContactsAdvanced
 [74]: search/2a.creating_an_advanced_search
 [75]: search/2a.creating_an_advanced_search
 [76]: search/2a.creating_an_advanced_search
@@ -182,7 +147,6 @@
 [78]: search/2a.creating_an_advanced_search
 [79]: search/2a.creating_an_advanced_search
 [80]: messages/9.exporting
-[81]: StatusTop
 [82]: status/1.getting_around_the_status_tab
 [83]: status/1.getting_around_the_status_tab
 [84]: status/1.getting_around_the_status_tab
@@ -190,7 +154,6 @@
 [86]: status/1.getting_around_the_status_tab
 [87]: status/2.using_the_traffic_graph
 [88]: status/2.using_the_traffic_graph
-[89]: SettingsTop
 [90]: settings/1.getting_around_the_settings_menu
 [91]: settings/2.changing_languages
 [92]: settings/3.restoring_a_backup

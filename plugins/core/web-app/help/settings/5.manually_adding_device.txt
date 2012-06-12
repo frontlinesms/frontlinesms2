@@ -66,8 +66,8 @@ If the connection fails then you may have entered information incorrectly. This 
 [5]: settings/6.edit_delete_connection
 [6]: http://frontlinesms.ning.com/
 [7]: settings/4.setting_up_a_device
-[8]: settings/4a.clickatell
-[9]: settings/4b.intellisms
+[8]: settings/4a.intellisms
+[9]: settings/4b.clickatell
 [10]: ../images/help/detect_activity.jpg
 [11]: ../images/help/settings_connections.jpg
 [12]: ../images/help/add_new_connection.jpg

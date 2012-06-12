@@ -55,7 +55,7 @@ Multiple parameters can be used simultaneously. You could add 'Contact Name' and
   
 **To remove a parameter, simply click the 'x' next to the field.**
 
-### [Example Search][8]
+### Example Search
 Here is an example of how you might set up an advanced search which uses all of the parameters.   
   
 In this example search, we  will be searching for received messages with the keyword "Maize" from a contact group called “Farmers” who participated in an [activity][1] called  “Crops”. We will also specifically want to know which farmers from the town Kisumu use Maize. Furthermore, we want only the messages that were received in April, 2011. To perform this search we would do the following:

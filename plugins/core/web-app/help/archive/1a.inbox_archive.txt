@@ -22,7 +22,7 @@ When a message is selected (2), the full text will be displayed here along with 
 [Unarchiving Messages, Activities and Folders][10]  
 
 [1]: archive/1a.inbox_archive
-[2]: archive/getting_around_the_archive_tab
+[2]: archive/1.getting_around_the_archive_tab
 [3]: archive/1a.inbox_archive
 [4]: messages/3.quick_message
 [5]: messages/9.exporting

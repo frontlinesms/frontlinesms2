@@ -25,7 +25,6 @@ To delete multiple contacts, select the contacts you wish to delete and select "
 [Creating a Group][8]  
 [Creating a Smart Group][9]  
 
-[1]: EditingAContact
 [2]: contacts/1.getting_around_the_contacts_tab
 [3]: contacts/1.getting_around_the_contacts_tab
 [4]: contacts/8.searching_through_contacts

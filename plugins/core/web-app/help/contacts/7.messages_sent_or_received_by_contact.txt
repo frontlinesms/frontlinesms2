@@ -19,10 +19,8 @@ You can [export][5] these messages using the "Export" button. More details can b
 [Creating a Smart Group][8]   
 [Creating a Group][9]  
 
-[1]: MessagesSentOrReceivedByContact
 [2]: contacts/1.getting_around_the_contacts_tab
 [3]: search/1.getting_around_the_search_tab
-[4]: TechnicalTip
 [5]: messages/9.exporting
 [6]: contacts/6.add_remove_contact_to_from_a_group
 [7]: gotoExporting-contacts

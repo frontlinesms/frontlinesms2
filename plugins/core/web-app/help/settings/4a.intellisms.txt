@@ -36,7 +36,6 @@ If the connection fails then you may have entered information incorrectly. To ma
 [Editing a Connection][3]  
 [Setting up a Connection to a Clickatell Account][6]
 
-[1]: adding_an_intellisms_account
 [2]: settings/1.getting_around_the_settings_menu
 [3]: settings/6.edit_delete_connection
 [4]: http://frontlinesms.ning.com/

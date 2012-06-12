@@ -23,12 +23,12 @@ When a message is selected, the full text will be displayed here (2) along with 
 
 [1]: archive/1b.sent_archive
 [2]: messages/5.sent
-[3]: messages/1b.sent_archive
+[3]: archived/1b.sent_archive
 [4]: messages/3.quick_message
 [5]: messages/9.exporting
-[6]: messages/1b.sent_archive
+[6]: archive/1b.sent_archive
 [7]: messages/2.sss
-[8]: messages/1b.sent_archive
+[8]: archive/1b.sent_archive
 [9]: messages/8.mrfd
 [10]: archive/4.unarchive
 [11]: archive/3.archiving_activities_folders

@@ -33,18 +33,15 @@ _**Note:** This will **not** remove the custom field from the "Add more informat
 
 ### Related Actions  
 [Adding/Removing a Contact from a Group][7]  
-[Exporting Contacts][8]  
 [Creating a Smart Group][9]   
 [Creating a Group][10]  
 
-[1]: contacts/5.create_a_smart_group
+[1]: contacts/5.creating_a_smart_group
 [2]: search/1.getting_around_the_search_tab
 [3]: contacts/3.add_remove_a_custom_field
 [4]: contacts/1.getting_around_the_contacts_tab
-[5]: TechnicalTip
 [6]: contacts/3.add_remove_a_custom_field
 [7]: contacts/6.add_remove_contact_to_from_a_group
-[8]: [TODO]gotoExporting
 [9]: contacts/5.creating_a_smart_group
 [10]: contacts/4.creating_a_group
 [11]: ../images/help/add_more_info.jpg

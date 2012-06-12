@@ -33,13 +33,12 @@ To view your archived folder, navigate to the [archive tab][4] and then click on
 
 [1]: activities/1.getting_around_activities
 [2]: messages/1.getting_around_the_messages_tab
-[3]: archive/1b.folder_archive
-[4]: archive/getting_around_the_archive_tab
+[3]: archive/1d.folder_archive
+[4]: archive/1.getting_around_the_archive_tab
 [5]: messages/9.exporting
 [6]: activities/6.renaming_an_activity
 [7]: messages/8.mrfd
-[8]: activities/1c.activity_archive
-[9]: ArchivingAnActivity
+[8]: archive/1c.activity_archive
 [10]: activities/3.creating_a_poll
 [11]: archive/3.archiving_activities_folders
 [12]: folders/1.getting_around_folders

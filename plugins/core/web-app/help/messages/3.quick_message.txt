@@ -1,6 +1,6 @@
 # Sending a Message
 
-Quick Message will allow you to easily send a message to either a single recipient or a number of recipients. It can be accessed from any page under the [messages tab][1]and the [search tab][2]. So whether you are looking at an activity or a folder, or even the trash, you will be able to send a quick message with ease. You can also send a message when you are viewing contact information. Both methods of sending a message will be explained here
+Quick Message will allow you to easily send a message to either a single recipient or a number of recipients. It can be accessed from any page under the [messages tab][1] and the [search tab][2]. So whether you are looking at an activity or a folder, or even the trash, you will be able to send a quick message with ease. You can also send a message when you are viewing contact information. Both methods of sending a message will be explained here
 
 ![Quick Message Icon][12]
 
@@ -59,14 +59,12 @@ Clicking 'send' will complete the action.
 [Viewing Pending Messages][10] 
 [Creating an Announcement][11]
 
-[1]: messages/getting_around_the_messages_tab
+[1]: messages/1.getting_around_the_messages_tab
 [2]: search/1.getting_around_the_search_tab
 [3]: messages/3.quick_message
-[4]: TOOLTIPWalkthrough
 [5]: contacts/1.getting_around_the_contacts_tab
 [6]: contacts/4.creating_a_group
 [7]: contacts/5.creating_a_smart_group
-[8]: SendingAMessageFromtheContactScreen
 [9]: activities/3.creating_a_poll
 [10]: messages/7.pending
 [11]: activities/4.creating_an_announcement
