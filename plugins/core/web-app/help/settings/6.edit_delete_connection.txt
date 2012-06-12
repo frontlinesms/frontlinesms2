@@ -45,9 +45,7 @@ The connection will be deleted. If this was your active connection then you will
 [Manually Setting up a Connection][7]
 
 [1]: settings/4.setting_up_a_device
-[2]: editing_a_connection
 [3]: settings/1.getting_around_the_settings_menu
-[4]: Deletingaconnection
 [5]: settings/4b.clickatell
 [6]: settings/4a.intellisms
 [7]: settings/5.manually_adding_device

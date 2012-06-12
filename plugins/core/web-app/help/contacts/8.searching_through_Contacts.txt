@@ -23,7 +23,6 @@ This search filter works by matching the contents of the 'Name' field of your co
 [2]: contacts/1.getting_around_the_contacts_tab
 [3]: contacts/8.searching_through_contacts
 [4]: contacts/6.add_remove_contact_to_from_a_group
-[5]: gotoExporting
 [6]: contacts/5.creating_a_smart_group
 [7]: contacts/4.creating_a_group
 [8]: ../images/help/contact_search.jpg

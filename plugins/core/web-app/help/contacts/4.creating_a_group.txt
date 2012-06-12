@@ -25,7 +25,6 @@ Your new group should appear under 'Groups'.
 [3]: contacts/4.creating_a_group
 [4]: contacts/1.getting_around_the_contacts_tab
 [5]: contacts/5.creating_a_smart_group
-[6]: gotoExporting
 [7]: contacts/3.add_remove_a_custom_field
 [8]: ../images/help/create_group.jpg
 [9]: ../images/help/create_group_dialog.jpg

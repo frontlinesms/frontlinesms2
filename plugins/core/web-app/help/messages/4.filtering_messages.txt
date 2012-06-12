@@ -18,8 +18,6 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 [How to Select Multiple Messages][4]  
 
 [1]: messages/2.sss
-[2]: HowToFilterMessagesToShowOnlyTheStarredItems
-[3]: howtoshowstarredmessages
 [4]: search/1.getting_around_the_search_tab
 [5]: messages/8.mrfd
 [6]: ../images/help/filtering_messages.jpg

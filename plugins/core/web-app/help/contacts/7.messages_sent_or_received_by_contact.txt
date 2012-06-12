@@ -23,7 +23,6 @@ You can [export][5] these messages using the "Export" button. More details can b
 [3]: search/1.getting_around_the_search_tab
 [5]: messages/9.exporting
 [6]: contacts/6.add_remove_contact_to_from_a_group
-[7]: gotoExporting-contacts
 [8]: contacts/5.creating_a_smart_group
 [9]: contacts/4.creating_a_group
 [10]: ../images/help/view_sent_received_messages.jpg

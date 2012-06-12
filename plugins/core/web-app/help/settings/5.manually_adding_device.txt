@@ -59,10 +59,8 @@ If the connection fails then you may have entered information incorrectly. This 
 [Setting up a Connection to a Clickatell Account][8]
 [Setting up a Connection to an IntelliSMS Account][9]
 
-[1]: devicedetection
 [2]: settings/1.getting_around_the_settings_menu
 [3]: status/1.getting_around_the_status_tab
-[4]: addingaconnection
 [5]: settings/6.edit_delete_connection
 [6]: http://frontlinesms.ning.com/
 [7]: settings/4.setting_up_a_device

@@ -56,7 +56,6 @@ How to Sort by Message Content
 [Sending a Quick Message][17]  
 [Moving, Replying, Forwarding and Deleting][18]  
 
-[1]: NavigatingPages
 [2]: messages/1.getting_around_the_messages_tab
 [3]: messages/5.sent
 [4]: messages/7.pending
@@ -65,13 +64,6 @@ How to Sort by Message Content
 [7]: folders/1.getting_around_folders
 [8]: archive/1.getting_around_the_archive_tab
 [9]: search/1.getting_around_the_search_tab
-[10]: SelectingMultipleMessages
-[11]: StarringMessages
-[12]: sorting
-[13]: HowToSortByContactOrNumber
-[14]: HowToSortByMessageContent
-[15]: HowToSortByDate
-[16]: gotoFiltering_messages
 [17]: messages/3.quick_message
 [18]: messages/8.mrfd
 [19]: ../images/help/sss.jpg
