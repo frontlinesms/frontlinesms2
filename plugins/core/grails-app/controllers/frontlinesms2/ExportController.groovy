@@ -36,7 +36,7 @@ class ExportController {
 				messageInstanceList = Fmessage.sent(params.starred, params.viewingArchive).list()
 				break
 			case 'pending':
-				messageInstanceList = Fmessage.pending(params.failed?:false).list()
+				messageInstanceList = Fmessage.listPending(params.failed?:false, [:])
 				break
 			case 'trash':
 				messageInstanceList = Fmessage.trash().list()
