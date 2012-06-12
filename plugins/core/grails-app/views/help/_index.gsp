@@ -9,8 +9,7 @@
 		* [How do I see messages that I have deleted?][13]
 		* [How do I see messages that have had a problem whilst sending?][14]
 	* Managing Your Messages
-		* [How do I sort my messages?][16]
-		* [How do I mark messages as important?][17]
+		* [How do I sort and mark my messages as important?][16]
 		* [How do I see only starred messages?][18]
 		* [How do I resend a message that has failed to send?][19]
 		* [All of my messages arent being displayed, where are they?][20]
@@ -20,9 +19,6 @@
 			* [How do I get around an Activity?][24]
 		* Polls
 			* [How do I create a poll][26]
-			* [How do I set up a Keyword in my poll so that the system will automatically sort messages?][27]
-			* [How do I set an automatic reply in my poll][28]
-			* [How do I change the outgoing poll message][29]
 			* [How do I manually categorise a message?][30]
 		* Announcement
 			* [How do I create an announcement][31]
@@ -39,15 +35,14 @@
 			* [How do I move messages into a folder?][41]
 	* Archive
 		* Overview
-			* [How do I get around the Archive tab?][44]
+			* [How do I get around the Archive tab?][43]
 			* [The Inbox Archive][45]
 			* [The Sent Archive][46]
 			* [The Activity Archive][47]
 			* [The Folder Archive][48]
 		* The Basics
 			* [How do I archive a Message or Messages?][50]
-			* [How do I Archive an Activity?][51]
-			* [How do I archive a Folder?][52]
+			* [How do I Archive an Activity or Folder?][51]
 			* [Can I reply and forward Archived messages?][53]
 			* [How do I restore archived messages?][54]
 * Contacts
@@ -61,8 +56,7 @@
 		* [How do I search through the contacts list?][64]
 	* Advanced
 		* [How do I add/remove custom information to/from a contact?][66]
-		* [How do I add/remove a contact to/from a group?][67]
-		* [How do I add/remove more than one contact to/from a group?][68]
+		* [How do I add/remove contacts to/from a group?][67]
 * Search
 	* Basic
 		* [How do I perform a simple search?][72]
@@ -76,7 +70,7 @@
 	* Overview
 		* [How do I change the Language?][91]
 		* [How do I import Contacts?][92]
-		* [How do I import Messages?][93]
+		* [How do I import Messages?][92]
 		* [How do I use my modem/phone with FrontlineSMS?][94]
 		* [How do I set up an IntelliSMS account?][95]
 		* [How do I set up a Clickatell account?][96]
@@ -84,19 +78,14 @@
 		* [How do I get FrontlineSMS to detect my device?][98]
 
 [2]: messages/1.getting_around_the_messages_tab
-[3]: messages/1.getting_around_the_messages_tab
 [5]: messages/2.sss
 [6]: messages/3.quick_message
 [7]: messages/8.mrfd
-[8]: messages/8.mrfd
 [9]: archive/2.archiving_messages
-[10]: messages/8.mrfd
-[11]: messages/8.mrfd
 [12]: messages/5.sent
 [13]: messages/6.trash
 [14]: messages/7.pending
 [16]: messages/2.sss
-[17]: messages/2.sss
 [18]: messages/4.filtering_messages
 [19]: messages/7.pending
 [20]: messages/2.sss
@@ -104,9 +93,6 @@
 [23]: activities/2.creating_an_activity
 [24]: activities/1.getting_around_activities
 [26]: activities/3.creating_a_poll
-[27]: activities/3.creating_a_poll
-[28]: activities/3.creating_a_poll
-[29]: activities/3.creating_a_poll
 [30]: activities/3a.manually_categorising
 [31]: activities/4.creating_an_announcement
 [32]: activities/5.creating_an_auto-reply
@@ -118,14 +104,12 @@
 [40]: folders/2.creating_a_folder
 [41]: messages/8.mrfd
 [43]: archive/1.getting_around_the_archive_tab
-[44]: archive/1.getting_around_the_archive_tab
 [45]: archive/1a.inbox_archive
 [46]: archive/1b.sent_archive
 [47]: archive/1c.activity_archive
 [48]: archive/1d.folder_archive
 [50]: archive/2.archiving_messages
 [51]: archive/3.archiving_activities_folders
-[52]: archive/3.archiving_activities_folders
 [53]: messages/8.mrfd
 [54]: archive/4.unarchive
 [56]: contacts/1.getting_around_the_contacts_tab
@@ -137,27 +121,15 @@
 [64]: contacts/8.searching_through_contacts
 [66]: contacts/3.add_remove_a_custom_field
 [67]: contacts/6.add_remove_contact_to_from_a_group
-[68]: contacts/6.add_remove_contact_to_from_a_group
 [70]: search/1.getting_around_the_search_tab
 [72]: search/2.creating_a_search
 [74]: search/2a.creating_an_advanced_search
-[75]: search/2a.creating_an_advanced_search
-[76]: search/2a.creating_an_advanced_search
-[77]: search/2a.creating_an_advanced_search
-[78]: search/2a.creating_an_advanced_search
-[79]: search/2a.creating_an_advanced_search
 [80]: messages/9.exporting
 [82]: status/1.getting_around_the_status_tab
-[83]: status/1.getting_around_the_status_tab
-[84]: status/1.getting_around_the_status_tab
-[85]: status/1.getting_around_the_status_tab
-[86]: status/1.getting_around_the_status_tab
 [87]: status/2.using_the_traffic_graph
-[88]: status/2.using_the_traffic_graph
 [90]: settings/1.getting_around_the_settings_menu
 [91]: settings/2.changing_languages
 [92]: settings/3.restoring_a_backup
-[93]: settings/3.restoring_a_backup
 [94]: settings/4.setting_up_a_device
 [95]: settings/4a.intellisms
 [96]: settings/4b.clickatell
