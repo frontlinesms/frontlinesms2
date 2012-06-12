@@ -21,7 +21,7 @@ Your new group should appear under 'Groups'.
 [Removing/Adding a Custom Field to a Contact][7]   
 
 [1]: contacts/6.add_remove_contact_to_from_a_group
-[2]: messages/3.quick_messages
+[2]: messages/3.quick_message
 [3]: contacts/4.creating_a_group
 [4]: contacts/1.getting_around_the_contacts_tab
 [5]: contacts/5.creating_a_smart_group
