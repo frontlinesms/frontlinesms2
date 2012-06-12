@@ -11,5 +11,9 @@ databaseChangeLog = {
 
 		modifyDataType(tableName:'fmessage', columnName:'text', newDataType:'varchar(1600)')
 	}
+
+	changeSet(author: "geoffrey (generated)", id: "1339489677372-1") {
+		dropNotNullConstraint(columnDataType: "timestamp", columnName: "DATE_CREATED", tableName: "FOLDER")
+	}
 }
 
