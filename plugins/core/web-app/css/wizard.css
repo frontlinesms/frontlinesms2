@@ -1,3 +1,8 @@
+#modalBox #export-form > * { margin:0 0 15px 0; }
+#modalBox #export-form > a { display:block; text-align:center; }
+#modalBox #export-form > :last-child { margin:0; }
+#modalBox #export-form input[type="radio"] { margin:5px; }
+
 #tabs div.info { padding-left:25px; margin:15px 0;
 	background-position:top left; background-repeat:no-repeat; background-image:url("../images/icons/help.png"); }
 
