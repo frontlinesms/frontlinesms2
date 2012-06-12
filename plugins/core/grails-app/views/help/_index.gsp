@@ -59,23 +59,20 @@
 		* [How do I add/remove contacts to/from a group?][67]
 * Search
 	* Basic
-		* [How do I perform a simple search?][72]
-
+		* [How do I perform a simple search?][72] 
 	* Advanced
 		* [How do I perform a much more detailed search?][74]
 * Status
 	* [What is the Status Tab?][82]
 	* [How do I see how many messages I have sent or received?][87]
 * Settings
-	* Overview
-		* [How do I change the Language?][91]
-		* [How do I import Contacts?][92]
-		* [How do I import Messages?][92]
-		* [How do I use my modem/phone with FrontlineSMS?][94]
-		* [How do I set up an IntelliSMS account?][95]
-		* [How do I set up a Clickatell account?][96]
-		* [How do I edit/delete a Connection?][97]
-		* [How do I get FrontlineSMS to detect my device?][98]
+	* [How do I change the Language?][91]
+	* [How do I import Messages and Contacts?][92]
+	* [How do I use my modem/phone with FrontlineSMS?][94]
+	* [How do I set up an IntelliSMS account?][95]
+	* [How do I set up a Clickatell account?][96]
+	* [How do I edit/delete a Connection?][97]
+	* [How do I get FrontlineSMS to detect my device?][98]
 
 [2]: messages/1.getting_around_the_messages_tab
 [5]: messages/2.sss
