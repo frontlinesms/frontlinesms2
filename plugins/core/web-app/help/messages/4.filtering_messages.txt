@@ -14,8 +14,7 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 
 ### Related Actions:
 [How to Mark Important Messages][1]  
-[How to Use the Search Tab][3]  
-[How to Select Multiple Messages][4]  
+[How to Use the Search Tab][4]  
 
 [1]: messages/2.sss
 [4]: search/1.getting_around_the_search_tab

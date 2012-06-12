@@ -39,6 +39,7 @@ def requestedLinksInFiles = {
 	def listedIndexes = [:].withDefault { [] }
 	def inlineIndexes = [:].withDefault { [] }
 	helpDir.eachFileRecurse(FileType.FILES) { f ->
+		if(!f.name.endsWith(".txt")) return;
 		f.eachLine { line ->
 			if(line ==~ markdownLinkMatcher) {
 				def matcher = (line =~ markdownLinkMatcher)

@@ -19,13 +19,13 @@ If you have clicked on a (plus icon) icon you will automatically be brought to t
 __Custom Fields__  
 The default information boxes that are displayed in each contact record allow you to input basic details including a contact’s name, phone number and email address. The primary number is the default number which any messages will be sent to.    
   
->[Technical Tips!][11]
+>*__Technical Tips!__
 >The ‘Name’ field has a 255 character limit.
 >The ‘Notes’ field as a 1024 character limit.
   
 You  can add custom fields that allow you to specify more information that you need. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favourite colour is. 
 
->[Technical Tips!][12]
+>*__Technical Tips!__
 >The name of a custom field can only be 255 characters long. Similarly, once created, custom fields have a 255 character limit.
 
 To create a custom field:  

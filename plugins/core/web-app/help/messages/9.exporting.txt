@@ -17,7 +17,8 @@ You can export messages from anywhere in the software.
 2.  A new window will appear prompting you to choose which format you would like to export to, and how many messages are being exported.  
 ![Export Dialog][22] 
 
-[Technical Tips!][10]
+#### Technical Tips!
+
 _CSV stands for Comma Separated Values. This type of file can be opened by most spreadsheet software, including Microsoft Excel. If you want to manipulate your messages in a spreadsheet format then CSV would be the most appropriate format.    
 PDF stands for Portable Document Format. This type of file can be opened by PDF readers such as Adobe Acrobat. If you want to print your messages then PDF is the most appropriate format._
 
@@ -29,14 +30,14 @@ PDF stands for Portable Document Format. This type of file can be opened by PDF 
 You can export the entire database of your [contacts][12], a particular [group][13] of contacts or the contacts in a [smart group][14]
 
 1.  When viewing "All Contacts" in the [Contacts][12] tab, the export button can be found in the contact [header][1]:
-2.  Clicking on "Export" will cause a new window to appear prompting you to choose which [format][10] you would like to export to.
+2.  Clicking on "Export" will cause a new window to appear prompting you to choose which format you would like to export to.
 3.  After selecting a format for your contacts, click "Export".
 4. You will be prompted by your browser to choose a location to save your exported contacts. *__If this doesn't happen__* then the file has been automatically saved to your browsers default downloads folder.
 
 #### Exporting a Group of Contacts
 
 1.  Navigate to the [group][13] you wish to export in the contacts tab. The export button can be found in the group [header][1]:
-2.  Clicking on "Export" will cause a new window to appear prompting you to choose which [format][10] you would like to export to.
+2.  Clicking on "Export" will cause a new window to appear prompting you to choose which format you would like to export to.
 3.  After selecting a format for your contacts, click "Export".
 4. You will be prompted by your browser to choose a location to save your exported contacts. *__If this doesn't happen__* then the file has been automatically saved to your browsers default downloads folder.  
 
@@ -45,7 +46,7 @@ You can export the entire database of your [contacts][12], a particular [group][
 1.  Navigate to the [smart group][12] you wish to export in the contacts tab. The export button can be found in the group [header][1]:
 SCREENSHOT
 
-2.  Clicking on "Export" will cause a new window to appear prompting you to choose which [format][10] you would like to export to.
+2.  Clicking on "Export" will cause a new window to appear prompting you to choose which format you would like to export to.
 3.  After selecting a format for your contacts, click "Export".
 4. You will be prompted by your browser to choose a location to save your exported contacts. *__If this doesn't happen__* then the file has been automatically saved to your browsers default downloads folder.  
 

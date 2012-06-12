@@ -4,7 +4,7 @@ You can access activities from the messages tab. When you click on an activity f
 
 ![activity overciew][17]
 
-### [Activity Header][4]
+### Activity Header
 
 This large header (1) contains summary information about the Activity. Basic information such as the name of the activity, the date it was created, the settings it was created with and how many messages were sent as part of the activity.
 So, in the example of a Poll, you would also find here the question sent as part of the poll, and whether there was an Auto Reply set up. If an Auto Reply was set up, the message used in the [auto-reply][5] will also be displayed here.  
@@ -16,7 +16,7 @@ Clicking on '[Show Poll Details][11]' allows you to see a visual representation 
 
 ![Poll Chart][18]
 
-### [Message List][12]
+### Message List
 
 The message list (2) functions like any other message list in FrontlineSMS. You are able to star, sort and multiple select messages.
 
@@ -26,7 +26,7 @@ Next to the message content, FrontlineSMS will display in parentheses the option
 
 To [manually categorise][13], or change the categorisation of a poll response, see [here][13] 
 
-### [Message Details][14]
+### Message Details
 
 The message detail area (3) contains the full text of the selected message and sender details, or information about how many messages have been selected. 
 

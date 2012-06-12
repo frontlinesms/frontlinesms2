@@ -31,7 +31,7 @@ As before, make sure the device's drivers are installed and that the device is c
 1.  Navigate to the [status tab][2] and click on "Detect Modems".  
 This will begin the automatic set up process.
 2.  You should see activity in the "Detected Devices" area. The process from this point is the same as above.  
-**_Note:** This process can take a few **minutes**. Please be patient and allow the software time to work. You will be notified if the connection has failed or if no device is detected. If the connection fails then click [here][3] to manually set up a connection. If no device is detected, please click [here][4] to see what you can do to try and fix the issue._
+**_Note:** This process can take a few **minutes**. Please be patient and allow the software time to work. You will be notified if the connection has failed or if no device is detected. If the connection fails then click [here][3] to manually set up a connection. If no device is detected, please click [here][3] to see what you can do to try and fix the issue._
 
 ![Connecting][10]
 

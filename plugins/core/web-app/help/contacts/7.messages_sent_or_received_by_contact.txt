@@ -10,7 +10,7 @@ This page will describe how to view all the messages that have been sent and rec
 2.  On the right of the contact record there is a summary of how many messages have been sent to or received from that contact. Click on "Search for Messages" below this (1).
 3.  The [Search][3] tab will appear with all messages sent to and received by the contact already displayed.
 
-*__[Technical Tips!][4]__
+*__Technical Tips!__
 You can [export][5] these messages using the "Export" button. More details can be found [here][5].*
 
 ### Related Actions  
@@ -23,6 +23,7 @@ You can [export][5] these messages using the "Export" button. More details can b
 [3]: search/1.getting_around_the_search_tab
 [5]: messages/9.exporting
 [6]: contacts/6.add_remove_contact_to_from_a_group
+[7]: messages/9.exporting
 [8]: contacts/5.creating_a_smart_group
 [9]: contacts/4.creating_a_group
 [10]: ../images/help/view_sent_received_messages.jpg

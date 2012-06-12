@@ -44,13 +44,13 @@ To set a keyword, select "Sort messages automatically that have the following Ke
 Click 'next' to set an Automatic Reply.
 
 **_Automatic Reply_**
-At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a [keyword][2] with your poll. Without a [keyword][2] the system cannot recognise which messages to automatically reply to.  
-The automatic reply option will be unavailable until you create a [keyword][2] for your poll.
+At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
+The automatic reply option will be unavailable until you create a keyword for your poll.
 
 ![Automatic Reply][12]
 
 To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the message.  
-This message will be sent out to everyone who sends a message with the [keyword][2] you set up in the previous step.
+This message will be sent out to everyone who sends a message with the keyword you set up in the previous step.
 
 **_Note:** This is different from the [auto-reply activity][3]._
 
@@ -64,13 +64,13 @@ The message will be compiled from the options you have selected in previous step
 If you selected "yes or no" as the question type and created a keyword the default message will look like this:  
 >"[Your Question]? Reply "[Keyword] A" for yes, "[Keyword] B" for no."  
 
-If you did not create a [keyword][2] then the message will look like this:  
+If you did not create a keyword then the message will look like this:  
 >"[Your Question]? Please reply 'Yes' or 'No'"
 
 If you selected "Multiple Choice Question" as question type and created a keyword, the default message will look like this:  
 >"[Your Question]? Reply "[Keyword] A" for [Multiple Choice A], "[Keyword] B" for [Multiple Choice B], "[Keyword] C" for [Multiple >Choice C], "[Keyword] D" for [Multiple Choice D], "[Keyword] E" for [Multiple Choice E]."
 
-If you did not create a [keyword][2] then the message will look like this:  
+If you did not create a keyword then the message will look like this:  
 >"[Your Question]? Please reply '[Multiple Choice A]' or '[Multiple Choice B]' or '[Multiple Choice C]' or '[Multiple Choice D]' or >'[Multiple Choice E]'
 
 Once you are happy with the message, please click 'Next'.

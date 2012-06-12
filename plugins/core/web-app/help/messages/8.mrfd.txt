@@ -20,7 +20,7 @@ You can reply to a message, or to the senders of multiple messages by selecting 
 
 ### Deleting
 
-**_[Deleting Messages][7]_**
+**_Deleting Messages_**
 
 You can delete a message, or multiple messages, by selecting them and then clicking the "Delete" or "Delete All" button:
 
@@ -33,7 +33,7 @@ You can delete a message, or multiple messages, by selecting them and then click
 
 **_Note**: Deleted messages can be found in the [trash][8] for a short period of time after they have been deleted_
 
-**_[Deleting Activities and Folders][9]_**
+**_Deleting Activities and Folders_**
 
 You can delete [activities][3] and [folders][10] in the same way you can delete messages.
 

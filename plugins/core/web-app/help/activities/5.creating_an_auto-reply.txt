@@ -12,7 +12,7 @@ An auto reply is a type of activity which allows you to set up FrontlineSMS to a
 
 ![Keyword][10]
 
-In this step you can choose to enter a [keyword][1] to trigger the autoreply. If you would like to set up an auto reply that will be triggered by a [keyword][1] then enter unique keyword here.  
+In this step you can choose to enter a keyword to trigger the autoreply. If you would like to set up an auto reply that will be triggered by a keyword then enter unique keyword here.  
 Messages that trigger the autoreply will be moved into the activity's folder along with a copy of the autoreply.
 
 **Global autoreply**
@@ -30,7 +30,7 @@ When you have finished setting up a keyword, or have chosen a global autoreply, 
 
 On this screen you will be able to enter the message you would like to use as the autoreply.
 
-You can also add expressions to the message to add a more personal touch. For more information, please click [here][4]
+You can also add expressions to the message to add a more personal touch.
 
 **_Summary Screen_**  
 
