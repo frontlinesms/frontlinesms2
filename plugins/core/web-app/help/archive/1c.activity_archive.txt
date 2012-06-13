@@ -1,0 +1,36 @@
+# Activity Archive
+
+The Activity archive contains all Activities that have been archived. The layout and features of the Activity archive will be explained in this help page. There are two levels of detail that can be viewed. The first level is shown by default and displays a list of all Activities that have been archived. The second level of details displays specific information similar to how an activity is displayed when it is active on the [messages tab][1]
+
+![Activity Archive - list View][10]
+
+### Activity List View
+
+The Activity List (1) View displays the list of all archived activities. Each row corresponds to a single activity and contains information about the what type of Activity is archived, the date it was archived and how many messages have been archived within the activity.  
+  
+As with Message Lists, multiple or single activities can be selected in the activity list to be [unarchived][3], [deleted][4] or [exported][5].
+
+Clicking on a single activity will take you to that activities detail view which is described below.
+
+### Activity Detail View
+
+![Detail View][11]
+
+Clicking on a single activity will take you to that activities detail view which resembles the standard view for displaying activities as found for activities in the messages tab. Click [here][7] to go to the Getting around Activities for a full explanation of this screen.
+
+### Related Actions  
+[Archiving Activities and Folders][8]  
+[Archiving Messages][9]  
+[Unarchiving Messages, Activities and Folders][3]  
+
+[1]: archive/1.getting_around_the_archive_tab
+[2]: archive/1c.activity_archive
+[3]: archive/4.unarchive
+[4]: messages/8.mrfd
+[5]: messages/9.exporting
+[6]: archive/1c.activity_archive
+[7]: archive/1.getting_around_the_archive_tab
+[8]: archive/3.archiving_activities_folders
+[9]: archive/2.archiving_messages
+[10]: ../images/help/activity_archive.jpg
+[11]: ../images/help/activity_archive_detail.jpg

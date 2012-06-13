@@ -7,6 +7,10 @@ class PollResponse {
 	static hasMany = [messages: Fmessage]
 	List messages = []
 	static transients = ['liveMessageCount']
+
+	static mapping = {
+		version false
+	}
 	
 	static constraints = {
 		value(blank:false, nullable:false, maxSize:255)

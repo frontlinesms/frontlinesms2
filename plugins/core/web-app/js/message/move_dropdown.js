@@ -2,7 +2,6 @@ function moveAction() {
 	var messageSection = $('input:hidden[name=messageSection]').val();
 	var ownerId = $('input:hidden[name=ownerId]').val();
 	var searchId = $("input:hidden[name=searchId]").val();
-
 	var messagesToMove;
 	var moveTarget;
 	if(getCheckedItemCount('message') > 1) {
@@ -16,7 +15,7 @@ function moveAction() {
 	}
 
 	var moveTargetType = moveTarget.attr("class");
-	if(moveTargetType == 'na') { alert("No valid target selected"); return; }
+	if(moveTargetType == 'na') { return; }
 	var moveTargetId = moveTarget.val();
 
 	if(messageSection == 'result' && !(getCheckedItemCount('message') > 1)) {
@@ -25,7 +24,7 @@ function moveAction() {
 		var location = url_root + "search/" + messageSection + '?searchId=' + searchId;
 	} else if(messageSection == 'activity' || messageSection == 'folder' || messageSection == 'radioShow') {
 		var location = url_root + "message/" + messageSection + "/" + ownerId;
-	} else{
+	} else {
 		var location = url_root + "message/" + messageSection;
 	}
 	// TODO no point in doing an AJAX call if we're going to move to a new page anyway - just

@@ -17,9 +17,11 @@ import org.mockito.Mockito
 
 class CoreBootStrap {
 	def applicationContext
+	def appSettingsService
 	def grailsApplication
 	def deviceDetectionService
 	def failPendingMessagesService
+	def localeResolver
 	def camelContext
 	def messageSource
 	def quartzScheduler
@@ -34,6 +36,9 @@ class CoreBootStrap {
 		MetaClassModifiers.addZipMethodToFile()
 		MetaClassModifiers.addCamelMethods()
 		MetaClassModifiers.addMapMethods()
+
+		initAppSettings()
+
 		switch(Environment.current) {
 			case Environment.TEST:
 				quartzScheduler.start()
@@ -73,6 +78,16 @@ class CoreBootStrap {
 	}
 
 	def destroy = {
+	}
+
+	private def initAppSettings() {
+		appSettingsService.init()
+		def language = appSettingsService.get('language')
+		if(language) {
+			def defaultLocale = new Locale(language)
+			java.util.Locale.setDefault(defaultLocale)
+			localeResolver.setDefaultLocale(defaultLocale)
+		}
 	}
 	
 	private def createWelcomeNote() {
@@ -139,13 +154,36 @@ class CoreBootStrap {
 		def m1 = new Fmessage(src: '+3245678', date: new Date(), text: "time over?")
 		def m2 = new Fmessage(src: 'Johnny', date:new Date(), text: "I am in a meeting")
 		def m3 = new Fmessage(src: 'Sony', date:new Date(), text: "Hurry up")
-		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "sample sms")
+		def m4 = new Fmessage(src: 'Jill', date:new Date(), text: "Some cool characters: कञॠ, and more: á é í ó ú ü ñ ¿ ¡ ºª")
 		
 		m1.addToDispatches(dst:'+123456789', status:DispatchStatus.FAILED)
 		m1.addToDispatches(dst:'+254114533', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m2.addToDispatches(dst:'+254114433', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m3.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError: true)
 		m4.addToDispatches(dst:'+254115533', status:DispatchStatus.PENDING).save(failOnError:true)
+
+		def m5 = new Fmessage(src:'Jinja', date:new Date(), text:'Look at all my friends!')
+		for(i in 1..100) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true)
+		for(i in 101..200) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.FAILED).save(failOnError:true)
+		for(i in 201..300) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.PENDING).save(failOnError:true)
+
+		for(i in 1..100) {
+			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date())
+					.save(failOnError:true)
+		}
+
+		for(i in 101..200) {
+			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.PENDING)
+					.save(failOnError:true)
+		}
+
+		for(i in 201..300) {
+			new Fmessage(src:"123456", date:new Date(), text:"Generated SENT message: $i")
+					.addToDispatches(dst:"+12345678$i", status:DispatchStatus.FAILED)
+					.save(failOnError:true)
+		}
 	}
 	
 	private def dev_initFconnections() {

@@ -22,6 +22,7 @@ class Poll extends Activity {
 	
 	static mapping = {
 		keyword cascade: 'all'
+		version false
 	}
 			
 	static constraints = {
@@ -64,13 +65,13 @@ class Poll extends Activity {
 	}
 	
 	def getResponseStats() {
-		def totalMessageCount = getActivityMessages().count()
+		def totalMessageCount = getActivityMessages(false, false).count()
 		responses.sort {it.key?.toLowerCase()}.collect {
 			def messageCount = it.liveMessageCount
 			[id: it.id,
 					value: it.value,
 					count: messageCount,
-					percent: totalMessageCount ? messageCount * 100 / totalMessageCount as Integer : 0]
+					percent: totalMessageCount ? new BigDecimal(messageCount * 100 / totalMessageCount).setScale(2,BigDecimal.ROUND_HALF_UP) : 0]
 		}
 	}
 	

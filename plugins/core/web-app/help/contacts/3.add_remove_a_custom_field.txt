@@ -1,0 +1,47 @@
+# Adding/Removing a Custom Field
+
+This page will describe how to add and remove a custom field from a contact's record. A custom field allows you to specify personalised information for each contact, allowing you to build on the default fields. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favourite colour is. This information can be used in [smart groups][1] or when performing a [search][2].
+
+![Adding More information to your contact][11]
+
+### Adding a Custom Field
+
+1.  Navigate to the [Contacts tab][4] and select a contact you wish to add a custom field to.
+2.  Click the drop down box called "Add more information" (1). A list will appear of preset custom fields that you can use to add more information to your contact.
+To use one of these, click on the one you require and a field will be created for it.
+3.  To add a field of your choosing select the "Create New" option in the list.
+4.  A window will appear allowing you to enter a name for the new field.  
+(screenshot)
+>__Technical Tips!__
+>The name of a custom field can only be 255 characters long. Similarly, once created, custom fields have a 255 character limit.*
+
+5.  Click "Ok" to confirm.
+6.  Click "Save" to confirm the changes. *__Note:__ You __must__ perform this step. If you do not click "Save" the custom field will not be added to the contact.*
+
+Your custom field will now appear in the contact record. To add more custom fields repeat steps 2-5 above.
+
+_**Note:** Once you have created a new custom field, it will be available to add to any contact, new or existing, via the "Add more information" dropdown list._
+
+### Removing a Custom Field
+
+1.  Navigate to the contact record from which you want to remove a custom field.
+2.  Next to the custom field you wish to remove there will be a 'x' icon.
+3.  Click this to remove the field from the contact's record.
+4.  Click "Save" to confirm the changes. *__Note:__ You __must__ perform this step. If you do not click "Save" the custom field will not be removed from the contact.*
+
+_**Note:** This will **not** remove the custom field from the "Add more information" dropdown list. The field will still be available to add to other contacts._
+
+### Related Actions  
+[Adding/Removing a Contact from a Group][7]  
+[Creating a Smart Group][9]   
+[Creating a Group][10]  
+
+[1]: contacts/5.creating_a_smart_group
+[2]: search/1.getting_around_the_search_tab
+[3]: contacts/3.add_remove_a_custom_field
+[4]: contacts/1.getting_around_the_contacts_tab
+[6]: contacts/3.add_remove_a_custom_field
+[7]: contacts/6.add_remove_contact_to_from_a_group
+[9]: contacts/5.creating_a_smart_group
+[10]: contacts/4.creating_a_group
+[11]: ../images/help/add_more_info.jpg

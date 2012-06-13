@@ -1,5 +1,5 @@
 function chooseActivity() {
-	var activity = $("#new-activity-choices input[checked=checked]").val();
+	var activity = $("input[name='activity']:checked").val();
 	var activityUrl = activity + '/create';
 	var title = i18n("wizard.title.new") + activity;
 	$(this).dialog('close');
@@ -16,7 +16,7 @@ function chooseActivity() {
 function checkForSuccessfulSave(response, type) {
 	$("#submit").removeAttr('disabled');
 	if (response.ok) {
-		$("div.confirm").hide();
+		$("div.confirm").parent().hide();
 		$(".ui-tabs-nav").hide();
 		$("div.summary").show();
 		$(".summary #activityId").val(response.ownerId);
@@ -25,8 +25,10 @@ function checkForSuccessfulSave(response, type) {
 			{
 				modal: true,
 				title: i18n("popup.title.saved", type),
-				buttons: [{ text:i18n("popup.cancel"), click: cancel, id:"cancel" }, { text:i18n("popup.back"), disabled: "true"},
-				          		{ text:i18n('popup.ok'),  click: summaryRedirect, id:"submit" }],
+				buttons: [
+					{ text:i18n("action.cancel"), click: cancel, id:"cancel" },
+					{ text:i18n("action.back"), disabled: "true"},
+					{ text:i18n('action.ok'),  click: summaryRedirect, id:"submit" }],
 				close: function() { $(this).remove(); }
 			}
 		);

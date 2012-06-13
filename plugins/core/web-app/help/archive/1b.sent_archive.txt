@@ -1,0 +1,37 @@
+# Sent Archive
+
+The Sent archive will contain messages that have been archived from the Folder. The layout and features of the Inbox archive will be explained in this help page.
+
+![Sent Archive][13]
+
+### Sent Archive
+
+The Sent archive contains all messages that have been archived from the [Sent Folder][2]. 
+
+#### Sent Archive Message List
+
+The Message list (1) here functions like any other message list elsewhere in the program. Multiples messages can be selected, starred or filtered. To learn more about how to do this, click [here][7]
+
+#### Sent Archive Message Details
+
+When a message is selected, the full text will be displayed here (2) along with the ability to [reply][9], [forward][9], [unarchive][10], [delete][9] and [move][9].
+
+### Related Actions  
+[Archiving Activities and Folders][11]  
+[Archiving Messages][12]  
+[Unarchiving Messages, Activities and Folders][10]  
+
+[1]: archive/1b.sent_archive
+[2]: messages/5.sent
+[3]: archive/1b.sent_archive
+[4]: messages/3.quick_message
+[5]: messages/9.exporting
+[6]: archive/1b.sent_archive
+[7]: messages/2.sss
+[8]: archive/1b.sent_archive
+[9]: messages/8.mrfd
+[10]: archive/4.unarchive
+[11]: archive/3.archiving_activities_folders
+[12]: archive/2.archiving_messages
+[13]: ../images/help/sent_archive.jpg
+

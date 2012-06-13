@@ -76,10 +76,9 @@ class MessageController {
 	} 
 
 	def pending() {
-		def messageInstanceList = Fmessage.pending(params.failed)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.listDistinct(params),
+		render view:'standard', model:[messageInstanceList:Fmessage.listPending(params.failed, params),
 				messageSection:'pending',
-				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				messageInstanceTotal: Fmessage.countPending()] << getShowModel()
 	}
 	
 	def trash() {
@@ -89,7 +88,7 @@ class MessageController {
 		params.sort = params.sort?: 'date'
 		if(params.id) {
 			def setTrashInstance = { obj ->
-				if(obj.objectClass == frontlinesms2.Fmessage) {
+				if(obj.objectClass == "frontlinesms2.Fmessage") {
 					params.messageId = obj.objectId
 				} else {
 					trashedObject = obj.object
@@ -238,9 +237,11 @@ class MessageController {
 					messagesToSend << outgoingMessage
 					activity.addToMessages(outgoingMessage)
 				}
-				activity.save(flush:true)
+				activity.save()
 			} else if (params.ownerId && params.ownerId != 'inbox') {
+				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
 				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
+				messageInstance.save()
 			} else {
 				messageInstance.with {
 					if(messageOwner) {

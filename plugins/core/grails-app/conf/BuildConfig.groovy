@@ -59,6 +59,7 @@ grails.project.dependency.resolution = {
 		test "org.codehaus.geb:geb-spock:$gebVersion"
 		test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
 		test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+		test "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
 
 		// TODO this should be included in compile for TEST and DEV scopes, and excluded for PRODUCTION
 		compile 'net.frontlinesms.test:hayescommandset-test:0.0.4'
@@ -67,7 +68,7 @@ grails.project.dependency.resolution = {
 		compile 'net.frontlinesms.core:camel-smslib:0.0.5-SNAPSHOT'
 		['mail', 'http'].each { compile camel(it) }
 		compile 'net.frontlinesms.core:serial:1.0.1'
-		compile 'net.frontlinesms.core:at-modem-detector:0.6'
+		compile 'net.frontlinesms.core:at-modem-detector:0.7'
 		runtime 'org.rxtx:rxtx:2.1.7'
 		runtime 'javax.comm:comm:2.0.3'
 	}

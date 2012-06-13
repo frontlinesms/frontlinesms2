@@ -6,7 +6,7 @@
 		<g:layoutHead/>
 		<r:require module="status"/>
 		<fsms:render template="/includes"/>
-		<fsms:i18n keys="traffic.sent, traffic.received, traffic.total, popup.cancel, popup.back, smallpopup.cancel, popup.help.title, popup.done, popup.ok"/>
+		<fsms:i18nBundle/>
 		<r:layoutResources/>
 	</head>
 	<body id="content">

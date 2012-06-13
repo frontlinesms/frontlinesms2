@@ -1,8 +1,18 @@
 package frontlinesms2
 
+import org.springframework.web.servlet.support.RequestContextUtils
+
 class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
+
+	def wizardTabs = { att ->
+		att.templates.split(",")*.trim().eachWithIndex { template, i ->
+			out << "<div id=\"tabs-${i+1}\">"
+			out << render([template:template])
+			out << "</div>"
+		}
+	}
 
 	def tab = { att, body ->
 		def con = att.controller
@@ -43,14 +53,15 @@ class FsmsTagLib {
 		out << g.render(att)
 	}
 
-	def i18n = { att ->
-		r.script(disposition:'head') {
-			att.keys.tokenize(',')*.trim().each {
-				def propVal = g.message(code:it)
-				propVal = propVal.replaceAll("\\'", "\\\\'")
-				out << "\ti18nStrings['$it'] = '${propVal}';\n"
-			}
-		}
+	def i18nBundle = {
+		def locale = RequestContextUtils.getLocale(request)
+		// Always include English in case their locale is not available.  The most accurate
+		// translation available will take precedence when the JS files are loaded
+		// TODO this could likely be streamlined by using i18nUtilService.getCurrentLanguage(request)
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}" + '.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}" + '.js"></script>'
+		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}_${locale.variant}" + '.js"></script>'
 	}
 	
 	def confirmTable = { att ->
@@ -84,6 +95,7 @@ class FsmsTagLib {
 	}
 	
 	def inputs = { att ->
+		if(att.table) out << '<table>'
 		def fields = getFields(att)
 		if(fields instanceof Map) {
 			generateSection(att, fields)
@@ -92,7 +104,7 @@ class FsmsTagLib {
 				out << input(att + [field:it])
 			}
 		}
-		
+		if(att.table) out << '</table>'
 	}
 	
 	def input = { att, body ->
@@ -150,7 +162,9 @@ class FsmsTagLib {
 		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
 		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'
 		fields.each {
-			out << '<option class="predefined-field" value="'+it.key+'" ' + (it.value?'':'disabled="disabled" ') + '>' + g.message(code:"dynamicfield.${it.key}.label") + '</option>'
+			out << '<option class="predefined-field" value="'+it+'">'
+			out << g.message(code:"dynamicfield.${it}.label")
+			out << '</option>'
 		}
 		out << '</select>'
 		out << '</div>'
@@ -181,6 +195,16 @@ class FsmsTagLib {
 		out << g.datePicker(att)
 		out << "<input type='hidden' class='datepicker' name='$name-datepicker'/>"
 		out << '</div>'
+	}
+
+	def quickMessage = { att ->
+		att.controller = "quickMessage"
+		att.action = "create"
+		att.id = "quick_message"
+		att.onLoading = "showThinking();"
+		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)"
+		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
+		out << g.remoteLink(att, body)
 	}
 	
 	private def getFields(att) {

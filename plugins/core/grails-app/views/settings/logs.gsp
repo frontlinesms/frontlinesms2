@@ -44,7 +44,7 @@
 			</thead>
 			<tbody>
 				<g:if test="${logEntryTotal==0}">
-					<tr><td colspan="2"><g:message code="logs.none"/></td></tr>
+					<tr><td colspan="2" class="no-content"><g:message code="logs.none"/></td></tr>
 				</g:if>
 				<g:else>
 					<g:each in="${logEntryList}" var="l">

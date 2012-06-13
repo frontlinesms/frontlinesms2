@@ -28,11 +28,14 @@
 #body.messages #main-list a.starred { background-image:url("../images/icons/star.png"); }
 #body.messages #main-list a.unstarred { background-image:url("../images/icons/star_outline.png"); }
 #body.messages #main-list a.starred, #body.messages #main-list a.unstarred { width:16px; height:16px; }
-#body.messages #main-list tr td:last-child { padding-right:23px;}
+#body.messages #main-list tr td:last-child { padding-right:23px; }
+#body.messages #main-list tr td.message-date-cell, #body.messages #main-list tr td.message-sender-cell { white-space:nowrap; }
 #body.messages #main-list tr.send-failed td:last-child { background-image:url('../images/icons/error_on.png');
 	background-repeat:no-repeat; background-position:98% center; }
 #body.messages #main-list tr.selected { background-color:#d8e8ef; }
 #body.messages #main-list tr:hover { background-color:#e5eff3; }
+#body.messages #main-list #new-message-notification { background-color:rgba(192,50,131,0.3); }
+#body.messages #main-list #new-message-notification a { text-align:center; font-weight:bold; padding:3px 0; cursor:pointer; }
 
 #body.messages #main-list-foot .controls div#message-toggler a { padding:0 10px; }
 
@@ -46,6 +49,10 @@
 
 #body.messages #body-menu a.failures { background-image:url("../images/icons/error_on.png");
 	background-repeat:no-repeat; background-position:17px center; }
-#body #pollGraph {position: fixed; height: auto; left: 17%; right: 23%; bottom: 0pt; top: 235px; }
+#body #pollGraph {position: fixed; height: auto; left: 17%; right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }
 
 #message-detail-sender .add { background-image: url("../images/icons/add.png"); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; }
+
+span.quick-message { padding: 6px 5px 6px 25px; background-image: url('../images/icons/quickmessage.png'); background-repeat: no-repeat; background-position: 0px center; }
+
+#modalBox .recipient-list { padding:17px; }

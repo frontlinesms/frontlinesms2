@@ -1,18 +1,40 @@
 package frontlinesms2
 
+import org.springframework.web.servlet.LocaleResolver
+import org.springframework.web.servlet.support.RequestContextUtils
+import org.springframework.util.StringUtils
+
 class I18nUtilService {
 	def servletContext
 	def messageSource
+	def appSettingsService
 
-	def getAllTranslations() {
-		def allTranslations = [:]
-		new  File(getRootDirectory()).eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
-			def filename = file.name
-			def locale = getLocaleKey(filename)
-			def language = getLanguageName(filename)
-			allTranslations[locale] = language
+	private allTranslations
+
+	def getCurrentLanguage(def request) {
+		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request)
+		return localeResolver.resolveLocale(request).toString()
+	}
+
+	def setLocale(request, response, language) {
+		Locale locale = StringUtils.parseLocaleString(language)
+		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request)
+		localeResolver.setLocale(request, response, locale)
+		appSettingsService.set('language', language)
+	}
+
+	synchronized def getAllTranslations() {
+		if(!this.@allTranslations) {
+			def translations = [:]
+			new  File(getRootDirectory()).eachFileMatch groovy.io.FileType.FILES, ~/messages(_\w\w)*\.properties$/, { file ->
+				def filename = file.name
+				def locale = getLocaleKey(filename)
+				def language = getLanguageName(filename)
+				translations[locale] = language
+			}
+			this.allTranslations = translations.sort { it.value }
 		}
-		return allTranslations.sort { it.value }
+		return this.@allTranslations
 	}
 
 	def getLocaleKey(filename) {

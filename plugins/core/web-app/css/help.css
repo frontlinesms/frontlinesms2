@@ -1,77 +1,36 @@
-#help {
-	left: 0; 
-	width: 100%; 
-	overflow: auto;
-}
+.ui-dialog.help .ui-dialog-buttonset { position:absolute; top:0; right:0; width:auto; border:none; }
+#modalBox.help { position:relative; }
+#modalBox.help #help-index, #modalBox.help #help-content { position:absolute; top:0; bottom:0; overflow:auto; }
+#modalBox.help #help-index { left:0; right:80%; }
+#modalBox.help #help-content { left:20%; right:0; }
 
-#help #file {
-	height: 93%;
-	min-height: 368px;
-	overflow: auto;
-	padding: 17px;
-}
+#modalBox.help #help-index { padding:17px 0; }
+#modalBox.help #help-index > ul { line-height:200%; }
+#modalBox.help #help-index > ul ul { margin:10px 0; }
+#modalBox.help #help-index li a { display:block; }
+#modalBox.help #help-index li.selected > a { background-color:#d8e8ef; }
+#modalBox.help #help-index li a:hover { background-color:#e5eff3; }
 
-#help #index {
-	float: left;
-	height: 93%;
-	min-height: 368px;
-	min-width: 135px;
-	overflow: scroll;
-	padding: 17px 0 17px 0;
-	width: 24%;
-}
+#modalBox.help #help-index > ul > li { text-indent:17px; }
+#modalBox.help #help-index li a { text-indent:-17px; padding-left:34px; padding-right:17px; }
+#modalBox.help #help-index > ul > li > ul > li { text-indent:28px; }
+#modalBox.help #help-index li li a { text-indent:-17px; padding-left:44px; padding-right:17px; }
+#modalBox.help #help-index li li li a { text-indent:-17px; padding-left:54px; padding-right:17px; }
 
-#help #index li {
-	padding-left: 51px;
-}
 
-#help #index ul {
-	width: 100%;
-}
+#modalBox.help #help-content { padding:17px; line-height:140%; }
+#modalBox.help #help-content h1 { font-weight:bold; font-size:150%; margin:0 0 17px 0; }
+#modalBox.help #help-content h2 { font-weight:bold; font-size:130%; margin:17px 0 12px 0; }
+#modalBox.help #help-content h3 { font-weight:bold; font-size:110%; margin:12px 0 6px 0;}
 
-#help #index li a{
-	display: block;
-	padding-bottom: 7px;
-	padding-top: 5px;
-	width: 100%;
-}
+#modalBox.help #help-content a { color:#339; }
+#modalBox.help #help-content a:hover { color:black; }
 
-#help #index li:hover {
-	background-color: #E5EFF3;
-}
+#modalBox.help #help-content img { display:block; max-width:66%; margin:17px 0 17px 17%; }
 
-#help #index .section {
-	font-weight: bold;
-	padding-left: 17px;
-}
+#modalBox.help #help-content p { margin:6px 0; }
+#modalBox.help #help-content p:nth-child(2) { font-style:italic; }
 
-#help #index .sub-section {
-	padding-left: 34px;
-}
-
-#file h1 {
-    	font-size: 16px;
-    	font-weight: bold;
-	padding: 0 0 7px;
-}
-
-#file h2 {
-    	font-size: 15px;
-    	font-weight: bold;
-	padding: 12px 0 6px;
-}
-
-#file h3 {
-    	font-size: 14px;
-    	font-weight: bold;
-	padding: 12px 0 6px;
-}
-
-#file p a:hover {
-	color: blue;
-	text-decoration:underline;
-}
-
-#file p a {
-	color: blue;
-}
+#modalBox.help #help-content ul, #modalBox.help #help-content ol { margin:6px 0; }
+#modalBox.help #help-content li { padding-left:1.5em; text-indent:-1em; }
+#modalBox.help #help-content li:before { content:"\00BB \0020" }

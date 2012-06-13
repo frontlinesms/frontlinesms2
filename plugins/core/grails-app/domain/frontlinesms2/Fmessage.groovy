@@ -5,7 +5,8 @@ import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
-	def messageSource
+
+	static int maxMessageSize = 1600
 
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
@@ -30,6 +31,7 @@ class Fmessage {
 		sort date:'desc'
 		inboundContactName formula:'SELECT c.name FROM Contact c WHERE c.mobile=src'
 		outboundContactName formula:'SELECT MAX(c.name) FROM Contact c, Dispatch d WHERE c.mobile=d.dst AND d.message_id=id'
+		version false
 	}
 	
 	static constraints = {
@@ -37,7 +39,7 @@ class Fmessage {
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text nullable:true, maxSize:480
+		text nullable:true, maxSize:maxMessageSize
 		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
@@ -89,6 +91,11 @@ class Fmessage {
 						}
 					}
 				}
+			}
+			projections {
+				distinct 'id'
+				property 'date'
+				property 'id'
 			}
 		}
 		deleted { getOnlyStarred=false ->
@@ -189,9 +196,9 @@ class Fmessage {
 			else if(id) return src
 			else return Contact.findByMobile(src)?.name?: src
 		} else if(dispatches.size() == 1) {
-			messageSource.getMessage('fmessage.to', [outboundContactName?: (dispatches as List)[0].dst] as Object[], null)
+			return [outboundContactName?: (dispatches as List)[0].dst]
 		} else {
-			messageSource.getMessage('fmessage.to.multiple', [dispatches.size()] as Object[], null)
+			return [dispatches.size()]
 		}
 	}
 
@@ -203,11 +210,12 @@ class Fmessage {
 	}
 
 	public void setText(String text) {
-		if(text?.size() > 480) text = text[0..478] + '…'
+		if(text?.size() > maxMessageSize) text = text[0..(maxMessageSize - 2)] + '…'
 		this.text = text
 	}
 
-	// FIXME document what this is, and remove references to PollResponse
+	// FIXME document what this is, and remove references to PollResponse.  Anyway this poll display
+	// only makes sense within a poll - e.g. in a search result this is a bit dumb.
 	def getDisplayText() {
 		def p = PollResponse.withCriteria {
 			messages {
@@ -218,6 +226,14 @@ class Fmessage {
 		}
 
 		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
+	}
+
+	static def listPending(onlyFailed, params) {
+		Fmessage.getAll(pending(onlyFailed).list(params) as List)
+	}
+
+	static def countPending(onlyFailed) {
+		pending(onlyFailed).list().size()
 	}
 
 	static def hasFailedMessages() {

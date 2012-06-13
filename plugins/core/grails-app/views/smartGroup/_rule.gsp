@@ -15,7 +15,7 @@
 		<g:textField name="rule-text" class="rule-text" value='${value}'/>
 	</td>
 	<td>
-		<a onclick="removeRule(this)" class="button remove-rule ${isFirst?'hide':''}"><img class="remove" src="${resource(dir:'images/icons',file:'remove.png')}"/></a>
+		<a onclick="removeRule(this)" class="remove-command" style="display:${isFirst?'none':'auto'}"/>
 	</td>
 </tr>
 

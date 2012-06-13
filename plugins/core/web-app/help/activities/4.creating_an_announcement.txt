@@ -1,0 +1,76 @@
+# Creating an Announcement #
+
+An announcement is a type of activity which allows you to send messages to multiple groups or contacts and then keep track of responses. You can send personalized messages or updates to anyone in your list, saving you time. This feature is useful in campaigning, managing remote teams of field staff or sending short news bulletins.
+
+### [How to Create an Announcement][2]
+
+1.  From the [messages tab][3] click on 'Create New Activity'.
+2.  A new window will appear and you will be presented with a number of options. Choose "Announcement" and click next
+![Select Activity][9]
+
+**_Create Message_**  
+You can enter the message you want to send here.  
+
+![Enter Message][10]
+
+If the input area is too small, you can resize it by click the <resizeicon> in the bottom right hand corner and dragging it to the size you want.  
+When you have finished entering your message, click next.
+
+**_Select Recipients_**  
+On this screen you will be able to select who to send the announcement to.
+
+![Select Recipients][11]
+
+There are a few ways to choose recipients for your message:  
+You can enter the number manually at the top and click 'add'. This will add the number to the recipient list and allow you to enter another number if you want to send the message to multiple people.  
+The numbers are automatically selected as you add them.  
+  
+If the recipients are already part of your [contacts][4] then simply find and select them in the list (1). You can select as many contacts as you would like to send the message to. Bear in mind that the more contacts you add to the recipient list, the greater the number of SMS that will be sent out.  
+  
+Any [groups][4] you may have created will also be available here, including [smart groups][5]. You can select more than one [group][4], and you can use a combination of all 3 methods to choose recipients.   
+  
+So you could manually add a contact, select a group and a pre-existing contact as recipients for your message.  
+  
+Alternatively, you could simply 'Select All Contacts' to send a message to all your contacts.
+
+Or, 'Select All Groups' to send a message to all your groups.
+
+_**NOTE:** Selecting this option may result in a very large number of text messages being sent. This could result in a very large charge from your cellular provider._
+
+**_Summary Screen_**
+On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+
+![Summary][12]
+
+You will also be able to name your [activity][6] so that it is easily recognisable.
+
+Clicking next will create the [activity][6].
+
+**_Confirmation_**
+Once successfully created, you will see a confirmation screen like this one:
+
+![confirmation][13]
+
+Clicking OK will take you back to the [Messages Tab][3]
+
+Your Announcement will appear under the activities sub-heading.
+
+### Related Actions
+[Creating a Poll][7]  
+[Creating a Group][8]  
+[Creating a Smart Group][5]  
+
+[1]: activities/4.creating_an_announcement
+[2]: activities/4.creating_an_announcement
+[3]: messages/1.getting_around_the_messages_tab
+[4]: contacts/1.getting_around_the_contacts_tab
+[5]: contacts/5.creating_a_smart_group
+[6]: activities/1.getting_around_activities
+[7]: activities/3.creating_a_poll
+[8]: contacts/4.creating_a_group
+[9]: ../images/help/poll1.jpg
+[10]: ../images/help/announcement1.jpg
+[11]: ../images/help/announcement2.jpg
+[12]: ../images/help/announcement3.jpg
+[13]: ../images/help/announcement4.jpg
+

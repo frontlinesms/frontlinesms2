@@ -14,21 +14,15 @@
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<fsms:render template="/poll/question"/>
-		<fsms:render template="/poll/responses"/>
-		<fsms:render template="/poll/sorting"/>
-		<fsms:render template="/poll/replies"/>
-		<div id="tabs-5">
-			<fsms:render template="/message/compose"/>
-		</div>
-		<div id="tabs-6">
-			<fsms:render template="/message/select_recipients" model= "['contactList' : contactList,
-				                                                           'groupList': groupList,
-				                                                           'nonExistingRecipients': [],
-				                                                           'recipients': []]"/>
-		</div>
-		<fsms:render template="/poll/confirm"/>
-		<fsms:render template="/poll/save"/>
+		<fsms:wizardTabs templates="
+				/poll/question,
+				/poll/responses,
+				/poll/sorting,
+				/poll/replies,
+				/message/compose,
+				/message/select_recipients,
+				/poll/confirm,
+				/poll/save"/>
 	</g:formRemote>
 </div>
 
@@ -95,11 +89,10 @@
 				$("#question").removeClass('error');
 				if ($("input[name='pollType']:checked").val() == "yesNo") {
 					disableTab(1);
-				}
-				else {
+				} else {
 					enableTab(1);
 				}
-				var isValid = !isElementEmpty($("#question"));
+				var isValid = $("input[name='dontSendMessage']").is(':checked') || !isElementEmpty($("#question"));
 				if(!isValid)
 					$("#question").addClass('error');
 				return isValid;

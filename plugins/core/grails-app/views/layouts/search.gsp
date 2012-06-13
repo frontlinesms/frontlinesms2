@@ -2,11 +2,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title><g:layoutTitle default="Search"/></title>
+		<title><g:layoutTitle default="${g.message(code:'tab.search')}"/></title>
 		<g:layoutHead/>
 		<r:require module="search"/>
 		<fsms:render template="/includes"/>
-		<fsms:i18n keys="popup.cancel, popup.back, wizard.cancel, wizard.back, wizard.next, smallpopup.cancel, popup.help.title, search.moreoptions.label, popup.done, smallpopup.send, smallpopup.messages.export.title, wizard.quickmessage.title, smallpopup.export, popup.ok, many.selected, message.character.count"/>
+		<fsms:i18nBundle/>
 		<r:script>
 			$(function() {  
 				disablePaginationControls();
@@ -20,8 +20,9 @@
 		<div id="body" class="messages">
 			<fsms:render template="menu"/>
 			<g:form controller="${params.controller}"
-					params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
+					params="[ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
 				<g:hiddenField name="searchId" value="${search?.id}"/>
+				<g:hiddenField name="messageSection" value="${messageSection}"/>
 				<div id="main-list-container">
 					<div id="main-list-head">
 						<fsms:render template="/search/header"/>

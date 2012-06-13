@@ -1,0 +1,30 @@
+# Exporting an Activity
+
+You are able to export all the messages in an activity to either .CSV or .PDF format for viewing outside of FrontlineSMS or for use in another program.
+
+![Exporting a Activity][6]
+
+### [Exporting an Activity][1]
+
+1. Select the Activity you want to export.
+2. In the Activity Header (1) click the drop down box called "More Actions..."
+3. From this menu choose "Export".
+4. In the new window which appears, select your desired output file type (either .CSV or .PDF) and click Export.
+![Export Dialog][7]
+5. Your browser may prompt you to choose where to save the file if you have not specified a location for browser downloads.
+
+Your messages will be exported to the desired format.
+
+### Related Actions
+[Renaming an Activity][2]  
+[Creating a Poll][3]  
+[Creating an Announcement][4]  
+[Manually Categorising a Response][5]  
+
+[1]: activities/7.exporting_an_activity
+[2]: activities/7.exporting_an_activity
+[3]: activities/3.creating_a_poll
+[4]: activities/4.creating_an_announcement
+[5]: activities/3a.manually_categorising
+[6]: ../images/help/export_activity.jpg
+[7]: ../images/help/export_dialog.jpg

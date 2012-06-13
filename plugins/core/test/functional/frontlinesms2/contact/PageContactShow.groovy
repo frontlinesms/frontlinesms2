@@ -3,12 +3,12 @@ package frontlinesms2.contact
 import frontlinesms2.*
 
 class PageContactShow extends geb.Page {
-	static getUrl() { 'contact/show' }
+	static url = 'contact/show'
 	static at = {
 		title.contains('Contacts')
 	}
 	static content = {
-		bodyMenu { ${'#body-menu') }
+		bodyMenu { $('#body-menu') }
 		selectedMenuItem { bodyMenu.find('.selected') }
 		groupSubmenu(required:false) { bodyMenu.find('.groups .submenu') }
 		groupList(required:false) { $("#group-list") }

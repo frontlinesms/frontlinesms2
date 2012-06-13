@@ -11,7 +11,7 @@
 	refresh_rate = ${params.rRate ?: 30000};
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 
-	var i18nStrings = {};
+	var i18nStrings = i18nStrings || {};
 	function i18n(key) {
 		var translated = i18nStrings[key];
 		if(typeof(translated) == 'undefined') return key;

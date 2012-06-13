@@ -1,175 +1,135 @@
 <markdown:renderHtml>
-*  [__Messages__][1]
-*  [*Overview*][61]
-*  [How do I get around the Messages screen?][2]
+* [Messages][2]
+	* The Basics
+		* [How do I select more than one message?][5]
+		* [How do I send a message?][6]
+		* [How to move, delete, reply and forward messages][7]
+		* [How do I archive a message?][9]
+		* [How do I see messages that I have sent?][12]
+		* [How do I see messages that I have deleted?][13]
+		* [How do I see messages that have had a problem whilst sending?][14]
+	* Managing Your Messages
+		* [How do I sort and mark my messages as important?][16]
+		* [How do I see only starred messages?][18]
+		* [How do I resend a message that has failed to send?][19]
+		* [All of my messages arent being displayed, where are they?][20]
+	* Activities
+		* Overview
+			* [What are Activities?][23]
+			* [How do I get around an Activity?][24]
+		* Polls
+			* [How do I create a poll][26]
+			* [How do I manually categorise a message?][30]
+		* Announcement
+			* [How do I create an announcement][31]
+		* Auto Reply
+			* [How do I create an Auto-Reply?][32]
+		* Managing your Activities
+			* [How do I Archive an Activity?][34]
+			* [How do I Export an Activity?][35]
+			* [How do I Rename an Activity?][36]
+			* [How do I resend failed messages in an activity?][37]
+	* Folders
+		* Overview
+			* [How do I Create a Folder?][40]
+			* [How do I move messages into a folder?][41]
+	* Archive
+		* Overview
+			* [How do I get around the Archive tab?][43]
+			* [The Inbox Archive][45]
+			* [The Sent Archive][46]
+			* [The Activity Archive][47]
+			* [The Folder Archive][48]
+		* The Basics
+			* [How do I archive a Message or Messages?][50]
+			* [How do I Archive an Activity or Folder?][51]
+			* [Can I reply and forward Archived messages?][53]
+			* [How do I restore archived messages?][54]
+* Contacts
+	* Basics
+		* [How do I create a Contact?][58]
+		* [How do I delete a Contact/s?][59]
+		* [How do I create a Group?][60]
+	* Managing your Contacts
+		* [How do I see the messages that have been sent and received by a particular contact?][62]
+		* [How do I export contacts?][63]
+		* [How do I search through the contacts list?][64]
+	* Advanced
+		* [How do I add/remove custom information to/from a contact?][66]
+		* [How do I add/remove contacts to/from a group?][67]
+* Search
+	* Basic
+		* [How do I perform a simple search?][72] 
+	* Advanced
+		* [How do I perform a much more detailed search?][74]
+* Status
+	* [What is the Status Tab?][82]
+	* [How do I see how many messages I have sent or received?][87]
+* Settings
+	* [How do I change the Language?][91]
+	* [How do I import Messages and Contacts?][92]
+	* [How do I use my modem/phone with FrontlineSMS?][94]
+	* [How do I set up an IntelliSMS account?][95]
+	* [How do I set up a Clickatell account?][96]
+	* [How do I edit/delete a Connection?][97]
+	* [How do I get FrontlineSMS to detect my device?][98]
 
-*  [*The Basics*][62]
-*  [How do I select more than one message?][3]
-*  [How do I send a message?][4]
-*  [How do I reply to a message?][5]
-*  [How do I delete a message?][6]
-*  [How do I archive a message?][7]
-*  [How do I move a message?][8]
-*  [How do I forward a message?][9] 
-*  [How do I see messages that I have sent?][10]
-*  [How do I see messages that I have deleted?][11]
-*  [How do I see messages that have had a problem whilst sending?][12]
-
-*  [*Managing Your Messages*][63]
-*  [How do I sort my messages?][13]
-*  [How do I mark messages as important?][14]
-*  [How do I search through the messages on my screen?][15]
-*  [How do I see only starred messages?][16]
-*  [How do I resend a message that has failed to send?][17]
-*  [All of my messages arent being displayed, where are they?][18]
-*  [How do I archive a Message or Messages?][19]
-
-*  [__Activities__][64]
-*  [*Overview*][65]
-*  [What are Activities?][20]
-*  [How do I get around an Activity?][21]
-
-*  [*The Basics*][66]
-*  __Polls__
-*  [How do I create a poll][22]
-*  [How do I set up a Keyword in my poll so that the system will automatically sort messages?][23]
-*  [How do I set an automatic reply in my poll][24]
-*  [How do I change the outgoing poll message][25]
-*  [How do I manually categorise a message?][26]
-
-*  [*Managing your Activities*][67]
-*  [How do I Archive an Activity?][27]
-*  [How do I Export an Activity?][28]
-*  [How do I Rename an Activity?][29]
-*  [How do I resend failed messages in an activity?][30]
-
-*  [__Folders__][68]
-*  [*Overview*][69]
-*  [How do I Create a Folder?][31]
-*  [How do I move messages into a folder?][32]
-
-*  [__Archive__][70]
-*  [*Overview*][71]
-*  [What is Archiving?][33]
-*  [How do I get around the Archive tab?][34]
-*  [The Inbox Archive][35]
-*  [The Sent Archive][36]
-*  [The Activity Archive][37]
-*  [The Folder Archive][38]
-
-*  [*The Basics*][72]
-*  [How do I archive a Message or Messages?][39]
-*  [How do I Archive an Activity?][40]
-*  [How do I archive a Folder?][41]
-*  [Can I reply and forward Archived messages?][42]
-*  [How do I restore archived messages?][43]
-
-*  [__Contacts__][73]
-*  [*The Basics*][74]
-*  [How do I create a Contact?][44]
-*  [How do I delete a Contact/s?][45]
-*  [How do I create a Group?][46]
-
-*  [Managing your Contacts][75]
-*  [How do I see the messages that have been sent and received by a particular contact?][47]
-*  [How do I export contacts?][48]
-*  [How do I search through the contacts list?][49]
-
-*  [*Advanced*][76]
-*  [How do I add/remove custom information to/from a contact?][50]
-*  [How do I add/remove a contact to/from a group?][51]
-*  [How do I add/remove more than one contact to/from a group?][52]
-
-*  [__Search__][77]
-*  [*The Basics*][78]
-*  [How do I perform a simple search?][53]
-
-*  [*Advanced*][79]
-*  [How do I perform a much more detailed search?][54]
-*  [How do I limit my search to a particular Group/Activity/Folder?][55]
-*  [How do I limit my search to either sent or received messages or both?][56]
-*  [How do I include the archive within my search?][57]
-*  [How do I Search between/up to/from certain dates?][58]
-*  [How do I Search in custom field?][59]
-*  [How do I export Search results?][60]
-
-[1]: Messages_Top
-[2]: Messages/1_Getting_Around_Messages
-[3]: Messages/2_Sorting_Selecting_Multiple_Messages/Selecting_Multiple_Messages13
-[4]: Messages/3_QuickMessage
-[5]: x
-[6]: x
-[7]: Archive/2_Archiving_Messages
-[8]: x
-[9]: x
-[10]: Messages/5_Sent
-[11]: Messages/6_Trash
-[12]: Messages/7_Pending
-[13]: Messages/2_Sorting_Selecting_Multiple_Messages/Sorting12
-[14]: Messages/2_Sorting_Selecting_Multiple_Messages/Starring_Messages14
-[15]: Messages/4_Searching_and_Filtering_Message_Lists/How_to_Search_in_your_Message_List2
-[16]: Messages/4_Searching_and_Filtering_Message_Lists/How_to_Filter_Messages_to_show_only_starred_messages3
-[17]: Messages/7_Pending/Retrying_Sending_Failed_Message_or_Messages6
-[18]: Messages/2_Sorting_SelectingMultipleMessages/NavigatingPages16
-[19]: Archive/2_Archiving_Messages
-[20]: x
-[21]: Activities/1_Getting_Around_Activities
-[22]: Activities/3_Creating_a_Poll
-[23]: Activities/3_Creating_a_Poll/Automatic_Sorting
-[24]: Activities/3_Creating_a_Poll/Automatic_Reply5
-[25]: Activities/3_Creating_a_Poll/Edit_Message 
-[26]: Activities/3a_Manually_Categorising_a_Message
-[27]: Archive/3_Archiving_Activities_Folders
-[28]: Activities/4_Exporting_an_Activity
-[29]: Activities/5_Renaming_Activity
-[30]: Messages/7_Pending/Retry_Sending_Failed_Messages_in_an_Activity8
-[31]: Folders/2_Creating_a_Folder
-[32]: x
-[33]: x
-[34]: Archive/1_Getting_Around_the_Archive_Tab
-[35]: Archive/1a_Inbox_Archive
-[36]: Archive/1b_Sent_Archive
-[37]: Archive/1c_Activity_Archive
-[38]: x
-[39]: Archive/2_Archiving_Messages
-[40]: Archive/3_Archiving_Activities_Folders/Archiving_an_Activity15
-[41]: Archive/3_Archiving_Activities_Folders/Archiving_a_Folder16
-[42]: x
-[43]: Archive/4_Unarchive/Unarchive_a_Message14
-[44]: Contacts/Add_Contact
-[45]: x
-[46]: x
-[47]: x
-[48]: x
-[49]: x
-[50]: x
-[51]: x
-[52]: x
-[53]: x
-[54]: x
-[55]: x
-[56]: x
-[57]: x
-[58]: x
-[59]: x
-[60]: x
-[61]: MessagesOverview
-[62]: Messages/The_Basics
-[63]: Messages/Managing_Your_Messages
-[64]: Activities_Top
-[65]: Activities_Overview
-[66]: Activities/The_Basics
-[67]: Activities/Managing_Your_Messages
-[68]: Folders_Top
-[69]: Folders_Overview
-[70]: Archive_Top
-[71]: Archive_Overview
-[72]: Archive/The_Basics
-[73]: Contacts_Top
-[74]: Contacts/The_Basics
-[75]: Contacts/Managing_Your_Contacts
-[76]: Contacts/Advanced
-[77]: Search_Top
-[78]: Search/The_Basics
-[79]: Search/Advanced
+[2]: messages/1.getting_around_the_messages_tab
+[5]: messages/2.sss
+[6]: messages/3.quick_message
+[7]: messages/8.mrfd
+[9]: archive/2.archiving_messages
+[12]: messages/5.sent
+[13]: messages/6.trash
+[14]: messages/7.pending
+[16]: messages/2.sss
+[18]: messages/4.filtering_messages
+[19]: messages/7.pending
+[20]: messages/2.sss
+[22]: activities/1.getting_around_activities
+[23]: activities/2.creating_an_activity
+[24]: activities/1.getting_around_activities
+[26]: activities/3.creating_a_poll
+[30]: activities/3a.manually_categorising
+[31]: activities/4.creating_an_announcement
+[32]: activities/5.creating_an_auto-reply
+[34]: archive/3.archiving_activities_folders
+[35]: messages/9.exporting
+[36]: activities/6.renaming_an_activity
+[37]: messages/7.pending
+[39]: folders/1.getting_around_folders
+[40]: folders/2.creating_a_folder
+[41]: messages/8.mrfd
+[43]: archive/1.getting_around_the_archive_tab
+[45]: archive/1a.inbox_archive
+[46]: archive/1b.sent_archive
+[47]: archive/1c.activity_archive
+[48]: archive/1d.folder_archive
+[50]: archive/2.archiving_messages
+[51]: archive/3.archiving_activities_folders
+[53]: messages/8.mrfd
+[54]: archive/4.unarchive
+[56]: contacts/1.getting_around_the_contacts_tab
+[58]: contacts/2.add_contact
+[59]: contacts/2a.editing_a_contact
+[60]: contacts/4.creating_a_group
+[62]: contacts/7.messages_sent_or_received_by_contact
+[63]: messages/9.exporting
+[64]: contacts/8.searching_through_contacts
+[66]: contacts/3.add_remove_a_custom_field
+[67]: contacts/6.add_remove_contact_to_from_a_group
+[70]: search/1.getting_around_the_search_tab
+[72]: search/2.creating_a_search
+[74]: search/2a.creating_an_advanced_search
+[80]: messages/9.exporting
+[82]: status/1.getting_around_the_status_tab
+[87]: status/2.using_the_traffic_graph
+[90]: settings/1.getting_around_the_settings_menu
+[91]: settings/2.changing_languages
+[92]: settings/3.restoring_a_backup
+[94]: settings/4.setting_up_a_device
+[95]: settings/4a.intellisms
+[96]: settings/4b.clickatell
+[97]: settings/6.edit_delete_connection
+[98]: settings/5.manually_adding_device
 </markdown:renderHtml>

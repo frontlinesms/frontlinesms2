@@ -1,0 +1,28 @@
+# Using the Trash Folder
+
+The trash folder contains all the messages you have deleted. The messages are stored here where they can be restored or deleted permanently.
+
+(Screenshot)
+
+### Moving a Deleted Message
+
+Please see [here][2]
+
+### Emptying the trash
+
+To empty the trash folder of all messages:
+
+__NOTE:__ This will _permanently_ delete all messages in the trash folder
+
+1.  From the 'Trash Actions..' dropdown menu (1), select "Empty Trash".
+
+All messages in the trash folder will be permanently deleted.
+
+### Related Actions
+[Archiving Messages][4]  
+[Moving Messages][2]  
+[Unarchiving Messages][5]  
+
+[2]: messages/8.mrfd
+[4]: archive/2.archiving_messages
+[5]: archive/4.unarchive

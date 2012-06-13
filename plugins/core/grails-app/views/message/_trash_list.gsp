@@ -1,6 +1,6 @@
 <%@ page import="frontlinesms2.*" %>
 <g:each in="${trashInstanceList}" status="i" var="t">
-	<g:if test="${t.objectClass == frontlinesms2.Fmessage}">
+	<g:if test="${t.objectClass == 'frontlinesms2.Fmessage'}">
 		<g:hiddenField name="src-${t.object.id}" value="${t.object.src}"/>
 		<tr class="message-preview ${t.object == messageInstance ? 'selected' : ''}" id="message-${t.object.id}">
 	</g:if>

@@ -8,7 +8,7 @@
 					<g:each in="${sharedGroupInstanceList}" status="i" var="g">
 						<li id="${g.name}" class="${g == groupInstance ? 'selected' : ''}">
 							<span>${g.name}</span>
-							<a class="remove-group" id="remove-group-${g.id}"></a>
+							<a class="remove-group remove-command" id="remove-group-${g.id}"></a>
 						</li>
 					</g:each>
 				</ul>
@@ -18,6 +18,8 @@
 			<td></td>
 			<td>
 				<g:select name="multi-group-dropdown"
+						class="dropdown"
+						onchange="selectmenuTools.snapback(this)"
 						noSelection="['_':g.message(code:'contact.add.to.group')]"
 						from="${nonSharedGroupInstanceList}"
 						optionKey="id"

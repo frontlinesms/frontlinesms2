@@ -1,31 +1,35 @@
 <meta name="layout" content="popup"/>
 <r:script>
 function initializePopup() {
-	$('#help strong').parents('li').addClass('section');
-	$('#help em').parents('li').addClass('sub-section');
-	
-	$("#help #index li a").click(goToSection);
-	$("#help #file").delegate("a", "click", goToSection);
-	$('div#index a:first').click();
-
+	$("#modalBox.help #help-index li a").click(goToSection);
+	$("#modalBox.help #help-content").delegate("a", "click", goToSection);
+	$("div#help-index a:first").click();
 }
 
 function goToSection() {
-	var section = $(this).attr('href');
-	$("#help #index li").removeClass('selected');
-	$(this).parent('li').addClass('selected');
-	var new_url = url_root + "help/section";
-	$.get(new_url, {helpSection: section}, function(data) {
-		$('#file').contents().replaceWith($(data));
+	var menuItem = $(this);
+
+	var section = menuItem.attr("href");
+	if(section.indexOf("http:") == 0)
+	{
+		return true;
+	}
+	$("#modalBox.help #help-index li.selected").removeClass("selected");
+	menuItem.parent().addClass("selected");
+	$("#help-content").load(url_root + "help/section", { helpSection:section }, function() {
+		// This is a workaround for the image URL bug when viewing help from second+
+		// action URLs TODO long-term solution is to fix help generation/iframe it
+		$("#help-content img").each(function(i, e) {
+			e = $(e);
+			e.attr("src", url_root + "help/" + e.attr("src"));
+		});
 	});
 	return false;
 }
 </r:script>
-<div id="help">
-	<div id="index">
-		<fsms:render template="index"/>
-	</div>
-	<div id="file">
-	</div>
+<div id="help-index">
+	<fsms:render template="index"/>
+</div>
+<div id="help-content">
 </div>
 

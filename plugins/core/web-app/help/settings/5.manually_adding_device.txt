@@ -1,0 +1,73 @@
+# Manually Adding a Device or Modem
+
+_Before you can start using FrontlineSMS Version 2, you will have to connect and configure a device to use. You can manually add a device or modem if the automatic detection fails or if you have specific setting you want to use for your device. This page will describe how to add a device connection manually._
+
+### Device Detection
+
+Before FrontlineSMS Version 2 can connect to your device, it needs to know that the device is connected so it can gather all the information it requires to connect to it. We call this [device detection][2]. 
+
+The first step in connecting a device is making sure your device has been detected. To do this, you need to make sure the device is physically connected to your computer and that it's driver software is installed.
+
+For newer Windows machines this should happen when you attach your device to your computer for the first time. If you don't know how to do this, please consult your device's operating instructions. 
+
+Once the device driver's have been installed and the device is detected by your operating system, run FrontlineSMS version 2 and follow the below instructions.
+
+1.  Navigate to the [status tab][3] and click on "Detect Modems".  
+2.  You should see activity in the "Detected Devices" area. 
+
+![Detect Device Activity][10]
+
+3.  Make note of the port that your device has been detected on. There may be more than one port displayed. This is normal. The port number you want is the one which displays the most information about your device.
+
+---
+
+### Adding a Connection
+
+![Add New Connection][11]
+
+Once the device has been successfully detected, you can manually add the connection:
+
+1.  Navigate to the [settings menu][2] and click on "Phones and Connections" (1).  
+2.  On this page you will find any existing connections that you have, and will be able to add new ones. Click on "Add New Connection". The following screen will appear asking you to select the type of connection you would like to create:  
+
+![Add New Connection][12]
+  
+3.  Select "Phone/modem" and click "Next"
+4.  On this screen, please enter the required information.
+
+![Adding Phone/Modem][13]
+  
+**Name:** Enter a Name for your connection
+**Port:** Enter the port number of your device that you made note of earlier. It should be in the format "COMX", where X is the number associated with your device.
+**Baud Rate:** This can vary for each device, but if you are unsure of this then enter **19200**
+**PIN:** If your device has a PIN lock, this can prevent FrontlineSMS from connecting to it automatically. Please enter your 4 digit PIN number here.
+**SIM IMSI** and **Device Serial #** do not need to be entered to ensure the connection is successful.
+
+5.  You will be presented with a confirmation screen like below, summarising your settings. If this is correct, click "Create". If there is a problem, please click "Back" and enter the correct information.
+
+![Confirm Screen][14]
+
+Your connection will be created and you will be notified when a successful connection has been made. 
+
+If the connection fails then you may have entered information incorrectly. This could mean the PIN number is incorrect. To make sure this isn't the case, please [edit the connection][5] and check the information that you entered. If this information is correct, then you may be able to find more support in the [community forum][6]
+
+---
+
+### Related Actions
+[Automatically Setting Up a Connection][7]  
+[Editing a Connection][5]  
+[Setting up a Connection to a Clickatell Account][8]
+[Setting up a Connection to an IntelliSMS Account][9]
+
+[2]: settings/1.getting_around_the_settings_menu
+[3]: status/1.getting_around_the_status_tab
+[5]: settings/6.edit_delete_connection
+[6]: http://frontlinesms.ning.com/
+[7]: settings/4.setting_up_a_device
+[8]: settings/4a.intellisms
+[9]: settings/4b.clickatell
+[10]: ../images/help/detect_activity.jpg
+[11]: ../images/help/settings_connections.jpg
+[12]: ../images/help/add_new_connection.jpg
+[13]: ../images/help/phone_modem.jpg
+[14]: ../images/help/phone_modem_confirm.jpg

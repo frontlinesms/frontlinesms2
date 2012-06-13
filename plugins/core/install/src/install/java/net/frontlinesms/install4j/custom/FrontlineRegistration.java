@@ -78,6 +78,12 @@ public class FrontlineRegistration {
 				.getVariable("var_share_telephone_skype");
 		boolean var_share_your_data = context
 				.getBooleanVariable("var_share_your_data");
+		boolean var_monitor_impact = context
+				.getBooleanVariable("var_monitor_impact");
+		boolean var_partner = context
+				.getBooleanVariable("var_partner");
+		boolean var_share_limited_technical_info = context
+				.getBooleanVariable("var_share_limited_technical_info");
 
 		Map data = new HashMap();
 		copyStrings(context, data,
@@ -96,8 +102,10 @@ public class FrontlineRegistration {
 				+ var_get_frontlinesms_newsletter);
 		data.put("var_organization_name", var_organization_name);
 		data.put("var_share_email", var_share_email);
+		data.put("var_partner", var_partner);
+		data.put("var_share_limited_technical_info", var_share_limited_technical_info);
 		data.put("var_share_telephone_skype", var_share_telephone_skype);
-		data.put("var_share_your_data", "" + var_share_your_data);
+		data.put("var_monitor_impact", "" + var_monitor_impact);
 
 		return addSystemPropertiesToRegistrationData(data);
 	}

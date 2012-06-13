@@ -1,0 +1,75 @@
+# Getting Around the Messages Tab
+
+The messages tab is shown by default whenever you start FrontlineSMS. From here you can easily see all your incoming messages, [sent messages][1], [activities][2], and [folders][3]. You can also create [new activities][4] and [new folders][5] from this tab. You can also view the content of individual messages and manage your messages with actions like [delete][6], [reply][6], [archive][7] and [move][6].
+
+![Message Tab Overiew][20]
+
+### Navigation tab
+
+This bar (1) will allow you access the various parts of the software: [Archive][7], [Contacts][9], [Status][10], [Search][11] and [Settings and Plugins][12].
+
+### Navigation Pane
+
+From this area (2) you can navigate across the various folders and activities.
+    
+- __Inbox:__ 
+Clicking here will show you all your incoming messages that are not affiliated with an [activity][2] or [folder][3].
+- __[Sent][1]:__
+Clicking here will show you all the messages which have been successfully sent from FrontlineSMS. 
+- __[Pending][15]:__
+Clicking here will show you all the messages which are waiting to be sent or could not be sent.  
+Messages that could not be sent will be indicated with an error icon (insert pic).   
+- __[Trash][16]:__
+Clicking here will show you all the messages that you have deleted. Any messages associated with an activity or folder will be found here and no longer associated to that activity.
+
+__[Activities][2] and [Folders][3]:__  
+- From here you can [create new activities][4] and navigate to existing ones which will be listed here.
+- You can also [create new folders][5] and navigate to existing ones that are listed here.
+
+### Message List
+
+This area will display all the messages contained within your selected folder.  
+ 
+Messages that have not been read will be displayed in **bold**, and will become unbolded once you have read them.
+
+Clicking on a single message displays its contents on the right hand side in the Message Details (3) area.
+
+You can [select multiple messages][18] by clicking on the check boxes (4) next to a message.
+
+You can also highlight important messages by [starring][18] them.
+
+To see more on how to use the message list please go [here][18].
+
+### Message Details
+
+When a message or multiple messages are selected in the message list, the message details will display further information about the message or messages.
+
+When a single message is selected, the message details will display the full text of the message. You can also choose to [reply][6], [delete][6], [archive][7], [move][6] or [forward][6] the message.
+
+When multiple messages are selected, a summary of how many messages have been selected will be shown in place of the message text. You can also choose to [reply][6], [delete][6], [archive][7], and [move][6] the messages. 
+
+### See Also
+[Getting around the Contacts Tab][9]  
+[Getting around the Archive Tab][7]  
+[Getting around the Search Tab][11]  
+[Getting around the Status Tab][10]  
+
+[1]: messages/5.sent
+[2]: activities/1.getting_around_activities
+[3]: folders/1.getting_around_folders
+[4]: activities/2.creating_an_activity
+[5]: folders/2.creating_a_folder
+[6]: messages/8.mrfd
+[7]: archive/1.getting_around_the_archive_tab
+[9]: contacts/1.getting_around_the_contacts_tab
+[10]: status/1.getting_around_the_status_tab
+[11]: search/1.getting_around_the_search_tab
+[12]: settings/1.getting_around_the_settings_menu
+[13]: messages/1.getting_around_the_messages_tab
+[14]: messages/1.getting_around_the_messages_tab
+[15]: messages/7.pending
+[16]: messages/6.trash
+[17]: messages/1.getting_around_the_messages_tab
+[18]: messages/2.sss
+[19]: messages/1.getting_around_the_messages_tab
+[20]: ../images/help/message_tab_overview.jpg

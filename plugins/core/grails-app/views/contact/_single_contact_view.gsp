@@ -15,7 +15,7 @@
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td><g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();"/></td>
 			<td><g:if test="${contactInstance?.mobile?.trim()}">
-				<a class="remove-command" id="remove-mobile"><g:message code="contact.remove.mobile"/></a>
+				<a class="remove-command not-custom-field" id="remove-mobile"><g:message code="contact.remove.mobile"/></a>
 				<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">&nbsp;
 				</g:remoteLink>
 			</g:if></td>
@@ -23,30 +23,28 @@
 		<tr>
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td><g:textField name="email" value="${contactInstance?.email?.trim()}"/></td>
-			<td><a class="remove-command" id="remove-email"></a></td>
+			<td><a class="remove-command not-custom-field" id="remove-email"></a></td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
 			<tr class="input ${f==fieldInstance? 'selected': ''}">
 				<td><label for="custom-field-${f.name}">${f.name}</label></td>
 				<td><input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/></td>
-				<td><a class="remove-command" id="remove-field-${f.id}"></a></td>
+				<td><a class="remove-command custom-field" id="remove-field-${f.id}"></a></td>
 			</tr>
 		</g:each>
 		<tr>
 			<td></td>
 			<td id="info-add" class="button-container">
 				<select class="dropdown" id="new-field-dropdown" name="new-field-dropdown">
-					<option class="not-field" value="na"><g:message code="contact.customfield.addmoreinformation"/></option>
-					<option class="predefined-field" value="Street address"><g:message code="contact.customfield.streetaddress"/></option>
-					<option class="predefined-field" value="City"><g:message code="contact.customfield.city"/></option>
-					<option class="predefined-field" value="Postcode"><g:message code="contact.customfield.postcode"/></option>
-					<option class="predefined-field" value="State"><g:message code="contact.customfield.state"/></option>
+					<option class="not-field" value="na">
+						<g:message code="contact.customfield.addmoreinformation"/>
+					</option>
 					<g:each in="${uniqueFieldInstanceList}" status="i" var="f">
-						<g:if test="${f != 'Street address' && f != 'City' && f != 'Postcode' && f != 'State'}">
-							<option value="${f}">${f}</option>
-						</g:if>
+						<option value="${f}">${f}</option>
 					</g:each>
-					<option class="create-custom-field" value='add-new'><g:message code="contact.customfield.option.createnew"/></option>
+					<option class="create-custom-field" value='add-new'>
+						<g:message code="contact.customfield.option.createnew"/>
+					</option>
 				</select>
 			</td>
 			<td></td>
@@ -61,7 +59,7 @@
 			<td>
 				<ul id="group-list">
 					<g:each in="${contactGroupInstanceList}" status="i" var="g">
-						<li class="${g == groupInstance ? 'selected' : ''}" id="${g.name}">
+						<li class="${g == groupInstance ? 'selected' : ''}" groupName="${g.name}">
 							<span>${g.name}</span><a class="remove-command" id="remove-group-${g.id}"><g:message code="contact.remove.from.group"/></a>
 						</li>
 					</g:each>

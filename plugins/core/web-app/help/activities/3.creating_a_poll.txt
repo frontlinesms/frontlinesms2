@@ -1,0 +1,122 @@
+# Creating a Poll 
+
+A poll is a type of activity which allows you to see a graphical representation of the responses to a question. When creating a poll you will be able to enter the question and select who to send the question to. You will also be able to set up a **keyword**. A **keyword** allows FrontlineSMS to recognise which incoming messages are for polls and which aren't. It will also help the system determine which poll the message belongs to. This gives you the option to let FrontlineSMS automatically sort incoming messages into polls and you will be notified when this has happened. There are two types of responses you can set: Yes/No or a Multiple Choice style answer. You can also set up an **automatic reply** that is sent to every message received for that poll. This makes polls useful for contexts where you want to see the response to a particular issue or question._
+### How to Create a Poll
+
+1.  From the messages tab click on 'Create New Activity'.
+2.  A new window will appear and you will be presented with a number of options. Choose "Poll" and click next
+![Activity Select][8]
+
+**_Enter Question_**  
+
+After clicking next, you will be prompted to select a question type and enter a question:
+
+![Enter Question][9]
+
+**Question Type:** 
+Yes or No: Select this if your question has a Yes or No answer. For example, the question "Do you like the colour Red?", could have a Yes or No Answer.
+Multiple Choice Question: Select this if your question has a number of different answers. For example, with the question "Do you like the colour Red?", you could get more detailed responses by having a range of answers such as, "Yes", "Quite a lot", "Not a lot" or "No".  
+If you select this option you will have the opportunity to input the possible responses in the following screens.
+
+**Enter Question:**
+Here you will find an area for you to enter your question. You can re-size the text entry box by clicking and dragging the bottom right hand corner of it.  
+  
+If you simply want to collect responses and not send out a question then check the "Do not send a message for this poll (Collect responses only)" box. This might be useful when you have already distributed the question, for example over the radio or at a meeting.
+
+**_Response List_**  
+If you selected the "Multiple Choice Question" then the next screen you see will allow you to specify the possible responses to the question. You can enter a maximum of 5 and a must enter a minimum of 2.
+
+![Response List][10]
+
+Boxes A-C will be immediately available to you to edit. If you need more than 3 responses, when you input something into box C, box D will automatically become active. If you then need more, entering text into box D will activate box E.
+
+Once you have entered all your choices, click next to set up Automatic Sorting.
+
+**_Automatic Sorting_**  
+You will be able to specify a keyword, that when included in an incoming message, will allow the system to automatically sort it into the relevant Poll.   
+
+![Automatic Sorting][11]
+  
+_**Note:** Keywords are **unique.** Once a keyword has been set, it cannot be used in a new activity even if the original activity has been archived. To re-use a keyword you have to delete the activity that keyword is associated with._
+
+To set a keyword, select "Sort messages automatically that have the following Keyword:" and then enter your keyword.
+
+Click 'next' to set an Automatic Reply.
+
+**_Automatic Reply_**
+At this screen you can choose to enter a message that will be automatically sent to the senders of messages identified as poll responses. This can only be selected if you have chosen to use a keyword with your poll. Without a keyword the system cannot recognise which messages to automatically reply to.  
+The automatic reply option will be unavailable until you create a keyword for your poll.
+
+![Automatic Reply][12]
+
+To enable an automatic reply, check the "Send an automatic reply to poll responses" box and enter your message in the message.  
+This message will be sent out to everyone who sends a message with the keyword you set up in the previous step.
+
+**_Note:** This is different from the [auto-reply activity][3]._
+
+**_Edit Message_**  
+This screen will provide you with an opportunity to view the message that will be sent out. If you want, you can also edit the message to add any other text.  
+
+![Edit Message][13]
+
+The message will be compiled from the options you have selected in previous steps.
+
+If you selected "yes or no" as the question type and created a keyword the default message will look like this:  
+>"[Your Question]? Reply "[Keyword] A" for yes, "[Keyword] B" for no."  
+
+If you did not create a keyword then the message will look like this:  
+>"[Your Question]? Please reply 'Yes' or 'No'"
+
+If you selected "Multiple Choice Question" as question type and created a keyword, the default message will look like this:  
+>"[Your Question]? Reply "[Keyword] A" for [Multiple Choice A], "[Keyword] B" for [Multiple Choice B], "[Keyword] C" for [Multiple >Choice C], "[Keyword] D" for [Multiple Choice D], "[Keyword] E" for [Multiple Choice E]."
+
+If you did not create a keyword then the message will look like this:  
+>"[Your Question]? Please reply '[Multiple Choice A]' or '[Multiple Choice B]' or '[Multiple Choice C]' or '[Multiple Choice D]' or >'[Multiple Choice E]'
+
+Once you are happy with the message, please click 'Next'.
+
+**_Select Recipients_**
+On this screen you will be able to either add the numbers of the people you want to send the poll to, or select them from your contacts list. 
+
+![Select Recipients][14]
+
+If you add a number manually it will be added to the list and automatically selected. This number will only remain in the system for as long as it needs to send the message and will not be added to your contacts.  
+Selecting groups and contacts is easy, simply select the contacts or groups you want to send the poll.
+
+**_Summary Screen_**
+On this screen you will find a summary of all the options you have selected, so you can confirm that what you have created is what you would like to send. 
+
+![Summary][15]
+
+You will also be able to name your poll so that it is easily recognisable.
+
+Clicking next will create the poll.
+
+**_Confirmation_**
+Once successfully created, you will see a confirmation screen like this one:
+
+![Confirmation][16]
+
+Your poll will be displayed under the "Activities" sub heading in the [messages tab][7].
+
+### Related Actions
+[Creating an Announcement][4]  
+[Creating an Auto-Reply][3]  
+[Creating a group][5]  
+[Creating a smart group][6]  
+
+[1]: activities/3.creating_a_poll
+[3]: activities/5.creating_an_auto-reply
+[4]: activities/4.creating_an_announcement
+[5]: contacts/4.creating_a_group
+[6]: contacts/5.creating_a_smart_group
+[7]: messages/1.getting_around_the_messages_tab
+[8]: ../images/help/poll1.jpg
+[9]: ../images/help/poll2.jpg
+[10]: ../images/help/poll3.jpg
+[11]: ../images/help/poll4.jpg
+[12]: ../images/help/poll5.jpg
+[13]: ../images/help/poll6.jpg
+[14]: ../images/help/poll7.jpg
+[15]: ../images/help/poll8.jpg
+[16]: ../images/help/poll9.jpg

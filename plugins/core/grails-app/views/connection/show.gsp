@@ -6,13 +6,22 @@
 		<g:if test="${params.createRoute}">
 			<r:script>
 				$(function() {
+					var count = 0;
+					var oldSystemNotificationCount = $("div.system-notification").length;
 					var connectionTimer = setInterval(refreshConnectionStatus, 2000);
 					function refreshConnectionStatus() {
 						$.get("${createLink(controller:'connection', action:'list', id:params?.id)}", function(data) {
-								$("#connections").replaceWith($(data).find('#connections'));
+							var newSystemNotificationCount = $("div.system-notification").length;
+							if (count < 2 && oldSystemNotificationCount == newSystemNotificationCount) {
+								count++;	
+							} else {
+								clearInterval(connectionTimer);
+								$("div.flash").hide();
+								$(".connections").replaceWith($(data).find('.connections'));
+							}	
 						});
 					}
-			});
+				});
 			</r:script>
 		</g:if>
 	</head>

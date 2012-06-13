@@ -11,7 +11,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 			width: 675,
 			height: 500,
 			title: title,
-			buttons: [{ text:i18n("popup.cancel"), click:cancel, id:"cancel" }, { text:i18n("popup.back"), disabled:"true" },
+			buttons: [{ text:i18n("action.cancel"), click:cancel, id:"cancel" }, { text:i18n("action.back"), disabled:"true" },
 					{ text:btnFinishedText, click:submitAction, id:"submit" }],
 			close: function() { $(this).remove(); }
 	});
@@ -35,10 +35,10 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 		width: width,
 		height: height,
 		buttons: [
-			{ text:i18n("wizard.cancel"), click: cancel, id:"cancel" },
-			{ text:i18n("wizard.back"), id:"disabledBack", disabled:true },
-			{ text:i18n("wizard.back"), click:prevButton, id:"prevPage" },
-			{ text:i18n("wizard.next"), click:nextButton, id:"nextPage" },
+			{ text:i18n("action.cancel"), click: cancel, id:"cancel" },
+			{ text:i18n("action.back"), id:"disabledBack", disabled:true },
+			{ text:i18n("action.back"), click:prevButton, id:"prevPage" },
+			{ text:i18n("action.next"), click:nextButton, id:"nextPage" },
 			{ text:btnFinishedText, click:closeWhenDone? submit: submitWithoutClose, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
@@ -52,17 +52,20 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 
 function launchHelpWizard(html) {
 	var modalBox = createModalBox(html);
+	modalBox.addClass("help");
 	$("#messageText").keyup();
-	modalBox.dialog({
+	var height = window.innerHeight;
+	var dialog = modalBox.dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
-		width: '95%',
-		height: screen.height*0.8,
+		width: "95%",
+		height: height,
 		buttons: [
-			{ text:i18n("popup.ok"), click:submit, id:"submit" }
+			{ text:i18n("action.close"), click:submit, id:"submit" }
 		],
 		close: function() { $(this).remove(); }
 	});
+	$(".ui-dialog").addClass("help");
 	initializePopup();
 }
 
@@ -257,7 +260,7 @@ function messageResponseClick(messageType) {
 		type:'POST',
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
-		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('wizard.send')); }
+		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
 	});
 }
 

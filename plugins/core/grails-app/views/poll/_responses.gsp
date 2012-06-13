@@ -1,11 +1,11 @@
-<div id="tabs-2" class="poll-responses-tab">
-	<label class="bold" for='poll-choices'><g:message code="poll.responses.prompt"/></label>
+<div class="input">
+	<label for='poll-choices'><g:message code="poll.responses.prompt"/></label>
 	<ul id='poll-choices'>
 		<g:each in="${['A','B','C','D','E']}" var="option" status="i">
 			<li>
 				<g:if test="${activityInstanceToEdit?.id}">
 					<label for='choice${option}' class="${option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">${option}</label>
-					<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == option}%>
+					<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} %>
 					<g:if test="${(option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)))}">
 						<g:textField class='choices' name="choice${option}" value="${pollResponse?.value}"/>
 					</g:if>

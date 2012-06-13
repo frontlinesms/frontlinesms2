@@ -23,7 +23,7 @@
 #body.contacts table input[type="text"], #body.contacts table textarea, #body.contacts td:nth-child(1) { padding:5px; }
 #body.contacts td:nth-child(1) { padding-right:20px; }
 
-#body.contacts #detail #single-contact .buttons { margin:17px; }
+#body.contacts #detail #single-contact .buttons, #body.contacts #detail #multiple-contacts .buttons { margin:17px; }
 
 #body.contacts #detail #single-contact #message-stats { position:absolute; top:17px; right:17px; }
 #body.contacts #detail #single-contact #message-stats h2 { font-weight:bold; }
@@ -38,5 +38,11 @@
 #body.contacts #detail #multiple-contacts #multi-group-list { margin:10px 0; }
 #body.contacts #detail #multiple-contacts #multi-group-dropdown { margin:0 0 20px 0; }
 
-.remove-command { background-image: url('../images/icons/remove.png'); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; margin-left: 3px; }
-.send-message { background-image: url('../images/icons/send.png'); background-repeat: no-repeat; display: inline-block; height: 14px; text-indent: -999999px; width: 14px; margin-left: 3px; }
+.remove-command { background-image:url('../images/icons/remove.png'); background-repeat:no-repeat;
+	display:inline-block; height:14px; text-indent:-999999px; width:14px; margin-left:3px; }
+.remove-command:hover { background-image:url('../images/icons/remove_hover.png'); }
+.send-message { background-image:url('../images/icons/send.png'); background-repeat:no-repeat;
+	display:inline-block; height:14px; text-indent:-999999px; width:14px; margin-left:3px; }
+
+#modalBox #smartGroup-table { margin:20px; }
+

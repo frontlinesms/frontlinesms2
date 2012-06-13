@@ -1,0 +1,65 @@
+# Unarchiving Messages, Sent Messages, Activities and Folders
+
+Unarchiving allows you to place archived messages, activities and/or folders back into the [messages tab][1]. Messages can then be sorted into activities, and activities become live; any triggers associated with them such as auto-replies, will work again. This feature is useful if you need to re-use an old activity, or if you need an activity to be live for only a certain period after which you don't want it to be active.
+![Unarchiving a Message][16]
+
+### Unarchiving a Message
+
+To unarchive one or more messages first navigate to the [Inbox archive][3] which can be found under the [Archive][4] tab.
+
+1.  Select the message, or messages you want to unarchive using the check boxes.
+2.  In the Message Details area (1), select "unarchive."
+
+Your messages will now appear in the [inbox][1].
+
+### Unarchiving a Sent Message
+
+To unarchive one or more sent messages first navigate to the [sent archive][6] which can be found under the [Archive][4] tab.
+
+1.  Select the sent message, or messages you want to unarchive using the check boxes.
+2.  In the Message Details area (1), select "unarchive."
+
+Your messages will now appear in [sent messages][7].
+
+(Screenshot)
+
+### Unarchiving an Activity
+
+To unarchive one or more activities first navigate to the [activity archive][9], which can be found under the [Archive][4] tab.
+
+1.  Select the activity, or activities, you want to unarchive by using the check boxes.
+2.  In the Message Details area (1), select "unarchive
+
+Your activity will now appear in the [messages][1] tab.
+
+### [Unarchiving a Folder][10]
+
+To unarchive one or more folders, first navigate to the [folder archive][11], which can be found under the [Archive][4] tab.
+
+1.  Select the folder, or folders, you want to unarchive by using the check boxes.
+2.  In the Message Details area (1), select "unarchive
+
+Your folder will now appear in the [messages][1] tab.
+
+### Related Actions
+[Creating a Folder][12]  
+[Creating an Activity][13]  
+[Sending a Message][14]  
+[Forwarding messages][15]  
+
+[1]: messages/1.getting_around_the_messages_tab
+[2]: archive/2.archiving_messages
+[3]: archive/1a.inbox_archive
+[4]: archive/1.getting_around_the_archive_tab
+[5]: archive/1b.sent_archive
+[6]: archive/1b.sent_archive
+[7]: messages/5.sent
+[8]: archive/4.unarchive
+[9]: archive/1c.activity_archive
+[10]: archive/4.unarchive
+[11]: archive/1d.folder_archive
+[12]: folders/2.creating_a_folder
+[13]: activities/2.creating_an_activity
+[14]: messages/3.quick_message
+[15]: messages/8.mrfd
+[16]: ../images/help/unarchive_message.jpg

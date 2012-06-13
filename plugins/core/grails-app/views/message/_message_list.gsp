@@ -38,7 +38,15 @@
 						</td>
 						<td class="message-sender-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
 								<g:link class="displayName-${m.id}" controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})  + [messageId: m.id]}">
-									<fsms:unbroken>${m.displayName}</fsms:unbroken>
+									<g:if test="${m.inbound}">
+										${m.displayName}
+									</g:if>
+									<g:elseif test="${m.dispatches.size() == 1}">
+										<g:message code="fmessage.to" args="${m.displayName}" />
+									</g:elseif>
+									<g:else>
+										<g:message code="fmessage.to.multiple" args="${m.displayName}" />
+									</g:else>
 								</g:link>
 						</td>
 						<td class="message-text-cell ${m.messageOwner ? (m.messageOwner instanceof frontlinesms2.Folder ? 'folderOwner' : 'activityOwner') : ''}">
@@ -48,9 +56,7 @@
 						</td>
 						<td class="message-date-cell">
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
-								<fsms:unbroken>
-									<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
-								</fsms:unbroken>
+								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
 							</g:link>
 						</td>
 					</tr>
