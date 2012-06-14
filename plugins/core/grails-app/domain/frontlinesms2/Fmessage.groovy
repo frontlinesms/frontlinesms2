@@ -92,6 +92,11 @@ class Fmessage {
 					}
 				}
 			}
+			projections {
+				distinct 'id'
+				property 'date'
+				property 'id'
+			}
 		}
 		deleted { getOnlyStarred=false ->
 			and {
@@ -221,6 +226,14 @@ class Fmessage {
 		}
 
 		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
+	}
+
+	static def listPending(onlyFailed, params) {
+		Fmessage.getAll(pending(onlyFailed).list(params) as List)
+	}
+
+	static def countPending(onlyFailed) {
+		pending(onlyFailed).list().size()
 	}
 
 	static def hasFailedMessages() {

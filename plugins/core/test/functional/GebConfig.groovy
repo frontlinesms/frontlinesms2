@@ -20,12 +20,8 @@ waiting {
 }
 
 driver = {
-	def driver = new FirefoxDriver()
+	def driver = System.properties['frontlinesms2.test.remote']? null: new FirefoxDriver()
 	if(driver?.class?.simpleName == 'FirefoxDriver') {
-		def width = 1366
-		def height = 768
-		driver.navigate().to('http://localhost') // make sure that the browser has opened so we can resize it
-		driver.manage().window().setSize(new Dimension(width, height))
 	} else if(driver?.class?.simpleName == 'HtmlUnitDriver') {
 		driver.javascriptEnabled = true
 		driver.@webClient.throwExceptionOnScriptError = false
@@ -33,17 +29,19 @@ driver = {
 		DesiredCapabilities capabilities = new DesiredCapabilities()
 		capabilities.javascriptEnabled = true
 		driver = new RemoteWebDriver(new URL("http://localhost:8083"), capabilities)
-		try {
-			driver.navigate().to('http://localhost:8080/core') // TODO should read this url from grails settings
-		} catch(TimeoutException ex) {
-			sleep 30000
-		}
-		def width = 1366
-		def height = 768
-		driver.manage().window().setSize(new Dimension(width, height))
 		actualCapabilities = ((RemoteWebDriver) driver).getCapabilities();
 		assert actualCapabilities.javascriptEnabled
 	}
+
+	println "Configured WebDriver: ${driver.class}"
+
+	3.times { try {
+		driver.navigate().to('http://localhost:8080/core') // TODO should read this url from grails settings
+	} catch(TimeoutException ex) { sleep 10000 } }
+	def width = 1366
+	def height = 768
+	driver.manage().window().setSize(new Dimension(width, height))
+
 	return driver
 }
 

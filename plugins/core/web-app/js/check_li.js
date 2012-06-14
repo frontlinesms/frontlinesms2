@@ -86,7 +86,6 @@ function updateSingleCheckedDetails(itemTypeString, itemId, row) {
 }
 
 function updateMultipleCheckedDetails(itemTypeString) {
-	showMultipleDetailsPanel(itemTypeString);
 	if (itemTypeString == 'contact') {
 		$.get(url_root + itemTypeString + "/multipleContactGroupList/", {checkedContactList: getCheckedList(itemTypeString)}, function(data) {
 			var pane = $(data);
@@ -94,10 +93,12 @@ function updateMultipleCheckedDetails(itemTypeString) {
 			$('#multiple-'+itemTypeString+'s').replaceWith(pane);
 			$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
 			applyContactPaneJavascriptEnhancements(pane);
+			showMultipleDetailsPanel(itemTypeString);
 		});
 	} else {	
 		// update counter display
 		$('#checked-'+ itemTypeString + '-count').text(i18n("many.selected", getCheckedItemCount(itemTypeString), itemTypeString));
+		showMultipleDetailsPanel(itemTypeString);
 	}
 }
 

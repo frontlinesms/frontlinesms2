@@ -76,10 +76,9 @@ class MessageController {
 	} 
 
 	def pending() {
-		def messageInstanceList = Fmessage.pending(params.failed)
-		render view:'standard', model:[messageInstanceList: messageInstanceList.listDistinct(params),
+		render view:'standard', model:[messageInstanceList:Fmessage.listPending(params.failed, params),
 				messageSection:'pending',
-				messageInstanceTotal: messageInstanceList.count()] << getShowModel()
+				messageInstanceTotal: Fmessage.countPending()] << getShowModel()
 	}
 	
 	def trash() {
