@@ -1137,8 +1137,6 @@ return valid;</string>
                 <initScript />
                 <visibilityScript />
               </formComponent>
-
-
               <formComponent name="" id="413" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.TextfieldComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
@@ -1147,7 +1145,7 @@ return valid;</string>
                         <boolean>true</boolean>
                       </void>
                       <void property="labelText">
-                        <string>Email</string>
+                        <string>Email*</string>
                       </void>
                       <void property="variableName">
                         <string>var_share_email</string>
@@ -1174,7 +1172,6 @@ return valid;</string>
                 <initScript />
                 <visibilityScript />
               </formComponent>
-
             </formComponents>
           </screen>
           <screen name="How I plan to use frontlinesms" id="349" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
