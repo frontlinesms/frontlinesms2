@@ -13,7 +13,10 @@
 		</tr>
 		<tr>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
-			<td><g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();"/></td>
+			<td><g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" onFocus="showWarning();" onBlur="hideWarning()"/>
+				<div class="warning">
+					This number is not in international format. This may cause problems matching messages to contacts, or if you are sending with internet services.
+				</div></td>
 			<td><g:if test="${contactInstance?.mobile?.trim()}">
 				<a class="remove-command not-custom-field" id="remove-mobile"><g:message code="contact.remove.mobile"/></a>
 				<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">&nbsp;

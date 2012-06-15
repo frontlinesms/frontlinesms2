@@ -42,3 +42,11 @@ function checkForDuplicates() {
 		}
 	});
 }
+
+function showWarning(){
+	$("div.warning").fadeIn();
+}
+
+function hideWarning(){
+	$("div.warning").fadeOut();
+}

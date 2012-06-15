@@ -60,6 +60,7 @@ modules = {
 		resource url: [dir:'js', file:"contact/search_within_list.js"]
 		resource url: [dir:'js', file:"contact/show-groups.js"]
 		resource url: [dir:'js', file:"contact/show-fields.js"]
+		resource url: [dir:'js', file:"contact/validateNumber.js"]
 	}
 
 	status {
