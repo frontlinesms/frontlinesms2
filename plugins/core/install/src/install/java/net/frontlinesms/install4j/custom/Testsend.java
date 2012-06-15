@@ -48,7 +48,7 @@ public class Testsend {
 			if(content.length() > 0) {
 				content += "&";
 			}
-			content += e.getKey() + "=" + URLEncoder.encode(e.getValue(), "UTF-8");
+			content += urlEncode(e.getKey()) + "=" + urlEncode(e.getValue());
 		}
 		System.out.println(content);
 		// TODO close streams safely
