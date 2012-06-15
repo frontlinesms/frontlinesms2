@@ -4,21 +4,16 @@ $(function() {
 });
 
 function checkForNew() {
-	var params = {};
-	params.messageSection = $("#messageSection").val();
-	params.ownerId = $('input:hidden[name=ownerId]').val();
-	params.starred = $('input:hidden[name=starred]').val();
-	params.failed = $('input:hidden[name=failed]').val();
-
-
-	var currentTotal = parseInt($("#messageTotal").val());
-	var newTotal = $("#messageTotal").val();
+	var params = {
+			messageSection: $("#messageSection").val(),
+			ownerId: $('input:hidden[name=ownerId]').val(),
+			starred: $('input:hidden[name=starred]').val(),
+			failed: $('input:hidden[name=failed]').val() };
 	
 	$.getJSON(url_root + 'message/newMessageCount', params, function(data) {
 		if(data == null) return;
-		$.each(data, function(key, val) {
-		    newTotal = val;
-		});
+		var currentTotal = parseInt($("#messageTotal").val());
+		var newTotal = data;
 
 		if(newTotal > currentTotal) {
 			var newMessageCount = newTotal - currentTotal;
