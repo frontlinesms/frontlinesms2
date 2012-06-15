@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Properties;
+import java.net.URLEncoder;
 
 public class Futil {
 //> CONSTANTS
@@ -20,6 +21,10 @@ public class Futil {
 	private static final String EMAIL_REGEX = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$";
 
 //> PUBLIC UTILITY METHODS
+	public static String urlEncode(String s) throws IOException {
+		return URLEncoder.encode(s, "UTF-8");
+	}
+
 	public static boolean validateUrl(String url) {
 		return url.matches(URL_REGEX);
 	}
