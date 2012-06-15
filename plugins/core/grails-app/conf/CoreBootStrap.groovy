@@ -285,8 +285,8 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def a1 = new Announcement(name:'Free cars!')
-		def a2 = new Announcement(name:'Office Party')
+		def a1 = new Announcement(name:'Free cars!', sentMessageText:"Everyone who recieves this message will also recieve a free Subaru")
+		def a2 = new Announcement(name:'Office Party', sentMessageText:"Office Party on Friday!")
 		def sent1 = new Fmessage(src:'me', inbound:false, text:"Everyone who recieves this message will also recieve a free Subaru")
 		def sent2 = new Fmessage(src:'me', inbound:false, text:"Office Party on Friday!")
 		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
