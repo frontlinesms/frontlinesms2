@@ -8,8 +8,8 @@
 </div>
 <r:script>
 $(function() {
-	$('#blankKeyword').change(function() {
-		$("#keyword").attr("disabled", this.checked? "disabled": false);
+	$('#blankKeyword').live("change", function() {
+		$("#keyword").attr("disabled", this.checked? "disabled" : false);
 	});
 });
 </r:script>
