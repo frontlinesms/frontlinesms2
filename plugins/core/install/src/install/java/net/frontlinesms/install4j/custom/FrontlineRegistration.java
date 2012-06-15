@@ -102,8 +102,8 @@ public class FrontlineRegistration {
 				+ var_get_frontlinesms_newsletter);
 		data.put("var_organization_name", var_organization_name);
 		data.put("var_share_email", var_share_email);
-		data.put("var_partner", var_partner);
-		data.put("var_share_limited_technical_info", var_share_limited_technical_info);
+		data.put("var_partner", "" + var_partner);
+		data.put("var_share_limited_technical_info","" + var_share_limited_technical_info);
 		data.put("var_share_telephone_skype", var_share_telephone_skype);
 		data.put("var_monitor_impact", "" + var_monitor_impact);
 
@@ -143,7 +143,6 @@ public class FrontlineRegistration {
 		boolean succeeded = ts.submitData(getRegistrationData(context));
 
 		setVisible(formEnvironment, 199, succeeded);
-		setVisible(formEnvironment, 200, succeeded);
 		setVisible(formEnvironment, 201, !succeeded);
 		setVisible(formEnvironment, 202, !succeeded);
 	}
