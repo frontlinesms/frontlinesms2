@@ -26,7 +26,7 @@ Your modified setting will be applied and you will be notified when a successful
 
 1. Navigate to the [settings menu][3] and click on "Phones and Connections". (1)
 2. Once here, you will see a list of all your connections. Click on the connection you wish to edit to see an expanded view of that connection. 
-3. If the connection you wish to delete ir currently connected and active, you will need to click "Destroy Route" (3) first.
+3. If the connection you wish to delete is currently connected and active, you will need to click "Destroy Route" (3) first.
 
 ![Destroy Route][11]
 

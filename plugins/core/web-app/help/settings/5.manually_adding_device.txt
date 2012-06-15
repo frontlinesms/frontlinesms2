@@ -6,11 +6,11 @@ _Before you can start using FrontlineSMS Version 2, you will have to connect and
 
 Before FrontlineSMS Version 2 can connect to your device, it needs to know that the device is connected so it can gather all the information it requires to connect to it. We call this [device detection][2]. 
 
-The first step in connecting a device is making sure your device has been detected. To do this, you need to make sure the device is physically connected to your computer and that it's driver software is installed.
+The first step in connecting a device is making sure your device has been detected. To do this, you need to make sure the device is physically connected to your computer and that its driver software is installed.
 
 For newer Windows machines this should happen when you attach your device to your computer for the first time. If you don't know how to do this, please consult your device's operating instructions. 
 
-Once the device driver's have been installed and the device is detected by your operating system, run FrontlineSMS version 2 and follow the below instructions.
+Once the device's drivers have been installed and the device is detected by your operating system, run FrontlineSMS version 2 and follow the below instructions.
 
 1.  Navigate to the [status tab][3] and click on "Detect Modems".  
 2.  You should see activity in the "Detected Devices" area. 
