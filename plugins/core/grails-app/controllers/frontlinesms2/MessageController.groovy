@@ -189,12 +189,10 @@ class MessageController {
 	}
 	
 	def archive() {
-		def messages = getCheckedMessages()
+		def messages = getCheckedMessages().findAll { !it.messageOwner && !it.hasPending }
 		messages.each { messageInstance ->
-			if(!messageInstance.messageOwner) {
-				messageInstance.archived = true
-				messageInstance.save()
-			}
+			messageInstance.archived = true
+			messageInstance.save()
 		}
 		params.flashMessage = dynamicMessage 'archived', messages
 		if(params.messageSection == 'result') {
