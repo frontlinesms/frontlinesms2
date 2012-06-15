@@ -10,7 +10,7 @@ The first step in connecting a device is making sure your device has been detect
 
 For newer Windows machines this should happen when you attach your device to your computer for the first time. If you don't know how to do this, please consult your device's operating instructions. 
 
-1.  Once your device is attached and the device driver's have been installed, please start FrontlineSMS Version 2.
+1.  Once your device is attached and the device's drivers have been installed, please start FrontlineSMS Version 2.
 2.  FrontlineSMS Version 2 will automatically detect the attached device and begin to collate the information it needs to create a usable connection.  
 **_Note:** This process can take a few **minutes**. Please be patient and allow the software time to work. You will be notified if the connection has failed or if no device is detected. If the connection fails then click [here][3] to manually set up a connection.
 
@@ -24,7 +24,7 @@ This will also be indicated by a green light on the [status tab][2]. The connect
 
 ### Attaching a Device While FrontlineSMS Version 2 is Running
 
-If you start FrontlineSMS Version 2 and then attach a device to your computer you will have to prompt FrontlineSMS to scan your system so that it can begin the automatic device setup process. This method is not recommended unless your device has previously been attached to this computer and has device driver's installed.
+If you start FrontlineSMS Version 2 and then attach a device to your computer you will have to prompt FrontlineSMS to scan your system so that it can begin the automatic device setup process. This method is not recommended unless your device has previously been attached to this computer and has device's drivers installed.
 
 As before, make sure the device's drivers are installed and that the device is correctly detected by your operating system before continuing with these steps.
 
