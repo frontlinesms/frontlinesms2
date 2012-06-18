@@ -21,7 +21,6 @@
 			<fsms:render template="menu"/>
 			<g:form controller="${params.controller}"
 					params="[ownerId: ownerInstance?.id, messageId: messageInstance?.id]">
-				<g:hiddenField name="searchId" value="${search?.id}"/>
 				<g:hiddenField name="messageSection" value="${messageSection}"/>
 				<div id="main-list-container">
 					<div id="main-list-head">
