@@ -24,11 +24,17 @@ function refreshMessageCount() {
 }
 
 function refreshStatusIndicator() {
-	$.get(url_root + 'status/trafficLightIndicator', function(data) {
+	var updateLight = function(data) {
 		$('#status-indicator').removeClass('green');
 		$('#status-indicator').removeClass('red');
 		$('#status-indicator').addClass(data);
 		$('#status-indicator').show();
+	};
+
+	$.ajax({
+		url: url_root + 'status/trafficLightIndicator',
+		success: updateLight,
+		error: function() { updateLight('red'); }
 	});
 }
 
