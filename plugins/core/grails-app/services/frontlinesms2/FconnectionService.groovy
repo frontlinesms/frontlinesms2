@@ -31,7 +31,7 @@ class FconnectionService {
 			e.printStackTrace()
 			log.warn("Error creating routes to fconnection with id $c?.id", e)
 			LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
-			createSystemNotification('connection.route.failNotification', [c?.name?: c?.id])
+			createSystemNotification('connection.route.failNotification', [c?.name?: c?.id, c?.id])
 		}
 		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}
