@@ -13,26 +13,33 @@
 		</tr>
 		<tr>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
-			<td><g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onkeyup="checkForNonDigits(); checkForDuplicates();" onFocus="showWarning();" onBlur="hideWarning()"/>
-				<div class="warning">
-					This number is not in international format. This may cause problems matching messages to contacts, or if you are sending with internet services.
-				</div></td>
-			<td><g:if test="${contactInstance?.mobile?.trim()}">
-				<a class="remove-command not-custom-field" id="remove-mobile"><g:message code="contact.remove.mobile"/></a>
-				<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">&nbsp;
-				</g:remoteLink>
-			</g:if></td>
+			<td>
+				<g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)"/>
+				<g:if test="${contactInstance?.mobile?.trim()}">
+					<a class="remove-command not-custom-field" id="remove-mobile">
+						<g:message code="contact.remove.mobile"/>
+					</a>
+					<g:remoteLink class="send-message" controller="quickMessage" action="create" params="[configureTabs: 'tabs-1,tabs-3', recipients: contactInstance?.mobile]" onSuccess="launchMediumWizard(i18n('wizard.send.message.title'), data, i18n('wizard.send'), true);">
+						&nbsp;
+					</g:remoteLink>
+				</g:if>
+				<p class="warning" style="display:none"><g:message code="contact.phonenumber.international.warning"/></p>
+			</td>
 		</tr>
 		<tr>
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
-			<td><g:textField name="email" value="${contactInstance?.email?.trim()}"/></td>
-			<td><a class="remove-command not-custom-field" id="remove-email"></a></td>
+			<td>
+				<g:textField name="email" value="${contactInstance?.email?.trim()}"/>
+				<a class="remove-command not-custom-field" id="remove-email">&nbsp;</a>
+			</td>
 		</tr>
 		<g:each in="${contactFieldInstanceList}" status="i" var="f">
 			<tr class="input ${f==fieldInstance? 'selected': ''}">
 				<td><label for="custom-field-${f.name}">${f.name}</label></td>
-				<td><input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/></td>
-				<td><a class="remove-command custom-field" id="remove-field-${f.id}"></a></td>
+				<td>
+					<input type="text" name="${f.name}" id="field-item-${f.name}" value="${f.value}"/>
+					<a class="remove-command custom-field" id="remove-field-${f.id}">&nbsp;</a>
+				</td>
 			</tr>
 		</g:each>
 		<tr>
@@ -55,7 +62,6 @@
 		<tr id="note-area" class="input basic-info">
 			<td><label for="notes"><g:message code="contact.notes.label"/></label></td>
 			<td><g:textArea name="notes" id="notes" value="${contactInstance?.notes}"/></td>
-			<td></td>
 		</tr>
 		<tr id="group-section" class="input basic-info">
 			<td><label for="groups"><g:message code="contact.groups.label"/></label></td>
@@ -71,34 +77,32 @@
 					</li>
 				</ul>
 			</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td>
-				<select id="group-dropdown" name="group-dropdown" class="dropdown">
+				<select id="group-dropdown" name="group-dropdown" class="dropdown" onchange="selectmenuTools.snapback(this)">
 					<option class="not-group"><g:message code="contact.add.to.group"/></option>
 					<g:each in="${nonContactGroupInstanceList}" status="i" var="g">
 						<option value="${g.id}">${g.name}</option>
 					</g:each>
 				</select>
 			</td>
-			<td></td>
 		</tr>
 	</table>
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.id}">
-			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'contact.save')}" disabled="disabled"/>
-			<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel"/></g:link>
+			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
+			<g:link class="cancel btn" disabled="disabled"><g:message code="action.cancel"/></g:link>
 		</g:if>
 		<g:else>
-			<g:actionSubmit class="btn" action="saveContact" value="${g.message(code:'contact.save')}"/>
-			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="contact.cancel"/></g:link>
+			<g:actionSubmit class="btn" action="saveContact" value="${g.message(code:'action.save')}"/>
+			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="action.cancel"/></g:link>
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
 			<a id="btn_delete" onclick="launchConfirmationPopup(i18n('smallpopup.contact.delete.title'));" class="btn">
-				<g:message code="contact.delete"/>
+				<g:message code="action.delete"/>
 			</a>
 		</g:if>
 	</div>
@@ -127,9 +131,6 @@ function refreshMessageStats(data) {
 }
 
 $(function() {
-	$('#group-dropdown').live("change", function() {
-		$('select').selectmenu();
-	});
 	setInterval(refreshMessageStats, 15000);
 });
 </r:script>
