@@ -115,6 +115,7 @@
 	function addNewRule() {
 		var template = $('.smart-group-criteria').first();
 		var templateSelect = template.find("select");
+		// Selectmenu is destroyed here to allow cloning. Rebuilt after clone.
 		templateSelect.selectmenu("destroy");
 		template.find('.remove-command').show();
 		var newRow = template.clone();
