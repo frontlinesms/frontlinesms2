@@ -10,7 +10,6 @@ function initContactPaneFields() {
 
 function addFieldClickAction() {
 	var me = $(this).find('option:selected');
-	$("#new-field-dropdown").val("na");
 	if(me.hasClass('not-field')) return;
 	if(me.hasClass('create-custom-field')) {
 		$.ajax({
@@ -24,7 +23,7 @@ function addFieldClickAction() {
 		addCustomField(fieldName);
 		me.remove();
 	}
-	selectmenuTools.refresh($('#new-field-dropdown'));
+	selectmenuTools.snapback(this);
 	enableSaveAndCancel();
 }
 
