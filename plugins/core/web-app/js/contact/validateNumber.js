@@ -2,7 +2,7 @@ function validateMobile(field) {
 	checkForNonDigits();
 	checkForDuplicates();
 	var internationFormatWarning = $(field).parent().find(".warning");
-	if(isInternationalFormat(field.value)) {
+	if(field.value=="" || isInternationalFormat(field.value)) {
 		internationFormatWarning.hide('fast');
 	} else {
 		internationFormatWarning.show('fast');
