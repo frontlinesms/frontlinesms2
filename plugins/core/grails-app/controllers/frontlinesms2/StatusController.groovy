@@ -51,12 +51,13 @@ class StatusController {
 	private def getFilters() {
 			def groupInstance = params.groupId? Group.get(params.groupId): null
 			params.rangeOption = params.rangeOption ?: "two-weeks"
+			println "FIXME VANEYCK Fix filtering messages by activities or groups "
+			//FIXME VANEYCK Fix filtering messages by activities or groups 
 			[groupInstance: groupInstance,
 					activityId: params.activityId,
 					groupInstanceList : Group.findAll(),
 					activityInstanceList: Activity.findAllByDeleted(false),
-					folderInstanceList: Folder.findAllByDeleted(false),
-					search: new Search(group:groupInstance,	activityId: params.activityId)]
+					folderInstanceList: Folder.findAllByDeleted(false)]
 	}
 	
 }
