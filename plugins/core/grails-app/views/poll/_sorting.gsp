@@ -11,8 +11,7 @@
 		<li>
 			<label for="enableKeyword"><g:message code="poll.autosort.description"/></label>
 			<g:radio name="enableKeyword" value="true" checked="${activityInstanceToEdit?.keyword? activityInstanceToEdit.keyword.value as boolean: false}"/>
-			<g:textField name="keyword" id="poll-keyword" disabled="${activityInstanceToEdit && activityInstanceToEdit.keyword? true: false}" value="${activityInstanceToEdit?.keyword?.value}"/>
+			<g:textField name="keyword" id="poll-keyword" disabled="${activityInstanceToEdit && activityInstanceToEdit.keyword? false: true}" value="${activityInstanceToEdit?.keyword?.value}"/>
 		</li>
 	</ul>
 </div>
-
