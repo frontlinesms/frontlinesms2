@@ -45,3 +45,11 @@ var SystemNotification = function() {
 	};
 }
 
+function editConnection(id){
+	$.ajax({
+  		url : url_root+"connection/wizard/"+id,
+  		success : function(data){
+  			launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)
+  		}
+	});
+}
