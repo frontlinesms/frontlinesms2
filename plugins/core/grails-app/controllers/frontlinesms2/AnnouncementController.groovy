@@ -5,7 +5,8 @@ import grails.converters.JSON
 class AnnouncementController extends ActivityController {
 	def index = { redirect(action: 'save') }
 	def save = {
-		def announcementInstance = new Announcement()
+		def announcementInstance
+		announcementInstance = Announcement.get(params.ownerId) ?: new Announcement()
 		announcementInstance.name = params.name
 		announcementInstance.sentMessageText = params.messageText
 		def m = messageSendService.createOutgoingMessage(params)

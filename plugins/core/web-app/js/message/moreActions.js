@@ -22,8 +22,9 @@ function renameAction() {
 		type:'GET',
 		url: url_root + messageSection + '/rename',
 		data: {ownerId: $("#ownerId").val()},
+		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"));
+			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"));
 	}})
 }
 
@@ -34,8 +35,9 @@ function editAction() {
 		type:'GET',
 		url: url_root + messageSection + '/edit',
 		data: {id: $("#ownerId").val()},
+		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false);
+			hideThinking(); launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false);
 	}})
 }
 

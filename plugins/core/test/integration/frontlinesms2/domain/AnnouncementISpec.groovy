@@ -24,7 +24,23 @@ class AnnouncementISpec extends grails.plugin.spock.IntegrationSpec {
 			announcement.sentMessageText.contains('sending this')
 			announcement
 	}
-	
+
+	def "can edit an announcement"() {
+		setup:
+			def message = Fmessage.build()
+			def announcement = new Announcement(name: 'Test', addresses: "12345")
+			announcement.addToMessages(message)
+			announcement.save(failOnError:true, flush:true)
+			controller.params.ownerId = announcement.id
+			controller.params.name = "renamed announcement"
+		when:
+			controller.save()
+			def editedAnnouncement = Announcement.get(announcement.id)
+		then:
+			!Announcement.findByName('name')
+			editedAnnouncement.name == "renamed announcement"
+	}
+
 	def "A announcement can be archived"() {
 		when:
 			def m = Fmessage.build()

@@ -73,6 +73,7 @@
 	* [How do I set up a Clickatell account?][96]
 	* [How do I edit/delete a Connection?][97]
 	* [How do I get FrontlineSMS to detect my device?][98]
+	* [How do I translate the interface into my language?][99]
 
 [2]: messages/1.getting_around_the_messages_tab
 [5]: messages/2.sss
@@ -132,4 +133,5 @@
 [96]: settings/4b.clickatell
 [97]: settings/6.edit_delete_connection
 [98]: settings/5.manually_adding_device
+[99]: settings/7.translatingfrontlinesms
 </markdown:renderHtml>

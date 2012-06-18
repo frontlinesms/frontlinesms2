@@ -20,6 +20,18 @@ class Keyword {
 		})
 		activity(nullable: false)
 	}
+
+	static namedQueries = {
+		match { word ->
+			activity { eq('archived', false) }
+			eq('value', word.toUpperCase())
+		}
+	}
+
+	static Keyword getMatch(String word) {
+		def list = Keyword.match(word).list()
+		return list? list[0]: null
+	}
     
 	def beforeSave = {
 		value = value?.trim()?.toUpperCase()
@@ -28,3 +40,4 @@ class Keyword {
 	def beforeUpdate = beforeSave
 	def beforeInsert = beforeSave
 }
+

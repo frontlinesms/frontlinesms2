@@ -1,3 +1,18 @@
+function validateMobile(field) {
+	checkForNonDigits();
+	checkForDuplicates();
+	var internationFormatWarning = $(field).parent().find(".warning");
+	if(isInternationalFormat(field.value)) {
+		internationFormatWarning.hide('fast');
+	} else {
+		internationFormatWarning.show('fast');
+	}
+}
+
+function isInternationalFormat(phoneNumber) {
+	return phoneNumber.match(/\+\d+/);
+}
+
 function checkForNonDigits() {
 	if($("#duplicate-error").length == 0) {
 		$(".numberField").removeClass('error');
@@ -6,8 +21,8 @@ function checkForNonDigits() {
 	$('#letter-error').remove();
 	
 	var field = $(".numberField").filter(function() {
-        return this.value.match(/[^\+?\d+]/);
-    });
+		return this.value.match(/[^\+?\d+]/);
+	});
 	field.addClass('error');
 	field.parent(".basic-info").append("<span id='letter-error' class='error-message'><g:message code='fmessage.number.error' /></span>");
 }
@@ -15,15 +30,6 @@ function checkForNonDigits() {
 function checkForDuplicates() {
 	var inputNumber = $("#mobile").val();
 	var truncatedNumber = inputNumber;
-	
-	// For use when we chack partial numbers (ie duplicates with vs without country codes)
-//	if(inputNumber.length < 7)
-//		return;
-//	else if(inputNumber.length > 7 && inputNumber.length < 10)
-//		truncatedNumber = inputNumber;
-//	else
-//	if(inputNumber.length > 9)
-//		truncatedNumber = inputNumber.substring(inputNumber.length - 9);
 	
 	if($("#letter-error").length == 0) {
 		$(".numberField").removeClass('error');
@@ -42,3 +48,6 @@ function checkForDuplicates() {
 		}
 	});
 }
+$(document).ready(function() {
+	$("#mobile").trigger('change');
+});

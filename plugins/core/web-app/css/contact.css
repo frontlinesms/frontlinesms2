@@ -21,7 +21,13 @@
 #body.contacts #detail { padding:37px; background-color:#d8e8ef; border-left:1px solid #9e9e9e; }
 
 #body.contacts table input[type="text"], #body.contacts table textarea, #body.contacts td:nth-child(1) { padding:5px; }
-#body.contacts td:nth-child(1) { padding-right:20px; }
+#body.contacts table .warning{ display:none; width:300px; padding:0 3px 3px 3px; color:#C03283; }
+#body.contacts td:nth-child(1) { padding:10px 20px 5px 5px; vertical-align:top; }
+#body.contacts td:nth-child(3) { padding-top:10px; vertical-align:top; }
+#body.contacts #group-list { padding:7px 0 0 0; }
+#body.contacts #group-list li { margin:3px 0; }
+#body.contacts #group-list li:first-child { margin:0 0 3px 0; }
+#body.contacts #group-list li:last-child { margin:3px 0 0 0; }
 
 #body.contacts #detail #single-contact .buttons, #body.contacts #detail #multiple-contacts .buttons { margin:17px; }
 
@@ -45,4 +51,3 @@
 	display:inline-block; height:14px; text-indent:-999999px; width:14px; margin-left:3px; }
 
 #modalBox #smartGroup-table { margin:20px; }
-

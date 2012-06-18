@@ -66,6 +66,7 @@ button:disabled, .ui-button-disabled, input[type="submit"]:disabled  { backgroun
 #notifications .hider:hover { text-decoration:underline; }
 
 input[type=text], input[type=password], textarea { padding:3px; border:1px solid #bbb; border-radius:2px; }
+input[type=text]:disabled, input[type=password]:disabled, textarea:disabled { background-color:#eee; }
 input[type="text"].search{ background-image:url('../images/icons/search.png');
 	background-repeat:no-repeat; background-position:right; }
 

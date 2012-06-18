@@ -7,13 +7,14 @@ import com.install4j.api.context.InstallerContext;
 import com.install4j.api.formcomponents.FormEnvironment;
 
 public class FrontlineRegistration {
-	public String[] prof = { "Agriculture", "Conservation", "Commercial",
+	private static final String[] PROFESSION = { "Agriculture",
+			"Conservation", "Commercial",
 			"Education", "Elections", "Emergency response", "Gender",
 			"Governance", "Health", "Human rights",
 			"Humanitarian Assistance", "Legal services", "Media",
 			"Mobile finance", "Radio", "Other" };
 
-	public String[] countries = { "Afghanistan", "Albania", "Algeria", "Andorra",
+	private static final String[] COUNTRIES  = { "Afghanistan", "Albania", "Algeria", "Andorra",
 			"Angola", "Antigua & Deps", "Argentina", "Armenia",
 			"Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain",
 			"Bangladesh", "Barbados", "Belarus", "Belgium", "Belize",
@@ -58,74 +59,46 @@ public class FrontlineRegistration {
 			"Zambia", "Zimbabwe" };
 	
 	public Map getRegistrationData(InstallerContext context){
-		// TODO refactor this like the string stuff below!
-		Integer var_category_of_work = (Integer) context
-				.getVariable("var_category_of_work");
-		String var_city_region = (String) context
-				.getVariable("var_city_region");
-		Integer var_country = (Integer) context.getVariable("var_country");
-		boolean var_feature_in_user_map = context
-				.getBooleanVariable("var_feature_in_user_map");
-		boolean var_findout_more_about_research = context
-				.getBooleanVariable("var_findout_more_about_research");
-		boolean var_get_frontlinesms_newsletter = context
-				.getBooleanVariable("var_get_frontlinesms_newsletter");
-		String var_organization_name = (String) context
-				.getVariable("var_organization_name");
-		String var_share_email = (String) context
-				.getVariable("var_share_email");
-		String var_share_telephone_skype = (String) context
-				.getVariable("var_share_telephone_skype");
-		boolean var_share_your_data = context
-				.getBooleanVariable("var_share_your_data");
-		boolean var_monitor_impact = context
-				.getBooleanVariable("var_monitor_impact");
-		boolean var_partner = context
-				.getBooleanVariable("var_partner");
-		boolean var_share_limited_technical_info = context
-				.getBooleanVariable("var_share_limited_technical_info");
-
 		Map data = new HashMap();
 		copyStrings(context, data,
 				"var_name",
 				"var_use",
-				"var_website_address");
-		data.put("var_operating_system", System.getProperty("os.name"));
-
-		data.put("var_category_of_work", "" + prof[var_category_of_work]);
-		data.put("var_city_region", var_city_region);
-		data.put("var_country", "" + countries[var_country]);
-		data.put("var_feature_in_user_map", "" + var_feature_in_user_map);
-		data.put("var_findout_more_about_research", ""
-				+ var_findout_more_about_research);
-		data.put("var_get_frontlinesms_newsletter", ""
-				+ var_get_frontlinesms_newsletter);
-		data.put("var_organization_name", var_organization_name);
-		data.put("var_share_email", var_share_email);
-		data.put("var_partner", var_partner);
-		data.put("var_share_limited_technical_info", var_share_limited_technical_info);
-		data.put("var_share_telephone_skype", var_share_telephone_skype);
-		data.put("var_monitor_impact", "" + var_monitor_impact);
-
+				"var_website_address",
+				"var_city_region",
+				"var_organization_name",
+				"var_share_email",
+				"var_share_telephone_skype");
+		copyBooleans(context, data,
+				"var_feature_in_user_map",
+				"var_findout_more_about_research",
+				"var_get_frontlinesms_newsletter",
+				"var_share_your_data",
+				"var_monitor_impact",
+				"var_partner",
+				"var_share_limited_technical_info");		
+		copyIntegers(context, data,
+				PROFESSION, "var_category_of_work",
+				COUNTRIES, "var_country");
 		return addSystemPropertiesToRegistrationData(data);
 	}
 
-	private Map addSystemPropertiesToRegistrationData(Map<String, String> data){
-		data.put("javahome",getSysProp("java.home"));
-		data.put("javavendor",getSysProp("java.vendor"));
-		data.put("javavendorurl",getSysProp("java.vendor.url"));
-		data.put("javaversion",getSysProp("java.version"));
-		data.put("javavmversion",getSysProp("java.vm.version"));
-		data.put("javaruntimeversion",getSysProp("java.runtime.version"));
-		data.put("javaspecificationversion",getSysProp("java.specification.version"));
-		data.put("osarch",getSysProp("os.arch"));
-		data.put("osname",getSysProp("os.name"));
-		data.put("osversion",getSysProp("os.version"));
-		data.put("userdir",getSysProp("user.dir"));
-		data.put("userhome",getSysProp("user.home"));
-		data.put("username",getSysProp("user.name"));
-		data.put("userlanguage",getSysProp("user.language"));
-		data.put("usercountry",getSysProp("user.country"));
+	private Map addSystemPropertiesToRegistrationData(Map<String, String> data) {
+		data = addSystemProperties(data,
+				"java.home", 
+				"java.vendor",
+				"java.vendor.url",
+				"java.version",
+				"java.vm.version",
+				"java.runtime.version",
+				"java.specification.version",
+				"os.arch",
+				"os.name",
+				"os.version",
+				"user.dir",
+				"user.home",
+				"user.name",
+				"user.language",
+				"user.country");
 		try{
 			data.put("hostname",java.net.InetAddress.getLocalHost().getHostName());
 		}catch(java.net.UnknownHostException e){
@@ -133,9 +106,12 @@ public class FrontlineRegistration {
 		}
 		return data;
 		}
-
-	private String getSysProp(String prop){
-			return System.getProperty(prop);
+	
+	private Map addSystemProperties(Map<String, String> data, String... keys){
+		for(String key: keys){
+			data.put(key, System.getProperty(key));			
+		}
+		return data;
 	}
 
 	public void send(FormEnvironment formEnvironment, InstallerContext context) {
@@ -143,7 +119,6 @@ public class FrontlineRegistration {
 		boolean succeeded = ts.submitData(getRegistrationData(context));
 
 		setVisible(formEnvironment, 199, succeeded);
-		setVisible(formEnvironment, 200, succeeded);
 		setVisible(formEnvironment, 201, !succeeded);
 		setVisible(formEnvironment, 202, !succeeded);
 	}
@@ -157,6 +132,29 @@ public class FrontlineRegistration {
 	private void copyString(InstallerContext from, Map to, String key) {
 		String value = (String) from.getVariable(key);
 		to.put(key, value.replace("\n", " "));
+	}
+
+	private void copyBooleans(InstallerContext from, Map to, String... keys) {
+		for(String key: keys) {
+			copyBoolean(from, to, key);
+		}
+	}
+
+	private void copyBoolean(InstallerContext from, Map to, String key) {
+		boolean value = from.getBooleanVariable(key);
+		to.put(key, Boolean.toString(value));
+	}
+
+	private void copyIntegers(InstallerContext from, Map to, Object... keys) {
+		for(int x=0; x<keys.length; x+=2) {
+			copyInteger(from, to, (String[])keys[x], (String)keys[x+1]);
+		}
+	}
+
+	private void copyInteger(InstallerContext from, Map to, String[] map, String key) {
+		Integer index = (Integer) from.getVariable(key);
+		String value = index==null? "": map[index];
+		to.put(key, value);
 	}
 
 	private void setVisible(FormEnvironment formEnvironment, int id, boolean visible) {

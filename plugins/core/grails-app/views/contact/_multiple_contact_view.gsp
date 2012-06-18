@@ -28,10 +28,10 @@
 		</tr>
 	</table>
 	<div id="action-buttons" class="buttons">
-		<g:actionSubmit class="btn" id="update-all" action="updateMultipleContacts" value="${g.message(code:'contact.save.many')}" disabled="disabled" />
-		<g:link class="cancel btn" disabled="disabled"><g:message code="contact.cancel"/></g:link>
-		<a class="btn" id="btn_delete_all" onclick="launchConfirmationPopup(i18n('contact.delete.many'));">
-			<g:message code="contact.delete.many"/>
+		<g:actionSubmit class="btn" id="update-all" action="updateMultipleContacts" value="${g.message(code:'action.save.all')}" disabled="disabled" />
+		<g:link class="cancel btn" disabled="disabled"><g:message code="action.cancel"/></g:link>
+		<a class="btn" id="btn_delete_all" onclick="launchConfirmationPopup(i18n('action.delete.all'));">
+			<g:message code="action.delete.all"/>
 		</a>
 	</div>
 </div>

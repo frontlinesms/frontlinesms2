@@ -91,4 +91,17 @@ class MessageControllerSpec extends Specification {
 		then:
 			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived.message"
 	}
+	
+	def "archiving pending messages from the result screen should fail"(){
+		setup:
+			def message = new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]).save()
+			params.controller = "message"
+			params.messageSection = "result"
+			params.searchId = "1"
+			params.messageId = message.id
+		when:
+			controller.archive()
+		then:
+			assert message.archived == true
+	}
 }

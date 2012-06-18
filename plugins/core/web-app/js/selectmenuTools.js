@@ -19,7 +19,8 @@ var selectmenuTools = {
 
 	removeSelected: function(menu) {
 		menu = $(menu);
-		menu.find("[value='"+menu.val()+"']").remove();
+		menu.find("[value='" + menu.val() + "']").remove();
 		selectmenuTools.snapback(menu);
 	},
 }
+

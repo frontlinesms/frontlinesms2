@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="name"><g:message code="announcement.prompt"/></label>
-	<g:textField name="name"/>
+	<g:textField name="name" value="${activityInstanceToEdit?.name}"/>
 </div>
 <div class="confirm">
 	<h2><g:message code="announcement.details.label"/></h2>
