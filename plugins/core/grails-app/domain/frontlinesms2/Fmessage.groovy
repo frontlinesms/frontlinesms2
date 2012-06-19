@@ -5,8 +5,7 @@ import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
-
-	static int maxMessageSize = 1600
+	static final int MAX_TEXT_LENGTH = 1600
 
 	static belongsTo = [messageOwner:MessageOwner]
 	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
@@ -39,7 +38,7 @@ class Fmessage {
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text nullable:true, maxSize:maxMessageSize
+		text nullable:true, maxSize:MAX_TEXT_LENGTH
 		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->
@@ -196,9 +195,14 @@ class Fmessage {
 			else if(id) return src
 			else return Contact.findByMobile(src)?.name?: src
 		} else if(dispatches.size() == 1) {
-			return [outboundContactName?: (dispatches as List)[0].dst]
+			if(outboundContactName) return outboundContactName
+			else {
+				def dst = (dispatches as List)[0].dst
+				if(id) return dst
+				else return Contact.findByMobile(dst)?.name?: dst
+			}
 		} else {
-			return [dispatches.size()]
+			return dispatches.size()
 		}
 	}
 
@@ -210,8 +214,7 @@ class Fmessage {
 	}
 
 	public void setText(String text) {
-		if(text?.size() > maxMessageSize) text = text[0..(maxMessageSize - 2)] + '…'
-		this.text = text
+		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
 
 	// FIXME document what this is, and remove references to PollResponse.  Anyway this poll display
@@ -228,7 +231,7 @@ class Fmessage {
 		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
 	}
 
-	static def listPending(onlyFailed, params) {
+	static def listPending(onlyFailed, params=[:]) {
 		Fmessage.getAll(pending(onlyFailed).list(params) as List)
 	}
 

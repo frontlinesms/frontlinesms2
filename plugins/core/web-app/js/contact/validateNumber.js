@@ -48,4 +48,6 @@ function checkForDuplicates() {
 		}
 	});
 }
-
+$(document).ready(function() {
+	$("#mobile").trigger('change');
+});

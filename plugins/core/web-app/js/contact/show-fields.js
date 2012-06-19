@@ -38,18 +38,19 @@ function clickDone() {
 }
 
 function addCustomField(name) {
-	var fieldId = Math.floor(Math.random()*100001)
-	var fieldListItem = $('<tr><td><label class="why" for="' + fieldId + '">' + name + '</label></td></tr>');
-	var textFieldItem = $('<td><input type="text" name="' + name + '" value="" /></td>');
-	var deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '"></a>');
-	var deleteButtonTd = $('<td></td>');
+	var fieldId = Math.floor(Math.random() * 100001);
+	var fieldRow = $('<tr><td><label for="' + fieldId + '">' + name + '</label></td></tr>');
+	var textFieldItem = $('<input type="text" name="' + name + '"/>');
+	var deleteButton = $('<a class="remove-command unsaved-field custom-field" id="remove-field-' + fieldId + '">&nbsp;</a>');
 
-	deleteButtonTd.append(deleteButton);
-	fieldListItem.append(textFieldItem);
-	fieldListItem.append(deleteButtonTd);
+	var fieldTd = $("<td/>");
+	fieldTd.append(textFieldItem);
+	fieldTd.append(deleteButton);
+	fieldRow.append(fieldTd);
+
 	deleteButton.click(removeFieldClickAction);
 
-	$('#info-add').parent().before(fieldListItem);
+	$('#info-add').parent().before(fieldRow);
 	$('input[name="' + name + '"]').focus();
 	addField(name);
 }
