@@ -6,6 +6,14 @@ import java.util.zip.ZipEntry
 import org.apache.camel.Exchange
 
 class MetaClassModifiers {
+	static void addAll() {
+		MetaClassModifiers.addTruncateMethodToStrings()
+		MetaClassModifiers.addRoundingMethodsToDates()
+		MetaClassModifiers.addZipMethodToFile()
+		MetaClassModifiers.addCamelMethods()
+		MetaClassModifiers.addMapMethods()
+	}
+
 	static def addZipMethodToFile() {
 		File.metaClass.zip = { output, filter=null ->
 			new ZipOutputStream(output).withStream { zipOutStream ->
@@ -96,6 +104,5 @@ class MetaClassModifiers {
 		}
 		
 	}
-	
 }
 
