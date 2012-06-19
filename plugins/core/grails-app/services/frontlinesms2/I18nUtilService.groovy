@@ -57,7 +57,11 @@ class I18nUtilService {
 
 	def getMessage(args) {
 		// maybe we need Locale.setDefault(new Locale("en","US"))
-		def text = messageSource.getMessage(args.code, args.args as Object[], null)
+		try {
+			def text = messageSource.getMessage(args.code, args.args as Object[], null)
+		} catch(org.springframework.context.NoSuchMessageException _) {
+			return args.code
+		}
 	}
 
 	private String getRootDirectory() {

@@ -28,7 +28,7 @@ class MetaClassModifiers {
 	
 	static def addTruncateMethodToStrings() {
 		String.metaClass.truncate = { max=16 ->
-		    delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
+			delegate.size() <= max? delegate: delegate.substring(0, max-1) + '…'
 		}
 	}
 
