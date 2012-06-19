@@ -71,6 +71,7 @@ class CoreBootStrap {
 		}
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
+		println '\\o/ FrontlineSMS started.'
 	}
 
 	def destroy = {
