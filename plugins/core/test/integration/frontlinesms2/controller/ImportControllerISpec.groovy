@@ -74,7 +74,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.importMessages()
 		then:
-			Fmessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..478] + '…']
+			Fmessage.list()*.text == ['short message', ('0123456789ABCDEF' * 256)[0..1598] + '…']
 	}
 
 	def 'Uploading a CSV with a BOM should not cause issues'() {

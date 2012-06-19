@@ -76,7 +76,8 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "blank search string returns a list of messages"() {
 		when:
-			def search = new SearchCommand(name: "toSave", searchString: "")
+			def search = new Search(name: "toSave", searchString: "")
+			search.save(failOnError: true, flush: true)
 			controller.params.search = search
 			controller.params.inArchive = true
 			def model = controller.result()

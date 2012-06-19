@@ -2,18 +2,18 @@ package frontlinesms2.camel.clickatell
 
 import spock.lang.*
 import frontlinesms2.*
-import grails.plugin.spock.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
+import grails.buildtestdata.mixin.Build
 
-class ClickatellPreProcessorSpec extends UnitSpec {
+@Mock(ClickatellFconnection)
+@Build(ClickatellFconnection)
+class ClickatellPreProcessorSpec extends Specification {
 	ClickatellPreProcessor p
 	
 	def setup() {
-		mockDomain Fconnection, [[apiId:'11111', username:'bob', password:'secret'] as ClickatellFconnection]
-		
-		registerMetaClass Exchange
-		Exchange.metaClass.getFconnectionId = { Fconnection.list()[-1].id }
+		def c = ClickatellFconnection.build(apiId:'111111')
+		Exchange.metaClass.getFconnectionId = { c.id }
 		
 		p = new ClickatellPreProcessor()
 	}

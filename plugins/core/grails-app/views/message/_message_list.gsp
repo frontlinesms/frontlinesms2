@@ -42,10 +42,10 @@
 										${m.displayName}
 									</g:if>
 									<g:elseif test="${m.dispatches.size() == 1}">
-										<g:message code="fmessage.to" args="${m.displayName}" />
+										<g:message code="fmessage.to" args="${[] << m.displayName}" />
 									</g:elseif>
 									<g:else>
-										<g:message code="fmessage.to.multiple" args="${m.displayName}" />
+										<g:message code="fmessage.to.multiple" args="${[] << m.displayName}" />
 									</g:else>
 								</g:link>
 						</td>
