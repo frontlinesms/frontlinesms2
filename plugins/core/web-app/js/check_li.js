@@ -107,6 +107,7 @@ function applyContactPaneJavascriptEnhancements(pane) {
 	$("div.single-contact").keyup(function(event) {
 		enableSaveAndCancel();
 	});
+	$("#mobile").trigger('change');
 }
 
 function checkAll(itemTypeString) {

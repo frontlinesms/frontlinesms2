@@ -19,25 +19,24 @@ class SearchController extends MessageController {
 				messageSection:'result',
 				customFieldList:CustomField.getAllUniquelyNamed()]
 	}
-
+	
 	def result = {
-		def search = withSearch { searchInstance ->
-			def activity =  getActivityInstance()
-			searchInstance.owners = activity ? [activity] : null
-			searchInstance.searchString = params.searchString ?: ""
-			searchInstance.contactString = params.contactString ?: null
-			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
-			searchInstance.status = params.messageStatus ?: null
-			searchInstance.activityId = params.activityId ?: null
-			searchInstance.inArchive = params.inArchive ? true : false
-			searchInstance.startDate = params.startDate ?: null
-			searchInstance.endDate = params.endDate ?: null
-			searchInstance.customFields = [:]
-			CustomField.getAllUniquelyNamed().each { customFieldName ->
-				if(params[customFieldName])
-					searchInstance.customFields[customFieldName] = params[customFieldName]
-			}
-			searchInstance.save(failOnError: true, flush: true)
+		def search = new SearchCommand()
+		def activity = getActivityInstance()
+		search.owners = activity ? [activity] : null
+		search.searchString = params.searchString ?: ""
+		search.contactString = params.contactString ?: null
+		search.group = params.groupId ? Group.get(params.groupId) : null
+		search.status = params.messageStatus ?: null
+		search.activityId = params.activityId ?: null
+		search.inArchive = params.inArchive ? true : false
+		search.startDate = params.startDate ?: null
+		search.endDate = params.endDate ?: null
+		search.customFields = [:]
+
+		CustomField.getAllUniquelyNamed().each { customFieldName ->
+			if(params[customFieldName])
+				search.customFields[customFieldName] = params[customFieldName]
 		}
 
 		def rawSearchResults = Fmessage.search(search)
@@ -102,25 +101,32 @@ class SearchController extends MessageController {
 			activityType.findById(activityId)
 		} else return null
 	}
-	
-	private def withSearch(Closure c) {
-		def search = Search.get(params.searchId)
-		if(search) {
-			params.searchString = search.searchString
-			params.contactString = search.contactString
-			params.groupId = search.group
-			params.messageStatus = search.status
-			params.activityId = search.activityId
-			params.inArchive = search.inArchive
-			params.startDate = search.startDate
-			params.endDate = search.endDate
-			search.customFields.each() { customFieldName, val ->
-				params[customFieldName] = val
-			}
-		} else {
-			search = new Search(name: 'TempSearchObject')
-		}
-		c.call(search)
-	}
 }
 
+class SearchCommand {
+	String name
+	String searchString
+	String contactString
+	List owners
+	String activityId
+	Group group
+	String status
+	Date startDate
+	Date endDate
+	Map customFields
+	boolean inArchive
+	
+	static constraints = {
+		name(blank: false, nullable: false, maxSize: 255)
+		searchString(blank: true, maxSize: 255)
+		contactString(blank: true, nullable: true, maxSize: 255)
+		activityId(nullable: true, blank: true, maxSize: 255)
+		owners(nullable: true)
+		group(nullable: true)
+		status(nullable: true)
+		startDate(nullable: true)
+		endDate(nullable: true)
+		customFields(nullable: true)
+		inArchive(nullable: true)
+	}
+}
