@@ -13,9 +13,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def messageSources = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			messageSources.containsAll(['Alice', 'Bob'])
+			messageList.sources.containsAll(['Alice', 'Bob'])
 	}
 
 	def 'message details are shown in row'() {
@@ -23,14 +22,14 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
 		then:
-			rowContents[2] == 'Bob'
-			rowContents[3] == 'hi Bob'
-			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messages[2].source == 'Bob'
+			messageList.messages[2].text == 'hi Bob'
+			messageList.messages[2].date != null // ie is a valid date object
 	}
 
 	def 'message to alice is first in the list, and links to the show page'() {
+		// TODO: rewrite (but first understand what it's doing.. seems strange)
 		given:
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
@@ -47,7 +46,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			$('#message-detail #message-detail-content').text() == "No message selected"
+			singleMessageDetails.displayed && singleMessageDetails.noneSelected
 	}
 	
 	//FIXME this test fail when the local computer language is different than english. The Date return
@@ -57,12 +56,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
-			go "message/inbox/show/${message.id}"
-			def formatedDate = dateToString(message.date)
+			to PageMessageInbox, "show", message.id
 		then:
-			$('#message-detail #message-detail-sender').text() == message.src
-			$('#message-detail #message-detail-date').text() == formatedDate
-			$('#message-detail #message-detail-content').text() == message.text
+			singleMessageDetails.sender == message.src
+			compareDatesIgnoreSeconds(singleMessageDetails.date, message.date)
+			singleMessageDetails.text == message.text
 	}
 
 	def 'selected message is highlighted'() {
@@ -71,13 +69,14 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			go "message/inbox/show/${aliceMessage.id}"
+			to PageMessageInbox, "show", aliceMessage.id
 		then:
-			$('#message-list .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
+			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${aliceMessage.id}"
+			// $('#message-list .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
 		when:
-			go "message/inbox/show/${bobMessage.id}"
+			to PageMessageInbox, "show", bobMessage.id
 		then:
-			$('#message-list .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}"
+			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
@@ -87,13 +86,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 			assert !m1.read
 			assert m2.read
 		when:
-			go "message/inbox/show/$m2.id"
+			to PageMessageInbox, "show", m2.id
 		then:
-			$("tr#message-${m1.id}").hasClass('unread')
-			!$("tr#message-${m1.id}").hasClass('read')
-
-			!$("tr#message-${m2.id}").hasClass('unread')
-			$("tr#message-${m2.id}").hasClass('read')
+			!messageList.messages[0].isRead
+			messageList.messages[1].isRead
 	}
 
 	def 'contact name is displayed if message src is an existing contact'() {
@@ -102,12 +98,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def contact = new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageInbox
-			def rowContents = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			rowContents.contains('June')
+			messageList.sources.contains('June')
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
@@ -120,6 +116,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		setup:
 			createInboxTestMessages()
 		when:
@@ -139,6 +136,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		when:
 			go "message/inbox"
 		then:
@@ -147,11 +145,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
-			go "message/inbox/show/$message.id"
+			to PageMessageInbox, "show", message.id
 			waitFor{ $("#btn_forward").displayed }
 			$("#btn_forward").click()
 			waitFor { $('div#tabs-1').displayed }
@@ -160,6 +159,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 	
 	def "should only display message details when one message is checked"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			createInboxTestMessages()
 		when:
@@ -178,6 +178,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	def "should skip recipients tab if a message is replied"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			createInboxTestMessages()
 		when:
@@ -193,6 +194,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 	
 	def "should show the address of the contact in the confirm screen"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
@@ -210,6 +212,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
@@ -247,6 +250,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 //	}
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		setup:
 			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
@@ -260,6 +264,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 	
 	def "should update message count on tab when new message is received"() {
+		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			createInboxTestMessages()
 		when:
@@ -275,5 +280,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	String dateToString(Date date) {
 		new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).format(date)
+	}
+
+	boolean compareDatesIgnoreSeconds(Date a, Date b) {
+		dateToString(a) == dateToString(b)
 	}
 }
