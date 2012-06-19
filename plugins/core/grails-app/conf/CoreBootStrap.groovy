@@ -31,11 +31,7 @@ class CoreBootStrap {
 	def init = { servletContext ->
 		println "BootStrap.init() : Env=${Environment.current}"
 		initialiseSerial()
-		MetaClassModifiers.addTruncateMethodToStrings()
-		MetaClassModifiers.addRoundingMethodsToDates()
-		MetaClassModifiers.addZipMethodToFile()
-		MetaClassModifiers.addCamelMethods()
-		MetaClassModifiers.addMapMethods()
+		MetaClassModifiers.addAll()
 
 		initAppSettings()
 

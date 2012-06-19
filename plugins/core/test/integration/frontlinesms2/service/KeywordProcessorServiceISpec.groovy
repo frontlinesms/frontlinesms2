@@ -9,7 +9,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Keyword matching should ignore archived and deleted activities when there is an unarchived match'() {
 		given:
-			createKeywords([archived:true, deleted:false], [archived:true, deleted:false], [archived:false, deleted:false])
+			createKeywords([[archived:true, deleted:false], [archived:false, deleted:true], [archived:false, deleted:false]])
 			def activities = Keyword.findAllByValue('A')*.activity
 			def activeKeyword = activities[2]
 			assert activities*.archived == [true, false, false]
@@ -23,7 +23,7 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Keyword matching should ignore archived and deleted activities even if there is no unarchived or undeleted match'() {
 		given:
-			createKeywords([archived:true, deleted:false], [archived:true, deleted:false])
+			createKeywords([[archived:true, deleted:false], [archived:false, deleted:true]])
 			def activities = Keyword.findAllByValue('A')*.activity
 			assert activities*.archived == [true, false]
 			assert activities*.deleted == [false, true]
@@ -35,9 +35,11 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createKeywords(attributes) {
+		def count = 0
 		attributes.collect { a ->
-			k = new Keyword(value:'A')
-			k.activity = Autoreply.build(keyword:k, archived:a.archived, deleted:a.deleted)
+			def k = new Keyword(value:'A')
+			k.activity = Autoreply.build(name:"autoreply-${++count}",
+					keyword:k, archived:a.archived, deleted:a.deleted)
 			k.activity.metaClass.processKeyword = { Fmessage m, boolean b -> processed << delegate }
 			k.save(failOnError:true, flush:true)
 		}

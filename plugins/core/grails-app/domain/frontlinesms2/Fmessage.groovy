@@ -195,9 +195,14 @@ class Fmessage {
 			else if(id) return src
 			else return Contact.findByMobile(src)?.name?: src
 		} else if(dispatches.size() == 1) {
-			return [outboundContactName?: (dispatches as List)[0].dst]
+			if(outboundContactName) return outboundContactName
+			else {
+				def dst = (dispatches as List)[0].dst
+				if(id) return dst
+				else return Contact.findByMobile(dst)?.name?: dst
+			}
 		} else {
-			return [dispatches.size()]
+			return dispatches.size()
 		}
 	}
 
@@ -209,7 +214,7 @@ class Fmessage {
 	}
 
 	public void setText(String text) {
-		this.text = text.truncate(MAX_TEXT_LENGTH)
+		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
 
 	// FIXME document what this is, and remove references to PollResponse.  Anyway this poll display
@@ -226,7 +231,7 @@ class Fmessage {
 		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
 	}
 
-	static def listPending(onlyFailed, params) {
+	static def listPending(onlyFailed, params=[:]) {
 		Fmessage.getAll(pending(onlyFailed).list(params) as List)
 	}
 

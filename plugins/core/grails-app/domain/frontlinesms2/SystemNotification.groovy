@@ -10,6 +10,6 @@ class SystemNotification {
 	}
 
 	public void setText(String text) {
-		this.text = text.truncate(MAX_TEXT_LENGTH)
+		this.text = text?.truncate(MAX_TEXT_LENGTH)
 	}
 }
