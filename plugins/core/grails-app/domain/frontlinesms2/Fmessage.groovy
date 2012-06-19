@@ -202,7 +202,7 @@ class Fmessage {
 				else return Contact.findByMobile(dst)?.name?: dst
 			}
 		} else {
-			return dispatches.size()
+			return Integer.toString(dispatches.size())
 		}
 	}
 

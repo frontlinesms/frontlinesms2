@@ -10,6 +10,17 @@ testDataConfig {
 		'frontlinesms2.Announcement' {
 			messages = []
 		}
+		'frontlinesms2.IntelliSmsFconnection' {
+			send = true
+			username = 'uname'
+			password = 'secret'
+			receive = true
+			receiveProtocol = frontlinesms2.EmailReceiveProtocol.POP3
+			serverName = 'example.com'
+			serverPort = 1234
+			emailUserName = 'ename'
+			emailPassword = 'pword'
+		}
 	}
 }
 
