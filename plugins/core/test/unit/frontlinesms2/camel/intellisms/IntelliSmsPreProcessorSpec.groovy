@@ -2,18 +2,18 @@ package frontlinesms2.camel.intellisms
 
 import spock.lang.*
 import frontlinesms2.*
-import grails.plugin.spock.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
+import grails.buildtestdata.mixin.Build
 
-class IntelliSmsPreProcessorSpec extends UnitSpec {
+@Mock([IntelliSmsFconnection, Dispatch])
+@Build(IntelliSmsFconnection)
+class IntelliSmsPreProcessorSpec extends Specification {
 	IntelliSmsPreProcessor p
 	
 	def setup() {
-		mockDomain Fconnection, [[username:'bob', password:'secret'] as IntelliSmsFconnection]
-		mockDomain Dispatch
-		registerMetaClass Exchange
-		Exchange.metaClass.getFconnectionId = { Fconnection.list()[-1].id }
+		def c = IntelliSmsFconnection.build(username:'bob', password:'secret')
+		Exchange.metaClass.getFconnectionId = { c.id }
 		
 		p = new IntelliSmsPreProcessor()
 	}
