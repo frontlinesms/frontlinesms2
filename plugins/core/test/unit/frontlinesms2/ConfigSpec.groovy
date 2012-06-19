@@ -1,10 +1,9 @@
 package frontlinesms2
 
-import grails.plugin.spock.*
+import spock.lang.*
 import org.codehaus.groovy.grails.commons.ConfigurationHolder as GrailsConfig
 
-class ConfigSpec extends UnitSpec {
-	
+class ConfigSpec extends Specification {
 	def 'frontlinesms plugin property should be set to core when no plugins are installed'() {
 		setup:
 			mockConfig('''
