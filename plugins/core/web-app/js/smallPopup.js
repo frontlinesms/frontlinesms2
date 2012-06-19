@@ -10,6 +10,12 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 			          		{ text:btnFinishedText,  click: doneAction, id:"done" }],
 			close: function() { $(this).remove(); }
 	});
+	$("#modalBox").bind("keydown", function(e) {
+		if (e.keyCode === 13){
+			$("#done").click();
+			return false;
+		}
+	});
 }
 
 function launchConfirmationPopup(title) {
