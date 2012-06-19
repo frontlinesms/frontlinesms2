@@ -7,15 +7,13 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def processed = []
 
-	def 'Keyword matching should ignore archived activities when there is an unarchived match'() {
+	def 'Keyword matching should ignore archived and deleted activities when there is an unarchived match'() {
 		given:
-			createKeywords(["A", "A"])
+			createKeywords([archived:true, deleted:false], [archived:true, deleted:false], [archived:false, deleted:false])
 			def activities = Keyword.findAllByValue('A')*.activity
-			assert activities.size() == 2
-			def activeKeyword = activities[1]
-			activeKeyword.archived = false
-			activeKeyword.save()
-			assert Keyword.findAllByValue('A')*.activity*.archived == [true, false]
+			def activeKeyword = activities[2]
+			assert activities*.archived == [true, false, false]
+			assert activities*.deleted == [false, true, false]
 			def m = createFmessage 'a'
 		when:
 			keywordProcessorService.process(m)
@@ -23,12 +21,12 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			processed == [activeKeyword]
 	}
 
-	def 'Keyword matching should ignore archived activities even if there is no unarchived match'() {
+	def 'Keyword matching should ignore archived and deleted activities even if there is no unarchived or undeleted match'() {
 		given:
-			createKeywords(["A", "A"])
+			createKeywords([archived:true, deleted:false], [archived:true, deleted:false])
 			def activities = Keyword.findAllByValue('A')*.activity
-			assert activities.size() == 2
-			assert Keyword.findAllByValue('A')*.activity*.archived == [true, true]
+			assert activities*.archived == [true, false]
+			assert activities*.deleted == [false, true]
 			def m = createFmessage 'a'
 		when:
 			keywordProcessorService.process(m)
@@ -36,10 +34,10 @@ class KeywordProcessorServiceISpec extends grails.plugin.spock.IntegrationSpec {
 			processed == []
 	}
 
-	private def createKeywords(keywords) {
-		keywords.collect { k ->
-			k = new Keyword(value:k)
-			k.activity = Autoreply.build(keyword:k, archived:true)
+	private def createKeywords(attributes) {
+		attributes.collect { a ->
+			k = new Keyword(value:'A')
+			k.activity = Autoreply.build(keyword:k, archived:a.archived, deleted:a.deleted)
 			k.activity.metaClass.processKeyword = { Fmessage m, boolean b -> processed << delegate }
 			k.save(failOnError:true, flush:true)
 		}
