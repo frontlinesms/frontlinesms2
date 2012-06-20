@@ -21,6 +21,8 @@
 			<fsms:render template="/archive/menu"/>
 			<g:form controller="${params.controller}"
 					params="[messageSection: messageSection, ownerId: ownerInstance?.id, messageId: messageInstance?.id, searchId: search?.id]">
+				<g:hiddenField name="messageSection" value="${messageSection}"/>
+				<g:hiddenField name="ownerId" value="${ownerInstance?.id}"/>
 				<div id="main-list-container">
 					<div id="main-list-head">
 						<g:if test="${viewingMessages}">
