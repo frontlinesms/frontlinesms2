@@ -72,7 +72,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, "show", aliceMessage.id
 		then:
 			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${aliceMessage.id}"
-			// $('#message-list .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
 		when:
 			to PageMessageInbox, "show", bobMessage.id
 		then:
@@ -103,131 +102,119 @@ class MessageInboxSpec extends MessageBaseSpec {
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
-			go "message/inbox/show/$message.id"
-			$('#btn_reply').click()
+			to PageMessageInbox, "show", message.id
+			singleMessageDetails.reply.click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			//FIXME: does this test really check what the title suggests?
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		setup:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.list()[0].id}"
+			to PageMessageInbox, "show",Fmessage.list()[0].id
 		then:
-			$("#message-list tr").size() == 3
+			messageList.messages.size() == 3
 		when:
-			$('a', text:'Starred').click()
-			waitFor { $("#message-list tr").size() == 2 }
+			footer.showStarred.click()
+			waitFor { messageList.messages.size() == 2 }
 		then:
-			$("#message-list tr .message-sender-cell a")[1].text() == 'Alice'
+			messageList.messages[1].source == 'Alice'
 		when:
-			$('a', text:'All').click()
-			waitFor { $("#message-list tr").size() == 3 }
+			footer.showAll.click()
+			waitFor { messageList.messages.size() == 3 }
 		then:
-			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Alice', 'Bob'])
+			messageList.sources.containsAll(['Alice', 'Bob'])
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		when:
-			go "message/inbox"
+			to PageMessageInbox
 		then:
-			$("#no-messages").text() == "No messages here!"
-		    !$("a", text:"starred").displayed
+			messageList.noContent.displayed
+		    !footer.showStarred.displayed
 	}
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 		when:
 			to PageMessageInbox, "show", message.id
-			waitFor{ $("#btn_forward").displayed }
-			$("#btn_forward").click()
-			waitFor { $('div#tabs-1').displayed }
+			waitFor{ singleMessageDetails.forward.displayed }
+			singleMessageDetails.forward.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		then:
-			$('textArea', name:'messageText').text() == "test"
+			quickMessageDialog.compose.textArea.text() == "test"
 	}
 	
 	def "should only display message details when one message is checked"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[1].checkbox.click()
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 2 }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 		when:
-			messagesSelect[2].click()
-			def message = Fmessage.findBySrc('Alice')
-			def formatedDate = dateToString(message.date)
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 1 }
-			waitFor { $('#single-message').displayed }
+			waitFor { multipleMessageDetails.checkedMessageCount == 1 }
+			waitFor { singleMessageDetails.displayed }
 	}
 
 	def "should skip recipients tab if a message is replied"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessageInbox, "show", Fmessage.findBySrc('Bob').id
 		then:
-			$("#btn_reply").click()
-			waitFor { $('#tabs-1').displayed }
+			singleMessageDetails.reply.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		when:
-			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3').displayed }
+			quickMessageDialog.next.jquery.trigger('click')
 		then:
-			$("#tabs-3").displayed
+			waitFor { quickMessageDialog.confirm.displayed }
 	}
 	
 	def "should show the address of the contact in the confirm screen"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
-			go "message/inbox/show/${message.id}"
+			to PageMessageInbox, "show", message.id
 		then:
-			$("#btn_reply").click()
-			waitFor { $('#tabs-1').displayed }
+			singleMessageDetails.reply.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		when:
-			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			quickMessageDialog.next.jquery.trigger('click')
+			waitFor { quickMessageDialog.confirm.displayed }
 		then:
-			$("#tabs-3").displayed
-			$("#recipient").text() == "${message.src}"
+			quickMessageDialog.confirm.recipientName == "${message.src}"
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			new Contact(name: "Tom", mobile: "+254999999").save(failOnError:true)
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
-			go "message/inbox/show/${message.id}"
+			to PageMessageInbox, "show", message.id
 		then:
-			$("#btn_reply").click()
-			waitFor { $('#tabs-1').displayed }
+			singleMessageDetails.reply.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		when:
-			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			quickMessageDialog.next.jquery.trigger('click')
+			waitFor { quickMessageDialog.confirm.displayed }
 		then:
-			$("#tabs-3").displayed
-			$("#recipient").text() == "${Contact.findByMobile(message.src).name}"
+			quickMessageDialog.confirm.recipientName == "${Contact.findByMobile(message.src).name}"
 	}
 
 	// FIXME FOR THE BELOW FIXME.  IF YOU WILL INSIST ON COMMENTING OUT STUFF LIKE THIS, PLEASE EXPLAIN WHAT IS BROKEN
@@ -250,32 +237,29 @@ class MessageInboxSpec extends MessageBaseSpec {
 //	}
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		setup:
 			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			go "message/inbox/show/${Fmessage.findByText('hello').id}"
-			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
-			$("#move-actions").jquery.trigger("change")
+			to PageMessageInbox, "show", Fmessage.findByText('hello').id
+			singleMessageDetails.moveTo("my-folder")
 		then:	
-			waitFor { $("#no-messages").displayed && $("#no-messages").text().contains("No messages") }
-			$("#messages-submenu .selected").text().contains('Inbox')
+			waitFor { messageList.noContent.displayed }
+			bodyMenu.selected == "inbox"
 	}
 	
 	def "should update message count on tab when new message is received"() {
-		// TODO: rewrite to use new PageMessageInbox utilities
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
+			to PageMessageInbox, "show", Fmessage.findBySrc('Alice').id
 		then:
-			$('#inbox-indicator').text() == '1'
+			tabs.unreadcount == 1
 		when:
 			Fmessage.build().save(flush: true, failOnError:true)
 			js.refreshMessageCount()
 		then:
-			waitFor { $('#inbox-indicator').text() == '2' }
+			waitFor { tabs.unreadcount == 2}
 	}
 
 	String dateToString(Date date) {
