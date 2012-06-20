@@ -76,6 +76,7 @@
 	function autoUpdateOn() {
 		autoUpdate = true;
 	}
+
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit}">
 			$("#messageText").trigger("keyup");
@@ -117,7 +118,8 @@
 		$("#tabs-3").contentWidget({
 			validate: function() {
 				var pollKeywordTextfield = $("input[name='keyword']");
-				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||	pollKeywordTextfield.val().trim().length > 0;
+				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||
+						pollKeywordTextfield.val().trim().length > 0;
 				if(isValid) pollKeywordTextfield.removeClass('error');
 				else pollKeywordTextfield.addClass('error');
 				return isValid;
@@ -142,7 +144,7 @@
 					addAddressHandler();
 					return isGroupChecked('addresses');
 				}
-				return true
+				return true;
 			}
 		});
 
