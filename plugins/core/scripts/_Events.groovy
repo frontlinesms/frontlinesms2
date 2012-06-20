@@ -1,4 +1,5 @@
 import groovy.sql.Sql
+import grails.util.Environment
 
 eventDefaultStart = {
 	createUnitTest = { Map args = [:] ->
@@ -57,6 +58,31 @@ eventTestPhaseEnd = { phaseName ->
 	}
 }
 
+eventCompileStart = { kind ->
+	if(Environment.current == Environment.PRODUCTION) {
+		// Check we have no snapshot dependencies
+		if(new File('grails-app/conf/BuildConfig.groovy').text.contains('SNAPSHOT')) {
+			println '##################################'
+			println '# YOU HAVE SNAPSHOT DEPENDENCIES #'
+			println '##################################'
+
+			def appVersion
+			def VERSION_MATCHER = /app\.version=(.*)/
+			new File('application.properties').eachLine {
+				if(it ==~ VERSION_MATCHER) appVersion = (it =~ VERSION_MATCHER)[0][1]
+			}
+			if(appVersion.contains('SNAPSHOT')) {
+				println '# Press ENTER to continue...'
+				System.in.withReader { it.readLine() }
+			} else {
+				println '# You cannot include SNAPSHOT dependencies in a release.'
+				println '# Build terminating.'
+				System.exit(1);
+			}
+		}
+	}
+}
+
 eventCompileEnd = {
 	// Copy i18n properties files to web-app so they are available for i18nService in dev mode
 	def folderMap = [
@@ -82,7 +108,5 @@ eventCompileEnd = {
 		jsFilename = f.name - '.properties' + '.js'
 		new File("web-app/i18n/$jsFilename").text = 'var i18nStrings = ' + builder.toString()
 	}
-
-
 }
 
