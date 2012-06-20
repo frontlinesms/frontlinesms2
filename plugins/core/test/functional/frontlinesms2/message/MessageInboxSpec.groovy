@@ -80,8 +80,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = new Fmessage(inbound:true, read: false, date: new Date(), src: '1256').save(failOnError:true)
-			def m2 = new Fmessage(inbound:true, read: true, date: new Date(), src: '1256').save(failOnError:true)
+			def m1 = Fmessage.build(read:false)
+			def m2 = Fmessage.build(read:true)
 			assert !m1.read
 			assert m2.read
 		when:
@@ -93,8 +93,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			def message = new Fmessage(src:'+254778899', text:'test', inbound:true, date: new Date()).save(failOnError:true)
-			def contact = new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			Fmessage.build(src:'+254778899')
+			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
 		then:
@@ -103,14 +103,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			Fmessage.build(src:'+254778899', text:'test')
+			Contact.build(name:'June', mobile:'+254778899')
+			def message = Fmessage.build(src:'+254999999')
 		when:
-			to PageMessageInbox, "show", message.id
+			to PageMessageInbox, 'show', message.id
 			singleMessageDetails.reply.click()
 		then:
 			//FIXME: does this test really check what the title suggests?
+			// FIXME no it doesn't!  Not entirely clear what it is trying to test to me.
 			waitFor { quickMessageDialog.compose.textArea.displayed }
 	}
 
@@ -118,7 +119,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		setup:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, "show",Fmessage.list()[0].id
+			to PageMessageInbox, "show", Fmessage.list()[0].id
 		then:
 			messageList.messages.size() == 3
 		when:
@@ -138,13 +139,13 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox
 		then:
 			messageList.noContent.displayed
-		    !footer.showStarred.displayed
+			!footer.showStarred.displayed
 	}
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			Fmessage.build(src:'+254778899', text:'test')
+			def message = Fmessage.build(src:'+254999999' text:'test')
 		when:
 			to PageMessageInbox, "show", message.id
 			waitFor{ singleMessageDetails.forward.displayed }
@@ -197,7 +198,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			quickMessageDialog.next.jquery.trigger('click')
 			waitFor { quickMessageDialog.confirm.displayed }
 		then:
-			quickMessageDialog.confirm.recipientName == "${message.src}"
+			quickMessageDialog.confirm.recipientName == message.src
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
