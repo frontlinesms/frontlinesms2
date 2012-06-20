@@ -12,7 +12,7 @@ class ClickatellPreProcessorSpec extends Specification {
 	ClickatellPreProcessor p
 	
 	def setup() {
-		def c = ClickatellFconnection.build(apiId:'111111')
+		def c = ClickatellFconnection.build(apiId:'11111', username:'bob', password:'secret')
 		Exchange.metaClass.getFconnectionId = { c.id }
 		
 		p = new ClickatellPreProcessor()

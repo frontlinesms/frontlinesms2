@@ -1,12 +1,11 @@
 package frontlinesms2.camel.intellisms
 
 import spock.lang.*
-import grails.plugin.spock.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 import frontlinesms2.camel.exception.AuthenticationException
 
-class IntelliSmsPostProcessorSpec extends UnitSpec {
+class IntelliSmsPostProcessorSpec extends Specification {
 	IntelliSmsPostProcessor p = new IntelliSmsPostProcessor()
 	
 	def 'Successful responses should do nothing exciting'() {
@@ -39,3 +38,4 @@ class IntelliSmsPostProcessorSpec extends UnitSpec {
 		return x
 	}
 }
+

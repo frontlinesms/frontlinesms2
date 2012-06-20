@@ -65,8 +65,9 @@ function exportAction() {
 		data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(),
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
 				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
+		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
+			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
 			updateExportInfo();
 	}})
 }
