@@ -1,11 +1,10 @@
 package frontlinesms2.camel.clickatell
 
 import spock.lang.*
-import grails.plugin.spock.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
-class ClickatellPostProcessorSpec extends UnitSpec {
+class ClickatellPostProcessorSpec extends Specification {
 	ClickatellPostProcessor p = new ClickatellPostProcessor()
 	
 	def 'Successful responses should do nothing exciting'() {

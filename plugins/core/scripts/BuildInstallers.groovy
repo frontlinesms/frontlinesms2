@@ -17,6 +17,11 @@ def getValue(String var) {
 	return System.properties."frontlinesms2.build.$var"
 }
 
+def getValueAsBoolean(String var, boolean defaultValue) {
+	if(isSet(var)) return Boolean.parseBoolean(getValue(var))
+	else return defaultValue
+}
+
 def isWindows() {
 	System.properties.'os.name'.toLowerCase().contains('windows')
 }
@@ -39,7 +44,7 @@ target(main: 'Build installers for various platforms.') {
 			depends(clean)
 		}
 	} else depends(clean, war)
-	if(!isWindows()) if(isSet('compress')? getValue('compress'): grailsSettings.grailsEnv == 'production') {
+	if(!isWindows()) if(getValueAsBoolean('compress', grailsSettings.grailsEnv == 'production')) {
 		println 'Forcing compression of installers...'
 		exec executable:'do/enable_installer_compression'
 	} else {
@@ -67,6 +72,10 @@ target(main: 'Build installers for various platforms.') {
 		arg value:'clean'
 		arg value:'package'
 	}
+
+	// Make sure that linux installer is executable
+	chmod dir:'install/target/install4j', includes:'*.sh', type:'file', perm:'a+x'
+
 	envCheck()
 }
 

@@ -94,7 +94,7 @@ class MessageControllerSpec extends Specification {
 	
 	def "archiving pending messages from the result screen should fail"(){
 		setup:
-			def message = new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]).save()
+			def message = new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:PENDING)]).save()
 			params.controller = "message"
 			params.messageSection = "result"
 			params.searchId = "1"
@@ -102,6 +102,6 @@ class MessageControllerSpec extends Specification {
 		when:
 			controller.archive()
 		then:
-			assert message.archived == true
+			assert message.archived == false
 	}
 }
