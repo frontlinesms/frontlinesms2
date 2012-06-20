@@ -24,17 +24,39 @@ function refreshMessageCount() {
 }
 
 function refreshStatusIndicator() {
-	var updateLight = function(data) {
+	var getConnectionLostNotification = function() {
+		return $("#server-connection-lost-notification");
+	};
+
+	var _errorHandler = function() {
+		if(!getConnectionLostNotification().length) {
+			var notification = '<div id="server-connection-lost-notification"><div class="content"><p>'
+					+ i18n('server.connection.fail.title')
+					+ '</p><p>'
+					+ i18n('server.connection.fail.info')
+					+ '</p></div></div>';
+			$('body').append($(notification));
+		}
+		updateLight('red');
+	};
+
+	var _successHandler = function(data) {
+		var connectionLostNotification = getConnectionLostNotification();
+		if(connectionLostNotification) connectionLostNotification.remove();
+		updateLight(data);
+	};
+
+	var updateLight = function(color) {
 		$('#status-indicator').removeClass('green');
 		$('#status-indicator').removeClass('red');
-		$('#status-indicator').addClass(data);
+		$('#status-indicator').addClass(color);
 		$('#status-indicator').show();
 	};
 
 	$.ajax({
 		url: url_root + 'status/trafficLightIndicator',
-		success: updateLight,
-		error: function() { updateLight('red'); }
+		success: _successHandler,
+		error: _errorHandler
 	});
 }
 
