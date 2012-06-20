@@ -1,6 +1,6 @@
 package frontlinesms2
 
-import org.apache.camel.Exchange
+import org.apache.camel.*
 import serial.SerialClassFactory
 import serial.CommPortIdentifier
 import net.frontlinesms.messaging.*
@@ -27,6 +27,11 @@ class FconnectionService {
 			camelContext.addRouteDefinitions(routes)
 			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
 			LogEntry.log("Created routes: ${routes*.id}")
+		} catch(FailedToCreateProducerException ex) {
+			def cause = ex.cause
+			log.warn("Error creating routes to fconnection with id $c?.id", cause)
+			LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
+			createSystemNotification('connection.route.failNotification', [c?.name?:c?.id], cause)
 		} catch(Exception ex) {
 			ex.printStackTrace()
 			log.warn("Error creating routes to fconnection with id $c?.id", ex)
@@ -82,7 +87,7 @@ class FconnectionService {
 	}
 
 	private def createSystemNotification(code, args, exception=null) {
-		if(exception) args += [i18nUtilService.getMessage(code:exception.class.name.toLowerCase()), exception.message]
+		if(exception) args += [i18nUtilService.getMessage(code:exception.class.name.toLowerCase())]
 		def text = i18nUtilService.getMessage(code:code, args:args)
 		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
 		notification.read = false
