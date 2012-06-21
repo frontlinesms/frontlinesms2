@@ -5,6 +5,7 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 	//   - set width and position CSS only on first init
 	// * does not currently behave well for table headings as column widths break for the header when it is removed from normal flow
 	var
+		_direction, _key,
 		_main_header_height = $("#head").outerHeight(), // this height is fixed
 		_getBorders = function(element) {
 			return {
@@ -12,16 +13,16 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 				left:{ width:element.css("border-left-width"), style:element.css("border-left-style"), color:element.css("border-left-color") }};
 		},
 		_setBorders = function(element, borders) {
-			for(direction in borders) {
-				var values = borders[direction];
-				for(key in values) {
-					element.css("border-" + direction + "-" + key, values[key]);
+			for(_direction in borders) {
+				var values = borders[_direction];
+				for(_key in values) {
+					element.css("border-" + _direction + "-" + _key, values[_key]);
 				}
 			}
 		},
 		_fixed_headers = $(fixed_header_selecter),
 		_fixed_footers = $(fixed_footer_selecter),
-		_container = $(container_selecter);
+		_container = $(container_selecter),
 		_resize = function() {
 			var _header_offset = _main_header_height;
 			var _container_left = _container.css("left");   // FF gives these values in px instead of % so

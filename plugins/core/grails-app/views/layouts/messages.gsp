@@ -9,7 +9,7 @@
 		<fsms:render template="/includes"/>
 		<fsms:i18nBundle/>
 		<r:script>
-			$(function() {  
+			$(function() {
 				disablePaginationControls();
 				$(window).resize(new Resizer('#main-list-container', '#main-list-head', '#main-list-foot'));
 			});

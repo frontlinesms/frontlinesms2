@@ -21,6 +21,6 @@ var selectmenuTools = {
 		menu = $(menu);
 		menu.find("[value='" + menu.val() + "']").remove();
 		selectmenuTools.snapback(menu);
-	},
-}
+	}
+};
 

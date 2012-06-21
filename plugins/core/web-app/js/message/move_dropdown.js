@@ -18,14 +18,15 @@ function moveAction() {
 	if(moveTargetType == 'na') { return; }
 	var moveTargetId = moveTarget.val();
 
+	var location;
 	if(messageSection == 'result' && !(getCheckedItemCount('message') > 1)) {
-		var location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
+		location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
-		var location = url_root + "search/" + messageSection + '?searchId=' + searchId;
+		location = url_root + "search/" + messageSection + '?searchId=' + searchId;
 	} else if(messageSection == 'activity' || messageSection == 'folder' || messageSection == 'radioShow') {
-		var location = url_root + "message/" + messageSection + "/" + ownerId;
+		location = url_root + "message/" + messageSection + "/" + ownerId;
 	} else {
-		var location = url_root + "message/" + messageSection;
+		location = url_root + "message/" + messageSection;
 	}
 	// TODO no point in doing an AJAX call if we're going to move to a new page anyway - just
 	// submit the form with HTTP POST like normal.
