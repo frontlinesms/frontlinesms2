@@ -20,7 +20,7 @@ function checkForSuccessfulSave(response, type) {
 		$(".ui-tabs-nav").hide();
 		$("div.summary").show();
 		$(".summary #activityId").val(response.ownerId);
-		var messageDialog = $("#modalBox")
+		var messageDialog = $("#modalBox");
 		messageDialog.dialog(
 			{
 				modal: true,
@@ -42,7 +42,7 @@ function checkForSuccessfulSave(response, type) {
 	}
 }
 	
-function summaryRedirect(activityId) {
+function summaryRedirect() {
 	var activityId = $(".summary #activityId").val();
 	$(this).dialog('close');
 	window.location.replace(url_root + "message/activity/" + activityId	);

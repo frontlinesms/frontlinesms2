@@ -68,12 +68,13 @@ function removeFieldClickAction() {
 }
 
 function removeFieldId(id, name, isUnsaved) {
-	if(isUnsaved)
+	if(isUnsaved) {
 		// remove from the ADD list
 		removeFieldIdFromList(name, 'fieldsToAdd');
-	else
+	} else {
 		// add to the REMOVE list
 		addFieldIdToList(id, 'fieldsToRemove');
+	}
 }
 function addField(id) {
 	// remove from the REMOVE list
@@ -99,7 +100,7 @@ function clearField() {
 	if($(this).attr('id')) {
 		var field = $(this).attr('id').substring('remove-'.length);
 		$('#' + field).val('');
-		$(this).hide()
-		$(this).next().hide()
+		$(this).hide();
+		$(this).next().hide();
 	}		
 }
