@@ -93,11 +93,11 @@
 	<div id="action-buttons" class="buttons">
 		<g:if test="${contactInstance?.id}">
 			<g:actionSubmit class="btn" id="update-single" action="update" value="${g.message(code:'action.save')}" disabled="disabled"/>
-			<g:link class="cancel btn" disabled="disabled"><g:message code="action.cancel"/></g:link>
+			<g:link class="cancel btn disabled"><g:message code="action.cancel"/></g:link>
 		</g:if>
 		<g:else>
 			<g:actionSubmit class="btn" action="saveContact" value="${g.message(code:'action.save')}"/>
-			<g:link class="cancel btn" action="index" default="Cancel"><g:message code="action.cancel"/></g:link>
+			<g:link class="cancel btn" action="index"><g:message code="action.cancel"/></g:link>
 		</g:else>
 		
 		<g:if test="${contactInstance?.id}">
