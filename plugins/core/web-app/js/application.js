@@ -1,3 +1,11 @@
+// Array.indexOf is not available in IE before IE9, so
+// add it here using the jQuery implementation
+if(!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function(index) {
+		return jQuery.inArray(index, this);
+	}
+}
+
 (function($) {
 	$.fn.disableField = function(){
 	    return this.each(function(){
