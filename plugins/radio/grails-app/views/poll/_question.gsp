@@ -1,34 +1,36 @@
-<%@ page import="frontlinesms2.radio.RadioShow" %>
-<div id="tabs-1">
-	<div class="section">
-		<div id="responseType">
-			<h2 class="bold">Select the kind of poll to create:</h2>
-			<ul>
-				<g:if test="${activityInstanceToEdit}">
-					<g:set var="standard" value="${activityInstanceToEdit?.responses*.key.contains('A')}"/>
-					<li><g:radio name="pollType" value="standard" checked="${standard}" disabled="${!standard}" />Question with a 'Yes' or 'No' answer</li>
-					<li><g:radio name="pollType" value="multiple" checked="${!standard}" disabled="${standard}"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
-				</g:if>
-				<g:else>
-					<li><g:radio name="pollType" value="standard" checked='checked'/>Question with a 'Yes' or 'No' answer</li>
-					<li><g:radio name="pollType" value="multiple"/>Multiple choice question (e.g. 'Red', 'Blue', 'Green')</li>
-				</g:else>
-			</ul>
-		</div>
-		<div class="add-to-radioshow">
-			<g:select class="radio-show-select" name='radioShowId' value=""
-			    noSelection="${['':'Assign to Radio Show...']}"
-			    from='${RadioShow.findAll()}'
-			    optionKey="id" optionValue="name"/>
-		</div>
-		<div id="poll-question" >
-			<label class="bold" for='question'>Enter question:</label>
-			<g:textArea name="question" value="${activityInstanceToEdit?.question}"/>
-		</div>
-		<g:checkBox name="dontSendMessage" value="no-message" checked='false'/>Do not send a message for this poll(collect responses only)
-	</div>
+<%@ page import="frontlinesms2.Poll; frontlinesms2.radio.RadioShow" %>
+<div class="input">
+	<label for="pollType"><g:message code="poll.type.prompt"/></label>
+	<ul class="select">
+		<g:set var="isYesNo" value="${activityInstanceToEdit?.yesNo}"/>
+		<li>
+			<label for="pollType"><g:message code="poll.question.yes.no"/></label>
+			<g:radio name="pollType" value="yesNo" checked="${!activityInstanceToEdit || isYesNo}" disabled="${activityInstanceToEdit && !isYesNo}"/>
+		</li>
+		<li>
+			<label for="pollType"><g:message code="poll.question.multiple"/></label>
+			<g:radio name="pollType" value="multiple" checked="${activityInstanceToEdit && !isYesNo}" disabled="${activityInstanceToEdit && isYesNo}"/>
+		</li>
+	</ul>
 </div>
-<g:javascript>
+<div class="add-to-radioshow">
+	<g:select class="dropdown" name='radioShowId' value=""
+	    noSelection="${['':'Assign to Radio Show...']}"
+	    from='${RadioShow.findAll()}'
+	    optionKey="id" optionValue="name"/>
+</div>
+<div class="input required">
+	<label for="question">
+		<g:message code="poll.question.prompt"/>
+	</label>
+	<g:textArea name="question" value="${activityInstanceToEdit?.question}" class="required"/>
+</div>
+<div class="input optional">
+	<label for="dontSendMessage"><g:message code="poll.message.none"/></label>
+	<g:checkBox name="dontSendMessage" value="no-message" checked='false'/>
+</div>
+
+<r:script>
 	$("input[name='dontSendMessage']").live("change", function() {
 		if(isGroupChecked("dontSendMessage")) {
 			disableTab(4);
@@ -42,7 +44,7 @@
 	});
 
 	$("input[name='pollType']").live("change", function() {
-		if ($("input[name='pollType']:checked").val() == "standard") {
+		if ($("input[name='pollType']:checked").val() == "yesNo") {
 			disableTab(1);
 		} else {
 			enableTab(1);
@@ -50,4 +52,4 @@
 		autoUpdate = true;
 		updateConfirmationMessage();
 	});
-</g:javascript>
+</r:script>

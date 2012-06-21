@@ -1,7 +1,7 @@
 modules = {
 	radio {
 		dependsOn "jquery, common, messages"
-		resource url: "/css/radio.css"
-		resource url: "/js/on_air.js"
+		resource url: [dir:'css', file:'radio.css']
+		resource url: [dir:'js', file:"on_air.js"], disposition: 'head'
 	}
 }

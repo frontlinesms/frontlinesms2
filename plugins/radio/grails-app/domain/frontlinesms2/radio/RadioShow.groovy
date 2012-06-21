@@ -7,27 +7,36 @@ class RadioShow extends MessageOwner {
 	String name
 	boolean isRunning
 	Date dateCreated
-	List polls
-	static hasMany = [polls: Poll]
+	List activities = []
+	static boolean editable = false
+	static hasMany = [activities: Activity]
 	static String getShortName() { "radioShow" }
+	static transients = ['liveMessageCount']
 	
 	static constraints = {
-		name(blank: false, nullable: false, unique: true, validator: { val, obj ->
-			if(!obj.id) {
-				return RadioShow.findByNameIlike(val) == null
-			}
-		})
+		name(blank: false, nullable: false, unique: true, validator: {val, obj ->
+				if(!obj.id) {
+					RadioShow.withNewSession {
+						return RadioShow.findByNameIlike(val) == null 
+					}
+				}
+			})
 	}
 	
-	def getShowMessages(getOnlyStarred = false) {
-		Fmessage.owned(this, getOnlyStarred)
+	def getShowMessages(getOnlyStarred = false, getSent=false) {
+		Fmessage.owned(this, getOnlyStarred, getSent)
+	}
+
+	def getLiveMessageCount() {
+		def m = Fmessage.findAllByMessageOwnerAndIsDeleted(this, false)
+		m ? m.size() : 0
 	}
 	
 	def start() {
-		if(!RadioShow.findByIsRunning(true)) {
-			this.isRunning = true
-		} else {
+		if(RadioShow.findByIsRunning(true)) {
 			return false
+		} else {
+			this.isRunning = true
 		}
 	}
 	
@@ -35,21 +44,47 @@ class RadioShow extends MessageOwner {
 		isRunning = false
 	}
 	
-	def getActivePolls() {
-		def pollList
-		if(polls) {
-			pollList = Poll.withCriteria {
-				'in'("id", polls*.id)
+	def getActiveActivities() {
+		def activityInstanceList
+		if(activities) {
+			activityInstanceList = Activity.withCriteria {
+				'in'("id", activities*.id)
 				eq("archived", false)
 				eq("deleted", false)
 			}
 		}
-		pollList
+		activityInstanceList
+	}
+
+	def archive() {
+		this.archived = true
+		this.messages.each {
+			it.archived = true
+			it.save(flush: true)
+		}
 	}
 	
-	static def getAllRadioPolls() {
-		def radioPollsInstanceList = RadioShow.findAll()*.polls
-		radioPollsInstanceList.flatten()
+	def unarchive() {
+		this.archived = false
+		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
+		messagesToArchive.each { it?.archived = false }
+	}
+
+	void addToActivities(Activity activityInstance) {
+		removeFromRadioShow(activityInstance)
+		this.activities.add(activityInstance)
 	}
 	
+	void removeFromRadioShow(Activity activityInstance) {
+		RadioShow.findAll().collect { showInstance ->
+			if(activityInstance in showInstance.activities) {
+				showInstance.removeFromActivities(activityInstance)
+			}
+		}
+	}
+
+	static def getAllRadioActivities() {
+		def radioActivitiesInstanceList = RadioShow.findAll()*.activeActivities
+		radioActivitiesInstanceList.flatten()
+	}
 }

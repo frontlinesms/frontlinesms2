@@ -1,48 +1,56 @@
 package frontlinesms2.radio
 
 import frontlinesms2.MessageController
-import frontlinesms2.Poll
+import frontlinesms2.*
 import java.util.Date
 import grails.converters.*
 import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
+	def messageInstanceList
 	
 	def index = {
 		params.sort = 'date'
 		redirect(action:messageSection, params:params)
 	}
 	
-	def create = {}
+	def create = {
+		[showInstance: new RadioShow()]
+	}
 
 	def save = {	
 		def showInstance = new RadioShow()
 		showInstance.properties = params
 		if (showInstance.validate()) {
 			showInstance.save()
-			flash.message = "Radio show created"
+			flash.message = message(code: 'radio.show.created')
 		} else {
-			flash.message = "Name is not valid"
+			flash.message = message(code: 'radio.show.invalid.name')
 		}
 		redirect(controller: 'message', action: "inbox")
 	}
 	
-	def radioShow = {
+	def radioShow() {
 		def showInstance = RadioShow.get(params.ownerId)
-		def messageInstanceList = showInstance?.getShowMessages(params.starred)
-		
-		def radioMessageInstanceList = []
-		messageInstanceList?.list(params).inject([]) { messageB, messageA ->
-		    if(messageB && dateToString(messageB.date) != dateToString(messageA.date) && params.sort == 'date')
-		        radioMessageInstanceList.add(dateToString(messageA.date))
-		    radioMessageInstanceList.add(messageA)
-		    return messageA
+		if(showInstance) {
+				def messageInstanceList = showInstance?.getShowMessages(params.starred)
+				def radioMessageInstanceList = []
+				messageInstanceList?.list(params).inject([]) { messageB, messageA ->
+				    if(messageB && dateToString(messageB.date) != dateToString(messageA.date) && params.sort == 'date')
+				        radioMessageInstanceList.add(dateToString(messageA.date))
+				    radioMessageInstanceList.add(messageA)
+				    return messageA
+				}
+				render view:'standard',
+					model:[messageInstanceList: radioMessageInstanceList,
+						   messageSection: 'radioShow',
+						   messageInstanceTotal: messageInstanceList?.count(),
+						   ownerInstance: showInstance] << this.getShowModel()
+		} else {
+			flash.message = message(code: 'radio.show.not.found')
+			redirect(action: 'inbox')
 		}
-		render view:'standard', model:[messageInstanceList: radioMessageInstanceList,
-			   messageSection: 'radioShow',
-			   messageInstanceTotal: messageInstanceList?.count(),
-			   ownerInstance: showInstance] << this.getShowModel()
 	}
 	
 	def startShow = {
@@ -53,7 +61,7 @@ class RadioShowController extends MessageController {
 			showInstance.save(flush:true)
 			render "$showInstance.id"
 		} else {
-			flash.message = "${RadioShow.findByIsRunning(true)?.name} show is already on air"
+			flash.message = message code:'radio.show.onair.error', args:[RadioShow.findByIsRunning(true)?.name]
 			render text:flash.message
 		}
 	}
@@ -67,7 +75,7 @@ class RadioShowController extends MessageController {
 	
 	def getShowModel(messageInstanceList) {
 		def model = super.getShowModel(messageInstanceList)
-		model << [radioShowInstanceList: RadioShow.findAll(), radioShowPollInstanceList: RadioShow.getAllRadioPolls()]
+		model << [radioShowInstanceList: RadioShow.findAll()]
 		return model
 	}
 	
@@ -80,26 +88,25 @@ class RadioShowController extends MessageController {
 		}
 	}
 	
-	def addPoll = {
-		def pollInstance = Poll.get(params.pollId)
+	def addActivity = {
+		def activityInstance = Activity.get(params.activityId)
 		def showInstance = RadioShow.get(params.radioShowId)
 		
-		if(showInstance) {
-			removePollFromRadioShow(pollInstance)
-			showInstance.addToPolls(pollInstance)
+		if(showInstance && activityInstance) {
+			showInstance.addToActivities(activityInstance)
 		}
-		redirect controller:"message", action:"activity", params: [ownerId: params.pollId]
+		redirect controller:"message", action:"activity", params: [ownerId: params.activityId]
 	}
 	
-	def selectPoll = {
-		def pollInstance = Poll.get(params.ownerId)
-		[ownerInstance:pollInstance]
+	def selectActivity = {
+		def activityInstance = Activity.get(params.ownerId)
+		[ownerInstance:activityInstance]
 	}
 	
-	private void removePollFromRadioShow(Poll poll) {
+	private void removeActivityFromRadioShow(Activity activity) {
 		RadioShow.findAll().collect { showInstance ->
-			if(poll in showInstance.polls) {
-				showInstance.removeFromPolls(poll)
+			if(activity in showInstance.activities) {
+				showInstance.removeFromActivities(activity)
 				showInstance.save()
 			}
 		}

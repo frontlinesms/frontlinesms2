@@ -1,14 +1,9 @@
 <html>
 	<head>
-		<title>${pageTitle?:params.action.capitalize()}</title>
+		<meta name="layout" content="${params.controller=='radioShow' ? 'messages' : 'archive'}"/>
 		<r:require module="radio"/>
-		<meta name="layout" content="messages" />
-		<g:javascript>
-			$(function() {  
-			   disablePaginationControls();
-			});
-		</g:javascript>
-    </head>
-    <body>
-    </body>
+		<title>${pageTitle?:params.action.capitalize()}</title>
+	</head>
+	<body>
+	</body>
 </html>
