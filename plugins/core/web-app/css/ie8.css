@@ -12,3 +12,8 @@ input[type=file] { border:1px solid #333; }
 
 /* flash message background is missing in IE8 TODO opacity is not working for flash messages */
 #notifications .flash { background-color: rgb(192,50,131); }
+
+/* magic wand background is too big and the button background is too short vertically */
+.ui-selectmenu-wrapper { background:none; border:none; }
+.ui-selectmenu-wrapper .btn { background:none; background-color:#eee; border:1px solid black; }
+.ui-selectmenu-wrapper .btn:hover { background:none; background-color:#ccc; }
