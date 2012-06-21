@@ -1,0 +1,11 @@
+/* this styles both the textfield and the butto for file choosing */
+input[type=file] { border:1px solid #333; }
+
+/* Button background image does not stretch vertically */
+.btn, input[type=submit], button, .ui-selectmenu-wrapper { border-bottom:1px solid #999; background-color:#ddd; }
+#body-menu a.btn { margin-right:0 !important; }
+
+/* Hide the traffic graph, because it doesn't work, and move connections and detection next to each other */
+#body.status #traffic-status { display:none; }
+#body.status #right-column { float:none; left:0; width:auto !important; padding:25px 0; }
+#body.status #connection-status, #body.status #device-detection { width:44%; position:static; border:1px solid #999; float:left; margin:0 3%; }
