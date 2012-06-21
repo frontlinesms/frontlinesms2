@@ -1,6 +1,8 @@
-#head {	background-image:url("../images/logo.png"),url("../images/head_background.png");
-	background-repeat:no-repeat,no-repeat; background-position:5% 10px,0 0;
-	background-color:#e2e2e2;
+body { background-image:url("../images/head_background.png"); 
+	background-repeat:no-repeat; background-position:0 0;
+	background-color:#e2e2e2; }
+#head { background-image:url("../images/logo.png");
+	background-repeat:no-repeat; background-position:5% 10px;
 	height:77px; border-top:3px solid #D8AEC6; }
 
 #main-nav { padding:0 0 11px 17%; width:100%;
