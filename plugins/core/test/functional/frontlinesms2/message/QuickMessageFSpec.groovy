@@ -11,7 +11,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			at QuickMessageDialog
+			at QMessageDialog
 	}
 
 	def "should select the next tab on click of next"() {
@@ -273,7 +273,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	def launchQuickMessageDialog() {
 		to PageMessageInbox
 		$("a", text:"Quick message").click()
-		waitFor { at QuickMessageDialog }
+		waitFor { at QMessageDialog }
 	}
 	
 	def toSelectRecipientsTab() {
@@ -287,7 +287,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 	}
 }
 
-class QuickMessageDialog extends geb.Page {
+class QMessageDialog extends geb.Page {
 	static at = {
 		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('Quick Message')
 	}

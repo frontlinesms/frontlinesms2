@@ -110,7 +110,7 @@ class QuickMessageDialog extends geb.Module {
 class ComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
-		textArea { $('textarea#messageText')}
+		textArea { $('textarea#messageText') }
 	}
 }
 
