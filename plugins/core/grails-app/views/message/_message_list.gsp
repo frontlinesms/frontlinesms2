@@ -17,7 +17,6 @@
 					params="${params}" id="message-header"/>
 			<g:sortableColumn property="date" title="${message(code:'fmessage.date.label')}"
 					params="${params}" id="timestamp-header" defaultOrder="desc"/>
-			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,11 +26,12 @@
 			</g:if>
 			<g:else>
 				<g:each in="${messageInstanceList}" status="i" var="m">
-					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'}" id="message-${m.id}">
+					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.hasSent ? 'send-sent' : '' } ${m.hasPending ? 'send-pending' : '' } ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
 						<td colspan="1" class="message-select-cell">
 							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="itemCheckChanged('message', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>
 						</td>
+
 						<td id="star-${m.id}" >
 							<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 						</td>
@@ -58,22 +58,6 @@
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
 								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
 							</g:link>
-						</td>
-						<td>
-							<div id="feedback-outer">
-								<ul id="horizontal-list">
-									<li>
-										${m.hasSent && m.hasPending ? '<img src="../images/icons/message_sent.png" />' : '' }
-										${m.hasSent && m.hasFailed ? '<img src="../images/icons/message_sent.png" />' : '' }
-									</li>
-									<li>
-										${m.hasFailed ? '<img src="../images/icons/error_on.png" />' : '' }
-									</li>
-									<li>
-										${m.hasPending ? '<img src="../images/icons/pending.png" />' : '' }
-									</li>
-								</ul>
-							</div>
 						</td>
 					</tr>
 				</g:each>
