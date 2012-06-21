@@ -1,0 +1,17 @@
+/* menu items are listed vertically */
+#main-nav li { float:left; position:relative; bottom:-1px; margin-right:1px; }
+
+/* system menu items are listed vertically */
+#system-menu li { float:left; }
+
+/* TODO status traffic light is not visible */
+/* TODO hide traffic graph because it is not visible */
+/* TODO content-head of message lists needs buttons floated right */
+
+/* this styles both the textfield and button for file choosing */
+input[type=file] { border:1px solid #333; }
+
+/* Button background image does not stretch vertically */
+.btn, input[type=submit], button, .ui-selectmenu-wrapper { border-bottom:1px solid #999; background-color:#bbb; }
+#body-menu a.btn { margin-right:0 !important; white-space:nowrap; }
+

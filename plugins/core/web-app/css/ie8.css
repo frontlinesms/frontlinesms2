@@ -1,9 +1,11 @@
-/* this styles both the textfield and the butto for file choosing */
+/* this styles both the textfield and button for file choosing */
 input[type=file] { border:1px solid #333; }
 
 /* Button background image does not stretch vertically */
 .btn, input[type=submit], button, .ui-selectmenu-wrapper { border-bottom:1px solid #999; background-color:#bbb; }
 #body-menu a.btn { margin-right:0 !important; }
+
+/* TODO status traffic light is not visible */
 
 /* Hide the traffic graph, because it doesn't work, and move connections and detection next to each other */
 #body.status #traffic-status { display:none; }

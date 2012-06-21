@@ -31,8 +31,6 @@
 							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="itemCheckChanged('message', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>
 						</td>
-						<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
-
 						<td id="star-${m.id}" >
 							<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
 						</td>
@@ -55,6 +53,7 @@
 							</g:link>
 						</td>
 						<td class="message-date-cell">
+							<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
 								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
 							</g:link>

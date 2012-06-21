@@ -2,6 +2,9 @@
 <!--[if IE 8]>
 	<link href="${resource(dir:'css', file:'ie8.css')}" media="screen, projection" rel="stylesheet" type="text/css" />
 <![endif]-->
+<!--[if IE 7]>
+	<link href="${resource(dir:'css', file:'ie7.css')}" media="screen, projection" rel="stylesheet" type="text/css" />
+<![endif]-->
 
 <r:script disposition="head">
 	url_root = "${request.contextPath}/";
