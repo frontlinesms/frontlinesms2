@@ -12,22 +12,44 @@ import java.util.Date
 class PollCedSpec extends PollBaseSpec {
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
+	def "entering correct url will load poll"() {
+		// also a test of PageMessageActivity.convertToPath
+		given:
+			createTestPolls()
+			createTestMessages()
+		when:
+			to PageMessagePoll, 'Football Teams'
+		then:
+			waitFor { header.title == 'football teams poll' }
+		when:
+			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc('Alice')
+		then:
+			waitFor { header.title == 'football teams poll' }
+		when:
+			to PageMessagePoll, Poll.findByName('Football Teams').id, 2
+		then:
+			waitFor { header.title == 'football teams poll' }
+
+	}
+
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
 			launchPollPopup('yesNo', null)
+
 		then:
-			errorMessage.displayed
+			pollDialog.errorPanel.displayed
 		when:
-			pollForm.question = "question"
-			pollForm.'dontSendMessage' = 'no-message'
-			$("a", text:"Confirm").click()
+			pollDialog.tab(1).click()
+			pollDialog.compose.question = "question"
+			pollDialog.compose.dontSendQuestion.click()
+			pollDialog.tab(7).click()
 		then:
-			waitFor { confirmationTab.displayed }
+			waitFor { pollDialog.confirm.pollName.displayed }
 		when:
-			pollForm.name = "POLL NAME"
-			done.click()
+			pollDialog.confirm.pollName = "POLL NAME"
+			pollDialog.send.click()
 		then:
-			waitFor { $(".summary").displayed }
+			waitFor { pollDialog.summary.displayed }
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	
@@ -460,19 +482,19 @@ class PollCedSpec extends PollBaseSpec {
 
 	def launchPollPopup(pollType='yesNo', question='question', enableMessage=true) {
 		to PageMessageInbox
-		createActivityButton.click()
-		waitFor { createActivityDialog.displayed }
-		$("input", class: "poll").click()
-		$("#submit").click()
-		waitFor('slow') { at PagePollCreate }
-		pollForm.pollType = pollType
-		if(question) pollForm.question = question
-		pollForm."dontSendMessage" = !enableMessage
-		next.click()
+		bodyMenu.newActivity.click()
+		waitFor { createActivityDialog.poll.displayed }
+		createActivityDialog.poll.click()
+		waitFor('slow') { pollDialog.displayed }
+		
+		pollType=='yesNo'?pollDialog.compose.yesNo.click():pollDialog.compose.multiple.click()
+		if(question) pollDialog.compose.question= question
+		if(!enableMessage) pollDialog.compose.dontSendMessage.click()
+		pollDialog.next.click()
 	}
 	
 	def goToTab(tab) {
-		$(".tabs-$tab").click()	
+		pollDialog.tab(tab).click()	
 	}
 }
 
