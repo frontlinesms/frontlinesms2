@@ -2,7 +2,7 @@ html { height:100%; width:100%; }
 
 #content { height:100%; }
 
-#head { position:absolute; top:0; height:80px; left:0; right:0; overflow:hidden; background-color:#0C6; }
+#head { position:absolute; top:0; height:80px; left:0; right:0; overflow:hidden; }
 #main-nav { position:absolute; bottom:0; }
 #main-nav li { display:inline-block; }
 

@@ -9,3 +9,4 @@ input[type=file] { border:1px solid #333; }
 #body.status #traffic-status { display:none; }
 #body.status #right-column { float:none; left:0; width:auto !important; padding:25px 0; }
 #body.status #connection-status, #body.status #device-detection { width:44%; position:static; border:1px solid #999; float:left; margin:0 3%; }
+
