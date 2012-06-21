@@ -145,7 +145,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
 			Fmessage.build(src:'+254778899', text:'test')
-			def message = Fmessage.build(src:'+254999999' text:'test')
+			def message = Fmessage.build(src:'+254999999', text:'test')
 		when:
 			to PageMessageInbox, "show", message.id
 			waitFor{ singleMessageDetails.forward.displayed }
