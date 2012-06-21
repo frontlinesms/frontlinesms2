@@ -26,3 +26,11 @@ input[type=file] { border:1px solid #333; }
 input[type=checkbox] { background-color:transparent; }
 
 /* TODO status screen does not reach bottom or right hand sides of container */
+
+/* TODO flash message background is missing */
+/* TODO system menu needs some margin on the right */
+/* TODO magic wand background is broken like IE8 */
+/* TODO magic wand float is broken (seems to be much too wide) */
+/* TODO help layout is broken like IE8 */
+/* TODO settings/connections layout broken - looks like box model issue */
+
