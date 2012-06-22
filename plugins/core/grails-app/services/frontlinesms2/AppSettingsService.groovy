@@ -18,7 +18,7 @@ class AppSettingsService {
 	}
 
 	private synchronized def load() {
-		try {
+		if(PROPERTIES_FILE.exists()) try {
 			def p = new Properties()
 			PROPERTIES_FILE.withInputStream { stream -> p.load(stream) }
 

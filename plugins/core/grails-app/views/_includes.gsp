@@ -1,6 +1,9 @@
 <link rel="shortcut icon" href="${resource(dir:'images', file:'favicon.ico')}" type="image/x-icon"/>
-<!--[if IE]>
-	<link href="${resource(dir:'css', file:'ie.css')}" media="screen, projection" rel="stylesheet" type="text/css" />
+<!--[if IE 8]>
+	<link href="${resource(dir:'css', file:'ie8.css')}" media="screen, projection" rel="stylesheet" type="text/css" />
+<![endif]-->
+<!--[if IE 7]>
+	<link href="${resource(dir:'css', file:'ie7.css')}" media="screen, projection" rel="stylesheet" type="text/css" />
 <![endif]-->
 
 <r:script disposition="head">

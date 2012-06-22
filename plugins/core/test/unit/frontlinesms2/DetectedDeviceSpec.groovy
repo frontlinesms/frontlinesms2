@@ -1,11 +1,10 @@
 package frontlinesms2
 
 import spock.lang.*
-import grails.plugin.spock.*
 
 import net.frontlinesms.messaging.ATDeviceDetector
 
-class DetectedDeviceSpec extends UnitSpec {
+class DetectedDeviceSpec extends Specification {
 	def "detected modem should have status GREEN"() {
 		given:
 			ATDeviceDetector d = Mock()

@@ -5,7 +5,6 @@
 			<g:message code="fmessage.export"/>
 		</g:link></li>
 	</g:if>
-	
 	<g:elseif test="${messageSection == 'trash' && messageInstanceTotal != 0}">
 		<li class="trash">
 			<select class="dropdown" id="trash-actions" onchange="launchEmptyTrashConfirmation();">

@@ -2,7 +2,9 @@ var FsmsButton = function() {
 	var
 		_trigger = function() {
 			// Trigger clicking of the button when the anchor is clicked.
-			$(this).prev().click();
+			var button = $(this);
+			if(button.hasClass("disabled")) return;
+			else button.prev().click();
 		},
 		_apply = function(original) {
 			// replace a button with an anchor
@@ -16,10 +18,14 @@ var FsmsButton = function() {
 
 			var displayNone = original.css("display") == "none";
 			if(displayNone) newController.css("display", "none");
-			var copyAttributes = ["class", "disabled"];
+			var copyAttributes = ["class"];
 			for(i=copyAttributes.length-1; i>=0; --i) {
 				var a=copyAttributes[i];
 				newController.attr(a, original.attr(a));
+			}
+			// Only IE seems to support "disabled" attribute on <a/> tags
+			if(original.attr("disabled")) {
+				newController.addClass("disabled");
 			}
 			newController.click(_trigger);
 			

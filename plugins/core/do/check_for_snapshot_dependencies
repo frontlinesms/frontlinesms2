@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "Counting..."
+count=`grep -c SNAPSHOT grails-app/conf/BuildConfig.groovy`
+echo "counted: $count"
+if [ $count -eq 0 ]; then
+    echo "No snapshots found."
+else
+    echo "##################################"
+    echo "# YOU HAVE SNAPSHOT DEPENDENCIES #"
+    echo "##################################"
+    echo "Press ENTER to continue..."
+    read whatever
+fi
+

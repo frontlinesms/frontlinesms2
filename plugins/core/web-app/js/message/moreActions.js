@@ -1,15 +1,16 @@
 $(document).ready(function() {
 	$('.more-actions').bind('change', function() {
-		if ($(this).find('option:selected').val() == 'delete')
+		if ($(this).find('option:selected').val() == 'delete') {
 			deleteAction();
-		else if($(this).find('option:selected').val() == 'rename')
+		} else if($(this).find('option:selected').val() == 'rename') {
 			renameAction();
-		else if($(this).find('option:selected').val() == 'edit')
+		} else if($(this).find('option:selected').val() == 'edit') {
 			editAction();
-		else if($(this).find('option:selected').val() == 'export')
+		} else if($(this).find('option:selected').val() == 'export') {
 			exportAction();
 		else if($(this).find('option:selected').val() == 'radio.show')
 			radioShowAction();
+		}
 		selectmenuTools.snapback($('#more-actions'));
 	});
 	
@@ -24,8 +25,8 @@ function renameAction() {
 		data: {ownerId: $("#ownerId").val()},
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"));
-	}})
+			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename")); }
+	});
 }
 
 function editAction() {
@@ -37,8 +38,8 @@ function editAction() {
 		data: {id: $("#ownerId").val()},
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false);
-	}})
+			hideThinking(); launchMediumWizard(title, data, i18n('wizard.ok'), 675, 500, false); }
+	});
 }
 
 function deleteAction() {
@@ -48,16 +49,17 @@ function deleteAction() {
 		url: url_root + messageSection + '/confirmDelete',
 		data: {id: $("#ownerId").val()},
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, i18n("action.delete"));
-	}})
+			launchSmallPopup(i18n("smallpopup.fmessage.delete.title", messageSection), data, i18n("action.delete")); }
+	});
 }
 
 function exportAction() {
 	var viewingArchive;
-	if(url.indexOf("/archive/") >= 0)
+	if(url.indexOf("/archive/") >= 0) {
 		viewingArchive = true;
-	else
+	} else {
 		viewingArchive = false;
+	}
 		
 	$.ajax({
 		type:'GET',
@@ -65,8 +67,9 @@ function exportAction() {
 		data: {messageSection: $("#messageSection").val(), ownerId: $('#ownerId').val(),
 				searchString: $("#searchString").val(), groupId: $("#groupId").val(), messageTotal: $("#messageTotal").val(),
 				failed: $("#failed").val(), starred: $("#starred").val(), viewingArchive: viewingArchive},
+		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
-			updateExportInfo();
-	}})
+			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.export.title"), data, i18n("action.export"));
+			updateExportInfo(); }
+	});
 }

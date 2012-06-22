@@ -13,9 +13,8 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def messageSources = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			messageSources.containsAll(['Alice', 'Bob'])
+			messageList.sources.containsAll(['Alice', 'Bob'])
 	}
 
 	def 'message details are shown in row'() {
@@ -23,14 +22,14 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
 		then:
-			rowContents[2] == 'Bob'
-			rowContents[3] == 'hi Bob'
-			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messages[2].source == 'Bob'
+			messageList.messages[2].text == 'hi Bob'
+			messageList.messages[2].date != null // ie is a valid date object
 	}
 
 	def 'message to alice is first in the list, and links to the show page'() {
+		// TODO: rewrite (but first understand what it's doing.. seems strange)
 		given:
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
@@ -47,7 +46,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			$('#message-detail #message-detail-content').text() == "No message selected"
+			singleMessageDetails.displayed && singleMessageDetails.noneSelected
 	}
 	
 	//FIXME this test fail when the local computer language is different than english. The Date return
@@ -57,12 +56,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
-			go "message/inbox/show/${message.id}"
-			def formatedDate = dateToString(message.date)
+			to PageMessageInbox, "show", message.id
 		then:
-			$('#message-detail #message-detail-sender').text() == message.src
-			$('#message-detail #message-detail-date').text() == formatedDate
-			$('#message-detail #message-detail-content').text() == message.text
+			singleMessageDetails.sender == message.src
+			compareDatesIgnoreSeconds(singleMessageDetails.date, message.date)
+			singleMessageDetails.text == message.text
 	}
 
 	def 'selected message is highlighted'() {
@@ -71,92 +69,90 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			go "message/inbox/show/${aliceMessage.id}"
+			to PageMessageInbox, "show", aliceMessage.id
 		then:
-			$('#message-list .selected td a')[3].@href == "/message/inbox/show/${aliceMessage.id}"
+			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${aliceMessage.id}"
 		when:
-			go "message/inbox/show/${bobMessage.id}"
+			to PageMessageInbox, "show", bobMessage.id
 		then:
-			$('#message-list .selected td a')[3].@href == "/message/inbox/show/${bobMessage.id}"
+			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${bobMessage.id}"
 	}
 
 	def 'CSS classes READ and UNREAD are set on corresponding messages'() {
 		given:
-			def m1 = new Fmessage(inbound:true, read: false, date: new Date(), src: '1256').save(failOnError:true)
-			def m2 = new Fmessage(inbound:true, read: true, date: new Date(), src: '1256').save(failOnError:true)
+			def m1 = Fmessage.build(read:false)
+			def m2 = Fmessage.build(read:true)
 			assert !m1.read
 			assert m2.read
 		when:
-			go "message/inbox/show/$m2.id"
+			to PageMessageInbox, "show", m2.id
 		then:
-			$("tr#message-${m1.id}").hasClass('unread')
-			!$("tr#message-${m1.id}").hasClass('read')
-
-			!$("tr#message-${m2.id}").hasClass('unread')
-			$("tr#message-${m2.id}").hasClass('read')
+			!messageList.messages[0].isRead
+			messageList.messages[1].isRead
 	}
 
 	def 'contact name is displayed if message src is an existing contact'() {
 		given:
-			def message = new Fmessage(src:'+254778899', text:'test', inbound:true, date: new Date()).save(failOnError:true)
-			def contact = new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
+			Fmessage.build(src:'+254778899')
+			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			def rowContents = $('#message-list tr .message-sender-cell a')*.text()
 		then:
-			rowContents.contains('June')
+			messageList.sources.contains('June')
 	}
 
 	def "should autopopulate the recipients name on click of reply even if the recipient is not in contact list"() {
 		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
-			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			Fmessage.build(src:'+254778899', text:'test')
+			Contact.build(name:'June', mobile:'+254778899')
+			def message = Fmessage.build(src:'+254999999')
 		when:
-			go "message/inbox/show/$message.id"
-			$('#btn_reply').click()
+			to PageMessageInbox, 'show', message.id
+			singleMessageDetails.reply.click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			//FIXME: does this test really check what the title suggests?
+			// FIXME no it doesn't!  Not entirely clear what it is trying to test to me.
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
 		setup:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.list()[0].id}"
+			to PageMessageInbox, "show", Fmessage.list()[0].id
 		then:
-			$("#message-list tr").size() == 3
+			messageList.messages.size() == 3
 		when:
-			$('a', text:'Starred').click()
-			waitFor { $("#message-list tr").size() == 2 }
+			footer.showStarred.click()
+			waitFor { messageList.messages.size() == 2 }
 		then:
-			$("#message-list tr .message-sender-cell a")[1].text() == 'Alice'
+			messageList.messages[1].source == 'Alice'
 		when:
-			$('a', text:'All').click()
-			waitFor { $("#message-list tr").size() == 3 }
+			footer.showAll.click()
+			waitFor { messageList.messages.size() == 3 }
 		then:
-			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Alice', 'Bob'])
+			messageList.sources.containsAll(['Alice', 'Bob'])
 	}
 
 	def "starred message filter should not be visible when there are no search results"() {
 		when:
-			go "message/inbox"
+			to PageMessageInbox
 		then:
-			$("#no-messages").text() == "No messages here!"
-		    !$("a", text:"starred").displayed
+			messageList.noContent.displayed
+			!footer.showStarred.displayed
 	}
 
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
-			new Fmessage(src:'+254778899', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
+			Fmessage.build(src:'+254778899', text:'test')
+			def message = Fmessage.build(src:'+254999999', text:'test')
 		when:
-			go "message/inbox/show/$message.id"
-			waitFor{ $("#btn_forward").displayed }
-			$("#btn_forward").click()
-			waitFor { $('div#tabs-1').displayed }
+			to PageMessageInbox, "show", message.id
+			waitFor{ singleMessageDetails.forward.displayed }
+			singleMessageDetails.forward.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		then:
-			$('textArea', name:'messageText').text() == "test"
+			quickMessageDialog.compose.textArea.text() == "test"
 	}
 	
 	def "should only display message details when one message is checked"() {
@@ -164,32 +160,29 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[1].checkbox.click()
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 2 }
+			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
 		when:
-			messagesSelect[2].click()
-			def message = Fmessage.findBySrc('Alice')
-			def formatedDate = dateToString(message.date)
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 1 }
-			waitFor { $('#single-message').displayed }
+			waitFor { multipleMessageDetails.checkedMessageCount == 1 }
+			waitFor { singleMessageDetails.displayed }
 	}
 
 	def "should skip recipients tab if a message is replied"() {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessageInbox, "show", Fmessage.findBySrc('Bob').id
 		then:
-			$("#btn_reply").click()
-			waitFor { $('#tabs-1').displayed }
+			singleMessageDetails.reply.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		when:
-			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3').displayed }
+			quickMessageDialog.next.jquery.trigger('click')
 		then:
-			$("#tabs-3").displayed
+			waitFor { quickMessageDialog.confirm.displayed }
 	}
 	
 	def "should show the address of the contact in the confirm screen"() {
@@ -197,16 +190,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
-			go "message/inbox/show/${message.id}"
+			to PageMessageInbox, "show", message.id
 		then:
-			$("#btn_reply").click()
-			waitFor { $('#tabs-1').displayed }
+			singleMessageDetails.reply.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		when:
-			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			quickMessageDialog.next.jquery.trigger('click')
+			waitFor { quickMessageDialog.confirm.displayed }
 		then:
-			$("#tabs-3").displayed
-			$("#recipient").text() == "${message.src}"
+			quickMessageDialog.confirm.recipientName == message.src
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
@@ -215,16 +207,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
-			go "message/inbox/show/${message.id}"
+			to PageMessageInbox, "show", message.id
 		then:
-			$("#btn_reply").click()
-			waitFor { $('#tabs-1').displayed }
+			singleMessageDetails.reply.click()
+			waitFor { quickMessageDialog.compose.textArea.displayed }
 		when:
-			$("#nextPage").jquery.trigger('click')
-			waitFor { $('#tabs-3 ').displayed }
+			quickMessageDialog.next.jquery.trigger('click')
+			waitFor { quickMessageDialog.confirm.displayed }
 		then:
-			$("#tabs-3").displayed
-			$("#recipient").text() == "${Contact.findByMobile(message.src).name}"
+			quickMessageDialog.confirm.recipientName == "${Contact.findByMobile(message.src).name}"
 	}
 
 	// FIXME FOR THE BELOW FIXME.  IF YOU WILL INSIST ON COMMENTING OUT STUFF LIKE THIS, PLEASE EXPLAIN WHAT IS BROKEN
@@ -251,29 +242,32 @@ class MessageInboxSpec extends MessageBaseSpec {
 			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			go "message/inbox/show/${Fmessage.findByText('hello').id}"
-			$("#move-actions").jquery.val(Folder.findByName('my-folder').id.toString()) // TODO please note why we are using jquery here - if it's necessary, that is
-			$("#move-actions").jquery.trigger("change")
+			to PageMessageInbox, "show", Fmessage.findByText('hello').id
+			singleMessageDetails.moveTo("my-folder")
 		then:	
-			waitFor { $("#no-messages").displayed && $("#no-messages").text().contains("No messages") }
-			$("#messages-submenu .selected").text().contains('Inbox')
+			waitFor { messageList.noContent.displayed }
+			bodyMenu.selected == "inbox"
 	}
 	
 	def "should update message count on tab when new message is received"() {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
+			to PageMessageInbox, "show", Fmessage.findBySrc('Alice').id
 		then:
-			$('#inbox-indicator').text() == '1'
+			tabs.unreadcount == 1
 		when:
 			Fmessage.build().save(flush: true, failOnError:true)
 			js.refreshMessageCount()
 		then:
-			waitFor { $('#inbox-indicator').text() == '2' }
+			waitFor { tabs.unreadcount == 2}
 	}
 
 	String dateToString(Date date) {
 		new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).format(date)
+	}
+
+	boolean compareDatesIgnoreSeconds(Date a, Date b) {
+		dateToString(a) == dateToString(b)
 	}
 }

@@ -1,5 +1,5 @@
 function setStarStatus(object,data){
-	if(data == 'starred') {
+	if(data === 'starred') {
 		$("#" + object + " a").removeClass("unstarred");
 		$("#" + object + " a").addClass(data);
 	} else {

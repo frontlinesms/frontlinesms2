@@ -104,7 +104,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.pending(false)
+			def results = Fmessage.listPending(false)
 		then:
 			results.count() == 2
 			results.list()*.every { it.hasFailed || it.hasPending }
@@ -115,9 +115,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.pending(true)
+			def results = Fmessage.listPending(true)
 		then:
-		    results.count() == 1
+			results.count() == 1
 			results.list()[0].hasFailed
 			results.list().every { !it.archived }
 	}
@@ -129,7 +129,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def results = Fmessage.deleted(true)
 		then:
-		    results.count() == 1
+			results.count() == 1
 			results.list()[0].isDeleted
 			results.list()[0].starred
 			results.list().every { !it.archived }
@@ -137,20 +137,20 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch all deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', text:'hi Bob', inbound:true, date:BASE_DATE - 4, isDeleted: true, starred: true).save(flush: true)
-			new Fmessage(src:'Jim', dst:'+254987654', text:'hi Bob', inbound:true, date:BASE_DATE - 4, isDeleted: true).save(flush: true)
+			Fmessage.build(isDeleted:true, date:BASE_DATE-4, starred:true)
+			Fmessage.build(isDeleted:true, date:BASE_DATE-4)
 		when:
 			def results = Fmessage.deleted(false)
 		then:
-		    results.count() == 2
+			results.count() == 2
 			results.list()[0].isDeleted
 			results.list().every { !it.archived }
 	}
 
 	def "check for offset and limit while fetching deleted messages"() {
 		setup:
-			new Fmessage(src:'Bob', dst:'+254987654', inbound:true, text:'hi Bob', date:new Date() - 1, isDeleted:true).save(flush:true)
-			new Fmessage(src:'Jim', dst:'+254987654', inbound:true, text:'hi Bob', date:new Date(), isDeleted:true).save(flush:true)
+			Fmessage.build(date:new Date()-1, isDeleted:true)
+			Fmessage.build(isDeleted:true)
 		when:
 			def firstDeletedMsg = Fmessage.deleted(false).list(max:1, offset: 0)
 		then:
@@ -166,8 +166,8 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			!minime.archived
 		when:
 			minime.messageOwner.archive()
-			minime.messageOwner.save(flush: true)
-			minime.save(flush: true)
+			minime.messageOwner.save(flush:true)
+			minime.save(flush:true)
 		then:
 			Poll.findByName("Miauow Mix").archived
 			minime.archived
@@ -191,34 +191,24 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def createTestData() {
 		// INCOMING MESSAGES
-		[new Fmessage(src:'Bob', text:'hi Bob', date:BASE_DATE - 4000),
-				new Fmessage(src:'Alice', text:'hi Alice', date:BASE_DATE - 10000),
-				new Fmessage(src:'+254778899', text:'test', date:BASE_DATE - 3000),
-				new Fmessage(src: "9544426444", starred:true, date:BASE_DATE - 5000)].collect() {
-			it.inbound = true
-			it.save(failOnError:true)
-		}
-				
-		def d1 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT, dateSent: new Date())
-		def d2 = new Dispatch(dst:'1234567', status: DispatchStatus.SENT, dateSent: new Date())
-		def d3 = new Dispatch(dst:'1234567', status: DispatchStatus.FAILED)
-		def d4 = new Dispatch(dst:'1234567', status: DispatchStatus.PENDING)
+		Fmessage.build(src:'Bob', text:'hi Bob', date:BASE_DATE - 4000)
+		Fmessage.build(src:'Alice', text:'hi Alice', date:BASE_DATE - 10000)
+		Fmessage.build(src:'+254778899', text:'test', date:BASE_DATE - 3000)
+		Fmessage.build(src:"9544426444", starred:true, date:BASE_DATE - 5000)
 		
 		// OUTGOING MESSAGES
-		def m1 = new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2, hasSent:true)
-		def m2 = new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, hasSent:true, starred: true)
-		def m3 = new Fmessage(src:"src", text:"text",  hasFailed:true, date: new Date())
-		def m4 = new Fmessage(src:"src", text:"text",  hasPending:true, starred: true, date: new Date())
-		
-		m1.addToDispatches(d1)
-		m2.addToDispatches(d2)
-		m3.addToDispatches(d3)
-		m4.addToDispatches(d4)
-		
-		m1.save(flush:true, failOnError:true)
-		m2.save(flush:true, failOnError:true)
-		m3.save(flush:true, failOnError:true)
-		m4.save(flush:true, failOnError:true)
+		def m1 = new Fmessage(src:'Mary', text:'hi Mary', date:BASE_DATE - 2)
+				.addToDispatches(dst:'1234567', status:DispatchStatus.SENT, dateSent:new Date())
+				.save(flush:true, failOnError:true)
+		def m2 = new Fmessage(src:'+254445566', text:'test', date:BASE_DATE - 1, starred:true)
+				.addToDispatches(dst:'1234567', status:DispatchStatus.SENT, dateSent:new Date())
+				.save(flush:true, failOnError:true)
+		def m3 = new Fmessage(src:"src", text:"text", date:new Date())
+				.addToDispatches(dst:'1234567', status:DispatchStatus.FAILED)
+				.save(flush:true, failOnError:true)
+		def m4 = new Fmessage(src:"src", text:"text", starred:true, date:new Date())
+				.addToDispatches(dst:'1234567', status:DispatchStatus.PENDING)
+				.save(flush:true, failOnError:true)
 	}
 	
 	def createPollTestData() {

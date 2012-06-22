@@ -26,12 +26,11 @@
 			</g:if>
 			<g:else>
 				<g:each in="${messageInstanceList}" status="i" var="m">
-					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'}  ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
+					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.hasSent ? 'send-sent' : '' } ${m.hasPending ? 'send-pending' : '' } ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
 						<td colspan="1" class="message-select-cell">
 							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="itemCheckChanged('message', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>
 						</td>
-						<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
 
 						<td id="star-${m.id}" >
 							<g:remoteLink class="${m.starred ? 'starred' : 'unstarred'}" controller="message" action="changeStarStatus" params='[messageId: "${m.id}"]' onSuccess="setStarStatus('star-${m.id}', data)"/>
@@ -42,10 +41,10 @@
 										${m.displayName}
 									</g:if>
 									<g:elseif test="${m.dispatches.size() == 1}">
-										<g:message code="fmessage.to" args="${m.displayName}" />
+										<g:message code="fmessage.to" args="${[] << m.displayName}" />
 									</g:elseif>
 									<g:else>
-										<g:message code="fmessage.to.multiple" args="${m.displayName}" />
+										<g:message code="fmessage.to.multiple" args="${[] << m.displayName}" />
 									</g:else>
 								</g:link>
 						</td>
@@ -55,6 +54,7 @@
 							</g:link>
 						</td>
 						<td class="message-date-cell">
+							<g:hiddenField name="message-created-date" value="${m.date}" disabled="true"/>
 							<g:link controller="${params.controller}" action="${messageSection}" params="${params.findAll({it.key != 'checkedId'})   + [messageId: m.id]}">
 								<g:formatDate format="dd MMMM, yyyy hh:mm a" date="${m.date}"/>
 							</g:link>

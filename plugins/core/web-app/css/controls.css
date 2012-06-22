@@ -13,7 +13,7 @@
 
 thead tr { height:26px; font-weight:bold;
 	background-image:url("../images/menubar.png"); background-repeat:repeat-x; background-position:center left; }
-tr > * { padding:3px; vertical-align:middle; }
+tr > td, tr > th { padding:3px; vertical-align:middle; }
 tr > :first-child { padding-left:8px; }
 tr > :last-child { padding-right:8px; }
 td a, th a { display:block; }
@@ -39,7 +39,7 @@ input,textarea { background:white; }
 	color:black; cursor:pointer; text-align:center; }
 .btn:hover, .ui-selectmenu:hover, button:hover, input[type="submit"]:hover { background-image:url("../images/button/hover.png"); }
 .btn:active, .ui-selectmenu:active, button:active, input[type="submit"]:active { background-image:url("../images/button/active.png"); }
-button:disabled, .ui-button-disabled, input[type="submit"]:disabled  { background-image:url("../images/button/disabled.png"); cursor:default; color:#777777; }
+.btn.disabled, button:disabled, .ui-button-disabled, input[type="submit"]:disabled { background-image:url("../images/button/disabled.png"); cursor:default; color:#777777; }
 .ui-selectmenu { display:block; text-align:left; padding:0; }
 .ui-selectmenu-status { width:100%; padding:6px 0; text-indent:10px; }
 .ui-selectmenu-menu-dropdown li:hover { background-color:#e5eff3; }
@@ -61,9 +61,11 @@ button:disabled, .ui-button-disabled, input[type="submit"]:disabled  { backgroun
 #notifications { position:fixed; left:25%; right:25%; top:3px;
 	font-size:115%; font-weight:bold; z-index:10; }
 #notifications div { text-align:center; min-height:21px; padding:2px 0;
-	background-color: rgba(192,50,131,0.4); border-radius: 2px 2px 2px 2px; box-shadow: 1px 1px 2px grey, -1px 0 2px grey; }
+	border-radius: 2px 2px 2px 2px; box-shadow: 1px 1px 2px grey, -1px 0 2px grey; }
+#notifications .flash { background-color: rgba(192,50,131,0.4); }
 #notifications .hider { cursor:pointer; float:right; font-weight:normal; padding-right:8px; text-decoration:none; }
 #notifications .hider:hover { text-decoration:underline; }
+#notifications .system-notification { background-color: #D9ADE6;}
 
 input[type=text], input[type=password], textarea { padding:3px; border:1px solid #bbb; border-radius:2px; }
 input[type=text]:disabled, input[type=password]:disabled, textarea:disabled { background-color:#eee; }
@@ -73,7 +75,11 @@ input[type="text"].search{ background-image:url('../images/icons/search.png');
 .magicwand-icon { background-image:url('../images/icons/magic_wand.png'); background-repeat:no-repeat; background-position:top left;
 	display:block; width:16px; height:18px; }
 
-#thinking { display:none; z-index:99;
-	position:absolute; top:0; bottom:0; left:0; right:0; background-color:transparent; opacity:0.5;
-	background-image:url('../images/icons/ajax-loader.gif'); background-position:center; background-repeat:no-repeat; }
+#server-connection-lost-notification, #thinking { position:absolute; top:0; bottom:0; left:0; right:0; opacity:0.8; }
+#server-connection-lost-notification { background-color:black; padding-top:40px; text-align:center; z-index:100; }
+#server-connection-lost-notification .content { background-color:white; border-radius:8px; padding:17px; display:inline-block; }
+#server-connection-lost-notification .content p { text-align:center; font-size:180%; font-weight:bold; margin-bottom:17px; }
+#server-connection-lost-notification .content p:last-child { margin-bottom:0; }
+#thinking { background-color:transparent; z-index:99;
+	display:none; background-image:url('../images/thinking.gif'); background-position:center; background-repeat:no-repeat; }
 

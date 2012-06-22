@@ -23,7 +23,10 @@ class Keyword {
 
 	static namedQueries = {
 		match { word ->
-			activity { eq('archived', false) }
+			activity {
+				eq('archived', false)
+				eq('deleted', false)
+			}
 			eq('value', word.toUpperCase())
 		}
 	}

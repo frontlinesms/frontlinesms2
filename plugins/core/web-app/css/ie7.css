@@ -1,0 +1,36 @@
+/* menu items are listed vertically */
+#main-nav li { float:left; position:relative; bottom:-1px; margin-right:1px; }
+
+/* system menu items are listed vertically */
+#system-menu li { float:left; }
+
+/* status traffic light is not visible */
+#status-indicator { display:inline-block; padding:1px 8px 0 8px !important; }
+
+/* Hide the traffic graph, because it doesn't work, and move connections and detection next to each other */
+#body.status #traffic-status { display:none; }
+#body.status #right-column { float:none; left:0; width:auto !important; padding:25px 0; }
+#body.status #connection-status, #body.status #device-detection { width:38%; position:static; border:1px solid #999; float:left; margin:0 3%; }
+
+/* TODO content-head of message lists needs buttons floated right */
+/* TODO message list date column needs word-wrap disabled */
+
+/* this styles both the textfield and button for file choosing */
+input[type=file] { border:1px solid #333; }
+
+/* Button background image does not stretch vertically */
+.btn, input[type=submit], button, .ui-selectmenu-wrapper { border-bottom:1px solid #999; background-color:#bbb; }
+#body-menu a.btn { margin-right:0 !important; white-space:nowrap; }
+
+/* checkbox padding has funny white background */
+input[type=checkbox] { background-color:transparent; }
+
+/* TODO status screen does not reach bottom or right hand sides of container */
+
+/* TODO flash message background is missing */
+/* TODO system menu needs some margin on the right */
+/* TODO magic wand background is broken like IE8 */
+/* TODO magic wand float is broken (seems to be much too wide) */
+/* TODO help layout is broken like IE8 */
+/* TODO settings/connections layout broken - looks like box model issue */
+

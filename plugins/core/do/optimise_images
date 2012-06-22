@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "Optimising PNGs with PNGout..."
+
+find web-app/ -name "*.png" -print0 -type f | xargs --null -n 1 pngout -r
+
+echo "Image optimisation complete."
+
