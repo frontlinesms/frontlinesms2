@@ -25,6 +25,7 @@
 	}
 
 	var systemNotification = new SystemNotification();
+	var statusIndicator = new StatusIndicator();
 
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
@@ -41,6 +42,7 @@
 
 			// Enable system notification refresh
 			setInterval(systemNotification.refresh, 10000);
+			setInterval(statusIndicator.refresh, 10000);
 		});
 	</g:else>
 </r:script>

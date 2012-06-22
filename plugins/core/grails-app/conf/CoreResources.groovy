@@ -30,6 +30,7 @@ modules = {
 		resource url: [dir:'js', file:"mediumPopup.js"], disposition: 'head'
 		resource url: [dir:'js', file:"pagination.js"], disposition: 'head'
 		resource url: [dir:'js', file:"smallPopup.js"], disposition: 'head'
+		resource url: [dir:'js', file:"status_indicator.js"], disposition: 'head'
 		resource url: [dir:'js', file:"system_notification.js"], disposition: 'head'
 		resource url: [dir:'js', file:'magicwand.js'], disposition: 'head'
 		resource url: [dir:'js', file:'selectmenuTools.js'], disposition: 'head'

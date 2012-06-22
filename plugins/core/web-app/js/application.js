@@ -25,42 +25,6 @@ function refreshMessageCount() {
 	});
 }
 
-function refreshStatusIndicator() {
-	var updateLight = function(color) {
-		$('#status-indicator').removeClass('green');
-		$('#status-indicator').removeClass('red');
-		$('#status-indicator').addClass(color);
-		$('#status-indicator').show();
-	},
-	getConnectionLostNotification = function() {
-		return $("#server-connection-lost-notification");
-	},
-	_errorHandler = function() {
-		if(!getConnectionLostNotification().length) {
-			var notification = '<div id="server-connection-lost-notification"><div class="content"><p>'
-					+ i18n('server.connection.fail.title')
-					+ '</p><p>'
-					+ i18n('server.connection.fail.info')
-					+ '</p></div></div>';
-			$('body').append($(notification));
-		}
-		updateLight('red');
-	},
-	_successHandler = function(data) {
-		var connectionLostNotification = getConnectionLostNotification();
-		if(connectionLostNotification) {
-			connectionLostNotification.remove();
-		}
-		updateLight(data);
-	};
-
-	$.ajax({
-		url: url_root + 'status/trafficLightIndicator',
-		success: _successHandler,
-		error: _errorHandler
-	});
-}
-
 function isElementEmpty(selector) {
 	return isEmpty($(selector).val());
 }
@@ -151,7 +115,5 @@ function insertAtCaret(areaId, text) {
 
 $(function() {
 	setInterval(refreshMessageCount, 30000);
-	setInterval(refreshStatusIndicator, 30000);
-	refreshStatusIndicator();
 });
 
