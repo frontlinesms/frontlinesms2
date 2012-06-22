@@ -30,9 +30,9 @@
 					</li>
 					<g:if test="${s.activeActivities}">
 						<ul id="radio-show-activities">
-							<g:each in="${s.activeActivities}" status="j" var="p">
-								<li class="${p == ownerInstance ? 'selected' : ''}">
-									<g:link controller="message" action="activity" params="[ownerId: p.id]"><g:message code="${a.shortName}.title" args="${[a.name]}"/></g:link>
+							<g:each in="${s.activeActivities}" status="j" var="a">
+								<li class="${a == ownerInstance ? 'selected' : ''}">
+									<g:link controller="message" action="activity" params="[ownerId: a.id]"><g:message code="${a.shortName}.title" args="${[a.name]}"/></g:link>
 								</li>
 							</g:each>
 						</ul>
@@ -48,7 +48,7 @@
 		<li class="activities">
 			<h3><g:message code="activities.header"/></h3>
 			<ul class="submenu">
-				<g:each in="${activityInstanceList}" status="i" var="a">
+				<g:each in="${activityInstanceList - radioShowActivityInstanceList}" status="i" var="a">
 					<li class="${a == ownerInstance ? 'selected' : ''}">
 						<g:link controller="message" action="activity" params="[ownerId: a.id]">
 							<g:message code="${a.shortName}.title" args="${[a.name]}"/>

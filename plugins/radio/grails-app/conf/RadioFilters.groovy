@@ -5,7 +5,7 @@ class RadioFilters {
 		justMessage(action:'*') {
 			after = { model ->
 				if(model) {
-					model << [radioShowInstanceList: listRadioShows()]
+					model << [radioShowInstanceList: listRadioShows(), radioShowActivityInstanceList: RadioShow.getAllRadioActivities()]
 					}
 			}
 		}

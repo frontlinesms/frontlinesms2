@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
-	def messageInstanceList
 	
 	def index = {
 		params.sort = 'date'
