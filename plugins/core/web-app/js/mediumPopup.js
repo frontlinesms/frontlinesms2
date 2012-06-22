@@ -90,17 +90,6 @@ function submit() {
 	}
 }
 
-function createSmartGroup() {
-	$("#submit").attr('disabled', 'disabled');
-	if(validateSmartGroup()) {
-		$(this).find("form").submit();
-		$(this).dialog('close');
-	} else {
-		$("#submit").removeAttr('disabled');
-		$('.error-panel').show();
-	}
-}
-
 function prevButton() {
 	for (var i = 1; i <= getCurrentTabIndex(); i++) {
 		var prevTab = getCurrentTabIndex() - i;
@@ -238,6 +227,7 @@ $.widget("ui.contentWidget", {
     options: {validate: function() {return true;} }
 });
 
+//> FUNCTION-SPECIFIC METHODS
 function messageResponseClick(messageType) {
 	var configureTabs= "";
 	var me = $(this);
@@ -261,6 +251,26 @@ function messageResponseClick(messageType) {
 		data: {recipients: src, messageText: text, configureTabs: configureTabs},
 		url: url_root + 'quickMessage/create',
 		success: function(data, textStatus){ launchMediumWizard(messageType, data, i18n('action.send')); }
+	});
+}
+
+function createSmartGroup() {
+	$("#submit").attr('disabled', 'disabled');
+	if(validateSmartGroup()) {
+		$(this).find("form").submit();
+		$(this).dialog('close');
+	} else {
+		$("#submit").removeAttr('disabled');
+		$('.error-panel').show();
+	}
+}
+
+function editConnection(id) {
+	$.ajax({
+		url: url_root + "connection/wizard/" + id,
+		success: function(data){
+			launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false);
+		}
 	});
 }
 

@@ -28,15 +28,9 @@ class FconnectionService {
 			createSystemNotification('connection.route.successNotification', [c?.name?: c?.id])
 			LogEntry.log("Created routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
-			def cause = ex.cause
-			log.warn("Error creating routes to fconnection with id $c?.id", cause)
-			LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
-			createSystemNotification('connection.route.failNotification', [c?.name?:c?.id], cause)
+			logFail(c, ex.cause)
 		} catch(Exception ex) {
-			ex.printStackTrace()
-			log.warn("Error creating routes to fconnection with id $c?.id", ex)
-			LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
-			createSystemNotification('connection.route.failNotification', [c?.name?:c?.id], ex)
+			logFail(c, ex)
 		}
 		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}
@@ -86,8 +80,15 @@ class FconnectionService {
 		}
 	}
 
+	private def logFail(c, ex) {
+		ex.printStackTrace()
+		log.warn("Error creating routes to fconnection with id $c?.id", ex)
+		LogEntry.log("Error creating routes to fconnection with name ${c?.name?: c?.id}")
+		createSystemNotification('connection.route.failNotification', [c.id, c?.name?:c?.id], ex)
+	}
+
 	private def createSystemNotification(code, args, exception=null) {
-		if(exception) args += [i18nUtilService.getMessage(code:exception.class.name.toLowerCase())]
+		if(exception) args += [i18nUtilService.getMessage(code:'connection.error.'+exception.class.name.toLowerCase(), args:[exception.message])]
 		def text = i18nUtilService.getMessage(code:code, args:args)
 		def notification = SystemNotification.findByText(text) ?: new SystemNotification(text:text)
 		notification.read = false
