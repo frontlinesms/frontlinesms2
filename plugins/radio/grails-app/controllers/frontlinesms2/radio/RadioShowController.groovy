@@ -72,7 +72,7 @@ class RadioShowController extends MessageController {
 		render "$showInstance.id"
 	}
 	
-	def getShowModel(messageInstanceList) {
+	private def getShowModel(messageInstanceList) {
 		def model = super.getShowModel(messageInstanceList)
 		model << [radioShowInstanceList: RadioShow.findAll()]
 		return model
