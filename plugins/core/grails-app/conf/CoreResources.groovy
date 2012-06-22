@@ -20,8 +20,7 @@ modules = {
 
 		resource url: [dir:'css', file:'help.css']
 
-
-		resource url: [dir:'js', file:"frontlinesms_application.js"], disposition: 'head'
+		resource url: [dir:'js', file:"frontlinesms_core.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
 		resource url: [dir:'js', file:'button.js'], disposition: 'head'
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
