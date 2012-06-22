@@ -21,7 +21,7 @@ modules = {
 		resource url: [dir:'css', file:'help.css']
 
 
-		resource url: [dir:'js', file:"application.js", plugin:"core"], disposition: 'head'
+		resource url: [dir:'js', file:"application.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
 		resource url: [dir:'js', file:'button.js'], disposition: 'head'
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
