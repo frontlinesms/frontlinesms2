@@ -1,11 +1,11 @@
 import frontlinesms2.radio.*
-import frontlinesms2.Poll
+import frontlinesms2.Activity
 class RadioFilters {
 	def filters = {
 		justMessage(action:'*') {
 			after = { model ->
 				if(model) {
-					model << [radioShowInstanceList: listRadioShows(), radioShowPollInstanceList: RadioShow.getAllRadioPolls()]
+					model << [radioShowInstanceList: listRadioShows(), radioShowActivityInstanceList: RadioShow.getAllRadioActivities()]
 					}
 			}
 		}
@@ -29,7 +29,7 @@ class RadioFilters {
 		justPoll(action:'save') {
 			after = { model ->
 				if(params.radioShowId) {
-					addPollToRadioShow(model, params.radioShowId)
+					addActivityToRadioShow(model, params.radioShowId)
 				}
 			}
 		}
@@ -37,7 +37,7 @@ class RadioFilters {
 		justPoll(action:'edit') {
 			after = { model ->
 				if(params.radioShowId) {
-					addPollToRadioShow(model, params.radioShowId)
+					addActivityToRadioShow(model, params.radioShowId)
 				}
 			}
 		}
@@ -47,23 +47,15 @@ class RadioFilters {
 		RadioShow.findAll()
 	}
 	
-	private def addPollToRadioShow(model, id) {
+	private def addActivityToRadioShow(model, id) {
 		def showInstance = RadioShow.get(id)
-		def pollInstance = Poll.get(model.ownerId)
+		def activityInstance = Activity.get(model.ownerId)
 		if(showInstance) {
-			removePollFromRadioShow(pollInstance)
-			showInstance.addToPolls(pollInstance)
+			removeActivityFromRadioShow(activityInstance)
+			showInstance.addToActivity(activityInstance)
 		}
 		showInstance.save(flush:true, failOnError:true)
-		println "${pollInstance.name} has been added to ${showInstance.name}"
+		println "${activityInstance.name} has been added to ${showInstance.name}"
 	}
 	
-	private void removePollFromRadioShow(pollInstance) {
-		RadioShow.findAll().collect { showInstance ->
-			if(pollInstance in showInstance.polls) {
-				showInstance.removeFromPolls(pollInstance)
-				showInstance.save()
-			}
-		}
-	}
 }

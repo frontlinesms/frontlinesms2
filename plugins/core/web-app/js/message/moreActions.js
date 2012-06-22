@@ -8,7 +8,8 @@ $(document).ready(function() {
 			editAction();
 		} else if($(this).find('option:selected').val() == 'export') {
 			exportAction();
-		} else if($(this).find('option:selected').val() == 'radioShow') {
+		}
+		else if($(this).find('option:selected').val() == 'radio.show') {
 			radioShowAction();
 		}
 		selectmenuTools.snapback($('#more-actions'));

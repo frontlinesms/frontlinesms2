@@ -1,13 +1,13 @@
 package frontlinesms2.radio
 
-import grails.plugin.spock.UnitSpec
-import frontlinesms2.Poll
+import frontlinesms2.*
+import spock.lang.*
+import grails.test.mixin.*
 
-class RadioShowSpec extends UnitSpec {
+@TestFor(RadioShow)
+class RadioShowSpec extends Specification {
 
 	def "should check for validations"() {
-		setup:
-			mockDomain(RadioShow)
 		when:
 			def invalid1 = new RadioShow(name: null)
 			def invalid2 = new RadioShow(name: '')
@@ -17,7 +17,7 @@ class RadioShowSpec extends UnitSpec {
 	}
 
 	def "shows names should be unique"() {
-		mockDomain(RadioShow, [new RadioShow(name: 'show1')])
+		new RadioShow(name: 'show1').save()
 		when:
 			def invalidShow1 = new RadioShow(name: "show1")
 			def invalidShow2 = new RadioShow(name: "SHOW1")
@@ -26,47 +26,5 @@ class RadioShowSpec extends UnitSpec {
 			!invalidShow1.validate()
 			!invalidShow2.validate()
 			validShow.validate()
-	}
-	
-	def "only one radio show can be active any given time"() {
-		setup:
-			mockDomain(RadioShow)
-			def show = new RadioShow(name:"Health Show").save()
-			def show2 = new RadioShow(name:"Agriculture Show").save()
-		when:
-			show.start()
-		then:
-			show.isRunning
-		when:
-			show2.start()
-		then:
-			!show2.isRunning
-	}
-	
-	def "radioShow can only be started when the current running one is stopped"() {
-		setup:
-			mockDomain(RadioShow)
-			def show = new RadioShow(name:"Health Show").save()
-			def show2 = new RadioShow(name:"Agriculture Show").save()
-		when:
-			show.start()
-		then:
-			show.isRunning
-		when:
-			show.stop()
-			show2.start()
-		then:
-			show2.isRunning
-	}
-	
-	def "radioShow can own one more shows"() {
-		setup:
-			mockDomain(RadioShow)
-			mockDomain(Poll)
-			def show = new RadioShow(name:"Health Show").save()
-		when:
-			show.addToPolls(new Poll(title:"Test Poll"))
-		then:
-			show.validate()
 	}
 }

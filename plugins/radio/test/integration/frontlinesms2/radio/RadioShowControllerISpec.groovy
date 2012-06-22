@@ -53,24 +53,26 @@ class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			!RadioShow.findByName("Test 1").isRunning
 	}
-	
+
 	def "Adding a poll to a new radio show removes it from the previous radio show"() {
 		given:
-			def show1 = new RadioShow(name:"Test 1").save(flush:true)
-			def show2 = new RadioShow(name:"Test 2").save(flush:true)
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			show1.addToPolls(poll)
-			show1.save(flush:true)
-			assert show1.activePolls.size() == 1
+			def show1 = new RadioShow(name:"Test 1").save()
+			def show2 = new RadioShow(name:"Test 2").save()
+			def poll = new Poll(name:"Test Poll")
+			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.save(failOnError:true)
+			show1.addToActivities(poll)
+			show1.save()
+			assert show1.activeActivities.size() == 1
 		when:
-			controller.params.pollId = poll.id
+			controller.params.activityId = poll.id
 			controller.params.radioShowId = show2.id
-			controller.addPoll()
+			controller.addActivity()
 			show1.refresh()
 			show2.refresh()
 		then:
-			show2.activePolls.size() == 1
-			!show1.activePolls
+			show2.activeActivities.size() == 1
+			!show1.activeActivities
 	}
 	
 	def "message can be moved to a folder"() {

@@ -46,52 +46,63 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 	def "radioShows can be associated with one or more polls"() {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
-			show.addToPolls(poll)
-			show.addToPolls(poll2)
-			show.save(flush:true)
-			show.refresh()
+			def poll = new Poll(name: 'Who is badder?')
+			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.save(failOnError:true)
+			def poll2 = new Poll(name: 'Who will win?')
+			poll2.editResponses(choiceA: 'Uhuru', choiceB:'Ruto')
+			poll2.save(failOnError:true)
+			show.addToActivities(poll)
+			show.addToActivities(poll2)
+			show.save(failOnError:true)
 		then:
-			show.polls.size() == 2
+			show.activities.size() == 2
 	}
 	
 	def "deleted polls are nolonger listed with radioShows"() {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
-			show.addToPolls(poll)
-			show.addToPolls(poll2)
-			show.save(flush:true)
+			def poll = new Poll(name: 'Who is badder?')
+			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.save(failOnError:true)
+			def poll2 = new Poll(name: 'Who will win?')
+			poll2.editResponses(choiceA: 'Uhuru', choiceB:'Ruto')
+			poll2.save(failOnError:true)
+			show.addToActivities(poll)
+			show.addToActivities(poll2)
+			show.save()
 		then:
-			show.activePolls.size() == 2
+			show.activeActivities.size() == 2
 		when:
 			poll.deleted = true
 		then:
-			show.activePolls.size() == 1
+			show.activeActivities.size() == 1
 	}
 	
 	def "archived polls are nolonger listed with radioShows"() {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
-			def poll = Poll.createPoll(name: 'Who is badder?', choiceA:'Michael-Jackson', choiceB:'Chuck-Norris', question: "question").save(failOnError:true, flush:true)
-			def poll2 = Poll.createPoll(name: 'Who will win?', choiceA:'Uhuru Kenyatta', choiceB:'Fred Ruto', question: "politics").save(failOnError:true, flush:true)
-			show.addToPolls(poll)
-			show.addToPolls(poll2)
-			show.save(flush:true)
+			def poll = new Poll(name: 'Who is badder?',question: "question")
+			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.save(failOnError:true)
+			def poll2 = new Poll(name: 'Who will win?', question: "politics")
+			poll2.editResponses(choiceA: 'Uhuru', choiceB:'Ruto')
+			poll2.save(failOnError:true)
+			show.addToActivities(poll)
+			show.addToActivities(poll2)
+			show.save()
 		then:
-			show.activePolls.size() == 2
+			show.activeActivities.size() == 2
 		when:
 			poll.archived = true
 		then:
-			show.activePolls.size() == 1
+			show.activeActivities.size() == 1
 	}
 	
 	def "message searches can be restricted to a radio show"() {
 		given:
 			def show = RadioShow.findByName("Health & fitness")
-			def m = new Fmessage(src:"123", date:new Date(), text: "eat fruits now", inbound:true).save(flush:true)
+			def m = new Fmessage(src:"123", date:new Date(), text: "eat fruits now", inbound:true).save()
 			def controller = new SearchController()
 		when:
 			controller.params.searchString = "fruits"
@@ -99,5 +110,19 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 			def model = controller.result()
 		then:
 			model.messageInstanceList == [Fmessage.findByText('eat fruits')]
+	}
+
+	def "radioShow can own one more activities"() {
+		setup:
+			def show = new RadioShow(name:"Health Show").save()
+			def poll = new Poll(name:"Test Poll")
+			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.save(failOnError:true)
+			def announcement = Announcement.build()
+		when:
+			show.addToActivities(poll)
+			show.addToActivities(announcement)
+		then:
+			show.activities.size() == 2
 	}
 }
