@@ -20,7 +20,6 @@ modules = {
 
 		resource url: [dir:'css', file:'help.css']
 
-
 		resource url: [dir:'js', file:"frontlinesms_core.js"], disposition: 'head'
 		resource url: [dir:'js', file:"activity/popups.js"], disposition: 'head'
 		resource url: [dir:'js', file:'button.js'], disposition: 'head'
@@ -51,11 +50,11 @@ modules = {
 	}
 	
 	archive {
-		dependsOn "jquery, jquery-ui, common, messages"
+		dependsOn "messages"
 	}
 	
 	contacts {
-		dependsOn "jquery, jquery-ui, common"
+		dependsOn "common"
 		resource url: [dir:'js', file:"contact/buttonStates.js"]
 		resource url: [dir:'js', file:"contact/moreGroupActions.js"]
 		resource url: [dir:'js', file:"contact/search_within_list.js"]
@@ -65,7 +64,7 @@ modules = {
 	}
 
 	status {
-		dependsOn "jquery, jquery-ui, common"
+		dependsOn "common"
 		resource url: [dir:'js', file:"datepicker.js"]
 	}
 
@@ -81,13 +80,13 @@ modules = {
 	}
 
 	search {
-		dependsOn "jquery, jquery-ui, common, messages"
+		dependsOn "messages"
 		resource url: [dir:'js', file:"datepicker.js"]
 		resource url: [dir:'js', file:"search/moreOptions.js"]
 	}
 	
 	settings {
-		dependsOn "jquery, jquery-ui, common"
+		dependsOn "common"
 	}
 	
 	overrides {
@@ -97,4 +96,3 @@ modules = {
 	}
 
 }
-
