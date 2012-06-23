@@ -32,10 +32,10 @@ def mvn() {
 
 target(main: 'Build installers for various platforms.') {
 	envCheck()
-	if(grailsSettings.grailsEnv != 'production') {
+	if(!getValueAsBoolean('confirmNotProd', grailsSettings.grailsEnv == 'production')) {
 		input('Press Return to continue building...')
 	}
-	if(isSet('skipWar')) {
+	if(getValueAsBoolean('skipWar', false)) {
 		if(grailsSettings.grailsEnv == 'production') {
 			println "CANNOT SKIP WAR BUILD FOR PRODUCTION"
 			depends(clean, war)
@@ -46,20 +46,20 @@ target(main: 'Build installers for various platforms.') {
 	} else depends(clean, war)
 	if(!isWindows()) if(getValueAsBoolean('compress', grailsSettings.grailsEnv == 'production')) {
 		println 'Forcing compression of installers...'
-		exec executable:'do/enable_installer_compression'
+		exec executable:'../core/do/enable_installer_compression'
 	} else {
 		println 'Disabling compression of installers...'
-		exec executable:'do/disable_installer_compression'
+		exec executable:'../core/do/disable_installer_compression'
 	}
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
 	println "Building $appName, v$appVersion"
-	def webappTempDir = 'install/src/web-app'
+	def webappTempDir = '../core/install/src/web-app'
 	delete(dir:webappTempDir)
 	unzip(src:"target/${appName}-${appVersion}.war", dest:webappTempDir)
 
 	// Build instal4j custom code JAR
-	exec(dir:'install', output:'install4j-custom-classes.maven.log', executable:mvn(), args) {
+	exec(dir:'../core/install', output:'install4j-custom-classes.maven.log', executable:mvn(), args) {
 		arg value:'-f'
 		arg value:'install4j-custom-classes.pom.xml'
 		arg value:'clean'
@@ -67,14 +67,14 @@ target(main: 'Build installers for various platforms.') {
 	}
 	
 	// Build installers
-	exec(dir:'install', output:'install4j.maven.log', executable:mvn(), args) {
+	exec(dir:'../core/install', output:'install4j.maven.log', executable:mvn(), args) {
 		arg value:"-Dbuild.version=$appVersion"
 		arg value:'clean'
 		arg value:'package'
 	}
 
 	// Make sure that linux installer is executable
-	chmod dir:'install/target/install4j', includes:'*.sh', type:'file', perm:'a+x'
+	chmod dir:'../core/install/target/install4j', includes:'*.sh', type:'file', perm:'a+x'
 
 	envCheck()
 }
