@@ -59,8 +59,6 @@ class FsmsTagLib {
 		// Always include English in case their locale is not available.  The most accurate
 		// translation available will take precedence when the JS files are loaded
 		grailsApplication.config.frontlinesms.plugins.each { bundle ->
-println "Including JS i18n for $bundle"
-// TODO clean up this string concatenation
 			// TODO this could likely be streamlined by using i18nUtilService.getCurrentLanguage(request)
 			['', "_${locale.language}",
 					"_${locale.language}_${locale.country}",
