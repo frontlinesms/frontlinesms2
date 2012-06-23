@@ -133,3 +133,5 @@ jqueryValidation.packed = true
 jqueryValidation.cdn = false  // false or "microsoft"
 jqueryValidation.additionalMethods = false
 
+frontlinesms.plugins=['core']
+

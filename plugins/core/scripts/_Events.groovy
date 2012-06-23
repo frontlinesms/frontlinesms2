@@ -58,6 +58,15 @@ eventTestPhaseEnd = { phaseName ->
 	}
 }
 
+def getApplicationProperty(key) {
+	def MATCHER = key.replace('.', /\./) + /=(.*)/
+	def match
+	new File('application.properties').eachLine {
+		if(it ==~ MATCHER) match = (it =~ MATCHER)[0][1]
+	}
+	return match
+}
+
 eventCompileStart = { kind ->
 	if(Environment.current == Environment.PRODUCTION) {
 		// Check we have no snapshot dependencies
@@ -66,11 +75,7 @@ eventCompileStart = { kind ->
 			println '# YOU HAVE SNAPSHOT DEPENDENCIES #'
 			println '##################################'
 
-			def appVersion
-			def VERSION_MATCHER = /app\.version=(.*)/
-			new File('application.properties').eachLine {
-				if(it ==~ VERSION_MATCHER) appVersion = (it =~ VERSION_MATCHER)[0][1]
-			}
+			def appVersion = getApplicationProperty('app.version')
 			if(appVersion.contains('SNAPSHOT')) {
 				println '# Press ENTER to continue...'
 				System.in.withReader { it.readLine() }
@@ -95,6 +100,8 @@ eventCompileEnd = {
 	}
 
 	// Rewrite the message properties files as JSON so they are available in Javascript in the app
+	def appName = getApplicationProperty('app.name')
+println "appName: $appName"
 	new File('web-app/i18n').mkdir()
 	new File('grails-app/i18n/').listFiles().each { f ->
 		def builder = new groovy.json.JsonBuilder()
@@ -105,8 +112,9 @@ eventCompileEnd = {
 		props.each { k, v -> m[k] = v }
 		builder(m)
 
-		jsFilename = f.name - '.properties' + '.js'
-		new File("web-app/i18n/$jsFilename").text = 'var i18nStrings = ' + builder.toString()
+		jsFilename = appName + '_' + f.name - '.properties' + '.js'
+		new File("web-app/i18n/$jsFilename").text =
+				"var i18nStrings = i18nStrings || {}; i18nStrings[\"$appName\"] = $builder;"
 	}
 }
 

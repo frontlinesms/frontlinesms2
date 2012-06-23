@@ -32,9 +32,6 @@ grails.scaffolding.templates.domainSuffix = 'Instance'
 // jquery plugin
 grails.views.javascript.library = "jquery"
 
-//fronlinesms plugin
-frontlinesms2.plugin = "radio"
-
 // pagination
 grails.views.pagination.max = 50
 log4j = {
@@ -72,4 +69,6 @@ log4j = {
 jqueryValidation.packed = true
 jqueryValidation.cdn = false  // false or "microsoft"
 jqueryValidation.additionalMethods = false
+
+frontlinesms.plugins=['core', 'radio']
 

@@ -5,6 +5,7 @@ import org.springframework.web.servlet.support.RequestContextUtils
 class FsmsTagLib {
 	static namespace = 'fsms'
 	def expressionProcessorService
+	def grailsApplication
 
 	def wizardTabs = { att ->
 		att.templates.split(",")*.trim().eachWithIndex { template, i ->
@@ -57,11 +58,15 @@ class FsmsTagLib {
 		def locale = RequestContextUtils.getLocale(request)
 		// Always include English in case their locale is not available.  The most accurate
 		// translation available will take precedence when the JS files are loaded
-		// TODO this could likely be streamlined by using i18nUtilService.getCurrentLanguage(request)
-		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages.js"></script>'
-		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}" + '.js"></script>'
-		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}" + '.js"></script>'
-		out << '<script type="text/javascript" src="' + request.contextPath + '/i18n/messages' + "_${locale.language}_${locale.country}_${locale.variant}" + '.js"></script>'
+		grailsApplication.config.frontlinesms.plugins.each { bundle ->
+println "Including JS i18n for $bundle"
+// TODO clean up this string concatenation
+			// TODO this could likely be streamlined by using i18nUtilService.getCurrentLanguage(request)
+			['', "_${locale.language}",
+					"_${locale.language}_${locale.country}",
+					"_${locale.language}_${locale.country}_${locale.variant}"].each {
+				out << "<script type=\"text/javascript\" src=\"${request.contextPath}/i18n/${bundle}_messages${it}.js\"></script>" }
+		}
 	}
 	
 	def confirmTable = { att ->
