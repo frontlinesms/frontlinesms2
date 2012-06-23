@@ -1,4 +1,13 @@
 var selectmenuTools = {
+	initAll: function(selecter) {
+		var elements = $(selecter);
+		elements.selectmenu();
+		elements.each(function(i, e) {
+			e = $(e).next().find(".ui-selectmenu-status");
+			if(!e.text()) e.html("&nbsp;");
+		});
+	},
+
 	init: function(menu) {
 		menu = $(menu);
 		menu.selectmenu();
