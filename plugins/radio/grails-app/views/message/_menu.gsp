@@ -18,9 +18,9 @@
 				</li>
 			</ul>
 		</li>
-		<li class="radioShows>
-			<h3 id="shows-list-title" class="list-title">Shows</h3>
-			<ul class='sublist' id="shows-submenu">
+		<li class="radio-shows">
+			<h3>Shows</h3>
+			<ul class="submenu">
 				<g:each in="${radioShowInstanceList}" status="i" var="s">
 					<li class="${s == ownerInstance ? 'selected' : ''}${ownerInstance && ownerInstance in s.activeActivities ? 'secondarySelected' : ''}">
 						<g:link controller="radioShow" action="radioShow" params="[ownerId: s.id]">

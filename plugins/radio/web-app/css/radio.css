@@ -12,25 +12,11 @@
 .message-list-separator:hover {
 	background-color: #DFDFDF;
 }
-.message-list-separator td{
+.message-list-separator td {
 	padding: 0 25px;
 	height: 28px;
 }
 
-#radio-actions, #radio-actions li {
-	display: inline;
-	text-transform: none;
-	font-weight: normal;
-	font-size: normal;
-}
-#radio-actions .btn {
-	padding: 2px 10px 0 10px;
-	height: 23px;
-}
-
-#sidebar .sublist #radio-show-polls li {
-	padding-left: 17px;
-}
 .secondarySelected {
 	background-color: #E0F0DE;
 }
