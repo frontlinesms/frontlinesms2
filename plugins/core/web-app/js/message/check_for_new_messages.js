@@ -10,22 +10,25 @@ function checkForNew() {
 			starred: $('input:hidden[name=starred]').val(),
 			failed: $('input:hidden[name=failed]').val() };
 	
-	$.getJSON(url_root + 'message/newMessageCount', params, function(data) {
+	$.ajax({url:url_root + 'message/newMessageCount',
+			dataType:"json",
+			data:params,
+			cache:false,
+			success:function(data) {
 		if(data == null) return;
 		var currentTotal = parseInt($("#messageTotal").val());
 		var newTotal = data;
-
 		if(newTotal > currentTotal) {
 			var newMessageCount = newTotal - currentTotal;
 			var notificationContents = "<a id='refreshMessageList'>" + i18n("fmessage.new.info", newMessageCount) + "</a>"
-			if(!$("#main-list #new-message-notification").html())
+			if(!$("#main-list #new-message-notification").html()) {
 				$('#main-list tbody tr:first').before('<tr id="new-message-notification"><td colspan="5">' + notificationContents + '</td></tr>');
-			else {
+			} else {
 				$("#new-message-notification a").replaceWith(notificationContents);
 				$("#new-message-notification a").show();
 			}
 		}
-	});
+	}});
 }
 
 function refreshList() {
