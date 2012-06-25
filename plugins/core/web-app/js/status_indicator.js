@@ -35,6 +35,7 @@ var StatusIndicator = function() {
 	_refresh = function() {
 		$.ajax({
 			url: url_root + 'status/trafficLightIndicator',
+			cache: false,
 			success: _successHandler,
 			error: _errorHandler
 		});

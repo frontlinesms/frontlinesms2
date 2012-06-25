@@ -20,8 +20,10 @@ if(!Array.prototype.indexOf) {
 })(jQuery);
 
 function refreshMessageCount() {
-	$.get(url_root + 'message/unreadMessageCount', function(data) {
-		$('#inbox-indicator').html(data);
+	$.ajax({
+			url: url_root + 'message/unreadMessageCount',
+			cache: false,
+			success: function(data) { $('#inbox-indicator').html(data); }
 	});
 }
 
