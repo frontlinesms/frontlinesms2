@@ -112,7 +112,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			//FIXME: does this test really check what the title suggests?
 			// FIXME no it doesn't!  Not entirely clear what it is trying to test to me.
-			waitFor { quickMessageDialog.compose.textArea.displayed }
+			waitFor { at QuickMessageDialog }
 	}
 
 	def "should filter inbox messages for starred and unstarred messages"() {
@@ -150,9 +150,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, "show", message.id
 			waitFor{ singleMessageDetails.forward.displayed }
 			singleMessageDetails.forward.click()
-			waitFor { quickMessageDialog.compose.textArea.displayed }
+			waitFor { at QuickMessageDialog }
 		then:
-			quickMessageDialog.compose.textArea.text() == "test"
+			compose.textArea.text() == "test"
 	}
 	
 	def "should only display message details when one message is checked"() {
@@ -178,11 +178,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, "show", Fmessage.findBySrc('Bob').id
 		then:
 			singleMessageDetails.reply.click()
-			waitFor { quickMessageDialog.compose.textArea.displayed }
+			waitFor { at QuickMessageDialog }
 		when:
-			quickMessageDialog.next.jquery.trigger('click')
+			next.jquery.trigger('click')
 		then:
-			waitFor { quickMessageDialog.confirm.displayed }
+			waitFor { confirm.displayed }
 	}
 	
 	def "should show the address of the contact in the confirm screen"() {
@@ -193,12 +193,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, "show", message.id
 		then:
 			singleMessageDetails.reply.click()
-			waitFor { quickMessageDialog.compose.textArea.displayed }
+			waitFor { at QuickMessageDialog }
 		when:
-			quickMessageDialog.next.jquery.trigger('click')
-			waitFor { quickMessageDialog.confirm.displayed }
+			next.jquery.trigger('click')
+			waitFor { confirm.displayed }
 		then:
-			quickMessageDialog.confirm.recipientName == message.src
+			confirm.recipientName == message.src
 	}
 	
 	def "should show the name of the contact in the confirm screen if contact exists"() {
@@ -210,12 +210,12 @@ class MessageInboxSpec extends MessageBaseSpec {
 			to PageMessageInbox, "show", message.id
 		then:
 			singleMessageDetails.reply.click()
-			waitFor { quickMessageDialog.compose.textArea.displayed }
+			waitFor { at QuickMessageDialog }
 		when:
-			quickMessageDialog.next.jquery.trigger('click')
-			waitFor { quickMessageDialog.confirm.displayed }
+			next.jquery.trigger('click')
+			waitFor { confirm.displayed }
 		then:
-			quickMessageDialog.confirm.recipientName == "${Contact.findByMobile(message.src).name}"
+			confirm.recipientName == "${Contact.findByMobile(message.src).name}"
 	}
 
 	// FIXME FOR THE BELOW FIXME.  IF YOU WILL INSIST ON COMMENTING OUT STUFF LIKE THIS, PLEASE EXPLAIN WHAT IS BROKEN
