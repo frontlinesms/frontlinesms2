@@ -33,6 +33,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', null)
 
@@ -54,6 +55,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "should require keyword if sorting is enabled"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup()
 		then:
@@ -79,6 +81,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
@@ -109,6 +112,7 @@ class PollCedSpec extends PollBaseSpec {
 
 
 	def "should move to the next tab when multiple choice poll is selected"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple')
 		then:	
@@ -116,6 +120,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple', 'question')
 		then:
@@ -128,6 +133,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "should not proceed when the poll is not named"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
@@ -148,6 +154,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
@@ -229,6 +236,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "can enter instructions for the poll and allow user to edit message"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
@@ -283,6 +291,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "should update confirm screen when user decides not to send messages"() {
+		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', "Will you send messages to this poll")
 		then:
@@ -308,6 +317,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "can launch export popup"() {
+		// FIXME: rewrite to use new test format
 		when:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
@@ -328,6 +338,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "can rename a poll"() {
+		// FIXME: rewrite to use new test format
 		given:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
@@ -352,6 +363,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "can delete a poll"() {
+		// FIXME: rewrite to use new test format
 		when:
 			deletePoll()
 			waitFor { $("div.flash").displayed }
@@ -361,6 +373,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "deleted polls show up in the trash section"() {
+		// FIXME: rewrite to use new test format
 		setup:
 			def poll = deletePoll()
 		when:
@@ -373,6 +386,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "selected poll and its details are displayed"() {
+		// FIXME: rewrite to use new test format
 		setup:
 			def poll = deletePoll()
 		when:
@@ -384,6 +398,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "clicking on empty trash permanently deletes a poll"() {
+		// FIXME: rewrite to use new test format
 		setup:
 			deletePoll()
 		when:
@@ -399,6 +414,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "user can edit an existing poll"() {
+		// FIXME: rewrite to use new test format
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'choiceA', value: 'Michael-Jackson')
@@ -445,6 +461,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "should display errors when poll validation fails"() {
+		// FIXME: rewrite to use new test format
 		given:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
@@ -483,18 +500,19 @@ class PollCedSpec extends PollBaseSpec {
 	def launchPollPopup(pollType='yesNo', question='question', enableMessage=true) {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()
-		waitFor { createActivityDialog.poll.displayed }
-		createActivityDialog.poll.click()
-		waitFor('slow') { pollDialog.displayed }
+		waitFor { at CreateActivityDialog }
+		poll.click()
+		waitFor('slow') { at PollDialog }
 		
-		pollType=='yesNo'?pollDialog.compose.yesNo.click():pollDialog.compose.multiple.click()
-		if(question) pollDialog.compose.question= question
-		if(!enableMessage) pollDialog.compose.dontSendMessage.click()
-		pollDialog.next.click()
+		pollType=='yesNo'?compose.yesNo.click():compose.multiple.click()
+		if(question) compose.question= question
+		if(!enableMessage) compose.dontSendMessage.click()
+		next.click()
 	}
 	
 	def goToTab(tab) {
-		pollDialog.tab(tab).click()	
+		at PollDialog
+		tab(tab).click()
 	}
 }
 
