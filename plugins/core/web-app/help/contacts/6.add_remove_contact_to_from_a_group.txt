@@ -92,6 +92,6 @@ __Group List View__
 [11]: ../images/help/add_to_group.png
 [12]: ../images/help/multiple_add_to_group.png
 [13]: ../images/help/remove_single_contact.png
-[14]: contacts/contactselect.png
-[15]: contacts/groupdropdown.png
-[16]: contacts/removesinglecontact.png
+[14]: ../images/help/contact_select.png
+[15]: ../images/help/group_dropdown.png
+[16]: ../images/help/removesinglecontact.png
