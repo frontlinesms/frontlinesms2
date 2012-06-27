@@ -8,7 +8,7 @@ class Fmessage {
 	static final int MAX_TEXT_LENGTH = 1600
 
 	static belongsTo = [messageOwner:MessageOwner]
-	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName']
+	static transients = ['hasSent', 'hasPending', 'hasFailed', 'displayName' ,'outboundContactList']
 	
 	Date date = new Date() // No need for dateReceived since this will be the same as date for received messages and the Dispatch will have a dateSent
 	Date dateCreated // This is unused and should be removed, but doing so throws an exception when running the app and I cannot determine why
@@ -53,7 +53,7 @@ class Fmessage {
 	def beforeInsert = {
 		if(!this.inbound) this.read = true
 	}
-	
+
 	static namedQueries = {
 		inbox { getOnlyStarred=false, archived=false ->
 			and {
@@ -209,6 +209,12 @@ class Fmessage {
 	def getHasSent() { areAnyDispatches(DispatchStatus.SENT) }
 	def getHasFailed() { areAnyDispatches(DispatchStatus.FAILED) }
 	def getHasPending() { areAnyDispatches(DispatchStatus.PENDING) }
+	def getOutboundContactList(){ 
+		def contactlist = []
+		dispatches.each{ contactlist << Contact.findByMobile(it.dst)?.name }
+		contactlist?contactlist:""
+	}
+
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
 	}

@@ -58,7 +58,7 @@ class ExportController {
 				break
 		}
 		
-		generateMessageReport(messageInstanceList)
+		generateMessageReport(messageInstanceList.unique())
 	}
 	
 	def contactWizard = {
@@ -83,8 +83,8 @@ class ExportController {
 	private def generateMessageReport(messageInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "src", "dst", "text", "date"]
-		Map labels = ["id":message(code: 'export.database.id'), "src":message(code: 'export.message.source'), "dst":message(code: 'export.message.destination'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
+		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
+		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try{
