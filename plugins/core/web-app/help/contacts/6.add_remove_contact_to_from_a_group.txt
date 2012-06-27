@@ -20,10 +20,10 @@ This page will describe to you how you can add and remove contacts from groups s
 
 1.  Navigate to the [Contacts tab][4].
 2.  From the list of contacts, select the ones you wish to add to a group by checking the boxes next to the contact names.
-(Screenshot)
+![Contact Selection][14]
 *__Note:__ If you navigate to another page of contacts your current selection will be lost. If the contacts you want to add span multiple pages then please repeat steps 2-4 for each page of contacts you want to add.*
 3.  You will find a drop down box which lists all available groups. Choose the group you want to add the selected contacts to from this list.
-(Screenshot)
+![Group Selection Dropdown][15]
 4.  Click "Save All" to confirm the changes. *__Note:__ You __must__ perform this step. If you do not click "Save All" the contacts will not be added to the group.*
 
 ### [Remove a Contact from a Group][5]
@@ -36,7 +36,7 @@ __Contact Record__
   
 1.  Navigate to the contact you wish to remove from a group.
 2.  Next to the sub-heading "Groups", there is a list of groups that the contact is currently a member of.
-(screenshot)
+![Removing Single Contact From a Group][16]
 3.  Click on the 'x' icon (1) next to a group name to remove it from that group.
 4.  The group name will disappear, and the contact will no longer be in that group.
 5.  Click "Save" to confirm the changes. *__Note:__ You __must__ perform this step. If you do not click "Save" the contact will not be removed from the group.*
@@ -89,6 +89,9 @@ __Group List View__
 [8]: messages/9.exporting
 [9]: contacts/3.add_remove_a_custom_field
 [10]: contacts/4.creating_a_group
-[11]: ../images/help/add_to_group.jpg
-[12]: ../images/help/multiple_add_to_group.jpg
-[13]: ../images/help/remove_single_contact.jpg
+[11]: ../images/help/add_to_group.png
+[12]: ../images/help/multiple_add_to_group.png
+[13]: ../images/help/remove_single_contact.png
+[14]: contacts/contactselect.png
+[15]: contacts/groupdropdown.png
+[16]: contacts/removesinglecontact.png

@@ -39,4 +39,4 @@ You can [reply][9], [move][9], [forward][9], [delete][9] and [unarchive][12] mes
 [10]: archive/3.archiving_activities_folders
 [11]: archive/2.archiving_messages
 [12]: archive/4.unarchive
-[13]: ../images/help/archive_overview.jpg
+[13]: ../images/help/archive_overview.png

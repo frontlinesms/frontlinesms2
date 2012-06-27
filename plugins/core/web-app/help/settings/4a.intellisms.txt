@@ -41,7 +41,7 @@ If the connection fails then you may have entered information incorrectly. To ma
 [4]: http://frontlinesms.ning.com/
 [5]: settings/5.manually_adding_device
 [6]: settings/4b.clickatell
-[7]: ../images/help/settings_connections.jpg
-[8]: ../images/help/add_new_connection.jpg
-[9]: ../images/help/intellisms.jpg
-[10]: ../images/help/intellisms_confirm.jpg
+[7]: ../images/help/settings_connections.png
+[8]: ../images/help/add_new_connection.png
+[9]: ../images/help/intellisms.png
+[10]: ../images/help/intellisms_confirm.png

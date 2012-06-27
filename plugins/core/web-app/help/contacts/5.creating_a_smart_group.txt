@@ -34,5 +34,5 @@ _**Note:** When using custom fields in smart group rules, contacts must also hav
 [5]: messages/9.exporting
 [6]: contacts/3.add_remove_a_custom_field
 [7]: contacts/4.creating_a_group
-[8]: ../images/help/create_smartgroup.jpg
-[9]: ../images/help/smartgroup_dialog.jpg
+[8]: ../images/help/create_smartgroup.png
+[9]: ../images/help/smartgroup_dialog.png

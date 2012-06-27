@@ -66,4 +66,4 @@ How to Sort by Message Content
 [9]: search/1.getting_around_the_search_tab
 [17]: messages/3.quick_message
 [18]: messages/8.mrfd
-[19]: ../images/help/sss.jpg
+[19]: ../images/help/sss.png
