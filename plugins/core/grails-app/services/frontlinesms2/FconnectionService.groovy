@@ -60,7 +60,10 @@ class FconnectionService {
 	}
 	
 	def getRouteStatus(Fconnection c) {
-		return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED
+		if (c instanceof SmslibFconnection)
+			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? RouteStatus.CONNECTED : deviceDetectionService.isConnecting((c as SmslibFconnection).port) ? RouteStatus.CONNECTING : RouteStatus.NOT_CONNECTED
+		else
+			return camelContext.routes.any { it.id ==~ /.*-$c.id$/ } ? RouteStatus.CONNECTED : RouteStatus.NOT_CONNECTED
 	}
 	
 	// TODO rename 'handleNotConnectedException'

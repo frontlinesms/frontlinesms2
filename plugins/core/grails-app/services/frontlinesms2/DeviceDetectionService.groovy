@@ -44,4 +44,18 @@ class DeviceDetectionService {
 			}
 		}
 	}
+
+	def isConnecting(String port) {
+		def detectorThread
+		detector.detectors.each {
+			if(it.portName == port) {
+				detectorThread = it
+			}
+		}
+		def threadState
+		if(detectorThread && detectorThread!=Thread.currentThread()) {
+			threadState = detectorThread.getState()
+		}
+		return (detectorThread != null && threadState != Thread.State.TERMINATED)
+	}
 }
