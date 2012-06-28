@@ -43,4 +43,4 @@ The search header (3) displays the parameters of the search that was last carrie
 [4]: messages/3.quick_message
 [5]: search/1.getting_around_the_search_tab
 [6]: search/2.creating_a_search
-[7]: ../images/help/search_overview.jpg
+[7]: ../images/help/search_overview.png

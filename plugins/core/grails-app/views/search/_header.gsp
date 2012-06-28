@@ -10,7 +10,7 @@
 			<fsms:quickMessage class="section-action-button btn"/>
 		</li>
  		<li id="export-btn">
-			<g:if test="${search}">
+			<g:if test="${messageInstanceTotal > 0}">
 				<g:remoteLink class="btn" controller="export" action="messageWizard"
 						params="[messageSection:messageSection, searchId:search.id]"
 						onSuccess="launchSmallPopup(i18n('smallpopup.messages.export.title', '${messageInstanceTotal}'), data, i18n('action.export'));">
@@ -18,7 +18,7 @@
 				</g:remoteLink>
 			</g:if>
 			<g:else>
-	  			<a class="btn" disabled="disabled">
+	  			<a class="btn disabled">
 					<g:message code="search.export"/>
 				</a>
 			</g:else>

@@ -20,4 +20,4 @@ If the import was unsuccessful, or some contacts or messages failed to import, a
 [1]: settings/3.restoring_a_backup
 [2]: settings/2.changing_languages
 [3]: settings/3.restoring_a_backup
-[4]: ../images/help/settings_import.jpg
+[4]: ../images/help/settings_import.png

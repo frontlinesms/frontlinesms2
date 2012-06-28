@@ -9,7 +9,7 @@ The sent folder contains all the messages you have successfully sent. The messag
 1.  Select the message you want to forward.
 2.  In the [message details][3] area (1) click on the 'Forward' button.
 3.  A new window should appear:  
-[screenshot]  
+![Message Forward][11]
 In this window you will be given the opportunity to edit your message's text before you send it.
 Once you have finished editing, or if you do not wish to edit the message text, then click 'Next' 
 
@@ -42,4 +42,5 @@ The selected messages will be moved to your chosen destination.
 [7]: archive/2.archiving_messages
 [8]: folders/1.getting_around_folders
 [9]: archive/4.unarchive
-[10]: ../images/help/sent.jpg
+[10]: ../images/help/sent.png
+[11]: ../images/help/messageforward.png

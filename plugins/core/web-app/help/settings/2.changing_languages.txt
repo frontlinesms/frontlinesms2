@@ -18,4 +18,4 @@ FrontlineSMS will change to the language you have specified.
 [1]: settings/2.changing_languages
 [2]: settings/3.restoring_a_backup
 [3]: settings/1.getting_around_the_settings_menu
-[4]: ../images/help/settings_language.jpg
+[4]: ../images/help/settings_language.png

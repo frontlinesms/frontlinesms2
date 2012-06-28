@@ -33,5 +33,5 @@ When a message is selected, the full text will be displayed here (2) along with 
 [10]: archive/4.unarchive
 [11]: archive/3.archiving_activities_folders
 [12]: archive/2.archiving_messages
-[13]: ../images/help/sent_archive.jpg
+[13]: ../images/help/sent_archive.png
 

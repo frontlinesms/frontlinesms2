@@ -28,4 +28,4 @@ The results of your search will then be displayed in the message list (2).
 [3]: search/1.getting_around_the_search_tab
 [4]: search/1.getting_around_the_search_tab
 [5]: search/2.creating_a_search
-[6]: ../images/help/basic_search.jpg
+[6]: ../images/help/basic_search.png
