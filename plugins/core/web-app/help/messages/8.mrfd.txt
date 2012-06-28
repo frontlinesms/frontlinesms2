@@ -87,10 +87,10 @@ The message will be queued to be sent.
 [8]: messages/6.trash
 [10]: folders/1.getting_around_folders
 [13]: messages/9.exporting
-[14]: ../images/help/mrfd_reply.jpg
-[15]: ../images/help/mrfd_multiple.jpg
-[16]: ../images/help/mrfd_reply.jpg
-[17]: ../images/help/mrfd_multiple.jpg
-[18]: ../images/help/mrfd_reply.jpg
-[19]: ../images/help/mrfd_reply.jpg
-[20]: ../images/help/activity_delete.jpg
+[14]: ../images/help/mrfd_reply.png
+[15]: ../images/help/mrfd_multiple.png
+[16]: ../images/help/mrfd_reply.png
+[17]: ../images/help/mrfd_multiple.png
+[18]: ../images/help/mrfd_reply.png
+[19]: ../images/help/mrfd_reply.png
+[20]: ../images/help/activity_delete.png

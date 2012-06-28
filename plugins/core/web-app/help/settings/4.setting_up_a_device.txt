@@ -53,5 +53,5 @@ If you are having trouble getting a connection set up then please click [here][3
 [6]: settings/6.edit_delete_connection
 [7]: settings/4a.intellisms
 [8]: settings/4b.clickatell
-[9]: ../images/help/successfully_connected.jpg
-[10]: ../images/help/connecting.jpg
+[9]: ../images/help/successfully_connected.png
+[10]: ../images/help/connecting.png

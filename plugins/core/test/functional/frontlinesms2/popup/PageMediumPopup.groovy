@@ -6,13 +6,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 abstract class MediumPopup extends geb.Page {
-	static at = {
-		$('div.ui-dialog').displayed
-	}
 	static content = {
+		popupTitle {
+			$('#ui-dialog-title-modalBox').text().toLowerCase()
+		}
 		cancel { $('button#cancel') }
 		next { $('button#nextPage') }
-		previous { $('button#prev') }
+		previous { $('button#prevPage') }
 		send { $('button#submit') }
 		tab { tabId -> 
 			$('#tabs a[href="#tabs-'+tabId+'"]')
@@ -52,7 +52,9 @@ class QuickMessageConfirmTab extends geb.Module {
 }
 
 class CreateActivityDialog extends MediumPopup {
-	static base = { $('div.ui-dialog') }
+	static at = {
+		popupTitle.contains("create new activity")
+	}
 	static content = {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
@@ -61,6 +63,9 @@ class CreateActivityDialog extends MediumPopup {
 }
 
 class PollDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("poll")
+	}
 	static content = {
 		compose { module PollComposeTab }
 		response { module PollResponseTab }
@@ -87,7 +92,10 @@ class PollResponseTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		choice { choiceLetter -> 
-			$('input#choice${choiceLetter}"]')
+			$('input#choice${choiceLetter}')
+		}
+		label { choiceLetter ->
+			$('label[for="choice${choiceLetter}"]')
 		}
 	}
 }
@@ -97,6 +105,7 @@ class PollSortTab extends geb.Module {
 	static content = {
 		dontSort { $('ul.select input[value="false"]') }
 		sort { $('ul.select input[value="true"]') }
+		toggle { $('input#enableKeyword') }
 		keyword { $('input#poll-keyword') }
 	}
 }
@@ -120,7 +129,10 @@ class PollEditMessageTab extends geb.Module {
 class PollRecipientsTab extends geb.Module {
 	static base = { $('div#tabs-6') }
 	static content = {
-		addNumber { $('input#address') }
+		addField { $('input#address') }
+		addButton { $('input.btn.add-address') }
+		manual { $('li.manual.contact') }
+		count { $('#recipient-count').text().toInteger() }
 	}
 }
 
@@ -128,11 +140,15 @@ class PollConfirmTab extends geb.Module {
 	static base = { $('div#tabs-7') }
 	static content = {
 		pollName { $('input#name') }
+		message { $("#poll-message").text() }
+		recipientCount { $("confirm-recipients-count").text() }
+		messageCount { $("confirm-messages-count").text() }
+		autoreply { $("auto-reply-read-only-text").text() }
 	}
 }
 
 class PollSummary extends geb.Module {
-	static base = { $('div.sumamry') }
+	static base = { $('div.summary') }
 	static content = {
 
 	}

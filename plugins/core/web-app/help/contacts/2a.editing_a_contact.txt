@@ -34,5 +34,5 @@ To delete multiple contacts, select the contacts you wish to delete and select "
 [8]: contacts/4.creating_a_group
 [9]: contacts/5.creating_a_smart_group
 [10]: contacts/2a.editing_a_contact
-[11]: ../images/help/delete_contact.jpg
-[12]: ../images/help/delete_multiple_contact.jpg
+[11]: ../images/help/delete_contact.png
+[12]: ../images/help/delete_multiple_contact.png

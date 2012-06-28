@@ -41,4 +41,4 @@ Please see [here][2]
 [6]: messages/1.getting_around_the_messages_tab
 [8]: activities/2.creating_an_activity
 [11]: archive/4.unarchive
-[12]: ../images/help/pending.jpg
+[12]: ../images/help/pending.png
