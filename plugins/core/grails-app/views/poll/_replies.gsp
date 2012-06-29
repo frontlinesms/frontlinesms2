@@ -10,7 +10,7 @@
 	<g:textArea name="autoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit? activityInstanceToEdit.autoreplyText as boolean: true}" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
 	<div class="controls">
 		<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
-		<fsms:magicWand target="autoreplyText" controller="${controllerName}"/>
+		<fsms:magicWand target="autoreplyText" controller="${controllerName}" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>
 

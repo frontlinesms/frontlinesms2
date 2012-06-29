@@ -155,7 +155,8 @@ class FsmsTagLib {
 	}
 
 	def magicWand = { att ->
-		def controller = att.controller
+		// edit of activities goes through generic ActivityController, so need to check instance type in this case
+		def controller = att.controller == "activity" ? att.instance?.shortName : att.controller
 		def target = att.target
 		def fields = expressionProcessorService.findByController(controller)
 		target = target?: "messageText"
