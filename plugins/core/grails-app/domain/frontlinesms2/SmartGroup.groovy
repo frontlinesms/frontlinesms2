@@ -79,9 +79,9 @@ class SmartGroup {
 			customFields.each {
 				// FIXME potential for injection via it.name?
 				w << "c IN (SELECT DISTINCT cf.contact FROM CustomField AS cf WHERE \
-cf.name=:custom_${it.name}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name}_value))"
-				p."custom_${it.name}_name" = it.name
-				p."custom_${it.name}_value" = "%$it.value%"
+cf.name=:custom_${it.name.replaceAll(' ', '_')}_name AND LOWER(cf.value) LIKE LOWER(:custom_${it.name.replaceAll(' ', '_')}_value))"
+				p."custom_${it.name.replaceAll(' ', '_')}_name" = it.name
+				p."custom_${it.name.replaceAll(' ', '_')}_value" = "%$it.value%"
 			}
 		}
 		
