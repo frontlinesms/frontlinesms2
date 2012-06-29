@@ -68,4 +68,4 @@ url('../images/icons/error_on.png') no-repeat 99% 0; center;}
 
 span.quick-message { padding: 6px 5px 6px 25px; background-image: url('../images/icons/quickmessage.png'); background-repeat: no-repeat; background-position: 0px center; }
 
-#modalBox .recipient-list { padding:17px; }
+#modalBox .recipient-list { padding:17px; max-height: 200px; overflow-y:scroll; }
