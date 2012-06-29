@@ -32,6 +32,10 @@ grails.scaffolding.templates.domainSuffix = 'Instance'
 // jquery plugin
 grails.views.javascript.library = "jquery"
 
+//Enable automatic database migrations
+grails.plugin.databasemigration.updateOnStart = true
+grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+
 // pagination
 grails.views.pagination.max = 50
 log4j = {

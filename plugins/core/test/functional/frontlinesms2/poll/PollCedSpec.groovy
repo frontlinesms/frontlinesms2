@@ -3,6 +3,7 @@ package frontlinesms2.poll
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.message.PageMessagePending
+import frontlinesms2.popup.*
 import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -20,217 +21,209 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			waitFor { header.title == 'football teams poll' }
+			header.title == 'football teams poll'
 		when:
 			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc('Alice')
 		then:
-			waitFor { header.title == 'football teams poll' }
+			header.title == 'football teams poll'
 		when:
 			to PageMessagePoll, Poll.findByName('Football Teams').id, 2
 		then:
-			waitFor { header.title == 'football teams poll' }
+			header.title == 'football teams poll'
 
 	}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', null)
 
 		then:
-			pollDialog.errorPanel.displayed
+			errorPanel.displayed
 		when:
-			pollDialog.tab(1).click()
-			pollDialog.compose.question = "question"
-			pollDialog.compose.dontSendQuestion.click()
-			pollDialog.tab(7).click()
+			tab(1).click()
+			compose.question = "question"
+			compose.dontSendQuestion.click()
+			tab(7).click()
 		then:
-			waitFor { pollDialog.confirm.pollName.displayed }
+			confirm.pollName.displayed
 		when:
-			pollDialog.confirm.pollName = "POLL NAME"
-			pollDialog.send.click()
+			confirm.pollName = "POLL NAME"
+			send.click()
 		then:
-			waitFor { pollDialog.summary.displayed }
+			waitFor { summary.displayed }
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	
 	def "should require keyword if sorting is enabled"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup()
 		then:
-			waitFor { autoSortTab.displayed }
-			pollForm.keyword().disabled
+			waitFor { sort.displayed }
+			sort.keyword.disabled
 		when:
-			pollForm.enableKeyword = 'true'
-			!pollForm.keyword
+			sort.sort.click()
 		then:
-			waitFor { !pollForm.keyword().disabled }
-			!pollForm.keyword
+			waitFor { !sort.keyword.disabled }
 		when:
 			next.click()
 		then:
-			waitFor { errorMessage.displayed }
-			pollForm.keyword().hasClass('error')
-			autoSortTab.displayed
+			waitFor { errorPanel.displayed }
+			sort.keyword.hasClass('error')
+			sort.displayed
 		when:
-			pollForm.keyword = 'trigger'
+			sort.keyword = 'trigger'
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
-			responseListTabLink.hasClass("ui-state-disabled")
-			selectRecipientsTabLink.hasClass("ui-state-disabled")
+			waitFor { confirm.displayed }
+			tab(2).hasClass("disabled-tab")
+			tab(6).hasClass("disabled-tab")
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { enterQuestionTab.displayed }
+			waitFor { compose.displayed }
 	}
 
 
 	def "should move to the next tab when multiple choice poll is selected"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple')
 		then:	
-			waitFor { responseListTab.displayed }
+			waitFor { response.displayed }
 	}
 
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple', 'question')
 		then:
-			waitFor { responseListTab.displayed }
+			waitFor { response.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { errorMessage.displayed }
-			responseListTab.displayed
+			waitFor { errorPanel.displayed }
+			response.displayed
 	}
 
 	def "should not proceed when the poll is not named"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
+			waitFor { confirm.displayed }
 		when:
 			done.click()
 		then:
-			waitFor { errorMessage.displayed }
-			confirmationTab.displayed
+			waitFor { errorPanel.displayed }
+			confirm.displayed
 	}
 	
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
-		// FIXME: rewrite to use new test format
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
-			waitFor { responseListTab.displayed }
-			choiceALabel.hasClass('field-enabled')
-			choiceBLabel.hasClass('field-enabled')
-			!choiceCLabel.hasClass('field-enabled')
-			!choiceDLabel.hasClass('field-enabled')
-			!choiceELabel.hasClass('field-enabled')
+			waitFor { response.displayed }
+			response.label("A").hasClass('field-enabled')
+			response.label("B").hasClass('field-enabled')
+			!response.label("C").hasClass('field-enabled')
+			!response.label("D").hasClass('field-enabled')
+			!response.label("E").hasClass('field-enabled')
 		when:
-			pollForm.choiceA = 'Never'
-			pollForm.choiceB = 'Once a day'
+			response.choice("A").jquery.val('Never')
+			response.choice("B").jquery.val('Once a day')
 		then:
-			waitFor { choiceCLabel.hasClass('field-enabled') }
+			waitFor { response.label("C").hasClass('field-enabled') }
 		when:
-			pollForm.choiceC = 'Twice a day'
+			response.choice("C").jquery.val('Twice a day')
 		then:
-			waitFor { choiceDLabel.hasClass('field-enabled') }
+			waitFor { response.label("D").hasClass('field-enabled') }
 			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
-			pollForm.enableKeyword = true
-			pollForm.keyword = 'coffee'
+			sort.sort.click()
+			sort.keyword = 'coffee'
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
-			pollForm.autoreplyText().disabled
+			waitFor { autoreply.displayed }
+			autoreply.text.disabled
 		when:
-			pollForm.enableAutoreply = true
+			autoreply.autoreplyCheck = true
 		then:
-			waitFor { !pollForm.autoreplyText().disabled }
+			waitFor { !autoreply.text.disabled }
 		when:
 			
-			pollForm.autoreplyText = "Thanks for participating..."
+			autoreply.text = "Thanks for participating..."
 		then:
 			waitFor {
 				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
-				pollForm.autoreplyText().jquery.val() == "Thanks for participating..."
+				autoreply.text.jquery.val() == "Thanks for participating..."
 			}
 		when:
-			pollForm.enableAutoreply = false
+			autoreply.autoreplyCheck = false
 		then:	
-			waitFor { pollForm.autoreplyText().disabled }
-			pollForm.autoreplyText().jquery.val() == "Thanks for participating..."
+			waitFor { autoreply.text.disabled }
+			autoreply.text.jquery.val() == "Thanks for participating..."
 		when:
-			pollForm.enableAutoreply = true
+			autoreply.autoreplyCheck = true
 			next.click()
 		then:
-			waitFor { editMessageTab.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { selectRecipientsTab.displayed }
+			waitFor { edit.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { errorMessage.displayed }
-		when:
-			pollForm.address = '1234567890'
-			addManualAddress.click()
-			pollForm.address = '1234567890'
-			addManualAddress.click()
-		then:
-			waitFor { $('.manual').displayed }
-			$("#recipient-count").text() == "1"
+			waitFor { recipients.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
-			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
-			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
-			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
+			waitFor { errorPanel.displayed }
 		when:
-			pollForm.name = "Coffee Poll"
-			done.click()
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
+		then:
+			waitFor { recipients.manual.size() == 1 }
+			recipients.count == 1
+		when:
+			next.click()
+		then:
+			waitFor { confirm.displayed }
+			confirm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			confirm.recipientCount == "1 contacts selected"
+			confirm.messageCount == "1 messages will be sent"
+			confirm.autoreply == "Thanks for participating..."
+		when:
+			confirm.pollName = "Coffee Poll"
+			send.click()
 		then:
 			waitFor { Poll.findByName("Coffee Poll") }
 	}
@@ -255,7 +248,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { at PollDialog }
 		when:
 			pollForm.enableKeyword = true
 			pollForm.keyword = 'coffee'
@@ -500,13 +493,13 @@ class PollCedSpec extends PollBaseSpec {
 	def launchPollPopup(pollType='yesNo', question='question', enableMessage=true) {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()
-		waitFor { at CreateActivityDialog }
+		waitFor('slow') { at CreateActivityDialog }
 		poll.click()
 		waitFor('slow') { at PollDialog }
 		
 		pollType=='yesNo'?compose.yesNo.click():compose.multiple.click()
 		if(question) compose.question= question
-		if(!enableMessage) compose.dontSendMessage.click()
+		if(!enableMessage) compose.dontSendQuestion.click()
 		next.click()
 	}
 	
