@@ -30,7 +30,7 @@ class ConnectionController {
 	def show = {
 		withFconnection {
 			if(params.createRoute) {
-				it.metaClass.getStatus = { RouteStatus.CONNECTING }
+				it.metaClass.getStatus = { ConnectionStatus.CONNECTING }
 			}
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 					fconnectionInstanceTotal: Fconnection.list(params)]
@@ -54,7 +54,7 @@ class ConnectionController {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		if(connection.status == RouteStatus.NOT_CONNECTED) {
+		if(connection.status == ConnectionStatus.NOT_CONNECTED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
 			redirect action:'list'

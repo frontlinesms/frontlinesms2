@@ -18,9 +18,9 @@ class StatusControllerSpec extends Specification {
 		where:
 			expectedColor | statuses
 			'red'         | []
-			'red'         | [RouteStatus.NOT_CONNECTED, RouteStatus.NOT_CONNECTED]
-			'green'       | [RouteStatus.NOT_CONNECTED, RouteStatus.CONNECTED, RouteStatus.NOT_CONNECTED]
-			'green'       | [RouteStatus.CONNECTED, RouteStatus.CONNECTED]
+			'red'         | [ConnectionStatus.NOT_CONNECTED, ConnectionStatus.NOT_CONNECTED]
+			'green'       | [ConnectionStatus.NOT_CONNECTED, ConnectionStatus.CONNECTED, ConnectionStatus.NOT_CONNECTED]
+			'green'       | [ConnectionStatus.CONNECTED, ConnectionStatus.CONNECTED]
 	}
 }
 

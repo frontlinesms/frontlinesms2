@@ -10,7 +10,7 @@ class StatusController {
 
 	def trafficLightIndicator = {
 		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == RouteStatus.CONNECTED)}) ? 'green' : 'red'
+		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
 		render text:color, contentType:'text/plain'
 	}
 	

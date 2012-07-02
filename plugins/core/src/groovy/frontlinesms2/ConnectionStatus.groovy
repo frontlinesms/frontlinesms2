@@ -1,6 +1,6 @@
 package frontlinesms2
 
-enum RouteStatus {
+enum ConnectionStatus {
 	NOT_CONNECTED,
 	CONNECTING,
 	CONNECTED

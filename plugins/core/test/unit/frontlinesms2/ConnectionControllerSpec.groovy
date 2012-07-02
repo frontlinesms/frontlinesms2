@@ -20,7 +20,7 @@ class ConnectionControllerSpec extends Specification {
 
 	def "delete should delete an inactive Fconnection"() {
 		given:
-			def c = buildTestConnection(RouteStatus.NOT_CONNECTED)
+			def c = buildTestConnection(ConnectionStatus.NOT_CONNECTED)
 			params.id = c.id
 		when:
 			controller.delete()
@@ -31,7 +31,7 @@ class ConnectionControllerSpec extends Specification {
 
 	def "delete should throw an exception for an active fconnection"() {
 		given:
-			def c = buildTestConnection(RouteStatus.CONNECTED)
+			def c = buildTestConnection(ConnectionStatus.CONNECTED)
 			params.id = c.id
 		when:
 			controller.delete()
@@ -43,7 +43,7 @@ class ConnectionControllerSpec extends Specification {
 	private def buildTestConnection(status) {
 		def c = new Fconnection(name:'test').save(failOnError:true)
 		def fconnectionService = Mock(FconnectionService)
-		fconnectionService.getRouteStatus(_) >> { connection -> status }
+		fconnectionService.getConnectionStatus(_) >> { connection -> status }
 		c.fconnectionService = fconnectionService
 		assert c.fconnectionService != null
 		return c
