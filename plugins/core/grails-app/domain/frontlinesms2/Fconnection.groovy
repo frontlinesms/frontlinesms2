@@ -28,7 +28,7 @@ class Fconnection {
 	String name
 	
 	def getStatus() {
-		fconnectionService.getRouteStatus(this)	
+		fconnectionService.getConnectionStatus(this)
 	}
 	
 	List<RouteDefinition> getRouteDefinitions() {

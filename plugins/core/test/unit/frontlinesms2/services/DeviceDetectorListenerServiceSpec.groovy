@@ -61,7 +61,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			def imsi = '56789'
 			new SmslibFconnection(name:'Already configured', port:'/dev/different',
 							serial:serial, imsi:imsi).save()
-					.metaClass.getStatus = { -> RouteStatus.CONNECTED }
+					.metaClass.getStatus = { -> ConnectionStatus.CONNECTED }
 			assert SmslibFconnection.count() == 1
 			def d = mockDetector(port:port, serial:serial, imsi:imsi)
 		when:
@@ -79,7 +79,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			def imsi = '56789'
 			new SmslibFconnection(name:'Already configured', port:port,
 							serial:serial, imsi:imsi).save()
-					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
+					.metaClass.getStatus = { -> ConnectionStatus.NOT_CONNECTED }
 			MockModemUtils.initialiseMockSerial("$port":mockPortIdentifier(port))
 			assert SmslibFconnection.count() == 1
 			def d = mockDetector(port:port, serial:serial, imsi:imsi)
@@ -98,7 +98,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			def imsi = '56789'
 			new SmslibFconnection(name:'Already configured', port:otherPort,
 							serial:serial, imsi:imsi).save()
-					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
+					.metaClass.getStatus = { -> ConnectionStatus.NOT_CONNECTED }
 			MockModemUtils.initialiseMockSerial("$otherPort":mockPortIdentifier(otherPort))
 			assert SmslibFconnection.count() == 1
 			def d = mockDetector(port:port, serial:serial, imsi:imsi)
@@ -118,7 +118,7 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			def imsi = '56789'
 			new SmslibFconnection(name:'Already configured', port:otherPort,
 							serial:serial, imsi:imsi).save()
-					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
+					.metaClass.getStatus = { -> ConnectionStatus.NOT_CONNECTED }
 			MockModemUtils.initialiseMockSerial([:])
 			assert SmslibFconnection.count() == 1
 			def d = mockDetector(port:port, serial:serial, imsi:imsi)
@@ -138,10 +138,10 @@ class DeviceDetectorListenerServiceSpec extends Specification {
 			def imsi = '56789'
 			new SmslibFconnection(name:'Already connected', port:otherPort,
 							serial:serial, imsi:imsi).save()
-					.metaClass.getStatus = { -> RouteStatus.CONNECTED }
+					.metaClass.getStatus = { -> ConnectionStatus.CONNECTED }
 			new SmslibFconnection(name:'Should I connect?', port:port,
 							serial:serial, imsi:imsi).save()
-					.metaClass.getStatus = { -> RouteStatus.NOT_CONNECTED }
+					.metaClass.getStatus = { -> ConnectionStatus.NOT_CONNECTED }
 			MockModemUtils.initialiseMockSerial([:])
 			assert SmslibFconnection.count() == 2
 			def d = mockDetector(port:port, serial:serial, imsi:imsi)

@@ -177,7 +177,7 @@ class FsmsTagLib {
 	def trafficLightStatus = { att ->
 		out << '<span id="status-indicator" class="indicator '
 		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == RouteStatus.CONNECTED)}) ? 'green' : 'red'
+		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
 		out << color
 		out << '"></span>'
 	}
