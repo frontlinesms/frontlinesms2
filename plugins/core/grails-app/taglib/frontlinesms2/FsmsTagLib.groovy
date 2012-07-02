@@ -117,7 +117,7 @@ class FsmsTagLib {
 		// specially for the view
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
 		def htmlKey = (att.fieldPrefix!=null? att.fieldPrefix: instanceClass?instanceClass.shortName:'') + att.field
-		def val = att.instance?."$groovyKey"
+		def val = att.instance?."$groovyKey"?:instanceClass?.defaultValues?."$groovyKey"?:null
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
 		att += [name:htmlKey, value:val]

@@ -9,6 +9,7 @@ import org.apache.camel.model.RouteDefinition
 class ClickatellFconnection extends Fconnection {
 	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http'
 	static configFields = ['name', 'apiId', 'username', 'password']
+	static defaultValues = []
 	static String getShortName() { 'clickatell' }
 	
 	String apiId
