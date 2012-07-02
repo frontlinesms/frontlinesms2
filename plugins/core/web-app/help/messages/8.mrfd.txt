@@ -68,7 +68,7 @@ You can forward a message on from almost anywhere in the software. Only messages
 1.  [Select][5] the message you would like to forward.
 2.  Click on the small arrow next to the "Reply" button (1). _If the message is in the [Sent][6] folder, then the small arrow will appear next to the "Resend" button._ The "Forward" option will appear in a list. Click on it to continue.
 3.  A window will appear with the selected message already in the message text area. Click Next.
-(screenshot)
+![Forwarding Dialog Box][21]
 4.  At this screen you can add the recipient phone number or phone numbers that you want to forward to. You can also send to contacts and groups that you have created previously.
 5.  The confirmation window will appear with a summary containing the message to be sent, how many recipients it will be sent to, and how many messages will be sent in total.  
 6.  Click "Send" to forward the message.
@@ -94,3 +94,4 @@ The message will be queued to be sent.
 [18]: ../images/help/mrfd_reply.png
 [19]: ../images/help/mrfd_reply.png
 [20]: ../images/help/activity_delete.png
+[21]: ../images/help/forward.png
