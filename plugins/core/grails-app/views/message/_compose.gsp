@@ -2,7 +2,14 @@
 	<label for="messageText"><g:message code="message.create.prompt"/></label>
 	<g:textArea name="messageText" value="${activityInstanceToEdit?activityInstanceToEdit.sentMessageText:messageText}" rows="5" cols="40"/>
 	<div class="controls">
-		<span id="send-message-stats" class="character-count"><g:message code="message.character.count" args="[0, 1]"/></span>
+		<div class="stats">
+			<span id="send-message-stats" class="character-count">
+				<g:message code="message.character.count" args="[0, 1]"/>
+			</span>
+		</div>
+		<div id="character-count-warning" class="stats">
+			<g:message code="message.character.count.warning"/>
+		</div>
 		<fsms:magicWand controller="${controllerName}" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>

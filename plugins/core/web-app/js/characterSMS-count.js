@@ -7,6 +7,16 @@ function updateSmsCharacterCount() {
 	} else {
 		$.get(url_root + 'message/sendMessageCount', { message:messageText }, function(data) {
 			messageStats.text(i18n('message.character.count', data['remaining'], data['partCount']));
+			if(messageText.indexOf("${") != -1)
+			{
+				messageStats.addClass("invalid");
+				$("#character-count-warning").show();
+			}
+			else
+			{
+				messageStats.removeClass("invalid");
+				$("#character-count-warning").hide();
+			}
 		});
 	}
 }
