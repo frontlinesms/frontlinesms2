@@ -33,11 +33,15 @@ class SmslibFconnection extends Fconnection {
 		imsi(nullable: true)
 		pin(nullable: true)
 		serial(nullable: true)
-		send(validator: { val, obj ->
-			return val || obj.receive
+		send(nullable:true, validator: { val, obj ->
+			if(!val) {
+				return obj.receive
+			}
 		})
-		receive(validator: { val, obj ->
-			return val || obj.send
+		receive(nullable:true, validator: { val, obj ->
+			if(!val) {
+				return obj.send
+			}
 		})
 	}
 	
