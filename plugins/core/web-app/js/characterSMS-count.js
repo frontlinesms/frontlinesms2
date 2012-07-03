@@ -1,6 +1,7 @@
 function updateSmsCharacterCount() {
+	var textArea = $(this);
 	var messageText = $(this).val();
-	var messageStats = $("span.character-count");
+	var messageStats = textArea.parent().find("span.character-count");
 	if(messageText.length > 3000) {
 		//prevent addition of new content to message
 		$(this).val(messageText.substring(0, 3000));
@@ -10,12 +11,12 @@ function updateSmsCharacterCount() {
 			if(messageText.indexOf("${") != -1)
 			{
 				messageStats.addClass("invalid");
-				$("#character-count-warning").show();
+				textArea.parent().find(".character-count-warning").show();
 			}
 			else
 			{
 				messageStats.removeClass("invalid");
-				$("#character-count-warning").hide();
+				textArea.parent().find(".character-count-warning").hide();
 			}
 		});
 	}

@@ -81,7 +81,6 @@
 		<g:if test="${activityInstanceToEdit}">
 			$("#messageText").trigger("keyup");
 		</g:if>
-		
 		highlightPollResponses();
 		
 		/* Poll type tab */
