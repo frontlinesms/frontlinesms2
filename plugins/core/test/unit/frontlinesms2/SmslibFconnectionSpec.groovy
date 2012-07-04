@@ -20,4 +20,15 @@ class SmslibFconnectionSpec extends Specification {
 		then:
 			conn.errors.hasFieldErrors("baud")
 	}
+
+	def "send or receive flags should be set"() {
+		when:
+			def conn = new SmslibFconnection(name:"testConnection", baud:"9600", port:"/dev/ttyUSB0", send:true)
+		then:
+			conn.validate()
+		when:
+			conn = new SmslibFconnection(name:"testConnection", baud:"9600", port:"/dev/ttyUSB0", send:false, receive:false)
+		then:
+			!conn.validate()
+	}
 }

@@ -31,6 +31,7 @@ class FconnectionService {
 			logFail(c, ex.cause)
 		} catch(Exception ex) {
 			logFail(c, ex)
+			destroyRoutes(c.id as long)
 		}
 		println "FconnectionService.createRoutes() :: EXIT :: $c"
 	}

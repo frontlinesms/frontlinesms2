@@ -15,6 +15,6 @@ class HelpControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.section()
 		then:
-			controller.response.text == '<p>This is test content for the help.</p>'
+			controller.response.text == '<p>This help file is not yet available, sorry.</p>'
 	}
 }

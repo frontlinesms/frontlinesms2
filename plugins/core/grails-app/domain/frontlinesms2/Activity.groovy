@@ -15,7 +15,6 @@ abstract class Activity extends MessageOwner {
 	}
 
 	static constraints = {
-		name(blank:false, nullable:false, unique:true)
 		sentMessageText(nullable:true)
 	}
 

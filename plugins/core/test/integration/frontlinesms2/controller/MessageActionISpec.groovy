@@ -2,7 +2,7 @@ package frontlinesms2.controller
 
 import frontlinesms2.*
 
-class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
+class MessageActionISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def controller
 	
@@ -80,11 +80,11 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should move a poll message to folder section"() {
 		setup:
-			def folder = new Folder(name: 'nairobi').save(failOnError:true, flush:true)
+			def folder = new Folder(name: 'nairobi').save(failOnError:true)
 			def poll = new Poll(name: 'Who is badder?')
 			poll.editResponses(choiceA: 'known unknown', choiceB: 'unknown unknowns')
-			poll.save(failOnError:true, flush:true)
-			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true, flush:true)
+			poll.save(failOnError:true)
+			def message = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save(failOnError:true)
 			PollResponse.findByValue('known unknown').addToMessages(message)
 			poll.save(failOnError: true)
 		when:
@@ -96,6 +96,6 @@ class MessageActionsISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.move()
 		then:
 			PollResponse.findByValue('known unknown').messages == []
-			message.refresh().messageOwner == folder
+			message.messageOwner == folder
 	}
 }
