@@ -6,17 +6,19 @@
 	<ul>
 		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question"/></a></li>
 		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response"/></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.sort"/></a></li>
-		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.reply"/></a></li>
-		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.edit.message"/></a></li>
-		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.recipients"/></a></li>
-		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.confirm"/></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.alias"/></a></li>
+		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.sort"/></a></li>
+		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.reply"/></a></li>
+		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.edit.message"/></a></li>
+		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.recipients"/></a></li>
+		<li><a class="tabs-8" href="#tabs-8"><g:message code="poll.confirm"/></a></li>
 	</ul>
 
 	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
 		<fsms:wizardTabs templates="
 				/poll/question,
 				/poll/responses,
+				/poll/aliases,
 				/poll/sorting,
 				/poll/replies,
 				/message/compose,
@@ -66,6 +68,52 @@
 			var sendMessage = questionText + replyText;
 			$("#messageText").val(sendMessage);
 			$("#messageText").keyup();
+			//SET VALUES FOR ALIASES
+			setAliasValues();
+		}
+	}
+
+	function setAliasValues(){
+		var yesNo = $("input[name='pollType']:checked").val() == "yesNo";
+		if (yesNo) {
+			var myMap = {'A':'Yes', 'B':'No' };
+			$.each(myMap, function(key, value){
+				$("ul#poll-aliases li label[for='alias"+key+"']").text(value);
+			});
+		}else{
+			var myArray = ['A', 'B', 'C', 'D', 'E'];
+			$.each(myArray, function(index, value){
+				var labelValue = $("ul#poll-choices li input#choice"+value).val().trim();
+				var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias"+value+"']");
+				var aliasTextField = $("ul#poll-aliases li input#alias"+value);
+				if(labelValue.length == 0){
+					aliasTextFieldLabel.text(value);
+					aliasTextField.attr('disabled', 'disabled');
+				}else{
+					aliasTextFieldLabel.text(labelValue);
+				}
+			});
+		}
+	}
+
+	function addRespectiveAliases(field){
+		if($(field).hasClass("create")) {
+			var aliases = "";
+			var rawKey = $(field).attr('id').trim();
+			var rawVal = $(field).val().trim();
+			var value = rawVal.split(' ')[0]
+			var key = rawKey.substring(rawKey.length-1);
+			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias"+value+"']");
+			var aliasTextField = $("ul#poll-aliases li input#alias"+key);
+			if(value.length > 0){
+				aliases += key+","+value;
+				aliasTextField.val(aliases);
+				aliasTextField.removeAttr("disabled");
+			}else{
+				aliasTextFieldLabel.text("");
+				aliasTextField.val("");
+				aliasTextField.attr("disabled","disabled");
+			}
 		}
 	}
 	
@@ -115,7 +163,7 @@
 		});
 		
 		/* Auto-sort tab */
-		$("#tabs-3").contentWidget({
+		$("#tabs-4").contentWidget({
 			validate: function() {
 				var pollKeywordTextfield = $("input[name='keyword']");
 				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||
@@ -127,18 +175,18 @@
 		});
 
 		/* Auto-reply tab */
-		$("#tabs-4").contentWidget({
+		$("#tabs-5").contentWidget({
 			validate: function() {
-				$('#tabs-4 textarea').removeClass("error");
+				$('#tabs-5 textarea').removeClass("error");
 				var isValid = !isGroupChecked('enableAutoReply') || !(isElementEmpty('#tabs-4 textarea'));
 				if(!isValid) {
-					$('#tabs-4 textarea').addClass("error");
+					$('#tabs-5 textarea').addClass("error");
 				}
 				return isValid;
 			}
 		});
 		
-		$("#tabs-6").contentWidget({
+		$("#tabs-7").contentWidget({
 			validate: function() {
 				if(!isGroupChecked('dontSendMessage')) {
 					addAddressHandler();
@@ -148,12 +196,12 @@
 			}
 		});
 
-		$("#tabs-7").contentWidget({
+		$("#tabs-8").contentWidget({
 			validate: function() {
-				$("#tabs-7 #name").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-7 #name"));
+				$("#tabs-8 #name").removeClass("error");
+				var isEmpty = isElementEmpty($("#tabs-8 #name"));
 				if(isEmpty) {
-					$("#tabs-7 #name").addClass("error");
+					$("#tabs-8 #name").addClass("error");
 				}
 				return !isEmpty;
 			}

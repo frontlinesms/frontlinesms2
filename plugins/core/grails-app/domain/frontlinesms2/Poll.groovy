@@ -77,8 +77,8 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'yesNo' && !this.responses) {
-			this.addToResponses(value:'Yes', key:'A')
-			this.addToResponses(value:'No', key:'B')
+			this.addToResponses(value:'Yes', key:'A', aliases:addAlias('A', attrs))
+			this.addToResponses(value:'No', key:'B', aliases:addAlias('B', attrs))
 			this.yesNo = true
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
@@ -87,7 +87,9 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-				} else if(v?.trim()) this.addToResponses(value:v, key:k)
+					found.aliases = addAlias(k, attrs)
+					println "######### Saved ######## ${found.aliases}"
+				} else if(v?.trim()) this.addToResponses(value:v, key:k , aliases:addAlias(k, attrs))
 			}
 		}
 		if(!this.unknown) {
@@ -95,6 +97,11 @@ class Poll extends Activity {
 		}
 	}
 	
+	def addAlias(String k, attrs){
+		def aliases = attrs["alias"+k]?.toUpperCase()
+		return aliases
+	}
+
 	def deleteResponse(PollResponse response) {
 		response.messages.findAll { message ->
 			this.unknown.messages.add(message)
@@ -127,11 +134,11 @@ class Poll extends Activity {
 		if(exactMatch) {
 			if(words.size() < 2) return this.unknown
 			option = words[1]
-			if(option.size() > 1) return this.unknown
 		} else {
 			option = words[0][-1]
 		}
-		return responses.find { it.key == option }?: this.unknown
+		println "Option choosen >> ${option}"
+		return responses.find { it!=this.unknown?it.aliases?.split(",").contains(option):false }?: this.unknown
 	}
 }
 

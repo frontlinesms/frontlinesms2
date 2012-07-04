@@ -266,4 +266,33 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			!responseA.messages.contains(m)
 			!m.messageOwner
 	}
+
+	def "Saving a poll should save the corresponding aliases for the choices"(){
+		when:
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
+			p.save(failOnError:true, flush:true)
+			def savedPoll = Poll.findByName("This is a poll")
+		then:
+			savedPoll.responses[0].aliases.contains("A").equals(true)
+			savedPoll.responses[0].aliases.contains("MANU").equals(true)
+			savedPoll.responses[0].aliases.contains("YEAH").equals(true)
+	}
+
+	def "Aliases should be sorted into the correct PollResponse"() {
+		when:
+			def p = new Poll(name: 'This is a poll')
+			p.keyword = new Keyword(value: "FOOTBALL", activity: p)
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
+			p.save(failOnError:true, flush:true)
+		then:
+			println "Key >> " + p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date: new Date()).save(), true).key
+			p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date: new Date()).save(), true).key == groupKey
+		where:
+			messageText 	| groupKey
+			"football manu"	| "A"
+			"football a" 	| "A"	
+			"football yeah" | "A"
+			"football"  	| "unknown"
+	}
 }
