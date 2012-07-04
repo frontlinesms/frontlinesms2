@@ -9,7 +9,10 @@ class Autoreply extends Activity {
 	String autoreplyText
 	
 	static constraints = {
-		name(blank:false, maxSize:255, unique:true)
+		name(blank:false, maxSize:255, validator: { val, obj ->
+			def similarName = Autoreply.findByNameIlike(val)
+			return !similarName|| obj.id == similarName.id
+			})
 		autoreplyText(blank:false)
 	}
 	
