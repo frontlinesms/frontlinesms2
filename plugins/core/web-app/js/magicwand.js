@@ -4,6 +4,7 @@ var magicwand = {
 		var varName = list.val();
 		insertAtCaret(target, "${" + varName + "}");
 		magicwand.reset(list);
+		$("#"+target).trigger("keyup");
 	},
 	/**
 	 * Reset a jquery "selectmenu" to display the original selected item.

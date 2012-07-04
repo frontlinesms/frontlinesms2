@@ -65,7 +65,8 @@ class ConnectionController {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
 			fconnectionInstance.properties = params
-			def connectionErrors = fconnectionInstance.errors.allErrors.collect {message(code:it.codes[2], args:it.arguments.flatten())}
+			fconnectionInstance.validate()
+			def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 			if (fconnectionInstance.save()) {
 			withFormat {
 				html {
@@ -146,7 +147,8 @@ class ConnectionController {
 	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
-		def connectionErrors = fconnectionInstance.errors.allErrors.collect {message(code:it.codes[2], args:it.arguments.flatten())}
+		fconnectionInstance.validate()
+		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 		if (fconnectionInstance.save()) {
 			withFormat {
 				html {
@@ -164,7 +166,7 @@ class ConnectionController {
 					redirect(controller:'connection', action:"list")
 				}
 				json {
-					render([ok:false, text:connectionErrors.join().toString()] as JSON)
+					render([ok:false, text:connectionErrors.join(", ").toString()] as JSON)
 				}
 			}
 		}

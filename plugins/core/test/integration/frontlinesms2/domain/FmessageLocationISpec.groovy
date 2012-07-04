@@ -102,24 +102,29 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "can fetch all pending messages"() {
 		setup:
-			createTestData()
+			def m4 = new Fmessage(src:"src", text:"text", starred:true, date:new Date())
+				.addToDispatches(dst:'1234567', status:DispatchStatus.PENDING)
+				.save(failOnError:true)
+			def m3 = new Fmessage(src:"src", text:"text", date:new Date())
+				.addToDispatches(dst:'1234567', status:DispatchStatus.FAILED)
+				.save(failOnError:true)
 		when:
-			def results = Fmessage.listPending(false)
+			def results = Fmessage.listPending(false, [sort:"date", order:"desc"])
 		then:
-			results.count() == 2
-			results.list()*.every { it.hasFailed || it.hasPending }
-			results.list().every { !it.archived }
+			results.size() == 2
+			results.every { it.hasFailed || it.hasPending }
+			results.every { !it.archived }
 	}
 
 	def "can fetch failed pending messages"() {
 		setup:
 			createTestData()
 		when:
-			def results = Fmessage.listPending(true)
+			def results = Fmessage.listPending(true, [sort:"date", order:"desc"])
 		then:
-			results.count() == 1
-			results.list()[0].hasFailed
-			results.list().every { !it.archived }
+			results.size() == 1
+			results[0].hasFailed
+			results.every { !it.archived }
 	}
 
 	def "can fetch starred deleted messages"() {
@@ -154,7 +159,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def firstDeletedMsg = Fmessage.deleted(false).list(max:1, offset: 0)
 		then:
-			firstDeletedMsg*.src == ['Jim']
+			firstDeletedMsg*.src == ['+254701234567']
 	}
 	
 	def "can only archive ownerless messages, unless owner is archived"() {
