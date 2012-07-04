@@ -34,7 +34,7 @@ eventTestPhaseStart = { phaseName ->
 }
 
 eventTestStart = { testName ->
-	if (currentTestPhase == 'functional') {
+	if (currentTestPhase == 'functional' || currentTestPhase == 'integration') {
 		def sql = Sql.newInstance('jdbc:h2:mem:testDb', 'sa', '', 'org.h2.Driver')
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
 		sql.eachRow("SHOW TABLES") { table -> sql.execute('DELETE FROM ' + table.TABLE_NAME) } 
