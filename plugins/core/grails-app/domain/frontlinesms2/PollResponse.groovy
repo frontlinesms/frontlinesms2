@@ -7,7 +7,7 @@ class PollResponse {
 	static belongsTo = [poll: Poll]
 	static hasMany = [messages: Fmessage]
 	List messages = []
-	static transients = ['liveMessageCount', 'commaSeparatedAliases']
+	static transients = ['liveMessageCount']
 
 	static mapping = {
 		version false

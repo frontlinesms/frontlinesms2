@@ -10,7 +10,7 @@
 						<g:textField class='aliases' name="alias${alias}" value="${pollResponse?.aliases}"/>
 					</g:if>
 					<g:else>
-						<g:textField class='aliases' name="alias${alias}" value="${pollResponse?.commaSeparatedAliases}" disabled="true"/>	
+						<g:textField class='aliases' name="alias${alias}" value="${pollResponse?.aliases}" disabled="true"/>	
 					</g:else>
 				</g:if>
 				<g:else>
