@@ -70,6 +70,7 @@
 			$("#messageText").keyup();
 			setAliasValues();
 			highlightPollResponses();
+			setConfirmAliasValues();
 		}
 	}
 
@@ -301,4 +302,16 @@
 		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
 	}
 
+	function setConfirmAliasValues(){
+		var myArray = ['A', 'B', 'C', 'D', 'E'];
+		var aliasText = "";
+		$.each(myArray, function(index, value){
+			var choice = $("ul#poll-choices li input#choice"+value).val();
+			var aliases = $("ul#poll-aliases li input#alias"+value).val();
+			if(choice.length != 0){
+				aliasText += "<b>"+choice+" : </b>"+aliases+"<br>";
+			}
+		});
+		$("#poll-confirm-aliases").html(aliasText);
+	}
 </r:script>
