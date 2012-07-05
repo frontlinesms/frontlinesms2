@@ -2,14 +2,14 @@ package frontlinesms2.settings
 
 import frontlinesms2.*
 
-class PageSettingsConnection extends geb.Page {
+class PageConnectionSettings extends PageSettings {
 	static url = 'connection/list'
 	static at = {
-		title.startsWith('Settings')
+		title.contains('Connections')
 	}
 	
 	static content = {
-		btnNewConnection { $('#create-connection-btn a') }
+		btnNewConnection { $('a', name:'addConnection') }
 		connectionNames { $('.connection-header').find('h2') }
 	}
 }
