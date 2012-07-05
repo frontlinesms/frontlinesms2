@@ -99,7 +99,9 @@ class ExportController {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
 		List fields = ["id", "name", "mobile", "email", "notes"]
-		Map labels = ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes')]
+		Map labels = params.format == "csv" ? 
+			["id": "DatabaseID", "name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes"]
+			: ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes')]
 		Map parameters = [title: message(code: 'export.contact.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try{

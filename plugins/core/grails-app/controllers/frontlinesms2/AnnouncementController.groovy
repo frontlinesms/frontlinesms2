@@ -25,7 +25,7 @@ class AnnouncementController extends ActivityController {
 			}
 
 		} else {
-			def errors = announcementInstance.errors.allErrors.collect {message(code:it.codes[0], args: it.arguments.flatten(), defaultMessage: it.defaultMessage)}.join("\n")
+			def errors = announcementInstance.errors.allErrors.collect { message(error:it)}.join("\n")
 			withFormat {
 				json {
 					render([ok:false, text:errors] as JSON)

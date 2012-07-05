@@ -12,6 +12,7 @@ class EmailFconnection extends Fconnection {
 	
 	static passwords = ['password']
 	static configFields = ['name', 'receiveProtocol', 'serverName', 'serverPort', 'username', 'password']
+	static defaultValues = []
 	static String getShortName() { 'email' }
 	
 	static constraints = {

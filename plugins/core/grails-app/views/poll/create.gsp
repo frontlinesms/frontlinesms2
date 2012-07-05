@@ -150,8 +150,6 @@
 		<g:if test="${activityInstanceToEdit}">
 			$("#messageText").trigger("keyup");
 		</g:if>
-		
-		
 		/* Poll type tab */
 		$("#tabs-1").contentWidget({
 			validate: function() {
