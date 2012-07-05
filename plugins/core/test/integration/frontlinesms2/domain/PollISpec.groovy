@@ -209,36 +209,6 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			p.messages*.id == [m.id]
 	}
 
-	// TODO move this test to MessageControllerISpec
-	def "Message should not remain in old PollResponse after moving it to another activity"(){
-		given:
-			def m = Fmessage.build(inbound:true)
-			def responseA = new PollResponse(key:'A', value:'TessstA')
-			def previousOwner = new Poll(name:'This is a poll', question:'What is your name?')
-					.addToResponses(responseA)
-					.addToResponses(key:'B' , value:'TessstB')
-					.addToResponses(PollResponse.createUnknown())
-					.addToMessages(m)
-			responseA.addToMessages(m)
-			previousOwner.save(flush:true, failOnError:true)
-
-			assert responseA.refresh().messages.contains(m)
-
-			def Keyword k = new Keyword(value:'ASDF')
-			def newOwner = Autoreply.build(keyword:k)
-			
-			// TODO move this test to MessageController
-			def controller = new MessageController()
-			controller.params.messageId = m.id
-			controller.params.ownerId = newOwner.id
-			controller.params.messageSection = 'activity'
-		when:
-			controller.move()
-		then:
-			previousOwner.refresh()
-			!responseA.refresh().messages.contains(m)
-	}
-
 	// TODO move this test to MessageControllerISpec	
 	def "Message should not remain in old PollResponse after moving it to inbox"(){
 		given:
@@ -265,5 +235,34 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			!previousOwner.messages.contains(m)
 			!responseA.messages.contains(m)
 			!m.messageOwner
+	}
+
+	def "Saving a poll should save the corresponding aliases for the choices"(){
+		when:
+			def p = new Poll(name: 'This is a poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
+			p.save(failOnError:true, flush:true)
+			def savedPoll = Poll.findByName("This is a poll")
+		then:
+			savedPoll.responses[0].aliases.contains("A").equals(true)
+			savedPoll.responses[0].aliases.contains("MANU").equals(true)
+			savedPoll.responses[0].aliases.contains("YEAH").equals(true)
+	}
+
+	def "Aliases should be sorted into the correct PollResponse"() {
+		when:
+			def p = new Poll(name: 'This is a poll')
+			p.keyword = new Keyword(value: "FOOTBALL", activity: p)
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
+			p.save(failOnError:true, flush:true)
+		then:
+			println "Key >> " + p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date: new Date()).save(), true).key
+			p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date: new Date()).save(), true).key == groupKey
+		where:
+			messageText 	| groupKey
+			"football manu"	| "A"
+			"football a" 	| "A"	
+			"football yeah" | "A"
+			"football"  	| "unknown"
 	}
 }
