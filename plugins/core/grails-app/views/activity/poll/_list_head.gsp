@@ -14,6 +14,7 @@
 				<td class="percent">
 					<g:formatNumber number="${ownerInstance.liveMessageCount - sentMessageCount != 0 ? r.liveMessageCount/(ownerInstance.liveMessageCount - sentMessageCount) : 0}" type="percent" maxFractionDigits="2"/>
 				</td>
+				<td class="" >${r.aliases}</td>
 			</tr>
 		</g:each>
 	</table>
