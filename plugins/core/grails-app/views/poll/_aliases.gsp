@@ -9,7 +9,7 @@
 				<g:if test="${activityInstanceToEdit?.id}">
 					<label for='alias${alias}' class="${alias == 'A' || alias == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">alias${alias}</label>
 					<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == alias} %>
-					<g:if test="${(alias == 'A' || alias == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)))}">
+					<g:if test="${(alias == 'A' || alias == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 2)))}">
 						<g:textField class='aliases' name="alias${alias}" value="${pollResponse?.aliases}"/>
 					</g:if>
 					<g:else>
