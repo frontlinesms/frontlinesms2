@@ -31,6 +31,7 @@
 <r:script>
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateSmsCharacterCount);
+	$("button#nextPage").click(setAliasValues);
 
 	function updateSendMessage() {
 		// TODO check why these are being bound every time - surely could just bind when the page is loaded.
@@ -47,7 +48,9 @@
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
 				if($("input[name='pollType']:checked").val() == "yesNo") {
-					replyText = i18n("poll.reply.text", keywordText, keywordText);
+					var yesAlias = $("ul#poll-aliases li input#aliasA").val().split(",")[0].trim();
+					var noAlias = $("ul#poll-aliases li input#aliasB").val().split(",")[0].trim();
+					replyText = i18n("poll.reply.text", keywordText, yesAlias, keywordText, noAlias);
 				} else {
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
@@ -68,7 +71,6 @@
 			var sendMessage = questionText + replyText;
 			$("#messageText").val(sendMessage);
 			$("#messageText").keyup();
-			setAliasValues();
 			highlightPollResponses();
 			setConfirmAliasValues();
 		}
@@ -94,8 +96,10 @@
 				if(labelValue.length == 0){
 					aliasTextFieldLabel.text(value);
 					aliasTextField.attr('disabled', 'disabled');
+					aliasTextFieldLabel.removeClass("field-enabled");
 				}else{
 					aliasTextFieldLabel.text(labelValue);
+					aliasTextFieldLabel.addClass("field-enabled");
 				}
 			});
 		}
@@ -177,6 +181,41 @@
 					if(isElementEmpty($('#choiceA'))) $('#choiceA').addClass('error');
 					if(isElementEmpty($('#choiceB'))) $('#choiceB').addClass('error');
 				}
+				setAliasValues();
+				return isValid;
+			}
+		});
+
+		/* Aliases tab */
+		$("#tabs-3").contentWidget({
+			validate: function() {
+				var isValid = true;
+				var allAliases = ",";
+				$('input.aliases').each(function() {
+					var currentInput = $(this);
+					currentInput.removeClass("invalid");
+					if(currentInput.attr('disabled') != "disabled")
+					{
+						if(currentInput.val().trim().length == 0) {
+							currentInput.addClass("invalid");
+							isValid = false;
+						}
+						else {
+							var aliases = currentInput.val().split(",");
+							$.each(aliases, function(index, value) {
+								if(allAliases.indexOf(","+value.toUpperCase()+",") == -1) {
+									// alias not in allAliases
+									allAliases += value.toUpperCase() + ","
+								}
+								else {
+									// alias not unique
+									isValid = false;
+									currentInput.addClass("invalid");
+								}
+							});
+						}
+					}
+				});
 				return isValid;
 			}
 		});
@@ -258,6 +297,8 @@
 			autoSortMessages.eq(0).show();
 			autoSortMessages.eq(1).hide();
 		}
+		//setConfirmAliasValues();
+
 	}
 	
 	function updateMessageDetails() {
@@ -305,13 +346,19 @@
 	function setConfirmAliasValues(){
 		var myArray = ['A', 'B', 'C', 'D', 'E'];
 		var aliasText = "";
-		$.each(myArray, function(index, value){
-			var choice = $("ul#poll-choices li input#choice"+value).val();
-			var aliases = $("ul#poll-aliases li input#alias"+value).val();
-			if(choice.length != 0){
-				aliasText += "<b>"+choice+" : </b>"+aliases+"<br>";
-			}
-		});
+		if($("input[name='pollType']:checked").val() != "yesNo") {
+			$.each(myArray, function(index, value){
+				var choice = $("ul#poll-choices li input#choice"+value).val();
+				var aliases = $("ul#poll-aliases li input#alias"+value).val();
+				if(choice.length != 0){
+					aliasText += "<p>"+choice+" : "+aliases + "</p>";
+				}
+			});
+		}
+		else {
+			aliasText += "<p>"+i18n("poll.yes") + " : " + $("ul#poll-aliases li input#aliasA").val() + "</p>";
+			aliasText += "<p>"+i18n("poll.no") + " : " + $("ul#poll-aliases li input#aliasB").val() + "</p>";
+		}
 		$("#poll-confirm-aliases").html(aliasText);
 	}
 </r:script>

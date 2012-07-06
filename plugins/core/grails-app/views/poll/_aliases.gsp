@@ -1,5 +1,8 @@
 <div class="input">
 	<label for='poll-aliases'><g:message code="poll.aliases.prompt"/></label>
+	<div class="info">
+		<p><g:message code="poll.aliases.prompt.details"/></p>
+	</div>
 	<ul id='poll-aliases'>
 		<g:each in="${['A','B','C','D','E']}" var="alias" status="i">
 			<li>

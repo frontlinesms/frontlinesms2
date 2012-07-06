@@ -77,3 +77,13 @@
 .ui-tabs-panel #recipients-list ul#contacts li.contact label {
 	display:inline-block; width:150px;
 }
+
+#tabs div.input ul#poll-aliases label {
+	display:inline-block;
+	min-width:120px;
+	padding-right:5px;
+}
+
+#poll-aliases input.aliases.invalid {
+	border:1px solid #E33;
+}
