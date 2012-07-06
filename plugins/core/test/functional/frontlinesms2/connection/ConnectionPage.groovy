@@ -10,13 +10,13 @@ class ConnectionPage extends frontlinesms2.base.PageBase {
 	}
 	static content = {
 		connectionList { module ConnectionList }
+		btnNewConnection(wait:true) { $(".btn", text: 'Add new connection') }
 	}
 }
 
 class ConnectionList extends geb.Module {
 	static base = { $('div#body-content.connections') }
 	static content = {
-		btnNewConnection(wait:true) { $('.btn', text:'Add new connection') }
 		connection(required:false) { $("li.connection") }
 		selectedConnection(required:false) { $("li.connection.selected") }
 		btnCreateRoute(wait:true) {  $(".btn", text:'Create route') }

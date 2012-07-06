@@ -48,7 +48,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			connectionList.btnDelete.click()
 		then:
-			errorMessages.contains("Connection test email connection was deleted.")
+			notifications.flashMessages.contains("Connection test email connection was deleted.")
 			connectionList.text().contains('You have no connections configured.')
 	}
 
@@ -77,7 +77,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			connectionList.btnCreateRoute.click()
 		then:
-			waitFor('slow') { connectionList.status == "Connected" }
+			waitFor('very slow') { connectionList.status == "Connected" }
 			!connectionList.btnDelete.displayed
 	}
 	
@@ -88,13 +88,13 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			connectionList.selectedConnection.size() == 1
 	}
-		
+
 	def 'creating a new fconnection causes a refresh of the connections list'(){
 		given:
 			createTestEmailConnection()
 		when:
 			to ConnectionPage
-			connectionList.btnNewConnection.click()
+			btnNewConnection.click()
 		then:
 			waitFor('very slow') { at ConnectionDialog }
 		when:
@@ -110,15 +110,14 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			doneButton.click()
 		then:
-			waitFor { selectedConnection.text().contains('name') }
-			println "TEXT: ${lstConnections.find('li')*.text()}"
-			lstConnections.find('li').size() == 2
+			waitFor { connectionList.selectedConnection.text().contains('name') }
+			connectionList.connection.size() == 2
 	}
 
 	def 'dialog should not close after confirmation screen unless save is successful'(){
 		given:
 			to ConnectionPage
-			connectionList.btnNewConnection.click()
+			btnNewConnection.click()
 			waitFor { at ConnectionDialog }
 			nextPageButton.click()
 			connectionForm.smslibname = "name"
@@ -139,7 +138,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'can setup a new IntelliSMS account'() {
 		when:
 			to ConnectionPage
-			connectionList.btnNewConnection.click()
+			btnNewConnection.click()
 		then:
 			waitFor { at ConnectionDialog }
 		when:
@@ -158,7 +157,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			doneButton.click()
 		then:
-			waitFor { selectedConnection.text().contains('New IntelliSMS Connection') }
+			waitFor { connectionList.selectedConnection.text().contains('New IntelliSMS Connection') }
 	}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
