@@ -42,7 +42,7 @@
 }
 
 .ui-tabs-panel #recipients-list {
-	height: 330px;
+	height: 260px;
 	overflow: auto;
 	margin: 0;
 	box-shadow: 0px 3px 10px -5px #888888 inset, 0px -3px 10px -5px #888888 inset;
@@ -61,7 +61,19 @@
 	line-height: 200%;
 }
 
+.ui-tabs-panel div#search {
+	margin-bottom:10px;
+}
+
 .ui-tabs-panel #groups {
 	border-bottom: 1px solid #9E9E9E;
 }
 
+.ui-tabs-panel .matched-search-result {
+	color:#89A;
+	display:none;
+}
+
+.ui-tabs-panel #recipients-list ul#contacts li.contact label {
+	display:inline-block; width:150px;
+}

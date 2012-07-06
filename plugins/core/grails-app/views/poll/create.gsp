@@ -52,7 +52,7 @@
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, this.name.substring(6,7), this.value);
+						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, $("ul#poll-aliases li input#alias"+this.name.substring(6,7)).val().split(",")[0].trim(), this.value);
 					});
 					replyText = replyText + '.';
 				}
