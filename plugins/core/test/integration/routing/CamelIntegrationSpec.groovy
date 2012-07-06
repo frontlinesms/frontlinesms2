@@ -32,9 +32,9 @@ abstract class CamelIntegrationSpec extends IntegrationSpec {
 		camelContext.removeRouteDefinitions(testRoutes - null)
 
 		// Work around as domain objects created within routes are not cleaned up by the transaction of the integration test
-		Fmessage.findAll().each {
-			it.delete()
-		}
+		//Fmessage.findAll().each {
+		//	it.delete()
+		//}
 	}
 
 	String getTestRouteFrom() {}

@@ -32,8 +32,8 @@ class GroupISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			def alice = Contact.build()
 			def bob = Contact.build()
-			def group1 = Group.build()
-			def group2 = Group.build()
+			def group1 = Group.build(name:"test 1")
+			def group2 = Group.build(name:"test 2")
 			alice.addToGroup(group1)
 			bob.addToGroup(group1)
 			bob.addToGroup(group2)

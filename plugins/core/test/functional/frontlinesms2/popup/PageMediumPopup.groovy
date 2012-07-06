@@ -92,10 +92,10 @@ class PollResponseTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		choice { choiceLetter -> 
-			$('input#choice${choiceLetter}')
+			$('#choice'+choiceLetter)
 		}
 		label { choiceLetter ->
-			$('label[for="choice${choiceLetter}"]')
+			$('label[for="choice'+choiceLetter+'"]')
 		}
 	}
 }
@@ -122,7 +122,7 @@ class PollAutoReplyTab extends geb.Module {
 class PollEditMessageTab extends geb.Module {
 	static base = { $('div#tabs-5') }
 	static content = {
-		autoreplyCheck { $('textarea#messageText') }
+		text { $('textarea#messageText') }
 	}
 }
 
@@ -130,7 +130,7 @@ class PollRecipientsTab extends geb.Module {
 	static base = { $('div#tabs-6') }
 	static content = {
 		addField { $('input#address') }
-		addButton { $('input.btn.add-address') }
+		addButton { $('a.btn.add-address') }
 		manual { $('li.manual.contact') }
 		count { $('#recipient-count').text().toInteger() }
 	}
@@ -141,9 +141,10 @@ class PollConfirmTab extends geb.Module {
 	static content = {
 		pollName { $('input#name') }
 		message { $("#poll-message").text() }
-		recipientCount { $("confirm-recipients-count").text() }
-		messageCount { $("confirm-messages-count").text() }
-		autoreply { $("auto-reply-read-only-text").text() }
+		recipientCount { $("#confirm-recipients-count").text() }
+		noRecipients { $("#no-recipients") }
+		messageCount { $("#confirm-messages-count").text() }
+		autoreply { $("#auto-reply-read-only-text").text() }
 	}
 }
 
@@ -151,5 +152,24 @@ class PollSummary extends geb.Module {
 	static base = { $('div.summary') }
 	static content = {
 
+	}
+}
+
+class ExportDialog extends MediumPopup {
+	static at = {
+		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("export");
+	}
+	static content = {
+
+	}
+}
+
+class RenameDialog extends MediumPopup {
+	static at = {
+		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("rename");
+	}
+	static content = {
+		name { $('input#name') }
+		done { $('button#done') }
 	}
 }

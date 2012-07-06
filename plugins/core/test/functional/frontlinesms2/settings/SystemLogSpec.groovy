@@ -3,7 +3,7 @@ package frontlinesms2.settings
 import frontlinesms2.*
 import spock.lang.*
 
-class SystemLogSpec extends SettingsBaseSpec {
+class SystemLogSpec extends grails.plugin.geb.GebSpec {
 
 	def 'Can access user support from export logs dialog'() {
 		given:
@@ -16,15 +16,8 @@ class SystemLogSpec extends SettingsBaseSpec {
 			userSupportLink.@href == 'http://community.frontlinesms.com/'
 	}
 
-}
-
-class SendLogsDialog extends PageLogs {
-	static at = {
-		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('download logs to send')
-	}
-
-	static content = {
-		userSupportLink { $('a',id:'supportLink')}
-		continueButton { $("#done") }
+	def createTestLogs() {
+		new LogEntry(date:new Date(), content: "Log entry one").save()
 	}
 }
+

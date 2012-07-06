@@ -6,7 +6,10 @@ class Group {
 	static def shortName = 'group'
 
 	static constraints = {
-		name(unique: true, nullable: false, blank: false, maxSize: 255)
+		name(nullable: false, blank: false, maxSize: 255, validator: { val, obj ->
+			def similarName = Group.findByNameIlike(val)
+			return !similarName || obj.id == similarName.id
+			})
 	}
 
 	static mapping = {
