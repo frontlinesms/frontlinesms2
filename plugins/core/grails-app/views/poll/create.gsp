@@ -212,6 +212,12 @@
 									isValid = false;
 									currentInput.addClass("invalid");
 								}
+								if(value.indexOf(" ") != -1)
+								{
+									// no spaces allowed
+									isValid=false;
+									currentInput.addClass("invalid");
+								}
 							});
 						}
 					}
