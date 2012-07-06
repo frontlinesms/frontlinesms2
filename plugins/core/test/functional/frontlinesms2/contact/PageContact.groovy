@@ -50,10 +50,9 @@ class ContentFooter extends geb.Module {
 class ContactList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
-		sources { $('td.message-sender-cell')*.text() }
-		messages { moduleList MessageListRow, $('tr') }
-		selectedMessages { moduleList MessageListRow, $('tr.selected') }
-		noContent { $('td.no-content') }
+		contacts { $("ul#main-list li a")*.text() }
+		selectedContacts { $("ul#main-list.selected li a")*.text() }
+		noContent { $('p.no-content') }
 	}
 }
 
