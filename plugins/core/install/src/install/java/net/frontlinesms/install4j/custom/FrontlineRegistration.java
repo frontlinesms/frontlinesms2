@@ -79,6 +79,7 @@ public class FrontlineRegistration {
 		copyIntegers(context, data,
 				PROFESSION, "var_category_of_work",
 				COUNTRIES, "var_country");
+		data.put("app.version",context.getCompilerVariable("sys.version"));
 		return addSystemPropertiesToRegistrationData(data);
 	}
 

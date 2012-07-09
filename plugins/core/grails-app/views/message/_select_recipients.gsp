@@ -120,7 +120,7 @@
 			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress;
 			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 			if(checkbox !== address) {
-				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' onclick='setContact(" + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
+				$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='setContact(" + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
 				updateMessageCount();
 			}
 			$('#address').val("");
