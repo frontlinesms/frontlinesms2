@@ -84,6 +84,6 @@
 	padding-right:5px;
 }
 
-#poll-aliases input.aliases.invalid {
-	border:1px solid #E33;
+input[type='text'].error {
+	border:1px solid red;
 }
