@@ -2,11 +2,12 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class PageContactShow extends geb.Page {
+class PageContactShow extends PageContact {
 	static url = 'contact/show'
 	static at = {
 		title.contains('Contacts')
 	}
+	/**
 	static content = {
 		bodyMenu { $('#body-menu') }
 		selectedMenuItem { bodyMenu.find('.selected') }
@@ -35,19 +36,8 @@ class PageContactShow extends geb.Page {
 		
 		moreGroupActions(required:false) { $('.section-header #group-actions') }
 		
-		// SMART GROUPS
-		smartGroupsList { $('#smart-groups-submenu') }
-		smartGroupsListItems {
-			def list = smartGroupsList.find('li')
-			assert list[-1].@id == 'create-smart-group'
-			list = list[0..-2] // remove 'create new smart group' item from list
-			if(list.size()==1 && list[0].@id == 'no-smart-groups') {
-				return []
-			} else return list
-		}
-		createSmartGroupButton { $('li#create-smart-group a') }
-		
 		// Custom Fields
 		fieldSelecter { $('#new-field-dropdown') }
 	}
+	**/
 }
