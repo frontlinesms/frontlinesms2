@@ -27,13 +27,13 @@
 <r:script>
 	$("input[name='dontSendMessage']").live("change", function() {
 		if(isGroupChecked("dontSendMessage")) {
+			disableTab(4);
 			disableTab(5);
-			disableTab(6);
 			//update confirm screen
 			updateConfirmationMessage();
 		} else {
+			enableTab(4);
 			enableTab(5);
-			enableTab(6);
 		}
 	});
 
