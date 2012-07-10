@@ -8,9 +8,6 @@ $(document).ready(function() {
 			editAction();
 		} else if($(this).find('option:selected').val() == 'export') {
 			exportAction();
-		} else if($(this).find('option:selected').val() == 'radio.show') {
-			// FIXME this should not be in core
-			radioShowAction();
 		}
 		selectmenuTools.snapback($('#more-actions'));
 	});
