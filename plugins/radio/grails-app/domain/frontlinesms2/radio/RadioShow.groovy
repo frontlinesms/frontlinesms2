@@ -21,6 +21,14 @@ class RadioShow extends MessageOwner {
 				}
 			})
 	}
+
+	static namedQueries = {
+		findByOwnedActivity { activityInstance ->
+				activities {
+					eq 'id', activityInstance.id
+				}
+		}
+	}
 	
 	def getShowMessages(getOnlyStarred = false, getSent=false) {
 		Fmessage.owned(this, getOnlyStarred, getSent)
