@@ -5,24 +5,21 @@
 			<li>
 				<g:if test="${activityInstanceToEdit?.id}">
 					<label for='choice${option}' class="${option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)) ? 'field-enabled': ''}">${option}</label>
-					<% 	
-						def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} 
-						def mode = pollResponse?"edit":"create"
-					%>
+					<% def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} %>
 					<g:if test="${(option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)))}">
-						<g:textField class='choices ${mode}' name="choice${option}" value="${pollResponse?.value}" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+						<g:textField class='choices' name="choice${option}" value="${pollResponse?.value}"/>
 					</g:if>
 					<g:else>
-						<g:textField class='choices create' name="choice${option}" value="${pollResponse?.value}" disabled="true" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+						<g:textField class='choices' name="choice${option}" value="${pollResponse?.value}" disabled="true"/>	
 					</g:else>
 				</g:if>
 				<g:else>
 					<label for='choice${option}' class="${option == 'A' || option == 'B' ? 'field-enabled': ''}">${option}</label>
 					<g:if test="${(option == 'A' || option == 'B')}">
-						<g:textField class='choices create' name="choice${option}" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+						<g:textField class='choices' name="choice${option}"/>
 					</g:if>
 					<g:else>
-						<g:textField class='choices create' name="choice${option}" disabled="true"  onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>	
+						<g:textField class='choices' name="choice${option}" disabled="true"/>	
 					</g:else>
 				</g:else>
 			</li>
