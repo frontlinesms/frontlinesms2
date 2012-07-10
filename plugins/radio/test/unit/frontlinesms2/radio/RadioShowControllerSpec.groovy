@@ -1,30 +1,41 @@
 package frontlinesms2.radio
 
-import grails.plugin.spock.ControllerSpec
+import grails.test.mixin.*
+import spock.lang.*
 
-class RadioShowControllerSpec extends ControllerSpec {
+@TestFor(RadioShowController)
+@Mock(RadioShow)
+
+class RadioShowControllerSpec extends Specification {
 
 	def "should create a show"() {
 		setup:
-			mockParams.name = "show name"
-			mockDomain(RadioShow)
+			params.name = "show name"
 		when:
 			controller.save()
 		then:
 			RadioShow.findByName("show name")
-			controller.redirectArgs.controller == "message"
-			controller.redirectArgs.action == "inbox"
+			controller.response.redirectUrl == "/message/inbox"
 	}
 
 	def "save should throw error when validation fails"() {
 		setup:
-			mockParams.name = ""
-			mockDomain(RadioShow)
+			params.name = ""
 		when:
 			controller.save()
 		then:
-			controller.flash.message == "Name is not valid"
-			controller.redirectArgs.controller == "message"
-			controller.redirectArgs.action == "inbox"
+			controller.flash.message == "radio.show.invalid.name"
+			controller.response.redirectUrl == "/message/inbox"
+	}
+
+	def "can rename a radioshow folder"() {
+		setup:
+			def radioshow = new RadioShow(name:"Name 1").save()
+		when:
+			params.name = "Name 2"
+			params.ownerId = radioshow.id
+			controller.save()
+		then:
+			radioshow.name == "Name 2"
 	}
 }

@@ -9,30 +9,31 @@ import java.text.SimpleDateFormat
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
 	
-	def index = {
+	def index() {
 		params.sort = 'date'
 		redirect(action:messageSection, params:params)
 	}
 	
-	def create = {
+	def create() {
 		[showInstance: new RadioShow()]
 	}
 
-	def save = {	
-		def showInstance = new RadioShow()
-		showInstance.properties = params
-		if (showInstance.validate()) {
-			showInstance.save()
-			flash.message = message(code: 'radio.show.created')
-		} else {
-			flash.message = message(code: 'radio.show.invalid.name')
+	def save() {
+		withRadioShow { showInstance ->
+			showInstance.properties = params
+			if (showInstance.validate()) {
+				showInstance.save()
+				flash.message = message(code: 'radio.show.saved')
+			} else {
+				flash.message = message(code: 'radio.show.invalid.name')
+			}
+			redirect(controller: 'message', action: "inbox")
 		}
-		redirect(controller: 'message', action: "inbox")
 	}
 	
 	def radioShow() {
-		def showInstance = RadioShow.get(params.ownerId)
-		if(showInstance) {
+		withRadioShow { showInstance ->
+			if(showInstance) {
 				def messageInstanceList = showInstance?.getShowMessages(params.starred)
 				def radioMessageInstanceList = []
 				messageInstanceList?.list(params).inject([]) { messageB, messageA ->
@@ -50,9 +51,10 @@ class RadioShowController extends MessageController {
 			flash.message = message(code: 'radio.show.not.found')
 			redirect(action: 'inbox')
 		}
+		}
 	}
 	
-	def startShow = {
+	def startShow() {
 		def showInstance = RadioShow.findById(params.id)
 		println "params.id: ${params.id}"
 		if(showInstance?.start()) {
@@ -65,7 +67,7 @@ class RadioShowController extends MessageController {
 		}
 	}
 	
-	def stopShow = {
+	def stopShow() {
 		def showInstance = RadioShow.findById(params.id)
 		showInstance.stop()
 		showInstance.save(flush:true)
@@ -87,7 +89,7 @@ class RadioShowController extends MessageController {
 		}
 	}
 	
-	def addActivity = {
+	def addActivity() {
 		def activityInstance = Activity.get(params.activityId)
 		def showInstance = RadioShow.get(params.radioShowId)
 		
@@ -100,10 +102,16 @@ class RadioShowController extends MessageController {
 		redirect controller:"message", action:"activity", params: [ownerId: params.activityId]
 	}
 	
-	def selectActivity = {
+	def selectActivity() {
 		def activityInstance = Activity.get(params.ownerId)
 		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
 		[ownerInstance:activityInstance, currentShow:radioShowIntance]
+	}
+
+	def rename() {
+		withRadioShow{ showInstance ->
+			[showInstance: showInstance]
+		}
 	}
 	
 	private void removeActivityFromRadioShow(Activity activity) {
@@ -117,6 +125,18 @@ class RadioShowController extends MessageController {
 	
 	private String dateToString(Date date) {
 		new SimpleDateFormat("EEEE, MMMM dd", Locale.US).format(date)
+	}
+
+	private def withRadioShow(id=params.ownerId, Closure c) {
+		def showInstance = RadioShow.get(id) ?: new RadioShow()
+		if (showInstance) c showInstance
+	}
+
+//TODO clean up default message declaration to prevent future duplication
+	private def defaultMessage(String code, Object... args=[]) {
+		def folderName = message code:'folder.label'
+		return message(code:'default.' + code,
+				args:[folderName] + args)
 	}
 	
 }
