@@ -19,17 +19,16 @@ class RadioShowController extends MessageController {
 	}
 
 	def save() {
-		withRadioShow { showInstance ->
-			showInstance.properties = params
-			if (showInstance.validate()) {
-				showInstance.save()
-				flash.message = message(code: 'radio.show.saved')
-			} else {
-				flash.message = message(code: 'radio.show.invalid.name')
-			}
-			redirect(controller: 'message', action: "inbox")
+		def showInstance = RadioShow.get(params.ownerId) ?: new RadioShow()
+		showInstance.properties = params
+		if (showInstance.validate()) {
+			showInstance.save()
+			flash.message = message(code: 'radio.show.saved')
+		} else {
+			flash.message = message(code: 'radio.show.invalid.name')
 		}
-	}
+		redirect(controller: 'message', action: "inbox")
+}
 	
 	def radioShow() {
 		withRadioShow { showInstance ->
@@ -109,6 +108,25 @@ class RadioShowController extends MessageController {
 			[showInstance: showInstance]
 		}
 	}
+
+	def confirmDelete() {
+		def showInstance = RadioShow.get(params.id)
+		model:[ownerName:showInstance.name,
+				ownerInstance:showInstance]
+	}
+
+	def delete() {
+		withRadioShow( params.id, { showInstance->
+			println "### ${showInstance}"
+			trashService.sendToTrash(showInstance)
+			showInstance.activities?.each{ activity ->
+				println "### ${activity}"
+				trashService.sendToTrash(activity)
+			}
+			flash.message = defaultMessage 'trashed'
+			redirect controller:"message", action:"inbox"
+		})
+	}
 	
 	private void removeActivityFromRadioShow(Activity activity) {
 		RadioShow.findAll().collect { showInstance ->
@@ -124,8 +142,9 @@ class RadioShowController extends MessageController {
 	}
 
 	private def withRadioShow(id=params.ownerId, Closure c) {
-		def showInstance = RadioShow.get(id) ?: new RadioShow()
+		def showInstance = RadioShow.findByIdAndDeleted(id, false)
 		if (showInstance) c showInstance
+		else render text:defaultMessage('notfound', params.id)
 	}
 
 //TODO clean up default message declaration to prevent future duplication
