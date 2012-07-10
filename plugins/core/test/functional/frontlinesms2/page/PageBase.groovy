@@ -1,4 +1,4 @@
-package frontlinesms2.base
+package frontlinesms2.page
 
 import frontlinesms2.*
 
