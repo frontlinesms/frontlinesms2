@@ -5,6 +5,7 @@ import spock.lang.*
 import grails.test.mixin.*
 
 @TestFor(RadioShow)
+@Mock(Folder)
 class RadioShowSpec extends Specification {
 
 	def "should check for validations"() {
@@ -17,7 +18,8 @@ class RadioShowSpec extends Specification {
 	}
 
 	def "shows names should be unique"() {
-		new RadioShow(name: 'show1').save()
+		given:
+			new RadioShow(name: "show1").save()
 		when:
 			def invalidShow1 = new RadioShow(name: "show1")
 			def invalidShow2 = new RadioShow(name: "SHOW1")
@@ -25,6 +27,14 @@ class RadioShowSpec extends Specification {
 		then:
 			!invalidShow1.validate()
 			!invalidShow2.validate()
+			validShow.validate()
+	}
+
+	def "can create shows and folders with the same name"() {
+		when:
+			def folder = new Folder(name:"show2").save()
+			def validShow = new RadioShow(name: "show2")
+		then:
 			validShow.validate()
 	}
 }
