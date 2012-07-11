@@ -29,7 +29,7 @@
 						</g:link>
 					</li>
 					<g:if test="${s.activeActivities}">
-						<ul id="radio-show-activities">
+						<ul class="radio-show-activities">
 							<g:each in="${s.activeActivities}" status="j" var="a">
 								<li class="${a == ownerInstance ? 'selected' : ''}">
 									<g:link controller="message" action="activity" params="[ownerId: a.id]"><g:message code="${a.shortName}.title" args="${[a.name]}"/></g:link>
