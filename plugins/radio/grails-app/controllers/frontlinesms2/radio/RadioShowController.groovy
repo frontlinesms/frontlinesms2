@@ -104,7 +104,7 @@ class RadioShowController extends MessageController {
 	def selectActivity() {
 		def activityInstance = Activity.get(params.ownerId)
 		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		[ownerInstance:activityInstance, currentShow:radioShowIntance]
+		[ownerInstance:activityInstance, currentShow:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false)]
 	}
 
 	def rename() {
