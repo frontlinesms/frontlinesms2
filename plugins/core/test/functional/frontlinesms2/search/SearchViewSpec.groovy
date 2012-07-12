@@ -9,7 +9,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		createTestPollsAndFolders()
 		createTestMessages2()
 	}
-	
+
 	def "clicking on the search button links to the result show page"() {
 		setup:
 			Fmessage.build(text:"sent", date:new Date()-1)
@@ -21,7 +21,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.click()
 		then:
 			at PageSearchResult
-			$("#message-list tr td:nth-child(5)")*.text().containsAll(['hi alex',
+			messageTextInTable*.text().containsAll(['hi alex',
 					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
 	}
 	
@@ -39,7 +39,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchBtn.present()
 			searchBtn.click()
 		then:
-			waitFor {searchDescription}
+			waitFor('veryslow') {searchDescription}
 			searchDescription.text().contains('Searching all messages, including archived messages')
 	}
 	
@@ -92,7 +92,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:	
 			waitFor { searchBtn.displayed }
 			searchFrm.messageStatus == 'inbound'
-			$("#message-list tr .message-text-cell a")*.text().containsAll(['hi alex', 'meeting at 11.00'])
+			messageTextLink*.text().containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
 	def "should fetch all sent messages alone"() {
@@ -119,7 +119,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor{ searchBtn.displayed }
 			searchFrm.messageStatus == 'outbound'
-			$("#message-list tr .message-text-cell a")*.text().containsAll(["sent", "send_pending", "send_failed"]) 
+			messageTextLink*.text().containsAll(["sent", "send_pending", "send_failed"]) 
 	}
 	
 	def "should clear search results" () {
@@ -130,7 +130,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor{ searchBtn.displayed }
 		when:
-			$("a", text:"Clear search").click()
+			clearSearchLink.click()
 		then:
 			waitFor{ !$("#search-description").displayed }
 	}
@@ -151,7 +151,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			$("#delete-msg").click()
 		then:
 			at PageSearchResult
-			$("#message-list tr .message-text-cell a")*.text().containsAll(["hi alex", "received1", "received2", "meeting at 11.00"])
+			messageTextLink*.text().containsAll(["hi alex", "received1", "received2", "meeting at 11.00"])
 			$('.flash').displayed
 	}
 	
@@ -283,11 +283,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			$("#message-tab a").text()?.equalsIgnoreCase("Messages\n2")
+			messageTabLink.text()?.contains("2")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#message-tab a").text()?.equalsIgnoreCase("Messages\n3") }
+			waitFor('very slow') { messageTabLink.text()?.contains("3") }
 	}
 	
 }

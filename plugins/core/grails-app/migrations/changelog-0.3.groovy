@@ -16,4 +16,12 @@ databaseChangeLog = {
 			column(name: "send", type: "boolean")
 		}
 	}
+
+	changeSet(author: "sitati", id:"1341237212656-3") {
+		grailsChange{
+			change{
+				sql.executeUpdate("UPDATE smslib_fconnection SET send = true, receive = true")
+			}
+		}
+	}
 }

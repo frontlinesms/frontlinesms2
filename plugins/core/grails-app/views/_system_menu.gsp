@@ -13,5 +13,5 @@
 </ul>
 <div id="version-number">
 	<g:message code="app.version.label"/> 
-	<g:meta name="app.grails.version"/>
+	<g:meta name="app.version"/>
 </div>

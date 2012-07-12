@@ -32,6 +32,7 @@
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateSmsCharacterCount);
 	$("button#nextPage").click(setAliasValues);
+	$("input[name='pollType']").live("change", resetResponses);
 
 	function updateSendMessage() {
 		// TODO check why these are being bound every time - surely could just bind when the page is loaded.
@@ -83,10 +84,13 @@
 			$.each(myMap, function(key, value){
 				$("ul#poll-aliases li label[for='alias"+key+"']").text(value);
 				if(value == ''){
-					$("ul#poll-aliases li input#alias"+value).attr('disabled','disabled');
+					$("ul#poll-aliases li input#alias"+key).val('');
+					$("ul#poll-aliases li input#alias"+key).attr('disabled','disabled');
+				}
+				else {
+					$("ul#poll-aliases li input#alias"+key).removeAttr('disabled');
 				}
 			});
-			addRespectiveAliases("anything will do");//Yes No polls do not have custom fields
 		}else{
 			var myArray = ['A', 'B', 'C', 'D', 'E'];
 			$.each(myArray, function(index, value){
@@ -100,9 +104,12 @@
 				}else{
 					aliasTextFieldLabel.text(labelValue);
 					aliasTextFieldLabel.addClass("field-enabled");
+					$("ul#poll-aliases li input#alias"+value).removeAttr('disabled');
 				}
 			});
 		}
+		// remove styling from previous errors
+		$("input.aliases").removeClass("error");
 	}
 
 	function addRespectiveAliases(field){
@@ -122,23 +129,24 @@
 				}
 			});
 		}else{
+			var aliases = "";
+			var rawKey = $(field).attr('id').trim();
+			var rawVal = $(field).val().trim();
+			var value = rawVal.split(' ')[0]
+			var key = rawKey.substring(rawKey.length-1);
+			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias"+value+"']");
+			var aliasTextField = $("ul#poll-aliases li input#alias"+key);
 			if($(field).hasClass("create")) {
-				var aliases = "";
-				var rawKey = $(field).attr('id').trim();
-				var rawVal = $(field).val().trim();
-				var value = rawVal.split(' ')[0]
-				var key = rawKey.substring(rawKey.length-1);
-				var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias"+value+"']");
-				var aliasTextField = $("ul#poll-aliases li input#alias"+key);
 				if(value.length > 0){
 					aliases += key+","+value;
 					aliasTextField.val(aliases);
 					aliasTextField.removeAttr("disabled");
-				}else{
-					aliasTextFieldLabel.text("");
-					aliasTextField.val("");
-					aliasTextField.attr("disabled","disabled");
 				}
+			}
+			if(value.length == 0) {
+				aliasTextFieldLabel.text("");
+				aliasTextField.val("");
+				aliasTextField.attr("disabled","disabled");
 			}
 		}
 	}
@@ -193,11 +201,11 @@
 				var allAliases = ",";
 				$('input.aliases').each(function() {
 					var currentInput = $(this);
-					currentInput.removeClass("invalid");
+					currentInput.removeClass("error");
 					if(currentInput.attr('disabled') != "disabled")
 					{
 						if(currentInput.val().trim().length == 0) {
-							currentInput.addClass("invalid");
+							currentInput.addClass("error");
 							isValid = false;
 						}
 						else {
@@ -210,13 +218,13 @@
 								else {
 									// alias not unique
 									isValid = false;
-									currentInput.addClass("invalid");
+									currentInput.addClass("error");
 								}
 								if(value.indexOf(" ") != -1)
 								{
 									// no spaces allowed
 									isValid=false;
-									currentInput.addClass("invalid");
+									currentInput.addClass("error");
 								}
 							});
 						}
@@ -343,6 +351,19 @@
 		$(".choices").each(function(index){
 			highlightNextPollResponse(this);
 		});
+	}
+
+	function resetResponses(){
+		$("input.choices").each(function(index){
+			$(this).val('');
+			console.log('reset');
+		});
+		$(".aliases input").each(function(index){
+			$(this).val('');
+			$(this).removeClass('error');
+		});
+		// if user chose yesNo, set aliases
+		addRespectiveAliases("");//Yes No polls do not have custom fields
 	}
 
 	function validatePollResponses() {

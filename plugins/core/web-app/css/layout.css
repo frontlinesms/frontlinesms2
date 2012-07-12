@@ -25,4 +25,4 @@ html { height:100%; width:100%; }
 #system-menu { position:absolute; right:0; top:0; }
 #system-menu li { display:inline-block; }
 
-#version-number { position:absolute; text-align:center; width:218px; bottom:10px; color:#99A; z-index:1000; }
+#version-number { position:absolute; text-align:center; width:270px; bottom:10px; color:#99A; z-index:1000; right:0px; }

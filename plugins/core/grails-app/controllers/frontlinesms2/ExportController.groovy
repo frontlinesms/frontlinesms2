@@ -98,10 +98,23 @@ class ExportController {
 	private def generateContactReport(contactInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "name", "mobile", "email", "notes"]
+		List fields = ["id", "name", "mobile", "email", "notes", "groupMembership"]
 		Map labels = params.format == "csv" ? 
-			["id": "DatabaseID", "name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes"]
-			: ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes')]
+			["id": "DatabaseID", "name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
+			: ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes'), "groupMembership":message(code: 'export.contact.groups')]
+		// add custom fields
+		def customFields = CustomField.getAllUniquelyNamed()
+		customFields.each { field ->
+			fields << field
+			labels << ["{$field}":field]
+			contactInstanceList.each { contact ->
+				contact.metaClass."${field}" = (contact.customFields.find { it.name == field})?.value
+			}
+		}
+		// add groups
+		contactInstanceList.each { contact ->
+			contact.metaClass.groupMembership = contact.groups*.name.join("\\\\")
+		}
 		Map parameters = [title: message(code: 'export.contact.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try{

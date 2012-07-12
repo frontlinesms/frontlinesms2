@@ -1,4 +1,4 @@
-package frontlinesms2.base
+package frontlinesms2.page
 
 import frontlinesms2.*
 
@@ -27,6 +27,10 @@ class TabsModule extends geb.Module {
 class NotificationsModule extends geb.Module {
 	static content = { 
 		errorMessages { $('.flash.errors')*.text() }
-		flashMessage { $('div.flash') }
+
+
+
+		flashMessages { $('div.flash.message').text() }
+
 	}
 }

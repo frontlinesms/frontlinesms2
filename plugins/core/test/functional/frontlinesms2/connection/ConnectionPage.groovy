@@ -2,7 +2,7 @@ package frontlinesms2.connection
 
 import frontlinesms2.*
 
-class ConnectionPage extends frontlinesms2.base.PageBase {
+class ConnectionPage extends frontlinesms2.page.PageBase {
 	static url = 'connection/list'
 	static at = {
 		assert title == "Settings > Connections"
@@ -10,13 +10,13 @@ class ConnectionPage extends frontlinesms2.base.PageBase {
 	}
 	static content = {
 		connectionList { module ConnectionList }
+		btnNewConnection(wait:true) { $(".btn", text: 'Add new connection') }
 	}
 }
 
 class ConnectionList extends geb.Module {
 	static base = { $('div#body-content.connections') }
 	static content = {
-		btnNewConnection(wait:true) { $('.btn', text:'Add new connection') }
 		connection(required:false) { $("li.connection") }
 		selectedConnection(required:false) { $("li.connection.selected") }
 		btnCreateRoute(wait:true) {  $(".btn", text:'Create route') }

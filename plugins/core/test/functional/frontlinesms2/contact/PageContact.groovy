@@ -5,7 +5,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
-abstract class PageContact extends frontlinesms2.base.PageBase {
+abstract class PageContact extends frontlinesms2.page.PageBase {
 	static url = 'contact/'
 	static content = {
 		bodyMenu { module BodyMenu }
@@ -19,12 +19,13 @@ abstract class PageContact extends frontlinesms2.base.PageBase {
 
 class BodyMenu extends geb.Module {
 	static content = {
-		selected { $('#body-menu .selected').text().toLowerCase() }
-		groupLinks { $('#body-menu li.groups ul.submenu li a') }
-		smartGroupLinks { $('#body-menu li.smartgroups ul.submenu li a') }
-		newContact { $('#body-menu li.contacts .create a') }
-		newGroup { $('#body-menu li.groups .create a') }
-		newSmartGroup { $('#body-menu li.smartgroups .create a') }
+		bodyMenu { $('#body-menu') }
+		selectedMenuItem { bodyMenu.find('.selected').text().toLowerCase() }
+		groupSubmenuLinks { bodyMenu.find('li.groups ul.submenu li a') }
+		smartGroupSubmenuLinks { bodyMenu.find('li.smartgroups ul.submenu li a') }
+		newContact { bodyMenu.find('li.contacts .create a') }
+		newGroup { bodyMenu.find('li.groups .create a') }
+		newSmartGroup { bodyMenu.find('li.smartgroups .create a') }
 	}
 }
 
@@ -33,6 +34,7 @@ class ContentHeader extends geb.Module {
 	static content = {
 		title { $('h1').text().toLowerCase() }
 		button { $('a.btn, input[type="button"], button') }
+		moreGroupActions(required:false) { $('div.header-buttons #group-actions-menu') }
 	}
 }
 
@@ -92,6 +94,7 @@ class SingleContactDetails extends geb.Module {
 class MultipleContactDetails extends geb.Module {
 	static base = { $('#multiple-contacts') }
 	static content = {
+
 		checkedContactCount { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
 	
 		multiGroupDropDown { $('#multi-group-dropdown') }
@@ -106,5 +109,9 @@ class MultipleContactDetails extends geb.Module {
 		}
 		update { $('#action-buttons #update-all') }
 		delete { $('#action-buttons #btn_delete_all') }
+
+		checkedContactCount(required:false) { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
+		deleteAllButton(required:false) { $('#btn_delete_all') }
+
 	}
 }
