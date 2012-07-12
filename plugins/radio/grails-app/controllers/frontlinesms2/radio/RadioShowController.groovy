@@ -120,16 +120,38 @@ class RadioShowController extends MessageController {
 	}
 
 	def delete() {
-		withRadioShow( params.id, { showInstance->
-			println "### ${showInstance}"
+		withRadioShow params.id, { showInstance->
 			trashService.sendToTrash(showInstance)
 			showInstance.activities?.each{ activity ->
-				println "### ${activity}"
 				trashService.sendToTrash(activity)
 			}
 			flash.message = defaultMessage 'trashed'
 			redirect controller:"message", action:"inbox"
-		})
+		}
+	}
+
+	def restore() {
+		def radioShow = RadioShow.findById(params.id)
+		if(radioShow){
+			Trash.findByObject(radioShow)?.delete()
+			radioShow.deleted = false
+			radioShow.activities.each{ activity->
+				activity.deleted = false
+				activity.save()
+				activity.messages.each{
+					it.isDeleted = false
+					it.save(failOnError: true, flush: true)
+				}
+				Trash.findByObject(activity)?.delete()
+			}
+
+			if(radioShow.save()) {
+				flash.message = defaultMessage 'restored'
+			} else {
+				flash.message = defaultMessage 'restore.failed', activity.id
+			}
+		}
+		redirect controller:"message", action:"trash"
 	}
 	
 	private void removeActivityFromRadioShow(Activity activity) {
@@ -153,9 +175,9 @@ class RadioShowController extends MessageController {
 
 //TODO clean up default message declaration to prevent future duplication
 	private def defaultMessage(String code, Object... args=[]) {
-		def folderName = message code:'folder.label'
+		def messageName = message code:'radio.label'
 		return message(code:'default.' + code,
-				args:[folderName] + args)
+				args:[messageName] + args)
 	}
 	
 }
