@@ -5,6 +5,6 @@
 		    noSelection="${['':currentShow?
 		    	g.message(code:'activity.assigned.defaultoption', args:[currentShow.name]):
 		    	g.message(code:'activity.unassigned.defaultoption')]}"
-		    from='${RadioShow.findAll()}'
+		    from='${radioShows}'
 		    optionKey="id" optionValue="name"/>
 </g:form>
