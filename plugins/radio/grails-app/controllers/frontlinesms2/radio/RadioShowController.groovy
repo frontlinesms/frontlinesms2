@@ -104,7 +104,7 @@ class RadioShowController extends MessageController {
 	def selectActivity() {
 		def activityInstance = Activity.get(params.ownerId)
 		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		[ownerInstance:activityInstance, currentShow:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false)]
+		render template:"selectActivity", model:[ownerInstance:activityInstance, currentShow:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
 	}
 
 	def rename() {
@@ -122,15 +122,16 @@ class RadioShowController extends MessageController {
 	def delete() {
 		withRadioShow params.id, { showInstance->
 			if(showInstance.isRunning){
-				showInstance.isRunning = false
-				showInstance.save()
+				flash.message = message code:'radioshow.show.onair.error.delete', args:[RadioShow.findByIsRunning(true)?.name]
+				redirect action:"radioShow", params:[ownerId: showInstance.id]
+			}else{
+				trashService.sendToTrash(showInstance)
+				showInstance.activities?.each{ activity ->
+					trashService.sendToTrash(activity)
+				}
+				flash.message = defaultMessage 'trashed'
+				redirect controller:"message", action:"inbox"
 			}
-			trashService.sendToTrash(showInstance)
-			showInstance.activities?.each{ activity ->
-				trashService.sendToTrash(activity)
-			}
-			flash.message = defaultMessage 'trashed'
-			redirect controller:"message", action:"inbox"
 		}
 	}
 
