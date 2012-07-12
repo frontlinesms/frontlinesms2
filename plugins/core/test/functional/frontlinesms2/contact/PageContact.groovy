@@ -5,7 +5,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 
-abstract class PageContact extends frontlinesms2.base.PageBase {
+abstract class PageContact extends frontlinesms2.page.PageBase {
 	static url = 'contact/'
 	static content = {
 		bodyMenu { module BodyMenu }
