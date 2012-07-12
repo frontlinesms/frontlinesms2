@@ -35,14 +35,6 @@ grails.project.dependency.resolution = {
 		runtime ":csv:0.3.1"
 		runtime ":quartz2:0.2.3"
 
-		test ":code-coverage:1.2.5"
-		test ":codenarc:0.17"
-		test ":spock:0.6"
-		test ":geb:$gebVersion"
-
-		test ":build-test-data:2.0.2"
-		test ':remote-control:1.2'
-
 		build(":tomcat:$grailsVersion", ":release:1.0.0") {
 			export = false
 		}
