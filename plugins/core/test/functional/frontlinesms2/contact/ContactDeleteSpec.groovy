@@ -1,6 +1,7 @@
 package frontlinesms2.contact
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
 
 import geb.Browser
 import grails.plugin.geb.GebSpec
@@ -11,14 +12,15 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		given:
 			createTestContacts()
 		when:
-			to PageContactShow
-			deleteSingleButton.click()
+			to PageContactAll
+			singleContactDetails.delete.click()
 		then:
-			waitFor { confirmDeleteButton.displayed }
+			waitFor { at DeletePopup }
 		when:
-			confirmDeleteButton.jquery.trigger("click")
+			ok.jquery.trigger("click")
 		then:
-			waitFor { flashMessage.displayed }
+			at PageContactAll
+			waitFor { notifications.flashMessage.displayed }
 			!Contact.findByName('Alice')
 	}
 	
@@ -26,22 +28,23 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		given:
 			createTestContacts()
 		when:
-			to PageContactShowAlice
-			contactSelect[1].click()
+			to PageContactAll, Contact.findByName('Alice')
+			contactList.selectContact 1
 		then:
-			waitFor { $('input#name').value() == 'Bob' }
+			waitFor { singleContactDetails.name.value() == 'Bob' }
 		when:
-			contactSelect[0].click()
+			contactList.selectContact 0
 		then:
-			waitFor { deleteAllButton.displayed }
+			waitFor { multipleContactDetails.delete.displayed  }
 		when:
-			deleteAllButton.click()
+			multipleContactDetails.delete.click()
 		then:
-			waitFor { confirmDeleteButton.displayed }
+			waitFor { at DeletePopup }
 		when:
-			confirmDeleteButton.click()
+			ok.jquery.trigger("click")
 		then:
-			waitFor { flashMessage.displayed }
+			at PageContactAll
+			waitFor { notifications.flashMessage.displayed }
 			Contact.count() == 0
 	}
 }

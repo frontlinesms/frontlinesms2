@@ -12,72 +12,67 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		when:
-			to PageContactShowBob
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			def memberOf = $("#group-list li").children('span')*.text().sort()
-			memberOf == ['Test', 'three']
+			singleContactDetails.groupList == ['Test', 'three']
 	}
 	
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
 		when:
-			to PageContactShowBob
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			$("#group-dropdown").children('option')*.text().sort() == ['Add to group...', 'Others', 'four']
+			singleContactDetails.otherGroupOptions == ['Add to group...', 'Others', 'four']
 		when:
-			$("#group-dropdown").value("${Group.findByName('Others').id}")
+			singleContactDetails.addToGroup Group.findByName('Others').id.toString()
 		then:
-			waitFor { $("#group-list li span")*.text().sort() == ['Others', 'Test', 'three'] }
-			$("#group-dropdown").children()*.text() == ['Add to group...', 'four']
-			
+			waitFor { singleContactDetails.groupList.sort() == ['Others', 'Test', 'three'] }
+			singleContactDetails.otherGroupOptions == ['Add to group...', 'four']
+	         
 	}
 
-	def 'clicking X next to group in list removes group from visible list, but does not change database iff no other action is taken'() {
+	def 'clicking X next to group in list removes group from visible list, but does not change database if no other action is taken'() {
 		given:
 			def bob = Contact.findByName("Bob")
-			def bobsDatabaseGroups = bob.groups
-			def bobsGroups = bobsDatabaseGroups
+			def bobsGroups
 		when:
-			to PageContactShowBob
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			groupList.find('li span').size() == 2
-			def groupsText = groupList.find('li span')*.text()
-			groupsText.containsAll(['Test', 'three'])
+			singleContactDetails.groupList.size() == 2
+			singleContactDetails.groupList.containsAll(['Test', 'three'])
 		when:
-			groupList.find('a').first().click()
+			singleContactDetails.removeGroup Group.findByName('Test').id.toString()
 			bobsGroups = bob.groups
 		then:
-			waitFor { groupList.find('li span').size() == 1 }
+			waitFor { singleContactDetails.groupList.size() == 1 }
 		when:
-			to PageContactShowBob
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			waitFor { groupList.find('li span').size() == 2 }
+			waitFor { singleContactDetails.groupList.size() == 2 }
 	}
 
 	def 'clicking save actually adds contact to newly selected groups'() {
 		when:
-			to PageContactShowBob
-			$('#contact-details select', name:'group-dropdown').value('Others')
-			$("#contact-details .save").click()
+			to PageContactAll, Contact.findByName('Bob')
+			singleContactDetails.addToGroup Group.findByName('Others').id.toString()
+			singleContactDetails.save.click()
 		then:
-			at PageContactShow
-			Contact.findByName('Bob') in Group.findByName('Test').members
+			at PageContactAll
+			Contact.findByName('Bob') in Group.findByName('Others').members
 	}
 	
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
-			to PageContactShow
-			contactSelect[1].click()
+			to PageContactAll
+			contactList.selectContact 1
 		then:
-			waitFor { $('input#name').value() == 'Bob' }
+			waitFor { singleContactDetails.name.value() == 'Bob' }
 		when:
-			contactSelect[0].click()
+			contactList.selectContact 0
 		then:
-			waitFor { multiGroupSelect.find('option').size() > 1 }
+			waitFor { multipleContactDetails.otherMultiGroupOptions.size() > 1 }
 		when:
-			def otherGroupId = Group.findByName('Others').id
-			multiGroupSelect.jquery.val(otherGroupId)
-			multiGroupSelect.jquery.trigger('change')
-			updateAll.click()	
+			multipleContactDetails.addToGroup Group.findByName('Others').id.toString()
+			multipleContactDetails.update.click()	
 		then:
 			waitFor {Group.findByName('Others').members*.name.containsAll(['Bob', 'Alice'])}
 	}
@@ -92,19 +87,19 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			assert bob.isMemberOf(otherGroup)
 			assert alice.isMemberOf(otherGroup)
 		when:
-			to PageContactShow
-			contactSelect[1].click()
+			to PageContactAll
+			contactList.selectContact 1
 		then:
-			waitFor { $('input#name').value() == 'Bob' }
+			waitFor { singleContactDetails.name.value() == 'Bob' }
 		when:
-			contactSelect[0].click()
+			contactList.selectContact 0
 		then:
-			waitFor { $("#multi-group-list #remove-group-${otherGroup.id}").displayed }
+			waitFor { multipleContactDetails.multiGroupList.contains('Others') }
 		when:
-			$("#multi-group-list #remove-group-${otherGroup.id}").click()
-			updateAll.click()
+			multipleContactDetails.removeMultiGroup otherGroup.id.toString()
+			multipleContactDetails.update.click()
 		then:
-			waitFor { flashMessage.displayed }
+			waitFor { notifications.flashMessage.displayed }
 		when:
 			otherGroup.refresh()
 		then:
@@ -113,28 +108,27 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
-			def otherGroup = Group.findByName('Others')
-			to PageContactShowBob
-			def btnRemoveFromGroup = $("#remove-group-${otherGroup.id}")
-			btnRemoveFromGroup.click()
-			def btnUpdate = $("#single-contact #update-single")
-			btnUpdate.click()
+			def testGroup = Group.findByName('Test')
+			to PageContactAll, Contact.findByName('Bob')
+
+			singleContactDetails.removeGroup testGroup.id.toString()
+			singleContactDetails.save.click()
 		then:
 			at PageContactShow
-			otherGroup.refresh()
-			GroupMembership.countMembers(otherGroup) == 0
+			testGroup.refresh()
+			GroupMembership.countMembers(testGroup) == 0
 	}
 	
 	def "should enable save and cancel buttons when new group is added"() {
 		when:
-			to PageContactShowBob
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			btnSave.disabled
+			singleContactDetails.save.disabled
 		when:
-			$("#group-dropdown").value("Others").click()
+			singleContactDetails.addToGroup Group.findByName('Others').id.toString()
 		then:
-			waitFor { !btnSave.disabled }
-			!btnCancel.disabled
+			waitFor { !singleContactDetails.save.disabled }
+			!singleContactDetails.cancel.disabled
 			
 	}
 }
