@@ -121,6 +121,10 @@ class RadioShowController extends MessageController {
 
 	def delete() {
 		withRadioShow params.id, { showInstance->
+			if(showInstance.isRunning){
+				showInstance.isRunning = false
+				showInstance.save()
+			}
 			trashService.sendToTrash(showInstance)
 			showInstance.activities?.each{ activity ->
 				trashService.sendToTrash(activity)
@@ -135,6 +139,10 @@ class RadioShowController extends MessageController {
 		if(radioShow){
 			Trash.findByObject(radioShow)?.delete()
 			radioShow.deleted = false
+			radioShow.messages.each{
+				it.isDeleted = false
+				it.save(failOnError: true, flush: true)
+			}
 			radioShow.activities.each{ activity->
 				activity.deleted = false
 				activity.save()
