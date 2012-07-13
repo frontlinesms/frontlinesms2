@@ -9,23 +9,23 @@ class ContactCreateSpec extends ContactBaseSpec {
 
 	def 'ALL CONTACTS menu item is selected when creating a contact'() {
 		when:
-			to PageContactShow
+			to PageContactAll
 		then:
-			selectedMenuItem.text() == 'All contacts'
+			bodyMenu.selected == 'all contacts'
 	}
 
 	def 'button to create new contact exists and goes to NEW CONTACT page'() {
 		when:
-			to PageContactShow
+			to PageContactAll
 		then:
-			$("#create-contact a").@href == "/contact/createContact"
+			bodyMenu.newContact.@href == "/contact/createContact"
 	}
 
 	def 'button to create new group exists and goes to NEW GROUP page'() {
 		when:
-			to PageContactShow
+			to PageContactAll
 		then:
-			$("#create-group a").@href == "/group/create"
+			bodyMenu.newGroup.@href == "/group/create"
 	}
 	
 }

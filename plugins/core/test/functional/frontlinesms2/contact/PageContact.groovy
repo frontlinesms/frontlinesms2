@@ -44,8 +44,9 @@ class ContentFooter extends geb.Module {
 		search { $('a')[0] }
 		noneSearch { $('#contact-search').text().toLowerCase() == "search" }
 		searchDetails { $('#contact-search').text() }
-		nextPage { $('a.nextLink') }
-		prevPage { $('a.prevLink') }
+		nextPage { $('#paging a.nextLink') }
+		prevPage { $('#paging a.prevLink') }
+		currentStep { $('#paging currentStep') }
 	}
 }
 
@@ -53,6 +54,9 @@ class ContactList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
 		contacts { $("ul#main-list li a")*.text() }
+		selectContact { contactPosition ->
+			$('.contact-select', contactPosition).click()
+	    }
 		selectedContacts { $("ul#main-list.selected li a")*.text() }
 		noContent { $('p.no-content') }
 	}
@@ -61,21 +65,28 @@ class ContactList extends geb.Module {
 class SingleContactDetails extends geb.Module {
 	static base = { $('#single-contact') }
 	static content = {
-		name { $('#message-detail-content') }
-		mobile { $('#message-detail-sender') }
-		email { $('#message-detail-content') }
+		name { $('#name') }
+		mobile { $('#mobile') }
+		email { $('#email') }
 		notes { $('#notes')}
 		addMoreInfomation { customField -> 
 			$('select#new-field-dropdown').jquery.val(customField)
 			$('select#new-field-dropdown').jquery.trigger("change")
 		}
-        groupList { $('ul#group-list li')*.@groupname }
-		addToGroup { groupName -> 
-			$('select#group-dropdown').jquery.val(groupName)
+		groupDropDown { $('#group-dropdown') }
+        groupList { $('ul#group-list li span')*.text() }
+        removeGroup { groupId ->
+			$("#group-list a#remove-group-${groupId}").click()
+		}
+		removeMobile { $('#remove-mobile') }
+		sendMessage { $('#single-contact .send-message') }
+        otherGroupOptions { $('#group-dropdown option')*.text().sort() }
+		addToGroup { groupId -> 
+			$('select#group-dropdown').jquery.val(groupId)
 			$('select#group-dropdown').jquery.trigger("change")
 		}
-		save { $('#action-buttons a', text:'Save') }
-		cancel { $('#action-buttons a', text:'Cancel') }
+		save { $('#action-buttons #update-single') }
+		cancel { $('#action-buttons a.cancel', text:'Cancel') }
 		delete { $('#btn_delete') }
 	}
 }
@@ -83,7 +94,24 @@ class SingleContactDetails extends geb.Module {
 class MultipleContactDetails extends geb.Module {
 	static base = { $('#multiple-contacts') }
 	static content = {
+
+		checkedContactCount { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
+	
+		multiGroupDropDown { $('#multi-group-dropdown') }
+		multiGroupList { $('ul#multi-group-list li span')*.text() }
+		otherMultiGroupOptions { $('#multi-group-dropdown option')*.text().sort() }
+		addToGroup { groupId -> 
+			$('select#multi-group-dropdown').jquery.val(groupId)
+			$('select#multi-group-dropdown').jquery.trigger("change")
+		}
+		removeMultiGroup { groupId ->
+		    $("#multi-group-list a#remove-group-${groupId}").click()
+		}
+		update { $('#action-buttons #update-all') }
+		delete { $('#action-buttons #btn_delete_all') }
+
 		checkedContactCount(required:false) { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
 		deleteAllButton(required:false) { $('#btn_delete_all') }
+
 	}
 }

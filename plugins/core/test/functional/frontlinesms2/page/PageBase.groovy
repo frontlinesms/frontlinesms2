@@ -27,6 +27,10 @@ class TabsModule extends geb.Module {
 class NotificationsModule extends geb.Module {
 	static content = { 
 		errorMessages { $('.flash.errors')*.text() }
+
+
+
 		flashMessages { $('div.flash.message').text() }
+
 	}
 }

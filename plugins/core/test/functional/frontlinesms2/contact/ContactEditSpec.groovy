@@ -13,17 +13,18 @@ class ContactEditSpec extends ContactBaseSpec {
 	
 	def 'selected contact details can be edited and saved'() {
 		when:
-			to PageContactShowAlice
+
+			to PageContactAll, Contact.findByName('Alice')
 			def changingContact = Contact.findByName('Alice')
-			frmDetails.name = 'Kate'
-			frmDetails.mobile = '+2541234567'
-			frmDetails.email = 'gaga@gmail.com'
-			$('#update-single').click()
+
+			singleContactDetails.name.value('Kate')
+			singleContactDetails.mobile.value('+2541234567')
+			singleContactDetails.email.value('gaga@gmail.com')
+			singleContactDetails.save.click()
 		then:
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
 			changingContact.refresh()
-			println Contact.findAll()*.name
 			changingContact.name == 'Kate'
 	}
 
@@ -34,68 +35,59 @@ class ContactEditSpec extends ContactBaseSpec {
 			alice.addToGroups(g)
 			alice.save(flush: true)
 		when:
-			to PageContactShowGroupContactAlice
-			frmDetails.name = 'Kate'
-			frmDetails.mobile = '+2541234567'
-			frmDetails.email = 'gaga@gmail.com'
-			$('#update-single').click()
+			to PageContactAll, g, Contact.findByName('Alice')
+			singleContactDetails.name.value('Kate')
+			singleContactDetails.mobile.value('+2541234567') 
+			singleContactDetails.email.value('gaga@gmail.com')
+			singleContactDetails.save.click()
 		then:
-			at PageContactShowGroupContactAlice
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			Contact.findByName('Kate') != null
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
-			$('#groups-submenu .selected').text() == 'Excellent'
+			bodyMenu.selected == 'excellent'
 	}
 	
 	def "should remove address when delete icon is clicked"() {
 		when:
-			to PageContactShowBob
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			$('#remove-mobile').displayed
-			$("#mobile").siblings('a').displayed
+			singleContactDetails.removeMobile.displayed
 		when:
-			$('#remove-mobile').click()
+			singleContactDetails.removeMobile.click()
 		then:
-			!$('#remove-mobile').displayed
-			!$('.basic-info .send-message').displayed
+			!singleContactDetails.removeMobile.displayed
+			!singleContactDetails.sendMessage.displayed
 	}
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to PageContactAll, Contact.findByName('Bob')
 		then:
-			at PageContactShowBob
-			btnSave.disabled
+			singleContactDetails.save.disabled
 	}
 	
 	def "should enable save and cancel buttons when contact details are edited"() {
 		when:
-			go "contact/show/${Contact.findByName('Bob').id}"
+			to PageContactAll, Contact.findByName('Bob')
+			singleContactDetails.email.value('bob@gmail.com')
 		then:
-			at PageContactShowBob
-		when:
-			frmDetails.email = 'bob@gmail.com'
-		then:
-			!btnSave.disabled
-			!btnCancel.disabled
+			!singleContactDetails.save.disabled
+			!singleContactDetails.cancel.disabled
 	}
 	
 	def "should remain on the same page after updating a contact"() {
 		given:
 			createManyContacts()
 		when:
-			to PageContactShowBob
-			$("#paging .nextLink").click()
-			$("#paging .currentStep").jquery.show();
+			to PageContactAll, Contact.findByName('Bob')
+			footer.nextPage.click()
 		then:
-			$("#paging .currentStep").text() == "2"
+			!footer.prevPage.disabled
 		when:
-			frmDetails.name = 'Kate'
-			btnSave.click()
-			$("#paging .currentStep").jquery.show();
+			singleContactDetails.name = 'Kate'
+			singleContactDetails.save.click()
 		then:
-			$("#paging .currentStep").text() == "2"
+			!footer.prevPage.disabled
 	}
-	
 }
