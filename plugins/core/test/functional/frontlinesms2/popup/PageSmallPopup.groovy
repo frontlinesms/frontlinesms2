@@ -14,10 +14,18 @@ abstract class SmallPopup extends geb.Page {
 
 class DeletePopup extends SmallPopup {
 	static at = {
-		println "123123" + popupTitle;
 		popupTitle.contains("delete")
 	}
 	static content = {
 		text { $('#confirmDelete h2').text() }
+	}
+}
+
+class CustomFieldPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("create custom field")
+	}
+	static content = {
+		newField { $('#modalBox #custom-field-popup #custom-field-name') }
 	}
 }

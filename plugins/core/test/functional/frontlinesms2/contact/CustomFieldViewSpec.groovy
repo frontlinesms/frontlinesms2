@@ -11,45 +11,42 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 	}
 	
 	def "'add new custom field' is shown in dropdown and redirects to create page"() {
-		when:
+		given:
 			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
+		when:
+			to PageContactAll, bob
 		then:
-			at PageContactShowBob
-		then:
-			fieldSelecter.children('option')*.value() == ['na', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'add-new']
+			singleContactDetails.customFields == ['na', 'lake', 'add-new']
 	}
 
 	def 'custom fields with no value for that contact are shown in dropdown'() {
-		when:
+		given:
 			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
+		when:
+			to PageContactAll, bob
 		then:
-			at PageContactShowBob
-		then:
-			fieldSelecter.children('option')*.value() == ['na', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'add-new']
+			singleContactDetails.customFields == ['na', 'lake', 'add-new']
 	}
 
 	def 'custom fields with value for that contact are shown in list of details'() {
-		when:
+		given:
 			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
+		when:
+			to PageContactAll, bob
 		then:
-			$("#custom-field-list").children().children('label')*.text() == ['town']
+			singleContactDetails.contactsCustomFields == ['town']
 	}
 
 	def 'clicking an existing custom field in dropdown adds it to list with blank value'() {
-		when:
+		given:
 			def bob = Contact.findByName("Bob")
-			to PageContactShowBob
-		then:
-			$("#custom-field-list").children().children('label')*.text() == ['town']
-			waitFor { fieldSelecter.displayed }
 		when:
-			fieldSelecter.value('lake').click()
+			to PageContactAll, bob
 		then:
-			$("#custom-field-list").find('label')*.text().sort() == ['lake', 'town']
-			fieldSelecter.children()*.text() == ['Add more information...', 'Street address', 'City', 'Postcode', 'State', 'lake', 'town', 'Create new...']
+			singleContactDetails.addCustomField 'lake'
+			def customFeild = singleContactDetails.customField 'lake'
+			customFeild.displayed
+			customFeild.value() == ""
 	}
 
 	def 'clicking X next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {

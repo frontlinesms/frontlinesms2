@@ -69,10 +69,22 @@ class SingleContactDetails extends geb.Module {
 		mobile { $('#mobile') }
 		email { $('#email') }
 		notes { $('#notes')}
-		addMoreInfomation { customField -> 
-			$('select#new-field-dropdown').jquery.val(customField)
-			$('select#new-field-dropdown').jquery.trigger("change")
+	    customLabel { customField ->
+	    	$('label', text:customField ) 
+	    }
+		addMoreInfomation {
+			$('select#new-field-dropdown').jquery.val('add-new') 
+			$('select#new-field-dropdown').jquery.trigger("change") 
 		}
+		addCustomField { customFieldValue ->
+			$('select#new-field-dropdown').jquery.val(customFieldValue) 
+			$('select#new-field-dropdown').jquery.trigger("change") 
+		}
+		customField { customFieldName ->
+			$ ('input', name:customFieldName)
+		}
+		customFields { $('select#new-field-dropdown option')*.value() }
+		contactsCustomFields { $('label', for: startsWith("custom-field-"))*.text() }
 		groupDropDown { $('#group-dropdown') }
         groupList { $('ul#group-list li span')*.text() }
         removeGroup { groupId ->
