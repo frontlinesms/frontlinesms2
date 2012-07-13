@@ -17,7 +17,7 @@
 		<div class="stats character-count-warning" style="display:none;">
 			<g:message code="message.character.count.warning"/>
 		</div>
-		<fsms:magicWand target="autoreplyText" controller="${controllerName}" instance="${activityInstanceToEdit?:null}"/>
+		<fsms:magicWand target="autoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>
 
@@ -27,11 +27,13 @@
 		if(isGroupChecked('enableAutoreply')) {
 			$("#autoreplyText").removeAttr("disabled");
 			$("span.character-count").removeClass("hide");
+			$(".magicwand-container").css({"visibility":"visible"});
 		} else {
 			$("#autoreplyText").attr('disabled','disabled');
 			$("span.character-count").addClass("hide");
 			$("#autoreplyText").removeClass('error');
 			$(".error-panel").hide();
+			$(".magicwand-container").css({"visibility":"hidden"});
 		}
 	});
 	
