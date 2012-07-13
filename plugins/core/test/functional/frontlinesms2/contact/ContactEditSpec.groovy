@@ -9,11 +9,9 @@ class ContactEditSpec extends ContactBaseSpec {
 	def setup() {
 		createTestContacts()
 	}
-
 	
 	def 'selected contact details can be edited and saved'() {
 		when:
-
 			to PageContactAll, Contact.findByName('Alice')
 			def changingContact = Contact.findByName('Alice')
 
@@ -45,7 +43,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			Contact.findByName('Kate') != null
 			assertFieldDetailsCorrect('name', 'Name', 'Kate')
 			assertFieldDetailsCorrect('mobile', 'Mobile', '+2541234567')
-			bodyMenu.selected == 'excellent'
+			bodyMenu.selectedMenuItem == 'excellent'
 	}
 	
 	def "should remove address when delete icon is clicked"() {

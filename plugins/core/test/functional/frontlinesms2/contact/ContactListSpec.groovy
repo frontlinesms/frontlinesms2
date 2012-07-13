@@ -10,33 +10,32 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			createTestContacts()
 		when:
-			go 'contact'
+			to PageContactAll
 		then:	
-			$('#contact-list').children()*.text() == ['Alice', 'Bob']
+			contactList.contacts == ['Alice', 'Bob']
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
 		when:
-			go 'contact'
+			to PageContactAll
 		then:
-			$('div#contact-list').text() == 'No contacts here!'
+			contactList.noContent == 'No contacts here!'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
 		when:
-			to PageContactShow
+			to PageContactAll
 		then:
-			selectedMenuItem.text() == 'All contacts'
+			bodyMenu.selectedMenuItem == 'all contacts'
 	}
 	
 	def 'contacts list is paginated'() {
 		given:
 			createManyContacts()
 		when:
-			to PageContactShow
+			to PageContactAll
 		then:
-			def contactList = $('#contact-list')
-			def contactNames = contactList.children()*.text()
+			def contactNames = contactList.contacts
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			assert contactNames == expectedNames
 	}
@@ -48,11 +47,11 @@ class ContactListSpec extends ContactBaseSpec {
 			def samTina = Contact.build(name:'SaM Tina')
 			def bob = Contact.build(name:'bob')
 		when:
-			to PageContactShow
-			$("#contact-search").jquery.trigger('focus')
-			$("#contact-search") << "Sam"
+			to PageContactAll
+			footer.searchContact.jquery.trigger('focus')
+			footer.searchContact << "Sam"
 		then:
-			waitFor { $('#contact-list li a')*.text() == ['Sam Anderson', 'SAm Jones', 'SaM Tina'] }
+			waitFor { contactList.contacts == ['Sam Anderson', 'SAm Jones', 'SaM Tina'] }
 	}
 	
 	def 'should be able to search contacts within a group'() {
@@ -67,30 +66,24 @@ class ContactListSpec extends ContactBaseSpec {
 			samJones.addToGroups(fpGroup, true)
 			bob.addToGroups(fpGroup, true)
 		when:
-			go "group/show/${fpGroup.id}"
-			$("#contact-search").jquery.trigger('focus')
-			$("#contact-search") << "Sam"
+			to PageContactAll, fpGroup
+			footer.searchContact.jquery.trigger('focus')
+			footer.searchContact << "Sam"
 		then:
-			waitFor {
-println $('#contact-list li').children('a')*.text()
- $('#contact-list li').children('a')*.text() == ['Sam Anderson', 'SAm Jones'] }
+			waitFor {contactList.contacts == ['Sam Anderson', 'SAm Jones'] }
 	}
 	
 	def "should remain on the same page when a contact is selected"() {
 		given:
 			createManyContacts()
 		when:
-			go 'contact/show'
-			$("#paging .nextLink").click()
-			$("#paging .currentStep").jquery.show();
+			to PageContactAll
+			footer.nextPage.click()
 		then:
-			at PageContactShow
-			$("#paging .currentStep").text() == "2"
+			!footer.prevPage.disabled
 		when:
-			$('#contact-list li').children('a')[1].click()
-			$("#paging .currentStep").jquery.show();
+			contactList.selectContact 1
 		then:
-			$("#paging .currentStep").text() == "2"
+			!footer.prevPage.disabled
 	}
-	
 }
