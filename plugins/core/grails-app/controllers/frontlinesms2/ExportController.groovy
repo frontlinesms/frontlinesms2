@@ -98,10 +98,10 @@ class ExportController {
 	private def generateContactReport(contactInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "name", "mobile", "email", "notes", "groupMembership"]
+		List fields = ["name", "mobile", "email", "notes", "groupMembership"]
 		Map labels = params.format == "csv" ? 
-			["id": "DatabaseID", "name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
-			: ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes'), "groupMembership":message(code: 'export.contact.groups')]
+			["name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
+			: ["name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes'), "groupMembership":message(code: 'export.contact.groups')]
 		// add custom fields
 		def customFields = CustomField.getAllUniquelyNamed()
 		customFields.each { field ->

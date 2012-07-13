@@ -43,10 +43,10 @@ class GroupMembership implements Serializable {
 		executeUpdate("DELETE FROM GroupMembership WHERE group=:group", [group: g])
 	}
 	
-	static def searchForContacts(Long groupId, String contactSearchString, max, offset) {
+	static def searchForContacts(Long groupId, String contactSearchString, String sortBy, max, offset) {
 		def groupMembershipsAndContacts = Contact.executeQuery("SELECT c FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND lower(c.name) LIKE :contactSearchString",
 				[groupId:groupId, contactSearchString:contactSearchString], [max:max, offset:offset])
-		return groupMembershipsAndContacts
+		return groupMembershipsAndContacts.sort { it."${sortBy}" }
 	}
 	
 	static def countSearchForContacts(groupId, String contactSearchString) {
