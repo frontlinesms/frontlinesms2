@@ -48,7 +48,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			connectionList.btnDelete.click()
 		then:
-			notifications.flashMessages.contains("Connection test email connection was deleted.")
+			notifications.flashMessagesText.contains("Connection test email connection was deleted.")
 			connectionList.text().contains('You have no connections configured.')
 	}
 

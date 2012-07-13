@@ -18,14 +18,14 @@ abstract class PageContact extends frontlinesms2.page.PageBase {
 }
 
 class BodyMenu extends geb.Module {
+	static base = { $('#body-menu') }
 	static content = {
-		bodyMenu { $('#body-menu') }
-		selectedMenuItem { bodyMenu.find('.selected').text().toLowerCase() }
-		groupSubmenuLinks { bodyMenu.find('li.groups ul.submenu li a') }
-		smartGroupSubmenuLinks { bodyMenu.find('li.smartgroups ul.submenu li a') }
-		newContact { bodyMenu.find('li.contacts .create a') }
-		newGroup { bodyMenu.find('li.groups .create a') }
-		newSmartGroup { bodyMenu.find('li.smartgroups .create a') }
+		selectedMenuItem { $('.selected a').text().toLowerCase() }
+		groupSubmenuLinks { $('li.groups ul.submenu li a') }
+		smartGroupSubmenuLinks { $('li.smartgroups ul.submenu li a') }
+		newContact { $('li.contacts .create a') }
+		newGroup { $('li.groups .create a') }
+		newSmartGroup { $('li.smartgroups .create a') }
 	}
 }
 
@@ -42,8 +42,8 @@ class ContentFooter extends geb.Module {
 	static base = { $('#main-list-foot') }
 	static content = {
 		search { $('a')[0] }
-		noneSearch { $('#contact-search').text().toLowerCase() == "search" }
-		searchDetails { $('#contact-search').text() }
+		searchContact { $('#contact-search')}
+		searchDetailsText { $('#contact-search').text().toLowerCase() }
 		nextPage { $('#paging a.nextLink') }
 		prevPage { $('#paging a.prevLink') }
 		currentStep { $('#paging currentStep') }
@@ -53,12 +53,12 @@ class ContentFooter extends geb.Module {
 class ContactList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
-		contacts { $("ul#main-list li a")*.text() }
+		contacts { $("li a")*.text() }
 		selectContact { contactPosition ->
 			$('.contact-select', contactPosition).click()
 	    }
-		selectedContacts { $("ul#main-list.selected li a")*.text() }
-		noContent { $('p.no-content') }
+		selectedContacts { $(".selected li a")*.text() }
+		noContent { $('p.no-content').text() }
 	}
 }
 
