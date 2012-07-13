@@ -13,7 +13,7 @@ class ContactSearchService {
 		def searchString = getSearchString(params)
 		
 		if(params.groupId) {
-			GroupMembership.searchForContacts(asLong(params.groupId), searchString,
+			GroupMembership.searchForContacts(asLong(params.groupId), searchString, params.sort,
 					params.max,
 			                params.offset)
 		} else if(params.smartGroupId) {
