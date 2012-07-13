@@ -28,12 +28,14 @@
 			$("#autoreplyText").removeAttr("disabled");
 			$("span.character-count").removeClass("hide");
 			$(".magicwand-container").css({"visibility":"visible"});
+			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"visible"});
 		} else {
 			$("#autoreplyText").attr('disabled','disabled');
 			$("span.character-count").addClass("hide");
 			$("#autoreplyText").removeClass('error');
 			$(".error-panel").hide();
 			$(".magicwand-container").css({"visibility":"hidden"});
+			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"hidden"});
 		}
 	});
 	
