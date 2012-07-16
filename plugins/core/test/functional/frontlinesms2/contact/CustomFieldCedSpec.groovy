@@ -11,7 +11,7 @@ class CustomFieldCedSpec extends ContactBaseSpec {
 		given:
 			Contact bob = Contact.build(name:'Bob')
 		when:
-			to PageContactAll, bob
+			to PageContactShow, bob
 			singleContactDetails.addMoreInfomation
 		then:
 			waitFor { at CustomFieldPopup }
@@ -21,12 +21,12 @@ class CustomFieldCedSpec extends ContactBaseSpec {
 		given:
 			Contact bob = Contact.build(name:'Bob')
 		when:
-			to PageContactAll, bob
+			to PageContactShow, bob
 			singleContactDetails.addMoreInfomation
 			waitFor { at CustomFieldPopup }
 			newField.value('planet')
 			ok.jquery.trigger("click")
-			at PageContactAll
+			at PageContactShow
 		then:
 			singleContactDetails.customLabel("planet").displayed
 	}

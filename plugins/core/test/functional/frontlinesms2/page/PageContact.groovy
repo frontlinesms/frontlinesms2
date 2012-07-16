@@ -21,7 +21,10 @@ class BodyMenu extends geb.Module {
 	static base = { $('#body-menu') }
 	static content = {
 		selectedMenuItem { $('.selected a').text().toLowerCase() }
-		groupSubmenuLinks { $('li.groups ul.submenu li a') }
+		groupSubmenuLinks { $('li.groups ul.submenu li a')*.text() }
+		getGroupLink { groupName ->
+	    	$('li.groups ul.submenu li a', text:groupName ) 
+	    }
 		smartGroupSubmenuLinks { $('li.smartgroups ul.submenu li a') }
 		newContact { $('li.contacts .create a') }
 		newGroup { $('li.groups .create a') }
@@ -34,7 +37,9 @@ class ContentHeader extends geb.Module {
 	static content = {
 		title { $('h1').text().toLowerCase() }
 		button { $('a.btn, input[type="button"], button') }
-		moreGroupActions(required:false) { $('div.header-buttons #group-actions-menu') }
+		groupHeaderSection { $('div.group') }
+		groupHeaderTitle { $('div.group h1') }
+		moreGroupActions { $('div.header-buttons #group-actions') }
 	}
 }
 
@@ -54,6 +59,7 @@ class ContactList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
 		contacts { $("li a")*.text() }
+		contactsLink { $("li a")*.@href }
 		selectContact { contactPosition ->
 			$('.contact-select', contactPosition).click()
 	    }
@@ -84,6 +90,10 @@ class SingleContactDetails extends geb.Module {
 			$ ('input', name:customFieldName)
 		}
 		customFields { $('select#new-field-dropdown option')*.value() }
+
+		removeCustomFeild { feildId ->
+			$('a#remove-field-'+feildId).click()
+		}
 		contactsCustomFields { $('label', for: startsWith("custom-field-"))*.text() }
 		groupDropDown { $('#group-dropdown') }
         groupList { $('ul#group-list li span')*.text() }

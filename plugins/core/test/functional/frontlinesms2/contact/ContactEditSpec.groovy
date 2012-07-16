@@ -12,7 +12,7 @@ class ContactEditSpec extends ContactBaseSpec {
 	
 	def 'selected contact details can be edited and saved'() {
 		when:
-			to PageContactAll, Contact.findByName('Alice')
+			to PageContactShow, Contact.findByName('Alice')
 			def changingContact = Contact.findByName('Alice')
 
 			singleContactDetails.name.value('Kate')
@@ -33,7 +33,7 @@ class ContactEditSpec extends ContactBaseSpec {
 			alice.addToGroups(g)
 			alice.save(flush: true)
 		when:
-			to PageContactAll, g, Contact.findByName('Alice')
+			to PageContactShow, g, Contact.findByName('Alice')
 			singleContactDetails.name.value('Kate')
 			singleContactDetails.mobile.value('+2541234567') 
 			singleContactDetails.email.value('gaga@gmail.com')
@@ -48,7 +48,7 @@ class ContactEditSpec extends ContactBaseSpec {
 	
 	def "should remove address when delete icon is clicked"() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			singleContactDetails.removeMobile.displayed
 		when:
@@ -60,14 +60,14 @@ class ContactEditSpec extends ContactBaseSpec {
 	
 	def "should disable the save and cancel buttons when viewing a contact details"() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			singleContactDetails.save.disabled
 	}
 	
 	def "should enable save and cancel buttons when contact details are edited"() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 			singleContactDetails.email.value('bob@gmail.com')
 		then:
 			!singleContactDetails.save.disabled
@@ -78,7 +78,7 @@ class ContactEditSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 			footer.nextPage.click()
 		then:
 			!footer.prevPage.disabled
