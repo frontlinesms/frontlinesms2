@@ -42,6 +42,7 @@ class PollCedSpec extends PollBaseSpec {
 			tab(1).click()
 			compose.question = "question"
 			compose.dontSendQuestion.click()
+			setAliases();
 			tab(8).click()
 		then:
 			confirm.pollName.displayed
@@ -56,6 +57,8 @@ class PollCedSpec extends PollBaseSpec {
 	def "should require keyword if sorting is enabled"() {
 		when:
 			launchPollPopup()
+			setAliases()
+			next.click()
 		then:
 			waitFor { sort.displayed }
 			sort.keyword.disabled
@@ -79,6 +82,8 @@ class PollCedSpec extends PollBaseSpec {
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
+			setAliases()
+			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
@@ -99,6 +104,10 @@ class PollCedSpec extends PollBaseSpec {
 			previous.click()
 		then:
 			waitFor { sort.displayed }
+		when:
+			previous.click()
+		then:
+			waitFor { aliases.displayed }
 		when:
 			previous.click()
 		then:
@@ -128,6 +137,8 @@ class PollCedSpec extends PollBaseSpec {
 	def "should not proceed when the poll is not named"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
+			setAliases()
+			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
@@ -171,6 +182,8 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { response.label("D").hasClass('field-enabled') }
 			next.click()
 		then:
+			setAliases()
+			next.click()
 			waitFor { sort.displayed }
 		when:
 			sort.sort.click()
@@ -251,6 +264,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { response.label("D").hasClass('field-enabled') }
 		when:
+			setAliases()
 			next.click()
 		then:
 			waitFor { sort.displayed }
@@ -294,6 +308,8 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', "Will you send messages to this poll")
 		then:
+			setAliases()
+			next.click()
 			waitFor { sort.displayed }
 		when:
 			tab(7).click()
@@ -365,17 +381,16 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "can delete a poll"() {
-		// FIXME: rewrite to use new test format
 		when:
 			deletePoll()
-			waitFor { $("div.flash").displayed }
+			waitFor { notifications.flashMessage.displayed }
 		then:
-			$("title").text() == "Inbox"
-			!$("a", text: "Who is badder?")
+			at PageMessageInbox
+			bodyMenu.activityLinks.size() == 1
 	}
 	
 	def "deleted polls show up in the trash section"() {
-		// FIXME: rewrite to use new test format
+		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
@@ -388,7 +403,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "selected poll and its details are displayed"() {
-		// FIXME: rewrite to use new test format
+		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
@@ -400,7 +415,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "clicking on empty trash permanently deletes a poll"() {
-		// FIXME: rewrite to use new test format
+		// FIXME: rewrite when trash page definitions exist
 		setup:
 			deletePoll()
 		when:
@@ -416,7 +431,6 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "user can edit an existing poll"() {
-		// FIXME: rewrite to use new test format
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'choiceA', value: 'Michael-Jackson')
@@ -425,45 +439,45 @@ class PollCedSpec extends PollBaseSpec {
 			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
-			$("a", text: "Who is badder? poll").click()
+			bodyMenu.activityLinks[1].click()
 		then:
-			waitFor { title == "Poll" }
+			waitFor { at PageMessagePoll }
 		when:
-			$(".more-actions").value("edit").click()
+			moreActions.value("edit").click()
 		then:
-			waitFor('slow') { $("#ui-dialog-title-modalBox").displayed }
-			at PagePollEdit
-			pollForm.question == 'question'
-			pollForm.pollType == "multiple"
+			waitFor('slow') { at PollDialog }
+			compose.question == 'question'
+			compose.pollType == "multiple"
 		when:
-			pollForm.question = "Who is worse?"
-			pollForm."dontSendMessage" = false
+			compose.question = "Who is worse?"
+			compose.dontSendQuestion = false
 			next.click()
 		then:
-			waitFor { responseListTab.displayed }
-			pollForm.choiceA == "Michael-Jackson"
-			pollForm.choiceB == "Chuck-Norris"
+			waitFor { response.displayed }
+			response.choice("A").jquery.val("Michael-Jackson")
+			response.choice("B").jquery.val("Chuck-Norris")
 		when:
-			pollForm.choiceC = "Bruce Vandam"
+			response.choice("C").jquery.val("Bruce Vandam")
+			next.click()
+			setAliases()
 			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
-			goToTab(6)
-			pollForm.address = '1234567890'
-			addManualAddress.click()
+			goToTab(7)
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
 		then:
-			waitFor { $('.manual').displayed }
+			waitFor { recipients.manual.size() == 1 }
 		when:
 			next.click()
-			pollForm.name = 'Who is badder?'
+			confirm.pollName = 'Who is badder?'
 			done.click()
 		then:
 			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
 	}
 	
 	def "should display errors when poll validation fails"() {
-		// FIXME: rewrite to use new test format
 		given:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
@@ -474,16 +488,20 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
-			waitFor { autoSortTab.displayed }
+			setAliases()
+			next.click()
+			waitFor { sort.displayed }
 		when:
-			goToTab(7)
-			pollForm.name = 'Who is badder?'
+			goToTab(8)
+			confirm.pollName = 'Who is badder?'
 			done.click()
 		then:
 			assert Poll.count() == 1
-			waitFor { errorMessage.displayed }
-			at PagePollCreate
+			at PollDialog
+			waitFor { errorPanel.displayed }
 	}
+
+	// TODO: add alias-specific tests
 
 	def deletePoll() {
 		def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
@@ -491,11 +509,10 @@ class PollCedSpec extends PollBaseSpec {
 		poll.addToResponses(key: 'B', value: 'Chuck-Norris')
 		poll.addToResponses(key: 'Unknown', value: 'Unknown')
 		poll.save(failOnError:true, flush:true)
-		go "message/poll/${poll.id}"
-		$(".more-actions").value("delete")
-		waitFor { $("#ui-dialog-title-modalBox").displayed }
-		$("#title").value("Delete poll")
-		$("#done").click()
+		to PageMessagePoll, poll
+		moreActions.value("delete")
+		waitFor { at DeleteDialog }
+		done.click()
 		poll
 	}
 
@@ -515,6 +532,18 @@ class PollCedSpec extends PollBaseSpec {
 	def goToTab(tab) {
 		at PollDialog
 		tab(tab).click()
+	}
+
+	def setAliases(aliasValues=null) {
+		at PollDialog
+		tab(3).click()
+		if (!aliasValues)
+			aliasValues = ['A', 'B', 'C', 'D', 'E']
+		aliasValues.eachWithIndex { alias, index ->
+			if (aliases.inputs[index].displayed && !aliases.inputs[index].disabled) {
+				aliases.inputs[index].value(alias)
+			}
+		}
 	}
 }
 

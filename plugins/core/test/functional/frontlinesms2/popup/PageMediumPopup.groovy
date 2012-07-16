@@ -182,3 +182,12 @@ class RenameDialog extends MediumPopup {
 		done { $('button#done') }
 	}
 }
+
+class DeleteDialog extends MediumPopup {
+	static at = {
+		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("delete");
+	}
+	static content = {
+		done { $('button#done') }
+	}
+}
