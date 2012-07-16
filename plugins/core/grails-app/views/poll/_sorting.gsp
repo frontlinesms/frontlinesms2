@@ -15,3 +15,20 @@
 		</li>
 	</ul>
 </div>
+
+<r:script>
+	var enableKeyword = function() {
+			var enabled = $(this).val() == 'true';
+			if(enabled) {
+				$('#poll-keyword').removeAttr("disabled");
+				$('#poll-keyword').addClass("required");
+			}
+			else {
+				$('#poll-keyword').attr("disabled", "disabled");
+				$('#poll-keyword').removeClass("required");
+				$('#poll-keyword').removeClass("error");
+				$("label.error").remove();
+			}
+		};
+	$("input[name='enableKeyword']").live("change", enableKeyword);
+</r:script>
