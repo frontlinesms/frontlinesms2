@@ -2,7 +2,7 @@
 <meta name="layout" content="popup"/>
 
 <div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="poll.validation.prompt"/></div>
+	
 	<ul>
 		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question"/></a></li>
 		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response"/></a></li>
@@ -32,7 +32,6 @@
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateSmsCharacterCount);
 	$("button#nextPage").click(setAliasValues);
-	$("input[name='pollType']").live("change", resetResponses);
 
 	function updateSendMessage() {
 		// TODO check why these are being bound every time - surely could just bind when the page is loaded.
@@ -65,7 +64,7 @@
 			} else {
 				replyText = i18n("poll.reply.text6")+ ' ';
 				$(".choices").each(function() {
-					if (replyText!=i18n("poll.reply.text6")+ ' ' && this.value) replyText += ' ' + i18n("poll.reply.text3");
+					if (replyText!=i18n("poll.reply.text6") + ' ' && this.value) replyText += ' ' + i18n("poll.reply.text3");
 					if (this.value) replyText += "'" + this.value + "'";
 				});
 			} 
@@ -77,44 +76,41 @@
 		}
 	}
 
-	function setAliasValues(){
+	function setAliasValues() {
 		var yesNo = $("input[name='pollType']:checked").val() == "yesNo";
 		if (yesNo) {
 			var myMap = {'A':'Yes', 'B':'No', 'C':'', 'D':'', 'E':''};
-			$.each(myMap, function(key, value){
-				$("ul#poll-aliases li label[for='alias"+key+"']").text(value);
-				if(value == ''){
+			$.each(myMap, function(key, value) {
+				$("ul#poll-aliases li label:first[for='alias"+key+"']").text(value);
+				if(value == '') {
 					$("ul#poll-aliases li input#alias"+key).val('');
 					$("ul#poll-aliases li input#alias"+key).attr('disabled','disabled');
-				}
-				else {
+				} else {
 					$("ul#poll-aliases li input#alias"+key).removeAttr('disabled');
 				}
 			});
-		}else{
+		} else {
 			var myArray = ['A', 'B', 'C', 'D', 'E'];
-			$.each(myArray, function(index, value){
+			$.each(myArray, function(index, value) {
 				var labelValue = $("ul#poll-choices li input#choice"+value).val().trim();
-				var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias"+value+"']");
+				var aliasTextFieldLabel = $("ul#poll-aliases li label:first[for='alias"+value+"']");
 				var aliasTextField = $("ul#poll-aliases li input#alias"+value);
-				if(labelValue.length == 0){
+				if(labelValue.length == 0) {
 					aliasTextFieldLabel.text(value);
 					aliasTextField.attr('disabled', 'disabled');
 					aliasTextFieldLabel.removeClass("field-enabled");
-				}else{
+				} else {
 					aliasTextFieldLabel.text(labelValue);
 					aliasTextFieldLabel.addClass("field-enabled");
 					$("ul#poll-aliases li input#alias"+value).removeAttr('disabled');
 				}
 			});
 		}
-		// remove styling from previous errors
-		$("input.aliases").removeClass("error");
 	}
 
-	function addRespectiveAliases(field){
+	function addRespectiveAliases(field) {
 		var yesNo = $("input[name='pollType']:checked").val() == "yesNo";
-		if (yesNo) {
+		if(yesNo) {
 			var aliasYesTextField = $("ul#poll-aliases li input#aliasA");
 			var aliasNoTextField = $("ul#poll-aliases li input#aliasB");
 
@@ -123,19 +119,19 @@
 				def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} 
 				def mode = pollResponse?"edit":"create"
 			%>
-			$.each(choices, function(key, value){
-				if("${mode}" == "create"){
+			$.each(choices, function(key, value) {
+				if("${mode}" == "create") {
 					if( value.val().trim().length == 0 ) value.val(key);
 				}
 			});
-		}else{
+		} else {
 			var aliases = "";
 			var rawKey = $(field).attr('id').trim();
 			var rawVal = $(field).val().trim();
 			var value = rawVal.split(' ')[0]
 			var key = rawKey.substring(rawKey.length-1);
-			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias"+value+"']");
-			var aliasTextField = $("ul#poll-aliases li input#alias"+key);
+			var aliasTextFieldLabel = $("ul#poll-aliases li label[for='alias" + value + "']");
+			var aliasTextField = $("ul#poll-aliases li input#alias" + key);
 			if($(field).hasClass("create")) {
 				if(value.length > 0){
 					aliases += key+","+value;
@@ -160,122 +156,148 @@
 	}
 
 	function initializePopup() {
-		<g:if test="${activityInstanceToEdit}">
+		<g:if test="${activityInstanceToEdit?.id}">
 			$("#messageText").trigger("keyup");
 		</g:if>
+		var validator = $("#new-poll-form").validate({
+			rules: {
+				addresses: {
+				  required: true,
+				  minlength: 1
+				}
+			},
+			messages: {
+				addresses: {
+					required: i18n("poll.recipients.validation.error")
+				}
+			},
+			errorPlacement: function(error, element) {
+				if (element.attr("name") == "addresses") {
+					error.insertAfter("#recipients-list");
+					$("#recipients-list").addClass("error");
+				} else
+					error.insertAfter(element);
+			}
+		});
+		jQuery.validator.addMethod("aliases", function(value, element) {
+			var isValid = true;
+			var allAliases = ",";
+			$('input:not(:disabled).aliases').each(function() {
+				var currentInput = $(this);
+				var aliases = currentInput.val().split(",");
+				$.each(aliases, function(index, value) {
+					value = value.trim().toUpperCase() + ",";
+					if(allAliases.indexOf("," + value) == -1) {
+						// alias not in allAliases
+						allAliases += value;
+					}
+					else {
+						// alias not unique
+						isValid = false;
+					}
+				});
+			});
+			return isValid;
+		}, i18n("poll.alias.validation.error"));
+
 		/* Poll type tab */
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				$("#question").removeClass('error');
+				var valid = true;
 				if ($("input[name='pollType']:checked").val() == "yesNo") {
 					disableTab(1);
+					addRespectiveAliases();
 				} else {
 					enableTab(1);
 				}
-				var isValid = $("input[name='dontSendMessage']").is(':checked') || !isElementEmpty($("#question"));
-				if(!isValid)
-					$("#question").addClass('error');
-				return isValid;
+				if(!validator.element($("#question")) && valid) {
+				    valid = false;
+				}
+				return valid;
 			}
 		});
 
-		/* Replies tab */
+		/* response list tab */
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				$('#choiceA').removeClass('error');
-				$('#choiceB').removeClass('error');
-				var isValid =  $("input[name='pollType']:checked").val() == "yesNo" || validatePollResponses();
-				if(!isValid) {
-					if(isElementEmpty($('#choiceA'))) $('#choiceA').addClass('error');
-					if(isElementEmpty($('#choiceB'))) $('#choiceB').addClass('error');
-				}
+				var valid = true;
+				var choices = [$('#choiceA'), $('#choiceB')];
+				$.each(choices, function(index, value) {
+					if (!validator.element(value) && valid) {
+						valid = false;
+					}
+				});
 				setAliasValues();
-				return isValid;
+				return valid;
 			}
 		});
 
 		/* Aliases tab */
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				var isValid = true;
-				var allAliases = ",";
-				$('input.aliases').each(function() {
-					var currentInput = $(this);
-					currentInput.removeClass("error");
-					if(currentInput.attr('disabled') != "disabled")
-					{
-						if(currentInput.val().trim().length == 0) {
-							currentInput.addClass("error");
-							isValid = false;
-						}
-						else {
-							var aliases = currentInput.val().split(",");
-							$.each(aliases, function(index, value) {
-								if(allAliases.indexOf(","+value.toUpperCase()+",") == -1) {
-									// alias not in allAliases
-									allAliases += value.toUpperCase() + ","
-								}
-								else {
-									// alias not unique
-									isValid = false;
-									currentInput.addClass("error");
-								}
-								if(value.indexOf(" ") != -1)
-								{
-									// no spaces allowed
-									isValid=false;
-									currentInput.addClass("error");
-								}
-							});
-						}
+				var valid = true;
+				$('input:not(:disabled).aliases').each(function() {
+					if (!validator.element(this) && valid) {
+					    valid = false;
 					}
 				});
-				return isValid;
+				return valid;
 			}
 		});
 		
 		/* Auto-sort tab */
 		$("#tabs-4").contentWidget({
 			validate: function() {
-				var pollKeywordTextfield = $("input[name='keyword']");
-				var isValid = $("input[name='enableKeyword']:checked").val() == 'false' ||
-						pollKeywordTextfield.val().trim().length > 0;
-				if(isValid) pollKeywordTextfield.removeClass('error');
-				else pollKeywordTextfield.addClass('error');
-				return isValid;
+				var valid = true;
+				if (!validator.element('#poll-keyword') && valid) {
+					valid = false;
+				}
+				return valid;
 			}
 		});
 
 		/* Auto-reply tab */
 		$("#tabs-5").contentWidget({
 			validate: function() {
-				$('#tabs-5 textarea').removeClass("error");
-				var isValid = !isGroupChecked('enableAutoReply') || !(isElementEmpty('#tabs-4 textarea'));
-				if(!isValid) {
-					$('#tabs-5 textarea').addClass("error");
+				var valid = true;
+				if (!validator.element('#autoreplyText') && valid) {
+					valid = false;
 				}
-				return isValid;
+				return valid;
 			}
 		});
 		
+		/* Select recepient's tab */
 		$("#tabs-7").contentWidget({
 			validate: function() {
 				if(!isGroupChecked('dontSendMessage')) {
 					addAddressHandler();
-					return isGroupChecked('addresses');
+					var valid = true;
+					var addressListener = function() {
+						if(validator.element('input[name=addresses]')) {
+							$('#recipients-list').removeClass("error");
+						} else {
+							$('#recipients-list').addClass("error");
+						}
+					};
+					if (!validator.element('input[name=addresses]') && valid) {
+						valid = false;
+						$('input[name=addresses]').change(addressListener);
+					}
+					return valid;
 				}
 				return true;
 			}
 		});
 
+		/* Confirm tab*/
 		$("#tabs-8").contentWidget({
 			validate: function() {
-				$("#tabs-8 #name").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-8 #name"));
-				if(isEmpty) {
-					$("#tabs-8 #name").addClass("error");
-				}
-				return !isEmpty;
+				var valid = true;
+				if (!validator.element('input[name=name]') && valid) {
+						valid = false;
+					}
+				return valid
 			}
 		});
 
@@ -284,15 +306,7 @@
 			updateSendMessage();
 			updateConfirmationMessage();
 		});
-		
-		/* SET UP KEYWORD SORTING PAGE */
-		// Add change listener to enableKeyword radio group such that when value is false
-		// poll-keyword is disabled, and when value is true then poll-keyword is enabled
-		$("input[name='enableKeyword']").change(function() {
-			var enabled = $(this).val() == 'true';
-			if(enabled) $('#poll-keyword').removeAttr("disabled");
-			else $('#poll-keyword').attr("disabled", "disabled");
-		});
+
 		tabValidates($("#tabs-1"));
 	}
 
@@ -311,7 +325,7 @@
 			autoSortMessages.eq(0).show();
 			autoSortMessages.eq(1).hide();
 		}
-		//setConfirmAliasValues();
+		setConfirmAliasValues();
 
 	}
 	
@@ -348,26 +362,19 @@
 	}
 
 	function highlightPollResponses(){
-		$(".choices").each(function(index){
+		$(".choices").each(function(){
 			highlightNextPollResponse(this);
 		});
 	}
 
 	function resetResponses(){
-		$("input.choices").each(function(index){
+		$("input.choices").each(function(){
 			$(this).val('');
 			console.log('reset');
 		});
-		$(".aliases input").each(function(index){
+		$("input.aliases").each(function(){
 			$(this).val('');
-			$(this).removeClass('error');
 		});
-		// if user chose yesNo, set aliases
-		addRespectiveAliases("");//Yes No polls do not have custom fields
-	}
-
-	function validatePollResponses() {
-		return !isElementEmpty($("#choiceA")) && !isElementEmpty($("#choiceB"))
 	}
 
 	function setConfirmAliasValues(){
