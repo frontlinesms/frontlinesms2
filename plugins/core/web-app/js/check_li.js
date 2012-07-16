@@ -14,7 +14,7 @@ function showMultipleDetailsPanel(itemTypeString) {
 	if (itemTypeString == "contact")
 		selectmenuTools.refresh("#multi-group-dropdown");
 	else
-		selectmenuTools.refresh("#move-actions");
+		selectmenuTools.refresh("#multiple-messages #move-actions");
 }
 
 function itemCheckChanged(itemTypeString, itemId) {
