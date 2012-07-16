@@ -17,7 +17,7 @@
 		<div class="stats character-count-warning" style="display:none;">
 			<g:message code="message.character.count.warning"/>
 		</div>
-		<fsms:magicWand target="autoreplyText" controller="${controllerName}" instance="${activityInstanceToEdit?:null}"/>
+		<fsms:magicWand target="autoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>
 
@@ -25,16 +25,18 @@
 	$("#enableAutoreply").live("change", function() {
 		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
 		var autoreplyText = $("#autoreplyText");
-		alert("enableAutoreply text: " + isGroupChecked("enableAutoreply"));
 		if(isGroupChecked("enableAutoreply")) {
 			autoreplyText.removeAttr("disabled");
 			autoreplyText.addClass("required");
 			$("span.character-count").removeClass("hide");
+			$(".magicwand-container").css({"visibility":"visible"});
+			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"visible"});
 		} else {
 			autoreplyText.attr('disabled','disabled');
 			autoreplyText.removeClass("required");
 			$("span.character-count").addClass("hide");
-			$("label.error").hide();
+			$(".magicwand-container").css({"visibility":"hidden"});
+			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"hidden"});
 		}
 	});
 	

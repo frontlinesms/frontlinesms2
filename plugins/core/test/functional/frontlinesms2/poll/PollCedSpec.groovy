@@ -36,14 +36,13 @@ class PollCedSpec extends PollBaseSpec {
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
 			launchPollPopup('yesNo', null)
-
 		then:
 			errorPanel.displayed
 		when:
 			tab(1).click()
 			compose.question = "question"
 			compose.dontSendQuestion.click()
-			tab(7).click()
+			tab(8).click()
 		then:
 			confirm.pollName.displayed
 		when:
@@ -91,7 +90,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 			tab(2).hasClass("disabled-tab")
-			tab(6).hasClass("disabled-tab")
+			tab(7).hasClass("disabled-tab")
 		when:
 			previous.click()
 		then:
@@ -297,7 +296,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { sort.displayed }
 		when:
-			tab(6).click()
+			tab(7).click()
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
 		then:
@@ -312,7 +311,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			tab(1).click()
 			compose.dontSendQuestion = true
-			tab(7).click()
+			tab(8).click()
 		then:
 			waitFor { confirm.noRecipients.displayed }
 	}

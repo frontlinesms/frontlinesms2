@@ -165,9 +165,10 @@ class FsmsTagLib {
 		def controller = att.controller == "activity" ? att.instance?.shortName : att.controller
 		def target = att.target
 		def fields = expressionProcessorService.findByController(controller)
+		def hidden = att.hidden?:false
 		target = target?: "messageText"
 
-		out << '<div class="magicwand-container">'
+		out << '<div class="magicwand-container '+ (hidden?'hidden':'') +'">'
 		// TODO change this to use g.select if appropriate
 		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
 		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'

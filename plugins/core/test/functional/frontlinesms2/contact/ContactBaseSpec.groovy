@@ -49,6 +49,5 @@ class ContactBaseSpec extends grails.plugin.geb.GebSpec {
 		(11..90).each {
 			Contact.build(name:"Contact${it}", mobile:"987654321${it}", notes:'notes')
 		}
-	}
-	
+	}	
 }

@@ -1,8 +1,8 @@
-package frontlinesms2.message
+package frontlinesms2.page
 
 import frontlinesms2.*
 
-abstract class PageMessageActivity extends PageMessage {
+abstract class PageMessageActivity extends frontlinesms2.message.PageMessage {
 	static url = 'message/activity'
 	String convertToPath(Object[] args) {
 		println("Building url...")

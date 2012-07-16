@@ -1,38 +1,34 @@
 package frontlinesms2.contact
 
 import frontlinesms2.*
-import java.util.regex.*
+import frontlinesms2.popup.*
+import geb.Browser
+import grails.plugin.geb.GebSpec
 
-class CustomFieldCedSpec extends grails.plugin.geb.GebSpec {
+class CustomFieldCedSpec extends ContactBaseSpec {
 	
 	def "selecting add custom field from dropdown opens the popup"() {
-		when:
+		given:
 			Contact bob = Contact.build(name:'Bob')
-			go "contact/show/${bob.id}"
-		then:
-			at PageContactShowBob
 		when:
-			fieldSelecter.value('add-new').click()
+			to PageContactShow, bob
+			singleContactDetails.addMoreInfomation
 		then:
-			waitFor {$('div#custom-field-popup').displayed}
-			$('div#custom-field-popup').displayed
+			waitFor { at CustomFieldPopup }
 	}
 
 	def "should add the manually entered custom fields to the list "() {
-		when:
+		given:
 			Contact bob = Contact.build(name:'Bob')
-			go "contact/show/${bob.id}"
-		then:
-			at PageContactShowBob
 		when:
-			fieldSelecter.value('add-new')
+			to PageContactShow, bob
+			singleContactDetails.addMoreInfomation
+			waitFor { at CustomFieldPopup }
+			newField.value('planet')
+			ok.jquery.trigger("click")
+			at PageContactShow
 		then:
-			waitFor {$('div#custom-field-popup').displayed}
-		when:
-			$("#custom-field-name").value("planet")
-			$('#done').click()
-		then:
-			$('#custom-field-list li').find('label').text() == "planet"
+			singleContactDetails.customLabel("planet").displayed
 	}
 }
 
