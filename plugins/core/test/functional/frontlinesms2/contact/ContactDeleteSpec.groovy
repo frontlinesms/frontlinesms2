@@ -12,14 +12,14 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		given:
 			createTestContacts()
 		when:
-			to PageContactAll
+			to PageContactShow
 			singleContactDetails.delete.click()
 		then:
 			waitFor { at DeletePopup }
 		when:
 			ok.jquery.trigger("click")
 		then:
-			at PageContactAll
+			at PageContactShow
 			waitFor { notifications.flashMessage.displayed }
 			!Contact.findByName('Alice')
 	}
@@ -28,7 +28,7 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		given:
 			createTestContacts()
 		when:
-			to PageContactAll, Contact.findByName('Alice')
+			to PageContactShow, Contact.findByName('Alice')
 			contactList.selectContact 1
 		then:
 			waitFor { singleContactDetails.name.value() == 'Bob' }
@@ -43,7 +43,7 @@ class ContactDeleteSpec extends ContactBaseSpec {
 		when:
 			ok.jquery.trigger("click")
 		then:
-			at PageContactAll
+			at PageContactShow
 			waitFor { notifications.flashMessage.displayed }
 			Contact.count() == 0
 	}

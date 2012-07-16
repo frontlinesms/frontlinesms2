@@ -10,21 +10,21 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			createTestContacts()
 		when:
-			to PageContactAll
+			to PageContactShow
 		then:	
 			contactList.contacts == ['Alice', 'Bob']
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
 		when:
-			to PageContactAll
+			to PageContactShow
 		then:
 			contactList.noContent == 'No contacts here!'
 	}
 
 	def 'ALL CONTACTS menu item is selected in default view'() {
 		when:
-			to PageContactAll
+			to PageContactShow
 		then:
 			bodyMenu.selectedMenuItem == 'all contacts'
 	}
@@ -33,7 +33,7 @@ class ContactListSpec extends ContactBaseSpec {
 		given:
 			createManyContacts()
 		when:
-			to PageContactAll
+			to PageContactShow
 		then:
 			def contactNames = contactList.contacts
 			def expectedNames = (11..60).collect{"Contact${it}"}
@@ -47,7 +47,7 @@ class ContactListSpec extends ContactBaseSpec {
 			def samTina = Contact.build(name:'SaM Tina')
 			def bob = Contact.build(name:'bob')
 		when:
-			to PageContactAll
+			to PageContactShow
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
@@ -66,18 +66,18 @@ class ContactListSpec extends ContactBaseSpec {
 			samJones.addToGroups(fpGroup, true)
 			bob.addToGroups(fpGroup, true)
 		when:
-			to PageContactAll, fpGroup
+			to PageContactShow, fpGroup
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor {contactList.contacts == ['Sam Anderson', 'SAm Jones'] }
+			waitFor {contactList.contacts == ['SAm Jones', 'Sam Anderson'] }
 	}
 	
 	def "should remain on the same page when a contact is selected"() {
 		given:
 			createManyContacts()
 		when:
-			to PageContactAll
+			to PageContactShow
 			footer.nextPage.click()
 		then:
 			!footer.prevPage.disabled

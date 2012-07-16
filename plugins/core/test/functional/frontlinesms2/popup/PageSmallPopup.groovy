@@ -29,3 +29,30 @@ class CustomFieldPopup extends SmallPopup {
 		newField { $('#modalBox #custom-field-popup #custom-field-name') }
 	}
 }
+
+class GroupPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("group")
+	}
+	static content = {
+		groupName { $('#modalBox #group-details #name') }
+	}
+}
+
+class RenameGroupPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("rename group")
+	}
+	static content = {
+		groupName { $('#modalBox #name') }
+	}
+}
+
+class DeleteGroupPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("delete group")
+	}
+	static content = {
+		warningMessage { $('#modalBox div.dialog p').text().toLowerCase() }
+	}
+}

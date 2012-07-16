@@ -12,14 +12,14 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def 'groups that selected contact belongs to are shown in contact details'() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			singleContactDetails.groupList == ['Test', 'three']
 	}
 	
 	def 'existing groups that contact is not a member of can be selected from dropdown and are then added to list'() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			singleContactDetails.otherGroupOptions == ['Add to group...', 'Others', 'four']
 		when:
@@ -35,7 +35,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			def bob = Contact.findByName("Bob")
 			def bobsGroups
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			singleContactDetails.groupList.size() == 2
 			singleContactDetails.groupList.containsAll(['Test', 'three'])
@@ -45,24 +45,24 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		then:
 			waitFor { singleContactDetails.groupList.size() == 1 }
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			waitFor { singleContactDetails.groupList.size() == 2 }
 	}
 
 	def 'clicking save actually adds contact to newly selected groups'() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 			singleContactDetails.addToGroup Group.findByName('Others').id.toString()
 			singleContactDetails.save.click()
 		then:
-			at PageContactAll
+			at PageContactShow
 			Contact.findByName('Bob') in Group.findByName('Others').members
 	}
 	
 	def 'clicking save actually adds multiple contacts to newly selected groups'() {
 		when:
-			to PageContactAll
+			to PageContactShow
 			contactList.selectContact 1
 		then:
 			waitFor { singleContactDetails.name.value() == 'Bob' }
@@ -87,7 +87,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 			assert bob.isMemberOf(otherGroup)
 			assert alice.isMemberOf(otherGroup)
 		when:
-			to PageContactAll
+			to PageContactShow
 			contactList.selectContact 1
 		then:
 			waitFor { singleContactDetails.name.value() == 'Bob' }
@@ -109,7 +109,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	def 'clicking save removes contact from newly removed groups'() {
 		when:
 			def testGroup = Group.findByName('Test')
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 
 			singleContactDetails.removeGroup testGroup.id.toString()
 			singleContactDetails.save.click()
@@ -121,7 +121,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 	
 	def "should enable save and cancel buttons when new group is added"() {
 		when:
-			to PageContactAll, Contact.findByName('Bob')
+			to PageContactShow, Contact.findByName('Bob')
 		then:
 			singleContactDetails.save.disabled
 		when:

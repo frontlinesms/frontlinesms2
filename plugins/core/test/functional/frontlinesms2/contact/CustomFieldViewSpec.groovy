@@ -14,7 +14,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactAll, bob
+			to PageContactShow, bob
 		then:
 			singleContactDetails.customFields == ['na', 'lake', 'add-new']
 	}
@@ -23,7 +23,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactAll, bob
+			to PageContactShow, bob
 		then:
 			singleContactDetails.customFields == ['na', 'lake', 'add-new']
 	}
@@ -32,7 +32,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactAll, bob
+			to PageContactShow, bob
 		then:
 			singleContactDetails.contactsCustomFields == ['town']
 	}
@@ -41,7 +41,7 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 		given:
 			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactAll, bob
+			to PageContactShow, bob
 		then:
 			singleContactDetails.addCustomField 'lake'
 			def customFeild = singleContactDetails.customField 'lake'
@@ -49,58 +49,51 @@ class CustomFieldViewSpec extends ContactBaseSpec {
 			customFeild.value() == ""
 	}
 
-	def 'clicking X next to custom field in list removes it from visible list, but does not change database iff no other action is taken'() {
-		when:
+	def 'clicking X next to custom field in list removes it from visible list, but does not change database if no other action is taken'() {
+		given:
 			def bob = Contact.findByName("Bob")
 			bob.addToCustomFields(name:'lake', value: 'Erie').save(failOnError: true, flush: true)
-			def originalFields = bob.customFields
-			to PageContactShowBob
-			def lstFields = $("#custom-field-list")
-			assert lstFields.children().children('label').size() == 2
-			lstFields.find('a').first().click()
-			def lstUpdatedFields = $("#custom-field-list")
+		when:
+			to PageContactShow, bob
+			singleContactDetails.contactsCustomFields.size() == 2
+			singleContactDetails.removeCustomFeild CustomField.findByName("town").id
 		then:
-			lstUpdatedFields.children().children('label').size() == 1
-			lstUpdatedFields.children().children('label').text() == 'town'
-			bob.refresh().customFields == originalFields
+			singleContactDetails.contactsCustomFields.size() == 1
+			singleContactDetails.contactsCustomFields == ['lake']
+			bob.refresh().customFields.size() == 2
 	}
 
 	def 'clicking X next to custom field in list then saving removes it from  database'() {
+		given:
+			def bob = Contact.findByName("Bob")
 		when:
-			to PageContactShowBob
-			def lstFields = $("#custom-field-list")
-			lstFields.find('a').first().click()
-			$("#contact-editor #update-single").click()
+			to PageContactShow, bob
+			singleContactDetails.removeCustomFeild CustomField.findByName("town").id
+			singleContactDetails.save.click()
 		then:
-			waitFor { !CustomField.findByContact(Contact.findByName("Bob")) }
+			waitFor { !CustomField.findByContact(bob) }
 	}
 
-	def 'clicking save actually adds field to contact in database iff value is filled in'() {
-		when:
+	def 'clicking save actually adds field to contact in database if value is filled in'() {
+		given:
 			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
-		then:
-			at PageContactShowBob
 		when:
-			fieldSelecter.value('lake').click()
-			def inputField =  $("#contact-editor").find('input', name:'lake')
-			inputField.value('erie')
-			$("#contact-editor #update-single").click()
-			go "contact/show/${bob.id}"
-			def updatedList = $("#custom-field-list").children().children('label').collect() { it.text() }
+			to PageContactShow, bob
+			singleContactDetails.addCustomField 'lake'
+			def customFeild = singleContactDetails.customField 'lake'
+			customFeild.value('erie')
+			singleContactDetails.save.click()
 		then:
-			updatedList == ['lake', 'town']
+			singleContactDetails.contactsCustomFields == ['lake', 'town']
 	}
 
 	def "clicking save doesn't add field to contact in database if there is a blank value for field"() {
-		when:
+		given:
 			def bob = Contact.findByName("Bob")
-			go "contact/show/${bob.id}"
-		then:
-			at PageContactShowBob
 		when:
-			fieldSelecter.value('lake')
-			$("#contact-details #update-single").click()
+			to PageContactShow, bob
+			singleContactDetails.addCustomField 'lake'
+			singleContactDetails.save.click()
 		then:
 			bob.refresh()
 			bob.customFields.name == ['town']
