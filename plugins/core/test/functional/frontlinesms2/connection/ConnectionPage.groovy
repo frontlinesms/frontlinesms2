@@ -2,21 +2,44 @@ package frontlinesms2.connection
 
 import frontlinesms2.*
 
-class ConnectionPage extends geb.Page {
+class ConnectionPage extends frontlinesms2.page.PageBase {
 	static url = 'connection/list'
 	static at = {
 		assert title == "Settings > Connections"
 		true
 	}
 	static content = {
-		btnNewConnection { $('#create-connection-btn').find('a') }
-		lstConnections(wait:true) { $('#connections') }
-		selectedConnection(required:false) { lstConnections.find(".selected") }
-		btnCreateRoute(wait:true) {  $("a", text:'Create route') }
+		connectionList { module ConnectionList }
+		btnNewConnection(wait:true) { $(".btn", text: 'Add new connection') }
+	}
+}
+
+class ConnectionList extends geb.Module {
+	static base = { $('div#body-content.connections') }
+	static content = {
+		connection(required:false) { $("li.connection") }
+		selectedConnection(required:false) { $("li.connection.selected") }
+		btnCreateRoute(wait:true) {  $(".btn", text:'Create route') }
 		btnDelete(required:false) { $('.btn', text:'Delete Connection') }
-		btnTestRoute(required:false) {  $('#connections .selected a.test') }
-		txtStatus { $('.connection-status').text() }
-		connectionErrors { $('.errors').text() }
-		flashMessage { $('div.flash') }
+		btnTestRoute(required:false) {  $('.btn', text:'Send test message') }
+		status { $('p.connection-status').text() }
+	}
+}
+
+class ConnectionDialog extends ConnectionPage {
+	static at = {
+		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('connection')
+	}
+	
+	static content = {
+		connectionForm { $('#connectionForm')}
+		doneButton { $("#submit") }
+		nextPageButton { $("#nextPage") }
+		confirmName { $("#confirm-name")}
+		confirmType { $("#confirm-type")}
+		confirmPort { $("#confirm-port")}
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
 	}
 }

@@ -9,50 +9,46 @@ class GroupViewSpec extends GroupBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			groupSubmenu.children()*.text() == ['Friends', 'Listeners', 'Create new group']
+			bodyMenu.groupSubmenuLinks == ['Listeners', 'Friends', 'Create new group']
 	}
 
 	def 'Group menu item is highlighted when viewing corresponding group'() {
 		given:
 			createTestGroups()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
+			to PageContactShow, friendsGroup
 		then:
-			at PageContactShowGroupFriends
-			selectedMenuItem.text() == 'Friends'
+			bodyMenu.selectedMenuItem == 'friends'
 		when:
 			Contact c = new Contact(name:'Mildred').save(failOnError:true, flush:true)
-			c.addToGroups(Group.findByName('Friends'))
+			c.addToGroups(friendsGroup)
 			c.save(failOnError:true, flush:true)
-			go "group/show/${Group.findByName('Friends').id}"
 		then:
-			at PageContactShowGroupFriends
-			$('#contacts-menu .selected').text() == 'Friends'
+			bodyMenu.selectedMenuItem == 'friends'
 	}
 
 	def 'Group members list is displayed when viewing corresponding group'() {
 		given:
 			createTestGroupsAndContacts()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
+			to PageContactShow, friendsGroup
 		then:
-			at PageContactShowGroupFriends
-			contactsList.children()*.text().sort() == ['Bobby', 'Duchamps']
+			contactList.contacts.sort() == ['Bobby', 'Duchamps']
 	}
 
 	def 'Group members list has correct href when viewing corresponding group'() {
 		given:
 			createTestGroupsAndContacts()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
-		then:
-			at PageContactShowGroupFriends
-		when:
-			def links = contactsList.find('a')
+			to PageContactShow, friendsGroup
+			def links = contactList.contactsLink
 		then:
 			links.size() == 2
 			links.each() {
-				assert it.@href ==~ '/group/show/\\d+/contact/show/\\d+\\?.+'
+				assert it ==~ '/group/show/\\d+/contact/show/\\d+\\?.+'
 			}
 	}
 	
@@ -60,11 +56,11 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroups()
 			createManyContactsAddToGroups()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
+			to PageContactShow, friendsGroup 
 		then:
-			at PageContactShowGroupFriends
-			def contactNames = contactsList.children()*.text()
+			def contactNames = contactList.contacts
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			contactNames == expectedNames
 	}
@@ -73,20 +69,17 @@ class GroupViewSpec extends GroupBaseSpec {
 		given:
 			createTestGroups()
 			createManyContactsAddToGroups()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
+			to PageContactShow, friendsGroup 
+			footer.prevPage.disabled
+			footer.nextPage.click()
 		then:
-			at PageContactShowGroupFriends
+			!footer.prevPage.disabled
 		when:
-			$("#paging .nextLink").click()
-			$("#paging .currentStep").jquery.show();
+			contactList.selectContact 1
 		then:
-			$("#paging .currentStep").text() == "2"
-		when:
-			$('#contact-list li').children('a')[1].click()
-			$("#paging .currentStep").jquery.show();
-		then:
-			$("#paging .currentStep").text() == "2"
+			!footer.prevPage.disabled
 	}
 	
 }

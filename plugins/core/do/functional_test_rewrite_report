@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "functional tests with inline selectors:"
+grep -lr "\$(" test/functional/frontlinesms2/ | grep -v "/Page"

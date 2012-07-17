@@ -151,11 +151,11 @@ class ContactController {
 	}
 	
 	def checkForDuplicates = {
-		def foundContact = Contact.findByMobile(params.contactmobile)
+		def foundContact = Contact.findByMobile(params.number)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
 			render("true")
 		} else
-			if(!foundContact && params.contactmobile)
+			if(!foundContact && params.number)
 				render "true"
 			else
 				render "false"
@@ -178,8 +178,7 @@ class ContactController {
 			if(params.groupId) redirectParams << [groupId: params.groupId]
 			return true
 		} else if (existingContact && existingContact != contactInstance) {
-			// TODO generate link with g:link
-			flash.message = "${message(code: 'contact.exists.warn')}  <a href='/frontlinesms2/contact/show/" + Contact.findByMobileLike(params.mobile)?.id + "'>${message(code: 'contact.view.duplicate')}</g:link>"
+			flash.message = "${message(code: 'contact.exists.warn')}  " + g.link(action:'show', params:[contactId:Contact.findByMobileLike(params.mobile)?.id], g.message(code: 'contact.view.duplicate'))
 			return false
 		}
 		return false

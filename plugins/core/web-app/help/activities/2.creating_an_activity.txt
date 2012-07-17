@@ -19,4 +19,4 @@ There are currently three kinds of activities:
 [2]: activities/3.creating_a_poll
 [3]: activities/2.creating_an_activity
 [4]: activities/5.creating_an_auto-reply
-[5]: ../images/help/creating_activity.jpg
+[5]: ../images/help/creating_activity.png

@@ -40,7 +40,7 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 		matchingModemAndSim.each { c ->
 			log "    $c.id\t$c.port\t$c.serial\t$c.imsi"
 		}
-		if(matchingModemAndSim.any { it.status == RouteStatus.CONNECTED ||
+		if(matchingModemAndSim.any { it.status == ConnectionStatus.CONNECTED ||
 				(it.port != detector.portName && isPortVisible(it.port)) }) {
 			log "There was a created route already on this device."
 			return
@@ -48,7 +48,7 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 
 		def connectionToStart
 		def exactMatch = matchingModemAndSim.find { it.port == detector.portName }
-		if(exactMatch && exactMatch.status != RouteStatus.CONNECTED) {
+		if(exactMatch && exactMatch.status != ConnectionStatus.CONNECTED) {
 			log "Found exact match: $exactMatch"
 			connectionToStart = exactMatch
 		} else {

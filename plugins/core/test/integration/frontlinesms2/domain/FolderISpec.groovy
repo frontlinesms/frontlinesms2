@@ -62,14 +62,14 @@ class FolderISpec extends grails.plugin.spock.IntegrationSpec {
 			m.messageOwner == f
 	}
 
-	def 'folder name must be unique'(){
+	def 'folder name must be unique and case insensitive'(){
 		given:
 			controller.params.name == 'folder'
 			controller.save()
 		when:
-			def f = new Folder(name:'folder').save(flush:true)
+			def f = new Folder(name:'FolDeR').save(failOnError:true)
 		then:
-			Folder.findByName("folder").count() == 1
+			Folder.findByNameIlike("folder").count() == 1
 			controller.flash.message == 'Failed to create Folder'
 	}
 }

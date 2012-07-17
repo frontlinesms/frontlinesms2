@@ -49,8 +49,8 @@ The connection will be deleted. If this was your active connection then you will
 [5]: settings/4b.clickatell
 [6]: settings/4a.intellisms
 [7]: settings/5.manually_adding_device
-[8]: ../images/help/settings_connections.jpg
-[9]: ../images/help/edit_connection.jpg
-[10]: ../images/help/phone_modem_confirm.jpg
-[11]: ../images/help/destroy_route.jpg
-[12]: ../images/help/delete_connection.jpg
+[8]: ../images/help/settings_connections.png
+[9]: ../images/help/edit_connection.png
+[10]: ../images/help/phone_modem_confirm.png
+[11]: ../images/help/destroy_route.png
+[12]: ../images/help/delete_connection.png

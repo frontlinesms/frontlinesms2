@@ -11,7 +11,10 @@ function showMultipleDetailsPanel(itemTypeString) {
 	var multipleDetails = $("#multiple-"+itemTypeString+'s');
 	multipleDetails.show();
 	fsmsButton.findAndApply("input[type='submit']", multipleDetails);
-	selectmenuTools.refresh(".dropdown");
+	if (itemTypeString == "contact")
+		selectmenuTools.refresh("#multi-group-dropdown");
+	else
+		selectmenuTools.refresh("#multiple-messages #move-actions");
 }
 
 function itemCheckChanged(itemTypeString, itemId) {

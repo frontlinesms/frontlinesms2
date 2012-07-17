@@ -32,5 +32,5 @@ Clicking on a single activity will take you to that activities detail view which
 [7]: archive/1.getting_around_the_archive_tab
 [8]: archive/3.archiving_activities_folders
 [9]: archive/2.archiving_messages
-[10]: ../images/help/activity_archive.jpg
-[11]: ../images/help/activity_archive_detail.jpg
+[10]: ../images/help/activity_archive.png
+[11]: ../images/help/activity_archive_detail.png

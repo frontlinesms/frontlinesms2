@@ -13,7 +13,7 @@
 		</li>
 	</ul>
 </div>
-<div class="input required">
+<div class="input">
 	<label for="question">
 		<g:message code="poll.question.prompt"/>
 	</label>
@@ -27,23 +27,28 @@
 <r:script>
 	$("input[name='dontSendMessage']").live("change", function() {
 		if(isGroupChecked("dontSendMessage")) {
-			disableTab(4);
 			disableTab(5);
+			disableTab(6);
 			//update confirm screen
 			updateConfirmationMessage();
 		} else {
-			enableTab(4);
 			enableTab(5);
+			enableTab(6);
 		}
 	});
 
-	$("input[name='pollType']").live("change", function() {
+	var setPollType = function() {
 		if ($("input[name='pollType']:checked").val() == "yesNo") {
 			disableTab(1);
+			resetResponses();
+			addRespectiveAliases();
 		} else {
 			enableTab(1);
+			resetResponses();
 		}
 		autoUpdate = true;
 		updateConfirmationMessage();
-	});
+	}
+
+	$("input[name='pollType']").live("change", setPollType);
 </r:script>

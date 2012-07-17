@@ -25,8 +25,9 @@
 				<fsms:render template="/message/trash_list"/>
 			</g:if>
 			<g:else>
+
 				<g:each in="${messageInstanceList}" status="i" var="m">
-					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${m.hasSent ? 'send-sent' : '' } ${m.hasPending ? 'send-pending' : '' } ${m.hasFailed ? 'send-failed' : '' }" id="message-${m.id}">
+					<tr class="message-preview ${m == messageInstance ? 'selected initial-selection' : ''} ${m.read?'read':'unread'} ${ 'send' + (m.hasSent? '-sent':'') + (m.hasPending ? '-pending' : '') + (m.hasFailed ? '-failed' : '') }" id="message-${m.id}">
 						<td colspan="1" class="message-select-cell">
 							<g:checkBox class="message-select message-select-checkbox" name="message-select" id="message-select-${m.id}" checked="${params.checkedId == m.id+'' ? 'true': 'false'}" value="${m.id}" onclick="itemCheckChanged('message', ${m.id});"/>
 							<g:hiddenField name="src-${m.id}" value="${m.src}" disabled="true"/>

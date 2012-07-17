@@ -18,7 +18,7 @@ class Fconnection {
 	static getNonnullableConfigFields = { clazz ->
 		def fields = clazz.configFields
 		if(fields instanceof Map) return fields.getAllValues()?.findAll { field -> !clazz.constraints[field].blank }
-		else return fields.findAll { field -> !clazz.constraints[field].nullable }
+		else return fields.findAll { field -> if(!(clazz.metaClass.hasProperty(null, field).type in [Boolean, boolean])){ !clazz.constraints[field].nullable} }
 	}
 
 	static mapping = {
@@ -28,7 +28,7 @@ class Fconnection {
 	String name
 	
 	def getStatus() {
-		fconnectionService.getRouteStatus(this)	
+		fconnectionService.getConnectionStatus(this)
 	}
 	
 	List<RouteDefinition> getRouteDefinitions() {

@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="name"><g:message code="poll.prompt"/></label>
-	<g:textField name="name" value="${activityInstanceToEdit?.name}"/>
+	<g:textField name="name" class="required" value="${activityInstanceToEdit?.name}"/>
 </div>
 <div class="confirm">
 	<h2><g:message code="poll.details.label"/></h2>
@@ -26,7 +26,11 @@
 		</tr>
 		<tr>
 			<td><g:message code="quickmessage.count.label"/></td>
-			<td id="confirm-messages-count"><span id="messages-count"></span> <g:message code="quickmessage.messages.count"/></td>
+			<td id="confirm-messages-count"><span id="messages-count">0</span> <g:message code="quickmessage.messages.count"/></td>
+		</tr>
+		<tr>
+			<td><g:message code="poll.alias"/></td>
+			<td id="poll-confirm-aliases"/>
 		</tr>
 	</table>
 </div>

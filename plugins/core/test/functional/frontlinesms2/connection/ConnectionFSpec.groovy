@@ -13,8 +13,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to ConnectionPage
 		then:
-			lstConnections.tag() == 'div'
-			lstConnections.text().contains('You have no connections configured.')
+			connectionList.displayed
+			connectionList.text().contains('You have no connections configured.')
 	}
 	
 	def 'There is a Not Connected label shown for inactive connection'() {
@@ -22,7 +22,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			createTestEmailConnection()
 			to ConnectionPage
 		then:
-			txtStatus == "Not connected"
+			connectionList.status == "Not connected"
 	}
 
 	def 'there is a DELETE button shown for inactive connection'() {
@@ -30,7 +30,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			createTestEmailConnection()
 			to ConnectionPage
 		then:
-			btnDelete.displayed
+			connectionList.btnDelete.displayed
 	}
 	
 	def 'should show "create route" button for inactive connection '() {
@@ -38,7 +38,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			createTestEmailConnection()
 			to ConnectionPage
 		then:
-			btnCreateRoute.displayed
+			connectionList.btnCreateRoute.displayed
 	}
 
 	def 'DELETE button should remove selected fconnection from the list'() {
@@ -46,10 +46,10 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			createTestEmailConnection()
 			to ConnectionPage
 		when:
-			btnDelete.click()
+			connectionList.btnDelete.click()
 		then:
-			flashMessage.text().contains("Connection test email connection was deleted.")
-			lstConnections.text().contains('You have no connections configured.')
+			notifications.flashMessagesText.contains("Connection test email connection was deleted.")
+			connectionList.text().contains('You have no connections configured.')
 	}
 
 	def 'Send test message button for particular connection appears when that connection is selected and started'() {
@@ -58,15 +58,15 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to ConnectionPage
+			waitFor{ connectionList.btnCreateRoute.displayed }
 		then:
-			$('#connections .selected .test').isEmpty()
+			!connectionList.btnTestRoute.displayed
 		when:
-			waitFor{ $("#connections .selected .route") }
-			btnCreateRoute.click()
+			connectionList.btnCreateRoute.click()
 		then:
-			waitFor('slow') { txtStatus == "Connected" }
-			waitFor { btnTestRoute }.@text.trim() == "Send test message"
-			btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
+			waitFor('slow') { connectionList.status == "Connected" }
+			waitFor { connectionList.btnTestRoute.displayed }
+			connectionList.btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
 	}
 
 	def 'delete button is not displayed for a connected Fconnection'() {
@@ -75,10 +75,10 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
 			to ConnectionPage
-			btnCreateRoute.click()
+			connectionList.btnCreateRoute.click()
 		then:
-			waitFor('slow') { txtStatus == "Connected" }
-			!btnDelete.displayed
+			waitFor('very slow') { connectionList.status == "Connected" }
+			!connectionList.btnDelete.displayed
 	}
 	
 	def 'The first connection in the connection list page is selected'() {
@@ -86,19 +86,9 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			createTestEmailConnection()
 			to ConnectionPage
 		then:
-			$('#connections .selected').size() == 1
+			connectionList.selectedConnection.size() == 1
 	}
-	
-	def 'clicking on a connection shows us more details'() {
-		given:
-			createTestSmsConnection()
-			to ConnectionPage
-		when:
-			lstConnections.find('h2').click()
-		then:
-			$('title').text() == "Settings > Connections > MTN Dongle"
-	}
-	
+
 	def 'creating a new fconnection causes a refresh of the connections list'(){
 		given:
 			createTestEmailConnection()
@@ -120,9 +110,8 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			doneButton.click()
 		then:
-			waitFor { selectedConnection.text().contains('name') }
-			println "TEXT: ${lstConnections.find('li')*.text()}"
-			lstConnections.find('li').size() == 2
+			waitFor { connectionList.selectedConnection.text().contains('name') }
+			connectionList.connection.size() == 2
 	}
 
 	def 'dialog should not close after confirmation screen unless save is successful'(){
@@ -168,7 +157,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			doneButton.click()
 		then:
-			waitFor { selectedConnection.text().contains('New IntelliSMS Connection') }
+			waitFor { connectionList.selectedConnection.text().contains('New IntelliSMS Connection') }
 	}
 	
 	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
@@ -213,24 +202,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		MockModemUtils.initialiseMockSerial([
 				COM99:new CommPortIdentifier('COM99', MockModemUtils.createMockPortHandler())])
 		SmslibFconnection.build(name:'MTN Dongle', port:'COM99')
-	}
-}
-
-class ConnectionDialog extends ConnectionPage {
-	static at = {
-		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('connection')
-	}
-	
-	static content = {
-		connectionForm { $('#connectionForm')}
-		doneButton { $("#submit") }
-		nextPageButton { $("#nextPage") }
-		confirmName { $("#confirm-name")}
-		confirmType { $("#confirm-type")}
-		confirmPort { $("#confirm-port")}
-		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
-		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
-		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
 	}
 }
 

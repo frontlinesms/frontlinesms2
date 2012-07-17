@@ -12,9 +12,12 @@ class Folder extends MessageOwner {
 	static mapping = {
 		version false
 	}
-	
+
 	static constraints = {
-		name(blank:false, nullable:false, maxSize:255, unique:true)
+		name(blank:false, nullable:false, maxSize:255, validator: { val, obj ->
+			def similarName = Folder.findByNameIlike(val)
+			return !similarName || obj.id == similarName.id
+			})
 	}
 
 //> ACCESSORS

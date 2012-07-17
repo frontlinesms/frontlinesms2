@@ -112,8 +112,6 @@ We will then get to work on integrating your translation into the software. We g
 [Changing languages][4]  
 [Configuring Detected Devices][5]  
 
-[1]: Preparation
 [2]: http://notepad-plus-plus.org/
-[3]: HowToTranslateFrontlineSMSVersion2
-[4]: settings/2.changing_languages.txt
-[5]: settings/4.setting_up_a_device.txt
+[4]: settings/2.changing_languages
+[5]: settings/4.setting_up_a_device

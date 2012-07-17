@@ -12,14 +12,14 @@ To send a quick message, click on this icon to get started:  <IconPicture>
   
 1.  The following screen will appear. You can enter the message you want to send here. 
 
-(screenshot dialog)
+![Quick Message Dialog][13]
  
 If the input area is too small, you can resize it by click in the bottom right hand corner of the text box (2) and dragging it to the size you want.  
 When you have finished entering your message, click "next".
 
 2.  The following screen will allow you to choose who to send the message to:
 
-(screenshot dialog)
+![Select Recipients][14]
 
 There are a few ways to choose recipients for your message:  
 You can enter the number manually at the top and click 'add'. This will add the number to the recipient list and allow you to enter another number if you want to send the message to multiple people.  
@@ -42,7 +42,7 @@ If this is okay, clicking send will complete the action.
 
 ### Sending a Message from the Contact Screen
 
-(screenshot)
+![Sending a Quick Message From a Contact][15]
 
 On the contact screen, clicking on the arrow icon (4) will allow you to send a message or an e-mail to that number or address.
 
@@ -68,4 +68,7 @@ Clicking 'send' will complete the action.
 [9]: activities/3.creating_a_poll
 [10]: messages/7.pending
 [11]: activities/4.creating_an_announcement
-[12]: ../images/help/quick_message1.jpg
+[12]: ../images/help/quick_message1.png
+[13]: ../images/help/quickmessage2.png
+[14]: ../images/help/quickmessage3.png
+[15]: ../images/help/quickmessagecontact.png

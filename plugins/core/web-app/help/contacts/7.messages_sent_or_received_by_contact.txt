@@ -26,4 +26,4 @@ You can [export][5] these messages using the "Export" button. More details can b
 [7]: messages/9.exporting
 [8]: contacts/5.creating_a_smart_group
 [9]: contacts/4.creating_a_group
-[10]: ../images/help/view_sent_received_messages.jpg
+[10]: ../images/help/view_sent_received_messages.png

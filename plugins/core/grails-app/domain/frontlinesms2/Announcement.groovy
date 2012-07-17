@@ -9,6 +9,10 @@ class Announcement extends Activity {
 	}
 
 	static constraints = {
+		name(blank:false, nullable:false, validator: { val, obj ->
+			def similarName = Announcement.findByNameIlike(val)
+			return !similarName|| obj.id == similarName.id
+			})
 		messages(nullable:false)
 	}
 }

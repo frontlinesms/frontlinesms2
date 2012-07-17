@@ -25,6 +25,10 @@ grails.project.dependency.resolution = {
 		build(":tomcat:$grailsVersion", ":release:1.0.0") {
 			export = false
 		}
+
+		runtime ":database-migration:1.0"
+		runtime ":resources:1.1.6"
+		runtime ":quartz2:0.2.3"
 	}
 }
 

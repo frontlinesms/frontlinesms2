@@ -1,58 +1,63 @@
 package frontlinesms2.contact
 
+import frontlinesms2.popup.*
 import frontlinesms2.*
 
 class GroupCedSpec extends GroupBaseSpec {
 	
 	def 'button to save new group is displayed and works'() {
 		when:
-			to PageContactCreateGroup
+			to PageContactShow
 			def initNumGroups = Group.count()
-			$("li#create-group a").click()
-			waitFor { $("#modalBox").displayed}
-			$('#group-details input', name: "name").value('People')
-			$("#done").click()
-			waitFor {$("a", text: "People").displayed}
+			bodyMenu.newGroup.click()
+			waitFor { at GroupPopup }
+			groupName.value('People')
+			ok.jquery.trigger("click")
 		then:
+			at PageContactShow
+			waitFor { bodyMenu.getGroupLink "People" }
 			assert Group.count() == (initNumGroups + 1)
 	}
 	
 	def 'More action dropdown has option to rename the group'(){
 		given:
 			createTestGroupsAndContacts()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
+			to PageContactShow, friendsGroup
 		then:
-			at PageContactShowGroupFriends
-			waitFor { moreGroupActions.displayed }
+			waitFor { header.groupHeaderSection.displayed }
 		when:
-			$('#group-actions').value("rename").click()
+			header.moreGroupActions.value("rename").click()
 		then:
-			waitFor{ $('#ui-dialog-title-modalBox').displayed}
+			waitFor{ at RenameGroupPopup }
 		when:
-			$("#name").value("Renamed Group")
-			$('#done').click()
+			groupName.value("Renamed Group")
+			ok.jquery.trigger("click")
 		then:
-			waitFor{ $('a', text:'Renamed Group') }
-			$('#group-title').text().equalsIgnoreCase('Renamed Group (2)')
+			at PageContactShow
+			waitFor{ bodyMenu.getGroupLink "Renamed Group" }
+			header.groupHeaderTitle.text().equalsIgnoreCase('Renamed Group (2)')
 	}
 	
 	def 'More action dropdown has option to delete the group and opens a confirmation popup'(){
 		given:
 			createTestGroupsAndContacts()
+			def friendsGroup = Group.findByName("Friends")
 		when:
-			go "group/show/${Group.findByName('Friends').id}"
+			to PageContactShow, friendsGroup
 		then:
-			at PageContactShowGroupFriends
-			waitFor { moreGroupActions.displayed }
+			waitFor { header.groupHeaderSection.displayed }
 		when:
-			moreGroupActions.value("delete").click()
+			header.moreGroupActions.value("delete").click()
 		then:
-			waitFor{ $('#ui-dialog-title-modalBox').displayed}
+			waitFor{ at DeleteGroupPopup }
 		when:
-			$('#done').click()
+			warningMessage == 'Are you sure you want to delete Friends? WARNING: This cannot be undone'
+			ok.jquery.trigger("click")
 		then:
-			!Group.findByName('Friends')
+			at PageContactShow
+			bodyMenu.groupSubmenuLinks == ['Listeners', 'Create new group']
 	}
 }
 

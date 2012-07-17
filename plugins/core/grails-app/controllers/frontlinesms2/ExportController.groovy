@@ -58,7 +58,7 @@ class ExportController {
 				break
 		}
 		
-		generateMessageReport(messageInstanceList)
+		generateMessageReport(messageInstanceList.unique())
 	}
 	
 	def contactWizard = {
@@ -83,8 +83,8 @@ class ExportController {
 	private def generateMessageReport(messageInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "src", "dst", "text", "date"]
-		Map labels = ["id":message(code: 'export.database.id'), "src":message(code: 'export.message.source'), "dst":message(code: 'export.message.destination'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
+		List fields = ["id", "inboundContactName", "src", "outboundContactList", "dispatches.dst", "text", "date"]
+		Map labels = ["id":message(code: 'export.database.id'), "inboundContactName":message(code: 'export.message.source.name'),"src":message(code: 'export.message.source.mobile'), "outboundContactList":message(code: 'export.message.destination.name'), "dispatches.dst":message(code: 'export.message.destination.mobile'), "text":message(code: 'export.message.text'), "date":message(code: 'export.message.date.created')]
 		Map parameters = [title: message(code: 'export.message.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Message_Export_${formatedTime}.${params.format}")
 		try{
@@ -98,8 +98,23 @@ class ExportController {
 	private def generateContactReport(contactInstanceList) {
 		def currentTime = new Date()
 		def formatedTime = dateToString(currentTime)
-		List fields = ["id", "name", "mobile", "email", "notes"]
-		Map labels = ["id": message(code: 'export.database.id'), "name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes')]
+		List fields = ["name", "mobile", "email", "notes", "groupMembership"]
+		Map labels = params.format == "csv" ? 
+			["name":"Name", "mobile":"Mobile Number", "email":"E-mail Address", "notes":"Notes", "groupMembership":"Group(s)"]
+			: ["name":message(code: 'export.contact.name'), "mobile":message(code: 'export.contact.mobile'), "email":message(code: 'export.contact.email'), "notes":message(code: 'export.contact.notes'), "groupMembership":message(code: 'export.contact.groups')]
+		// add custom fields
+		def customFields = CustomField.getAllUniquelyNamed()
+		customFields.each { field ->
+			fields << field
+			labels << ["{$field}":field]
+			contactInstanceList.each { contact ->
+				contact.metaClass."${field}" = (contact.customFields.find { it.name == field})?.value
+			}
+		}
+		// add groups
+		contactInstanceList.each { contact ->
+			contact.metaClass.groupMembership = contact.groups*.name.join("\\\\")
+		}
 		Map parameters = [title: message(code: 'export.contact.title')]
 		response.setHeader("Content-disposition", "attachment; filename=FrontlineSMS_Contact_Export_${formatedTime}.${params.format}")
 		try{

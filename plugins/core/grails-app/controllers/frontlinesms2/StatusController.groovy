@@ -10,7 +10,7 @@ class StatusController {
 
 	def trafficLightIndicator = {
 		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == RouteStatus.CONNECTED)}) ? 'green' : 'red'
+		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
 		render text:color, contentType:'text/plain'
 	}
 	
@@ -51,8 +51,6 @@ class StatusController {
 	private def getFilters() {
 			def groupInstance = params.groupId? Group.get(params.groupId): null
 			params.rangeOption = params.rangeOption ?: "two-weeks"
-			println "FIXME VANEYCK Fix filtering messages by activities or groups "
-			//FIXME VANEYCK Fix filtering messages by activities or groups 
 			[groupInstance: groupInstance,
 					activityId: params.activityId,
 					groupInstanceList : Group.findAll(),

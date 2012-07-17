@@ -117,7 +117,13 @@ class FsmsTagLib {
 		// specially for the view
 		def instanceClass = att.instance?.getClass()?: att.instanceClass
 		def htmlKey = (att.fieldPrefix!=null? att.fieldPrefix: instanceClass?instanceClass.shortName:'') + att.field
-		def val = att.instance?."$groovyKey"
+		def val
+		if(att.instance) {
+			val = att.instance?."$groovyKey"
+		} else {
+			val = instanceClass?.defaultValues?."$groovyKey"?:null
+		}
+		
 		
 		['instance', 'instanceClass'].each { att.remove(it) }
 		att += [name:htmlKey, value:val]
@@ -155,12 +161,14 @@ class FsmsTagLib {
 	}
 
 	def magicWand = { att ->
-		def controller = att.controller
+		// edit of activities goes through generic ActivityController, so need to check instance type in this case
+		def controller = att.controller == "activity" ? att.instance?.shortName : att.controller
 		def target = att.target
 		def fields = expressionProcessorService.findByController(controller)
+		def hidden = att.hidden?:false
 		target = target?: "messageText"
 
-		out << '<div class="magicwand-container">'
+		out << '<div class="magicwand-container '+ (hidden?'hidden':'') +'">'
 		// TODO change this to use g.select if appropriate
 		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
 		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'
@@ -176,7 +184,7 @@ class FsmsTagLib {
 	def trafficLightStatus = { att ->
 		out << '<span id="status-indicator" class="indicator '
 		def connections = Fconnection.list()
-		def color = (connections && connections.status.any {(it == RouteStatus.CONNECTED)}) ? 'green' : 'red'
+		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
 		out << color
 		out << '"></span>'
 	}

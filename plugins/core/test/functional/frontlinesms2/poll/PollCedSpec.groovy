@@ -3,6 +3,7 @@ package frontlinesms2.poll
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.message.PageMessagePending
+import frontlinesms2.popup.*
 import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -20,91 +21,97 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams'
 		then:
-			waitFor { header.title == 'football teams poll' }
+			header.title == 'football teams poll'
 		when:
 			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc('Alice')
 		then:
-			waitFor { header.title == 'football teams poll' }
+			header.title == 'football teams poll'
 		when:
 			to PageMessagePoll, Poll.findByName('Football Teams').id, 2
 		then:
-			waitFor { header.title == 'football teams poll' }
+			header.title == 'football teams poll'
 
 	}
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
 			launchPollPopup('yesNo', null)
-
 		then:
-			pollDialog.errorPanel.displayed
+			errorPanel.displayed
 		when:
-			pollDialog.tab(1).click()
-			pollDialog.compose.question = "question"
-			pollDialog.compose.dontSendQuestion.click()
-			pollDialog.tab(7).click()
+			tab(1).click()
+			compose.question = "question"
+			compose.dontSendQuestion.click()
+			setAliases();
+			tab(8).click()
 		then:
-			waitFor { pollDialog.confirm.pollName.displayed }
+			confirm.pollName.displayed
 		when:
-			pollDialog.confirm.pollName = "POLL NAME"
-			pollDialog.send.click()
+			confirm.pollName = "POLL NAME"
+			send.click()
 		then:
-			waitFor { pollDialog.summary.displayed }
+			waitFor { summary.displayed }
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
 	
 	def "should require keyword if sorting is enabled"() {
 		when:
 			launchPollPopup()
+			setAliases()
+			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
-			pollForm.keyword().disabled
+			waitFor { sort.displayed }
+			sort.keyword.disabled
 		when:
-			pollForm.enableKeyword = 'true'
-			!pollForm.keyword
+			sort.sort.click()
 		then:
-			waitFor { !pollForm.keyword().disabled }
-			!pollForm.keyword
+			waitFor { !sort.keyword.disabled }
 		when:
 			next.click()
 		then:
-			waitFor { errorMessage.displayed }
-			pollForm.keyword().hasClass('error')
-			autoSortTab.displayed
+			waitFor { errorPanel.displayed }
+			sort.keyword.hasClass('error')
+			sort.displayed
 		when:
-			pollForm.keyword = 'trigger'
+			sort.keyword = 'trigger'
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
+			setAliases()
+			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
-			responseListTabLink.hasClass("ui-state-disabled")
-			selectRecipientsTabLink.hasClass("ui-state-disabled")
+			waitFor { confirm.displayed }
+			tab(2).hasClass("disabled-tab")
+			tab(7).hasClass("disabled-tab")
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { enterQuestionTab.displayed }
+			waitFor { aliases.displayed }
+		when:
+			previous.click()
+		then:
+			waitFor { compose.displayed }
 	}
 
 
@@ -112,118 +119,128 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('multiple')
 		then:	
-			waitFor { responseListTab.displayed }
+			waitFor { response.displayed }
 	}
 
 	def "should not proceed when less than 2 choices are given for a multi choice poll"() {
 		when:
 			launchPollPopup('multiple', 'question')
 		then:
-			waitFor { responseListTab.displayed }
+			waitFor { response.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { errorMessage.displayed }
-			responseListTab.displayed
+			waitFor { errorPanel.displayed }
+			response.displayed
 	}
 
 	def "should not proceed when the poll is not named"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
+			setAliases()
+			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { autoreply.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
+			waitFor { confirm.displayed }
 		when:
-			done.click()
+			send.click()
 		then:
-			waitFor { errorMessage.displayed }
-			confirmationTab.displayed
+			waitFor { errorPanel.displayed }
+			confirm.displayed
 	}
 	
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
-			waitFor { responseListTab.displayed }
-			choiceALabel.hasClass('field-enabled')
-			choiceBLabel.hasClass('field-enabled')
-			!choiceCLabel.hasClass('field-enabled')
-			!choiceDLabel.hasClass('field-enabled')
-			!choiceELabel.hasClass('field-enabled')
+			waitFor { response.displayed }
+			response.label("A").hasClass('field-enabled')
+			response.label("B").hasClass('field-enabled')
+			!response.label("C").hasClass('field-enabled')
+			!response.label("D").hasClass('field-enabled')
+			!response.label("E").hasClass('field-enabled')
 		when:
-			pollForm.choiceA = 'Never'
-			pollForm.choiceB = 'Once a day'
+			response.choice("A").jquery.val('Never')
+			response.choice("B").jquery.val('Once a day')
+			// need to trigger keyup to enable next field
+			response.choice("B").jquery.trigger('keyup')
+
 		then:
-			waitFor { choiceCLabel.hasClass('field-enabled') }
+			waitFor { response.label("C").hasClass('field-enabled') }
 		when:
-			pollForm.choiceC = 'Twice a day'
+			response.choice("C").jquery.val('Twice a day')
+			// need to trigger keyup to enable next field
+			response.choice("C").jquery.trigger('keyup')
 		then:
-			waitFor { choiceDLabel.hasClass('field-enabled') }
+			waitFor { response.label("D").hasClass('field-enabled') }
 			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			setAliases()
+			next.click()
+			waitFor { sort.displayed }
 		when:
-			pollForm.enableKeyword = true
-			pollForm.keyword = 'coffee'
+			sort.sort.click()
+			sort.keyword = 'coffee'
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
-			pollForm.autoreplyText().disabled
+			waitFor { autoreply.displayed }
+			autoreply.text.disabled
 		when:
-			pollForm.enableAutoreply = true
+			autoreply.autoreplyCheck = true
 		then:
-			waitFor { !pollForm.autoreplyText().disabled }
+			waitFor { !autoreply.text.disabled }
 		when:
 			
-			pollForm.autoreplyText = "Thanks for participating..."
+			autoreply.text = "Thanks for participating..."
 		then:
 			waitFor {
 				// using jQuery here as seems to be a bug in getting field value the normal way for textarea
-				pollForm.autoreplyText().jquery.val() == "Thanks for participating..."
+				autoreply.text.jquery.val() == "Thanks for participating..."
 			}
 		when:
-			pollForm.enableAutoreply = false
+			autoreply.autoreplyCheck = false
 		then:	
-			waitFor { pollForm.autoreplyText().disabled }
-			pollForm.autoreplyText().jquery.val() == "Thanks for participating..."
+			waitFor { autoreply.text.disabled }
+			autoreply.text.jquery.val() == "Thanks for participating..."
 		when:
-			pollForm.enableAutoreply = true
+			autoreply.autoreplyCheck = true
 			next.click()
 		then:
-			waitFor { editMessageTab.displayed }
-		when:
-			next.click()
-		then:
-			waitFor { selectRecipientsTab.displayed }
+			waitFor { edit.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { errorMessage.displayed }
-		when:
-			pollForm.address = '1234567890'
-			addManualAddress.click()
-			pollForm.address = '1234567890'
-			addManualAddress.click()
-		then:
-			waitFor { $('.manual').displayed }
-			$("#recipient-count").text() == "1"
+			waitFor { recipients.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
-			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
-			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
-			$("#auto-reply-read-only-text").text() == "Thanks for participating..."
+			waitFor { errorPanel.displayed }
 		when:
-			pollForm.name = "Coffee Poll"
-			done.click()
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
+		then:
+			waitFor { recipients.manual.size() == 1 }
+			recipients.count == 1
+		when:
+			next.click()
+		then:
+			waitFor { confirm.displayed }
+			confirm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
+			confirm.recipientCount == "1 contacts selected"
+			confirm.messageCount == "1 messages will be sent"
+			confirm.autoreply == "Thanks for participating..."
+		when:
+			confirm.pollName = "Coffee Poll"
+			send.click()
 		then:
 			waitFor { Poll.findByName("Coffee Poll") }
 	}
@@ -232,52 +249,57 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
 		then:
-			waitFor { responseListTab.displayed }
-			choiceALabel.hasClass('field-enabled')
-			choiceBLabel.hasClass('field-enabled')
+			waitFor { response.displayed }
+			response.label("A").hasClass('field-enabled')
+			response.label("B").hasClass('field-enabled')
 		when:
-			pollForm.choiceA = 'Never'
-			pollForm.choiceB = 'Once a day'
+			response.choice("A").jquery.val('Never')
+			response.choice("B").jquery.val('Once a day')
+			response.choice("B").jquery.trigger("keyup")
 		then:
-			waitFor { choiceCLabel.hasClass('field-enabled') }
+			waitFor { response.label("C").hasClass('field-enabled') }
 		when:
-			pollForm.choiceC = 'Twice a day'
+			response.choice("C").jquery.val('Twice a day')
+			response.choice("C").jquery.trigger("keyup")
 		then:
-			waitFor { choiceDLabel.hasClass('field-enabled') }
+			waitFor { response.label("D").hasClass('field-enabled') }
+		when:
+			setAliases()
+			next.click()
+		then:
+			waitFor { sort.displayed }
+		when:
+			sort.sort.click()
+			sort.keyword = 'coffee'
+			next.click()
+		then:
+			waitFor { autoreply.displayed }
 		when:
 			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { edit.displayed }
+			edit.text.jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
 		when:
-			pollForm.enableKeyword = true
-			pollForm.keyword = 'coffee'
+			edit.text.value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
 			next.click()
 		then:
-			waitFor { autoReplyTab.displayed }
+			waitFor { recipients.displayed }
 		when:
-			next.click()
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
 		then:
-			waitFor { editMessageTab.displayed }
-			pollForm.messageText().jquery.val() == 'How often do you drink coffee?\nReply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day.'
-		when:
-			$("#messageText").value('How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating')
-			next.click()
-		then:
-			waitFor { selectRecipientsTab.displayed }
-		when:
-			pollForm.address = '1234567890'
-			addManualAddress.click()
-		then:
-			waitFor { $('.manual').displayed }
+			waitFor { recipients.manual.size() == 1 }
+			recipients.count == 1
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
-			$("#poll-message").text() == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
-			$("#confirm-recipients-count #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
+			waitFor { confirm.displayed }
+			confirm.message == 'How often do you drink coffee? Reply "COFFEE A" for Never, "COFFEE B" for Once a day, "COFFEE C" for Twice a day. Thanks for participating'
+			confirm.recipientCount == "1 contacts selected"
+			confirm.messageCount == "1 messages will be sent"
 		when:
-			pollForm.name = "Coffee Poll"
-			done.click()
+			confirm.pollName = "Coffee Poll"
+			send.click()
 		then:
 			waitFor {Poll.findByName("Coffee Poll") }
 	}
@@ -286,25 +308,28 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', "Will you send messages to this poll")
 		then:
-			waitFor { autoSortTab.displayed }
+			setAliases()
+			next.click()
+			waitFor { sort.displayed }
 		when:
-			goToTab(6)
-			pollForm.address = '1234567890'
-			addManualAddress.click()
+			tab(7).click()
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
 		then:
-			waitFor { $('.manual').displayed }
+			waitFor { recipients.manual.size() == 1 }
+			recipients.count == 1
 		when:
 			next.click()
 		then:
-			waitFor { confirmationTab.displayed }
-			$("#confirm-recipients-count  #sending-messages").text() == "1 contacts selected (1 messages will be sent)"
+			waitFor { confirm.displayed }
+			confirm.recipientCount == "1 contacts selected"
+			confirm.messageCount == "1 messages will be sent"
 		when:
-			goToTab(1)
-			pollForm."dontSendMessage" = true
-			goToTab(7)
+			tab(1).click()
+			compose.dontSendQuestion = true
+			tab(8).click()
 		then:
-			waitFor { $("#no-recipients").displayed }
-			$("#no-recipients").text() == "None"
+			waitFor { confirm.noRecipients.displayed }
 	}
 	
 	def "can launch export popup"() {
@@ -314,53 +339,58 @@ class PollCedSpec extends PollBaseSpec {
 			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
 			poll.addToResponses(key: 'Unknown', value: 'Unknown')
 			poll.save(failOnError:true, flush:true)
-			go 'message/inbox'
+			to PageMessageInbox
 		then:
 			at PageMessageInbox
 		when:	
-			$("a", text: "Who is badder? poll").click()
+			bodyMenu.activityLink("Who is badder?").click()
 		then:
-			waitFor { title == "Poll" }
+			waitFor { header.title == "who is badder? poll" }
+			at PageMessagePoll
 		when:
-			$(".more-actions").value("export").click()
+			moreActions.value("export").click()
 		then:	
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { at ExportDialog }
 	}
 
 	def "can rename a poll"() {
-		given:
+		when:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
 			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
 			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
 			poll.addToResponses(key: 'Unknown', value: 'Unknown')
 			poll.save(failOnError:true, flush:true)
-		when:
 			to PageMessageInbox
-			$("a", text: "Who is badder? poll").click()
 		then:
-			waitFor { title == "Poll" }
+			at PageMessageInbox
+		when:	
+			bodyMenu.activityLink("Who is badder?").click()
+		then:
+			waitFor { header.title == "who is badder? poll" }
+			at PageMessagePoll
 		when:
-			$(".more-actions").value("rename").click()
+			moreActions.value("rename").click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { at RenameDialog }
 		when:
-			$("#name").value("Rename poll")
-			$("#done").click()
+			name = "rename poll"
+			done.click()
 		then:
-			waitFor { $("a", text: 'Rename poll poll') }
-			!$("a", text: "Who is badder? poll")
+			waitFor { at PageMessageInbox }
+			header.title == "rename poll poll"
 	}
 
 	def "can delete a poll"() {
 		when:
 			deletePoll()
-			waitFor { $("div.flash").displayed }
+			waitFor { notifications.flashMessage.displayed }
 		then:
-			$("title").text() == "Inbox"
-			!$("a", text: "Who is badder?")
+			at PageMessageInbox
+			bodyMenu.activityLinks.size() == 1
 	}
 	
 	def "deleted polls show up in the trash section"() {
+		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
@@ -373,6 +403,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "selected poll and its details are displayed"() {
+		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
@@ -384,6 +415,7 @@ class PollCedSpec extends PollBaseSpec {
 	}
 	
 	def "clicking on empty trash permanently deletes a poll"() {
+		// FIXME: rewrite when trash page definitions exist
 		setup:
 			deletePoll()
 		when:
@@ -407,38 +439,39 @@ class PollCedSpec extends PollBaseSpec {
 			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
-			$("a", text: "Who is badder? poll").click()
+			bodyMenu.activityLinks[1].click()
 		then:
-			waitFor { title == "Poll" }
+			waitFor { at PageMessagePoll }
 		when:
-			$(".more-actions").value("edit").click()
+			moreActions.value("edit").click()
 		then:
-			waitFor('slow') { $("#ui-dialog-title-modalBox").displayed }
-			at PagePollEdit
-			pollForm.question == 'question'
-			pollForm.pollType == "multiple"
+			waitFor('slow') { at PollDialog }
+			compose.question == 'question'
+			compose.pollType == "multiple"
 		when:
-			pollForm.question = "Who is worse?"
-			pollForm."dontSendMessage" = false
+			compose.question = "Who is worse?"
+			compose.dontSendQuestion = false
 			next.click()
 		then:
-			waitFor { responseListTab.displayed }
-			pollForm.choiceA == "Michael-Jackson"
-			pollForm.choiceB == "Chuck-Norris"
+			waitFor { response.displayed }
+			response.choice("A").jquery.val("Michael-Jackson")
+			response.choice("B").jquery.val("Chuck-Norris")
 		when:
-			pollForm.choiceC = "Bruce Vandam"
+			response.choice("C").jquery.val("Bruce Vandam")
+			next.click()
+			setAliases()
 			next.click()
 		then:
-			waitFor { autoSortTab.displayed }
+			waitFor { sort.displayed }
 		when:
-			goToTab(6)
-			pollForm.address = '1234567890'
-			addManualAddress.click()
+			goToTab(7)
+			recipients.addField = '1234567890'
+			recipients.addButton.click()
 		then:
-			waitFor { $('.manual').displayed }
+			waitFor { recipients.manual.size() == 1 }
 		when:
 			next.click()
-			pollForm.name = 'Who is badder?'
+			confirm.pollName = 'Who is badder?'
 			done.click()
 		then:
 			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
@@ -455,16 +488,20 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
-			waitFor { autoSortTab.displayed }
+			setAliases()
+			next.click()
+			waitFor { sort.displayed }
 		when:
-			goToTab(7)
-			pollForm.name = 'Who is badder?'
+			goToTab(8)
+			confirm.pollName = 'Who is badder?'
 			done.click()
 		then:
 			assert Poll.count() == 1
-			waitFor { errorMessage.displayed }
-			at PagePollCreate
+			at PollDialog
+			waitFor { errorPanel.displayed }
 	}
+
+	// TODO: add alias-specific tests
 
 	def deletePoll() {
 		def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
@@ -472,29 +509,41 @@ class PollCedSpec extends PollBaseSpec {
 		poll.addToResponses(key: 'B', value: 'Chuck-Norris')
 		poll.addToResponses(key: 'Unknown', value: 'Unknown')
 		poll.save(failOnError:true, flush:true)
-		go "message/poll/${poll.id}"
-		$(".more-actions").value("delete")
-		waitFor { $("#ui-dialog-title-modalBox").displayed }
-		$("#title").value("Delete poll")
-		$("#done").click()
+		to PageMessagePoll, poll
+		moreActions.value("delete")
+		waitFor { at DeleteDialog }
+		done.click()
 		poll
 	}
 
 	def launchPollPopup(pollType='yesNo', question='question', enableMessage=true) {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()
-		waitFor { createActivityDialog.poll.displayed }
-		createActivityDialog.poll.click()
-		waitFor('slow') { pollDialog.displayed }
+		waitFor('slow') { at CreateActivityDialog }
+		poll.click()
+		waitFor('slow') { at PollDialog }
 		
-		pollType=='yesNo'?pollDialog.compose.yesNo.click():pollDialog.compose.multiple.click()
-		if(question) pollDialog.compose.question= question
-		if(!enableMessage) pollDialog.compose.dontSendMessage.click()
-		pollDialog.next.click()
+		pollType=='yesNo'?compose.yesNo.click():compose.multiple.click()
+		if(question) compose.question= question
+		if(!enableMessage) compose.dontSendQuestion.click()
+		next.click()
 	}
 	
 	def goToTab(tab) {
-		pollDialog.tab(tab).click()	
+		at PollDialog
+		tab(tab).click()
+	}
+
+	def setAliases(aliasValues=null) {
+		at PollDialog
+		tab(3).click()
+		if (!aliasValues)
+			aliasValues = ['A', 'B', 'C', 'D', 'E']
+		aliasValues.eachWithIndex { alias, index ->
+			if (aliases.inputs[index].displayed && !aliases.inputs[index].disabled) {
+				aliases.inputs[index].value(alias)
+			}
+		}
 	}
 }
 

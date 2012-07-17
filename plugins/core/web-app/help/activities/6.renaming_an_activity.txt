@@ -25,5 +25,5 @@ Your Activity will be Renamed.
 [3]: activities/3.creating_a_poll
 [4]: activities/4.creating_an_announcement
 [5]: activities/3a.manually_categorising
-[6]: ../images/help/rename_poll.jpg
-[7]: ../images/help/rename_poll_dialog.jpg
+[6]: ../images/help/rename_poll.png
+[7]: ../images/help/rename_poll_dialog.png

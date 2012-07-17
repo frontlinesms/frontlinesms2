@@ -20,7 +20,7 @@ class SearchController extends MessageController {
 				customFieldList:CustomField.getAllUniquelyNamed()]
 	}
 
-	def result = {
+	def result() {
 		def search = withSearch { searchInstance ->
 			def activity =  getActivityInstance()
 			searchInstance.owners = activity ? [activity] : null

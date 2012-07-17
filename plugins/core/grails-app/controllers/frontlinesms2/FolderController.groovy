@@ -17,7 +17,7 @@ class FolderController {
 
 	def rename = {
 		def folderInstance = Folder.get(params.ownerId)
-		render view:"../folder/rename", model:[folderName: folderInstance.name, folderInstance: folderInstance, ownerId:params.ownerId]
+		[folderInstance: folderInstance]
 	}
 
 	def save = {

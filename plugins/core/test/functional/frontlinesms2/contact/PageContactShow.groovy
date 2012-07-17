@@ -2,52 +2,16 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class PageContactShow extends geb.Page {
-	static url = 'contact/show'
-	static at = {
-		title.contains('Contacts')
-	}
-	static content = {
-		bodyMenu { $('#body-menu') }
-		selectedMenuItem { bodyMenu.find('.selected') }
-		groupSubmenu(required:false) { bodyMenu.find('.groups .submenu') }
-		groupList(required:false) { $("#group-list") }
-		contactSelect(required:false) { $(".contact-select") }	
-		multiGroupSelect(required:false) { $('#multi-group-dropdown') }
-		updateAll(required:false) { $("#update-all") }
-		flashMessage(required:false) { $('div.flash') }
-
-		frmDetails { $("#details") }
-		btnSave { frmDetails.find('#update-single') }
-		btnCancel { $(".buttons .cancel") }
-		deleteSingleButton { $('#btn_delete') }
-		deleteAllButton { $('#btn_delete_all') }
-		contactCount { $('#contact-count') }
-		searchBtn { $('#message-search .buttons') }
-		
-		// Popup
-		confirmDeleteButton(required:false) { $("#done") }
-		
-		// When showing a group
-		contactsList(required:false) { $('#contact-list') }
-		
-		// Groups
-		
-		moreGroupActions(required:false) { $('.section-header #group-actions') }
-		
-		// SMART GROUPS
-		smartGroupsList { $('#smart-groups-submenu') }
-		smartGroupsListItems {
-			def list = smartGroupsList.find('li')
-			assert list[-1].@id == 'create-smart-group'
-			list = list[0..-2] // remove 'create new smart group' item from list
-			if(list.size()==1 && list[0].@id == 'no-smart-groups') {
-				return []
-			} else return list
-		}
-		createSmartGroupButton { $('li#create-smart-group a') }
-		
-		// Custom Fields
-		fieldSelecter { $('#new-field-dropdown') }
+class PageContactShow extends PageContact {
+	static url = ''
+	String convertToPath(Object [] args) {
+		if (args.equals(null) || args.length == 0)
+			return "contact/show"
+		if (args[0] instanceof Contact)
+			return "contact/show/${(args[0] as Contact).id}"
+		if (args[0] instanceof Group && args.length == 2)
+			return "group/show/${(args[0] as Group).id}/contact/show/${(args[1] as Contact).id}" 
+		if (args[0] instanceof Group && args.length == 1)
+			return "group/show/${(args[0] as Group).id}" 
 	}
 }

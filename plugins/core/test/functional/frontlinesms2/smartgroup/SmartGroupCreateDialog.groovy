@@ -1,6 +1,6 @@
 package frontlinesms2.smartgroup
 
-class SmartGroupCreateDialog extends frontlinesms2.contact.PageContactShow {
+class SmartGroupCreateDialog extends frontlinesms2.contact.PageContact {
 	static at = {
 		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('Create smart group')
 	}
@@ -23,5 +23,19 @@ class SmartGroupCreateDialog extends frontlinesms2.contact.PageContactShow {
 		
 		errorMessages(required:false) { $('.error-panel') }
 		flashMessage(required:false) { $('div.flash') }
+		// SMART GROUPS
+		smartGroupsList { $('#smart-groups-submenu') }
+		smartGroupsListItems {
+			def list = smartGroupsList.find('li')
+			assert list[-1].@id == 'create-smart-group'
+			list = list[0..-2] // remove 'create new smart group' item from list
+			if(list.size()==1 && list[0].@id == 'no-smart-groups') {
+				return []
+			} else return list
+		}
+		createSmartGroupButton { $('li#create-smart-group a') }
+		
 	}
+
+
 }

@@ -19,4 +19,4 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 [1]: messages/2.sss
 [4]: search/1.getting_around_the_search_tab
 [5]: messages/8.mrfd
-[6]: ../images/help/filtering_messages.jpg
+[6]: ../images/help/filtering_messages.png

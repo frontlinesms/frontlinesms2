@@ -18,6 +18,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.choiceA = "yes"
 			controller.params.choiceB = "no"
 			controller.params.choiceC = "maybe"
+			controller.params.enableAutoreply = "true"
 			controller.params.autoreplyText = "automatic reply text"
 		when:
 			controller.save()
@@ -83,10 +84,12 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
 			controller.params.ownerId = poll.id
+			controller.params.enableAutoreply = "true"
 			controller.params.name = "renamed poll name"
 		when:
 			controller.save()
 			def updatedPoll = Poll.get(poll.id)
+			println "edit():: ${updatedPoll.autoreplyText}"
 		then:
 			updatedPoll.name == "renamed poll name"
 			updatedPoll.question == "question"
@@ -158,6 +161,7 @@ class PollControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.question == "Who is worse?"
 		when:
 			controller.params.ownerId = poll.id
+			controller.params.enableAutoreply = "true"
 			controller.params.autoreplyText = "Thank you for replying to this awesome poll"
 			controller.save()
 			poll = Poll.get(poll.id)

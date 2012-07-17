@@ -30,7 +30,7 @@ class ConnectionController {
 	def show = {
 		withFconnection {
 			if(params.createRoute) {
-				it.metaClass.getStatus = { RouteStatus.CONNECTING }
+				it.metaClass.getStatus = { ConnectionStatus.CONNECTING }
 			}
 			[connectionInstance: it] << [connectionInstanceList: Fconnection.list(params),
 					fconnectionInstanceTotal: Fconnection.list(params)]
@@ -54,7 +54,7 @@ class ConnectionController {
 
 	def delete() {
 		def connection = Fconnection.get(params.id)
-		if(connection.status == RouteStatus.NOT_CONNECTED) {
+		if(connection.status == ConnectionStatus.NOT_CONNECTED) {
 			connection.delete()
 			flash.message = message code:'connection.deleted', args:[connection.name]
 			redirect action:'list'
@@ -65,7 +65,8 @@ class ConnectionController {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
 			fconnectionInstance.properties = params
-			def connectionErrors = fconnectionInstance.errors.allErrors.collect {message(code:it.codes[2], args:it.arguments.flatten())}
+			fconnectionInstance.validate()
+			def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 			if (fconnectionInstance.save()) {
 			withFormat {
 				html {
@@ -146,7 +147,8 @@ class ConnectionController {
 	private def doSave(Class<Fconnection> clazz) {
 		def fconnectionInstance = clazz.newInstance()
 		fconnectionInstance.properties = params
-		def connectionErrors = fconnectionInstance.errors.allErrors.collect {message(code:it.codes[2], args:it.arguments.flatten())}
+		fconnectionInstance.validate()
+		def connectionErrors = fconnectionInstance.errors.allErrors.collect { message(error:it) }
 		if (fconnectionInstance.save()) {
 			withFormat {
 				html {
@@ -164,7 +166,7 @@ class ConnectionController {
 					redirect(controller:'connection', action:"list")
 				}
 				json {
-					render([ok:false, text:connectionErrors.join().toString()] as JSON)
+					render([ok:false, text:connectionErrors.join(", ").toString()] as JSON)
 				}
 			}
 		}

@@ -1,9 +1,13 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label"/> </label>
-		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
-		<g:link url="#" class="btn add-address" onclick="addAddressHandler();"><g:message code="quickmessage.phonenumber.add"/></g:link>
+		<label id="manual-label" class="bold" for="address" style="display:table-cell; padding:5px 5px 0 0;"><g:message code="quickmessage.phonenumber.label" /> </label>
+		<g:textField id="address" name="address" onkeyup="validateAddressEntry();" style="display:table-cell; margin-right:5px; width:150px;"/>
+		<g:link url="#" class="btn add-address" onclick="addAddressHandler();" ><g:message code="quickmessage.phonenumber.add"/></g:link>
+	</div>
+	<div id="search">
+		<label id="search-label" class="bold" for="address" style="display:table-cell;"><g:message code="default.button.search.label"/> </label>
+		<g:textField id="searchbox" name="address" onkeyup="searchForContacts();" style="display:table-cell; width:150px;"/>
 	</div>
 	<div id="recipients-list">
 		<ul id="groups">
@@ -22,16 +26,19 @@
 		</ul>
 		<ul id="contacts">
 			<g:each in="${contactList}" var="contact" status="i">
-				<li class="contact">
+				<li class="contact" f-name="${contact.name}" f-number="${contact.mobile}">
 					<g:checkBox id="addresses-${i}" name="addresses" value="${contact.mobile}" onclick="setContact('${contact.mobile}')" checked="${recipients?.contains(contact.mobile)}"/>
 					<label for="addresses-${i}">${contact.name ?: contact.mobile}</label>
+					<span class="matched-search-result" id="matched-search-result-${i}">
+						<g:message code="contact.mobile.label"/> : ${contact.mobile}
+					</span>
 				</li>
-				<li class="contact">
-					<g:if test="${recipients?.contains(contact.email)}">
+				<g:if test="${recipients?.contains(contact.email)}">
+					<li class="contact">
 						<input type="checkbox" name="addresses" value="${contact.email}" checked>
 						${contact.name ?: contact.email} (<g:message code="contact.email.label"/>)
-					</g:if>
-				</li>
+					</li>
+				</g:if>
 			</g:each>
 		</ul>
 	</div>
@@ -113,7 +120,7 @@
 			if(address[0] == '+') sanitizedAddress = '+' + sanitizedAddress;
 			var checkbox = $("li.manual").find(":checkbox[value=" + sanitizedAddress + "]").val();
 			if(checkbox !== address) {
-				$("#contacts").prepend("<li class='manual contact'><input contacts='true' type='checkbox' onclick='setContact(" + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
+				$("#contacts").prepend("<li class='manual contact' f-name='' f-number='" + sanitizedAddress + "'><input contacts='true' type='checkbox' onclick='setContact(" + sanitizedAddress + ")' checked='true' name='addresses' value='" + sanitizedAddress + "'>" + sanitizedAddress + "</input></li>")
 				updateMessageCount();
 			}
 			$('#address').val("");
@@ -122,5 +129,32 @@
 			return true;
 		}
 		return false;
+	}
+
+	function searchForContacts() {
+		var search = $('#searchbox').val().toLowerCase();
+		if (search == "" )
+		{
+			$('li.contact').show();
+			$('ul#groups').show();
+			$('.matched-search-result').hide();
+		}
+		else
+		{
+			$('ul#groups').hide();
+			$('.ui-tabs-panel #recipients-list ul#contacts li.contact').each(function () {
+				if($(this).attr('f-name').toLowerCase().indexOf(search.toLowerCase()) == -1 
+					&& $(this).attr('f-number').toLowerCase().indexOf(search.toLowerCase()) == -1)
+				{
+					$(this).hide();
+					$(this).find('.matched-search-result').hide();
+				}
+				else
+				{
+					$(this).show();
+					$(this).find('.matched-search-result').show();
+				}
+			});
+		}
 	}
 </r:script>

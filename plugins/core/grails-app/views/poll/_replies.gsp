@@ -9,22 +9,34 @@
 	<g:checkBox name="enableAutoreply" checked="${activityInstanceToEdit?.autoreplyText as boolean}"/>
 	<g:textArea name="autoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit? activityInstanceToEdit.autoreplyText as boolean: true}" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
 	<div class="controls">
-		<span class="hide character-count" id="reply-count"><g:message code="poll.message.count"/></span> 
-		<fsms:magicWand target="autoreplyText" controller="${controllerName}"/>
+		<div class="stats">
+			<span id="send-message-stats" class="character-count">
+				<g:message code="message.character.count" args="[0, 1]"/>
+			</span>
+		</div>
+		<div class="stats character-count-warning" style="display:none;">
+			<g:message code="message.character.count.warning"/>
+		</div>
+		<fsms:magicWand target="autoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>
 
 <r:script>
 	$("#enableAutoreply").live("change", function() {
 		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
-		if(isGroupChecked('enableAutoreply')) {
-			$("#autoreplyText").removeAttr("disabled");
+		var autoreplyText = $("#autoreplyText");
+		if(isGroupChecked("enableAutoreply")) {
+			autoreplyText.removeAttr("disabled");
+			autoreplyText.addClass("required");
 			$("span.character-count").removeClass("hide");
+			$(".magicwand-container").css({"visibility":"visible"});
+			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"visible"});
 		} else {
-			$("#autoreplyText").attr('disabled','disabled');
+			autoreplyText.attr('disabled','disabled');
+			autoreplyText.removeClass("required");
 			$("span.character-count").addClass("hide");
-			$("#autoreplyText").removeClass('error');
-			$(".error-panel").hide();
+			$(".magicwand-container").css({"visibility":"hidden"});
+			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"hidden"});
 		}
 	});
 	

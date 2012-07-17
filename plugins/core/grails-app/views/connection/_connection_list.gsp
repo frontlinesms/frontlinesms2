@@ -1,10 +1,10 @@
-<%@ page import="frontlinesms2.RouteStatus" %>
+<%@ page import="frontlinesms2.ConnectionStatus" %>
 <div id="body-content-head">
 	<div class="content">
 		<h1><g:message code="connection.header"/></h1>
 		<ul class="buttons">
 			<li>
-				<g:remoteLink class="btn" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
+				<g:remoteLink class="btn" name="addConnection" controller='connection' action="wizard" onLoading="showThinking()" onSuccess="hideThinking(); launchMediumWizard(i18n('connection.add'), data, i18n('wizard.create'), 675, 500, false)">
 					<g:message code="connection.add" />
 				</g:remoteLink>
 			</li>
@@ -29,7 +29,7 @@
 					
 					<g:if test="${c == connectionInstance}">
 						<div class="controls">
-							<g:if test="${c.status == RouteStatus.NOT_CONNECTED}">
+							<g:if test="${c.status == ConnectionStatus.NOT_CONNECTED}">
 								<g:link controller="connection" action="createRoute" class="btn route" id="${c.id}"><g:message code="connection.route.create"/></g:link>
 								<g:remoteLink controller="connection" action="wizard" class="btn route" id="${c.id}" onSuccess="launchMediumWizard(i18n('connection.edit'), data, i18n('action.done'), 675, 500, false)">
 										<g:message code="connection.edit"/>
@@ -38,7 +38,7 @@
 									<g:message code="connection.delete"/>
 								</g:link>
 							</g:if>
-							<g:elseif test="${c.status == RouteStatus.CONNECTED}">
+							<g:elseif test="${c.status == ConnectionStatus.CONNECTED}">
 								<g:remoteLink controller="connection" action="createTest" class="btn test" id="${c.id}" onSuccess="launchSmallPopup(i18n('smallpopup.test.message.title'), data, i18n('action.send'))">
 										<g:message code="connection.send.test.message"/>
 								</g:remoteLink>

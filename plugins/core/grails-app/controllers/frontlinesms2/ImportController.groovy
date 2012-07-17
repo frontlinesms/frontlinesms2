@@ -36,7 +36,9 @@ class ImportController {
 							def groupNames = getGroupNames(value)
 							groups = getGroups(groupNames)
 						} else {
-							customFields << new CustomField(name:key, value:value)
+							if (value.size() > 0 ){
+								customFields << new CustomField(name:key, value:value)
+							}
 						}
 					}
 					// TODO not sure why this has to be done in a new session, but grails

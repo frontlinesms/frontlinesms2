@@ -26,9 +26,9 @@ class FconnectionServiceSpec extends Specification {
 			context.routes >> []
 			def notConnected = Mock(Fconnection)
 		when:
-			def status = service.getRouteStatus(notConnected)
+			def status = service.getConnectionStatus(notConnected)
 		then:
-			status == RouteStatus.NOT_CONNECTED
+			status == ConnectionStatus.NOT_CONNECTED
 	}
 	
 	def 'Connected Fconnection gives a status of CONNECTED'() {
@@ -40,9 +40,9 @@ class FconnectionServiceSpec extends Specification {
 		when:
 			true
 		then:
-			service.getRouteStatus(connected) == RouteStatus.CONNECTED
-			service.getRouteStatus(notConnected) == RouteStatus.NOT_CONNECTED
-			service.getRouteStatus(alsoConnected) == RouteStatus.CONNECTED
+			service.getConnectionStatus(connected) == ConnectionStatus.CONNECTED
+			service.getConnectionStatus(notConnected) == ConnectionStatus.NOT_CONNECTED
+			service.getConnectionStatus(alsoConnected) == ConnectionStatus.CONNECTED
 	}
 	
 	@Unroll
@@ -51,18 +51,18 @@ class FconnectionServiceSpec extends Specification {
 			context.routes >> routeNames.collect { [id:it] }
 			def c = mockFconnection(id)
 		expect:
-			service.getRouteStatus(c) == expectedStatus
+			service.getConnectionStatus(c) == expectedStatus
 		where:
 			id | routeNames                 | expectedStatus
-			1  | []                         | RouteStatus.NOT_CONNECTED
-			1  | ['in-2', 'out-3']          | RouteStatus.NOT_CONNECTED
-			1  | ['in-1']                   | RouteStatus.CONNECTED
-			1  | ['out-1']                  | RouteStatus.CONNECTED
-			1  | ['in-1', 'out-1']          | RouteStatus.CONNECTED
-			1  | ['in-1', 'out-internet-1'] | RouteStatus.CONNECTED
-			1  | ['in-1', 'out-modem-1']    | RouteStatus.CONNECTED
-			1  | ['out-internet-1']         | RouteStatus.CONNECTED
-			1  | ['out-modem-1']            | RouteStatus.CONNECTED
+			1  | []                         | ConnectionStatus.NOT_CONNECTED
+			1  | ['in-2', 'out-3']          | ConnectionStatus.NOT_CONNECTED
+			1  | ['in-1']                   | ConnectionStatus.CONNECTED
+			1  | ['out-1']                  | ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-1']          | ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-internet-1'] | ConnectionStatus.CONNECTED
+			1  | ['in-1', 'out-modem-1']    | ConnectionStatus.CONNECTED
+			1  | ['out-internet-1']         | ConnectionStatus.CONNECTED
+			1  | ['out-modem-1']            | ConnectionStatus.CONNECTED
 	}
 
 	def 'creating a SMSLib route should stop detection on the corresponding port'() {
