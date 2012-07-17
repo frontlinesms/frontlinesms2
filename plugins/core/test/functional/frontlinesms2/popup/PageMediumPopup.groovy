@@ -224,6 +224,8 @@ class AnnouncementConfirmTab extends geb.Module {
 class AnnouncementSummary extends geb.Module {
 	static at = {
 		popupTitle.contains("announcement saved")
+	}
+}
 
 class DeleteDialog extends MediumPopup {
 	static at = {
