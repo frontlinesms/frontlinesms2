@@ -20,6 +20,7 @@ abstract class PageMessage extends frontlinesms2.page.PageBase {
 class BodyMenu extends geb.Module {
 	static content = {
 		selected { $('#body-menu .selected').text().toLowerCase() }
+		activityList { $('#body-menu li.activities ul.submenu li') }
 		activityLinks { $('#body-menu li.activities ul.submenu li a') }
 		newActivity { $('#body-menu a#create-new-activity') }
 		newFolder { $('#body-menu li.folders a.btn.create') }
@@ -95,5 +96,6 @@ class MultipleMessageDetails extends geb.Module {
 	static base = { $('#multiple-messages') }
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text().toInteger() }
+		replyAll { $('a#btn_reply_all') }
 	}
 }

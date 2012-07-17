@@ -173,3 +173,46 @@ class RenameDialog extends MediumPopup {
 		done { $('button#done') }
 	}
 }
+
+class AnnouncementDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("announcement")
+	}
+	static content = {
+		composeAnnouncement {module AnnouncementMessageComposeTab}
+		recipients {module AnnouncementRecipientsTab}
+		confirm { module AnnouncementConfirmTab }
+		summary { module AnnouncementSummary }
+	}
+}
+
+class AnnouncementMessageComposeTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		textArea { $('#messageText') }
+	}
+}
+
+class AnnouncementRecipientsTab extends geb.Module {
+	static base = { $('div#tabs-2') }
+	static content = {
+		addField { $('input#address') }
+		addButton { $('a.btn.add-address') }
+	}
+}
+
+class AnnouncementConfirmTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		announcementName { $('input#name') }
+		message { $("#confirm-message-text").text() }
+		recipientCount { $("#confirm-recipients-count").text() }
+		recipientCount { $("#confirm-message-count").text() }
+	}
+}
+
+class AnnouncementSummary extends geb.Module {
+	static at = {
+		popupTitle.contains("announcement saved")
+	}
+}
