@@ -113,8 +113,13 @@
 		if(yesNo) {
 			var aliasYesTextField = $("ul#poll-aliases li input#aliasA");
 			var aliasNoTextField = $("ul#poll-aliases li input#aliasB");
-
-			var choices = {'A,Yes':aliasYesTextField, 'B,No':aliasNoTextField};
+			var yesAlias = "A," + i18n("poll.yes");
+			var noAlias = "B," + i18n("poll.no")
+			var choices = { };
+			choices[yesAlias] = aliasYesTextField;
+			choices[noAlias] = aliasNoTextField;
+			console.log("done");
+			console.log(i18n("poll.yes"));
 			<% 	
 				def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} 
 				def mode = pollResponse?"edit":"create"
