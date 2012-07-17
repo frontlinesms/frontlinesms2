@@ -97,5 +97,6 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text().toInteger() }
 		replyAll { $('a#btn_reply_all') }
+		messageCount {$("#checked-message-count")}
 	}
 }

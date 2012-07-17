@@ -50,9 +50,9 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			def messages = announcement.getMessages() as List
 			def message = messages[0]
 			to PageMessageAnnouncement, 'New Office', Fmessage.findBySrc('Max')
-			reply.click()
+			singleMessageDetails.reply.click()
 		then:
-			singleMessageDetails.reply.displayed
+			waitFor {at QuickMessageDialog}
 	}
 
 	def "should filter announcement messages for starred and unstarred messages"() {
@@ -64,12 +64,12 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		then:
 			messagesList.size() == 3
 		when:
-			starredMessages.click()
+			footer.showStarred.click()
 		then:
 			waitFor { messagesList.size() == 2 }
 			messagesList[1].find(".message-sender-cell").text() == 'Max'
 		when:
-			allMessages.click()
+			footer.showAll.click()
 		then:
 			waitFor { messagesList.size() == 3 }
 			messagesList.collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
@@ -95,11 +95,11 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			to PageMessageAnnouncement, 'New Office'
 			messagesSelect[1].click()
 		then:
-			waitFor { messageDetailsSender.text().contains("Jane") }
+			waitFor { singleMessageDetails.sender.contains("Jane") }
 		when:
 			messagesSelect[2].click()
 		then:
-			waitFor { messageCount.text() == "2 messages selected" }
+			waitFor { multipleMessageDetails.messageCount.text() == "2 messages selected" }
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -113,7 +113,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor { multipleMessageDetails.displayed }
+			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
 			multipleMessageDetails.replyAll.click()
 		then:
