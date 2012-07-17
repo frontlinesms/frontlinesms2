@@ -1,110 +1,90 @@
 package frontlinesms2.announcement
 
 import frontlinesms2.*
+import frontlinesms2.message.PageMessageInbox
+import frontlinesms2.popup.*
 
 class AnnouncementCedSpec extends AnnouncementBaseSpec {
-	
+
 	def "can launch announcement screen from create new activity link" () {
 		when:
-			go "message"
-			$("a", text:"Create new activity").click()
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
 		then:
-			waitFor { $("#new-activity-choices").displayed }
+			waitFor { at CreateActivityDialog}
 		when:
-			$("input.announcement").click()
-			$("#submit").click()
+			announcement.click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("New announcement") }
+			waitFor { at AnnouncementDialog }
 	}
-	
+
 	def "can create a new Announcement" () {
 		when:
-			go "message"
-			$("a", text:"Create new activity").click()
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
 		then:
-			waitFor { $("#new-activity-choices").displayed }
+			waitFor { at CreateActivityDialog }
 		when:
-			$("input.announcement").click()
-			$("#submit").click()
+			announcement.click()
 		then:
 			waitFor { at AnnouncementDialog }
 		when:
-			$("#messageText").value("announcing this new announcement!")
-			nextPageButton.click()
+			composeAnnouncement.textArea.value("announcing this new announcement!")
+			next.click()
 		then:
-			waitFor { selectRecipientsTab.displayed }
+			waitFor {recipients.addField.displayed}
 		when:
-			addressField.value("+919544426000")
-			addAddressButton.click()
-			nextPageButton.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
+			next.click()
 		then:
-			waitFor { confirmTab.displayed }
+			waitFor { confirm.announcementName.displayed }
 		when:
-			addName.value("newbie")
-			doneButton.click()
+			confirm.announcementName.value("newbie")
+			send.click()
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Announcement saved!") }
-			Announcement.findByName("newbie").sentMessageText == "announcing this new announcement!"
+			waitFor { summary.displayed}
 	}
 
 	def 'existing announcements appear in activities section of messages'() {
 			given:
 				createTestAnnouncements()
 			when:
-				go 'message'
+				to PageMessageInbox
 			then:
-				$('#activities-submenu li')[0].text().contains('New Office')
-				$('#activities-submenu li')[1].text().contains('Office Party')
+				bodyMenu.activityList[0].text().contains('New Office')
+				bodyMenu.activityList[1].text().contains('Office Party')
 	}
 
 	def "should display errors when announcement validation fails"() {
-		given:
+		setup:
 			def announcement = new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true)
 		when:
-			go "message"
-			$("a", text:"Create new activity").click()
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
 		then:
-			waitFor { $("#new-activity-choices").displayed }
+			waitFor { at CreateActivityDialog}
 		when:
-			$("input", class: "announcement").click()
-			$("#submit").click()
+			announcement.click()
 		then:
 			waitFor { at AnnouncementDialog }
 		when:
-			$("#messageText").value("announcing this new announcement!")
-			nextPageButton.click()
+			composeAnnouncement.textArea.value("announcing this new announcement!")
+			next.click()
 		then:
-			waitFor { selectRecipientsTab.displayed }
+			waitFor {recipients.addField.displayed}
 		when:
-			addressField.value("+919544426000")
-			addAddressButton.click()
-			nextPageButton.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
+			next.click()
 		then:
-			waitFor { confirmTab.displayed }
+			waitFor { confirm.announcementName.displayed }
 		when:
-			addName.value("newbie")
-			doneButton.click()
+			confirm.announcementName.value("newbie")
+			send.click()
 		then:
 			assert Announcement.count() == 1
-			waitFor { errorMessage.displayed }
+			waitFor { error.displayed }
 			at AnnouncementDialog
-	}
-}
-	
-class AnnouncementDialog extends geb.Page {
-	static at = {
-		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('New announcement')
-	}
-	static content = {
-		selectRecipientsTab { $('div#tabs-2') }
-		confirmTab { $('div#tabs-3') }
-		
-		addressField { $('#address') }
-		addAddressButton { $('.add-address') }
-		addName { $("#name") }
-		
-		nextPageButton { $("#nextPage") }
-		doneButton { $("#submit") }
-		errorMessage(required:false) { $('.error-panel') }
 	}
 }

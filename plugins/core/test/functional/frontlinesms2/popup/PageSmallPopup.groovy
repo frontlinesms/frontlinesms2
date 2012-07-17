@@ -56,3 +56,12 @@ class DeleteGroupPopup extends SmallPopup {
 		warningMessage { $('#modalBox div.dialog p').text().toLowerCase() }
 	}
 }
+
+class DeleteActivity extends SmallPopup {
+	static at = {
+		popupTitle.contains("delete activity")
+	}
+	static content = {
+		text { $('#confirmDelete h2') }
+	}
+}
