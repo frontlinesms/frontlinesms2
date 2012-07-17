@@ -101,7 +101,7 @@ class Poll extends Activity {
 	}
 	
 	def addAlias(String k, attrs){
-		def aliases = attrs["alias"+k]?.toUpperCase()
+		def aliases = attrs["alias"+k]?.replace(" ", "").toUpperCase()
 		return aliases
 	}
 
@@ -133,7 +133,7 @@ class Poll extends Activity {
 //> PRIVATE HELPERS
 	private PollResponse getPollResponse(Fmessage message, boolean exactMatch) {
 		def option
-		def words = message.text.trim().toUpperCase().split(/\s/)
+		def words = message.text.trim().toUpperCase().split(/\s+/)
 		if(exactMatch) {
 			if(words.size() < 2) return this.unknown
 			option = words[1]
