@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="name"><g:message code="poll.prompt"/></label>
-	<g:textField name="name" value="${activityInstanceToEdit?.name}"/>
+	<g:textField name="name" class="required" value="${activityInstanceToEdit?.name}"/>
 </div>
 <div class="confirm">
 	<h2><g:message code="poll.details.label"/></h2>

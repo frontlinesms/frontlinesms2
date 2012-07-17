@@ -13,7 +13,7 @@
 		</li>
 	</ul>
 </div>
-<div class="input required">
+<div class="input">
 	<label for="question">
 		<g:message code="poll.question.prompt"/>
 	</label>
@@ -37,13 +37,18 @@
 		}
 	});
 
-	$("input[name='pollType']").live("change", function() {
+	var setPollType = function() {
 		if ($("input[name='pollType']:checked").val() == "yesNo") {
 			disableTab(1);
+			resetResponses();
+			addRespectiveAliases();
 		} else {
 			enableTab(1);
+			resetResponses();
 		}
 		autoUpdate = true;
 		updateConfirmationMessage();
-	});
+	}
+
+	$("input[name='pollType']").live("change", setPollType);
 </r:script>
