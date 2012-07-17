@@ -14,7 +14,7 @@
 		<tr>
 			<td><label for="mobile"><g:message code="contact.mobile.label"/></label></td>
 			<td>
-				<g:textField class="numberField" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)"/>
+				<g:textField class="phoneNumber unique" name="mobile" value="${contactInstance?.mobile?.trim()}" onchange="validateMobile(this)"/>
 				<g:if test="${contactInstance?.mobile?.trim()}">
 					<a class="remove-command not-custom-field" id="remove-mobile">
 						<g:message code="contact.remove.mobile"/>
@@ -29,7 +29,7 @@
 		<tr>
 			<td><label for="email"><g:message code="contact.email.label"/></label></td>
 			<td>
-				<g:textField name="email" value="${contactInstance?.email?.trim()}"/>
+				<g:textField name="email" class="email" value="${contactInstance?.email?.trim()}"/>
 				<a class="remove-command not-custom-field" id="remove-email">&nbsp;</a>
 			</td>
 		</tr>
