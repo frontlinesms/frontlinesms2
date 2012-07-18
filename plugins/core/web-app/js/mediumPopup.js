@@ -54,7 +54,7 @@ function launchHelpWizard(html) {
 	var modalBox = createModalBox(html);
 	modalBox.addClass("help");
 	$("#messageText").keyup();
-	var height = window.innerHeight;
+	var height = $(window).height();
 	var dialog = modalBox.dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
