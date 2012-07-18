@@ -217,6 +217,32 @@ class FsmsTagLib {
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
 		out << g.remoteLink(att, body)
 	}
+
+	def menu = { att, body ->
+		out << '<div id="body-menu" class="'+att.class+'">'
+		out << '<ul>'
+		out << body()
+		out << '</ul>'
+		out << '</div>'
+	}
+
+	def submenu = { att, body ->
+		out << '<ul class="submenu">'
+		out << body()
+		out << '</ul>'
+	}
+
+	def menuitem = { att ->
+		def classlist = att.class + " "
+		classlist += att.selected ? "selected " : ""
+		out << '<li class="' + classlist + '" >'
+		def msg = att.code
+		println msg
+		out << g.link(controller:att.controller, action:att.action) {
+			out << g.message(code:msg)
+		}
+		out << '</li>'
+	}
 	
 	private def getFields(att) {
 		def fields = att.remove('fields')
