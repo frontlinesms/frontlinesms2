@@ -31,6 +31,11 @@ class RadioBootStrap extends CoreBootStrap {
 		 }
 		 show1.save(failOnError: true, flush: true)
 		 def show2 = new RadioShow(name: "Morning Show").save(flush:true)
+		 def show3 = new RadioShow(name: "The Football Show")
+		 show3.addToActivities(Poll.findByNameIlike("Football Teams"))
+		 show3.addToMessages(new Fmessage(src: '+3245678', text: "I think football is great", date:new Date()-2, inbound: true).save(failOnError: true))
+		 show3.addToMessages(new Fmessage(src: '+3245678', text: "I think football is boring", date:new Date()-3, inbound: true).save(failOnError: true))
+		 show3.save(flush:true)
 	}
 	
 }
