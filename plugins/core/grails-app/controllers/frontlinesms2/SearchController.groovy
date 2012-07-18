@@ -29,7 +29,7 @@ class SearchController extends MessageController {
 			searchInstance.group = params.groupId ? Group.get(params.groupId) : null
 			searchInstance.status = params.messageStatus ?: null
 			searchInstance.activityId = params.activityId ?: null
-			searchInstance.inArchive = params.inArchive ? true : false
+			searchInstance.inArchive = params.activityId ? true : params.inArchive ? true : false
 			searchInstance.startDate = params.startDate ?: null
 			searchInstance.endDate = params.endDate ?: null
 			searchInstance.customFields = [:]

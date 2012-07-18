@@ -1,6 +1,7 @@
 package frontlinesms2.radio
 import frontlinesms2.*
 import java.util.Date
+import frontlinesms2.Trash
 
 class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def controller
@@ -102,5 +103,88 @@ class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def result = controller.downloadMessageReport()
 		then:
 			result['messageInstanceList'].size() == 1
+	}
+
+	def "can delete a radio show to send it to the trash"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1").save(flush:true)
+			assert RadioShow.findAllByDeleted(false) == [show1]
+			assert !Trash.findByObject(show1)
+			controller.params.id  = show1.id
+		when:
+			controller.delete()
+		then:
+			RadioShow.findAllByDeleted(true) == [show1]
+			RadioShow.findAllByDeleted(false) == []
+			assert Trash.findByObject(show1)
+	}
+
+	def "can restore a radio show to move out of the trash"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1", deleted:true).save()
+			def trashedShow = new Trash(displayName:show1.name,
+				displayText:"20 messages",
+				objectClass:show1.class.name,
+				objectId:show1.id).save()
+			assert RadioShow.findAllByDeleted(true) == [show1]
+			assert Trash.findByObject(show1)
+			controller.params.id = show1.id
+		when:
+			controller.restore()
+		then:
+			RadioShow.findAllByDeleted(false) == [show1]
+			RadioShow.findAllByDeleted(true) == []
+			!Trash.findByObject(show1)
+	}
+
+	def "can delete a radio show with its associated activities to send it to the trash"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1").save(flush:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(PollResponse.createUnknown())
+			poll.save(failOnError:true, flush:true)
+			show1.addToActivities(poll)
+			show1.save(failOnError:true, flush:true)
+			assert RadioShow.findAllByDeleted(false) == [show1]
+			assert Poll.findAllByDeleted(false) == [poll]
+			assert !Trash.findByObject(show1)
+			controller.params.id  = show1.id
+		when:
+			controller.delete()
+		then:
+			RadioShow.findAllByDeleted(true) == [show1]
+			RadioShow.findAllByDeleted(false) == []
+			Poll.findAllByDeleted(true) == [poll]
+			Poll.findAllByDeleted(false) == []
+			Trash.findByObject(show1)
+	}
+
+	def "can restore a radio show with its associated activities to move out of the trash"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1", deleted: true).save()
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks", deleted: true)
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(PollResponse.createUnknown())
+			poll.save()
+			show1.addToActivities(poll)
+			show1.save()
+			controller.params.id = show1.id
+			def trashedShow = new Trash(displayName:show1.name,
+				displayText:"20 messages",
+				objectClass:show1.class.name,
+				objectId:show1.id).save()
+			assert RadioShow.findAllByDeleted(true) == [show1]
+			assert Trash.findByObject(show1)
+		when:
+			controller.restore()
+		then:
+			RadioShow.findAllByDeleted(false) == [show1]
+			RadioShow.findAllByDeleted(true) == []
+			Poll.findAllByDeleted(false) == [poll]
+			Poll.findAllByDeleted(true) == []
+			!Trash.findByObject(show1)
 	}
 }

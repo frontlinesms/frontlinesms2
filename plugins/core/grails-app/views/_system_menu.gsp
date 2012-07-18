@@ -7,7 +7,7 @@
 	</li>
 	<li class="nav ${params.controller=='help' ? 'selected' : ''}">
 		<g:remoteLink controller="help" onSuccess="launchHelpWizard(data);">
-			<g:message code="commont.help"/>
+			<g:message code="common.help"/>
 		</g:remoteLink>
 	</li>
 </ul>

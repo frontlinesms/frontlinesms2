@@ -24,7 +24,7 @@ environments {
     }
     production {
         dataSource {
-            url = "jdbc:h2:${System.properties.'user.home'}/.frontlinesms2/prodDb;MVCC=TRUE"
+            url = "jdbc:h2:${System.properties.'user.home'}/.frontlinesms2/radioProdDb;MVCC=TRUE"
             pooled = true
             properties {
                maxActive = -1

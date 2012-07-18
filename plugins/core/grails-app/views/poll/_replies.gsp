@@ -37,6 +37,8 @@
 			$("span.character-count").addClass("hide");
 			$(".magicwand-container").css({"visibility":"hidden"});
 			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"hidden"});
+			$("#autoreplyText").removeClass('error');
+			$(".error-panel").hide();
 		}
 	});
 	

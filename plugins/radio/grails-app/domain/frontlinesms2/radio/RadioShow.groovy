@@ -14,12 +14,18 @@ class RadioShow extends MessageOwner {
 	static transients = ['liveMessageCount']
 	
 	static constraints = {
-		name(blank: false, unique: true, validator: {val, obj ->
-				RadioShow.withNewSession {
-					def similarName = RadioShow.findByNameIlike(val)
-					return !similarName|| obj.id == similarName.id
-				}
+		name(blank: false, validator: {val, obj ->
+				def similarName = RadioShow.findByNameIlike(val)
+				return !similarName|| obj.id == similarName.id
 			})
+	}
+
+	static namedQueries = {
+		findByOwnedActivity { activityInstance ->
+				activities {
+					eq 'id', activityInstance.id
+				}
+		}
 	}
 	
 	def getShowMessages(getOnlyStarred = false, getSent=false) {

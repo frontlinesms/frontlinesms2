@@ -44,7 +44,7 @@ class RadioFilters {
 	}
 	
 	def listRadioShows() {
-		RadioShow.findAll()
+		RadioShow.findAllByDeleted(false)
 	}
 	
 	private def addActivityToRadioShow(model, id) {
