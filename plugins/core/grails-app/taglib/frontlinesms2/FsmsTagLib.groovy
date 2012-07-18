@@ -227,19 +227,33 @@ class FsmsTagLib {
 	}
 
 	def submenu = { att, body ->
+		out << '<li class="'+ att.class +'">'
+		if(att.code) {
+			out << '<h3>'
+			out << g.message(code:att.code)
+			out << '</h3>'
+		}
 		out << '<ul class="submenu">'
 		out << body()
 		out << '</ul>'
+		out << '</li>'
 	}
 
-	def menuitem = { att ->
+	def menuitem = { att, body ->
 		def classlist = att.class + " "
 		classlist += att.selected ? "selected " : ""
 		out << '<li class="' + classlist + '" >'
-		def msg = att.code
-		println msg
-		out << g.link(controller:att.controller, action:att.action) {
-			out << g.message(code:msg)
+		if (att?.bodyOnly)
+		{
+			out << body()
+		}
+		else {
+			def msg = att.code
+			def msgargs = att.msgargs
+			def p = att.params
+			out << g.link(controller:att.controller, action:att.action, params:p) {
+				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
+			}
 		}
 		out << '</li>'
 	}
