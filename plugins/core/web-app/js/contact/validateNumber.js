@@ -1,6 +1,4 @@
 function validateMobile(field) {
-	checkForNonDigits();
-	checkForDuplicates();
 	var internationFormatWarning = $(field).parent().find(".warning");
 	if(field.value=="" || isInternationalFormat(field.value)) {
 		internationFormatWarning.hide('fast');
@@ -13,41 +11,35 @@ function isInternationalFormat(phoneNumber) {
 	return phoneNumber.match(/\+\d+/);
 }
 
-function checkForNonDigits() {
-	if($("#duplicate-error").length == 0) {
-		$(".numberField").removeClass('error');
-		$(".error-message").remove();
-	}
-	$('#letter-error').remove();
-	
-	var field = $(".numberField").filter(function() {
-		return this.value.match(/[^\+?\d+]/);
-	});
-	field.addClass('error');
-	field.parent(".basic-info").append("<span id='letter-error' class='error-message'><g:message code='fmessage.number.error' /></span>");
-}
-
-function checkForDuplicates() {
-	var inputNumber = $("#mobile").val();
-	var truncatedNumber = inputNumber;
-	
-	if($("#letter-error").length == 0) {
-		$(".numberField").removeClass('error');
-		$(".error-message").remove();
-	}
-	$('#duplicate-error').remove();
-	$.ajax({
-		type:'GET',
-		data: {number: truncatedNumber, contactId: $("#contactId").val()},
-		url: url_root + 'contact/checkForDuplicates',
-		success: function(data, textStatus){
-			if(data && data != '') {
-				$("#mobile").addClass('error');
-				$("#mobile").parent(".basic-info").append("<span id='duplicate-error' class='error-message'>" + data + "</span>");
-			}
-		}
-	});
-}
 $(document).ready(function() {
 	$("#mobile").trigger('change');
+	var validator = $(".contact_form").validate({
+		rules: {
+			mobile: {
+				remote: {
+					url: url_root + 'contact/checkForDuplicates',
+					type: "GET",
+					data: {
+						contactId: $("input[name=contactId]").val()
+					}
+				}
+			}
+		},
+		messages: {
+			mobile: {
+				remote: i18n("contact.exists.warn")
+			}
+		},
+		errorPlacement: function(error, element) {
+			error.insertAfter(element.parent());
+		}
+	});
+	jQuery.validator.addMethod("phoneNumber", function(value, element) {
+		var valid = true;
+		var hasChar = $(element).val().match(/[^\+?\d+]/);
+		if(hasChar != null) {
+			valid = false;
+		}
+		return valid;
+	}, i18n("fmessage.number.error"));
 });

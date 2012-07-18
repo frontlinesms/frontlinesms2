@@ -117,5 +117,25 @@ function insertAtCaret(areaId, text) {
 
 $(function() {
 	setInterval(refreshMessageCount, 30000);
+	$.extend($.validator.messages, {
+		required: i18n("jquery.validation.required"),
+		remote: i18n("jquery.validation.remote"),
+		email: i18n("jquery.validation.email"),
+		url: i18n("jquery.validation.url"),
+		date: i18n("jquery.validation.date"),
+		dateISO: i18n("jquery.validation.dateISO"),
+		number: i18n("jquery.validation.number"),
+		digits: i18n("jquery.validation.digits"),
+		creditcard: i18n("jquery.validation.creditcard"),
+		equalTo: i18n("jquery.validation.equalto"),
+		accept: i18n("jquery.validation.accept"),
+		maxlength: jQuery.validator.format(i18n("jquery.validation.maxlength")),
+		minlength: jQuery.validator.format(i18n("jquery.validation.minlength")),
+		rangelength: jQuery.validator.format(i18n("jquery.validation.rangelength")),
+		range: jQuery.validator.format(i18n("jquery.validation.range")),
+		max: jQuery.validator.format(i18n("jquery.validation.max")),
+		min: jQuery.validator.format(i18n("jquery.validation.min"))
+	});
 });
+
 
