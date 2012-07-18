@@ -13,7 +13,7 @@
 			value="${search?.status}"
 			keys="${['', 'inbound', 'outbound']}"/>
 	<div class="input">
-		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}"/>
+		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" disabled="${search?.activityId ? true : false}"/>
 		<label for="inArchive"><g:message code="search.filter.archive"/></label>
 	</div>
 </g:if>
@@ -22,3 +22,19 @@
 	<fsms:dateRangePicker startDate="${search?.startDate}" endDate="${search?.endDate}"/>
 </div>
 
+<r:script>
+	$('#activityId').change(toggleInArchiveEnabled);
+	function toggleInArchiveEnabled() {
+		if ($(this).val() != "") {
+			var checkbox = $('#inArchive');
+			checkbox.attr("checked", "true");
+			checkbox.attr("disabled", "disabled");
+			$('label[for="inArchive"').attr("disabled", "disabled");
+		}
+		else {
+			checkbox.removeAttr("disabled");
+			$('label[for="inArchive"').removeAttr("disabled");
+		}
+
+	}
+</r:script>
