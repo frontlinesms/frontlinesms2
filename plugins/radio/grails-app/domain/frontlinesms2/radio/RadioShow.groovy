@@ -67,6 +67,10 @@ class RadioShow extends MessageOwner {
 			it.archived = true
 			it.save(flush: true)
 		}
+		this.activities?.each {
+			it.archive()
+			it.save(flush: true)
+		}
 	}
 	
 	def unarchive() {

@@ -135,6 +135,18 @@ class RadioShowController extends MessageController {
 		}
 	}
 
+	def archive() {
+		withRadioShow params.id, { showInstance ->
+			showInstance.archive()
+			if(showInstance.save(flush:true)) {
+				flash.message = defaultMessage 'archived'
+			} else {
+				flash.message = defaultMessage 'archive.failed', showInstance.id
+			}
+			redirect controller:"message", action:"inbox"
+		}
+	}
+
 	def restore() {
 		def radioShow = RadioShow.findById(params.id)
 		if(radioShow){
