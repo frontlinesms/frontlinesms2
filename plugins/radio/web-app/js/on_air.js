@@ -1,25 +1,26 @@
-var interval;
-var timeout;
+var interval; // TODO not safe variable name
+var timeout; // TODO not safe variable name
 
 function startShow(data) {
 	if(data.indexOf("already on air") == -1) {
-		$("#on-air").addClass("onAirIsActive");
-		$("#show-" + data).addClass("onAirIsActive");
+		$("#on-air").addClass("onAirIsActive"); // TODO cache jQuery objects
+		$("#show-" + data).addClass("onAirIsActive"); // TODO cache jQuery objects
 		$("#show-" + data).show();
 		$("#on-air").effect("pulsate", {}, 1000);
-		document.getElementsByClassName("start-show")[0].setAttribute("disabled","disabled");
-		document.getElementsByClassName("stop-show")[0].setAttribute("disabled","");
+		$(".start-show").attr("disabled","disabled");
+		document.getElementsByClassName("stop-show")[0].setAttribute("disabled",""); // TODO use jquery
 	} else {
 		window.location = window.location
 	}
 }
 
 function stopShow(data) {
-	$("#on-air").stop(true, true);
+	$("#on-air").stop(true, true); // TODO cache jQuery objects
 	$("#on-air").removeClass("onAirIsActive");
 	$("#on-air").css("opacity", "1");
-	$("#show-" + data).removeClass("onAirIsActive");
+	$("#show-" + data).removeClass("onAirIsActive"); // TODO cache jQuery objects
 	$("#show-" + data).hide();
-	document.getElementsByClassName("start-show")[0].setAttribute("disabled","");
-	document.getElementsByClassName("stop-show")[0].setAttribute("disabled","disabled");
+	document.getElementsByClassName("start-show")[0].setAttribute("disabled",""); // TODO use jquery
+	document.getElementsByClassName("stop-show")[0].setAttribute("disabled","disabled"); // TODO use jquery
 }
+

@@ -1,6 +1,9 @@
 package frontlinesms2.announcement
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
+import frontlinesms2.message.PageMessageInbox
+import frontlinesms2.page.PageMessageActivity
 import java.text.SimpleDateFormat
 
 class AnnouncementListSpec extends AnnouncementBaseSpec {
@@ -11,7 +14,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			to PageMessageAnnouncementNewOffice
+			to PageMessageAnnouncement, 'New Office'
 			def announcementMessageSources = messageSender.find('a')*.text()
 		then:
 			announcementMessageSources.containsAll(['Jane', 'Max'])
@@ -22,8 +25,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			to PageMessageAnnouncementNewOffice
-			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
+			to PageMessageAnnouncement, 'New Office'
 		then:
 			rowContents[2] == 'Max'
 			rowContents[3] == 'I will be late'
@@ -34,8 +36,7 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 		given:
 			createTestAnnouncements()
 		when:
-			go "message/activity/${Announcement.findByName('New Office').id}"
-			def selectedMenuItem = $('#sidebar .selected')
+			to PageMessageAnnouncement, 'New Office'
 		then:
 			selectedMenuItem.text() == 'New Office announcement'
 	}
@@ -48,10 +49,10 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			def announcement = Announcement.findByName("New Office")
 			def messages = announcement.getMessages() as List
 			def message = messages[0]
-			go "message/activity/${announcement.id}/show/${message.id}"
-			$("#btn_reply").click()
+			to PageMessageAnnouncement, 'New Office', Fmessage.findBySrc('Max')
+			singleMessageDetails.reply.click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor {at QuickMessageDialog}
 	}
 
 	def "should filter announcement messages for starred and unstarred messages"() {
@@ -59,19 +60,19 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
+			to PageMessageAnnouncement, 'New Office'
 		then:
-			$("#message-list tr").size() == 3
+			messagesList.size() == 3
 		when:
-			$('a', text:'Starred').click()
+			footer.showStarred.click()
 		then:
-			waitFor { $("#message-list tr").size() == 2 }
-			$("#message-list tr")[1].find(".message-sender-cell").text() == 'Max'
+			waitFor { messagesList.size() == 2 }
+			messagesList[1].find(".message-sender-cell").text() == 'Max'
 		when:
-			$('a', text:'All').click()
+			footer.showAll.click()
 		then:
-			waitFor { $("#message-list tr").size() == 3 }
-			$("#message-list tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
+			waitFor { messagesList.size() == 3 }
+			messagesList.collect {it.find(".message-sender-cell").text()}.containsAll(['Jane', 'Max'])
 	}
 	
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -79,28 +80,28 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			go "message/activity/${Announcement.findByName('New Office').id}/show/${Fmessage.findBySrc('Max').id}"
-			$("#btn_forward").click()
+			to PageMessageAnnouncement, 'New Office', Fmessage.findBySrc('Max')
+			singleMessageDetails.forward.click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
-			$('textArea', name:'messageText').text() == "I will be late"
+			waitFor { at QuickMessageDialog }
+			compose.textArea.text() == "I will be late"
 	}
-	
+
 	def "message count displayed when multiple messages are selected"() {
 		given:
 			createTestAnnouncements()
 			createTestMessages()
 		when:
-			to PageMessageAnnouncementNewOffice
+			to PageMessageAnnouncement, 'New Office'
 			messagesSelect[1].click()
 		then:
-			waitFor { $("#message-detail-sender").text().contains("Jane") }
+			waitFor { singleMessageDetails.sender.contains("Jane") }
 		when:
 			messagesSelect[2].click()
 		then:
-			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+			waitFor { multipleMessageDetails.messageCount.text() == "2 messages selected" }
 	}
-	
+
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createTestAnnouncements()
@@ -108,31 +109,30 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
-			to PageMessageAnnouncementNewOffice
+			to PageMessageAnnouncement, 'New Office'
 			messagesSelect[1].click()
 			messagesSelect[2].click()
 		then:
-			waitFor { $('#multiple-messages a').displayed }
+			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
-			btnReplyMultiple.click()
+			multipleMessageDetails.replyAll.click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor { at QuickMessageDialog }
 	}
-	
+
 	def "can delete a announcement"() {
 		when:
 			createTestAnnouncements()
 			createTestMessages()
-			def announcement = Announcement.findByName("New Office")
-			to PageMessageAnnouncementNewOffice
-			$(".header-buttons #more-actions").value("delete")
+			to PageMessageAnnouncement, 'New Office'
+			moreActions.value("delete")
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete activity") }
+			waitFor { at DeleteActivity }
 		when:
-			$("#done").click()
+			ok.click()
 		then:
-			waitFor { $("#sidebar .selected").text() == "Inbox" }
-			!$("a", text: "New Office announcement")
+			at PageMessageInbox
+			!bodyMenu.activityList.text().contains('New Office')
 	}
 }
 

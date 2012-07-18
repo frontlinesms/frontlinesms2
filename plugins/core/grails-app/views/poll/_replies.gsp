@@ -24,16 +24,17 @@
 <r:script>
 	$("#enableAutoreply").live("change", function() {
 		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
-		if(isGroupChecked('enableAutoreply')) {
-			$("#autoreplyText").removeAttr("disabled");
+		var autoreplyText = $("#autoreplyText");
+		if(isGroupChecked("enableAutoreply")) {
+			autoreplyText.removeAttr("disabled");
+			autoreplyText.addClass("required");
 			$("span.character-count").removeClass("hide");
 			$(".magicwand-container").css({"visibility":"visible"});
 			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"visible"});
 		} else {
-			$("#autoreplyText").attr('disabled','disabled');
+			autoreplyText.attr('disabled','disabled');
+			autoreplyText.removeClass("required");
 			$("span.character-count").addClass("hide");
-			$("#autoreplyText").removeClass('error');
-			$(".error-panel").hide();
 			$(".magicwand-container").css({"visibility":"hidden"});
 			$(".magicwand-container").parent().find(".character-count-warning").css({"visibility":"hidden"});
 		}

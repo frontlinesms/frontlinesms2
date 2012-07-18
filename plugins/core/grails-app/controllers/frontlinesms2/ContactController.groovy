@@ -151,14 +151,12 @@ class ContactController {
 	}
 	
 	def checkForDuplicates = {
-		def foundContact = Contact.findByMobile(params.number)
+		def foundContact = Contact.findByMobile(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
-			render("true")
+			render true
 		} else
-			if(!foundContact && params.number)
-				render "true"
-			else
-				render "false"
+			if(!foundContact && params.mobile) render true
+			else render false
 	}
 	
 	def messageStats() {

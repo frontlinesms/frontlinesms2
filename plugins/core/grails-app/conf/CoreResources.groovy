@@ -26,6 +26,7 @@ modules = {
 		resource url: [dir:'js', file:'characterSMS-count.js'], disposition: 'head'
 		resource url: [dir:'js', file:'check_li.js'], disposition: 'head'
 		resource url: [dir:'js', file:"jquery.ui.selectmenu.js"], disposition: 'head'
+		resource url: [dir:'js', file:"jquery.validate.min.js"], disposition: 'head'
 		resource url: [dir:'js', file:"mediumPopup.js"], disposition: 'head'
 		resource url: [dir:'js', file:"pagination.js"], disposition: 'head'
 		resource url: [dir:'js', file:"smallPopup.js"], disposition: 'head'

@@ -1,9 +1,5 @@
-#on-air {
-	color: #DFDFDF;
-}
-#on-air.onAirIsActive, .onAirIsActive {
-	color: #9433C7;
-}
+#on-air { color:#DFDFDF; }
+#on-air.onAirIsActive, .onAirIsActive { color: #9433C7; }
 
 .message-list-separator {
 	background-color: #DFDFDF;
@@ -17,7 +13,18 @@
 	height: 28px;
 }
 
-.secondarySelected {
-	background-color: #E0F0DE;
-}
+#inbox-indicator { background-color:#693f80 !important; }
+
+#body-menu .selected a, .ui-tabs-nav .ui-tabs-selected a,
+#body.contacts #main-list li.selected,
+#modalBox.help #help-index li.selected > a {
+	background-color:#c2dbbf !important; }
+
+#body-menu a:hover, .ui-tabs-nav a:hover,
+#body.messages #detail,
+#body.contacts #detail,
+#body.contacts #main-list li:hover,
+#body-messages #main-list tr:hover,
+#modalBox.help #help-index li li li a:hover {
+	background-color:#e0f0de !important; }
 

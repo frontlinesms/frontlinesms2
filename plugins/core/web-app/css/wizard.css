@@ -36,3 +36,5 @@
 
 #tabs div.summary { display:none; }
 #tabs div.summary p { line-height:150%; margin-bottom:20px; }
+
+#tabs div.input ul label.error { margin-right: 0px; }

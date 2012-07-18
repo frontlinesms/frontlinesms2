@@ -67,18 +67,19 @@ class PollDialog extends MediumPopup {
 		popupTitle.contains("poll")
 	}
 	static content = {
-		compose { module PollComposeTab }
-		response { module PollResponseTab }
-		sort { module PollSortTab }
-		autoreply { module PollAutoReplyTab }
-		edit { module PollEditMessageTab }
-		recipients { module PollRecipientsTab }
-		confirm { module PollConfirmTab }
-		summary { module PollSummary }
+		compose { module ComposeTab }
+		response { module ResponseTab }
+		aliases { module AliasTab }
+		sort { module SortTab }
+		autoreply { module AutoReplyTab }
+		edit { module EditMessageTab }
+		recipients { module RecipientsTab }
+		confirm { module ConfirmTab }
+		summary { module Summary }
 	}
 }
 
-class PollComposeTab extends geb.Module {
+class ComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		yesNo { $('div.input input[value="yesNo"]') }
@@ -88,7 +89,7 @@ class PollComposeTab extends geb.Module {
 	}
 }
 
-class PollResponseTab extends geb.Module {
+class ResponseTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		choice { choiceLetter -> 
@@ -100,8 +101,16 @@ class PollResponseTab extends geb.Module {
 	}
 }
 
-class PollSortTab extends geb.Module {
+class AliasTab extends geb.Module {
 	static base = { $('div#tabs-3') }
+	static content = {
+		labels { $('#poll-aliases label') }
+		inputs { $('#poll-aliases input.aliases') }
+	}
+}
+
+class SortTab extends geb.Module {
+	static base = { $('div#tabs-4') }
 	static content = {
 		dontSort { $('ul.select input[value="false"]') }
 		sort { $('ul.select input[value="true"]') }
@@ -110,8 +119,8 @@ class PollSortTab extends geb.Module {
 	}
 }
 
-class PollAutoReplyTab extends geb.Module {
-	static base = { $('div#tabs-4') }
+class AutoReplyTab extends geb.Module {
+	static base = { $('div#tabs-5') }
 	static content = {
 		autoreplyCheck { $('input#enableAutoreply') }
 		text { $('textarea#autoreplyText') }
@@ -119,15 +128,15 @@ class PollAutoReplyTab extends geb.Module {
 	}
 }
 
-class PollEditMessageTab extends geb.Module {
-	static base = { $('div#tabs-5') }
+class EditMessageTab extends geb.Module {
+	static base = { $('div#tabs-6') }
 	static content = {
 		text { $('textarea#messageText') }
 	}
 }
 
-class PollRecipientsTab extends geb.Module {
-	static base = { $('div#tabs-6') }
+class RecipientsTab extends geb.Module {
+	static base = { $('div#tabs-7') }
 	static content = {
 		addField { $('input#address') }
 		addButton { $('a.btn.add-address') }
@@ -136,8 +145,8 @@ class PollRecipientsTab extends geb.Module {
 	}
 }
 
-class PollConfirmTab extends geb.Module {
-	static base = { $('div#tabs-7') }
+class ConfirmTab extends geb.Module {
+	static base = { $('div#tabs-8') }
 	static content = {
 		pollName { $('input#name') }
 		message { $("#poll-message").text() }
@@ -148,7 +157,7 @@ class PollConfirmTab extends geb.Module {
 	}
 }
 
-class PollSummary extends geb.Module {
+class Summary extends geb.Module {
 	static base = { $('div.summary') }
 	static content = {
 
@@ -171,5 +180,59 @@ class RenameDialog extends MediumPopup {
 	static content = {
 		name { $('input#name') }
 		done { $('button#done') }
+	}
+}
+
+
+class AnnouncementDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("announcement")
+	}
+	static content = {
+		composeAnnouncement {module AnnouncementMessageComposeTab}
+		recipients {module AnnouncementRecipientsTab}
+		confirm { module AnnouncementConfirmTab }
+		summary { module AnnouncementSummary }
+	}
+}
+
+class AnnouncementMessageComposeTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		textArea { $('#messageText') }
+	}
+}
+
+class AnnouncementRecipientsTab extends geb.Module {
+	static base = { $('div#tabs-2') }
+	static content = {
+		addField { $('input#address') }
+		addButton { $('a.btn.add-address') }
+	}
+}
+
+class AnnouncementConfirmTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		announcementName { $('input#name') }
+		message { $("#confirm-message-text").text() }
+		recipientCount { $("#confirm-recipients-count").text() }
+		recipientCount { $("#confirm-message-count").text() }
+	}
+}
+
+class AnnouncementSummary extends geb.Module {
+	static at = {
+		popupTitle.contains("announcement saved")
+	}
+}
+
+class DeleteDialog extends MediumPopup {
+	static at = {
+		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("delete");
+	}
+	static content = {
+		done { $('button#done') }
+
 	}
 }
