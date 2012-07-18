@@ -83,6 +83,7 @@ modules = {
 		dependsOn "messages"
 		resource url: [dir:'js', file:"datepicker.js"]
 		resource url: [dir:'js', file:"search/moreOptions.js"]
+		resource url: [dir:'js', file:"search/basicFilters.js"]
 	}
 	
 	settings {
