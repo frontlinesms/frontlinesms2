@@ -143,7 +143,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			compose.textArea.text() == "test"
 	}
 	
-	@spock.lang.IgnoreRest
 	def "should only display message details when one message is checked"() {
 		given:
 			createInboxTestMessages()
