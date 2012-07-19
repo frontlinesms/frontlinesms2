@@ -1,22 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="popup"/>
-
-<div id="tabs" class="vertical-tabs">
-	
-	<ul>
-		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question"/></a></li>
-		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response"/></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.alias"/></a></li>
-		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.sort"/></a></li>
-		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.reply"/></a></li>
-		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.edit.message"/></a></li>
-		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.recipients"/></a></li>
-		<li><a class="tabs-8" href="#tabs-8"><g:message code="poll.confirm"/></a></li>
-	</ul>
-
-	<g:formRemote url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )">
-		<fsms:wizardTabs templates="
-				/poll/question,
+<fsms:wizard url="[action: 'save', controller:'poll', params: [ownerId:activityInstanceToEdit?.id ?: null, format: 'json']]" name='new-poll-form' method="post" onSuccess="checkForSuccessfulSave(data, i18n('poll.label') )"
+		verticalTabs="poll.question,
+				poll.response,
+				poll.sort,
+				poll.alias,
+				poll.reply,
+				poll.edit.message,
+				poll.recipients,
+				poll.confirm"
+		templates="/poll/question,
 				/poll/responses,
 				/poll/aliases,
 				/poll/sorting,
@@ -25,8 +18,6 @@
 				/message/select_recipients,
 				/poll/confirm,
 				/poll/save"/>
-	</g:formRemote>
-</div>
 
 <r:script>
 	var autoUpdate = true;

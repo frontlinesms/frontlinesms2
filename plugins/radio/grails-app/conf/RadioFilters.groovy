@@ -29,16 +29,20 @@ class RadioFilters {
 		justPoll(action:'save') {
 			after = { model ->
 				if(params.radioShowId) {
-					addActivityToRadioShow(model, params.radioShowId)
+					addActivityToRadioShow(params.ownerId, params.radioShowId)
 				}
 			}
 		}
-		
-		justPoll(action:'edit') {
+
+		justActivity(action:'create') {
 			after = { model ->
-				if(params.radioShowId) {
-					addActivityToRadioShow(model, params.radioShowId)
-				}
+				params.radioSelector = true
+			}
+		}
+
+		justActivity(action:'edit') {
+			after = { model ->
+				params.radioSelector = true
 			}
 		}
 	}
@@ -47,15 +51,14 @@ class RadioFilters {
 		RadioShow.findAllByDeleted(false)
 	}
 	
-	private def addActivityToRadioShow(model, id) {
+	private def addActivityToRadioShow(ownerId, id) {
 		def showInstance = RadioShow.get(id)
-		def activityInstance = Activity.get(model.ownerId)
+		def activityInstance
+		ownerId? (activityInstance = Activity.get(ownerId)) : (activityInstance = Activity.get(model.ownerId))
 		if(showInstance) {
-			removeActivityFromRadioShow(activityInstance)
-			showInstance.addToActivity(activityInstance)
+			showInstance.addToActivities(activityInstance)
+			showInstance.save(flush:true, failOnError:true)
 		}
-		showInstance.save(flush:true, failOnError:true)
-		println "${activityInstance.name} has been added to ${showInstance.name}"
 	}
 	
 }

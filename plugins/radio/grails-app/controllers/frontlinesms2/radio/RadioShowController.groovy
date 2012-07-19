@@ -55,11 +55,9 @@ class RadioShowController extends MessageController {
 	
 	def startShow() {
 		def showInstance = RadioShow.findById(params.id)
-		println "params.id: ${params.id}"
 		if(showInstance?.start()) {
 			println "${showInstance.name} show started"
 			showInstance.save(flush:true)
-			render "$showInstance.id"
 		} else {
 			flash.message = message code:'radio.show.onair.error', args:[RadioShow.findByIsRunning(true)?.name]
 			render text:flash.message
@@ -104,7 +102,7 @@ class RadioShowController extends MessageController {
 	def selectActivity() {
 		def activityInstance = Activity.get(params.ownerId)
 		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		render template:"selectActivity", model:[ownerInstance:activityInstance, currentShow:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
+		[ownerInstance:activityInstance, radioShowIntance:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
 	}
 
 	def rename() {
@@ -161,15 +159,6 @@ class RadioShowController extends MessageController {
 			}
 		}
 		redirect controller:"message", action:"trash"
-	}
-	
-	private void removeActivityFromRadioShow(Activity activity) {
-		RadioShow.findAll().collect { showInstance ->
-			if(activity in showInstance.activities) {
-				showInstance.removeFromActivities(activity)
-				showInstance.save()
-			}
-		}
 	}
 	
 	private String dateToString(Date date) {
