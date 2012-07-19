@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# check spidermonkey is installed
+jslint
+if [ $? -eq 127 ]; then
+	echo "Please install jslint."
+	exit
+fi
+
+# check that jslint is available in temp
+
+# run jslint
+find web-app/js/ -name "*.js" -print0 -type f | xargs --null -n 1 jslint
