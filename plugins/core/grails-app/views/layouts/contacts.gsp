@@ -21,7 +21,7 @@
 			<div id="body-menu">
 				<fsms:render template="menu"/>
 			</div>
-			<g:form class="contact_form">
+			<g:form controller="contact">
 				<div id="main-list-container">
 					<div id="main-list-head">
 						<fsms:render template="header"/>
