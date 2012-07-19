@@ -150,6 +150,7 @@ class RadioShowController extends MessageController {
 			fmessages << Fmessage."${params.messageSection}"()?.list()
 		}
 		fmessages.text.each{ words+=it+" " }
+		words =  words.replaceAll("\\W", " ")//remove all non-alphabet
 		def data = words.split()
 		def freq = [:].withDefault { k -> 0 }
 		data.each { freq[it] += 1 }
