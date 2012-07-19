@@ -10,7 +10,7 @@ $(function() {
 		
 	});
 
-	var pollGraph = {
+	pollGraph = {
 		stats: {},
 		loaded: false,
 		refresh:false,
@@ -45,18 +45,18 @@ $(function() {
 			pollGraphBtn.html(i18n("fmessage.hidepolldetails"));
 			pollGraphBtn.addClass("hide-arrow");
 			pollGraphBtn.removeClass("show-arrow");
-			$("#poll-details").toggle();
-			$('#main-list').toggle();
-			$("#main-list-foot").toggle();
+			$("#poll-details").show();
+			$('#main-list').hide();
+			$("#main-list-foot").hide();
 		},
 		showMessages: function() {
 			var pollGraphBtn = $("#poll-graph-btn");
-			$("#poll-details").toggle();
+			$("#poll-details").hide();
 			pollGraphBtn.html(i18n("fmessage.showpolldetails"));
 			pollGraphBtn.addClass("show-arrow");
 			pollGraphBtn.removeClass("hide-arrow");
-			$('#main-list').toggle();
-			$("#main-list-foot").toggle();
+			$('#main-list').show();
+			$("#main-list-foot").show();
 			pollGraph.loaded = false;
 		},
 		showGraph: function() {
