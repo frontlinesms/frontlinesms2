@@ -86,9 +86,8 @@ class SingleMessageDetails extends geb.Module {
 		}
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
-		moveTo { foldername -> 
-			def folder = foldername == "inbox" ? foldername : Folder.findByName(foldername).id.toString()
-			$('select#move-actions').jquery.val(folder)
+		moveTo { msgowner -> 
+			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
 		}
 		moveActions { $('select#move-actions option')*.text() }
@@ -101,9 +100,8 @@ class MultipleMessageDetails extends geb.Module {
 		checkedMessageCount { $('p#checked-message-count').text().toInteger() }
 		replyAll { $('a#btn_reply_all') }
 		messageCount {$("#checked-message-count")}
-		moveTo { foldername -> 
-			def folder = foldername == "inbox" ? foldername : Folder.findByName(foldername).id.toString()
-			$('select#move-actions').jquery.val(folder)
+		moveTo { msgowner -> 
+			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
 		}
 		moveActions { $('select#move-actions option')*.text() }

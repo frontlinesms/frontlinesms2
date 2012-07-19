@@ -78,7 +78,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo('Shampoo Brands')
+			multipleMessageDetails.moveTo(Poll.findByName('Shampoo Brands'))
 		then:
 			waitFor { messageList.noContent.displayed }
 			Fmessage.owned(footballPoll).count() == 0
