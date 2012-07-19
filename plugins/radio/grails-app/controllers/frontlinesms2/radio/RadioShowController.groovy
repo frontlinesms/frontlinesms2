@@ -135,6 +135,30 @@ class RadioShowController extends MessageController {
 		}
 	}
 
+	def wordCloudStats() {
+		def words = ""
+		def fmessages = []
+		if(params.id != 'null'){
+			def ownerInstance =  MessageOwner.findById(params.id)
+			ownerInstance.messages.each{ fmessages << it }
+			if(ownerInstance instanceof RadioShow){
+				ownerInstance.activities.each{
+					it.messages.each{ fmessages << it}
+				}
+			}
+		}else{
+			fmessages << Fmessage."${params.messageSection}"()?.list()
+		}
+		fmessages.text.each{ words+=it+" " }
+		words =  words.replaceAll("\\W", " ")//remove all non-alphabet
+		def data = words.split()
+		def freq = [:].withDefault { k -> 0 }
+		data.each { freq[it] += 1 }
+		freq = freq.sort { a, b -> b.value <=> a.value }
+		freq = freq.take(100).sort()
+		render freq as JSON
+	}
+
 	def restore() {
 		def radioShow = RadioShow.findById(params.id)
 		if(radioShow){

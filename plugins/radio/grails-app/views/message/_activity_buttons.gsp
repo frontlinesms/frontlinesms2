@@ -2,6 +2,7 @@
 <%@ page import="frontlinesms2.radio.*" %>
 <div class="header-buttons">
 	<fsms:quickMessage class="section-action-button activity-btn btn"/>
+	<g:render template="/wordcloud/wordcloud_actions"/>
 	<g:if test="${params.controller!='archive'}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:if>
