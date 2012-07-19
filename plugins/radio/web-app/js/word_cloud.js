@@ -17,7 +17,7 @@ function showWordCloud(stats){
 	$("#main-list").hide();
 	$("#main-list-foot").hide();
 	$("#poll-details").hide();
-	pollGraph.loaded = false
+	if(typeof(pollGraph) !== "undefined") { pollGraph.loaded = false; }
 	$("#poll-graph-btn").html(i18n("fmessage.showpolldetails"));
 
 	$("a[name=show-wordcloud-btn]").hide();
@@ -26,7 +26,7 @@ function showWordCloud(stats){
 
 function showMessages(){
 	$("#poll-details").hide();
-	pollGraph.loaded = false
+	if(typeof(pollGraph) !== "undefined") { pollGraph.loaded = false; }
 	$("#poll-graph-btn").html(i18n("fmessage.showpolldetails"));
 	$("#wordcloud-container").hide();
 	$("#main-list").show();
