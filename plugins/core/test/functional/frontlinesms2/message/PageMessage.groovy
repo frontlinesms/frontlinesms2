@@ -51,6 +51,7 @@ class ContentFooter extends geb.Module {
 class MessageList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
+		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
 		messages { moduleList MessageListRow, $('tr') }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
