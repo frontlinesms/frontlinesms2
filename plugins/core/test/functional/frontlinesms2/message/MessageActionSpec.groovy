@@ -1,6 +1,8 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.poll.*
+import frontlinesms2.folder.*
 import frontlinesms2.poll.PageMessagePollFootballTeamsBob
 
 class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
@@ -11,21 +13,18 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestMessages()
 			createTestFolders()
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc('Bob')
 		then:
-			at PageMessagePollFootballTeamsBob
+			def actions = singleMessageDetails.moveActions
+			actions[1] == "Inbox"
+			actions[2] == "Shampoo Brands"
+			!actions.contains("Football Teams")
 		when:
-			def actions = $('select', name: 'move-actions').children()*.value()
-		then:
-			actions[1] == "inbox"
-			actions[2] == "${Poll.findByName("Shampoo Brands").id}"
-			!actions.contains("${Poll.findByName("Football Teams").id}")
-		when:
-			go "message/inbox/show/${Fmessage.findBySrc("Bob").id}"
-			def inboxActions = $('#move-actions').children()*.value()
+			to PageMessageInbox, Fmessage.findBySrc("Bob")
+			def inboxActions = singleMessageDetails.moveActions
 		then:
 			inboxActions.size() >= 5
-			inboxActions.every {it != "inbox"}
+			inboxActions.every {it != "Inbox"}
 	}
 
 	def "move to inbox option should be displayed for folder messages and should work"() {
@@ -33,16 +32,14 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestFolders()
 			Folder.findByName("Work").addToMessages(new Fmessage(src: "src", inbound: true)).save(flush: true, failOnError: true)
 		when:
-			go "message/folder/${Folder.findByName("Work").id}/show/${Fmessage.findBySrc("src").id}"
-			$('#move-actions').jquery.val('inbox') // bug selecting option - seems to be solved by using jquery...
-			$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
+			to PageMessageFolder, Folder.findByName("Work"), Fmessage.findBySrc("src")
+			singleMessageDetails.moveTo("inbox")
 		then:
-			waitFor { $("div.flash").displayed }
+			waitFor { notifications.flashMessage.displayed }
 		when:
-			$("a", text: "Inbox").click()
-			waitFor {title == "Inbox"}
+			to PageMessageInbox
 		then:
-			$("#message-list tr").size() == 2
+			messageList.messages.size() == 2
 	}
 	
 	def "can categorize poll messages using dropdown"() {
@@ -50,15 +47,14 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc("Bob")
 			def barce = "btn-" + PollResponse.findByValue('barcelona').id
 		then:
 			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('manchester').poll
 		when:
-			$('#categorise_dropdown').jquery.val(barce)
-			$('#categorise_dropdown').jquery.trigger('change')
+			categoriseSingle(PollResponse.findByValue('barcelona').id)
 		then:
-			waitFor { $(".flash").displayed }
+			waitFor { notifications.flashMessage.displayed }
 		when:
 			PollResponse.findByValue('manchester').refresh()
 			PollResponse.findByValue('barcelona').refresh()
@@ -74,17 +70,17 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			def shampooPoll = Poll.findByName('Shampoo Brands')
 			def footballPoll = Poll.findByName('Football Teams')
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc("Bob")
 		then:
-			at PageMessagePollFootballTeamsBob
+			at PageMessagePoll
 		when:
-			messagesSelect[0].click()
+			messageList.selectAll.click()
 		then:
-			waitFor { $('#multiple-messages').displayed }
+			waitFor { multipleMessageDetails.displayed }
 		when:
-			setMoveActionsValue(shampooPoll.id.toString())
+			multipleMessageDetails.moveTo('Shampoo Brands')
 		then:
-			waitFor { $('#no-messages').displayed }
+			waitFor { messageList.noContent.displayed }
 			Fmessage.owned(footballPoll).count() == 0
 			Fmessage.owned(shampooPoll).count() == 3
 	}
