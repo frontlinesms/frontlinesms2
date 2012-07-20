@@ -80,6 +80,12 @@ class SingleContactDetails extends geb.Module {
 	    customLabel { customField ->
 	    	$('label', text:customField ) 
 	    }
+	    labels { fieldName ->
+	 		$('label', for:fieldName)   	
+	    }
+	    textField { fieldName ->
+	    	$("#$fieldName")
+	    }
 		addMoreInfomation {
 			$('select#new-field-dropdown').jquery.val('add-new') 
 			$('select#new-field-dropdown').jquery.trigger("change") 

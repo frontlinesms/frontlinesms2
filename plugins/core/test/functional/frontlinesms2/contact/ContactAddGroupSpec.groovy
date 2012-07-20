@@ -110,6 +110,7 @@ class ContactAddGroupSpec extends ContactBaseSpec {
 		when:
 			def testGroup = Group.findByName('Test')
 			to PageContactShow, Contact.findByName('Bob')
+			GroupMembership.countMembers(testGroup) == 1
 
 			singleContactDetails.removeGroup testGroup.id.toString()
 			singleContactDetails.save.click()

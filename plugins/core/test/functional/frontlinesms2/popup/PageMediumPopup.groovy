@@ -189,26 +189,15 @@ class AnnouncementDialog extends MediumPopup {
 		popupTitle.contains("announcement")
 	}
 	static content = {
-		composeAnnouncement {module AnnouncementMessageComposeTab}
+		composeAnnouncement {module QuickMessageComposeTab}
 		recipients {module AnnouncementRecipientsTab}
 		confirm { module AnnouncementConfirmTab }
 		summary { module AnnouncementSummary }
 	}
 }
 
-class AnnouncementMessageComposeTab extends geb.Module {
-	static base = { $('div#tabs-1') }
-	static content = {
-		textArea { $('#messageText') }
-	}
-}
-
-class AnnouncementRecipientsTab extends geb.Module {
+class AnnouncementRecipientsTab extends RecipientsTab {
 	static base = { $('div#tabs-2') }
-	static content = {
-		addField { $('input#address') }
-		addButton { $('a.btn.add-address') }
-	}
 }
 
 class AnnouncementConfirmTab extends geb.Module {

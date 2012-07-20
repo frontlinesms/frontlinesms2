@@ -4,7 +4,7 @@ import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
-
+import frontlinesms2.popup.*
 import frontlinesms2.*
 
 class MessageInboxSpec extends MessageBaseSpec {
@@ -26,18 +26,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageList.messages[2].source == 'Bob'
 			messageList.messages[2].text == 'hi Bob'
 			messageList.messages[2].date != null // ie is a valid date object
-	}
-
-	def 'message to alice is first in the list, and links to the show page'() {
-		// TODO: rewrite (but first understand what it's doing.. seems strange)
-		given:
-			createInboxTestMessages()
-			def message = Fmessage.findBySrc('Alice')
-		when:
-			to PageMessageInbox
-			def firstMessageLink = $('a', text:"Alice")
-		then:
-			firstMessageLink.text() == 'Alice'
 	}
 
 	def 'no message is selected when inbox is first loaded'() {
@@ -167,7 +155,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { multipleMessageDetails.checkedMessageCount == 1 }
+			waitFor { !multipleMessageDetails.checkedMessageCount.displayed }
 			waitFor { singleMessageDetails.displayed }
 	}
 
@@ -218,24 +206,22 @@ class MessageInboxSpec extends MessageBaseSpec {
 			confirm.recipientName == "${Contact.findByMobile(message.src).name}"
 	}
 
-	// FIXME FOR THE BELOW FIXME.  IF YOU WILL INSIST ON COMMENTING OUT STUFF LIKE THIS, PLEASE EXPLAIN WHAT IS BROKEN
-	//FIXME
-//	def "should skip recipients tab for reply-all option"() {
-//		given:
-//			createInboxTestMessages()
-//		when:
-//			go "message"
-//			$("#message")[0].click()
-//			sleep 1000
-//			$("#reply-all").click()
-//			sleep 10000
-//		then:
-//			$("#tabs").find { $("a").@href == '#tabs1' }
-//			!$("#tabs").find { $("a").@href == '#tabs2' }
-//			$("#tabs").find { $("a").@href == '#tabs3' }
-//			!$("#tabs a").@href('#tabs2').displayed
-//			$("#tabs a").@href('#tabs3').displayed
-//	}
+	def "should skip recipients tab for reply-all option"() {
+		given:
+			createInboxTestMessages()
+		when:
+			to PageMessageInbox
+			messageList.selectAll.click()
+			waitFor { multipleMessageDetails.replyAll.displayed }
+			multipleMessageDetails.replyAll.click()
+		then:
+			waitFor { at QuickMessageDialog }
+			compose.displayed
+		when:
+			next.click()
+		then:
+			waitFor { confirm.displayed }
+	}
 	
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:

@@ -51,6 +51,7 @@ class ContentFooter extends geb.Module {
 class MessageList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
+		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
 		messages { moduleList MessageListRow, $('tr') }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
@@ -85,10 +86,11 @@ class SingleMessageDetails extends geb.Module {
 		}
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
-		moveTo { foldername -> 
-			$('select#move-actions').jquery.val(Folder.findByName(foldername).id.toString())
+		moveTo { msgowner -> 
+			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
 		}
+		moveActions { $('select#move-actions option')*.text() }
 	}
 }
 
@@ -98,5 +100,10 @@ class MultipleMessageDetails extends geb.Module {
 		checkedMessageCount { $('p#checked-message-count').text().toInteger() }
 		replyAll { $('a#btn_reply_all') }
 		messageCount {$("#checked-message-count")}
+		moveTo { msgowner -> 
+			$('select#move-actions').jquery.val(msgowner)
+			$('select#move-actions').jquery.trigger("change")
+		}
+		moveActions { $('select#move-actions option')*.text() }
 	}
 }

@@ -52,13 +52,15 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			when:
 				to PageMessageInbox
 			then:
-				bodyMenu.activityList[0].text().contains('New Office')
-				bodyMenu.activityList[1].text().contains('Office Party')
+				waitFor('slow') {
+					bodyMenu.activityList[0].text().contains('New Office')
+					bodyMenu.activityList[1].text().contains('Office Party')
+				}
 	}
 
 	def "should display errors when announcement validation fails"() {
 		setup:
-			def announcement = new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true)
+			def announcementNewbie = new Announcement(name: "newbie", messageText: "announcing this new announcement!", messages:[]).save(failOnError:true)
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -84,7 +86,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			submit.click()
 		then:
 			assert Announcement.count() == 1
-			waitFor { error.displayed }
+			waitFor { error }
 			at AnnouncementDialog
 	}
 }

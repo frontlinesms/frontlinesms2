@@ -10,6 +10,7 @@ class GroupController {
 	def update = {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
+		println "these are the details >>>>> ${params}"
 		if(group.save(flush:true)) {
 			flash.message = message(code:'group.update.success')
 			redirect controller:"contact", action:"show", params:[groupId:params.id]
