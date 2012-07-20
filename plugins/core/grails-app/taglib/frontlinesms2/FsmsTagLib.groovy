@@ -240,8 +240,8 @@ class FsmsTagLib {
 	}
 
 	def menuitem = { att, body ->
-		def classlist = att.class + " "
-		classlist += att.selected ? "selected " : ""
+		def classlist = att.class?:""
+		classlist += att.selected ? " selected" : ""
 		out << '<li class="' + classlist + '" >'
 		if (att?.bodyOnly)
 		{
@@ -251,7 +251,7 @@ class FsmsTagLib {
 			def msg = att.code
 			def msgargs = att.msgargs
 			def p = att.params
-			out << g.link(controller:att.controller, action:att.action, params:p) {
+			out << g.link(controller:att.controller, action:att.action, params:p, id:att.id) {
 				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
 			}
 		}
