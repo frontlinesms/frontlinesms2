@@ -1,9 +1,9 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
-import frontlinesms2.contact.PageContactShow
 
 class SmartGroupCreateSpec extends SmartGroupBaseSpec {
+	@spock.lang.IgnoreRest
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
 		when:
 			launchCreateDialog()
@@ -208,7 +208,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 
 	def 'successfully creating a smart group should add it to the smart groups menu'() {
 		when:
-			to PageContactShow
+			to PageSmartGroupShow
 			launchCreateDialog('All the bobs!')
 			ruleField[0].value('Contact name')
 			setRuleValue(0, 'bob')

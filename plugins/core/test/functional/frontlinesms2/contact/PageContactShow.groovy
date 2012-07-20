@@ -2,7 +2,7 @@ package frontlinesms2.contact
 
 import frontlinesms2.*
 
-class PageContactShow extends PageContact {
+class PageContactShow extends frontlinesms2.page.PageContact {
 	static url = ''
 	String convertToPath(Object [] args) {
 		if (args.equals(null) || args.length == 0)
