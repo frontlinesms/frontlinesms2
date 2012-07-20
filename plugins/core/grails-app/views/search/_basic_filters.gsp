@@ -13,7 +13,7 @@
 			value="${search?.status}"
 			keys="${['', 'inbound', 'outbound']}"/>
 	<div class="input">
-		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}"/>
+		<g:checkBox name="inArchive" value="${search ? (search.inArchive ?: null) : true}" disabled="${search?.activityId ? true : false}"/>
 		<label for="inArchive"><g:message code="search.filter.archive"/></label>
 	</div>
 </g:if>

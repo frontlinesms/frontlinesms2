@@ -287,4 +287,21 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			0            | [city:'somethingthatdoesntexist', inArchive:true]
 			9            | [inArchive:true]
 	}
+
+	def "if searching in a group, archive is included, ignoring params value"() {
+		when:
+			folder = new Folder(name: 'work').save(failOnError:true, flush:true)
+			def m = Fmessage.findBySrc('+254111222')
+			folder.addToMessages(m).save(failOnError: true, flush:true)
+			m.save(flush:true, failOnError:true)
+			controller.params.activityId = folder.id
+			def model = controller.result()
+		then:
+			model.messageInstanceTotal == 1
+		when:
+			m.archived = true
+			model = controller.result()
+		then:
+			model.messageInstanceTotal == 1
+	}
 }

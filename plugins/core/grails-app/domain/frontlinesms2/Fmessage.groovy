@@ -69,7 +69,19 @@ class Fmessage {
 			and {
 				eq("isDeleted", false)
 				eq("archived", archived)
-				projections { dispatches { eq('status', DispatchStatus.SENT) } }
+				if(!archived) {
+					projections { dispatches { eq('status', DispatchStatus.SENT) } }
+				} else {
+					projections {
+						dispatches {
+							or {
+								eq('status', DispatchStatus.SENT)
+								eq('status', DispatchStatus.PENDING)
+								eq('status', DispatchStatus.FAILED)
+							}
+						}
+					}
+				}
 				if(getOnlyStarred)
 					eq("starred", true)
 			}
