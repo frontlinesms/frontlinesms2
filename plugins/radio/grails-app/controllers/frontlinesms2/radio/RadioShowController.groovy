@@ -174,6 +174,13 @@ class RadioShowController extends MessageController {
 		}
 		redirect controller:"message", action:"trash"
 	}
+
+	def showArchive() {
+		def showInstanceList = RadioShow.findAllByArchivedAndDeleted(true, false)
+		render view:'../archive/showArchive', model:[showInstanceList: showInstanceList,
+				showInstanceTotal: showInstanceList.size(),
+				messageSection: "radioShow"]
+	}
 	
 	private void removeActivityFromRadioShow(Activity activity) {
 		RadioShow.findAll().collect { showInstance ->

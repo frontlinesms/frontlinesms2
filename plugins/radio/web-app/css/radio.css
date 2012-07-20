@@ -32,3 +32,10 @@ ul.radio-show-activities {
 	padding-left: 10px;
 }
 
+table.archive td.show-cell {
+	font-weight:bold;
+}
+
+table.archive td.show-activity-name {
+	padding-left:40px;
+}
