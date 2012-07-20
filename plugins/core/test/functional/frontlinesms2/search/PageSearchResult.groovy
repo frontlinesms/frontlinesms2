@@ -19,5 +19,8 @@ class PageSearchResult extends PageSearch {
 			}
 		}
 		messageList {$("#message-list tr")}
+		displayNameLink { id->
+			$("a.displayName-"+ id)
+		}
 	}
 }

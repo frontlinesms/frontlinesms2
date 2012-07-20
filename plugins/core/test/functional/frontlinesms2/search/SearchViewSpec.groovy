@@ -147,7 +147,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findBySrc('src3').id}").click()
+			displayNameLink(Fmessage.findBySrc('src3').id).click()
 			deleteMessageBtn.click()
 		then:
 			at PageSearchResult
@@ -189,12 +189,12 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
+			displayNameLink(Fmessage.findByText('hi alex').id).click()
 			archiveMsgBtn.click()
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
+			displayNameLink(Fmessage.findByText('hi alex').id).click()
 		then:
 			at PageSearchResult
 			singleMessageDetailContent.text() == 'hi alex'
