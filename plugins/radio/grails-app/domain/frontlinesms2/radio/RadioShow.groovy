@@ -65,11 +65,11 @@ class RadioShow extends MessageOwner {
 		this.archived = true
 		this.messages.each {
 			it.archived = true
-			it.save(flush: true)
+			it.save()
 		}
 		this.activities?.each {
 			it.archive()
-			it.save(flush: true)
+			it.save()
 		}
 	}
 	
@@ -77,11 +77,11 @@ class RadioShow extends MessageOwner {
 		this.archived = false
 		this.messages.each {
 			it.archived = false
-			it.save(flush: true)
+			it.save()
 		}
 		this.activities?.each {
 			it.unarchive()
-			it.save(flush: true)
+			it.save()
 		}
 	}
 
