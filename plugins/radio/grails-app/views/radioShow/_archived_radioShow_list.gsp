@@ -32,17 +32,17 @@
 					<g:each in="${s.activities}" var="a">
 						<tr>
 							<td class="show-activity-name">
-								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'radioShow', ownerId:a.id, viewingMessages:true]">
 									- ${a.name}
 								</g:link>
 							</td>
 							<td>
-								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'radioShow', ownerId:a.id, viewingMessages:true]">
 									<g:message code="${a.shortName}.label"/>
 								</g:link>
 							</td>
 							<td>
-								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'radioShow', ownerId:a.id, viewingMessages:true]">
 									${a.liveMessageCount}
 								</g:link>
 							</td>
