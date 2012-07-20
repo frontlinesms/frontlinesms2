@@ -44,8 +44,8 @@ class RadioShowController extends MessageController {
 				render view:'standard',
 					model:[messageInstanceList: radioMessageInstanceList,
 						   messageSection: 'radioShow',
-						   messageInstanceTotal: messageInstanceList?.count(),
-						   ownerInstance: showInstance] << this.getShowModel()
+						   messageInstanceTotal: messageInstanceList?.count(), viewingMessages:params.viewingMessages,
+						   ownerInstance: showInstance, inArchive:params.inArchive] << this.getShowModel()
 		} else {
 			flash.message = message(code: 'radio.show.not.found')
 			redirect(action: 'inbox')
@@ -146,6 +146,18 @@ class RadioShowController extends MessageController {
 			redirect controller:"message", action:"inbox"
 		}
 	}
+
+	def unarchive() {
+		withRadioShow params.id, { showInstance ->
+			showInstance.unarchive()
+			if(showInstance.save(flush:true)) {
+				flash.message = defaultMessage 'unarchived'
+			} else {
+				flash.message = defaultMessage 'unarchive.failed', showInstance.id
+			}
+			redirect controller:"radioShow", action:"showArchive"
+		}
+	}	
 
 	def restore() {
 		def radioShow = RadioShow.findById(params.id)

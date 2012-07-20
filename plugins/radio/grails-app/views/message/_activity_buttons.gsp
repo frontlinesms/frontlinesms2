@@ -2,7 +2,7 @@
 <%@ page import="frontlinesms2.radio.*" %>
 <div class="header-buttons">
 	<fsms:quickMessage class="section-action-button activity-btn btn"/>
-	<g:if test="${params.controller!='archive'}">
+	<g:if test="${params.controller!='archive' && !params.inArchive}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:if>
 	<g:else>

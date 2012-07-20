@@ -75,8 +75,14 @@ class RadioShow extends MessageOwner {
 	
 	def unarchive() {
 		this.archived = false
-		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
-		messagesToArchive.each { it?.archived = false }
+		this.messages.each {
+			it.archived = false
+			it.save(flush: true)
+		}
+		this.activities?.each {
+			it.unarchive()
+			it.save(flush: true)
+		}
 	}
 
 	void addToActivities(Activity activityInstance) {

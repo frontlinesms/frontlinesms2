@@ -9,44 +9,46 @@
 	<tbody>
 		<g:if test="${showInstanceList.size() > 0}">
 			<g:each in="${showInstanceList}" var="s">
-				<tr class="folder-list-item">
-					<td class="show-name-cell show-cell">
-						<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
-							${s.name}
-						</g:link>
-					</td>
-					<td class="show-type-cell show-cell">
-						<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
-							<fsms:unbroken>
-								<g:message code="radio.label"/>
-							</fsms:unbroken>
-						</g:link>
-					</td>
-					<td class="show-message-count-cell show-cell">
-						<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
-							${s.liveMessageCount}
-						</g:link>
-					</td>
-				</tr>
-				<g:each in="${s.activities}" var="a">
-					<tr>
-						<td class="show-activity-name">
-							<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
-								- ${a.name}
+				<tbody>
+					<tr class="folder-list-item">
+						<td class="show-name-cell show-cell">
+							<g:link controller="radioShow" action="radioShow" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'radioShow', inArchive:true]">
+								${s.name}
 							</g:link>
 						</td>
-						<td>
-							<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
-								<g:message code="${a.shortName}.label"/>
+						<td class="show-type-cell show-cell">
+							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
+								<fsms:unbroken>
+									<g:message code="radio.label"/>
+								</fsms:unbroken>
 							</g:link>
 						</td>
-						<td>
-							<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
-								${a.liveMessageCount}
+						<td class="show-message-count-cell show-cell">
+							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
+								${s.liveMessageCount}
 							</g:link>
 						</td>
 					</tr>
-				</g:each>
+					<g:each in="${s.activities}" var="a">
+						<tr>
+							<td class="show-activity-name">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+									- ${a.name}
+								</g:link>
+							</td>
+							<td>
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+									<g:message code="${a.shortName}.label"/>
+								</g:link>
+							</td>
+							<td>
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true]">
+									${a.liveMessageCount}
+								</g:link>
+							</td>
+						</tr>
+					</g:each>
+				</tbody>
 			</g:each>
 		</g:if>
 		<g:else>
