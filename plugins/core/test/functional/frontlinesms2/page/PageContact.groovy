@@ -27,10 +27,6 @@ class BodyMenu extends geb.Module {
 	    }
 	    newContact { $('li.contacts .create a') }
 		newGroup { $('li.groups .create a') }
-
-	    smartgroups { $('li.smartgroups')}
-		smartGroupSubmenuLinks { smartgroups.find('ul.submenu li:not(.create) a') }
-		newSmartGroup { smartgroups.find('.create a') }
 	}
 }
 

@@ -1,6 +1,7 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
+import frontlinesms2.contact.PageContactShow
 
 abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 	def removeRule(i) {
@@ -17,7 +18,7 @@ abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	def launchCreateDialog(smartGroupName='English Contacts') {
 		to PageSmartGroup
-		newSmartGroup.click()
+		createSmartGroupButton.click()
 		waitFor { at SmartGroupCreateDialog }
 		if(smartGroupName) smartGroupNameField.value(smartGroupName)
 	}
