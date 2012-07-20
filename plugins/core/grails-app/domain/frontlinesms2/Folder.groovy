@@ -16,7 +16,8 @@ class Folder extends MessageOwner {
 	static constraints = {
 		name(blank:false, nullable:false, maxSize:255, validator: { val, obj ->
 			def similarName = Folder.findByNameIlike(val)
-			return !similarName || obj.id == similarName.id
+			if(!(similarName?.deleted || similarName?.archived))
+				return !similarName || obj.id == similarName.id
 			})
 	}
 

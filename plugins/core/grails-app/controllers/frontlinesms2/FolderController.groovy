@@ -83,9 +83,12 @@ class FolderController {
 	def restore = {
 		withFolder { folder ->
 			folder.deleted = false
-			folder.save(failOnError:true, flush:true)
 			Trash.findByObject(folder)?.delete()
-			flash.message = defaultMessage 'restored'
+			if(folder.save()) {
+				flash.message = defaultMessage 'restored'
+			} else {
+				flash.message = defaultMessage 'restore.failed', activity.id
+			}
 			redirect controller:"message", action:"trash"
 		}
 	}

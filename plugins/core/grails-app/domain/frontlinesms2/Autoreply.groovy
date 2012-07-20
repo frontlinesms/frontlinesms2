@@ -11,7 +11,8 @@ class Autoreply extends Activity {
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
 			def similarName = Autoreply.findByNameIlike(val)
-			return !similarName|| obj.id == similarName.id
+			if(!(similarName?.deleted || similarName?.archived))
+				return !similarName || obj.id == similarName.id
 			})
 		autoreplyText(blank:false)
 	}
