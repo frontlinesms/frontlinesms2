@@ -87,7 +87,7 @@ class FolderController {
 			if(folder.save()) {
 				flash.message = defaultMessage 'restored'
 			} else {
-				flash.message = defaultMessage 'restore.failed', activity.id
+				flash.message = defaultMessage 'restore.failed', folder.id
 			}
 			redirect controller:"message", action:"trash"
 		}
