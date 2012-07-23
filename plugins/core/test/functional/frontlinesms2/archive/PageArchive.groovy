@@ -6,3 +6,11 @@ class PageArchive extends geb.Page {
 		title.endsWith('Inbox archive')
 	}
 }
+
+class PageArchiveActivity extends PageArchive {
+	static def url = "archive/activity"
+
+	static at = {
+		title.contains('Activity Archive')
+	}
+}
