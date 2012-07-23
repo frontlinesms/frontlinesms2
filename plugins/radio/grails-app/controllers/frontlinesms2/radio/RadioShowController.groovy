@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
+
+	def radioShowService
 	
 	def index() {
 		params.sort = 'date'
@@ -137,8 +139,7 @@ class RadioShowController extends MessageController {
 
 	def archive() {
 		withRadioShow params.id, { showInstance ->
-			showInstance.archive()
-			if(showInstance.save(flush:true)) {
+			if(radioShowService.archive(showInstance as RadioShow)) {
 				flash.message = defaultMessage 'archived'
 			} else {
 				flash.message = defaultMessage 'archive.failed', showInstance.id
@@ -149,8 +150,7 @@ class RadioShowController extends MessageController {
 
 	def unarchive() {
 		withRadioShow params.id, { showInstance ->
-			showInstance.unarchive()
-			if(showInstance.save(flush:true)) {
+			if(radioShowService.unarchive(showInstance as RadioShow)) {
 				flash.message = defaultMessage 'unarchived'
 			} else {
 				flash.message = defaultMessage 'unarchive.failed', showInstance.id

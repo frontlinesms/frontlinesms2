@@ -44,9 +44,8 @@ class RadioFilters {
 
 		justArchive(action:'activityList') {
 			after = { model ->
-				println("removing activities owned by shows from view..")
-				model.activityInstanceList = model.activityInstanceList.find { !RadioShow.findByOwnedActivity(it).get() }
-				model.activityInstanceTotal = model.activityInstanceList.count()
+				model.activityInstanceList = model.activityInstanceList.findAll { act -> !RadioShow.findByOwnedActivity(act).get() }
+				model.activityInstanceTotal = model.activityInstanceList?.size()
 			}
 		}
 	}

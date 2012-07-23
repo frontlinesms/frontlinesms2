@@ -65,24 +65,26 @@ class RadioShow extends MessageOwner {
 		this.archived = true
 		this.messages.each {
 			it.archived = true
-			it.save()
+			it.save(failOnError: true)
 		}
 		this.activities?.each {
 			it.archive()
-			it.save()
+			it.save(failOnError: true)
 		}
+		return this.save(flush:true, failOnError: true)
 	}
 	
 	def unarchive() {
 		this.archived = false
 		this.messages.each {
 			it.archived = false
-			it.save()
+			it.save(failOnError: true)
 		}
 		this.activities?.each {
 			it.unarchive()
-			it.save()
+			it.save(failOnError: true)
 		}
+		return this.save(flush:true, failOnError: true)
 	}
 
 	void addToActivities(Activity activityInstance) {
