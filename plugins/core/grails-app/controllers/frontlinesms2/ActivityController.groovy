@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class ActivityController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -31,12 +33,21 @@ class ActivityController {
 	def update = {
 		withActivity { activity ->
 			activity.properties = params
-			if(activity.save()) {
+			if (activity.save()) {
 				flash.message = defaultMessage 'updated'
+		
+				withFormat {
+					json {
+						render([ok:true] as JSON)
+					}
+				}
 			} else {
-				flash.message = defaultMessage 'update.fail', activity.id
+				withFormat {
+					json {
+						render([ok:false, text:message(code: activity.errors.allErrors[0].codes[7])] as JSON)
+					}
+				}
 			}
-			redirect controller:"message", action:"activity", params:[ownerId: params.id]
 		}
 	}
 	
