@@ -183,10 +183,11 @@ class RadioShowController extends MessageController {
 		withRadioShow params.id, { showInstance ->
 			if(radioShowService.unarchive(showInstance as RadioShow)) {
 				flash.message = defaultMessage 'unarchived'
+				redirect controller:"radioShow", action:"radioShow", params:[ownerId: showInstance.id]
 			} else {
 				flash.message = defaultMessage 'unarchive.failed', showInstance.id
+				redirect controller:"radioShow", action:"showArchive"
 			}
-			redirect controller:"radioShow", action:"showArchive"
 		}
 	}	
 
