@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
+
+	def radioShowService
 	
 	def index() {
 		params.sort = 'date'
@@ -44,8 +46,8 @@ class RadioShowController extends MessageController {
 				render view:'standard',
 					model:[messageInstanceList: radioMessageInstanceList,
 						   messageSection: 'radioShow',
-						   messageInstanceTotal: messageInstanceList?.count(),
-						   ownerInstance: showInstance] << this.getShowModel()
+						   messageInstanceTotal: messageInstanceList?.count(), viewingMessages:params.viewingMessages,
+						   ownerInstance: showInstance, inArchive:params.inArchive] << this.getShowModel()
 		} else {
 			flash.message = message(code: 'radio.show.not.found')
 			redirect(action: 'inbox')
@@ -159,6 +161,28 @@ class RadioShowController extends MessageController {
 		render freq as JSON
 	}
 
+	def archive() {
+		withRadioShow params.id, { showInstance ->
+			if(radioShowService.archive(showInstance as RadioShow)) {
+				flash.message = defaultMessage 'archived'
+			} else {
+				flash.message = defaultMessage 'archive.failed', showInstance.id
+			}
+			redirect controller:"message", action:"inbox"
+		}
+	}
+
+	def unarchive() {
+		withRadioShow params.id, { showInstance ->
+			if(radioShowService.unarchive(showInstance as RadioShow)) {
+				flash.message = defaultMessage 'unarchived'
+			} else {
+				flash.message = defaultMessage 'unarchive.failed', showInstance.id
+			}
+			redirect controller:"radioShow", action:"showArchive"
+		}
+	}	
+
 	def restore() {
 		def radioShow = RadioShow.findById(params.id)
 		if(radioShow){
@@ -185,6 +209,13 @@ class RadioShowController extends MessageController {
 			}
 		}
 		redirect controller:"message", action:"trash"
+	}
+
+	def showArchive() {
+		def showInstanceList = RadioShow.findAllByArchivedAndDeleted(true, false)
+		render view:'../archive/showArchive', model:[showInstanceList: showInstanceList,
+				showInstanceTotal: showInstanceList.size(),
+				messageSection: "radioShow"]
 	}
 	
 	private void removeActivityFromRadioShow(Activity activity) {

@@ -126,7 +126,7 @@ class MessageController {
 			}
 			render view:"/activity/${activityInstance.shortName}/show",
 				model:[messageInstanceList: messageInstanceList?.list(params),
-						messageSection: 'activity',
+						messageSection: params.messageSection?:'activity',
 						messageInstanceTotal: messageInstanceList?.count(),
 						ownerInstance: activityInstance,
 						viewingMessages: this.viewingArchive ? params.viewingMessages : null,

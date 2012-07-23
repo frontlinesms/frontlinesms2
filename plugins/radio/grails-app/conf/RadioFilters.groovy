@@ -41,10 +41,17 @@ class RadioFilters {
 				}
 			}
 		}
+
+		justArchive(action:'activityList') {
+			after = { model ->
+				model.activityInstanceList = model.activityInstanceList.findAll { act -> !RadioShow.findByOwnedActivity(act).get() }
+				model.activityInstanceTotal = model.activityInstanceList?.size()
+			}
+		}
 	}
 	
 	def listRadioShows() {
-		RadioShow.findAllByDeleted(false)
+		RadioShow.findAllByDeletedAndArchived(false, false)
 	}
 	
 	private def addActivityToRadioShow(model, id) {
