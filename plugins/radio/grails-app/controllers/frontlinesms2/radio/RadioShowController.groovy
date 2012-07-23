@@ -58,13 +58,17 @@ class RadioShowController extends MessageController {
 	def startShow() {
 		def showInstance = RadioShow.findById(params.id)
 		println "params.id: ${params.id}"
-		if(showInstance?.start()) {
+		if(showInstance.archived) {
+			flash.message = message code:'radio.show.onair.error.archived'
+			render ([ok:false, message:flash.message] as JSON)
+		}
+		else if(showInstance?.start()) {
 			println "${showInstance.name} show started"
 			showInstance.save(flush:true)
-			render "$showInstance.id"
+			render ([ok:true] as JSON)
 		} else {
 			flash.message = message code:'radio.show.onair.error', args:[RadioShow.findByIsRunning(true)?.name]
-			render text:flash.message
+			render ([ok:false, message:flash.message] as JSON)
 		}
 	}
 	
@@ -163,7 +167,10 @@ class RadioShowController extends MessageController {
 
 	def archive() {
 		withRadioShow params.id, { showInstance ->
-			if(radioShowService.archive(showInstance as RadioShow)) {
+			if(showInstance.isRunning) {
+				flash.message =  message(code:'radioshow.show.onair.error.archive')
+			}
+			else if(radioShowService.archive(showInstance as RadioShow)) {
 				flash.message = defaultMessage 'archived'
 			} else {
 				flash.message = defaultMessage 'archive.failed', showInstance.id
