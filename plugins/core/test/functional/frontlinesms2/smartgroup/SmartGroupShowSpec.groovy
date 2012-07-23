@@ -14,7 +14,7 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		when:
 			getMenuLink('English Contacts').click()
 		then:
-			at PageEnglishSmartGroupShow
+			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
 	}
 	
 	def 'changing contact selection in a smartgroup should keep user in smartgroup view'() {
@@ -32,42 +32,31 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		when:
 			getMenuLink('English Contacts').click()
 		then:
-			at PageEnglishSmartGroupShow
+			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
 			contactLink[1].displayed
 		then:
 			contactLink[1].click()
 		then:
-			$('#smart-group-title').text().equalsIgnoreCase('English Contacts (2)')
-			at PageEnglishSmartGroupShow
+			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
 	}
 	
 	def 'user can edit an existing smartGroup'(){
 		setup:
 			def englishContacts = new SmartGroup(name:'English Contacts', mobile:'+254').save(flush:true, failOnError:true)
 		when:
-			to PageContactShow
+			to PageSmartGroupShow, SmartGroup.findByName("English Contacts")
 			getMenuLink('English Contacts').click()
 		then:
-			at PageEnglishSmartGroupShow
+			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
 		when:
-			$("#group-actions").value("edit").jquery.trigger("click")
-		then:
+			moreActionsSelect("edit")
 			waitFor { at SmartGroupEditDialog}
 			smartGroupNameField.value(smartGroupNameField.value() == englishContacts.name)
-		when:
 			setRuleValue(0, "+44")
 			editButton.click()
 			englishContacts.refresh()
 		then:
 			SmartGroup.count() == 1
 			waitFor {englishContacts.mobile == "+44"}
-	}
-}
-
-class PageEnglishSmartGroupShow extends geb.Page {
-	static at = { title.contains('English Contacts') }
-	
-	static content = {
-		contactLink { $('#contact-list a') }
 	}
 }

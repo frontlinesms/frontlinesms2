@@ -86,6 +86,7 @@ class SingleMessageDetails extends geb.Module {
 		}
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
+		delete {$('#delete-msg')}
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
@@ -99,6 +100,8 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text().toInteger() }
 		replyAll { $('a#btn_reply_all') }
+		archiveAll {$("a#btn_archive_all")}
+		deleteAll {$('btn_delete_all')}
 		messageCount {$("#checked-message-count")}
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)

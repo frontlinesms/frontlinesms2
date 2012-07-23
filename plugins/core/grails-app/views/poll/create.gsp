@@ -2,7 +2,7 @@
 <meta name="layout" content="popup"/>
 
 <div id="tabs" class="vertical-tabs">
-	
+	<div class="error-panel hide"><div id="error-icon"></div><g:message code="poll.validation.prompt"/></div>
 	<ul>
 		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question"/></a></li>
 		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response"/></a></li>

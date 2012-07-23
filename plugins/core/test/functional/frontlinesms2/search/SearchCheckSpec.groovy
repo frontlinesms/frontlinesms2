@@ -34,11 +34,11 @@ class SearchCheckSpec extends SearchBaseSpec {
 			to PageSearchResultHi
 			messagesSelect[2].click()
 		then:
-			waitFor { $("#message-detail #message-detail-sender").text() == 'Alice' }
+			waitFor { messageSenderDetail.text() == 'Alice' }
 		when:
 			messagesSelect[1].click()
 		then:
-			waitFor { $('#multiple-messages').displayed }
+			waitFor { multipleMessageDetails.displayed }
 			messagesSelect[2].parent().parent().hasClass("selected")
 			messagesSelect[1].parent().parent().hasClass("selected")
 	}
@@ -57,7 +57,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			replyToMultipleButton.click() // click the reply button
 		then:
-			waitFor { $("div#tabs-1").displayed }
+			waitFor { tab1.displayed }
 	}
 	
 	def "'Forward' button still work when all messages are unchecked"() {
@@ -72,12 +72,12 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			messagesSelect[0].click()
 		then:
-			waitFor { $('#message-detail #message-detail-sender').text() == "Barnabus" }
+			waitFor { messageSenderDetail.text() == "Barnabus" }
 		when:
 			$('a', text:'Barnabus').click()	
-			$('#btn_forward').click()
+			forwardBtn.click()
 		then:
-			waitFor { $('textArea', name:'messageText').text() == "i like chicken" }
+			waitFor { messageTextArea.text() == "i like chicken" }
 	}
 	
 	def "should set row as selected when a message is checked"() {
@@ -125,6 +125,6 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			archiveAllBtn.jquery.trigger("click")
 		then:
-			waitFor { $('title').text() == "Results"}
+			waitFor { pageTitle.text() == "Results"}
 	}
 }
