@@ -273,4 +273,3 @@ function editConnection(id) {
 		}
 	});
 }
-

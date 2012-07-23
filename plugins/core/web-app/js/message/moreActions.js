@@ -23,7 +23,7 @@ function renameAction() {
 		data: {ownerId: $("#ownerId").val()},
 		beforeSend: function(){ showThinking(); },
 		success: function(data) {
-			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename")); }
+			hideThinking(); launchSmallPopup(i18n("smallpopup.fmessage.rename.title", messageSection), data, i18n("action.rename"), 'validate'); }
 	});
 }
 
