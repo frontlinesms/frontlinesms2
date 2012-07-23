@@ -32,5 +32,6 @@ class PageSearch extends geb.Page {
 		forwardBtn { $('#btn_forward') }
 		messageTextArea { $('textArea', name:'messageText') }
 		pageTitle { $('title') }
+		tab1 { $("div#tabs-1") }
 	}
 }

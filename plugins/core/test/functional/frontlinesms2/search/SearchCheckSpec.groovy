@@ -57,7 +57,7 @@ class SearchCheckSpec extends SearchBaseSpec {
 		when:
 			replyToMultipleButton.click() // click the reply button
 		then:
-			waitFor { $("div#tabs-1").displayed }
+			waitFor { tab1.displayed }
 	}
 	
 	def "'Forward' button still work when all messages are unchecked"() {
