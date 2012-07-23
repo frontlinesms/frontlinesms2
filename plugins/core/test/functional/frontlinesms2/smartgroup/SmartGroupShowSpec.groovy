@@ -4,7 +4,6 @@ import frontlinesms2.*
 import frontlinesms2.contact.PageContactShow
 
 class SmartGroupShowSpec extends SmartGroupBaseSpec {
-	@spock.lang.IgnoreRest
 	def 'clicking a smartgroup in the menu should load it in the view'() {
 		when:
 			launchCreateDialog()
