@@ -1,4 +1,4 @@
-package frontlinesms2.contact
+package frontlinesms2.page
 
 import frontlinesms2.*
 import java.text.DateFormat
@@ -25,10 +25,8 @@ class BodyMenu extends geb.Module {
 		getGroupLink { groupName ->
 	    	$('li.groups ul.submenu li a', text:groupName ) 
 	    }
-		smartGroupSubmenuLinks { $('li.smartgroups ul.submenu li a') }
-		newContact { $('li.contacts .create a') }
+	    newContact { $('li.contacts .create a') }
 		newGroup { $('li.groups .create a') }
-		newSmartGroup { $('li.smartgroups .create a') }
 	}
 }
 

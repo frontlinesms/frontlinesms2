@@ -41,7 +41,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			waitFor { confirm.announcementName.displayed }
 		when:
 			confirm.announcementName.value("newbie")
-			send.click()
+			submit.click()
 		then:
 			waitFor { summary.displayed}
 	}
@@ -83,7 +83,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			waitFor { confirm.announcementName.displayed }
 		when:
 			confirm.announcementName.value("newbie")
-			send.click()
+			submit.click()
 		then:
 			assert Announcement.count() == 1
 			waitFor { error }

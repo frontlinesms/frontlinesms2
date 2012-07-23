@@ -48,7 +48,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName.displayed
 		when:
 			confirm.pollName = "POLL NAME"
-			send.click()
+			submit.click()
 		then:
 			waitFor { summary.displayed }
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
@@ -150,7 +150,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 		when:
-			send.click()
+			submit.click()
 		then:
 			waitFor { errorPanel.displayed }
 			confirm.displayed
@@ -240,7 +240,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.autoreply == "Thanks for participating..."
 		when:
 			confirm.pollName = "Coffee Poll"
-			send.click()
+			submit.click()
 		then:
 			waitFor { Poll.findByName("Coffee Poll") }
 	}
@@ -299,7 +299,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.messageCount == "1 messages will be sent"
 		when:
 			confirm.pollName = "Coffee Poll"
-			send.click()
+			submit.click()
 		then:
 			waitFor {Poll.findByName("Coffee Poll") }
 	}
