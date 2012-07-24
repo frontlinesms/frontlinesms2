@@ -501,6 +501,30 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { errorPanel.displayed }
 	}
 
+	def "Choices for a saved poll should validate as required"() {
+		setup:
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
+			poll.save(failOnError:true, flush:true)
+			poll.refresh()
+		when:
+			to PageMessagePoll, poll
+		then:
+			moreActions.value("edit").click()
+		when:
+			waitFor('slow') { at PollDialog }
+			next.click()
+		then:
+			response.choice("B").jquery.val("")
+			response.choice("B").jquery.trigger('keyup')
+		when:
+			next.click()
+		then:
+			response.choice("B").hasClass("error")
+			response.errorLabel("B").text().contains("A saved choice cannot")
+	}
 	// TODO: add alias-specific tests
 
 	def deletePoll() {

@@ -98,6 +98,9 @@ class ResponseTab extends geb.Module {
 		label { choiceLetter ->
 			$('label[for="choice'+choiceLetter+'"]')
 		}
+		errorLabel { choiceLetter ->
+			$('label.error[for="choice'+choiceLetter+'"]')
+		}
 	}
 }
 
