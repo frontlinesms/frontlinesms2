@@ -44,6 +44,8 @@ On this screen you will find a summary of all the options you have selected, so 
 
 You will also be able to name your [activity][6] so that it is easily recognisable.
 
+_**Note:** Activity names must be unique. You cannot have two activities with the same name. When an activity is deleted **and** removed from the trash, that name can then be used in any new activities._
+
 Clicking next will create the [activity][6].
 
 **_Confirmation_**
