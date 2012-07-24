@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class GroupController {
 	static allowedMethods = [update: "POST"]
 
@@ -10,13 +12,19 @@ class GroupController {
 	def update = {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
-		println "these are the details >>>>> ${params}"
-		if(group.save(flush:true)) {
+		if (group.save(flush:true)) {
 			flash.message = message(code:'group.update.success')
-			redirect controller:"contact", action:"show", params:[groupId:params.id]
+			withFormat {
+				json {
+					render([ok:true] as JSON)
+				}
+			}
 		} else {
-			flash.message = message(code:'group.save.fail')
-			redirect controller:"contact", action:"show", params:params
+			withFormat {
+				json {
+					render([ok:false, text:message(code: group.errors.allErrors[0].codes[7])] as JSON)
+				}
+			}
 		}
 	}
 
@@ -35,10 +43,18 @@ class GroupController {
 		def groupInstance = new Group(params)
 		if (groupInstance.save(flush:true)) {
 			flash.message = message(code:'default.created.message', args:[message(code:'group.label'), groupInstance.name])
+			withFormat {
+				json {
+					render([ok:true] as JSON)
+				}
+			}
 		} else {
-			flash.message = message(code:'group.save.fail')
+			withFormat {
+				json {
+					render([ok:false, text:message(code: groupInstance.errors.allErrors[0].codes[7])] as JSON)
+				}
+			}
 		}
-		redirect controller:"contact", params:[flashMessage:flash.message]
 	}
 	
 	def rename = {}

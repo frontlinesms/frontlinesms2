@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
-	<g:form action="update" method="post" >
+	<div class="error-panel hide" id="smallpopup-error-panel"><div id="error-icon"></div></div>
+	<g:formRemote name="rename-activity" url="[action:'update']" method="post" onSuccess="checkResults(data)">
 		<g:hiddenField name="id" value="${params.ownerId}"></g:hiddenField>
 		<div class="dialog">
 			<table>
@@ -16,5 +17,5 @@
 				</tbody>
 			</table>
 		</div>
-	</g:form>
+	</g:formRemote>
 </div>

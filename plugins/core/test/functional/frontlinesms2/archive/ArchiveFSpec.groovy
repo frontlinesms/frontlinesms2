@@ -1,6 +1,7 @@
 package frontlinesms2.archive
 
 import frontlinesms2.*
+import frontlinesms2.message.PageMessage
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class ArchiveFSpec extends ArchiveBaseSpec {
@@ -16,41 +17,44 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		then:
 			folderNames*.text() == ["Work"]
 	}
-	
+
 	def 'should show list of remaining messages when a message is deleted'() {
 		given:
 			createTestMessages2()
 		when:
-			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
+			to PageMessageArchive, "inbox"
 		then:
-			$("#message-list td.message-sender-cell")*.text().sort() == ['Jane', 'Max']
+			messageList.sources.sort() == ['Jane', 'Max']
 		when:
-			def btnDelete = $("#delete-msg")
-			btnDelete.click()
+			to PageMessageArchive, "inbox", Fmessage.findBySrc('Max')
+			singleMessageDetails.delete.click()
 		then:
-			$("#message-list td.message-sender-cell")*.text() == ['Jane']
+			messageList.sources == ['Jane']
 	}
-	
+
 	def '"Archive All" button does not appear in archive section'() {
 		given:
 			createTestMessages2()
 		when:
-			go "archive/inbox/show/${Fmessage.findBySrc('Max').id}?viewingArchive=true"
+			to PageMessageArchive, "inbox", Fmessage.findBySrc('Max').id
 			$(".message-select")[0].click()
 		then:
+			//multipleMessageDetails.archiveAll.displayed
 			!$("#btn_archive_all").displayed
 		when:
 			$(".message-select")[1].click()
 			$(".message-select")[2].click()
 		then:
-			!$("#btn_archive_all").displayed
+			!$('#btn_archive_all').displayed
 		
 	}
-	
+
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {
 		given:
 			def poll = new Poll(name:'thingy')
-			poll.editResponses(choiceA:'One', choiceB:'Other')
+			poll.addToResponses(key:'A', value:'One')
+			poll.addToResponses(key:'B', value:'Other')
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
 			def messages = [Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4),
 					Fmessage.build(src:'Max', text:'I will be late', date:TEST_DATE-4)] 
@@ -63,8 +67,10 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.refresh()
 			assert poll.activityMessages.list().every { it.archived }
 		when:
-			go "archive/activity/${poll.id}/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
-			$(".message-select-cell #message-select-all").click()
+			to PageArchiveActivity
+			//go "archive/activity/${poll.id}/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
+			messageList.selectAll.click()
+			//$(".message-select-cell #message-select-all").click()
 		then:
 			waitFor { $("#btn_delete_all").displayed }
 	}
