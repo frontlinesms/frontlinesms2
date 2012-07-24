@@ -205,6 +205,10 @@
 			return isValid;
 		}, i18n("poll.alias.validation.error"));
 
+		jQuery.validator.addMethod("edit", function(value, element) {
+			return (value.trim().length != 0);
+		}, i18n("poll.choice.validation.error.deleting.response"));
+
 		/* Poll type tab */
 		$("#tabs-1").contentWidget({
 			validate: function() {
@@ -226,8 +230,7 @@
 		$("#tabs-2").contentWidget({
 			validate: function() {
 				var valid = true;
-				var choices = [$('#choiceA'), $('#choiceB')];
-				$.each(choices, function(index, value) {
+				$.each($(".choices"), function(index, value) {
 					if (!validator.element(value) && valid) {
 						valid = false;
 					}
