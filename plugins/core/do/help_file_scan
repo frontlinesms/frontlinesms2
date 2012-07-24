@@ -1,0 +1,2 @@
+#!/bin/bash
+grep --color='auto' -P -n -r "[\x80-\xFF]" web-app/help
