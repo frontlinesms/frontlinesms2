@@ -6,8 +6,8 @@
 	<ul>
 		<li><a class="tabs-1" href="#tabs-1"><g:message code="poll.question"/></a></li>
 		<li><a class="tabs-2" href="#tabs-2"><g:message code="poll.response"/></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.alias"/></a></li>
-		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.sort"/></a></li>
+		<li><a class="tabs-3" href="#tabs-3"><g:message code="poll.sort"/></a></li>
+		<li><a class="tabs-4" href="#tabs-4"><g:message code="poll.alias"/></a></li>
 		<li><a class="tabs-5" href="#tabs-5"><g:message code="poll.reply"/></a></li>
 		<li><a class="tabs-6" href="#tabs-6"><g:message code="poll.edit.message"/></a></li>
 		<li><a class="tabs-7" href="#tabs-7"><g:message code="poll.recipients"/></a></li>
@@ -18,8 +18,8 @@
 		<fsms:wizardTabs templates="
 				/poll/question,
 				/poll/responses,
-				/poll/aliases,
 				/poll/sorting,
+				/poll/aliases,
 				/poll/replies,
 				/message/compose,
 				/message/select_recipients,
@@ -113,8 +113,8 @@
 		if(yesNo) {
 			var aliasYesTextField = $("ul#poll-aliases li input#aliasA");
 			var aliasNoTextField = $("ul#poll-aliases li input#aliasB");
-			var yesAlias = "A," + i18n("poll.yes");
-			var noAlias = "B," + i18n("poll.no")
+			var yesAlias = i18n("poll.yes") + ", A";
+			var noAlias = i18n("poll.no") + ", B"
 			var choices = { };
 			choices[yesAlias] = aliasYesTextField;
 			choices[noAlias] = aliasNoTextField;
@@ -139,7 +139,7 @@
 			var aliasTextField = $("ul#poll-aliases li input#alias" + key);
 			if($(field).hasClass("create")) {
 				if(value.length > 0){
-					aliases += key+","+value;
+					aliases += value + ", " +key;
 					aliasTextField.val(aliases);
 					aliasTextField.removeAttr("disabled");
 				}
@@ -219,6 +219,7 @@
 				} else {
 					enableTab(1);
 				}
+				useAliases();
 				if(!validator.element($("#question")) && valid) {
 				    valid = false;
 				}
@@ -240,8 +241,20 @@
 			}
 		});
 
-		/* Aliases tab */
+
+		/* Auto-sort tab */
 		$("#tabs-3").contentWidget({
+			validate: function() {
+				var valid = true;
+				if (!validator.element('#poll-keyword') && valid) {
+					valid = false;
+				}
+				return valid;
+			}
+		});
+
+		/* Aliases tab */
+		$("#tabs-4").contentWidget({
 			validate: function() {
 				var valid = true;
 				$('input:not(:disabled).aliases').each(function() {
@@ -249,17 +262,6 @@
 					    valid = false;
 					}
 				});
-				return valid;
-			}
-		});
-		
-		/* Auto-sort tab */
-		$("#tabs-4").contentWidget({
-			validate: function() {
-				var valid = true;
-				if (!validator.element('#poll-keyword') && valid) {
-					valid = false;
-				}
 				return valid;
 			}
 		});
@@ -403,4 +405,13 @@
 		}
 		$("#poll-confirm-aliases").html(aliasText);
 	}
+
+	function useAliases(){
+		if ($("input[name='enableKeyword']:checked").val() == 'false') {
+			disableTab(3);
+		}
+		else {
+			enableTab(3);
+		}
+}
 </r:script>
