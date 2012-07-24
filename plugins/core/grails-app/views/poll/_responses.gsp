@@ -9,8 +9,8 @@
 						def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} 
 						def mode = pollResponse?"edit":"create"
 					%>
-					<g:if test="${(option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 1)))}">
-						<g:textField class='choices ${mode} required' name="choice${option}" value="${pollResponse?.value}" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
+					<g:if test="${(option == 'A' || option == 'B' || pollResponse?.value || (i == (activityInstanceToEdit?.responses.size() - 2)))}">
+						<g:textField class='choices ${mode}' name="choice${option}" value="${pollResponse?.value}" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
 					</g:if>
 					<g:else>
 						<g:textField class='choices create' name="choice${option}" value="${pollResponse?.value}" disabled="true" onkeyup="addRespectiveAliases(this);highlightNextPollResponse(this);"/>
