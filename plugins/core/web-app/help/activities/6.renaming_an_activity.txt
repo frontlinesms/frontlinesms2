@@ -14,6 +14,8 @@ You are able to rename any activity in a few simple steps.
 
 Your Activity will be Renamed.
 
+_**Note:** Activity names must be unique. You cannot have two activities with the same name. When an activity is deleted **and** removed from the trash, that name can then be used in any new activities._
+
 ### Related Actions
 [Exporting an Activity][2]  
 [Creating a Poll][3]  
