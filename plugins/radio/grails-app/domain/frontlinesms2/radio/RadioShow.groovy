@@ -61,6 +61,18 @@ class RadioShow extends MessageOwner {
 		activityInstanceList
 	}
 
+	def getActivitiesByArchivedAndDeleted(archived=false, deleted=false) {
+		def activityInstanceList
+		if(activities) {
+			activityInstanceList = Activity.withCriteria {
+				'in'("id", activities*.id)
+				eq("archived", archived)
+				eq("deleted", deleted)
+			}
+		}
+		activityInstanceList
+	}
+
 	def archive() {
 		this.archived = true
 		this.messages.each {
