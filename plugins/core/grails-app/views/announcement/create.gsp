@@ -1,49 +1,90 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <meta name="layout" content="popup"/>
-<div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="announcement.validation.prompt"/></div>
-	<ol>
-		<li><a class="tabs-1" href="#tabs-1"><g:message code="announcement.create.message"/></a></li>
-		<li><a class="tabs-2" href="#tabs-2"><g:message code="announcement.select.recipients"/></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="announcement.confirm"/></a></li>
-	</ol>
-
-	<g:formRemote name="create_announcement" url="${[action:'save', controller:'announcement', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]}" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))">
-		<fsms:wizardTabs templates="
-				/message/compose,
+<fsms:wizard url="${[action:'save', controller:'announcement', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]}" name="create_announcement" method="post" onSuccess="checkForSuccessfulSave(data, i18n('announcement.label'))"
+		verticalTabs="announcement.create.message,
+				announcement.select.recipients,
+				announcement.confirm"
+		templates="/message/compose,
 				/message/select_recipients,
 				/announcement/confirm,
 				/announcement/save"/>
-	</g:formRemote>
-</div>
 <r:script>
 	function initializePopup() {
-		
+		var validator = $("#create_announcement").validate({
+			errorContainer: ".error-panel",
+			rules: {
+				addresses: {
+					required: true,
+					minlength: 1
+				},
+				messageText: {
+					required:true
+				}
+			},
+			messages: {
+					addresses: {
+					required: i18n("poll.recipients.validation.error")
+				}
+			},
+			errorPlacement: function(error, element) {
+				if (element.attr("name") == "addresses") {
+					error.insertAfter("#recipients-list");
+					$("#recipients-list").addClass("error");
+				} else
+					error.insertAfter(element);
+			}
+		});
+
+		//Validation Map
+		tabValidation = {};
+
+		var messageTextTabValidation = function() {
+			return validator.element('#messageText');
+		};
+
+		var recepientTabValidation = function() {
+			var valid = true;
+			addAddressHandler();
+			valid = $('input[name=addresses]:checked').length > 0;
+			var addressListener = function() {
+				if($('input[name=addresses]:checked').length > 0) {
+					validator.element($('#contacts').find("input[name=addresses]"));
+					$('#recipients-list').removeClass("error");
+				} else {
+					$('#recipients-list').addClass("error");
+					validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
+				}
+			};
+			if (!valid) {
+				$('input[name=addresses]').change(addressListener);
+				$('input[name=addresses]').trigger("change");
+			}
+			return valid;
+		};
+
+		var confirmTabValidation = function() {
+			return validator.element('input[name=name]');
+		};
+
+		tabValidation["#tab-1"] = messageTextTabValidation;
+		tabValidation["#tab-2"] = recepientTabValidation;
+		tabValidation["#tab-3"] = confirmTabValidation;
+
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if (isElementEmpty("#tabs-1 #messageText")) {
-					$("#tabs-1 #messageText").addClass("error");
-					return false;
-				}
-				return true;
+				return tabValidation["#tab-1"].call();
 			}
 		});
 	
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				addAddressHandler();
-				return isGroupChecked("addresses")
+				return tabValidation["#tab-2"].call();
 			}
 		});
 		
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				$("#tabs-3 #name").removeClass("error");
-				var isEmpty = isElementEmpty($("#tabs-3 #name"));
-				if(isEmpty) {
-					$("#tabs-3 #name").addClass("error");
-				}
-				return !isEmpty;
+				return tabValidation["#tab-3"].call();
 			}
 		});
 		

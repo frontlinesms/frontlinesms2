@@ -208,10 +208,7 @@
 				} else {
 					enableTab(1);
 				}
-				if(!validator.element($("#question")) && valid) {
-				    valid = false;
-				}
-				return valid;
+				return validator.element($("#question"));
 		};
 		var responseTabValidation = function() {
 			var valid = true;
@@ -238,18 +235,10 @@
 			return valid;
 		};
 		var autoSortTabValidation = function() {
-			var valid = true;
-			if (!validator.element('#poll-keyword') && valid) {
-				valid = false;
-			}
-			return valid;
+			return validator.element('#poll-keyword');
 		};
 		var autoReplyTabValidation = function() {
-			var valid = true;
-			if (!validator.element('#autoreplyText') && valid) {
-				valid = false;
-			}
-			return valid;
+			return validator.element('#autoreplyText');
 		};
 		var recepientTabValidation = function() {
 			if(!isGroupChecked('dontSendMessage')) {
@@ -275,11 +264,7 @@
 		};
 
 		var confirmTabValidation = function() {
-			var valid = true;
-			if (!validator.element('input[name=name]') && valid) {
-					valid = false;
-				}
-			return valid
+			return validator.element('input[name=name]');
 		};
 
 		tabValidation["#tab-1"] = questionTabValidation;
@@ -289,7 +274,6 @@
 		tabValidation["#tab-5"] = autoReplyTabValidation;
 		tabValidation["#tab-7"] = recepientTabValidation;
 		tabValidation["#tab-8"] = confirmTabValidation;
-
 
 		/* Poll type tab */
 		$("#tabs-1").contentWidget({
