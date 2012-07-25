@@ -1,43 +1,63 @@
 <meta name="layout" content="popup"/>
-<div id="tabs" class="vertical-tabs">
-	<div class="error-panel hide"><div id="error-icon"></div><g:message code="autoreply.validation.prompt"/></div>
-	<ol>
-		<li><a class="tabs-1" href="#tabs-1"><g:message code="autoreply.enter.keyword"/></a></li>
-		<li><a class="tabs-2" href="#tabs-2"><g:message code="autoreply.create.message"/></a></li>
-		<li><a class="tabs-3" href="#tabs-3"><g:message code="autoreply.confirm"/></a></li>
-	</ol>
-	<g:formRemote name="create_autoreply" url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" method="post"  onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))">
-		<fsms:wizardTabs templates="
-				/autoreply/keyword,
+<fsms:wizard url="[action:'save', controller:'autoreply', params:[ownerId:activityInstanceToEdit?.id ?: null, format:'json']]" name="create_autoreply" method="post" onSuccess="checkForSuccessfulSave(data, i18n('autoreply.label'))"
+		verticalTabs="autoreply.enter.keyword,
+				autoreply.create.message,
+				autoreply.confirm"
+		templates="/autoreply/keyword,
 				/message/compose,
 				/autoreply/confirm,
 				/autoreply/save"/>
-	</g:formRemote>
-</div>
 <r:script>
 	function initializePopup() {
-		$("#messageText").trigger("keyup");
-		
+		<g:if test="${activityInstanceToEdit?.id}">
+			$("#messageText").val("${activityInstanceToEdit.autoreplyText}");
+			$("#messageText").trigger("keyup");
+		</g:if>
+		var validator = $("#create_autoreply").validate({
+			errorContainer: ".error-panel",
+			rules: {
+				messageText: { required:true },
+				keyword: { required:true },
+				name: { required:true }
+			}
+		});
+
+		var keyWordTabValidation = function() {
+			 if(!isGroupChecked("blankKeyword")) return validator.element('#keyword');
+			 else return true;
+		};
+		var messageTextTabValidation = function() {
+			return validator.element('#messageText');
+		};
+
+		var confirmTabValidation = function() {
+			return validator.element('input[name=name]');
+		};
+
+		//Validation Map
+		tabValidation = {};
+		tabValidation["#tab-1"] = keyWordTabValidation;
+		tabValidation["#tab-2"] = messageTextTabValidation;
+		tabValidation["#tab-3"] = confirmTabValidation;
+
 		$("#tabs-1").contentWidget({
 			validate: function() {
-				if ((isElementEmpty("#tabs-1 #keyword"))&&(!(isGroupChecked("blankKeyword")))) {
-					$("#tabs-1 #keyword").addClass("error");
-					return false;
-				}
-				return true;
+				return tabValidation["#tab-1"].call();
 			}
 		});
 		
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				if (isElementEmpty("#tabs-2 #messageText")) {
-					$("#tabs-2 #messageText").addClass("error");
-					return false;
-				}
-				return true;
+				return tabValidation["#tab-2"].call();
 			}
 		});
 		
+		$("#tabs-3").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-3"].call();
+			}
+		});
+
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
 		});
