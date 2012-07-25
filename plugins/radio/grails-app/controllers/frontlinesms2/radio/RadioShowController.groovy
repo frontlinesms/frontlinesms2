@@ -47,7 +47,7 @@ class RadioShowController extends MessageController {
 					model:[messageInstanceList: radioMessageInstanceList,
 						   messageSection: 'radioShow',
 						   messageInstanceTotal: messageInstanceList?.count(), viewingMessages:params.viewingMessages,
-						   ownerInstance: showInstance, inArchive:params.inArchive] << this.getShowModel()
+						   ownerInstance: showInstance, inArchive:params.inArchive, inARadioShow: showInstance.archived] << this.getShowModel()
 		} else {
 			flash.message = message(code: 'radio.show.not.found')
 			redirect(action: 'inbox')
@@ -223,7 +223,7 @@ class RadioShowController extends MessageController {
 		def showInstanceList = RadioShow.findAllByArchivedAndDeleted(true, false)
 		render view:'../archive/showArchive', model:[showInstanceList: showInstanceList,
 				showInstanceTotal: showInstanceList.size(),
-				messageSection: "radioShow"]
+				messageSection: "radioShow", inARadioShow: true]
 	}
 	
 	private void removeActivityFromRadioShow(Activity activity) {

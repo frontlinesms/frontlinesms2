@@ -1,5 +1,6 @@
 import frontlinesms2.radio.*
 import frontlinesms2.Activity
+import frontlinesms2.*
 class RadioFilters {
 	def filters = {
 		justMessage(action:'*') {
@@ -46,6 +47,13 @@ class RadioFilters {
 			after = { model ->
 				model.activityInstanceList = model.activityInstanceList.findAll { act -> !RadioShow.findByOwnedActivity(act).get() }
 				model.activityInstanceTotal = model.activityInstanceList?.size()
+			}
+		}
+
+		forActivityInShowArchive(controller:'archive', action:'activity') {
+			after = { model ->
+				model.inARadioShow = RadioShow.findByOwnedActivity(model?.ownerInstance).get() != null
+				println model.inARadioShow
 			}
 		}
 	}

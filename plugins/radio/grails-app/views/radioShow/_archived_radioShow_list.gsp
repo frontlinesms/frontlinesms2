@@ -17,32 +17,32 @@
 							</g:link>
 						</td>
 						<td class="show-type-cell show-cell">
-							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
+							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'radioShow']">
 								<fsms:unbroken>
 									<g:message code="radio.label"/>
 								</fsms:unbroken>
 							</g:link>
 						</td>
 						<td class="show-message-count-cell show-cell">
-							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'folder']">
+							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'radioShow']">
 								${s.liveMessageCount}
 							</g:link>
 						</td>
 					</tr>
-					<g:each in="${s.activities}" var="a">
+					<g:each in="${s.getActivitiesByArchivedAndDeleted(true, false)}" var="a">
 						<tr>
 							<td class="show-activity-name">
-								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'radioShow', ownerId:a.id, viewingMessages:true]">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true, inARadioShow:true]">
 									- ${a.name}
 								</g:link>
 							</td>
 							<td>
-								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'radioShow', ownerId:a.id, viewingMessages:true]">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true, inARadioShow:true]">
 									<g:message code="${a.shortName}.label"/>
 								</g:link>
 							</td>
 							<td>
-								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'radioShow', ownerId:a.id, viewingMessages:true]">
+								<g:link controller="archive" action="${a.shortName}" params="[messageSection:'activity', ownerId:a.id, viewingMessages:true, inARadioShow:true]">
 									${a.liveMessageCount}
 								</g:link>
 							</td>
