@@ -9,6 +9,7 @@ class FsmsTagLib {
 
 	def wizard = { att ->
 		out << "<div id='tabs' class=\"vertical-tabs\">"
+		out << "<div class='error-panel hide'><div id='error-icon'></div>${g:message(code:'poll.validation.prompt')}</div>"
 		out << verticalTabs(att)
 		out << g.formRemote(url:att.url, name:att.name, method:att.method, onSuccess:att.onSuccess) {
 			out << wizardTabs(att)	

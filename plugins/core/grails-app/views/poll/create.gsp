@@ -159,6 +159,7 @@
 			$("#messageText").trigger("keyup");
 		</g:if>
 		var validator = $("#new-poll-form").validate({
+			errorContainer: ".error-panel",
 			rules: {
 				addresses: {
 				  required: true,
@@ -214,12 +215,16 @@
 		};
 		var responseTabValidation = function() {
 			var valid = true;
-			var choices = [$('#choiceA'), $('#choiceB')];
-			$.each(choices, function(index, value) {
-				if (!validator.element(value) && valid) {
-					valid = false;
-				}
-			});
+			if($("input[name='pollType']:checked").val() == "yesNo") {
+				valid = true;
+			} else {
+				var choices = [$('#choiceA'), $('#choiceB')];
+				$.each(choices, function(index, value) {
+					if (!validator.element(value) && valid) {
+						valid = false;
+					}
+				});
+			}
 			setAliasValues();
 			return valid;
 		};
@@ -250,16 +255,19 @@
 			if(!isGroupChecked('dontSendMessage')) {
 				var valid = true;
 				addAddressHandler();
+				valid = $('input[name=addresses]:checked').length > 0;
 				var addressListener = function() {
-					if(validator.element('input[name=addresses]')) {
+					if($('input[name=addresses]:checked').length > 0) {
+						validator.element($('#contacts').find("input[name=addresses]"));
 						$('#recipients-list').removeClass("error");
 					} else {
 						$('#recipients-list').addClass("error");
+						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
 					}
 				};
-				if (!validator.element('input[name=addresses]') && valid) {
-					valid = false;
+				if (!valid) {
 					$('input[name=addresses]').change(addressListener);
+					$('input[name=addresses]').trigger("change");
 				}
 				return valid;
 			}
