@@ -105,7 +105,7 @@ class ResponseTab extends geb.Module {
 }
 
 class AliasTab extends geb.Module {
-	static base = { $('div#tabs-3') }
+	static base = { $('div#tabs-4') }
 	static content = {
 		labels { $('#poll-aliases label') }
 		inputs { $('#poll-aliases input.aliases') }
@@ -113,7 +113,7 @@ class AliasTab extends geb.Module {
 }
 
 class SortTab extends geb.Module {
-	static base = { $('div#tabs-4') }
+	static base = { $('div#tabs-3') }
 	static content = {
 		dontSort { $('ul.select input[value="false"]') }
 		sort { $('ul.select input[value="true"]') }

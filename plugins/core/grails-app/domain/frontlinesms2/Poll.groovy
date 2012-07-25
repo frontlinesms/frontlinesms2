@@ -101,7 +101,13 @@ class Poll extends Activity {
 	}
 	
 	def addAlias(attrs, String k){
-		def aliases = attrs["alias"+k]?.replace(" ", "")?.toUpperCase()
+		def rawAliases = attrs["alias"+k]?.replace(" ", "")?.toUpperCase().split(",")
+		def aliases = ""
+		rawAliases.each{
+			if(it.length() != 0){
+				aliases += it.trim() + ", "
+			}
+		}
 		return aliases
 	}
 
