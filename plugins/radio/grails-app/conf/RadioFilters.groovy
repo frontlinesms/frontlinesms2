@@ -45,14 +45,14 @@ class RadioFilters {
 
 		justArchive(action:'activityList') {
 			after = { model ->
-				model.activityInstanceList = model.activityInstanceList.findAll { act -> !RadioShow.findByOwnedActivity(act).get() }
+				model.activityInstanceList -= model.activityInstanceList.findAll { act -> RadioShow.findByOwnedActivity(act).get()?.archived }
 				model.activityInstanceTotal = model.activityInstanceList?.size()
 			}
 		}
 
 		forActivityInShowArchive(controller:'archive', action:'activity') {
 			after = { model ->
-				model.inARadioShow = RadioShow.findByOwnedActivity(model?.ownerInstance).get() != null
+				model.inARadioShow = RadioShow.findByOwnedActivity(model?.ownerInstance)?.get()?.archived
 				println model.inARadioShow
 			}
 		}

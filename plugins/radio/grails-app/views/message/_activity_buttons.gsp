@@ -6,7 +6,7 @@
 	<g:if test="${params.controller!='archive' && !params.inArchive}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:if>
-	<g:elseif test="${!RadioShow.findByOwnedActivity(ownerInstance).get()}">
+	<g:elseif test="${!RadioShow.findByOwnedActivity(ownerInstance).get()?.archived}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="unarchive" id="${ownerInstance?.id}"><g:message code="fmessage.unarchive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:elseif>
 	<g:select class="dropdown more-actions activity-btn" name="more-actions"  
