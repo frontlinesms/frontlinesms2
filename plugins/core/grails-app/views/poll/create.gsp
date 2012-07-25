@@ -23,6 +23,9 @@
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateSmsCharacterCount);
 	$("button#nextPage").click(setAliasValues);
+	
+	//Validation Map
+	tabValidation = {};
 
 	function updateSendMessage() {
 		// TODO check why these are being bound every time - surely could just bind when the page is loaded.
@@ -196,9 +199,7 @@
 			return isValid;
 		}, i18n("poll.alias.validation.error"));
 
-		/* Poll type tab */
-		$("#tabs-1").contentWidget({
-			validate: function() {
+		var questionTabValidation = function() {
 				var valid = true;
 				if ($("input[name='pollType']:checked").val() == "yesNo") {
 					disableTab(1);
@@ -210,90 +211,124 @@
 				    valid = false;
 				}
 				return valid;
+		};
+		var responseTabValidation = function() {
+			var valid = true;
+			var choices = [$('#choiceA'), $('#choiceB')];
+			$.each(choices, function(index, value) {
+				if (!validator.element(value) && valid) {
+					valid = false;
+				}
+			});
+			setAliasValues();
+			return valid;
+		};
+		var aliasTabValidation = function() {
+			var valid = true;
+			$('input:not(:disabled).aliases').each(function() {
+				if (!validator.element(this) && valid) {
+				    valid = false;
+				}
+			});
+			return valid;
+		};
+		var autoSortTabValidation = function() {
+			var valid = true;
+			if (!validator.element('#poll-keyword') && valid) {
+				valid = false;
+			}
+			return valid;
+		};
+		var autoReplyTabValidation = function() {
+			var valid = true;
+			if (!validator.element('#autoreplyText') && valid) {
+				valid = false;
+			}
+			return valid;
+		};
+		var recepientTabValidation = function() {
+			if(!isGroupChecked('dontSendMessage')) {
+				var valid = true;
+				addAddressHandler();
+				var addressListener = function() {
+					if(validator.element('input[name=addresses]')) {
+						$('#recipients-list').removeClass("error");
+					} else {
+						$('#recipients-list').addClass("error");
+					}
+				};
+				if (!validator.element('input[name=addresses]') && valid) {
+					valid = false;
+					$('input[name=addresses]').change(addressListener);
+				}
+				return valid;
+			}
+			return true;
+		};
+
+		var confirmTabValidation = function() {
+			var valid = true;
+			if (!validator.element('input[name=name]') && valid) {
+					valid = false;
+				}
+			return valid
+		};
+
+		tabValidation["#tab-1"] = questionTabValidation;
+		tabValidation["#tab-2"] = responseTabValidation;
+		tabValidation["#tab-3"] = aliasTabValidation;
+		tabValidation["#tab-4"] = autoSortTabValidation;
+		tabValidation["#tab-5"] = autoReplyTabValidation;
+		tabValidation["#tab-7"] = recepientTabValidation;
+		tabValidation["#tab-8"] = confirmTabValidation;
+
+
+		/* Poll type tab */
+		$("#tabs-1").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-1"].call();
 			}
 		});
 
 		/* response list tab */
 		$("#tabs-2").contentWidget({
 			validate: function() {
-				var valid = true;
-				var choices = [$('#choiceA'), $('#choiceB')];
-				$.each(choices, function(index, value) {
-					if (!validator.element(value) && valid) {
-						valid = false;
-					}
-				});
-				setAliasValues();
-				return valid;
+				return tabValidation["#tab-2"].call();
 			}
 		});
 
 		/* Aliases tab */
 		$("#tabs-3").contentWidget({
 			validate: function() {
-				var valid = true;
-				$('input:not(:disabled).aliases').each(function() {
-					if (!validator.element(this) && valid) {
-					    valid = false;
-					}
-				});
-				return valid;
+				return tabValidation["#tab-3"].call();
 			}
 		});
 		
 		/* Auto-sort tab */
 		$("#tabs-4").contentWidget({
 			validate: function() {
-				var valid = true;
-				if (!validator.element('#poll-keyword') && valid) {
-					valid = false;
-				}
-				return valid;
+				return tabValidation["#tab-4"].call();
 			}
 		});
 
 		/* Auto-reply tab */
 		$("#tabs-5").contentWidget({
 			validate: function() {
-				var valid = true;
-				if (!validator.element('#autoreplyText') && valid) {
-					valid = false;
-				}
-				return valid;
+				return tabValidation["#tab-5"].call();
 			}
 		});
 		
 		/* Select recepient's tab */
 		$("#tabs-7").contentWidget({
 			validate: function() {
-				if(!isGroupChecked('dontSendMessage')) {
-					addAddressHandler();
-					var valid = true;
-					var addressListener = function() {
-						if(validator.element('input[name=addresses]')) {
-							$('#recipients-list').removeClass("error");
-						} else {
-							$('#recipients-list').addClass("error");
-						}
-					};
-					if (!validator.element('input[name=addresses]') && valid) {
-						valid = false;
-						$('input[name=addresses]').change(addressListener);
-					}
-					return valid;
-				}
-				return true;
+				return tabValidation["#tab-7"].call();
 			}
 		});
 
 		/* Confirm tab*/
 		$("#tabs-8").contentWidget({
 			validate: function() {
-				var valid = true;
-				if (!validator.element('input[name=name]') && valid) {
-						valid = false;
-					}
-				return valid
+				return tabValidation["#tab-8"].call();
 			}
 		});
 
