@@ -209,7 +209,7 @@
 		}, i18n("poll.alias.validation.error"));
 
 		jQuery.validator.addMethod("validcommas", function(value, element) {
-			return value.match(/^(\s*,*\s*\w+\s*,*\s*)(,+\s*\w+\s*,*)*$/) !== null;
+			return value.match(/^(\s*,*\s*[\w-]+\s*,*\s*)(,*\s*[\w-]+\s*,*\s*)*$/) !== null;
 		}, i18n("poll.alias.validation.error.invalid.alias"));
 
 		jQuery.validator.addMethod("edit", function(value, element) {
