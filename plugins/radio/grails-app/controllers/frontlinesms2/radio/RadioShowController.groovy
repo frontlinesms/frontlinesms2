@@ -57,13 +57,11 @@ class RadioShowController extends MessageController {
 	
 	def startShow() {
 		def showInstance = RadioShow.findById(params.id)
-		println "params.id: ${params.id}"
 		if(showInstance.archived) {
 			flash.message = message code:'radio.show.onair.error.archived'
 			render ([ok:false, message:flash.message] as JSON)
 		}
 		else if(showInstance?.start()) {
-			println "${showInstance.name} show started"
 			showInstance.save(flush:true)
 			render ([ok:true] as JSON)
 		} else {

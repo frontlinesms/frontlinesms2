@@ -53,7 +53,6 @@ class RadioFilters {
 		forActivityInShowArchive(controller:'archive', action:'activity') {
 			after = { model ->
 				model.inARadioShow = RadioShow.findByOwnedActivity(model?.ownerInstance)?.get()?.archived
-				println model.inARadioShow
 			}
 		}
 	}
@@ -70,7 +69,6 @@ class RadioFilters {
 			showInstance.addToActivity(activityInstance)
 		}
 		showInstance.save(flush:true, failOnError:true)
-		println "${activityInstance.name} has been added to ${showInstance.name}"
 	}
 	
 }
