@@ -15,5 +15,9 @@ class Announcement extends Activity {
 			})
 		messages(nullable:false)
 	}
+
+	boolean isEditable() {
+		return !(this.archived || this.deleted)
+	}
 }
 

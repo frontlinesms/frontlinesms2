@@ -8,7 +8,11 @@
 		<g:if test="${activityInstanceToEdit?.id}">
 			$("#messageText").trigger("keyup");
 		</g:if>
-
+		<g:if test="${activityInstanceToEdit?.archived}">
+			$("input#dontSendMessage").attr('checked', true);
+			$("input#dontSendMessage").trigger("change");
+			$("input#dontSendMessage").attr('disabled', 'disabled');
+		</g:if>
 		addCustomValidationClasses();
 		initializeTabValidation(createFormValidator());
 	}
