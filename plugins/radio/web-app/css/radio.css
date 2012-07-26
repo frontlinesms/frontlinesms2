@@ -31,7 +31,15 @@
 ul.radio-show-activities {
 	padding-left: 10px;
 }
-#wordcloud-container {position: fixed; height: auto; left: 17%; 
+#wordcloud-container {position: fixed; height: auto; width:auto; left: 17%; 
 	right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }
 #wordcloud { padding:3px; margin:auto auto;}
 #wordcloud-container p { border-bottom:solid 2px #8D38C9; padding: 3px; margin-bottom: 5px; color:#8D38C9; }
+
+table.archive td.show-cell {
+	font-weight:bold;
+}
+
+table.archive td.show-activity-name {
+	padding-left:40px;
+}

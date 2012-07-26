@@ -1,6 +1,7 @@
 modules = {
-	common {
-		dependsOn 'jquery, jquery-ui' // need to redefine these to make sure they are loaded first
+	common { dependsOn 'frontlinesms-radio' }
+	'frontlinesms-radio' {
+		dependsOn 'frontlinesms-core'
 		resource url:[dir:'css', file:'radio.css']
 		resource url:[dir:'css', file:'jqcloud.css']
 		resource url:[dir:'js', file:'on_air.js'], disposition:'head'

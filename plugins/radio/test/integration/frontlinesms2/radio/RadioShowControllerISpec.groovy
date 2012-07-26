@@ -187,4 +187,71 @@ class RadioShowControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Poll.findAllByDeleted(true) == []
 			!Trash.findByObject(show1)
 	}
+
+	def "can archive a show, and all related activities get archived"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1").save(flush:true, failOnError:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks")
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(PollResponse.createUnknown())
+			poll.save(flush:true, failOnError:true)
+			show1.addToActivities(poll)
+			show1.save(flush:true, failOnError:true)
+			controller.params.id = show1.id
+		when:
+			controller.archive()
+		then:
+			show1.archived
+			poll.archived
+	}
+
+	def "can unarchive a show, and all related activities get unarchived"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1", archived:true).save(flush:true, failOnError:true)
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks", archived:true)
+			poll.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll.addToResponses(PollResponse.createUnknown())
+			poll.save(flush:true, failOnError:true)
+			show1.addToActivities(poll)
+			show1.save(flush:true, failOnError:true)
+			controller.params.id = show1.id
+		when:
+			controller.unarchive()
+		then:
+			!show1.archived
+			!poll.archived
+	}
+
+@spock.lang.IgnoreRest
+	def "show will not be unarchived if its keyword is in use by other show"() {
+		setup:
+			def show1 = new RadioShow(name:"Test 1", archived:true).save()
+			def poll1 = new Poll(name: 'Who is badder?', question: "question", autoReplyText: "Thanks", archived:true)
+			poll1.keyword = new Keyword(value: "THEKEYWORD", activity:poll1)
+			poll1.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll1.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll1.addToResponses(PollResponse.createUnknown())
+			poll1.save(flush:true, failOnError:true)
+			show1.addToActivities(poll1)
+			show1.save(flush:true, failOnError:true)
+
+			def show2 = new RadioShow(name:"Test 2").save()
+			def poll2 = new Poll(name: 'Who is baddest?', question: "question", autoReplyText: "Thanks")
+			poll2.keyword = new Keyword(value: "THEKEYWORD", activity: poll2)
+			poll2.addToResponses(new PollResponse(key: 'A', value: 'Michael-Jackson'))
+			poll2.addToResponses(new PollResponse(key: 'B', value: 'Chuck-Norris'))
+			poll2.addToResponses(PollResponse.createUnknown())
+			poll2.save(flush:true, failOnError:true)
+			show2.addToActivities(poll2)
+			show2.save(flush:true, failOnError:true)
+
+			controller.params.id = show1.id
+		when:
+			controller.unarchive()
+		then:
+			poll1.archived
+			show1.archived
+	}
 }

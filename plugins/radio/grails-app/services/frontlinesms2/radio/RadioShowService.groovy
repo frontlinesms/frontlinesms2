@@ -11,4 +11,24 @@ class RadioShowService {
 			runningShow.save(failOnError:true)
 		}
 	}
+
+	def archive(RadioShow s) {
+		try {
+			s.archive()
+			return true
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
+
+	def unarchive(RadioShow s) {
+		try {
+			s.unarchive()
+			return true
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
 }

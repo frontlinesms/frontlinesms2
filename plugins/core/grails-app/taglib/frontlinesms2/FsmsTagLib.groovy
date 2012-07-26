@@ -7,7 +7,30 @@ class FsmsTagLib {
 	def expressionProcessorService
 	def grailsApplication
 
+	def wizard = { att ->
+		out << "<div id='tabs' class=\"vertical-tabs\">"
+		out << "<div class='error-panel hide'><div id='error-icon'></div>${g:message(code:'activity.validation.prompt')}</div>"
+		out << verticalTabs(att)
+		out << g.formRemote(url:att.url, name:att.name, method:att.method, onSuccess:att.onSuccess) {
+			out << wizardTabs(att)	
+		}
+		out << '</div>'
+	}
+
+	def verticalTabs = { att ->
+		out << '<ul>'
+		att.verticalTabs.split(",")*.trim().eachWithIndex { code, i ->
+			out << '<li>'
+			out << "<a class=\"tabs-${i+1}\" href=\"#tabs-${i+1}\">"
+			out << g.message(code:code)
+			out << '</a>'
+			out << '</li>'
+		}
+		out << '</ul>'
+	}
+
 	def wizardTabs = { att ->
+		def htmlClass = att.verticalTabs.split(",")*.trim()*.toLowerCase()
 		att.templates.split(",")*.trim().eachWithIndex { template, i ->
 			out << "<div id=\"tabs-${i+1}\">"
 			out << render([template:template])
@@ -18,7 +41,12 @@ class FsmsTagLib {
 	def tab = { att, body ->
 		def con = att.controller
 		out << '<li class="' + con
-		if(con == params.controller) out << ' current'
+		if(att.mainNavSection) {
+			if (att.mainNavSection == con) out << ' current'
+		}
+		else if(con == params.controller) {
+			out << ' current'
+		}
 		out << '">'
 		out << g.link(controller:con) {
 			out << g.message(code:"tab.$con")
@@ -240,8 +268,8 @@ class FsmsTagLib {
 	}
 
 	def menuitem = { att, body ->
-		def classlist = att.class + " "
-		classlist += att.selected ? "selected " : ""
+		def classlist = att.class?:""
+		classlist += att.selected ? " selected" : ""
 		out << '<li class="' + classlist + '" >'
 		if (att?.bodyOnly)
 		{
@@ -251,7 +279,7 @@ class FsmsTagLib {
 			def msg = att.code
 			def msgargs = att.msgargs
 			def p = att.params
-			out << g.link(controller:att.controller, action:att.action, params:p) {
+			out << g.link(controller:att.controller, action:att.action, params:p, id:att.id) {
 				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
 			}
 		}

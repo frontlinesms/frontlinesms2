@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat
 
 class RadioShowController extends MessageController {
 	static allowedMethods = [save: "POST"]
+
+	def radioShowService
 	
 	def index() {
 		params.sort = 'date'
@@ -44,8 +46,8 @@ class RadioShowController extends MessageController {
 				render view:'standard',
 					model:[messageInstanceList: radioMessageInstanceList,
 						   messageSection: 'radioShow',
-						   messageInstanceTotal: messageInstanceList?.count(),
-						   ownerInstance: showInstance] << this.getShowModel()
+						   messageInstanceTotal: messageInstanceList?.count(), viewingMessages:params.viewingMessages,
+						   ownerInstance: showInstance, inArchive:params.inArchive, mainNavSection: showInstance.archived?'archive':'message', inARadioShow: showInstance.archived] << this.getShowModel()
 		} else {
 			flash.message = message(code: 'radio.show.not.found')
 			redirect(action: 'inbox')
@@ -55,14 +57,16 @@ class RadioShowController extends MessageController {
 	
 	def startShow() {
 		def showInstance = RadioShow.findById(params.id)
-		println "params.id: ${params.id}"
-		if(showInstance?.start()) {
-			println "${showInstance.name} show started"
+		if(showInstance.archived) {
+			flash.message = message code:'radio.show.onair.error.archived'
+			render ([ok:false, message:flash.message] as JSON)
+		}
+		else if(showInstance?.start()) {
 			showInstance.save(flush:true)
-			render "$showInstance.id"
+			render ([ok:true] as JSON)
 		} else {
 			flash.message = message code:'radio.show.onair.error', args:[RadioShow.findByIsRunning(true)?.name]
-			render text:flash.message
+			render ([ok:false, message:flash.message] as JSON)
 		}
 	}
 	
@@ -98,13 +102,13 @@ class RadioShowController extends MessageController {
 		else if(activityInstance) {
 			RadioShow.findByOwnedActivity(activityInstance).get()?.removeFromActivities(activityInstance)
 		}
-		redirect controller:"message", action:"activity", params: [ownerId: params.activityId]
+		redirect controller:activityInstance?.archived?"archive":"message", action:"activity", params: [ownerId: params.activityId]
 	}
 	
 	def selectActivity() {
 		def activityInstance = Activity.get(params.ownerId)
 		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		render template:"selectActivity", model:[ownerInstance:activityInstance, currentShow:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
+		[ownerInstance:activityInstance, radioShowIntance:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
 	}
 
 	def rename() {
@@ -159,6 +163,32 @@ class RadioShowController extends MessageController {
 		render freq as JSON
 	}
 
+	def archive() {
+		withRadioShow params.id, { showInstance ->
+			if(showInstance.isRunning) {
+				flash.message =  message(code:'radioshow.show.onair.error.archive')
+			}
+			else if(radioShowService.archive(showInstance as RadioShow)) {
+				flash.message = defaultMessage 'archived'
+			} else {
+				flash.message = defaultMessage 'archive.failed', showInstance.id
+			}
+			redirect controller:"message", action:"inbox"
+		}
+	}
+
+	def unarchive() {
+		withRadioShow params.id, { showInstance ->
+			if(radioShowService.unarchive(showInstance as RadioShow)) {
+				flash.message = defaultMessage 'unarchived'
+				redirect controller:"radioShow", action:"radioShow", params:[ownerId: showInstance.id]
+			} else {
+				flash.message = defaultMessage 'unarchive.failed', showInstance.id
+				redirect controller:"radioShow", action:"showArchive"
+			}
+		}
+	}	
+
 	def restore() {
 		def radioShow = RadioShow.findById(params.id)
 		if(radioShow){
@@ -186,14 +216,12 @@ class RadioShowController extends MessageController {
 		}
 		redirect controller:"message", action:"trash"
 	}
-	
-	private void removeActivityFromRadioShow(Activity activity) {
-		RadioShow.findAll().collect { showInstance ->
-			if(activity in showInstance.activities) {
-				showInstance.removeFromActivities(activity)
-				showInstance.save()
-			}
-		}
+
+	def showArchive() {
+		def showInstanceList = RadioShow.findAllByArchivedAndDeleted(true, false)
+		render view:'../archive/showArchive', model:[showInstanceList: showInstanceList,
+				showInstanceTotal: showInstanceList.size(),
+				messageSection: "radioShow", inARadioShow: true, mainNavSection: 'archive']
 	}
 	
 	private String dateToString(Date date) {

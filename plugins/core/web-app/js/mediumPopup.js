@@ -54,7 +54,7 @@ function launchHelpWizard(html) {
 	var modalBox = createModalBox(html);
 	modalBox.addClass("help");
 	$("#messageText").keyup();
-	var height = window.innerHeight;
+	var height = $(window).height();
 	var dialog = modalBox.dialog({
 		modal: true,
 		title: i18n("popup.help.title"),
@@ -140,10 +140,11 @@ function tabValidates(tab) {
 }
 
 function validateAllPreviousTabs(selectedTabIndex) {
-	for(i = 0; i < selectedTabIndex; i++) {
+	var i = 0;
+	for(i; i < selectedTabIndex; i++) {
 		if(!tabValidates($("#tabs").find('.ui-tabs-panel').eq(i))) {
 			$('#tabs').tabs('select', i);
-			$('.error-panel').show();
+			//$('.error-panel').show();
 			return false;
 		}
 	}
@@ -273,4 +274,3 @@ function editConnection(id) {
 		}
 	});
 }
-

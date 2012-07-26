@@ -32,13 +32,11 @@ abstract class Activity extends MessageOwner {
 	def archive() {
 		this.archived = true
 		messages.each { it.archived = true }
-		Fmessage.owned(this, false, true)?.list()*.each { it?.archived = true }
 	}
 	
 	def unarchive() {
 		this.archived = false
 		messages.each { it.archived = false }
-		Fmessage.owned(this, false, true)?.list()*.each { it?.archived = false }
 	}
 
 	def processKeyword(Fmessage message, boolean exactMatch) {}
