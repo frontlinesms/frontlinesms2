@@ -2,21 +2,21 @@ package frontlinesms2.folder
 
 import frontlinesms2.*
 import java.text.SimpleDateFormat
-
+import frontlinesms2.message.*
+import frontlinesms2.popup.*
 import spock.lang.*
 
 class FolderListSpec extends FolderBaseSpec {
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
-	
+
 	def 'folder message list is displayed'() {
 		given:
 			createTestFolders()
 			createTestMessages()
 		when:
-			to PageMessageFolderWork
-			def folderMessageSources = $('#message-list tr .message-sender-cell a')*.text()
+			to PageMessageFolder, Folder.findByName('Work')
 		then:
-			folderMessageSources.containsAll(['Jane', 'Max'])
+			messageList.sources.containsAll(['Jane', 'Max'])
 	}
 
 	def 'no message is selected when a folder is first loaded'() {
@@ -24,46 +24,45 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			go "message/folder/${Folder.findByName('Work').id}"
+			to PageMessageFolder, Folder.findByName('Work')
 		then:
-			$('#message-detail #message-detail-content').text() == "No message selected"
+			singleMessageDetails.noneSelected
 	}
 
 	def "message's folder details are shown in list"() {
 		given:
 			createTestFolders()
 			createTestMessages()
+			def folder = Folder.findByName("Work")
 		when:
-			at PageMessageFolderWork
-			def rowContents = $('#message-list tr:nth-child(3) td')*.text()
+			to PageMessageFolder, folder
 		then:
-			rowContents[2] == 'Max'
-			rowContents[3] == 'I will be late'
-			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messages[1].source == 'Max'
+			messageList.messages[1].text == 'I will be late'
+			DATE_FORMAT.format(messageList.messages[1].date) ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def 'selected folder is highlighted'() {
 		given:
 			createTestFolders()
 		when:
-			at PageMessageFolderWork
-			def selectedMenuItem = $('#sidebar .selected')
+			to PageMessageFolder, Folder.findByName('Work')
 		then:
-			selectedMenuItem.text() == 'Work'
+			bodyMenu.selected == 'work'
 	}
 
 	def "should be able to reply for messages listed in the folder section"() {
 		setup:
 			createTestFolders()
 			createTestMessages()
-		when:
 			def folder = Folder.findByName("Work")
 			def messages = folder.getMessages() as List
 			def message = messages[0]
-			go "message/folder/${folder.id}/show/${message.id}"
-			$("#btn_reply").click()
+		when:
+			to PageMessageFolder, folder, message
+			singleMessageDetails.reply.jquery.trigger("click")
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor { at QuickMessageDialog }
 	}
 
 	def "should filter folder messages for starred and unstarred messages"() {
@@ -71,19 +70,19 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
 		then:
-			$("#message-list tr").size() == 3
+			messageList.messages.size() == 2
 		when:
-			$('a', text:'Starred').click()
+			footer.showStarred.jquery.trigger("click")
 		then:
-			waitFor { $("#message-list tr").size() == 2 }
-			$("#message-list .message-sender-cell a")[1].text() == 'Max'
+			waitFor { messageList.messages.size() == 2 }
+			messageList.messages[1].source == 'Max'
 		when:
-			$('a', text:'All').click()
+			footer.showAll.jquery.trigger("click")
 		then:
-			waitFor { $("#message-list tr").size() == 3 }
-			$("#message-list tr .message-sender-cell a")*.text().containsAll(['Jane', 'Max'])
+			waitFor { messageList.messages.size() == 2 }
+			messageList.sources.containsAll(['Jane', 'Max'])
 	}
 	
 	def "should autopopulate the message body when 'forward' is clicked"() {
@@ -91,11 +90,11 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
-			$("#btn_forward").click()
+			to PageMessageFolder, Folder.findByName('Work'), Fmessage.findBySrc('Max')
+			singleMessageDetails.forward.jquery.trigger("click")
 		then:
-			waitFor { $('div#tabs-1').displayed }
-			$('textArea', name:'messageText').text() == "I will be late"
+			waitFor { at QuickMessageDialog }
+			compose.textArea.text() == "I will be late"
 	}
 	
 	def "message count displayed when multiple messages are selected"() {
@@ -103,14 +102,11 @@ class FolderListSpec extends FolderBaseSpec {
 			createTestFolders()
 			createTestMessages()
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+			to PageMessageFolder, Folder.findByName('Work')
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			at PageMessageFolderWork
-		when:
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-		then:
-			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+			multipleMessageDetails.checkedMessageCount == "2 messages selected"
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -120,70 +116,111 @@ class FolderListSpec extends FolderBaseSpec {
 			new Contact(name: 'Alice', mobile: 'Alice').save(failOnError:true)
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
-			go "message/folder/${Folder.findByName('Work').id}/show/${Fmessage.findBySrc('Max').id}"
+			to PageMessageFolder, Folder.findByName('Work')
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
+			multipleMessageDetails.replyAll.jquery.trigger("click")
 		then:
-			at PageMessageFolderWork
-		when:
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-		then:
-			waitFor { $('#multiple-messages a').displayed }
-		when:
-			btnReplyMultiple.click()
-		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor { at QuickMessageDialog }
 	}
-	
+
+	def "can rename a folder"() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			to PageMessageFolder, Folder.findByName('Work')
+			folderMoreActions.value("rename")
+			waitFor { at RenameFolderDialog }
+			folderName.equals("Work")
+			folderName.value("New Work")
+			ok.jquery.trigger("click")
+			to PageMessageFolder
+		then:
+			folderLinks*.text().containsAll('New Work', 'Projects')
+	}
+
+	def 'Errors are displayed when creating a folder with an already existing folders name'() {
+			given:
+				createTestFolders()
+				createTestMessages()
+			when:
+				to PageMessageFolder
+				bodyMenu.newFolder.jquery.trigger("click")
+			then:
+				waitFor { at CreateFolderPopup }
+			when:
+				folderName.value("Work")
+				ok.jquery.trigger("click")
+			then:
+				waitFor { errorPanel.text().toLowerCase() == "used folder name" }
+	}
+
+	def "display error when renaming a folder with a blank name"() {
+		given:
+			createTestFolders()
+			createTestMessages()
+		when:
+			to PageMessageFolder, Folder.findByName('Work')
+			folderMoreActions.value("rename")
+			waitFor { at RenameFolderDialog }
+			folderName.equals("Work")
+			folderName.value("")
+			ok.jquery.trigger("click")
+		then:
+			waitFor { errorPanel.text().toLowerCase() == "folder name cannot be blank" }
+	}
+
 	def "can delete a folder"() {
 		when:
 			deleteFolder()
 		then:
-			waitFor { $("#sidebar .selected").text() == "Inbox" }
-			!$("a", text: "Work")
+			at PageMessageFolder
+			waitFor { bodyMenu.selected == "inbox" }
+			!folderLinks*.text().containsAll('Work')
 	}
 	
 	def "deleted folders show up in the trash section"() {
 		setup:
 			def folderId = deleteFolder()
 		when:
-			go "message/trash/show/${Trash.findByObjectId(folderId).id}"
-			def rowContents = $('#message-list tr:nth-child(2) td')*.text()
+			at PageMessageFolder
+			to PageMessageTrash, Trash.findByObjectId(folderId).id
 		then:
-			println rowContents
-			rowContents[2] == 'Work'
-			rowContents[3] == '2 message(s)'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
-			$('#message-detail-sender').text() == 'Work folder'
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
-			$('#message-detail-content').text() == "${Folder.findById(folderId).messages.size()} messages"
+			messageList.messages[0].source == 'Work'
+			messageList.messages[0].text == '2 message(s)'
+			DATE_FORMAT.format(messageList.messages[0].date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
+			senderDetails == 'Work folder'
+			DATE_FORMAT.format(date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 	}
 	
 	def "clicking on empty trash permanently deletes a folder"() {
 		setup:
 			def folderId = deleteFolder()
 		when:
-			go "message/trash"
-			$("#trash-actions").value("empty-trash")
+			at PageMessageFolder
+			to PageMessageTrash, Trash.findByObjectId(folderId).id
+			trashMoreActions.value("empty-trash")
+			waitFor { at EmptyTrashPopup }
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			popupTitle.equals("empty trash?")
 		when:
-			$("#title").value("Empty trash")
-			$("#done").click()
+			ok.jquery.trigger("click")
+			at PageMessageFolder
 		then:
-			!Folder.findById(folderId)
+			folderLinks*.text().containsAll('Projects')
 	}
 	
 	def deleteFolder() {
 		createTestFolders()
 		createTestMessages()
-		def folderId = Folder.findByName("Work").id
-		go "message/folder/${folderId}"
-		$(".header-buttons #more-actions").value("delete")
-		waitFor { $("#ui-dialog-title-modalBox").displayed }
-		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase("Delete folder")
-		$("#done").click()
-		folderId
+		def folder = Folder.findByName("Work")
+		to PageMessageFolder, folder
+		folderMoreActions.value("delete")
+		waitFor { at DeleteFolderPopup }
+		popupTitle.equals("delete folder")
+		ok.jquery.trigger("click")
+		folder.id
 	}
-
 }
 

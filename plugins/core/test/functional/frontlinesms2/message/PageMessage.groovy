@@ -53,7 +53,7 @@ class MessageList extends geb.Module {
 	static content = {
 		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
-		messages { moduleList MessageListRow, $('tr') }
+		messages { moduleList MessageListRow, $('tbody tr') }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('td.no-content') }
 	}
@@ -98,7 +98,7 @@ class SingleMessageDetails extends geb.Module {
 class MultipleMessageDetails extends geb.Module {
 	static base = { $('#multiple-messages') }
 	static content = {
-		checkedMessageCount { $('p#checked-message-count').text().toInteger() }
+		checkedMessageCount { $('p#checked-message-count').text() }
 		replyAll { $('a#btn_reply_all') }
 		archiveAll {$("a#btn_archive_all")}
 		deleteAll {$('btn_delete_all')}
