@@ -1,9 +1,9 @@
 <html>
 	<head>
-		<meta name="layout" content="${params.controller=='radioShow' ? 'messages' : 'archive'}"/>
-		<r:require module="radio"/>
+		<meta name="layout" content="${params.inArchive? 'archive' : 'messages'}"/>
 		<title>${pageTitle?:params.action.capitalize()}</title>
 	</head>
 	<body>
+		<fsms:render template="/wordcloud/wordcloud"/>
 	</body>
 </html>

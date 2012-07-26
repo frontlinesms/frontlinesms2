@@ -17,7 +17,6 @@
 	</head>
 	<body>
 		<fsms:render template="/head"/>
-		<div id="body" class="contacts">
 			<div id="body-menu">
 				<fsms:render template="menu"/>
 			</div>

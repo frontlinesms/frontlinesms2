@@ -69,7 +69,10 @@ class ActivityController {
 			if(activity.save()) {
 				flash.message = defaultMessage 'unarchived'
 			} else {
-				flash.message = defaultMessage 'unarchive.failed', activity.id
+				if (activity instanceof Announcement)
+					flash.message = defaultMessage 'unarchive.failed', activity.id
+				else
+					flash.message = defaultMessage 'unarchive.keyword.failed', activity.id
 			}
 			redirect controller:"archive", action:"activityList"
 		}
