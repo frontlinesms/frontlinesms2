@@ -19,7 +19,6 @@
 			</g:remoteLink>
 		</fsms:menuitem>
 	</fsms:submenu>
-
 	<fsms:submenu code="contact.smartgroup.header" class="smartgroups">
 		<g:each in="${smartGroupInstanceList}" var="g">
 			<fsms:menuitem selected="${contactsSection instanceof frontlinesms2.SmartGroup && contactsSection.id==g.id}" controller="smartGroup" action="show" string="${g.name}" id="${g.id}" />

@@ -20,11 +20,13 @@
 	var enableKeyword = function() {
 			var enabled = $(this).val() == 'true';
 			if(enabled) {
+				enableTab(3);
 				$('#poll-keyword').removeAttr("disabled");
 				$('#poll-keyword').addClass("required");
 			}
 			else {
 				$('#poll-keyword').attr("disabled", "disabled");
+				disableTab(3);
 				$('#poll-keyword').removeClass("required");
 				$('#poll-keyword').removeClass("error");
 				$("label.error").remove();

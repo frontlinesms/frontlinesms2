@@ -108,7 +108,7 @@ class RadioShowController extends MessageController {
 	def selectActivity() {
 		def activityInstance = Activity.get(params.ownerId)
 		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		render template:"selectActivity", model:[ownerInstance:activityInstance, currentShow:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
+		[ownerInstance:activityInstance, radioShowIntance:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
 	}
 
 	def rename() {
@@ -222,15 +222,6 @@ class RadioShowController extends MessageController {
 		render view:'../archive/showArchive', model:[showInstanceList: showInstanceList,
 				showInstanceTotal: showInstanceList.size(),
 				messageSection: "radioShow", inARadioShow: true, mainNavSection: 'archive']
-	}
-	
-	private void removeActivityFromRadioShow(Activity activity) {
-		RadioShow.findAll().collect { showInstance ->
-			if(activity in showInstance.activities) {
-				showInstance.removeFromActivities(activity)
-				showInstance.save()
-			}
-		}
 	}
 	
 	private String dateToString(Date date) {

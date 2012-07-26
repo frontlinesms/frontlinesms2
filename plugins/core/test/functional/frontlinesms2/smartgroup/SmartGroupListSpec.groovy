@@ -6,9 +6,9 @@ import frontlinesms2.contact.PageContactShow
 class SmartGroupListSpec extends SmartGroupBaseSpec {
 	def 'smartgroups list is not visible if there are no smart groups'() {
 		when:
-			to PageContactShow
+			to PageSmartGroup
 		then:
-			smartGroupsList.children('li')*.size() == [1]
+			!smartGroupSubmenuLinks.size()
 	}
 	
 	def 'smartgroups list is visible if there are smart groups created'() {
@@ -17,12 +17,12 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			ruleValues[0].value('+44')
 			finishButton.click()
 		then:
-			waitFor { smartGroupsListItems.size() > 0 }
+			waitFor { smartGroupSubmenuLinks.size() == 1 }
 	}
 	
 	def 'CREATE NEW SMARTGROUP button is available when there are no smart groups'() {
 		when:
-			to PageContactShow
+			to PageSmartGroup
 		then:
 			createSmartGroupButton.displayed
 	}
@@ -31,7 +31,7 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		given:
 			new SmartGroup(name:'Test Group 1', contactName:'Jeremiah').save(failOnError:true, flush:true)
 		when:
-			to PageContactShow
+			to PageSmartGroup
 		then:
 			createSmartGroupButton.displayed
 	}
@@ -51,22 +51,21 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 			!menuItemHighlighted(a)
 			menuItemHighlighted(b)
 	}
-	
+
 	def "renaming a smart group displays a confirmation popup"() {
 		given:
 			def a = new SmartGroup(name:'Test Group A', contactName:'A').save(failOnError:true, flush:true)
 		when:
 			goToSmartGroupPage(a)
 		then:
-			$('#group-actions').displayed
+			moreActions.displayed
 		when:
-			$('#group-actions').value("rename").click()
+			moreActionsSelect("rename")
 		then:
-			waitFor{ $('#ui-dialog-title-modalBox').displayed}
-			
+			waitFor{ dialogIsDisplayed}
 		when:
-			$("#name").value("Renamed Smart Group")
-			$("#done").click()
+			inputValue("smartgroupname", "Renamed Smart Group")
+			done.click()
 		then:
 			!SmartGroup.findByName("Test Group A")
 	}
@@ -77,22 +76,18 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			goToSmartGroupPage(a)
 		then:
-			$('#group-actions').displayed
+			moreActions.displayed
 		when:
-			$('#group-actions').value("delete").click()
+			moreActionsSelect("delete")
 		then:
-			waitFor{ $('#ui-dialog-title-modalBox').displayed}
+			waitFor{ dialogIsDisplayed }
 		when:
-			$('#done').click()
+			done.click()
 		then:
 			!SmartGroup.findByName("Test Group A")
 	}
 	
 	private def goToSmartGroupPage(SmartGroup g) {
-		go "smartGroup/show/$g.id"
-	}
-	
-	private def menuItemHighlighted(SmartGroup g) {
-		$("#smartgroup-link-$g.id").closest('li').hasClass('selected')
+		to PageSmartGroupShow, g
 	}
 }
