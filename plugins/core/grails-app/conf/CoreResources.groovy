@@ -1,5 +1,6 @@
 modules = {
-	common {
+	common { dependsOn 'frontlinesms-core' }
+	'frontlinesms-core' {
 		dependsOn "jquery, jquery-ui"
 		resource url:[dir:'css', file:'reset.css', plugin:'core']
 		resource url:[dir:'css', file:'layout.css', plugin:'core']
