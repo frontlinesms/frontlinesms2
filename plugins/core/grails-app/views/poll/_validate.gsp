@@ -2,9 +2,210 @@
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateSmsCharacterCount);
 	$("button#nextPage").click(setAliasValues);
-	
-	//Validation Map
 	tabValidation = {};
+
+	function initializePopup() {
+		<g:if test="${activityInstanceToEdit?.id}">
+			$("#messageText").trigger("keyup");
+		</g:if>
+
+		addCustomValidationClasses();
+		initializeTabValidation(createFormValidator());
+	}
+
+	function createFormValidator() {
+		var validator = $("#new-poll-form").validate({
+			errorContainer: ".error-panel",
+			rules: {
+				addresses: {
+				  required: true,
+				  minlength: 1
+				}
+			},
+			messages: {
+				addresses: {
+					required: i18n("poll.recipients.validation.error")
+				}
+			},
+			errorPlacement: function(error, element) {
+				if (element.attr("name") == "addresses") {
+					error.insertAfter("#recipients-list");
+					$("#recipients-list").addClass("error");
+				} else
+					error.insertAfter(element);
+			}
+		});
+		return validator;
+	}
+
+	function addCustomValidationClasses() {
+		jQuery.validator.addMethod("aliases", function(value, element) {
+			var isValid = true;
+			var allAliases = ",";
+			$('input:not(:disabled).aliases').each(function() {
+				var currentInput = $(this);
+				var aliases = currentInput.val().split(",");
+				$.each(aliases, function(index, value) {
+					value = value.trim();
+					if(value.length != 0){
+						value = value.toUpperCase() + ",";
+						if(allAliases.indexOf("," + value) == -1) {
+							// alias not in allAliases
+							allAliases += value;
+						}
+						else {
+							// alias not unique
+							isValid = false;
+						}
+					}
+				});
+			});
+			return isValid;
+		}, i18n("poll.alias.validation.error"));
+
+		jQuery.validator.addMethod("validcommas", function(value, element) {
+			return value.match(/^(\s*,*\s*[\w-]+\s*,*\s*)(,*\s*[\w-]+\s*,*\s*)*$/) !== null;
+		}, i18n("poll.alias.validation.error.invalid.alias"));
+
+		jQuery.validator.addMethod("edit", function(value, element) {
+			return (value.trim().length != 0);
+		}, i18n("poll.choice.validation.error.deleting.response"));
+	}
+
+	function initializeTabValidation(validator) {
+		var questionTabValidation = function() {
+				var valid = true;
+				if ($("input[name='pollType']:checked").val() == "yesNo") {
+					disableTab(1);
+					addRespectiveAliases();
+				} else {
+					enableTab(1);
+				}
+				return validator.element($("#question"));
+		};
+		var responseTabValidation = function() {
+			var valid = true;
+			if($("input[name='pollType']:checked").val() == "yesNo") {
+				valid = true;
+			} else {
+				var choices = [$('#choiceA'), $('#choiceB')];
+				$.each(choices, function(index, value) {
+					if (!validator.element(value) && valid) {
+						valid = false;
+					}
+				});
+			}
+			setAliasValues();
+			return valid;
+		};
+		var aliasTabValidation = function() {
+			var valid = true;
+			$('input:not(:disabled).aliases').each(function() {
+				if (!validator.element(this) && valid) {
+				    valid = false;
+				}
+			});
+			return valid;
+		};
+		var autoSortTabValidation = function() {
+			return validator.element('#poll-keyword');
+		};
+		var autoReplyTabValidation = function() {
+			return validator.element('#autoreplyText');
+		};
+		var recepientTabValidation = function() {
+			if(!isGroupChecked('dontSendMessage')) {
+				var valid = true;
+				addAddressHandler();
+				valid = $('input[name=addresses]:checked').length > 0;
+				var addressListener = function() {
+					if($('input[name=addresses]:checked').length > 0) {
+						validator.element($('#contacts').find("input[name=addresses]"));
+						$('#recipients-list').removeClass("error");
+					} else {
+						$('#recipients-list').addClass("error");
+						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
+					}
+				};
+				if (!valid) {
+					$('input[name=addresses]').change(addressListener);
+					$('input[name=addresses]').trigger("change");
+				}
+				return valid;
+			}
+			return true;
+		};
+
+		var confirmTabValidation = function() {
+			return validator.element('input[name=name]');
+		};
+
+		tabValidation["#tab-1"] = questionTabValidation;
+		tabValidation["#tab-2"] = responseTabValidation;
+		tabValidation["#tab-3"] = autoSortTabValidation;
+		tabValidation["#tab-4"] = aliasTabValidation;
+		tabValidation["#tab-5"] = autoReplyTabValidation;
+		tabValidation["#tab-7"] = recepientTabValidation;
+		tabValidation["#tab-8"] = confirmTabValidation;
+
+		/* Poll type tab */
+		$("#tabs-1").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-1"].call();
+			}
+		});
+
+		/* response list tab */
+		$("#tabs-2").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-2"].call();
+			}
+		});
+
+		/* Aliases tab */
+		$("#tabs-3").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-3"].call();
+			}
+		});
+		
+		/* Auto-sort tab */
+		$("#tabs-4").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-4"].call();
+			}
+		});
+
+		/* Auto-reply tab */
+		$("#tabs-5").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-5"].call();
+			}
+		});
+		
+		/* Select recepient's tab */
+		$("#tabs-7").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-7"].call();
+			}
+		});
+
+		/* Confirm tab*/
+		$("#tabs-8").contentWidget({
+			validate: function() {
+				return tabValidation["#tab-8"].call();
+			}
+		});
+
+
+		$("#tabs").bind("tabsshow", function(event, ui) {
+			updateSendMessage();
+			updateConfirmationMessage();
+		});
+
+		tabValidates($("#tabs-1"));
+	}
+
 
 	function updateSendMessage() {
 		// TODO check why these are being bound every time - surely could just bind when the page is loaded.
@@ -131,196 +332,6 @@
 	
 	function autoUpdateOn() {
 		autoUpdate = true;
-	}
-
-	function initializePopup() {
-		<g:if test="${activityInstanceToEdit?.id}">
-			$("#messageText").trigger("keyup");
-		</g:if>
-		var validator = $("#new-poll-form").validate({
-			errorContainer: ".error-panel",
-			rules: {
-				addresses: {
-				  required: true,
-				  minlength: 1
-				}
-			},
-			messages: {
-				addresses: {
-					required: i18n("poll.recipients.validation.error")
-				}
-			},
-			errorPlacement: function(error, element) {
-				if (element.attr("name") == "addresses") {
-					error.insertAfter("#recipients-list");
-					$("#recipients-list").addClass("error");
-				} else
-					error.insertAfter(element);
-			}
-		});
-		jQuery.validator.addMethod("aliases", function(value, element) {
-			var isValid = true;
-			var allAliases = ",";
-			$('input:not(:disabled).aliases').each(function() {
-				var currentInput = $(this);
-				var aliases = currentInput.val().split(",");
-				$.each(aliases, function(index, value) {
-					value = value.trim();
-					if(value.length != 0){
-						value = value.toUpperCase() + ",";
-						if(allAliases.indexOf("," + value) == -1) {
-							// alias not in allAliases
-							allAliases += value;
-						}
-						else {
-							// alias not unique
-							isValid = false;
-						}
-					}
-				});
-			});
-			return isValid;
-		}, i18n("poll.alias.validation.error"));
-
-		jQuery.validator.addMethod("validcommas", function(value, element) {
-			return value.match(/^(\s*,*\s*[\w-]+\s*,*\s*)(,*\s*[\w-]+\s*,*\s*)*$/) !== null;
-		}, i18n("poll.alias.validation.error.invalid.alias"));
-
-		jQuery.validator.addMethod("edit", function(value, element) {
-			return (value.trim().length != 0);
-		}, i18n("poll.choice.validation.error.deleting.response"));
-
-		var questionTabValidation = function() {
-				var valid = true;
-				if ($("input[name='pollType']:checked").val() == "yesNo") {
-					disableTab(1);
-					addRespectiveAliases();
-				} else {
-					enableTab(1);
-				}
-				return validator.element($("#question"));
-		};
-		var responseTabValidation = function() {
-			var valid = true;
-			if($("input[name='pollType']:checked").val() == "yesNo") {
-				valid = true;
-			} else {
-				var choices = [$('#choiceA'), $('#choiceB')];
-				$.each(choices, function(index, value) {
-					if (!validator.element(value) && valid) {
-						valid = false;
-					}
-				});
-			}
-			setAliasValues();
-			return valid;
-		};
-		var aliasTabValidation = function() {
-			var valid = true;
-			$('input:not(:disabled).aliases').each(function() {
-				if (!validator.element(this) && valid) {
-				    valid = false;
-				}
-			});
-			return valid;
-		};
-		var autoSortTabValidation = function() {
-			return validator.element('#poll-keyword');
-		};
-		var autoReplyTabValidation = function() {
-			return validator.element('#autoreplyText');
-		};
-		var recepientTabValidation = function() {
-			if(!isGroupChecked('dontSendMessage')) {
-				var valid = true;
-				addAddressHandler();
-				valid = $('input[name=addresses]:checked').length > 0;
-				var addressListener = function() {
-					if($('input[name=addresses]:checked').length > 0) {
-						validator.element($('#contacts').find("input[name=addresses]"));
-						$('#recipients-list').removeClass("error");
-					} else {
-						$('#recipients-list').addClass("error");
-						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
-					}
-				};
-				if (!valid) {
-					$('input[name=addresses]').change(addressListener);
-					$('input[name=addresses]').trigger("change");
-				}
-				return valid;
-			}
-			return true;
-		};
-
-		var confirmTabValidation = function() {
-			return validator.element('input[name=name]');
-		};
-
-		tabValidation["#tab-1"] = questionTabValidation;
-		tabValidation["#tab-2"] = responseTabValidation;
-		tabValidation["#tab-3"] = aliasTabValidation;
-		tabValidation["#tab-4"] = autoSortTabValidation;
-		tabValidation["#tab-5"] = autoReplyTabValidation;
-		tabValidation["#tab-7"] = recepientTabValidation;
-		tabValidation["#tab-8"] = confirmTabValidation;
-
-		/* Poll type tab */
-		$("#tabs-1").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-1"].call();
-			}
-		});
-
-		/* response list tab */
-		$("#tabs-2").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-2"].call();
-			}
-		});
-
-		/* Aliases tab */
-		$("#tabs-3").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-3"].call();
-			}
-		});
-		
-		/* Auto-sort tab */
-		$("#tabs-4").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-4"].call();
-			}
-		});
-
-		/* Auto-reply tab */
-		$("#tabs-5").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-5"].call();
-			}
-		});
-		
-		/* Select recepient's tab */
-		$("#tabs-7").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-7"].call();
-			}
-		});
-
-		/* Confirm tab*/
-		$("#tabs-8").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-8"].call();
-			}
-		});
-
-
-		$("#tabs").bind("tabsshow", function(event, ui) {
-			updateSendMessage();
-			updateConfirmationMessage();
-		});
-
-		tabValidates($("#tabs-1"));
 	}
 
 	function updateConfirmationMessage() {
