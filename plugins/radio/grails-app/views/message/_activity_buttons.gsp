@@ -2,12 +2,13 @@
 <%@ page import="frontlinesms2.radio.*" %>
 <div class="header-buttons">
 	<fsms:quickMessage class="section-action-button activity-btn btn"/>
-	<g:if test="${params.controller!='archive'}">
+	<g:render template="/wordcloud/wordcloud_actions"/>
+	<g:if test="${params.controller!='archive' && !params.inArchive}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:if>
-	<g:else>
+	<g:elseif test="${!RadioShow.findByOwnedActivity(ownerInstance).get()?.archived}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="unarchive" id="${ownerInstance?.id}"><g:message code="fmessage.unarchive" args="${[ownerInstance?.shortName]}"/></g:link>
-	</g:else>
+	</g:elseif>
 	<g:select class="dropdown more-actions activity-btn" name="more-actions"  
 			from="${['export', 'rename', 'delete'] + (ownerInstance.editable?['edit']:[]) + 
 			(ownerInstance instanceof Activity? 

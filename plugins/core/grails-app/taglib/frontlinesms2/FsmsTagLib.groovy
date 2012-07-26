@@ -18,7 +18,12 @@ class FsmsTagLib {
 	def tab = { att, body ->
 		def con = att.controller
 		out << '<li class="' + con
-		if(con == params.controller) out << ' current'
+		if(att.mainNavSection) {
+			if (att.mainNavSection == con) out << ' current'
+		}
+		else if(con == params.controller) {
+			out << ' current'
+		}
 		out << '">'
 		out << g.link(controller:con) {
 			out << g.message(code:"tab.$con")
@@ -216,6 +221,46 @@ class FsmsTagLib {
 		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)"
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
 		out << g.remoteLink(att, body)
+	}
+
+	def menu = { att, body ->
+		out << '<div id="body-menu" class="'+att.class+'">'
+		out << '<ul>'
+		out << body()
+		out << '</ul>'
+		out << '</div>'
+	}
+
+	def submenu = { att, body ->
+		out << '<li class="'+ att.class +'">'
+		if(att.code) {
+			out << '<h3>'
+			out << g.message(code:att.code)
+			out << '</h3>'
+		}
+		out << '<ul class="submenu">'
+		out << body()
+		out << '</ul>'
+		out << '</li>'
+	}
+
+	def menuitem = { att, body ->
+		def classlist = att.class?:""
+		classlist += att.selected ? " selected" : ""
+		out << '<li class="' + classlist + '" >'
+		if (att?.bodyOnly)
+		{
+			out << body()
+		}
+		else {
+			def msg = att.code
+			def msgargs = att.msgargs
+			def p = att.params
+			out << g.link(controller:att.controller, action:att.action, params:p, id:att.id) {
+				out << (att.string ? att.string : g.message(code:msg, args:msgargs))
+			}
+		}
+		out << '</li>'
 	}
 	
 	private def getFields(att) {

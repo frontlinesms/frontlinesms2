@@ -18,26 +18,10 @@ grails.project.dependency.resolution = {
 	}
 	dependencies {
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-
 		// runtime 'mysql:mysql-connector-java:5.1.5'
  	}
 	plugins {
-		runtime ":hibernate:$grailsVersion"
-		runtime ":jquery-validation:1.7.3"
-		runtime ":database-migration:1.0"
-		runtime ":jquery:1.7.1"
-		runtime ':jquery-ui:1.8.15'
-		runtime ":resources:1.1.6"
-
-		runtime ":export:1.1"
-		runtime ":markdown:1.0.0.RC1"
-		runtime ":routing:1.2.0"
-		runtime ":csv:0.3.1"
-		runtime ":quartz2:0.2.3"
-
-		build(":tomcat:$grailsVersion", ":release:1.0.0") {
-			export = false
-		}
+		runtime ':plugin-config:0.1.5'
 	}
 }
 

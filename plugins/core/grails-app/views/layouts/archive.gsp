@@ -29,14 +29,20 @@
 							<fsms:render template="/message/header"/>
 						</g:if>
 						<g:else>
-							<fsms:render template="header"/>
+							<fsms:render template="/archive/header"/>
 						</g:else>
 					</div>
-					<g:if test="${(messageSection == 'activity') && !viewingMessages}">
+					<g:if test="${messageSection == 'activity' && !viewingMessages}">
 						<fsms:render template="archived_activity_list"/>
 					</g:if>
 					<g:elseif test="${messageSection == 'folder' && !viewingMessages}">
 						<fsms:render template="archived_folder_list"/>
+					</g:elseif>
+					<g:elseif test="${(messageSection == 'inbox' || messageSection == 'sent') && !viewingMessages}">
+						<fsms:render template="/message/message_list"/>
+					</g:elseif>
+					<g:elseif test="${!viewingMessages}">
+						<fsms:render template="/${messageSection}/archived_${messageSection}_list"/>
 					</g:elseif>
 					<g:else>
 						<fsms:render template="/message/message_list"/>
