@@ -49,11 +49,11 @@ class MessageController {
 
 	def show() {
 		def messageInstance = Fmessage.get(params.messageId)
-		def activityInstance = Activity.get(params?.ownerId)
+		def ownerInstance = MessageOwner.get(params?.ownerId)
 		messageInstance.read = true
 		messageInstance.save()
 		def model = [messageInstance: messageInstance,
-				ownerInstance:activityInstance,
+				ownerInstance:ownerInstance,
 				folderInstanceList: Folder.findAllByArchivedAndDeleted(viewingArchive, false),
 				activityInstanceList: Activity.findAllByArchivedAndDeleted(viewingArchive, false),
 				messageSection: params.messageSection]
