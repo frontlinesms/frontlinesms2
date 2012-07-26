@@ -13,7 +13,8 @@ function showWordCloud(stats){
 			height : 0.8*h 
 		});
 	});
-
+	console.log($("#main-list").offset().top);
+	$("#wordcloud-container").css('top', $("#main-list").offset().top);
 	$("#wordcloud-container").show();
 	$("#main-list").hide();
 	$("#main-list-foot").hide();
