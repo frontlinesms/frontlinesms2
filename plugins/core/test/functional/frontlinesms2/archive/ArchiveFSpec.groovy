@@ -1,7 +1,7 @@
 package frontlinesms2.archive
 
 import frontlinesms2.*
-import frontlinesms2.message.PageMessage
+import frontlinesms2.message.PageMessageInbox
 
 @Mixin(frontlinesms2.utils.GebUtil)
 class ArchiveFSpec extends ArchiveBaseSpec {
@@ -22,11 +22,11 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageMessageArchive, "inbox"
+			to PageMessageArchive, Fmessage.findBySrc('Max')
 		then:
 			messageList.sources.sort() == ['Jane', 'Max']
 		when:
-			to PageMessageArchive, "inbox", Fmessage.findBySrc('Max')
+			to PageMessageArchive, Fmessage.findBySrc('Max')
 			singleMessageDetails.delete.click()
 		then:
 			messageList.sources == ['Jane']
@@ -36,17 +36,10 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageMessageArchive, "inbox", Fmessage.findBySrc('Max').id
-			$(".message-select")[0].click()
+			to PageMessageArchive, Fmessage.findBySrc('Max')
+			messageList.selectAll.click()
 		then:
-			//multipleMessageDetails.archiveAll.displayed
 			!$("#btn_archive_all").displayed
-		when:
-			$(".message-select")[1].click()
-			$(".message-select")[2].click()
-		then:
-			!$('#btn_archive_all').displayed
-		
 	}
 
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {
@@ -67,11 +60,9 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.refresh()
 			assert poll.activityMessages.list().every { it.archived }
 		when:
-			to PageArchiveActivity
-			//go "archive/activity/${poll.id}/show/${messages[0].id}?messageSection=activity&viewingMessages=true"
+			to PageMessageArchive, 'thingy'
 			messageList.selectAll.click()
-			//$(".message-select-cell #message-select-all").click()
 		then:
-			waitFor { $("#btn_delete_all").displayed }
+			waitFor { multipleMessageDetails.deleteAll.displayed }
 	}
 }

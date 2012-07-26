@@ -79,6 +79,26 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { autoreply.displayed }
 	}
 
+	def "Aliases tab should disabled when poll popup first loads"() {
+		when:
+			launchPollPopup()
+		then:
+			aliases.hasClass('ui-tabs-hide')
+	}
+
+	def "Aliases tab should be enabled if sorting is enabled"() {
+		when:
+			launchPollPopup('yesNo','question',true)
+			next.click()
+		then:
+			at SortTab
+			sort.keyword.disabled
+		when:
+			sort.sort.click()
+		then:
+			aliases.hasClass('ui-tabs-hide')
+	}
+
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)

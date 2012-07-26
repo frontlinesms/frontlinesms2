@@ -1,0 +1,19 @@
+clear
+echo "##########################################################################"
+echo "# CLEANING ALL TARGETS, REBUILDING RADIO WAR AND INSTALLER AND EXECUTING #"
+echo "##########################################################################"
+rm -rf ../core/target/
+rm -rf target/
+rm -rf ../core/install/target*
+rm -rf ../core/install/src/web-app/
+grails clean
+grails -Dfrontlinesms2.build.confirmNotProd=true build-installers
+rm -rf ~/.frontlinesms2/
+~/frontlinesms2/uninstall
+rm -rf ~/frontlinesms2/
+../core/install/target/install4j/frontlinesms2_unix_2.0.a7-SNAPSHOT.sh
+echo "server.port=8081" >> ~/frontlinesms2/launcher.properties
+~/frontlinesms2/FrontlineSMS2_Launcher
+echo "#####################################"
+echo "# DONE REBUILDING AND RUNNING RADIO #"
+echo "#####################################"

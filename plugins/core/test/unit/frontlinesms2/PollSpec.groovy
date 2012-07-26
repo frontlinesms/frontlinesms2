@@ -117,6 +117,19 @@ class PollSpec extends Specification {
 			!p.messages
 	}
 
+	def 'ill-formated submitted aliases should be formated neatly'(){
+		given:
+			def p =  new Poll()
+		expect:
+			p.addAlias(attrs, 'B') == validAliases
+		where:
+			attrs							| validAliases
+			[aliasB: ",,,,"] 				| ""
+			[aliasB: "   "] 				| ""
+			[aliasB: "a,,,b"] 				| "A, B, "
+			[aliasB: ",,,,a  ,,,,b,,,   "] 	| "A, B, "
+	}
+
 	private def createPoll(int validResponseCount) {
 		def p = new Poll()
 		def responses = [unknown:PollResponse.createUnknown()]

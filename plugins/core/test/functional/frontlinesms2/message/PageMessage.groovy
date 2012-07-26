@@ -100,8 +100,7 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text() }
 		replyAll { $('a#btn_reply_all') }
-		archiveAll {$("a#btn_archive_all")}
-		deleteAll {$('btn_delete_all')}
+		deleteAll {$('#btn_delete_all')}
 		messageCount {$("#checked-message-count")}
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)

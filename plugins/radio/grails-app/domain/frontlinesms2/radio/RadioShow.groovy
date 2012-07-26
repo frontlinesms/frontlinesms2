@@ -14,12 +14,18 @@ class RadioShow extends MessageOwner {
 	static transients = ['liveMessageCount']
 	
 	static constraints = {
-		name(blank: false, unique: true, validator: {val, obj ->
-				RadioShow.withNewSession {
-					def similarName = RadioShow.findByNameIlike(val)
-					return !similarName|| obj.id == similarName.id
-				}
+		name(blank: false, validator: {val, obj ->
+				def similarName = RadioShow.findByNameIlike(val)
+				return !similarName|| obj.id == similarName.id
 			})
+	}
+
+	static namedQueries = {
+		findByOwnedActivity { activityInstance ->
+				activities {
+					eq 'id', activityInstance.id
+				}
+		}
 	}
 	
 	def getShowMessages(getOnlyStarred = false, getSent=false) {
@@ -55,18 +61,42 @@ class RadioShow extends MessageOwner {
 		activityInstanceList
 	}
 
+	def getActivitiesByArchivedAndDeleted(archived=false, deleted=false) {
+		def activityInstanceList
+		if(activities) {
+			activityInstanceList = Activity.withCriteria {
+				'in'("id", activities*.id)
+				eq("archived", archived)
+				eq("deleted", deleted)
+			}
+		}
+		activityInstanceList
+	}
+
 	def archive() {
 		this.archived = true
 		this.messages.each {
 			it.archived = true
-			it.save(flush: true)
+			it.save(failOnError: true)
 		}
+		this.activities?.each {
+			it.archive()
+			it.save(failOnError: true)
+		}
+		return this.save(flush:true, failOnError: true)
 	}
 	
 	def unarchive() {
 		this.archived = false
-		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
-		messagesToArchive.each { it?.archived = false }
+		this.messages.each {
+			it.archived = false
+			it.save(failOnError: true)
+		}
+		this.activities?.each {
+			it.unarchive()
+			it.save(failOnError: true)
+		}
+		return this.save(flush:true, failOnError: true)
 	}
 
 	void addToActivities(Activity activityInstance) {

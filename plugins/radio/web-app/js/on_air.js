@@ -2,7 +2,7 @@ var interval; // TODO not safe variable name
 var timeout; // TODO not safe variable name
 
 function startShow(data) {
-	if(data.indexOf("already on air") == -1) {
+	if(data.ok) { 
 		$("#on-air").addClass("onAirIsActive"); // TODO cache jQuery objects
 		$("#show-" + data).addClass("onAirIsActive"); // TODO cache jQuery objects
 		$("#show-" + data).show();
