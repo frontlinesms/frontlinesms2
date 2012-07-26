@@ -11,8 +11,8 @@
 				poll.confirm"
 		templates="/poll/question,
 				/poll/responses,
-				/poll/aliases,
 				/poll/sorting,
+				/poll/aliases,
 				/poll/replies,
 				/message/compose,
 				/message/select_recipients,

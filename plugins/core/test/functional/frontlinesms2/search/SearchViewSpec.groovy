@@ -80,7 +80,7 @@ class SearchViewSpec extends SearchBaseSpec {
 		when:
 			to PageSearch
 		then:
-			!$('h2:nth-child(2) div#export-results a').present()
+			exportBtnLink.hasClass('disabled');
 	}
 
 	def "should fetch all inbound messages alone"() {
@@ -147,12 +147,12 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findBySrc('src3').id}").click()
-			$("#delete-msg").click()
+			displayNameLink(Fmessage.findBySrc('src3').id).click()
+			deleteMessageBtn.click()
 		then:
 			at PageSearchResult
 			messageTextLink*.text().containsAll(["hi alex", "received1", "received2", "meeting at 11.00"])
-			$('.flash').displayed
+			flashMessage.displayed
 	}
 	
 	def "should have the start date not set, then as the user set one the result page should contain his start date"() {
@@ -168,11 +168,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			searchFrm.endDate_month == 'none'
 			searchFrm.endDate_year == 'none'
 		when:
-			 searchFrm.startDate_day = '4'
-			 searchFrm.startDate_month = '9'
-			 searchFrm.startDate_year = '2010'
-			$("#ui-datepicker-div").jquery.hide()
-			waitFor { !$("#ui-datepicker-div").displayed }
+			searchFrm.startDate_day = '4'
+			searchFrm.startDate_month = '9'
+			searchFrm.startDate_year = '2010'
+			datePickerDiv.jquery.hide()
+			waitFor { !datePickerDiv.displayed }
 			searchBtn.click()
 			waitFor {searchDescription}
 		then:
@@ -189,15 +189,15 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
-			$("#archive-msg").click()
+			displayNameLink(Fmessage.findByText('hi alex').id).click()
+			archiveMsgBtn.click()
 		then:
 			at PageSearchResult
 		when:
-			$("a.displayName-${Fmessage.findByText('hi alex').id}").click()
+			displayNameLink(Fmessage.findByText('hi alex').id).click()
 		then:
 			at PageSearchResult
-			$("#message-detail-content").text() == 'hi alex'
+			singleMessageDetailContent.text() == 'hi alex'
 	}
 	
 	def "should expand the more option and select a contactName then the link to add contactName is hidden"() {
@@ -283,11 +283,11 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageSearch
 			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			messageTabLink.text()?.contains("2")
+			noMessagesInboxed.text()?.contains("2")
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor('very slow') { messageTabLink.text()?.contains("3") }
+			waitFor('very slow') { noMessagesInboxed.text()?.contains("3") }
 	}
 	
 }

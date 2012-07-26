@@ -165,19 +165,30 @@
 				var currentInput = $(this);
 				var aliases = currentInput.val().split(",");
 				$.each(aliases, function(index, value) {
-					value = value.trim().toUpperCase() + ",";
-					if(allAliases.indexOf("," + value) == -1) {
-						// alias not in allAliases
-						allAliases += value;
-					}
-					else {
-						// alias not unique
-						isValid = false;
+					value = value.trim();
+					if(value.length != 0){
+						value = value.toUpperCase() + ",";
+						if(allAliases.indexOf("," + value) == -1) {
+							// alias not in allAliases
+							allAliases += value;
+						}
+						else {
+							// alias not unique
+							isValid = false;
+						}
 					}
 				});
 			});
 			return isValid;
 		}, i18n("poll.alias.validation.error"));
+
+		jQuery.validator.addMethod("validcommas", function(value, element) {
+			return value.match(/^(\s*,*\s*[\w-]+\s*,*\s*)(,*\s*[\w-]+\s*,*\s*)*$/) !== null;
+		}, i18n("poll.alias.validation.error.invalid.alias"));
+
+		jQuery.validator.addMethod("edit", function(value, element) {
+			return (value.trim().length != 0);
+		}, i18n("poll.choice.validation.error.deleting.response"));
 
 		var questionTabValidation = function() {
 				var valid = true;

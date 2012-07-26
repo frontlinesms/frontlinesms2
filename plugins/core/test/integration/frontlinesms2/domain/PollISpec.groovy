@@ -265,4 +265,20 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			"football yeah" | "A"
 			"football"  	| "unknown"
 	}
+
+	def "saving a poll with a response value empty should fail"(){
+		given:
+			def p = new Poll(name: 'My Team poll')
+			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
+			p.save(failOnError:true)
+			def controller = new PollController()
+			controller.params.ownerId = p.id
+			controller.params.choiceA = "My team"
+			controller.params.choiceB = ""
+		when:
+			controller.save()
+		then:
+			p.refresh()
+			p.responses*.value.containsAll(["Manchester", "Barcelona", "Unknown"])
+	}
 }

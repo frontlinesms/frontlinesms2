@@ -6,7 +6,7 @@ class ContactSearchService {
 	def contactList(params) {
 		[contactInstanceList: getContacts(params),
 				contactInstanceTotal: countContacts(params),
-				contactsSection: params.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null]
+				contactsSection: params?.groupId? Group.get(params.groupId): params.smartGroupId? SmartGroup.get(params.smartGroupId): null]
 	}
 	
 	private def getContacts(params) {

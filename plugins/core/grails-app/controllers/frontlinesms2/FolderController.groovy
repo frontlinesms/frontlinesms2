@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class FolderController {
 	static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
@@ -23,11 +25,19 @@ class FolderController {
 	def save = {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush:true)) {
-			flash.message = defaultMessage 'created'
-			redirect controller:"message", action:'folder', id:folderInstance.id
+			flash.message = message(code: 'folder.create.success')
+
+			withFormat {
+				json {
+					render([ok:true] as JSON)
+				}
+			}
 		} else {
-			flash.message = defaultMessage 'create.failed'
-			redirect controller:"message", action:'inbox', params:[flashMessage:flash.message]
+			withFormat {
+				json {
+					render([ok:false, text:message(code: folderInstance.errors.allErrors[0].codes[7])] as JSON)
+				}
+			}
 		}
 	}
 
@@ -36,10 +46,18 @@ class FolderController {
 		folderInstance.name = params.name
 		if (folderInstance.save(flush:true)) {
 			flash.message = message(code: 'folder.renamed')
-			redirect controller:"message", action:'folder', id:folderInstance.id
+			
+			withFormat {
+				json {
+					render([ok:true] as JSON)
+				}
+			}
 		} else {
-			flash.message = defaultMessage 'create.failed'
-			redirect controller:"message", action:'inbox', params:[flashMessage:flash.message]
+			withFormat {
+				json {
+					render([ok:false, text:message(code: folderInstance.errors.allErrors[0].codes[7])] as JSON)
+				}
+			}
 		}
 	}
 

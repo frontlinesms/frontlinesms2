@@ -48,7 +48,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.pollName.displayed
 		when:
 			confirm.pollName = "POLL NAME"
-			send.click()
+			submit.click()
 		then:
 			waitFor { summary.displayed }
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
@@ -77,6 +77,26 @@ class PollCedSpec extends PollBaseSpec {
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
+	}
+
+	def "Aliases tab should disabled when poll popup first loads"() {
+		when:
+			launchPollPopup()
+		then:
+			aliases.hasClass('ui-tabs-hide')
+	}
+
+	def "Aliases tab should be enabled if sorting is enabled"() {
+		when:
+			launchPollPopup('yesNo','question',true)
+			next.click()
+		then:
+			at SortTab
+			sort.keyword.disabled
+		when:
+			sort.sort.click()
+		then:
+			aliases.hasClass('ui-tabs-hide')
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
@@ -150,7 +170,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 		when:
-			send.click()
+			submit.click()
 		then:
 			waitFor { errorPanel.displayed }
 			confirm.displayed
@@ -240,7 +260,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.autoreply == "Thanks for participating..."
 		when:
 			confirm.pollName = "Coffee Poll"
-			send.click()
+			submit.click()
 		then:
 			waitFor { Poll.findByName("Coffee Poll") }
 	}
@@ -299,7 +319,7 @@ class PollCedSpec extends PollBaseSpec {
 			confirm.messageCount == "1 messages will be sent"
 		when:
 			confirm.pollName = "Coffee Poll"
-			send.click()
+			submit.click()
 		then:
 			waitFor {Poll.findByName("Coffee Poll") }
 	}
@@ -501,6 +521,30 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { errorPanel.displayed }
 	}
 
+	def "Choices for a saved poll should validate as required"() {
+		setup:
+			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris')
+			poll.addToResponses(key: 'Unknown', value: 'Unknown')
+			poll.save(failOnError:true, flush:true)
+			poll.refresh()
+		when:
+			to PageMessagePoll, poll
+		then:
+			moreActions.value("edit").click()
+		when:
+			waitFor('slow') { at PollDialog }
+			next.click()
+		then:
+			response.choice("B").jquery.val("")
+			response.choice("B").jquery.trigger('keyup')
+		when:
+			next.click()
+		then:
+			response.choice("B").hasClass("error")
+			response.errorLabel("B").text().contains("A saved choice cannot")
+	}
 	// TODO: add alias-specific tests
 
 	def deletePoll() {
