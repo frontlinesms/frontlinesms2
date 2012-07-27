@@ -1,0 +1,2 @@
+<%@ page import="frontlinesms2.radio.RadioShow" %>
+<radio:selectShow formtag="${formtag}" from="${radioShows?:RadioShow.findAllByDeleted(false)}" radioShowIntance="${radioShowIntance}" ownerInstance="${activityInstanceToEdit ?: ownerInstance}"/>

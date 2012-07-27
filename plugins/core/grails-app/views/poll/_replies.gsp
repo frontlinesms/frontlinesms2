@@ -7,7 +7,7 @@
 		<g:message code="poll.autoreply.send"/>
 	</label>
 	<g:checkBox name="enableAutoreply" checked="${activityInstanceToEdit?.autoreplyText as boolean}"/>
-	<g:textArea name="autoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit? activityInstanceToEdit.autoreplyText as boolean: true}" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
+	<g:textArea name="autoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.autoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.autoreplyText ?:''}"/>
 	<div class="controls">
 		<div class="stats">
 			<span id="send-message-stats" class="character-count">
