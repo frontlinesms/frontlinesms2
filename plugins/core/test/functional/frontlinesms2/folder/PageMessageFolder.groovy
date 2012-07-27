@@ -7,9 +7,9 @@ class PageMessageFolder extends PageMessage {
 	static url = 'message/folder'
 
 	String convertToPath(Object[] args) {
-		println("Building url...")
 		def restOfPath = ""
-		if (args.length == 0)
+
+		if (args.equals(null) || args.length == 0)
 			return ""
 
 	    if (args[0] instanceof Folder)
@@ -27,5 +27,7 @@ class PageMessageFolder extends PageMessage {
 	    return restOfPath
 	}
 	static content = {
+		folderLinks { $('ul li.folders ul.submenu li a') }
+		folderMoreActions { $(".header-buttons #more-actions") }
 	}
 }
