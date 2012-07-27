@@ -53,14 +53,13 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { summary.displayed }
 			Poll.findByName("POLL NAME").responses*.value.containsAll("Yes", "No", "Unknown")
 	}
-	
+
 	def "should require keyword if sorting is enabled"() {
 		when:
 			launchPollPopup()
 			setAliases()
-			next.click()
 		then:
-			waitFor { sort.displayed }
+			waitFor { sort.keyword.displayed }
 			sort.keyword.disabled
 		when:
 			sort.sort.click()
@@ -75,11 +74,12 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			sort.keyword = 'trigger'
 			next.click()
+			next.click()
 		then:
 			waitFor { autoreply.displayed }
 	}
 
-	def "Aliases tab should disabled when poll popup first loads"() {
+	def "Aliases tab should be disabled when poll popup first loads"() {
 		when:
 			launchPollPopup()
 		then:
@@ -89,9 +89,8 @@ class PollCedSpec extends PollBaseSpec {
 	def "Aliases tab should be enabled if sorting is enabled"() {
 		when:
 			launchPollPopup('yesNo','question',true)
-			next.click()
 		then:
-			at SortTab
+			sort.displayed
 			sort.keyword.disabled
 		when:
 			sort.sort.click()
@@ -103,7 +102,6 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 			setAliases()
-			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
@@ -124,10 +122,6 @@ class PollCedSpec extends PollBaseSpec {
 			previous.click()
 		then:
 			waitFor { sort.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { aliases.displayed }
 		when:
 			previous.click()
 		then:
@@ -158,7 +152,6 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 			setAliases()
-			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
@@ -202,12 +195,12 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { response.label("D").hasClass('field-enabled') }
 			next.click()
 		then:
-			setAliases()
-			next.click()
 			waitFor { sort.displayed }
 		when:
 			sort.sort.click()
 			sort.keyword = 'coffee'
+			next.click()
+			setAliases()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -217,7 +210,6 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { !autoreply.text.disabled }
 		when:
-			
 			autoreply.text = "Thanks for participating..."
 		then:
 			waitFor {
@@ -241,7 +233,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			next.click()
 		then:
-			waitFor { errorPanel.displayed }
+			waitFor { error }
 		when:
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
@@ -284,13 +276,14 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { response.label("D").hasClass('field-enabled') }
 		when:
-			setAliases()
 			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
 			sort.sort.click()
 			sort.keyword = 'coffee'
+			next.click()
+			setAliases()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -323,35 +316,20 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor {Poll.findByName("Coffee Poll") }
 	}
-	
+
 	def "should update confirm screen when user decides not to send messages"() {
 		when:
-			launchPollPopup('yesNo', "Will you send messages to this poll")
+			launchPollPopup('yesNo', "Will you send messages to this poll", false)
 		then:
-			setAliases()
-			next.click()
 			waitFor { sort.displayed }
 		when:
-			tab(7).click()
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
-		then:
-			waitFor { recipients.manual.size() == 1 }
-			recipients.count == 1
-		when:
+			next.click()
 			next.click()
 		then:
 			waitFor { confirm.displayed }
-			confirm.recipientCount == "1 contacts selected"
-			confirm.messageCount == "1 messages will be sent"
-		when:
-			tab(1).click()
-			compose.dontSendQuestion = true
-			tab(8).click()
-		then:
-			waitFor { confirm.noRecipients.displayed }
+			confirm.recipientCount == "0 contacts selected"
 	}
-	
+
 	def "can launch export popup"() {
 		when:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
@@ -393,22 +371,22 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { at RenameDialog }
 		when:
-			name = "rename poll"
+			name.value("rename poll")
 			done.click()
 		then:
-			waitFor { at PageMessageInbox }
+			at PageMessagePoll
 			header.title == "rename poll poll"
 	}
 
 	def "can delete a poll"() {
 		when:
 			deletePoll()
-			waitFor { notifications.flashMessage.displayed }
 		then:
 			at PageMessageInbox
+			waitFor { notifications.flashMessage.displayed }
 			bodyMenu.activityLinks.size() == 1
 	}
-	
+
 	def "deleted polls show up in the trash section"() {
 		// FIXME: rewrite when trash page definitions exist
 		setup:
@@ -580,7 +558,6 @@ class PollCedSpec extends PollBaseSpec {
 
 	def setAliases(aliasValues=null) {
 		at PollDialog
-		tab(3).click()
 		if (!aliasValues)
 			aliasValues = ['A', 'B', 'C', 'D', 'E']
 		aliasValues.eachWithIndex { alias, index ->
