@@ -69,6 +69,7 @@ target(main: 'Build installers for various platforms.') {
 	// Build installers
 	exec(dir:'../core/install', output:'install4j.maven.log', executable:mvn(), args) {
 		arg value:"-Dbuild.version=$appVersion"
+		arg value:"-Dfrontlinesms.flavour=$appName"
 		arg value:'clean'
 		arg value:'package'
 	}

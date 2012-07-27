@@ -105,10 +105,10 @@ class RadioShowController extends MessageController {
 		redirect controller:activityInstance?.archived?"archive":"message", action:"activity", params: [ownerId: params.activityId]
 	}
 	
-	def selectActivity() {
+	def selectShow() {
 		def activityInstance = Activity.get(params.ownerId)
-		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		[ownerInstance:activityInstance, radioShowIntance:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
+		def radioShowInstance = RadioShow.findByOwnedActivity(activityInstance).get()
+		render template:"selectShow", model:[ownerInstance:activityInstance, radioShowInstance:radioShowInstance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
 	}
 
 	def rename() {
@@ -142,7 +142,7 @@ class RadioShowController extends MessageController {
 	def wordCloudStats() {
 		def words = ""
 		def fmessages = []
-		if(params.id != 'null'){
+		if(params.id){
 			def ownerInstance =  MessageOwner.findById(params.id)
 			ownerInstance.messages.each{ fmessages << it }
 			if(ownerInstance instanceof RadioShow){
@@ -156,6 +156,9 @@ class RadioShowController extends MessageController {
 		fmessages.text.each{ words+=it+" " }
 		words =  words.replaceAll("\\W", " ")//remove all non-alphabet
 		def data = words.split()
+		if (params.ignoreWords) {
+			data -= params.ignoreWords.split(",")
+		}
 		def freq = [:].withDefault { k -> 0 }
 		data.each { freq[it] += 1 }
 		freq = freq.sort { a, b -> b.value <=> a.value }

@@ -15,4 +15,11 @@
 			<scope>runtime</scope>
 		</dependencySet>
 	</dependencySets>
+
+	<fileSets>
+		<fileSet>
+			<directory>${frontlinesms.flavour.bundle.fileset}</directory>
+			<outputDirectory>/</outputDirectory>
+		</fileSet>
+	</fileSets>
 </assembly>

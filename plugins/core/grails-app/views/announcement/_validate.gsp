@@ -25,9 +25,6 @@
 			}
 		});
 
-		//Validation Map
-		tabValidation = {};
-
 		var messageTextTabValidation = function() {
 			return validator.element('#messageText');
 		};
@@ -56,27 +53,9 @@
 			return validator.element('input[name=name]');
 		};
 
-		tabValidation["#tab-1"] = messageTextTabValidation;
-		tabValidation["#tab-2"] = recepientTabValidation;
-		tabValidation["#tab-3"] = confirmTabValidation;
-
-		$("#tabs-1").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-1"].call();
-			}
-		});
-	
-		$("#tabs-2").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-2"].call();
-			}
-		});
-		
-		$("#tabs-3").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-3"].call();
-			}
-		});
+		addValidation('announcement-create-message', messageTextTabValidation);
+		addValidation('announcement-select-recipients', recepientTabValidation);
+		addValidation('announcement-confirm', confirmTabValidation);
 		
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();

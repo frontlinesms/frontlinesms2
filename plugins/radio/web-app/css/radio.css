@@ -31,12 +31,15 @@
 ul.radio-show-activities {
 	padding-left: 10px;
 }
-
 #wordcloud-container {position: fixed; height: auto; width:auto; left: 17%; 
 	right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }
-#wordcloud { text-align: center; }
-#wordcloud-container a { display:inline-block; margin-right:5px; }
+#wordcloud { padding:3px; margin:auto auto;}
 #wordcloud-container p { border-bottom:solid 2px #8D38C9; padding: 3px; margin-bottom: 5px; color:#8D38C9; }
+#wordcloud span.word { z-index: 0; }
+#wordcloud span.word:hover { cursor: pointer; }
+div#wordcloud span.remove-word { position:relative; z-index:2; font-size:14px; color:#555; vertical-align: top; margin-left: -15px; text-align:center; margin-bottom:-15px; padding:2px; background: #FFF;}
+div#wordcloud span.remove-word:hover { color:#933;}
+
 
 table.archive td.show-cell {
 	font-weight:bold;

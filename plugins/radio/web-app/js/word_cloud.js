@@ -1,30 +1,44 @@
 function showWordCloud(stats){
 	$("#wordcloud").html("");
+	var word_array = []
 	$.each(stats, function(key, value){
-		$("#wordcloud").append("<a href='#' rel='"+value+"'>"+key+"</a>");
+		word_array.push({text : key, weight: value, html: {class: "word", onClick: "searchForWord('"+key+"')"}});
 	});
 
-	$.fn.tagcloud.defaults = {
-	  size: {start: 10, end: 30, unit: 'pt'},
-	  color: {start: '#8467D7', end: '#8D38C9'}
-	};
-
-	$(function () {
-	  $('#wordcloud a').tagcloud();
+	$(function() {
+		var w = $("#wordcloud").parent().width();
+		var h = $("#wordcloud").parent().height();
+		$("#wordcloud").jQCloud(word_array, {
+			width : w,
+			height : 0.8*h,
+			afterCloudRender : wordCloudLoaded
+		});
 	});
-
+	console.log($("#main-list").offset().top);
+	var top = 0;
+	top = $("#main-list-head").offset().top + $("#main-list-head").height();
+	console.log("top is "+top);
+	$("#wordcloud-container").css('top', top);
 	$("#wordcloud-container").show();
 	$("#main-list").hide();
 	$("#main-list-foot").hide();
 	$("#poll-details").hide();
 	if(typeof(pollGraph) !== "undefined") { pollGraph.loaded = false; }
 	$("#poll-graph-btn").html(i18n("fmessage.showpolldetails"));
-
-	$("a[name=show-wordcloud-btn]").hide();
+	$("#show-messages-btn").addClass('disabled');
+	$("#poll-graph-btn").addClass('disabled');
 	$("#show-messages-btn").show();
+	$("input[name=show-wordcloud-btn]").hide();
+}
+
+function wordCloudLoaded() {
+	$("#show-messages-btn").removeClass('disabled');
+	$("#poll-graph-btn").removeClass('disabled');
 }
 
 function showMessages(){
+	if ($("#show-messages-btn").hasClass('disabled'))
+		return;
 	$("#poll-details").hide();
 	if(typeof(pollGraph) !== "undefined") { pollGraph.loaded = false; }
 	$("#poll-graph-btn").html(i18n("fmessage.showpolldetails"));
@@ -32,18 +46,67 @@ function showMessages(){
 	$("#main-list").show();
 	$("#main-list-foot").show();
 
-	$("a[name=show-wordcloud-btn]").show();
+	$("input[name=show-wordcloud-btn]").show();
 	$("#show-messages-btn").hide();
 }
 
-$("#poll-graph-btn").live("click", function(){
-	if(pollGraph.loaded) {
-		$("#wordcloud-container").hide();
-		$("a[name=show-wordcloud-btn]").show();
-		$("#show-messages-btn").hide();
-	} else {
-		$("#wordcloud-container").hide();
-		$("a[name=show-wordcloud-btn]").show();
-		$("#show-messages-btn").hide();
+$("div#wordcloud span.word").live("mouseenter",
+	function() {
+		var wordId = $(this).attr("id");
+		var theX = $('#'+wordId +' #remove-word-'+wordId);
+		if (!theX.length) {
+			$(this).attr('orig-font-size', $(this).css('font-size'));
+			$(this).animate({'font-size': '50px'}, 100);
+			$("<a href='#'><span class='remove-word' id='remove-word-"+wordId+"'> X </span></a>").appendTo($(this));
+			theX = $('#remove-word-'+wordId);
+			theX.click(function(evnt) {
+				evnt.stopPropagation();
+				if ($("#show-messages-btn").hasClass('disabled'))
+					return;
+				removeWord($(this).attr('id').substr(('remove-word-').length));
+			});
+		}
+		else {
+			theX.show();
+			$(this).animate({'font-size': '55px'}, 100);
+		}
+		$("span.word:not(#"+wordId+")").css("opacity", 0.6);
+		$(this).css('z-index', 1);
+	}).live("mouseleave",
+	function() {
+		$(this).animate({'font-size': $(this).attr('orig-font-size')}, 100);
+		var wordId = $(this).attr("id");
+		var theX = $('#remove-word-'+wordId);
+		theX.hide();
+		$(this).css('z-index', 0);
+		$("span.word").css("opacity", 1);
 	}
+);
+
+function removeWord(wordId) {
+	$("#"+wordId).children().remove();
+	var word = $("#"+wordId).text();
+	var ignoreWords = $("input#ignoreWords");
+	ignoreWords.val(ignoreWords.val() + word + ",");
+	console.log("IGNORE: "+$("input#ignoreWords").val());
+	$("input[name=show-wordcloud-btn]").click();
+	$("#reset-words-btn").show();
+}
+
+function searchForWord(word) {
+	console.log("searching for "+word);
+	var searchUrl = url_root + "search" + '/result?searchString=' + word;
+	window.location = searchUrl;
+}
+
+function resetWordcloud() {
+	$("input#ignoreWords").val("");
+	$("input[name=show-wordcloud-btn]").click();
+	$("#reset-words-btn").hide();
+}
+
+$("#poll-graph-btn").live("click", function(){
+	$("#wordcloud-container").hide();
+	$("input[name=show-wordcloud-btn]").show();
+	$("#show-messages-btn").hide();
 });
