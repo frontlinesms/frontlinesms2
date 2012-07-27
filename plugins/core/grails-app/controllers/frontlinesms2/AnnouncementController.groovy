@@ -14,7 +14,7 @@ class AnnouncementController extends ActivityController {
 		announcementInstance.addToMessages(m)
 		if (announcementInstance.save()) {
 			flash.message = message(code: 'announcement.saved')
-			params.activityId = announcementInstance
+			params.activityId = announcementInstance.id
 			withFormat {
 				json { render([ok:true, ownerId: announcementInstance.id] as JSON)}
 				html { [ownerId: announcementInstance.id]}

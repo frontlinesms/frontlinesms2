@@ -234,7 +234,7 @@ function enableTab(tabName) {
 		$('.tabs-' + (tabNumber + 1)).removeClass('disabled-tab');
 	} else if(typeof(tabName) === 'string') {
 		tabNumber = $('.tab-content-' + tabName).attr("id").substring("tabs-".length);
-		$('#tabs').tabs("disable", tabNumber);
+		$('#tabs').tabs("enable", tabNumber);
 		$('.tab-' + tabName).removeClass('disabled-tab');
 	}
 	

@@ -115,13 +115,14 @@
 		};
 		var recipientTabValidation = function() {
 			if(!isGroupChecked('dontSendMessage')) {
-				var valid = true;
+				var valid = false;
 				addAddressHandler();
 				valid = $('input[name=addresses]:checked').length > 0;
 				var addressListener = function() {
 					if($('input[name=addresses]:checked').length > 0) {
 						validator.element($('#contacts').find("input[name=addresses]"));
 						$('#recipients-list').removeClass("error");
+						$(".error").hide();
 					} else {
 						$('#recipients-list').addClass("error");
 						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});

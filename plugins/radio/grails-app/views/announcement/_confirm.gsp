@@ -5,10 +5,7 @@
 <div class="confirm">
 	<h2><g:message code="announcement.details.label"/></h2>
 	<table>
-		<tr>
-			<td><g:message code="radioShow.name.label"/></td>
-			<td id="radioShow-confirm"><g:message code="announcement.message.none"/></td>
-		</tr>
+		<radio:confirmRadioRow activityInstance="${activityInstanceToEdit}"/>
 		<tr>
 			<td><g:message code="announcement.confirm.message"/>
 			</td><td id="confirm-message-text"><g:message code="announcement.message.none"/></td>

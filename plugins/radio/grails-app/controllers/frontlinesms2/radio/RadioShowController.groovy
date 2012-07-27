@@ -107,8 +107,8 @@ class RadioShowController extends MessageController {
 	
 	def selectShow() {
 		def activityInstance = Activity.get(params.ownerId)
-		def radioShowIntance = RadioShow.findByOwnedActivity(activityInstance).get()
-		render template:"selectShow", model:[ownerInstance:activityInstance, radioShowIntance:radioShowIntance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
+		def radioShowInstance = RadioShow.findByOwnedActivity(activityInstance).get()
+		render template:"selectShow", model:[ownerInstance:activityInstance, radioShowInstance:radioShowInstance, radioShows:RadioShow.findAllByDeleted(false), formtag:true]
 	}
 
 	def rename() {

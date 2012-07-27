@@ -5,10 +5,7 @@
 <div class="confirm">
 	<h2><g:message code="poll.details.label"/></h2>
 	<table>
-		<tr>
-			<td><g:message code="radioShow.name.label"/></td>
-			<td id="radioShow-confirm"><g:message code="poll.autoreply.none"/></td>
-		</tr>
+		<radio:confirmRadioRow activityInstance="${activityInstanceToEdit}"/>
 		<tr>
 			<td><g:message code="poll.message.label"/></td>
 			<td id="poll-message"/>
@@ -38,4 +35,3 @@
 		</tr>
 	</table>
 </div>
-

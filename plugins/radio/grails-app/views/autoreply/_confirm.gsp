@@ -5,10 +5,7 @@
 <div class="confirm">
 	<h2><g:message code="autoreply.details.label"/></h2>
 	<table>
-		<tr>
-			<td><g:message code="radioShow.name.label"/></td>
-			<td id="radioShow-confirm"><g:message code="autoreply.text.none"/></td>
-		</tr>
+		<radio:confirmRadioRow activityInstance="${activityInstanceToEdit}"/>
 		<tr>
 			<td><g:message code="autoreply.keyword.label"/></td>
 			<td id="keyword-confirm"/>
