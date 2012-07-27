@@ -47,7 +47,7 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 '''
 	}
 	
-	def 'Uploading a messages CSV file should create new messages and folder in the database'() {
+	def 'Uploading a messages CSV file from version 1 should create new messages and folder in the database'() {
 		given:
 			mockFileUpload('importCsvFile', '''"Message Type","Message Status","Message Date","Message Content","Sender Number","Recipient Number"
 "Received","Received","2012-02-16 16:42:24","Message Received Msg1.","Safaricom","254704593656"
@@ -63,6 +63,49 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.list()*.text.sort() == ['Message Received Msg1.', 'Message Received Msg2.', 'Message Sent Msg1', 'Message Sent Msg2']
 			Folder.list().name == ['messages from v1']
 			Fmessage.list()*.messageOwner.name.every { it == 'messages from v1' }
+	}
+	
+	def 'Uploading a messages CSV file from version 2 should create new messages and folder in the database'() {
+		given:
+			mockFileUpload('importCsvFile', '''"DatabaseID","Source Name","Source Mobile","Destination Name","Destination Mobile","Text","Date Created"
+"302","Simon","+123987123","","[]","Message 1","2012-07-27 10:22:02.943"
+"302","Says","+123987123","","[]","Message 2","2012-07-27 10:22:02.943"
+"302","Import","+123987123","","[]","Message 3","2012-07-27 10:22:02.943"
+''')
+		when:
+			controller.importMessages()
+		then:
+			// check that messages and folders were created
+			Fmessage.list()*.text.sort() == ['Message 1', 'Message 2', 'Message 3']
+			Folder.list().name == ['messages from v2']
+			Fmessage.list()*.messageOwner.name.every { it == 'messages from v2' }
+	}
+
+	def 'Uploading a messages CSV file from version 2 should be able to handle line breaks in messages'() {
+		given:
+			mockFileUpload('importCsvFile', '''"DatabaseID","Source Name","Source Mobile","Destination Name","Destination Mobile","Text","Date Created"
+"3","Sharon Langevin","+254704913240","","[]","Sharon Langevin","2012-06-12 15:51:25.0"
+"27",,,"[Alex Anderson]","[+254702597711]","Joyce
+Vancouver
+Siloi
+Rotation
+Amelia
+Georgina
+Shantelle","2012-06-12 15:58:44.488"
+''')
+		when:
+			controller.importMessages()
+		then:
+			// check that messages and folders were created
+			Fmessage.list()*.text.sort() == ['''"Joyce
+Vancouver
+Siloi
+Rotation
+Amelia
+Georgina
+Shantelle"''']
+			Folder.list().name == ['messages from v2']
+			Fmessage.list()*.messageOwner.name.every { it == 'messages from v2' }
 	}
 
 	def 'Uploading a message with a very long content field results in the message content being...'() {

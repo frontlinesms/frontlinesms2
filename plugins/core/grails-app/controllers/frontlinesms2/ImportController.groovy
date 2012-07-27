@@ -84,6 +84,7 @@ class ImportController {
 	def importMessages = {
 		def savedCount = 0
 		def failedCount = 0
+		def importingVersionOne = true
 		def uploadedCSVFile = request.getFile('importCsvFile')
 		if(uploadedCSVFile) {
 			def headers
@@ -100,8 +101,7 @@ class ImportController {
 					if(headers[0] && headers[0][0] == '\uFEFF') {
 						headers[0] = headers[0].substring(1)
 					}
-				}
-				else try {
+				} else try {
 					Fmessage fm = new Fmessage()
 					def dispatchStatus
 					headers.eachWithIndex { key, i ->
@@ -116,6 +116,19 @@ class ImportController {
 							fm.inbound = (value == 'Received')
 						} else if(key == 'Message Status') {
 							dispatchStatus = dispatchStatuses[value]
+						} else if (key == 'Source Mobile') { //version 2 import
+							fm.src = value
+							fm.inbound = true
+							importingVersionOne = false
+						} else if (key == 'Destination Mobile') {
+							value = value.replace("[","")
+							value.replace("]","").split(",").each{
+								fm.addToDispatches(new Dispatch(dst:it))
+							}
+						} else if (key == 'Date Created') {
+							fm.date = MESSAGE_DATE.parse(value)
+						} else if (key == 'Text') {
+							fm.text = value
 						}
 					}
 					if (fm.inbound) fm.dispatches = []
@@ -127,8 +140,9 @@ class ImportController {
 						fm.save(failOnError:true)
 					}
 					++savedCount
-					getMessageFolder("messages from v1").addToMessages(fm)
+					importingVersionOne ? saveMessagesIntoFolder("v1", fm) : saveMessagesIntoFolder("v2", fm)
 				} catch(Exception ex) {
+					ex.printStackTrace()
 					log.info message(code:'import.message.save.error'), ex
 					++failedCount
 				}
@@ -140,6 +154,10 @@ class ImportController {
 	
 	private def getMessageFolder(name) {
 		Folder.findByName(name)?: new Folder(name:name).save(failOnError:true)
+	}
+
+	private saveMessagesIntoFolder(version, fm){
+		getMessageFolder("messages from "+version).addToMessages(fm)
 	}
 
 	private def getGroupNames(csvValue) {
