@@ -14,22 +14,16 @@ class AnnouncementController extends ActivityController {
 		announcementInstance.addToMessages(m)
 		if (announcementInstance.save()) {
 			flash.message = message(code: 'announcement.saved')
+			params.activityId = announcementInstance
 			withFormat {
-				json {
-					render([ok:true, ownerId: announcementInstance.id] as JSON)
-				}
-
-				html {
-					[ownerId: announcementInstance.id]
-				}
+				json { render([ok:true, ownerId: announcementInstance.id] as JSON)}
+				html { [ownerId: announcementInstance.id]}
 			}
 
 		} else {
 			def errors = announcementInstance.errors.allErrors.collect { message(error:it)}.join("\n")
 			withFormat {
-				json {
-					render([ok:false, text:errors] as JSON)
-				}
+				json { render([ok:false, text:errors] as JSON)}
 			}
 		}
 	}

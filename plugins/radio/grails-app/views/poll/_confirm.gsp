@@ -7,7 +7,7 @@
 	<table>
 		<tr>
 			<td><g:message code="radioShow.name.label"/></td>
-			<td id="radioShow-confirm"><g:message code="autoreply.text.none"/></td>
+			<td id="radioShow-confirm"><g:message code="poll.autoreply.none"/></td>
 		</tr>
 		<tr>
 			<td><g:message code="poll.message.label"/></td>
