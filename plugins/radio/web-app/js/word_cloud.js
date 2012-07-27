@@ -1,18 +1,20 @@
 function showWordCloud(stats){
 	$("#wordcloud").html("");
+	var word_array = []
 	$.each(stats, function(key, value){
-		$("#wordcloud").append("<a href='#' rel='"+value+"'>"+key+"</a>");
+		word_array.push({text : key, weight: value});
 	});
 
-	$.fn.tagcloud.defaults = {
-	  size: {start: 10, end: 30, unit: 'pt'},
-	  color: {start: '#8467D7', end: '#8D38C9'}
-	};
-
-	$(function () {
-	  $('#wordcloud a').tagcloud();
+	$(function() {
+		var w = $("#wordcloud").parent().width();
+		var h = $("#wordcloud").parent().height();
+		$("#wordcloud").jQCloud(word_array, {
+			width : w,
+			height : 0.8*h 
+		});
 	});
-
+	console.log($("#main-list").offset().top);
+	$("#wordcloud-container").css('top', $("#main-list").offset().top);
 	$("#wordcloud-container").show();
 	$("#main-list").hide();
 	$("#main-list-foot").hide();
