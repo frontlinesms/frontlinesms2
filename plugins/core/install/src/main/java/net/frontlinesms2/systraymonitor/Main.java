@@ -5,8 +5,12 @@ import java.awt.event.*;
 import java.util.Arrays;
 
 import static net.frontlinesms2.systraymonitor.Utils.*;
+import static net.frontlinesms2.systraymonitor.CommandlineUtils.*;
 
 public class Main {
+	private static final String PROP_SERVER_PORT = "server.port";
+	private static final String PROP_TRAY_DISABLED = "tray.disabled";
+
 	private Monitor m;
 	private TrayThingy t;
 	private boolean trayIconDisabled;
@@ -17,31 +21,33 @@ public class Main {
 		c("org/apache/juli/logging/LogFactory");
 		c("org.apache.jasper.servlet.JspServlet");
 
-		Main m = new Main();
-		m.setTrayIconDisabled(isFlagSet(args, "--no-tray"));
-		m.init();
-	}
+		o("Reading properties file...");
+		FProperties properties = new FProperties("launcher.properties");
+		o("Properties file read.");
 
-	private static boolean isFlagSet(String[] args, String flag) {
-		for(String arg : args) {
-			if(arg.equals(flag)) {
-				return true;
-			}
-		}
-		return false;
+		// Set defailt properties
+		properties.setDefault(PROP_SERVER_PORT, 8129);
+		properties.setDefault(PROP_TRAY_DISABLED, false);
+
+		// Override properties with commandline settings
+		if(isFlagSet(args, "no-tray")) properties.set(PROP_TRAY_DISABLED, true);
+		if(isValSet(args, "server-port")) properties.set(PROP_SERVER_PORT, getVal(args, "server-port"));
+
+		Main m = new Main();
+		m.init(properties);
 	}
 
 //> ACCESSORS
 	private void setTrayIconDisabled(boolean disabled) {
+		o("Setting tray disabled to: " + disabled);
 		this.trayIconDisabled = disabled;
 	}
 
 //> INIT
-	private void init() throws Exception {
-		o("Reading properties file...");
-		FProperties properties = new FProperties("launcher.properties");
-		o("Properties file read.");
-		int port = properties.getInt("server.port", 8080);
+	private void init(FProperties properties) throws Exception {
+		setTrayIconDisabled(properties.getBoolean(PROP_TRAY_DISABLED));
+
+		int port = properties.getInt(PROP_SERVER_PORT);
 		o("Read server port: " + port);
 
 		o("Creating monitor...");

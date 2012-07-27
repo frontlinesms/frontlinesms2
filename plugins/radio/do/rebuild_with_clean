@@ -1,19 +1,28 @@
+#!/bin/bash
+
 clear
 echo "##########################################################################"
 echo "# CLEANING ALL TARGETS, REBUILDING RADIO WAR AND INSTALLER AND EXECUTING #"
 echo "##########################################################################"
+
+INSTALL_DIR=~/frontlinesms-radio
+echo "INSTALL_DIR=$INSTALL_DIR"
+
+SETTINGS_DIR=~/.frontlinesms2
+echo "SETTINGS_DIR=$SETTINGS_DIR"
+
 rm -rf ../core/target/
 rm -rf target/
 rm -rf ../core/install/target*
 rm -rf ../core/install/src/web-app/
 grails clean
 grails -Dfrontlinesms2.build.confirmNotProd=true build-installers
-rm -rf ~/.frontlinesms2/
-~/frontlinesms2/uninstall
-rm -rf ~/frontlinesms2/
-../core/install/target/install4j/frontlinesms2_unix_2.0.a7-SNAPSHOT.sh
-echo "server.port=8081" >> ~/frontlinesms2/launcher.properties
-~/frontlinesms2/FrontlineSMS2_Launcher
+rm -rf $SETTINGS_DIR/
+$INSTALL_DIR/uninstall
+rm -rf $INSTALL_DIR/
+../core/install/target/install4j/*radio*.sh
+echo "server.port=8081" >> $INSTALL_DIR/launcher.properties
+$INSTALL_DIR/*_Launcher
 echo "#####################################"
 echo "# DONE REBUILDING AND RUNNING RADIO #"
 echo "#####################################"
