@@ -139,6 +139,12 @@ function tabValidates(tab) {
 	return tab.contentWidget('validate');
 }
 
+function addValidation(tabName, rules) {
+	$(".tab-content-" + tabName).contentWidget({
+		validate: rules
+	});
+}
+
 function validateAllPreviousTabs(selectedTabIndex) {
 	var i = 0;
 	for(i; i < selectedTabIndex; i++) {
@@ -206,14 +212,32 @@ function initializeTabContentWidgets() {
 	}
 }
 
-function disableTab(tabNumber) {
-	$('#tabs').tabs("disable", tabNumber);
-	$('.tabs-' + (tabNumber + 1)).addClass('disabled-tab');
+function disableTab(tabName) {
+	var tabNumber;
+	// TODO change this to tabName
+	if(typeof(tabName) === 'number') {
+		tabNumber = tabName;
+		$('#tabs').tabs("disable", tabNumber);
+		$('.tabs-' + (tabNumber + 1)).addClass('disabled-tab');
+	} else if(typeof(tabName) === 'string') {
+		tabNumber = $('.tab-content-' + tabName).attr("id").substring("tabs-".length);
+		$('#tabs').tabs("disable", tabNumber);
+		$('.tab-' + tabName).addClass('disabled-tab');
+	}
 }
 
-function enableTab(tabNumber) {
-	$('#tabs').tabs("enable", tabNumber);
-	$('.tabs-' + (tabNumber + 1)).removeClass('disabled-tab');
+function enableTab(tabName) {
+	var tabNumber;
+	if(typeof(tabName) === 'number') {
+		tabNumber = tabName;
+		$('#tabs').tabs("enable", tabNumber);
+		$('.tabs-' + (tabNumber + 1)).removeClass('disabled-tab');
+	} else if(typeof(tabName) === 'string') {
+		tabNumber = $('.tab-content-' + tabName).attr("id").substring("tabs-".length);
+		$('#tabs').tabs("disable", tabNumber);
+		$('.tab-' + tabName).removeClass('disabled-tab');
+	}
+	
 }
 
 function moveToRelativeTab(offset) {
@@ -221,6 +245,7 @@ function moveToRelativeTab(offset) {
 }
 
 $.widget("ui.contentWidget", {
+	// TODO couldn't this just read: `validate: this.options.validate`?
 	validate: function() {
 		return this.options['validate'].call();                 
     },

@@ -23,7 +23,7 @@ function radioShowAction() {
 	{
 		$.ajax({
 			type:'GET',
-			url: url_root + 'radioShow/selectActivity',
+			url: url_root + 'radioShow/selectShow',
 			data: {ownerId: $("#ownerId").val()},
 			success: function(data) {
 				launchSmallPopup('Add to Show', data, 'Add');

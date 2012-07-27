@@ -30,19 +30,10 @@ class RadioFilters {
 			}
 		}
 		
-		justPoll(action:'save') {
+		justActivity( action:'save') {
 			after = { model ->
 				if(params.radioShowId) {
-					addActivityToRadioShow(params.ownerId, params.radioShowId)
-				}
-				return true
-			}
-		}
-
-		justActivity(action:'create') {
-			after = { model ->
-				if(params.radioShowId) {
-					addActivityToRadioShow(model, params.radioShowId)
+					addActivityToRadioShow(params.activityId, params.radioShowId)
 				}
 				return true
 			}
@@ -68,10 +59,10 @@ class RadioFilters {
 		RadioShow.findAllByDeletedAndArchived(false, false)
 	}
 	
-	private def addActivityToRadioShow(ownerId, id) {
+	private def addActivityToRadioShow(activityId, id) {
 		def showInstance = RadioShow.get(id)
 		def activityInstance
-		ownerId? (activityInstance = Activity.get(ownerId)) : (activityInstance = Activity.get(model.ownerId))
+		activityId? (activityInstance = Activity.get(activityId)) : (activityInstance = Activity.get(model.activityId))
 		if(showInstance) {
 			showInstance.addToActivities(activityInstance)
 			showInstance.save(flush:true, failOnError:true)

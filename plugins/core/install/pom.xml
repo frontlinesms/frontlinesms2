@@ -11,7 +11,11 @@
 			platform default. -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jetty.version>8.0.4.v20111024</jetty.version>
-		<build.name>FrontlineSMS2.${build.version}</build.name>
+		<install4j.osx.installDir>${install4j.app.shortName}</install4j.osx.installDir>
+		<install4j.windows.installDir>${install4j.app.shortName}</install4j.windows.installDir>
+		<install4j.unix.installDir>${install4j.app.shortName}</install4j.unix.installDir>
+		<frontlinesms.flavour.propertiesfile>../../${frontlinesms.flavour}/install/${frontlinesms.flavour}.install.properties</frontlinesms.flavour.propertiesfile>
+		<frontlinesms.flavour.bundle.fileset>../../${frontlinesms.flavour}/install/fileset</frontlinesms.flavour.bundle.fileset>
 	</properties>
 
 	<repositories>
@@ -64,7 +68,7 @@
 				<configuration>
 					<executable>${devenv.install4jc}</executable>
 					<configFile>${basedir}/build.install4j</configFile>
-					<releaseId>2.${build.version}</releaseId>
+					<releaseId>${install4j.releaseId}</releaseId>
 					<attach>true</attach>
 					<skipOnMissingExecutable>true</skipOnMissingExecutable>
 					<compilerVariables>
@@ -72,21 +76,15 @@
 							<name>assembly.dir</name>
 							<value>target/${project.artifactId}-${project.version}-windows-install4j</value>
 						</property>
-						<property>
-							<name>install4j.windows.application.name</name>
-							<value>${build.name}</value>
-						</property>
-						<property>
-							<name>install4j.windows.application.shortName</name>
-							<value>${build.name}</value>
-						</property>
-						<property><name>install4j.windows.launcher.name</name><value>${build.name}</value></property>
-						<property><name>install4j.windows.launcher.icnsFile</name><value>osx-resources/${build.name}.icns</value></property>
-						<property><name>install4j.windows.launcher.executable.name</name><value>${build.name}</value></property>
-						<property><name>install4j.windows.launcher.executable.iconFile</name><value>resources/${build.name}.ico</value></property>
-						<property><name>install4j.windows.launcher.splashScreen.bitmapFile</name><value>resources/${build.name}_Splash_Logo.jpg</value></property>
-						<property><name>install4j.windows.launcher.iconImageFiles.file.path</name><value>src/assemble/resources/${build.name}.ico</value></property>
-						<property><name>install4j.windows.installDir</name><value>${build.name}</value></property>
+						<property><name>build.name</name><value>${install4j.build.name}</value></property>
+						<property><name>app.shortName</name><value>${install4j.app.shortName}</value></property>
+						<property><name>install4j.applicationId</name><value>${install4j.applicationId}</value></property>
+						<property><name>exe.name</name><value>${install4j.exe.name}</value></property>
+						<property><name>exe.ico</name><value>${install4j.exe.ico}</value></property>
+						<property><name>exe.icns</name><value>${install4j.exe.icns}</value></property>
+						<property><name>osx.installDir</name><value>${install4j.osx.installDir}</value></property>
+						<property><name>windows.installDir</name><value>${install4j.windows.installDir}</value></property>
+						<property><name>unix.installDir</name><value>${install4j.unix.installDir}</value></property>
 					</compilerVariables>
 					<verbose>true</verbose>
 				</configuration>
@@ -143,6 +141,24 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.2</version>
 			</plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0-alpha-2</version>
+        <executions>
+          <execution>
+            <phase>initialize</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+            <configuration>
+              <files>
+                <file>${frontlinesms.flavour.propertiesfile}</file>
+              </files>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 		
 		<extensions>

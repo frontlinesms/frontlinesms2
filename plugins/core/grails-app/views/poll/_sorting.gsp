@@ -18,15 +18,15 @@
 
 <r:script>
 	var enableKeyword = function() {
-			var enabled = $(this).val() == 'true';
+			var enabled = $(this).is(":checked");
 			if(enabled) {
-				enableTab(3);
+				enableTab("poll-alias");
 				$('#poll-keyword').removeAttr("disabled");
 				$('#poll-keyword').addClass("required");
 			}
 			else {
 				$('#poll-keyword').attr("disabled", "disabled");
-				disableTab(3);
+				disableTab("poll-alias");
 				$('#poll-keyword').removeClass("required");
 				$('#poll-keyword').removeClass("error");
 				$("label.error").remove();
