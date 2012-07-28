@@ -12,7 +12,7 @@ class FutilIntegrationSpec extends Specification {
 
 	def 'createRegistrationPropertiesFile should create parent folder if it doesnt exist'() {
 		given:
-			def settings = getFrontlinesmsSettingsDirectory()
+			def settings = Futil.getResourceDirectory()
 			assert settings.deleteDir()
 		when:
 			Futil.createRegistrationPropertiesFile('1234', true)
@@ -46,12 +46,8 @@ class FutilIntegrationSpec extends Specification {
 			"23234"		|	"23234"
 	}
 
-	private def getFrontlinesmsSettingsDirectory() {
-		new File(System.properties['user.home'], '.frontlinesms2')
-	}
-
 	private def getRegistrationFile() {
-		new File(getFrontlinesmsSettingsDirectory(), 'registration.properties')
+		new File(Futil.getResourceDirectory(), 'registration.properties')
 	}
 }
 

@@ -166,7 +166,7 @@ class ImportController {
 
 	private def getFailedContactsFile() {
 		if(!params.jobId || params.jobId!=UUID.fromString(params.jobId).toString()) params.jobId = UUID.randomUUID().toString()
-		def f = new File(System.properties['user.home'], "import_contacts_${params.jobId}.csv")
+		def f = new File(ResourceUtils.resourcePath, "import_contacts_${params.jobId}.csv")
 		f.deleteOnExit()
 		return f
 	}

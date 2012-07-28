@@ -37,18 +37,31 @@ public class Futil {
 	    javax.swing.JOptionPane.showMessageDialog(null, message);
 	}
 
+	/* N.B. Unfortunately this code is currently triplcated throughout application.  Please take care when editing.  FIXME move to external lib. */
+	public static String getResourcePath() {
+		String path = System.getProperty("frontlinesms.resource.path");
+		if(path == null || path.length() == 0) return System.getProperty("user.home") + File.separatorChar + "/.frontlinesms2-default";
+		else if(path.charAt(0) == '~') return System.getProperty("user.home") + path.substring(1);
+		else return path;
+	}
+
+	/* N.B. Unfortunately this code is currently triplcated throughout application.  Please take care when editing.  FIXME move to external lib. */
+	public static File getResourceDirectory() {
+		return new File(getResourcePath());
+	}
+
 //> PACKAGE UTILITY METHODS
 	static File getRegistrationPropertiesFile() {
-		File frontlinesms2Directory = new File(System.getProperty("user.home"), ".frontlinesms2");
+		File frontlinesms2Directory = getResourceDirectory();
 		if(!frontlinesms2Directory.exists()) frontlinesms2Directory.mkdirs();
 		File regPropFile = new File(frontlinesms2Directory, "registration.properties");
-		try{
+		try {
 			if(!regPropFile.exists()) {
-					regPropFile.createNewFile();
-				}
-			}catch(IOException e){
-				e.printStackTrace();
+				regPropFile.createNewFile();
 			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		return regPropFile;
 	}
 

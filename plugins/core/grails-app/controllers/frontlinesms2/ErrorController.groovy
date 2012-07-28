@@ -14,7 +14,7 @@ class ErrorController {
 		def formatedDate = DATE_FORMAT.format(new Date())
 		response.setContentType("application/x-zip-compressed")
 		response.setHeader("Content-disposition", "attachment; filename=frontlinesms2-$filename-${formatedDate}.zip")
-		new File("${System.properties.'user.home'}/.frontlinesms2/").zip(response.outputStream, filter)
+		ResourceUtils.resourceDirectory.zip(response.outputStream, filter)
 		response.outputStream.flush()
 	}
 	

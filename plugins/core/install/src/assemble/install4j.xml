@@ -18,7 +18,12 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>${frontlinesms.flavour.bundle.fileset}</directory>
+			<directory>${frontlinesms.flavour.bundle.fileset}/filtered</directory>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+		</fileSet>
+		<fileSet>
+			<directory>${frontlinesms.flavour.bundle.fileset}/unfiltered</directory>
 			<outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
