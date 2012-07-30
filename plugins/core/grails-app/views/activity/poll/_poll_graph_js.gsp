@@ -60,6 +60,10 @@ $(function() {
 			pollGraph.loaded = false;
 		},
 		showGraph: function() {
+			var top = $("#main-list-head").offset().top + $("#main-list-head").height();
+			var left = $("#main-list-head").offset().left;
+			$("#pollGraph").css('top', top);
+			$("#pollGraph").css('left', left);
 			var show = true;
 			if (pollGraph.loaded || pollGraph.refresh) {
 				var stats = pollGraph.getStats();
