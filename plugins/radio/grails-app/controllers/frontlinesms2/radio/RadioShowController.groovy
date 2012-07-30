@@ -95,12 +95,13 @@ class RadioShowController extends MessageController {
 	def addActivity() {
 		def activityInstance = Activity.get(params.activityId)
 		def showInstance = RadioShow.get(params.radioShowId)
-		
-		if(showInstance && activityInstance) {
-			showInstance.addToActivities(activityInstance)
-		}
-		else if(activityInstance) {
-			RadioShow.findByOwnedActivity(activityInstance).get()?.removeFromActivities(activityInstance)
+		if(!activityInstance?.archived){
+			if(showInstance && activityInstance) {
+				showInstance.addToActivities(activityInstance)
+			}
+			else if(activityInstance) {
+				RadioShow.findByOwnedActivity(activityInstance).get()?.removeFromActivities(activityInstance)
+			}
 		}
 		redirect controller:activityInstance?.archived?"archive":"message", action:"activity", params: [ownerId: params.activityId]
 	}

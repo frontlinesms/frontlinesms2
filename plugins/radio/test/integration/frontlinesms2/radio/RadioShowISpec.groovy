@@ -47,10 +47,10 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
 			def poll = new Poll(name: 'Who is badder?')
-			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll.save(failOnError:true)
 			def poll2 = new Poll(name: 'Who will win?')
-			poll2.editResponses(choiceA: 'Uhuru', choiceB:'Ruto')
+			poll2.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll2.save(failOnError:true)
 			show.addToActivities(poll)
 			show.addToActivities(poll2)
@@ -63,10 +63,10 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
 			def poll = new Poll(name: 'Who is badder?')
-			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll.save(failOnError:true)
 			def poll2 = new Poll(name: 'Who will win?')
-			poll2.editResponses(choiceA: 'Uhuru', choiceB:'Ruto')
+			poll2.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll2.save(failOnError:true)
 			show.addToActivities(poll)
 			show.addToActivities(poll2)
@@ -83,10 +83,10 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			def show = RadioShow.findByName("Health & fitness")
 			def poll = new Poll(name: 'Who is badder?',question: "question")
-			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll.save(failOnError:true)
 			def poll2 = new Poll(name: 'Who will win?', question: "politics")
-			poll2.editResponses(choiceA: 'Uhuru', choiceB:'Ruto')
+			poll2.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll2.save(failOnError:true)
 			show.addToActivities(poll)
 			show.addToActivities(poll2)
@@ -116,7 +116,7 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 		setup:
 			def show = new RadioShow(name:"Health Show").save()
 			def poll = new Poll(name:"Test Poll")
-			poll.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
+			poll.editResponses(choiceA: 'Manchester', aliasA: 'a',choiceB:'Barcelona', aliasB: 'b')
 			poll.save(failOnError:true)
 			def announcement = Announcement.build()
 		when:
@@ -124,5 +124,25 @@ class RadioShowISpec extends grails.plugin.spock.IntegrationSpec {
 			show.addToActivities(announcement)
 		then:
 			show.activities.size() == 2
+	}
+
+	def "cant assign an archived activity to a RadioShow"(){
+		setup:
+			def healthShow = new RadioShow(name:"Health Show").save()
+			def footballShow = new RadioShow(name:"Football Show").save()
+			def announcement = Announcement.build()
+			healthShow.addToActivities(announcement)
+			healthShow.save()
+			announcement.archived = true
+			announcement.save()
+			def controller =  new RadioShowController()
+			controller.params.activityId = announcement.id
+			controller.params.radioShowId = footballShow.id
+		when:
+			assert healthShow.activities.contains(announcement)
+			controller.addActivity()
+		then:
+			healthShow.activities.contains(announcement)
+			!footballShow.activities.contains(announcement)
 	}
 }
