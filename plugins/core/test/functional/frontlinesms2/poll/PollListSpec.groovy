@@ -1,17 +1,20 @@
 package frontlinesms2.poll
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
+import frontlinesms2.message.PageMessage
+import frontlinesms2.page.PageMessageActivity
 
 class PollListSpec extends PollBaseSpec {
+
 	def "poll message list is displayed"() {
 		given:
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
-			def pollMessageSources = $('#message-list .message-sender-cell a')*.text()
+			to PageMessagePoll, 'Football Teams'
 		then:
-			pollMessageSources.containsAll('Alice', 'Bob')
+			messageList.sources.containsAll('Alice', 'Bob')
 	}
 
 	def "message's poll details are shown in list"() {
@@ -19,12 +22,12 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
-			def rowContents = $('#message-list .main-table tr:nth-child(3) td')*.text()
+			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Bob').id
 		then:
-			rowContents[2] == 'Bob'
-			rowContents[3] == 'manchester ("I like manchester")'
-			rowContents[4] ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			//rowContents[4] ==~ /[A-Za-z]{3,9} [0-9]{2}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messages[1].source == 'Bob'
+			messageList.messages[1].text == 'manchester ("I like manchester")'
+			messageList.messages[1].date ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
@@ -32,13 +35,9 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
-			def pollTitle = $("h3.activity").text()
-			def statsLabels = $('#poll-stats tbody tr td:first-child')*.text()
-			def statsNums = $('#poll-stats tbody tr td:nth-child(2)')*.text()
-			def statsPercents = $('#poll-stats tbody tr td:nth-child(3)')*.text()
+			to PageMessagePoll, 'Football Teams'
 		then:
-			pollTitle.equalsIgnoreCase('Football Teams poll')
+			header.title == 'football teams poll'
 			statsLabels == ['manchester', 'barcelona','Unknown']
 			statsNums == ['2', '0', '0']
 			statsPercents == ['100%', '0%', '0%']
