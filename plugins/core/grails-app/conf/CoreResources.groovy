@@ -62,7 +62,7 @@ modules = {
 		resource url:[dir:'js', file:"contact/search_within_list.js", plugin:'core']
 		resource url:[dir:'js', file:"contact/show-groups.js", plugin:'core']
 		resource url:[dir:'js', file:"contact/show-fields.js", plugin:'core']
-		resource url:[dir:'js', file:"contact/validateNumber.js", plugin:'core']
+		resource url:[dir:'js', file:"contact/validateContact.js", plugin:'core']
 	}
 
 	status {
