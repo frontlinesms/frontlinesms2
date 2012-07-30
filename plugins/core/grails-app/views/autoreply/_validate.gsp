@@ -8,7 +8,6 @@
 			errorContainer: ".error-panel",
 			rules: {
 				messageText: { required:true },
-				keyword: { required:true },
 				name: { required:true }
 			}
 		});
@@ -25,29 +24,9 @@
 			return validator.element('input[name=name]');
 		};
 
-		//Validation Map
-		tabValidation = {};
-		tabValidation["#tab-1"] = keyWordTabValidation;
-		tabValidation["#tab-2"] = messageTextTabValidation;
-		tabValidation["#tab-3"] = confirmTabValidation;
-
-		$("#tabs-1").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-1"].call();
-			}
-		});
-		
-		$("#tabs-2").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-2"].call();
-			}
-		});
-		
-		$("#tabs-3").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-3"].call();
-			}
-		});
+		addValidation('autoreply-enter-keyword', keyWordTabValidation);
+		addValidation('autoreply-create-message', messageTextTabValidation);
+		addValidation('autoreply-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();

@@ -2,12 +2,19 @@
 	var autoUpdate = true;
 	$("#messageText").live("keyup", updateSmsCharacterCount);
 	$("button#nextPage").click(setAliasValues);
-	tabValidation = {};
 
 	function initializePopup() {
 		<g:if test="${activityInstanceToEdit?.id}">
-			$("#messageText").trigger("keyup");
+			if($("#messageText").val().length > 0) {
+				$("#messageText").trigger("keyup");
+				$("input[name='pollType']").trigger("change");
+				$("input[name='enableKeyword']").trigger("change");
+			}
 		</g:if>
+		<g:else>
+			disableTab("poll-response");
+			disableTab("poll-alias");
+		</g:else>
 
 		addCustomValidationClasses();
 		initializeTabValidation(createFormValidator());
@@ -74,14 +81,7 @@
 
 	function initializeTabValidation(validator) {
 		var questionTabValidation = function() {
-				var valid = true;
-				if ($("input[name='pollType']:checked").val() == "yesNo") {
-					disableTab(1);
-					addRespectiveAliases();
-				} else {
-					enableTab(1);
-				}
-				return validator.element($("#question"));
+			return validator.element($("#question"));
 		};
 		var responseTabValidation = function() {
 			var valid = true;
@@ -113,15 +113,16 @@
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');
 		};
-		var recepientTabValidation = function() {
+		var recipientTabValidation = function() {
 			if(!isGroupChecked('dontSendMessage')) {
-				var valid = true;
+				var valid = false;
 				addAddressHandler();
 				valid = $('input[name=addresses]:checked').length > 0;
 				var addressListener = function() {
 					if($('input[name=addresses]:checked').length > 0) {
 						validator.element($('#contacts').find("input[name=addresses]"));
 						$('#recipients-list').removeClass("error");
+						$(".error").hide();
 					} else {
 						$('#recipients-list').addClass("error");
 						validator.showErrors({"addresses": i18n("poll.recipients.validation.error")});
@@ -140,70 +141,18 @@
 			return validator.element('input[name=name]');
 		};
 
-		tabValidation["#tab-1"] = questionTabValidation;
-		tabValidation["#tab-2"] = responseTabValidation;
-		tabValidation["#tab-3"] = autoSortTabValidation;
-		tabValidation["#tab-4"] = aliasTabValidation;
-		tabValidation["#tab-5"] = autoReplyTabValidation;
-		tabValidation["#tab-7"] = recepientTabValidation;
-		tabValidation["#tab-8"] = confirmTabValidation;
-
-		/* Poll type tab */
-		$("#tabs-1").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-1"].call();
-			}
-		});
-
-		/* response list tab */
-		$("#tabs-2").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-2"].call();
-			}
-		});
-
-		/* Aliases tab */
-		$("#tabs-3").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-3"].call();
-			}
-		});
-		
-		/* Auto-sort tab */
-		$("#tabs-4").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-4"].call();
-			}
-		});
-
-		/* Auto-reply tab */
-		$("#tabs-5").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-5"].call();
-			}
-		});
-		
-		/* Select recepient's tab */
-		$("#tabs-7").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-7"].call();
-			}
-		});
-
-		/* Confirm tab*/
-		$("#tabs-8").contentWidget({
-			validate: function() {
-				return tabValidation["#tab-8"].call();
-			}
-		});
-
+		addValidation('poll-question', questionTabValidation);
+		addValidation('poll-response', responseTabValidation);
+		addValidation('poll-sort', autoSortTabValidation);
+		addValidation('poll-alias', aliasTabValidation);
+		addValidation('poll-reply', autoReplyTabValidation);
+		addValidation('poll-recipients', recipientTabValidation);
+		addValidation('poll-confirm', confirmTabValidation);
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateSendMessage();
 			updateConfirmationMessage();
 		});
-
-		tabValidates($("#tabs-1"));
 	}
 
 

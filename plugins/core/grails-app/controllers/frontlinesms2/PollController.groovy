@@ -30,19 +30,15 @@ class PollController extends ActivityController {
 				MessageSendJob.defer(message)
 			}
 			if (poll.save()) {
+				params.activityId = poll.id
 				if (!params.dontSendMessage)
 					flash.message = message(code: 'flash.message.poll.queued')
 				else
 					flash.message = message(code: 'flash.message.poll.saved')
 
 				withFormat {
-					json {
-						render([ok:true, ownerId: poll.id] as JSON)
-					}
-
-					html {
-						[ownerId:poll.id]
-					}
+					json { render([ok:true, ownerId: poll.id] as JSON)}
+					html { [ownerId:poll.id]}
 				}
 			} else {
 				renderJsonErrors(poll)

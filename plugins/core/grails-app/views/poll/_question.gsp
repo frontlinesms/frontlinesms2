@@ -27,23 +27,23 @@
 <r:script>
 	$("input[name='dontSendMessage']").live("change", function() {
 		if(isGroupChecked("dontSendMessage")) {
-			disableTab(5);
-			disableTab(6);
+			disableTab("poll-edit-message");
+			disableTab("poll-recipients");
 			//update confirm screen
 			updateConfirmationMessage();
 		} else {
-			enableTab(5);
-			enableTab(6);
+			enableTab("poll-edit-message");
+			enableTab("poll-recipients");
 		}
 	});
 
 	var setPollType = function() {
 		if ($("input[name='pollType']:checked").val() == "yesNo") {
-			disableTab(1);
+			disableTab("poll-response");
 			resetResponses();
 			addRespectiveAliases();
 		} else {
-			enableTab(1);
+			enableTab("poll-response");
 			resetResponses();
 		}
 		autoUpdate = true;

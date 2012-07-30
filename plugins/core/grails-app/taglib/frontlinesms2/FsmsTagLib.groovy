@@ -7,12 +7,14 @@ class FsmsTagLib {
 	def expressionProcessorService
 	def grailsApplication
 
-	def wizard = { att ->
+	def wizard = { att, body ->
 		out << "<div id='tabs' class=\"vertical-tabs\">"
-		out << "<div class='error-panel hide'><div id='error-icon'></div>${g:message(code:'activity.validation.prompt')}</div>"
+		out << "<div class='error-panel error hide'><div id='error-icon'></div>${g:message(code:'activity.validation.prompt')}</div>"
 		out << verticalTabs(att)
 		out << g.formRemote(url:att.url, name:att.name, method:att.method, onSuccess:att.onSuccess) {
-			out << wizardTabs(att)	
+			if(att.before) out << body()
+			out << wizardTabs(att)
+			if(att.after) out << body()
 		}
 		out << '</div>'
 	}
@@ -20,8 +22,9 @@ class FsmsTagLib {
 	def verticalTabs = { att ->
 		out << '<ul>'
 		att.verticalTabs.split(",")*.trim().eachWithIndex { code, i ->
+			def tabName = code.replace('.', '-');
 			out << '<li>'
-			out << "<a class=\"tabs-${i+1}\" href=\"#tabs-${i+1}\">"
+			out << "<a class=\"tabs-${i+1} tab-${tabName}\" href=\"#tabs-${i+1}\">"
 			out << g.message(code:code)
 			out << '</a>'
 			out << '</li>'
@@ -30,9 +33,9 @@ class FsmsTagLib {
 	}
 
 	def wizardTabs = { att ->
-		def htmlClass = att.verticalTabs.split(",")*.trim()*.toLowerCase()
+		def tabNames = att.verticalTabs.replace('.', '-').split(",")*.trim()*.toLowerCase()
 		att.templates.split(",")*.trim().eachWithIndex { template, i ->
-			out << "<div id=\"tabs-${i+1}\">"
+			out << "<div id=\"tabs-${i+1}\" class=\"tab-content-${tabNames[i]}\">"
 			out << render([template:template])
 			out << "</div>"
 		}
