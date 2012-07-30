@@ -175,14 +175,14 @@
 			if ($('#poll-keyword').attr("disabled") == undefined || $('#poll-keyword').attr("disabled") == false) {
 				keywordText = $("#poll-keyword").val().toUpperCase();
 				if($("input[name='pollType']:checked").val() == "yesNo") {
-					var yesAlias = $("ul#poll-aliases li input#aliasA").val().split(",")[0].trim();
-					var noAlias = $("ul#poll-aliases li input#aliasB").val().split(",")[0].trim();
+					var yesAlias = getFirstAlias($("ul#poll-aliases li input#aliasA"))
+					var noAlias = getFirstAlias($("ul#poll-aliases li input#aliasB"))
 					replyText = i18n("poll.reply.text", keywordText, yesAlias, keywordText, noAlias);
 				} else {
 					replyText = i18n("poll.reply.text5");
 					$(".choices").each(function() {
 						if (replyText != 'Reply' && this.value) replyText = replyText + ',';
-						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, $("ul#poll-aliases li input#alias"+this.name.substring(6,7)).val().split(",")[0].trim(), this.value);
+						if (this.value) replyText = i18n("poll.reply.text1", replyText, keywordText, getFirstAlias($("ul#poll-aliases li input#alias"+this.name.substring(6,7))), this.value);
 					});
 					replyText = replyText + '.';
 				}
@@ -245,8 +245,6 @@
 			var choices = { };
 			choices[yesAlias] = aliasYesTextField;
 			choices[noAlias] = aliasNoTextField;
-			console.log("done");
-			console.log(i18n("poll.yes"));
 			<% 	
 				def pollResponse = activityInstanceToEdit?.responses.find {it.key == option} 
 				def mode = pollResponse?"edit":"create"
@@ -348,7 +346,6 @@
 		<g:if test="${!activityInstanceToEdit?.id}">
 			$("input.choices").each(function(){
 				$(this).val('');
-				console.log('reset');
 			});
 			$("input.aliases").each(function(){
 				$(this).val('');
@@ -373,5 +370,15 @@
 			aliasText += "<p>"+i18n("poll.no") + " : " + $("ul#poll-aliases li input#aliasB").val() + "</p>";
 		}
 		$("#poll-confirm-aliases").html(aliasText);
+	}
+
+	function getFirstAlias(field){
+		var aliases = new Array();
+		$.each(field.val().split(","), function(index, value){
+			if(value.trim().length != 0){
+				aliases.push(value);
+			}
+		});
+		return aliases[0];
 	}
 </r:script>
