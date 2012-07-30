@@ -7,7 +7,7 @@
 		<g:if test="${activityInstanceToEdit?.id}">
 			if($("#messageText").val().length > 0) {
 				$("#messageText").trigger("keyup");
-				$("input[name='enableKeyword']").trigger("change");
+				$("input[name='enableKeyword']:checked").trigger("change");
 				$("input[name='pollType']").trigger("change");
 			}
 		</g:if>
