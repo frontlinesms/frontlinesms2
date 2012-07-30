@@ -234,3 +234,5 @@ class DeleteDialog extends MediumPopup {
 
 	}
 }
+
+

@@ -3,6 +3,7 @@ package frontlinesms2.poll
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.message.PageMessagePending
+import frontlinesms2.message.PageMessageTrash
 import frontlinesms2.popup.*
 import java.util.regex.*
 import java.text.DateFormat
@@ -360,8 +361,8 @@ class PollCedSpec extends PollBaseSpec {
 			name.value("rename poll")
 			done.click()
 		then:
+			at PageMessageInbox
 			waitFor { header.title == "rename poll poll" }
-			at PageMessagePoll
 	}
 
 	def "can delete a poll"() {
@@ -374,42 +375,36 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "deleted polls show up in the trash section"() {
-		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByObjectId(poll.id).id}"
-			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
+			to PageMessageTrash, Trash.findByObjectId(poll.id).id
 		then:
-			rowContents[2] == 'Who is badder?'
-			rowContents[3] == '0 message(s)'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
+			messageList.sources.join() == 'Who is badder?'
+			messageList.messages.text.join() == "0 message(s)"
 	}
-	
+
 	def "selected poll and its details are displayed"() {
-		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByObjectId(poll.id).id}"
+			to PageMessageTrash, Trash.findByObjectId(poll.id).id
 		then:
-			$('#message-detail-sender').text() == "${poll.name} poll"
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
-			$('#message-detail-content').text() == "${poll.getLiveMessageCount()} messages"
+			messageList.sources.join() == "${poll.name}"
+			messageList.messages.text.join() == "${poll.getLiveMessageCount()} message(s)"
+			messageList.messages.date.join() == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
 	}
-	
+
 	def "clicking on empty trash permanently deletes a poll"() {
-		// FIXME: rewrite when trash page definitions exist
 		setup:
 			deletePoll()
 		when:
-			go "message/trash"
-			$("#trash-actions").value("empty-trash")
+			to PageMessageTrash
+			trashMoreActions.value("empty-trash")
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { at EmptyTrashPopup }
 		when:
-			$("#title").value("Empty trash")
-			$("#done").click()
+			ok.click()
 		then:
 			!Poll.findAll()
 	}
@@ -552,4 +547,3 @@ class PollCedSpec extends PollBaseSpec {
 		}
 	}
 }
-
