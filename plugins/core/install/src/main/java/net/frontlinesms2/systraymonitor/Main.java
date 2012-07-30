@@ -10,6 +10,7 @@ import static net.frontlinesms2.systraymonitor.CommandlineUtils.*;
 public class Main {
 	private static final String PROP_SERVER_PORT = "server.port";
 	private static final String PROP_TRAY_DISABLED = "tray.disabled";
+	private static final String PROP_RESOURCE_PATH = "resource.path";
 
 	private Monitor m;
 	private TrayThingy t;
@@ -28,13 +29,32 @@ public class Main {
 		// Set defailt properties
 		properties.setDefault(PROP_SERVER_PORT, 8129);
 		properties.setDefault(PROP_TRAY_DISABLED, false);
+		properties.setDefault(PROP_RESOURCE_PATH, "~/.frontlinesms2-default");
 
 		// Override properties with commandline settings
 		if(isFlagSet(args, "no-tray")) properties.set(PROP_TRAY_DISABLED, true);
-		if(isValSet(args, "server-port")) properties.set(PROP_SERVER_PORT, getVal(args, "server-port"));
+		mapArgsToProperties(args, properties,
+				"server-port", PROP_SERVER_PORT,
+				"resource-path", PROP_RESOURCE_PATH);
+
+		setResourcePathSystemProperty(properties);
 
 		Main m = new Main();
 		m.init(properties);
+	}
+
+	private static void mapArgsToProperties(String[] args, FProperties properties, String... mappings) {
+		for(int i=0; i<mappings.length; i+=2) {
+			String commandlineKey = mappings[i];
+			String propertyFileKey = mappings[i+1];
+			if(isValSet(args, commandlineKey)) {
+				properties.set(propertyFileKey, getVal(args, commandlineKey));
+			}
+		}
+	}
+
+	private static void setResourcePathSystemProperty(FProperties properties) {
+		System.setProperty("frontlinesms.resource.path", properties.getString(PROP_RESOURCE_PATH));
 	}
 
 //> ACCESSORS

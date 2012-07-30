@@ -31,6 +31,10 @@ class FProperties {
 	}
 
 //> PROPERTY GETTERS
+	String getString(String key) {
+		return properties.getProperty(key);
+	}
+
 	boolean getBoolean(String key) {
 		String stringValue = properties.getProperty(key);
 		return Boolean.parseBoolean(stringValue);
@@ -55,6 +59,10 @@ class FProperties {
 	}
 
 //> PROPERTY DEFAULT SETTERS
+	void setDefault(String key, String value) {
+		if(notSet(key)) set(key, value);
+	}
+	
 	void setDefault(String key, boolean value) {
 		if(notSet(key)) set(key, value);
 	}

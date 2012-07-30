@@ -83,7 +83,7 @@ environments {
 // first check for external config
 
 grails.config.locations = []
-grails.config.locations << "file:${System.properties.'user.home'}/.frontlinesms2/log4j.groovy"
+grails.config.locations << "file:${ResourceUtils.resourcePath}/log4j.groovy"
 log4j = {
     // Example of changing the log pattern for the default console
     // appender:
@@ -96,7 +96,7 @@ log4j = {
 	environments {
 		def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
 		production {
-			def conf = "${System.properties.'user.home'}/.frontlinesms2"
+			def conf = ResourceUtils.resourcePath
 			appender new RollingFileAppender(name:"prod",
 					layout:layout, file:"$conf/standard.log",
 					threshold:org.apache.log4j.Level.INFO)

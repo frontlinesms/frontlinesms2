@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class AppSettingsService {
-	private static final File PROPERTIES_FILE = new File(new File(System.properties['user.home'], '.frontlinesms2'), 'app-settings.properties')
+	private static final File PROPERTIES_FILE = new File(ResourceUtils.resourceDirectory, 'app-settings.properties')
 	private def settings = [:]
 
 	synchronized def init() {
