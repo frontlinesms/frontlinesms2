@@ -21,7 +21,7 @@ class FsmsTagLib {
 
 	def verticalTabs = { att ->
 		out << '<ul>'
-		att.verticalTabs.split(",")*.trim().eachWithIndex { code, i ->
+		att.verticalTabs?.split(",")*.trim().eachWithIndex { code, i ->
 			def tabName = code.replace('.', '-');
 			out << '<li>'
 			out << "<a class=\"tabs-${i+1} tab-${tabName}\" href=\"#tabs-${i+1}\">"
@@ -33,9 +33,9 @@ class FsmsTagLib {
 	}
 
 	def wizardTabs = { att ->
-		def tabNames = att.verticalTabs.replace('.', '-').split(",")*.trim()*.toLowerCase()
+		def tabNames = att.verticalTabs?.replace('.', '-')?.split(",")*.trim()*.toLowerCase()
 		att.templates.split(",")*.trim().eachWithIndex { template, i ->
-			out << "<div id=\"tabs-${i+1}\" class=\"tab-content-${tabNames[i]}\">"
+			out << "<div id=\"tabs-${i+1}\" class=\"tab-content-${tabNames?.getAt(i)}\">"
 			out << render([template:template])
 			out << "</div>"
 		}
