@@ -18,8 +18,8 @@
 
 <r:script>
 	var enableKeyword = function() {
-			var enabled = $(this).is(":checked");
-			if(enabled) {
+			var enabled = $(this).val();
+			if(enabled == "true") {
 				enableTab("poll-alias");
 				$('#poll-keyword').removeAttr("disabled");
 				$('#poll-keyword').addClass("required");
