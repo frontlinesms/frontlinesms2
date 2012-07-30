@@ -22,6 +22,15 @@ class ContactController {
 	def index() {
 		redirect action: "show", params:params
 	}
+
+	def getUniqueCustomFields() {
+		def allFields = CustomField.getAllUniquelyNamed()
+		withFormat {
+			json {
+				render([uniqueCustomFields:allFields] as JSON)
+			}
+		}
+	}
 	
 	def updateContactPane() {
 		def contactInstance = Contact.get(params.id)

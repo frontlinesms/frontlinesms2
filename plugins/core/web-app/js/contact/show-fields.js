@@ -28,12 +28,30 @@ function addFieldClickAction() {
 }
 
 function clickDone() {
+	if ($("#modalBox").contentWidget("onDone")) {
+		$(this).find("form").submit();
+	}
+}
+
+function checkResults(jsn) {
 	if ($("#custom-field-name").val() != "") {
 		var name = $("#custom-field-name").val();
+		var fieldsToAdd = getFieldIdList('fieldsToAdd').val().split(",");
+		for (y in fieldsToAdd) {
+			if(fieldsToAdd[y] !="" ) {jsn.uniqueCustomFields.push(fieldsToAdd[y])};
+		}
+		for (x in jsn.uniqueCustomFields) {
+			if (jsn.uniqueCustomFields[x].toLowerCase() == name.toLowerCase()) {
+				$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
+				$("#smallpopup-error-panel").show();
+				return false;
+			}
+		}
 		addCustomField(name);
-		$(this).remove();
+		$("#modalBox").remove();
 	} else {
-		$("#custom-field-popup .error-panel").removeClass("hide");
+		$("#smallpopup-error-panel").html(i18n("customfield.validation.prompt"));
+		$("#smallpopup-error-panel").show();
 	}
 }
 
@@ -90,12 +108,14 @@ function removeFieldIdFromList(id, fieldName) {
 	f.val(newList);
 }
 function addFieldIdToList(id, fieldName) {
-	var f = $('input:hidden[name=' + fieldName + ']');
+	var f = getFieldIdList(fieldName);
 	var oldList = f.val();
 	var newList = oldList + id + ',';
 	f.val(newList);
 }
-
+function getFieldIdList(fieldName) {
+	return $('input:hidden[name=' + fieldName + ']');
+}
 function clearField() {
 	if($(this).attr('id')) {
 		var field = $(this).attr('id').substring('remove-'.length);
