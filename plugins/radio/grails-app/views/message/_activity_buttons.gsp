@@ -11,7 +11,7 @@
 	</g:elseif>
 	<g:select class="dropdown more-actions activity-btn" name="more-actions"  
 			from="${['export', 'rename', 'delete'] + (ownerInstance.editable?['edit']:[]) + 
-			(ownerInstance instanceof Activity? 
+			((ownerInstance instanceof Activity)&& (!ownerInstance.archived)?
 			['radio.show'+(RadioShow.findByOwnedActivity(ownerInstance).get()?'.assigned':'.unassigned')]:[])}"
 			noSelection="${['': g.message(code:'fmessage.moreactions')]}"
 			valueMessagePrefix="${ownerInstance.shortName}.moreactions"/>

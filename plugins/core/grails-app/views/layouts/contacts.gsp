@@ -17,9 +17,8 @@
 	</head>
 	<body>
 		<fsms:render template="/head"/>
-			<div id="body-menu">
-				<fsms:render template="menu"/>
-			</div>
+		<div id="body" class="contacts">
+			<fsms:render template="menu"/>
 			<g:form controller="contact">
 				<div id="main-list-container">
 					<div id="main-list-head">
