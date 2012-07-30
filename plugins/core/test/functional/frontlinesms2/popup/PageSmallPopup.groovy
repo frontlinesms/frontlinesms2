@@ -65,3 +65,41 @@ class DeleteActivity extends SmallPopup {
 		text { $('#confirmDelete h2') }
 	}
 }
+
+class CreateFolderPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("folder")
+	}
+	static content = {
+		errorPanel { $('#modalBox #smallpopup-error-panel') }
+		folderName { $('#modalBox #folder-details #name') }
+	}
+}
+
+class RenameFolderDialog extends SmallPopup {
+	static at = {
+		popupTitle.contains("rename folder")
+	}
+	static content = {
+		errorPanel { $('#modalBox #smallpopup-error-panel') }
+		folderName { $('#modalBox #folder-details #name') }
+	}
+}
+
+class DeleteFolderPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("delete folder")
+	}
+	static content = {
+		text { $('#modalBox #confirmDelete h2') }
+	}
+}
+
+class EmptyTrashPopup extends SmallPopup {
+	static at = {
+		popupTitle.contains("empty trash?")
+	}
+	static content = {
+		text { $('#confirmEmptyTrash p') }
+	}
+}

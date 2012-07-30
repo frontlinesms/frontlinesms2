@@ -7,15 +7,20 @@
 		<g:if test="${activityInstanceToEdit?.id}">
 			if($("#messageText").val().length > 0) {
 				$("#messageText").trigger("keyup");
-				$("input[name='pollType']").trigger("change");
 				$("input[name='enableKeyword']").trigger("change");
+				$("input[name='pollType']").trigger("change");
 			}
 		</g:if>
 		<g:else>
 			disableTab("poll-response");
 			disableTab("poll-alias");
+			$("input[name='pollType']").trigger("change");
 		</g:else>
-
+		<g:if test="${activityInstanceToEdit?.archived}">
+			$("input#dontSendMessage").attr('checked', true);
+			$("input#dontSendMessage").trigger("change");
+			$("input#dontSendMessage").attr('disabled', 'disabled');
+		</g:if>
 		addCustomValidationClasses();
 		initializeTabValidation(createFormValidator());
 	}
@@ -48,24 +53,23 @@
 	function addCustomValidationClasses() {
 		jQuery.validator.addMethod("aliases", function(value, element) {
 			var isValid = true;
-			var allAliases = ",";
+			var allAliases = {}
 			$('input:not(:disabled).aliases').each(function() {
 				var currentInput = $(this);
 				var aliases = currentInput.val().split(",");
 				$.each(aliases, function(index, value) {
-					value = value.trim();
-					if(value.length != 0){
-						value = value.toUpperCase() + ",";
-						if(allAliases.indexOf("," + value) == -1) {
-							// alias not in allAliases
-							allAliases += value;
+					alias = value.trim();
+					if(alias.length != 0){
+						alias = alias.toUpperCase();
+						if((alias in allAliases) && (element.id == currentInput.attr("id"))) {
+							isValid = false; return;
 						}
 						else {
-							// alias not unique
-							isValid = false;
+							allAliases[alias] = true;
 						}
 					}
 				});
+				if(!isValid) { return; }
 			});
 			return isValid;
 		}, i18n("poll.alias.validation.error"));
@@ -236,8 +240,8 @@
 		if(yesNo) {
 			var aliasYesTextField = $("ul#poll-aliases li input#aliasA");
 			var aliasNoTextField = $("ul#poll-aliases li input#aliasB");
-			var yesAlias = "A," + i18n("poll.yes");
-			var noAlias = "B," + i18n("poll.no")
+			var yesAlias = i18n("poll.yes") + ", A";
+			var noAlias = i18n("poll.no") + ", B";
 			var choices = { };
 			choices[yesAlias] = aliasYesTextField;
 			choices[noAlias] = aliasNoTextField;
@@ -262,7 +266,7 @@
 			var aliasTextField = $("ul#poll-aliases li input#alias" + key);
 			if($(field).hasClass("create")) {
 				if(value.length > 0){
-					aliases += key+","+value;
+					aliases += value + ", " + key;
 					aliasTextField.val(aliases);
 					aliasTextField.removeAttr("disabled");
 				}
@@ -341,13 +345,15 @@
 	}
 
 	function resetResponses(){
-		$("input.choices").each(function(){
-			$(this).val('');
-			console.log('reset');
-		});
-		$("input.aliases").each(function(){
-			$(this).val('');
-		});
+		<g:if test="${!activityInstanceToEdit?.id}">
+			$("input.choices").each(function(){
+				$(this).val('');
+				console.log('reset');
+			});
+			$("input.aliases").each(function(){
+				$(this).val('');
+			});
+		</g:if>
 	}
 
 	function setConfirmAliasValues(){

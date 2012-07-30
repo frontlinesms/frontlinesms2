@@ -23,9 +23,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messages[2].source == 'Bob'
-			messageList.messages[2].text == 'hi Bob'
-			messageList.messages[2].date != null // ie is a valid date object
+			messageList.messages[1].source == 'Bob'
+			messageList.messages[1].text == 'hi Bob'
+			messageList.messages[1].date != null // ie is a valid date object
 	}
 
 	def 'no message is selected when inbox is first loaded'() {
