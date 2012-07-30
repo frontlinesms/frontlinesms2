@@ -16,21 +16,17 @@ import static net.frontlinesms.install4j.custom.Futil.*;
 
 public class UserDataBackupAction extends AbstractInstallAction {
 	private static final String dateFormat = "yyyy-MM-dd-HH-mm";
-	private static final long backupExpiryDuration = 7776000000l; // 90 days in miliseconds
+	private static final long backupExpiryDuration = 7776000000L; // 90 days in miliseconds
 	private static final String backupDirNameFormat = ".frontlinesms2-backup.";
 	private File fsms2Home;
 	private File userHome;
-	public UserDataBackupAction (){
-		super();
-	}
 
 	public boolean isRollbackSupported() {
 		return false;
 	}
 
 	public boolean install(InstallerContext context) {
-		userHome = new File(System.getProperty("user.home"));
-		fsms2Home = new File(userHome.getAbsolutePath() + "/.frontlinesms2");
+		fsms2Home = Futil.getResourceDirectory();
 		log(".fronlinesms2 folder " + (fsms2Home.exists() ? "found" : "not found"));
 		newBackup();
 		deleteOldBackups();
@@ -38,8 +34,7 @@ public class UserDataBackupAction extends AbstractInstallAction {
 	}
 
 	private void newBackup() {
-		if (fsms2Home.exists())
-		{
+		if (fsms2Home.exists()) {
 			Date now = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 			File thisBackupDir = new File(fsms2Home.getAbsolutePath() + "-backup." + formatter.format(now));
@@ -53,11 +48,9 @@ public class UserDataBackupAction extends AbstractInstallAction {
 					new File(thisBackupDir + File.separator + files[i]));
 			}
 			log("Successfully backed up to " + thisBackupDir.getAbsolutePath());
-		}
-		else
-		{
-			// No .fsms2 folder found in user home. Nothing to back up?
-			//TODO: find way to handle Windows pointing at wrong user.home
+		} else {
+			// No resource directory found. Nothing to back up?
+			// TODO may have to find way to handle Windows pointing at wrong user.home
 		}
 	}
 

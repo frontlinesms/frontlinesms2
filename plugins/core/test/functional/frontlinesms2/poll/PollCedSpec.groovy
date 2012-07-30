@@ -57,15 +57,11 @@ class PollCedSpec extends PollBaseSpec {
 	def "should require keyword if sorting is enabled"() {
 		when:
 			launchPollPopup()
-			setAliases()
 		then:
-			waitFor { sort.keyword.displayed }
+			waitFor { sort.displayed }
 			sort.keyword.disabled
 		when:
 			sort.sort.click()
-		then:
-			waitFor { !sort.keyword.disabled }
-		when:
 			next.click()
 		then:
 			waitFor { errorPanel.displayed }
@@ -101,10 +97,13 @@ class PollCedSpec extends PollBaseSpec {
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
-			setAliases()
 		then:
 			waitFor { sort.displayed }
 		when:
+			sort.sort.click()
+			sort.keyword.value("key")
+			next.click()
+			setAliases()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -118,16 +117,7 @@ class PollCedSpec extends PollBaseSpec {
 			previous.click()
 		then:
 			waitFor { autoreply.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { sort.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { compose.displayed }
 	}
-
 
 	def "should move to the next tab when multiple choice poll is selected"() {
 		when:
@@ -152,9 +142,6 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 			setAliases()
-		then:
-			waitFor { sort.displayed }
-		when:
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -168,7 +155,7 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { errorPanel.displayed }
 			confirm.displayed
 	}
-	
+
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
@@ -323,8 +310,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { sort.displayed }
 		when:
-			next.click()
-			next.click()
+			tab(8).click()
 		then:
 			waitFor { confirm.displayed }
 			confirm.recipientCount == "0 contacts selected"
@@ -374,8 +360,8 @@ class PollCedSpec extends PollBaseSpec {
 			name.value("rename poll")
 			done.click()
 		then:
+			waitFor { header.title == "rename poll poll" }
 			at PageMessagePoll
-			header.title == "rename poll poll"
 	}
 
 	def "can delete a poll"() {
@@ -427,7 +413,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			!Poll.findAll()
 	}
-	
+
 	def "user can edit an existing poll"() {
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
@@ -437,13 +423,13 @@ class PollCedSpec extends PollBaseSpec {
 			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
-			bodyMenu.activityLinks[1].click()
+			bodyMenu.activityLinks[0].click()
 		then:
 			waitFor { at PageMessagePoll }
 		when:
 			moreActions.value("edit").click()
 		then:
-			waitFor('slow') { at PollDialog }
+			waitFor('slow') { at EditPollDialog }
 			compose.question == 'question'
 			compose.pollType == "multiple"
 		when:
@@ -457,11 +443,11 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			response.choice("C").jquery.val("Bruce Vandam")
 			next.click()
-			setAliases()
-			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
+			sort.dontSort.click()
+			next.click()
 			goToTab(7)
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
@@ -486,13 +472,11 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
-			setAliases()
-			next.click()
 			waitFor { sort.displayed }
 		when:
-			goToTab(8)
+			tab(8).click()
 			confirm.pollName = 'Who is badder?'
-			done.click()
+			submit.click()
 		then:
 			assert Poll.count() == 1
 			at PollDialog
@@ -512,7 +496,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			moreActions.value("edit").click()
 		when:
-			waitFor('slow') { at PollDialog }
+			waitFor('slow') { at EditPollDialog }
 			next.click()
 		then:
 			response.choice("B").jquery.val("")
@@ -558,6 +542,7 @@ class PollCedSpec extends PollBaseSpec {
 
 	def setAliases(aliasValues=null) {
 		at PollDialog
+		tab(4).click()
 		if (!aliasValues)
 			aliasValues = ['A', 'B', 'C', 'D', 'E']
 		aliasValues.eachWithIndex { alias, index ->

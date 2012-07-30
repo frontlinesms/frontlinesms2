@@ -21,7 +21,6 @@ rm -rf $SETTINGS_DIR/
 $INSTALL_DIR/uninstall
 rm -rf $INSTALL_DIR/
 ../core/install/target/install4j/*radio*.sh
-echo "server.port=8081" >> $INSTALL_DIR/launcher.properties
 $INSTALL_DIR/*_Launcher
 echo "#####################################"
 echo "# DONE REBUILDING AND RUNNING RADIO #"
