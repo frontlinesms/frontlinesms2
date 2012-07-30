@@ -34,29 +34,19 @@
 			</g:remoteLink>
 		</g:if>
 		<g:elseif test="${messageSection != 'trash'}">
-				<a id="btn_reply_all" class="msg-btn btn" onclick="messageResponseClick('Reply')"><g:message code="fmessage.reply.many" /></a>
-				<g:if test="${(!ownerInstance) && params.controller !='archive'}">
-					<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
-				</g:if>
-				<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
-					<g:actionSubmit id="unarchive-msg btn" class="msg-btn btn" value="${g.message(code:'fmessage.unarchive.many')}" action="unarchive"/>
-				</g:elseif>
-				<g:if test="${messageSection != 'pending'}">
-					<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
-				</g:if>
-			<g:if test="${messageSection == 'pending'}">
-				<g:actionSubmit class="msg-btn btn" id="retry-failed" action="retry"
-						params="${[type: 'multiple_failed']}" value="${g.message(code:'fmessage.retry.many')}"/>
-				<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
-			</g:if>
 			<a id="btn_reply_all" class="msg-btn btn" onclick="messageResponseClick('Reply')"><g:message code="fmessage.reply.many" /></a>
-			<g:if test="${!ownerInstance && params.controller !='archive'}">
+			<g:if test="${(!ownerInstance) && params.controller !='archive'}">
 				<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
 			</g:if>
 			<g:elseif test="${!ownerInstance && params.controller == 'archive'}">
 				<g:actionSubmit id="unarchive-msg btn" class="msg-btn btn" value="${g.message(code:'fmessage.unarchive.many')}" action="unarchive"/>
 			</g:elseif>
 			<g:if test="${messageSection != 'pending'}">
+				<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
+			</g:if>
+			<g:if test="${messageSection == 'pending'}">
+				<g:actionSubmit class="msg-btn btn" id="retry-failed" action="retry"
+						params="${[type: 'multiple_failed']}" value="${g.message(code:'fmessage.retry.many')}"/>
 				<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.delete.many')}" id="btn_delete_all" action="delete"/>
 			</g:if>
 		</g:elseif>

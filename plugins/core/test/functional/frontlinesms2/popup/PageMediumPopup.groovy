@@ -79,6 +79,12 @@ class PollDialog extends MediumPopup {
 	}
 }
 
+class EditPollDialog extends PollDialog {
+	static at = {
+		popupTitle.contains("edit activity")
+	}
+}
+
 class ComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
@@ -228,3 +234,5 @@ class DeleteDialog extends MediumPopup {
 
 	}
 }
+
+
