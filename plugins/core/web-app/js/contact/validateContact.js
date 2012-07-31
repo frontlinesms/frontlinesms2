@@ -13,7 +13,7 @@ function isInternationalFormat(phoneNumber) {
 
 $(document).ready(function() {
 	$("#mobile").trigger('change');
-	var validator = $("form").validate();
+	var validator = $("form").validate({onsubmit: false});
 	jQuery.validator.addMethod("phoneNumber", function(value, element) {
 		var valid = true;
 		var hasChar = $(element).val().match(/[^\+?\d+]/);

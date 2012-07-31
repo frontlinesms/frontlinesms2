@@ -3,6 +3,7 @@ package frontlinesms2.poll
 import frontlinesms2.*
 import frontlinesms2.message.PageMessageInbox
 import frontlinesms2.message.PageMessagePending
+import frontlinesms2.message.PageMessageTrash
 import frontlinesms2.popup.*
 import java.util.regex.*
 import java.text.DateFormat
@@ -57,15 +58,11 @@ class PollCedSpec extends PollBaseSpec {
 	def "should require keyword if sorting is enabled"() {
 		when:
 			launchPollPopup()
-			setAliases()
 		then:
-			waitFor { sort.keyword.displayed }
+			waitFor { sort.displayed }
 			sort.keyword.disabled
 		when:
 			sort.sort.click()
-		then:
-			waitFor { !sort.keyword.disabled }
-		when:
 			next.click()
 		then:
 			waitFor { errorPanel.displayed }
@@ -101,10 +98,13 @@ class PollCedSpec extends PollBaseSpec {
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
-			setAliases()
 		then:
 			waitFor { sort.displayed }
 		when:
+			sort.sort.click()
+			sort.keyword.value("key")
+			next.click()
+			setAliases()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -118,16 +118,7 @@ class PollCedSpec extends PollBaseSpec {
 			previous.click()
 		then:
 			waitFor { autoreply.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { sort.displayed }
-		when:
-			previous.click()
-		then:
-			waitFor { compose.displayed }
 	}
-
 
 	def "should move to the next tab when multiple choice poll is selected"() {
 		when:
@@ -152,9 +143,6 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 			setAliases()
-		then:
-			waitFor { sort.displayed }
-		when:
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -168,7 +156,7 @@ class PollCedSpec extends PollBaseSpec {
 			waitFor { errorPanel.displayed }
 			confirm.displayed
 	}
-	
+
 	def "should enter instructions for the poll and validate multiple choices user entered"() {
 		when:
 			launchPollPopup('multiple', 'How often do you drink coffee?')
@@ -323,8 +311,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { sort.displayed }
 		when:
-			next.click()
-			next.click()
+			tab(8).click()
 		then:
 			waitFor { confirm.displayed }
 			confirm.recipientCount == "0 contacts selected"
@@ -374,8 +361,8 @@ class PollCedSpec extends PollBaseSpec {
 			name.value("rename poll")
 			done.click()
 		then:
-			at PageMessagePoll
-			header.title == "rename poll poll"
+			at PageMessageInbox
+			waitFor { header.title == "rename poll poll" }
 	}
 
 	def "can delete a poll"() {
@@ -388,46 +375,40 @@ class PollCedSpec extends PollBaseSpec {
 	}
 
 	def "deleted polls show up in the trash section"() {
-		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByObjectId(poll.id).id}"
-			def rowContents = $('#message-list .main-table tr:nth-child(2) td')*.text()
+			to PageMessageTrash, Trash.findByObjectId(poll.id).id
 		then:
-			rowContents[2] == 'Who is badder?'
-			rowContents[3] == '0 message(s)'
-			rowContents[4] == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
+			messageList.sources.join() == 'Who is badder?'
+			messageList.messages.text.join() == "0 message(s)"
 	}
-	
+
 	def "selected poll and its details are displayed"() {
-		// FIXME: rewrite when trash page definitions exist
 		setup:
 			def poll = deletePoll()
 		when:
-			go "message/trash/show/${Trash.findByObjectId(poll.id).id}"
+			to PageMessageTrash, Trash.findByObjectId(poll.id).id
 		then:
-			$('#message-detail-sender').text() == "${poll.name} poll"
-			$('#message-detail-date').text() == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
-			$('#message-detail-content').text() == "${poll.getLiveMessageCount()} messages"
+			messageList.sources.join() == "${poll.name}"
+			messageList.messages.text.join() == "${poll.getLiveMessageCount()} message(s)"
+			messageList.messages.date.join() == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
 	}
-	
+
 	def "clicking on empty trash permanently deletes a poll"() {
-		// FIXME: rewrite when trash page definitions exist
 		setup:
 			deletePoll()
 		when:
-			go "message/trash"
-			$("#trash-actions").value("empty-trash")
+			to PageMessageTrash
+			trashMoreActions.value("empty-trash")
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { at EmptyTrashPopup }
 		when:
-			$("#title").value("Empty trash")
-			$("#done").click()
+			ok.click()
 		then:
 			!Poll.findAll()
 	}
-	
+
 	def "user can edit an existing poll"() {
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
@@ -437,13 +418,13 @@ class PollCedSpec extends PollBaseSpec {
 			poll.save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox
-			bodyMenu.activityLinks[1].click()
+			bodyMenu.activityLinks[0].click()
 		then:
 			waitFor { at PageMessagePoll }
 		when:
 			moreActions.value("edit").click()
 		then:
-			waitFor('slow') { at PollDialog }
+			waitFor('slow') { at EditPollDialog }
 			compose.question == 'question'
 			compose.pollType == "multiple"
 		when:
@@ -457,11 +438,11 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			response.choice("C").jquery.val("Bruce Vandam")
 			next.click()
-			setAliases()
-			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
+			sort.dontSort.click()
+			next.click()
 			goToTab(7)
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
@@ -486,13 +467,11 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			launchPollPopup('yesNo', 'question', false)
 		then:
-			setAliases()
-			next.click()
 			waitFor { sort.displayed }
 		when:
-			goToTab(8)
+			tab(8).click()
 			confirm.pollName = 'Who is badder?'
-			done.click()
+			submit.click()
 		then:
 			assert Poll.count() == 1
 			at PollDialog
@@ -512,7 +491,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			moreActions.value("edit").click()
 		when:
-			waitFor('slow') { at PollDialog }
+			waitFor('slow') { at EditPollDialog }
 			next.click()
 		then:
 			response.choice("B").jquery.val("")
@@ -558,6 +537,7 @@ class PollCedSpec extends PollBaseSpec {
 
 	def setAliases(aliasValues=null) {
 		at PollDialog
+		tab(4).click()
 		if (!aliasValues)
 			aliasValues = ['A', 'B', 'C', 'D', 'E']
 		aliasValues.eachWithIndex { alias, index ->
@@ -567,4 +547,3 @@ class PollCedSpec extends PollBaseSpec {
 		}
 	}
 }
-
