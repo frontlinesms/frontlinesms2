@@ -14,6 +14,8 @@
 	refresh_rate = ${params.rRate ?: 30000};
 	grailsEnvironment = "${grails.util.GrailsUtil.environment}";
 	var i18nStrings = i18nStrings || {};
+	var console = console || {};
+	console.log = console.log || function() {};
 	function i18n(key) {
 		var translated =
 			<g:each var="plugin" in="${grailsApplication.config.frontlinesms.plugins}">
@@ -33,7 +35,7 @@
 	<g:if env="test">
 		// declare our own, non-functioning select menu and button methods so that standard HTML elements are used in tests
 		$.fn.selectmenu = function() {};
-		var fsmsButton = { apply:function(){}, findAndApply:function(){} };
+		var fsmsButton = { apply:function(){}, findAndApply:function(){}, find:function(){} };
 	</g:if>
 	<g:else>
 		var fsmsButton = new FsmsButton();
@@ -41,7 +43,7 @@
 			// make dropdowns pretty - N.B. this will break geb tests, so should not be done in TEST environment
 			// TODO reintroduce dropdown when the CSS is fixed
 			selectmenuTools.initAll("select");
-			fsmsButton.findAndApply("input[type='submit']");
+			fsmsButton.findAndApply("input[type='submit'], input[type='button']");
 
 			// Enable system notification refresh
 			setInterval(systemNotification.refresh, 10000);
