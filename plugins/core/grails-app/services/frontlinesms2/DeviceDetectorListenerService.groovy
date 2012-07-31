@@ -67,7 +67,7 @@ class DeviceDetectorListenerService implements ATDeviceDetectorListener {
 				connectionToStart = new SmslibFconnection(name:name, port:detector.portName, baud:detector.maxBaudRate,
 								serial:detector.serial, imsi:detector.imsi)
 						.save(flush:true, failOnError:true)
-				log "Created new detector: $name"
+				log "Created new SmslibFconnection: $name"
 			}
 		}
 		if(connectionToStart) {
