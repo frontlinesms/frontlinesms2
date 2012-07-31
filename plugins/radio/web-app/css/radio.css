@@ -20,8 +20,7 @@
 #body-menu .selected a, .ui-tabs-nav .ui-tabs-selected a,
 #body.contacts #main-list li.selected,
 #body.messages #main-list tr.selected,
-#modalBox.help #help-index li.selected > a {
-	background-color:#c2dbbf !important; }
+#modalBox.help #help-index li.selected > a { background-color:#c2dbbf !important; }
 
 #body-menu a:hover, .ui-tabs-nav a:hover,
 #body.messages #detail,
@@ -29,8 +28,7 @@
 #body.contacts #main-list li:hover,
 #body.messages #main-list tr:hover,
 #modalBox.help #help-index li li li a:hover,
-#body.status #device-detection table tr:hover {
-	background-color:#e0f0de !important; }
+#body.status #device-detection table tr:hover { background-color:#e0f0de !important; }
 
 #body-menu ul.radio-show-activities li a { padding-left:50px; }
 #wordcloud-container {position: fixed; height: auto; width:auto; left: 17%; 
@@ -39,14 +37,9 @@
 #wordcloud-container p { border-bottom:solid 2px #8D38C9; padding: 3px; margin-bottom: 5px; color:#8D38C9; }
 #wordcloud span.word { z-index: 0; }
 #wordcloud span.word:hover { cursor: pointer; }
-div#wordcloud span.remove-word { position:relative; z-index:2; font-size:14px; color:#555; vertical-align: top; margin-left: -15px; text-align:center; margin-bottom:-15px; padding:2px; background: #FFF;}
-div#wordcloud span.remove-word:hover { color:#933;}
+div#wordcloud span.remove-word { font-size:14px; color:#555; text-align:center; vertical-align:top;
+	position:relative; z-index:2; margin-left:-15px; margin-bottom:-15px; padding:2px; background:#FFF; }
+div#wordcloud span.remove-word:hover { color:#933; }
 
-
-table.archive td.show-cell {
-	font-weight:bold;
-}
-
-table.archive td.show-activity-name {
-	padding-left:40px;
-}
+table.archive td.show-cell { font-weight:bold; }
+table.archive td.show-activity-name { padding-left:40px; }
