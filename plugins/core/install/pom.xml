@@ -82,6 +82,8 @@
 						<property><name>exe.name</name><value>${install4j.exe.name}</value></property>
 						<property><name>exe.ico</name><value>${install4j.exe.ico}</value></property>
 						<property><name>exe.icns</name><value>${install4j.exe.icns}</value></property>
+						<property><name>installer.ico</name><value>${install4j.installer.ico}</value></property>
+						<property><name>installer.icns</name><value>${install4j.installer.icns}</value></property>
 						<property><name>osx.installDir</name><value>${install4j.osx.installDir}</value></property>
 						<property><name>windows.installDir</name><value>${install4j.windows.installDir}</value></property>
 						<property><name>unix.installDir</name><value>${install4j.unix.installDir}</value></property>
