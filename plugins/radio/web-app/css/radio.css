@@ -1,3 +1,5 @@
+#head { background-image:url("../images/logo.png"); }
+
 #on-air { color:#DFDFDF; }
 #on-air.onAirIsActive, .onAirIsActive { color: #9433C7; }
 
@@ -17,6 +19,7 @@
 
 #body-menu .selected a, .ui-tabs-nav .ui-tabs-selected a,
 #body.contacts #main-list li.selected,
+#body.messages #main-list tr.selected,
 #modalBox.help #help-index li.selected > a {
 	background-color:#c2dbbf !important; }
 
@@ -24,13 +27,12 @@
 #body.messages #detail,
 #body.contacts #detail,
 #body.contacts #main-list li:hover,
-#body-messages #main-list tr:hover,
-#modalBox.help #help-index li li li a:hover {
+#body.messages #main-list tr:hover,
+#modalBox.help #help-index li li li a:hover,
+#body.status #device-detection table tr:hover {
 	background-color:#e0f0de !important; }
 
-ul.radio-show-activities {
-	padding-left: 10px;
-}
+#body-menu ul.radio-show-activities li a { padding-left:50px; }
 #wordcloud-container {position: fixed; height: auto; width:auto; left: 17%; 
 	right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }
 #wordcloud { padding:3px; margin:auto auto;}
