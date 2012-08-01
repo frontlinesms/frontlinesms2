@@ -19,7 +19,6 @@ public class UserDataBackupAction extends AbstractInstallAction {
 	private static final long backupExpiryDuration = 7776000000L; // 90 days in miliseconds
 	private static final String backupDirNameFormat = ".frontlinesms2-backup.";
 	private File fsms2Home;
-	private File userHome;
 
 	public boolean isRollbackSupported() {
 		return false;
@@ -41,8 +40,7 @@ public class UserDataBackupAction extends AbstractInstallAction {
 			log("Will backup to " + thisBackupDir.getAbsolutePath());
 			thisBackupDir.mkdir();
 			String [] files = fsms2Home.list();
-			for (int i = 0; i < files.length; i++)
-			{
+			for (int i = 0; i < files.length; i++) {
 				log("trying to copy " + files[i]);
 				copyFile(new File(fsms2Home + File.separator + files[i]), 
 					new File(thisBackupDir + File.separator + files[i]));
@@ -55,33 +53,29 @@ public class UserDataBackupAction extends AbstractInstallAction {
 	}
 
 	private void deleteOldBackups() {
-		File [] backups = userHome.listFiles(new FilenameFilter() {
-		    @Override
-		    public boolean accept(File dir, String name) {
-		        return name.contains(backupDirNameFormat);
-		    }
+		File[] backups = new File(System.getProperty("user.home")).listFiles(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.contains(backupDirNameFormat);
+			}
 		});
-		Date oldestBackupToKeep = new Date((new Date()).getTime() - backupExpiryDuration);
+		Date oldestBackupToKeep = new Date(new Date().getTime() - backupExpiryDuration);
 		log("oldest backup to keep: " + oldestBackupToKeep);
-		for(int i=0; i<backups.length; i++)
-		{
+		for(int i=0; i<backups.length; i++) {
 			log("Found backup :" + backups[i].getAbsolutePath());
 			Date thisBackupDate;
-			try{
-				thisBackupDate = (new SimpleDateFormat(dateFormat)).parse(backups[i].getPath().substring(
-							backups[i].getPath().lastIndexOf(backupDirNameFormat) + backupDirNameFormat.length()));
-			}
-			catch(ParseException e){
+			try {
+				thisBackupDate = new SimpleDateFormat(dateFormat).parse(backups[i].getPath().substring(
+						backups[i].getPath().lastIndexOf(backupDirNameFormat) + backupDirNameFormat.length()));
+			} catch(ParseException e) {
 				log("failed to parse date!");
 				break;
 			}
 			log("Backup is dated " + thisBackupDate);
-			if(thisBackupDate.compareTo(oldestBackupToKeep) < 0)
-			{
+			if(thisBackupDate.compareTo(oldestBackupToKeep) < 0) {
 				log("backup is older than backup expiry duration. Will be deleted");
 				File [] currentDirContents = backups[i].listFiles();
-				for(int f=0; f < currentDirContents.length; f++)
-				{
+				for(int f=0; f < currentDirContents.length; f++) {
 					currentDirContents[f].delete();
 				}
 				log(backups[i].delete() ? " delete successful" : " delete failed");
@@ -90,31 +84,23 @@ public class UserDataBackupAction extends AbstractInstallAction {
 	}
 
 	private void copyFile(File sourceFile, File destFile) {
-			try
-			{
-			    if(!destFile.exists()) {
-			        destFile.createNewFile();
-			    }
-			    FileChannel source = null;
-			    FileChannel destination = null;
-			    try {
-			        source = new FileInputStream(sourceFile).getChannel();
-			        destination = new FileOutputStream(destFile).getChannel();
-			        destination.transferFrom(source, 0, source.size());
-			    }
-			    finally {
-			        if(source != null) {
-			            source.close();
-			        }
-			        if(destination != null) {
-			            destination.close();
-			        }
-			    }
+		try {
+			if(!destFile.exists()) {
+				destFile.createNewFile();
 			}
-			catch(IOException e)
-			{
-				log("failed to copy file");
+			FileChannel source = null;
+			FileChannel destination = null;
+			try {
+				source = new FileInputStream(sourceFile).getChannel();
+				destination = new FileOutputStream(destFile).getChannel();
+				destination.transferFrom(source, 0, source.size());
+			} finally {
+				if(source != null) { try { source.close(); } catch(Exception _) { /* ignore */ } }
+				if(destination != null) { try { destination.close(); } catch(Exception _) { /* ignore */ }}
 			}
+		} catch(IOException e) {
+			log("failed to copy file");
+		}
 	}
 
 	public static void main(String [] args) {
