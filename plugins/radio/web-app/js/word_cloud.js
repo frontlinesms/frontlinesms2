@@ -6,7 +6,7 @@ function showWordCloud(stats) {
 			text:key,
 			weight:value,
 			html:{
-				class:"word",
+				"class":"word",
 				onClick:"searchForWord('" + key + "')"
 			}
 		});
