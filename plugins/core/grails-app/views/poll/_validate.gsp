@@ -77,7 +77,7 @@
 		jQuery.validator.addMethod("validcommas", function(value, element) {
 			return value.match(/^(\s*,*\s*[\w-]+\s*,*\s*)(,*\s*[\w-]+\s*,*\s*)*$/) !== null;
 		}, i18n("poll.alias.validation.error.invalid.alias"));
-
+		
 		jQuery.validator.addMethod("edit", function(value, element) {
 			return (value.trim().length != 0);
 		}, i18n("poll.choice.validation.error.deleting.response"));
@@ -92,7 +92,7 @@
 			if($("input[name='pollType']:checked").val() == "yesNo") {
 				valid = true;
 			} else {
-				var choices = [$('#choiceA'), $('#choiceB')];
+				var choices = $('input:not(:disabled).choices');
 				$.each(choices, function(index, value) {
 					if (!validator.element(value) && valid) {
 						valid = false;

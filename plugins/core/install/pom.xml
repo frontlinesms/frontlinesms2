@@ -87,6 +87,8 @@
 						<property><name>osx.installDir</name><value>${install4j.osx.installDir}</value></property>
 						<property><name>windows.installDir</name><value>${install4j.windows.installDir}</value></property>
 						<property><name>unix.installDir</name><value>${install4j.unix.installDir}</value></property>
+						<property><name>splash.image</name><value>${install4j.splash.image}</value></property>
+						<property><name>installer.icons.path</name><value>${install4j.installer.icons.path}</value></property>
 					</compilerVariables>
 					<verbose>true</verbose>
 				</configuration>
