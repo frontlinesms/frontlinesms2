@@ -32,6 +32,9 @@
 #modalBox.ui-dialog-content div.input.select label:hover > *,
 #body.status #device-detection table tr:hover { background-color:#e0f0de !important; }
 
+#body.messages #detail #message-detail-content p.trashed-show-act-title { margin-top:0px; margin-bottom:0px; padding-top:0px; }
+ul.trashed-show-activities { list-style-type:disc; padding:0 17px 17px 17px; }
+
 #body-menu ul.radio-show-activities li a { padding-left:50px; }
 #wordcloud-container {position: fixed; height: auto; width:auto; left: 17%; 
 	right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }

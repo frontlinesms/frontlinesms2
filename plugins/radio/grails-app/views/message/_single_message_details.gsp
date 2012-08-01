@@ -43,13 +43,15 @@
 			</p>
 			<p id="message-detail-date"><g:formatDate format="dd MMMM, yyyy hh:mm a" date="${ownerInstance.dateCreated}"/></p>
 			<div id="message-detail-content"><p>${ownerInstance.messages.size() == 1 ? g.message(code:'fmessage.count') : ownerInstance.messages.size() + " " + g.message(code:'fmessage.many')}</p>
-				<g:if test="${ownerInstance instanceof frontlinesms2.radio.RadioShow}">
-					<div>
-						<div>Activities for ${ownerInstance.name} ${ownerInstance.shortName}</div>
+				<g:if test="${ownerInstance instanceof frontlinesms2.radio.RadioShow && ownerInstance.activities}">
+					<p class="trashed-show-act-title">
+						<g:message code="trashed.radioShow.activities" args="${[ownerInstance.name]}"/>
+					</p>
+					<ul class="trashed-show-activities">
 						<g:each in="${ownerInstance.activities}" var="act">
-							<div class="radioActivities">${act.name}</div>
-					</g:each>
-				</div>
+							<li>${act.name} ${act.shortName}</li>
+						</g:each>
+					</ul>
 				</g:if>
 			</div>
 		</div>

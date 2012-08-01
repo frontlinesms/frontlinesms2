@@ -3,7 +3,7 @@
 <%
 	trashInstanceList.each{ trashObj->
 		if (trashObj.object instanceof frontlinesms2.radio.RadioShow){
-			trashObj.displayText = trashObj.object.activities.size() + " activity(s), " +trashObj.object.messages.size() + " message(s)"
+			trashObj.displayText = message(code:"radioShow.trash.display.text", args:[trashObj.object.activities.size(), trashObj.object.messages.size()])
 			trashObj.object.activities.each{ act->
 				trashInstanceList -= Trash.findByObject(act)
 			}
