@@ -111,6 +111,9 @@ function searchForWord(word) {
 }
 
 function resetWordcloud() {
+	if(fsmsButton.find("#show-messages-btn").hasClass('disabled')) {
+		return;
+	}
 	$("input#ignoreWords").val("");
 	fsmsButton.find("input[name=show-wordcloud-btn]").click();
 	fsmsButton.find("#reset-words-btn").hide();
