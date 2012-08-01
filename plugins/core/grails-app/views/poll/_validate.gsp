@@ -117,6 +117,9 @@
 		var autoReplyTabValidation = function() {
 			return validator.element('#autoreplyText');
 		};
+		var composeMessageTabValidation = function() {
+			return validator.element('#messageText');
+		};
 		var recipientTabValidation = function() {
 			if(!isGroupChecked('dontSendMessage')) {
 				var valid = false;
@@ -150,6 +153,7 @@
 		addValidation('poll-sort', autoSortTabValidation);
 		addValidation('poll-alias', aliasTabValidation);
 		addValidation('poll-reply', autoReplyTabValidation);
+		addValidation('poll-edit-message', composeMessageTabValidation)
 		addValidation('poll-recipients', recipientTabValidation);
 		addValidation('poll-confirm', confirmTabValidation);
 

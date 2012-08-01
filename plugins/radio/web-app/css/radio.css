@@ -28,6 +28,8 @@
 #body.contacts #main-list li:hover,
 #body.messages #main-list tr:hover,
 #modalBox.help #help-index li li li a:hover,
+#modalBox.ui-dialog-content div.input.select label:hover,
+#modalBox.ui-dialog-content div.input.select label:hover > *,
 #body.status #device-detection table tr:hover { background-color:#e0f0de !important; }
 
 #body-menu ul.radio-show-activities li a { padding-left:50px; }

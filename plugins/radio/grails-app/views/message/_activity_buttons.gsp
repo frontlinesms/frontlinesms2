@@ -24,9 +24,11 @@ function radioShowAction() {
 		$.ajax({
 			type:'GET',
 			url: url_root + 'radioShow/selectShow',
-			data: {ownerId: $("#ownerId").val()},
+			data: {
+				ownerId:$("#ownerId").val(),
+				hideLabel:true },
 			success: function(data) {
-				launchSmallPopup('Add to Show', data, 'Add');
+				launchSmallPopup(i18n("activity.radioShow.assign"), data, i18n("action.ok"));
 		}});
 	}
 }

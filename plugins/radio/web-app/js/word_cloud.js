@@ -40,6 +40,7 @@ function showWordCloud(stats) {
 function wordCloudLoaded() {
 	fsmsButton.find("#show-messages-btn").removeClass('disabled');
 	fsmsButton.find("#poll-graph-btn").removeClass('disabled');
+	fsmsButton.find("#reset-words-btn").removeClass('disabled');
 }
 
 function showMessages(){
@@ -99,6 +100,7 @@ function removeWord(wordId) {
 	ignoreWords.val(ignoreWords.val() + word + ",");
 	console.log("IGNORE: "+$("input#ignoreWords").val());
 	fsmsButton.find("input[name=show-wordcloud-btn]").click();
+	fsmsButton.find("#reset-words-btn").addClass('disabled');
 	fsmsButton.find("#reset-words-btn").show();
 }
 
