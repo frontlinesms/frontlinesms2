@@ -82,22 +82,22 @@
               <void property="customIconImageFiles">
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>${installer.icons.path}/installer_16.png</string>
+                    <string>${compiler:installer.icons.path}/installer_16.png</string>
                   </object>
                 </void>
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>${installer.icons.path}/installer_32.png</string>
+                    <string>${compiler:installer.icons.path}/installer_32.png</string>
                   </object>
                 </void>
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>${installer.icons.path}/installer_64.png</string>
+                    <string>${compiler:installer.icons.path}/installer_64.png</string>
                   </object>
                 </void>
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
-                    <string>${installer.icons.path}/installer_128.png</string>
+                    <string>${compiler:installer.icons.path}/installer_128.png</string>
                   </object>
                 </void>
               </void>
