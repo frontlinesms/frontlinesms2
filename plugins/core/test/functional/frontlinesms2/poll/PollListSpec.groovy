@@ -77,7 +77,7 @@ class PollListSpec extends PollBaseSpec {
 			messageList.sources == ['Alice', 'Bob']
 	}
 
-	def "should only display message details when one message is checked"() {
+	def "should display message details when message is checked"() {
 		given:
 			createTestPolls()
 			createTestMessages()
@@ -91,11 +91,11 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			$(".message-select")[2].click()
+			messageList.messages[1].checkbox.click()
 			def message = Fmessage.findBySrc('Alice')
 		then:
-			waitFor { $('#message-detail #message-detail-sender').text() == message.src }
-			$('#message-detail #message-detail-content').text() == message.text
+			waitFor { singleMessageDetails.sender == message.src }
+			singleMessageDetails.text == message.text
 	}
 
 	def "should hide the messages when poll detail chart is shown"() {
@@ -103,18 +103,18 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+			to PageMessagePoll, 'Football Teams'
 		then:
-			waitFor { $("#message-list").displayed}
+			waitFor { messageList.displayed}
 		when:
-			$("#poll-graph-btn").click()
+			pollGraphBtn.click()
 		then:
-			waitFor {$("#poll-details").displayed}
-			$(".response-count").text() == "2 responses total"
+			waitFor {pollGraph.displayed}
+			!messageList.displayed
 		when:
-			$("#poll-graph-btn").click()
+			pollGraphBtn.click()
 		then:
-			waitFor { !$('#poll-details').displayed }
+			waitFor { !pollGraph.displayed }
 	}
 	
 	def 'no message is selected when a poll is first loaded'() {
@@ -122,32 +122,32 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}"
+			to PageMessagePoll, 'Football Teams'
 		then:
-			$('#message-detail #message-detail-content').text() == "No message selected"
+			singleMessageDetails.text() == "No message selected"
 	}
-	
+
 	def 'new messages are checked for in the backround every ten seconds and cause a notification to appear if there are new messages'() {
 		when:
 			createTestPolls()
 			createTestMessages()
-			to PageMessagePollFootballTeamsAlice
+			to PageMessagePoll, 'Football Teams'
 		then:
-			visibleMessageTotal == 3
+			messageList.messages.size == 2
 		when:
 			sleep 11000
 		then:
-			visibleMessageTotal == 3
-			!newMessageNotification.displayed
+			messageList.messages.size == 2
+			!messageList.newMessageNotification.displayed
 		when:
 			createMoreTestMessages()
 			sleep 5000
 		then:
-			visibleMessageTotal == 3
-			!newMessageNotification.displayed
+			messageList.messages.size == 2
+			!messageList.newMessageNotification.displayed
 		when:
 			sleep 7000
 		then:
-			waitFor { newMessageNotification.displayed }
+			waitFor { messageList.newMessageNotification.displayed }
 	}
 }
