@@ -82,6 +82,7 @@ class MessageList extends geb.Module {
 				return $(".displayName-${message.id}").text()
 			}
 		}
+		newMessageNotification(required: false) { $("#new-message-notification") }
 	}
 }
 

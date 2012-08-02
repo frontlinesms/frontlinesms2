@@ -36,13 +36,12 @@ class PollCedSpec extends PollBaseSpec {
 
 	def "should auto populate poll response when a poll with yes or no answer is created"() {
 		when:
-			launchPollPopup('yesNo', null)
+			launchPollPopup('yesNo', null, false)
 		then:
 			errorPanel.displayed
 		when:
 			tab(1).click()
 			compose.question = "question"
-			compose.dontSendQuestion.click()
 			setAliases();
 			tab(8).click()
 		then:
@@ -71,9 +70,8 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			sort.keyword = 'trigger'
 			next.click()
-			next.click()
 		then:
-			waitFor { autoreply.displayed }
+			waitFor { aliases.displayed }
 	}
 
 	def "Aliases tab should be disabled when poll popup first loads"() {
@@ -91,25 +89,22 @@ class PollCedSpec extends PollBaseSpec {
 			sort.keyword.disabled
 		when:
 			sort.sort.click()
+			sort.keyword = 'key'
+			next.click()
 		then:
-			aliases.hasClass('ui-tabs-hide')
+			waitFor { aliases.displayed }
 	}
 
 	def "should skip recipients tab when do not send message option is chosen"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
+			setAliases()
 		then:
 			waitFor { sort.displayed }
 		when:
 			sort.sort.click()
 			sort.keyword.value("key")
-			next.click()
-			setAliases()
-			next.click()
-		then:
-			waitFor { autoreply.displayed }
-		when:
-			next.click()
+			tab(8).click()
 		then:
 			waitFor { confirm.displayed }
 			tab(2).hasClass("disabled-tab")
@@ -142,7 +137,6 @@ class PollCedSpec extends PollBaseSpec {
 	def "should not proceed when the poll is not named"() {
 		when:
 			launchPollPopup('yesNo', 'question', false)
-			setAliases()
 			next.click()
 		then:
 			waitFor { autoreply.displayed }
@@ -223,8 +217,6 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			waitFor { error }
 		when:
-			recipients.addField = '1234567890'
-			recipients.addButton.click()
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
 		then:
@@ -477,7 +469,7 @@ class PollCedSpec extends PollBaseSpec {
 			at PollDialog
 			waitFor { errorPanel.displayed }
 	}
-	@spock.lang.IgnoreRest
+
 	def "Choices for a saved poll should validate as required"() {
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
