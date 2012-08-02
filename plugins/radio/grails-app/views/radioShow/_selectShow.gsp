@@ -1,5 +1,9 @@
 <%@ page import="frontlinesms2.radio.RadioShow" %>
-<radio:selectShow formtag="${formtag}" from="${radioShows?:RadioShow.findAllByDeleted(false)}" radioShowInstance="${radioShowInstance}" activityInstance="${activityInstanceToEdit ?: ownerInstance}"/>
+<radio:selectShow wrapInFormTag="${wrapInFormTag}"
+		hideLabel="${hideLabel}"
+		from="${radioShows?:RadioShow.findAllByDeleted(false)}"
+		radioShowInstance="${radioShowInstance}"
+		activityInstance="${activityInstanceToEdit ?: ownerInstance}"/>
 <r:script>
 	<g:if test="${activityInstanceToEdit}">
 		$("#radioShowId").live("change", function() {

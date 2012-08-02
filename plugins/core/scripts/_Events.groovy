@@ -93,7 +93,7 @@ eventCompileEnd = {
 	def folderMap = [
 		"grails-app/i18n":"web-app/WEB-INF/grails-app/i18n"
 	]
-	folderMap.each {oldLocation, newLocation ->
+	folderMap.each { oldLocation, newLocation ->
 		ant.copy(toDir: newLocation) {
 			fileset(dir:oldLocation)
 		}	

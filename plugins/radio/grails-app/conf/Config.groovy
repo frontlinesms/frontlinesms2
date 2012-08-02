@@ -53,7 +53,7 @@ log4j = {
   environments {
     def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
     production {
-      def conf = ResourceUtils.resourcePath
+      def conf = frontlinesms2.ResourceUtils.resourcePath
       appender new RollingFileAppender(name:"prod",
           layout:layout, file:"$conf/standard.log",
           threshold:org.apache.log4j.Level.INFO)

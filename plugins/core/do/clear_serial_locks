@@ -1,1 +1,4 @@
+echo "Clearing serial lock files..."
+locks=`ls /var/lock/LCK..ttyUSB*`
+echo "Current locks: $locks"
 sudo rm /var/lock/LCK..ttyUSB*

@@ -34,8 +34,9 @@ class DeviceDetectionService {
 		detector.detectors.each {
 			println "Checking $it.portName..."
 			if(it.portName == port) {
+				println "Port matched."
 				detectorThread = it
-			} else println "not the right port."
+			} else println "Not the right port."
 		}
 		if(detectorThread && detectorThread!=Thread.currentThread()) {
 			detectorThread.interrupt()

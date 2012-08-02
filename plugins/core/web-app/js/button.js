@@ -39,7 +39,13 @@ var FsmsButton = function() {
 			if(parent) found = parent.find(selecter);
 			else found = $(selecter);
 			found.each(function(i, e) { _apply(e); });
+		},
+		_find = function(selecter) {
+			var found = $(selecter);
+			if(found.hasClass("fsms-button-replaced")) {
+				return found.next();
+			} else return found;
 		};
-	return { apply:_apply, trigger:_trigger, findAndApply:_findAndApply };
+	return { apply:_apply, trigger:_trigger, findAndApply:_findAndApply, find:_find };
 };
 
