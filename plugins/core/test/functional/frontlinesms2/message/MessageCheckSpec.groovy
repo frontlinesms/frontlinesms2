@@ -1,6 +1,7 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
 
 import spock.lang.*
 
@@ -11,11 +12,10 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-			messagesSelect[3].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { messagesSelect[0].checked }
+			waitFor { messageList.selectAll.checked }
 	}
 	
 	def "message count displayed when multiple messages are selected"() {
@@ -23,25 +23,25 @@ class MessageCheckSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 2 }
+			waitFor('veryslow') { multipleMessageDetails.checkedMessageCount == "2 messages selected"}
 	}
 	
 	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
+			def m = Fmessage.findBySrc('Bob')
 		when:
-			go "message/inbox/show/${Fmessage.list()[0].id}"
-			$(".message-select")[2].click()
+			to PageMessageInbox, m.id
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $("#message-detail #message-detail-sender").text() == $(".displayName-${Fmessage.findBySrc('Bob').id}").text() }
+			waitFor('veryslow') { singleMessageDetails.sender == messageList.displayedNameFor(m) }
 		when:
-			$(".message-select")[1].click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $(".message-select")[1].parent().parent().hasClass("selected") }
-			$(".message-select")[2].parent().parent().hasClass("selected")
+			waitFor('veryslow') { messageList.messages[1].hasClass("selected") }
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -51,16 +51,17 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $('#multiple-messages a')[0].displayed }
+			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
-			$('#multiple-messages a')[0].click()
+			multipleMessageDetails.replyAll.click()
 		then:
-			waitFor { $("div#tabs-1").displayed }
+			waitFor { at QuickMessageDialog }
+			waitFor { next.displayed }
 	}
-	
+
 	def "the count of messages being sent is updated even in 'Reply all'"() {
 		given:
 			createInboxTestMessages()
@@ -68,100 +69,80 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $('#multiple-messages a')[0].displayed }
+			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
-			$('#multiple-messages a')[0].click()
+			multipleMessageDetails.replyAll.click()
 		then:
-			waitFor { $("div#tabs-1").displayed }
+			waitFor { at QuickMessageDialog }
+			waitFor { next.displayed }
 		when:
-			$('#nextPage').click()
+			next.click()
 		then:
-			$('#messages-count').text() == '2'
+			confirm.messagesToSendCount == '2'
 	}
-	
-	def "Should show the correct contact count when replying to multiple checked messages"() {
+
+	def "Should show the contact's name when replying to multiple messages from the same contact"() {
 		given:
 			Fmessage.build(src:'Alice', text:'hi Alice')
 			Fmessage.build(src:'Alice', text:'test')
 			Contact.build(name:'Alice', mobile:'Alice')
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $('#multiple-messages a')[0].displayed }
+			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
-			$('#multiple-messages a')[0].click()
+			multipleMessageDetails.replyAll.click()
 		then:
-			waitFor { $("#tabs a", text: "Confirm").displayed }
+			waitFor { at QuickMessageDialog }
+			waitFor { next.displayed }
 		when:
-			$("#tabs a", text: "Confirm").click()
+			next.click()
 		then:
-			waitFor { $('div#tabs-3').displayed }
-			$('#recipient').text() == "Alice"
-	}
-	
-	def "Should show the contact's name when replying to multiple messages from the same contact"() {
-		given:
-			createInboxTestMessages()
-			Contact.build(name:'Alice', mobile:'Alice')
-			Contact.build(name:'June', mobile:'+254778899')
-		when:
-			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-		then:
-			waitFor { $('#multiple-messages a')[0].displayed }
-		when:
-			$('#multiple-messages a')[0].click()
-		then:
-			waitFor { $("#tabs a", text: "Confirm").displayed }
-		when:
-			$("#tabs a", text: "Confirm").click()
-		then:
-			waitFor { $('div#tabs-3').displayed }
-			$('#confirm-recipients-count').text() == "2 contacts selected"
+			waitFor { confirm.displayed }
+			confirm.recipientName == "Alice"
 	}
 
 	def "'Forward' button works even when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
 		when: 
-			go "message/inbox/show/${Fmessage.findBySrc('Alice').id}"
-			at PageMessageInbox
-			messagesSelectAll.click()
+			to PageMessageInbox, Fmessage.findBySrc('Alice').id
+			messageList.selectAll.click()
 		then:
-			waitFor { checkedMessageCount == 2 }
+			waitFor { messageList.selectedMessages.size() == 2 }
 		when:
-			messagesSelectAll.click()
+			messageList.selectAll.click()
 		then: 
-			waitFor { $('#message-detail #message-detail-sender').text() == "Alice" }
+			waitFor { singleMessageDetails.sender == "Alice" }
 		when:
-			$('a', text:'Alice').click()
-			$('#btn_forward').click()
+			singleMessageDetails.forward.click()
 		then:
-			waitFor { $('div#tabs-1').displayed }
+			waitFor { at QuickMessageDialog }
+			waitFor { next.displayed }
 		then:
-			$('textArea', name:'messageText').text() == "hi Alice"
+			compose.textArea.text() == "hi Alice"
 	}
-	
+
 	def "should uncheck message when a different message is clicked"() {
 		given:
 			createInboxTestMessages()
 		when: 
 			to PageMessageInbox
-			messagesSelect[1].click()
+			messageList.messages[0].checkbox.click()
 		then:
-			messagesSelect[1].checked
+			messageList.messages[0].checkbox.checked
 		when:
-			messagesSelect[1].click()
-		then: 
-			!messagesSelect[1].checked
+			messageList.messages[1].textLink.click()
+		then:
+			waitFor('veryslow') { at PageMessageInbox }
+			waitFor('verslow') { messageList.displayed }
+ 			!messageList.messages[0].checkbox.checked
 	}
-
 
 	def "select all should update the total message count when messages are checked"() {
 		given:
@@ -169,37 +150,35 @@ class MessageCheckSpec extends MessageBaseSpec {
 			Fmessage.build()
 		when:
 			to PageMessageInbox
-			messagesSelect[0].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $('#multiple-messages').displayed }
-			checkedMessageCount == 3
+			waitFor('veryslow') { multipleMessageDetails.displayed }
+			multipleMessageDetails.checkedMessageCount == '2 messages selected'
 		when:
-			messagesSelect[1].click()
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 2 }
+			waitFor { multipleMessageDetails.checkedMessageCount == '3 messages selected' }
 		when:
-			messagesSelect[0].click()
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 3 }
+			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
 	}
 
 	def "can archive multiple messages"() {
 		given:
 			createInboxTestMessages()
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessageInbox
+		then:
+			messageList.selectAll.click()
+		then:
+			waitFor { multipleMessageDetails.archiveAll.displayed }
+		when:
+			multipleMessageDetails.archiveAll.click()
 		then:
 			waitFor { at PageMessageInbox }
-		when:
-			messagesSelect[0].click()
-		then:
-			waitFor { deleteAllButton.displayed }
-		when:
-			assert $('#multiple-messages #btn_archive_all').displayed			
-			$('#multiple-messages #btn_archive_all').jquery.trigger('click')
-		then:
-			waitFor { at PageMessageInbox }
-			$("#message-detail-content").text() == 'No message selected'
+			singleMessageDetails.noneSelected
 
 	}
 }
