@@ -1,9 +1,10 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
 
 class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
-	def trashService
+	def trashService = new TrashService()
 	
 	def setup() {
 		createTestData()
@@ -12,29 +13,28 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def 'delete button does not show up for messages in trash view'() {
 		when:
 			def bobMessage = Fmessage.findBySrc('Bob')
-			bobMessage.save(flush:true)
 			deleteMessage(bobMessage)
-			go "message/trash"
-			$("a", text: "Bob").click()
+			to PageMessageTrash
+			messageList.messages[0].textLink.click()
 		then:
+			waitFor { singleMessageDetails.displayed }
 			Fmessage.deleted(false).count() == 1
-			$('#message-detail #message-detail-sender').text() == bobMessage.displayName
-			!$('#message-detail .buttons #delete-msg')
+			singleMessageDetails.sender == bobMessage.displayName
+			!singleMessageDetails.delete.displayed
 	}
 
 	def 'empty trash on confirmation deletes all trashed messages permanently and redirects to inbox'() {
 		given:
 			def message = Fmessage.build()
 			deleteMessage(message)
-			go "message/trash"
+			to PageMessageTrash
 			assert Fmessage.findAllByIsDeleted(true).size == 1
 		when:
-			$("#trash-actions").value("empty-trash")
+			trashMoreActions.value("empty-trash")
 		then:
-			waitFor { $("#ui-dialog-title-modalBox").displayed }
+			waitFor { at DeleteDialog }
 		when:
-			$("#title").value("Empty trash")
-			$("#done").click()
+			done.click()
 		then:
 			waitFor { at PageMessageInbox }
 			Fmessage.findAllByIsDeleted(true).size == 0
@@ -43,25 +43,26 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 	def "'Delete All' button appears for multiple selected messages and works"() {
 		when:
 			to PageMessageInbox
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-			waitFor { multipleMessagesThing.displayed }
-			$("#btn_delete_all").jquery.trigger('click')
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor{ $(".flash.message").text().contains("trash") }
+			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
+			multipleMessageDetails.deleteAll.click()
+		then:
+			waitFor { notifications.flashMessagesText.contains("trash") }
 	}
 	
 	def "'Delete' button appears for individual messages and works"() {
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
-			def btnDelete = $("#delete-msg")
+			to PageMessageInbox, Fmessage.findBySrc('Bob').id
 		then:
-			btnDelete
+			waitFor { singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.delete.displayed }
 		when:
-			btnDelete.click()
+			singleMessageDetails.delete.click()
 		then:
 			at PageMessageInbox
-			waitFor{$("div.flash").text().contains("trash")}
+			waitFor{ notifications.flashMessagesText.contains("trash") }
 	}
 
 	def deleteMessage(Fmessage message) {
