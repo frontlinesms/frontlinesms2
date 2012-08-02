@@ -14,9 +14,11 @@ class PageMessagePoll extends frontlinesms2.page.PageMessageActivity {
 			$("#multiple-messages #categorise_dropdown").jquery.val("btn-"+responseId)
 			$("#multiple-messages #categorise_dropdown").jquery.trigger("change")
 		}
-		statsLabels {$('#poll-stats tbody tr td:first-child')*.text()}
-		statsNums {$('#poll-stats tbody tr td:nth-child(2)')*.text()}
-		statsPercents {$('#poll-stats tbody tr td:nth-child(3)')*.text()}
+		statsLabels {$('div.stats table tbody tr td.value')*.text()}
+		statsNumbers {$('div.stats table tbody tr td.count')*.text()}
+		statsPercents {$('div.stats table tbody tr td.percent')*.text()}
+		pollGraphBtn {$("#poll-graph-btn")}
+		pollGraph {$('#pollGraph')}
 	}
 
 }

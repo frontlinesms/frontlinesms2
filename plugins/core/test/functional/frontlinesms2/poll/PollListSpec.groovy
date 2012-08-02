@@ -39,12 +39,12 @@ class PollListSpec extends PollBaseSpec {
 		then:
 			header.title == 'football teams poll'
 			statsLabels == ['manchester', 'barcelona','Unknown']
-			statsNums == ['2', '0', '0']
+			statsNumbers == ['2', '0', '0']
 			statsPercents == ['100%', '0%', '0%']
 		when:
-			$("#poll-graph-btn").click()
+			pollGraphBtn.click()
 		then:
-			waitFor {$('#pollGraph').displayed}
+			waitFor { pollGraph.displayed}
 	}
 
 	def 'selected poll should be highlighted'() {
@@ -52,9 +52,9 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+			to PageMessagePoll, 'Football Teams'
 		then:
-			$('#sidebar .selected').text() == 'Football Teams poll'
+			bodyMenu.selected == 'football teams poll'
 	}
 
 	def "should filter poll response messages for starred and unstarred messages"() {
@@ -62,19 +62,19 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+			to PageMessagePoll, 'Football Teams'
 		then:
-			$("#message-list .main-table tr").size() == 3
+			messageList.messages.size() == 2
 		when:
-			$('a', text:'Starred').click()
-			waitFor { $("#message-list .main-table tr").size() == 2 }
+			footer.showStarred.click()
+			waitFor { messageList.messages.size() == 1 }
 		then:
-			$("#message-list .main-table tr")[1].find(".message-sender-cell").text() == 'Bob'
+			messageList.sources == ['Bob']
 		when:
-			$('a', text:'All').click()
-			waitFor {$("#message-list .main-table tr").size() == 3}
+			footer.showAll.click()
+			waitFor {messageList.messages.size() == 2}
 		then:
-			$("#message-list .main-table tr").collect {it.find(".message-sender-cell").text()}.containsAll(['Bob', 'Alice'])
+			messageList.sources == ['Alice', 'Bob']
 	}
 
 	def "should only display message details when one message is checked"() {
@@ -82,14 +82,14 @@ class PollListSpec extends PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
-			$(".message-select")[2].click()
+			to PageMessagePoll, 'Football Teams'
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { $('#message-detail-content').text() == 'I like manchester' }
+			waitFor { singleMessageDetails.text == "I like manchester" }
 		when:
-			$(".message-select")[1].click()
+			messageList.messages[0].checkbox.click()
 		then:
-			waitFor { $("#checked-message-count").text() == "2 messages selected" }
+			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
 			$(".message-select")[2].click()
 			def message = Fmessage.findBySrc('Alice')
