@@ -121,6 +121,7 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text() }
 		replyAll { $('a#btn_reply_all') }
+		retry { $("a", text: iContains("retry")) }
 		deleteAll {$('#btn_delete_all')}
 		messageCount {$("#checked-message-count")}
 		moveTo { msgowner -> 
