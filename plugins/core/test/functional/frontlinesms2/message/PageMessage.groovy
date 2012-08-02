@@ -68,6 +68,13 @@ class MessageList extends geb.Module {
 		messages { moduleList MessageListRow, $('tbody tr') }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('td.no-content') }
+		starFor { message ->
+			if (message instanceof Fmessage){	
+					return $("tr #star-${message.id} a")
+				}else if(message instanceof Number){
+					return $("tr #star-${message} a")
+				}
+		}
 	}
 }
 
