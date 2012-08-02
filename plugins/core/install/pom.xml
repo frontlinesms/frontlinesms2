@@ -16,6 +16,7 @@
 		<install4j.unix.installDir>${install4j.app.shortName}</install4j.unix.installDir>
 		<frontlinesms.flavour.propertiesfile>../../${frontlinesms.flavour}/install/${frontlinesms.flavour}.install.properties</frontlinesms.flavour.propertiesfile>
 		<frontlinesms.flavour.bundle.fileset>../../${frontlinesms.flavour}/install/fileset</frontlinesms.flavour.bundle.fileset>
+		<resources.root.path>src/main/resources</resources.root.path>
 	</properties>
 
 	<repositories>
@@ -34,7 +35,12 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<build>	
+	<build>
+		<resources>
+			<resource>
+				<directory>${resources.root.path}</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>

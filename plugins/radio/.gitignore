@@ -46,3 +46,6 @@ snapshots.list
 # i18n generated files
 web-app/i18n
 web-app/WEB-INF/grails-app/i18n/
+
+# imported help files from other plugins
+web-app/help/core/
