@@ -9,40 +9,46 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
     def 'button to view inbox messages exists and goes to INBOX page'() {
         when:
           to PageMessageInbox
-		  def btnInbox = $('#messages-submenu li a', text:"Inbox")
         then:
-		btnInbox.text() == 'Inbox'
+			bodyMenu.messageSection("Inbox").text() == 'Inbox'
+		when:
+			bodyMenu.messageSection("Inbox").click()
+		then:
+			waitFor { title == "Inbox" }
     }
 
     def 'button to view sent messages exists and goes to SENT page'() {
         when:
-	        to PageMessageInbox
-			def btnSentItems = $('#messages-submenu li a', text:"Sent")
+          to PageMessageInbox
         then:
-		btnSentItems.text() == 'Sent'
+			bodyMenu.messageSection("Sent").text() == 'Sent'
+		when:
+			bodyMenu.messageSection("Sent").click()
+		then:
+			waitFor { title == "Sent" }
     }
     
     def 'when in inbox, Inbox menu item is highlighted'() {
         when:
-		go "message"
+			to PageMessageInbox
         then:
-            assertMenuItemSelected("Inbox")
+			bodyMenu.selected == "inbox"
 	}
-	
+
 	def 'when viewing Sent Items, Sent Items menu item is hilighted'() {
         when:
-            go "message/sent"
+			to PageMessageSent
         then:
-            assertMenuItemSelected("Sent")
+			bodyMenu.selected == "sent"
     }
-	
+
 	def 'Messages tab should have unread messages count next to it'() {
 		given:
 			createReadUnreadMessages()
 		when:
 			to PageMessageInbox
 		then:
-		$('#inbox-indicator').text() == '2'
+			tabs.unreadcount == 2
 	}
 	
 	def 'Should be able to sort messages'() {
@@ -50,22 +56,15 @@ class MessageListSpec extends grails.plugin.geb.GebSpec {
 			createTestMessages()
 		when:
 			to PageMessageInbox
-			$("#source-header a").click()
+			messageListHeader.source.click()
 		then:
-			waitFor { getColumnText('message-list', 3) == ['Contact 1', 'Contact 2']}
+			waitFor { getColumnText('main-list', 2) == ['Contact 1', 'Contact 2']}
 		when:
-			$("#message-header a").click()
+			messageListHeader.message.click()
 		then:
-			getColumnText('message-list', 4) == ['An inbox message', 'Another inbox message']		
+			getColumnText('main-list', 3) == ['An inbox message', 'Another inbox message']
 	}
-	   
-    def assertMenuItemSelected(String itemText) {
-        def selectedChildren = $('#sidebar li.selected')
-        assert selectedChildren.size() == 1
-        assert selectedChildren.text().contains(itemText)
-        true
-    }
-	
+
 	def createTestMessages() {
 		9.times {
 			new Contact(name:"Contact ${it}", mobile:"123456789${it}").save(failOnError:true)

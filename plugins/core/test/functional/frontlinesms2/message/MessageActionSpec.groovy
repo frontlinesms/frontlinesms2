@@ -39,7 +39,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			messageList.messages.size() == 2
+			messageList.messages.size() == 1
 	}
 	
 	def "can categorize poll messages using dropdown"() {
@@ -62,7 +62,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		then:
 			Fmessage.findBySrc("Bob").messageOwner == PollResponse.findByValue('barcelona').poll
 	}
-	
+
 	def 'clicking on poll moves multiple messages to that poll and removes it from the previous poll or inbox'() {
 		given:
 			createTestPolls()
@@ -70,17 +70,17 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			def shampooPoll = Poll.findByName('Shampoo Brands')
 			def footballPoll = Poll.findByName('Football Teams')
 		when:
-			to PageMessagePoll, Poll.findByName('Football Teams'), Fmessage.findBySrc("Bob")
+			to PageMessagePoll, 'Football Teams'
 		then:
-			at PageMessagePoll
+			waitFor { messageList.displayed }
 		when:
 			messageList.selectAll.click()
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo(Poll.findByName('Shampoo Brands'))
+			multipleMessageDetails.moveTo(shampooPoll.id)
 		then:
-			waitFor { messageList.noContent.displayed }
+			waitFor("very-slow") { messageList.noContent.displayed }
 			Fmessage.owned(footballPoll).count() == 0
 			Fmessage.owned(shampooPoll).count() == 3
 	}
@@ -90,9 +90,13 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			to PageMessagePollFootballTeamsBob
+			to PageMessagePoll, 'Football Teams'
 		then:
-			!$("#message-archive").displayed
+			waitFor { messageList.displayed }
+		when:
+			messageList.messages[0].checkbox.click()
+		then:
+			!singleMessageDetails.archive.displayed
 	}
 
 	def "can move poll messages to inbox"() {
@@ -100,27 +104,22 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			createTestPolls()
 			createTestMessages()
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc("Bob")
 		then:
-			at PageMessagePollFootballTeamsBob
+			waitFor { messageList.displayed }
 		when:
-			messagesSelect[0].click()
+			messageList.messages.checkbox[0].click()
 		then:
-			waitFor { $('#multiple-messages').displayed }
+			waitFor { singleMessageDetails.displayed }
 		when:
-			setMoveActionsValue('inbox')
+			singleMessageDetails.moveTo('inbox')
 		then:
-			waitFor { $("div.flash").text() }
+			waitFor { notifications.flashMessagesText }
 		when:
-			$("a", text: "Inbox").click()
-		then:	
+			bodyMenu.messageSection("Inbox").click()
+		then:
 			waitFor { title == "Inbox" }
-			$("#message-list .main-table tr").size() == 4
-	}
-	
-	private def setMoveActionsValue(value) {
-		$('#move-actions').jquery.val(value) // bug selecting option - seems to be solved by using jquery...
-		$('#move-actions').jquery.trigger('change') // again this should not be necessary, but works around apparent bugs
+			messageList.messages.size() == 2
 	}
 }
 

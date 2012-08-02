@@ -11,6 +11,7 @@ abstract class PageMessage extends frontlinesms2.page.PageBase {
 		bodyMenu { module BodyMenu }
 		header { module ContentHeader }
 		footer { module ContentFooter }
+		messageListHeader { module MessageListHeader }
 		messageList { module MessageList }
 		singleMessageDetails { module SingleMessageDetails }
 		multipleMessageDetails { module MultipleMessageDetails }
@@ -19,6 +20,9 @@ abstract class PageMessage extends frontlinesms2.page.PageBase {
 
 class BodyMenu extends geb.Module {
 	static content = {
+		messageSection { section->
+			$("a", text: "${section}")
+		}
 		selected { $('#body-menu .selected').text().toLowerCase() }
 		activityList { $('#body-menu li.activities ul.submenu li') }
 		activityLinks { $('#body-menu li.activities ul.submenu li a') }
@@ -45,6 +49,14 @@ class ContentFooter extends geb.Module {
 		showStarred { $('a')[1] }
 		nextPage { $('a.nextLink') }
 		prevPage { $('a.prevLink') }
+	}
+}
+
+class MessageListHeader extends geb.Module {
+	static base = { $('#main-list thead') }
+	static content = {
+		source { $('#source-header a') }
+		message { $('#message-header a') }
 	}
 }
 
@@ -84,6 +96,8 @@ class SingleMessageDetails extends geb.Module {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 				.parse($('#message-detail-date').text())
 		}
+		archive { $('#archive-msg') }
+		unarchive { $('#unarchive-msg') }
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
 		delete {$('#delete-msg')}
