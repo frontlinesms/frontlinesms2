@@ -24,80 +24,39 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	
 	def "'Reply All' button does not appears for multiple selected messages"() {
 		when:
-			go "message/pending"
+			to PageMessagePending
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			at PageMessagePending
-		when:
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-		then:
-			waitFor { !$('.multi-action a', text:'Reply All').displayed }
+			waitFor { !multipleMessageDetails.replyAll.displayed }
 	}
-
-	def "should filter pending messages for pending and failed messages"() {
-		when:
-			go "message/pending"
-		then:
-			at PageMessagePending
-			$("#message-list tr").size() == 3
-		when:
-			$('a', text:'Failed').click()
-		then:	
-			waitFor { $("#message-list tr").size() == 2 }
-			getColumnText('message-list', 3) == ['To: dst2']
-		when:
-			$('a', text:'All').click()
-		then:	
-			waitFor { $("#message-list tr").size() == 3 }
-			getColumnText('message-list', 3).containsAll(['To: dst1', 'To: dst2'])
-	}
-
-	// Is this necessary? retry will only send failed messages. That is much easier than only showing the button if you've checked a failed message
-//	def "retry button must not apper if there are no failed messages"() {
-//		when:
-//			go "message/pending"
-//		then:
-//			at PageMessagePending
-//			!$("#retry").displayed
-//		when:
-//			messagesSelect[0].click()
-//		then:
-//			waitFor { $("#multiple-messages").displayed }
-//			!$("#retry-failed").displayed
-//	}
 
 	def "should be able to retry a failed message"() {
 		when:
-			go "message/pending"
+			to PageMessagePending
+			messageList.messages[1].checkbox.click()
 		then:
-			at PageMessagePending
+			waitFor { singleMessageDetails.reply.displayed }
 		when:
-			$("a", text:contains("dst2")).click()
-		then:
-			waitFor { $("#btn_reply").displayed }
-		when:
-			$("#btn_reply").click()
+			singleMessageDetails.reply.click()
 		then:	
-			waitFor { $(".flash").displayed }
+			waitFor { notifications.flashMessage.displayed }
 	}
 
 	def "should be able to retry all failed messages"() {
 		when:
-			go "message/pending"
+			to PageMessagePending
+			messageList.messages[1].checkbox.click()
 		then:
-			at PageMessagePending
+			waitFor { singleMessageDetails.reply.displayed }
 		when:
-			$("a", text: contains("dst2")).click()
+			messageList.selectAll.click()
 		then:
-			waitFor { $("#btn_reply").displayed }
+			waitFor { multipleMessageDetails.retry.displayed }
 		when:
-			messagesSelect[0].click()
+			multipleMessageDetails.retry.click()
 		then:
-			waitFor { $("#retry-failed").displayed }
-		when:
-			$("#retry-failed").jquery.trigger("click")
-		then:
-			waitFor{ $(".flash").displayed }
+			waitFor{ notifications.flashMessage.displayed }
 	}
 }
 

@@ -9,11 +9,13 @@ class MessageStarSpec extends grails.plugin.geb.GebSpec{
 	}
 	
 	def 'clicking on an unstarred message changes its CSS to starred'() {
+		setup:
+			def m = Fmessage.findBySrc('+254287645')
 		when:
-			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
-			$("tr #star-${Fmessage.findBySrc('+254287645').id} a").click()
+			to PageMessageInbox
+			messageList.starFor(m).click()
 		then:
-			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id} a").hasClass("starred")}
+			waitFor {messageList.starFor(m).hasClass("starred")}
 			Fmessage.findBySrc('+254287645').refresh()
 			Fmessage.findBySrc('+254287645').starred
 	}
@@ -24,10 +26,10 @@ class MessageStarSpec extends grails.plugin.geb.GebSpec{
 			message.starred = true
 			message.save(flush:true)
 		when:
-			go "message/inbox/show/${message.id}"
-			$("tr #star-${message.id} a").click()
+			to PageMessageInbox, message.id
+			messageList.starFor(message).click()
 		then:
-			waitFor {$("tr #star-${message.id} a").hasClass("unstarred")}
+			waitFor {messageList.starFor(message).hasClass("unstarred")}
 			message.refresh()
 			!message.starred
 			
@@ -35,15 +37,16 @@ class MessageStarSpec extends grails.plugin.geb.GebSpec{
 	
 	def 'starring one message does not affect other messages'() {
 		when:
-			new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', inbound:true, read:false).save(failOnError:true)
-			go "message/inbox/show/${Fmessage.findBySrc('+254287645').id}"
-			$("tr #star-${Fmessage.findBySrc('+254287645').id} a").click()
+			def m1 = new Fmessage(src:'+254556677', dst:'+254112233', text:'css test 2', inbound:true, read:false).save(failOnError:true)
+			def m2 = Fmessage.findBySrc('+254287645')
+			to PageMessageInbox, m2.id
+			messageList.starFor(m2).click()
 		then:
-			waitFor {$("tr #star-${Fmessage.findBySrc('+254287645').id} a").hasClass("starred")}
+			waitFor {messageList.starFor(m2).hasClass("starred")}
 			Fmessage.findBySrc('+254287645').refresh()
 			Fmessage.findBySrc('+254287645').starred
-			!$("tr #star-${Fmessage.findBySrc('+254556677').id}").hasClass('starred')	
-			!Fmessage.findBySrc('+254556677').starred
+			!messageList.starFor(m1).hasClass('starred')	
+			!m1.starred
 	
 	}
 }

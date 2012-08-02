@@ -1,6 +1,10 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
+import frontlinesms2.page.*
+import frontlinesms2.message.*
+import frontlinesms2.poll.*
+import frontlinesms2.folder.*
 
 class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 
@@ -8,14 +12,14 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		setup:
 			setupInboxMessages()
 		when:
-			go "message/inbox"
+			to PageMessageInbox
 		then:
-			$("#message-list tr").size() == 51
+			messageList.messages.size() == 50
 		when:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
+			footer.nextPage.click()
+			waitFor {footer.nextPage.hasClass("disabled")}
 		then:
-			$("#message-list tr").size() == 2
+			messageList.messages.size() == 1
 
 	}
 
@@ -23,16 +27,16 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		setup:
 			setupPendingMessages()
 		when:
-			go "message/pending"
+			to PageMessagePending
 		then:
-			$("#message-list tr").size() == 51
-			$(".prevLink").hasClass("disabled")
+			messageList.messages.size() == 50
+			footer.prevPage.hasClass("disabled")
 		when:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
+			footer.nextPage.click()
+			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			$("#message-list tr").size() == 2
-			$(".nextLink").hasClass("disabled")
+			messageList.messages.size() == 1
+			footer.nextPage.hasClass("disabled")
 
 	}
 
@@ -40,32 +44,32 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 		setup:
 			setupDeletedMessages()
 		when:
-			go "message/trash"
+			to PageMessageTrash
 		then:
-			$("#message-list tr").size() == 51
-			$(".prevLink").hasClass("disabled")
+			messageList.messages.size() == 50
+			footer.prevPage.hasClass("disabled")
 		when:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
+			footer.nextPage.click()
+			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			$("#message-list tr").size() == 2
-			$(".nextLink").hasClass("disabled")
+			messageList.messages.size() == 1
+			footer.nextPage.hasClass("disabled")
 	}
 
 	def "should paginate sent messages"() {
 		setup:
 			setupSentMessages()
 		when:
-			go "message/sent"
+			to PageMessageSent
 		then:
-			$("#message-list tr").size() == 51
-			$(".prevLink").hasClass("disabled")
+			messageList.messages.size() == 50
+			footer.prevPage.hasClass("disabled")
 		when:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
+			footer.nextPage.click()
+			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			$("#message-list tr").size() == 2
-			$(".nextLink").hasClass("disabled")
+			messageList.messages.size() == 1
+			footer.nextPage.hasClass("disabled")
 	}
 
 	def "should paginate folder messages"() {
@@ -73,16 +77,16 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			setupFolderAndItsMessages()
 			def folderId = Folder.findByName("folder").id
 		when:
-			go "message/folder/${folderId}"
+			to PageMessageFolder, folderId
 		then:
-			$("#message-list tr").size() == 51
-			$(".prevLink").hasClass("disabled")
+			messageList.messages.size() == 50
+			footer.prevPage.hasClass("disabled")
 		when:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
+			footer.nextPage.click()
+			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			$("#message-list tr").size() == 2
-			$(".nextLink").hasClass("disabled")
+			messageList.messages.size() == 1
+			footer.nextPage.hasClass("disabled")
 	}
 
 	def "should paginate poll messages"() {
@@ -90,16 +94,16 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 			setupPollAndItsMessages()
 			def pollId = Poll.findByName("poll").id
 		when:
-			go "message/poll/${pollId}"
+			to PageMessagePoll, pollId
 		then:
-			$("#message-list .main-table tr").size() == 51
-			$(".prevLink").hasClass("disabled")
+			messageList.messages.size() == 50
+			footer.prevPage.hasClass("disabled")
 		when:
-			$(".nextLink").click()
-			waitFor {!$(".prevLink").hasClass("disabled")}
+			footer.nextPage.click()
+			waitFor {!footer.prevPage.hasClass("disabled")}
 		then:
-			$("#message-list .main-table tr").size() == 2
-			$(".nextLink").hasClass("disabled")
+			messageList.messages.size() == 1
+			footer.nextPage.hasClass("disabled")
 	}
 
 	private def setupInboxMessages() {
@@ -136,7 +140,7 @@ class MessagePaginationSpec  extends grails.plugin.geb.GebSpec  {
 	private def deleteMessage(Fmessage message) {
 		message.isDeleted = true
 		message.save(failOnError:true, flush:true)
-		Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class, objectId:message.id)
+		Trash.build(displayName:message.displayName, displayText:message.text, objectClass:message.class.name, objectId:message.id)
 	}
 
 	private def setupFolderAndItsMessages() {

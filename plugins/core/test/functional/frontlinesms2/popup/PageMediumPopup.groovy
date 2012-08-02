@@ -40,13 +40,13 @@ class QuickMessageComposeTab extends geb.Module {
 class QuickMessageRecipientsTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
-		
 	}
 }
 
 class QuickMessageConfirmTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
+		messagesToSendCount { $('#contacts-count').text() }
 		recipientName { $('td#recipient').text() }
 	}
 }

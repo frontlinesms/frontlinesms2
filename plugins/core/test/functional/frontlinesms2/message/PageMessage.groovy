@@ -68,6 +68,20 @@ class MessageList extends geb.Module {
 		messages { moduleList MessageListRow, $('tbody tr') }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('td.no-content') }
+		starFor { message ->
+			if (message instanceof Fmessage){	
+					return $("tr #star-${message.id} a")
+			}else if(message instanceof Number){
+				return $("tr #star-${message} a")
+			}
+		}
+		displayedNameFor { message->
+			if (message instanceof Fmessage){
+					return $(".displayName-${message.id}").text()
+			}else if(message instanceof Number){
+				return $(".displayName-${message.id}").text()
+			}
+		}
 	}
 }
 
@@ -79,6 +93,7 @@ class MessageListRow extends geb.Module {
 		isRead { $(':first-child').parent().hasClass('read') } //TODO: replace with a more sensible selector for base
 		source { $('td.message-sender-cell').text() }
 		text { $('td.message-text-cell').text() }
+		textLink { $('td.message-text-cell a')}
 		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
 		}
@@ -114,8 +129,9 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text() }
 		replyAll { $('a#btn_reply_all') }
+		retry { $("a", text: iContains("retry")) }
 		deleteAll {$('#btn_delete_all')}
-		messageCount {$("#checked-message-count")}
+		archiveAll { $('#btn_archive_all') }
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
