@@ -116,7 +116,7 @@ class SingleMessageDetails extends geb.Module {
 		unarchive { $('#unarchive-msg') }
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
-		delete {$('#delete-msg')}
+		delete(required:false) {$('#delete-msg')}
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")

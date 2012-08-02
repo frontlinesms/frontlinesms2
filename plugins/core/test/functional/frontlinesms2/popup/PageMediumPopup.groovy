@@ -227,11 +227,11 @@ class AnnouncementSummary extends geb.Module {
 
 class DeleteDialog extends MediumPopup {
 	static at = {
-		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("delete");
+		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("empty trash");
 	}
 	static content = {
+		title { $("#title").text() }
 		done { $('button#done') }
-
 	}
 }
 
