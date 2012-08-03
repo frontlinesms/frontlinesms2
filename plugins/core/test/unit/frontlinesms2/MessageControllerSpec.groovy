@@ -30,35 +30,39 @@ class MessageControllerSpec extends Specification {
 				new GroupMembership(group: thar, contact: new Contact(mobile: "22222"))]*.save()
 
 		Fmessage.metaClass.static.getAll = { List ids ->
-			Fmessage.findAll().findAll { it.id in ids } }
+			ids.collect { Fmessage.get(it) } }
 
 		mockMessageSendService = Mock()
 		controller.messageSendService = mockMessageSendService
+	}
+
+	def "should resend a single failed message"() {
+		setup:
+			[new Fmessage(id:1, inbound:false, dispatches:[new Dispatch()]),
+					new Fmessage(id:2, inbound:false, dispatches:[new Dispatch()]),
+					new Fmessage(id:3, inbound:false, dispatches:[new Dispatch()])]*.save(failOnError:true)*.id
+			params.messageId = 1
+			1 * mockMessageSendService.retry(_) >> { m ->
+				assert m*.id == [1]
+				return 1 }
+		when:
+			controller.retry()
+		then:
+			true
 	}
 
 	def "should resend multiple failed message"() {
 		setup:
 			[new Fmessage(id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
 				new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
-				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save()
+				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save(failOnError:true)
 			params['message-select'] = [1, 2]
+			2 * mockMessageSendService.retry(_) >> { m ->
+				return 1 }
 		when:
 			controller.retry()
 		then:
-			1 * mockMessageSendService.retry { it.id == 1L }
-			1 * mockMessageSendService.retry { it.id == 2L }
-	}
-
-	def "should resend a single failed message"() {
-		setup:
-			[new Fmessage(id:1L, inbound:false, dispatches:[new Dispatch()]),
-				new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch()]),
-				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch()])]*.save()
-			params.messageId = "1"
-		when:
-			controller.retry()
-		then:
-			1 * mockMessageSendService.retry { it.id == 1L }
+			true
 	}
 	
 	def 'emptyTrash should call trashService_emptyTrash'() {
@@ -74,22 +78,23 @@ class MessageControllerSpec extends Specification {
 		given:
 			params.controller = "message"
 			params.messageSection = "inbox"
-			params.messageId = "1"
+			params.messageId = Fmessage.build().id
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId=&flashMessage=default.archived.message"
+			controller.response.redirectUrl == "/message/inbox?ownerId=&starred=false&failed=&searchId=&flashMessage=default.archived"
 	}
 
 	def "archiving a message IN SEARCH should redirect to the calling action without a messageId"() {
 		given:
 			params.controller = "message"
 			params.messageSection = "result"
-			params.searchId = "1"
+			params.messageId = Fmessage.build().id
+			params.searchId = 1
 		when:
 			controller.archive()
 		then:
-			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived.message"
+			controller.response.redirectUrl == "/search/result?searchId=1&flashMessage=default.archived"
 	}
 	
 	def "archiving pending messages from the result screen should fail"(){
