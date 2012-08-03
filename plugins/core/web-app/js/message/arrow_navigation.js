@@ -37,7 +37,7 @@ function showPreviousRow() {
 				}
 			}
 		}
-	}else{ $("#main-list tr.message-preview:first").addClass("selected"); }
+	}else{ $("#main-list tbody tr:first").addClass("selected"); }
 }
 
 function showNextRow() {
@@ -57,7 +57,7 @@ function showNextRow() {
 				}
 			}
 		}
-	}else{ $("#main-list tr.message-preview:first").addClass("selected"); }
+	}else{ $("#main-list tbody tr:first").addClass("selected"); }
 }
 
 function loadRow(id, row) {
