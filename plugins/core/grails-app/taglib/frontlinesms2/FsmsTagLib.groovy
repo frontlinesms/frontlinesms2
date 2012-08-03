@@ -82,7 +82,21 @@ class FsmsTagLib {
 	}
 
 	def render = { att ->
-		out << g.render(att)
+		boolean rendered = false
+		([null] + grailsApplication.config.frontlinesms.plugins).each { plugin -> 
+			if(!rendered && templateExists(att.template, plugin)) {
+				att.plugin = plugin
+				out << g.render(att)
+				rendered = true
+			}
+		}
+	}
+
+	private def templateExists(name, plugin) {
+		// FIXME need to use `plugin` variable when checking for resource
+		def fullUri = grailsAttributes.getTemplateUri(name, request)
+		def resource = grailsAttributes.pagesTemplateEngine.getResourceForUri(fullUri)
+		return resource && resource.file && resource.exists()
 	}
 
 	def i18nBundle = {
