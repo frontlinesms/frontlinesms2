@@ -39,6 +39,7 @@ class ContentHeader extends geb.Module {
 	static content = {
 		title { $('h1').text().toLowerCase() }
 		buttons { $('a.btn, input[type="button"], button') }
+		export (required:false) { $('a#export') }
 	}
 }
 
@@ -131,7 +132,7 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text() }
 		replyAll { $('a#btn_reply_all') }
-		retry { $("a", text: iContains("retry")) }
+		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
 		archiveAll { $('#btn_archive_all') }
 		moveTo { msgowner -> 
