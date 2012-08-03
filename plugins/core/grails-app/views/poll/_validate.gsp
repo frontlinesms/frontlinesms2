@@ -84,7 +84,7 @@
 
 		jQuery.validator.addMethod("no-space", function(value, element) {
 			return (value.trim().indexOf(" ") === -1);
-		}, i18n("poll.alias.validation.error"));		
+		}, i18n("validation.nospaces.error"));
 	}
 
 	function initializeTabValidation(validator) {

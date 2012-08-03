@@ -18,32 +18,32 @@ public class UserDataBackupAction extends AbstractInstallAction {
 	private static final String dateFormat = "yyyy-MM-dd-HH-mm";
 	private static final long backupExpiryDuration = 7776000000L; // 90 days in miliseconds
 	private static final String backupDirNameFormat = ".frontlinesms2-backup.";
-	private File fsms2Home;
 
 	public boolean isRollbackSupported() {
 		return false;
 	}
 
 	public boolean install(InstallerContext context) {
-		fsms2Home = Futil.getResourceDirectory();
-		log(".fronlinesms2 folder " + (fsms2Home.exists() ? "found" : "not found"));
+		File resDir = Futil.getResourceDirectory();
+		log(resDir.getAbsolutePath() + " " + (resDir.exists()? "found": "not found"));
 		newBackup();
 		deleteOldBackups();
 		return true;
 	}
 
 	private void newBackup() {
-		if (fsms2Home.exists()) {
+		File resDir = Futil.getResourceDirectory();
+		if (resDir.exists()) {
 			Date now = new Date();
 			SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-			File thisBackupDir = new File(fsms2Home.getAbsolutePath() + "-backup." + formatter.format(now));
+			File thisBackupDir = new File(resDir.getAbsolutePath() + "-backup." + formatter.format(now));
 			log("Will backup to " + thisBackupDir.getAbsolutePath());
 			thisBackupDir.mkdir();
-			String [] files = fsms2Home.list();
+			String [] files = resDir.list();
 			for (int i = 0; i < files.length; i++) {
 				log("trying to copy " + files[i]);
-				copyFile(new File(fsms2Home + File.separator + files[i]), 
-					new File(thisBackupDir + File.separator + files[i]));
+				copyFile(new File(resDir, files[i]), 
+						new File(thisBackupDir, files[i]));
 			}
 			log("Successfully backed up to " + thisBackupDir.getAbsolutePath());
 		} else {
