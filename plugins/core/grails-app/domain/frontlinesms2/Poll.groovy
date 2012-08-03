@@ -140,7 +140,7 @@ class Poll extends Activity {
 		} else {
 			option = words[0][-1]
 		}
-		return responses.find { it!=this.unknown && it.aliases?.split(",")?.contains(option) }?: this.unknown
+		return responses.find { it!=this.unknown && it.aliases?.split(", ")?.contains(option) }?: this.unknown
 	}
 }
 

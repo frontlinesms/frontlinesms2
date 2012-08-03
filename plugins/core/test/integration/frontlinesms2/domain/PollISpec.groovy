@@ -2,6 +2,8 @@ package frontlinesms2.domain
 
 import frontlinesms2.*
 
+import spock.lang.*
+
 class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'Deleted messages do not show up as responses'() {
@@ -249,15 +251,16 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			savedPoll.responses[0].aliases.contains("YEAH").equals(true)
 	}
 
+	@Unroll
 	def "Aliases should be sorted into the correct PollResponse"() {
 		when:
 			def p = new Poll(name: 'This is a poll')
 			p.keyword = new Keyword(value: "FOOTBALL", activity: p)
-			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona', aliasA: 'A,manu,yeah',aliasB: 'B,barca,bfc')
+			p.editResponses(choiceA:'Manchester', choiceB:'Barcelona', aliasA:'A,manu,yeah', aliasB:'B,barca,bfc')
 			p.save(failOnError:true, flush:true)
 		then:
-			println "Key >> " + p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date: new Date()).save(), true).key
-			p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date: new Date()).save(), true).key == groupKey
+			// TODO change this message creation to .build()
+			p.getPollResponse(new Fmessage(src:'Bob', text:messageText, inbound:true, date:new Date()).save(), true).key == groupKey
 		where:
 			messageText 	| groupKey
 			"football manu"	| "A"
