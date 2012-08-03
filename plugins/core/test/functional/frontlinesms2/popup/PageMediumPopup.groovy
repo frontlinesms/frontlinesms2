@@ -27,6 +27,7 @@ class QuickMessageDialog extends MediumPopup {
 		compose { module QuickMessageComposeTab }
 		recipients { module QuickMessageRecipientsTab }
 		confirm { module QuickMessageConfirmTab }
+		errorPanel { $(".error-panel") }
 	}
 }
 
@@ -34,12 +35,21 @@ class QuickMessageComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		textArea { $('textarea#messageText') }
+		wordCount { $("span#send-message-stats").text() }
+		magicWand { $("#magicwand-selectmessageText") }
 	}
 }
 
 class QuickMessageRecipientsTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
+		addField { $('input#address') }
+		addButton { $('a.btn.add-address') }
+		manual { $('li.manual.contact') }
+		count { $('#recipient-count').text().toInteger() }
+		manualContacts { $("li.manual").find("input", name:"addresses") }
+		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
+		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
 	}
 }
 
