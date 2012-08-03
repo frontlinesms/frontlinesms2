@@ -57,7 +57,7 @@ class MessageBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'Alice', text:'hi Alice')
 		Fmessage.build(src:'+254778899', text:'test')
 		Fmessage.build(src:'Mary', text:'hi Mary')
-		Fmessage.build(src:'+254445566', text:'test')
+		Fmessage.build(src:'+254445566', text:'test2')
 		
 		def chickenMessage = Fmessage.build(src:'Barnabus', text:'i like chicken')
 		def liverMessage = Fmessage.build(src:'Minime', text:'i like liver')
