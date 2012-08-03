@@ -3,7 +3,6 @@ package frontlinesms2.message
 import frontlinesms2.*
 import frontlinesms2.poll.*
 import frontlinesms2.folder.*
-import frontlinesms2.poll.PageMessagePollFootballTeamsBob
 
 class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 
