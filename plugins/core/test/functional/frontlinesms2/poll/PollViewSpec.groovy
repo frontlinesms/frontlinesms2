@@ -19,7 +19,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			bodyMenu.activityList*.text() == ['Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll']
+			bodyMenu.activityList*.text() == ['Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll', 'Create new activity']
 	}
 
 	def 'message from bob is second in the list, and links to the show page'() {
@@ -43,8 +43,8 @@ class PollViewSpec extends PollBaseSpec {
 			to PageMessagePoll, 'Football Teams', message.id
 		then:
 			messageList.messages[0].source == message.src
-			messageList.messages[0].date == message.date
-			messageList.messages[0].text == message.text
+			messageList.messages[0].dateCell ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messages[0].text == 'manchester ("go manchester")'
 	}
 
 	def 'selected message is highlighted'() {

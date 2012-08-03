@@ -39,6 +39,7 @@ class ContentHeader extends geb.Module {
 	static content = {
 		title { $('h1').text().toLowerCase() }
 		buttons { $('a.btn, input[type="button"], button') }
+		export (required:false) { $('a#export') }
 	}
 }
 
@@ -95,6 +96,7 @@ class MessageListRow extends geb.Module {
 		source { $('td.message-sender-cell').text() }
 		text { $('td.message-text-cell').text() }
 		textLink { $('td.message-text-cell a')}
+		dateCell {$('td.message-date-cell').text()}
 		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
 		}
@@ -130,7 +132,7 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		checkedMessageCount { $('p#checked-message-count').text() }
 		replyAll { $('a#btn_reply_all') }
-		retry { $("a", text: iContains("retry")) }
+		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
 		archiveAll(required:false) { $('#btn_archive_all') }
 		moveTo { msgowner -> 

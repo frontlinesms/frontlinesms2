@@ -24,10 +24,9 @@ class PollListSpec extends PollBaseSpec {
 		when:
 			to PageMessagePoll, 'Football Teams', Fmessage.findBySrc('Bob').id
 		then:
-			//rowContents[4] ==~ /[A-Za-z]{3,9} [0-9]{2}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 			messageList.messages[1].source == 'Bob'
 			messageList.messages[1].text == 'manchester ("I like manchester")'
-			messageList.messages[1].date ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
+			messageList.messages[1].dateCell ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def "poll details are shown in header and graph is displayed"() {
