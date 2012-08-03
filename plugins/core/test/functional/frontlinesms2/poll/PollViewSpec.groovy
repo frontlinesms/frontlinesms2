@@ -1,6 +1,9 @@
 package frontlinesms2.poll
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
+import frontlinesms2.message.PageMessageInbox
+import frontlinesms2.page.PageMessageActivity
 import java.util.regex.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -14,21 +17,21 @@ class PollViewSpec extends PollBaseSpec {
 		given:
 			createTestPolls()
 		when:
-			go 'message'
+			to PageMessageInbox
 		then:
-			$('#activities-submenu li')*.text().containsAll('Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll')
+			bodyMenu.activityList*.text() == ['Football Teams poll', 'Shampoo Brands poll', 'Rugby Brands poll']
 	}
-	
-	def 'message from bob is first in the list, and links to the show page'() {
+
+	def 'message from bob is second in the list, and links to the show page'() {
 		given:
 			createTestPolls()
 			createTestMessages()
 			def message = Fmessage.findBySrc('Bob')
 			def poll = Poll.findByName('Football Teams')
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePoll, 'Football Teams', message.id
 		then:
-			$('#message-list tr a', text: "Bob").displayed
+			messageList.messages[1].source == 'Bob'
 	}
 
 	def 'selected message and its details are displayed'() {
@@ -37,11 +40,11 @@ class PollViewSpec extends PollBaseSpec {
 			createTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
+			to PageMessagePoll, 'Football Teams', message.id
 		then:
-			$('#message-detail #message-detail-sender').text() == message.src
-			$('#message-detail #message-detail-date').text() == DATE_FORMAT.format(message.date)
-			$('#message-detail #message-detail-content').text() == message.text
+			messageList.messages[0].source == message.src
+			messageList.messages[0].date == message.date
+			messageList.messages[0].text == message.text
 	}
 
 	def 'selected message is highlighted'() {
@@ -52,12 +55,12 @@ class PollViewSpec extends PollBaseSpec {
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Alice").id}"
+			to PageMessagePoll, 'Football Teams', aliceMessage.id
 		then:
-			$('#message-list .selected a')[3].@href == "/message/activity/$poll.id/show/$aliceMessage.id"
+			messageList.selectedMessages.text == ['manchester ("go manchester")']
 		when:
-			go "message/activity/${Poll.findByName('Football Teams').id}/show/${Fmessage.findBySrc("Bob").id}"
+			to PageMessagePoll, 'Football Teams', bobMessage.id
 		then:
-			$('#message-list .selected a', text: "Bob").displayed
+			messageList.selectedMessages.text == ['manchester ("I like manchester")']
 	}
 }

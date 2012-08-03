@@ -39,7 +39,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			to PageMessageArchive, Fmessage.findBySrc('Max')
 			messageList.selectAll.click()
 		then:
-			!$("#btn_archive_all").displayed
+			!archiveAll.displayed
 	}
 
 	def '"Delete All" button appears when multiple messages are selected in an archived activity'() {

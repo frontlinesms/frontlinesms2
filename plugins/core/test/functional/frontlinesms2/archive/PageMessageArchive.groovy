@@ -18,6 +18,6 @@ class PageMessageArchive extends frontlinesms2.message.PageMessage {
 	}
 
 	static content = {
-		archiveAll {$('a', text:'Archive all')}
+		archiveAll {$("#btn_archive_all")}
 	}
 }
