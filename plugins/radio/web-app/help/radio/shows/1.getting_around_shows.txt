@@ -1,0 +1,56 @@
+# Getting Around Shows
+
+You can access shows from the messages tab. When you click on a show for the first time, you will notice that it has a slightly different layout in comparison to the [message inbox][1]. This is because a show performs a specialised function to track the flow of messages and activities while a show is on air. The unique interface for shows has been designed so that information can be accessed and managed easier.
+
+![show overview][1]
+
+### Show Header
+
+This large header (1) contains the "Start Show" and "Stop Show" buttons.
+
+__Start Show:__ Clicking on "Start Show" will cause the "On Air" icon to flash. While this is flashing all incoming messages will be stored in the Shows folder.
+
+__Stop Show:__ Click on "Stop Show" will cause the "on Air" icon to stop flashing. FrontlineSMS will return to normal and all incoming messages will go to the inbox.
+
+The [Quick Message][2] button and buttons to [Archive][3] show, [Export][4] show, [Rename][5] show and [Delete][6] show can be accessed from this header as well. 
+
+Clicking on '[Show WordCloud][7]' (2) allows you to see a visual representation of the message content within the show. The words from all texts contained within the show will be displayed in a cloud to allow you to analyse the themes of incoming messages. For more information click [here][7]:
+
+![WordCloud][8]
+
+### Message List
+
+The message list (3) functions like any other message list in FrontlineSMS. You are able to star, sort and multiple select messages.
+
+When viewing a Show, the message list will display some additional information:
+
+Divider bars (4) will appear once a show has been run over more than one day, to help separate messages received on the different days that the show was run.
+
+### Message Details
+
+The message detail area (5) contains the full text of the selected message and sender details, or information about how many messages have been selected. 
+
+You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
+
+### Related Actions
+[Getting Around the Inbox][10]  
+[Creating a Show][11]    
+[Creating an Announcement][12]  
+[Creating an Auto Reply][13]  
+[Creating a Poll][14]
+ 
+[1]: .../images/help/show_overview
+[2]: core/messages/3.quick_message
+[3]: radio/shows/7.archive_show
+[4]: radio/shows/6.export_show
+[5]: radio/shows/4.rename_show
+[6]: radio/shows/5.delete_show
+[7]: radio/shows/9.wordcloud
+[8]: .../images/help/wordcloud.png
+[9]: core/messages/8.mrfd
+[10]: core/messages/1.getting_around_the_messages_tab
+[11]: radio/shows/2.creating_a_show
+[12]: core/activities/4.creating_an_announcement
+[13]: core/activities/5.creating_an_autoreply
+[14]: core/activities/3.creating_a_poll
+

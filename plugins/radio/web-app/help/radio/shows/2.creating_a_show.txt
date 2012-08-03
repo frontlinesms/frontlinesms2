@@ -1,0 +1,26 @@
+# Creating a Show
+
+Shows are a unique feature of FrontlineSMS:Radio. When you are on air, you can ensure that any messages received during that time are stored in that particular show. This way you can manage all the messages relevant to your show. Shows streamline the SMS process during a Radio show allowing the presenter or operator to worry less about the technicalities and more about using the content in incoming messages. To this end, a new WordCloud feature has been introduced that shows the most prominent words from messages within a show as a cloud, allowing you to view the most common themes and issues at a glance. This help page will explain the steps required for creating a new Show.
+
+![Creating A Show][1]
+
+### [Creating a Show][2]
+
+1.  Navigate to the messages tab if you are not already viewing it.
+2.  On the navigation bar to the left, under the 'Shows" heading, click "Create New Show" (1).
+3.  A dialog box will appear asking you to enter a name for the new Show. Click "Create" when you are done.
+![Show Dialog][3]
+
+Your folder will be created and will be displayed underneath the "Show" sub heading (2).
+
+### Related Actions
+[Adding Activities to Shows][4]  
+[Creating an Activity][5]  
+[Moving Messages into a Folder][6]  
+
+[1]: .../images/help/creating_show.png
+[2]: radio/shows/2.creating_a_show
+[3]: ...images/help/creating_show_dialog.png
+[4]: radio/shows/3.adding_activities_to_shows
+[5]: core/activities/2.creating_an_activity
+[6]: core/messages/8.mrfd
