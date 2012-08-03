@@ -1,12 +1,14 @@
 package frontlinesms2.archive
-
 import frontlinesms2.*
-import frontlinesms2.archive.PageArchive
 
-class PageMessageArchive extends frontlinesms2.message.PageMessage {
-	static url = 'archive'
+class PageArchiveSent extends PageArchive {
+	static def url = "archive/sent"
 
 	String convertToPath(Object[] args) {
+		if (!args)
+			return ""
+		if (args.length == 0)
+			return ""
 		def restOfPath = ""
 		if (args[0] instanceof Fmessage)
 			restOfPath += "/inbox/show/"+(args[0] as Fmessage).id
@@ -16,8 +18,8 @@ class PageMessageArchive extends frontlinesms2.message.PageMessage {
 			restOfPath += "/activity/"+Activity.findByName(args[0])?.id+"?messageSection=activity&viewingMessages=true"
 		return restOfPath
 	}
-
-	static content = {
-		archiveAll {$("#btn_archive_all")}
+	
+	static at = {
+		title.endsWith('sent')
 	}
 }

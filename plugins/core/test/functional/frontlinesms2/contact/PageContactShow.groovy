@@ -14,4 +14,8 @@ class PageContactShow extends frontlinesms2.page.PageContact {
 		if (args[0] instanceof Group && args.length == 1)
 			return "group/show/${(args[0] as Group).id}" 
 	}
+
+	static at = {
+		title.endsWith('ontacts')
+	}
 }

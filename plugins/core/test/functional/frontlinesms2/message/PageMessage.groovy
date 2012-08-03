@@ -97,6 +97,7 @@ class MessageListRow extends geb.Module {
 		source { $('td.message-sender-cell').text() }
 		text { $('td.message-text-cell').text() }
 		textLink { $('td.message-text-cell a')}
+		dateCell {$('td.message-date-cell').text()}
 		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
 		}
@@ -109,12 +110,13 @@ class SingleMessageDetails extends geb.Module {
 	static content = {
 		noneSelected { $('#message-detail-content').text().toLowerCase() == "no message selected" }
 		sender { $('#message-detail-sender').text() }
+		senderLink { $('#message-detail-sender a') }
 		text { $('#message-detail-content').text() }
 		date { 
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 				.parse($('#message-detail-date').text())
 		}
-		archive { $('#archive-msg') }
+		archive(required:false) { $('#archive-msg') }
 		unarchive { $('#unarchive-msg') }
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
@@ -134,7 +136,7 @@ class MultipleMessageDetails extends geb.Module {
 		replyAll { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
-		archiveAll { $('#btn_archive_all') }
+		archiveAll(required:false) { $('#btn_archive_all') }
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")

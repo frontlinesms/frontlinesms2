@@ -6,13 +6,8 @@ import frontlinesms2.message.PageMessagePending
 import frontlinesms2.message.PageMessageTrash
 import frontlinesms2.popup.*
 import java.util.regex.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-
 
 class PollCedSpec extends PollBaseSpec {
-	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 	
 	def "entering correct url will load poll"() {
 		// also a test of PageMessageActivity.convertToPath
@@ -384,7 +379,7 @@ class PollCedSpec extends PollBaseSpec {
 		then:
 			messageList.sources.join() == "${poll.name}"
 			messageList.messages.text.join() == "${poll.getLiveMessageCount()} message(s)"
-			messageList.messages.date.join() == DATE_FORMAT.format(Trash.findByObjectId(poll.id).dateCreated)
+			messageList.messages.dateCell.join() ==~ /[0-9]{2} [A-Za-z]{3,9}, [0-9]{4} [0-9]{2}:[0-9]{2} [A-Z]{2}/
 	}
 
 	def "clicking on empty trash permanently deletes a poll"() {
@@ -506,8 +501,8 @@ class PollCedSpec extends PollBaseSpec {
 		poll.save(failOnError:true, flush:true)
 		to PageMessagePoll, poll
 		moreActions.value("delete")
-		waitFor { at DeleteDialog }
-		done.click()
+		waitFor { at DeleteActivity }
+		ok.click()
 		poll
 	}
 
