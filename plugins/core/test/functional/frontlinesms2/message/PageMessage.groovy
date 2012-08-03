@@ -95,6 +95,7 @@ class MessageListRow extends geb.Module {
 		source { $('td.message-sender-cell').text() }
 		text { $('td.message-text-cell').text() }
 		textLink { $('td.message-text-cell a')}
+		dateCell {$('td.message-date-cell').text()}
 		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US).parse($('td.message-date-cell').text())
 		}
