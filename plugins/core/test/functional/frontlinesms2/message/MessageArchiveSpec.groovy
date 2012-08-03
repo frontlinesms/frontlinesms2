@@ -1,7 +1,8 @@
 package frontlinesms2.message
 
 import frontlinesms2.*
-import frontlinesms2.archive.PageArchive
+import frontlinesms2.archive.*
+import frontlinesms2.poll.*
 
 class MessageArchiveSpec extends MessageBaseSpec {
 	def setup() {
@@ -10,21 +11,21 @@ class MessageArchiveSpec extends MessageBaseSpec {
 
 	def 'archived messages do not show up in inbox view'() {
 		when:
-			to PageArchive
+			to PageArchiveInbox
 		then:
-			waitFor { $("#no-messages").text() == "No messages here!"}
+			waitFor() { messageList.noContent.text() == "No messages here!" }
 		when:
 			to PageMessageInbox
-			$("a", text:"hi Bob").click()
-			waitFor { $("#message-detail-content p").text() == "hi Bob" }
-			archiveBtn.click()
-			to PageArchive
+			messageList.messages[0].checkbox.click()
+			waitFor { singleMessageDetails.text == "test2" }
+			singleMessageDetails.archive.click()
+			to PageArchiveInbox
 		then:
-	        $("a", text:"hi Bob").displayed
+			messageList.messages[0].text == "test2"
 		when:
-	        $("a", text:"hi Bob").click()
+			to PageMessageInbox
 		then:
-			!$("#message-archive").displayed()
+			!messageList.messages.text.contains("test2")
 	}
 
 	def 'archived messages do not show up in sent view'() {
@@ -32,37 +33,32 @@ class MessageArchiveSpec extends MessageBaseSpec {
 			def d = new Dispatch(dst:"34567890", dateSent: new Date(), status: DispatchStatus.SENT)
 			new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi Mary').addToDispatches(d).save(flush: true, failOnError:true)
 		when:
-		    to PageArchive
-			$("#sent").click()
+		    to PageArchiveSent
 		then:
-			waitFor { $("#no-messages").text() == "No messages here!"}
+			waitFor() { messageList.noContent.text() == "No messages here!" }
 		when:
 			to PageMessageSent
-			$("a", text:"hi Mary").click()
-			waitFor { $("#message-detail-content p").text() == "hi Mary" }
-			archiveBtn.click()
-			to PageArchive
-			$("#sent").click()
+			messageList.messages[0].checkbox.click()
+			waitFor { singleMessageDetails.text == "hi Mary" }
+			singleMessageDetails.archive.click()
+			to PageArchiveSent
 		then:
-	        waitFor {$("a", text:"hi Mary").displayed}
+	        waitFor { messageList.messages[0].text == "hi Mary" }
 		when:
-			$("a", text:"hi Mary").click()
+			to PageMessageSent
 		then:
-			!$("#message-archive").displayed()
+			waitFor() { messageList.noContent.text() == "No messages here!" }
 	}
 
 	 def 'should not be able to archive activity messages'() {
 		when:
-			go "message/poll/${Poll.findByName('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
+			to PageMessagePoll, Poll.findByName('Miauow Mix').id, Fmessage.findBySrc('Barnabus')
 		then:
-			!$("#message-details a", text:"Archive").displayed
-		when:
-			go "message/poll/${Poll.findByName('Miauow Mix').id}/show/${Fmessage.findBySrc('Barnabus').id}"
-			$("#message")[0].click()
-			$("#message")[1].click()
-			sleep 1000
+			waitFor { singleMessageDetails.displayed }
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		 then:
-			!$('#multiple-messages a', text: "Archive All").displayed
+			waitFor { !multipleMessageDetails.archiveAll.displayed }
 	 }
 
 }

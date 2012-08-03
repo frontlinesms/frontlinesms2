@@ -112,7 +112,7 @@ class SingleMessageDetails extends geb.Module {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 				.parse($('#message-detail-date').text())
 		}
-		archive { $('#archive-msg') }
+		archive(required:false) { $('#archive-msg') }
 		unarchive { $('#unarchive-msg') }
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
@@ -132,7 +132,7 @@ class MultipleMessageDetails extends geb.Module {
 		replyAll { $('a#btn_reply_all') }
 		retry { $("a", text: iContains("retry")) }
 		deleteAll {$('#btn_delete_all')}
-		archiveAll { $('#btn_archive_all') }
+		archiveAll(required:false) { $('#btn_archive_all') }
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
