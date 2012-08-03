@@ -1,0 +1,15 @@
+# Adding Activities to Shows
+
+You have the option to add activities to shows, to allow you to be able to manage your activities more efficiently while you are airing a show. Once you have added an activity to a show it will be displayed indented, underneath the name of the show it was added to. This page will explain how to add an activity to a show.
+
+### Adding an Activity to a Show
+
+![Adding Activity][1]
+
+In order to add an activity to a show follow these steps:
+
+1.  Navigate to the activity you wish to add.
+2.  When viewing this activity, click on "More Actions..." and then click on "Add to Radio Show".
+3.  The activity will be added to the show, and moved underneath the parent Radio Show on the messages tab.
+
+To add more activities to shows, repeat the above steps for each activity.

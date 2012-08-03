@@ -1,0 +1,28 @@
+# Deleting a Show
+
+You can delete Shows in the same way you can delete messages.
+
+![Deleting Shows][1]
+
+### [Deleting a Show][2]
+
+1.  When you are viewing the [Show][2] you want to delete, find the "More Actions..." drop down menu.  
+2.  From here choose "Delete".
+3.  A window will appear asking you if you want to confirm the deletion.
+4.  Click "Delete".
+
+The aShow _and all activities and messages within it_ will be moved to the [trash][3].
+
+###  Related Actions
+[Exporting a Show][4]  
+[Renaming a Show][5]
+[Archiving a Show][6]
+[Creating a Show][7]
+
+[1]: .../images/help/deleting_shows.png
+[2]: radio/shows/5.delete_show
+[3]: core/messages/6.trash
+[4]: radio/shows/6.export_show
+[5]: radio/shows/4.rename_show
+[6]: radio/shows/7.export_show
+[7]: radio/shows/2.creating_a_show
