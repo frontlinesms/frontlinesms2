@@ -20,7 +20,7 @@ grails.project.dependency.resolution = {
 		// uncomment to disable ehcache
 		// excludes 'ehcache'
 	}
-	log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+	log "debug" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
 	checksums true // Whether to verify checksums on resolve
 
 	repositories {
@@ -29,12 +29,14 @@ grails.project.dependency.resolution = {
 		grailsHome()
 		grailsPlugins()
 
+		mavenRepo "http://192.168.0.200:8081/artifactory/simple/super-repo/"
+		grailsRepo "http://192.168.0.200:8081/artifactory/simple/super-repo/"
+
 		mavenLocal()
-
-		grailsCentral()
-
 		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 		mavenCentral()
+
+		grailsCentral()
 
 		// uncomment these to enable remote dependency resolution from public Maven repositories
 		//mavenCentral()

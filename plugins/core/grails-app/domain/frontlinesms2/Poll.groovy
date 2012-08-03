@@ -80,8 +80,8 @@ class Poll extends Activity {
 	
 	def editResponses(attrs) {
 		if(attrs.pollType == 'yesNo' && !this.responses) {
-			this.addToResponses(value:'Yes', key:'A', aliases:addAlias(attrs, 'A'))
-			this.addToResponses(value:'No', key:'B', aliases:addAlias(attrs, 'B'))
+			this.addToResponses(value:'Yes', key:'A', aliases:extractAliases(attrs, 'A'))
+			this.addToResponses(value:'No', key:'B', aliases:extractAliases(attrs, 'B'))
 			this.yesNo = true
 		} else {
 			def choices = attrs.findAll { it ==~ /choice[A-E]=.*/ }
@@ -90,9 +90,9 @@ class Poll extends Activity {
 				def found = responses.find { it.key == k }
 				if(found) {
 					found.value = v
-					found.aliases = addAlias(attrs, k)
+					found.aliases = extractAliases(attrs, k)
 					println "######### Saved ######## ${found.aliases}"
-				} else if(v?.trim()) this.addToResponses(value:v, key:k , aliases:addAlias(attrs, k))
+				} else if(v?.trim()) this.addToResponses(value:v, key:k , aliases:extractAliases(attrs, k))
 			}
 		}
 		if(!this.unknown) {
@@ -100,15 +100,9 @@ class Poll extends Activity {
 		}
 	}
 	
-	def addAlias(attrs, String k){
-		def rawAliases = attrs["alias"+k]?.replace(" ", "")?.toUpperCase().split(",")
-		def aliases = ""
-		rawAliases.each{
-			if(it.length() != 0){
-				aliases += it.trim() + ", "
-			}
-		}
-		return aliases
+	def extractAliases(attrs, String k) {
+		def raw = attrs["alias$k"]
+		if(raw) raw.toUpperCase().replaceAll(/\s/, "").split(",").findAll { it }.join(", ")
 	}
 
 	def deleteResponse(PollResponse response) {
@@ -146,8 +140,7 @@ class Poll extends Activity {
 		} else {
 			option = words[0][-1]
 		}
-		println "Option choosen >> ${option}"
-		return responses.find { it!=this.unknown?it.aliases?.split(",").contains(option):false }?: this.unknown
+		return responses.find { it!=this.unknown && it.aliases?.split(",")?.contains(option) }?: this.unknown
 	}
 }
 

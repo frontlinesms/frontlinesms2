@@ -2,19 +2,19 @@ package frontlinesms2.camel.intellisms
 
 import spock.lang.*
 import frontlinesms2.*
+import frontlinesms2.camel.*
+
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 import grails.buildtestdata.mixin.Build
 
 @Mock([IntelliSmsFconnection, Dispatch])
 @Build(IntelliSmsFconnection)
-class IntelliSmsPreProcessorSpec extends Specification {
+class IntelliSmsPreProcessorSpec extends CamelUnitSpecification {
 	IntelliSmsPreProcessor p
 	
 	def setup() {
 		def c = IntelliSmsFconnection.build(username:'bob', password:'secret')
-		Exchange.metaClass.getFconnectionId = { c.id }
-		
 		p = new IntelliSmsPreProcessor()
 	}
 	
@@ -63,32 +63,6 @@ class IntelliSmsPreProcessorSpec extends Specification {
 			x.out.headers.'intellisms.username' == 'bob'
 			x.out.headers.'intellisms.password' == 'secret'
 		
-	}
-	
-	private def mockDispatchMessage(String messageText) {
-		def m = Mock(Message)
-		m.body >> [
-			id:'45678',
-			message:[
-				text:messageText,
-				toString:{"mock Fmessage"}
-			],
-			text:messageText,
-			dst:'+1234567890',
-			toString:{"mock body (Dispatch)"}
-		]
-		return m
-	}
-	
-	private Exchange mockExchange(messageText) {
-		def inMessage = mockDispatchMessage(messageText)
-		def x = Mock(Exchange)
-		x.in >> inMessage
-		def out = Mock(Message)
-		out.headers >> [:]
-		x.out >> out
-		println "mockExchange() : x.out=$x.out"
-		return x
 	}
 }
 

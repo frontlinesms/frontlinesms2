@@ -2,19 +2,17 @@ package frontlinesms2.camel.clickatell
 
 import spock.lang.*
 import frontlinesms2.*
-import org.apache.camel.Exchange
-import org.apache.camel.Message
+import frontlinesms2.camel.*
+
 import grails.buildtestdata.mixin.Build
 
 @Mock(ClickatellFconnection)
 @Build(ClickatellFconnection)
-class ClickatellPreProcessorSpec extends Specification {
+class ClickatellPreProcessorSpec extends CamelUnitSpecification {
 	ClickatellPreProcessor p
 	
 	def setup() {
 		def c = ClickatellFconnection.build(apiId:'11111', username:'bob', password:'secret')
-		Exchange.metaClass.getFconnectionId = { c.id }
-		
 		p = new ClickatellPreProcessor()
 	}
 	
@@ -64,31 +62,5 @@ class ClickatellPreProcessorSpec extends Specification {
 			x.out.headers.'clickatell.username' == 'bob'
 			x.out.headers.'clickatell.password' == 'secret'
 		
-	}
-	
-	private def mockDispatchMessage(String messageText) {
-		def m = Mock(Message)
-		m.body >> [
-			id:'45678',
-			message:[
-				text:messageText,
-				toString:{"mock Fmessage"}
-			],
-			text:messageText,
-			dst:'+1234567890',
-			toString:{"mock body (Dispatch)"}
-		]
-		return m
-	}
-	
-	private Exchange mockExchange(messageText) {
-		def inMessage = mockDispatchMessage(messageText)
-		def x = Mock(Exchange)
-		x.in >> inMessage
-		def out = Mock(Message)
-		out.headers >> [:]
-		x.out >> out
-		println "mockExchange() : x.out=$x.out"
-		return x
 	}
 }

@@ -117,17 +117,18 @@ class PollSpec extends Specification {
 			!p.messages
 	}
 
-	def 'ill-formated submitted aliases should be formated neatly'(){
+	@Unroll
+	def 'ill-formated submitted aliases should be formated neatly'() {
 		given:
 			def p =  new Poll()
 		expect:
-			p.addAlias(attrs, 'B') == validAliases
+			p.extractAliases(attrs, 'B') == validAliases
 		where:
-			attrs							| validAliases
-			[aliasB: ",,,,"] 				| ""
-			[aliasB: "   "] 				| ""
-			[aliasB: "a,,,b"] 				| "A, B, "
-			[aliasB: ",,,,a  ,,,,b,,,   "] 	| "A, B, "
+			attrs                          | validAliases
+			[aliasB: ",,,,"]               | ""
+			[aliasB: "   "]                | ""
+			[aliasB: "a,,,b"]              | "A, B"
+			[aliasB: ",,,,a  ,,,,b,,,   "] | "A, B"
 	}
 
 	private def createPoll(int validResponseCount) {
@@ -136,7 +137,7 @@ class PollSpec extends Specification {
 		p.addToResponses(responses.unknown)
 		for(i in 0..<validResponseCount) {
 			def key = ('A'..'C')[i]
-			def r = new PollResponse(key:key, value:"mock-response-$i")
+			def r = new PollResponse(key:key, value:"mock-response-$i", aliases:key)
 			responses[key] = r
 			p.addToResponses(r)
 		}

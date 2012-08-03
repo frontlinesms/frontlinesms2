@@ -30,3 +30,4 @@ class ConfigSpec extends Specification {
 			plugin == "radio"
 	}
 }
+
