@@ -5,10 +5,6 @@
 		<g:textField id="address" name="address" onkeyup="validateAddressEntry();" style="display:table-cell; margin-right:5px; width:150px;"/>
 		<g:link url="#" class="btn add-address" onclick="addAddressHandler();" ><g:message code="quickmessage.phonenumber.add"/></g:link>
 	</div>
-	<div id="search">
-		<label id="search-label" class="bold" for="address" style="display:table-cell;"><g:message code="default.button.search.label"/> </label>
-		<g:textField id="searchbox" name="address" onkeyup="searchForContacts();" style="display:table-cell; width:150px;"/>
-	</div>
 	<div id="recipients-list">
 		<ul id="groups">
 			<g:each in="${groupList}" var="entry" status='i'>
@@ -41,6 +37,9 @@
 				</g:if>
 			</g:each>
 		</ul>
+	</div>
+	<div id="search">
+		<g:textField id="searchbox" class='search' name="address" onkeyup="searchForContacts();" style="display:table-cell; width:150px; margin-top:5px;"/>
 	</div>
 	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients"/></div>
 </div>
