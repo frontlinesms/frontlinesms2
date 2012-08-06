@@ -3,6 +3,7 @@ package frontlinesms2.connection
 import spock.lang.*
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
 import frontlinesms2.dev.MockModemUtils
 
 import serial.mock.MockSerial
@@ -89,7 +90,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.selectedConnection.size() == 1
 	}
 
-	def 'creating a new fconnection causes a refresh of the connections list'(){
+	def 'creating a new fconnection adds the connection to the connections list'(){
 		given:
 			createTestEmailConnection()
 		when:
@@ -98,18 +99,19 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor('very slow') { at ConnectionDialog }
 		when:
-			nextPageButton.click()
+			next.click()
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "COM2"
 			connectionForm.smslibbaud = "9600"
-			nextPageButton.click()
+			next.click()
 		then:
 			confirmName.text() == "name"
 			confirmPort.text() == "COM2"
 			confirmType.text() == "Phone/Modem"
 		when:
-			doneButton.click()
+			submit.click()
 		then:
+			at ConnectionPage
 			waitFor { connectionList.selectedConnection.text().contains('name') }
 			connectionList.connection.size() == 2
 	}
@@ -119,22 +121,22 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			to ConnectionPage
 			btnNewConnection.click()
 			waitFor { at ConnectionDialog }
-			nextPageButton.click()
+			next.click()
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "port"
 			connectionForm.smslibbaud = "wrongBaud"
-			nextPageButton.click()
+			next.click()
 		when:
-			doneButton.click()
+			submit.click()
 		then:
 			waitFor{ $('.error-panel').displayed }
-			$('.error-panel').text() == 'baud must be a valid number'
+			error == 'baud must be a valid number'
 			at ConnectionDialog
 			confirmName.text() == "name"
 			confirmPort.text() == "port"
 			confirmType.text() == "Phone/Modem"
 	}
-	
+
 	def 'can setup a new IntelliSMS account'() {
 		when:
 			to ConnectionPage
@@ -142,21 +144,22 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { at ConnectionDialog }
 		when:
-			$("#connectionType").value("intellisms").jquery.trigger("click")
+			connectionType.value("intellisms").jquery.trigger("click")
 
-			nextPageButton.click()
+			next.click()
 			connectionForm.intellismssend = true
 			connectionForm.intellismsname = "New IntelliSMS Connection"
 			connectionForm.intellismsusername = "test"
 			connectionForm.intellismspassword = "1234"
-			nextPageButton.click()
+			next.click()
 		then:
 			confirmIntelliSmsConnectionName.text() == "New IntelliSMS Connection"
 			confirmIntelliSmsUserName.text() == "test"
 			confirmIntelliSmsType.text() == "IntelliSms Account"
 		when:
-			doneButton.click()
+			submit.click()
 		then:
+			at ConnectionPage
 			waitFor { connectionList.selectedConnection.text().contains('New IntelliSMS Connection') }
 	}
 	

@@ -245,4 +245,20 @@ class DeleteDialog extends MediumPopup {
 	}
 }
 
+class ConnectionDialog extends MediumPopup {
+	static at = {
+		$("#ui-dialog-title-modalBox").text()?.toLowerCase().contains('connection')
+	}
+
+	static content = {
+		connectionType { $("#connectionType") }
+		connectionForm { $('#connectionForm')}
+		confirmName { $("#confirm-name")}
+		confirmType { $("#confirm-type")}
+		confirmPort { $("#confirm-port")}
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
+	}
+}
 
