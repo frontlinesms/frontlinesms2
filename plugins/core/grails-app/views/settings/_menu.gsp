@@ -1,15 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<div id="body-menu">
-	<ul>
-		<li class="${params.action=='general' ? 'selected' : ''}">
-			<g:link url="${[controller:'settings', action:'general']}"><g:message code="settings.general"/></g:link>
-		</li>
-		<li class="${params.controller=='connection' ? 'selected' : ''}">
-			<g:link url="${[controller:'connection', action:'list']}"><g:message code="settings.connections"/></g:link>
-		</li>
-		<li class="${params.action=='logs' ? 'selected' : ''}">
-			<g:link url="${[controller:'settings', action:'logs']}"><g:message code="settings.logs"/></g:link>
-		</li>
-	</ul>
-</div>
-
+<fsms:menu>
+	<fsms:menuitem selected="${params.action=='general'}" controller="settings" action="general" code="settings.general" />
+	<fsms:menuitem selected="${params.controller=='connection'}" controller="connection" action="list" code="settings.connections" />
+	<fsms:menuitem selected="${params.action=='logs'}" controller="settings" action="logs" code="settings.logs" />
+</fsms:menu>
