@@ -7,9 +7,7 @@ class RadioTagLib {
 
 	def selectShow = { att ->
 		out << "<div id='select-radio-show' class='input'>"
-println "att.hideLabel?.toBoolean() = ${att.hideLabel?.toBoolean()}"
 		if(!(att.hideLabel?.toBoolean())) {
-			println "att.hideLabel = $att.hideLabel (${att.hideLabel.getClass()})"
 			out << "<label>Assign Activity to Radio Show</label>"
 		}
 		if(att.activityInstance) {
