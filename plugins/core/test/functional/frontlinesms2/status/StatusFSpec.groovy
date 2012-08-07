@@ -12,7 +12,7 @@ class StatusFSpec extends StatusBaseSpec {
 		when:
 			to PageStatus
 		then:
-			$("#connections").text() == "You have no connections configured."
+			noConnections.text() == "You have no connections configured."
 	}
 	
 	def "Shows a list of devices that FrontlineSMS can connect to"() {
@@ -21,18 +21,18 @@ class StatusFSpec extends StatusBaseSpec {
 		when:
 			to PageStatus
 		then:
-			$("#connection-${SmslibFconnection.findByName('MTN Dongle').id}").displayed
+			connectionByName('MTN Dongle').displayed
 	}
 	
 	def "should update message count when in status section"() {
 		when:
 			to PageStatus
-			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 		then:
-			$("#inbox-indicator").text() == "15"
+			tabs.unreadcount == 15
 		when:
+			def message = new Fmessage(src:'+254999999', dst:'+254112233', text: "message count", inbound:true).save(flush: true, failOnError:true)
 			js.refreshMessageCount()
 		then:
-			waitFor { $("#inbox-indicator").text() == "16" }
+			waitFor { tabs.unreadcount == 16 }
 	}
 }
