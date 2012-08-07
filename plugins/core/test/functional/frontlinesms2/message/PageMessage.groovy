@@ -39,7 +39,8 @@ class ContentHeader extends geb.Module {
 	static content = {
 		title { $('h1').text().toLowerCase() }
 		buttons { $('a.btn, input[type="button"], button') }
-		export (required:false) { $('a#export') }
+		export (required:false) { $('#export-btn a') }
+		searchDescription { $('p', class:'description').text() }
 	}
 }
 

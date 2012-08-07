@@ -11,93 +11,86 @@ class SearchViewSpec extends SearchBaseSpec {
 	}
 
 	def "clicking on the search button links to the result show page"() {
-		setup:
-			Fmessage.build(text:"sent", date:new Date()-1)
-			Fmessage.build(text:"send_pending", date:new Date()-1)
-			Fmessage.build(text:"send_failed", date:new Date()-1)
 		when:
-			to PageSearch
-			searchBtn.present()
-			searchBtn.click()
+			to PageNewSearch
+			waitFor("veryslow") { searchsidebar.searchBtn.displayed }
+			searchsidebar.searchBtn.click()
 		then:
-			at PageSearchResult
-			messageTextInTable*.text().containsAll(['hi alex',
-					'meeting at 11.00', 'sent', 'send_pending', 'send_failed'])
+			waitFor("veryslow") { messageList.messages.size() == 3 }
 	}
 	
 	def "group list and activity lists are displayed when they exist"() {
 		when:
-			to PageSearch
+			to PageNewSearch
 		then:
-			searchFrm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
-			searchFrm.find('select', name:'activityId').children('option')*.text() == ['Select activity/folder', "Miauow Mix", 'Work']
+			searchsidebar.searchForm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
+			searchsidebar.searchForm.find('select', name:'activityId').children('option')*.text() == ['Select activity/folder', "Miauow Mix", 'Work']
 	}
 	
 	def "search description is shown in header"() {
 		when:
-			to PageSearch
-			searchBtn.present()
-			searchBtn.click()
+			to PageNewSearch
+			searchsidebar.searchBtn.displayed
+			searchsidebar.searchBtn.click()
 		then:
-			waitFor('veryslow') {searchDescription}
-			searchDescription.text().contains('Searching all messages, including archived messages')
+			waitFor('veryslow') { header.searchDescription == 'Searching all messages, including archived messages' }
 	}
-	
+
 	def "search string is still shown on form submit and consequent page reload"() {
 		given:
-			to PageSearch
-			searchFrm.searchString = 'bacon'
+			to PageNewSearch
+			searchsidebar.searchField = 'bacon'
 		when:
-			searchBtn.click()
+			searchsidebar.searchBtn.click()
 		then:
-			searchFrm.searchString == 'bacon'
+			waitFor("veryslow") { header.searchDescription.contains('bacon') }
+			waitFor { searchsidebar.searchString == "bacon" }
 	}
 	
 	def "selected activity is still selected on form submit and consequent page reload"() {
 		given:
-			to PageSearch
+			to PageNewSearch
 			def a = Folder.findByName("Work")
-			searchFrm.activityId = "folder-$a.id"
+			searchsidebar.activityId = "folder-$a.id"
 		when:
-			searchBtn.click()
+			searchsidebar.searchBtn.click()
 		then:
-			searchFrm.activityId == "folder-$a.id"
+			waitFor("veryslow") { searchsidebar.activityId.jquery.val() == "folder-$a.id" }
 	}
 	
 	def "can search in archive or not, is enabled by default"() {
 		when:
-			to PageSearch
+			to PageNewSearch
 		then:
-			searchFrm.inArchive
+			searchsidebar.inArchive == "on"
 		when:
-			searchFrm.inArchive = false
-			searchBtn.click()
+			searchsidebar.archive.click()
+			searchsidebar.searchBtn.click()
 		then:
-			!searchFrm.inArchive
+			!searchsidebar.inArchive
 	}
-	
+
 	def "'Export Results' link is disabled when search is null "() {
 		when:
-			to PageSearch
+			to PageNewSearch
 		then:
-			exportBtnLink.hasClass('disabled');
+			header.export.hasClass('disabled');
 	}
 
 	def "should fetch all inbound messages alone"() {
 		given:
-			to PageSearch
-			searchFrm.messageStatus = "inbound"
+			to PageNewSearch
+			searchsidebar.messageStatus = "inbound"
 		when:
-			searchBtn.click()
+			searchsidebar.searchBtn.click()
 		then:	
-			waitFor { searchBtn.displayed }
-			searchFrm.messageStatus == 'inbound'
-			messageTextLink*.text().containsAll(['hi alex', 'meeting at 11.00'])
+			waitFor { searchsidebar.searchBtn.displayed }
+			searchsidebar.messageStatus == 'inbound'
+			messageList.messages.text.containsAll(['hi alex', 'meeting at 11.00'])
 	}
 	
 	def "should fetch all sent messages alone"() {
 		given:
-			
 			def m1 = new Fmessage(src:"src", text:"sent", date:new Date()-1)
 			m1.addToDispatches(dst:'123', status: DispatchStatus.SENT, dateSent:new Date())
 			m1.save(failOnError:true, flush:true)
@@ -112,144 +105,136 @@ class SearchViewSpec extends SearchBaseSpec {
 
 			Fmessage.build(text:"received", date:new Date()-1)
 			
-			to PageSearch
-			searchFrm.messageStatus = "outbound"
+			to PageNewSearch
+			searchsidebar.messageStatus = "outbound"
 		when:
-			searchBtn.click()
+			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchBtn.displayed }
-			searchFrm.messageStatus == 'outbound'
-			messageTextLink*.text().containsAll(["sent", "send_pending", "send_failed"]) 
+			waitFor{ searchsidebar.searchBtn.displayed }
+			searchsidebar.messageStatus == 'outbound'
+			messageList.messages.size() == 3
 	}
-	
+
 	def "should clear search results" () {
 		when:
-			to PageSearch
-			searchBtn.present()
-			searchBtn.click()
+			to PageNewSearch
+			searchsidebar.searchBtn.displayed
+			searchsidebar.searchBtn.click()
 		then:
-			waitFor{ searchBtn.displayed }
+			waitFor{ searchsidebar.searchBtn.displayed }
 		when:
-			clearSearchLink.click()
+			searchsidebar.clearSearchLink.click()
 		then:
-			waitFor{ !$("#search-description").displayed }
+			waitFor { messageList.noContent.displayed }
 	}
-	
+
 	def "should return to the same search results when message is deleted" () {
 		setup:
 			Fmessage.build(src:"src", text:"received1")
 			Fmessage.build(src:"src", text:"received2", date:new Date()-1)
 			Fmessage.build(src:"src3", text:"send_failed", date:new Date()-2)
 		when:
-			to PageSearch
-			searchBtn.present()
-			searchBtn.click()
+			to PageNewSearch
+			searchsidebar.searchBtn.displayed
+			searchsidebar.searchBtn.click()
 		then:
-			at PageSearchResult
-		when:
-			displayNameLink(Fmessage.findBySrc('src3').id).click()
-			deleteMessageBtn.click()
+			waitFor { messageList.messages.size() == 6 }
+			messageList.messages[0].checkbox.click()
+			waitFor("veryslow") { singleMessageDetails.text == "received1" }
+			singleMessageDetails.delete.click()
 		then:
-			at PageSearchResult
-			messageTextLink*.text().containsAll(["hi alex", "received1", "received2", "meeting at 11.00"])
-			flashMessage.displayed
+			waitFor("veryslow") { messageList.messages.size() == 5 }
+			notifications.flashMessage.text().contains("Message moved to trash")
 	}
-	
+
 	def "should have the start date not set, then as the user set one the result page should contain his start date"() {
 		when:
 			def date = new Date()
-			to PageSearch
-			searchBtn.present()
+			to PageNewSearch
+			searchsidebar.searchBtn.displayed
 		then:
-			searchFrm.startDate_day == 'none'
-			searchFrm.startDate_month == 'none'
-			searchFrm.startDate_year == 'none'
-			searchFrm.endDate_day == 'none'
-			searchFrm.endDate_month == 'none'
-			searchFrm.endDate_year == 'none'
+			searchsidebar.startDate_day == 'none'
+			searchsidebar.startDate_month == 'none'
+			searchsidebar.startDate_year == 'none'
+			searchsidebar.endDate_day == 'none'
+			searchsidebar.endDate_month == 'none'
+			searchsidebar.endDate_year == 'none'
 		when:
-			searchFrm.startDate_day = '4'
-			searchFrm.startDate_month = '9'
-			searchFrm.startDate_year = '2010'
-			datePickerDiv.jquery.hide()
-			waitFor { !datePickerDiv.displayed }
-			searchBtn.click()
-			waitFor {searchDescription}
+			searchsidebar.startDate_day = '4'
+			searchsidebar.startDate_month = '9'
+			searchsidebar.startDate_year = '2010'
+			searchsidebar.datePickerDiv.jquery.hide()
+			waitFor { !searchsidebar.datePickerDiv.displayed }
+			searchsidebar.searchBtn.click()
+			waitFor { header.searchDescription.contains("Searching all messages, including archived messages") }
 		then:
-			searchFrm.startDate_day == '4'
-			searchFrm.startDate_month == '9'
-			searchFrm.startDate_year == '2010'
+			searchsidebar.startDate_day == '4'
+			searchsidebar.startDate_month == '9'
+			searchsidebar.startDate_year == '2010'
 	}
-	
+
 	def "archiving message should not break message navigation "() {
 		when:
-			to PageSearch
-			searchBtn.present()
-			searchBtn.click()
+			to PageSearchResult, "alex"
 		then:
-			at PageSearchResult
+			messageList.messages[0].checkbox.click()
+			waitFor { singleMessageDetails.text == "hi alex" }
 		when:
-			displayNameLink(Fmessage.findByText('hi alex').id).click()
-			archiveMsgBtn.click()
+			singleMessageDetails.archive.click()
 		then:
-			at PageSearchResult
-		when:
-			displayNameLink(Fmessage.findByText('hi alex').id).click()
-		then:
-			at PageSearchResult
-			singleMessageDetailContent.text() == 'hi alex'
+			waitFor { searchsidebar.searchString == "alex" }
 	}
-	
+
 	def "should expand the more option and select a contactName then the link to add contactName is hidden"() {
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
-			to PageSearch
-			searchMoreOptionLink.click()
+			to PageSearchResult, ""
+			searchsidebar.searchMoreOptionLink.click()
 		then:
-			waitFor { expandedSearchOption.displayed }
-			contactNameLink.displayed
-			addTownCustomFieldLink.displayed
-			likeCustomFieldLink.displayed
-			ikCustomFieldLink.displayed
+			waitFor { searchsidebar.expandedSearchOption.displayed }
+			searchsidebar.contactNameLink.displayed
+			searchsidebar.addTownCustomFieldLink.displayed
+			searchsidebar.likeCustomFieldLink.displayed
+			searchsidebar.ikCustomFieldLink.displayed
 		when:
-			contactNameLink.click()
+			searchsidebar.contactNameLink.click()
 		then:
-			waitFor { contactNameField.displayed }
-			!contactNameLink.displayed
+			waitFor { searchsidebar.contactNameField.displayed }
+			!searchsidebar.contactNameLink.displayed
 	}
 
 	def "Can select a customField in More options"() {
 		when:
 			createTestContactsAndCustomFieldsAndMessages()
-			to PageSearch
-			searchMoreOptionLink.click()
+			to PageSearchResult, ""
+			searchsidebar.searchMoreOptionLink.click()
 		then:
-			waitFor { expandedSearchOption.displayed }
+			waitFor { searchsidebar.expandedSearchOption.displayed }
 		when:
-			addTownCustomFieldLink.click()
+			searchsidebar.addTownCustomFieldLink.click()
 		then:
-			waitFor { townCustomField.displayed }
-			!addTownCustomFieldLink.displayed
+			waitFor { searchsidebar.townCustomField.displayed }
+			!searchsidebar.addTownCustomFieldLink.displayed
 	}
-	
+
 	def "should show the contact name that has been filled in after a search"(){
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
-			to PageSearch
-			searchMoreOptionLink.click()
+			to PageSearchResult, ""
+			searchsidebar.searchMoreOptionLink.click()
 		then:
-			waitFor { expandedSearchOption.displayed }
+			waitFor { searchsidebar.expandedSearchOption.displayed }
 		when:
-			contactNameLink.click()
+			searchsidebar.contactNameLink.click()
 		then:
-			waitFor { contactNameField.displayed }
+			waitFor { searchsidebar.contactNameField.displayed }
 		when:
-			searchFrm.contactString = "toto"
-			searchBtn.click()
+			searchsidebar.contactString = "toto"
+			searchsidebar.searchBtn.click()
 		then:
-			waitFor { contactNameField.displayed }
-			searchFrm.contactString == "toto"		
+			waitFor { searchsidebar.contactNameField.displayed }
+			searchsidebar.contactString == "toto"
 	}
 	
 	
@@ -257,37 +242,37 @@ class SearchViewSpec extends SearchBaseSpec {
 		given:
 			createTestContactsAndCustomFieldsAndMessages()
 		when:
-			to PageSearch
-			searchMoreOptionLink.click()
+			to PageSearchResult, ""
+			searchsidebar.searchMoreOptionLink.click()
 		then:
-			waitFor { expandedSearchOption.displayed }
+			waitFor { searchsidebar.expandedSearchOption.displayed }
 		when:
-			contactNameLink.click()
+			searchsidebar.contactNameLink.click()
 		then:
-			waitFor { contactNameField.displayed }
+			waitFor { searchsidebar.contactNameField.displayed }
 		when:
-			searchFrm.contactString = "toto"
-			contactNameField.children('a').click()
+			searchsidebar.contactString = "toto"
+			searchsidebar.contactNameField.children('a').click()
 		then:
-			waitFor { !contactNameField.displayed }
-			contactNameLink.displayed
+			waitFor { !searchsidebar.contactNameField.displayed }
+			searchsidebar.contactNameLink.displayed
 		when:
-			contactNameLink.click()
+			searchsidebar.contactNameLink.click()
 		then:
-			waitFor { contactNameField.displayed }
-			!searchFrm.contactString
+			waitFor { searchsidebar.contactNameField.displayed }
+			!searchsidebar.contactString
 	}
 	
 	def "should update message count when in search tab"() {
 		when:
-			to PageSearch
+			to PageSearchResult, ""
 			def message = Fmessage.build(src:'+254999999', text:'message count')
 		then:
-			noMessagesInboxed.text()?.contains("2")
+			tabs.unreadcount == 2
 		when:
 			js.refreshMessageCount()
 		then:
-			waitFor('very slow') { noMessagesInboxed.text()?.contains("3") }
+			waitFor('very slow') { tabs.unreadcount == 3 }
 	}
 	
 }
