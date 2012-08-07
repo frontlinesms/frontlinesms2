@@ -21,7 +21,6 @@ class GroupControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def updatedGroup = Group.get(group.id)
 		then:
 			updatedGroup.name == "renamed group"
-			controller.response.redirectedUrl == "/contact/show?groupId=${group.id}"
 	}
 	
 }

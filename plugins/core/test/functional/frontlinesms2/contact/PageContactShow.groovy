@@ -16,6 +16,6 @@ class PageContactShow extends frontlinesms2.page.PageContact {
 	}
 
 	static at = {
-		title.endsWith('ontacts')
+		title.contains('Contacts')
 	}
 }

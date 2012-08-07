@@ -163,6 +163,10 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def "can only archive ownerless messages, unless owner is archived"() {
+		// FIXME: 
+		/* 1) test is failing, even though activity.archive archives child messages, and FMessage constraints would not allow save otherwise
+		   2) this actually tests "if message owner is archived, child message gets archived as well", which is related but different.
+		*/
 		when:
 			createTestData()
 			createPollTestData()
@@ -173,6 +177,7 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 			minime.messageOwner.archive()
 			minime.messageOwner.save(flush:true)
 			minime.save(flush:true)
+			minime.refresh()
 		then:
 			Poll.findByName("Miauow Mix").archived
 			minime.archived

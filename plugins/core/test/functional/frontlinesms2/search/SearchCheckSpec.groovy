@@ -1,6 +1,8 @@
 package frontlinesms2.search
 
 import frontlinesms2.*
+import frontlinesms2.message.*
+import frontlinesms2.popup.*
 
 class SearchCheckSpec extends SearchBaseSpec {
 	
@@ -8,76 +10,79 @@ class SearchCheckSpec extends SearchBaseSpec {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageSearchResultHi
-			messagesSelect[1].click()
-			messagesSelect[2].click()
-			messagesSelect[3].click()
+			to PageSearchResult, "hi"
+			waitFor("veryslow") { messageList.displayed }
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { messagesSelect[0].checked }
+			waitFor { messageList.selectAll.checked }
 	}
 	
 	def "message count displayed when multiple messages are selected"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageSearchResultHi
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			to PageSearchResult, "hi"
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 2}
+			waitFor { messageList.selectedMessages.size() == 2}
 	}
 	
 	def "checked message details are displayed when message is checked"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageSearchResultHi
-			messagesSelect[2].click()
+			to PageSearchResult, "hi"
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { messageSenderDetail.text() == 'Alice' }
+			waitFor { singleMessageDetails.text == 'hi Bob' }
 		when:
-			messagesSelect[1].click()
+			messageList.messages[1].checkbox.click()
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			messagesSelect[2].parent().parent().hasClass("selected")
-			messagesSelect[1].parent().parent().hasClass("selected")
+			messageList.messages[1].hasClass("selected")
+			messageList.messages[2].hasClass("selected")
 	}
-	
+
 	def "'Reply All' button appears for multiple selected messages and works"() {
 		given:
 			createInboxTestMessages()
 			Contact.build(name:'Alice', mobile:'Alice')
 			Contact.build(name:'June', mobile:'+254778899')
 		when:
-			to PageSearchResultHi
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			to PageSearchResult, "hi"
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { replyToMultipleButton.displayed }
+			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
-			replyToMultipleButton.click() // click the reply button
+			multipleMessageDetails.replyAll.click()
 		then:
-			waitFor { tab1.displayed }
+			waitFor("veryslow") { at QuickMessageDialog }
+			waitFor("veryslow") { compose.textArea.displayed }
 	}
-	
+
 	def "'Forward' button still work when all messages are unchecked"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageSearchResultHi
-			messagesSelect[1].click()
-			messagesSelect[0].click()
+			to PageSearchResult, "hi"
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 3 }
+			waitFor { messageList.selectedMessages.size() == 2 }
 		when:
-			messagesSelect[0].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { messageSenderDetail.text() == "Barnabus" }
+			waitFor { singleMessageDetails.text == "hi Alice" }
 		when:
-			$('a', text:'Barnabus').click()	
-			forwardBtn.click()
+			singleMessageDetails.forward.click()
 		then:
-			waitFor { messageTextArea.text() == "i like chicken" }
+			waitFor("veryslow") { at QuickMessageDialog }
+			waitFor("veryslow") { compose.textArea.jquery.val() == "hi Alice" }
 	}
 	
 	def "should set row as selected when a message is checked"() {
@@ -85,11 +90,10 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Bob')
 		when:
-			to PageSearchResultHi
-			messagesSelect[2].click()
+			to PageSearchResult, "hi"
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { messagesSelect[2].checked }
-			messagesSelect[2].parent().parent().hasClass("selected")
+			waitFor { messageList.messages[1].hasClass("selected") }
 	}
 
 
@@ -98,33 +102,17 @@ class SearchCheckSpec extends SearchBaseSpec {
 			createInboxTestMessages()
 			Fmessage.build()
 		when:
-			to PageSearchResultHi
-			messagesSelect[0].click()
+			to PageSearchResult, "hi"
+			messageList.selectAll.click()
 		then:
-			waitFor { checkedMessageCount == 3 }
-			
+			waitFor { messageList.selectedMessages.size() == 3 }
 		when:
-			messagesSelect[1].click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 2 }
+			waitFor { messageList.selectedMessages.size() == 2 }
 		when:
-			messagesSelect[0].click()
+			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { checkedMessageCount == 3 }
-	}
-	
-	//FIXME this could easily be an integration test
-	def "can archive multiple messages where any owned messages are ignored, but those that are not are archived"() {
-		given:
-			createInboxTestMessages()
-		when:
-			to PageSearchResultI
-			messagesSelect[0].click()
-		then:
-			waitFor { archiveAllBtn.displayed }
-		when:
-			archiveAllBtn.jquery.trigger("click")
-		then:
-			waitFor { pageTitle.text() == "Results"}
+			waitFor { messageList.selectedMessages.size() == 1 }
 	}
 }

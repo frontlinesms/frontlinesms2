@@ -1,26 +1,20 @@
 package frontlinesms2.search
+import frontlinesms2.message.*
 
 class PageSearchResult extends PageSearch {
-	static getUrl() { 'search/result/show' }
+	static url = 'search/result/show'
 	static at = {
 		title.startsWith("Results")
 	}
-	static content = {
-		messagesSelect { $(".message-select") }
-		archiveAllButton { $('#btn_archive_all') }
-		multipleMessagesPanel { $('#multiple-messages') }
-		replyToMultipleButton { $('#multiple-messages a')[0] }
-		checkedMessageCount {
-			def t = $("#checked-message-count").text()
-			if(t != null) {
-				return t - ' messages selected' as Integer
-			} else {
-				return $('.message-select:checked').size()
-			}
-		}
-		messageList {$("#message-list tr")}
-		displayNameLink { id->
-			$("a.displayName-"+ id)
-		}
+
+	String convertToPath(Object[] args) {
+		println("Building Search url...")
+		def restOfPath = ""
+		if (!args)
+			return ""
+
+	    if (args[0] instanceof String)
+			restOfPath += "?searchString="+args[0]
+	    return restOfPath
 	}
 }
