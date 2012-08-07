@@ -53,7 +53,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.text().contains('You have no connections configured.')
 	}
 
-	def 'Send test message button for particular connection appears when that connection is selected and started'() {
+	def 'Send test message button for particular connection displayed on a successfully created route'() {
 		given:
 			def testConnection = createTestSmsConnection()
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
@@ -67,7 +67,6 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor('slow') { connectionList.status == "Connected" }
 			waitFor { connectionList.btnTestRoute.displayed }
-			connectionList.btnTestRoute.@href == "/connection/createTest/${testConnection.id}"
 	}
 
 	def 'delete button is not displayed for a connected Fconnection'() {
@@ -129,7 +128,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			submit.click()
 		then:
-			waitFor{ $('.error-panel').displayed }
+			waitFor{ error }
 			error == 'baud must be a valid number'
 			at ConnectionDialog
 			confirmName.text() == "name"
@@ -162,31 +161,21 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			at PageConnection
 			waitFor { connectionList.selectedConnection.text().contains('New IntelliSMS Connection') }
 	}
-	
-	def 'clicking Send test message takes us to a page with default message and empty recieving number field'() {
-		given:
-			def email = createTestEmailConnection()
-		when:
-			go "connection/createTest/${email.id}"
-		then:
-			assertFieldDetailsCorrect('addresses', 'Number', '')
-			assertFieldDetailsCorrect('messageText', 'Message', "Congratulations from FrontlineSMS \\o/ you have successfully configured ${email.name} to send SMS \\o/")
-	}
 
-	def assertFieldDetailsCorrect(fieldName, labelText, expectedValue) {
-		def label = $('label', for:fieldName)
-		assert label.text() == labelText
-		assert label.@for == fieldName
-		def input
-		if (fieldName == 'addresses') {
-			input = $('input', name: fieldName)
-		} else {
-			input = $('textarea', name: fieldName)
-		}
-		assert input.@name == fieldName
-		assert input.@id == fieldName
-		assert input.@value  == expectedValue
-		true
+	def 'clicking Send test message displays a popup with a default message and empty address field'() {
+		given:
+			createTestEmailConnection()
+			to PageConnection
+		when:
+			connectionList.btnCreateRoute.click()
+		then:
+			waitFor('slow') {connectionList.btnTestRoute.displayed}
+		when:
+			connectionList.btnTestRoute.click()
+		then:
+			waitFor { at TestMessagePopup }
+			addresses == ''
+			message == "Congratulations from FrontlineSMS \\o/ you have successfully configured test email connection to send SMS \\o/"
 	}
 
 	def createTestConnections() {
