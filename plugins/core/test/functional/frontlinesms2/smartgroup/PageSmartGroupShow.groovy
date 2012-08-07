@@ -6,22 +6,7 @@ class PageSmartGroup extends frontlinesms2.page.PageContact {
 	static url = 'contact/'
 
 	static content = {
-		smartgroups { $('li.smartgroups')}
-		smartGroupSubmenuLinks(required:false) { smartgroups.find('a:not(.create)') }
-		createSmartGroupButton { $('li.smartgroups li.create a') }
-		smartGroupIsDisplayed { smartGroupInstance ->
-			$("title").text().contains(smartGroupInstance.name)
-		}
 		contactLink { $('#contact-list a') }
-		moreActions { $("#group-actions") }
-		moreActionsSelect { value ->
-			moreActions.value(value).jquery.trigger("click")
-		}
-		dialogIsDisplayed { $('#ui-dialog-title-modalBox').displayed }
-		done { $('#done')}
-		inputValue { input, value ->
-			$("#${input}").value(value)
-		}
 	}
 }
 
