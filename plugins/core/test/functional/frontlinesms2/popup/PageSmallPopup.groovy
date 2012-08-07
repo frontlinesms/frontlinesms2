@@ -103,3 +103,13 @@ class EmptyTrashPopup extends SmallPopup {
 		text { $('#confirmEmptyTrash p') }
 	}
 }
+
+class TestMessagePopup extends SmallPopup {
+	static at ={
+		popupTitle.contains('test message')
+	}
+	static content = {
+		addresses { $('input#addresses').text() }
+		message { $('textarea#messageText').text() }
+	}
+}

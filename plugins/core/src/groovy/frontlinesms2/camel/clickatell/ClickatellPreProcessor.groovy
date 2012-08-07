@@ -38,3 +38,4 @@ class ClickatellPreProcessor implements Processor {
 		return URLEncoder.encode(s, "UTF-8");
 	}
 }
+

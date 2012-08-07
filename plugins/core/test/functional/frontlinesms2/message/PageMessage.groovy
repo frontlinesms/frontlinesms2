@@ -41,6 +41,7 @@ class ContentHeader extends geb.Module {
 		buttons { $('a.btn, input[type="button"], button') }
 		export (required:false) { $('#export-btn a') }
 		searchDescription { $('p', class:'description').text() }
+		quickMessage { $("a#quick_message") }
 	}
 }
 

@@ -218,11 +218,11 @@ class CoreBootStrap {
 		if(!dev) return
 		def keyword = new Keyword(value: 'FOOTBALL')
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
-		poll1.addToResponses(key:'A', value:'manchester')
-		poll1.addToResponses(key:'B', value:'barcelona')
+		poll1.addToResponses(key:'A', value:'manchester', aliases:'manchester, A')
+		poll1.addToResponses(key:'B', value:'barcelona', aliases:'barcelona, B')
 		poll1.addToResponses(PollResponse.createUnknown())
 		
-		def poll2 = new Poll(name: 'Shampoo Brands', sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
+		def poll2 = new Poll(name: 'Shampoo Brands', question:"What shampoo brand do you prefer?", sentMessageText:"What shampoo brand do you prefer? Reply 'pantene' or 'oriele'")
 		poll2.addToResponses(key: 'A', value: 'pantene')
 		poll2.addToResponses(key: 'B', value: 'oriele')
 		poll2.addToResponses(PollResponse.createUnknown())

@@ -122,14 +122,6 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageList.sources.containsAll(['Alice', 'Bob'])
 	}
 
-	def "starred message filter should not be visible when there are no search results"() {
-		when:
-			to PageMessageInbox
-		then:
-			messageList.noContent.displayed
-			!footer.showStarred.displayed
-	}
-
 	def "should autopopulate the message body  when 'forward' is clicked"() {
 		given:
 			Fmessage.build(src:'+254778899', text:'test')

@@ -2,6 +2,7 @@ package frontlinesms2.message
 
 import frontlinesms2.*
 import java.util.regex.*
+import frontlinesms2.popup.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -11,108 +12,98 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			at QMessageDialog
+			at QuickMessageDialog
 	}
 
 	def "should select the next tab on click of next"() {
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			addressField.value("+919544426000")
-			addAddressButton.click()
 		then:
-			waitFor { selectRecipientsTab.displayed }
+			waitFor { compose.displayed }
 		when:
-			toConfirmTab()
+			next.click()
 		then:
-			waitFor { confirmTab.displayed }
+			waitFor { recipients.displayed }
 	}
 
 	def "should select the previous tab on click of back"() {
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			addressField.value("+919544426000")
-			addAddressButton.click()
-			toConfirmTab()
 		then:
-			waitFor { confirmTab.displayed }
+			waitFor { compose.displayed }
 		when:
-			$("#prevPage").click()
+			next.click()
 		then:
-			waitFor { selectRecipientsTab.displayed }
+			waitFor { recipients.displayed }
+		when:
+			previous.click()
+		then:
+			waitFor { compose.displayed }
 
 	}
 
 	def "should add the manually entered contacts to the list "() {
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			addressField.value("+919544426000")
-			addAddressButton.click()
+			waitFor { compose.displayed }
+			next.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
 		then:
-			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426000" }
-			$("#recipient-count").text() == "1"
+			waitFor { recipients.count == 1 }
 	}
 	
 	def "should not add the same manually entered contact more than once "() {
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			addressField.value("+919544426000")
-			addAddressButton.click()
-			addressField.value("+919544426000")
-			addAddressButton.click()
+			waitFor { compose.displayed }
+			next.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
 		then:
-			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426000" }
-			$("#recipient-count").text() == "1"
+			waitFor { recipients.count == 1 }
 		when:
-			addressField.value("3232")
-			addAddressButton.click()
+			recipients.addField.value("+221122")
+			recipients.addButton.click()
 		then:
-			waitFor { $('#contacts').find('input', type:'checkbox').value() == "3232" }
-			$("#recipient-count").text() == "2"
+			waitFor { recipients.count == 2 }
 	}
 
 	def "unchecking a manually added contact updates the recipients count "() {
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			addressField.value("+919544426000")
-			addAddressButton.click()
-			addressField.value("+919544426009")
-			addAddressButton.click()
+			waitFor { compose.displayed }
+			next.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
 		then:
-			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426009" }
-			$("#recipient-count").text() == "2"
+			waitFor { recipients.count == 1 }
 		when:
-			$("li.manual").find("input", name:"addresses")[0].click()
-			$("nextPage").click()
+			recipients.manualContacts[0].click()
 		then:
-			waitFor { $("#recipient-count").text() == "1"	 }
+			waitFor { recipients.count == 0 }
 	}
 	
 	def "should send the message to the selected recipients"() {
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			addressField.value("+919544426000")
-			addAddressButton.click()
+			waitFor { compose.displayed }
+			next.click()
+			recipients.addField.value("+919544426000")
+			recipients.addButton.click()
+			next.click()
+			submit.click()
 		then:
-			waitFor { $('#contacts').find('input', type:'checkbox').value() == "+919544426000" }
+			at PageMessageInbox
+			waitFor { notifications.flashMessage.displayed }
 		when:
-			toConfirmTab()
-			doneButton.click()
+			to PageMessagePending
 		then:
-			waitFor { $(".flash").displayed }
-		when:
-			$("a", text:contains("Pending")).click()
-		then:
-			waitFor { $("a", text:contains("Pending")).hasClass("pending-send-failed") }
-		then:
-			waitFor { $('h3.pending').text().equalsIgnoreCase("Pending") }
-			$("a", text:contains("Pending")).hasClass("pending-send-failed")
-			$("#message-list tr").size() == 2
+			messageList.messages.size() == 1
 	}
 
 	def "should select members belonging to the selected group"() {
@@ -120,13 +111,14 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
+			waitFor { next.displayed }
+			next.click()
 		then:
-			groupCheckbox[0].displayed
+			recipients.groupCheckboxes[0].displayed
 		when:
-			groupCheckbox[0].click()
+			recipients.groupCheckboxes[0].click()
 		then:
-			waitFor { $("#recipient-count").text() == "2" }
+			waitFor { recipients.count == 2 }
 	}
 
 	def "should deselect all member recipients when a group is un checked"() {
@@ -134,17 +126,18 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
+			waitFor { next.displayed }
+			next.click()
 		then:
-			groupCheckbox[0].displayed
+			recipients.groupCheckboxes[0].displayed
 		when:
-			groupCheckbox[0].click()
+			recipients.groupCheckboxes[0].click()
 		then:
-			waitFor { $("#recipient-count").text() == "2" }
+			waitFor { recipients.count == 2 }
 		when:
-			groupCheckbox[0].click()
+			recipients.groupCheckboxes[0].click()
 		then:
-			waitFor { $("#recipient-count").text() == "0" }
+			waitFor { recipients.count == 0 }
 	}
 
 	def "should not allow to proceed if the recipients are not selected in the quick message screen"() {
@@ -152,13 +145,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
+			waitFor { next.displayed }
+			next.click()
 		then:
-			!$(".error-panel").displayed
+			recipients.groupCheckboxes[0].displayed
 		when:
-			nextPageButton.click()
+			next.click()
 		then:
-			waitFor { $(".error-panel").displayed }
+			recipients.displayed
+			waitFor { errorPanel.displayed }
 	}
 
 	def "selected group should get unchecked when a member drops off"() {
@@ -166,17 +161,20 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			groupCheckbox[0].click()
-			groupCheckbox[1].click()
+			waitFor { next.displayed }
+			next.click()
 		then:
-			$("#recipient-count").text() == "2"
+			recipients.groupCheckboxes[0].displayed
 		when:
-			$("input[value='12345678']").click()
+			recipients.groupCheckboxes[0].click()
 		then:
-			!groupCheckbox[0].checked
-			!groupCheckbox[1].checked
-			$("#recipient-count").text() == "1"
+			waitFor { recipients.count == 2 }
+		when:
+			recipients.recipientCheckboxByValue("12345678").click()
+		then:
+			waitFor { !recipients.groupCheckboxes[0].checked }
+			waitFor { !recipients.groupCheckboxes[1].checked }
+			waitFor { recipients.count == 1 }
 	}
 
 	def "should not deselect common members across groups when one of the group is unchecked"() {
@@ -184,17 +182,18 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			createData()
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			groupCheckbox[0].click()
-			groupCheckbox[1].click()
+			waitFor { next.displayed }
+			next.click()
+			recipients.groupCheckboxes[0].click()
+			recipients.groupCheckboxes[1].click()
 		then:
-			$("#recipient-count").text() == "2"
+			waitFor { recipients.count == 2 }
 		when:
-			groupCheckbox[0].click()
+			recipients.groupCheckboxes[0].click()
 		then:
-			!groupCheckbox[0].checked
-			groupCheckbox[1].checked
-			$("#recipient-count").text() == "2"
+			!recipients.groupCheckboxes[0].checked
+			recipients.groupCheckboxes[1].checked
+			waitFor { recipients.count == 2 }
 
 	}
 
@@ -204,12 +203,12 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message(s))" }
+			waitFor { compose.wordCount == "Characters remaining 160 (1 SMS message(s))" }
 		when:
-			$("#messageText") << "h"
-			$("#messageText").jquery.trigger('keyup')
+			compose.textArea << "h"
+			compose.textArea.jquery.trigger('keyup')
 		then:
-			waitFor { characterCount.text() == "Characters remaining 159 (1 SMS message(s))" }
+			waitFor { compose.wordCount == "Characters remaining 159 (1 SMS message(s))" }
 	}
 	
 	def "should not deselect group when a non-member contact is unchecked"() {
@@ -218,18 +217,19 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 			def contact = Contact.build(name:"Test", mobile:"876543212")
 		when:
 			launchQuickMessageDialog()
-			toSelectRecipientsTab()
-			groupCheckbox[0].click()
+			waitFor { compose.displayed }
+			next.click()
+			recipients.groupCheckboxes[0].click()
 		then:
-			groupCheckbox[0].checked
+			recipients.groupCheckboxes[0].checked
 		when:
-			$("input[value='876543212']").click()
+			recipients.recipientCheckboxByValue("876543212").click()
 		then:
-			groupCheckbox[0].checked
+			recipients.groupCheckboxes[0].checked
 		when:
-			$("input[value='876543212']").click()
+			recipients.recipientCheckboxByValue("876543212").click()
 		then:
-			groupCheckbox[0].checked
+			recipients.groupCheckboxes[0].checked
 
 	}
 
@@ -239,7 +239,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { $("#magicwand-selectmessageText").displayed }
+			waitFor { compose.magicWand.displayed }
 	}
 
 	def "using contact name magic wand option should insert substitution variable"() {
@@ -248,15 +248,15 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			launchQuickMessageDialog()
 		then:
-			waitFor { characterCount.text() == "Characters remaining 160 (1 SMS message(s))" }
+			waitFor { compose.wordCount == "Characters remaining 160 (1 SMS message(s))" }
 		when:
-			$("#messageText") << "Hello, "
-			$("#messageText").jquery.trigger('keyup')
+			compose.textArea << "Hello, "
+			compose.textArea.jquery.trigger('keyup')
 		then:
-			$("#magicwand-selectmessageText").jquery.val('contact_name')
-			$("#magicwand-selectmessageText").jquery.trigger('change')
+			compose.magicWand.jquery.val('contact_name')
+			compose.magicWand.jquery.trigger('change')
 		then:
-			waitFor { $('#messageText').jquery.val() == 'Hello, ${contact_name}' }
+			waitFor { compose.textArea.jquery.val() == 'Hello, ${contact_name}' }
 	}
 	
 	private def createData() {
@@ -268,46 +268,25 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		group2.addToMembers(alice)
 		group.addToMembers(bob)
 		group2.addToMembers(bob)
+		group.save(flush:true)
+		group2.save(flush:true)
 	}
 	
 	def launchQuickMessageDialog() {
 		to PageMessageInbox
-		$("a", text:"Quick message").click()
-		waitFor { at QMessageDialog }
+		header.quickMessage.click()
+		waitFor { at QuickMessageDialog }
 	}
 	
-	def toSelectRecipientsTab() {
-		$('a', text:'Select recipients').click()
-		waitFor { selectRecipientsTab.displayed }
+	def toRecipientsTab() {
+		at QuickMessageDialog
+		tab(2).click()
+		waitFor { recipients.displayed }
 	}
 	
 	def toConfirmTab() {
-		$('a', text:'Confirm').click()
-		waitFor { confirmTab.displayed }
+		at QuickMessageDialog
+		tab(3).click()
+		waitFor { confirm.displayed }
 	}
-}
-
-class QMessageDialog extends geb.Page {
-	static at = {
-		$("#ui-dialog-title-modalBox").text().equalsIgnoreCase('Quick Message')
-	}
-	static content = {
-		selectRecipientsTab { $('div#tabs-2') }
-		confirmTab { $('div#tabs-3') }
-		messagesQueuedNotification { $(".summary") }
-		
-		addressField { $('#address') }
-		addAddressButton { $('.add-address') }
-		
-		doneButton { $("#submit") }
-		nextPageButton { $("#nextPage") }
-		characterCount { $("#send-message-stats")}
-		messagesCount { $("#messages-count")}
-
-		groupCheckbox { $('input', type:'checkbox', name:'groups') }
-	}
-}
-
-class SentMessagesPage extends geb.Page {
-	static url = 'message/sent'
 }

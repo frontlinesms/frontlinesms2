@@ -13,7 +13,7 @@ class ContactControllerSpec extends Specification {
 			def bob = new Contact(name: "Bob", mobile: "54321").save(flush: true)
 			println "ids: ${Contact.list()*.id}"
 		when:
-			params.number = suppliedMobile
+			params.mobile = suppliedMobile
 			params.contactId = contactId
 			controller.checkForDuplicates()
 		then:
@@ -25,3 +25,4 @@ class ContactControllerSpec extends Specification {
 			''        | '54321'        | 'false'
 	}
 }
+

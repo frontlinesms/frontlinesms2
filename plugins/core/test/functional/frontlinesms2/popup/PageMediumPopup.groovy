@@ -27,6 +27,7 @@ class QuickMessageDialog extends MediumPopup {
 		compose { module QuickMessageComposeTab }
 		recipients { module QuickMessageRecipientsTab }
 		confirm { module QuickMessageConfirmTab }
+		errorPanel { $(".error-panel") }
 	}
 }
 
@@ -34,12 +35,21 @@ class QuickMessageComposeTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		textArea { $('textarea#messageText') }
+		wordCount { $("span#send-message-stats").text() }
+		magicWand { $("#magicwand-selectmessageText") }
 	}
 }
 
 class QuickMessageRecipientsTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
+		addField { $('input#address') }
+		addButton { $('a.btn.add-address') }
+		manual { $('li.manual.contact') }
+		count { $('#recipient-count').text().toInteger() }
+		manualContacts { $("li.manual").find("input", name:"addresses") }
+		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
+		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
 	}
 }
 
@@ -227,7 +237,7 @@ class AnnouncementSummary extends geb.Module {
 
 class DeleteDialog extends MediumPopup {
 	static at = {
-		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("empty trash");
+		popupTitle.contains("empty trash");
 	}
 	static content = {
 		title { $("#title").text() }
@@ -235,4 +245,49 @@ class DeleteDialog extends MediumPopup {
 	}
 }
 
+class ConnectionDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains('connection')
+	}
+
+	static content = {
+		connectionType { $("#connectionType") }
+		connectionForm { $('#connectionForm')}
+		confirmName { $("#confirm-name")}
+		confirmType { $("#confirm-type")}
+		confirmPort { $("#confirm-port")}
+		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
+		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
+		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
+	}
+}
+
+class SmartGroupCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains('create smart group')
+	}
+
+	static content = {
+
+		rules { $('tr.smart-group-criteria') }
+		ruleField { rules.find('select', name:'rule-field') }
+		ruleValues { rules.find('input', name:'rule-text') }
+		ruleMatchText { rules.find('.rule-match-text')*.text() }
+		removeRuleButtons(required:false) { $('tr.smart-group-criteria a.remove-command') }
+		smartGroupNameField { $('input', type:'text', name:'smartgroupname') }
+		addRuleButton { $('.btn', text:"Add another rule") }
+		editButton { $('button', text:'Edit')}
+		flashMessage(required:false) { $('div.flash') }
+		getMenuLink { smartGroupName ->
+			$('li.smartgroups li:not(.create) a', text:smartGroupName)
+		}
+	}
+}
+
+
+class SmartGroupEditDialog extends SmartGroupCreateDialog {
+	static at = {
+		popupTitle.contains('Edit Group')
+	}
+}
 

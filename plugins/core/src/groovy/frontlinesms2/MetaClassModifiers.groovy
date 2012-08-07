@@ -61,6 +61,7 @@ class MetaClassModifiers {
 	
 	static def addCamelMethods() {
 		Exchange.metaClass.getFconnectionId = {
+println "MetaClassModifiers.addCamelMethods()"
 			def routeId = delegate.unitOfWork?.routeContext?.route?.id
 			final def ID_REGEX = /.*-(\d+)$/
 			if(routeId && routeId==~ID_REGEX) {
