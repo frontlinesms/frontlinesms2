@@ -2,6 +2,7 @@ package frontlinesms2.smartgroup
 
 import frontlinesms2.*
 import frontlinesms2.contact.PageContactShow
+import frontlinesms2.popup.*
 
 abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 	def removeRule(i) {

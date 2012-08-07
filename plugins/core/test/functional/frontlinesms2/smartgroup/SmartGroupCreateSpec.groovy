@@ -1,6 +1,7 @@
 package frontlinesms2.smartgroup
 
 import frontlinesms2.*
+import frontlinesms2.popup.*
 
 class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 	def 'ADD MORE RULES button is visible in CREATE dialog'() {
@@ -21,14 +22,14 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			!finishButton.disabled
+			!submit.disabled
 	}
 	
 	def 'there is no BACK button'() {
 		when:
 			launchCreateDialog()
 		then:
-			backButton.disabled
+			!previous
 	}
 	
 	def 'SMART GROUP NAME FIELD is displayed'() {
@@ -42,15 +43,15 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog(null)
 		then:
-			!errorMessages.displayed
+			!error
 	}
 	
 	def 'Clicking FINISH when no name is defined should display validation error'() {
 		when:
 			launchCreateDialog(null)
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { errorMessages.displayed }
+			waitFor { error }
 	}
 	
 	def 'ADD MORE RULES button should add one more rule'() {
@@ -160,17 +161,17 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			ruleValues[0].value('+44')
 			addRule()
 			ruleValues[1].value('+254')
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { errorMessages.displayed }
+			waitFor { error }
 	}
 
 	def 'a single empty rule should fail validation'() {
 		when:
 			launchCreateDialog()
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { errorMessages.displayed }
+			waitFor { error }
 	}
 
 	def 'a single empty rule followed by filled rules should fail validation'() {
@@ -179,9 +180,9 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			addRule()
 			ruleField[1].value('Contact name')
 			ruleValues[1].value('bob')
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { errorMessages.displayed }
+			waitFor { error }
 	}
 	
 	def 'filled rule followed by empty rule should fail validation'() {
@@ -190,16 +191,16 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			addRule()
 			ruleField[1].value('Contact name')
 			ruleValues[1].value('bob')
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { errorMessages.displayed }
+			waitFor { error }
 	}
 	
 	def 'successfully creating a smart group should show a flash message'() {
 		when:
 			launchCreateDialog()
 			setRuleValue(0, '+44')
-			finishButton.click()
+			submit.click()
 		then:
 			waitFor { flashMessage.text().contains('English Contacts') }
 	}
@@ -210,7 +211,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			launchCreateDialog('All the bobs!')
 			ruleField[0].value('Contact name')
 			setRuleValue(0, 'bob')
-			finishButton.click()
+			submit.click()
 		then:
 			waitFor { getMenuLink('All the bobs!').displayed }
 	}
@@ -231,7 +232,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			launchCreateDialog('Field Dwellers')
 			ruleField[0].value('Town')
 			setRuleValue(0, 'field')
-			finishButton.click()
+			submit.click()
 		then:
 			waitFor { getMenuLink('Field Dwellers') }
 		when:
