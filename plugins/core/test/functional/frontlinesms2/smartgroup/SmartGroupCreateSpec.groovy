@@ -29,7 +29,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			!previous
+			!previous.displayed
 	}
 	
 	def 'SMART GROUP NAME FIELD is displayed'() {
@@ -184,13 +184,13 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			waitFor { error }
 	}
-	
+
 	def 'filled rule followed by empty rule should fail validation'() {
 		when:
 			launchCreateDialog()
+			ruleField[0].value('Contact name')
+			ruleValues[0].value('bob')
 			addRule()
-			ruleField[1].value('Contact name')
-			ruleValues[1].value('bob')
 			submit.click()
 		then:
 			waitFor { error }

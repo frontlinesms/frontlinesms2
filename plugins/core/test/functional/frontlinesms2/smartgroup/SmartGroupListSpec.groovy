@@ -2,29 +2,31 @@ package frontlinesms2.smartgroup
 
 import frontlinesms2.*
 import frontlinesms2.contact.PageContactShow
+import frontlinesms2.popup.*
 
 class SmartGroupListSpec extends SmartGroupBaseSpec {
 	def 'smartgroups list is not visible if there are no smart groups'() {
 		when:
 			to PageSmartGroup
 		then:
-			!smartGroupSubmenuLinks.size()
+			!bodyMenu.smartGroupSubmenuLinks.size()
 	}
-	
+
 	def 'smartgroups list is visible if there are smart groups created'() {
 		when:
 			launchCreateDialog()
 			ruleValues[0].value('+44')
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { smartGroupSubmenuLinks.size() == 1 }
+			at PageSmartGroup
+			waitFor { bodyMenu.smartGroupSubmenuLinks.size() == 1 }
 	}
 	
 	def 'CREATE NEW SMARTGROUP button is available when there are no smart groups'() {
 		when:
 			to PageSmartGroup
 		then:
-			createSmartGroupButton.displayed
+			bodyMenu.createSmartGroupButton.displayed
 	}
 
 	def 'CREATE NEW SMARTGROUP button is available when there are smart groups'() {
@@ -33,7 +35,7 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			to PageSmartGroup
 		then:
-			createSmartGroupButton.displayed
+			bodyMenu.createSmartGroupButton.displayed
 	}
 	
 	def 'selected smartgroup should be highlighted in the smartgroup menu'() {

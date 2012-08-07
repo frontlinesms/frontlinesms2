@@ -19,7 +19,7 @@ abstract class SmartGroupBaseSpec extends grails.plugin.geb.GebSpec {
 	
 	def launchCreateDialog(smartGroupName='English Contacts') {
 		to PageSmartGroup
-		createSmartGroupButton.click()
+		bodyMenu.createSmartGroupButton.click()
 		waitFor { at SmartGroupCreateDialog }
 		if(smartGroupName) smartGroupNameField.value(smartGroupName)
 	}

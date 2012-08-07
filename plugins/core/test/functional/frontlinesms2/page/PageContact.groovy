@@ -27,6 +27,12 @@ class BodyMenu extends geb.Module {
 	    }
 	    newContact { $('li.contacts .create a') }
 		newGroup { $('li.groups .create a') }
+		smartgroups { $('li.smartgroups')}
+		smartGroupSubmenuLinks(required:false) { smartgroups.find('a:not(.create)') }
+		createSmartGroupButton { $('li.smartgroups li.create a') }
+		smartGroupIsDisplayed { smartGroupInstance ->
+			$("title").text().contains(smartGroupInstance.name)
+		}
 	}
 }
 
