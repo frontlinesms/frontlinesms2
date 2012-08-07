@@ -12,7 +12,7 @@ import serial.mock.CommPortIdentifier
 class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'When there are no connections, this is explained to the user'() {
 		when:
-			to ConnectionPage
+			to PageConnection
 		then:
 			connectionList.displayed
 			connectionList.text().contains('You have no connections configured.')
@@ -21,7 +21,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'There is a Not Connected label shown for inactive connection'() {
 		when:
 			createTestEmailConnection()
-			to ConnectionPage
+			to PageConnection
 		then:
 			connectionList.status == "Not connected"
 	}
@@ -29,7 +29,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'there is a DELETE button shown for inactive connection'() {
 		when:
 			createTestEmailConnection()
-			to ConnectionPage
+			to PageConnection
 		then:
 			connectionList.btnDelete.displayed
 	}
@@ -37,7 +37,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'should show "create route" button for inactive connection '() {
 		when:
 			createTestEmailConnection()
-			to ConnectionPage
+			to PageConnection
 		then:
 			connectionList.btnCreateRoute.displayed
 	}
@@ -45,7 +45,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'DELETE button should remove selected fconnection from the list'() {
 		given:
 			createTestEmailConnection()
-			to ConnectionPage
+			to PageConnection
 		when:
 			connectionList.btnDelete.click()
 		then:
@@ -58,7 +58,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			def testConnection = createTestSmsConnection()
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
-			to ConnectionPage
+			to PageConnection
 			waitFor{ connectionList.btnCreateRoute.displayed }
 		then:
 			!connectionList.btnTestRoute.displayed
@@ -75,7 +75,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			def testConnection = createTestSmsConnection()
 			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
 		when:
-			to ConnectionPage
+			to PageConnection
 			connectionList.btnCreateRoute.click()
 		then:
 			waitFor('very slow') { connectionList.status == "Connected" }
@@ -85,7 +85,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 	def 'The first connection in the connection list page is selected'() {
 		when: 
 			createTestEmailConnection()
-			to ConnectionPage
+			to PageConnection
 		then:
 			connectionList.selectedConnection.size() == 1
 	}
@@ -94,7 +94,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		given:
 			createTestEmailConnection()
 		when:
-			to ConnectionPage
+			to PageConnection
 			btnNewConnection.click()
 		then:
 			waitFor('very slow') { at ConnectionDialog }
@@ -111,14 +111,14 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			submit.click()
 		then:
-			at ConnectionPage
+			at PageConnection
 			waitFor { connectionList.selectedConnection.text().contains('name') }
 			connectionList.connection.size() == 2
 	}
 
 	def 'dialog should not close after confirmation screen unless save is successful'(){
 		given:
-			to ConnectionPage
+			to PageConnection
 			btnNewConnection.click()
 			waitFor { at ConnectionDialog }
 			next.click()
@@ -139,7 +139,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 
 	def 'can setup a new IntelliSMS account'() {
 		when:
-			to ConnectionPage
+			to PageConnection
 			btnNewConnection.click()
 		then:
 			waitFor { at ConnectionDialog }
@@ -159,7 +159,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			submit.click()
 		then:
-			at ConnectionPage
+			at PageConnection
 			waitFor { connectionList.selectedConnection.text().contains('New IntelliSMS Connection') }
 	}
 	
