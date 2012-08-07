@@ -278,9 +278,6 @@ class SmartGroupCreateDialog extends MediumPopup {
 		addRuleButton { $('.btn', text:"Add another rule") }
 		editButton { $('button', text:'Edit')}
 		flashMessage(required:false) { $('div.flash') }
-		getMenuLink { smartGroupName ->
-			$('li.smartgroups li:not(.create) a', text:smartGroupName)
-		}
 	}
 }
 

@@ -30,6 +30,9 @@ class BodyMenu extends geb.Module {
 		smartgroups { $('li.smartgroups')}
 		smartGroupSubmenuLinks(required:false) { smartgroups.find('a:not(.create)') }
 		createSmartGroupButton { $('li.smartgroups li.create a') }
+		getSmartGroupLink { groupName ->
+			$('li.smartgroups ul.submenu li a', text:groupName )
+	    }
 		smartGroupIsDisplayed { smartGroupInstance ->
 			$("title").text().contains(smartGroupInstance.name)
 		}

@@ -60,14 +60,14 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			goToSmartGroupPage(a)
 		then:
-			moreActions.displayed
+			header.moreGroupActions.displayed
 		when:
-			moreActionsSelect("rename")
+			header.moreGroupActions.value("rename")
 		then:
-			waitFor{ dialogIsDisplayed}
+			waitFor{ at RenameGroupPopup }
 		when:
-			inputValue("smartgroupname", "Renamed Smart Group")
-			done.click()
+			groupName.value('Renamed smart group')
+			ok.click()
 		then:
 			!SmartGroup.findByName("Test Group A")
 	}
@@ -78,13 +78,13 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			goToSmartGroupPage(a)
 		then:
-			moreActions.displayed
+			header.moreGroupActions.displayed
 		when:
-			moreActionsSelect("delete")
+			header.moreGroupActions.value("delete")
 		then:
-			waitFor{ dialogIsDisplayed }
+			waitFor{ at DeleteGroupPopup }
 		when:
-			done.click()
+			ok.click()
 		then:
 			!SmartGroup.findByName("Test Group A")
 	}
