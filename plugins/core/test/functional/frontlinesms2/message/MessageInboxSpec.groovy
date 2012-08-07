@@ -144,6 +144,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			messageList.messages[0].checkbox.click()
 			messageList.messages[1].checkbox.click()
 		then:
+			waitFor("veryslow") { multipleMessageDetails.displayed }
 			waitFor("veryslow") { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
 			messageList.messages[1].checkbox.click()
@@ -215,15 +216,15 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 	}
-	@spock.lang.IgnoreRest
+
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
 			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
 			to PageMessageInbox, Fmessage.findByText('hello').id
-			singleMessageDetails.moveTo("my-folder")
-		then:	
+			singleMessageDetails.moveTo(Fmessage.findByText('hello').id)
+		then:
 			waitFor("veryslow") { messageList.noContent.text() == "No messages here!" }
 			bodyMenu.selected == "inbox"
 	}
