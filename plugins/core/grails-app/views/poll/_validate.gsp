@@ -254,9 +254,9 @@
 				def mode = pollResponse?"edit":"create"
 			%>
 			$.each(choices, function(key, value) {
-				if("${mode}" == "create") {
-					if( value.val().trim().length == 0 ) value.val(key);
-				}
+				<g:if test="${mode == 'create'">
+					if(value.val().trim().length == 0) value.val(key);
+				</g:if>
 			});
 		} else {
 			var aliases = "";
