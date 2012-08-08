@@ -15,6 +15,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 					{ text:btnFinishedText, click:submitAction, id:"submit" }],
 			close: function() { $(this).remove(); }
 	});
+	addChangeHandlersForRadiosAndCheckboxes();
 	initializePopup(modalBox);
 }
 
@@ -43,6 +44,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 		],
 		close: function() { $(this).remove(); }
 	});
+	addChangeHandlersForRadiosAndCheckboxes();
 	makeTabsUnfocusable();
 	validateTabSelections(modalBox);
 	changeButtons(getButtonToTabMappings(),  getCurrentTabDom());
@@ -65,6 +67,7 @@ function launchHelpWizard(html) {
 		],
 		close: function() { $(this).remove(); }
 	});
+	addChangeHandlersForRadiosAndCheckboxes();
 	$(".ui-dialog").addClass("help");
 	initializePopup();
 }

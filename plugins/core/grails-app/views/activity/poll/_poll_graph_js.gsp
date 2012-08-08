@@ -1,3 +1,4 @@
+<!-- TODO this should be moved to a javascript file -->
 <r:script>
 $(function() {
 	$("#poll-graph-btn").live("click", function(){
@@ -10,7 +11,7 @@ $(function() {
 		
 	});
 
-	pollGraph = {
+	var pollGraph = {
 		stats: {},
 		loaded: false,
 		refresh:false,
@@ -107,4 +108,5 @@ $(function() {
 	}
 	
 });
-</r:script>	
+</r:script>
+

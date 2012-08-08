@@ -291,7 +291,9 @@
 
 	function updateConfirmationMessage() {
 		updateMessageDetails();
-		$("#auto-reply-read-only-text").html($("#autoreplyText").val().trim() ? $("#autoreplyText").val() : i18n("autoreply.text.none"))
+		
+		var currentVal = $("#autoreplyText").val();
+		$("#auto-reply-read-only-text").html(currentVal.trim()? currentVal: i18n("autoreply.text.none"))
 		// update auto-sort
 		var autoSort = $("input[name='enableKeyword']:checked").val();
 		var autoSortMessages = $('#auto-sort-confirm p');
@@ -328,7 +330,7 @@
 		if(choice.id != "choiceA" && choice.id != "choiceE") {
 			var nextLabel = $(choice).parent().next().find('label');
 			var nextInput = $(choice).parent().next().find('.choices');
-			if (!$.trim(choice.value).length) {
+			if (!choice.value.trim().length) {
 				if (nextInput.val().trim().length == 0){
 					nextLabel.removeClass('field-enabled');
 					nextInput.attr('disabled', 'disabled');
