@@ -27,6 +27,9 @@ class PollResponse {
 				it.removeFromMessages(message)
 			}
 			this.messages.add(message)
+			if (this.poll.messages == null)
+				this.poll.messages = []
+			this.poll.messages << message
 			message.messageOwner = this.poll
 			message.save()
 		}
