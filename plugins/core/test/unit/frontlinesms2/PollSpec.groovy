@@ -55,7 +55,7 @@ class PollSpec extends Specification {
 			poll.processKeyword(m, exactMatch)
 		then:
 			responses[response].messages == [m]
-			!poll.messages?.contains(m)
+			poll.messages?.contains(m)
 		where:
 			messageText            | exactMatch | validResponseCount | response
 			'k c'                  | true       | 3                  | 'C'
