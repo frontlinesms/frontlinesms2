@@ -14,7 +14,7 @@ You are able to rename any show in a few simple steps.
 
 Your Show will be Renamed.
 
-_**Note:** Show names must be unique. You cannot have two shows with the same name. When a show is deleted **and** removed from the trash, that name can then be used in any new show._
+_**Note:** Show names must be unique. You cannot have two shows with the same name (including any stored in archive or trash). When a show is deleted **and** removed from the trash, that name can then be used in any new show._
 
 ### Related Actions
 [Exporting a Show][4]  

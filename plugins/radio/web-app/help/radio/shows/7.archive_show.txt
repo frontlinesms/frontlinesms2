@@ -1,6 +1,6 @@
 # Archiving Shows
 
-Archiving a Show removes it, and any activities associated with it, from the messages tab and stops new messages being automatically sorted into the show and it's activities. This can be particularly useful for reducing the amount of clutter you have on your screen if you have a lot of shows you don't use much anymore. When a show has been archived, all the information about that show is still available. You can still view the WordCloud. The format for the Show remains the same across the messages tab and archive tab. You are also able to still [export][1], [rename][2] and [delete][3] Shows from the [show archive][4]
+Archiving a Show removes it, and any activities associated with it, from the messages tab and stops new messages being automatically sorted (e.g. by keyword) into the show and it's activities. This can be particularly useful for reducing the amount of clutter you have on your screen if you have a lot of shows you don't use often but may want to reference later. When a show has been archived, all the information about that show and activity is still available. You can still view the WordCloud. The format for the Show remains the same across the messages tab and archive tab. You are also able to still [export][1], [rename][2] and [delete][3] Shows from the [show archive][4]
 
 ![Archiving a Show][5]
 
@@ -10,11 +10,18 @@ To archive a Show, follow these steps:
 
 1.  Select the Show you want to archive.
 2.  Click on the "Archive" button (1).
-3.  Your Show will have been archived!    
+3.  Your Show and associated activities will have been sent to the shows archive.  
 
-If your archived Show has Activities associated with it, they will also be archived. If these Activities use a keyword, such as a [Poll activity][6], the keyword can not be used again in the creation of a new [poll][6]. If the [activity is deleted][7], that keyword is then available for use when creating new activities.  
 
-To view your archived shows, navigate to the [archive tab][8] and then click on [show archive][4]. You will find a list of your archived activities.
+You can not put a show on air while it is in the archive. 
+
+If your archived Show has Activities associated with it, they will also be archived. If these Activities use a keyword, such as a [Poll activity][6], the keyword can not be used again in the creation of a new [poll][6]. If the [activity is deleted][7] and removed from Trash, that keyword is then available for use when creating new activities. 
+
+
+If you want to archive a show but keep an associated activity in the messages tab, you will need to remove the association [Adding Activities to Shows][3]
+
+4. To view your archived shows, navigate to the [archive tab][8]. Here you will find the [show archive][4] which displays the name of any archived shows. When you click on a show, you will be able to access any associated activites.  
+
 
 ### Related Actions
 [Unarchiving Shows][9]  

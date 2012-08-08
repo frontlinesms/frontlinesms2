@@ -1,6 +1,6 @@
 # Deleting a Show
 
-You can delete Shows in the same way you can delete messages.
+You can delete Shows in a similar way that you can delete messages.
 
 ![Deleting Shows][1]
 
@@ -11,7 +11,7 @@ You can delete Shows in the same way you can delete messages.
 3.  A window will appear asking you if you want to confirm the deletion.
 4.  Click "Delete".
 
-The aShow _and all activities and messages within it_ will be moved to the [trash][3].
+The Show _and all activities associated with it and messages within it_ will be moved to the [trash][3]. If you want to delete the show but keep an associated activity make sure you remove it from the show [Adding Activites to Shows][3]
 
 ###  Related Actions
 [Exporting a Show][4]  

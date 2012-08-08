@@ -1,20 +1,22 @@
-# Exporting Shows
+# Exporting Messages in Shows
 
-Exporting lets you to extract messages from FrontlineSMS Version 2 and format them for use in other programs like Microsoft Excel. Export can also be used to create a backup of the selected messages so that you have a copy of them, should any of your hardware malfunction.
+Exporting lets you to extract messages from FrontlineSMS Version 2 and format them for use in other programs like Microsoft Excel or PDF. Export can also be used to create a backup of the selected messages so that you have a copy of them, should any of your hardware malfunction.You have the option to export all messages contained in the show's inbox.
 
 ![Exporting Show][1]
 
 1.  When you are viewing the show that you wish to export, click on "More Actions" and then select "Export". 
 2.  A new window will appear prompting you to choose which format you would like to export to, and how many messages are being exported.  
+3. The export will contain all messages from all dates which appear in the show's inbox.The export will also include messages from activities associated with that show.
 ![Export Dialog][2] 
 
 #### Technical Tips!
 
 _CSV stands for Comma Separated Values. This type of file can be opened by most spreadsheet software, including Microsoft Excel. If you want to manipulate your messages in a spreadsheet format then CSV would be the most appropriate format.    
-PDF stands for Portable Document Format. This type of file can be opened by PDF readers such as Adobe Acrobat. If you want to print your messages then PDF is the most appropriate format._
+PDF stands for Portable Document Format. This type of file can be opened by PDF readers such as Adobe Acrobat. If you want to print your messages without editing then PDF is the most appropriate format._
 
 3.  After selecting a format for your messages, click "Export".
 4.  You will be prompted by your browser to choose a location to save your exported messages. *__If this doesn't happen__* then the file has been automatically saved to your browsers default downloads folder.
+5. If you want to further customize the messages included in the export, you can do this from the Search tab. Here, you will be able to select the show you are interested in and adjust other parameters like the date or by keyword. Once you have retrived the search result, you can then export these messages by clicking "Export" in the Search tab. 
 
 ### Related Actions
 [Deleting a Show][3]  

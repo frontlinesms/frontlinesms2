@@ -1,6 +1,6 @@
 # Getting Around Shows
 
-You can access shows from the messages tab. When you click on a show for the first time, you will notice that it has a slightly different layout in comparison to the [message inbox][1]. This is because a show performs a specialised function to track the flow of messages and activities while a show is on air. The unique interface for shows has been designed so that information can be accessed and managed easier.
+Shows are a useful way to manage messages based on the time they are received. Shows act like a folder to manage messages which enter FrontlineSMS during the time you indicate that a show is on air. You can access the shows functionality from the messages tab.  The unique interface for shows has been designed so that information can be accessed and managed more easily. Shows are particularly useful when multiple users are using the same instance of FrontlineSMS and want to capture SMS in a certain time frame such as a radio presenter.
 
 ![show overview][1]
 
@@ -8,15 +8,17 @@ You can access shows from the messages tab. When you click on a show for the fir
 
 This large header (1) contains the "Start Show" and "Stop Show" buttons.
 
-__Start Show:__ Clicking on "Start Show" will cause the "On Air" icon to flash. While this is flashing all incoming messages will be stored in the Shows folder.
+__Start Show:__ Clicking on "Start Show" will cause the "On Air" icon to flash. While the show is on air, all incoming messages will be sent to that Show's inbox.You can see which show is on air from any view in the messages tab.
+_**Note:** Activities where keywords have been set up will *not* be affected by starting a show. Messages containing keywords belonging to other activities will be sorted into their respective activity inboxes._
 
-__Stop Show:__ Click on "Stop Show" will cause the "on Air" icon to stop flashing. FrontlineSMS will return to normal and all incoming messages will go to the inbox.
+__Stop Show:__ Click on "Stop Show" will stop messages from entering the show and the "on Air" icon will be disabled. All incoming messages will go to the inbox.
+
+__WordCloud:__ Will display a Word Cloud of all received messages in this show. Please click [here][15] for more information.
+
+_**Note:** You can only put one show on air at once._
 
 The [Quick Message][2] button and buttons to [Archive][3] show, [Export][4] show, [Rename][5] show and [Delete][6] show can be accessed from this header as well. 
 
-Clicking on '[Show WordCloud][7]' (2) allows you to see a visual representation of the message content within the show. The words from all texts contained within the show will be displayed in a cloud to allow you to analyse the themes of incoming messages. For more information click [here][7]:
-
-![WordCloud][8]
 
 ### Message List
 
@@ -24,7 +26,7 @@ The message list (3) functions like any other message list in FrontlineSMS. You 
 
 When viewing a Show, the message list will display some additional information:
 
-Divider bars (4) will appear once a show has been run over more than one day, to help separate messages received on the different days that the show was run.
+Divider bars with a date stamp (4) will appear to separate messages received by the date the show was put on air.
 
 ### Message Details
 
@@ -39,7 +41,7 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [Creating an Auto Reply][13]  
 [Creating a Poll][14]
  
-[1]: .../images/help/show_overview
+[1]: .../images/help/show_overview.png
 [2]: core/messages/3.quick_message
 [3]: radio/shows/7.archive_show
 [4]: radio/shows/6.export_show
@@ -53,4 +55,4 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [12]: core/activities/4.creating_an_announcement
 [13]: core/activities/5.creating_an_autoreply
 [14]: core/activities/3.creating_a_poll
-
+[15]: radio/shows/9.wordcloud
