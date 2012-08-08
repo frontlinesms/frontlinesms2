@@ -161,6 +161,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.save(flush:true, failOnError:true)
 		when:
 			poll.archive()
+			poll.save(flush:true, failOnError:true)
 			poll.refresh()
 		then:
 			poll.liveMessageCount == 2

@@ -31,7 +31,9 @@ abstract class Activity extends MessageOwner {
 //> ACTIONS
 	def archive() {
 		this.archived = true
-		messages.each { it.archived = true }
+		messages.each {
+			it.archived = true
+		}
 	}
 	
 	def unarchive() {
