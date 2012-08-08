@@ -17,7 +17,7 @@
 		<label for="inArchive"><g:message code="search.filter.archive"/></label>
 	</div>
 </g:if>
-<div class="input">
+<div id="datePicker" class="input">
 	<label for="startDate endDate"><g:message code="search.betweendates.label"/></label>
 	<fsms:dateRangePicker startDate="${search?.startDate}" endDate="${search?.endDate}"/>
 </div>

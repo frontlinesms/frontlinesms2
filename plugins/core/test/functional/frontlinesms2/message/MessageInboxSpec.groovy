@@ -44,8 +44,9 @@ class MessageInboxSpec extends MessageBaseSpec {
 			createInboxTestMessages()
 			def message = Fmessage.findBySrc('Alice')
 		when:
-			to PageMessageInbox, "show", message.id
+			to PageMessageInbox, message.id
 		then:
+			waitFor { singleMessageDetails.displayed }
 			singleMessageDetails.sender == message.src
 			compareDatesIgnoreSeconds(singleMessageDetails.date, message.date)
 			singleMessageDetails.text == message.text
@@ -57,11 +58,11 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def aliceMessage = Fmessage.findBySrc('Alice')
 			def bobMessage = Fmessage.findBySrc('Bob')
 		when:
-			to PageMessageInbox, "show", aliceMessage.id
+			to PageMessageInbox, aliceMessage.id
 		then:
 			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${aliceMessage.id}"
 		when:
-			to PageMessageInbox, "show", bobMessage.id
+			to PageMessageInbox, bobMessage.id
 		then:
 			messageList.selectedMessages[0].linkUrl == "/message/inbox/show/${bobMessage.id}"
 	}
@@ -73,10 +74,10 @@ class MessageInboxSpec extends MessageBaseSpec {
 			assert !m1.read
 			assert m2.read
 		when:
-			to PageMessageInbox, "show", m2.id
+			to PageMessageInbox, m2.id
 		then:
-			!messageList.messages[0].isRead
-			messageList.messages[1].isRead
+			messageList.messages[0].isRead
+			!messageList.messages[1].isRead
 	}
 
 	def 'contact name is displayed if message src is an existing contact'() {
@@ -95,7 +96,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			Contact.build(name:'June', mobile:'+254778899')
 			def message = Fmessage.build(src:'+254999999')
 		when:
-			to PageMessageInbox, 'show', message.id
+			to PageMessageInbox, message.id
 			singleMessageDetails.reply.click()
 		then:
 			//FIXME: does this test really check what the title suggests?
@@ -107,17 +108,17 @@ class MessageInboxSpec extends MessageBaseSpec {
 		setup:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, "show", Fmessage.list()[0].id
+			to PageMessageInbox, Fmessage.list()[0].id
 		then:
-			messageList.messages.size() == 3
+			messageList.messages.size() == 2
 		when:
 			footer.showStarred.click()
-			waitFor { messageList.messages.size() == 2 }
+			waitFor { messageList.messages.size() == 1 }
 		then:
-			messageList.messages[1].source == 'Alice'
+			messageList.messages[0].source == 'Alice'
 		when:
 			footer.showAll.click()
-			waitFor { messageList.messages.size() == 3 }
+			waitFor { messageList.messages.size() == 2 }
 		then:
 			messageList.sources.containsAll(['Alice', 'Bob'])
 	}
@@ -127,35 +128,36 @@ class MessageInboxSpec extends MessageBaseSpec {
 			Fmessage.build(src:'+254778899', text:'test')
 			def message = Fmessage.build(src:'+254999999', text:'test')
 		when:
-			to PageMessageInbox, "show", message.id
+			to PageMessageInbox, message.id
 			waitFor{ singleMessageDetails.forward.displayed }
 			singleMessageDetails.forward.click()
 			waitFor { at QuickMessageDialog }
 		then:
-			compose.textArea.text() == "test"
+			waitFor { compose.textArea.text() == "test" }
 	}
-	
+
 	def "should only display message details when one message is checked"() {
 		given:
 			createInboxTestMessages()
 		when:
 			to PageMessageInbox
+			messageList.messages[0].checkbox.click()
 			messageList.messages[1].checkbox.click()
-			messageList.messages[2].checkbox.click()
 		then:
-			waitFor { multipleMessageDetails.checkedMessageCount == 2 }
+			waitFor("veryslow") { multipleMessageDetails.displayed }
+			waitFor("veryslow") { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 		when:
-			messageList.messages[2].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { !multipleMessageDetails.checkedMessageCount.displayed }
-			waitFor { singleMessageDetails.displayed }
+			waitFor { !multipleMessageDetails.displayed }
+			waitFor { singleMessageDetails.text == "hi Alice" }
 	}
 
 	def "should skip recipients tab if a message is replied"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, "show", Fmessage.findBySrc('Bob').id
+			to PageMessageInbox, Fmessage.findBySrc('Bob').id
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -170,7 +172,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
-			to PageMessageInbox, "show", message.id
+			to PageMessageInbox, message.id
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -187,7 +189,7 @@ class MessageInboxSpec extends MessageBaseSpec {
 			def message = new Fmessage(src:'+254999999', dst:'+254112233', text:'test', inbound:true).save(failOnError:true)
 			
 		when:
-			to PageMessageInbox, "show", message.id
+			to PageMessageInbox, message.id
 		then:
 			singleMessageDetails.reply.click()
 			waitFor { at QuickMessageDialog }
@@ -214,24 +216,24 @@ class MessageInboxSpec extends MessageBaseSpec {
 		then:
 			waitFor { confirm.displayed }
 	}
-	
+
 	def "should remain in the same page, after moving the message to the destination folder"() {
 		setup:
 			new Fmessage(src: '1234567', date: new Date(), text: "hello", inbound:true).save(failOnError:true)
 			new Folder(name: "my-folder").save(failOnError:true, flush:true)
 		when:
-			to PageMessageInbox, "show", Fmessage.findByText('hello').id
-			singleMessageDetails.moveTo("my-folder")
-		then:	
-			waitFor { messageList.noContent.displayed }
+			to PageMessageInbox, Fmessage.findByText('hello').id
+			singleMessageDetails.moveTo(Fmessage.findByText('hello').id)
+		then:
+			waitFor("veryslow") { messageList.noContent.text() == "No messages here!" }
 			bodyMenu.selected == "inbox"
 	}
-	
+
 	def "should update message count on tab when new message is received"() {
 		given:
 			createInboxTestMessages()
 		when:
-			to PageMessageInbox, "show", Fmessage.findBySrc('Alice').id
+			to PageMessageInbox, Fmessage.findBySrc('Alice').id
 		then:
 			tabs.unreadcount == 1
 		when:

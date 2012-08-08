@@ -96,6 +96,10 @@ class ActivityController {
 		withActivity { activity ->
 			activity.deleted = false
 			Trash.findByObject(activity)?.delete()
+			activity.messages.each {
+				it.isDeleted = false
+				it.save(failOnError: true, flush: true)
+			}
 			if(activity.save()) {
 				flash.message = defaultMessage 'restored'
 			} else {

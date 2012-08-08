@@ -8,62 +8,60 @@ class MessagesRecievedSpec extends MessageBaseSpec {
 	def 'new messages in the current section are checked for in the backround every ten seconds and causes a notification to appear if there are new messages'() {
 		when:
 			createInboxTestMessages()
-			go 'message/inbox'
+			to PageMessageInbox
 		then:
-			at PageMessageInbox
-			visibleMessageTotal == 2
+			messageList.messages.size() == 2
 		when:
 			sleep 11000
 		then:
-			visibleMessageTotal == 2
-			!newMessageNotification.displayed
+			messageList.messages.size() == 2
+			!messageList.newMessageNotification.displayed
 		when:
 			createTestMessages()
 			sleep 5000
 		then:
-			visibleMessageTotal == 2
-			!newMessageNotification.displayed
+			messageList.messages.size() == 2
+			!messageList.newMessageNotification.displayed
 		when:
 			sleep 5000
 		then:
-			waitFor { newMessageNotification.displayed }
+			waitFor { messageList.newMessageNotification.displayed }
 	}
 	
 	def 'clicking the new message notification refreshes the list and removes the notification'() {
 		when:
 			createInboxTestMessages()
-			go 'message/inbox'
+			to PageMessageInbox
 		then:
-			at PageMessageInbox
-			visibleMessageTotal == 2
+			messageList.messages.size() == 2
 		when:
 			createTestMessages()
 			sleep 11000
 		then:
-			waitFor { newMessageNotification.displayed }
-			visibleMessageTotal == 3
+			waitFor { messageList.newMessageNotification.displayed }
+			messageList.messages.size() == 3
 		when:
-			newMessageNotification.find("a").click()
+			messageList.newMessageNotification.find("a").click()
 		then:
-			waitFor { visibleMessageTotal == 5 }
-			!newMessageNotification.displayed
+			waitFor { messageList.messages.size() == 5 }
+			!messageList.newMessageNotification.displayed
 	}
-		
+
 	def 'when clicking the new message notification, the view stays at the current page and details'() {
 		when:
 			createInboxTestMessages()
-			go "message/inbox/show/${Fmessage.findBySrc('Bob').id}"
+			to PageMessageInbox, Fmessage.findBySrc('Bob').id
 		then:
-			at PageMessageInboxBob
-			visibleMessageTotal == 2
+			messageList.messages.size() == 2
 		when:
 			createTestMessages()
 			sleep 11000
 		then:
-			waitFor { newMessageNotification.displayed }
+			waitFor { messageList.newMessageNotification.displayed }
 		when:
-			newMessageNotification.click()
+			messageList.newMessageNotification.find("a").click()
 		then:
-			at PageMessageInboxBob
+			waitFor { singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.sender == "Bob" }
 	}
 }
