@@ -104,6 +104,10 @@ class FolderController {
 			folder.deleted = false
 			folder.save(failOnError:true, flush:true)
 			Trash.findByObject(folder)?.delete()
+			folder.messages.each {
+				it.isDeleted = false
+				it.save(failOnError: true, flush: true)
+			}
 			flash.message = defaultMessage 'restored'
 			redirect controller:"message", action:"trash"
 		}
