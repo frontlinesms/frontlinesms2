@@ -33,6 +33,7 @@ class FolderController {
 				}
 			}
 		} else {
+			flash.message = message(code: 'folder.create.failed')
 			withFormat {
 				json {
 					render([ok:false, text:message(code: folderInstance.errors.allErrors[0].codes[7])] as JSON)
