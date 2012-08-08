@@ -74,7 +74,7 @@ class CreateActivityDialog extends MediumPopup {
 
 class PollDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("activity")
+		popupTitle.contains("poll")
 	}
 	static content = {
 		compose { module ComposeTab }
