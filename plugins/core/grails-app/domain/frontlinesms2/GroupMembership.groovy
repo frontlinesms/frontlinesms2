@@ -44,6 +44,8 @@ class GroupMembership implements Serializable {
 	}
 	
 	static def searchForContacts(Long groupId, String contactSearchString, String sortBy, max, offset) {
+		if (!sortBy)
+			sortBy = "name"
 		def groupMembershipsAndContacts = Contact.executeQuery("SELECT c FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND lower(c.name) LIKE :contactSearchString",
 				[groupId:groupId, contactSearchString:contactSearchString], [max:max, offset:offset])
 		return groupMembershipsAndContacts.sort { it."${sortBy}" }
