@@ -28,6 +28,7 @@ class BodyMenu extends geb.Module {
 		activityLinks { $('#body-menu li.activities ul.submenu li a') }
 		newActivity { $('#body-menu a#create-new-activity') }
 		newFolder { $('#body-menu li.folders a.btn.create') }
+		folderLinks { $('ul li.folders ul.submenu li a') }
 		activityLink { activityName ->
 			$('#body-menu li.activities ul.submenu li a', text: activityName + " " + Activity.findByName(activityName)?.shortName)
 		}
