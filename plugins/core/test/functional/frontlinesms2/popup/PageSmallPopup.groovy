@@ -48,6 +48,12 @@ class RenameGroupPopup extends SmallPopup {
 	}
 }
 
+class RenameSmartGroupPopup extends RenameGroupPopup {
+	static content = {
+		smartGroupName { $('input#smartgroupname') }
+	}
+}
+
 class DeleteGroupPopup extends SmallPopup {
 	static at = {
 		popupTitle.contains("delete group")

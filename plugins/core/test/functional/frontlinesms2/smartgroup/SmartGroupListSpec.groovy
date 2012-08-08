@@ -64,9 +64,9 @@ class SmartGroupListSpec extends SmartGroupBaseSpec {
 		when:
 			header.moreGroupActions.value("rename")
 		then:
-			waitFor{ at RenameGroupPopup }
+			waitFor{ at RenameSmartGroupPopup }
 		when:
-			groupName.value('Renamed smart group')
+			smartGroupName.value('Renamed smart group')
 			ok.click()
 		then:
 			!SmartGroup.findByName("Test Group A")

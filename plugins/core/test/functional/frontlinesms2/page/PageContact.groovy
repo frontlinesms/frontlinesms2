@@ -65,6 +65,7 @@ class ContentFooter extends geb.Module {
 class ContactList extends geb.Module {
 	static base = { $('#main-list') }
 	static content = {
+		contact { $("li a")}
 		contacts { $("li a")*.text() }
 		contactsLink { $("li a")*.@href }
 		selectContact { contactPosition ->

@@ -282,7 +282,7 @@ class SmartGroupCreateDialog extends MediumPopup {
 
 class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	static at = {
-		popupTitle.contains('Edit Group')
+		popupTitle.contains('edit group')
 	}
 }
 
