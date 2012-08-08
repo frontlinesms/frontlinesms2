@@ -93,13 +93,14 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			createTestMessages()
 		when:
 			to PageMessageAnnouncement, 'New Office'
-			messagesSelect[1].click()
+			messageList.messages[0].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.sender.contains("Jane") }
 		when:
-			messagesSelect[2].click()
+			messageList.messages[1].checkbox.click()
 		then:
-			waitFor { multipleMessageDetails.messageCount.text() == "2 messages selected" }
+			waitFor { multipleMessageDetails.displayed }
+			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 	}
 
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -110,9 +111,10 @@ class AnnouncementListSpec extends AnnouncementBaseSpec {
 			new Contact(name: 'June', mobile: '+254778899').save(failOnError:true)
 		when:
 			to PageMessageAnnouncement, 'New Office'
-			messagesSelect[1].click()
-			messagesSelect[2].click()
+			messageList.messages[0].checkbox.click()
+			messageList.messages[1].checkbox.click()
 		then:
+			waitFor { multipleMessageDetails.displayed }
 			waitFor { multipleMessageDetails.replyAll.displayed }
 		when:
 			multipleMessageDetails.replyAll.click()
