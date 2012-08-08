@@ -6,6 +6,25 @@ if(!Array.prototype.indexOf) {
 	};
 }
 
+// String.trim is not available in IE before IE9, so
+// add it here using the jQuery implementation
+if(!String.prototype.trim) {
+	String.prototype.trim = function(s) {
+		return jQuery.trim(s);
+	}
+}
+
+// Standardise the onclick/onchange firing in IE before IE9
+function addChangeHandlersForRadiosAndCheckboxes() {
+	$('input:radio, input:checkbox').click(function() {
+		this.blur();
+		this.focus();
+	});
+}
+if(jQuery.browser.msie) { $(function() {
+	addChangeHandlersForRadiosAndCheckboxes();
+});}
+
 (function($) {
 	$.fn.disableField = function(){
 	    return this.each(function(){
