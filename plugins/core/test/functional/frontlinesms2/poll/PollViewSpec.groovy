@@ -19,7 +19,7 @@ class PollViewSpec extends PollBaseSpec {
 		when:
 			to PageMessageInbox
 		then:
-			bodyMenu.activityList*.text() == ['Rugby Brands poll', 'Shampoo Brands poll', 'Football Teams poll', 'Create new activity']
+			bodyMenu.activityList*.text() == ['Football Teams poll','Shampoo Brands poll', 'Rugby Brands poll', 'Create new activity']
 	}
 
 	def 'message from bob is second in the list, and links to the show page'() {
