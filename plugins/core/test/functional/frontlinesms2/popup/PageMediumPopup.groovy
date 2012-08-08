@@ -249,7 +249,6 @@ class ConnectionDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains('connection')
 	}
-
 	static content = {
 		connectionType { $("#connectionType") }
 		connectionForm { $('#connectionForm')}
@@ -266,7 +265,6 @@ class SmartGroupCreateDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains('create smart group')
 	}
-
 	static content = {
 
 		rules { $('tr.smart-group-criteria') }
@@ -284,7 +282,7 @@ class SmartGroupCreateDialog extends MediumPopup {
 
 class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	static at = {
-		popupTitle.contains('Edit Group')
+		popupTitle.contains('edit group')
 	}
 }
 

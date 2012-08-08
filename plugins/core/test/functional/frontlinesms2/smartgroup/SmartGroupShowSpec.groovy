@@ -2,19 +2,22 @@ package frontlinesms2.smartgroup
 
 import frontlinesms2.*
 import frontlinesms2.contact.PageContactShow
+import frontlinesms2.popup.*
 
 class SmartGroupShowSpec extends SmartGroupBaseSpec {
 	def 'clicking a smartgroup in the menu should load it in the view'() {
 		when:
 			launchCreateDialog()
 			setRuleValue(0, '+44')
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { getMenuLink('English Contacts').displayed }
+			at PageSmartGroup
+			waitFor { bodyMenu.getSmartGroupLink('English Contacts').displayed }
 		when:
-			getMenuLink('English Contacts').click()
+			bodyMenu.getSmartGroupLink('English Contacts').click()
 		then:
-			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
+			at PageSmartGroup
+			header.title.startsWith("english contacts")
 	}
 	
 	def 'changing contact selection in a smartgroup should keep user in smartgroup view'() {
@@ -26,18 +29,20 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 			setRuleValue(0, '+44')
-			finishButton.click()
+			submit.click()
 		then:
-			waitFor { getMenuLink('English Contacts').displayed }
+			at PageSmartGroup
+			waitFor { bodyMenu.getSmartGroupLink('English Contacts').displayed }
 		when:
-			getMenuLink('English Contacts').click()
+			at PageSmartGroup
+			bodyMenu.getSmartGroupLink('English Contacts').click()
 		then:
-			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
-			contactLink[1].displayed
+			header.title.startsWith("english contacts")
+			contactList.contact[1].displayed
+		when:
+			contactList.contact[1].click()
 		then:
-			contactLink[1].click()
-		then:
-			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
+			bodyMenu.getSmartGroupLink('English Contacts').click()
 	}
 	
 	def 'user can edit an existing smartGroup'(){
@@ -45,11 +50,12 @@ class SmartGroupShowSpec extends SmartGroupBaseSpec {
 			def englishContacts = new SmartGroup(name:'English Contacts', mobile:'+254').save(flush:true, failOnError:true)
 		when:
 			to PageSmartGroupShow, SmartGroup.findByName("English Contacts")
-			getMenuLink('English Contacts').click()
+			bodyMenu.getSmartGroupLink('English Contacts').click()
 		then:
-			smartGroupIsDisplayed(SmartGroup.findByName("English Contacts"))
+			at PageSmartGroup
+			header.title.startsWith('english contacts')
 		when:
-			moreActionsSelect("edit")
+			header.moreGroupActions.value('edit')
 			waitFor { at SmartGroupEditDialog}
 			smartGroupNameField.value(smartGroupNameField.value() == englishContacts.name)
 			setRuleValue(0, "+44")
