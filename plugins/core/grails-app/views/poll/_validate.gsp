@@ -254,7 +254,7 @@
 				def mode = pollResponse?"edit":"create"
 			%>
 			$.each(choices, function(key, value) {
-				<g:if test="${mode == 'create'">
+				<g:if test="${mode == 'create'}">
 					if(value.val().trim().length == 0) value.val(key);
 				</g:if>
 			});
