@@ -1,6 +1,8 @@
 package frontlinesms2.archive
 
 import frontlinesms2.*
+import frontlinesms2.page.*
+import frontlinesms2.poll.*
 import frontlinesms2.message.PageMessageInbox
 
 @Mixin(frontlinesms2.utils.GebUtil)
@@ -22,11 +24,11 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageMessageArchive, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, Fmessage.findBySrc('Max')
 		then:
 			messageList.sources.sort() == ['Jane', 'Max']
 		when:
-			to PageMessageArchive, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, Fmessage.findBySrc('Max')
 			singleMessageDetails.delete.click()
 		then:
 			messageList.sources == ['Jane']
@@ -36,7 +38,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 		given:
 			createTestMessages2()
 		when:
-			to PageMessageArchive, Fmessage.findBySrc('Max')
+			to PageArchiveInbox, Fmessage.findBySrc('Max')
 			messageList.selectAll.click()
 		then:
 			!multipleMessageDetails.archiveAll.displayed
@@ -60,7 +62,7 @@ class ArchiveFSpec extends ArchiveBaseSpec {
 			poll.refresh()
 			assert poll.activityMessages.list().every { it.archived }
 		when:
-			to PageMessageArchive, 'thingy'
+			to PageMessagePoll, 'thingy'
 			messageList.selectAll.click()
 		then:
 			waitFor { multipleMessageDetails.deleteAll.displayed }
