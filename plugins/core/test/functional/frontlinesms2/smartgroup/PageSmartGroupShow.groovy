@@ -22,7 +22,7 @@ class PageSmartGroupShow extends PageSmartGroup {
 
 	static content = {
 		menuItemHighlighted { g ->
-		$("a#smartgroup-link-${g.id}").parent().hasClass('selected')
-	}
+			$("a", text:"${g.name}").parent().hasClass('selected')
+		}
 	}
 }
