@@ -18,13 +18,13 @@ class GroupISpec extends grails.plugin.spock.IntegrationSpec {
 			def results = contactSearchService.getContacts([groupId:fpGroup.id, searchString:"Sam", max:50, offset:0])
 			def resultsCount = contactSearchService.countContacts([groupId:fpGroup.id, searchString:"Sam"])
 		then:
-			assert results == [samAnderson, samJones]
+			assert results.containsAll([samAnderson, samJones])
 			assert resultsCount == 2
 		when:
 			results = contactSearchService.getContacts([searchString:"Sam", max:50, offset:0])
 			resultsCount = contactSearchService.countContacts([searchString:"Sam"])			
 		then:
-			assert results == [samAnderson, samJones, samTina]
+			assert results.containsAll([samAnderson, samJones, samTina])
 			assert resultsCount == 3
 	}
 

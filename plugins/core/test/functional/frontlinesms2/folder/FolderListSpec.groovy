@@ -7,6 +7,7 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class FolderListSpec extends FolderBaseSpec {
+	def trashService = new TrashService()
 	private def DATE_FORMAT = new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 
 	def 'folder message list is displayed'() {
@@ -84,7 +85,7 @@ class FolderListSpec extends FolderBaseSpec {
 			waitFor { messageList.messages.size() == 2 }
 			messageList.sources.containsAll(['Jane', 'Max'])
 	}
-	
+
 	def "should autopopulate the message body when 'forward' is clicked"() {
 		setup:
 			createTestFolders()
@@ -94,9 +95,10 @@ class FolderListSpec extends FolderBaseSpec {
 			singleMessageDetails.forward.jquery.trigger("click")
 		then:
 			waitFor { at QuickMessageDialog }
-			compose.textArea.text() == "I will be late"
+			at QuickMessageDialog
+			waitFor { compose.textArea.text() == "I will be late" }
 	}
-	
+
 	def "message count displayed when multiple messages are selected"() {
 		given:
 			createTestFolders()
@@ -106,7 +108,8 @@ class FolderListSpec extends FolderBaseSpec {
 			messageList.messages[0].checkbox.click()
 			messageList.messages[1].checkbox.click()
 		then:
-			multipleMessageDetails.checkedMessageCount == "2 messages selected"
+			waitFor { multipleMessageDetails.displayed }
+			waitFor { multipleMessageDetails.checkedMessageCount == "2 messages selected" }
 	}
 	
 	def "'Reply All' button appears for multiple selected messages and works"() {
@@ -153,6 +156,7 @@ class FolderListSpec extends FolderBaseSpec {
 				folderName.value("Work")
 				ok.jquery.trigger("click")
 			then:
+				at CreateFolderPopup
 				waitFor { errorPanel.text().toLowerCase() == "used folder name" }
 	}
 
@@ -172,12 +176,18 @@ class FolderListSpec extends FolderBaseSpec {
 	}
 
 	def "can delete a folder"() {
+		setup:
+			createTestFolders()
 		when:
-			deleteFolder()
+			to PageMessageFolder, Folder.findByName("Work")
+			folderMoreActions.value("delete")
+			waitFor { at DeleteFolderPopup }
+			popupTitle.equals("delete folder")
 		then:
+			ok.jquery.trigger("click")
 			at PageMessageFolder
 			waitFor { bodyMenu.selected == "inbox" }
-			!folderLinks*.text().containsAll('Work')
+			!bodyMenu.folderLinks*.text().containsAll('Work')
 	}
 	
 	def "deleted folders show up in the trash section"() {
@@ -193,7 +203,7 @@ class FolderListSpec extends FolderBaseSpec {
 			senderDetails == 'Work folder'
 			DATE_FORMAT.format(date) == DATE_FORMAT.format(Trash.findByObjectId(folderId).dateCreated)
 	}
-	
+
 	def "clicking on empty trash permanently deletes a folder"() {
 		setup:
 			def folderId = deleteFolder()
@@ -206,20 +216,17 @@ class FolderListSpec extends FolderBaseSpec {
 			popupTitle.equals("empty trash?")
 		when:
 			ok.jquery.trigger("click")
-			at PageMessageFolder
+			waitFor { title.toLowerCase().contains("inbox") }
 		then:
-			folderLinks*.text().containsAll('Projects')
+			at PageMessageInbox
+			bodyMenu.folderLinks*.text().containsAll('Projects')
 	}
 	
 	def deleteFolder() {
 		createTestFolders()
 		createTestMessages()
 		def folder = Folder.findByName("Work")
-		to PageMessageFolder, folder
-		folderMoreActions.value("delete")
-		waitFor { at DeleteFolderPopup }
-		popupTitle.equals("delete folder")
-		ok.jquery.trigger("click")
+		trashService.sendToTrash(folder)
 		folder.id
 	}
 }

@@ -53,8 +53,8 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 				to PageMessageInbox
 			then:
 				waitFor('slow') {
-					bodyMenu.activityList[0].text().contains('New Office')
-					bodyMenu.activityList[1].text().contains('Office Party')
+					bodyMenu.activityList[1].text().contains('New Office')
+					bodyMenu.activityList[0].text().contains('Office Party')
 				}
 	}
 

@@ -294,7 +294,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			def m = Fmessage.findBySrc('+254111222')
 			folder.addToMessages(m).save(failOnError: true, flush:true)
 			m.save(flush:true, failOnError:true)
-			controller.params.activityId = folder.id
+			controller.params.activityId = "folder-"+folder.id
 			def model = controller.result()
 		then:
 			model.messageInstanceTotal == 1
