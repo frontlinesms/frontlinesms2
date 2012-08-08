@@ -12,7 +12,7 @@ abstract class MediumPopup extends geb.Page {
 		}
 		cancel { $('button#cancel') }
 		next { $('button#nextPage') }
-		previous { $('button#prevPage') }
+		previous(required:false) { $('button#prevPage') }
 		submit { $('button#submit') }
 		tab { tabId -> 
 			$('#tabs a[href="#tabs-'+tabId+'"]')

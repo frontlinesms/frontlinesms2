@@ -29,7 +29,7 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		when:
 			launchCreateDialog()
 		then:
-			previous.disabled
+			!previous.displayed
 	}
 	
 	def 'SMART GROUP NAME FIELD is displayed'() {
