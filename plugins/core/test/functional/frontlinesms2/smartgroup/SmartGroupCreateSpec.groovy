@@ -24,12 +24,12 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 		then:
 			!submit.disabled
 	}
-	
+
 	def 'there is no BACK button'() {
 		when:
 			launchCreateDialog()
 		then:
-			!previous.displayed
+			previous.disabled
 	}
 	
 	def 'SMART GROUP NAME FIELD is displayed'() {
@@ -213,7 +213,8 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			setRuleValue(0, 'bob')
 			submit.click()
 		then:
-			waitFor { getMenuLink('All the bobs!').displayed }
+			at PageSmartGroup
+			waitFor { bodyMenu.getSmartGroupLink('All the bobs!').displayed }
 	}
 	
 	def 'rules should include custom fields'() {
@@ -234,7 +235,8 @@ class SmartGroupCreateSpec extends SmartGroupBaseSpec {
 			setRuleValue(0, 'field')
 			submit.click()
 		then:
-			waitFor { getMenuLink('Field Dwellers') }
+			at PageSmartGroup
+			waitFor { bodyMenu.getSmartGroupLink('Field Dwellers') }
 		when:
 			def g = SmartGroup.findByName('Field Dwellers')
 			println([g.name, g.contactName, g.mobile, g.email, g.notes, g.customFields])
