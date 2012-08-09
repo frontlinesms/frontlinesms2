@@ -74,7 +74,7 @@ class CreateActivityDialog extends MediumPopup {
 
 class PollDialog extends MediumPopup {
 	static at = {
-		popupTitle.contains("poll")
+		popupTitle.contains("poll") || popupTitle.contains("edit activity")
 	}
 	static content = {
 		compose { module ComposeTab }
@@ -230,8 +230,9 @@ class AnnouncementConfirmTab extends geb.Module {
 }
 
 class AnnouncementSummary extends geb.Module {
-	static at = {
-		popupTitle.contains("announcement saved")
+	static base = { $('div#tabs-4') }
+	static content = {
+
 	}
 }
 

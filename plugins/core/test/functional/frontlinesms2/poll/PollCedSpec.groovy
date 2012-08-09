@@ -399,10 +399,11 @@ class PollCedSpec extends PollBaseSpec {
 	def "user can edit an existing poll"() {
 		setup:
 			def poll = new Poll(name: 'Who is badder?', question: "question", autoreplyText: "Thanks")
-			poll.addToResponses(key: 'choiceA', value: 'Michael-Jackson')
-			poll.addToResponses(key: 'choiceB', value: 'Chuck-Norris')
-			poll.addToResponses(key: 'Unknown', value: 'Unknown')
+			poll.addToResponses(key: 'A', value: 'Michael-Jackson', aliases:'A')
+			poll.addToResponses(key: 'B', value: 'Chuck-Norris', aliases:'B')
+			poll.addToResponses(PollResponse.createUnknown())
 			poll.save(failOnError:true, flush:true)
+			poll.refresh()
 		when:
 			to PageMessageInbox
 			bodyMenu.activityLinks[0].click()
@@ -415,21 +416,21 @@ class PollCedSpec extends PollBaseSpec {
 			compose.question == 'question'
 			compose.pollType == "multiple"
 		when:
-			compose.question = "Who is worse?"
-			compose.dontSendQuestion = false
 			next.click()
 		then:
 			waitFor { response.displayed }
-			response.choice("A").jquery.val("Michael-Jackson")
-			response.choice("B").jquery.val("Chuck-Norris")
+			response.choice("A").jquery.val() == "Michael-Jackson"
+			response.choice("B").jquery.val() == "Chuck-Norris"
 		when:
 			response.choice("C").jquery.val("Bruce Vandam")
+			response.choice("C").jquery.trigger("keyup")
 			next.click()
 		then:
 			waitFor { sort.displayed }
 		when:
 			sort.dontSort.click()
 			next.click()
+			setAliases()
 			goToTab(7)
 			recipients.addField = '1234567890'
 			recipients.addButton.click()
@@ -438,7 +439,7 @@ class PollCedSpec extends PollBaseSpec {
 		when:
 			next.click()
 			confirm.pollName = 'Who is badder?'
-			done.click()
+			submit.click()
 		then:
 			waitFor { Poll.findByName("Who is badder?").responses*.value.containsAll("Michael-Jackson", "Chuck-Norris", "Bruce Vandam") }		
 	}
@@ -519,9 +520,9 @@ class PollCedSpec extends PollBaseSpec {
 		next.click()
 	}
 	
-	def goToTab(tab) {
+	def goToTab(tabNo) {
 		at PollDialog
-		tab(tab).click()
+		tab(tabNo).click()
 	}
 
 	def setAliases(aliasValues=null) {
