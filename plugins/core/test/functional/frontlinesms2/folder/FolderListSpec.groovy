@@ -106,6 +106,7 @@ class FolderListSpec extends FolderBaseSpec {
 		when:
 			to PageMessageFolder, Folder.findByName('Work')
 			messageList.messages[0].checkbox.click()
+			waitFor("slow") { singleMessageDetails.displayed }
 			messageList.messages[1].checkbox.click()
 		then:
 			waitFor { multipleMessageDetails.displayed }
