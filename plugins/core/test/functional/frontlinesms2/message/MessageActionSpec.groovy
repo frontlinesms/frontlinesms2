@@ -79,7 +79,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			multipleMessageDetails.moveTo(shampooPoll.id)
 		then:
-			waitFor("very-slow") { messageList.noContent.displayed }
+			waitFor("veryslow") { messageList.noContent.displayed }
 			Fmessage.owned(footballPoll).count() == 0
 			Fmessage.owned(shampooPoll).count() == 3
 	}
@@ -95,6 +95,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			messageList.messages[0].checkbox.click()
 		then:
+			waitFor("veryslow") { singleMessageDetails.displayed }
 			!singleMessageDetails.archive.displayed
 	}
 
