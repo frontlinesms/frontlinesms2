@@ -10,19 +10,30 @@ function goToSection() {
 	var menuItem = $(this);
 
 	var section = menuItem.attr("href");
-	if(section.indexOf("http:") == 0)
-	{
-		return true;
+	if(section.indexOf("http:") == 0) {
+		if(jQuery.browser.msie && jQuery.browser.version <= 7) {
+			var loc = window.location.toString();
+			var lastSlash = loc.lastIndexOf("/") + 1;
+			loc = loc.substring(0, lastSlash);
+			if(section.indexOf(loc) !== 0) {
+				return true;
+			}
+			section = section.substring(lastSlash);
+		} else {
+			return true;
+		} 
 	}
 	$("#modalBox.help #help-index li.selected").removeClass("selected");
 	menuItem.parent().addClass("selected");
 	$("#help-content").load(url_root + "help/section", { helpSection:section }, function() {
-		// This is a workaround for the image URL bug when viewing help from second+
-		// action URLs TODO long-term solution is to fix help generation/iframe it
-		$("#help-content img").each(function(i, e) {
-			e = $(e);
-			e.attr("src", url_root + "help/" + e.attr("src"));
-		});
+		if(!jQuery.browser.msie || jQuery.browser.version > 7) {
+			// This is a workaround for the image URL bug when viewing help from second+
+			// action URLs TODO long-term solution is to fix help generation/iframe it
+			$("#help-content img").each(function(i, e) {
+				e = $(e);
+				e.attr("src", url_root + "help/" + e.attr("src"));
+			});
+		}
 	});
 	return false;
 }

@@ -2,7 +2,9 @@ var magicwand = {
 	wave: function(select, target) {
 		var list = $('#' + select);
 		var varName = list.val();
-		insertAtCaret(target, "${" + varName + "}");
+		if(varName !== "na") {
+			insertAtCaret(target, "${" + varName + "}");
+		}
 		magicwand.reset(list);
 		$("#"+target).trigger("keyup");
 	},
@@ -11,12 +13,15 @@ var magicwand = {
 	 * @arg list jquery selecter for the <option/> element
 	 */
 	reset: function(list) {
-		list.selectmenu("destroy");
+		if(selectmenuTools.isSupported()) {
+			list.selectmenu("destroy");
+		}
 		list[0].selectedIndex = 0;
 		magicwand.init(list);
 	},
 
 	init: function(list) {
+		if(!selectmenuTools.isSupported()) return;
 		list.selectmenu();
 		var status = list.parent().find(".ui-selectmenu-status");
 		status.text('');

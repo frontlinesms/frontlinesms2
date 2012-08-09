@@ -13,7 +13,7 @@ input[type=file] { border:1px solid #333; }
 /* Hide the poll graph, because it doesn't work */
 #poll-graph-btn { display:none; }
 
-/* flash message background is missing in IE8 TODO opacity is not working for flash messages */
+/* flash message background is missing TODO opacity is not working for flash messages */
 #notifications .flash { background-color: rgb(192,50,131); }
 
 /* magic wand background is too big and the button background is too short vertically */

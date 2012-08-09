@@ -42,16 +42,16 @@ var fconnection = {
 	},
 	isValid: function() {
 		var valid = false;
-		var keys = fconnection[fconnection.getType()].configFieldsKeys
+		var keys = fconnection[fconnection.getType()].configFieldsKeys;
 		if(keys.length > 1) {
-			valid = validateSections(keys)
+			valid = validateSections(keys);
 			if(!valid) return valid;
 			$.each(keys, function(index, value) {
 				valid = isFieldValid(value);
 				return valid;
 			});
 		} else {
-			var fields = fconnection[fconnection.getType()].requiredFields
+			var fields = fconnection[fconnection.getType()].requiredFields;
 			$.each(fields, function(index, value) {
 				valid = isFieldValid(value);
 				return valid;
@@ -64,11 +64,11 @@ var fconnection = {
 	},
 	toggleSubFields: function(key) {
 		if(isSubsection(key)) {
+			// TODO why can't these be combined?
 			if(!getFieldVal(key))
 				disableSubsectionFields(key);
 			if(getFieldVal(key))
 				enableSubsectionFields(key);
-				
 		}	
 	},
 
@@ -81,7 +81,7 @@ var fconnection = {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
 				$("#${it}-confirm").hide();
 			</g:each>
-			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys
+			var configFieldsKeys = fconnection[fconnection.getType()].configFieldsKeys;
 			if(configFieldsKeys.length > 1) {
 				$.each(configFieldsKeys, function(index, value) {
 					setConfirmation(value);
@@ -96,6 +96,7 @@ var fconnection = {
 		}
 	},
 	</g:each>
+	_terminator: null // this is here to prevent the trailing comma which kills IE7
 };
 			
 function isFieldSet(fieldName) {
@@ -105,7 +106,7 @@ function isFieldSet(fieldName) {
 			return validateSubsectionFields(fieldName);
 		}
 	} else {
-		return val!=null && val.length>0;
+		return val!==null && val.length>0;
 	}
 }
 
@@ -113,14 +114,14 @@ function isFieldValid(field) {
 	return isFieldSet(field);
 }
 
-function isInstanceOf(obj, clazz){
-  return (obj instanceof eval("("+clazz+")")) || (typeof obj == clazz.toLowerCase());
+function isInstanceOf(obj, clazz) {
+  return (obj instanceof eval("("+clazz+")")) || typeof(obj) === clazz.toLowerCase();
 }
 
 function validateSubsectionFields(field) {
 	var valid = false;
 	var subSectionFields = $('.' + field + '-subsection-member');
-	var requiredFields = fconnection[fconnection.getType()].requiredFields
+	var requiredFields = fconnection[fconnection.getType()].requiredFields;
 	$.each(subSectionFields, function(index, value) {
 		var field = $(value).attr("field");
 		if(requiredFields.indexOf(field) > -1) {
@@ -148,29 +149,30 @@ function isSubsection(fieldName) {
 
 function disableSubsectionFields(field) {
 	var subSectionFields = $('.' + field + '-subsection-member');
-	$.each(subSectionFields, function(index, value){
+	$.each(subSectionFields, function(index, value) {
 		$(value).disableField();
 	});
 }
 
 function enableSubsectionFields(field) {
 	var subSectionFields = $('.' + field + '-subsection-member');
-	$.each(subSectionFields, function(index, value){
+	$.each(subSectionFields, function(index, value) {
 		$(value).enableField();
 	});
 }
 
 function getFieldVal(fieldName) {
-	if($('#' + fconnection.getType() + fieldName).attr("type") == "checkbox") {
-		var val = $('#' + fconnection.getType() + fieldName).prop("checked");
+	var val;
+	if($('#' + fconnection.getType() + fieldName).attr("type") === "checkbox") {
+		val = $('#' + fconnection.getType() + fieldName).prop("checked");
 	} else {
-		var val = $('#' + fconnection.getType() + fieldName).val();
+		val = $('#' + fconnection.getType() + fieldName).val();
 	}
 	return val;
 }
 
 function setConfirmVal(fieldName, val) {
-	var isCheckbox = $('#' + fconnection.getType() + fieldName).attr("type") == "checkbox";
+	var isCheckbox = $('#' + fconnection.getType() + fieldName).attr("type") === "checkbox";
 	
 	if(isCheckbox == true) {
 		var text = (val == true) ? "Yes": "No";
@@ -188,12 +190,12 @@ function setConfirmation(fieldName) {
 }
 
 function setSecretConfirmation(fieldName) {
-	val = isFieldSet(fieldName)? '****': 'None';
+	var val = isFieldSet(fieldName)? '****': 'None';
 	setConfirmVal(fieldName, val);
 }
 
 function attachCheckBoxListener() {
-	$("input[type='checkbox']").bind("change", function(){
+	$("input[type='checkbox']").bind("change", function() {
 		var key = $(this).attr("field");
 		fconnection.toggleSubFields(key);
 	});
