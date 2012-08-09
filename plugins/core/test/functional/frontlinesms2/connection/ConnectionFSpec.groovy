@@ -71,8 +71,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 
 	def 'delete button is not displayed for a connected Fconnection'() {
 		given:
-			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
+			createTestEmailConnection()
 		when:
 			to PageConnection
 			connectionList.btnCreateRoute.click()
@@ -115,25 +114,17 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 			connectionList.connection.size() == 2
 	}
 
-	def 'dialog should not close after confirmation screen unless save is successful'(){
-		given:
+	def 'dialog should dispay error when wrong baud data type is entered'(){
+		when:
 			to PageConnection
 			btnNewConnection.click()
 			waitFor { at ConnectionDialog }
 			next.click()
+			connectionForm.smslibbaud = "wrongBaud"
 			connectionForm.smslibname = "name"
 			connectionForm.smslibport = "port"
-			connectionForm.smslibbaud = "wrongBaud"
-			next.click()
-		when:
-			submit.click()
 		then:
-			waitFor{ error }
-			error == 'baud must be a valid number'
-			at ConnectionDialog
-			confirmName.text() == "name"
-			confirmPort.text() == "port"
-			confirmType.text() == "Phone/Modem"
+			waitFor {error.text().contains('Please enter only digits')}
 	}
 
 	def 'can setup a new IntelliSMS account'() {

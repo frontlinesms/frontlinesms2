@@ -6,6 +6,9 @@ class PageGeneralSettings extends PageSettings {
 	static url = 'settings/general'
 	
 	static content = {
-		languageList { $('select', name:'language') }
+		languageList { $('select#language') }
+	}
+	static at = {
+		title.contains('Settings') || title.contains('Mazingira')
 	}
 }

@@ -81,11 +81,11 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			Fmessage.list()*.messageOwner.name.every { it == 'messages from v2' }
 	}
 
+	@spock.lang.IgnoreRest
 	def 'Uploading a messages CSV file from version 2 should be able to handle line breaks in messages'() {
 		given:
 			mockFileUpload('importCsvFile', '''"DatabaseID","Source Name","Source Mobile","Destination Name","Destination Mobile","Text","Date Created"
-"3","Sharon Langevin","+254704913240","","[]","Sharon Langevin","2012-06-12 15:51:25.0"
-"27",,,"[Alex Anderson]","[+254702597711]","Joyce
+"27",,+12345678,"[Bobby Briggs]","[+2547123456]","Joyce
 Vancouver
 Siloi
 Rotation
@@ -97,13 +97,13 @@ Shantelle","2012-06-12 15:58:44.488"
 			controller.importMessages()
 		then:
 			// check that messages and folders were created
-			Fmessage.list()*.text.sort() == ['''"Joyce
+			Fmessage.list()*.text.sort() == ['''Joyce
 Vancouver
 Siloi
 Rotation
 Amelia
 Georgina
-Shantelle"''']
+Shantelle''']
 			Folder.list().name == ['messages from v2']
 			Fmessage.list()*.messageOwner.name.every { it == 'messages from v2' }
 	}

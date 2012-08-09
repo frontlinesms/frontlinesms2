@@ -106,6 +106,7 @@ class ImportController {
 					def dispatchStatus
 					headers.eachWithIndex { key, i ->
 						def value = tokens[i]
+						println "Processing cell value: $value for key '$key'"
 						if (key in standardFields) {
 							fm[standardFields[key]] = value
 						} else if (key == 'Message Date') {
@@ -136,6 +137,10 @@ class ImportController {
 						it.status = dispatchStatus?: DispatchStatus.FAILED
 						if (dispatchStatus==DispatchStatus.SENT) it.dateSent = fm.date
 					}
+
+println "Is the message valid? ${fm.validate()}"
+println "The errors are $fm.errors"
+
 					Fmessage.withNewSession {
 						fm.save(failOnError:true)
 					}
