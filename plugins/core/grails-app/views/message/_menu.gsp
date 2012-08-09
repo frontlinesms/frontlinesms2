@@ -23,7 +23,7 @@
 			<fsms:menuitem class="" selected="${f == ownerInstance}" controller="message" action="folder" string="${f.name}" params="[ownerId: f.id]"/>
 		</g:each>
 		<fsms:menuitem bodyOnly="true" class="create">
-			<g:remoteLink class="btn create" controller="folder" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'));">
+			<g:remoteLink class="btn create" controller="folder" action="create" onLoading="showThinking();" onSuccess="hideThinking(); launchSmallPopup(i18n('smallpopup.folder.title'), data, i18n('action.create'),'validate');">
 				<g:message code="folder.create"/>
 			</g:remoteLink>
 		</fsms:menuitem>
