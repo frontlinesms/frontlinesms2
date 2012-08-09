@@ -71,8 +71,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 
 	def 'delete button is not displayed for a connected Fconnection'() {
 		given:
-			def testConnection = createTestSmsConnection()
-			SmslibFconnection.build(name:"test modem", port:"COM2", baud:11200)
+			createTestEmailConnection()
 		when:
 			to PageConnection
 			connectionList.btnCreateRoute.click()
