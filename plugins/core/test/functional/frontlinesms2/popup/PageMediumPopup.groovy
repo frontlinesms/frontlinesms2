@@ -258,6 +258,7 @@ class ConnectionDialog extends MediumPopup {
 		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
 		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
 		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
+		error {$('label', class:'error')}
 	}
 }
 
