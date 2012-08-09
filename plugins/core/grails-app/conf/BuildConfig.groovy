@@ -107,8 +107,16 @@ grails.project.dependency.resolution = {
 	}
 }
 
+coverage {
+}
+
 codenarc {
-	reportName = 'target/test-reports/CodeNarcReport.xml'
+	reportName = 'target/test-reports/codenarc.xml'
 	reportType = 'xml'
+	systemExitOnBuildException = false
+	// NB these numbers should be LOWERED over time as code quality should be INCREASING
+	maxPriority1Violations = 0
+	maxPriority2Violations = 200
+	maxPriority3Violations = 500
 }
 
