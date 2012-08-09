@@ -84,7 +84,6 @@ class ImportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Uploading a messages CSV file from version 2 should be able to handle line breaks in messages'() {
 		given:
 			mockFileUpload('importCsvFile', '''"DatabaseID","Source Name","Source Mobile","Destination Name","Destination Mobile","Text","Date Created"
-"3","Sharon Langevin","+254704913240","","[]","Sharon Langevin","2012-06-12 15:51:25.0"
 "27",,,"[Alex Anderson]","[+254702597711]","Joyce
 Vancouver
 Siloi
