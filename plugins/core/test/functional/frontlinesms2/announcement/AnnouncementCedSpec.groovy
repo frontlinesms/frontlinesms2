@@ -15,7 +15,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 		when:
 			announcement.click()
 		then:
-			waitFor { at AnnouncementDialog }
+			waitFor('slow') { at AnnouncementDialog }
 	}
 
 	def "can create a new Announcement" () {
@@ -43,7 +43,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 			confirm.announcementName.value("newbie")
 			submit.click()
 		then:
-			waitFor { summary.displayed}
+			waitFor { summary.message.displayed }
 	}
 
 	def 'existing announcements appear in activities section of messages'() {
@@ -53,8 +53,7 @@ class AnnouncementCedSpec extends AnnouncementBaseSpec {
 				to PageMessageInbox
 			then:
 				waitFor('slow') {
-					bodyMenu.activityList[0].text().contains('New Office')
-					bodyMenu.activityList[1].text().contains('Office Party')
+					bodyMenu.activityList*.text().containsAll(['New Office announcement', 'Office Party announcement'])
 				}
 	}
 
