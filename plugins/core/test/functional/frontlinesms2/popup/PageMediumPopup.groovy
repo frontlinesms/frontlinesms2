@@ -188,7 +188,6 @@ class ExportDialog extends MediumPopup {
 		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("export");
 	}
 	static content = {
-
 	}
 }
 
@@ -232,7 +231,7 @@ class AnnouncementConfirmTab extends geb.Module {
 class AnnouncementSummary extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
-
+		message { $("div.summary") }
 	}
 }
 
@@ -259,6 +258,7 @@ class ConnectionDialog extends MediumPopup {
 		confirmIntelliSmsConnectionName { $("#intellisms-confirm #confirm-name")}
 		confirmIntelliSmsUserName { $("#intellisms-confirm #confirm-username")}
 		confirmIntelliSmsType { $("#intellisms-confirm #confirm-type")}
+		error {$('label', class:'error')}
 	}
 }
 
