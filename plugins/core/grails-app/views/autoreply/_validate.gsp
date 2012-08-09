@@ -40,8 +40,7 @@
 
 			$("#keyword-confirm").html('<p>' + keyword  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
-		}
-		else{
+		} else {
 			var autoreplyText = $('#messageText').val();
 			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
