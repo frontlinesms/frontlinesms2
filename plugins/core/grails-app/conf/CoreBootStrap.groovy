@@ -69,6 +69,7 @@ class CoreBootStrap {
 				createWelcomeNote()
 				break
 		}
+		ensureResourceDirExists()
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
 		println '\\o/ FrontlineSMS started.'
@@ -443,5 +444,14 @@ class CoreBootStrap {
 
 	private DateFormat createDateFormat() {
 		return new SimpleDateFormat("yyyy/MM/dd")
+	}
+
+	private def ensureResourceDirExists() {
+		def dir = new File(ResourceUtils.getResourcePath())
+		if (!dir.exists())
+		{
+			dir.mkdirs()
+			log.info "creating resource directory at {$dir.absolutePath}"
+		}
 	}
 }
