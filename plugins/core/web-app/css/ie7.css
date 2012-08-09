@@ -41,7 +41,7 @@ input[type=checkbox] { background-color:transparent; }
 /* message list date column needs word-wrap disabled */
 #body.messages #main-list tr td.message-date-cell a, #body.messages #main-list tr td.message-sender-cell a { white-space:nowrap; }
 
-/* TODO settings/connections layout broken - looks like box model issue */
+/* TODO settings > connections layout broken - looks like box model issue */
 /* TODO settings menu has empty margin on right */
 
 /* heading fonts are browser-determined */
