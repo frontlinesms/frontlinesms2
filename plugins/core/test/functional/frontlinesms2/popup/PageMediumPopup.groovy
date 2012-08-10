@@ -312,6 +312,7 @@ class SubscriptionGroupTab extends geb.Module {
 		joinAliases {$('input#joinAliases')}
 		enableLeaveKeyword{$('input#enableLeaveKeyword')}
 		leaveAliases {$('input#leaveAliases')}
+		toggleKeyword {toggle { $('input#enableToggleKeyword') }}
 	}
 }
 
