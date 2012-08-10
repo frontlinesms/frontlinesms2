@@ -37,6 +37,9 @@
 </div>
 
 <r:script>
+	$("#joinAutoreplyText").live("keyup", updateSmsCharacterCount);
+	$("#leaveAutoreplyText").live("keyup", updateSmsCharacterCount);
+	
 	$("input.enableAutoReply").live("change", function() {
 		// FIXME remove lookup of 'auto-reply' "group" - it's just 'this', but instead gets searched for 3 times inside this function
 		var isJoin = $(this).attr("id").indexOf("enableJoin") > -1;
@@ -69,5 +72,4 @@
 		}
 	});
 	
-	$("#autoreplyText").live("keyup", updateSmsCharacterCount);
 </r:script>
