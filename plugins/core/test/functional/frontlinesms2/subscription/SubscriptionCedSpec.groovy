@@ -4,7 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.page.*
 import frontlinesms2.message.PageMessageInbox
 
-class SubscriptionCedSpec extends grails.plugin.geb.GebSpec  {
+class SubscriptionCedSpec extends gSubscriptionBaseSpec  {
 	def "can launch subscription wizard from create new activity link" () {
 		when:
 			to PageMessageInbox
