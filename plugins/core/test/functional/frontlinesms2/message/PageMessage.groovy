@@ -20,7 +20,7 @@ abstract class PageMessage extends frontlinesms2.page.PageBase {
 
 class BodyMenu extends geb.Module {
 	static content = {
-		messageSection { section->
+		messageSection { section ->
 			$("a", text: "${section}")
 		}
 		selected { $('#body-menu .selected').text().toLowerCase() }

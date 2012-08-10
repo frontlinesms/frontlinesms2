@@ -4,6 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.contact.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
+import spock.lang.*
 
 class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	def setup() {
@@ -12,6 +13,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		createTestMessages(Subscription.findByName("Camping Subscription"))
 	}
 
+	@Unroll
+	@IgnoreRest
 	def "subscription page should show the details of the subscription in the header"() {
 		setup:
 			def subscription  = Subscription.findByName("Camping Subscription")
@@ -19,30 +22,33 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageSubscription, subscription
 		then:
 			waitFor { title.toLowerCase().contains("subscription") }
-			keyword == subscription.keyword.value
-			joinAutoreplyText ==  subscription.joinAutoreply.text
-			leaveAutoreplyText == subscription.leaveAutoreply.text
-			groupCount ==  subscription.group.getMembers().size()
-			toggleStatus == subscription.toggleActive
+			header[item] == value
+		where:
+			item               | value
+			'title'            | "camping subscription subscription"
+			'group'            | 'Group: Camping'
+			'groupMemberCount' | '2 members'
+			'keyword'          | 'Keyword: CAMPING'
+			'joinAliases'      | 'Join: JOIN,IN,START'
+			'leaveAliases'     | 'Leave: LEAVE,OUT,STOP'
 	}
 
-	def "clicking the group link shoud redirect to the group page"(){
+	def "clicking the group link shoud redirect to the group page"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { subHead.displayed }
+			waitFor { header.displayed }
 		when:
-			subHead.groupLink.click()
+			header.groupLink.click()
 		then:
-			waitFor { at PageGroup }
-			//subscription.group.name == header.groupname
+			waitFor { at PageGroup, Group.findByName("camping").id }
 	}
 
-	def "clicking the archive button archives the subscription and redirects to inbox "(){
+	def "clicking the archive button archives the subscription and redirects to inbox "() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { subHead.displayed }
+			waitFor { header.displayed }
 		when:
 			header.archive.click()
 		then:
@@ -54,7 +60,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { subHead.displayed }
+			waitFor { header.displayed }
 		when:
 			header.moreAction("edit").jquery.click()
 		then:
@@ -164,7 +170,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { subHead.displayed }
+			waitFor { header.displayed }
 		when:
 			header.moreAction("rename").jquery.click()
 		then:
@@ -176,7 +182,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { subHead.displayed }
+			waitFor { header.displayed }
 		when:
 			header.moreAction("delete").jquery.click()
 		then:
@@ -187,7 +193,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { subHead.displayed }
+			waitFor { header.displayed }
 		when:
 			header.moreAction("export").jquery.click()
 		then:

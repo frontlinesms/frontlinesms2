@@ -1,6 +1,6 @@
 #!/bin/bash
 
 echo "Starting grails in database development mode..."
-echo "Calling 'grails -Dgrails.env=dbDev  $@'"
-grails -Dgrails.env=dbDev $@
+echo "Calling 'grails -Dgrails.env=dbDev -Ddisable.auto.recompile=false $@'"
+grails -Dgrails.env=dbDev -Ddisable.auto.recompile=false $@
 
