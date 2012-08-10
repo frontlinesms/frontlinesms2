@@ -350,7 +350,7 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
-class SubscriptionCategoriseDialog extends PageMediumPopup {
+class SubscriptionCategoriseDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains('categorise subscription')
 	}
