@@ -109,7 +109,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			submit.click()
 		then:
-			waitFor { error }
+			waitFor {error.text().contains('Fill in the required field')}
 			at SubscriptionCreateDialog
 	}
 
@@ -119,7 +119,20 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.addToGroup Group.findByName('Friends').id.toString()
 			next.click()
 		then:
-			waitFor {error}
+			waitFor {error.text().contains('Subscriptions must have a keyword')}
+			group.keywordText.displayed
+			at SubscriptionCreateDialog
+	}
+
+	def "keyword aliases must be provided in a subscription if toggle not enabled"() {
+		when:
+			launchSubscriptionPopup()
+			group.addToGroup Group.findByName('Friends').id.toString()
+			group.enableJoinKeyword.click()
+			group.enableLeaveKeyword.click()
+			next.click()
+		then:
+			waitFor {error.text().contains('Please provide aliases')}
 			group.keywordText.displayed
 			at SubscriptionCreateDialog
 	}
@@ -142,7 +155,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.click()
 			next.click()
 		then:
-			waitFor { error }
+			waitFor {error.text().contains('Please enter autoreply text')}
 			autoreply.enableLeaveAutoreply.displayed
 	}
 

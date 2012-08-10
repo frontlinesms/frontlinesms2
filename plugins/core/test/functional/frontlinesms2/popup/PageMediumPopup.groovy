@@ -297,6 +297,7 @@ class SubscriptionCreateDialog extends MediumPopup {
 		autoreply { module SubscripitonAutoReplyTab }
 		confirm { module SubscripitonConfirmTab }
 		summary { module SubscripitonSummary }
+		error {$('label', class:'error')}
 	}
 }
 
