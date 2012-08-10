@@ -44,4 +44,9 @@ class Folder extends MessageOwner {
 		def messagesToArchive = Fmessage?.owned(this, false, true)?.list()
 		messagesToArchive.each { it?.archived = false }
 	}
+
+	def restoreFromTrash() {
+		this.deleted = false
+		this.messages*.isDeleted = false
+	}
 }

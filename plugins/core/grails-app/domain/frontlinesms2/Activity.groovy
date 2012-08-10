@@ -41,6 +41,11 @@ abstract class Activity extends MessageOwner {
 		messages.each { it.archived = false }
 	}
 
+	def restoreFromTrash() {
+		this.deleted = false
+		activity.messages*.isDeleted = false
+	}
+
 	def processKeyword(Fmessage message, boolean exactMatch) {}
 }
 
