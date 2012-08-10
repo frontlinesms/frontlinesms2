@@ -11,7 +11,7 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 			defaultAction:"toggle")
 
 		def footballGroup = new Group(name:"Football Updates").save()
-		def campingSub = new Subscription(name:"Football Updates Subscription", group:campingGroup,
+		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup,
 			keyword:"FOOTY", joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
 			defaultAction:"join")
 		
@@ -37,8 +37,11 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestMessages(Subscription s) {
 		(11..90).each {
-			def s= Fmessage.build(src:'Bob', text:'Test message number${it}', date:new Date()-it).save(flush:true, failOnError:true)
-			s.addToMessages(s) // TODO correct this to sort messages into either join or leave
+			def m = Fmessage.build(src:'Bob', text:'Test message number${it}', date:new Date()-it).save(flush:true, failOnError:true)
+			s.addToMessages(m) // TODO correct this to sort messages into either join or leave
 		}
+	}
+	static createTestActivities(){
+		new Announcement(name:"Sample Announcement", text:"Message to send").save()
 	}
 }
