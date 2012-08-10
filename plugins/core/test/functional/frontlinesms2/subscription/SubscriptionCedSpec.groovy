@@ -113,6 +113,21 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			at SubscriptionCreateDialog
 	}
 
+	def "Subscriptions must be associated with a group" () {
+		when:
+			launchSubscriptionPopup()
+			group.addToGroup.value('Select group...')
+			group.keywordText = 'friend'
+			group.enableJoinKeyword.click()
+			group.joinAliases = 'join, start'
+			group.enableLeaveKeyword.click()
+			group.leaveAliases = 'leave, stop'
+			next.click()
+		then:
+			waitFor {error.text().contains('Subscriptions must have a group')}
+			at SubscriptionCreateDialog
+	}
+
 	def "keyword must be provided in a subscription"() {
 		when:
 			launchSubscriptionPopup()
@@ -158,7 +173,6 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor {error.text().contains('Please enter autoreply text')}
 			autoreply.enableLeaveAutoreply.displayed
 	}
-
 
 	def launchSubscriptionPopup() {
 		to PageMessageInbox
