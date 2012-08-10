@@ -278,7 +278,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
-			to PageSubscription, Subscription.findByName("My Subscription")
+			to PageMessageSubscription, Subscription.findByName("My Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 			messageList.messages*.text.contains(m.text)

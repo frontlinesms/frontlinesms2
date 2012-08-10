@@ -308,20 +308,20 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#addGroupDropdown').jquery.trigger("change")
 		}
 		keywordText { $('input#keywordText') }
-		enableJoinKeyword {$('input#enableJoinKeyword')}
+		enableJoinKeyword {$('input#enableJoinKeyword')}//checkbox
 		joinAliases {$('input#joinAliases')}
-		enableLeaveKeyword{$('input#enableLeaveKeyword')}
+		enableLeaveKeyword{$('input#enableLeaveKeyword')}//checkbox
 		leaveAliases {$('input#leaveAliases')}
-		toggleKeyword {toggle { $('input#enableToggleKeyword') }}
+		toggleKeyword {toggle { $('input#enableToggleKeyword') }}//radiobutton
 	}
 }
 
 class SubscriptionAutoreplyTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
-		enableJoinAutoreply {$('input#enableJoinAutoreply')}
+		enableJoinAutoreply {$('input#enableJoinAutoreply')}//checkbox
 		joinAutoreplyText {$('input#joinAutoreplyText')}
-		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}
+		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}//checkbox
 		leaveAutoreplyText {$('input#leaveAutoreplyText')}
 	}
 }
