@@ -11,11 +11,18 @@ hibernate {
 }
 // environment specific settings
 environments {
-    development {
-        dataSource {
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
-        }
-    }
+	development {
+		dataSource {
+			url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+		}
+	}
+	dbDev {
+		dataSource {
+			dbCreate = "create-drop"
+			url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+			logSql = true
+		}
+	}
     test {
         dataSource {
             dbCreate = "update"

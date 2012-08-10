@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "Starting grails in database development mode..."
+echo "Calling 'grails -Dgrails.env=dbDev  $@'"
+grails -Dgrails.env=dbDev $@
+
