@@ -3,10 +3,7 @@ package frontlinesms2.subscription
 import frontlinesms2.*
 import frontlinesms2.contact.*
 import frontlinesms2.message.*
-<<<<<<< HEAD
-=======
 import frontlinesms2.popup.*
->>>>>>> d4ef945a07e10b1769f8dd175a9cdee1cc76ea21
 
 class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	def "subscription page should show the details of the subscription in the header"(){
