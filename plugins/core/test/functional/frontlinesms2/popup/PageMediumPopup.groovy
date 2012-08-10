@@ -69,6 +69,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
+		subscription { $('input[value="subscription"]') }
 	}
 }
 
@@ -287,3 +288,54 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
+class SubscriptionDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("subscription") || popupTitle.contains("edit activity")
+	}
+	static content = {
+		group { module SubscripitonGroupTab }
+		autoreply { module SubscripitonAutoReplyTab }
+		confirm { module SubscripitonConfirmTab }
+		summary { module SubscripitonSummary }
+	}
+}
+
+class SubscriptionGroupTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		addToGroup {}
+		keywordText { $('input#name') }
+		enableJoinKeyword {}
+		joinAliases {}
+		enableLeaveKeyword{}
+		leaveAliases {}
+	}
+}
+
+class SubscriptionAutoreplyTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		enableJoinAutoreply {}
+		joinAutoreplyText {}
+		enableLeaveAutoreply{}
+		leaveAutoreplyText {}
+	}
+}
+
+class SubscriptionConfirmTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		subscriptionName { $('input#name') }
+		keyword {}
+		joinAliases {}
+		leaveAliases {}
+		autoreplyText {}
+	}
+}
+
+class SubscriptionSummary extends geb.Module {
+	static base = { $('div#tabs-4') }
+	static content = {
+		message { $("div.summary") }
+	}
+}
