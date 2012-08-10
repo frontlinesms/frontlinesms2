@@ -30,11 +30,14 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor {at SubscriptionCreateDialog}
 		when:
 			group.addToGroup Group.findByName('Friends').id.toString()
-			group.keywordText = 'friend'
-			group.enableJoinKeyword.click()
-			group.joinAliases = 'join, start'
-			group.enableLeaveKeyword.click()
-			group.leaveAliases = 'leave, stop'
+			group.keywordText = 'FRIENDS'
+			next.click()
+		then:
+			waitFor { aliases.displayed}
+		when:
+			aliases.joinAliases = 'join, start'
+			aliases.leaveAliases = 'leave, stop'
+			aliases.enableJoinKeyword.click()
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -61,7 +64,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			createTestSubscriptions()
 		when:
 			to PageMessageInbox
-			bodyMenu.activityLinks[].click()//click on the subscription
+			bodyMenu.activityLinks[0].click()//click on the subscription
 		then:
 			waitFor { at PageMessageSubscription }
 		when:
@@ -70,15 +73,16 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor { at EditSubscriptionDialog }
 		when:
 			group.addToGroup Group.findByName('Not cats').id.toString()
-			group.keywordText = 'nonecats'
+			group.keywordText = 'NONECATS'
 			next.click()
 		then:
-			waitFor {autoreply.displayed}
+			waitFor {aliases.displayed}
 		when:
+			next.click()
 			autoreply.enableJoinAutoreply.click()
-			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Not cats group"
 			autoreply.enableLeaveAutoreply.click()
-			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Not cats group"
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
@@ -92,11 +96,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			group.addToGroup Group.findByName('Friends').id.toString()
-			group.keywordText = 'friend'
-			group.enableJoinKeyword.click()
-			group.joinAliases = 'join, start'
-			group.enableLeaveKeyword.click()
-			group.leaveAliases = 'leave, stop'
+			group.keywordText = 'FRIENDS'
+			next.click()
+			aliases.joinAliases = 'join, start'
+			aliases.leaveAliases = 'leave, stop'
+			aliases.enableJoinKeyword.click()
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -118,11 +122,11 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			group.addToGroup.value('Select group...')
-			group.keywordText = 'friend'
-			group.enableJoinKeyword.click()
-			group.joinAliases = 'join, start'
-			group.enableLeaveKeyword.click()
-			group.leaveAliases = 'leave, stop'
+			group.keywordText = 'FRIENDS'
+			next.click()
+			aliases.enableJoinKeyword.click()
+			aliases.joinAliases = 'join, start'
+			aliases.leaveAliases = 'leave, stop'
 			next.click()
 		then:
 			waitFor {error.text().contains('Subscriptions must have a group')}
@@ -144,12 +148,15 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			group.addToGroup Group.findByName('Friends').id.toString()
-			group.enableJoinKeyword.click()
-			group.enableLeaveKeyword.click()
+			group.keywordText = 'FRIENDS'
+			next.click()
+			aliases.enableJoinKeyword.click()
+			aliases.joinAliases = ''
+			aliases.leaveAliases = ''
 			next.click()
 		then:
 			waitFor {error.text().contains('Please provide aliases')}
-			group.keywordText.displayed
+			aliases.joinAliases.displayed
 			at SubscriptionCreateDialog
 	}
 
@@ -157,11 +164,12 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			group.addToGroup Group.findByName('Friends').id.toString()
-			group.keywordText = 'friend'
-			group.enableJoinKeyword.click()
-			group.joinAliases = 'join, start'
-			group.enableLeaveKeyword.click()
-			group.leaveAliases = 'leave, stop'
+			group.keywordText = 'FRIENDS'
+			next.click()
+			aliases.enableJoinKeyword.click()
+			aliases.joinAliases = 'join, start'
+			aliases.enableLeaveKeyword.click()
+			aliases.leaveAliases = 'leave, stop'
 			next.click()
 		then:
 			waitFor {autoreply.displayed}

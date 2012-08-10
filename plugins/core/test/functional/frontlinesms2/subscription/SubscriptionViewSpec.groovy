@@ -6,13 +6,13 @@ import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
 class SubscriptionViewSpec extends SubscriptionBaseSpec {
-	def setup(){
+	def setup() {
 		createTestSubscriptions()
 		createTestActivities()
 		createTestMessages(Subscription.findByName("Camping Subscription"))
 	}
 
-	def "subscription page should show the details of the subscription in the header"(){
+	def "subscription page should show the details of the subscription in the header"() {
 		setup:
 			def subscription  = Subscription.findByName("Camping Subscription")
 		when:
@@ -58,8 +58,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			header.moreAction("edit").jquery.click()
 		then:
-			waitFor { at SubscriptionDialog }
-			//waitFor { TODO implement contents of the SubscriptionDialog } wait for content to be displayed
+			waitFor { at EditSubscriptionDialog }
 	}
 
 	def "clicking the group link shoud redirect to the group page"(){}
@@ -69,7 +68,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		given:
 			createTestSubscriptions() // TODO create a SubscriptionBaseSpec with appropriate test data
 		when:
-			to PageSubscriptionShow, mySubscription
+			to PageMessageSubscription, mySubscription
 			waitFor { quickMessageButton.displayed }
 			quickMessageButton.click()
 		then:
@@ -117,7 +116,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageInbox, m1
 			singleMessageDetails.moveTo(Subscription.findByGroup(g))
 		then:
-			waitFor { at SubscriptionCategoriseDialog } // TODO: add this page, extending PageMediumPopup
+			waitFor { at SubscriptionCategoriseDialog }
 	}
 
 	def 'When a message is categorised with the dialog, it appears in the correct category and the contact membership is updated'() {
@@ -133,7 +132,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageInbox, m1
 			singleMessageDetails.moveTo(Subscription.findByGroup(g))
 		then:
-			waitFor { at SubscriptionCategoriseDialog } // TODO: add this page, extending PageMediumPopup
+			waitFor { at SubscriptionCategoriseDialog }
 		when:
 			leave.click()
 		then:
@@ -142,14 +141,14 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			to PageMessageInbox, m2
 			singleMessageDetails.moveTo(Subscription.findByGroup(g))
 		then:
-			waitFor { at SubscriptionCategoriseDialog } // TODO: add this page, extending PageMediumPopup
+			waitFor { at SubscriptionCategoriseDialog }
 		when:
 			join.click()
-			to PageSubscriptionShow, Subscription.findByGroup(g)
+			to PageMessageSubscription, Subscription.findByGroup(g)
 		then:
 			waitFor { at PageMessageInbox }
 		when:
-			to PageSubscriptionShow, Subscription.findByGroup(g)
+			to PageMessageSubscription, Subscription.findByGroup(g)
 		then:
 			messageList.sources.containsAll(["prudence", "wilburforce"])
 			messageList.sources.length == 2

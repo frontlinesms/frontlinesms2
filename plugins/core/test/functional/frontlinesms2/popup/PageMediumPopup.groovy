@@ -202,7 +202,6 @@ class RenameDialog extends MediumPopup {
 	}
 }
 
-
 class AnnouncementDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains("announcement")
@@ -294,6 +293,7 @@ class SubscriptionCreateDialog extends MediumPopup {
 	}
 	static content = {
 		group { module SubscripitonGroupTab }
+		aliases { module SubscriptionAliasesTab}
 		autoreply { module SubscripitonAutoReplyTab }
 		confirm { module SubscripitonConfirmTab }
 		summary { module SubscripitonSummary }
@@ -309,26 +309,32 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#addGroupDropdown').jquery.trigger("change")
 		}
 		keywordText { $('input#keywordText') }
-		enableJoinKeyword {$('input#enableJoinKeyword')}//checkbox
+	}
+}
+
+class SubscripitonAliasesTab extends geb.module {
+	static base = { $('div#tabs-2')}
+	static content = {
 		joinAliases {$('input#joinAliases')}
-		enableLeaveKeyword{$('input#enableLeaveKeyword')}//checkbox
 		leaveAliases {$('input#leaveAliases')}
-		toggleKeyword {toggle { $('input#enableToggleKeyword') }}//radiobutton
+		enableJoinKeyword {$('input#enableJoinKeyword')}
+		enableLeaveKeyword{$('input#enableLeaveKeyword')}
+		toggleKeyword {toggle { $('input#enableToggleKeyword') }}
 	}
 }
 
 class SubscriptionAutoreplyTab extends geb.Module {
-	static base = { $('div#tabs-2') }
+	static base = { $('div#tabs-3') }
 	static content = {
-		enableJoinAutoreply {$('input#enableJoinAutoreply')}//checkbox
+		enableJoinAutoreply {$('input#enableJoinAutoreply')}
 		joinAutoreplyText {$('input#joinAutoreplyText')}
-		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}//checkbox
+		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}
 		leaveAutoreplyText {$('input#leaveAutoreplyText')}
 	}
 }
 
 class SubscriptionConfirmTab extends geb.Module {
-	static base = { $('div#tabs-3') }
+	static base = { $('div#tabs-4') }
 	static content = {
 		subscriptionName { $('input#name') }
 		keyword {$("#confirm-keyword").text()}
@@ -339,7 +345,7 @@ class SubscriptionConfirmTab extends geb.Module {
 }
 
 class SubscriptionSummary extends geb.Module {
-	static base = { $('div#tabs-4') }
+	static base = { $('div#tabs-5') }
 	static content = {
 		message { $("div.summary") }
 	}
@@ -348,5 +354,16 @@ class SubscriptionSummary extends geb.Module {
 class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	static at = {
 		popupTitle.contains('edit subscription')
+	}
+}
+
+class SubscriptionCategoriseDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains('categorise subscription')
+	}
+	static content = {
+		groupName {'input#group-dropdown'}
+		join {'input#btn_join'}
+		leave {'input#btn_leave'}
 	}
 }
