@@ -33,24 +33,20 @@
 .ui-tabs-panel #manual-label {
 	padding-right: 10px;
 }
-.ui-tabs-panel #manual-address .btn{
-	display: inline;
-}
 
 .ui-tabs-panel #address {
 	width: 200px;
 }
 
+.ui-tabs-panel div.controls { display:table-row; padding-top:10px; }
+.ui-tabs-panel div.controls > * { display:table-cell; }
+.ui-tabs-panel div.controls #recipients-selected { width:100%; text-align:right; padding-top:10px; }
+
 .ui-tabs-panel #recipients-list {
-	height: 260px;
+	height: 300px;
 	overflow: auto;
 	margin: 0;
 	box-shadow: 0px 3px 10px -5px #888888 inset, 0px -3px 10px -5px #888888 inset;
-}
-.ui-tabs-panel #recipients-selected {
-	height: 17px;
-	float: right;
-	padding: 4px 0 2px 0;
 }
 
 .ui-tabs-panel #recipients-list ul{
@@ -59,10 +55,6 @@
 }
 .ui-tabs-panel #recipients-list li {
 	line-height: 200%;
-}
-
-.ui-tabs-panel div#search {
-	margin-bottom:10px;
 }
 
 .ui-tabs-panel #groups {
