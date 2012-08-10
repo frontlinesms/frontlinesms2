@@ -43,7 +43,7 @@ abstract class Activity extends MessageOwner {
 
 	def restoreFromTrash() {
 		this.deleted = false
-		activity.messages*.isDeleted = false
+		this.messages*.isDeleted = false
 	}
 
 	def processKeyword(Fmessage message, boolean exactMatch) {}
