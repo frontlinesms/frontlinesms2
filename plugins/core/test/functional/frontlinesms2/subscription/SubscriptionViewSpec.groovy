@@ -6,13 +6,13 @@ import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
 class SubscriptionViewSpec extends SubscriptionBaseSpec {
-	def setup(){
+	def setup() {
 		createTestSubscriptions()
 		createTestActivities()
 		createTestMessages(Subscription.findByName("Camping Subscription"))
 	}
 
-	def "subscription page should show the details of the subscription in the header"(){
+	def "subscription page should show the details of the subscription in the header"() {
 		setup:
 			def subscription  = Subscription.findByName("Camping Subscription")
 		when:
