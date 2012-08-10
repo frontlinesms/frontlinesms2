@@ -4,7 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.contact.*
 
 class SubscriptionViewSpec {
-<<<<<<< HEAD
+
 	def "subscription page should show the details of the subscription in the header"(){
 		/*
 		link to group
@@ -16,6 +16,7 @@ class SubscriptionViewSpec {
 		*/
 	}
 	def "clicking the group link shoud redirect to the group page"(){}
+	
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
 		
 	}
