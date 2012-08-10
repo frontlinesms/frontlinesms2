@@ -111,7 +111,7 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 	@Unroll
 	def 'non-exact match without alias should not map'() {
 		expect:
-			s.getAction(messageText, true) == null
+			s.getAction(messageText, false) == null
 		where:
 			messageText << ['KEY SOMETHING', 'KEY OTHERWISE', 'KEY RAMBLING NONSENSE']
 	}
@@ -126,8 +126,9 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 
 	private def createTestSubscriptionAndGroup() {
-		g = Group.build()
-		s = new Subscription(group:g)
+		g = new Group(name:"Subscription Group").save()
+		def keyword = new Keyword(value:"KEY")
+		s = new Subscription(keyword: keyword,group:g, joinAliases:"join", leaveAliases:"leave")
 	}
 
 	private def mockMessage(String messageText, String sourcePhoneNumber) {

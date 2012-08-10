@@ -5,8 +5,8 @@ class ExpressionProcessorService {
 	// fields map holds the available expressions for replacement
 	// key is the expression name, and value is the controllers it is applicable to
 	def fields = [
-		'contact_name' : ['quickMessage', 'announcement', 'poll', 'autoreply'],
-		'contact_number' : ['quickMessage', 'announcement', 'poll', 'autoreply']]
+		'contact_name' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription'],
+		'contact_number' : ['quickMessage', 'announcement', 'poll', 'autoreply', 'subscription']]
 
 	def findByController(controllerName) {
 		fields.findAll { controllerName in it.value }.keySet()
