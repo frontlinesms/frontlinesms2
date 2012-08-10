@@ -4,7 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.page.*
 import frontlinesms2.message.PageMessageInbox
 
-class SubscriptionCedSpec extends gSubscriptionBaseSpec  {
+class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 	def "can launch subscription wizard from create new activity link" () {
 		when:
 			to PageMessageInbox
@@ -49,14 +49,16 @@ class SubscriptionCedSpec extends gSubscriptionBaseSpec  {
 			submit.click()
 		then:
 			waitFor { summary.message.displayed }
+		when:
+			ok.click()
 	}
 
 	def "Can edit an existing subscription"() {
 		setup:
-			//TODO set up a friends subscription
+			createTestSubscriptions()
 		when:
 			to PageMessageInbox
-			bodyMenu.activityLinks[].click()//click on friends subscription
+			bodyMenu.activityLinks[].click()//click on the subscription
 		then:
 			waitFor { at PageMessageSubscription }
 		when:
