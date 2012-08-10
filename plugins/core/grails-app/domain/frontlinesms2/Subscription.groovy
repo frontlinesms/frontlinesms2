@@ -1,6 +1,10 @@
 package frontlinesms2
 
 class Subscription extends Activity{
+//> CONSTANTS
+	static String getShortName() { 'subscription' }
+
+//> PROPERTIES
 	enum Action { TOGGLE, JOIN, LEAVE }
 
 	String name
