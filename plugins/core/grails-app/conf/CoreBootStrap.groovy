@@ -26,7 +26,7 @@ class CoreBootStrap {
 	def messageSource
 	def quartzScheduler
 
-	def dev = Environment.current == Environment.DEVELOPMENT
+	def bootstrapData = Environment.current == Environment.DEVELOPMENT || (System.properties['frontlinesms2.bootstrap.data'] as Boolean)
 	
 	def init = { servletContext ->
 		println "BootStrap.init() : Env=${Environment.current}"
@@ -35,40 +35,42 @@ class CoreBootStrap {
 
 		initAppSettings()
 
-		switch(Environment.current) {
-			case Environment.TEST:
-				quartzScheduler.start()
-				test_initGeb(servletContext)
-				break
-				
-			case Environment.DEVELOPMENT:
-				//DB Viewer
-				//org.hsqldb.util.DatabaseManager.main()
-				// do custom init for dev here
-
-				// Uncomment the following line to enable tracing in Camel.
-				// N.B. this BREAKS AUTODISCONNECT OF FAILED ROUTES in camel
-				// 2.5.0 (which we are currently using), but has been fixed
-				// by camel 2.9.0 so this can be permanently enabled once we
-				// upgrade our Camel dependencies.
-				//camelContext.tracing = true
-
-				dev_initSmartGroups()
-				dev_initGroups()
-				dev_initContacts()
-				dev_initFconnections()
-				dev_initFmessages()
-				dev_initPolls()
-				dev_initAutoreplies()
-				dev_initFolders()
-				dev_initAnnouncements()
-				dev_initLogEntries()
-				break
-				
-			case Environment.PRODUCTION:
-				createWelcomeNote()
-				break
+		if(Environment.current == Environment.TEST) {
+			quartzScheduler.start()
+			test_initGeb(servletContext)
 		}
+
+		if(Environment.current == Environment.DEVELOPMENT) {
+			//DB Viewer
+			//org.hsqldb.util.DatabaseManager.main()
+			// do custom init for dev here
+
+			// Uncomment the following line to enable tracing in Camel.
+			// N.B. this BREAKS AUTODISCONNECT OF FAILED ROUTES in camel
+			// 2.5.0 (which we are currently using), but has been fixed
+			// by camel 2.9.0 so this can be permanently enabled once we
+			// upgrade our Camel dependencies.
+			//camelContext.tracing = true
+		}
+
+		if(bootstrapData) {
+			dev_initSmartGroups()
+			dev_initGroups()
+			dev_initContacts()
+			dev_initFconnections()
+			dev_initFmessages()
+			dev_initPolls()
+			dev_initAutoreplies()
+			dev_initFolders()
+			dev_initAnnouncements()
+			dev_initSubscriptions()
+			dev_initLogEntries()
+		}
+
+		if(Environment.current == Environment.PRODUCTION) {
+			createWelcomeNote()
+		}
+
 		ensureResourceDirExists()
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
@@ -96,7 +98,7 @@ class CoreBootStrap {
 	
 	/** Initialise SmartGroup domain objects for development and demos. */
 	private def dev_initContacts() {
-		if(!dev) return
+		if(!bootstrapData) return
 		def alice = createContact("Alice", "+123456789")
 		def friends = Group.findByName('Friends')
 		def notCats = Group.findByName('Not Cats')
@@ -118,18 +120,18 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initSmartGroups() {
-		if(!dev) return
+		if(!bootstrapData) return
 		new SmartGroup(name:'Kenyans', mobile:'+254').save(failOnError:true)
 		new SmartGroup(name:'Test Contacts', contactName:'test-').save(failOnError:true)
 	}
 	
 	private def dev_initGroups() {
-		if(!dev) return
+		if(!bootstrapData) return
 		['Friends', 'Listeners', 'Not Cats', 'Adults'].each() { createGroup(it) }
 	}
 	
 	private def dev_initFmessages() {
-		if(!dev) return
+		if(!bootstrapData) return
 
 		def m5 = new Fmessage(src:'Jinja', date:new Date(), text:'Look at all my friends!')
 		for(i in 1..100) m5.addToDispatches(dst:"+12345678$i", status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true)
@@ -186,7 +188,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initFconnections() {
-		if(!dev) return
+		if(!bootstrapData) return
 		new EmailFconnection(name:"mr testy's email", receiveProtocol:EmailReceiveProtocol.IMAPS, serverName:'imap.zoho.com',
 				serverPort:993, username:'mr.testy@zoho.com', password:'mister').save(failOnError:true)
 		new ClickatellFconnection(name:"Clickatell Mock Server", apiId:"api123", username:"boris", password:"top secret").save(failOnError:true)
@@ -194,7 +196,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initRealSmslibFconnections() {
-		if(!dev) return
+		if(!bootstrapData) return
 		new SmslibFconnection(name:"Huawei Modem", port:'/dev/cu.HUAWEIMobile-Modem', baud:9600, pin:'1234').save(failOnError:true)
 		new SmslibFconnection(name:"COM4", port:'COM4', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"Geoffrey's Modem", port:'/dev/ttyUSB0', baud:9600, pin:'1149').save(failOnError:true)
@@ -204,7 +206,7 @@ class CoreBootStrap {
 	
 	
 	private def dev_initMockSmslibFconnections() {
-		if(!dev) return
+		if(!bootstrapData) return
 		new SmslibFconnection(name:"MOCK95: rejects all pins", pin:'1234', port:'MOCK95', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK96: breaks on receive", port:'MOCK96', baud:9600).save(failOnError:true)
 		new SmslibFconnection(name:"MOCK97: bad port", port:'MOCK97', baud:9600).save(failOnError:true)
@@ -216,7 +218,7 @@ class CoreBootStrap {
 	
 	
 	private def dev_initPolls() {
-		if(!dev) return
+		if(!bootstrapData) return
 		def keyword = new Keyword(value: 'FOOTBALL')
 		def poll1 = new Poll(name: 'Football Teams', question:"Who will win?", sentMessageText:"Who will win? Reply FOOTBALL A for 'manchester' or FOOTBALL B for 'barcelona'", autoreplyText:"Thank you for participating in the football poll", keyword: keyword)
 		poll1.addToResponses(key:'A', value:'manchester', aliases:'manchester, A')
@@ -245,7 +247,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initAutoreplies() {
-		if(!dev) return
+		if(!bootstrapData) return
 		def k1 = new Keyword(value: "COLOR")
 		def k2 = new Keyword(value: "AUTOREPLY")
 
@@ -254,7 +256,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initFolders() {
-		if(!dev) return
+		if(!bootstrapData) return
 		['Work', 'Projects'].each {
 			new Folder(name:it).save(failOnError:true, flush:true)
 		}
@@ -276,7 +278,7 @@ class CoreBootStrap {
 	}
 	
 	private def dev_initAnnouncements() {
-		if(!dev) return
+		if(!bootstrapData) return
 		[new Fmessage(src:'Roy', text:'I will be late'),
 			new Fmessage(src:'Marie', text:'Meeting at 10 am'),
 			new Fmessage(src:'Mike', text:'Project has started')].each() {
@@ -299,9 +301,36 @@ class CoreBootStrap {
 			it.save(failOnError:true, flush:true)
 		}
 	}
+
+	private def dev_initSubscriptions() {
+		if(!bootstrapData) return
+
+		def allrounderBobby = new Contact(name:'Bobby', mobile:"987654321").save(failOnError:true)
+		def camperSam = new Contact(name:"Sam", mobile:"987654322").save(failOnError:true)
+		def footyRon = new Contact(name:'Ron', mobile:"987654323").save(failOnError:true)
+
+		def campingGroup = new Group(name:"Camping Group").save(failOnError:true)
+		def campingKeyword = new Keyword(value: 'CAMPING')
+		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
+				defaultAction:Subscription.Action.JOIN, keyword:campingKeyword).save(failOnError:true)
+		campingGroup.addToMembers(allrounderBobby)
+		campingGroup.addToMembers(camperSam)
+
+		campingGroup.save(failOnError:true)
+
+		def footballGroup = new Group(name:"Football Updates").save(failOnError:true)
+		def footballKeyword = new Keyword(value: 'FOOTIE')
+		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
+				defaultAction:Subscription.Action.JOIN, keyword:footballKeyword).save(failOnError:true)
+		
+		footballGroup.addToMembers(allrounderBobby)
+		footballGroup.addToMembers(footyRon)
+
+		footballGroup.save(failOnError:true)
+	}
 	
 	private def dev_initLogEntries() {
-		if(!dev) return
+		if(!bootstrapData) return
 		def now = new Date()
 		[new LogEntry(date:now, content: "entry1"),
 				new LogEntry(date:now-2, content: "entry2"),
