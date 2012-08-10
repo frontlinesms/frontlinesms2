@@ -69,7 +69,7 @@ grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 environments {
 	dbDev {
-		grails.plguin.databasemigration.updateOnStart = false
+		grails.plugin.databasemigration.updateOnStart = false
 	}
 }
 
