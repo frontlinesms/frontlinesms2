@@ -202,7 +202,6 @@ class RenameDialog extends MediumPopup {
 	}
 }
 
-
 class AnnouncementDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains("announcement")
@@ -348,5 +347,16 @@ class SubscriptionSummary extends geb.Module {
 class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	static at = {
 		popupTitle.contains('edit subscription')
+	}
+}
+
+class SubscriptionCategoriseDialog extends PageMediumPopup {
+	static at = {
+		popupTitle.contains('categorise subscription')
+	}
+	static content = {
+		groupName {'input#group-dropdown'}
+		join {'input#btn_join'}
+		leave {'input#btn_leave'}
 	}
 }
