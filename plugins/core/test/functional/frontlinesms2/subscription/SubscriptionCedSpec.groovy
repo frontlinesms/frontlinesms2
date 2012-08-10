@@ -29,19 +29,19 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor {at SubscriptionCreateDialog}
 		when:
 			group.addToGroup Group.findByName('Friends').id.toString()
-			keywordText = 'friend'
-			enableJoinKeyword.click()
-			joinAliases = 'join, start'
-			enableLeaveKeyword.click()
-			leaveAliases = 'leave, stop'
+			group.keywordText = 'friend'
+			group.enableJoinKeyword.click()
+			group.joinAliases = 'join, start'
+			group.enableLeaveKeyword.click()
+			group.leaveAliases = 'leave, stop'
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
 		when:
-			enableJoinAutoreply.click()
-			joinAutoreplyText = "You have been successfully subscribed to Friends group"
-			enableLeaveAutoreply.click()
-			leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
@@ -69,15 +69,15 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor { at EditSubscriptionDialog }
 		when:
 			group.addToGroup Group.findByName('Not cats').id.toString()
-			keywordText = 'nonecats'
+			group.keywordText = 'nonecats'
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
 		when:
-			enableJoinAutoreply.click()
-			joinAutoreplyText = "You have been successfully subscribed to Friends group"
-			enableLeaveAutoreply.click()
-			leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
@@ -91,19 +91,19 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		when:
 			launchSubscriptionPopup()
 			group.addToGroup Group.findByName('Friends').id.toString()
-			keywordText = 'friend'
-			enableJoinKeyword.click()
-			joinAliases = 'join, start'
-			enableLeaveKeyword.click()
-			leaveAliases = 'leave, stop'
+			group.keywordText = 'friend'
+			group.enableJoinKeyword.click()
+			group.joinAliases = 'join, start'
+			group.enableLeaveKeyword.click()
+			group.leaveAliases = 'leave, stop'
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
 		when:
-			enableJoinAutoreply.click()
-			joinAutoreplyText = "You have been successfully subscribed to Friends group"
-			enableLeaveAutoreply.click()
-			leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
@@ -112,6 +112,40 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor { error }
 			at SubscriptionCreateDialog
 	}
+
+	def "keyword must be provided in a subscription"() {
+		when:
+			launchSubscriptionPopup()
+			group.addToGroup Group.findByName('Friends').id.toString()
+			next.click()
+		then:
+			waitFor {error}
+			group.keywordText.displayed
+			at SubscriptionCreateDialog
+	}
+
+	def "autoreply text must be provided if join/leave autoreply is enabled"() {
+		when:
+			launchSubscriptionPopup()
+			group.addToGroup Group.findByName('Friends').id.toString()
+			group.keywordText = 'friend'
+			group.enableJoinKeyword.click()
+			group.joinAliases = 'join, start'
+			group.enableLeaveKeyword.click()
+			group.leaveAliases = 'leave, stop'
+			next.click()
+		then:
+			waitFor {autoreply.displayed}
+		when:
+			autoreply.enableJoinAutoreply.click()
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
+			autoreply.enableLeaveAutoreply.click()
+			next.click()
+		then:
+			waitFor { error }
+			autoreply.enableLeaveAutoreply.displayed
+	}
+
 
 	def launchSubscriptionPopup() {
 		to PageMessageInbox
