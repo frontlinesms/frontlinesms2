@@ -1,37 +1,38 @@
 package frontlinesms2.subscription
 
 import frontlinesms2.*
+import frontlinesms2.Subscription.Action
 
 class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestSubscriptions() {
-		def campingGroup = new Group(name:"Camping Group").save()
-		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup,
-			keyword:"CAMP", joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-			defaultAction:"toggle")
+		def campingGroup = Group.build(name:"Camping Group")
+		def campingKeyword = new Keyword(value: 'CAMPING')
+		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
+				defaultAction:Action.JOIN, keyword:campingKeyword).save(failOnError:true)
 
-		def footballGroup = new Group(name:"Football Updates").save()
-		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup,
-			keyword:"FOOTY", joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-			defaultAction:"join")
+		def footballGroup = Group.build(name:"Football Updates")
+		def footballKeyword = new Keyword(value: 'FOOTBALL')
+		def footballSub = new Subscription(name:"Football Updates Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
+				defaultAction:Action.JOIN, keyword:footballKeyword).save(failOnError:true)
 		
-		def allrounderBobby = new Contact(name: 'Bobby', mobile: "987654321").save()
-		def camperSam = new Contact(name: 'Samson', mobile: "987654322").save()
-		def footyRon = new Contact(name: 'Ronaldo', mobile: "987654323").save()
+		def allrounderBobby = Contact.build(mobile:"987654321")
+		def camperSam = Contact.build(mobile:"987654322")
+		def footyRon = Contact.build(mobile:"987654323")
 
-		footballGroup.addToContacts(allrounderBobby)
-		footballGroup.addToContacts(footyRon)
-		campingGroup.addToContacts(allrounderBobby)
-		campingGroup.addToContacts(camperSam)
+		footballGroup.addToMembers(allrounderBobby)
+		footballGroup.addToMembers(footyRon)
+		campingGroup.addToMembers(allrounderBobby)
+		campingGroup.addToMembers(camperSam)
 
-		footballGroup.save()
-		campingGroup.save()
+		footballGroup.save(failOnError:true)
+		campingGroup.save(failOnError:true)
 	}
 
 	static createTestMembers(Group g) {
 		(1..90).each {
-			def c = new Contact(name: "Contact${it}", mobile: "987654321${it}", notes: 'notes').save(failOnError:true, flush:true)
-			c.addToGroups(g).save(failOnError:true, flush:true)
+			def c = Contact.build(mobile:"987654321${it}")
+			c.addToGroups(g)
 		}
 	}
 
