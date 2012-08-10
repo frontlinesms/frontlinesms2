@@ -288,7 +288,7 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
-class SubscriptionDialog extends MediumPopup {
+class SubscriptionCreateDialog extends MediumPopup {
 	static at = {
 		popupTitle.contains("subscription") || popupTitle.contains("edit activity")
 	}
@@ -303,22 +303,25 @@ class SubscriptionDialog extends MediumPopup {
 class SubscriptionGroupTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
-		addToGroup {}
-		keywordText { $('input#name') }
-		enableJoinKeyword {}
-		joinAliases {}
-		enableLeaveKeyword{}
-		leaveAliases {}
+		addToGroup { groupId ->
+			$('select#addGroupDropdown').jquery.val(groupId)
+			$('select#addGroupDropdown').jquery.trigger("change")
+		}
+		keywordText { $('input#keywordText') }
+		enableJoinKeyword {$('input#enableJoinKeyword')}
+		joinAliases {$('input#joinAliases')}
+		enableLeaveKeyword{$('input#enableLeaveKeyword')}
+		leaveAliases {$('input#leaveAliases')}
 	}
 }
 
 class SubscriptionAutoreplyTab extends geb.Module {
-	static base = { $('div#tabs-1') }
+	static base = { $('div#tabs-2') }
 	static content = {
-		enableJoinAutoreply {}
-		joinAutoreplyText {}
-		enableLeaveAutoreply{}
-		leaveAutoreplyText {}
+		enableJoinAutoreply {$('input#enableJoinAutoreply')}
+		joinAutoreplyText {$('input#joinAutoreplyText')}
+		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}
+		leaveAutoreplyText {$('input#leaveAutoreplyText')}
 	}
 }
 
@@ -326,10 +329,10 @@ class SubscriptionConfirmTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
 		subscriptionName { $('input#name') }
-		keyword {}
-		joinAliases {}
-		leaveAliases {}
-		autoreplyText {}
+		keyword {$("#confirm-keyword").text()}
+		joinAliases {$("#confirm-joinAliases").text()}
+		leaveAliases {$("#confirm-leaveAliases").text()}
+		autoreplyText {$("#confirm-autoreplyText").text()}
 	}
 }
 
@@ -337,5 +340,11 @@ class SubscriptionSummary extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
 		message { $("div.summary") }
+	}
+}
+
+class EditSubsriptionDialog extends SubscriptionCreateDialog {
+	static at = {
+		popupTitle.contains('edit subscription')
 	}
 }
