@@ -8,11 +8,11 @@ import frontlinesms2.popup.*
 class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	def "subscription page should show the details of the subscription in the header"(){
 		setup:
-			def subscription  = Subscription.findBy.....
+			def subscription = Subscription.findBy.....
 		when:
 			to PageSubscriptionView, subscription
 		then:
-			waitFor { page to Load}
+			waitFor { page to Load }
 			subHead.name  == subscription.name
 			subHead.joinautoreply ==  subscription.joinautoreply
 			subHead.leaveautoreply == subscription.leaveautoreply
