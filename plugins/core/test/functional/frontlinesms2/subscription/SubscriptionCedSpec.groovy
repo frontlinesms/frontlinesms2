@@ -2,6 +2,7 @@ package frontlinesms2.subscription
 
 import frontlinesms2.*
 import frontlinesms2.page.*
+import frontlinesms2.popup.*
 import frontlinesms2.message.PageMessageInbox
 
 class SubscriptionCedSpec extends SubscriptionBaseSpec  {
