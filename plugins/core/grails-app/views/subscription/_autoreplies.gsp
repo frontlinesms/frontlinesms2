@@ -13,7 +13,7 @@
 		<div class="stats character-count-warning" style="display:none;">
 			<g:message code="message.character.count.warning"/>
 		</div>
-		<fsms:magicWand target="autoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
+		<fsms:magicWand target="joinAutoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>
 
@@ -32,7 +32,7 @@
 		<div class="stats character-count-warning" style="display:none;">
 			<g:message code="message.character.count.warning"/>
 		</div>
-		<fsms:magicWand target="autoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
+		<fsms:magicWand target="leaveAutoreplyText" controller="${controllerName}" hidden="true" instance="${activityInstanceToEdit?:null}"/>
 	</div>
 </div>
 
