@@ -6,24 +6,29 @@ import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
 class SubscriptionViewSpec extends SubscriptionBaseSpec {
+	def setup(){
+		createTestActivities()
+		createTestMessages()
+		createTestSubscriptions()
+	}
+
 	def "subscription page should show the details of the subscription in the header"(){
 		setup:
-			def subscription = Subscription.findBy.....
+			def subscription  = Subscription.findByName("Camping Subscription")
 		when:
-			to PageSubscriptionView, subscription
+			to PageMessageSubscription, subscription
 		then:
-			waitFor { page to Load }
-			subHead.name  == subscription.name
-			subHead.joinautoreply ==  subscription.joinautoreply
-			subHead.leaveautoreply == subscription.leaveautoreply
-			subHead.group == subscription.group
-			subHead.groupcount ==  subscription.groupcount
-			subHead.toggleEnable == subscription.toggleEnable
+			waitFor { title.toLowerCase().contains("subscription") }
+			keyword == subscription.keyword.value
+			joinAutoreplyText ==  subscription.joinAutoreply.text
+			leaveAutoreplyText == subscription.leaveAutoreply.text
+			groupCount ==  subscription.group.getMembers().size()
+			toggleStatus == subscription.toggleActive
 	}
 
 	def "clicking the group link shoud redirect to the group page"(){
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { subHead.displayed }
 		when:
@@ -35,7 +40,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the archive button archives the subscription and redirects to inbox "(){
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { subHead.displayed }
 		when:
@@ -47,14 +52,14 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the edit option opens the Subscription Dialog for editing"(){
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { subHead.displayed }
 		when:
 			header.moreAction("edit").jquery.click()
 		then:
 			waitFor { at SubscriptionDialog }
-			waitFor { something in the SubscriptionDialog is displayed }
+			//waitFor { TODO implement contents of the SubscriptionDialog } wait for content to be displayed
 	}
 
 	def "clicking the group link shoud redirect to the group page"(){}
@@ -158,19 +163,19 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"(){
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { subHead.displayed }
 		when:
 			header.moreAction("rename").jquery.click()
 		then:
-			waitFor { at RenameDialog }
-			waitFor { something in the RenameDialog is displayed }
+			waitFor { at RenameSubscriptionDialog }
+			waitFor { subscriptionName == "Camping Subscription" }
 	}
 
 	def "clicking the delete option opens the confirm delete small popup"(){
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { subHead.displayed }
 		when:
@@ -181,7 +186,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the export option opens the export dialog"(){
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { subHead.displayed }
 		when:
@@ -191,10 +196,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	def "selecting a single message reveals the single message view"(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -205,10 +208,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	def "selecting multiple messages reveals the multiple message view"(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -221,10 +222,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -237,10 +236,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	def "delete single message action works "(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy...
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -255,10 +252,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	def "delete multiple message action works for multiple select"(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -275,10 +270,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	def "move single message action works"(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -291,17 +284,15 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { messageList.messages.displayed }
 			!messageList.messages*.text.contains("the text contents of the previous message")
 		when:
-			to PageActivity, Activity.findBy....
+			to PageMessageActivity, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.messages.displayed }
 			messageList.messages*.text.contains("the text we just moved")
 	}
 
 	def "move multiple message action works"(){
-		setup:
-			createSubcriptionMessages()
 		when:
-			to PageSubscriptionView, Subscription.findBy....
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { messageList.messages.displayed }
 		when:
@@ -316,7 +307,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { messageList.messages.displayed }
 			!messageList.messages*.text.containsAll("the text contents of the previous message", "the second message message")
 		when:
-			to PageActivity, Activity.findBy....
+			to PageMessageActivity, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.messages.displayed }
 			messageList.messages*.text.containsAll("the text we just moved", "the second message we just moved")
@@ -324,10 +315,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"(){
 		setup:
-			def activity = Activity.findBy....
-			def m = Fmessage.findBy.....
+			def activity = Activity.findByName("Sample Announcement")
+			def m = Fmessage.findByScr("Bob")
 		when:
-			to PageActivity, activity.id, m.id
+			to PageMessageActivity, activity.id, m.id
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:

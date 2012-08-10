@@ -51,6 +51,8 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			waitFor { summary.message.displayed }
 		when:
 			ok.click()
+		then:
+			waitFor { at PageMessageSubscription }
 	}
 
 	def "Can edit an existing subscription"() {

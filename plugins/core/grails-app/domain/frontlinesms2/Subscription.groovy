@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class Subscription {
+class Subscription extends Activity{
 	enum Action { TOGGLE, JOIN, LEAVE }
 
 	def processKeyword(Fmessage message, boolean exactMatch) {}
