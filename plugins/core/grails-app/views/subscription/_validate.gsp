@@ -26,7 +26,7 @@
 		});
 
 		var groupAndKeywordTabValidation = function() {
-			return validator.element('#messageText');
+			
 		};
 
 		var aliasTabValidation = function() {
@@ -38,7 +38,7 @@
 		};
 
 		var confirmTabValidation = function() {
-			return validator.element('input[name=name]');
+			
 		};
 
 		addValidation('subscription-select-group-keyword', groupAndKeywordTabValidation);
@@ -52,7 +52,6 @@
 	}
 
 	function updateConfirmTab() {
-		$("#confirm-group-text").val("THIS IS MY GROUP Y'ALL!") //TODO: confirm tab update & wizard validation
+		$("#confirm-group-text").val("test");
 	}
-}
 </r:script>
