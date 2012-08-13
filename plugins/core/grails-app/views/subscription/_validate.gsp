@@ -31,11 +31,11 @@
 
 		var aliasTabValidation = function() {
 
-		}
+		};
 
 		var autoreplyTabValidation = function() {
 			
-		}
+		};
 
 		var confirmTabValidation = function() {
 			return validator.element('input[name=name]');
