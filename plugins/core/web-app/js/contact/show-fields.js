@@ -33,27 +33,34 @@ function clickDone() {
 	}
 }
 
-function checkResults(jsn) {
-	if ($("#custom-field-name").val() != "") {
-		var name = $("#custom-field-name").val();
-		var fieldsToAdd = getFieldIdList('fieldsToAdd').val().split(",");
-		for (y in fieldsToAdd) {
-			if(fieldsToAdd[y] !="" ) {jsn.uniqueCustomFields.push(fieldsToAdd[y])};
-		}
-		for (x in jsn.uniqueCustomFields) {
-			if (jsn.uniqueCustomFields[x].toLowerCase() == name.toLowerCase()) {
-				$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
+var CustomFields = function() {
+	var
+		_checkResults = function(json) {
+			if ($("#custom-field-name").val() != "") {
+				var name = $("#custom-field-name").val();
+				var fieldsToAdd = getFieldIdList('fieldsToAdd').val().split(",");
+				for (y in fieldsToAdd) {
+					if(fieldsToAdd[y] !="" ) {json.uniqueCustomFields.push(fieldsToAdd[y])};
+				}
+				for (x in json.uniqueCustomFields) {
+					if (json.uniqueCustomFields[x].toLowerCase() == name.toLowerCase()) {
+						$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
+						$("#smallpopup-error-panel").show();
+						return false;
+					}
+				}
+				addCustomField(name);
+				$("#modalBox").remove();
+			} else {
+				$("#smallpopup-error-panel").html(i18n("customfield.validation.prompt"));
 				$("#smallpopup-error-panel").show();
-				return false;
 			}
-		}
-		addCustomField(name);
-		$("#modalBox").remove();
-	} else {
-		$("#smallpopup-error-panel").html(i18n("customfield.validation.prompt"));
-		$("#smallpopup-error-panel").show();
-	}
-}
+		};
+	return {
+		checkResults: _checkResults
+	};
+};
+var customFields = new CustomFields();
 
 function addCustomField(name) {
 	var fieldId = Math.floor(Math.random() * 100001);

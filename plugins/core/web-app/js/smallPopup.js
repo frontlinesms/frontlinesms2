@@ -4,7 +4,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 		doneAction = defaultDoneAction;
 	} else {
 		if (doneAction == 'validate') {
-			doneAction = validate;	
+			doneAction = smallPopup.validate;	
 		}
 	}
 	$("#modalBox").dialog({
@@ -62,18 +62,26 @@ function defaultDoneAction() {
 	}
 }
 
-function validate () {
-	if ($("#modalBox").contentWidget("onDone")) {
-		$(this).find("form").submit();
-	}
-}
+var SmallPopup = function() {
+	var
+		_checkResults = function(json) {
+			if (json.ok) {
+				$("#modalBox").remove();
+				location.reload(true);
+			} else {
+				$("#smallpopup-error-panel").html(json.text);
+				$("#smallpopup-error-panel").show();
+			}
+		},
 
-function checkResults(jsn) {
-	if (jsn.ok) {
-		$("#modalBox").remove();
-		location.reload(true);
-	} else {
-		$("#smallpopup-error-panel").html(jsn.text);
-		$("#smallpopup-error-panel").show();
-	}
-}
+		_validate = function() {
+			if ($("#modalBox").contentWidget("onDone")) {
+				$(this).find("form").submit();
+			}
+		}
+	return {
+		checkResults: _checkResults,
+		validate: _validate
+	};
+};
+var smallPopup = new SmallPopup();
