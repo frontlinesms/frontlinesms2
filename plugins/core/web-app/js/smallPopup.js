@@ -4,7 +4,7 @@ function launchSmallPopup(title, html, btnFinishedText, doneAction) {
 		doneAction = defaultDoneAction;
 	} else {
 		if (doneAction == 'validate') {
-			doneAction = smallPopup.validate;	
+			doneAction = smallPopup.validate;
 		}
 	}
 	$("#modalBox").dialog({

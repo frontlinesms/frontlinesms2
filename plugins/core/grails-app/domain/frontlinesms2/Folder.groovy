@@ -18,7 +18,7 @@ class Folder extends MessageOwner {
 			if(obj?.deleted || obj?.archived) return true
 			def identical = Folder.findAllByNameIlike(val)
 			if(!identical) return true
-			else if (identical.any { it != obj && !it?.archived && !it?.deleted }) return false
+			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
 			else return true
 			})
 	}
