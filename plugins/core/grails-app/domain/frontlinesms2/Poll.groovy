@@ -30,7 +30,7 @@ class Poll extends Activity {
 			if(obj?.deleted || obj?.archived) return true
 			def identical = Poll.findAllByNameIlike(val)
 			if(!identical) return true
-			else if (identical.any { it != obj && !it?.archived && !it?.deleted }) return false
+			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
 			else return true
 			})
 		responses(validator: { val, obj ->
@@ -94,7 +94,6 @@ class Poll extends Activity {
 				if(found) {
 					found.value = v
 					found.aliases = extractAliases(attrs, k)
-					println "######### Saved ######## ${found.aliases}"
 				} else if(v?.trim()) this.addToResponses(value:v, key:k , aliases:extractAliases(attrs, k))
 			}
 		}
