@@ -2,6 +2,7 @@ package frontlinesms2.subscription
 
 import frontlinesms2.*
 import frontlinesms2.message.*
+import frontlinesms2.popup.*
 
 class PageMessageSubscription extends frontlinesms2.page.PageMessageActivity {
 	static content = {
