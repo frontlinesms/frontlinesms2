@@ -81,6 +81,10 @@
 		jQuery.validator.addMethod("edit", function(value, element) {
 			return (value.trim().length != 0);
 		}, i18n("poll.choice.validation.error.deleting.response"));
+
+		jQuery.validator.addMethod("no-space", function(value, element) {
+			return (value.trim().indexOf(" ") === -1);
+		}, i18n("validation.nospaces.error"));
 	}
 
 	function initializeTabValidation(validator) {

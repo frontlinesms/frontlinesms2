@@ -1,0 +1,31 @@
+# Renaming an Show
+
+You are able to rename any show in a few simple steps.
+
+![Renaming a Show][1]
+
+### [Renaming a Show][2]
+
+1. Select the Show you want to rename.
+2. In the Show Header (1) click the drop down box called "More Actions..."
+3. From this menu choose "Rename"
+4. In the new window which appears, enter a new name for the Show and click Rename.
+![Rename Dialog][3]
+
+Your Show will be Renamed.
+
+_**Note:** Show names must be unique. You cannot have two shows with the same name (including any stored in archive or trash). When a show is deleted **and** removed from the trash, that name can then be used in any new show._
+
+### Related Actions
+[Exporting a Show][4]  
+[Creating a Poll][5]  
+[Creating an Announcement][6]  
+[Manually Categorising a Response][7]  
+
+[1]: .../images/help/rename_show.png
+[2]: radio/shows/4.renaming_a_show
+[3]: .../images/help/rename_show_dialog.png
+[4]: radio/shows/5.exporting_a_show
+[5]: core/activities/3.creating_a_poll
+[6]: core/activities/4.creating_an_announcement
+[7]: core/activities/3a.manually_categorising

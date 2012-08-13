@@ -8,7 +8,7 @@ echo "##########################################################################
 INSTALL_DIR=~/frontlinesms-radio
 echo "INSTALL_DIR=$INSTALL_DIR"
 
-SETTINGS_DIR=~/.frontlinesms2
+SETTINGS_DIR=~/.frontlinesms-radio
 echo "SETTINGS_DIR=$SETTINGS_DIR"
 
 rm -rf ../core/target/
