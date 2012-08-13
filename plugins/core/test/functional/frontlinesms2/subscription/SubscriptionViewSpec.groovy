@@ -72,20 +72,26 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	// FIXME this is a test skeleton that needs to be fleshed out
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
 		given:
-			createTestSubscriptions() // TODO create a SubscriptionBaseSpec with appropriate test data
+			def allrounderBobby = new Contact(name:'Bobby', mobile:"987654321").save(failOnError:true)
+			def campingGroup = new Group(name:"Campers").save(failOnError:true)
+			def campingKeyword = new Keyword(value: 'CAMP')
+			def campingSub = new Subscription(name:"Campers Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
+				defaultAction:Subscription.Action.JOIN, keyword:campingKeyword).save(failOnError:true)
+			campingGroup.addToMembers(allrounderBobby)
 		when:
-			to PageMessageSubscription, mySubscription
-			waitFor { quickMessageButton.displayed }
-			quickMessageButton.click()
+			to PageMessageSubscription, campingSub
+			waitFor { header.quickMessage.displayed }
+			header.quickMessage.click()
 		then:
-			waitFor { at QuickMessageDialog }
+			waitFor('slow'){ at QuickMessageDialog }
+			waitFor{compose.textArea.displayed}
 		when:
-			compose.textArea << "some test message"
+			compose.textArea = "Message"
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			// TODO: appropriate group checkbox is ticked
-			// TODO: recipient count matches number of contacts in group
+			waitFor { recipients.groupCheckboxes[2].checked }
+			waitFor { recipients.count == 1 }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {

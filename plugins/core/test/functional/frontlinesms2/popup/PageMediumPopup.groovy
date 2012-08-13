@@ -292,11 +292,11 @@ class SubscriptionCreateDialog extends MediumPopup {
 		popupTitle.contains("subscription") || popupTitle.contains("edit activity")
 	}
 	static content = {
-		group { module SubscripitonGroupTab }
+		group { module SubscriptionGroupTab }
 		aliases { module SubscriptionAliasesTab}
-		autoreply { module SubscripitonAutoReplyTab }
-		confirm { module SubscripitonConfirmTab }
-		summary { module SubscripitonSummary }
+		autoreply { module SubscriptionAutoReplyTab }
+		confirm { module SubscriptionConfirmTab }
+		summary { module SubscriptionSummary }
 		error {$('label', class:'error')}
 	}
 }
@@ -312,7 +312,7 @@ class SubscriptionGroupTab extends geb.Module {
 	}
 }
 
-class SubscripitonAliasesTab extends geb.module {
+class SubscriptionAliasesTab extends geb.Module {
 	static base = { $('div#tabs-2')}
 	static content = {
 		joinAliases {$('input#joinAliases')}
