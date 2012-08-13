@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div class="error-panel hide" id="smallpopup-error-panel"><div id="error-icon"></div></div>
-<g:formRemote name="ustom-field-popup" url="[controller: 'contact', action:'getUniqueCustomFields']" method="post" onSuccess="checkResults(data)">
+<g:formRemote name="custom-field-popup" url="[controller: 'contact', action:'getUniqueCustomFields']" method="post" onSuccess="checkResults(data)">
 	<table>
 		<tr>
 			<td><label for="name"><g:message code="customfield.name.label"/></label></td>
