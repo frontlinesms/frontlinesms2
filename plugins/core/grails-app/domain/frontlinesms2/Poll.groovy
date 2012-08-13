@@ -27,8 +27,11 @@ class Poll extends Activity {
 			
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
-			def similarName = Poll.findByNameIlike(val)
-			return !similarName|| obj.id == similarName.id
+			if(obj?.deleted || obj?.archived) return true
+			def identical = Poll.findAllByNameIlike(val)
+			if(!identical) return true
+			else if (identical.any { it != obj && !it?.archived && !it?.deleted }) return false
+			else return true
 			})
 		responses(validator: { val, obj ->
 			val?.size() > 2 &&

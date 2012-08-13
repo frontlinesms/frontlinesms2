@@ -104,7 +104,7 @@ class FolderController {
 			if(trashService.restore(folder)) {
 				flash.message = defaultMessage 'restored'
 			} else {
-				flash.message = defaultMessage 'restore.failed'
+				flash.message = defaultMessage 'restore.failed', folder.id
 			}
 			redirect controller:"message", action:"trash"
 		}

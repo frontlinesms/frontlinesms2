@@ -12,7 +12,7 @@ There is **no risk** to damaging your installation of FrontlineSMS Version 2 as 
 
 **These instructions are for Windows computers.** However, the general method does not differ between platforms and is applicable to Mac systems as well.
 
-Before you begin, it is highly recommended that you download and install [Notepad++][2]. It is a small and free software which will make editing the core language file a much more pleasant and streamlined process. Once at the Notepad++ website, click on “Download” on the left hand side and select the first entry for the latest version of Notepad++. Once you have finished translating FrontlineSMS Version 2 you can uninstall Notepad++ if you wish to.
+Before you begin, it is highly recommended that you download and install [Notepad++][2]. It is a small and free software which will make editing the core language file a much more pleasant and streamlined process. Once at the Notepad++ website, click on "Download" on the left hand side and select the first entry for the latest version of Notepad++. Once you have finished translating FrontlineSMS Version 2 you can uninstall Notepad++ if you wish to.
 
 You can use other similar editors, and even the built in Notepad software of Windows. Unfortunately, this may result in a more difficult editing experience because these editors may read the format of the language file incorrectly. Consequently, your editing experience may differ from the one outlined below.
 
@@ -28,7 +28,7 @@ The default location on a 64-bit Windows computer is: C:\program files (x86)\fro
 
 3.In this folder you should see 2 files: **messages.properties** and **messages_sw.properties**  
 
-Right-click on messages.properties and select “Copy” from the menu that appears. Go to your desktop, or any other safe location on your computer and Paste a copy of the file there. You have just created a backup copy of the file, in the off chance that something goes wrong. Remember where you saved this backup.
+Right-click on messages.properties and select "Copy" from the menu that appears. Go to your desktop, or any other safe location on your computer and Paste a copy of the file there. You have just created a backup copy of the file, in the off chance that something goes wrong. Remember where you saved this backup.
 
 4.We **only** want to use the **messages.properties** file. So, open Notepad++ (or whichever program you are using for editing) and open this file in the editor using File>>Open **OR** drag and drop the **messages.properties** file into the Notepad++ window.  
 
@@ -62,7 +62,7 @@ Right-click on messages.properties and select “Copy” from the menu that appears.
     connection.route.destroyNotification = Disconnected route on {0}  
     connection.test.sent = Test message successfully sent to {0} using {1}   
  
-If you aren’t using Notepad++ you may see something different.  
+If you aren't using Notepad++ you may see something different.  
 
 While editing this file there are some guidelines that should be followed to ensure that your translation will work once converted:
 
@@ -74,7 +74,7 @@ While editing this file there are some guidelines that should be followed to ens
 
 6.The first and most important step is to update the value of the **language.name** key. This is found at the top of the file and lets us and other users know what language you have translated into.  
 
-Replace “English” with the name of the language you are translating to and move on to the next step.
+Replace "English" with the name of the language you are translating to and move on to the next step.
 
 7.Once you have entered the name of the translation, the rest of the process involved substituting the English with their translated equivalents for each key.  
 
@@ -86,7 +86,7 @@ Replace “English” with the name of the language you are translating to and move 
 
 >This key indicates the text used when multiple messages are deleted. The {0} will indicate the number of messages that were deleted. >Hence, in English this sentence is grammatically correct.
 
->Let’s translate this into Swahili:
+>Let's translate this into Swahili:
 
 >message.deleted.many={0} risala imefutwa
 
