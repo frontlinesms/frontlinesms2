@@ -14,7 +14,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	@Unroll
-	@IgnoreRest
 	def "subscription page should show the details of the subscription in the header"() {
 		setup:
 			def subscription  = Subscription.findByName("Camping Subscription")
@@ -69,15 +68,16 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def "clicking the group link shoud redirect to the group page"(){}
 
-	// FIXME this is a test skeleton that needs to be fleshed out
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
 		given:
-			def allrounderBobby = new Contact(name:'Bobby', mobile:"987654321").save(failOnError:true)
+			def allrounderBobby = new Contact(name:'Bobby', mobile:"+987654321").save(failOnError:true)
+			def allrounderBarbie = new Contact(name:'Barbie', mobile:"+987654322").save(failOnError:true)
 			def campingGroup = new Group(name:"Campers").save(failOnError:true)
 			def campingKeyword = new Keyword(value: 'CAMP')
 			def campingSub = new Subscription(name:"Campers Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
 				defaultAction:Subscription.Action.JOIN, keyword:campingKeyword).save(failOnError:true)
 			campingGroup.addToMembers(allrounderBobby)
+			campingGroup.addToMembers(allrounderBarbie)
 		when:
 			to PageMessageSubscription, campingSub
 			waitFor { header.quickMessage.displayed }
@@ -91,7 +91,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { recipients.displayed }
 			waitFor { recipients.groupCheckboxes[2].checked }
-			waitFor { recipients.count == 1 }
+			waitFor { recipients.count == 2 }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {
@@ -117,16 +117,15 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
 		given:
-			createTestSubscriptions()
 			def g = Group.findByName("Camping Group")
 			def c1 = new Contact(name:'prudence', mobile:'+12321').save(flush:true, failOnError:true)
 			def c2 = new Contact(name:'wilburforce', mobile:'+1232123').save(flush:true, failOnError:true)
-			g.addToContacts(c1)
+			g.addToMembers(c1)
 			def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
 		when:
 			to PageMessageInbox, m1
-			singleMessageDetails.moveTo(Subscription.findByGroup(g))
+			singleMessageDetails.moveTo(g.id)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}

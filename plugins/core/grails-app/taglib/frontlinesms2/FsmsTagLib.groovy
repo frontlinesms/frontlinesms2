@@ -244,7 +244,7 @@ class FsmsTagLib {
 		att.action = "create"
 		att.id = "quick_message"
 		att.onLoading = "showThinking();"
-		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)"
+		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); selectSubscriptionGroup(${att.groupId});"
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
 		out << g.remoteLink(att, body)
 	}
