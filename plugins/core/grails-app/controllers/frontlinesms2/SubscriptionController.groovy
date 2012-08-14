@@ -11,13 +11,12 @@ class SubscriptionController extends ActivityController {
 	}
 
 	def save = {
-		println "***" + params
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
 			subscriptionInstance.keyword = new Keyword(value: params.keyword.toUpperCase())
 			subscriptionInstance.joinAliases = params.joinAliases.toUpperCase()
 			subscriptionInstance.leaveAliases = params.leaveAliases.toUpperCase()
-			//subscriptionInstance.defaultAction = params. TODO
+			subscriptionInstance.defaultAction = Subscription.Action."${params.defaultAction.toUpperCase()}"
 			subscriptionInstance.joinAutoreplyText = params.joinAutoreplyText
 			subscriptionInstance.leaveAutoreplyText = params.leaveAutoreplyText
 			subscriptionInstance.name = params.name

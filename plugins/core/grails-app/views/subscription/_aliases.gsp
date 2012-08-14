@@ -24,11 +24,11 @@
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.leave"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'leave' : false}"/>
+			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'leave' : false}"/>
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.toggle"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'toggle' : false}"/>
+			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'toggle' : false}"/>
 		</li>
 	</ul>
 </div>
