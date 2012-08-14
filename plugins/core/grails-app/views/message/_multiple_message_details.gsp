@@ -35,7 +35,7 @@
 		</g:if>
 		<g:elseif test="${messageSection != 'trash'}">
 			<a id="btn_reply_all" class="msg-btn btn" onclick="messageResponseClick('Reply')"><g:message code="fmessage.reply.many" /></a>
-			<g:if test="${(!ownerInstance) && params.controller !='archive'}">
+			<g:if test="${(!ownerInstance) && params.controller!='archive'}">
 				<g:actionSubmit class="msg-btn btn" value="${g.message(code:'fmessage.archive.many')}" id="btn_archive_all" action="archive"/>
 			</g:if>
 			<g:elseif test="${!ownerInstance && params.controller == 'archive'}">

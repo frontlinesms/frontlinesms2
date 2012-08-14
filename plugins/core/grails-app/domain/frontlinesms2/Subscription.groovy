@@ -13,6 +13,21 @@ class Subscription extends Activity{
 	Action defaultAction = Action.TOGGLE
 	String joinAliases
 	String leaveAliases
+	String joinAutoreplyText
+	String leaveAutoreplyText
+
+	static constraints = {
+		name(blank:false, maxSize:255, validator: { val, obj ->
+			if(obj?.deleted || obj?.archived) return true
+			def identical = Subscription.findAllByNameIlike(val)
+			if(!identical) return true
+			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
+			else return true
+			})
+		joinAutoreplyText(nullable:true, blank:false)
+		joinAutoreplyText(nullable:true, blank:false)
+		keyword(nullable:true)
+	}
 
 	def addToMessages(def message) {}
 	def processKeyword(Fmessage message, boolean exactMatch) {

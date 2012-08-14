@@ -30,7 +30,14 @@ def mvn() {
 	return isWindows()? 'mvn.bat': 'mvn'
 }
 
+target(clearPluginXmls: 'Delete plugin.xml from all in-place plugins') {
+	delete {
+		fileset dir:'..', includes:'*/plugin.xml'
+	}
+}
+
 target(main: 'Build installers for various platforms.') {
+	clearPluginXmls()
 	envCheck()
 	if(!getValueAsBoolean('confirmNotProd', grailsSettings.grailsEnv == 'production')) {
 		input('Press Return to continue building...')

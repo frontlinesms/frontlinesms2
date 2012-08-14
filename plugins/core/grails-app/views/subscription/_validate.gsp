@@ -26,19 +26,19 @@
 		});
 
 		var groupAndKeywordTabValidation = function() {
-			
+			console.log("validate keyword tab");
 		};
 
 		var aliasTabValidation = function() {
-
+			console.log("validate alias tab");
 		};
 
 		var autoreplyTabValidation = function() {
-			
+			console.log("validate autoreply tab");
 		};
 
 		var confirmTabValidation = function() {
-			
+			console.log("validate confirm tab");
 		};
 
 		addValidation('subscription-select-group-keyword', groupAndKeywordTabValidation);
@@ -52,6 +52,6 @@
 	}
 
 	function updateConfirmTab() {
-		$("#confirm-group-text").val("test");
+		$("#confirm-group-text").html($("#subscription-group").val());
 	}
 </r:script>

@@ -94,13 +94,7 @@ class ActivityController {
 	
 	def restore = {
 		withActivity { activity ->
-			activity.deleted = false
-			Trash.findByObject(activity)?.delete()
-			activity.messages.each {
-				it.isDeleted = false
-				it.save(failOnError: true, flush: true)
-			}
-			if(activity.save()) {
+			if(trashService.restore(activity)) {
 				flash.message = defaultMessage 'restored'
 			} else {
 				flash.message = defaultMessage 'restore.failed', activity.id

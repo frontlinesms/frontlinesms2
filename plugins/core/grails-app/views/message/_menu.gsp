@@ -17,7 +17,6 @@
 			</g:remoteLink>
 		</fsms:menuitem>
 	</fsms:submenu>
-
 	<fsms:submenu code="folder.header" class="folders">
 		<g:each in="${folderInstanceList}" status="i" var="f">
 			<fsms:menuitem class="" selected="${f == ownerInstance}" controller="message" action="folder" string="${f.name}" params="[ownerId: f.id]"/>
@@ -29,3 +28,4 @@
 		</fsms:menuitem>
 	</fsms:submenu>
 </fsms:menu>
+

@@ -1,0 +1,29 @@
+# Unarchiving Shows
+
+Unarchiving allows you to place archived shows back into the messages tab. Shows then become live and any triggers associated with activities, such as auto-replies, will work again. This feature is useful if you need to re-use an old show.
+
+### [Unarchiving a Show][1]
+
+![unarchive show][8]
+
+To unarchive one or more Shows first navigate to the [show archive][2], which can be found under the [Archive][3] tab.
+
+1.  Select the Show, or Shows, you want to unarchive by using the check boxes.
+2.  You will be taken to the Detail view of the show. In the header (1), select "unarchive".
+
+Your Show will now appear in the messages tab, under "Shows". Activities that were associated and thus, archived, with this show will also be restored and become active.This means any triggers set up such as autoreplies will work again. 
+
+### Related Actions
+[Creating a Folder][4]  
+[Creating a Show][5]  
+[Sending a Message][6]  
+[Forwarding messages][7]  
+
+[1]: radio/shows/8.unarchive_show
+[2]: core/archive/1e.show_archive
+[3]: core/archive/1.getting_around_the_archive_tab
+[4]: folders/2.creating_a_folder
+[5]: radio/shows/2.creating_a_show
+[6]: core/messages/3.quick_message
+[7]: core/messages/8.mrfd
+[8]: .../images/help/unarchive_show.png

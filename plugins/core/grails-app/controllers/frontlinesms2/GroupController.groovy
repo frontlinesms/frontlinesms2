@@ -12,7 +12,7 @@ class GroupController {
 	def update = {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
-		if (group.save(flush:true)) {
+		if(group.save(flush:true)) {
 			flash.message = message(code:'group.update.success')
 			withFormat {
 				json {
