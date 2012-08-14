@@ -302,4 +302,3 @@ function editConnection(id) {
 		}
 	});
 }
-
