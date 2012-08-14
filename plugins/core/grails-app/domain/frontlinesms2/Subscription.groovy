@@ -24,9 +24,9 @@ class Subscription extends Activity{
 			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
 			else return true
 			})
-		joinAutoreplyText(nullable:true, blank:false)
-		leaveAutoreplyText(nullable:true, blank:false)
-		keyword(nullable:true)
+		joinAutoreplyText nullable:true, blank:false
+		joinAutoreplyText nullable:true, blank:false
+		keyword nullable:true
 	}
 
 	def addToMessages(def message) {}

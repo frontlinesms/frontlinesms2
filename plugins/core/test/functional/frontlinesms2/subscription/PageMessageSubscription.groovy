@@ -18,6 +18,8 @@ class SubscriptionHeaderModule extends ContentHeader {
 		keyword { infoListItems[2] }
 		joinAliases { infoListItems[3] }
 		leaveAliases { infoListItems[4] }
-		groupLink { buttons.find(text:'Go to group') }
+		groupLink { buttons.filter(text:'View Group') }
+		archive { buttons.filter(text:'Archive subscription') }
+		moreActions { $('div.header-buttons select#more-actions') }
 	}
 }

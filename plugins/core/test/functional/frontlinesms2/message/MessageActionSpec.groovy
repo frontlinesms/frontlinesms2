@@ -114,7 +114,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 		when:
 			singleMessageDetails.moveTo('inbox')
 		then:
-			waitFor { notifications.flashMessagesText }
+			waitFor { notifications.flashMessageText }
 		when:
 			bodyMenu.messageSection("Inbox").click()
 		then:

@@ -3,6 +3,7 @@ package frontlinesms2.subscription
 import frontlinesms2.*
 import frontlinesms2.contact.*
 import frontlinesms2.message.*
+import frontlinesms2.page.*
 import frontlinesms2.popup.*
 import spock.lang.*
 
@@ -20,13 +21,13 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, subscription
 		then:
-			waitFor { title.toLowerCase().contains("subscription") }
+			waitFor { title?.toLowerCase().contains("subscription") }
 			header[item] == value
 		where:
 			item               | value
 			'title'            | "camping subscription subscription"
 			'groupMemberCount' | '2 members'
-			'group'            | 'Group: Camping Group'
+			'group'            | 'Group: Camping'
 			'keyword'          | 'Keyword: CAMPING'
 			'joinAliases'      | 'Join: JOIN,IN,START'
 			'leaveAliases'     | 'Leave: LEAVE,OUT,STOP'
@@ -40,7 +41,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			header.groupLink.click()
 		then:
-			waitFor { at PageGroup, Group.findByName("camping").id }
+			waitFor { at PageGroupShow, Group.findByName("Camping") }
 	}
 
 	def "clicking the archive button archives the subscription and redirects to inbox "() {
@@ -52,34 +53,23 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.archive.click()
 		then:
 			waitFor { at PageMessageInbox }
-			notifications.flashmessage.contains("subscription has been archived")
+			notifications.flashMessageText == "Activity archived"
 	}
 
-	def "clicking the edit option opens the Subscription Dialog for editing"(){
+	def "clicking the edit option opens the Subscription Dialog for editing"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreAction("edit").jquery.click()
+			header.moreActions("edit").jquery.click()
 		then:
 			waitFor { at EditSubscriptionDialog }
 	}
 
-	def "clicking the group link shoud redirect to the group page"(){}
-
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
-		given:
-			def allrounderBobby = new Contact(name:'Bobby', mobile:"+987654321").save(failOnError:true)
-			def allrounderBarbie = new Contact(name:'Barbie', mobile:"+987654322").save(failOnError:true)
-			def campingGroup = new Group(name:"Campers").save(failOnError:true)
-			def campingKeyword = new Keyword(value: 'CAMP')
-			def campingSub = new Subscription(name:"Campers Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
-				defaultAction:Subscription.Action.JOIN, keyword:campingKeyword).save(failOnError:true)
-			campingGroup.addToMembers(allrounderBobby)
-			campingGroup.addToMembers(allrounderBarbie)
 		when:
-			to PageMessageSubscription, campingSub
+			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -96,8 +86,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {
 		given:
-			def friendsGroup = new Group(name: "Friends").save()
-			def subscription = new Subscription(group:friendsGroup, name:"sign-me-up") // TODO populate with appropriate args
+			def friendsGroup = Group.build(name: "Friends")
+			def subscription = Subscription.build(group:friendsGroup)
 		when:
 			to PageContactShow, friendsGroup
 		then:
@@ -105,22 +95,22 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			header.moreGroupActions.value("delete").click()
 		then:
-			waitFor{ at DeleteGroupPopup }
+			waitFor { at DeleteGroupPopup }
 		when:
 			warningMessage == 'Are you sure you want to delete Friends? WARNING: This cannot be undone'
 			ok.jquery.trigger("click")
 		then:
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks.contains("Friends")
-			notifications.flashMessagesText.contains("Cannot delete group Friends: is used by sign-me-up Subscription")
+			notifications.flashMessageText.contains("Cannot delete group Friends: is used by sign-me-up Subscription")
 	}
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
 		given:
-			def g = Group.findByName("Camping Group")
-			def c1 = new Contact(name:'prudence', mobile:'+12321').save(flush:true, failOnError:true)
-			def c2 = new Contact(name:'wilburforce', mobile:'+1232123').save(flush:true, failOnError:true)
-			g.addToMembers(c1)
+			def g = Group.findByName("Camping")
+			def c1 = Contact.build(name:'prudence', mobile:'+12321')
+			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+			g.addToContacts(c1)
 			def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
 		when:
@@ -132,10 +122,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 
 	def 'When a message is categorised with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
-			createTestSubscriptions()
-			def g = Group.findByName("Camping Group")
-			def c1 = new Contact(name:'prudence', mobile:'+12321').save(flush:true, failOnError:true)
-			def c2 = new Contact(name:'wilburforce', mobile:'+1232123').save(flush:true, failOnError:true)
+			def g = Group.findByName("Camping")
+			def c1 = Contact.build(name:'prudence', mobile:'+12321')
+			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 			g.addToContacts(c1)
 			def m1 = Fmessage.build(text:'I want to go away', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to come in', src:'wilburforce', read:true)
@@ -171,41 +160,41 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			}
 	}
 
-	def "clicking the rename option opens the rename small popup"(){
+	def "clicking the rename option opens the rename small popup"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreAction("rename").jquery.click()
+			header.moreActions("rename").jquery.click()
 		then:
 			waitFor { at RenameSubscriptionDialog }
 			waitFor { subscriptionName == "Camping Subscription" }
 	}
 
-	def "clicking the delete option opens the confirm delete small popup"(){
+	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreAction("delete").jquery.click()
+			header.moreActions("delete").jquery.click()
 		then:
 			waitFor { at ConfirmDeleteDialog }
 	}
 
-	def "clicking the export option opens the export dialog"(){
+	def "clicking the export option opens the export dialog"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreAction("export").jquery.click()
+			header.moreActions("export").jquery.click()
 		then:
 			waitFor { at ExportDialog }
 	}
 
-	def "selecting a single message reveals the single message view"(){
+	def "selecting a single message reveals the single message view"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
@@ -217,7 +206,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { singleMessageDetails.text == "some text" }
 	}
 
-	def "selecting multiple messages reveals the multiple message view"(){
+	def "selecting multiple messages reveals the multiple message view"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
@@ -228,10 +217,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages[1].checkbox.click()		
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text.toLowerCase() == "2 messages selected" }
+			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
 	}
 
-	def "clicking on a message reveals the single message view with clicked message"(){
+	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
@@ -245,7 +234,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			singleMessageDetails.text == "some text"
 	}
 
-	def "delete single message action works "(){
+	def "delete single message action works "() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
@@ -279,7 +268,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			!messageList.messages*.text.containsAll("the text contents of the previous message", "the second message message")
 	}
 
-	def "move single message action works"(){
+	def "move single message action works"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
@@ -300,7 +289,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.text.contains("the text we just moved")
 	}
 
-	def "move multiple message action works"(){
+	def "move multiple message action works"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
@@ -323,10 +312,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			messageList.messages*.text.containsAll("the text we just moved", "the second message we just moved")
 	}
 
-	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"(){
+	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"() {
 		setup:
 			def activity = Activity.findByName("Sample Announcement")
-			def m = Fmessage.findByScr("Bob")
+			def m = Fmessage.findBySrc("Bob")
 		when:
 			to PageMessageActivity, activity.id, m.id
 		then:

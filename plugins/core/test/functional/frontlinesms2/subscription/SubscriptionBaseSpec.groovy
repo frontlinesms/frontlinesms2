@@ -5,14 +5,11 @@ import frontlinesms2.Subscription.Action
 
 class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestSubscriptions() {
-println "All memberships: ${GroupMembership.findAll()}"
-println "All groups: ${Group.findAll()}"
-println "All contacts: ${Contact.findAll()}"
 		def allrounderBobby = Contact.build(mobile:"987654321")
 		def camperSam = Contact.build(mobile:"987654322")
 		def footyRon = Contact.build(mobile:"987654323")
 
-		def campingGroup = Group.build(name:"Camping Group")
+		def campingGroup = Group.build(name:"Camping")
 		def campingKeyword = new Keyword(value: 'CAMPING')
 		def campingSub = new Subscription(name:"Camping Subscription", group:campingGroup, joinAliases:"JOIN,IN,START", leaveAliases:"LEAVE,OUT,STOP",
 				defaultAction:Action.JOIN, keyword:campingKeyword).save(failOnError:true)
