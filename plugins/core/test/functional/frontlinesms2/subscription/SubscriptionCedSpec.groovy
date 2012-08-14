@@ -93,40 +93,37 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 	}
 
 	def "Should not proceed if subscription not named"() {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
 		when:
 			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
 			group.addToGroup Group.findByName('Friends').id.toString()
 			group.keywordText = 'FRIENDS'
 			next.click()
 			aliases.joinAliases = 'join, start'
 			aliases.leaveAliases = 'leave, stop'
-			aliases.enableJoinKeyword.click()
 			next.click()
-		then:
-			waitFor {autoreply.displayed}
-		when:
 			autoreply.enableJoinAutoreply.click()
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
 			autoreply.enableLeaveAutoreply.click()
 			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			next.click()
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
 			submit.click()
 		then:
-			waitFor {error.text().contains('Fill in the required field')}
+			waitFor {error.text().contains('This field is required.')}
 			at SubscriptionCreateDialog
 	}
 
 	def "Subscriptions must be associated with a group" () {
 		when:
 			launchSubscriptionPopup()
-			group.addToGroup.value('Select group...')
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup('Select group')
 			group.keywordText = 'FRIENDS'
-			next.click()
-			aliases.enableJoinKeyword.click()
-			aliases.joinAliases = 'join, start'
-			aliases.leaveAliases = 'leave, stop'
 			next.click()
 		then:
 			waitFor {error.text().contains('Subscriptions must have a group')}
@@ -134,12 +131,15 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 	}
 
 	def "keyword must be provided in a subscription"() {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
 		when:
 			launchSubscriptionPopup()
-			group.addToGroup Group.findByName('Friends').id.toString()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
 			next.click()
 		then:
-			waitFor {error.text().contains('Subscriptions must have a keyword')}
+			waitFor {error.text().contains('This field is required')}
 			group.keywordText.displayed
 			at SubscriptionCreateDialog
 	}
