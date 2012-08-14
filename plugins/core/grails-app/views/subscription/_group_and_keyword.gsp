@@ -3,7 +3,7 @@
 	<p><g:message code="subscription.group.description"/></p>
 </div>
 <div class="input">
-	<g:select name="subscription-group" value="${activityInstanceToEdit?.group}" class="dropdown required"
+	<g:select name="subscriptionGroup" value="${activityInstanceToEdit?.group}" class="dropdown required"
 		noSelection="${['': g.message(code:'subscription.group.none.selected')]}"
 		from="${groupList}" optionKey="id" optionValue="name"/>
 </div>
