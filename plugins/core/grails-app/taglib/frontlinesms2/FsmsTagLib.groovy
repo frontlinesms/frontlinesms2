@@ -84,13 +84,21 @@ class FsmsTagLib {
 
 	def render = { att ->
 		boolean rendered = false
-		([null] + grailsApplication.config.frontlinesms.plugins).each { plugin -> 
+		def plugins = [null] + grailsApplication.config.frontlinesms.plugins
+		plugins.each { plugin -> 
 			if(!rendered) {
 				try {
 					att.plugin = plugin
 					out << g.render(att)
 					rendered = true
-				} catch(GrailsTagException ex) { log.debug "Could not render $plugin:$att.template", ex }
+				} catch(GrailsTagException ex) {
+					if(ex.message.startsWith("Template not found")) {
+						// Thanks for not subclassing your exceptions, guys!
+						log.debug "Could not render $plugin:$att.template", ex
+					} else {
+						throw ex
+					}
+				}
 			}
 		}
 		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=$plugins]")
