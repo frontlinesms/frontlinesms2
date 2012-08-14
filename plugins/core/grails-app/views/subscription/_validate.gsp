@@ -1,6 +1,11 @@
 <r:script>
 	function initializePopup() {
-		var validator = $("#create_announcement").validate({
+		addCustomValidationClasses()
+		initializeTabValidation(createFormValidator());
+	}
+
+	function createFormValidator() {
+		var validator = $("#create_subscription").validate({
 			errorContainer: ".error-panel",
 			rules: {
 				addresses: {
@@ -12,7 +17,7 @@
 				}
 			},
 			messages: {
-					addresses: {
+				addresses: {
 					required: i18n("poll.recipients.validation.error")
 				}
 			},
@@ -24,9 +29,12 @@
 					error.insertAfter(element);
 			}
 		});
+		return validator;
+	}
 
+	function initializeTabValidation(validator) {
 		var groupAndKeywordTabValidation = function() {
-			console.log("validate keyword tab");
+			return (validator.element($('#subscriptionGroup')) && validator.element($("#subscription-keyword")));
 		};
 
 		var aliasTabValidation = function() {
@@ -38,7 +46,7 @@
 		};
 
 		var confirmTabValidation = function() {
-			console.log("validate confirm tab");
+			return validator.element('#name');
 		};
 
 		addValidation('subscription-select-group-keyword', groupAndKeywordTabValidation);
@@ -53,5 +61,11 @@
 
 	function updateConfirmTab() {
 		$("#confirm-group-text").html($("#subscription-group").val());
+	}
+
+	function addCustomValidationClasses() {
+		jQuery.validator.addMethod("notEmpty", function(value, element) {
+			return ($('select#subscriptionGroup').val() != '');
+		}, i18n("subscription.group.required.error"));
 	}
 </r:script>

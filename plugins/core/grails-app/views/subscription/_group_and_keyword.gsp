@@ -4,7 +4,7 @@
 	<p><g:message code="subscription.group.description"/></p>
 </div>
 <div class="input">
-	<g:select name="subscriptionGroup" class="dropdown required"
+	<g:select name="subscriptionGroup" class="dropdown notEmpty"
 		noSelection="${activityInstanceToEdit? [(activityInstanceToEdit.group.id) : (activityInstanceToEdit.group.name)] : ['': g.message(code:'subscription.group.none.selected')] }"
 		from="${Group.getAll()}" optionKey="id" optionValue="name" />
 		<!--
@@ -14,7 +14,7 @@
 
 <h2><g:message code="subscription.keyword.header"/></h2>
 <div class="input">
-	<g:textField name="keyword" id="subscription-keyword" value="${activityInstanceToEdit?.keyword?.value}" />
+	<g:textField name="keyword" id="subscription-keyword" value="${activityInstanceToEdit?.keyword?.value}" class="required"/>
 </div>
 
 

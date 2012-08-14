@@ -305,10 +305,10 @@ class SubscriptionGroupTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		addToGroup { groupId ->
-			$('select#addGroupDropdown').jquery.val(groupId)
-			$('select#addGroupDropdown').jquery.trigger("change")
+			$('select#subscriptionGroup').jquery.val(groupId)
+			$('select#subscriptionGroup').jquery.trigger("change")
 		}
-		keywordText { $('input#keywordText') }
+		keywordText { $('input#subscription-keyword') }
 	}
 }
 
@@ -323,13 +323,13 @@ class SubscriptionAliasesTab extends geb.Module {
 	}
 }
 
-class SubscriptionAutoreplyTab extends geb.Module {
+class SubscriptionAutoReplyTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
 		enableJoinAutoreply {$('input#enableJoinAutoreply')}
-		joinAutoreplyText {$('input#joinAutoreplyText')}
+		joinAutoreplyText {$('textarea#joinAutoreplyText')}
 		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}
-		leaveAutoreplyText {$('input#leaveAutoreplyText')}
+		leaveAutoreplyText {$('textarea#leaveAutoreplyText')}
 	}
 }
 
