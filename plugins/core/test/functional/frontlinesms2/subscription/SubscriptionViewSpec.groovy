@@ -14,7 +14,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 	}
 
 	@Unroll
-	@IgnoreRest
 	def "subscription page should show the details of the subscription in the header"() {
 		setup:
 			def subscription  = Subscription.findByName("Camping Subscription")
@@ -26,8 +25,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		where:
 			item               | value
 			'title'            | "camping subscription subscription"
-			'group'            | 'Group: Camping'
 			'groupMemberCount' | '2 members'
+			'group'            | 'Group: Camping Group'
 			'keyword'          | 'Keyword: CAMPING'
 			'joinAliases'      | 'Join: JOIN,IN,START'
 			'leaveAliases'     | 'Leave: LEAVE,OUT,STOP'

@@ -5,6 +5,9 @@ import frontlinesms2.Subscription.Action
 
 class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 	static createTestSubscriptions() {
+println "All memberships: ${GroupMembership.findAll()}"
+println "All groups: ${Group.findAll()}"
+println "All contacts: ${Contact.findAll()}"
 		def allrounderBobby = Contact.build(mobile:"987654321")
 		def camperSam = Contact.build(mobile:"987654322")
 		def footyRon = Contact.build(mobile:"987654323")
@@ -38,12 +41,13 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestMessages(Subscription s) {
 		(11..90).each {
-			def m = Fmessage.build(src:'Bob', text:'Test message number${it}', date:new Date()-it).save(flush:true, failOnError:true)
+			def m = Fmessage.build(src:'Bob', text:'Test message number${it}', date:new Date()-it)
 			s.addToMessages(m) // TODO correct this to sort messages into either join or leave
+			s.save(failOnError:true, flush:true)
 		}
 	}
 
-	static createTestActivities(){
-		new Announcement(name:"Sample Announcement", text:"Message to send").save()
+	static createTestActivities() {
+		Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
 	}
 }
