@@ -25,7 +25,7 @@ class Subscription extends Activity{
 			else return true
 			})
 		joinAutoreplyText(nullable:true, blank:false)
-		joinAutoreplyText(nullable:true, blank:false)
+		leaveAutoreplyText(nullable:true, blank:false)
 		keyword(nullable:true)
 	}
 
