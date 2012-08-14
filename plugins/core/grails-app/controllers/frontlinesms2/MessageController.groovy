@@ -227,7 +227,7 @@ class MessageController {
 			messageInstance.isDeleted = false
 			Trash.findByObject(messageInstance)?.delete(failOnError:true)
 			if (params.messageSection == 'activity') {
-				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
+				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
 				activity.addToMessages(messageInstance)
 				if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
 					params.addresses = messageInstance.src
@@ -239,14 +239,14 @@ class MessageController {
 				}
 				activity.save()
 			} else if (params.ownerId && params.ownerId != 'inbox') {
-				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save()
-				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save()
+				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
+				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save(failOnError:true)
 				messageInstance.save()
 			} else {
 				messageInstance.with {
 					if(messageOwner) {
-						messageOwner.removeFromMessages(messageInstance).save()
-						save()
+						messageOwner.removeFromMessages(messageInstance).save(failOnError:true)
+						save(failOnError:true)
 					}
 				}
 			}

@@ -1,2 +1,2 @@
-kill -9 `ps aux | grep grails | grep -Po -m1 "\d+" | grep -Pm1 "\d+"`
+kill -9 `ps aux | grep grails | grep -Po -m2 "\w+" | grep -Pm2 "\w+" | tail -n1`
 

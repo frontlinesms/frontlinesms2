@@ -17,11 +17,11 @@ If you have clicked on a (plus icon) icon you will automatically be brought to t
 ### 2. Filling in the details
 
 __Custom Fields__  
-The default information boxes that are displayed in each contact record allow you to input basic details including a contact’s name, phone number and email address. The primary number is the default number which any messages will be sent to.    
+The default information boxes that are displayed in each contact record allow you to input basic details including a contact's name, phone number and email address. The primary number is the default number which any messages will be sent to.    
   
 >*__Technical Tips!__
->The ‘Name’ field has a 255 character limit.
->The ‘Notes’ field as a 1024 character limit.
+>The 'Name' field has a 255 character limit.
+>The 'Notes' field as a 1024 character limit.
   
 You  can add custom fields that allow you to specify more information that you need. For example, you may want to add a postal address, or information about which region the contact is from, or you may even want to add what the contact's favourite colour is. 
 
@@ -33,7 +33,7 @@ To create a custom field:
 1.  There is a drop down box which says 'Add more information' (2). Clicking on this will bring up a list of preset fields that you can use, such as Street Address, City and Postcode. This will add the selected field to each contact in your system offering you space to add additional information.  
 2.  If none of these options are what you are looking for, then choose the "Create New" option in the drop down box.
 3.  A window will then appear, allowing you to enter a name for the new field. 
-4.  If you want this new field to appear by default in all new contacts created from this point on, then check the box next to where it says “Make a default field”.
+4.  If you want this new field to appear by default in all new contacts created from this point on, then check the box next to where it says "Make a default field".
 5.  Once you have named the field, it will now appear in your contact's details (and all other contacts if you have made it default)  for you to fill out.
 
 Once a field has been created it can be accessed easily again from the drop down menu from any contact. The field can also be removed from a particular contact by clicking the 'x' next to the field.

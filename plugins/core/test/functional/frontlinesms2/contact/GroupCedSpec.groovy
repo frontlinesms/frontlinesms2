@@ -19,7 +19,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			assert Group.count() == (initNumGroups + 1)
 	}
 	
-	def 'More action dropdown has option to rename the group'(){
+	def 'More action dropdown has option to rename the group and it works'() {
 		given:
 			createTestGroupsAndContacts()
 			def friendsGroup = Group.findByName("Friends")

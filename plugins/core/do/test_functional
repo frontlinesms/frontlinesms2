@@ -1,0 +1,16 @@
+echo "Starting grails server in test mode..."
+grails test run-app &
+
+echo "Starting grails interactive console..."
+TEST_NAME="$1"
+if [[ -z "$TEST_NAME" ]]; then
+	TEST_NAME="YourTestHere"
+fi
+echo -n "test-app functional:spock -baseUrl=http://localhost:8080/core $TEST_NAME" | grails
+
+echo "Killing grails server"
+kill -9 %1
+
+echo "Jobs from this process:"
+echo `jobs`
+echo "Functional testing finished :¬("

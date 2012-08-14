@@ -28,14 +28,39 @@ function addFieldClickAction() {
 }
 
 function clickDone() {
-	if ($("#custom-field-name").val() != "") {
-		var name = $("#custom-field-name").val();
-		addCustomField(name);
-		$(this).remove();
-	} else {
-		$("#custom-field-popup .error-panel").removeClass("hide");
+	if ($("#modalBox").contentWidget("onDone")) {
+		$(this).find("form").submit();
 	}
 }
+
+var CustomFields = function() {
+	var
+		_checkResults = function(json) {
+			if ($("#custom-field-name").val() != "") {
+				var name = $("#custom-field-name").val();
+				var fieldsToAdd = getFieldIdList('fieldsToAdd').val().split(",");
+				for (y in fieldsToAdd) {
+					if(fieldsToAdd[y] !="" ) {json.uniqueCustomFields.push(fieldsToAdd[y])};
+				}
+				for (x in json.uniqueCustomFields) {
+					if (json.uniqueCustomFields[x].toLowerCase() == name.toLowerCase()) {
+						$("#smallpopup-error-panel").html(i18n("customfield.validation.error"));
+						$("#smallpopup-error-panel").show();
+						return false;
+					}
+				}
+				addCustomField(name);
+				$("#modalBox").remove();
+			} else {
+				$("#smallpopup-error-panel").html(i18n("customfield.validation.prompt"));
+				$("#smallpopup-error-panel").show();
+			}
+		};
+	return {
+		checkResults: _checkResults
+	};
+};
+var customFields = new CustomFields();
 
 function addCustomField(name) {
 	var fieldId = Math.floor(Math.random() * 100001);
@@ -90,12 +115,14 @@ function removeFieldIdFromList(id, fieldName) {
 	f.val(newList);
 }
 function addFieldIdToList(id, fieldName) {
-	var f = $('input:hidden[name=' + fieldName + ']');
+	var f = getFieldIdList(fieldName);
 	var oldList = f.val();
 	var newList = oldList + id + ',';
 	f.val(newList);
 }
-
+function getFieldIdList(fieldName) {
+	return $('input:hidden[name=' + fieldName + ']');
+}
 function clearField() {
 	if($(this).attr('id')) {
 		var field = $(this).attr('id').substring('remove-'.length);

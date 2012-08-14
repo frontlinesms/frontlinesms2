@@ -79,6 +79,9 @@
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
+              <void property="arguments">
+                <string>-Dfrontlinesms.resource.path=~/.${compiler:app.shortName}</string>
+              </void>
               <void property="customIconImageFiles">
                 <void method="add">
                   <object class="com.install4j.api.beans.ExternalFile">
