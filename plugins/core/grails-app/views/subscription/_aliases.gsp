@@ -2,12 +2,12 @@
 <div class="input">
 	<table class="subscription-aliases">
 		<tr>
-			<td><label for="join-aliases"><g:message code="subscription.aliases.join"/></label></td>
-			<td><g:textField name="join-aliases" id="join-aliases" value="${activityInstanceToEdit?.leaveAliases?.value}"/></td>
+			<td><label for="joinAliases"><g:message code="subscription.aliases.join"/></label></td>
+			<td><g:textField name="joinAliases" id="joinAliases" value="${activityInstanceToEdit?.leaveAliases?.value}"/></td>
 		</tr>
 		<tr>
-			<td><label for="leave-aliases"><g:message code="subscription.aliases.leave"/></label></td>
-			<td><g:textField name="leave-aliases" id="leave-aliases" value="${activityInstanceToEdit?.leaveAliases?.value}"/></td>
+			<td><label for="leaveAliases"><g:message code="subscription.aliases.leave"/></label></td>
+			<td><g:textField name="leaveAliases" id="leaveAliases" value="${activityInstanceToEdit?.leaveAliases?.value}"/></td>
 		</tr>
 </table>
 </div>
@@ -24,11 +24,11 @@
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.leave"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'leave' : false}"/>
+			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'leave' : false}"/>
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.toggle"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'toggle' : false}"/>
+			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'toggle' : false}"/>
 		</li>
 	</ul>
 </div>

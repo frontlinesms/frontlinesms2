@@ -13,6 +13,8 @@ class Subscription extends Activity{
 	Action defaultAction = Action.TOGGLE
 	String joinAliases
 	String leaveAliases
+	String joinAutoreplyText
+	String leaveAutoreplyText
 
 	def addToMessages(def message) {}
 	def processKeyword(Fmessage message, boolean exactMatch) {
