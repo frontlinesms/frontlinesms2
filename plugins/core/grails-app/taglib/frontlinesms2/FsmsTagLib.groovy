@@ -84,13 +84,21 @@ class FsmsTagLib {
 
 	def render = { att ->
 		boolean rendered = false
-		([null] + grailsApplication.config.frontlinesms.plugins).each { plugin -> 
+		def plugins = [null] + grailsApplication.config.frontlinesms.plugins
+		plugins.each { plugin -> 
 			if(!rendered) {
 				try {
 					att.plugin = plugin
 					out << g.render(att)
 					rendered = true
-				} catch(GrailsTagException ex) { log.debug "Could not render $plugin:$att.template", ex }
+				} catch(GrailsTagException ex) {
+					if(ex.message.startsWith("Template not found")) {
+						// Thanks for not subclassing your exceptions, guys!
+						log.debug "Could not render $plugin:$att.template", ex
+					} else {
+						throw ex
+					}
+				}
 			}
 		}
 		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=$plugins]")
@@ -262,7 +270,7 @@ class FsmsTagLib {
 		att.action = "create"
 		att.id = "quick_message"
 		att.onLoading = "showThinking();"
-		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true)"
+		att.onSuccess = "hideThinking(); launchMediumWizard(i18n('wizard.quickmessage.title'), data, i18n('wizard.send'), true); selectSubscriptionGroup(${att.groupId});"
 		def body = "<span class='quick-message'>${g.message(code:'fmessage.quickmessage')}</span>"
 		out << g.remoteLink(att, body)
 	}
