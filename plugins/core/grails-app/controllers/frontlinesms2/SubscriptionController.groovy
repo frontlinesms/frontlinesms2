@@ -10,6 +10,16 @@ class SubscriptionController extends ActivityController {
 				groupList:groupList]
 	}
 
+	def edit = {
+		withActivity { activityInstance ->
+			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
+			def activityType = activityInstance.shortName
+			render view:"../$activityType/create", model:[contactList: Contact.list(),
+				groupList:groupList,
+				activityInstanceToEdit: activityInstance]
+		}
+	}
+
 	def save = {
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
