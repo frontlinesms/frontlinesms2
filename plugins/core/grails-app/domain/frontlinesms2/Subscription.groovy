@@ -16,6 +16,11 @@ class Subscription extends Activity{
 	String joinAutoreplyText
 	String leaveAutoreplyText
 
+	static constraints = {
+		joinAutoreplyText nullable:true
+		leaveAutoreplyText nullable:true
+	}
+
 	def addToMessages(def message) {}
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def action = getAction(message.text,exactMatch)

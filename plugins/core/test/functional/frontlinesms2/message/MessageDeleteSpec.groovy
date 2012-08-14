@@ -49,7 +49,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			waitFor { multipleMessageDetails.checkedMessageCount == '2 messages selected' }
 			multipleMessageDetails.deleteAll.click()
 		then:
-			waitFor { notifications.flashMessagesText.contains("trash") }
+			waitFor { notifications.flashMessageText.contains("trash") }
 	}
 	
 	def "'Delete' button appears for individual messages and works"() {
@@ -62,7 +62,7 @@ class MessageDeleteSpec extends grails.plugin.geb.GebSpec {
 			singleMessageDetails.delete.click()
 		then:
 			at PageMessageInbox
-			waitFor{ notifications.flashMessagesText.contains("trash") }
+			waitFor{ notifications.flashMessageText.contains("trash") }
 	}
 
 	def deleteMessage(Fmessage message) {
