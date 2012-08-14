@@ -29,5 +29,12 @@ class TrashService {
 			object.save(failOnError:true, flush:true)
 		}
 	}
+
+	def restore(object) {
+		Trash.findByObject(object)?.delete()
+		object.restoreFromTrash()
+		object.save()
+		return true
+	}
 }
 

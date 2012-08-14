@@ -10,6 +10,7 @@ class Trash {
 	String displayText
 	
 	static constraints = {
+		objectId unique:'objectClass'
 		displayName(nullable: true)
 		displayText(nullable: true)
 	}

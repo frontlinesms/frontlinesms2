@@ -67,4 +67,17 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			Fmessage.list() == inboxMessages
 	}
+
+	def 'should not be able to delete the same item twice'() {
+		given: 'activity exists'
+			def a = Announcement.build()
+		when: 'activity deleted'
+			trashService.sendToTrash(a)
+		then: '1 trash item exists for activity'
+			Trash.findAllByObjectIdAndObjectClass(a.id, a.class.name).size() == 1
+		when: 'activity deleted again'
+			trashService.sendToTrash(a)
+		then: 'still only 1 trash item exists for activity'
+			Trash.findAllByObjectIdAndObjectClass(a.id, a.class.name).size() == 1
+	}
 }

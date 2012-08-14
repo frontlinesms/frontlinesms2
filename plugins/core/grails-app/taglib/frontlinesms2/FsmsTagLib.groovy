@@ -1,6 +1,7 @@
 package frontlinesms2
 
 import org.springframework.web.servlet.support.RequestContextUtils
+import org.codehaus.groovy.grails.web.taglib.exceptions.GrailsTagException
 
 class FsmsTagLib {
 	static namespace = 'fsms'
@@ -82,7 +83,24 @@ class FsmsTagLib {
 	}
 
 	def render = { att ->
-		out << g.render(att)
+		boolean rendered = false
+		([null] + grailsApplication.config.frontlinesms.plugins).each { plugin -> 
+			if(!rendered) {
+				try {
+					att.plugin = plugin
+					out << g.render(att)
+					rendered = true
+				} catch(GrailsTagException ex) { log.debug "Could not render $plugin:$att.template", ex }
+			}
+		}
+		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=$plugins]")
+	}
+
+	private def templateExists(name, plugin) {
+		// FIXME need to use `plugin` variable when checking for resource
+		def fullUri = grailsAttributes.getTemplateUri(name, request)
+		def resource = grailsAttributes.pagesTemplateEngine.getResourceForUri(fullUri)
+		return resource && resource.file && resource.exists()
 	}
 
 	def i18nBundle = {

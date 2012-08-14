@@ -24,7 +24,7 @@ class SearchViewSpec extends SearchBaseSpec {
 			to PageNewSearch
 		then:
 			searchsidebar.searchForm.find('select', name:'groupId').children('option')*.text() == ['Select group', 'Friends', 'Listeners']
-			searchsidebar.searchForm.find('select', name:'activityId').children('option')*.text() == ['Select activity/folder', "Miauow Mix", 'Work']
+			searchsidebar.searchForm.find('select', name:'activityId').children('option')*.text() == ['Select activity/folder', "Miauow Mix poll", 'Work folder']
 	}
 	
 	def "search description is shown in header"() {

@@ -99,7 +99,7 @@ class MessageActionSpec extends frontlinesms2.poll.PollBaseSpec {
 			!singleMessageDetails.archive.displayed
 	}
 
-	def "can move poll messages to inbox"() {
+	def "can move poll message to inbox"() {
 		given:
 			createTestPolls()
 			createTestMessages()

@@ -34,7 +34,7 @@
 			</p></div>
 		</div>
 		<fsms:render template="/message/message_actions"/>
-		<fsms:render template="/message/other_actions"/>
+		<fsms:render template="/message/other_actions" plugin="core"/>
 	</g:if>
 	<g:elseif test="${messageSection == 'trash' && ownerInstance}">	
 		<div id='message-info'>

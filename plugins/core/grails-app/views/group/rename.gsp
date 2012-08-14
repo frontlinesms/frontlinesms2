@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <div>
 	<div class="error-panel hide" id="smallpopup-error-panel"><div id="error-icon"></div></div>
-	<g:formRemote name="group-details" url="[controller: 'group', action:'update']" method="post" onSuccess="checkResults(data)">
+	<g:formRemote name="group-details" url="[controller: 'group', action:'update']" method="post" onSuccess="smallPopup.checkResults(data)">
 		<g:hiddenField name="id" value="${params.groupId}"></g:hiddenField>
 		<div class="dialog">
 			<table>

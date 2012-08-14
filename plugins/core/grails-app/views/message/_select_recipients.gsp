@@ -1,9 +1,11 @@
 <%@ page import="grails.converters.JSON" contentType="text/html;charset=UTF-8" %>
 <div>
 	<div id="manual-address">
-		<label id="manual-label" class="bold" for="address" style="display:table-cell; padding:5px 5px 0 0;"><g:message code="quickmessage.phonenumber.label" /> </label>
-		<g:textField id="address" name="address" onkeyup="validateAddressEntry();" style="display:table-cell; margin-right:5px; width:150px;"/>
-		<g:link url="#" class="btn add-address" onclick="addAddressHandler();" ><g:message code="quickmessage.phonenumber.add"/></g:link>
+		<label id="manual-label" class="bold" for="address"><g:message code="quickmessage.phonenumber.label" /></label>
+		<g:textField id="address" name="address" onkeyup="validateAddressEntry();"/>
+		<g:link url="#" class="btn add-address" onclick="addAddressHandler();" >
+			<g:message code="quickmessage.phonenumber.add"/>
+		</g:link>
 	</div>
 	<div id="recipients-list">
 		<ul id="groups">
@@ -31,17 +33,19 @@
 				</li>
 				<g:if test="${recipients?.contains(contact.email)}">
 					<li class="contact">
-						<input type="checkbox" name="addresses" value="${contact.email}" checked>
+						<g:checkBox name="addresses" value="${contact.email}" checked="true"/>
 						${contact.name ?: contact.email} (<g:message code="contact.email.label"/>)
 					</li>
 				</g:if>
 			</g:each>
 		</ul>
 	</div>
-	<div id="search">
-		<g:textField id="searchbox" class='search' name="address" onkeyup="searchForContacts();" style="display:table-cell; width:150px; margin-top:5px;"/>
+	<div class="controls">
+		<div id="search">
+			<g:textField id="searchbox" class='search' name="address" onkeyup="searchForContacts();"/>
+		</div>
+		<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients"/></div>
 	</div>
-	<div id="recipients-selected"><span id="recipient-count">0</span> <g:message code="quickmessage.selected.recipients"/></div>
 </div>
 
 <r:script disposition="head">

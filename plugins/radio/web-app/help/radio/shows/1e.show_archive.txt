@@ -1,0 +1,31 @@
+# Show Archive
+
+The Show archive contains all Shows that have been archived. The layout and features of the Show archive will be explained in this help page. There are two levels of detail that can be viewed. The first level is shown by default and displays a list of all Shows and associated Activities that have been archived. The second level of details displays specific information similar to how a Show is displayed when it is active on the messages tab.
+
+![Show Archive - list View][1]
+
+### Show List View
+
+The Show List (1) View displays the list of all archived shows. Each entry will be displayed with the Show name, the date it was archived and how many messages have been archived within the Show. If the Show has associated Activities that were archived with it, they will be shown as indented entries below their parent Show (2).
+  
+As with Message Lists, multiple or single Shows can be selected in the activity list to be [unarchived][2], [deleted][3] or [exported][4].
+
+Clicking on a single Show will take you to that Show's detail view which is described below.
+
+### Show Detail View
+
+Clicking on a single Show will take you to that Show's detail view which resembles the standard view for displaying Shows as in the messages tab. Click [here][6] to go to the Getting around Shows for a full explanation of this screen.
+
+### Related Actions  
+[Archiving Activities and Folders][7]  
+[Archiving Messages][8]  
+[Unarchiving Messages, Activities and Folders][9]  
+
+[1]: .../images/help/show_archive_list.png
+[2]: radio/shows/8.unarchive_show
+[3]: radio/shows/5.delete_show
+[4]: radio/shows/6.export_show
+[6]: radio/shows/1.getting_around_shows
+[7]: core/archive/3.archiving_activities_folders
+[8]: core/archive/2.archiving_messages
+[9]: core/archive/4.unarchive.txt
