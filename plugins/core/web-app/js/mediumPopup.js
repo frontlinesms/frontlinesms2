@@ -303,3 +303,8 @@ function editConnection(id) {
 	});
 }
 
+function selectSubscriptionGroup(groupId){
+	var labelId = $('input[value=group-'+groupId+']').attr('id');
+	$('label[for='+labelId+']').trigger('click');
+}
+

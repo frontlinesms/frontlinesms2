@@ -81,7 +81,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { recipients.displayed }
 			waitFor { recipients.groupCheckboxes[2].checked }
-			waitFor { recipients.count == 1 }
+			waitFor { recipients.count == 2 }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {
@@ -115,7 +115,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
 		when:
 			to PageMessageInbox, m1
-			singleMessageDetails.moveTo(Subscription.findByGroup(g))
+			singleMessageDetails.moveTo(g.id)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
