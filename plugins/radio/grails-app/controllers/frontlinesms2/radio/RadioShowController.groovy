@@ -159,7 +159,7 @@ class RadioShowController extends MessageController {
 		}else{
 			fmessages << Fmessage."${params.messageSection}"()?.list()
 		}
-		fmessages.text.each{ words+=it+" " }
+		fmessages.text.each{ words+=it.toLowerCase()+" " }
 		words =  words.replaceAll("\\W", " ")//remove all non-alphabet
 		def data = words.split()
 		if (params.ignoreWords) {
