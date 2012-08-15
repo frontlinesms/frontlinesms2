@@ -117,9 +117,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			g.addToMembers(c1)
 			def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
+			def subscription = Subscription.findByName('Camping Subscription')
 		when:
 			to PageMessageInbox, m1
-			singleMessageDetails.moveTo("Camping Subscription")
+			singleMessageDetails.moveTo(subscription.id)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
@@ -132,9 +133,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			g.addToMembers(c1)
 			def m1 = Fmessage.build(text:'I want to go away', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to come in', src:'wilburforce', read:true)
+			def subscription = Subscription.findByName('Camping Subscription')
 		when:
 			to PageMessageInbox, m1
-			singleMessageDetails.moveTo('Camping Subscription')
+			singleMessageDetails.moveTo(subscription.id)
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
@@ -143,7 +145,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { at PageMessageInbox }
 		when:
 			to PageMessageInbox, m2
-			singleMessageDetails.moveTo('Camping Subscription')
+			singleMessageDetails.moveTo(subscription.id)
 
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
