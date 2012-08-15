@@ -11,7 +11,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
 		then:
-			waitFor { at CreateActivityDialog}
+			waitFor { at CreateActivityDialog }
 		when:
 			subscription.click()
 		then:
@@ -19,6 +19,8 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 	}
 
 	def "Can create a new subscription" () {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -29,15 +31,15 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor {at SubscriptionCreateDialog}
 		when:
-			group.addToGroup Group.findByName('Friends').id.toString()
+			group.addToGroup Group.findByName('Friends').id
 			group.keywordText = 'FRIENDS'
 			next.click()
 		then:
-			waitFor { aliases.displayed}
+			waitFor { aliases.displayed }
 		when:
 			aliases.joinAliases = 'join, start'
 			aliases.leaveAliases = 'leave, stop'
-			aliases.enableJoinKeyword.click()
+			aliases.defaultAction = "join"
 			next.click()
 		then:
 			waitFor {autoreply.displayed}
@@ -46,6 +48,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.joinAutoreplyText = "You have been successfully subscribed to Friends group"
 			autoreply.enableLeaveAutoreply.click()
 			autoreply.leaveAutoreplyText = "You have been unsubscribed from Friends group"
+			next.click()
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
@@ -54,7 +57,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor { summary.message.displayed }
 		when:
-			ok.click()
+			submit.click()
 		then:
 			waitFor { at PageMessageSubscription }
 	}
@@ -68,21 +71,23 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor { at PageMessageSubscription }
 		when:
-			moreActions.value("edit").click()
+			header.moreActions.value("edit").click()
 		then:
-			waitFor { at EditSubscriptionDialog }
+			waitFor { at SubscriptionCreateDialog }
 		when:
-			group.addToGroup Group.findByName('Not cats').id.toString()
-			group.keywordText = 'NONECATS'
+			println "***"+group.text()
+			group.addToGroup Group.findByName("Camping").id.toString()
+			group.keywordText = 'NOTABOUTFOOTBALL'
 			next.click()
 		then:
 			waitFor {aliases.displayed}
 		when:
 			next.click()
 			autoreply.enableJoinAutoreply.click()
-			autoreply.joinAutoreplyText = "You have been successfully subscribed to Not cats group"
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to some other group"
 			autoreply.enableLeaveAutoreply.click()
-			autoreply.leaveAutoreplyText = "You have been unsubscribed from Not cats group"
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from some other group"
+			next.click()
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
@@ -144,13 +149,13 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			at SubscriptionCreateDialog
 	}
 
+	// TODO: double check this, not sure the test case is valid
 	def "keyword aliases must be provided in a subscription if toggle not enabled"() {
 		when:
 			launchSubscriptionPopup()
 			group.addToGroup Group.findByName('Friends').id.toString()
 			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.enableJoinKeyword.click()
 			aliases.joinAliases = ''
 			aliases.leaveAliases = ''
 			next.click()
@@ -166,9 +171,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.addToGroup Group.findByName('Friends').id.toString()
 			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.enableJoinKeyword.click()
 			aliases.joinAliases = 'join, start'
-			aliases.enableLeaveKeyword.click()
 			aliases.leaveAliases = 'leave, stop'
 			next.click()
 		then:

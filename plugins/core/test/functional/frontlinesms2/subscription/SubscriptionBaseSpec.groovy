@@ -37,8 +37,8 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 	}
 
 	static createTestMessages(Subscription s) {
-		(11..90).each {
-			def m = Fmessage.build(src:'Bob', text:'Test message number${it}', date:new Date()-it)
+		(0..90).each {
+			def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
 			s.addToMessages(m) // TODO correct this to sort messages into either join or leave
 			s.save(failOnError:true, flush:true)
 		}
@@ -46,5 +46,6 @@ class SubscriptionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createTestActivities() {
 		Announcement.build(name:"Sample Announcement", sentMessageText:"Message to send")
+		Fmessage.build(src:'announce')
 	}
 }

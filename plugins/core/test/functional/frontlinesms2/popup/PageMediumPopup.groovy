@@ -8,7 +8,7 @@ import java.util.Date
 abstract class MediumPopup extends geb.Page {
 	static content = {
 		popupTitle {
-			$('#ui-dialog-title-modalBox').text().toLowerCase()
+			$('#ui-dialog-title-modalBox').text()?.toLowerCase()
 		}
 		cancel { $('button#cancel') }
 		next { $('button#nextPage') }
@@ -18,7 +18,7 @@ abstract class MediumPopup extends geb.Page {
 			$('#tabs a[href="#tabs-'+tabId+'"]')
 		}
 		errorPanel { $('div.error-panel') }
-		error { errorPanel.text().toLowerCase() }
+		error { errorPanel.text()?.toLowerCase() }
 	}
 }
 
@@ -186,7 +186,7 @@ class Summary extends geb.Module {
 
 class ExportDialog extends MediumPopup {
 	static at = {
-		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("export");
+		$('#ui-dialog-title-modalBox').text()?.toLowerCase().contains("export");
 	}
 	static content = {
 	}
@@ -194,7 +194,7 @@ class ExportDialog extends MediumPopup {
 
 class RenameDialog extends MediumPopup {
 	static at = {
-		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("rename");
+		$('#ui-dialog-title-modalBox').text()?.toLowerCase().contains("rename");
 	}
 	static content = {
 		name { $('input#name') }
@@ -317,9 +317,7 @@ class SubscriptionAliasesTab extends geb.Module {
 	static content = {
 		joinAliases {$('input#joinAliases')}
 		leaveAliases {$('input#leaveAliases')}
-		enableJoinKeyword {$('input#enableJoinKeyword')}
-		enableLeaveKeyword{$('input#enableLeaveKeyword')}
-		toggleKeyword {toggle { $('input#enableToggleKeyword') }}
+		defaultAction { $("input#defaultAction") }
 	}
 }
 
@@ -348,6 +346,7 @@ class SubscriptionSummary extends geb.Module {
 	static base = { $('div#tabs-5') }
 	static content = {
 		message { $("div.summary") }
+		ok { $('button#submit') }
 	}
 }
 
