@@ -3,7 +3,7 @@
 		<g:message code="subscription.autoreply.join"/>
 	</label>
 	<g:checkBox name="enableJoinAutoreply" checked="${activityInstanceToEdit?.joinAutoreplyText as boolean}" class="enableAutoReply"/>
-	<g:textArea name="joinAutoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.joinAutoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.joinAutoreplyText ?:''}"/>
+	<g:textArea class="required" name="joinAutoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.joinAutoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.joinAutoreplyText ?:''}"/>
 	<div class="controls">
 		<div class="stats">
 			<span id="send-message-stats" class="character-count">
@@ -22,7 +22,7 @@
 		<g:message code="subscription.autoreply.leave"/>
 	</label>
 	<g:checkBox name="enableLeaveAutoreply" checked="${activityInstanceToEdit?.leaveAutoreplyText as boolean}" class="enableAutoReply"/>
-	<g:textArea name="leaveAutoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.leaveAutoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.leaveAutoreplyText ?:''}"/>
+	<g:textArea class="required" name="leaveAutoreplyText" rows="5" cols="40" disabled="${activityInstanceToEdit?.leaveAutoreplyText ? false:'disabled'}" value="${activityInstanceToEdit?.leaveAutoreplyText ?:''}"/>
 	<div class="controls">
 		<div class="stats">
 			<span id="send-message-stats" class="character-count">

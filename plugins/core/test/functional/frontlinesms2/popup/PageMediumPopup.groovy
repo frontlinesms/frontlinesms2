@@ -308,7 +308,7 @@ class SubscriptionGroupTab extends geb.Module {
 			$('select#subscriptionGroup').jquery.val(groupId)
 			$('select#subscriptionGroup').jquery.trigger("change")
 		}
-		keywordText { $('input#subscription-keyword') }
+		keywordText { $('input#keyword') }
 	}
 }
 

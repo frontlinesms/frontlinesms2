@@ -4,13 +4,13 @@
 	<table class="subscription-aliases">
 		<tr>
 			<td><label for="joinAliases"><g:message code="subscription.aliases.join"/></label></td>
-			<td><g:textField name="joinAliases" id="joinAliases" value="${activityInstanceToEdit?.joinAliases}"/></td>
+			<td><g:textField class="required" name="joinAliases" id="joinAliases" value="${activityInstanceToEdit?.joinAliases}"/></td>
 		</tr>
 		<tr>
 			<td><label for="leaveAliases"><g:message code="subscription.aliases.leave"/></label></td>
-			<td><g:textField name="leaveAliases" id="leaveAliases" value="${activityInstanceToEdit?.leaveAliases}"/></td>
+			<td><g:textField class="required" name="leaveAliases" id="leaveAliases" value="${activityInstanceToEdit?.leaveAliases}"/></td>
 		</tr>
-</table>
+	</table>
 </div>
 
 <h2><g:message code="subscription.default.action.header"/></h2>
