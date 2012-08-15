@@ -21,10 +21,11 @@ class SubscriptionController extends ActivityController {
 	}
 
 	def save = {
+		println "**PARAMS** "+params
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
 			if(subscriptionInstance.keyword)
-				subscriptionInstance.keyword.value = params.keyword.toUpperCase
+				subscriptionInstance.keyword.value = params.keyword.toUpperCase()
 			else
 				subscriptionInstance.keyword = new Keyword(value: params.keyword.toUpperCase())
 			subscriptionInstance.joinAliases = params.joinAliases.toUpperCase()
