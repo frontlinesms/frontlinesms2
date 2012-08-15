@@ -80,7 +80,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.groupCheckboxes[2].checked }
+			waitFor { recipients.groupCheckboxes[0].checked }
 			waitFor { recipients.count == 2 }
 	}
 
@@ -102,7 +102,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks.contains("Friends")
-			notifications.flashMessageText.contains("Unable to delete group")
+			notifications.flashMessageText.contains("Unable to delete group. In use by a subscription")
 	}
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
@@ -110,7 +110,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			def g = Group.findByName("Camping")
 			def c1 = Contact.build(name:'prudence', mobile:'+12321')
 			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToContacts(c1)
+			g.addToMembers(c1)
 			def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
 		when:

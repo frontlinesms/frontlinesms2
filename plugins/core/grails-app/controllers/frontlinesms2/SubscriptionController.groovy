@@ -47,6 +47,10 @@ class SubscriptionController extends ActivityController {
 		}
 	}
 
+	def categoriseSubscriptionPopup = {
+		render view:"categoriseSubscription", model:[params]
+	}
+
 	private def renderJsonErrors(subscription) {
 		println "Error:: ${subscription.errors.allErrors}"
 		def errorMessages = subscription.errors.allErrors.collect { message(error:it) }.join("\n")
