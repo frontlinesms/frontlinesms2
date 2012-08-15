@@ -69,13 +69,15 @@ class MessageList extends geb.Module {
 	static content = {
 		selectAll { $("input#message-select-all") }
 		sources { $('td.message-sender-cell')*.text() }
-		messages { moduleList MessageListRow, $('tbody tr') }
+		messages {
+			println("MESSAGES:::" + $('tbody tr')*.text())
+			moduleList MessageListRow, $('tbody tr') }
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('td.no-content') }
 		starFor { message ->
-			if (message instanceof Fmessage){	
+			if (message instanceof Fmessage) {
 					return $("tr #star-${message.id} a")
-			}else if(message instanceof Number){
+			} else if(message instanceof Number) {
 				return $("tr #star-${message} a")
 			}
 		}
@@ -114,7 +116,7 @@ class SingleMessageDetails extends geb.Module {
 		sender { $('#message-detail-sender').text() }
 		senderLink { $('#message-detail-sender a') }
 		text { $('#message-detail-content').text() }
-		date { 
+		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 				.parse($('#message-detail-date').text())
 		}
@@ -123,7 +125,7 @@ class SingleMessageDetails extends geb.Module {
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
 		delete(required:false) {$('#delete-msg')}
-		moveTo { msgowner -> 
+		moveTo { msgowner ->
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
 		}
@@ -139,7 +141,7 @@ class MultipleMessageDetails extends geb.Module {
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
 		archiveAll(required:false) { $('#btn_archive_all') }
-		moveTo { msgowner -> 
+		moveTo { msgowner ->
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
 		}

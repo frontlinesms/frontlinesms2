@@ -41,7 +41,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			header.groupLink.click()
 		then:
-			waitFor { at PageGroupShow, Group.findByName("Camping") }
+			waitFor {
+				// TODO when this is supported by Geb, we want to do:
+				//at PageGroupShow, Group.findByName("Camping")
+				title == "Contacts >> Camping" }
 	}
 
 	def "clicking the archive button archives the subscription and redirects to inbox "() {
@@ -64,7 +67,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			header.moreActions("edit").jquery.click()
 		then:
-			waitFor { at EditSubscriptionDialog }
+			waitFor { at SubscriptionCreateDialog }
 	}
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
@@ -74,7 +77,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.quickMessage.click()
 		then:
 			waitFor('slow'){ at QuickMessageDialog }
-			waitFor{compose.textArea.displayed}
+			waitFor{ compose.textArea.displayedi }
 		when:
 			compose.textArea = "Message"
 			next.click()
@@ -110,7 +113,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			def g = Group.findByName("Camping")
 			def c1 = Contact.build(name:'prudence', mobile:'+12321')
 			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToContacts(c1)
+			g.addToMembers(c1)
 			def m1 = Fmessage.build(text:'I want to leave', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to join', src:'wilburforce', read:true)
 		when:
@@ -125,7 +128,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			def g = Group.findByName("Camping")
 			def c1 = Contact.build(name:'prudence', mobile:'+12321')
 			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
-			g.addToContacts(c1)
+			g.addToMembers(c1)
 			def m1 = Fmessage.build(text:'I want to go away', src:'prudence', read:true)
 			def m2 = Fmessage.build(text:'I want to come in', src:'wilburforce', read:true)
 		when:
@@ -152,11 +155,12 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			messageList.sources.containsAll(["prudence", "wilburforce"])
 			messageList.sources.length == 2
-			messageList.messages.each { messageRow ->
-				if (messageRow.source == "prudence")
-					assert messageRow.text.contains("leave")
-				else
-					assert messageRow.text.contains("join")
+			messageList.each { messageRow ->
+				if (messageRow.source == "prudence") {
+					assert messageRow.text().contains("leave")
+				} else {
+					assert messageRow.text().contains("join")
+				}
 			}
 	}
 
@@ -198,47 +202,47 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.displayed }
-			waitFor { singleMessageDetails.text == "some text" }
+			waitFor { singleMessageDetails.text() == "some text" }
 	}
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].checkbox.click()
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[1].checkbox.click()		
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
+			waitFor { multipleMessageDetails.text()?.toLowerCase() == "2 messages selected" }
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].click()
 		then:
 			waitFor { messageList.displayed }
 			messageList.messages[0].hasClass("selected")
 			singleMessageDetails.displayed
-			singleMessageDetails.text == "some text"
+			singleMessageDetails.text() == "some text"
 	}
 
 	def "delete single message action works "() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].click()
 		then:
@@ -246,15 +250,15 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			singleMessageDetails.delete.click()
 		then:
-			waitFor { messageList.messages.displayed }
-			!messageList.messages*.text.contains("the text contents of the previous message")
+			waitFor { messageList.displayed }
+			!messageList.messages*.text().contains("the text contents of the previous message")
 	}
 
 	def "delete multiple message action works for multiple select"(){
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].checkbox.click()
 			waitFor {singleMessageDetails.displayed }
@@ -264,15 +268,15 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			multipleMessageDetails.deleteAll.click()
 		then:
-			waitFor { messageList.messages.displayed }
-			!messageList.messages*.text.containsAll("the text contents of the previous message", "the second message message")
+			waitFor { messageList.displayed }
+			!messageList.messages*.text().containsAll("the text contents of the previous message", "the second message message")
 	}
 
 	def "move single message action works"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].click()
 		then:
@@ -280,20 +284,20 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			singleMessageDetails.moveTo("Activity Awesome").click()
 		then:
-			waitFor { messageList.messages.displayed }
-			!messageList.messages*.text.contains("the text contents of the previous message")
+			waitFor { messageList.displayed }
+			!messageList.messages*.text().contains("the text contents of the previous message")
 		when:
 			to PageMessageActivity, Activity.findByName("Sample Announcement")
 		then:
-			waitFor { messageList.messages.displayed }
-			messageList.messages*.text.contains("the text we just moved")
+			waitFor { messageList.displayed }
+			messageList.messages*.text().contains("the text we just moved")
 	}
 
 	def "move multiple message action works"() {
 		when:
 			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			messageList.messages[0].checkbox.click()
 			waitFor {singleMessageDetails.displayed }
@@ -303,13 +307,13 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			multipleMessageDetails.moveTo("ACtivity Awesome").click()
 		then:
-			waitFor { messageList.messages.displayed }
-			!messageList.messages*.text.containsAll("the text contents of the previous message", "the second message message")
+			waitFor { messageList.displayed }
+			!messageList.messages*.text().containsAll("the text contents of the previous message", "the second message message")
 		when:
 			to PageMessageActivity, Activity.findByName("Sample Announcement")
 		then:
-			waitFor { messageList.messages.displayed }
-			messageList.messages*.text.containsAll("the text we just moved", "the second message we just moved")
+			waitFor { messageList.displayed }
+			messageList.messages*.text().containsAll("the text we just moved", "the second message we just moved")
 	}
 
 	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"() {
@@ -323,11 +327,11 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			singleMessageDetails.moveTo("My Subscription").click()
 		then:
-			waitFor { messageList.messages.displayed }
+			waitFor { messageList.displayed }
 		when:
 			to PageMessageSubscription, Subscription.findByName("My Subscription")
 		then:
-			waitFor { messageList.messages.displayed }
-			messageList.messages*.text.contains(m.text)
+			waitFor { messageList.displayed }
+			messageList.messages*.text().contains(m.text)
 	}
 }
