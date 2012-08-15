@@ -5,8 +5,9 @@
 </div>
 <div class="input">
 	<g:select name="subscriptionGroup" class="dropdown notEmpty"
-		noSelection="${activityInstanceToEdit? [(activityInstanceToEdit.group.id) : (activityInstanceToEdit.group.name)] : ['': g.message(code:'subscription.group.none.selected')] }"
-		from="${Group.getAll()}" optionKey="id" optionValue="name" />
+		noSelection="${activityInstanceToEdit? null : ['': g.message(code:'subscription.group.none.selected')] }"
+		from="${Group.getAll()}" optionKey="id" optionValue="name"
+		value="${activityInstanceToEdit?.group?.id}" />
 		<!--
 			TODO: the group list needs to exclude currently selected group
 		-->

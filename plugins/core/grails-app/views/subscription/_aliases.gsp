@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.Subscription" %>
 <h2><g:message code="subscription.aliases.header"/></h2>
 <div class="input">
 	<table class="subscription-aliases">
@@ -20,15 +21,15 @@
 	<ul class="select">
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.join"/></label>
-			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'JOIN' : true}"/>
+			<g:radio name="defaultAction" value="join" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.JOIN : true}"/>
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.leave"/></label>
-			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'LEAVE' : false}"/>
+			<g:radio name="defaultAction" value="leave" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.LEAVE : false}"/>
 		</li>
 		<li>
 			<label for="defaultAction"><g:message code="subscription.default.action.toggle"/></label>
-			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == 'TOGGLE' : false}"/>
+			<g:radio name="defaultAction" value="toggle" checked="${activityInstanceToEdit?.defaultAction? activityInstanceToEdit?.defaultAction == Subscription.Action.TOGGLE : false}"/>
 		</li>
 	</ul>
 </div>
