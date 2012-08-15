@@ -82,7 +82,7 @@
 	* [How do I delete a show?](radio/shows/5.delete_show)
 	* [How do I export a show](radio/shows/6.export_show)
 	* [How do I archive a show?](radio/shows/7.archive_show)
-	* [How do I unarchive a show?](radio/shows/8.unarchive_shows)
+	* [How do I unarchive a show?](radio/shows/8.unarchive_show)
 
 [2]: core/messages/1.getting_around_the_messages_tab
 [5]: core/messages/2.sss
