@@ -18,37 +18,38 @@ class Subscription extends Activity{
 
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
-			if(obj?.deleted || obj?.archived) return true
-			def identical = Subscription.findAllByNameIlike(val)
-			if(!identical) return true
-			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
-			else return true
+				if(obj?.deleted || obj?.archived) return true
+				def identical = Subscription.findAllByNameIlike(val)
+				if(!identical) return true
+				else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
+				else return true
 			})
 		joinAutoreplyText nullable:true, blank:false
-		joinAutoreplyText nullable:true, blank:false
+		leaveAutoreplyText nullable:true, blank:false
 		keyword nullable:true
 	}
 
 	def addToMessages(def message) {}
+
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def action = getAction(message.text,exactMatch)
 		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
-			 if(!foundContact){
+			 if(!foundContact) {
 			 	group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
-			 }else{
+			 } else {
 			 	group.addToMembers(foundContact);
 			 }
-		}else if(action == Action.LEAVE){
+		}else if(action == Action.LEAVE) {
 			foundContact?.removeFromGroup(group)
-		}else if(action == Action.TOGGLE){
+		}else if(action == Action.TOGGLE) {
 			if(foundContact){
-				if(foundContact.isMemberOf(group)){
+				if(foundContact.isMemberOf(group)) {
 					foundContact.removeFromGroup(group)
-				}else{
+				} else {
 					group.addToMembers(foundContact);
 				}
-			}else{
+			} else {
 				group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));			
 			}
 		}
