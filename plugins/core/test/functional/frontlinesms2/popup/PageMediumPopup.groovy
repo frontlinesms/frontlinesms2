@@ -317,9 +317,7 @@ class SubscriptionAliasesTab extends geb.Module {
 	static content = {
 		joinAliases {$('input#joinAliases')}
 		leaveAliases {$('input#leaveAliases')}
-		enableJoinKeyword {$('input#enableJoinKeyword')}
-		enableLeaveKeyword{$('input#enableLeaveKeyword')}
-		toggleKeyword {toggle { $('input#enableToggleKeyword') }}
+		defaultAction { $("input#defaultAction") }
 	}
 }
 
@@ -348,6 +346,7 @@ class SubscriptionSummary extends geb.Module {
 	static base = { $('div#tabs-5') }
 	static content = {
 		message { $("div.summary") }
+		ok { $('button#submit') }
 	}
 }
 
