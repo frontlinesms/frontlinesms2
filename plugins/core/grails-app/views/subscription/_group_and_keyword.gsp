@@ -15,7 +15,7 @@
 
 <h2><g:message code="subscription.keyword.header"/></h2>
 <div class="input">
-	<g:textField name="keyword" id="subscription-keyword" value="${activityInstanceToEdit?.keyword?.value}" class="required"/>
+	<g:textField name="keyword" value="${activityInstanceToEdit?.keyword?.value}" class="required"/>
 </div>
 
 

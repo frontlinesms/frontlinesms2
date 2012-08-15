@@ -144,31 +144,37 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.addToGroup Group.findByName('Friends').id
 			next.click()
 		then:
-			waitFor {error.text().contains('This field is required')}
+			waitFor {error.text().contains('Keyword is required')}
 			group.keywordText.displayed
 			at SubscriptionCreateDialog
 	}
 
 	// TODO: double check this, not sure the test case is valid
 	def "keyword aliases must be provided in a subscription if toggle not enabled"() {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
 		when:
 			launchSubscriptionPopup()
-			group.addToGroup Group.findByName('Friends').id.toString()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
 			group.keywordText = 'FRIENDS'
 			next.click()
 			aliases.joinAliases = ''
 			aliases.leaveAliases = ''
 			next.click()
 		then:
-			waitFor {error.text().contains('Please provide aliases')}
+			waitFor {error.text().contains('Subscription join alias is required')}
 			aliases.joinAliases.displayed
 			at SubscriptionCreateDialog
 	}
 
 	def "autoreply text must be provided if join/leave autoreply is enabled"() {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
 		when:
 			launchSubscriptionPopup()
-			group.addToGroup Group.findByName('Friends').id.toString()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
 			group.keywordText = 'FRIENDS'
 			next.click()
 			aliases.joinAliases = 'join, start'
@@ -182,7 +188,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			autoreply.enableLeaveAutoreply.click()
 			next.click()
 		then:
-			waitFor {error.text().contains('Please enter autoreply text')}
+			waitFor {error.text().contains('Please enter leave autoreply text')}
 			autoreply.enableLeaveAutoreply.displayed
 	}
 
