@@ -5,7 +5,7 @@ You have the option to associate activities with shows to allow you to manage yo
 
 ### Adding an Activity to a Show in the Activity set up 
 
-1.  Whenever you set up an activity like a poll or autoreply you will be given the option to 'Add to Radio show' in the first page of the walkthrough. Select the show from the dropdown menu.
+1.  Whenever you set up an activity like a poll or autoreply you will be given the option to 'Select radio show' in the first page of the walkthrough. Select the show from the dropdown menu.
 __*Note:* If you have not created any shows then there will be no options available for you to select. Please create a show first.__
 2. If you have already set up the activity, navigate to the activity you wish to add to your show.
 3.  When viewing this activity, click on "More Actions..." and then click on "Edit [Activity Type]" e.g. "Edit Autoreply" (2).In the first screen it says"Add to Radio Show." Select the show from the dropdown menu. You can also make other changes to the activity in the walkthrough.
