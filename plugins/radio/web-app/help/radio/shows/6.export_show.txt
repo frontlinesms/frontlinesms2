@@ -24,8 +24,8 @@ PDF stands for Portable Document Format. This type of file can be opened by PDF 
 [Archiving a Show][5]
 [Creating a Show][6]
 
-[1]: .../images/help/export_show.jpg
-[2]: .../images/help/export_show_dialog.jpg
+[1]: ../images/help/export_show.png
+[2]: ../images/help/export_show_dialog.png
 [3]: radio/shows/5.delete_show
 [4]: radio/shows/4.rename_show
 [5]: radio/shows/7.archive_show

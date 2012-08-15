@@ -49,10 +49,10 @@ You can achieve the same result When viewing the activity by clicking on "More A
 [Creating an Activity][4]  
 [Moving Messages into a Folder][5] 
 
-[1]: .../images/help/add_to_show.png
-[2]: .../images/help/assign_to_show_dialog.png
+[1]: ../images/help/add_to_show.png
+[2]: ../images/help/assign_to_show_dialog.png
 [3]: radio/shows/2.creating_a_show
 [4]: core/activities/2.creating_an_activity
 [5]: core/messages/8.mrfd 
-[6]: .../images/help/assign_to_show_activity_dialog.png
+[6]: ../images/help/assign_to_show_activity_dialog.png
 

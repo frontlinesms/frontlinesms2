@@ -21,7 +21,7 @@ Clicking on a single Show will take you to that Show's detail view which resembl
 [Archiving Messages][8]  
 [Unarchiving Messages, Activities and Folders][9]  
 
-[1]: .../images/help/show_archive_list.png
+[1]: ../images/help/show_archive_list.png
 [2]: radio/shows/8.unarchive_show
 [3]: radio/shows/5.delete_show
 [4]: radio/shows/6.export_show

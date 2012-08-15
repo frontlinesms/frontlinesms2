@@ -19,7 +19,7 @@ The Show _and all activities associated with it and messages within it_ will be 
 [Archiving a Show][6]
 [Creating a Show][7]
 
-[1]: .../images/help/deleting_shows.png
+[1]: ../images/help/deleting_shows.png
 [2]: radio/shows/5.delete_show
 [3]: core/messages/6.trash
 [4]: radio/shows/6.export_show

@@ -18,7 +18,7 @@ Your show will be created and will be displayed underneath the "Show" sub headin
 [Creating an Activity][5]  
 [Moving Messages into a Folder][6]  
 
-[1]: .../images/help/creating_show.png
+[1]: ../images/help/creating_show.png
 [2]: radio/shows/2.creating_a_show
 [3]: ...images/help/creating_show_dialog.png
 [4]: radio/shows/3.adding_activities_to_shows

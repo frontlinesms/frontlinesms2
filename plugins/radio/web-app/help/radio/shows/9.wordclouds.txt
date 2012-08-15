@@ -36,9 +36,9 @@ _**Note:** you will need to customize the view each time you enter as we do not 
 [Creating a Show][4]
 [Performing a Search][5]
 
-[1]: .../images/help/wordcloud.png
+[1]: ../images/help/wordcloud.png
 [2]: core/search/1.getting_around_the_search_tab
-[3]: .../images/help/ignore_word.png
+[3]: ../images/help/ignore_word.png
 [4]: radio/shows/2.creating_a_show
 [5]: core/search/2.creating_a_search
  
