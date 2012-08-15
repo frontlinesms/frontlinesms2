@@ -71,21 +71,23 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 		then:
 			waitFor { at PageMessageSubscription }
 		when:
-			moreActions.value("edit").click()
+			header.moreActions.value("edit").click()
 		then:
-			waitFor { at EditSubscriptionDialog }
+			waitFor { at SubscriptionCreateDialog }
 		when:
-			group.addToGroup Group.findByName('Not cats').id.toString()
-			group.keywordText = 'NONECATS'
+			println "***"+group.text()
+			group.addToGroup Group.findByName("Camping").id.toString()
+			group.keywordText = 'NOTABOUTFOOTBALL'
 			next.click()
 		then:
 			waitFor {aliases.displayed}
 		when:
 			next.click()
 			autoreply.enableJoinAutoreply.click()
-			autoreply.joinAutoreplyText = "You have been successfully subscribed to Not cats group"
+			autoreply.joinAutoreplyText = "You have been successfully subscribed to some other group"
 			autoreply.enableLeaveAutoreply.click()
-			autoreply.leaveAutoreplyText = "You have been unsubscribed from Not cats group"
+			autoreply.leaveAutoreplyText = "You have been unsubscribed from some other group"
+			next.click()
 		then:
 			waitFor { confirm.subscriptionName.displayed }
 		when:
