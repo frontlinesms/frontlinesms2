@@ -41,6 +41,7 @@ class ContentHeader extends geb.Module {
 		title { $('h1').text().toLowerCase() }
 		buttons { $('a.btn, input[type="button"], button') }
 		export (required:false) { $('#export-btn a') }
+		moreActions { $('div.header-buttons select#more-actions') }
 		searchDescription { $('p', class:'description').text() }
 		quickMessage { $("a#quick_message") }
 	}

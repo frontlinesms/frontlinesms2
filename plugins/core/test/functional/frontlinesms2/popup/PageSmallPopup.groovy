@@ -92,6 +92,16 @@ class RenameFolderDialog extends SmallPopup {
 	}
 }
 
+class RenameSubscriptionDialog extends SmallPopup {
+	static at = {
+		popupTitle.contains("subscription")
+	}
+	static content = {
+		errorPanel { $('#modalBox #smallpopup-error-panel') }
+		subscriptionName { $('#modalBox #subscription-details #name').text() }
+	}
+}
+
 class DeleteFolderPopup extends SmallPopup {
 	static at = {
 		popupTitle.contains("delete folder")
