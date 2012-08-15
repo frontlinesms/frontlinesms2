@@ -23,11 +23,13 @@ class CustomFieldCedSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow, bob
 			singleContactDetails.addMoreInfomation
+		then:
 			waitFor { at CustomFieldPopup }
+		when:
 			newField.value('planet')
 			ok.jquery.trigger("click")
-			at PageContactShow
 		then:
+			waitFor { at PageContactShow }
 			singleContactDetails.customLabel("planet").displayed
 	}
 }
