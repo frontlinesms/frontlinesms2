@@ -14,12 +14,15 @@ function moveAction() {
 		moveTarget = $('#single-message select#move-actions option:selected');
 	}
 
-	var moveTargetType = moveTarget.attr("class");
+	var moveTargetType = moveTarget.attr("class").split(/\s+/)[0];
 	if(moveTargetType == 'na') { return; }
 	var moveTargetId = moveTarget.val();
 
 	var location;
-	if(messageSection == 'result' && !(getCheckedItemCount('message') > 1)) {
+	if(moveTarget.hasClass('subscription')){
+		launchCategorisePopup(moveTargetType,messagesToMove,moveTargetId);
+		return;
+	}else if(messageSection == 'result' && !(getCheckedItemCount('message') > 1)) {
 		location = url_root + "search/" + messageSection + '/' + messagesToMove + '?searchId=' + searchId;
 	} else if(messageSection == 'result') {
 		location = url_root + "search/" + messageSection + '?searchId=' + searchId;
@@ -35,5 +38,14 @@ function moveAction() {
 		url: url_root + 'message/move',
 		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
 		success: function(data) { window.location = location; }
+	});
+}
+
+function launchCategorisePopup(moveTargetType,messagesToMove,moveTargetId){
+	$.ajax({
+		type:'POST',
+		url: url_root + 'subscription/categoriseSubscriptionPopup',
+		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
+		success: function(data) { launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok')) }
 	});
 }

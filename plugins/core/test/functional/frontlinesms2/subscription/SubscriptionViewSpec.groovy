@@ -84,7 +84,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.groupCheckboxes[2].checked }
+			waitFor { recipients.groupCheckboxes[0].checked }
 			waitFor { recipients.count == 2 }
 	}
 
@@ -106,7 +106,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks.contains("Friends")
-			notifications.flashMessageText.contains("Unable to delete group")
+			notifications.flashMessageText.contains("Unable to delete group. In use by a subscription")
 	}
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
