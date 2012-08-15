@@ -150,14 +150,23 @@ class RadioShowController extends MessageController {
 		def fmessages = []
 		if(params.id){
 			def ownerInstance =  MessageOwner.findById(params.id)
-			ownerInstance.messages.each{ fmessages << it }
+			ownerInstance.messages.each{ 
+				if(it.inbound)
+					fmessages << it 
+			}
 			if(ownerInstance instanceof RadioShow){
 				ownerInstance.activities.each{
-					it.messages.each{ fmessages << it}
+					it.messages.each{
+						if (it.inbound)
+							fmessages << it
+					}
 				}
 			}
 		}else{
-			fmessages << Fmessage."${params.messageSection}"()?.list()
+			Fmessage."${params.messageSection}"()?.list().each {
+				if(it.inbound)
+					fmessages << it
+			}
 		}
 		fmessages.text.each{ words+=it.toLowerCase()+" " }
 		words =  words.replaceAll("\\W", " ")//remove all non-alphabet
