@@ -37,11 +37,11 @@ Removing the association between an activity and a show means the activity will 
 
 1.  Navigate to the activity you wish to remove from a show.
 2.  When viewing this activity, click on "More Actions..." and then click on "Edit [Activity Type]" e.g. "Edit Autoreply"
-3.  In the first screen it says"Add to Radio Show." Select "None" from the dropdown menu.
+3.  In the first screen it says "Add to Radio Show." Select "Unassign from radio show" from the dropdown menu.
 4.  Click through to the confirmation screen and click 'Create' to save changes.
 5.  The activity will be removed from the show, and moved underneath the Activities header on the messages tab.
 
-You can achieve the same result When viewing the activity by clicking on "More Actions..." and then on "Add to Radio Show" and selecting "None."
+You can achieve the same result When viewing the activity by clicking on "More Actions..." and then on "Add to Radio Show" and selecting "Unassign from radio show".
 
 
 ### Related Actions
