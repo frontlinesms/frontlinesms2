@@ -23,16 +23,16 @@ class BodyMenu extends geb.Module {
 		selectedMenuItem { $('.selected a').text().toLowerCase() }
 		groupSubmenuLinks { $('li.groups ul.submenu li a')*.text() }
 		getGroupLink { groupName ->
-	    	$('li.groups ul.submenu li a', text:groupName ) 
-	    }
-	    newContact { $('li.contacts .create a') }
+			$('li.groups ul.submenu li a', text:groupName ) 
+		}
+		newContact { $('li.contacts .create a') }
 		newGroup { $('li.groups .create a') }
 		smartgroups { $('li.smartgroups')}
 		smartGroupSubmenuLinks(required:false) { smartgroups.find('a:not(.create)') }
 		createSmartGroupButton { $('li.smartgroups li.create a') }
 		getSmartGroupLink { groupName ->
-			$('li.smartgroups ul.submenu li a', text:groupName )
-	    }
+			$('li.smartgroups ul.submenu li a', text:groupName)
+		}
 		smartGroupIsDisplayed { smartGroupInstance ->
 			$("title").text().contains(smartGroupInstance.name)
 		}
@@ -82,16 +82,16 @@ class SingleContactDetails extends geb.Module {
 		name { $('#name') }
 		mobile { $('#mobile') }
 		email { $('#email') }
-		notes { $('#notes')}
-	    customLabel { customField ->
-	    	$('label', text:customField ) 
-	    }
-	    labels { fieldName ->
-	 		$('label', for:fieldName)   	
-	    }
-	    textField { fieldName ->
-	    	$("#$fieldName")
-	    }
+		notes { $('#notes') }
+		customLabel { customField ->
+			$('label', text:customField) 
+		}
+		labels { fieldName ->
+			$('label', for:fieldName)   	
+		}
+		textField { fieldName ->
+			$("#$fieldName")
+		}
 		addMoreInfomation {
 			$('select#new-field-dropdown').jquery.val('add-new') 
 			$('select#new-field-dropdown').jquery.trigger("change") 
