@@ -102,7 +102,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks.contains("Friends")
-			notifications.flashMessageText.contains("Cannot delete group Friends: is used by sign-me-up Subscription")
+			notifications.flashMessageText.contains("Unable to delete group")
 	}
 
 	def 'Moving a message to a subscription launches the categorize dialog'() {
