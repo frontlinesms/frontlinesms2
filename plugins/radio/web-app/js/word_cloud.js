@@ -106,7 +106,10 @@ function removeWord(wordId) {
 
 function searchForWord(word) {
 	console.log("searching for "+word);
+	var ownerId = $("#ownerId").val();
 	var searchUrl = url_root + "search" + '/result?searchString=' + word;
+	if (ownerId.length > 0)
+		searchUrl = searchUrl + "&activityId=messageOwner-" +ownerId;
 	window.location = searchUrl;
 }
 

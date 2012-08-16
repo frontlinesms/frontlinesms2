@@ -1,6 +1,6 @@
 <ul class="buttons">
 	<li><fsms:quickMessage class="section-action-button btn"/></li>
-	<g:if test="${(messageSection in ['inbox','sent'])}">
+	<g:if test="${(messageSection in ['inbox'])}">
 		<g:render template="/wordcloud/wordcloud_actions"/>
 	</g:if>
 	<g:if test="${!(messageSection in ['trash', 'folder', 'activity'])}">

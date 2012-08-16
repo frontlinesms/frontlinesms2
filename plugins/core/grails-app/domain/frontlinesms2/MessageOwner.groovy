@@ -11,4 +11,9 @@ abstract class MessageOwner {
 		tablePerHierarchy false
 		version false
 	}
+
+	def restoreFromTrash() {
+		this.deleted = false
+		this.messages*.isDeleted = false
+	}
 }

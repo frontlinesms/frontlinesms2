@@ -22,9 +22,9 @@ class RadioShow extends MessageOwner {
 
 	static namedQueries = {
 		findByOwnedActivity { activityInstance ->
-				activities {
-					eq 'id', activityInstance.id
-				}
+			activities {
+				eq 'id', activityInstance.id
+			}
 		}
 	}
 	
@@ -99,17 +99,25 @@ class RadioShow extends MessageOwner {
 		return this.save(flush:true, failOnError: true)
 	}
 
-	void addToActivities(Activity activityInstance) {
+	def addToActivities(Activity activityInstance) {
 		removeFromRadioShow(activityInstance)
 		this.activities.add(activityInstance)
+		return this
 	}
 	
-	void removeFromRadioShow(Activity activityInstance) {
+	def removeFromRadioShow(Activity activityInstance) {
 		RadioShow.findAll().collect { showInstance ->
 			if(activityInstance in showInstance.activities) {
 				showInstance.removeFromActivities(activityInstance)
 			}
 		}
+		return this
+	}
+
+	def restoreFromTrash() {
+		super.restoreFromTrash()
+		this.activities*.restoreFromTrash()
+		return this.activities
 	}
 
 	static def getAllRadioActivities() {
