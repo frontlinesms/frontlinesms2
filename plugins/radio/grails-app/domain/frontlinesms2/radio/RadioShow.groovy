@@ -4,7 +4,6 @@ import java.util.Date
 import frontlinesms2.*
 
 class RadioShow extends MessageOwner {
-	String name
 	boolean isRunning
 	Date dateCreated
 	List activities = []
@@ -112,6 +111,11 @@ class RadioShow extends MessageOwner {
 			}
 		}
 		return this
+	}
+
+	def sendToTrash() {
+		this.activities*.sendToTrash()
+		return super.sendToTrash()
 	}
 
 	def restoreFromTrash() {

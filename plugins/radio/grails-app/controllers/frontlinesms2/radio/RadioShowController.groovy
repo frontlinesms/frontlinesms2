@@ -136,9 +136,6 @@ class RadioShowController extends MessageController {
 				redirect action:"radioShow", params:[ownerId: showInstance.id]
 			}else{
 				trashService.sendToTrash(showInstance)
-				showInstance.activities?.each{ activity ->
-					trashService.sendToTrash(activity)
-				}
 				flash.message = defaultMessage 'trashed'
 				redirect controller:"message", action:"inbox"
 			}
@@ -209,24 +206,8 @@ class RadioShowController extends MessageController {
 
 	def restore() {
 		def radioShow = RadioShow.findById(params.id)
-		if(radioShow){
-			Trash.findByObject(radioShow)?.delete()
-			radioShow.deleted = false
-			radioShow.messages.each{
-				it.isDeleted = false
-				it.save(failOnError: true, flush: true)
-			}
-			radioShow.activities.each{ activity->
-				activity.deleted = false
-				activity.save()
-				activity.messages.each{
-					it.isDeleted = false
-					it.save(failOnError: true, flush: true)
-				}
-				Trash.findByObject(activity)?.delete()
-			}
-
-			if(radioShow.save()) {
+		if(radioShow) {
+			if(trashService.restore(radioShow)) {
 				flash.message = defaultMessage 'restored'
 			} else {
 				flash.message = defaultMessage 'restore.failed', activity.id

@@ -21,5 +21,24 @@ class ShowDeleteSpec extends IntegrationSpec {
 		then:
 			!Trash.findAll()
 	}
+
+	def 'Restoring a show with a poll with messages should leave nothing in the trash'() {
+		given:
+			def m = Fmessage.build()
+			def p = new Poll(name:"test-poll")
+					.editResponses(choiceA:"aaa", choiceB:"bbb")
+					.save(failOnError:true)
+			def s = RadioShow.build()
+			p.addToMessages(m).save(failOnError:true, flush:true)
+			s.addToActivities(p).save(failOnError:true)
+		when:
+			trashService.sendToTrash(s)
+		then:
+			Trash.count() == 1
+		when:
+			trashService.restore(s)
+		then:
+			!Trash.findAll()
+	}
 }
 

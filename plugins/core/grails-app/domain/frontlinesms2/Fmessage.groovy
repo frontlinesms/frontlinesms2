@@ -315,5 +315,15 @@ class Fmessage {
 			}
 		}
 	}
+
+	def restoreFromTrash() {
+		this.isDeleted = false
+	}
+
+	def sendToTrash() {
+		this.isDeleted = true
+		return [displayName:this.displayName,
+				text:this.text]
+	}
 }
 

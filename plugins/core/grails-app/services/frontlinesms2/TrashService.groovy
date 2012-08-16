@@ -8,35 +8,24 @@ class TrashService {
     	}
     
 	def sendToTrash(object) {
-		if (object instanceof frontlinesms2.Fmessage) {
-			object.isDeleted = true
-			new Trash(displayName:object.displayName,
-					displayText:object.text,
-					objectClass:object.class.name,
-					objectId:object.id).save()
-			object.save(failOnError:true, flush:true)
-		} else if (object instanceof frontlinesms2.MessageOwner) {
-			object.deleted = true
-			object.messages.each {
-				it.isDeleted = true
-				it.save(failOnError: true, flush: true)
-			}
-			def detail = object.messages?.size() + " message(s)"
-			new Trash(displayName:object.name,
-					displayText:detail,
-					objectClass:object.class.name,
-					objectId:object.id).save()
-			object.save(failOnError:true, flush:true)
-		}
+		def trashDetails = object.sendToTrash()
+		new Trash(displayName:trashDetails.displayName,
+				displayText:trashDetails.text,
+				objectClass:object.class.name,
+				objectId:object.id).save()
+		object.save(failOnError:true, flush:true)
 	}
 
 	def restore(object) {
 		Trash.findByObject(object)?.delete()
-		def related = object.restoreFromTrash()
-		if(related instanceof Collection) {
-			related.each { restore(it) }
+		def children = object.restoreFromTrash()
+		object.save(failOnError:true)
+		if(children instanceof Collection) {
+			children.each {
+				restore(it)
+				it.save(failOnError:true)
+			}
 		}
-		object.save()
 		return true
 	}
 }
