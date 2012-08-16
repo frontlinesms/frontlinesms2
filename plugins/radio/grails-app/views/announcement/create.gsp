@@ -12,4 +12,3 @@
 				/announcement/save,
 				/announcement/validate"/>
 
-

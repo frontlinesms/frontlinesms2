@@ -5,9 +5,14 @@
 		radioShowInstance="${radioShowInstance}"
 		activityInstance="${activityInstanceToEdit ?: ownerInstance}"/>
 <r:script>
+mediumPopupDeferredInitialisers.push(function(dialog) {
+	var radioShowSelecter = $("select#radioShowId");
 	<g:if test="${activityInstanceToEdit}">
-		$("#radioShowId").live("change", function() {
+		radioShowSelecter.bind("change", function() {
 			$("#radioShow-confirm").html('<p>' + $("#radioShowId :selected").text().toUpperCase() + '</p>');
 		});
 	</g:if>
+	selectmenuTools.init(radioShowSelecter);
+	radioShowSelecter.selectmenu({ showFirstItem:true });
+});
 </r:script>

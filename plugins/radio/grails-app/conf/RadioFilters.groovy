@@ -34,6 +34,8 @@ class RadioFilters {
 			after = { model ->
 				if(params.radioShowId) {
 					addActivityToRadioShow(params.activityId, params.radioShowId)
+				}else if (!(params.radioShowId)){
+					removeActivityFromRadioShow(params.activityId)
 				}
 				return true
 			}
@@ -58,7 +60,15 @@ class RadioFilters {
 	def listRadioShows() {
 		RadioShow.findAllByDeletedAndArchived(false, false)
 	}
-	
+	private removeActivityFromRadioShow(activityId){
+		def activityInstance = Activity.get(activityId)
+		RadioShow.findAll().collect { showInstance ->
+			if(activityInstance in showInstance.activities) {
+				showInstance.removeFromActivities(activityInstance)
+			}
+		}
+	}
+
 	private def addActivityToRadioShow(activityId, id) {
 		def showInstance = RadioShow.get(id)
 		def activityInstance

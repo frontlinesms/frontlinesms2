@@ -30,7 +30,7 @@ class RadioShowController extends MessageController {
 			flash.message = message(code: 'radio.show.invalid.name')
 		}
 		redirect(controller: 'message', action: "inbox")
-}
+	}
 	
 	def radioShow() {
 		withRadioShow { showInstance ->
@@ -48,10 +48,10 @@ class RadioShowController extends MessageController {
 						   messageSection: 'radioShow',
 						   messageInstanceTotal: messageInstanceList?.count(), viewingMessages:params.viewingMessages,
 						   ownerInstance: showInstance, inArchive:params.inArchive, mainNavSection: showInstance.archived?'archive':'message', inARadioShow: showInstance.archived] << this.getShowModel()
-		} else {
-			flash.message = message(code: 'radio.show.not.found')
-			redirect(action: 'inbox')
-		}
+			} else {
+				flash.message = message(code: 'radio.show.not.found')
+				redirect(action: 'inbox')
+			}
 		}
 	}
 	
@@ -59,22 +59,19 @@ class RadioShowController extends MessageController {
 		def showInstance = RadioShow.findById(params.id)
 		if(showInstance.archived) {
 			flash.message = message code:'radio.show.onair.error.archived'
-			render ([ok:false, message:flash.message] as JSON)
-		}
-		else if(showInstance?.start()) {
-			showInstance.save(flush:true)
-			render ([ok:true] as JSON)
+		} else if(showInstance?.start()) {
+			showInstance.save()
 		} else {
 			flash.message = message code:'radio.show.onair.error', args:[RadioShow.findByIsRunning(true)?.name]
-			render ([ok:false, message:flash.message] as JSON)
 		}
+		redirect action:'radioShow', params:[ownerId:params.id]
 	}
 	
 	def stopShow() {
 		def showInstance = RadioShow.findById(params.id)
 		showInstance.stop()
-		showInstance.save(flush:true)
-		render "$showInstance.id"
+		showInstance.save()
+		redirect action:'radioShow', params:[ownerId:params.id]
 	}
 	
 	private def getShowModel(messageInstanceList) {
