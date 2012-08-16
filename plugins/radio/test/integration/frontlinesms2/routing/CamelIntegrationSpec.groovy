@@ -1,4 +1,4 @@
-package routing
+package frontlinesms2.routing
 
 import spock.lang.*
 import grails.plugin.spock.*
