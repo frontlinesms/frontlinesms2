@@ -232,7 +232,7 @@ class RadioShowController extends MessageController {
 
 //TODO clean up default message declaration to prevent future duplication
 	private def defaultMessage(String code, Object... args=[]) {
-		def messageName = message code:'radio.label'
+		def messageName = message code:'radioshow.label'
 		return message(code:'default.' + code,
 				args:[messageName] + args)
 	}
