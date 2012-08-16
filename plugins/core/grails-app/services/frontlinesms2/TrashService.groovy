@@ -32,7 +32,10 @@ class TrashService {
 
 	def restore(object) {
 		Trash.findByObject(object)?.delete()
-		object.restoreFromTrash()
+		def related = object.restoreFromTrash()
+		if(related instanceof Collection) {
+			related.each { restore(it) }
+		}
 		object.save()
 		return true
 	}

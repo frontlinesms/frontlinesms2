@@ -37,5 +37,5 @@ class RadioBootStrap extends CoreBootStrap {
 		 show3.addToMessages(new Fmessage(src: '+3245678', text: "I think football is boring", date:new Date()-3, inbound: true).save(failOnError: true))
 		 show3.save(flush:true)
 	}
-	
 }
+
