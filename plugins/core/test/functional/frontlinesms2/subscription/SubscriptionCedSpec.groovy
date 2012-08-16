@@ -149,8 +149,7 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			at SubscriptionCreateDialog
 	}
 
-	// TODO: double check this, not sure the test case is valid
-	def "keyword aliases must be provided in a subscription if toggle not enabled"() {
+	def "keyword aliases must be unique if provided"() {
 		setup:
 			new Group(name:"Friends").save(failOnError:true)
 		when:
@@ -159,11 +158,29 @@ class SubscriptionCedSpec extends SubscriptionBaseSpec  {
 			group.addToGroup Group.findByName('Friends').id
 			group.keywordText = 'FRIENDS'
 			next.click()
-			aliases.joinAliases = ''
-			aliases.leaveAliases = ''
+			aliases.joinAliases = 'team'
+			aliases.leaveAliases = 'team'
 			next.click()
 		then:
-			waitFor {error.text().contains('Subscription join alias is required')}
+			waitFor {error.text().contains('Aliases should be unique')}
+			aliases.joinAliases.displayed
+			at SubscriptionCreateDialog
+	}
+
+	def "keyword aliases must have valid commas seperated values if provided"() {
+		setup:
+			new Group(name:"Friends").save(failOnError:true)
+		when:
+			launchSubscriptionPopup()
+			waitFor { at SubscriptionCreateDialog }
+			group.addToGroup Group.findByName('Friends').id
+			group.keywordText = 'FRIENDS'
+			next.click()
+			aliases.joinAliases = 'team'
+			aliases.leaveAliases = 'team%^&%^%&'
+			next.click()
+		then:
+			waitFor {error.text().contains('Invalid alias. Try a, name, word')}
 			aliases.joinAliases.displayed
 			at SubscriptionCreateDialog
 	}

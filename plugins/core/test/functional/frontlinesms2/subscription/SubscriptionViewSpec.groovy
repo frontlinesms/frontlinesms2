@@ -84,7 +84,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.groupCheckboxes[0].checked }
+			waitFor { recipients.groupCheckboxesChecked*.value().contains("group-${Group.findByName('Camping').id}".toString()) }
 			waitFor { recipients.count == 2 }
 	}
 
@@ -157,8 +157,8 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageSubscription, Subscription.findByGroup(g)
 		then:
-			messageList.sources.containsAll(["prudence", "wilburforce"])
-			messageList.sources.length == 2
+			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
+			messageList.messages.size() == 2
 			messageList.each { messageRow ->
 				if (messageRow.source == "prudence") {
 					assert messageRow.text().contains("leave")
@@ -174,10 +174,10 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreActions("rename").jquery.click()
+			header.moreActions.value("rename").jquery.click()
 		then:
 			waitFor { at RenameSubscriptionDialog }
-			waitFor { subscriptionName == "Camping Subscription" }
+			waitFor { subscriptionName.contains("Camping Subscription") }
 	}
 
 	def "clicking the delete option opens the confirm delete small popup"() {
@@ -186,7 +186,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreActions("delete").jquery.click()
+			header.moreActions.value("delete").jquery.click()
 		then:
 			waitFor { at DeleteActivity }
 	}
@@ -197,7 +197,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreActions("export").jquery.click()
+			header.moreActions.value("export").jquery.click()
 		then:
 			waitFor { at ExportDialog }
 	}
@@ -312,8 +312,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
-			waitFor("veryslow") { at PageMessageSubscription }
-			waitFor { notifications.flashMessageText.contains("updated") }
+			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
 			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
@@ -333,11 +332,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			singleMessageDetails.moveTo("Camping Subscription").click()
 		then:
-			waitFor { messageList.displayed }
-		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
-		then:
-			waitFor { messageList.displayed }
-			messageList.messages*.text.contains(m.text)
+			waitFor { at SubscriptionCategoriseDialog }
 	}
 }

@@ -23,12 +23,6 @@
 				"keyword": {
 					required: "Keyword is required"
 				},
-				"joinAliases": {
-					required: "Subscription join alias is required"
-				},
-				"leaveAliases": {
-					required: "Subscription leave alias is required"
-				},
 				"joinAutoreplyText": {
 					required: "Please enter join autoreply text"
 				},
@@ -90,5 +84,7 @@
 		jQuery.validator.addMethod("notEmpty", function(value, element) {
 			return ($('select#subscriptionGroup').val() != '');
 		}, i18n("subscription.group.required.error"));
+
+		aliasCustomValidation();
 	}
 </r:script>
