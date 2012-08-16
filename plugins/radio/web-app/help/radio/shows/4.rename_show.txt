@@ -22,9 +22,9 @@ _**Note:** Show names must be unique. You cannot have two shows with the same na
 [Creating an Announcement][6]  
 [Manually Categorising a Response][7]  
 
-[1]: .../images/help/rename_show.png
+[1]: ../images/help/rename_show.png
 [2]: radio/shows/4.renaming_a_show
-[3]: .../images/help/rename_show_dialog.png
+[3]: ../images/help/rename_show_dialog.png
 [4]: radio/shows/5.exporting_a_show
 [5]: core/activities/3.creating_a_poll
 [6]: core/activities/4.creating_an_announcement

@@ -26,4 +26,4 @@ Your Show will now appear in the messages tab, under "Shows". Activities that we
 [5]: radio/shows/2.creating_a_show
 [6]: core/messages/3.quick_message
 [7]: core/messages/8.mrfd
-[8]: .../images/help/unarchive_show.png
+[8]: ../images/help/unarchive_show.png

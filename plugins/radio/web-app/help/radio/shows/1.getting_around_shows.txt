@@ -41,14 +41,14 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [Creating an Auto Reply][13]  
 [Creating a Poll][14]
  
-[1]: .../images/help/show_overview.png
+[1]: ../images/help/show_overview.png
 [2]: core/messages/3.quick_message
 [3]: radio/shows/7.archive_show
 [4]: radio/shows/6.export_show
 [5]: radio/shows/4.rename_show
 [6]: radio/shows/5.delete_show
 [7]: radio/shows/9.wordcloud
-[8]: .../images/help/wordcloud.png
+[8]: ../images/help/wordcloud.png
 [9]: core/messages/8.mrfd
 [10]: core/messages/1.getting_around_the_messages_tab
 [11]: radio/shows/2.creating_a_show

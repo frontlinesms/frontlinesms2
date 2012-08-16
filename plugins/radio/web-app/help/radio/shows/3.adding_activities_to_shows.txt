@@ -5,7 +5,7 @@ You have the option to associate activities with shows to allow you to manage yo
 
 ### Adding an Activity to a Show in the Activity set up 
 
-1.  Whenever you set up an activity like a poll or autoreply you will be given the option to 'Add to Radio show' in the first page of the walkthrough. Select the show from the dropdown menu.
+1.  Whenever you set up an activity like a poll or autoreply you will be given the option to 'Select radio show' in the first page of the walkthrough. Select the show from the dropdown menu.
 __*Note:* If you have not created any shows then there will be no options available for you to select. Please create a show first.__
 2. If you have already set up the activity, navigate to the activity you wish to add to your show.
 3.  When viewing this activity, click on "More Actions..." and then click on "Edit [Activity Type]" e.g. "Edit Autoreply" (2).In the first screen it says"Add to Radio Show." Select the show from the dropdown menu. You can also make other changes to the activity in the walkthrough.
@@ -37,11 +37,11 @@ Removing the association between an activity and a show means the activity will 
 
 1.  Navigate to the activity you wish to remove from a show.
 2.  When viewing this activity, click on "More Actions..." and then click on "Edit [Activity Type]" e.g. "Edit Autoreply"
-3.  In the first screen it says"Add to Radio Show." Select "None" from the dropdown menu.
+3.  In the first screen it says "Add to Radio Show." Select "Unassign from radio show" from the dropdown menu.
 4.  Click through to the confirmation screen and click 'Create' to save changes.
 5.  The activity will be removed from the show, and moved underneath the Activities header on the messages tab.
 
-You can achieve the same result When viewing the activity by clicking on "More Actions..." and then on "Add to Radio Show" and selecting "None."
+You can achieve the same result When viewing the activity by clicking on "More Actions..." and then on "Add to Radio Show" and selecting "Unassign from radio show".
 
 
 ### Related Actions
@@ -49,10 +49,10 @@ You can achieve the same result When viewing the activity by clicking on "More A
 [Creating an Activity][4]  
 [Moving Messages into a Folder][5] 
 
-[1]: .../images/help/add_to_show.png
-[2]: .../images/help/assign_to_show_dialog.png
+[1]: ../images/help/add_to_show.png
+[2]: ../images/help/assign_to_show_dialog.png
 [3]: radio/shows/2.creating_a_show
 [4]: core/activities/2.creating_an_activity
 [5]: core/messages/8.mrfd 
-[6]: .../images/help/assign_to_show_activity_dialog.png
+[6]: ../images/help/assign_to_show_activity_dialog.png
 

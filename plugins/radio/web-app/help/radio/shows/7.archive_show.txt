@@ -34,7 +34,7 @@ If you want to archive a show but keep an associated activity in the messages ta
 [2]: radio/shows/4.rename_show
 [3]: radio/shows/5.delete_show
 [4]: core/archive/1e.show_archive
-[5]: .../images/help/show_archive.png
+[5]: ../images/help/show_archive.png
 [6]: core/activities/3.creating_a_poll
 [7]: core/messages/8.mrfd
 [8]: core/archive/1.getting_around_the_archive_tab
