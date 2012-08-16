@@ -258,6 +258,18 @@ class MessageController {
 		render 'OK'
 	}
 
+	def changeSubscriptionType() {
+		def subscription = Subscription.get(params.ownerId)
+		def checkedMessages = getCheckedMessages()
+		checkedMessages.each { messageInstance ->
+			//TODO work on adding action to message Instance
+			subscription.addToMessages(messageInstance)
+		}
+		subscription.save()
+		flash.message = dynamicMessage 'updated', checkedMessages
+		render 'OK'
+	}
+
 	def changeResponse() {
 		def responseInstance = PollResponse.get(params.responseId)
 		def checkedMessages = getCheckedMessages()

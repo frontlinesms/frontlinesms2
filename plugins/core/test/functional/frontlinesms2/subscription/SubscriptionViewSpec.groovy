@@ -77,7 +77,11 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
+
+			waitFor('slow'){ at QuickMessageDialog }
+
 			waitFor('veryslow'){ at QuickMessageDialog }
+
 			waitFor{ compose.textArea.displayed }
 		when:
 			compose.textArea = "Message"
@@ -85,7 +89,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { recipients.displayed }
 			waitFor { recipients.groupCheckboxesChecked*.value().contains("group-${Group.findByName('Camping').id}".toString()) }
-			waitFor { recipients.count == 2 }
 	}
 
 	def 'Deleting a group that is used in a subscription should fail with an appropriate error'() {
@@ -146,7 +149,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageInbox, m2
 			singleMessageDetails.moveTo(subscription.id)
-
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
