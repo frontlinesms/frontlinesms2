@@ -20,6 +20,28 @@ class SubscriptionController extends ActivityController {
 		}
 	}
 
+	def join = {
+		withSubscription { subscriptionInstance->
+			getCheckedMessages().each{ message->
+				subscriptionInstance.joinGroup(message)
+				subscriptionInstance.addToMessages(message)
+			}
+			subscriptionInstance.save()
+		}
+		redirect(controller:'message', action:'inbox')
+	}
+
+	def leave = {
+		withSubscription { subscriptionInstance->
+			getCheckedMessages().each{ message->
+				subscriptionInstance.leaveGroup(Contact.findByMobile(message.src))
+				subscriptionInstance.addToMessages(message)
+			}
+			subscriptionInstance.save()
+		}
+		redirect(controller:'message', action:'inbox')
+	}
+
 	def save = {
 		println "**PARAMS** "+params
 		withSubscription { subscriptionInstance ->
@@ -65,5 +87,17 @@ class SubscriptionController extends ActivityController {
 	private def withSubscription(Closure c) {
 		def subscriptionInstance = Subscription.get(params.ownerId) ?: new Subscription()
 		if (subscriptionInstance) c subscriptionInstance
+	}
+
+	private def getCheckedMessages() {
+		return Fmessage.getAll(getCheckedMessageList()) - null
+	}
+
+	private def getCheckedMessageList() {
+		def checked = params.messagesList?: params.messageId?: []
+		if(checked instanceof String) checked = checked.split(/\D+/) - ''
+		if(checked instanceof Number) checked = [checked]
+		if(checked.class.isArray()) checked = checked as List
+		return checked
 	}
 }

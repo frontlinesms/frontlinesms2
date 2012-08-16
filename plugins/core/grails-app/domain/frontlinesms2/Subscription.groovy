@@ -29,29 +29,43 @@ class Subscription extends Activity{
 		keyword nullable:true
 	}
 
-	def addToMessages(def message) {}
+	def joinGroup(Fmessage message, Contact foundContact=null){
+		foundContact = Contact.findByMobile(message.src)
+		if(!foundContact) {
+			group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
+		} else {
+			if(!(foundContact.isMemberOf(group))){
+				group.addToMembers(foundContact);
+			}
+		}
+	}
+
+	def leaveGroup(Contact foundContact){
+		foundContact?.removeFromGroup(group)
+	}
+
+	def toggleGroup(Fmessage message, Contact foundContact=null){
+		foundContact = Contact.findByMobile(message.src)
+		if(foundContact){
+			if(foundContact.isMemberOf(group)) {
+				foundContact.removeFromGroup(group)
+			} else {
+				group.addToMembers(foundContact);
+			}
+		} else {
+			group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
+		}
+	}
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def action = getAction(message.text,exactMatch)
 		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
-			 if(!foundContact) {
-			 	group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
-			 } else {
-			 	group.addToMembers(foundContact);
-			 }
+			joinGroup(message, foundContact)
 		}else if(action == Action.LEAVE) {
-			foundContact?.removeFromGroup(group)
+			leaveGroup(foundContact)
 		}else if(action == Action.TOGGLE) {
-			if(foundContact){
-				if(foundContact.isMemberOf(group)) {
-					foundContact.removeFromGroup(group)
-				} else {
-					group.addToMembers(foundContact);
-				}
-			} else {
-				group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));			
-			}
+			toggleGroup(message, foundContact)
 		}
 	}
 

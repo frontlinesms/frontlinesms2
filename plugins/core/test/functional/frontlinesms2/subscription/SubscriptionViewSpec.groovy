@@ -77,11 +77,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
-
-			waitFor('slow'){ at QuickMessageDialog }
-
 			waitFor('veryslow'){ at QuickMessageDialog }
-
 			waitFor{ compose.textArea.displayed }
 		when:
 			compose.textArea = "Message"
@@ -329,18 +325,14 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		setup:
 			def activity = Activity.findByName("Sample Announcement")
 			def m = Fmessage.findBySrc("announce")
+			def subscription = Subscription.findByName('Camping Subscription')
 		when:
 			to PageMessageAnnouncement, activity.id, m.id
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
-			singleMessageDetails.moveTo("Camping Subscription").click()
+			singleMessageDetails.moveTo(subscription.id)
 		then:
-			waitFor { messageList.displayed }
-		when:
-			to PageMessageSubscription, Subscription.findByName("Camping Subscription")
-		then:
-			waitFor { messageList.displayed }
-			messageList.messages*.text.contains(m.text)
+			waitFor { at SubscriptionCategoriseDialog }
 	}
 }
