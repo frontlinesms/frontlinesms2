@@ -66,9 +66,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { header.displayed }
 		when:
-			header.moreActions("edit").jquery.click()
+			header.moreActions.value("edit").jquery.click()
 		then:
-			waitFor { at SubscriptionCreateDialog }
+			waitFor("veryslow") { at SubscriptionCreateDialog }
 	}
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog with the group prepopulated as recipients"() {
@@ -77,7 +77,11 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
+
 			waitFor('slow'){ at QuickMessageDialog }
+
+			waitFor('veryslow'){ at QuickMessageDialog }
+
 			waitFor{ compose.textArea.displayed }
 		when:
 			compose.textArea = "Message"
@@ -187,7 +191,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			header.moreActions("delete").jquery.click()
 		then:
-			waitFor { at ConfirmDeleteDialog }
+			waitFor { at DeleteActivity }
 	}
 
 	def "clicking the export option opens the export dialog"() {
@@ -233,7 +237,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[3].click()
+			messageList.messages[3].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[3].hasClass("selected")
@@ -246,7 +250,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].click()
+			messageList.messages[0].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
@@ -280,16 +284,18 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { messageList.displayed }
 		when:
-			messageList.messages[0].click()
+			messageList.messages[0].checkbox.click()
 		then:
 			waitFor { singleMessageDetails.displayed }
+			waitFor { singleMessageDetails.text == "Test message 0" }
 		when:
-			singleMessageDetails.moveTo("Sample Announcement").click()
+			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
-			waitFor { messageList.displayed }
+			waitFor("veryslow") { at PageMessageSubscription }
+			waitFor { notifications.flashMessageText.contains("updated") }
 			!messageList.messages*.text.contains("Test message 0")
 		when:
-			to PageMessageActivity, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
 			messageList.messages*.text.contains("Test message 0")
@@ -307,15 +313,16 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { multipleMessageDetails.displayed }
 		when:
-			multipleMessageDetails.moveTo("Sample Announcement").click()
+			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
-			waitFor { messageList.displayed }
+			waitFor("veryslow") { at PageMessageSubscription }
+			waitFor { notifications.flashMessageText.contains("updated") }
 			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
 		when:
-			to PageMessageActivity, Activity.findByName("Sample Announcement")
+			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
 		then:
 			waitFor { messageList.displayed }
-			messageList.messages*.text.containsAll("the text we just moved", "the second message we just moved")
+			messageList.messages*.text.containsAll("Test message 0", "Test message 1")
 	}
 
 	def "moving a message from another activity to a subscription opens the categorise popup for the chosen subscription"() {

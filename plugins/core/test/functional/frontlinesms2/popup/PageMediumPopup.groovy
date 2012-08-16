@@ -23,6 +23,9 @@ abstract class MediumPopup extends geb.Page {
 }
 
 class QuickMessageDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("message")
+	}
 	static content = {
 		compose { module QuickMessageComposeTab }
 		recipients { module QuickMessageRecipientsTab }

@@ -8,6 +8,9 @@ class PageMessageSubscription extends frontlinesms2.page.PageMessageActivity {
 	static content = {
 		header { module SubscriptionHeaderModule }
 	}
+	static at = {
+		title.contains("subscription")
+	}
 }
 
 class SubscriptionHeaderModule extends ContentHeader {
