@@ -179,7 +179,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.moreActions.value("rename").jquery.click()
 		then:
 			waitFor { at RenameSubscriptionDialog }
-			waitFor { subscriptionName.contains("Camping Subscription") }
+			waitFor { subscriptionName.jquery.val().contains("Camping Subscription") }
 	}
 
 	def "clicking the delete option opens the confirm delete small popup"() {

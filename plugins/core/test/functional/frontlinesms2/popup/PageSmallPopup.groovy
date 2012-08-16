@@ -98,7 +98,7 @@ class RenameSubscriptionDialog extends SmallPopup {
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
-		subscriptionName { $('#modalBox #name').text() }
+		subscriptionName { $('#modalBox #name') }
 	}
 }
 
