@@ -94,11 +94,11 @@ class RenameFolderDialog extends SmallPopup {
 
 class RenameSubscriptionDialog extends SmallPopup {
 	static at = {
-		popupTitle.contains("subscription")
+		popupTitle.contains("activity")
 	}
 	static content = {
 		errorPanel { $('#modalBox #smallpopup-error-panel') }
-		subscriptionName { $('#modalBox #subscription-details #name').text() }
+		subscriptionName { $('#modalBox #name') }
 	}
 }
 

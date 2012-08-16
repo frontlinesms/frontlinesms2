@@ -52,6 +52,7 @@ class QuickMessageRecipientsTab extends geb.Module {
 		count { $('#recipient-count').text().toInteger() }
 		manualContacts { $("li.manual").find("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
+		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
 		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
 	}
 }
