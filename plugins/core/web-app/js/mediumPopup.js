@@ -1,7 +1,33 @@
+var mediumPopup;
+var mediumPopupDeferredInitialisers = [];
+
+var MediumPopup = function(html) {
+	var
+		_modalBox,
+		_init = function() {
+			var initliaser;
+			// call the old initialiser - hopefully this can be phased out
+			if(initializePopup) initializePopup(_modalBox);
+			// now call all explicitly-declared initializers
+			while(initialiser = mediumPopupDeferredInitialisers.pop()) {
+				initialiser(_modalBox);
+			}
+		};
+
+	// construction logic
+	_modalBox = $("<div id='modalBox'><div>");
+	_modalBox.html(html).appendTo(document.body);
+
+	// public access methods
+	return {
+		init: _init,
+		modalBox: _modalBox
+	};
+};
+
 function createModalBox(html) {
-	var modalBox = $("<div id='modalBox'><div>");
-	modalBox.html(html).appendTo(document.body);
-	return modalBox;
+	mediumPopup = new MediumPopup(html);
+	return mediumPopup.modalBox;
 }
 
 function launchMediumPopup(title, html, btnFinishedText, submitAction) {
@@ -16,7 +42,7 @@ function launchMediumPopup(title, html, btnFinishedText, submitAction) {
 			close: function() { $(this).remove(); }
 	});
 	addChangeHandlersForRadiosAndCheckboxes();
-	initializePopup(modalBox);
+	mediumPopup.init();
 }
 
 function launchMediumWizard(title, html, btnFinishedText, width, height) {
@@ -49,7 +75,7 @@ function launchMediumWizard(title, html, btnFinishedText, width, height, closeOn
 	validateTabSelections(modalBox);
 	changeButtons(getButtonToTabMappings(),  getCurrentTabDom());
 	initializeTabContentWidgets();
-	initializePopup();
+	mediumPopup.init();
 }
 
 function launchHelpWizard(html) {
@@ -69,7 +95,7 @@ function launchHelpWizard(html) {
 	});
 	addChangeHandlersForRadiosAndCheckboxes();
 	$(".ui-dialog").addClass("help");
-	initializePopup();
+	mediumPopup.init();
 }
 
 function submitWithoutClose() {
