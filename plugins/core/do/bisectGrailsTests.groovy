@@ -4,6 +4,9 @@
 // a file name containing the test order that is failing and the particular test that is failing
 // it will start doing a binary search by running combinations of tests that occur before the failing test
 // and will eventually identify the smallest set of tests that are failing when run together
+
+// From: http://naleid.com/blog/2012/05/22/fixing-grails-tests-that-pass-in-isolation-but-fail-when-run-as-a-suite/
+
 class BisectGrailsTests {
  
     String testOrderFilePath
