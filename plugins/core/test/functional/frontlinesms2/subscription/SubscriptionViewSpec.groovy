@@ -78,13 +78,13 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			header.quickMessage.click()
 		then:
 			waitFor('slow'){ at QuickMessageDialog }
-			waitFor{ compose.textArea.displayedi }
+			waitFor{ compose.textArea.displayed }
 		when:
 			compose.textArea = "Message"
 			next.click()
 		then:
 			waitFor { recipients.displayed }
-			waitFor { recipients.groupCheckboxes[0].checked }
+			waitFor { recipients.groupCheckboxes[1].checked }
 			waitFor { recipients.count == 2 }
 	}
 
@@ -146,7 +146,6 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		when:
 			to PageMessageInbox, m2
 			singleMessageDetails.moveTo(subscription.id)
-
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
