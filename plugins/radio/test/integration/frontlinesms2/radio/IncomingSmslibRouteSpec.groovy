@@ -4,7 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.dev.MockModemUtils
 
 import serial.mock.*
-import routing.CamelIntegrationSpec
+import frontlinesms2.routing.CamelIntegrationSpec
 
 class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 	def fconnectionService
