@@ -5,7 +5,7 @@
 		if (trashObj.object instanceof frontlinesms2.radio.RadioShow){
 			trashObj.displayText = message(code:"radioShow.trash.display.text", args:[trashObj.object.activities.size(), trashObj.object.messages.size()])
 			trashObj.object.activities.each{ act->
-				trashInstanceList -= Trash.findByObject(act)
+				trashInstanceList -= Trash.findByObjectId(act.id)
 			}
 		}
 	}	
