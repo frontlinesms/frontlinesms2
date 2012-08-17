@@ -11,4 +11,8 @@ abstract class MessageOwner {
 		tablePerHierarchy false
 		version false
 	}
+
+	def getDisplayText(Fmessage msg) {
+		msg.text
+	}
 }

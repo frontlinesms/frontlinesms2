@@ -30,6 +30,8 @@ class Subscription extends Activity{
 	}
 
 	def joinGroup(Fmessage message, Contact foundContact=null){
+		message.ownerDetail = Action.JOIN.toString()
+		message.save(failOnError:true)
 		foundContact = Contact.findByMobile(message.src)
 		if(!foundContact) {
 			group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
@@ -40,11 +42,15 @@ class Subscription extends Activity{
 		}
 	}
 
-	def leaveGroup(Contact foundContact){
+	def leaveGroup(Fmessage message, Contact foundContact){
+		message.ownerDetail = Action.LEAVE.toString()
+		message.save(failOnError:true)
 		foundContact?.removeFromGroup(group)
 	}
 
 	def toggleGroup(Fmessage message, Contact foundContact=null){
+		message.ownerDetail = Action.TOGGLE.toString()
+		message.save(failOnError:true)
 		foundContact = Contact.findByMobile(message.src)
 		if(foundContact){
 			if(foundContact.isMemberOf(group)) {
@@ -59,11 +65,12 @@ class Subscription extends Activity{
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def action = getAction(message.text,exactMatch)
+		message.ownerDetail = action.toString
 		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
 			joinGroup(message, foundContact)
 		}else if(action == Action.LEAVE) {
-			leaveGroup(foundContact)
+			leaveGroup(message, foundContact)
 		}else if(action == Action.TOGGLE) {
 			toggleGroup(message, foundContact)
 		}
@@ -97,6 +104,15 @@ class Subscription extends Activity{
 
 	def hasAtLeastOneAlias(aliases,message){
 		aliases.toUpperCase().split(",").contains(message.substring(keyword.value.length()))	
+	}
+
+	def getDisplayText(Fmessage msg) {
+		if (msg.messageOwner.id == this.id)
+		{
+			return (msg.ownerDetail.toLowerCase() + ' ("' + msg.text + '")').truncate(50)
+		}
+		else
+			return msg.text
 	}
 }
 
