@@ -1,0 +1,2 @@
+#!/bin/bash
+grep --color='auto' -P -n -r "console.log" grails-app/views/ web-app/
