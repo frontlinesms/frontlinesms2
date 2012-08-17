@@ -15,7 +15,7 @@ class ShowDeleteSpec extends IntegrationSpec {
 			trashService.sendToTrash(a)
 			trashService.sendToTrash(s)
 		then:
-			Trash.count() == 2
+			Trash.count() == 1
 		when:
 			trashService.restore(s)
 		then:

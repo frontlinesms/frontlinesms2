@@ -118,6 +118,7 @@ class RadioShow extends MessageOwner {
 		def trashDetails = super.sendToTrash()
 		if(!trashDetails.children) trashDetails.children = []
 		trashDetails.children += activities
+		trashDetails.displayText = "${(activities?:[]).size()} activities, ${(messages?:[]).size()} message(s)" // TODO i18n
 		return trashDetails
 	}
 

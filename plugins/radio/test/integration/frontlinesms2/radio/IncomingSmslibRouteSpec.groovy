@@ -43,13 +43,10 @@ class IncomingSmslibRouteSpec extends CamelIntegrationSpec {
 			if(connection) fconnectionService.destroyRoutes(connection)
 			// remove mock serial port
 			MockSerial.reset()
-			//stop show
-			radioShowService.stopShow()
 			Fconnection.findAll()*.delete()
 			RadioShow.findAll()*.delete()
 	}
 	
-	@spock.lang.IgnoreRest
 	def "should not save poll message to the running radio show"() {
 		given:
 			def mockPortHandler = MockModemUtils.createMockPortHandler(false, [1:'0891534875001040F30414D0537AD91C7683A465B71E0000013020017560400CC7F79B0C6ABFE5EEB4FB0C',

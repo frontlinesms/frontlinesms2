@@ -82,12 +82,12 @@ class RadioShowController extends MessageController {
 		return model
 	}
 	
-	def getNewRadioMessageCount = {
+	def newRadioMessageCount() {
 		if(params.messageSection == 'radioShow') {
 			def messageCount = [totalMessages:[RadioShow.get(params.ownerId)?.getShowMessages()?.count()]]
 			render messageCount as JSON
 		} else {
-			getNewMessageCount()
+			newMessageCount()
 		}
 	}
 	

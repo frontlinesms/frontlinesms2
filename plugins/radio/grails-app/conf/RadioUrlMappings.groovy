@@ -9,7 +9,7 @@ class RadioUrlMappings extends CoreUrlMappings{
 
 		"/"(controller:'radio', action:'inbox')
 		
-		"/message/getNewMessageCount"(controller:'radioShow', action:'getNewRadioMessageCount') {}
+		"/message/newMessageCount"(controller:'radioShow', action:'newRadioMessageCount') {}
 		"/message/radioShow"(controller:'radioShow', action:'radioShow'){}
 		"/message/radioShow/$ownerId"(controller:'radioShow', action:'radioShow') {}
 		"/message/radioShow/$ownerId/show/$messageId"(controller:'radioShow', action:'radioShow') {}
