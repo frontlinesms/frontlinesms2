@@ -19,7 +19,7 @@
 						<td class="show-type-cell show-cell">
 							<g:link controller="archive" action="folder" params="[ownerId: s.id,  viewingMessages: true, messageSection: 'radioShow']">
 								<fsms:unbroken>
-									<g:message code="radio.label"/>
+									<g:message code="radioshow.label"/>
 								</fsms:unbroken>
 							</g:link>
 						</td>
