@@ -1,15 +1,5 @@
 <%@ page import="frontlinesms2.*" %>
 <%@ page import="frontlinesms2.radio.*" %>
-<%
-	trashInstanceList.each{ trashObj->
-		if (trashObj.object instanceof frontlinesms2.radio.RadioShow){
-			trashObj.displayText = message(code:"radioShow.trash.display.text", args:[trashObj.object.activities.size(), trashObj.object.messages.size()])
-			trashObj.object.activities.each{ act->
-				trashInstanceList -= Trash.findByObject(act)
-			}
-		}
-	}	
-%>
 <g:each in="${trashInstanceList}" status="i" var="t">
 	<g:if test="${t.objectClass == 'frontlinesms2.Fmessage'}">
 		<g:hiddenField name="src-${t.object.id}" value="${t.object.src}"/>
