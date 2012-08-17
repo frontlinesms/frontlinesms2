@@ -17,6 +17,7 @@ class Fmessage {
 	String text
 	String inboundContactName
 	String outboundContactName
+	String ownerDetail
 	
 	boolean read
 	boolean starred
@@ -48,6 +49,7 @@ class Fmessage {
 				val ^ (obj.dispatches? true: false)
 		})
 		dispatches nullable:true
+		ownerDetail nullable:true
 	}
 
 	def beforeInsert = {
@@ -233,20 +235,6 @@ class Fmessage {
 
 	public void setText(String text) {
 		this.text = text?.truncate(MAX_TEXT_LENGTH)
-	}
-
-	// FIXME document what this is, and remove references to PollResponse.  Anyway this poll display
-	// only makes sense within a poll - e.g. in a search result this is a bit dumb.
-	def getDisplayText() {
-		def p = PollResponse.withCriteria {
-			messages {
-				eq('isDeleted', false)
-				eq('archived', false)
-				eq('id', this.id)
-			}
-		}
-
-		p?.size() ? "${p[0].value} (\"${this.text}\")" : this.text
 	}
 
 	static def listPending(onlyFailed, params=[:]) {
