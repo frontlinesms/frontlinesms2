@@ -28,8 +28,7 @@ class RadioShowCedSpec extends RadioBaseSpec {
 			$("input", name: 'name').value("")
 			$("#done").click()
 		then:
-			println "flash message:" + $("div.flash").text()
-			waitFor { $("div.flash").text().contains("Name is not valid") }
+			waitFor { $("div.flash").text().contains("A radio show with this name already exists") }
 	}
 	
 	def "separator is displayed for radio messages from different days"() {

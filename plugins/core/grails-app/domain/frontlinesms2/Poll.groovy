@@ -144,5 +144,12 @@ class Poll extends Activity {
 		}
 		return responses.find { it!=this.unknown && it.aliases?.split(", ")?.contains(option) }?: this.unknown
 	}
+
+//> FACTORY METHODS
+	static createPoll(args) {
+		def p = new Poll(args)
+		p.editResponses(args)
+		return p
+	}
 }
 
