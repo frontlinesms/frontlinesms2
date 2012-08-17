@@ -59,6 +59,8 @@ class RadioShowController extends MessageController {
 		def showInstance = RadioShow.findById(params.id)
 		if(showInstance.archived) {
 			flash.message = message code:'radio.show.onair.error.archived'
+			redirect action:'showArchive', params:[ownerId:params.id]
+			return
 		} else if(showInstance?.start()) {
 			showInstance.save()
 		} else {
