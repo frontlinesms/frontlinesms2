@@ -115,12 +115,14 @@ class RadioShow extends MessageOwner {
 
 	def sendToTrash() {
 		this.activities*.sendToTrash()
-		return super.sendToTrash()
+		def trashDetails = super.sendToTrash()
+		if(!trashDetails.children) trashDetails.children = []
+		trashDetails.children += activities
+		return trashDetails
 	}
 
 	def restoreFromTrash() {
 		super.restoreFromTrash()
-		this.activities*.restoreFromTrash()
 		return this.activities
 	}
 

@@ -9,10 +9,12 @@ class TrashService {
     
 	def sendToTrash(object) {
 		def trashDetails = object.sendToTrash()
-		new Trash(displayName:trashDetails.displayName,
-				displayText:trashDetails.text,
-				objectClass:object.class.name,
-				objectId:object.id).save()
+		Trash.create(object, [displayText:trashDetails.text,
+				displayName:trashDetails.displayName])
+			.save()
+		if(trashDetails.children instanceof Collection) {
+			Trash.deleteForAll(trashDetails.children)
+		}
 		object.save(failOnError:true, flush:true)
 	}
 
