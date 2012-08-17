@@ -65,7 +65,7 @@ class Subscription extends Activity{
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def action = getAction(message.text,exactMatch)
-		message.ownerDetail = action.toString
+		message.ownerDetail = action.toString()
 		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
 			joinGroup(message, foundContact)
@@ -74,6 +74,8 @@ class Subscription extends Activity{
 		}else if(action == Action.TOGGLE) {
 			toggleGroup(message, foundContact)
 		}
+		this.addToMessages(message)
+		this.save(flush:true, failOnError:true)
 	}
 
 	Action getAction(String messageText, boolean exactMatch) {
