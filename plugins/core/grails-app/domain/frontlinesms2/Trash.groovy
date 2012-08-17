@@ -27,7 +27,7 @@ class Trash {
 
 	static def deleteForAll(def objects) {
 		objects.each { o ->
-			findByObject(o).delete()
+			findByObject(o)?.delete()
 		}
 	}
 
