@@ -366,7 +366,7 @@ class SubscriptionCategoriseDialog extends MediumPopup {
 	}
 	static content = {
 		groupName {'input#group-dropdown'}
-		join {$('a', name:'btn_join')}
-		leave {$('a', name:'btn_leave')}
+		join {$('#modalBox #btn_join')}
+		leave {$('#modalBox #btn_leave')}
 	}
 }

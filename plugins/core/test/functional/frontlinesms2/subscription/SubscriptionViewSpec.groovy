@@ -123,15 +123,15 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
-
+@spock.lang.IgnoreRest
 	def 'When a message is categorised with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
 			def g = Group.findByName("Camping")
 			def c1 = Contact.build(name:'prudence', mobile:'+12321')
 			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
 			g.addToMembers(c1)
-			def m1 = Fmessage.build(text:'I want to go away', src:'prudence', read:true)
-			def m2 = Fmessage.build(text:'I want to come in', src:'wilburforce', read:true)
+			def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
+			def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
 			def subscription = Subscription.findByName('Camping Subscription')
 		when:
 			to PageMessageInbox, m1
@@ -139,9 +139,9 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
-			leave.click()
+			join.click()
 		then:
-			waitFor { at PageMessageInbox }
+			waitFor("veryslow") { at PageMessageInbox }
 		when:
 			to PageMessageInbox, m2
 			singleMessageDetails.moveTo(subscription.id)
@@ -149,14 +149,12 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
 			join.click()
-			to PageMessageSubscription, Subscription.findByGroup(g)
 		then:
-			waitFor { at PageMessageInbox }
+			waitFor("veryslow") { at PageMessageInbox }
 		when:
 			to PageMessageSubscription, Subscription.findByGroup(g)
 		then:
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
-			messageList.messages.size() == 2
 			messageList.each { messageRow ->
 				if (messageRow.source == "prudence") {
 					assert messageRow.text().contains("leave")
