@@ -116,36 +116,6 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 			messageText << ['KEY SOMETHING', 'KEY OTHERWISE', 'KEY RAMBLING NONSENSE']
 	}
 
-	def 'join autoreply message should be sent when join action is triggered'() {
-		given:
-			def sendService = Mock(MessageSendService)
-			s.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
-			}) >> replyMessage
-		when:
-			processKeyword("KEY JOIN", TEST_CONTACT)
-		then:
-			1 * sendService.send(replyMessage)
-	}
-
-	def 'leave autoreply message should be sent when leave action is triggered'() {
-		given:
-			def sendService = Mock(MessageSendService)
-			s.messageSendService = sendService
-
-			def replyMessage = mockFmessage("woteva")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==TEST_CONTACT && params.messageText=='you have left'
-			}) >> replyMessage
-		when:
-			processKeyword("KEY LEAVE", TEST_CONTACT)
-		then:
-			1 * sendService.send(replyMessage)
-	}
-
 //> HELPERS
 	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
 		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)

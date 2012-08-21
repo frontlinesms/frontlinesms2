@@ -16,6 +16,10 @@ class Subscription extends Activity{
 	String joinAutoreplyText
 	String leaveAutoreplyText
 
+
+//> SERVICES
+	def messageSendService
+
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
 				if(obj?.deleted || obj?.archived) return true
@@ -34,18 +38,34 @@ class Subscription extends Activity{
 		message.save(failOnError:true)
 		foundContact = Contact.findByMobile(message.src)
 		if(!foundContact) {
-			group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
+			foundContact = new Contact(name:"", mobile:message.src).save(failOnError:true)
+			group.addToMembers(foundContact);
 		} else {
 			if(!(foundContact.isMemberOf(group))){
 				group.addToMembers(foundContact);
 			}
 		}
+		if(joinAutoreplyText) {
+			sendAutoreplyMessage(foundContact, joinAutoreplyText)		}
 	}
 
 	def leaveGroup(Fmessage message, Contact foundContact){
 		message.ownerDetail = Action.LEAVE.toString()
 		message.save(failOnError:true)
 		foundContact?.removeFromGroup(group)
+		if(leaveAutoreplyText) {
+			sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+		}
+	}
+
+	def sendAutoreplyMessage(Contact foundContact, autoreplyText) {
+		def params = [:]
+		params.addresses = foundContact.mobile
+		params.messageText = autoreplyText
+		def outgoingMessage = messageSendService.createOutgoingMessage(params)
+		this.addToMessages(outgoingMessage)
+		this.save()
+		messageSendService.send(outgoingMessage)
 	}
 
 	def toggleGroup(Fmessage message, Contact foundContact=null){
