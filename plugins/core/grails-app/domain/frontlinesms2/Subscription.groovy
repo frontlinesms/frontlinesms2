@@ -6,7 +6,6 @@ class Subscription extends Activity{
 
 //> PROPERTIES
 	enum Action { TOGGLE, JOIN, LEAVE }
-
 	String name
 	static hasOne = [keyword: Keyword]
 	Group group
@@ -15,6 +14,9 @@ class Subscription extends Activity{
 	String leaveAliases
 	String joinAutoreplyText
 	String leaveAutoreplyText
+
+//> SERVICES
+	def messageSendService
 
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->
