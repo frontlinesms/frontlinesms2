@@ -5,7 +5,7 @@
 			noSelection="${['': g.message(code:'search.filter.group')]}"/>
 	<g:select class="dropdown" name="activityId" from="${activityInstanceList + folderInstanceList + radioShowInstanceList}"
 			value="${search?.activityId}"
-			optionKey="${{(it instanceof frontlinesms2.Activity ? 'activity' : 'folder') + '-' + it.id}}"
+			optionKey="${{(it instanceof frontlinesms2.Folder ? 'folder' : 'activity') + '-' + it.id}}"
 			optionValue="${{it.name}}"
 			noSelection="${['':g.message(code:'search.filter.activities.radio.show')]}"/>
 	<g:select class="dropdown" name="messageStatus"

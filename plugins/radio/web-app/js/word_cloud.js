@@ -108,8 +108,14 @@ function searchForWord(word) {
 	console.log("searching for "+word);
 	var ownerId = $("#ownerId").val();
 	var searchUrl = url_root + "search" + '/result?searchString=' + word;
+	var messageSection;
+	if($("#messageSection").val() == "folder"){
+		messageSection = "folder";
+	}else{
+		messageSection = "activity"
+	}
 	if (ownerId.length > 0)
-		searchUrl = searchUrl + "&activityId=messageOwner-" +ownerId;
+		searchUrl = searchUrl + "&activityId="+messageSection+"-" +ownerId;
 	window.location = searchUrl;
 }
 
