@@ -16,6 +16,7 @@ class Group {
 		// 'group' is a SQL keyword, and so automatic mapping of this class to a
 		// table does not work.
 		table 'grup'
+		sort name:'asc'
 	}
 
 	def beforeDelete = {
