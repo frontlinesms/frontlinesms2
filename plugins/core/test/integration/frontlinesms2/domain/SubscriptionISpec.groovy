@@ -116,6 +116,36 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 			messageText << ['KEY SOMETHING', 'KEY OTHERWISE', 'KEY RAMBLING NONSENSE']
 	}
 
+	def 'join autoreply message should be sent when join action is triggered'() {
+		given:
+			def sendService = Mock(MessageSendService)
+			s.messageSendService = sendService
+
+			def replyMessage = mockFmessage("woteva")
+			sendService.createOutgoingMessage({ params ->
+				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
+			}) >> replyMessage
+		when:
+			processKeyword("KEY JOIN", TEST_CONTACT)
+		then:
+			1 * sendService.send(replyMessage)
+	}
+
+	def 'leave autoreply message should be sent when leave action is triggered'() {
+		given:
+			def sendService = Mock(MessageSendService)
+			s.messageSendService = sendService
+
+			def replyMessage = mockFmessage("woteva")
+			sendService.createOutgoingMessage({ params ->
+				params.addresses==TEST_CONTACT && params.messageText=='you have left'
+			}) >> replyMessage
+		when:
+			processKeyword("KEY LEAVE", TEST_CONTACT)
+		then:
+			1 * sendService.send(replyMessage)
+	}
+
 //> HELPERS
 	private def processKeyword(String messageText, String sourcePhoneNumber, boolean exactMatch=true) {
 		s.processKeyword(mockMessage(messageText, sourcePhoneNumber), exactMatch)
@@ -128,11 +158,18 @@ class SubscriptionISpec extends grails.plugin.spock.IntegrationSpec {
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
 		def keyword = new Keyword(value:"KEY")
-		s = new Subscription(keyword: keyword,group:g, joinAliases:"join", leaveAliases:"leave")
+		s = new Subscription(name:"test subscription", keyword: keyword,group:g, joinAliases:"join", joinAutoreplyText:"you have joined", leaveAutoreplyText:"you have left", leaveAliases:"leave")
 	}
 
 	private def mockMessage(String messageText, String sourcePhoneNumber) {
 		return Fmessage.build(text:messageText, src:sourcePhoneNumber)
+	}
+
+	private def mockFmessage(String messageText, String src=null) {
+		Fmessage m = Mock()
+		m.text >> messageText
+		m.src >> src
+		return m
 	}
 
 	private def getNewContact() {
