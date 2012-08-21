@@ -41,6 +41,7 @@ grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 // pagination
 grails.views.pagination.max = 50
 
+grails.config.locations = []
 grails.config.locations << "file:${frontlinesms2.ResourceUtils.resourcePath}/log4j.groovy"
 log4j = {
 	environments {
