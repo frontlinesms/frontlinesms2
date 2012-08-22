@@ -137,7 +137,7 @@ class Subscription extends Activity{
 	}
 
 	def getDisplayText(Fmessage msg) {
-		if (msg.messageOwner.id == this.id) {
+		if (msg.messageOwner.id == this.id && msg.inbound) {
 			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50)
 		} else
 			return msg.text
