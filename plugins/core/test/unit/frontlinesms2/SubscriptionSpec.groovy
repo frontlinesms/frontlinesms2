@@ -51,6 +51,37 @@ class SubscriptionSpec extends Specification {
 			1 * sendService.send(replyMessage)
 	}
 
+	def 'correct autoreply message for join should be sent when toggle action is triggered'() {
+		given:
+			def sendService = Mock(MessageSendService)
+			s.messageSendService = sendService
+
+			def replyMessage = mockFmessage("woteva")
+			sendService.createOutgoingMessage({ params ->
+				params.addresses==TEST_CONTACT && params.messageText=='you have joined'
+			}) >> replyMessage
+		when:
+			processKeyword("KEY", TEST_CONTACT)
+		then:
+			1 * sendService.send(replyMessage)
+	}
+
+	def 'correct autoreply message for leave should be sent when toggle action is triggered'() {
+		given:
+			def sendService = Mock(MessageSendService)
+			s.messageSendService = sendService
+			c.addToGroups(g)
+
+			def replyMessage = mockFmessage("woteva")
+			sendService.createOutgoingMessage({ params ->
+				params.addresses==TEST_CONTACT && params.messageText=='you have left'
+			}) >> replyMessage
+		when:
+			processKeyword("KEY", TEST_CONTACT)
+		then:
+			1 * sendService.send(replyMessage)
+	}
+
 	private def createTestSubscriptionAndGroup() {
 		g = new Group(name:"Subscription Group").save()
 		def keyword = new Keyword(value:"KEY")
