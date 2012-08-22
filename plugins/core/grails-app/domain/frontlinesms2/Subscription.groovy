@@ -73,11 +73,17 @@ class Subscription extends Activity{
 		if(foundContact){
 			if(foundContact.isMemberOf(group)) {
 				foundContact.removeFromGroup(group)
+				if(leaveAutoreplyText)
+					sendAutoreplyMessage(foundContact, leaveAutoreplyText)
 			} else {
 				group.addToMembers(foundContact);
+				if(joinAutoreplyText)
+					sendAutoreplyMessage(foundContact, joinAutoreplyText)
 			}
 		} else {
 			group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
+			if(joinAutoreplyText)
+				sendAutoreplyMessage(foundContact, joinAutoreplyText)
 		}
 	}
 
