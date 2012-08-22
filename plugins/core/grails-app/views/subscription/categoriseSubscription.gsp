@@ -7,7 +7,7 @@
 		<g:hiddenField id="owner" name="ownerId" value="${params.ownerId}"/>
 		<p class="info"><g:message code="subscription.categorise.info" args="${[Subscription.get(params.ownerId)?.name]}" /></p>
 		<div class="subscription_input">
-			<g:radio name="subscription-action" value="join" selected="true"/>
+			<g:radio name="subscription-action" value="join" checked="checked"/>
 			<g:message code="subscription.categorise.join.label" args="${[Subscription.get(params.ownerId)?.group?.name]}"/>
 		</div>
 		<div class="subscription_input">
