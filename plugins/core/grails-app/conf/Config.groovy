@@ -82,7 +82,6 @@ grails.config.locations = []
 grails.config.locations << "file:${frontlinesms2.ResourceUtils.resourcePath}/log4j.groovy"
 log4j = {
 	environments {
-		def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
 		production {
 			def conf = frontlinesms2.ResourceUtils.resourcePath
 			println "Logging conf dir: $conf"
