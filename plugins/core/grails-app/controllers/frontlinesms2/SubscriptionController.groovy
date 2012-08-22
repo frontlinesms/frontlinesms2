@@ -21,10 +21,10 @@ class SubscriptionController extends ActivityController {
 	}
 
 	def join = {
-		withSubscription { subscriptionInstance->
-			getCheckedMessages().each{ message->
-				subscriptionInstance.joinGroup(message)
-				subscriptionInstance.addToMessages(message)
+		withSubscription { subscriptionInstance ->
+			getCheckedMessages().each { message ->
+				subscriptionInstance.processJoin(message)
+				println "ownerDetail before subscription save: $message.ownerDetail"
 			}
 			subscriptionInstance.save(failOnError:true)
 		}
@@ -32,9 +32,9 @@ class SubscriptionController extends ActivityController {
 	}
 
 	def leave = {
-		withSubscription { subscriptionInstance->
-			getCheckedMessages().each{ message->
-				subscriptionInstance.leaveGroup(message, Contact.findByMobile(message.src))
+		withSubscription { subscriptionInstance ->
+			getCheckedMessages().each { message ->
+				subscriptionInstance.processLeave(message, Contact.findByMobile(message.src))
 				subscriptionInstance.addToMessages(message)
 			}
 			subscriptionInstance.save(failOnError:true)

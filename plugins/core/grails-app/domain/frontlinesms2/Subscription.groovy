@@ -31,7 +31,8 @@ class Subscription extends Activity{
 		keyword nullable:true
 	}
 
-	def joinGroup(Fmessage message, Contact foundContact=null){
+	def processJoin(Fmessage message, Contact foundContact=null){
+		this.addToMessages(message)
 		message.ownerDetail = Action.JOIN.toString()
 		message.save(failOnError:true)
 		foundContact = Contact.findByMobile(message.src)
@@ -44,10 +45,12 @@ class Subscription extends Activity{
 			}
 		}
 		if(joinAutoreplyText) {
-			sendAutoreplyMessage(foundContact, joinAutoreplyText)		}
+			sendAutoreplyMessage(foundContact, joinAutoreplyText)
+		}
 	}
 
-	def leaveGroup(Fmessage message, Contact foundContact){
+	def processLeave(Fmessage message, Contact foundContact){
+		this.addToMessages(message)
 		message.ownerDetail = Action.LEAVE.toString()
 		message.save(failOnError:true)
 		foundContact?.removeFromGroup(group)
@@ -66,7 +69,8 @@ class Subscription extends Activity{
 		messageSendService.send(outgoingMessage)
 	}
 
-	def toggleGroup(Fmessage message, Contact foundContact=null){
+	def processToggle(Fmessage message, Contact foundContact=null){
+		this.addToMessages(message)
 		message.ownerDetail = Action.TOGGLE.toString()
 		message.save(failOnError:true)
 		foundContact = Contact.findByMobile(message.src)
@@ -93,13 +97,12 @@ class Subscription extends Activity{
 		message.ownerDetail = action.toString()
 		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
-			joinGroup(message, foundContact)
+			processJoin(message, foundContact)
 		}else if(action == Action.LEAVE) {
-			leaveGroup(message, foundContact)
+			processLeave(message, foundContact)
 		}else if(action == Action.TOGGLE) {
-			toggleGroup(message, foundContact)
+			processToggle(message, foundContact)
 		}
-		this.addToMessages(message)
 		this.save(flush:true, failOnError:true)
 	}
 
@@ -118,27 +121,25 @@ class Subscription extends Activity{
 				}
 			}
 		}
-		else if (words.size() > 1 && exactMatch){
-			if(joinAliases.toUpperCase().split(",").contains(words[1].trim())){
+		else if (words.size() > 1 && exactMatch) {
+			if(joinAliases.toUpperCase().split(",").contains(words[1].trim())) {
 				return Action.JOIN
-		 	}else if(leaveAliases.toUpperCase().split(",").contains(words[1].trim())){
+		 	} else if(leaveAliases.toUpperCase().split(",").contains(words[1].trim())) {
 		 		return Action.LEAVE
-		 	}else{
+		 	} else {
 		 		return Action.TOGGLE
 		 	}
 		}
 	}
 
-	def hasAtLeastOneAlias(aliases,message){
+	def hasAtLeastOneAlias(aliases,message) {
 		aliases.toUpperCase().split(",").contains(message.substring(keyword.value.length()))	
 	}
 
 	def getDisplayText(Fmessage msg) {
-		if (msg.messageOwner.id == this.id)
-		{
-			return (msg.ownerDetail.toLowerCase() + ' ("' + msg.text + '")').truncate(50)
-		}
-		else
+		if (msg.messageOwner.id == this.id) {
+			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50)
+		} else
 			return msg.text
 	}
 }
