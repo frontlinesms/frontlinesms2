@@ -36,7 +36,7 @@
 ul.trashed-show-activities { list-style-type:disc; padding:0 17px 17px 17px; }
 
 #body-menu li.radio-shows h3 { background-image:url("../images/shows.png"); }
-#body-menu .radioShow a, #main-list-head h1.radioShows-archive { background-image:url("../images/shows.png"); }
+#body-menu .radioShow a, #main-list-head h1.radioShow-archive { background-image:url("../images/shows.png"); }
 #body-menu ul.radio-show-activities li a { padding-left:50px; }
 #wordcloud-container {position: fixed; height: auto; width:auto; left: 17%; 
 	right: 23%; bottom: 0pt; top: 235px; width:60%; margin-left:10px; }
