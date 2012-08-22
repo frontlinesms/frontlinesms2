@@ -28,7 +28,7 @@ class CustomFieldCedSpec extends ContactBaseSpec {
 			ok.jquery.trigger("click")
 			at PageContactShow
 		then:
-			singleContactDetails.customLabel("planet").displayed
+			waitFor { singleContactDetails.customLabel("planet").displayed }
 	}
 }
 
