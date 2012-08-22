@@ -26,7 +26,7 @@ class CoreBootStrap {
 	def messageSource
 	def quartzScheduler
 
-	def bootstrapData = Environment.current == Environment.DEVELOPMENT || (System.properties['frontlinesms2.bootstrap.data'] as Boolean)
+	def bootstrapData = Environment.current == Environment.DEVELOPMENT || Boolean.parseBoolean(System.properties['frontlinesms2.bootstrap.data']?:'')
 	
 	def init = { servletContext ->
 		println "BootStrap.init() : Env=${Environment.current}"
