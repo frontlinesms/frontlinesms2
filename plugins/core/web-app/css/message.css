@@ -31,11 +31,11 @@
 #body.messages #main-list tr td:last-child { padding-right:23px;
 	background-repeat:no-repeat; background-position:98% center; }
 #body.messages #main-list tr td.message-date-cell, #body.messages #main-list tr td.message-sender-cell { white-space:nowrap; }
-#body.messages #main-list tr.failed td:last-child { background-image:url('../images/icons/error_on.png'); }
-#body.messages #main-list tr.sent.pending.failed td:last-child { background:url('../images/icons/pending.failed.png'); }
-#body.messages #main-list tr.sent.pending td:last-child { background:url('../images/icons/sent.pending.png'); }
-#body.messages #main-list tr.sent.failed td:last-child { background-image:url('../images/icons/sent.failed.png'); }
-#body.messages #main-list tr.pending.failed td:last-child { background:url('../images/icons/pending.failed.png'); }
+#body.messages #main-list tr.failed td:last-child { background-image:url('../images/icons/failed.png'); }
+#body.messages #main-list tr.sent.pending.failed td:last-child { background-image:url('../images/icons/sent-pending-failed.png'); }
+#body.messages #main-list tr.sent.pending td:last-child { background-image:url('../images/icons/sent-pending.png'); }
+#body.messages #main-list tr.sent.failed td:last-child { background-image:url('../images/icons/sent-failed.png'); }
+#body.messages #main-list tr.pending.failed td:last-child { background-image:url('../images/icons/pending-failed.png'); }
 #body.messages #main-list tr.sent td:last-child { background-image:url('../images/icons/sent.png'); }
 #body.messages #main-list tr.pending td:last-child { background-image:url('../images/icons/pending.png'); }
 
