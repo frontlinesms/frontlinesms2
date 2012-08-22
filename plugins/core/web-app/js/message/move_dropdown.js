@@ -46,6 +46,12 @@ function launchCategorisePopup(moveTargetType,messagesToMove,moveTargetId){
 		type:'POST',
 		url: url_root + 'subscription/categoriseSubscriptionPopup',
 		data: { messageSection:moveTargetType, messageId:messagesToMove, ownerId:moveTargetId },
-		success: function(data) { launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok')) }
+		success: function(data) { launchSmallPopup(i18n('subscription.categorise.title'), data, i18n('wizard.ok'), function() {
+			var form = $("form#categorize_subscription");
+			var action = form.find("input[type=radio]:checked").val();
+			var action_url = url_root + "subscription/" + action;
+			form.attr('action', action_url);
+			form.submit();
+		}) }
 	});
 }

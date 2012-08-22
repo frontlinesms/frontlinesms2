@@ -69,6 +69,7 @@ class Subscription extends Activity{
 		messageSendService.send(outgoingMessage)
 	}
 
+	// TODO this should just call processJoin or processLeave
 	def processToggle(Fmessage message, Contact foundContact=null){
 		this.addToMessages(message)
 		message.ownerDetail = Action.TOGGLE.toString()
