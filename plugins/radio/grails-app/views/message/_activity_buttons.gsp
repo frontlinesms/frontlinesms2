@@ -4,7 +4,7 @@
 	<fsms:quickMessage class="section-action-button activity-btn btn"/>
 	<g:render template="/wordcloud/wordcloud_actions"/>
 	<g:if test="${params.controller!='archive' && !params.inArchive}">
-		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive"/> <g:message code="${ownerInstance?.shortName.toLowerCase()}.label"/></g:link>
+		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" /> <g:message code="${ownerInstance?.shortName.toLowerCase()}.label"/></g:link>
 	</g:if>
 	<g:elseif test="${!RadioShow.findByOwnedActivity(ownerInstance).get()?.archived}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="unarchive" id="${ownerInstance?.id}"><g:message code="fmessage.unarchive"/> <g:message code="${ownerInstance?.shortName.toLowerCase()}.label"/></g:link>
