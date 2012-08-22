@@ -16,7 +16,7 @@ rm -rf target/
 rm -rf ../core/install/target*
 rm -rf ../core/install/src/web-app/
 grails clean
-grails -Dfrontlinesms2.build.confirmNotProd=true build-installers
+../core/do/build_installers -Dfrontlinesms2.build.confirmNotProd=true
 rm -rf $SETTINGS_DIR/
 $INSTALL_DIR/uninstall
 rm -rf $INSTALL_DIR/
