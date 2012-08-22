@@ -81,7 +81,8 @@ class Subscription extends Activity{
 					sendAutoreplyMessage(foundContact, joinAutoreplyText)
 			}
 		} else {
-			group.addToMembers(new Contact(name:"", mobile:message.src).save(failOnError:true));
+			foundContact = new Contact(name:"", mobile:message.src).save(failOnError:true)
+			group.addToMembers(foundContact);
 			if(joinAutoreplyText)
 				sendAutoreplyMessage(foundContact, joinAutoreplyText)
 		}

@@ -26,7 +26,7 @@ class SubscriptionController extends ActivityController {
 				subscriptionInstance.joinGroup(message)
 				subscriptionInstance.addToMessages(message)
 			}
-			subscriptionInstance.save()
+			subscriptionInstance.save(failOnError:true)
 		}
 		redirect(controller:'message', action:'inbox')
 	}
@@ -37,7 +37,7 @@ class SubscriptionController extends ActivityController {
 				subscriptionInstance.leaveGroup(message, Contact.findByMobile(message.src))
 				subscriptionInstance.addToMessages(message)
 			}
-			subscriptionInstance.save()
+			subscriptionInstance.save(failOnError:true)
 		}
 		redirect(controller:'message', action:'inbox')
 	}
