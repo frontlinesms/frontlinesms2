@@ -123,7 +123,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
-@spock.lang.IgnoreRest
+
 	def 'When a message is categorised with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
 			def g = Group.findByName("Camping")
@@ -327,11 +327,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 		then:
 			waitFor { singleMessageDetails.displayed }
 		when:
-
 			singleMessageDetails.moveTo(subscription.id)
-
-
-
 		then:
 			waitFor { at SubscriptionCategoriseDialog }
 	}
