@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Arguments: $@"
+
+# Must delete plugin XMLs outside of grails so stale settings are not propogated
+# to the new file
+echo "DELETING PLUGIN XMLs..."
+rm ../*/plugin.xml
+
+echo "Starting grails build..."
+grails --stacktrace unsafe-build-installers "$@"

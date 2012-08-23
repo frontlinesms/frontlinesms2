@@ -41,47 +41,42 @@ grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 // pagination
 grails.views.pagination.max = 50
 
+grails.config.locations = []
+grails.config.locations << "file:${frontlinesms2.ResourceUtils.resourcePath}/log4j.groovy"
 log4j = {
-    // Example of changing the log pattern for the default console
-    // appender:
-    //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+	environments {
+		production {
+			def conf = frontlinesms2.ResourceUtils.resourcePath
+			println "Logging conf dir: $conf"
+			rollingFile name:"prod",
+					file:"$conf/standard.log",
+					maxFileSize:10240000,
+					threshold:org.apache.log4j.Level.INFO
+			rollingFile name:"prod-stacktrace",
+					file:"$conf/stacktrace.log",
+					maxFileSize:10240000,
+					threshold:org.apache.log4j.Level.WARN
+		}
+		development { console name:'dev', threshold:org.apache.log4j.Level.INFO }
+		test { console name:'test', threshold:org.apache.log4j.Level.INFO }
+	}
 
-    warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
-  environments {
-    def layout = pattern(conversionPattern:'%d %-5p [%c{2}] %m%n')
-    production {
-      def conf = frontlinesms2.ResourceUtils.resourcePath
-      appender new RollingFileAppender(name:"prod",
-          layout:layout, file:"$conf/standard.log",
-          threshold:org.apache.log4j.Level.INFO)
-      appender new RollingFileAppender(name:"prod-stacktrace",
-          layout:layout, file:"$conf/stacktrace.log",
-          threshold:org.apache.log4j.Level.ERROR)
-      info 'prod-stacktrace'
-      error 'prod'
-    }
-    development {
-      appender new ConsoleAppender(name:'console-logger',
-          layout:layout,
-          threshold:org.apache.log4j.Level.INFO)
-      info 'console-logger'
-    }
-  }
+	root {
+		all 'dev', 'test', 'prod', 'prod-stacktrace'
+	}
 
-  warn 'org.codehaus.groovy.grails.web.servlet',  //  controllers
-    'org.codehaus.groovy.grails.web.pages', //  GSP
-    'org.codehaus.groovy.grails.web.sitemesh', //  layouts
-    'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-    'org.codehaus.groovy.grails.web.mapping', // URL mapping
-    'org.codehaus.groovy.grails.commons', // core / classloading
-    'org.codehaus.groovy.grails.plugins', // plugins
-    'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
-    'org.springframework',
-    'org.hibernate',
-    'net.sf.ehcache.hibernate'
+
+	all 'org.codehaus.groovy.grails.web.servlet',  //  controllers
+		'org.codehaus.groovy.grails.web.pages', //  GSP
+		'org.codehaus.groovy.grails.web.sitemesh', //  layouts
+		'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
+		'org.codehaus.groovy.grails.web.mapping', // URL mapping
+		'org.codehaus.groovy.grails.commons', // core / classloading
+		'org.codehaus.groovy.grails.plugins', // plugins
+		'org.codehaus.groovy.grails.orm.hibernate', // hibernate integration
+		'org.springframework',
+		'org.hibernate',
+		'net.sf.ehcache.hibernate'
 }
 
 // Added by the JQuery Validation plugin:
