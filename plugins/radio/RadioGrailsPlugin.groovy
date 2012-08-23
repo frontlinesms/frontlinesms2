@@ -1,11 +1,11 @@
 import frontlinesms2.radio.*
 class RadioGrailsPlugin {
     // the plugin version
-    def version = "0.a7-SNAPSHOT"
+    def version = "0.b1"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0.3 > *"
     // the other plugins this plugin depends on
-    def dependsOn = [core:"1.0-SNAPSHOT > *"]
+    def dependsOn = [core:"1.0 > *"]
     // resources that are excluded from plugin packaging
     // def pluginExcludes = ["grails-app/views/error.gsp"]
 

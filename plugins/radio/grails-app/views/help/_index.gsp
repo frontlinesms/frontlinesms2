@@ -83,6 +83,9 @@
 	* [How do I export a show](radio/shows/6.export_show)
 	* [How do I archive a show?](radio/shows/7.archive_show)
 	* [How do I unarchive a show?](radio/shows/8.unarchive_show)
+	* [How do I see a Word Cloud of my Messages?][104]
+	* [How do I ignore a word in the Word Cloud?][105]
+	* [How do I reset the Word Cloud?][106]
 
 [2]: core/messages/1.getting_around_the_messages_tab
 [5]: core/messages/2.sss
@@ -143,5 +146,8 @@
 [97]: core/settings/6.edit_delete_connection
 [98]: core/settings/5.manually_adding_device
 [99]: core/settings/7.translatingfrontlinesms
+[104]: radio/shows/9.wordcloud
+[105]: radio/shows/9.wordcloud
+[106]: radio/shows/9.wordcloud
 </markdown:renderHtml>
 
