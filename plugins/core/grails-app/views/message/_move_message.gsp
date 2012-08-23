@@ -14,4 +14,3 @@
 		</g:if>
 	</g:each>
 </select>
-

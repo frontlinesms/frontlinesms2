@@ -123,6 +123,7 @@ class SingleMessageDetails extends geb.Module {
 		reply { $('a#btn_reply') }
 		forward { $('#btn_forward') }
 		delete(required:false) {$('#delete-msg')}
+		single_moveActions(required:false) { $("select#move-actions") }
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")
@@ -139,6 +140,7 @@ class MultipleMessageDetails extends geb.Module {
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
 		archiveAll(required:false) { $('#btn_archive_all') }
+		multiple_moveActions(required:false) { $("select#move-actions") }
 		moveTo { msgowner -> 
 			$('select#move-actions').jquery.val(msgowner)
 			$('select#move-actions').jquery.trigger("change")

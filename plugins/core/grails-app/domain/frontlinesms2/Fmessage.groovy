@@ -227,6 +227,14 @@ class Fmessage {
 		contactlist?contactlist:""
 	}
 
+	private boolean isMoveAllowed(){
+		if(this.messageOwner){
+			return !(this.messageOwner?.archived)
+		} else {
+			return (!this.isDeleted && !this.archived)
+		}
+    }
+
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }
 	}

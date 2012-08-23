@@ -15,6 +15,11 @@ class PageSearchResult extends PageSearch {
 
 	    if (args[0] instanceof String)
 			restOfPath += "?searchString="+args[0]
+		if (args[1] instanceof String){
+			if (args[1]){
+				restOfPath += "&"+args[1]
+			}
+		}
 	    return restOfPath
 	}
 }

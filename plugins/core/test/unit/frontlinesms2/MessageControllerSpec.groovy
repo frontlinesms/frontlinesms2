@@ -3,7 +3,7 @@ package frontlinesms2
 import spock.lang.*
 import grails.test.mixin.*
 import grails.buildtestdata.mixin.Build
-
+import frontlinesms2.*
 import static frontlinesms2.DispatchStatus.*
 
 @TestFor(MessageController)
