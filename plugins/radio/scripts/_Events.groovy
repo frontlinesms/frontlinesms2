@@ -36,7 +36,7 @@ eventTestPhaseStart = { name ->
 
 eventTestStart = { name ->
 	if (inFunctionalTestPhase) {
-		def sql = Sql.newInstance("jdbc:hsqldb:mem:testDb", "sa",
+		def sql = Sql.newInstance("jdbc:hsqldb:mem:testDb${frontlinesms2.StaticApplicationInstance.uniqueId}", "sa",
 				"", "org.hsqldb.jdbcDriver")
 		sql.execute "SET REFERENTIAL_INTEGRITY FALSE"
 		sql.eachRow("SELECT * FROM  INFORMATION_SCHEMA.SYSTEM_TABLES where TABLE_SCHEM = 'PUBLIC'") { row ->
