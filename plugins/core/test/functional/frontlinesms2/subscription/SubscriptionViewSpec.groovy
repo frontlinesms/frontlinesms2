@@ -45,7 +45,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor {
 				// TODO when this is supported by Geb, we want to do:
 				//at PageGroupShow, Group.findByName("Camping")
-				title == "Contacts >> Camping" }
+				title.contains("Camping") }
 	}
 
 	def "clicking the archive button archives the subscription and redirects to inbox "() {
