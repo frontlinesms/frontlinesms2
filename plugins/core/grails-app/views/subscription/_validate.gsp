@@ -1,7 +1,7 @@
 <r:script>
 	function initializePopup() {
-		addCustomValidationClasses()
 		initializeTabValidation(createFormValidator());
+		addCustomValidationClasses();
 	}
 
 	function createFormValidator() {
@@ -21,13 +21,13 @@
 					required: i18n("poll.recipients.validation.error")
 				},
 				"keyword": {
-					required: "Keyword is required"
+					required: i18n("subscription.keyword.required")
 				},
 				"joinAutoreplyText": {
-					required: "Please enter join autoreply text"
+					required: i18n("subscription.jointext.required")
 				},
 				"leaveAutoreplyText": {
-					required: "Please enter leave autoreply text"
+					required: i18n("subscription.leavetext.required")
 				}
 			},
 			errorPlacement: function(error, element) {
@@ -47,7 +47,6 @@
 		};
 
 		var aliasTabValidation = function() {
-			console.log("validate alias tab");
 			return (validator.element($('#joinAliases')) && validator.element($("#leaveAliases")));
 		};
 
