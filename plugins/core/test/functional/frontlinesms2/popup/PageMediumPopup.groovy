@@ -307,6 +307,7 @@ class ExternalCommandKeywordTab extends geb.Module {
 		keyword { $('input#keyword') }
 		post { $("input[value='POST']") }
 		get { $("input[value='GET']") }
+		url { $("input#url") }
 	}
 }
 
