@@ -48,7 +48,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 		when:
 			header.moreActions.value("edit").jquery.click()
 		then:
-			waitFor("veryslow") { at ExternalCommandCreateDialog }
+			waitFor("veryslow") { at ExternalCommandWizard }
 	}
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
@@ -69,7 +69,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 		when:
 			header.moreActions.value("rename").jquery.click()
 		then:
-			waitFor { at RenameExternalCommandDialog }
+			waitFor { at RenameDialog }
 			waitFor { externalCommandName.jquery.val().contains("Sync") }
 	}
 

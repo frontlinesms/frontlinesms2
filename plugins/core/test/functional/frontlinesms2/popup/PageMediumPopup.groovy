@@ -200,7 +200,7 @@ class RenameDialog extends MediumPopup {
 		name { $('input#name') }
 		done { $('button#done') }
 	}
-}
+}f
 
 
 class AnnouncementDialog extends MediumPopup {

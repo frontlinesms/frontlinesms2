@@ -15,7 +15,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandDialog }
+			waitFor('slow') { at ExternalCommandWizard }
 	}
 
 	def "can create and save a HTTP GET external command"() {
@@ -27,7 +27,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandDialog }
+			waitFor('slow') { at ExternalCommandWizard }
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.post.click()
@@ -60,7 +60,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandDialog }
+			waitFor('slow') { at ExternalCommandWizard }
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.get.click()
@@ -93,7 +93,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandDialog }
+			waitFor('slow') { at ExternalCommandWizard }
 		when:
 			keywordAndUrl.keyword = ""
 			keywordAndUrl.useKeyword.click() // to disable
@@ -127,7 +127,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandDialog }
+			waitFor('slow') { at ExternalCommandWizard }
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.get.click()
@@ -170,4 +170,68 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 			waitFor { summary.displayed }
 	}
 
+	def "Keyword must be provided if its checkbox is selected"() {
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor { at CreateActivityDialog }
+		when:
+			externalcommand.click()
+		then:
+			waitFor('slow') { at ExternalCommandWizard }
+		when:
+			keywordAndUrl.useKeyword.jquery.click()//disable keyword
+			keywordAndUrl.url = "www.frontlinesms.com"
+			keywordAndUrl.post.click()
+			next.click()
+		then:
+			waitFor { requestFormat.displayed }
+		when:
+			back.click()
+		then:
+			waitFor { keywordAndUrl.displayed }
+		when:
+			keywordAndUrl.useKeyword.jquery.click()//enable keyword
+			next.click()
+		then:
+			waitFor { waitFor {error.text().contains('Keyword is required')} }
+	}
+
+	def "Url must be provided"(){
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor { at CreateActivityDialog }
+		when:
+			externalcommand.click()
+		then:
+			waitFor('slow') { at ExternalCommandWizard }
+		when:
+			keywordAndUrl.keyword = "Sync"
+			keywordAndUrl.post.click()
+			next.click()
+		then:
+			waitFor { waitFor {error.text().contains('Url is required')} }
+	}
+
+	def "Url must be valid"(){
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor { at CreateActivityDialog }
+		when:
+			externalcommand.click()
+		then:
+			waitFor('slow') { at ExternalCommandWizard }
+		when:
+			keywordAndUrl.keyword = "Sync"
+			keywordAndUrl.url = "frontlinesms"
+			keywordAndUrl.post.click()
+			next.click()
+		then:
+			waitFor { waitFor {error.text().contains('Url is must be valid')} }
+	}
 }
