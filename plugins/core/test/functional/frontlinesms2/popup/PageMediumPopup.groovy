@@ -287,3 +287,56 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
+class ExternalCommandWizard extends MediumPopup {
+	static at = {
+		popupTitle.contains("external command")
+	}
+	static content = {
+		keywordAndUrl { module ExternalCommandKeywordTab }
+		requestFormat { module ExternalCommandRequestFormatTab }
+		confirm { module ExternalCommandConfirmTab }
+		summary { module ExternalCommandSummary }
+	}
+}
+
+class ExternalCommandKeywordTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		keyword { $('input#keyword') }
+		post { $("input[value='POST']") }
+		get { $("input[value='GET']") }
+	}
+}
+
+class ExternalCommandRequestFormatTab extends geb.Module {
+	static base = { $('div#tabs-2') }
+	static content = {
+		addParam { $('input#new') }
+		parameters { moduleList ExternalCommandParam, $('div#parameters') }
+	}
+}
+
+class ExternalCommandParam extends geb.Module {
+	static content = {
+		value { $('input.param_value') }
+		name { $("input.param_name") }
+		remove { $("a.remove") }
+	}
+}
+
+class ExternalCommandConfirmTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		name { $('input#name') }
+		keyword { $("#confirm-keyword").text() }
+		type { $("#confirm-type").text() }
+		url { $("#confirm-url").text() }
+	}
+}
+
+class ExternalCommandSummary extends geb.Module {
+	static base = { $('div#tabs-4') }
+	static content = {
+		message { $("div.summary") }
+	}
+}
