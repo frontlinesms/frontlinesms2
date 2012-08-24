@@ -69,6 +69,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
+		externalcommand { $('input[value="externalcommand"]') }
 	}
 }
 
@@ -302,6 +303,7 @@ class ExternalCommandWizard extends MediumPopup {
 class ExternalCommandKeywordTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
+		useKeyword { $("input#useKeyword") }
 		keyword { $('input#keyword') }
 		post { $("input[value='POST']") }
 		get { $("input[value='GET']") }
