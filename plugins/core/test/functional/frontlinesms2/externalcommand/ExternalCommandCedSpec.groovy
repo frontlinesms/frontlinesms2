@@ -31,6 +31,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.post.click()
+			keywordAndUrl.url = "http://www.myurl.com"
 			next.click()
 		then:
 			waitFor { requestFormat.displayed }
@@ -63,6 +64,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 			waitFor('slow') { at ExternalCommandDialog }
 		when:
 			keywordAndUrl.keyword = "SENDME"
+			keywordAndUrl.url = "http://www.myurl.com"
 			keywordAndUrl.get.click()
 			next.click()
 		then:
@@ -97,6 +99,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			keywordAndUrl.keyword = ""
 			keywordAndUrl.useKeyword.click() // to disable
+			keywordAndUrl.url = "http://www.myurl.com"
 			keywordAndUrl.post.click()
 			next.click()
 		then:
@@ -131,6 +134,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.get.click()
+			keywordAndUrl.url = "http://www.myurl.com"
 			next.click()
 		then:
 			waitFor { requestFormat.displayed }
