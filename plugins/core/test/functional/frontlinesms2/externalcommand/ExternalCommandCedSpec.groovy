@@ -170,8 +170,4 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 			waitFor { summary.displayed }
 	}
 
-	def "can move a message into an external command activity"() {
-		// TODO 
-	}
-
 }
