@@ -315,7 +315,7 @@ class ExternalCommandRequestFormatTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		addParam { $('input#new') }
-		parameters { moduleList ExternalCommandParam, $('div#parameters') }
+		parameters { moduleList ExternalCommandParam, $('div#parameters tbody tr') }
 	}
 }
 

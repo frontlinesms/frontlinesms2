@@ -74,8 +74,8 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		then:
 			waitFor { requestFormat.parameters.size() == 1 }
 		when:
-			requestFormat.parameters(0).value = "message_body"
-			requestFormat.parameters(0).name = "text"
+			requestFormat.parameters[0].value = "message_body"
+			requestFormat.parameters[0].name = "text"
 			next.click()
 		then:
 			waitFor { confirm.displayed }
@@ -109,8 +109,8 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		then:
 			waitFor { requestFormat.parameters.size() == 1 }
 		when:
-			requestFormat.parameters(0).value = "message_body"
-			requestFormat.parameters(0).name = "text"
+			requestFormat.parameters[0].value = "message_body"
+			requestFormat.parameters[0].name = "text"
 			next.click()
 		then:
 			waitFor { confirm.displayed }
@@ -143,14 +143,14 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		then:
 			waitFor { requestFormat.parameters.size() == 1 }
 		when:
-			requestFormat.parameters(0).value = "message_body"
-			requestFormat.parameters(0).name = "text"
+			requestFormat.parameters[0].value = "message_body"
+			requestFormat.parameters[0].name = "text"
 			requestFormat.addParam.click()
 		then:
 			waitFor { requestFormat.parameters.size() == 2 }
 		when:
-			requestFormat.parameters(0).value = "contact_name"
-			requestFormat.parameters(0).name = "contact"
+			requestFormat.parameters[0].value = "contact_name"
+			requestFormat.parameters[0].name = "contact"
 			next.click()
 		then:
 			waitFor { confirm.displayed }
@@ -159,10 +159,10 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		then:
 			waitFor { requestFormat.displayed }
 		when:
-			requestFormat.parameters(0).remove.click()
+			requestFormat.parameters[0].remove.click()
 		then:
 			waitFor { requestFormat.parameters.size() == 1 }
-			requestFormat.parameters(0).value.jquery.val() == "contact_name"
+			requestFormat.parameters[0].value.jquery.val() == "contact_name"
 		when:
 			next.click()
 		then:
@@ -237,5 +237,32 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 			next.click()
 		then:
 			waitFor { waitFor {error.text().contains('Url is must be valid')} }
+	}
+
+	def "If parameter added a name must be given"(){
+		when:
+			to PageMessageInbox
+			bodyMenu.newActivity.click()
+		then:
+			waitFor{ at CreateActivityDialog }
+		when:
+			externalcommand.click()
+		then:
+			waitFor('slow') { at ExternalCommandWizard }
+		when:
+			keywordAndUrl.keyword = "Sync"
+			keywordAndUrl.url = "www.frontlinsms.com.sync"
+			keywordAndUrl.post.click()
+			next.click()
+		then:
+			waitFor { requestFormat.displayed }
+		when:
+			requestFormat.addParam.click()
+		then:
+			waitFor { requestFormat.parameters.size() == 1 }
+		when:
+			next.click()
+		then:
+			waitFor { waitFor {error.text().contains('Name of paramter must be provided')} }
 	}
 }
