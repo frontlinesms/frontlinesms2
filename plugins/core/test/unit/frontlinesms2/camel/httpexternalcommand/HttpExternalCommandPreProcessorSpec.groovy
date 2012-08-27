@@ -12,7 +12,12 @@ class HttpExternalCommandPreProcessorSpec extends CamelUnitSpecification {
 	HttpExternalCommandPreProcessor p
 	
 	def setup() {
-		def c = HttpExternalCommandFconnection.build(url:"www.frontlinesms.com/sync", requestParameters: ['username':'bob', 'password':'secret', 'extra':'Kenya'])
+		def username = new RequestParameter(name:'username',value:'bob').save(failOnError:true)
+		def password = new RequestParameter(name:'password',value:'secret').save(failOnError:true)
+		def extra = new RequestParameter(name:'extrainfo',value:'extra extra').save(failOnError:true)
+		def c = new HttpExternalCommandFconnection(url:"www.frontlinesms.com/sync")
+		c.requestParameters << username << password << extra
+		c.save(failOnError:true)
 		p = new HttpExternalCommandPreProcessor()
 	}
 

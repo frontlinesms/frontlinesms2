@@ -8,6 +8,9 @@ import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
 class HttpExternalCommandFconnection extends Fconnection {
+	enum HttpMethod { POST, GET }
+
 	String url
-	def requestParameters = [:]
+	HttpMethod httpMethod
+	static hasMany = [requestParameters:RequestParameter]
 }
