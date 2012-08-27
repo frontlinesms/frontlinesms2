@@ -2,8 +2,7 @@ package frontlinesms2
 
 class ExternalCommand extends Activity {
 
-	// HTTP Request methods
-	enum RequestType { POST, GET }
+	static String getShortName() { 'externalCommand' }
 
 	// Substitution variables
 	public static final String MESSAGE_BODY = "\${MESSAGE_BODY}"
@@ -12,10 +11,7 @@ class ExternalCommand extends Activity {
 	public static final String MESSAGE_TIMESTAMP = "\${MESSAGE_TIMESTAMP}"
 
 	/// Variables
-	String url
-	String sendMethod
-	static hasOne = [keyword: Keyword]
-	RequestType requestType
+	static hasOne = [keyword: Keyword, connection: FConnection]
 	
 	static constraints = {}
 
