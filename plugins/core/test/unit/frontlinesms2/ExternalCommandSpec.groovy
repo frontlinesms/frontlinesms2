@@ -6,7 +6,7 @@ import spock.lang.*
 @TestFor(ExternalCommand)
 @Mock([Keyword])
 class ExternalCommandSpec extends Specification {
-
+	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
 	}
 
@@ -25,6 +25,27 @@ class ExternalCommandSpec extends Specification {
 			'test'   | null                                      | true       | ExternalCommand.POST | false
 			'test'   | 'http://192.168.0.200:8080/test'          | false      | ExternalCommand.POST | false
 			'test'   | 'http://192.168.0.200:8080/test'          | true       | "not a valid value!" | false
+			'test'   | 'not a valid URL'                         | true       | ExternalCommand.POST | false
+	}
+
+	def 'incoming message matching keyword should trigger message sending through the external command connection'() {
+		given:
+			def k = mockKeyword('FORWARD')
+			def extCommand = new ExternalCommand(name:'whatever', url:'http://192.168.0.200:8080/test', keyword:k, type:ExternalCommand.POST)
+
+			def sendService = Mock(MessageSendService)
+			extCommand.messageSendService = sendService
+
+			def forwardedMessage = mockFmessage("FORWARD ME")
+			sendService.createOutgoingMessage({ params ->
+				params.addresses==null && params.messageText=='test'
+			}) >> forwardedMessage
+
+			def incomingMessage = mockFmessage("FORWARD ME", TEST_NUMBER)
+		when:
+			extCommand.processKeyword(incomingMessage, false)
+		then:
+			1 * sendService.send(replyMessage, extCommand.connection)
 	}
 
 }
