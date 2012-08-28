@@ -14,16 +14,17 @@ class WebConnectionSpec extends Specification {
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection =  new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
+			def connection =  addConnection? new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET):null
 			def extComm = new WebConnection(name:name, keyword:keyword, connection: connection)
 		then:
 			extComm.validate() == valid
 		where:
-			name 	| addKeyword 	| valid
-			'test' 	| true 			| true
-			'test' 	| false 		| true
-			'' 		| true 			| false
-			null 	| true 			| false
+			name	|addKeyword	|addConnection	|valid
+			'test'	|true		|true			|true
+			'test'	|false		|true			|true
+			''		|true		|true			|false
+			null	|true		|true			|false
+			'test'	|true		|false			|false
 
 	}
 
