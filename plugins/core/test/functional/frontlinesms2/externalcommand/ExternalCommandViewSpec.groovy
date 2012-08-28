@@ -11,7 +11,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 		createTestMessages(ExternalCommand.findByName("Sync"))
 	}
 
-	@Unroll
+	@spock.lang.Unroll
 	def "ExternalCommand page should show the details of the ExternalCommand in the header"() {
 		setup:
 			def externalCommand  = ExternalCommand.findByName("Sync")

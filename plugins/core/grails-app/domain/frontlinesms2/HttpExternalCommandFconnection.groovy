@@ -12,5 +12,7 @@ class HttpExternalCommandFconnection extends Fconnection {
 
 	String url
 	HttpMethod httpMethod
+	static Fconnection.ConnectionRole connectionRole = Fconnection.ConnectionRole.FSMS_EXT_COMMAND
 	static hasMany = [requestParameters:RequestParameter]
+	static belongsTo = [externalCommand: ExternalCommand]
 }

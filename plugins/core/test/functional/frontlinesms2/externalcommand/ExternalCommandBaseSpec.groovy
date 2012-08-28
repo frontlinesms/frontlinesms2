@@ -1,11 +1,11 @@
-package frontlinesms2.poll
+package frontlinesms2.externalcommand
 
 import frontlinesms2.*
 
 class ExternalCommandBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createExternalCommands() {
-		def syncKeyword = new KeyWord(value:"SYNC").save(failOnError:true)
+		def syncKeyword = new Keyword(value:"SYNC").save(failOnError:true)
 		new ExternalCommand(name:"Sync", url:"http://www.frontlinesms.com/sync", sendMethod:"POST", keyword:syncKeyword).save(failOnError:true)
 	}
 

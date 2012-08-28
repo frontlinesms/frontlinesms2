@@ -11,7 +11,7 @@ class ExternalCommand extends Activity {
 	public static final String MESSAGE_TIMESTAMP = "\${MESSAGE_TIMESTAMP}"
 
 	/// Variables
-	static hasOne = [keyword: Keyword, connection: FConnection]
+	static hasOne = [keyword: Keyword, connection: HttpExternalCommandFconnection]
 	
 	static constraints = {}
 
