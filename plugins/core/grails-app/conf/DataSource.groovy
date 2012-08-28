@@ -13,7 +13,6 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop"
             url = "jdbc:h2:mem:devDb;MVCC=TRUE"
         }
     }

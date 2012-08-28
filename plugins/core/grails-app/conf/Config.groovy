@@ -65,7 +65,7 @@ grails.exceptionresolver.params.exclude = ['password']
 grails.hibernate.cache.queries = true
 
 //Enable automatic database migrations
-grails.plugin.databasemigration.updateOnStart = false
+grails.plugin.databasemigration.updateOnStart = true
 grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 
 // set per-environment serverURL stem for creating absolute links
