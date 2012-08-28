@@ -4,7 +4,7 @@ import frontlinesms2.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
-class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
+class WebConnectionCedSpec extends WebConnectionBaseSpec {
 
 	def "can launch external command screen from create new activity link" () {
 		when:
@@ -15,7 +15,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 	}
 
 	def "can create and save a HTTP GET external command"() {
@@ -27,7 +27,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.post.click()
@@ -61,7 +61,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.url = "http://www.myurl.com"
@@ -95,7 +95,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = ""
 			keywordAndUrl.useKeyword.click() // to disable
@@ -130,7 +130,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = "SENDME"
 			keywordAndUrl.get.click()
@@ -183,7 +183,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.useKeyword.jquery.click()//disable keyword
 			keywordAndUrl.url = "www.frontlinesms.com"
@@ -211,7 +211,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = "Sync"
 			keywordAndUrl.post.click()
@@ -229,7 +229,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = "Sync"
 			keywordAndUrl.url = "frontlinesms"
@@ -248,7 +248,7 @@ class ExternalCommandCedSpec extends ExternalCommandBaseSpec {
 		when:
 			externalcommand.click()
 		then:
-			waitFor('slow') { at ExternalCommandWizard }
+			waitFor('slow') { at WebConnectionWizard }
 		when:
 			keywordAndUrl.keyword = "Sync"
 			keywordAndUrl.url = "www.frontlinsms.com.sync"

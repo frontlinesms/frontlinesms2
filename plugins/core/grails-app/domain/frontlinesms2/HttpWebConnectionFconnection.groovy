@@ -7,7 +7,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
-class HttpExternalCommandFconnection extends Fconnection {
+class HttpWebConnectionFconnection extends Fconnection {
 	enum HttpMethod { POST, GET }
 
 	// Substitution variables
@@ -20,5 +20,5 @@ class HttpExternalCommandFconnection extends Fconnection {
 	HttpMethod httpMethod
 	static Fconnection.ConnectionRole connectionRole = Fconnection.ConnectionRole.FSMS_EXT_COMMAND
 	static hasMany = [requestParameters:RequestParameter]
-	static belongsTo = [externalCommand: ExternalCommand]
+	static belongsTo = [webConnection: WebConnection]
 }

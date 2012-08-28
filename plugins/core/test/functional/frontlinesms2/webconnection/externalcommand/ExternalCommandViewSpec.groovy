@@ -4,33 +4,33 @@ import frontlinesms2.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
-class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
+class WebConnectionViewSpec extends WebConnectionBaseSpec {
 	def setup() {
-		createTestExternalCommands()
+		createTestWebConnections()
 		createTestActivities()
-		createTestMessages(ExternalCommand.findByName("Sync"))
+		createTestMessages(WebConnection.findByName("Sync"))
 	}
 
 	@spock.lang.Unroll
-	def "ExternalCommand page should show the details of the ExternalCommand in the header"() {
+	def "WebConnection page should show the details of the WebConnection in the header"() {
 		setup:
-			def externalCommand  = ExternalCommand.findByName("Sync")
+			def webConnection  = WebConnection.findByName("Sync")
 		when:
-			to PageMessageExternalCommand, externalCommand
+			to PageMessageWebConnection, webConnection
 		then:
 			waitFor { title?.toLowerCase().contains("command") }
 			header[item] == value
 		where:
 			item		| value
-			'name'		| "Sync ExternalCommand"
+			'name'		| "Sync WebConnection"
 			'keyword'	| 'sync'
 			'url'		| 'http://www.frontlinesms.com/sync'
 			'sendMethod'| 'POST'
 	}
 
-	def "clicking the archive button archives the ExternalCommand and redirects to inbox "() {
+	def "clicking the archive button archives the WebConnection and redirects to inbox "() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { header.displayed }
 		when:
@@ -40,20 +40,20 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 			notifications.flashMessageText == "Activity archived"
 	}
 
-	def "clicking the edit option opens the ExternalCommand Dialog for editing"() {
+	def "clicking the edit option opens the WebConnection Dialog for editing"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { header.displayed }
 		when:
 			header.moreActions.value("edit").jquery.click()
 		then:
-			waitFor("veryslow") { at ExternalCommandWizard }
+			waitFor("veryslow") { at WebConnectionWizard }
 	}
 
 	def "Clicking the Quick Message button brings up the Quick Message Dialog"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 			waitFor { header.quickMessage.displayed }
 			header.quickMessage.click()
 		then:
@@ -63,19 +63,19 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "clicking the rename option opens the rename small popup"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { header.displayed }
 		when:
 			header.moreActions.value("rename").jquery.click()
 		then:
 			waitFor { at RenameDialog }
-			waitFor { externalCommandName.jquery.val().contains("Sync") }
+			waitFor { webConnectionName.jquery.val().contains("Sync") }
 	}
 
 	def "clicking the delete option opens the confirm delete small popup"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { header.displayed }
 		when:
@@ -86,7 +86,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "clicking the export option opens the export dialog"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { header.displayed }
 		when:
@@ -97,7 +97,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "selecting a single message reveals the single message view"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -109,7 +109,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "selecting multiple messages reveals the multiple message view"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -123,7 +123,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "clicking on a message reveals the single message view with clicked message"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -136,7 +136,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "delete single message action works "() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -152,7 +152,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "delete multiple message action works for multiple select"(){
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -170,7 +170,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "move single message action works"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:
@@ -181,7 +181,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 		when:
 			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
-			waitFor("veryslow") { at PageMessageExternalCommand }
+			waitFor("veryslow") { at PageMessageWebConnection }
 			waitFor { notifications.flashMessageText.contains("updated") }
 			!messageList.messages*.text.contains("Test message 0")
 		when:
@@ -193,7 +193,7 @@ class ExternalCommandViewSpec extends ExternalCommandBaseSpec {
 
 	def "move multiple message action works"() {
 		when:
-			to PageMessageExternalCommand, ExternalCommand.findByName("Sync")
+			to PageMessageWebConnection, WebConnection.findByName("Sync")
 		then:
 			waitFor { messageList.displayed }
 		when:

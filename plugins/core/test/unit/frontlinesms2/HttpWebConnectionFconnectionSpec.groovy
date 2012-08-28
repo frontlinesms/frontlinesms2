@@ -3,13 +3,13 @@ package frontlinesms2
 import grails.plugin.mixin.*
 import spock.lang.*
 
-@TestFor(HttpExternalCommandFconnection)
-class HttpExternalCommandFconnectionSpec extends Specification {
+@TestFor(HttpWebConnectionFconnection)
+class HttpWebConnectionFconnectionSpec extends Specification {
 	def 'test constraints'() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection =  addConnection? new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET): null
-			def extComm = new ExternalCommand(name:name, keyword:keyword, connection: connection)
+			def connection =  addConnection? new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET): null
+			def extComm = new WebConnection(name:name, keyword:keyword, connection: connection)
 		then:
 			extComm.validate() == valid
 		where:

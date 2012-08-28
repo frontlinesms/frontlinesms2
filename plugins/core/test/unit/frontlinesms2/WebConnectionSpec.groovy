@@ -3,9 +3,9 @@ package frontlinesms2
 import grails.test.mixin.*
 import spock.lang.*
 
-@TestFor(ExternalCommand)
+@TestFor(WebConnection)
 @Mock([Keyword])
-class ExternalCommandSpec extends Specification {
+class WebConnectionSpec extends Specification {
 	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
 	}
@@ -14,8 +14,8 @@ class ExternalCommandSpec extends Specification {
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection =  new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
-			def extComm = new ExternalCommand(name:name, keyword:keyword, connection: connection)
+			def connection =  new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
+			def extComm = new WebConnection(name:name, keyword:keyword, connection: connection)
 		then:
 			extComm.validate() == valid
 		where:
@@ -30,8 +30,8 @@ class ExternalCommandSpec extends Specification {
 	def 'incoming message matching keyword should trigger message sending through the external command connection'() {
 		given:
 			def k = mockKeyword('FORWARD')
-			def connection =  new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
-			def extCommand = new ExternalCommand(name:'whatever', keyword:k, connection:connection)
+			def connection =  new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
+			def extCommand = new WebConnection(name:'whatever', keyword:k, connection:connection)
 
 			def sendService = Mock(MessageSendService)
 			extCommand.messageSendService = sendService
@@ -51,8 +51,8 @@ class ExternalCommandSpec extends Specification {
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
 		given:
 			def k = mockKeyword('')
-			def connection =  new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
-			def extCommand = new ExternalCommand(name:'whatever', keyword:k, connection:connection)
+			def connection =  new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
+			def extCommand = new WebConnection(name:'whatever', keyword:k, connection:connection)
 
 			def sendService = Mock(MessageSendService)
 			extCommand.messageSendService = sendService

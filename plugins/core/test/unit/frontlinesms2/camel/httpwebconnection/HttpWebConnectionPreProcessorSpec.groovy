@@ -6,19 +6,19 @@ import frontlinesms2.camel.*
 
 import grails.buildtestdata.mixin.Build
 
-@Mock(HttpExternalCommandFconnection)
-@Build(HttpExternalCommandFconnection)
-class HttpExternalCommandPreProcessorSpec extends CamelUnitSpecification {
-	HttpExternalCommandPreProcessor p
+@Mock(HttpWebConnectionFconnection)
+@Build(HttpWebConnectionFconnection)
+class HttpWebConnectionPreProcessorSpec extends CamelUnitSpecification {
+	HttpWebConnectionPreProcessor p
 	
 	def setup() {
 		def username = new RequestParameter(name:'username',value:'bob').save(failOnError:true)
 		def password = new RequestParameter(name:'password',value:'secret').save(failOnError:true)
 		def extra = new RequestParameter(name:'extrainfo',value:'extra extra').save(failOnError:true)
-		def c = new HttpExternalCommandFconnection(url:"www.frontlinesms.com/sync")
+		def c = new HttpWebConnectionFconnection(url:"www.frontlinesms.com/sync")
 		c.requestParameters << username << password << extra
 		c.save(failOnError:true)
-		p = new HttpExternalCommandPreProcessor()
+		p = new HttpWebConnectionPreProcessor()
 	}
 
 	def "out_body should have all the parameters defined in the external command fconnection"(){

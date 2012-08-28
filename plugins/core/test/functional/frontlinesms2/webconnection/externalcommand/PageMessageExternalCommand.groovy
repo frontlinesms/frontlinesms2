@@ -4,16 +4,16 @@ import frontlinesms2.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
-class PageMessageExternalCommand extends frontlinesms2.page.PageMessageActivity {
+class PageMessageWebConnection extends frontlinesms2.page.PageMessageActivity {
 	static content = {
-		header { module ExternalCommandHeaderModule }
+		header { module WebConnectionHeaderModule }
 	}
 	static at = {
 		title.contains("command")
 	}
 }
 
-class ExternalCommandHeaderModule extends ContentHeader {
+class WebConnectionHeaderModule extends ContentHeader {
 	static content = {
 		infoListItems { $('ul.info li')*.text() }
 		name { infoListItems[0] }

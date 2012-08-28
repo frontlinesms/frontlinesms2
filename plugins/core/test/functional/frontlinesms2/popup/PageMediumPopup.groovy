@@ -288,19 +288,19 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
-class ExternalCommandWizard extends MediumPopup {
+class WebConnectionWizard extends MediumPopup {
 	static at = {
 		popupTitle.contains("external command")
 	}
 	static content = {
-		keywordAndUrl { module ExternalCommandKeywordTab }
-		requestFormat { module ExternalCommandRequestFormatTab }
-		confirm { module ExternalCommandConfirmTab }
-		summary { module ExternalCommandSummary }
+		keywordAndUrl { module WebConnectionKeywordTab }
+		requestFormat { module WebConnectionRequestFormatTab }
+		confirm { module WebConnectionConfirmTab }
+		summary { module WebConnectionSummary }
 	}
 }
 
-class ExternalCommandKeywordTab extends geb.Module {
+class WebConnectionKeywordTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
 		useKeyword { $("input#useKeyword") }
@@ -311,15 +311,15 @@ class ExternalCommandKeywordTab extends geb.Module {
 	}
 }
 
-class ExternalCommandRequestFormatTab extends geb.Module {
+class WebConnectionRequestFormatTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
 		addParam { $('input#new') }
-		parameters { moduleList ExternalCommandParam, $('div#parameters tbody tr') }
+		parameters { moduleList WebConnectionParam, $('div#parameters tbody tr') }
 	}
 }
 
-class ExternalCommandParam extends geb.Module {
+class WebConnectionParam extends geb.Module {
 	static content = {
 		value { $('input.param_value') }
 		name { $("input.param_name") }
@@ -327,7 +327,7 @@ class ExternalCommandParam extends geb.Module {
 	}
 }
 
-class ExternalCommandConfirmTab extends geb.Module {
+class WebConnectionConfirmTab extends geb.Module {
 	static base = { $('div#tabs-3') }
 	static content = {
 		name { $('input#name') }
@@ -337,7 +337,7 @@ class ExternalCommandConfirmTab extends geb.Module {
 	}
 }
 
-class ExternalCommandSummary extends geb.Module {
+class WebConnectionSummary extends geb.Module {
 	static base = { $('div#tabs-4') }
 	static content = {
 		message { $("div.summary") }

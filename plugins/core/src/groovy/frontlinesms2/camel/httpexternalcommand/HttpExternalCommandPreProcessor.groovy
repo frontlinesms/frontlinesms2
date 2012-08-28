@@ -3,9 +3,9 @@ package frontlinesms2.camel.httpexternalcommand
 import frontlinesms2.*
 import org.apache.camel.*
 
-class HttpExternalCommandPreProcessor implements Processor {
+class HttpWebConnectionPreProcessor implements Processor {
 	public void process(Exchange x) throws Exception {
-		def log = { println "HttpExternalCommandPreProcessor.process() : $it" }
+		def log = { println "HttpWebConnectionPreProcessor.process() : $it" }
 		log 'ENTRY'
 		log 'EXIT'
 	}

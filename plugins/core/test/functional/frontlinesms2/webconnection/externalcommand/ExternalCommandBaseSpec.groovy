@@ -2,11 +2,11 @@ package frontlinesms2.externalcommand
 
 import frontlinesms2.*
 
-class ExternalCommandBaseSpec extends grails.plugin.geb.GebSpec {
+class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 
-	static createExternalCommands() {
+	static createWebConnections() {
 		def syncKeyword = new Keyword(value:"SYNC").save(failOnError:true)
-		new ExternalCommand(name:"Sync", url:"http://www.frontlinesms.com/sync", sendMethod:"POST", keyword:syncKeyword).save(failOnError:true)
+		new WebConnection(name:"Sync", url:"http://www.frontlinesms.com/sync", sendMethod:"POST", keyword:syncKeyword).save(failOnError:true)
 	}
 
 	static createTestActivities() {
@@ -14,7 +14,7 @@ class ExternalCommandBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'announce')
 	}
 
-	static createTestMessages(ExternalCommand ec) {
+	static createTestMessages(WebConnection ec) {
 		(0..90).each {
 			def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
 			ec.addToMessages(m)

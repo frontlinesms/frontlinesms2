@@ -25,12 +25,12 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			connectionNames*.text().containsAll(["'Miriam's Clickatell account'", "'MTN Dongle'"])
 	}
 
-	def 'HttpExternalCommandsFconnections should not be listed in the connections list'() {
+	def 'HttpWebConnectionsFconnections should not be listed in the connections list'() {
 		given:
 			createTestConnections()
 			def k = new Keyword(value:"TESTING")
-			def c = new HttpExternalCommandFconnection(name:"test", url:"www.frontlinesms.com/sync", httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
-			def e = new ExternalCommand(name:"Testing a command", connection:c, keyword:k).save(failOnError:true)
+			def c = new HttpWebConnectionFconnection(name:"test", url:"www.frontlinesms.com/sync", httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
+			def e = new WebConnection(name:"Testing a command", connection:c, keyword:k).save(failOnError:true)
 		when:
 			go 'connection/list'
 		then:
