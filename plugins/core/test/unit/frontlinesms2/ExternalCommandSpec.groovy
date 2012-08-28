@@ -13,25 +13,25 @@ class ExternalCommandSpec extends Specification {
 	@Unroll
 	def "Test constraints"() {
 		when:
-			def keyword = addKeyword? new Keyword(): null
-			def extComm = new ExternalCommand(name:name, url:url, keyword:keyword, type:type)
+			def keyword = addKeyword? new Keyword(value:'TEST'): null
+			def connection =  new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
+			def extComm = new ExternalCommand(name:name, keyword:keyword, connection: connection)
 		then:
 			extComm.validate() == valid
 		where:
-			name     | url                                       | addKeyword | type   	             | valid
-			'test'   | 'http://192.168.0.200:8080/test'          | true       | ExternalCommand.GET  | true
-			'test'   | 'http://192.168.0.200:8080/test'          | true       | ExternalCommand.POST | true
-			null     | 'http://192.168.0.200:8080/test'          | true       | ExternalCommand.POST | false
-			'test'   | null                                      | true       | ExternalCommand.POST | false
-			'test'   | 'http://192.168.0.200:8080/test'          | false      | ExternalCommand.POST | false
-			'test'   | 'http://192.168.0.200:8080/test'          | true       | "not a valid value!" | false
-			'test'   | 'not a valid URL'                         | true       | ExternalCommand.POST | false
+			name 	| addKeyword 	| valid
+			'test' 	| true 			| true
+			'test' 	| false 		| true
+			'' 		| true 			| false
+			null 	| true 			| false
+
 	}
 
 	def 'incoming message matching keyword should trigger message sending through the external command connection'() {
 		given:
 			def k = mockKeyword('FORWARD')
-			def extCommand = new ExternalCommand(name:'whatever', url:'http://192.168.0.200:8080/test', keyword:k, type:ExternalCommand.POST)
+			def connection =  new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
+			def extCommand = new ExternalCommand(name:'whatever', keyword:k, connection:connection)
 
 			def sendService = Mock(MessageSendService)
 			extCommand.messageSendService = sendService
@@ -51,7 +51,8 @@ class ExternalCommandSpec extends Specification {
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
 		given:
 			def k = mockKeyword('')
-			def extCommand = new ExternalCommand(name:'whatever', url:'http://192.168.0.200:8080/test', keyword:k, type:ExternalCommand.POST)
+			def connection =  new HttpExternalCommandFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
+			def extCommand = new ExternalCommand(name:'whatever', keyword:k, connection:connection)
 
 			def sendService = Mock(MessageSendService)
 			extCommand.messageSendService = sendService

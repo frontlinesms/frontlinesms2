@@ -30,7 +30,7 @@ class PhonesAndConnectionsFSpec extends grails.plugin.geb.GebSpec {
 			createTestConnections()
 			def k = new Keyword(value:"TESTING")
 			def c = new HttpExternalCommandFconnection(name:"test", url:"www.frontlinesms.com/sync", httpMethod:HttpExternalCommandFconnection.HttpMethod.GET)
-			def e = new ExternalCommand(name:"", connection:c, keyword:k).save(failOnError:true)
+			def e = new ExternalCommand(name:"Testing a command", connection:c, keyword:k).save(failOnError:true)
 		when:
 			go 'connection/list'
 		then:
