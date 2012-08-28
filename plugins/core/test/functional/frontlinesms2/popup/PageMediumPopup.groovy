@@ -69,7 +69,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
-		externalcommand { $('input[value="externalcommand"]') }
+		externalcommand(wait:true) { $('input[value="externalcommand"]') }
 	}
 }
 

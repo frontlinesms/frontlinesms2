@@ -20,7 +20,7 @@
 	</head>
 	<body>
 		<div class="input select">
-			<g:each var="activityType" in="${['announcement', 'autoreply', 'poll']}">
+			<g:each var="activityType" in="${frontlinesms2.Activity.implementations*.shortName}">
 				<label>
 					<g:radio name="activity" value="${activityType}" onchange="setActivityTypeSelected()"/>
 					<h3><g:message code="${activityType}.label"/></h3>
