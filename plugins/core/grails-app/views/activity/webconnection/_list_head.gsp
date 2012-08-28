@@ -6,10 +6,11 @@
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>
 	<li>
-		${ownerInstance.connection?.url} (${ownerInstance.connection?.httpMethod?.toString()})
+		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>
 	<li>
-		<g:message code="fmessage.activity.sentmessage" args="${ [sentMessageCount] }"/>
+		<span id="web_connection_url">${ownerInstance.connection?.url}</span>
+		<span id="web_connection_method">(${ownerInstance.connection?.httpMethod?.toString()})</span>
 	</li>
 </ul>
 

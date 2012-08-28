@@ -6,7 +6,7 @@ import frontlinesms2.popup.*
 
 class WebConnectionViewSpec extends WebConnectionBaseSpec {
 	def setup() {
-		createTestWebConnections()
+		createWebConnections()
 		createTestActivities()
 		createTestMessages(WebConnection.findByName("Sync"))
 	}
@@ -18,14 +18,13 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 		when:
 			to PageMessageWebConnection, webConnection
 		then:
-			waitFor { title?.toLowerCase().contains("command") }
+			waitFor { title?.toLowerCase().contains("web connection") }
 			header[item] == value
 		where:
 			item		| value
-			'name'		| "Sync WebConnection"
-			'keyword'	| 'sync'
+			'name'		| "sync web connection"
 			'url'		| 'http://www.frontlinesms.com/sync'
-			'sendMethod'| 'POST'
+			'sendMethod'| 'get'
 	}
 
 	def "clicking the archive button archives the WebConnection and redirects to inbox "() {

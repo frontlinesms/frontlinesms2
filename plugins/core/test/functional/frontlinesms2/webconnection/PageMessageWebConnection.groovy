@@ -9,17 +9,16 @@ class PageMessageWebConnection extends frontlinesms2.page.PageMessageActivity {
 		header { module WebConnectionHeaderModule }
 	}
 	static at = {
-		title.contains("command")
+		title.contains("web connection")
 	}
 }
 
 class WebConnectionHeaderModule extends ContentHeader {
 	static content = {
 		infoListItems { $('ul.info li')*.text() }
-		name { infoListItems[0] }
-		keyword { infoListItems[1] }
-		url { infoListItems[2] }
-		sendMethod { infoListItems[3] }
+		name { $('ul.info h1').text().toLowerCase() }
+		url { $("span#web_connection_url").text().toLowerCase() }
+		sendMethod { $("span#web_connection_method").text().toLowerCase() - ')' -'('}
 		archive { buttons.filter(text:'Archive subscription') }
 		moreActions { $('div.header-buttons select#more-actions') }
 	}

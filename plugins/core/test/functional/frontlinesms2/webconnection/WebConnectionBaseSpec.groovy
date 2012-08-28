@@ -5,8 +5,9 @@ import frontlinesms2.*
 class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createWebConnections() {
-		def syncKeyword = new Keyword(value:"SYNC").save(failOnError:true)
-		new WebConnection(name:"Sync", url:"http://www.frontlinesms.com/sync", sendMethod:"POST", keyword:syncKeyword).save(failOnError:true)
+		def connection = new HttpWebConnectionFconnection(name:"testConn", url:"http://www.frontlinesms.com/sync", httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
+		def syncKeyword = new Keyword(value:"SYNC")
+		new WebConnection(name:"Sync", keyword:syncKeyword, connection:connection).save(failOnError:true)
 	}
 
 	static createTestActivities() {
@@ -14,11 +15,11 @@ class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		Fmessage.build(src:'announce')
 	}
 
-	static createTestMessages(WebConnection ec) {
+	static createTestMessages(WebConnection wc) {
 		(0..90).each {
 			def m = Fmessage.build(src:'Bob', text:"Test message $it", date:new Date()-it)
-			ec.addToMessages(m)
-			ec.save(failOnError:true, flush:true)
+			wc.addToMessages(m)
+			wc.save(failOnError:true)
 		}
 	}
 }
