@@ -34,7 +34,4 @@
 	</ul>
 </div>
 
-<r:script>
-	$(function () {	$(".dropdown").selectmenu(); })
-</r:script>
 
