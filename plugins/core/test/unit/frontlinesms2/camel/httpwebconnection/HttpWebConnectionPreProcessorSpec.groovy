@@ -1,4 +1,4 @@
-package frontlinesms2.camel.httpexternalcommand
+package frontlinesms2.camel.httpwebconnection
 
 import spock.lang.*
 import frontlinesms2.*

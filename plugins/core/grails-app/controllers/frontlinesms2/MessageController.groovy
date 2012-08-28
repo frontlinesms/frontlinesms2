@@ -113,7 +113,7 @@ class MessageController {
 	}
 
 	def poll() { redirect(action: 'activity', params: params) }
-	def externalcommand() { redirect(action: 'activity', params: params) }
+	def webconnection() { redirect(action: 'activity', params: params) }
 	def announcement() { redirect(action: 'activity', params: params) }
 	def autoreply() { redirect(action: 'activity', params: params) }
 	def activity() {

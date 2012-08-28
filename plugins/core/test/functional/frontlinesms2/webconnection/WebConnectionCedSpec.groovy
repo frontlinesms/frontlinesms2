@@ -1,4 +1,4 @@
-package frontlinesms2.externalcommand
+package frontlinesms2.webconnection
 
 import frontlinesms2.*
 import frontlinesms2.message.*
@@ -13,7 +13,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 	}
@@ -25,7 +25,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -59,7 +59,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -93,7 +93,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -128,7 +128,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -181,7 +181,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -209,7 +209,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -227,7 +227,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
@@ -246,7 +246,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor{ at CreateActivityDialog }
 		when:
-			externalcommand.click()
+			webconnection.click()
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:

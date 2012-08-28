@@ -1,4 +1,4 @@
-package frontlinesms2.externalcommand
+package frontlinesms2.webconnection
 
 import frontlinesms2.*
 
