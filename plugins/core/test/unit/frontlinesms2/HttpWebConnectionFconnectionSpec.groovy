@@ -5,19 +5,30 @@ import spock.lang.*
 
 @TestFor(HttpWebConnectionFconnection)
 class HttpWebConnectionFconnectionSpec extends Specification {
-	def 'test constraints'() {
+	@Unroll
+	def 'test constraints and url validation'() {
 		when:
-			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def connection =  addConnection? new HttpWebConnectionFconnection(name:'Testing', url:"www.frontlinesms.com/sync",httpMethod:HttpWebConnectionFconnection.HttpMethod.GET): null
+			def keyword = new Keyword(value:"TEST")
+			def connection =  new HttpWebConnectionFconnection(name:name, url:url, httpMethod:method)
 			def extComm = new WebConnection(name:name, keyword:keyword, connection: connection)
+
 		then:
-			extComm.validate() == valid
+			connection.validate() == valid
 		where:
-			name|addKeyword|addConnection|valid
-			'test'|true|true|true
-			'test'|false|true|true
-			''|true|true|false
-			null|true|true|false
-			'test'|true|false|true
+			name 	|url 							|method |valid
+			'test'	|'..'							|HttpWebConnectionFconnection.HttpMethod.GET 	|false
+			'test'	|''								|HttpWebConnectionFconnection.HttpMethod.GET 	|false
+			'test'	|'http://.com'					|HttpWebConnectionFconnection.HttpMethod.GET 	|false
+			'test'	|'http://.com/sync'				|HttpWebConnectionFconnection.HttpMethod.GET 	|false
+			'test'	|'http://www.frontlinesms.com'	|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			'test'	|'http://frontlinesms.com'		|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			'test'	|'www.frontlinesms.com/sync'	|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			'test'	|'frontlinesms.com/sync'		|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			'test'	|'frontlinesms.com:8080'		|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			'test'	|'frontlinesms.com:8080/sync'	|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			'test'	|'192.168.0.200:8080'			|HttpWebConnectionFconnection.HttpMethod.GET 	|true
+			''		|'http://frontlinesms.com'		|HttpWebConnectionFconnection.HttpMethod.GET 	|false
+			null	|'http://frontlinesms.com'		|HttpWebConnectionFconnection.HttpMethod.GET 	|false
+			'test'	|'http://frontlinesms.com'		|HttpWebConnectionFconnection.HttpMethod.POST 	|true
 	}
 }
