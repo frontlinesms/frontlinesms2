@@ -63,6 +63,7 @@ class CoreBootStrap {
 				dev_initFolders()
 				dev_initAnnouncements()
 				dev_initLogEntries()
+				dev_initExternalCommands()
 				break
 				
 			case Environment.PRODUCTION:
@@ -299,7 +300,30 @@ class CoreBootStrap {
 			it.save(failOnError:true, flush:true)
 		}
 	}
-	
+
+	private def dev_initExternalCommands() {
+		if(!dev) return
+		[new Fmessage(src:'Wanyama', text:'forward me to the server'),
+			new Fmessage(src:'Tshabalala', text:'a text from me'),
+			new Fmessage(src:'June', text:'I just arrived')].each() {
+				it.inbound = true
+				it.date = new Date()
+			it.save(failOnError:true, flush:true)
+		}
+		def con = new HttpExternalCommandFconnection(name:"extCmdFcon1", url:"http://localhost:8181", httpMethod:HttpExternalCommandFconnection.HttpMethod.POST)
+		con.addToRequestParameters(new RequestParameter(name:'text' , value: HttpExternalCommandFconnection.MESSAGE_BODY))
+		con.addToRequestParameters(new RequestParameter(name:'username' , value: 'usr101'))
+		con.addToRequestParameters(new RequestParameter(name:'password' , value: 'pass123'))
+		def extCmd = new ExternalCommand(name:'Through To Server', keyword:new Keyword(value:'FORWARD'), connection:con)
+		def sent1 = new Fmessage(src:'me', inbound:false, text:"Your messages are in 'the cloud'")
+		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+		extCmd.addToMessages(sent1).save(failOnError:true, flush:true)
+		extCmd.addToMessages(Fmessage.findBySrc('Wanyama'))
+		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
+		extCmd.addToMessages(Fmessage.findBySrc('June'))
+		extCmd.save(failOnError:true, flush:true)
+	}
+
 	private def dev_initLogEntries() {
 		if(!dev) return
 		def now = new Date()
