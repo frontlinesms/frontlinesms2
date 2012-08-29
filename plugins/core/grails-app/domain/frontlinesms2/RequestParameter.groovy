@@ -4,5 +4,5 @@ class RequestParameter{
 	String name
 	String value
 
-	static belongsTo = [connection:HttpWebConnectionFconnection]
+	static belongsTo = [connection:WebConnection]
 }

@@ -9,8 +9,8 @@
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>
 	<li>
-		<span id="web_connection_url">${ownerInstance.connection?.url}</span>
-		<span id="web_connection_method">(${ownerInstance.connection?.httpMethod?.toString()})</span>
+		<span id="web_connection_url">${ownerInstance?.url}</span>
+		<span id="web_connection_method">(${ownerInstance.httpMethod?.toString()})</span>
 	</li>
 </ul>
 
