@@ -17,6 +17,7 @@ class WebConnection extends Activity {
 	static hasOne = [keyword: Keyword]
 	
 	static constraints = {}
-
+	def processKeyWord(Fmessage message, Boolean exactMatch){}
+	def send(Fmessage message){}
 }
 	
