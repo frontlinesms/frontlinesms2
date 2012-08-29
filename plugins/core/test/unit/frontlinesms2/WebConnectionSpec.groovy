@@ -27,40 +27,26 @@ class WebConnectionSpec extends Specification {
 
 	}
 
-	def 'incoming message matching keyword should trigger message sending through the external command connection'() {
+	def 'incoming message matching keyword should trigger http message sending'() {
 		given:
 			def k = mockKeyword('FORWARD')
 			def extCommand = new WebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET)
-			def sendService = Mock(MessageSendService)
-
-			def forwardedMessage = mockFmessage("FORWARD ME")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==null && params.messageText=='test'
-			}) >> forwardedMessage
-
 			def incomingMessage = mockFmessage("FORWARD ME", TEST_NUMBER)
 		when:
 			extCommand.processKeyword(incomingMessage, true)
 		then:
-			1 * sendService.send(replyMessage, extCommand.connection)
+			1 * extCommand.send(incomingMessage)
 	}
 
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
 		given:
 			def k = mockKeyword('')
 			def extCommand = new WebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET)
-			def sendService = Mock(MessageSendService)
-
-			def forwardedMessage = mockFmessage("FORWARD ME")
-			sendService.createOutgoingMessage({ params ->
-				params.addresses==null && params.messageText=='test'
-			}) >> forwardedMessage
-
 			def incomingMessage = mockFmessage("FORWARD ME", TEST_NUMBER)
 		when:
 			extCommand.processKeyword(incomingMessage, false)
 		then:
-			1 * sendService.send(replyMessage, extCommand.connection)
+			1 * extCommand.send(incomingMessage)
 	}
 
 	private def mockKeyword(String value) {
