@@ -64,19 +64,25 @@ grails.exceptionresolver.params.exclude = ['password']
 // enable query caching by default
 grails.hibernate.cache.queries = true
 
-//Enable automatic database migrations
-grails.plugin.databasemigration.updateOnStart = true
-grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-
-// set per-environment serverURL stem for creating absolute links
+// set per-environment settings
 environments {
     development {
         grails.logging.jul.usebridge = true
+        def runMigrations = System.properties.'run.migration'
+        //Enable automatic database migrations in dev mode
+        if(runMigrations == null) {
+			grails.plugin.databasemigration.updateOnStart = runMigrations
+			grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+        }
+
     }
     production {
         grails.logging.jul.usebridge = false
-        // TODO: grails.serverURL = "http://www.changeme.com"
-    }
+        //Enable automatic database migrations in prod mode
+		grails.plugin.databasemigration.updateOnStart = true
+		grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+
+    }	
 }
 
 // log4j configuration

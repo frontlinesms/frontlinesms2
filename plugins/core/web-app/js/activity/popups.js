@@ -1,6 +1,6 @@
 function chooseActivity() {
 	var activity = $("input[name='activity']:checked").val();
-	var activityUrl = activity + '/create';
+	var activityUrl = activity.replace(/\s/g, "") + '/create';
 	var title = i18n("wizard.title.new") + activity;
 	$(this).dialog('close');
 	$.ajax({

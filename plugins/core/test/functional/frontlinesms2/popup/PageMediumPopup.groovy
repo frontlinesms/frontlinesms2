@@ -66,10 +66,10 @@ class CreateActivityDialog extends MediumPopup {
 		popupTitle.contains("create new activity")
 	}
 	static content = {
-		poll { $('input[value="poll"]') }
-		announcement { $('input[value="announcement"]') }
-		autoreply { $('input[value="autoreply"]') }
-		webconnection(wait:true) { $('input[value="webconnection"]') }
+		poll { $('input[value="Poll"]') }
+		announcement { $('input[value="Announcement"]') }
+		autoreply { $('input[value="Autoreply"]') }
+		webconnection(wait:true) { $('input[value="Web Connection"]') }
 	}
 }
 
@@ -290,7 +290,7 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 
 class WebConnectionWizard extends MediumPopup {
 	static at = {
-		popupTitle.contains("external command")
+		popupTitle.toLowerCase().contains("web connection")
 	}
 	static content = {
 		keywordAndUrl { module WebConnectionKeywordTab }

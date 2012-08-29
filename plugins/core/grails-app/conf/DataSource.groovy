@@ -13,6 +13,11 @@ hibernate {
 environments {
     development {
         dataSource {
+            def runMigrations = System.properties.'run.migration'
+            if(runMigrations == "false") {
+              println "WARNING:: DATABASE MIGRATION DISABLED"
+              dbCreate = "create-drop"
+            }
             url = "jdbc:h2:mem:devDb;MVCC=TRUE"
         }
     }

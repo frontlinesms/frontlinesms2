@@ -93,7 +93,7 @@ class FsmsTagLib {
 				} catch(GrailsTagException ex) { log.debug "Could not render $plugin:$att.template", ex }
 			}
 		}
-		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=$plugins]")
+		if(!rendered) throw new GrailsTagException("Failed to render [att=$att, plugins=${grailsApplication.config.frontlinesms.plugins}]")
 	}
 
 	private def templateExists(name, plugin) {
