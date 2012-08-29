@@ -290,7 +290,7 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 
 class WebConnectionWizard extends MediumPopup {
 	static at = {
-		popupTitle.contains("external command")
+		popupTitle.contains("web connection")
 	}
 	static content = {
 		keywordAndUrl { module WebConnectionKeywordTab }

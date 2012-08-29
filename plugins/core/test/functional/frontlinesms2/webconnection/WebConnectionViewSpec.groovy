@@ -3,6 +3,7 @@ package frontlinesms2.webconnection
 import frontlinesms2.*
 import frontlinesms2.message.*
 import frontlinesms2.popup.*
+import frontlinesms2.announcement.*
 
 class WebConnectionViewSpec extends WebConnectionBaseSpec {
 	def setup() {
@@ -36,7 +37,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			header.archive.click()
 		then:
 			waitFor { at PageMessageInbox }
-			notifications.flashMessageText == "Activity archived"
+			notifications.flashMessagesText.contains("Activity archived")
 	}
 
 	def "clicking the edit option opens the WebConnection Dialog for editing"() {
@@ -117,7 +118,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			messageList.messages[1].checkbox.click()		
 		then:
 			waitFor { multipleMessageDetails.displayed }
-			waitFor { multipleMessageDetails.text?.toLowerCase() == "2 messages selected" }
+			multipleMessageDetails.checkedMessageCount == "2 messages selected"
 	}
 
 	def "clicking on a message reveals the single message view with clicked message"() {
@@ -181,7 +182,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { at PageMessageWebConnection }
-			waitFor { notifications.flashMessageText.contains("updated") }
+			waitFor { notifications.flashMessagesText.contains("updated") }
 			!messageList.messages*.text.contains("Test message 0")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
@@ -204,7 +205,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 		when:
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
-			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
+			waitFor("veryslow") { notifications.flashMessagesText.contains("updated") }
 			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
