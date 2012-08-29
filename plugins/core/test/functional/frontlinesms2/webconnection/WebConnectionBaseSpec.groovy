@@ -5,9 +5,8 @@ import frontlinesms2.*
 class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 
 	static createWebConnections() {
-		def connection = new HttpWebConnectionFconnection(name:"testConn", url:"http://www.frontlinesms.com/sync", httpMethod:HttpWebConnectionFconnection.HttpMethod.GET)
 		def syncKeyword = new Keyword(value:"SYNC")
-		new WebConnection(name:"Sync", keyword:syncKeyword, connection:connection).save(failOnError:true)
+		new WebConnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
 	}
 
 	static createTestActivities() {

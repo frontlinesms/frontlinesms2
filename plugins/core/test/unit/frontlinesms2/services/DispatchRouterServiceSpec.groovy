@@ -66,16 +66,7 @@ class DispatchRouterServiceSpec extends Specification {
 		then:
 			routedTo == [1, 3, 1, 3, 1].collect { "seda:out-$it" }
 	}
-
-	def 'slip should not use external command fconnections '() {
-		given:
-			mockRoutes(1:'internet', 2:'internet-ext-command')
-		when:
-			def routedTo = [1,2].collect { service.slip(mockExchange(), null, null) }
-		then:
-			routedTo == [1, 2].collect { "seda:out-$it" }
-	}
-
+	
 	private def mockExchange() {
 		def x = Mock(Exchange)
 		def out = Mock(Message)

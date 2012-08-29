@@ -8,9 +8,7 @@ import org.apache.camel.model.RouteDefinition
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
-	enum ConnectionRole { FSMS_ROUTE, FSMS_EXT_COMMAND }
 	def fconnectionService
-	static ConnectionRole connectionRole = ConnectionRole.FSMS_ROUTE
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
 	
