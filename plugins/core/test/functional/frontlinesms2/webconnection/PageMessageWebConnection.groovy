@@ -19,7 +19,7 @@ class WebConnectionHeaderModule extends ContentHeader {
 		name { $('ul.info h1').text().toLowerCase() }
 		url { $("span#web_connection_url").text().toLowerCase() }
 		sendMethod { $("span#web_connection_method").text().toLowerCase() - ')' -'('}
-		archive { buttons.filter(text:'Archive subscription') }
+		archive { buttons.filter(text: iContains('Archive')) }
 		moreActions { $('div.header-buttons select#more-actions') }
 	}
 }

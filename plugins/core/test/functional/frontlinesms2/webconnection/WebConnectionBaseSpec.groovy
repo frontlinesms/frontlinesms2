@@ -20,5 +20,6 @@ class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 			wc.addToMessages(m)
 			wc.save(failOnError:true)
 		}
+		wc.save(flush:true, failOnError:true)
 	}
 }
