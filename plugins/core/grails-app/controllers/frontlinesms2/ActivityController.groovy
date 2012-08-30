@@ -56,6 +56,7 @@ class ActivityController {
 			activity.archive()
 			if(activity.save(flush:true)) {
 				flash.message = defaultMessage 'archived'
+				activity.deactivate()
 			} else {
 				flash.message = defaultMessage 'archive.failed', activity.id
 			}
@@ -68,6 +69,7 @@ class ActivityController {
 			activity.unarchive()
 			if(activity.save()) {
 				flash.message = defaultMessage 'unarchived'
+				activity.activate()
 			} else {
 				if (activity instanceof Announcement)
 					flash.message = defaultMessage 'unarchive.failed', activity.id
@@ -87,6 +89,7 @@ class ActivityController {
 	def delete = {
 		withActivity { activity ->
 			trashService.sendToTrash(activity)
+			activity.deactivate()
 			flash.message = defaultMessage 'trashed'
 			redirect controller:"message", action:"inbox"
 		}
@@ -96,6 +99,7 @@ class ActivityController {
 		withActivity { activity ->
 			if(trashService.restore(activity)) {
 				flash.message = defaultMessage 'restored'
+				activity.activate()
 			} else {
 				flash.message = defaultMessage 'restore.failed', activity.id
 			}

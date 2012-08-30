@@ -48,5 +48,9 @@ abstract class Activity extends MessageOwner {
 	}
 
 	def processKeyword(Fmessage message, boolean exactMatch) {}
+
+	def activate() {}
+
+	def deactivate() {}
 }
 

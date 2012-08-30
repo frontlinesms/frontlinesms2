@@ -73,6 +73,7 @@ class CoreBootStrap {
 		ensureResourceDirExists()
 		deviceDetectionService.init()
 		failPendingMessagesService.init()
+		activateActivities()
 		println '\\o/ FrontlineSMS started.'
 	}
 
@@ -398,6 +399,12 @@ class CoreBootStrap {
 		log.info "Adding $jniPath/$os/$architecture to library paths..."
 		addJavaLibraryPath "$jniPath/$os/$architecture"
 		serial.SerialClassFactory.init(serial.SerialClassFactory.PACKAGE_RXTX) // TODO hoepfully this step of specifying the package is unnecessary
+	}
+
+	private def activateActivities() {
+		Activity.findAllByArchivedAndDeleted(false, false).each { activity ->
+			activity.activate()
+		}
 	}
 
 	private def initialiseMockSerial() {
