@@ -25,7 +25,9 @@ class SmslibFconnection extends Fconnection {
 	String imsi
 	String pin // FIXME maybe encode this rather than storing plaintext(?)
 	boolean allMessages = true
+	// TODO rename sendEnabled
 	boolean send = true
+	// TODO rename receiveEnabled
 	boolean receive = true
 
 	static constraints = {
@@ -70,41 +72,27 @@ class SmslibFconnection extends Fconnection {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				if(getSend() && getReceive()) {
-					return [from("seda:out-${SmslibFconnection.this.id}")
+				def definitions = []
+				if(isSend()) {
+					definitions << from("seda:out-${SmslibFconnection.this.id}")
 							.onException(NotConnectedException)
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
 							.beanRef('smslibTranslationService', 'toCmessage')
 							.to(camelAddress())
-							.routeId("out-modem-${SmslibFconnection.this.id}"),
-							from(camelAddress())
-									.onException(NotConnectedException)
-											.handled(true)
-											.beanRef('fconnectionService', 'handleDisconnection')
-											.end()
-									.to('seda:raw-smslib')
-									.routeId("in-${SmslibFconnection.this.id}")]	
-				} else if(getReceive()) {
-					return [from(camelAddress())
+							.routeId("out-modem-${SmslibFconnection.this.id}")
+				}
+				if(isReceive()) {
+					definitions << from(camelAddress())
 							.onException(NotConnectedException)
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
 							.to('seda:raw-smslib')
-							.routeId("in-${SmslibFconnection.this.id}")]
-				} else {
-					return [from("seda:out-${SmslibFconnection.this.id}")
-							.onException(NotConnectedException)
-									.handled(true)
-									.beanRef('fconnectionService', 'handleDisconnection')
-									.end()
-							.beanRef('smslibTranslationService', 'toCmessage')
-							.to(camelAddress())
-							.routeId("out-modem-${SmslibFconnection.this.id}")]
+							.routeId("in-${SmslibFconnection.this.id}")
 				}
-				
+				return definitions
 			}
 		}.routeDefinitions
 	}
