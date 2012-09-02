@@ -31,11 +31,12 @@ class Subscription extends Activity{
 		keyword nullable:true
 	}
 
-	def processJoin(Fmessage message, Contact foundContact=null){
+	def processJoin(Fmessage message){
 		this.addToMessages(message)
+		this.save()
 		message.ownerDetail = Action.JOIN.toString()
 		message.save(failOnError:true)
-		foundContact = Contact.findByMobile(message.src)
+		def foundContact = Contact.findByMobile(message.src)
 		if(!foundContact) {
 			foundContact = new Contact(name:"", mobile:message.src).save(failOnError:true)
 			group.addToMembers(foundContact);
@@ -49,13 +50,17 @@ class Subscription extends Activity{
 		}
 	}
 
-	def processLeave(Fmessage message, Contact foundContact){
+	def processLeave(Fmessage message){
 		this.addToMessages(message)
+		this.save()
 		message.ownerDetail = Action.LEAVE.toString()
 		message.save(failOnError:true)
+		def foundContact = Contact.findByMobile(message.src)
 		foundContact?.removeFromGroup(group)
 		if(leaveAutoreplyText) {
-			sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+			if(foundContact){
+				sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+			}
 		}
 	}
 
@@ -70,11 +75,12 @@ class Subscription extends Activity{
 	}
 
 	// TODO this should just call processJoin or processLeave
-	def processToggle(Fmessage message, Contact foundContact=null){
+	def processToggle(Fmessage message){
 		this.addToMessages(message)
+		this.save()
 		message.ownerDetail = Action.TOGGLE.toString()
 		message.save(failOnError:true)
-		foundContact = Contact.findByMobile(message.src)
+		def foundContact = Contact.findByMobile(message.src)
 		if(foundContact){
 			if(foundContact.isMemberOf(group)) {
 				foundContact.removeFromGroup(group)
@@ -98,13 +104,13 @@ class Subscription extends Activity{
 		message.ownerDetail = action.toString()
 		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
-			processJoin(message, foundContact)
+			processJoin(message)
 		}else if(action == Action.LEAVE) {
-			processLeave(message, foundContact)
+			processLeave(message)
 		}else if(action == Action.TOGGLE) {
-			processToggle(message, foundContact)
+			processToggle(message)
 		}
-		this.save(flush:true, failOnError:true)
+		this.save(failOnError:true)
 	}
 
 	Action getAction(String messageText, boolean exactMatch) {
