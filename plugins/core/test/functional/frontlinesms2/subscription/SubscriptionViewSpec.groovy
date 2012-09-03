@@ -140,6 +140,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
 			join.click()
+			ok.click()
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
@@ -149,16 +150,16 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { at SubscriptionCategoriseDialog }
 		when:
 			join.click()
+			ok.click()
 		then:
 			waitFor("veryslow") { at PageMessageInbox }
 		when:
-			to PageMessageSubscription, Subscription.findByGroup(g)
+			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
 		then:
+			waitFor { at PageMessageSubscription }
 			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
-			messageList.each { messageRow ->
+			messageList.messages.each { messageRow ->
 				if (messageRow.source == "prudence") {
-					assert messageRow.text().contains("leave")
-				} else {
 					assert messageRow.text().contains("join")
 				}
 			}

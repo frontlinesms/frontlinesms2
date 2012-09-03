@@ -359,14 +359,3 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 		popupTitle.contains('edit subscription')
 	}
 }
-
-class SubscriptionCategoriseDialog extends MediumPopup {
-	static at = {
-		popupTitle.contains('categorise subscription')
-	}
-	static content = {
-		groupName { $('input#group-dropdown') }
-		join { $('#modalBox #btn_join') }
-		leave { $('#modalBox #btn_leave') }
-	}
-}

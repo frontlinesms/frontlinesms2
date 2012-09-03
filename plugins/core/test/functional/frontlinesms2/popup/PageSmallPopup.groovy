@@ -129,3 +129,15 @@ class TestMessagePopup extends SmallPopup {
 		message { $('textarea#messageText').text() }
 	}
 }
+
+class SubscriptionCategoriseDialog extends SmallPopup {
+	static at = {
+		popupTitle.contains('categorise subscription')
+	}
+	static content = {
+		groupName { $('input#group-dropdown') }
+		join { $('#modalBox input#subscription-action').value("join") }
+		leave { $('#modalBox input#subscription-action').value("leave") }
+		toggle { $('#modalBox input#subscription-action').value("toggle") }
+	}
+}
