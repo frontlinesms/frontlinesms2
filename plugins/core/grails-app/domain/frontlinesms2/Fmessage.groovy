@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import groovy.time.*
-import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {

@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import grails.converters.*
-import org.quartz.impl.triggers.SimpleTriggerImpl
 
 class MessageController {
 //> CONSTANTS

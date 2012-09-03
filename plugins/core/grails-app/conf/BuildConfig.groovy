@@ -29,10 +29,9 @@ grails.project.dependency.resolution = {
 		grailsHome()
 		grailsPlugins()
 
+		mavenLocal()
 		mavenRepo "http://192.168.0.200:8081/artifactory/simple/super-repo/"
 		grailsRepo "http://192.168.0.200:8081/artifactory/simple/super-repo/"
-
-		mavenLocal()
 		mavenRepo 'http://dev.frontlinesms.com/m2repo/'
 		mavenCentral()
 
@@ -76,7 +75,7 @@ grails.project.dependency.resolution = {
 	}
 
 	plugins {
-		runtime ":hibernate:$grailsVersion"
+		compile ":hibernate:$grailsVersion"
 		runtime ":database-migration:1.0"
 		runtime ":jquery:1.7.1"
 		runtime ':jquery-ui:1.8.15'
@@ -86,7 +85,7 @@ grails.project.dependency.resolution = {
 		runtime ":markdown:1.0.0.RC1"
 		runtime ":routing:1.2.0"
 		runtime ":csv:0.3.1"
-		runtime ":quartz2:0.2.3-frontlinesms"
+		compile ":quartz2:0.2.3-frontlinesms"
 
 		test ":code-coverage:1.2.5"
 		test ":codenarc:0.17"
