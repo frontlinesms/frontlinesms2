@@ -32,8 +32,8 @@ class StatusControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def "message start dates should be inclusive"() {
 		given:
 			def sentDate = createDate(2011, 10, 18, 23, 58, 59)
-			def m1 = new Fmessage(src:"src1", date:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
-			def m2 = new Fmessage(src:"src2", date:sentDate, hasSent:true, inbound: false)
+			def m1 = new Fmessage(text:'', src:"src1", date:createDate(2011, 10, 18, 0, 0, 1), inbound:true).save(flush:true, failOnError:true)
+			def m2 = new Fmessage(text:'', src:"src2", date:sentDate, hasSent:true, inbound: false)
 			def d = new Dispatch(dst:'123', status:DispatchStatus.SENT, dateSent:sentDate)
 			m2.addToDispatches(d)
 			m2.save(flush:true, failOnError:true)

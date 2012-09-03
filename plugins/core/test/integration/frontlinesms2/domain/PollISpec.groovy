@@ -112,9 +112,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			def poll = new Poll(name:"title")
 			poll.editResponses(choiceA: "one", choiceB: "two")
 			poll.save(flush: true)
-			def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
-			def m2 = new Fmessage(src: "src2", inbound: true, date: new Date() - 10)
-			def m3 = new Fmessage(src: "src3", inbound: true, date: new Date() - 10)
+			def m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
+			def m2 = Fmessage.build(src: "src2", inbound: true, date: new Date() - 10)
+			def m3 = Fmessage.build(src: "src3", inbound: true, date: new Date() - 10)
 			PollResponse.findByValue("one").addToMessages(m1)
 			PollResponse.findByValue("one").addToMessages(m2)
 			PollResponse.findByValue("two").addToMessages(m3)
@@ -129,9 +129,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 			poll.responses*.value.containsAll(['one', 'two', 'three', 'four', 'Unknown'])
 			poll.responses*.liveMessageCount == [2, 1, 0, 0, 0]
 		when:
-			m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
+			m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
 			PollResponse.findByValue("one").addToMessages(m1)
-			PollResponse.findByValue("three").addToMessages(new Fmessage(src: "src4", inbound: true, date: new Date() - 10))
+			PollResponse.findByValue("three").addToMessages(Fmessage.build(src: "src4", inbound: true, date: new Date() - 10))
 			poll.save(flush:true)
 		then:
 			poll.responses*.liveMessageCount == [3, 1, 0, 1, 0]
@@ -180,9 +180,9 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 
 	private def setUpPollResponseAndItsMessages() {
 		def poll = setUpPollAndResponses()
-		def m1 = new Fmessage(src: "src1", inbound: true, date: new Date() - 10)
-		def m2 = new Fmessage(src: "src2", inbound: true, date: new Date() - 2)
-		def m3 = new Fmessage(src: "src3", inbound: true, date: new Date() - 5, starred: true)
+		def m1 = Fmessage.build(src: "src1", inbound: true, date: new Date() - 10)
+		def m2 = Fmessage.build(src: "src2", inbound: true, date: new Date() - 2)
+		def m3 = Fmessage.build(src: "src3", inbound: true, date: new Date() - 5, starred: true)
 		PollResponse.findByValue("response 1").addToMessages(m1)
 		PollResponse.findByValue("response 2").addToMessages(m2)
 		PollResponse.findByValue("response 3").addToMessages(m3)
@@ -192,7 +192,7 @@ class PollISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'Adding a message will propogate it to the Unknown response'() {
 		given:
 			Poll p = setUpPollAndResponses()
-			Fmessage m = new Fmessage(date:new Date(), inbound:true, src:"a-unit-test!").save(flush:true, failOnError:true)
+			Fmessage m = Fmessage.build(date:new Date(), inbound:true, src:"a-unit-test!").save(flush:true, failOnError:true)
 			p.refresh()
 			m.refresh()
 			p.responses*.refresh()

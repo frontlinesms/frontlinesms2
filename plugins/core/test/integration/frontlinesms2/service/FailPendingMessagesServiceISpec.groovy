@@ -7,7 +7,7 @@ class FailPendingMessagesServiceISpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "init should fail all pending dispatches"() {
 		setup:
-			def m = new Fmessage(src: 'src', inbound: false, archived: false, hasSent: true, hasPending: true, hasFailed: true, date: new Date())
+			def m = new Fmessage(text:'', src: 'src', inbound: false, archived: false, hasSent: true, hasPending: true, hasFailed: true, date: new Date())
 			[Dispatch.build(status: DispatchStatus.FAILED, message: m),
 					Dispatch.build(status: DispatchStatus.PENDING, message: m),
 					Dispatch.build(status: DispatchStatus.SENT, message: m, dateSent: new Date())].each() {
@@ -21,7 +21,7 @@ class FailPendingMessagesServiceISpec extends grails.plugin.spock.IntegrationSpe
 	
 	def "init should create system notification if it fails any messages"() {
 		setup:
-			def m = new Fmessage(src: 'src', inbound: false, archived: false, hasSent: true, hasPending: true, hasFailed: true, date: new Date())
+			def m = new Fmessage(text:'', src: 'src', inbound: false, archived: false, hasSent: true, hasPending: true, hasFailed: true, date: new Date())
 			SystemNotification.findAll()*.delete(flush:true)
 		when:
 			failPendingMessagesService.init()

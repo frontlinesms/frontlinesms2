@@ -70,8 +70,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 
 	def createTestMessages() {
-		[new Fmessage(src:'Bob', text:'I like manchester', date: new Date() - 4, starred: true),
-			new Fmessage(src:'Alice', text:'go manchester', date: new Date() - 3)].each {
+		[Fmessage.build(src:'Bob', text:'I like manchester', date: new Date() - 4, starred: true),
+			Fmessage.build(src:'Alice', text:'go manchester', date: new Date() - 3)].each {
 					it.inbound = true
 					it.save(failOnError:true, flush:true)
 			}
@@ -79,8 +79,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def createTestFolders() {
 		def workFolder = new Folder(name: 'Work')
-		workFolder.addToMessages(new Fmessage(src: "Bob", inbound: true, date: new Date()))
-		workFolder.addToMessages(new Fmessage(src: "Alice", inbound: true, date: new Date()))
+		workFolder.addToMessages(Fmessage.build(src: "Bob", inbound: true, date: new Date()))
+		workFolder.addToMessages(Fmessage.build(src: "Alice", inbound: true, date: new Date()))
 		workFolder.save(flush: true)
 	}
 
@@ -100,8 +100,8 @@ class ExportControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	}
 	
 	def createTestAnnouncement() {
-		def m = new Fmessage(src: "Bob", inbound: true, date: new Date())
+		def m = Fmessage.build(src: "Bob", inbound: true, date: new Date())
 		def a = new Announcement(name:'Free Food')
-		a.addToMessages(new Fmessage(src:"Alice", inbound:true, date:new Date())).save(failOnError:true, flush:true)
+		a.addToMessages(Fmessage.build(src:"Alice", inbound:true, date:new Date())).save(failOnError:true, flush:true)
 	}
 }

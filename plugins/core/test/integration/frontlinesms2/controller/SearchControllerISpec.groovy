@@ -121,7 +121,7 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "search for outgoing messages only"() {
 		setup:
-			3.times { new Fmessage(src:'src', date:TEST_DATE)
+			3.times { new Fmessage(src:'src', date:TEST_DATE, inbound:false, text:'')
 					.addToDispatches(dst:'123456', status:DispatchStatus.PENDING)
 					.save(flush:true, failOnError:true) }
 		when:
