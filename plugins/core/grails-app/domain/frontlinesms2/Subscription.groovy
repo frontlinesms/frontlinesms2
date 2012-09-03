@@ -145,7 +145,7 @@ class Subscription extends Activity{
 
 	def getDisplayText(Fmessage msg) {
 		if (msg.messageOwner.id == this.id && msg.inbound) {
-			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50)
+			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50) // FIXME probably shouldn't truncate here
 		} else
 			return msg.text
 	}

@@ -137,7 +137,7 @@ class MultipleMessageDetails extends geb.Module {
 	static content = {
 		text { $('#message-detail-content').text() }
 		checkedMessageCount { $('p#checked-message-count').text() }
-		replyAll { $('a#btn_reply_all') }
+		replyAll(required:false) { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
 		archiveAll(required:false) { $('#btn_archive_all') }

@@ -27,6 +27,7 @@ class Fmessage {
 	boolean inbound
 	static hasMany = [dispatches:Dispatch]
 
+
 	static mapping = {
 		sort date:'desc'
 		inboundContactName formula:'SELECT c.name FROM Contact c WHERE c.mobile=src'
@@ -39,7 +40,7 @@ class Fmessage {
 		src(nullable:true, validator: { val, obj ->
 				val || !obj.inbound
 		})
-		text nullable:true, maxSize:MAX_TEXT_LENGTH
+		text nullable:false, maxSize:MAX_TEXT_LENGTH
 		inboundContactName nullable:true
 		outboundContactName nullable:true
 		archived(nullable:true, validator: { val, obj ->

@@ -10,13 +10,13 @@ import frontlinesms2.*
 @Mixin(frontlinesms2.utils.GebUtil)
 class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 	def setup() {
-		new Fmessage(src:"src1", starred:true)
+		new Fmessage(text:'text',src:"src1", starred:true)
 				.addToDispatches(dst:"dst2", status:DispatchStatus.FAILED)
 				.save(failOnError:true, flush:true)
-		new Fmessage(src:"src2")
+		new Fmessage(text:'text',src:"src2")
 				.addToDispatches(dst:"dst1", status:DispatchStatus.PENDING)
 				.save(failOnError:true, flush:true)
-		new Fmessage(src:"src")
+		new Fmessage(text:'text',src:"src")
 				.addToDispatches(dst:"dst3", status:DispatchStatus.SENT, dateSent:new Date())
 				.save(failOnError:true, flush:true)
 		Fmessage.build(src:"src")
@@ -28,9 +28,10 @@ class MessagePendingSpec extends grails.plugin.geb.GebSpec {
 			messageList.messages[0].checkbox.click()
 			waitFor { singleMessageDetails.displayed }
 			messageList.messages[1].checkbox.click()
-		then:
 			waitFor("veryslow") { multipleMessageDetails.displayed }
-			multipleMessageDetails.replyAll.displayed
+		then:
+			waitFor("veryslow") { multipleMessageDetails.text == '2 messages selected' }
+			!multipleMessageDetails.replyAll.displayed
 	}
 
 	def "should be able to retry a failed message"() {
