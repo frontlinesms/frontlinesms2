@@ -18,7 +18,9 @@ class IntelliSmsFconnection extends Fconnection {
 	
 	String username
 	String password // FIXME maybe encode this rather than storing plaintext
+	// TODO rename sendEnabled
 	boolean send
+	// TODO rename receiveEnabled
 	boolean receive
 	
 	//Http forwarding configuration
@@ -63,8 +65,9 @@ class IntelliSmsFconnection extends Fconnection {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				if(getSend() && getReceive()) {
-					return [from("seda:out-${IntelliSmsFconnection.this.id}")
+				def definitions = []
+				if(isSend()) {
+					definitions << from("seda:out-${IntelliSmsFconnection.this.id}")
 							.onException(AuthenticationException)
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
@@ -78,35 +81,15 @@ class IntelliSmsFconnection extends Fconnection {
 											'text=${body}'))
 							.to(INTELLISMS_URL)
 							.process(new IntelliSmsPostProcessor())
-							.routeId("out-internet-${IntelliSmsFconnection.this.id}"),
-						from(camelProducerAddress())
+							.routeId("out-internet-${IntelliSmsFconnection.this.id}")
+				}
+				if(isReceive()) {
+					definitions << from(camelProducerAddress())
 							.beanRef('intelliSmsTranslationService', 'process')
 							.to('seda:incoming-fmessages-to-store')
-							.routeId("in-${IntelliSmsFconnection.this.id}")]
+							.routeId("in-${IntelliSmsFconnection.this.id}")
 				}
-				else if(getReceive()) {
-					return [from(camelProducerAddress())
-							.beanRef('intelliSmsTranslationService', 'process')
-							.to('seda:incoming-fmessages-to-store')
-							.routeId("in-${IntelliSmsFconnection.this.id}")]
-				}
-				else {
-					return [from("seda:out-${IntelliSmsFconnection.this.id}")
-							.onException(AuthenticationException)
-									.handled(true)
-									.beanRef('fconnectionService', 'handleDisconnection')
-									.end()
-							.process(new IntelliSmsPreProcessor())
-							.setHeader(Exchange.HTTP_URI,
-									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
-											'username=${header.intellisms.username}&' + 
-											'password=${header.intellisms.password}&' + 
-											'to=${header.intellisms.dst}&' +
-											'text=${body}'))
-							.to(INTELLISMS_URL)
-							.process(new IntelliSmsPostProcessor())
-							.routeId("out-internet-${IntelliSmsFconnection.this.id}")]
-				}
+				return definitions
 			}
 		}.routeDefinitions
 	}
