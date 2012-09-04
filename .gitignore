@@ -34,6 +34,9 @@ plugin.xml
 # Log files 
 *.log
 
+# Generated plugin packages
+*.zip
+
 # Temp files and directories
 temp/
 *~

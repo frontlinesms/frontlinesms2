@@ -24,11 +24,11 @@ environments {
 		}
 	}
   test {
-    dataSource {
-        dbCreate = "update"
-        url = "jdbc:h2:mem:testDb;MVCC=TRUE"
-        logSql = true
-    }
+      dataSource {
+          dbCreate = "update"
+          url = "jdbc:h2:mem:testDb${frontlinesms2.StaticApplicationInstance.uniqueId};MVCC=TRUE"
+          logSql = true
+      }
   }
   production {
     dataSource {

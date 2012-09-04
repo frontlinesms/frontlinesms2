@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import grails.converters.*
-import org.quartz.impl.triggers.SimpleTriggerImpl
 
 class MessageController {
 //> CONSTANTS
@@ -11,6 +10,7 @@ class MessageController {
 	def messageSendService
 	def fmessageInfoService
 	def trashService
+	def fmessageService
 
 //> INTERCEPTORS
 	def bobInterceptor = {
@@ -221,40 +221,9 @@ class MessageController {
 	}
 
 	def move() {
-		def messagesToSend = []
 		def activity = params.messageSection == 'activity'? Activity.get(params.ownerId): null
 		def messageList = getCheckedMessages()
-		messageList.each { messageInstance ->
-			messageInstance.isDeleted = false
-			Trash.findByObject(messageInstance)?.delete(failOnError:true)
-			if (params.messageSection == 'activity') {
-				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
-				activity.addToMessages(messageInstance)
-				if(activity.metaClass.hasProperty(null, 'autoreplyText') && activity.autoreplyText) {
-					params.addresses = messageInstance.src
-					params.messageText = activity.autoreplyText
-					def outgoingMessage = messageSendService.createOutgoingMessage(params)
-					outgoingMessage.save()
-					messagesToSend << outgoingMessage
-					activity.addToMessages(outgoingMessage)
-				}
-				activity.save()
-			} else if (params.ownerId && params.ownerId != 'inbox') {
-				messageInstance.messageOwner?.removeFromMessages(messageInstance)?.save(failOnError:true)
-				MessageOwner.get(params.ownerId).addToMessages(messageInstance).save(failOnError:true)
-				messageInstance.save()
-			} else {
-				messageInstance.with {
-					if(messageOwner) {
-						messageOwner.removeFromMessages(messageInstance).save(failOnError:true)
-						save(failOnError:true)
-					}
-				}
-			}
-		}
-		if(messagesToSend) {
-			MessageSendJob.defer(messagesToSend)
-		}
+		fmessageService.move(messageList, activity, params)
 		flash.message = dynamicMessage 'updated', messageList
 		render 'OK'
 	}

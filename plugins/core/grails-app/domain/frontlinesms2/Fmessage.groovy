@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import groovy.time.*
-import org.hibernate.FlushMode
 import org.hibernate.criterion.CriteriaSpecification
 
 class Fmessage {
@@ -229,6 +228,14 @@ class Fmessage {
 		dispatches.each{ contactlist << Contact.findByMobile(it.dst)?.name }
 		contactlist?contactlist:""
 	}
+
+	private boolean isMoveAllowed(){
+		if(this.messageOwner){
+			return !(this.messageOwner?.archived)
+		} else {
+			return (!this.isDeleted && !this.archived)
+		}
+    }
 
 	private def areAnyDispatches(status) {
 		dispatches?.any { it.status == status }

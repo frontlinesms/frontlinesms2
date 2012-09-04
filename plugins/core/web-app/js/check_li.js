@@ -46,6 +46,7 @@ function itemCheckChanged(itemTypeString, itemId) {
 	
 	if (itemTypeString == 'message')
 		updateCheckAllBox(count);
+	displayMoveactionDropdown();
 }
 
 function getRow(itemTypeString, rowId) {
@@ -153,3 +154,19 @@ function updateCheckAllBox(count) {
 	}
 }
 
+function displayMoveactionDropdown(){
+	var showDropdown = false;
+	var checkedBoxes = $('#main-list .message-select-checkbox:checked');
+	checkedBoxes.each(function(){
+		showDropdown = (!$(this).parent().parent().hasClass("archived") || showDropdown);
+	});
+	var single_moveActions = $("div#single-message a#move-actions-button");
+	var multiple_moveActions = $("div#multiple-messages a#move-actions-button");
+	if(checkedBoxes.size() > 1) {
+		if(showDropdown){
+			multiple_moveActions.show();
+		} else {
+			multiple_moveActions.hide();
+		}
+	}
+}

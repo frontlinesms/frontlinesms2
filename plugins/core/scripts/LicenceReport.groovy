@@ -15,8 +15,10 @@ includeTargets << grailsScript("_GrailsSettings")
 File.metaClass.eachCsvLine = { Closure c ->
 	CSVReader reader = new CSVReader(delegate.newReader())
 	try {
-		String[] tokens
-		while(tokens=reader.readNext()) c.call(tokens)
+		def tokens
+		while(tokens=reader.readNext()) {
+			c.call(tokens as List)
+		}
 	} finally { reader.close() }
 }
 
@@ -28,7 +30,7 @@ target(licenceReport:"Produces a report for the current Grails application") {
 	def licenceDb = mapOfMaps()
 	// read licences CSV
 	new File('licences.csv').eachCsvLine { tokens ->
-		if(tokens.length >= 5) {
+		if(tokens.size() >= 5) {
 			def artifact = [:]
 			['groupId', 'artifactId', 'version', 'licence', 'url'].eachWithIndex { o, i ->
 				def token = tokens[i].trim()
@@ -94,6 +96,14 @@ target(xmlDependencyReport:"Produces an XML dependency report for the current Gr
 	String targetDir = "$projectTargetDir/dependency-report"
 	ant.delete(dir:targetDir, failonerror:false)
 	ant.mkdir(dir:targetDir)
+	def home = System.getProperty("user.home")
+	["org.grails.internal-$grailsAppName-build.xml",
+	"org.grails.internal-$grailsAppName-compile.xml",
+	"org.grails.internal-$grailsAppName-provided.xml",
+	"org.grails.internal-$grailsAppName-runtime.xml",
+	"org.grails.internal-$grailsAppName-test.xml"].each{
+		ant.copy(file:home+"/.grails/ivy-cache/"+it ,todir:home+"/.ivy2/cache" ,overwrite:true)
+	}
 
 	println "Obtaining dependency data..."
 	IvyDependencyManager dependencyManager = grailsSettings.dependencyManager

@@ -201,6 +201,25 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			!responseA.messages.contains(m)
 	}
 	
+	def 'archived messages should not be allowed to move'(){
+		setup:
+			def announcement = Announcement.build(name:"Archived activity",sentMessageText:"text message",archived:true)
+			def announcement2 = Announcement.build(name:"Moving Into Announcement",sentMessageText:"text")
+			def m1 = Fmessage.build(archived:true)//archived message fails
+			def m2 = Fmessage.build(messageOwner:announcement,archived:true)//archived owner fails
+			def m3 = Fmessage.build()//inbox message passes
+			def controller = new MessageController()
+			controller.params['message-select'] = []
+			controller.params['message-select'] << m1.id << m2.id << m3.id
+			controller.params.ownerId = announcement2.id
+		when:
+			controller.move()
+		then:
+			m1.messageOwner != announcement2
+			m2.messageOwner != announcement2
+			m3.messageOwner == announcement2
+	}
+
 	private Date createDate(String dateAsString) {
 		new SimpleDateFormat("yyyy/MM/dd").parse(dateAsString)
 	}

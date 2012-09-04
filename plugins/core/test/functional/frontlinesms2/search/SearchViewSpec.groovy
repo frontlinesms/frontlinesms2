@@ -274,6 +274,23 @@ class SearchViewSpec extends SearchBaseSpec {
 		then:
 			waitFor('very slow') { tabs.unreadcount == 3 }
 	}
+
+	def "moveaction drop down should not be visible if only one archived message is seleted"(){
+		when:
+			def m2 = Fmessage.build(src:'+25499934', text:'archived2')
+			def m1 = Fmessage.build(src:'+25499912', text:'archived1', archived:true)
+			to PageSearchResult, "archived", "inArchive=true"
+		then:
+			messageList.messages[0].checkbox.click()
+		when:
+			waitFor { singleMessageDetails.text == "archived1" }
+		then:
+			!singleMessageDetails.single_moveActions.displayed
+		when:
+			messageList.messages[1].checkbox.click()
+		then:
+			multipleMessageDetails.multiple_moveActions.displayed
+	}
 	
 }
 
