@@ -5,10 +5,7 @@ class WebConnection extends Activity {
 	static String getShortName() { 'webConnection' }
 
 	// Substitution variables
-	public static final String MESSAGE_BODY = "\${MESSAGE_BODY}"
-	public static final String MESSAGE_SOURCE_NUMBER = "\${MESSAGE_SRC_NUMBER}"
-	public static final String MESSAGE_SOURCE_NAME = "\${MESSAGE_SRC_NAME}"
-	public static final String MESSAGE_TIMESTAMP = "\${MESSAGE_TIMESTAMP}"
+	static subFields = ['message_body', 'message_src_number', 'message_src_name', 'message_timestamp']
 	
 	/// Variables
 	String url

@@ -10,8 +10,16 @@
 			<td id="keyword-confirm"/>
 		</tr>
 		<tr>
-			<td><g:message code="webConnection.name.label"/></td>
-			<td id="webConnection-confirm"/>
+			<td><g:message code="webConnection.url.label"/></td>
+			<td id="url-confirm"/>
+		</tr>
+		<tr>
+			<td><g:message code="webConnection.httpMethod.label"/></td>
+			<td id="requestType-confirm"/>
+		</tr>
+		<tr>
+			<td><g:message code="webConnection.parameters.confirm"/></td>
+			<td id="requestParameters-confirm"/>
 		</tr>
 	</table>
 </div>

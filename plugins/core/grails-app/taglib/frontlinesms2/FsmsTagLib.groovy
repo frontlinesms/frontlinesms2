@@ -23,7 +23,7 @@ class FsmsTagLib {
 	def verticalTabs = { att ->
 		out << '<ul>'
 		att.verticalTabs?.split(",")*.trim().eachWithIndex { code, i ->
-			def tabName = code.replace('.', '-');
+			def tabName = code.replace('.', '-').toLowerCase();
 			out << '<li>'
 			out << "<a class=\"tabs-${i+1} tab-${tabName}\" href=\"#tabs-${i+1}\">"
 			out << g.message(code:code)
@@ -213,13 +213,14 @@ class FsmsTagLib {
 		// edit of activities goes through generic ActivityController, so need to check instance type in this case
 		def controller = att.controller == "activity" ? att.instance?.shortName : att.controller
 		def target = att.target
-		def fields = expressionProcessorService.findByController(controller)
+		def fields = att.fields ?: expressionProcessorService.findByController(controller)
 		def hidden = att.hidden?:false
 		target = target?: "messageText"
+		def onchange = att.onchange ?: 'magicwand.wave("magicwand-select' + target + '", "' + target + '")'
 
 		out << '<div class="magicwand-container '+ (hidden?'hidden':'') +'">'
 		// TODO change this to use g.select if appropriate
-		out << "<select id='magicwand-select$target' onchange=\"magicwand.wave('magicwand-select$target', '$target')\">"
+		out << "<select id='magicwand-select$target' onchange='${onchange}'>"
 		out << '<option value="na" id="magic-wand-na$target" class="not-field">Select option</option>'
 		fields.each {
 			out << '<option class="predefined-field" value="'+it+'">'

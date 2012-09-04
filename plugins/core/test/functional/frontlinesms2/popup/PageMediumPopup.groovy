@@ -303,7 +303,7 @@ class WebConnectionWizard extends MediumPopup {
 class WebConnectionKeywordTab extends geb.Module {
 	static base = { $('div#tabs-1') }
 	static content = {
-		useKeyword { $("input#useKeyword") }
+		useKeyword { $("input#blankKeyword") }
 		keyword { $('input#keyword') }
 		post { $("input[value='POST']") }
 		get { $("input[value='GET']") }
