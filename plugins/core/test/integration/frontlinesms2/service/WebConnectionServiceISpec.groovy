@@ -83,7 +83,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		def unitOfWork = Mock(UnitOfWork)
 		x.unitOfWork >> unitOfWork
 		x.in >> inMessage
-		x.in.headers >> ['frontlinesms.fmessageId':inMessage.body.id]
+		x.in.headers >> ['frontlinesms.fmessageId':inMessage.body.id,'frontlinesms.webConnectionId':webconnection.id]
 		def out = Mock(Message)
 		out.headers >> [:]
 		x.out >> out
