@@ -3,6 +3,8 @@ package frontlinesms2
 class WebConnectionController extends ActivityController {
 	def create = {}
 
+	
+
 	private def withWebConnection(Closure c) {
 		def webConnectionInstance = WebConnection.get(params.id)
 		if (webConnectionInstance) c webConnectionInstance
