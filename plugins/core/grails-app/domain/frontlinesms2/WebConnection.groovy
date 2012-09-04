@@ -16,5 +16,8 @@ class WebConnection extends Activity {
 	static constraints = {}
 	def processKeyWord(Fmessage message, Boolean exactMatch){}
 	def send(Fmessage message){}
+
+	def preProcess(message){}
+	def postProcess(exchange){}
 }
 	
