@@ -7,7 +7,7 @@
 <![endif]-->
 
 <r:script disposition="head">
-	url_root = "${request.contextPath}/";
+	var url_root = url_root || "${request.contextPath}/";
 	url = "${request.forwardURI}/";
 	controller = "${params?.controller}";
 	action = "${params?.action}";

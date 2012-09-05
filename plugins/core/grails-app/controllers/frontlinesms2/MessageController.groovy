@@ -22,12 +22,11 @@ class MessageController {
 		params.offset  = params.offset ?: 0
 		return true
 	}
-	def beforeInterceptor = bobInterceptor
+	def beforeInterceptor = [except:'index', action:bobInterceptor]
 	
 //> ACTIONS
 	def index() {
-		params.sort = 'date'
-		redirect(action:'inbox', params:params)
+		redirect action:'inbox', params:params
 	}
 
 	def newMessageCount() {

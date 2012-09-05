@@ -6,21 +6,19 @@ class ArchiveController extends MessageController {
 //> INTERCEPTORS
 	 
 //> ACTIONS
-	def index = {
-		params.sort = 'date'
+	def index() {
 		def action = params.messageSection ?: 'inbox'
-		println "index: $params"
-		redirect(action:action, params:params)
+		redirect action:action, params:params
 	}
 	
-	def activityList = {
+	def activityList() {
 		def activityInstanceList = Activity.findAllByArchivedAndDeleted(true, false)
 		render view:'../message/standard', model:[activityInstanceList: activityInstanceList,
 				activityInstanceTotal: activityInstanceList.size(),
 				messageSection: "activity"]
 	}
 	
-	def folderList = {
+	def folderList() {
 		def folderInstanceList = Folder.findAllByArchivedAndDeleted(true, false)
 		render view:'../message/standard', model:[folderInstanceList: folderInstanceList,
 				itemInstanceTotal: folderInstanceList.size(),
