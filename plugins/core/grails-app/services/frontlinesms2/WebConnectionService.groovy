@@ -3,7 +3,7 @@ package frontlinesms2
 import frontlinesms2.*
 import org.apache.camel.*
 
-class WebConnectionService implements Processor {
+class WebConnectionService{
 
 	def preProcess(Exchange x) throws Exception {
 		def inHeader = x.in.header
@@ -11,25 +11,21 @@ class WebConnectionService implements Processor {
 		def webConn = WebConnection.get(inHeader.'frontlinesms.webConnectionId')
 		def body
 		def url = webConn.url
-		def params
+		def encodedParameters
 		webConn.requestParameters.each {
-			params+=urlEncode(it.name + "=" + it.value + "&")
+			encodedParameters+=urlEncode(it.name + "=" + it.processedValue + "&")
 		}
-		if (params.length > 0)
-			params = params[0..-2] // drop trailing ampersand
+		if (encodedParameters.length > 0)
+			encodedParameters = encodedParameters[0..-2] // drop trailing ampersand
 		if(webConn.httpMethod == WebConnection.HttpMethod.GET) {
-			url += "?" + params
+			url += "?" + encodedParameters
 		}
 		else {
-			body = params
+			body = encodedParameters
 		}
-		body = urlEncode(body)
-		url = urlEncode(url)
 		// TODO:
-		/* - Find the message and the webservice activity instance
-		 * - Put all parameters into URL/BODY (depending on GET/POST)
+		/*
 		 * - Perform substitutions on URL and BODY (thus catering for clever people who put params in URL field)
-		 * - URLEncode body & url
 		*/
 	}
 
