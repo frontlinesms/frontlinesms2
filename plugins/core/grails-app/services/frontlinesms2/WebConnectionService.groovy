@@ -13,9 +13,9 @@ class WebConnectionService{
 		def url = webConn.url
 		def encodedParameters
 		webConn.requestParameters.each {
-			encodedParameters+=urlEncode(it.name + "=" + it.processedValue + "&")
+			encodedParameters+=urlEncode(it.name + "=" + it.getProcessedValue(inMessage) + "&")
 		}
-		if (encodedParameters.length > 0)
+		if (encodedParameters.length() > 0)
 			encodedParameters = encodedParameters[0..-2] // drop trailing ampersand
 		if(webConn.httpMethod == WebConnection.HttpMethod.GET) {
 			url += "?" + encodedParameters
@@ -25,7 +25,7 @@ class WebConnectionService{
 		}
 		x.out.headers = x.in.headers
 		x.out.headers.url = url
-		x.out.body = x.in.body
+		x.out.body = body
 	}
 
 	def postProcess(Exchange x) throws Exception {
