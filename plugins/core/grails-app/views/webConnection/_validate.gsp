@@ -3,7 +3,8 @@
 		var validator = $("#new-webconnection-form").validate({
 			errorContainer: ".error-panel",
 			rules: {
-				name: { required:true }
+				name: { required:true },
+				"param-name": { required:true }
 			}
 		});
 
@@ -12,7 +13,13 @@
 			 else return true;
 		};
 		var configureTabValidation = function() {
-			return validator.element('#url');
+			var isValid = true;
+			$('#web-connection-param-table input').each(function() {
+				if (!validator.element(this) && isValid) {
+					isValid = false;
+				}
+			});
+			return (validator.element('#url') && isValid);
 		};
 
 		var confirmTabValidation = function() {

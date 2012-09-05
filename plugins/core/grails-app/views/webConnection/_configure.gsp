@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="url"><g:message code="webConnection.url.label"/></label>
-	<g:textField name="url" value="${activityInstanceToEdit?.connection?.url}" required="true"/>
+	<g:textField name="url" value="${activityInstanceToEdit?.connection?.url}" class="email" required="true"/>
 </div>
 <div class="input">
 	<label for="httpMethod"><g:message code="webConnection.httpMethod.label"/></label>
@@ -20,6 +20,14 @@
 <g:set var="isFirst" value="i==0"/>
 <table id="web-connection-param-table">
 	<tbody>
+		<tr class="prop web-connection-parameter">
+			<td>
+				<label for="param-name"><g:message code="webConnection.param.name"/></label>
+			</td>
+			<td>
+				<label for="param-value"><g:message code="webConnection.param.value"/></label>
+			</td>
+		</tr>
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
 				<g:set var="isFirst" value="i==0"/>
@@ -53,7 +61,7 @@
 	}
 
 	function addNewParam() {
-		var template = $('.web-connection-parameter').first();
+		var template = $('.web-connection-parameter').last();
 		var target = "param.value";
 		// Selectmenu is destroyed here to allow cloning. Rebuilt after clone.
 		template.find("select").selectmenu("destroy");
@@ -70,7 +78,7 @@
 
 	function updateServerConfiguration() {
 		var url = $("input[name=url]").val();
-		var httpMethod = $("input[name=httpMethod]").val();
+		var httpMethod = $("input[name=httpMethod]").val().toUpperCase();
 		var requestParameters = "";
 
 		if(requestParameters.length === 0) { requestParameters = i18n("webConnection.none.label")}
