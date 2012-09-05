@@ -5,7 +5,10 @@ class WebConnection extends Activity {
 	static String getShortName() { 'webConnection' }
 
 	// Substitution variables
-	static subFields = ['message_body', 'message_src_number', 'message_src_name', 'message_timestamp']
+	static subFields = ['message_body' : { msg -> msg.text},
+		'message_src_number' : { msg -> msg.src },
+		'message_src_name' : { msg -> Contact.findByMobile(msg.src)?.name ?: msg.src },
+		'message_timestamp' : { msg -> msg.dateCreated }]
 	
 	/// Variables
 	String url
