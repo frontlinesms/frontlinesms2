@@ -312,7 +312,7 @@ class CoreBootStrap {
 			it.save(failOnError:true, flush:true)
 		}
 		def extCmd = new WebConnection(name:'Through To Server', keyword:new Keyword(value:'FORWARD'), url:"http://localhost:8181", httpMethod:WebConnection.HttpMethod.POST.toString())
-		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: WebConnection.subFields[0]))
+		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'username' , value: 'usr101'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'password' , value: 'pass123'))
 		extCmd.save(failOnError:true, flush:true)
