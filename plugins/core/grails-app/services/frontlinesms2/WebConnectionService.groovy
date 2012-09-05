@@ -6,7 +6,7 @@ import org.apache.camel.*
 class WebConnectionService{
 
 	def preProcess(Exchange x) throws Exception {
-		def inHeader = x.in.header
+		def inHeader = x.in.headers
 		def inMessage = Fmessage.get(inHeader.'frontlinesms.fmessageId')
 		def webConn = WebConnection.get(inHeader.'frontlinesms.webConnectionId')
 		def body
@@ -23,21 +23,13 @@ class WebConnectionService{
 		else {
 			body = encodedParameters
 		}
-		// TODO:
-		/*
-		 * - Perform substitutions on URL and BODY (thus catering for clever people who put params in URL field)
-		*/
+		x.out.headers = x.in.headers
+		x.out.headers.url = url
+		x.out.body = x.in.body
 	}
 
 	def postProcess(Exchange x) throws Exception {
-		// TODO:
-		/* - Log the response
-		*/
-	}
-
-	private def set(Exchange x, String header, String value) {
-		println "PreProcessor.set() : header=$header; value=$value"
-		x.out.headers["intellisms.$header"] = urlEncode(value)
+		println "Web Connection Response::\n ${x.body}"
 	}
 	
 	private String urlEncode(String s) throws UnsupportedEncodingException {
