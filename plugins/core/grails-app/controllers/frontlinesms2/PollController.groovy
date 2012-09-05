@@ -49,7 +49,6 @@ class PollController extends ActivityController {
 	}
 
 	private def renderJsonErrors(poll) {
-		println "Error:: ${poll.errors.allErrors}"
 		def errorMessages = poll.errors.allErrors.collect { message(error:it) }.join("\n")
 		withFormat {
 			json {

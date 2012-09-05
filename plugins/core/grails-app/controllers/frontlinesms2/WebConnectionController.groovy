@@ -1,9 +1,22 @@
 package frontlinesms2
 
+import grails.converters.JSON
+
 class WebConnectionController extends ActivityController {
 	def create = {}
 
-	
+	def save = {
+	}
+
+	private def renderJsonErrors(webConnectionInstance) {
+		def errorMessages = webConnectionInstance.errors.allErrors.collect { message(error:it) }.join("\n")
+		withFormat {
+			json {
+				render([ok:false, text:errorMessages] as JSON)
+			}
+		}
+	}
+
 
 	private def withWebConnection(Closure c) {
 		def webConnectionInstance = WebConnection.get(params.id)

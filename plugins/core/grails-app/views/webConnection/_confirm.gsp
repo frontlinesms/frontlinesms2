@@ -15,7 +15,7 @@
 		</tr>
 		<tr>
 			<td><g:message code="webConnection.httpMethod.label"/></td>
-			<td id="requestType-confirm"/>
+			<td id="httpMethod-confirm"/>
 		</tr>
 		<tr>
 			<td><g:message code="webConnection.parameters.confirm"/></td>
