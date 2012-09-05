@@ -84,7 +84,8 @@ class FsmsTagLib {
 
 	def render = { att ->
 		boolean rendered = false
-		([null] + grailsApplication.config.frontlinesms.plugins).each { plugin -> 
+		def plugins = grailsApplication.config.frontlinesms.plugins
+		([null] + plugins).each { plugin ->
 			if(!rendered) {
 				try {
 					att.plugin = plugin
