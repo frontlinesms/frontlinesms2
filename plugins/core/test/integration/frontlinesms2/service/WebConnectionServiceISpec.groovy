@@ -22,8 +22,8 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webConnectionService.preProcess(x)
 			println "**** " + x.out.headers.url
 		then:
-			x.out.headers.url.contains(urlEncode("username=bob"))
-			x.out.headers.url.contains(urlEncode("password=secret"))
+			x.out.headers.url.contains("username=bob")
+			x.out.headers.url.contains("password=secret")
 	}
 
 	def 'out_body should contains the substituted RequestParameters for POST request'(){
@@ -33,7 +33,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webConnectionService.preProcess(x)
 		then:
 			1* x.out.setBody({ bodyContent ->
-				bodyContent.contains(urlEncode("message=test message"))
+				bodyContent.contains("message=test+message")
 			})
 	}
 
@@ -53,9 +53,9 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webConnectionService.preProcess(x)
 		then:
 			1* x.out.setBody({ bodyContent ->
-				bodyContent.contains(urlEncode("message=simple")) && 
-				bodyContent.contains(urlEncode("username=bob")) && 
-				bodyContent.contains(urlEncode("password=secret"))
+				bodyContent.contains("message=simple") && 
+				bodyContent.contains("username=bob") && 
+				bodyContent.contains("password=secret")
 			})
 	}
 	//Post-Processor Tests

@@ -15,12 +15,9 @@ class WebConnectionService{
 		def body = ""
 		def url = webConn.url
 		def encodedParameters = ""
-		webConn.requestParameters.each {
-			println "I AM A REQUEST PARAMETER:::"+it
-			encodedParameters+=urlEncode(it.name + "=" + it.getProcessedValue(inMessage) + "&")
-		}
-		if (encodedParameters.length() > 0)
-			encodedParameters = encodedParameters[0..-2] // drop trailing ampersand
+		encodedParameters += webConn.requestParameters.collect {
+			urlEncode(it.name) + "=" + urlEncode(it.getProcessedValue(inMessage))
+		}.join("&")
 		if(webConn.httpMethod == WebConnection.HttpMethod.GET) {
 			url += "?" + encodedParameters
 		}
@@ -37,6 +34,14 @@ class WebConnectionService{
 
 	def postProcess(Exchange x) throws Exception {
 		println "Web Connection Response::\n ${x.in.body}"
+	}
+
+	def send(Fmessage message){
+		println "*** sending message ${message}"
+		def headers = [:]
+		headers.'frontlinesms.fmessageId' = message.id
+		headers.'frontlinesms.webConnectionId' = message.messageOwner.id
+		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
 	}
 	
 	private String urlEncode(String s) throws UnsupportedEncodingException {

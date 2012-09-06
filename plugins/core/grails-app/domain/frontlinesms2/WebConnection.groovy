@@ -8,6 +8,7 @@ import frontlinesms2.camel.exception.*
 
 class WebConnection extends Activity {
 	def camelContext
+	def webConnectionService
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webConnection' }
 
@@ -24,34 +25,30 @@ class WebConnection extends Activity {
 	static hasOne = [keyword: Keyword]
 	
 	static constraints = {}
-	def processKeyWord(Fmessage message, Boolean exactMatch){
+
+	def processKeyword(Fmessage message, Boolean exactMatch) {
 		this.addToMessages(message)
 		this.save(failOnError:true)
-		send(message)
-	}
-	def send(Fmessage message){
-		def headers = [:]
-		headers.'frontlinesms.fmessageId' = message.id
-		headers.'frontlinesms.webConnectionId' = this.id
-		sendMessageAndHeaders('seda:dispatches', it, headers)
+		webConnectionService.send(message)
 	}
 
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
 			@Override void configure() {}
 			List getRouteDefinitions() {
-				return [from("seda:out-webconnection-${this.id}")
+				return [from("seda:activity-webconnection-${WebConnection.this.id}")
 						.beanRef('webConnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_URI,
 								simple('${header.url}'))
-						.to('${header.url}')
+						.to(url)
 						.beanRef('webConnectionService', 'postProcess')
-						.routeId("out-webconnection-${this.id}")]
+						.routeId("activity-webconnection-${WebConnection.this.id}")]
 			}
 		}.routeDefinitions
 	}
 
 	def activate(){
+		println "*** ACTIVATING ACTIVITY ***"
 		try {
 			def routes = this.routeDefinitions
 			camelContext.addRouteDefinitions(routes)
@@ -61,15 +58,15 @@ class WebConnection extends Activity {
 			logFail(this, ex.cause)
 		} catch(Exception ex) {
 			logFail(this, ex)
-			camelContext.stopRoute("out-webconnection-${this.id}")
-			camelContext.removeRoute("out-webconnection-${this.id}")
+			camelContext.stopRoute("activity-webconnection-${this.id}")
+			camelContext.removeRoute("activity-webconnection-${this.id}")
 		}
 	}
 
 	def deactivate(){
 		println "################ Deactivating WebConnection :: ${this}"
-		camelContext.stopRoute("out-webconnection-${this.id}")
-		camelContext.removeRoute("out-webconnection-${this.id}")
+		camelContext.stopRoute("activity-webconnection-${this.id}")
+		camelContext.removeRoute("activity-webconnection-${this.id}")
 	}
 }
 	
