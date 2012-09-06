@@ -17,7 +17,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	//Pre-Processor Tests
 	def 'out_header url should contain the RequestParameters for GET request'() {
  		given:
-			def x = mockExchange("simple","get")
+			def x = mockExchange("simple","get", false)
 		when:
 			webConnectionService.preProcess(x)
 			println "**** " + x.out.headers.url
@@ -26,70 +26,81 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			x.out.headers.url.contains(urlEncode("password=secret"))
 	}
 
-	def 'out_body should contains the RequestParameters for POST request'(){
+	def 'out_body should contains the substituted RequestParameters for POST request'(){
 		given:
-			def x = mockExchange("simple","post")
+			def x = mockExchange("test message","post", true)
 		when:
 			webConnectionService.preProcess(x)
 		then:
-			x.out.body.contains("username=bob")
-			x.out.body.contains("password=secret")
+			1* x.out.setBody({ bodyContent ->
+				bodyContent.contains(urlEncode("message=test message"))
+			})
 	}
 
-	def 'exchange header should have all the necessary extra information in the header'() {
+	def 'URL is not modified when request is POST'(){
 		given:
-			def x = mockExchange("simple","post")
+			def x = mockExchange("test message","post", true)
 		when:
 			webConnectionService.preProcess(x)
 		then:
-			x.out.headers.'ownerid' != ''
-			x.out.headers.'sender' == '45678'
+			x.out.headers.url == "www.frontlinesms.com/sync"
 	}
 
-	def 'exchange body should contains the substituted values'() {
+	def 'exchange body should contains all values substituted values'() {
 		given:
-			def x = mockExchange("simple","post")
+			def x = mockExchange("simple","post", false)
 		when:
 			webConnectionService.preProcess(x)
 		then:
-			x.out.body.contains("message=simple")
+			1* x.out.setBody({ bodyContent ->
+				bodyContent.contains(urlEncode("message=simple")) && 
+				bodyContent.contains(urlEncode("username=bob")) && 
+				bodyContent.contains(urlEncode("password=secret"))
+			})
 	}
 	//Post-Processor Tests
 	def 'Successful responses should do nothing exciting'() {
 		given:
-			def x = mockExchange("simple","post")
+			def x = mockExchange("simple","post", false)
 		when:
 			webConnectionService.postProcess(x)
 		then:
 			notThrown(RuntimeException)
 	}
 
-	Exchange mockExchange(messageText,method){
+	Exchange mockExchange(messageText,method,messageOnly){
 		def webconnection =  WebConnection.findByName("Sync")
 		if(method ==  'get'){
 			webconnection.httpMethod = WebConnection.HttpMethod.GET
 		} else {
 			webconnection.httpMethod = WebConnection.HttpMethod.POST
 		}
-		def p1 = new RequestParameter(name:"username",value:"bob")
-		def p2 = new RequestParameter(name:"password",value:"secret")
-		def p3 = new RequestParameter(name:"message",value:"\${message_body}")
-		println "*** ${method} *** ${webconnection.httpMethod}"
+		def p1 = new RequestParameter(name:"message",value:"\${message_body}")
 		webconnection.addToRequestParameters(p1)
-		webconnection.addToRequestParameters(p2)
-		webconnection.addToRequestParameters(p3)
+		if(!messageOnly){
+			def p2 = new RequestParameter(name:"password",value:"secret")
+			def p3 = new RequestParameter(name:"username",value:"bob")
+			webconnection.addToRequestParameters(p2)
+			webconnection.addToRequestParameters(p3)
+		}
 		webconnection.save(failOnError:true, flush:true)
 		def message = Fmessage.build(text:messageText)
+		Exchange exchange = Mock(Exchange)
+		exchange.in >> mockExchangeMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], null)
+		exchange.out >> mockExchangeMessage([:], null)
+		exchange.unitOfWork >> Mock(UnitOfWork)
+		return exchange
+		/*
 		def inMessage = mockIncomingMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], null)
-		def x = Mock(Exchange)
-		def unitOfWork = Mock(UnitOfWork)
-		x.unitOfWork >> unitOfWork
-		x.in >> inMessage
-		def out = Mock(Message)
-		out.headers >> [:]
-		x.out >> out
+		def xIn = [headers:['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], body:null] as Message
+		def xOut = [headers:[:], body:null] as Message
+		def x = [getIn:{xIn}, getOut:{xOut}, unitOfWork:Mock(UnitOfWork)]
+		x = x as Exchange
+		//def unitOfWork = Mock(UnitOfWork)
+		//x.unitOfWork >> unitOfWork
 		println "mockExchange() : x = $x"
 		return x
+		*/
 	}
 
 	private String urlEncode(String s) throws UnsupportedEncodingException {
@@ -97,7 +108,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		return URLEncoder.encode(s, "UTF-8");
 	}
 
-	def mockIncomingMessage(headers, body) {
+	def mockExchangeMessage(headers, body) {
 		def m = Mock(Message)
 		m.body >> body
 		m.headers >> headers
