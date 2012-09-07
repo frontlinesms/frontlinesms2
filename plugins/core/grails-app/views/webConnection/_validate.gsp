@@ -1,5 +1,6 @@
 <r:script>
 	function initializePopup() {
+
 		var validator = $("#new-webconnection-form").validate({
 			errorContainer: ".error-panel",
 			rules: {
@@ -12,9 +13,6 @@
 				},
 				url: {
 					required: i18n("webconnection.url.validation.error")
-				},
-				"param-name": {
-					required: i18n("webconnection.paramName.validation.error")
 				}
 			}
 		});
