@@ -109,8 +109,9 @@ class CoreBootStrap {
 		}
 		createContact("Kate", "+198730948")
 
-		(1..101).each {
+		(1..1000000).each {
 			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
+			if (it % 1000 == 0) println "${it}"
 		}
 		
 		[new CustomField(name: 'lake', value: 'Victoria', contact: alice),
@@ -313,8 +314,10 @@ class CoreBootStrap {
 		}
 		def extCmd = new WebConnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:WebConnection.HttpMethod.GET)
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
+		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
-		extCmd.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
+		extCmd.addToRequestParameters(new RequestParameter(name:'senderNumber' , value: '${message_src_number}'))
+		extCmd.addToRequestParameters(new RequestParameter(name:'senderName' , value: '${message_src_name}'))
 		extCmd.save(failOnError:true, flush:true)
 		def sent1 = new Fmessage(src:'me', inbound:false, text:"Your messages are in 'the cloud'")
 		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
