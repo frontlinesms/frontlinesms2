@@ -20,7 +20,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should permanently delete a poll and its messages when trashed"() {
 		setup:
-			def message = new Fmessage(src:'123456', date:new Date(), inbound:true, isDeleted:false)
+			def message = Fmessage.build(src:'123456', date:new Date(), inbound:true, isDeleted:false)
 			message.save(failOnError:true, flush:true)
 			def keyword = new Keyword(value: "FOOTBALL")
 			def p = new Poll(name:'Who is the best football team in the world?', keyword: keyword, deleted:true)
@@ -42,7 +42,7 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 	
 	def "should permanently delete a folder and its messages when trashed"() {
 		given:
-			def message = new Fmessage(src: '1234567', date: new Date(), inbound: true).save(failOnError:true, flush:true)
+			def message = Fmessage.build(src: '1234567', date: new Date(), inbound: true).save(failOnError:true, flush:true)
 			def folder = new Folder(name:"test", deleted:true).save(failOnError:true, flush:true)
 			folder.addToMessages(message)
 			folder.save(failOnError:true, flush:true)
@@ -58,9 +58,9 @@ class TrashServiceISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'empty trash permanently deletes messages with isDeleted flag true'() {
 		setup:
-			(1..3).each {new Fmessage(src:'123456', isDeleted:false, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
+			(1..3).each {Fmessage.build(src:'123456', isDeleted:false, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
 			def inboxMessages = Fmessage.list()
-			(1..3).each {new Fmessage(src:'123456', isDeleted:true, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
+			(1..3).each {Fmessage.build(src:'123456', isDeleted:true, date:new Date(), inbound:true).save(failOnError:true, flush:true)}
 			
 		when:
 			trashService.emptyTrash()

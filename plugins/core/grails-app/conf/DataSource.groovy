@@ -11,32 +11,39 @@ hibernate {
 }
 // environment specific settings
 environments {
-    development {
-        dataSource {
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+	development {
+		dataSource {
+			url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+		}
+	}
+	dbDev {
+		dataSource {
+			dbCreate = "create-drop"
+			url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+			logSql = true
+		}
+	}
+  test {
+      dataSource {
+          dbCreate = "update"
+          url = "jdbc:h2:mem:testDb${frontlinesms2.StaticApplicationInstance.uniqueId};MVCC=TRUE"
+          logSql = true
+      }
+  }
+  production {
+    dataSource {
+        url = "jdbc:h2:${frontlinesms2.ResourceUtils.resourcePath}/prodDb;MVCC=TRUE"
+        pooled = true
+        properties {
+           maxActive = -1
+           minEvictableIdleTimeMillis=1800000
+           timeBetweenEvictionRunsMillis=1800000
+           numTestsPerEvictionRun=3
+           testOnBorrow=true
+           testWhileIdle=true
+           testOnReturn=true
+           validationQuery="SELECT 1"
         }
     }
-    test {
-        dataSource {
-            dbCreate = "update"
-            url = "jdbc:h2:mem:testDb${frontlinesms2.StaticApplicationInstance.uniqueId};MVCC=TRUE"
-            logSql = true
-        }
-    }
-    production {
-        dataSource {
-            url = "jdbc:h2:${frontlinesms2.ResourceUtils.resourcePath}/prodDb;MVCC=TRUE"
-            pooled = true
-            properties {
-               maxActive = -1
-               minEvictableIdleTimeMillis=1800000
-               timeBetweenEvictionRunsMillis=1800000
-               numTestsPerEvictionRun=3
-               testOnBorrow=true
-               testWhileIdle=true
-               testOnReturn=true
-               validationQuery="SELECT 1"
-            }
-        }
-    }
+  }
 }

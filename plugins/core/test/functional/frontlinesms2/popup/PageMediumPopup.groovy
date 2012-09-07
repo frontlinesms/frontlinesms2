@@ -8,7 +8,7 @@ import java.util.Date
 abstract class MediumPopup extends geb.Page {
 	static content = {
 		popupTitle {
-			$('#ui-dialog-title-modalBox').text().toLowerCase()
+			$('#ui-dialog-title-modalBox').text()?.toLowerCase()
 		}
 		cancel { $('button#cancel') }
 		next { $('button#nextPage') }
@@ -18,11 +18,14 @@ abstract class MediumPopup extends geb.Page {
 			$('#tabs a[href="#tabs-'+tabId+'"]')
 		}
 		errorPanel { $('div.error-panel') }
-		error { errorPanel.text().toLowerCase() }
+		error { errorPanel.text()?.toLowerCase() }
 	}
 }
 
 class QuickMessageDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("message") || popupTitle.contains("forward") || popupTitle.contains("reply")
+	}
 	static content = {
 		compose { module QuickMessageComposeTab }
 		recipients { module QuickMessageRecipientsTab }
@@ -49,6 +52,7 @@ class QuickMessageRecipientsTab extends geb.Module {
 		count { $('#recipient-count').text().toInteger() }
 		manualContacts { $("li.manual").find("input", name:"addresses") }
 		groupCheckboxes { $('input', type:'checkbox', name:'groups') }
+		groupCheckboxesChecked { $('input:checked', type:'checkbox', name:'groups') }
 		recipientCheckboxByValue { val -> $("input[value='" + val + "']") }
 	}
 }
@@ -69,6 +73,7 @@ class CreateActivityDialog extends MediumPopup {
 		poll { $('input[value="poll"]') }
 		announcement { $('input[value="announcement"]') }
 		autoreply { $('input[value="autoreply"]') }
+		subscription { $('input[value="subscription"]') }
 	}
 }
 
@@ -185,7 +190,7 @@ class Summary extends geb.Module {
 
 class ExportDialog extends MediumPopup {
 	static at = {
-		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("export");
+		$('#ui-dialog-title-modalBox').text()?.toLowerCase().contains("export");
 	}
 	static content = {
 	}
@@ -193,14 +198,13 @@ class ExportDialog extends MediumPopup {
 
 class RenameDialog extends MediumPopup {
 	static at = {
-		$('#ui-dialog-title-modalBox').text().toLowerCase().contains("rename");
+		$('#ui-dialog-title-modalBox').text()?.toLowerCase().contains("rename");
 	}
 	static content = {
 		name { $('input#name') }
 		done { $('button#done') }
 	}
 }
-
 
 class AnnouncementDialog extends MediumPopup {
 	static at = {
@@ -287,3 +291,71 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 	}
 }
 
+class SubscriptionCreateDialog extends MediumPopup {
+	static at = {
+		popupTitle.contains("subscription") || popupTitle.contains("edit activity")
+	}
+	static content = {
+		group { module SubscriptionGroupTab }
+		aliases { module SubscriptionAliasesTab}
+		autoreply { module SubscriptionAutoReplyTab }
+		confirm { module SubscriptionConfirmTab }
+		summary { module SubscriptionSummary }
+		error {$('label', class:'error')}
+	}
+}
+
+class SubscriptionGroupTab extends geb.Module {
+	static base = { $('div#tabs-1') }
+	static content = {
+		addToGroup { groupId ->
+			$('select#subscriptionGroup').jquery.val(groupId)
+			$('select#subscriptionGroup').jquery.trigger("change")
+		}
+		keywordText { $('input#keyword') }
+	}
+}
+
+class SubscriptionAliasesTab extends geb.Module {
+	static base = { $('div#tabs-2')}
+	static content = {
+		joinAliases {$('input#joinAliases')}
+		leaveAliases {$('input#leaveAliases')}
+		defaultAction { $("input#defaultAction") }
+	}
+}
+
+class SubscriptionAutoReplyTab extends geb.Module {
+	static base = { $('div#tabs-3') }
+	static content = {
+		enableJoinAutoreply {$('input#enableJoinAutoreply')}
+		joinAutoreplyText {$('textarea#joinAutoreplyText')}
+		enableLeaveAutoreply{$('input#enableLeaveAutoreply')}
+		leaveAutoreplyText {$('textarea#leaveAutoreplyText')}
+	}
+}
+
+class SubscriptionConfirmTab extends geb.Module {
+	static base = { $('div#tabs-4') }
+	static content = {
+		subscriptionName { $('input#name') }
+		keyword {$("#confirm-keyword").text()}
+		joinAliases {$("#confirm-joinAliases").text()}
+		leaveAliases {$("#confirm-leaveAliases").text()}
+		autoreplyText {$("#confirm-autoreplyText").text()}
+	}
+}
+
+class SubscriptionSummary extends geb.Module {
+	static base = { $('div#tabs-5') }
+	static content = {
+		message { $("div.summary") }
+		ok { $('button#submit') }
+	}
+}
+
+class EditSubsriptionDialog extends SubscriptionCreateDialog {
+	static at = {
+		popupTitle.contains('edit subscription')
+	}
+}

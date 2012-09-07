@@ -52,7 +52,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'display for outgoing message should be taken from Contact with matching mobile if only one recipient'() {
 		given:
 			Contact.build(name:'bob', mobile:'123')
-			Fmessage m = new Fmessage()
+			Fmessage m = new Fmessage(text:'')
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		expect:
@@ -61,7 +61,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def 'outgoing display name should be dst if only one recipient but no matching contact'() {
 		given:
-			Fmessage m = new Fmessage()
+			Fmessage m = new Fmessage(text:'')
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.save(failOnError:true)
 		expect:
@@ -72,7 +72,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			Contact.build(name:'adam', mobile:'123')
 			Contact.build(name:'bob', mobile:'456')
-			Fmessage m = new Fmessage()
+			Fmessage m = new Fmessage(text:'')
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.addToDispatches(dst:'456', status:DispatchStatus.PENDING)
 					.addToDispatches(dst:'789', status:DispatchStatus.PENDING)
@@ -339,6 +339,7 @@ class FmessageISpec extends grails.plugin.spock.IntegrationSpec {
 	private Fmessage createMessage(params) {
 		def date = TEST_DATE - (params.dateDelta?:0)
 		def m = new Fmessage(src:'1-POTATO',
+				text:'',
 				archived:params.archived?:false,
 				starred:params.starred?:false,
 				inbound:params.inbound!=null?params.inbound:true,

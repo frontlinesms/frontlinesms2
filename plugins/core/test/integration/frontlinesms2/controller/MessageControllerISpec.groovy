@@ -162,7 +162,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		given:
 			new Contact(mobile:'456', name:'bertrand').save()
 			new Contact(mobile:'123', name:'andrea').save()
-			def m = new Fmessage()
+			def m = new Fmessage(text:"")
 					.addToDispatches(dst:'123', status:DispatchStatus.PENDING)
 					.addToDispatches(dst:'456', status:DispatchStatus.SENT, dateSent:new Date())
 					.addToDispatches(dst:'789', status:DispatchStatus.FAILED)

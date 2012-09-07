@@ -59,6 +59,7 @@ class GroupCedSpec extends GroupBaseSpec {
 			at PageContactShow
 			bodyMenu.groupSubmenuLinks == ['Listeners', 'Create new group']
 	}
+
 }
 
 

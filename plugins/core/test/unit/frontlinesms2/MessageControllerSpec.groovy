@@ -38,9 +38,9 @@ class MessageControllerSpec extends Specification {
 
 	def "should resend a single failed message"() {
 		setup:
-			[new Fmessage(id:1, inbound:false, dispatches:[new Dispatch()]),
-					new Fmessage(id:2, inbound:false, dispatches:[new Dispatch()]),
-					new Fmessage(id:3, inbound:false, dispatches:[new Dispatch()])]*.save(failOnError:true)*.id
+			[new Fmessage(text:'', id:1, inbound:false, dispatches:[new Dispatch()]),
+					new Fmessage(text:'', id:2, inbound:false, dispatches:[new Dispatch()]),
+					new Fmessage(text:'', id:3, inbound:false, dispatches:[new Dispatch()])]*.save(failOnError:true)*.id
 			params.messageId = 1
 			1 * mockMessageSendService.retry(_) >> { m ->
 				assert m*.id == [1]
@@ -53,9 +53,9 @@ class MessageControllerSpec extends Specification {
 
 	def "should resend multiple failed message"() {
 		setup:
-			[new Fmessage(id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
-				new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
-				new Fmessage(id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save(failOnError:true)
+			[new Fmessage(text:'', id:1L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
+				new Fmessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)]),
+				new Fmessage(text:'', id:3L, inbound:false, dispatches:[new Dispatch(dst:"234", status:FAILED)])]*.save(failOnError:true)
 			params['message-select'] = [1, 2]
 			2 * mockMessageSendService.retry(_) >> { m ->
 				return 1 }
@@ -99,7 +99,7 @@ class MessageControllerSpec extends Specification {
 	
 	def "archiving pending messages from the result screen should fail"(){
 		setup:
-			def message = new Fmessage(id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:PENDING)]).save()
+			def message = new Fmessage(text:'', id:2L, inbound:false, dispatches:[new Dispatch(dst:"234", status:PENDING)]).save()
 			params.controller = "message"
 			params.messageSection = "result"
 			params.searchId = "1"

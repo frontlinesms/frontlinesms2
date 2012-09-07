@@ -35,6 +35,7 @@ modules = {
 		resource url:[dir:'js', file:"system_notification.js", plugin:'core'], disposition:'head'
 		resource url:[dir:'js', file:'magicwand.js', plugin:'core'], disposition:'head'
 		resource url:[dir:'js', file:'selectmenuTools.js', plugin:'core'], disposition:'head'
+		resource url:[dir:'js', file:"activity/popupCustomValidation.js", plugin:'core'], disposition:'head'
 	}
 	
 	messages {

@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import grails.converters.*
-import org.quartz.impl.triggers.SimpleTriggerImpl
 
 class MessageController {
 //> CONSTANTS
@@ -115,6 +114,7 @@ class MessageController {
 	def poll() { redirect(action: 'activity', params: params) }
 	def announcement() { redirect(action: 'activity', params: params) }
 	def autoreply() { redirect(action: 'activity', params: params) }
+	def subscription() { redirect(action: 'activity', params: params) }
 	def activity() {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {

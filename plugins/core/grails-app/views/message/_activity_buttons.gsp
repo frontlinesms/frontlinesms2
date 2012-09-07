@@ -1,6 +1,11 @@
 <%@ page import="frontlinesms2.*" %>
 <div class="header-buttons">
-	<fsms:quickMessage class="section-action-button activity-btn btn"/>
+	<g:if test='${ownerInstance?.shortName=='subscription'}'>
+		<fsms:quickMessage class="section-action-button activity-btn btn" groupId="${ownerInstance.group.id}"/>
+	</g:if>
+	<g:else>
+		<fsms:quickMessage class="section-action-button activity-btn btn"/>
+	</g:else>
 	<g:if test="${params.controller!='archive'}">
 		<g:link class="activity-btn btn" controller="${ownerInstance?.shortName}" action="archive" id="${ownerInstance?.id}"><g:message code="fmessage.activity.archive" args="${[ownerInstance?.shortName]}"/></g:link>
 	</g:if>

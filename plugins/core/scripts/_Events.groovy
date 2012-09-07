@@ -77,8 +77,12 @@ eventCompileStart = { kind ->
 
 			def appVersion = getApplicationProperty('app.version')
 			if(appVersion.contains('SNAPSHOT')) {
-				println '# Press ENTER to continue...'
-				System.in.withReader { it.readLine() }
+				if(System.getenv('frontlinesms.build.env') == 'online-dev') {
+					// let it slide
+				} else {
+					println '# Press ENTER to continue...'
+					System.in.withReader { it.readLine() }
+				}
 			} else {
 				println '# You cannot include SNAPSHOT dependencies in a release.'
 				println '# Build terminating.'
