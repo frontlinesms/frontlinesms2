@@ -293,9 +293,10 @@ class WebConnectionWizard extends MediumPopup {
 		popupTitle.toLowerCase().contains("web connection")
 	}
 	static content = {
-		keywordAndUrl { module WebConnectionKeywordTab }
-		requestFormat { module WebConnectionRequestFormatTab }
-		confirm { module WebConnectionConfirmTab }
+		error { $("label.error").text()}
+		keywordTab { module WebConnectionKeywordTab }
+		requestTab { module WebConnectionRequestFormatTab }
+		confirmTab { module WebConnectionConfirmTab }
 		summary { module WebConnectionSummary }
 	}
 }
@@ -305,25 +306,25 @@ class WebConnectionKeywordTab extends geb.Module {
 	static content = {
 		useKeyword { $("input#blankKeyword") }
 		keyword { $('input#keyword') }
-		post { $("input[value='POST']") }
-		get { $("input[value='GET']") }
-		url { $("input#url") }
 	}
 }
 
 class WebConnectionRequestFormatTab extends geb.Module {
 	static base = { $('div#tabs-2') }
 	static content = {
-		addParam { $('input#new') }
-		parameters { moduleList WebConnectionParam, $('div#parameters tbody tr') }
+		post { $("input[value='POST']") }
+		get { $("input[value='GET']") }
+		url { $("input#url") }
+		addParam { $('a.btn.addNew') }
+		parameters { moduleList WebConnectionParam, $('#web-connection-param-table tbody tr') }
 	}
 }
 
 class WebConnectionParam extends geb.Module {
 	static content = {
-		value { $('input.param_value') }
-		name { $("input.param_name") }
-		remove { $("a.remove") }
+		value { $('input.param-value') }
+		name { $("input.param-name") }
+		remove { $("a.remove-command") }
 	}
 }
 

@@ -5,6 +5,17 @@
 			rules: {
 				name: { required:true },
 				"param-name": { required:true }
+			},
+			messages: {
+				keyword: {
+					required: i18n("webconnection.keyword.validation.error")
+				},
+				url: {
+					required: i18n("webconnection.url.validation.error")
+				},
+				"param-name": {
+					required: i18n("webconnection.paramName.validation.error")
+				}
 			}
 		});
 
