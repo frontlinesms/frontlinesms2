@@ -7,4 +7,5 @@
 		templates="/webConnection/sorting,
 				/webConnection/configure,
 				/webConnection/confirm,
+				/webConnection/save,
 				/webConnection/validate"/>
