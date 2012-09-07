@@ -33,7 +33,6 @@ class WebConnectionService{
 		}
 		else {
 			x.out.headers."${Exchange.HTTP_METHOD}" = "GET"
-			//x.out.headers."${Exchange.CONTENT_TYPE}" = "application/x-www-form-urlencoded"
 		}
 		x.out.body = body
 		println "x.out.headers = ${x.out.headers}"

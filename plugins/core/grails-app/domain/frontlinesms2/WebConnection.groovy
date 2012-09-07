@@ -13,7 +13,15 @@ class WebConnection extends Activity {
 	static String getShortName() { 'webConnection' }
 
 	// Substitution variables
-	static subFields = ['message_body' : { msg -> msg.text},
+	static subFields = ['message_body' : { msg ->
+			def keyword = msg.messageOwner?.keyword?.value
+			def text = msg.text
+			if (keyword.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+				text = text.substring(keyword.size()).trim()
+			}
+			text
+		},
+		'message_body_with_keyword' : { msg -> msg.text },
 		'message_src_number' : { msg -> msg.src },
 		'message_src_name' : { msg -> Contact.findByMobile(msg.src)?.name ?: msg.src },
 		'message_timestamp' : { msg -> msg.dateCreated }]
