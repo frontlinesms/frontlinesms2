@@ -21,8 +21,8 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.frontlinesms.com/sync"
 			controller.params.keyword = "keyword"
-			controller.params.'params-name' = 'username'
-			controller.params.'params-value' = 'bob'
+			controller.params.'param-name' = 'username'
+			controller.params.'param-value' = 'bob'
 		when:
 			controller.save()
 		then:
@@ -40,8 +40,8 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.url = "www.frontlinesms.com/syncing"
 			controller.params.httpMethod = "get"
 			controller.params.keyword = "keyword"
-			controller.params.'params-name' = ['username', 'password']
-			controller.params.'params-value' = ['bob','secret']
+			controller.params.'param-name' = ['username', 'password']
+			controller.params.'param-value' = ['bob','secret']
 		when:
 			controller.save()
 			println "WebConnection::: ${webConnection.validate()}"

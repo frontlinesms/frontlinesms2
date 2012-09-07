@@ -46,12 +46,12 @@ class WebConnectionController extends ActivityController {
 	}
 
 	private def processRequestParameters(webConnectionInstance) {
-		if(params.'params-name' instanceof List) {
-			params.'params-name'?.size()?.times {
-				addRequestParameter(params.'params-name'[it].trim(), params.'params-value'[it].trim(), webConnectionInstance)
+		if(params.'param-name' instanceof List) {
+			params.'param-name'?.size()?.times {
+				addRequestParameter(params.'param-name'[it].trim(), params.'param-value'[it].trim(), webConnectionInstance)
 			}
 		} else {
-			addRequestParameter(params.'params-name'.trim(), params.'params-value'.trim(), webConnectionInstance)
+			addRequestParameter(params.'param-name'?.trim(), params.'param-value'?.trim(), webConnectionInstance)
 		}
 	}
 
