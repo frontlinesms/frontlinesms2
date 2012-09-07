@@ -15,7 +15,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new WebConnectionController()
 	}
 
-	def 'save action should also save a webconnection'(){
+	def 'save action should also save a webconnection'() {
 		setup:
 			controller.params.name = "Test WebConnection"
 			controller.params.httpMethod = "get"
@@ -27,7 +27,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			WebConnection.findByName("Test WebConnection").name == controller.params.name
 	}
 
-	def 'edit should save all the details from the walkthrough'(){
+	def 'edit should save all the details from the walkthrough'() {
 		setup:
 			def keyword = new Keyword(value:'TEST')
 			def webConnection = new WebConnection(name:"Old WebConnection name", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.POST)
@@ -38,12 +38,13 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.url = "www.frontlinesms.com/syncing"
 			controller.params.httpMethod = "get"
 			controller.params.keyword = "keyword"
-			controller.params.'params-name' = "['username', 'password']"
-			controller.params.'params-value' = "['bob','secret']"
+			controller.params.'params-name' = ['username', 'password']
+			controller.params.'params-value' = ['bob','secret']
 		when:
 			controller.save()
-		then:
+			println "WebConnection::: ${webConnection.validate()}"
 			webConnection.refresh()
+		then:
 			webConnection.name == "New WebConnection name"
 			webConnection.keyword.value == "KEYWORD"
 			webConnection.httpMethod == WebConnection.HttpMethod.GET

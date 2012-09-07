@@ -1,6 +1,6 @@
 package frontlinesms2
 
-class RequestParameter{
+class RequestParameter {
 	String name
 	String value
 
