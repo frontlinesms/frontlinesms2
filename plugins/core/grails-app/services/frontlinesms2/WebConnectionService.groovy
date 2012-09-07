@@ -38,6 +38,10 @@ class WebConnectionService{
 		println "Web Connection Response::\n ${x.in.body}"
 	}
 
+	def handleException(Exchange x) {
+		println "Web Connection request failed with exception: ${x.in.body}"
+	}
+
 	def send(Fmessage message){
 		println "*** sending message ${message}"
 		def headers = [:]

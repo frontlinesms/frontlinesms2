@@ -323,7 +323,7 @@ class CoreBootStrap {
 		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
 		extCmd.addToMessages(Fmessage.findBySrc('June'))
 		extCmd.save(failOnError:true, flush:true)
-		def extCmdPost = new WebConnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://localhost:8080/core/webConnection/test", httpMethod:WebConnection.HttpMethod.POST)
+		def extCmdPost = new WebConnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:WebConnection.HttpMethod.POST)
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))

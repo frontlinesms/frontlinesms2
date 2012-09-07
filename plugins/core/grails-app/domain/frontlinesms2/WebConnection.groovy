@@ -40,6 +40,10 @@ class WebConnection extends Activity {
 						.beanRef('webConnectionService', 'preProcess')
 						.setHeader(Exchange.HTTP_URI,
 								simple('${header.url}'))
+						.onException(Exception)
+									.handled(true)
+									.beanRef('webConnectionService', 'handleException')
+									.end()
 						.to(url)
 						.beanRef('webConnectionService', 'postProcess')
 						.routeId("activity-webconnection-${WebConnection.this.id}")]
