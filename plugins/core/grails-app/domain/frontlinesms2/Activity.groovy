@@ -52,5 +52,12 @@ abstract class Activity extends MessageOwner {
 	def activate() {}
 
 	def deactivate() {}
+
+	private def logFail(c, ex) {
+		ex.printStackTrace()
+		log.warn("Error creating routes of webconnection with id $c?.id", ex)
+		LogEntry.log("Error creating routes to webconnection with name ${c?.name?: c?.id}")
+		//createSystemNotification('connection.route.failNotification', [c.id, c?.name?:c?.id], ex)
+	}
 }
 

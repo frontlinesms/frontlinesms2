@@ -51,7 +51,7 @@ class CoreBootStrap {
 				// 2.5.0 (which we are currently using), but has been fixed
 				// by camel 2.9.0 so this can be permanently enabled once we
 				// upgrade our Camel dependencies.
-				//camelContext.tracing = true
+				camelContext.tracing = true
 
 				dev_initSmartGroups()
 				dev_initGroups()
@@ -311,10 +311,10 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new WebConnection(name:'Through To Server', keyword:new Keyword(value:'FORWARD'), url:"http://localhost:8181", httpMethod:WebConnection.HttpMethod.POST.toString())
+		def extCmd = new WebConnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:WebConnection.HttpMethod.GET)
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
-		extCmd.addToRequestParameters(new RequestParameter(name:'username' , value: 'usr101'))
-		extCmd.addToRequestParameters(new RequestParameter(name:'password' , value: 'pass123'))
+		extCmd.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
+		extCmd.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
 		extCmd.save(failOnError:true, flush:true)
 		def sent1 = new Fmessage(src:'me', inbound:false, text:"Your messages are in 'the cloud'")
 		sent1.addToDispatches(dst:'+254116633', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
@@ -323,6 +323,11 @@ class CoreBootStrap {
 		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
 		extCmd.addToMessages(Fmessage.findBySrc('June'))
 		extCmd.save(failOnError:true, flush:true)
+		def extCmdPost = new WebConnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:WebConnection.HttpMethod.POST)
+		extCmdPost.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
+		extCmdPost.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
+		extCmdPost.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
+		extCmdPost.save(failOnError:true, flush:true)
 	}
 
 	private def dev_initLogEntries() {
