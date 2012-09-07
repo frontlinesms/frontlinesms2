@@ -27,6 +27,8 @@ class WebConnectionService{
 		}
 		x.out.headers = x.in.headers
 		x.out.headers.url = url
+		if (webConn.httpMethod == WebConnection.HttpMethod.POST)
+			x.out.headers."${Exchange.HTTP_METHOD}" = "POST"
 		x.out.body = body
 		println "x.out.headers = ${x.out.headers}"
 		println "x.out.body = ${x.out.body}"
