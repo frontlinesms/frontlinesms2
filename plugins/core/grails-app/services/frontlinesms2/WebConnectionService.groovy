@@ -12,13 +12,13 @@ class WebConnectionService{
 		def inHeader = x.in.headers
 		def inMessage = Fmessage.get(inHeader.'frontlinesms.fmessageId')
 		def webConn = WebConnection.get(inHeader.'frontlinesms.webConnectionId')
-		def body = ""
+		def body
 		def url = webConn.url
 		def encodedParameters = ""
 		encodedParameters += webConn.requestParameters.collect {
 			urlEncode(it.name) + "=" + urlEncode(it.getProcessedValue(inMessage))
 		}.join("&")
-		if(webConn.httpMethod == WebConnection.HttpMethod.GET) {
+		if(webConn.httpMethod == WebConnection.HttpMethod.GET && (encodedParameters.size() > 0)) {
 			url += "?" + encodedParameters
 		}
 		else {
@@ -27,8 +27,13 @@ class WebConnectionService{
 		}
 		x.out.headers = x.in.headers
 		x.out.headers.url = url
-		if (webConn.httpMethod == WebConnection.HttpMethod.POST)
+		if (webConn.httpMethod == WebConnection.HttpMethod.POST) {
 			x.out.headers."${Exchange.HTTP_METHOD}" = "POST"
+			x.out.headers."${Exchange.CONTENT_TYPE}" = "application/x-www-form-urlencoded"
+		}
+		else {
+			x.out.headers."${Exchange.HTTP_METHOD}" = "GET"
+		}
 		x.out.body = body
 		println "x.out.headers = ${x.out.headers}"
 		println "x.out.body = ${x.out.body}"
