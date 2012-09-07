@@ -18,7 +18,7 @@ class WebConnectionService{
 		encodedParameters += webConn.requestParameters.collect {
 			urlEncode(it.name) + "=" + urlEncode(it.getProcessedValue(inMessage))
 		}.join("&")
-		if(webConn.httpMethod == WebConnection.HttpMethod.GET) {
+		if(webConn.httpMethod == WebConnection.HttpMethod.GET && (encodedParameters.size() > 0)) {
 			url += "?" + encodedParameters
 		}
 		else {
