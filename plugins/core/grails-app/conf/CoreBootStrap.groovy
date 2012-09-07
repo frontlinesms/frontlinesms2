@@ -109,7 +109,7 @@ class CoreBootStrap {
 		}
 		createContact("Kate", "+198730948")
 
-		(1..1000000).each {
+		(1..101).each {
 			new Contact(name:"test-${it}", mobile:"number-${it}").save(failOnError:true)
 			if (it % 1000 == 0) println "${it}"
 		}
