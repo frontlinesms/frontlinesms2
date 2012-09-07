@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="url"><g:message code="webConnection.url.label"/></label>
-	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
+	<g:textField name="url" class="url" value="${activityInstanceToEdit?.url}" required="true"/>
 </div>
 <div class="input">
 	<label for="httpMethod"><g:message code="webConnection.httpMethod.label"/></label>

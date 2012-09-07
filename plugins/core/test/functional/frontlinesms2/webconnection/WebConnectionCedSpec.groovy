@@ -223,9 +223,8 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 			waitFor { requestTab.displayed }
 		when:
 			requestTab.url = "frontlinesms"
-			requestTab.post.click()
 		then:
-			waitFor { waitFor {error.contains('Url must be valid')} }
+			waitFor { waitFor {error.contains('Please enter a valid URL')} }
 	}
 
 	def "If parameter added a name must be given"() {
@@ -244,10 +243,10 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor { requestTab.displayed }
 		when:
-			requestTab.url = "www.frontlinsms.com.sync"
-			requestTab.post.click()
+			requestTab.url = "http://www.frontlinsms.com.sync"
+			requestTab.addParam.click()
 			next.click()
 		then:
-			waitFor { waitFor {error.contains('Name of paramter must be provided')} }
+			waitFor { waitFor {error.contains('This field is required')} }
 	}
 }
