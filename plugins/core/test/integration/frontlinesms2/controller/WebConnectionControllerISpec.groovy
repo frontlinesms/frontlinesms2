@@ -21,6 +21,8 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.frontlinesms.com/sync"
 			controller.params.keyword = "keyword"
+			controller.params.'params-name' = 'username'
+			controller.params.'params-value' = 'bob'
 		when:
 			controller.save()
 		then:
