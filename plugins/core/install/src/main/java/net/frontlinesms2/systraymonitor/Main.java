@@ -13,6 +13,7 @@ public class Main {
 	private static final String PROP_TRAY_DISABLED = "tray.disabled";
 	private static final String PROP_RESOURCE_PATH = "resource.path";
 	private static final String PROP_PERMISSIONS_CHECK = "os.permissions.check";
+	private static final String PROP_SERIAL_PORTS = "serial.ports.rxtx.enable";
 
 	private Monitor m;
 	private TrayThingy t;
@@ -72,6 +73,11 @@ public class Main {
 
 		if(properties.getBoolean(PROP_PERMISSIONS_CHECK)) {
 			new PermissionsCheckHandlerFactory().create().check();
+		}
+
+		String serialPorts = properties.getString(PROP_SERIAL_PORTS);
+		if(serialPorts != null) {
+			System.setProperty("gnu.io.rxtx.SerialPorts", serialPorts);
 		}
 
 		int port = properties.getInt(PROP_SERVER_PORT);
