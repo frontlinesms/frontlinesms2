@@ -29,24 +29,20 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = "SENDME"
-			keywordAndUrl.post.click()
-			keywordAndUrl.url = "http://www.myurl.com"
+			keywordTab.keyword = "SENDME"
 			next.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			requestFormat.addParam.click()
-		then:
-			waitFor { requestFormat.parameters.size() == 1 }
-		when:
-			requestFormat.parameters(0).value = "message_body"
-			requestFormat.parameters(0).name = "text"
+			requestTab.post.click()
+			requestTab.url = "http://www.myurl.com"
+			requestTab.parameters[0].name = "text"
+			requestTab.parameters[0].value = "message_body"
 			next.click()
 		then:
-			waitFor { confirm.displayed }
+			waitFor { confirmTab.displayed }
 		when:
-			confirm.name = "my ext cmd"
+			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
 			waitFor { summary.displayed }
@@ -63,24 +59,20 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = "SENDME"
-			keywordAndUrl.url = "http://www.myurl.com"
-			keywordAndUrl.get.click()
+			keywordTab.keyword = "SENDME"
 			next.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			requestFormat.addParam.click()
-		then:
-			waitFor { requestFormat.parameters.size() == 1 }
-		when:
-			requestFormat.parameters[0].value = "message_body"
-			requestFormat.parameters[0].name = "text"
+			requestTab.url = "http://www.myurl.com"
+			requestTab.get.click()
+			requestTab.parameters[0].value = "message_body"
+			requestTab.parameters[0].name = "text"
 			next.click()
 		then:
-			waitFor { confirm.displayed }
+			waitFor { confirmTab.displayed }
 		when:
-			confirm.name = "my ext cmd"
+			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
 			waitFor { summary.displayed }
@@ -97,25 +89,21 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = ""
-			keywordAndUrl.useKeyword.click() // to disable
-			keywordAndUrl.url = "http://www.myurl.com"
-			keywordAndUrl.post.click()
+			keywordTab.keyword = ""
+			keywordTab.useKeyword.click() // to disable
 			next.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			requestFormat.addParam.click()
-		then:
-			waitFor { requestFormat.parameters.size() == 1 }
-		when:
-			requestFormat.parameters[0].value = "message_body"
-			requestFormat.parameters[0].name = "text"
+			requestTab.url = "http://www.myurl.com"
+			requestTab.post.click()
+			requestTab.parameters[0].value = "message_body"
+			requestTab.parameters[0].name = "text"
 			next.click()
 		then:
-			waitFor { confirm.displayed }
+			waitFor { confirmTab.displayed }
 		when:
-			confirm.name = "my ext cmd"
+			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
 			waitFor { summary.displayed }
@@ -132,43 +120,39 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = "SENDME"
-			keywordAndUrl.get.click()
-			keywordAndUrl.url = "http://www.myurl.com"
+			keywordTab.keyword = "SENDME"
 			next.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			requestFormat.addParam.click()
+			requestTab.get.click()
+			requestTab.url = "http://www.myurl.com"
+			requestTab.parameters[0].value = "message_body"
+			requestTab.parameters[0].name = "text"
+			requestTab.addParam.click()
 		then:
-			waitFor { requestFormat.parameters.size() == 1 }
+			waitFor { requestTab.parameters.size() == 2 }
 		when:
-			requestFormat.parameters[0].value = "message_body"
-			requestFormat.parameters[0].name = "text"
-			requestFormat.addParam.click()
-		then:
-			waitFor { requestFormat.parameters.size() == 2 }
-		when:
-			requestFormat.parameters[0].value = "contact_name"
-			requestFormat.parameters[0].name = "contact"
+			requestTab.parameters[1].value = "contact_name"
+			requestTab.parameters[1].name = "contact"
 			next.click()
 		then:
-			waitFor { confirm.displayed }
+			waitFor { confirmTab.displayed }
 		when:
-			prev.click()
+			previous.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			requestFormat.parameters[0].remove.click()
+			requestTab.parameters[0].remove.click()
 		then:
-			waitFor { requestFormat.parameters.size() == 1 }
-			requestFormat.parameters[0].value.jquery.val() == "contact_name"
+			waitFor { requestTab.parameters.size() == 1 }
+			requestTab.parameters[0].value.jquery.val() == "contact_name"
 		when:
 			next.click()
 		then:
-			waitFor { confirm.displayed }
+			waitFor { confirmTab.displayed }
 		when:
-			confirm.name = "my ext cmd"
+			confirmTab.name = "my ext cmd"
 			submit.click()
 		then:
 			waitFor { summary.displayed }
@@ -185,24 +169,22 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.useKeyword.jquery.click()//disable keyword
-			keywordAndUrl.url = "www.frontlinesms.com"
-			keywordAndUrl.post.click()
+			keywordTab.useKeyword.jquery.click()//disable keyword
 			next.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			back.click()
+			previous.click()
 		then:
-			waitFor { keywordAndUrl.displayed }
+			waitFor { keywordTab.displayed }
 		when:
-			keywordAndUrl.useKeyword.jquery.click()//enable keyword
+			keywordTab.useKeyword.jquery.click()//enable keyword
 			next.click()
 		then:
-			waitFor { waitFor {error.text().contains('Keyword is required')} }
+			waitFor { waitFor {error.contains('Keyword is required')} }
 	}
 
-	def "Url must be provided"(){
+	def "Url must be provided"() {
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -213,14 +195,18 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = "Sync"
-			keywordAndUrl.post.click()
+			keywordTab.keyword = "Sync"
 			next.click()
 		then:
-			waitFor { waitFor {error.text().contains('Url is required')} }
+			waitFor { requestTab.displayed }
+		when:
+			requestTab.post.click()
+			next.click()
+		then:
+			waitFor { waitFor {error.contains('Url is required')} }
 	}
 
-	def "Url must be valid"(){
+	def "Url must be valid"() {
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -231,15 +217,18 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = "Sync"
-			keywordAndUrl.url = "frontlinesms"
-			keywordAndUrl.post.click()
+			keywordTab.keyword = "Sync"
 			next.click()
 		then:
-			waitFor { waitFor {error.text().contains('Url is must be valid')} }
+			waitFor { requestTab.displayed }
+		when:
+			requestTab.url = "frontlinesms"
+			requestTab.post.click()
+		then:
+			waitFor { waitFor {error.contains('Url must be valid')} }
 	}
 
-	def "If parameter added a name must be given"(){
+	def "If parameter added a name must be given"() {
 		when:
 			to PageMessageInbox
 			bodyMenu.newActivity.click()
@@ -250,19 +239,15 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 		then:
 			waitFor('slow') { at WebConnectionWizard }
 		when:
-			keywordAndUrl.keyword = "Sync"
-			keywordAndUrl.url = "www.frontlinsms.com.sync"
-			keywordAndUrl.post.click()
+			keywordTab.keyword = "Sync"
 			next.click()
 		then:
-			waitFor { requestFormat.displayed }
+			waitFor { requestTab.displayed }
 		when:
-			requestFormat.addParam.click()
-		then:
-			waitFor { requestFormat.parameters.size() == 1 }
-		when:
+			requestTab.url = "www.frontlinsms.com.sync"
+			requestTab.post.click()
 			next.click()
 		then:
-			waitFor { waitFor {error.text().contains('Name of paramter must be provided')} }
+			waitFor { waitFor {error.contains('Name of paramter must be provided')} }
 	}
 }

@@ -28,6 +28,7 @@
 #tabs div.input .controls { display:table; margin-top:10px; }
 #tabs div.input .controls > * { display:table-cell; vertical-align:middle; }
 #tabs div.input .controls > :first-child { width:100%; }
+#tabs thead tr { background: none;}
 #tabs div.input .controls .magicwand-container a { text-align:right; }
 #tabs div.input .controls div.magicwand-container.hidden { visibility:hidden; }
 #tabs div.confirm td { padding:5px; }

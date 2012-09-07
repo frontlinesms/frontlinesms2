@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="url"><g:message code="webConnection.url.label"/></label>
-	<g:textField name="url" value="${activityInstanceToEdit?.url}" class="email" required="true"/>
+	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
 </div>
 <div class="input">
 	<label for="httpMethod"><g:message code="webConnection.httpMethod.label"/></label>
@@ -8,18 +8,18 @@
 		<g:set var="httpMethod" value="${activityInstanceToEdit?.httpMethod}"/>
 		<li>
 			<label for="httpMethod"><g:message code="webConnection.httpMethod.get"/></label>
-			<g:radio name="httpMethod" value="get" checked="${!activityInstanceToEdit || httpMethod}" disabled="${activityInstanceToEdit && !httpMethod}"/>
+			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod}" disabled="${activityInstanceToEdit && !httpMethod}"/>
 		</li>
 		<li>
 			<label for="httpMethod"><g:message code="webConnection.httpMethod.post"/></label>
-			<g:radio name="httpMethod" value="post" checked="${activityInstanceToEdit && !httpMethod}" disabled="${activityInstanceToEdit && httpMethod}"/>
+			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && !httpMethod}" disabled="${activityInstanceToEdit && httpMethod}"/>
 		</li>
 	</ul>
 </div>
 <h2><g:message code="webConnection.parameters"/></h2>
 <g:set var="isFirst" value="i==0"/>
 <table id="web-connection-param-table">
-	<tbody>
+	<thead>
 		<tr class="prop web-connection-parameter">
 			<td>
 				<label for="param-name"><g:message code="webConnection.param.name"/></label>
@@ -28,6 +28,8 @@
 				<label for="param-value"><g:message code="webConnection.param.value"/></label>
 			</td>
 		</tr>
+	</thead>
+	<tbody>
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
 				<g:set var="isFirst" value="i==0"/>
@@ -39,7 +41,7 @@
 		</g:else>
 	</tbody>
 </table>
-<a class="btn" onclick="addNewParam()">
+<a class="btn addNew" onclick="addNewParam()">
 	<g:message code="webConnection.add.anotherparam"/>
 </a></br>
 
