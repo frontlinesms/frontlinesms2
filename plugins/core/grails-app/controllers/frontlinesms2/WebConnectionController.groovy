@@ -22,6 +22,9 @@ class WebConnectionController extends ActivityController {
 		webConnectionInstance.name = params.name
 		processRequestParameters(webConnectionInstance)
 		if(webConnectionInstance.save(flush:true)) {
+			if(params.ownerId)
+				webConnectionInstance.deactivate()
+			webConnectionInstance.activate()
 			flash.message = message(code:'webConnection.saved')
 			params.activityId = webConnectionInstance.id
 			withFormat {
