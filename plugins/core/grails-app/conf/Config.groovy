@@ -64,25 +64,25 @@ grails.exceptionresolver.params.exclude = ['password']
 // enable query caching by default
 grails.hibernate.cache.queries = true
 
+grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+grails.plugin.databasemigration.updateOnStart = true
+// allow migration override in dev
+environments { development {
+        def runMigrations = System.properties.'run.migration'
+	if(runMigrations != null) {
+		grails.plugin.databasemigration.updateOnStart = runMigrations
+	}
+} }
+
 // set per-environment settings
 environments {
     development {
         grails.logging.jul.usebridge = true
-        def runMigrations = System.properties.'run.migration'
-        //Enable automatic database migrations in dev mode
-        if(runMigrations == null) {
-			grails.plugin.databasemigration.updateOnStart = runMigrations
-			grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-        }
 
     }
     production {
         grails.logging.jul.usebridge = false
-        //Enable automatic database migrations in prod mode
-		grails.plugin.databasemigration.updateOnStart = true
-		grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
-
-    }	
+    }
 }
 
 // log4j configuration
