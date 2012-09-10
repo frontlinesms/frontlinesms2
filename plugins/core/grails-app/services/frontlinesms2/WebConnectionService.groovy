@@ -9,34 +9,26 @@ class WebConnectionService{
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		def inHeader = x.in.headers
-		def inMessage = Fmessage.get(inHeader.'frontlinesms.fmessageId')
-		def webConn = WebConnection.get(inHeader.'frontlinesms.webConnectionId')
-		def body
-		def url = webConn.url
-		def encodedParameters = ""
-		encodedParameters += webConn.requestParameters.collect {
-			urlEncode(it.name) + "=" + urlEncode(it.getProcessedValue(inMessage))
-		}.join("&")
-		if(webConn.httpMethod == WebConnection.HttpMethod.GET && (encodedParameters.size() > 0)) {
-			url += "?" + encodedParameters
-		}
-		else {
-			println "PARAMS:::"+encodedParameters
-			body = encodedParameters
-		}
 		x.out.headers = x.in.headers
-		x.out.headers.url = url
-		if (webConn.httpMethod == WebConnection.HttpMethod.POST) {
-			x.out.headers."${Exchange.HTTP_METHOD}" = "POST"
-			x.out.headers."${Exchange.CONTENT_TYPE}" = "application/x-www-form-urlencoded"
+		def inMessage = Fmessage.get(x.in.headers.'frontlinesms.fmessageId')
+		def webConn = WebConnection.get(x.in.headers.'frontlinesms.webConnectionId')
+		def encodedParameters = webConn.requestParameters.collect {
+			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(inMessage))
+		}.join('&')
+		println "PARAMS:::$encodedParameters"
+
+		x.out.headers[Exchange.HTTP_METHOD] = webConn.httpMethod
+		switch(webConn.httpMethod) {
+			case 'GET':
+				x.out.headers[Exchange.HTTP_QUERY] = encodedParameters
+				break;
+			case 'POST':
+				x.out.body = encodedParameters
+				x.out.headers[Exchange.CONTENT_TYPE] = 'application/x-www-form-urlencoded'
+				break;
 		}
-		else {
-			x.out.headers."${Exchange.HTTP_METHOD}" = "GET"
-		}
-		x.out.body = body
-		println "x.out.headers = ${x.out.headers}"
-		println "x.out.body = ${x.out.body}"
+		println "x.out.headers = $x.out.headers"
+		println "x.out.body = $x.out.body"
 	}
 
 	def postProcess(Exchange x) throws Exception {

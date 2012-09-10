@@ -13,6 +13,9 @@
 				},
 				url: {
 					required: i18n("webconnection.url.validation.error")
+				},
+				"param-name": {
+					required: ""
 				}
 			}
 		});

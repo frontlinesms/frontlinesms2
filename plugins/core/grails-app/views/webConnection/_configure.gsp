@@ -1,6 +1,6 @@
 <div class="input">
 	<label for="url"><g:message code="webConnection.url.label"/></label>
-	<g:textField name="url" class="url" value="${activityInstanceToEdit?.url}" required="true"/>
+	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
 </div>
 <div class="input">
 	<label for="httpMethod"><g:message code="webConnection.httpMethod.label"/></label>
@@ -49,9 +49,11 @@
 <r:script>
 
 	function removeRule(_removeAnchor) {
-			var row = $(_removeAnchor).closest('.web-connection-parameter').remove();
+			var row = $(_removeAnchor).closest('.web-connection-parameter');
+			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
+			row.remove();
 			var rows = $('.web-connection-parameter');
-			if(rows.length == 1) rows.find('.remove-command').hide();
+			if(rows.length == 2) rows.find('.remove-command').hide();
 		}
 
 	function autofillValue(list) {
@@ -65,7 +67,8 @@
 	function addNewParam() {
 		var template = $('.web-connection-parameter').last();
 		var target = "param.value";
-		// Selectmenu is destroyed here to allow cloning. Rebuilt after clone.
+		// Selectmenu is destroyed here to allow cloning. Rebuilt after clone
+		if($(".error").size() > 1) { $(".error-panel").show(); }
 		template.find("select").selectmenu("destroy");
 		template.find('.remove-command').show();
 		var newRow = template.clone();
