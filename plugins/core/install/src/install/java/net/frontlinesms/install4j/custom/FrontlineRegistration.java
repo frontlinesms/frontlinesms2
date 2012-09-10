@@ -80,6 +80,7 @@ public class FrontlineRegistration {
 				PROFESSION, "var_category_of_work",
 				COUNTRIES, "var_country");
 		data.put("app.version",context.getCompilerVariable("sys.version"));
+		data.put("app.name",context.getCompilerVariable("sys.shortName"));
 		return addSystemPropertiesToRegistrationData(data);
 	}
 
