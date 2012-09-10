@@ -290,7 +290,7 @@ class SmartGroupEditDialog extends SmartGroupCreateDialog {
 
 class WebConnectionWizard extends MediumPopup {
 	static at = {
-		popupTitle.toLowerCase().contains("web connection")
+		popupTitle.toLowerCase().contains("activity")
 	}
 	static content = {
 		error { $("label.error").text()}

@@ -16,7 +16,7 @@ class WebConnection extends Activity {
 	static subFields = ['message_body' : { msg ->
 			def keyword = msg.messageOwner?.keyword?.value
 			def text = msg.text
-			if (keyword.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
 				text = text.substring(keyword.size()).trim()
 			}
 			text
@@ -46,7 +46,7 @@ class WebConnection extends Activity {
 			List getRouteDefinitions() {
 				return [from("seda:activity-webconnection-${WebConnection.this.id}")
 						.beanRef('webConnectionService', 'preProcess')
-						.setHeader(Exchange.HTTP_URI,
+						.setHeader(Exchange.HTTP_PATH,
 								simple('${header.url}'))
 						.onException(Exception)
 									.handled(true)
@@ -59,7 +59,7 @@ class WebConnection extends Activity {
 		}.routeDefinitions
 	}
 
-	def activate(){
+	def activate() {
 		println "*** ACTIVATING ACTIVITY ***"
 		try {
 			def routes = this.routeDefinitions
@@ -75,7 +75,7 @@ class WebConnection extends Activity {
 		}
 	}
 
-	def deactivate(){
+	def deactivate() {
 		println "################ Deactivating WebConnection :: ${this}"
 		camelContext.stopRoute("activity-webconnection-${this.id}")
 		camelContext.removeRoute("activity-webconnection-${this.id}")
