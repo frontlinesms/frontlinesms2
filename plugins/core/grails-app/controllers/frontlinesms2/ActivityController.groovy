@@ -27,6 +27,8 @@ class ActivityController {
 				activityInstanceToEdit: activityInstance]
 		}
 	}
+
+	// TODO: if we implement a save() action, call Activity.activate() and Activity.deactivate() appropriately
 	
 	def rename = {}
 	

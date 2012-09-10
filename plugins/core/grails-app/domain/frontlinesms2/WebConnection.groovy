@@ -16,7 +16,7 @@ class WebConnection extends Activity {
 	static subFields = ['message_body' : { msg ->
 			def keyword = msg.messageOwner?.keyword?.value
 			def text = msg.text
-			if (keyword.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
+			if (keyword?.size() && text.toUpperCase().startsWith(keyword.toUpperCase())) {
 				text = text.substring(keyword.size()).trim()
 			}
 			text
