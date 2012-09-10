@@ -240,9 +240,9 @@ class FmessageLocationISpec extends grails.plugin.spock.IntegrationSpec {
 
 		new Folder(name: 'home').save(flush: true)
 		def folder = Folder.findByName('home')
-		folder.addToMessages(new Fmessage(src: "Bob", inbound:true, date:BASE_DATE - 14))
-		folder.addToMessages(new Fmessage(src: "Jim", inbound:true, date:BASE_DATE - 10))
-		folder.addToMessages(new Fmessage(src: "Jack", inbound:true, starred: true, date:BASE_DATE - 15))
+		folder.addToMessages(Fmessage.build(src: "Bob", inbound:true, date:BASE_DATE - 14))
+		folder.addToMessages(Fmessage.build(src: "Jim", inbound:true, date:BASE_DATE - 10))
+		folder.addToMessages(Fmessage.build(src: "Jack", inbound:true, starred: true, date:BASE_DATE - 15))
 
 		folder.save(flush: true)
 	}

@@ -92,6 +92,16 @@ class RenameFolderDialog extends SmallPopup {
 	}
 }
 
+class RenameSubscriptionDialog extends SmallPopup {
+	static at = {
+		popupTitle.contains("activity")
+	}
+	static content = {
+		errorPanel { $('#modalBox #smallpopup-error-panel') }
+		subscriptionName { $('#modalBox #name') }
+	}
+}
+
 class DeleteFolderPopup extends SmallPopup {
 	static at = {
 		popupTitle.contains("delete folder")
@@ -117,5 +127,17 @@ class TestMessagePopup extends SmallPopup {
 	static content = {
 		addresses { $('input#addresses').text() }
 		message { $('textarea#messageText').text() }
+	}
+}
+
+class SubscriptionCategoriseDialog extends SmallPopup {
+	static at = {
+		popupTitle.contains('categorise subscription')
+	}
+	static content = {
+		groupName { $('input#group-dropdown') }
+		join { $('#modalBox input#subscription-action').value("join") }
+		leave { $('#modalBox input#subscription-action').value("leave") }
+		toggle { $('#modalBox input#subscription-action').value("toggle") }
 	}
 }

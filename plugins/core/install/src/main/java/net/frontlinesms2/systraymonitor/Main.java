@@ -3,6 +3,7 @@ package net.frontlinesms2.systraymonitor;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
+import net.frontlinesms2.systraymonitor.permissions.PermissionsCheckHandlerFactory;
 
 import static net.frontlinesms2.systraymonitor.Utils.*;
 import static net.frontlinesms2.systraymonitor.CommandlineUtils.*;
@@ -11,6 +12,8 @@ public class Main {
 	private static final String PROP_SERVER_PORT = "server.port";
 	private static final String PROP_TRAY_DISABLED = "tray.disabled";
 	private static final String PROP_RESOURCE_PATH = "resource.path";
+	private static final String PROP_PERMISSIONS_CHECK = "os.permissions.check";
+	private static final String PROP_SERIAL_PORTS = "serial.ports.rxtx.enable";
 
 	private Monitor m;
 	private TrayThingy t;
@@ -30,6 +33,7 @@ public class Main {
 		properties.setDefault(PROP_SERVER_PORT, 8129);
 		properties.setDefault(PROP_TRAY_DISABLED, false);
 		properties.setDefault(PROP_RESOURCE_PATH, "~/.frontlinesms2-default");
+		properties.setDefault(PROP_PERMISSIONS_CHECK, true);
 
 		// Override properties with commandline settings
 		if(isFlagSet(args, "no-tray")) properties.set(PROP_TRAY_DISABLED, true);
@@ -66,6 +70,15 @@ public class Main {
 //> INIT
 	private void init(FProperties properties) throws Exception {
 		setTrayIconDisabled(properties.getBoolean(PROP_TRAY_DISABLED));
+
+		if(properties.getBoolean(PROP_PERMISSIONS_CHECK)) {
+			new PermissionsCheckHandlerFactory().create().check();
+		}
+
+		String serialPorts = properties.getString(PROP_SERIAL_PORTS);
+		if(serialPorts != null) {
+			System.setProperty("gnu.io.rxtx.SerialPorts", serialPorts);
+		}
 
 		int port = properties.getInt(PROP_SERVER_PORT);
 		o("Read server port: " + port);

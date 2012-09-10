@@ -87,7 +87,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		then:
 			waitFor { recipients.count == 0 }
 	}
-	
+
 	def "should send the message to the selected recipients"() {
 		when:
 			launchQuickMessageDialog()
@@ -103,7 +103,7 @@ class QuickMessageFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			to PageMessagePending
 		then:
-			messageList.messages.size() == 1
+			waitFor { messageList.messages.size() == 1 }
 	}
 
 	def "should select members belonging to the selected group"() {
