@@ -19,6 +19,8 @@ class FmessageService {
 						outgoingMessage.save()
 						messagesToSend << outgoingMessage
 						activity.addToMessages(outgoingMessage)
+					}else if(activity instanceof WebConnection) {
+						activity.processKeyword(messageInstance, false)
 					}
 					activity.save()
 				} else if (params.ownerId && params.ownerId != 'inbox') {

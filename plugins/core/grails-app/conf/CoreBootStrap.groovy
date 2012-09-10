@@ -316,7 +316,7 @@ class CoreBootStrap {
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
-		extCmd.addToRequestParameters(new RequestParameter(name:'senderNumber' , value: '${message_src_number}'))
+		extCmd.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'senderName' , value: '${message_src_name}'))
 		extCmd.save(failOnError:true, flush:true)
 		def sent1 = new Fmessage(src:'me', inbound:false, text:"Your messages are in 'the cloud'")
