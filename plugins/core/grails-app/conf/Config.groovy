@@ -70,7 +70,7 @@ grails.plugin.databasemigration.updateOnStart = true
 environments { development {
         def runMigrations = System.properties.'run.migration'
 	if(runMigrations != null) {
-		grails.plugin.databasemigration.updateOnStart = runMigrations
+		grails.plugin.databasemigration.updateOnStart = runMigrations != 'false'
 	}
 } }
 
