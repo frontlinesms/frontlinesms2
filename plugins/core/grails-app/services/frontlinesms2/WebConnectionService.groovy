@@ -40,11 +40,11 @@ class WebConnectionService{
 	}
 
 	def postProcess(Exchange x) throws Exception {
-		println "Web Connection Response::\n ${x.in.body}"
+		log.info "Web Connection Response::\n ${x.in.body}"
 	}
 
 	def handleException(Exchange x) {
-		println "Web Connection request failed with exception: ${x.in.body}"
+		log.info "Web Connection request failed with exception: ${x.in.body}"
 	}
 
 	def send(Fmessage message){
