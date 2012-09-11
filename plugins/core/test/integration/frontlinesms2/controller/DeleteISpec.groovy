@@ -31,14 +31,14 @@ class DeleteISpec extends IntegrationSpec {
 			def r2 = PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model1 = messageController.getShowModel()
 		then:
 			model1.activityInstanceList == [p]
 		when:
 			pollController.params.id = p.id
 			pollController.delete()
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model2 = messageController.getShowModel()
 		then:
 			!model2.activityInstanceList
@@ -55,7 +55,7 @@ class DeleteISpec extends IntegrationSpec {
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model1 = messageController.getShowModel()
 		then:
 			model1.activityInstanceList == [p]
@@ -74,14 +74,14 @@ class DeleteISpec extends IntegrationSpec {
 			f.addToMessages(m)
 			f.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model1 = messageController.getShowModel()
 		then:
 			model1.folderInstanceList == [f]
 		when:
 			folderController.params.id = f.id
 			folderController.delete()
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model2 = messageController.getShowModel()
 		then:
 			!model2.folderInstanceList
@@ -97,7 +97,7 @@ class DeleteISpec extends IntegrationSpec {
 			delete(f)
 			f.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
@@ -127,7 +127,7 @@ class DeleteISpec extends IntegrationSpec {
 			delete(p)
 			p.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:

@@ -14,7 +14,7 @@ class MessageControllerISpec extends grails.plugin.spock.IntegrationSpec {
 	def setup() {
 		controller = new MessageController()
 		controller.trashService = trashService
-		controller.beforeInterceptor.call()
+		controller.beforeInterceptor.action.call()
 
 		controller.params.messageText = "text"
 		controller.params.max = 10
