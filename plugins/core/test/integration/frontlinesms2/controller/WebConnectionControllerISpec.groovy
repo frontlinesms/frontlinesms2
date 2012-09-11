@@ -77,4 +77,24 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webConnection.requestParameters.size() == 1
 			webConnection.requestParameters*.name == ['username']
 	}
+
+	def "should not save requestParameters without a name value"() {
+		setup:
+			def keyword = new Keyword(value:'COOL')
+			def webConnection = new WebConnection(name:"Ushahidi", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.POST)
+			webConnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
+			webConnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
+			webConnection.save(failOnError:true)
+			controller.params.ownerId = webConnection.id
+			controller.params.name = "Ushahidi Connection"
+			controller.params.keyword = "Test"
+			controller.params.httpMethod = "post"
+			controller.params.'param-name' = ""
+			controller.params.'param-value' = "geoffrey"
+		when:
+			controller.save()
+		then:
+			webConnection.name == "Ushahidi Connection"
+			!webConnection.requestParameters
+	}
 }

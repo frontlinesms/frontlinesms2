@@ -56,9 +56,7 @@ class WebConnectionController extends ActivityController {
 			paramsName?.size()?.times {
 				addRequestParameter(paramsName[it], paramsValue[it], webConnectionInstance)
 			}
-		} else {
-			addRequestParameter(paramsName, paramsValue, webConnectionInstance)
-		}
+		} else { if(paramsName) addRequestParameter(paramsName, paramsValue, webConnectionInstance)}
 	}
 
 	private def addRequestParameter(name, value, webConnectionInstance) {

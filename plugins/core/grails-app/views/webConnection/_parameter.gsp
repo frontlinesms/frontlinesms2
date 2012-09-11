@@ -10,7 +10,7 @@
 		<fsms:magicWand target="param-value" fields="${WebConnection.subFields*.key}" onchange='autofillValue(this);'/>
 	</td>
 	<td>
-		<a onclick="removeRule(this)" class="remove-command" style="display:${isFirst?'none':'auto'}"/>
+		<a onclick="removeRule(this)" class="remove-command" />
 	</td>
 </tr>
 

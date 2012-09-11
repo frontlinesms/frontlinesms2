@@ -19,7 +19,7 @@
 <h2><g:message code="webConnection.parameters"/></h2>
 <table id="web-connection-param-table">
 	<thead>
-		<tr class="prop web-connection-parameter">
+		<tr class="prop">
 			<td>
 				<label for="param-name"><g:message code="webConnection.param.name"/></label>
 			</td>
@@ -31,12 +31,11 @@
 	<tbody>
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
-				<g:set var="isFirst" value="${i==0}"/>
-				<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value, isFirst:isFirst]" />
+				<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value]" />
 			</g:each>
 		</g:if>
 		<g:else>
-			<fsms:render template="/webConnection/parameter" model="[name:'message',  value:'${messageText}', isFirst:true]"/>
+			<fsms:render template="/webConnection/parameter" model="[name:'message',  value:'${messageText}']"/>
 		</g:else>
 	</tbody>
 </table>
@@ -50,9 +49,10 @@
 	function removeRule(_removeAnchor) {
 			var row = $(_removeAnchor).closest('.web-connection-parameter');
 			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
-			row.remove();
+			if($('.web-connection-parameter').size() == 1) {
+				row.hide();
+			} else { row.remove();}
 			var rows = $('.web-connection-parameter');
-			if(rows.length == 2) rows.find('.remove-command').hide();
 		}
 
 	function autofillValue(list) {
@@ -64,6 +64,10 @@
 	}
 
 	function addNewParam() {
+		if($('.web-connection-parameter:hidden').size() == 1) {
+				$('.web-connection-parameter').show();
+				return;
+		}
 		var template = $('.web-connection-parameter').last();
 		var target = "param.value";
 		// Selectmenu is destroyed here to allow cloning. Rebuilt after clone
