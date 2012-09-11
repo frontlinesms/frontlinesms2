@@ -1,0 +1,5 @@
+#web-connection-param-table { margin-bottom:10px; margin-left:20px; }
+#web-connection-param-table td { padding:2px; }
+#web-connection-param-table td .ui-selectmenu-wrapper > a { margin:0 !important; }
+#web-connection-param-table td .ui-selectmenu-wrapper > a > span { padding:2px; }
+#new-webconnection-form a.btn.addNew { margin-left:20px; }
