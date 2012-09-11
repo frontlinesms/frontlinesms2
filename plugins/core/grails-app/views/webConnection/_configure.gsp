@@ -8,16 +8,15 @@
 		<g:set var="httpMethod" value="${activityInstanceToEdit?.httpMethod}"/>
 		<li>
 			<label for="httpMethod"><g:message code="webConnection.httpMethod.get"/></label>
-			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod}" disabled="${activityInstanceToEdit && !httpMethod}"/>
+			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod}" />
 		</li>
 		<li>
 			<label for="httpMethod"><g:message code="webConnection.httpMethod.post"/></label>
-			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && !httpMethod}" disabled="${activityInstanceToEdit && httpMethod}"/>
+			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && !httpMethod}" />
 		</li>
 	</ul>
 </div>
 <h2><g:message code="webConnection.parameters"/></h2>
-<g:set var="isFirst" value="i==0"/>
 <table id="web-connection-param-table">
 	<thead>
 		<tr class="prop web-connection-parameter">
