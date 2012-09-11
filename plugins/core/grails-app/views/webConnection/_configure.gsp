@@ -32,7 +32,7 @@
 	<tbody>
 		<g:if test="${activityInstanceToEdit?.id}">
 			<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
-				<g:set var="isFirst" value="i==0"/>
+				<g:set var="isFirst" value="${i==0}"/>
 				<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value, isFirst:isFirst]" />
 			</g:each>
 		</g:if>
