@@ -49,7 +49,7 @@
 	function removeRule(_removeAnchor) {
 			var row = $(_removeAnchor).closest('.web-connection-parameter');
 			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
-			if($('.web-connection-parameter').size() == 1) {
+			if($('.web-connection-parameter').length === 1) {
 				row.hide();
 			} else { row.remove();}
 			var rows = $('.web-connection-parameter');
@@ -64,7 +64,7 @@
 	}
 
 	function addNewParam() {
-		if($('.web-connection-parameter:hidden').size() == 1) {
+		if($('.web-connection-parameter:hidden').length === 1) {
 				$('.web-connection-parameter').show();
 				return;
 		}
