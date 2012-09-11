@@ -72,6 +72,7 @@ input[type=text]:disabled, input[type=password]:disabled, textarea:disabled { ba
 input[type="text"].search{ background-image:url('../images/icons/search.png');
 	background-repeat:no-repeat; background-position:right; }
 
+.magicwand-container .ui-selectmenu-dropdown { width:auto !important; margin:0 8px !important; }
 .magicwand-icon { background-image:url('../images/icons/magic_wand.png'); background-repeat:no-repeat; background-position:top left;
 	display:block; width:16px; height:18px; }
 
