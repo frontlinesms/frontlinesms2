@@ -1,2 +1,3 @@
+#!/bin/sh
 kill -9 `ps aux | grep grails | grep -Po -m2 "\w+" | grep -Pm2 "\w+" | tail -n1`
 
