@@ -42,7 +42,13 @@ class WebConnection extends Activity {
 
 	List<RouteDefinition> getRouteDefinitions() {
 		return new RouteBuilder() {
-			@Override void configure() {}
+			@Override void configure() {
+				errorHandler(defaultErrorHandler()
+					.redeliveryDelay(10000)
+					.backOffMultiplier(3)
+					.maximumRedeliveries(3)
+					.retryAttemptedLogLevel(LoggingLevel.WARN))
+			}
 			List getRouteDefinitions() {
 				return [from("seda:activity-webconnection-${WebConnection.this.id}")
 						.beanRef('webConnectionService', 'preProcess')
