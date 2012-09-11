@@ -34,7 +34,7 @@ class WebConnection extends Activity {
 	
 	static constraints = {}
 	static mapping = {
-		requestParameters: "all-delete-orphan"
+		requestParameters cascade: "all-delete-orphan"
 	}
 
 	def processKeyword(Fmessage message, Boolean exactMatch) {

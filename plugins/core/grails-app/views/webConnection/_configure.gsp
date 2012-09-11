@@ -50,6 +50,7 @@
 			var row = $(_removeAnchor).closest('.web-connection-parameter');
 			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
 			if($('.web-connection-parameter').length === 1) {
+				row.addClass("disabled");
 				row.hide();
 			} else { row.remove();}
 			var rows = $('.web-connection-parameter');
@@ -66,6 +67,7 @@
 	function addNewParam() {
 		if($('.web-connection-parameter:hidden').length === 1) {
 				$('.web-connection-parameter').show();
+				row.removeClass("disabled");
 				return;
 		}
 		var template = $('.web-connection-parameter').last();
@@ -86,19 +88,20 @@
 
 	function updateServerConfiguration() {
 		var url = $("input[name=url]").val();
-		var httpMethod = $("input[name=httpMethod]").val().toUpperCase();
+		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();
 		var requestParameters = "";
-
-		if(requestParameters.length === 0) { requestParameters = i18n("webConnection.none.label")}
+		if($(".web-connection-parameter.disabled").is(":hidden")) { 
+			requestParameters = i18n("webConnection.none.label")
+		} else {
+			$('input[name=param-name]').each(function(index) {
+				var values = $('input[name=param-value]').get();
+				if($(this).val().length > 0) {
+					requestParameters += '<p>' + $(this).val() + ':' + $(values[index]).val() + '</p>';
+				}
+			});
+		}
 		$("#url-confirm").html('<p>' + url  + '</p>');
 		$("#httpMethod-confirm").html('<p>' + httpMethod  + '</p>');
-
-		$('input[name=param-name]:visible').each(function(index) {
-			var values = $('input[name=param-value]').get();
-			if($(this).val().length > 0) {
-				requestParameters += '<p>' + $(this).val() + ':' + $(values[index]).val() + '</p>';
-			}
-		});
 		$("#requestParameters-confirm").html('<p>' + requestParameters  + '</p>');
 
 	}
