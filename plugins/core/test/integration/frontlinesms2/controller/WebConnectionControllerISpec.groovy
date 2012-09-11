@@ -55,4 +55,26 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webConnection.requestParameters*.name.containsAll(['username','password'])
 			webConnection.requestParameters*.value.containsAll(['bob','secret'])
 	}
+
+	def 'edit should remove requestParameters from a web connection'() {
+		setup:
+			def keyword = new Keyword(value:'COOL')
+			def webConnection = new WebConnection(name:"Test", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.POST)
+			webConnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
+			webConnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
+			webConnection.save(failOnError:true)
+			controller.params.ownerId = webConnection.id
+			controller.params.name = "Test Connection"
+			controller.params.httpMethod = "post"
+			controller.params.keyword = "Test"
+			controller.params.'param-name' = "username"
+			controller.params.'param-value' = "geoffrey"
+		when:
+			controller.save()
+		then:
+			webConnection.name == "Test Connection"
+			webConnection.httpMethod == WebConnection.HttpMethod.POST
+			webConnection.requestParameters.size() == 1
+			webConnection.requestParameters*.name == ['username']
+	}
 }

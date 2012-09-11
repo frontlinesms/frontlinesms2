@@ -51,6 +51,7 @@ class WebConnectionController extends ActivityController {
 	private def processRequestParameters(webConnectionInstance) {
 		def paramsName = params.'param-name'
 		def paramsValue = params.'param-value'
+		webConnectionInstance.requestParameters = null
 		if(paramsName instanceof String[]) {
 			paramsName?.size()?.times {
 				addRequestParameter(paramsName[it], paramsValue[it], webConnectionInstance)
@@ -61,13 +62,8 @@ class WebConnectionController extends ActivityController {
 	}
 
 	private def addRequestParameter(name, value, webConnectionInstance) {
-		def found = webConnectionInstance.requestParameters.find { it.name == name}
-		if(found) {
-			found.value = value
-		} else if(name) {
-			def requestParam = new RequestParameter(name:name, value:value)
-			webConnectionInstance.addToRequestParameters(requestParam)
-		}
+		def requestParam = new RequestParameter(name:name, value:value)
+		webConnectionInstance.addToRequestParameters(requestParam)
 	}
 
 	private def withWebConnection(Closure c) {
