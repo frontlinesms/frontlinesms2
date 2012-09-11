@@ -33,6 +33,9 @@ class WebConnection extends Activity {
 	static hasOne = [keyword: Keyword]
 	
 	static constraints = {}
+	static mapping = {
+		requestParameters: "all-delete-orphan"
+	}
 
 	def processKeyword(Fmessage message, Boolean exactMatch) {
 		this.addToMessages(message)

@@ -93,7 +93,7 @@
 		$("#url-confirm").html('<p>' + url  + '</p>');
 		$("#httpMethod-confirm").html('<p>' + httpMethod  + '</p>');
 
-		$('input[name=param-name]').each(function(index) {
+		$('input[name=param-name]:visible').each(function(index) {
 			var values = $('input[name=param-value]').get();
 			if($(this).val().length > 0) {
 				requestParameters += '<p>' + $(this).val() + ':' + $(values[index]).val() + '</p>';

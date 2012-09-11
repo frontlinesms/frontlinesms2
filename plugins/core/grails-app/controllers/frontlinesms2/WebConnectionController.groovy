@@ -51,7 +51,7 @@ class WebConnectionController extends ActivityController {
 	private def processRequestParameters(webConnectionInstance) {
 		def paramsName = params.'param-name'
 		def paramsValue = params.'param-value'
-		webConnectionInstance.requestParameters = null
+		webConnectionInstance.requestParameters?.clear()
 		if(paramsName instanceof String[]) {
 			paramsName?.size()?.times {
 				addRequestParameter(paramsName[it], paramsValue[it], webConnectionInstance)

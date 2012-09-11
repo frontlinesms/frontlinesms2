@@ -44,7 +44,6 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.'param-value' = ['bob','secret'] as String[]
 		when:
 			controller.save()
-			println "WebConnection::: ${webConnection.validate()}"
 			webConnection.refresh()
 		then:
 			webConnection.name == "New WebConnection name"
@@ -80,7 +79,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 
 	def "should not save requestParameters without a name value"() {
 		setup:
-			def keyword = new Keyword(value:'COOL')
+			def keyword = new Keyword(value:'AWESOME')
 			def webConnection = new WebConnection(name:"Ushahidi", keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.POST)
 			webConnection.addToRequestParameters(new RequestParameter(name:"name", value:'${name}'))
 			webConnection.addToRequestParameters(new RequestParameter(name:"age", value:'${age}'))
