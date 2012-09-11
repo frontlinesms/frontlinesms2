@@ -26,7 +26,7 @@
 		};
 		var configureTabValidation = function() {
 			var isValid = true;
-			$('#web-connection-param-table input').each(function() {
+			$('#web-connection-param-table input:visible').each(function() {
 				if (!validator.element(this) && isValid) {
 					isValid = false;
 				}

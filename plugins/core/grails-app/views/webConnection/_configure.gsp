@@ -1,3 +1,4 @@
+<%@ page import="frontlinesms2.WebConnection" %>
 <div class="input">
 	<label for="url"><g:message code="webConnection.url.label"/></label>
 	<g:textField name="url" value="${activityInstanceToEdit?.url}" required="true"/>
@@ -8,11 +9,11 @@
 		<g:set var="httpMethod" value="${activityInstanceToEdit?.httpMethod}"/>
 		<li>
 			<label for="httpMethod"><g:message code="webConnection.httpMethod.get"/></label>
-			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod}" />
+			<g:radio name="httpMethod" value="GET" checked="${!activityInstanceToEdit || httpMethod == WebConnection.HttpMethod.GET}" />
 		</li>
 		<li>
 			<label for="httpMethod"><g:message code="webConnection.httpMethod.post"/></label>
-			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && !httpMethod}" />
+			<g:radio name="httpMethod" value="POST" checked="${activityInstanceToEdit && httpMethod != WebConnection.HttpMethod.GET}" />
 		</li>
 	</ul>
 </div>
@@ -30,9 +31,14 @@
 	</thead>
 	<tbody>
 		<g:if test="${activityInstanceToEdit?.id}">
-			<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
-				<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value]" />
-			</g:each>
+			<g:if test="${activityInstanceToEdit?.requestParameters}">
+				<g:each in="${activityInstanceToEdit?.requestParameters}" var="parameter" status="i">
+					<fsms:render template="/webConnection/parameter" model="[name:parameter.name, value:parameter.value]" />
+				</g:each>
+			</g:if>
+			<g:else>
+				<fsms:render template="/webConnection/parameter" model="[name:'',  value:'']"/>
+			</g:else>
 		</g:if>
 		<g:else>
 			<fsms:render template="/webConnection/parameter" model="[name:'message',  value:'${messageText}']"/>
@@ -51,9 +57,10 @@
 			if(row.find("#param-name.error").is(":visible") && $(".error").size() < 4) { $(".error-panel").hide(); }
 			if($('.web-connection-parameter').length === 1) {
 				row.addClass("disabled");
+				row.find("input").removeClass("error");
+				row.find("input").attr("disabled", "disabled");
 				row.hide();
 			} else { row.remove();}
-			var rows = $('.web-connection-parameter');
 		}
 
 	function autofillValue(list) {
@@ -67,7 +74,8 @@
 	function addNewParam() {
 		if($('.web-connection-parameter:hidden').length === 1) {
 				$('.web-connection-parameter').show();
-				row.removeClass("disabled");
+				$('.web-connection-parameter').removeClass("disabled");
+				$('.web-connection-parameter').find("input").attr("disabled", false);
 				return;
 		}
 		var template = $('.web-connection-parameter').last();
