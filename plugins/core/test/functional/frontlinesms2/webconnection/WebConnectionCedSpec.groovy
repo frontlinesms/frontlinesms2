@@ -181,7 +181,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 			keywordTab.useKeyword.jquery.click()//enable keyword
 			next.click()
 		then:
-			waitFor { waitFor {error.contains('Keyword is required')} }
+			waitFor { error.contains('Keyword is required') }
 	}
 
 	def "Url must be provided"() {
@@ -203,28 +203,7 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 			requestTab.post.click()
 			next.click()
 		then:
-			waitFor { waitFor {error.contains('Url is required')} }
-	}
-
-	def "Url must be valid"() {
-		when:
-			to PageMessageInbox
-			bodyMenu.newActivity.click()
-		then:
-			waitFor { at CreateActivityDialog }
-		when:
-			webconnection.click()
-		then:
-			waitFor('slow') { at WebConnectionWizard }
-		when:
-			keywordTab.keyword = "Sync"
-			next.click()
-		then:
-			waitFor { requestTab.displayed }
-		when:
-			requestTab.url = "frontlinesms"
-		then:
-			waitFor { waitFor {error.contains('Please enter a valid URL')} }
+			waitFor { error.contains('Url is required') }
 	}
 
 	def "If parameter added a name must be given"() {
@@ -247,6 +226,6 @@ class WebConnectionCedSpec extends WebConnectionBaseSpec {
 			requestTab.addParam.click()
 			next.click()
 		then:
-			waitFor { waitFor {error.contains('This field is required')} }
+			requestTab.displayed
 	}
 }

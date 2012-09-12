@@ -70,7 +70,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			header.moreActions.value("rename").jquery.click()
 		then:
 			waitFor { at RenameDialog }
-			waitFor { webConnectionName.jquery.val().contains("Sync") }
+			name.jquery.val().contains("Sync")
 	}
 
 	def "clicking the delete option opens the confirm delete small popup"() {
