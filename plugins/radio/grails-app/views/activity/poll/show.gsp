@@ -7,7 +7,9 @@
 	</head>
 	<body>
 		<div id="poll-details" style="display:none">
-			<div id="pollGraph"></div>
+			<div id="pollGraph-container">
+				<div id="pollGraph"></div>
+			</div>
 		</div>
 		<fsms:render template="/wordcloud/wordcloud"/>
 	</body>
