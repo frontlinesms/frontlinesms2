@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0.10" transformSequenceNumber="3">
+<install4j version="5.0.11" transformSequenceNumber="3">
   <directoryPresets config="." />
   <application name="${compiler:build.name}" distributionSourceDir="" applicationId="${compiler:install4j.applicationId}" mediaDir="target/install4j" mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="${compiler:app.shortName}" publisher="FrontlineSMS" publisherWeb="http://www.frontlinesms.com" version="${compiler:sys.version}" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="false" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
@@ -1386,6 +1386,22 @@ FrontlineSMS in their project.&lt;br&gt;
                     <object class="com.install4j.runtime.beans.formcomponents.LabelComponent">
                       <void property="labelText">
                         <string>the software.</string>
+                      </void>
+                    </object>
+                  </java>
+                </serializedBean>
+                <initScript />
+                <visibilityScript />
+              </formComponent>
+              <formComponent name="" id="476" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.CheckboxComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                <serializedBean>
+                  <java class="java.beans.XMLDecoder">
+                    <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
+                      <void property="checkboxText">
+                        <string>consulting with FrontlineSMS</string>
+                      </void>
+                      <void property="variableName">
+                        <string>var_consulting</string>
                       </void>
                     </object>
                   </java>
