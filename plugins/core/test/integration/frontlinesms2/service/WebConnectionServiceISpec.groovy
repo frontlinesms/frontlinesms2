@@ -22,8 +22,8 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 			webConnectionService.preProcess(x)
 			println "**** " + x.out.headers.url
 		then:
-			x.out.headers.url.contains("username=bob")
-			x.out.headers.url.contains("password=secret")
+			x.out.headers[Exchange.HTTP_QUERY].contains("username=bob")
+			x.out.headers[Exchange.HTTP_QUERY].contains("password=secret")
 	}
 
 	def 'out_body should contains the substituted RequestParameters for POST request'(){
@@ -43,7 +43,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 		when:
 			webConnectionService.preProcess(x)
 		then:
-			x.out.headers.url == "www.frontlinesms.com/sync"
+		!x.out.headers[Exchange.HTTP_QUERY]
 	}
 
 	def 'exchange body should contains all values substituted values'() {
