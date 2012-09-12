@@ -6,9 +6,9 @@ import java.text.SimpleDateFormat
 class ErrorController {
 	static final def DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd")
 
-	def logs = { supplyDownload('log') }
+	def logs() { supplyDownload('log') }
 
-	def logsAndDatabase = {	supplyDownload('log-and-database', null) }
+	def logsAndDatabase() {	supplyDownload('log-and-database', null) }
 
 	private def supplyDownload(filename, filter={ file -> file.name.endsWith('.log') }) {
 		def formatedDate = DATE_FORMAT.format(new Date())
@@ -18,7 +18,7 @@ class ErrorController {
 		response.outputStream.flush()
 	}
 	
-	def createException = {
+	def createException() {
 		throw new RuntimeException("This exception was generated at the user's request.",
 				new RuntimeException("And here is a nested exception ;¬)"))
 	}

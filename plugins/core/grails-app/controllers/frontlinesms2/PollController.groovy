@@ -3,7 +3,7 @@ package frontlinesms2
 import grails.converters.JSON
 
 class PollController extends ActivityController {
-	def save = {
+	def save() {
 		// FIXME this should use withPoll to shorten and DRY the code, but it causes cascade errors as referenced here:
 		// http://grails.1312388.n4.nabble.com/Cascade-problem-with-hasOne-relationship-td4495102.html
 		def poll
@@ -58,7 +58,7 @@ class PollController extends ActivityController {
 		}
 	}
 
-	def sendReply = {
+	def sendReply() {
 		def poll = Poll.get(params.ownerId)
 		def incomingMessage = Fmessage.get(params.messageId)
 		if(poll.autoreplyText) {
