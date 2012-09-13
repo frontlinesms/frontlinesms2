@@ -5,7 +5,7 @@
 	</g:if>
 	<g:each in="${activityInstanceList}" var="a">
 		<g:if test="${a != ownerInstance}">
-			<option class="activity" value="${a.id}">${a.name}</option>
+			<option class="activity ${a.shortName}" value="${a.id}">${a.name}</option>
 		</g:if>
 	</g:each>
 	<g:each in="${folderInstanceList}" var="f">

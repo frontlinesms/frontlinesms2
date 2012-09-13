@@ -24,6 +24,18 @@ class Poll extends Activity {
 		keyword cascade: 'all'
 		version false
 	}
+
+	def getDisplayText(Fmessage msg) {
+		def p = PollResponse.withCriteria {
+			messages {
+				eq('isDeleted', false)
+				eq('archived', false)
+				eq('id', msg.id)
+			}
+		}
+
+		p?.size() ? "${p[0].value} (\"${msg.text}\")" : msg.text
+	}
 			
 	static constraints = {
 		name(blank:false, maxSize:255, validator: { val, obj ->

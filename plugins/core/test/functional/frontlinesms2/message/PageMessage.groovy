@@ -20,7 +20,7 @@ abstract class PageMessage extends frontlinesms2.page.PageBase {
 
 class BodyMenu extends geb.Module {
 	static content = {
-		messageSection { section->
+		messageSection { section ->
 			$("a", text: "${section}")
 		}
 		selected { $('#body-menu .selected').text().toLowerCase() }
@@ -41,6 +41,7 @@ class ContentHeader extends geb.Module {
 		title { $('h1').text().toLowerCase() }
 		buttons { $('a.btn, input[type="button"], button') }
 		export (required:false) { $('#export-btn a') }
+		moreActions { $('div.header-buttons select#more-actions') }
 		searchDescription { $('p', class:'description').text() }
 		quickMessage { $("a#quick_message") }
 	}
@@ -73,9 +74,9 @@ class MessageList extends geb.Module {
 		selectedMessages { moduleList MessageListRow, $('tr.selected') }
 		noContent { $('td.no-content') }
 		starFor { message ->
-			if (message instanceof Fmessage){	
+			if (message instanceof Fmessage) {
 					return $("tr #star-${message.id} a")
-			}else if(message instanceof Number){
+			} else if(message instanceof Number) {
 				return $("tr #star-${message} a")
 			}
 		}
@@ -114,7 +115,7 @@ class SingleMessageDetails extends geb.Module {
 		sender { $('#message-detail-sender').text() }
 		senderLink { $('#message-detail-sender a') }
 		text { $('#message-detail-content').text() }
-		date { 
+		date {
 			new SimpleDateFormat("dd MMMM, yyyy hh:mm a", Locale.US)
 				.parse($('#message-detail-date').text())
 		}
@@ -135,8 +136,9 @@ class SingleMessageDetails extends geb.Module {
 class MultipleMessageDetails extends geb.Module {
 	static base = { $('#multiple-messages') }
 	static content = {
+		text { $('#message-detail-content').text() }
 		checkedMessageCount { $('p#checked-message-count').text() }
-		replyAll { $('a#btn_reply_all') }
+		replyAll(required:false) { $('a#btn_reply_all') }
 		retry { $("input#retry-failed") }
 		deleteAll {$('#btn_delete_all')}
 		archiveAll(required:false) { $('#btn_archive_all') }

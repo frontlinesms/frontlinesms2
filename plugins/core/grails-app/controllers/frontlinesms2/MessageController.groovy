@@ -1,7 +1,6 @@
 package frontlinesms2
 
 import grails.converters.*
-import org.quartz.impl.triggers.SimpleTriggerImpl
 
 class MessageController {
 //> CONSTANTS
@@ -23,12 +22,11 @@ class MessageController {
 		params.offset  = params.offset ?: 0
 		return true
 	}
-	def beforeInterceptor = bobInterceptor
+	def beforeInterceptor = [except:'index', action:bobInterceptor]
 	
 //> ACTIONS
 	def index() {
-		params.sort = 'date'
-		redirect(action:'inbox', params:params)
+		redirect action:'inbox', params:params
 	}
 
 	def newMessageCount() {
@@ -116,6 +114,7 @@ class MessageController {
 	def webConnection() { redirect(action: 'activity', params: params) }
 	def announcement() { redirect(action: 'activity', params: params) }
 	def autoreply() { redirect(action: 'activity', params: params) }
+	def subscription() { redirect(action: 'activity', params: params) }
 	def activity() {
 		def activityInstance = Activity.get(params.ownerId)
 		if (activityInstance) {

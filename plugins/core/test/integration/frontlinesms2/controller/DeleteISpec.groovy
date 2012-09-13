@@ -22,8 +22,8 @@ class DeleteISpec extends IntegrationSpec {
 
 	def "deleted polls are not included in the pollInstanceList"() {
 		given:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
+			def message1 = Fmessage.build(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = Fmessage.build(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
@@ -31,14 +31,14 @@ class DeleteISpec extends IntegrationSpec {
 			def r2 = PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model1 = messageController.getShowModel()
 		then:
 			model1.activityInstanceList == [p]
 		when:
 			pollController.params.id = p.id
 			pollController.delete()
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model2 = messageController.getShowModel()
 		then:
 			!model2.activityInstanceList
@@ -46,8 +46,8 @@ class DeleteISpec extends IntegrationSpec {
 	
 	def "deleted polls are not included in the polls list"() {
 		given:
-			def message1 = new Fmessage(src:'Bob', dst:'+254987654', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', dst:'+2541234567', text:'go barcelona', inbound:true, date: new Date()).save()
+			def message1 = Fmessage.build(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = Fmessage.build(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
 			p.save(failOnError:true, flush:true)
@@ -55,7 +55,7 @@ class DeleteISpec extends IntegrationSpec {
 			PollResponse.findByValue('Barcelona').addToMessages(message2)
 			p.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model1 = messageController.getShowModel()
 		then:
 			model1.activityInstanceList == [p]
@@ -70,18 +70,18 @@ class DeleteISpec extends IntegrationSpec {
 	def "deleted folders are not included in the folderInstanceList"() {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(src: '123456', date: new Date(), inbound: true)
+			def m = Fmessage.build(src: '123456', date: new Date(), inbound: true)
 			f.addToMessages(m)
 			f.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model1 = messageController.getShowModel()
 		then:
 			model1.folderInstanceList == [f]
 		when:
 			folderController.params.id = f.id
 			folderController.delete()
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			def model2 = messageController.getShowModel()
 		then:
 			!model2.folderInstanceList
@@ -90,34 +90,34 @@ class DeleteISpec extends IntegrationSpec {
 	def "deleted folders are included in the trash list"() {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
-			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
+			def m = Fmessage.build(src: '12345', inbound: true, date: new Date())
+			def m2 = Fmessage.build(src: '12345', inbound: true, date: new Date()-1)
 			f.addToMessages(m)
 			f.addToMessages(m2)
 			delete(f)
 			f.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model*.object == [f]
+			model*.object.id == [f.id]
 	}
 	
 	def "polls, folders and messages appear in the trash section"() {
 		given:
 			def f = new Folder(name:'test').save(failOnError:true)
-			def m = new Fmessage(src: '12345', inbound: true, date: new Date())
-			def m2 = new Fmessage(src: '12345', inbound: true, date: new Date()-1)
+			def m = Fmessage.build(src: '12345', inbound: true, date: new Date())
+			def m2 = Fmessage.build(src: '12345', inbound: true, date: new Date()-1)
 			f.addToMessages(m)
 			f.addToMessages(m2)
 			delete(f)
 			f.save(flush:true, failOnError:true)
 			
-			def message1 = new Fmessage(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
-			def message2 = new Fmessage(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
+			def message1 = Fmessage.build(src:'Bob', text:'I like manchester', inbound:true, date: new Date()).save()
+			def message2 = Fmessage.build(src:'Alice', text:'go barcelona', inbound:true, date: new Date()).save()
 			
-			def m3 = new Fmessage(src: '1235', text:"not in folder", isDeleted: true, date: new Date(), inbound: true).save(flush:true, failOnError:true)
+			def m3 = Fmessage.build(src: '1235', text:"not in folder", isDeleted: true, date: new Date(), inbound: true).save(flush:true, failOnError:true)
 			delete(m3)
 			def p = new Poll(name: 'This is a poll')
 			p.editResponses(choiceA: 'Manchester', choiceB:'Barcelona')
@@ -127,11 +127,11 @@ class DeleteISpec extends IntegrationSpec {
 			delete(p)
 			p.save(flush:true, failOnError:true)
 		when:
-			messageController.beforeInterceptor()
+			messageController.beforeInterceptor.action.call()
 			messageController.trash()
 			def model = messageController.modelAndView.model.trashInstanceList
 		then:
-			model*.object == [p, m3, f]
+			model*.object.id == [p.id, m3.id, f.id]
 	}
 	
 	private def delete(def o) {

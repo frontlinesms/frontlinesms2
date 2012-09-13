@@ -39,3 +39,8 @@
 #tabs div.summary p { line-height:150%; margin-bottom:20px; }
 
 #tabs div.input label.error { margin-right:0px; font-weight:normal; left:0px; padding-top:2px; }
+
+div.subscription_input { padding: 3px 0px; }
+form#categorize_subscription p.info { padding:5px 0px; }
+
+

@@ -64,11 +64,14 @@ class GroupController {
 	}
 	
 	def delete = {
-		if (Group.get(params.id)?.delete(flush:true))
+		try {
+			Group.get(params.id)?.delete(flush: true)
 			flash.message = message(code:'default.deleted.message', args:[message(code:'group.label')])
-		else
+		}
+		catch (org.springframework.dao.DataIntegrityViolationException e) {
 			flash.message = message(code:'group.delete.fail')
-		redirect controller:"contact"
+		}
+		redirect controller:'contact', action: "show"
 	}
 }
 

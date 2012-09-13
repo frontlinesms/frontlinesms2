@@ -20,7 +20,7 @@ class MessageStorageServiceSpec extends Specification {
 
 	def "it saves the incoming Fmessage"() {
 		given:
-			def m = new Fmessage(src:"12345", inbound:true, date:new Date())
+			def m = new Fmessage(text:'', src:"12345", inbound:true, date:new Date())
 		when:
 			service.process(createTestExchange(m))
 		then:

@@ -24,7 +24,7 @@ class MessageSendService {
 	}
 	
 	def createOutgoingMessage(params) {
-		def message = new Fmessage(text:params.messageText, inbound:false)
+		def message = new Fmessage(text:(params.messageText), inbound:false)
 		def addresses = [params.addresses].flatten() - null
 		def groups = [params.groups].flatten() - null
 		addresses += getAddressesForGroups(groups)

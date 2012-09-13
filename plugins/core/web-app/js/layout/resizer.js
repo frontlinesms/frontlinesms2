@@ -4,6 +4,9 @@ var Resizer = function(container_selecter, fixed_header_selecter, fixed_footer_s
 	//   - cache jQuery objects _fixed_headers and _fixed_footers
 	//   - set width and position CSS only on first init
 	// * does not currently behave well for table headings as column widths break for the header when it is removed from normal flow
+	// Notes on use: (N.B. these were written while attempting to re-use the script so maybe not 100% accurate)
+	// * all resizables should be within a single parent
+	// * resizables should have `position:absolute` set
 	var
 		_direction, _key,
 		_main_header_height = $("#head").outerHeight(), // this height is fixed
