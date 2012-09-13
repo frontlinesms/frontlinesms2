@@ -44,7 +44,7 @@ class PollControllerSpec extends Specification {
 	
 	def "can unarchive a poll"() {
 		given:
-			PollController.metaClass.withActivity = { Closure c -> c.call(Poll.get(params.id)) }
+			Activity.metaClass.static.get = { Serializable s -> Poll.get(s) }
 			def poll = new Poll(name:'thingy', archived:true)
 			poll.editResponses(choiceA:'One', choiceB:'Other')
 			poll.save()
