@@ -417,4 +417,4 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 		popupTitle.contains('edit subscription')
 	}
 }
-}
+

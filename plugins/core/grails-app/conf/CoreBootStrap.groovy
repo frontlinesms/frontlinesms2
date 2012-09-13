@@ -64,7 +64,7 @@ class CoreBootStrap {
 			dev_initFolders()
 			dev_initAnnouncements()
 			dev_initSubscriptions()
-			dev_initWebConnections
+			dev_initWebConnections()
 			dev_initLogEntries()
 		}
 
@@ -307,7 +307,7 @@ class CoreBootStrap {
 
 
 	private def dev_initWebConnections() {
-		if(!dev) return
+		if(!bootstrapData) return
 		[new Fmessage(src:'Wanyama', text:'forward me to the server'),
 			new Fmessage(src:'Tshabalala', text:'a text from me'),
 			new Fmessage(src:'June', text:'I just arrived')].each() {
