@@ -2,6 +2,7 @@ package frontlinesms2.camel.clickatell
 
 import frontlinesms2.*
 import org.apache.camel.*
+import frontlinesms2.camel.exception.*
 
 class ClickatellPostProcessor implements Processor {
 	public void process(Exchange exchange) throws Exception {
@@ -16,8 +17,16 @@ class ClickatellPostProcessor implements Processor {
 		if(text ==~ "ID:.*") log "message sent successfully"
 		else {
 			def m = (text =~ /ERR:\s*(\d+),\s*(.*)/)
-			if(m.matches()) throw new RuntimeException("Clickatell gateway error: ${m[0][1]} (${m[0][2]})")
-			else throw new RuntimeException("Unexpected response from Clickatell gateway: $text")
+			if(m.matches()) {
+				switch (m[0][1]) {
+					case "001"://Invalid Login
+						throw new AuthenticationException("Clickatell gateway error: $m[0][2]}")
+					case "108"://Missing or invalid Api_Id
+						throw new InvalidApiIdException("Clickatell gateway error: $m[0][2]")
+					default:
+						throw new RuntimeException("Clickatell gateway error: $m[0][2]")
+				}
+			} else throw new RuntimeException("Unexpected response from Clickatell gateway: $text")
 		}
 		log 'EXIT'
 	}
