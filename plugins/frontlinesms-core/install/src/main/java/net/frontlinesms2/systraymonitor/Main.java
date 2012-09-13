@@ -2,6 +2,7 @@ package net.frontlinesms2.systraymonitor;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import net.frontlinesms2.systraymonitor.permissions.PermissionsCheckHandlerFactory;
 
@@ -24,6 +25,8 @@ public class Main {
 		o("main() called with args: " + Arrays.toString(args));
 		c("org/apache/juli/logging/LogFactory");
 		c("org.apache.jasper.servlet.JspServlet");
+
+		o("Default charset: " + Charset.defaultCharset());
 
 		o("Reading properties file...");
 		FProperties properties = new FProperties("launcher.properties");
