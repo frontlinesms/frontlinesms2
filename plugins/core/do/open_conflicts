@@ -1,0 +1,2 @@
+#!/bin/bash
+$EDITOR `git diff --name-only --relative | uniq`
