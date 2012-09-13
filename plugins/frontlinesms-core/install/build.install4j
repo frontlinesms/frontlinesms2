@@ -1273,7 +1273,7 @@ c.setCancelButtonVisible(false);</postActivation>
                     <object class="com.install4j.runtime.beans.formcomponents.MultilineHtmlLabelComponent">
                       <void property="labelHtml">
                         <string>&lt;html&gt;
-I am happy to share my contact information with the FrontlineSMS so that they can contact me about
+I am happy to share my contact information with the FrontlineSMS team so that they can contact me about
 &lt;/html&gt;</string>
                       </void>
                     </object>
