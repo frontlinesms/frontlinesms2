@@ -33,8 +33,12 @@ public class Futil {
 		return email.matches(EMAIL_REGEX);
 	}
 
-	public static void showAlert(String message) {
-	    javax.swing.JOptionPane.showMessageDialog(null, message);
+	public static void showAlert(com.install4j.api.context.InstallerContext context, String message) {
+		if(context.isConsole() || context.isUnattended()) {
+			System.out.println(message);
+		} else {
+			javax.swing.JOptionPane.showMessageDialog(null, message);
+		}
 	}
 
 	/* N.B. Unfortunately this code is currently triplcated throughout application.  Please take care when editing.  FIXME move to external lib. */

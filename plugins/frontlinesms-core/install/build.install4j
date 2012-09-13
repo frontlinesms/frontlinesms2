@@ -1123,7 +1123,7 @@ c.setCancelButtonVisible(false);</postActivation>
                             <string>import net.frontlinesms.install4j.custom.*;
 
 boolean valid = text.length() == 0 || Futil.validateUrl(text);
-if(!valid) Futil.showAlert("Invalid Web Address \nTry e.g. www.google.com");
+if(!valid) Futil.showAlert(context, "Invalid Web Address \nTry e.g. www.google.com");
 return valid;</string>
                           </void>
                         </object>
@@ -1438,7 +1438,7 @@ released publicly without your permission.&lt;br&gt;
                             <string>import net.frontlinesms.install4j.custom.*;
 
 boolean valid = text.length() == 0 || Futil.validateEmailAddress(text);
-if(!valid) Futil.showAlert("Invalid Email Address \n Try name@home.com");
+if(!valid) Futil.showAlert(context, "Invalid Email Address \n Try name@home.com");
 return valid;</string>
                           </void>
                         </object>
