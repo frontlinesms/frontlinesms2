@@ -32,7 +32,15 @@ class WebConnection extends Activity {
 	static hasMany = [requestParameters:RequestParameter]
 	static hasOne = [keyword: Keyword]
 	
-	static constraints = {}
+	static constraints = {
+		name(blank:false, maxSize:255, validator: { val, obj ->
+			if(obj?.deleted || obj?.archived) return true
+			def identical = WebConnection.findAllByNameIlike(val)
+			if(!identical) return true
+			else if (identical.any { it.id != obj.id && !it?.archived && !it?.deleted }) return false
+			else return true
+			})
+	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
 	}

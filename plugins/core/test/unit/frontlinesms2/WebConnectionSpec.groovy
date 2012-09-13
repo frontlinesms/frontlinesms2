@@ -24,7 +24,7 @@ class WebConnectionSpec extends CamelUnitSpecification {
 		where:
 			name	|addKeyword	|valid
 			'test'	|true		|true
-			'test'	|false		|true
+			'test'	|false		|false
 			''		|true		|false
 			null	|true		|false
 	}
