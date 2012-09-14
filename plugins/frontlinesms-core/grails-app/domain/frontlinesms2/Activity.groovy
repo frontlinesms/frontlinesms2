@@ -3,7 +3,7 @@ package frontlinesms2
 abstract class Activity extends MessageOwner {
 //> STATIC PROPERTIES
 	static boolean editable = { true }
-	static def implementations = [Announcement, Autoreply, Poll, WebConnection]
+	static def implementations = [Announcement, Autoreply, Poll, Subscription, WebConnection]
 
 //> INSTANCE PROPERTIES
 	String sentMessageText

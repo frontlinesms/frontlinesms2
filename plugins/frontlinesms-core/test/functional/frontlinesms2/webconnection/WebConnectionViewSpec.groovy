@@ -37,7 +37,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			header.archive.click()
 		then:
 			waitFor { at PageMessageInbox }
-			notifications.flashMessagesText.contains("Activity archived")
+			notifications.flashMessageText.contains("Activity archived")
 	}
 
 	def "clicking the edit option opens the WebConnection Dialog for editing"() {
@@ -182,7 +182,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			singleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
 			waitFor("veryslow") { at PageMessageWebConnection }
-			waitFor { notifications.flashMessagesText.contains("updated") }
+			waitFor { notifications.flashMessageText.contains("updated") }
 			!messageList.messages*.text.contains("Test message 0")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
@@ -205,7 +205,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 		when:
 			multipleMessageDetails.moveTo(Activity.findByName("Sample Announcement").id).click()
 		then:
-			waitFor("veryslow") { notifications.flashMessagesText.contains("updated") }
+			waitFor("veryslow") { notifications.flashMessageText.contains("updated") }
 			!messageList.messages*.text.containsAll("Test message 0", "Test message 1")
 		when:
 			to PageMessageAnnouncement, Activity.findByName("Sample Announcement")
