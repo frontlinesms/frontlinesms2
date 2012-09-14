@@ -117,5 +117,9 @@ codenarc {
 	maxPriority1Violations = 0
 	maxPriority2Violations = 250
 	maxPriority3Violations = 500
+
+	properties = {
+		GrailsPublicControllerMethod.enabled = false
+	}
 }
 

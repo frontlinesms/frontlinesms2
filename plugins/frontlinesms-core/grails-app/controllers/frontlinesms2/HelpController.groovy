@@ -1,11 +1,11 @@
 package frontlinesms2
 
 class HelpController {
-	def index = { redirect(action: main) }
+	def index() { redirect(action: main) }
 	
-	def main = { }
+	def main() {}
 	
-	def section = {
+	def section() {
 		def helpText
 		if(!params.helpSection) {
 			helpText = "This help file is not yet available, sorry."

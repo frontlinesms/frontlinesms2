@@ -5,11 +5,11 @@ import grails.converters.JSON
 class GroupController {
 	static allowedMethods = [update: "POST"]
 
-	def list = {
+	def list() {
 		[groups:Group.list()]
 	}
 
-	def update = {
+	def update() {
 		def group = Group.get(params.id.toLong())
 		group.properties = params
 		if(group.save(flush:true)) {
@@ -28,18 +28,18 @@ class GroupController {
 		}
 	}
 
-	def show = {
+	def show() {
 		params.groupId = params.id
 		redirect controller:"contact", action:"show", params:params
 	}
 	
-	def create = {
+	def create() {
 		def groupInstance = new Group()
 		groupInstance.properties = params
 		[groupInstance: groupInstance]
 	}
 	
-	def save = {
+	def save() {
 		def groupInstance = new Group(params)
 		if (groupInstance.save(flush:true)) {
 			flash.message = message(code:'default.created.message', args:[message(code:'group.label'), groupInstance.name])
@@ -57,13 +57,13 @@ class GroupController {
 		}
 	}
 	
-	def rename = {}
+	def rename() {}
 
-	def confirmDelete = {
+	def confirmDelete() {
 		[groupName: Group.get(params.groupId)?.name]
 	}
 	
-	def delete = {
+	def delete() {
 		try {
 			Group.get(params.id)?.delete(flush: true)
 			flash.message = message(code:'default.deleted.message', args:[message(code:'group.label')])

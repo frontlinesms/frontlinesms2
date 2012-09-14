@@ -8,12 +8,12 @@ import au.com.bytecode.opencsv.CSVWriter
 class ImportController {
 	private static final def MESSAGE_DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 	
-	def importData = {
+	def importData() {
 		if (params.data == 'contacts') importContacts()
 		else importMessages()
 	}
 	
-	def importContacts = {
+	def importContacts() {
 		def savedCount = 0
 		def uploadedCSVFile = request.getFile('importCsvFile')
 		
@@ -75,13 +75,13 @@ class ImportController {
 		} else throw new RuntimeException(message(code:'import.upload.failed'))
 	}
 
-	def failedContacts = { 
+	def failedContacts() { 
 		response.setHeader("Content-disposition", "attachment; filename=failedContacts.csv")
 		failedContactsFile.eachLine { response.outputStream << it << '\n' }
 		response.outputStream.flush()
 	}
 	
-	def importMessages = {
+	def importMessages() {
 		def savedCount = 0
 		def failedCount = 0
 		def importingVersionOne = true

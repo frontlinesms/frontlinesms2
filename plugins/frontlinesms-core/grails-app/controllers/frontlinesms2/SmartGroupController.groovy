@@ -5,7 +5,7 @@ import org.codehaus.groovy.grails.commons.DefaultGrailsDomainClass
 class SmartGroupController {
 	private static final String CUSTOM_FIELD_ID_PREFIX = 'custom:'
 	
-	def create = {
+	def create() {
 		def smartGroupInstance = new SmartGroup()
 		def customFieldNames = CustomField.allUniquelyNamed
 		[smartGroupInstance:smartGroupInstance,
@@ -13,7 +13,7 @@ class SmartGroupController {
 				fieldIds:['mobile', 'contactName', 'email', 'notes'] + customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
 	}
 	
-	def save = {
+	def save() {
 		withSmartGroup { smartGroupInstance ->
 			smartGroupInstance.name = params.smartgroupname
 			if((getRuleText().flatten() - null)) {
@@ -30,15 +30,15 @@ class SmartGroupController {
 		}
 	}
 	
-	def show = {
+	def show() {
 		redirect(controller: "contact", action: "show", params:[smartGroupId:params.id])
 	}
 	
-	def rename = {
+	def rename() {
 		render view: "../smartGroup/rename", model: [groupName: SmartGroup.get(params.groupId)?.name]
 	}
 	
-	def edit = {
+	def edit() {
 		def smartGroupInstance = SmartGroup.get(params.id)
 		def smartGroupRuleFields = getSmartGroupRuleFields()
 		def currentRules = [:]
@@ -55,11 +55,11 @@ class SmartGroupController {
 				fieldIds:['mobile', 'contactName', 'email', 'notes']+customFieldNames.collect { CUSTOM_FIELD_ID_PREFIX+it }]
 	}
 	
-	def confirmDelete = {
+	def confirmDelete() {
 		render view: "../group/confirmDelete", model: [groupName: SmartGroup.get(params.groupId)?.name]
 	}
 	
-	def delete = {
+	def delete() {
 		if (SmartGroup.get(params.id)?.delete(flush: true))
 				flash.message = "${message(code: 'default.deleted.message', args: [message(code: 'smartgroup.label', default: 'SmartGroup'), ''])}"
 		else
