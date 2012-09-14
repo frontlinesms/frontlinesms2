@@ -3,8 +3,8 @@ package frontlinesms2
 import grails.converters.JSON
 
 class AnnouncementController extends ActivityController {
-	def index = { redirect(action: 'save') }
-	def save = {
+	def index() { redirect(action: 'save') }
+	def save() {
 		def announcementInstance
 		announcementInstance = Announcement.get(params.ownerId) ?: new Announcement()
 		announcementInstance.name = params.name

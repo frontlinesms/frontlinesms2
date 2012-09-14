@@ -2,7 +2,7 @@ package frontlinesms2
 
 class SettingsController {
 	def i18nUtilService
-	def index = {
+	def index() {
 		redirect(action:'general')
 	}
 	
@@ -22,12 +22,12 @@ class SettingsController {
 		return [action: 'logs']
 	}
 
-	def general = {
+	def general() {
 		[currentLanguage:i18nUtilService.getCurrentLanguage(request),
 				languageList:i18nUtilService.allTranslations]
 	}
 
-	def selectLocale = {
+	def selectLocale() {
 		i18nUtilService.setLocale(request, response, params.language?:'en')
 		redirect view:'general'
 	}

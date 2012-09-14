@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class QuickMessageController {
-	def create = {
+	def create() {
 		if( params.recipients?.contains(',')) {
 			def recipientList = []
 			params.recipients.tokenize(',').each {

@@ -4,13 +4,13 @@ import grails.converters.JSON
 
 class SubscriptionController extends ActivityController {
 
-	def create = {
+	def create() {
 		def groupList = Group.getAll()
 		[contactList: Contact.list(),
 				groupList:groupList]
 	}
 
-	def edit = {
+	def edit() {
 		withActivity { activityInstance ->
 			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 			def activityType = activityInstance.shortName
@@ -20,7 +20,7 @@ class SubscriptionController extends ActivityController {
 		}
 	}
 
-	def join = {
+	def join() {
 		withSubscription { subscriptionInstance ->
 			getCheckedMessages().each { message ->
 				subscriptionInstance.processJoin(message)
@@ -30,7 +30,7 @@ class SubscriptionController extends ActivityController {
 		redirect(controller:'message', action:'inbox')
 	}
 
-	def leave = {
+	def leave() {
 		withSubscription { subscriptionInstance ->
 			getCheckedMessages().each { message ->
 				subscriptionInstance.processLeave(message, Contact.findByMobile(message.src))
@@ -40,7 +40,7 @@ class SubscriptionController extends ActivityController {
 		redirect(controller:'message', action:'inbox')
 	}
 
-	def toggle = {
+	def toggle() {
 		withSubscription { subscriptionInstance ->
 			getCheckedMessages().each { message ->
 				subscriptionInstance.processToggle(message, Contact.findByMobile(message.src))
@@ -50,7 +50,7 @@ class SubscriptionController extends ActivityController {
 		redirect(controller:'message', action:'inbox')
 	}
 
-	def save = {
+	def save() {
 		println "**PARAMS** "+params
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
@@ -78,7 +78,7 @@ class SubscriptionController extends ActivityController {
 		}
 	}
 
-	def categoriseSubscriptionPopup = {
+	def categoriseSubscriptionPopup() {
 		render view:"categoriseSubscription", model:[params]
 	}
 

@@ -3,34 +3,34 @@ package frontlinesms2
 class StatusController {
 	def deviceDetectionService
 	
-	def index = {
+	def index() {
 	    
 		redirect action: "show", params:params
 	}
 
-	def trafficLightIndicator = {
+	def trafficLightIndicator() {
 		def connections = Fconnection.list()
 		def color = (connections && connections.status.any {(it == ConnectionStatus.CONNECTED)}) ? 'green' : 'red'
 		render text:color, contentType:'text/plain'
 	}
 	
-	def show = {
+	def show() {
 		[connectionInstanceList: Fconnection.list(),
 				connectionInstanceTotal: Fconnection.count(),
 				detectedDevices:deviceDetectionService.detected] <<
 			getMessageStats() << getFilters()
 	}
 	
-	def detectDevices = {
+	def detectDevices() {
 		deviceDetectionService.detect()
 		redirect action:'show'
 	}
 	
-	def listDetected = {
+	def listDetected() {
 		render template:'device_detection', model:[detectedDevices:deviceDetectionService.detected]
 	}
 	
-	def resetDetection = {
+	def resetDetection() {
 		deviceDetectionService.reset()
 		redirect action:'index'
 	}

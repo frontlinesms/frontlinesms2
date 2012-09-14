@@ -8,17 +8,17 @@ class ActivityController {
 	def messageSendService
 	def trashService
 
-	def index = {
+	def index() {
 		redirect action:'create'
 	}
 	
-	def create = {
+	def create() {
 		def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 		[contactList: Contact.list(),
 				groupList:groupList]
 	}
 	
-	def edit = {
+	def edit() {
 		withActivity { activityInstance ->
 			def groupList = Group.getGroupDetails() + SmartGroup.getGroupDetails()
 			def activityType = activityInstance.shortName
@@ -28,9 +28,9 @@ class ActivityController {
 		}
 	}
 	
-	def rename = {}
+	def rename() {}
 	
-	def update = {
+	def update() {
 		withActivity { activity ->
 			activity.properties = params
 			if (activity.save()) {
@@ -51,7 +51,7 @@ class ActivityController {
 		}
 	}
 	
-	def archive = {
+	def archive() {
 		withActivity { activity ->
 			activity.archive()
 			if(activity.save(flush:true)) {
@@ -63,7 +63,7 @@ class ActivityController {
 		}
 	}
 	
-	def unarchive = {
+	def unarchive() {
 		withActivity { activity ->
 			activity.unarchive()
 			if(activity.save()) {
@@ -78,13 +78,13 @@ class ActivityController {
 		}
 	}
 	
-	def confirmDelete = {
+	def confirmDelete() {
 		def activityInstance = Activity.get(params.id)
 		model:[ownerName:activityInstance.name,
 				ownerInstance:activityInstance]
 	}
 	
-	def delete = {
+	def delete() {
 		withActivity { activity ->
 			trashService.sendToTrash(activity)
 			flash.message = defaultMessage 'trashed'
@@ -92,7 +92,7 @@ class ActivityController {
 		}
 	}
 	
-	def restore = {
+	def restore() {
 		withActivity { activity ->
 			if(trashService.restore(activity)) {
 				flash.message = defaultMessage 'restored'
@@ -103,7 +103,7 @@ class ActivityController {
 		}
 	}
 	
-	def create_new_activity = {}
+	def create_new_activity() {}
 	
 	private def withActivity(Closure c) {
 		def activityInstance = Activity.get(params.id)
