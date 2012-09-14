@@ -5,6 +5,7 @@ import frontlinesms2.camel.clickatell.*
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
+import frontlinesms2.camel.exception.*
 
 class ClickatellFconnection extends Fconnection {
 	private static final String CLICKATELL_URL = 'http://api.clickatell.com/http'
@@ -27,6 +28,10 @@ class ClickatellFconnection extends Fconnection {
 			@Override void configure() {}
 			List getRouteDefinitions() {
 				return [from("seda:out-${ClickatellFconnection.this.id}")
+						.onException(AuthenticationException, InvalidApiIdException)
+									.handled(true)
+									.beanRef('fconnectionService', 'handleDisconnection')
+									.end()
 						.process(new ClickatellPreProcessor())
 						.setHeader(Exchange.HTTP_URI,
 								simple(CLICKATELL_URL + '/sendmsg?' + 
