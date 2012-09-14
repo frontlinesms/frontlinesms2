@@ -26,7 +26,7 @@ class CustomFieldPopup extends SmallPopup {
 		popupTitle.contains("create custom field")
 	}
 	static content = {
-		newField { $('#modalBox #custom-field-popup #custom-field-name') }
+		newField(required:false) { $('#modalBox #custom-field-popup #custom-field-name') }
 	}
 }
 
