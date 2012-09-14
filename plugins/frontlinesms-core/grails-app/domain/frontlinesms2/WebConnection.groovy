@@ -12,6 +12,11 @@ class WebConnection extends Activity {
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webConnection' }
 
+	// Camel route redelivery config
+	static final def retryAttempts = 3 // how many times to retry before giving up
+	static final def initialRetryDelay = 10000 // delay before first retry, in milliseconds
+	static final def delayMultiplier = 3 // multiplier applied to delay after each failed attempt
+
 	// Substitution variables
 	static subFields = ['message_body' : { msg ->
 			def keyword = msg.messageOwner?.keyword?.value
@@ -60,6 +65,10 @@ class WebConnection extends Activity {
 						.setHeader(Exchange.HTTP_PATH,
 								simple('${header.url}'))
 						.onException(Exception)
+									.redeliveryDelay(initialRetryDelay)
+									.backOffMultiplier(delayMultiplier)
+									.maximumRedeliveries(retryAttempts)
+									.retryAttemptedLogLevel(LoggingLevel.WARN)
 									.handled(true)
 									.beanRef('webConnectionService', 'handleException')
 									.end()
