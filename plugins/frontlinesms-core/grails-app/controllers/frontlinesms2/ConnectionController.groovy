@@ -12,11 +12,11 @@ class ConnectionController {
 	def fconnectionService
 	def messageSendService
 
-	def index = {
+	def index() {
 		redirect(action:'create_new')
 	}
 	
-	def list = {
+	def list() {
 		def fconnectionInstanceList = Fconnection.list(params)
 		def fconnectionInstanceTotal = Fconnection.count()
 
@@ -27,7 +27,7 @@ class ConnectionController {
 		render view:'show', model:model
 	}
 	
-	def show = {
+	def show() {
 		withFconnection {
 			if(params.createRoute) {
 				it.metaClass.getStatus = { ConnectionStatus.CONNECTING }
@@ -37,7 +37,7 @@ class ConnectionController {
 		}
 	}
 
-	def wizard = {
+	def wizard() {
 		if(params.id) {
 			withFconnection {
 				return [action:'update', fconnectionInstance:it]
@@ -47,7 +47,7 @@ class ConnectionController {
 		}
 	}
 	
-	def save = {
+	def save() {
 		remapFormParams()
 		doSave(CONNECTION_TYPE_MAP[params.connectionType])
 	}
@@ -61,7 +61,7 @@ class ConnectionController {
 		} else throw new RuntimeException()
 	}
 	
-	def update = {
+	def update() {
 		remapFormParams()
 		withFconnection { fconnectionInstance ->
 			fconnectionInstance.properties = params
@@ -110,14 +110,14 @@ class ConnectionController {
 		params << newParams
 	}
 	
-	def createRoute = {
+	def createRoute() {
 		CreateRouteJob.triggerNow([connectionId:params.id])
 		params.createRoute = true
 		flash.message = message(code: 'connection.route.connecting')
 		redirect(action:'list', params:params)
 	}
   
-	def destroyRoute = {
+	def destroyRoute() {
 		withFconnection { c ->
 			fconnectionService.destroyRoutes(c)
 			flash.message = message(code: 'connection.route.disconnecting')
@@ -125,17 +125,17 @@ class ConnectionController {
 		}
 	}
 
-	def listComPorts = {
+	def listComPorts() {
 		// This is a secret debug method for now to help devs see what ports are available
 		render(text: "${serial.CommPortIdentifier.portIdentifiers*.name}")
 	}
 
-	def createTest = {
+	def createTest() {
 		def connectionInstance = Fconnection.get(params.id)
 		[connectionInstance:connectionInstance]
 	}
 	
-	def sendTest = {
+	def sendTest() {
 		withFconnection { connection ->
 			def m = messageSendService.createOutgoingMessage(params)
 			messageSendService.send(m, connection)

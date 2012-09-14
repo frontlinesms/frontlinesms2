@@ -7,22 +7,22 @@ class FolderController {
 
 	def trashService
 	
-	def index = {
+	def index() {
 		 redirect(action: "create", params: params)
 	}
 
-	def create = {
+	def create() {
 		def folderInstance = new Folder()
 		folderInstance.properties = params
 		[folderInstance: folderInstance]
 	}
 
-	def rename = {
+	def rename() {
 		def folderInstance = Folder.get(params.ownerId)
 		[folderInstance: folderInstance]
 	}
 
-	def save = {
+	def save() {
 		def folderInstance = new Folder(params)
 		if (folderInstance.save(flush:true)) {
 			flash.message = message(code: 'folder.create.success')
@@ -42,7 +42,7 @@ class FolderController {
 		}
 	}
 
-	def update = {
+	def update() {
 		def folderInstance = Folder.get(params.id)
 		folderInstance.name = params.name
 		if (folderInstance.save(flush:true)) {
@@ -62,7 +62,7 @@ class FolderController {
 		}
 	}
 
-	def archive = {
+	def archive() {
 		withFolder { folder ->
 			folder.archive()
 			if(folder.save()) {
@@ -74,7 +74,7 @@ class FolderController {
 		}
 	}
 	
-	def unarchive = {
+	def unarchive() {
 		withFolder { folder ->
 			folder.unarchive()
 			if(folder.save()) {
@@ -86,12 +86,12 @@ class FolderController {
 		}
 	}
 
-	def confirmDelete = {
+	def confirmDelete() {
 		def folderInstance = Folder.get(params.id)
 		render view: "../activity/confirmDelete", model: [ownerInstance: folderInstance]
 	}
 	
-	def delete = {
+	def delete() {
 		withFolder { folder ->
 			trashService.sendToTrash(folder)
 			flash.message = defaultMessage 'trashed'
@@ -99,7 +99,7 @@ class FolderController {
 		}
 	}
 	
-	def restore = {
+	def restore() {
 		withFolder { folder ->
 			if(trashService.restore(folder)) {
 				flash.message = defaultMessage 'restored'

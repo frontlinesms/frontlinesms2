@@ -159,7 +159,7 @@ class ContactController {
 		render template:'search_results', model:contactSearchService.contactList(params)
 	}
 	
-	def checkForDuplicates = {
+	def checkForDuplicates() {
 		def foundContact = Contact.findByMobile(params.mobile)
 		if (foundContact && foundContact.id.toString() == params.contactId) {
 			render true

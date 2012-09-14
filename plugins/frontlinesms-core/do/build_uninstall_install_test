@@ -1,0 +1,77 @@
+#!/bin/bash
+set -e
+
+echo "#############################################"
+echo "## This script aims to test new installers ##"
+echo "## 1. Build installer                      ##"
+echo "## 2. uninstall old installation           ##"
+echo "## 3. install new version                  ##"
+echo "## 4. run new version                      ##"
+echo "## 5. check that the server is working!    ##"
+echo "#############################################"
+
+INSTALL_DIR=~/frontlinesms2
+SETTINGS_DIR=~/.frontlinesms2
+SERVER_PORT=8130
+CONTEXT_PATH=
+
+echo "# clean target directories"
+rm -rf ../frontlinesms-core/target/
+rm -rf target/
+rm -rf ../frontlinesms-core/install/target*
+rm -rf ../frontlinesms-core/install/src/web-app/
+
+echo "# build-installers"
+grails clean
+grails -Dfrontlinesms2.build.confirmNotProd=true build-installers $@
+
+echo "# uninstall old version"
+$INSTALL_DIR/uninstall -q || echo "# Could not run uninstaller"
+
+echo "# remove old install directory"
+rm -rf $INSTALL_DIR/
+
+echo "# remove old settings/database directory"
+rm -rf $SETTINGS_DIR/
+
+echo "# install new build"
+../frontlinesms-core/install/target/install4j/*.sh -q || echo "There was an error running the installer TODO supply a valid email address on commandline so this does not fail."
+
+echo "# run new install in background"
+$INSTALL_DIR/*_Launcher &
+LAUNCHER_PROCESS_ID=`jobs -p`
+LAUNCHER_PROCESS_GROUP_ID=`ps -j --pid $LAUNCHER_PROCESS_ID | tail -n1 | grep -Po -m2 "\w+" | grep -Pm2 "\w+" | tail -n1`
+jobs
+echo "Launched process ID: $LAUNCHER_PROCESS_ID with group $LAUNCHER_PROCESS_GROUP_ID"
+
+RESPONSE="000"
+PING_URL=http://localhost:$SERVER_PORT$CONTEXT_PATH/status/show
+echo "# Waiting for server to start"
+echo "# Ping URL: $PING_URL"
+until [ "$RESPONSE" -ne "000" ]; do
+	echo "#   Pinging $PING_URL..."
+	RESPONSE=`curl -o /dev/null --silent --head --write-out '%{http_code}' $PING_URL` || echo "Setting response seems to give an error code"
+	echo "#   Pinged server at $PING_URL and got response: $RESPONSE"
+	sleep 10
+done
+
+echo "# Final server response: $RESPONSE"
+if [ "$RESPONSE" -eq "200" ]; then
+	echo "# Started FrontlineSMS successfully \\o/"
+	EXIT_CODE=0
+else
+	echo "# Error starting FrontlineSMS"
+	EXIT_CORE=1
+fi
+
+echo "# Killing FrontlineSMS instance"
+CHILD_PROCESSES=`ps h -o pid -$LAUNCHER_PROCESS_GROUP_ID | tac | tail -n +2`
+echo "# Detected processes: $CHILD_PROCESSES"
+echo "# Excluding process: $LAUNCHER_PROCESS_GROUP_ID"
+CHILD_PROCESSES=`echo "$CHILD_PROCESSES" | sed s/$LAUNCHER_PROCESS_GROUP_ID//`
+echo "# Killing child processes: $CHILD_PROCESSES"
+kill -TERM $CHILD_PROCESSES || echo "Kill doesn't give us a nice exit code BTW"
+
+echo "Exiting with code: $EXIT_CODE"
+exit $EXIT_CODE
+

@@ -13,9 +13,9 @@ class ExportController {
 		true
 	}
 	
-    def index = { redirect(action:'wizard', params: params) }
+	def index() { redirect(action:'wizard', params: params) }
 	
-	def messageWizard = {
+	def messageWizard() {
 		[messageSection: params.messageSection,
 				searchId: params.searchId,
 				ownerId: params.ownerId,
@@ -25,7 +25,7 @@ class ExportController {
 				reportName:getActivityDescription()]
 	}
 	
-	def downloadMessageReport = {
+	def downloadMessageReport() {
 		def messageSection = params.messageSection
 		def messageInstanceList
 		switch(messageSection) {
@@ -61,13 +61,13 @@ class ExportController {
 		generateMessageReport(messageInstanceList.unique())
 	}
 	
-	def contactWizard = {
+	def contactWizard() {
 		[groupId: params.groupId, 
 			contactsSection: params.contactsSection,
 			reportName:getGroupDescription()]
 	}
 	
-	def downloadContactReport = {
+	def downloadContactReport() {
 		def groupId = params.groupId
 		def contactInstanceList
 		if(!params.groupId)
