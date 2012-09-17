@@ -8,6 +8,7 @@ import org.apache.camel.model.RouteDefinition
 // Please don't instantiate this class.  We would make it abstract if it didn't make testing
 // difficult, and stop us calling GORM queries across all subclasses.
 class Fconnection {
+	static final String HEADER_FCONNECTION_ID = 'fconnection-id'
 	def fconnectionService
 	static transients = ['status', 'routeDefinitions']
 	static String getShortName() { 'base' }
@@ -40,14 +41,13 @@ class Fconnection {
 			List getRouteDefinitions() {
 				return [
 					from('seda:nowhere')
+							.setHeader(HEADER_FCONNECTION_ID, simple(Fconnection.this.id.toString()))
 							.to('bad:fconnection?subclassed=false')
 							.routeId("out-${Fconnection.this.id}"),
 					from('bad:fconnection?subclassed=false')
-							.onException(NotConnectedException)
-									.handled(true)
-									.beanRef('fconnectionService', "handleDisconnection")
-									.end()
-							.to('stream:out').routeId("in-${Fconnection.this.id}")]
+							.setHeader(HEADER_FCONNECTION_ID, simple(Fconnection.this.id.toString()))
+							.to('stream:out')
+							.routeId("in-${Fconnection.this.id}")]
 			}
 		}.routeDefinitions
 	}

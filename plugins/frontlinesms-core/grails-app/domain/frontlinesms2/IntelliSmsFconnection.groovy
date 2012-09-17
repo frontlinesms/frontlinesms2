@@ -72,6 +72,7 @@ class IntelliSmsFconnection extends Fconnection {
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
+							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(IntelliSmsFconnection.this.id.toString()))
 							.process(new IntelliSmsPreProcessor())
 							.setHeader(Exchange.HTTP_URI,
 									simple(INTELLISMS_URL + '/sendmsg.aspx?' + 
@@ -85,6 +86,7 @@ class IntelliSmsFconnection extends Fconnection {
 				}
 				if(isReceive()) {
 					definitions << from(camelProducerAddress())
+							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(IntelliSmsFconnection.this.id.toString()))
 							.beanRef('intelliSmsTranslationService', 'process')
 							.to('seda:incoming-fmessages-to-store')
 							.routeId("in-${IntelliSmsFconnection.this.id}")
