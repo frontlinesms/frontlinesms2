@@ -46,6 +46,7 @@ When you set a keyword, and have selected a Multiple Choice Poll type, it will b
 Click 'next' to set Aliases if you have chosen a keyword, or the set up and Automatic Reply if you haven't.
 
 **_Aliases_**
+
 Aliases are alternate ways of spelling and/or writing the choices you entered in the "Response List". 
 
 _This step is only available if you have selected a keyword in the previous step. If you have not, then please go to the next step._
