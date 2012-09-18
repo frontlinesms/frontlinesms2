@@ -10,6 +10,7 @@ echo "## 4. run new version                      ##"
 echo "## 5. check that the server is working!    ##"
 echo "#############################################"
 
+PROJECT_DIR=../core
 INSTALL_DIR=~/frontlinesms2
 ALL_USER_INSTALL_DIR=/opt/frontlinesms2
 SETTINGS_DIR=~/.frontlinesms2
@@ -17,10 +18,10 @@ SERVER_PORT=8130
 CONTEXT_PATH=
 
 echo "# clean target directories"
-rm -rf ../frontlinesms-core/target/
+rm -rf $PROJECT_DIR/target/
 rm -rf target/
-rm -rf ../frontlinesms-core/install/target*
-rm -rf ../frontlinesms-core/install/src/web-app/
+rm -rf $PROJECT_DIR/install/target*
+rm -rf $PROJECT_DIR/install/src/web-app/
 
 echo "# build-installers"
 grails clean
@@ -37,7 +38,7 @@ echo "# remove old settings/database directory"
 rm -rf $SETTINGS_DIR/
 
 echo "# install new build"
-../frontlinesms-core/install/target/install4j/*.sh -q || echo "There was an error running the installer TODO supply a valid email address on commandline so this does not fail."
+$PROJECT_DIR/install/target/install4j/*.sh -q || echo "There was an error running the installer TODO supply a valid email address on commandline so this does not fail."
 
 echo "# run new install in background"
 $INSTALL_DIR/*_Launcher || $ALL_USER_INSTALL_DIR/*_Launcher &
