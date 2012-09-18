@@ -13,8 +13,15 @@
 #body.contacts #main-list-head .smartgroup h1 { background-image:url("../images/icons/smartgroups.png"); }
 
 #body.contacts #main-list li { padding:7px 0 7px 24px; }
-#body.contacts #main-list li:hover { background-color:#e5eff3; }
+#body.contacts #main-list li:first-child { 
+	background-image:url("../images/menubar.png");
+	background-position:top center;
+	background-repeat:repeat-x;
+	font-weight:bold;
+}
+#body.contacts #main-list li:not(:first-child):hover { background-color:#e5eff3; }
 #body.contacts #main-list li.selected { background-color:#d8e8ef; }
+#body.contacts #main-list li label { padding-left:7px; padding-right:24px; }
 #body.contacts #main-list li a { padding-left:7px; padding-right:24px; }
 #body.contacts #main-list li input[type="checkbox"] { vertical-align:middle; }
 
