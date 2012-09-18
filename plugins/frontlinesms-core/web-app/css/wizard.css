@@ -40,7 +40,9 @@
 
 #tabs div.input label.error { margin-right:0px; font-weight:normal; left:0px; padding-top:2px; }
 
-div.subscription_input { padding: 3px 0px; }
-form#categorize_subscription p.info { padding:5px 0px; }
+div.subscription_input { padding: 5px 5px;}
+div.subscription_input label { }
+div.subscription_input input { float:left; margin-right:10px; }
+form#categorize_subscription p.info { padding:5px 0px; line-height: 1.1em;}
 
 
