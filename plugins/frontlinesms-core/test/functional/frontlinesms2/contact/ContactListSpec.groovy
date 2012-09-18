@@ -96,4 +96,19 @@ class ContactListSpec extends ContactBaseSpec {
 		then:
 			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
 	}
+
+	def "should deselect 'select all' when some contacts are not selected"() {
+		given:
+			createManyContacts()
+		when:
+			to PageContactShow
+			contactList.selectContact 0
+		then:
+			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
+			contactList.selectAll.checked
+		when:
+			contactList.selectContact 1
+		then:
+			!contactList.selectAll.checked
+	}
 }
