@@ -35,33 +35,35 @@ class Subscription extends Activity{
 		this.addToMessages(message)
 		this.save()
 		message.ownerDetail = Action.JOIN.toString()
-		message.save(failOnError:true)
-		def foundContact = Contact.findByMobile(message.src)
-		if(!foundContact) {
-			foundContact = new Contact(name:"", mobile:message.src).save(failOnError:true)
-			group.addToMembers(foundContact);
-		} else {
-			if(!(foundContact.isMemberOf(group))){
+		message.save(failOnError:true, flush:true)
+		withEachCorrespondent(message, { phoneNumber ->
+			def foundContact = Contact.findByMobile(phoneNumber)
+			if(!foundContact) {
+				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
 				group.addToMembers(foundContact);
+			} else {
+				if(!(foundContact.isMemberOf(group))){
+					group.addToMembers(foundContact);
+				}
 			}
-		}
-		if(joinAutoreplyText) {
-			sendAutoreplyMessage(foundContact, joinAutoreplyText)
-		}
+			if(joinAutoreplyText) {
+				sendAutoreplyMessage(foundContact, joinAutoreplyText)
+			}
+		})
 	}
 
 	def processLeave(Fmessage message){
 		this.addToMessages(message)
 		this.save()
 		message.ownerDetail = Action.LEAVE.toString()
-		message.save(failOnError:true)
-		def foundContact = Contact.findByMobile(message.src)
-		foundContact?.removeFromGroup(group)
-		if(leaveAutoreplyText) {
-			if(foundContact){
+		message.save(failOnError:true, flush:true)
+		withEachCorrespondent(message, { phoneNumber ->
+			def foundContact = Contact.findByMobile(phoneNumber)
+			foundContact?.removeFromGroup(group)
+			if(leaveAutoreplyText && foundContact) {
 				sendAutoreplyMessage(foundContact, leaveAutoreplyText)
 			}
-		}
+		})
 	}
 
 	def sendAutoreplyMessage(Contact foundContact, autoreplyText) {
@@ -80,29 +82,30 @@ class Subscription extends Activity{
 		this.save()
 		message.ownerDetail = Action.TOGGLE.toString()
 		message.save(failOnError:true)
-		def foundContact = Contact.findByMobile(message.src)
-		if(foundContact){
-			if(foundContact.isMemberOf(group)) {
-				foundContact.removeFromGroup(group)
-				if(leaveAutoreplyText)
-					sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+		withEachCorrespondent(message, { phoneNumber ->
+			def foundContact = Contact.findByMobile(phoneNumber)
+			if(foundContact){
+				if(foundContact.isMemberOf(group)) {
+					foundContact.removeFromGroup(group)
+					if(leaveAutoreplyText)
+						sendAutoreplyMessage(foundContact, leaveAutoreplyText)
+				} else {
+					group.addToMembers(foundContact);
+					if(joinAutoreplyText)
+						sendAutoreplyMessage(foundContact, joinAutoreplyText)
+				}
 			} else {
+				foundContact = new Contact(name:"", mobile:phoneNumber).save(failOnError:true)
 				group.addToMembers(foundContact);
 				if(joinAutoreplyText)
 					sendAutoreplyMessage(foundContact, joinAutoreplyText)
 			}
-		} else {
-			foundContact = new Contact(name:"", mobile:message.src).save(failOnError:true)
-			group.addToMembers(foundContact);
-			if(joinAutoreplyText)
-				sendAutoreplyMessage(foundContact, joinAutoreplyText)
-		}
+		})
 	}
 
 	def processKeyword(Fmessage message, boolean exactMatch) {
 		def action = getAction(message.text,exactMatch)
 		message.ownerDetail = action.toString()
-		def foundContact = Contact.findByMobile(message.src)
 		if(action == Action.JOIN){
 			processJoin(message)
 		}else if(action == Action.LEAVE) {
@@ -144,10 +147,26 @@ class Subscription extends Activity{
 	}
 
 	def getDisplayText(Fmessage msg) {
-		if (msg.messageOwner.id == this.id && msg.inbound) {
+		if (msg.messageOwner.id == this.id) {
 			return (msg.ownerDetail?.toLowerCase() + ' ("' + msg.text + '")').truncate(50) // FIXME probably shouldn't truncate here
 		} else
 			return msg.text
+	}
+
+	def withEachCorrespondent(Fmessage message, Closure c) {
+		def phoneNumbers = []
+		if (message.inbound)
+			phoneNumbers << message.src
+		else {
+			message.dispatches.each { d->
+				phoneNumbers << d.dst
+			}
+		}
+		if (phoneNumbers.size() > 0) {
+			phoneNumbers.each { phoneNumber ->
+				c phoneNumber
+			}
+		}
 	}
 }
 

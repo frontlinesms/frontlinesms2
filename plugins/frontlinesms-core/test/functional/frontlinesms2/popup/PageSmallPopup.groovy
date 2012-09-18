@@ -136,8 +136,8 @@ class SubscriptionCategoriseDialog extends SmallPopup {
 	}
 	static content = {
 		groupName { $('input#group-dropdown') }
-		join { $('#modalBox input#subscription-action').value("join") }
-		leave { $('#modalBox input#subscription-action').value("leave") }
-		toggle { $('#modalBox input#subscription-action').value("toggle") }
+		join { $('#modalBox input#join') }
+		leave { $('#modalBox input#leave') }
+		toggle { $('#modalBox input#toggle') }
 	}
 }

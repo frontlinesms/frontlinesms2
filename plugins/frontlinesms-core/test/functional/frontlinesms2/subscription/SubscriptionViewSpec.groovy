@@ -124,7 +124,7 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 			waitFor { at SubscriptionCategoriseDialog }
 	}
 
-	def 'When a message is categorised with the dialog, it appears in the correct category and the contact membership is updated'() {
+	def 'When a message is categorised as a join with the dialog, it appears in the correct category and the contact membership is updated'() {
 		given:
 			def g = Group.findByName("Camping")
 			def c1 = Contact.build(name:'prudence', mobile:'+12321')
@@ -163,6 +163,144 @@ class SubscriptionViewSpec extends SubscriptionBaseSpec {
 					assert messageRow.text().contains("join")
 				}
 			}
+		when:
+			header.groupLink.click()
+		then:
+			waitFor { title.contains("Camping") }
+			at PageContactShow
+			contactList.contacts.containsAll(['wilburforce', 'prudence'])
+	}
+
+	def 'When a message is categorised as a leave with the dialog, it appears in the correct category and the contact membership is updated'() {
+		given:
+			def g = Group.findByName("Camping")
+			def c1 = Contact.build(name:'prudence', mobile:'+12321')
+			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+			g.addToMembers(c1)
+			def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
+			def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+			def subscription = Subscription.findByName('Camping Subscription')
+		when:
+			to PageMessageInbox, m1
+			singleMessageDetails.moveTo(subscription.id)
+		then:
+			waitFor { at SubscriptionCategoriseDialog }
+		when:
+			leave.click()
+			ok.click()
+		then:
+			waitFor("veryslow") { at PageMessageInbox }
+		when:
+			to PageMessageInbox, m2
+			singleMessageDetails.moveTo(subscription.id)
+		then:
+			waitFor { at SubscriptionCategoriseDialog }
+		when:
+			leave.click()
+			ok.click()
+		then:
+			waitFor("veryslow") { at PageMessageInbox }
+		when:
+			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+		then:
+			waitFor { at PageMessageSubscription }
+			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
+			messageList.messages.each { messageRow ->
+				if (messageRow.source == "prudence") {
+					assert messageRow.text().contains("leave")
+				}
+			}
+		when:
+			header.groupLink.click()
+		then:
+			waitFor { title.contains("Camping") }
+			at PageContactShow
+			!contactList.contacts.containsAll(['wilburforce'])
+			!contactList.contacts.containsAll(['prudence'])
+	}
+
+	def 'When a message is categorised as a toggle with the dialog, it appears in the correct category and the contact membership is updated'() {
+		given:
+			def g = Group.findByName("Camping")
+			def c1 = Contact.build(name:'prudence', mobile:'+12321')
+			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+			g.addToMembers(c1)
+			def m1 = Fmessage.build(text:'I want to go away', src:'+12321', read:true)
+			def m2 = Fmessage.build(text:'I want to come in', src:'+1232123', read:true)
+			def subscription = Subscription.findByName('Camping Subscription')
+		when:
+			to PageMessageInbox, m1
+			singleMessageDetails.moveTo(subscription.id)
+		then:
+			waitFor { at SubscriptionCategoriseDialog }
+		when:
+			toggle.click()
+			ok.click()
+		then:
+			waitFor("veryslow") { at PageMessageInbox }
+		when:
+			to PageMessageInbox, m2
+			singleMessageDetails.moveTo(subscription.id)
+		then:
+			waitFor { at SubscriptionCategoriseDialog }
+		when:
+			toggle.click()
+			ok.click()
+		then:
+			waitFor("veryslow") { at PageMessageInbox }
+		when:
+			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+		then:
+			waitFor { at PageMessageSubscription }
+			messageList.messages*.source.containsAll(["prudence", "wilburforce"])
+			messageList.messages.each { messageRow ->
+				if (messageRow.source == "prudence") {
+					assert messageRow.text().contains("toggle")
+				}
+			}
+		when:
+			header.groupLink.click()
+		then:
+			waitFor { title.contains("Camping") }
+			at PageContactShow
+			contactList.contacts.containsAll(['wilburforce'])
+			!contactList.contacts.containsAll(['prudence'])
+
+	}
+
+
+	def 'Categorisation with the dialog works for sent messages as well, adding/removing the recipients to/from the group'() {
+		given:
+			def g = Group.findByName("Camping")
+			def c1 = Contact.build(name:'prudence', mobile:'+12321')
+			def c2 = Contact.build(name:'wilburforce', mobile:'+1232123')
+			g.addToMembers(c1)
+			def m1 = new Fmessage(src:'src', hasSent:true, inbound:false, text:'hi prudence and wilburforce! You are signed up by force').addToDispatches(dst:"+12321", status:DispatchStatus.SENT, dateSent:new Date()).save(flush: true, failOnError:true)
+			m1.addToDispatches(dst:"+1232123", status:DispatchStatus.SENT, dateSent:new Date()).save(flush: true, failOnError:true)
+			def subscription = Subscription.findByName('Camping Subscription')
+		when:
+			to PageMessageSent, m1
+			singleMessageDetails.moveTo(subscription.id)
+		then:
+			waitFor { at SubscriptionCategoriseDialog }
+		when:
+			join.click()
+			ok.click()
+		then:
+			waitFor("veryslow") { at PageMessageInbox }
+		when:
+			to PageMessageSubscription, Subscription.findByName('Camping Subscription')
+		then:
+			waitFor { at PageMessageSubscription }
+			["join", "prudence", "wilburforce"].each {
+				assert messageList.messages[0].text().contains(it)
+			}
+		when:
+			header.groupLink.click()
+		then:
+			waitFor { title.contains("Camping") }
+			at PageContactShow
+			contactList.contacts.containsAll(['prudence', 'wilburforce'])
 	}
 
 	def "clicking the rename option opens the rename small popup"() {

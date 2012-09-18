@@ -33,7 +33,7 @@ class SubscriptionController extends ActivityController {
 	def leave() {
 		withSubscription { subscriptionInstance ->
 			getCheckedMessages().each { message ->
-				subscriptionInstance.processLeave(message, Contact.findByMobile(message.src))
+				subscriptionInstance.processLeave(message)
 			}
 			subscriptionInstance.save(failOnError:true)
 		}
@@ -43,7 +43,7 @@ class SubscriptionController extends ActivityController {
 	def toggle() {
 		withSubscription { subscriptionInstance ->
 			getCheckedMessages().each { message ->
-				subscriptionInstance.processToggle(message, Contact.findByMobile(message.src))
+				subscriptionInstance.processToggle(message)
 			}
 			subscriptionInstance.save(failOnError:true)
 		}
@@ -51,7 +51,6 @@ class SubscriptionController extends ActivityController {
 	}
 
 	def save() {
-		println "**PARAMS** "+params
 		withSubscription { subscriptionInstance ->
 			subscriptionInstance.group = Group.get(params.subscriptionGroup)
 			if(subscriptionInstance.keyword)
