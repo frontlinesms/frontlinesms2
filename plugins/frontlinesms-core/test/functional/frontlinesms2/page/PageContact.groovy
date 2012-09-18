@@ -67,10 +67,12 @@ class ContactList extends geb.Module {
 	static content = {
 		contact { $("li a")}
 		contacts { $("li a")*.text() }
-		contactsLink { $("li a")*.@href }
+		contactsLink { $("li:not(:first-child) a")*.@href }
 		selectContact { contactPosition ->
 			$('.contact-select', contactPosition).click()
 	    }
+
+		selectAll(required:false) { $('.contact-select', 0)}
 		selectedContacts { $(".selected li a")*.text() }
 		noContent { $('p.no-content').text() }
 	}
@@ -131,8 +133,6 @@ class MultipleContactDetails extends geb.Module {
 	static base = { $('#multiple-contacts') }
 	static content = {
 
-		checkedContactCount { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
-	
 		multiGroupDropDown { $('#multi-group-dropdown') }
 		multiGroupList { $('ul#multi-group-list li span')*.text() }
 		otherMultiGroupOptions { $('#multi-group-dropdown option')*.text().sort() }
@@ -145,7 +145,6 @@ class MultipleContactDetails extends geb.Module {
 		}
 		update { $('#action-buttons #update-all') }
 		delete { $('#action-buttons #btn_delete_all') }
-
 		checkedContactCount(required:false) { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
 		deleteAllButton(required:false) { $('#btn_delete_all') }
 

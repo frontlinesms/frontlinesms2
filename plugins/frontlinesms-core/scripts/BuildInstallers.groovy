@@ -30,6 +30,15 @@ def mvn() {
 	return isWindows()? 'mvn.bat': 'mvn'
 }
 
+def doScript(name) {
+	ant.exec executable:"../frontlinesms-core/do/$name"
+}
+
+def isReleaseBuild() {
+	def appVersion = metadata['app.version'].toUpperCase()
+	return !(appVersion.contains('SNAPSHOT') || appVersion.contains('RC'))
+}
+
 target(clearPluginXmls: 'Delete plugin.xml from all in-place plugins') {
 	delete {
 		fileset dir:'..', includes:'*/plugin.xml'
@@ -53,10 +62,17 @@ target(main: 'Build installers for various platforms.') {
 	} else depends(clean, war)
 	if(!isWindows()) if(getValueAsBoolean('compress', grailsSettings.grailsEnv == 'production')) {
 		println 'Forcing compression of installers...'
-		exec executable:'../frontlinesms-core/do/enable_installer_compression'
+		doScript 'enable_installer_compression'
 	} else {
 		println 'Disabling compression of installers...'
-		exec executable:'../frontlinesms-core/do/disable_installer_compression'
+		doScript 'disable_installer_compression'
+	}
+	if(getValueAsBoolean('resources.asRelease', isReleaseBuild())) {
+		println 'Changing resource paths for installed app to RELEASE options...'
+		doScript 'remove_snapshot_from_install_resource_directories'
+	} else {
+		println 'Changing resource paths for installed app to SNAPSHOT options...'
+		doScript 'add_snapshot_to_install_resource_directories'
 	}
 	def appName = metadata.'app.name'
 	def appVersion = metadata.'app.version'
