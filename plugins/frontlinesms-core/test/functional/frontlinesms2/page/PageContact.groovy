@@ -67,7 +67,7 @@ class ContactList extends geb.Module {
 	static content = {
 		contact { $("li a")}
 		contacts { $("li a")*.text() }
-		contactsLink { $("li a")*.@href }
+		contactsLink { $("li:not(:first-child) a")*.@href }
 		selectContact { contactPosition ->
 			$('.contact-select', contactPosition).click()
 	    }
@@ -131,8 +131,6 @@ class MultipleContactDetails extends geb.Module {
 	static base = { $('#multiple-contacts') }
 	static content = {
 
-		checkedContactCount { $("h2#checked-contact-count").text().split(" ")[0].toInteger() }
-	
 		multiGroupDropDown { $('#multi-group-dropdown') }
 		multiGroupList { $('ul#multi-group-list li span')*.text() }
 		otherMultiGroupOptions { $('#multi-group-dropdown option')*.text().sort() }

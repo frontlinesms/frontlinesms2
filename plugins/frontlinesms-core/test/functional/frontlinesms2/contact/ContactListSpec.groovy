@@ -12,7 +12,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:	
-			contactList.contacts == ['Alice', 'Bob']
+			contactList.contacts.containsAll(['Alice', 'Bob'])
 	}
 
 	def 'contacts list not shown when no contacts exist'() {
@@ -35,7 +35,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			def contactNames = contactList.contacts
+			def contactNames = contactList.contacts - "Select All"
 			def expectedNames = (11..60).collect{"Contact${it}"}
 			assert contactNames == expectedNames
 	}
@@ -51,7 +51,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor { contactList.contacts == ['Sam Anderson', 'SAm Jones', 'SaM Tina'] }
+			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) }
 	}
 	
 	def 'should be able to search contacts within a group'() {
@@ -70,7 +70,7 @@ class ContactListSpec extends ContactBaseSpec {
 			footer.searchContact.jquery.trigger('focus')
 			footer.searchContact << "Sam"
 		then:
-			waitFor {contactList.contacts == ['SAm Jones', 'Sam Anderson'] }
+			waitFor {contactList.contacts.containsAll(['SAm Jones', 'Sam Anderson']) }
 	}
 	
 	def "should remain on the same page when a contact is selected"() {
@@ -85,5 +85,15 @@ class ContactListSpec extends ContactBaseSpec {
 			contactList.selectContact 1
 		then:
 			!footer.prevPage.disabled
+	}
+
+	def "can select all contacts using checkbox"() {
+		given:
+			createManyContacts()
+		when:
+			to PageContactShow
+			contactList.selectContact 0
+		then:
+			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
 	}
 }
