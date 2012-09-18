@@ -79,6 +79,7 @@ class SmslibFconnection extends Fconnection {
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
+							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(SmslibFconnection.this.id.toString()))
 							.beanRef('smslibTranslationService', 'toCmessage')
 							.to(camelAddress())
 							.routeId("out-modem-${SmslibFconnection.this.id}")
@@ -89,6 +90,7 @@ class SmslibFconnection extends Fconnection {
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
+							.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(SmslibFconnection.this.id.toString()))
 							.to('seda:raw-smslib')
 							.routeId("in-${SmslibFconnection.this.id}")
 				}

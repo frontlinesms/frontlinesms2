@@ -13,10 +13,12 @@ class DispatchRouterService {
 	 * Slip should return the list of ______ to forward to, or <code>null</code> if
 	 * we've done with it.
 	 */
-	def slip(Exchange exchange, @Header(Exchange.SLIP_ENDPOINT) String previous, @Header('fconnection') String target) {
+	def slip(Exchange exchange,
+			@Header(Exchange.SLIP_ENDPOINT) String previous,
+			@Header('requested-fconnection-id') String requestedFconnectionId) {
 		def log = { println "DispatchRouterService.slip() : $it" }
 		log "ENTRY"
-		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $target"
+		log "Routing exchange $exchange with previous endpoint $previous and target fconnection $requestedFconnectionId"
 		log "x.in=$exchange?.in"
 		log "x.in.headers=$exchange?.in?.headers"
 		
@@ -25,17 +27,17 @@ class DispatchRouterService {
 			// is a previous one set, we should exit the slip.
 			log "Exchange has previous endpoint from this slip.  Returning null."
 			return null
-		} else if(target) {
-			log "Target is set, so forwarding exchange to fconnection $target"
-			return "seda:out-$target"
+		} else if(requestedFconnectionId) {
+			log "Target is set, so forwarding exchange to fconnection $requestedFconnectionId"
+			return "seda:out-$requestedFconnectionId"
 		} else {
 			def routeId = getDispatchRouteId()
 			if(routeId) {
 				log "Sending with route: $routeId"
 				def fconnectionId = (routeId =~ /.*-(\d+)$/)[0][1]
-				def routeName = "seda:out-$fconnectionId"
-				log "Routing to $routeName"
-				return routeName
+				def queueName = "seda:out-$fconnectionId"
+				log "Routing to $queueName"
+				return queueName
 			} else {
 				// TODO may want to queue for retry here, after incrementing retry-count header
 				throw new RuntimeException("No outbound route available for dispatch.")

@@ -5,7 +5,7 @@ class MessageSendService {
 	
 	def send(Fmessage m, Fconnection c=null) {
 		def headers = [:]
-		if(c) headers.fconnection = c.id
+		if(c) headers['requested-fconnection-id'] = c.id
 		m.save()
 		m.dispatches.each {
 			sendMessageAndHeaders('seda:dispatches', it, headers)

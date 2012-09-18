@@ -43,9 +43,7 @@ function itemCheckChanged(itemTypeString, itemId) {
 			}
 		}
 	}
-	
-	if (itemTypeString == 'message')
-		updateCheckAllBox(count);
+	updateCheckAllBox(count);
 	displayMoveactionDropdown();
 }
 
@@ -148,6 +146,8 @@ function checkAll(itemTypeString) {
 function updateCheckAllBox(count) {
 	// Check whether all messages are checked
 	if(count == $('#main-list tbody tr :checkbox').size() && !$('#main-list :checkbox')[0].checked) {
+		$('#main-list :checkbox')[0].checked = true;
+	} else if(count == $('#main-list li input:checked').size() && !$('#main-list li input:checkbox')[0].checked) {
 		$('#main-list :checkbox')[0].checked = true;
 	} else if($('#main-list :checkbox')[0].checked) {
 		$('#main-list :checkbox')[0].checked = false;

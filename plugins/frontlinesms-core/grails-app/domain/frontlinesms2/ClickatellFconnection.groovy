@@ -32,6 +32,7 @@ class ClickatellFconnection extends Fconnection {
 									.handled(true)
 									.beanRef('fconnectionService', 'handleDisconnection')
 									.end()
+						.setHeader(Fconnection.HEADER_FCONNECTION_ID, simple(ClickatellFconnection.this.id.toString()))
 						.process(new ClickatellPreProcessor())
 						.setHeader(Exchange.HTTP_URI,
 								simple(CLICKATELL_URL + '/sendmsg?' + 

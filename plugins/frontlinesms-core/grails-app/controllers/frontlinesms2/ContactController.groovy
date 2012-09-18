@@ -207,7 +207,7 @@ class ContactController {
 	}
 
 	private def getCheckedContacts() {
-		Contact.getAll(getCheckedContactIds())
+		Contact.getAll(getCheckedContactIds()) - null
 	}
 
 	private def getCheckedContactIds() {
