@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+echo "# Removing -SNAPSHOT to resource.path values for installer..."
+sed -r -i ": repeat; s:(-Dfrontlinesms.resource.path=~/.*)-SNAPSHOT</string>:\1</string>:; t repeat" ../frontlinesms-core/install/build.install4j
+sed -r -i -e ": repeat; s:(resource.path=.*)-SNAPSHOT:\1:; t repeat" ../frontlinesms-core/install/fileset/filtered/launcher.properties
+
+echo "# TODO update this to support other flavours than core"
+sed -r -i -e   "/^install4j\.applicationId=.*$/d" \
+          -e "s/^(install4j\.applicationId.RELEASE)=(.*)$/\1=\2\ninstall4j.applicationId=\2/" \
+		install/frontlinesms-core.install.properties
