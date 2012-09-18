@@ -10,7 +10,7 @@
 			<g:if test="${contactInstanceTotal}">
 				<li>
 					<fsms:checkBox name="contact-select" class="contact-select" id="contact-select-all" value="0" checked="false" onclick="checkAll('contact')" />
-					<a disabled="disabled" class="contact-name" href="#"><g:message code="contact.select.all"/></a>
+					<label for="contact-select" class="contact-name"><g:message code="contact.name.label"/></label>
 				</li>
 			</g:if>
 			<g:each in="${contactInstanceList}" status="i" var="c">
