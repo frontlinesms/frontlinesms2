@@ -69,7 +69,7 @@ class ContactList extends geb.Module {
 		contacts { $("li a")*.text() }
 		contactsLink { $("li:not(:first-child) a")*.@href }
 		selectContact { contactPosition ->
-			$('.contact-select', contactPosition).click()
+			$('.contact-select', (contactPosition + 1)).click()
 	    }
 
 		selectAll(required:false) { $('.contact-select', 0)}
