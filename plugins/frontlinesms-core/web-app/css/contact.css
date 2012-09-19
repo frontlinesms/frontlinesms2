@@ -3,7 +3,7 @@
 #body-menu li.smartgroups h3 { background-image:url("../images/icons/smartgroups.png"); }
 
 #body.contacts #main-list-container > * { width:auto }
-#body.contacts #main-list-head { background-color:white; border-bottom:1px solid #9e9e9e; padding:0 17px; }
+#body.contacts #main-list-head { background-color:white; border-bottom:none; solid #9e9e9e; padding:0 17px; }
 #body.contacts #main-list-head .content { display:table; width:100%; padding-bottom:17px; }
 #body.contacts #main-list-head .content.all { display:table; width:100%; padding-bottom:0; }
 #body.contacts #main-list-head .content.all > * { display:table-cell; }
