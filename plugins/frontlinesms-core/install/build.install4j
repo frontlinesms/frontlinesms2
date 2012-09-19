@@ -1289,19 +1289,6 @@ Please contact me about
                       <void property="checkboxText">
                         <string>News and updates about FrontlineSMS</string>
                       </void>
-                      <void property="helpText">
-                        <string>&lt;html&gt;
-FrontlineSMS normally releases new software&lt;br&gt;
-to a small group of test users before&lt;br&gt;
-making it available publicly, either in&lt;br&gt;
-beta or directly as a full release. These&lt;br&gt;
-users have the opportunity to influence the&lt;br&gt;
-design of FrontlineSMS, get a sneak preview&lt;br&gt;
-of new functionality and be the first to try&lt;br&gt;
-out new tools. Check here to be invited to&lt;br&gt;
-participate in test releases.&lt;br&gt;
-&lt;/html&gt;</string>
-                      </void>
                       <void property="variableName">
                         <string>var_get_frontlinesms_newsletter</string>
                       </void>
@@ -1320,22 +1307,15 @@ participate in test releases.&lt;br&gt;
                       </void>
                       <void property="helpText">
                         <string>&lt;html&gt;
-This allows us to identify users&lt;br&gt;
-who are interested in contributing&lt;br&gt;
-to guest blog posts, case studies,&lt;br&gt;
-and research into the impact of FrontlineSMS.&lt;br&gt; 
-&lt;br/&gt;
-Sharing your contact details with us&lt;br&gt;
-can help others learn from your experiences,&lt;br&gt;
-spread the word about your work, raise&lt;br&gt;
-the profile of your organization, and&lt;br&gt;
-connect you with other local users. We&lt;br&gt;
-can also include you in examples we&lt;br&gt;
-share with the media and our donors.&lt;br&gt;
-Check this box if you are interested&lt;br&gt;
-in contributing a guest blog post, working&lt;br&gt;
-jointly on a case study, or participating&lt;br&gt;
-in our impact research project.&lt;br&gt;
+FrontlineSMS normally releases new software&lt;br&gt;
+to a small group of test users before&lt;br&gt;
+making it available publicly, either in&lt;br&gt;
+beta or directly as a full release. These&lt;br&gt;
+users have the opportunity to influence the&lt;br&gt;
+design of FrontlineSMS, get a sneak preview&lt;br&gt;
+of new functionality and be the first to try&lt;br&gt;
+out new tools. Check here to be invited to&lt;br&gt;
+participate in test releases.&lt;br&gt;
 &lt;/html&gt;</string>
                       </void>
                       <void property="variableName">
@@ -1356,16 +1336,24 @@ in our impact research project.&lt;br&gt;
                       </void>
                       <void property="helpText">
                         <string>&lt;html&gt;
-FrontlineSMS is always looking for&lt;br&gt;
-great organizations to partner with&lt;br&gt;
-on interesting projects. We release&lt;br&gt;
-our software for free and partly rely&lt;br&gt;
-on grant funding to maintain this.&lt;br&gt;
-Check this box if you have a project&lt;br&gt;
-idea and are interested in being&lt;br&gt;
-contacted about exploring co-fundraising&lt;br&gt;
-opportunities with FrontlineSMS.&lt;br&gt;
-&lt;/html&gt;</string>
+This allows us to identify users&lt;br&gt;
+who are interested in contributing&lt;br&gt;
+to guest blog posts, case studies,&lt;br&gt;
+and research into the impact of FrontlineSMS.&lt;br&gt; 
+&lt;br/&gt;
+Sharing your contact details with us&lt;br&gt;
+can help others learn from your experiences,&lt;br&gt;
+spread the word about your work, raise&lt;br&gt;
+the profile of your organization, and&lt;br&gt;
+connect you with other local users. We&lt;br&gt;
+can also include you in examples we&lt;br&gt;
+share with the media and our donors.&lt;br&gt;
+Check this box if you are interested&lt;br&gt;
+in contributing a guest blog post, working&lt;br&gt;
+jointly on a case study, or participating&lt;br&gt;
+in our impact research project.&lt;br&gt;
+&lt;/html&gt;
+</string>
                       </void>
                       <void property="selectionScript">
                         <object class="com.install4j.api.beans.ScriptProperty">
@@ -1389,6 +1377,19 @@ opportunities with FrontlineSMS.&lt;br&gt;
                     <object class="com.install4j.runtime.beans.formcomponents.CheckboxComponent">
                       <void property="checkboxText">
                         <string>Partnerships and fundraising opportunities</string>
+                      </void>
+                      <void property="helpText">
+                        <string>&lt;html&gt;
+FrontlineSMS is always looking for&lt;br&gt;
+great organizations to partner with&lt;br&gt;
+on interesting projects. We release&lt;br&gt;
+our software for free and partly rely&lt;br&gt;
+on grant funding to maintain this.&lt;br&gt;
+Check this box if you have a project&lt;br&gt;
+idea and are interested in being&lt;br&gt;
+contacted about exploring co-fundraising&lt;br&gt;
+opportunities with FrontlineSMS.&lt;br&gt;
+&lt;/html&gt;</string>
                       </void>
                       <void property="selectionScript">
                         <object class="com.install4j.api.beans.ScriptProperty">
