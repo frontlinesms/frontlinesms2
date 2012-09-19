@@ -132,7 +132,7 @@ class TestMessagePopup extends SmallPopup {
 
 class SubscriptionCategoriseDialog extends SmallPopup {
 	static at = {
-		popupTitle.contains('categorise subscription')
+		popupTitle.contains('categorise messages')
 	}
 	static content = {
 		groupName { $('input#group-dropdown') }
