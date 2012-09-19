@@ -22,7 +22,7 @@ class AnnouncementControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		when:
 			controller.list()
 		then:
-			controller.response.contentAsString ==~ /\[(\{"id":\d+,"dateCreated":"\d+-\d\d-\d\dT\d\d:\d\d:\d\dZ","name":"\w+",("sentMessageText":"\w*"|null)\},?){$instanceCount}\]/
+			controller.response.contentAsString ==~ /\[(\{"id":\d+,"dateCreated":"\d+-\d\d-\d\dT\d\d:\d\d:\d\dZ","name":".*","sentMessageText":(".*"|null)\},?){$instanceCount}\]/
 		where:
 			instanceCount << [0, 1, 10, 100]
 	}
