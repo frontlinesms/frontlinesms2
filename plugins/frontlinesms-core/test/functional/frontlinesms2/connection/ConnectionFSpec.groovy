@@ -65,7 +65,7 @@ class ConnectionFSpec extends grails.plugin.geb.GebSpec {
 		when:
 			connectionList.btnCreateRoute.click()
 		then:
-			waitFor('slow') { connectionList.status == "Connected" }
+			waitFor('very slow') { connectionList.status == "Connected" }
 			waitFor { connectionList.btnTestRoute.displayed }
 	}
 
