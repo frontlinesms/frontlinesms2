@@ -1444,22 +1444,6 @@ installation and modifications to the software.&lt;br&gt;
                       <void property="checkIfEmpty">
                         <boolean>true</boolean>
                       </void>
-                      <void property="helpText">
-                        <string>&lt;html&gt;
-Sharing information about how you use&lt;br&gt;
-FrontlineSMS helps us understand how &lt;br&gt;
-many people the software is reaching&lt;br&gt;
-- another important measure of our work.&lt;br&gt;
-We do not collect message content or &lt;br&gt;
-sender / recipient details, only how &lt;br&gt;
-many messages you are sending and &lt;br&gt;
-receiving through FrontlineSMS and &lt;br&gt;
-how large your contact database is. &lt;br&gt;
-The data will be confidentially stored &lt;br&gt;
-by the FrontineSMS team, and won’t be &lt;br&gt;
-released publicly without your permission.&lt;br&gt; 
-&lt;/html&gt;</string>
-                      </void>
                       <void property="inputVerifier">
                         <object class="com.install4j.api.beans.ScriptProperty">
                           <void property="value">
