@@ -6,7 +6,9 @@ class AnnouncementController extends ActivityController {
 	def index() { redirect(action: 'save') }
 
 	def list() {
-		render Announcement.getAll() as JSON
+		render Announcement.getAll().collect {
+			['id':it.id, 'dateCreated':it.dateCreated, 'name':it.name, 'sentMessageText':it.sentMessageText]
+		} as JSON
 	}
 
 	def save() {
