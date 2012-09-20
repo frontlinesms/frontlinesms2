@@ -76,6 +76,7 @@ public class FrontlineRegistration {
 				"var_monitor_impact",
 				"var_partner",
 				"var_share_limited_technical_info",
+				"var_testing",
 				"var_consulting");
 		copyIntegers(context, data,
 				PROFESSION, "var_category_of_work",
