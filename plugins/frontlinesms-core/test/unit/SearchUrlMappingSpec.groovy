@@ -1,4 +1,3 @@
-import grails.test.mixin.*
 import spock.lang.*
 
 import frontlinesms2.*
@@ -7,8 +6,9 @@ import frontlinesms2.*
 @Mock(SearchController)
 class SearchUrlMappingSpec extends Specification {
 	def testSearchMapping() {
-		assertForwardUrlMapping('/search/result/show/123', controller:'search', action:'result') {
-			messageId = 123
-		}
+		expect:
+			assertForwardUrlMapping('/search/result/show/123', controller:'search', action:'result') {
+				messageId = 123
+			}
 	}
 }

@@ -1,4 +1,3 @@
-import grails.test.mixin.*
 import spock.lang.*
 
 import frontlinesms2.*
