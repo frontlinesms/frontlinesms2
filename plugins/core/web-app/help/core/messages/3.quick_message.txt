@@ -59,15 +59,15 @@ Clicking 'send' will complete the action.
 [Viewing Pending Messages][10] 
 [Creating an Announcement][11]
 
-[1]: messages/1.getting_around_the_messages_tab
-[2]: search/1.getting_around_the_search_tab
-[3]: messages/3.quick_message
-[5]: contacts/1.getting_around_the_contacts_tab
-[6]: contacts/4.creating_a_group
-[7]: contacts/5.creating_a_smart_group
-[9]: activities/3.creating_a_poll
-[10]: messages/7.pending
-[11]: activities/4.creating_an_announcement
+[1]: core/messages/1.getting_around_the_messages_tab
+[2]: core/search/1.getting_around_the_search_tab
+[3]: core/messages/3.quick_message
+[5]: core/contacts/1.getting_around_the_contacts_tab
+[6]: core/contacts/4.creating_a_group
+[7]: core/contacts/5.creating_a_smart_group
+[9]: core/activities/3.creating_a_poll
+[10]: core/messages/7.pending
+[11]: core/activities/4.creating_an_announcement
 [12]: ../images/help/quick_message1.png
 [13]: ../images/help/quickmessage2.png
 [14]: ../images/help/quickmessage3.png

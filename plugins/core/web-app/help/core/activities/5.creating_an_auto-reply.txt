@@ -59,12 +59,12 @@ Your Auto-reply will appear under the Activities sub-heading.
 [Creating a Group][7]  
 [Creating a Smart Group][8]  
 
-[2]: messages/1.getting_around_the_messages_tab
-[3]: activities/5.creating_an_auto-reply
-[5]: activities/1.getting_around_activities
-[6]: activities/3.creating_a_poll
-[7]: contacts/4.creating_a_group
-[8]: contacts/5.creating_a_smart_group
+[2]: core/messages/1.getting_around_the_messages_tab
+[3]: core/activities/5.creating_an_auto-reply
+[5]: core/activities/1.getting_around_activities
+[6]: core/activities/3.creating_a_poll
+[7]: core/contacts/4.creating_a_group
+[8]: core/contacts/5.creating_a_smart_group
 [9]: ../images/help/poll1.png
 [10]: ../images/help/autoreply1.png
 [11]: ../images/help/autoreply2.png

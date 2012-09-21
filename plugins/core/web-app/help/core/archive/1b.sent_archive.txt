@@ -21,17 +21,17 @@ When a message is selected, the full text will be displayed here (2) along with 
 [Archiving Messages][12]  
 [Unarchiving Messages, Activities and Folders][10]  
 
-[1]: archive/1b.sent_archive
-[2]: messages/5.sent
-[3]: archive/1b.sent_archive
-[4]: messages/3.quick_message
-[5]: messages/9.exporting
-[6]: archive/1b.sent_archive
-[7]: messages/2.sss
-[8]: archive/1b.sent_archive
-[9]: messages/8.mrfd
-[10]: archive/4.unarchive
-[11]: archive/3.archiving_activities_folders
-[12]: archive/2.archiving_messages
+[1]: core/archive/1b.sent_archive
+[2]: core/messages/5.sent
+[3]: core/archive/1b.sent_archive
+[4]: core/messages/3.quick_message
+[5]: core/messages/9.exporting
+[6]: core/archive/1b.sent_archive
+[7]: core/messages/2.sss
+[8]: core/archive/1b.sent_archive
+[9]: core/messages/8.mrfd
+[10]: core/archive/4.unarchive
+[11]: core/archive/3.archiving_activities_folders
+[12]: core/archive/2.archiving_messages
 [13]: ../images/help/sent_archive.png
 

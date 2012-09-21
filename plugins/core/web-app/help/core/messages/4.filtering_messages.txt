@@ -16,7 +16,7 @@ _**Note**: Navigating away from this list will cause the message list to revert 
 [How to Mark Important Messages][1]  
 [How to Use the Search Tab][4]  
 
-[1]: messages/2.sss
-[4]: search/1.getting_around_the_search_tab
-[5]: messages/8.mrfd
+[1]: core/messages/2.sss
+[4]: core/search/1.getting_around_the_search_tab
+[5]: core/messages/8.mrfd
 [6]: ../images/help/filtering_messages.png

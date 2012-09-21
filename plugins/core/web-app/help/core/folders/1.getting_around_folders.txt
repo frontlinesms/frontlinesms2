@@ -24,14 +24,14 @@ You can [reply][9], [move][9], [forward][9] and [delete][9] messages from here.
 [Getting Around the Inbox][10]  
 [Creating a Folder][11]  
 
-[1]: search/1.getting_around_the_search_tab
-[2]: folders/1.getting_around_folders
-[3]: messages/3.quick_message
-[4]: archive/3.archiving_activities_folders
-[6]: folders/1.getting_around_folders
-[7]: messages/2.sss
-[8]: messages/1.getting_around_the_messages_tab
-[9]: messages/8.mrfd
-[10]: messages/1.getting_around_the_messages_tab
-[11]: folders/2.creating_a_folder
+[1]: core/search/1.getting_around_the_search_tab
+[2]: core/folders/1.getting_around_folders
+[3]: core/messages/3.quick_message
+[4]: core/archive/3.archiving_activities_folders
+[6]: core/folders/1.getting_around_folders
+[7]: core/messages/2.sss
+[8]: core/messages/1.getting_around_the_messages_tab
+[9]: core/messages/8.mrfd
+[10]: core/messages/1.getting_around_the_messages_tab
+[11]: core/folders/2.creating_a_folder
 [12]: ../images/help/folder_overview.png

@@ -19,11 +19,11 @@ You can [export][5] these messages using the "Export" button. More details can b
 [Creating a Smart Group][8]   
 [Creating a Group][9]  
 
-[2]: contacts/1.getting_around_the_contacts_tab
-[3]: search/1.getting_around_the_search_tab
-[5]: messages/9.exporting
-[6]: contacts/6.add_remove_contact_to_from_a_group
-[7]: messages/9.exporting
-[8]: contacts/5.creating_a_smart_group
-[9]: contacts/4.creating_a_group
+[2]: core/contacts/1.getting_around_the_contacts_tab
+[3]: core/search/1.getting_around_the_search_tab
+[5]: core/messages/9.exporting
+[6]: core/contacts/6.add_remove_contact_to_from_a_group
+[7]: core/messages/9.exporting
+[8]: core/contacts/5.creating_a_smart_group
+[9]: core/contacts/4.creating_a_group
 [10]: ../images/help/view_sent_received_messages.png

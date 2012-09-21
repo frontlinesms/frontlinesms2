@@ -121,7 +121,7 @@ If you are happy for FrontlineSMS to distribute your translation in future relea
 [Changing languages][4]  
 [Configuring Detected Devices][5]  
 
-[2]: http://notepad-plus-plus.org/
-[4]: settings/2.changing_languages
-[5]: settings/4.setting_up_a_device
-[6]: http://translate.frontlinesms.com/
+[2]: core/http://notepad-plus-plus.org/
+[4]: core/settings/2.changing_languages
+[5]: core/settings/4.setting_up_a_device
+[6]: core/http://translate.frontlinesms.com/

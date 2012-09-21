@@ -79,14 +79,14 @@ The message will be queued to be sent.
 [Exporting Messages][13]  
 [Selecting Multiple Messages][5]  
 
-[1]: messages/1.getting_around_the_messages_tab
-[2]: activities/1.getting_around_activities
-[3]: activities/1.getting_around_activities
-[5]: messages/2.sss
-[6]: messages/5.sent
-[8]: messages/6.trash
-[10]: folders/1.getting_around_folders
-[13]: messages/9.exporting
+[1]: core/messages/1.getting_around_the_messages_tab
+[2]: core/activities/1.getting_around_activities
+[3]: core/activities/1.getting_around_activities
+[5]: core/messages/2.sss
+[6]: core/messages/5.sent
+[8]: core/messages/6.trash
+[10]: core/folders/1.getting_around_folders
+[13]: core/messages/9.exporting
 [14]: ../images/help/mrfd_reply.png
 [15]: ../images/help/mrfd_multiple.png
 [16]: ../images/help/mrfd_reply.png
