@@ -76,8 +76,11 @@ eventCompileStart = { kind ->
 			println '##################################'
 
 			def appVersion = getApplicationProperty('app.version')
+			def allowSnapshots = Boolean.parseBoolean(System.properties.'frontlinesms2.build.allowSnapshots')
+			println "allowSnapshots=$allowSnapshots"
 			if(appVersion.contains('SNAPSHOT')) {
-				if(System.getenv('frontlinesms.build.env') == 'online-dev') {
+				if(System.getenv('frontlinesms.build.env') == 'online-dev' ||
+						allowSnapshots) {
 					// let it slide
 				} else {
 					println '# Press ENTER to continue...'
