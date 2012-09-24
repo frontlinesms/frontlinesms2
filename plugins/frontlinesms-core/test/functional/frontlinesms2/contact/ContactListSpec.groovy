@@ -92,7 +92,7 @@ class ContactListSpec extends ContactBaseSpec {
 			createManyContacts()
 		when:
 			to PageContactShow
-			contactList.selectContact 0
+			contactList.selectAll.click()
 		then:
 			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
 	}
@@ -102,7 +102,7 @@ class ContactListSpec extends ContactBaseSpec {
 			createManyContacts()
 		when:
 			to PageContactShow
-			contactList.selectContact 0
+			contactList.selectAll.click()
 		then:
 			waitFor('veryslow') {multipleContactDetails.checkedContactCount == 50}
 			contactList.selectAll.checked
