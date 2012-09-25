@@ -46,13 +46,13 @@ class GroupMembership implements Serializable {
 	static def searchForContacts(Long groupId, String contactSearchString, String sortBy, max, offset) {
 		if (!sortBy)
 			sortBy = "name"
-		def groupMembershipsAndContacts = Contact.executeQuery("SELECT c FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND lower(c.name) LIKE :contactSearchString",
-				[groupId:groupId, contactSearchString:contactSearchString], [max:max, offset:offset])
+		def groupMembershipsAndContacts = Contact.executeQuery("SELECT c FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND (lower(c.name) LIKE :contactSearchString OR c.mobile LIKE :contactSearchString)",
+				[groupId:groupId, contactSearchString:"%${contactSearchString}%"], [max:max, offset:offset])
 		return groupMembershipsAndContacts.sort { it."${sortBy}" }
 	}
 	
 	static def countSearchForContacts(groupId, String contactSearchString) {
-		def count = GroupMembership.executeQuery("SELECT count(c) FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND lower(c.name) LIKE :contactSearchString",
+		def count = GroupMembership.executeQuery("SELECT count(c) FROM GroupMembership g JOIN g.contact c WHERE g.group.id=:groupId AND (lower(c.name) LIKE :contactSearchString OR c.mobile LIKE :contactSearchString)",
 				[groupId:groupId, contactSearchString:contactSearchString])
 		return count[0]
 	}

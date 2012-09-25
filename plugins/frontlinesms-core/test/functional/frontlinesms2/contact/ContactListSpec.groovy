@@ -54,7 +54,6 @@ class ContactListSpec extends ContactBaseSpec {
 			waitFor { contactList.contacts.containsAll(['Sam Anderson', 'SAm Jones', 'SaM Tina']) }
 	}
 
-	@spock.lang.IgnoreRest
 	def 'should be able to search contacts by phone number'() {
 		given:
 			def samAnderson = Contact.build(name:'Sam Anderson', mobile:"+11111")

@@ -51,7 +51,7 @@ class SmartGroup {
 		def p = [:]
 		
 		if(searchString) {
-			w << "lower(c.name) LIKE lower(:nameSubSearch)"
+			w << "(lower(c.name) LIKE lower(:nameSubSearch) OR c.mobile LIKE lower(:nameSubSearch))"
 			p.nameSubSearch = "%$searchString%"
 		}
 		
