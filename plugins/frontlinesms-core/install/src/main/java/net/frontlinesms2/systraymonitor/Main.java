@@ -15,6 +15,7 @@ public class Main {
 	private static final String PROP_RESOURCE_PATH = "resource.path";
 	private static final String PROP_PERMISSIONS_CHECK = "os.permissions.check";
 	private static final String PROP_SERIAL_PORTS = "serial.ports.rxtx.enable";
+	private static final String PROP_SERIAL_DETECTION_DISABLED = "serial.detect.disable";
 
 	private Monitor m;
 	private TrayThingy t;
@@ -37,9 +38,12 @@ public class Main {
 		properties.setDefault(PROP_TRAY_DISABLED, false);
 		properties.setDefault(PROP_RESOURCE_PATH, "~/.frontlinesms2-default");
 		properties.setDefault(PROP_PERMISSIONS_CHECK, true);
+		properties.setDefault(PROP_SERIAL_DETECTION_DISABLED, false);
 
 		// Override properties with commandline settings
 		if(isFlagSet(args, "no-tray")) properties.set(PROP_TRAY_DISABLED, true);
+		if(isFlagSet(args, "no-permission-check")) properties.set(PROP_PERMISSIONS_CHECK, false);
+		if(isFlagSet(args, "no-serial-detection")) properties.set(PROP_SERIAL_DETECTION_DISABLED, true);
 		mapArgsToProperties(args, properties,
 				"server-port", PROP_SERVER_PORT,
 				"resource-path", PROP_RESOURCE_PATH);
@@ -81,6 +85,10 @@ public class Main {
 		String serialPorts = properties.getString(PROP_SERIAL_PORTS);
 		if(serialPorts != null) {
 			System.setProperty("gnu.io.rxtx.SerialPorts", serialPorts);
+		}
+
+		if(properties.getBoolean(PROP_SERIAL_DETECTION_DISABLED)) {
+			System.setProperty("serial.detect.disable", "true");
 		}
 
 		int port = properties.getInt(PROP_SERVER_PORT);
