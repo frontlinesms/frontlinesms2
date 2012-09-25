@@ -68,7 +68,7 @@ grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
 grails.plugin.databasemigration.updateOnStart = true
 // allow migration override in dev
 environments { development {
-        def runMigrations = System.properties.'run.migration'
+        def runMigrations = System.properties.'db.migrations'
 	if(runMigrations != null) {
 		grails.plugin.databasemigration.updateOnStart = runMigrations != 'false'
 	}
