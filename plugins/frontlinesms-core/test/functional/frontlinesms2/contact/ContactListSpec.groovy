@@ -26,7 +26,7 @@ class ContactListSpec extends ContactBaseSpec {
 		when:
 			to PageContactShow
 		then:
-			bodyMenu.selectedMenuItem == 'all contacts'
+			bodyMenu.selectedMenuItem.startsWith('all contacts')
 	}
 	
 	def 'contacts list is paginated'() {
