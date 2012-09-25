@@ -140,7 +140,11 @@ class Fmessage {
 		search { search ->
 			createAlias('dispatches', 'disp', CriteriaSpecification.LEFT_JOIN)
 			if(search.searchString) {
-				ilike("text", "%${search.searchString}%")
+				or {
+					ilike("text", "%${search.searchString}%")
+					ilike("src", "%${search.searchString}%")
+					ilike("disp.dst", "%${search.searchString}%")
+				}
 			}
 			if(search.contactString) {
 				def contactNumbers = Contact.findAllByNameIlike("%${search.contactString}%")*.mobile ?: ['']
