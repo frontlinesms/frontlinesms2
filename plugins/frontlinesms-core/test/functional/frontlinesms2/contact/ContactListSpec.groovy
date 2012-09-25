@@ -111,4 +111,13 @@ class ContactListSpec extends ContactBaseSpec {
 		then:
 			!contactList.selectAll.checked
 	}
+
+	def '"All contacts" heading should displayed contact count'() {
+		given:
+			createTestContacts()
+		when:
+			to PageContactShow
+		then:	
+			header.contactCount == 2
+	}
 }
