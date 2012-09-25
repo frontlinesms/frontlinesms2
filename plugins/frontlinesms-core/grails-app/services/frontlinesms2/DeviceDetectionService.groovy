@@ -13,7 +13,14 @@ class DeviceDetectionService {
 		def deviceDetectorListenerService = grailsApplication.mainContext.deviceDetectorListenerService
 		detector = new AllModemsDetector(listener: deviceDetectorListenerService)
 		
-		if(Environment.current != Environment.TEST) detect()
+		if(Environment.current != Environment.TEST) {
+			def disableDetect = System.properties['serial.detect.disable']
+			println "DeviceDetectionService.init() :: disableDetect? $disableDetect"
+			if(!disableDetect || !Boolean.parseBoolean(disableDetect)) {
+				println 'DeviceDetectionService.init() :: detection enabled.  Starting...'
+				detect()
+			} else println 'DeviceDetectionService.init() :: detection disabled.'
+		} else println 'DeviceDetectionService.init() :: detection disabled as grails environment is test.'
 	}
 
 	def detect() {
