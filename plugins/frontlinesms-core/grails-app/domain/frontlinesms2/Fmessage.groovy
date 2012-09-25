@@ -29,8 +29,8 @@ class Fmessage {
 
 	static mapping = {
 		sort date:'desc'
-		inboundContactName formula:'SELECT c.name FROM Contact c WHERE c.mobile=src'
-		outboundContactName formula:'SELECT MAX(c.name) FROM Contact c, Dispatch d WHERE c.mobile=d.dst AND d.message_id=id'
+		inboundContactName formula:'(SELECT c.name FROM contact c WHERE c.mobile=src)'
+		outboundContactName formula:'(SELECT MAX(c.name) FROM contact c, dispatch d WHERE c.mobile=d.dst AND d.message_id=id)'
 		version false
 	}
 	
