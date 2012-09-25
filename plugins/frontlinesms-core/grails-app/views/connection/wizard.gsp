@@ -74,8 +74,13 @@ var fconnection = {
 
 	<g:each in="${Fconnection.implementations}" var="imp">
 	${imp.shortName}: {
-		requiredFields: ["${Fconnection.getNonnullableConfigFields(imp).join('", "')}"],
-		configFieldsKeys: ["${imp.configFields instanceof Map ? imp.configFields.getAllKeys()?.join('", "'):''}"],
+		<%
+			def asJs = { it? '"' + it.join('", "') + '"': '' }
+			def nonNullableConfigFields = asJs(Fconnection.getNonnullableConfigFields(imp))
+			def configFieldKeys = asJs(imp.configFields instanceof Map? imp.configFields.getAllKeys(): imp.configFields)
+		%>
+		requiredFields: [${nonNullableConfigFields}],
+		configFieldsKeys: [${configFieldKeys}],
 		humanReadableName: "<g:message code="${imp.simpleName.toLowerCase()}.label"/>",
 		show: function() {
 			<g:each in="${(Fconnection.implementations - imp)*.shortName}">
