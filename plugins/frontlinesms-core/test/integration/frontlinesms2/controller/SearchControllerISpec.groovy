@@ -304,4 +304,12 @@ class SearchControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		then:
 			model.messageInstanceTotal == 1
 	}
+
+	def "search string with phone number should return matching messages"() {
+		when:
+			controller.params.searchString = "+254333222"
+			def model = controller.result()
+		then:
+			model.messageInstanceList.size() == 1
+	}
 }
