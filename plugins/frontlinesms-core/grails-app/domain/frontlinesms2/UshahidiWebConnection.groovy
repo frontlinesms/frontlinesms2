@@ -17,5 +17,4 @@ class UshahidiWebConnection extends WebConnection {
 		this.name = params.name
 		this
 	}
-
 }
