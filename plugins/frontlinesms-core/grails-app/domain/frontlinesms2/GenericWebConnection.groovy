@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class GenericWebConnection extends WebConnection {
-	static String getShortName() { 'generic' }
+	static String getType() { 'generic' }
 
 	def initialize(params) {
 		this.httpMethod = WebConnection.HttpMethod."${params.httpMethod.toUpperCase()}"

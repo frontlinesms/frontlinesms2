@@ -1,7 +1,7 @@
 package frontlinesms2
 
 class UshahidiWebConnection extends WebConnection {
-	static String getShortName() { 'ushahidi' }
+	static String getType() { 'ushahidi' }
 
 	static constraints = {
 	}
