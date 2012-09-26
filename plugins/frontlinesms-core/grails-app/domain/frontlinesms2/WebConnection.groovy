@@ -6,11 +6,13 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.camel.model.RouteDefinition
 import frontlinesms2.camel.exception.*
 
-class WebConnection extends Activity {
+abstract class WebConnection extends Activity {
 	def camelContext
 	def webConnectionService
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webConnection' }
+	static def implementations = [GenericWebConnection,
+			CrowdMapWebConnection]
 
 	// Camel route redelivery config
 	static final def retryAttempts = 3 // how many times to retry before giving up
@@ -48,6 +50,7 @@ class WebConnection extends Activity {
 	}
 	static mapping = {
 		requestParameters cascade: "all-delete-orphan"
+		tablePerHierarchy false
 	}
 
 	def processKeyword(Fmessage message, Boolean exactMatch) {
@@ -99,6 +102,24 @@ class WebConnection extends Activity {
 		println "################ Deactivating WebConnection :: ${this}"
 		camelContext.stopRoute("activity-webconnection-${this.id}")
 		camelContext.removeRoute("activity-webconnection-${this.id}")
+	}
+
+	def initialize(params) {}
+
+	private def processRequestParameters(params) {
+		def paramsName = params.'param-name'
+		def paramsValue = params.'param-value'
+		this.requestParameters?.clear()
+		if(paramsName instanceof String[]) {
+			paramsName?.size()?.times {
+				addRequestParameter(paramsName[it], paramsValue[it])
+			}
+		} else { if(paramsName) addRequestParameter(paramsName, paramsValue)}
+	}
+
+	private def addRequestParameter(name, value) {
+		def requestParam = new RequestParameter(name:name, value:value)
+		this.addToRequestParameters(requestParam)
 	}
 }
 	
