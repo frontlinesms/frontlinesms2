@@ -1,7 +1,6 @@
 <%@ page import="frontlinesms2.WebConnection" %>
 <r:script>
 	function initializePopup() {
-		setType("${activityInstanceToEdit?.type ?: 'generic'}");
 		var validator = $("#new-webconnection-form").validate({
 			errorContainer: ".error-panel",
 			rules: {
@@ -50,7 +49,11 @@
 	}
 
 	function setType(type) {
-	$("#webconnection-config").load(url_root + "webConnection/" + type + "/config");
+		$.get(url_root + "webConnection/" + type + "/config", function(data) {
+			var configTab = $("#webconnection-config");
+			configTab.html(data);
+			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
+		});
 	}
 	
 	function updateConfirmationMessage() {
@@ -66,5 +69,10 @@
 			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
 		}
 				
-	}	
+	}
+
+	$("input[name=serviceType]").live("change", function() {
+		if($(this).val() == "ushahidi") $("#crowdmap-url-suffix").hide()
+		else $("#crowdmap-url-suffix").show()
+	});
 </r:script>
