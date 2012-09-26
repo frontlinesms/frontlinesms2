@@ -2,8 +2,6 @@ package frontlinesms2.domain
 
 import frontlinesms2.*
 import spock.lang.*
-import grails.test.mixin.*
-
 
 class WebConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def webCService = Mock(WebConnectionService)
