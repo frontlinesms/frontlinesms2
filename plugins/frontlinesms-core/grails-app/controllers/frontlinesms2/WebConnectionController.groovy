@@ -4,7 +4,7 @@ import grails.converters.JSON
 
 class WebConnectionController extends ActivityController {
 	private static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebConnection,
-			ushahidi:CrowdMapWebConnection]
+			ushahidi:UshahidiWebConnection]
 
 	def create = {}
 
