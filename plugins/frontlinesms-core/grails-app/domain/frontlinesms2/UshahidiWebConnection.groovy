@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import org.apache.camel.Exchange
+
 class UshahidiWebConnection extends WebConnection {
 	static String getType() { 'ushahidi' }
 	static constraints = {
@@ -21,3 +23,4 @@ class UshahidiWebConnection extends WebConnection {
 		url ==~ 'http://.*\\.crowdmap.com' ? "crowdmap" : "ushahidi"
 	}
 }
+
