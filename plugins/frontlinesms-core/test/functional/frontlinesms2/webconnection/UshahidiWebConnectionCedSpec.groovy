@@ -46,5 +46,26 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 		and:
 			apiKeyInputLabel.text() == 'Ushahidi API key'
 	}
+
+	@Unroll
+	def 'URL and API key must be filled for config page to validate'() {
+		given:
+			launchWizard('ushahidi')
+		when:
+			subType('ushahidi')
+		and:
+			ushahidiDeployAddress = deployAddress
+		and:
+			ushahidiApiKey = apiKey
+		and:
+			next.click()
+		then:
+			(valid && at AutomaticSortingTab) || (!valid && validationError.displayed)
+		where:
+			deployAddress     | apiKey       | valid
+			'www.example.com' | 'ABCDE12345' | true
+			''                | 'ABCDE12345' | false
+			'www.example.com' | ''           | false
+			''                | ''           | false
 }
 
