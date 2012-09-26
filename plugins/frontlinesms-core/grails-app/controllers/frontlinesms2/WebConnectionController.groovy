@@ -10,7 +10,7 @@ class WebConnectionController extends ActivityController {
 
 	def save = {
 		def webConnectionInstance
-		doSave(WEB_CONNECTION_TYPE_MAP[params.type])
+		doSave(WEB_CONNECTION_TYPE_MAP[params.webConnectionType])
 	}
 
 	private def doSave(Class<Fconnection> clazz) {
