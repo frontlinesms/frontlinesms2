@@ -104,7 +104,37 @@ abstract class WebConnection extends Activity {
 		camelContext.removeRoute("activity-webconnection-${this.id}")
 	}
 
-	def initialize(params) {}
+	def initialize(params)
+
+	def preProcess(Exchange x) {
+		println "x: ${x}"
+		println "x.in: ${x.in}"
+		println "x.in.headers: ${x.in.headers}"
+		x.out.headers = x.in.headers
+		def inMessage = Fmessage.get(x.in.headers.'frontlinesms.fmessageId')
+		def encodedParameters = this.requestParameters.collect {
+			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(inMessage))
+		}.join('&')
+		println "PARAMS:::$encodedParameters"
+
+		x.out.headers[Exchange.HTTP_METHOD] = this.httpMethod
+		switch(this.httpMethod) {
+			case 'GET':
+				x.out.headers[Exchange.HTTP_QUERY] = encodedParameters
+				break;
+			case 'POST':
+				x.out.body = encodedParameters
+				x.out.headers[Exchange.CONTENT_TYPE] = 'application/x-www-form-urlencoded'
+				break;
+		}
+		println "x.out.headers = $x.out.headers"
+		println "x.out.body = $x.out.body"
+	}
+
+	def postProcess(Exchange x) {
+		println "Web Connection Response::\n ${x.in.body}"
+		log.info "Web Connection Response::\n ${x.in.body}"
+	}
 
 	private def processRequestParameters(params) {
 		def paramsName = params.'param-name'
