@@ -12,6 +12,7 @@ import org.apache.camel.Message
 class GenericWebConnectionSpec extends CamelUnitSpecification {
 	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
+		WebConnection.metaClass.static.findAllByNameIlike = { name -> GenericWebConnection.findAll().findAll { it.name == name } }
 	}
 
 	@Unroll
