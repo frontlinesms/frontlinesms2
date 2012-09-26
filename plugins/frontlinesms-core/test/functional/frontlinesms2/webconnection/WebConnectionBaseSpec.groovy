@@ -1,12 +1,13 @@
 package frontlinesms2.webconnection
 
 import frontlinesms2.*
+import frontlinesms2.message.*
+import frontlinesms2.popup.*
 
-class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
-
+abstract class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 	static createWebConnections() {
 		def syncKeyword = new Keyword(value:"SYNC")
-		new WebConnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
+		new GenericWebConnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
 	}
 
 	static createTestActivities() {
@@ -21,5 +22,18 @@ class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 			wc.save(failOnError:true)
 		}
 		wc.save(flush:true, failOnError:true)
+	}
+
+	protected def launchWizard(webConnectionType=null) {
+		to PageMessageInbox
+		bodyMenu.newActivity.click()
+		waitFor { at CreateActivityDialog }
+		webconnection.click()
+		waitFor('slow') { at WebConnectionWizard }
+		if(webConnectionType) {
+			selectWebConnectionType.option(webConnectionType)
+			next.click()
+		}
+		return true
 	}
 }
