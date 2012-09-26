@@ -315,7 +315,7 @@ class CoreBootStrap {
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
 		}
-		def extCmd = new WebConnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:WebConnection.HttpMethod.GET)
+		def extCmd = new GenericWebConnection(name:'GET to Server', keyword:new Keyword(value:'FORWARD'), url:"http://192.168.0.200:9091/webservice-0.1/message/get", httpMethod:WebConnection.HttpMethod.GET)
 		extCmd.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'text_with_keyword' , value: '${message_body_with_keyword}'))
 		extCmd.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
@@ -329,7 +329,7 @@ class CoreBootStrap {
 		extCmd.addToMessages(Fmessage.findBySrc('Tshabalala'))
 		extCmd.addToMessages(Fmessage.findBySrc('June'))
 		extCmd.save(failOnError:true, flush:true)
-		def extCmdPost = new WebConnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:WebConnection.HttpMethod.POST)
+		def extCmdPost = new GenericWebConnection(name:'POST to Server', keyword:new Keyword(value:'POST'), url:"http://192.168.0.200:9091/webservice-0.1/message/post", httpMethod:WebConnection.HttpMethod.POST)
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'text' , value: '${message_body}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))

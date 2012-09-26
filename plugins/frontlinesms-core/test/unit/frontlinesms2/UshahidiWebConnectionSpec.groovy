@@ -7,9 +7,9 @@ import frontlinesms2.camel.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
 
-@TestFor(WebConnection)
+@TestFor(UshahidiWebConnection)
 @Mock([Keyword])
-class WebConnectionSpec extends CamelUnitSpecification {
+class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
 	}
@@ -18,9 +18,9 @@ class WebConnectionSpec extends CamelUnitSpecification {
 	def "Test constraints"() {
 		when:
 			def keyword = addKeyword? new Keyword(value:'TEST'): null
-			def extComm = new WebConnection(name:name, keyword:keyword, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET)
+			def connection = new UshahidiWebConnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2")
 		then:
-			extComm.validate() == valid
+			connection.validate() == valid
 		where:
 			name	|addKeyword	|valid
 			'test'	|true		|true

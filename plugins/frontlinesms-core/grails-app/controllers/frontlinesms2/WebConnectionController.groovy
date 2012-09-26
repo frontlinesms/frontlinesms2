@@ -3,24 +3,28 @@ package frontlinesms2
 import grails.converters.JSON
 
 class WebConnectionController extends ActivityController {
+	private static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebConnection,
+			ushahidi:UshahidiWebConnection]
+
 	def create = {}
 
 	def save = {
 		def webConnectionInstance
-		if(params.ownerId) { 
-			webConnectionInstance = WebConnection.get(params.ownerId)
+		doSave(WEB_CONNECTION_TYPE_MAP[params.type])
+	}
 
+	private def doSave(Class<Fconnection> clazz) {
+		def webConnectionInstance
+		if(params.ownerId) { 
+			webConnectionInstance = clazz.get(params.ownerId)
 			def keywordValue = params.blankKeyword ? '' : params.keyword.toUpperCase()
 			webConnectionInstance.keyword.value = keywordValue
 		} else {
-			webConnectionInstance = new WebConnection()
+			webConnectionInstance = clazz.newInstance()
 			webConnectionInstance.keyword =  new Keyword(value: params.blankKeyword ? '' : params.keyword.toUpperCase())
 		}
-
-		webConnectionInstance.httpMethod = WebConnection.HttpMethod."${params.httpMethod.toUpperCase()}"
-		webConnectionInstance.url = params.url
-		webConnectionInstance.name = params.name
-		processRequestParameters(webConnectionInstance)
+		webConnectionInstance.initialize(params)
+		
 		if(webConnectionInstance.save(flush:true)) {
 			if(params.ownerId)
 				webConnectionInstance.deactivate()
@@ -46,22 +50,6 @@ class WebConnectionController extends ActivityController {
 				render([ok:false, text:errorMessages] as JSON)
 			}
 		}
-	}
-
-	private def processRequestParameters(webConnectionInstance) {
-		def paramsName = params.'param-name'
-		def paramsValue = params.'param-value'
-		webConnectionInstance.requestParameters?.clear()
-		if(paramsName instanceof String[]) {
-			paramsName?.size()?.times {
-				addRequestParameter(paramsName[it], paramsValue[it], webConnectionInstance)
-			}
-		} else { if(paramsName) addRequestParameter(paramsName, paramsValue, webConnectionInstance)}
-	}
-
-	private def addRequestParameter(name, value, webConnectionInstance) {
-		def requestParam = new RequestParameter(name:name, value:value)
-		webConnectionInstance.addToRequestParameters(requestParam)
 	}
 
 	private def withWebConnection(Closure c) {
