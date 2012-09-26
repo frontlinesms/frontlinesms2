@@ -30,7 +30,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			WebConnection.findByName("Test WebConnection").url == "www.ushahidi.com/frontlinesms"
 			RequestParameter.findByName('key').value == '12345678'
 			RequestParameter.findByName('m').value == '${message_body}'
-			RequestParameter.findByName('s').value == '${message_src_name}'
+			RequestParameter.findByName('s').value == '${message_src_number}'
 	}
 
 	def 'save action should also save a generic webconnection'() {

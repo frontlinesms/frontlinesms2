@@ -33,10 +33,10 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 
 	def "Test Ushahidi pre-processor"() {
 		when:
-			def message = Fmessage.build(text:"testing", src:"bob")
+			def message = Fmessage.build(text:"testing", src:"12345")
 			def connection = new UshahidiWebConnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
 			def s = Mock(RequestParameter)
-			s >> ['name':'s', 'value':'${message_src_name}']
+			s >> ['name':'s', 'value':'${message_src_number}']
 			def m = Mock(RequestParameter)
 			m >> ['name':'m', 'value':'${message_body}']
 			def key = Mock(RequestParameter)
