@@ -10,7 +10,6 @@ class WebConnectionService{
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
 		def webConn = WebConnection.get(x.in.headers.'webconnection-id')
-		println "the web connection is ${webConn}"
 		webConn.preProcess(x)
 	}
 
@@ -31,12 +30,7 @@ class WebConnectionService{
 		println "*** sending message ${message}"
 		def headers = [:]
 		headers.'frontlinesms.fmessageId' = message.id
-		headers.'frontlinesms.webConnectionId' = message.messageOwner.id
+		headers.'webconnection-id' = message.messageOwner.id
 		sendMessageAndHeaders("seda:activity-webconnection-${message.messageOwner.id}", message, headers)
-	}
-	
-	private String urlEncode(String s) throws UnsupportedEncodingException {
-		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
-		return URLEncoder.encode(s, "UTF-8");
 	}
 }

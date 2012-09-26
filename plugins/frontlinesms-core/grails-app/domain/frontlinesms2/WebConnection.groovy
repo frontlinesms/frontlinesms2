@@ -75,7 +75,7 @@ abstract class WebConnection extends Activity {
 									.handled(true)
 									.beanRef('webConnectionService', 'handleException')
 									.end()
-						.to(url)
+						.to(WebConnection.this.url)
 						.beanRef('webConnectionService', 'postProcess')
 						.routeId("activity-webconnection-${WebConnection.this.id}")]
 			}
@@ -86,13 +86,14 @@ abstract class WebConnection extends Activity {
 		println "*** ACTIVATING ACTIVITY ***"
 		try {
 			def routes = this.routeDefinitions
+			println "I reached here"
 			camelContext.addRouteDefinitions(routes)
 			println "################# Activating WebConnection :: ${this}"
 			LogEntry.log("Created WebConnection routes: ${routes*.id}")
 		} catch(FailedToCreateProducerException ex) {
-			logFail(this, ex.cause)
+			println ex
 		} catch(Exception ex) {
-			logFail(this, ex)
+			println ex
 			camelContext.stopRoute("activity-webconnection-${this.id}")
 			camelContext.removeRoute("activity-webconnection-${this.id}")
 		}
@@ -150,6 +151,11 @@ abstract class WebConnection extends Activity {
 	private def addRequestParameter(name, value) {
 		def requestParam = new RequestParameter(name:name, value:value)
 		this.addToRequestParameters(requestParam)
+	}
+
+	private String urlEncode(String s) throws UnsupportedEncodingException {
+		println "PreProcessor.urlEncode : s=$s -> ${URLEncoder.encode(s, "UTF-8")}"
+		return URLEncoder.encode(s, "UTF-8");
 	}
 }
 	
