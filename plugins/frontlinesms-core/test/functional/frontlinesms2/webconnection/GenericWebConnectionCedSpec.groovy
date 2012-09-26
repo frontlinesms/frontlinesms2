@@ -5,6 +5,17 @@ import frontlinesms2.message.*
 import frontlinesms2.popup.*
 
 class GenericWebConnectionCedSpec extends WebConnectionBaseSpec {
+	def 'generic option is available on "Select type" screen'() {
+		when:
+			launchWizard()
+		then:
+			option('generic').displayed
+		and:
+			getTitle('generic') == "Other web service"
+		and:
+			getDescription('generic') == 'Send messages to other web service'
+	}
+
 	def "can create and save a HTTP GET external command"() {
 		given:
 			launchWizard('generic')

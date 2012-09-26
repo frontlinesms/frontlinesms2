@@ -24,11 +24,15 @@ abstract class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		wc.save(flush:true, failOnError:true)
 	}
 
-	protected def launchWizard(webConnectionType) {
+	protected def launchWizard(webConnectionType=null) {
 		to PageMessageInbox
 		bodyMenu.newActivity.click()
 		waitFor { at CreateActivityDialog }
 		webconnection.click()
 		waitFor('slow') { at WebConnectionWizard }
+		if(webConnectionType) {
+			// TODO select option and click next
+		}
+		return true
 	}
 }
