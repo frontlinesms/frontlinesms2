@@ -13,7 +13,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 	}
 
 	@spock.lang.Unroll
-	def "WebConnection page should show the details of the WebConnection in the header"() {
+	def "WebConnection page should show the details of a generic WebConnection in the header"() {
 		setup:
 			def webConnection  = WebConnection.findByName("Sync")
 		when:
@@ -25,6 +25,22 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 			item		| value
 			'name'		| "sync web connection"
 			'url'		| 'http://www.frontlinesms.com/sync'
+			'sendMethod'| 'get'
+	}
+
+	@spock.lang.Unroll
+	def "WebConnection page should show the details of an Ushahidi WebConnection in the header"() {
+		setup:
+			def webConnection  = WebConnection.findByName("Ush")
+		when:
+			to PageMessageWebConnection, webConnection
+		then:
+			waitFor { title?.toLowerCase().contains("web connection") }
+			header[item] == value
+		where:
+			item		| value
+			'name'		| "sync web connection"
+			'ushahidi deployment address'		| 'http://www.ushahidi.com/'
 			'sendMethod'| 'get'
 	}
 
