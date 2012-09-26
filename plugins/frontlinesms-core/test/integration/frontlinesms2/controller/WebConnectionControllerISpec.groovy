@@ -15,7 +15,25 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 		controller = new WebConnectionController()
 	}
 
-	def 'save action should also save a webconnection'() {
+	def 'save action should also save an Ushahidi webconnection'() {
+		setup:
+			controller.params.name = "Test WebConnection"
+			controller.params.httpMethod = "get"
+			controller.params.url = "www.ushahidi.com"
+			controller.params.keyword = "keyword"
+			controller.params.type = "ushahidi"
+			controller.params.key = '12345678'
+		when:
+			controller.save()
+		then:
+			WebConnection.findByName("Test WebConnection").name == controller.params.name
+			WebConnection.findByName("Test WebConnection").url == "www.ushahidi.com/frontlinesms"
+			RequestParameter.findByName('key').value == '12345678'
+			RequestParameter.findByName('m').value == '${message_body}'
+			RequestParameter.findByName('s').value == '${message_src_name}'
+	}
+
+	def 'save action should also save a generic webconnection'() {
 		setup:
 			controller.params.name = "Test WebConnection"
 			controller.params.httpMethod = "get"
@@ -28,6 +46,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.save()
 		then:
 			WebConnection.findByName("Test WebConnection").name == controller.params.name
+			RequestParameter.findByName('username').value == 'bob'
 	}
 
 	def 'edit should save all the details from the walkthrough'() {

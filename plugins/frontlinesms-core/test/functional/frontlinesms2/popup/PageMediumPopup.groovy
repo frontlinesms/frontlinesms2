@@ -418,3 +418,36 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
+class WebConnectionTypeSelectDialog extends geb.Module{
+	static base = { $('div#tab-1') }
+	static content = {
+		getDescription{ shortname->
+			$("#"+shortname).text()
+		}
+		getTitle{ shortname->
+			$("#"+shortname+" .info").text()
+		}
+		option{ shortname->
+			$("#"+shortname)
+		}
+	}
+}
+
+class ConfigureUshahidiWebConnectionTab extends geb.Module{
+	static base = { $('div#tab-2') }
+	static content = {
+		subType{ $('#subType') }
+		crowdmapDeployAddress{ $('#crowdmapDeployAddress') }
+		ushahidiDeployAddress{ $('#ushahidiDeployAddress')  }
+		apiKeyInputLabel{ $('#apikey') }	
+	}
+}
+
+class ConfirmUshahidiWebConnectionTab extends geb.Module{
+	static base = { $('div#tab-5') }
+	static content = {
+		confirm{ label->
+			$("#"+label+"-confirm").text()
+		}		
+	}
+}
