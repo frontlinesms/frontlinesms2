@@ -2,7 +2,6 @@ package frontlinesms2
 
 class UshahidiWebConnection extends WebConnection {
 	static String getType() { 'ushahidi' }
-
 	static constraints = {
 	}
 
@@ -11,10 +10,14 @@ class UshahidiWebConnection extends WebConnection {
 		this.addToRequestParameters(new RequestParameter(name:"m", value:'${message_body}'))
 		this.addToRequestParameters(new RequestParameter(name:"key", value:params.key))
 		//TODO Test for urls which end with /
-		def modifyUrl = params.url.find(/frontlinesms/) ? params.url : params.url + "/frontlinesms"
+		def modifyUrl = params.url.endsWith(/\/frontlinesms/) ? params.url : params.url + "/frontlinesms"
 		this.url = modifyUrl
 		this.httpMethod = WebConnection.HttpMethod.GET
 		this.name = params.name
 		this
+	}
+
+	def getServiceType() {
+		url ==~ 'http://.*\\.crowdmap.com' ? "crowdmap" : "ushahidi"
 	}
 }
