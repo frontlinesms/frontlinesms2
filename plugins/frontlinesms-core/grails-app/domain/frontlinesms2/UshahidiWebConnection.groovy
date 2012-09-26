@@ -1,5 +1,7 @@
 package frontlinesms2
 
+import org.apache.camel.Exchange
+
 class UshahidiWebConnection extends WebConnection {
 	static String getType() { 'ushahidi' }
 
@@ -17,5 +19,5 @@ class UshahidiWebConnection extends WebConnection {
 		this.name = params.name
 		this
 	}
-
 }
+

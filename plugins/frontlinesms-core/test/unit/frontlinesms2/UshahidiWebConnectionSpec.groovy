@@ -6,9 +6,11 @@ import frontlinesms2.*
 import frontlinesms2.camel.*
 import org.apache.camel.Exchange
 import org.apache.camel.Message
+import grails.buildtestdata.mixin.Build
 
 @TestFor(UshahidiWebConnection)
 @Mock([Keyword])
+@Build(Fmessage)
 class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 	private static final String TEST_NUMBER = "+2345678"
 	def setup() {
@@ -32,44 +34,40 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 	}
 
 	def "Test Ushahidi pre-processor"() {
-		when:
+		given:
 			def message = Fmessage.build(text:"testing", src:"bob")
-			def connection = new UshahidiWebConnection(name:name, keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:method)
-			def s = Mock(RequestParameter)
-			s >> ['name':'s', 'value':'${message_src_name}']
-			def m = Mock(RequestParameter)
-			m >> ['name':'m', 'value':'${message_body}']
-			def key = Mock(RequestParameter)
-			key >> ['name':'key', 'value':'1234567']
+			def connection = new UshahidiWebConnection(name:'name',
+					keyword:new Keyword(value:'keyword'),
+					url:"www.ushahidi.com/frontlinesms2",
+					httpMethod:WebConnection.HttpMethod.GET)
 
-			[s, m, key].each { connection.addToRequestParameters(it) }
+			mockRequestParams(connection, [s:'${message_src_name}', m:'${message_body}', key:'1234567'])
 
-			Exchange exchange = Mock(Exchange)
-			exchange.in >> mockExchangeMessage(['frontlinesms.fmessageId':message.id,'frontlinesms.webConnectionId':webconnection.id], null)
-			exchange.out >> mockExchangeMessage([:], null)
-			exchange.unitOfWork >> Mock(UnitOfWork)
+			def headers = ['fmessage-id':message.id,'webConnection-id':connection.id]
+			def exchange = mockExchange(null, headers)
+		when:
 			connection.preProcess(exchange)
 		then:
-			1* exchange.out.setBody({ bodyContent ->
-				bodyContent.contains("m=testing") && 
-				bodyContent.contains("s=bob") && 
-				bodyContent.contains("key=1234567")
-			})
+			headers[Exchange.HTTP_QUERY].contains("m=testing")
+			headers[Exchange.HTTP_QUERY].contains("s=bob")
+			headers[Exchange.HTTP_QUERY].contains("key=1234567")
 	}
 
-	def "Test Ushahidi post-processor"() {
-		when:
-			def thisTest = "TODO"
-			// TODO: if/when we decide to handle different Ushahidi response codes with appropriate actions, the post processor
-			// tests need to be expanded to cover this. Currently it just logs the output after 3 attempts.
-		then:
-			true
+	def mockRequestParams(connection, Map params) {
+		params.each { key, value ->
+			def rp = Mock(RequestParameter)
+			rp.name >> key
+			rp.value >> value
+			connection.addToRequestParameters(rp)
+		}
 	}
-	
-	def mockExchangeMessage(headers, body) {
-		def m = Mock(Message)
-		m.body >> body
-		m.headers >> headers
-		return m
+
+	Exchange mockExchange(body, Map headers) {
+		Exchange x = Mock()
+		def inMessage = Mock(Message)
+		if(body) inMessage.body >> body
+		inMessage.headers >> headers
+		x.in >> inMessage
+		return x
 	}
 }
