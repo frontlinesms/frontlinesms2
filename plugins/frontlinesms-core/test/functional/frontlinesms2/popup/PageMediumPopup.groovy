@@ -418,3 +418,17 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
+class WebConnectionTypeSelectPage {
+	static base = { $('div#tab-1') }
+	static content = {
+		getDescription{ shortname->
+			$("#"+shortname).text()
+		}
+		getTitle{ shortname->
+			$("#"+shortname+" .info").text()
+		}
+		option{ shortname->
+			$("#"+shortname)
+		}
+	}
+}
