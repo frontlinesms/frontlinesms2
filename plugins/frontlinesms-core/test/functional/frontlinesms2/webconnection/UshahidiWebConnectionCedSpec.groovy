@@ -67,5 +67,43 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 			''                | 'ABCDE12345' | false
 			'www.example.com' | ''           | false
 			''                | ''           | false
+	}
+
+	def 'name field is displayed on confirm screen'() {
+		given:
+			launchWizard('ushahidi')
+		and:
+			fillValidConfig()
+		when: 'skip past sorting page'
+			next.click()
+			next.click()
+		then:
+			connectionNameField.displayed // not sure, but expect this definition will already exist - please update accordingly
+	}
+
+	def 'confirm page for Ushahidi Web Connection should display relevant details'() {
+		given:
+			launchWizard('ushahidi')
+		and:
+			subType('crowdmap')
+			crowdmapDeployAddress = 'my'
+			crowdmapApiKey = 'a1b2c3d4e5'
+		when: 'we skip past the sorting page'
+			next.click()
+			next.click()
+		then:
+			at ConfirmTab
+		and:
+			confirm('Service') == 'Crowdmap'
+			confirm('Address') == 'http://my.crowdmap.com'
+			confirm('API key') == 'a1b2c3d4e5'
+			confirm('Auto-sort') == 'No messages will be autosorted but you should check what the correct text is here when implementing thanks ;-)'
+	}
+
+	private def fillValidConfig() {
+		subType('crowdmap')
+		crowdmapDeployAddress = 'default'
+		crowdmapApiKey = 'aaa111bbb222'
+	}
 }
 
