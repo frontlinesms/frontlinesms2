@@ -11,7 +11,7 @@ class WebConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'incoming message matching keyword should trigger http message sending'() {
 		given:
 			def k = new Keyword(value:'FORWARD')
-			def webConnection = new WebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
+			def webConnection = new GenericWebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
 			webConnection.webConnectionService = webCService
 			webConnection.save(failOnError:true)
 			def incomingMessage = Fmessage.build(text:"FORWARD ME", src:'123123')
@@ -24,7 +24,7 @@ class WebConnectionISpec extends grails.plugin.spock.IntegrationSpec {
 	def 'incoming message should match if keyword is blank and exactmatch == false'() {
 		given:
 			def k = new Keyword(value:'')
-			def webConnection = new WebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
+			def webConnection = new GenericWebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
 			webConnection.webConnectionService = webCService
 			webConnection.save(failOnError:true)
 			def incomingMessage = Fmessage.build(text:"FORWARD ME", src:'123123')

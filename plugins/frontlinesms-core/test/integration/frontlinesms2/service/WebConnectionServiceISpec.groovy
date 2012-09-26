@@ -12,7 +12,7 @@ class WebConnectionServiceISpec extends grails.plugin.spock.IntegrationSpec{
 	def webConnectionService
 	def setup() {
 		def k = new Keyword(value:'FOREWARD')
-		def webconnection = new WebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
+		def webconnection = new GenericWebConnection(name:"Sync", keyword:k, url:"www.frontlinesms.com/sync",httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
 	}
 	//Pre-Processor Tests
 	def 'out_header url should contain the RequestParameters for GET request'() {
