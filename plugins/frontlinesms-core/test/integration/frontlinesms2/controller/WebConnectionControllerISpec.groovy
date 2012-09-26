@@ -21,7 +21,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.ushahidi.com"
 			controller.params.keyword = "keyword"
-			controller.params.type = "ushahidi"
+			controller.params.webConnectionType = "ushahidi"
 			controller.params.key = '12345678'
 		when:
 			controller.save()
@@ -39,7 +39,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.httpMethod = "get"
 			controller.params.url = "www.frontlinesms.com/sync"
 			controller.params.keyword = "keyword"
-			controller.params.type = "generic"
+			controller.params.webConnectionType = "generic"
 			controller.params.'param-name' = 'username'
 			controller.params.'param-value' = 'bob'
 		when:
@@ -48,7 +48,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			WebConnection.findByName("Test WebConnection").name == controller.params.name
 			RequestParameter.findByName('username').value == 'bob'
 	}
-
+	
 	def 'edit should save all the details from the walkthrough'() {
 		setup:
 			def keyword = new Keyword(value:'TEST')
@@ -60,7 +60,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.url = "www.frontlinesms.com/syncing"
 			controller.params.httpMethod = "get"
 			controller.params.keyword = "keyword"
-			controller.params.type = "generic"
+			controller.params.webConnectionType = "generic"
 			controller.params.'param-name' = ['username', 'password'] as String[]
 			controller.params.'param-value' = ['bob','secret'] as String[]
 		when:
@@ -87,7 +87,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.name = "Test Connection"
 			controller.params.httpMethod = "post"
 			controller.params.keyword = "Test"
-			controller.params.type = "generic"
+			controller.params.webConnectionType = "generic"
 			controller.params.'param-name' = "username"
 			controller.params.'param-value' = "geoffrey"
 		when:
@@ -111,7 +111,7 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			controller.params.keyword = "Test"
 			controller.params.httpMethod = "post"
 			controller.params.'param-name' = ""
-			controller.params.type = "generic"
+			controller.params.webConnectionType = "generic"
 			controller.params.'param-value' = "geoffrey"
 		when:
 			controller.save()
