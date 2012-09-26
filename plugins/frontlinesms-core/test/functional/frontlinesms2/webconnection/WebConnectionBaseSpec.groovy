@@ -31,7 +31,8 @@ abstract class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 		webconnection.click()
 		waitFor('slow') { at WebConnectionWizard }
 		if(webConnectionType) {
-			// TODO select option and click next
+			option(webConnectionType)
+			next.click()
 		}
 		return true
 	}

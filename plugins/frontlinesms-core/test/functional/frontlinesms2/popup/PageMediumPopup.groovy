@@ -418,7 +418,7 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
-class WebConnectionTypeSelectPage {
+class WebConnectionTypeSelectDialog extends geb.Module{
 	static base = { $('div#tab-1') }
 	static content = {
 		getDescription{ shortname->
@@ -430,5 +430,24 @@ class WebConnectionTypeSelectPage {
 		option{ shortname->
 			$("#"+shortname)
 		}
+	}
+}
+
+class ConfigureUshahidiWebConnectionTab extends geb.Module{
+	static base = { $('div#tab-2') }
+	static content = {
+		subType{ $('#subType') }
+		crowdmapDeployAddress{ $('#crowdmapDeployAddress') }
+		ushahidiDeployAddress{ $('#ushahidiDeployAddress')  }
+		apiKeyInputLabel{ $('#apikey') }	
+	}
+}
+
+class ConfirmUshahidiWebConnectionTab extends geb.Module{
+	static base = { $('div#tab-5') }
+	static content = {
+		confirm{ label->
+			$("#"+label+"-confirm").text()
+		}		
 	}
 }
