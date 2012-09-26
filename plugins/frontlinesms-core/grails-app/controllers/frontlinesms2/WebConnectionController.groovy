@@ -17,7 +17,7 @@ class WebConnectionController extends ActivityController {
 		render template:"/webConnection/$params.imp/config"
 	}
 
-	private def doSave(Class<Fconnection> clazz) {
+	private def doSave(Class<WebConnection> clazz) {
 		def webConnectionInstance
 		if(params.ownerId) { 
 			webConnectionInstance = clazz.get(params.ownerId)
