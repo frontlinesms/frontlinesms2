@@ -1,6 +1,7 @@
+<%@ page import="frontlinesms2.WebConnection" %>
 <r:script>
 	function initializePopup() {
-
+		setType("${activityInstanceToEdit?.type ?: 'generic'}");
 		var validator = $("#new-webconnection-form").validate({
 			errorContainer: ".error-panel",
 			rules: {
@@ -46,6 +47,10 @@
 			updateConfirmationMessage();
 			updateServerConfiguration();
 		});
+	}
+
+	function setType(type) {
+	$("#webconnection-config").load(url_root + "webConnection/" + type + "/config");
 	}
 	
 	function updateConfirmationMessage() {
