@@ -40,7 +40,7 @@ class WebConnectionViewSpec extends WebConnectionBaseSpec {
 		where:
 			item		| value
 			'name'		| "sync web connection"
-			'ushahidi deployment address'		| 'http://www.ushahidi.com/'
+			'url'		| 'http://www.ushahidi.com/' // For Ushahidi web connection, /frontlinesms should not be displayed
 			'sendMethod'| 'get'
 	}
 
