@@ -104,7 +104,11 @@ abstract class WebConnection extends Activity {
 		camelContext.removeRoute("activity-webconnection-${this.id}")
 	}
 
-	def initialize(params) {}
+	def initialize(params)
+
+	def preProcess(Exchange ex)
+
+	def postProcess(Exchange ex)
 
 	private def processRequestParameters(params) {
 		def paramsName = params.'param-name'
