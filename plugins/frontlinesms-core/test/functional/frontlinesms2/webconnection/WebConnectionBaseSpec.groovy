@@ -7,7 +7,7 @@ import frontlinesms2.popup.*
 abstract class WebConnectionBaseSpec extends grails.plugin.geb.GebSpec {
 	static createWebConnections() {
 		def syncKeyword = new Keyword(value:"SYNC")
-		new WebConnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
+		new GenericWebConnection(name:"Sync", keyword:syncKeyword, url:"http://www.frontlinesms.com/sync", httpMethod:WebConnection.HttpMethod.GET).save(failOnError:true)
 	}
 
 	static createTestActivities() {
