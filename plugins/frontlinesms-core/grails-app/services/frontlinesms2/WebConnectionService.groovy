@@ -9,8 +9,8 @@ class WebConnectionService{
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		x.out.headers = x.in.headers
-		def webConn = WebConnection.get(x.in.headers.'frontlinesms.webConnectionId')
+		def webConn = WebConnection.get(x.in.headers.'webconnection-id')
+		println "the web connection is ${webConn}"
 		webConn.preProcess(x)
 	}
 
@@ -18,8 +18,7 @@ class WebConnectionService{
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		x.out.headers = x.in.headers
-		def webConn = WebConnection.get(x.in.headers.'frontlinesms.webConnectionId')
+		def webConn = WebConnection.get(x.in.headers.'webconnection-id')
 		webConn.postProcess(x)
 	}
 

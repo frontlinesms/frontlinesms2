@@ -12,7 +12,7 @@ class WebConnectionServiceSpec extends Specification {
 
 	def setup() {
 		mockConnection = Mock(WebConnection)
-		WebConnection.metaClass.static.get = { id ->
+		WebConnection.metaClass.static.get = { Serializable id ->
 			requestedId = id
 			return mockConnection
 		}
