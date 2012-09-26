@@ -86,7 +86,6 @@ abstract class WebConnection extends Activity {
 		println "*** ACTIVATING ACTIVITY ***"
 		try {
 			def routes = this.routeDefinitions
-			println "I reached here"
 			camelContext.addRouteDefinitions(routes)
 			println "################# Activating WebConnection :: ${this}"
 			LogEntry.log("Created WebConnection routes: ${routes*.id}")
