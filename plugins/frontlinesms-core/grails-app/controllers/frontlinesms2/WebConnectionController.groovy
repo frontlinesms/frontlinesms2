@@ -6,11 +6,15 @@ class WebConnectionController extends ActivityController {
 	private static final def WEB_CONNECTION_TYPE_MAP = [generic:GenericWebConnection,
 			ushahidi:UshahidiWebConnection]
 
-	def create = {}
+	def create() {}
 
-	def save = {
+	def save() {
 		def webConnectionInstance
 		doSave(WEB_CONNECTION_TYPE_MAP[params.webConnectionType])
+	}
+
+	def config() {
+		render template:"/webConnection/$params.imp/config"
 	}
 
 	private def doSave(Class<Fconnection> clazz) {
