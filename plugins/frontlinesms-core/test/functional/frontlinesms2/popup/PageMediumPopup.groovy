@@ -302,6 +302,9 @@ class WebConnectionWizard extends MediumPopup {
 		requestTab { module WebConnectionRequestFormatTab }
 		confirmTab { module WebConnectionConfirmTab }
 		summary { module WebConnectionSummary }
+
+		selectWebConnectionType { module WebConnectionTypeSelectTab }
+		configureUshahidi { module ConfigureUshahidiWebConnectionTab }
 	}
 }
 
@@ -339,6 +342,10 @@ class WebConnectionConfirmTab extends geb.Module {
 		keyword { $("#confirm-keyword").text() }
 		type { $("#confirm-type").text() }
 		url { $("#confirm-url").text() }
+		
+		confirm{ label->
+			$("#"+label+"-confirm").text()
+		}
 	}
 }
 
@@ -418,7 +425,7 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 	}
 }
 
-class WebConnectionTypeSelectDialog extends geb.Module{
+class WebConnectionTypeSelectTab extends geb.Module{
 	static base = { $('div#tab-1') }
 	static content = {
 		getDescription{ shortname->
@@ -437,17 +444,11 @@ class ConfigureUshahidiWebConnectionTab extends geb.Module{
 	static base = { $('div#tab-2') }
 	static content = {
 		subType{ $('#subType') }
+		subType{ id->
+			$("#"+id).click()
+		} 
 		crowdmapDeployAddress{ $('#crowdmapDeployAddress') }
 		ushahidiDeployAddress{ $('#ushahidiDeployAddress')  }
 		apiKeyInputLabel{ $('#apikey') }	
-	}
-}
-
-class ConfirmUshahidiWebConnectionTab extends geb.Module{
-	static base = { $('div#tab-5') }
-	static content = {
-		confirm{ label->
-			$("#"+label+"-confirm").text()
-		}		
 	}
 }
