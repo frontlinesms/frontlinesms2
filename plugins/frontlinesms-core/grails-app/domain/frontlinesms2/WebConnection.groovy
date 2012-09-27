@@ -11,6 +11,7 @@ abstract class WebConnection extends Activity {
 	def webConnectionService
 	enum HttpMethod { POST, GET }
 	static String getShortName() { 'webConnection' }
+	static String getType() { '' }
 	static def implementations = [GenericWebConnection,
 			UshahidiWebConnection]
 
