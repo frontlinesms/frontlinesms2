@@ -2,16 +2,16 @@
 	<p><g:message code="webConnection.ushahidi.description"/></p>
 </div>
 <div class="input">
-	<label for="httpMethod"><g:message code="webConnection.ushahidi.service.label"/></label>
+	<label for="serviceType"><g:message code="webConnection.ushahidi.service.label"/></label>
 	<ul class="select">
-		<g:set var="service" value="${activityInstanceToEdit?.httpMethod}"/>
+		<g:set var="serviceType" value="${activityInstanceToEdit?.serviceTypeType}"/>
 		<li>
-			<label for="service"><g:message code="webConnection.ushahidi.service.crowdmap"/></label>
-			<g:radio name="service" value="crowdmap" checked="${!activityInstanceToEdit || service == 'crowdmap'}" />
+			<label for="serviceType"><g:message code="webConnection.ushahidi.serviceType.crowdmap"/></label>
+			<g:radio name="serviceType" value="crowdmap" checked="${!activityInstanceToEdit || serviceType == 'crowdmap'}" />
 		</li>
 		<li>
-			<label for="service"><g:message code="webConnection.ushahidi.service.ushahidi"/></label>
-			<g:radio name="service" value="ushahidi" checked="${activityInstanceToEdit && service != 'ushahidi'}" />
+			<label for="serviceType"><g:message code="webConnection.ushahidi.serviceType.ushahidi"/></label>
+			<g:radio name="serviceType" value="ushahidi" checked="${activityInstanceToEdit && serviceType != 'ushahidi'}" />
 		</li>
 	</ul>
 </div>
@@ -24,3 +24,9 @@
 	<label for="key"><g:message code="webConnection.ushahidi.key.label"/></label>
 	<g:textField name="key" value="${activityInstanceToEdit?.key}" required="true"/>
 </div>
+
+<r:script>
+	function updateServerConfiguration() {
+		
+	}
+</r:script>

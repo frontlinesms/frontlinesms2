@@ -1,12 +1,14 @@
 package frontlinesms2
 
+import org.apache.camel.Exchange
+
 class UshahidiWebConnection extends WebConnection {
 	static String getType() { 'ushahidi' }
 	static constraints = {
 	}
 
 	def initialize(params) {
-		this.addToRequestParameters(new RequestParameter(name:"s", value:'${message_src_name}'))
+		this.addToRequestParameters(new RequestParameter(name:"s", value:'${message_src_number}'))
 		this.addToRequestParameters(new RequestParameter(name:"m", value:'${message_body}'))
 		this.addToRequestParameters(new RequestParameter(name:"key", value:params.key))
 		//TODO Test for urls which end with /
@@ -21,3 +23,4 @@ class UshahidiWebConnection extends WebConnection {
 		url ==~ 'http://.*\\.crowdmap.com' ? "crowdmap" : "ushahidi"
 	}
 }
+
