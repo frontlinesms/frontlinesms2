@@ -308,9 +308,12 @@ class CoreBootStrap {
 
 	private def dev_initWebConnections() {
 		if(!bootstrapData) return
-		[new Fmessage(src:'Wanyama', text:'forward me to the server'),
+		[	new Fmessage(src:'Wanyama', text:'forward me to the server'),
 			new Fmessage(src:'Tshabalala', text:'a text from me'),
-			new Fmessage(src:'June', text:'I just arrived')].each() {
+			new Fmessage(src:'June', text:'I just arrived'),
+			new Fmessage(src:'Otieno', text:'I am on a map!'),
+			new Fmessage(src:'Ekisa', text:'I too am on a map'),
+			new Fmessage(src:'James', text:'I just arrived')].each() {
 				it.inbound = true
 				it.date = new Date()
 			it.save(failOnError:true, flush:true)
@@ -334,6 +337,19 @@ class CoreBootStrap {
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'date' , value: '${message_timestamp}'))
 		extCmdPost.addToRequestParameters(new RequestParameter(name:'sender' , value: '${message_src_number}'))
 		extCmdPost.save(failOnError:true, flush:true)
+
+		def ushahidiWebConnection = new UshahidiWebConnection(name:'Ushahidi', keyword:new Keyword(value:'USHAHIDI'), url:"http://192.168.0.200:80/ushahidi/frontlinesms/", httpMethod:WebConnection.HttpMethod.GET)
+		ushahidiWebConnection.addToRequestParameters(new RequestParameter(name:'m' , value: '${message_body}'))
+		ushahidiWebConnection.addToRequestParameters(new RequestParameter(name:'key' , value: '1NIJP34G'))
+		ushahidiWebConnection.addToRequestParameters(new RequestParameter(name:'s' , value: '${message_src_number}'))
+		ushahidiWebConnection.save(failOnError:true, flush:true)
+		def ushSent = new Fmessage(src:'me', inbound:false, text:"Your messages are on Ushahidi!")
+		ushSent.addToDispatches(dst:'+25411663123', status:DispatchStatus.SENT, dateSent:new Date()).save(failOnError:true, flush:true)
+		ushahidiWebConnection.addToMessages(ushSent).save(failOnError:true, flush:true)
+		ushahidiWebConnection.addToMessages(Fmessage.findBySrc('Otieno'))
+		ushahidiWebConnection.addToMessages(Fmessage.findBySrc('Ekisa'))
+		ushahidiWebConnection.addToMessages(Fmessage.findBySrc('James'))
+		ushahidiWebConnection.save(failOnError:true, flush:true)
 	}
 
 
