@@ -23,6 +23,7 @@ class Fconnection {
 	}
 
 	static mapping = {
+		sort id:'asc'
 		tablePerHierarchy false
 	}
 	
