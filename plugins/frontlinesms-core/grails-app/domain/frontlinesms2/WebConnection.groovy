@@ -110,7 +110,6 @@ abstract class WebConnection extends Activity {
 		println "x: ${x}"
 		println "x.in: ${x.in}"
 		println "x.in.headers: ${x.in.headers}"
-		x.out.headers = x.in.headers
 		def inMessage = Fmessage.get(x.in.headers.'frontlinesms.fmessageId')
 		def encodedParameters = this.requestParameters.collect {
 			urlEncode(it.name) + '=' + urlEncode(it.getProcessedValue(inMessage))

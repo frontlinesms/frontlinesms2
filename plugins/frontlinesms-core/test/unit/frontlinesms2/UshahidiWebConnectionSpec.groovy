@@ -34,18 +34,6 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 	}
 
 	def "Test Ushahidi pre-processor"() {
-		when:
-			def message = Fmessage.build(text:"testing", src:"bob")
-			def connection = new UshahidiWebConnection(name:'name',
-					keyword:new Keyword(value:'keyword'),
-					url:"www.ushahidi.com/frontlinesms2",
-					httpMethod:WebConnection.HttpMethod.GET)
-			def s = Mock(RequestParameter)
-			s >> ['name':'s', 'value':'${message_src_number}']
-			def m = Mock(RequestParameter)
-			m >> ['name':'m', 'value':'${message_body}']
-			def key = Mock(RequestParameter)
-			key >> ['name':'key', 'value':'1234567']
 		given:
 			def message = Fmessage.build(text:"testing", src:"bob")
 			def connection = new UshahidiWebConnection(name:'name',
@@ -59,9 +47,9 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 		when:
 			connection.preProcess(exchange)
 		then:
-			headers[Exchange.HTTP_QUERY].contains("m=testing")
-			headers[Exchange.HTTP_QUERY].contains("s=bob")
-			headers[Exchange.HTTP_QUERY].contains("key=1234567")
+			exchange.out.headers[Exchange.HTTP_QUERY].contains('m=test')
+			exchange.out.headers[Exchange.HTTP_QUERY].contains('s=test')
+			exchange.out.headers[Exchange.HTTP_QUERY].contains('key=test')
 	}
 
 	def mockRequestParams(connection, Map params) {
@@ -69,6 +57,7 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 			def rp = Mock(RequestParameter)
 			rp.name >> key
 			rp.value >> value
+			rp.getProcessedValue(_) >> { a -> "test" }
 			connection.addToRequestParameters(rp)
 		}
 	}
@@ -79,6 +68,10 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 		if(body) inMessage.body >> body
 		inMessage.headers >> headers
 		x.in >> inMessage
+		def outMessage = Mock(Message)
+		outMessage.headers >> [:]
+		outMessage.body >> [:]
+		x.out >> outMessage
 		return x
 	}
 }
