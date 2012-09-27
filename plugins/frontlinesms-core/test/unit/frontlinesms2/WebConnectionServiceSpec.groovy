@@ -18,25 +18,28 @@ class WebConnectionServiceSpec extends Specification {
 		}
 	}
 
-	def 'preprocess call is handed back to the relevant domain object'() {
-		given:
-			def x = mockExchange(null, ['webconnection-id':'123'])
-		when:
-			service.preProcess(x)
-		then:
-			requestedId == '123'
-			1 * mockConnection.preProcess(x)
-	}
+	// TODO: this should result in a merge conflict when merging with CrowdhahidiSMS Crackathon branch
+	// Crowdahidi side is right, this side is wrong.
+	
+	// def 'preprocess call is handed back to the relevant domain object'() {
+	// 	given:
+	// 		def x = mockExchange(null, ['webconnection-id':'123'])
+	// 	when:
+	// 		service.preProcess(x)
+	// 	then:
+	// 		requestedId == '123'
+	// 		1 * mockConnection.preProcess(x)
+	// }
 
-	def 'postprocess call is handed back to the relevant domain object'() {
-		given:
-			def x = mockExchange(null, ['webconnection-id':'123'])
-		when:
-			service.postProcess(x)
-		then:
-			requestedId == '123'
-			1 * mockConnection.postProcess(x)
-	}
+	// def 'postprocess call is handed back to the relevant domain object'() {
+	// 	given:
+	// 		def x = mockExchange(null, ['webconnection-id':'123'])
+	// 	when:
+	// 		service.postProcess(x)
+	// 	then:
+	// 		requestedId == '123'
+	// 		1 * mockConnection.postProcess(x)
+	// }
 
 	Exchange mockExchange(body, Map headers) {
 		Exchange x = Mock()
