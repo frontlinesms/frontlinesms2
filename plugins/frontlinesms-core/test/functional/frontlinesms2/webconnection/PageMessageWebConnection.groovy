@@ -17,6 +17,7 @@ class WebConnectionHeaderModule extends ContentHeader {
 	static content = {
 		infoListItems { $('ul.info li')*.text() }
 		name { $('ul.info h1').text().toLowerCase() }
+		subtitle { $('#webConnectionSubtitle').text().toLowerCase() }
 		url { $("span#web_connection_url").text().toLowerCase() }
 		sendMethod { $("span#web_connection_method").text().toLowerCase() - ')' -'('}
 		archive { buttons.filter(text: iContains('Archive')) }
