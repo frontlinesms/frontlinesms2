@@ -6,6 +6,9 @@ import frontlinesms2.popup.*
 import spock.lang.*
 
 class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
+	def setup(){
+		createWebConnections()
+	}
 	def 'ushahidi option is available on "Select type" screen'() {
 		when:
 			launchWizard()
@@ -104,6 +107,34 @@ class UshahidiWebConnectionCedSpec extends WebConnectionBaseSpec {
 			confirmTab.confirm('Address') == 'http://my.crowdmap.com'
 			confirmTab.confirm('API key') == 'a1b2c3d4e5'
 			confirmTab.confirm('Auto-sort') == 'No messages will be autosorted but you should check what the correct text is here when implementing thanks ;-)'
+	}
+
+	def "editing a web connection should change values"(){
+		given:
+			to PageMessageWebConnection, UshahidiWebConnection.findByName('Trial')
+		when:
+			header.moreActions.value("edit").jquery.click()
+			waitFor { at WebConnectionWizard }
+			configureUshahidi.subType('crowdmap').click()
+			configureUshahidi.crowdmapDeployAddress = "frontlineCrowd"
+			configureUshahidi.apiKeyInputLabel = "2343asdasd"
+			next.click()
+		and:
+			keywordTab.keywordTab = "Repo"
+			next.click()
+		then:
+			confirmTab.name == "stanlee"
+			confirmTab.confirm('Service') == 'Crowdmap'
+			confirmTab.confirm('Address') == 'http://frontlineCrowd.crowdmap.com'
+			confirmTab.confirm('API key') == '2343asdasd'
+			confirmTab.confirm('Auto-sort') == 'No messages will be autosorted but you should check what the correct text is here when implementing thanks ;-)'
+		when:
+			submit.click()
+		then:
+			def connection = UshahidiWebConnection.findByName('Trial')
+			connection.name == "stanlee"
+			connection.url == "http://frontlineCrowd.crowdmap.com"
+			connection.requestParameters*.value.containsAll(["2343asdasd"])
 	}
 
 	private def fillValidConfig() {

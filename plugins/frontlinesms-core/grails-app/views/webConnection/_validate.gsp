@@ -1,37 +1,59 @@
 <%@ page import="frontlinesms2.WebConnection" %>
 <r:script>
-	function initializePopup() {
-		var validator = $("#new-webconnection-form").validate({
-			errorContainer: ".error-panel",
-			rules: {
-				name: { required:true },
-				"param-name": { required:true }
-			},
-			messages: {
-				keyword: {
-					required: i18n("webconnection.keyword.validation.error")
-				},
-				url: {
-					required: i18n("webconnection.url.validation.error")
-				},
-				"param-name": {
-					required: ""
+	var webConnectionDialog = (function() {
+		var _updateConfirmationScreen = function() {};
+		var validationMessageGenerator = function(fieldName, ruleName) {
+			var i18nKey = "webconnection." + fieldName + ".validation.error";
+			var i18nString = i18n(i18nKey);
+			return i18nKey == i18nString? "": i18nString;
+		};
+		var generateMessages = function(fieldsAndRules) {
+			var messageMap = {};
+			for(field in fieldsAndRules) {
+				var i, rules = fieldsAndRules[field];
+				messageMap[field] = {};
+				if(typeof(rules) === "string") {
+					messageMap[field][rules] = validationMessageGenerator(field, rules);
+				} else {
+					for(i=0; i<rules.length; ++i) {
+						messageMap[field][rules[i]] = validationMessageGenerator(field, rules[i]);
+					}
 				}
 			}
-		});
+			return messageMap;
+		};
+
+		return {
+			resetValidator: function(messageRules) {
+				$("#new-webconnection-form").data("validator", null);
+				validator = $("#new-webconnection-form").validate({
+					errorContainer:".error-panel",
+					messages:generateMessages(messageRules)
+				});
+			},
+			setScripts: function(scripts) {
+				webConnectionDialog.resetValidator(scripts.validation);
+				webConnectionDialog.updateConfirmationScreen = scripts.updateConfirmationScreen;
+			},
+			updateConfirmationScreen:_updateConfirmationScreen,
+			___end___:null
+		};
+	})();
+
+	function initializePopup() {
+		var initialScripts = <fsms:render template="generic/scripts"/>;
+		webConnectionDialog.setScripts(initialScripts);
 
 		var keyWordTabValidation = function() {
-			 if(!isGroupChecked("blankKeyword")) return validator.element('#keyword');
-			 else return true;
+			return isGroupChecked("blankKeyword") || validator.element("#keyword");
 		};
+
 		var configureTabValidation = function() {
 			var isValid = true;
-			$('#web-connection-param-table input:visible').each(function() {
-				if (!validator.element(this) && isValid) {
-					isValid = false;
-				}
+			$('#webconnection-config input:visible').each(function() {
+				isValid = isValid && validator.element(this);
 			});
-			return (validator.element('#url') && isValid);
+			return isValid;
 		};
 
 		var confirmTabValidation = function() {
@@ -44,35 +66,32 @@
 
 		$("#tabs").bind("tabsshow", function(event, ui) {
 			updateConfirmationMessage();
-			updateServerConfiguration();
+			webConnectionDialog.updateConfirmationScreen();
 		});
 	}
 
 	function setType(type) {
-		$.get(url_root + "webConnection/" + type + "/config", function(data) {
+		$.getJSON(url_root + "webConnection/" + type + "/config", function(data) {
 			var configTab = $("#webconnection-config");
-			configTab.html(data);
+			configTab.html(data.config);
 			magicwand.init(configTab.find('select[id^="magicwand-select"]'));
+			webConnectionDialog.setScripts(eval("(" + data.scripts + ")"));
 		});
+	}
+
+	function setPara(selecter, text) {
+		$(selecter).html("<p>" + text + "</p>");
 	}
 	
 	function updateConfirmationMessage() {
-		if(!(isGroupChecked("blankKeyword"))){
-			var keyword = $('#keyword').val().toUpperCase();
-			var autoreplyText = $('#messageText').val();
-
-			$("#keyword-confirm").html('<p>' + keyword  + '</p>');
-			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+		var keywordConfirmationText;
+		if(!(isGroupChecked("blankKeyword"))) {
+			keywordConfirmationText = $('#keyword').val().toUpperCase();
 		} else {
-			var autoreplyText = $('#messageText').val();
-			$("#keyword-confirm").html('<p>' + i18n("autoreply.blank.keyword")  + '</p>');
-			$("#autoreply-confirm").html('<p>' + autoreplyText  + '</p>');
+			keywordConfirmationText = i18n("autoreply.blank.keyword");
 		}
-				
-	}
-
-	$("input[name=serviceType]").live("change", function() {
-		if($(this).val() == "ushahidi") $("#crowdmap-url-suffix").hide()
-		else $("#crowdmap-url-suffix").show()
-	});
+		setPara("#keyword-confirm", keywordConfirmationText);
+		setPara("#autoreply-confirm", $('#messageText').val());
+	}	
 </r:script>
+

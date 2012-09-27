@@ -14,7 +14,10 @@ class WebConnectionController extends ActivityController {
 	}
 
 	def config() {
-		render template:"/webConnection/$params.imp/config"
+		def responseMap = ['config', 'scripts', 'confirm'].collectEntries {
+			[it, g.render(template:"/webConnection/$params.imp/$it")]
+		}
+		render responseMap as JSON
 	}
 
 	private def doSave(Class<WebConnection> clazz) {

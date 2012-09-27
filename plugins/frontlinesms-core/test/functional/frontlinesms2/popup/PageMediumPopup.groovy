@@ -309,7 +309,7 @@ class WebConnectionWizard extends MediumPopup {
 }
 
 class WebConnectionKeywordTab extends geb.Module {
-	static base = { $('div#tabs-1') }
+	static base = { $('div#tabs-3') }
 	static content = {
 		useKeyword { $("input#blankKeyword") }
 		keyword { $('input#keyword') }
@@ -336,7 +336,7 @@ class WebConnectionParam extends geb.Module {
 }
 
 class WebConnectionConfirmTab extends geb.Module {
-	static base = { $('div#tabs-3') }
+	static base = { $('div#tabs-4') }
 	static content = {
 		name { $('input#name') }
 		keyword { $("#confirm-keyword").text() }
@@ -443,9 +443,8 @@ class WebConnectionTypeSelectTab extends geb.Module{
 class ConfigureUshahidiWebConnectionTab extends geb.Module{
 	static base = { $('div#tab-2') }
 	static content = {
-		subType{ $('#subType') }
-		subType{ id->
-			$("#"+id).click()
+		subType{ type->
+			$("input#serviceType").value(type)
 		} 
 		crowdmapDeployAddress{ $('#crowdmapDeployAddress') }
 		ushahidiDeployAddress{ $('#ushahidiDeployAddress')  }
