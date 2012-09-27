@@ -119,4 +119,26 @@ class WebConnectionControllerISpec extends grails.plugin.spock.IntegrationSpec {
 			webConnection.name == "Ushahidi Connection"
 			!webConnection.requestParameters
 	}
+
+	def "editing a webconnection should persist changes"(){
+		setup:
+			def keyword = new Keyword(value:"TRIAL")
+			def connection = new UshahidiWebConnection(name:"Trial", keyword:keyword, url:"www.ushahidi.com/frontlinesms2", httpMethod:WebConnection.HttpMethod.POST)
+			connection.save(failOnError:true)
+			controller.params.ownerId = connection.id
+			controller.params.name = "Ushahidi Connection"
+			controller.params.url = "http://sane.com"
+			controller.params.keyword = "Test"
+			controller.params.webConnectionType = "ushahidi"
+			controller.params.httpMethod = "get"
+		when:
+			controller.save()
+		then:
+			connection.name == "Ushahidi Connection"
+			connection.name != "Trial"
+			connection.url == "http://sane.com/frontlinesms"
+			connection.url != "www.ushahidi.com/frontlinesms2"
+			connection.httpMethod ==  WebConnection.HttpMethod.GET
+			connection.httpMethod !=  WebConnection.HttpMethod.POST
+	}
 }

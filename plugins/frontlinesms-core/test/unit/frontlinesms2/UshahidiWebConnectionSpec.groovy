@@ -50,7 +50,7 @@ class UshahidiWebConnectionSpec extends CamelUnitSpecification {
 			exchange.unitOfWork >> Mock(UnitOfWork)
 			connection.preProcess(exchange)
 		then:
-			1* exchange.out.setBody({ bodyContent ->
+			1 * exchange.out.setBody({ bodyContent ->
 				bodyContent.contains("m=testing") && 
 				bodyContent.contains("s=bob") && 
 				bodyContent.contains("key=1234567")
