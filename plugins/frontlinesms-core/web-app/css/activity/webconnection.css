@@ -5,5 +5,5 @@
 #new-webconnection-form a.btn.addNew { margin-left:20px; }
 
 #webconnection-config input#url { display:inline-block; }
-#webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:20px; margin-bottom:0; }
+#webconnection-config label.crowdmap:nth-child(4) { display:inline-block; text-indent:25px; margin-bottom:0; }
 
