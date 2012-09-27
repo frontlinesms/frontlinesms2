@@ -21,7 +21,12 @@ new File(args[1]).withInputStream { stream -> other.load(stream); }
 def missingKeys = []
 def redundantKeys = []
 
-missingKeys = master.keySet() - other.keySet()
+master.keySet().each {
+	if(!other.get(it) || other.get(it).length() == 0)
+	{
+		missingKeys << it
+	}
+}
 redundantKeys = other.keySet() - master.keySet()
 
 redundantKeys.each {

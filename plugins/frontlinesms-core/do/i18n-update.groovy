@@ -42,7 +42,7 @@ master.eachLine { masterLine ->
 		def key = masterLine.split('=')[0]
 		def masterValue = masterLine.split('=')[1]
 
-		newSlaveLines << (existingSlaveLines.find { it.startsWith(key+"=") } ?: masterLine.replaceFirst("=", "=TODO:"))
+		newSlaveLines << (existingSlaveLines.find { it.startsWith(key+"=") && it.split("=").size() > 1 } ?: masterLine.replaceFirst("=", "=TODO:"))
 	}
 	else {
 		// Something strange is going on, we should only have props, comments or whitespace!
