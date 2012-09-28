@@ -21,22 +21,32 @@ public class DatabaseBackupRestorer {
 	}
 
 	public boolean restore(String resourcePath) {
+		File resourceDir = new File(resourcePath);
+		if (!resourceDir.exists()) {
+			System.out.println("Can't find existing resource directory at " + resourceDir.getAbsolutePath());
+			return false;
+		}
+		System.out.println("looking for DB at " + resourcePath + "/" + DB_FILE_NAME);
 		File brokenDatabase = new File(resourcePath, DB_FILE_NAME);
 		if (!brokenDatabase.exists()) {
-			System.out.println("Current database not found");
+			System.out.println("Current database not found at " + brokenDatabase.getAbsolutePath());
 			return false;
 		}
 		File latestBackup;
-		String [] backupFiles = brokenDatabase.getParentFile().list(new FilenameFilter() {
+		String [] backupFiles = resourceDir.getParentFile().list(new FilenameFilter() {
 			@Override
 			public boolean accept(File arg0, String arg1) {
+				System.out.println("checking for backup at "+arg1);
 				return arg1.contains(BACKUP_FOLDER_IDENTIFIER);
 			}
 		});
-		if (backupFiles.length == 0)
+		if (backupFiles.length == 0) {
+			System.out.println("no backup folders found");
 			return false;
+		}
 		Arrays.sort(backupFiles);
-		latestBackup = new File(brokenDatabase.getParentFile().getAbsolutePath() + "/" + backupFiles[0] + "/" + DB_FILE_NAME);
+		latestBackup = new File(resourceDir.getParentFile().getAbsolutePath() + "/" + backupFiles[0] + "/" + DB_FILE_NAME);
+		System.out.println("Trying to find backup db at "+latestBackup.getAbsolutePath());
 		if (latestBackup.exists()) {
 			copyFile(brokenDatabase, new File(brokenDatabase.getParentFile().getAbsolutePath() + "/" + BROKEN_DB_BACKUP_FOLDER_NAME + "/" + brokenDatabase.getName()));
 			brokenDatabase.delete();
@@ -71,7 +81,7 @@ public class DatabaseBackupRestorer {
 	}
 
 	public static void main(String[] args) {
-		new DatabaseBackupRestorer().restore("~/.frontlinesms2");
+		new DatabaseBackupRestorer().restore(System.getProperty("user.home") +"/.frontlinesms2");
 	}
 }
 
