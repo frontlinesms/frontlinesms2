@@ -1,1 +1,3 @@
-<div id="webconnection-confirm"></div>
+<div id="webconnection-confirm">
+	<fsms:render template="generic/confirm"/>
+</div>

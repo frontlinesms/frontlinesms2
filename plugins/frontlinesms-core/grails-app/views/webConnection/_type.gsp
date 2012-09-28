@@ -1,5 +1,5 @@
 <%@ page import="frontlinesms2.WebConnection" %>
-<g:if test="${!activityInstanceToEdit}">
+<g:if test="${!activityInstanceToEdit?.id}">
 	<div class="input">
 		<label for="pollType"><g:message code="webconnection.select.type"/></label>
 		<ul class="select">

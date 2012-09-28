@@ -22,5 +22,9 @@ class UshahidiWebConnection extends WebConnection {
 	def getServiceType() {
 		url ==~ 'http://.*\\.crowdmap.com' ? "crowdmap" : "ushahidi"
 	}
+
+	def getKey() {
+		requestParameters?.find {it.name == "key"}
+	}
 }
 

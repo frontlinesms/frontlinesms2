@@ -5,7 +5,7 @@
 <div class="input">
 	<label for="serviceType"><g:message code="webConnection.ushahidi.service.label"/></label>
 	<ul class="select">
-		<g:set var="serviceType" value="${activityInstanceToEdit?.serviceTypeType}"/>
+		<g:set var="serviceType" value="${activityInstanceToEdit?.serviceType}"/>
 		<li>
 			<label for="serviceType"><g:message code="webConnection.ushahidi.serviceType.crowdmap"/></label>
 			<g:radio name="serviceType" value="crowdmap" checked="${isCrowdmap}"/>
