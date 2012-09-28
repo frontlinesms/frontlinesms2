@@ -1,8 +1,8 @@
 <ul class="info">
 	<h1>
-		<g:message code="webConnection.title" args="${[ownerInstance.name]}"/>
+		<g:message code="webconnection.title" args="${[ownerInstance.name]}"/>
 	</h1>
-	<g:message code="webConnection.${ownerInstance?.type}.subtitle" id="webConnectionSubtitle"/>
+	<g:message code="webconnection.${ownerInstance?.type}.subtitle" id="webConnectionSubtitle"/>
 	<li>
 		<g:formatDate date="${ownerInstance?.dateCreated}"/>
 	</li>
