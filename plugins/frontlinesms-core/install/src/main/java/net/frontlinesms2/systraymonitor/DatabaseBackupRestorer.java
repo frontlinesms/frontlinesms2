@@ -36,7 +36,6 @@ public class DatabaseBackupRestorer {
 		String [] backupFiles = resourceDir.getParentFile().list(new FilenameFilter() {
 			@Override
 			public boolean accept(File arg0, String arg1) {
-				System.out.println("checking for backup at "+arg1);
 				return arg1.contains(BACKUP_FOLDER_IDENTIFIER);
 			}
 		});
@@ -48,6 +47,8 @@ public class DatabaseBackupRestorer {
 		latestBackup = new File(resourceDir.getParentFile().getAbsolutePath() + "/" + backupFiles[0] + "/" + DB_FILE_NAME);
 		System.out.println("Trying to find backup db at "+latestBackup.getAbsolutePath());
 		if (latestBackup.exists()) {
+			File brokenBackupDir = new File(resourceDir.getAbsolutePath() + "/" + BROKEN_DB_BACKUP_FOLDER_NAME + "/");
+			brokenBackupDir.mkdir();
 			copyFile(brokenDatabase, new File(brokenDatabase.getParentFile().getAbsolutePath() + "/" + BROKEN_DB_BACKUP_FOLDER_NAME + "/" + brokenDatabase.getName()));
 			brokenDatabase.delete();
 			copyFile(latestBackup, brokenDatabase);
@@ -60,6 +61,7 @@ public class DatabaseBackupRestorer {
 	}
 	
 	private void copyFile(File sourceFile, File destFile) {
+		System.out.println("Copying from "+sourceFile.getAbsolutePath() + " to " + destFile.getAbsolutePath());
 		try {
 			if(!destFile.exists()) {
 				destFile.createNewFile();
