@@ -430,16 +430,16 @@ class EditSubsriptionDialog extends SubscriptionCreateDialog {
 }
 
 class WebConnectionTypeSelectTab extends geb.Module{
-	static base = { $('div#tab-1') }
+	static base = { $('div#tabs-1') }
 	static content = {
-		getDescription{ shortname->
-			$("#"+shortname).text()
+		getDescription { shortName ->
+			$("#"+shortName).text()
 		}
-		getTitle{ shortname->
-			$("#"+shortname+" .info").text()
+		getTitle { shortName ->
+			$("#"+shortName+" .info").text()
 		}
-		option{ shortname->
-			$("#"+shortname)
+		option { shortName ->
+			$('#webConnectionType').value(shortName)
 		}
 	}
 }
