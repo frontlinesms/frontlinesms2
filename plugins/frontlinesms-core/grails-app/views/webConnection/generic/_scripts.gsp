@@ -1,5 +1,5 @@
 {
-	validation:{ url:"required", "param-name":"required" },
+	validation:{ url:"required", "param-name":"required", keyword:"required"},
 	updateConfirmationScreen:function() {
 		var url = $("input[name=url]").val();
 		var httpMethod = $("input[name=httpMethod]:checked").val().toUpperCase();

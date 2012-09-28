@@ -1,5 +1,5 @@
 {
-	validation:{ url:"required", key:"required" },
+	validation:{ url:"required", key:"required", keyword:"required"},
 	updateConfirmationScreen:function() {
 		$("#webconnection-config label.hidden").hide();
 		$("input[name=serviceType]").live("change", function() {
